@@ -73,6 +73,9 @@
 	  </xsl:apply-templates><xsl:text>
           </xsl:text>
 	</setinfo>
+	<xsl:apply-templates select=".//toc">
+		<xsl:with-param name="lang" select="$lang"/>
+	  </xsl:apply-templates>
     <xsl:apply-templates select=".//sb">
     	<xsl:with-param name="lang" select="$lang"/>
     </xsl:apply-templates><xsl:text>
@@ -119,6 +122,13 @@
 	<xsl:with-param name="lang" select="$n"/>
   </xsl:apply-templates></para></legalnotice>
 </xsl:template>
+
+<!-- Table of contents -->
+<xsl:template match="toc">
+  <xsl:param name="lang" select="./@lang"/>
+  <toc/>
+</xsl:template>
+
 
 <!-- Book --> 
 <xsl:template match="sb">

@@ -27,7 +27,7 @@
 
 <!ENTITY % attlang "lang CDATA #IMPLIED">
 
-<!ELEMENT gbfxml (tt, stt, sumrights, rights?, (sb)*,sbib?) >
+<!ELEMENT gbfxml (tt, stt, sumrights, rights?, toc?, (sb)*,sbib?) >
 <!ATTLIST gbfxml
 	  %attlang;
           version CDATA #REQUIRED>
@@ -66,6 +66,9 @@
 	%attlang;
 >
 <!-- Complete copy terms -->
+
+<!ELEMENT toc (EMPTY)>
+<!-- Table of Contents-->
 
 <!ELEMENT sb (tt,credits,( tb | sc)*)+>
 <!ATTLIST sb
