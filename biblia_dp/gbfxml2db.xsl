@@ -126,7 +126,7 @@
 <!-- Table of contents -->
 <xsl:template match="toc">
   <xsl:param name="lang" select="./@lang"/>
-  <toc/>
+  <toc></toc>
 </xsl:template>
 
 
@@ -134,7 +134,7 @@
 <xsl:template match="sb">
   <xsl:param name="lang" select="./@lang"/>
   <xsl:variable name="n"><xsl:call-template name="newlang"><xsl:with-param name="lang" select="$lang"/></xsl:call-template></xsl:variable>
-  <article><xsl:text>
+  <book><xsl:text>
     </xsl:text>
     <xsl:apply-templates select=".//tt">
 	<xsl:with-param name="lang" select="$n"/>
@@ -148,7 +148,7 @@
     <xsl:apply-templates select=".//sc">
 	<xsl:with-param name="lang" select="$n"/>
     </xsl:apply-templates>
-  </article>
+  </book>
 </xsl:template>
 
 <!-- Credits -->
