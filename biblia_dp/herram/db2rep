@@ -1,0 +1,783 @@
+#!/usr/bin/awk -f
+# Translates from DocBook with conventions to repasa.
+# Public domain. 2003. No warranties. vtamara@informatik.uni-kl.de
+
+# We prefered not to use XSLT to be able to include origin of each
+# translation as a special comment that can be used by markup to reference
+# to the real source in case of error. (probably possible for some
+# xslt processors that implement namespace lex:  ??)
+
+
+# /*
+# <refentry id="db2rep" lang="es">
+
+#  <refmeta>
+#    <refentrytitle>db2rep</refentrytitle>
+#    <manvolnum>1</manvolnum>
+#  </refmeta>
+
+#  <refnamediv>
+#    <refname>db2rep</refname>
+#    <refpurpose>Extrae archivos para &repasa; de un documento DocBook con convenciones</refpurpose>
+#  </refnamediv>
+#  <refsynopsisdiv><cmdsynopsis>
+#    <command>db2rep</command> 
+#    <arg choice="opt" rep="repeat">archivo</arg>
+#  </cmdsynopsis></refsynopsisdiv>
+
+# <refsect1 id="db2rep-descripcion">
+# <title>DESCRIPCIÓN</title>
+# <para>
+# El script <command>db2rep</command> convierte uno o más archivos
+# escritos en DocBook con convenciones para &repasa; en tres archivos
+# XML con definiciones (<citerefentry><refentrytitle>def</refentrytitle>
+# <manvolnum>5</manvolnum></citerefentry>), clasificación 
+# (<citerefentry><refentrytitle>clasif</refentrytitle>
+# <manvolnum>5</manvolnum></citerefentry>)  y secuencia 
+# (<citerefentry><refentrytitle>sec</refentrytitle>
+# <manvolnum>5</manvolnum></citerefentry>).  Los archivos generados y
+# las convenciones son apropiadas para procesar material de estudio
+# organizado de acuerdo a la legislación colombiana vigente para
+# colegios (Ley 115/1994).
+# </para>
+# <para>
+# Este script no recibe opciones por la línea de comando, pero puede
+# adaptarse empleando las siguientes variables de ambiente:
+# <variablelist>
+# <varlistentry><term>DEF</term>
+# <listitem><para>Nombre  del archivo de definiciones por generar.
+# </para></listitem></varlistentry>
+# <varlistentry><term>CLA</term>
+# <listitem><para>Nombre del archivo de clasificaciones por generar.
+# </para></listitem></varlistentry>
+# <varlistentry><term>SEC</term>
+# <listitem><para>Nombre del archivo de secuencia por generar.
+# </para></listitem></varlistentry>
+# <varlistentry><term>DESC</term>
+# <listitem><para>Descripción por emplear en los archivos que se generan.
+# </para></listitem></varlistentry>
+# <varlistentry><term>FECHA</term>
+# <listitem><para>Fecha de actualización que debe emplearse.
+# </para></listitem></varlistentry>
+# <varlistentry><term>BIBLIO</term>
+# <listitem><para>Bibliografía por agregar  en los archivos que se generan.
+# </para></listitem></varlistentry>
+# <varlistentry><term>TIPO_DERECHOS</term>
+# <listitem><para>Tipo de derechos de reproducción por emplear en archivos que se generan.
+# </para></listitem></varlistentry>
+# <varlistentry><term>TIEMPO_DERECHOS</term>
+# <listitem><para>Año(s) en los que comienzan a regir derechos de reproducción
+# </para></listitem></varlistentry>
+# <varlistentry><term>DERECHOS</term>
+# <listitem><para>Términos de reproducción completos.
+# </para></listitem></varlistentry>
+# <varlistentry><term>AUTORES</term>
+# <listitem><para>Nombres de los autores.
+# </para></listitem></varlistentry>
+# <varlistentry><term>IDSIGNIFICADO</term>
+# <listitem><para>Es la cadena con la que se completan identificadores
+# de significados.  Si no se especifica una se emplea <literal>sig</literal>.
+# </para></listitem></varlistentry>
+# </variablelist>
+# </para>
+# <para>Para extraer esta información hemos supuesto que el documento DocBook
+# es material de referencia para estudiantes, que ha sido escrito por
+# uno o más profesores, y que emplea un formato más o menos estándar:
+# <itemizedlist>
+# <listitem><para>Cuenta con logros y sus indicadores de logros escritos,
+#  por ejemplo, al comienzo de una guía o sección o capítulo.</para></listitem>
+# <listitem><para>Incluye definiciones importantes diferenciadas del resto 
+# del documento y valoradas de acuerdo a su relevancia.  Estas definiciones 
+# deben  relacionarse con los indicadores de logro que desarrollan. 
+# Las palabras podrían servir como elementos del índice del documento, o 
+# junto con las definiciones podrían emplearse en un glosario.
+# </para></listitem>
+# <listitem><para>Ejercicios relacionados con indicadores de logro y 
+# sus soluciones.  Las soluciones podrían emplearse para generar un 
+# solucionario.
+# </para></listitem>
+# <listitem><para>Un orden para presentar los logros e indicadores de
+# acuerdo al periodo en el que se presenten.
+# </para></listitem>
+# </itemizedlist>
+# </para>
+
+# <para>
+# Esta información es extractada y dejada en archivos XML para 
+# &repasa;, que emplean el formato <literal>docbook</literal>.
+# Queda separada así:
+# <itemizedlist>
+# <listitem><para>Las definiciones y significados quedan en el archivo
+# para definiciones
+# </para></listitem>
+# <listitem><para>Los logros e indicadores quedan en el archivo de
+# clasificación con tipos <literal>Logro</literal> y
+# <literal>Indicador</literal>.
+# Dentro de la clasificación de un indicador quedan
+# referenciados los significados que se relacionen con el indicador
+# junto con el peso, y quedan incluidos los ejercicios que se relacionen
+# con el indicador.
+# </para></listitem>
+# <listitem><para>La división en periodos queda en el archivo de
+# secuencia con tipo <literal>Periodo</literal>.  Dentro de cada
+# secuencia quedan referenciados los indicadores del periodo
+# correspondiente.</para></listitem>
+# </itemizedlist>
+# </para>
+# </refsect1>
+
+#  <refsect1><title>Convenciones para documentos DocBook</title>
+
+# <para>Hemos buscado adaptar DocBook 4.1.2 sin infringir las expectativas de
+# un procesador típico para este formato.  Para esto hemos empleado 
+# especialmente los atributos <literal>role</literal>, <literal>id</literal> 
+# y <literal>userlevel</literal> que son comunes a todos los elementos de 
+# DocBook, así como extensiones a las hojas de estilo que permiten 
+# procesar las adaptaciones.  A continuación se presenta en detalle cada 
+# una de las adaptaciones.
+# </para>
+# */
+
+# [to_xml(str)] returns an XML representation of string [str] (e.g replaces & 
+# with &amp;)
+function to_xml(str) 
+{
+        gsub(/&/,"\\&amp;",str);
+        gsub(/</,"\\&lt;",str);
+        gsub(/>/,"\\&gt;",str);
+        gsub(/"/,"\\&quot;",str);
+        gsub(/%/,"\\&#37;",str);
+        return str;
+}
+
+# [trim(str)] removes redundant spaces in [str]
+function trim(str)
+{
+	sub(/^[ \t]*/,"",str);
+	sub(/[ \t]*$/,"",str);
+	sub(/ [ \t]*$/," ",str);
+	return str;
+}
+
+
+# [str_from(str,i)] returns the substring of [str] that begins in position
+# [i]
+function str_from(str,i) {
+        return substr(str,i,length(str)-i+1);
+}
+
+
+# [extract_id(str)] extracts value of attribute id
+function extract_id(str) {
+	if (match(str,/id="/)<=0) {
+		print FILENAME ":" FNR ": Se esperaba atributo id";
+		error=1;
+		return "";
+	}
+	else {
+		r=str_from(str,RSTART+RLENGTH);
+		match(r,/"/);
+		r=substr(r,1,RSTART-1);
+		return r;
+	}
+}
+
+# [extract_id_role(str,typ)] in an element with a role atrribute that follows
+# the convention (role="tipo:val") and it is supposed to have
+# type [typ] returns [val].
+function extract_id_role(str,typ) {
+	if (match($0,"role=\"" typ ":")<=0) {
+		print FILENAME ":" FNR ": Se esperaba identificación en rol";
+		error=1;
+		return "";
+	}
+	else {
+		r=str_from($0,RSTART+RLENGTH);
+		match(r,/"/);
+		r=substr(r,1,RSTART-1);
+		return r;
+	}
+}
+
+# [cur_pos()]  returns the current position of file in XML format accepted
+# for referencing of Markup
+function cur_pos() {
+	return "<!--# " FNR " " FILENAME "-->";
+}
+
+# [sepstr(str)]  returns a string to separate a string from [str]
+function sepstr(str) {
+	if (str!="" && substr(str,length(str),1)!=" ") {
+		return " ";
+	}
+	return "";
+}
+
+# Ends capture of indicador and logro
+(s_cap==1 || s_cap==2) && /<\/listitem>/ { 
+	match($0,/<\/listitem>/);
+	lin=trim(substr($0,1,RSTART-1));
+	if (lin!="" && s_cap==1)  {  # Capturando logro en listitem
+                logro[idlogro]=logro[idlogro] sepstr(logro[idlogro]) lin;
+        } else if (lin!="" && s_cap==2) { # Capturando un indicador
+                ind[idindicador]=ind[idindicador] sepstr(ind[idindicador]) lin;
+        } 
+	s_cap=0;
+}
+
+# Ends capture of meaning
+s_cap==4 && /<\/para>/ { 
+	match($0,/<\/para>/);
+	lin=trim(substr($0,1,RSTART-1));
+	palabras[palid]=palabras[palid] " " lin;
+	pal="";
+	s_cap=0;
+}
+
+# Ends capture of question
+s_cap==3 && /<\/question>/ { 
+	match($0,/<\/question>/);
+	lin=trim(substr($0,1,RSTART-1));
+	iejer[idejer]=iejer[idejer] " " lin;
+	s_cap=0;
+}
+
+# Ends capture of answer
+s_cap==5 && /<\/answer>/ {
+	match($0,/<\/answer>/);
+	lin=trim(substr($0,1,RSTART-1));
+	iejer[idejer]=iejer[idejer] " " lin;
+	idejer="";
+	s_cap=0;
+}
+
+
+# Capturates certain texts that could be in more than one line
+s_cap!=0 && /.*/ {
+	lin=$0;
+        sub(/^[ \t]*/,"",lin);
+        sub(/[ \t]*$/,"",lin);
+
+	if (lin!="" && s_cap==1)  {  # Capturando logro en listitem
+                logro[idlogro]=logro[idlogro] sepstr(logro[idlogro]) lin;
+        } else if (lin!="" && s_cap==2) { # Capturando un indicador
+                ind[idindicador]=ind[idindicador] sepstr(ind[idindicador]) lin;
+        } else if (lin!="" && (s_cap==3 || s_cap==5)) { # Leyendo un ejercicio
+		iejer[idejer]=iejer[idejer] " " lin;
+        } else if (lin!="" && s_cap==4) { # Un significado
+		palabras[palid]=palabras[palid] " " lin;
+	}
+}
+
+# /*
+# <refsect2 id="db2rep-periodos">
+#   <title>Periodos</title>
+# <para>
+# El orden en el que se especifiquen y procesen los archivos fuente
+# debe corresponder al orden de presentación del material en periodos.  
+# Puede especificarse el inicio del material para un periodo en 
+# cualquier elemento que tenga el atributo <literal>role="periodo"</literal>.
+# Se supone que el material de un periodo termina si no hay más 
+# archivos por procesar o al iniciarse material para un nuevo periodo.
+# Se espera que como parte del material para un periodo se especifique
+# al menos un indicador de logro.
+# El mismo elemento con atributo <literal>role="periodo"</literal> (por
+# ejemplo <literal>chapter</literal> o <literal>sect1</literal>) debe
+# indicar el identificador del periodo en el atributo 
+# <literal>userlevel</literal>. Por ejemplo:
+# <screen>
+# &lt;chapter role="periodo" userlevel="p1"&gt;
+# </screen>
+# </para>
+# </refsect2>
+# */
+
+/<[^>]* role="periodo"/ {
+	if (periodo!="" && numindper==0) {
+		print lperiodo_FILENAME ":" lperiodo_FNR ": Faltan indicadores en periodo " periodo;
+		error=1;
+	}
+	if (periodo!="") {
+        	print "      </sec>" >> out_seq;
+	}
+	if (match($0,/userlevel[ ]*=[ ]*"/)<=0) {
+		print FILENAME ":" FNR ": Falta periodo en atributo userlevel";
+		error=1;
+		peso="";
+	}
+	else {
+		r=str_from($0,RSTART+RLENGTH);
+		match(r,/^[^"]*"/);
+		periodo=substr(r,1,RLENGTH-1);
+	}
+	print cur_pos() "<sec tipo=\"Periodo\" id=\"" to_xml(periodo) "\"><desc>" to_xml(periodo) "</desc>" >> out_seq;
+	lperiodo_FILENAME=FILENAME;
+	lperiodo_FNR=FNR;
+	numindper=0;
+}
+
+# /*
+# <refsect2 id="db2rep-logros-e-indicadores-de-logro">
+#   <title>Logros e indicadores-de-logro</title>
+#   <para>Tanto un logro como un indicador de logro se esperan especificados 
+#   en un elemento <literal>&lt;listitem&gt;</literal> con atributo
+#   <literal>role="logro"</literal> o <literal>role="indicador"</literal>
+#   respectivamente, y con identificador especificado en el atributo
+#   <literal>id</literal>, por ejemplo:
+# <screen>
+# &lt;listitem role="logro" id="escucha"&gt;&lt;para&gt;Escucha música
+# y sigue el ritmo&lt;/para&gt;&lt;/listitem&gt;
+# </screen>
+# o
+# <screen>
+# &lt;listitem role="indicador" id="escucha.clave"&gt;&lt;para&gt;Identifica
+# el instrumento que lleva la melodía&lt;/para&gt;&lt;/listitem&gt;
+# </screen>
+# Note que el identificador del logro además de ser un identificador
+# XML 
+# (ver <citerefentry><refentrytitle>xmlintro</refentrytitle>
+# <manvolnum>5</manvolnum></citerefentry>), no debe incluir el caracter
+# punto '.', mientras que el identificador de un indicador debe
+# tener este caracter, precedido del identificador para el logro que
+# el indicador desarrolla y seguido de un identificador particular para
+# el indicador que lo distinga de otros posibles indicadores del mismo logro.
+# </para>
+# <para>El logro que desarrolla uno o más indicadores debe especificarse
+# antes (digamos los logros al comienzo de un capítulo mientras que los
+# indicadores al comienzo de una sección), y los indicadores deben 
+# especificarse cómo parte de algún periodo.
+# </para>
+# </refsect2>
+# */
+
+/<[^>]* role="logro"/ {
+	idlogro=extract_id($0);
+	match($0,/role="logro[^>]*>/);
+	logro[idlogro]=str_from($0,RSTART+RLENGTH+1);
+	pos_logro[idlogro]=cur_pos();
+	s_cap=1;
+}
+
+/<[^>]* role="indicador"/ {
+	if (periodo=="") {
+		print FILENAME ":" FNR ": Falta un elemento con rol periodo antes de primer indicador";
+		error=1;
+	}
+	
+	idindicador=extract_id($0);
+	print "    " cur_pos() "<refcla tipo=\"Indicador\" idcla=\"" to_xml(idindicador) "\"/>" >> out_seq;
+		
+	match($0,/role="indicador[^>]*>/);
+	ind[idindicador]=str_from($0,RSTART+RLENGTH+1);
+	pos_ind[idindicador]=cur_pos();
+	ipals[idindicador]="";
+	iejer[idindicador]="";
+	match(idindicador,/[.]/);
+	idl=substr(idindicador,1,RSTART-1);
+	idi=str_from(idindicador,RSTART+1);
+	if (idl=="") {
+		print FILENAME ":" FNR ": Falta identificacion de logro como prefijo en indicador";
+		error=1;
+	}
+	else if (!(idl in logro)) {
+		print FILENAME ":" FNR ": Ident. de logro no existente '" idl "'";
+		error=1;
+	}
+	else {
+		indlog[idl]=indlog[idl] "." idi;
+	}
+	numindper=numindper+1;
+	s_cap=2;
+}
+
+
+
+/<[^>]* role="pal/ {
+	indpal=1;
+}
+
+indpal==1 && /<primary>.*<\/primary>/ {
+	if (pal!="") {
+		print FILENAME ":" llinpal ": Palabra sin significado '" pal "'";
+		error=1;
+	}
+	llinpal=FNR;
+	match($0,/<primary>.*<\/primary>/);
+	pal=substr($0,RSTART+9,RLENGTH-19);
+	if (pal!="") {
+		if (pos_fpal[pal]=="") {
+			pos_fpal[pal]="<!--# " FNR " " FILENAME "-->";
+		}
+	}
+	indpal=0;
+}
+
+# /*
+# <refsect2 id="db2rep-definiciones">
+#   <title>Definiciones</title>
+# <para>
+# Una definición debe constar de una palabra,un significado, un
+# peso y un indicador de logro asociado (en realidad  pueden ser varias 
+# palabras separadas por espacio o números o caracteres arbitrarios)
+# Con respecto al documento la palabra puede ser también una entrada del índice.
+# </para>
+# <para>
+# Para especificar una palabra que también aparezca en el índice se emplea
+# el elemento <literal>indexterm</literal> con el atributo 
+# <literal>role="pal"</literal>, a continuación de este elemento o
+# al menos antes de otro que especifique una definición debe incluirse
+# la definición  en un párrafo <literal>para</literal> con atributo 
+# <literal>role="sig"</literal>.  Otro atributo del párrafo debe ser
+# <literal>id</literal> cuyo valor será el identificador de un indicador
+# seguido del caracter punto ('.') y una cadena que diferencie la palabra
+# de otras del mismo indicador (se sugiere la palabra misma o una variación).
+# El párrafo con la definición también  debe emplear el atributo 
+# <literal>userlevel</literal> para indicar
+# el peso de la palabra con respecto a otras (se sugiere un número de
+# 1 a 5, siendo 5 las más importantes) y si se desea, separada con el caracter 
+# dos puntos (':'), la 
+# heurística que una herramienta de repaso
+# (ver <citerefentry><refentrytitle>repasa</refentrytitle>
+# <manvolnum>1</manvolnum></citerefentry> o 
+# <citerefentry><refentrytitle>repasatk</refentrytitle>
+# <manvolnum>1</manvolnum></citerefentry>) debería emplear al
+# valorar respuestas de quien estudie la definición
+# ---<command>repasa</command> y <command>repasatk</command> soportan
+# <literal>dist</literal> e <literal>indist</literal> para tener en
+# cuenta o no diferencia entre mayúsculas y minúsculas en respuestas
+# abiertas.  Por ejemplo:
+# <screen>
+# &lt;indexterm role="pal"&gt;
+#   &lt;primary&gt;Denario&lt;/primary&gt;
+# &lt;/indexterm&gt;
+# &lt;para role="sig" userlevel="3:indist" id="contexto.historia.denario">Moneda empleada por los romanos del tiempo de Jesús, equivalía al jornal de un día de trabajo agrícola.&lt;/para&gt;
+# </screen>
+# Tenga en cuenta que las hojas de estilo distribuidas con &repasa; no 
+# presentan los párrafos con definiciones.
+# </para>
+# <para>
+# Una definición cuya palabra no se desea incluir en el índice se especifica 
+# en un párrafo con atributo 
+# <literal>role="nipal:<replaceable>palabra</replaceable>"</literal>, siendo
+# <replaceable>palabra</replaceable> la palabra (o palabras) que se
+# define.  El texto del párrafo debe corresponder al significado y 
+# los atributos <literal>id</literal> y <literal>userlevel</literal>
+# se emplean como en el caso de definiciones cuya palabra se incluye en
+# el índice.  Por ejemplo:
+# <screen>
+# &lt;para role="nipal:1/128" id="contexto.historia.val-lepton" userlevel="1"&gt;El
+# leptón era una moneda de cobre y zinc, cuyo valor correspondía a 1/2
+# cuadrante y a ... de denario&lt;/para&gt;
+# </screen>
+# </para>
+# <para>
+# De emplear la misma palabra con diversos significados agregue a la
+# identificación una cadena que distinga unas de otras separadas con
+# el caracter '.'  Por ejemplo una segunda definición para "denario"
+# podría tener como identificación 
+# <literal>contexto.historia.denario.2</literal>
+# </para>
+# </refsect2> 
+# */
+
+/<[^>]* role="nipal/  || /<[^>]* role="sig/ {
+	if (match($0,"role=\"nipal")>0) {
+		idp=extract_id($0);
+		pal=extract_id_role($0,"nipal");
+	}
+	else {
+		idp=extract_id($0);
+	}
+	split(idp,bid,/[.]/);
+	idi=bid[1] "." bid[2];
+	palid=bid[3];
+	if (pal=="") {
+		print FILENAME ":" FNR ": Significado sin palabra";
+		error=1;
+	}
+	else if (palid=="") {
+		print FILENAME ":" FNR ": Falta identificación de palabra";
+		error=1;
+	}
+	if (match($0,/userlevel[ ]*=[ ]*"/)<=0) {
+		print FILENAME ":" FNR ": Falta peso en atributo userlevel";
+		error=1;
+		peso="";
+	}
+	else {
+		r=str_from($0,RSTART+RLENGTH);
+		match(r,/^[^"]*"/);
+		c=substr(r,1,RLENGTH-1);
+		if (match(c,/:/)>0) {
+			peso=substr(c,1,RLENGTH);
+			heur=str_from(c,RLENGTH+2);
+		}
+		else {
+			peso=c;
+			heur="";
+		}
+	}
+	match($0,/role="[^>]*>/);
+	sig=str_from($0,RSTART+RLENGTH)
+	s_cap=4;
+	if (palabras[palid]=="") {
+		sep="";
+		num_rep[palid]=0;
+		palpal[palid]=pal;
+	 } 
+	else {
+		sep="%;%";
+		num_rep[palid]=num_rep[palid]+1;
+	}
+	palabras[palid]=palabras[palid] sep "<!--# " FNR " " FILENAME "-->%-%" bid[4] "%-%" heur "%-%" sig;
+	if (!(idi in ind)) {
+		print FILENAME ":" FNR ": Indicador en palabra inexistente '" idi "'";
+		error=1;
+	}
+	ipals[idi]=ipals[idi] "%;%<!--#" FNR " " FILENAME "-->%-%" palid "%-%" peso "%-%" bid[4];
+}
+
+# /*
+# <refsect2 id="db2rep-ejercicios">
+#   <title>Ejercicios</title>
+# <para>
+# Se espera que los ejercicios se incluyan en secciones <literal>qanda</literal>
+# de preguntas y reespuestas.  El ejercicio en un elemento
+# <literal>question</literal> (o en un párrafo dentro de este elemento)  con 
+# atributo <literal>role="ejer"</literal>, y la respuesta en el elemento
+# <literal>answer</literal> que debe ir después de <literal>question</literal>.
+# Se espera que el elemento que incluya <literal>role="ejer"</literal> también
+# incluya el atributo <literal>id</literal> cuyo valor debe ser el
+# identificador del ejercicio que se compone del identifcador del indicador
+# de logro que desarrolla, seguido del caracter punto ('.') y una cadena
+# que distinga al ejercicio de otros del mismo indicador ---
+# Tanto en el enunciado del ejercicio como en la respuesta, evite emplear
+# las cadenas %-% y %;%.   
+# <screen>
+# &lt;question role="ejer" id="dh.busca.carta"&gt;
+# &lt;para&gt;Un camino directo que puede seguir para buscar determinar
+# si cierta información de derechos humanos es cierta o falsa es 
+# preguntar por confirmación directamente a quienes la información 
+# afecte. ¿Dónde puede consultar casos actuales de derechos humanos
+# en Colombia y direcciones donde pueda escribir solicitando confirmación?
+# &lt;/para&gt;
+# &lt;/question&gt;
+# &lt;answer&gt;&lt;para&gt;
+# Entre las organizaciones que mantienen información 
+# reciente sobre casos en Colombia están:
+# &lt;itemizedlist&gt;
+# &lt;listitem&gt;&lt;para&gt;Amnistía Internacional.  
+# &lt;ulink url="http://www.amnesty.org"/&gt;.   Además de mantener información
+# publicada (reportes, cartas, acciones urgentes), cuenta con una lista de 
+# distribución abierta de acciones urgentes.  Estas acciones incluyen 
+# direcciones a las cuales escribir.&lt;/para&gt;&lt;/listitem&gt;
+# &lt;listitem&gt;&lt;para&gt;Human Right Watch. &lt;ulink url="http://www.hrw.org"/&gt;.
+# Publica reportes con regularidad.  Cuenta con lista de noticias.&lt;/para&gt;&lt;/listitem&gt;
+# &lt;listitem&gt;&lt;para&gt;Banco de violencia política de Justicia y Paz &amp;
+# CINEP.  &lt;ulink url="http://www.nocheyniebla.org"/&gt;. Registra 
+# todos los casos de violación a derechos humanos de los que se tiene
+# noticia, así como reportes periódicos. Cuenta con lista de noticias.&lt;/para&gt;&lt;/listitem&gt;
+# &lt;/itemizedlist&gt;
+# &lt;/para&gt;&lt;/answer&gt;
+# </screen>
+
+# </para>
+# </refsect2>
+
+# </refsect1>
+# </refentry>
+
+# */
+/<[^>]* role="ejer/ {
+	ts=extract_id($0);
+	if (idejer!="") {
+		print lejer_FILENAME ":" lejer_FNR ": Ejercicio sin respuesta";
+		error=1;
+	}
+	lejer_FILENAME=FILENAME;
+	lejer_FNR=FNR;
+	match(ts,/[^.]*[.][^.]*[.]/);
+	idejer=substr(ts,1,RLENGTH-1);
+	if (!(idejer in ind)) {
+		print FILENAME ":" FNR ": Identificador de indicador no existente '" idejer "'";
+		error=1;
+	}
+	ide=str_from(ts,RLENGTH+1);
+	match($0,/role="[^>]*>/);
+	iejer[idejer]=iejer[idejer] "%;% <!--# " FNR " " FILENAME "-->%-%" ide "%-%" str_from($0,RSTART+RLENGTH) ;
+	s_cap=3;
+}
+
+idejer!="" && /<answer>/ {
+	match($0,/<answer>/);
+	s_cap=5;
+	iejer[idejer]=iejer[idejer] "%-%" str_from($0,RSTART+RLENGTH) ;
+}
+
+
+BEGIN {
+    	
+	out_def=ENVIRON["DEF"];
+	out_cla=ENVIRON["CLA"];
+	out_seq=ENVIRON["SEC"];
+	desc=ENVIRON["DESC"];
+	fecha=ENVIRON["FECHA"];
+	biblio=ENVIRON["BIBLIO"];
+	tipo_derechos=ENVIRON["TIPO_DERECHOS"];
+	tiempo_derechos=ENVIRON["TIEMPO_DERECHOS"];
+	derechos=ENVIRON["DERECHOS"];
+	autores=ENVIRON["AUTORES"];
+	if (ENVIRON["IDSIGNIFICADO"]!="") {
+		idmeaning=to_xml(ENVIRON["IDSIGNIFICADO"]);
+	}
+	else {
+		idmeaning="sig";  
+	}
+
+#	out_def="tmp.def";
+#	out_cla="tmp.cla";
+#	out_seq="tmp.sec";
+#	fecha="2003";
+#	desc="hola";
+
+	if (fecha=="") {
+		print "Falta variable de ambiente FECHA";
+		exit 1;
+	}
+	if (out_def=="") {
+		print "Falta variable DEF con archivo .def";
+		exit 1;
+	}
+	if (out_cla=="") {
+		print "Falta variable CLA con archivo .cla";
+		exit 1;
+	}
+	if (out_seq=="") {
+		print "Falta variable SEC con archivo .sec";
+		exit 1;
+	}
+	if (desc=="") {
+		print "Falta variable DESC con descripción";
+		exit 1;
+	}
+
+	print "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" > out_def ;
+	print "<!DOCTYPE def PUBLIC \"-//Structio//DTD definiciones 1.0\" \"def.dtd\">" >> out_def ;
+	print "<def formato=\"docbook\">" >> out_def ;
+	
+	print "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" > out_cla ;
+	print "<!DOCTYPE clasificacion PUBLIC \"-//Structio//DTD clasificacion 1.0\" \"clasif.dtd\">" >> out_cla ;
+	print "<clasificacion formato=\"docbook\" tipos=\"Logro;Indicador\">" >> out_cla ;
+	
+	print "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" > out_seq ;
+	print "<!DOCTYPE secuencia PUBLIC \"-//Structio//DTD secuencia 1.0\" \"sec.dtd\">" >> out_seq ;
+	print "<secuencia formato=\"docbook\" tipos=\"Periodo\">" >> out_seq ;
+
+	print "  <desc>" to_xml(desc) "</desc>" >> out_def;
+	print "  <desc>" to_xml(desc) "</desc>" >> out_cla;
+	print "  <desc>" to_xml(desc) "</desc>" >> out_seq;
+		
+	if (biblio!="") {
+		print "  <biblio>" to_xml(biblio) "</biblio>" >> out_def;
+		print "  <biblio>" to_xml(biblio) "</biblio>" >> out_cla;
+		print "  <biblio>" to_xml(biblio) "</biblio>" >> out_seq;
+		
+	}
+
+	if (tipo_derechos!="") {
+		print "  <derechos tipo=\"" to_xml(tipo_derechos) "\" tiempo=\"" to_xml(tiempo_derechos) "\">" >> out_def;
+		print "  " to_xml(derechos) >> out_def;
+		print "  </derechos>" >> out_def;
+		print "  <derechos tipo=\"" to_xml(tipo_derechos) "\" tiempo=\"" to_xml(tiempo_derechos) "\">" >> out_cla;
+		print "  " to_xml(derechos) >> out_cla;
+		print "  </derechos>" >> out_cla;
+		print "  <derechos tipo=\"" to_xml(tipo_derechos) "\" tiempo=\"" to_xml(tiempo_derechos) "\">" >> out_seq;
+		print "  " to_xml(derechos) >> out_seq;
+		print "  </derechos>" >> out_seq;
+	}
+	
+	if (autores!="") {
+		print "  <autor fecha=\"" to_xml(fecha) "\">" to_xml(autores) "</autor>" >> out_def;
+		print "  <autor fecha=\"" to_xml(fecha) "\">" to_xml(autores) "</autor>" >> out_cla;
+		print "  <autor fecha=\"" to_xml(fecha) "\">" to_xml(autores) "</autor>" >> out_seq;
+	}
+
+			
+}
+
+
+END {
+	
+	if (periodo!="") {
+		print "  </sec>" >> out_seq;
+	}
+	for (l in logro) {
+		print "  " pos_logro[l] "<clasif tipo=\"Logro\" id=\"" to_xml(l) "\"><desc>" to_xml(logro[l]) "</desc>" >> out_cla;
+		split(indlog[l],iind,/[.]/);
+		for (n in iind) {
+			if (iind[n]!="") {
+				i=l "." iind[n];
+				print "    " pos_ind[i] "<clasif tipo=\"Indicador\" id=\"" to_xml(l) "." to_xml(iind[n]) "\"><desc>" to_xml(ind[i]) "</desc>" >> out_cla;
+				split(ipals[i],pp,"%;%");
+				for (p in pp) {
+					if (pp[p]!="") {
+						split(pp[p],ee,"%-%");
+						if (ee[4]=="") {
+							idm=to_xml(idmeaning);
+						}
+						else {
+							idm=to_xml(ee[4]);
+						}
+						print "        " ee[1] "<refsig idsig=\"" to_xml(ee[2]) "." idm "\" peso=\"" to_xml(ee[3]) "\" />" >> out_cla;  
+					}
+				}
+				
+				split(iejer[i],pp,"%;%");
+				for (p in pp) {
+					if (pp[p]!="") {
+						split(pp[p],ee,"%-%");
+						print "        <ejercicio id=\"" to_xml(l) "." to_xml(iind[n]) "." to_xml(ee[2]) "\" tipo=\"" to_xml(idmeaning) "\">" ee[1] "<pregunta>" to_xml(ee[3]) "</pregunta>" >>out_cla;
+						print "        <respuesta>" to_xml(ee[4]) "</respuesta></ejercicio>" >> out_cla;
+					}
+				}
+				print "    </clasif>" >> out_cla;
+			}
+		}
+		print "  </clasif>" >> out_cla;
+	}
+	
+	for (idp in palabras) {
+		if (idp==palpal[idp]) {
+			p="";
+		}
+		else {
+			p=" pal=\"" to_xml(palpal[idp]) "\"";
+		}
+		print "  " pos_fpal[idp] "<pal id=\"" idp "\"" p ">" >> out_def;
+		split(palabras[idp], sigs, "%;%");
+		for (n in sigs) {
+			split(sigs[n], ee, "%-%");
+			if (ee[2] == "") {
+				id=to_xml(idmeaning);
+			} 
+			else {
+				id=to_xml(ee[2]);
+			}
+			if (ee[3]!="") {
+				heur="heur=\"" ee[3] "\"";
+			}
+			else {
+				heur="";
+			}
+			print "    " ee[1] "<sig id=\"" idp "." id "\" fecha=\"" fecha "\" " heur ">" to_xml(ee[4]) "</sig>" >> out_def;
+		}
+		print "  </pal>" >> out_def;
+	}
+	
+	print "</secuencia>" >> out_seq;
+	print "</clasificacion>" >> out_cla;
+	print "</def>" >> out_def;
+
+	exit error;
+
+}
