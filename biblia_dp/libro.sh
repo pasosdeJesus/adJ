@@ -4,9 +4,10 @@ dir=$1;
 pry=$2;
 desc=$3;
 fuentes=$4;
-gutnum=$5;
-gutdate=$6;
-imagenes=$7;
+tipoestilo=$5;
+gutnum=$6;
+gutdate=$7;
+imagenes=$8;
 
 if (test "$dir" = "") then {
 	echo "Falta directorio como primer parámetro";
@@ -22,18 +23,24 @@ if (test "$desc" = "") then {
 	echo "Falta descripción del libro como tercer parámetro";
 	exit 1;
 } fi;
+
 if (test "$fuentes" = "") then {
 	echo "Faltan fuentes como cuarto parámetro";
 	exit 1;
 } fi;
 
+if (test "$tipoestilo" != "1ev" -a "$tipoestilo" != "4ev") then {
+	echo "Quinto parámetro debe ser tipo de estilo (1ev o 4ev)";
+	exit 1;
+} fi;
+
 if (test "$gutnum" = "") then {
-	echo "Falta número Gutenberg como quinto parámetro";
+	echo "Falta número Gutenberg como sexto parámetro";
 	exit 1;
 } fi;
 
 if (test "$gutdate" = "") then {
-	echo "Falta fecha de publicación en Gutenberg como sexto parámetro";
+	echo "Falta fecha de publicación en Gutenberg como septimo parámetro";
 	exit 1;
 } fi;
 
@@ -71,10 +78,10 @@ mkdir -p $nd/ispell
 
 for i in $fuentes ; do 
 	v=`grep "<credits.*version" $i | sed -e "s/^.*version=\"\([^\"]*\)\".*$/\1/g"`;
-	if (test "$v" != "") then {
+	if (test "$version" = "" -a "$v" != "") then {
 		version=$v;
 	} fi;
-	echo "$i ($version)";
+	echo "$i ($v)";
 	neln $i $nd;
 done
 
@@ -88,8 +95,8 @@ neln docbookrep_html.xsl $nd/docbookrep_html.xsl
 neln docbookrep_tex.dsl $nd/docbookrep_tex.dsl
 nesed Leame.txt $nd/Leame.txt
 nesed Desarrollo.txt $nd/Desarrollo.txt
-nesed estilo.dsl $nd/estilo.dsl
-nesed estilohtml.xsl $nd/estilohtml.xsl
+nesed estilos/estilo-$tipoestilo.dsl $nd/estilo.dsl
+nesed estilos/estilohtml-$tipoestilo.xsl $nd/estilohtml.xsl
 nesed confv.empty $nd/confv.empty
 nesed Makefile $nd/Makefile
 nesed Derechos.txt $nd/Derechos.txt
