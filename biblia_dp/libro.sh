@@ -1,4 +1,6 @@
 #!/bin/sh
+# Genera distribución de fuentes de un libro o un grupo de libros
+# Dominio público. Sin garantías. 2004. vtamara@infomatik.uni-kl.de
 
 dir=$1;
 pry=$2;
