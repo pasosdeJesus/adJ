@@ -1,0 +1,40 @@
+
+* ispell: Corregir bug con defformater herram/defispell
+ispell -d spanish -p ./marcos.ispell -F herram/defispell marcos.gbfxml
+No procesa bien tildes
+
+* Evangelios:
+	Comparar con más evangelios (ojala con versiones bien antiguas).
+	Ilustrar.
+	Separar con subtítulos.
+	Concordar.
+	Agregar comentarios de diversos autores.
+	* Mateo
+		Faltan 2-9, 
+
+* Imprimir
+
+* Traducir otras partes de la biblia (podría ser nuevo testamento).
+
+gbfxml2html
+	* Completarlo para no requerir traducción a DocBook (dificil usar
+	  DocBook con un documento tan grande).
+
+gbfxml2tex
+	* Hacerla para evitar traducción a DocBook
+
+gbfxml2gbfdb
+	* Agregar tag para cambio de línea a gbfdb.
+
+   Tomado de TDG :
+
+Line-specific environments
+
+These environments preserve whitespace and line breaks in the source text.
+DocBook does not provide the equivalent of HTML's BR tag, so there's no way to
+interject a line break into normal running text.
+
+
+
+Conversión a PostScript:
+	* Más distinción entre notas de pie de página y versiculos

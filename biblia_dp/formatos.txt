@@ -1,0 +1,47 @@
+
+Formatos y extensiones:
+
+.gbf      GBF - General Bible Format
+.gbfxml   GBF XML - Version XML de GBF
+.xdbk	  DocBook
+.xsl	  XSLT 
+.dsl	  DSSSL
+.ps	  PostScript
+.pdf	  PDF
+.tex	  TeX
+.dvi	  DVI (TeX)
+.awk	  Script para AWK
+
+Conversiones y herramientas:
+                                                        docbookrep_html.xsl
+							estilohtml.xsl
+    gbf2xml.awk           gbfxml2db.xsl   (XML) /--------------> HTML
+GBF -----------> GBF XML -----------------> DocBook 
+			                      | (SGML)
+			                      -----> TeX -------> DVI  ---> PS
+                                      docbookrep_tex.dsl  jadetex     dvips |
+                                             estilo.dsl                     |
+                                                                     ps2pdf V
+                                                                           PDF
+
+Parte de los scripts para conversión (a partir de DocBook), así como los 
+scripts de configuración y publicación se basan en repasa 
+http://structio.sourceforge.net/repasa   
+
+
+------ 
+
+Porque GBFXML?
+
+TEI:
+http://www.tei-c.org/Lite/
+Permite mantener muchos detalles de un libro impreso en XML.
+
+DocBook:
+http://www.docbook.org
+Permite mantener estrucutra de un libro
+
+TML (Theological Markup Language):
+http://www.ccel.org/ThML/ 
+Empleado en textos de Christian Classics Ethereal Library
+

@@ -1,0 +1,60 @@
+#!/usr/bin/awk -f
+# Deformatter of gbfxml for ispell.  See man ispell
+# Released to the public domain. 2003. No warranties. vtamara@informatik.uni-kl.de
+
+function str_to(str,i) {
+        return substr(str,1,i-1);
+}
+
+
+function str_from(str,i) {
+        return substr(str,i,length(str)-i+1);
+}
+
+function spaces(n) {
+	str="";
+        while (length(str)<n) {
+                str=" " str;
+        }
+        return str;
+}
+
+
+/<[^<>]+>/ {
+	while (match($0,/<[^<>]+>/)!=0) {
+		stag=RSTART;
+		ltag=RLENGTH
+		p=str_to($0,stag);
+		tag=substr($0,stag+1,ltag-2);
+		if (prtag!="") {
+			printf "%s",p;
+		}
+		else {
+			printf spaces(length(p));
+		}
+		printf "%s",spaces(length(tag)+2);
+		if (match(tag,/ lang="es"/)!=0) {
+			match(tag,/^[A-Za-z]* /);
+			prtag=str_to(tag,RLENGTH);
+		}
+		else if (match(tag,"^/" prtag)!=0) {
+			prtag="";
+		}
+		$0=str_from($0,stag+ltag);
+	}
+}
+
+/.*/ {
+	if (prtag!="") {
+		print $0;
+	}
+	else {
+		print spaces(length($0));
+	}
+}
+
+BEGIN {
+	prtag="";  # Name of current tag whose data and subelements are printable
+}
+
+

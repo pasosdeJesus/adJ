@@ -1,0 +1,162 @@
+# Variables de configuración
+
+# Las siguientes líneas definen variables de configuración que,
+# eventualmente, usted puede quedar cambiar para adaptar mejor estas fuentes
+# a sus necesidades --después de modificar este archivo ejecute conf.sh.  
+
+# Note que la sintaxis de este archivo es apropiada para
+# ser usada por conf.sh, a continuación de cada variable debe haber
+# dos líneas con comentarios.  La primera describe la variable y la segunda
+# da una indicación de que hacer si ocurre algún problema.
+
+PROYECTO="biblia_dp"
+# Nombre del proyecto
+#
+
+PRY_VERSION="0.2"
+# Versión
+#
+
+PRY_DESC="La Biblia: Traducción de dominio público abierta a mejoras"
+# Descripcion corta
+#
+
+
+URLSITE="http://de.geocities.com/nuestroamigojesus/bdp"
+# Sitio de desarrollo de este proyecto
+#
+
+ACT_PROC="act-ncftpput"
+# Regla para actualizar sitio de publicación
+# Las que hay por defecto son act-scp y act-ncftpput
+
+HTML_PROC="dbrep_html_xsltproc_single"
+# Regla para generar HTML
+# Las que están por defecto son: dbrep_html_xsltproc para generar en varios HTML con XSLTPROC, dbrep_html_jade para generar en varias páginas con Jade
+
+PS_PROC="dbrep_ps_jade"
+# Regla para generar PostScript
+# Las que están por defecto son: dbrep_html_xsltproc para generar en varios HTML con XSLTPROC, dbrep_html_jade para generar en varias páginas con Jade
+
+PDF_PROC="dbrep_pdf_ps"
+# Regla para generar PDF
+# Las que hay por defecto es dbrep_pdf_ps que genera PDF a  partir de PostScript
+
+
+# Variables empleadas en fuentes
+
+
+
+
+# Las siguientes variables serán modificadas por conf.sh (normalmente no las debe editar)
+
+MES_ACT="octubre de 2002"
+# Mes de actualización
+#
+
+FECHA_ACT=""
+# Fecha de la actualización más reciente
+#
+
+REPASA_DOCBOOK_XSL_HTML="docbookrep_html.xsl"
+# Ruta de hojas XSLT de define para convertir de DocBook a HTML
+# 
+
+JADE=""
+# Motor para procesar hojas de estilo DSSSL
+# Instale jade o openjade (http://openjade.sourceforge.net)
+
+JADETEX=""
+# Para procesar TeX producido por Jade y generar DVI
+# Instale jadetex (fuentes disponibles en http://openjade.sourceforge.net)
+
+PDFJADETEX=""
+# Para procesar TeX producido por Jade y generar PDF
+# Instale jade o openjade (http://openjade.sourceforge.net)
+
+XSLTPROC=""
+# Procesador de XSL xsltproc
+# Disponible en http://xmlsoft.org/XSLT/ 
+
+XMLLINT=""
+# Validador de XML
+# xmllint está disponible junto con xsltproc en http://xmlsoft.org/XSLT/ 
+
+DVIPS=""
+# Conversor de DVI a PostScript dvips
+# 
+
+PS2PDF=""
+# Conversor de PostScript a PDF
+# 
+
+PAPEL="a4"
+# Tamaño de papel, puede ser a4 o letter o alguno de los aceptados por gs
+# 
+
+SGML_XML=""
+# Declaración SGML de un documento XML
+# Disponible junto con Docbook-DSSL
+
+DOCBOOK_XML_DIR=""
+# Vía del DTD de DocBook XML
+# Disponible en http://www.docbook.org
+
+DOCBOOK_DSSSL=""
+# Directorio con las hojas de estilo DSSSL para DocBook
+# Instale docbook-dsssl (http://docbook.sourceforge.net/projects/dsssl/)
+
+DOCBOOK_XSL=""
+# Directorio con hojas de estilo XSL para DocBook
+# Instale docbook-xsl (http://http://docbook.sourceforge.net/projects/xsl/index.html)
+
+CONVERT=""
+# Programa para convertir imagenes de un formato a otro
+# Hace parte del paquete imagemagick
+
+COLLATEINDEX=""
+# Programa auxiliar de DocBook para generar indices
+#
+
+NCFTPPUT=""
+# Programa para transferir archivos desde línea de comandos usando el protocolo FTP
+# Es una herramienta del paquete ncftp cliente http://www.ncftpd.com/
+
+SCP=""
+# Programa para transferir archivos desde la línea de comandos usando SSH
+# Es una herramienta del paquete ssh  http://www.openssh.org
+
+SED=""
+# Stream Editor.  Empleado para transformar textos.
+# Hace parte del paquete sed.
+
+ED=""
+# Editor orientado a linea.
+# Herramienta estándar en sistemas Unix
+
+AWK=""
+# Interprete POSIX Awk.  Empleado para transformar textos.
+# Hace parte del paquete awk.
+
+GZIP=""
+# Compresor.
+# Herramienta típica en sistemas Unix.
+
+W3M=""
+# Navegador de web en texto.
+# http://www.w3m.org
+
+ISPELL=""
+# Corrector ortográfico internacional.
+# http://fmg-www.cs.ucla.edu/fmg-members/geoff/ispell.html
+
+ Vías de instalación
+
+INSBIN="/usr/local/bin"
+# Directorio de instalación de binarios
+#
+
+INSDOC="/usr/local/share/doc/$PROYECTO"
+# Directorio para instalación de documentación Postscript y HTML
+#
+

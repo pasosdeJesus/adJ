@@ -1,0 +1,1269 @@
+<html>
+
+<head>
+<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<meta NAME="GENERATOR" CONTENT="Microsoft FrontPage 4.0">
+<title>General Bible Format Tagging Specification</title>
+<meta NAME="Template" CONTENT="D:\Program Files\Microsoft Office\Office\html.dot">
+<meta http-equiv="PICS-Label"
+content='(PICS-1.1 "http://www.rsac.org/ratingsv01.html" l gen true comment "RSACi North America Server" for "http://ebible.org" on "1998.06.27T18:09-0800" r (n 0 s 0 v 0 l 0))'>
+<meta NAME="keywords"
+CONTENT="GBF, General, Format, Bible Translations, Bible, Translations, Bibles, Biblia, Tanakh, Law, Torah, Prophets, History, Old Testament, Apocrypha, New Testament, Old, New, Testament, World, English, Hebrew, Names, Version, God's, Word, Holy Bible, Search, Christian, Holy, Bible search, GLW, Scripture, Scriptures, Study, WEB, HNV, alt.bible, alt.christnet.bible">
+<meta NAME="description"
+CONTENT="Official definition of the General Bible Format text tagging specification for use in preparing translations of the Holy Bible for Bible study and translation software.">
+</head>
+
+<body LINK="#0000ff" VLINK="#800080" BGCOLOR="#00ffff">
+
+<p><!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN"></p>
+<b><font FACE="Arial" SIZE="6">
+
+<p ALIGN="CENTER">General Bible Format Tagging Specification</p>
+</font><font FACE="Arial" SIZE="4">
+
+<p>Purpose</p>
+</font></b><font FACE="Palatino,Book Antiqua">
+
+<p>This specification is intended as an aid to preparing Bible Texts for use with various
+Bible search programs. While it is possible to parse and use these files directly, these
+files may be further processed by a Bible search program by indexing and/or converting to
+another format. Conversions to other formats should be relatively simple. This format is
+designed to leave most of the detailed formatting up to the Bible search program, which
+may be running in DOS, Windows, or some other platform.</p>
+</font><font FACE="Arial" SIZE="4"><b>
+
+<p>Caution</p>
+</b></font><font FACE="Palatino,Book Antiqua">
+
+<p>Since this format is still under development, some things might change, especially with
+respect to footnote and cross reference handling. There are still some things that are a
+bit ambiguous in this specification, and which may be clarified later with a reference
+implementation of a GBF reader. Check the <a HREF="http://www.ebible.org/bible/gbf.htm">master
+copy</a> of this document before writing programs to take advantage of Bibles distributed
+in this format. This document was last updated 19 November 2001. The latest
+change was to document the &lt;WTf&gt; tag and mark some tags as unused or
+obsolete.</p>
+</font><font FACE="Arial" SIZE="4"><b>
+
+<p>General Format</p>
+</b></font><font FACE="Palatino,Book Antiqua">
+
+<p>General Bible Format (GBF) files are plain ASCII text files, with lines limited to no
+more than 254 characters. Lines are ended with the DOS standard CR-LF pair of characters.
+GBF files consist of a series of tokens, which may be tags, words, spaces, or punctuation.
+These tokens may not cross line boundaries. When read, line endings are the same as a
+single space, except when they immediately follow the &lt;CM&gt; token, in which case they
+are ignored. It is up to the program displaying or converting the text to another format
+to insert soft line breaks at the appropriate places. For ASCII values greater than 127,
+the U. S. Windows ANSI character set is assumed. (Currently, the only use for
+these characters is for typographic quotation marks.) GBF readers targeting DOS or Unix should
+convert characters in this range to the closest equivalents on those platforms.</p>
+</font>
+
+<p>&nbsp;</p>
+<font FACE="Arial" SIZE="4"><b>
+
+<p>Tags</p>
+</b></font><font FACE="Palatino,Book Antiqua">
+
+<p>There are several kinds of tags in GBF files, indicated by the first character after
+the &quot;&lt;&quot; character. These include: file header tags, text type tags, file tail
+tags, font attribute tags, paragraph attribute tags, informational tags, sync marks,
+special characters, etc. All tags start with the less-than symbol (&lt;) and two
+characters that identifies the tag and end with the greater-than symbol (&gt;). Tag
+identifiers are case sensitive, and may be extended in the future to include additional
+letters, numbers, and other characters. Some tags take a parameter (like sync marks). This
+parameter is inserted just before the ending &quot;&gt;&quot;. Unrecognized tags (not in
+this specification) should be ignored by GBF readers aimed at this version of the GBF
+specification (since they were probably added in a later version of this specification. In
+tags with start and stop versions, the second letter of the tag is upper case in the start
+tag, and lower case in the stop tag.</p>
+</font>
+
+<p>&nbsp;</p>
+<font FACE="Arial" SIZE="4"><b>
+
+<p>Text Type Tags</p>
+</b></font><font FACE="Palatino,Book Antiqua">
+
+<p>The text type mutually exclusive tag group specifies the logical contents of the
+following text and implies a default set of character and paragraph settings. The actual
+fonts and paragraph attributes assigned to each of these kinds of text is determined by
+the displaying program, preferably with some input from the user.</p>
+</font>
+
+<p>&nbsp;</p>
+<font FACE="Palatino,Book Antiqua">
+
+<p>File header tags are presented in the following order, starting at the beginning of the
+file.</p>
+</font>
+
+<table BORDER="1" CELLSPACING="1" CELLPADDING="7" WIDTH="589">
+  <tr>
+    <td WIDTH="30%" VALIGN="TOP"><font FACE="Arial" SIZE="2"><b>Type</b></font></td>
+    <td WIDTH="13%" VALIGN="TOP"><font FACE="Arial" SIZE="2"><b>Tag</b></font></td>
+    <td WIDTH="57%" VALIGN="TOP"><font FACE="Arial" SIZE="2"><b>Purpose</b></font></td>
+  </tr>
+  <tr>
+    <td WIDTH="30%" VALIGN="TOP"><font FACE="Arial" SIZE="2">File header start</font></td>
+    <td WIDTH="13%" VALIGN="TOP"><font FACE="Arial" SIZE="2"><b>&lt;H0<i>vv</i>&gt;</b></font></td>
+    <td WIDTH="57%" VALIGN="TOP"><font FACE="Arial" SIZE="2">SBF file version information. (vv
+    = 00 for initial version). This must be the first token of the file, if present. This is
+    where a shift to Unicode may happen in the future. Any text before this tag is ignored.</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="30%" VALIGN="TOP"><font FACE="Arial" SIZE="2">Long translation title</font></td>
+    <td WIDTH="13%" VALIGN="TOP"><font FACE="Arial" SIZE="2"><b>&lt;H1&gt;</b></font></td>
+    <td WIDTH="57%" VALIGN="TOP"><font FACE="Arial" SIZE="2">Set the long title of the
+    translation for printing at the beginning and for long window titles or headings. Should
+    precede the main text of the Bible (i.e., The Holy Bible, God&#146;s Living Word
+    Translation; or American Standard Version).</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="30%" VALIGN="TOP"><font FACE="Arial" SIZE="2">Translation abbreviation</font></td>
+    <td WIDTH="13%" VALIGN="TOP"><font FACE="Arial" SIZE="2"><b>&lt;H2&gt;</b></font></td>
+    <td WIDTH="57%" VALIGN="TOP"><font FACE="Arial" SIZE="2">Set the short translation title
+    or abbreviation (i. e., GLW, ASV, NASB 1995, NJB, Amplified, etc.)</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="30%" VALIGN="TOP"><font FACE="Arial" SIZE="2">Copyright notice (short)</font></td>
+    <td WIDTH="13%" VALIGN="TOP"><font FACE="Arial" SIZE="2"><b>&lt;H3&gt;</b></font></td>
+    <td WIDTH="57%" VALIGN="TOP"><font FACE="Arial" SIZE="2">Short copyright notice (minimal)
+    if copyrighted or something like &quot;KJV text is in the Public Domain.&quot;</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="30%" VALIGN="TOP"><font FACE="Arial" SIZE="2">Copyright notice (long)</font></td>
+    <td WIDTH="13%" VALIGN="TOP"><font FACE="Arial" SIZE="2">&lt;H4&gt;</font></td>
+    <td WIDTH="57%" VALIGN="TOP"><font FACE="Arial" SIZE="2">Copyright and permissions notice
+    (full text). The copyright notice ends when the next field (probably &lt;TI&gt;) starts.</font></td>
+  </tr>
+</table>
+
+<p>&nbsp;</p>
+<font FACE="Palatino,Book Antiqua">
+
+<p>File body tags are used as necessary to mark the type of content of the text.</p>
+</font>
+
+<table BORDER="1" CELLSPACING="1" CELLPADDING="7" WIDTH="589">
+  <tr>
+    <td WIDTH="30%" VALIGN="TOP"><font FACE="Arial" SIZE="2"><b>Type</b></font></td>
+    <td WIDTH="13%" VALIGN="TOP"><font FACE="Arial" SIZE="2"><b>Tag</b></font></td>
+    <td WIDTH="57%" VALIGN="TOP"><font FACE="Arial" SIZE="2"><b>Purpose</b></font></td>
+  </tr>
+  <tr>
+    <td WIDTH="30%" VALIGN="TOP"><font FACE="Arial" SIZE="2">Apocrypha</font></td>
+    <td WIDTH="13%" VALIGN="TOP"><font FACE="Arial" SIZE="2">&lt;BA&gt;</font></td>
+    <td WIDTH="57%" VALIGN="TOP"><font FACE="Arial" SIZE="2">Text of the
+    Apocrypha/Deuterocanonical books</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="30%" VALIGN="TOP"><font FACE="Arial" SIZE="2">Commentary</font></td>
+    <td WIDTH="13%" VALIGN="TOP"><font FACE="Arial" SIZE="2">&lt;BC&gt;</font></td>
+    <td WIDTH="57%" VALIGN="TOP"><font FACE="Arial" SIZE="2">Commentary (not normally used in
+    Bible texts but in separate files with sync marks).</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="30%" VALIGN="TOP"><font FACE="Arial" SIZE="2">Introduction to translation</font></td>
+    <td WIDTH="13%" VALIGN="TOP"><font FACE="Arial" SIZE="2">&lt;BI&gt;</font></td>
+    <td WIDTH="57%" VALIGN="TOP"><font FACE="Arial" SIZE="2">Notes to the reader, translation
+    history, etc.</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="30%" VALIGN="TOP"><font FACE="Arial" SIZE="2">New Testament Text</font></td>
+    <td WIDTH="13%" VALIGN="TOP"><font FACE="Arial" SIZE="2"><b>&lt;BN&gt;</b></font></td>
+    <td WIDTH="57%" VALIGN="TOP"><font FACE="Arial" SIZE="2">Text of the 27 books of the New
+    Testament</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="30%" VALIGN="TOP"><font FACE="Arial" SIZE="2">Old Testament Text</font></td>
+    <td WIDTH="13%" VALIGN="TOP"><font FACE="Arial" SIZE="2"><b>&lt;BO&gt;</b></font></td>
+    <td WIDTH="57%" VALIGN="TOP"><font FACE="Arial" SIZE="2">Text of the 39 books of the Old
+    Testament</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="30%" VALIGN="TOP"><font FACE="Arial" SIZE="2">Book Preface</font></td>
+    <td WIDTH="13%" VALIGN="TOP"><font FACE="Arial" SIZE="2">&lt;BP&gt;</font></td>
+    <td WIDTH="57%" VALIGN="TOP"><font FACE="Arial" SIZE="2">Ancient or recent preface to a
+    book of the Bible or Apocrypha</font></td>
+  </tr>
+</table>
+
+<p>&nbsp;</p>
+<font FACE="Palatino,Book Antiqua">
+
+<p>File tail tags must be in the following order:</p>
+</font>
+
+<table BORDER="1" CELLSPACING="1" CELLPADDING="7" WIDTH="589">
+  <tr>
+    <td WIDTH="30%" VALIGN="TOP"><font FACE="Arial" SIZE="2"><b>Type</b></font></td>
+    <td WIDTH="13%" VALIGN="TOP"><font FACE="Arial" SIZE="2"><b>Tag</b></font></td>
+    <td WIDTH="57%" VALIGN="TOP"><font FACE="Arial" SIZE="2"><b>Purpose</b></font></td>
+  </tr>
+  <tr>
+    <td WIDTH="30%" VALIGN="TOP"><font FACE="Arial" SIZE="2">Check value</font></td>
+    <td WIDTH="13%" VALIGN="TOP"><font FACE="Arial" SIZE="2">&lt;ZW&gt;</font></td>
+    <td WIDTH="57%" VALIGN="TOP"><font FACE="Arial" SIZE="2"><b>OBSOLETE</b>
+      (Replaced by external check value from SHASUM or SAPPSUM. Was defined as: Check value (SHA-1 hash of all
+    lines from the beginning of the file to just before this line). Followed by 32 hexadecimal
+    digits. SBF readers should reject any SBF File that fails this validation check. The hash
+    value may optionally be followed by a DSS digital signature.)</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="30%" VALIGN="TOP"><font FACE="Arial" SIZE="2">Digital Signature</font></td>
+    <td WIDTH="13%" VALIGN="TOP"><font FACE="Arial" SIZE="2">&lt;ZX&gt;</font></td>
+    <td WIDTH="57%" VALIGN="TOP"><font face="Arial" size="2"><b>OBSOLETE</b>
+      (Replaced by external PGP digital signatures. Was defined as: DSS Signature of file from &lt;H0<i>vv</i>&gt;
+    to before &lt;ZW&gt;)</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="30%" VALIGN="TOP"><font FACE="Arial" SIZE="2">Registered user ID.</font></td>
+    <td WIDTH="13%" VALIGN="TOP"><font FACE="Arial" SIZE="2">&lt;ZY&gt;</font></td>
+    <td WIDTH="57%" VALIGN="TOP"><font FACE="Arial" SIZE="2"><b>OBSOLETE</b>
+      (Not used. Was defined as: The user ID, name, organization,
+    and check value of the registered user are encoded in this section.)</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="30%" VALIGN="TOP"><font FACE="Arial" SIZE="2">End of file</font></td>
+    <td WIDTH="13%" VALIGN="TOP"><font FACE="Arial" SIZE="2">&lt;ZZ&gt;</font></td>
+    <td WIDTH="57%" VALIGN="TOP"><font FACE="Arial" SIZE="2">Stop reading here.</font></td>
+  </tr>
+</table>
+
+<p>&nbsp;</p>
+
+<table BORDER="1" CELLSPACING="1" CELLPADDING="7" WIDTH="576">
+  <tr>
+    <td WIDTH="20%" VALIGN="TOP"><font FACE="Arial" SIZE="2"><b>Type</b></font></td>
+    <td WIDTH="15%" VALIGN="TOP"><font FACE="Arial" SIZE="2"><b>Start Tag</b></font></td>
+    <td WIDTH="14%" VALIGN="TOP"><font FACE="Arial" SIZE="2"><b>Stop Tag</b></font></td>
+    <td WIDTH="52%" VALIGN="TOP"><font FACE="Arial" SIZE="2"><b>Purpose</b></font></td>
+  </tr>
+  <tr>
+    <td WIDTH="20%" VALIGN="TOP"><font FACE="Arial" SIZE="2">Psalm Book Title</font></td>
+    <td WIDTH="15%" VALIGN="TOP"><font FACE="Arial" SIZE="2"><b>&lt;TB&gt;</b></font></td>
+    <td WIDTH="14%" VALIGN="TOP"><font FACE="Arial" SIZE="2"><b>&lt;Tb&gt;</b></font></td>
+    <td WIDTH="52%" VALIGN="TOP"><font FACE="Arial" SIZE="2">Mark the beginnings of the 5
+    books of Psalms</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="20%" VALIGN="TOP"><font FACE="Arial" SIZE="2">Comment</font></td>
+    <td WIDTH="15%" VALIGN="TOP"><font FACE="Arial" SIZE="2">&lt;TC&gt;</font></td>
+    <td WIDTH="14%" VALIGN="TOP"><font FACE="Arial" SIZE="2">&lt;Tc&gt;</font></td>
+    <td WIDTH="52%" VALIGN="TOP"><font FACE="Arial" SIZE="2">Ignore text in this section for
+    any display or conversion use.</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="20%" VALIGN="TOP"><font FACE="Arial" SIZE="2">Hebrew Title</font></td>
+    <td WIDTH="15%" VALIGN="TOP"><font FACE="Arial" SIZE="2"><b>&lt;TH&gt;</b></font></td>
+    <td WIDTH="14%" VALIGN="TOP"><font FACE="Arial" SIZE="2"><b>&lt;Th&gt;</b></font></td>
+    <td WIDTH="52%" VALIGN="TOP"><font FACE="Arial" SIZE="2">Hebrew titles of psalms. The
+    Hebrew title should come right after the sync marker for verse 1.</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="20%" VALIGN="TOP"><font FACE="Arial" SIZE="2">Section header</font></td>
+    <td WIDTH="15%" VALIGN="TOP"><font FACE="Arial" SIZE="2">&lt;TS&gt;</font></td>
+    <td WIDTH="14%" VALIGN="TOP"><font FACE="Arial" SIZE="2">&lt;Ts&gt;</font></td>
+    <td WIDTH="52%" VALIGN="TOP"><font FACE="Arial" SIZE="2">Translator&#146;s or
+    publisher&#146;s section headers</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="20%" VALIGN="TOP"><font FACE="Arial" SIZE="2">Book title</font></td>
+    <td WIDTH="15%" VALIGN="TOP"><font FACE="Arial" SIZE="2"><b>&lt;TT&gt;</b></font></td>
+    <td WIDTH="14%" VALIGN="TOP"><font FACE="Arial" SIZE="2"><b>&lt;Tt&gt;</b></font></td>
+    <td WIDTH="52%" VALIGN="TOP"><font FACE="Arial" SIZE="2">Full title of the current book as
+    it is to be displayed, i. e. &quot;The Good News According to John&quot;</font></td>
+  </tr>
+</table>
+
+<p>&nbsp;</p>
+<font FACE="Arial" SIZE="4"><b>
+
+<p>Font Attributes</p>
+</b></font><font FACE="Palatino,Book Antiqua">
+
+<p>Text attribute tag pairs are inserted into the text as necessary to indicate text
+attributes like italics. These may or may not be properly represented in all Bible viewers
+due to platform limitations. All of these text attributes are assumed to be off at the
+beginning of each chapter unless the start tag is explicitly repeated after the chapter
+sync mark.</p>
+</font>
+
+<p>&nbsp;</p>
+
+<table BORDER="1" CELLSPACING="1" CELLPADDING="7" WIDTH="379">
+  <tr>
+    <td WIDTH="45%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua"><b>Attribute</b></font></td>
+    <td WIDTH="30%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua"><b>Start tag </b></font></td>
+    <td WIDTH="25%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua"><b>Stop tag </b></font></td>
+  </tr>
+  <tr>
+    <td WIDTH="45%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Bold
+      (unused)</font></td>
+    <td WIDTH="30%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;FB&gt;</font></td>
+    <td WIDTH="25%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;Fb&gt;</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="45%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Small Caps
+      (unused)</font></td>
+    <td WIDTH="30%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;FC&gt;</font></td>
+    <td WIDTH="25%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;Fc&gt;</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="45%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Italics</font></td>
+    <td WIDTH="30%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;FI&gt;</font></td>
+    <td WIDTH="25%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;Fi&gt;</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="45%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Font name
+      (unused)</font></td>
+    <td WIDTH="30%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;FN<i>name</i>&gt;</font></td>
+    <td WIDTH="25%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;Fn&gt;</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="45%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Old Testament quote
+      (unused)</font></td>
+    <td WIDTH="30%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;FO&gt;</font></td>
+    <td WIDTH="25%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;Fo&gt;</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="45%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Red (words of Jesus)</font></td>
+    <td WIDTH="30%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;FR&gt;</font></td>
+    <td WIDTH="25%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;Fr&gt;</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="45%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Superscript
+      (unused)</font></td>
+    <td WIDTH="30%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;FS&gt;</font></td>
+    <td WIDTH="25%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;Fs&gt;</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="45%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Underline
+      (unused)</font></td>
+    <td WIDTH="30%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;FU&gt;</font></td>
+    <td WIDTH="25%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;Fu&gt;</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="45%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Subscript
+      (unused)</font></td>
+    <td WIDTH="30%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;FV&gt;</font></td>
+    <td WIDTH="25%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;Fv&gt;</font></td>
+  </tr>
+</table>
+
+<p>&nbsp;</p>
+<font FACE="Arial" SIZE="4"><b>
+
+<p>Paragraph Attributes</p>
+</b></font><font FACE="Palatino,Book Antiqua">
+
+<p>These tags describe attributes of paragraphs, like justification, indenting, etc. All
+of these attributes are assumed to be in the default state (non-indented prose, left
+justified, direction left-to-right) at the beginning of each chapter unless the
+appropriate start tag is repeated after the chapter sync mark. Justification tags are
+mutually exclusive, as are direction tags.</p>
+</font>
+
+<table BORDER="1" CELLSPACING="1" CELLPADDING="7" WIDTH="583">
+  <tr>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua"><b>Attribute</b></font></td>
+    <td WIDTH="14%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua"><b>Start Tag</b></font></td>
+    <td WIDTH="13%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua"><b>Stop Tag</b></font></td>
+    <td WIDTH="51%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua"><b>Comment</b></font></td>
+  </tr>
+  <tr>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Direction left-to-right
+    (default) (unused)</font></td>
+    <td WIDTH="14%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;DL&gt;</font></td>
+    <td WIDTH="13%" VALIGN="TOP">&nbsp;</td>
+    <td WIDTH="51%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">European &amp; American
+    languages</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Direction right-to-left
+      (unused)</font></td>
+    <td WIDTH="14%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;DR&gt;</font></td>
+    <td WIDTH="13%" VALIGN="TOP">&nbsp;</td>
+    <td WIDTH="51%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Hebrew, Arabic, etc.</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Direction top-to-bottom
+      (unused)</font></td>
+    <td WIDTH="14%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;DT&gt;</font></td>
+    <td WIDTH="13%" VALIGN="TOP">&nbsp;</td>
+    <td WIDTH="51%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Mandarin, etc.</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Justify Center
+      (unused)</font></td>
+    <td WIDTH="14%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;JC&gt;</font></td>
+    <td WIDTH="13%" VALIGN="TOP">&nbsp;</td>
+    <td WIDTH="51%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Useful for titles.</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Justify Full
+      (unusuded)</font></td>
+    <td WIDTH="14%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;JF&gt;</font></td>
+    <td WIDTH="13%" VALIGN="TOP">&nbsp;</td>
+    <td WIDTH="51%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Might map to left
+    justification.</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Justify Left</font></td>
+    <td WIDTH="14%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;JL&gt;</font></td>
+    <td WIDTH="13%" VALIGN="TOP">&nbsp;</td>
+    <td WIDTH="51%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">The default method of
+    justification.</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Justify Right</font></td>
+    <td WIDTH="14%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;JR&gt;</font></td>
+    <td WIDTH="13%" VALIGN="TOP">&nbsp;</td>
+    <td WIDTH="51%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">For &quot;selah&quot;</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Indented quote
+      (unused)</font></td>
+    <td WIDTH="14%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;PI&gt;</font></td>
+    <td WIDTH="13%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;Pi&gt;</font></td>
+    <td WIDTH="51%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Indented extended
+    quotation.</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Poetry</font></td>
+    <td WIDTH="14%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;PP&gt;</font></td>
+    <td WIDTH="13%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;Pp&gt;</font></td>
+    <td WIDTH="51%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Describes poetry (like in
+    Psalms).</font></td>
+  </tr>
+</table>
+<font FACE="Arial" SIZE="4"><b>
+
+<p>Information Tags</p>
+</b></font><font FACE="Palatino,Book Antiqua">
+
+<p>These tags provide various additional pieces of information about the text that are
+intended to be displayed on demand with a right mouse click, in a separate window, or at
+the bottom of a page. The start and stop tags indicate a range of words over which the
+footnote or reference apply. The sequence indicators shown as &quot;seq&quot; below are
+used to match the start and stop tags in case of overlapping references, and is a short
+string of numbers or letters that are guaranteed to be unique in the range of text they
+cover.</p>
+</font>
+
+<table BORDER="1" CELLSPACING="1" CELLPADDING="7" WIDTH="582">
+  <tr>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua"><b>Type</b></font></td>
+    <td WIDTH="29%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua"><b>Start Tag</b></font></td>
+    <td WIDTH="15%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua"><b>Stop Tag</b></font></td>
+    <td WIDTH="35%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua"><b>Purpose</b></font></td>
+  </tr>
+  <tr>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Text with an embedded
+    footnote.</font></td>
+    <td WIDTH="29%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;RB&gt;</font></td>
+    <td WIDTH="15%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;RF&gt;</font></td>
+    <td WIDTH="35%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">The text between
+    &lt;RB&gt; and &lt;RF&gt; is further described or has a comment or translator's note
+    between &lt;RF&gt; and &lt;Rf&gt;. The text between &lt;RB&gt; and &lt;RF&gt; may be
+    marked as having a hyperlink for a footnote pop-up, or may be marked with more
+    conventional superscript indicators in printed text.</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Footnote text</font></td>
+    <td WIDTH="29%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;RF&gt;</font></td>
+    <td WIDTH="15%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;Rf&gt;</font></td>
+    <td WIDTH="35%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Embedded footnote text is
+    between the &lt;RF&gt; and &lt;Rf&gt; tags. &lt;RF&gt; may or may not be preceded by
+    &lt;RB&gt;.</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Parallel Passage
+      (unused)</font></td>
+    <td WIDTH="29%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;RP<i>seq Book ch</i>:<i>vs</i>&gt;</font></td>
+    <td WIDTH="15%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;Rp<i>seq</i>&gt;</font></td>
+    <td WIDTH="35%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Book is a number or
+    abbreviation without spaces.</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Cross reference
+      (unused)</font></td>
+    <td WIDTH="29%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;RX<i>seq Book ch</i>:<i>vs</i>&gt;</font></td>
+    <td WIDTH="15%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;Rx<i>seq</i>&gt;</font></td>
+    <td WIDTH="35%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Book is a number or
+    abbreviation without spaces.</font></td>
+  </tr>
+</table>
+
+<p>&nbsp;</p>
+<font FACE="Palatino,Book Antiqua">
+
+<p>Word information tags:</p>
+</font>
+
+<table BORDER="1" CELLSPACING="1" CELLPADDING="7" WIDTH="590">
+  <tr>
+    <td WIDTH="29%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua"><b>Type</b></font></td>
+    <td WIDTH="25%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua"><b>Tag</b></font></td>
+    <td WIDTH="46%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua"><b>Purpose</b></font></td>
+  </tr>
+  <tr>
+    <td WIDTH="29%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Strong&#146;s Greek Number</font></td>
+    <td WIDTH="25%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;WG<i>nnn</i>&gt;</font></td>
+    <td WIDTH="46%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Ordinal number of Greek
+    lexicon entry.</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="29%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Strong&#146;s Hebrew
+    Number</font></td>
+    <td WIDTH="25%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;WH<i>nnn</i>&gt;</font></td>
+    <td WIDTH="46%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Ordinal number of Hebrew
+    lexicon entry for previous word.</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="29%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Interlinear translation</font></td>
+    <td WIDTH="25%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;WI<i>word(s)</i>&gt;</font></td>
+    <td WIDTH="46%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">words to be placed under
+    the current word.</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="29%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Original Language word
+    information</font></td>
+    <td WIDTH="25%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;WT<i>xxxx</i>&gt;</font></td>
+    <td WIDTH="46%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua"><i>xxxx</i> are one or
+    more characters with specific meanings that apply to the previous word&#146;s tense,
+    gender, number, etc.:<p>A = aorist</p>
+    <p>P = plural</p>
+    <p>S = singular</p>
+    <p>[to be expanded]</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="29%" VALIGN="TOP"><font face="Palatino,Book Antiqua">Form of
+      address</font></td>
+    <td WIDTH="25%" VALIGN="TOP"><font face="Palatino,Book Antiqua">&lt;WTf&gt;</font></td>
+    <td WIDTH="46%" VALIGN="TOP"><font face="Palatino,Book Antiqua">The proper
+      name immediately preceding this tag is being addressed directly (2nd
+      person) as opposed to referred to (3rd person).</font></td>
+  </tr>
+</table>
+<font FACE="Arial" SIZE="4"><b>
+
+<p>Sync Marks</p>
+</b></font><font FACE="Palatino,Book Antiqua">
+
+<p>Verse sync marks identify the current book, chapter, and verse. Each kind of sync mark
+is required at the beginning of the section (book, chapter, or verse) that it identifies.
+Sync marks may optionally be repeated within a section. If no specific number is specified
+in a sync mark, the number is assumed to be one more than the previous sync mark of the
+same kind.</p>
+</font>
+
+<p>&nbsp;</p>
+
+<table BORDER="1" CELLSPACING="1" CELLPADDING="7" WIDTH="588">
+  <tr>
+    <td WIDTH="14%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua"><b>Kind</b></font></td>
+    <td WIDTH="16%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua"><b>Tag</b></font></td>
+    <td WIDTH="69%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua"><b>Example or comment</b></font></td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Book</font></td>
+    <td WIDTH="16%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;SB<i>xxx</i>&gt;</font></td>
+    <td WIDTH="69%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">For John, &lt;SBJohn&gt;
+    or &lt;SB67&gt;</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Chapter</font></td>
+    <td WIDTH="16%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;SC<i>xxx</i>&gt;</font></td>
+    <td WIDTH="69%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">For chapter 3, &lt;SC3&gt;
+    or (if the last chapter was chapter 2), &lt;SC&gt;</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Verse</font></td>
+    <td WIDTH="16%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;SV<i>xxx</i>&gt;</font></td>
+    <td WIDTH="69%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">For verse 16 (following
+    verse 15), &lt;SV16&gt; or &lt;SV&gt;</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="14%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Date
+      (unused)</font></td>
+    <td WIDTH="16%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;SD<i>mmdd</i>&gt;</font></td>
+    <td WIDTH="69%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">For April 30,
+    &lt;SD0430&gt;. Not normally used in Bible texts, but may be in commentaries arranged by
+    daily reading. If mmdd are omitted, assume next day.</font></td>
+  </tr>
+</table>
+
+<p>&nbsp;</p>
+<font FACE="Palatino,Book Antiqua">
+
+<p>Book markers may be either numeric or an English name or abbreviation as follows. The
+STEP # is not used in this format, but is listed for reference in conversions.</p>
+</font>
+
+<table BORDER="1" CELLSPACING="1" CELLPADDING="7" WIDTH="553">
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua"><b>Old Testament Book Name</b></font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua"><b>Abbreviations</b></font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua"><b>STEP #</b></font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua"><b>Book Number</b></font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Genesis</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Ge, Gn</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">1</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">1</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Exodus</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Ex</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">2</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">2</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Leviticus</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Lev, Lv</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">3</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">3</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Numbers</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Nu</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">4</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">4</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Deuteronomy</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">De, Dt</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">5</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">5</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Joshua</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Jos</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">6</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">6</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Judges</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Judg, Jdg</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">7</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">7</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Ruth</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Ru</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">8</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">8</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">1 Samuel</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">1 Sa, 1Sa</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">9</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">9</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">2 Samuel</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">2 Sa, 2Sa</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">10</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">10</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">1 Kings</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">1 Ki, 1Ki</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">11</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">11</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">2 Kings</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">2 Ki, 2Ki</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">12</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">12</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">1 Chronicles</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">1 Ch, 1Ch</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">13</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">13</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">2 Chronicles</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">2 Ch, 2Ch</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">14</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">14</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Ezra</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Ezr</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">15</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">15</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Nehemiah</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Ne</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">16</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">16</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Esther</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Es</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">17, 95, 100</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">17</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Job</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Job</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">18</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">18</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Psalms</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Ps</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">19, 91, 92</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">19</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Proverbs</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Pr</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">20</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">20</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Ecclesiastes</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Ec</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">21</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">21</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Song of Solomon</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Song, Sol, SS</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">22</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">22</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Isaiah</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Isa</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">23</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">23</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Jeremiah</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Je</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">24</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">24</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Lamentations</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">La</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">25</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">25</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Ezekiel</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Eze</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">26</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">26</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Daniel</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Da</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">27, 89</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">27</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Hosea</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Ho</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">28</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">28</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Joel</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Joe</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">29</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">29</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Amos</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Am</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">30</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">30</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Obadiah</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Ob</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">31</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">31</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Jonah</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Jon</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">32</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">32</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Micah</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Mi</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">33</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">33</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Nahum</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Na</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">34</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">34</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Habakkuk</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Hab</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">35</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">35</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Zephaniah</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Zep</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">36</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">36</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Haggai</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Hag</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">37</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">37</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Zechariah</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Zec</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">38</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">38</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Malachi</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">Mal</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">39</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua" SIZE="2">39</font></td>
+  </tr>
+</table>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<table BORDER="1" CELLSPACING="1" CELLPADDING="7" WIDTH="553">
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua"><b>Apocrypha Book name</b></font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua"><b>Abbreviation</b></font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua"><b>STEP #</b></font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua"><b>Book #</b></font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Tobit</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Tob</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">69, 93, 98</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">40</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Judith</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Judi, Jdt</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">70</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">41</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Esther (Greek)</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">GrkEs</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">71 (additions only);<p>88
+    (Complete)</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">42</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Wisdom</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Wis</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">72</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">43</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Sirach</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Sir</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">73, 94, 99</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">44</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Baruch</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Bar</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">74, 90</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">45</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Letter of Jeremiah</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Let</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">75</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">46</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Prayer of Azariah and the
+    Song of the Three Jews</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Azar</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">76</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">47</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Susanna</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Sus</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">77</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">48</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Bel and the Dragon</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Bel</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">78</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">49</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">1 Maccabees</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">1Mac</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">79, 96</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">50</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">2 Maccabees</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">2Mac</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">80, 97</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">51</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">1 Esdras</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">1Esd</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">81</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">52</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Prayer of Manasseh</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Man</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">82</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">53</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Psalm 151</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">P1</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">86</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">54</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">3 Maccabees</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">3Mac</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">84</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">55</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">2 Esdras</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">2Esd</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">83, 87</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">56</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">4 Maccabees</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">4Mac</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">85</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">57</font></td>
+  </tr>
+</table>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<table BORDER="1" CELLSPACING="1" CELLPADDING="7" WIDTH="553">
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua"><b>New Testament Book Name</b></font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua"><b>Abbreviation</b></font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua"><b>STEP #</b></font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua"><b>Book #</b></font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Matthew</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Mat, Mt</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">40</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">64</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Mark</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Mar, Mk</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">41</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">65</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Luke</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Lu, Lk</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">42</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">66</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">John</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Joh</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">43</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">67</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Acts</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Ac</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">44</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">68</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Romans</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Ro, Rm</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">45</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">69</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">1 Corinthians</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">1 Co, 1Co</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">46</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">70</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">2 Corinthians</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">2 Co, 2Co</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">47</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">71</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Galatians</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Ga</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">48</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">72</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Ephesians</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Ep</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">49</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">73</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Philippians</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Phili, Php</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">50</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">74</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Colossians</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Col</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">51</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">75</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">1 Thessalonians</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">1 Th, 1Th</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">52</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">76</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">2 Thessalonians</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">2 Th, 2Th</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">53</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">77</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">1 Timothy</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">1 Ti, 1Ti</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">54</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">78</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">2 Timothy</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">2 Ti, 2Ti</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">55</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">79</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Titus</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Tit</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">56</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">80</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Philemon</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Phile, Phm</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">57</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">81</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Hebrews</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">He</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">58</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">82</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">James</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Ja</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">59</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">83</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">1 Peter</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">1 Pe, 1Pe</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">60</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">84</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">2 Peter</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">2 Pe, 2Pe</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">61</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">85</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">1 John</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">1 Jo, 1Jo</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">62</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">86</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">2 John</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">2 Jo, 2Jo</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">63</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">87</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">3 John</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">3 Jo, 3Jo</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">64 (14 vs.);<p>67 (15 vs.)</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">88</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Jude</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Jude</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">65</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">89</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="36%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Revelation</font></td>
+    <td WIDTH="21%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Re</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">66;<p>68 (18 vs. in Ch.
+    12)</font></td>
+    <td WIDTH="22%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">90</font></td>
+  </tr>
+</table>
+
+<p>&nbsp;</p>
+<font FACE="Arial" SIZE="4"><b>
+
+<p>Special Character Tags</p>
+</b></font>
+
+<p>&nbsp;</p>
+<font FACE="Palatino,Book Antiqua">
+
+<p>These tags indicate just a single character in the text.</p>
+</font>
+
+<p>&nbsp;</p>
+
+<table BORDER="1" CELLSPACING="1" CELLPADDING="7" WIDTH="590">
+  <tr>
+    <td WIDTH="25%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua"><b>Meaning</b></font></td>
+    <td WIDTH="19%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua"><b>Tag</b></font></td>
+    <td WIDTH="56%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua"><b>Comment</b></font></td>
+  </tr>
+  <tr>
+    <td WIDTH="25%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">ASCII character
+      (unused)</font></td>
+    <td WIDTH="19%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;CA<i>xx</i>&gt;</font></td>
+    <td WIDTH="56%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">xx is a hexadecimal value</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="25%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&gt;
+      (unused)</font></td>
+    <td WIDTH="19%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;CG&gt;</font></td>
+    <td WIDTH="56%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Literal greater-than sign.</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="25%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;
+      (unused)</font></td>
+    <td WIDTH="19%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;CT&gt;</font></td>
+    <td WIDTH="56%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Literal less-than sign.</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="25%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">End of paragraph</font></td>
+    <td WIDTH="19%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;CM&gt;</font></td>
+    <td WIDTH="56%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Ends paragraph or line of
+    poetry. In prose, may cause blank line and/or indent.</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="25%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">End of Line</font></td>
+    <td WIDTH="19%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;CL&gt;</font></td>
+    <td WIDTH="56%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Ends line without ending
+    paragraph -- used in the first line of a poetic couplet.</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="25%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Unicode character
+      (unused)</font></td>
+    <td WIDTH="19%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;CU<i>xxxx</i>&gt;</font></td>
+    <td WIDTH="56%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">xxxx is a hexadecimal
+    value.</font></td>
+  </tr>
+</table>
+
+<p>&nbsp;</p>
+<font FACE="Arial" SIZE="4"><b>
+
+<p>External Note and Highlight Files</p>
+</b></font><font FACE="Palatino,Book Antiqua">
+
+<p>External note and highlight files may either be prepared commentaries or notations made
+by the individual Bible student as he or she studies the Bible using a Bible search
+program. When a note and highlight file is open along with a Bible text, the notes are
+made available to the reader by a pop-up mechanism or a separate window, or printed at the
+bottom of a page as footnotes. The highlights are applied to the Bible text background as
+it is displayed. The note and highlight files are plain ASCII text, using the same tags as
+the Bible text for font and paragraph characteristics, plus the following:</p>
+</font>
+
+<table BORDER="1" CELLSPACING="1" CELLPADDING="7" WIDTH="590">
+  <tr>
+    <td WIDTH="25%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua"><b>Meaning</b></font></td>
+    <td WIDTH="19%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua"><b>Tag</b></font></td>
+    <td WIDTH="56%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua"><b>Comment</b></font></td>
+  </tr>
+  <tr>
+    <td WIDTH="25%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Start of note file</font></td>
+    <td WIDTH="19%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;HN&gt;</font></td>
+    <td WIDTH="56%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">This tag must be first.</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="25%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Note
+      (unused)</font></td>
+    <td WIDTH="19%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;NN<i>ref</i>-<i>ref</i>&gt;</font></td>
+    <td WIDTH="56%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">The text following is a
+    note pertaining to the Bible text included in the references indicated. References are of
+    the form <i>Book ch</i>:<i>vs wd</i>, where <i>Book</i> may be an abbreviation (without
+    spaces) or a number, and <i>ch</i> and <i>vs</i> are numbers. The number <i>wd</i> is the
+    number of the word within the verse. If wd is omitted, then the whole verse is assumed. If
+    vs is omitted, then the whole chapter is assumed. If ch is omitted, then the whole book is
+    assumed. If the second reference is omitted, then the reference is assumed to cover only
+    the first reference. The beginning and ending words are considered part of the range</font></td>
+  </tr>
+  <tr>
+    <td WIDTH="25%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Color
+      (unused)</font></td>
+    <td WIDTH="19%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;NC <i>rrr ggg bbb ref</i>-<i>ref</i>&gt;</font></td>
+    <td WIDTH="56%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Background highlight color
+    expressed as three numbers from 0 to 255 for red (<i>rrr</i>), green (<i>ggg</i>), and
+    blue (<i>bbb</i>) covering the reference indicated. The reference is interpreted just like
+    it is for the note tag. For example, to highlight all of John 3:16 in green, the tag would
+    be &lt;NC 0 255 0 John 3:16&gt;. To highlight &quot;In the beginning&quot; in John 1:1
+    with a shade of greenish blue, the tag would be &lt;NC 0 64 255 John 1:1 1-John 1:1 3&gt; </font></td>
+  </tr>
+  <tr>
+    <td WIDTH="25%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">End of file</font></td>
+    <td WIDTH="19%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">&lt;ZZ&gt;</font></td>
+    <td WIDTH="56%" VALIGN="TOP"><font FACE="Palatino,Book Antiqua">Last token of the file.
+    Anything after this token is ignored.</font></td>
+  </tr>
+</table>
+
+<hr>
+
+<p><a HREF="index.html"><font FACE="Palatino,Book Antiqua">[Home]</font></a></p>
+</body>
+</html>

@@ -1,0 +1,42 @@
+
+Ayudas para traducir y desarrollar
+
+Estas fuentes están en formato GBF XML[1] el cual es apropiado para 
+mantener simultaneamente traducciones de la Biblia.  La extensión sugerida 
+es "gbfxml" (ver gbfxml.dtd).
+
+Puede ver más sobre los formatos y herramientas empleadas en
+formatos.txt 
+
+[1] El formato GBF XML se basa en el formato GBF de Michael Johnson 
+	(http://ebible.org/bible/gbf.htm)
+
+1. INICIO DE UNA TRADUCCIÓN
+
+Extraer libro que se traduce de la biblia en inglés convertida a GBF XML:
+(web-corr.gbfxml). Para agregar <t lang="es"></t> al libro extraido
+(digamos si se ha puesto en hechos.gbfxml):
+
+	cp hechos.gbfxml hechos.gbfxml.bak
+	awk -f herram/adcionat.awk hechos.gbfxml.bak > hechos.gbfxml
+
+2. EDICIÓN
+
+Para editar un archivo gbfxml puede emplear cualquier editor de texto.
+Hay un modo para vim: herram/gbfxml.vim que puede usar así:
+ 1. Agregue a ~/.vim/filetype.vim
+au! BufRead,BufNewFile *.gbfxml       setfiletype gbfxml
+ 2. ponga herram/gbfxml.vim en ~/.vim/plugins con nombre gbfxml.vim
+
+Empleando este modo, al teclear el comienzo de una marquilla se autocompletará
+automáticamente esa marquilla.  Por ejemplo si digita <t automáticamente
+se completará: <t lang="es"></t>
+Las completaciones disponibles son:
+---
+* '<c' genera '<citebib id=""/>'
+* '<r' genera '<rb lang="es"><rf></rf></rb>'
+* '<t' genera '<t lang="es"></t>'
+---
+
+
+

@@ -1,0 +1,27 @@
+
+<!-- 
+   GBF DocBook (SGML)
+   Extension to DocBook SGML to support better General Bible Format XML
+
+   This source is released to the public domain since 2002.
+   vtamara@informatik.uni-kl.de
+-->
+
+<!ENTITY % local.other.char.class "|fr">
+
+<!ENTITY % DocBookDTD PUBLIC "-//OASIS//DTD DocBook V4.1//EN" "/usr/local/share/sgml/docbook/4.1/docbook.dtd">
+<!-- Should be "http:/www.oasis-open.org/docbook/xml/4.0/docbookx.dtd" -->
+%DocBookDTD;
+
+<!-- Red, words of Jesus -->
+<!ELEMENT fr (#PCDATA
+                | %link.char.class;
+                | %xref.char.class;
+                | %gen.char.class;
+                | %base.char.class; 
+                | %other.char.class;)*>
+
+<!ATTLIST fr
+                %common.attrib;>
+
+
