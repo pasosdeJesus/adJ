@@ -9,7 +9,7 @@
 
 " Agregar a ~/.vim/filetype.vim
 " au! BufRead,BufNewFile *.gbfxml       setfiletype gbfxml
-" y poner este archivo en ~/.vim/plugins con nombre gbfxml.vim
+" y poner este archivo en ~/.vim/ftplugin con nombre gbfxml.vim
 
 
 " Sólo carga plugin si el usuario lo desea y no se ha hecho antes

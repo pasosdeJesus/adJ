@@ -3,19 +3,34 @@
 ispell -d spanish -p ./marcos.ispell -F herram/defispell marcos.gbfxml
 No procesa bien tildes
 
-* Evangelios:
-de éstilo CSS
-	Comparar con más evangelios (ojala con versiones bien antiguas).
+* Traducciones ya hechas (Mateo, Marcos, Lucas, Juan, Hechos --la menos
+  comparada es Hechos):
+	Mateo, Marcos, Lucas, Juan con las biblias que tengo disponibles:
+		Gideons, SE en Gutenberg, Reina Valera en Gutenberg, UBS3.
+	Hechos con las que tengo disponibles que me faltan:
+		Reina Valera en Gutenberg, UBS3.
+	Ayudas para UBS3 en 
+	  http://groups.yahoo.com/group/evangelios-dp/message/84 ).
 	Ilustrar.
 	Separar con subtítulos.
 	Concordar.
 	Agregar comentarios de diversos autores.
-	* Mateo
-		Faltan 2-9, 
 
-* Imprimir
+* Mejorar versión PostScript para imprimir y distribuir gratuitamente
+	(Gideons ya hace esto http://www.gideons.org pero la versión
+	que distribuyen no es de dominio público).
+	* Más distinción entre notas de pie de página y versiculos
+	* guerrimo me dijo que hiciera un machote, me dijo un método
+	  facil de empastar (todas las hojas listas para el libro se
+	  les hace cortes con un cuchillo de forma transversal sobre
+	  el lomo, el lomo se pega a una malla con pegante y a la
+	  caratula.
 
-* Continuar traducción de hechos.
+* Publicar hechos en nuestroamigojesus
+
+* Publicar hechos en Gutenberg
+
+* Traducir carta a los romanos
 
 gbfxml2html
 	* Completarlo para no requerir traducción a DocBook (dificil usar
@@ -34,11 +49,6 @@ Line-specific environments
 These environments preserve whitespace and line breaks in the source text.
 DocBook does not provide the equivalent of HTML's BR tag, so there's no way to
 interject a line break into normal running text.
-
-
-
-Conversión a PostScript:
-	* Más distinción entre notas de pie de página y versiculos
 
 HTML:
 	En traducción a HTML usar clase para palabras de Jesús y hoja CSS

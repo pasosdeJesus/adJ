@@ -37,7 +37,9 @@ act: $(GENACT) $(ACT_PROC)
 	if (test "$(OTHER_ACT)" != "") then { make $(OTHER_ACT); } fi;
 
 act-scp:
+	if (test "$(SCP)" = "") then { echo "Falta programa scp, instale y configure de nuevo con conf.sh"; exit 1; } fi;
 	$(SCP) $(FILESACT) $(USER)@$(ACTHOST):$(ACTDIR)
 
 act-ncftpput:
+	if (test "$(NCFTPPUT)" = "") then { echo "Falta programa ncftpput, instale y configure de nuevo con conf.sh"; exit 1; } fi;
 	$(NCFTPPUT) -u $(USER) $(ACTHOST) $(ACTDIR) $(FILESACT)

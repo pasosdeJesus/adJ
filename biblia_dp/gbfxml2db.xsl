@@ -37,15 +37,16 @@
 
 <!-- To use with call-template -->
 <xsl:template name="newlang">
-  <xsl:param name="lang"/>
-  <xsl:choose>
-    <xsl:when test="./@lang = ''">
-      <xsl:value-of select="$lang"/>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:value-of select="./@lang"/>
-    </xsl:otherwise>
-  </xsl:choose>
+	<xsl:param name="lang"/>
+	<xsl:variable name="langloc"><xsl:value-of select="./@lang"/></xsl:variable>
+	<xsl:choose>
+		<xsl:when test="$langloc = ''">
+			<xsl:value-of select="$lang"/>
+		</xsl:when>
+		<xsl:otherwise>
+			<xsl:value-of select="./@lang"/>
+		</xsl:otherwise>
+	</xsl:choose>
 </xsl:template>
 
 
@@ -55,8 +56,8 @@
 <!-- Entry point -->
 <xsl:template match="gbfxml">
   <xsl:param name="lang" select="./@lang"/>
-  <set lang="{$outlang}"><xsl:text>
-    </xsl:text>
+  <set lang="{$outlang}"><xsl:text> 
+	  </xsl:text>
 	<setinfo>
 	  <xsl:apply-templates select="./tt">
 		  <xsl:with-param name="lang" select="$lang"/>
@@ -91,6 +92,7 @@
 <xsl:template match="tt"> 
   <xsl:param name="lang" select="./@lang"/>
   <xsl:variable name="n"><xsl:call-template name="newlang"><xsl:with-param name="lang" select="$lang"/></xsl:call-template></xsl:variable>
+
   <title><xsl:apply-templates>
 	  <xsl:with-param name="lang" select="$n"/>
   </xsl:apply-templates></title>
@@ -352,14 +354,6 @@
 	</xsl:if> -->
 </xsl:template>
 
-<!-- Text -->
-<xsl:template match="text()">
- <xsl:param name="lang"/>
-        <xsl:if test="$lang = $outlang">
-                <xsl:value-of select="."/>
-        </xsl:if>
-</xsl:template>
-
 <!-- Section of bibliography -->
 <xsl:template match="sbib">
   <xsl:param name="lang" select="./@lang"/>
@@ -394,28 +388,37 @@
 <xsl:template match="author">
   <xsl:param name="lang" select="./@lang"/>
   <xsl:variable name="n"><xsl:call-template name="newlang"><xsl:with-param name="lang" select="$lang"/></xsl:call-template></xsl:variable>
-  <xsl:apply-templates>
+  <xsl:value-of select="."/>
+  <!--  <xsl:apply-templates>
     <xsl:with-param name="lang" select="$n"/>
-    </xsl:apply-templates>
+    </xsl:apply-templates> -->
 </xsl:template>
 
 <xsl:template match="editor">
   <xsl:param name="lang" select="./@lang"/>
   <xsl:variable name="n"><xsl:call-template name="newlang"><xsl:with-param name="lang" select="$lang"/></xsl:call-template></xsl:variable>
-  <xsl:apply-templates>
+  <xsl:value-of select="."/>
+  <!-- <xsl:apply-templates>
     <xsl:with-param name="lang" select="$n"/>
-    </xsl:apply-templates>
+    </xsl:apply-templates> -->
 </xsl:template>
 
 <xsl:template match="otherbib">
   <xsl:param name="lang" select="./@lang"/>
   <xsl:variable name="n"><xsl:call-template name="newlang"><xsl:with-param name="lang" select="$lang"/></xsl:call-template></xsl:variable>
-  <xsl:apply-templates>
+  <xsl:value-of select="."/>
+  <!-- <xsl:apply-templates>
     <xsl:with-param name="lang" select="$n"/>
-  </xsl:apply-templates>
+  </xsl:apply-templates> -->
 </xsl:template>
 
-
+<!-- Text -->
+<xsl:template match="text()">
+	<xsl:param name="lang"/>
+        <xsl:if test="$lang = $outlang">
+                <xsl:value-of select="."/>
+        </xsl:if>
+</xsl:template>
 
 
 </xsl:stylesheet>
