@@ -1,9 +1,18 @@
 
-Ayudas para traducir y desarrollar
+Ayudas para traducir, comparar y desarrollar
+--------------------------------------------
 
-Estas fuentes están en formato GBF XML[1] el cual es apropiado para 
-mantener simultaneamente traducciones de la Biblia.  La extensión sugerida 
-es "gbfxml" (ver gbfxml.dtd).
+Primero pidamósle a Dios que nos ilumine con su Santo Espíritu para
+que hagamos sólo cosas acordes a la voluntad de Él.
+
+Si desea comunicarse con otras personas que están ayudando a traducir,
+comparar y desarrollar, lo invitamos cordialmente a unirse a la lista
+evangelios-dp@yahoogroups.com por ejemplo desde:
+http://groups.yahoo.com/group/evangelios-dp/
+
+Técnicamente estas fuentes están en formato GBF XML[1] el cual es 
+apropiado para mantener simultaneamente traducciones de la Biblia.  
+La extensión sugerida es "gbfxml" (ver gbfxml.dtd).
 
 Puede ver más sobre los formatos y herramientas empleadas en
 formatos.txt 
@@ -14,11 +23,12 @@ formatos.txt
 1. INICIO DE UNA TRADUCCIÓN
 
 Extraer libro que se traduce de la biblia en inglés convertida a GBF XML:
-(web-corr.gbfxml). Para agregar <t lang="es"></t> al libro extraido
-(digamos si se ha puesto en hechos.gbfxml):
+(web-corr.gbfxml). Desde sistemas tipo Unix para agregar <t lang="es"></t> 
+al libro extraido (digamos si se ha puesto en hechos.gbfxml):
 
 	cp hechos.gbfxml hechos.gbfxml.bak
 	awk -f herram/adcionat.awk hechos.gbfxml.bak > hechos.gbfxml
+
 
 2. EDICIÓN
 
@@ -49,5 +59,30 @@ Las completaciones disponibles son:
 * '<t' genera '<t lang="es"></t>'
 ---
 
+
+3. DICCIONARIOS 
+
+Además de los diccionarios impresos o con derechos de reproducción restrictivos
+a los que tenga acceso, entre otros diccionarios con derechos generosos
+puede usar:
+
+El programa dict y los diccionarios preparados para este (inglés-inglés),
+después de descargarlos e instalarlos en su computador (o si tiene
+conexión a internet puede instalar sólo cliente para consultar diccionarios
+disponibles en Internet): http://www.dict.org/
+
+Diccionarios disponibles en Internet como 
+	- inglés-inglés http://www.dictionary.com
+	- inglés-español http://www.wordreference.com/es/
+	- aleman-inglés http://dict.leo.org/
+
+
+
+4. COMPARACIONES CON OTRAS TRADUCCIONES 
+
+Además de las biblias impresas o con derechos de reproducción restrictivos
+a las que tenga acceso, entre otras traducciones de la biblia con
+derechos generosos puede usar algunas de las citadas en la bibliografía 
+(i.e archivo biblio.gbxml).
 
 

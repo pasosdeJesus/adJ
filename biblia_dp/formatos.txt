@@ -25,7 +25,7 @@ GBF -----------> GBF XML -----------------> DocBook
                                                                            PDF
 
 Parte de los scripts para conversión (a partir de DocBook), así como los 
-scripts de configuración y publicación se basan en repasa 
+scripts de configuración y publicación se basan en los de repasa 
 http://structio.sourceforge.net/repasa   
 
 
@@ -45,3 +45,10 @@ TML (Theological Markup Language):
 http://www.ccel.org/ThML/ 
 Empleado en textos de Christian Classics Ethereal Library
 
+
+Cada uno de estos lenguajes ofrece sus ventajas, aunque ninguno es
+específico para la biblia, mientras que GBFXML toma los elementos
+fundamentales de GBF que si es específico para la biblia.    
+
+La conversión de GBFXML a los otros formatos XML descritos es 
+relativamente fácil preparando hojas XSLT.
