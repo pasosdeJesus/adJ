@@ -4,6 +4,7 @@ ispell -d spanish -p ./marcos.ispell -F herram/defispell marcos.gbfxml
 No procesa bien tildes
 
 * Evangelios:
+de éstilo CSS
 	Comparar con más evangelios (ojala con versiones bien antiguas).
 	Ilustrar.
 	Separar con subtítulos.
@@ -14,7 +15,7 @@ No procesa bien tildes
 
 * Imprimir
 
-* Traducir otras partes de la biblia (podría ser nuevo testamento).
+* Continuar traducción de hechos.
 
 gbfxml2html
 	* Completarlo para no requerir traducción a DocBook (dificil usar
@@ -38,3 +39,9 @@ interject a line break into normal running text.
 
 Conversión a PostScript:
 	* Más distinción entre notas de pie de página y versiculos
+
+HTML:
+	En traducción a HTML usar clase para palabras de Jesús y hoja CSS
+	(inicialmente rojo).
+
+
