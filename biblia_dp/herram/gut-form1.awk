@@ -50,11 +50,20 @@ function remspace(str) {
 	br=1;
 }
 
-/[0-9]+[«A-Za-záéíóúÁÉÍÓÚñÑÜü¿¡(`_]/  {
-	while (match($0,/[0-9]+[«A-Za-záéíóúÁÉÍÓÚñÑÜü¿¡(`_]/)!=0) {
+/\^?[0-9]+[«A-Za-záéíóúÁÉÍÓÚñÑÜü¿¡(`_]/  {
+	while (substr($0,1,6)!="501(c)" && 
+		match($0,/\^?[0-9]+[«A-Za-záéíóúÁÉÍÓÚñÑÜü¿¡(`_]/)!=0) {
 		p=str_to($0,RSTART);
 		num=substr($0,RSTART,RLENGTH-1);
 		n=remspace(str_from($0,RSTART+RLENGTH-1));
+		if (match(num,/^\^/)) {
+			num=str_from(num,2);
+		}
+#		print "OJO 0=" $0;
+#		print "OJO p=" p;
+#		print "OJO num=" num;
+#		print "OJO n=" n;
+#exit 1;
 		print remspace(p);
 		if (int(num)!=int(lver)+1) {
 			print FILENAME ":" FNR ": Versículo errado" > "/dev/stderr";
