@@ -237,10 +237,10 @@ if (test -f $DOCBOOK_XSL/html/docbook.xsl) then {
 		echo "** Falta archivo VERSION en directorio $DOCBOOK_XSL";
 		exit 1;
 	} 
-	elif (test ! -f $DOCBOOK_XSL/manpages/docbook.xsl) then {
-		echo "** La distribución de las hojas de estilo para DocBook que está empleando no incluye soporte para generar páginas man. Instale una versión reciente (http://docbook.sourceforge.net) y configure la ruta en la variable DOCBOOK_XSL del archivo confv.sh";
-		exit 1;
-	} 
+#	elif (test ! -f $DOCBOOK_XSL/manpages/docbook.xsl) then {
+#		echo "** La distribución de las hojas de estilo para DocBook que está empleando no incluye soporte para generar páginas man. Instale una versión reciente (http://docbook.sourceforge.net) y configure la ruta en la variable DOCBOOK_XSL del archivo confv.sh";
+#		exit 1;
+#	} 
 	elif (ltf "$v" "1.56" -a "$HTML_PROC" = "dbrep_html_xsltproc") then {
 		echo "Se requieren hojas de estilo XSL versión 1.56 o posterior";
 		echo "Empleando jade como segunda opción"

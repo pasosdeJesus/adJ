@@ -49,8 +49,8 @@ FILESACT=$(PROYECTO)-$(PRY_VERSION).tar.gz $(PRINT_DIR)/$(PROYECTO)-$(PRY_VERSIO
 
 all: $(HTML_TARGET) $(PRINT_DIR)/$(PROYECTO).ps $(PRINT_DIR)/$(PROYECTO).pdf
 
-valida: 
-	$(XMLLLINT) --catalogs $(PROYECTO).gbfxml
+valida-gbfxml: 
+	$(XMLLINT) --catalogs $(PROYECTO).gbfxml
 
 $(PROYECTO).$(EXT_DOCBOOK): $(PROYECTO).gbfxml $(SOURCE_GBFXML) derechos.gbfxml biblio.gbfxml
 
@@ -126,7 +126,7 @@ gutact: gutenberg
 
 # Reglas para revisar ortografía con ispell (al texto plano)
 
-ispell: gutenberg/$(PROYECTO).txt ispell/$(PROYECTO).ispell
+ispell-gut: gutenberg/$(PROYECTO).txt ispell/$(PROYECTO).ispell
 	$(ISPELL) -d spanish -p ispell/$(PROYECTO).ispell gutenberg/$(PROYECTO).txt
 
 # Para usar DocBook

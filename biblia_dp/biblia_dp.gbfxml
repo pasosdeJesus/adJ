@@ -8,6 +8,8 @@
   <!ENTITY lucas SYSTEM "lucas.gbfxml">
   <!ENTITY juan SYSTEM "juan.gbfxml">
   <!ENTITY hechos SYSTEM "hechos.gbfxml">
+  <!ENTITY romanos SYSTEM "romanos.gbfxml">
+
   <!ENTITY biblio SYSTEM "biblio.gbfxml">
   ]>
   
@@ -18,12 +20,13 @@
 <tt>La Biblia: Traducción  de dominio pública abierta a mejoras</tt>
 <stt>biblia_dp</stt>
 &derechos;
-&hechos;
+&romanos;
 <!--
 &mateo;
 &marcos;
 &lucas; 
 &juan; 
+&hechos;
 -->
 &biblio;
 </gbfxml>
