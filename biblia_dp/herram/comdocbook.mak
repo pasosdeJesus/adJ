@@ -1,6 +1,6 @@
 
 # Common rules to generate HTML, PostScript and PDF versions of a DocBook document
-# Released to the public domain. structio-devel@lists.sourceforge.net
+# Released to the public domain. structio-info@lists.sourceforge.net
 
 # Variables required
 
@@ -51,6 +51,7 @@ dbrep_html_xsltproc: $(PROYECTO)-4.1.2.$(EXT_DOCBOOK) $(INDEX) $(SOURCES) $(IMAG
 	for i in $(IMAGES)  ; do cp $$i $(HTML_DIR)/`basename $$i`; done 
 	bp=`pwd`;cd $(HTML_DIR) && rm -f *html && $(XSLTPROC) --catalogs --nonet $$bp/$(XSLT_HTML) $$bp/$(PROYECTO)-4.1.2.$(EXT_DOCBOOK) 
 	for i in $(HTML_DIR)/*html; do cp $$i $$i.bak; $(SED) -e "s/­/-/g" $$i.bak > $$i; done
+	rm -f $(HTML_DIR)/*bak
 	$(OTHER_HTML)
 
 # To generate HTML in one page with xsltproc
@@ -121,6 +122,15 @@ HTML.index.m: $(PROYECTO)-4.1.2.$(EXT_DOCBOOK) $(SOURCES)
 	else { \
 	touch HTML.index.m; \
 	} fi;
+
+# Revisa ortografía empleando ispell
+ispell: $(HTML_TARGET)
+	touch $(PROYECT).ispell
+	if (test "$(W3M)" = "") then { echo "Se requiere w3m o lynx"; exit 1; } fi
+	echo "" > $(PRINT_DIR)/$(PROYECTO).txt
+	for i in html/*html; do echo $$i; $(W3M) -dump $(W3M_OPT) $$i >> $(PRINT_DIR)/$(PROYECTO).txt ; done
+	ispell -p $(PROYECTO).ispell imp/$(PROYECTO).txt
+
 
 .SUFFIXES: .eps .png
 

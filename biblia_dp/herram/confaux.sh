@@ -3,7 +3,7 @@
 # Released to the public domain, 2002.   No warranties.
 # Citation of the source is appreciated.
 # Project Structio http://structio.sourceforge.net, 
-# structio-devel@lists.sourceforge.net
+# structio-info@lists.sourceforge.net
 
 # Run this script with parameter -t to make a regression test
 
@@ -250,7 +250,7 @@ function addOcamlConfv  {
 	rm -f confv.tm1 confv.tm2
 	tifs=$IFS;
 	IFS="%";
-	grep -A 1 "^[A-Za-z_0-9]*[ \t]*=.*" < $confvar_file | tr "\n" "#" | sed -e "s/--#//g" | sed -e 's|[ \t]*\([A-Za-z_0-9]*\)[ \t]*=[ \t]*["]\([^"]*\)["][^#]*## \([^#]*\)#|\1%\2%\3#|g' | tr "#" "\n" | while read nvar vval comm ; do ovar=`echo $nvar | tr A-Z a-z`; oval=`echo $vval | sed -e 's|\$\([A-Za-z_0-9]*\)|"^\1^"|g'` ; echo "let $ovar=\"$oval\";;" >> confv.tm1 ; echo "(** $comm *)" >> confv.tm1; echo "" >> confv.tm1 ; echo "s/\"\^$nvar\^\"/\"\^$ovar\^\"/g" >> confv.tm2 ; done
+	LC_ALL=es_CO LANG=es_CO LANGUAGE=es_CO grep -A 1 "^[A-Za-z_0-9]*[ \t]*=.*"< $confvar_file | tr "\n" "#" | sed -e "s/--#//g" | sed -e 's|[ \t]*\([A-Za-z_0-9]*\)[ \t]*=[ \t]*["]\([^"]*\)["][^#]*## \([^#]*\)#|\1%\2%\3#|g' | tr "#" "\n" | while read nvar vval comm ; do  ovar=`echo $nvar | tr A-Z a-z`; oval=`echo $vval | sed -e 's|\$\([A-Za-z_0-9]*\)|"^\1^"|g'` ; echo "let $ovar=\"$oval\";;" >> confv.tm1 ; echo "(** $comm *)" >> confv.tm1; echo "" >> confv.tm1 ; echo "s|\"\^$nvar\^\"|\"\^$ovar\^\"|g" >> confv.tm2 ; done
 	sed -f confv.tm2 confv.tm1 | sed -e 's|""\^||g' -e 's|\^""||g' >> $1;
 	IFS=$tifs;
 	rm -f confv.tm1 confv.tm2
@@ -285,7 +285,7 @@ if (test "$?" != 0 -o "$r" != "b") then {
         echo "  El programa 'sed' es requerido";
         exit 1;
 } fi;
-r=`grep -V`;
+r=`grep -V 2> /dev/null`;
 if (test "$?" != 0) then {
         echo " El programa 'grep' es requerido";
         exit 1;

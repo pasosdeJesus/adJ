@@ -1,6 +1,6 @@
 # Reglas comunes para crear distribución de fuentes y publicar.  
 # Para incluir en Makefile.
-# Dominio público. Sin garantías. structio-devel@lists.sourceforge.net
+# Dominio público. Sin garantías. structio-info@lists.sourceforge.net
 
 # Variables requeridas:
 
@@ -19,10 +19,10 @@
 # 		en una distribución de fuentes.
 
 
-dist: $(GENDIST) $(PROYECTO)-$(PRY_VERSION).tgz
+dist: $(GENDIST) $(PROYECTO)-$(PRY_VERSION).tar.gz
 
-$(PROYECTO)-$(PRY_VERSION).tgz: 
-	rm -f $(PROYECTO)-$(PRY_VERSION).tgz
+$(PROYECTO)-$(PRY_VERSION).tar.gz: 
+	rm -f $(PROYECTO)-$(PRY_VERSION).tar.gz
 	rm -rf $(PROYECTO)-$(PRY_VERSION)
 	a=`echo *`; \
 	mkdir -p $(PROYECTO)-$(PRY_VERSION); \
@@ -30,10 +30,11 @@ $(PROYECTO)-$(PRY_VERSION).tgz:
 	find $(PROYECTO)-$(PRY_VERSION) -name "CVS" | xargs rm -rf
 	if (test "$(LIMPIADIST2)" != "") then { cd $(PROYECTO)-$(PRY_VERSION); make $(LIMPIADIST2);} fi;
 	cd $(PROYECTO)-$(PRY_VERSION); make limpiadist
-	tar cvfz $(PROYECTO)-$(PRY_VERSION).tgz $(PROYECTO)-$(PRY_VERSION)
+	tar cvfz $(PROYECTO)-$(PRY_VERSION).tar.gz $(PROYECTO)-$(PRY_VERSION)
 	rm -rf $(PROYECTO)-$(PRY_VERSION)
 
 act: $(GENACT) $(ACT_PROC)
+	if (test "$(OTHER_ACT)" != "") then { make $(OTHER_ACT); } fi;
 
 act-scp:
 	$(SCP) $(FILESACT) $(USER)@$(ACTHOST):$(ACTDIR)

@@ -2,7 +2,7 @@
 
 # Script genérico para preparar herramientas de DocBook y configurar.
 # Esta fuente se cede al dominio público 2003. No se ofrecen garantías.
-# Puede enviar reportes de fallas a structio-devel@lists.sourceforge.net
+# Puede enviar reportes de fallas a structio-info@lists.sourceforge.net
 
 # Créditos
 # Manejo de variables de configuración: Miembros de Structio.  
@@ -156,7 +156,7 @@ CRÉDITOS Y DERECHOS DE REPRODUCCIÓN
  	Script de dominio público.  Sin garantías.
 	Fuentes disponibles en: http://structio.sourceforge.net/repasa
 	Puede enviar reportes de problemas a 
-		structio-devel@lists.sourceforge.net
+		structio-info@lists.sourceforge.net
 
 	Incluye porciones de código dominio público escritas por:
 	  Miembros de Structio http://structio.sourceforge.net
@@ -238,7 +238,7 @@ if (test -f $DOCBOOK_XSL/html/docbook.xsl) then {
 		exit 1;
 	} 
 	elif (test ! -f $DOCBOOK_XSL/manpages/docbook.xsl) then {
-		echo "** La distribución de las hojas de éstilo para DocBook que está empleando no incluye soporte para generar páginas man. Instale una versión reciente (http://docbook.sourceforge.net) y configure la ruta en la variable DOCBOOK_XSL del archivo confv.sh";
+		echo "** La distribución de las hojas de estilo para DocBook que está empleando no incluye soporte para generar páginas man. Instale una versión reciente (http://docbook.sourceforge.net) y configure la ruta en la variable DOCBOOK_XSL del archivo confv.sh";
 		exit 1;
 	} 
 	elif (ltf "$v" "1.56" -a "$HTML_PROC" = "dbrep_html_xsltproc") then {
@@ -270,9 +270,20 @@ check "ED" "" "test -x \$ED" `which ed 2> /dev/null`
 check "SED" "" "test -x \$SED" `which sed 2> /dev/null`
 check "AWK" "" "test -x \$AWK" `which awk 2> /dev/null`
 check "GZIP" "" "test -x \$GZIP" `which gzip 2> /dev/null`
+check "TAR" "" "test -x \$TAR" `which tar 2> /dev/null`
+check "ZIP" "optional" "test -x \$ZIP" `which zip 2> /dev/null`
+check "PERL" "optional" "test -x \$PERL" `which perl 2> /dev/null`
+check "TIDY" "optional" "test -x \$TIDY" `which tidy 2> /dev/null`
 
 # Corrección ortografica
-check "W3M" "optional" "test -x \$W3M" `which w3m 2> /dev/null`
+check "W3M" "optional" "test -x \$W3M" `which w3m 2> /dev/null` `which lynx 2> /dev/null`
+l=`echo $W3M | sed -e "s|.*lynx.*|si|g"`
+W3M_OPT=""; 
+if (test "$l" = "si") then {
+	W3M_OPT="-nolist";
+} fi;
+changeVar W3M_OPT 1;
+
 check "ISPELL" "optional" "test -x \$ISPELL" `which ispell 2> /dev/null`
 
 

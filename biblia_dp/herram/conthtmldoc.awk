@@ -3,7 +3,7 @@
 # obtenidos con lynx o w3m a partir de HTMLs de DocBook
 # Dominio público. 
 
-/^-----------------------------------/ {
+/___________________________/ || /^-----------------------------------/ {
 	estado=estado+1;
 }
 
