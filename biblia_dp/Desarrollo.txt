@@ -23,13 +23,15 @@ Extraer libro que se traduce de la biblia en inglés convertida a GBF XML:
 2. EDICIÓN
 
 Para editar un archivo gbfxml puede emplear cualquier editor de texto.
-Hay un modo para vim: herram/gbfxml.vim que puede usar así:
+Hay un modo para vim (herram/gbfxml.vim) que puede usar así:
  1. Agregue a ~/.vim/filetype.vim
-au! BufRead,BufNewFile *.gbfxml       setfiletype gbfxml
+
+	au! BufRead,BufNewFile *.gbfxml       setfiletype gbfxml
+
  2. ponga herram/gbfxml.vim en ~/.vim/plugins con nombre gbfxml.vim
 
-Empleando este modo, al teclear el comienzo de una marquilla se autocompletará
-automáticamente esa marquilla.  Por ejemplo si digita <t automáticamente
+Empleando este modo, al teclear el comienzo de una marquilla esta
+se autocompletará automáticamente.  Por ejemplo si digita <t automáticamente
 se completará: <t lang="es"></t>
 Las completaciones disponibles son:
 ---
