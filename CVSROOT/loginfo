@@ -26,4 +26,4 @@
 #DEFAULT (echo ""; id; echo %{sVv}; date; cat) >> $CVSROOT/CVSROOT/commitlog
 CVSROOT /cvsroot/sitedocs/CVSROOT/cvstools/syncmail %{sVv} vtamara@users.sourceforge.net
 DEFAULT /cvsroot/sitedocs/CVSROOT/cvstools/syncmail %{sVv} structio-cvs@lists.sourceforge.net
-#biblia_dp /cvsroot/sitedocs/CVSROOT/cvstools/syncmail %{sVv} evangelios-dp@yahoogroups.com
+biblia_dp /cvsroot/sitedocs/CVSROOT/cvstools/syncmail %{sVv} vtamara@informatik.uni-kl.de
