@@ -5,7 +5,7 @@
 
 include Make.inc
 
-SOURCE_GBFXML=mateo.gbfxml marcos.gbfxml lucas.gbfxml juan.gbfxml
+SOURCE_GBFXML=mateo.gbfxml marcos.gbfxml lucas.gbfxml juan.gbfxml hechos.gbfxml
 
 EXT_DOCBOOK=xdbk
 
@@ -50,33 +50,74 @@ FILESACT=$(PROYECTO)-$(PRY_VERSION).tgz $(PRINT_DIR)/$(PROYECTO)-$(PRY_VERSION).
 all: $(HTML_TARGET) $(PRINT_DIR)/$(PROYECTO).ps $(PRINT_DIR)/$(PROYECTO).pdf
 
 valida: 
-	xmllint --catalogs $(PROYECTO).gbfxml
+	$(XMLLLINT) --catalogs $(PROYECTO).gbfxml
 
 $(PROYECTO).$(EXT_DOCBOOK): $(PROYECTO).gbfxml $(SOURCE_GBFXML) derechos.gbfxml biblio.gbfxml
 
 # Reglas para generar HTML y texto con formato Gutenberg
  
-gutenberg: gutenberg/$(PROYECTO).html gutenberg/$(PROYECTO).txt
+gutenberg: gutenberg/$(GUTNUM)
+
+gutenberg/$(GUTNUM): gutenberg/$(PROYECTO).html gutenberg/$(PROYECTO)-2.txt gutenberg/$(PROYECTO)-$(PRY_VERSION).zip
+	mkdir -p gutenberg/$(GUTNUM)
+	mkdir -p gutenberg/$(GUTNUM)/$(GUTNUM)-h
+	mkdir -p gutenberg/$(GUTNUM)/$(GUTNUM)-x
+	cp gutenberg/$(PROYECTO)-2.txt gutenberg/$(GUTNUM)/$(GUTNUM)-8.txt
+	cd gutenberg/$(GUTNUM); zip $(GUTNUM).zip $(GUTNUM)-8.txt
+	cp gutenberg/$(PROYECTO).html gutenberg/$(GUTNUM)/$(GUTNUM)-h/$(GUTNUM)-h.html
+	cd gutenberg/$(GUTNUM); zip -r $(GUTNUM)-h.zip $(GUTNUM)-h
+	$(XMLLINT) --noent --format $(PROYECTO).gbfxml > gutenberg/$(GUTNUM)/$(GUTNUM)-x/$(GUTNUM)-x.xml
+	cp gutenberg/$(PROYECTO)-$(PRY_VERSION).zip gutenberg/$(GUTNUM)/$(GUTNUM)-x/$(GUTNUM)-x.zip
+
  
 herram/u2d: herram/u2d.c
 	$(CC) -o herram/u2d herram/u2d.c
 
 gutenberg/$(PROYECTO).html: html/$(PROYECTO).html
-	-tidy html/$(PROYECTO).html > gutenberg/$(PROYECTO).html
+	-$(TIDY) html/$(PROYECTO).html | \
+	$(AWK) 'function mayusculas(str) { r=toupper(str); gsub(/á/,"Á",r); gsub(/é/,"É",r); gsub(/í/,"Í",r); gsub(/ó/,"Ó",r); gsub(/ú/,"Ú",r); return r}\
+	/<title>/ { nopr=1; } \
+	/<\/title>/ { $$0="<title>The Project Gutenberg eBook of $(PRY_DESC)</title>"; nopr=0; } \
+	/<h1 class="title">/ { h1tit=1; nopr=1; } \
+	/<\/h1>/ { if (h1tit==1) { $$0="<h1 class=\"title\">The Project Gutenberg eBook of $(PRY_DESC)</h1>\n<pre>This eBook is for the use of anyone anywhere at no cost and with\nalmost no restrictions whatsoever.  You may copy it, give it away or\nre-use it under the terms of the Project Gutenberg License included\nwith this eBook or online at <a href =\" http://www.gutenberg.net\">www.gutenberg.net</a></pre>\n<p>Title: $(PRY_DESC)</p>\n <p>Release Date: $(GUTDATE) [eBook #$(GUTNUM)]</p>\n <p>Language: Spanish </p>\n <p>Character set encoding: iso-8859-1</p>\n <p>***START OF THE PROJECT GUTENBERG EBOOK " dup "***</p>\n<br><center><b>Development site <a href=\"$(URLSITE)\">$(URLSITE)</a></b></center><br>\n<hr class=\"full\">"; nopr=0;} }  \
+	/<\/body>/ { print "<hr class=\"full\">\n<p>***END OF THE PROJECT GUTENBERG EBOOK " dup "***</p>\n <p>******* This file should be named $(GUTNUM)-h.html or $(GUTNUM)-h.zip *******</p>\n <p>This and all associated files of various formats will be found in:<br />\n <a href=\"$(GUTURL)\">$(GUTURL)</a></p>\n"; system("cat gutenberg/footer.inc"); } \
+	/.*/ { if (nopr!=1) { print $0; }} \
+	BEGIN { dup=mayusculas("$(PRY_DESC)"); nopr=0;} ' > gutenberg/$(PROYECTO).html
+
  
 gutenberg/$(PROYECTO).txt: gutenberg/$(PROYECTO).t3 herram/u2d
 	$(SED) -e "s/ $$//g" gutenberg/$(PROYECTO).t3 | \
 	herram/u2d >gutenberg/$(PROYECTO).txt
 	echo "Revisar con gutcheck"
 
+gutenberg/$(PROYECTO)-2.txt: gutenberg/$(PROYECTO)-2.t3 herram/u2d
+	$(SED) -e "s/ $$//g" gutenberg/$(PROYECTO)-2.t3 | \
+	herram/u2d >gutenberg/$(PROYECTO)-2.txt
+	echo "Revisar con gutcheck"
+
 gutenberg/$(PROYECTO).t3: gutenberg/$(PROYECTO).t2  
-	perl herram/gut-form2.pl gutenberg/$(PROYECTO).t2 >gutenberg/$(PROYECTO).t3
+	$(PERL) herram/gut-form2.pl gutenberg/$(PROYECTO).t2 >gutenberg/$(PROYECTO).t3
+
+gutenberg/$(PROYECTO)-2.t3: gutenberg/$(PROYECTO)-2.t2  
+	$(PERL) herram/gut-form2.pl gutenberg/$(PROYECTO)-2.t2 >gutenberg/$(PROYECTO)-2.t3
 
 gutenberg/$(PROYECTO).t2: gutenberg/$(PROYECTO).t1
 	$(AWK) -f herram/gut-form1.awk gutenberg/$(PROYECTO).t1 > gutenberg/$(PROYECTO).t2
 
+gutenberg/$(PROYECTO)-2.t2: gutenberg/$(PROYECTO)-2.t1
+	$(AWK) -f herram/gut-form1.awk gutenberg/$(PROYECTO)-2.t1 > gutenberg/$(PROYECTO)-2.t2
+
 gutenberg/$(PROYECTO).t1: html/$(PROYECTO).html
-	$(W3M) -cols 68 -dump html/$(PROYECTO).html > gutenberg/$(PROYECTO).t1
+	$(W3M) -cols 68 -dump html/$(PROYECTO).html | $(SED) -e "s/$(GUTNUM)-h.html/$(GUTNUM)-8.txt/g;s/$(GUTNUM)-h.zip/$(GUTNUM).zip/g;s/\^[ ]*$$//g" > gutenberg/$(PROYECTO).t1
+ 
+gutenberg/$(PROYECTO)-2.t1: gutenberg/$(PROYECTO).html
+	$(W3M) -cols 68 -dump gutenberg/$(PROYECTO).html | $(SED) -e "s/$(GUTNUM)-h.html/$(GUTNUM)-8.txt/g;s/$(GUTNUM)-h.zip/$(GUTNUM).zip/g;s/\^[ ]*$$//g" > gutenberg/$(PROYECTO)-2.t1
+ 
+gutenberg/$(PROYECTO)-$(PRY_VERSION).zip: dist
+	$(TAR) xvfz $(PROYECTO)-$(PRY_VERSION).tgz
+	rm -f gutenberg/$(PROYECTO)-$(PRY_VERSION).zip
+	$(ZIP) -r gutenberg/$(PROYECTO)-$(PRY_VERSION).zip $(PROYECTO)-$(PRY_VERSION)
+
 
 
 # Reglas para revisar ortografía con ispell (al texto plano)
@@ -116,10 +157,10 @@ limpia:
 .SUFFIXES: .$(EXT_DOCBOOK) .gbfxml .gbf .txt
 
 .gbfxml.$(EXT_DOCBOOK): gbfxml2db.xsl
-	SGML_CATALOG_FILES=$(CATALOG_DOCBOOK) xsltproc --stringparam outlang es --catalogs --nonet gbfxml2db.xsl $< > $@
+	SGML_CATALOG_FILES=$(CATALOG_DOCBOOK) $(XSLTPROC) --stringparam outlang es --catalogs --nonet gbfxml2db.xsl $< > $@
 
 #.gbfxml.txt: gbfxml2txt.xsl
-#	SGML_CATALOG_FILES=$(CATALOG_DOCBOOK) xsltproc --stringparam outlang es --catalogs --nonet gbfxml2txt.xsl $< > $@  # Por ahora está mejor w3m
+#	SGML_CATALOG_FILES=$(CATALOG_DOCBOOK) $(XSLTPROC) --stringparam outlang es --catalogs --nonet gbfxml2txt.xsl $< > $@  # Por ahora está mejor w3m
 
 .gbf.gbfxml:
 	($(AWK) -f gbf2gbfxml.awk $< > $@ ; \
@@ -131,9 +172,9 @@ limpia:
 $(PROYECTO).$(EXT_DOCBOOK): $(PROYECTO).gbfxml
 
 Derechos.txt: derechos.gbfxml
-	make $(HTML_TARGET)
-	w3m -cols 70 -dump $(HTML_TARGET) | $(AWK) -f herram/arrderechos.awk > Derechos.txt
+	$(MAKE) $(HTML_TARGET)
+	$(W3M) -cols 70 -dump $(HTML_TARGET) | $(AWK) -f herram/arrderechos.awk > Derechos.txt
 
 Desarrollo.txt: herram/gbfxml.vim
 	cp Desarrollo.txt Desarrollo.txt.bak
-	INICIO="Las completaciones disponibles" CMD="awk -f herram/exdocvimgbfxml.awk herram/gbfxml.vim" awk -f herram/rempbloquearch.awk Desarrollo.txt.bak > Desarrollo.txt
+	INICIO="Las completaciones disponibles" CMD="$(AWK) -f herram/exdocvimgbfxml.awk herram/gbfxml.vim" $(AWK) -f herram/rempbloquearch.awk Desarrollo.txt.bak > Desarrollo.txt

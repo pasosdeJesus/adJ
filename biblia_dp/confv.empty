@@ -26,6 +26,18 @@ URLSITE="http://de.geocities.com/nuestroamigojesus/bdp"
 # Sitio de desarrollo de este proyecto
 #
 
+GUTNUM=11500
+# Número asignado por proyecto Gutenberg
+#
+
+GUTDATE="9 February 2004"
+# Fecha de publicación en proyecto Gutenberg
+#
+
+GUTURL=http://www.gutenberg.net/1/1/5/0/11500
+# URL asignado por proyecto Gutenberg
+#
+
 ACT_PROC="act-ncftpput"
 # Regla para actualizar sitio de publicación
 # Las que hay por defecto son act-scp y act-ncftpput
@@ -139,8 +151,24 @@ AWK=""
 # Hace parte del paquete awk.
 
 GZIP=""
-# Compresor.
+# Compresor gzip.
 # Herramienta típica en sistemas Unix.
+
+ZIP=""
+# Compresor zip.
+# Herramienta típica en sistemas Unix.
+
+TAR=""
+# Empaquetador de archivos tar.
+# Herramienta típica en sistemas Unix.
+
+PERL=""
+# Interprete del lenguaje Perl.
+# Herramienta típica en sistemas Unix.  http://www.perl.org
+
+TIDY=""
+# Validador de HTML.
+# Sitio de desarrollo: http://www.w3.org/People/Raggett/tidy/
 
 W3M=""
 # Navegador de web en texto.

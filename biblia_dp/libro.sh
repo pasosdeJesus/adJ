@@ -1,30 +1,43 @@
 #!/bin/sh
 
-if (test "$1" = "") then {
+dir=$1;
+pry=$2;
+desc=$3;
+fuentes=$4;
+gutnum=$5;
+gutdate=$6;
+imagenes=$7;
+
+if (test "$dir" = "") then {
 	echo "Falta directorio como primer parámetro";
 	exit 1;
 } fi;
-dir=$1;
 
-if (test "$2" = "") then {
+if (test "$pry" = "") then {
 	echo "Falta nombre corto del proyecto como segundo parámetro";
 	exit 1;
 } fi;
-pry=$2;
 
-if (test "$3" = "") then {
+if (test "$desc" = "") then {
 	echo "Falta descripción del libro como tercer parámetro";
 	exit 1;
 } fi;
-desc=$3;
-
-if (test "$4" = "") then {
+if (test "$fuentes" = "") then {
 	echo "Faltan fuentes como cuarto parámetro";
 	exit 1;
 } fi;
-fuentes=$4;
 
-imagenes=$5;
+if (test "$gutnum" = "") then {
+	echo "Falta número Gutenberg como quinto parámetro";
+	exit 1;
+} fi;
+
+if (test "$gutdate" = "") then {
+	echo "Falta fecha de publicación en Gutenberg como sexto parámetro";
+	exit 1;
+} fi;
+
+guturl=`echo $gutnum | sed -e "s|^\([0-9]\)\([0-9]\)\([0-9]\)\([0-9]\).*|http://www.gutenberg.net/\1/\2/\3/\4/&|g"`;
 
 version="";
 
@@ -45,7 +58,7 @@ function necp {
 
 function nesed {
 	if (test ! -f $2) then {
-		sed -e "s|biblia_dp|$pry|g;s|PRY_DESC=\"[^\"]*\"|PRY_DESC=\"$desc\"|g;s|SOURCE_GBFXML=.*|SOURCE_GBFXML=$fuentes|g;s|IMAGES=.*|IMAGES=$imagenes|g;s|Traducción a español de la Biblia|Traducción a español|g;s|PRY_VERSION=\"[^\"]*\"|PRY_VERSION=\"$version\"|g" $1 > $2
+		sed -e "s|biblia_dp|$pry|g;s|PRY_DESC=\"[^\"]*\"|PRY_DESC=\"$desc\"|g;s|SOURCE_GBFXML=.*|SOURCE_GBFXML=$fuentes|g;s|IMAGES=.*|IMAGES=$imagenes|g;s|Traducción a español de la Biblia|Traducción a español|g;s|PRY_VERSION=\"[^\"]*\"|PRY_VERSION=\"$version\"|g;s|GUTNUM=.*|GUTNUM=\"$gutnum\"|g;s|GUTDATE=.*|GUTDATE=\"$gutdate\"|g;s|GUTURL=.*|GUTURL=\"$guturl\"|g" $1 > $2
 	} fi
 }
 
@@ -85,7 +98,9 @@ neln biblio.gbfxml $nd
 neln gbfxml2db.xsl $nd
 neln gbfxml.dtd $nd
 neln gutenberg/Readme.txt $nd/gutenberg
+neln gutenberg/footer.inc $nd/gutenberg
 neln ispell/$pry.ispell $nd/ispell
+neln img/*.png $nd/img/
 
 if (test ! -d $dir/herram) then {
 	mkdir $nd/herram
