@@ -43,7 +43,7 @@ USER=nuestroamigojesus
 GENACT=dist all $(PRINT_DIR)/$(PROYECTO)-$(PRY_VERSION).ps.gz $(PRINT_DIR)/$(PROYECTO)-$(PRY_VERSION).pdf $(PROYECTO)-$(PRY_VERSION)_html.tar.gz gutenberg
 # Reglas por emplear antes de actualizar sitio en Internet
 
-FILESACT=$(PROYECTO)-$(PRY_VERSION).tgz $(PRINT_DIR)/$(PROYECTO)-$(PRY_VERSION).ps.gz $(PRINT_DIR)/$(PROYECTO)-$(PRY_VERSION).pdf $(PROYECTO)-$(PRY_VERSION)_html.tar.gz $(HTML_TARGET) gutenberg/$(PROYECTO).txt
+FILESACT=$(PROYECTO)-$(PRY_VERSION).tar.gz $(PRINT_DIR)/$(PROYECTO)-$(PRY_VERSION).ps.gz $(PRINT_DIR)/$(PROYECTO)-$(PRY_VERSION).pdf $(PROYECTO)-$(PRY_VERSION)_html.tar.gz $(HTML_TARGET) gutenberg/$(PROYECTO).txt
 # Archivos que se debe actualizar en sitio de Internet
 
 
@@ -114,10 +114,14 @@ gutenberg/$(PROYECTO)-2.t1: gutenberg/$(PROYECTO).html
 	$(W3M) -cols 68 -dump gutenberg/$(PROYECTO).html | $(SED) -e "s/$(GUTNUM)-h.html/$(GUTNUM)-8.txt/g;s/$(GUTNUM)-h.zip/$(GUTNUM).zip/g;s/\^[ ]*$$//g" > gutenberg/$(PROYECTO)-2.t1
  
 gutenberg/$(PROYECTO)-$(PRY_VERSION).zip: dist
-	$(TAR) xvfz $(PROYECTO)-$(PRY_VERSION).tgz
+	$(TAR) xvfz $(PROYECTO)-$(PRY_VERSION).tar.gz
 	rm -f gutenberg/$(PROYECTO)-$(PRY_VERSION).zip
 	$(ZIP) -r gutenberg/$(PROYECTO)-$(PRY_VERSION).zip $(PROYECTO)-$(PRY_VERSION)
 
+gutact: gutenberg
+	$(NCFTPPUT) -u $(USER) $(ACTHOST) bdp/$(GUTNUM)/$(GUTNUM)-h gutenberg/$(GUTNUM)/$(GUTNUM)-h/*
+	$(NCFTPPUT) -u $(USER) $(ACTHOST) bdp/$(GUTNUM)/$(GUTNUM)-x gutenberg/$(GUTNUM)/$(GUTNUM)-x/*
+	$(NCFTPPUT) -u $(USER) $(ACTHOST) bdp/$(GUTNUM) gutenberg/$(GUTNUM)/*.{txt,zip}
 
 
 # Reglas para revisar ortografía con ispell (al texto plano)
@@ -142,7 +146,7 @@ limpiamas: limpia
 	rm -rf $(HTML_DIR)
 	rm -rf $(PRINT_DIR)
 	rm -f img/*.eps img/*.ps
-	rm -f $(PROYECTO)-$(PRY_VERSION).tgz
+	rm -f $(PROYECTO)-$(PRY_VERSION).tar.gz
 	rm -f $(PROYECTO).$(EXT_DOCBOOK)
 	rm -f $(PROYECTO)-$(PRY_VERSION)_html.tar.gz
 	rm -f $(PROYECTO)-4.1.2*
