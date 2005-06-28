@@ -1,4 +1,4 @@
 
-" Copie este archivo en ~/.vim/syntax/ (cre el directorio de requerirlo)
+" Copie este archivo en ~/.vim/syntax/ (cree el directorio de requerirlo)
 "
 runtime syntax/xml.vim
