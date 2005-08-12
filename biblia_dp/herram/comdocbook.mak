@@ -32,7 +32,7 @@
 # INDEX file name where index will be generated, if NULL no index is generated
 
 valida: $(SOURCES) $(PROYECTO)-4.1.2.$(EXT_DOCBOOK)
-	$(XMLLINT) --catalogs --valid $(PROYECTO)-4.1.2.$(EXT_DOCBOOK)
+	SGML_CATALOG_FILES=${SGML_CATALOG_FILES}:$(DOCBOOK_XML_DIR) $(XMLLINT) --catalogs --valid $(PROYECTO)-4.1.2.$(EXT_DOCBOOK)
 
 $(PROYECTO)-4.1.2.$(EXT_DOCBOOK): $(PROYECTO).$(EXT_DOCBOOK)
 	$(SED) -e "s|DOCTYPE \\([A-Za-z0-9_]*\\) [-\": A-Za-z0-9_/.]*|DOCTYPE \\1 PUBLIC \"-//OASIS//DTD DocBook XML V4.1.2//EN\" \"$(DOCBOOK_XML_DIR)/docbookx.dtd\"|g" $(PROYECTO).$(EXT_DOCBOOK) > $@
