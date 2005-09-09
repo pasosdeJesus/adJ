@@ -261,8 +261,14 @@
 
 <!ELEMENT st (#PCDATA)>
 <!ATTLIST st 
-  n IDREF #REQUIRED>
-
+  n IDREF #IMPLIED  
+  c IDREF #IMPLIED 
+>
+<!-- Strong's numbers -->
+<!-- n for Textual, 1 Strong number, PCDATA cannot be empty -->
+<!-- c for Context, one or more Strong numbers separated with commas and possibly spaces.  PCDATA can be empty. -->
+<!-- Property: equivalence, extracting only the Strong numbers from left to
+     right we must be able to see the TR -->
 
 	
 <!ELEMENT bib (author,tt,editor,otherbib)>
