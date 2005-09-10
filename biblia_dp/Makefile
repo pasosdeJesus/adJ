@@ -182,3 +182,14 @@ Derechos.txt: derechos.gbfxml
 Desarrollo.txt: herram/gbfxml.vim
 	cp Desarrollo.txt Desarrollo.txt.bak
 	INICIO="Las completaciones disponibles" CMD="$(AWK) -f herram/exdocvimgbfxml.awk herram/gbfxml.vim" $(AWK) -f herram/rempbloquearch.awk Desarrollo.txt.bak > Desarrollo.txt
+
+strong-KJV.tmp:
+	echo "" > strong-KJV.tmp
+	diatheke -b KJV -o n -k Mat | sed -e "s/^[^ ]* \([0-9]*\):\([0-9]*\):[^{]*/Mateo-\1-\2: /g;s/{<\([0-9]*\)>}[^{]*/{<\1>}/g" >> strong-KJV.tmp
+
+
+valida-strong: strong-KJV.tmp
+	xsltproc gbfxml2strong.xsl biblia_dp.gbfxml > strong-dp.tmp
+	diff strong-KJV.tmp strong-dp.tmp
+
+
