@@ -190,6 +190,6 @@ strong-KJV.tmp:
 
 valida-strong: strong-KJV.tmp
 	xsltproc gbfxml2strong.xsl biblia_dp.gbfxml > strong-dp.tmp
-	diff strong-KJV.tmp strong-dp.tmp
+	diff -b strong-KJV.tmp strong-dp.tmp
 
 
