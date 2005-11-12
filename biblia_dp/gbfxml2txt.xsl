@@ -201,9 +201,9 @@
 <xsl:template match="fr">
   <xsl:param name="lang" select="./@lang"/>
   <xsl:variable name="n"><xsl:call-template name="newlang"><xsl:with-param name="lang" select="$lang"/></xsl:call-template></xsl:variable>
-  <xsl:text>_</xsl:text><xsl:apply-templates>
+  <xsl:text></xsl:text><xsl:apply-templates>
 	<xsl:with-param name="lang" select="$n"/>
-  </xsl:apply-templates><xsl:text>_</xsl:text>
+  </xsl:apply-templates><xsl:text></xsl:text>
 </xsl:template>
 
 <!-- Superscript -->
@@ -235,6 +235,8 @@
 
 <!-- Break line -->
 <xsl:template match="cl">
+	<xsl:text>
+</xsl:text>
 </xsl:template>
 
 <!-- Poetry -->

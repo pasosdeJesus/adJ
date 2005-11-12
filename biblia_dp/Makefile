@@ -185,9 +185,15 @@ Desarrollo.txt: herram/gbfxml.vim
 
 strong-KJV.tmp:
 	echo "" > strong-KJV.tmp
-	diatheke -b KJV -o n -k Mat | sed -e "s/^[^ ]* \([0-9]*\):\([0-9]*\):[^{]*/Mateo-\1-\2: /g;s/{<\([0-9]*\)>}[^{]*/{<\1>}/g" >> strong-KJV.tmp
+	diatheke -b KJV -o nm -k Mat | sed -e "s/^[^ ]* \([0-9]*\):\([0-9]*\):[^{]*/Mateo-\1-\2: /g;s/{<\([0-9]*\)>} (\([^)]*\))[^{]*/{<\1>}/g" >> strong-KJV.tmp
 
+morf-KJV.tmp:
+	echo "" > morf-KJV.tmp
+	diatheke -b KJV -o nm -k Mat | sed -e "s/^[^ ]* \([0-9]*\):\([0-9]*\):[^{]*/Mateo-\1-\2: /g;s/{<\([0-9]*\)>} (\([^)]*\))[^{]*/(\2)/g" >> morf-KJV.tmp
 
+num-KJV.tmp:
+	echo "" > num-KJV.tmp
+	diatheke -b KJV -o nm -k Mat | sed -e "s/^[^ ]* \([0-9]*\):\([0-9]*\):[^{]*/Mateo-\1-\2: /g;s/{<\([0-9]*\)>} (\([^)]*\))[^{]*/{<\1>}(\2)/g" >> num-KJV.tmp
 valida-strong: strong-KJV.tmp
 	xsltproc gbfxml2strong.xsl biblia_dp.gbfxml > strong-dp.tmp
 	diff -b strong-KJV.tmp strong-dp.tmp

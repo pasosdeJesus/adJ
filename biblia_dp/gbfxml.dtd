@@ -1,6 +1,6 @@
 
 <!-- 
-   XML version of General Bible Format (GBF XML) 1.0
+   XML version of General Bible Format (GBF XML) 1.1
    Based on General Bible Format (GBF) of 19/Nov/2001. The current
    GBF is available is at: http://ebible.org/bible/gbf.htm
 
@@ -19,10 +19,10 @@
 	* Tanslation.  Every element with PCDATA has an attribute lang
 	  and can contain one or more elements t.
 	  The language specified in the attribute lang is the language
-	  of the PCDATA it should be the original language.  In each
-	  element t there could be a translation.
+	  of the PCDATA.  In each element t there could be a translation.
 	  The lang attribute is NOT like lang in HTML 4.0 or DocBook.
         * Bibliography: Section, cites and bibliographic entries.
+	* Strong numbers with morphology
 -->
 
 <!ENTITY % attlang "lang CDATA #IMPLIED">
@@ -33,11 +33,11 @@
           version CDATA #REQUIRED>
 <!-- Replaces H0vv -->
 	
-<!ENTITY % inline-footnote "#PCDATA | sv | cl | fb | fc | fi | fo | fr | fs
+<!ENTITY % inline-footnote "#PCDATA | cl | fb | fc | fi | fo | fr | fs
 | fu | fv | wi | sd | citebib | t | url | email">
 <!-- Inline elements inside footnotes-->
 
-<!ENTITY % inline "%inline-footnote; | rb | rp | rx ">
+<!ENTITY % inline "%inline-footnote; | sv | rb | rp | rx ">
 <!-- Inline elements outside footnotes -->
  
 <!ELEMENT tt (%inline;)*>
@@ -104,7 +104,9 @@
 	  %attlang;
 	  id  ID    #REQUIRED
           num CDATA #REQUIRED>
-<!-- Chapter -->
+<!-- Chapter.  id is always of the form book-number 
+OJO retirar num
+-->
 
 
 <!ELEMENT ts (tt, (cm | tc))*>
@@ -119,8 +121,6 @@
 >
 <!-- Comment -->
 
-
-                  
 
 <!ELEMENT cm (%inline; | tt | pp )*>
 <!ATTLIST cm
@@ -196,12 +196,10 @@
 	%attlang;
 	num CDATA #REQUIRED
 	id ID #REQUIRED>
-<!-- Verse -->
+<!-- Verse.
+OJO eliminar num. id must be of the form book-chap-vers -->
 
-<!ELEMENT cl ( %inline; )*>
-<!ATTLIST cl
-	  %attlang;
->
+<!ELEMENT cl EMPTY>
 <!-- Break line -->
 
 <!ELEMENT rb ( %inline-footnote; | rf )*>
@@ -261,14 +259,16 @@
 
 <!ELEMENT st (#PCDATA)>
 <!ATTLIST st 
-  n IDREF #IMPLIED  
-  c IDREF #IMPLIED 
+  n IDREF #REQUIRED
+  p IDREF #IMPLIED 
+  m IDREF #IMPLIED 
+  c IDREF #IMPLIED  
 >
 <!-- Strong's numbers -->
-<!-- n for Textual, 1 Strong number, PCDATA cannot be empty -->
-<!-- c for Context, one or more Strong numbers separated with commas and possibly spaces.  PCDATA can be empty. -->
-<!-- Property: equivalence, extracting only the Strong numbers from left to
-     right we must be able to see the TR -->
+<!-- n for strong number -->
+<!-- p for position of corresponding word in TR -->
+<!-- m Morphology. -->
+<!-- c Temporal, while we translate to n, p and m -->
 
 	
 <!ELEMENT bib (author,tt,editor,otherbib)>

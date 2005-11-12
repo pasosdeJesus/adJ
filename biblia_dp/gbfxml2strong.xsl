@@ -44,6 +44,34 @@
 	</xsl:choose>
 </xsl:template>
 
+<!-- Ignora morfología en número Strong. s="123:N-X" 
+     lo convierte en {<123>} (N-X) -->
+     <xsl:template name="un_strong">
+		<xsl:param name="s" select="''"/>
+		<xsl:text>{&lt;</xsl:text>
+		<xsl:value-of select="$s"/>
+		<xsl:text>&gt;}</xsl:text>
+	</xsl:template>
+	<!--	<xsl:param name="s" select="''"/>
+	<xsl:choose>
+		<xsl:when test="not($s)">
+		</xsl:when>
+		<xsl:when test="contains($s, ':')">
+			<xsl:text>{&lt;</xsl:text>
+			<xsl:value-of select="substring-before($s, ':')"/>
+			<xsl:text>&gt;}(</xsl:text>
+			<xsl:value-of select="substring-after($s, ':')"/>
+			<xsl:text>)</xsl:text>
+		</xsl:when>
+		<xsl:otherwise>
+			<xsl:text>{&lt;</xsl:text>
+			<xsl:value-of select="$s"/>
+			<xsl:text>&gt;}</xsl:text>
+		</xsl:otherwise>
+	</xsl:choose>
+</xsl:template> -->
+
+
 <!-- Divide c="123,232,45" en 123>][<232>][<45
      Referencia: http://www.exslt.org/str/functions/tokenize/str.tokenize.template.xsl
      -->
@@ -53,14 +81,17 @@
 		<xsl:when test="not($c)">
 		</xsl:when>
 		<xsl:when test="contains($c, ',')">
-			<xsl:value-of select="substring-before($c,',')"/>
-			<xsl:text>>}{&lt;</xsl:text>
+			<xsl:call-template name="un_strong">
+				<xsl:with-param name="s" select="substring-before($c,',')"/>
+			</xsl:call-template>
 			<xsl:call-template name="divstrong">
 				<xsl:with-param name="c" select="substring-after($c,',')"/>
 			</xsl:call-template>
 		</xsl:when>
 		<xsl:otherwise>
-			<xsl:value-of select="$c"/>
+			<xsl:call-template name="un_strong">
+				<xsl:with-param name="s" select="$c"/>
+			</xsl:call-template>
 		</xsl:otherwise>
 	</xsl:choose>
 </xsl:template>
@@ -105,7 +136,7 @@
 	</xsl:apply-templates>
 </xsl:template>
 
-<!-- Strong -->
+<!-- Strong style -->
 <xsl:template match="fb">
 	<xsl:param name="lang" select="./@lang"/>
 	<xsl:variable name="n"><xsl:call-template name="newlang"><xsl:with-param name="lang" select="$lang"/></xsl:call-template></xsl:variable>
@@ -235,10 +266,11 @@
 </xsl:template>
 
 <xsl:template match="st">
-	<xsl:text>{&lt;</xsl:text>
 	<xsl:choose>
 		<xsl:when test="./@n != ''">
-			<xsl:value-of select="./@n"/>
+			<xsl:call-template name="un_strong">
+				<xsl:with-param name="s" select="./@n"/>
+			</xsl:call-template>
 		</xsl:when>
 		<xsl:otherwise>
 			<xsl:call-template name="divstrong">
@@ -246,7 +278,6 @@
 			</xsl:call-template>
 		</xsl:otherwise>
 	</xsl:choose>
-	<xsl:text>&gt;}</xsl:text>
 </xsl:template>
 
 
