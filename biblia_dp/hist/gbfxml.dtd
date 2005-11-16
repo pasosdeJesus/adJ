@@ -1,0 +1,295 @@
+
+<!-- 
+   XML version of General Bible Format (GBF XML) 1.1
+   Based on General Bible Format (GBF) of 19/Nov/2001. The current
+   GBF is available is at: http://ebible.org/bible/gbf.htm
+
+   This source is released to the public domain since 2003. No warranties
+   vtamara@informatik.uni-kl.de
+
+   Missing or omitted features:
+	* Font names
+	* Obsolet tags: zw, zx, zy
+	* Autoenumerated sync marks
+	* External notes and highlight files
+	* Some word information tags
+
+   Extensions:
+	* url
+	* Tanslation.  Every element with PCDATA has an attribute lang
+	  and can contain one or more elements t.
+	  The language specified in the attribute lang is the language
+	  of the PCDATA.  In each element t there could be a translation.
+	  The lang attribute is NOT like lang in HTML 4.0 or DocBook.
+        * Bibliography: Section, cites and bibliographic entries.
+	* Strong numbers with morphology
+-->
+
+<!ENTITY % attlang "lang CDATA #IMPLIED">
+
+<!ELEMENT gbfxml (tt, stt, sumrights, rights?, toc?, (sb)*,sbib?) >
+<!ATTLIST gbfxml
+	  %attlang;
+          version CDATA #REQUIRED>
+<!-- Replaces H0vv -->
+	
+<!ENTITY % inline-footnote "#PCDATA | cl | fb | fc | fi | fo | fr | fs
+| fu | fv | wi | sd | citebib | t | url | email">
+<!-- Inline elements inside footnotes-->
+
+<!ENTITY % inline "%inline-footnote; | sv | rb | rp | rx ">
+<!-- Inline elements outside footnotes -->
+ 
+<!ELEMENT tt (%inline;)*>
+<!ATTLIST tt
+	%attlang;
+	type CDATA #IMPLIED
+>
+<!-- Long title.  The type could be:
+     th for Hebrew title of some psalms 
+     ts for section title introduced by editor -->
+
+<!ELEMENT stt (%inline;)*>
+<!ATTLIST stt
+	%attlang;
+>
+<!-- Short name -->
+
+<!ELEMENT sumrights (%inline;)*>
+<!ATTLIST sumrights
+	%attlang;
+>
+<!-- Summary of copy terms -->
+
+<!ELEMENT rights (%inline;)*>
+<!ATTLIST rights
+	%attlang;
+>
+<!-- Complete copy terms -->
+
+<!ELEMENT toc (EMPTY)>
+<!-- Table of Contents-->
+
+<!ELEMENT sb (tt,credits,( tb | sc)*)+>
+<!ATTLIST sb
+	  %attlang;
+          id ID #REQUIRED
+	  type CDATA #IMPLIED>
+<!-- Book.
+     The types could be:
+     BA Apocrypha
+     BC Commentary
+     BI Introduction to translataion
+     BN New testament text
+     BO Old testament text
+     BP Book Preface -->
+
+<!ELEMENT sbib (bib)*>
+<!-- Section for bibliography -->
+
+<!ELEMENT credits (%inline-footnote;)*>
+<!ATTLIST credits
+	%attlang;
+	version CDATA #REQUIRED>
+
+<!ELEMENT tb (tt, sc*)>
+<!ATTLIST tb
+	  %attlang;
+>
+<!-- Sub-book in psalms -->
+
+
+<!ELEMENT sc (ts |  cm | tc)*>
+<!ATTLIST sc
+	  %attlang;
+	  id  ID    #REQUIRED
+          num CDATA #REQUIRED>
+<!-- Chapter.  id is always of the form book-number 
+OJO retirar num
+-->
+
+
+<!ELEMENT ts (tt, (cm | tc))*>
+<!ATTLIST ts
+	  %attlang;
+>
+<!-- Section introduced by editor -->
+
+<!ELEMENT tc (#PCDATA | t)*>
+<!ATTLIST tc
+	  %attlang;
+>
+<!-- Comment -->
+
+
+<!ELEMENT cm (%inline; | tt | pp )*>
+<!ATTLIST cm
+	  %attlang;
+          type CDATA #IMPLIED>
+<!-- Paragraph of chapter.
+	type could be: 
+	DL Direction left-to right
+	DR Direction right-to-left
+	DT Direction top-to-bottom
+	JC Justify Center
+	JF Justify full
+	JL Justify left
+	JR Justify right
+	PI Indente quote -->
+
+<!ELEMENT pp (cm)*>
+<!ATTLIST pp
+	  %attlang;
+>
+<!-- Poetry -->
+
+<!ELEMENT fb ( %inline; )*>
+<!ATTLIST fb
+	  %attlang;
+>
+<!-- Strong (by default bold) -->
+
+<!ELEMENT fc ( %inline; )*>
+<!ATTLIST fc
+	  %attlang;
+>
+<!-- Small Caps -->
+
+<!ELEMENT fi ( %inline; )*>
+<!ATTLIST fi
+	  %attlang;
+>
+<!-- Emphasis (by default Italics) -->
+
+<!ELEMENT fo ( %inline; )*>
+<!ATTLIST fo
+	  %attlang;
+>
+<!-- Old testament quote -->
+
+<!ELEMENT fr ( %inline; )*>
+<!ATTLIST fr
+	  %attlang;
+>
+<!-- Words of Jesus (by default red) -->
+
+<!ELEMENT fs ( %inline; )*>
+<!ATTLIST fs
+	  %attlang;
+>
+<!-- Superscript -->
+
+<!ELEMENT fu ( %inline; )*>
+<!ATTLIST fu
+	  %attlang;
+>
+<!-- Underline -->
+
+<!ELEMENT fv ( %inline; )*>
+<!ATTLIST fv
+	  %attlang;
+>
+<!-- Subscript -->
+
+<!ELEMENT sv ( %inline; )*>
+<!ATTLIST sv 
+	%attlang;
+	num CDATA #REQUIRED
+	id ID #REQUIRED>
+<!-- Verse.
+OJO eliminar num. id must be of the form book-chap-vers -->
+
+<!ELEMENT cl EMPTY>
+<!-- Break line -->
+
+<!ELEMENT rb ( %inline-footnote; | rf )*>
+<!ATTLIST rb
+	  %attlang;
+>
+<!-- Text with embedded footnote -->
+
+<!ELEMENT rf ( %inline-footnote; )*>
+<!ATTLIST rf
+	  %attlang;
+>
+<!-- Footnote -->
+
+<!ELEMENT wi (#PCDATA)>
+<!ATTLIST wi 
+	type CDATA #REQUIRED>
+<!-- Word information . Type could be
+	G Strong Greek number (e.g <wi type="G">10</wi>)
+	H Strong Hebrew number
+	I Interlinear translation
+	T Original language word information (e.g <wi type="T">P</wi>)
+	Tf Form of address -->	
+
+
+<!ELEMENT sd (#PCDATA)>
+<!ATTLIST sd
+	month CDATA #REQUIRED
+	day CDATA #REQUIRED>
+<!-- Date -->
+
+<!ELEMENT rp (#PCDATA)>
+<!ATTLIST rp
+	book CDATA #REQUIRED
+	ch CDATA #REQUIRED
+	vs CDATA #REQUIRED>
+<!-- Parallel passage -->
+
+<!ELEMENT rx (#PCDATA)>
+<!ATTLIST rx
+	book CDATA #REQUIRED
+	ch CDATA #REQUIRED
+	vs CDATA #REQUIRED>
+<!-- Cross reference -->
+
+
+<!ELEMENT url (#PCDATA)>
+<!-- URLs -->
+
+<!ELEMENT email (#PCDATA)>
+<!-- email -->
+
+<!ELEMENT t (#PCDATA|citebib|st)*>
+<!ATTLIST t
+	lang CDATA #REQUIRED>
+<!-- Translation -->
+
+<!ELEMENT st (#PCDATA)>
+<!ATTLIST st 
+  n IDREF #REQUIRED
+  p IDREF #IMPLIED 
+  m IDREF #IMPLIED 
+  c IDREF #IMPLIED  
+>
+<!-- Strong's numbers -->
+<!-- n for strong number -->
+<!-- p for position of corresponding word in TR -->
+<!-- m Morphology. -->
+<!-- c Temporal, while we translate to n, p and m -->
+
+	
+<!ELEMENT bib (author,tt,editor,otherbib)>
+<!ATTLIST bib 
+  %attlang;
+  id ID #REQUIRED
+  citelabel CDATA #IMPLIED
+  >
+<!-- Bibliography entry, id can be used to reference it in inline
+     elements.  citelabel is the label that will be used in the
+     generated document (by default the label will be the value of id) -->
+
+<!ELEMENT citebib (#PCDATA)>
+<!ATTLIST citebib
+  id IDREF #REQUIRED>
+
+<!ELEMENT author (%inline-footnote;)*>
+<!-- Bibliography author -->
+
+<!ELEMENT editor (%inline-footnote;)*>
+<!-- Bibliography editor -->
+
+<!ELEMENT otherbib (%inline-footnote;)*>
+<!-- Other information for Bibliography -->
