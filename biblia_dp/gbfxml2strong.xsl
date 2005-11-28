@@ -173,9 +173,25 @@
 	<xsl:variable name="nv" select="substring-after($ns,'-')"/>
 	<xsl:value-of select="$nc"/>:<xsl:value-of select="$nv"/><xsl:text>
 </xsl:text>
+<!--<xsl:variable name="s">
 	<xsl:apply-templates>
 		<xsl:with-param name="lang" select="$n"/>
 	</xsl:apply-templates>
+</xsl:variable> -->
+
+<!--<xsl:for-each select="*/wi">
+	- -->
+
+	<xsl:for-each select="*/wi">
+		<xsl:sort select="substring-before(substring-after(./@value,','),',')" 
+			data-type="number" />
+		<xsl:value-of select="substring-before(substring-after(./@value,','),',')"/>,<xsl:value-of select="substring-before(./@value,',')"/>,<xsl:value-of select="substring-after(substring-after(./@value,','),',')"/>
+		<xsl:text>
+</xsl:text>
+	</xsl:for-each>
+
+	<!-- </xsl:for-each>
+ -->
 </xsl:template>
 
 <!-- Text with embedded footnote  --> 
@@ -230,6 +246,7 @@
 </xsl:template>
 
 <xsl:template match="wi">
+	uvw
 	<xsl:if test="./@type= 'G'">
 		<xsl:call-template name="divstrong"><xsl:with-param name="c" select="./@value"/></xsl:call-template>
 	</xsl:if>
