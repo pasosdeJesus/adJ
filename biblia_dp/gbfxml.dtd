@@ -4,17 +4,24 @@
    Based on General Bible Format (GBF) of 19/Nov/2001. The current
    GBF is available is at: http://ebible.org/bible/gbf.htm
 
-   This source is released to the public domain since 2003. No warranties
+   This source is released to the public domain since 2005. No warranties
    vtamara@informatik.uni-kl.de
 
-   Missing or omitted features:
+   Missing or omitted features with respect to GBF:
 	* Font names
 	* Obsolet tags: zw, zx, zy
 	* Autoenumerated sync marks
 	* External notes and highlight files
 	* Some word information tags
 
-   Extensions:
+   Changed:
+	* Poetry (distributed over cm and fp)
+	* Structure. Book <SBxxx>,  Chapter <SCxxx> and Verse 	<SVxxx> are
+		not sync marks but structural elements. A book is composed
+		of chapters, a chapter is composed of paragraphs and a
+		paragraph is composed of verses.
+ 
+   Extensions with respect to GBF:
 	* url
 	* Tanslation.  Every element with PCDATA has an attribute lang
 	  and can contain one or more elements t.
@@ -22,7 +29,7 @@
 	  of the PCDATA.  In each element t there could be a translation.
 	  The lang attribute is NOT like lang in HTML 4.0 or DocBook.
         * Bibliography: Section, cites and bibliographic entries.
-	* Strong numbers with morphology
+	* Strong numbers with morphology and position
 -->
 
 <!ENTITY % attlang "lang CDATA #IMPLIED">
@@ -33,11 +40,11 @@
           version CDATA #REQUIRED>
 <!-- Replaces H0vv -->
 	
-<!ENTITY % inline-footnote "#PCDATA | cl | fb | fc | fi | fo | fr | fs
-| fu | fv | wi | sd | citebib | t | url | email">
+<!ENTITY % inline-footnote "#PCDATA | cl | fb | fc | fi | fo | fp | fr | fs
+| fu | fv | wi | sd | citebib | t | url | q">
 <!-- Inline elements inside footnotes-->
 
-<!ENTITY % inline "%inline-footnote; | sv | rb | rp | rx ">
+<!ENTITY % inline "%inline-footnote; | rb | rp | rx ">
 <!-- Inline elements outside footnotes -->
  
 <!ELEMENT tt (%inline;)*>
@@ -102,11 +109,9 @@
 <!ELEMENT sc (ts |  cm | tc)*>
 <!ATTLIST sc
 	  %attlang;
-	  id  ID    #REQUIRED
-          num CDATA #REQUIRED>
-<!-- Chapter.  id is always of the form book-number 
-OJO retirar num
--->
+	  id  ID    #REQUIRED>
+          
+<!-- Chapter.  id is always of the form book-number -->
 
 
 <!ELEMENT ts (tt, (cm | tc))*>
@@ -122,7 +127,7 @@ OJO retirar num
 <!-- Comment -->
 
 
-<!ELEMENT cm (%inline; | tt | pp )*>
+<!ELEMENT cm (sv | tt)*>
 <!ATTLIST cm
 	  %attlang;
           type CDATA #IMPLIED>
@@ -135,13 +140,15 @@ OJO retirar num
 	JF Justify full
 	JL Justify left
 	JR Justify right
-	PI Indente quote -->
+	PI Indente quote
+        PO Poetry -->
 
-<!ELEMENT pp (cm)*>
-<!ATTLIST pp
-	  %attlang;
->
-<!-- Poetry -->
+<!ELEMENT sv ( %inline; )*>
+<!ATTLIST sv 
+	%attlang;
+	id ID #REQUIRED>
+<!-- Verse.  id must be of the form book-chap-vers -->
+
 
 <!ELEMENT fb ( %inline; )*>
 <!ATTLIST fb
@@ -167,6 +174,14 @@ OJO retirar num
 >
 <!-- Old testament quote -->
 
+
+<!ELEMENT fp ( %inline; )*>
+<!ATTLIST fp
+	  %attlang;
+>
+<!-- Poetry -->
+
+
 <!ELEMENT fr ( %inline; )*>
 <!ATTLIST fr
 	  %attlang;
@@ -191,14 +206,6 @@ OJO retirar num
 >
 <!-- Subscript -->
 
-<!ELEMENT sv ( %inline; )*>
-<!ATTLIST sv 
-	%attlang;
-	num CDATA #REQUIRED
-	id ID #REQUIRED>
-<!-- Verse.
-OJO eliminar num. id must be of the form book-chap-vers -->
-
 <!ELEMENT cl EMPTY>
 <!-- Break line -->
 
@@ -216,12 +223,16 @@ OJO eliminar num. id must be of the form book-chap-vers -->
 
 <!ELEMENT wi (#PCDATA)>
 <!ATTLIST wi 
-	type CDATA #REQUIRED>
+	type CDATA #REQUIRED
+	value CDATA #IMPLIED>
 <!-- Word information . Type could be
-	G Strong Greek number (e.g <wi type="G">10</wi>)
+	G Strong Greek number (e.g <wi type="G" value="1161,1,CONJ">y</wi>)
+	  where 1161 is the number, 1 the position in the verse in greek,
+	  CONJ the morphology.
 	H Strong Hebrew number
 	I Interlinear translation
-	T Original language word information (e.g <wi type="T">P</wi>)
+	T Original language word information (e.g 
+		<wi type="T" value="P">you</wi>)
 	Tf Form of address -->	
 
 
@@ -249,26 +260,10 @@ OJO eliminar num. id must be of the form book-chap-vers -->
 <!ELEMENT url (#PCDATA)>
 <!-- URLs -->
 
-<!ELEMENT email (#PCDATA)>
-<!-- email -->
-
-<!ELEMENT t (#PCDATA|citebib|st)*>
+<!ELEMENT t (#PCDATA|citebib|wi)*>
 <!ATTLIST t
 	lang CDATA #REQUIRED>
 <!-- Translation -->
-
-<!ELEMENT st (#PCDATA)>
-<!ATTLIST st 
-  n IDREF #REQUIRED
-  p IDREF #IMPLIED 
-  m IDREF #IMPLIED 
-  c IDREF #IMPLIED  
->
-<!-- Strong's numbers -->
-<!-- n for strong number -->
-<!-- p for position of corresponding word in TR -->
-<!-- m Morphology. -->
-<!-- c Temporal, while we translate to n, p and m -->
 
 	
 <!ELEMENT bib (author,tt,editor,otherbib)>
