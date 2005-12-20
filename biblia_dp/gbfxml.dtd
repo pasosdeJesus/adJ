@@ -229,6 +229,11 @@
 	G Strong Greek number (e.g <wi type="G" value="1161,1,CONJ">y</wi>)
 	  where 1161 is the number, 1 the position in the verse in greek,
 	  CONJ the morphology.
+	GC Continuation of a strong greek number.  The value is the position
+	of the greek word that it complements -must be referenced before in
+	the same verse (e.g in Mat 2:18)
+	<wi type="G" value="1526,22,">ellos</wi> ya 
+	<wi type="G" value="3756,20">no</wi> <wi type="GC" value="22">estan</wi>
 	H Strong Hebrew number
 	I Interlinear translation
 	T Original language word information (e.g 
