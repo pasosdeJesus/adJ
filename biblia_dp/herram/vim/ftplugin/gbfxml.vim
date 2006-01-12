@@ -46,7 +46,7 @@ if !exists("no_plugin_maps") && !exists("no_gbfxml_maps")
 	if !hasmapto('<Plug>GBFwi')
 		imap <buffer> <unique> <LocalLeader>wi <Plug>GBFwi<ESC>bbbbla
 	endif
-	inoremap <buffer> <unique> <Plug>GBFwi <wi type="G" value=",,"><ESC>ea</wi>
+	inoremap <buffer> <unique> <Plug>GBFwi <wi type="G" value=","><ESC>ea</wi>
 
 
 endif

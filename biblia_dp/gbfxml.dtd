@@ -228,19 +228,20 @@
 <!-- Word information . Type could be
 	G Strong Greek number (e.g <wi type="G" value="1161,1,CONJ">y</wi>)
 	  where 1161 is the number, 1 the position in the verse in greek,
-	  CONJ the morphology.
+	  CONJ the morphology. One strong could correspond to several
+          words, like in Mat 4:24: 
+ 	  <wi type="G" value="1139,23,">poseidos por demonios</wi>
 	GC Continuation of a strong greek number.  The value is the position
-	of the greek word that it complements -must be referenced before in
-	the same verse (e.g in Mat 2:18)
-	<wi type="G" value="1526,22,">ellos</wi> ya 
+	  of the greek word that it complements -must be referenced before in
+	  the same verse (e.g in Mat 2:18)
+	  <wi type="G" value="1526,22,">ellos</wi> ya 
 	<wi type="G" value="3756,20">no</wi> <wi type="GC" value="22">estan</wi>
 	GU One word is the union of two Strong's numbers, the value are
-        concatenated Strong information separated with ;  . e.g Mat 4:19:
+          concatenated Strong information separated with ;  . e.g Mat 4:19:
 <w src="4" lemma="x-Strongs:G1205" morph="x-Robinson:V-XXM-2P">Follow</w>
 <w src="6" lemma="x-Strongs:G3450" morph="x-Robinson:P-1GS">me,</w>
-
-	<wi type="GU" value="1205,4,;3450,7,">Siganme</wi>
-        
+	  <wi type="GU" value="1205,4,;3450,7,">Siganme</wi>
+        G* like G but not sure of translation 
 	H Strong Hebrew number
 	I Interlinear translation
 	T Original language word information (e.g 
