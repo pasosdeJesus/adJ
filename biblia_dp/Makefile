@@ -9,6 +9,8 @@ SOURCE_GBFXML=mateo.gbfxml marcos.gbfxml lucas.gbfxml juan.gbfxml hechos.gbfxml
 
 EXT_DOCBOOK=xdbk
 
+VS_SWORDBOOK=Matthew
+
 # Variables requeridas por comdocbook.mak
 SOURCES=$(PROYECTO).$(EXT_DOCBOOK)
 
@@ -183,19 +185,18 @@ Desarrollo.txt: herram/gbfxml.vim
 	cp Desarrollo.txt Desarrollo.txt.bak
 	INICIO="Las completaciones disponibles" CMD="$(AWK) -f herram/exdocvimgbfxml.awk herram/gbfxml.vim" $(AWK) -f herram/rempbloquearch.awk Desarrollo.txt.bak > Desarrollo.txt
 
-strong-KJV.tmp:
-	echo "" > strong-KJV.tmp
-	diatheke -b KJV -o nm -k Mat | sed -e "s/^[^ ]* \([0-9]*\):\([0-9]*\):[^{]*/Mateo-\1-\2: /g;s/{<\([0-9]*\)>} (\([^)]*\))[^{]*/{<\1>}/g" >> strong-KJV.tmp
+$(VS_SWORDBOOK)-KJV.tmp: 
+	mod2imp KJV | awk '/.*/ { if (imp==1) { print $$0; } } /\$$\$$\$$.*/ { match($$0,/ /); n=substr($$0, 4, RSTART-4); if (n=="$(VS_SWORDBOOK)") { imp=1; } else { imp=0; } }' > $(VS_SWORDBOOK)-KJV.tmp
 
-morf-KJV.tmp:
-	echo "" > morf-KJV.tmp
-	diatheke -b KJV -o nm -k Mat | sed -e "s/^[^ ]* \([0-9]*\):\([0-9]*\):[^{]*/Mateo-\1-\2: /g;s/{<\([0-9]*\)>} (\([^)]*\))[^{]*/(\2)/g" >> morf-KJV.tmp
+$(VS_SWORDBOOK)-n-KJV.tmp: $(VS_SWORDBOOK)-KJV.tmp
+	grep -v '^[ ]*$' $(VS_SWORDBOOK)-KJV.tmp | grep -v "Heading \]" | grep -v "strongsMarkup" | grep -v "^[A-Za-z].*" | grep -v "^<q .*" | sed -e 's/.*src=.\([0-9]*\).*:G\([0-9]*\).*x-Robinson:\([^"]*\)".*/\1,\2,\3/g;s/\$\$\$[^ ]* \([0-9:]*\)/\1/g' > $(VS_SWORDBOOK)-n-KJV.tmp
 
-num-KJV.tmp:
-	echo "" > num-KJV.tmp
-	diatheke -b KJV -o nm -k Mat | sed -e "s/^[^ ]* \([0-9]*\):\([0-9]*\):[^{]*/Mateo-\1-\2: /g;s/{<\([0-9]*\)>} (\([^)]*\))[^{]*/{<\1>}(\2)/g" >> num-KJV.tmp
-valida-strong: strong-KJV.tmp
+$(VS_SWORDBOOK)-o-KJV.tmp: $(VS_SWORDBOOK)-n-KJV.tmp
+	awk herram/ordenastrong.awk $(VS_SWORDBOOK)-n-KJV.tmp > $(VS_SWORDBOOK)-o-KJV.tmp
+
+valida-strong: $(VS_SWORDBOOK)-o-KJV.tmp
 	xsltproc gbfxml2strong.xsl biblia_dp.gbfxml > strong-dp.tmp
-	diff -b strong-KJV.tmp strong-dp.tmp
+	awk herram/ordenastrong.awk strong-dp.tmp > strong-o-dp.tmp
+	diff -b $(VS_SWORDBOOK)-o-KJV.tmp strong-o-dp.tmp
 
 
