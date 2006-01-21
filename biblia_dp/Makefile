@@ -186,10 +186,10 @@ Desarrollo.txt: herram/gbfxml.vim
 	INICIO="Las completaciones disponibles" CMD="$(AWK) -f herram/exdocvimgbfxml.awk herram/gbfxml.vim" $(AWK) -f herram/rempbloquearch.awk Desarrollo.txt.bak > Desarrollo.txt
 
 $(VS_SWORDBOOK)-KJV.tmp: 
-	mod2imp KJV | awk '/.*/ { if (imp==1) { print $$0; } } /\$$\$$\$$.*/ { match($$0,/ /); n=substr($$0, 4, RSTART-4); if (n=="$(VS_SWORDBOOK)") { imp=1; } else { imp=0; } }' > $(VS_SWORDBOOK)-KJV.tmp
+	mod2imp KJV | awk '/.*/ { if (imp==1) { print $$0; } } /\$$\$$\$$.*/ { match($$0,/ /); n=substr($$0, 4, RSTART-4); if (n=="$(VS_SWORDBOOK)") { imp=1; } else { imp=0; } }' | sed -e "s/<w /|<w /g" | tr "|" "\n"  | sed -e  "s/ [ ]*$$//g" | sed -e "s/\(<\/w>[.,;]*\)[ ]*\(.\)/\1|\2/g" | tr "|" "\n" > $(VS_SWORDBOOK)-KJV.tmp
 
 $(VS_SWORDBOOK)-n-KJV.tmp: $(VS_SWORDBOOK)-KJV.tmp
-	grep -v '^[ ]*$' $(VS_SWORDBOOK)-KJV.tmp | grep -v "Heading \]" | grep -v "strongsMarkup" | grep -v "^[A-Za-z].*" | grep -v "^<q .*" | sed -e 's/.*src=.\([0-9]*\).*:G\([0-9]*\).*x-Robinson:\([^"]*\)".*/\1,\2,\3/g;s/\$\$\$[^ ]* \([0-9:]*\)/\1/g' > $(VS_SWORDBOOK)-n-KJV.tmp
+	grep -v '^[ ]*$$' $(VS_SWORDBOOK)-KJV.tmp | grep -v "Heading \]" | grep -v "strongsMarkup" | grep -v "^[A-Za-z].*" | grep -v "^<q .*" | sed -e 's/.*src=.\([0-9]*\).*:G\([0-9]*\).*x-Robinson:\([^"]*\)".*/\1,\2,\3/g;s/\$$\$$\$$[^ ]* \([0-9:]*\)/\1/g' > $(VS_SWORDBOOK)-n-KJV.tmp
 
 $(VS_SWORDBOOK)-o-KJV.tmp: $(VS_SWORDBOOK)-n-KJV.tmp
 	awk herram/ordenastrong.awk $(VS_SWORDBOOK)-n-KJV.tmp > $(VS_SWORDBOOK)-o-KJV.tmp
