@@ -52,9 +52,20 @@
 	<xsl:variable name="n" select="substring-before($c,',')"/>
 	<xsl:variable name="pm" select="substring-after($c,',')"/>
 	<xsl:variable name="p" select="substring-before($pm,',')"/>
-	<xsl:variable name="m" select="substring-after($pm,',')"/>
-	<xsl:value-of select="$p"/>,<xsl:value-of select="$n"/>,<xsl:value-of select="$m"/><xsl:text>
+	<xsl:variable name="mo" select="substring-after($pm,',')"/>
+	<xsl:choose>
+	    <xsl:when test="contains($mo,';')">
+		<xsl:variable name="mt" select="substring-before($mo,';')"/>
+		<xsl:variable name="r" select="substring-after($mo,';')"/>
+		<xsl:value-of select="$p"/>,<xsl:value-of select="$n"/>,<xsl:value-of select="$mt"/><xsl:text>
 </xsl:text>
+		<xsl:call-template name="divstrong"><xsl:with-param name="c" select="$r"/></xsl:call-template>
+           </xsl:when>
+	   <xsl:otherwise>
+		<xsl:value-of select="$p"/>,<xsl:value-of select="$n"/>,<xsl:value-of select="$mo"/><xsl:text>
+</xsl:text>
+	   </xsl:otherwise>
+      </xsl:choose>
 </xsl:template>
 
 
@@ -179,19 +190,17 @@
 	</xsl:apply-templates>
 </xsl:variable> -->
 
-<!--<xsl:for-each select="*/wi">
-	- -->
-
-	<xsl:for-each select="*/wi">
+	<xsl:apply-templates>
+		<xsl:with-param name="lang" select="$n"/>
+	</xsl:apply-templates>
+	<!--	<xsl:for-each select="*/wi">
 		<xsl:sort select="substring-before(substring-after(./@value,','),',')" 
 			data-type="number" />
 		<xsl:value-of select="substring-before(substring-after(./@value,','),',')"/>,<xsl:value-of select="substring-before(./@value,',')"/>,<xsl:value-of select="substring-after(substring-after(./@value,','),',')"/>
 		<xsl:text>
 </xsl:text>
-	</xsl:for-each>
+	</xsl:for-each> -->
 
-	<!-- </xsl:for-each>
- -->
 </xsl:template>
 
 <!-- Text with embedded footnote  --> 
@@ -245,11 +254,14 @@
 <xsl:template match="otherbib">
 </xsl:template>
 
-<xsl:template match="wi">
-	uvw
-	<xsl:if test="./@type= 'G'">
-		<xsl:call-template name="divstrong"><xsl:with-param name="c" select="./@value"/></xsl:call-template>
-	</xsl:if>
+<xsl:template match="wi">	
+	<xsl:choose>
+		<xsl:when test="./@type='G' or ./@type='G*' or ./@type='GU'">
+			<xsl:call-template name="divstrong"><xsl:with-param name="c" select="./@value"/></xsl:call-template>
+		</xsl:when>
+		<xsl:otherwise>
+		</xsl:otherwise>
+	</xsl:choose>
 </xsl:template>
 
 
