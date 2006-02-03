@@ -19,19 +19,40 @@
 # 		en una distribución de fuentes.
 
 
-dist: $(GENDIST) $(PROYECTO)-$(PRY_VERSION).tar.gz
+distcvs:
+	cvs -z3 co $(PROYECTO) 
+	mv $(PROYECTO) $(PROYECTO)-$(PRY_VERSION)
+	find ./$(PROYECTO)-$(PRY_VERSION)/ -name CVS | xargs rm -rf 
+	tar cvfz $(PROYECTO)-$(PRY_VERSION).tar.gz $(PROYECTO)-$(PRY_VERSION)
+	rm -rf $(PROYECTO)-$(PRY_VERSION)
 
-$(PROYECTO)-$(PRY_VERSION).tar.gz: 
+dist:
 	rm -f $(PROYECTO)-$(PRY_VERSION).tar.gz
 	rm -rf $(PROYECTO)-$(PRY_VERSION)
-	a=`echo *`; \
+	if (test "$(LISTA_DIST)" = "") then { a=`echo *`; } else { a="$(LISTA_DIST)"; } fi; \
 	mkdir -p $(PROYECTO)-$(PRY_VERSION); \
 	cp -rf $$a $(PROYECTO)-$(PRY_VERSION)
 	find $(PROYECTO)-$(PRY_VERSION) -name "CVS" | xargs rm -rf
 	if (test "$(LIMPIADIST2)" != "") then { cd $(PROYECTO)-$(PRY_VERSION); make $(LIMPIADIST2);} fi;
-	cd $(PROYECTO)-$(PRY_VERSION); make limpiadist
+	cp Make.inc $(PROYECTO)-$(PRY_VERSION); cd $(PROYECTO)-$(PRY_VERSION); make limpiadist; rm -f Make.inc
 	tar cvfz $(PROYECTO)-$(PRY_VERSION).tar.gz $(PROYECTO)-$(PRY_VERSION)
 	rm -rf $(PROYECTO)-$(PRY_VERSION)
+
+
+distregr: $(PROYECTO)-$(PRY_VERSION).tar.gz
+	if (test -d $(PROYECTO)-$(PRY_VERSION)) then {\
+		echo "No debe exisitr directorio $(PROYECTO)-$(PRY_VERSION)"; \
+	} fi;
+	tar xvfz $(PROYECTO)-$(PRY_VERSION).tar.gz
+	cp confv.sh $(PROYECTO)-$(PRY_VERSION)
+	cd $(PROYECTO)-$(PRY_VERSION) && \
+	./conf.sh && make && make regr && \
+	cd .. && \
+	rm -rf $(PROYECTO)-$(PRY_VERSION) && \
+	echo "=============================" && \
+	echo "Funciona!" && \
+	echo "============================="
+
 
 act: $(GENACT) $(ACT_PROC)
 	if (test "$(OTHER_ACT)" != "") then { make $(OTHER_ACT); } fi;

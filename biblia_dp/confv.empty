@@ -42,7 +42,7 @@ ACT_PROC="act-ncftpput"
 # Regla para actualizar sitio de publicación
 # Las que hay por defecto son act-scp y act-ncftpput
 
-HTML_PROC="dbrep_html_xsltproc_single"
+HTML_PROC="dbrep_html_jade_single"
 # Regla para generar HTML
 # Las que están por defecto son: dbrep_html_xsltproc para generar en varios HTML con XSLTPROC, dbrep_html_jade para generar en varias páginas con Jade
 
@@ -126,6 +126,14 @@ CONVERT=""
 # Programa para convertir imagenes de un formato a otro
 # Hace parte del paquete imagemagick
 
+DOT="dot-falta"
+# Convierte grafo en formato dotty a gráfica
+# Hace parte del paquete graphviz http://graphviz.org
+
+FIG2DEV="fig2dev-falta"
+# Convierte del formato de Xfig a gráfica
+# Hace parte del paquete transfig
+
 COLLATEINDEX=""
 # Programa auxiliar de DocBook para generar indices
 #
@@ -141,6 +149,10 @@ SCP=""
 SED=""
 # Stream Editor.  Empleado para transformar textos.
 # Hace parte del paquete sed.
+
+TOUCH=""
+# touch
+# Herramienta típica en sistemas Unix. 
 
 ED=""
 # Editor orientado a linea.

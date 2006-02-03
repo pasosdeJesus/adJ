@@ -179,7 +179,7 @@
   <xsl:param name="lang" select="./@lang"/>
   <xsl:variable name="n"><xsl:call-template name="newlang"><xsl:with-param name="lang" select="$lang"/></xsl:call-template></xsl:variable>
   <sect1 id="{./@id}">
-    <title><xsl:value-of select="./@num"/></title>
+    <title><xsl:value-of select="substring-after(./@id,'-')"/></title>
     <xsl:apply-templates>
 	<xsl:with-param name="lang" select="$n"/>
     </xsl:apply-templates>
@@ -212,12 +212,6 @@
 </xsl:template>
 
 
-<!-- Email -->
-<xsl:template match="email">
-  <email><xsl:value-of select="."/></email>
-</xsl:template>
-
-
 <!-- Strong -->
 <xsl:template match="fb">
   <xsl:param name="lang" select="./@lang"/>
@@ -226,6 +220,7 @@
     <xsl:with-param name="lang" select="$n"/>
   </xsl:apply-templates></emphasis>
 </xsl:template>
+
 
 <!-- Small Caps -->
 <xsl:template match="fc">
@@ -240,7 +235,18 @@
 <xsl:template match="fo">
   <xsl:param name="lang" select="./@lang"/>
   <xsl:variable name="n"><xsl:call-template name="newlang"><xsl:with-param name="lang" select="$lang"/></xsl:call-template></xsl:variable>
-  <quote><xsl:value-of select="."/></quote>
+  <quote><xsl:apply-templates>
+	<xsl:with-param name="lang" select="$n"/>
+  </xsl:apply-templates></quote>
+</xsl:template>
+
+<!-- Inline poetry -->
+<xsl:template match="fp">
+  <xsl:param name="lang" select="./@lang"/>
+  <xsl:variable name="n"><xsl:call-template name="newlang"><xsl:with-param name="lang" select="$lang"/></xsl:call-template></xsl:variable>
+  <quote><xsl:apply-templates>
+	<xsl:with-param name="lang" select="$n"/>
+  </xsl:apply-templates></quote>
 </xsl:template>
 
 <!-- Words of Jesus -->
@@ -295,7 +301,13 @@
 
 <!-- Verse -->
 <xsl:template match="sv">
-  <xsl:text> </xsl:text><superscript role="verse" id="{./@id}"><xsl:value-of select="./@num"/></superscript>
+  <xsl:param name="lang" select="./@lang"/>
+  <xsl:variable name="n"><xsl:call-template name="newlang"><xsl:with-param name="lang" select="$lang"/></xsl:call-template></xsl:variable>
+  <xsl:variable name="cv" select="substring-after(./@id, '-')"/>
+  <xsl:text> </xsl:text><superscript role="verse" id="{./@id}"><xsl:value-of select="substring-after($cv, '-')"/></superscript>
+  <xsl:apply-templates>
+	<xsl:with-param name="lang" select="$n"/>
+  </xsl:apply-templates>
 </xsl:template>
 
 <!-- Text with embedded footnote  --> 
@@ -327,6 +339,11 @@
 
 <!-- Word information -->
 <xsl:template match="wi">
+  <xsl:param name="lang" select="./@lang"/>
+  <xsl:variable name="n"><xsl:call-template name="newlang"><xsl:with-param name="lang" select="$lang"/></xsl:call-template></xsl:variable>
+  <xsl:apply-templates>
+     <xsl:with-param name="lang" select="$n"/>
+  </xsl:apply-templates>
 </xsl:template>
 
 <!-- Parallel passage -->

@@ -120,7 +120,7 @@ DESCRIPCIÓN
 	confv.empty y permitirá ingresar directamente la información o
 	cancelar para reanudar posteriormente.
 
-	De requerirlo usted puede cambiar directamente los valores detectados
+	De requerirlo sumerce puede cambiar directamente los valores detectados
 	modificando el archivo confv.sh y ejecutando nuevamente ./conf.sh.
 
 OPCIONES
@@ -222,11 +222,14 @@ if (test -x $XSLTPROC) then {
 check "DVIPS" "" "test -x \$DVIPS" `which dvips 2> /dev/null`
 check "PS2PDF" "" "test -x \$PS2PDF" `which ps2pdf 2> /dev/null`
 
-check "DOCBOOK_XML_DIR" "" "test -f \$DOCBOOK_XML_DIR/docbookx.dtd" "/usr/local/share/xml/docbook/4.1.2" "/usr/share/sgml/docbook/dtd/xml/4.1.2"
+check "DOCBOOK_XML_DIR" "" "test -f \$DOCBOOK_XML_DIR/docbookx.dtd" "/usr/local/share/xml/docbook/4.2" "/usr/local/share/xml/docbook/4.1.2" "/usr/share/sgml/docbook/dtd/xml/4.1.2"
 check "DOCBOOK_DSSSL" "" "test -f \$DOCBOOK_DSSSL/html/docbook.dsl" "/usr/local/share/sgml/docbook/dsssl/modular/" "/usr/share/sgml/docbook/stylesheet/dsssl/modular/"
 check "SGML_XML" "" "test -f \$SGML_XML" "$DOCBOOK_DSSSL/dtds/decls/xml.dcl" "/usr/share/sgml/declaration/xml.dcl"
-check "DOCBOOK_XSL" "optional" "test -f \$DOCBOOK_XSL/html/docbook.xsl" "/usr/local/share/xml/docbook-xsl" "/usr/share/sgml/docbook/stylesheet/xsl/nwalsh"
-if (test -f $DOCBOOK_XSL/html/docbook.xsl) then {
+check "DOCBOOK_XSL" "optional" "test -f \$DOCBOOK_XSL/html/docbook.xsl" "/usr/local/share/xml/docbook-xsl" "/usr/share/sgml/docbook/stylesheet/xsl/nwalsh" "/usr/local/share/xsl/docbook/"
+
+if (test "$HTML_PROC" = "dbrep_html_jade" -o "$HTML_PROC" = "dbrep_html_jade_single") then {
+}
+elif (test -f $DOCBOOK_XSL/html/docbook.xsl) then {
         isfm=`grep "<fm:project>" $DOCBOOK_XSL/VERSION`;
         if (test "$isfm" != "") then {
                 v=`grep "fm:Version>" $DOCBOOK_XSL/VERSION | sed -e "s|.*fm:Version>\([.0-9]*\)</fm:Version.*|\1|g"`;
@@ -237,10 +240,10 @@ if (test -f $DOCBOOK_XSL/html/docbook.xsl) then {
 		echo "** Falta archivo VERSION en directorio $DOCBOOK_XSL";
 		exit 1;
 	} 
-#	elif (test ! -f $DOCBOOK_XSL/manpages/docbook.xsl) then {
-#		echo "** La distribución de las hojas de estilo para DocBook que está empleando no incluye soporte para generar páginas man. Instale una versión reciente (http://docbook.sourceforge.net) y configure la ruta en la variable DOCBOOK_XSL del archivo confv.sh";
-#		exit 1;
-#	} 
+	elif (test ! -f $DOCBOOK_XSL/manpages/docbook.xsl) then {
+		echo "** La distribución de las hojas de estilo para DocBook que está empleando no incluye soporte para generar páginas man. Instale una versión reciente (http://docbook.sourceforge.net) y configure la ruta en la variable DOCBOOK_XSL del archivo confv.sh";
+		exit 1;
+	} 
 	elif (ltf "$v" "1.56" -a "$HTML_PROC" = "dbrep_html_xsltproc") then {
 		echo "Se requieren hojas de estilo XSL versión 1.56 o posterior";
 		echo "Empleando jade como segunda opción"
@@ -265,12 +268,15 @@ elif (test "$ACT_PROC" = "act-scp") then {
 
 
 check "CONVERT" "" "test -x \$CONVERT" `which convert 2> /dev/null`
+check "DOT" "optional" "test -x \$DOT" `which dot 2> /dev/null`
+check "FIG2DEV" "optional" "test -x \$FIG2DEV" `which fig2dev 2> /dev/null`
 
 check "ED" "" "test -x \$ED" `which ed 2> /dev/null`
 check "SED" "" "test -x \$SED" `which sed 2> /dev/null`
 check "AWK" "" "test -x \$AWK" `which awk 2> /dev/null`
 check "GZIP" "" "test -x \$GZIP" `which gzip 2> /dev/null`
 check "TAR" "" "test -x \$TAR" `which tar 2> /dev/null`
+check "TOUCH" "" "test -x \$TOUCH" `which touch 2> /dev/null`
 check "ZIP" "optional" "test -x \$ZIP" `which zip 2> /dev/null`
 check "PERL" "optional" "test -x \$PERL" `which perl 2> /dev/null`
 check "TIDY" "optional" "test -x \$TIDY" `which tidy 2> /dev/null`
@@ -342,6 +348,10 @@ echo ",s|/usr/bin/awk|$AWK|g
 w
 q
 " | ed herram/db2rep 2> /dev/null
+
+if (test ! -f personaliza.ent -a -f personaliza.ent.plantilla) then {
+	cp personaliza.ent.plantilla personaliza.ent
+} fi;
 
 echo "Configuración completada";
 

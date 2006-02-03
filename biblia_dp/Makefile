@@ -24,7 +24,9 @@ XSLT_HTML=estilohtml.xsl
 
 PRINT_DIR=imp
 
-DSSSL_PRINT=estilo.dsl#print
+DSSSL_PRINT=estilo.dsl\#print
+
+DSSSL_HTML=estilo.dsl\#html
 
 OTHER_HTML=
 

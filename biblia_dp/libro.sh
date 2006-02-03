@@ -95,6 +95,7 @@ done
 neln conf.sh $nd/conf.sh
 neln docbookrep_html.xsl $nd/docbookrep_html.xsl
 neln docbookrep_tex.dsl $nd/docbookrep_tex.dsl
+neln docbookrep_html.dsl $nd/docbookrep_html.dsl
 nesed Leame.txt $nd/Leame.txt
 nesed Desarrollo.txt $nd/Desarrollo.txt
 nesed estilos/estilo-$tipoestilo.dsl $nd/estilo.dsl

@@ -9,6 +9,9 @@
 	&docbookrep-html.dsl;
 -->
 
+(define %generate-book-toc%
+	#f)
+
 (define ($generate-qandaset-toc$)
 	#f)
 
@@ -41,7 +44,7 @@
 		      (make element gi: "H2"
 			    (literal "Logros"))	
 		      (process-children)))
-    (else ($block-container$))))
+    (else ($block-container$)))
 )
 
 ;; This is copied from html/dbfootn.dsl of DocBook DSSSL Stylesheet

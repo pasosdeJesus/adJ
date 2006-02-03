@@ -67,7 +67,12 @@ dbrep_html_xsltproc_single: $(PROYECTO)-4.1.2.$(EXT_DOCBOOK) $(INDEX) $(SOURCES)
 dbrep_html_jade: $(INDEX) $(SOURCES) $(IMAGES) $(XSLT_HTML) $(PROYECTO)-4.1.2.$(EXT_DOCBOOK)
 	mkdir -p $(HTML_DIR)
 	for i in $(IMAGES) ; do cp $$i $(HTML_DIR)/`basename $$i`; done 
-	-bp=`pwd`;cd $(HTML_DIR) && rm -f *.aux *.log && $(JADE) -V html-backend -D$(DOCBOOK_DSSSL)/html -t sgml -ihtml -d $$bp/$(DSSSL_HTML) $(SGML_XML) $$bp/$(PROYECTO)-4.1.2.$(EXT_DOCBOOK)
+	-bp=`pwd`;cd $(HTML_DIR) && rm -f *.aux *.log && $(JADE) -c$(DOCBOOK_DSSSL)/catalog -V html-backend -D$(DOCBOOK_DSSSL)/html -t sgml -ihtml -d $$bp/$(DSSSL_HTML) $(SGML_XML) $$bp/$(PROYECTO)-4.1.2.$(EXT_DOCBOOK)
+
+dbrep_html_jade_single: $(INDEX) $(SOURCES) $(IMAGES) $(XSLT_HTML) $(PROYECTO)-4.1.2.$(EXT_DOCBOOK)
+	mkdir -p $(HTML_DIR)
+	for i in $(IMAGES) ; do cp $$i $(HTML_DIR)/`basename $$i`; done 
+	-bp=`pwd`;cd $(HTML_DIR) && rm -f *.aux *.log && $(JADE) -c$(DOCBOOK_DSSSL)/catalog -V nochunks -V html-backend -D$(DOCBOOK_DSSSL)/html -t sgml -ihtml -d $$bp/$(DSSSL_HTML) $(SGML_XML) $$bp/$(PROYECTO)-4.1.2.$(EXT_DOCBOOK) > $(PROYECTO).html
 
 
 $(PROYECTO)-$(PRY_VERSION)_html.tar.gz: $(HTML_TARGET)
@@ -98,17 +103,17 @@ $(PRINT_DIR)/$(PROYECTO).tex: $(INDEX) $(SOURCES) $(IMAGES:.png=.eps)  $(PROYECT
 	mkdir -p $(PRINT_DIR)
 	for i in $(IMAGES:.png=.eps) ; do cp -f $$i $(PRINT_DIR)/`basename $$i`; done
 
-	-bp=`pwd`; cd $(PRINT_DIR) && rm -f *.aux *.log && $(JADE) -V tex-backend -D$(DOCBOOK_DSSSL)/print -o $(PROYECTO).tex -t tex -d  $$bp/$(DSSSL_PRINT) $(SGML_XML) $$bp/$(PROYECTO)-4.1.2.$(EXT_DOCBOOK)
+	-bp=`pwd`; cd $(PRINT_DIR) && rm -f *.aux *.log && $(JADE) -V tex-backend -c$(DOCBOOK_DSSSL)/catalog -D$(DOCBOOK_DSSSL)/print -o $(PROYECTO).tex -t tex -d  $$bp/$(DSSSL_PRINT) $(SGML_XML) $$bp/$(PROYECTO)-4.1.2.$(EXT_DOCBOOK)
 	cp $(PRINT_DIR)/$(PROYECTO).tex $(PRINT_DIR)/$(PROYECTO).tex.bak
 	$(SED) -e "s/­/{-}/g" $(PRINT_DIR)/$(PROYECTO).tex.bak > $(PRINT_DIR)/$(PROYECTO).tex
 
 
 $(INDEX): $(INDEX).m
-		echo "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" > $@
-	        cat $(INDEX).m >> $@
+	echo "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" > $@
+	cat $(INDEX).m >> $@
 
 $(INDEX).m: HTML.index.m
-	        perl -S $(COLLATEINDEX) -o $@ HTML.index.m
+	perl -S $(COLLATEINDEX) -o $@ HTML.index.m
 
 HTML.index.m: $(PROYECTO)-4.1.2.$(EXT_DOCBOOK) $(SOURCES)
 	echo $(COLLATEINDEX);
@@ -116,23 +121,23 @@ HTML.index.m: $(PROYECTO)-4.1.2.$(EXT_DOCBOOK) $(SOURCES)
         perl -S $(COLLATEINDEX) -N -o $(INDEX); \
 	} fi;
 	mkdir -p $(HTML_DIR)
-	-cd $(HTML_DIR) && rm -f * && $(JADE) -D .. -D $(DOCBOOK_DSSSL)/html -t sgml -ihtml -V html-index -d docbook.dsl $(SGML_XML) $(PROYECTO)-4.1.2.$(EXT_DOCBOOK) 
+	-cd $(HTML_DIR) && rm -f * && $(JADE) -c$(DOCBOOK_DSSSL)/catalog -D .. -D $(DOCBOOK_DSSSL)/html -t sgml -ihtml -V html-index -d docbook.dsl $(SGML_XML) $(PROYECTO)-4.1.2.$(EXT_DOCBOOK) 
 	if (test -f html/HTML.index) then { \
 	mv html/HTML.index HTML.index.m; } \
 	else { \
-	touch HTML.index.m; \
+	$(TOUCH) HTML.index.m; \
 	} fi;
 
 # Revisa ortografía empleando ispell
 ispell: $(HTML_TARGET)
-	touch $(PROYECT).ispell
+	$(TOUCH) $(PROYECTO).ispell
 	if (test "$(W3M)" = "") then { echo "Se requiere w3m o lynx"; exit 1; } fi
 	echo "" > $(PRINT_DIR)/$(PROYECTO).txt
 	for i in html/*html; do echo $$i; $(W3M) -dump $(W3M_OPT) $$i >> $(PRINT_DIR)/$(PROYECTO).txt ; done
-	ispell -p $(PROYECTO).ispell imp/$(PROYECTO).txt
+	$(ISPELL) -d spanish -p $(PROYECTO).ispell imp/$(PROYECTO).txt
 
 
-.SUFFIXES: .eps .png
+.SUFFIXES: .eps .png .dot .fig
 
 .jpg.eps:
 	$(CONVERT) $< EPS:$@
@@ -140,3 +145,10 @@ ispell: $(HTML_TARGET)
 .png.eps:
 	$(CONVERT) $< EPS:$@
 
+.dot.png:
+	$(DOT) -Tgif $< >/tmp/dotpng.gif
+	$(CONVERT) /tmp/dotpng.gif /tmp/dotpng.jpg  # convert no pasaba bien de gif a png
+	$(CONVERT) /tmp/dotpng.jpg $@
+
+.fig.png:
+	$(FIG2DEV) -L png $< $@
