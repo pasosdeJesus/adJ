@@ -12,4 +12,4 @@ genlib juan_dp "Buena Nueva de acuerdo a Juan" "juan.gbfxml" "1ev" 12503 "2 May 
 
 genlib evangelios_dp "Los Evangelios" "intro-evangelios.gbfxml mateo.gbfxml marcos.gbfxml lucas.gbfxml juan.gbfxml" "4ev" 0 "No"
 
-genlib nuevo_testamento_dp "Nuevo Testamento" "intro-nuevotestamento.gbfxml mateo.gbfxml marcos.gbfxml juan.gbfxml hechos.gbfxml romanos.gbfxml" "4ev" 0 "No"
+genlib nuevo_testamento_dp "Nuevo Testamento" "intro-nuevotestamento.gbfxml mateo.gbfxml marcos.gbfxml lucas.gbfxml juan.gbfxml hechos.gbfxml romanos.gbfxml" "4ev" 0 "No"

@@ -44,10 +44,10 @@ ACTDIR=bdp
 USER=nuestroamigojesus
 
 
-GENACT=dist all $(PRINT_DIR)/$(PROYECTO)-$(PRY_VERSION).ps.gz $(PRINT_DIR)/$(PROYECTO)-$(PRY_VERSION).pdf $(PROYECTO)-$(PRY_VERSION)_html.tar.gz gutenberg
+GENACT=dist all $(PROYECTO)-$(PRY_VERSION)_html.tar.gz $(PRINT_DIR)/$(PROYECTO)-$(PRY_VERSION).ps.gz $(PRINT_DIR)/$(PROYECTO)-$(PRY_VERSION).pdf #gutenberg 
 # Reglas por emplear antes de actualizar sitio en Internet
 
-FILESACT=$(PROYECTO)-$(PRY_VERSION).tar.gz $(PRINT_DIR)/$(PROYECTO)-$(PRY_VERSION).ps.gz $(PRINT_DIR)/$(PROYECTO)-$(PRY_VERSION).pdf $(PROYECTO)-$(PRY_VERSION)_html.tar.gz $(HTML_TARGET) gutenberg/$(PROYECTO).txt
+FILESACT=$(PROYECTO)-$(PRY_VERSION).tar.gz $(PROYECTO)-$(PRY_VERSION)_html.tar.gz $(HTML_TARGET) gutenberg/$(PROYECTO).txt $(PRINT_DIR)/$(PROYECTO)-$(PRY_VERSION).ps.gz $(PRINT_DIR)/$(PROYECTO)-$(PRY_VERSION).pdf 
 # Archivos que se debe actualizar en sitio de Internet
 
 
@@ -183,9 +183,9 @@ Derechos.txt: derechos.gbfxml
 	$(MAKE) $(HTML_TARGET)
 	$(W3M) -cols 70 -dump $(HTML_TARGET) | $(AWK) -f herram/arrderechos.awk > Derechos.txt
 
-Desarrollo.txt: herram/gbfxml.vim
+Desarrollo.txt: herram/vim/ftplugin/gbfxml.vim
 	cp Desarrollo.txt Desarrollo.txt.bak
-	INICIO="Las completaciones disponibles" CMD="$(AWK) -f herram/exdocvimgbfxml.awk herram/gbfxml.vim" $(AWK) -f herram/rempbloquearch.awk Desarrollo.txt.bak > Desarrollo.txt
+	INICIO="Las completaciones disponibles" CMD="$(AWK) -f herram/exdocvimgbfxml.awk herram/vim/ftplugin/gbfxml.vim" $(AWK) -f herram/rempbloquearch.awk Desarrollo.txt.bak > Desarrollo.txt
 
 $(VS_SWORDBOOK)-KJV.tmp: 
 	mod2imp KJV | awk '/.*/ { if (imp==1) { print $$0; } } /\$$\$$\$$.*/ { match($$0,/ /); n=substr($$0, 4, RSTART-4); if (n=="$(VS_SWORDBOOK)") { imp=1; } else { imp=0; } }' | sed -e "s/<w /|<w /g" | tr "|" "\n"  | sed -e  "s/ [ ]*$$//g" | sed -e "s/\(<\/w>[.,;]*\)[ ]*\(.\)/\1|\2/g" | tr "|" "\n" > $(VS_SWORDBOOK)-KJV.tmp
