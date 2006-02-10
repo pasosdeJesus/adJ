@@ -202,6 +202,7 @@ if (test "$prefix" != "") then {
 if (test "$VERBOSE_FLAG" -gt "0") then {
 	echo "Chequeando y detectando valor de variables de configuración";
 } fi;
+
 check "JADE" "" "test -x \$JADE" `which jade 2> /dev/null` `which openjade 2> /dev/null`
 check "JADETEX" "" "test -x \$JADETEX" `which jadetex 2> /dev/null`
 check "PDFJADETEX" "" "test -x \$PDFJADETEX" `which pdfjadetex 2> /dev/null`
@@ -221,6 +222,7 @@ if (test -x $XSLTPROC) then {
 } fi;
 check "DVIPS" "" "test -x \$DVIPS" `which dvips 2> /dev/null`
 check "PS2PDF" "" "test -x \$PS2PDF" `which ps2pdf 2> /dev/null`
+
 
 check "DOCBOOK_XML_DIR" "" "test -f \$DOCBOOK_XML_DIR/docbookx.dtd" "/usr/local/share/xml/docbook/4.2" "/usr/local/share/xml/docbook/4.1.2" "/usr/share/sgml/docbook/dtd/xml/4.1.2"
 check "DOCBOOK_DSSSL" "" "test -f \$DOCBOOK_DSSSL/html/docbook.dsl" "/usr/local/share/sgml/docbook/dsssl/modular/" "/usr/share/sgml/docbook/stylesheet/dsssl/modular/"
@@ -289,7 +291,6 @@ if (test "$l" = "si") then {
 	W3M_OPT="-nolist";
 } fi;
 changeVar W3M_OPT 1;
-
 check "ISPELL" "optional" "test -x \$ISPELL" `which ispell 2> /dev/null`
 
 

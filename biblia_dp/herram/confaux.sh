@@ -180,6 +180,7 @@ function changeVar {
 		sol=`grep -A 2 "^[ \t]*$1[ \t]*=" $confvar_file | tail -n 1 | sed "s/#\(.*\)/\1/g"`
 		if (test "x$desc" = "x") then {
 			echo "Falta descripción de variable de configuración $1";
+			echo "desc: $desc, sol: $sol, confvar_file: $confvar_file";
 			exit 1;
 		} fi;
 		echo "$desc : $valp1";
@@ -187,8 +188,10 @@ function changeVar {
 	sexp="s|^\([ \t]*$1[ \t]*=[ \t]*\)\(.*\)$|\1\"${valp1}\"|g";
 	if (test "x$sedexp" = "x") then {
 		sedexp="$sexp";
+		echo "$sexp" > confaux.sed
 	} else {
 		sedexp="$sedexp;$sexp";
+		echo "$sexp" >> confaux.sed
 	} fi;
 }
 
@@ -216,7 +219,8 @@ function check  {
 function changeConfv  {
 	if (test "x$sedexp" != "x") then {
 		cp $confvar_file confv.bak
-		sed -e "$sedexp" < confv.bak > $confvar_file;
+#		sed -e "$sedexp" < confv.bak > $confvar_file;
+		sed -f confaux.sed < confv.bak > $confvar_file;
 	} fi;
 }
 
