@@ -39,9 +39,9 @@ OTHER_HTML=
 GENDIST=Desarrollo.txt Derechos.txt $(SOURCES) $(IMAGES) 
 # Dependencias para generar distribución
 
-ACTHOST=ftp.de.geocities.com
+ACTHOST=ns2.pasosdejesus.org
 ACTDIR=bdp
-USER=nuestroamigojesus
+USER=vtamara
 
 
 GENACT=dist all $(PROYECTO)-$(PRY_VERSION)_html.tar.gz $(PRINT_DIR)/$(PROYECTO)-$(PRY_VERSION).ps.gz $(PRINT_DIR)/$(PROYECTO)-$(PRY_VERSION).pdf #gutenberg 
