@@ -12,7 +12,7 @@ function mkstr {
 		echo "Bug.  Times cannot be negative";
 		exit 1;
 	}
-	elif (test "$2" == "0") then {
+	elif (test "$2" = "0") then {
 		echo $3;
 	}
 	else {
@@ -30,11 +30,11 @@ function ltf {
 
 # Add .0 to integers
 	t=`echo $n1 | grep "[.]"`;
-	if (test "$t" == "") then {
+	if (test "$t" = "") then {
 		n1="${n1}.0"
 	} fi;
 	t=`echo $n2 | grep "[.]"`;
-	if (test "$t" == "") then {
+	if (test "$t" = "") then {
 		n2="${n2}.0"
 	} fi;
 		
@@ -47,7 +47,7 @@ function ltf {
 	nn2=`echo $n2 | sed -e "s/\([0-9]*\)[.]\([0-9]*\)/\1\2/g"`
 	
 	t=`echo $((${#d1} < ${#d2}))`
-	if (test "$t" == "1") then { 
+	if (test "$t" = "1") then { 
 		# n1 has less decimal digits
 		nn1=`mkstr "0" $((${#d2}-${#d1})) $nn1`
 	} 
@@ -57,7 +57,7 @@ function ltf {
 	}  fi;
 
 	t=`echo $((${nn1} < ${nn2}))`;
-	if (test "$t" == "1") then {
+	if (test "$t" = "1") then {
 		return 0;
 	}
 	else {
@@ -95,6 +95,6 @@ function regtest {
 	} fi;
 }
 
-if (test "$1" == "-t") then {
+if (test "$1" = "-t") then {
 	regtest;
 } fi;

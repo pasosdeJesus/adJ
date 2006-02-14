@@ -74,34 +74,6 @@ REPASA_DOCBOOK_XSL_HTML="docbookrep_html.xsl"
 # Ruta de hojas XSLT de define para convertir de DocBook a HTML
 # 
 
-JADE=""
-# Motor para procesar hojas de estilo DSSSL
-# Instale jade o openjade (http://openjade.sourceforge.net)
-
-JADETEX=""
-# Para procesar TeX producido por Jade y generar DVI
-# Instale jadetex (fuentes disponibles en http://openjade.sourceforge.net)
-
-PDFJADETEX=""
-# Para procesar TeX producido por Jade y generar PDF
-# Instale jade o openjade (http://openjade.sourceforge.net)
-
-XSLTPROC=""
-# Procesador de XSL xsltproc
-# Disponible en http://xmlsoft.org/XSLT/ 
-
-XMLLINT=""
-# Validador de XML
-# xmllint está disponible junto con xsltproc en http://xmlsoft.org/XSLT/ 
-
-DVIPS=""
-# Conversor de DVI a PostScript dvips
-# 
-
-PS2PDF=""
-# Conversor de PostScript a PDF
-# 
-
 PAPEL="a4"
 # Tamaño de papel, puede ser a4 o letter o alguno de los aceptados por gs
 # 
@@ -122,25 +94,97 @@ DOCBOOK_XSL=""
 # Directorio con hojas de estilo XSL para DocBook
 # Instale docbook-xsl (http://http://docbook.sourceforge.net/projects/xsl/index.html)
 
-CONVERT=""
-# Programa para convertir imagenes de un formato a otro
-# Hace parte del paquete imagemagick
+AWK=""
+# Interprete POSIX Awk.  Empleado para transformar textos.
+# Hace parte del paquete awk.
 
-DOT="dot-falta"
-# Convierte grafo en formato dotty a gráfica
-# Hace parte del paquete graphviz http://graphviz.org
-
-FIG2DEV="fig2dev-falta"
-# Convierte del formato de Xfig a gráfica
-# Hace parte del paquete transfig
+CP=""
+# Para copiar archivos
+# Herramienta típica en sistemas Unix.
 
 COLLATEINDEX=""
 # Programa auxiliar de DocBook para generar indices
 #
 
+CONVERT=""
+# Programa para convertir imagenes de un formato a otro
+# Hace parte del paquete imagemagick
+
+CVS=""
+# Para control de versiones
+# Sugerido http://www.opencvs.org
+
+DIATHEKE=""
+# KJV2003
+# http://fmg-www.cs.ucla.edu/fmg-members/geoff/ispell.html
+
+DOT="dot-falta"
+# Convierte grafo en formato dotty a gráfica
+# Hace parte del paquete graphviz http://graphviz.org
+
+DVIPS=""
+# Conversor de DVI a PostScript dvips
+# 
+
+ED=""
+# Editor orientado a linea.
+# Herramienta estándar en sistemas Unix
+
+FIG2DEV="fig2dev-falta"
+# Convierte del formato de Xfig a gráfica
+# Hace parte del paquete transfig
+
+FIND=""
+# Para ubicar archivos
+# Herramienta típica en sistemas Unix.
+
+GZIP=""
+# Compresor gzip.
+# Herramienta típica en sistemas Unix.
+
+ISPELL=""
+# Corrector ortográfico internacional.
+# http://fmg-www.cs.ucla.edu/fmg-members/geoff/ispell.html
+
+JADE=""
+# Motor para procesar hojas de estilo DSSSL
+# Instale jade o openjade (http://openjade.sourceforge.net)
+
+JADETEX=""
+# Para procesar TeX producido por Jade y generar DVI
+# Instale jadetex (fuentes disponibles en http://openjade.sourceforge.net)
+
+MAKE=""
+# Ejecuta comandos requeridos
+# Herramienta estándar en sistemas Unix
+
+MKDIR=""
+# Crea directorios
+# Herramienta estándar en sistemas Unix
+
+MV=""
+# Mueve/renombra archivos
+# Herramienta estándar en sistemas Unix
+
 NCFTPPUT=""
 # Programa para transferir archivos desde línea de comandos usando el protocolo FTP
 # Es una herramienta del paquete ncftp cliente http://www.ncftpd.com/
+
+PDFJADETEX=""
+# Para procesar TeX producido por Jade y generar PDF
+# Instale jade o openjade (http://openjade.sourceforge.net)
+
+PS2PDF=""
+# Conversor de PostScript a PDF
+# 
+
+PERL=""
+# Interprete del lenguaje Perl.
+# Herramienta típica en sistemas Unix.  http://www.perl.org
+
+RM=""
+# Para eliminar archivos
+# Herramienta típica en sistemas Unix.
 
 SCP=""
 # Programa para transferir archivos desde la línea de comandos usando SSH
@@ -150,37 +194,17 @@ SED=""
 # Stream Editor.  Empleado para transformar textos.
 # Hace parte del paquete sed.
 
-TOUCH=""
-# touch
-# Herramienta típica en sistemas Unix. 
-
-ED=""
-# Editor orientado a linea.
-# Herramienta estándar en sistemas Unix
-
-AWK=""
-# Interprete POSIX Awk.  Empleado para transformar textos.
-# Hace parte del paquete awk.
-
-GZIP=""
-# Compresor gzip.
-# Herramienta típica en sistemas Unix.
-
-ZIP=""
-# Compresor zip.
-# Herramienta típica en sistemas Unix.
-
 TAR=""
 # Empaquetador de archivos tar.
 # Herramienta típica en sistemas Unix.
 
-PERL=""
-# Interprete del lenguaje Perl.
-# Herramienta típica en sistemas Unix.  http://www.perl.org
-
 TIDY=""
 # Validador de HTML.
 # Sitio de desarrollo: http://www.w3.org/People/Raggett/tidy/
+
+TOUCH=""
+# touch
+# Herramienta típica en sistemas Unix. 
 
 W3M=""
 # Navegador de web en texto.
@@ -190,13 +214,17 @@ W3M_OPT=""
 # Opciones para visualizador HTML como texto
 #
 
-ISPELL=""
-# Corrector ortográfico internacional.
-# http://fmg-www.cs.ucla.edu/fmg-members/geoff/ispell.html
+XSLTPROC=""
+# Procesador de XSL xsltproc
+# Disponible en http://xmlsoft.org/XSLT/ 
 
-DIATHEKE=""
-# KJV2003
-# http://fmg-www.cs.ucla.edu/fmg-members/geoff/ispell.html
+XMLLINT=""
+# Validador de XML
+# xmllint está disponible junto con xsltproc en http://xmlsoft.org/XSLT/ 
+
+ZIP=""
+# Compresor zip.
+# Herramienta típica en sistemas Unix.
 
 
 # Vías de instalación
@@ -209,3 +237,6 @@ INSDOC="/usr/local/share/doc/$PROYECTO"
 # Directorio para instalación de documentación Postscript y HTML
 #
 
+INSDATA="/usr/local/share/$PROYECTO"
+# Directorio para instalación de datos del proyecto
+#

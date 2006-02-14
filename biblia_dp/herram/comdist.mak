@@ -2,7 +2,7 @@
 # Para incluir en Makefile.
 # Dominio público. Sin garantías. structio-info@lists.sourceforge.net
 
-# Variables requeridas:
+# Variables requeridas (fuera de otras con programas) 
 
 # PROYECTO nombre corto del proyecto 
 # PRY_VERSION version
@@ -20,42 +20,42 @@
 
 
 distcvs:
-	cvs -z3 co $(PROYECTO) 
-	mv $(PROYECTO) $(PROYECTO)-$(PRY_VERSION)
-	find ./$(PROYECTO)-$(PRY_VERSION)/ -name CVS | xargs rm -rf 
-	tar cvfz $(PROYECTO)-$(PRY_VERSION).tar.gz $(PROYECTO)-$(PRY_VERSION)
-	rm -rf $(PROYECTO)-$(PRY_VERSION)
+	$(CVS) -z3 co $(PROYECTO) 
+	$(MV) $(PROYECTO) $(PROYECTO)-$(PRY_VERSION)
+	$(FIND) ./$(PROYECTO)-$(PRY_VERSION)/ -name CVS | xargs rm -rf 
+	$(TAR) cvfz $(PROYECTO)-$(PRY_VERSION).tar.gz $(PROYECTO)-$(PRY_VERSION)
+	$(RM) -rf $(PROYECTO)-$(PRY_VERSION)
 
 dist:
-	rm -f $(PROYECTO)-$(PRY_VERSION).tar.gz
-	rm -rf $(PROYECTO)-$(PRY_VERSION)
+	$(RM) -f $(PROYECTO)-$(PRY_VERSION).tar.gz
+	$(RM) -rf $(PROYECTO)-$(PRY_VERSION)
 	if (test "$(LISTA_DIST)" = "") then { a=`echo *`; } else { a="$(LISTA_DIST)"; } fi; \
-	mkdir -p $(PROYECTO)-$(PRY_VERSION); \
-	cp -rf $$a $(PROYECTO)-$(PRY_VERSION)
-	find $(PROYECTO)-$(PRY_VERSION) -name "CVS" | xargs rm -rf
-	if (test "$(LIMPIADIST2)" != "") then { cd $(PROYECTO)-$(PRY_VERSION); make $(LIMPIADIST2);} fi;
-	cp Make.inc $(PROYECTO)-$(PRY_VERSION); cd $(PROYECTO)-$(PRY_VERSION); make limpiadist; rm -f Make.inc
-	tar cvfz $(PROYECTO)-$(PRY_VERSION).tar.gz $(PROYECTO)-$(PRY_VERSION)
-	rm -rf $(PROYECTO)-$(PRY_VERSION)
+	$(MKDIR) -p $(PROYECTO)-$(PRY_VERSION); \
+	$(CP) -rf $$a $(PROYECTO)-$(PRY_VERSION)
+	$(FIND) $(PROYECTO)-$(PRY_VERSION) -name "CVS" | xargs rm -rf
+	if (test "$(LIMPIADIST2)" != "") then { cd $(PROYECTO)-$(PRY_VERSION); $(MAKE) $(LIMPIADIST2);} fi;
+	$(CP) Make.inc $(PROYECTO)-$(PRY_VERSION); cd $(PROYECTO)-$(PRY_VERSION); $(MAKE) limpiadist; rm -f Make.inc
+	$(TAR) cvfz $(PROYECTO)-$(PRY_VERSION).tar.gz $(PROYECTO)-$(PRY_VERSION)
+	$(RM) -rf $(PROYECTO)-$(PRY_VERSION)
 
 
 distregr: $(PROYECTO)-$(PRY_VERSION).tar.gz
 	if (test -d $(PROYECTO)-$(PRY_VERSION)) then {\
 		echo "No debe exisitr directorio $(PROYECTO)-$(PRY_VERSION)"; \
 	} fi;
-	tar xvfz $(PROYECTO)-$(PRY_VERSION).tar.gz
-	cp confv.sh $(PROYECTO)-$(PRY_VERSION)
+	$(TAR) xvfz $(PROYECTO)-$(PRY_VERSION).tar.gz
+	$(CP) confv.sh $(PROYECTO)-$(PRY_VERSION)
 	cd $(PROYECTO)-$(PRY_VERSION) && \
-	./conf.sh && make && make regr && \
+	./conf.sh && $(MAKE) && $(MAKE) regr && \
 	cd .. && \
-	rm -rf $(PROYECTO)-$(PRY_VERSION) && \
+	$(RM) -rf $(PROYECTO)-$(PRY_VERSION) && \
 	echo "=============================" && \
 	echo "Funciona!" && \
 	echo "============================="
 
 
 act: $(GENACT) $(ACT_PROC)
-	if (test "$(OTHER_ACT)" != "") then { make $(OTHER_ACT); } fi;
+	if (test "$(OTHER_ACT)" != "") then { $(MAKE) $(OTHER_ACT); } fi;
 
 act-scp:
 	if (test "$(SCP)" = "") then { echo "Falta programa scp, instale y configure de nuevo con conf.sh"; exit 1; } fi;

@@ -96,7 +96,10 @@ DESCRIPCIÓN
 
 	Establece el valor de las variables de configuración y genera
 	archivos en diversos formatos empleados por las fuentes DocBook
-	con ayudas de 'repasa' del proyecto $PROYECTO.
+	con ayudas de 'repasa' del proyecto $PROYECTO:
+	* $PRY_DESC
+	* $URLSITE
+
 	Las variables de configuración y sus valores por defecto están
 	en confv.empty (debajo de cada variable hay un comentario con la 
 	descripción).
@@ -195,14 +198,14 @@ if (test "$prefix" != "") then {
         changeVar INSBIN 1;
         INSDOC="$prefix/share/doc/$PROYECTO";
         changeVar INSDOC 1;
+	INSDATA="$prefix/share/$PROYECTO";
+	changeVar INSDATA 1;
 } fi;
-
 
 
 if (test "$VERBOSE_FLAG" -gt "0") then {
 	echo "Chequeando y detectando valor de variables de configuración";
 } fi;
-
 check "JADE" "" "test -x \$JADE" `which jade 2> /dev/null` `which openjade 2> /dev/null`
 check "JADETEX" "" "test -x \$JADETEX" `which jadetex 2> /dev/null`
 check "PDFJADETEX" "" "test -x \$PDFJADETEX" `which pdfjadetex 2> /dev/null`
@@ -223,12 +226,10 @@ if (test -x $XSLTPROC) then {
 check "DVIPS" "" "test -x \$DVIPS" `which dvips 2> /dev/null`
 check "PS2PDF" "" "test -x \$PS2PDF" `which ps2pdf 2> /dev/null`
 
-
 check "DOCBOOK_XML_DIR" "" "test -f \$DOCBOOK_XML_DIR/docbookx.dtd" "/usr/local/share/xml/docbook/4.2" "/usr/local/share/xml/docbook/4.1.2" "/usr/share/sgml/docbook/dtd/xml/4.1.2"
 check "DOCBOOK_DSSSL" "" "test -f \$DOCBOOK_DSSSL/html/docbook.dsl" "/usr/local/share/sgml/docbook/dsssl/modular/" "/usr/share/sgml/docbook/stylesheet/dsssl/modular/"
 check "SGML_XML" "" "test -f \$SGML_XML" "$DOCBOOK_DSSSL/dtds/decls/xml.dcl" "/usr/share/sgml/declaration/xml.dcl"
 check "DOCBOOK_XSL" "optional" "test -f \$DOCBOOK_XSL/html/docbook.xsl" "/usr/local/share/xml/docbook-xsl" "/usr/share/sgml/docbook/stylesheet/xsl/nwalsh" "/usr/local/share/xsl/docbook/"
-
 if (test "$HTML_PROC" = "dbrep_html_jade" -o "$HTML_PROC" = "dbrep_html_jade_single") then {
 }
 elif (test -f $DOCBOOK_XSL/html/docbook.xsl) then {
@@ -273,15 +274,24 @@ check "CONVERT" "" "test -x \$CONVERT" `which convert 2> /dev/null`
 check "DOT" "optional" "test -x \$DOT" `which dot 2> /dev/null`
 check "FIG2DEV" "optional" "test -x \$FIG2DEV" `which fig2dev 2> /dev/null`
 
-check "ED" "" "test -x \$ED" `which ed 2> /dev/null`
-check "SED" "" "test -x \$SED" `which sed 2> /dev/null`
 check "AWK" "" "test -x \$AWK" `which awk 2> /dev/null`
+check "CP" "" "test -x \$CP" `which cp 2> /dev/null`
+check "CVS" "optional" "test -x \$CVS" `which cvs 2> /dev/null`
+check "DOT" "optional" "test -x \$DOT" `which dot 2> /dev/null`
+check "ED" "" "test -x \$ED" `which ed 2> /dev/null`
+check "FIG2DEV" "optional" "test -x \$FIG2DEV" `which fig2dev 2> /dev/null`
+check "FIND" "" "test -x \$FIND" `which find 2> /dev/null`
 check "GZIP" "" "test -x \$GZIP" `which gzip 2> /dev/null`
-check "TAR" "" "test -x \$TAR" `which tar 2> /dev/null`
-check "TOUCH" "" "test -x \$TOUCH" `which touch 2> /dev/null`
-check "ZIP" "optional" "test -x \$ZIP" `which zip 2> /dev/null`
+check "ISPELL" "optional" "test -x \$ISPELL" `which ispell 2> /dev/null`
+check "MAKE" "" "test -x \$MAKE" `which make 2> /dev/null`
+check "MV" "" "test -x \$MV" `which mv 2> /dev/null`
+check "MKDIR" "" "test -x \$MKDIR" `which mkdir 2> /dev/null`
 check "PERL" "optional" "test -x \$PERL" `which perl 2> /dev/null`
+check "RM" "" "test -x \$RM" `which rm 2> /dev/null`
+check "SED" "" "test -x \$SED" `which sed 2> /dev/null`
+check "TAR" "" "test -x \$TAR" `which tar 2> /dev/null`
 check "TIDY" "optional" "test -x \$TIDY" `which tidy 2> /dev/null`
+check "TOUCH" "" "test -x \$TOUCH" `which touch 2> /dev/null`
 
 # Corrección ortografica
 check "W3M" "optional" "test -x \$W3M" `which w3m 2> /dev/null` `which lynx 2> /dev/null`
@@ -291,7 +301,8 @@ if (test "$l" = "si") then {
 	W3M_OPT="-nolist";
 } fi;
 changeVar W3M_OPT 1;
-check "ISPELL" "optional" "test -x \$ISPELL" `which ispell 2> /dev/null`
+
+check "ZIP" "optional" "test -x \$ZIP" `which zip 2> /dev/null`
 
 
 FECHA_ACT=`date "+%d/%m/%Y"`;

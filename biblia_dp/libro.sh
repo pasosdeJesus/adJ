@@ -54,7 +54,7 @@ extdbk=xdbk
 
 function neln {
 	pwd=`pwd`;
-	if (test ! -f $2) then {
+	if (test -d $2 -o ! -f $2) then {
 		ln -s $pwd/$1 $2
 	} fi
 }
@@ -67,7 +67,7 @@ function necp {
 
 function nesed {
 	if (test ! -f $2) then {
-		sed -e "s|biblia_dp|$pry|g;s|PRY_DESC=\"[^\"]*\"|PRY_DESC=\"$desc\"|g;s|SOURCE_GBFXML=.*|SOURCE_GBFXML=$fuentes|g;s|IMAGES=.*|IMAGES=$imagenes|g;s|Traducción a español de la Biblia|Traducción a español|g;s|PRY_VERSION=\"[^\"]*\"|PRY_VERSION=\"$version\"|g;s|GUTNUM=.*|GUTNUM=\"$gutnum\"|g;s|GUTDATE=.*|GUTDATE=\"$gutdate\"|g;s|GUTURL=.*|GUTURL=\"$guturl\"|g" $1 > $2
+		sed -e "s|biblia_dp|$pry|g;s|Biblia de dominio público|$desc|g;s|PRY_DESC=\"[^\"]*\"|PRY_DESC=\"$desc\"|g;s|SOURCE_GBFXML=.*|SOURCE_GBFXML=$fuentes|g;s|IMAGES=.*|IMAGES=$imagenes|g;s|Traducción a español de la Biblia|Traducción a español|g;s|PRY_VERSION=\"[^\"]*\"|PRY_VERSION=\"$version\"|g;s|GUTNUM=.*|GUTNUM=\"$gutnum\"|g;s|GUTDATE=.*|GUTDATE=\"$gutdate\"|g;s|GUTURL=.*|GUTURL=\"$guturl\"|g" $1 > $2
 	} fi
 }
 
@@ -97,6 +97,9 @@ neln docbookrep_html.xsl $nd/docbookrep_html.xsl
 neln docbookrep_tex.dsl $nd/docbookrep_tex.dsl
 neln docbookrep_html.dsl $nd/docbookrep_html.dsl
 nesed Leame.txt $nd/Leame.txt
+nesed Instala.txt $nd/Instala.txt
+nesed Creditos.txt $nd/Creditos.txt
+nesed Novedades.txt $nd/Novedades.txt
 nesed Desarrollo.txt $nd/Desarrollo.txt
 nesed estilos/estilo-$tipoestilo.dsl $nd/estilo.dsl
 nesed estilos/estilohtml-$tipoestilo.xsl $nd/estilohtml.xsl
@@ -110,7 +113,20 @@ neln gbfxml.dtd $nd
 neln gutenberg/Readme.txt $nd/gutenberg
 neln gutenberg/footer.inc $nd/gutenberg
 neln ispell/$pry.ispell $nd/ispell
-neln img/*.png $nd/img/
+neln img/blank.png $nd/img/
+neln img/caution.png $nd/img/
+neln img/draft.png $nd/img/
+neln img/home.png $nd/img/
+neln img/important.png $nd/img/
+neln img/next.png $nd/img/
+neln img/note.png $nd/img/
+neln img/prev.png $nd/img/
+neln img/tip.png $nd/img/
+neln img/toc-blank.png $nd/img/
+neln img/toc-minus.png $nd/img/
+neln img/toc-plus.png $nd/img/
+neln img/up.png $nd/img/
+neln img/warning.png $nd/img/
 
 if (test ! -d $dir/herram) then {
 	mkdir $nd/herram

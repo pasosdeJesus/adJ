@@ -139,6 +139,11 @@ include herram/comdocbook.mak
 # To crear distribución de fuentes y actualizar en Internet
 include herram/comdist.mak
 
+instala:
+	$(MKDIR) $(INSDOC)
+	$(CP) html/*html $(INSDOC)
+	$(CP) imp/*ps $(INSDOC)
+	$(CP) imp/*pdf $(INSDOC)
 
 # Elimina hasta configuración
 limpiadist: limpiamas
