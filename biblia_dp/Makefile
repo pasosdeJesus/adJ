@@ -39,9 +39,9 @@ OTHER_HTML=
 GENDIST=Desarrollo.txt Derechos.txt $(SOURCES) $(IMAGES) 
 # Dependencias para generar distribución
 
-ACTHOST=ns2.pasosdejesus.org
+ACTHOST=ftp.de.geocities.com
 ACTDIR=bdp
-USER=vtamara
+USER=nuestroamigojesus
 
 
 GENACT=dist all $(PROYECTO)-$(PRY_VERSION)_html.tar.gz $(PRINT_DIR)/$(PROYECTO)-$(PRY_VERSION).ps.gz $(PRINT_DIR)/$(PROYECTO)-$(PRY_VERSION).pdf #gutenberg 
@@ -140,10 +140,13 @@ include herram/comdocbook.mak
 include herram/comdist.mak
 
 instala:
-	$(MKDIR) $(INSDOC)
-	$(CP) html/*html $(INSDOC)
-	$(CP) imp/*ps $(INSDOC)
-	$(CP) imp/*pdf $(INSDOC)
+	$(MKDIR) $(DESTDIR)$(INSDOC)
+	$(CP) html/*html $(DESTDIR)$(INSDOC)
+	$(CP) imp/*ps $(DESTDIR)$(INSDOC)
+	$(CP) imp/*pdf $(DESTDIR)$(INSDOC)
+
+desinstala:
+	$(RM) -rf $(DESTDIR)$(INSDOC)
 
 # Elimina hasta configuración
 limpiadist: limpiamas
