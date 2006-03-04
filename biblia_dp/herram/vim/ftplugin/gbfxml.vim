@@ -28,6 +28,11 @@ endif
 " Mapeo de teclas
 if !exists("no_plugin_maps") && !exists("no_gbfxml_maps")
 
+	if !hasmapto('<Plug>GBFbib')
+		imap <buffer> <unique> <LocalLeader>b <Plug>GBFbib<ESC>kkkkk0f"a
+	endif
+	inoremap <buffer> <unique> <Plug>GBFbib <bib id=""><CR><TAB><tt></tt><CR><TAB><author></author><CR><TAB><editor></editor><CR><TAB><otherbib></otherbib><CR></bib>
+
 	if !hasmapto('<Plug>GBFcitebib')
 		imap <buffer> <unique> <LocalLeader>ci <Plug>GBFcitebib<ESC>hhi
 	endif
@@ -47,6 +52,5 @@ if !exists("no_plugin_maps") && !exists("no_gbfxml_maps")
 		imap <buffer> <unique> <LocalLeader>wi <Plug>GBFwi<ESC>bbbbla
 	endif
 	inoremap <buffer> <unique> <Plug>GBFwi <wi type="G" value=","><ESC>ea</wi>
-
 
 endif
