@@ -47,17 +47,17 @@ $(HTML_TARGET): $(HTML_PROC)
 
 # To generate HTML in multiple pages with xsltproc
 dbrep_html_xsltproc: $(PROYECTO)-4.1.2.$(EXT_DOCBOOK) $(INDEX) $(SOURCES) $(IMAGES) $(XSLT_HTML) 
-	mkdir -p $(HTML_DIR)
-	for i in $(IMAGES)  ; do cp $$i $(HTML_DIR)/`basename $$i`; done 
-	bp=`pwd`;cd $(HTML_DIR) && rm -f *html && $(XSLTPROC) --catalogs --nonet $$bp/$(XSLT_HTML) $$bp/$(PROYECTO)-4.1.2.$(EXT_DOCBOOK) 
-	for i in $(HTML_DIR)/*html; do cp $$i $$i.bak; $(SED) -e "s/­/-/g" $$i.bak > $$i; done
+	$(MKDIR) -p $(HTML_DIR)
+	for i in $(IMAGES)  ; do $(CP) $$i $(HTML_DIR)/`basename $$i`; done 
+	bp=`pwd`;cd $(HTML_DIR) && $(RM) -f *html && $(XSLTPROC) --catalogs --nonet $$bp/$(XSLT_HTML) $$bp/$(PROYECTO)-4.1.2.$(EXT_DOCBOOK) 
+	for i in $(HTML_DIR)/*html; do $(CP) $$i $$i.bak; $(SED) -e "s/­/-/g" $$i.bak > $$i; done
 	rm -f $(HTML_DIR)/*bak
 	$(OTHER_HTML)
 
 # To generate HTML in one page with xsltproc
 dbrep_html_xsltproc_single: $(PROYECTO)-4.1.2.$(EXT_DOCBOOK) $(INDEX) $(SOURCES) $(IMAGES) $(XSLT_HTML) 
 	mkdir -p $(HTML_DIR)
-	for i in $(IMAGES) ; do cp $$i $(HTML_DIR)/`basename $$i`; done 
+	for i in $(IMAGES) ; do $(CP) $$i $(HTML_DIR)/`basename $$i`; done 
 	$(XSLTPROC) --catalogs --nonet $(XSLT_HTML) $(PROYECTO)-4.1.2.$(EXT_DOCBOOK) > $(HTML_TARGET).bak
 	$(SED) -e "s/­/-/g" $(HTML_TARGET).bak > $(HTML_TARGET)
 	$(OTHER_HTML)
@@ -65,24 +65,24 @@ dbrep_html_xsltproc_single: $(PROYECTO)-4.1.2.$(EXT_DOCBOOK) $(INDEX) $(SOURCES)
 
 # Possible rule to generate HTML with OpenJade
 dbrep_html_jade: $(INDEX) $(SOURCES) $(IMAGES) $(XSLT_HTML) $(PROYECTO)-4.1.2.$(EXT_DOCBOOK)
-	mkdir -p $(HTML_DIR)
-	for i in $(IMAGES) ; do cp $$i $(HTML_DIR)/`basename $$i`; done 
-	-bp=`pwd`;cd $(HTML_DIR) && rm -f *.aux *.log && $(JADE) -c$(DOCBOOK_DSSSL)/catalog -V html-backend -D$(DOCBOOK_DSSSL)/html -t sgml -ihtml -d $$bp/$(DSSSL_HTML) $(SGML_XML) $$bp/$(PROYECTO)-4.1.2.$(EXT_DOCBOOK)
+	$(MKDIR) -p $(HTML_DIR)
+	for i in $(IMAGES) ; do $(CP) $$i $(HTML_DIR)/`basename $$i`; done 
+	-bp=`pwd`;cd $(HTML_DIR) && $(RM) -f *.aux *.log && $(JADE) -c$(DOCBOOK_DSSSL)/catalog -V html-backend -D$(DOCBOOK_DSSSL)/html -t sgml -ihtml -d $$bp/$(DSSSL_HTML) $(SGML_XML) $$bp/$(PROYECTO)-4.1.2.$(EXT_DOCBOOK)
 
 dbrep_html_jade_single: $(INDEX) $(SOURCES) $(IMAGES) $(XSLT_HTML) $(PROYECTO)-4.1.2.$(EXT_DOCBOOK)
-	mkdir -p $(HTML_DIR)
-	for i in $(IMAGES) ; do cp $$i $(HTML_DIR)/`basename $$i`; done 
-	-bp=`pwd`;cd $(HTML_DIR) && rm -f *.aux *.log && $(JADE) -c$(DOCBOOK_DSSSL)/catalog -V nochunks -V html-backend -D$(DOCBOOK_DSSSL)/html -t sgml -ihtml -d $$bp/$(DSSSL_HTML) $(SGML_XML) $$bp/$(PROYECTO)-4.1.2.$(EXT_DOCBOOK) > $(PROYECTO).html
+	$(MKDIR) -p $(HTML_DIR)
+	for i in $(IMAGES) ; do $(CP) $$i $(HTML_DIR)/`basename $$i`; done 
+	-bp=`pwd`;cd $(HTML_DIR) && $(RM) -f *.aux *.log && $(JADE) -c$(DOCBOOK_DSSSL)/catalog -V nochunks -V html-backend -D$(DOCBOOK_DSSSL)/html -t sgml -ihtml -d $$bp/$(DSSSL_HTML) $(SGML_XML) $$bp/$(PROYECTO)-4.1.2.$(EXT_DOCBOOK) > $(PROYECTO).html
 
 
 $(PROYECTO)-$(PRY_VERSION)_html.tar.gz: $(HTML_TARGET)
-	tar cvfz $(PROYECTO)-$(PRY_VERSION)_html.tar.gz $(HTML_DIR)
+	$(TAR) cvfz $(PROYECTO)-$(PRY_VERSION)_html.tar.gz $(HTML_DIR)
 
 $(PRINT_DIR)/$(PROYECTO)-$(PRY_VERSION).pdf: $(PRINT_DIR)/$(PROYECTO).pdf
-	cp $(PRINT_DIR)/$(PROYECTO).pdf $(PRINT_DIR)/$(PROYECTO)-$(PRY_VERSION).pdf
+	$(CP) $(PRINT_DIR)/$(PROYECTO).pdf $(PRINT_DIR)/$(PROYECTO)-$(PRY_VERSION).pdf
 
 $(PRINT_DIR)/$(PROYECTO)-$(PRY_VERSION).ps.gz: $(PRINT_DIR)/$(PROYECTO).ps
-	cp $(PRINT_DIR)/$(PROYECTO).ps $(PRINT_DIR)/$(PROYECTO)-$(PRY_VERSION).ps
+	$(CP) $(PRINT_DIR)/$(PROYECTO).ps $(PRINT_DIR)/$(PROYECTO)-$(PRY_VERSION).ps
 	$(GZIP) $(PRINT_DIR)/$(PROYECTO)-$(PRY_VERSION).ps
 
 
@@ -94,17 +94,17 @@ dbrep_pdf_ps: $(PRINT_DIR)/$(PROYECTO).ps
 $(PRINT_DIR)/$(PROYECTO).ps: $(PS_PROC)
 
 dbrep_ps_jade: $(PRINT_DIR)/$(PROYECTO).dvi
-	cd $(PRINT_DIR) && dvips -o $(PROYECTO).ps $(PROYECTO).dvi
+	cd $(PRINT_DIR) && $(DVIPS) -o $(PROYECTO).ps $(PROYECTO).dvi
 
 $(PRINT_DIR)/$(PROYECTO).dvi: $(PRINT_DIR)/$(PROYECTO).tex
 	-cd $(PRINT_DIR); $(JADETEX) $(PROYECTO).tex; $(JADETEX) $(PROYECTO).tex; $(JADETEX) $(PROYECTO).tex
 
 $(PRINT_DIR)/$(PROYECTO).tex: $(INDEX) $(SOURCES) $(IMAGES:.png=.eps)  $(PROYECTO)-4.1.2.$(EXT_DOCBOOK)
-	mkdir -p $(PRINT_DIR)
-	for i in $(IMAGES:.png=.eps) ; do cp -f $$i $(PRINT_DIR)/`basename $$i`; done
+	$(MKDIR) -p $(PRINT_DIR)
+	for i in $(IMAGES:.png=.eps) ; do $(CP) -f $$i $(PRINT_DIR)/`basename $$i`; done
 
-	-bp=`pwd`; cd $(PRINT_DIR) && rm -f *.aux *.log && $(JADE) -V tex-backend -c$(DOCBOOK_DSSSL)/catalog -D$(DOCBOOK_DSSSL)/print -o $(PROYECTO).tex -t tex -d  $$bp/$(DSSSL_PRINT) $(SGML_XML) $$bp/$(PROYECTO)-4.1.2.$(EXT_DOCBOOK)
-	cp $(PRINT_DIR)/$(PROYECTO).tex $(PRINT_DIR)/$(PROYECTO).tex.bak
+	-bp=`pwd`; cd $(PRINT_DIR) && $(RM) -f *.aux *.log && $(JADE) -V tex-backend -c$(DOCBOOK_DSSSL)/catalog -D$(DOCBOOK_DSSSL)/print -o $(PROYECTO).tex -t tex -d  $$bp/$(DSSSL_PRINT) $(SGML_XML) $$bp/$(PROYECTO)-4.1.2.$(EXT_DOCBOOK)
+	$(CP) $(PRINT_DIR)/$(PROYECTO).tex $(PRINT_DIR)/$(PROYECTO).tex.bak
 	$(SED) -e "s/­/{-}/g" $(PRINT_DIR)/$(PROYECTO).tex.bak > $(PRINT_DIR)/$(PROYECTO).tex
 
 
@@ -113,17 +113,17 @@ $(INDEX): $(INDEX).m
 	cat $(INDEX).m >> $@
 
 $(INDEX).m: HTML.index.m
-	perl -S $(COLLATEINDEX) -o $@ HTML.index.m
+	$(PERL) -S $(COLLATEINDEX) -o $@ HTML.index.m
 
 HTML.index.m: $(PROYECTO)-4.1.2.$(EXT_DOCBOOK) $(SOURCES)
 	echo $(COLLATEINDEX);
 	if (test ! -f $(INDEX)) then { \
-        perl -S $(COLLATEINDEX) -N -o $(INDEX); \
+        $(PERL) -S $(COLLATEINDEX) -N -o $(INDEX); \
 	} fi;
-	mkdir -p $(HTML_DIR)
-	-cd $(HTML_DIR) && rm -f * && $(JADE) -c$(DOCBOOK_DSSSL)/catalog -D .. -D $(DOCBOOK_DSSSL)/html -t sgml -ihtml -V html-index -d docbook.dsl $(SGML_XML) $(PROYECTO)-4.1.2.$(EXT_DOCBOOK) 
+	$(MKDIR) -p $(HTML_DIR)
+	-cd $(HTML_DIR) && $(RM) -f * && $(JADE) -c$(DOCBOOK_DSSSL)/catalog -D .. -D $(DOCBOOK_DSSSL)/html -t sgml -ihtml -V html-index -d docbook.dsl $(SGML_XML) $(PROYECTO)-4.1.2.$(EXT_DOCBOOK) 
 	if (test -f html/HTML.index) then { \
-	mv html/HTML.index HTML.index.m; } \
+	$(MV) html/HTML.index HTML.index.m; } \
 	else { \
 	$(TOUCH) HTML.index.m; \
 	} fi;

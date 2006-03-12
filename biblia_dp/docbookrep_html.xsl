@@ -60,7 +60,7 @@ set       toc,title
   <xsl:apply-templates/>
 </xsl:template>
 
-<!--
+
 	<xsl:template match="para">
 		<xsl:choose>
 			<xsl:when test="substring(./@role,1,3)='sig' or substring(./@role,1,5)='nipal'"/>
@@ -85,13 +85,12 @@ set       toc,title
 		</xsl:choose>
 	</xsl:template>
 
--->
 	<!-- The next one is copied from html/footnote.xsl in original 
 	Docbook-xsl 1.56.1 distribution -->
+
+<xsl:template match="footnote/para[1]|footnote/simpara[1]" priority="2">
   <!-- this only works if the first thing in a footnote is a para, -->
   <!-- which is ok, because it usually is. -->
-<!--
-<xsl:template match="footnote/para[1]|footnote/simpara[1]" priority="2">
   <xsl:variable name="name">
     <xsl:text>ftn.</xsl:text>
     <xsl:call-template name="object.id">
@@ -116,6 +115,7 @@ set       toc,title
     <xsl:apply-templates/>
   </p>
 </xsl:template>
--->
+
+
 </xsl:stylesheet>
 

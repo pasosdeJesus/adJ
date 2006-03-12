@@ -174,13 +174,13 @@ PDFJADETEX=""
 # Para procesar TeX producido por Jade y generar PDF
 # Instale jade o openjade (http://openjade.sourceforge.net)
 
-PS2PDF=""
-# Conversor de PostScript a PDF
-# 
-
 PERL=""
 # Interprete del lenguaje Perl.
 # Herramienta típica en sistemas Unix.  http://www.perl.org
+
+PS2PDF=""
+# Conversor de PostScript a PDF
+# 
 
 RM=""
 # Para eliminar archivos
@@ -188,7 +188,7 @@ RM=""
 
 SCP=""
 # Programa para transferir archivos desde la línea de comandos usando SSH
-# Es una herramienta del paquete ssh  http://www.openssh.org
+# Es una herramienta del proyecto ssh  http://www.openssh.org
 
 SED=""
 # Stream Editor.  Empleado para transformar textos.
