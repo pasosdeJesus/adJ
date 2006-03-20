@@ -28,6 +28,7 @@
 # DSSSL_PRINT DSSSL custom style for printing (estilo.dsl#print)
 # DSSSL_HTML DSSSL custom style for HTML generation (estilo.dsl#html)
 # DOCBOOK_DSSSL Directory with stylesheets DSSSL for DocBook
+# CATALOGE_DSSSL Directory with stylesheets DSSSL for DocBook
 # OTHER_HTML Other things to do after generating HTML
 # INDEX file name where index will be generated, if NULL no index is generated
 
@@ -67,12 +68,12 @@ dbrep_html_xsltproc_single: $(PROYECTO)-4.1.2.$(EXT_DOCBOOK) $(INDEX) $(SOURCES)
 dbrep_html_jade: $(INDEX) $(SOURCES) $(IMAGES) $(XSLT_HTML) $(PROYECTO)-4.1.2.$(EXT_DOCBOOK)
 	$(MKDIR) -p $(HTML_DIR)
 	for i in $(IMAGES) ; do $(CP) $$i $(HTML_DIR)/`basename $$i`; done 
-	-bp=`pwd`;cd $(HTML_DIR) && $(RM) -f *.aux *.log && $(JADE) -c$(DOCBOOK_DSSSL)/catalog -V html-backend -D$(DOCBOOK_DSSSL)/html -t sgml -ihtml -d $$bp/$(DSSSL_HTML) $(SGML_XML) $$bp/$(PROYECTO)-4.1.2.$(EXT_DOCBOOK)
+	-bp=`pwd`;cd $(HTML_DIR) && $(RM) -f *.aux *.log && $(JADE) -c$(CATALOG_DSSSL) -V html-backend -D$(DOCBOOK_DSSSL)/html -t sgml -ihtml -d $$bp/$(DSSSL_HTML) $(SGML_XML) $$bp/$(PROYECTO)-4.1.2.$(EXT_DOCBOOK)
 
 dbrep_html_jade_single: $(INDEX) $(SOURCES) $(IMAGES) $(XSLT_HTML) $(PROYECTO)-4.1.2.$(EXT_DOCBOOK)
 	$(MKDIR) -p $(HTML_DIR)
 	for i in $(IMAGES) ; do $(CP) $$i $(HTML_DIR)/`basename $$i`; done 
-	-bp=`pwd`;cd $(HTML_DIR) && $(RM) -f *.aux *.log && $(JADE) -c$(DOCBOOK_DSSSL)/catalog -V nochunks -V html-backend -D$(DOCBOOK_DSSSL)/html -t sgml -ihtml -d $$bp/$(DSSSL_HTML) $(SGML_XML) $$bp/$(PROYECTO)-4.1.2.$(EXT_DOCBOOK) > $(PROYECTO).html
+	-bp=`pwd`;cd $(HTML_DIR) && $(RM) -f *.aux *.log && $(JADE) -c$(CATALOG_DSSSL) -V nochunks -V html-backend -D$(DOCBOOK_DSSSL)/html -t sgml -ihtml -d $$bp/$(DSSSL_HTML) $(SGML_XML) $$bp/$(PROYECTO)-4.1.2.$(EXT_DOCBOOK) > $(PROYECTO).html
 
 
 $(PROYECTO)-$(PRY_VERSION)_html.tar.gz: $(HTML_TARGET)
@@ -103,7 +104,7 @@ $(PRINT_DIR)/$(PROYECTO).tex: $(INDEX) $(SOURCES) $(IMAGES:.png=.eps)  $(PROYECT
 	$(MKDIR) -p $(PRINT_DIR)
 	for i in $(IMAGES:.png=.eps) ; do $(CP) -f $$i $(PRINT_DIR)/`basename $$i`; done
 
-	-bp=`pwd`; cd $(PRINT_DIR) && $(RM) -f *.aux *.log && $(JADE) -V tex-backend -c$(DOCBOOK_DSSSL)/catalog -D$(DOCBOOK_DSSSL)/print -o $(PROYECTO).tex -t tex -d  $$bp/$(DSSSL_PRINT) $(SGML_XML) $$bp/$(PROYECTO)-4.1.2.$(EXT_DOCBOOK)
+	-bp=`pwd`; cd $(PRINT_DIR) && $(RM) -f *.aux *.log && $(JADE) -V tex-backend -c$(CATALOG_DSSSL) -D$(DOCBOOK_DSSSL)/print -o $(PROYECTO).tex -t tex -d  $$bp/$(DSSSL_PRINT) $(SGML_XML) $$bp/$(PROYECTO)-4.1.2.$(EXT_DOCBOOK)
 	$(CP) $(PRINT_DIR)/$(PROYECTO).tex $(PRINT_DIR)/$(PROYECTO).tex.bak
 	$(SED) -e "s/­/{-}/g" $(PRINT_DIR)/$(PROYECTO).tex.bak > $(PRINT_DIR)/$(PROYECTO).tex
 
@@ -121,7 +122,7 @@ HTML.index.m: $(PROYECTO)-4.1.2.$(EXT_DOCBOOK) $(SOURCES)
         $(PERL) -S $(COLLATEINDEX) -N -o $(INDEX); \
 	} fi;
 	$(MKDIR) -p $(HTML_DIR)
-	-cd $(HTML_DIR) && $(RM) -f * && $(JADE) -c$(DOCBOOK_DSSSL)/catalog -D .. -D $(DOCBOOK_DSSSL)/html -t sgml -ihtml -V html-index -d docbook.dsl $(SGML_XML) $(PROYECTO)-4.1.2.$(EXT_DOCBOOK) 
+	-cd $(HTML_DIR) && $(RM) -f * && $(JADE) -c$(CATALOG_DSSSL) -D .. -D $(DOCBOOK_DSSSL)/html -t sgml -ihtml -V html-index -d docbook.dsl $(SGML_XML) $(PROYECTO)-4.1.2.$(EXT_DOCBOOK) 
 	if (test -f html/HTML.index) then { \
 	$(MV) html/HTML.index HTML.index.m; } \
 	else { \

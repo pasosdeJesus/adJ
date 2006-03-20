@@ -74,7 +74,7 @@ REPASA_DOCBOOK_XSL_HTML="docbookrep_html.xsl"
 # Ruta de hojas XSLT de define para convertir de DocBook a HTML
 # 
 
-PAPEL="a4"
+PAPEL="letter"
 # Tamaño de papel, puede ser a4 o letter o alguno de los aceptados por gs
 # 
 
@@ -85,6 +85,10 @@ SGML_XML=""
 DOCBOOK_XML_DIR=""
 # Vía del DTD de DocBook XML
 # Disponible en http://www.docbook.org
+
+CATALOG_DSSSL=""
+# Catalogo de hojas DSSSL
+# Debe referenciar las de OpenJade y las de DocBook
 
 DOCBOOK_DSSSL=""
 # Directorio con las hojas de estilo DSSSL para DocBook
