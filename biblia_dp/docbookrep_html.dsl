@@ -62,7 +62,19 @@
                 (make sequence
                   (make element gi: "A"
                         attributes: (list
-                                     (list "NAME" (string-append "FTN." ))
+                                     (list "NAME" (string-append "FTN." id))
+			             (list "HREF" (href-to (parent (current-node
+)))))
+                        (literal 
+                         (string-append "[" 
+                                        ($footnote-number$ 
+                                         (parent (current-node))) 
+                                        "]")))
+                  (literal " "))
+                (literal ""))
+            (process-children))))
+)
+
 (mode table-footnote-mode
   (element footnote
     (process-children))
@@ -82,17 +94,5 @@
             (empty-sosofo))
         (process-children)
         (make empty-element gi: "BR")))))
-
-
-                                     (list "HREF" (href-to (parent (current-node)))))
-                        (literal
-                         (string-append "["
-                                        ($footnote-number$
-                                         (parent (current-node)))
-                                        "]")))
-                  (literal " "))
-                (literal ""))
-            (process-children))))
-)
 
 

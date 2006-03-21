@@ -178,13 +178,13 @@
 <xsl:template match="sc">
   <xsl:param name="lang" select="./@lang"/>
   <xsl:variable name="n"><xsl:call-template name="newlang"><xsl:with-param name="lang" select="$lang"/></xsl:call-template></xsl:variable>
-  <sect1 id="{./@id}">
+  <chapter id="{./@id}">
     <title><xsl:value-of select="substring-after(./@id,'-')"/></title>
     <xsl:apply-templates>
 	<xsl:with-param name="lang" select="$n"/>
     </xsl:apply-templates>
     
-  </sect1>
+  </chapter>
 </xsl:template>
 
 <!-- Comment -->

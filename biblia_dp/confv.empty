@@ -42,7 +42,7 @@ ACT_PROC="act-scp"
 # Regla para actualizar sitio de publicación
 # Las que hay por defecto son act-scp y act-ncftpput
 
-HTML_PROC="dbrep_html_jade_single"
+HTML_PROC="dbrep_html_xsltproc_single"
 # Regla para generar HTML
 # Las que están por defecto son: dbrep_html_xsltproc para generar en varios HTML con XSLTPROC, dbrep_html_jade para generar en varias páginas con Jade
 

@@ -228,6 +228,7 @@ check "PS2PDF" "" "test -x \$PS2PDF" `which ps2pdf 2> /dev/null`
 
 check "DOCBOOK_XML_DIR" "" "test -f \$DOCBOOK_XML_DIR/docbookx.dtd" "/usr/local/share/xml/docbook/4.2" "/usr/local/share/xml/docbook/4.1.2" "/usr/share/sgml/docbook/dtd/xml/4.1.2"
 check "DOCBOOK_DSSSL" "" "test -f \$DOCBOOK_DSSSL/html/docbook.dsl" "/usr/local/share/sgml/docbook/dsssl/modular/" "/usr/share/sgml/docbook/stylesheet/dsssl/modular/"
+check "CATALOG_DSSSL" "" "test -f \$CATALOG_DSSSL" "/usr/local/share/sgml/catalog" "/etc/sgml/catalog"
 check "SGML_XML" "" "test -f \$SGML_XML" "$DOCBOOK_DSSSL/dtds/decls/xml.dcl" "/usr/share/sgml/declaration/xml.dcl"
 check "DOCBOOK_XSL" "optional" "test -f \$DOCBOOK_XSL/html/docbook.xsl" "/usr/local/share/xml/docbook-xsl" "/usr/share/sgml/docbook/stylesheet/xsl/nwalsh" "/usr/local/share/xsl/docbook/"
 if (test "$HTML_PROC" = "dbrep_html_jade" -o "$HTML_PROC" = "dbrep_html_jade_single") then {
@@ -259,6 +260,11 @@ elif (test "$HTML_PROC" = "dbrep_html_xsltproc") then {
 	HTML_PROC=dbrep_html_jade;
 	changeVar HTML_PROC 1;
 } fi;
+
+check "REPASA_DOCBOOK_XSL_HTML" "" "test -f \$REPASA_DOCBOOK_XSL_HTML" 'docbookrep_html.xsl'
+check "PAPEL" "" "test x\$PAPEL != x" 'letter' 'legal' 'a4'
+check "PS_PROC" "" "test x\$PS_PROC != x" 'dbrep_ps_jade'
+check "PDF_PROC" "" "test x\$PDF_PROC != x" 'dbrep_pdf_ps'
 
 check "COLLATEINDEX" "" "test -f \$COLLATEINDEX" "/usr/local/share/sgml/docbook/dsssl/modular/bin/collateindex.pl" "/usr/share/sgml/docbook/dsssl/nwalsh-modular/bin/collateindex.pl" "/usr/bin/collateindex.pl" `which collateindex.pl`
 
