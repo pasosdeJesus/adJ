@@ -1,10 +1,10 @@
+- Agregar números Strong
 
-romanos
-- Sacar de 11,16 a 11,21 del otro sitio.
-- mejorar formateo HTML (que incluya footnotes).
-- posibilitar PS.
+- Comparar versión griega disponible con TR de otras fuentes
 
-- Números strong a lo que va o seguir con corintios ...
+- Agregar morfología en griego
+
+- Posibilitar PS.
 
 * ispell: Corregir bug con defformater herram/defispell
 ispell -d spanish -p ./marcos.ispell -F herram/defispell marcos.gbfxml
@@ -22,7 +22,6 @@ No procesa bien tildes
 	Separar con subtítulos.
 	Concordar.
 	Agregar comentarios de diversos autores.
-	Poner números Strong
 
 * Mejorar versión PostScript para imprimir y distribuir gratuitamente
 	(Gideons ya hace esto http://www.gideons.org pero la versión
@@ -36,12 +35,9 @@ No procesa bien tildes
 	* El openjade de OpenBSD está malo, ya ni pude sacar versión 
  	  PostScript
 
-* Mejorar versión HTML.  Las nuevas hojas de estilo DocBook no incluyen
-  pies de página.
+* Mejorar versión HTML.  
 
 * Publicar hechos y romanos en Gutenberg
-
-* Traducir carta a los romanos
 
 gbfxml2html
 	* Completarlo para no requerir traducción a DocBook (dificil usar
