@@ -48,9 +48,15 @@ if !exists("no_plugin_maps") && !exists("no_gbfxml_maps")
 	endif
 	inoremap <buffer> <unique> <Plug>GBFt <t lang="es"></t>
 
+	if !hasmapto('<Plug>GBFw3')
+		imap <buffer> <unique> <LocalLeader>w3 <Plug>GBFw3<ESC>F,i
+	endif
+	inoremap <buffer> <unique> <Plug>GBFw3 <wi type="G" value="3588,,"/>
+
 	if !hasmapto('<Plug>GBFwi')
 		imap <buffer> <unique> <LocalLeader>wi <Plug>GBFwi<ESC>bbbbla
 	endif
 	inoremap <buffer> <unique> <Plug>GBFwi <wi type="G" value=","><ESC>ea</wi>
+
 
 endif
