@@ -37,5 +37,21 @@ BEGIN {
 }
 
 END {
+	lin="";
+	for (i=1; i<=mv; i++) {
+		if (ver[i]=="") {
+			print FILENAME ":" FNR ":Falta el " i "-esimo en " nant > "/dev/stderr";
+			error=1;
+		}
+		else {
+			lin=lin i"-"ver[i] " ";
+		}
+	}
+	if (lin != "") {
+		print nant " " lin;
+	}
+	mv=-1;
+	delete ver;
+
 	exit error;
 }
