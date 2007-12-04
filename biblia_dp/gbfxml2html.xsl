@@ -3,45 +3,17 @@
 <!-- XSL to convert from GBF XML in HTML -->
 <!-- Source released to the public domain 2003 vtamara@informatik.uni-kl.de -->
 
+<!-- Modularity ideas from http://nwalsh.com/docs/articles/dbdesign/ -->
 <!DOCTYPE xsl:stylesheet []>
 
 <xsl:stylesheet version="1.0"
-        xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+	xmlns:xsl="http://www.w3.org/1999/XSL/Transform" out="text"
+	xmlns:exsl="http://exslt.org/common"
+	extension-element-prefixes="exsl">
+
 
 <xsl:param name="outlang">es</xsl:param>
-<xsl:param name="lang">en</xsl:param>
-
-
-<!-- functions not supported by xsltproc 1004
-<xsl:function name="new_lang">
-  <xsl:param name="attlang"/>
-  <xsl:param name="lang"/>
-  <xsl:variable name="res">
-    <xsl:choose>
-	<xsl:when  test="$attlang=''">
-	  <xsl:value-of select="$lang"/>
-	</xsl:when>
-	<xsl:otherwise>
-	  <xsl:value-of select="$attlang"/>
-	</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <xsl:result select="$res"/>
-</xsl:function>
--->
-
-<!-- To use with call-template -->
-<xsl:template name="newlang">
-  <xsl:param name="lang"/>
-  <xsl:choose>
-    <xsl:when test="./@lang = ''">
-      <xsl:value-of select="$lang"/>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:value-of select="./@lang"/>
-    </xsl:otherwise>
-  </xsl:choose>
-</xsl:template>
+<xsl:variable name="numf" select="1"/>
 
 
 <xsl:output method="html" encoding="ISO-8859-1"/>
@@ -49,252 +21,347 @@
 
 <!-- Entry point -->
 <xsl:template match="gbfxml">
-  <xsl:param name="lang" select="./@lang"/>
-  <html><head>
-</head>set lang="{$outlang}"><xsl:text>
-    </xsl:text>
-	<setinfo>
-	  <xsl:apply-templates select="gbfxml//tt">
-		  <xsl:with-param name="lang" select="$lang"/>
-	  </xsl:apply-templates>
+	<xsl:variable name="titulo">
+		<xsl:apply-templates select="tt">
+		</xsl:apply-templates>
+	</xsl:variable>
 
+  <html><head>
+		  <title><xsl:value-of select="$titulo"/></title>
+	<link rel="stylesheet" type="text/css" href="biblia_dp.css" />
+	</head><xsl:text>
+    </xsl:text>
+    <body>
     <xsl:text>
     </xsl:text>
-	  <xsl:apply-templates select=".//stt">
-		<xsl:with-param name="lang" select="$lang"/>
-	  </xsl:apply-templates><xsl:text>
-          </xsl:text>
-	  <xsl:apply-templates select=".//rights">
-		<xsl:with-param name="lang" select="$lang"/>
-	  </xsl:apply-templates><xsl:text>
-          </xsl:text>
-	</setinfo>
+    <h1><xsl:value-of select="$titulo"/></h1> 
+    <!--	  <xsl:apply-templates select=".//stt">
+	</xsl:apply-templates>-->
+		<xsl:text> 
+		</xsl:text>
+		<font size="-1" class="srights-title">
+		<a href="#srights">Derechos</a> | 
+		<a href="#credits">Créditos</a>
+		</font>
+		<!--	  <xsl:apply-templates select=".//rights">
+			</xsl:apply-templates><xsl:text> 
+          </xsl:text>  -->
     <xsl:apply-templates select=".//sb">
-    	<xsl:with-param name="lang" select="$lang"/>
     </xsl:apply-templates><xsl:text>
     </xsl:text>
+    <h3>Derechos</h3>
+    <a name="#srights"/>
+	<xsl:apply-templates select=".//rights">
+	</xsl:apply-templates><xsl:text> 
+</xsl:text>  
+    <h3>Créditos</h3>
+    <a name="#credits"/>
+	<xsl:apply-templates select="credits" mode="footnotes">
+	</xsl:apply-templates><xsl:text> 
+</xsl:text>  
+    <h3>Notas al pie</h3>
+    <a name="#footnotes"/>
+    <xsl:apply-templates select=".//sb" mode="footnotes">
+    </xsl:apply-templates><xsl:text>
+    </xsl:text>
+    <h3>Referencias</h3>
+    <a name="#references"/>
     <xsl:apply-templates select=".//sbib">
-    	<xsl:with-param name="lang" select="$lang"/>
     </xsl:apply-templates><xsl:text>
-    </xsl:text>
-  </set>
+    </xsl:text> 
+
+  </body></html>
 </xsl:template>
 
 <!-- Short title -->
 <xsl:template match="tt"> 
-  <xsl:param name="lang" select="./@lang"/>
-  <xsl:variable name="n"><xsl:call-template name="newlang"><xsl:with-param name="lang" select="$lang"/></xsl:call-template></xsl:variable>
-  <title><xsl:apply-templates>
-	  <xsl:with-param name="lang" select="$n"/>
-  </xsl:apply-templates></title>
+	<xsl:apply-templates/>
 </xsl:template>
+
 
 <!-- Long title -->
 <xsl:template match="stt">
-  <xsl:param name="lang" select="./@lang"/>
-  <xsl:variable name="n"><xsl:call-template name="newlang"><xsl:with-param name="lang" select="$lang"/></xsl:call-template></xsl:variable>
-  <titleabbrev><xsl:apply-templates>
-	<xsl:with-param name="lang" select="$n"/>
-  </xsl:apply-templates></titleabbrev>
+	<h1><xsl:apply-templates/></h1>
 </xsl:template>
 
 <!-- Copyright notice  -->
 <xsl:template match="srights">
-  <xsl:param name="lang" select="./@lang"/>
-  <xsl:variable name="n"><xsl:call-template name="newlang"><xsl:with-param name="lang" select="$lang"/></xsl:call-template></xsl:variable>
+  <p>
   <xsl:apply-templates>
-	<xsl:with-param name="lang" select="$n"/>
   </xsl:apply-templates>
+  </p>
 </xsl:template> 
 
 <!-- Long copyright notice -->
 <xsl:template match="rights">
-  <xsl:param name="lang" select="./@lang"/>
-  <xsl:variable name="n"><xsl:call-template name="newlang"><xsl:with-param name="lang" select="$lang"/></xsl:call-template></xsl:variable>
-  <legalnotice><para><xsl:apply-templates>
-	<xsl:with-param name="lang" select="$n"/>
-  </xsl:apply-templates></para></legalnotice>
+  <p>
+	  <xsl:apply-templates>
+  </xsl:apply-templates></p>
 </xsl:template>
 
 <!-- Book --> 
 <xsl:template match="sb">
-  <xsl:param name="lang" select="./@lang"/>
-  <xsl:variable name="n"><xsl:call-template name="newlang"><xsl:with-param name="lang" select="$lang"/></xsl:call-template></xsl:variable>
-  <article><xsl:text>
+  <div class="sb"><xsl:text>
+</xsl:text>
+<!--	<xsl:variable name="titulo">
+		<xsl:apply-templates select="tt">
+		</xsl:apply-templates>
+	</xsl:variable>
+	<h2><xsl:value-of select="$titulo"/>
+		<a href="#fn0"><sup>0</sup></a>
+	</h2> -->
+    <xsl:text>
     </xsl:text>
-    <xsl:apply-templates select=".//tt">
-	<xsl:with-param name="lang" select="$n"/>
-    </xsl:apply-templates><xsl:text>
-    </xsl:text>
-    <footnote><xsl:apply-templates select=".//credits">
-    	<xsl:with-param name="lang" select="$n"/>
-      </xsl:apply-templates>
-    </footnote>
-    <xsl:apply-templates select=".//sc">
-	<xsl:with-param name="lang" select="$n"/>
-    </xsl:apply-templates>
-  </article>
+	<xsl:apply-templates select=".//sc">
+	</xsl:apply-templates>
+  </div>
 </xsl:template>
 
+<xsl:template match="sb" mode="footnotes">
+	<xsl:apply-templates select="//sc" mode="footnotes">
+	</xsl:apply-templates>
+</xsl:template>
+
+	
 <!-- Credits -->
 <xsl:template match="credits">
-  <xsl:param name="lang" select="./@lang"/>
-  <xsl:variable name="n"><xsl:call-template name="newlang"><xsl:with-param name="lang" select="$lang"/></xsl:call-template></xsl:variable>
-  <para><xsl:apply-templates>
-	  <xsl:with-param name="lang" select="$n"/>
-  </xsl:apply-templates></para>
+</xsl:template>
+
+<xsl:template match="credits" mode="footnotes">
+  <p><xsl:apply-templates>
+  </xsl:apply-templates></p>
 </xsl:template>
 
 
 <!-- Sub-book in psalms -->
 <xsl:template match="tb">
-  <xsl:param name="lang" select="./@lang"/>
-  <xsl:variable name="n"><xsl:call-template name="newlang"><xsl:with-param name="lang" select="$lang"/></xsl:call-template></xsl:variable>
-  <brighthead><xsl:value-of select="./@title"/></brighthead>
+  <h4>
+	  <xsl:value-of select="./@title"/></h4>
   <xsl:apply-templates>
-	<xsl:with-param name="lang" select="$n"/>
   </xsl:apply-templates>
 </xsl:template>
 
 <!-- Chapter -->
 <xsl:template match="sc">
-  <xsl:param name="lang" select="./@lang"/>
-  <xsl:variable name="n"><xsl:call-template name="newlang"><xsl:with-param name="lang" select="$lang"/></xsl:call-template></xsl:variable>
-  <sect1 id="{./@id}">
-    <title><xsl:value-of select="./@num"/></title>
-    <xsl:apply-templates>
-	<xsl:with-param name="lang" select="$n"/>
+     <xsl:variable name="numcap" select="substring-after(./@id,'-')"/>
+     <div class="sect1" id="{./@id}">
+	<!--    <font size="+2"><xsl:value-of select="$num"/></font> -->
+    <xsl:apply-templates select="cm[position()=1]">
+	    <xsl:with-param name="numcap" select="$numcap"/>
     </xsl:apply-templates>
-    
-  </sect1>
+    <xsl:apply-templates select="*[position()>1]">
+    </xsl:apply-templates>
+  </div>
+</xsl:template>
+
+<xsl:template match="sc" mode="footnotes">
+	<xsl:apply-templates mode="footnotes">
+	</xsl:apply-templates>
 </xsl:template>
 
 <!-- Comment -->
 <xsl:template match="tc">
-  <xsl:param name="lang" select="./@lang"/>
-  <xsl:variable name="n"><xsl:call-template name="newlang"><xsl:with-param name="lang" select="$lang"/></xsl:call-template></xsl:variable>
 </xsl:template>
 
 
 <!-- Paragraph of chapter -->
 <xsl:template match="cm">
-  <xsl:param name="lang" select="./@lang"/>
-  <xsl:variable name="n"><xsl:call-template name="newlang"><xsl:with-param name="lang" select="$lang"/></xsl:call-template></xsl:variable>
+	<xsl:param name="numcap"/>
   <xsl:text>
-</xsl:text>
-  <para>
+  </xsl:text>
+  <p class="{./@type}">
+	<xsl:if test="$numcap!=''">
+		<font size="+2"><xsl:value-of select="$numcap"/></font>
+	</xsl:if>
 <xsl:apply-templates>
-	<xsl:with-param name="lang" select="$n"/>
-  </xsl:apply-templates></para>
+  </xsl:apply-templates></p>
+</xsl:template>
+
+<xsl:template match="cm" mode="footnotes">
+	<xsl:apply-templates mode="footnotes">
+	</xsl:apply-templates>
 </xsl:template>
 
 <!-- URL -->
 <xsl:template match="url">
-  <ulink url="{.}"><xsl:value-of select="."/></ulink>
+  <a href="{.}"><xsl:value-of select="."/></a>
 </xsl:template>
 
 <!-- Strong -->
 <xsl:template match="fb">
-  <xsl:param name="lang" select="./@lang"/>
-  <xsl:variable name="n"><xsl:call-template name="newlang"><xsl:with-param name="lang" select="$lang"/></xsl:call-template></xsl:variable>
-  <emphasis role="strong"><xsl:apply-templates>
-    <xsl:with-param name="lang" select="$n"/>
-  </xsl:apply-templates></emphasis>
+  <b class="strong">
+	  <xsl:apply-templates>
+  </xsl:apply-templates></b>
 </xsl:template>
+
+<xsl:template match="fb" mode="footnotes">
+  <b class="strong">
+	<xsl:apply-templates mode="footnotes">
+  </xsl:apply-templates></b>
+</xsl:template>
+
 
 <!-- Small Caps -->
 <xsl:template match="fc">
-  <xsl:param name="lang" select="./@lang"/>
-  <xsl:variable name="n"><xsl:call-template name="newlang"><xsl:with-param name="lang" select="$lang"/></xsl:call-template></xsl:variable>
   <xsl:apply-templates>
-    <xsl:with-param name="lang" select="$n"/>
   </xsl:apply-templates>
 </xsl:template>
 
+<xsl:template match="fc" mode="footnotes">
+	<xsl:apply-templates mode="footnotes">
+  </xsl:apply-templates>
+</xsl:template>
+
+
+
 <!-- Old testament quote -->
 <xsl:template match="fo">
-  <xsl:param name="lang" select="./@lang"/>
-  <xsl:variable name="n"><xsl:call-template name="newlang"><xsl:with-param name="lang" select="$lang"/></xsl:call-template></xsl:variable>
-  <quote><xsl:value-of select="."/></quote>
+  <blockquote>
+	<xsl:value-of select="."/>
+  </blockquote>
 </xsl:template>
+
+<xsl:template match="fo" mode="footnote">
+	<xsl:apply-templates mode="footnotes"/>
+</xsl:template>
+
 
 <!-- Words of Jesus -->
 <xsl:template match="fr">
-  <xsl:param name="lang" select="./@lang"/>
-  <xsl:variable name="n"><xsl:call-template name="newlang"><xsl:with-param name="lang" select="$lang"/></xsl:call-template></xsl:variable>
-  <fr><xsl:apply-templates>
-	<xsl:with-param name="lang" select="$n"/>
-  </xsl:apply-templates></fr>
+  <font color="red" class="fr">
+  <xsl:apply-templates>
+  </xsl:apply-templates>
+  </font>
 </xsl:template>
+
+<xsl:template match="fr" mode="footnote">
+	<xsl:apply-templates mode="footnotes"/>
+</xsl:template>
+
 
 <!-- Superscript -->
 <xsl:template match="fs">
-  <xsl:param name="lang" select="./@lang"/>
-  <xsl:variable name="n"><xsl:call-template name="newlang"><xsl:with-param name="lang" select="$lang"/></xsl:call-template></xsl:variable>
-  <superscript><xsl:apply-templates>
-    <xsl:with-param name="lang" select="$n"/>
-  </xsl:apply-templates></superscript>
+	<xsl:apply-templates mode="footnotes"/>
 </xsl:template>
 
 <!-- Underline -->
 <xsl:template match="fu">
-  <xsl:param name="lang" select="./@lang"/>
-  <xsl:variable name="n"><xsl:call-template name="newlang"><xsl:with-param name="lang" select="$lang"/></xsl:call-template></xsl:variable>
-  <emphasis role="underline"><xsl:apply-templates>
-    <xsl:with-param name="lang" select="$n"/>
-  </xsl:apply-templates></emphasis>
+  <u class="underline">
+	  <xsl:apply-templates>
+  </xsl:apply-templates></u>
 </xsl:template>
+
+<xsl:template match="fu" mode="footnotes">
+	<xsl:apply-templates mode="footnotes"/>
+</xsl:template>
+
 
 <!-- Subscript -->
 <xsl:template match="fv">
-  <xsl:param name="lang" select="./@lang"/>
-  <xsl:variable name="n"><xsl:call-template name="newlang"><xsl:with-param name="lang" select="$lang"/></xsl:call-template></xsl:variable>
-  <subscript><xsl:apply-templates>
-    <xsl:with-param name="lang" select="$n"/>
-  </xsl:apply-templates></subscript>
+  <sub>
+	  <xsl:apply-templates>
+  </xsl:apply-templates></sub>
+</xsl:template>
+
+<xsl:template match="fv" mode="footnotes">
+	<xsl:apply-templates mode="footnotes"/>
 </xsl:template>
 
 <!-- Break line -->
 <xsl:template match="cl">
+	<br/>
   <xsl:text>
 </xsl:text>
 </xsl:template>
 
 <!-- Poetry -->
 <xsl:template match="pp">
-  <xsl:param name="lang" select="./@lang"/>
-  <xsl:variable name="n"><xsl:call-template name="newlang"><xsl:with-param name="lang" select="$lang"/></xsl:call-template></xsl:variable>
-  <blockquote><xsl:apply-templates>
-	<xsl:with-param name="lang" select="$n"/>
+  <blockquote>
+	  <xsl:apply-templates>
   </xsl:apply-templates>
   </blockquote>
 </xsl:template>
 
+<xsl:template match="pp" mode="footnotes">
+	<xsl:apply-templates mode="footnotes"/>
+</xsl:template>
+
+
 <!-- Verse -->
 <xsl:template match="sv">
-  <xsl:text> </xsl:text><superscript role="verse" id="{./@id}"><xsl:value-of select="./@num"/></superscript>
+	<xsl:variable name="num1"><xsl:value-of select='substring-after(./@id,"-")'/></xsl:variable>
+	<xsl:variable name="num"><xsl:value-of select='substring-after($num1,"-")'/></xsl:variable>
+	<xsl:text> </xsl:text>
+	<sup class="verse" id="{./@id}"><xsl:value-of select="$num"/></sup>
+	<xsl:apply-templates>
+  </xsl:apply-templates>
+
 </xsl:template>
+
+<xsl:template match="sv" mode="footnotes">
+	<xsl:apply-templates mode="footnotes">
+	</xsl:apply-templates>
+</xsl:template>
+
+<xsl:key name="footnote" match="rb" use="."/>
 
 <!-- Text with embedded footnote  --> 
 <xsl:template match="rb">
-  <xsl:param name="lang" select="./@lang"/>
-  <xsl:variable name="n"><xsl:call-template name="newlang"><xsl:with-param name="lang" select="$lang"/></xsl:call-template></xsl:variable>
-  <xsl:apply-templates>
-    <xsl:with-param name="lang" select="$n"/>
-  </xsl:apply-templates>
+	<!-- Numeración con base en num. pies de páginas de Docbook (N. Walsh) -->
+	<xsl:variable name="pf" select="preceding::rb"/>
+	<xsl:variable name="pf2" select="preceding::rb[@xml:lang='es']"/>
+	<xsl:variable name="pf3" select="preceding::rb/t[@xml:lang='es']"/>
+	<xsl:variable name="nf" select="count($pf) + 1"/>
+	<xsl:variable name="nf2" select="count($pf2)"/>
+	<xsl:variable name="nf3" select="count($pf3)"/>
+	<xsl:variable name="ct">
+		<xsl:apply-templates select="rf" mode="write-footnotes">
+		</xsl:apply-templates>
+	</xsl:variable>
+
+	<xsl:if test="$ct!=''"> 
+		<a name="b_{generate-id(key('footnote',.))}"/>
+		<a href="#{generate-id(key('footnote',.))}" class="footnote">
+			<xsl:apply-templates/>
+			<sup>[<xsl:value-of select="$nf2+$nf3+1"/>]</sup></a>
+	</xsl:if>
 </xsl:template>
+
+<xsl:template match="rb" mode="footnotes">
+	<xsl:variable name="pf" select="preceding::rb"/>
+	<xsl:variable name="pf2" select="preceding::rb[@xml:lang='es']"/>
+	<xsl:variable name="pf3" select="preceding::rb/t[@xml:lang='es']"/>
+	<xsl:variable name="nf" select="count($pf) + 1"/>
+	<xsl:variable name="nf2" select="count($pf2)"/>
+	<xsl:variable name="nf3" select="count($pf3)"/>
+	<xsl:variable name="ct">
+		<xsl:apply-templates select="rf" mode="write-footnotes">
+		</xsl:apply-templates>
+	</xsl:variable>
+
+	<xsl:if test="$ct!=''">
+		<p><a name="{generate-id()}"/>[<a href="#b_{generate-id()}" class="bfootnote"><xsl:value-of select="$nf2+$nf3+1"/></a>]
+			<xsl:copy-of select="$ct"/>
+		</p>
+	</xsl:if>
+</xsl:template>
+
 
 <!-- Footnote -->
 <xsl:template match="rf">
-  <xsl:param name="lang" select="./@lang"/>
-  <xsl:variable name="n"><xsl:call-template name="newlang"><xsl:with-param name="lang" select="$lang"/></xsl:call-template></xsl:variable>
-  <footnote><para><xsl:apply-templates>
-    <xsl:with-param name="lang" select="$n"/>
-  </xsl:apply-templates></para></footnote>
 </xsl:template>
+
+
+<xsl:template match="rf" mode="write-footnotes">
+	<xsl:apply-templates mode="write-footnotes">
+	</xsl:apply-templates>
+</xsl:template>
+
 
 <!-- Word information -->
 <xsl:template match="wi">
+  <xsl:apply-templates>
+  </xsl:apply-templates>
 </xsl:template>
 
 <!-- Parallel passage -->
@@ -307,70 +374,88 @@
 
 <!-- Cite to bibliography -->
 <xsl:template match="citebib">
-  <citation><xsl:value-of select="./@id"/></citation>
+  <a href="#bib_{./@id}">
+  <xsl:value-of select="./@id"/></a>
 </xsl:template>
+
+<xsl:template match="citebib" mode="write-footnotes">
+  <a href="#bib_{./@id}">
+  <xsl:value-of select="./@id"/></a>
+</xsl:template>
+
 
 <!-- Translation -->
 <xsl:template match="t">
-	<xsl:if test="./@lang = $outlang">
+	  <xsl:if test="lang($outlang)">
+	  	<xsl:apply-templates>
+		</xsl:apply-templates>
+	  </xsl:if>
+</xsl:template>
+
+<xsl:template match="t" mode="footnotes"/>
+
+<xsl:template match="t" mode="write-footnotes">
+	<xsl:if test="lang($outlang)">
+	  	<xsl:apply-templates>
+		</xsl:apply-templates>
+	  </xsl:if>
+</xsl:template>
+
+
+<!-- Text -->
+<xsl:template match="text()">
+	<xsl:if test="lang($outlang)">
+       		<xsl:value-of select="."/>
+	</xsl:if>
+</xsl:template>
+
+<xsl:template match="text()" mode="footnotes">
+</xsl:template>
+
+
+<xsl:template match="text()" mode="write-footnotes">
+	<xsl:if test="lang($outlang)">
 		<xsl:value-of select="."/>
 	</xsl:if>
 </xsl:template>
 
-<!-- Text -->
-<xsl:template match="text()">
- <xsl:param name="lang"/>
-        <xsl:if test="$lang = $outlang">
-                <xsl:value-of select="."/>
-        </xsl:if>
-</xsl:template>
 
 <!-- Section of bibliography -->
 <xsl:template match="sbib">
-  <xsl:param name="lang" select="./@lang"/>
-  <xsl:variable name="n"><xsl:call-template name="newlang"><xsl:with-param name="lang" select="$lang"/></xsl:call-template></xsl:variable>
-  <bibliography><para><xsl:apply-templates>
-    <xsl:with-param name="lang" select="$n"/>
-  </xsl:apply-templates></para></bibliography>
+  <div class="bibliography">
+    <xsl:apply-templates>
+    </xsl:apply-templates>
+  </div>
 </xsl:template>
 
 <xsl:template match="bib">
-  <xsl:param name="lang" select="./@lang"/>
-  <xsl:variable name="n"><xsl:call-template name="newlang"><xsl:with-param name="lang" select="$lang"/></xsl:call-template></xsl:variable>
-  <biblioentry><xsl:apply-templates>
-    <xsl:with-param name="lang" select="$n"/>
+  <p>
+    <a name="#bib_{./@id}">[<xsl:value-of select="./@id"/>]</a>
+    <xsl:apply-templates>
     </xsl:apply-templates>
-  </biblioentry>
+  </p>
 </xsl:template>
 
 <xsl:template match="author">
-  <xsl:param name="lang" select="./@lang"/>
-  <xsl:variable name="n"><xsl:call-template name="newlang"><xsl:with-param name="lang" select="$lang"/></xsl:call-template></xsl:variable>
-  <author><xsl:apply-templates>
-    <xsl:with-param name="lang" select="$n"/>
+  <font class="author">
+	<xsl:apply-templates>
     </xsl:apply-templates>
-  </author>
+  </font>
 </xsl:template>
 
 <xsl:template match="editor">
-  <xsl:param name="lang" select="./@lang"/>
-  <xsl:variable name="n"><xsl:call-template name="newlang"><xsl:with-param name="lang" select="$lang"/></xsl:call-template></xsl:variable>
-  <editor><xsl:apply-templates>
-    <xsl:with-param name="lang" select="$n"/>
+  <font class="editor">
+	  <xsl:apply-templates>
     </xsl:apply-templates>
-  </editor>
+  </font>
 </xsl:template>
 
 <xsl:template match="otherbib">
-  <xsl:param name="lang" select="./@lang"/>
-  <xsl:variable name="n"><xsl:call-template name="newlang"><xsl:with-param name="lang" select="$lang"/></xsl:call-template></xsl:variable>
-  <publisher><xsl:apply-templates>
-    <xsl:with-param name="lang" select="$n"/>
+  <font class="publisher">
+	  <xsl:apply-templates>
     </xsl:apply-templates>
-  </publisher>
+  </font>
 </xsl:template>
-
-
 
 
 </xsl:stylesheet>

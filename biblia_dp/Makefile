@@ -209,3 +209,5 @@ valida-strong: $(VS_SWORDBOOK)-o-KJV.tmp
 	awk -f herram/ordenastrong.awk strong-dp.tmp > strong-o-dp.tmp && diff -b $(VS_SWORDBOOK)-o-KJV.tmp strong-o-dp.tmp
 
 
+html/em.html: gbfxml2html.xsl biblia_dp.gbfxml  mateo.gbfxml
+	SGML_CATALOG_FILES=$(CATALOG_DOCBOOK) $(XSLTPROC) --stringparam outlang es --catalogs --nonet gbfxml2html.xsl biblia_dp.gbfxml > html/em.html

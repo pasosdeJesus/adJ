@@ -41,12 +41,12 @@ if !exists("no_plugin_maps") && !exists("no_gbfxml_maps")
 	if !hasmapto('<Plug>GBFrb')
 		imap <buffer> <unique> <LocalLeader>rb <Plug>GBFrb<ESC>F"la
 	endif
-	inoremap <buffer> <unique> <Plug>GBFrb <rb lang="es"><rf></rf></rb>
+	inoremap <buffer> <unique> <Plug>GBFrb <rb xml:lang="es"><rf></rf></rb>
 
 	if !hasmapto('<Plug>GBFt')
 		imap <buffer> <unique> <LocalLeader>t <Plug>GBFt<ESC>hhhi
 	endif
-	inoremap <buffer> <unique> <Plug>GBFt <t lang="es"></t>
+	inoremap <buffer> <unique> <Plug>GBFt <t xml:lang="es"></t>
 
 	if !hasmapto('<Plug>GBFw3')
 		imap <buffer> <unique> <LocalLeader>w3 <Plug>GBFw3<ESC>F,i

@@ -32,7 +32,7 @@
 	* Strong numbers with morphology and position
 -->
 
-<!ENTITY % attlang "lang CDATA #IMPLIED">
+<!ENTITY % attlang "xml:lang CDATA #IMPLIED">
 
 <!ELEMENT gbfxml (tt, stt, sumrights, rights?, toc?, (sb)*,sbib?) >
 <!ATTLIST gbfxml
@@ -92,6 +92,10 @@
      BP Book Preface -->
 
 <!ELEMENT sbib (bib)*>
+<!ATTLIST sbib
+	%attlang;
+>
+
 <!-- Section for bibliography -->
 
 <!ELEMENT credits (%inline-footnote;)*>
@@ -275,11 +279,11 @@
 
 <!ELEMENT t (#PCDATA|citebib|wi)*>
 <!ATTLIST t
-	lang CDATA #REQUIRED>
+	xml:lang CDATA #REQUIRED>
 <!-- Translation -->
 
 	
-<!ELEMENT bib (author,tt,editor,otherbib)>
+<!ELEMENT bib (author?,tt,editor?,otherbib?)>
 <!ATTLIST bib 
   %attlang;
   id ID #REQUIRED

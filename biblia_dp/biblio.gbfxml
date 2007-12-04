@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<sbib lang="es">
+<sbib xml:lang="es">
 
 
 <bib id="DieBibel"> 
@@ -80,14 +80,12 @@ edición 1975.</tt>
 
 <bib id="Webster">
 	<tt>Webster's Revised Unabridged Dictionary (1913). </tt>
-	<author></author>
 	<editor>Diccionario preparado para programa dictd. 2002</editor>
 	<otherbib>http://humanities.uchicago.edu/orgs/ARTFL/forms_unrest/webster.form.html ftp://ftp.dict.org/pub/dict/</otherbib>
 </bib>
 
 <bib id="Gideons">
 	<tt>Neues Testament. Psalmen, Sprüche. </tt>
-	<author></author>
 	<editor>Die Gideons. Internationaler 
 	Gideonbund in eutschland E.V.  http://www.gideons.de</editor>
 	<otherbib>Auflage 2003/2.  Todos los derechos reservados. </otherbib>
@@ -97,7 +95,6 @@ edición 1975.</tt>
 
 <bib id="MSG">
 	<tt>THE MESSAGE: The Bible in Contemporary Language</tt>
-	<author></author>
 	<editor>NavPress.</editor>
 	<otherbib>Copyright 2002 by Eugene Peterson.  Todos
         los derechos reservados</otherbib>
@@ -106,7 +103,6 @@ edición 1975.</tt>
 
 <bib id="SRV">
 	<tt>Biblia Reina Valera 1909</tt>
-	<author></author>
 	<editor></editor>
 	<otherbib></otherbib>
 </bib>
@@ -114,7 +110,6 @@ edición 1975.</tt>
 <bib id="ALT">
 	<tt>Analytical-Literal Translation of the New Testament of
 		the Holy Bible </tt>
-	<author></author>
 	<editor> Zeolla of Darkness to Light ministry (www.dtl.org). </editor>
 	<otherbib> Scripture taken from the Analytical-Literal 
 	Translation of the New Testament of the Holy Bible.  
@@ -125,21 +120,18 @@ edición 1975.</tt>
 
 <bib id="leo">
 	<tt>LEO Wörterbuch </tt>
-	<author></author>
 	<editor>LEO Dictionary Team</editor>
 	<otherbib> http://dict.leo.org/ </otherbib>
 </bib>
 
 <bib id="dictionary">
 	<tt>Dictonary.com</tt>
-	<author></author>
 	<editor>Lexico Publishing Group</editor>
 	<otherbib> http://dictionary.reference.com/</otherbib>
 </bib>
 
 <bib id="LBA">
 	<tt>La Biblia de las Américas</tt>
-	<author></author>
 	<editor>The Lockman Foundation</editor>
 	<otherbib>http://www.lbla.com
 Las citas bíblicas son tomadas de LA BIBLIA DE LAS
@@ -285,23 +277,19 @@ All rights reserved.
 <editor></editor>
 <otherbib></otherbib>
 </bib> -->
-<bib id="BL">
+<bib id="BLB">
 <tt>Blue Letter Bible</tt>
-<author></author>
-<editor></editor>
 <otherbib>http://www.blueletterbible.org</otherbib>
 </bib> 
 
 <bib id="TR-BLB">
 <tt>Stephanus Textus Recpetus 1550, de Blue Letter Bible</tt>
-<author></author>
 <editor>Blue Letter Bible</editor>
 <otherbib>http://www.blueletterbible.org/info_greek.html</otherbib>
 </bib> 
 
 <bib id="Thayer-BLB">
 <tt>Lexicón de Thayer de Blue Letter Bible</tt>
-<author></author>
 <editor>Blue Letter Bible</editor>
 <otherbib>http://www.blueletterbible.org/info_greek.html</otherbib>
 </bib> 
@@ -309,7 +297,6 @@ All rights reserved.
 
 <bib id="KJV2003">
 <tt>KJV module of the Sword Project</tt>
-<author></author>
 <editor>CrossWire bible Society</editor>
 <otherbib>http://crosswire.org/sword/software/swordapi.jsp.  Los números
 Strong se basan en numeración del Textus Receptus de Stephanus 1550, y se
@@ -318,30 +305,32 @@ pueden emplear sin restricción.</otherbib>
 
 <bib id="RAE">
 <tt>Diccionario de la Real Academia de la Lengua </tt>
-<author></author>
-<editor></editor>
 <otherbib>http://buscon.rae.es/diccionario/cabecera.htm </otherbib>
 </bib> 
 
 
 <bib id="LAT">
-<tt>Los Santos Evangelios: Edición Popular Latinoamericana</tt>
 <author>Dir. Dr. Evaristo Martín Nieto</author>
+<tt>Los Santos Evangelios: Edición Popular Latinoamericana</tt>
 <editor>San Pablo 1998</editor>
-<otherbib>
-</otherbib>
 </bib> 
 
 <bib id="Barnes">
-<tt>Barnes New Testament Notes</tt>
 <author>Barnes, Albert</author>
+<tt>Barnes New Testament Notes</tt>
 <editor>Christian Classics Ethereal Library.  Basado en Grand Rapids, Mich.: Baker Book House, 1949.</editor>
 <otherbib>Dominio público. http://www.ccel.org/ccel/barnes/ntnotes.html</otherbib>
 </bib> 
 
-<bib id="RV95">
-<tt>El Nuevo Testamento.</tt>
+<bib id="RV1960">
+<tt>Reina-Valera Revisión de 1960</tt>
+<editor>Sociedades Bíblicas Unidas</editor>
+</bib> 
+
+
+<bib id="RV1995">
 <author>Reina-Valera Revisión de 1995</author>
+<tt>El Nuevo Testamento.</tt>
 <editor>Sociedades Bíblicas Unidas</editor>
 </bib> 
 
