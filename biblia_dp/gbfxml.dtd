@@ -1,6 +1,6 @@
 
 <!-- 
-   XML version of General Bible Format (GBF XML) 1.1
+   XML version of General Bible Format (GBF XML) 1.2
    Based on General Bible Format (GBF) of 19/Nov/2001. The current
    GBF is available is at: http://ebible.org/bible/gbf.htm
 
@@ -29,7 +29,7 @@
 	  of the PCDATA.  In each element t there could be a translation.
 	  The lang attribute is NOT like lang in HTML 4.0 or DocBook.
         * Bibliography: Section, cites and bibliographic entries.
-	* Strong numbers with morphology and position
+	* Strong numbers with morphology and position (idea from OSIS)
 -->
 
 <!ENTITY % attlang "xml:lang CDATA #IMPLIED">
@@ -225,7 +225,7 @@
 >
 <!-- Footnote -->
 
-<!ELEMENT wi (#PCDATA)>
+<!ELEMENT wi (#PCDATA|wi)*>
 <!ATTLIST wi 
 	type CDATA #REQUIRED
 	value CDATA #IMPLIED>
@@ -239,12 +239,13 @@
 	  of the greek word that it complements -must be referenced before in
 	  the same verse (e.g in Mat 2:18)
 	  <wi type="G" value="1526,22,">ellos</wi> ya 
-	<wi type="G" value="3756,20">no</wi> <wi type="GC" value="22">estan</wi>
-	GU One word is the union of two Strong's numbers, the value are
-          concatenated Strong information separated with ;  . e.g Mat 4:19:
+	  <wi type="G" value="3756,20">no</wi> 
+	  <wi type="GC" value="22">estan</wi>
+	Nested wi when one or several words are the union of two or more
+	Strong's numbers . e.g Mat 4:19:
 <w src="4" lemma="x-Strongs:G1205" morph="x-Robinson:V-XXM-2P">Follow</w>
 <w src="6" lemma="x-Strongs:G3450" morph="x-Robinson:P-1GS">me,</w>
-	  <wi type="GU" value="1205,4,;3450,7,">Siganme</wi>
+	  <wi type="G" value="1205,4,"><wi type="G" value="3450,7,">Siganme</wi>
         G* like G but not sure of translation 
 	H Strong Hebrew number
 	I Interlinear translation

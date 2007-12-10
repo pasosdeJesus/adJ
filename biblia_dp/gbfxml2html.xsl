@@ -19,6 +19,8 @@
 <xsl:output method="html" encoding="ISO-8859-1"/>
 
 
+<xsl:key name="numstrong" match="//wi" use="substring-before(./@value,',')"/>
+
 <!-- Entry point -->
 <xsl:template match="gbfxml">
 	<xsl:variable name="titulo">
@@ -49,23 +51,46 @@
     <xsl:apply-templates select=".//sb">
     </xsl:apply-templates><xsl:text>
     </xsl:text>
-    <h3>Derechos</h3>
-    <a name="#srights"/>
-	<xsl:apply-templates select=".//rights">
-	</xsl:apply-templates><xsl:text> 
-</xsl:text>  
-    <h3>Créditos</h3>
-    <a name="#credits"/>
-	<xsl:apply-templates select="credits" mode="footnotes">
-	</xsl:apply-templates><xsl:text> 
-</xsl:text>  
+    <h3>Números Strong</h3>
+    <a name="strong"/>
+    <!-- http://www.dpawson.co.uk/xsl/sect2/N4486.html -->
+    <xsl:for-each select=".//wi[generate-id(.)=generate-id(key('numstrong', substring-before(@value,',')))]" >
+	    <xsl:sort select="substring-before(@value, ',')" 
+		    data-type="number"/>
+	    <xsl:variable name="ns"><xsl:copy-of 
+			    select="substring-before(@value, ',')"/>
+	    </xsl:variable>
+	    <li><a name="st{$ns}"/><xsl:value-of select="$ns"/>
+		    <xsl:text>: </xsl:text>
+		    <xsl:for-each select="key('numstrong',substring-before(@value, ','))">	
+			    <xsl:variable name="nver" select="ancestor::sv/@id"/>
+			    <xsl:value-of select="."/><xsl:text> </xsl:text>
+			    <a href="#{$nver}">
+				    <xsl:value-of select="$nver"/>
+			    </a>
+			<xsl:text> </xsl:text>
+		</xsl:for-each>
+	    </li>
+    </xsl:for-each>
+    <xsl:text>
+    </xsl:text>
+    <a name="footnotes"/>
     <h3>Notas al pie</h3>
-    <a name="#footnotes"/>
     <xsl:apply-templates select=".//sb" mode="footnotes">
     </xsl:apply-templates><xsl:text>
     </xsl:text>
+    <a name="srights"/>
+    <h3>Derechos</h3>
+	<xsl:apply-templates select=".//rights">
+	</xsl:apply-templates><xsl:text> 
+    </xsl:text>  
+    <a name="credits"/>
+    <h3>Créditos</h3>
+    <xsl:apply-templates select=".//credits">
+	</xsl:apply-templates><xsl:text> 
+    </xsl:text>  
+    <a name="references"/>
     <h3>Referencias</h3>
-    <a name="#references"/>
     <xsl:apply-templates select=".//sbib">
     </xsl:apply-templates><xsl:text>
     </xsl:text> 
@@ -122,12 +147,15 @@
 	</xsl:apply-templates>
 </xsl:template>
 
+<xsl:template match="sb" mode="strong">
+	<xsl:apply-templates select="//sc" mode="strong">
+	</xsl:apply-templates>
+</xsl:template>
+
+
 	
 <!-- Credits -->
 <xsl:template match="credits">
-</xsl:template>
-
-<xsl:template match="credits" mode="footnotes">
   <p><xsl:apply-templates>
   </xsl:apply-templates></p>
 </xsl:template>
@@ -145,6 +173,7 @@
 <xsl:template match="sc">
      <xsl:variable name="numcap" select="substring-after(./@id,'-')"/>
      <div class="sect1" id="{./@id}">
+	<a name="{./@id}"/>
 	<!--    <font size="+2"><xsl:value-of select="$num"/></font> -->
     <xsl:apply-templates select="cm[position()=1]">
 	    <xsl:with-param name="numcap" select="$numcap"/>
@@ -159,6 +188,12 @@
 	</xsl:apply-templates>
 </xsl:template>
 
+<xsl:template match="sc" mode="strong">
+	<xsl:apply-templates mode="strong">
+	</xsl:apply-templates>
+</xsl:template>
+
+
 <!-- Comment -->
 <xsl:template match="tc">
 </xsl:template>
@@ -169,18 +204,22 @@
 	<xsl:param name="numcap"/>
   <xsl:text>
   </xsl:text>
-  <p class="{./@type}">
+  <p class="cm{./@type}">
 	<xsl:if test="$numcap!=''">
-		<font size="+2"><xsl:value-of select="$numcap"/></font>
+		<font class="chapter" size="+2"><xsl:value-of select="$numcap"/></font>
 	</xsl:if>
 <xsl:apply-templates>
   </xsl:apply-templates></p>
 </xsl:template>
 
 <xsl:template match="cm" mode="footnotes">
-	<xsl:apply-templates mode="footnotes">
-	</xsl:apply-templates>
+	<xsl:apply-templates mode="footnotes"/>
 </xsl:template>
+
+<xsl:template match="cm" mode="strong">
+	<xsl:apply-templates mode="strong"/>
+</xsl:template>
+
 
 <!-- URL -->
 <xsl:template match="url">
@@ -195,9 +234,11 @@
 </xsl:template>
 
 <xsl:template match="fb" mode="footnotes">
-  <b class="strong">
-	<xsl:apply-templates mode="footnotes">
-  </xsl:apply-templates></b>
+	  <xsl:apply-templates mode="footnotes"/>
+</xsl:template>
+
+<xsl:template match="fb" mode="strong">
+	<xsl:apply-templates mode="strong"/>
 </xsl:template>
 
 
@@ -212,6 +253,11 @@
   </xsl:apply-templates>
 </xsl:template>
 
+<xsl:template match="fc" mode="strong">
+	<xsl:apply-templates mode="strong"/>
+</xsl:template>
+
+
 
 
 <!-- Old testament quote -->
@@ -225,6 +271,9 @@
 	<xsl:apply-templates mode="footnotes"/>
 </xsl:template>
 
+<xsl:template match="fo" mode="strong">
+	<xsl:apply-templates mode="strong"/>
+</xsl:template>
 
 <!-- Words of Jesus -->
 <xsl:template match="fr">
@@ -238,10 +287,21 @@
 	<xsl:apply-templates mode="footnotes"/>
 </xsl:template>
 
+<xsl:template match="fr" mode="strong">
+	<xsl:apply-templates mode="strong"/>
+</xsl:template>
 
 <!-- Superscript -->
 <xsl:template match="fs">
+	<xsl:apply-templates/>
+</xsl:template>
+
+<xsl:template match="fs" mode="footnotes">
 	<xsl:apply-templates mode="footnotes"/>
+</xsl:template>
+
+<xsl:template match="fs" mode="strong">
+	<xsl:apply-templates mode="strong"/>
 </xsl:template>
 
 <!-- Underline -->
@@ -255,6 +315,9 @@
 	<xsl:apply-templates mode="footnotes"/>
 </xsl:template>
 
+<xsl:template match="fu" mode="strong">
+	<xsl:apply-templates mode="strong"/>
+</xsl:template>
 
 <!-- Subscript -->
 <xsl:template match="fv">
@@ -265,6 +328,10 @@
 
 <xsl:template match="fv" mode="footnotes">
 	<xsl:apply-templates mode="footnotes"/>
+</xsl:template>
+
+<xsl:template match="fv" mode="strong">
+	<xsl:apply-templates mode="strong"/>
 </xsl:template>
 
 <!-- Break line -->
@@ -286,12 +353,16 @@
 	<xsl:apply-templates mode="footnotes"/>
 </xsl:template>
 
+<xsl:template match="pp" mode="strong">
+	<xsl:apply-templates mode="strong"/>
+</xsl:template>
 
 <!-- Verse -->
 <xsl:template match="sv">
 	<xsl:variable name="num1"><xsl:value-of select='substring-after(./@id,"-")'/></xsl:variable>
 	<xsl:variable name="num"><xsl:value-of select='substring-after($num1,"-")'/></xsl:variable>
 	<xsl:text> </xsl:text>
+	<a name="{./@id}"/>
 	<sup class="verse" id="{./@id}"><xsl:value-of select="$num"/></sup>
 	<xsl:apply-templates>
   </xsl:apply-templates>
@@ -299,13 +370,17 @@
 </xsl:template>
 
 <xsl:template match="sv" mode="footnotes">
-	<xsl:apply-templates mode="footnotes">
-	</xsl:apply-templates>
+	<xsl:apply-templates mode="footnotes"/>
 </xsl:template>
 
-<xsl:key name="footnote" match="rb" use="."/>
+<xsl:template match="sv" mode="strong">
+	<xsl:apply-templates mode="strong"/>
+</xsl:template>
+
 
 <!-- Text with embedded footnote  --> 
+<xsl:key name="footnote" match="rb" use="."/>
+
 <xsl:template match="rb">
 	<!-- Numeración con base en num. pies de páginas de Docbook (N. Walsh) -->
 	<xsl:variable name="pf" select="preceding::rb"/>
@@ -322,8 +397,9 @@
 	<xsl:if test="$ct!=''"> 
 		<a name="b_{generate-id(key('footnote',.))}"/>
 		<a href="#{generate-id(key('footnote',.))}" class="footnote">
-			<xsl:apply-templates/>
-			<sup>[<xsl:value-of select="$nf2+$nf3+1"/>]</sup></a>
+			<xsl:apply-templates/></a>
+		<a href="#{generate-id(key('footnote',.))}" class="footnote">
+			<sup class="footnote">[<xsl:value-of select="$nf2+$nf3+1"/>]</sup></a>
 	</xsl:if>
 </xsl:template>
 
@@ -346,6 +422,10 @@
 	</xsl:if>
 </xsl:template>
 
+<xsl:template match="rb" mode="strong">
+	<xsl:apply-templates mode="strong"/>
+</xsl:template>
+
 
 <!-- Footnote -->
 <xsl:template match="rf">
@@ -353,16 +433,38 @@
 
 
 <xsl:template match="rf" mode="write-footnotes">
-	<xsl:apply-templates mode="write-footnotes">
-	</xsl:apply-templates>
+	<xsl:apply-templates mode="write-footnotes"/>
 </xsl:template>
 
+<xsl:template match="rf" mode="strong">
+</xsl:template>
 
 <!-- Word information -->
 <xsl:template match="wi">
-  <xsl:apply-templates>
-  </xsl:apply-templates>
+	<xsl:param name="interior"/>
+	<xsl:message><xsl:value-of select="$interior"/></xsl:message>
+	<xsl:variable name="ns" select="substring-before(./@value,',')"/>
+	<xsl:if test="$ns!=''">
+		<u class="strong">
+		<xsl:apply-templates>
+			<xsl:with-param name="interior" select="1"/>	
+		</xsl:apply-templates>
+		<sup class="strong"><a href="#st{$ns}" class="strong">
+				<xsl:value-of select="$ns"/></a>
+		<xsl:if test="$interior='1'">
+			<xsl:message><xsl:value-of select="$interior"/>
+			</xsl:message>
+			<xsl:text>,</xsl:text></xsl:if>
+		</sup>
+	</u>
+	</xsl:if>
 </xsl:template>
+
+<xsl:template match="wi" mode="strong">
+	<xsl:variable name="ns" select="substring-before(./@value,',')"/>
+	<li><xsl:value-of select="$ns"/></li>
+</xsl:template>
+
 
 <!-- Parallel passage -->
 <xsl:template match="rp">
@@ -387,8 +489,7 @@
 <!-- Translation -->
 <xsl:template match="t">
 	  <xsl:if test="lang($outlang)">
-	  	<xsl:apply-templates>
-		</xsl:apply-templates>
+		  <xsl:apply-templates/>
 	  </xsl:if>
 </xsl:template>
 
@@ -396,10 +497,16 @@
 
 <xsl:template match="t" mode="write-footnotes">
 	<xsl:if test="lang($outlang)">
-	  	<xsl:apply-templates>
-		</xsl:apply-templates>
+		<xsl:apply-templates/>
 	  </xsl:if>
 </xsl:template>
+
+<xsl:template match="t" mode="strong">
+	<xsl:if test="lang($outlang)">
+		<xsl:apply-templates mode="strong"/>
+	  </xsl:if>
+</xsl:template>
+
 
 
 <!-- Text -->
@@ -412,48 +519,45 @@
 <xsl:template match="text()" mode="footnotes">
 </xsl:template>
 
-
 <xsl:template match="text()" mode="write-footnotes">
 	<xsl:if test="lang($outlang)">
 		<xsl:value-of select="."/>
 	</xsl:if>
 </xsl:template>
 
+<xsl:template match="text()" mode="strong">
+</xsl:template>
+
 
 <!-- Section of bibliography -->
 <xsl:template match="sbib">
   <div class="bibliography">
-    <xsl:apply-templates>
-    </xsl:apply-templates>
+	  <xsl:apply-templates/>
   </div>
 </xsl:template>
 
 <xsl:template match="bib">
   <p>
-    <a name="#bib_{./@id}">[<xsl:value-of select="./@id"/>]</a>
-    <xsl:apply-templates>
-    </xsl:apply-templates>
+    <a name="bib_{./@id}">[<xsl:value-of select="./@id"/>]</a>
+    <xsl:apply-templates/>
   </p>
 </xsl:template>
 
 <xsl:template match="author">
   <font class="author">
-	<xsl:apply-templates>
-    </xsl:apply-templates>
+	  <xsl:apply-templates/>
   </font>
 </xsl:template>
 
 <xsl:template match="editor">
   <font class="editor">
-	  <xsl:apply-templates>
-    </xsl:apply-templates>
+	  <xsl:apply-templates/>
   </font>
 </xsl:template>
 
 <xsl:template match="otherbib">
   <font class="publisher">
-	  <xsl:apply-templates>
-    </xsl:apply-templates>
+	  <xsl:apply-templates/>
   </font>
 </xsl:template>
 

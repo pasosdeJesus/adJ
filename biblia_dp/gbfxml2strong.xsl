@@ -262,6 +262,10 @@
 		<xsl:otherwise>
 		</xsl:otherwise>
 	</xsl:choose>
+	<xsl:apply-templates/>
+	<!--		<xsl:with-param name="lang" select="$n"/>
+</xsl:apply-templates> -->
+
 </xsl:template>
 
 
