@@ -108,7 +108,9 @@ nesed Makefile $nd/Makefile
 nesed Derechos.txt $nd/Derechos.txt
 neln derechos.gbfxml $nd
 neln biblio.gbfxml $nd
+neln biblia_dp.css $nd/$pry.css
 neln gbfxml2db.xsl $nd
+neln gbfxml2html.xsl $nd
 neln gbfxml.dtd $nd
 neln gutenberg/Readme.txt $nd/gutenberg
 neln gutenberg/footer.inc $nd/gutenberg

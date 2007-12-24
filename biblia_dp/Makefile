@@ -50,8 +50,19 @@ GENACT=dist all $(PROYECTO)-$(PRY_VERSION)_html.tar.gz $(PRINT_DIR)/$(PROYECTO)-
 FILESACT=$(PROYECTO)-$(PRY_VERSION).tar.gz $(PROYECTO)-$(PRY_VERSION)_html.tar.gz $(HTML_TARGET) gutenberg/$(PROYECTO).txt $(PRINT_DIR)/$(PROYECTO)-$(PRY_VERSION).ps.gz $(PRINT_DIR)/$(PROYECTO)-$(PRY_VERSION).pdf 
 # Archivos que se debe actualizar en sitio de Internet
 
+$(HTML_TARGET).bak: gbfxml2html.xsl $(PROYECTO).gbfxml 
+	mkdir -p $(HTML_DIR)/
+	cp $(PROYECTO).css $(HTML_DIR)/
+	SGML_CATALOG_FILES=$(CATALOG_DOCBOOK) $(XSLTPROC) --stringparam outlang es --catalogs --nonet gbfxml2html.xsl $(PROYECTO).gbfxml > $(HTML_TARGET).bak
+	sed -e "s/biblia_dp/$(PROYECTO)/g" $(HTML_TARGET).bak > $(HTML_TARGET)
 
-all: $(HTML_TARGET) $(PRINT_DIR)/$(PROYECTO).ps $(PRINT_DIR)/$(PROYECTO).pdf
+multi: gbfxml2vhtml.xsl $(PROYECTO).gbfxml
+	mkdir -p $(HTML_DIR)/
+	cp -f $(PROYECTO).css $(HTML_DIR)/
+	SGML_CATALOG_FILES=$(CATALOG_DOCBOOK) $(XSLTPROC) --stringparam outlang es --stringparam css $(PROYECTO).css --catalogs --nonet gbfxml2vhtml.xsl $(PROYECTO).gbfxml 
+
+
+all: $(HTML_TARGET).bak $(PRINT_DIR)/$(PROYECTO).ps $(PRINT_DIR)/$(PROYECTO).pdf
 
 valida-gbfxml: 
 	$(XMLLINT) --catalogs $(PROYECTO).gbfxml
