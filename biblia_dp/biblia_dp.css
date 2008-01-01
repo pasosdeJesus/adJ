@@ -1,0 +1,72 @@
+/* Hoja de estilo para libros de la biblia generados a partir de gbfxml.
+ * Dominio público. 2007. vtamara@pasosdeJesus.org
+ */
+
+.footnotes {
+	font-size: 80%
+}
+
+.numchapter {
+	font-size: 144%
+}
+.titulo {
+	background-color:#3C3A68;
+}
+
+.fr {
+	color: red;
+}
+
+.PO {
+	padding-left: 2em;
+}
+
+/* Bibliography */
+
+.author {
+	text-decoration: none;
+}
+
+.editor {
+}
+
+.publisher {
+}
+
+
+A.strong:visited  {color: #909090; text-decoration: none; font-size:smaller; }
+A.strong:link  {color: #909090; text-decoration: none; font-size:smaller; }
+A.strong:active  {color: #C0FFC0; text-decoration: none}
+A.strong:hover   {cursor: crosshair; color: #C0FFC0; background-color: lightslategray; text-decoration: none}
+
+sup.strong {
+	font-size: smaller;
+}
+
+sup.footnote {
+}
+
+u.strong {
+	text-decoration: none; 
+}
+
+u.strong:hover {
+	text-decoration: underline; 
+	border-bottom: 3px;
+}
+
+
+/* http://www.htmlforums.com/archive/index.php/t-30226.html */
+
+a.footnote:link {
+	border-bottom: 3px;
+}
+a.footnote:hover {
+	text-decoration: none; 
+	border-bottom: 3px double;
+}
+a.footnote:visited {
+	border-bottom: 3px;
+}
+
+

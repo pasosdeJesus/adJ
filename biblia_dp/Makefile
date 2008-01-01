@@ -9,8 +9,8 @@ SOURCE_GBFXML=mateo.gbfxml marcos.gbfxml lucas.gbfxml juan.gbfxml hechos.gbfxml
 
 EXT_DOCBOOK=xdbk
 
-VS_SWORDBOOK_I=I Timothy
-VS_SWORDBOOK=I-Timothy
+VS_SWORDBOOK_I=Acts
+VS_SWORDBOOK=Acts
 
 # Variables requeridas por comdocbook.mak
 SOURCES=$(PROYECTO).$(EXT_DOCBOOK)
@@ -208,7 +208,9 @@ Desarrollo.txt: herram/vim/ftplugin/gbfxml.vim
 	INICIO="Las completaciones disponibles" CMD="$(AWK) -f herram/exdocvimgbfxml.awk herram/vim/ftplugin/gbfxml.vim" $(AWK) -f herram/rempbloquearch.awk Desarrollo.txt.bak > Desarrollo.txt
 
 $(VS_SWORDBOOK)-KJV.tmp: 
-	mod2imp KJV | awk '/.*/ { if (imp==1) { print $$0; } } /\$$\$$\$$.*/ { match($$0,/ /); n=substr($$0, 4, RSTART-4); if (n=="$(VS_SWORDBOOK_I)") { imp=1; } else { imp=0; } }' | sed -e "s/<w /|<w /g" | tr "|" "\n"  | sed -e  "s/ [ ]*$$//g" | sed -e "s/\(<\/w>[.,;]*\)[ ]*\(.\)/\1|\2/g" | tr "|" "\n" > $(VS_SWORDBOOK)-KJV.tmp
+	mod2imp KJV > /tmp/kjv
+	awk '/.*/ { if (imp==1) { print $$0; } } /\$$\$$\$$.*/ { match($$0,/ [0-9]/); n=substr($$0, 4, RSTART-4); if (n=="$(VS_SWORDBOOK_I)") { imp=1; } else { imp=0; } }' /tmp/kjv > /tmp/kjv-awk
+	sed -e "s/<w /|<w /g" /tmp/kjv-awk | tr "|" "\n" | sed -e  "s/ [ ]*$$//g" | sed -e "s/\(<\/w>[.,;]*\)[ ]*\(.\)/\1|\2/g" | tr "|" "\n" > $(VS_SWORDBOOK)-KJV.tmp
 
 $(VS_SWORDBOOK)-n-KJV.tmp: $(VS_SWORDBOOK)-KJV.tmp
 	grep -v '^[ ]*$$' $(VS_SWORDBOOK)-KJV.tmp | grep -v "Heading \]" | grep -v "strongsMarkup" | grep -v "^[A-Za-z].*" | grep -v "^<q .*" | sed -e 's/.*src=.\([0-9]*\).*:G\([0-9]*\).*x-Robinson:\([^"]*\)".*/\1,\2,\3/g;s/\$$\$$\$$[^ ]* \([0-9:]*\)/\1/g' | grep "^[0-9]" > $(VS_SWORDBOOK)-n-KJV.tmp
