@@ -443,13 +443,14 @@ function changeIt() {
 
 
 <!-- Old testament quote -->
-<xsl:template match="fo">
-  <blockquote>
-    <xsl:value-of select="."/>
-  </blockquote>
+<xsl:template match="fo|fp">
+  <p class="cmPO">
+    <xsl:apply-templates>
+    </xsl:apply-templates>
+  </p>
 </xsl:template>
 
-<xsl:template match="fo" mode="footnote">
+<xsl:template match="fo|fp" mode="footnote">
     <xsl:apply-templates mode="footnotes"/>
 </xsl:template>
 

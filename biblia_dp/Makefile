@@ -225,3 +225,10 @@ valida-strong: $(VS_SWORDBOOK)-o-KJV.tmp
 
 html/em.html: gbfxml2html.xsl biblia_dp.gbfxml  mateo.gbfxml
 	SGML_CATALOG_FILES=$(CATALOG_DOCBOOK) $(XSLTPROC) --stringparam outlang es --catalogs --nonet gbfxml2html.xsl biblia_dp.gbfxml > html/em.html
+
+valida-formateo: 
+	echo "Espacios horizontales que posiblemente deben omitirse (para que no quede espacio entre número de versículo y la primera palabra del mismo)"
+	-xmllint --noent biblia_dp.gbfxml | grep "<t xml:lang=.es.>[^/]*\/>[ ]*$$" 
+	echo "Espacios horizontales que posiblemente deben añadirse (para que al ver números strong quede espacio entre uno y otro que no tienen palabra en español asociada)"
+	-xmllint --noent biblia_dp.gbfxml | grep -n "<wi[^/]*\/><wi[^/]*\/>"
+	-xmllint --noent biblia_dp.gbfxml | grep -n "\/wi><wi"

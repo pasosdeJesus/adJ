@@ -9,7 +9,9 @@ fuentes=$4;
 tipoestilo=$5;
 gutnum=$6;
 gutdate=$7;
-imagenes=$8;
+sword1=$8
+sword2=$9
+imagenes=${10};
 
 if (test "$dir" = "") then {
 	echo "Falta directorio como primer parámetro";
@@ -46,6 +48,17 @@ if (test "$gutdate" = "") then {
 	exit 1;
 } fi;
 
+if (test "$sword1" = "") then {
+	echo "Nombre de módulo en Sword es octavo parámetro";
+	exit 1;
+} fi;
+
+if (test "$sword2" = "") then {
+	echo "Nombre de módulo/archivo en Sword es noveno parámetro";
+	exit 1;
+} fi;
+
+
 guturl=`echo $gutnum | sed -e "s|^\([0-9]\)\([0-9]\)\([0-9]\)\([0-9]\).*|http://www.gutenberg.net/\1/\2/\3/\4/&|g"`;
 
 version="";
@@ -67,7 +80,7 @@ function necp {
 
 function nesed {
 	if (test ! -f $2) then {
-		sed -e "s|biblia_dp|$pry|g;s|Biblia de dominio público|$desc|g;s|PRY_DESC=\"[^\"]*\"|PRY_DESC=\"$desc\"|g;s|SOURCE_GBFXML=.*|SOURCE_GBFXML=$fuentes|g;s|IMAGES=.*|IMAGES=$imagenes|g;s|Traducción a español de la Biblia|Traducción a español|g;s|PRY_VERSION=\"[^\"]*\"|PRY_VERSION=\"$version\"|g;s|GUTNUM=.*|GUTNUM=\"$gutnum\"|g;s|GUTDATE=.*|GUTDATE=\"$gutdate\"|g;s|GUTURL=.*|GUTURL=\"$guturl\"|g" $1 > $2
+		sed -e "s|biblia_dp|$pry|g;s|Biblia de dominio público|$desc|g;s|PRY_DESC=\"[^\"]*\"|PRY_DESC=\"$desc\"|g;s|SOURCE_GBFXML=.*|SOURCE_GBFXML=$fuentes|g;s|IMAGES=.*|IMAGES=$imagenes|g;s|Traducción a español de la Biblia|Traducción a español|g;s|PRY_VERSION=\"[^\"]*\"|PRY_VERSION=\"$version\"|g;s|GUTNUM=.*|GUTNUM=\"$gutnum\"|g;s|GUTDATE=.*|GUTDATE=\"$gutdate\"|g;s|GUTURL=.*|GUTURL=\"$guturl\"|g;s|VS_SWORDBOOK_I=.*|VS_SWORDBOOK_I=$sword1|g;s|VS_SWORDBOOK=.*|VS_SWORDBOOK=$sword2|g" $1 > $2
 	} fi
 }
 
@@ -112,6 +125,7 @@ neln biblia_dp.css $nd/$pry.css
 neln gbfxml2db.xsl $nd
 neln gbfxml2html.xsl $nd
 neln gbfxml2vhtml.xsl $nd
+neln gbfxml2strong.xsl $nd
 neln gbfxml.dtd $nd
 neln gutenberg/Readme.txt $nd/gutenberg
 neln gutenberg/footer.inc $nd/gutenberg
