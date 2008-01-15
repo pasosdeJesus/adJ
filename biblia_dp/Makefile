@@ -232,3 +232,5 @@ valida-formateo:
 	echo "Espacios horizontales que posiblemente deben añadirse (para que al ver números strong quede espacio entre uno y otro que no tienen palabra en español asociada)"
 	-xmllint --noent biblia_dp.gbfxml | grep -n "<wi[^/]*\/><wi[^/]*\/>"
 	-xmllint --noent biblia_dp.gbfxml | grep -n "\/wi><wi"
+	echo "Marcado errado"
+	-xmllint --noent biblia_dp.gbfxml | grep -n "type=\"G\" value=\"[0-9]*\""
