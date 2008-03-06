@@ -213,7 +213,8 @@ $(VS_SWORDBOOK)-KJV.tmp:
 	sed -e "s/<w /|<w /g" /tmp/kjv-awk | tr "|" "\n" | sed -e  "s/ [ ]*$$//g" | sed -e "s/\(<\/w>[.,;]*\)[ ]*\(.\)/\1|\2/g" | tr "|" "\n" > $(VS_SWORDBOOK)-KJV.tmp
 
 $(VS_SWORDBOOK)-n-KJV.tmp: $(VS_SWORDBOOK)-KJV.tmp
-	grep -v '^[ ]*$$' $(VS_SWORDBOOK)-KJV.tmp | grep -v "Heading \]" | grep -v "strongsMarkup" | grep -v "^[A-Za-z].*" | grep -v "^<q .*" | sed -e 's/.*src=.\([0-9]*\).*:G\([0-9]*\).*x-Robinson:\([^"]*\)".*/\1,\2,\3/g;s/\$$\$$\$$[^ ]* \([0-9:]*\)/\1/g' | grep "^[0-9]" > $(VS_SWORDBOOK)-n-KJV.tmp
+	grep -v '^[ ]*$$' $(VS_SWORDBOOK)-KJV.tmp | grep -v "Heading \]" | grep -v "strongsMarkup" | grep -v "^[A-Za-z].*" | grep -v "^<q .*" | sed -e 's/.*src=.\([0-9]*\).*:G\([0-9]*\).*x-Robinson:\([^"]*\)".*/\1,\2,\3/g;s/.*lemma="strong:G\([0-9]*\).*robinson:\([^"]*\)".*src=.\([0-9]*\).*/\3,\2,\1/g;s/\$$\$$\$$[^ ]* \([0-9:]*\)/\1/g' | grep "^[0-9]" > $(VS_SWORDBOOK)-n-KJV.tmp
+# Formato tanto de sword-1.5.8 como 1.5.10
 
 $(VS_SWORDBOOK)-o-KJV.tmp: $(VS_SWORDBOOK)-n-KJV.tmp
 	-awk -f herram/ordenastrong.awk $(VS_SWORDBOOK)-n-KJV.tmp > $(VS_SWORDBOOK)-o-KJV.tmp
