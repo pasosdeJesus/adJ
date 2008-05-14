@@ -152,7 +152,7 @@ include herram/comdocbook.mak
 include herram/comdist.mak
 
 instala:
-	$(MKDIR) $(DESTDIR)$(INSDOC)
+	$(MKDIR) -p $(DESTDIR)$(INSDOC)
 	$(CP) html/*html $(DESTDIR)$(INSDOC)
 	$(CP) imp/*ps $(DESTDIR)$(INSDOC)
 	$(CP) imp/*pdf $(DESTDIR)$(INSDOC)
