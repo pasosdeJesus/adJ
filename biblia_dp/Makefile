@@ -40,9 +40,9 @@ OTHER_HTML=
 GENDIST=Desarrollo.txt Derechos.txt $(SOURCES) $(IMAGES) 
 # Dependencias para generar distribución
 
-ACTHOST=ftp.de.geocities.com
-ACTDIR=bdp
-USER=nuestroamigojesus
+ACTHOST=traduccion.pasosdeJesus.org
+ACTDIR=/var/www/pasosdeJesus/traduccion/
+USER=vtamara
 
 
 GENACT=dist all $(PROYECTO)-$(PRY_VERSION)_html.tar.gz $(PRINT_DIR)/$(PROYECTO)-$(PRY_VERSION).ps.gz $(PRINT_DIR)/$(PROYECTO)-$(PRY_VERSION).pdf #gutenberg 
@@ -207,9 +207,11 @@ Desarrollo.txt: herram/vim/ftplugin/gbfxml.vim
 	cp Desarrollo.txt Desarrollo.txt.bak
 	INICIO="Las completaciones disponibles" CMD="$(AWK) -f herram/exdocvimgbfxml.awk herram/vim/ftplugin/gbfxml.vim" $(AWK) -f herram/rempbloquearch.awk Desarrollo.txt.bak > Desarrollo.txt
 
-$(VS_SWORDBOOK)-KJV.tmp: 
-	mod2imp KJV > /tmp/kjv
-	awk '/.*/ { if (imp==1) { print $$0; } } /\$$\$$\$$.*/ { match($$0,/ [0-9]/); n=substr($$0, 4, RSTART-4); if (n=="$(VS_SWORDBOOK_I)") { imp=1; } else { imp=0; } }' /tmp/kjv > /tmp/kjv-awk
+KJV.imp: /usr/local/share/sword/mods.d/kjv.conf 
+	mod2imp KJV > KJV.imp
+
+$(VS_SWORDBOOK)-KJV.tmp: KJV.imp
+	awk '/.*/ { if (imp==1) { print $$0; } } /\$$\$$\$$.*/ { match($$0,/ [0-9]/); n=substr($$0, 4, RSTART-4); if (n=="$(VS_SWORDBOOK_I)") { imp=1; } else { imp=0; } }' KJV.imp > /tmp/kjv-awk
 	sed -e "s/<w /|<w /g" /tmp/kjv-awk | tr "|" "\n" | sed -e  "s/ [ ]*$$//g" | sed -e "s/\(<\/w>[.,;]*\)[ ]*\(.\)/\1|\2/g" | tr "|" "\n" > $(VS_SWORDBOOK)-KJV.tmp
 
 $(VS_SWORDBOOK)-n-KJV.tmp: $(VS_SWORDBOOK)-KJV.tmp
@@ -236,9 +238,9 @@ valida-formateo:
 	echo "Marcado errado"
 	-xmllint --noent biblia_dp.gbfxml | grep -n "type=\"G\" value=\"[0-9]*\""
 	echo "Apostrofes por cambiar por ´"
-	-xmllint --noent biblia_dp.gbfxml | grep -n "`[^´]*'"
-	echo "Signos de puntuación fuera de ` ´"
-	-xmllint --noent biblia_dp.gbfxml | grep -n "´\."
-	-xmllint --noent biblia_dp.gbfxml | grep -n "´\,"
+	-xmllint --noent biblia_dp.gbfxml | grep -n "\`[^\´']*\'"
+	echo "Signos de puntuación fuera de \` \´"
+	-xmllint --noent biblia_dp.gbfxml | grep -n "\´\."
+	-xmllint --noent biblia_dp.gbfxml | grep -n "\´\,"
 	echo "Marcación Strong errada"
 	grep "wi type=\"G[^C]" biblia_dp.gbfxml | grep -v "wi type=\"G\""

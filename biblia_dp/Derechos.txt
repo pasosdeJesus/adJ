@@ -1,29 +1,62 @@
-
-Esta traducción no oficial se basa especialmente en la biblia World
-English Bible - WEB (http://www.ebible.org). Así como la biblia World
-English Bible esta traducción y sus fuentes son de dominio público.
-En particular están permitidos por siempre el uso ilimitado, la
-redistribución, reproducción y retransmisión por cualquier medio
-conocido o por conocer así como la modificación con o sin provecho
-comercial.  Quienes traducimos desinteresadamente no ofrecemos garantía 
-alguna.
-
-Quien movido por la fe en Jesús desee mejorar esta traducción está
-cordialmente invitado al grupo virtual evangelios-dp 
-http://groups.yahoo.com/group/evangelios-dp
-
-Puede buscar actualizaciones o citar como fuente de la traducción 
-(lo cual agradeceremos y es exigido por la legislación de algunos
-paises como Colombia): 
-http://de.geocities.com/nuestroamigojesus/bdp
-Lo invitamos a difundir esta traducción, a mejorarla pero sobre todo a 
-colaborar en la construcción del Reino de Dios, haciendo la voluntad de 
-nuestro Padre, siguiendo el ejemplo de Jesús.
-
-Sin los suficientes conocimientos, ni autoridad, nos atrevimos
-a comenzar porque no habíamos encontrado una versión de dominio
-público en español. Oramos a Dios para que no nos permit introducir
-errores, pues queremos una traducción fiel a los manuscritos más antiguos 
-y sencilla  (hemos comparado con otras traducciones, incluyendo 
-citas a las mismas tanto para mostrar diferencias como para aclarar).
-
+  -                 receive options and arguments from stdin
+  -accept_all_cookies 
+                    accept cookies without prompting if Set-Cookie handling
+                    is on (off)
+  -anonymous        apply restrictions for anonymous account,
+                    see also -restrictions
+  -assume_charset=MIMEname
+                    charset for documents that don't specify it
+  -assume_local_charset=MIMEname
+                    charset assumed for local files
+  -assume_unrec_charset=MIMEname
+                    use this instead of unrecognized charsets
+  -auth=id:pw       authentication information for protected documents
+  -base             prepend a request URL comment and BASE tag to text/html
+                    outputs for -source dumps
+  -bibhost=URL      local bibp server (default 
+http://bibhost/)
+  -book             use the bookmark page as the startfile (off)
+  -buried_news      toggles scanning of news articles for buried references (on)
+  -cache=NUMBER     NUMBER of documents cached in memory
+  -case             enable case sensitive user searching (off)
+  -center           toggle center alignment in HTML TABLE (off)
+  -cfg=FILENAME     specifies a lynx.cfg file other than the default
+  -child            exit on left-arrow in startfile, and disable save to disk
+  -cmd_log=FILENAME log keystroke commands to the given file
+  -cmd_script=FILENAME
+                    read keystroke commands from the given file
+                    (see -cmd_log)
+  -connect_timeout=N
+                    set the N-second connection timeout (18000)
+  -cookie_file=FILENAME
+                    specifies a file to use to read cookies
+  -cookie_save_file=FILENAME
+                    specifies a file to use to store cookies
+  -cookies          toggles handling of Set-Cookie headers (on)
+  -core             toggles forced core dumps on fatal errors (off)
+  -crawl            with -traversal, output each page to a file
+                    with -dump, format output as with -traversal, but to stdout
+  -curses_pads      uses curses pad feature to support left/right shifting (on)
+  -debug_partial    incremental display stages with MessageSecs delay (off)
+  -delay=NNN        set NNN-second delay at statusline message (0.000)
+  -display=DISPLAY  set the display variable for X exec'ed programs
+  -display_charset=MIMEname
+                    charset for the terminal output
+  -dont_wrap_pre    inhibit wrapping of text in <pre> when -dump'ing and
+                    -crawl'ing, mark wrapped lines in interactive session (off)
+  -dump             dump the first file to stdout and exit
+  -editor=EDITOR    enable edit mode with specified editor
+  -emacskeys        enable emacs-like key movement (off)
+  -enable_scrollback 
+                    toggles compatibility with comm programs' scrollback
+                    keys (may be incompatible with some curses packages) (off)
+  -error_file=FILE  write the HTTP status code here
+  -force_empty_hrefless_a 
+                    force HREF-less 'A' elements to be empty (close them as
+                    soon as they are seen) (off)
+  -force_html       forces the first document to be interpreted as HTML (off)
+  -force_secure     toggles forcing of the secure flag for SSL cookies (off)
+  -forms_options    toggles forms-based vs old-style options menu (on)
+  -from             toggle transmission of From headers (on)
+  -ftp              disable ftp access (off)
+  -get_data         user data for get forms, read from stdin,

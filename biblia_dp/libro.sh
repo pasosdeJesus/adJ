@@ -92,7 +92,7 @@ mkdir -p $nd/gutenberg
 mkdir -p $nd/ispell
 
 for i in $fuentes ; do 
-	v=`grep "<credits.*version" $i | sed -e "s/^.*version=\"\([^\"]*\)\".*$/\1/g"`;
+	v=`grep -a "<credits.*version" $i | sed -e "s/^.*version=\"\([^\"]*\)\".*$/\1/g" 2> /dev/null`;
 	if (test "$version" = "" -a "$v" != "") then {
 		version=$v;
 	} fi;
