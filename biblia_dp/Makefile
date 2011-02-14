@@ -244,3 +244,6 @@ valida-formateo:
 	-xmllint --noent biblia_dp.gbfxml | grep -n "\´\,"
 	echo "Marcación Strong errada"
 	grep "wi type=\"G[^C]" biblia_dp.gbfxml | grep -v "wi type=\"G\""
+	echo "Errores comunes"
+	grep "i<w" biblia_dp.gbfxml
+

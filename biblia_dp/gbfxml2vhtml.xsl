@@ -520,13 +520,14 @@ function changeIt() {
 <xsl:template match="sv">
     <xsl:variable name="num1"><xsl:value-of select='substring-after(./@id,"-")'/></xsl:variable>
     <xsl:variable name="num"><xsl:value-of select='substring-after($num1,"-")'/></xsl:variable>
-    <xsl:text> </xsl:text>
+    <xsl:text> 
+</xsl:text>
     <a name="{./@id}"/>
     <sup class="verse" id="{./@id}"><xsl:value-of select="$num"/></sup>
     <xsl:apply-templates>
-  </xsl:apply-templates>
-
+    </xsl:apply-templates>
 </xsl:template>
+
 
 <xsl:template match="sv" mode="footnotes">
     <xsl:apply-templates mode="footnotes"/>
@@ -584,6 +585,7 @@ function changeIt() {
 <xsl:template match="rf" mode="write-footnotes">
     <xsl:apply-templates mode="write-footnotes"/>
 </xsl:template>
+
 
 <!-- Word information -->
 <xsl:template match="wi">
@@ -644,7 +646,6 @@ function changeIt() {
   <xsl:value-of select="./@id"/></a>
 </xsl:template>
 
-
 <!-- Translation -->
 <xsl:template match="t">
       <xsl:if test="lang($outlang)">
@@ -659,7 +660,6 @@ function changeIt() {
         <xsl:apply-templates/>
       </xsl:if>
 </xsl:template>
-
 
 <!-- Text -->
 <xsl:template match="text()">
@@ -676,6 +676,7 @@ function changeIt() {
         <xsl:value-of select="."/>
     </xsl:if>
 </xsl:template>
+
 
 <!-- Section of bibliography -->
 <xsl:template match="sbib">
