@@ -1,7 +1,7 @@
 " Plugin para vim
 " Lenguaje: gbfxml
-" Mantenedor: Vladimir Támara (vtamara@informatik.uni-kl.de)
-" URL: http://de.geocities.com/nuestroamigojesus/bdp
+" Mantenedor: Vladimir Támara (vtamara@pasosdeJesus.org)
+" URL: http://traduccion.pasosdeJesus.org
 " Last Change: 4/Ago/2003
 " Liberado al dominio público
 
