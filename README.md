@@ -1,4 +1,7 @@
 adJ
 ===
 
-Distribución de OpenBSD en Español y enfocada en Derechos Humanos
+Distribución de OpenBSD para fomentar la construcción del Reino de Dios 
+desde la educación y el respeto por la Dignidad Humana
+
+
