@@ -1,0 +1,12 @@
+$OpenBSD$
+--- Makefile.code.orig	Thu Jul 29 12:25:44 2004
++++ Makefile.code	Thu Jul 29 12:25:58 2004
+@@ -21,7 +21,7 @@ $(XARCHIVE): $(XOBJECTS)
+ 
+ OPTIONS   =
+ C_OCAMLC    = $(OCAMLC) -g $(OPTIONS) $(ROPTIONS)
+-C_OCAMLOPT  = $(OCAMLOPT) -p $(OPTIONS) $(ROPTIONS)
++C_OCAMLOPT  = $(OCAMLOPT) $(OPTIONS) $(ROPTIONS)
+ C_OCAMLDEP  = $(OCAMLDEP) $(OPTIONS)
+ OCAMLFIND = ocamlfind
+ 

@@ -1,0 +1,29 @@
+$OpenBSD$
+--- Makefile.orig	Sun Nov 23 10:18:10 2003
++++ Makefile	Thu Jul 29 09:35:38 2004
+@@ -30,11 +30,16 @@ INS_FILES=markup.cma markup_aux.cmi mark
+ 
+ OPT_FILES=markup.cmxa markup.a 
+ 
++# INSLIB set during configuration can be overriden with INSLIB2 
+ .PHONY: install
+ install: all tmp/markup_entity.mli 
+ 	{ test ! -f $(XARCHIVE) || extra="$(OPT_FILES)"; }; \
+-	install -d $(INSLIB); \
+-	install $(MLI) tmp/markup_entity.mli $(INS_FILES) $$extra $(INSLIB)
++	if (test "$(INSLIB2)" != "") then { \
++		install -d $(INSLIB2); \
++		install $(MLI) tmp/markup_entity.mli $(INS_FILES) $$extra $(INSLIB2); \
++	} else { \
++		install -d $(INSLIB); \
++		install $(MLI) tmp/markup_entity.mli $(INS_FILES) $$extra $(INSLIB); } fi;
+ 
+ .PHONY: uninstall
+ uninstall:
+@@ -187,3 +192,6 @@ doc/INSTALL.html: doc/INSTALL.xml
+ 
+ index.html: index.html.in
+ 	sed -e "s|\&PRY-VERSION;|$(PRY_VERSION)|g;s|\&URLSITE;|$(URLSITE)|g;s|\&FECHA-ACT;|$(FECHA_ACT)|g" index.html.in > index.html
++
++test:
++	(cd rtests; make; ./run)

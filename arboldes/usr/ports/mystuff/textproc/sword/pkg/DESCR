@@ -1,0 +1,9 @@
+The SWORD Project is the CrossWire Bible Society's free Bible software
+project. Its purpose is to create cross-platform open-source tools
+that allow programmers and Bible societies to write new Bible software
+more quickly and easily
+
+After installing run:
+	sudo cp ${PREFIX}/share/examples/sword/sword.conf /etc/
+and add to your ~/.profile:
+	export SWORD_PATH=${PREFIX}/share/sword

@@ -1,0 +1,338 @@
+# Strings in spanish to install/update OpenBSD
+# Dominio público. 2009.
+
+# si tiene una sola una unidad de CD que no pregunte por la que
+# debe escogerse.
+
+_slinilang="SETDIR=/
+LANG=es
+_SLANG=es
+_SMODE=\$MODE;
+case \$MODE in
+upgrade)
+_SMODE=\"actualizar\" ;;
+install)
+_SMODE=\"instalar\" ;;
+esac
+"
+_slnone="nada";
+_sldefault="predefinida";
+_sldone="listo";
+_slyes="si";
+_slno="no";
+_slall="todos";
+_slterminaltype="¿Terminal?";
+_slkbdmapping="¿Teclado kbd(8)? ('L' muestra listado)";
+_slkbdefault="es";
+_slmajortables="Distribuciones";
+_slwelcome="Bienvenido al programa para \$_SMODE OpenBSD \$ARCH.
+
+En preguntas, excepto en claves, escape al interprete de comandos con '!'. 
+Las respuestas por defecto aparecen entre [], se seleccionan con RETORNO.  
+Puede salir con Control-C, pero esto puede dejar su sistema inconsistente.";
+_slbackedup="¿RESPALDÓ SUS DATOS? Este programa puede causar perdida SIGNIFICATIVA.";
+_slnoteetc="NOTA: Tras actualizar, mezcle todo cambio a archivos del componente de 
+instalación 'etc' en los archivos de sus sistema.  sysmerge(8) puede ayudar.";
+
+_slproceedupgrade="¿Proceder a actualizar?";
+_slinstallationnotes="Útil tener a mano notas de instalación. 
+También manuales del disco y calculadora para configuraciones complejas.";
+_slrestartinterrupted="!Reiniciando instalación interrumpida! 
+Puede saltar los pasos de preparación, o puede reiniciar.";
+_slskipdisk="¿Saltar inicialización del disco?";
+_slproceedinstall="¿Proceder con la instalación?";
+_slenterhalt="Salga con 'halt' e inicie su sistema operativo original."
+_slcool="¡Bien! Manos a la obra."
+_slnonamefound="No se encontro(aron) más";
+_slnonamefound2="";
+_slavailablenames="";
+_slavailablenames2="disponibles son";
+_slavailablenames3="¿Cual";
+_slordone="o '$_sldone'";
+_slnotvalidchoice="no es opción"
+_slmedia="medio usará para \$_SMODE";
+_slpartition="partición";
+_slhassets="tiene componentes para \$_SMODE"
+_slnofs="No hay subparticiones.";
+_slexittoreturn="'exit' para regresar."
+_sledit="Editar";
+_slwith="con";
+_slmanualnet="¿Configurar manualmente la red?"
+_slexit="'exit' regresa";
+_slmakedevnf="MAKEDEV no hallado.  No se crean nodos de dispositivos.";
+_slselectsets="Selecccione componentes por instalar, un patrón o 'todos'.
+Deseleccione poniendo un '-' antes del nombre, del patrón o de 'todos'.  
+Los seleccionados se marcan con '[X]'.";
+_slinterface="interfaz"
+_slinit="desea inicializar"
+_slnomoreint="No hay más interfaces por inicializar"
+_slsymbolic="¿Nombre para";
+_slmediaoptions1="Opciones para ";
+_slmediaoptions2=" son ";
+_slchangemedia="¿Cambiar opciones?"
+_slsupportedmedia1="Posibles opciones para";
+_slsupportedmedia2="son:"
+_slaskmediaoptions="Opciones para"
+_slhostnamedhcp="Enviando DHCP a"
+_slfreedhcp="Enviando DHCP free-roaming"
+_slipv41="Dirección IPv4 para"
+_slornone="o '$_slnone'"
+_sldhcpnot="Sin DHCP - falta /sbin/dhclient."
+_slnetmask="Máscara de red"
+_slipv61="Dirección IPv6 para"
+_slipv6prefix="Long. de prefijo IPv6 para";
+_slipv4route="¿Ruta IPv4 por defecto?"
+_slipv6route="¿Ruta IPv6 por defecto? (# en lista, dir. o '$_slnone'):"
+_slinvalidnetfile="configuración de red invalida"
+_slnetintconf="Configurar interfaz de red:"
+_slresolverenabled="Resolvedor habilitado."
+_slresolvernotenabled="Resolvedor deshabilitado."
+_slnosets="No hay componentes en"
+_slsetnames="Juegos "
+_slasksetname="¿Nombre del componente? (o '$_sldone')"
+_slarchnotfound="INSTALL.\$ARCH no encontrado. ¿Usar componentes?"
+_slreadysets1="¿Listo(a) para"
+_slreadysets2="?"
+_slgetting="Procesando";
+_slnotinstall="no instaló correctamente.";
+_slproxy="¿Proxy HTTP/FTP? (e.g. 'http://proxy:8080', o '$_slnone')";
+_sllist="Mostrar servidores";
+_sllist2="conocidos";
+_slgettinglist="Tomando de 129.128.5.191 (ftp.openbsd.org)...";
+_slserver="Servidor? (IP, nombre, # en lista, '$_sldone' o '?')";
+_slfailed="FALLÓ";
+_slserver2="¿Servidor? (IP, nombre o '$_sldone')";
+_slnoline="No hay línea";
+_slusing="Usando";
+_slpassivesupport="¿Soporta ftp pasivo?"
+_slserverdirectory="Directorio"
+_sllogin="¿Usuario?"
+_slpassftp="¿Contraseña? (no se mostrará)"
+_slloginfailed="Falló el ingreso."
+_slnosuchfile="No hay tal archivo."
+_slpathname="¿Ruta a componentes? (o '$_sldone')"
+_sldir1="El directorio";
+_slnotexist="no existe"
+_slpartitionmounted="¿Partición ya montada?"
+_slserverip="¿IP del servidor o nombre?"
+_slserverdir="¿Sist. de arch. por montar?"
+_sltcptransport="¿Transporte TCP? (requiere servidor NFS capaz)"
+_sltapedrive="unidad de cinta";
+_sltapechar="no es archivo de caracteres."
+_slrewind1="Devolviendo";
+_slrewind2="(mt devuelto)..."
+_slskip="¿Saltar cuantos? (o '$_sldone')"
+_slskipping="Saltando"
+_slfiles="archivo(s)"
+_slgzipped="¿Comprimido con gzip?"
+_slblocksize="¿Tamaño de bloque?"
+_sltimezone="¿Zona horaria? ('?' muestra lista)"
+_slsubtimezone1="¿En que sub-zona de"
+_slsubtimezone2="está? ('?' muestra lista)"
+_slsettinglocal="Estableciendo zona "
+_slnotvalidzone="no es zona válida"
+_slnotinstalled="no fue instalado.\n*SEGURO* se completó el proceso sin"
+_sllets="\n¡Por \$_SMODE componentes básicos!"
+_sllocsets="¿Localización"
+_slor="o"
+_slnotfstab="No se pudo crear /etc/fstab valido."
+_slforcenr="¿Chequear otras subparticiones limpias?"
+_slfailedfsck="FALLÓ. Ejecute fsck"
+_slmanually=""
+_slok="Listo."
+_sldomain="¿Dominio DNS? (e.g. 'bar.com')"
+_sldnsserver="¿Servidor DNS? (IP o '$_slnone')"
+_slusedns="¿Usar servidor DNS?"
+_slstartsshd="¿Iniciar sshd(8) por defecto?"
+_slstartntpd="¿Iniciar ntpd(8) por defecto?"
+_slntpstartntpd="¿Iniciar ntpd(8) por defecto?" 
+_slntpserver="¿Servidor NTP? (nombre o '$_sldefault')"
+_slexpectX="¿Usará X Window?"
+_slchangeconsole="¿Cambiar consola a";
+_slspeed="velocidad"
+_slshould="debería"
+_slmaking="Creando nodos de dispositivos ..."
+_slcongratulations="¡FELICITACIONES! ¡Procedimiento completado!
+'halt' en la línea de comandos, espere y arranque desde el disco duro."
+_slinitialize="Inicializará el disco para OpenBSD. Se sugiere que
+configure subparticiones para /, /tmp, /var, /usr y /home.";
+_sldisk="disco";
+_slDisks="Discos";
+_slroot="es disco principal/raiz";
+_slnomoredisks="No hay más discos por inicializar"
+_slerrornoroot="ERROR: No hay partición raíz"
+_sluse="usar"
+_slusec="Usar"
+_slrootpassword="Debe establecer una contraseña para root."
+_slsecurityprotocol="¿Protocolo de Seguridad? (A)bierto, (W)EP, W(P)A"
+_slaccesspoint="¿Punto de Acceso Inalámbrico? (ESSID, 'cualquiera', #lista o '?'
+)"
+_slany="cualquiera"
+_slthereisnoline="No hay línea"
+_slwebkey="¿Llave WEP? (no se verá)"
+_slwpapassphrase="¿Palabra secreta WPA? (se verá)"
+_slisnotvalidchoice="no es una opción válida."
+_slinvalidnetworkconfiguration="archivo de configuración de red inválido"
+_slandfoundnoobsdsets="y no se encontraron juegos de $OBSD. Los juegos buscados eran"
+
+
+
+_slmountpointfor1="Punto de montaje para"
+_slsize="tamaño"
+_slmountpointfor2="o '$_slnone' o '$_sldone'"
+_slinvalidresponse="Respuesta invalida"
+_slalreadymounted="ya está montado en"
+_slabsolutepath="¡Punto de montaje debe ser ruta absoluta!"
+_slopenbsdfilesystems="Sistemas de archivos OpenBSD"
+_sldestroys="¡El siguiente paso *DESTRUIRÁ* los datos en estas particiones!"
+_slsureproceed="¿Procede?"
+_sltrylater="Bien, intente después."
+_slhostname="¿Nombre de la máquina? (forma corta, e.g. 'foo')"
+_slconfigurenet="¿Configurar red?"
+_slpassroot="¿Clave para root?"
+_slnotecho="no se mostrará"
+_slagain="nuevamente"
+_slnotmatch="No coinciden, reintente."
+_slsaving="Guardando configuración..."
+_slgeneratingrandom="Generando host.random ..."
+_sltimeappears="La hora parece errada. Establecerla como"
+
+# install.md
+_slinstallingboot="Instalando bloque de arranque..."
+_sluseall="¿Usar todo"
+_sluseall2="para OpenBSD?"
+_slputtingall="Estableciendo todo"
+_slputtingall2="como partición OpenBSD en el RMA (tipo 'A6')..."
+_slmbr="Creará sólo una partición en el RMA que contendrá los datos de OpenBSD
+Esta partición debe tener identificación 'A6'; *NO* debe traslaparse sobre
+otras particiones; y debe estar marcada como la única partición activa.
+
+El comando 'manual' describe en detalle los comandos."
+
+_slpartinfo="Información de particiones:"
+
+_slcreatedisklabel="Ahora cree etiquetas de discos OpenBSD dentro de la partición de OpenBSD
+en el Registro Maestro de Arranque (RMA).  Las etiquetas definen como dividirá
+la partición del RMA en particiones de OpenBSD en las que se crean las
+subparticiones y espacio de intercambio.
+
+Los desplazamientos usados en las etiquetas son ABSOLUTOS, i.e. relativos al
+comienzo del disco, NO al comienzo de la partición en el RMA de OpenBSD."
+_slwarninglabelcorrupted="ADVERTENCIA: Etiqueta del disco"
+_slwarninglabelcorrupted2="dañada. Repararla."
+# upgrade.sh
+_slrootfilesystem="¿Subpartición raiz?"
+_slsorrynotblock=""
+_slsorrynotblock2="no es dispositivo por bloques."
+_slcheckingroot="Revisando subpartición raíz"
+_slfsckmanually="Ejecutar fsck"
+_slfsckmanually2="manualmente."
+_slmountingroot="Montando subpartición raiz..."
+_slerrorcantmount="ERROR: ¡no puede montar subpartición raíz!"
+_slerrorno="ERROR: sin"
+_slenablenet="¿Activar red usando configuración de la subpartición raíz?"
+_slfstabas="fstab está configurado así:"
+_slfstabnoauto="Al \$_SMODE, se montarán subparticioens de fstab sin 'noauto'.
+Las que no sean ffs se montarán como sólo lectura.
+
+Puede editar temporalmente el archivo /etc/fstab."
+_slerrorunmount="ERROR: ¡no puede desmontar la raíz!"
+
+# 4.6
+
+_slmustbeconfigured="debe ser configurado"
+_sland="y"
+_slcantbothbemountedat="no puede montarse en"
+_slchooseyourkeyboardlayout="Elija distribución de teclado ('?' o 'L' para ver lista)"
+_slavailablelayouts="Distribuciones disponibles"
+_slpasswordfor="Clave para cuenta "
+_slaccount=""
+_slwillnotecho="no se verá"
+_slagain="nuevamente"
+_slsetupauser="¿Crear cuenta de usuario? (nombre de cuenta en minúscula o 'no')"
+_slnoreally="No, de verdad, ¿cúal es el nombre de cuenta en minúscula o 'no'?"
+_slisnotauseable="no es nombre de cuenta utilizable"
+_slfullusername="Nombre completo para "
+_slarenotallowed="no son permitidos"
+_sltoolong="Muy largo"
+_slsinceyousetupauser="Como creó una cuenta de usuario, deshabilitar ingresos por sshd(8) a root?" 
+_slavailable="Disponible"
+_slare="son"
+_slwichone="Cual"
+_sly="s"
+_slsetnames2="Nombre(s) de juego(s)"
+_slabort="cancelar"
+_slnetworkinterface="Interfaces de red"
+_sldoyouwishtoconfigure="desea configurar"
+_slwhichinterfacetag="¿Sobre que interface:tag debe estar \$_ifs?"
+_slinvalidinterfacechoice="Elección de interfaz invalida";
+_slinvalidorinusevlantag="Tag invalido o en uso";
+_sllookedat="Se buscó"
+_slandfoundno="y no se encontraron juegos de \$OBSD.  Los nombres de juegos buscados fueron:"
+_slthesha256="El condensado SHA256"
+_slforfdidnotmatch="para \$_f no corresponde a lo que este bsd.rd esperaba."
+_slwasnotable="No pudo obtener lista ftp de ftp.openbsd.org, pero está bien"
+_slserver3="Servidor? (nombre, # en lista, 'listo' or '?')";
+_slserver4="Servidor? (nombre o 'listo')";
+_slisnotavalidhostname="no es nombre de máquina valido"
+_slnotpropmounted="!ADVERTENCIA! Los siguientes sistemas de archivos no pudieron montarse apropiadamente"
+_slcontinue="¿Continuar en todo caso?"
+_slusingdns="Usando nombre de dominio DNS"
+_slusingdnsname="Usando servidores de nombres DNS en"
+
+_slenabled="habilitado"
+_sldisabled="deshabilitado"
+_slduringinstall="durante instalación" 
+_slxdm="¿Desea que el sistema X Window sea iniciado por xdm(1)?"
+
+_slcongrat2="FELICITACIONES! El proceso para \$_SMODE ha sido completado con éxito!
+ Para iniciar el nuevo sistema, ingrese 'reboot' en la línea de comandos."
+
+_slnewmail="Cuando ingrese por primera vez, por favor lea correo usando 
+el comando 'mail'."
+_slatanyprompt="En cualquier pregunta, excepto claves puede escapar al interprete de comandos
+tecleando '!'. Las respuestas por defecto se presentan entre [] y se seleccionan
+presionando RETORNO.  Puede salir de este programa presionando
+Control-C, pero esto puede dejar su sistema en un estado inconsistente."
+_slbackedup="ESTÁN RESPALDADOS SUS DATOS? Como con todo lo que modifica el contenido del     disco, este programa puede causar perdida de datos SIGNIFICATIVA.";
+
+_slnodiskfound="No se encontraron discos"
+_slmulti="Máquina multiprocesador; usando bsd.mp en lugar de bsd."
+_slopenbsdarea="usar el área de (O)penBSD,"
+
+_slmbrhasinvalid="El RMA (Registro maestro de arranque MBR) tiene firma invalida; no se muestra."
+_slusewhole="¿Usar (T)odo el disco \$_q o (E)ditar RMA?"
+_slwhole="todo"
+_sledit="editar"
+_slw=t
+_slW=T
+
+_slsettingopenbsd="Estableciendo partición de OpenBSD en RMA como el disco \$_disk completo..."
+_slyouwillnowcreate="Ahora creará una sola partición en el RMA que con todos sus datos de OpenBSD
+Esta partición debe tener identificación 'A6'; *NO* debe traslaparse con otras
+particiones y debe marcarse como la única partición activa.  En el programa
+fdisk, el comando 'manual' describe todos los comandos de fdisk en detalle."
+_slnoopenbsdpartition="No hay partición para OpenBSD en el RMA, intente de nuevo." 
+_slautoallocated="La distribución autolocalizada para \$_disk es:"
+_sluseautolayout="Usar distribución (A)utolocalizada, (E)ditarla, o (C)rear una distribución?" 
+_slnowdisklabel="Ahora creará subparticiones para OpenBSD en la partición del RMA para OpenBSD.
+Las subparticiones definen como se divide la partición RMA en 
+espacios donde se crearán los sistemas de archivo y el area de intercambio.
+En este programa debe proveer para cada sistema de archivo un punto de montaje.
+
+Los desplazamientos usados para las subparticiones son ABSOLUTAS, i.e relativas
+al comienzo del disco, NO al comienzo de la partición para OpenBSD el RMA.";
+
+_slwhichone="Cual"
+_slcantumount="No puede montar \$ROOTDEV!"
+_slerver_ip_var="\$_server_ip_var"
+_slduid="Usar DUIDs en lugar de dispositivos en fstab?"
+_slfailbootblocks="Falla al instalar bloques de arranque."
+_slnobootfrom="No podra arrancar OpenBSD de"
+_slO="A"
+_slo="a"
+_slrunsysmerge="Por favor ejecute sysmerge(8) tras reiniciar para reparar /etc."
+_slInstall="Instalar"
+_slUpdate="Actualizar"
+_slnonfreefirmware="archivos de firmware no-libre en primer arranque?" 
+

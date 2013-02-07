@@ -1,0 +1,34 @@
+$OpenBSD$
+--- xvt/ttyinit.c.orig	Tue Sep 11 18:01:42 2012
++++ xvt/ttyinit.c	Tue Sep 11 18:04:17 2012
+@@ -385,8 +385,9 @@ static int get_tslot(char* ttynam)
+  */
+ static char* get_pseudo_tty(int* pmaster, int* pslave)
+ {
++    int mfd = 0, sfd = 0;
++    char *ttynam = NULL;
+ #ifdef BSD_PTY
+-    int mfd, sfd;
+     char *s3, *s4;
+     static char ptyc3[] = "pqrstuvwxyz";
+     static char ptyc4[] = "0123456789abcdef";
+@@ -429,9 +430,6 @@ static char* get_pseudo_tty(int* pmaster, int* pslave)
+ #endif /* BSD_PTY */
+ 
+ #ifdef SVR4_PTY
+-    char *ttynam;
+-    int mfd, sfd;
+-
+     if ((mfd = open("/dev/ptmx",O_RDWR)) < 0)
+     {
+         error("Can't open a pseudo teletype");
+@@ -450,9 +448,6 @@ static char* get_pseudo_tty(int* pmaster, int* pslave)
+ #endif /* SVR4_PTY */
+ 
+ #ifdef LIBC_OPENPTY
+-    char *ttynam;
+-    int mfd, sfd;
+-
+     if (openpty(&mfd, &sfd, NULL, NULL, NULL))
+     {
+         error("Cannot allocate a pseudo teletype");

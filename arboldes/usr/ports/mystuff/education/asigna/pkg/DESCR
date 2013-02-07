@@ -1,0 +1,6 @@
+asigna receives information about the timetable of a school and some of 
+its constraints, then it tries to arrange a timetable that satisfy the 
+contraints by using an heuristic. It can also export the problem as an 
+integer linear programming problem for lp_solve. It is highly portable and 
+has a simple plain interface and a PHP interface.  Although it was developed 
+with colombian schools in mind, possibly it will be useful in other contexts.

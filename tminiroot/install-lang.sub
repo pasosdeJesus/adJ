@@ -1,0 +1,1803 @@
+#       $OpenBSD: install.sub,v 1.635 2011/02/25 12:55:45 krw Exp $
+#	$NetBSD: install.sub,v 1.5.2.8 1996/09/02 23:25:02 pk Exp $
+#
+# Copyright (c) 1997-2009 Todd Miller, Theo de Raadt, Ken Westerback
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+# Copyright (c) 1996 The NetBSD Foundation, Inc.
+# All rights reserved.
+#
+# This code is derived from software contributed to The NetBSD Foundation
+# by Jason R. Thorpe.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+#
+# THIS SOFTWARE IS PROVIDED BY THE NETBSD FOUNDATION, INC. AND CONTRIBUTORS
+# ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
+# TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE
+# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
+#
+
+# OpenBSD install/upgrade script common subroutines and initialization code
+
+. install.md
+
+set_term() {
+	local _layouts
+
+	export TERM=${TERM:-${MDTERM:-vt220}}
+	if [[ -n $CONSOLE ]]; then
+		ask "$_slterminaltype" $TERM
+		export TERM=$resp
+	else
+		[[ -x /sbin/kbd ]] || return
+		_layouts=$(bsort $(kbd -l | egrep -v "^(user|tables|encoding)"))
+		while :; do
+			ask "$_slchooseyourkeyboardlayout" "$_sldefault"
+			case $resp in
+			"?"|L|l) echo "$_slavailablelayouts: $_layouts" ;;
+			$_sldefault) return ;;
+			*)	kbd $resp && { echo $resp >/tmp/kbdtype ; return ; } ;;
+			esac
+		done
+	fi
+}
+
+stripcom () {
+	local _l
+
+	[[ -f $1 ]] || return
+
+	while read _l; do
+		[[ -n ${_l%%#*} ]] && echo $_l
+	done <$1
+}
+
+quote() (
+	for a; do
+		alias Q=$a; a=$(alias Q); print -rn -- " ${a#Q=}"
+	done | sed '1s/ //'
+	echo
+)
+
+scan_dmesg() {
+	bsort $(sed -ne "$1" /var/run/dmesg.boot)
+}
+
+scan_disknames() {
+	local _n _oifs=$IFS
+	IFS=","
+	bsort $(for _n in $(sysctl -n hw.disknames); do echo "${_n%%:*} "; done | sed -ne "$1")
+	IFS=$_oifs
+}
+
+get_dkdevs () {
+	echo $(scan_disknames "${MDDKDEVS:-/^[sw]d[0-9][0-9]* /s/ .*//p}")
+}
+
+get_cddevs () {
+	echo $(scan_disknames "${MDCDDEVS:-/^cd[0-9][0-9]* /s/ .*//p}")
+}
+
+get_ifdevs() {
+	ifconfig "$@" 2>&- \
+		| egrep -v '^[[:space:]]|(bridge|enc|gif|gre|lo|pflog|pfsync|ppp|sl|tun)[[:digit:]]+:' \
+		| sed -ne 's/^\(.*\):.*/\1/p'
+}
+
+get_drive() {
+	ask_which "$1" "$_slmedia" "$2" "$3"
+	[[ $resp == $_sldone ]] && return 1
+	makedev $resp || return 1
+	return 0
+}
+
+mount_mnt2() {
+	local _dev=$1 _opts _file=/tmp/parts.$1 _parts
+
+	disklabel $_dev 2>/dev/null | grep '^  [a-p]: '	\
+		| egrep -v "swap|unused" >$_file
+
+	_parts=$(sed -e 's/^  \(.\): .*/\1/' $_file)
+	set -- $_parts
+	[[ $# == 0 ]] && { echo "$_slnofs $_dev." ; return 1 ; }
+
+	if isin "c" $_parts; then
+		resp=c
+	elif [[ $# == 1 ]]; then
+		resp=$1
+	else
+		cat /tmp/parts.$_dev
+		ask_which "$_dev $_slpartition" "$_slhassets" \
+			'$(disklabel '$_dev' 2>/dev/null | grep "^  [a-p]: " |
+			egrep -v "swap|unused" |
+			sed '\''s/^  \(.\): .*/\1/'\'')'
+			
+		[[ $resp == $_sldone ]] && return 1
+	fi
+
+	grep -q "^  $resp: .*MSDOS" $_file && _opts="-s"
+	mount -o ro,$_opts /dev/$_dev$resp /mnt2
+}
+
+askpass() {
+	set -o noglob
+	stty -echo
+	read -r resp?"$1 "
+	stty echo
+	set +o noglob
+	echo
+}
+
+rm -df /tmp/lock
+
+lock() {
+	while ! mkdir /tmp/lock 2>&- && sleep .1; do done
+}
+
+unlock() {
+	rm -d /tmp/lock 2>&-
+}
+
+retrap() {
+	trap '>&- && kill -KILL $cppid 2>&-; echo; stty echo; exit 0' \
+		INT EXIT TERM
+}
+
+rm -f /tmp/update
+
+(
+	while :; do
+		lock
+		if test -e /tmp/update && [[ "`dmesg`" != "`cat /tmp/update`" ]]; then
+			dmesg >/tmp/update
+			kill -TERM 2>&- $$ || exit 1
+		fi
+		unlock
+		sleep .5
+	done
+) |&
+cppid=$!
+
+retrap
+
+_ask() {
+	local _int _redo=0 _pid
+
+	trap "_int=1" INT
+	trap "_redo=1" TERM
+	lock; dmesg >/tmp/update; unlock
+	read resp
+	lock; rm /tmp/update; unlock
+	if (( _redo )); then
+		stty raw
+		stty -raw
+	else
+		case $resp in
+		!)	echo "$_slexittoreturn"
+			sh
+			_redo=1
+			;;
+		!*)	eval "${resp#?}"
+			_redo=1
+			;;
+		esac
+	fi
+	retrap
+	(( _int )) && kill -INT $$
+	return $_redo
+}
+
+ask() {
+	local _question=$1 _default=$2
+
+	while :; do
+		echo -n "$_question "
+		[[ -z $_default ]] || echo -n "[$_default] "
+		_ask && : ${resp:=$_default} && break
+	done
+}
+
+askpassword() {
+	local _oifs=$IFS
+	IFS=
+	while :; do
+		askpass "$_slpasswordfor $1 $_slaccount? ($_slwillnotecho)"
+		_password=$resp
+
+		askpass "$_slpasswordfor $1 $_slaccount? ($_slagain)"
+		[[ "$resp" == "$_password" ]] && break
+
+		echo "$_slnotmatch"
+	done
+	IFS=$_oifs
+}
+
+user_setup() {
+	local _q="$_slsetupauser"
+
+	while :; do
+		ask "$_q" no
+		case $resp in
+		n|no)	return ;;
+		$_sly|$_slyes)	_q="$_slnoreally"
+			continue ;;
+		root|daemon|operator|bin|smmsp|popa3d) ;;
+		sshd|uucp|www|named|proxy|nobody|ftp) ;;
+		[a-z]*([a-z0-9_]))
+			(( ${#resp} <= 31 )) && break ;;
+		esac
+		echo "$resp $_slisnotauseable."
+	done
+	user=$resp
+	while :; do
+		ask "$_slfullusername $user?" $user
+		case $resp in
+		*[:\&,]*)
+			echo "':', '&' $_slor ',' $_slarenotallowed." ;;
+		*)
+			(( ${#resp} <= 100 )) && break
+			echo "$_sltoolong." ;;
+		esac
+	done
+	username=$resp
+
+	askpassword $user
+	userpass=$_password
+
+	if [[ $sshd == y ]]; then
+		ask_yn "$_slsinceyousetupauser" $_slyes
+		sshd_disableroot=$resp
+	fi
+
+}
+
+ask_until() {
+	resp=
+	while [[ -z $resp ]] ; do
+		ask "$1" "$2"
+	done
+}
+
+ask_yn() {
+	local _q=$1 _a=${2:-no} _resp
+	typeset -l _resp
+
+	while :; do
+		ask "$_q" "$_a"
+		_resp=$resp
+		case $_resp in
+		$_sly|$_slyes)	resp=y ; return ;;
+		n|no)	resp=n ; return ;;
+		esac
+	done
+}
+
+ask_which() {
+	local _name=$1 _query=$2 _list=$3 _def=$4 _dynlist _dyndef
+
+	while :; do
+		eval "_dynlist=\"$_list\""
+		eval "_dyndef=\"$_def\""
+
+		set -o noglob
+		set -- $_dyndef; _dyndef="$1"
+		set -- $_dynlist; _dynlist="$*"
+		set +o noglob
+		(( $# < 1 )) && resp=$_sldone && return
+
+		: ${_dyndef:=$1}
+		echo "$_slavailablenames ${_name}s $_slavailablenames2: $_dynlist."
+		echo -n "$_slwhichone $_query? ($_slor '$_sldone') "
+		[[ -n $_dyndef ]] && echo -n "[$_dyndef] "
+		_ask || continue
+		[[ -z $resp ]] && resp="$_dyndef"
+
+		isin "$resp" $_dynlist $_sldone && break
+		echo "'$resp' $_slnotvalidchoice."
+	done
+}
+
+isin() {
+	local	_a=$1 _b
+
+	shift
+	for _b; do
+		[[ $_a == $_b ]] && return 0
+	done
+	return 1
+}
+
+addel() {
+	local	_a=$1
+
+	shift
+
+	echo -n "$*"
+	isin "$_a" $* || echo -n " $_a"
+}
+
+rmel() {
+	local	_a=$1 _b
+
+	shift
+	for _b; do
+		[[ $_a != $_b ]] && echo -n "$_b "
+	done
+}
+
+bsort() {
+	local _l _a=$1 _b
+
+	[[ $# -gt 0 ]] || return
+
+	shift
+	for _b; do
+		if [[ $_a != $_b ]] ; then
+			if [[ $_a > $_b ]] ; then
+				_l="$_a $_l"; _a=$_b
+			else
+				_l="$_b $_l"
+			fi
+		fi
+	done
+
+	echo -n "$_a "
+
+	bsort $_l
+}
+
+showcols() {
+	local _l _cdir=/tmp/cdir
+	set -A _clist
+	mkdir -p $_cdir
+	rm -rf -- $_cdir/*
+	while read _l; do
+		[ "$_l" ] || continue
+		mkdir -p /tmp/cdir/"$_l"
+		_clist[${#_clist[*]}]="$_l"
+	done
+	(cd $_cdir; ls -Cdf "${_clist[@]}")
+	rm -rf -- $_cdir
+}
+
+manual_net_cfg() {
+	ask_yn "$_slmanualnet"
+
+	[[ $resp == y ]] && { echo "$_slexit." ; sh ; }
+}
+
+# Create a device.
+#
+# $1 = name of the device to create.
+makedev() {
+	local _dev=$1
+
+	if [[ ! -r /dev/MAKEDEV ]] ; then
+		echo "$_slmakedevnf"
+		return 1
+	fi
+
+	(cd /dev && sh MAKEDEV "$_dev") >/dev/null 2>&1
+}
+
+addhostent() {
+	local _addr=$1 _name=$2 _delim="."
+
+	[[ -z $_addr || -z $_name ]] && return
+
+	[[ $_addr == *:* ]] && _delim=":"
+
+	sed "/^[0-9a-fA-F]*[$_delim].*[ 	]$_name\$/d" /tmp/hosts \
+		>/tmp/hosts.new 2>/dev/null
+	mv /tmp/hosts.new /tmp/hosts
+
+	echo "$_addr $_name" >>/tmp/hosts
+}
+
+select_sets() {
+	local _avail=$1 _selected=$2 _f _action _col=$COLUMNS
+	let COLUMNS=_col-8
+
+	cat <<__EOT
+
+$_slselectsets
+__EOT
+	while :; do
+		for _f in $_avail; do
+			isin $_f $_selected && echo "[X] $_f" || echo "[ ] $_f"
+		done | showcols | sed 's/^/    /'
+		ask "$_slsetnames2? ($_slor '$_slabort' $_slor '$_sldone')" $_sldone
+
+		set -o noglob
+		for resp in $resp; do
+			case $resp in
+			$_slabort)	_selected=; break 2 ;;
+			$_sldone)	break 2 ;;
+			-*)	_action=rmel ;;
+			*)	_action=addel ;;
+			esac
+			resp=${resp#[+-]}
+			[[ $resp = $_slall ]] && resp=*
+
+			for _f in $_avail; do
+				[[ $_f = $resp ]] && _selected=$($_action $_f $_selected)
+			done
+		done
+	done
+
+	set +o noglob
+	COLUMNS=$_col
+
+	resp=$_selected
+}
+
+configure_ifs() {
+	local _first _ifdevs _ifs _name _hn _vl=0 _vd _vi _p _tags
+
+	# In case of restart, discover last vlan configured.
+	while :; do
+		_vd=$(ifconfig vlan$_vl 2>&1)
+		[[ $_vd == @(*no such interface*) ]] && break
+		[[ $_vd == @(vlan$_vl: flags=0<>*) ]] && break
+		: $(( _vl++ ))
+	done
+	_vd=
+
+	while :; do
+		ifconfig vlan$_vl create >/dev/null 2>&1
+		ask_which "$_slnetworkinterface" "$_sldoyouwishtoconfigure" \
+			'$(get_ifdevs)' \
+			${_p:-'$( (ifconfig netboot 2>/dev/null | sed -n '\''1s/:.*//p'\''; get_ifdevs) | sed q )'}
+		[[ $resp == $_sldone ]] && break
+
+		_ifs=$resp
+		_hn=/tmp/hostname.$_ifs
+		rm -f $_hn
+		
+		if [[ $_ifs == vlan[0-9]* ]]; then
+			_vi=$(ifconfig $_ifs 2>/dev/null | \
+				sed -n 's/vlan: \([0-9]*\).*/\1/p')
+			_tags=$(ifconfig vlan 2>/dev/null | \
+				sed -n 's/vlan: \([0-9]*\).*/\1/p')
+			[[ -n $_tags ]] && _tags=$(rmel "$_vi" $_tags)
+			if [[ -z $_vi ]]; then
+				_vi=0
+				while (( (_vi += 1) < 4096 )); do
+					! isin "$_vi" $_tags && break
+				done
+			fi
+			_ifdevs=$(get_ifdevs)
+			set -- $_ifdevs
+			while [[ $1 == vlan[0-9]* ]]; do
+				shift
+			done
+			ask "$_slwhichinterfacetag" "${_vd:=$1}:$_vi"
+			_vd=${resp%%:*}
+			_vi=${resp##*:}
+
+			if ! (isin "$_vd" $_ifdevs && [[ $_vd != vlan[0-9]* ]]); then
+				echo "$_slinvalidinterfacechoice '$_vd'"
+				_vd=
+				continue
+			fi
+
+			if (( _vi < 1 || _vi > 4095 )) || isin "$_vi" $_tags; then
+				echo "$_slinvalidorinusevlantag '$_vi'"
+				continue
+			fi
+
+			grep -qs "^up" /tmp/hostname.$_vd || \
+				echo "up" >>/tmp/hostname.$_vd
+			ifconfig $_vd up
+
+			ifconfig $_ifs destroy >/dev/null 2>&1
+			ifconfig $_ifs vlan $_vi vlandev $_vd
+			echo "vlan $_vi vlandev $_vd" >>$_hn
+			[[ ${_ifs##vlan} == $_vl ]] && (( _vl += 1 ))
+		fi
+
+		ifconfig $_ifs 2>&- | grep -q "^[[:space:]]*ieee80211:" &&
+			ieee80211_config $_ifs $_hn
+
+		resp=$(hostname -s)
+		[[ -n $_first && $_first != $_ifs ]] && \
+			ask "$_slsymbolic $_ifs?" $resp
+		_name=$resp
+
+		v4_config $_ifs $_name $_hn
+		v6_config $_ifs $_name $_hn
+
+		if [[ -f $_hn ]]; then
+			chmod 640 $_hn
+			(( nifs += 1 ))
+			: ${_first:=$_ifs}
+			_p=$_sldone
+		fi
+	done
+}
+
+v4_info() {
+	ifconfig $1 inet | sed -n '
+		1s/.*<UP,.*/UP/p
+		1s/.*<.*/DOWN/p
+		/inet/s/netmask//
+		/inet/s///p'
+}
+
+v6_info() {
+	ifconfig $1 inet6 | sed -n '
+		1s/.*<UP,.*/UP/p
+		1s/.*<.*/DOWN/p
+		/scopeid/d
+		/inet6/s///p'
+}
+
+dhcp_request() {
+	local _ifs=$1 _hn=$2
+
+	echo "lookup file bind" >/etc/resolv.conf.tail
+
+	if [[ -n $_hn ]]; then
+		_hn="send host-name \"$_hn\";"
+		echo "$_slhostnamedhcp $_ifs."
+	else
+		echo "$_slfreedhcp $_ifs."
+	fi
+
+	cat >/etc/dhclient.conf <<__EOT
+initial-interval 1;
+$_hn
+request subnet-mask, broadcast-address, routers, domain-name,
+	domain-name-servers, host-name;
+__EOT
+
+	ifconfig $_ifs group dhcp >/dev/null 2>&1
+	dhclient $_ifs
+
+	set -- $(v4_info $_ifs)
+
+	if [[ $1 == UP && -n $2 ]]; then
+		mv /etc/dhclient.conf /tmp/dhclient.conf
+		mv /etc/resolv.conf.tail /tmp/resolv.conf.tail
+		return 0
+	fi
+
+	ifconfig $_ifs delete down -group dhcp 2>&-
+	rm /etc/dhclient.conf /etc/resolv.conf.tail
+	return 1
+}
+
+hextodec() {
+	local _d _b
+
+	for _b in $(echo ${1#0x} | sed 's/\(..\)/\1 /g'); do
+		_d=$_d.$((0x$_b))
+	done
+	echo ${_d#.}
+}
+
+ieee80211_scan() {
+	[[ -f $WLANLIST ]] ||
+		ifconfig $1 scan |
+		sed -n 's/^		nwid \([^"]\)/\1/p' > $WLANLIST
+	cat $WLANLIST
+}
+
+ieee80211_config() {
+	local _ifs=$1 _hn=$2 _prompt _nwid _haswpa=0 _err
+
+	# Reset 802.11 settings and determine wpa capability
+	ifconfig $_ifs -nwid -nwkey
+	ifconfig $_ifs -wpa 2>&- && _haswpa=1
+
+	# Empty scan cache
+	rm -f $WLANLIST
+
+	while [[ -z $_nwid ]]; do
+		ask_until "$_slaccesspoint" "$_slany"
+		case "$resp" in
+		+([0-9]))
+			_nwid=$(ieee80211_scan $_ifs | sed -n "${resp}s/ .*//p")
+			[[ -z $_nwid ]] && echo "$_slthereisnoline $resp."
+			;;
+		\?)     ieee80211_scan $_ifs |
+				sed -n 's/^\([^ ]*\) chan .* bssid \([^ ]*\) .*$/	\1 (\2)/p' |
+				less -XEN
+			;;
+		*)      _nwid=$resp ;;
+		esac
+	done
+
+	# 'any' implies that only open access points are considered
+	if [[ $_nwid != $_slany ]]; then
+		ifconfig $_ifs nwid "$_nwid"
+		quote nwid "$_nwid" >>$_hn
+
+		_prompt="$_slsecurityprotocol"
+		[[ $_haswpa == 1 ]] && _prompt="$_prompt, WPA-(P)SK"
+		while :; do
+			ask_until "$_prompt" "$_slO"
+			case "$_haswpa-$resp" in
+			?-[$_slO$_slo]) break
+				;;
+			?-[Ww]) ask_until "$_slwebkey"
+				# Make sure ifconfig accepts the key
+				if _err=$(ifconfig $_ifs nwkey "$resp" 2>&1) &&
+				    [[ -z $_err ]]; then
+					quote nwkey "$resp" >>$_hn
+					break
+				fi
+				echo "$_err"
+				;;
+			1-[Pp]) ask_until "$_slwpapassphrase"
+				# Make sure ifconfig accepts the key
+				if ifconfig $_ifs wpakey "$resp"; then
+					quote wpakey "$resp" >>$_hn
+					break
+				fi
+				;;
+			*)      echo "'$resp' $_slisnotvalidchoice"
+				;;
+			esac
+		done
+	fi
+}
+
+
+v4_config() {
+	local _ifs=$1 _name=$2 _hn=$3 _prompt _addr _mask
+
+	if ifconfig $_ifs | grep 'groups:.* dhcp' >/dev/null 2>&1; then
+		_addr=dhcp
+	else
+		set -- $(v4_info $_ifs)
+		if [[ -n $2 ]]; then
+			_addr=$2; _mask=$(hextodec $3)
+			ifconfig $_ifs inet $_addr delete
+		fi
+	fi
+
+	if [[ -x /sbin/dhclient ]]; then
+		_prompt="or 'dhcp' "
+		ifconfig dhcp >/dev/null 2>&1 || _addr=dhcp
+	fi
+	_prompt="$_slipv41 $_ifs? (${_prompt}$_slor '$_slnone')"
+
+	ask_until "$_prompt" "$_addr"
+	case $resp in
+	$_slnone)	;;
+	dhcp)	if [[ ! -x /sbin/dhclient ]]; then
+			echo "$_sldhcpnot"
+		elif dhcp_request $_ifs "$_name" || dhcp_request $_ifs ; then
+			set -- $(v4_info $_ifs)
+			addhostent "$2" "$_name"
+			echo "dhcp" >>$_hn
+			makedev bpf$(ls /dev | grep -c "^bpf[0-9]")
+		fi
+		;;
+	*)	_addr=$resp
+		ask_until "$_slnetmask?" "${_mask:=255.255.255.0}"
+		ifconfig $_ifs -group dhcp >/dev/null 2>&1
+		if ifconfig $_ifs inet $_addr netmask $resp up ; then
+			addhostent "$_addr" "$_name"
+			echo "inet $_addr $resp" >>$_hn
+		fi
+		;;
+	esac
+}
+
+v6_config() {
+	local _ifs=$1 _name=$2 _hn=$3 _addr _prefixlen _prompt
+
+	ifconfig lo0 inet6 >/dev/null 2>&1 || return
+
+	set -- $(v6_info $_ifs)
+	[[ -n $2 ]] && { _addr=$2; _prefixlen=$3; }
+
+	[[ -x /sbin/rtsol ]] && _prompt="or 'rtsol' "
+	_prompt="$_slipv61 $_ifs? (${_prompt}$_slor '$_slnone')"
+	ask_until "$_prompt" "${_addr:-$_slnone}"
+
+	case $resp in
+	$_slnone)	return
+		;;
+	rtsol)	[[ ! -x /sbin/rtsol ]] && { echo "No /sbin/rtsol." ; return ; }
+		ifconfig $_ifs up
+		if rtsol -F $_ifs; then
+			set -- $(v6_info $_ifs)
+			addhostent "$2" "$_name"
+			echo "up\nrtsol" >>$_hn
+		fi
+		return
+		;;
+	esac
+
+	_addr=$resp
+	ask_until "$_slipv6prefix $_ifs?" "${_prefixlen:=64}"
+	ifconfig $_ifs inet6 $_addr prefixlen $resp up || return
+	echo "inet6 $_addr $resp" >>$_hn
+	addhostent "$_addr" "$_name"
+
+	v6_defroute $_ifs
+	[[ $resp == $_slnone ]] && return
+	route -n add -inet6 -host default "$resp" || return
+	echo "$resp" >>/tmp/mygate
+}
+
+v4_defroute() {
+	local _dr _prompt=" $_slor '$_slnone'"
+
+	# Get/Confirm an IPv4 default route if an IPv4 address was configured.
+	[[ -n $(ifconfig | sed -ne '/[ 	]inet .* broadcast /p') ]] || return
+
+	# If only one interface, and it is running dhclient, ask nothing
+	[[ -f /tmp/dhclient.conf && $nifs == 1 ]] && return
+
+	[[ -x /sbin/dhclient ]] && _prompt=", 'dhcp'$_prompt"
+	_prompt="$_slipv4route$_prompt)"
+
+	_dr=$(route -n show -inet | sed -ne '/^default */{s///; s/ .*//; p;}')
+	[[ -f /tmp/dhclient.conf ]] && _dr=dhcp
+
+	while :; do
+		ask_until "$_prompt" "$_dr"
+		[[ $resp == @($_slnone|dhcp) ]] && break
+		route delete -inet default >/dev/null 2>&1
+		route -n add -inet -host default "$resp" && { echo "$resp" >/tmp/mygate ; break ; }
+		route -n add -inet -host default $_dr >/dev/null 2>&1
+	done
+}
+
+v6_defroute() {
+	local _if=$1 _routers _oifs
+
+	if [[ -z $(route -n show -inet6 | sed -ne '/^default */{s///; s/ .*//; p;}') ]]; then
+		resp=$_slnone
+		return
+	fi
+
+	if [[ -x /sbin/ping6 ]]; then
+		_routers=$(ping6 -n -c 2 ff02::2%$_if 2>&1 | sed -n \
+			-e '/bytes from/{s/^.*from //;s/,.*$//;p;}')
+	fi
+
+	_oifs=$IFS
+	IFS=
+	PS3="$_slipv6route"
+	select i in $_routers; do
+		case $i in
+		"")	resp=$REPLY
+			[[ -n $resp ]] && break
+			;;
+		*)	resp=$i
+			break
+			;;
+		esac
+	done
+	IFS=$_oifs
+}
+
+enable_network() {
+	local _f _gw
+
+	for _f in dhclient.conf resolv.conf resolv.conf.tail; do
+		if [ -f /mnt/etc/$_f ]; then
+			cp /mnt/etc/$_f /etc/$_f
+		fi
+	done
+
+	ifconfig lo0 inet 127.0.0.1/8
+
+	for hn in /mnt/etc/hostname.*; do
+		(( nifs += 1 ))
+
+		if=${hn#/mnt/etc/hostname.}
+
+		(ifconfig $if||ifconfig $if create)> /dev/null 2>&1 || continue
+
+		while :; do
+			if [ "$cmd2" ]; then
+				set -- $cmd2
+				af=$1 name=$2 mask=$3 bcaddr=$4 ext1=$5 cmd2=
+				i=1; while [ i -lt 6 -a -n "$1" ]; do shift; let i=i+1; done
+				ext2="$@"
+			else
+				read af name mask bcaddr ext1 ext2 || break
+			fi
+			case $af in
+			"#"*|"!"*|"bridge"|"")
+				continue
+				;;
+			"dhcp")	[ "$name" = "NONE" ] && name=
+				[ "$mask" = "NONE" ] && mask=
+				[ "$bcaddr" = "NONE" ] && bcaddr=
+				dhcpif="$dhcpif $if"
+				cmd="ifconfig $if $name $mask $bcaddr $ext1 $ext2 down"
+				cmd="$cmd; dhclient $if"
+				makedev bpf$(ls /dev | grep -c "^bpf[0-9]")
+				;;
+			"rtsol")
+				rtsolif="$rtsolif $if"
+				cmd="ifconfig $if $name $mask $bcaddr $ext1 $ext2 up"
+				;;
+			"up")
+				cmd="ifconfig $if $name $mask $bcaddr $ext1 $ext2 up"
+				;;
+			*)	read dt dtaddr
+				if [ "$name" = "alias" ]; then
+					alias=$name
+					name=$mask
+					mask=$bcaddr
+					bcaddr=$ext1
+					ext1=$ext2
+					ext2=
+				else
+					alias=
+				fi
+				cmd="ifconfig $if $af $alias $name "
+				case $dt in
+				dest)	cmd="$cmd $dtaddr"
+					;;
+				[a-z!]*)
+					cmd2="$dt $dtaddr"
+					;;
+				esac
+				if [ -z "$name" ]; then
+					echo "/mnt/etc/hostname.$if: $_slinvalidnetworkconfiguration"
+					return
+				fi
+				case $af in
+				inet)	[ "$mask" ] && cmd="$cmd netmask $mask"
+					if [ "$bcaddr" -a "$bcaddr" != "NONE" ]; then
+						cmd="$cmd broadcast $bcaddr"
+					fi
+					[ "$alias" ] && rtcmd="; route -qn add -host $name 127.0.0.1"
+					;;
+				inet6)
+					[ "$mask" ] && cmd="$cmd prefixlen $mask"
+					cmd="$cmd $bcaddr"
+					;;
+				*)	cmd="$cmd $mask $bcaddr"
+					;;
+				esac
+				cmd="$cmd $ext1 $ext2$rtcmd" rtcmd=
+				;;
+			esac
+			eval "$cmd"
+		done </mnt/etc/hostname.$if
+	done
+
+	[[ -n $rtsolif ]] && /mnt/sbin/rtsol -F $rtsolif
+
+	[[ -z $dhcpif ]] && stripcom /mnt/etc/mygate | while read _gw; do
+		[[ $_gw == @(*:*) ]] && continue
+		route -qn delete default >/dev/null 2>&1
+		route -qn add -host default $_gw && break
+	done
+	[[ -z $rtsolif ]] && stripcom /mnt/etc/mygate | while read _gw; do
+		[[ $_gw == !(*:*) ]] && continue
+		route -qn delete -inet6 default >/dev/null 2>&1
+		route -qn add -host -inet6 default $_gw && break
+	done
+
+	route -qn add -net 127 127.0.0.1 -reject >/dev/null
+}
+
+install_files() {
+	local _src=$1 _files=$2 _f _sets _get_sets _n _col=$COLUMNS
+
+	for _f in $THESETS; do
+		isin $_f $_files || continue;
+		_sets=$(addel $_f $_sets)
+		if [[ -z $DISPLAY && ! -d /mnt/etc/X11 ]]; then
+			# No displays and X isn't installed ==> skip X sets
+			isin ${_f%${VERSION}.tgz} xbase xetc xshare xfont xserv && continue
+		fi
+		isin $_f $DEFAULTSETS "site$VERSION-$(hostname -s).tgz" && \
+			_get_sets=$(addel $_f $_get_sets)
+	done
+
+	if [[ -z $_sets ]]; then
+		echo -n "$_sllookedat "
+		echo $_src | sed -e 's/\(^ftp:\/\/[^/]*\)\(:[^/]*\)\(@.*\)/\1\3/'
+		echo "$_slandfoundnoobsdsets:"
+
+		let COLUMNS=_col-8
+		for _n in $THESETS; do echo $_n; done | showcols | sed 's/^/    /'
+		COLUMNS=$_col
+
+		echo
+		return
+	fi
+
+	resp=y
+	isin INSTALL.$ARCH $_files ||
+		ask_yn "$_slarchnotfound"
+	[[ $resp = n ]] && return
+
+	select_sets "$_sets" "$_get_sets"
+
+	[[ -n $resp ]] || return
+	_get_sets=$resp
+
+	[[ $resp = n ]] && return
+
+	shacmd="cat"
+	[[ -x /bin/sha256 ]] && shacmd="sha256 /tmp/h"
+
+	for _f in $THESETS ; do
+		isin $_f $_get_sets || continue
+		echo -n "$_slgetting $_f ..."
+		rm -f /tmp/h
+		case $_f in
+		*.tgz)	ftp $FTPOPTS -o - -m "$_src/$_f" | \
+				$shacmd | tar zxphf - -C /mnt
+			;;
+		*)	ftp $FTPOPTS -o - -m "$_src/$_f" | \
+				$shacmd > "/mnt/$_f"
+			;;
+		esac
+		if [ $? -ne 0 ]; then
+			echo "'$_f' $_slnotinstall"
+		elif [ -f /tmp/h -a -f "/var/hash/$_f" ]; then
+			if [ "$(</tmp/h)" != "$(</var/hash/$_f)" ]; then
+				echo "$_slthesha256 $(cat /tmp/h)"
+				echo "$_slforfdidnotmatch"
+			fi
+			DEFAULTSETS=$(rmel $_f $DEFAULTSETS)
+			GOTSETS="$GOTSETS $_f"
+		else
+			DEFAULTSETS=$(rmel $_f $DEFAULTSETS)
+			GOTSETS="$GOTSETS $_f"
+		fi
+		[[ $_f == base$VERSION.tgz ]] && \
+			ftp $FTPOPTS -o /mnt/tmp/etc$VERSION.tgz \
+				-m "$_src/etc$VERSION.tgz" >/dev/null 2>&1 && \
+			SM_ARGS="-s /tmp/etc$VERSION.tgz"
+		[[ $_f == xbase$VERSION.tgz ]] && \
+			ftp $FTPOPTS -o /mnt/tmp/xetc$VERSION.tgz \
+				-m "$_src/xetc$VERSION.tgz" >/dev/null 2>&1  && \
+			SM_ARGSX="-x /tmp/xetc$VERSION.tgz"
+	done
+}
+
+encode_for_url() {
+	echo "$1" | sed -e "
+s/%/%25/g
+s/ /%20/g
+s/!/%21/g
+s/\"/%22/g
+s/#/%23/g
+s/\\\\\$/%24/g
+s/&/%26/g
+s/'/%27/g
+s/(/%28/g
+s/)/%29/g
+s/\*/%2a/g
+s/+/%2b/g
+s/,/%2c/g
+s/-/%2d/g
+s/\./%2e/g
+s/\//%2f/g
+s/:/%3a/g
+s/;/%3b/g
+s/</%3c/g
+s/=/%3d/g
+s/>/%3e/g
+s/?/%3f/g
+s/@/%40/g
+s/\[/%5b/g
+s/\\\\\\\\/%5c/g
+s/]/%5d/g
+s/\^/%5e/g
+s/_/%5f/g
+s/\`/%60/g
+s/{/%7b/g
+s/|/%7c/g
+s/}/%7d/g
+s/~/%7e/g
+"
+}
+
+ftp_error() {
+	if [[ -n $(echo "$2" | grep "$1") ]]; then
+		echo $1
+		return 0
+	fi
+	return 1
+}
+
+startftplist() {
+	(( nifs < 1 )) && return
+
+	set -m
+	(
+		ftp $FTPOPTS -a -o - "http://129.128.5.191/cgi-bin/ftplist.cgi?path=$FTPSETDIR" \
+			2>/tmp/ftplisterr > $SERVERLISTALL
+		echo -n $SECONDS >$SERVERLISTSEC
+	) & ftppid=$!
+	set +m
+
+	(sleep 12; kill -INT -$ftppid >/dev/null 2>&1) &
+}
+
+waitftplist() {
+	local _dot						# XXX
+
+	[[ -z $ftppid ]] && return
+	while [[ -n $(jobs $ftppid 2>/dev/null) ]]; do
+		echo -n .					# XXX
+		_dot=.						# XXX
+		sleep 0.2					# XXX
+	done
+	[[ -n $_dot ]] && echo					# XXX
+}
+
+ftp_time() {
+	local _ftplist_sec=$(cat $SERVERLISTSEC 2>&-)
+	local _time=$(sed '/^TIME=\([0-9]*\)$/!d;s//\1/;q' $SERVERLISTALL 2>&-)
+	[[ -n $_ftplist_sec && -n $_time ]] &&
+		echo $((_time + SECONDS - _ftplist_sec))
+}
+
+install_url() {
+	local _url_type=$1 _file_list _url_base _oifs _prompt _passwd _mirror
+	eval local _server_ip=\$_${_url_type}_server_ip \
+		_server_dir=\$_${_url_type}_server_dir
+
+	waitftplist
+	ask "HTTP/FTP proxy URL? (e.g. 'http://proxy:8080', or '$_slnone')" \
+		"${ftp_proxy:-$_slnone}"
+	unset ftp_proxy http_proxy
+	[[ $resp == $_slnone ]] || export ftp_proxy=$resp http_proxy=$resp
+
+	if [[ -s $SERVERLISTALL ]]; then
+		_prompt="$_slserver3"
+		sed -n "s,^${_url_type}://"'\([[A-Za-z0-9\:_][]A-Za-z0-9:._-]*\),\1,p' \
+			$SERVERLISTALL > $SERVERLIST
+		set -- $(sed q $SERVERLIST)
+		_server_ip=${1%%/*}
+	else
+		echo "($_slwasnotable)"
+		_prompt="$_slserver4"
+	fi
+
+	while :; do
+		ask_until "$_prompt" "$_server_ip"
+		case $resp in
+		done)	return ;;
+		"?")	[[ -s $SERVERLIST ]] || continue
+			less -XEN < $SERVERLIST
+			;;
+		+([0-9]))
+			[[ -s $SERVERLIST ]] || continue
+			set -- $(sed -n "${resp}p" $SERVERLIST)
+			[[ $# -lt 1 ]] && { echo "$_slnoline $resp." ; continue ; }
+			_server_ip=${1%%/*}
+			;;
+		+([A-Za-z0-9\:.\[\]_-]))
+			_server_ip=$resp
+			break
+			;;
+		*)	echo "'$resp' $_slisnotavalidhostname."
+			;;
+		esac
+	done
+	eval _${_url_type}_server_ip=$_server_ip
+
+	set -- $(sed "/^$_server_ip/x;\$!d;x" $SERVERLIST 2>&-)
+	resp=${1#*/}
+	[[ $resp == "$1" ]] && resp=
+	if (( $# > 1 )); then
+		resp=$resp/$FTPSETDIR
+		_mirror=yes
+	fi
+
+	ask_until "$_slserverdirectory" "${resp:-pub/OpenBSD/$FTPSETDIR}"
+	_server_dir=$resp
+	eval _${_url_type}_server_dir=$_server_dir
+
+
+	if [[ $_url_type == ftp ]]; then
+		_oifs=$IFS
+		IFS=
+		ask_until "$_sllogin" "${_ftp_server_login:=anonymous}"
+		_ftp_server_login=$resp
+
+		if [[ $_ftp_server_login == @(anonymous|ftp) ]]; then
+			_passwd=root@`hostname`
+		else
+			resp=
+			while [[ -z $resp ]] ; do
+				askpass "$_slpassftp"
+			done
+			_passwd=$resp
+		fi
+		IFS=$_oifs
+	fi
+
+	_url_base=$_url_type://
+	if [[ $_url_type == ftp && $_ftp_server_login != anonymous ]]; then
+		_url_base=$_url_base$(encode_for_url "$_ftp_server_login"):$(encode_for_url "$_passwd")@
+	fi
+	_url_base=$_url_base$_server_ip/$_server_dir
+
+	ifconfig lo0 127.0.0.1
+
+	if [[ $_url_type == ftp && -z $ftp_proxy ]] ; then
+		_file_list=$(ftp $FTPOPTS "$_url_base/")
+		ftp_error "$_slloginfailed" "$_file_list" && return
+		ftp_error "$_slnosuchfile" "$_file_list" && return
+	else
+		_file_list=$(ftp $FTPOPTS -o - "$_url_base/index.txt" | \
+			sed -e 's/^.* //' | sed -e 's///')
+	fi
+
+	install_files "$_url_base" "$_file_list"
+
+	installedfrom=$_url_type://$_server_ip/$_server_dir
+
+	if [[ -n $_mirror ]]; then
+		package_path=$(print -r -- "$installedfrom" |
+			sed -E "/\/(snapshots|[0-9]\.[0-9])\/($ARCH)\/*$/!d
+				s!!/\1/packages/$(arch -s)/!;q")
+	else
+		package_path=
+	fi
+
+}
+
+install_mounted_fs() {
+	local _dir
+
+	while :; do
+		ask_until "$_slpathname" "$SETDIR"
+		[[ $resp == $_sldone ]] && return
+		[[ -d /mnt2/$resp ]] && { _dir=/mnt2/$resp ; break ; }
+		[[ -d /mnt/$resp ]] && { _dir=/mnt/$resp ; break ; }
+		[[ -d /$resp ]] && { _dir=/$resp ; break ; }
+		echo "$_sldir1 '$resp' $_slnotexist."
+	done
+
+	install_files "file://$_dir" "$(ls $_dir/)"
+}
+
+install_cdrom() {
+	get_drive "CD-ROM" '$(get_cddevs)' || return
+	mount_mnt2 $resp || return
+
+	install_mounted_fs
+}
+
+install_disk() {
+	ask_yn "$_slpartitionmounted"
+	if [[ $resp == n ]]; then
+		get_drive "disk" '$(bsort $(get_dkdevs))' \
+			'$(bsort $(rmel $ROOTDISK $(get_dkdevs)))' || return
+		mount_mnt2 $resp || return
+	fi
+
+	install_mounted_fs
+}
+
+install_nfs() {
+	local _tcp
+
+	ask_until "$_slserverip" "$NFS_ADDR"
+	NFS_ADDR=$resp
+
+	ask_until "$_slserverdir" "$NFS_PATH"
+	NFS_PATH=$resp
+
+	ask_yn "$_sltcptransport"
+	[[ $resp == y ]] && _tcp=-T
+
+	mount_nfs $_tcp -o ro -R 5 $NFS_ADDR:$NFS_PATH /mnt2 || return
+
+	install_mounted_fs
+}
+
+install_tape() {
+	local _z _bs
+
+	get_drive "$_sltapedrive" '$MTDEVS' || return
+	export TAPE=/dev/nr$resp
+	if [[ ! -c $TAPE ]]; then
+		echo "$TAPE $_sltapechar"
+		return
+	fi
+
+	echo -n "$_slrewind1 $TAPE $_slrewind2"
+	mt rewind || return
+	echo "$_sldone."
+
+	while :; do
+		ask_until "$_slskip" 0
+		[[ $resp == $_sldone ]] && return
+		[[ $resp == +([0-9]) ]] || continue
+		(($resp < 0)) && continue
+
+		if (($resp > 0)); then
+			echo -n "$_slskipping $resp $_slfiles..."
+			mt fsf $resp || return
+			echo "$_sldone."
+		elif [[ -n $_bs ]]; then
+			mt bsf ; mt fsf
+		fi
+
+		unset _z
+		ask_yn "$_slgzipped" $_slyes
+		[[ $resp == y ]] && _z=z
+
+		[[ $_z == z ]] || _bs=10240
+		ask_until "$_slblocksize" "${_bs:-8k}"
+		[[ $resp == $_sldone ]] && return
+		_bs=$resp
+
+		dd if=$TAPE bs=$_bs | tar ${_z}xvphf - -C /mnt || return
+	done
+}
+
+set_timezone() {
+	local _zonefile=$1 _zonepath _zsed _tz _zoneroot=/usr/share/zoneinfo
+
+	[[ ! -f $_zonefile ]] && return
+
+	[[ -n $TZ ]] && return
+
+	if [[ -h /mnt/etc/localtime ]]; then
+		TZ=$(ls -l /mnt/etc/localtime 2>/dev/null)
+		TZ=${TZ#*${_zoneroot#/mnt}/}
+	fi
+
+	waitftplist
+	if [[ -s $SERVERLISTALL ]]; then
+		_tz=$(sed -ne '/^TZ=/s/TZ=//p' <$SERVERLISTALL)
+		[[ -n $_tz ]] && isin "$_tz" `cat $_zonefile` && TZ=$_tz
+	fi
+
+	[[ $_zonefile = /var/tzlist && -z $TZ ]] && return
+
+	while :; do
+		ask "$_sltimezone" "$TZ"
+		_zonepath=${resp%%*(/)}
+		case $_zonepath in
+		"")     continue ;;
+		"?")    grep -v /. $_zonefile | showcols
+			continue ;;
+		esac
+
+		while isin $_zonepath/ $(cat $_zonefile); do
+			ask "$_slsubtimezone1 '$_zonepath' $_slsubtimezone2"
+			_zsed=$(echo $_zonepath/ | sed 's,/,\\\/,g')
+			resp=${resp%%*(/)}
+			case $resp in
+			"")	;;
+			"?")	sed -n "/^$_zsed/{s/$_zsed//;/\/./!p;}" $_zonefile | showcols ;;
+			*)	_zonepath=$_zonepath/$resp ;;
+			esac
+		done
+
+		if isin $_zonepath $(cat $_zonefile); then
+			TZ=${_zonepath#$_zoneroot}
+			return
+		fi
+
+		echo -n "'${_zonepath}'"
+		echo " $_slnotvalidzone"
+	done
+}
+
+sane_install() {
+	local _q=$1 _s _m
+
+	for _s in $SANESETS; do
+		isin $_s $DEFAULTSETS || continue
+		resp=n
+		[[ -z $_q ]] && ask_yn "$_slnotinstalled '$_s'?"
+		[[ $resp == n ]] && _m="$_m $_s"
+	done
+
+	[[ -n $_m ]] && return 1
+	return 0
+}
+
+install_sets() {
+	local _d _locs="$_sldisk ftp http"
+
+	echo
+
+	[[ -s $SERVERLISTALL ]] && \
+		_d=$(sed -ne '/^method=/s/method=//p' $SERVERLISTALL)
+
+	ifconfig netboot >/dev/null 2>&1 && : ${_d:=http}
+	[[ -n $(get_cddevs) ]] && { _locs="cd $_locs" ; : ${_d:=cd} ; }
+	[[ -x /sbin/mount_nfs ]] && _locs="$_locs nfs"
+	[[ -n $MTDEVS && -x /bin/mt ]] && _locs="$_locs tape"
+	: ${_d:=http}
+
+	if ! isin "$_d" $_locs; then
+		for a in http ftp cd nfs tape $_sldisk; do 
+			isin $a $_locs && _d=$a && break
+		done
+	fi
+
+	echo "$_sllets"
+	while :; do
+		umount -f /mnt2 >/dev/null 2>&1
+		[[ -n $method ]] && _d=$method
+		sane_install quiet && _d=$_sldone
+
+		ask "$_sllocsets? ($_locs $_slor '$_sldone')" "$_d"
+		case $resp in
+		$_sldone)	sane_install && return ;;
+		c*|C*)	isin cd $_locs && install_cdrom && method=cd ;;
+		d*|D*)	install_disk && method=disk ;;
+		f*|F*)	isin ftp $_locs && install_url ftp && method=ftp ;;
+		h*|H*)	isin http $_locs && install_url http && method=http ;;
+		n*|N*)	isin nfs $_locs && install_nfs && method=nfs ;;
+		t*|T*)	isin tape $_locs && install_tape && method=tape ;;
+		esac
+	done
+}
+
+run_sysmerge() {
+	echo "$_slrunsysmerge"
+	#if [[ -n "$SM_ARGS" || -n "$SM_ARGSX" ]]; then
+	#	ask_yn "Merge the new etc/xetc install sets using sysmerge(8)?" no
+	#	if [[ $resp == y ]]; then \
+	#		/mnt/usr/sbin/chroot /mnt /usr/sbin/sysmerge $SM_ARGS $SM_ARGSX
+	#	fi
+	#fi
+}
+
+update_firmware() {
+	local _get="$_slInstall"
+	[[ $MODE == upgrade ]] && _get="$_slUpdate"
+	ask_yn "$_get $_slnonfreefirmware" $_slno
+	[[ $resp == $_sly ]] && \
+		echo "/usr/sbin/fw_update -v" >> /mnt/etc/rc.firsttime
+}
+
+munge_fstab() {
+	local _dev _mp _fstype _opt _rest
+
+	while read _dev _mp _fstype _opt _rest; do
+		[[ $_dev == @(/dev/vnd*|\#*) || \
+			$_fstype == nfs || \
+			! -f /sbin/mount_$_fstype || \
+			$_opt == *noauto* || \
+			$_opt == *xx* ]] && continue
+
+		_opt=$(echo $_opt | sed -e 's/softdep//')
+
+		[[ $_fstype == ffs ]] && _opt=$(echo $_opt | sed -e 's/ro/rw/')
+
+		[[ $_fstype == ffs ]] || _opt=$(echo $_opt | sed -e 's/rw/ro/')
+
+		echo $_dev /mnt${_mp%/} $_fstype $_opt $_rest
+
+	done </tmp/fstab >/etc/fstab
+
+	if [ ! -s /etc/fstab ]; then
+		echo "$_slnotfstab"
+		exit
+	fi
+}
+
+mount_fs() {
+	local _async=$1 _dev _mp _fstype _opt _rest _msg _fail
+
+	while read _dev _mp _fstype _opt _rest; do
+		[ "$_mp" = "/mnt" ] || mkdir -p $_mp
+
+		_msg=$(mount -v -t $_fstype $_async -o $_opt $_dev $_mp) ||
+			_fail="$_fail\n$_mp ($_dev)"
+
+		echo $_msg | sed -e 's/, ctime=[^,)]*//'
+	done </etc/fstab
+
+	if [[ -n $_fail ]]; then
+		echo "\n$_slnotpropmounted:$_fail"
+		ask_yn "$_slcontinue" no
+		if [[ $resp == n ]]; then
+			exit
+		fi
+	fi
+}
+
+getdevname() {
+	local _dev=$1
+	if [[ ${#_dev} == 18 && $_dev == +([0-9a-f]).[a-p] ||
+		${#_dev} == 16 && $_dev == +([0-9a-f]) ]]; then
+		sysctl -n hw.disknames |
+		sed -nE "s/^(.*,)*(.*):${_dev%.?}.*/\\2/p"
+	else
+		_dev=${_dev#/dev/}
+		print -r -- "${_dev%[a-p]}"
+	fi
+}
+
+check_fs() {
+	local _dev _mp _fstype _rest _fail _f _passno
+
+	ask_yn "$_slforcenr" 
+	[[ $resp == y ]] && _f=f
+
+	while read _dev _mp _fstype _rest _rest _passno _rest; do
+		[ "$_dev" != /dev/"$ROOTDEV" ] || continue
+		[ -f "/sbin/fsck_$_fstype" ] || continue
+		makedev "$(getdevname "$_dev")" || continue
+		[[ $_passno > 0 ]] || continue
+
+		echo -n "fsck -${_f}p $_dev..."
+		if ! fsck -${_f}p $_dev >/dev/null 2>&1; then
+			echo "$_slfailedfsck $_dev $_slmanually."
+			_fail=y
+		else
+			echo "$_slok"
+		fi
+	done </etc/fstab
+
+	[ "$_fail" ] && exit
+}
+
+get_fqdn() {
+	local _dn
+
+	_dn=$(hostname)
+	_dn=${_dn#$(hostname -s)}
+	_dn=${_dn#.}
+
+	echo "${_dn:=my.domain}"
+}
+
+donetconfig() {
+	local _dn _ns _n
+
+	configure_ifs
+	v4_defroute
+
+	if [ -f /tmp/resolv.conf.shadow ]; then
+		mv /tmp/resolv.conf.shadow /tmp/resolv.conf
+		for _n in $(grep '^nameserver ' /tmp/resolv.conf); do
+			[[ $_n == nameserver ]] || _ns="$_ns$_n "
+		done
+		set -- $_ns
+		_ns=$*
+		_dn=$(sed -n \
+			-e '/^domain[[:space:]][[:space:]]*/{s///;s/\([^[:space:]]*\).*$/\1/;h;}' \
+			-e '/^search[[:space:]][[:space:]]*/{s///;s/\([^[:space:]]*\).*$/\1/;h;}' \
+			-e '${g;p;}' /tmp/resolv.conf)
+	fi
+
+	resp="${_dn:=$(get_fqdn)}"
+	if [[ ! -f /tmp/dhclient.conf || $nifs != 1 ]]; then
+		ask "$_sldomain" "$resp"
+	else
+		echo "$_slusingdns $resp"
+	fi
+	hostname "$(hostname -s).$resp"
+
+	resp="${_ns:=$_slnone}"
+	if [[ ! -f /tmp/dhclient.conf || $nifs != 1 || $resp == none ]]; then
+		ask "$_sldnsserver" "$resp"
+	else
+		echo "$_slusingdnsname $resp"
+	fi
+	if [[ $resp != $_slnone ]]; then
+		echo "lookup file bind" >/tmp/resolv.conf
+		for _ns in $resp; do
+			echo "nameserver $_ns" >>/tmp/resolv.conf
+		done
+		cp /tmp/resolv.conf /tmp/resolv.conf.shadow
+	fi
+
+	manual_net_cfg
+}
+
+populateusrlocal() {
+	if [ -f /mnt/etc/mtree/BSD.local.dist ]; then
+		/mnt/usr/sbin/chroot /mnt /usr/sbin/mtree -Uedqn -p /usr/local -f /etc/mtree/BSD.local.dist >/dev/null
+	fi
+}
+
+apply()
+{
+	if [[ $sshd == n ]]; then
+		echo "sshd_flags=NO		# $_sldisabled $_slduringinstall" \
+			>>/mnt/etc/rc.conf.local
+	fi
+	if [[ $sshd_disableroot == y ]]; then
+		sed -e "/^#\(PermitRootLogin\) yes/s//\1 no/" \
+			< /mnt/etc/ssh/sshd_config > /tmp/sshd_config
+		cp /tmp/sshd_config /mnt/etc/ssh/sshd_config
+	fi
+	if [[ $ntpd == y ]]; then
+		echo "ntpd_flags=		# $_slenabled $_slduringinstall" \
+			>>/mnt/etc/rc.conf.local
+		if [[ $ntpd_server != default ]]; then
+			set -- $ntpd_server
+			sed -e "s/^servers /#&/;/#server /a\\\
+servers $1
+" /mnt/etc/ntpd.conf >/tmp/ntpd.conf
+			cp /tmp/ntpd.conf /mnt/etc/ntpd.conf
+		fi
+	fi
+
+	if [[ $x11 == y ]]; then
+		sed -e "/^#\(machdep\.allowaperture=${MDXAPERTURE}\)/s//\1	/" \
+			/mnt/etc/sysctl.conf >/tmp/sysctl.conf
+		cp /tmp/sysctl.conf /mnt/etc/sysctl.conf
+	fi
+
+	if [[ $xdm == y && -x /mnt/usr/X11R6/bin/xdm ]]; then
+		echo "xdm_flags=		# $_slenabled $_slduringinstall" \
+			>>/mnt/etc/rc.conf.local
+	fi
+
+	if [[ $defcons == y ]]; then
+		cp /mnt/etc/ttys /tmp/ttys
+		sed	-e "/^$CTTY/s/std.9600/std.${CSPEED}/" \
+			-e "/^$CTTY/s/unknown/vt220	/" \
+			-e "/$CTTY/s/off.*/on secure/" /tmp/ttys >/mnt/etc/ttys
+		[[ -n $CPROM ]] && \
+			echo "stty $CPROM $CSPEED\nset tty $CPROM" >>/mnt/etc/boot.conf
+	fi
+
+	ln -sf /usr/share/zoneinfo/$TZ /mnt/etc/localtime
+}
+
+questions() {
+	local _d _xdmask=y _def
+
+	ask_yn "$_slstartsshd" $_slyes
+	sshd=$resp
+
+	ask_yn "$_slstartntpd"
+	ntpd=$resp
+	if [[ $resp == y ]]; then
+		ask "$_slntpserver" default
+		ntpd_server=$resp
+	fi
+
+	def=$_slno
+	[[ -n $DISPLAY ]] && def=$_slyes
+	if [[ -n $MDXAPERTURE ]]; then
+		ask_yn "$_slexpectX" $def
+		x11=$resp
+		_xdmask=$resp
+	fi
+
+	if [[ -n $MDXDM && $_xdmask == y ]]; then
+		ask_yn "$_slxdm" $_xdmask
+		xdm=$resp
+	fi
+
+	if [[ -n $CDEV ]]; then
+		_d=${CPROM:-$CDEV}
+		ask_yn "$_slchangeconsole $_d?"
+		defcons=$resp
+		if [[ $resp == y ]]; then
+			ask_which "$_slspeed" "$_slshould $_d $_sluse" \
+				"9600 19200 38400 57600 115200" $CSPEED
+			case $resp in
+			$_sldone)	defcons=n ;;
+			*)	CSPEED=$resp ;;
+			esac
+		fi
+	fi
+}
+
+finish_up() {
+	local _dev _mp _fstype _rest
+
+	if [[ -x /mnt/sbin/swapctl ]]; then
+		/mnt/sbin/swapctl -a /dev/$SWAPDEV >/dev/null 2>&1
+		while read _dev _mp _fstype _rest; do
+			[[ $_fstype == swap ]] && \
+				/mnt/sbin/swapctl -a $_dev >/dev/null 2>&1
+		done </mnt/etc/fstab
+	fi
+
+	if [[ -n $package_path ]]; then
+		grep -v '^[     ]*installpath[  ]*=' /mnt/etc/pkg.conf 2>&- > /tmp/pkgconf
+		print -r -- "installpath = $package_path" >> /tmp/pkgconf
+		cp /tmp/pkgconf /mnt/etc/pkg.conf
+	fi
+
+	echo -n "$_slmaking"
+	(cd /mnt/dev; sh MAKEDEV all
+		for _dev in $(get_dkdevs) $(get_cddevs) $MTDEVS ; do
+			sh MAKEDEV $_dev
+		done
+	)
+	echo "$_sldone."
+
+	rm -f /mnt/var/run/ld.so.hints
+
+	populateusrlocal
+
+	[ -x /mnt/$MODE.site ] && /mnt/usr/sbin/chroot /mnt /$MODE.site
+
+	md_installboot $ROOTDISK
+
+	if [[ -f /mnt/bsd.mp ]] && ((NCPU > 1)); then
+		echo "$_slmulti"
+		mv /mnt/bsd /mnt/bsd.sp 2>/dev/null
+		mv /mnt/bsd.mp /mnt/bsd
+	fi
+
+	[[ "$MODE" == upgrade ]] && run_sysmerge
+
+	update_firmware
+
+	cat <<__EOT
+
+$_slcongrat2
+__EOT
+	[[ $MODE == install ]] && cat <<__EOT
+$_slnewmail
+__EOT
+
+	md_congrats
+}
+
+
+ROOTDISK=
+ROOTDEV=
+package_path=
+SM_ARGS=
+SM_ARGSX=
+
+SETDIR="$VNAME/$ARCH"
+FTPDIR="pub/OpenBSD/$VNAME"
+FTPOPTS="-V"
+SERVERLISTALL=/tmp/serverlistall
+SERVERLISTSEC=/tmp/serverlistsec
+SERVERLIST=/tmp/serverlist
+WLANLIST=/tmp/wlanlist
+FSTABFLAG=-f
+
+for _opt in d f l m n p s; do
+	ulimit -$_opt unlimited
+done
+
+dmesg | sed -ne '/^OpenBSD /h;/^OpenBSD /!H;${g;p;}' >/var/run/dmesg.boot
+
+# Are we in a real release, or a snapshot?  If this is a snapshot
+# install media, default us to a snapshot directory.
+FTPSETDIR=$SETDIR
+set -- $(scan_dmesg "/^OpenBSD $VNAME\([^ ]*\).*$/s//\1/p")
+[[ $1 == -!(stable) ]] && FTPSETDIR=snapshots/$ARCH
+
+# Scan /var/run/dmesg.boot for interesting devices.
+MTDEVS=$(scan_dmesg "${MDMTDEVS:-/^[cms]t[0-9][0-9]* /s/ .*//p}")
+nifs=0
+DISPLAY=$(scan_dmesg '/^wsdisplay[0-9]* /s/ .*//p')
+
+CONSOLE=$(scan_dmesg '/^\([^ ]*\).*: console$/s//\1/p')
+CONSOLE=${CONSOLE% }
+[[ -n $CONSOLE ]] && CSPEED=$(stty speed)
+
+# Look for the serial device matching the console. If we are not installing
+# from a serial console, just find the first serial device that could be used
+# as a console. If a suitable device is found, set CDEV, CTTY, CSPEED, CPROM.
+md_consoleinfo
+
+# Selected sets will be installed in the order they are listed in $THESETS.
+# Ensure that siteXX.tgz is the *last* set listed so its contents overwrite
+# the contents of the other sets, not the other way around.
+THESETS="bsd bsd.rd bsd.mp $MDSETS"
+: ${DEFAULTSETS:="bsd bsd.rd"}
+for _set in base etc comp man game xbase xetc xshare xfont xserv site ; do
+	[[ $MODE == upgrade && ( $_set == etc || $_set == xetc ) ]] && continue
+	THESETS="$THESETS ${_set}${VERSION}.tgz"
+ 	#siteXX si esta por defecto
+	#isin $_set site && continue
+	DEFAULTSETS="$DEFAULTSETS ${_set}${VERSION}.tgz"
+done
+# Since etc${VERSION}.tgz is not in DEFAULTSETS for upgrades, it can always be
+# in SANESETS.
+SANESETS="${SANESETS:-bsd} base${VERSION}.tgz etc${VERSION}.tgz"
+
+# prepare COLUMNS sanely
+COLUMNS=$(stty -a | sed -n '/columns/{s/^.* \([0-9]*\) columns.*$/\1/;p;}')
+[ COLUMNS -eq 0 ] && COLUMNS=80
+
+# decide upon an editor
+: ${EDITOR:=ed}
+[[ -x /usr/bin/vi ]] && EDITOR=vi
+export EDITOR COLUMNS
+
+# umount all filesystems, just in case we are re-running install or upgrade.
+cd /
+umount -af 1>/dev/null 2>&1
+
+for _ifs in $(get_ifdevs dhcp); do
+	set -- $(v4_info $_ifs)
+	[[ $1 == UP && -n $2 ]] && continue
+	ifconfig $_ifs delete down -group dhcp 2>&-
+done
+
+cat <<__EOT
+$_slatanyprompt
+
+__EOT
+
+$_slinilang
+
+# Configure the terminal and keyboard.
+set_term
+
+if [[ $MODE == install ]]; then
+	ask_until "$_slhostname" "$(hostname -s)"
+	[[ ${resp%%.*} != $(hostname -s) ]] && hostname $resp
+	THESETS="$THESETS site$VERSION-$(hostname -s).tgz"
+
+	echo
+	donetconfig
+
+	(( nifs != 0 )) && startftplist
+
+	echo
+	while :; do
+		askpassword root
+		_rootpass="$_password"
+		[[ -n "$_password" ]] && break
+		echo "$_slrootpassword"
+	done
+
+	questions
+	user_setup
+
+	set_timezone /var/tzlist
+	echo
+fi
+
+# Get ROOTDISK, ROOTDEV and SWAPDEV.
+while :; do
+	ask_which "$_sldisk" "$_slroot" '$(get_dkdevs | sed s,^$,none, )'
+	[[ $resp == $_sldone ]] && exit
+	[[ $resp != $_slnone ]] && break
+done
+makedev $resp || exit
+
+ROOTDISK=$resp
+ROOTDEV=${ROOTDISK}a
+SWAPDEV=${ROOTDISK}b

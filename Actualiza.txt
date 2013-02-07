@@ -1,0 +1,102 @@
+Instalación/Actualización a Aprendiendo De Jesús 5.2
+****************************************************
+
+La instalación consta de 2 partes:
+
+a) Instalación/Actualización del Sistema Base
+
+b) Instalación/Actualización de Aplicaciones 
+
+Para la primera tener en cuenta:
+	* Si va a instalar reservar espacio en un disco duro, en una
+	  partición primaria, cuya primera cabeza (head) no sea 0 sino 1.
+	* Elegir un método para arrancar el computador con el disco virtual de
+	  instalación.  Puede ser: (1) DVD configurando el BIOS, (2) disquete 
+	  con una imagen como floppy51.fs, (3) si actualiza puede iniciar 
+	  con el kernel bsd.rd de la versión a la cual se actualiza 
+	  copiándolo en el directorio raíz y en la línea "boot>" ingresando 
+	  bsd.rd, (4) por red local con DHCP y TFTP
+	* Elegir un medio del que se sacarán los juegos de instalación. Puede 
+	  ser del DVD, disco duro en un sistema de archivos de OpenBSD, 
+	  por red con ftp o http.
+	* Si se comparte el computador con otro sistema operativo, configure
+	  un manejador de arranque (LILO, GRUB, NTLDR, etc) o inicie siempre
+	  con el DVD y en la línea "boot>" ingrese "hd0a:bsd" si instaló
+	  en el primer disco IDE o "hd1a:bsd" si instaló en el segundo.
+	* Si requiere actualizar de una versión de 32 bits a una de 64, tenga en
+	  cuenta sacar copia de las bases de datos para PostgreSQL antes de 
+	  actualizar el sistema base.
+
+Para la segunda tener en cuenta:
+	* Se inicia con:
+		/inst-adJ.sh
+	  Que iniciará una sesión del administrador (por lo cual
+          debe suministrar clave del usuario root) y ejecutar el 
+	  archivo de comnados de instalación de acuerdo a su entorno.
+	  Este archivo de comandos además de asistir actualizaciones 
+	  que puedan hacer falta de una versión a otra del sistema base, 
+	  instala y configura los paquetes y componentes que conforman 
+	  la distribución adJ: zonas de disco encriptadas, base de 
+	  datos PostgreSQL --preferiblemente en imagen encriptada--, Apache 
+	  de OpenBSD con SSL, PHP Hardened, ispell, escritorio gráfico con 
+	  fluxbox, navegadores recientes y otras aplicaciones gráficas
+	  que facilitan el uso (Si prefiere o debe hacer actualización manual 
+	  del sistema base, tenga en cuenta la lista oficial de cambios 
+	  requeridos disponible en: http://openbsd.org/faq/upgrade51.html )
+
+	* Por defecto este instalador intenta obtener las aplicaciones de un 
+ 	  DVD, pero si las aplicaciones están en un disco duro (digamos en 
+          /root/adJ/5.1-amd64) puede iniciarse con:
+		ARCH=/root/adJ/5.1-amd64 /usr/local/adJ/inst.sh
+	* Si el proceso no concluye exitosamente por favor después de ejecutar
+	  el instalador y avanzar tanto como pueda envíe el archivo
+	  /var/tmp/inst-adJ.bitacora a info@pasosdeJesus.org
+	* Utiliza sysmerge para actualizar archivos de configuración, como	
+	se explica en http://www.openbsd.org/faq/upgrade48.html :
+
+	Sysmerge(8) muestra el resultado del comando diff(1) unificado, pasando
+	por un paginador (el que haya configurado en la variable de ambiente 
+	$PAGER) y para la mayoría de archivos presenta un mensaje como el 
+	siguiente:
+
+      Use 'd' to delete the temporary ./var/www/htdocs/index.html
+      Use 'i' to install the temporary ./var/www/htdocs/index.html
+      Use 'm' to merge the temporary and installed versions
+      Use 'v' to view the diff results again
+
+      Default is to leave the temporary file to deal with by hand
+
+	Si desea retener su archivo actual, borre el temporal con la opción 
+	'd', si dese remplazar su archivo existente con la nueva versión, 
+	instale el archivo temporal con 'i' Si desea mezclar los dos, 
+	al alejir 'm' ingresará al programa sdiff (1) donde podrá mezclar 
+	manualmente el archivo.  Por defecto continuará y dejará el archivo 
+	sin modificar para manejarlo posteriormente de manera manual.
+
+	Aunque puede funcionar, no se recomienda usar sysmerge para integrar 		nuevos usuarios en el sistema, sino para esto usar useradd, que es 
+	menos proclive a errores (ayuda: no instale el archivo temporal 
+	master.passwd sobre su archivo existente!).
+
+	Sysmerge(8) salva todos sus archivos remplazados en un directorio 
+	temporal, como /var/tmp/sysmerge.24959/backups, así que si por 
+	accidente elimina algo que no era buena idea eliminar, tiene 
+	oportunidad de recuperarlo.  Advertencia: Note que la rutina daily(8) 		limpia archivos antiguos de ese directorio.
+
+	En general al usar sysmerge puede remplazar (opción 'i') todos los 
+	archivos por sus versiones más recientes, pero dependiendo de los 
+ 	servicios que preste el servidor, hay algunos archivos de 
+	configuración que es mejor no remplazar (opción 'd') o que es	
+	mejor mezclar si conoce la sintaxis (opción 'm'):
+	* En general:
+		** Evitar remplazar /etc/rc.local /etc/hosts
+	* Si es cortafuegos: 
+		** Evitar remplazar /etc/pf.conf y /etc/sysctl.conf
+	* Si es servidor DNS:
+		** Evitar remplazar /var/named/etc/named.conf
+	* Si es servidor de correo: 
+		** Evitar remplazar archivos del directorio /etc/mail 
+		   (tras actualizar recuerde recompilar sendmail).
+	* Si es servidor web: 
+		** Evitar remplazar /var/www/conf/httpd.conf
+
+

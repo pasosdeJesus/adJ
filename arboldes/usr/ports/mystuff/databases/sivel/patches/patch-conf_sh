@@ -1,0 +1,12 @@
+$OpenBSD$
+--- conf.sh.orig	Thu Sep 27 08:08:34 2012
++++ conf.sh	Thu Sep 27 08:08:31 2012
+@@ -254,7 +254,7 @@ echo " PostgreSQL corriendo";
+ proceso post Postgresql 
+ check "SOCKPSQL" "" "test -S \$SOCKPSQL/.s.PGSQL.5432" '/var/www/tmp/' '/tmp/' '/var/run/postgresql/'
+ 
+-check "PHP" "" "test -x \$PHP" `which php-5.2 2> /dev/null` `which php 2> /dev/null` 
++check "PHP" "" "test -x \$PHP" `which php-5.3 2> /dev/null` `which php-5.2 2> /dev/null` `which php 2> /dev/null` 
+ verphp=`$PHP -v | grep "PHP " | sed -e "s|.*PHP \([0-9.]*\).*|\1|g"`;
+ if (test "$?" != 0 -o "x$verphp" = "x") then {
+ 	echo "  $PROYECTO funciona con versiones de PHP posteriores a la 5.0";

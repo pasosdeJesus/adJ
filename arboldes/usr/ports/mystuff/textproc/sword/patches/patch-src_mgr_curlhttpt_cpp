@@ -1,0 +1,11 @@
+$OpenBSD$
+--- src/mgr/curlhttpt.cpp.orig	Sun May 13 10:24:10 2012
++++ src/mgr/curlhttpt.cpp	Sun May 13 10:24:21 2012
+@@ -25,7 +25,6 @@
+ #include <cctype>
+ 
+ #include <curl/curl.h>
+-#include <curl/types.h>
+ #include <curl/easy.h>
+ 
+ #include <swlog.h>

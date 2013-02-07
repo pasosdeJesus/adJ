@@ -1,0 +1,344 @@
+# Cadenas en inglés
+
+_slinilang="SETDIR=/
+LANG=en
+_SLANG=en
+_SMODE=\$MODE
+"
+
+# Common Answers
+_slnone="none";
+_sldefault="default";
+_sldone="done";
+_slyes="yes";
+_slno="no";
+_slall="all";
+
+_slterminaltype="Terminal type?";
+_slkbdmapping="kbd(8) mapping? ('L' for list)";
+_slkbdefault="none";
+_slmajortables="Major tables";
+_slwelcome="Welcome to the \$OBSD \$_SMODE program.
+
+This program will help you \$_SMODE OpenBSD. At any prompt except password
+prompts you can escape to a shell by typing '!'. Default answers are shown
+in []'s and are selected by pressing RETURN.  At any time you can exit this
+program by pressing Control-C, but exiting during an \$_SMODE can leave your
+system in an inconsistent state.";
+_slbackedup="IS YOUR DATA BACKED UP? As with anything that modifies disk contents, this
+program can cause SIGNIFICANT data loss.";
+_slnoteetc="NOTE: Once your system has been upgraded, you must manually merge any
+changes to files in the 'etc' set into the files already on your system.
+sysmerge(8) can help.";
+
+_slproceedupgrade="Proceed with upgrade?";
+_slinstallationnotes="It is often helpful to have the installation notes handy. For complex disk
+configurations, relevant disk hardware manuals and a calculator are useful.";
+_slrestartinterrupted="You seem to be trying to restart an interrupted installation! You can skip
+the disk preparation steps and continue, or you can reboot and start over.";
+_slskipdisk="Skip disk initialization?";
+_slproceedinstall="Proceed with install?";
+_slenterhalt="Enter 'halt' at the prompt to gracefully exit OpenBSD. You can then
+power cycle the machine and boot your original OS.";
+_slcool="Cool! Let's get to it."
+
+_slnonamefound="No";
+_slnonamefound2="found";
+_slavailablenames="Available";
+_slavailablenames2="are";
+_slavailablenames3="Which one";
+_slordone="or 'done'";
+_slnotvalidchoice="is not a valid choice"
+
+
+_slmedia="contains the \$_SMODE media";
+_slpartition="partition";
+_slhassets="has the \$_SMODE sets"
+_slnofs="No filesystems found on";
+_slexittoreturn="Type 'exit' to return to install."
+_slwith="with";
+_slmanualnet="Do you want to do any manual network configuration?"
+_slexit="Type 'exit' to return to \$_SMODE";
+_slmakedevnf="MAKEDEV not found. Can't create device nodes.";
+
+_slselectsets="Select sets by entering a set name, a file name pattern or 'all'. De-select
+sets by prepending a '-' to the set name, file name pattern or 'all'. Selected
+sets are labelled '[X]'.";
+_slinterface="interface"
+_slinit="do you wish to initialize"
+_slnomoreint="No more interfaces to initialize"
+_slsymbolic="Symbolic (host) name for";
+_slmediaoptions1="The media options for";
+_slmediaoptions2="are currently";
+_slchangemedia="Do you want to change the media options?"
+_slsupportedmedia1="Supported media options for";
+_slsupportedmedia2="are:"
+_slaskmediaoptions="Media options for"
+_slhostnamedhcp="Issuing hostname-associated DHCP request for"
+_slfreedhcp="Issuing free-roaming DHCP request for"
+_slipv41="IPv4 address for"
+_slornone="or 'none'"
+_sldhcpnot="DHCP not possible - no /sbin/dhclient."
+_slnetmask="Netmask"
+_slipv61="IPv6 address for"
+_slipv6prefix="IPv6 prefix length for";
+_slipv4route="Default IPv4 route? (IPv4 address"
+_slipv6route="IPv6 default router? (list #, IPv6 address or 'none'): "
+_slinvalidnetfile="invalid network configuration file"
+_slnetintconf="Network interface configuration:"
+_slresolverenabled="Resolver enabled."
+_slresolvernotenabled="Resolver not enabled."
+_slnosets="No \$OBSD sets were found at"
+_slsetnames="Set names are"
+_slasksetname="Set name? (or 'done')"
+_slarchnotfound="INSTALL.\$ARCH not found. Use sets found here anyway?"
+_slreadysets1="Ready to"
+_slreadysets2="sets?"
+_slgetting="Getting";
+_slnotinstall="did not install correctly.";
+_slproxy="HTTP/FTP proxy URL? (e.g. 'http://proxy:8080', or 'none')";
+_sllist="Display the list of known";
+_sllist2="servers";
+_slgettinglist="Getting the list from 129.128.5.191 (ftp.openbsd.org)...";
+_slserver="Server? (IP address, hostname, list#, 'done' or '?')";
+_slfailed="FAILED";
+_slserver2="Server? (IP address, hostname or 'done')";
+_slnoline="There is no line";
+_slusing="Using";
+_slpassivesupport="Does the server support passive mode ftp?"
+_slserverdirectory="Server directory?"
+_sllogin="Login?"
+_slpassftp="Password? (will not echo)"
+_slloginfailed="Login failed."
+_slnosuchfile="No such file or directory."
+_slpathname="Pathname to the sets? (or 'done')"
+_sldir1="The directory";
+_slnotexist="does not exist"
+_slpartitionmounted="Is the disk partition already mounted?"
+_slserverip="Server IP address or hostname?"
+_slserverdir="Filesystem on server to mount?"
+_sltcptransport="Use TCP transport? (requires TCP-capable NFS server)"
+_sltapedrive="tape drive";
+_sltapechar="is not a character special file."
+_slrewind1="Rewinding";
+_slrewind2="(mt rewind)..."
+_slskip="Skip how many files? (or 'done')"
+_slskipping="Skipping"
+_slfiles="file(s)"
+_slgzipped="Is the file gzipped?"
+_slblocksize="Blocksize for this file?"
+_sltimezone="What timezone are you in? ('?' for list)"
+_slsubtimezone1="What sub-timezone of"
+_slsubtimezone2="are you in? ('?' for list)"
+_slsettinglocal="Setting local timezone to"
+_slnotvalidzone="is not a valid timezone on this system."
+_slnotinstalled="Are you *SURE* your \$_SMODE is complete without"
+_sllets="Let's \$_SMODE the sets!"
+_sllocsets="Location of sets"
+_slor="or"
+_slnotfstab="Unable to create valid /etc/fstab."
+_slforcenr="Force checking of clean non-root filesystems?"
+_slfailedfsck="FAILED. You must fsck"
+_slmanually="manually"
+_slok="OK."
+_sldomain="DNS domain name? (e.g. 'bar.com')"
+_sldnsserver="DNS nameservers? (IP address list or 'none')"
+_slusedns="Use the nameserver now?"
+_slstartsshd="Start sshd(8) by default?"
+_slstartntpd="Start ntpd(8) by default?"
+_slntpstartntpd="Start ntpd(8) by default?" 
+_slntpserver="NTP server? (hostname or 'default')"
+_slexpectX="Do you expect to run the X Window System?"
+_slchangeconsole="Change the default console to";
+_slspeed="speed"
+_slshould="should"
+_sluse="use"
+_slmaking="Making all device nodes..."
+_slcongratulations="CONGRATULATIONS! Your OpenBSD \$_SMODE has been successfully completed!
+To boot the new system, enter halt at the command prompt. Once the
+system has halted, reset the machine and boot from the disk."
+_slinitialize="You will now initialize the disk(s) that OpenBSD will use. To enable all
+available security features you should configure the disk(s) to allow the
+creation of separate filesystems for /, /tmp, /var, /usr, and /home.";
+_sldisk="disk";
+_slroot="is the root disk";
+_slnomoredisks="No more disks to initialize";
+_slerrornoroot="ERROR: No root partition"
+_slusec="Use"
+_slrootpassword="The root password must be set."
+_slsecurityprotocol="Security protocol? (O)pen, (W)EP"
+_slaccesspoint="Access point? (ESSID, 'any', list# or '?')"
+_slany="any"
+_slthereisnoline="There is no line"
+_slwebkey="WEP key? (will echo)"
+_slwpapassphrase="WPA passphrase? (will echo)"
+_slisnotvalidchoice="is not a valid choice."
+_slinvalidnetworkconfiguration="invalid network configuration file"
+_slandfoundnoobsdsets="and found no $OBSD sets.  The set names looked for were"
+
+
+
+# Strings of install.sh
+
+_slmountpointfor1="Mount point for"
+_slsize="size"
+_slmountpointfor2="or '$_snone' or '$_sdone'"
+_slinvalidresponse="Invalid response"
+_slalreadymounted="is already being mounted at"
+_slabsolutepath="mount point must be an absolute path!"
+_slopenbsdfilesystems="OpenBSD filesystems"
+_sldestroys="The next step *DESTROYS* all existing data on these partitions!"
+_slsureproceed="Are you really sure that you're ready to proceed?"
+_sltrylater="Ok, try again later."
+_slhostname="System hostname? (short form, e.g. 'foo')"
+_slconfigurenet="Configure the network?"
+_slpassroot="Password for root account?"
+_slnotecho="will not echo"
+_slagain="again"
+_slnotmatch="Passwords do not match, try again."
+_slsaving="Saving configuration files..."
+_slgeneratingrandom="Generating initial host.random file..."
+
+_sltimeappears="Time appears wrong.  Set to"
+
+# install.md
+
+_slinstallingboot="Installing boot block..."
+_sluseall="Do you want to use *all* of"
+_sluseall2="for OpenBSD?"
+_slputtingall="Putting all of"
+_slputtingall2="into an active OpenBSD MBR partition (type 'A6')..."
+_slmbr="You will now create a single MBR partition to contain your OpenBSD data. This
+partition must have an id of 'A6'; must *NOT* overlap other partitions; and
+must be marked as the only active partition.
+
+The 'manual' command describes all the fdisk commands in detail."
+
+_slpartinfo="Here is the partition information you chose:"
+
+_slcreatedisklabel="You will now create an OpenBSD disklabel inside the OpenBSD MBR
+partition. The disklabel defines how OpenBSD splits up the MBR partition
+into OpenBSD partitions in which filesystems and swap space are created.
+
+The offsets used in the disklabel are ABSOLUTE, i.e. relative to the
+start of the disk, NOT the start of the OpenBSD MBR partition."
+_slwarninglabelcorrupted="WARNING: Label on disk"
+_slwarninglabelcorrupted2="is corrupted. You will be repairing it."
+
+# upgrade.sh
+
+_slrootfilesystem="Root filesystem?"
+_slsorrynotblock="Sorry,"
+_slsorrynotblock2="is not a block device."
+_slcheckingroot="Checking root filesystem"
+_slfsckmanually="You must fsck"
+_slfsckmanually2="manually."
+_slmountingroot="Mounting root filesystem"
+_slerrorcantmount="ERROR: can't mount root filesystem!"
+_slerrorno="ERROR: no"
+_slenablenet="Enable network using configuration stored on root filesystem?"
+_slfstabas="The fstab is configured as follows:"
+_slfstabnoauto="For the \$_SMODE, filesystems in the fstab will be automatically mounted if the
+'noauto' option is absent, and /sbin/mount_<fstype> is found, and the fstype is
+not nfs. Non-ffs filesystems will be mounted read-only.
+
+You can edit the fstab now, before it is used, but the edited fstab will only
+be used during the upgrade. It will not be copied back to disk."
+_slerrorunmount="ERROR: can't unmount previously mounted root!"
+
+LANG="en"
+
+_slmustbeconfigured="must be configured"
+_sland="and"
+_slcantbothbemountedat="can't both be mounted at"
+_slchooseyourkeyboardlayout="Choose your keyboard layout ('?' or 'L' for list)"
+_slavailablelayouts="Available layouts"
+_slpasswordfor="Password for"
+_slaccount="account"
+_slwillnotecho="will not echo"
+_slagain="again"
+_slsetupauser="Setup a user? (enter a lower-case loginname, or 'no')"
+_slnoreally="No really, what is the lower-case loginname, or 'no'?"
+_slisnotauseable="is not a useable loginname"
+_slfullusername="Full user name for"
+_slarenotallowed="are not allowed"
+_sltoolong="Too long"
+_slsinceyousetupauser="Since you set up a user, disable sshd(8) logins to root?" 
+_slavailable="Available"
+_slare="are"
+_slwichone="Which one"
+_sly="y"
+_slsetnames2="Set name(s)"
+_slabort="abort"
+_slnetworkinterface="network interface"
+_sldoyouwishtoconfigure="do you wish to configure"
+_slwhichinterfacetag="Which interface:tag should \$_ifs be on?"
+_slinvalidinterfacechoice="Invalid interface choice";
+_slinvalidorinusevlantag="Invalid or in-use vlan tag";
+_sllookedat="Looked at"
+_slandfoundno="and found no \$OBSD sets.  The set names looked for were:"
+_slthesha256="The SHA256 hash"
+_slforfdidnotmatch="for \$_f did not match what this bsd.rd expected."
+_slwasnotable="Was not able to get ftplist from ftp.openbsd.org, but that is OK"
+_slserver3="Server? (hostname, list#, 'done' or '?')";
+_slserver4="Server? (hostname or 'done')";
+_slisnotavalidhostname="is not a valid hostname"
+_slnotpropmounted="WARNING! The following filesystems were not properly mounted"
+_slcontinue="Continue anyway?"
+_slusingdns="Using DNS domainname"
+_slusingdnsname="Using DNS nameservers at"
+
+_slenabled="enabled"
+_sldisabled="disabled"
+_slduringinstall="during install" 
+_slxdm="Do you want the X Window System to be started by xdm(1)?"
+
+_slcongrat2="CONGRATULATIONS! Your OpenBSD \$_SMODE has been successfully completed!
+To boot the new system, enter 'reboot' at the command prompt."
+
+_slnewmail="When you login to your new system the first time, please read your mail
+using the 'mail' command."
+_slatanyprompt="At any prompt except password prompts you can escape to a shell by 
+typing '!'. Default answers are shown in []'s and are selected by 
+pressing RETURN.  You can exit this program at any time by pressing 
+Control-C, but this can leave your system in an inconsistent state."
+_slbackedup="IS YOUR DATA BACKED UP? As with anything that modifies disk contents, this
+program can cause SIGNIFICANT data loss.";
+_slnodiskfound="No disks found"
+_slmulti="Multiprocessor machine; using bsd.mp instead of bsd."
+_slopenbsdarea="use the (O)penBSD area,"
+
+_slmbrhasinvalid="MBR has invalid signature; not showing it."
+_slusewhole="Use (W)hole disk\$_q or (E)dit the MBR?"
+_sledit="edit"
+_slw=w
+_slW=W
+_slsettingopenbsd="Setting OpenBSD MBR partition to whole \$_disk..."
+_slyouwillnowcreate="You will now create a single MBR partition to contain your OpenBSD data. This
+partition must have an id of 'A6'; must *NOT* overlap other partitions; and
+must be marked as the only active partition.  Inside the fdisk command, the
+'manual' command describes all the fdisk commands in detail."
+_slnoopenbsdpartition="No OpenBSD partition in MBR, try again." 
+_slautoallocated="The auto-allocated layout for \$_disk is:"
+_sluseautolayout="Use (A)uto layout, (E)dit auto layout, or create (C)ustom layout?" 
+_slnowdisklabel="You will now create an OpenBSD disklabel inside the OpenBSD MBR
+partition. The disklabel defines how OpenBSD splits up the MBR partition
+into OpenBSD partitions in which filesystems and swap space are created.
+You must provide each filesystem's mountpoint in this program.
+
+The offsets used in the disklabel are ABSOLUTE, i.e. relative to the
+start of the disk, NOT the start of the OpenBSD MBR partition.";
+
+_slwhichone="Which one"
+_slcantumount="Can't umount \$ROOTDEV!"
+_slerver_ip_var="\$_server_ip_var"
+_slduid="Use DUIDs rather than device names in fstab?"
+_slfailbootblocks="Failed to install bootblocks."
+_slnobootfrom="You will not be able to boot OpenBSD from"
+_slO="O"
+_slo="o"
+_slrunsysmerge="Please run sysmerge(8) after rebooting to repair your /etc configuration."
+_slInstall="Install"
+_slUpdate="Update"
+_slnonfreefirmware="non-free firmware files on first boot?"
+

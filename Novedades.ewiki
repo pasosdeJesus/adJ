@@ -1,0 +1,102 @@
+DVD para fomentar la construcción del Reino de Dios desde la educación,
+el respeto por la dignidad humana y la memoria.
+
+Versión: 5.2%%%
+Fecha de publicación: 25/Mar/2013
+
+!!!NOVEDADES
+
+Con respecto a OpenBSD 5.2 para amd64 y a la edición anterior de este DVD
+
+!KERNEL Y SISTEMA BASE
+
+* Parches de seguridad de sistema base hasta:  1.Feb.2013
+* Kernel recompilado renombrando la palabra `daemon' por `service' (ver por ejemplo ==vmstat -s== y detalles en http://aprendiendo.pasosdejesus.org/?id=Renombrando+Daemon+por+Service). 
+* En sistema base ==/etc/rc.d== emplea service y se recomienda que los scripts de inicio definan ==service== en lugar de ==daemon== (el segundo se soporta pero se considera obsoleto).  ==syslog== emplea ==/var/log/service== y se recomienda emplear nombre de facilidad ==service== pues ==daemon== se considera obsoleto.
+* Información de zonas horarias actualizadas.
+* A partir de la versión 5.0 se distribuye imagen para un DVD en lugar de un CD. La distribución de archivos en el mismo es diferente a la del CD de OpenBSD oficial.   Los comprimidos con los componentes básicos de OpenBSD están en ==/==  y la mayoría de paquetes en el directorio ==paquetes==.  
+
+Entre las novedades reportadas en las `Notas de publicación de OpenBSD 5.2' destacamos:
+* Soporte para pthreads.  Mejoras a la pila de red (especialmente IPv6) y a herramientas de enrutamiento, servicios de enrutamiento y SCSI, velocidad y aleatoreidad del kernel.  Soporte a interrupciones MSI.  Mejor soporte de memoria grande en toda arquitectura. 
+
+* Controladores ampliados
+** Video: ==nviic==,  soporte para touch pads ALPS
+** Sonido: ==azalia==
+** Ethernet: USB 100MB ==axe==, ==mos==, 1GB: ==em==, ==bnx==, ==axe== 10GB: ==ix== 
+** Wifi: ==iwn== soporta Centrino Advanced-N 6205
+** Generales: Mejoras a ==usb== en algunos portatiles
+** Controladores SCSI/SAS/RADI ==mfi== soporta !MegaRaid 9240, pciide soporta SIS 1182/1183 SATA
+** Modems: ==umsm== 
+** Sensores: ==lm== soporta Nuvoton NCT6776F
+** Procesadores: Implementación para el modo AES-GCM de CPUs Intel y futuras AMD
+
+* Red
+** Mejoras a IPSec, IPv6, servicios de enrutamiento y utilidades para usuarios
+** nginx: Nuevo servidor HTTP, proxy reverso y proxy de correo
+** 
+
+* Herramientas mejoradas: 
+** ==smtpd==, ==sndiod==,  ==aucat==, ==tmux==, ==ssh 6.0==
+* Ahora sólo soporta capa de emulación de Linux.
+* Soporte locale mejorado.  Locale "C" usa ASCII en lugar de ISO-8859-1. Para emplear ISO-8859-1 debe emplearse ==LC_CTYPE==
+* Herramientas para crear paquetes 
+* El sistema base incluye mejoras a componentes auditados como ==Xenocara== (Xorg 7.7), ==gcc== 4.2.1, ==perl== 5.12.2, Apache 1.3 mejorado, OpenSSL 1.0.0f, ==sendmail== 8.14.5, bind 9.4.2-P2
+
+!PROCESO DE INSTALACIÓN
+
+La instalación del sistema base, de las particiones cifradas y de todos los paquetes del DVD instalador requiere por lo menos 13G, de los cuales 10G deben reservarse en ==/usr== y 1.5G en ==/var
+
+* Ahora el instalador  de adJ (y otros archivos de comandos de adJ) se ubica en /usr/local/adJ y emplea codificación UTF8, por lo que para iniciarlo se recomienda desde iniciar una terminal gráfica con codificación UTF8 con ==xterm -u8 -en utf8== y desde esa terminal ejecutar ==/inst-adJ.sh==
+* El instalador de adJ además de ser en español ahora emplea diálogos.
+
+
+!PAQUETES
+
+* Se pasa de PHP 5.2 a PHP 5.3
+* PostgreSQL actualizado a 9.12 e inicializado para usar codificación UTF-8 por defecto.  Atención: Este cambio modificara codificacion de las bases y requiere revisar las aplicaciones que tengan bases de datos en PostgreSQL en su servidor (se incluye una versión de SIVeL que lo soporta). 
+* Navegadores actualizados: Firefox a 9.01, Chromium a 16.0.912.77, Midori a 0.4.3
+* Se agrega qgis, sistema de información geográfica que permite entre otras conectarse a PostGIS 
+* Se incluye y configura el lenguaje Ruby 1.9 y el entorno para desarrollo de aplicaciones web Ruby on Rails con todas las dependencias.
+* Se incluyen sistemas para procesamiento de textos texlive y docbook
+* Paquete dialog parchado activando localización en español.
+* Novedades en paquete característico de adJ: 
+** Vuelven a incluirse hojas de trabajo de lecto-escritura AprestamientoI y AnimalesI
+** Añadidos !PlantasCursiva y !NombresCursiva que son hojas de trabajo de escritura en letra cursiva, así como las fentes tipográficas !TiposLectoEscritura
+* Los paquetes particulares los encuentra en [ftp://ftp.pasosdeJesus.org/pub/AprendiendoDeJesus/5.1-amd64/paquetes]
+* Se incluyen otros paquetes típicos del repositorio de OpenBSD, en donde hay   más de 7400 disponibles para amd64
+
+!ESCRITORIO
+
+* Transición a UTF8 en base de datos.
+* SIVeL 1.1.2 soporta UTF8 en base de datos.
+* Usuario sivel es superusuario de PostgreSQL para facilitar interacción con PostGIS.
+* qgis
+
+==xterm== tiene bugs por ejemplo al borrar una vocal con tilde o ñ debe presionarse 2 veces espacio atras.  Si requiere una terminal con codificación ASCII ejecute:
+<pre>
+    xterm -en ascii
+</pre>
+y ponga la variable LANG en otro valor por ejemplo:
+<pre>
+    export LANG=C
+</pre>
+
+
+!!!DESCARGAS
+
+Puede descargar imagenes ISO para amd64 de ==ftp://ftp.pasosdeJesus.org/pub/AprendiendoDeJesus==, o si prefiere asumir gastos de manufactura, envío y eventualmente una donación con gusto le enviamos un DVD ([correo de contacto|mailto:info@pasosdeJesus.org]).
+
+Eventualmente podrá contar con ayuda voluntaria para utilizar los programas disponibles en este DVD en la lista pública ==openbsd-colombia== a la cual puede suscribirse enviando un correo a openbsd-colombia-subscribe@googlegroups.com (Agradecemos amabilidad de Fernando Quintero).
+
+Para mejorar el financiamiento de OpenBSD, donamos y aportamos trabajo voluntario a ese proyecto.  Por lo mismo publicamos adJ varios meses después de la respectiva versión de OpenBSD.
+
+
+!!!DESARROLLO
+
+Puede descargar las fuentes de los scripts que han permitido generar esta distribución empleando la etiqueta ADJ_5.1 del repositorio CVS.  Lo invitamos a contribuir con aportes de dominio público, vea detalles en: http://aprendiendo.pasosdejesus.org/?id=Fuentes+de+adJ
+
+
+!!! FE DE ERRATAS
+
+!!! DONACIONES 
+'''Agradecemos sus oraciones y si le resulta posible sus [donaciones | Donaciones]'''.

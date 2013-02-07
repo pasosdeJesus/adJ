@@ -1,0 +1,58 @@
+$OpenBSD$
+--- po/es.po.orig	Fri Aug 10 07:35:36 2012
++++ po/es.po	Fri Aug 10 07:37:46 2012
+@@ -67,44 +67,43 @@ msgstr "Ficheros"
+ 
+ #: mixedgauge.c:58
+ msgid "Succeeded"
+-msgstr ""
++msgstr "Exitoso"
+ 
+ #: mixedgauge.c:61
+-#, fuzzy
+ msgid "Failed"
+-msgstr "Ficheros"
++msgstr "Fallaron"
+ 
+ #: mixedgauge.c:64
+ msgid "Passed"
+-msgstr ""
++msgstr "Pasó"
+ 
+ #: mixedgauge.c:67
+ msgid "Completed"
+-msgstr ""
++msgstr "Completado"
+ 
+ #: mixedgauge.c:70
+ msgid "Checked"
+-msgstr ""
++msgstr "Marcado"
+ 
+ #: mixedgauge.c:73
+ msgid "Done"
+-msgstr ""
++msgstr "Listo"
+ 
+ #: mixedgauge.c:76
+ msgid "Skipped"
+-msgstr ""
++msgstr "Saltado"
+ 
+ #: mixedgauge.c:79
+ msgid "In Progress"
+-msgstr ""
++msgstr "En Progreso"
+ 
+ #: mixedgauge.c:85
+ msgid "N/A"
+-msgstr ""
++msgstr "N/D"
+ 
+ #: mixedgauge.c:193
+ msgid "Overall Progress"
+-msgstr ""
++msgstr "Progreso General"
+ 
+ #: textbox.c:489
+ msgid "Search"

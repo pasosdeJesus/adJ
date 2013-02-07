@@ -1,0 +1,71 @@
+#!/bin/sh
+# Variables de configuración para generar distribución Aprendiendo de Jesús
+# Dominio público. 2007. vtamara@pasosdeJesus.org
+
+V=5.2
+VESP=""
+VP=`echo $V | sed -e "s/[.]//g"`
+ARQ=`uname -m`
+export R=OPENBSD_5_2
+export RADJ=ADJ_5_2
+
+#Paquetes
+PKG_PATH=ftp://rt.fm/pub/OpenBSD/$V/packages/$ARQ/
+PKG_PATH=ftp://rt.fm/pub/OpenBSD/$V/packages/$ARQ/
+PKG_PATH=ftp://ftp.openbsd.org/pub/OpenBSD/$V/packages/$ARQ/
+PKG_PATH=ftp://ftp3.usa.openbsd.org/pub/OpenBSD/$V/packages/$ARQ/
+PKG_PATH=ftp://filedump.se.rit.edu/pub/OpenBSD/$V/packages/$ARQ/
+PKG_PATH=ftp://ftp3.usa.openbsd.org/pub/OpenBSD/$V/packages/$ARQ/
+PKG_PATH=ftp://ftp.pasosdeJesus.org/pub/OpenBSD/$V/packages/$ARQ/
+PKG_PATH=ftp://filedump.se.rit.edu/pub/OpenBSD/$V/packages/$ARQ/
+
+METODOACT=ftp
+
+# Usado si METODOACT es rsync
+SERVACT="vtamara@ftp.pasosdeJesus.org"
+
+OPSSHOTRO=""
+OTRO="127.16.0.1"
+USOTRO="micuenta"
+
+OPSSHHAZOWN="-p10022"
+HAZOWN="www.nocheyniebla.org"
+
+RSYNCHOST=""
+
+excluye="dialog-* libstdc++-* python-3* php-5.2.* php-gd-5.2.* php-pdo_pgsql-5.2.* php-pgsql-5.2.* php-mcrypt-5.2.* php-sqlite-5.2.* pear-Validate-.* pear-Auth-[0-9p.]*.tgz pear-HTML-QuickForm-.* ruby-1.8.* xfe-.*"
+
+# Si debe usarse un kernel por ejemplo sin rlphy
+RUTAKERNELREESPECIAL=""
+
+# SIVeL
+DIRSIVEL=/var/www/users/sivel/
+
+# Para compilación
+export DESTDIR=/destdir; 
+export RELEASEDIR=/releasedir
+export XSRCDIR=/usr/src/xenocara;
+
+# Solo en la misma arquitectura
+export autoCvs=n
+export autoCompKernel=n
+export autoInsKernel=n
+export autoActZonasHorarias=n
+export autoCompBase=n
+export autoElimCompBase=n
+export autoDist=n
+export autoBsdrd=n
+export autoElimDist=n
+export autoX=n
+export autoXDist=n
+export autoElimXDist=n
+export autoJuegosInstalacion=n
+export autoPaquetes=n
+
+# Se puede arquitectura cruzada
+export autoMasPaquetes=s
+export autoSite=s
+export autoTextos=s
+
+
+qemuboot=c

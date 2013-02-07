@@ -1,0 +1,17 @@
+$OpenBSD$
+--- Makefile.orig	Tue May 13 09:00:23 2008
++++ Makefile	Tue May 13 09:03:23 2008
+@@ -140,10 +140,10 @@ include herram/comdocbook.mak
+ include herram/comdist.mak
+ 
+ instala:
+-	$(MKDIR) $(DESTDIR)$(INSDOC)
++	$(MKDIR) -p $(DESTDIR)$(INSDOC)
+ 	$(CP) html/*html $(DESTDIR)$(INSDOC)
+-	$(CP) imp/*ps $(DESTDIR)$(INSDOC)
+-	$(CP) imp/*pdf $(DESTDIR)$(INSDOC)
++	#$(CP) imp/*ps $(DESTDIR)$(INSDOC)
++	#$(CP) imp/*pdf $(DESTDIR)$(INSDOC)
+ 
+ desinstala:
+ 	$(RM) -rf $(DESTDIR)$(INSDOC)
