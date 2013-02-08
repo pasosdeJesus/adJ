@@ -1,7 +1,20 @@
 #!/bin/sh
+# Generar distribuci√≥n Aprendiendo de Jes√∫s.
+# Dominio p√∫blico de acuerdo a la legislaci√≥n colombiana. 
+# http://www.pasosdejesus.org/dominio_publico_colombia.html
+# 2007. vtamara@pasosdeJesus.org. 
 
 inter=$1;
 
+if (test ! -f "ver.sh") then {
+	echo "Falta archivo de configuraci√≥n ver.sh";
+	if (test "ver.sh.plantilla") then {
+		echo "Copiando configuraci√≥n por defecto de ver.sh.plantilla";
+		cp ver.sh.plantilla ver.sh
+		echo "Este archivo de comandos es controlado por ver.sh, por favor editelo y vuelva a ejecutar"
+		exit 0;
+	} fi;
+} fi;
 . ./ver.sh
 
 dini=`pwd`;
@@ -20,7 +33,7 @@ function vardef {
 vardef DESTDIR $DESTDIR
 vardef RELEASEDIR $RELEASEDIR
 vardef XSRCDIR ${XSRCDIR}
-echo "Genera distribuciÛn de adJ" | tee -a /var/tmp/distrib-adJ.bitacora
+echo "Genera distribuci√≥n de adJ" | tee -a /var/tmp/distrib-adJ.bitacora
 date | tee -a /var/tmp/distrib-adJ.bitacora
 echo "DESTDIR=$DESTDIR" | tee -a /var/tmp/distrib-adJ.bitacora
 echo "RELEASEDIR=$RELEASEDIR" | tee -a /var/tmp/distrib-adJ.bitacora
@@ -107,14 +120,14 @@ else {
 } fi;
 if (test "$sn" = "s") then {
 	if (test "$ARQ" != "$narq") then {
-		echo "Esta operaciÛn requiere que ARQ en ver.sh sea $narq";
+		echo "Esta operaci√≥n requiere que ARQ en ver.sh sea $narq";
 		exit 1;
 	} fi;
 
 	cd /usr/src/sys
 	$dini/hdes/service-kernel.sh	
 	# Esta en general se cambiaron comentarios a lo largo de todas
-    # las fuentes.  Ver documentaciÛn en 
+    # las fuentes.  Ver documentaci√≥n en 
     # http://aprendiendo.pasosdejesus.org/?id=Renombrando+Daemon+por+Service
 
 	# Para compilar vmstat
@@ -151,7 +164,7 @@ else {
 } fi;
 if (test "$sn" = "s") then {
 	if (test "$ARQ" != "$narq") then {
-		echo "Esta operaciÛn requiere que ARQ en ver.sh sea $narq";
+		echo "Esta operaci√≥n requiere que ARQ en ver.sh sea $narq";
 		exit 1;
 	} fi;
 	cd /usr/src/sys/arch/$ARQ/compile/APRENDIENDODEJESUS.MP
@@ -205,7 +218,7 @@ if (test "$sn" = "s") then {
 	cp -rf * /usr/src/share/zoneinfo/datfiles/
 } fi;	
 
-echo " *> Actualizar resto del sistema base" | tee -a /var/tmp/distrib-adJ.bitacora
+echo " *> Modificar y compilar resto del sistema base" | tee -a /var/tmp/distrib-adJ.bitacora
 if (test "$inter" = "-i") then {
 	echo -n "(s/n)? "
 	read sn
@@ -215,7 +228,7 @@ else {
 } fi;
 if (test "$sn" = "s") then {
 	if (test "$ARQ" != "$narq") then {
-		echo "Esta operaciÛn requiere que ARQ en ver.sh sea $narq" | tee -a /var/tmp/distrib-adJ.bitacora 
+		echo "Esta operaci√≥n requiere que ARQ en ver.sh sea $narq" | tee -a /var/tmp/distrib-adJ.bitacora 
 		exit 1;
 	} fi;
 
@@ -232,24 +245,24 @@ if (test "$sn" = "s") then {
 		echo "Uyy, Eliminando"; exit 1;
 		rm -rf /usr/obj/*
 	} fi;
-	echo "Esta operacion modificar tanto las fuentes en /usr como archivos en /etc e /include del sistema donde se emplea para hacer posible la compilaciÛn, presione [ENTER] para continuar";
+	echo "Esta operacion modificar tanto las fuentes en /usr como archivos en /etc e /include del sistema donde se emplea para hacer posible la compilaci√≥n, presione [ENTER] para continuar";
 	read
 	rm -f ${DESTDIR}/usr/include/g++ 
 	mkdir -p ${DESTDIR}/usr/include/g++
 	#export CFLAGS=-I/usr/include/g++/${ARQ}-unknown-openbsd${V}/
-	echo "* Copiando archivos nuevos" | tee -a /var/tmp/distrib-adJ.bitacora
-	(cd src ; for i in `find . -type f | grep -v CVS `; do  if (test ! -f /usr/src/$i) then { echo $i; n=`dirname $i`; sudo mkdir -p /usr/src/$n; sudo cp $i /usr/src/$i; } fi; done )
+	echo "* Copiando archivos nuevos en /usr/src" | tee -a /var/tmp/distrib-adJ.bitacora
+	(cd $dini/arboldes/usr/src ; for i in `find . -type f | grep -v CVS | grep -v .patch`; do  if (test ! -f /usr/src/$i) then { echo $i; n=`dirname $i`; sudo mkdir -p /usr/src/$n; sudo cp $i /usr/src/$i; } fi; done )
 	echo "* Cambiando /etc " | tee -a /var/tmp/distrib-adJ.bitacora
 	cd /etc
 	$dini/arboldd/usr/local/adJ/service-etc.sh	
 	echo "* Cambiando /usr/src/etc" | tee -a /var/tmp/distrib-adJ.bitacora
 	cd /usr/src/etc
 	$dini/arboldd/usr/local/adJ/service-etc.sh	
-	echo "* Cambiando base" | tee -a /var/tmp/distrib-adJ.bitacora
+	echo "* Cambios iniciales a /usr/src" | tee -a /var/tmp/distrib-adJ.bitacora
 	cd /usr/src/
 	$dini/hdes/service-base.sh	
-	echo "* Aplicando parches faltantes" | tee -a /var/tmp/distrib-adJ.bitacora 
-	(cd $dini/src; for i in *patch; do echo $i; if (test ! -f /usr/src/$i) then { sudo cp $i /usr/src; (cd /usr/src; sudo patch < $i;) } fi; done) |  tee -a  /var/tmp/distrib-adJ.bitacora
+	echo "* Aplicando parches a /usr/src" | tee -a /var/tmp/distrib-adJ.bitacora 
+	(cd $dini/arboldes/usr/src; for i in *patch; do echo $i; if (test ! -f /usr/src/$i) then { sudo cp $i /usr/src; (cd /usr/src; sudo patch < $i;) } fi; done) |  tee -a  /var/tmp/distrib-adJ.bitacora
 	grep LOG_SERVICE  /usr/include/syslog.h > /dev/null 2>&1
 	if (test "$?" != "0") then {
 		cd /usr/src/sys
@@ -280,13 +293,13 @@ export DLENG=es
 function verleng {
 	a=$1;
 	if (test "$a" = "") then {
-		echo "Falta archivo como primer par·metro en verleng" | tee -a /var/tmp/distrib-adJ.bitacora
+		echo "Falta archivo como primer par√°metro en verleng" | tee -a /var/tmp/distrib-adJ.bitacora
 		exit 1;
 	} fi;
 	echo $a;
 	grep "DLENG" $a > /dev/null 2> /dev/null
 	if (test "$?" != "0") then {
-		echo "Instalador en espaÒol no est· bien configurado en fuentes" | tee -a /var/tmp/distrib-adJ.bitacora
+		echo "Instalador en espa√±ol no est√° bien configurado en fuentes" | tee -a /var/tmp/distrib-adJ.bitacora
 		echo "Agregar:
 SCRIPT  \${CURDIR}/upgrade-\${DLENG}.sh                   upgrade
 SCRIPT  \${CURDIR}/install-\${DLENG}.sh                   install
@@ -300,7 +313,7 @@ SCRIPT  \${CURDIR}/install-\${DLENG}.sub                  install.sub"
 
 
 #
-echo " *> Hacer una distribuciÛn en $DESTDIR y unos juegos de instalaciÛn en $RELEASEDIR" | tee -a /var/tmp/distrib-adJ.bitacora;
+echo " *> Hacer una distribuci√≥n en $DESTDIR y unos juegos de instalaci√≥n en $RELEASEDIR" | tee -a /var/tmp/distrib-adJ.bitacora;
 if (test "$inter" = "-i") then {
 	echo -n "(s/n)? "
 	read sn
@@ -310,7 +323,7 @@ else {
 } fi;
 if (test "$sn" = "s") then {
 	if (test "$ARQ" != "$narq") then {
-		echo "Esta operaciÛn requiere que ARQ en ver.sh sea $narq";
+		echo "Esta operaci√≥n requiere que ARQ en ver.sh sea $narq";
 		exit 1;
 	} fi;
 
@@ -353,7 +366,7 @@ else {
 } fi;
 if (test "$sn" = "s") then {
 	if (test "$ARQ" != "$narq") then {
-		echo "Esta operaciÛn requiere que ARQ en ver.sh sea $narq" | tee -a /var/tmp/distrib-adJ.bitacora;
+		echo "Esta operaci√≥n requiere que ARQ en ver.sh sea $narq" | tee -a /var/tmp/distrib-adJ.bitacora;
 		exit 1;
 	} fi;
 
@@ -403,7 +416,7 @@ if (test "$sn" = "s") then {
 	} fi;
 } fi;
 
-echo " *> DistribuciÛn de X-Window en $DESTDIR y un juego de instalaciÛn en $RELEASEDIR  con fuentes de $XSRCDIR" | tee -a /var/tmp/distrib-adJ.bitacora;
+echo " *> Distribuci√≥n de X-Window en $DESTDIR y un juego de instalaci√≥n en $RELEASEDIR  con fuentes de $XSRCDIR" | tee -a /var/tmp/distrib-adJ.bitacora;
 if (test "$inter" = "-i") then {
 	echo -n "(s/n)? "
 	read sn
@@ -413,7 +426,7 @@ else {
 } fi;
 if (test "$sn" = "s") then {
 	if (test "$ARQ" != "$narq") then {
-		echo "Esta operaciÛn requiere que ARQ en ver.sh sea $narq";
+		echo "Esta operaci√≥n requiere que ARQ en ver.sh sea $narq";
 		exit 1;
 	} fi;
 
@@ -446,7 +459,7 @@ else {
 } fi;
 if (test "$sn" = "s") then {
 	if (test "$ARQ" != "$narq") then {
-		echo "Esta operaciÛn requiere que ARQ en ver.sh sea $narq";
+		echo "Esta operaci√≥n requiere que ARQ en ver.sh sea $narq";
 		exit 1;
 	} fi;
 	
@@ -476,7 +489,7 @@ if (test "$sn" = "s") then {
 } fi;
 
 cd $cdir
-echo " *> Copiar juegos de instalaciÛn de sistema base y X-Window de $RELEASEDIR a $dini/$V$VESP-$ARQ?" | tee -a /var/tmp/distrib-adJ.bitacora;
+echo " *> Copiar juegos de instalaci√≥n de sistema base y X-Window de $RELEASEDIR a $dini/$V$VESP-$ARQ?" | tee -a /var/tmp/distrib-adJ.bitacora;
 if (test "$inter" = "-i") then {
 	echo -n "(s/n)? "
 	read sn
@@ -487,7 +500,7 @@ else {
 
 if (test "$sn" = "s") then {
 	if (test "$ARQ" != "$narq") then {
-		echo "Esta operaciÛn requiere que ARQ en ver.sh sea $narq";
+		echo "Esta operaci√≥n requiere que ARQ en ver.sh sea $narq";
 		exit 1;
 	} fi;
 
@@ -499,7 +512,7 @@ if (test "$sn" = "s") then {
 	rm -f $dini/$V$VESP-$ARQ/{MD5,CKSUM,index.txt,cd??.iso,}
 } fi;
 
-echo " *> Generar paquetes de la distribuciÛn AprendiendoDeJes˙s en $dini/$V$VESP-$ARQ/paquetes " | tee -a /var/tmp/distrib-adJ.bitacora;
+echo " *> Generar paquetes de la distribuci√≥n AprendiendoDeJes√∫s en $dini/$V$VESP-$ARQ/paquetes " | tee -a /var/tmp/distrib-adJ.bitacora;
 if (test "$inter" = "-i") then {
 	echo -n "(s/n)? "
 	read sn
@@ -564,7 +577,7 @@ function paquete {
 echo $sn
 if (test "$sn" = "s") then {
 	if (test "$ARQ" != "$narq") then {
-		echo "Esta operaciÛn requiere que ARQ en ver.sh sea $narq";
+		echo "Esta operaci√≥n requiere que ARQ en ver.sh sea $narq";
 		exit 1;
 	} fi;
 
@@ -676,7 +689,7 @@ if (test "$sn" = "s") then {
 	grep ".-\[v\]" Contenido.txt | sed -e "s/-\[v\]\([-a-zA-Z_0-9]*\).*/-[0-9][0-9alphabetrcvSTABLERC._]*\1.tgz/g" > esperados.txt
 	ne=`(ls $V$VESP-$ARQ/paquetes/ ; ls $V$VESP-$ARQ/sivel/*tgz) | grep -v -f esperados.txt`;
 	if (test "$ne" != "") then {
-		echo "Los siguientes paquetes presentes en el directorio $V$VESP-$ARQ/paquetes no est·n entre los esperados:" | tee -a /var/tmp/distrib-adJ.bitacora;
+		echo "Los siguientes paquetes presentes en el directorio $V$VESP-$ARQ/paquetes no est√°n entre los esperados:" | tee -a /var/tmp/distrib-adJ.bitacora;
 		echo $ne | tee -a /var/tmp/distrib-adJ.bitacora;
 		echo -n "[ENTER] para continuar: ";
 		read;

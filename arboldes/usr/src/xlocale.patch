@@ -2,7 +2,24 @@
 ? include/runetype.h
 ? include/xlocale
 ? include/xlocale.h
-
+Index: distrib/special/libstubs/setlocale.c
+===================================================================
+RCS file: /cvs/src/distrib/special/libstubs/setlocale.c,v
+retrieving revision 1.1
+diff -u -r1.1 setlocale.c
+--- distrib/special/libstubs/setlocale.c        3 Aug 2005 22:33:59 -0000       1.1
++++ distrib/special/libstubs/setlocale.c        7 Feb 2013 19:15:38 -0000
+@@ -3,8 +3,8 @@
+ /* Written by Marc Espie, 2005 */
+ /* Public domain */
+ 
+-char *
++/*char *
+ setlocale(int cat, const char *locale)
+ {
+        return 0;
+-}
++}*/
 Index: include//Makefile
 ===================================================================
 RCS file: /cvs/src/include/Makefile,v
@@ -268,7 +285,7 @@ RCS file: /cvs/src/lib/libc/locale/Makefile.inc,v
 retrieving revision 1.18
 diff -u -r1.18 Makefile.inc
 --- lib/libc/locale/Makefile.inc	7 Jun 2012 19:47:40 -0000	1.18
-+++ lib/libc/locale/Makefile.inc	1 Feb 2013 12:12:40 -0000
++++ lib/libc/locale/Makefile.inc	4 Feb 2013 19:16:22 -0000
 @@ -3,20 +3,54 @@
  # locale sources
  .PATH: ${LIBCSRCDIR}/arch/${MACHINE_CPU}/locale ${LIBCSRCDIR}/locale
@@ -336,7 +353,7 @@ diff -u -r1.18 Makefile.inc
  	iswalnum.3 iswalpha.3 \
  	iswalnum.3 iswblank.3 \
  	iswalnum.3 iswcntrl.3 \
-@@ -28,6 +62,26 @@
+@@ -28,6 +62,25 @@
  	iswalnum.3 iswspace.3 \
  	iswalnum.3 iswupper.3 \
  	iswalnum.3 iswxdigit.3 \
@@ -359,11 +376,10 @@ diff -u -r1.18 Makefile.inc
 +	mbstowcs.3 mbstowcs_l.3\
 +	mbtowc.3 mbtowc_l.3\
 +	setlocale.3 localeconv.3 \
-+	strncasecmp.3 strncasecmp_l.3 \
  	towlower.3 towupper.3 \
  	wcstod.3 wcstof.3 \
  	wcstod.3 wcstold.3 \
-@@ -36,6 +90,8 @@
+@@ -36,6 +89,8 @@
  	wcstol.3 wcstoull.3 \
  	wcstol.3 wcstoimax.3 \
  	wcstol.3 wcstoumax.3 \
@@ -372,7 +388,6 @@ diff -u -r1.18 Makefile.inc
  	mbsrtowcs.3 mbsnrtowcs.3 \
  	wcsrtombs.3 wcsnrtombs.3
  
-
 Index: lib/libc/locale/___runetype_mb.c
 ===================================================================
 RCS file: /cvs/src/lib/libc/locale/___runetype_mb.c,v
@@ -2402,7 +2417,24 @@ diff -u -r1.1 Makefile
  SUBDIR+= check_isw
 +SUBDIR+= check_xlocale
  
- install:
+ Index: distrib/special/libstubs/setlocale.c
+===================================================================
+RCS file: /cvs/src/distrib/special/libstubs/setlocale.c,v
+retrieving revision 1.1
+diff -u -r1.1 setlocale.c
+--- distrib/special/libstubs/setlocale.c        3 Aug 2005 22:33:59 -0000       1.1
++++ distrib/special/libstubs/setlocale.c        7 Feb 2013 19:15:38 -0000
+@@ -3,8 +3,8 @@
+ /* Written by Marc Espie, 2005 */
+ /* Public domain */
+ 
+-char *
++/*char *
+ setlocale(int cat, const char *locale)
+ {
+        return 0;
+-}
++}*/install:
  
 
 Index: regress/lib/libc/locale//check_isw/check_isw.c
