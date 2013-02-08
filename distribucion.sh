@@ -110,7 +110,7 @@ if (test "$sn" = "s") then {
 	cvs -z3 update -Pd -r$RADJ
 } fi;
 
-echo " *> Compilar kernel APRENDIENDODEJESUS" | tee -a /var/tmp/distrib-adJ.bitacora
+echo " *> Transformar y compilar kernel APRENDIENDODEJESUS" | tee -a /var/tmp/distrib-adJ.bitacora
 if (test "$inter" = "-i") then {
 	echo -n "(s/n)? "
 	read sn;
@@ -218,7 +218,7 @@ if (test "$sn" = "s") then {
 	cp -rf * /usr/src/share/zoneinfo/datfiles/
 } fi;	
 
-echo " *> Modificar y compilar resto del sistema base" | tee -a /var/tmp/distrib-adJ.bitacora
+echo " *> Transformar y compilar resto del sistema base" | tee -a /var/tmp/distrib-adJ.bitacora
 if (test "$inter" = "-i") then {
 	echo -n "(s/n)? "
 	read sn
@@ -282,7 +282,7 @@ if (test "$sn" = "s") then {
 	echo "* Completo compilabase" | tee -a /var/tmp/distrib-adJ.bitacora
 	echo "whoami 3" >> /var/tmp/distrib-adJ.bitacora
 	whoami >> /var/tmp/distrib-adJ.bitacora 2>&1
-	cd /usr/src && unset DESTDIR && nice make SUDO=sudo build
+	cd /usr/src && unset DESTDIR && nice make SUDO=sudo build | tee -a /var/tmp/distrib-adJ.bitacora
 	echo "whoami 3" >> /var/tmp/distrib-adJ.bitacora
 	whoami >> /var/tmp/distrib-adJ.bitacora 2>&1
 	echo "* Completo make build" | tee -a /var/tmp/distrib-adJ.bitacora
