@@ -57,6 +57,9 @@ if (test ! -d /usr/obj) then {
 
 narq=`uname -m`
 
+ANONCVS="anoncvs@anoncvs1.ca.openbsd.org:/cvs"
+ANONCVS="anoncvs@mirror.planetunix.net:/cvs"
+
 echo " *> Actualizar fuentes de CVS" | tee -a /var/tmp/distrib-adJ.bitacora
 if (test "$inter" = "-i") then {
 	echo -n "(s/n)?"
@@ -70,7 +73,7 @@ if (test "$sn" = "s") then {
 	if (test ! -f CVS/Root) then {
 		for i in `find . -name CVS`; do 
 			echo $i;
-			echo "anoncvs@anoncvs1.ca.openbsd.org:/cvs" > $i/Root;
+			echo "$ANONCVS" > $i/Root;
 		done;
 	} fi;
 	cvs -z3 update -Pd -r$R
@@ -78,7 +81,7 @@ if (test "$sn" = "s") then {
 	if (test ! -f CVS/Root) then {
 		for i in `find . -name CVS`; do 
 			echo $i;
-			echo "anoncvs@anoncvs1.ca.openbsd.org:/cvs" > $i/Root;
+			echo "$ANONCVS" > $i/Root;
 		done;
 	} fi;
 	cvs -z3 update -Pd -r$R
@@ -86,7 +89,7 @@ if (test "$sn" = "s") then {
 	if (test ! -f CVS/Root) then {
 		for i in `find . -name CVS`; do 
 			echo $i;
-			echo "anoncvs@anoncvs1.ca.openbsd.org:/cvs" > $i/Root;
+			echo "$ANONCVS" > $i/Root;
 		done;
 	} fi;
 	cvs -z3 update -Pd -r$R
@@ -96,18 +99,11 @@ if (test "$sn" = "s") then {
 			echo $i;
 			grep "mystuff" $i > /dev/null 2>&1
 			if (test "$?" != "0") then {
-				echo "anoncvs@anoncvs1.ca.openbsd.org:/cvs" > $i/Root;
+				echo "$ANONCVS" > $i/Root;
 			} fi;
 		done;
 	} fi;
-	cd /usr/ports/mystuff
-	if (test ! -f CVS/Root) then {
-		for i in `find . -name CVS`; do 
-			echo $i;
-			echo "vtamara@sn1.pasosdeJesus.org:/home/vtamara/cvs" > $i/Root;
-		done;
-	} fi;
-	cvs -z3 update -Pd -r$RADJ
+	cvs -z3 update -Pd -r$R
 } fi;
 
 echo " *> Transformar y compilar kernel APRENDIENDODEJESUS" | tee -a /var/tmp/distrib-adJ.bitacora
@@ -582,6 +578,10 @@ if (test "$sn" = "s") then {
 	} fi;
 
 
+	if (test ! -d "/usr/ports/mystuff") then {
+		mkdir -p /usr/ports
+		ln -s $dini/arboldes/usr/ports/mystuff /usr/ports/mystuff
+	} fi;
 	rm disponibles*
 	paquete dialog misc
 
@@ -773,10 +773,22 @@ if (test "$sn" = "s") then {
 	mkdir -p /tmp/i
 	rm -rf /tmp/i/*
 	mkdir -p /tmp/i/usr/local/adJ/
-	cp -rf arboldd/* /tmp/i/
-	cp arboldd/usr/local/adJ/inst.sh /tmp/i/inst-adJ.sh
+	cp -rf $dini/arboldd/* /tmp/i/
+	cp $dini/arboldd/usr/local/adJ/inst.sh /tmp/i/inst-adJ.sh
 	mkdir -p /tmp/i/usr/src/etc/
 	cp /usr/src/etc/Makefile  /tmp/i/usr/src/etc/
+	for i in `cat $dini/lista-site`; do 
+		if (test -d "/destdir/$i") then {
+			mkdir -p /tmp/i/$i
+		} elif (test -f "/destdir/$i") then {
+			d=`dirname $i`
+			mkdir -p /tmp/i/$d
+			cp /destdir/$i /tmp/i/$i
+		} else {
+			echo "lista-site errada, falta $i";
+		} fi;
+	done;
+	mkdir -p /tmp/i/etc/
 	cat > /tmp/i/etc/rc.firsttime <<EOF
 /usr/local/adJ/inst-adJ.sh
 EOF

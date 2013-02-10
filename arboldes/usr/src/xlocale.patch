@@ -2498,6 +2498,7 @@ diff -u -r1.1 check_isw.c
  	}
  	free(s);
 
+
 Index: usr.bin/mklocale/lex.l
 ===================================================================
 RCS file: /cvs/src/usr.bin/mklocale/lex.l,v
@@ -2533,3 +2534,52 @@ diff -u -r1.4 yacc.y
  #include <stdio.h>
  #include <stdlib.h>
 
+? share/locale/colldef
+Index: share/locale//Makefile
+===================================================================
+RCS file: /cvs/src/share/locale/Makefile,v
+retrieving revision 1.1
+diff -u -r1.1 Makefile
+--- share/locale//Makefile	7 Aug 2005 10:03:44 -0000	1.1
++++ share/locale//Makefile	9 Feb 2013 02:02:03 -0000
+@@ -1,6 +1,6 @@
+ #	$OpenBSD: Makefile,v 1.1 2005/08/07 10:03:44 espie Exp $
+ 
+-SUBDIR=	ctype
++SUBDIR=	ctype colldef
+ 	
+ 
+ .include <bsd.subdir.mk>
+Index: share/locale/ctype/Makefile
+===================================================================
+RCS file: /cvs/src/share/locale/ctype/Makefile,v
+retrieving revision 1.6
+diff -u -r1.6 Makefile
+--- share/locale/ctype/Makefile	16 Jul 2011 21:33:30 -0000	1.6
++++ share/locale/ctype/Makefile	9 Feb 2013 02:38:53 -0000
+@@ -80,14 +80,17 @@
+ LOCALES += en_US.UTF-8
+  LOCALESRC_en_US.UTF-8 = en_US.UTF-8
+ 
+-LOCALES += es_ES.ISO8859-1
+- LOCALESRC_es_ES.ISO8859-1 = en_US.ISO_8859-1
+-
+-LOCALES += es_ES.ISO8859-15
+- LOCALESRC_es_ES.ISO8859-15 = en_US.DIS_8859-15
+-
+-LOCALES += es_ES.UTF-8
+- LOCALESRC_es_ES.UTF-8 = en_US.UTF-8
++# http://en.wikipedia.org/wiki/List_of_countries_where_Spanish_is_an_official_language
++ES_COUNTRIES= ES CO PE VE EC GT CU BO HN PY SV CR PA GQ MX AR CH DO NI UY PR
++ES_ENCODINGS= ISO8859-1 ISO8859-15 UTF-8
++.for c in ${ES_COUNTRIES}
++LOCALES += es_${c}.UTF-8
++LOCALESRC_es_${c}.UTF-8 = en_US.UTF-8
++LOCALES += es_${c}.ISO8859-1
++LOCALESRC_es_${c}.ISO8859-1 = en_US.ISO_8859-1
++LOCALES += es_${c}.ISO8859-15
++LOCALESRC_es_${c}.ISO8859-15 = en_US.DIS_8859-15
++.endfor
+ 
+ LOCALES += fa_IR.UTF-8
+  LOCALESRC_fa_IR.UTF-8 = en_US.UTF-8

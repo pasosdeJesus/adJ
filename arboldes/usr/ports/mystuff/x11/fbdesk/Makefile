@@ -1,10 +1,9 @@
-# $OpenBSD: Makefile,v 1.2 2007/09/15 20:04:19 merdely Exp $
 
 COMMENT=		fluxbox-util application that creates and manage icons
 
 V=              1.4.1
 DISTNAME=       fbdesk-${V}
-PKGNAME=        ${DISTNAME}p1
+PKGNAME=        ${DISTNAME}p2
 
 CATEGORIES=		x11
 

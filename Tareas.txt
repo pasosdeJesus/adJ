@@ -1,20 +1,12 @@
 
 5.2
 
-* xdm por defecto en instalador
-* Xorg -configure produjo error, revisar configuración X-Window en inst-adJ.sh
-* Logo
-* En /destdir debería generar /usr/share/locale/es_CO.UTF-8 y otros en español
-  asi como LC_COLLATE en estos.
-* Poner un dialog actualizado con libc
-* Poner kernel apropiado
-* colldef no se instala por defecto en base, aunque si mklocale
-* No opera man xlocale ni hay /usr/include/xlocale.h
+* Xorg -configure produce Segmentation Fault (tanto emulado como sin emular)
+  aunque sin emular produce xorg.conf.new, comprobar en emulado y que
+  se intente con el xorg.conf.new producido
 
 
 * xiphos debería incluir módulos por defecto.
 
-Para nuevas versiones.
-* Dejar todo listo en master de github y despues de distribuir ISO crear 
-  rama con versión
+
 

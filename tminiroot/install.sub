@@ -1906,7 +1906,7 @@ questions() {
 	fi
 
 	if [[ -n $MDXDM && $_xdmask == y ]]; then
-		ask_yn "Do you want the X Window System to be started by xdm(1)?"
+		ask_yn "Do you want the X Window System to be started by xdm(1)?" $_xdmask
 		xdm=$resp
 	fi
 

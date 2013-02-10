@@ -1584,7 +1584,7 @@ servers $1
 }
 
 questions() {
-	local _d _xdmask=y _def
+	local _d _xdmask=$_slyes _def
 
 	ask_yn "$_slstartsshd" $_slyes
 	sshd=$resp
@@ -1605,7 +1605,7 @@ questions() {
 	fi
 
 	if [[ -n $MDXDM && $_xdmask == y ]]; then
-		ask_yn "$_slxdm" $_xdmask
+		ask_yn "$_slxdm" $def
 		xdm=$resp
 	fi
 

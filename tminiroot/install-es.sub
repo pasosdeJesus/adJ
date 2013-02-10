@@ -1610,7 +1610,7 @@ questions() {
 	fi
 
 	if [[ -n $MDXDM && $_xdmask == y ]]; then
-		ask_yn "¿Desea que el sistema X Window sea iniciado por xdm(1)?"
+		ask_yn "¿Desea que el sistema X Window sea iniciado por xdm(1)?" $_xdmask
 		xdm=$resp
 	fi
 
