@@ -4,8 +4,8 @@
 
 COMMENT=	"Information system of political violence"
 
-DISTNAME=	sivel-1.1.2
-PKGNAME=	${DISTNAME}p0
+DISTNAME=	sivel-1.1.4
+PKGNAME=	${DISTNAME}
 CATEGORIES=    	databases www
 
 HOMEPAGE=	http://sivel.sourceforge.net/

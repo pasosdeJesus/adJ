@@ -2,7 +2,7 @@
 
 COMMENT =	format the display of a shell script
 
-V =		1.1-20080819
+V =		1.2-20121230
 DISTNAME = 	dialog-${V}
 PKGNAME = 	dialog-${V:S/-/./}p0
 
