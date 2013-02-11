@@ -5,12 +5,14 @@ Distribución de OpenBSD para fomentar la construcción del Reino de Dios
 desde la educación y el respeto por la Dignidad Humana
 
 Prerequisitos
+-------------
 
 Computador con procesador de 64 bits.
 OpenBSD o adJ para 64 bits instalados.
 
 
 Procedimiento
+-------------
 
 1. Clone
 2. Ejecute sudo ./distribucion.sh
@@ -18,6 +20,8 @@ Procedimiento
 
 
 Organización de fuentes
+-----------------------
+
 arbolcd 	Directorios y archivos de un DVD instalador
 arboldd		Directorios y archivos de un adJ instalado
 arboldes	Directorios, archivos y parches por emplear en comp.desarrollo
@@ -29,6 +33,8 @@ ver.sh.plantilla	Plantilla con variables que controlan distribucion.sh
 
 
 Pasos típicos para desarrollar
+------------------------------
+
 * Descargue fuentes de OpenBSD en /usr/src y de portes en /usr/ports
 * Enlace arboldes/usr/ports/mystuff en /usr/ports/mystuff
 * Actualice fuentes de /usr/src (con periodicidad) para mezclar cambios de OpenBSD activando autoCVS en ver.sh y ejecutando sudo ./distribucion.sh
