@@ -625,7 +625,7 @@ if (test "$sn" = "s") then {
         #paquete mozilla-firefox www 
         #paquete firefox-i18n www paquetes "firefox-i18n-es-AR"
 #        paquete evince graphics
-#        paquete postgresql databases paquetes "postgresql-server postgresql-client"
+        paquete postgresql databases paquetes "postgresql-server postgresql-client"
 	rm $dini/$V$VESP-$ARQ/$dest/php5-gd-*-no_x11.tgz
 
 } fi;	

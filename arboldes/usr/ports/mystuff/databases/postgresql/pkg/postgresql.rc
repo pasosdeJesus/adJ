@@ -1,0 +1,31 @@
+#!/bin/sh
+#
+# $OpenBSD: postgresql.rc,v 1.9 2012/06/01 15:06:46 ajacoutot Exp $
+
+daemon="${TRUEPREFIX}/bin/pg_ctl"
+daemon_flags="-l /var/postgresql/logfile"
+daemon_user="_postgresql"
+
+. /etc/rc.d/rc.subr
+
+datadir="/var/postgresql/data"
+
+rc_check() {
+	${rcexec} "${daemon} -D ${datadir} status"
+}
+
+rc_reload() {
+	${rcexec} "${daemon} -D ${datadir} reload"
+}
+
+rc_start() {
+	rm -f ${datadir}/postmaster.pid
+	${rcexec} "${daemon} -D ${datadir} start ${daemon_flags}"
+}
+
+rc_stop() {
+	${rcexec} "${daemon} -D ${datadir} stop -m fast" || \
+		${rcexec} "${daemon} -D ${datadir} stop -m immediate"
+}
+
+rc_cmd $1

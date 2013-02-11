@@ -130,6 +130,11 @@ zip-[v]			Comprime en formato ZIP
 
 
 * Servidor / Plataforma de comunicaciones:
+courier-authlib-[v]
+courier-imap-[v]
+courier-pop3-[v]
+mysql-server-[v]
+p5-Mail-SpamAssassin-[v]
 php-[v]		Lenguaje script empotrado en HTML que opera en servidor
 php-gd-[v]		Uso de gd (librería gráfica) desde PHP
 php-mcrypt-[v]	Extensión para encripción/desencripción para PHP5
@@ -190,6 +195,7 @@ enca-[v]		Detecta codificación de caracteres de textos planos
 enchant-[v]		Librería genérica para corrección ortográfica
 enscript-[v]	Convierte archivos ASCII a PostScript
 esound-[v]	Librería de sonido para enlightment
+expect-[v]-no_tk
 fcgi-[v]		Herramientas de Desarrollo FastCGI
 femail-[v]		Cliente simple de SMTP
 femail-chroot-[v]	Cliente simple de SMTP para Apache en jaula chroot
@@ -226,6 +232,7 @@ gnome-mime-data-[v]	Base de datos MIME y de aplicaciones
 gnome-user-docs-[v]	Documentación de usuario de GNOME
 gnome-vfs2-[v]	Sistema de archivos virtual
 gnugetopt-[v]	Utilidad getopt(1) de GNU
+gnupg-[v]		
 gnutls-[v]		Librearía segura para la capa de transporte
 goffice-[v]	Utilidades y objetos centrados en documentos
 gpsd-[v]	Servicio que monitorea uno o más GPSes
@@ -298,6 +305,7 @@ libffi-[v]		Interfaz de funciones foráneas
 libgadu-[v]	Implementación del protocolo de Mensajería Gadu-Gadu
 libgcrypt-[v]	Criptografía basada en GnuPG
 libgeotiff-[v]		Libreria pata intercambio TIFF en GIS
+libghttp-[v]
 libglade2-[v]	Carga interfaces Glade
 libgnome-[v]	Librerías para el proyecto GNOME
 libgnome-keyring-[v]  Libreria para integrar anillo de llaves GNOME
@@ -364,8 +372,39 @@ opensp-[v]		Reconocedor SGML orientado a objetos
 orc-[v]		Librerìa y herraminetas para operar arreglos de datos
 ORBit2-[v]	CORBA ORB de alto desempeño
 p11-kit-[v]		Librería para enumerar módulos PKCS#11
+p5-Clone-[v]		
+p5-Crypt-OpenSSL-Bignum-[v]		
+p5-Crypt-OpenSSL-Random-[v]		
+p5-Crypt-OpenSSL-RSA-[v]		
 p5-DateManip-[v]	Manipulación de fechas en perl
+p5-DBI-[v]		
+p5-DBD-mysql-[v]		
+p5-Digest-SHA1-[v]		
+p5-Digest-HMAC-[v]		
 p5-Error-[v]		Manejo de errores al estilo objetos
+p5-FreezeThaw-[v]		
+p5-Geography-Countries-[v]		
+p5-HTML-Tagset-[v]		
+p5-HTML-Parser-[v]		
+p5-HTTP-GHTTP-[v]		
+p5-IO-Socket-SSL-[v]		
+p5-IO-Socket-INET6-[v]		
+p5-IP-Country-[v]		
+p5-libwww-[v]
+p5-Mail-SPF-[v]
+p5-Mail-Tools-[v]
+p5-Mail-DKIM-[v]
+p5-MLDBM-[v]		
+p5-NetAddr-IP-[v]		
+p5-Net-Daemon-[v]		
+p5-Net-DNS-[v]		
+p5-Net-DNS-Resolver-Programmable-[v]		
+p5-Params-Util-[v]		
+p5-PlRPC-[v]		
+p5-SQL-Statement-[v]		
+p5-Socket6-[v]		
+p5-Time-TimeDate-[v]		
+p5-URI-[v]		
 p5-XML-LibXML-[v]	Interfaz a librería libxml2
 p5-XML-LibXML-Common-[v]	Interfaz a librería libxml2
 p5-XML-NamespaceSupport-[v]	Interfaz a clase SAX2 NamespaceSupport
@@ -428,6 +467,7 @@ qt4-[v]		Juego de herramientas en C++ para GUI en X11
 qwt-[v]		Widgets de QT para aplicaciones Tecnicas
 raptor-[v]		Herramientas para reconocer RDF usadas por redland
 rarian-[v]		Librería para metadatos de documentación
+re2c-[v]
 recode-[v]		Convertir archivos entre juegos de caracters y usos
 redland-[v]		Interfaz de alto nivel para RDF 
 ruby19-actionmailer-[v] Envio de email y pruebas en ruby

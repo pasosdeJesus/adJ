@@ -1901,7 +1901,7 @@ if (test "$?" != "0") then {
 	insacp pango
 	insacp gtk+2
 
-	p=`ls $PKG_PATH/libxml-* $PKG_PATH/shared-mime-info-* $PKG_PATH/pcre-* $PKG_PATH/png-* $PKG_PATH/jpeg-* $PKG_PATH/glib2-* $PKG_PATH/tiff-* $PKG_PATH/libiconv-* $PKG_PATH/esound-* $PKG_PATH/atk-* $PKG_PATH/desktop-file-utils-* $PKG_PATH/gettext-* $PKG_PATH/libaudiofile-* $PKG_PATH/gtk+2-* $PKG_PATH/cairo-* $PKG_PATH/pango-* $PKG_PATH/nss-* $PKG_PATH/nspr-* $PKG_PATH/sqlite3-* $PKG_PATH/jasper-* $PKG_PATH/hicolor-icon-theme-* $PKG_PATH/firefox-* $PKG_PATH/firefox-i18n-es-AR*`
+	p=`ls $PKG_PATH/libxml-* $PKG_PATH/shared-mime-info-* $PKG_PATH/pcre-* $PKG_PATH/png-* $PKG_PATH/jpeg-* $PKG_PATH/glib2-* $PKG_PATH/tiff-* $PKG_PATH/libiconv-* $PKG_PATH/esound-* $PKG_PATH/atk-* $PKG_PATH/desktop-file-utils-* $PKG_PATH/gettext-* $PKG_PATH/libaudiofile-* $PKG_PATH/gtk+2-* $PKG_PATH/cairo-* $PKG_PATH/pango-* $PKG_PATH/nss-* $PKG_PATH/nspr-* $PKG_PATH/jasper-* $PKG_PATH/hicolor-icon-theme-* $PKG_PATH/firefox-* $PKG_PATH/firefox-i18n-es-AR*`
         pkg_add -D update -D updatedepends -r $p >> /var/tmp/inst-adJ.bitacora 2>&1;
 	grep "browser.startup.homepage.*https://localhost" /usr/local/mozilla-firefox/defaults/profile/prefs.js > /dev/null
 	if (test "$?" != "0") then {
