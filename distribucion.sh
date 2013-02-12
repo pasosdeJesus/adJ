@@ -596,6 +596,7 @@ if (test "$sn" = "s") then {
  	paquete pear-HTML-QuickForm-Controller www
  	paquete pear-HTML-Javascript www
  	paquete pear-HTML-Menu www
+ 	paquete pear-HTML-Table www
 
 	paquete evangelios_dp books
 	paquete sword textproc 
@@ -641,7 +642,7 @@ else {
 
 
 echo "$paraexc" | tr " " "\n" | grep -v "^[ \t]*$" | sed -e "s/^/ /g" > excluye.txt
-cmd="echo \$excluye | tr \" \" \"\\n\" >> excluye.txt"
+cmd="echo \$excluye | tr \" \" \"\\n\" | sed -e \"s/^/ /g\" >> excluye.txt"
 eval "$cmd"
 if (test "$sn" = "s") then {
 	mkdir -p $V$VESP-$ARQ/paquetes
@@ -664,7 +665,7 @@ if (test "$sn" = "s") then {
 		echo $cmd; eval $cmd;
 		cmd="grep -a \".tgz\" /tmp/actu2-l > /tmp/actu2-g"
 		echo $cmd; eval $cmd;
-		cmd="sed -e \"s/.*\( [A-Za-z0-9.-][_A-Za-z0-9.-]*.tgz\).*/\1 /g\" /tmp/actu2-g > /tmp/actu2-s"
+		cmd="sed -e \"s/.*\( [A-Za-z0-9.-][_A-Za-z0-9.@+-]*.tgz\).*/\1 /g\" /tmp/actu2-g > /tmp/actu2-s"
 		echo $cmd; eval $cmd;
 		if (test "$excluye" != "") then {
 			cmd="grep -v -f excluye.txt /tmp/actu2-s > $arcdis";

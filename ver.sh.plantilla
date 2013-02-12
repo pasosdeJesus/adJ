@@ -1,8 +1,6 @@
 #!/bin/sh
 # Variables de configuración para generar distribución Aprendiendo de Jesús
-# Dominio público de acuerdo a la legislación colombiana. 
-# http://www.pasosdejesus.org/dominio_publico_colombia.html
-# 2007. vtamara@pasosdeJesus.org
+# Dominio público. 2007. vtamara@pasosdeJesus.org
 
 V=5.2
 VESP=""
@@ -41,7 +39,7 @@ HAZOWN="www.nocheyniebla.org"
 
 RSYNCHOST=""
 
-excluye="dialog-* libstdc++-* python-3* php-5.2.* php-gd-5.2.* php-pdo_pgsql-5.2.* php-pgsql-5.2.* php-mcrypt-5.2.* php-sqlite-5.2.* pear-Validate-.* pear-Auth-[0-9p.]*.tgz pear-HTML-QuickForm-.* ruby-1.8.* xfe-.*"
+excluye="dialog-.* libstdc++-.* python-3.* php-5.2.* php-gd-5.2.* php-pdo_pgsql-5.2.* php-pgsql-5.2.* php-mcrypt-5.2.* php-sqlite-5.2.* pear-Validate-.* pear-Auth-[0-9p.]*.tgz pear-HTML-QuickForm-.* postgresql-.* ruby-1.8.* xfe-.*"
 # Paquetes por excluir de descarga ftp de OpenBSD
 
 RUTAKERNELREESPECIAL=""

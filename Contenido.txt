@@ -133,6 +133,7 @@ zip-[v]			Comprime en formato ZIP
 courier-authlib-[v]
 courier-imap-[v]
 courier-pop3-[v]
+mysql-client-[v]
 mysql-server-[v]
 p5-Mail-SpamAssassin-[v]
 php-[v]		Lenguaje script empotrado en HTML que opera en servidor
@@ -150,7 +151,6 @@ sqlite-[v]		Implementación embebida de SQL (version 2).
 * Seguridad:
 apg-[v]		Genera claves aleatorias seguras
 john-[v]		Auditoría de claves
-nmap-[v]		Escaneo de puertos
 sleuthkit-[v]		Herramienta para análisis forense
 
 
@@ -162,7 +162,7 @@ python-[v]		Lenguaje de programación
 ruby-[v]    	Lenguaje de programación
 
 * Soporte, librerías y desarrollo
-a2ps-[v]-letter	Para imprimir en impresoras PostScript
+a2ps-[v]	Para imprimir en impresoras PostScript
 aalib-[v]		Librería de arte ASCII
 aspell-[v]		Chequeador de ortografía
 atk-[v]		Juego de herramientas de accesibilidad
@@ -278,6 +278,7 @@ libao-[v]		Librería portable para emitir audio
 libarchive-[v]	Librería para leer y escribir archivos de emisión
 libart-[v]		Gráficas 2D
 libass-[v]		Librería para decodificación AC-3
+libassuan-[v]		
 libaudiofile-[v]	Librería de archivos de audio de SGI
 libbluray-[v]	Soporta reproducción de Blu-ray
 libbonobo-[v]	Sistema de componentes y documentos compuestos
@@ -292,7 +293,6 @@ libdca-[v]		Librería para decodificar flujos DTS Coherent Acoustic
 libdnet-[v]		Librería portable de bajo nivel para redes
 libdv-[v]		Codec Quasar DV
 libdvbpsi-[v]		Librería para decodificar/generar tablas MPEG TS/DVB
-libdvd-[v]		Decodifica DVDs codificados con ACSS		
 libdvdcss-[v]		Desenmaraña DVDs enmarañados
 libdvdnav-[v]	Lectura/navegación de DVD
 libdvdread-[v]	Acceso a archivos DVD
@@ -315,6 +315,7 @@ libgsf-[v]		Archivos estructurados de Gnome
 libiconv-[v]		Conversión entre codificaciones de caracteres
 libid3tag-[v]	Lector de marcas ID3
 libidn-[v]		Manejo de cadenas de internacionalización
+libksba-[v]		
 liblrdf-[v]		Envoltura para dlopen de gnu libtool
 libltdl-[v]		Envoltura para dlopen de gnu libtool
 libmad-[v]	Decoficador de MPEG
@@ -324,7 +325,6 @@ libmcrypt-[v]	Algoritmos de encripción de flujos/bloques
 libmms-[v]		Librería para reconocer mms:// y mmsh://
 libmng-[v]		Librería de referencia del formato gráfico MNG
 libmp4v2-[v]	Lee y manipula formato de contenedor MP4
-libmpcdec-[v]		Formato de compresión de audio de alta calidad
 libmspack-[v]	Librería para manejar formatos de compresión de MS
 libnettle-[v]		Envía notificaciones de escritorio a un servicio 
 libnotify-[v]	Envía notificaciones de escritorio a un servicio 
@@ -376,6 +376,7 @@ p5-Clone-[v]
 p5-Crypt-OpenSSL-Bignum-[v]		
 p5-Crypt-OpenSSL-Random-[v]		
 p5-Crypt-OpenSSL-RSA-[v]		
+p5-Crypt-SSLeay-[v]
 p5-DateManip-[v]	Manipulación de fechas en perl
 p5-DBI-[v]		
 p5-DBD-mysql-[v]		
@@ -399,6 +400,7 @@ p5-NetAddr-IP-[v]
 p5-Net-Daemon-[v]		
 p5-Net-DNS-[v]		
 p5-Net-DNS-Resolver-Programmable-[v]		
+p5-Net-SSLeay-[v]		
 p5-Params-Util-[v]		
 p5-PlRPC-[v]		
 p5-SQL-Statement-[v]		
@@ -428,6 +430,7 @@ pear-HTML-Javascript-[v]	Interfaz para crear programas JS simples
 pear-HTML-Menu-[v]	Genera menús en HTML
 pear-HTML-QuickForm-[v]	Métodos para formularios en HTML
 pear-HTML-QuickForm-Controller-[v]	Formas multipágina con HTML_QuickForm
+pear-HTML-Table-[v]	Facilita diseño de tablas HTML
 pear-HTTP-Request-[v]	Facilita hacer requerimientos HTTP
 pear-Log-[v]	Librería de pear para manejo de bitácoras
 pear-Mail-[v]	Librería de pear para envío de correos
@@ -443,14 +446,16 @@ pear-XML-RSS-[v]	Reconocedor para Archivos Resumenes de Sitio RDF en PHP
 pear-XML-Serializer-[v]	Leer y escribir XML
 pear-XML-Tree-[v]	Clases para representar datos XML en PHP
 pear-XML-Util-[v]	Utilidad XML
+pinentry-[v]	
 png-[v]		Librería para manipular imágenes PNG
 poppler-[v]		Librería para presentar PDF
 popt-[v]		Librería estilo getopt
 portaudio-svn-[v]	API de audio portable y multi-plataforma
 procmail-[v]		Agente para filtrado de correo local
 proj-[v]		Utilidades para proyecciÃn cartogrÃfica
+pth-[v]		
 ps2eps-[v]		Convierte Postscript a Postscript Encapsulado
-psutils-[v]-letter	Utilidades para manipular documentos Postscript
+psutils-[v]	Utilidades para manipular documentos Postscript
 py-cairo-[v]	Conexión con Cairo para Python
 py-gdal-[v]	Interfaz con GDAL desde Python
 py-gobject-[v]	Conexión con gobject de glib2 en Python
@@ -515,6 +520,7 @@ speex-[v]		Codec para voz libre de patentes
 t1lib-[v]		Librería para presentación de fuentes tipo 1
 t1utils-[v]		Utilidades para fuentes PostScript tipo 1
 taglib-[v]		Para manejar meta-datos de formatos de audio
+tango-icon-theme-[v]		Para manejar meta-datos de formatos de audio
 tcl-[v]		Lenguaje de programación
 tiff-[v]		Manipula formato gráfico TIFF
 tk-[v]                Complemento gráfico para TCL
@@ -531,7 +537,6 @@ Xaw3d-[v]		Componentes gráficos 3D Athena similares a Motif
 x264-[v]		Codificador abierto h264/avc
 xcdroast-[v]	Quemador de CD
 xdg-utils-[v]	Asisten integración de tareas de escritorio
-xpdf-utils-[v]		Herramientas para conversión PDF
 xvidcore-[v]	Codificador y decodificador de MPEG-4
 xz-[v]		Herramientas para compresión y decompresión LZMA
 yelp-[v]		Sistema de ayuda de GNOME
