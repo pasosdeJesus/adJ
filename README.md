@@ -4,6 +4,13 @@ adJ
 Distribución de OpenBSD para fomentar la construcción del Reino de Dios 
 desde la educación y el respeto por la Dignidad Humana
 
+
+Concepto de estas fuentes
+-------------------------
+
+Estas fuentes buscan expresar brevemente los cambios por hacer a las fuentes de OpenBSD (y al sistema donde está desarrollando) para obtener adJ.  Una vez transformado puede compilar para generar juegos de distribución, instalador y el DVD de distribución de adJ.
+
+
 Prerequisitos
 -------------
 
@@ -14,7 +21,6 @@ Prerequisitos
 ```
 mkdir ~/comp; cd ~/comp; git clone git://github.com/pasosdeJesus/adJ.git
 ```
-
 
 
 Organización de fuentes
@@ -35,9 +41,8 @@ Pasos típicos para desarrollar
 
 Muchas de las operaciones típicas se controlan activando o desactivando pasos que el archivo de comandos distribucion.sh hará.  Los pasos se activan/desactivan en el archivo ver.sh (si no tiene una sudo ./distribucion.sh lo creará), activa un paso poniendo "s" en la variable asociada y lo desactiva poniendo "n".
 
-* Ejecute ```sudo ./distribucion.sh``` y siga instrucciones que este archivo de comandos de
-* Descargue fuentes de OpenBSD en /usr/src y de portes en /usr/ports
 * Enlace arboldes/usr/ports/mystuff en /usr/ports/mystuff
+* Ejecute ```sudo ./distribucion.sh``` y siga instrucciones que este archivo de comandos de
 * Actualice fuentes de /usr/src (con periodicidad) para mezclar cambios de OpenBSD activando autoCVS en ver.sh y ejecutando sudo ./distribucion.sh
 * Implemente mejoras a /usr/src bien como archivos de comandos (por ubicar en hdes/) que hacen cambios automáticos o bien como parches (ubicar en arboldes/usr/src)
 * Actualice/mejore portes o cree nuevos en arboldes/usr/ports/mystuff.  Al agregar o retirar actualizar distribucion.sh

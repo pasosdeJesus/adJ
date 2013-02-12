@@ -3,7 +3,7 @@ Distribución para fomentar la construcción del Reino de Dios desde la educación,
 el respeto por la dignidad humana y la memoria.
 
 Versión: 5.2%%%
-Fecha de publicación: 12/Feb/2013
+Fecha de publicación: 20/Feb/2013
 
 !!!NOVEDADES
 
@@ -11,14 +11,12 @@ Con respecto a OpenBSD 5.2 para amd64 y a la edición anterior de este DVD
 
 !KERNEL Y SISTEMA BASE
 
+* Se incluye soporte para cotejación (COLLATE) en idioma nativo importado de FreeBSD, tablas de caracteres y cotejación para todos los paises de habla hispana y porte de PostgreSQL que soporta cotejación (por fin pueden quedar en orden para español las consultas a la base de datos). Notará la diferencia! Vea detalles y una captura de pantalla en http://aprendiendo.pasosdejesus.org/?id=i18n
 * Parches de seguridad de sistema base hasta:  1.Feb.2013
-* Kernel recompilado renombrando la palabra `daemon' por `service' (ver por ejemplo ==vmstat -s== y detalles en http://aprendiendo.pasosdejesus.org/?id=Renombrando+Daemon+por+Service). 
-* En sistema base ==/etc/rc.d== emplea service y se recomienda que los scripts de inicio definan ==service== en lugar de ==daemon== (el segundo se soporta pero se considera obsoleto).  ==syslog== emplea ==/var/log/service== y se recomienda emplear nombre de facilidad ==service== pues ==daemon== se considera obsoleto.
-* Información de zonas horarias actualizadas.
-* A partir de la versión 5.0 se distribuye imagen para un DVD en lugar de un CD. La distribución de archivos en el mismo es diferente a la del CD de OpenBSD oficial.   Los comprimidos con los componentes básicos de OpenBSD están en ==/==  y la mayoría de paquetes en el directorio ==paquetes==.  
+* Se ha ampliado el renombramiento de `daemon' por `service' para cubrir más del sistema base (tras instalar, ver por ejemplo ==vmstat -s== o ==less /var/log/service== o ==man service==).  Se renombró en documentación, en la mayoría de programas del sistema base y en librería libc se cambió la función ==daemon== por ==service==, la primera se mantiene por compatibilidad (ver ==man service==), se hicieron cambios análogos en libwrapper.  Ver detalles en http://aprendiendo.pasosdejesus.org/?id=Renombrando+Daemon+por+Service ). 
 
 Entre las novedades reportadas en las `Notas de publicación de OpenBSD 5.2' destacamos:
-* Soporte para pthreads.  Mejoras a la pila de red (especialmente IPv6) y a herramientas de enrutamiento, servicios de enrutamiento y SCSI, velocidad y aleatoreidad del kernel.  Soporte a interrupciones MSI.  Mejor soporte de memoria grande en toda arquitectura. 
+* Soporte para pthreads aunque sin _Thread_local.  
 
 * Controladores ampliados
 ** Video: ==nviic==,  soporte para touch pads ALPS
@@ -32,27 +30,26 @@ Entre las novedades reportadas en las `Notas de publicación de OpenBSD 5.2' dest
 ** Procesadores: Implementación para el modo AES-GCM de CPUs Intel y futuras AMD
 
 * Red
-** Mejoras a IPSec, IPv6, servicios de enrutamiento y utilidades para usuarios
+** Mejoras a pila de red y servicios. Mejoras a pf. . IPSec, IPv6, servicios de enrutamiento y utilidades para usuarios
 ** nginx: Nuevo servidor HTTP, proxy reverso y proxy de correo
-** 
+** smtpd mejorado.
 
-* Herramientas mejoradas: 
-** ==smtpd==, ==sndiod==,  ==aucat==, ==tmux==, ==ssh 6.0==
-* Ahora sólo soporta capa de emulación de Linux.
-* Soporte locale mejorado.  Locale "C" usa ASCII en lugar de ISO-8859-1. Para emplear ISO-8859-1 debe emplearse ==LC_CTYPE==
-* Herramientas para crear paquetes 
+* Librerías y herramientas mejoradas: 
+** Ampliado soporte de caracteres amplios y cadenas multibyte (importante en localización).
+** Mejoras entre otros a  ==tmux==, ==libtool==, ==tmux==, ==ssh 6.1==
 * El sistema base incluye mejoras a componentes auditados como ==Xenocara== (Xorg 7.7), ==gcc== 4.2.1, ==perl== 5.12.2, Apache 1.3 mejorado, OpenSSL 1.0.0f, ==sendmail== 8.14.5, bind 9.4.2-P2
 
 !PROCESO DE INSTALACIÓN
 
 La instalación del sistema base, de las particiones cifradas y de todos los paquetes del DVD instalador requiere por lo menos 13G, de los cuales 10G deben reservarse en ==/usr== y 1.5G en ==/var
 
-* Ahora el instalador  de adJ (y otros archivos de comandos de adJ) se ubica en /usr/local/adJ y emplea codificación UTF8, por lo que para iniciarlo se recomienda desde iniciar una terminal gráfica con codificación UTF8 con ==xterm -u8 -en utf8== y desde esa terminal ejecutar ==/inst-adJ.sh==
-* El instalador de adJ además de ser en español ahora emplea diálogos.
+* Ahora el instalador  de adJ (y otros archivos de comandos de adJ) se ubica en /usr/local/adJ y emplea codificación UTF8, por lo que para iniciarlo se recomienda desde iniciar una terminal gráfica para ejecutar ==/inst-adJ.sh==
 
 
 !PAQUETES
 
+* Paquete xfe actualizado a 1.34 con nueva traducción es_CO.
+* Mejores permisos en paquetes pear-*. 
 * Se pasa de PHP 5.2 a PHP 5.3
 * PostgreSQL actualizado a 9.12 e inicializado para usar codificación UTF-8 por defecto.  Atención: Este cambio modificara codificacion de las bases y requiere revisar las aplicaciones que tengan bases de datos en PostgreSQL en su servidor (se incluye una versión de SIVeL que lo soporta). 
 * Navegadores actualizados: Firefox a 9.01, Chromium a 16.0.912.77, Midori a 0.4.3
@@ -94,7 +91,7 @@ Para mejorar el financiamiento de OpenBSD, donamos y aportamos trabajo voluntari
 
 !!!DESARROLLO
 
-Puede descargar las fuentes de los scripts que han permitido generar esta distribución empleando la etiqueta ADJ_5.1 del repositorio CVS.  Lo invitamos a contribuir con aportes de dominio público, vea detalles en: http://aprendiendo.pasosdejesus.org/?id=Fuentes+de+adJ
+Hemos reorganizado las fuentes y ahora empleamos github donde puede resultar más fácil para más personas ayudar en el desarrollo.   Lo invitamos a consultar https://github.com/pasosdeJesus/adJ
 
 
 !!! FE DE ERRATAS
