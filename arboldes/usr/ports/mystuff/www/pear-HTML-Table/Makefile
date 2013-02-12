@@ -1,8 +1,7 @@
-# $OpenBSD: Makefile,v 1.3 2007/03/22 22:48:04 robert Exp $
 
 COMMENT=	"design of HTML tables easy, flexible, reusable and efficient"
 
-DISTNAME=	HTML_Table-1.8.2
+DISTNAME=	HTML_Table-1.8.3
 PKGNAME=	pear-${DISTNAME:S/_/-/}
 CATEGORIES=	www devel pear
 

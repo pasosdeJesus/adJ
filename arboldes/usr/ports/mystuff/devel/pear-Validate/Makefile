@@ -3,7 +3,6 @@
 COMMENT=	validation class
 
 DISTNAME=	Validate-0.8.5
-REVISION =	
 CATEGORIES=	devel
 
 MODULES=	www/pear

@@ -4,7 +4,7 @@ COMMENT =	format the display of a shell script
 
 V =		1.2-20121230
 DISTNAME = 	dialog-${V}
-PKGNAME = 	dialog-${V:S/-/./}p0
+PKGNAME = 	dialog-${V:S/-/./}
 
 EXTRACT_SUFX =	.tgz
 

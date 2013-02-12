@@ -1,4 +1,3 @@
-# $OpenBSD: Makefile,v 1.5 2007/03/22 22:48:03 robert Exp $
 
 COMMENT=	"object interface to database tables"
 

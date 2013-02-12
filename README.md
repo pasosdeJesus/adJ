@@ -7,34 +7,35 @@ desde la educación y el respeto por la Dignidad Humana
 Prerequisitos
 -------------
 
-Computador con procesador de 64 bits.
-OpenBSD o adJ para 64 bits instalados.
+1. Computador con procesador de 64 bits.
+2. OpenBSD o adJ para 64 bits instalados.
+3. Fuentes de la versión de OpenBSD que usa descargadas e instaladas en /usr/src, /usr/src/sys, /usr/ports y /usr/src/xenocara
+4. Clone estas a su directorio preferido, por ejemplo:
+```
+mkdir ~/comp; cd ~/comp; git clone git://github.com/pasosdeJesus/adJ.git
+```
 
-
-Procedimiento
--------------
-
-1. Clone
-2. Ejecute sudo ./distribucion.sh
-3. Siga instrucciones que el archivo de comandos da
 
 
 Organización de fuentes
 -----------------------
 
-arbolcd 	Directorios y archivos de un DVD instalador
-arboldd		Directorios y archivos de un adJ instalado
-arboldes	Directorios, archivos y parches por emplear en comp.desarrollo
-distribucion.sh	Archivo de comandos para generar distribución
-hdes		Herramientas para generar distribución
-tminiroot	Transforma instalador que va en DVD a español
-ver.sh.plantilla	Plantilla con variables que controlan distribucion.sh
+- arbolcd 	Directorios y archivos de un DVD instalador
+- arboldd		Directorios y archivos de un adJ instalado
+- arboldes	Directorios, archivos y parches por emplear en comp.desarrollo
+- distribucion.sh	Archivo de comandos para generar distribución
+- hdes		Herramientas para generar distribución
+- tminiroot	Transforma instalador que va en DVD a español
+- ver.sh.plantilla	Plantilla con variables que controlan distribucion.sh
 
 
 
 Pasos típicos para desarrollar
 ------------------------------
 
+Muchas de las operaciones típicas se controlan activando o desactivando pasos que el archivo de comandos distribucion.sh hará.  Los pasos se activan/desactivan en el archivo ver.sh (si no tiene una sudo ./distribucion.sh lo creará), activa un paso poniendo "s" en la variable asociada y lo desactiva poniendo "n".
+
+* Ejecute ```sudo ./distribucion.sh``` y siga instrucciones que este archivo de comandos de
 * Descargue fuentes de OpenBSD en /usr/src y de portes en /usr/ports
 * Enlace arboldes/usr/ports/mystuff en /usr/ports/mystuff
 * Actualice fuentes de /usr/src (con periodicidad) para mezclar cambios de OpenBSD activando autoCVS en ver.sh y ejecutando sudo ./distribucion.sh
