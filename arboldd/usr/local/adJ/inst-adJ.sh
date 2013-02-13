@@ -548,7 +548,7 @@ p5-Module-CoreList p5-Module-Load p5-version p5-Digest-SHA \
 p5-Locale-Maketext-Simple p5-Pod-Escapes p5-Pod-Simple \
 p5-ExtUtils-ParseXS p5-ExtUtils-CBuilder p5-Module-Pluggable \
 p5-Time-Piece p5-Module-Loaded xcompmgr; do
-		pkg_delete -D dependencies $i 2>> /var/tmp/inst-adJ.bitacora 2>&1
+		pkg_delete -I -D dependencies $i 2>> /var/tmp/inst-adJ.bitacora 2>&1
 	done;
 	ed /etc/mixerctl.conf >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/headphones/hp/g
@@ -1142,11 +1142,11 @@ if (test "$?" = "0") then {
 	dialog --title 'Eliminar PostgreSQL' --yesno "\\nDesea eliminar la actual versión de PostgreSQL y los datos asociados para actualizarla\\n" 15 60
 	if (test "$?" = "0") then {
 		echo "s" >> /var/tmp/inst-adJ.bitacora
-		pkg_delete -D dependencies postgresql-server >> /var/tmp/inst-adJ.bitacora 2>&1
-		pkg_delete -D dependencies postgresql-client >> /var/tmp/inst-adJ.bitacora 2>&1
-		pkg_delete -D dependencies .libs-postgresql-client >> /var/tmp/inst-adJ.bitacora 2>&1
-		pkg_delete -D dependencies .libs1-postgresql-client >> /var/tmp/inst-adJ.bitacora 2>&1
-		pkg_delete -D dependencies .libs-postgresql-server >> /var/tmp/inst-adJ.bitacora 2>&1
+		pkg_delete -I -D dependencies postgresql-server >> /var/tmp/inst-adJ.bitacora 2>&1
+		pkg_delete -I -D dependencies postgresql-client >> /var/tmp/inst-adJ.bitacora 2>&1
+		pkg_delete -I -D dependencies .libs-postgresql-client >> /var/tmp/inst-adJ.bitacora 2>&1
+		pkg_delete -I -D dependencies .libs1-postgresql-client >> /var/tmp/inst-adJ.bitacora 2>&1
+		pkg_delete -I -D dependencies .libs-postgresql-server >> /var/tmp/inst-adJ.bitacora 2>&1
 		d=`date +%Y%M%d`
 		nd="data-$o-$d"
 		while (test -f "${nd}.tar.gz" ) ; do
@@ -1282,12 +1282,12 @@ if (test "$p" != "") then {
 	dialog --title 'Eliminar PHP' --yesno "\\nPaquete PHP ya instalado. ¿Eliminar para instalar el de esta versión de adJ?" 15 60
 	if (test "$?" = "0") then {
 		rm -f /var/www/conf/modules/php5.conf 
-		pkg_delete -D dependencies php >> /var/tmp/inst-adJ.bitacora 2>&1
-		pkg_delete -D dependencies php-2. >> /var/tmp/inst-adJ.bitacora 2>&1
-		pkg_delete -D dependencies php5-core >> /var/tmp/inst-adJ.bitacora 2>&1
-		pkg_delete -D dependencies partial-php5-core >> /var/tmp/inst-adJ.bitacora 2>&1
-		pkg_delete -D dependencies partial-php5-pear >> /var/tmp/inst-adJ.bitacora 2>&1
-		pkg_delete -D dependencies partial-php >> /var/tmp/inst-adJ.bitacora 2>&1
+		pkg_delete -I -D dependencies php >> /var/tmp/inst-adJ.bitacora 2>&1
+		pkg_delete -I -D dependencies php-2. >> /var/tmp/inst-adJ.bitacora 2>&1
+		pkg_delete -I -D dependencies php5-core >> /var/tmp/inst-adJ.bitacora 2>&1
+		pkg_delete -I -D dependencies partial-php5-core >> /var/tmp/inst-adJ.bitacora 2>&1
+		pkg_delete -I -D dependencies partial-php5-pear >> /var/tmp/inst-adJ.bitacora 2>&1
+		pkg_delete -I -D dependencies partial-php >> /var/tmp/inst-adJ.bitacora 2>&1
 	} fi;
 } fi;
 
@@ -1473,9 +1473,9 @@ if (test "$inspear" = "s") then {
 	echo "* Actualizando paquetes de pear"  >> /var/tmp/inst-adJ.bitacora;
 	echo "* Eliminando paquetes y librerías" >> /var/tmp/inst-adJ.bitacora;
 	p=`ls /var/db/pkg/ | grep "pear-"`;
-	pkg_delete $p >> /var/tmp/inst-adJ.bitacora 2>&1
+	pkg_delete -I $p >> /var/tmp/inst-adJ.bitacora 2>&1
 	p=`ls /var/db/pkg/ | grep "pear-"`;
-	pkg_delete $p >> /var/tmp/inst-adJ.bitacora 2>&1;
+	pkg_delete -I $p >> /var/tmp/inst-adJ.bitacora 2>&1;
 	rm -rf /var/www/pear
 	echo "Antes de pkg_add" >> /var/tmp/inst-adJ.bitacora
 	p=`ls $PKG_PATH/pear-*`;
@@ -1483,7 +1483,7 @@ if (test "$inspear" = "s") then {
 	echo "Antes de pkg_delete" >> /var/tmp/inst-adJ.bitacora
 	ls -l /var/www/pear/lib/DB/ >> /var/tmp/inst-adJ.bitacora
 	cd /var/db/pkg
-	pkg_delete partial-pear-*  >> /var/tmp/inst-adJ.bitacora 2>&1;
+	pkg_delete -I partial-pear-*  >> /var/tmp/inst-adJ.bitacora 2>&1;
 } fi;
 
 }
@@ -1513,8 +1513,8 @@ f=`ls /var/db/pkg/fluxbox* 2> /dev/null > /dev/null`;
 if (test "$?" = "0") then {
 	dialog --title 'Eliminar Fluxbox' --yesno "\\nfluxbox instalado. ¿Eliminarlo para instalar uno más nuevo?" 15 60
 	if (test "$?" = "0") then {
-		pkg_delete -D dependencies fluxbox >> /var/tmp/inst-adJ.bitacora 2>&1 
-		pkg_delete -D dependencies partial-fluxbox >> /var/tmp/inst-adJ.bitacora 2>&1
+		pkg_delete -I -D dependencies fluxbox >> /var/tmp/inst-adJ.bitacora 2>&1 
+		pkg_delete -I -D dependencies partial-fluxbox >> /var/tmp/inst-adJ.bitacora 2>&1
 	} fi;
 } fi;
 
@@ -1877,7 +1877,7 @@ if (test ! -f "/usr/local/bin/ruby") then {
 echo "* Configurar tmux" >> /var/tmp/inst-adJ.bitacora;
 f=`ls /var/db/pkg/tmux* 2> /dev/null`;
 if (test "$f" != "") then {
-	pkg_delete tmux >> /var/tmp/inst-adJ.bitacora 2>&1
+	pkg_delete -I tmux >> /var/tmp/inst-adJ.bitacora 2>&1
 } fi;
 
 if (test ! -f /home/$uadJ/.tmux.conf) then {
@@ -1899,8 +1899,8 @@ f=`ls /var/db/pkg/*firefox* 2> /dev/null > /dev/null`;
 if (test "$?" = "0") then {
 	dialog --title 'Eliminar Firefox' --yesno "\\nFirefox instalado. ¿Eliminarlo para instalar uno más nuevo?" 15 60
 	if (test "$?" = "0") then {
-		pkg_delete -D dependencies mozilla-firefox >> /var/tmp/inst-adJ.bitacora 2>&1
-		pkg_delete -D dependencies firefox >> /var/tmp/inst-adJ.bitacora 2>&1
+		pkg_delete -I -D dependencies mozilla-firefox >> /var/tmp/inst-adJ.bitacora 2>&1
+		pkg_delete -I -D dependencies firefox >> /var/tmp/inst-adJ.bitacora 2>&1
 	} fi;
 } fi;
 f=`ls /var/db/pkg/firefox* 2> /dev/null > /dev/null`;
@@ -1951,7 +1951,7 @@ f=`ls /var/db/pkg/xfe* 2> /dev/null > /dev/null`;
 if (test "$?" = "0") then {
 	dialog --title 'Eliminar xfe' --yesno "\\nxfe instalado. ¿Eliminarlo para instalar uno más nuevo?" 15 60
 	if (test "$?" = "0") then {
-		pkg_delete -D dependencies xfe >> /var/tmp/inst-adJ.bitacora 2>&1
+		pkg_delete -I -D dependencies xfe >> /var/tmp/inst-adJ.bitacora 2>&1
 	} fi;
 } fi;
 f=`ls /var/db/pkg/xfe* 2> /dev/null > /dev/null`;
@@ -2204,7 +2204,7 @@ echo "Eliminando parciales" >> /var/tmp/inst-adJ.bitacora
 cd /var/db/pkg
 for i in partial-*; do 
 	echo $i >> /var/tmp/inst-adJ.bitacora ; 
-	sudo pkg_delete $i >> /var/tmp/inst-adJ.bitacora 2>&1 ; 
+	sudo pkg_delete -I $i >> /var/tmp/inst-adJ.bitacora 2>&1 ; 
 done
 
 
@@ -2224,7 +2224,7 @@ echo "Eliminando librerías innecesarias" >> /var/tmp/inst-adJ.bitacora
 cd /var/db/pkg
 for i in .libs-*; do 
 	echo $i >> /var/tmp/inst-adJ.bitacora ; 
-	sudo pkg_delete $i >> /var/tmp/inst-adJ.bitacora 2>&1 ; 
+	sudo pkg_delete -I $i >> /var/tmp/inst-adJ.bitacora 2>&1 ; 
 done
 
 for i in $PKG_PATH/*tgz; do
