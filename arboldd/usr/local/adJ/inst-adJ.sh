@@ -2207,6 +2207,9 @@ for i in partial-*; do
 	sudo pkg_delete -I $i >> /var/tmp/inst-adJ.bitacora 2>&1 ; 
 done
 
+echo "Eliminando problemáticos" >> /var/tmp/inst-adJ.bitacora 
+sudo pkg_delete -D dependencies libstdc++ >> /var/tmp/inst-adJ.bitacora  2>&1
+sudo pkg_delete -D dependencies lua >> /var/tmp/inst-adJ.bitacora  2>&1
 
 echo "Instalando algunos comunes" >> /var/tmp/inst-adJ.bitacora 
 pkg_add -D updatedepends -D update -D libdepends -r $PKG_PATH/sdl*tgz $PKG_PATH/libxml*tgz $PKG_PATH/libgpg-error*tgz $PKG_PATH/libart-*.tgz  >> /var/tmp/inst-adJ.bitacora 2>&1;

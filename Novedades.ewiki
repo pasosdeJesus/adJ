@@ -39,38 +39,31 @@ Entre las novedades reportadas en las `Notas de publicación de OpenBSD 5.2' dest
 ** Mejoras entre otros a  ==tmux==, ==libtool==, ==tmux==, ==ssh 6.1==
 * El sistema base incluye mejoras a componentes auditados como ==Xenocara== (Xorg 7.7), ==gcc== 4.2.1, ==perl== 5.12.2, Apache 1.3 mejorado, OpenSSL 1.0.0f, ==sendmail== 8.14.5, bind 9.4.2-P2
 
+!PAQUETES EXCLUSIVOS DE ADJ
+
+* SIVeL 1.1.4 con gran actualización a DIVIPOLA.
+* xfe actualizado a 1.34 con nueva traducción es_CO.
+* PostgreSQL actualizado a 9.1.7 con soporte para cotejaciones nativas (COLLATE) y UTF-8 por defecto. Ver detalles de como usar cotejación en http://aprendiendo.pasosdejesus.org/?id=i18n
+* Los paquetes exclusivos los encuentra en [ftp://ftp.pasosdeJesus.org/pub/AprendiendoDeJesus/5.1-amd64/paquetes]
+
 !PROCESO DE INSTALACIÓN
 
 La instalación del sistema base, de las particiones cifradas y de todos los paquetes del DVD instalador requiere por lo menos 13G, de los cuales 10G deben reservarse en ==/usr== y 1.5G en ==/var
 
-* Ahora el instalador  de adJ (y otros archivos de comandos de adJ) se ubica en /usr/local/adJ y emplea codificación UTF8, por lo que para iniciarlo se recomienda desde iniciar una terminal gráfica para ejecutar ==/inst-adJ.sh==
+* El instalador  de adJ emplea codificación UTF8, por lo que para iniciarlo se recomienda desde una terminal gráfica con ==/inst-adJ.sh==
 
 
 !PAQUETES
 
-* Paquete xfe actualizado a 1.34 con nueva traducción es_CO.
 * Mejores permisos en paquetes pear-*. 
-* Se pasa de PHP 5.2 a PHP 5.3
-* PostgreSQL actualizado a 9.12 e inicializado para usar codificación UTF-8 por defecto.  Atención: Este cambio modificara codificacion de las bases y requiere revisar las aplicaciones que tengan bases de datos en PostgreSQL en su servidor (se incluye una versión de SIVeL que lo soporta). 
-* Navegadores actualizados: Firefox a 9.01, Chromium a 16.0.912.77, Midori a 0.4.3
-* Se agrega qgis, sistema de información geográfica que permite entre otras conectarse a PostGIS 
-* Se incluye y configura el lenguaje Ruby 1.9 y el entorno para desarrollo de aplicaciones web Ruby on Rails con todas las dependencias.
-* Se incluyen sistemas para procesamiento de textos texlive y docbook
-* Paquete dialog parchado activando localización en español.
-* Novedades en paquete característico de adJ: 
-** Vuelven a incluirse hojas de trabajo de lecto-escritura AprestamientoI y AnimalesI
-** Añadidos !PlantasCursiva y !NombresCursiva que son hojas de trabajo de escritura en letra cursiva, así como las fentes tipográficas !TiposLectoEscritura
-* Los paquetes particulares los encuentra en [ftp://ftp.pasosdeJesus.org/pub/AprendiendoDeJesus/5.1-amd64/paquetes]
+* Navegadores actualizados: Firefox a 13.01, Chromium a 20.0.1132.57, Midori a 0.4.6
+* LibreOffice actualizado a 3.5.5.3, gimp a 2.8.0, vlc a 2.0
+* PHP actualizado a 5.3.14 así como todos los lenguajes de programación.
 * Se incluyen otros paquetes típicos del repositorio de OpenBSD, en donde hay   más de 7400 disponibles para amd64
 
 !ESCRITORIO
 
-* Transición a UTF8 en base de datos.
-* SIVeL 1.1.2 soporta UTF8 en base de datos.
-* Usuario sivel es superusuario de PostgreSQL para facilitar interacción con PostGIS.
-* qgis
-
-==xterm== tiene bugs por ejemplo al borrar una vocal con tilde o ñ debe presionarse 2 veces espacio atras.  Si requiere una terminal con codificación ASCII ejecute:
+==xterm== tiene fallas en UTF-8 por ejemplo al borrar una vocal con tilde o ñ debe presionarse 2 veces espacio atras.  Si requiere una terminal con codificación ASCII ejecute:
 <pre>
     xterm -en ascii
 </pre>
@@ -84,7 +77,7 @@ y ponga la variable LANG en otro valor por ejemplo:
 
 Puede descargar imagenes ISO para amd64 de ==ftp://ftp.pasosdeJesus.org/pub/AprendiendoDeJesus==, o si prefiere asumir gastos de manufactura, envío y eventualmente una donación con gusto le enviamos un DVD ([correo de contacto|mailto:info@pasosdeJesus.org]).
 
-Eventualmente podrá contar con ayuda voluntaria para utilizar los programas disponibles en este DVD en la lista pública ==openbsd-colombia== a la cual puede suscribirse enviando un correo a openbsd-colombia-subscribe@googlegroups.com (Agradecemos amabilidad de Fernando Quintero).
+Eventualmente podrá contar con ayuda voluntaria para utilizar los programas disponibles en este DVD en la lista pública ==openbsd-colombia== a la cual puede suscribirse enviando un correo a openbsd-colombia-subscribe@googlegroups.com (Agradecemos amabilidad del moderador).
 
 Para mejorar el financiamiento de OpenBSD, donamos y aportamos trabajo voluntario a ese proyecto.  Por lo mismo publicamos adJ varios meses después de la respectiva versión de OpenBSD.
 
