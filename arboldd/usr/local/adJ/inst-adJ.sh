@@ -2222,7 +2222,7 @@ done;
 
 echo "Eliminando librerías innecesarias" >> /var/tmp/inst-adJ.bitacora 
 cd /var/db/pkg
-for i in .libs-*; do 
+for i in .libs*; do 
 	echo $i >> /var/tmp/inst-adJ.bitacora ; 
 	sudo pkg_delete -I $i >> /var/tmp/inst-adJ.bitacora 2>&1 ; 
 done
