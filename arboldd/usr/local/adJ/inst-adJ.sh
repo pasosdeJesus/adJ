@@ -1389,26 +1389,36 @@ if (test "$?" != "0") then {
 } fi;
 cat /var/www/conf/httpd.conf >> /var/tmp/inst-adJ.bitacora 
 
+
 apdocroot=`awk '
 /DocumentRoot  */ {
-	if (paso==2) {
+	if (paso==3) {
 		match($0, /DocumentRoot  */);
 		sc=substr($0, RSTART+RLENGTH, length($0)-RSTART-RLENGTH+1);
 		gsub(/"/, "", sc);
-		print sc;
-		paso=0;
+		paso=4;
 	}
 	if (paso==1) {
 		match($0, /DocumentRoot  */);
 		sc=substr($0, RSTART+RLENGTH, length($0)-RSTART-RLENGTH+1);
 		gsub(/"/, "", sc);
-		paso=1;
+		paso=2;
 	}
 }
 
 /<VirtualHost .*_default_:443/ {
-	paso=1;
+	if (paso==0) {
+		paso=1;
+	}
 }
+
+/<VirtualHost .*127.0.0.1:443/ {
+	if (paso==2 || paso==0) {
+		paso=3;
+	} 
+}
+
+Primero default, pero si despues viene un 127.0.0.1 ese
 
 /.*/ {
 }
@@ -1418,8 +1428,10 @@ BEGIN {
 }
 
 END {
-	if (paso == 1) {
+	if (paso == 2 || paso == 4) {
 		print sc;
+	} else {
+		print "/var/www/htdocs"
 	}
 }
 ' /var/www/conf/httpd.conf`
