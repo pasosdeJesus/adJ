@@ -17,6 +17,8 @@ if (test ! -f "ver.sh") then {
 } fi;
 . ./ver.sh
 
+mkdir -p ./tmp
+
 dini=`pwd`;
 
 function die {
@@ -582,7 +584,7 @@ if (test "$sn" = "s") then {
 		mkdir -p /usr/ports
 		ln -s $dini/arboldes/usr/ports/mystuff /usr/ports/mystuff
 	} fi;
-	rm disponibles*
+	rm tmp/disponibles*
 	paquete dialog misc
 
 	paquete pear-Auth security
@@ -641,16 +643,16 @@ else {
 } fi;
 
 
-echo "$paraexc" | tr " " "\n" | grep -v "^[ \t]*$" | sed -e "s/^/ /g" > excluye.txt
-cmd="echo \$excluye | tr \" \" \"\\n\" | sed -e \"s/^/ /g\" >> excluye.txt"
+echo "$paraexc" | tr " " "\n" | grep -v "^[ \t]*$" | sed -e "s/^/ /g" > tmp/excluye.txt
+cmd="echo \$excluye | tr \" \" \"\\n\" | sed -e \"s/^/ /g\" >> tmp/excluye.txt"
 eval "$cmd"
 if (test "$sn" = "s") then {
 	mkdir -p $V$VESP-$ARQ/paquetes
 	cp -rf arbolcd/* $V$VESP-$ARQ/
 	find $V$VESP-$ARQ/ -name CVS | xargs rm -rf
 
-	arcdis="disponibles.txt";
-	arcdis2="disponibles2.txt";
+	arcdis="tmp/disponibles.txt";
+	arcdis2="tmp/disponibles2.txt";
 
 	pftp=`echo $PKG_PATH | sed -e "s/^ftp:.*/ftp/g;s/^http:.*/ftp/g"`;
 	echo pftp $pftp
@@ -668,7 +670,7 @@ if (test "$sn" = "s") then {
 		cmd="sed -e \"s/.*\( [A-Za-z0-9.-][_A-Za-z0-9.@+-]*.tgz\).*/\1 /g\" /tmp/actu2-g > /tmp/actu2-s"
 		echo $cmd; eval $cmd;
 		if (test "$excluye" != "") then {
-			cmd="grep -v -f excluye.txt /tmp/actu2-s > $arcdis";
+			cmd="grep -v -f tmp/excluye.txt /tmp/actu2-s > $arcdis";
 		} else {
 			cmd="cp /tmp/actu2-s $arcdis";
 		} fi;
@@ -687,8 +689,8 @@ if (test "$sn" = "s") then {
 	tr " " "\\n" < $arcdis > $arcdis2
 
 	echo "Buscando paquetes sobrantes con respecto a Contenido.txt" | tee -a /var/tmp/distrib-adJ.bitacora
-	grep ".-\[v\]" Contenido.txt | sed -e "s/-\[v\]\([-a-zA-Z_0-9]*\).*/-[0-9][0-9alphabetrcvSTABLERC._]*\1.tgz/g" > esperados.txt
-	ne=`(ls $V$VESP-$ARQ/paquetes/ ; ls $V$VESP-$ARQ/sivel/*tgz) | grep -v -f esperados.txt`;
+	grep ".-\[v\]" Contenido.txt | sed -e "s/-\[v\]\([-a-zA-Z_0-9]*\).*/-[0-9][0-9alphabetrcvSTABLERC._]*\1.tgz/g" > tmp/esperados.txt
+	ne=`(ls $V$VESP-$ARQ/paquetes/ ; ls $V$VESP-$ARQ/sivel/*tgz) | grep -v -f tmp/esperados.txt`;
 	if (test "$ne" != "") then {
 		echo "Los siguientes paquetes presentes en el directorio $V$VESP-$ARQ/paquetes no están entre los esperados:" | tee -a /var/tmp/distrib-adJ.bitacora;
 		echo $ne | tee -a /var/tmp/distrib-adJ.bitacora;
@@ -699,7 +701,7 @@ if (test "$sn" = "s") then {
 	echo "Buscando repetidos con respecto a Contenido.txt" | tee -a /var/tmp/distrib-adJ.bitacora
 	m=""
 	(cd $V$VESP-$ARQ/paquetes; ls ../sivel/*tgz; ls > /tmp/actu2-l)
-	for i in `cat esperados.txt`; do
+	for i in `cat tmp/esperados.txt`; do
 		n=`grep "^$i" /tmp/actu2-l | wc -l | sed -e "s/ //g"`;
 		if (test "$n" -gt "1") then {
 			m="enter";
@@ -713,24 +715,24 @@ if (test "$sn" = "s") then {
 		read;
 	} fi;
 
-	rm -f poract.txt
+	rm -f tmp/poract.txt
 	t=0;
-	for i in `cat esperados.txt`; do 
+	for i in `cat tmp/esperados.txt`; do 
 		cmd="grep \"^$i\" $arcdis2 | tail -n 1";
 		p=`grep "^$i" $arcdis2 | tail -n 1`; 
 		echo -n "($p)"
 		da=`ls $V$VESP-$ARQ/paquetes/ | grep "^$i"`
 		echo -n " -> $p"; 
-		e=`grep "^$i" excluye.txt | tail -n 1`;
+		e=`grep "^$i" tmp/excluye.txt | tail -n 1`;
 		echo " $e"; 
 		if (test "$da" != "$p" -a "$p" != "$e" -a "X$p" != "X") then {
-			echo $p >> poract.txt
+			echo $p >> tmp/poract.txt
 			t=1;
 		} fi;
 	done
 
 	if (test "$t" = "1") then {
-		pa=`cat poract.txt | grep . | tr "\n" "," | sed -e "s/,$//g"`
+		pa=`cat tmp/poract.txt | grep . | tr "\n" "," | sed -e "s/,$//g"`
 		#	cmd="rsync -avz vtamara@uvirtual.ean.edu.co:'$pa' $V$VESP-$ARQ/paquetes/"
 		if (test "$pftp" = "ftp") then {
 			cmd="(cd $V$VESP-$ARQ/paquetes; ftp $PKG_PATH/{$pa} )"
@@ -751,7 +753,7 @@ if (test "$sn" = "s") then {
 	echo "Buscando faltantes con respecto a Contenido.txt" | tee -a /var/tmp/distrib-adJ.bitacora
 	m=""
 	(cd $V$VESP-$ARQ/paquetes; ls > /tmp/actu2-l)
-	for i in `cat esperados.txt`; do  
+	for i in `cat tmp/esperados.txt`; do  
 		n=`grep "^$i" /tmp/actu2-l | wc -l | sed -e "s/ //g"`; 
 		if (test "$n" = "0") then {
 			echo "$i"
@@ -808,16 +810,16 @@ else {
 
 
 if (test "$sn" = "s") then {
-	echo "s/\[V\]/$V/g"  > rempCont.sed
+	echo "s/\[V\]/$V/g"  > tmp/rempCont.sed
 	for i in `grep ".-\[v\]" Contenido.txt | sed -e "s/-\[v\]\([-a-zA-Z_0-9]*\).*/-[v]\1/g"`; do
 		n=`echo $i | sed -e "s/-\[v\]\([-a-zA-Z_0-9]*\).*/-[0-9][0-9alphabetvrc._]*\1.tgz/g"`
 		d=`(cd $V$VESP-$ARQ/paquetes; ls | grep "^$n"; cd ../sivel; ls | grep "^$n" 2>/dev/null | tail -n 1)`
 		e=`echo $d | sed -e 's/.tgz//g'`;
 		ic=`echo $i | sed -e 's/\[v\]/\\\\[v\\\\]/g'`;
-		echo "s/^$ic/$e/g" >> rempCont.sed
+		echo "s/^$ic/$e/g" >> tmp/rempCont.sed
 	done;
 
-	sed -f rempCont.sed Contenido.txt > $V$VESP-$ARQ/Contenido.txt
+	sed -f tmp/rempCont.sed Contenido.txt > $V$VESP-$ARQ/Contenido.txt
 
 echo " *> Revisando faltantes con respecto a Contenido.txt" | tee -a /var/tmp/distrib-adJ.bitacora;
 	l=`(cd $V$VESP-$ARQ/paquetes; ls *tgz)`

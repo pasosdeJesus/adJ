@@ -1,0 +1,34 @@
+#!/bin/sh
+# Monitorea conexiones de un cortafuegos
+# Dominio Publico de acuerdo a legislación colombiana. 
+# 2010. vtamara@pasosdeJesus.org
+
+. /etc/varmonitorea.sh
+
+
+if (test ! -f $rutamon/$nomotraorg.csv) then {
+	echo "hora,simismo($ipext),maquinainterna($ipmaqint),puertadeenlace($ippuerta),otraorg($ipotraorg),nomotraorg($nomotraorg)" > /$rutamon/$nomotraorg.csv
+} fi;
+
+
+if (test ! -f $rutamon/$nomotraorg2.csv) then {
+	echo "hora,simismo($ipext),maquinainterna($ipmaqint),puertadeenlace($ippuerta),otraorg($ipotraorg),nomotraorg2($nomotraorg2)" > /$rutamon/$nomotraorg2.csv
+} fi;
+f=`date +%Y%m%d%H%M`
+ping -w 3 -c 1 $ipext > /dev/null 2>&1
+s=`expr 1 - $?`
+ping -w 3 -c 1 $ipmaqint > /dev/null 2>&1
+r=`expr 1 - $?`
+ping -w 3 -c 1 $ippuerta > /dev/null 2>&1
+m=`expr 1 - $?`
+ping -w 3 -c 1 $ipotraorg > /dev/null 2>&1
+c=`expr 1 - $?`
+ping -w 3 -c 1 $nomotraorg > /dev/null 2>&1
+cn=`expr 1 - $?`
+ping -w 3 -c 1 $nomotraorg2 > /dev/null 2>&1
+cm=`expr 1 - $?`
+
+echo "$f,$s,$r,$m,$c,$cn" >> /$rutamon/$nomotraorg.csv
+
+echo "$f,$s,$r,$m,$c,$cm" >> /$rutamon/$nomotraorg2.csv
+

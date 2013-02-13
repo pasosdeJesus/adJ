@@ -1,0 +1,270 @@
+#!/bin/sh
+# Crea una cuenta en un servidor de correo cifrado y le configura SpamAssassin, 
+# formato maildir y directorios cifrados
+# Dominio público. 2009. vtamara@pasosdeJesus.org
+# Ejemplo de uso
+#   adicuenta jaime "Jaime Rodriguez" cambiameya 
+# Respaldo 
+#   adicuenta jaime_suorg "Jaime Rodriguez" cambiameya jaime@suorg.org suorg
+
+
+us=$1;
+nom=$2;
+claveplana=$3;
+virtualuser=$4;
+gru=$5;
+
+echo "adicuenta($us, $nom, $claveplana, $virtualuser, $gru)"
+if (test "$USER" != "root") then {
+    echo "Este script debe ser ejecutado por root o con sudo";
+    exit 1;
+} fi;
+
+if (test ! -f "/etc/varcorreo.sh") then {
+	echo "no se encunetra /etc/varcorreo.sh";
+	exit 1;
+} fi;
+. /etc/varcorreo.sh $us
+
+if (test "$us" = "") then {
+    echo "Primer parámetro debe ser identificación de nuevo usuario";
+    exit 1;
+} fi;
+
+if (test ! -d "$partenc") then {
+    pwd
+	echo "Falta especificar particion para correos en /etc/varcorreo.sh ($partenc)";
+	exit 1;
+} fi;
+
+if (test "$gru" = "" -a "$grupous" = "") then {
+		echo "Falta grupo de usuario por defecto en varcorreo.sh usando usuario";
+        gru=$us
+} elif (test "$gru" = "") then {
+    gru=$grupous
+} fi;
+
+dhome="/home/$us"
+
+if (test "$nom" = "") then {
+	nom=$us;
+} fi;
+
+groupinfo $gru > /dev/null 2>&1
+if (test "$?" != "0") then {
+    echo "Agregando grupo $gru";
+	groupadd $gru
+} fi;
+
+
+if (test "$claveplana" != "") then {
+    en=`echo "$claveplana" | sed -e 's/.*\$.*/si/g'`;
+    if (test "$en" = "si") then {
+	clave="$claveplana";
+        echo "Clave cifrada '$clave'";
+        #`echo "$claveplana" | sed -e "s/\$/\\\$/g"`;
+    } else {
+        echo "Clave sin cifrar";
+        clave=`encrypt "$claveplana"`
+    } fi;
+} fi;
+userinfo $us >/dev/null 2> /dev/null
+if (test "$?" != "0") then {
+    if (test "$virtualuser" != "") then {
+		echo "Agregando sin shell";
+	    adduser -v -batch $us $gru "$nom" "$clave" -shell /sbin/nologin -group $gru
+    } else {
+		echo "Agregando con shell";
+	    adduser -v -batch $us $us "$nom" "$clave"
+    } fi;
+    if (test "$clave" = "") then {
+        passwd $us
+    } fi;
+} elif (test "$clave" = "") then {
+	clave=`grep "^$us:" /etc/master.passwd | sed -e "s/^[^:]*:\([^:]*\):.*/\1/g"`
+	echo "Clave: $clave";
+	gru=`id -g -n $us`
+} fi;
+if (test "$virtualuser" = "") then {
+	user mod -g $us $us
+	user mod -G users $us
+	user mod -G $gru $us
+} fi;
+
+chown $us:$gru $dhome
+
+cd $dhome
+
+echo "Configurando Correo"
+grep "^[^#]*sendmail.sendmail" /etc/mailer.conf > /dev/null 2>&1
+if (test "$?" = "0") then {
+	# Usa sendmail
+} fi;
+
+touch /var/mail/$us
+chown $us:$gru /var/mail/$us
+
+grep "spoolfile" $dhome/.muttrc > /dev/null 2>&1
+if (test "$?" != "0") then {
+	echo "Creando .muttrc";
+	cat > $dhome/.muttrc << EOF
+set spoolfile=imaps://\$USER@127.0.0.1/INBOX
+set folder=imaps://\$USER@127.0.0.1/
+EOF
+} fi;
+
+grep "$Maildir" $dhome/.procmailrc > /dev/null 2>&1
+if (test "$?" != "0") then {
+	echo "Creando .procmail";
+cat > $dhome/.procmailrc <<EOF
+LINEBUF=4096
+VERBOSE=on
+PMDIR=$dhome
+MAILDIR=\$PMDIR/$Maildir/
+FORMAIL=/usr/local/bin/formail
+SENDMAIL=/usr/sbin/sendmail
+
+DROPPRIVS=yes
+
+:0fw: spamassassin.lock
+* < 512000
+| spamc
+
+# All mail tagged as spam (eg. with a score higher than the set threshold)
+# is moved to "probably-spam".
+:0:
+* ^X-Spam-Status: Yes
+$dhome/$Maildir/.Junk/
+
+:0
+* .*
+$dhome/$Maildir/
+
+EOF
+
+} fi;
+
+grep procmail /home/$us/.forward > /dev/null 2> /dev/null
+if (test "$?" != "0") then {
+	echo '"| exec /usr/local/bin/procmail"' > /home/$us/.forward
+} fi;
+
+function subc {
+	s=$1;
+	maildirmake -f $s $partenc/$us/$Maildir 2> /dev/null
+	grep $s $partenc/$us/$Maildir/courierimapsubscribed > /dev/null 2> /dev/null
+	if (test "$?" != "0") then {
+		echo "INBOX.$s" >> $partenc/$us/$Maildir/courierimapsubscribed
+	} fi;
+}
+
+mkdir -p $partenc/$us/
+chown  $us:$gru $partenc/$us/
+maildirmake $partenc/$us/$Maildir 2> /dev/null
+subc Junk 
+subc Trash
+subc Drafts
+subc Sent
+chown  -R $us:$gru $partenc/$us/$Maildir
+
+echo "Configurando Antispam"
+
+mkdir -p $dhome/.spamassassin/
+chown -R _spamdaemon:_spamdaemon $dhome/.spamassassin
+
+if (test "$virtualuser" = "") then {
+	echo "Configurando Espacio Virtual Encriptado";
+
+	mkdir -p $partenc/$us/{recibe,personal}; 
+	chown $us:$gru $partenc/$us $partenc/$us/recibe; 
+	chown $us:$us $partenc/$us/personal
+	chmod go-w+rx $partenc/$us/
+	chmod go+rx $partenc/$us/
+	chmod go-r+x $partenc/$us/recibe; 
+	chmod g+w $partenc/$us/recibe 
+	chmod go-wrx $partenc/$us/personal
+	chmod o-rxw $partenc/$us/
+	if (test ! -h $dhome/enc) then {
+		ln -s $partenc/$us/ $dhome/enc
+	} fi;
+	if (test ! -h $dhome/personal) then {
+		ln -s $partenc/$us/personal $dhome/enc_personal
+	} fi;
+	if (test ! -h $dhome/recibe) then {
+		ln -s $partenc/$us/recibe $dhome/enc_recibe
+	} fi;
+
+
+
+	if (test -d $dhome/$Maildir -a ! -h $dhome/$Maildir ) then {
+		echo "Moviendo correo a particion de correo";
+		cmd="mv $dhome/$Maildir/* $partenc/$us/$Maildir"
+		echo "$cmd"
+		eval "$cmd"
+		rm -rf $dhome/$Maildir
+	} fi;
+	mkdir -p $partenc/compartido
+	chgrp -R $gru $partenc/compartido
+	chmod -R g+w $partenc/compartido
+
+	if (test -d $partenc/compartido -a ! -h $dhome/compartido) then {
+		ln -s $partenc/compartido $dhome/enc_compartido
+	} fi;
+
+
+	echo "Configurando Espacio Virtual Público";
+	mkdir -p /var/www/users/$us
+	chown $us:$gru /var/www/users/$us
+	if (test ! -h $dhome/publico) then {
+		ln -s /var/www/users/$us/ $dhome/publico
+	} fi;
+} fi;
+
+if (test ! -h $dhome/$Maildir ) then {
+	cmd="ln -s $partenc/$us/$Maildir $dhome/$Maildir"
+	echo "$cmd";
+	eval "$cmd";
+} fi;
+
+if (test -d /var/www/roundcubemail) then {
+	echo "Configurando roundcubemail";
+	rm -f /tmp/resins.txt
+	dsn=`grep db_dsnw /var/www/roundcubemail/config/db.inc.php | sed -e "s/.*pgsql:/pgsql:/g;s/['\"].*//g"`
+	echo "dsn=$dsn"
+	db=`echo $dsn | sed -e "s/.*pgsql:\/\/.*\/\([^'\"]*\).*/\1/g"`;
+	echo "psql -h /var/www/tmp/ -Upostgres ${db} -c \"SELECT user_id FROM users WHERE username='$us';\" > /tmp/resins.txt" > /tmp/cu.sh
+	chmod +x /tmp/cu.sh
+	cat /tmp/cu.sh
+	su - _postgresql /tmp/cu.sh >> /tmp/adicuenta.bitacora;
+	grep "(1 row)" /tmp/resins.txt > /dev/null 2>&1
+	if (test "$?" != "0") then {
+		idu=-1
+		hoy=`date +"%Y-%m-%d"`
+		rm -f /tmp/resins.txt
+		echo "psql -h /var/www/tmp/ -Upostgres ${db} -c \"INSERT INTO users (username, mail_host, created, language) VALUES ('$us', '127.0.0.1','${hoy}','es_ES');SELECT last_value FROM user_ids;\" > /tmp/resins.txt" > /tmp/cu.sh
+		chmod +x /tmp/cu.sh
+		su - _postgresql /tmp/cu.sh >> /tmp/adicuenta.bitacora;
+		if (test -f /tmp/resins.txt -a ! -z /tmp/resins.txt) then {
+			idu=`grep -v "(1 row)" /tmp/resins.txt | grep -v "last_value" | grep -v "[-]-----" | grep -v "^ *$" | sed -e "s/  *//g"`
+		} fi;
+		echo "psql -h /var/www/tmp/ -Upostgres ${db} -c \"INSERT INTO identities (user_id, del, standard, name, organization, email, changed) VALUES ('$idu', '0', '1', '$nom', '$orgrespaldo', '$virtualuser', '${hoy}');\" > /tmp/resins.txt" > /tmp/cu.sh
+		chmod +x /tmp/cu.sh
+		su - _postgresql /tmp/cu.sh >> /tmp/adicuenta.bitacora;
+	} fi;
+} fi;
+
+if (test "$virtualuser" != "") then {
+	echo "Configurando usuario virtual";
+	grep "^$virtualuser" /etc/mail/virtusertable > /dev/null 2>&1
+	if (test "$?" != "0") then {
+		echo "$virtualuser  $us"  >> /etc/mail/virtusertable
+		(cd /etc/mail; make; pkill sendmail; sh /etc/rc.local)
+	} fi;
+} else {
+	echo "Configuración cuenta en servidor de respaldo";
+	if (test "$sresp" != "") then {
+		cmd="ssh $opsresp $SUDO_USER@$sresp \"(cd /home/$SUDO_USER/servidor/audita/;  sudo ./adicuenta.sh ${us}_${orgrespaldo} \\\"${nom}\\\" '$clave' ${us}@${domrespaldo} ${orgrespaldo})\""
+		echo "$cmd"
+		ssh $opsresp $SUDO_USER@$sresp "(cd /home/$SUDO_USER/servidor/audita/;  sudo ./adicuenta.sh ${us}_${orgrespaldo} \"${nom}\" '$clave' ${us}@${domrespaldo} ${orgrespaldo})"
+	} fi;
+} fi;

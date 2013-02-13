@@ -1,0 +1,96 @@
+#!/bin/sh
+# Elimina cuenta en un servidor de correo cifrado con adJ
+# Dominio público. 2013. vtamara@pasosdeJesus.org
+# Ejemplo de uso
+#   ./elimcuenta jaime 
+# De respaldo
+#   ./elimcuenta jaime jaime@suorg.org
+
+
+us=$1;
+virtualuser=$2;
+
+if (test "$USER" != "root") then {
+	echo "Este script debe ser ejecutado por root o con sudo";
+	exit 1;
+} fi;
+
+if (test ! -f "/etc/varcorreo.sh") then {
+	echo "no se encunetra /etc/varcorreo.sh";
+	exit 1;
+} fi;
+. /etc/varcorreo.sh $us
+
+if (test "$us" = "") then {
+    echo "Primer parámetro debe ser identificación de cuenta";
+    exit 1;
+} fi;
+
+if (test ! -d "$partenc") then {
+	echo "Falta especificar particion para correos en varserv.sh ($partenc)";
+	exit 1;
+} fi;
+
+grep "^$us" /etc/group 2> /dev/null
+if (test "$?" = "0") then {
+	groupdel -v $us;
+} fi;
+
+dhome="/home/$us"
+
+rmuser $us
+
+rm -f /var/mail/$us
+
+if (test -d "$partenc/$us") then {
+	du -sh $partenc/$us
+	echo "Borrar correo de $partenc/$us (s/n)?"
+	read sn
+	if (test "$sn" = "s") then {
+		rm -rf $partenc/$us
+	} fi;
+} fi;
+if (test -d "/var/www/users/$us") then {
+	rm -rf /var/www/users/$us
+} fi;
+
+if (test -d /var/www/roundcubemail) then {
+	echo "Borrando de roundcubemail";
+	rm -f /tmp/resins.txt
+	dsn=`grep db_dsnw /var/www/roundcubemail/config/db.inc.php`
+	db=`echo $dsn | sed -e "s/.*pgsql:\/\/.*\/\([^'\"]*\).*/\1/g"`;
+	echo "psql -h /var/www/tmp/ -Upostgres ${db} -c \"SELECT user_id FROM users WHERE username='$us';\" > /tmp/resins.txt" > /tmp/cu.sh
+	chmod +x /tmp/cu.sh
+	cat /tmp/cu.sh
+	su - _postgresql /tmp/cu.sh >> /tmp/elimcuenta.bitacora;
+	if (test -f /tmp/resins.txt -a ! -z /tmp/resins.txt) then {
+		grep "0 rows" /tmp/resins.txt > /dev/null 2>&1
+		if (test "$?" != "0") then {
+			idu=`grep -v "(1 row)" /tmp/resins.txt | grep -v "user_id" | grep -v "[-]-----" | grep -v "^ *$" | sed -e "s/  *//g"`
+			echo "idu=${idu}";
+			echo "psql -h /var/www/tmp/ -Upostgres ${db} -c \"DELETE FROM identities WHERE user_id='${idu}'; DELETE FROM users WHERE user_id='${idu}';\" > /tmp/resins.txt" > /tmp/cu.sh
+			chmod +x /tmp/cu.sh
+			cat /tmp/cu.sh
+			su - _postgresql /tmp/cu.sh >> /tmp/elimcuenta.bitacora;
+		} fi;
+	} fi;
+} fi;
+
+if (test "$virtualuser" != "") then {
+	echo "Desconfigurando usuario virtual";
+	grep $virtualuser /etc/mail/virtusertable > /dev/null 2>&1
+	if (test "$?" = "0") then {
+		ed /etc/mail/virtusertable <<EOF
+/$virtualuser
+d
+w
+q
+EOF
+		(cd /etc/mail; make; pkill sendmail; sh /etc/rc.local)
+	} fi;
+} else {
+	if (test "$sresp" != "") then {
+		echo "Eliminando de servidor de respaldo";
+		ssh $opsresp $SUDO_USER@$sresp "sudo /home/$SUDO_USER/servidor/audita/eliminacuenta.sh ${us}_${gru} ${us}@${dominio}"
+	} fi;
+} fi;
