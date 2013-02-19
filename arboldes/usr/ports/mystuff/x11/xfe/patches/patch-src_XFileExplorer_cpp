@@ -1,12 +1,11 @@
 $OpenBSD$
---- src/XFileExplorer.cpp.orig	Tue Sep 11 18:19:38 2012
-+++ src/XFileExplorer.cpp	Tue Sep 11 18:20:55 2012
-@@ -8,6 +8,8 @@
- #include <sys/wait.h>
- #include <unistd.h>
- 
-+#include <X11/Xlib.h>
-+
- #include <fx.h>
- #include <fxkeys.h>
- #include <FXPNGIcon.h>
+--- src/XFileExplorer.cpp.orig	Fri Feb  8 08:16:42 2013
++++ src/XFileExplorer.cpp	Tue Feb 19 09:48:59 2013
+@@ -2252,6 +2254,7 @@ Bilalovi, Omar Cogo Emir\n\
+ Catalan: muzzol\n\
+ Chinese: Xin Li\n\
+ Chinese (Taïwan): Wei-Lun Chao\n\
++Colombian Spanish: Vladimir Támara (Pasos de Jesús)\n\
+ Czech: David Vachulka\n\
+ Danish: Jonas Bardino, Vidar Jon Bauge\n\
+ Dutch: Hans Strijards\n\

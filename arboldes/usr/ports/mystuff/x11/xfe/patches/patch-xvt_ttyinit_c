@@ -1,6 +1,6 @@
 $OpenBSD$
---- xvt/ttyinit.c.orig	Tue Sep 11 18:01:42 2012
-+++ xvt/ttyinit.c	Tue Sep 11 18:04:17 2012
+--- xvt/ttyinit.c.orig	Thu Feb  7 04:58:48 2013
++++ xvt/ttyinit.c	Fri Feb 15 17:15:09 2013
 @@ -385,8 +385,9 @@ static int get_tslot(char* ttynam)
   */
  static char* get_pseudo_tty(int* pmaster, int* pslave)
