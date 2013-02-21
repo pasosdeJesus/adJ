@@ -1,0 +1,30 @@
+$OpenBSD$
+--- src/foxhacks.cpp.orig	Tue Feb 19 13:30:57 2013
++++ src/foxhacks.cpp	Tue Feb 19 13:32:35 2013
+@@ -3068,7 +3068,7 @@ void FXProgressBar::drawInterior(FXDCWindow& dc)
+             if (tw>(10*d)/16) return;
+             th=font->getFontHeight();
+             if (th>d/2) return;
+-            sprintf(numtext,"%d%%",percent);
++            snprintf(numtext, 5, "%d%%",percent);
+             n=strlen(numtext);
+             tw=font->getTextWidth(numtext,n);
+             th=font->getFontHeight();
+@@ -3132,7 +3132,7 @@ void FXProgressBar::drawInterior(FXDCWindow& dc)
+         if (options&PROGRESSBAR_PERCENTAGE)
+         {
+             dc.setFont(font);
+-            sprintf(numtext,"%d%%",percent);
++            snprintf(numtext, 5, "%d%%",percent);
+             n=strlen(numtext);
+             tw=font->getTextWidth(numtext,n);
+             th=font->getFontHeight();
+@@ -3204,7 +3204,7 @@ void FXProgressBar::drawInterior(FXDCWindow& dc)
+         if (options&PROGRESSBAR_PERCENTAGE)
+         {
+             dc.setFont(font);
+-            sprintf(numtext,"%d%%",percent);
++            snprintf(numtext, 5, "%d%%",percent);
+             n=strlen(numtext);
+             tw=font->getTextWidth(numtext,n);
+             th=font->getFontHeight();
