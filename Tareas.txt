@@ -1,6 +1,8 @@
 
 5.2
 
+* strcasecmp posiblemente debería emplear locale, strcasecmp_l está mal implementado
+* Paginas de manual por actualizar wcscasecmp (no solo bytes), crear wcscasecomp_l
 * Descripción de paquetes en Contenido.txt
 * Confirmar dependencia entre paquetes
 * Xorg -configure produce Segmentation Fault (tanto emulado como sin emular)
