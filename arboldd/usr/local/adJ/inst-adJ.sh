@@ -1,6 +1,7 @@
 #!/bin/sh
 # Instala/Actualiza un Aprendiendo de Jesús 
-# Dominio público. 2012. vtamara@pasosdeJesus.org
+# Dominio público de acuerdo a legislación colombiana. http://www.pasosdejesus.org/dominio_publico_colombia.html. 
+# 2012. vtamara@pasosdeJesus.org
 
 VER=5.2
 VESP=""
@@ -1271,6 +1272,28 @@ if (test -f "$pb") then {
 	} fi;
 } fi;
 
+
+echo "* Agregar cotejaciones en español"  >> /var/tmp/inst-adJ.bitacora
+ES_COUNTRIES="ES CO PE VE EC GT CU BO HN PY SV CR PA GQ MX AR CH DO NI UY PR"
+echo "psql -h /var/www/tmp -U postgres -c \"SELECT COUNT(*) FROM pg_collation WHERE collname = 'es_co_utf_8';\"" > /tmp/cu.sh
+echo "exit \$?" >> /tmp/cu.sh;
+chmod +x /tmp/cu.sh | tee -a /var/tmp/inst-adJ.bitacora
+cat /tmp/cu.sh >> /var/tmp/inst-adJ.bitacora
+su - _postgresql /tmp/cu.sh > /tmp/cu.out 2>> /var/tmp/inst-adJ.bitacora
+t=`head -n 3 /tmp/cu.out | tail -n 1 | sed -e "s/ *//g" 2>/dev/null`
+if (test "$t" != "1") then {
+	echo "" > /tmp/cu.sh
+	for i in $ES_COUNTRIES; do
+		echo "psql -h /var/www/tmp -U postgres -c \"CREATE COLLATION es_${i}_UTF_8 (LOCALE='es_${i}.UTF-8');\"" >> /tmp/cu.sh
+	done;
+	echo "exit \$?" >> /tmp/cu.sh;
+	chmod +x /tmp/cu.sh 2>&1 >> /var/tmp/inst-adJ.bitacora
+	cat /tmp/cu.sh >> /var/tmp/inst-adJ.bitacora
+	su - _postgresql /tmp/cu.sh  2>&1
+} else {
+	echo "   Saltando..." >> /var/tmp/inst-adJ.bitacora;
+} fi;
+				
 
 insacp libidn
 insacp curl 

@@ -40,8 +40,6 @@
 .Nm iswspace_l ,
 .Nm iswupper_l ,
 .Nm iswxdigit_l ,
-.Nm towlower_l ,
-.Nm towupper_l ,
 .Nm wctype_l ,
 .Nm iswblank_l ,
 .Nm iswhexnumber_l ,
@@ -82,10 +80,6 @@
 .Fn iswupper_l "wint_t wc" "locale_t loc"
 .Ft int
 .Fn iswxdigit_l "wint_t wc" "locale_t loc"
-.Ft wint_t
-.Fn towlower_l "wint_t wc" "locale_t loc"
-.Ft wint_t
-.Fn towupper_l "wint_t wc" "locale_t loc"
 .Ft wctype_t
 .Fn wctype_l "wint_t wc" "locale_t loc"
 .Ft int
@@ -147,8 +141,6 @@ If the locale is invalid, their behaviors are undefined.
 .Xr iswxdigit 3 ,
 .Xr nextwctype 3 ,
 .Xr towctrans 3 ,
-.Xr towlower 3 ,
-.Xr towupper 3 ,
 .Xr wctrans 3 ,
 .Xr wctype 3
 .Sh STANDARDS

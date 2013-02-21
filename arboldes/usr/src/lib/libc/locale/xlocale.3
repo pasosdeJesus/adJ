@@ -260,8 +260,8 @@ except in thread safety.
 The xlocale APIs first appeared in Darwin 8.0.
 David Chisnall implemented it for FreeBSD 9.1
 under sponsorship from the FreeBSD Foundation.
-For adJ 5.2, Vladimir Tamara mixed the collation support of 
-such implementation with the existing locale support of OpenBSD 5.2.
+For OpenBSD 5.2, vtamara@pasosdeJesus.org mixed the collation support of 
+such implementation with the existing locale support.
 .Sh CAVEATS
 Due to the lack of _Thread_local storage, this implementation still
 is not thread safe, all the threads share the same global locale.

@@ -11,7 +11,7 @@ Con respecto a OpenBSD 5.2 para amd64 y a la edición anterior de este DVD
 
 !KERNEL Y SISTEMA BASE
 
-* Se incluye soporte para cotejación (COLLATE) en idioma nativo importado de FreeBSD, tablas de caracteres y cotejación para todos los paises de habla hispana y porte de PostgreSQL que soporta cotejación (por fin pueden quedar en orden para español las consultas a la base de datos). Notará la diferencia! Vea detalles y una captura de pantalla en http://aprendiendo.pasosdejesus.org/?id=i18n
+* Se incluye soporte para cotejación (COLLATE) en idioma nativo importado de FreeBSD, tablas de caracteres y cotejación para todos los paises de habla hispana y portes de PostgreSQL y xfe que soportan cotejación (por fin pueden quedar en orden para español las consultas a la base de datos). ¡Notará la diferencia! Vea detalles y una captura de pantalla en http://aprendiendo.pasosdejesus.org/?id=i18n
 * Parches de seguridad de sistema base hasta:  1.Feb.2013
 * Se ha ampliado el renombramiento de `daemon' por `service' para cubrir más del sistema base (tras instalar, ver por ejemplo ==vmstat -s== o ==less /var/log/service== o ==man service==).  Se renombró en documentación, en la mayoría de programas del sistema base y en librería libc se cambió la función ==daemon== por ==service==, la primera se mantiene por compatibilidad (ver ==man service==), se hicieron cambios análogos en libwrapper.  Ver detalles en http://aprendiendo.pasosdejesus.org/?id=Renombrando+Daemon+por+Service ). 
 
@@ -42,9 +42,9 @@ Entre las novedades reportadas en las `Notas de publicación de OpenBSD 5.2' dest
 !PAQUETES EXCLUSIVOS DE ADJ
 
 * SIVeL 1.1.4 con gran actualización a DIVIPOLA.
-* xfe actualizado a 1.34 con nueva traducción es_CO.
-* PostgreSQL actualizado a 9.1.7 con soporte para cotejaciones nativas (COLLATE) y UTF-8 por defecto. Ver detalles de como usar cotejación en http://aprendiendo.pasosdejesus.org/?id=i18n
-* Los paquetes exclusivos los encuentra en [ftp://ftp.pasosdeJesus.org/pub/AprendiendoDeJesus/5.1-amd64/paquetes]
+* xfe actualizado a 1.34 con nueva traducción es_CO y ordenamiento de archivos empleando el locale.
+* PostgreSQL actualizado a 9.1.7 con soporte para UTF-8 y cotejaciones nativas (COLLATE) listas para todos los paises de habla hispana. Ver detalles de como usar cotejación en http://aprendiendo.pasosdejesus.org/?id=i18n
+* Los paquetes exclusivos los encuentra en [ftp://ftp.pasosdeJesus.org/pub/AprendiendoDeJesus/5.2-amd64/paquetes]
 
 !PROCESO DE INSTALACIÓN
 

@@ -1,234 +1,10 @@
-? include/_ctype.h
-? include/runetype.h
-? include/xlocale
-? include/xlocale.h
-Index: distrib/special/libstubs/setlocale.c
-===================================================================
-RCS file: /cvs/src/distrib/special/libstubs/setlocale.c,v
-retrieving revision 1.1
-diff -u -r1.1 setlocale.c
---- distrib/special/libstubs/setlocale.c        3 Aug 2005 22:33:59 -0000       1.1
-+++ distrib/special/libstubs/setlocale.c        7 Feb 2013 19:15:38 -0000
-@@ -3,8 +3,8 @@
- /* Written by Marc Espie, 2005 */
- /* Public domain */
- 
--char *
-+/*char *
- setlocale(int cat, const char *locale)
- {
-        return 0;
--}
-+}*/
-Index: include//Makefile
-===================================================================
-RCS file: /cvs/src/include/Makefile,v
-retrieving revision 1.165
-diff -u -r1.165 Makefile
---- include//Makefile	28 Jun 2012 06:18:46 -0000	1.165
-+++ include//Makefile	1 Feb 2013 12:12:26 -0000
-@@ -11,18 +11,21 @@
- 
- # Missing: mp.h
- FILES=	a.out.h ar.h assert.h bitstring.h blf.h bm.h bsd_auth.h \
--	complex.h cpio.h ctype.h curses.h db.h dbm.h des.h dirent.h disktab.h \
-+	complex.h cpio.h _ctype.h ctype.h curses.h db.h dbm.h des.h \
-+	dirent.h disktab.h \
- 	dlfcn.h elf_abi.h err.h errno.h fenv.h float.h fnmatch.h fstab.h fts.h \
- 	ftw.h getopt.h glob.h grp.h ifaddrs.h inttypes.h iso646.h kvm.h \
--	langinfo.h libgen.h limits.h locale.h login_cap.h malloc.h math.h md4.h \
-+	langinfo.h libgen.h limits.h locale.h login_cap.h \
-+	malloc.h math.h md4.h \
- 	md5.h memory.h mpool.h ndbm.h netdb.h netgroup.h nlist.h nl_types.h \
- 	ohash.h paths.h poll.h pwd.h ranlib.h re_comp.h \
--	readpassphrase.h regex.h resolv.h rmd160.h search.h setjmp.h \
-+	readpassphrase.h regex.h resolv.h rmd160.h runetype.h \
-+	search.h setjmp.h \
- 	sgtty.h sha1.h sha2.h signal.h sndio.h spawn.h stab.h \
- 	stdbool.h stddef.h stdio.h stdlib.h \
- 	string.h strings.h struct.h sysexits.h tar.h tgmath.h \
- 	time.h ttyent.h tzfile.h unistd.h utime.h utmp.h vis.h \
--	wchar.h wctype.h
-+	wchar.h wctype.h xlocale.h
- 
- FILES+=	link.h link_aout.h link_elf.h
- 
-@@ -33,7 +36,7 @@
- MFILES=	frame.h
- LFILES=	fcntl.h syslog.h termios.h stdarg.h stdint.h varargs.h
- 
--DIRS=	arpa protocols rpc rpcsvc
-+DIRS=	arpa protocols rpc rpcsvc xlocale
- LDIRS=	altq crypto ddb dev isofs miscfs msdosfs net netinet netinet6 \
- 	netmpls netnatm net80211 netbt nfs nnpfs ntfs scsi sys ufs uvm
- 
-Index: include//ctype.h
-===================================================================
-RCS file: /cvs/src/include/ctype.h,v
-retrieving revision 1.22
-diff -u -r1.22 ctype.h
---- include//ctype.h	1 Oct 2010 20:10:24 -0000	1.22
-+++ include//ctype.h	1 Feb 2013 12:12:26 -0000
-@@ -189,6 +189,10 @@
- 
- #endif /* !_ANSI_LIBRARY && !lint */
- 
-+#if __POSIX_VISIBLE >= 200809 || defined(_XLOCALE_H_)
-+#include <xlocale/_ctype.h>
-+#endif
-+
- __END_DECLS
- 
- #endif /* !_CTYPE_H_ */
-
-Index: include//inttypes.h
-===================================================================
-RCS file: /cvs/src/include/inttypes.h,v
-retrieving revision 1.10
-diff -u -r1.10 inttypes.h
---- include//inttypes.h	13 Jan 2009 18:13:51 -0000	1.10
-+++ include//inttypes.h	1 Feb 2013 12:12:26 -0000
-@@ -252,6 +252,9 @@
- } imaxdiv_t;
- 
- __BEGIN_DECLS
-+#ifdef _XLOCALE_H_
-+#include <xlocale/_inttypes.h>
-+#endif
- intmax_t	imaxabs(intmax_t);
- imaxdiv_t	imaxdiv(intmax_t, intmax_t);
- intmax_t	strtoimax(const char *, char **, int);
-
-Index: include//langinfo.h
-===================================================================
-RCS file: /cvs/src/include/langinfo.h,v
-retrieving revision 1.6
-diff -u -r1.6 langinfo.h
---- include//langinfo.h	7 Jul 2011 14:25:15 -0000	1.6
-+++ include//langinfo.h	1 Feb 2013 12:12:26 -0000
-@@ -73,6 +73,10 @@
- 
- __BEGIN_DECLS
- char *nl_langinfo(nl_item);
-+#if defined(_XLOCALE_H_)
-+#include <xlocale/_langinfo.h>
-+#endif
-+
- __END_DECLS
- 
- #endif	/* _LANGINFO_H_ */
-
-Index: include//locale.h
-===================================================================
-RCS file: /cvs/src/include/locale.h,v
-retrieving revision 1.8
-diff -u -r1.8 locale.h
---- include//locale.h	3 Jul 2011 18:51:01 -0000	1.8
-+++ include//locale.h	1 Feb 2013 12:12:26 -0000
-@@ -81,6 +81,8 @@
- __BEGIN_DECLS
- struct lconv	*localeconv(void);
- char		*setlocale(int, const char *);
-+
-+#include <xlocale/_locale.h>
- __END_DECLS
- 
- #endif /* _LOCALE_H_ */
-
-Index: include//stdio.h
-===================================================================
-RCS file: /cvs/src/include/stdio.h,v
-retrieving revision 1.42
-diff -u -r1.42 stdio.h
---- include//stdio.h	21 Mar 2012 23:44:35 -0000	1.42
-+++ include//stdio.h	1 Feb 2013 12:12:26 -0000
-@@ -211,6 +211,10 @@
-  * Functions defined in ANSI C standard.
-  */
- __BEGIN_DECLS
-+
-+#ifdef _XLOCALE_H_
-+#include <xlocale/_stdio.h>
-+#endif
- void	 clearerr(FILE *);
- int	 fclose(FILE *);
- int	 feof(FILE *);
-+++ include//stdlib.h	1 Feb 2013 12:12:26 -0000
-@@ -107,6 +107,9 @@
- #endif
- 
- __BEGIN_DECLS
-+#ifdef _XLOCALE_H_
-+#include <xlocale/_stdlib.h>
-+#endif
- __dead void	 abort(void);
- int	 abs(int);
- int	 atexit(void (*)(void));
-
-Index: include//string.h
-===================================================================
-RCS file: /cvs/src/include/string.h,v
-retrieving revision 1.24
-diff -u -r1.24 string.h
---- include//string.h	25 Mar 2012 20:04:18 -0000	1.24
-+++ include//string.h	1 Feb 2013 12:12:27 -0000
-@@ -133,6 +133,10 @@
- char	*strsep(char **, const char *);
- int	 timingsafe_bcmp(const void *, const void *, size_t);
- #endif 
-+
-+#ifdef _XLOCALE_H_
-+#include <xlocale/_string.h>
-+#endif
- __END_DECLS
- 
- #endif /* _STRING_H_ */
-
-Index: include//time.h
-===================================================================
-RCS file: /cvs/src/include/time.h,v
-retrieving revision 1.22
-diff -u -r1.22 time.h
---- include//time.h	10 May 2012 19:13:12 -0000	1.22
-+++ include//time.h	1 Feb 2013 12:12:27 -0000
-@@ -159,6 +159,10 @@
- time_t timegm(struct tm *);
- time_t timeoff(struct tm *, const long);
- #endif
-+
-+#ifdef _XLOCALE_H_
-+#include <xlocale/_time.h>
-+#endif
- __END_DECLS
- 
- #endif /* !_TIME_H_ */
-
-Index: include//wchar.h
-===================================================================
-RCS file: /cvs/src/include/wchar.h,v
-retrieving revision 1.23
-diff -u -r1.23 wchar.h
---- include//wchar.h	6 Jun 2012 16:58:02 -0000	1.23
-+++ include//wchar.h	1 Feb 2013 12:12:27 -0000
-@@ -163,6 +163,10 @@
-     size_t, mbstate_t * __restrict);
- size_t wcsnrtombs(char * __restrict, const wchar_t ** __restrict, size_t,
-     size_t, mbstate_t * __restrict);
-+
-+#ifdef _XLOCALE_H_
-+#include <xlocale/_wchar.h>
-+#endif
- #endif
- 
- #if __ISO_C_VISIBLE >= 1999
-
-Index: include//wctype.h
+Index: include/wctype.h
 ===================================================================
 RCS file: /cvs/src/include/wctype.h,v
 retrieving revision 1.5
 diff -u -r1.5 wctype.h
---- include//wctype.h	6 Jan 2006 18:53:04 -0000	1.5
-+++ include//wctype.h	1 Feb 2013 12:12:27 -0000
+--- include/wctype.h	6 Jan 2006 18:53:04 -0000	1.5
++++ include/wctype.h	21 Feb 2013 17:30:04 -0000
 @@ -34,6 +34,7 @@
  
  #include <sys/cdefs.h>
@@ -248,7 +24,101 @@ diff -u -r1.5 wctype.h
  __END_DECLS
  
  #endif		/* _WCTYPE_H_ */
+Index: include/wchar.h
+===================================================================
+RCS file: /cvs/src/include/wchar.h,v
+retrieving revision 1.23
+diff -u -r1.23 wchar.h
+--- include/wchar.h	6 Jun 2012 16:58:02 -0000	1.23
++++ include/wchar.h	21 Feb 2013 17:30:04 -0000
+@@ -163,6 +163,10 @@
+     size_t, mbstate_t * __restrict);
+ size_t wcsnrtombs(char * __restrict, const wchar_t ** __restrict, size_t,
+     size_t, mbstate_t * __restrict);
++
++#ifdef _XLOCALE_H_
++#include <xlocale/_wchar.h>
++#endif
+ #endif
  
+ #if __ISO_C_VISIBLE >= 1999
+Index: include/string.h
+===================================================================
+RCS file: /cvs/src/include/string.h,v
+retrieving revision 1.24
+diff -u -r1.24 string.h
+--- include/string.h	25 Mar 2012 20:04:18 -0000	1.24
++++ include/string.h	21 Feb 2013 17:30:04 -0000
+@@ -133,6 +133,10 @@
+ char	*strsep(char **, const char *);
+ int	 timingsafe_bcmp(const void *, const void *, size_t);
+ #endif 
++
++#ifdef _XLOCALE_H_
++#include <xlocale/_string.h>
++#endif
+ __END_DECLS
+ 
+ #endif /* _STRING_H_ */
+Index: include/stdlib.h
+===================================================================
+RCS file: /cvs/src/include/stdlib.h,v
+retrieving revision 1.50
+diff -u -r1.50 stdlib.h
+--- include/stdlib.h	1 Jun 2012 01:01:57 -0000	1.50
++++ include/stdlib.h	21 Feb 2013 17:30:04 -0000
+@@ -107,6 +107,9 @@
+ #endif
+ 
+ __BEGIN_DECLS
++#ifdef _XLOCALE_H_
++#include <xlocale/_stdlib.h>
++#endif
+ __dead void	 abort(void);
+ int	 abs(int);
+ int	 atexit(void (*)(void));
+@@ -256,6 +259,7 @@
+ int	 cgetstr(char *, const char *, char **);
+ int	 cgetustr(char *, const char *, char **);
+ 
++int	 service(int, int);
+ int	 daemon(int, int);
+ char	*devname(int, mode_t);
+ int	 getloadavg(double [], int);
+Index: include/locale.h
+===================================================================
+RCS file: /cvs/src/include/locale.h,v
+retrieving revision 1.8
+diff -u -r1.8 locale.h
+--- include/locale.h	3 Jul 2011 18:51:01 -0000	1.8
++++ include/locale.h	21 Feb 2013 17:30:04 -0000
+@@ -81,6 +81,8 @@
+ __BEGIN_DECLS
+ struct lconv	*localeconv(void);
+ char		*setlocale(int, const char *);
++
++#include <xlocale/_locale.h>
+ __END_DECLS
+ 
+ #endif /* _LOCALE_H_ */
+Index: include/langinfo.h
+===================================================================
+RCS file: /cvs/src/include/langinfo.h,v
+retrieving revision 1.6
+diff -u -r1.6 langinfo.h
+--- include/langinfo.h	7 Jul 2011 14:25:15 -0000	1.6
++++ include/langinfo.h	21 Feb 2013 17:30:04 -0000
+@@ -73,6 +73,10 @@
+ 
+ __BEGIN_DECLS
+ char *nl_langinfo(nl_item);
++#if defined(_XLOCALE_H_)
++#include <xlocale/_langinfo.h>
++#endif
++
+ __END_DECLS
+ 
+ #endif	/* _LANGINFO_H_ */
 ? lib/libc/locale/_ctype.c
 ? lib/libc/locale/_once_stub.c
 ? lib/libc/locale/collate.c
@@ -268,9 +138,6 @@ diff -u -r1.5 wctype.h
 ? lib/libc/locale/none.c
 ? lib/libc/locale/querylocale.3
 ? lib/libc/locale/string_l.c
-? lib/libc/locale/tolower.3
-? lib/libc/locale/toupper.3
-? lib/libc/locale/towupper.3
 ? lib/libc/locale/un-namespace.h
 ? lib/libc/locale/uselocale.3
 ? lib/libc/locale/wcscoll.3
@@ -278,15 +145,14 @@ diff -u -r1.5 wctype.h
 ? lib/libc/locale/xlocale.3
 ? lib/libc/locale/xlocale.c
 ? lib/libc/locale/xlocale_private.h
-
 Index: lib/libc/locale/Makefile.inc
 ===================================================================
 RCS file: /cvs/src/lib/libc/locale/Makefile.inc,v
 retrieving revision 1.18
 diff -u -r1.18 Makefile.inc
 --- lib/libc/locale/Makefile.inc	7 Jun 2012 19:47:40 -0000	1.18
-+++ lib/libc/locale/Makefile.inc	4 Feb 2013 19:16:22 -0000
-@@ -3,20 +3,54 @@
++++ lib/libc/locale/Makefile.inc	21 Feb 2013 17:30:10 -0000
+@@ -3,20 +3,52 @@
  # locale sources
  .PATH: ${LIBCSRCDIR}/arch/${MACHINE_CPU}/locale ${LIBCSRCDIR}/locale
  
@@ -321,7 +187,7 @@ diff -u -r1.18 Makefile.inc
 +	mbrlen.3 mbrtowc.3 mbsinit.3 mbsrtowcs.3 \
 +	mbstowcs.3 mbtowc.3 nextwctype.3 \
 +	nl_langinfo.3 setlocale.3 \
-+	tolower.3 toupper.3 towlower.3 \
++	towlower.3 \
 +	wcscoll.3 wcrtomb.3 wcsrtombs.3 wcstod.3 \
 +	wcstol.3 wcstombs.3 wctob.3 wctomb.3 \
 +	wctype.3 iswctype.3 wctrans.3 towctrans.3 wcwidth.3 \
@@ -348,12 +214,10 @@ diff -u -r1.18 Makefile.inc
 +	ctype_l.3 isspecial_l.3 \
 +	ctype_l.3 isupper_l.3 \
 +	ctype_l.3 isxdigit_l.3 \
-+	ctype_l.3 tolower_l.3 \
-+	ctype_l.3 toupper_l.3 \
  	iswalnum.3 iswalpha.3 \
  	iswalnum.3 iswblank.3 \
  	iswalnum.3 iswcntrl.3 \
-@@ -28,6 +62,25 @@
+@@ -28,7 +60,28 @@
  	iswalnum.3 iswspace.3 \
  	iswalnum.3 iswupper.3 \
  	iswalnum.3 iswxdigit.3 \
@@ -369,32 +233,42 @@ diff -u -r1.18 Makefile.inc
 +	iswalnum_l.3 iswspace_l.3 \
 +	iswalnum_l.3 iswupper_l.3 \
 +	iswalnum_l.3 iswxdigit_l.3 \
-+	iswalnum_l.3 towlower_l.3 \
-+	iswalnum_l.3 towupper_l.3 \
 +	iswalnum_l.3 wctype_l.3 \
 +	mblen.3 mblen_l.3\
++	mbrtowc.3 mbrtowc_l.3\
++	mbsinit.3 mbsinit_l.3\
 +	mbstowcs.3 mbstowcs_l.3\
 +	mbtowc.3 mbtowc_l.3\
 +	setlocale.3 localeconv.3 \
++	towlower.3 towlower_l.3 \
  	towlower.3 towupper.3 \
++	towlower.3 towupper_l.3 \
  	wcstod.3 wcstof.3 \
  	wcstod.3 wcstold.3 \
-@@ -36,6 +89,8 @@
+ 	wcstol.3 wcstoul.3 \
+@@ -36,7 +89,14 @@
  	wcstol.3 wcstoull.3 \
  	wcstol.3 wcstoimax.3 \
  	wcstol.3 wcstoumax.3 \
 +	wcstombs.3 wcstombs_l.3 \
++	wctob.3 wctob_l.3 \
 +	wctomb.3 wctomb_l.3 \
  	mbsrtowcs.3 mbsnrtowcs.3 \
- 	wcsrtombs.3 wcsnrtombs.3
+-	wcsrtombs.3 wcsnrtombs.3
++	mbsrtowcs.3 mbsnrtowcs_l.3 \
++	mbsrtowcs.3 mbsrtowcs_l.3 \
++	wcsrtombs.3 wcsnrtombs.3 \
++	wcsrtombs.3 wcsrtombs_l.3 \
++	wcsrtombs.3 wcsnrtombs_l.3
  
+ CFLAGS+=-I${.CURDIR} -I${LIBCSRCDIR}/citrus
 Index: lib/libc/locale/___runetype_mb.c
 ===================================================================
 RCS file: /cvs/src/lib/libc/locale/___runetype_mb.c,v
 retrieving revision 1.1
 diff -u -r1.1 ___runetype_mb.c
 --- lib/libc/locale/___runetype_mb.c	7 Aug 2005 10:16:23 -0000	1.1
-+++ lib/libc/locale/___runetype_mb.c	1 Feb 2013 12:12:40 -0000
++++ lib/libc/locale/___runetype_mb.c	21 Feb 2013 17:30:10 -0000
 @@ -36,11 +36,14 @@
  #include <sys/cdefs.h>
  
@@ -436,14 +310,13 @@ diff -u -r1.1 ___runetype_mb.c
 +}
 +
 +
-
 Index: lib/libc/locale/btowc.c
 ===================================================================
 RCS file: /cvs/src/lib/libc/locale/btowc.c,v
 retrieving revision 1.1
 diff -u -r1.1 btowc.c
 --- lib/libc/locale/btowc.c	27 Jul 2010 16:59:03 -0000	1.1
-+++ lib/libc/locale/btowc.c	1 Feb 2013 12:12:40 -0000
++++ lib/libc/locale/btowc.c	21 Feb 2013 17:30:10 -0000
 @@ -31,9 +31,11 @@
  #include <stdio.h>
  #include <string.h>
@@ -473,14 +346,13 @@ diff -u -r1.1 btowc.c
 +{
 +	return btowc_l(c, __get_locale());
  }
-
 Index: lib/libc/locale/iswctype.c
 ===================================================================
 RCS file: /cvs/src/lib/libc/locale/iswctype.c,v
 retrieving revision 1.2
 diff -u -r1.2 iswctype.c
 --- lib/libc/locale/iswctype.c	15 Apr 2011 16:11:23 -0000	1.2
-+++ lib/libc/locale/iswctype.c	1 Feb 2013 12:12:40 -0000
++++ lib/libc/locale/iswctype.c	21 Feb 2013 17:30:10 -0000
 @@ -43,7 +43,7 @@
  #include <errno.h>
  #include <string.h>
@@ -496,7 +368,7 @@ RCS file: /cvs/src/lib/libc/locale/mblen.3,v
 retrieving revision 1.2
 diff -u -r1.2 mblen.3
 --- lib/libc/locale/mblen.3	31 May 2007 19:19:29 -0000	1.2
-+++ lib/libc/locale/mblen.3	1 Feb 2013 12:12:40 -0000
++++ lib/libc/locale/mblen.3	21 Feb 2013 17:30:10 -0000
 @@ -31,21 +31,26 @@
  .\" ----------------------------------------------------------------------
  .Sh NAME
@@ -548,14 +420,13 @@ diff -u -r1.2 mblen.3
  .\" ----------------------------------------------------------------------
  .Sh STANDARDS
  The
-
 Index: lib/libc/locale/mblen.c
 ===================================================================
 RCS file: /cvs/src/lib/libc/locale/mblen.c,v
 retrieving revision 1.1
 diff -u -r1.1 mblen.c
 --- lib/libc/locale/mblen.c	27 Jul 2010 16:59:04 -0000	1.1
-+++ lib/libc/locale/mblen.c	1 Feb 2013 12:12:40 -0000
++++ lib/libc/locale/mblen.c	21 Feb 2013 17:30:10 -0000
 @@ -31,9 +31,12 @@
  #include <stdlib.h>
  #include <string.h>
@@ -587,14 +458,13 @@ diff -u -r1.1 mblen.c
 +{
 +	return mblen_l(s, n, __get_locale());
  }
-
 Index: lib/libc/locale/mbrlen.c
 ===================================================================
 RCS file: /cvs/src/lib/libc/locale/mbrlen.c,v
 retrieving revision 1.1
 diff -u -r1.1 mbrlen.c
 --- lib/libc/locale/mbrlen.c	27 Jul 2010 16:59:04 -0000	1.1
-+++ lib/libc/locale/mbrlen.c	1 Feb 2013 12:12:40 -0000
++++ lib/libc/locale/mbrlen.c	21 Feb 2013 17:30:10 -0000
 @@ -29,13 +29,22 @@
  #include <sys/cdefs.h>
  
@@ -620,14 +490,280 @@ diff -u -r1.1 mbrlen.c
 +{
 +	return mbrlen_l(s, n, ps, __get_locale());
  }
-
+Index: lib/libc/locale/mbrtowc.3
+===================================================================
+RCS file: /cvs/src/lib/libc/locale/mbrtowc.3,v
+retrieving revision 1.3
+diff -u -r1.3 mbrtowc.3
+--- lib/libc/locale/mbrtowc.3	5 Dec 2010 14:59:49 -0000	1.3
++++ lib/libc/locale/mbrtowc.3	21 Feb 2013 17:30:10 -0000
+@@ -29,17 +29,23 @@
+ .Dt MBRTOWC 3
+ .Os
+ .Sh NAME
+-.Nm mbrtowc
++.Nm mbrtowc ,
++.Nm mbrtowc_l 
+ .Nd converts a multibyte character to a wide character (restartable)
+ .Sh SYNOPSIS
+ .Fd #include <wchar.h>
++.Fd #include <xlocale.h>
+ .Ft size_t
+ .Fn mbrtowc "wchar_t * restrict wc" "const char * restrict s" "size_t n" \
+-"mbstate_t * restrict mbs"
++.Ft size_t
++.Fn mbrtowc_l "wchar_t * restrict wc" "const char * restrict s" "size_t n" \
++"mbstate_t * restrict mbs" "locale_t l"
+ .Sh DESCRIPTION
+ The
+ .Fn mbrtowc
+-function examines at most
++and
++.Fn mbrtowc_l
++functions examine at most
+ .Fa n
+ bytes of the multibyte character byte string pointed to by
+ .Fa s ,
+@@ -59,9 +65,11 @@
+ .Fa mbs .
+ The mbstate_t object must be initialized to zero before the application's
+ first call to
+-.Fn mbrtowc .
+-If the previous call to
+-.Fn mbrtowc
++.Fn mbrtowc 
++or
++.Fn mbrtowc_l .
++
++If the previous call to the function
+ did not return (size_t)-1, the mbstate_t object can safely be reused
+ without reinitialization.
+ .Pp
+@@ -69,7 +77,12 @@
+ .Fn mbrtowc
+ is affected by the
+ .Dv LC_CTYPE
+-category of the current locale.
++category of the current locale, while the behavior of
++.Fn mbrtowc_l
++is affected by the
++.Dv LC_CTYPE
++category of the locale provided as parameter, see
++.Xr xlocale 3
+ If the locale is changed without reinitialization of the mbstate_t object
+ pointed to by
+ .Fa mbs ,
+@@ -238,12 +251,14 @@
+ .Sh SEE ALSO
+ .Xr mbrlen 3 ,
+ .Xr mbtowc 3 ,
+-.Xr setlocale 3
++.Xr setlocale 3,
++.Xr xlocale 3
+ .Sh STANDARDS
+ The
+ .Fn mbrtowc
+ function conforms to
+ .\" .St -isoC-amd1 .
++POSIX 2008,
+ ISO/IEC 9899/AMD1:1995
+ .Pq Dq ISO C90, Amendment 1 .
+ The restrict qualifier is added at
+Index: lib/libc/locale/mbsinit.3
+===================================================================
+RCS file: /cvs/src/lib/libc/locale/mbsinit.3,v
+retrieving revision 1.2
+diff -u -r1.2 mbsinit.3
+--- lib/libc/locale/mbsinit.3	31 May 2007 19:19:29 -0000	1.2
++++ lib/libc/locale/mbsinit.3	21 Feb 2013 17:30:10 -0000
+@@ -30,19 +30,31 @@
+ .Os
+ .\" ----------------------------------------------------------------------
+ .Sh NAME
+-.Nm mbsinit
++.Nm mbsinit ,
++.Nm mbsinit_l
+ .Nd determines whether the state object is in initial state
+ .\" ----------------------------------------------------------------------
+ .Sh SYNOPSIS
+ .Fd #include <wchar.h>
+ .Ft int
+ .Fn mbsinit "const mbstate_t *ps"
++.Ft int
++.Fn mbsinit_l "const mbstate_t *ps" "locale_t l"
+ .\" ----------------------------------------------------------------------
+ .Sh DESCRIPTION
+ .Fn mbsinit
+-determines whether the state object pointed to by
++and
++.Fn mbsinit_l
++determine whether the state object pointed to by
+ .Fa ps
+-is in initial conversion state, or not.
++is in initial conversion state, or not.  
++.Pp
++The behavior of 
++.Fn mbsinit 
++depends on the current locale, while the behavior of
++.Fn mbsinit_l
++depends on the locale provided as parameter, see
++.Xr xlocale 3
+ .Pp
+ .Fa ps
+ may be a
+@@ -50,6 +62,8 @@
+ pointer.
+ In this case,
+ .Fn mbsinit
++and
++.Fn mbsinit_l
+ will always return non-zero.
+ .\" ----------------------------------------------------------------------
+ .Sh RETURN VALUES
+@@ -74,5 +88,6 @@
+ .Fn mbsinit
+ conforms to
+ .\" .St -isoC-amd1 .
++POSIX 2008,
+ ISO/IEC 9899/AMD1:1995
+ .Pq Dq ISO C90, Amendment 1 .
+Index: lib/libc/locale/mbsrtowcs.3
+===================================================================
+RCS file: /cvs/src/lib/libc/locale/mbsrtowcs.3,v
+retrieving revision 1.4
+diff -u -r1.4 mbsrtowcs.3
+--- lib/libc/locale/mbsrtowcs.3	7 Jun 2012 19:47:40 -0000	1.4
++++ lib/libc/locale/mbsrtowcs.3	21 Feb 2013 17:30:10 -0000
+@@ -31,7 +31,9 @@
+ .\" ----------------------------------------------------------------------
+ .Sh NAME
+ .Nm mbsrtowcs ,
+-.Nm mbsnrtowcs
++.Nm mbsrtowcs_l ,
++.Nm mbsnrtowcs ,
++.Nm mbsnrtowcs_l
+ .Nd converts a multibyte character string to a wide-character string \
+ (restartable)
+ .\" ----------------------------------------------------------------------
+@@ -39,15 +41,21 @@
+ .Fd #include <wchar.h>
+ .Ft size_t
+ .Fn mbsrtowcs "wchar_t * restrict dst" "const char ** restrict src" "size_t len" \
+-"mbstate_t * restrict ps"
++.Ft size_t
++.Fn mbsrtowcs_l "wchar_t * restrict dst" "const char ** restrict src" "size_t len" \
++"mbstate_t * restrict ps" "locale_t l"
+ .Ft size_t
+ .Fn mbsnrtowcs "wchar_t * restrict dst" "const char ** restrict src" "size_t nmc" \
+-"size_t len" "mbstate_t * restrict ps"
++.Ft size_t
++.Fn mbsnrtowcs_l "wchar_t * restrict dst" "const char ** restrict src" "size_t nmc" \
++"size_t len" "mbstate_t * restrict ps" "locale_t l"
+ .\" ----------------------------------------------------------------------
+ .Sh DESCRIPTION
+-The
++The functions
+ .Fn mbsrtowcs
+-function converts the multibyte character string indirectly pointed to by
++and
++.Fn mbsrtowcs_l
++convert the multibyte character string indirectly pointed to by
+ .Fa src
+ to the corresponding wide-character string and stores it in the
+ array pointed to by
+@@ -66,10 +74,12 @@
+ .El
+ .Pp
+ The
+-.Fn mbsnrtowcs
+-function is equivalent to
++.Fn mbsnrtowcs 
++and
++.Fn mbsnrtowcs_l
++functions are equivalent to
+ .Fn mbsrtowcs
+-except that it will additionally stop the conversion after processing
++except that they will additionally stop the conversion after processing
+ .Fa nmc
+ bytes.
+ .Pp
+@@ -100,7 +110,15 @@
+ .Fn mbsnrtowcs
+ functions is affected by the
+ .Dv LC_CTYPE
+-category of the current locale.
++category of the current locale, while the
++behaviour of the
++.Fn mbsrtowcs_l
++and
++.Fn mbsnrtowcs_l
++functions is affected by the
++.Dv LC_CTYPE
++category of the locale provided as parameter, see 
++.Xr xlocale 3
+ .Pp
+ There are two special cases:
+ .Bl -tag -width 012345678901
+@@ -113,10 +131,7 @@
+ .Fa len
+ is ignored.
+ .It "ps == NULL"
+-The
+-.Fn mbsrtowcs
+-and
+-.Fn mbsnrtowcs
++These functions
+ functions use their own internal state objects to keep the conversion state,
+ instead of
+ .Fa ps
+@@ -130,9 +145,10 @@
+ .\" ----------------------------------------------------------------------
+ .Sh RETURN VALUES
+ The
+-.Fn mbsrtowcs
+-and
+-.Fn mbsnrtowcs
++.Fn mbsrtowcs ,
++.Fn mbsrtowcs_l ,
++.Fn mbsnrtowcs ,
++.Fn mbsnrtowcs_l
+ functions return:
+ .Bl -tag -width 012345678901
+ .It 0 or positive
+@@ -160,10 +176,7 @@
+ .El
+ .\" ----------------------------------------------------------------------
+ .Sh ERRORS
+-The
+-.Fn mbsrtowcs
+-and
+-.Fn mbsnrtowcs
++These
+ functions may return the following errors:
+ .Bl -tag -width Er
+ .It Bq Er EILSEQ
+@@ -179,12 +192,14 @@
+ .Xr mbrtowc 3 ,
+ .Xr mbstowcs 3 ,
+ .Xr setlocale 3
++.Xr xlocale 3
+ .\" ----------------------------------------------------------------------
+ .Sh STANDARDS
+ The
+ .Fn mbsrtowcs
+ function conforms to
+ .\" .St -isoC-amd1 .
++POSIX 2008,
+ ISO/IEC 9899/AMD1:1995
+ .Pq Dq ISO C90, Amendment 1 .
+ The restrict qualifier is added at
 Index: lib/libc/locale/mbstowcs.3
 ===================================================================
 RCS file: /cvs/src/lib/libc/locale/mbstowcs.3,v
 retrieving revision 1.4
 diff -u -r1.4 mbstowcs.3
 --- lib/libc/locale/mbstowcs.3	16 Nov 2011 13:06:21 -0000	1.4
-+++ lib/libc/locale/mbstowcs.3	1 Feb 2013 12:12:40 -0000
++++ lib/libc/locale/mbstowcs.3	21 Feb 2013 17:30:10 -0000
 @@ -31,22 +31,34 @@
  .\" ----------------------------------------------------------------------
  .Sh NAME
@@ -676,14 +812,13 @@ diff -u -r1.4 mbstowcs.3
  .\" ----------------------------------------------------------------------
  .Sh STANDARDS
  The
-
 Index: lib/libc/locale/mbstowcs.c
 ===================================================================
 RCS file: /cvs/src/lib/libc/locale/mbstowcs.c,v
 retrieving revision 1.1
 diff -u -r1.1 mbstowcs.c
 --- lib/libc/locale/mbstowcs.c	27 Jul 2010 16:59:04 -0000	1.1
-+++ lib/libc/locale/mbstowcs.c	1 Feb 2013 12:12:40 -0000
++++ lib/libc/locale/mbstowcs.c	21 Feb 2013 17:30:10 -0000
 @@ -32,14 +32,25 @@
  #include <stdlib.h>
  #include <string.h>
@@ -712,14 +847,13 @@ diff -u -r1.1 mbstowcs.c
 +{
 +	return mbstowcs_l(pwcs, s, n, __get_locale());
  }
-
 Index: lib/libc/locale/mbtowc.3
 ===================================================================
 RCS file: /cvs/src/lib/libc/locale/mbtowc.3,v
 retrieving revision 1.3
 diff -u -r1.3 mbtowc.3
 --- lib/libc/locale/mbtowc.3	20 Nov 2010 18:23:19 -0000	1.3
-+++ lib/libc/locale/mbtowc.3	1 Feb 2013 12:12:40 -0000
++++ lib/libc/locale/mbtowc.3	21 Feb 2013 17:30:10 -0000
 @@ -30,26 +30,30 @@
  .Os
  .\" ----------------------------------------------------------------------
@@ -778,14 +912,13 @@ diff -u -r1.3 mbtowc.3
  .\" ----------------------------------------------------------------------
  .Sh STANDARDS
  The
-
 Index: lib/libc/locale/mbtowc.c
 ===================================================================
 RCS file: /cvs/src/lib/libc/locale/mbtowc.c,v
 retrieving revision 1.1
 diff -u -r1.1 mbtowc.c
 --- lib/libc/locale/mbtowc.c	27 Jul 2010 16:59:04 -0000	1.1
-+++ lib/libc/locale/mbtowc.c	1 Feb 2013 12:12:40 -0000
++++ lib/libc/locale/mbtowc.c	21 Feb 2013 17:30:10 -0000
 @@ -32,9 +32,12 @@
  #include <string.h>
  #include <wchar.h>
@@ -817,14 +950,13 @@ diff -u -r1.1 mbtowc.c
 +{
 +	return mbtowc_l(pwc, s, n, __get_locale());
  }
-
 Index: lib/libc/locale/multibyte_citrus.c
 ===================================================================
 RCS file: /cvs/src/lib/libc/locale/multibyte_citrus.c,v
 retrieving revision 1.2
 diff -u -r1.2 multibyte_citrus.c
 --- lib/libc/locale/multibyte_citrus.c	6 Jun 2012 16:58:02 -0000	1.2
-+++ lib/libc/locale/multibyte_citrus.c	1 Feb 2013 12:12:40 -0000
++++ lib/libc/locale/multibyte_citrus.c	21 Feb 2013 17:30:10 -0000
 @@ -32,13 +32,18 @@
  #include <errno.h>
  #include <limits.h>
@@ -1002,14 +1134,13 @@ diff -u -r1.2 multibyte_citrus.c
 +{
 +	return wcsnrtombs_l(dst, src, nwc, len, ps, __get_locale());
  }
-
 Index: lib/libc/locale/nl_langinfo.c
 ===================================================================
 RCS file: /cvs/src/lib/libc/locale/nl_langinfo.c,v
 retrieving revision 1.6
 diff -u -r1.6 nl_langinfo.c
 --- lib/libc/locale/nl_langinfo.c	16 Nov 2005 16:48:15 -0000	1.6
-+++ lib/libc/locale/nl_langinfo.c	1 Feb 2013 12:12:41 -0000
++++ lib/libc/locale/nl_langinfo.c	21 Feb 2013 17:30:10 -0000
 @@ -9,7 +9,7 @@
  #include <nl_types.h>
  #include <langinfo.h>
@@ -1019,14 +1150,13 @@ diff -u -r1.6 nl_langinfo.c
  
  char *
  nl_langinfo(nl_item item)
-
 Index: lib/libc/locale/rune.h
 ===================================================================
 RCS file: /cvs/src/lib/libc/locale/rune.h,v
 retrieving revision 1.2
 diff -u -r1.2 rune.h
 --- lib/libc/locale/rune.h	15 Mar 2011 22:27:48 -0000	1.2
-+++ lib/libc/locale/rune.h	1 Feb 2013 12:12:41 -0000
++++ lib/libc/locale/rune.h	21 Feb 2013 17:30:10 -0000
 @@ -40,41 +40,8 @@
  
  #include <stdio.h>
@@ -1071,14 +1201,13 @@ diff -u -r1.2 rune.h
 -extern _RuneLocale *_CurrentRuneLocale;
  
  #endif	/*! _RUNE_H_ */
-
 Index: lib/libc/locale/runetable.c
 ===================================================================
 RCS file: /cvs/src/lib/libc/locale/runetable.c,v
 retrieving revision 1.3
 diff -u -r1.3 runetable.c
 --- lib/libc/locale/runetable.c	15 Mar 2011 22:27:48 -0000	1.3
-+++ lib/libc/locale/runetable.c	1 Feb 2013 12:12:41 -0000
++++ lib/libc/locale/runetable.c	21 Feb 2013 17:30:10 -0000
 @@ -46,6 +46,13 @@
  #include "citrus_ctype.h"
  #include "citrus_none.h"
@@ -1093,28 +1222,19 @@ diff -u -r1.3 runetable.c
  
  _RuneLocale _DefaultRuneLocale = {
      _RUNE_MAGIC_1,
-@@ -403,3 +410,13 @@
+@@ -403,3 +410,5 @@
  };
  
  _RuneLocale *_CurrentRuneLocale = &_DefaultRuneLocale;
 +
-+/* From http://svn.freebsd.org/base/projects/amd64_xen_pv/lib/libc/locale/table.c */
-+_RuneLocale *
-+__runes_for_locale(locale_t locale, int *mb_sb_limit)
-+{
-+	FIX_LOCALE(locale);
-+	struct xlocale_ctype *c = XLOCALE_CTYPE(locale);
-+	*mb_sb_limit = c->__mb_sb_limit;
-+	return c->runes;
-+}
-
++
 Index: lib/libc/locale/setlocale.c
 ===================================================================
 RCS file: /cvs/src/lib/libc/locale/setlocale.c,v
 retrieving revision 1.18
 diff -u -r1.18 setlocale.c
 --- lib/libc/locale/setlocale.c	15 Mar 2011 22:27:48 -0000	1.18
-+++ lib/libc/locale/setlocale.c	1 Feb 2013 12:12:41 -0000
++++ lib/libc/locale/setlocale.c	21 Feb 2013 17:30:10 -0000
 @@ -39,9 +39,11 @@
  #include <stdlib.h>
  #include <string.h>
@@ -1212,14 +1332,13 @@ diff -u -r1.18 setlocale.c
  __get_locale_env(int category)
  {
  	const char *env;
-
 Index: lib/libc/locale/setrunelocale.c
 ===================================================================
 RCS file: /cvs/src/lib/libc/locale/setrunelocale.c,v
 retrieving revision 1.6
 diff -u -r1.6 setrunelocale.c
 --- lib/libc/locale/setrunelocale.c	15 Mar 2011 22:27:48 -0000	1.6
-+++ lib/libc/locale/setrunelocale.c	1 Feb 2013 12:12:41 -0000
++++ lib/libc/locale/setrunelocale.c	21 Feb 2013 17:30:10 -0000
 @@ -102,6 +102,8 @@
  #include <unistd.h>
  #include <locale.h>
@@ -1412,14 +1531,86 @@ diff -u -r1.6 setrunelocale.c
 +};
 +
 +
-
+Index: lib/libc/locale/towlower.3
+===================================================================
+RCS file: /cvs/src/lib/libc/locale/towlower.3,v
+retrieving revision 1.4
+diff -u -r1.4 towlower.3
+--- lib/libc/locale/towlower.3	10 Sep 2010 18:38:19 -0000	1.4
++++ lib/libc/locale/towlower.3	21 Feb 2013 17:30:10 -0000
+@@ -38,33 +38,62 @@
+ .Dt TOWLOWER 3
+ .Os
+ .Sh NAME
+-.Nm towlower
++.Nm towlower , 
++.Nm towlower_l , 
++.Nm towupper
++.Nm towupper_l
+ .Nd wide-character case letter conversion utilities
+ .Sh SYNOPSIS
+ .In wctype.h
+ .Ft wint_t
+ .Fn towlower "wint_t wc"
+ .Ft wint_t
++.Fn towlower_l "wint_t wc" "locale_t l"
++.Ft wint_t
+ .Fn towupper "wint_t wc"
++.Ft wint_t
++.Fn towupper_l "wint_t wc" "locale_t l"
+ .Sh DESCRIPTION
+ The
+ .Fn towlower
+-function converts an upper-case wide character to the corresponding lower-case
++and
++.Fn towlower_l
++functions convert an upper-case wide character to the corresponding lower-case
+ letter.
+ The
+ .Fn towupper
+-function converts an lower-case wide character to the corresponding upper-case
++and
++.Fn towupper_l
++functions convert an lower-case wide character to the corresponding upper-case
+ letter.
+ .Sh RETURN VALUES
+ If the argument is an upper/lower-case letter, the
+ .Fn tolower
+ function returns the corresponding counterpart if there is
+ one; otherwise the argument is returned unchanged.
++.Pp
++The behavior of the functions
++.Fn towupper
++and 
++.Fn towlower
++is affected by the 
++.Dv LC_CTYPE
++category of the current locale, while 
++the behavior of the functions
++.Fn towupper_l
++and 
++.Fn towlower_l
++is affected by the 
++.Dv LC_CTYPE
++category of the locale provided as parameter, see
++.Xr xlocale 3 .
+ .Sh SEE ALSO
+ .Xr tolower 3 ,
+ .Xr toupper 3
++.Xr xlocale 3
+ .Sh STANDARDS
+ The functions conform to
++POSIX 2008,
+ .St -isoC-amd1
+ and
+ .St -isoC-99 .
 Index: lib/libc/locale/wcscoll.c
 ===================================================================
 RCS file: /cvs/src/lib/libc/locale/wcscoll.c,v
 retrieving revision 1.1
 diff -u -r1.1 wcscoll.c
 --- lib/libc/locale/wcscoll.c	27 Jul 2010 16:59:04 -0000	1.1
-+++ lib/libc/locale/wcscoll.c	1 Feb 2013 12:12:41 -0000
++++ lib/libc/locale/wcscoll.c	21 Feb 2013 17:30:10 -0000
 @@ -31,6 +31,7 @@
  
  #include <assert.h>
@@ -1436,14 +1627,139 @@ diff -u -r1.1 wcscoll.c
 -	return (wcscmp(s1, s2));
 +	return (wcscoll_l(s1, s2, __get_locale()));
  }
-
+Index: lib/libc/locale/wcsrtombs.3
+===================================================================
+RCS file: /cvs/src/lib/libc/locale/wcsrtombs.3,v
+retrieving revision 1.4
+diff -u -r1.4 wcsrtombs.3
+--- lib/libc/locale/wcsrtombs.3	7 Jun 2012 19:47:40 -0000	1.4
++++ lib/libc/locale/wcsrtombs.3	21 Feb 2013 17:30:10 -0000
+@@ -31,7 +31,9 @@
+ .\" ----------------------------------------------------------------------
+ .Sh NAME
+ .Nm wcsrtombs ,
+-.Nm wcsnrtombs
++.Nm wcsrtombs_l ,
++.Nm wcsnrtombs ,
++.Nm wcsnrtombs_l
+ .Nd converts a wide-character string to a multibyte character string \
+ (restartable)
+ .\" ----------------------------------------------------------------------
+@@ -39,15 +41,21 @@
+ .Fd #include <wchar.h>
+ .Ft size_t
+ .Fn wcsrtombs "const char * restrict dst" "const wchar_t ** restrict src" \
+-"size_t len" "mbstate_t * restrict ps"
++.Ft size_t
++.Fn wcsrtombs_l "const char * restrict dst" "const wchar_t ** restrict src" \
++"size_t len" "mbstate_t * restrict ps" "locale_t l"
++.Ft size_t
++.Fn wcsnrtombs "const char * restrict dst" "const wchar_t ** restrict src" \
+ .Ft size_t
+ .Fn wcsnrtombs "const char * restrict dst" "const wchar_t ** restrict src" \
+-"size_t nwc" "size_t len" "mbstate_t * restrict ps"
++"size_t nwc" "size_t len" "mbstate_t * restrict ps" "locale_t l"
+ .\" ----------------------------------------------------------------------
+ .Sh DESCRIPTION
+ The
+ .Fn wcsrtombs
+-function converts the wide-character string indirectly pointed to by
++and
++.Fn wcsrtombs_l
++functions convert the wide-character string indirectly pointed to by
+ .Fa src
+ to the corresponding multibyte character string
+ and stores it to the array pointed to by
+@@ -68,9 +76,11 @@
+ .Pp
+ The
+ .Fn wcsnrtombs
+-function is equivalent to
++and
++.Fn wcsnrtombs_l
++functions are equivalent to
+ .Fn wcsrtombs
+-except that it additionally stops the conversion after processing
++except that they additionally stops the conversion after processing
+ .Fa nwc
+ wide characters.
+ .Pp
+@@ -103,7 +113,16 @@
+ .Fn wcsnrtombs
+ functions is affected by the
+ .Dv LC_CTYPE
+-category of the current locale.
++category of the current locale, while
++the behaviour of the
++.Fn wcsrtombs_l
++and
++.Fn wcsnrtombs_l
++functions is affected by the
++.Dv LC_CTYPE
++category of the locale provided as parameter, see
++.Xr xlocale 3
++
+ .Pp
+ There are two special cases:
+ .Bl -tag -width 012345678901
+@@ -115,10 +134,7 @@
+ .Fa len
+ is ignored.
+ .It "ps == NULL"
+-The
+-.Fn wcsrtombs
+-and
+-.Fn wcsnrtombs
++These
+ functions use their own internal state objects to keep the conversion state,
+ instead of
+ .Fa ps
+@@ -131,10 +147,7 @@
+ .El
+ .\" ----------------------------------------------------------------------
+ .Sh RETURN VALUES
+-The
+-.Fn wcsrtombs
+-and
+-.Fn wcsnrtombs
++These
+ functions return:
+ .Bl -tag -width 012345678901
+ .It 0 or positive
+@@ -160,10 +173,7 @@
+ .El
+ .\" ----------------------------------------------------------------------
+ .Sh ERRORS
+-The
+-.Fn wcsrtombs
+-and
+-.Fn wcsnrtombs
++These
+ functions may return the following errors:
+ .Bl -tag -width Er
+ .It Bq Er EILSEQ
+@@ -178,11 +188,14 @@
+ .Xr setlocale 3 ,
+ .Xr wcrtomb 3 ,
+ .Xr wcstombs 3
++.Xr setlocale 3
++.Xr xlocale 3
+ .\" ----------------------------------------------------------------------
+ .Sh STANDARDS
+ The
+ .Fn wcsrtombs
+ function conforms to
++POSIX 2008,
+ .St -ansiC .
+ The restrict qualifier is added at
+ .\" .St -isoC99 .
 Index: lib/libc/locale/wcstombs.3
 ===================================================================
 RCS file: /cvs/src/lib/libc/locale/wcstombs.3,v
 retrieving revision 1.4
 diff -u -r1.4 wcstombs.3
 --- lib/libc/locale/wcstombs.3	10 Sep 2010 18:38:19 -0000	1.4
-+++ lib/libc/locale/wcstombs.3	1 Feb 2013 12:12:41 -0000
++++ lib/libc/locale/wcstombs.3	21 Feb 2013 17:30:10 -0000
 @@ -30,22 +30,27 @@
  .Os
  .\" ----------------------------------------------------------------------
@@ -1507,14 +1823,13 @@ diff -u -r1.4 wcstombs.3
  .\" ----------------------------------------------------------------------
  .Sh STANDARDS
  The
-
 Index: lib/libc/locale/wcstombs.c
 ===================================================================
 RCS file: /cvs/src/lib/libc/locale/wcstombs.c,v
 retrieving revision 1.1
 diff -u -r1.1 wcstombs.c
 --- lib/libc/locale/wcstombs.c	27 Jul 2010 16:59:04 -0000	1.1
-+++ lib/libc/locale/wcstombs.c	1 Feb 2013 12:12:42 -0000
++++ lib/libc/locale/wcstombs.c	21 Feb 2013 17:30:10 -0000
 @@ -32,14 +32,23 @@
  #include <stdlib.h>
  #include <string.h>
@@ -1541,14 +1856,13 @@ diff -u -r1.1 wcstombs.c
 +{
 +	return wcstombs_l(s, pwcs, n, __get_locale());
  }
-
 Index: lib/libc/locale/wcsxfrm.c
 ===================================================================
 RCS file: /cvs/src/lib/libc/locale/wcsxfrm.c,v
 retrieving revision 1.1
 diff -u -r1.1 wcsxfrm.c
 --- lib/libc/locale/wcsxfrm.c	27 Jul 2010 16:59:04 -0000	1.1
-+++ lib/libc/locale/wcsxfrm.c	1 Feb 2013 12:12:42 -0000
++++ lib/libc/locale/wcsxfrm.c	21 Feb 2013 17:30:10 -0000
 @@ -37,7 +37,5 @@
  size_t 
  wcsxfrm(wchar_t *dest, const wchar_t *src, size_t n)
@@ -1558,14 +1872,85 @@ diff -u -r1.1 wcsxfrm.c
 -	return wcslcpy(dest, src, n);
 +	return (wcsxfrm_l(dest, src, n, __get_locale()));
  }
-
+Index: lib/libc/locale/wctob.3
+===================================================================
+RCS file: /cvs/src/lib/libc/locale/wctob.3,v
+retrieving revision 1.3
+diff -u -r1.3 wctob.3
+--- lib/libc/locale/wctob.3	31 May 2007 19:19:29 -0000	1.3
++++ lib/libc/locale/wctob.3	21 Feb 2013 17:30:10 -0000
+@@ -30,32 +30,44 @@
+ .Os
+ .\" ----------------------------------------------------------------------
+ .Sh NAME
+-.Nm wctob
++.Nm wctob ,
++.Nm wctob_l
+ .Nd convert a wide character to a single byte character
+ .\" ----------------------------------------------------------------------
+ .Sh SYNOPSIS
+ .In wchar.h
+ .Ft int
+ .Fn wctob "wint_t wc"
++.Ft int
++.Fn wctob_l "wint_t wc" "locale_t l"
+ .\" ----------------------------------------------------------------------
+ .Sh DESCRIPTION
+ The
+ .Fn wctob
+-function converts a wide character
++and
++.Fn wctob_l
++functions converts a wide character
+ .Fa wc
+ to a corresponding single byte character in the initial shift state of
+-the current locale.
++the current locale in the case of 
++.Fn wctob
++or of the locale provided as parameter to 
++.Fn wctob_l ,
++see
++.Xr xlocale 3
+ .Pp
+ The behaviour of the
+ .Fn wctob
+ is affected by the
+ .Dv LC_CTYPE
+-category of the current locale.
++category of the current locale. While the behavior of
++.Fn wctob_l
++depends on the 
++.Dv LC_CTYPE
++category of the provided locale.
+ .\" ----------------------------------------------------------------------
+ .Sh RETURN VALUES
+-The
+-.Fn wctob
+-function returns:
++These functions return:
+ .Bl -tag -width 012345678901
+ .It Dv EOF
+ if
+@@ -77,9 +89,8 @@
+ .Xr btowc 3 ,
+ .Xr setlocale 3 ,
+ .Xr wcrtomb 3
++.Xr xlocale 3
+ .\" ----------------------------------------------------------------------
+ .Sh STANDARDS
+-The
+-.Fn wctob
+-function conforms to
+-.St -isoC-amd1 .
++These
++functions conforms to POSIX 2008.
 Index: lib/libc/locale/wctob.c
 ===================================================================
 RCS file: /cvs/src/lib/libc/locale/wctob.c,v
 retrieving revision 1.1
 diff -u -r1.1 wctob.c
 --- lib/libc/locale/wctob.c	27 Jul 2010 16:59:04 -0000	1.1
-+++ lib/libc/locale/wctob.c	1 Feb 2013 12:12:42 -0000
++++ lib/libc/locale/wctob.c	21 Feb 2013 17:30:10 -0000
 @@ -31,15 +31,23 @@
  #include <stdio.h>
  #include <string.h>
@@ -1592,14 +1977,13 @@ diff -u -r1.1 wctob.c
 +{
 +	return wctob_l(c, __get_locale());
  }
-
 Index: lib/libc/locale/wctomb.3
 ===================================================================
 RCS file: /cvs/src/lib/libc/locale/wctomb.3,v
 retrieving revision 1.2
 diff -u -r1.2 wctomb.3
 --- lib/libc/locale/wctomb.3	31 May 2007 19:19:29 -0000	1.2
-+++ lib/libc/locale/wctomb.3	1 Feb 2013 12:12:42 -0000
++++ lib/libc/locale/wctomb.3	21 Feb 2013 17:30:10 -0000
 @@ -29,18 +29,23 @@
  .Dt WCTOMB 3
  .Os
@@ -1676,14 +2060,13 @@ diff -u -r1.2 wctomb.3
  .Sh STANDARDS
  The
  .Fn wctomb
-
 Index: lib/libc/locale/wctomb.c
 ===================================================================
 RCS file: /cvs/src/lib/libc/locale/wctomb.c,v
 retrieving revision 1.1
 diff -u -r1.1 wctomb.c
 --- lib/libc/locale/wctomb.c	27 Jul 2010 16:59:04 -0000	1.1
-+++ lib/libc/locale/wctomb.c	1 Feb 2013 12:12:42 -0000
++++ lib/libc/locale/wctomb.c	21 Feb 2013 17:30:10 -0000
 @@ -31,9 +31,11 @@
  #include <stdlib.h>
  #include <string.h>
@@ -1712,14 +2095,13 @@ diff -u -r1.1 wctomb.c
 +{
 +	return wctomb_l(s, wchar, __get_locale());
  }
-
 Index: lib/libc/string/Makefile.inc
 ===================================================================
 RCS file: /cvs/src/lib/libc/string/Makefile.inc,v
 retrieving revision 1.28
 diff -u -r1.28 Makefile.inc
 --- lib/libc/string/Makefile.inc	17 Jan 2012 02:48:01 -0000	1.28
-+++ lib/libc/string/Makefile.inc	1 Feb 2013 12:12:54 -0000
++++ lib/libc/string/Makefile.inc	21 Feb 2013 17:30:17 -0000
 @@ -9,7 +9,8 @@
  	strsignal.c strtok.c strxfrm.c \
  	wcscat.c wcschr.c wcscmp.c wcscpy.c wcscspn.c wcslcat.c wcslcpy.c \
@@ -1759,14 +2141,13 @@ diff -u -r1.28 Makefile.inc
  MLINKS+=strerror.3 strerror_r.3
  MLINKS+=wcscasecmp.3 wcsncasecmp.3
  MLINKS+=wcscat.3 wcsncat.3
-
 Index: lib/libc/string/strcasecmp.3
 ===================================================================
 RCS file: /cvs/src/lib/libc/string/strcasecmp.3,v
 retrieving revision 1.11
 diff -u -r1.11 strcasecmp.3
 --- lib/libc/string/strcasecmp.3	25 Jul 2011 00:38:52 -0000	1.11
-+++ lib/libc/string/strcasecmp.3	1 Feb 2013 12:12:54 -0000
++++ lib/libc/string/strcasecmp.3	21 Feb 2013 17:30:17 -0000
 @@ -36,19 +36,27 @@
  .Os
  .Sh NAME
@@ -1834,14 +2215,13 @@ diff -u -r1.11 strcasecmp.3
  .Sh STANDARDS
  The
  .Fn strcasecmp
-
 Index: lib/libc/string/strcasecmp.c
 ===================================================================
 RCS file: /cvs/src/lib/libc/string/strcasecmp.c,v
 retrieving revision 1.6
 diff -u -r1.6 strcasecmp.c
 --- lib/libc/string/strcasecmp.c	8 Aug 2005 08:05:37 -0000	1.6
-+++ lib/libc/string/strcasecmp.c	1 Feb 2013 12:12:54 -0000
++++ lib/libc/string/strcasecmp.c	21 Feb 2013 17:30:17 -0000
 @@ -30,6 +30,8 @@
   */
  
@@ -1851,34 +2231,24 @@ diff -u -r1.6 strcasecmp.c
  
  typedef unsigned char u_char;
  
-@@ -74,32 +76,49 @@
+@@ -74,32 +76,53 @@
  };
  
  int
 -strcasecmp(const char *s1, const char *s2)
-+strcasecmp_l(const char *s1, const char *s2, locale_t loc)
- {
+-{
 -	const u_char *cm = charmap;
- 	const u_char *us1 = (const u_char *)s1;
- 	const u_char *us2 = (const u_char *)s2;
- 
+-	const u_char *us1 = (const u_char *)s1;
+-	const u_char *us2 = (const u_char *)s2;
+-
 -	while (cm[*us1] == cm[*us2++])
-+	while (toupper_l(*us1, loc) == toupper_l(*us2++, loc))
- 		if (*us1++ == '\0')
- 			return (0);
+-		if (*us1++ == '\0')
+-			return (0);
 -	return (cm[*us1] - cm[*--us2]);
-+	return (toupper_l(*us1, loc) - toupper_l(*--us2, loc));
- }
- 
-+
- int
+-}
+-
+-int
 -strncasecmp(const char *s1, const char *s2, size_t n)
-+strcasecmp(const char *s1, const char *s2)
-+{
-+	return strcasecmp_l(s1, s2, __get_locale());
-+}
-+
-+int
 +strncasecmp_l(const char *s1, const char *s2, size_t n, locale_t loc)
  {
  	if (n != 0) {
@@ -1890,14 +2260,37 @@ diff -u -r1.6 strcasecmp.c
 -			if (cm[*us1] != cm[*us2++])
 -				return (cm[*us1] - cm[*--us2]);
 +			if (toupper_l(*us1, loc) != toupper_l(*us2++, loc))
-+				return (toupper(*us1, loc) 
-+						- toupper(*--us2, loc));
++				return (toupper_l(*us1, loc) 
++						- toupper_l(*--us2, loc));
  			if (*us1++ == '\0')
  				break;
  		} while (--n != 0);
  	}
  	return (0);
  }
++
++int
++strcasecmp_l(const char *s1, const char *s2, locale_t loc)
++{
++	register size_t t1 = strlen(s1), t2 = strlen(s2);
++	return strncasecmp_l(s1, s2, t1 > t2 ? t1 : t2, loc);
++/*	const u_char *us1 = (const u_char *)s1;
++	const u_char *us2 = (const u_char *)s2;
++
++	while (toupper_l(*us1, loc) == toupper_l(*us2++, loc))
++		if (*us1++ == '\0')
++			return (0);
++	return (toupper_l(*us1, loc) - toupper_l(*--us2, loc)); */
++}
++
++
++int
++strcasecmp(const char *s1, const char *s2)
++{
++	return strcasecmp_l(s1, s2, __get_locale());
++}
++
++
 +
 +int
 +strncasecmp(const char *s1, const char *s2, size_t n)
@@ -1915,7 +2308,7 @@ RCS file: /cvs/src/lib/libc/string/strcasestr.c,v
 retrieving revision 1.3
 diff -u -r1.3 strcasestr.c
 --- lib/libc/string/strcasestr.c	31 Mar 2006 05:34:55 -0000	1.3
-+++ lib/libc/string/strcasestr.c	1 Feb 2013 12:12:54 -0000
++++ lib/libc/string/strcasestr.c	21 Feb 2013 17:30:17 -0000
 @@ -35,6 +35,8 @@
  
  #include <ctype.h>
@@ -1956,14 +2349,13 @@ diff -u -r1.3 strcasestr.c
  		s--;
  	}
  	return ((char *)s);
-
 Index: lib/libc/string/strcoll.3
 ===================================================================
 RCS file: /cvs/src/lib/libc/string/strcoll.3,v
 retrieving revision 1.8
 diff -u -r1.8 strcoll.3
 --- lib/libc/string/strcoll.3	25 Jul 2011 00:38:53 -0000	1.8
-+++ lib/libc/string/strcoll.3	1 Feb 2013 12:12:55 -0000
++++ lib/libc/string/strcoll.3	21 Feb 2013 17:30:17 -0000
 @@ -35,32 +35,42 @@
  .Dt STRCOLL 3
  .Os
@@ -2011,14 +2403,13 @@ diff -u -r1.8 strcoll.3
  .Sh STANDARDS
  The
  .Fn strcoll
-
 Index: lib/libc/string/strcoll.c
 ===================================================================
 RCS file: /cvs/src/lib/libc/string/strcoll.c,v
 retrieving revision 1.5
 diff -u -r1.5 strcoll.c
 --- lib/libc/string/strcoll.c	8 Aug 2005 08:05:37 -0000	1.5
-+++ lib/libc/string/strcoll.c	1 Feb 2013 12:12:55 -0000
++++ lib/libc/string/strcoll.c	21 Feb 2013 17:30:17 -0000
 @@ -32,6 +32,7 @@
   */
  
@@ -2035,14 +2426,13 @@ diff -u -r1.5 strcoll.c
 -	return (strcmp(s1, s2));
 +	return (strcoll_l(s1, s2, __get_locale()));
  }
-
 Index: lib/libc/string/strstr.3
 ===================================================================
 RCS file: /cvs/src/lib/libc/string/strstr.3,v
 retrieving revision 1.11
 diff -u -r1.11 strstr.3
 --- lib/libc/string/strstr.3	25 Jul 2011 00:38:53 -0000	1.11
-+++ lib/libc/string/strstr.3	1 Feb 2013 12:12:55 -0000
++++ lib/libc/string/strstr.3	21 Feb 2013 17:30:17 -0000
 @@ -35,7 +35,9 @@
  .Dt STRSTR 3
  .Os
@@ -2080,136 +2470,75 @@ diff -u -r1.11 strstr.3
  .Sh STANDARDS
  The
  .Fn strstr
-
 Index: lib/libc/string/strxfrm.3
 ===================================================================
 RCS file: /cvs/src/lib/libc/string/strxfrm.3,v
 retrieving revision 1.9
 diff -u -r1.9 strxfrm.3
 --- lib/libc/string/strxfrm.3	25 Jul 2011 00:38:53 -0000	1.9
-+++ lib/libc/string/strxfrm.3	1 Feb 2013 12:12:55 -0000
-@@ -1,5 +1,5 @@
--.\" Copyright (c) 1990, 1991 The Regents of the University of California.
--.\" All rights reserved.
-+.\" Copyright (c) 1990, 1991, 1993
-+.\"	The Regents of the University of California.  All rights reserved.
++++ lib/libc/string/strxfrm.3	21 Feb 2013 17:30:17 -0000
+@@ -31,7 +31,7 @@
  .\"
- .\" This code is derived from software contributed to Berkeley by
- .\" Chris Torek and the American National Standards Committee X3,
-@@ -13,7 +13,7 @@
- .\" 2. Redistributions in binary form must reproduce the above copyright
- .\"    notice, this list of conditions and the following disclaimer in the
- .\"    documentation and/or other materials provided with the distribution.
--.\" 3. Neither the name of the University nor the names of its contributors
-+.\" 4. Neither the name of the University nor the names of its contributors
- .\"    may be used to endorse or promote products derived from this software
- .\"    without specific prior written permission.
+ .\"	$OpenBSD: strxfrm.3,v 1.9 2011/07/25 00:38:53 schwarze Exp $
  .\"
-@@ -29,51 +29,83 @@
- .\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
- .\" SUCH DAMAGE.
- .\"
--.\"	$OpenBSD: strxfrm.3,v 1.9 2011/07/25 00:38:53 schwarze Exp $
-+.\"     @(#)strxfrm.3	8.1 (Berkeley) 6/4/93
-+.\" $FreeBSD$
- .\"
--.Dd $Mdocdate: February 1 2013 $
-+.Dd June 4, 1993
+-.Dd $Mdocdate: July 25 2011 $
++.Dd $Mdocdate: February 19 2011 $
  .Dt STRXFRM 3
  .Os
  .Sh NAME
--.Nm strxfrm
-+.Nm strxfrm,
-+.Nm strxfrm_l
- .Nd transform a string under locale
-+.Sh LIBRARY
-+.Lb libc
- .Sh SYNOPSIS
--.Fd #include <string.h>
-+.In string.h
+@@ -41,12 +41,17 @@
+ .Fd #include <string.h>
  .Ft size_t
--.Fn strxfrm "char *dst" "const char *src" "size_t n"
-+.Fn strxfrm "char * restrict dst" "const char * restrict src" "size_t n"
+ .Fn strxfrm "char *dst" "const char *src" "size_t n"
 +.Ft size_t
-+.Fn strxfrm_l "char * restrict dst" "const char *restrict src" "size_t n" "locale_t loc"
++.Fn strxfrm_l "char *dst" "const char *src" "size_t n" "locale_t locale"
  .Sh DESCRIPTION
--The idea of
-+The
-+.Fn strxfrm
-+function transforms a null-terminated string pointed to by
-+.Fa src
-+according to the current locale collation if any,
-+then copies the transformed string
-+into
-+.Fa dst .
-+Not more than
-+.Fa n
-+characters are copied into
-+.Fa dst ,
-+including the terminating null character added.
-+If
-+.Fa n
-+is set to 0
-+(it helps to determine an actual size needed
-+for transformation),
-+.Fa dst
-+is permitted to be a NULL pointer.
-+.Pp
-+Comparing two strings using
-+.Fn strcmp
-+after
-+.Fn strxfrm
-+is equal to comparing
-+two original strings with
-+.Fn strcoll .
-+.Pp
-+.Fn strxfrm_l
-+does the same, however takes an explicit locale rather than the global
-+locale, see
-+.Xr xlocale 3
-+.Sh RETURN VALUES
-+Upon successful completion,
+ The idea of
  .Fn strxfrm
--is to
--.Dq un-localize
--a string: the function transforms
--.Ar src ,
--storing the result in
--.Ar dst ,
--such that
--.Xr strcmp 3
--on transformed strings returns what
--.Xr strcoll 3
--on the original untransformed strings would return.
 +and
 +.Fn strxfrm_l
-+return the length of the transformed string not including
-+the terminating null character.
-+If this value is
-+.Fa n
-+or more, the contents of
-+.Fa dst
-+are indeterminate.
+ is to
+ .Dq un-localize
+-a string: the function transforms
++a string: these functions transform according to the default locale (or
++the locale provided to strxfrm_l) the string
+ .Ar src ,
+ storing the result in
+ .Ar dst ,
+@@ -55,12 +60,28 @@
+ on transformed strings returns what
+ .Xr strcoll 3
+ on the original untransformed strings would return.
++.Pp
++.Ar n
++is the maximal amount of bytes that can be written to
++.Ar dst
++, however if 
++.Ar n
++is 0 this function returns the amount of bytes that the transformed string
++would require --usefull to allocate space before calling  again.
++.Sh RETURN VALUE
++Length of the string transformed (not counting NUL).  If such lenght is grather
++than 
++.Ar n 
++the contents of 
++.Ar dst 
++is unspecified.
  .Sh SEE ALSO
--.Xr bcmp 3 ,
--.Xr memcmp 3 ,
+ .Xr bcmp 3 ,
+ .Xr memcmp 3 ,
  .Xr setlocale 3 ,
--.Xr strcasecmp 3 ,
+ .Xr strcasecmp 3 ,
  .Xr strcmp 3 ,
--.Xr strcoll 3
-+.Xr strcoll 3 ,
-+.Xr wcsxfrm 3,
-+.Xr xlocale 3
++.Xr xlocale 3 ,
+ .Xr strcoll 3
  .Sh STANDARDS
  The
- .Fn strxfrm
--function conforms to
--.St -ansiC .
--.Sh HISTORY
-+function
-+conforms to
-+.St -isoC .
- The
+@@ -68,12 +89,4 @@
+ function conforms to
+ .St -ansiC .
+ .Sh HISTORY
+-The
 -.Fn strxfrm
 -function first appeared in
 -.Bx 4.3 Reno .
@@ -2218,17 +2547,14 @@ diff -u -r1.9 strxfrm.3
 -.Ox ,
 -.Fn strxfrm
 -just returns a copy of the original string.
-+.Fn strxfrm_l
-+function conforms to
-+.St -p1003.1-2008 .
-
++The implementation is derived from FreeBSD
 Index: lib/libc/string/strxfrm.c
 ===================================================================
 RCS file: /cvs/src/lib/libc/string/strxfrm.c,v
 retrieving revision 1.6
 diff -u -r1.6 strxfrm.c
 --- lib/libc/string/strxfrm.c	8 Aug 2005 08:05:37 -0000	1.6
-+++ lib/libc/string/strxfrm.c	1 Feb 2013 12:12:55 -0000
++++ lib/libc/string/strxfrm.c	21 Feb 2013 17:30:17 -0000
 @@ -32,6 +32,7 @@
   */
  
@@ -2250,15 +2576,91 @@ diff -u -r1.6 strxfrm.c
 -	return (strlcpy(dst, src, n));
 +	return (strxfrm_l(dst, src, n, __get_locale()));
  }
-
+Index: lib/libc/string/wcscasecmp.3
+===================================================================
+RCS file: /cvs/src/lib/libc/string/wcscasecmp.3,v
+retrieving revision 1.2
+diff -u -r1.2 wcscasecmp.3
+--- lib/libc/string/wcscasecmp.3	25 Jul 2011 00:38:53 -0000	1.2
++++ lib/libc/string/wcscasecmp.3	21 Feb 2013 17:30:17 -0000
+@@ -36,19 +36,22 @@
+ .Os
+ .Sh NAME
+ .Nm wcscasecmp ,
+-.Nm wcsncasecmp
++.Nm wcscasecmp_l ,
++.Nm wcsncasecmp ,
++.Nm wcsncasecmp_l
+ .Nd compare wide strings, ignoring case
+ .Sh SYNOPSIS
+ .Fd #include <wchar.h>
+ .Ft int
+ .Fn wcscasecmp "const wchar_t *s1" "const wchar_t *s2"
+ .Ft int
++.Fn wcscasecmp_l "const wchar_t *s1" "const wchar_t *s2" "locale_t l"
++.Ft int
+ .Fn wcsncasecmp "const wchar_t *s1" "const wchar_t *s2" "size_t len"
++.Ft int
++.Fn wcsncasecmp_l "const wchar_t *s1" "const wchar_t *s2" "size_t len" "locale_t l"
+ .Sh DESCRIPTION
+-The
+-.Fn wcscasecmp
+-and
+-.Fn wcsncasecmp
++These 
+ functions compare the wide strings
+ .Fa s1
+ and
+@@ -62,19 +65,40 @@
+ The wide strings themselves are not modified.
+ .Pp
+ .Fn wcsncasecmp
++and
++.Fn wcsncasecmp_l
+ compares at most
+ .Fa len
+ wide characters.
++.Pp
++The behavior of the functions
++.Fn wcscasecmp
++and 
++.Fn wcsncasecmp
++is affected by the 
++.Dv LC_CTYPE
++category of the current locale, while 
++the behavior of the functions
++.Fn wcscasecmp_l
++and 
++.Fn wcsncasecmp_l
++is affected by the 
++.Dv LC_CTYPE
++category of the locale provided as parameter, see
++.Xr xlocale 3 .
+ .Sh SEE ALSO
+ .Xr strcasecmp 3 ,
+ .Xr wcscmp 3 ,
+-.Xr wmemcmp 3
++.Xr wmemcmp 3 ,
++.Xr setlocale 3 ,
++.Xr xlocale 3 
+ .Sh STANDARDS
+ The
+ .Fn wcscasecmp
+ and
+ .Fn wcsncasecmp
+ functions conform to
++POSIX 2008 ,
+ .St -p1003.1-2008 .
+ .Sh HISTORY
+ The
 Index: lib/libc/string/wcscasecmp.c
 ===================================================================
 RCS file: /cvs/src/lib/libc/string/wcscasecmp.c,v
 retrieving revision 1.2
 diff -u -r1.2 wcscasecmp.c
 --- lib/libc/string/wcscasecmp.c	1 Jun 2011 19:29:48 -0000	1.2
-+++ lib/libc/string/wcscasecmp.c	1 Feb 2013 12:12:55 -0000
-@@ -25,9 +25,26 @@
++++ lib/libc/string/wcscasecmp.c	21 Feb 2013 17:30:17 -0000
+@@ -25,37 +25,31 @@
   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   */
  
@@ -2268,58 +2670,57 @@ diff -u -r1.2 wcscasecmp.c
  #include <wctype.h>
 -#include "locale/runetype.h"
 +#include <runetype.h>
-+
-+int
-+wcscasecmp_l(const wchar_t *s1, const wchar_t *s2, locale_t loc)
-+{
-+	wchar_t l1, l2;
-+
-+	while ((l1 = towlower_l(*s1++, loc)) == 
-+			(l2 = towlower_l(*s2++, loc))) {
-+		if (l1 == 0)
-+			return (0);
-+	}
-+	/* XXX assumes wchar_t = int */
-+	return ((rune_t)l1 - (rune_t)l2);
-+}
-+
++#include "../locale/xlocale_private.h"
  
  int
- wcscasecmp(const wchar_t *s1, const wchar_t *s2)
-@@ -42,6 +59,25 @@
- 	return ((rune_t)l1 - (rune_t)l2);
+-wcscasecmp(const wchar_t *s1, const wchar_t *s2)
++wcscasecmp_l(const wchar_t *s1, const wchar_t *s2, locale_t loc)
+ {
+-	wchar_t l1, l2;
++	size_t n = wcslen(s1) > wcslen(s2) ? wcslen(s1) : wcslen(s2);
++	return wcsncasecmp_l(s1, s2, n, loc);
++}
+ 
+-	while ((l1 = towlower(*s1++)) == (l2 = towlower(*s2++))) {
+-		if (l1 == 0)
+-			return (0);
+-	}
+-	/* XXX assumes wchar_t = int */
+-	return ((rune_t)l1 - (rune_t)l2);
++
++int
++wcscasecmp(const wchar_t *s1, const wchar_t *s2)
++{
++	return wcscasecmp_l(s1, s2, __get_locale());
  }
  
 +	
-+int
-+wcsncasecmp_l(const wchar_t *s1, const wchar_t *s2, size_t n, locale_t loc)
-+{
-+	wchar_t l1, l2;
-+
-+	if (n == 0)
-+		return (0);
-+	do {
-+		if (((l1 = towlower_l(*s1++, loc))) != 
-+				(l2 = towlower_l(*s2++, loc))) {
-+			/* XXX assumes wchar_t = int */
-+			return ((rune_t)l1 - (rune_t)l2);
-+		}
-+		if (l1 == 0)
-+			break;
-+	} while (--n != 0);
-+	return (0);
-+}
  int
  wcsncasecmp(const wchar_t *s1, const wchar_t *s2, size_t n)
  {
-
+-	wchar_t l1, l2;
+-
+-	if (n == 0)
+-		return (0);
+-	do {
+-		if (((l1 = towlower(*s1++))) != (l2 = towlower(*s2++))) {
+-			/* XXX assumes wchar_t = int */
+-			return ((rune_t)l1 - (rune_t)l2);
+-		}
+-		if (l1 == 0)
+-			break;
+-	} while (--n != 0);
+-	return (0);
++	return wcsncasecmp_l(s1, s2, n, __get_locale());
+ }
++
 Index: lib/libc/string/wcscmp.c
 ===================================================================
 RCS file: /cvs/src/lib/libc/string/wcscmp.c,v
 retrieving revision 1.4
 diff -u -r1.4 wcscmp.c
 --- lib/libc/string/wcscmp.c	8 Aug 2005 08:05:37 -0000	1.4
-+++ lib/libc/string/wcscmp.c	1 Feb 2013 12:12:55 -0000
++++ lib/libc/string/wcscmp.c	21 Feb 2013 17:30:18 -0000
 @@ -34,7 +34,7 @@
   */
  
@@ -2329,14 +2730,13 @@ diff -u -r1.4 wcscmp.c
  
  /*
   * Compare strings.
-
 Index: lib/libc/string/wcsncmp.c
 ===================================================================
 RCS file: /cvs/src/lib/libc/string/wcsncmp.c,v
 retrieving revision 1.4
 diff -u -r1.4 wcsncmp.c
 --- lib/libc/string/wcsncmp.c	8 Aug 2005 08:05:37 -0000	1.4
-+++ lib/libc/string/wcsncmp.c	1 Feb 2013 12:12:55 -0000
++++ lib/libc/string/wcsncmp.c	21 Feb 2013 17:30:18 -0000
 @@ -31,7 +31,7 @@
   */
  
@@ -2346,14 +2746,13 @@ diff -u -r1.4 wcsncmp.c
  
  int
  wcsncmp(const wchar_t *s1, const wchar_t *s2, size_t n)
-
 Index: lib/libc/string/wcswidth.c
 ===================================================================
 RCS file: /cvs/src/lib/libc/string/wcswidth.c,v
 retrieving revision 1.4
 diff -u -r1.4 wcswidth.c
 --- lib/libc/string/wcswidth.c	4 Apr 2011 18:16:24 -0000	1.4
-+++ lib/libc/string/wcswidth.c	1 Feb 2013 12:12:55 -0000
++++ lib/libc/string/wcswidth.c	21 Feb 2013 17:30:18 -0000
 @@ -30,15 +30,17 @@
   */
  
@@ -2385,14 +2784,13 @@ diff -u -r1.4 wcswidth.c
 +{
 +	return wcswidth_l(s, n, __get_locale());
  }
-
 Index: lib/libc/string/wmemcmp.c
 ===================================================================
 RCS file: /cvs/src/lib/libc/string/wmemcmp.c,v
 retrieving revision 1.4
 diff -u -r1.4 wmemcmp.c
 --- lib/libc/string/wmemcmp.c	8 Aug 2005 08:05:37 -0000	1.4
-+++ lib/libc/string/wmemcmp.c	1 Feb 2013 12:12:55 -0000
++++ lib/libc/string/wmemcmp.c	21 Feb 2013 17:30:18 -0000
 @@ -30,7 +30,7 @@
   */
  
@@ -2402,48 +2800,283 @@ diff -u -r1.4 wmemcmp.c
  
  int
  wmemcmp(const wchar_t *s1, const wchar_t *s2, size_t n)
+Index: lib/libc/gen/isctype.c
+===================================================================
+RCS file: /cvs/src/lib/libc/gen/isctype.c,v
+retrieving revision 1.11
+diff -u -r1.11 isctype.c
+--- lib/libc/gen/isctype.c	8 Aug 2005 08:05:34 -0000	1.11
++++ lib/libc/gen/isctype.c	21 Feb 2013 17:30:23 -0000
+@@ -36,6 +36,7 @@
+ #define _ANSI_LIBRARY
+ #include <ctype.h>
+ #include <stdio.h>
++#include "../locale/xlocale_private.h"
+ 
+ #undef isalnum
+ int
+@@ -139,12 +140,12 @@
+ int
+ _toupper(int c)
+ {
+-	return (c - 'a' + 'A');
++	return _toupper_l(c, __get_locale());
+ }
+ 
+ #undef _tolower
+ int
+ _tolower(int c)
+ {
+-	return (c - 'A' + 'a');
++	return _tolower_l(c, __get_locale());
+ }
+Index: lib/libc/gen/tolower.3
+===================================================================
+RCS file: /cvs/src/lib/libc/gen/tolower.3,v
+retrieving revision 1.11
+diff -u -r1.11 tolower.3
+--- lib/libc/gen/tolower.3	31 May 2007 19:19:29 -0000	1.11
++++ lib/libc/gen/tolower.3	21 Feb 2013 17:30:23 -0000
+@@ -36,22 +36,33 @@
+ .Os
+ .Sh NAME
+ .Nm tolower ,
+-.Nm _tolower
++.Nm tolower_l ,
++.Nm _tolower ,
++.Nm _tolower_l ,
++
+ .Nd upper case to lower case letter conversion
+ .Sh SYNOPSIS
+ .Fd #include <ctype.h>
+ .Ft int
+ .Fn tolower "int c"
+ .Ft int
++.Fn tolower_l "int c" "locale_t l"
++.Ft int
+ .Fn _tolower "int c"
++.Ft int
++.Fn _tolower_l "int c" "locale_t l"
+ .Sh DESCRIPTION
+ The
+ .Fn tolower
+-function converts an upper-case letter to the corresponding lower-case
++and
++.Fn tolower_l
++functions convert an upper-case letter to the corresponding lower-case
+ letter.
+ The
+ .Fn _tolower
+-function is identical to
++and
++.Fn _tolower_l
++functions are identical to
+ .Fn tolower
+ except that
+ .Ar c
+@@ -59,12 +70,32 @@
+ .Sh RETURN VALUES
+ If the argument to the
+ .Fn tolower
+-function is an upper-case letter, the corresponding lower-case letter
++and
++.Fn tolower_l
++functions is an upper-case letter, the corresponding lower-case letter
+ is returned if there is one; otherwise the argument is returned unchanged.
+ If the argument to the
+ .Fn _tolower
+-function is an upper-case letter, the corresponding lower-case letter
++and
++.Fn _tolower_l
++functions is an upper-case letter, the corresponding lower-case letter
+ is returned; otherwise the output is undefined.
++.Pp
++The behavior of the functions
++.Fn tolower
++and 
++.Fn _tolower
++is affected by the 
++.Dv LC_CTYPE
++category of the current locale, while 
++the behavior of the functions
++.Fn tolower_l
++and 
++.Fn _tolower_l
++is affected by the 
++.Dv LC_CTYPE
++category of the locale provided as parameter, see
++.Xr xlocale 3 .
+ .\" In the
+ .\" .Em ``C''
+ .\" locale,
+@@ -91,11 +122,11 @@
+ .Xr stdio 3 ,
+ .Xr toascii 3 ,
+ .Xr toupper 3 ,
+-.Xr ascii 7
++.Xr ascii 7 ,
++.Xr setlocale 3
++.Xr xlocale 3
+ .Sh STANDARDS
+-The
+-.Fn tolower
+-and
+-.Fn _tolower
++These
+ functions conform to
++POSIX2008,
+ .St -ansiC .
+Index: lib/libc/gen/tolower_.c
+===================================================================
+RCS file: /cvs/src/lib/libc/gen/tolower_.c,v
+retrieving revision 1.9
+diff -u -r1.9 tolower_.c
+--- lib/libc/gen/tolower_.c	8 Aug 2005 08:05:34 -0000	1.9
++++ lib/libc/gen/tolower_.c	21 Feb 2013 17:30:23 -0000
+@@ -8,6 +8,7 @@
+ #include <ctype.h>
+ #include <stdio.h>
+ #include "ctype_private.h"
++#include "../locale/xlocale_private.h"
+ 
+ const short _C_tolower_[1 + CTYPE_NUM_CHARS] = {
+ 	EOF,
+@@ -51,7 +52,8 @@
+ int
+ tolower(int c)
+ {
+-	if ((unsigned int)c > 255)
++	return tolower_l(c, __get_locale());
++/*	if ((unsigned int)c > 255)
+ 		return(c);
+-	return((_tolower_tab_ + 1)[c]);
++	return((_tolower_tab_ + 1)[c]); */
+ }
+Index: lib/libc/gen/toupper.3
+===================================================================
+RCS file: /cvs/src/lib/libc/gen/toupper.3,v
+retrieving revision 1.13
+diff -u -r1.13 toupper.3
+--- lib/libc/gen/toupper.3	31 May 2007 19:19:29 -0000	1.13
++++ lib/libc/gen/toupper.3	21 Feb 2013 17:30:23 -0000
+@@ -35,27 +35,53 @@
+ .Dt TOUPPER 3
+ .Os
+ .Sh NAME
+-.Nm toupper ,
+-.Nm _toupper
++.Nm toupper , 
++.Nm toupper_l ,
++.Nm _toupper ,
++.Nm _toupper_l
+ .Nd lower case to upper case letter conversion
+ .Sh SYNOPSIS
+ .Fd #include <ctype.h>
+ .Ft int
+ .Fn toupper "int c"
+ .Ft int
++.Fn toupper_l "int c"
++.Ft int
+ .Fn _toupper "int c"
++.Ft int
++.Fn _toupper_l "int c"
+ .Sh DESCRIPTION
+ The
+ .Fn toupper
+-function converts a lower-case letter to the corresponding
++and
++.Fn toupper_l
++functions converts a lower-case letter to the corresponding
+ upper-case letter.
+ The
+ .Fn _toupper
++and
++.Fn _toupper_l
+ function is identical to
+ .Fn toupper
+ except that
+ .Ar c
+ must be a lower-case letter.
++.Pp
++The behavior of the functions
++.Fn toupper
++and 
++.Fn _toupper
++is affected by the 
++.Dv LC_CTYPE
++category of the current locale, while 
++the behavior of the functions
++.Fn toupper_l
++and 
++.Fn _toupper_l
++is affected by the 
++.Dv LC_CTYPE
++category of the locale provided as parameter, see
++.Xr xlocale 3 .
+ .Sh RETURN VALUES
+ If the argument to the
+ .Fn toupper
+@@ -91,7 +117,9 @@
+ .Xr stdio 3 ,
+ .Xr toascii 3 ,
+ .Xr tolower 3 ,
+-.Xr ascii 7
++.Xr ascii 7 ,
++.Xr setlocale 3 ,
++.Xr xlocale 3
+ .Sh STANDARDS
+ The
+ .Fn toupper
+Index: lib/libc/gen/toupper_.c
+===================================================================
+RCS file: /cvs/src/lib/libc/gen/toupper_.c,v
+retrieving revision 1.10
+diff -u -r1.10 toupper_.c
+--- lib/libc/gen/toupper_.c	9 Aug 2005 08:36:48 -0000	1.10
++++ lib/libc/gen/toupper_.c	21 Feb 2013 17:30:23 -0000
+@@ -9,6 +9,8 @@
+ #include <stdio.h>
+ 
+ #include "ctype_private.h"
++#include "../locale/xlocale_private.h"
++#include <xlocale.h>
+ 
+ const short _C_toupper_[1 + CTYPE_NUM_CHARS] = {
+ 	EOF,
+@@ -52,7 +54,8 @@
+ int
+ toupper(int c)
+ {
+-	if ((unsigned int)c > 255)
++	return toupper_l(c, __get_locale());
++/*	if ((unsigned int)c > 255)
+ 		return(c);
+-	return((_toupper_tab_ + 1)[c]);
++	return((_toupper_tab_ + 1)[c]); */
+ }
 ? regress/lib/libc/locale/check_xlocale
-
 Index: regress/lib/libc/locale//Makefile
 ===================================================================
 RCS file: /cvs/src/regress/lib/libc/locale/Makefile,v
 retrieving revision 1.1
 diff -u -r1.1 Makefile
 --- regress/lib/libc/locale//Makefile	11 Aug 2005 21:57:02 -0000	1.1
-+++ regress/lib/libc/locale//Makefile	1 Feb 2013 12:13:06 -0000
++++ regress/lib/libc/locale//Makefile	21 Feb 2013 17:30:28 -0000
 @@ -1,6 +1,7 @@
  # $OpenBSD: Makefile,v 1.1 2005/08/11 21:57:02 espie Exp $
  
  SUBDIR+= check_isw
 +SUBDIR+= check_xlocale
  
- Index: distrib/special/libstubs/setlocale.c
-===================================================================
-RCS file: /cvs/src/distrib/special/libstubs/setlocale.c,v
-retrieving revision 1.1
-diff -u -r1.1 setlocale.c
---- distrib/special/libstubs/setlocale.c        3 Aug 2005 22:33:59 -0000       1.1
-+++ distrib/special/libstubs/setlocale.c        7 Feb 2013 19:15:38 -0000
-@@ -3,8 +3,8 @@
- /* Written by Marc Espie, 2005 */
- /* Public domain */
+ install:
  
--char *
-+/*char *
- setlocale(int cat, const char *locale)
- {
-        return 0;
--}
-+}*/install:
- 
-
 Index: regress/lib/libc/locale//check_isw/check_isw.c
 ===================================================================
 RCS file: /cvs/src/regress/lib/libc/locale/check_isw/check_isw.c,v
 retrieving revision 1.1
 diff -u -r1.1 check_isw.c
 --- regress/lib/libc/locale//check_isw/check_isw.c	11 Aug 2005 21:57:02 -0000	1.1
-+++ regress/lib/libc/locale//check_isw/check_isw.c	1 Feb 2013 12:13:09 -0000
++++ regress/lib/libc/locale//check_isw/check_isw.c	21 Feb 2013 17:30:28 -0000
 @@ -25,6 +25,8 @@
  #include <wchar.h>
  #include <wctype.h>
@@ -2497,15 +3130,13 @@ diff -u -r1.1 check_isw.c
  		bad++;
  	}
  	free(s);
-
-
 Index: usr.bin/mklocale/lex.l
 ===================================================================
 RCS file: /cvs/src/usr.bin/mklocale/lex.l,v
 retrieving revision 1.2
 diff -u -r1.2 lex.l
 --- usr.bin/mklocale/lex.l	8 Aug 2009 19:37:14 -0000	1.2
-+++ usr.bin/mklocale/lex.l	1 Feb 2013 12:13:27 -0000
++++ usr.bin/mklocale/lex.l	21 Feb 2013 17:30:33 -0000
 @@ -36,7 +36,7 @@
  
  #include <sys/cdefs.h>
@@ -2515,15 +3146,13 @@ diff -u -r1.2 lex.l
  #include <stdio.h>
  #include <stdlib.h>
  
-? usr.bin/colldef
-
 Index: usr.bin/mklocale/yacc.y
 ===================================================================
 RCS file: /cvs/src/usr.bin/mklocale/yacc.y,v
 retrieving revision 1.4
 diff -u -r1.4 yacc.y
 --- usr.bin/mklocale/yacc.y	14 Jan 2011 23:15:40 -0000	1.4
-+++ usr.bin/mklocale/yacc.y	1 Feb 2013 12:13:27 -0000
++++ usr.bin/mklocale/yacc.y	21 Feb 2013 17:30:33 -0000
 @@ -41,7 +41,7 @@
  #include <arpa/inet.h>	/* Needed for htonl on POSIX systems. */
  
@@ -2533,53 +3162,3 @@ diff -u -r1.4 yacc.y
  #include <stddef.h>
  #include <stdio.h>
  #include <stdlib.h>
-
-? share/locale/colldef
-Index: share/locale//Makefile
-===================================================================
-RCS file: /cvs/src/share/locale/Makefile,v
-retrieving revision 1.1
-diff -u -r1.1 Makefile
---- share/locale//Makefile	7 Aug 2005 10:03:44 -0000	1.1
-+++ share/locale//Makefile	9 Feb 2013 02:02:03 -0000
-@@ -1,6 +1,6 @@
- #	$OpenBSD: Makefile,v 1.1 2005/08/07 10:03:44 espie Exp $
- 
--SUBDIR=	ctype
-+SUBDIR=	ctype colldef
- 	
- 
- .include <bsd.subdir.mk>
-Index: share/locale/ctype/Makefile
-===================================================================
-RCS file: /cvs/src/share/locale/ctype/Makefile,v
-retrieving revision 1.6
-diff -u -r1.6 Makefile
---- share/locale/ctype/Makefile	16 Jul 2011 21:33:30 -0000	1.6
-+++ share/locale/ctype/Makefile	9 Feb 2013 02:38:53 -0000
-@@ -80,14 +80,17 @@
- LOCALES += en_US.UTF-8
-  LOCALESRC_en_US.UTF-8 = en_US.UTF-8
- 
--LOCALES += es_ES.ISO8859-1
-- LOCALESRC_es_ES.ISO8859-1 = en_US.ISO_8859-1
--
--LOCALES += es_ES.ISO8859-15
-- LOCALESRC_es_ES.ISO8859-15 = en_US.DIS_8859-15
--
--LOCALES += es_ES.UTF-8
-- LOCALESRC_es_ES.UTF-8 = en_US.UTF-8
-+# http://en.wikipedia.org/wiki/List_of_countries_where_Spanish_is_an_official_language
-+ES_COUNTRIES= ES CO PE VE EC GT CU BO HN PY SV CR PA GQ MX AR CH DO NI UY PR
-+ES_ENCODINGS= ISO8859-1 ISO8859-15 UTF-8
-+.for c in ${ES_COUNTRIES}
-+LOCALES += es_${c}.UTF-8
-+LOCALESRC_es_${c}.UTF-8 = en_US.UTF-8
-+LOCALES += es_${c}.ISO8859-1
-+LOCALESRC_es_${c}.ISO8859-1 = en_US.ISO_8859-1
-+LOCALES += es_${c}.ISO8859-15
-+LOCALESRC_es_${c}.ISO8859-15 = en_US.DIS_8859-15
-+.endfor
- 
- LOCALES += fa_IR.UTF-8
-  LOCALESRC_fa_IR.UTF-8 = en_US.UTF-8

@@ -1,13 +1,8 @@
 
 5.2
 
-* strcasecmp posiblemente debería emplear locale, strcasecmp_l está mal implementado
-* Paginas de manual por actualizar wcscasecmp (no solo bytes), crear wcscasecomp_l
+* PostgreSQL debería incluir tablas de cotejación por defecto para países de habla hispana, en Ubuntu incluye es_co.utf8. 
 * Descripción de paquetes en Contenido.txt
-* Confirmar dependencia entre paquetes
-* Xorg -configure produce Segmentation Fault (tanto emulado como sin emular)
-  aunque sin emular produce xorg.conf.new, comprobar en emulado y que
-  se intente con el xorg.conf.new producido
 
 Futuro
 * Incluir el resto de xlocale de FreeBSD
