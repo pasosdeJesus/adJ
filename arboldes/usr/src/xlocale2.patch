@@ -4,7 +4,7 @@ RCS file: /cvs/src/include/wctype.h,v
 retrieving revision 1.5
 diff -u -r1.5 wctype.h
 --- include/wctype.h	6 Jan 2006 18:53:04 -0000	1.5
-+++ include/wctype.h	21 Feb 2013 17:30:04 -0000
++++ include/wctype.h	23 Feb 2013 03:07:26 -0000
 @@ -34,6 +34,7 @@
  
  #include <sys/cdefs.h>
@@ -30,7 +30,7 @@ RCS file: /cvs/src/include/wchar.h,v
 retrieving revision 1.23
 diff -u -r1.23 wchar.h
 --- include/wchar.h	6 Jun 2012 16:58:02 -0000	1.23
-+++ include/wchar.h	21 Feb 2013 17:30:04 -0000
++++ include/wchar.h	23 Feb 2013 03:07:26 -0000
 @@ -163,6 +163,10 @@
      size_t, mbstate_t * __restrict);
  size_t wcsnrtombs(char * __restrict, const wchar_t ** __restrict, size_t,
@@ -48,7 +48,7 @@ RCS file: /cvs/src/include/string.h,v
 retrieving revision 1.24
 diff -u -r1.24 string.h
 --- include/string.h	25 Mar 2012 20:04:18 -0000	1.24
-+++ include/string.h	21 Feb 2013 17:30:04 -0000
++++ include/string.h	23 Feb 2013 03:07:26 -0000
 @@ -133,6 +133,10 @@
  char	*strsep(char **, const char *);
  int	 timingsafe_bcmp(const void *, const void *, size_t);
@@ -66,7 +66,7 @@ RCS file: /cvs/src/include/stdlib.h,v
 retrieving revision 1.50
 diff -u -r1.50 stdlib.h
 --- include/stdlib.h	1 Jun 2012 01:01:57 -0000	1.50
-+++ include/stdlib.h	21 Feb 2013 17:30:04 -0000
++++ include/stdlib.h	23 Feb 2013 03:07:26 -0000
 @@ -107,6 +107,9 @@
  #endif
  
@@ -91,7 +91,7 @@ RCS file: /cvs/src/include/locale.h,v
 retrieving revision 1.8
 diff -u -r1.8 locale.h
 --- include/locale.h	3 Jul 2011 18:51:01 -0000	1.8
-+++ include/locale.h	21 Feb 2013 17:30:04 -0000
++++ include/locale.h	23 Feb 2013 03:07:26 -0000
 @@ -81,6 +81,8 @@
  __BEGIN_DECLS
  struct lconv	*localeconv(void);
@@ -107,7 +107,7 @@ RCS file: /cvs/src/include/langinfo.h,v
 retrieving revision 1.6
 diff -u -r1.6 langinfo.h
 --- include/langinfo.h	7 Jul 2011 14:25:15 -0000	1.6
-+++ include/langinfo.h	21 Feb 2013 17:30:04 -0000
++++ include/langinfo.h	23 Feb 2013 03:07:26 -0000
 @@ -73,6 +73,10 @@
  
  __BEGIN_DECLS
@@ -151,7 +151,7 @@ RCS file: /cvs/src/lib/libc/locale/Makefile.inc,v
 retrieving revision 1.18
 diff -u -r1.18 Makefile.inc
 --- lib/libc/locale/Makefile.inc	7 Jun 2012 19:47:40 -0000	1.18
-+++ lib/libc/locale/Makefile.inc	21 Feb 2013 17:30:10 -0000
++++ lib/libc/locale/Makefile.inc	23 Feb 2013 03:07:30 -0000
 @@ -3,20 +3,52 @@
  # locale sources
  .PATH: ${LIBCSRCDIR}/arch/${MACHINE_CPU}/locale ${LIBCSRCDIR}/locale
@@ -268,7 +268,7 @@ RCS file: /cvs/src/lib/libc/locale/___runetype_mb.c,v
 retrieving revision 1.1
 diff -u -r1.1 ___runetype_mb.c
 --- lib/libc/locale/___runetype_mb.c	7 Aug 2005 10:16:23 -0000	1.1
-+++ lib/libc/locale/___runetype_mb.c	21 Feb 2013 17:30:10 -0000
++++ lib/libc/locale/___runetype_mb.c	23 Feb 2013 03:07:30 -0000
 @@ -36,11 +36,14 @@
  #include <sys/cdefs.h>
  
@@ -316,7 +316,7 @@ RCS file: /cvs/src/lib/libc/locale/btowc.c,v
 retrieving revision 1.1
 diff -u -r1.1 btowc.c
 --- lib/libc/locale/btowc.c	27 Jul 2010 16:59:03 -0000	1.1
-+++ lib/libc/locale/btowc.c	21 Feb 2013 17:30:10 -0000
++++ lib/libc/locale/btowc.c	23 Feb 2013 03:07:30 -0000
 @@ -31,9 +31,11 @@
  #include <stdio.h>
  #include <string.h>
@@ -352,7 +352,7 @@ RCS file: /cvs/src/lib/libc/locale/iswctype.c,v
 retrieving revision 1.2
 diff -u -r1.2 iswctype.c
 --- lib/libc/locale/iswctype.c	15 Apr 2011 16:11:23 -0000	1.2
-+++ lib/libc/locale/iswctype.c	21 Feb 2013 17:30:10 -0000
++++ lib/libc/locale/iswctype.c	23 Feb 2013 03:07:30 -0000
 @@ -43,7 +43,7 @@
  #include <errno.h>
  #include <string.h>
@@ -368,7 +368,7 @@ RCS file: /cvs/src/lib/libc/locale/mblen.3,v
 retrieving revision 1.2
 diff -u -r1.2 mblen.3
 --- lib/libc/locale/mblen.3	31 May 2007 19:19:29 -0000	1.2
-+++ lib/libc/locale/mblen.3	21 Feb 2013 17:30:10 -0000
++++ lib/libc/locale/mblen.3	23 Feb 2013 03:07:30 -0000
 @@ -31,21 +31,26 @@
  .\" ----------------------------------------------------------------------
  .Sh NAME
@@ -426,7 +426,7 @@ RCS file: /cvs/src/lib/libc/locale/mblen.c,v
 retrieving revision 1.1
 diff -u -r1.1 mblen.c
 --- lib/libc/locale/mblen.c	27 Jul 2010 16:59:04 -0000	1.1
-+++ lib/libc/locale/mblen.c	21 Feb 2013 17:30:10 -0000
++++ lib/libc/locale/mblen.c	23 Feb 2013 03:07:30 -0000
 @@ -31,9 +31,12 @@
  #include <stdlib.h>
  #include <string.h>
@@ -464,7 +464,7 @@ RCS file: /cvs/src/lib/libc/locale/mbrlen.c,v
 retrieving revision 1.1
 diff -u -r1.1 mbrlen.c
 --- lib/libc/locale/mbrlen.c	27 Jul 2010 16:59:04 -0000	1.1
-+++ lib/libc/locale/mbrlen.c	21 Feb 2013 17:30:10 -0000
++++ lib/libc/locale/mbrlen.c	23 Feb 2013 03:07:30 -0000
 @@ -29,13 +29,22 @@
  #include <sys/cdefs.h>
  
@@ -496,7 +496,7 @@ RCS file: /cvs/src/lib/libc/locale/mbrtowc.3,v
 retrieving revision 1.3
 diff -u -r1.3 mbrtowc.3
 --- lib/libc/locale/mbrtowc.3	5 Dec 2010 14:59:49 -0000	1.3
-+++ lib/libc/locale/mbrtowc.3	21 Feb 2013 17:30:10 -0000
++++ lib/libc/locale/mbrtowc.3	23 Feb 2013 03:07:30 -0000
 @@ -29,17 +29,23 @@
  .Dt MBRTOWC 3
  .Os
@@ -575,7 +575,7 @@ RCS file: /cvs/src/lib/libc/locale/mbsinit.3,v
 retrieving revision 1.2
 diff -u -r1.2 mbsinit.3
 --- lib/libc/locale/mbsinit.3	31 May 2007 19:19:29 -0000	1.2
-+++ lib/libc/locale/mbsinit.3	21 Feb 2013 17:30:10 -0000
++++ lib/libc/locale/mbsinit.3	23 Feb 2013 03:07:30 -0000
 @@ -30,19 +30,31 @@
  .Os
  .\" ----------------------------------------------------------------------
@@ -633,7 +633,7 @@ RCS file: /cvs/src/lib/libc/locale/mbsrtowcs.3,v
 retrieving revision 1.4
 diff -u -r1.4 mbsrtowcs.3
 --- lib/libc/locale/mbsrtowcs.3	7 Jun 2012 19:47:40 -0000	1.4
-+++ lib/libc/locale/mbsrtowcs.3	21 Feb 2013 17:30:10 -0000
++++ lib/libc/locale/mbsrtowcs.3	23 Feb 2013 03:07:30 -0000
 @@ -31,7 +31,9 @@
  .\" ----------------------------------------------------------------------
  .Sh NAME
@@ -763,7 +763,7 @@ RCS file: /cvs/src/lib/libc/locale/mbstowcs.3,v
 retrieving revision 1.4
 diff -u -r1.4 mbstowcs.3
 --- lib/libc/locale/mbstowcs.3	16 Nov 2011 13:06:21 -0000	1.4
-+++ lib/libc/locale/mbstowcs.3	21 Feb 2013 17:30:10 -0000
++++ lib/libc/locale/mbstowcs.3	23 Feb 2013 03:07:30 -0000
 @@ -31,22 +31,34 @@
  .\" ----------------------------------------------------------------------
  .Sh NAME
@@ -818,7 +818,7 @@ RCS file: /cvs/src/lib/libc/locale/mbstowcs.c,v
 retrieving revision 1.1
 diff -u -r1.1 mbstowcs.c
 --- lib/libc/locale/mbstowcs.c	27 Jul 2010 16:59:04 -0000	1.1
-+++ lib/libc/locale/mbstowcs.c	21 Feb 2013 17:30:10 -0000
++++ lib/libc/locale/mbstowcs.c	23 Feb 2013 03:07:30 -0000
 @@ -32,14 +32,25 @@
  #include <stdlib.h>
  #include <string.h>
@@ -853,7 +853,7 @@ RCS file: /cvs/src/lib/libc/locale/mbtowc.3,v
 retrieving revision 1.3
 diff -u -r1.3 mbtowc.3
 --- lib/libc/locale/mbtowc.3	20 Nov 2010 18:23:19 -0000	1.3
-+++ lib/libc/locale/mbtowc.3	21 Feb 2013 17:30:10 -0000
++++ lib/libc/locale/mbtowc.3	23 Feb 2013 03:07:30 -0000
 @@ -30,26 +30,30 @@
  .Os
  .\" ----------------------------------------------------------------------
@@ -918,7 +918,7 @@ RCS file: /cvs/src/lib/libc/locale/mbtowc.c,v
 retrieving revision 1.1
 diff -u -r1.1 mbtowc.c
 --- lib/libc/locale/mbtowc.c	27 Jul 2010 16:59:04 -0000	1.1
-+++ lib/libc/locale/mbtowc.c	21 Feb 2013 17:30:10 -0000
++++ lib/libc/locale/mbtowc.c	23 Feb 2013 03:07:30 -0000
 @@ -32,9 +32,12 @@
  #include <string.h>
  #include <wchar.h>
@@ -956,7 +956,7 @@ RCS file: /cvs/src/lib/libc/locale/multibyte_citrus.c,v
 retrieving revision 1.2
 diff -u -r1.2 multibyte_citrus.c
 --- lib/libc/locale/multibyte_citrus.c	6 Jun 2012 16:58:02 -0000	1.2
-+++ lib/libc/locale/multibyte_citrus.c	21 Feb 2013 17:30:10 -0000
++++ lib/libc/locale/multibyte_citrus.c	23 Feb 2013 03:07:30 -0000
 @@ -32,13 +32,18 @@
  #include <errno.h>
  #include <limits.h>
@@ -1140,7 +1140,7 @@ RCS file: /cvs/src/lib/libc/locale/nl_langinfo.c,v
 retrieving revision 1.6
 diff -u -r1.6 nl_langinfo.c
 --- lib/libc/locale/nl_langinfo.c	16 Nov 2005 16:48:15 -0000	1.6
-+++ lib/libc/locale/nl_langinfo.c	21 Feb 2013 17:30:10 -0000
++++ lib/libc/locale/nl_langinfo.c	23 Feb 2013 03:07:30 -0000
 @@ -9,7 +9,7 @@
  #include <nl_types.h>
  #include <langinfo.h>
@@ -1156,7 +1156,7 @@ RCS file: /cvs/src/lib/libc/locale/rune.h,v
 retrieving revision 1.2
 diff -u -r1.2 rune.h
 --- lib/libc/locale/rune.h	15 Mar 2011 22:27:48 -0000	1.2
-+++ lib/libc/locale/rune.h	21 Feb 2013 17:30:10 -0000
++++ lib/libc/locale/rune.h	23 Feb 2013 03:07:30 -0000
 @@ -40,41 +40,8 @@
  
  #include <stdio.h>
@@ -1207,7 +1207,7 @@ RCS file: /cvs/src/lib/libc/locale/runetable.c,v
 retrieving revision 1.3
 diff -u -r1.3 runetable.c
 --- lib/libc/locale/runetable.c	15 Mar 2011 22:27:48 -0000	1.3
-+++ lib/libc/locale/runetable.c	21 Feb 2013 17:30:10 -0000
++++ lib/libc/locale/runetable.c	23 Feb 2013 03:07:30 -0000
 @@ -46,6 +46,13 @@
  #include "citrus_ctype.h"
  #include "citrus_none.h"
@@ -1234,7 +1234,7 @@ RCS file: /cvs/src/lib/libc/locale/setlocale.c,v
 retrieving revision 1.18
 diff -u -r1.18 setlocale.c
 --- lib/libc/locale/setlocale.c	15 Mar 2011 22:27:48 -0000	1.18
-+++ lib/libc/locale/setlocale.c	21 Feb 2013 17:30:10 -0000
++++ lib/libc/locale/setlocale.c	23 Feb 2013 03:07:30 -0000
 @@ -39,9 +39,11 @@
  #include <stdlib.h>
  #include <string.h>
@@ -1338,7 +1338,7 @@ RCS file: /cvs/src/lib/libc/locale/setrunelocale.c,v
 retrieving revision 1.6
 diff -u -r1.6 setrunelocale.c
 --- lib/libc/locale/setrunelocale.c	15 Mar 2011 22:27:48 -0000	1.6
-+++ lib/libc/locale/setrunelocale.c	21 Feb 2013 17:30:10 -0000
++++ lib/libc/locale/setrunelocale.c	23 Feb 2013 03:07:30 -0000
 @@ -102,6 +102,8 @@
  #include <unistd.h>
  #include <locale.h>
@@ -1537,7 +1537,7 @@ RCS file: /cvs/src/lib/libc/locale/towlower.3,v
 retrieving revision 1.4
 diff -u -r1.4 towlower.3
 --- lib/libc/locale/towlower.3	10 Sep 2010 18:38:19 -0000	1.4
-+++ lib/libc/locale/towlower.3	21 Feb 2013 17:30:10 -0000
++++ lib/libc/locale/towlower.3	23 Feb 2013 03:07:30 -0000
 @@ -38,33 +38,62 @@
  .Dt TOWLOWER 3
  .Os
@@ -1610,7 +1610,7 @@ RCS file: /cvs/src/lib/libc/locale/wcscoll.c,v
 retrieving revision 1.1
 diff -u -r1.1 wcscoll.c
 --- lib/libc/locale/wcscoll.c	27 Jul 2010 16:59:04 -0000	1.1
-+++ lib/libc/locale/wcscoll.c	21 Feb 2013 17:30:10 -0000
++++ lib/libc/locale/wcscoll.c	23 Feb 2013 03:07:30 -0000
 @@ -31,6 +31,7 @@
  
  #include <assert.h>
@@ -1633,7 +1633,7 @@ RCS file: /cvs/src/lib/libc/locale/wcsrtombs.3,v
 retrieving revision 1.4
 diff -u -r1.4 wcsrtombs.3
 --- lib/libc/locale/wcsrtombs.3	7 Jun 2012 19:47:40 -0000	1.4
-+++ lib/libc/locale/wcsrtombs.3	21 Feb 2013 17:30:10 -0000
++++ lib/libc/locale/wcsrtombs.3	23 Feb 2013 03:07:30 -0000
 @@ -31,7 +31,9 @@
  .\" ----------------------------------------------------------------------
  .Sh NAME
@@ -1759,7 +1759,7 @@ RCS file: /cvs/src/lib/libc/locale/wcstombs.3,v
 retrieving revision 1.4
 diff -u -r1.4 wcstombs.3
 --- lib/libc/locale/wcstombs.3	10 Sep 2010 18:38:19 -0000	1.4
-+++ lib/libc/locale/wcstombs.3	21 Feb 2013 17:30:10 -0000
++++ lib/libc/locale/wcstombs.3	23 Feb 2013 03:07:30 -0000
 @@ -30,22 +30,27 @@
  .Os
  .\" ----------------------------------------------------------------------
@@ -1829,7 +1829,7 @@ RCS file: /cvs/src/lib/libc/locale/wcstombs.c,v
 retrieving revision 1.1
 diff -u -r1.1 wcstombs.c
 --- lib/libc/locale/wcstombs.c	27 Jul 2010 16:59:04 -0000	1.1
-+++ lib/libc/locale/wcstombs.c	21 Feb 2013 17:30:10 -0000
++++ lib/libc/locale/wcstombs.c	23 Feb 2013 03:07:30 -0000
 @@ -32,14 +32,23 @@
  #include <stdlib.h>
  #include <string.h>
@@ -1862,7 +1862,7 @@ RCS file: /cvs/src/lib/libc/locale/wcsxfrm.c,v
 retrieving revision 1.1
 diff -u -r1.1 wcsxfrm.c
 --- lib/libc/locale/wcsxfrm.c	27 Jul 2010 16:59:04 -0000	1.1
-+++ lib/libc/locale/wcsxfrm.c	21 Feb 2013 17:30:10 -0000
++++ lib/libc/locale/wcsxfrm.c	23 Feb 2013 03:07:30 -0000
 @@ -37,7 +37,5 @@
  size_t 
  wcsxfrm(wchar_t *dest, const wchar_t *src, size_t n)
@@ -1878,7 +1878,7 @@ RCS file: /cvs/src/lib/libc/locale/wctob.3,v
 retrieving revision 1.3
 diff -u -r1.3 wctob.3
 --- lib/libc/locale/wctob.3	31 May 2007 19:19:29 -0000	1.3
-+++ lib/libc/locale/wctob.3	21 Feb 2013 17:30:10 -0000
++++ lib/libc/locale/wctob.3	23 Feb 2013 03:07:30 -0000
 @@ -30,32 +30,44 @@
  .Os
  .\" ----------------------------------------------------------------------
@@ -1950,7 +1950,7 @@ RCS file: /cvs/src/lib/libc/locale/wctob.c,v
 retrieving revision 1.1
 diff -u -r1.1 wctob.c
 --- lib/libc/locale/wctob.c	27 Jul 2010 16:59:04 -0000	1.1
-+++ lib/libc/locale/wctob.c	21 Feb 2013 17:30:10 -0000
++++ lib/libc/locale/wctob.c	23 Feb 2013 03:07:30 -0000
 @@ -31,15 +31,23 @@
  #include <stdio.h>
  #include <string.h>
@@ -1983,7 +1983,7 @@ RCS file: /cvs/src/lib/libc/locale/wctomb.3,v
 retrieving revision 1.2
 diff -u -r1.2 wctomb.3
 --- lib/libc/locale/wctomb.3	31 May 2007 19:19:29 -0000	1.2
-+++ lib/libc/locale/wctomb.3	21 Feb 2013 17:30:10 -0000
++++ lib/libc/locale/wctomb.3	23 Feb 2013 03:07:30 -0000
 @@ -29,18 +29,23 @@
  .Dt WCTOMB 3
  .Os
@@ -2066,7 +2066,7 @@ RCS file: /cvs/src/lib/libc/locale/wctomb.c,v
 retrieving revision 1.1
 diff -u -r1.1 wctomb.c
 --- lib/libc/locale/wctomb.c	27 Jul 2010 16:59:04 -0000	1.1
-+++ lib/libc/locale/wctomb.c	21 Feb 2013 17:30:10 -0000
++++ lib/libc/locale/wctomb.c	23 Feb 2013 03:07:30 -0000
 @@ -31,9 +31,11 @@
  #include <stdlib.h>
  #include <string.h>
@@ -2101,7 +2101,7 @@ RCS file: /cvs/src/lib/libc/string/Makefile.inc,v
 retrieving revision 1.28
 diff -u -r1.28 Makefile.inc
 --- lib/libc/string/Makefile.inc	17 Jan 2012 02:48:01 -0000	1.28
-+++ lib/libc/string/Makefile.inc	21 Feb 2013 17:30:17 -0000
++++ lib/libc/string/Makefile.inc	23 Feb 2013 03:07:36 -0000
 @@ -9,7 +9,8 @@
  	strsignal.c strtok.c strxfrm.c \
  	wcscat.c wcschr.c wcscmp.c wcscpy.c wcscspn.c wcslcat.c wcslcpy.c \
@@ -2147,7 +2147,7 @@ RCS file: /cvs/src/lib/libc/string/strcasecmp.3,v
 retrieving revision 1.11
 diff -u -r1.11 strcasecmp.3
 --- lib/libc/string/strcasecmp.3	25 Jul 2011 00:38:52 -0000	1.11
-+++ lib/libc/string/strcasecmp.3	21 Feb 2013 17:30:17 -0000
++++ lib/libc/string/strcasecmp.3	23 Feb 2013 03:07:36 -0000
 @@ -36,19 +36,27 @@
  .Os
  .Sh NAME
@@ -2221,7 +2221,7 @@ RCS file: /cvs/src/lib/libc/string/strcasecmp.c,v
 retrieving revision 1.6
 diff -u -r1.6 strcasecmp.c
 --- lib/libc/string/strcasecmp.c	8 Aug 2005 08:05:37 -0000	1.6
-+++ lib/libc/string/strcasecmp.c	21 Feb 2013 17:30:17 -0000
++++ lib/libc/string/strcasecmp.c	23 Feb 2013 03:07:36 -0000
 @@ -30,6 +30,8 @@
   */
  
@@ -2308,7 +2308,7 @@ RCS file: /cvs/src/lib/libc/string/strcasestr.c,v
 retrieving revision 1.3
 diff -u -r1.3 strcasestr.c
 --- lib/libc/string/strcasestr.c	31 Mar 2006 05:34:55 -0000	1.3
-+++ lib/libc/string/strcasestr.c	21 Feb 2013 17:30:17 -0000
++++ lib/libc/string/strcasestr.c	23 Feb 2013 03:07:36 -0000
 @@ -35,6 +35,8 @@
  
  #include <ctype.h>
@@ -2355,7 +2355,7 @@ RCS file: /cvs/src/lib/libc/string/strcoll.3,v
 retrieving revision 1.8
 diff -u -r1.8 strcoll.3
 --- lib/libc/string/strcoll.3	25 Jul 2011 00:38:53 -0000	1.8
-+++ lib/libc/string/strcoll.3	21 Feb 2013 17:30:17 -0000
++++ lib/libc/string/strcoll.3	23 Feb 2013 03:07:36 -0000
 @@ -35,32 +35,42 @@
  .Dt STRCOLL 3
  .Os
@@ -2409,7 +2409,7 @@ RCS file: /cvs/src/lib/libc/string/strcoll.c,v
 retrieving revision 1.5
 diff -u -r1.5 strcoll.c
 --- lib/libc/string/strcoll.c	8 Aug 2005 08:05:37 -0000	1.5
-+++ lib/libc/string/strcoll.c	21 Feb 2013 17:30:17 -0000
++++ lib/libc/string/strcoll.c	23 Feb 2013 03:07:36 -0000
 @@ -32,6 +32,7 @@
   */
  
@@ -2432,7 +2432,7 @@ RCS file: /cvs/src/lib/libc/string/strstr.3,v
 retrieving revision 1.11
 diff -u -r1.11 strstr.3
 --- lib/libc/string/strstr.3	25 Jul 2011 00:38:53 -0000	1.11
-+++ lib/libc/string/strstr.3	21 Feb 2013 17:30:17 -0000
++++ lib/libc/string/strstr.3	23 Feb 2013 03:07:36 -0000
 @@ -35,7 +35,9 @@
  .Dt STRSTR 3
  .Os
@@ -2476,7 +2476,7 @@ RCS file: /cvs/src/lib/libc/string/strxfrm.3,v
 retrieving revision 1.9
 diff -u -r1.9 strxfrm.3
 --- lib/libc/string/strxfrm.3	25 Jul 2011 00:38:53 -0000	1.9
-+++ lib/libc/string/strxfrm.3	21 Feb 2013 17:30:17 -0000
++++ lib/libc/string/strxfrm.3	23 Feb 2013 03:07:36 -0000
 @@ -31,7 +31,7 @@
  .\"
  .\"	$OpenBSD: strxfrm.3,v 1.9 2011/07/25 00:38:53 schwarze Exp $
@@ -2554,7 +2554,7 @@ RCS file: /cvs/src/lib/libc/string/strxfrm.c,v
 retrieving revision 1.6
 diff -u -r1.6 strxfrm.c
 --- lib/libc/string/strxfrm.c	8 Aug 2005 08:05:37 -0000	1.6
-+++ lib/libc/string/strxfrm.c	21 Feb 2013 17:30:17 -0000
++++ lib/libc/string/strxfrm.c	23 Feb 2013 03:07:36 -0000
 @@ -32,6 +32,7 @@
   */
  
@@ -2582,7 +2582,7 @@ RCS file: /cvs/src/lib/libc/string/wcscasecmp.3,v
 retrieving revision 1.2
 diff -u -r1.2 wcscasecmp.3
 --- lib/libc/string/wcscasecmp.3	25 Jul 2011 00:38:53 -0000	1.2
-+++ lib/libc/string/wcscasecmp.3	21 Feb 2013 17:30:17 -0000
++++ lib/libc/string/wcscasecmp.3	23 Feb 2013 03:07:36 -0000
 @@ -36,19 +36,22 @@
  .Os
  .Sh NAME
@@ -2659,7 +2659,7 @@ RCS file: /cvs/src/lib/libc/string/wcscasecmp.c,v
 retrieving revision 1.2
 diff -u -r1.2 wcscasecmp.c
 --- lib/libc/string/wcscasecmp.c	1 Jun 2011 19:29:48 -0000	1.2
-+++ lib/libc/string/wcscasecmp.c	21 Feb 2013 17:30:17 -0000
++++ lib/libc/string/wcscasecmp.c	23 Feb 2013 03:07:36 -0000
 @@ -25,37 +25,31 @@
   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   */
@@ -2720,7 +2720,7 @@ RCS file: /cvs/src/lib/libc/string/wcscmp.c,v
 retrieving revision 1.4
 diff -u -r1.4 wcscmp.c
 --- lib/libc/string/wcscmp.c	8 Aug 2005 08:05:37 -0000	1.4
-+++ lib/libc/string/wcscmp.c	21 Feb 2013 17:30:18 -0000
++++ lib/libc/string/wcscmp.c	23 Feb 2013 03:07:36 -0000
 @@ -34,7 +34,7 @@
   */
  
@@ -2736,7 +2736,7 @@ RCS file: /cvs/src/lib/libc/string/wcsncmp.c,v
 retrieving revision 1.4
 diff -u -r1.4 wcsncmp.c
 --- lib/libc/string/wcsncmp.c	8 Aug 2005 08:05:37 -0000	1.4
-+++ lib/libc/string/wcsncmp.c	21 Feb 2013 17:30:18 -0000
++++ lib/libc/string/wcsncmp.c	23 Feb 2013 03:07:36 -0000
 @@ -31,7 +31,7 @@
   */
  
@@ -2752,7 +2752,7 @@ RCS file: /cvs/src/lib/libc/string/wcswidth.c,v
 retrieving revision 1.4
 diff -u -r1.4 wcswidth.c
 --- lib/libc/string/wcswidth.c	4 Apr 2011 18:16:24 -0000	1.4
-+++ lib/libc/string/wcswidth.c	21 Feb 2013 17:30:18 -0000
++++ lib/libc/string/wcswidth.c	23 Feb 2013 03:07:36 -0000
 @@ -30,15 +30,17 @@
   */
  
@@ -2790,7 +2790,7 @@ RCS file: /cvs/src/lib/libc/string/wmemcmp.c,v
 retrieving revision 1.4
 diff -u -r1.4 wmemcmp.c
 --- lib/libc/string/wmemcmp.c	8 Aug 2005 08:05:37 -0000	1.4
-+++ lib/libc/string/wmemcmp.c	21 Feb 2013 17:30:18 -0000
++++ lib/libc/string/wmemcmp.c	23 Feb 2013 03:07:36 -0000
 @@ -30,7 +30,7 @@
   */
  
@@ -2806,7 +2806,7 @@ RCS file: /cvs/src/lib/libc/gen/isctype.c,v
 retrieving revision 1.11
 diff -u -r1.11 isctype.c
 --- lib/libc/gen/isctype.c	8 Aug 2005 08:05:34 -0000	1.11
-+++ lib/libc/gen/isctype.c	21 Feb 2013 17:30:23 -0000
++++ lib/libc/gen/isctype.c	23 Feb 2013 03:07:41 -0000
 @@ -36,6 +36,7 @@
  #define _ANSI_LIBRARY
  #include <ctype.h>
@@ -2836,7 +2836,7 @@ RCS file: /cvs/src/lib/libc/gen/tolower.3,v
 retrieving revision 1.11
 diff -u -r1.11 tolower.3
 --- lib/libc/gen/tolower.3	31 May 2007 19:19:29 -0000	1.11
-+++ lib/libc/gen/tolower.3	21 Feb 2013 17:30:23 -0000
++++ lib/libc/gen/tolower.3	23 Feb 2013 03:07:41 -0000
 @@ -36,22 +36,33 @@
  .Os
  .Sh NAME
@@ -2932,7 +2932,7 @@ RCS file: /cvs/src/lib/libc/gen/tolower_.c,v
 retrieving revision 1.9
 diff -u -r1.9 tolower_.c
 --- lib/libc/gen/tolower_.c	8 Aug 2005 08:05:34 -0000	1.9
-+++ lib/libc/gen/tolower_.c	21 Feb 2013 17:30:23 -0000
++++ lib/libc/gen/tolower_.c	23 Feb 2013 03:07:41 -0000
 @@ -8,6 +8,7 @@
  #include <ctype.h>
  #include <stdio.h>
@@ -2958,7 +2958,7 @@ RCS file: /cvs/src/lib/libc/gen/toupper.3,v
 retrieving revision 1.13
 diff -u -r1.13 toupper.3
 --- lib/libc/gen/toupper.3	31 May 2007 19:19:29 -0000	1.13
-+++ lib/libc/gen/toupper.3	21 Feb 2013 17:30:23 -0000
++++ lib/libc/gen/toupper.3	23 Feb 2013 03:07:41 -0000
 @@ -35,27 +35,53 @@
  .Dt TOUPPER 3
  .Os
@@ -3033,7 +3033,7 @@ RCS file: /cvs/src/lib/libc/gen/toupper_.c,v
 retrieving revision 1.10
 diff -u -r1.10 toupper_.c
 --- lib/libc/gen/toupper_.c	9 Aug 2005 08:36:48 -0000	1.10
-+++ lib/libc/gen/toupper_.c	21 Feb 2013 17:30:23 -0000
++++ lib/libc/gen/toupper_.c	23 Feb 2013 03:07:41 -0000
 @@ -9,6 +9,8 @@
  #include <stdio.h>
  
@@ -3061,7 +3061,7 @@ RCS file: /cvs/src/regress/lib/libc/locale/Makefile,v
 retrieving revision 1.1
 diff -u -r1.1 Makefile
 --- regress/lib/libc/locale//Makefile	11 Aug 2005 21:57:02 -0000	1.1
-+++ regress/lib/libc/locale//Makefile	21 Feb 2013 17:30:28 -0000
++++ regress/lib/libc/locale//Makefile	23 Feb 2013 03:07:45 -0000
 @@ -1,6 +1,7 @@
  # $OpenBSD: Makefile,v 1.1 2005/08/11 21:57:02 espie Exp $
  
@@ -3076,7 +3076,7 @@ RCS file: /cvs/src/regress/lib/libc/locale/check_isw/check_isw.c,v
 retrieving revision 1.1
 diff -u -r1.1 check_isw.c
 --- regress/lib/libc/locale//check_isw/check_isw.c	11 Aug 2005 21:57:02 -0000	1.1
-+++ regress/lib/libc/locale//check_isw/check_isw.c	21 Feb 2013 17:30:28 -0000
++++ regress/lib/libc/locale//check_isw/check_isw.c	23 Feb 2013 03:07:46 -0000
 @@ -25,6 +25,8 @@
  #include <wchar.h>
  #include <wctype.h>
@@ -3136,7 +3136,7 @@ RCS file: /cvs/src/usr.bin/mklocale/lex.l,v
 retrieving revision 1.2
 diff -u -r1.2 lex.l
 --- usr.bin/mklocale/lex.l	8 Aug 2009 19:37:14 -0000	1.2
-+++ usr.bin/mklocale/lex.l	21 Feb 2013 17:30:33 -0000
++++ usr.bin/mklocale/lex.l	23 Feb 2013 03:07:49 -0000
 @@ -36,7 +36,7 @@
  
  #include <sys/cdefs.h>
@@ -3152,7 +3152,7 @@ RCS file: /cvs/src/usr.bin/mklocale/yacc.y,v
 retrieving revision 1.4
 diff -u -r1.4 yacc.y
 --- usr.bin/mklocale/yacc.y	14 Jan 2011 23:15:40 -0000	1.4
-+++ usr.bin/mklocale/yacc.y	21 Feb 2013 17:30:33 -0000
++++ usr.bin/mklocale/yacc.y	23 Feb 2013 03:07:49 -0000
 @@ -41,7 +41,7 @@
  #include <arpa/inet.h>	/* Needed for htonl on POSIX systems. */
  

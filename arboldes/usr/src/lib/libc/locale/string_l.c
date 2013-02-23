@@ -203,8 +203,9 @@ wcsxfrm_l(wchar_t * __restrict dest, const wchar_t * __restrict src, size_t len,
  * see https://buildsecurityin.us-cert.gov/bsi/articles/knowledge/coding/769-BSI.html */
 wchar_t *__dup_as_wcs_l(const char *s, locale_t locale)
 {
-	int numc = mbstowcs(NULL, s, 0) + 1; 
-	if (numc == 0 || numc > ULONG_MAX / sizeof(wchar_t)) { 
+	int numc = mbstowcs_l(NULL, s, 0, locale) + 1; 
+	if (numc == 0 || numc > ULONG_MAX / sizeof(wchar_t)
+			|| numc == (size_t)-1) { 
 		errno = EINVAL;
 		return NULL;
 	}
