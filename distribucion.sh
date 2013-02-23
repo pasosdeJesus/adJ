@@ -643,6 +643,7 @@ else {
 } fi;
 
 
+cd $dini
 echo "$paraexc" | tr " " "\n" | grep -v "^[ \t]*$" | sed -e "s/^/ /g" > tmp/excluye.txt
 cmd="echo \$excluye | tr \" \" \"\\n\" | sed -e \"s/^/ /g\" >> tmp/excluye.txt"
 eval "$cmd"

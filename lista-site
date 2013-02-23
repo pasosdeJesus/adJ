@@ -4,14 +4,11 @@
 ./usr/include/xlocale
 ./usr/include/xlocale.h
 ./usr/include/xlocale/_ctype.h
-./usr/include/xlocale/_ctype.h~
 ./usr/include/xlocale/_inttypes.h
-./usr/include/xlocale/_inttypes.h~
 ./usr/include/xlocale/_langinfo.h
 ./usr/include/xlocale/_locale.h
 ./usr/include/xlocale/_monetary.h
 ./usr/include/xlocale/_stdio.h
-./usr/include/xlocale/_stdio.h~
 ./usr/include/xlocale/_stdlib.h
 ./usr/include/xlocale/_string.h
 ./usr/include/xlocale/_time.h
@@ -236,6 +233,10 @@
 ./usr/share/man/man3/iswxdigit_l.3
 ./usr/share/man/man3/isxdigit_l.3
 ./usr/share/man/man3/mblen_l.3
+./usr/share/man/man3/mbrtowc_l.3
+./usr/share/man/man3/mbsinit_l.3
+./usr/share/man/man3/mbsnrtowcs_l.3
+./usr/share/man/man3/mbsrtowcs_l.3
 ./usr/share/man/man3/mbstowcs_l.3
 ./usr/share/man/man3/mbtowc_l.3
 ./usr/share/man/man3/newlocale.3
@@ -253,8 +254,11 @@
 ./usr/share/man/man3/towupper_l.3
 ./usr/share/man/man3/uselocale.3
 ./usr/share/man/man3/wcscoll.3
+./usr/share/man/man3/wcsnrtombs_l.3
+./usr/share/man/man3/wcsrtombs_l.3
 ./usr/share/man/man3/wcstombs_l.3
 ./usr/share/man/man3/wcsxfrm.3
+./usr/share/man/man3/wctob_l.3
 ./usr/share/man/man3/wctomb_l.3
 ./usr/share/man/man3/wctype_l.3
 ./usr/share/man/man3/xlocale.3
