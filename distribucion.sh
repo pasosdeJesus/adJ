@@ -781,14 +781,16 @@ if (test "$sn" = "s") then {
 	mkdir -p /tmp/i/usr/src/etc/
 	cp /usr/src/etc/Makefile  /tmp/i/usr/src/etc/
 	for i in `cat $dini/lista-site`; do 
-		if (test -d "/destdir/$i") then {
+		if (test -d "/destdir/$i" -o -d "$i") then {
 			mkdir -p /tmp/i/$i
 		} elif (test -f "/destdir/$i") then {
 			d=`dirname $i`
 			mkdir -p /tmp/i/$d
 			cp /destdir/$i /tmp/i/$i
 		} else {
-			echo "lista-site errada, falta $i";
+			echo "lista-site errada, falta $i en /destdir, intentando de /";
+			mkdir -p /tmp/i/`dirname $i`; 
+			cp -f /$i /tmp/i/$i	
 		} fi;
 	done;
 	mkdir -p /tmp/i/etc/
