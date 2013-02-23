@@ -1586,7 +1586,7 @@ servers $1
 }
 
 questions() {
-	local _d _xdmask=y _def
+	local _d _xdmask=yes _def
 
 	ask_yn "Start sshd(8) by default?" yes
 	sshd=$resp
@@ -1603,11 +1603,13 @@ questions() {
 	if [[ -n $MDXAPERTURE ]]; then
 		ask_yn "Do you expect to run the X Window System?" $def
 		x11=$resp
-		_xdmask=$resp
+		if [[ $resp == n ]]; then
+			_xdmask=no
+		fi
 	fi
 
-	if [[ -n $MDXDM && $_xdmask == y ]]; then
-		ask_yn "Do you want the X Window System to be started by xdm(1)?" $def
+	if [[ -n $MDXDM && $_xdmask == yes ]]; then
+		ask_yn "Do you want the X Window System to be started by xdm(1)?" $_xdmask
 		xdm=$resp
 	fi
 
