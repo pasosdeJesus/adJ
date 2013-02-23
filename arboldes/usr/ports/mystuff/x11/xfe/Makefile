@@ -3,7 +3,7 @@
 COMMENT=	MS-Explorer like file manager for X
 
 DISTNAME= 	xfe-1.34
-REVISION=	
+REVISION=	0
 CATEGORIES= 	x11
 
 HOMEPAGE=	http://roland65.free.fr/xfe/
@@ -42,7 +42,8 @@ CONFIGURE_ENV=	CPPFLAGS="-I${LOCALBASE}/include \
 
 MAKE_FLAGS=	CXXFLAGS="${CXXFLAGS} -DHAVE_XFT_H"
 
-post-patch:
-	@cp ${FILESDIR}/es_CO.po ${WRKSRC}/po/
+post-extract:
+	@cp files/es_CO.po ${WRKSRC}/po/
+
 
 .include <bsd.port.mk>

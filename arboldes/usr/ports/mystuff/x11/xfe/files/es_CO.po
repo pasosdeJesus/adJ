@@ -1,13 +1,14 @@
 # Spanish translations for xfe package
 # Traducciones al español para el paquete xfe.
+# Se realizó con ayuda de las herramientas de traducción de Google
 # Dominio público de acuerdo a legislación colombiana. http://www.pasosdejesus.org/dominio_publico_colombia.html
 # vtamara@pasosdeJesus.org. 2013
-#
+# If you prefer different licesing terms, simply change them (just remember to give credit)
 msgid ""
 msgstr ""
 "Project-Id-Version: xfe 1.34\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-12 10:09-0500\n"
+"POT-Creation-Date: 2013-02-19 14:25-0500\n"
 "PO-Revision-Date: 2013-02-12 10:16-0500\n"
 "Last-Translator: Vladimir Támara Patiño <vtamara@pasosdeJesus.org>\n"
 "Language-Team: Spanish\n"
@@ -38,27 +39,31 @@ msgid ""
 "want to\n"
 "    open on start up.\n"
 "\n"
-msgstr "\n"
-"Uso: xfe [opciones] [dirinicio1] [dirinicio2] \n"
+msgstr ""
 "\n"
-"    [opciones] puede ser cualquiera de las siguientes: \n"
+"Uso: xfe [opciones] [dirinicio1] [dirinicio2]\n"
 "\n"
-"         -h,   --help      Imprime (esta) ayuda y termina \n"
+"    [opciones] puede ser cualquiera de las siguientes:\n"
+"\n"
+"         -h,   --help      Imprime (esta) ayuda y termina\n"
 "         -v,   --version   Imprime información de la versión y termina\n"
-"         -i,   --iconic    Inicia minimizando \n"
-"         -m,   --maximized Inicia maximizando \n"
-"         -p n, --panel n   Modo para vista de panel a n (n=0 => Árbol y un panel, \n"
-"                           n=1 => Un panel, n=2 => Dos paneles, "
-" n=3 => Árbol y dos paneles).\n"
-"\n" 
-"   [dirinicio1] y [dirinicio2] son las rutas a los directorios iniciales que usted\n"
+"         -i,   --iconic    Inicia minimizando\n"
+"         -m,   --maximized Inicia maximizando\n"
+"         -p n, --panel n   Modo para vista de panel a n (n=0 => Árbol y un "
+"panel,\n"
+"                           n=1 => Un panel, n=2 => Dos paneles,  n=3 => "
+"Árbol y dos paneles).\n"
+"\n"
+"   [dirinicio1] y [dirinicio2] son las rutas a los directorios iniciales que "
+"usted\n"
 "   quiere abrir al iniciar\n"
 "\n"
 
 #: ../src/main.cpp:363
 #, c-format
 msgid "Warning: Unknown panel mode, revert to last saved panel mode\n"
-msgstr "Advertencia: Modo desconocido de panel, volver al último panel guardado \n"
+msgstr ""
+"Advertencia: Modo desconocido de panel, volver al último panel guardado\n"
 
 #: ../src/main.cpp:448 ../src/XFileView.cpp:228 ../src/XFilePackage.cpp:755
 #: ../src/XFileImage.cpp:2103 ../src/XFileWrite.cpp:225
@@ -68,7 +73,8 @@ msgstr "Error al cargar los iconos"
 #: ../src/main.cpp:448 ../src/XFileView.cpp:228 ../src/XFilePackage.cpp:755
 #: ../src/XFileImage.cpp:2103 ../src/XFileWrite.cpp:225
 msgid "Unable to load some icons. Please check your icons path!"
-msgstr "No se pueden cargar algunos iconos. Por favor, ¡compruebe la ruta de iconos!"
+msgstr ""
+"No se pueden cargar algunos iconos. Por favor, ¡compruebe la ruta de iconos!"
 
 #. Permissions
 #: ../src/Properties.cpp:56 ../src/Properties.cpp:75 ../src/FileList.cpp:146
@@ -167,7 +173,7 @@ msgstr "Propiedades"
 #: ../src/FontDialog.cpp:44 ../src/HistInputDialog.cpp:51
 #: ../src/InputDialog.cpp:30 ../src/BrowseInputDialog.cpp:42
 #: ../src/ArchInputDialog.cpp:36 ../src/Preferences.cpp:156
-#: ../src/WriteWindow.cpp:190 ../src/Keybindings.cpp:77
+#: ../src/WriteWindow.cpp:188 ../src/Keybindings.cpp:77
 #: ../src/KeybindingsDialog.cpp:30
 msgid "&Accept"
 msgstr "&Aceptar"
@@ -185,8 +191,8 @@ msgstr "&Aceptar"
 #: ../src/HistInputDialog.cpp:54 ../src/InputDialog.cpp:33
 #: ../src/BrowseInputDialog.cpp:45 ../src/ArchInputDialog.cpp:39
 #: ../src/Preferences.cpp:160 ../src/OverwriteBox.cpp:38
-#: ../src/ExecuteBox.cpp:38 ../src/WriteWindow.cpp:194
-#: ../src/ViewWindow.cpp:722 ../src/foxhacks.cpp:586 ../src/foxhacks.cpp:655
+#: ../src/ExecuteBox.cpp:38 ../src/WriteWindow.cpp:192
+#: ../src/ViewWindow.cpp:720 ../src/foxhacks.cpp:586 ../src/foxhacks.cpp:655
 #: ../src/Keybindings.cpp:81 ../src/KeybindingsDialog.cpp:33
 msgid "&Cancel"
 msgstr "&Cancelar"
@@ -200,10 +206,10 @@ msgstr "&General"
 
 #. Second item is Access Permissions
 #: ../src/Properties.cpp:198 ../src/Properties.cpp:796
-#: ../src/FileDialog.cpp:1431 ../src/XFileExplorer.cpp:802
-#: ../src/XFileExplorer.cpp:832 ../src/XFileImage.cpp:654
+#: ../src/FileDialog.cpp:1431 ../src/XFileExplorer.cpp:800
+#: ../src/XFileExplorer.cpp:830 ../src/XFileImage.cpp:654
 msgid "&Permissions"
-msgstr "&Permisos"
+msgstr "Permi&sos"
 
 #. Third tab - file associations
 #: ../src/Properties.cpp:206
@@ -343,7 +349,7 @@ msgstr "Sistema de archivos:"
 
 #. Location bar
 #: ../src/Properties.cpp:548 ../src/Properties.cpp:561
-#: ../src/Properties.cpp:792 ../src/XFileExplorer.cpp:561
+#: ../src/Properties.cpp:792 ../src/XFileExplorer.cpp:559
 msgid "Location:"
 msgstr "Ubicación:"
 
@@ -429,8 +435,8 @@ msgstr "%d archivos, %d directorios"
 #: ../src/Properties.cpp:1328 ../src/DirList.cpp:1157 ../src/DirPanel.cpp:806
 #: ../src/FilePanel.cpp:1478 ../src/FilePanel.cpp:2962
 #: ../src/FilePanel.cpp:3224 ../src/FilePanel.cpp:3684 ../src/Bookmarks.cpp:87
-#: ../src/XFileExplorer.cpp:1461 ../src/XFileExplorer.cpp:1478
-#: ../src/XFileExplorer.cpp:1497
+#: ../src/XFileExplorer.cpp:1459 ../src/XFileExplorer.cpp:1476
+#: ../src/XFileExplorer.cpp:1495
 msgid "Warning"
 msgstr "Advertencia"
 
@@ -497,13 +503,13 @@ msgstr "Nombre de archivo vacío, operación cancelada"
 #: ../src/FilePanel.cpp:3919 ../src/FilePanel.cpp:3921
 #: ../src/FilePanel.cpp:4076 ../src/FilePanel.cpp:4362
 #: ../src/FilePanel.cpp:4450 ../src/FilePanel.cpp:4464
-#: ../src/FilePanel.cpp:4479 ../src/XFileExplorer.cpp:1512
-#: ../src/XFileExplorer.cpp:1514 ../src/XFileExplorer.cpp:1561
-#: ../src/XFileExplorer.cpp:1563 ../src/XFileExplorer.cpp:1579
-#: ../src/XFileExplorer.cpp:1581 ../src/XFileExplorer.cpp:2752
-#: ../src/XFileExplorer.cpp:2797 ../src/XFileExplorer.cpp:2799
-#: ../src/XFileExplorer.cpp:2812 ../src/XFileExplorer.cpp:2814
-#: ../src/XFileExplorer.cpp:2860 ../src/XFilePackage.cpp:260
+#: ../src/FilePanel.cpp:4479 ../src/XFileExplorer.cpp:1510
+#: ../src/XFileExplorer.cpp:1512 ../src/XFileExplorer.cpp:1559
+#: ../src/XFileExplorer.cpp:1561 ../src/XFileExplorer.cpp:1577
+#: ../src/XFileExplorer.cpp:1579 ../src/XFileExplorer.cpp:2751
+#: ../src/XFileExplorer.cpp:2796 ../src/XFileExplorer.cpp:2798
+#: ../src/XFileExplorer.cpp:2811 ../src/XFileExplorer.cpp:2813
+#: ../src/XFileExplorer.cpp:2859 ../src/XFilePackage.cpp:260
 #: ../src/XFilePackage.cpp:275 ../src/XFilePackage.cpp:302
 #: ../src/XFilePackage.cpp:325 ../src/XFilePackage.cpp:425
 #: ../src/XFilePackage.cpp:489 ../src/XFilePackage.cpp:515
@@ -560,7 +566,9 @@ msgstr "Chown en %s falló"
 #: ../src/Properties.cpp:1183 ../src/Properties.cpp:1328
 msgid ""
 "Setting special permissions could be unsafe! Is that you really want to do?"
-msgstr "¡Establecer permisos especiales puede ser inseguro! ¿Es esto lo que que realmente quieres hacer?"
+msgstr ""
+"¡Establecer permisos especiales puede ser inseguro! ¿Es esto lo que que "
+"realmente quieres hacer?"
 
 #: ../src/Properties.cpp:1193 ../src/Properties.cpp:1332
 msgid "File permissions"
@@ -654,7 +662,8 @@ msgstr "Copiar "
 msgid ""
 "Copy %s files/folders.\n"
 "From: %s"
-msgstr "Copiar %s archivos/directorios.\n"
+msgstr ""
+"Copiar %s archivos/directorios.\n"
 "De: %s"
 
 #: ../src/DirList.cpp:546 ../src/DirPanel.cpp:1369 ../src/DirPanel.cpp:1383
@@ -667,7 +676,8 @@ msgstr "Mover "
 msgid ""
 "Move %s files/folders.\n"
 "From: %s"
-msgstr "Mover %s archivos/directorios.\n"
+msgstr ""
+"Mover %s archivos/directorios.\n"
 "De: %s"
 
 #: ../src/DirList.cpp:555 ../src/DirPanel.cpp:1398 ../src/FileList.cpp:550
@@ -700,7 +710,7 @@ msgstr "¡Se produjo un error durante la operación de copia de archivos!"
 msgid "Copy file operation cancelled!"
 msgstr "¡Operación de copia de archivos cancelada!"
 
-#: ../src/DirList.cpp:1157 ../src/XFileExplorer.cpp:1478
+#: ../src/DirList.cpp:1157 ../src/XFileExplorer.cpp:1476
 #, c-format
 msgid "Mount point %s is not responding..."
 msgstr "El punto de montaje %s no responde..."
@@ -743,7 +753,7 @@ msgstr " Permiso para: %s rechazado."
 #. Panel menu items
 #: ../src/DirPanel.cpp:628 ../src/DirPanel.cpp:642
 msgid "New &folder..."
-msgstr "Nuevo &directorio..."
+msgstr "&Directorio nuevo..."
 
 #: ../src/DirPanel.cpp:631 ../src/DirPanel.cpp:645
 msgid "&Hidden folders"
@@ -784,24 +794,24 @@ msgid "&Add to archive..."
 msgstr "&Añadir al archivo..."
 
 #: ../src/DirPanel.cpp:666 ../src/FilePanel.cpp:3597
-#: ../src/XFileExplorer.cpp:676 ../src/WriteWindow.cpp:777
-#: ../src/WriteWindow.cpp:818 ../src/ViewWindow.cpp:212
+#: ../src/XFileExplorer.cpp:674 ../src/WriteWindow.cpp:775
+#: ../src/WriteWindow.cpp:816 ../src/ViewWindow.cpp:210
 msgid "&Copy"
 msgstr "&Copiar"
 
 #: ../src/DirPanel.cpp:667 ../src/FilePanel.cpp:3598
-#: ../src/XFileExplorer.cpp:682
+#: ../src/XFileExplorer.cpp:680
 msgid "C&ut"
 msgstr "C&ortar"
 
 #: ../src/DirPanel.cpp:668 ../src/FilePanel.cpp:3452 ../src/FilePanel.cpp:3493
-#: ../src/FilePanel.cpp:3599 ../src/XFileExplorer.cpp:688
-#: ../src/WriteWindow.cpp:789 ../src/WriteWindow.cpp:820
+#: ../src/FilePanel.cpp:3599 ../src/XFileExplorer.cpp:686
+#: ../src/WriteWindow.cpp:787 ../src/WriteWindow.cpp:818
 msgid "&Paste"
 msgstr "&Pegar"
 
 #: ../src/DirPanel.cpp:670 ../src/FilePanel.cpp:3601
-#: ../src/XFileExplorer.cpp:615
+#: ../src/XFileExplorer.cpp:613
 msgid "Re&name..."
 msgstr "Re&nombrar..."
 
@@ -810,7 +820,7 @@ msgid "Cop&y to..."
 msgstr "Cop&iar a..."
 
 #: ../src/DirPanel.cpp:672 ../src/FilePanel.cpp:3603
-#: ../src/XFileExplorer.cpp:627
+#: ../src/XFileExplorer.cpp:625
 msgid "&Move to..."
 msgstr "&Mover a..."
 
@@ -819,18 +829,18 @@ msgid "Symlin&k to..."
 msgstr "Enla&zar a..."
 
 #: ../src/DirPanel.cpp:674 ../src/FilePanel.cpp:3605
-#: ../src/XFileExplorer.cpp:639
+#: ../src/XFileExplorer.cpp:637
 msgid "Mo&ve to trash"
 msgstr "Mo&ver a la papelera"
 
-#: ../src/DirPanel.cpp:675 ../src/XFileExplorer.cpp:645
+#: ../src/DirPanel.cpp:675 ../src/XFileExplorer.cpp:643
 msgid "R&estore from trash"
-msgstr "R&estaurar de la papelera"
+msgstr "Res&taurar de la papelera"
 
 #: ../src/DirPanel.cpp:676 ../src/FilePanel.cpp:3607
-#: ../src/XFileExplorer.cpp:651
+#: ../src/XFileExplorer.cpp:649
 msgid "&Delete"
-msgstr "&Suprimir"
+msgstr "S&uprimir"
 
 #: ../src/DirPanel.cpp:678
 msgid "Prop&erties"
@@ -842,8 +852,8 @@ msgid "Create archive"
 msgstr "Crear un archivo"
 
 #: ../src/DirPanel.cpp:1323 ../src/FilePanel.cpp:1332
-#: ../src/FilePanel.cpp:1361 ../src/WriteWindow.cpp:654
-#: ../src/ViewWindow.cpp:158
+#: ../src/FilePanel.cpp:1361 ../src/WriteWindow.cpp:652
+#: ../src/ViewWindow.cpp:156
 msgid "Copy"
 msgstr "Copiar"
 
@@ -851,7 +861,7 @@ msgstr "Copiar"
 #: ../src/FilePanel.cpp:1369
 #, c-format
 msgid "Copy %s items from: %s"
-msgstr "Copia %s artículos de: %s"
+msgstr "Copiar %s elementos de: %s"
 
 #: ../src/DirPanel.cpp:1337 ../src/DirPanel.cpp:1344 ../src/FilePanel.cpp:1346
 #: ../src/FilePanel.cpp:1353
@@ -860,7 +870,7 @@ msgstr "Renombrar"
 
 #: ../src/DirPanel.cpp:1341 ../src/FilePanel.cpp:1350
 msgid "Rename "
-msgstr "Renombrar"
+msgstr "Renombrar "
 
 #: ../src/DirPanel.cpp:1352
 msgid "Copy to"
@@ -888,7 +898,7 @@ msgstr "Enlace"
 #: ../src/DirPanel.cpp:1403 ../src/FilePanel.cpp:1412
 #, c-format
 msgid "Symlink %s items from: %s"
-msgstr "Enlanzando %s artículos de: %s"
+msgstr "Enlanzar %s elementos de: %s"
 
 #: ../src/DirPanel.cpp:1446 ../src/DirPanel.cpp:1474 ../src/FilePanel.cpp:1502
 #: ../src/FilePanel.cpp:1530
@@ -898,11 +908,11 @@ msgstr "%s no es un directorio"
 
 #: ../src/DirPanel.cpp:1764 ../src/FilePanel.cpp:1816
 msgid "An error has occurred during the symlink operation!"
-msgstr "¡Se produjo un error durante la operación de enlazado!"
+msgstr "¡Se produjo un error durante la operación de enlace!"
 
 #: ../src/DirPanel.cpp:1772 ../src/FilePanel.cpp:1824
 msgid "Symlink operation cancelled!"
-msgstr "Operación de enlazado cancelado!"
+msgstr "Operación de enlace cancelada!"
 
 #: ../src/DirPanel.cpp:1821 ../src/FilePanel.cpp:2322
 #, c-format
@@ -918,7 +928,7 @@ msgstr "Confirmar Eliminación"
 #. File object
 #. Delete trash can info folder
 #: ../src/DirPanel.cpp:1828 ../src/FilePanel.cpp:2336
-#: ../src/XFileExplorer.cpp:2777 ../src/XFileExplorer.cpp:2783
+#: ../src/XFileExplorer.cpp:2776 ../src/XFileExplorer.cpp:2782
 msgid "File delete"
 msgstr "Borrar archivo"
 
@@ -930,7 +940,8 @@ msgstr "Directorio %s no está vacío, ¿elimínarlo de todos modos?"
 #: ../src/DirPanel.cpp:1854
 #, c-format
 msgid "Folder %s is write-protected, definitively delete it anyway?"
-msgstr "Directorio %s está protegida contra escritura, ¿eliminarlo de todas formas?"
+msgstr ""
+"Directorio %s está protegida contra escritura, ¿eliminarlo de todas formas?"
 
 #: ../src/DirPanel.cpp:1866 ../src/DirPanel.cpp:1894
 msgid "Delete folder operation cancelled!"
@@ -954,7 +965,9 @@ msgstr "Mover a la papelera"
 #: ../src/DirPanel.cpp:1948
 #, c-format
 msgid "Folder %s is write-protected, move it to trash can anyway?"
-msgstr "Directorio %s está protegido contra escritura, moverlo a la papelera de todos modos?"
+msgstr ""
+"Directorio %s está protegido contra escritura, moverlo a la papelera de "
+"todos modos?"
 
 #: ../src/DirPanel.cpp:1969 ../src/DirPanel.cpp:2002 ../src/FilePanel.cpp:2022
 #: ../src/FilePanel.cpp:2049
@@ -1011,12 +1024,12 @@ msgstr "¡Operación de restaurar archivos de la papelera cancelada!"
 
 #: ../src/DirPanel.cpp:2175 ../src/FilePanel.cpp:2808
 msgid "Create new folder:"
-msgstr "Crear nuevo directorio:"
+msgstr "Crear directorio nuevo:"
 
 #: ../src/DirPanel.cpp:2175 ../src/FileDialog.cpp:874
 #: ../src/FilePanel.cpp:2808
 msgid "New Folder"
-msgstr "Nuevo directorio"
+msgstr "Directorio nuevo"
 
 #: ../src/DirPanel.cpp:2244 ../src/FilePanel.cpp:4331
 msgid "Mount"
@@ -1105,8 +1118,10 @@ msgstr "Desmontar el directorio:"
 msgid ""
 "Folder %s already exists. Overwrite?\n"
 "=> Caution, all files within this directory will be definitively lost!"
-msgstr "Directorio %s ya existe. ¿Sobreescribir?\n"
-" => Precaución, ¡todos los archivos de este directorio se perderán definitivamente!"
+msgstr ""
+"Directorio %s ya existe. ¿Sobreescribir?\n"
+" => Precaución, ¡todos los archivos de este directorio se perderán "
+"definitivamente!"
 
 #: ../src/File.cpp:268 ../src/File.cpp:1589
 #, c-format
@@ -1116,7 +1131,7 @@ msgstr "El archivo %s ya existe. ¿Sobreescribir?"
 #: ../src/File.cpp:316
 #, c-format
 msgid "Source size: %s - Modified date: %s"
-msgstr "Tamaño de Fuente: %s - Fecha de modificación: %s"
+msgstr "Tamaño de origen: %s - Fecha de modificación: %s"
 
 #: ../src/File.cpp:317
 #, c-format
@@ -1131,7 +1146,7 @@ msgstr "Confirmar sobrescritura"
 #: ../src/File.cpp:371 ../src/File.cpp:425 ../src/File.cpp:497
 #, c-format
 msgid "Can't copy file %s: %s"
-msgstr "No se puede copiar el archivo %s : %s"
+msgstr "No se puede copiar el archivo %s: %s"
 
 #: ../src/File.cpp:373 ../src/File.cpp:427 ../src/File.cpp:499
 #, c-format
@@ -1141,7 +1156,7 @@ msgstr "No se puede copiar el archivo %s"
 #. Set labels for progress dialog
 #: ../src/File.cpp:403 ../src/File.cpp:742 ../src/File.cpp:1071
 msgid "Source: "
-msgstr "Fuente: "
+msgstr "Origen: "
 
 #: ../src/File.cpp:405 ../src/File.cpp:744 ../src/File.cpp:1073
 msgid "Target: "
@@ -1170,7 +1185,8 @@ msgstr "No se puede copiar el archivo %s : Permiso denegado"
 #: ../src/File.cpp:620
 #, c-format
 msgid "Can't preserve date when copying folder %s : %s"
-msgstr "No se puede conservar la fecha de cuando se copia el directorio %s : %s"
+msgstr ""
+"No se puede conservar la fecha de cuando se copia el directorio %s : %s"
 
 #: ../src/File.cpp:622
 #, c-format
@@ -1181,13 +1197,13 @@ msgstr "No se puede conservar la fecha de cuando se copia el directorio %s"
 #: ../src/File.cpp:1162
 #, c-format
 msgid "Source %s doesn't exist"
-msgstr "Fuente %s no existe"
+msgstr "No existe el origen %s"
 
 #: ../src/File.cpp:718 ../src/File.cpp:732 ../src/File.cpp:954
 #: ../src/File.cpp:1034 ../src/File.cpp:1059 ../src/File.cpp:1170
 #, c-format
 msgid "Destination %s is identical to source"
-msgstr "Destino %s es idéntica a la fuente"
+msgstr "Destino %s es idéntico al origen"
 
 #. Set labels for progress dialog
 #: ../src/File.cpp:828
@@ -1201,7 +1217,7 @@ msgstr "De: "
 #: ../src/File.cpp:865
 #, c-format
 msgid "Can't delete folder %s: %s"
-msgstr "No se puede eliminar el directorio %s : %s"
+msgstr "No se puede eliminar el directorio %s: %s"
 
 #: ../src/File.cpp:867
 #, c-format
@@ -1216,7 +1232,7 @@ msgstr "Eliminar: "
 #: ../src/File.cpp:916
 #, c-format
 msgid "Can't delete file %s: %s"
-msgstr "No se puede eliminar el archivo %s : %s"
+msgstr "No se puede eliminar el archivo %s: %s"
 
 #: ../src/File.cpp:918
 #, c-format
@@ -1231,17 +1247,17 @@ msgstr "No se puede cambiar el nombre de destino %s"
 #: ../src/File.cpp:1043
 #, c-format
 msgid "Target %s is a sub-folder of source"
-msgstr "Objetivo %s es una subdirectorio de la fuente"
+msgstr "Destino %s es un subdirectorio del origen"
 
 #: ../src/File.cpp:1240
 #, c-format
 msgid "Can't symlink %s: %s"
-msgstr "Puede no enlace simbólico %s : %s"
+msgstr "No se pudo crear enlace %s: %s"
 
 #: ../src/File.cpp:1242
 #, c-format
 msgid "Can't symlink %s"
-msgstr "No puedo enlace simbólico %s"
+msgstr "No se pudo crear enlace %s"
 
 #: ../src/File.cpp:1284 ../src/File.cpp:1359 ../src/File.cpp:1440
 #: ../src/File.cpp:1513
@@ -1276,22 +1292,22 @@ msgstr "Éxito"
 #: ../src/File.cpp:1687
 #, c-format
 msgid "Folder %s was successfully mounted."
-msgstr "Directorio %s se montó correctamente."
+msgstr "El directorio %s se montó correctamente."
 
 #: ../src/File.cpp:1689
 #, c-format
 msgid "Folder %s was successfully unmounted."
-msgstr "Directorio %s ha sido desmontado con éxito."
+msgstr "El directorio %s ha sido desmontado con éxito."
 
 #. Make and show command window
 #: ../src/File.cpp:1699
 msgid "Install/Upgrade package"
-msgstr "Instalar / Actualizar paquete"
+msgstr "Instalar/Actualizar paquete"
 
 #: ../src/File.cpp:1703 ../src/XFilePackage.cpp:284
 #, c-format
 msgid "Installing package: %s \n"
-msgstr "Instalación del paquete: %s \n"
+msgstr "Instalando el paquete: %s\n"
 
 #. Make and show command window
 #: ../src/File.cpp:1715
@@ -1301,7 +1317,7 @@ msgstr "Desinstalar paquete"
 #: ../src/File.cpp:1719 ../src/XFilePackage.cpp:334
 #, c-format
 msgid "Uninstalling package: %s \n"
-msgstr "Desinstalación del paquete: %s \n"
+msgstr "Desinstalando el paquete: %s\n"
 
 #: ../src/FileDialog.cpp:111
 msgid "&File Name:"
@@ -1321,24 +1337,24 @@ msgid "Read Only"
 msgstr "Solo lectura"
 
 #: ../src/FileDialog.cpp:132 ../src/Preferences.cpp:613
-#: ../src/XFileExplorer.cpp:427
+#: ../src/XFileExplorer.cpp:425
 msgid "Go to previous directory"
 msgstr "Ir al directorio anterior"
 
 #: ../src/FileDialog.cpp:139 ../src/Preferences.cpp:617
-#: ../src/XFileExplorer.cpp:434
+#: ../src/XFileExplorer.cpp:432
 msgid "Go to next directory"
 msgstr "Ir al directorio siguiente"
 
 #: ../src/FileDialog.cpp:145 ../src/Preferences.cpp:621
-#: ../src/XFileExplorer.cpp:441
+#: ../src/XFileExplorer.cpp:439
 msgid "Go to parent directory"
 msgstr "Ir al directorio superior"
 
 #: ../src/FileDialog.cpp:150 ../src/Preferences.cpp:625
-#: ../src/XFileExplorer.cpp:448
+#: ../src/XFileExplorer.cpp:446
 msgid "Go to home directory"
-msgstr "Ir al directorio de inicio"
+msgstr "Ir al directorio personal"
 
 #: ../src/FileDialog.cpp:155 ../src/Preferences.cpp:693
 msgid "Go to working directory"
@@ -1346,22 +1362,22 @@ msgstr "Ir al directorio de trabajo"
 
 #: ../src/FileDialog.cpp:160
 msgid "New folder"
-msgstr "Nuevo directorio"
+msgstr "Directorio nuevo"
 
 #: ../src/FileDialog.cpp:165 ../src/Preferences.cpp:649
-#: ../src/XFileExplorer.cpp:546
+#: ../src/XFileExplorer.cpp:544
 msgid "Big icon list"
-msgstr "Lista de iconos grandes"
+msgstr "Listado con iconos grandes"
 
 #: ../src/FileDialog.cpp:170 ../src/Preferences.cpp:653
-#: ../src/XFileExplorer.cpp:551
+#: ../src/XFileExplorer.cpp:549
 msgid "Small icon list"
-msgstr "Lista de iconos pequeños"
+msgstr "Listado con iconos pequeños"
 
 #: ../src/FileDialog.cpp:175 ../src/Preferences.cpp:657
-#: ../src/XFileExplorer.cpp:556
+#: ../src/XFileExplorer.cpp:554
 msgid "Detailed file list"
-msgstr "Lista detallada de archivos"
+msgstr "Listado detallado de archivos"
 
 #: ../src/FileDialog.cpp:180 ../src/FilePanel.cpp:221
 #: ../src/XFileImage.cpp:377
@@ -1385,7 +1401,7 @@ msgstr "Ocultar miniaturas"
 
 #: ../src/FileDialog.cpp:874
 msgid "Create new folder..."
-msgstr "Crear nuevo directorio..."
+msgstr "Crear directorio nuevo..."
 
 #: ../src/FileDialog.cpp:918
 msgid "Create new file..."
@@ -1393,34 +1409,34 @@ msgstr "Crear un archivo nuevo..."
 
 #: ../src/FileDialog.cpp:918 ../src/FilePanel.cpp:2874
 msgid "New File"
-msgstr "Nuevo archivo"
+msgstr "Archivo nuevo"
 
 #: ../src/FileDialog.cpp:931 ../src/FilePanel.cpp:2887
 #: ../src/FilePanel.cpp:2972
 #, c-format
 msgid "File or folder %s already exists"
-msgstr "Archivo o directorio %s ya existe"
+msgstr "El archivo o directorio %s ya existe"
 
 #: ../src/FileDialog.cpp:1408 ../src/XFileImage.cpp:633
 msgid "Go ho&me"
-msgstr "Ir directorio &personal"
+msgstr "Ir al directorio &personal"
 
 #: ../src/FileDialog.cpp:1409 ../src/XFileImage.cpp:634
 msgid "Go &work"
-msgstr "Ir a directorio de &trabajo"
+msgstr "Ir al directorio de &trabajo"
 
-#: ../src/FileDialog.cpp:1410 ../src/XFileExplorer.cpp:577
+#: ../src/FileDialog.cpp:1410 ../src/XFileExplorer.cpp:575
 msgid "New &file..."
-msgstr "Nuevo &archivo..."
+msgstr "&Archivo nuevo..."
 
 #: ../src/FileDialog.cpp:1411 ../src/FilePanel.cpp:3448
 #: ../src/FilePanel.cpp:3489
 msgid "New f&older..."
-msgstr "Nuevo d&irectorio..."
+msgstr "D&irectorio nuevo..."
 
 #: ../src/FileDialog.cpp:1413 ../src/FilePanel.cpp:3454
-#: ../src/FilePanel.cpp:3495 ../src/XFileExplorer.cpp:784
-#: ../src/XFileExplorer.cpp:814 ../src/XFileImage.cpp:522
+#: ../src/FilePanel.cpp:3495 ../src/XFileExplorer.cpp:782
+#: ../src/XFileExplorer.cpp:812 ../src/XFileImage.cpp:522
 #: ../src/XFileImage.cpp:636
 msgid "&Hidden files"
 msgstr "Archivos &ocultos"
@@ -1436,45 +1452,45 @@ msgid "B&ig icons"
 msgstr "Iconos &grandes"
 
 #: ../src/FileDialog.cpp:1417 ../src/FilePanel.cpp:3458
-#: ../src/FilePanel.cpp:3499 ../src/XFileExplorer.cpp:788
-#: ../src/XFileExplorer.cpp:818 ../src/XFileImage.cpp:542
+#: ../src/FilePanel.cpp:3499 ../src/XFileExplorer.cpp:786
+#: ../src/XFileExplorer.cpp:816 ../src/XFileImage.cpp:542
 #: ../src/XFileImage.cpp:640
 msgid "&Small icons"
 msgstr "Iconos &pequeños"
 
 #: ../src/FileDialog.cpp:1418 ../src/XFileImage.cpp:641
 msgid "Fu&ll file list"
-msgstr "Lista de archivos comple&ta"
+msgstr "Lis&tado detallado de archivos"
 
 #: ../src/FileDialog.cpp:1420 ../src/FilePanel.cpp:3461
-#: ../src/FilePanel.cpp:3502 ../src/XFileExplorer.cpp:791
-#: ../src/XFileExplorer.cpp:821 ../src/XFileImage.cpp:554
+#: ../src/FilePanel.cpp:3502 ../src/XFileExplorer.cpp:789
+#: ../src/XFileExplorer.cpp:819 ../src/XFileImage.cpp:554
 #: ../src/XFileImage.cpp:643
 msgid "&Rows"
 msgstr "&Filas"
 
 #: ../src/FileDialog.cpp:1421 ../src/FilePanel.cpp:3462
-#: ../src/FilePanel.cpp:3503 ../src/XFileExplorer.cpp:792
-#: ../src/XFileExplorer.cpp:822 ../src/XFileImage.cpp:555
+#: ../src/FilePanel.cpp:3503 ../src/XFileExplorer.cpp:790
+#: ../src/XFileExplorer.cpp:820 ../src/XFileImage.cpp:555
 #: ../src/XFileImage.cpp:644
 msgid "&Columns"
 msgstr "&Columnas"
 
 #: ../src/FileDialog.cpp:1422 ../src/FilePanel.cpp:3463
-#: ../src/FilePanel.cpp:3504 ../src/XFileExplorer.cpp:793
-#: ../src/XFileExplorer.cpp:823 ../src/XFileImage.cpp:645
+#: ../src/FilePanel.cpp:3504 ../src/XFileExplorer.cpp:791
+#: ../src/XFileExplorer.cpp:821 ../src/XFileImage.cpp:645
 msgid "Autosize"
-msgstr "Autosize"
+msgstr "Tamaño automático"
 
 #: ../src/FileDialog.cpp:1424 ../src/FilePanel.cpp:3465
-#: ../src/FilePanel.cpp:3506 ../src/XFileExplorer.cpp:795
-#: ../src/XFileExplorer.cpp:825 ../src/XFileImage.cpp:647
+#: ../src/FilePanel.cpp:3506 ../src/XFileExplorer.cpp:793
+#: ../src/XFileExplorer.cpp:823 ../src/XFileImage.cpp:647
 msgid "&Name"
 msgstr "&Nombre"
 
 #: ../src/FileDialog.cpp:1425 ../src/FilePanel.cpp:3466
-#: ../src/FilePanel.cpp:3507 ../src/XFileExplorer.cpp:796
-#: ../src/XFileExplorer.cpp:826 ../src/XFileImage.cpp:648
+#: ../src/FilePanel.cpp:3507 ../src/XFileExplorer.cpp:794
+#: ../src/XFileExplorer.cpp:824 ../src/XFileImage.cpp:648
 msgid "Si&ze"
 msgstr "Ta&maño"
 
@@ -1484,8 +1500,8 @@ msgid "&Type"
 msgstr "&Tipo"
 
 #: ../src/FileDialog.cpp:1427 ../src/FilePanel.cpp:3468
-#: ../src/FilePanel.cpp:3509 ../src/XFileExplorer.cpp:798
-#: ../src/XFileExplorer.cpp:828 ../src/XFileImage.cpp:650
+#: ../src/FilePanel.cpp:3509 ../src/XFileExplorer.cpp:796
+#: ../src/XFileExplorer.cpp:826 ../src/XFileImage.cpp:650
 msgid "E&xtension"
 msgstr "E&xtensión"
 
@@ -1510,8 +1526,8 @@ msgid "Dir&ectories first"
 msgstr "Primero Dir&ectorios"
 
 #: ../src/FileDialog.cpp:1435 ../src/FilePanel.cpp:3477
-#: ../src/FilePanel.cpp:3518 ../src/XFileExplorer.cpp:808
-#: ../src/XFileExplorer.cpp:838 ../src/XFileImage.cpp:658
+#: ../src/FilePanel.cpp:3518 ../src/XFileExplorer.cpp:806
+#: ../src/XFileExplorer.cpp:836 ../src/XFileImage.cpp:658
 msgid "Re&verse order"
 msgstr "Orden &inverso"
 
@@ -1555,7 +1571,7 @@ msgstr "Europa del Este"
 
 #: ../src/FontDialog.cpp:86
 msgid "South European"
-msgstr "Del sur de Europa"
+msgstr "Sur de Europa"
 
 #: ../src/FontDialog.cpp:87
 msgid "North European"
@@ -1603,7 +1619,7 @@ msgstr "Ruso"
 
 #: ../src/FontDialog.cpp:98
 msgid "Central European (cp1250)"
-msgstr "Central Europeo (cp1250)"
+msgstr "Europa Central (cp1250)"
 
 #: ../src/FontDialog.cpp:99
 msgid "Russian (cp1251)"
@@ -1648,7 +1664,7 @@ msgstr "UNICODE"
 #. Set width
 #: ../src/FontDialog.cpp:112
 msgid "Set Width:"
-msgstr "Configurar el ancho:"
+msgstr "Establecer ancho:"
 
 #: ../src/FontDialog.cpp:116
 msgid "Ultra condensed"
@@ -1656,7 +1672,7 @@ msgstr "Ultra condensada"
 
 #: ../src/FontDialog.cpp:117
 msgid "Extra condensed"
-msgstr "Extra Condensed"
+msgstr "Extra condensada"
 
 #: ../src/FontDialog.cpp:118
 msgid "Condensed"
@@ -1689,7 +1705,7 @@ msgstr "Ultra ampliada"
 #. Pitch
 #: ../src/FontDialog.cpp:128
 msgid "Pitch:"
-msgstr "Paso:"
+msgstr "Espaciado:"
 
 #: ../src/FontDialog.cpp:132
 msgid "Fixed"
@@ -1705,16 +1721,16 @@ msgstr "Escalable:"
 
 #: ../src/FontDialog.cpp:142
 msgid "All Fonts:"
-msgstr "Todas las fuentes:"
+msgstr "Todas las tipografías:"
 
 #: ../src/FontDialog.cpp:146
 msgid "Preview:"
 msgstr "Vista previa:"
 
 #. Space before tab is used to set the correct button height
-#: ../src/MessageBox.cpp:82 ../src/XFileExplorer.cpp:493
+#: ../src/MessageBox.cpp:82 ../src/XFileExplorer.cpp:491
 msgid "Launch Xfe as root"
-msgstr "Inicie Xfe como root"
+msgstr "Inicie Xfe como superusuario"
 
 #: ../src/MessageBox.cpp:96 ../src/MessageBox.cpp:104
 #: ../src/MessageBox.cpp:124
@@ -1727,13 +1743,13 @@ msgid "&Yes"
 msgstr "&Sí"
 
 #: ../src/MessageBox.cpp:110 ../src/MessageBox.cpp:116
-#: ../src/XFileExplorer.cpp:665 ../src/XFilePackage.cpp:144
-#: ../src/XFileImage.cpp:468 ../src/WriteWindow.cpp:755
-#: ../src/ViewWindow.cpp:205
+#: ../src/XFileExplorer.cpp:663 ../src/XFilePackage.cpp:144
+#: ../src/XFileImage.cpp:468 ../src/WriteWindow.cpp:753
+#: ../src/ViewWindow.cpp:203
 msgid "&Quit"
 msgstr "&Salir"
 
-#: ../src/MessageBox.cpp:117 ../src/WriteWindow.cpp:720
+#: ../src/MessageBox.cpp:117 ../src/WriteWindow.cpp:718
 msgid "&Save"
 msgstr "&Guardar"
 
@@ -1741,17 +1757,17 @@ msgstr "&Guardar"
 msgid "Yes for &All"
 msgstr "Sí a &Todo"
 
-#: ../src/MessageBox.cpp:155 ../src/XFileExplorer.cpp:2724
+#: ../src/MessageBox.cpp:155 ../src/XFileExplorer.cpp:2723
 msgid "Enter the user password:"
 msgstr "Introduzca la contraseña de usuario:"
 
-#: ../src/MessageBox.cpp:160 ../src/XFileExplorer.cpp:2729
+#: ../src/MessageBox.cpp:160 ../src/XFileExplorer.cpp:2728
 msgid "Enter the root password:"
-msgstr "Introduzca la contraseña de root:"
+msgstr "Introduzca la contraseña de superusuario:"
 
-#: ../src/MessageBox.cpp:182 ../src/XFileExplorer.cpp:2752
+#: ../src/MessageBox.cpp:182 ../src/XFileExplorer.cpp:2751
 msgid "An error has occurred!"
-msgstr "Un error ha ocurrido!"
+msgstr "!Ha ocurrido un error!"
 
 #: ../src/IconList.cpp:2156 ../src/IconList.cpp:2160 ../src/IconList.cpp:2171
 #: ../src/IconList.cpp:2175 ../src/foxhacks.cpp:152 ../src/foxhacks.cpp:156
@@ -1761,7 +1777,7 @@ msgstr "Nombre: "
 #: ../src/IconList.cpp:2156 ../src/IconList.cpp:2162 ../src/foxhacks.cpp:152
 #: ../src/foxhacks.cpp:156
 msgid "Size in root: "
-msgstr "Talla de la raíz: "
+msgstr "Tamaño de la raíz: "
 
 #: ../src/IconList.cpp:2156 ../src/IconList.cpp:2162 ../src/IconList.cpp:2171
 #: ../src/IconList.cpp:2177 ../src/foxhacks.cpp:152 ../src/foxhacks.cpp:156
@@ -1794,7 +1810,7 @@ msgstr "Ruta original: "
 
 #: ../src/IconList.cpp:2164 ../src/IconList.cpp:2179 ../src/foxhacks.cpp:157
 msgid "Deletion date: "
-msgstr "Fecha de cancelación: "
+msgstr "Fecha de Eliminación: "
 
 #: ../src/IconList.cpp:2171 ../src/IconList.cpp:2177
 msgid "Size: "
@@ -1824,22 +1840,22 @@ msgstr "Fecha de modificación"
 msgid "Permissions"
 msgstr "Permisos"
 
-#: ../src/FileList.cpp:4251 ../src/XFileExplorer.cpp:804
-#: ../src/XFileExplorer.cpp:834
+#: ../src/FileList.cpp:4251 ../src/XFileExplorer.cpp:802
+#: ../src/XFileExplorer.cpp:832
 msgid "Original path"
 msgstr "Ruta original"
 
 #: ../src/FileList.cpp:4252 ../src/FilePanel.cpp:3473
-#: ../src/FilePanel.cpp:3514 ../src/XFileExplorer.cpp:803
-#: ../src/XFileExplorer.cpp:833
+#: ../src/FilePanel.cpp:3514 ../src/XFileExplorer.cpp:801
+#: ../src/XFileExplorer.cpp:831
 msgid "Deletion date"
-msgstr "Fecha de cancelación"
+msgstr "Fecha de Eliminación"
 
 #: ../src/FileList.cpp:4658 ../src/XFileImage.cpp:1116
 #: ../src/XFileImage.cpp:1587 ../src/XFileImage.cpp:1630
 #: ../src/XFileImage.cpp:1702
 msgid "Unable to load image"
-msgstr "No se puede cargar la imagen"
+msgstr "No se pudo cargar la imagen"
 
 #: ../src/FilePanel.cpp:229 ../src/FilePanel.cpp:3355
 msgid "Filter"
@@ -1852,90 +1868,94 @@ msgstr "Estado"
 #: ../src/FilePanel.cpp:860
 #, c-format
 msgid "File %s is an executable text file, what do you want to do?"
-msgstr "El archivo %s es un archivo de texto ejecutable, ¿qué quieres que haga?"
+msgstr "El archivo %s es un archivo de texto ejecutable, ¿qué quiere hacer?"
 
 #: ../src/FilePanel.cpp:861
 msgid "Confirm Execute"
-msgstr "Confirmar Execute"
+msgstr "Confirmar Ejecución"
 
 #. Make and show command window
 #. The CommandWindow object will delete itself when closed!
 #. Make and show command window
-#: ../src/FilePanel.cpp:887 ../src/XFileExplorer.cpp:2662
+#: ../src/FilePanel.cpp:887 ../src/XFileExplorer.cpp:2661
 msgid "Command log"
-msgstr "Comando de registro"
+msgstr "Bitácora de comandos"
 
 #: ../src/FilePanel.cpp:1460
 msgid "To folder:"
-msgstr "A el directorio:"
+msgstr "Al directorio:"
 
 #: ../src/FilePanel.cpp:1884
 #, c-format
 msgid "Can't write to trash location %s: Permission denied"
-msgstr "No se puede escribir a la papelera ubicación %s : Permiso denegado"
+msgstr ""
+"No se puede escribir en la ubicacion de la papelera %s: Permiso denegado"
 
 #: ../src/FilePanel.cpp:1916
 #, c-format
 msgid "Move file %s to trash can?"
-msgstr "Mueva el archivo %s para bote de papelera?"
+msgstr "¿Mover el archivo %s a la papelera?"
 
 #: ../src/FilePanel.cpp:1919
 #, c-format
 msgid "Move %s selected items to trash can?"
-msgstr "Mueva %s elementos seleccionados a la papelera puede?"
+msgstr "¿Mover %s elementos seleccionados a la papelera?"
 
 #: ../src/FilePanel.cpp:1972
 #, c-format
 msgid "File %s is write-protected, move it anyway to trash can?"
-msgstr "El archivo %s está protegido contra escritura, moverlo a la papelera de todos modos no?"
+msgstr ""
+"El archivo %s está protegido contra escritura, ¿moverlo a la papelera de "
+"todos modos?"
 
 #: ../src/FilePanel.cpp:2057
 msgid "Move to trash file operation cancelled!"
-msgstr "Mover a la papelera operación de archivo cancelado!"
+msgstr "¡Cancelada la operaciónd e Mover a la papelera!"
 
 #: ../src/FilePanel.cpp:2182
 #, c-format
 msgid "Restore file %s to its original location %s ?"
-msgstr "Restaurar el archivo %s para su ubicación original %s ?"
+msgstr "¿Restaurar el archivo %s a su ubicación original %s ?"
 
 #: ../src/FilePanel.cpp:2185
 #, c-format
 msgid "Restore %s selected items to their original locations?"
-msgstr "Restaurar %s elementos seleccionados en sus ubicaciones originales?"
+msgstr "¿Restaurar %s elementos seleccionados a sus ubicaciones originales?"
 
 #: ../src/FilePanel.cpp:2224 ../src/FilePanel.cpp:2829
 #: ../src/FilePanel.cpp:3919
 #, c-format
 msgid "Can't create folder %s: %s"
-msgstr "No se puede crear el directorio %s : %s"
+msgstr "No se puede crear el directorio %s: %s"
 
 #: ../src/FilePanel.cpp:2324
 #, c-format
 msgid "Definitively delete file %s ?"
-msgstr "Definitivamente eliminar el archivo %s ?"
+msgstr "¿Eliminar definitivamente el archivo %s ?"
 
 #: ../src/FilePanel.cpp:2327
 #, c-format
 msgid "Definitively delete %s selected items?"
-msgstr "Definitivamente borrar %s elementos seleccionados?"
+msgstr "¿Borrar definitivamente %s elementos seleccionados?"
 
 #: ../src/FilePanel.cpp:2425
 #, c-format
 msgid "File %s is write-protected, delete it anyway?"
-msgstr "El archivo %s está protegido contra escritura, bórrelo de todos modos?"
+msgstr ""
+"El archivo %s está protegido contra escritura, ¿bórrarlo de todos modos?"
 
 #: ../src/FilePanel.cpp:2479
 msgid "Delete file operation cancelled!"
-msgstr "Eliminar operación de archivo cancelado!"
+msgstr "¡Operación de eliminación de archivo cancelada!"
 
 #: ../src/FilePanel.cpp:2874
 msgid "Create new file:"
-msgstr "Crear nuevo archivo:"
+msgstr "Crear archivo nuevo:"
 
 #: ../src/FilePanel.cpp:2895
 #, c-format
 msgid "Can't create file %s: %s"
-msgstr "No se puede crear el archivo %s : %s"
+msgstr "No se puede crear el archivo %s: %s"
 
 #: ../src/FilePanel.cpp:2897
 #, c-format
@@ -1945,7 +1965,7 @@ msgstr "No se puede crear el archivo %s"
 #: ../src/FilePanel.cpp:2910
 #, c-format
 msgid "Can't set permissions in %s: %s"
-msgstr "No se puede establecer permisos en %s : %s"
+msgstr "No se pueden establecer permisos en %s: %s"
 
 #: ../src/FilePanel.cpp:2912
 #, c-format
@@ -1954,11 +1974,11 @@ msgstr "No se puede establecer permisos en %s"
 
 #: ../src/FilePanel.cpp:2954
 msgid "Create new symbolic link:"
-msgstr "Crear un nuevo enlace simbólico:"
+msgstr "Crear un enlace simbólico nuevo:"
 
 #: ../src/FilePanel.cpp:2954
 msgid "New Symlink"
-msgstr "Nueva Symlink"
+msgstr "Enlace nuevo"
 
 #. Select target
 #: ../src/FilePanel.cpp:2977
@@ -1968,7 +1988,7 @@ msgstr "Seleccione el archivo de enlace simbólico referido o el directorio"
 #: ../src/FilePanel.cpp:2987
 #, c-format
 msgid "Symlink source %s does not exist"
-msgstr "Fuente Symlink %s no existe"
+msgstr "No existe el origen del enlace %s"
 
 #: ../src/FilePanel.cpp:3209
 msgid "Open selected file(s) with:"
@@ -1989,12 +2009,12 @@ msgstr "Mostrar todos los archivos:"
 #. Menu items
 #: ../src/FilePanel.cpp:3447
 msgid "New& file..."
-msgstr "Nue&vo archivo..."
+msgstr "Archi&vo nuevo..."
 
 #: ../src/FilePanel.cpp:3449 ../src/FilePanel.cpp:3490
-#: ../src/XFileExplorer.cpp:589
+#: ../src/XFileExplorer.cpp:587
 msgid "New s&ymlink..."
-msgstr "Nuevo &enlace..."
+msgstr "En&lace nuevo..."
 
 #: ../src/FilePanel.cpp:3450 ../src/FilePanel.cpp:3491
 msgid "Fi&lter..."
@@ -2002,7 +2022,7 @@ msgstr "Fi&ltros..."
 
 #: ../src/FilePanel.cpp:3459 ../src/FilePanel.cpp:3500
 msgid "&Full file list"
-msgstr "&Lista de archivos completa"
+msgstr "&Listado de archivos completo"
 
 #: ../src/FilePanel.cpp:3472 ../src/FilePanel.cpp:3513
 msgid "Per&missions"
@@ -2010,9 +2030,9 @@ msgstr "Per&misos"
 
 #: ../src/FilePanel.cpp:3488
 msgid "Ne&w file..."
-msgstr "Nue&vo archivo..."
+msgstr "Archi&vo nuevo..."
 
-#: ../src/FilePanel.cpp:3526 ../src/XFileExplorer.cpp:885
+#: ../src/FilePanel.cpp:3526 ../src/XFileExplorer.cpp:883
 msgid "&Mount"
 msgstr "&Montaje"
 
@@ -2026,7 +2046,7 @@ msgstr "&Abrir"
 
 #: ../src/FilePanel.cpp:3550 ../src/FilePanel.cpp:3552
 msgid "Extr&act to folder "
-msgstr "Extr&aer a directorio"
+msgstr "Extr&aer a directorio "
 
 #: ../src/FilePanel.cpp:3558 ../src/FilePanel.cpp:3565
 #: ../src/FilePanel.cpp:3570
@@ -2038,8 +2058,8 @@ msgid "E&xtract to..."
 msgstr "E&xtraer a..."
 
 #: ../src/FilePanel.cpp:3578 ../src/FilePanel.cpp:3586
-#: ../src/XFileExplorer.cpp:779 ../src/XFileImage.cpp:232
-#: ../src/WriteWindow.cpp:580
+#: ../src/XFileExplorer.cpp:777 ../src/XFileImage.cpp:232
+#: ../src/WriteWindow.cpp:578
 msgid "&View"
 msgstr "&Ver"
 
@@ -2052,14 +2072,14 @@ msgid "Un&install"
 msgstr "Des&instalar"
 
 #: ../src/FilePanel.cpp:3587 ../src/ExecuteBox.cpp:41
-#: ../src/XFileExplorer.cpp:717 ../src/WriteWindow.cpp:568
-#: ../src/ViewWindow.cpp:99
+#: ../src/XFileExplorer.cpp:715 ../src/WriteWindow.cpp:566
+#: ../src/ViewWindow.cpp:97
 msgid "&Edit"
 msgstr "&Editar"
 
 #: ../src/FilePanel.cpp:3594
 msgid "Packages &query "
-msgstr "&Consultar Paquetes"
+msgstr "&Consultar Paquetes "
 
 #: ../src/FilePanel.cpp:3602
 msgid "Copy &to..."
@@ -2078,28 +2098,28 @@ msgstr "P&ropiedades..."
 #: ../src/FilePanel.cpp:3782 ../src/HistInputDialog.cpp:131
 #: ../src/BrowseInputDialog.cpp:119 ../src/ArchInputDialog.cpp:114
 msgid "Select a destination folder"
-msgstr "Seleccione un directorio de destino"
+msgstr "Seleccione un directorio destino"
 
 #: ../src/FilePanel.cpp:3785 ../src/HistInputDialog.cpp:144
 #: ../src/BrowseInputDialog.cpp:130 ../src/ArchInputDialog.cpp:118
 #: ../src/XFilePackage.cpp:230 ../src/XFileImage.cpp:94
-#: ../src/WriteWindow.cpp:1459 ../src/ViewWindow.cpp:478
+#: ../src/WriteWindow.cpp:1457 ../src/ViewWindow.cpp:476
 msgid "All Files"
 msgstr "Todos los archivos"
 
 #. File object
 #: ../src/FilePanel.cpp:4113
 msgid "Package Install/Upgrade"
-msgstr "Paquete Instalar / Actualizar"
+msgstr "Instalación/Actualización de Paquete"
 
 #. File object
 #: ../src/FilePanel.cpp:4161
 msgid "Package Uninstall"
-msgstr "Paquete de desinstalación"
+msgstr "Desinstalación de Paquete"
 
 #: ../src/FilePanel.cpp:4450 ../src/XFilePackage.cpp:802
 msgid "No compatible package manager (rpm or dpkg) found!"
-msgstr "No compatible gestor de paquetes (rpm o dpkg) encontrado!"
+msgstr "¡No se encontró un administrador de paquetes compatbile (rpm o dpkg)!"
 
 #: ../src/FilePanel.cpp:4505
 #, c-format
@@ -2126,11 +2146,11 @@ msgstr "%s en %s elementos seleccionados"
 
 #: ../src/FilePanel.cpp:4587
 msgid "1 item"
-msgstr "1 artículo"
+msgstr "1 elemento"
 
 #: ../src/FilePanel.cpp:4589
 msgid " items"
-msgstr " artículos"
+msgstr " elementos"
 
 #: ../src/FilePanel.cpp:4607
 msgid "Link"
@@ -2143,11 +2163,12 @@ msgstr " - Filtro: %s"
 
 #: ../src/Bookmarks.cpp:88
 msgid "Bookmarks limit number reached. The last bookmark will be deleted..."
-msgstr "Marcadores número ha alcanzado el límite. El último marcador se borrará..."
+msgstr ""
+"Límite en el número de Marcadores alcanzado. El último marcador se borrará..."
 
 #: ../src/Bookmarks.cpp:132
 msgid "Confirm Clear Bookmarks"
-msgstr "Confirmar Borrar marcadores"
+msgstr "Confirmar Borrado de marcadores"
 
 #: ../src/Bookmarks.cpp:132
 msgid "Do you really want to clear all your bookmarks?"
@@ -2161,14 +2182,16 @@ msgstr "C&errar"
 msgid ""
 "\n"
 ">>>> COMMAND CANCELLED <<<<"
-msgstr "\n"
+msgstr ""
+"\n"
 ">>>> COMANDO CANCELADO <<<<"
 
 #: ../src/CommandWindow.cpp:247
 msgid ""
 "\n"
 ">>>> END OF COMMAND <<<<"
-msgstr "\n"
+msgstr ""
+"\n"
 ">>>> FIN DE COMANDO <<<<"
 
 #: ../src/HistInputDialog.cpp:80 ../src/BrowseInputDialog.cpp:72
@@ -2186,11 +2209,11 @@ msgstr "Seleccione un archivo o un directorio destino"
 
 #: ../src/ArchInputDialog.cpp:30
 msgid "Add To Archive"
-msgstr "Añadir al archivo"
+msgstr "Añadir al Archivo"
 
 #: ../src/ArchInputDialog.cpp:50
 msgid "New archive name:"
-msgstr "Nuevo nombre de archivo:"
+msgstr "Nombre de archivo nuevo:"
 
 #: ../src/ArchInputDialog.cpp:62
 msgid "Format:"
@@ -2255,15 +2278,16 @@ msgstr "Opciones"
 
 #: ../src/Preferences.cpp:171
 msgid "Use trash can for file deletion (safe delete)"
-msgstr "Utilice bote de papelera para la eliminación de archivos (seguro borrar)"
+msgstr ""
+"Utilizar la papelera para eliminación de archivos (eliminación cautelosa)"
 
 #: ../src/Preferences.cpp:172
 msgid "Include a command to bypass the trash can (permanent delete)"
-msgstr "Incluir una orden para evitar el bote de papelera (delete permanente)"
+msgstr "Incluir una orden para saltar la papelera (eliminación permanente)"
 
 #: ../src/Preferences.cpp:173
 msgid "Auto save layout"
-msgstr "Auto Guardar diseño"
+msgstr "Auto guardar diseño"
 
 #: ../src/Preferences.cpp:174
 msgid "Save window position"
@@ -2271,33 +2295,35 @@ msgstr "Guardar posición de la ventana"
 
 #: ../src/Preferences.cpp:175
 msgid "Single click directory open"
-msgstr "Un solo clic directorio abierto"
+msgstr "Una sola pulsación abre directorio"
 
 #: ../src/Preferences.cpp:176
 msgid "Single click file open"
-msgstr "Haga clic en Archivo único abierto"
+msgstr "Una sóla pulsación abre archivo"
 
 #: ../src/Preferences.cpp:177
 msgid "Display tooltips in file and directory lists"
-msgstr "Mostrar información sobre herramientas en las listas de archivos y directorios"
+msgstr "Mostrar ayudas emergentes en listados de archivos y directorios"
 
 #: ../src/Preferences.cpp:178
 msgid "Relative resizing of file lists"
-msgstr "Cambiar el tamaño relativo de las listas de archivos"
+msgstr "Cambiar el tamaño relativo de los listados de archivos"
 
 #: ../src/Preferences.cpp:179
 msgid "Display a path linker above file lists"
-msgstr "Mostrar un enlazador ruta anterior listas de archivos"
+msgstr "Mostrar un enlazador de rutas sobre los listados de archivos"
 
 #: ../src/Preferences.cpp:181
 msgid "Notify when applications start up"
-msgstr "Indicarme cuando las aplicaciones en marcha"
+msgstr "Notificar cuando las aplicaciones inicien"
 
 #: ../src/Preferences.cpp:185
 msgid ""
 "Date format used in file and directory lists:\n"
 "(Type 'man strftime' in a terminal for help on the format)"
-msgstr "El formato de fecha utilizado en las listas de archivos y directorios: \n ('strftime hombre Escriba un terminal para obtener ayuda sobre el formato)"
+msgstr ""
+"Formato de fecha utilizado en los listados de archivos y directorios:\n"
+"(Teclee 'man strftime' en una terminal para consultar ayuda sobre el formato)"
 
 #: ../src/Preferences.cpp:191
 msgid "Mouse"
@@ -2305,7 +2331,7 @@ msgstr "Ratón"
 
 #: ../src/Preferences.cpp:192
 msgid "Smooth scrolling in file lists and text windows"
-msgstr "Desplazamiento suave en las listas de archivos y ventanas de texto"
+msgstr "Desplazamiento suave en los listados de archivos y ventanas de texto"
 
 #: ../src/Preferences.cpp:194
 msgid "Mouse scrolling speed:"
@@ -2313,19 +2339,19 @@ msgstr "Velocidad de desplazamiento del ratón:"
 
 #: ../src/Preferences.cpp:200
 msgid "Root mode"
-msgstr "Raíz de modo"
+msgstr "Módo Superusuario"
 
 #: ../src/Preferences.cpp:201
 msgid "Allow root mode"
-msgstr "Permitir modo root"
+msgstr "Permitir modo superusuario"
 
 #: ../src/Preferences.cpp:202
 msgid "Authentication using su (uses root password)"
-msgstr "Autenticación por medio de su (utiliza contraseña de root)"
+msgstr "Autenticación con su (utiliza contraseña de superusuario)"
 
 #: ../src/Preferences.cpp:203
 msgid "Authentication using sudo (uses user password)"
-msgstr "Autenticación por medio de sudo (utiliza contraseña de usuario)"
+msgstr "Autenticación con sudo (utiliza contraseña de usuario)"
 
 #. Second tab - Dialogs
 #: ../src/Preferences.cpp:277
@@ -2338,7 +2364,7 @@ msgstr "Confirmaciones"
 
 #: ../src/Preferences.cpp:280
 msgid "Confirm copy/move/rename/symlink"
-msgstr "Confirmar copiar / mover / renombrar / enlace simbólico"
+msgstr "Confirmar copiar/mover/renombrar/enlazar"
 
 #: ../src/Preferences.cpp:281
 msgid "Confirm drag and drop"
@@ -2346,7 +2372,7 @@ msgstr "Confirmar arrastrar y soltar"
 
 #: ../src/Preferences.cpp:282
 msgid "Confirm move to trash/restore from trash"
-msgstr "Confirmar mover a la papelera / restauración de la papelera"
+msgstr "Confirmar mover a la papelera/restaurar de la papelera"
 
 #: ../src/Preferences.cpp:283
 msgid "Confirm delete"
@@ -2354,15 +2380,15 @@ msgstr "Confirmar eliminación"
 
 #: ../src/Preferences.cpp:284
 msgid "Confirm delete non empty directories"
-msgstr "Confirme borrar directorios vacíos no"
+msgstr "Confirmar borrar directorios no vacíos"
 
 #: ../src/Preferences.cpp:285
 msgid "Confirm overwrite"
-msgstr "Confirmar sobrescritura"
+msgstr "Confirmar sobrescribir"
 
 #: ../src/Preferences.cpp:286
 msgid "Confirm execute text files"
-msgstr "Confirme ejecutar archivos de texto"
+msgstr "Confirmar ejecutar archivos de texto"
 
 #: ../src/Preferences.cpp:288
 msgid "Warnings"
@@ -2370,19 +2396,19 @@ msgstr "Advertencias"
 
 #: ../src/Preferences.cpp:290
 msgid "Warn when mount points are not responding"
-msgstr "Avisar si hay puntos de montaje no están respondiendo"
+msgstr "Avisar cuando los puntos de montaje no respondan"
 
 #: ../src/Preferences.cpp:291
 msgid "Display mount/umount success messages"
-msgstr "Visualización de montaje / desmontaje, mensajes de éxito"
+msgstr "Visualizar mensajes de exito en montajes/desmontajes"
 
 #: ../src/Preferences.cpp:293
 msgid "Warn when date preservation failed"
-msgstr "Avisar si preservación fecha no"
+msgstr "Avisar cuando la preservación de fecha falle"
 
 #: ../src/Preferences.cpp:294
 msgid "Warn if running as root"
-msgstr "Advertir si se ejecuta como root"
+msgstr "Advertir si se ejecuta como superusuario"
 
 #. Third tab - Programs
 #: ../src/Preferences.cpp:328
@@ -2399,11 +2425,11 @@ msgstr "Editor de texto:"
 
 #: ../src/Preferences.cpp:339
 msgid "Text viewer:"
-msgstr "Text Viewer:"
+msgstr "Visor de Texto:"
 
 #: ../src/Preferences.cpp:345
 msgid "Image editor:"
-msgstr "Editor de imágenes:"
+msgstr "Editor de Imágenes:"
 
 #: ../src/Preferences.cpp:351
 msgid "Image viewer:"
@@ -2411,7 +2437,7 @@ msgstr "Visor de imágenes:"
 
 #: ../src/Preferences.cpp:357
 msgid "Archiver:"
-msgstr "Archiver:"
+msgstr "Archivador:"
 
 #: ../src/Preferences.cpp:363
 msgid "Pdf viewer:"
@@ -2419,11 +2445,11 @@ msgstr "Lector de PDF:"
 
 #: ../src/Preferences.cpp:369
 msgid "Audio player:"
-msgstr "Reproductor de audio:"
+msgstr "Reproductor de Audio:"
 
 #: ../src/Preferences.cpp:375
 msgid "Video player:"
-msgstr "Reproductor de vídeo:"
+msgstr "Reproductor de Vídeo:"
 
 #: ../src/Preferences.cpp:381
 msgid "Terminal:"
@@ -2436,19 +2462,19 @@ msgstr "&Temas"
 
 #: ../src/Preferences.cpp:390
 msgid "Color theme"
-msgstr "Tema de color"
+msgstr "Color del tema"
 
 #: ../src/Preferences.cpp:398
 msgid "Custom colors"
-msgstr "Los colores personalizados"
+msgstr "Colores Personalizados"
 
 #: ../src/Preferences.cpp:403
 msgid "Double click to customize the color"
-msgstr "Haga doble clic para modificar el color"
+msgstr "Haga doble click para personalizar color"
 
 #: ../src/Preferences.cpp:405
 msgid "Base color"
-msgstr "Base de color"
+msgstr "Color de base"
 
 #: ../src/Preferences.cpp:406
 msgid "Border color"
@@ -2464,31 +2490,31 @@ msgstr "Color del texto"
 
 #: ../src/Preferences.cpp:409
 msgid "Selection background color"
-msgstr "Selección de color de fondo"
+msgstr "Selección del color de fondo"
 
 #: ../src/Preferences.cpp:410
 msgid "Selection text color"
-msgstr "Selección de color de texto"
+msgstr "Selección del color de texto"
 
 #: ../src/Preferences.cpp:411
 msgid "File list background color"
-msgstr "Lista de ficheros fondo de color"
+msgstr "Color del fondo en los listados"
 
 #: ../src/Preferences.cpp:412
 msgid "File list text color"
-msgstr "Lista de archivos de texto de color"
+msgstr "Color del texto en los listados"
 
 #: ../src/Preferences.cpp:413
 msgid "File list highlight color"
-msgstr "Lista de archivos con color de realce"
+msgstr "Color de resaltado en listados"
 
 #: ../src/Preferences.cpp:414
 msgid "Progress bar color"
-msgstr "El progreso barra de color"
+msgstr "Color en la barra de progreso"
 
 #: ../src/Preferences.cpp:415
 msgid "Attention color"
-msgstr "Atención de color"
+msgstr "Color de Atención"
 
 #: ../src/Preferences.cpp:416
 msgid "Scrollbar color"
@@ -2505,12 +2531,12 @@ msgstr "Estándar (controles clásicos)"
 
 #: ../src/Preferences.cpp:423
 msgid "Clearlooks (modern looking controls)"
-msgstr "Clearlooks (controles modernos que buscan)"
+msgstr "Clearlooks (controles de apariencia moderna)"
 
 #. Find iconpath from the Xfe registry settings or set it to DEFAULTICONPATH
 #: ../src/Preferences.cpp:426
 msgid "Icon theme path"
-msgstr "Icono trayectoria tema"
+msgstr "Ruta a los iconos del tema"
 
 #: ../src/Preferences.cpp:429
 msgid "\tSelect path..."
@@ -2519,15 +2545,15 @@ msgstr "\tSeleccionar ruta..."
 #. Fifth tab - Fonts
 #: ../src/Preferences.cpp:434
 msgid "&Fonts"
-msgstr "&Fuentes"
+msgstr "&Tipo de letra"
 
 #: ../src/Preferences.cpp:436
 msgid "Fonts"
-msgstr "Fuentes"
+msgstr "Tipos de letra"
 
 #: ../src/Preferences.cpp:439
 msgid "Normal font:"
-msgstr "Fuente normal:"
+msgstr "Tipo de letra normal:"
 
 #: ../src/Preferences.cpp:441 ../src/Preferences.cpp:447
 msgid " Select..."
@@ -2535,12 +2561,12 @@ msgstr " Seleccionar..."
 
 #: ../src/Preferences.cpp:445
 msgid "Text font:"
-msgstr "Texto fuente:"
+msgstr "Tipo de letra del texto:"
 
 #. Sixth tab - Key bindings
 #: ../src/Preferences.cpp:452
 msgid "&Key Bindings"
-msgstr "&Asignaciones de teclas"
+msgstr "&Atajos de teclado"
 
 #: ../src/Preferences.cpp:454 ../src/Keybindings.cpp:63
 msgid "Key Bindings"
@@ -2548,32 +2574,32 @@ msgstr "Atajos de teclado"
 
 #: ../src/Preferences.cpp:457
 msgid "Modify key bindings..."
-msgstr "Modificar las asignaciones de teclas..."
+msgstr "Modificar atajos de teclado..."
 
 #. ,0,0,0,0,20,20);
 #: ../src/Preferences.cpp:458
 msgid "Restore default key bindings..."
-msgstr "Restaurar enlaces predeterminados clave..."
+msgstr "Restaurar atajos de teclado predeterminados..."
 
 #: ../src/Preferences.cpp:498
 msgid "Select an icon theme folder or an icon file"
-msgstr "Seleccione un directorio de temas icono o un archivo de icono"
+msgstr "Seleccione un directorio con iconos del tema o un archivo de icono"
 
 #: ../src/Preferences.cpp:561
 msgid "Change Normal Font"
-msgstr "Cambiar la fuente normal"
+msgstr "Cambiar la tipografía normal"
 
 #: ../src/Preferences.cpp:584
 msgid "Change Text Font"
-msgstr "Cambiar la fuente del texto"
+msgstr "Cambiar la tipografía para textos"
 
-#: ../src/Preferences.cpp:629 ../src/XFileExplorer.cpp:456
+#: ../src/Preferences.cpp:629 ../src/XFileExplorer.cpp:454
 msgid "Create new file"
 msgstr "Crear un archivo nuevo"
 
-#: ../src/Preferences.cpp:633 ../src/XFileExplorer.cpp:459
+#: ../src/Preferences.cpp:633 ../src/XFileExplorer.cpp:457
 msgid "Create new folder"
-msgstr "Crear nuevo directorio"
+msgstr "Crear un directorio nuevo"
 
 #: ../src/Preferences.cpp:637
 msgid "Copy to clipboard"
@@ -2583,7 +2609,7 @@ msgstr "Copiar al portapapeles"
 msgid "Cut to clipboard"
 msgstr "Cortar al portapapeles"
 
-#: ../src/Preferences.cpp:645 ../src/XFileExplorer.cpp:473
+#: ../src/Preferences.cpp:645 ../src/XFileExplorer.cpp:471
 msgid "Paste from clipboard"
 msgstr "Pegar desde el portapapeles"
 
@@ -2617,7 +2643,7 @@ msgstr "Alternar mostrar archivos ocultos"
 
 #: ../src/Preferences.cpp:689
 msgid "Toggle display thumbnails"
-msgstr "Alternar visualización de imágenes en miniatura"
+msgstr "Alternar visualización de miniaturas de imágenes"
 
 #: ../src/Preferences.cpp:697
 msgid "Close window"
@@ -2627,30 +2653,30 @@ msgstr "Cerrar ventana"
 msgid "Print file"
 msgstr "Imprimir archivo"
 
-#: ../src/Preferences.cpp:705 ../src/WriteWindow.cpp:684
-#: ../src/WriteWindow.cpp:1910
+#: ../src/Preferences.cpp:705 ../src/WriteWindow.cpp:682
+#: ../src/WriteWindow.cpp:1908
 msgid "Search"
 msgstr "Buscar"
 
 #: ../src/Preferences.cpp:709
 msgid "Search previous"
-msgstr "Buscar en los anteriores"
+msgstr "Buscar anterior"
 
 #: ../src/Preferences.cpp:713
 msgid "Search next"
 msgstr "Buscar siguiente"
 
-#: ../src/Preferences.cpp:722 ../src/XFileExplorer.cpp:451
+#: ../src/Preferences.cpp:722 ../src/XFileExplorer.cpp:449
 msgid "Refresh panels"
 msgstr "Actualizar paneles"
 
 #: ../src/Preferences.cpp:726
 msgid "Create new symbolic link"
-msgstr "Crear un nuevo enlace simbólico"
+msgstr "Crear un enlace simbólico nuevo"
 
 #: ../src/Preferences.cpp:730
 msgid "File properties"
-msgstr "Las propiedades de archivo"
+msgstr "Propiedades del archivo"
 
 #: ../src/Preferences.cpp:734
 msgid "Move files to trash"
@@ -2662,56 +2688,56 @@ msgstr "Restaurar archivos de papelera"
 
 #: ../src/Preferences.cpp:742
 msgid "Delete files"
-msgstr "Elimine los archivos"
+msgstr "Eliminar archivos"
 
 #: ../src/Preferences.cpp:746
 msgid "Create new window"
-msgstr "Crear una nueva ventana"
+msgstr "Crear una ventana nueva"
 
 #: ../src/Preferences.cpp:750
 msgid "Create new root window"
-msgstr "Crear ventana nueva raíz"
+msgstr "Crear ventana superusuario nueva"
 
-#: ../src/Preferences.cpp:754 ../src/XFileExplorer.cpp:496
-#: ../src/XFileExplorer.cpp:2642
+#: ../src/Preferences.cpp:754 ../src/XFileExplorer.cpp:494
+#: ../src/XFileExplorer.cpp:2641
 msgid "Execute command"
 msgstr "Ejecutar comando"
 
-#: ../src/Preferences.cpp:758 ../src/XFileExplorer.cpp:499
+#: ../src/Preferences.cpp:758 ../src/XFileExplorer.cpp:497
 msgid "Launch terminal"
-msgstr "Lanzamiento de terminales"
+msgstr "Lanzar terminal"
 
 #: ../src/Preferences.cpp:763
 msgid "Mount file system (Linux only)"
-msgstr "Monte el sistema de archivos (Linux)"
+msgstr "Montar el sistema de archivos (sólo Linux)"
 
 #: ../src/Preferences.cpp:767
 msgid "Unmount file system (Linux only)"
-msgstr "Desmonte el sistema de archivos (Linux)"
+msgstr "Desmontar el sistema de archivos (sólo Linux)"
 
 #: ../src/Preferences.cpp:772
 msgid "One panel mode"
-msgstr "Un panel de modo"
+msgstr "Modo Un panel"
 
 #: ../src/Preferences.cpp:776
 msgid "Tree and panel mode"
-msgstr "Árbol y el panel de modo"
+msgstr "Modo Árbol y panel"
 
 #: ../src/Preferences.cpp:780
 msgid "Two panels mode"
-msgstr "Dos paneles de modo"
+msgstr "Modo Dos paneles"
 
 #: ../src/Preferences.cpp:784
 msgid "Tree and two panels mode"
-msgstr "Árbol y el modo de dos paneles"
+msgstr "Modo Árbol y dos paneles"
 
 #: ../src/Preferences.cpp:788
 msgid "Clear location bar"
-msgstr "Bar Borrar ubicación"
+msgstr "Limpiar Barra de Ubicación"
 
 #: ../src/Preferences.cpp:792
 msgid "Rename file"
-msgstr "Cambiar el nombre de archivo"
+msgstr "Renombar archivo"
 
 #: ../src/Preferences.cpp:796
 msgid "Copy files to location"
@@ -2723,11 +2749,11 @@ msgstr "Mover archivos a la ubicación"
 
 #: ../src/Preferences.cpp:804
 msgid "Symlink files to location"
-msgstr "Archivos de enlace simbólico a ubicación"
+msgstr "Enlzar archivos a una ubicación"
 
 #: ../src/Preferences.cpp:808
 msgid "Add bookmark"
-msgstr "Añadir favorito"
+msgstr "Añadir marcador"
 
 #: ../src/Preferences.cpp:812
 msgid "Synchronize panels"
@@ -2735,13 +2761,13 @@ msgstr "Sincronizar los paneles"
 
 #: ../src/Preferences.cpp:816
 msgid "Switch panels"
-msgstr "Paneles de interruptores"
+msgstr "Intercambiar páneles"
 
 #: ../src/Preferences.cpp:820
 msgid "Go to trash can"
-msgstr "Ir al bote de papelera"
+msgstr "Ir a la papelera"
 
-#: ../src/Preferences.cpp:824 ../src/XFileExplorer.cpp:2768
+#: ../src/Preferences.cpp:824 ../src/XFileExplorer.cpp:2767
 msgid "Empty trash can"
 msgstr "Vaciar papelera"
 
@@ -2763,37 +2789,37 @@ msgstr "Filtrar archivos"
 
 #: ../src/Preferences.cpp:849
 msgid "Zoom image to 100%"
-msgstr "Ampliar al 100%"
+msgstr "Ampliar imagen al 100%"
 
 #: ../src/Preferences.cpp:853
 msgid "Zoom to fit window"
-msgstr "Zoom para encajar ventana"
+msgstr "Ampliar para ajustar a la ventana"
 
 #: ../src/Preferences.cpp:857
 msgid "Rotate image to left"
-msgstr "Gire a la izquierda de la imagen"
+msgstr "Girar imagen a la izquierda"
 
 #: ../src/Preferences.cpp:861
 msgid "Rotate image to right"
-msgstr "Gire a la derecha en la imagen para"
+msgstr "Girar imagen a la derecha"
 
 #: ../src/Preferences.cpp:865
 msgid "Mirror image horizontally"
-msgstr "Imagen espejo horizontalmente"
+msgstr "Reflejar imagen horizontalmente"
 
 #: ../src/Preferences.cpp:869
 msgid "Mirror image vertically"
-msgstr "Imagen espejo vertical"
+msgstr "Reflejar imagen verticalmente"
 
 #: ../src/Preferences.cpp:878
 msgid "Create new document"
-msgstr "Crear un nuevo documento"
+msgstr "Crear un documento nuevo"
 
 #: ../src/Preferences.cpp:882
 msgid "Save changes to file"
-msgstr "Guardar cambios en el archivo"
+msgstr "Guardar cambios al archivo"
 
-#: ../src/Preferences.cpp:886 ../src/WriteWindow.cpp:667
+#: ../src/Preferences.cpp:886 ../src/WriteWindow.cpp:665
 msgid "Goto line"
 msgstr "Ir a la línea"
 
@@ -2811,19 +2837,19 @@ msgstr "Reemplazar cadena"
 
 #: ../src/Preferences.cpp:902
 msgid "Toggle word wrap mode"
-msgstr "Palabra Alternar modo de ajuste"
+msgstr "Alternar el modo Ajuste de texto"
 
 #: ../src/Preferences.cpp:906
 msgid "Toggle line numbers mode"
-msgstr "Activar el modo de línea números"
+msgstr "Activar el modo Numeración de líneas"
 
 #: ../src/Preferences.cpp:910
 msgid "Toggle lower case mode"
-msgstr "Activar el modo de menor caso"
+msgstr "Activar el modo Minúsculas"
 
 #: ../src/Preferences.cpp:914
 msgid "Toggle upper case mode"
-msgstr "Activar el modo de mayúsculas"
+msgstr "Activar el modo Mayúsculas"
 
 #. Confirmation message
 #: ../src/Preferences.cpp:931
@@ -2831,11 +2857,14 @@ msgid ""
 "Do you really want to restore the default key bindings?\n"
 "\n"
 "All your customizations will be lost!"
-msgstr "¿Realmente desea restaurar las asociaciones de teclas por defecto? \n \nTodos las personalizaciones se perderán!"
+msgstr ""
+"¿Realmente desea restaurar las atajos de teclado predeterminados?\n"
+"\n"
+"¡Todas las personalizaciones se perderán!"
 
 #: ../src/Preferences.cpp:932
 msgid "Restore default key bindings"
-msgstr "Restaurar enlaces de teclado por defecto"
+msgstr "Restaurar atajos de teclado predeterminados"
 
 #. Ask the user if he wants to restart Xfe
 #: ../src/Preferences.cpp:1024 ../src/Preferences.cpp:1552
@@ -2849,43 +2878,57 @@ msgstr "Reanudar"
 msgid ""
 "Key bindings will be changed after restart.\n"
 "Restart X File Explorer now?"
-msgstr "Asociaciones de teclas se pueden cambiar después de reiniciar. \n ¿Reiniciar X File Explorer ahora?"
+msgstr ""
+"Los atajos de teclado se cambiarán tras reiniciar.\n"
+"¿Reiniciar X File Explorer ahora?"
 
 #: ../src/Preferences.cpp:1552
 msgid ""
 "Scrolling mode will be changed after restart.\n"
 "Restart X File Explorer now?"
-msgstr "Modo de desplazamiento se cambiará después de reiniciar. \n ¿Reiniciar X File Explorer ahora?"
+msgstr ""
+"El modo de desplazamiento se cambiará tras reiniciar.\n"
+"¿Reiniciar X File Explorer ahora?"
 
 #: ../src/Preferences.cpp:1557
 msgid ""
 "Theme will be changed after restart.\n"
 "Restart X File Explorer now?"
-msgstr "Tema será cambiado después de reiniciar. \n ¿Reiniciar X File Explorer ahora?"
+msgstr ""
+"El Tema será cambiado tras reiniciar.\n"
+"¿Reiniciar X File Explorer ahora?"
 
 #: ../src/Preferences.cpp:1563
 msgid ""
 "Path linker will be changed after restart.\n"
 "Restart X File Explorer now?"
-msgstr "Enlazador camino será cambiado después de reiniciar. \n ¿Reiniciar X File Explorer ahora?"
+msgstr ""
+"El enlazador de rutas se cambiará tras reiniciar.\n"
+"¿Reiniciar X File Explorer ahora?"
 
 #: ../src/Preferences.cpp:1569
 msgid ""
 "Button style will be changed after restart.\n"
 "Restart X File Explorer now?"
-msgstr "Estilo del botón se cambiará después de reiniciar. \n ¿Reiniciar X File Explorer ahora?"
+msgstr ""
+"El estilo de los botones se cambiará tras reiniciar.\n"
+"¿Reiniciar X File Explorer ahora?"
 
 #: ../src/Preferences.cpp:1575
 msgid ""
 "Normal font will be changed after restart.\n"
 "Restart X File Explorer now?"
-msgstr "Fuente normal será cambiado después de reiniciar. \n ¿Reiniciar X File Explorer ahora?"
+msgstr ""
+"La tipografía normal se cambiara tras reiniciar.\n"
+"¿Reiniciar X File Explorer ahora?"
 
 #: ../src/Preferences.cpp:1581
 msgid ""
 "Text font will be changed after restart.\n"
 "Restart X File Explorer now?"
-msgstr "Fuente del texto cambiará después de reiniciar. \n ¿Reiniciar X File Explorer ahora?"
+msgstr ""
+"La tipografía para texto se cambiará tras reiniciar.\n"
+"¿Reiniciar X File Explorer ahora?"
 
 #: ../src/OverwriteBox.cpp:39
 msgid "&Skip"
@@ -2905,355 +2948,361 @@ msgstr "Ejecutar en &Modo Consola"
 
 #. Close
 #: ../src/TextWindow.cpp:29 ../src/TextWindow.cpp:47
-#: ../src/XFilePackage.cpp:174 ../src/WriteWindow.cpp:728
-#: ../src/ViewWindow.cpp:179
+#: ../src/XFilePackage.cpp:174 ../src/WriteWindow.cpp:726
+#: ../src/ViewWindow.cpp:177
 msgid "&Close"
 msgstr "&Cerrar"
 
-#: ../src/XFileExplorer.cpp:462
+#: ../src/XFileExplorer.cpp:460
 msgid "Create new symlink"
 msgstr "Crear enlace simbólico nuevo"
 
-#: ../src/XFileExplorer.cpp:467
+#: ../src/XFileExplorer.cpp:465
 msgid "Copy selected files to clipboard"
 msgstr "Copiar archivos seleccionados en el portapapeles"
 
-#: ../src/XFileExplorer.cpp:470
+#: ../src/XFileExplorer.cpp:468
 msgid "Cut selected files to clipboard"
 msgstr "Cortar archivos seleccionados al portapapeles"
 
-#: ../src/XFileExplorer.cpp:476
+#: ../src/XFileExplorer.cpp:474
 msgid "Show properties of selected files"
 msgstr "Mostrar propiedades de los archivos seleccionados"
 
-#: ../src/XFileExplorer.cpp:481
+#: ../src/XFileExplorer.cpp:479
 msgid "Move selected files to trash can"
-msgstr "Mueve los archivos seleccionados a la papelera puede"
+msgstr "Mover los archivos seleccionados a la papelera"
 
-#: ../src/XFileExplorer.cpp:484
+#: ../src/XFileExplorer.cpp:482
 msgid "Restore selected files from trash can"
-msgstr "Restaurar archivos seleccionados de papelera"
+msgstr "Restaurar archivos seleccionados de la papelera"
 
-#: ../src/XFileExplorer.cpp:487
+#: ../src/XFileExplorer.cpp:485
 msgid "Delete selected files"
-msgstr "Eliminar archivos seleccionados"
+msgstr "Eliminar los archivos seleccionados"
 
-#: ../src/XFileExplorer.cpp:490
+#: ../src/XFileExplorer.cpp:488
 msgid "Launch Xfe"
 msgstr "Inicie Xfe"
 
-#: ../src/XFileExplorer.cpp:506
+#: ../src/XFileExplorer.cpp:504
 msgid "Mount (Linux only)"
-msgstr "Mount (Linux)"
+msgstr "Montar (sólo Linux)"
 
-#: ../src/XFileExplorer.cpp:511
+#: ../src/XFileExplorer.cpp:509
 msgid "Unmount (Linux only)"
-msgstr "Desmontar (Linux)"
+msgstr "Desmontar (sólo Linux)"
 
-#: ../src/XFileExplorer.cpp:520
+#: ../src/XFileExplorer.cpp:518
 msgid "Show one panel"
 msgstr "Mostrar un panel"
 
-#: ../src/XFileExplorer.cpp:526
+#: ../src/XFileExplorer.cpp:524
 msgid "Show tree and panel"
-msgstr "Mostrar árbol y el panel"
+msgstr "Mostrar árbol y un panel"
 
-#: ../src/XFileExplorer.cpp:532
+#: ../src/XFileExplorer.cpp:530
 msgid "Show two panels"
-msgstr "Muestre dos paneles"
+msgstr "Mostrar dos paneles"
 
-#: ../src/XFileExplorer.cpp:538
+#: ../src/XFileExplorer.cpp:536
 msgid "Show tree and two panels"
 msgstr "Mostrar árbol y dos paneles"
 
-#: ../src/XFileExplorer.cpp:563
+#: ../src/XFileExplorer.cpp:561
 msgid "Clear location"
 msgstr "Borrar ubicación"
 
-#: ../src/XFileExplorer.cpp:568
+#: ../src/XFileExplorer.cpp:566
 msgid "Go to location"
 msgstr "Ir a la ubicación"
 
-#: ../src/XFileExplorer.cpp:583
+#: ../src/XFileExplorer.cpp:581
 msgid "New fo&lder..."
-msgstr "Nuevo di&rectorio..."
+msgstr "&Directorio nuevo..."
 
-#: ../src/XFileExplorer.cpp:595
+#: ../src/XFileExplorer.cpp:593
 msgid "Go &home"
-msgstr "Ir a dir. &personal"
+msgstr "&Ir a directorio personal"
 
-#: ../src/XFileExplorer.cpp:601
+#: ../src/XFileExplorer.cpp:599
 msgid "&Refresh"
-msgstr "&Actualizar"
+msgstr "Actuali&zar"
 
-#: ../src/XFileExplorer.cpp:609 ../src/XFilePackage.cpp:138
-#: ../src/XFileImage.cpp:442 ../src/WriteWindow.cpp:714
-#: ../src/ViewWindow.cpp:173
+#: ../src/XFileExplorer.cpp:607 ../src/XFilePackage.cpp:138
+#: ../src/XFileImage.cpp:442 ../src/WriteWindow.cpp:712
+#: ../src/ViewWindow.cpp:171
 msgid "&Open..."
-msgstr "&Abrir..."
+msgstr "A&brir..."
 
-#: ../src/XFileExplorer.cpp:621
+#: ../src/XFileExplorer.cpp:619
 msgid "&Copy to..."
 msgstr "&Copiar a..."
 
-#: ../src/XFileExplorer.cpp:633
+#: ../src/XFileExplorer.cpp:631
 msgid "&Symlink to..."
 msgstr "&Enlazar a..."
 
-#: ../src/XFileExplorer.cpp:657
+#: ../src/XFileExplorer.cpp:655
 msgid "&Properties..."
 msgstr "&Propiedades..."
 
-#: ../src/XFileExplorer.cpp:671 ../src/XFilePackage.cpp:121
-#: ../src/XFileImage.cpp:220 ../src/WriteWindow.cpp:564
-#: ../src/ViewWindow.cpp:95
+#: ../src/XFileExplorer.cpp:669 ../src/XFilePackage.cpp:121
+#: ../src/XFileImage.cpp:220 ../src/WriteWindow.cpp:562
+#: ../src/ViewWindow.cpp:93
 msgid "&File"
 msgstr "&Archivo"
 
-#: ../src/XFileExplorer.cpp:696
+#: ../src/XFileExplorer.cpp:694
 msgid "&Select all"
 msgstr "&Seleccionar todo"
 
-#: ../src/XFileExplorer.cpp:702
+#: ../src/XFileExplorer.cpp:700
 msgid "&Deselect all"
-msgstr "&Deseleccionar todo,"
+msgstr "Dese&leccionar todo,"
 
-#: ../src/XFileExplorer.cpp:708
+#: ../src/XFileExplorer.cpp:706
 msgid "&Invert selection"
 msgstr "&Invertir selección"
 
-#: ../src/XFileExplorer.cpp:715
+#: ../src/XFileExplorer.cpp:713
 msgid "P&references"
-msgstr "P&referencias"
+msgstr "Pre&ferencias"
 
-#: ../src/XFileExplorer.cpp:721
+#: ../src/XFileExplorer.cpp:719
 msgid "&Add bookmark"
-msgstr "&Añadir marcador"
+msgstr "Añadir &marcador"
+
+#: ../src/XFileExplorer.cpp:747
+msgid "&Clear bookmarks"
+msgstr "E&liminar marcador"
 
 #: ../src/XFileExplorer.cpp:749
-msgid "&Clear bookmarks"
-msgstr "&Eliminar marcador"
-
-#: ../src/XFileExplorer.cpp:751
 msgid "&Bookmarks"
 msgstr "&Marcadores"
 
-#: ../src/XFileExplorer.cpp:755
+#: ../src/XFileExplorer.cpp:753
 msgid "&General toolbar"
-msgstr "General &barra de herramientas"
+msgstr "Barra de herramientas &general"
+
+#: ../src/XFileExplorer.cpp:754
+msgid "&Tools toolbar"
+msgstr "Barra de herramientas de u&tilidades"
+
+#: ../src/XFileExplorer.cpp:755
+msgid "&Panel toolbar"
+msgstr "Barra de herramientas del &panel"
 
 #: ../src/XFileExplorer.cpp:756
-msgid "&Tools toolbar"
-msgstr "&Herramientas de la barra de herramientas"
-
-#: ../src/XFileExplorer.cpp:757
-msgid "&Panel toolbar"
-msgstr "Barra de herramientas del panel"
-
-#: ../src/XFileExplorer.cpp:758
 msgid "&Location bar"
 msgstr "Barra de &Ubicación"
 
-#: ../src/XFileExplorer.cpp:759 ../src/ViewWindow.cpp:232
+#: ../src/XFileExplorer.cpp:757 ../src/ViewWindow.cpp:230
 msgid "&Status bar"
-msgstr "Barra de &estado"
+msgstr "Barra de &Estado"
 
-#: ../src/XFileExplorer.cpp:763
+#: ../src/XFileExplorer.cpp:761
 msgid "&One panel"
-msgstr "&Un panel"
+msgstr "U&n panel"
 
-#: ../src/XFileExplorer.cpp:767
+#: ../src/XFileExplorer.cpp:765
 msgid "T&ree and panel"
 msgstr "A&rbol y panel"
 
-#: ../src/XFileExplorer.cpp:771
+#: ../src/XFileExplorer.cpp:769
 msgid "Two &panels"
-msgstr "Dos &paneles"
+msgstr "&Dos paneles"
 
-#: ../src/XFileExplorer.cpp:775
+#: ../src/XFileExplorer.cpp:773
 msgid "Tr&ee and two panels"
 msgstr "Ar&bol y dos paneles"
 
-#: ../src/XFileExplorer.cpp:783
+#: ../src/XFileExplorer.cpp:781
 msgid "&Filter..."
 msgstr "&Filtro..."
 
-#: ../src/XFileExplorer.cpp:785 ../src/XFileExplorer.cpp:815
+#: ../src/XFileExplorer.cpp:783 ../src/XFileExplorer.cpp:813
 #: ../src/XFileImage.cpp:528
 msgid "&Thumbnails"
-msgstr "&Miniaturas"
+msgstr "Minia&turas"
 
-#: ../src/XFileExplorer.cpp:787 ../src/XFileExplorer.cpp:817
+#: ../src/XFileExplorer.cpp:785 ../src/XFileExplorer.cpp:815
 #: ../src/XFileImage.cpp:536
 msgid "&Big icons"
 msgstr "&Iconos grandes"
 
-#: ../src/XFileExplorer.cpp:789 ../src/XFileExplorer.cpp:819
+#: ../src/XFileExplorer.cpp:787 ../src/XFileExplorer.cpp:817
 msgid "F&ull file list"
-msgstr "Lista de archi&vos completa"
+msgstr "Listado de archi&vos completo"
+
+#: ../src/XFileExplorer.cpp:795 ../src/XFileExplorer.cpp:825
+msgid "T&ype"
+msgstr "&Tipo"
 
 #: ../src/XFileExplorer.cpp:797 ../src/XFileExplorer.cpp:827
-msgid "T&ype"
-msgstr "T&ipo"
-
-#: ../src/XFileExplorer.cpp:799 ../src/XFileExplorer.cpp:829
 msgid "D&ate"
 msgstr "F&echa"
 
-#: ../src/XFileExplorer.cpp:800 ../src/XFileExplorer.cpp:830
+#: ../src/XFileExplorer.cpp:798 ../src/XFileExplorer.cpp:828
 msgid "Us&er"
 msgstr "Us&uario"
 
-#: ../src/XFileExplorer.cpp:801 ../src/XFileExplorer.cpp:831
+#: ../src/XFileExplorer.cpp:799 ../src/XFileExplorer.cpp:829
 msgid "Gr&oup"
-msgstr "Gru&po"
+msgstr "&Grupo"
 
-#: ../src/XFileExplorer.cpp:806 ../src/XFileExplorer.cpp:836
+#: ../src/XFileExplorer.cpp:804 ../src/XFileExplorer.cpp:834
 msgid "I&gnore case"
-msgstr "I&gnorar capitalización"
+msgstr "Ignorar capitali&zación"
 
-#: ../src/XFileExplorer.cpp:807 ../src/XFileExplorer.cpp:837
+#: ../src/XFileExplorer.cpp:805 ../src/XFileExplorer.cpp:835
 msgid "&Directories first"
-msgstr "Primero &Directorios"
+msgstr "Primero &directorios"
 
-#: ../src/XFileExplorer.cpp:809 ../src/XFileExplorer.cpp:2483
-#: ../src/XFileExplorer.cpp:2526
+#: ../src/XFileExplorer.cpp:807 ../src/XFileExplorer.cpp:2482
+#: ../src/XFileExplorer.cpp:2525
 msgid "&Left panel"
 msgstr "Panel &Izquierdo"
 
-#: ../src/XFileExplorer.cpp:813
+#: ../src/XFileExplorer.cpp:811
 msgid "&Filter"
-msgstr "&Filtro"
+msgstr "Filt&ro"
 
-#: ../src/XFileExplorer.cpp:839 ../src/XFileExplorer.cpp:2482
-#: ../src/XFileExplorer.cpp:2525
+#: ../src/XFileExplorer.cpp:837 ../src/XFileExplorer.cpp:2481
+#: ../src/XFileExplorer.cpp:2524
 msgid "&Right panel"
-msgstr "&Panel derecho"
+msgstr "&Panel Derecho"
 
-#: ../src/XFileExplorer.cpp:844
+#: ../src/XFileExplorer.cpp:842
 msgid "New &window"
-msgstr "Nueva &ventana"
+msgstr "&Ventana nueva"
 
-#: ../src/XFileExplorer.cpp:850
+#: ../src/XFileExplorer.cpp:848
 msgid "New &root window"
-msgstr "Nueva ventana &raíz"
+msgstr "Ventana s&uperusuario nueva"
 
-#: ../src/XFileExplorer.cpp:858
+#: ../src/XFileExplorer.cpp:856
 msgid "E&xecute command..."
 msgstr "E&jecutar comando..."
 
-#: ../src/XFileExplorer.cpp:864
+#: ../src/XFileExplorer.cpp:862
 msgid "&Terminal"
 msgstr "&Terminal"
 
-#: ../src/XFileExplorer.cpp:870
+#: ../src/XFileExplorer.cpp:868
 msgid "&Synchronize panels"
 msgstr "&Sincronizar paneles"
 
-#: ../src/XFileExplorer.cpp:876
+#: ../src/XFileExplorer.cpp:874
 msgid "Sw&itch panels"
 msgstr "Cam&biar paneles"
 
-#: ../src/XFileExplorer.cpp:889
+#: ../src/XFileExplorer.cpp:887
 msgid "&Unmount"
 msgstr "&Desmontar"
 
-#: ../src/XFileExplorer.cpp:894
+#: ../src/XFileExplorer.cpp:892
 msgid "&Tools"
 msgstr "&Herramientas"
 
-#: ../src/XFileExplorer.cpp:899
+#: ../src/XFileExplorer.cpp:897
 msgid "&Go to trash"
 msgstr "&Ir a la papelera"
 
-#: ../src/XFileExplorer.cpp:905
+#: ../src/XFileExplorer.cpp:903
 msgid "&Trash size"
 msgstr "&Tamaño de la Papelera"
 
-#: ../src/XFileExplorer.cpp:907
+#: ../src/XFileExplorer.cpp:905
 msgid "&Empty trash can"
 msgstr "&Vaciar papelera"
 
-#: ../src/XFileExplorer.cpp:914 ../src/XFileExplorer.cpp:3016
+#: ../src/XFileExplorer.cpp:912 ../src/XFileExplorer.cpp:3015
 msgid "T&rash"
 msgstr "Papele&ra"
 
-#: ../src/XFileExplorer.cpp:919 ../src/XFileExplorer.cpp:926
-#: ../src/XFileExplorer.cpp:3019 ../src/XFileExplorer.cpp:3030
+#: ../src/XFileExplorer.cpp:917 ../src/XFileExplorer.cpp:924
+#: ../src/XFileExplorer.cpp:3018 ../src/XFileExplorer.cpp:3029
 #: ../src/XFilePackage.cpp:129 ../src/XFileImage.cpp:236
-#: ../src/WriteWindow.cpp:588 ../src/ViewWindow.cpp:115
+#: ../src/WriteWindow.cpp:586 ../src/ViewWindow.cpp:113
 msgid "&Help"
-msgstr "&Ayuda"
+msgstr "A&yuda"
 
-#: ../src/XFileExplorer.cpp:925
+#: ../src/XFileExplorer.cpp:923
 msgid "&About X File Explorer"
-msgstr "&Acerca de X File Explorer"
+msgstr "Acerca de &X File Explorer"
 
-#: ../src/XFileExplorer.cpp:1461
+#: ../src/XFileExplorer.cpp:1459
 msgid "Running Xfe as root!"
-msgstr "Ejecución de Xfe como root!"
+msgstr "¡Ejecutando Xfe como superusuario!"
 
-#: ../src/XFileExplorer.cpp:1496
+#: ../src/XFileExplorer.cpp:1494
 #, c-format
 msgid ""
 "Starting from Xfe 1.32, the location of the configuration files has changed "
 "to '%s'.\n"
 "Note you can manually edit the new configuration files to import your old "
 "customizations..."
-msgstr "A partir de Xfe 1,32, la ubicación de los archivos de configuración ha cambiado a ' %s '. \nNota puede editar manualmente los archivos de configuración nuevos para importar las personalizaciones de edad..."
+msgstr ""
+"A partir de Xfe 1.32, la ubicación de los archivos de configuración ha "
+"cambiado a ' %s '.\n"
+"Note que puede editar manualmente los archivos de configuración nuevos para "
+"importar sus personalizaciones antiguas..."
+
+#: ../src/XFileExplorer.cpp:1510
+#, c-format
+msgid "Can't create Xfe config folder %s : %s"
+msgstr "No se puede crear directorio de configuración de Xfe %s : %s"
 
 #: ../src/XFileExplorer.cpp:1512
 #, c-format
-msgid "Can't create Xfe config folder %s : %s"
-msgstr "No se puede crear directorio config Xfe %s : %s"
-
-#: ../src/XFileExplorer.cpp:1514
-#, c-format
 msgid "Can't create Xfe config folder %s"
-msgstr "No se puede crear Xfe config directorio %s"
+msgstr "No se puede crear directorio de configuración de Xfe %s"
 
-#: ../src/XFileExplorer.cpp:1529
+#: ../src/XFileExplorer.cpp:1527
 msgid "No global xferc file found! Please select a configuration file..."
-msgstr "No archivo global xferc encontrado! Por favor, seleccione un archivo de configuración..."
+msgstr ""
+"¡No se encontró archivo global xferc! Por favor, seleccione un archivo de "
+"configuración..."
 
-#: ../src/XFileExplorer.cpp:1533
-msgid "Xfe configuration file"
-msgstr "Xfe archivo de configuración"
+#: ../src/XFileExplorer.cpp:1531
+msgid "XFE configuration file"
+msgstr "Archivo de configuración de Xfe"
 
-#: ../src/XFileExplorer.cpp:1561
+#: ../src/XFileExplorer.cpp:1559
 #, c-format
 msgid "Can't create trash can 'files' folder %s : %s"
-msgstr "No se puede crear el cubo de papelera 'files' directorio %s : %s"
+msgstr "No se pudo crear directorio 'archivos' de la papelera %s : %s"
 
-#: ../src/XFileExplorer.cpp:1563 ../src/XFileExplorer.cpp:2799
+#: ../src/XFileExplorer.cpp:1561 ../src/XFileExplorer.cpp:2798
 #, c-format
 msgid "Can't create trash can 'files' folder %s"
-msgstr "No se puede crear el cubo de papelera 'files' directorio %s"
+msgstr "No se pudo crear directorio 'archivos' de la papelera %s"
 
-#: ../src/XFileExplorer.cpp:1579 ../src/XFileExplorer.cpp:2812
+#: ../src/XFileExplorer.cpp:1577 ../src/XFileExplorer.cpp:2811
 #, c-format
 msgid "Can't create trash can 'info' folder %s: %s"
-msgstr "No se puede crear el cubo de papelera 'info' directorio %s : %s"
+msgstr "No se pudo crear directorio 'info' de la papelera %s: %s"
 
-#: ../src/XFileExplorer.cpp:1581 ../src/XFileExplorer.cpp:2814
+#: ../src/XFileExplorer.cpp:1579 ../src/XFileExplorer.cpp:2813
 #, c-format
 msgid "Can't create trash can 'info' folder %s"
-msgstr "No se puede crear el cubo de papelera 'info' directorio %s"
+msgstr "No se pudo crear directorio 'info' de la papelera %s"
 
-#: ../src/XFileExplorer.cpp:2216
+#: ../src/XFileExplorer.cpp:2214
 msgid "Help"
-msgstr "Ayudar"
+msgstr "Ayuda"
 
-#: ../src/XFileExplorer.cpp:2244
+#: ../src/XFileExplorer.cpp:2242
 #, c-format
 msgid "X File Explorer Version %s"
-msgstr "X File Explorer Versión %s"
+msgstr "X File Explorer versión %s"
+
+#: ../src/XFileExplorer.cpp:2243
+msgid "Based on X WinCommander by Maxim Baranov\n"
+msgstr "Basado en X WinCommander por Maxim Baranov\n"
 
 #: ../src/XFileExplorer.cpp:2245
-msgid "Based on X WinCommander by Maxim Baranov\n"
-msgstr "Con base en X WinCommander por Maxim Baranov \n"
-
-#: ../src/XFileExplorer.cpp:2247
 msgid ""
 "\n"
 "Translators\n"
@@ -3266,6 +3315,7 @@ msgid ""
 "Catalan: muzzol\n"
 "Chinese: Xin Li\n"
 "Chinese (Taïwan): Wei-Lun Chao\n"
+"Colombian Spanish: Vladimir Támara (Pasos de Jesús)\n"
 "Czech: David Vachulka\n"
 "Danish: Jonas Bardino, Vidar Jon Bauge\n"
 "Dutch: Hans Strijards\n"
@@ -3283,55 +3333,88 @@ msgid ""
 "Martin Carr\n"
 "Swedish: Anders F. Bjorklund\n"
 "Turkish: erkaN\n"
-msgstr "\nTranslators \n ------------- \nArgentinian españoles: Bruno Gilberto Luciani \nBrazilian portugués: Eduardo RBS, José Carlos Medeiros, \nPhantom X, Tomas Acauan Schertel \nBosnian: Samir Ribi, Bajrami Emran , Balagija Jasmina, \nBilalovi, Omar Emir Cogo \nCatalan: muzzol \nChinese: Xin Li \nChinese (Taiwán): Wei-Lun Chao \nCzech: David Vachulka \nDanish: Jonas Bardino, Vidar Jon Bauge \nDutch: Strijards Hans \nFrench : Claude Leo Mercier, Roland Baudin \nGerman: Bastian Kleineidam, Joachim Wiedorn, Tim Benke, Jens Körner \nGreek: Nikos Papadopoulos \nHungarian: Attila Szervac, Sandor Sipos \nItalian: Claudio Fontana, Giorgio Moscardi \nJapanese: Karl Skewes \nNorwegian: Vidar Jon Bauge \nPolish: Jacek Dziura, Franciszek Janowski \nPortuguese: Miguel Santinho \nRussian: Dimitri Sertolov, Vad Vad \nSpanish: Felix Medrano Sanz, Vieites 'Basurero' Lucas, \nMartin Carr \nSwedish: Anders F. Bjorklund \nTurkish: Erkan \n"
+msgstr ""
+"\n"
+"Translators\n"
+" -------------\n"
+"Alemán: Bastian Kleineidam, Joachim Wiedorn, Tim Benke, Jens Körner\n"
+"Bosnio: Samir Ribi, Bajrami Emran , Balagija Jasmina,\n"
+"  Bilalovi, Omar Emir Cogo\n"
+"Catalan: muzzol\n"
+"Chino: Xin Li\n"
+"Chino(Taiwán): Wei-Lun Chao\n"
+"Checo: David Vachulka\n"
+"Danes: Jonas Bardino, Vidar Jon Bauge\n"
+"Español: Felix Medrano Sanz, Vieites 'Basurero' Lucas,\n"
+"  Martin Carr\n"
+"Español de Argentina: Bruno Gilberto Luciani\n"
+"Español de Colombia: Vladimir Támara (Pasos de Jesús)\n"
+"Francés: Claude Leo Mercier, Roland Baudin\n"
+"Griego: Nikos Papadopoulos\n"
+"Holandes: Strijards Hans\n"
+"Hungaro: Attila Szervac, Sandor Sipos\n"
+"Italiano: Claudio Fontana, Giorgio Moscardi\n"
+"Japones: Karl Skewes\n"
+"Noruego: Vidar Jon Bauge\n"
+"Polaco: Jacek Dziura, Franciszek Janowski\n"
+"Portugués: Miguel Santinho\n"
+"Portugués de Brazil: Eduardo RBS, José Carlos Medeiros,\n"
+"  Phantom X, Tomas Acauan Schertel\n"
+"Ruso: Dimitri Sertolov, Vad Vad\n"
+"Sueco: Anders F. Bjorklund\n"
+"Turko: Erkan\n"
 
-#: ../src/XFileExplorer.cpp:2277
+#: ../src/XFileExplorer.cpp:2276
 msgid "About X File Explorer"
 msgstr "Acerca de X File Explorer"
 
-#: ../src/XFileExplorer.cpp:2462 ../src/XFileExplorer.cpp:2502
+#: ../src/XFileExplorer.cpp:2461 ../src/XFileExplorer.cpp:2501
 msgid "&Panel"
 msgstr "&Panel"
 
-#: ../src/XFileExplorer.cpp:2642
+#: ../src/XFileExplorer.cpp:2641
 msgid "Execute the command:"
-msgstr "Ejecute el comando:"
+msgstr "Ejecutar el comando:"
 
-#: ../src/XFileExplorer.cpp:2642
+#: ../src/XFileExplorer.cpp:2641
 msgid "Console mode"
 msgstr "Modo consola"
 
 #. Confirmation message
-#: ../src/XFileExplorer.cpp:2767
+#: ../src/XFileExplorer.cpp:2766
 msgid ""
 "Do you really want to empty the trash can?\n"
 "\n"
 "All items will be definitively lost!"
-msgstr "¿Realmente desea vaciar la papelera? \n \nTodos artículos serán definitivamente perdidos!"
+msgstr ""
+"¿Realmente desea vaciar la papelera?\n"
+"\n"
+"¡Todos los elementos se perderán definitivamente!"
 
-#: ../src/XFileExplorer.cpp:2797
+#: ../src/XFileExplorer.cpp:2796
 #, c-format
 msgid "Can't create trash can 'files' folder %s: %s"
-msgstr "No se puede crear el cubo de papelera 'files' directorio %s : %s"
+msgstr "No se puede crear directorio 'archivos' de la papelera %s: %s"
 
-#: ../src/XFileExplorer.cpp:2851
+#: ../src/XFileExplorer.cpp:2850
 #, c-format
 msgid ""
 "Trash size: %s (%s files, %s subfolders)\n"
 "\n"
 "Modified date: %s"
-msgstr "Tamaño de la Papelera: %s (%s archivos, %s subdirectorios)\n"
+msgstr ""
+"Tamaño de la Papelera: %s (%s archivos, %s subdirectorios)\n"
 "\n"
 "Fecha de modificación: %s"
 
-#: ../src/XFileExplorer.cpp:2853
+#: ../src/XFileExplorer.cpp:2852
 msgid "Trash size"
-msgstr "Trash tamaño"
+msgstr "Tamaño de la papelera"
 
-#: ../src/XFileExplorer.cpp:2860
+#: ../src/XFileExplorer.cpp:2859
 #, c-format
 msgid "Trash can 'files' folder %s is not readable!"
-msgstr "Bote de papelera 'files' directorio %s no se puede leer!"
+msgstr "El directorio 'archivos' de la papelera %s no se puede leer!"
 
 #. Usage message
 #: ../src/XFileView.cpp:131
@@ -3347,35 +3430,46 @@ msgid ""
 "    [file1] [file2] [file3]... are the path(s) to the file(s) you want to "
 "open on start up.\n"
 "\n"
-msgstr "\nUso: Xfv [opciones] [archivo1] [archivo2] [archivo3]... \n \n [opciones] puede ser cualquiera de los siguientes: \n \n-h, - help Imprimir (este) y la pantalla de ayuda exit \n-v, -.. Versión para imprimir información de la versión y finaliza \n \n [archivo1] [archivo2] [archivo3]... son la ruta (s) de archivo (s) que desea abrir en el arranque. \n \n"
+msgstr ""
+"\n"
+"Uso: xfv [opciones] [archivo1] [archivo2] [archivo3]...\n"
+"\n"
+"    [opciones] puede ser cualquiera de las siguientes:\n"
+"\n"
+"        -h, --help        Mostrar (esta) pantalla de ayuda y terminar\n"
+"        -v, --version     Mostrar información de la versión y terminar\n"
+"\n"
+"    [archivo1] [archivo2] [archivo3]... son ruta(s) a archivo(s) que desea "
+"abrir al iniciar.\n"
+"\n"
 
 #: ../src/XFileView.cpp:254 ../src/XFileView.cpp:268
-#: ../src/WriteWindow.cpp:1166 ../src/ViewWindow.cpp:813
+#: ../src/WriteWindow.cpp:1164 ../src/ViewWindow.cpp:811
 #: ../src/XFileWrite.cpp:251 ../src/XFileWrite.cpp:265
 msgid "untitled"
-msgstr "intitulado"
+msgstr "Sin título"
 
 #: ../src/XFilePackage.cpp:125 ../src/XFileImage.cpp:228
-#: ../src/WriteWindow.cpp:576 ../src/ViewWindow.cpp:107
+#: ../src/WriteWindow.cpp:574 ../src/ViewWindow.cpp:105
 msgid "&Preferences"
 msgstr "&Preferencias"
 
 #: ../src/XFilePackage.cpp:133
 msgid "Open package file"
-msgstr "Abrir archivo de paquete"
+msgstr "Abrir archivo con paquete"
 
 #. Preferences menu
 #. View Menu entries
 #. Preferences menu
 #: ../src/XFilePackage.cpp:152 ../src/XFileImage.cpp:515
-#: ../src/WriteWindow.cpp:869 ../src/ViewWindow.cpp:231
+#: ../src/WriteWindow.cpp:867 ../src/ViewWindow.cpp:229
 msgid "&Toolbar"
 msgstr "&Barra de herramientas"
 
 #. Help Menu entries
 #: ../src/XFilePackage.cpp:155
 msgid "&About X File Package"
-msgstr "&Acerca de X File Package"
+msgstr "Acerca de &X File Package"
 
 #. Uninstall
 #: ../src/XFilePackage.cpp:177
@@ -3390,19 +3484,21 @@ msgstr "&Instalar/Actualizar"
 #. First item is Description
 #: ../src/XFilePackage.cpp:186
 msgid "&Description"
-msgstr "&Descripción"
+msgstr "De&scripción"
 
 #. Second item is File List
 #: ../src/XFilePackage.cpp:192
 msgid "File &List"
-msgstr "Lista de &Archivos"
+msgstr "Listado de Archi&vos"
 
 #: ../src/XFilePackage.cpp:217
 #, c-format
 msgid ""
 "X File Package Version %s is a simple rpm or deb package manager.\n"
 "\n"
-msgstr "X Package Versión del archivo %s es un gestor de paquetes rpm o deb sencillo . \n \n"
+msgstr ""
+"X File Package versión %s es un sencillo gestor de paquetes rpm o deb.\n"
+"\n"
 
 #: ../src/XFilePackage.cpp:219
 msgid "About X File Package"
@@ -3410,20 +3506,20 @@ msgstr "Acerca de X File Package"
 
 #: ../src/XFilePackage.cpp:231
 msgid "RPM source packages"
-msgstr "Los paquetes RPM de código"
+msgstr "Paquetes RPM con código fuente"
 
 #: ../src/XFilePackage.cpp:232
 msgid "RPM packages"
-msgstr "Los paquetes RPM"
+msgstr "Paquetes RPM"
 
 #: ../src/XFilePackage.cpp:233
 msgid "DEB packages"
-msgstr "DEB paquetes"
+msgstr "Paquetes DEB"
 
-#: ../src/XFilePackage.cpp:237 ../src/WriteWindow.cpp:1471
-#: ../src/ViewWindow.cpp:490
+#: ../src/XFilePackage.cpp:237 ../src/WriteWindow.cpp:1469
+#: ../src/ViewWindow.cpp:488
 msgid "Open Document"
-msgstr "Open Document"
+msgstr "Abrir Documento"
 
 #: ../src/XFilePackage.cpp:260 ../src/XFilePackage.cpp:302
 msgid "No package loaded"
@@ -3437,43 +3533,43 @@ msgstr "Formato de paquete desconocido"
 #. Make and show command window
 #: ../src/XFilePackage.cpp:280
 msgid "Install/Upgrade Package"
-msgstr "Instalar / Actualizar paquetes"
+msgstr "Instalar/Actualizar Paquete"
 
 #. Make and show command window
 #: ../src/XFilePackage.cpp:330
 msgid "Uninstall Package"
-msgstr "Desinstalar paquete"
+msgstr "Desinstalar Paquete"
 
 #: ../src/XFilePackage.cpp:477
 msgid "[RPM package]\n"
-msgstr "[RPM paquete] \n"
+msgstr "[Paquete RPM]\n"
 
 #: ../src/XFilePackage.cpp:482
 msgid "[DEB package]\n"
-msgstr "[Deb] \n"
+msgstr "[Paquete DEB]\n"
 
 #: ../src/XFilePackage.cpp:515
 #, c-format
 msgid "Query of %s failed!"
-msgstr "Consulta de %s failed!"
+msgstr "¡Falló consulta de %s!"
 
 #: ../src/XFilePackage.cpp:539 ../src/XFilePackage.cpp:549
 #: ../src/XFileImage.cpp:1005 ../src/XFileImage.cpp:1013
-#: ../src/WriteWindow.cpp:1035 ../src/WriteWindow.cpp:1045
-#: ../src/WriteWindow.cpp:1057 ../src/ViewWindow.cpp:433
-#: ../src/ViewWindow.cpp:439
+#: ../src/WriteWindow.cpp:1033 ../src/WriteWindow.cpp:1043
+#: ../src/WriteWindow.cpp:1055 ../src/ViewWindow.cpp:431
+#: ../src/ViewWindow.cpp:437
 msgid "Error Loading File"
 msgstr "Error al cargar el archivo"
 
 #: ../src/XFilePackage.cpp:539 ../src/XFileImage.cpp:1005
-#: ../src/ViewWindow.cpp:433
+#: ../src/ViewWindow.cpp:431
 #, c-format
 msgid "Non-existing file: %s"
-msgstr "No-existente del archivo: %s"
+msgstr "No existe el archivo: %s"
 
 #: ../src/XFilePackage.cpp:549 ../src/XFileImage.cpp:1013
-#: ../src/WriteWindow.cpp:1035 ../src/WriteWindow.cpp:1118
-#: ../src/ViewWindow.cpp:439
+#: ../src/WriteWindow.cpp:1033 ../src/WriteWindow.cpp:1116
+#: ../src/ViewWindow.cpp:437
 #, c-format
 msgid "Unable to open file: %s"
 msgstr "No se puede abrir el archivo: %s"
@@ -3492,35 +3588,45 @@ msgid ""
 "    [package] is the path to the rpm or deb package you want to open on "
 "start up.\n"
 "\n"
-msgstr "\nUso: xfp [opciones] [paquete] \n \n [opciones] puede ser cualquiera de los siguientes:. \n \n-h, - help Imprimir (este) la pantalla de ayuda y termina \n-v, - Versión para imprimir información de la versión y sale. \n \n [paquete] es la ruta de acceso al paquete rpm o deb que desea abrir en el arranque. \n \n"
+msgstr ""
+"\n"
+"Uso: xfp [opciones] [paquete]\n"
+"\n"
+"     [opciones] puede ser cualquiera de las siguientes:\n"
+"\n"
+"        -h, --help         Mostrar (esta) pantalla de ayuda y terminar\n"
+"        -v, --versión      Mostrar información de la versión y terminar\n"
+"\n"
+"     [paquete] es la ruta al paquete rpm o deb que desea abrir al iniciar\n"
+"\n"
 
 #: ../src/XFileImage.cpp:95
 msgid "GIF Image"
-msgstr "GIF Imagen"
+msgstr "Imagen GIF"
 
 #: ../src/XFileImage.cpp:96
 msgid "BMP Image"
-msgstr "BMP de imagen"
+msgstr "Imagen BMP"
 
 #: ../src/XFileImage.cpp:97
 msgid "XPM Image"
-msgstr "XPM Image"
+msgstr "Imagen XPM"
 
 #: ../src/XFileImage.cpp:98
 msgid "PCX Image"
-msgstr "PCX imagen"
+msgstr "Imagen PCX"
 
 #: ../src/XFileImage.cpp:99
 msgid "ICO Image"
-msgstr "OIC Imagen"
+msgstr "Imagen OIC"
 
 #: ../src/XFileImage.cpp:100
 msgid "RGB Image"
-msgstr "RGB Imagen"
+msgstr "Imagen RGB"
 
 #: ../src/XFileImage.cpp:101
 msgid "XBM Image"
-msgstr "XBM Imagen"
+msgstr "Imagen XBM"
 
 #: ../src/XFileImage.cpp:102
 msgid "TARGA Image"
@@ -3528,7 +3634,7 @@ msgstr "Imagen TARGA"
 
 #: ../src/XFileImage.cpp:103
 msgid "PPM Image"
-msgstr "PPM Imagen"
+msgstr "Imagen PPM"
 
 #: ../src/XFileImage.cpp:104
 msgid "PNG Image"
@@ -3540,7 +3646,7 @@ msgstr "Imagen JPEG"
 
 #: ../src/XFileImage.cpp:107 ../src/XFileImage.cpp:108
 msgid "TIFF Image"
-msgstr "TIFF Image"
+msgstr "Imagen TIFF"
 
 #: ../src/XFileImage.cpp:224
 msgid "&Image"
@@ -3548,7 +3654,7 @@ msgstr "&Imagen"
 
 #: ../src/XFileImage.cpp:275
 msgid "Go back"
-msgstr "&Volver"
+msgstr "Volver"
 
 #: ../src/XFileImage.cpp:275
 msgid "Move to previous folder."
@@ -3568,7 +3674,7 @@ msgstr "Subir un directorio"
 
 #: ../src/XFileImage.cpp:279
 msgid "Move up to higher folder."
-msgstr "Subir a un directorio superior."
+msgstr "Subir al directorio superior."
 
 #: ../src/XFileImage.cpp:280
 msgid "Go to home folder"
@@ -3608,20 +3714,20 @@ msgstr "Mostrar detalles"
 
 #: ../src/XFileImage.cpp:284 ../src/XFileImage.cpp:548
 msgid "Display detailed folder listing."
-msgstr "Mostrar listado de directorio detallado."
+msgstr "Mostrar listado detallado del directorio."
 
-#: ../src/XFileImage.cpp:389 ../src/WriteWindow.cpp:631
-#: ../src/ViewWindow.cpp:139
+#: ../src/XFileImage.cpp:389 ../src/WriteWindow.cpp:629
+#: ../src/ViewWindow.cpp:137
 msgid "Open"
-msgstr "Abierto"
+msgstr "Abrir"
 
 #: ../src/XFileImage.cpp:389 ../src/XFileImage.cpp:442
 msgid "Open image file."
 msgstr "Abrir archivo de imagen."
 
 #: ../src/XFileImage.cpp:393 ../src/XFileImage.cpp:1230
-#: ../src/WriteWindow.cpp:644 ../src/WriteWindow.cpp:1727
-#: ../src/ViewWindow.cpp:148 ../src/ViewWindow.cpp:567
+#: ../src/WriteWindow.cpp:642 ../src/WriteWindow.cpp:1725
+#: ../src/ViewWindow.cpp:146 ../src/ViewWindow.cpp:565
 msgid "Print"
 msgstr "Imprimir"
 
@@ -3633,11 +3739,11 @@ msgstr "Imprimir archivo de imagen."
 #. Toolbar button: Zoom in
 #: ../src/XFileImage.cpp:401
 msgid "Zoom in"
-msgstr "Zoom in"
+msgstr "Acercar"
 
 #: ../src/XFileImage.cpp:401 ../src/XFileImage.cpp:475
 msgid "Zoom in image."
-msgstr "Ampliar imagen."
+msgstr "Acercar imagen."
 
 #. Toolbar button: Zoom out
 #: ../src/XFileImage.cpp:406
@@ -3646,23 +3752,23 @@ msgstr "Alejar"
 
 #: ../src/XFileImage.cpp:406 ../src/XFileImage.cpp:476
 msgid "Zoom out image."
-msgstr "Alejar la imagen."
+msgstr "Alejar imagen."
 
 #: ../src/XFileImage.cpp:412
 msgid "Zoom 100%"
-msgstr "Zoom 100%"
+msgstr "Ampliar al 100%"
 
 #: ../src/XFileImage.cpp:412 ../src/XFileImage.cpp:479
 msgid "Zoom image to 100%."
-msgstr "Zoom de la imagen a 100%."
+msgstr "Ampliar imagen al 100%."
 
 #: ../src/XFileImage.cpp:416
 msgid "Zoom to fit"
-msgstr "Zoom para encajar"
+msgstr "Ampliar para encajar"
 
 #: ../src/XFileImage.cpp:416 ../src/XFileImage.cpp:485
 msgid "Zoom to fit window."
-msgstr "Zoom para encajar ventana."
+msgstr "Ampliar para encajar a la ventana."
 
 #: ../src/XFileImage.cpp:423
 msgid "Rotate left"
@@ -3690,14 +3796,14 @@ msgstr "Imagen espejo horizontalmente."
 
 #: ../src/XFileImage.cpp:435
 msgid "Mirror vertically"
-msgstr "Espejo vertical"
+msgstr "Reflejar verticalmente"
 
 #: ../src/XFileImage.cpp:435
 msgid "Mirror image vertically."
-msgstr "Imagen espejo vertical."
+msgstr "Reflejar imagen verticalmente."
 
-#: ../src/XFileImage.cpp:448 ../src/WriteWindow.cpp:735
-#: ../src/ViewWindow.cpp:185
+#: ../src/XFileImage.cpp:448 ../src/WriteWindow.cpp:733
+#: ../src/ViewWindow.cpp:183
 msgid "&Print..."
 msgstr "&Impresión..."
 
@@ -3716,7 +3822,7 @@ msgstr "Salir Xfi."
 #. Image Menu entries
 #: ../src/XFileImage.cpp:475
 msgid "Zoom &in"
-msgstr "&Acercar"
+msgstr "A&cercar"
 
 #: ../src/XFileImage.cpp:476
 msgid "Zoom &out"
@@ -3724,11 +3830,11 @@ msgstr "A&lejar"
 
 #: ../src/XFileImage.cpp:479
 msgid "Zoo&m 100%"
-msgstr "A&cercar 100%"
+msgstr "A&mpliar al 100%"
 
 #: ../src/XFileImage.cpp:485
 msgid "Zoom to fit &window"
-msgstr "Zoom para encajar y ventana"
+msgstr "Ampliar para encajar a la &ventana"
 
 #: ../src/XFileImage.cpp:491
 msgid "Rotate &right"
@@ -3756,20 +3862,20 @@ msgstr "Reflejar horizontalmente."
 
 #: ../src/XFileImage.cpp:509
 msgid "Mirror &vertically"
-msgstr "Reflejar &verticalmente"
+msgstr "Reflejar v&erticalmente"
 
 #: ../src/XFileImage.cpp:509
-msgid "Reflejar verticalmente."
-msgstr "Espejo verticalmente."
+msgid "Mirror vertically."
+msgstr "Reflejar verticalmente"
 
-#: ../src/XFileImage.cpp:515 ../src/WriteWindow.cpp:869
-#: ../src/ViewWindow.cpp:231
+#: ../src/XFileImage.cpp:515 ../src/WriteWindow.cpp:867
+#: ../src/ViewWindow.cpp:229
 msgid "Display toolbar."
 msgstr "Mostrar barra de herramientas."
 
 #: ../src/XFileImage.cpp:516
 msgid "&File list"
-msgstr "Lista de &archivos"
+msgstr "Listado de &archivos"
 
 #: ../src/XFileImage.cpp:516
 msgid "Display file list."
@@ -3789,7 +3895,7 @@ msgstr "A&justar la ventana al abrir"
 
 #: ../src/XFileImage.cpp:518
 msgid "Zoom to fit window when opening an image."
-msgstr "Zoom para encajar ventana al abrir una imagen."
+msgstr "Ampliar para encajar a la ventana al abrir una imagen."
 
 #: ../src/XFileImage.cpp:522
 msgid "Show hidden files and directories."
@@ -3809,7 +3915,7 @@ msgstr "Visualizar directorio con iconos pequeños."
 
 #: ../src/XFileImage.cpp:548
 msgid "&Detailed file list"
-msgstr "Lista de archivos &detallada"
+msgstr "Listado de archivos &detallado"
 
 #: ../src/XFileImage.cpp:554
 msgid "View icons row-wise."
@@ -3829,7 +3935,7 @@ msgstr "Autosize nombres de iconos."
 
 #: ../src/XFileImage.cpp:560
 msgid "&About X File Image"
-msgstr "&Acerca de X File Image"
+msgstr "Acerca de &X File Image"
 
 #: ../src/XFileImage.cpp:560
 msgid "About X File Image."
@@ -3840,7 +3946,9 @@ msgstr "Acerca de X File Image."
 msgid ""
 "X File Image Version %s is a simple image viewer.\n"
 "\n"
-msgstr "Archivo de imagen X versión %s es un sencillo visualizador de imágenes. \n \n"
+msgstr ""
+"Archivo de imagen X versión %s es un sencillo visualizador de imágenes.\n"
+"\n"
 
 #: ../src/XFileImage.cpp:987
 msgid "About X File Image"
@@ -3863,12 +3971,14 @@ msgstr "No se puede cargar la imagen, el archivo puede estar dañado"
 msgid "Open Image"
 msgstr "Abrir imagen"
 
-#: ../src/XFileImage.cpp:1230 ../src/WriteWindow.cpp:1727
-#: ../src/ViewWindow.cpp:567
+#: ../src/XFileImage.cpp:1230 ../src/WriteWindow.cpp:1725
+#: ../src/ViewWindow.cpp:565
 msgid ""
 "Print command: \n"
 "(ex: lpr -P <printer>)"
-msgstr "Comando Imprimir: \n (por ejemplo: lpr-P <impresora>)"
+msgstr ""
+"Comando para imprimir: \n"
+" (por ejemplo: lpr -P <impresora>)"
 
 #. Usage message
 #: ../src/XFileImage.cpp:1962
@@ -3883,610 +3993,627 @@ msgid ""
 "\n"
 "    [image] is the path to the image file you want to open on start up.\n"
 "\n"
-msgstr "\nUso: XFI [opciones] [imagen] \n \n [opciones] puede ser cualquiera de los siguientes:. \n \n-h, - help Imprimir (este) la pantalla de ayuda y termina \n-v, - Versión para imprimir información de la versión y sale. \n \n [imagen] es la ruta al archivo de imagen que desea abrir en el arranque. \n \n"
+msgstr ""
+"\n"
+"Uso: xfi [opciones] [imagen]\n"
+"\n"
+"    [opciones] puede ser cualquiera de los siguientes:\n"
+"\n"
+"         -h, --help        Imprimir (este) la pantalla de ayuda y termina\n"
+"         -v, --version     Versión para imprimir información de la versión y "
+"sale.\n"
+"\n"
+"    [imagen] es la ruta al archivo de imagen que desea abrir al iniciar.\n"
+"\n"
 
 #. Construct
 #. Set title
-#: ../src/WriteWindow.cpp:174 ../src/WriteWindow.cpp:181
+#: ../src/WriteWindow.cpp:172 ../src/WriteWindow.cpp:179
 msgid "XFileWrite Preferences"
 msgstr "XFileWrite Preferencias"
 
 #. First tab - Editor
-#: ../src/WriteWindow.cpp:200
+#: ../src/WriteWindow.cpp:198
 msgid "&Editor"
 msgstr "&Editor"
 
-#: ../src/WriteWindow.cpp:202 ../src/WriteWindow.cpp:223
+#: ../src/WriteWindow.cpp:200 ../src/WriteWindow.cpp:221
 msgid "Text"
 msgstr "Texto"
 
-#: ../src/WriteWindow.cpp:205
+#: ../src/WriteWindow.cpp:203
 msgid "Wrap margin:"
 msgstr "Wrap margen:"
 
-#: ../src/WriteWindow.cpp:210
+#: ../src/WriteWindow.cpp:208
 msgid "Tabulation size:"
 msgstr "Tabulación tamaño:"
 
-#: ../src/WriteWindow.cpp:215
+#: ../src/WriteWindow.cpp:213
 msgid "Strip carriage returns:"
 msgstr "Pele los retornos de carro:"
 
 #. Second tab - Colors
-#: ../src/WriteWindow.cpp:221
+#: ../src/WriteWindow.cpp:219
 msgid "&Colors"
 msgstr "&Colores"
 
-#: ../src/WriteWindow.cpp:225
+#: ../src/WriteWindow.cpp:223
 msgid "Lines"
 msgstr "Líneas"
 
-#: ../src/WriteWindow.cpp:228
+#: ../src/WriteWindow.cpp:226
 msgid "Background:"
 msgstr "Antecedentes:"
 
-#: ../src/WriteWindow.cpp:231
+#: ../src/WriteWindow.cpp:229
 msgid "Text:"
 msgstr "Texto:"
 
-#: ../src/WriteWindow.cpp:234
+#: ../src/WriteWindow.cpp:232
 msgid "Selected text background:"
 msgstr "El texto seleccionado de fondo:"
 
-#: ../src/WriteWindow.cpp:237
+#: ../src/WriteWindow.cpp:235
 msgid "Selected text:"
 msgstr "El texto seleccionado:"
 
-#: ../src/WriteWindow.cpp:240
+#: ../src/WriteWindow.cpp:238
 msgid "Highlighted text background:"
 msgstr "El texto resaltado de fondo:"
 
-#: ../src/WriteWindow.cpp:243
+#: ../src/WriteWindow.cpp:241
 msgid "Highlighted text:"
 msgstr "El texto resaltado:"
 
-#: ../src/WriteWindow.cpp:246
+#: ../src/WriteWindow.cpp:244
 msgid "Cursor:"
 msgstr "Cursor:"
 
-#: ../src/WriteWindow.cpp:249
+#: ../src/WriteWindow.cpp:247
 msgid "Line numbers background:"
 msgstr "Los números de línea de fondo:"
 
-#: ../src/WriteWindow.cpp:252
+#: ../src/WriteWindow.cpp:250
 msgid "Line numbers foreground:"
 msgstr "Los números de línea en primer plano:"
 
-#: ../src/WriteWindow.cpp:572 ../src/ViewWindow.cpp:103
+#: ../src/WriteWindow.cpp:570 ../src/ViewWindow.cpp:101
 #: ../src/foxhacks.cpp:639
 msgid "&Search"
 msgstr "&Buscar"
 
-#: ../src/WriteWindow.cpp:584 ../src/ViewWindow.cpp:111
+#: ../src/WriteWindow.cpp:582 ../src/ViewWindow.cpp:109
 msgid "&Window"
-msgstr "&Ventana"
+msgstr "Ve&ntana"
 
 #. Caption before number
-#: ../src/WriteWindow.cpp:610
+#: ../src/WriteWindow.cpp:608
 msgid "  Lines:"
 msgstr "  Líneas:"
 
 #. Caption before number
-#: ../src/WriteWindow.cpp:617
+#: ../src/WriteWindow.cpp:615
 msgid "  Col:"
 msgstr "  Col:"
 
 #. Caption before number
-#: ../src/WriteWindow.cpp:624
+#: ../src/WriteWindow.cpp:622
 msgid "  Line:"
 msgstr "  Línea:"
 
-#: ../src/WriteWindow.cpp:628
+#: ../src/WriteWindow.cpp:626
 msgid "New"
 msgstr "Nuevo"
 
-#: ../src/WriteWindow.cpp:628 ../src/WriteWindow.cpp:708
+#: ../src/WriteWindow.cpp:626 ../src/WriteWindow.cpp:706
 msgid "Create new document."
-msgstr "Crear nuevo documento."
+msgstr "Crear documento nuevo."
 
-#: ../src/WriteWindow.cpp:631 ../src/WriteWindow.cpp:714
+#: ../src/WriteWindow.cpp:629 ../src/WriteWindow.cpp:712
 msgid "Open document file."
 msgstr "Abra el archivo de documentos."
 
-#: ../src/WriteWindow.cpp:634
+#: ../src/WriteWindow.cpp:632
 msgid "Save"
-msgstr "Ahorrar"
+msgstr "Guardar"
 
-#: ../src/WriteWindow.cpp:634
+#: ../src/WriteWindow.cpp:632
 msgid "Save document."
 msgstr "Guardar documento."
 
-#: ../src/WriteWindow.cpp:637 ../src/ViewWindow.cpp:143
+#: ../src/WriteWindow.cpp:635 ../src/ViewWindow.cpp:141
 msgid "Close"
 msgstr "Cerrar"
 
-#: ../src/WriteWindow.cpp:637
+#: ../src/WriteWindow.cpp:635
 msgid "Close document file."
 msgstr "Cerrar archivo del documento."
 
-#: ../src/WriteWindow.cpp:644 ../src/WriteWindow.cpp:735
-#: ../src/ViewWindow.cpp:148 ../src/ViewWindow.cpp:185
+#: ../src/WriteWindow.cpp:642 ../src/WriteWindow.cpp:733
+#: ../src/ViewWindow.cpp:146 ../src/ViewWindow.cpp:183
 msgid "Print document."
 msgstr "Imprimir documento."
 
-#: ../src/WriteWindow.cpp:647 ../src/ViewWindow.cpp:152
+#: ../src/WriteWindow.cpp:645 ../src/ViewWindow.cpp:150
 msgid "Quit"
 msgstr "Dejar de"
 
-#: ../src/WriteWindow.cpp:647 ../src/WriteWindow.cpp:755
+#: ../src/WriteWindow.cpp:645 ../src/WriteWindow.cpp:753
 msgid "Quit X File Write."
 msgstr "Salir X Write File."
 
-#: ../src/WriteWindow.cpp:654 ../src/WriteWindow.cpp:777
-#: ../src/ViewWindow.cpp:158 ../src/ViewWindow.cpp:212
+#: ../src/WriteWindow.cpp:652 ../src/WriteWindow.cpp:775
+#: ../src/ViewWindow.cpp:156 ../src/ViewWindow.cpp:210
 msgid "Copy selection to clipboard."
 msgstr "Copiar la selección al portapapeles."
 
-#: ../src/WriteWindow.cpp:657
+#: ../src/WriteWindow.cpp:655
 msgid "Cut"
 msgstr "Cortar"
 
-#: ../src/WriteWindow.cpp:657 ../src/WriteWindow.cpp:783
+#: ../src/WriteWindow.cpp:655 ../src/WriteWindow.cpp:781
 msgid "Cut selection to clipboard."
 msgstr "Cortar la selección al portapapeles."
 
-#: ../src/WriteWindow.cpp:660
+#: ../src/WriteWindow.cpp:658
 msgid "Paste"
 msgstr "Pegar"
 
-#: ../src/WriteWindow.cpp:660
+#: ../src/WriteWindow.cpp:658
 msgid "Paste clipboard."
 msgstr "Pegar portapapeles."
 
-#: ../src/WriteWindow.cpp:667 ../src/WriteWindow.cpp:808
+#: ../src/WriteWindow.cpp:665 ../src/WriteWindow.cpp:806
 msgid "Goto line number."
 msgstr "Ir a número de línea."
 
-#: ../src/WriteWindow.cpp:674
+#: ../src/WriteWindow.cpp:672
 msgid "Undo"
 msgstr "Deshacer"
 
-#: ../src/WriteWindow.cpp:674 ../src/WriteWindow.cpp:762
+#: ../src/WriteWindow.cpp:672 ../src/WriteWindow.cpp:760
 msgid "Undo last change."
 msgstr "Deshacer último cambio."
 
-#: ../src/WriteWindow.cpp:677
+#: ../src/WriteWindow.cpp:675
 msgid "Redo"
 msgstr "Rehacer"
 
-#: ../src/WriteWindow.cpp:677 ../src/WriteWindow.cpp:768
+#: ../src/WriteWindow.cpp:675 ../src/WriteWindow.cpp:766
 msgid "Redo last undo."
 msgstr "Rehacer última acción."
 
-#: ../src/WriteWindow.cpp:684
+#: ../src/WriteWindow.cpp:682
 msgid "Search text."
 msgstr "Buscar en el texto."
 
-#: ../src/WriteWindow.cpp:687
+#: ../src/WriteWindow.cpp:685
 msgid "Search selection backward"
 msgstr "Buscar hacia atrás selección"
 
-#: ../src/WriteWindow.cpp:687 ../src/WriteWindow.cpp:838
+#: ../src/WriteWindow.cpp:685 ../src/WriteWindow.cpp:836
 msgid "Search backward for selected text."
 msgstr "Buscar hacia atrás para el texto seleccionado."
 
-#: ../src/WriteWindow.cpp:690
+#: ../src/WriteWindow.cpp:688
 msgid "Search selection forward"
 msgstr "Buscar selección hacia adelante"
 
-#: ../src/WriteWindow.cpp:690 ../src/WriteWindow.cpp:844
+#: ../src/WriteWindow.cpp:688 ../src/WriteWindow.cpp:842
 msgid "Search forward for selected text."
 msgstr "Búsqueda hacia delante para el texto seleccionado."
 
-#: ../src/WriteWindow.cpp:697
+#: ../src/WriteWindow.cpp:695
 msgid "Word wrap on"
 msgstr "Ajuste de línea en"
 
-#: ../src/WriteWindow.cpp:697
+#: ../src/WriteWindow.cpp:695
 msgid "Set word wrap on."
 msgstr "Establezca el ajuste de palabras."
 
-#: ../src/WriteWindow.cpp:697
+#: ../src/WriteWindow.cpp:695
 msgid "Word wrap off"
 msgstr "Ajuste de línea de"
 
-#: ../src/WriteWindow.cpp:697
+#: ../src/WriteWindow.cpp:695
 msgid "Set word wrap off."
 msgstr "Establezca el ajuste de línea apagado."
 
-#: ../src/WriteWindow.cpp:700
+#: ../src/WriteWindow.cpp:698
 msgid "Show line numbers"
 msgstr "Mostrar números de línea"
 
-#: ../src/WriteWindow.cpp:700
+#: ../src/WriteWindow.cpp:698
 msgid "Show line numbers."
 msgstr "Mostrar los números de línea."
 
-#: ../src/WriteWindow.cpp:700
+#: ../src/WriteWindow.cpp:698
 msgid "Hide line numbers"
 msgstr "Ocultar números de línea"
 
-#: ../src/WriteWindow.cpp:700
+#: ../src/WriteWindow.cpp:698
 msgid "Hide line numbers."
 msgstr "Ocultar números de línea."
 
-#: ../src/WriteWindow.cpp:708
+#: ../src/WriteWindow.cpp:706
 msgid "&New..."
 msgstr "&Nuevo..."
 
-#: ../src/WriteWindow.cpp:720
+#: ../src/WriteWindow.cpp:718
 msgid "Save changes to file."
 msgstr "Guardar cambios en un archivo."
 
-#: ../src/WriteWindow.cpp:725
+#: ../src/WriteWindow.cpp:723
 msgid "Save &As..."
-msgstr "Guardar &como..."
+msgstr "Guardar c&omo..."
 
-#: ../src/WriteWindow.cpp:725
+#: ../src/WriteWindow.cpp:723
 msgid "Save document to another file."
 msgstr "Guardar documento en otro archivo."
 
-#: ../src/WriteWindow.cpp:728 ../src/ViewWindow.cpp:143
-#: ../src/ViewWindow.cpp:179
+#: ../src/WriteWindow.cpp:726 ../src/ViewWindow.cpp:141
+#: ../src/ViewWindow.cpp:177
 msgid "Close document."
 msgstr "Cierre documento."
 
-#: ../src/WriteWindow.cpp:749 ../src/ViewWindow.cpp:199
+#: ../src/WriteWindow.cpp:747 ../src/ViewWindow.cpp:197
 msgid "&Clear Recent Files"
 msgstr "&Limpiar Archivos Recientes"
 
-#: ../src/WriteWindow.cpp:762 ../src/WriteWindow.cpp:815
+#: ../src/WriteWindow.cpp:760 ../src/WriteWindow.cpp:813
 msgid "&Undo"
 msgstr "&Deshacer"
 
-#: ../src/WriteWindow.cpp:768 ../src/WriteWindow.cpp:816
+#: ../src/WriteWindow.cpp:766 ../src/WriteWindow.cpp:814
 msgid "&Redo"
 msgstr "&Rehacer"
 
-#: ../src/WriteWindow.cpp:773
+#: ../src/WriteWindow.cpp:771
 msgid "Revert to &saved"
 msgstr "Volver al &guardado"
 
-#: ../src/WriteWindow.cpp:773
+#: ../src/WriteWindow.cpp:771
 msgid "Revert to saved document."
 msgstr "Volver al documento guardado."
 
-#: ../src/WriteWindow.cpp:783 ../src/WriteWindow.cpp:819
+#: ../src/WriteWindow.cpp:781 ../src/WriteWindow.cpp:817
 msgid "Cu&t"
 msgstr "Cor&tar"
 
-#: ../src/WriteWindow.cpp:789
+#: ../src/WriteWindow.cpp:787
 msgid "Paste from clipboard."
 msgstr "Pegar desde el portapapeles."
 
-#: ../src/WriteWindow.cpp:796
+#: ../src/WriteWindow.cpp:794
 msgid "Lo&wer-case"
 msgstr "Mi&núscula"
 
-#: ../src/WriteWindow.cpp:796
+#: ../src/WriteWindow.cpp:794
 msgid "Change to lower case."
 msgstr "Cambiar a minúsculas."
 
-#: ../src/WriteWindow.cpp:802
+#: ../src/WriteWindow.cpp:800
 msgid "Upp&er-case"
 msgstr "Mayúsc&ula"
 
-#: ../src/WriteWindow.cpp:802
+#: ../src/WriteWindow.cpp:800
 msgid "Change to upper case."
 msgstr "Cambiar a mayúsculas."
 
-#: ../src/WriteWindow.cpp:808
+#: ../src/WriteWindow.cpp:806
 msgid "&Goto line..."
 msgstr "&Ir a una línea..."
 
-#: ../src/WriteWindow.cpp:821
+#: ../src/WriteWindow.cpp:819
 msgid "Select &All"
 msgstr "Seleccionar &todo"
 
-#: ../src/WriteWindow.cpp:826
+#: ../src/WriteWindow.cpp:824
 msgid "&Search..."
 msgstr "&Buscar..."
 
-#: ../src/WriteWindow.cpp:826
+#: ../src/WriteWindow.cpp:824
 msgid "Search for a string."
 msgstr "Búsqueda de una cadena."
 
-#: ../src/WriteWindow.cpp:832
+#: ../src/WriteWindow.cpp:830
 msgid "&Replace..."
 msgstr "&Remplazar..."
 
-#: ../src/WriteWindow.cpp:832
+#: ../src/WriteWindow.cpp:830
 msgid "Search for a string and replace with another."
 msgstr "Buscar una cadena y sustituirla por otra."
 
-#: ../src/WriteWindow.cpp:838
+#: ../src/WriteWindow.cpp:836
 msgid "Search sel. &backward"
 msgstr "Buscar sel. hacia a&tras"
 
-#: ../src/WriteWindow.cpp:844
+#: ../src/WriteWindow.cpp:842
 msgid "Search sel. &forward"
 msgstr "Buscar sel. hacia &adelante"
 
-#: ../src/WriteWindow.cpp:852
+#: ../src/WriteWindow.cpp:850
 msgid "&Word wrap"
 msgstr "&Ajustar línea"
 
-#: ../src/WriteWindow.cpp:852
+#: ../src/WriteWindow.cpp:850
 msgid "Toggle word wrap mode."
 msgstr "Activar el modo de ajuste de línea."
 
-#: ../src/WriteWindow.cpp:858
+#: ../src/WriteWindow.cpp:856
 msgid "&Line numbers"
 msgstr "&Números de línea"
 
-#: ../src/WriteWindow.cpp:858
+#: ../src/WriteWindow.cpp:856
 msgid "Toggle line numbers mode."
 msgstr "Activar el modo de línea de números."
 
-#: ../src/WriteWindow.cpp:863
+#: ../src/WriteWindow.cpp:861
 msgid "&Overstrike"
 msgstr "&Tachar"
 
-#: ../src/WriteWindow.cpp:863
+#: ../src/WriteWindow.cpp:861
 msgid "Toggle overstrike mode."
 msgstr "Activar el modo de sobreimpresión."
 
-#: ../src/WriteWindow.cpp:865 ../src/ViewWindow.cpp:233
+#: ../src/WriteWindow.cpp:863 ../src/ViewWindow.cpp:231
 msgid "&Font..."
-msgstr "&Fuente..."
+msgstr "Tipo de &letra..."
 
-#: ../src/WriteWindow.cpp:865 ../src/ViewWindow.cpp:233
+#: ../src/WriteWindow.cpp:863 ../src/ViewWindow.cpp:231
 msgid "Change text font."
-msgstr "Cambiar la fuente del texto."
+msgstr "Cambiar la tipografía del texto."
 
-#: ../src/WriteWindow.cpp:866
+#: ../src/WriteWindow.cpp:864
 msgid "&More preferences..."
-msgstr "&Más más preferencias..."
+msgstr "&Más preferencias..."
 
-#: ../src/WriteWindow.cpp:866
+#: ../src/WriteWindow.cpp:864
 msgid "Change other options."
 msgstr "Cambiar otras opciones."
 
-#: ../src/WriteWindow.cpp:870
+#: ../src/WriteWindow.cpp:868
 msgid "&Status line"
-msgstr "Línea de e&stado"
+msgstr "Barra de e&stado"
 
-#: ../src/WriteWindow.cpp:870
+#: ../src/WriteWindow.cpp:868
 msgid "Display status line."
 msgstr "Mostrar barra de estado."
 
-#: ../src/WriteWindow.cpp:926
+#: ../src/WriteWindow.cpp:924
 msgid "&About X File Write..."
-msgstr "&Acerca de X File Write..."
+msgstr "Acerca de &X File Write..."
 
-#: ../src/WriteWindow.cpp:926
+#: ../src/WriteWindow.cpp:924
 msgid "About X File Write."
 msgstr "Acerca de X File Write."
 
-#: ../src/WriteWindow.cpp:1045
+#: ../src/WriteWindow.cpp:1043
 #, c-format
 msgid "File is too big: %s (%d bytes)"
 msgstr "El archivo es demasiado grande: %s ( %d bytes)"
 
-#: ../src/WriteWindow.cpp:1057
+#: ../src/WriteWindow.cpp:1055
 #, c-format
 msgid "Unable to read file: %s"
 msgstr "No se puede leer el archivo: %s"
 
-#: ../src/WriteWindow.cpp:1118 ../src/WriteWindow.cpp:1128
-#: ../src/WriteWindow.cpp:1150
+#: ../src/WriteWindow.cpp:1116 ../src/WriteWindow.cpp:1126
+#: ../src/WriteWindow.cpp:1148
 msgid "Error Saving File"
-msgstr "Error en el archivo de ahorro"
+msgstr "Error al guardar el archivo"
 
-#: ../src/WriteWindow.cpp:1128
+#: ../src/WriteWindow.cpp:1126
 #, c-format
 msgid "File is too big: %s"
 msgstr "El archivo es demasiado grande: %s"
 
-#: ../src/WriteWindow.cpp:1150
+#: ../src/WriteWindow.cpp:1148
 #, c-format
 msgid "File: %s truncated."
 msgstr "Archivo: %s truncado."
 
-#: ../src/WriteWindow.cpp:1171 ../src/ViewWindow.cpp:818
+#: ../src/WriteWindow.cpp:1169 ../src/ViewWindow.cpp:816
 #, c-format
 msgid "untitled%d"
-msgstr "untitled %d"
+msgstr "sintitulo%d"
 
-#: ../src/WriteWindow.cpp:1400
+#: ../src/WriteWindow.cpp:1398
 #, c-format
 msgid ""
 "X File Write Version %s is a simple text editor.\n"
 "\n"
-msgstr "X Write File Versión %s es un editor de texto sencillo. \n \n"
+msgstr ""
+"X Write File Versión %s es un editor de texto sencillo.\n"
+"\n"
 
-#: ../src/WriteWindow.cpp:1402
+#: ../src/WriteWindow.cpp:1400
 msgid "About X File Write"
 msgstr "Acerca de X File Write"
 
-#: ../src/WriteWindow.cpp:1421 ../src/ViewWindow.cpp:591
+#: ../src/WriteWindow.cpp:1419 ../src/ViewWindow.cpp:589
 msgid "Change Font"
-msgstr "Cambiar la fuente"
+msgstr "Cambiar el tipo de letra"
 
-#: ../src/WriteWindow.cpp:1460 ../src/ViewWindow.cpp:479
+#: ../src/WriteWindow.cpp:1458 ../src/ViewWindow.cpp:477
 msgid "Text Files"
 msgstr "Archivos de texto"
 
-#: ../src/WriteWindow.cpp:1461 ../src/ViewWindow.cpp:480
+#: ../src/WriteWindow.cpp:1459 ../src/ViewWindow.cpp:478
 msgid "C Source Files"
-msgstr "C Archivos de código fuente"
+msgstr "Archivos con código fuente en C"
 
-#: ../src/WriteWindow.cpp:1462 ../src/WriteWindow.cpp:1463
-#: ../src/WriteWindow.cpp:1464 ../src/ViewWindow.cpp:481
-#: ../src/ViewWindow.cpp:482 ../src/ViewWindow.cpp:483
+#: ../src/WriteWindow.cpp:1460 ../src/WriteWindow.cpp:1461
+#: ../src/WriteWindow.cpp:1462 ../src/ViewWindow.cpp:479
+#: ../src/ViewWindow.cpp:480 ../src/ViewWindow.cpp:481
 msgid "C++ Source Files"
-msgstr "C + + archivos de código fuente"
+msgstr "Archivos con código fuente en C++"
 
-#: ../src/WriteWindow.cpp:1465 ../src/ViewWindow.cpp:484
+#: ../src/WriteWindow.cpp:1463 ../src/ViewWindow.cpp:482
 msgid "C/C++ Header Files"
-msgstr "C / C + + Archivos de encabezado"
+msgstr "Archivos con encabezados C/C++"
 
-#: ../src/WriteWindow.cpp:1466 ../src/WriteWindow.cpp:1467
-#: ../src/ViewWindow.cpp:485 ../src/ViewWindow.cpp:486
+#: ../src/WriteWindow.cpp:1464 ../src/WriteWindow.cpp:1465
+#: ../src/ViewWindow.cpp:483 ../src/ViewWindow.cpp:484
 msgid "HTML Files"
 msgstr "Archivos HTML"
 
-#: ../src/WriteWindow.cpp:1468 ../src/ViewWindow.cpp:487
+#: ../src/WriteWindow.cpp:1466 ../src/ViewWindow.cpp:485
 msgid "PHP Files"
 msgstr "Archivos PHP"
 
-#: ../src/WriteWindow.cpp:1581
+#: ../src/WriteWindow.cpp:1579
 msgid "Unsaved Document"
-msgstr "Documento sin guardar"
+msgstr "Documento no guardado"
 
-#: ../src/WriteWindow.cpp:1581
+#: ../src/WriteWindow.cpp:1579
 #, c-format
 msgid "Save %s to file?"
-msgstr "Ahorra %s para presentar?"
+msgstr "¿Guardar archivo %s?"
 
-#: ../src/WriteWindow.cpp:1589 ../src/WriteWindow.cpp:1627
+#: ../src/WriteWindow.cpp:1587 ../src/WriteWindow.cpp:1625
 msgid "Save Document"
 msgstr "Guardar documento"
 
-#: ../src/WriteWindow.cpp:1596 ../src/WriteWindow.cpp:1636
+#: ../src/WriteWindow.cpp:1594 ../src/WriteWindow.cpp:1634
 msgid "Overwrite Document"
 msgstr "Sobrescribir documento"
 
-#: ../src/WriteWindow.cpp:1596 ../src/WriteWindow.cpp:1636
+#: ../src/WriteWindow.cpp:1594 ../src/WriteWindow.cpp:1634
 #, c-format
 msgid "Overwrite existing document: %s?"
 msgstr "Sobrescribir existente documento: %s ?"
 
-#: ../src/WriteWindow.cpp:1708
+#: ../src/WriteWindow.cpp:1706
 msgid " (changed)"
 msgstr " (Cambiado)"
 
-#: ../src/WriteWindow.cpp:1797
+#: ../src/WriteWindow.cpp:1795
 msgid "OVR"
 msgstr "OVR"
 
-#: ../src/WriteWindow.cpp:1797
+#: ../src/WriteWindow.cpp:1795
 msgid "INS"
 msgstr "INS"
 
-#: ../src/WriteWindow.cpp:1892
+#: ../src/WriteWindow.cpp:1890
 msgid "File Was Changed"
-msgstr "Archivo se ha cambiado"
+msgstr "El archivo ha cambiado"
 
-#: ../src/WriteWindow.cpp:1892
+#: ../src/WriteWindow.cpp:1890
 #, c-format
 msgid ""
 "%s\n"
 "was changed by another program. Reload this file from disk?"
-msgstr "%s \nwas cambiado por otro programa. Actualizar el archivo desde el disco?"
+msgstr ""
+"%s\n"
+"was cambiado por otro programa. Actualizar el archivo desde el disco?"
 
-#: ../src/WriteWindow.cpp:1946
+#: ../src/WriteWindow.cpp:1944
 msgid "Replace"
 msgstr "Reemplazar"
 
-#: ../src/WriteWindow.cpp:2091
+#: ../src/WriteWindow.cpp:2089
 msgid "Goto Line"
 msgstr "Ir a la línea"
 
-#: ../src/WriteWindow.cpp:2091
+#: ../src/WriteWindow.cpp:2089
 msgid "&Goto line number:"
 msgstr "&Ir a una línea numerada:"
 
 #. Caption before number
-#: ../src/ViewWindow.cpp:128
+#: ../src/ViewWindow.cpp:126
 msgid "Col:"
 msgstr "Col:"
 
 #. Caption before number
-#: ../src/ViewWindow.cpp:135
+#: ../src/ViewWindow.cpp:133
 msgid "Line:"
 msgstr "Línea:"
 
-#: ../src/ViewWindow.cpp:139 ../src/ViewWindow.cpp:173
+#: ../src/ViewWindow.cpp:137 ../src/ViewWindow.cpp:171
 msgid "Open document."
 msgstr "Abrir documento."
 
-#: ../src/ViewWindow.cpp:152 ../src/ViewWindow.cpp:205
+#: ../src/ViewWindow.cpp:150 ../src/ViewWindow.cpp:203
 msgid "Quit Xfv."
 msgstr "Salir Xfv."
 
-#: ../src/ViewWindow.cpp:163 ../src/ViewWindow.cpp:717
+#: ../src/ViewWindow.cpp:161 ../src/ViewWindow.cpp:715
 msgid "Find"
 msgstr "Encontrar"
 
-#: ../src/ViewWindow.cpp:163
+#: ../src/ViewWindow.cpp:161
 msgid "Find string in document."
 msgstr "Buscar cadena en el documento."
 
-#: ../src/ViewWindow.cpp:166
+#: ../src/ViewWindow.cpp:164
 msgid "Find again"
-msgstr "Buscar de nuevo"
+msgstr "Buscar nuevamente"
 
-#: ../src/ViewWindow.cpp:166 ../src/ViewWindow.cpp:225
+#: ../src/ViewWindow.cpp:164 ../src/ViewWindow.cpp:223
 msgid "Find string again."
 msgstr "Buscar cadena de nuevo."
 
-#: ../src/ViewWindow.cpp:219
+#: ../src/ViewWindow.cpp:217
 msgid "&Find..."
 msgstr "&Buscar..."
 
-#: ../src/ViewWindow.cpp:219
+#: ../src/ViewWindow.cpp:217
 msgid "Find a string in a document."
 msgstr "Buscar una cadena en un documento."
 
-#: ../src/ViewWindow.cpp:225
+#: ../src/ViewWindow.cpp:223
 msgid "Find &again"
 msgstr "Buscar otr&a vez"
 
-#: ../src/ViewWindow.cpp:232
+#: ../src/ViewWindow.cpp:230
 msgid "Display status bar."
 msgstr "Mostrar barra de estado."
 
-#: ../src/ViewWindow.cpp:289
+#: ../src/ViewWindow.cpp:287
 msgid "&About X File View"
-msgstr "&Acerca de X File View"
+msgstr "Acerca de &X File View"
 
-#: ../src/ViewWindow.cpp:289
+#: ../src/ViewWindow.cpp:287
 msgid "About X File View."
 msgstr "Acerca de X File View."
 
-#: ../src/ViewWindow.cpp:414
+#: ../src/ViewWindow.cpp:412
 #, c-format
 msgid ""
 "X File View Version %s is a simple text viewer.\n"
 "\n"
-msgstr "Archivo X Ver la Versión %s es un editor de texto sencillo. \n \n"
+msgstr ""
+"Archivo X Ver la Versión %s es un editor de texto sencillo.\n"
+"\n"
 
-#: ../src/ViewWindow.cpp:416
+#: ../src/ViewWindow.cpp:414
 msgid "About X File View"
 msgstr "Acerca de X File View"
 
-#: ../src/ViewWindow.cpp:450
+#: ../src/ViewWindow.cpp:448
 msgid "Error Reading File"
 msgstr "Error al leer el archivo"
 
-#: ../src/ViewWindow.cpp:450
+#: ../src/ViewWindow.cpp:448
 #, c-format
 msgid "Unable to load entire file: %s"
 msgstr "No se puede cargar todo el archivo: %s"
 
-#: ../src/ViewWindow.cpp:723
+#: ../src/ViewWindow.cpp:721
 msgid "&Find"
 msgstr "&Buscar"
 
-#: ../src/ViewWindow.cpp:735
+#: ../src/ViewWindow.cpp:733
 msgid "Not Found"
 msgstr "No se encuentra"
 
-#: ../src/ViewWindow.cpp:735
+#: ../src/ViewWindow.cpp:733
 #, c-format
 msgid "String '%s' not found"
-msgstr "'String %s 'no encontrado"
+msgstr "No se encontró la cadena '%s'"
 
 #. Usage message
 #: ../src/XFileWrite.cpp:128
@@ -4502,7 +4629,18 @@ msgid ""
 "    [file1] [file2] [file3]... are the path(s) to the file(s) you want to "
 "open on start up.\n"
 "\n"
-msgstr "\nUso: Xfw [opciones] [archivo1] [archivo2] [archivo3]... \n \n [opciones] puede ser cualquiera de los siguientes: \n \n-h, - help Imprimir (este) y la pantalla de ayuda exit \n-v, -.. Versión para imprimir información de la versión y finaliza \n \n [archivo1] [archivo2] [archivo3]... son la ruta (s) de archivo (s) que desea abrir en el arranque. \n \n"
+msgstr ""
+"\n"
+"Uso: xfw [opciones] [archivo1] [archivo2] [archivo3]...\n"
+"\n"
+" [opciones] puede ser cualquiera de los siguientes:\n"
+"\n"
+"-h, - help Imprimir (este) y la pantalla de ayuda exit\n"
+"-v, -.. Versión para imprimir información de la versión y finaliza\n"
+"\n"
+" [archivo1] [archivo2] [archivo3]... son la ruta (s) de archivo (s) que "
+"desea abrir en el arranque.\n"
+"\n"
 
 #: ../src/foxhacks.cpp:125
 msgid "Root directory"
@@ -4550,7 +4688,7 @@ msgid ""
 "\n"
 " \n"
 " \n"
-"                                   Xfe, X File Explorer File Manager\n"
+"                                   XFE, X File Explorer File Manager\n"
 " \n"
 "                                     <http://roland65.free.fr/xfe>\n"
 "                                 <http://sourceforge.net/projects/xfe>\n"
@@ -4674,7 +4812,7 @@ msgid ""
 "specific to the xfe application.\n"
 " \n"
 "     * Add bookmark                      - Ctrl-B\n"
-"     * Filter files                      - ctrl-D\n"
+"     * Filter files                      - Ctrl-D\n"
 "     * Execute command                   - Ctrl-E\n"
 "     * Create new symbolic link          - Ctrl-J\n"
 "     * Switch panels                     - Ctrl-K\n"
@@ -4908,7 +5046,378 @@ msgid ""
 "  [Last revision: 6/04/2012]\n"
 " \n"
 "  "
-msgstr "\n \n \n Xfe, X File Explorer File Manager \n \n <http://roland65.free.fr/xfe> \n <http://sourceforge.net/projects/xfe> \n \n \n \n [Este archivo de ayuda se visualiza mejor con una fuente de texto fijo. Se puede establecer mediante la ficha de la fuente del cuadro de diálogo Preferencias] \n \n \n \n Este programa es software libre,. Usted puede redistribuirlo y / o modificarlo bajo los términos de la GNU Licencia \n General Public publicada por la Free Software Foundation, bien de la versión 2, o (a su elección) \n cualquier versión posterior \n \n Este programa se distribuye con la esperanza de que sea útil, pero SIN NINGUNA GARANTÍA;. \n incluso sin la garantía implícita de COMERCIALIZACIÓN o IDONEIDAD PARA UN PROPÓSITO PARTICULAR. \n Vea la Licencia Pública General de GNU para más detalles \n \n \n \n Descripción \n = -. = - = - = - = - = \n \n X File Explorer (xfe) es un administrador de archivos ligero para escrito X11, utilizando el kit de herramientas FOX. \n Es escritorio independiente y fácilmente se puede personalizar. \n Cuenta con el comandante o el Explorador de estilos y es muy rápido y pequeño. \n Xfe se basa en la popular, pero suspendió X Win Comandante , originalmente escrita por Maxim Baranov \n \n \n \n Características \n = -. = - = - = - = \n \n - la interfaz gráfica de usuario muy rápido \n - soporte UTF-8 \n - Comandante / Explorer interfaz con cuatro modos de Administrador de archivos: a) un panel, b) un árbol de directorios \n y el panel de uno, c) dos paneles y d) un árbol de directorios y paneles de dos \n - Paneles de sincronización y conmutación \n - Editor de texto integrado ( X Write File, Xfw) \n - Visor de texto integrado (Vista X File, Xfv) \n - Visor de imágenes integrado (Imagen X File, XFI) \n - el paquete integrado (rpm o deb) espectador / instalador / desinstalador (X Archivo Paquete, xfp) \n - Copiar / Cortar / Pegar archivos desde y hacia su escritorio favorito (GNOME / KDE / XFCE / ROX) \n - Arrastrar y soltar archivos desde y hacia su escritorio favorito (GNOME / KDE / XFCE / ROX) \n - el modo de raíz con la autenticación de su o sudo \n - Línea de estado \n - Las asociaciones de archivos \n - la papelera puede Opcional para operaciones de borrado de archivos (que cumple con los estándar de freedesktop.org) \n - Auto guardar registro \n - Hacer doble clic o archivos individuales y directorios de navegación haga clic en \n - Clic derecho del ratón en el menú emergente de lista de árbol y lista de archivos \n - Cambiar atributos de archivos \n - montar / desmontar dispositivos (sólo Linux) \n - Avisar al punto de montaje no están respondiendo (Sólo Linux) \n - Barras de herramientas \n - Marcadores \n - Atrás y adelante los historiales de navegación de directorios \n - Color temas (GNOME, KDE, Windows...) \n - Icono de temas (Xfe, GNOME, KDE, XFCE, Tango, Windows...) \n - Control temas (estándar o como Clearlooks) \n - Crear archivos (tar, compress, zip, gzip, bzip2, xz y formatos 7zip son compatibles) \n - Extracto de archivos (tar , compress, zip, gzip, bzip2, xz, LZH, RAR, ACE arj y formatos 7zip son compatibles) \n - la información sobre herramientas con las propiedades del archivo \n - las barras de progreso o cuadros de diálogo para operaciones de archivo largos \n - Miniaturas imagen vistas previas \n - asociaciones de teclas configurables \n - la notificación de inicio (opcional) \n - y mucho más ... \n \n \n \n Por defecto las asociaciones de teclas \n = - = - = - = - = - = - = - = - = - = - = \n \n Abajo están los enlaces predeterminados globales clave. Estas combinaciones de teclas son comunes a todas las aplicaciones de archivos X \n \n * Seleccionar todo -. Ctrl-A \n * Copiar al portapapeles - Ctrl-C \n * Buscar - Ctrl-F \n * Buscar anterior - Shift-Ctrl- G \n * Buscar siguiente - Ctrl-G \n * Ir al directorio home - Ctrl-H \n * Invertir selección - Ctrl-I \n * Abrir archivo - Ctrl-O \n * Imprime ficha - Ctrl-P \n * Salir de la aplicación - Ctrl-Q \n * Pegar desde portapapeles - Ctrl-V \n * Cerrar ventana - Ctrl-W \n * Cortar al portapapeles - Ctrl-X \n * Deseleccionar todo - Ctrl-Z \n * Mostrar ayuda - F1 \n * Crear archivo nuevo - F2 \n * Crear nuevo directorio - F7 \n * Big lista de iconos - F10 \n * lista icono pequeño - F11 \n * lista detallada de archivos - F12 \n * Los archivos ocultos de pantalla Toggle - Ctrl-F6 \n * miniaturas CAMBIO DE PANTALLA - Ctrl-F7 \n * Ir al directorio de trabajo - Shift-F2 \n * Ir al directorio superior - Retroceso \n * Vaya al directorio anterior - Ctrl-Retroceso \n * Ir al siguiente directorio - Shift-Backspace \n \n \n Abajo están los archivos predeterminados de X. asociaciones de teclas Explorer. Estas combinaciones de teclas son específicas de la aplicación xfe \n \n * Agregar favorito -. Ctrl-B \n * Los archivos de filtro - ctrl-D \n * Ejecutar comando - Ctrl-E \n * Crear un nuevo enlace simbólico - Ctrl-J \n * Cambiar los paneles - Ctrl-K \n barras * Borrar ubicación - Ctrl-L \n * Montar sistema de archivos (Linux) - Ctrl-M \n * Cambiar el nombre de archivo - Ctrl-N \n * Paneles - Actualizar Ctrl- r \n * Los archivos de enlace a la ubicación - Ctrl-S \n * Lanzamiento de terminales - Ctrl-T \n * Desmontar el sistema de archivos (Linux) - Ctrl-U \n * Sincronización de los paneles - Ctrl-Y \n * Crear nueva ventana - F3 \n * Edición - F4 \n * Copiar archivos a la ubicación - F5 \n * Mover archivos a la ubicación - F6 \n * Propiedades de archivo - F9 \n * Un modo de panel - Ctrl-F1 \n * Árbol y el panel de modo - Ctrl-F2 \n * El modo de dos paneles - Ctrl-F3 \n * Árbol y el modo de dos paneles - Ctrl-F4 \n * Guías de pantalla oculta Toggle - Ctrl-F5 \n * Ir a la papelera puede - Ctrl-F8 \n * Crear una ventana nueva raíz - Shift-F3 \n * View - Mayúsculas + F4 \n * Mover archivos a la papelera puede - Del \n * Restaurar archivos de papelera - Alt-Supr \n * Eliminar archivos - Shift-Del \n * Vaciar papelera - Ctrl-Supr \n \n \n Abajo están los archivos predeterminados de X. asociaciones de teclas imagen. Estas combinaciones de teclas son específicas de la aplicación XFI \n \n * Zoom para ajustar la ventana -. Ctrl-F \n * Imagen espejo horizontalmente - Ctrl-H \n * Ampliar imagen al 100% - Ctrl-I \n * Rotar imagen a izquierda - Ctrl-L \n * Rotar imagen a la derecha - Ctrl-R \n * Imagen espejo verticalmente - Ctrl-V \n \n \n A continuación se presentan el archivo X predeterminado Escribir asociaciones de teclas. Estas combinaciones de teclas son específicas de la aplicación Xfw \n \n * Alternar modo de ajuste de línea -. Ctrl-K \n * Ir a la línea - Ctrl-L \n * Crear nuevo documento - Ctrl-N \n * Reemplazar cadena - Ctrl- R \n * Guardar los cambios en el archivo - Ctrl-S \n * La línea de cambiar el modo de números - Ctrl-T \n * Alternar modo de mayúsculas - Shift-Ctrl-U \n * Activar el modo de menor caso - Ctrl-U \n * Rehacer el último cambio - Ctrl-Y \n * Deshacer último cambio - Ctrl-Z \n \n \n X Ver archivo (Xfv) y el paquete de archivos X (Xfp) sólo utilizar algunos de los atajos de teclado globales \n \n Nota. que todas las asociaciones de teclas por defecto enumerados anteriormente se pueden personalizar en el cuadro de diálogo Preferencias xfe. Sin embargo, \n algunas acciones clave están codificados de una no se puede cambiar. Estos incluyen: \n \n * Ctrl-+ y Ctrl - - acercar y alejar el zoom en la imagen XFI \n * Shift-F10 - menús de la pantalla del contexto en Xfe \n * Volver - entrar en las listas de directorios de archivos, los archivos abiertos, seleccionar acciones de los botones, etc \n * Espacio - entrar en el archivo de listas de directorios \n * Esc - Diálogo de cierre actual, los archivos unselect, etc \n \n \n \n Arrastrar y las operaciones de la gota \n = - = - = - = - = - = - = - = - = - = - = - = - = \n \n Si arrastra un archivo o grupo de archivos o (moviendo el ratón mientras se mantiene pulsado el botón izquierdo) \n en un directorio o un archivo grupo opcionalmente se abre un cuadro de diálogo que permite seleccionar la operación de archivo:. copia, \n movimiento, enlace o cancelar \n \n \n \n Trash system \n = - = - = - = - = - = - = \n \n Desde la versión 1.32, xfe implementa un sistema de papelera que es totalmente compatible con los estándares de freedesktop.org. \n Esto permite al usuario mover archivos a la papelera y restaurar archivos dentro xfe o su favorito \n desktop . \n Tenga en cuenta que la ubicación de los archivos papelera ahora es: ~ / local / share / Trash / files \n \n \n \n \n Configuración  = - = - = - = - = - = - = \n \n Puede realizar cualquier personalización xfe (diseño, asociaciones de archivos, atajos de teclado, etc) sin necesidad de editar cualquier archivo \n con la mano. Sin embargo, es posible que desee entender los principios de configuración, ya que algunas personalizaciones también puede \n hacerse fácilmente mediante la edición manual de los archivos de configuración. \n Tenga cuidado de dejar xfe antes de editar manualmente cualquier archivo de configuración, de lo contrario los cambios no se pudieron tener \n en cuenta. \n \n La configuración global del sistema de archivos xferc se encuentra en / usr / share / xfe, / usr / local / share / xfe \n o / opt / local / share / xfe, en el orden de precedencia determinado . \n \n partir de la versión 1,32, la ubicación de los archivos de configuración local ha cambiado. Esto es para cumplir  \n con los estándares de freedesktop.org. \n \n Los archivos de configuración local para xfe, Xfw, Xfv, XFI, xfp se encuentran ahora en el directorio ~ / .config / xfe. \n Se nombran xferc, xfwrc, xfvrc, xfirc y xfprc. \n \n En el largo xfe primera, el archivo de configuración de todo el sistema se copia en el archivo de configuración local \n ~ / .config / xfe / xferc que no existe todavía. Si el archivo de configuración de todo el sistema no se encuentra \n (en el caso de un lugar de instalación unusal), un diálogo pregunta al usuario que seleccione el lugar correcto. Por tanto, es más fácil \n xfe personalizar (esto es particularmente cierto para las asociaciones de archivos) a mano de edición porque todas las opciones locales son \n situado en el mismo archivo. \n \n Por defecto los iconos PNG se encuentran en / usr / share / Xfe / icons / xfe tema-o / usr / local / share / Xfe / icons / xfe-tema, en función \n de su instalación. Usted puede cambiar la ruta del tema del icono en el diálogo de Preferencias \n \n \n \n No lenguajes basados ​​en América \n = -. = - = - = - = - = - = - = - = - = - = - = - = \n \n Xfe puede mostrar la interfaz de usuario y también proporcionó los nombres de archivo en idiomas basados ​​en caracteres no latinos, que \n ha seleccionado una fuente Unicode que soporta el conjunto de caracteres. Para seleccionar un tipo de letra adecuado, utilice el \n Edit / Preferences / elemento del menú de fuente \n \n multilingüe Unicode TrueType se pueden encontrar en la siguiente dirección:. Http://www.slovo.info/unifonts.htm \n \n \n \n Tips \n = - = - = \n \n Lista de archivos \n - Selección de archivos y haga clic derecho para abrir un menú contextual de los archivos seleccionados \n - Press Ctrl + clic derecho para abrir un menú contextual en el archivo de panel \n - Al arrastrar un archivo / directorio a un directorio, mantenga el mouse sobre el directorio para abrirlo \n \n lista Árbol  \n - Seleccione un directorio y haga clic derecho para abrir un menú contextual del directorio seleccionado \n - Press Ctrl + clic derecho para abrir un menú contextual en el panel de árbol de \n - Al arrastrar un archivo/directorio a un directorio, mantenga el mouse sobre el directorio para expandirlo \n \n Copiar / pegar los nombres de archivos \n - Seleccione un archivo y pulse Ctrl-C para copiar su nombre en el portapapeles. Luego, en un cuadro de diálogo, pulse Ctrl-V para pegar \n el nombre del archivo \n -. En un diálogo operación de archivo, seleccione un nombre de archivo en la línea que contiene el nombre de la fuente y pegarlo directamente \n al destino con el botón central del el ratón. A continuación, modificarlo según sus necesidades \n \n notificación de inicio \n -. Notificación de inicio es el proceso que muestra una retroalimentación (un cursor de caja de arena o lo que sea) al usuario cuando \n ha comenzado una acción (copia de archivos, inicio de aplicaciones , etc.) Dependiendo del sistema, puede haber \n algunos problemas con la notificación de inicio. Si Xfe fue compilado con soporte de notificación de inicio, el usuario puede \n desactivarlo para todas las aplicaciones a nivel mundial Preferencias. También puede desactivar por persona \n aplicaciones, mediante la opción especial en la primera pestaña del cuadro de diálogo Propiedades. Esta última forma es \n disponible sólo cuando el archivo es un ejecutable. Desactivación de la notificación de inicio puede ser útil cuando se inicia \n una aplicación antigua que no es compatible con el protocolo de notificación de inicio (por ejemplo xterm) \n \n \n \n errores \n = -. = - = \n \n Favor de reportar cualquier bug encontrado a Roland <roland65@free.fr> Baudin. No se olvide de mencionar la versión xfe que utilice, \n la versión de biblioteca FOX y tu nombre y versión del sistema \n \n \n \n Traducciones \n = -. = - = - = - = - = - = \n \n xfe está ahora disponible en 19 idiomas, pero algunas traducciones son sólo parciales. Para traducir a su idioma xfe, \n abrir el archivo xfe.pot encuentra en el directorio po del árbol de código fuente de un software como poedit, kbabel \n o gtranslator y llenarlo con sus cadenas traducidas (tenga cuidado con los atajos de teclado y c -format caracteres), \n y luego enviarlo de nuevo a mí. Estaré encantado de integrar su trabajo en el próximo lanzamiento xfe \n \n \n \n Patches \n = -. = - = - = \n \n Si se ha codificado algún parche interesante, por favor enviar a mí , voy a tratar de incluirlo en la próxima versión ... \n \n \n ¡Muchas gracias a Maxim Baranov por su excelente Comandante X Win ya todas las personas que han prestado útil \n parches, traducciones, ensayos y consejos. \n \n [la última revisión: 06/04/2012] \n \n  "
+msgstr ""
+"\n"
+"\n"
+"\n"
+"                                   Xfe, X File Explorer File Manager\n"
+"\n"
+"                                     <http://roland65.free.fr/xfe>\n"
+"                                 <http://sourceforge.net/projects/xfe>\n"
+"\n"
+"\n"
+"\n"
+"  [Este archivo de ayuda se visualiza mejor con una tipografía de ancho "
+"fijo. Puede establecerla usando la pestaña Tipo de letra del cuadro de "
+"diálogo  Preferencias]\n"
+"\n"
+"\n"
+"\n"
+"  Este programa es software libre; Puede redistribuirlo y/o modificarlo bajo "
+"los términos de la GNU\n"
+"  General Public License publicada por la Free Software Foundation, bien la "
+"versión 2, o (a su elección)\n"
+"  cualquier versión posterior\n"
+"\n"
+"  Este programa se distribuye con la esperanza de que sea útil, pero SIN "
+"NINGUNA GARANTÍA;.\n"
+"  incluso sin la garantía implícita de COMERCIALIZACIÓN o IDONEIDAD PARA  UN "
+"PROPÓSITO PARTICULAR.\n"
+"  Vea la GNU General Public License para más detalles\n"
+"\n"
+"\n"
+"\n"
+"   Descripción\n"
+"   =-=-=-=-=-=\n"
+"\n"
+"  X File Explorer (xfe) es un administrador de archivos ligero para X11, "
+"escrito utilizando el kit de herramientas FOX.\n"
+"  Es independiente de escritorio y puede personalizarse con facilidad.\n"
+"  Cuenta con estilos Comandos o Explorador y es muy rápido y pequeño.\n"
+"  Xfe se basa en el popular, pero descontinuado X Win Commander, escrito "
+"originalmente por Maxim Baranov.\n"
+"\n"
+"\n"
+"\n"
+"   Características\n"
+"   =-=-=-=-=-=-=-=\n"
+"\n"
+"     - Interfaz gráfica de usuario muy rápida\n"
+"     - Soporte UTF-8\n"
+"     - Interfaces Comandos/Explorador con cuatro modos para administrar "
+"archivos: a) un panel, b) un árbol de directorios\n"
+"       y un panel, c) dos paneles y d) un árbol de directorios y dos "
+"paneles\n"
+"     - Sincronización y conmutación de paneles\n"
+"     - Editor de texto integrado ( X File Write, xfw)\n"
+"     - Visor de texto integrado (X File View, xfv)\n"
+"     - Visor de imágenes integrado (X File Image, xfi)\n"
+"     - Visor/Instalador/Desinstalador de paquetes (rpm o deb) integrado (X "
+"File Package, xfp)\n"
+"     - Copia/Corta/Pega archivos desde y hacia su escritorio favorito (GNOME/"
+"KDE/XFCE/ROX)\n"
+"     - Permite arrastrar y soltar archivos desde y hacia su escritorio "
+"favorito (GNOME/KDE/XFCE/ROX)\n"
+"     - Modo superusuario con autenticación con su o con sudo\n"
+"     - Línea de Estado\n"
+"     - Asociaciones de archivos\n"
+"     - Papelera opcional para operaciones de eliminación de archivos (que "
+"cumple con los estándares de freedesktop.org)\n"
+"     - Auto guardado de registro\n"
+"     - Navegación en archivos y directorios con pulsación sencilla o doble\n"
+"     - Menús emergentes con pulsación derecha del ratón en los listados de "
+"árbol y de archivos\n"
+"     - Cambiar atributos de archivos\n"
+"     - Montar/desmontar dispositivos (sólo Linux)\n"
+"     - Avisar cuando el punto de montaje no está respondiendo (sólo Linux)\n"
+"     - Barras de herramientas\n"
+"     - Marcadores\n"
+"     - Listado con historial hacía adelante y hacía atras para navegación en "
+"directorios\n"
+"     - Color de temas (GNOME, KDE, Windows...)\n"
+"     - Iconos de temas (Xfe, GNOME, KDE, XFCE, Tango, Windows...)\n"
+"     - Controlar temas (apariencia Estándar o Clearlooks)\n"
+"     - Crear archivos (se soportan los formatos tar, compress, zip, gzip, "
+"bzip2, xz y 7zip)\n"
+"     - Extraer archivos (se soportan los formatos tar, compress, zip, gzip, "
+"bzip2, xz, lzh, rar, ace, arj y 7zip)\n"
+"     - Ayudas emergentes con las propiedades de los archivos\n"
+"     - Barras de progreso o cuadros de diálogo para operaciones de archivo "
+"demoradas\n"
+"     - Vista previa con miniaturas\n"
+"     - Atajos de teclado configurables\n"
+"     - Notificación de inicio (opcional)\n"
+"     - y mucho más...\n"
+"\n"
+"\n"
+"\n"
+"   Atajos de teclado predeterminados\n"
+"   =-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-\n"
+"\n"
+"  A continuación están los atajos de teclado globales predeterminados. Estos "
+"atajos de teclado son comunes a todas las aplicaciones X File\n"
+"\n"
+"     * Seleccionar todo - Ctrl-A\n"
+"     * Copiar al portapapeles - Ctrl-C\n"
+"     * Buscar - Ctrl-F\n"
+"     * Buscar anterior - Mayúscula-Ctrl-G\n"
+"     * Buscar siguiente - Ctrl-G\n"
+"     * Ir al directorio personal - Ctrl-H\n"
+"     * Invertir selección - Ctrl-I\n"
+"     * Abrir archivo - Ctrl-O\n"
+"     * Imprimir ficha - Ctrl-P\n"
+"     * Salir de la aplicación - Ctrl-Q\n"
+"     * Pegar desde el portapapeles - Ctrl-V\n"
+"     * Cerrar ventana - Ctrl-W\n"
+"     * Cortar al portapapeles - Ctrl-X\n"
+"     * Deseleccionar todo - Ctrl-Z\n"
+"     * Mostrar ayuda - F1\n"
+"     * Crear un archivo nuevo - F2\n"
+"     * Crear un directorio nuevo - F7\n"
+"     * Listado con iconos grandes - F10\n"
+"     * Listado con iconos pequeños - F11\n"
+"     * Listado detallado de archivos - F12\n"
+"     * Alternar mostrar archivos ocultos - Ctrl-F6\n"
+"     * Alternar mostrar miniaturas - Ctrl-F7\n"
+"     * Ir al directorio de trabajo - Mayúscula-F2\n"
+"     * Ir al directorio superior - Retroceso\n"
+"     * Ir al directorio anterior - Ctrl-Retroceso\n"
+"     * Ir al directorio siguiente - Mayúscula-Retroceso\n"
+"\n"
+"\n"
+"  A continuación están los atajos de teclado de X File Explorer. Estos "
+"atajos de teclado son específicos de la aplicación xfe\n"
+"\n"
+"     * Agregar marcador - Ctrl-B\n"
+"     * Filtrar archivos - Ctrl-D\n"
+"     * Ejecutar comando - Ctrl-E\n"
+"     * Crear un enlace simbólico nuevo - Ctrl-J\n"
+"     * Cambiar los paneles - Ctrl-K\n"
+"     * Eliminar Barra de Ubicación - Ctrl-L\n"
+"     * Montar sistema de archivos (sólo Linux) - Ctrl-M\n"
+"     * Renombrar archivo - Ctrl-N\n"
+"     * Actualizar páneles Ctrl-R\n"
+"     * Enlazar archivos a la ubicación - Ctrl-S\n"
+"     * Lanzar terminal - Ctrl-T\n"
+"     * Desmontar el sistema de archivos (Linux) - Ctrl-U\n"
+"     * Sincronizar los paneles - Ctrl-Y\n"
+"     * Crear ventana nueva - F3\n"
+"     * Editar - F4\n"
+"     * Copiar archivos a la ubicación - F5\n"
+"     * Mover archivos a la ubicación - F6\n"
+"     * Propiedades de archivo - F9\n"
+"     * Modo Un panel - Ctrl-F1\n"
+"     * Modo Árbol y un panel - Ctrl-F2\n"
+"     * Modo Dos paneles - Ctrl-F3\n"
+"     * Modo Árbol y dos paneles - Ctrl-F4\n"
+"     * Alternar mostrar directorios ocultos - Ctrl-F5\n"
+"     * Ir a la papelera - Ctrl-F8\n"
+"     * Crear una ventana superusuario nueva - Mayúscula-F3\n"
+"     * Ver - Mayúscula-F4\n"
+"     * Mover archivos a la papelerapuede - Supr\n"
+"     * Restaurar archivos de la papelera - Alt-Supr\n"
+"     * Eliminar archivos - Mayúscula-Supr\n"
+"     * Vaciar papelera - Ctrl-Supr\n"
+"\n"
+"\n"
+"  A continuación están los atajos de teclado predeterminados de X File "
+"Image.  Estos atajos de teclado son específicos de la aplicación xfi\n"
+"\n"
+"     * Ampliar para ajustar a la ventana - Ctrl-F\n"
+"     * Reflejar imagen horizontalmente - Ctrl-H\n"
+"     * Ampliar imagen al 100% - Ctrl-I\n"
+"     * Rotar imagen a izquierda - Ctrl-L\n"
+"     * Rotar imagen a la derecha - Ctrl-R\n"
+"     * Reflejar imagen verticalmente - Ctrl-V\n"
+"\n"
+"\n"
+"  A continuación están los atajos de teclado predeterminados de X File "
+"Write. Estos atajos son específicos de la aplicación xfw\n"
+"\n"
+"     * Alternar modo de ajuste de línea - Ctrl-K\n"
+"     * Ir a la línea - Ctrl-L\n"
+"     * Crear documento nuevo - Ctrl-N\n"
+"     * Reemplazar cadena - Ctrl-R\n"
+"     * Guardar los cambios en el archivo - Ctrl-S\n"
+"     * Alternar modo numeración de líneas - Ctrl-T\n"
+"     * Alternar modo mayúsculas - Mayúscula-Ctrl-U\n"
+"     * Alternar modo minúsculaes - Ctrl-U\n"
+"     * Rehacer el último cambio - Ctrl-Y\n"
+"     * Deshacer último cambio - Ctrl-Z\n"
+"\n"
+"\n"
+"  X File View (xfv) y X File Package (xfp) sólo emplean algunos de los "
+"atajos de teclado globales\n"
+"\n"
+"  Note que todos los atajos de teclado predeterminados enumerados "
+"anteriormente se pueden personalizar en el cuadro de diálogo Preferencias "
+"xfe. Sin embargo,  la acción de algunas teclas es innerente a la aplicación "
+"y no puede cambiarse. Estas incluyen:\n"
+"\n"
+"     * Ctrl-+ y Ctrl-- acercar y alejar la imagen en xfi\n"
+"     * Mayúscula-F10 - mostrar menús de contexto en Xfe\n"
+"     * Retorno - ingreras a directorios en listados de archivos, abrir "
+"archivos, elejir acción de botones, etc.\n"
+"     * Espacio - ingresar a directorios en listados de archivos\n"
+"     * Esc - Cerrar el cuadro de diálogo, anular selección de archivos, etc\n"
+"\n"
+"\n"
+"\n"
+"   Operaciones de Arrastrar y Soltar\n"
+"   =-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n"
+"\n"
+"  Si arrastra un archivo o grupo de archivos (moviendo el ratón mientras "
+"mantiene pulsado el botón izquierdo)\n"
+"  a un directorio o un panel de archivo opcionalmente se abre un cuadro de "
+"diálogo que permite seleccionar la operación de archivo: copiar,\n"
+"  mover, enlazar o cancelar\n"
+"\n"
+"\n"
+"\n"
+"   Sistema de Papelera\n"
+"   =-=-=-=-=-=-=-=-=-=-=-\n"
+"\n"
+"  Desde la versión 1.32, xfe implementa un sistema de papelera que cumple "
+"por completo con los estándares de freedesktop.org.\n"
+"  Este permite al usuario mover archivos a la papelera y restaurar archivos "
+"desde xfe o su escritorio favorito.\n"
+"  Tenga en cuenta que la ubicación de los archivos en la papelera ahora es: "
+"~/local/share/Trash/files\n"
+"\n"
+"\n"
+"\n"
+"\n"
+"   Configuración\n"
+"   =-=-=-=-=-=-=\n"
+"\n"
+"  Usted puede realizar cualquier personalización de xfe (diseño, "
+"asociaciones de archivos, atajos de teclado, etc) sin necesidad de editar "
+"archivo alguno\n"
+" a mano. Sin embargo, es posible que usted desee entender los principios de "
+"configuración, ya que algunas personalizaciones también pueden\n"
+" hacerse fácilmente mediante la edición manual de los archivos de "
+"configuración.\n"
+"  Asegurese de salir de xfe antes de editar manualmente cualquier archivo de "
+"configuración, o de lo contrario los cambios no se tendrán\n"
+" en cuenta.\n"
+"\n"
+"  El archivo de configuración global del sistema xferc se encuentra en /usr/"
+"share/xfe, /usr/local/share/xfe\n"
+" u /opt/local/share/xfe, en ese orden de precedencia.\n"
+"\n"
+" A partir de la versión 1.32, la ubicación de los archivos de configuración "
+"locales ha cambiado. Esto es para cumplir \n"
+" con los estándares de freedesktop.org.\n"
+"\n"
+"  Los archivos de configuración locales para xfe, xfw, xfv, xfi y xfp ahora "
+"se encuentran en el directorio ~/.config/xfe\n"
+" Sus nombre son xferc, xfwrc, xfvrc, xfirc y xfprc.\n"
+"\n"
+"  La primera vez que inicie xfe, el archivo de configuración global del "
+"sistema se copiará en el archivo de configuración local\n"
+" ~/.config/xfe/xferc que no debe existir. Si no se encuentra el archivo de "
+"configuración global\n"
+" (en caso de un lugar de instalación inusal), un cuadro de diálogo le pedirá "
+"al usuario seleccionar la ubicación correcta. Así resulta más fácil\n"
+" personalizar xfe (particularmente cierto para las asociaciones de archivos) "
+"mediante edición manual pues todas las opciones locales están\n"
+" en el mismo archivo.\n"
+"\n"
+"  Los iconos PNG por defecto se encuentran en /usr/share/xfe/icons/xfe-them "
+"o en  /usr/local/share/xfe/icons/xfe-theme, dependiendo\n"
+" de su instalación. Usted puede cambiar la ruta de iconos del tema en el "
+"cuadro de diálogo Preferencias\n"
+"\n"
+"\n"
+"\n"
+"   Idiomas no basado en Latín\n"
+"   =-=-=-=-=-=-=-=-=-=-=-=-=\n"
+"\n"
+"  Xfe puede mostrar la interfaz de usuario y también los nombres de archivos "
+"en idiomas que no se basan en los caracteres en latín, siempre y cuando\n"
+" usted haya seleccionado una tipofrafía Unicode que soporte su juego de "
+"caracteres. Para seleccionar un tipo de letra adecuado use el\n"
+" elemento de menú Editar/Preferencias/Tipo de letra\n"
+"\n"
+" Se pueden encontrar tipos de letra Trutype, multilingüe y Unicode en la "
+"siguiente dirección:. http://www.slovo.info/unifonts.htm\n"
+"\n"
+"\n"
+"\n"
+"   Consejos\n"
+"   =-=-=-=-\n"
+"\n"
+"  Listado de archivos\n"
+"     - Seleccione archivos y haga pulsación derecha para abrir un menú "
+"contextual sobre los archivos seleccionados\n"
+"     - Presione Ctrl + pulsación derecha para abrir un menú contextual en el "
+"panel de archivos\n"
+"     - Al arrastrar un archivo/directorio a un directorio, mantenga el "
+"puntero del ratón sobre un directorio para abrirlo\n"
+"\n"
+"  Listado de árbol \n"
+"     - Seleccione un directorio y haga pulsación derecha para abrir un menú "
+"contextual sobre el directorio seleccionado\n"
+"     - Presione Ctrl + pulsación derecha para abrir un menú contextual en el "
+"panel de árbol\n"
+"     - Al arrastrar un archivo/directorio a un directorio, mantenga el "
+"puntero del ratón sobre un directorio para expandirlo\n"
+"\n"
+"  Copiar/pegar nombres de archivos\n"
+"     - Seleccione un archivo y presiones Ctrl-C para copiar el nombre en el "
+"portapapeles. Luego, en un cuadro de diálogo, presione Ctrl-V para pegar\n"
+" el nombre del archivo\n"
+"     - En un cuadro de diálogo de operación, seleccione un nombre de archivo "
+"en la línea con el nombre del origen y peguelo directamente\n"
+" al destino usando el botón central del el ratón. A continuación, "
+"modifiquelo de acuerdo a sus necesidades\n"
+"\n"
+" Notificación de inicio\n"
+"     - Notificación de inicio es el proceso que muestra una "
+"retroalimentación al usuario (un puntero con un reloj u otra forma) cuando\n"
+" ha iniciado una acción (copia de archivos, inicio de una aplicación, etc.) "
+"Dependiendo del sistema, puede haber\n"
+" algunos problemas con la notificación de inicio. Si xfe fue compilado con "
+"soporte de notificación de inicio, el usuario puede\n"
+" desactivarlo para todas las aplicaciones a nivel global de las "
+"Preferencias. También puede desactivarlo para \n"
+" aplicaciones individuales, mediante la opción para esto en la primera "
+"pestaña del cuadro de diálogo Propiedades. Esta última forma está\n"
+" disponible sólo cuando el archivo es un ejecutable. Deshabilitar las "
+"notificación de inicio puede ser útil cuando inicia\n"
+" una aplicación antigua que no sea compatible con el protocolo de "
+"notificación de inicio (e.g. xterm)\n"
+"\n"
+"\n"
+"\n"
+"   Fallas\n"
+"   =-=-=-\n"
+"\n"
+"  Por favor reporte cualquier falla que encuentre a Roland Baudin "
+"<roland65@free.fr>. No olvide mencionar la versión de xfe que utiliza,\n"
+" la versión de la biblioteca FOX y el nombre y versión de su sistema "
+"operativo.\n"
+"\n"
+"\n"
+"\n"
+"   Traducciones\n"
+"   =-=-=-=-=-=-=\n"
+"\n"
+"  xfe ahora está disponible en 19 idiomas, pero algunas traducciones son "
+"sólo parciales. Para traducir xfe a su idioma,\n"
+"  abra el archivo xfe.pot ubicado en el directorio po del árbol de código "
+"fuente con un software como poedit, kbabel\n"
+"  o gtranslator y llenelo con sus cadenas traducidas (tenga cuidado con los "
+"atajos de teclado y los caracteres en c-formato),\n"
+"  y luego enviemelo. Estaré complacido de integrar su trabajo en la próxima "
+"publicación de xfe\n"
+"\n"
+"\n"
+"\n"
+"   Parches\n"
+"   =-=-=-=\n"
+"\n"
+"  Si se ha desarrollado algún parche interesante, por favor enviemelo, "
+"intentaré incluirlo en la siguiente versión...\n"
+"\n"
+"\n"
+"  ¡Muchas gracias a Maxim Baranov por su excelente X Win Commander y a todas "
+"las personas que han proveido\n"
+"parches útiles, traducciones, pruebas y consejos.\n"
+"\n"
+"  [Última revisión: 06/04/2012]\n"
+"\n"
+"  "
 
 #. First tab is global key bindings
 #: ../src/Keybindings.cpp:87
@@ -4919,7 +5428,9 @@ msgstr "Atajos de teclado &globales"
 msgid ""
 "These key bindings are common to all Xfe applications.\n"
 "Double click on an item to modify the selected key binding..."
-msgstr "Estas combinaciones de teclas son comunes a todas las aplicaciones Xfe. \nDouble clic en un elemento para modificar la clave seleccionada vinculante..."
+msgstr ""
+"Estas combinaciones de teclas son comunes a todas las aplicaciones Xfe.\n"
+"Doble pulsación en un elemento modifica el atajo de teclado..."
 
 #. Second tab is Xfe key bindings
 #: ../src/Keybindings.cpp:93
@@ -4930,7 +5441,9 @@ msgstr "Atajos de teclado de Xf&e"
 msgid ""
 "These key bindings are specific to the X File Explorer application.\n"
 "Double click on an item to modify the selected key binding..."
-msgstr "Estas combinaciones de teclas son específicas de la aplicación Explorer X archivo. \nDouble clic en un elemento para modificar la clave seleccionada vinculante..."
+msgstr ""
+"Estos atajos de teclado son específicos de la aplicación X File Explorer.\n"
+"Doble pulsación en un elemento modifica el atajo de teclado seleccionado..."
 
 #. Third tab is Xfi key bindings
 #: ../src/Keybindings.cpp:99
@@ -4941,7 +5454,10 @@ msgstr "Atajos de teclado de Xf&i"
 msgid ""
 "These key bindings are specific to the X File Image application.\n"
 "Double click on an item to modify the selected key binding..."
-msgstr "Estas combinaciones de teclas son específicas de la aplicación de imagen X archivo. \nDouble clic en un elemento para modificar la combinación de teclas seleccionado..."
+msgstr ""
+"Estas combinaciones de teclas son específicas de la aplicación X File "
+"Image.\n"
+"Doble pulsación en un elemento modifica el atajo de teclado seleccionado..."
 
 #. Fourth tab is Xfw key bindings
 #: ../src/Keybindings.cpp:105
@@ -4952,7 +5468,10 @@ msgstr "Atajos de teclado de Xf&w"
 msgid ""
 "These key bindings are specific to the X File Write application.\n"
 "Double click on an item to modify the selected key binding..."
-msgstr "Estas combinaciones de teclas son específicas de la aplicación Write X archivo. \nDouble clic en un elemento para modificar la clave seleccionada vinculante..."
+msgstr ""
+"Estas combinaciones de teclas son específicas de la aplicación X File "
+"Write.\n"
+"Doble pulsación en un elemento modifica el atajo de teclado seleccionado..."
 
 #: ../src/Keybindings.cpp:114 ../src/Keybindings.cpp:118
 #: ../src/Keybindings.cpp:122 ../src/Keybindings.cpp:126
@@ -4967,23 +5486,25 @@ msgstr "Clave del Registro"
 #: ../src/Keybindings.cpp:116 ../src/Keybindings.cpp:120
 #: ../src/Keybindings.cpp:124 ../src/Keybindings.cpp:128
 msgid "Key Binding"
-msgstr "Combinación de teclas"
+msgstr "Atajo de Teclado"
 
 #: ../src/Keybindings.cpp:785 ../src/Keybindings.cpp:925
 #: ../src/Keybindings.cpp:1029 ../src/Keybindings.cpp:1133
 #, c-format
 msgid "Press the combination of keys you want to use for the action: %s"
-msgstr "Pulse la combinación de teclas que desea utilizar para la acción: %s"
+msgstr ""
+"Presione la combinación de teclas que desea utilizar para la acción: %s"
 
 #: ../src/Keybindings.cpp:786 ../src/Keybindings.cpp:926
 #: ../src/Keybindings.cpp:1030 ../src/Keybindings.cpp:1134
 msgid "[Press space to disable the key binding for this action]"
-msgstr "[Pulsa espacio para deshabilitar la combinación de teclas para esta acción]"
+msgstr ""
+"[Presione espacio para deshabilitar el atajo de teclado para esta acción]"
 
 #: ../src/Keybindings.cpp:787 ../src/Keybindings.cpp:927
 #: ../src/Keybindings.cpp:1031 ../src/Keybindings.cpp:1135
 msgid "Modify Key Binding"
-msgstr "Modificar asociación de teclas"
+msgstr "Modificar atajo de teclado"
 
 #: ../src/Keybindings.cpp:814 ../src/Keybindings.cpp:954
 #: ../src/Keybindings.cpp:1058 ../src/Keybindings.cpp:1162
@@ -4991,34 +5512,45 @@ msgstr "Modificar asociación de teclas"
 msgid ""
 "The key binding %s is already used in the global section.\n"
 "\tYou should erase the existing key binding before assigning it again."
-msgstr "La clave de enlace %s ya se utiliza en la sección global. \n \tEstá debe borrar la combinación de teclas existente antes de asignarla de nuevo."
+msgstr ""
+"El atajo de teclado %s ya se utiliza en la sección global.\n"
+"\tUsted debe borrar el atajo de teclado existente antes de asignarlo de "
+"nuevo."
 
 #: ../src/Keybindings.cpp:832 ../src/Keybindings.cpp:972
 #, c-format
 msgid ""
 "The key binding %s is already used in the Xfe section.\n"
 "\tYou should erase the existing key binding before assigning it again."
-msgstr "La clave de enlace %s ya se utiliza en la sección Xfe. \n \tEstá debe borrar la combinación de teclas existente antes de asignarla de nuevo."
+msgstr ""
+"El atajo de teclado %s ya se utiliza en la sección Xfe.\n"
+"\tUsted debe borrar el atajo de teclado existente antes de asignarlo de "
+"nuevo."
 
 #: ../src/Keybindings.cpp:850 ../src/Keybindings.cpp:1076
 #, c-format
 msgid ""
 "The key binding %s is already used in the Xfi section.\n"
 "\tYou should erase the existing key binding before assigning it again."
-msgstr "La clave de enlace %s ya se utiliza en la sección Xfi. \n \tEstá debe borrar la combinación de teclas existente antes de asignarla de nuevo."
+msgstr ""
+"El atajo de teclado %s ya se utiliza en la sección Xfi.\n"
+"\tUsted debe borrar el atajo de teclado existente antes de asignarlo de "
+"nuevo."
 
 #: ../src/Keybindings.cpp:868 ../src/Keybindings.cpp:1180
 #, c-format
 msgid ""
 "The key binding %s is already used in the Xfw section.\n"
 "\tYou should erase the existing key binding before assigning it again."
-msgstr "La clave de enlace %s ya se utiliza en la sección Xfw. \n"
-"\tEstá debe borrar la combinación de teclas existente antes de asignarla de nuevo."
+msgstr ""
+"El atajo de teclado %s ya se utiliza en la sección Xfw.\n"
+"\tUsted debe borrar el atajo de teclado existente antes de asignarlo de "
+"nuevo."
 
 #: ../src/startupnotification.cpp:111
 #, c-format
 msgid "Error! Can't open display\n"
-msgstr "Error! No se puede abrir la pantalla\n"
+msgstr "¡Error! No se puede abrir la pantalla\n"
 
 #: ../src/startupnotification.cpp:118
 #, c-format
@@ -5028,12 +5560,12 @@ msgstr "Inicio de %s"
 #: ../src/startupnotification.cpp:137 ../src/xfeutils.cpp:1218
 #, c-format
 msgid "Error! Fork failed: %s\n"
-msgstr "Error! El tenedor falló: %s \n"
+msgstr "¡Error! Fork (bifuración) falló: %s\n"
 
 #: ../src/xfeutils.cpp:613 ../src/xfeutils.cpp:668
 #, c-format
 msgid "Can't close folder %s\n"
-msgstr "No se puede cerrar el directorio %s \n"
+msgstr "No se puede cerrar el directorio %s\n"
 
 #: ../src/xfeutils.cpp:684
 msgid "bytes"
@@ -5109,5 +5641,4 @@ msgstr "Administrador de Paquetes"
 
 #: ../xfp.desktop.in.h:3
 msgid "A simple package manager for Xfe"
-msgstr "Un gestor de paquetes sencillo para Xfe"
-
+msgstr "Un administrador de paquetes sencillo para Xfe"

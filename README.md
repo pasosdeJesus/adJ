@@ -26,12 +26,12 @@ mkdir ~/comp; cd ~/comp; git clone git://github.com/pasosdeJesus/adJ.git
 Organización de fuentes
 -----------------------
 
-- arbolcd 	Directorios y archivos de un DVD instalador
-- arboldd		Directorios y archivos de un adJ instalado
-- arboldes	Directorios, archivos y parches por emplear en comp.desarrollo
+- arbolcd    Directorios y archivos de un DVD instalador
+- arboldd    Directorios y archivos de un adJ instalado
+- arboldes   Directorios, archivos y parches para desarrollar adJ
 - distribucion.sh	Archivo de comandos para generar distribución
-- hdes		Herramientas para generar distribución
-- tminiroot	Transforma instalador que va en DVD a español
+- hdes       Herramientas para generar distribución
+- tminiroot  Transforma instalador que va en DVD a español
 - ver.sh.plantilla	Plantilla con variables que controlan distribucion.sh
 
 
@@ -39,10 +39,13 @@ Organización de fuentes
 Pasos típicos para desarrollar
 ------------------------------
 
-Muchas de las operaciones típicas se controlan activando o desactivando pasos que el archivo de comandos distribucion.sh hará.  Los pasos se activan/desactivan en el archivo ver.sh (si no tiene una sudo ./distribucion.sh lo creará), activa un paso poniendo "s" en la variable asociada y lo desactiva poniendo "n".
+Muchas de las operaciones típicas se controlan activando o desactivando pasos 
+que el archivo de comandos distribucion.sh hará.  Los pasos se 
+activan/desactivan en el archivo ver.sh (si no tiene uno ejecute 
+```cp ver.sh.plantilla ver.sh```), activa un paso poniendo "s" en la 
+variable asociada y lo desactiva poniendo "n".
 
-* Enlace arboldes/usr/ports/mystuff en /usr/ports/mystuff
-* Ejecute ```sudo ./distribucion.sh``` y siga instrucciones que este archivo de comandos de
+* Enlace arboldes/usr/ports/mystuff en /usr/ports/mystuff.  ```sudo ln -s ~/comp/adJ/usr/ports/mystuff /usr/ports```
 * Actualice fuentes de /usr/src (con periodicidad) para mezclar cambios de OpenBSD activando autoCVS en ver.sh y ejecutando sudo ./distribucion.sh
 * Implemente mejoras a /usr/src bien como archivos de comandos (por ubicar en hdes/) que hacen cambios automáticos o bien como parches (ubicar en arboldes/usr/src)
 * Actualice/mejore portes o cree nuevos en arboldes/usr/ports/mystuff.  Al agregar o retirar actualizar distribucion.sh

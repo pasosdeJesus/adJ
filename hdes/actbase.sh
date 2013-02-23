@@ -1,7 +1,8 @@
 #!/bin/sh
 # Actualiza sistema base a partir de instalador de adJ
 # Basada en instrucciones del FAQ de OpenBSD
-# Dominio público. 2011. vtamara@pasosdeJesus.org
+# Dominio público de acuerdo a legislación colombiana. http://www.pasosdejesus.org/dominio_publico_colombia.html. 
+# 2011. vtamara@pasosdeJesus.org
 
 if (test "$USER" != "root") then {
 	echo "Ejecutar como usuario root"

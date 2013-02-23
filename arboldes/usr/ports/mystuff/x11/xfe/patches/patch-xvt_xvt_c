@@ -1,0 +1,12 @@
+$OpenBSD$
+--- xvt/xvt.c.orig	Fri Feb 15 17:05:08 2013
++++ xvt/xvt.c	Fri Feb 15 17:06:57 2013
+@@ -143,7 +143,7 @@ int xvt(int argc, char** argv)
+         else
+             s = command;
+         shell_argv[0] = (char *)cmalloc(strlen(s) + 2);
+-        sprintf(shell_argv[0],"%s%s",is_logshell() ? "-" : "",s);
++        snprintf(shell_argv[0], strlen(s) + 2, "%s%s",is_logshell() ? "-" : "",s);
+         shell_argv[1] = NULL;
+         com_argv = shell_argv;
+     }

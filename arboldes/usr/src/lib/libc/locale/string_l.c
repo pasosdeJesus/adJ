@@ -77,6 +77,79 @@ wcscoll_l(const wchar_t *s, const wchar_t *s2, locale_t locale)
 	return ret;
 }
 
+int
+wcsncasecmp_l(const wchar_t *s, const wchar_t *s2, size_t n, locale_t locale)
+{
+
+	if (n == 0)
+		return (0);
+	int len, len2, ret, ret2;
+	wint_t prim, prim2, sec, sec2;
+	const wchar_t *t, *t2;
+	wchar_t *tt, *tt2;
+	FIX_LOCALE(locale);
+	struct xlocale_collate *table = 
+		((struct xlocale_collate *)(locale)->components[XLC_COLLATE]);
+
+	if (table->__collate_load_error) {
+		wchar_t l1, l2;
+
+		while (*s && *s2 && (l1 = towlower_l(*s, locale)) == 
+				(l2 = towlower_l(*s2, locale))) {
+			s++;
+			s2++;
+		}
+		return ((rune_t)l1 - (rune_t)l2);
+	}
+
+	len = len2 = 1;
+	ret = ret2 = 0;
+	if (table->__collate_substitute_nontrivial) {
+		t = tt = __collate_substitute_w(table, s);
+		t2 = tt2 = __collate_substitute_w(table, s2);
+	} else {
+		tt = tt2 = NULL;
+		t = s;
+		t2 = s2;
+	}
+	int n1 = 0, n2 = 0;
+	while(*t && *t2) {
+		prim = prim2 = 0;
+		while(*t && !prim) {
+			__collate_lookup_casew(table, t, &len, &prim, &sec, locale);
+			t += len;
+			n1 += len;
+		}
+		while(*t2 && !prim2) {
+			__collate_lookup_casew(table, t2, &len2, &prim2, &sec2, locale);
+			t2 += len2;
+			n2 += len2;
+		}
+		if ((n1 > n2 && n > n1) || (n2 > n1 && n > n2)) {
+			ret = 0;
+			goto end;
+		}
+		if(!prim || !prim2)
+			break;
+		if(prim != prim2) {
+			ret = prim - prim2;
+			goto end;
+		}
+		if(!ret2)
+			ret2 = sec - sec2;
+	}
+	if(!*t && *t2)
+		ret = -(int)((u_char)*t2);
+	else if(*t && !*t2)
+		ret = (u_char)*t;
+	else if(!*t && !*t2)
+		ret = ret2;
+  end:
+	free(tt);
+	free(tt2);
+
+	return ret;
+}
 
 size_t
 wcsxfrm_l(wchar_t * __restrict dest, const wchar_t * __restrict src, size_t len, locale_t locale)
@@ -130,8 +203,9 @@ wcsxfrm_l(wchar_t * __restrict dest, const wchar_t * __restrict src, size_t len,
  * see https://buildsecurityin.us-cert.gov/bsi/articles/knowledge/coding/769-BSI.html */
 wchar_t *__dup_as_wcs_l(const char *s, locale_t locale)
 {
-	int numc = mbstowcs(NULL, s, 0) + 1; 
-	if (numc == 0 || numc > ULONG_MAX / sizeof(wchar_t)) { 
+	int numc = mbstowcs_l(NULL, s, 0, locale) + 1; 
+	if (numc == 0 || numc > ULONG_MAX / sizeof(wchar_t)
+			|| numc == (size_t)-1) { 
 		errno = EINVAL;
 		return NULL;
 	}
