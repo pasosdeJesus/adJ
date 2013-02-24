@@ -1353,7 +1353,7 @@ if (test "$p" = "") then {
 	insacp libgcrypt
 	p=`ls $PKG_PATH/png*` 
 	pkg_add -D libdepends -D update -D updatedepends -r $p >> /var/tmp/inst-adJ.bitacora 2>&1
-	p=`ls $PKG_PATH/libxslt* $PKG_PATH/gettext* $PKG_PATH/libxml* $PKG_PATH/png* $PKG_PATH/jpeg* $PKG_PATH/t1lib* $PKG_PATH/libiconv* $PKG_PATH/php*` 
+	p=`ls $PKG_PATH/libxslt* $PKG_PATH/gettext* $PKG_PATH/libxml* $PKG_PATH/png* $PKG_PATH/jpeg* $PKG_PATH/t1lib* $PKG_PATH/libiconv* $PKG_PATH/php* $PKG_PATH/pecl*` 
 	echo $p >> /var/tmp/inst-adJ.bitacora 2>&1;
 	pkg_add -D libdepends -D update -D updatedepends -r $p >> /var/tmp/inst-adJ.bitacora 2>&1
 	rm -f /var/www/conf/modules/php.conf /var/www/conf/php.ini /etc/php.ini
@@ -1370,7 +1370,8 @@ if (test "$p" = "") then {
         	/etc/php-5.3/pdo_pgsql.ini
 	ln -fs /etc/php-5.3.sample/sqlite.ini \
 		/etc/php-5.3/sqlite.ini
-
+	ln -sf /etc/php-5.3.sample/uploadprogress.ini \
+	       	/etc/php-5.3/uploadprogress.ini
 	chmod +w /var/www/conf/httpd.conf
 	ed /var/www/conf/httpd.conf >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/\#AddType application\/x-httpd-php .php/AddType application\/x-httpd-php .php/g
@@ -1573,7 +1574,7 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 	[exec] (xterm) {xterm -en utf8 -e /bin/ksh -l}
 	[exec] (mozilla-firefox) {ulimit -d 200000 && /usr/local/bin/firefox -UILocale es-AR}
 	[exec] (midori) {/usr/local/bin/midori}
-	[exec] (chrome) {/usr/local/bin/chrome}
+	[exec] (chromium) {/usr/local/bin/chromium}
 [submenu] (Espiritualidad)
 	[exec] (xiphos) {/usr/local/bin/xiphos}
 	[exec] (Evangelios de dominio publico) {/usr/local/bin/firefox /usr/local/share/doc/evangelios_dp/index.html}
@@ -1601,18 +1602,25 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
         [end]
 [end]
 [submenu] (Oficina)
-	[exec] (gnumeric) {/usr/local/bin/gnumeric}
 	[exec] (abiword) {/usr/local/bin/abiword}
-	[exec] (xpdf) {xpdf}
+	[exec] (dia) {/usr/local/bin/abiword}
+	[exec] (gnumeric) {/usr/local/bin/gnumeric}
 	[exec] (gv) {gv}
 	[exec] (gimp) {gimp}
+	[exec] (inkscape) {inkscape}
 	[exec] (LibreOffice) {/usr/local/bin/soffice}
+	[exec] (scribus) {scribus}
+	[exec] (xpdf) {xpdf}
 [end]
 [submenu] (Multimedia)
+	[exec] (audacios) {audacious}
+	[exec] (audacity) {audacity}
+	[exec] (cdio cdplay) {xterm -en utf8 -e "cdio cdplay"}
+	[exec] (fontforge) {fontforge}
 	[exec] (xcdplayer) {xcdplayer}
 	[exec] (xcdroast) {sudo xcdroast}
 	[exec] (xmix) {xmix}
-	[exec] (cdio cdplay) {xterm -en utf8 -e "cdio cdplay"}
+	[exec] (vlc) {vlc}
 [end]
 [submenu] (Internet)
 	[exec] (FileZilla) {filezilla}
@@ -1624,7 +1632,10 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 	[exec] (OpenBSD servidor) {/usr/local/bin/firefox -UILocale es-AR /usr/local/share/doc/servidor_OpenBSD/index.html}
 [end]
 [submenu] (Otros)
-[exec] (vim) {gvim}
+[exec] (gvim) {gvim}
+[exec] (qgis) {qgis}
+[exec] (xarchiver) {xarchiver}
+[exec] (xfw) {xfw}
 [end]
 [submenu] (Menú de fluxbox)
 [config] (Configurar)
