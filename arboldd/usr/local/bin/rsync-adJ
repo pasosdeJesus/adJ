@@ -4,18 +4,25 @@
 # http://www.pasosdejesus.org/dominio_publico_colombia.html
 # 2013. vtamara@pasosdeJesus.org
 
-if (test -f "ver.sh") then {
-	. ./ver.sh
-} else {
-	V=$1
-	VESP=""
-	if (test "$V" = "") then {
+V=$1
+VESP=""
+if (test "$V" = "") then {
+	if (test -f "ver.sh") then {
+		. ./ver.sh
+	} else {
 		echo "Primer parámetro debe ser versión por descargar, e.g:"
 		echo "rsync-adJ 5.2"
 	} fi;
 } fi;
 
 mkdir -p $V$VESP-amd64
-cmd="rsync --delete -ravz rsync://ftp.pasosdeJesus.org/AprendiendoDeJesus/$V$VESP-amd64/* $V$VESP-amd64/"
+cruta="";
+cmd="rsync rsync://ftp.pasosdeJesus.org/AprendiendoDeJesus/$cruta$V$VESP-amd64/"
+echo $cmd;
+eval $cmd;
+if (test "$?" != "0") then {
+	cruta="endesarrollo/"
+} fi;
+cmd="rsync --delete -ravz rsync://ftp.pasosdeJesus.org/AprendiendoDeJesus/$cruta$V$VESP-amd64/* $V$VESP-amd64/"
 echo $cmd;
 eval $cmd;
