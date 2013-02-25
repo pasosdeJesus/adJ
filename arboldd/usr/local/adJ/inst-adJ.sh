@@ -712,7 +712,7 @@ if (test -d /usr/X11R6/share/X11/xkb/symbols/srvr_ctrl) then {
     sudo rm -f /usr/bin/midicat /usr/share/man/man1/midicat.1
     sudo rm -f /usr/bin/makewhatis /usr/bin/mandocdb /usr/share/man/man8/mandocdb.8
 } fi;
-if (test -d /usr/bin/lint) then {
+if (test -f /usr/bin/lint) then {
 	vac="$vac 5.1 a 5.2";	
 	echo "Aplicando actualizaciones de 5.1 a 5.2 " >> /var/tmp/inst-adJ.bitacora;
 	rm /usr/bin/lint
