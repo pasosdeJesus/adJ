@@ -266,11 +266,11 @@ done;
 ADMADJ=$uadJ;
 
 echo "* Creando cuenta inicial"  >> /var/tmp/inst-adJ.bitacora
-groupinfo $uadJ > /dev/null
+groupinfo $uadJ > /dev/null 2>&1
 if (test "$?" != "0") then {
 groupadd $uadJ
 } fi;
-userinfo $uadJ >/dev/null
+userinfo $uadJ >/dev/null 2>&1
 if (test "$?" != "0") then {
 adduser -v -batch $uadJ $uadJ,wheel $uadJ
 passwd $uadJ

@@ -28,16 +28,13 @@ METODOACT=ftp
 SERVACT="vtamara@ftp.pasosdeJesus.org"
 # Usado si METODOACT es rsync
 
-OTRO="127.16.0.1"
-OPSSHOTRO=""
+OTRO="172.16.0.1"
+OPSSHOTRO="-p11022"
 USOTRO="micuenta"
+DIROTRO="comp"
 # Otro servidor para enviar/recibir adJ
 
-OPSSHHAZOWN="-p10022"
-HAZOWN="www.nocheyniebla.org"
-# Servidor principal de adJ
-
-RSYNCHOST=""
+RSYNCHOST="ftp.pasosdeJesus.org"
 
 excluye="dialog-.* gnupg-2.* libstdc++-.* python-3.* php-5.2.* php-gd-5.2.* php-pdo_pgsql-5.2.* php-pgsql-5.2.* php-mcrypt-5.2.* php-sqlite-5.2.* pear-Validate-.* pear-Auth-[0-9p.]*.tgz pear-HTML-QuickForm-.* postgresql-.* ruby-1.8.* xfe-.*"
 # Paquetes por excluir de descarga ftp de OpenBSD

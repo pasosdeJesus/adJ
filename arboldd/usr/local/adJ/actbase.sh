@@ -9,7 +9,17 @@ if (test "$USER" != "root") then {
 	exit 1;
 } fi;
 
-. ./ver.sh
+if (test -f "ver.sh") then {
+	. ./ver.sh
+} else {
+	V=$1
+	if (test "$V" = "") then {
+		echo "Primer parámetro debería ser versión, e.g"
+		echo "actbase 5.2"
+		exit 1;
+	} fi;
+	VP=`echo $V | sed -e "s/[.]//g"`
+} fi;
 
 if (test "$V" = "5.1") then {
 	echo "Eliminando /usr/X11R6/share/X11/xkb/symbols/srvr_ctrl";
@@ -20,7 +30,11 @@ mp=`uname -a | sed -e "s/.*\.MP.*/.mp/g"`
 if (test "$mp" != ".mp") then {
 	mp="";
 } fi;
-rutak=$V-$ARQ
+rutak=$V$VESP-amd64
+if (test ! -f $rutak/bsd || ! -f $rutak/site$VP.tgz) then {
+	echo "No se encontró kernel e instaladores en $rutak";
+	exit 1;
+} fi;
 if (test "$RUTAKERNELREESPECIAL" != "") then {
         rutak="$RUTAKERNELREESPECIAL";
         echo "Usando kernel re-especial";

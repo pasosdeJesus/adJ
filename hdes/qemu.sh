@@ -11,7 +11,7 @@ if (test "$TEXTO" = "1") then {
 	opq="$opq -s -serial file:/tmp/q -monitor stdio"
 } fi;
 if (test ! -f virtual.vdi) then {
-	qemu-img create -f raw virtual.vdi 13G
+	qemu-img create -f raw virtual.vdi 15G
 } fi;
 
 if (test "$ARQ" = "i386") then {
