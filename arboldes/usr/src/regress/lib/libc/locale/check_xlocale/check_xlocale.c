@@ -383,6 +383,8 @@ void test_string()
 	p(wcscasecmp_l(L"", L"a", es_CO_UTF_8) < 0);
 	p(wcscasecmp_l(L"á", L"", es_CO_UTF_8) > 0);
 	p(wcscasecmp_l(L"áá", L"á", es_CO_UTF_8) > 0);
+	p(wcscasecmp(L"á", L"b") < 0);
+	p(wcscasecmp(L"a", L"á") <= 0);
 	p(wcsncasecmp_l(L"n", L"N", 1, es_CO_UTF_8) == 0);
 }
 
