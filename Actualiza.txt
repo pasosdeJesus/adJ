@@ -1,62 +1,62 @@
-InstalaciÛn/ActualizaciÛn a Aprendiendo De Jes˙s 5.2
+Instalaci√≥n/Actualizaci√≥n a Aprendiendo De Jes√∫s 5.2
 ****************************************************
 
-La instalaciÛn consta de 2 partes:
+La instalaci√≥n consta de 2 partes:
 
-a) InstalaciÛn/ActualizaciÛn del Sistema Base
+a) Instalaci√≥n/Actualizaci√≥n del Sistema Base
 
-b) InstalaciÛn/ActualizaciÛn de Aplicaciones 
+b) Instalaci√≥n/Actualizaci√≥n de Aplicaciones 
 
 Para la primera tener en cuenta:
 	* Si va a instalar reservar espacio en un disco duro, en una
-	  particiÛn primaria, cuya primera cabeza (head) no sea 0 sino 1.
-	* Elegir un mÈtodo para arrancar el computador con el disco virtual de
-	  instalaciÛn.  Puede ser: (1) DVD configurando el BIOS, (2) disquete 
+	  partici√≥n primaria, cuya primera cabeza (head) no sea 0 sino 1.
+	* Elegir un m√©todo para arrancar el computador con el disco virtual de
+	  instalaci√≥n.  Puede ser: (1) DVD configurando el BIOS, (2) disquete 
 	  con una imagen como floppy52.fs, (3) si actualiza puede iniciar 
-	  con el kernel bsd.rd de la versiÛn a la cual se actualiza 
-	  copi·ndolo en el directorio raÌz y en la lÌnea "boot>" ingresando 
+	  con el kernel bsd.rd de la versi√≥n a la cual se actualiza 
+	  copi√°ndolo en el directorio ra√≠z y en la l√≠nea "boot>" ingresando 
 	  bsd.rd, (4) por red local con DHCP y TFTP
-	* Elegir un medio del que se sacar·n los juegos de instalaciÛn. Puede 
+	* Elegir un medio del que se sacar√°n los juegos de instalaci√≥n. Puede 
 	  ser del DVD, disco duro en un sistema de archivos de OpenBSD, 
 	  por red con ftp o http.
 	* Si se comparte el computador con otro sistema operativo, configure
 	  un manejador de arranque (LILO, GRUB, NTLDR, etc) o inicie siempre
-	  con el DVD y en la lÌnea "boot>" ingrese "hd0a:bsd" si instalÛ
-	  en el primer disco IDE o "hd1a:bsd" si instalÛ en el segundo.
-	* Si requiere actualizar de una versiÛn de 32 bits a una de 64, tenga en
+	  con el DVD y en la l√≠nea "boot>" ingrese "hd0a:bsd" si instal√≥
+	  en el primer disco IDE o "hd1a:bsd" si instal√≥ en el segundo.
+	* Si requiere actualizar de una versi√≥n de 32 bits a una de 64, tenga en
 	  cuenta sacar copia de las bases de datos para PostgreSQL antes de 
 	  actualizar el sistema base.
 
 Para la segunda tener en cuenta:
 	* Se inicia con:
 		/inst-adJ.sh
-	  Que iniciar· una sesiÛn del administrador (por lo cual
+	  Que iniciar√° una sesi√≥n del administrador (por lo cual
           debe suministrar clave del usuario root) y ejecutar el 
-	  archivo de comnados de instalaciÛn de acuerdo a su entorno.
-	  Este archivo de comandos adem·s de asistir actualizaciones 
-	  que puedan hacer falta de una versiÛn a otra del sistema base, 
+	  archivo de comnados de instalaci√≥n de acuerdo a su entorno.
+	  Este archivo de comandos adem√°s de asistir actualizaciones 
+	  que puedan hacer falta de una versi√≥n a otra del sistema base, 
 	  instala y configura los paquetes y componentes que conforman 
-	  la distribuciÛn adJ: zonas de disco encriptadas, base de 
+	  la distribuci√≥n adJ: zonas de disco encriptadas, base de 
 	  datos PostgreSQL --preferiblemente en imagen encriptada--, Apache 
-	  de OpenBSD con SSL, PHP Hardened, ispell, escritorio gr·fico con 
-	  fluxbox, navegadores recientes y otras aplicaciones gr·ficas
-	  que facilitan el uso (Si prefiere o debe hacer actualizaciÛn manual 
+	  de OpenBSD con SSL, PHP Hardened, ispell, escritorio gr√°fico con 
+	  fluxbox, navegadores recientes y otras aplicaciones gr√°ficas
+	  que facilitan el uso (Si prefiere o debe hacer actualizaci√≥n manual 
 	  del sistema base, tenga en cuenta la lista oficial de cambios 
 	  requeridos disponible en: http://openbsd.org/faq/upgrade51.html )
 
 	* Por defecto este instalador intenta obtener las aplicaciones de un 
- 	  DVD, pero si las aplicaciones est·n en un disco duro (digamos en 
+ 	  DVD, pero si las aplicaciones est√°n en un disco duro (digamos en 
           /root/adJ/5.1-amd64) puede iniciarse con:
 		ARCH=/root/adJ/5.1-amd64 /usr/local/adJ/inst.sh
-	* Si el proceso no concluye exitosamente por favor despuÈs de ejecutar
-	  el instalador y avanzar tanto como pueda envÌe el archivo
+	* Si el proceso no concluye exitosamente por favor despu√©s de ejecutar
+	  el instalador y avanzar tanto como pueda env√≠e el archivo
 	  /var/tmp/inst-adJ.bitacora a info@pasosdeJesus.org
-	* Utiliza sysmerge para actualizar archivos de configuraciÛn, como	
+	* Utiliza sysmerge para actualizar archivos de configuraci√≥n, como	
 	se explica en http://www.openbsd.org/faq/upgrade48.html :
 
 	Sysmerge(8) muestra el resultado del comando diff(1) unificado, pasando
 	por un paginador (el que haya configurado en la variable de ambiente 
-	$PAGER) y para la mayorÌa de archivos presenta un mensaje como el 
+	$PAGER) y para la mayor√≠a de archivos presenta un mensaje como el 
 	siguiente:
 
       Use 'd' to delete the temporary ./var/www/htdocs/index.html
@@ -66,11 +66,11 @@ Para la segunda tener en cuenta:
 
       Default is to leave the temporary file to deal with by hand
 
-	Si desea retener su archivo actual, borre el temporal con la opciÛn 
-	'd', si dese remplazar su archivo existente con la nueva versiÛn, 
+	Si desea retener su archivo actual, borre el temporal con la opci√≥n 
+	'd', si dese remplazar su archivo existente con la nueva versi√≥n, 
 	instale el archivo temporal con 'i' Si desea mezclar los dos, 
-	al alejir 'm' ingresar· al programa sdiff (1) donde podr· mezclar 
-	manualmente el archivo.  Por defecto continuar· y dejar· el archivo 
+	al alejir 'm' ingresar√° al programa sdiff (1) donde podr√° mezclar 
+	manualmente el archivo.  Por defecto continuar√° y dejar√° el archivo 
 	sin modificar para manejarlo posteriormente de manera manual.
 
 	Aunque puede funcionar, no se recomienda usar sysmerge para integrar 		nuevos usuarios en el sistema, sino para esto usar useradd, que es 
@@ -78,15 +78,15 @@ Para la segunda tener en cuenta:
 	master.passwd sobre su archivo existente!).
 
 	Sysmerge(8) salva todos sus archivos remplazados en un directorio 
-	temporal, como /var/tmp/sysmerge.24959/backups, asÌ que si por 
+	temporal, como /var/tmp/sysmerge.24959/backups, as√≠ que si por 
 	accidente elimina algo que no era buena idea eliminar, tiene 
 	oportunidad de recuperarlo.  Advertencia: Note que la rutina daily(8) 		limpia archivos antiguos de ese directorio.
 
-	En general al usar sysmerge puede remplazar (opciÛn 'i') todos los 
-	archivos por sus versiones m·s recientes, pero dependiendo de los 
+	En general al usar sysmerge puede remplazar (opci√≥n 'i') todos los 
+	archivos por sus versiones m√°s recientes, pero dependiendo de los 
  	servicios que preste el servidor, hay algunos archivos de 
-	configuraciÛn que es mejor no remplazar (opciÛn 'd') o que es	
-	mejor mezclar si conoce la sintaxis (opciÛn 'm'):
+	configuraci√≥n que es mejor no remplazar (opci√≥n 'd') o que es	
+	mejor mezclar si conoce la sintaxis (opci√≥n 'm'):
 	* En general:
 		** Evitar remplazar /etc/rc.local /etc/hosts
 	* Si es cortafuegos: 

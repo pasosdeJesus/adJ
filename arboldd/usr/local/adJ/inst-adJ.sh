@@ -712,6 +712,23 @@ if (test -d /usr/X11R6/share/X11/xkb/symbols/srvr_ctrl) then {
     sudo rm -f /usr/bin/midicat /usr/share/man/man1/midicat.1
     sudo rm -f /usr/bin/makewhatis /usr/bin/mandocdb /usr/share/man/man8/mandocdb.8
 } fi;
+if (test -d /usr/bin/lint) then {
+	vac="$vac 5.1 a 5.2";	
+	echo "Aplicando actualizaciones de 5.1 a 5.2 " >> /var/tmp/inst-adJ.bitacora;
+	rm /usr/bin/lint
+	rm /usr/libexec/lint[12]
+	rm -r /usr/libdata/lint
+	rm /usr/share/man/man1/lint.1
+	rm /etc/rc.d/btd
+	rm /usr/sbin/pkg
+	rm /sbin/raidctl
+	rm /usr/share/man/man4/raid.4
+	rm /usr/share/man/man8/raidctl.8
+	rm /usr/libexec/tftpd
+	rm -r /usr/lib/gcc-lib/*-unknown-openbsd5.1
+	pkg_delete sqlite3 > /dev/null 2>&1
+} fi;
+
 
 if  (test "$vac" != "") then {
 	dialog --title 'Actualizaciones aplicadas' --msgbox "\\nSe aplicaron actualizaciones: $vac\\n\\n$mac\\n" 15 60
