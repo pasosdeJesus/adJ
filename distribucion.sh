@@ -845,11 +845,11 @@ echo " *> Revisando faltantes con respecto a Contenido.txt" | tee -a /var/tmp/di
 	} fi;
 	if (test -f Novedades.ewiki) then {
 		echo "*** De Ewiki a Texto" | tee -a /var/tmp/distrib-adJ.bitacora
-		awk -f hdes/ewikiAtexto.awk Novedades.ewiki > Novedades.txt
+		awk -f hdes/ewikiAtexto.awk Novedades.ewiki > tmp/Novedades.txt
 	} fi;
-	if (test -f Novedades.txt) then {
+	if (test -f tmp/Novedades.txt) then {
 		echo "*** Novedades" | tee -a /var/tmp/distrib-adJ.bitacora;
-		cp Novedades.txt $V$VESP-$ARQ/Novedades.txt
+		cp tmp/Novedades.txt $V$VESP-$ARQ/Novedades.txt
 	} fi;
 } fi;
 
