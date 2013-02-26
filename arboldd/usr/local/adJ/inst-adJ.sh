@@ -322,6 +322,7 @@ chmod g+rw /dev/sd?i /dev/sd?c /dev/cd?c /dev/cd?a
 mkdir -p /var/www/tmp
 chmod a+rxw /var/www/tmp > /dev/null 2>&1
 chmod +t /var/www/tmp
+chmod a+rxw /var/www/tmp > /dev/null 2>&1
 
 # Puede faltar en algunos sitios
 # cd /dev
