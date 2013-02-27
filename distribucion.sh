@@ -643,6 +643,7 @@ else {
 } fi;
 
 
+cd $dini
 echo "$paraexc" | tr " " "\n" | grep -v "^[ \t]*$" | sed -e "s/^/ /g" > tmp/excluye.txt
 cmd="echo \$excluye | tr \" \" \"\\n\" | sed -e \"s/^/ /g\" >> tmp/excluye.txt"
 eval "$cmd"
@@ -777,18 +778,21 @@ if (test "$sn" = "s") then {
 	rm -rf /tmp/i/*
 	mkdir -p /tmp/i/usr/local/adJ/
 	cp -rf $dini/arboldd/* /tmp/i/
+	find /tmp/i -name "*~" | xargs rm 
 	cp $dini/arboldd/usr/local/adJ/inst.sh /tmp/i/inst-adJ.sh
 	mkdir -p /tmp/i/usr/src/etc/
 	cp /usr/src/etc/Makefile  /tmp/i/usr/src/etc/
 	for i in `cat $dini/lista-site`; do 
-		if (test -d "/destdir/$i") then {
+		if (test -d "/destdir/$i" -o -d "$i") then {
 			mkdir -p /tmp/i/$i
 		} elif (test -f "/destdir/$i") then {
 			d=`dirname $i`
 			mkdir -p /tmp/i/$d
 			cp /destdir/$i /tmp/i/$i
 		} else {
-			echo "lista-site errada, falta $i";
+			echo "lista-site errada, falta $i en /destdir, intentando de /";
+			mkdir -p /tmp/i/`dirname $i`; 
+			cp -f /$i /tmp/i/$i	
 		} fi;
 	done;
 	mkdir -p /tmp/i/etc/
@@ -842,11 +846,12 @@ echo " *> Revisando faltantes con respecto a Contenido.txt" | tee -a /var/tmp/di
 	} fi;
 	if (test -f Novedades.ewiki) then {
 		echo "*** De Ewiki a Texto" | tee -a /var/tmp/distrib-adJ.bitacora
-		awk -f hdes/ewikiAtexto.awk Novedades.ewiki > Novedades.txt
+		awk -f hdes/ewikiAtexto.awk Novedades.ewiki > tmp/Novedades.txt
+		recode latin1..utf8 tmp/Novedades.txt
 	} fi;
-	if (test -f Novedades.txt) then {
+	if (test -f tmp/Novedades.txt) then {
 		echo "*** Novedades" | tee -a /var/tmp/distrib-adJ.bitacora;
-		cp Novedades.txt $V$VESP-$ARQ/Novedades.txt
+		cp tmp/Novedades.txt $V$VESP-$ARQ/Novedades.txt
 	} fi;
 } fi;
 

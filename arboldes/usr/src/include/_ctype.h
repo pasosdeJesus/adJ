@@ -105,7 +105,7 @@ __maskrune(rune_t _c, unsigned long _f)
 static __inline int
 __sbmaskrune(rune_t _c, unsigned long _f)
 {
-	return (_c < 0 || _c >= __mb_sb_limit) ? 0 :
+	return (_c < 0 || (int)_c >= __mb_sb_limit) ? 0 :
 	       _CurrentRuneLocale->rl_runetype[_c] & _f;
 }
 
@@ -138,7 +138,7 @@ __toupper(rune_t _c)
 static __inline rune_t
 __sbtoupper(rune_t _c)
 {
-	return (_c < 0 || _c >= __mb_sb_limit) ? _c :
+	return (_c < 0 || (int)_c >= __mb_sb_limit) ? _c :
 	       _CurrentRuneLocale->rl_mapupper[_c];
 }
 
@@ -152,7 +152,7 @@ __tolower(rune_t _c)
 static __inline rune_t
 __sbtolower(rune_t _c)
 {
-	return (_c < 0 || _c >= __mb_sb_limit) ? _c :
+	return (_c < 0 || (int)_c >= __mb_sb_limit) ? _c :
 	       _CurrentRuneLocale->rl_maplower[_c];
 }
 

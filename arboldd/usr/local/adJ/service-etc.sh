@@ -30,9 +30,7 @@ EOF
 } fi;
 
 echo "Archivos de etc en general exceptuando casos especiales de compatibilidad"  >> /var/tmp/inst-adJ.bitacora
-l1=`find . -exec grep -l "daemon" {} ';' | grep -v "login.conf" | grep -v "group" | grep -v "passwd" | grep -v "pwd.db" | grep -v "syslog.conf" | grep -v "rc.subr" | grep -v "mail/aliases" | grep -v "mail/.*cf" | grep -v "Xsetup_0" | grep -v "dbus-1/system.conf"`
-l2=`grep -l "daemon" rc.d/* | grep -v "rc.subr"`
-l="$l1 $l2"
+l=`find . -exec grep -l "daemon" {} ';' | grep -v "login.conf" | grep -v "group" | grep -v "passwd" | grep -v "pwd.db" | grep -v "syslog.conf" | grep -v "rc.subr" | grep -v "mail/aliases" | grep -v "mail/.*cf" | grep -v "Xsetup_0" | grep -v "dbus-1/system.conf" | grep -v "rc.conf.local" | grep -v "rc.local" | grep -v "rc.d/"`
 echo "l=$l" >> /var/tmp/inst-adJ.bitacora 
 for i in $l; do 
 	echo $i  >> /var/tmp/inst-adJ.bitacora
@@ -48,6 +46,35 @@ q
 EOF
 
 done;
+
+echo "Archivos de etc/rc.d"  >> /var/tmp/inst-adJ.bitacora
+l=`grep -l "daemon" rc.d/* | grep -v "rc.subr"`
+echo "l=$l" >> /var/tmp/inst-adJ.bitacora 
+for i in $l; do 
+	echo $i  >> /var/tmp/inst-adJ.bitacora
+	ed $i >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+,s/^ *daemon *=/service=/g
+w
+q
+EOF
+	ed $i >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+,s/^ *daemon_flags *=/service_flags=/g
+w
+q
+EOF
+	ed $i >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+,s/{daemon}/{service}/g
+w
+q
+EOF
+	ed $i >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+,s/{daemon_flags}/{service_flags}/g
+w
+q
+EOF
+
+done;
+
 
 echo "Particularidades de rc.subr"  >> /var/tmp/inst-adJ.bitacora
 if (test -f "rc.d/rc.subr") then {

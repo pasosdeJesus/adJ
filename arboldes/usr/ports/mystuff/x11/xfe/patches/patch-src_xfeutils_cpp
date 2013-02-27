@@ -1,0 +1,12 @@
+$OpenBSD$
+--- src/xfeutils.cpp.orig	Tue Feb 19 10:57:19 2013
++++ src/xfeutils.cpp	Tue Feb 19 10:57:28 2013
+@@ -296,7 +296,7 @@ FXString getKeybinding(FXEvent* event)
+ 		case KEY_F33:
+ 		case KEY_F34:
+ 		case KEY_F35:
+-			sprintf(buffer,"F%d",code-KEY_F1+1);			
++			snprintf(buffer, 64, "F%d",code-KEY_F1+1);			
+ 			s+=buffer;
+ 			break;
+ 		default:

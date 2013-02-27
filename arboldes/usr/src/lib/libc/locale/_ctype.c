@@ -83,6 +83,15 @@ toupper_l(int __c, locale_t __l)
 	       __runes->rl_mapupper[__c];
 }
 
+__inline int 
+_toupper_l(int __c, locale_t __l)
+{
+	int __limit;
+	_RuneLocale *__runes = __runes_for_locale(__l, &__limit);
+	return (__c < 0 || __c >= __limit) ? __c :
+	       __runes->rl_mapupper[__c];
+}
+
 
 __inline rune_t
 ___tolower_l(wint_t c, locale_t l)
@@ -102,6 +111,14 @@ towlower_l(wint_t __c, locale_t __l)
 }
 
 __inline int tolower_l(int __c, locale_t __l)
+{
+	int __limit;
+	_RuneLocale *__runes = __runes_for_locale(__l, &__limit);
+	return (__c < 0 || __c >= __limit) ? __c :
+	       __runes->rl_maplower[__c];
+}
+
+__inline int _tolower_l(int __c, locale_t __l)
 {
 	int __limit;
 	_RuneLocale *__runes = __runes_for_locale(__l, &__limit);

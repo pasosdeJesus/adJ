@@ -50,9 +50,7 @@
 .Nm isspace_l ,
 .Nm isspecial_l ,
 .Nm isupper_l ,
-.Nm isxdigit_l ,
-.Nm tolower_l ,
-.Nm toupper_l
+.Nm isxdigit_l 
 .Nd character classification functions
 .Sh LIBRARY
 .Lb libc
@@ -96,10 +94,6 @@
 .Fn isupper_l "int c" "locale_t loc"
 .Ft int
 .Fn isxdigit_l "int c" "locale_t loc"
-.Ft int
-.Fn tolower_l "int c" "locale_t loc"
-.Ft int
-.Fn toupper_l "int c" "locale_t loc"
 .Sh DESCRIPTION
 The above functions perform character tests and conversions on the integer
 .Fa c
@@ -127,8 +121,6 @@ See the specific manual pages for more information.
 .Xr isspecial 3 ,
 .Xr isupper 3 ,
 .Xr isxdigit 3 ,
-.Xr tolower 3 ,
-.Xr toupper 3 ,
 .Xr wctype 3 ,
 .Xr xlocale 3
 .Sh STANDARDS

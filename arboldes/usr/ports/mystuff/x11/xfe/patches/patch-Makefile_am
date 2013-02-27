@@ -1,0 +1,12 @@
+$OpenBSD$
+--- Makefile.am.orig	Tue Feb 19 14:22:08 2013
++++ Makefile.am	Tue Feb 19 14:23:49 2013
+@@ -19,7 +19,7 @@ desktop_DATA = $(desktop_in_files:.desktop.in=.desktop
+ 
+ dist-hook:
+ 	cd po && $(MAKE) update-po
+-	cp -b po/*.po* $(distdir)/po
++	cp po/*.po* $(distdir)/po
+ 	rm -rf $(distdir)/po/*~
+ 	rm -rf $(distdir)/debian/xfe
+ 

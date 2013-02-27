@@ -121,7 +121,6 @@ if (test "$ARCHSIVEL" = "") then {
 
 export PKG_PATH=$ARCH/paquetes/
 
-
 a=`ls $PKG_PATH/sivel-* 2> /dev/null`;
 o=`echo $a | sed -e "s/.*\sivel-\(.*\).tgz/\1/g"`;
 echo "Actualizando/Instalando SIVeL $o" | tee -a /var/tmp/inst-sivel.log;
@@ -439,15 +438,6 @@ cd /var/www/htdocs/sivel
 chown -R $usivel:$usivel .
 chmod -R a+r .
 chmod -R go-rx bin
-if (test ! -d /var/www/htdocs/sivel/sitios/sivel) then {
-	cd sitios/
-	# ahora nuevo.sh saca clave de .pgpass
-	pwd
-	SIN_CREAR=1 ./nuevo.sh sivel
-	sudo chown www:www sivel/ultimoenvio.txt
-	ln -s sivel 127.0.0.1
-	cd ..
-} fi;
 f=`ls /var/www/usr/local/bin/ispell 2> /dev/null > /dev/null`;
 if (test "$?" = "0") then {
 	echo -n "¿Desinstalar ispell y openssl de entorno chroot para instalarlos de nuevo? "
@@ -490,6 +480,17 @@ if (test "$derechos" = "") then {
 } fi;
 
 su $usivel ./conf.sh -i | tee -a /var/tmp/inst-sivel.log
+
+if (test ! -d /var/www/htdocs/sivel/sitios/sivel) then {
+	cd sitios/
+	# ahora nuevo.sh saca clave de .pgpass
+	pwd
+	SIN_CREAR=1 ./nuevo.sh sivel
+	sudo chown www:www sivel/ultimoenvio.txt
+	ln -s sivel 127.0.0.1
+	cd ..
+} fi;
+
 echo "* Estableciendo clave" | tee -a /var/tmp/inst-sivel.log;
 
 if (test ! -f "/var/www/htdocs/sivel/sitios/sivel/conf-copia$VER.php") then {

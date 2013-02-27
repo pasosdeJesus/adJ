@@ -1,6 +1,7 @@
 #!/bin/sh
 # Instala/Actualiza un Aprendiendo de Jesús 
-# Dominio público. 2012. vtamara@pasosdeJesus.org
+# Dominio público de acuerdo a legislación colombiana. http://www.pasosdejesus.org/dominio_publico_colombia.html. 
+# 2012. vtamara@pasosdeJesus.org
 
 VER=5.2
 VESP=""
@@ -265,11 +266,11 @@ done;
 ADMADJ=$uadJ;
 
 echo "* Creando cuenta inicial"  >> /var/tmp/inst-adJ.bitacora
-groupinfo $uadJ > /dev/null
+groupinfo $uadJ > /dev/null 2>&1
 if (test "$?" != "0") then {
 groupadd $uadJ
 } fi;
-userinfo $uadJ >/dev/null
+userinfo $uadJ >/dev/null 2>&1
 if (test "$?" != "0") then {
 adduser -v -batch $uadJ $uadJ,wheel $uadJ
 passwd $uadJ
@@ -321,6 +322,7 @@ chmod g+rw /dev/sd?i /dev/sd?c /dev/cd?c /dev/cd?a
 mkdir -p /var/www/tmp
 chmod a+rxw /var/www/tmp > /dev/null 2>&1
 chmod +t /var/www/tmp
+chmod a+rxw /var/www/tmp > /dev/null 2>&1
 
 # Puede faltar en algunos sitios
 # cd /dev
@@ -711,6 +713,23 @@ if (test -d /usr/X11R6/share/X11/xkb/symbols/srvr_ctrl) then {
     sudo rm -f /usr/bin/midicat /usr/share/man/man1/midicat.1
     sudo rm -f /usr/bin/makewhatis /usr/bin/mandocdb /usr/share/man/man8/mandocdb.8
 } fi;
+if (test -f /usr/bin/lint) then {
+	vac="$vac 5.1 a 5.2";	
+	echo "Aplicando actualizaciones de 5.1 a 5.2 " >> /var/tmp/inst-adJ.bitacora;
+	rm /usr/bin/lint
+	rm /usr/libexec/lint[12]
+	rm -r /usr/libdata/lint
+	rm /usr/share/man/man1/lint.1
+	rm /etc/rc.d/btd
+	rm /usr/sbin/pkg
+	rm /sbin/raidctl
+	rm /usr/share/man/man4/raid.4
+	rm /usr/share/man/man8/raidctl.8
+	rm /usr/libexec/tftpd
+	rm -r /usr/lib/gcc-lib/*-unknown-openbsd5.1
+	pkg_delete sqlite3 > /dev/null 2>&1
+} fi;
+
 
 if  (test "$vac" != "") then {
 	dialog --title 'Actualizaciones aplicadas' --msgbox "\\nSe aplicaron actualizaciones: $vac\\n\\n$mac\\n" 15 60
@@ -1272,6 +1291,28 @@ if (test -f "$pb") then {
 } fi;
 
 
+echo "* Agregar cotejaciones en español"  >> /var/tmp/inst-adJ.bitacora
+ES_COUNTRIES="ES CO PE VE EC GT CU BO HN PY SV CR PA GQ MX AR CH DO NI UY PR"
+echo "psql -h /var/www/tmp -U postgres -c \"SELECT COUNT(*) FROM pg_collation WHERE collname = 'es_co_utf_8';\"" > /tmp/cu.sh
+echo "exit \$?" >> /tmp/cu.sh;
+chmod +x /tmp/cu.sh | tee -a /var/tmp/inst-adJ.bitacora
+cat /tmp/cu.sh >> /var/tmp/inst-adJ.bitacora
+su - _postgresql /tmp/cu.sh > /tmp/cu.out 2>> /var/tmp/inst-adJ.bitacora
+t=`head -n 3 /tmp/cu.out | tail -n 1 | sed -e "s/ *//g" 2>/dev/null`
+if (test "$t" != "1") then {
+	echo "" > /tmp/cu.sh
+	for i in $ES_COUNTRIES; do
+		echo "psql -h /var/www/tmp -U postgres -c \"CREATE COLLATION es_${i}_UTF_8 (LOCALE='es_${i}.UTF-8');\"" >> /tmp/cu.sh
+	done;
+	echo "exit \$?" >> /tmp/cu.sh;
+	chmod +x /tmp/cu.sh 2>&1 >> /var/tmp/inst-adJ.bitacora
+	cat /tmp/cu.sh >> /var/tmp/inst-adJ.bitacora
+	su - _postgresql /tmp/cu.sh  2>&1
+} else {
+	echo "   Saltando..." >> /var/tmp/inst-adJ.bitacora;
+} fi;
+				
+
 insacp libidn
 insacp curl 
 insacp libidn
@@ -1347,7 +1388,8 @@ if (test "$p" = "") then {
         	/etc/php-5.3/pdo_pgsql.ini
 	ln -fs /etc/php-5.3.sample/sqlite.ini \
 		/etc/php-5.3/sqlite.ini
-
+	ln -sf /etc/php-5.3.sample/uploadprogress.ini \
+	       	/etc/php-5.3/uploadprogress.ini
 	chmod +w /var/www/conf/httpd.conf
 	ed /var/www/conf/httpd.conf >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/\#AddType application\/x-httpd-php .php/AddType application\/x-httpd-php .php/g
@@ -1546,25 +1588,25 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 	cat > /home/$uadJ/.fluxbox/menu <<EOF
 
 [begin] (Fluxbox)
-	[exec] (xfe - Archivos) {PATH=\$PATH:/usr/sbin:/usr/local/sbin:/sbin LANG=es LC_ALL=es /usr/local/bin/xfe}
+	[exec] (xfe - Archivos) {PATH=\$PATH:/usr/sbin:/usr/local/sbin:/sbin /usr/local/bin/xfe}
 	[exec] (xterm) {xterm -en utf8 -e /bin/ksh -l}
 	[exec] (mozilla-firefox) {ulimit -d 200000 && /usr/local/bin/firefox -UILocale es-AR}
-	[exec] (midori) {LANG=es_CO.UTF-8 /usr/local/bin/midori}
-	[exec] (chrome) {LANG=es_CO.UTF-8 /usr/local/bin/chrome}
+	[exec] (midori) {/usr/local/bin/midori}
+	[exec] (chromium) {/usr/local/bin/chromium}
 [submenu] (Espiritualidad)
-	[exec] (xiphos) {LANG=es_CO.UTF-8 /usr/local/bin/xiphos}
+	[exec] (xiphos) {/usr/local/bin/xiphos}
 	[exec] (Evangelios de dominio publico) {/usr/local/bin/firefox /usr/local/share/doc/evangelios_dp/index.html}
 [end]
 [submenu] (Dispositivos)
 	[exec] (Apagar) {sudo /sbin/halt -p}
 	[exec] (Iniciar servicios faltantes) {xterm -en utf8 -e "/usr/bin/sudo /bin/sh /etc/rc.local espera"}
-	[exec] (Montar CD) {/sbin/mount /mnt/cdrom ; LANG=es xfe /mnt/cdrom/ }
+	[exec] (Montar CD) {/sbin/mount /mnt/cdrom ; xfe /mnt/cdrom/ }
 	[exec] (Desmontar CD) {/sbin/umount -f /mnt/cdrom}
-	[exec] (Montar USB) {/sbin/mount /mnt/usb ; LANG=es xfe /mnt/usb/}
+	[exec] (Montar USB) {/sbin/mount /mnt/usb ; xfe /mnt/usb/}
 	[exec] (Desmontar USB) {/sbin/umount -f /mnt/usb}
-	[exec] (Montar USBC) {/sbin/mount /mnt/usbc ; LANG=es xfe /mnt/usbc/}
+	[exec] (Montar USBC) {/sbin/mount /mnt/usbc ; xfe /mnt/usbc/}
 	[exec] (Desmontar USBC) {/sbin/umount -f /mnt/usbc}
-	[exec] (Montar Floppy) {/sbin/mount /mnt/floppy ; LANG=es xfe /mnt/floppy}
+	[exec] (Montar Floppy) {/sbin/mount /mnt/floppy ; xfe /mnt/floppy}
 	[exec] (Desmontar Floppy) {/sbin/umount -f /mnt/floppy}
 	[exec] (Configurar Impresora con CUPS) {echo y | sudo cups-enable; sudo chmod a+rw /dev/ulpt* /dev/lpt*; /usr/local/bin/firefox -UILocale es-AR http://127.0.0.1:631}
 	[submenu] (Red)
@@ -1578,22 +1620,29 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
         [end]
 [end]
 [submenu] (Oficina)
-	[exec] (gnumeric) {LANG=es_CO.UTF-8 /usr/local/bin/gnumeric}
-	[exec] (abiword) {LANG=es_CO.UTF-8 /usr/local/bin/abiword}
-	[exec] (xpdf) {xpdf}
+	[exec] (abiword) {/usr/local/bin/abiword}
+	[exec] (dia) {/usr/local/bin/abiword}
+	[exec] (gnumeric) {/usr/local/bin/gnumeric}
 	[exec] (gv) {gv}
-	[exec] (gimp) {LANG=es_CO.UTF-8 gimp}
+	[exec] (gimp) {gimp}
+	[exec] (inkscape) {inkscape}
 	[exec] (LibreOffice) {/usr/local/bin/soffice}
+	[exec] (scribus) {scribus}
+	[exec] (xpdf) {xpdf}
 [end]
 [submenu] (Multimedia)
-	[exec] (xcdplayer) {LANG=es_CO.UTF-8 xcdplayer}
-	[exec] (xcdroast) {LANG=es_CO.UTF-8 sudo xcdroast}
-	[exec] (xmix) {LANG=es_CO.UTF-8 xmix}
+	[exec] (audacios) {audacious}
+	[exec] (audacity) {audacity}
 	[exec] (cdio cdplay) {xterm -en utf8 -e "cdio cdplay"}
+	[exec] (fontforge) {fontforge}
+	[exec] (xcdplayer) {xcdplayer}
+	[exec] (xcdroast) {sudo xcdroast}
+	[exec] (xmix) {xmix}
+	[exec] (vlc) {vlc}
 [end]
 [submenu] (Internet)
-	[exec] (FileZilla) {LANG=es_CO.UTF-8 filezilla}
-	[exec] (Pidgin) {LANG=es_CO.UTF-8 pidgin}
+	[exec] (FileZilla) {filezilla}
+	[exec] (Pidgin) {pidgin}
 [end]
 [submenu] (Documentos)
 	[exec] (OpenBSD basico) {/usr/local/bin/firefox -UILocale es-AR /usr/local/share/doc/basico_OpenBSD/index.html}
@@ -1601,7 +1650,10 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 	[exec] (OpenBSD servidor) {/usr/local/bin/firefox -UILocale es-AR /usr/local/share/doc/servidor_OpenBSD/index.html}
 [end]
 [submenu] (Otros)
-[exec] (vim) {LANG=es_CO.UTF-8 gvim}
+[exec] (gvim) {gvim}
+[exec] (qgis) {qgis}
+[exec] (xarchiver) {xarchiver}
+[exec] (xfw) {xfw}
 [end]
 [submenu] (Menú de fluxbox)
 [config] (Configurar)
@@ -1649,6 +1701,7 @@ if (test ! -f /home/$uadJ/.fluxbox/startup) then {
 	cp $ARCH/medios/$imfondo /home/$uadJ/.fluxbox/backgrounds/fondo.jpg
 	cat > /home/$uadJ/.fluxbox/startup <<EOF
 #fbsetroot -to blue -solid lightblue
+export LANG=es_CO.UTF-8
 if (test -x /usr/local/bin/fluxter) then {
 	/usr/local/bin/fluxter &
 } fi;
@@ -1952,238 +2005,16 @@ if (test "$?" = "0") then {
 	dialog --title 'Eliminar xfe' --yesno "\\nxfe instalado. ¿Eliminarlo para instalar uno más nuevo?" 15 60
 	if (test "$?" = "0") then {
 		pkg_delete -I -D dependencies xfe >> /var/tmp/inst-adJ.bitacora 2>&1
+		rm /home/$uadJ/.config/xfe/xf*
 	} fi;
 } fi;
 f=`ls /var/db/pkg/xfe* 2> /dev/null > /dev/null`;
 if (test "$?" != "0") then {
 	p=`ls $PKG_PATH/libiconv-* $PKG_PATH/fox-* $PKG_PATH/gettext-* $PKG_PATH/xfe-*`
         pkg_add -I -D update -D updatedepends -r $p >> /var/tmp/inst-adJ.bitacora 2>&1;
-	if (test ! -f "/home/$uadJ/.config/xfe/xferc") then {
-		mkdir -p /home/$uadJ/.config/xfe/
-		cat > /home/$uadJ/.config/xfe/xferc <<EOF
-[OPTIONS]
-panel_view=2
-xpos=149
-width=800
-confirm_quit=1
-tree_width=200
-locationbar=1
-auto_save_layout=1
-ask_before_copy=1
-status=1
-height=600
-tree_hidden_dir=0
-confirm_delete=1
-use_trash_bypass=0
-toolbar=1
-root_warn=0
-paneltoolbar=1
-single_click_fileopen=0
-use_trash_can=1
-ypos=99
-confirm_overwrite=1
-single_click_diropen=0
-
-[FILETYPES]
-kdelnk=xfw,xfv,xfw;KDE Link;config_32x32.png;config_16x16.png;;
-au=play,,;Sound;sound_32x32.png;sound_16x16.png;;
-py=xfw,xfv,xfw;Python Source;text_32x32.png;text_16x16.png;;
-gz=xarchive, file-roller,gunzip -f,file-roller;Gziped File;gz_32x32.png;gz_16x16.png;application/x-gzip
-mp3=mplayer,,;MPEG Audio;mp3_32x32.png;mp3_16x16.png;;
-class=xfw,xfv,xfw;Java Binary;class_32x32.png;class_16x16.png;;
-chm=xchm,xchm,xchm;Windows Help;chm_32x32.png;chm_16x16.png;;
-rm=realplay,,;RealPlayer Video;video_32x32.png;video_16x16.png;;
-xm=mplayer,,;Audio module;wave_32x32.png;wave_16x16.png;;
-html=firefox,firefox,xfw;Hyper Text;html_32x32.png;html_16x16.png;;
-smf=smath,oomath,oomath;StarMath 5.0 Document;sxm_32x32.png;sxm_16x16.png;;
-tcl=xfw,xfv,xfw;Tcl Source;tcl_32x32.png;tcl_16x16.png;;
-pl=xfw,xfv,xfw;Perl Source;text_32x32.png;text_16x16.png;;
-pm=xfw,xfv,xfw;Perl Module;text_32x32.png;text_16x16.png;;
-po=xfw,xfv,xfw;Locale File;text_32x32.png;text_16x16.png;;
-mpeg=mplayer,plaympeg,;MPEG Video;video_32x32.png;video_16x16.png;;
-mp4=mplayer,plaympeg,;MPEG Video;video_32x32.png;video_16x16.png;;
-sh=xfw,xfv,xfw;Shell Script;shell_32x32.png;shell_16x16.png;;
-exe=wine,,;Windows EXE;exe_32x32.png;exe_16x16.png;;
-sdw=swriter,oowriter,oowriter;Starwriter 5.0 Document;sxw_32x32.png;sxw_16x16.png;;
-ps=gv,evince,;PostScript Document;ps_32x32.png;ps_16x16.png;;
-rpm=xfp,xfp,xfp;RPM Package;rpm_32x32.png;rpm_16x16.png;;
-makefile.in=xfw,xfv,xfw;Configure Makefile;make_32x32.png;make_16x16.png;;
-patch=xfw,xfv,xfw;Source Patch;text_32x32.png;text_16x16.png;;
-news=xfw,xfv,xfw;News File;news_32x32.png;news_16x16.png;;
-xfprc=xfw,xfv,xfw;Xfe Configuration;config_32x32.png;config_16x16.png;;
-xfvrc=xfw,xfv,xfw;Xfe Configuration;config_32x32.png;config_16x16.png;;
-xbm=xfi,display,gimp,;X Bitmap;xbm_32x32.png;xbm_16x16.png;;
-jpeg=xfi,display,gimp;JPEG Image;jpeg_32x32.png;jpeg_16x16.png;;
-o=,,;Object File;o_32x32.png;o_16x16.png;;
-lzh=xarchive, file-roller,lha -xf,file-roller;LZH Archive;lzh_32x32.png;lzh_16x16.png;;
-xcf=xfi,gimp,gimp;XCF Image;xcf_32x32.png;xcf_16x16.png;;
-rar=xarchive, file-roller,rar x -o+,file-roller;RAR Archive;rar_32x32.png;rar_16x16.png;;
-pas=xfw,xfv,xfw;Pascal Source;text_32x32.png;text_16x16.png;;
-zip=xarchive, file-roller,unzip -o,file-roller;ZIP Archive;zip_32x32.png;zip_16x16.png;application/x-zip
-makefile=xfw,xfv,xfw;Makefile;make_32x32.png;make_16x16.png;;
-spec=xfw,xfv,xfw;RPM Spec;rpm_32x32.png;rpm_16x16.png;;
-pyo=,,;Python Object;o_32x32.png;o_16x16.png;;
-tar=xarchive, file-roller,tar -xvf,file-roller;Tar Archive;tar_32x32.png;tar_16x16.png;application/x-tar
-bak=xfw,xfv,xfw;Backup File;bak_32x32.png;bak_16x16.png;;
-dpatch=xfw,xfv,xfw;Debian Patch;text_32x32.png;text_16x16.png;;
-dia=dia,dia,dia;Dia Drawing;dia_32x32.png;dia_16x16.png;;
-djvu=djview,djview,;DJVU Document;djvu_32x32.png;djvu_16x16.png;;
-a=,,;Static Library;a_32x32.png;shared_16x16.png;;
-desktop=xfw,xfv,xfw;Gnome Desktop Entry;config_32x32.png;config_16x16.png;;
-iso=xarchive, file-roller,file-roller,file-roller;ISO9660 Image;package_32x32.png;package_16x16.png;;
-h=xfw,xfv,xfw;C Header;h_32x32.png;h_16x16.png;;
-vlog=xfw,xfv,xfw;Verilog Source;vlog_32x32.png;vlog_16x16.png;;
-readme=xfw,xfv,xfw;Readme File;help_32x32.png;help_16x16.png;;
-tif=xfi,display,gimp;TIFF Image;tif_32x32.png;tif_16x16.png;;
-ram=realplay,,;RealPlayer Video;video_32x32.png;video_16x16.png;;
-ml=xfw,xfv,xfw;Caml Source;text_32x32.png;text_16x16.png;;
-sxi=simpress,ooimpress,ooimpress;OpenOffice 1.0 Impress;sxi_32x32.png;sxi_16x16.png;;
-cpp=xfw,xfv,xfw;C++ Source;cc_32x32.png;cc_16x16.png;;
-copyright=xfw,xfv,xfw;Copyright File;info_32x32.png;info_16x16.png;;
-xpm=xfi,gimp,gimp;X Pixmap;xpm_32x32.png;xpm_16x16.png;;
-eps=gv,evince,;Encapsulated PostScript Document;ps_32x32.png;ps_16x16.png;;
-php=firefox,firefox,xfw;PHP Source;html_32x32.png;html_16x16.png;;
-m=xfw,xfv,xfw;Matlab Source;m_32x32.png;m_16x16.png;;
-sxd=sdraw,oodraw,oodraw;OpenOffice 1.0 Draw;sxd_32x32.png;sxd_16x16.png;;
-pps=simpress,ooimpress,ooimpress;PowerPoint Show;ppt_32x32.png;ppt_16x16.png;;
-ppt=simpress,ooimpress,ooimpress;PowerPoint Presentation;ppt_32x32.png;ppt_16x16.png;;
-mid=midiplay,,;MIDI File;midi_32x32.png;midi_16x16.png;;
-sxm=smath,oomath,oomath;OpenOffice 1.0 Math;sxm_32x32.png;sxm_16x16.png;;
-xfwrc=xfw,xfv,xfw;Xfe Configuration;config_32x32.png;config_16x16.png;;
-txt=xfw,xfv,xfw;Plain Text;text_32x32.png;text_16x16.png;;
-vhd=xfw,xfv,xfw;Vhdl Source;vhdl_32x32.png;vhdl_16x16.png;;
-core=,,;Core Dump;core_32x32.png;core_16x16.png;;
-sxw=swriter,oowriter,oowriter;OpenOffice 1.0 Text;sxw_32x32.png;sxw_16x16.png;;
-jpg=xfi,display,gimp;JPEG Image;jpeg_32x32.png;jpeg_16x16.png;;
-mpg=mplayer,xine,plaympeg;MPEG Video;video_32x32.png;video_16x16.png;;
-wav=mplayer,,;Wave Audio;wave_32x32.png;wave_16x16.png;;
-vsd=visio,visio,visio;Visio Drawing;vsd_32x32.png;vsd_16x16.png;;
-log=xfw,xfv,xfw;Log File;info_32x32.png;info_16x16.png;;
-doc=abiword,swriter,oowriter,oowriter;Word Document;doc_32x32.png;doc_16x16.png;;
-gif=xfi,xfi,gimp;GIF Image;gif_32x32.png;gif_16x16.png;;
-pot=simpress,ooimpress,ooimpress;PowerPoint Template;ppt_32x32.png;ppt_16x16.png;;
-la=,,;Libtool library file;a_32x32.png;shared_16x16.png;;
-vst=visio,visio,visio;Visio Template;vsd_32x32.png;vsd_16x16.png;;
-mod=mplayer,,;Audio module;wave_32x32.png;wave_16x16.png;;
-c=xfw,xfv,xfw;C Source;c_32x32.png;c_16x16.png;;
-vss=visio,visio,visio;Visio Solution;vsd_32x32.png;vsd_16x16.png;;
-svg=sodipodi,inkscape,inkscape;SVG Image;svg_32x32.png;svg_16x16.png;;
-sxc=scalc,oocalc,oocalc;OpenOffice 1.0 Calc;sxc_32x32.png;sxc_16x16.png;;
-java=xfw,xfv,xfw;Java Source;java_32x32.png;java_16x16.png;;
-z=xarchive, file-roller,uncompress -f,file-roller;Compressed File;z_32x32.png;z_16x16.png;;
-s3m=mplayer,,;Audio module;wave_32x32.png;wave_16x16.png;;
-dot=swriter,oowriter,oowriter;Word Template;doc_32x32.png;doc_16x16.png;;
-cc=xfw,xfv,xfw;C++ Source;cc_32x32.png;cc_16x16.png;;
-install=xfw,xfv,xfw;Install File;info_32x32.png;info_16x16.png;;
-bugs=xfw,xfv,xfw;Bugs File;bug_32x32.png;bug_16x16.png;;
-odg=sdraw,oodraw,oodraw;OpenDocument Graphic;odg_32x32.png;odg_16x16.png;;
-configure=xfw,xfv,xfw;Configure Script;make_32x32.png;make_16x16.png;;
-img=,,;Image File;package_32x32.png;package_16x16.png;;
-wri=swriter,oowriter,oowriter;Write Document;doc_32x32.png;doc_16x16.png;;
-ini=xfw,xfv,xfw;Configuration file;config_32x32.png;config_16x16.png;;
-tbz2=xarchive, file-roller,tar -jxvf,file-roller;Bziped Tar;tbz2_32x32.png;tbz2_16x16.png;application/x-tbz
-configure.in=xfw,xfv,xfw;Configure Source;make_32x32.png;make_16x16.png;;
-ogg=mplayer,ogg123,;Ogg Vorbis Audio;mp3_32x32.png;mp3_16x16.png;;
-bz2=xarchive, file-roller,bunzip2 -f,file-roller;Bziped File;bz2_32x32.png;bz2_16x16.png;application/x-bz
-png=xfi,display,gimp;PNG Image;png_32x32.png;png_16x16.png;;
-dvi=xdvi,xdvi,;DVI Document;dvi_32x32.png;dvi_16x16.png;;
-so=,,;Shared Library;so_32x32.png;shared_16x16.png;;
-wbk=swriter,oowriter,oowriter;Word Backup Document;doc_32x32.png;doc_16x16.png;;
-deb=xfp,xfp,xfp;DEB Package;deb_32x32.png;deb_16x16.png;;
-makefile.am=xfw,xfv,xfw;Automake Makefile;make_32x32.png;make_16x16.png;;
-tex=xfw,xfv,xfw;TeX Document;tex_32x32.png;tex_16x16.png;;
-config=xfw,xfv,xfw;Configuration file;config_32x32.png;config_16x16.png;;
-authors=xfw,xfv,xfw;Authors File;info_32x32.png;info_16x16.png;;
-mpeg3=mplayer,,;MPEG Audio;mp3_32x32.png;mp3_16x16.png;;
-diff=xfw,xfv,xfw;Diff File;text_32x32.png;text_16x16.png;;
-htm=firefox,firefox,xfw;Hyper Text;html_32x32.png;html_16x16.png;;
-tgz=xarchive, file-roller,tar -xzvf,file-roller;Gziped Tar;tgz_32x32.png;tgz_16x16.png;application/x-tgz
-rb=xfw,xfv,xfw;Ruby Source;text_32x32.png;text_16x16.png;;
-mov=mplayer,xine,plaympeg;MPEG Video;video_32x32.png;video_16x16.png;;
-vhdl=xfw,xfv,xfw;Vhdl Source;vhdl_32x32.png;vhdl_16x16.png;;
-csh=xfw,xfv,xfw;C-Shell Script;shell_32x32.png;shell_16x16.png;;
-tiff=xfi,gimp,gimp;TIFF Image;tif_32x32.png;tif_16x16.png;;
-bmp=xfi,gimp,gimp;BMP Image;bmp_32x32.png;bmp_16x16.png;;
-rtf=abiword,swriter,oowriter,oowriter;RTF Document;doc_32x32.png;doc_16x16.png;;
-avi=mplayer,xine,;Video;video_32x32.png;video_16x16.png;;
-conf=xfw,xfv,xfw;Configuration file;config_32x32.png;config_16x16.png;;
-xfirc=xfw,xfv,xfw;Xfe Configuration;config_32x32.png;config_16x16.png;;
-xls=gnumeric,scalc,excel,excel;Excel Spreadsheet;xls_32x32.png;xls_16x16.png;;
-gnumeric=gnumeric,scalc,excel,excel;Excel Spreadsheet;xls_32x32.png;xls_16x16.png;;
-midi=midiplay,,;MIDI File;midi_32x32.png;midi_16x16.png;;
-xferc=xfw,xfv,xfw;Xfe Configuration;config_32x32.png;config_16x16.png;;
-copying=xfw,xfv,xfw;Copyright File;info_32x32.png;info_16x16.png;;
-odf=smath,oomath,oomath;OpenDocument Formula;odf_32x32.png;odf_16x16.png;;
-pls=xmms,,;XMMS Playlist;mp3_32x32.png;mp3_16x16.png;;
-xlt=scalc,excel,excel;Excel Template;xls_32x32.png;xls_16x16.png;;
-pdf=evince,xpdf,acroread,;PDF Document;pdf_32x32.png;pdf_16x16.png;;
-changelog=xfw,xfv,xfw;Log File;info_32x32.png;info_16x16.png;;
-sdc=scalc,oocalc,oocalc;StarCalc 5.0 Document;sxc_32x32.png;sxc_16x16.png;;
-sda=sdraw,oodraw,oodraw;StarDraw 5.0 Document;sxd_32x32.png;sxd_16x16.png;;
-ods=scalc,oocalc,oocalc;OpenDocument Spreadsheet;ods_32x32.png;ods_16x16.png;;
-odp=simpress,ooimpress,ooimpress;OpenDocument Presentation;odp_32x32.png;odp_16x16.png;;
-cxx=xfw,xfv,xfw;C++ Source;cc_32x32.png;cc_16x16.png;;
-sdi=simpress,ooimpress,ooimpress;StarImpress 5.0 Document;sxi_32x32.png;sxi_16x16.png;;
-odt=abiword,swriter,oowriter,oowriter;OpenDocument Text;odt_32x32.png;odt_16x16.png;;
-abw=abiword,swriter,oowriter,oowriter;Abiword Text;odt_32x32.png;odt_16x16.png;;
-zabw=abiword,swriter,oowriter,oowriter;Abiword Text;odt_32x32.png;odt_16x16.png;;
-
-[LEFT PANEL]
-type_size=100
-hiddenfiles=0
-liststyle=4194304
-dirs_first=1
-attr_size=100
-user_size=50
-ext_size=100
-grou_size=50
-modd_size=150
-ignore_case=1
-sort_func=ascendingCase
-showthumbnails=0
-name_size=200
-size_size=60
-
-[HISTORY]
-open=simpress:soffice:
-run=
-
-[SETTINGS]
-listforecolor=Black
-forecolor=Black
-iconpath=/usr/local/share/xfe/icons/xfce-theme
-basecolor=#eeeeee
-selbackcolor=#637792
-highlightcolor=#eeeeee
-wheellines=5
-bordercolor=Black
-listbackcolor=Gray100
-backcolor=#eeeeee
-tiptime=10000
-selforecolor=Gray100
-tippause=200
-
-[RIGHT PANEL]
-grou_size=50
-type_size=100
-hiddenfiles=0
-dirs_first=1
-attr_size=100
-user_size=50
-panel_width=200
-ext_size=100
-liststyle=4194304
-panel_tree_width=200
-modd_size=150
-ignore_case=1
-sort_func=ascendingCase
-showthumbnails=0
-name_size=200
-size_size=60
-
-EOF
-		chown -R $uadJ:$uadJ /home/$uadJ/.config
-	} fi;
+	# Archivo de configuración se creará en primera ejecución de xfe
+	mkdir -p /home/$uadJ/.config/xfe/
+	chown -R $uadJ:$uadJ /home/$uadJ/.config
 } else {
 	echo "   Saltando..." >> /var/tmp/inst-adJ.bitacora;
 } fi;

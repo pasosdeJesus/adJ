@@ -140,4 +140,7 @@ inline int tolower_l(int, locale_t);
 
 inline int toupper_l(int, locale_t);
 
+inline int _tolower_l(int, locale_t);
+
+inline int _toupper_l(int, locale_t);
 #endif /* !defined(_XLOCALE_CTYPE_H) */

@@ -1,0 +1,56 @@
+$OpenBSD$
+--- xvt/xsetup.c.orig	Fri Feb 15 17:03:37 2013
++++ xvt/xsetup.c	Fri Feb 15 17:04:59 2013
+@@ -288,15 +288,15 @@ void fix_environment()
+             com_env[j++] = environ[i];
+     }
+     com_env[j++] = scopy(TERM_ENV);
+-    sprintf(buf,"DISPLAY=%.400s",DisplayString(display));
++    snprintf(buf, 500, "DISPLAY=%.400s",DisplayString(display));
+     com_env[j++] = scopy(buf);
+-    sprintf(buf,"WINDOWID=%d",(int)main_win);
++    snprintf(buf, 500, "WINDOWID=%d",(int)main_win);
+     com_env[j++] = scopy(buf);
+ #ifdef LC_ENV
+     scr_get_size(&cols,&lines);
+-    sprintf(buf,"LINES=%d",lines);
++    snprintf(buf, 500, "LINES=%d",lines);
+     com_env[j++] = scopy(buf);
+-    sprintf(buf,"COLUMNS=%d",cols);
++    snprintf(buf, 500, "COLUMNS=%d",cols);
+     com_env[j++] = scopy(buf);
+ #endif /* LC_ENV */
+     com_env[j] = NULL;
+@@ -380,8 +380,8 @@ void init_display(int argc, char** argv, int iargc, ch
+ 
+     /*  See if there was a display named in the command line
+      */
+-    sprintf(str1,"%.100s.display",res_name);
+-    sprintf(str2,"%.100s.Display",XVT_CLASS);
++    snprintf(str1, 256, "%.100s.display",res_name);
++    snprintf(str2, 256, "%.100s.Display",XVT_CLASS);
+     if (XrmGetResource(commandlineDB,str1,str2,&str_type,&value) == True)
+     {
+         strncpy(str1,value.addr,(int)value.size);
+@@ -533,8 +533,8 @@ static unsigned char *get_resource(char* name, char* c
+     XrmValue value;
+     char *str_type;
+ 
+-    sprintf((char *)str1,"%.100s.%.100s",res_name,name);
+-    sprintf((char *)str2,"%.100s.%.100s",XVT_CLASS,class);
++    snprintf((char *)str1, 256, "%.100s.%.100s",res_name,name);
++    snprintf((char *)str2, 256, "%.100s.%.100s",XVT_CLASS,class);
+     if (XrmGetResource(rDB,(char*)str1,(char*)str2,&str_type,&value) == True)
+     {
+         if (value.size > 255)
+@@ -545,8 +545,8 @@ static unsigned char *get_resource(char* name, char* c
+ 
+     /*  The following is added for compatibility with xterm.
+      */
+-    sprintf((char *)str1,"%.100s.vt100.%.100s",res_name,name);
+-    sprintf((char *)str2,"%.100s.VT100.%.100s",XVT_CLASS,class);
++    snprintf((char *)str1, 256, "%.100s.vt100.%.100s",res_name,name);
++    snprintf((char *)str2, 256, "%.100s.VT100.%.100s",XVT_CLASS,class);
+     if (XrmGetResource(rDB,(char*)str1,(char*)str2,&str_type,&value) == True)
+     {
+         if (value.size > 255)

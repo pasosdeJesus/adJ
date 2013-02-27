@@ -113,9 +113,15 @@ void test_ctype() {
 	p(!iswspecial_l(L'\0', es_CO_UTF_8));
 	p(nextwctype(-1, wctype("graph")) > 0);
 	p(tolower_l('A', es_CO_UTF_8) == 'a');
+	p(_tolower_l('A', es_CO_UTF_8) == 'a');
+	p(tolower('A') == 'a');
+	p(_tolower('A') == 'a');
 	p(towlower_l(L'Á', es_CO_UTF_8) == L'á');
 	p(towupper_l(L'á', es_CO_UTF_8) == L'Á');
 	p(toupper_l('a', es_CO_UTF_8) == 'A');
+	p(toupper('a') == 'A');
+	p(_toupper_l('a', es_CO_UTF_8) == 'A');
+	p(_toupper('a') == 'A');
 	p(wctrans_l("invalido", es_CO_UTF_8) == 0);
 	wchar_t lu[7][2] = {{ L'ñ', L'Ñ'},
 		{L'á', L'Á'},
@@ -306,6 +312,9 @@ void test_string()
 	p(wcscoll_l(L"T", L"Ü", es_CO_UTF_8) < 0);
 	p(wcscoll_l(L"Ú", L"V", es_CO_UTF_8) < 0);
 	p(wcscoll_l(L"Ü", L"V", es_CO_UTF_8) < 0);
+	p(wcscoll_l(L"", L"Á", es_CO_UTF_8) < 0);
+	p(wcscoll_l(L"á", L"", es_CO_UTF_8) > 0);
+	p(wcscoll_l(L"áá", L"á", es_CO_UTF_8) > 0);
 	
 	wchar_t wa[10], wb[10], we[10], wf[10], wn[10], wegne[10],
 		wo[10];
@@ -362,9 +371,20 @@ void test_string()
 	p(strcmp(e, f) < 0);
 
 	p(strcasecmp_l("n", "N", es_CO_UTF_8) == 0);
+	p(strcasecmp_l("largo", "largote", es_CO_UTF_8) < 0);
+	p(strcasecmp_l("cortote", "corto", es_CO_UTF_8) > 0);
 	p(strncasecmp_l("n", "N", 1, es_CO_UTF_8) == 0);
 	p(strcasestr_l("nino", "O", es_CO_UTF_8) != NULL);
 	p(wcscasecmp_l(L"ñ", L"Ñ", es_CO_UTF_8) == 0);
+	p(wcscasecmp_l(L"á", L"b", es_CO_UTF_8) < 0);
+	p(wcscasecmp_l(L"a", L"á", es_CO_UTF_8) <= 0);
+	p(wcscasecmp_l(L"", L"á", es_CO_UTF_8) < 0);
+	p(wcscasecmp_l(L"", L"a", es_CO_UTF_8) < 0);
+	p(wcscasecmp_l(L"", L"a", es_CO_UTF_8) < 0);
+	p(wcscasecmp_l(L"á", L"", es_CO_UTF_8) > 0);
+	p(wcscasecmp_l(L"áá", L"á", es_CO_UTF_8) > 0);
+	p(wcscasecmp(L"á", L"b") < 0);
+	p(wcscasecmp(L"a", L"á") <= 0);
 	p(wcsncasecmp_l(L"n", L"N", 1, es_CO_UTF_8) == 0);
 }
 

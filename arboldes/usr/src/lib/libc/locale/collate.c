@@ -42,7 +42,10 @@
 #include <unistd.h>
 #include <wchar.h>
 #include <xlocale.h>
+#include <runetype.h>
 
+#include "xlocale_private.h"
+#include "mblocal.h"
 #include "collate.h"
 #include "ldpart.h"
 #include "un-namespace.h"
@@ -67,7 +70,7 @@
 #define __unused	__attribute__((__unused__))
 #endif
 
-/* From http://fxr.watson.org/fxr/source/stdlib/reallocf.c?v=FREEBSD-LIBC;im=bigexcerpts */
+/* Function from http://fxr.watson.org/fxr/source/stdlib/reallocf.c?v=FREEBSD-LIBC;im=bigexcerpts */
 void *
 reallocf(void *ptr, size_t size)
 {
@@ -168,10 +171,10 @@ __collate_load_tables_l(const char *encoding, struct xlocale_collate *table)
 
 	/* 'PathLocale' must be already set & checked. */
 	/* Range checking not needed, encoding has fixed size */
-	(void)strcpy(buf, _PathLocale);
-	(void)strcat(buf, "/");
-	(void)strcat(buf, encoding);
-	(void)strcat(buf, "/LC_COLLATE");
+	(void)strlcpy(buf, _PathLocale, PATH_MAX);
+	(void)strlcat(buf, "/", PATH_MAX);
+	(void)strlcat(buf, encoding, PATH_MAX);
+	(void)strlcat(buf, "/LC_COLLATE", PATH_MAX);
 	if ((fp = fopen(buf, "re")) == NULL)
 		return (_LDP_ERROR);
 
@@ -305,7 +308,8 @@ __collate_substitute(struct xlocale_collate *table, const u_char *s)
 			if (dest_str == NULL)
 				__collate_err(EX_OSERR, __func__);
 		}
-		(void)strcpy(dest_str + len, __collate_substitute_table[*s++]);
+		(void)strlcpy(dest_str + len, __collate_substitute_table[*s++], 
+				dest_len - len);
 		len = nlen;
 	}
 	return (dest_str);
@@ -407,6 +411,24 @@ strncmp_wc(wchar_t *ws, char *cs, size_t l)
 	return *ws - *cs;
 }
 
+/** Added for OpenBSD */
+int 
+strncasecmp_wcl(wchar_t *ws, char *cs, size_t l, locale_t loc) 
+{
+	if (ws == NULL || cs == NULL || l == 0) {
+		return -1;
+	}
+	while (*ws != 0 && *cs != 0 && l > 0 
+		&& towlower_l(*ws, loc) == towlower_l((wchar_t)*cs, loc)) {
+		ws++;
+		cs++;
+		l--;
+	}
+	return *ws - *cs;
+}
+
+
+
 
 /** Added for OpenBSD */
 void
@@ -429,6 +451,32 @@ __collate_lookup_w(struct xlocale_collate *table, const wchar_t *t, int *len, in
 	*sec = __collate_char_pri_table[(u_char)*t].sec;
 }
 
+void
+__collate_lookup_casew(struct xlocale_collate *table, const wchar_t *t, 
+		int *len, int *prim, int *sec, locale_t loc)
+{
+	struct __collate_st_chain_pri *p2;
+
+	*len = 1;
+	*prim = *sec = 0;
+	for (p2 = __collate_chain_pri_table; p2->str[0] != '\0'; p2++) {
+		if (towlower_l(*t, loc) 
+				== towlower_l((wchar_t)p2->str[0], loc) &&
+		    strncasecmp_wcl((wchar_t *)t, p2->str, 
+			    strlen(p2->str), loc) == 0) {
+			*len = strlen(p2->str);
+			*prim = p2->prim;
+			*sec = p2->sec;
+			return;
+		}
+	}
+	*prim = __collate_char_pri_table[(u_char)towlower_l(*t, loc)].prim;
+	*sec = __collate_char_pri_table[(u_char)towlower_l(*t, loc)].sec;
+}
+
+
+
+
 u_char *
 __collate_strdup(u_char *s)
 {
@@ -446,7 +494,7 @@ __collate_err(int ex, const char *f)
 	int serrno = errno;
 
 	//s = _getprogname();
-	s = "Programa";
+	s = "Program";
 	write(STDERR_FILENO, s, strlen(s));
 	write(STDERR_FILENO, ": ", 2);
 	s = f;
@@ -457,6 +505,18 @@ __collate_err(int ex, const char *f)
 	write(STDERR_FILENO, "\n", 1);
 	exit(ex);
 }
+
+
+/* From http://svn.freebsd.org/base/projects/amd64_xen_pv/lib/libc/locale/table.c */
+_RuneLocale *
+__runes_for_locale(locale_t locale, int *mb_sb_limit)
+{
+	FIX_LOCALE(locale);
+	struct xlocale_ctype *c = XLOCALE_CTYPE(locale);
+	*mb_sb_limit = c->__mb_sb_limit;
+	return c->runes;
+}
+
 #define COLLATE_DEBUG
 #ifdef COLLATE_DEBUG
 void
