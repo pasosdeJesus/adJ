@@ -30,8 +30,9 @@ mp=`uname -a | sed -e "s/.*\.MP.*/.mp/g"`
 if (test "$mp" != ".mp") then {
 	mp="";
 } fi;
-rutak=$V$VESP-amd64
-if (test ! -f $rutak/bsd || ! -f $rutak/site$VP.tgz) then {
+ARQ=amd64
+rutak=$V$VESP-$ARQ
+if (test ! -f $rutak/bsd -o ! -f $rutak/site$VP.tgz) then {
 	echo "No se encontró kernel e instaladores en $rutak";
 	exit 1;
 } fi;
