@@ -11,7 +11,7 @@ if (test $USER != "root") then {
 d=`date +%Y%m%d`
 d="/var/adJ/auditabitacoras/$d"
 rep="$d/auditabitacoras.txt"
-echo "Auditando y enviando reporte a $rep" | tee $rep
+echo "Auditando y enviando reporte a $rep" > $rep
 
 
 mkdir -p $d |
