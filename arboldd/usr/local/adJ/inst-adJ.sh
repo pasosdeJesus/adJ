@@ -888,7 +888,8 @@ if (test "\$?" == "0") then {
 		alias ls=colorls
 } fi;
 export PS1="\h# "
-export HISTFILE=$HOME/.pdksh_history
+export HISTFILE=\$HOME/.pdksh_history
+export HISTSIZE=2048
 export LANG=es_CO.UTF-8
 EOF
 } else {
@@ -966,7 +967,8 @@ export PS1="\h\$ "
 #alias vi=vim
 #export VISUAL=vi
 export SWORD_PATH=/usr/local/share/sword
-export HISTFILE=$HOME/.pdksh_history
+export HISTFILE=\$HOME/.pdksh_history
+export HISTSIZE=2048
 export LANG=es_CO.UTF-8
 EOF
 	cat >> /home/$uadJ/.inputrc <<EOF
