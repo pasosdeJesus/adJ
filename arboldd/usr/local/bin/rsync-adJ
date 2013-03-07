@@ -12,6 +12,7 @@ if (test "$V" = "") then {
 	} else {
 		echo "Primer parámetro debe ser versión por descargar, e.g:"
 		echo "rsync-adJ 5.2"
+		exit 1;
 	} fi;
 } fi;
 
