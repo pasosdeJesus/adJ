@@ -4,7 +4,7 @@ Distribución para fomentar la construcción del Reino de Dios desde la educación,
 el respeto por la dignidad humana y la memoria.
 
 Versión: 5.2%%%
-Fecha de publicación: 23/Feb/2013
+Fecha de publicación: 26/Feb/2013
 
 !!!NOVEDADES
 
@@ -12,7 +12,7 @@ Con respecto a OpenBSD 5.2 para amd64 y a la edición anterior de este DVD
 
 !KERNEL Y SISTEMA BASE
 
-* Se incluye soporte para cotejación (COLLATE) en idioma nativo importado de FreeBSD, tablas de caracteres y cotejación para todos los paises de habla hispana y portes de PostgreSQL y xfe que soportan cotejación (por fin pueden quedar en orden para español las consultas a la base de datos y los listados de archivos). ¡Notará la diferencia! Vea detalles y una captura de pantalla en http://aprendiendo.pasosdejesus.org/?id=i18n
+* Se incluye soporte para cotejación (COLLATE) en idioma nativo en el sistema base importado de FreeBSD, tablas de caracteres y cotejación para todos los paises de habla hispana y portes de PostgreSQL y xfe que soportan cotejación (por fin pueden quedar en orden para español las consultas a la base de datos y los listados de archivos). ¡Notará la diferencia! Vea detalles y una captura de pantalla en http://aprendiendo.pasosdejesus.org/?id=i18n.  Las mejoras se han aportado a OpenBSD y xfe y se espera su integración en futuras versiones de esos proyectos.
 * Parches de seguridad de sistema base hasta:  1.Feb.2013
 * Se ha ampliado el renombramiento de `daemon' por `service' para cubrir más del sistema base (tras instalar, ver por ejemplo ==vmstat -s== o ==less /var/log/service== o ==man service==).  Se renombró en documentación, en la mayoría de programas del sistema base y en librería libc se cambió la función ==daemon== por ==service==, la primera se mantiene por compatibilidad (ver ==man service==), se hicieron cambios análogos en libwrapper.  Ver detalles en http://aprendiendo.pasosdejesus.org/?id=Renombrando+Daemon+por+Service ). 
 

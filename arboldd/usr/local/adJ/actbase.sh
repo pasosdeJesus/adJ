@@ -1,7 +1,7 @@
 #!/bin/sh
 # Actualiza sistema base a partir de instalador de adJ
 # Basada en instrucciones del FAQ de OpenBSD
-# Dominio público de acuerdo a legislación colombiana. http://www.pasosdejesus.org/dominio_publico_colombia.html. 
+# Dominio pÃºblico de acuerdo a legislaciÃ³n colombiana. http://www.pasosdejesus.org/dominio_publico_colombia.html. 
 # 2011. vtamara@pasosdeJesus.org
 
 if (test "$USER" != "root") then {
@@ -14,7 +14,7 @@ if (test -f "ver.sh") then {
 } else {
 	V=$1
 	if (test "$V" = "") then {
-		echo "Primer parámetro debería ser versión, e.g"
+		echo "Primer parÃ¡metro deberÃ­a ser versiÃ³n, e.g"
 		echo "actbase 5.2"
 		exit 1;
 	} fi;
@@ -30,9 +30,10 @@ mp=`uname -a | sed -e "s/.*\.MP.*/.mp/g"`
 if (test "$mp" != ".mp") then {
 	mp="";
 } fi;
-rutak=$V$VESP-amd64
-if (test ! -f $rutak/bsd || ! -f $rutak/site$VP.tgz) then {
-	echo "No se encontró kernel e instaladores en $rutak";
+ARQ=amd64
+rutak=$V$VESP-$ARQ
+if (test ! -f $rutak/bsd -o ! -f $rutak/site$VP.tgz) then {
+	echo "No se encontrÃ³ kernel e instaladores en $rutak";
 	exit 1;
 } fi;
 if (test "$RUTAKERNELREESPECIAL" != "") then {
