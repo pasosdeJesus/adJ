@@ -1,0 +1,12 @@
+$OpenBSD$
+--- display.c.orig	Tue Nov  8 11:16:47 2005
++++ display.c	Thu Mar 14 13:32:44 2013
+@@ -248,7 +248,7 @@ int displayMessageAndGetString(char *msg, char **last,
+   getnstr(p, p_size - 1);
+   noecho();
+   if (*p == '\0') {
+-    if (*last) strcpy(p, *last); else ret = FALSE;
++    if (*last) strlcpy(p, *last, p_size); else ret = FALSE;
+   } else {
+     FREE(*last);
+     *last = strdup(p);

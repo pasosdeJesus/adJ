@@ -1,0 +1,21 @@
+$OpenBSD$
+--- search.c.orig	Tue Nov  8 11:16:47 2005
++++ search.c	Thu Mar 14 13:32:36 2013
+@@ -68,7 +68,7 @@ void search_forward(void)
+     else if (getch() != ERR) quit = -2;
+     else if ((p = mymemmem(tmp, sizeb, string, sizea))) quit = p - tmp;
+ 
+-    sprintf(tmpstr,"searching... 0x%08llX", (long long) blockstart);
++    snprintf(tmpstr, BLOCK_SEARCH_SIZE, "searching... 0x%08llX", (long long) blockstart);
+     nodelay(stdscr, TRUE);
+     displayTwoLineMessage(tmpstr, "(press any key to cancel)");
+ 
+@@ -99,7 +99,7 @@ void search_backward(void)
+       else if ((p = mymemrmem(tmp, sizeb, string, sizea))) quit = p - tmp;
+     }
+ 
+-    sprintf(tmpstr,"searching... 0x%08llX", (long long) blockstart);
++    snprintf(tmpstr, BLOCK_SEARCH_SIZE, "searching... 0x%08llX", (long long) blockstart);
+     nodelay(stdscr, TRUE);
+     displayTwoLineMessage(tmpstr, "(press any key to cancel)");
+ 
