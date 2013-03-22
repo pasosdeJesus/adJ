@@ -3,12 +3,12 @@ adJ - Aprendiendo de Jesús.
 Distribución para fomentar la construcción del Reino de Dios desde la educación,
 el respeto por la dignidad humana y la memoria.
 
-Versión: 5.2%%%
-Fecha de publicación: 26/Feb/2013
+Versión: 5.3%%%
+Fecha de publicación: 26/Jul/2013
 
 !!!NOVEDADES
 
-Con respecto a OpenBSD 5.2 para amd64 y a la edición anterior de este DVD
+Con respecto a OpenBSD 5.3 para amd64 y a la edición anterior de este DVD
 
 !KERNEL Y SISTEMA BASE
 
@@ -31,7 +31,8 @@ Entre las novedades reportadas en las `Notas de publicación de OpenBSD 5.2' dest
 ** Procesadores: Implementación para el modo AES-GCM de CPUs Intel y futuras AMD
 
 * Red
-** Mejoras a pila de red y servicios. Mejoras a pf, IPSec, IPv6, servicios de enrutamiento y utilidades para usuarios
+** Mejoras a pila de red y servicios como ikectl, 
+** Nuevo npppd y driver pppx que maneja PPP, PPPOE y aumenta velocidad manejando tablas en kernel.
 ** nginx: Nuevo servidor HTTP, proxy reverso y proxy de correo
 ** smtpd mejorado.
 
