@@ -3,7 +3,8 @@
 COMMENT=	"allows building of multipage forms with HTML_QuickForm"
 
 DISTNAME=	HTML_QuickForm_Controller-1.0.10
-PKGNAME=	pear-${DISTNAME:S/_/-/g}
+REVISION=	1
+PKGNAME=	pear-${DISTNAME:S/_/-/g}p${REVISION}
 CATEGORIES=	www devel pear
 
 MASTER_SITES=	http://pear.php.net/get/
