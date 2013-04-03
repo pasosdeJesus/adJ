@@ -1,0 +1,162 @@
+diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/regress/lib/libc/locale/check_isw/check_isw.c src/regress/lib/libc/locale/check_isw/check_isw.c
+--- src53collation/regress/lib/libc/locale/check_isw/check_isw.c	Mon Apr  1 06:08:26 2013
++++ src/regress/lib/libc/locale/check_isw/check_isw.c	Mon Apr  1 13:31:53 2013
+@@ -19,14 +19,25 @@
+  * functions.
+  */
+ 
++#include <ctype.h>
++#include <locale.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+-#include <ctype.h>
+ #include <wchar.h>
+ #include <wctype.h>
+ 
++
+ int bad = 0;
+ 
++#define p(t) printf("%s:\t ",#t); \
++	if (t) { \
++		printf("\x1b[38;5;2mOK\x1b[0m\n"); \
++	} else { \
++		bad++; \
++		printf("\x1b[38;5;1mERROR\x1b[0m\n"); \
++	}
++
++
+ void
+ check_bool(int v1, int v2, char msg)
+ {
+@@ -50,7 +61,7 @@
+ {
+ 	int i;
+ 
+-	for (i = 0; i < 256; i++) {
++	for (i = 0; i < 128; i++) {
+ 		printf(" %02x: ", i);
+ 		check_bool(isalnum(i), iswalnum(i), '1');
+ 		check_bool(isalpha(i), iswalpha(i), '2');
+@@ -82,7 +93,7 @@
+ 	wchar_t c, d;
+ 	mbstate_t state;
+ 
+-	s = malloc(256);
++	s = malloc(128);
+ 	if (!s) {
+ 		bad++;
+ 		return;
+@@ -93,14 +104,14 @@
+ 		free(s);
+ 		return;
+ 	}
+-	for (i = 0; i < 256; i++)
++	for (i = 0; i < 127; i++)
+ 		s[i] = i+1;
+ 
+ 	j = 0;
+ 	mbrtowc(NULL, NULL, 1, &state);
+ 	printf(" %02x: ", 0);
+ 
+-	while ((n = mbrtowc(&c, s+j, 256-j, &state)) == 1) {
++	while (j < 127 && (n = mbrtowc(&c, s+j, 256-j, &state)) == 1) {
+ 		printf(" %02x: ", s[j]);
+ 		check_bool(isalnum(s[j]), iswalnum(c), '1');
+ 		check_bool(isalpha(s[j]), iswalpha(c), '2');
+@@ -130,7 +141,7 @@
+ 			printf("\n");
+ 		j++;
+ 	}
+-	if (n != 0 || j != 255) {
++	if (n != 1 || j != 127) {
+ 		bad++;
+ 	}
+ 	free(s);
+@@ -138,10 +149,87 @@
+ }
+ 
+ 
++void
++test3()
++{
++	/** toupper, tolower single byte encoding */
++	char *nl = setlocale(LC_ALL, "es_CO.ISO8859-1");
++	printf("locale %s\n", nl);
++	/* À -> 0xc0, à -> 0xe0 */
++	int c;
++	for(c = 0xc0; c < 0xde; c++) {
++		if (c != 0xd7) { // 0xd7 -> ×, 0xF7 -> ÷
++			printf("c=%x ", c);
++			p(tolower(c) == c+0x20); 
++			p(toupper(c+0x20) == c); 
++		}
++	}
++	/* http://en.wikipedia.org/w/index.php?title=ISO/IEC_8859-1 */
++	for (c = 0x21; c < 0x2F; c++) {
++		printf("c=%x ", c);
++		p(ispunct(c));
++	}
++	for (c = 0x30; c < 0x39; c++) {
++		printf("c=%x ", c);
++		p(isdigit(c));
++	}
++	for (c = 0x3A; c < 0x40; c++) {
++		printf("c=%x ", c);
++		p(ispunct(c));
++	}
++	for (c = 0x41; c < 0x5A; c++) {
++		printf("c=%x ", c);
++		p(isalpha(c));
++		p(isalpha(c+0x20));
++	}
++	for (c = 0x5B; c < 0x60; c++) {
++		printf("c=%x ", c);
++		p(ispunct(c));
++	}
++	p(ispunct(0x7B));
++	p(ispunct(0x7C));
++	p(ispunct(0x7D));
++	p(ispunct(0x7E));
++	for (c = 0xA1; c < 0xBF; c++) {
++		printf("c=%x ", c);
++		p(ispunct(c));
++	}
++	for (c = 0xC0; c < 0xFF; c++) {
++		if (c != 0xD7 && c != 0xF7) {
++			printf("c=%x ", c);
++			p(isalpha(c));
++		}
++	}
++	
++	*nl = setlocale(LC_ALL, "ru_RU.KOI8-R");
++	printf("locale %s\n", nl);
++	/* a -> 0xc0, A -> 0xe0 */
++	for(c = 0xc0; c < 0xdf; c++) {
++		printf("c=%x ", c);
++		p(islower(c));
++		p(isupper(c+0x20));
++		p(toupper(c) == c+0x20); 
++		p(tolower(c+0x20) == c); 
++	}
++	
++	/** multi-byte encoding */
++	nl = setlocale(LC_ALL, "es_CO.UTF-8");
++	printf("locale %s\n", nl);
++	for(c = 0x41; c < 0x5A; c++) {
++		printf("c=%x ", c);
++		p(tolower(c) == c+0x20); 
++		p(toupper(c+0x20) == c); 
++		p(isalpha(c));
++		p(isalpha(c+0x20));
++	}
++
++}
++
+ int
+ main()
+ {
+ 	test1();
+ 	test2();
++	test3();
+ 	return bad !=0;
+ }
