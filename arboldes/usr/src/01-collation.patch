@@ -5448,7 +5448,7 @@ diff -ruN -x obj -x CVS -x *~ src-orig/usr.bin/Makefile src/usr.bin/Makefile
  	basename bc bdes bgplg \
 -	biff cal calendar cap_mkdb cdio chpass cmp col colrm \
 +	biff cal calendar cap_mkdb cdio chpass cmp col colldef colrm \
- 	column comm compile_et compress cpp crontab csplit ctags cu cut \
+ 	column comm compile_et compress cpp crontab csplit ctags cut \
  	dc deroff diff diff3 dirname du encrypt env expand false file \
  	file2c find fgen finger fmt fold from fsplit fstat ftp gencat getcap \
 diff -ruN -x obj -x CVS -x *~ src-orig/usr.bin/colldef/Makefile src/usr.bin/colldef/Makefile
