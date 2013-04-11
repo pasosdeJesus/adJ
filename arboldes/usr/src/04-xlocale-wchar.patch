@@ -598,10 +598,10 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mb
 +{
 +	return mbrlen_l(s, n, ps, __get_locale());
  }
-diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mbrtowc.3 src/lib/libc/locale/mbrtowc.3
---- src53collation/lib/libc/locale/mbrtowc.3	Mon Mar 25 18:28:42 2013
-+++ src/lib/libc/locale/mbrtowc.3	Wed Apr  3 11:15:27 2013
-@@ -29,17 +29,23 @@
+diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53/lib/libc/locale/mbrtowc.3 src/lib/libc/locale/mbrtowc.3
+--- src53/lib/libc/locale/mbrtowc.3	Mon Mar 25 18:28:42 2013
++++ src/lib/libc/locale/mbrtowc.3	Tue Apr  9 09:45:12 2013
+@@ -29,17 +29,24 @@
  .Dt MBRTOWC 3
  .Os
  .Sh NAME
@@ -614,7 +614,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mb
 +.Fd #include <xlocale.h>
  .Ft size_t
  .Fn mbrtowc "wchar_t * restrict wc" "const char * restrict s" "size_t n" \
--"mbstate_t * restrict mbs"
+ "mbstate_t * restrict mbs"
 +.Ft size_t
 +.Fn mbrtowc_l "wchar_t * restrict wc" "const char * restrict s" "size_t n" \
 +"mbstate_t * restrict mbs" "locale_t l"
@@ -628,7 +628,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mb
  .Fa n
  bytes of the multibyte character byte string pointed to by
  .Fa s ,
-@@ -59,9 +65,11 @@
+@@ -59,9 +66,11 @@
  .Fa mbs .
  The mbstate_t object must be initialized to zero before the application's
  first call to
@@ -643,7 +643,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mb
  did not return (size_t)-1, the mbstate_t object can safely be reused
  without reinitialization.
  .Pp
-@@ -69,7 +77,12 @@
+@@ -69,7 +78,12 @@
  .Fn mbrtowc
  is affected by the
  .Dv LC_CTYPE
@@ -657,7 +657,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mb
  If the locale is changed without reinitialization of the mbstate_t object
  pointed to by
  .Fa mbs ,
-@@ -238,12 +251,14 @@
+@@ -238,12 +252,14 @@
  .Sh SEE ALSO
  .Xr mbrlen 3 ,
  .Xr mbtowc 3 ,

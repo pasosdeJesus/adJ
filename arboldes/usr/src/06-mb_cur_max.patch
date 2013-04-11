@@ -1,0 +1,52 @@
+diff -x *~ -ruN src53/lib/libc/citrus/citrus_ctype.c src/lib/libc/citrus/citrus_ctype.c
+--- src53/lib/libc/citrus/citrus_ctype.c	Fri Mar 22 08:37:36 2013
++++ src/lib/libc/citrus/citrus_ctype.c	Wed Apr 10 07:35:36 2013
+@@ -45,15 +45,24 @@
+ };
+ 
+ int
++_citrus_ctype_mb_cur_max(char const *encname)
++{
++	if (strcmp(encname, "UTF8") == 0) {
++		return _CITRUS_UTF8_MB_CUR_MAX;
++	}
++	return 1;  /* If not UTF8 then single byte encoding */
++}
++
++int
+ _citrus_ctype_open(struct _citrus_ctype_rec **rcc, char const *encname)
+ {
+ 	if (!strcmp(encname, "NONE")) {
+ 		*rcc = &_citrus_ctype_none;
+-		__mb_cur_max = 1;
++		__mb_cur_max = _citrus_ctype_mb_cur_max(encname);
+ 		return (0);
+ 	} else if (!strcmp(encname, "UTF8")) {
+ 		*rcc = &_citrus_ctype_utf8;
+-		__mb_cur_max = _CITRUS_UTF8_MB_CUR_MAX;
++		__mb_cur_max = _citrus_ctype_mb_cur_max(encname);
+ 		return (0);
+ 	}
+ 
+diff -x *~ -ruN src53/lib/libc/citrus/citrus_ctype.h src/lib/libc/citrus/citrus_ctype.h
+--- src53/lib/libc/citrus/citrus_ctype.h	Mon Aug  2 13:05:22 2010
++++ src/lib/libc/citrus/citrus_ctype.h	Wed Apr 10 05:57:54 2013
+@@ -35,6 +35,7 @@
+ 
+ extern struct _citrus_ctype_rec _citrus_ctype_none;
+ 
++int _citrus_ctype_mb_cur_max(char const *);
+ int _citrus_ctype_open(struct _citrus_ctype_rec **, char const *);
+ 
+ #endif
+--- src53xlocale2/lib/libc/locale/setrunelocale.c	Mon Apr  8 21:20:56 2013
++++ src/lib/libc/locale/setrunelocale.c	Thu Apr 11 07:31:54 2013
+@@ -215,6 +215,8 @@
+ 
+ found:
+ 	xc->runes = rl;
++	__mb_cur_max = xc->__mb_cur_max = 
++		_citrus_ctype_mb_cur_max(rl->rl_encoding);
+ 
+ 	return 0;
+ }

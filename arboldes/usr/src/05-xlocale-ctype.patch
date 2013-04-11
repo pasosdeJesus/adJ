@@ -1,0 +1,1334 @@
+--- src53xlocale1/lib/libc/gen/isctype.c	Mon Aug  8 03:05:34 2005
++++ src/lib/libc/gen/isctype.c	Mon Apr  8 18:33:50 2013
+@@ -32,11 +32,42 @@
+  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+  * SUCH DAMAGE.
+  */
++/**
++ * Public domain according to Colombian Legislation. 
++ * http://www.pasosdejesus.org/dominio_publico_colombia.html
++ * 2013. vtamara@pasosdeJesus.org.
++ *
++ * $adJ$
++ */
+ 
++
+ #define _ANSI_LIBRARY
+ #include <ctype.h>
+ #include <stdio.h>
++#include <xlocale.h>
+ 
++#include "../locale/mblocal.h"
++#include "../locale/rune.h"
++#include "../locale/runetype.h"
++#include "../locale/xlocale_private.h"
++
++__inline int
++__sbmaskrune_l(rune_t __c, unsigned long __f, locale_t __loc)
++{
++	int __limit;
++	FIX_LOCALE(__loc);
++	struct xlocale_ctype *ct = XLOCALE_CTYPE(__loc);
++	_RuneLocale *runes = ct->runes;
++	return (__c < 0 || __c >= ct->__mb_sb_limit) ? 0 :
++		runes->rl_runetype[__c] & __f;
++}
++
++__inline int
++__sbistype_l(rune_t __c, unsigned long __f, locale_t __loc)
++{
++	return (!!__sbmaskrune_l(__c, __f, __loc));
++}
++
+ #undef isalnum
+ int
+ isalnum(int c)
+@@ -44,6 +75,11 @@
+ 	return (c == EOF ? 0 : ((_ctype_ + 1)[(unsigned char)c] & (_U|_L|_N)));
+ }
+ 
++__inline int isalnum_l(int __c, locale_t __l)
++{
++	return __sbistype_l(__c, _CTYPE_A|_CTYPE_D, __l);
++}
++
+ #undef isalpha
+ int
+ isalpha(int c)
+@@ -51,6 +87,11 @@
+ 	return (c == EOF ? 0 : ((_ctype_ + 1)[(unsigned char)c] & (_U|_L)));
+ }
+ 
++__inline int isalpha_l(int __c, locale_t __l) 
++{ 
++	return __sbistype_l(__c, _CTYPE_A, __l); 
++}
++
+ #undef isblank
+ int
+ isblank(int c)
+@@ -58,6 +99,10 @@
+ 	return (c == ' ' || c == '\t');
+ }
+ 
++__inline int isblank_l(int __c, locale_t __l) 
++{ 
++	return __sbistype_l(__c, _CTYPE_B, __l); 
++}
+ #undef iscntrl
+ int
+ iscntrl(int c)
+@@ -65,6 +110,12 @@
+ 	return (c == EOF ? 0 : ((_ctype_ + 1)[(unsigned char)c] & _C));
+ }
+ 
++__inline int iscntrl_l(int __c, locale_t __l) 
++{ 
++	return __sbistype_l(__c, _CTYPE_C, __l);
++}
++
++
+ #undef isdigit
+ int
+ isdigit(int c)
+@@ -72,6 +123,12 @@
+ 	return (c == EOF ? 0 : ((_ctype_ + 1)[(unsigned char)c] & _N));
+ }
+ 
++__inline int isdigit_l(int __c, locale_t __l) 
++{ 
++	return __sbistype_l(__c, _CTYPE_D, __l); 
++}
++
++
+ #undef isgraph
+ int
+ isgraph(int c)
+@@ -79,6 +136,22 @@
+ 	return (c == EOF ? 0 : ((_ctype_ + 1)[(unsigned char)c] & (_P|_U|_L|_N)));
+ }
+ 
++__inline int isgraph_l(int __c, locale_t __l) 
++{ 
++	return __sbistype_l(__c, _CTYPE_G, __l); 
++}
++
++__inline int ishexnumber_l(int __c, locale_t __l) 
++{ 
++	return __sbistype_l(__c, _CTYPE_X, __l); 
++}
++
++__inline int isideogram_l(int __c, locale_t __l) 
++{ 
++	return __sbistype_l(__c, _CTYPE_I, __l);
++}
++
++
+ #undef islower
+ int
+ islower(int c)
+@@ -86,6 +159,21 @@
+ 	return (c == EOF ? 0 : ((_ctype_ + 1)[(unsigned char)c] & _L));
+ }
+ 
++__inline int islower_l(int __c, locale_t __l) 
++{ 
++	return __sbistype_l(__c, _CTYPE_L, __l);
++}
++
++__inline int isnumber_l(int __c, locale_t __l) 
++{ 
++	return __sbistype_l(__c, _CTYPE_D, __l);
++}
++
++__inline int isphonogram_l(int __c, locale_t __l) 
++{ 
++	return __sbistype_l(__c, _CTYPE_Q, __l);
++}
++
+ #undef isprint
+ int
+ isprint(int c)
+@@ -93,6 +181,12 @@
+ 	return (c == EOF ? 0 : ((_ctype_ + 1)[(unsigned char)c] & (_P|_U|_L|_N|_B)));
+ }
+ 
++__inline int isprint_l(int __c, locale_t __l) 
++{ 
++	return __sbistype_l(__c, _CTYPE_R, __l);
++}
++
++
+ #undef ispunct
+ int
+ ispunct(int c)
+@@ -100,6 +194,17 @@
+ 	return (c == EOF ? 0 : ((_ctype_ + 1)[(unsigned char)c] & _P));
+ }
+ 
++__inline int ispunct_l(int __c, locale_t __l)
++{ 
++	return __sbistype_l(__c, _CTYPE_P, __l);
++}
++
++__inline int isrune_l(int __c, locale_t __l) 
++{
++	return __sbistype_l(__c, 0xFFFFFF00L, __l);
++}
++
++
+ #undef isspace
+ int
+ isspace(int c)
+@@ -107,6 +212,16 @@
+ 	return (c == EOF ? 0 : ((_ctype_ + 1)[(unsigned char)c] & _S));
+ }
+ 
++__inline int isspace_l(int __c, locale_t __l) 
++{ 
++	return __sbistype_l(__c, _CTYPE_S, __l);
++}
++
++__inline int isspecial_l(int __c, locale_t __l) 
++{ 
++	return __sbistype_l(__c, _CTYPE_T, __l);
++}
++
+ #undef isupper
+ int
+ isupper(int c)
+@@ -114,6 +229,11 @@
+ 	return (c == EOF ? 0 : ((_ctype_ + 1)[(unsigned char)c] & _U));
+ }
+ 
++__inline int isupper_l(int __c, locale_t __l) 
++{ 
++	return __sbistype_l(__c, _CTYPE_U, __l);
++}
++
+ #undef isxdigit
+ int
+ isxdigit(int c)
+@@ -121,7 +241,11 @@
+ 	return (c == EOF ? 0 : ((_ctype_ + 1)[(unsigned char)c] & (_N|_X)));
+ }
+ 
+-#undef isascii
++__inline int isxdigit_l(int __c, locale_t __l) 
++{ 
++	return __sbistype_l(__c, _CTYPE_X, __l); 
++}
++
+ int
+ isascii(int c)
+ {
+@@ -147,4 +271,9 @@
+ _tolower(int c)
+ {
+ 	return (c - 'A' + 'a');
++}
++
++__inline int digittoint_l(int __c, locale_t __l)
++{ 
++	return __sbmaskrune_l((__c), 0xFF, __l); 
+ }
+diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src53xlocale1/lib/libc/gen/tolower_.c src/lib/libc/gen/tolower_.c
+--- src53xlocale1/lib/libc/gen/tolower_.c	Mon Aug  8 03:05:34 2005
++++ src/lib/libc/gen/tolower_.c	Thu Apr  4 10:46:17 2013
+@@ -7,7 +7,11 @@
+ #define _ANSI_LIBRARY
+ #include <ctype.h>
+ #include <stdio.h>
++
+ #include "ctype_private.h"
++#include "../locale/mblocal.h"
++#include "../locale/runetype.h"
++#include "../locale/xlocale_private.h"
+ 
+ const short _C_tolower_[1 + CTYPE_NUM_CHARS] = {
+ 	EOF,
+@@ -54,4 +58,15 @@
+ 	if ((unsigned int)c > 255)
+ 		return(c);
+ 	return((_tolower_tab_ + 1)[c]);
++}
++
++
++__inline int tolower_l(int __c, locale_t __l)
++{
++	FIX_LOCALE(__l);
++	struct xlocale_ctype *__ct = XLOCALE_CTYPE(__l);
++	_RuneLocale *__runes = __ct->runes;
++
++	return (__c < 0 || __c >= __ct->__mb_sb_limit) ? __c :
++		__runes->rl_maplower[__c];
+ }
+diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src53xlocale1/lib/libc/gen/toupper_.c src/lib/libc/gen/toupper_.c
+--- src53xlocale1/lib/libc/gen/toupper_.c	Tue Aug  9 03:36:48 2005
++++ src/lib/libc/gen/toupper_.c	Thu Apr  4 10:46:39 2013
+@@ -9,7 +9,11 @@
+ #include <stdio.h>
+ 
+ #include "ctype_private.h"
++#include "../locale/mblocal.h"
++#include "../locale/runetype.h"
++#include "../locale/xlocale_private.h"
+ 
++
+ const short _C_toupper_[1 + CTYPE_NUM_CHARS] = {
+ 	EOF,
+ 	0x00,	0x01,	0x02,	0x03,	0x04,	0x05,	0x06,	0x07,
+@@ -55,4 +59,14 @@
+ 	if ((unsigned int)c > 255)
+ 		return(c);
+ 	return((_toupper_tab_ + 1)[c]);
++}
++
++__inline int toupper_l(int __c, locale_t __l)
++{
++	FIX_LOCALE(__l);
++	struct xlocale_ctype *__ct = XLOCALE_CTYPE(__l);
++	_RuneLocale *__runes = __ct->runes;
++
++	return (__c < 0 || __c >= __ct->__mb_sb_limit) ? __c :
++		__runes->rl_mapupper[__c];
+ }
+--- src53xlocale1/lib/libc/locale/Makefile.inc	Mon Apr  8 20:43:35 2013
++++ src/lib/libc/locale/Makefile.inc	Mon Apr  8 20:52:11 2013
+@@ -10,15 +10,15 @@
+ 	wcstoul.c wcstoll.c wcstoull.c wcstoimax.c wcstoumax.c \
+ 	setrunelocale.c runeglue.c rune.c runetable.c ___runetype_mb.c \
+ 	_wctrans.c wcsxfrm.c \
+-	collate.c none.c xlocale.c
++	collate.c nextwctype.c none.c xlocale.c
+ 
+ MAN+=	nl_langinfo.3 setlocale.3 iswalnum.3 towlower.3 \
+ 	btowc.3 mblen.3 mbrlen.3 mbrtowc.3 mbsinit.3 mbsrtowcs.3 \
+ 	mbstowcs.3 mbtowc.3 wcrtomb.3 wcsrtombs.3 wcstod.3 wcstol.3 \
+ 	wcstombs.3 wctob.3 wctomb.3 \
+ 	wctype.3 iswctype.3 wctrans.3 towctrans.3 wcwidth.3 \
+-	duplocale.3  \
+-	freelocale.3 newlocale.3 nextwctype.3 \
++	ctype_l.3 duplocale.3  freelocale.3 \
++	iswalnum_l.3 newlocale.3 nextwctype.3 \
+ 	querylocale.3 uselocale.3 wcscoll.3 wcsxfrm.3 xlocale.3
+ 
+ MLINKS+= iswalnum.3 iswalpha.3 \
+@@ -37,6 +37,7 @@
+ 	mbsinit.3 mbsinit_l.3\
+ 	mbstowcs.3 mbstowcs_l.3\
+ 	mbtowc.3 mbtowc_l.3\
++	nextwctype.3 nextwctype_l.3 \
+ 	setlocale.3 localeconv.3 \
+ 	towlower.3 towlower_l.3 \
+ 	towlower.3 towupper.3 \
+diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src53xlocale1/lib/libc/locale/___runetype_mb.c src/lib/libc/locale/___runetype_mb.c
+--- src53xlocale1/lib/libc/locale/___runetype_mb.c	Mon Mar 25 18:28:42 2013
++++ src/lib/libc/locale/___runetype_mb.c	Thu Apr  4 09:52:18 2013
+@@ -34,11 +34,14 @@
+  */
+ 
+ #include <wctype.h>
++
++#include "mblocal.h"
+ #include "rune.h"
+ #include "rune_local.h"
++#include "xlocale_private.h"
+ 
+ _RuneType
+-___runetype_mb(wint_t c)
++___runetype_mb_l(wint_t c, locale_t l)
+ {
+ 	rune_t c0;
+ 	uint32_t x;
+@@ -49,7 +52,11 @@
+ 		return (0U);
+ 
+ 	c0 = (rune_t)c; /* XXX assumes wint_t = int */
+-	rr = &_CurrentRuneLocale->rl_runetype_ext;
++	FIX_LOCALE(l);
++		
++	_RuneLocale *runes = XLOCALE_CTYPE(l)->runes;
++	rr = &(runes->rl_runetype_ext);
++
+ 	base = rr->rr_rune_ranges;
+ 	for (x = rr->rr_nranges; x; x >>= 1) {
+ 		re = base + (x >> 1);
+@@ -66,3 +73,10 @@
+ 
+ 	return (0U);
+ }
++
++_RuneType
++___runetype_mb(wint_t c)
++{
++	return ___runetype_mb_l(c, __get_locale());
++}
++
+diff -ruN -x obj -x CVS -x *~ -x *orig -x *rej src53xlocale1/lib/libc/locale/ctype_l.3 src/lib/libc/locale/ctype_l.3
+--- src53xlocale1/lib/libc/locale/ctype_l.3	Wed Dec 31 19:00:00 1969
++++ src/lib/libc/locale/ctype_l.3	Mon Apr  8 14:00:01 2013
+@@ -0,0 +1,141 @@
++.\" Copyright (c) 2011 The FreeBSD Foundation
++.\" All rights reserved.
++.\"
++.\" This documentation was written by David Chisnall under sponsorship from
++.\" the FreeBSD Foundation.
++.\"
++.\" Redistribution and use in source and binary forms, with or without
++.\" modification, are permitted provided that the following conditions
++.\" are met:
++.\" 1. Redistributions of source code must retain the above copyright
++.\"    notice, this list of conditions and the following disclaimer.
++.\" 2. Redistributions in binary form must reproduce the above copyright
++.\"    notice, this list of conditions and the following disclaimer in the
++.\"    documentation and/or other materials provided with the distribution.
++.\"
++.\" THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
++.\" ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++.\" IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++.\" ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
++.\" FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++.\" DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++.\" OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++.\" HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++.\" LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++.\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++.\" SUCH DAMAGE.
++.\"
++.\" $FreeBSD$
++.\"
++.Dd January 29, 2013
++.Dt CTYPE_L 3
++.Os
++.Sh NAME
++.Nm digittoint_l ,
++.Nm isalnum_l ,
++.Nm isalpha_l ,
++.Nm isascii_l ,
++.Nm isblank_l ,
++.Nm iscntrl_l ,
++.Nm isdigit_l ,
++.Nm isgraph_l ,
++.Nm ishexnumber_l ,
++.Nm isideogram_l ,
++.Nm islower_l ,
++.Nm isnumber_l ,
++.Nm isphonogram_l ,
++.Nm isprint_l ,
++.Nm ispunct_l ,
++.Nm isrune_l ,
++.Nm isspace_l ,
++.Nm isspecial_l ,
++.Nm isupper_l ,
++.Nm isxdigit_l 
++.Nd character classification functions
++.Sh LIBRARY
++.Lb libc
++.Sh SYNOPSIS
++.In ctype.h
++.Ft int
++.Fn digittoint_l "int c" "locale_t loc"
++.Ft int
++.Fn isalnum_l "int c" "locale_t loc"
++.Ft int
++.Fn isalpha_l "int c" "locale_t loc"
++.Ft int
++.Fn isascii_l "int c" "locale_t loc"
++.Ft int
++.Fn iscntrl_l "int c" "locale_t loc"
++.Ft int
++.Fn isdigit_l "int c" "locale_t loc"
++.Ft int
++.Fn isgraph_l "int c" "locale_t loc"
++.Ft int
++.Fn ishexnumber_l "int c" "locale_t loc"
++.Ft int
++.Fn isideogram_l "int c" "locale_t loc"
++.Ft int
++.Fn islower_l "int c" "locale_t loc"
++.Ft int
++.Fn isnumber_l "int c" "locale_t loc"
++.Ft int
++.Fn isphonogram_l "int c" "locale_t loc"
++.Ft int
++.Fn isspecial_l "int c" "locale_t loc"
++.Ft int
++.Fn isprint_l "int c" "locale_t loc"
++.Ft int
++.Fn ispunct_l "int c" "locale_t loc"
++.Ft int
++.Fn isrune_l "int c" "locale_t loc"
++.Ft int
++.Fn isspace_l "int c" "locale_t loc"
++.Ft int
++.Fn isupper_l "int c" "locale_t loc"
++.Ft int
++.Fn isxdigit_l "int c" "locale_t loc"
++.Sh DESCRIPTION
++The above functions perform character tests and conversions on the integer
++.Fa c
++in the locale
++.Fa loc .
++They behave in the same way as the versions without the _l suffix, but use the
++specified locale rather than the global locale.
++See the specific manual pages for more information.
++.Sh SEE ALSO
++.Xr digittoint 3 ,
++.Xr isalnum 3 ,
++.Xr isalpha 3 ,
++.Xr isascii 3 ,
++.Xr isblank 3 ,
++.Xr iscntrl 3 ,
++.Xr isdigit 3 ,
++.Xr isgraph 3 ,
++.Xr isideogram 3 ,
++.Xr islower 3 ,
++.Xr isphonogram 3 ,
++.Xr isprint 3 ,
++.Xr ispunct 3 ,
++.Xr isrune 3 ,
++.Xr isspace 3 ,
++.Xr isspecial 3 ,
++.Xr isupper 3 ,
++.Xr isxdigit 3 ,
++.Xr wctype 3 ,
++.Xr xlocale 3
++.Sh STANDARDS
++These functions conform to
++.St -p1003.1-2008 ,
++except for
++.Fn digittoint_l ,
++.Fn isascii_l ,
++.Fn ishexnumber_l ,
++.Fn isideogram_l ,
++.Fn isnumber_l ,
++.Fn isphonogram_l ,
++.Fn isrune_l
++and
++.Fn isspecial_l
++which are
++.Fx
++extensions.
+diff -ruN -x obj -x CVS -x *~ -x *orig -x *rej src53xlocale1/lib/libc/locale/iswalnum_l.3 src/lib/libc/locale/iswalnum_l.3
+--- src53xlocale1/lib/libc/locale/iswalnum_l.3	Wed Dec 31 19:00:00 1969
++++ src/lib/libc/locale/iswalnum_l.3	Mon Apr  8 14:00:18 2013
+@@ -0,0 +1,160 @@
++.\" Copyright (c) 2012 Isabell Long <issyl0@FreeBSD.org>
++.\" All rights reserved.
++.\"
++.\" Redistribution and use in source and binary forms, with or without
++.\" modification, are permitted provided that the following conditions
++.\" are met:
++.\" 1. Redistributions of source code must retain the above copyright
++.\"    notice, this list of conditions and the following disclaimer.
++.\" 2. Redistributions in binary form must reproduce the above copyright
++.\"    notice, this list of conditions and the following disclaimer in the
++.\"    documentation and/or other materials provided with the distribution.
++.\"
++.\" THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
++.\" ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++.\" IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++.\" ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
++.\" FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++.\" DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++.\" OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++.\" HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++.\" LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++.\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++.\" SUCH DAMAGE.
++.\"
++.\" $FreeBSD$
++.\"
++.Dd July 25, 2012
++.Dt ISWALNUM_L 3
++.Os
++.Sh NAME
++.Nm iswalnum_l ,
++.Nm iswalpha_l ,
++.Nm iswcntrl_l ,
++.Nm iswctype_l ,
++.Nm iswdigit_l ,
++.Nm iswgraph_l ,
++.Nm iswlower_l ,
++.Nm iswprint_l ,
++.Nm iswpunct_l ,
++.Nm iswspace_l ,
++.Nm iswupper_l ,
++.Nm iswxdigit_l ,
++.Nm wctype_l ,
++.Nm iswblank_l ,
++.Nm iswhexnumber_l ,
++.Nm iswideogram_l ,
++.Nm iswnumber_l ,
++.Nm iswphonogram_l ,
++.Nm iswrune_l ,
++.Nm iswspecial_l ,
++.Nm nextwctype_l ,
++.Nm towctrans_l ,
++.Nm wctrans_l
++.Nd wide character classification utilities
++.Sh LIBRARY
++.Lb libc
++.Sh SYNOPSIS
++.In wctype.h
++.Ft int
++.Fn iswalnum_l "wint_t wc" "locale_t loc"
++.Ft int
++.Fn iswalpha_l "wint_t wc" "locale_t loc"
++.Ft int
++.Fn iswcntrl_l "wint_t wc" "locale_t loc"
++.Ft int
++.Fn iswctype_l "wint_t wc" "locale_t loc"
++.Ft int
++.Fn iswdigit_l "wint_t wc" "locale_t loc"
++.Ft int
++.Fn iswgraph_l "wint_t wc" "locale_t loc"
++.Ft int
++.Fn iswlower_l "wint_t wc" "locale_t loc"
++.Ft int
++.Fn iswprint_l "wint_t wc" "locale_t loc"
++.Ft int
++.Fn iswpunct_l "wint_t wc" "locale_t loc"
++.Ft int
++.Fn iswspace_l "wint_t wc" "locale_t loc"
++.Ft int
++.Fn iswupper_l "wint_t wc" "locale_t loc"
++.Ft int
++.Fn iswxdigit_l "wint_t wc" "locale_t loc"
++.Ft wctype_t
++.Fn wctype_l "wint_t wc" "locale_t loc"
++.Ft int
++.Fn iswblank_l "wint_t wc" "locale_t loc"
++.Ft int
++.Fn iswhexnumber_l "wint_t wc" "locale_t loc"
++.Ft int
++.Fn iswideogram_l "wint_t wc" "locale_t loc"
++.Ft int
++.Fn iswnumber_l "wint_t wc" "locale_t loc"
++.Ft int
++.Fn iswphonogram_l "wint_t wc" "locale_t loc"
++.Ft int
++.Fn iswrune_l "wint_t wc" "locale_t loc"
++.Ft int
++.Fn iswspecial_l "wint_t wc" "locale_t loc"
++.Ft wint_t
++.Fn nextwctype_l "wint_t wc" "locale_t loc"
++.Ft wint_t
++.Fn towctrans_l "wint_t wc" "wctrans_t" "locale_t loc"
++.Ft wctrans_t
++.Fn wctrans_l "const char *" "locale_t loc"
++.Sh DESCRIPTION
++The above functions are character classification utility functions,
++for use with wide characters
++.Vt ( wchar_t
++or
++.Vt wint_t )
++in the locale
++.Fa loc .
++They behave in the same way as the versions without the _l suffix, but use
++the specified locale rather than the global or per-thread locale.
++These functions may be implemented as inline functions in
++.In wctype.h
++and as functions in the C library.
++See the specific manual pages for more information.
++.Sh RETURN VALUES
++These functions return the same things as their non-locale versions.
++If the locale is invalid, their behaviors are undefined.
++.Sh SEE ALSO
++.Xr iswalnum 3 ,
++.Xr iswalpha 3 ,
++.Xr iswblank 3 ,
++.Xr iswcntrl 3 ,
++.Xr iswctype 3 ,
++.Xr iswdigit 3 ,
++.Xr iswgraph 3 ,
++.Xr iswhexnumber 3 ,
++.Xr iswideogram 3 ,
++.Xr iswlower 3 ,
++.Xr iswnumber 3 ,
++.Xr iswphonogram 3 ,
++.Xr iswprint 3 ,
++.Xr iswpunct 3 ,
++.Xr iswrune 3 ,
++.Xr iswspace 3 ,
++.Xr iswspecial 3 ,
++.Xr iswupper 3 ,
++.Xr iswxdigit 3 ,
++.Xr nextwctype 3 ,
++.Xr towctrans 3 ,
++.Xr wctrans 3 ,
++.Xr wctype 3
++.Sh STANDARDS
++These functions conform to
++.St -p1003.1-2008 ,
++except for
++.Fn iswascii_l ,
++.Fn iswhexnumber_l ,
++.Fn iswideogram_l ,
++.Fn iswphonogram_l ,
++.Fn iswrune_l ,
++.Fn iswspecial_l
++and
++.Fn nextwctype_l
++which are
++.Fx
++extensions.
+--- src53xlocale1/lib/libc/locale/iswctype.c	Mon Mar 25 18:28:42 2013
++++ src/lib/libc/locale/iswctype.c	Mon Apr  8 21:03:28 2013
+@@ -34,16 +34,26 @@
+  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+  * SUCH DAMAGE.
+  */
++/**
++ * Public domain according to Colombian Legislation.
++ * http://www.pasosdejesus.org/dominio_publico_colombia.html
++ * 2013. vtamara@pasosdeJesus.org.
++ *
++ * $adJ$
++ */
+ 
+ #include <wchar.h>
+ #include <wctype.h>
+ #include <ctype.h>
+ #include <errno.h>
+ #include <string.h>
++
++#include "mblocal.h"
+ #include "rune.h"
+ #include "runetype.h"
+ #include "rune_local.h"
+ #include "_wctrans_local.h"
++#include "xlocale_private.h"
+ 
+ #ifdef lint
+ #define __inline
+@@ -63,12 +73,28 @@
+ 		rl->rl_runetype[c] : ___runetype_mb(c));
+ }
+ 
++__inline _RuneType
++__runetype_w_l(wint_t c, locale_t l)
++{
++	FIX_LOCALE(l);
++	_RuneLocale *rl = XLOCALE_CTYPE(l)->runes;
++
++	return (_RUNE_ISCACHED(c) ?          
++	    rl->rl_runetype[c] : ___runetype_mb_l(c, l));
++}
++
+ static __inline int
+ __isctype_w(wint_t c, _RuneType f)
+ {
+ 	return (!!(__runetype_w(c) & f));
+ }
+ 
++__inline int
++__isctype_w_l(rune_t __c, unsigned long __f, locale_t __loc)
++{
++	        return (!!(__runetype_w_l(__c, __loc) & __f));
++}
++
+ static __inline wint_t
+ __toupper_w(wint_t c)
+ {
+@@ -76,95 +102,233 @@
+ }
+ 
+ static __inline wint_t
++__toupper_w_l(wint_t c, locale_t l)
++{
++	FIX_LOCALE(l);
++	_RuneLocale *_runes = XLOCALE_CTYPE(l)->runes;
++	return (_towctrans(c, _wctrans_upper(_runes)));
++}
++
++static __inline wint_t
+ __tolower_w(wint_t c)
+ {
+ 	return (_towctrans(c, _wctrans_lower(_CurrentRuneLocale)));
+ }
+ 
++static __inline wint_t
++__tolower_w_l(wint_t c, locale_t l)
++{
++	FIX_LOCALE(l);
++	_RuneLocale *_runes = XLOCALE_CTYPE(l)->runes;
++	return (_towctrans(c, _wctrans_lower(_runes)));
++}
++
+ int
+ iswalnum(wint_t c)
+ {
+ 	return (__isctype_w((c), _CTYPE_A|_CTYPE_D));
+ }
+ 
++__inline int 
++iswalnum_l(wint_t __c, locale_t __l)
++{
++	return __isctype_w_l(__c, _CTYPE_A|_CTYPE_D, __l);
++}
++
+ int
+ iswalpha(wint_t c)
+ {
+ 	return (__isctype_w((c), _CTYPE_A));
+ }
+ 
++__inline int 
++iswalpha_l(wint_t __c, locale_t __l) 
++{ 
++	return __isctype_w_l(__c, _CTYPE_A, __l); 
++}
++
++
+ int
+ iswblank(wint_t c)
+ {
+ 	return (__isctype_w((c), _CTYPE_B));
+ }
+ 
++__inline int
++iswblank_l(wint_t __c, locale_t __l) 
++{ 
++	return __isctype_w_l(__c, _CTYPE_B, __l); 
++}
++
++
+ int
+ iswcntrl(wint_t c)
+ {
+ 	return (__isctype_w((c), _CTYPE_C));
+ }
+ 
++__inline int 
++iswcntrl_l(wint_t __c, locale_t __l) 
++{ 
++	return __isctype_w_l(__c, _CTYPE_C, __l);
++}
++
++
+ int
+ iswdigit(wint_t c)
+ {
+ 	return (__isctype_w((c), _CTYPE_D));
+ }
+ 
++__inline int 
++iswdigit_l(wint_t __c, locale_t __l) 
++{ 
++	return __isctype_w_l(__c, _CTYPE_D, __l); 
++}
++
+ int
+ iswgraph(wint_t c)
+ {
+ 	return (__isctype_w((c), _CTYPE_G));
+ }
+ 
++__inline int 
++iswgraph_l(wint_t __c, locale_t __l) 
++{ 
++	return __isctype_w_l(__c, _CTYPE_G, __l); 
++}
++
++__inline int 
++iswhexnumber_l(wint_t __c, locale_t __l) 
++{ 
++	return __isctype_w_l(__c, _CTYPE_X, __l); 
++}
++
++__inline int 
++iswideogram_l(wint_t __c, locale_t __l) 
++{ 
++	return __isctype_w_l(__c, _CTYPE_I, __l);
++}
++
+ int
+ iswlower(wint_t c)
+ {
+ 	return (__isctype_w((c), _CTYPE_L));
+ }
+ 
++__inline int 
++iswlower_l(wint_t __c, locale_t __l) 
++{ 
++	return __isctype_w_l(__c, _CTYPE_L, __l);
++}
++
++__inline int 
++iswnumber_l(wint_t __c, locale_t __l) 
++{ 
++	return __isctype_w_l(__c, _CTYPE_D, __l);
++}
++
++
+ int
+ iswprint(wint_t c)
+ {
+ 	return (__isctype_w((c), _CTYPE_R));
+ }
+ 
++__inline int 
++iswphonogram_l(wint_t __c, locale_t __l) 
++{ 
++	return __isctype_w_l(__c, _CTYPE_Q, __l);
++}
++
++__inline int 
++iswprint_l(wint_t __c, locale_t __l) 
++{ 
++	return __isctype_w_l(__c, _CTYPE_R, __l);
++}
++
+ int
+ iswpunct(wint_t c)
+ {
+ 	return (__isctype_w((c), _CTYPE_P));
+ }
++__inline int iswpunct_l(wint_t __c, locale_t __l)
++{ 
++	return __isctype_w_l(__c, _CTYPE_P, __l);
++}
+ 
++__inline int 
++iswrune_l(wint_t __c, locale_t __l) 
++{
++	return __isctype_w_l(__c, 0xFFFFFF00L, __l);
++}
++
+ int
+ iswspace(wint_t c)
+ {
+ 	return (__isctype_w((c), _CTYPE_S));
+ }
+ 
++__inline int 
++iswspace_l(wint_t __c, locale_t __l) 
++{ 
++	return __isctype_w_l(__c, _CTYPE_S, __l);
++}
++
++__inline int 
++iswspecial_l(wint_t __c, locale_t __l) 
++{ 
++	return __isctype_w_l(__c, _CTYPE_T, __l);
++}
++
+ int
+ iswupper(wint_t c)
+ {
+ 	return (__isctype_w((c), _CTYPE_U));
+ }
+ 
++__inline int 
++iswupper_l(wint_t __c, locale_t __l) 
++{ 
++	return __isctype_w_l(__c, _CTYPE_U, __l);
++}
++
+ int
+ iswxdigit(wint_t c)
+ {
+ 	return (__isctype_w((c), _CTYPE_X));
+ }
+ 
++__inline int 
++iswxdigit_l(wint_t __c, locale_t __l) 
++{ 
++	return __isctype_w_l(__c, _CTYPE_X, __l); 
++}
++
+ wint_t
+ towupper(wint_t c)
+ {
+ 	return (__toupper_w(c));
+ }
+ 
++__inline wint_t
++towupper_l(wint_t __c, locale_t __l)
++{
++	return (__toupper_w_l(__c, __l));
++}
++
+ wint_t
+ towlower(wint_t c)
+ {
+ 	return (__tolower_w(c));
+ }
+ 
++__inline wint_t
++towlower_l(wint_t __c, locale_t __l)
++{
++	return (__tolower_w_l(__c, __l));
++}
++
+ int
+ wcwidth(wchar_t c)
+ {
+@@ -173,6 +337,15 @@
+ 	return -1;
+ }
+ 
++int wcwidth_l(wchar_t c, locale_t __l)
++{
++	if (__isctype_w_l((c), _CTYPE_R, __l))
++		return (((unsigned)__runetype_w_l(c, __l) & _CTYPE_SWM) 
++				>> _CTYPE_SWS);
++	return -1;
++}
++
++
+ wctrans_t
+ wctrans(const char *charclass)
+ {
+@@ -189,6 +362,23 @@
+ 	return ((wctrans_t)NULL);
+ }
+ 
++wctrans_t
++wctrans_l(const char *charclass, locale_t l)
++{
++	int i;
++	FIX_LOCALE(l);
++	_RuneLocale *rl = XLOCALE_CTYPE(l)->runes;
++
++	if (rl->rl_wctrans[_WCTRANS_INDEX_LOWER].te_name==NULL)
++		_wctrans_init(rl);
++
++	for (i=0; i<_WCTRANS_NINDEXES; i++)
++		if (!strcmp(rl->rl_wctrans[i].te_name, charclass))
++			return ((wctrans_t)&rl->rl_wctrans[i]);
++
++	return ((wctrans_t)NULL);
++}
++
+ wint_t
+ towctrans(wint_t c, wctrans_t desc)
+ {
+@@ -199,6 +389,22 @@
+ 	return (_towctrans(c, (_WCTransEntry *)desc));
+ }
+ 
++wint_t
++towctrans_l(wint_t wc, wctrans_t desc, locale_t locale)
++{
++	FIX_LOCALE(locale);
++	int i;
++	if (desc==NULL) {
++		errno = EINVAL;
++		return (wc);
++	}
++	/* Supposing that desc was obtained from locale with wctrans_l,
++	 * as stated in 
++	 * http://pubs.opengroup.org/onlinepubs/9699919799/functions/towctrans.html */
++	return (_towctrans(wc, (_WCTransEntry *)desc));
++}
++
++
+ wctype_t
+ wctype(const char *property)
+ {
+@@ -211,6 +417,20 @@
+ 	return ((wctype_t)NULL);
+ }
+ 
++wctype_t
++wctype_l(const char *property, locale_t l)
++{
++	int i;
++	FIX_LOCALE(l);
++	_RuneLocale *rl = XLOCALE_CTYPE(l)->runes;
++
++	for (i=0; i<_WCTYPE_NINDEXES; i++)
++		if (!strcmp(rl->rl_wctype[i].te_name, property))
++			return ((wctype_t)&rl->rl_wctype[i]);
++	return ((wctype_t)NULL);
++}
++
++
+ int
+ iswctype(wint_t c, wctype_t charclass)
+ {
+@@ -224,3 +444,10 @@
+ 
+ 	return (__isctype_w(c, ((_WCTypeEntry *)charclass)->te_mask));
+ }
++
++__inline int
++iswctype_l(wint_t wc, wctype_t charclass, locale_t locale)
++{
++	return __isctype_w_l(wc, ((_WCTypeEntry *)charclass)->te_mask, locale);
++}
++
+diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src53xlocale1/lib/libc/locale/nextwctype.3 src/lib/libc/locale/nextwctype.3
+--- src53xlocale1/lib/libc/locale/nextwctype.3	Tue Apr  2 06:11:30 2013
++++ src/lib/libc/locale/nextwctype.3	Thu Apr  4 17:37:32 2013
+@@ -25,11 +25,12 @@
+ .\"
+ .\" From FreeBSD
+ .\"
+-.Dd July 21, 2005
++.Dd April 4, 2013
+ .Dt NEXTWCTYPE 3
+ .Os
+ .Sh NAME
+-.Nm nextwctype
++.Nm nextwctype ,
++.Nm nextwctype_l
+ .Nd "iterate through character classes"
+ .Sh LIBRARY
+ .Lb libc
+@@ -37,10 +38,14 @@
+ .In wctype.h
+ .Ft wint_t
+ .Fn nextwctype "wint_t ch" "wctype_t wct"
++.Ft wint_t
++.Fn nextwctype_l "wint_t ch" "wctype_t wct" "locale_t l"
+ .Sh DESCRIPTION
+ The
+ .Fn nextwctype
+-function determines the next character after
++and
++.Fn nextwctype_l
++functions determine the next character after
+ .Fa ch
+ that is a member of character class
+ .Fa wct .
+@@ -48,6 +53,13 @@
+ .Fa ch
+ is \-1, the search begins at the first member of
+ .Fa wct .
++.Pp
++The function
++.Fn nextwctype
++uses the current locale, while the function
++.Fn nextwctype_l
++uses the locale provided as parameter, see
++.Xr xlocale 3
+ .Sh RETURN VALUES
+ The
+ .Fn nextwctype
+@@ -60,6 +72,7 @@
+ function would suffice.
+ .Sh SEE ALSO
+ .Xr wctype 3
++.Xr xlocale 3
+ .Sh HISTORY
+ The
+ .Fn nextwctype
+diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src53xlocale1/lib/libc/locale/nextwctype.c src/lib/libc/locale/nextwctype.c
+--- src53xlocale1/lib/libc/locale/nextwctype.c	Wed Dec 31 19:00:00 1969
++++ src/lib/libc/locale/nextwctype.c	Thu Apr  4 17:32:11 2013
+@@ -0,0 +1,108 @@
++/*-
++ * Copyright (c) 2004 Tim J. Robbins.
++ * All rights reserved.
++ *
++ * Copyright (c) 2011 The FreeBSD Foundation
++ * All rights reserved.
++ * Portions of this software were developed by David Chisnall
++ * under sponsorship from the FreeBSD Foundation.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
++ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
++ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++ * SUCH DAMAGE.
++ */
++
++#include <sys/cdefs.h>
++
++#include <runetype.h>
++#include <wchar.h>
++#include <wctype.h>
++#include <errno.h>
++#include "mblocal.h"
++
++wint_t
++nextwctype_l(wint_t wc, wctype_t wct, locale_t locale)
++{
++	if (wct == NULL) {
++		errno = EINVAL; 
++		return -1;
++	}
++	unsigned long wctm = ((_WCTypeEntry *)wct)->te_mask;
++	size_t lim;
++	FIX_LOCALE(locale);
++	_RuneLocale *runes = XLOCALE_CTYPE(locale)->runes;
++	_RuneRange *rr = &(runes->rl_runetype_ext);
++	_RuneEntry *base, *re;
++	int noinc;
++
++	noinc = 0;
++	if (wc < _CACHED_RUNES) {
++		wc++;
++		while (wc < _CACHED_RUNES) {
++			if (runes->rl_wctype[wc].te_mask & wctm)
++				return (wc);
++			wc++;
++		}
++		wc--;
++	}
++	if (rr->rr_rune_ranges != NULL && wc < rr->rr_rune_ranges[0].re_min) {
++		wc = rr->rr_rune_ranges[0].re_min;
++		noinc = 1;
++	}
++
++	/* Binary search -- see bsearch.c for explanation. */
++	base = rr->rr_rune_ranges;
++	for (lim = rr->rr_nranges; lim != 0; lim >>= 1) {
++		re = base + (lim >> 1);
++		if (re->re_min <= wc && wc <= re->re_max)
++			goto found;
++		else if (wc > re->re_max) {
++			base = re + 1;
++			lim--;
++		}
++	}
++	return (-1);
++found:
++	if (!noinc)
++		wc++;
++	if (re->re_min <= wc && wc <= re->re_max) {
++		if (re->re_rune_types != NULL) {
++			for (; wc <= re->re_max; wc++)
++				if (re->re_rune_types[wc - re->re_min] & wctm)
++					return (wc);
++		} else if (re->re_map & wctm)
++			return (wc);
++	}
++	while (++re < rr->rr_rune_ranges + rr->rr_nranges) {
++		wc = re->re_min;
++		if (re->re_rune_types != NULL) {
++			for (; wc <= re->re_max; wc++)
++				if (re->re_rune_types[wc - re->re_min] & wctm)
++					return (wc);
++		} else if (re->re_map & wctm)
++			return (wc);
++	}
++	return (-1);
++}
++wint_t
++nextwctype(wint_t wc, wctype_t wct)
++{
++	return nextwctype_l(wc, wct, __get_locale());
++}
+diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src53xlocale1/lib/libc/string/wcswidth.c src/lib/libc/string/wcswidth.c
+--- src53xlocale1/lib/libc/string/wcswidth.c	Wed Apr  3 12:10:19 2013
++++ src/lib/libc/string/wcswidth.c	Thu Apr  4 17:24:33 2013
+@@ -31,14 +31,16 @@
+ 
+ #include <wchar.h>
+ 
++#include "../locale/xlocale_private.h"
++
+ int
+-wcswidth(const wchar_t *s, size_t n)
++wcswidth_l(const wchar_t *s, size_t n, locale_t l)
+ {
+ 	int w, q;
+ 
+ 	w = 0;
+ 	while (n && *s) {
+-		q = wcwidth(*s);
++		q = wcwidth_l(*s, l);
+ 		if (q == -1)
+ 			return (-1);
+ 		w += q;
+@@ -48,3 +50,10 @@
+ 
+ 	return w;
+ }
++
++int
++wcswidth(const wchar_t *s, size_t n)
++{
++	return wcswidth_l(s, n, __get_locale());
++}
++
+diff -ruN -x *.o -x obj -x CVS -x *~ src53xlocale2/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regress/lib/libc/locale/check_xlocale/check_xlocale.c
+--- src53xlocale2/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Mon Apr  8 21:20:56 2013
++++ src/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Tue Apr  9 05:20:20 2013
+@@ -4,7 +4,6 @@
+  * 2013. vtamara@pasosdeJesus.org.
+  */
+ 
+-#include <xlocale.h>
+ #include <ctype.h>
+ #include <inttypes.h>
+ #include <langinfo.h>
+@@ -15,6 +14,7 @@
+ #include <time.h>
+ #include <wchar.h>
+ #include <wctype.h>
++#include <xlocale.h>
+ 
+ int bad;
+ 
+@@ -143,7 +143,6 @@
+ 
+ }
+ 
+-#if 0
+ void test_ctype() {
+ 	char *nl = setlocale(LC_ALL, "es_CO.UTF-8");
+ 	printf("locale %s\n", nl);
+@@ -151,6 +150,8 @@
+ 
+ 	size_t s;
+ 	wchar_t ws[100];
++	p((s = mbstowcs_l(ws, "niño", 10, es_CO_UTF_8)) > 0 && 
++	    wcsncmp(ws, L"niño", 10) == 0);
+ 	p((s = wcswidth_l(ws, 10, es_CO_UTF_8)) == 4);
+ 	p((s = wcwidth_l(L'a', es_CO_UTF_8)) == 1);
+ 	p(wctype("lower") == wctype_l("lower", es_CO_UTF_8));
+@@ -235,14 +236,12 @@
+ 	p(!iswspecial_l(L'\0', es_CO_UTF_8));
+ 	p(nextwctype(-1, wctype("graph")) > 0);
+ 	p(tolower_l('A', es_CO_UTF_8) == 'a');
+-	p(_tolower_l('A', es_CO_UTF_8) == 'a');
+ 	p(tolower('A') == 'a');
+ 	p(_tolower('A') == 'a');
+ 	p(towlower_l(L'Á', es_CO_UTF_8) == L'á');
+ 	p(towupper_l(L'á', es_CO_UTF_8) == L'Á');
+ 	p(toupper_l('a', es_CO_UTF_8) == 'A');
+ 	p(toupper('a') == 'A');
+-	p(_toupper_l('a', es_CO_UTF_8) == 'A');
+ 	p(_toupper('a') == 'A');
+ 	p(wctrans_l("invalido", es_CO_UTF_8) == 0);
+ 	wchar_t lu[7][2] = {{ L'ñ', L'Ñ'},
+@@ -267,8 +266,7 @@
+ 
+ }
+ 
+-
+-
++#if 0
+ void test_string() 
+ {
+ 	char *nl = setlocale(LC_ALL, "es_CO.UTF-8");
+@@ -401,7 +399,7 @@
+ {
+ 	test_xlocale();
+ 	test_wchar();
+-//	test_ctype();
++	test_ctype();
+ //	test_string();
+ 	
+ 	return bad != 0;
