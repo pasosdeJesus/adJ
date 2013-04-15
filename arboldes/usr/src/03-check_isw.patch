@@ -128,7 +128,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/regress/lib/libc/l
 +		}
 +	}
 +	
-+	*nl = setlocale(LC_ALL, "ru_RU.KOI8-R");
++	nl = setlocale(LC_ALL, "ru_RU.KOI8-R");
 +	printf("locale %s\n", nl);
 +	/* a -> 0xc0, A -> 0xe0 */
 +	for(c = 0xc0; c < 0xdf; c++) {

@@ -1332,3 +1332,1114 @@ diff -ruN -x *.o -x obj -x CVS -x *~ src53xlocale2/regress/lib/libc/locale/check
  //	test_string();
  	
  	return bad != 0;
+diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/gen/tolower.3 src53xlocale2/lib/libc/gen/tolower.3
+--- src53xlocale1/lib/libc/gen/tolower.3	Fri Mar 22 08:37:38 2013
++++ src53xlocale2/lib/libc/gen/tolower.3	Fri Apr 12 11:46:27 2013
+@@ -36,22 +36,33 @@
+ .Os
+ .Sh NAME
+ .Nm tolower ,
+-.Nm _tolower
++.Nm tolower_l ,
++.Nm _tolower ,
++.Nm _tolower_l ,
++
+ .Nd upper case to lower case letter conversion
+ .Sh SYNOPSIS
+ .Fd #include <ctype.h>
+ .Ft int
+ .Fn tolower "int c"
+ .Ft int
++.Fn tolower_l "int c" "locale_t l"
++.Ft int
+ .Fn _tolower "int c"
++.Ft int
++.Fn _tolower_l "int c" "locale_t l"
+ .Sh DESCRIPTION
+ The
+ .Fn tolower
+-function converts an upper-case letter to the corresponding lower-case
++and
++.Fn tolower_l
++functions convert an upper-case letter to the corresponding lower-case
+ letter.
+ The
+ .Fn _tolower
+-function is identical to
++and
++.Fn _tolower_l
++functions are identical to
+ .Fn tolower
+ except that
+ .Ar c
+@@ -59,12 +70,32 @@
+ .Sh RETURN VALUES
+ If the argument to the
+ .Fn tolower
+-function is an upper-case letter, the corresponding lower-case letter
++and
++.Fn tolower_l
++functions is an upper-case letter, the corresponding lower-case letter
+ is returned if there is one; otherwise the argument is returned unchanged.
+ If the argument to the
+ .Fn _tolower
+-function is an upper-case letter, the corresponding lower-case letter
++and
++.Fn _tolower_l
++functions is an upper-case letter, the corresponding lower-case letter
+ is returned; otherwise the output is undefined.
++.Pp
++The behavior of the functions
++.Fn tolower
++and 
++.Fn _tolower
++is affected by the 
++.Dv LC_CTYPE
++category of the current locale, while 
++the behavior of the functions
++.Fn tolower_l
++and 
++.Fn _tolower_l
++is affected by the 
++.Dv LC_CTYPE
++category of the locale provided as parameter, see
++.Xr xlocale 3 .
+ .\" In the
+ .\" .Em ``C''
+ .\" locale,
+@@ -91,13 +122,13 @@
+ .Xr stdio 3 ,
+ .Xr toascii 3 ,
+ .Xr toupper 3 ,
+-.Xr ascii 7
++.Xr ascii 7 ,
++.Xr setlocale 3
++.Xr xlocale 3
+ .Sh STANDARDS
+-The
+-.Fn tolower
+-and
+-.Fn _tolower
++These
+ functions conform to
++POSIX2008,
+ .St -ansiC .
+ .Sh CAVEATS
+ The argument to
+diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/gen/toupper.3 src53xlocale2/lib/libc/gen/toupper.3
+--- src53xlocale1/lib/libc/gen/toupper.3	Fri Mar 22 08:37:38 2013
++++ src53xlocale2/lib/libc/gen/toupper.3	Fri Apr 12 11:46:27 2013
+@@ -35,27 +35,53 @@
+ .Dt TOUPPER 3
+ .Os
+ .Sh NAME
+-.Nm toupper ,
+-.Nm _toupper
++.Nm toupper , 
++.Nm toupper_l ,
++.Nm _toupper ,
++.Nm _toupper_l
+ .Nd lower case to upper case letter conversion
+ .Sh SYNOPSIS
+ .Fd #include <ctype.h>
+ .Ft int
+ .Fn toupper "int c"
+ .Ft int
++.Fn toupper_l "int c"
++.Ft int
+ .Fn _toupper "int c"
++.Ft int
++.Fn _toupper_l "int c"
+ .Sh DESCRIPTION
+ The
+ .Fn toupper
+-function converts a lower-case letter to the corresponding
++and
++.Fn toupper_l
++functions converts a lower-case letter to the corresponding
+ upper-case letter.
+ The
+ .Fn _toupper
++and
++.Fn _toupper_l
+ function is identical to
+ .Fn toupper
+ except that
+ .Ar c
+ must be a lower-case letter.
++.Pp
++The behavior of the functions
++.Fn toupper
++and 
++.Fn _toupper
++is affected by the 
++.Dv LC_CTYPE
++category of the current locale, while 
++the behavior of the functions
++.Fn toupper_l
++and 
++.Fn _toupper_l
++is affected by the 
++.Dv LC_CTYPE
++category of the locale provided as parameter, see
++.Xr xlocale 3 .
+ .Sh RETURN VALUES
+ If the argument to the
+ .Fn toupper
+@@ -91,7 +117,9 @@
+ .Xr stdio 3 ,
+ .Xr toascii 3 ,
+ .Xr tolower 3 ,
+-.Xr ascii 7
++.Xr ascii 7 ,
++.Xr setlocale 3 ,
++.Xr xlocale 3
+ .Sh STANDARDS
+ The
+ .Fn toupper
+diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/btowc.3 src53xlocale2/lib/libc/locale/btowc.3
+--- src53xlocale1/lib/libc/locale/btowc.3	Mon Mar 25 18:28:42 2013
++++ src53xlocale2/lib/libc/locale/btowc.3	Fri Apr 12 12:05:59 2013
+@@ -25,7 +25,7 @@
+ .\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ .\" SUCH DAMAGE.
+ .\"
+-.Dd $Mdocdate$
++.Dd $Mdocdate: January 25 2013 $
+ .Dt BTOWC 3
+ .Os
+ .\" ----------------------------------------------------------------------
+diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/ctype_l.3 src53xlocale2/lib/libc/locale/ctype_l.3
+--- src53xlocale1/lib/libc/locale/ctype_l.3	Mon Apr  8 21:21:23 2013
++++ src53xlocale2/lib/libc/locale/ctype_l.3	Fri Apr 12 12:01:41 2013
+@@ -50,7 +50,7 @@
+ .Nm isspace_l ,
+ .Nm isspecial_l ,
+ .Nm isupper_l ,
+-.Nm isxdigit_l 
++.Nm isxdigit_l
+ .Nd character classification functions
+ .Sh LIBRARY
+ .Lb libc
+diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/duplocale.3 src53xlocale2/lib/libc/locale/duplocale.3
+--- src53xlocale1/lib/libc/locale/duplocale.3	Mon Apr  8 21:20:56 2013
++++ src53xlocale2/lib/libc/locale/duplocale.3	Fri Apr 12 12:16:31 2013
+@@ -27,14 +27,12 @@
+ .\"
+ .\" $FreeBSD: src/lib/libc/locale/duplocale.3,v 1.6 2012/11/17 01:49:29 svnexp Exp $
+ .\"
+-.Dd September 17 2011
++.Dd $Mdocdate: September 17 2011 $
+ .Dt DUPLOCALE 3
+ .Os
+ .Sh NAME
+ .Nm duplocale
+ .Nd duplicate an locale
+-.Sh LIBRARY
+-.Lb libc
+ .Sh SYNOPSIS
+ .In xlocale.h
+ .Ft locale_t
+diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/freelocale.3 src53xlocale2/lib/libc/locale/freelocale.3
+--- src53xlocale1/lib/libc/locale/freelocale.3	Mon Apr  8 21:20:56 2013
++++ src53xlocale2/lib/libc/locale/freelocale.3	Fri Apr 12 12:16:22 2013
+@@ -26,7 +26,7 @@
+ .\" SUCH DAMAGE.
+ .\"
+ .\" $FreeBSD: src/lib/libc/locale/freelocale.3,v 1.4 2012/11/17 01:49:29 svnexp Exp $
+-.Dd September 17 2011
++.Dd $Mdocdate: September 17 2011 $
+ .Dt FREELOCALE 3
+ .Os
+ .Sh NAME
+@@ -35,8 +35,6 @@
+ .Xr duplocale 3
+ or
+ .Xr newlocale 3
+-.Sh LIBRARY
+-.Lb libc
+ .Sh SYNOPSIS
+ .In xlocale.h
+ .Ft int
+diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/iswctype.3 src53xlocale2/lib/libc/locale/iswctype.3
+--- src53xlocale1/lib/libc/locale/iswctype.3	Mon Mar 25 18:28:42 2013
++++ src53xlocale2/lib/libc/locale/iswctype.3	Fri Apr 12 12:16:50 2013
+@@ -25,7 +25,7 @@
+ .\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ .\" SUCH DAMAGE.
+ .\"
+-.Dd $Mdocdate$
++.Dd $Mdocdate: January 25 2013 $
+ .Dt ISWCTYPE 3
+ .Os
+ .\" ----------------------------------------------------------------------
+@@ -79,7 +79,6 @@
+ is in
+ .Fa charclass .
+ .El
+-.Pp
+ .\" ----------------------------------------------------------------------
+ .Sh ERRORS
+ No errors are defined.
+diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/mblen.3 src53xlocale2/lib/libc/locale/mblen.3
+--- src53xlocale1/lib/libc/locale/mblen.3	Mon Apr  8 21:20:56 2013
++++ src53xlocale2/lib/libc/locale/mblen.3	Fri Apr 12 12:06:26 2013
+@@ -25,7 +25,7 @@
+ .\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ .\" SUCH DAMAGE.
+ .\"
+-.Dd $Mdocdate$
++.Dd $Mdocdate: January 25 2013 $
+ .Dt MBLEN 3
+ .Os
+ .\" ----------------------------------------------------------------------
+@@ -98,9 +98,9 @@
+ .Fn mblen
+ is affected by the
+ .Dv LC_CTYPE
+-category of the current locale.  The funcion 
++category of the current locale.  The funcion
+ .Fn mblen_l
+-allows you to provide a different locale, see 
++allows you to provide a different locale, see
+ .Xr xlocale 3
+ .Pp
+ There are special cases:
+diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/mbrtowc.3 src53xlocale2/lib/libc/locale/mbrtowc.3
+--- src53xlocale1/lib/libc/locale/mbrtowc.3	Mon Apr  8 21:20:56 2013
++++ src53xlocale2/lib/libc/locale/mbrtowc.3	Fri Apr 12 12:16:59 2013
+@@ -30,7 +30,7 @@
+ .Os
+ .Sh NAME
+ .Nm mbrtowc ,
+-.Nm mbrtowc_l 
++.Nm mbrtowc_l
+ .Nd converts a multibyte character to a wide character (restartable)
+ .Sh SYNOPSIS
+ .Fd #include <wchar.h>
+@@ -65,10 +65,9 @@
+ .Fa mbs .
+ The mbstate_t object must be initialized to zero before the application's
+ first call to
+-.Fn mbrtowc 
++.Fn mbrtowc
+ or
+ .Fn mbrtowc_l .
+-
+ If the previous call to the function
+ did not return (size_t)-1, the mbstate_t object can safely be reused
+ without reinitialization.
+diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/mbsinit.3 src53xlocale2/lib/libc/locale/mbsinit.3
+--- src53xlocale1/lib/libc/locale/mbsinit.3	Mon Apr  8 21:20:56 2013
++++ src53xlocale2/lib/libc/locale/mbsinit.3	Fri Apr 12 12:05:54 2013
+@@ -25,7 +25,7 @@
+ .\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ .\" SUCH DAMAGE.
+ .\"
+-.Dd $Mdocdate$
++.Dd $Mdocdate: January 25 2013 $
+ .Dt MBSINIT 3
+ .Os
+ .\" ----------------------------------------------------------------------
+@@ -47,10 +47,10 @@
+ .Fn mbsinit_l
+ determine whether the state object pointed to by
+ .Fa ps
+-is in initial conversion state, or not.  
++is in initial conversion state, or not.
+ .Pp
+-The behavior of 
+-.Fn mbsinit 
++The behavior of
++.Fn mbsinit
+ depends on the current locale, while the behavior of
+ .Fn mbsinit_l
+ depends on the locale provided as parameter, see
+diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/mbsrtowcs.3 src53xlocale2/lib/libc/locale/mbsrtowcs.3
+--- src53xlocale1/lib/libc/locale/mbsrtowcs.3	Mon Apr  8 21:20:56 2013
++++ src53xlocale2/lib/libc/locale/mbsrtowcs.3	Fri Apr 12 12:02:06 2013
+@@ -74,7 +74,7 @@
+ .El
+ .Pp
+ The
+-.Fn mbsnrtowcs 
++.Fn mbsnrtowcs
+ and
+ .Fn mbsnrtowcs_l
+ functions are equivalent to
+@@ -117,7 +117,7 @@
+ .Fn mbsnrtowcs_l
+ functions is affected by the
+ .Dv LC_CTYPE
+-category of the locale provided as parameter, see 
++category of the locale provided as parameter, see
+ .Xr xlocale 3
+ .Pp
+ There are two special cases:
+diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/mbstowcs.3 src53xlocale2/lib/libc/locale/mbstowcs.3
+--- src53xlocale1/lib/libc/locale/mbstowcs.3	Mon Apr  8 21:20:56 2013
++++ src53xlocale2/lib/libc/locale/mbstowcs.3	Fri Apr 12 12:02:10 2013
+@@ -51,9 +51,9 @@
+ to the corresponding wide-character string and store it in the array
+ pointed to by
+ .Fa pwcs .
+-The funcion 
++The funcion
+ .Fn mbstowcs
+-uses the current locale, while 
++uses the current locale, while
+ .Fn mbstowcs_l
+ uses the locale provided, see
+ .Xr xlocale 3
+diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/newlocale.3 src53xlocale2/lib/libc/locale/newlocale.3
+--- src53xlocale1/lib/libc/locale/newlocale.3	Mon Apr  8 21:20:56 2013
++++ src53xlocale2/lib/libc/locale/newlocale.3	Fri Apr 12 12:16:13 2013
+@@ -25,15 +25,13 @@
+ .\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ .\" SUCH DAMAGE.
+ .\"
+-.\" From FreeBSD src/lib/libc/locale/newlocale.3,v 1.8 2012/11/17 01:49:30 svnexp Exp 
+-.Dd September 17 2011
++.\" From FreeBSD src/lib/libc/locale/newlocale.3,v 1.8 2012/11/17 01:49:30 svnexp Exp
++.Dd $Mdocdate: September 17 2011 $
+ .Dt NEWLOCALE 3
+ .Os
+ .Sh NAME
+ .Nm newlocale
+ .Nd Creates a new locale
+-.Sh LIBRARY
+-.Lb libc
+ .Sh SYNOPSIS
+ .In xlocale
+ .Ft locale_t
+diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/querylocale.3 src53xlocale2/lib/libc/locale/querylocale.3
+--- src53xlocale1/lib/libc/locale/querylocale.3	Mon Apr  8 21:20:56 2013
++++ src53xlocale2/lib/libc/locale/querylocale.3	Fri Apr 12 12:15:40 2013
+@@ -25,16 +25,14 @@
+ .\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ .\" SUCH DAMAGE.
+ .\"
+-.\" From FreeBSD: src/lib/libc/locale/querylocale.3,v 1.4 2012/11/17 01:49:30 svnexp Exp 
++.\" From FreeBSD: src/lib/libc/locale/querylocale.3,v 1.4 2012/11/17 01:49:30 svnexp Exp
+ .\"
+-.Dd September 17 2011
++.Dd $Mdocdate: September 17 2011 $
+ .Dt QUERYLOCALE 3
+ .Os
+ .Sh NAME
+ .Nm querylocale
+ .Nd Look up the locale name for a specified category
+-.Sh LIBRARY
+-.Lb libc
+ .Sh SYNOPSIS
+ .In xlocale.h
+ .Ft const char *
+diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/towctrans.3 src53xlocale2/lib/libc/locale/towctrans.3
+--- src53xlocale1/lib/libc/locale/towctrans.3	Mon Mar 25 18:28:42 2013
++++ src53xlocale2/lib/libc/locale/towctrans.3	Fri Apr 12 12:05:50 2013
+@@ -26,7 +26,7 @@
+ .\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ .\" SUCH DAMAGE.
+ .\"
+-.Dd $Mdocdate$
++.Dd $Mdocdate: January 25 2013 $
+ .Dt TOWCTRANS 3
+ .Os
+ .\" ----------------------------------------------------------------------
+diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/towlower.3 src53xlocale2/lib/libc/locale/towlower.3
+--- src53xlocale1/lib/libc/locale/towlower.3	Mon Mar 25 18:28:42 2013
++++ src53xlocale2/lib/libc/locale/towlower.3	Fri Apr 12 12:02:28 2013
+@@ -38,33 +38,62 @@
+ .Dt TOWLOWER 3
+ .Os
+ .Sh NAME
+-.Nm towlower
++.Nm towlower ,
++.Nm towlower_l ,
++.Nm towupper
++.Nm towupper_l
+ .Nd wide-character case letter conversion utilities
+ .Sh SYNOPSIS
+ .In wctype.h
+ .Ft wint_t
+ .Fn towlower "wint_t wc"
+ .Ft wint_t
++.Fn towlower_l "wint_t wc" "locale_t l"
++.Ft wint_t
+ .Fn towupper "wint_t wc"
++.Ft wint_t
++.Fn towupper_l "wint_t wc" "locale_t l"
+ .Sh DESCRIPTION
+ The
+ .Fn towlower
+-function converts an upper-case wide character to the corresponding lower-case
++and
++.Fn towlower_l
++functions convert an upper-case wide character to the corresponding lower-case
+ letter.
+ The
+ .Fn towupper
+-function converts an lower-case wide character to the corresponding upper-case
++and
++.Fn towupper_l
++functions convert an lower-case wide character to the corresponding upper-case
+ letter.
+ .Sh RETURN VALUES
+ If the argument is an upper/lower-case letter, the
+ .Fn tolower
+ function returns the corresponding counterpart if there is
+ one; otherwise the argument is returned unchanged.
++.Pp
++The behavior of the functions
++.Fn towupper
++and
++.Fn towlower
++is affected by the
++.Dv LC_CTYPE
++category of the current locale, while
++the behavior of the functions
++.Fn towupper_l
++and
++.Fn towlower_l
++is affected by the
++.Dv LC_CTYPE
++category of the locale provided as parameter, see
++.Xr xlocale 3 .
+ .Sh SEE ALSO
+ .Xr tolower 3 ,
+ .Xr toupper 3
++.Xr xlocale 3
+ .Sh STANDARDS
+ The functions conform to
++POSIX 2008,
+ .St -isoC-amd1
+ and
+ .St -isoC-99 .
+diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/uselocale.3 src53xlocale2/lib/libc/locale/uselocale.3
+--- src53xlocale1/lib/libc/locale/uselocale.3	Mon Apr  8 21:20:56 2013
++++ src53xlocale2/lib/libc/locale/uselocale.3	Fri Apr 12 12:15:27 2013
+@@ -27,14 +27,12 @@
+ .\"
+ .\" $FreeBSD: src/lib/libc/locale/uselocale.3,v 1.4 2012/11/17 01:49:30 svnexp Exp $
+ .\"
+-.Dd September 17 2011
++.Dd $Mdocdate: September 17 2011 $
+ .Dt USELOCALE 3
+ .Os
+ .Sh NAME
+ .Nm uselocale
+ .Nd Sets a thread-local locale
+-.Sh LIBRARY
+-.Lb libc
+ .Sh SYNOPSIS
+ .In xlocale.h
+ .Ft locale_t
+diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/wcscoll.3 src53xlocale2/lib/libc/locale/wcscoll.3
+--- src53xlocale1/lib/libc/locale/wcscoll.3	Mon Apr  8 21:20:25 2013
++++ src53xlocale2/lib/libc/locale/wcscoll.3	Fri Apr 12 12:07:57 2013
+@@ -33,7 +33,7 @@
+ .\" FreeBSD: src/lib/libc/string/strcoll.3,v 1.11 2001/10/01 16:09:00 ru Exp
+ .\" $FreeBSD: src/lib/libc/string/wcscoll.3,v 1.3 2007/01/09 00:28:12 imp Exp $
+ .\"
+-.Dd $Mdocdate: March 17, 2013
++.Dd $Mdocdate: March 17 2013 $
+ .Dt WCSCOLL 3
+ .Os
+ .\" ----------------------------------------------------------------------
+diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/wcsrtombs.3 src53xlocale2/lib/libc/locale/wcsrtombs.3
+--- src53xlocale1/lib/libc/locale/wcsrtombs.3	Mon Apr  8 21:20:56 2013
++++ src53xlocale2/lib/libc/locale/wcsrtombs.3	Fri Apr 12 12:12:43 2013
+@@ -122,7 +122,6 @@
+ .Dv LC_CTYPE
+ category of the locale provided as parameter, see
+ .Xr xlocale 3
+-
+ .Pp
+ There are two special cases:
+ .Bl -tag -width 012345678901
+diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/wcsxfrm.3 src53xlocale2/lib/libc/locale/wcsxfrm.3
+--- src53xlocale1/lib/libc/locale/wcsxfrm.3	Mon Apr  8 21:20:25 2013
++++ src53xlocale2/lib/libc/locale/wcsxfrm.3	Fri Apr 12 12:12:05 2013
+@@ -33,72 +33,6 @@
+ .\" FreeBSD: src/lib/libc/string/strxfrm.3,v 1.16 2002/09/06 11:24:06 tjr Exp
+ .\" $FreeBSD$
+ .\"
+-.Dd October 4, 2002
+-.Dt WCSXFRM 3
+-.Os
+-.Sh NAME
+-.Nm wcsxfrm
+-.Nd transform a wide string under locale
+-.Sh LIBRARY
+-.Lb libc
+-.Sh SYNOPSIS
+-.In wchar.h
+-.Ft size_t
+-.Fn wcsxfrm "wchar_t * restrict dst" "const wchar_t * restrict src" "size_t n"
+-.Sh DESCRIPTION
+-The
+-.Fn wcsxfrm
+-function transforms a null-terminated wide character string pointed to by
+-.Fa src
+-according to the current locale collation order
+-then copies the transformed string
+-into
+-.Fa dst .
+-No more than
+-.Fa n
+-wide characters are copied into
+-.Fa dst ,
+-including the terminating null character added.
+-If
+-.Fa n
+-is set to 0
+-(it helps to determine an actual size needed
+-for transformation),
+-.Fa dst
+-is permitted to be a
+-.Dv NULL
+-pointer.
+-.Pp
+-Comparing two strings using
+-.Fn wcscmp
+-after
+-.Fn wcsxfrm
+-is equivalent to comparing
+-two original strings with
+-.Fn wcscoll .
+-.Sh RETURN VALUES
+-Upon successful completion,
+-.Fn wcsxfrm
+-returns the length of the transformed string not including
+-the terminating null character.
+-If this value is
+-.Fa n
+-or more, the contents of
+-.Fa dst
+-are indeterminate.
+-.Sh SEE ALSO
+-.Xr setlocale 3 ,
+-.Xr strxfrm 3 ,
+-.Xr wcscmp 3 ,
+-.Xr wcscoll 3
+-.Sh STANDARDS
+-The
+-.Fn wcsxfrm
+-function
+-conforms to
+-.St -isoC-99 .
+-
+-
+ .Dd $Mdocdate: March 17 2013 $
+ .Dt WCSXFRM 3
+ .Os
+diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/wctob.3 src53xlocale2/lib/libc/locale/wctob.3
+--- src53xlocale1/lib/libc/locale/wctob.3	Mon Apr  8 21:20:56 2013
++++ src53xlocale2/lib/libc/locale/wctob.3	Fri Apr 12 12:05:48 2013
+@@ -25,7 +25,7 @@
+ .\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ .\" SUCH DAMAGE.
+ .\"
+-.Dd $Mdocdate$
++.Dd $Mdocdate: January 25 2013 $
+ .Dt WCTOB 3
+ .Os
+ .\" ----------------------------------------------------------------------
+@@ -49,9 +49,9 @@
+ functions converts a wide character
+ .Fa wc
+ to a corresponding single byte character in the initial shift state of
+-the current locale in the case of 
++the current locale in the case of
+ .Fn wctob
+-or of the locale provided as parameter to 
++or of the locale provided as parameter to
+ .Fn wctob_l ,
+ see
+ .Xr xlocale 3
+@@ -62,7 +62,7 @@
+ .Dv LC_CTYPE
+ category of the current locale. While the behavior of
+ .Fn wctob_l
+-depends on the 
++depends on the
+ .Dv LC_CTYPE
+ category of the provided locale.
+ .\" ----------------------------------------------------------------------
+diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/wctomb.3 src53xlocale2/lib/libc/locale/wctomb.3
+--- src53xlocale1/lib/libc/locale/wctomb.3	Mon Apr  8 21:20:56 2013
++++ src53xlocale2/lib/libc/locale/wctomb.3	Fri Apr 12 12:05:33 2013
+@@ -25,7 +25,7 @@
+ .\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ .\" SUCH DAMAGE.
+ .\"
+-.Dd $Mdocdate$
++.Dd $Mdocdate: January 25 2013 $
+ .Dt WCTOMB 3
+ .Os
+ .Sh NAME
+@@ -70,7 +70,7 @@
+ .Em libc
+ never change the internal
+ state of
+-.Fn wctomb 
++.Fn wctomb
+ and
+ .Fn wctomb_l ,
+ except for calling
+diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/wctrans.3 src53xlocale2/lib/libc/locale/wctrans.3
+--- src53xlocale1/lib/libc/locale/wctrans.3	Mon Mar 25 18:28:42 2013
++++ src53xlocale2/lib/libc/locale/wctrans.3	Fri Apr 12 12:05:27 2013
+@@ -26,7 +26,7 @@
+ .\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ .\" SUCH DAMAGE.
+ .\"
+-.Dd $Mdocdate$
++.Dd $Mdocdate: January 25 2013 $
+ .Dt WCTRANS 3
+ .Os
+ .\" ----------------------------------------------------------------------
+diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/wctype.3 src53xlocale2/lib/libc/locale/wctype.3
+--- src53xlocale1/lib/libc/locale/wctype.3	Mon Mar 25 18:28:42 2013
++++ src53xlocale2/lib/libc/locale/wctype.3	Fri Apr 12 12:05:16 2013
+@@ -25,7 +25,7 @@
+ .\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ .\" SUCH DAMAGE.
+ .\"
+-.Dd $Mdocdate$
++.Dd $Mdocdate: January 25 2013 $
+ .Dt WCTYPE 3
+ .Os
+ .\" ----------------------------------------------------------------------
+diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/wcwidth.3 src53xlocale2/lib/libc/locale/wcwidth.3
+--- src53xlocale1/lib/libc/locale/wcwidth.3	Mon Mar 25 18:28:42 2013
++++ src53xlocale2/lib/libc/locale/wcwidth.3	Fri Apr 12 12:07:12 2013
+@@ -24,7 +24,7 @@
+ .\" SUCH DAMAGE.
+ .\"
+ .\"
+-.Dd $Mdocdate$
++.Dd $Mdocdate: January 25 2013 $
+ .Dt WCWIDTH 3
+ .Os
+ .Sh NAME
+diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/xlocale.3 src53xlocale2/lib/libc/locale/xlocale.3
+--- src53xlocale1/lib/libc/locale/xlocale.3	Mon Apr  8 21:20:56 2013
++++ src53xlocale2/lib/libc/locale/xlocale.3	Fri Apr 12 12:04:53 2013
+@@ -27,7 +27,7 @@
+ .\"
+ .\" $FreeBSD: src/lib/libc/locale/xlocale.3,v 1.6 2012/11/17 01:49:31 svnexp Exp $
+ .\"
+-.Dd January 25 2013
++.Dd $Mdocdate: January 25 2013 $
+ .Dt XLOCALE 3
+ .Os
+ .Sh NAME
+@@ -38,8 +38,8 @@
+ .Sh SYNOPSIS
+ .In xlocale.h
+ .Sh DESCRIPTION
+-The extended locale support for collations and ctype includes 
+-convenience functions for performing locale-aware calls with a 
++The extended locale support for collations and ctype includes
++convenience functions for performing locale-aware calls with a
+ specified locale.
+ .Pp
+ The core of the xlocale API is the
+@@ -54,7 +54,7 @@
+ values are available:
+ .Bl -bullet -offset indent
+ .It
+-NULL refers to the current locale 
++NULL refers to the current locale
+ .It
+ LC_GLOBAL_LOCALE refers to the global locale.
+ .El
+@@ -253,27 +253,27 @@
+ .El
+ .Sh STANDARDS
+ The functions
+-follow 
+-.St -p1003.1-2008 
++follow
++.St -p1003.1-2008
+ except in thread safety.
+ .Sh HISTORY
+ The xlocale APIs first appeared in Darwin 8.0.
+ David Chisnall implemented it for FreeBSD 9.1
+ under sponsorship from the FreeBSD Foundation.
+-For OpenBSD 5.2, vtamara@pasosdeJesus.org mixed the collation support of 
++For OpenBSD 5.2, vtamara@pasosdeJesus.org mixed the collation support of
+ such implementation with the existing locale support.
+ .Sh CAVEATS
+ Due to the lack of _Thread_local storage, this implementation still
+ is not thread safe, all the threads share the same global locale.
+-Better use the 
++Better use the
+ .Fa _l
+ suffixed versions of the functions.
+ .Pp
+-We have implemented only functions related with 
++We have implemented only functions related with
+ .In ctype.h
+ ,
+ .In wctype.h
+-and collations. 
++and collations.
+ The convenience functions that still has not been implemented are:
+ .Bl -tag -width "<monetary.h> "
+ .It In inttypes.h
+diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/string/strcasecmp.3 src53xlocale2/lib/libc/string/strcasecmp.3
+--- src53xlocale1/lib/libc/string/strcasecmp.3	Mon Mar 25 18:28:29 2013
++++ src53xlocale2/lib/libc/string/strcasecmp.3	Fri Apr 12 11:57:00 2013
+@@ -36,19 +36,27 @@
+ .Os
+ .Sh NAME
+ .Nm strcasecmp ,
+-.Nm strncasecmp
++.Nm strcasecmp_l ,
++.Nm strncasecmp ,
++.Nm strncasecmp_l
+ .Nd compare strings, ignoring case
+ .Sh SYNOPSIS
+ .Fd #include <string.h>
+ .Ft int
+ .Fn strcasecmp "const char *s1" "const char *s2"
+ .Ft int
++.Fn strcasecmp_l "const char *s1" "const char *s2" "locale_t l"
++.Ft int
+ .Fn strncasecmp "const char *s1" "const char *s2" "size_t len"
++.Ft int
++.Fn strncasecmp_l "const char *s1" "const char *s2" "size_t len" "locale_t l"
+ .Sh DESCRIPTION
+ The
+-.Fn strcasecmp
+-and
++.Fn strcasecmp,
++.Fn strcasecmp_l,
+ .Fn strncasecmp
++and
++.Fn strncasecmp_l
+ functions compare the NUL-terminated strings
+ .Fa s1
+ and
+@@ -60,13 +68,22 @@
+ .Fa s2
+ after translation of each corresponding character to lower-case.
+ The strings themselves are not modified.
+-The comparison is done using unsigned characters, so that
+-.Sq Li \e200
+-is greater than
+-.Ql \e0 .
++The comparison is done using the classification for lowercase and uppercase
++of the global locale in the case of
++.Fn strcasecmp
++and
++.Fn strncasecmp
++and of the given locale for the functions
++.Fn strcasecmp_l
++and
++.Fn strncasecmp_l
++see
++.Xr xlocale 3
+ .Pp
+ .Fn strncasecmp
+-compares at most
++and
++.Fn strncasecmp_l
++compare at most
+ .Fa len
+ characters.
+ .Sh SEE ALSO
+@@ -76,6 +93,7 @@
+ .Xr strcoll 3 ,
+ .Xr strxfrm 3 ,
+ .Xr wcscasecmp 3
++.Xr xlocale 3
+ .Sh STANDARDS
+ The
+ .Fn strcasecmp
+diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/string/strcoll.3 src53xlocale2/lib/libc/string/strcoll.3
+--- src53xlocale1/lib/libc/string/strcoll.3	Mon Apr  8 21:20:25 2013
++++ src53xlocale2/lib/libc/string/strcoll.3	Fri Apr 12 11:57:04 2013
+@@ -35,32 +35,42 @@
+ .Dt STRCOLL 3
+ .Os
+ .Sh NAME
+-.Nm strcoll
++.Nm strcoll,
++.Nm strcoll_l
+ .Nd compare strings according to current collation
+ .Sh SYNOPSIS
+ .Fd #include <string.h>
+ .Ft int
+ .Fn strcoll "const char *s1" "const char *s2"
++.Ft int
++.Fn strcoll_l "const char *s1" "const char *s2" "locale_t l"
+ .Sh DESCRIPTION
+ The
+ .Fn strcoll
+-function lexicographically compares the NUL-terminated strings
++dn
++.Fn strcoll_l
++functions lexicographically compare the NUL-terminated strings
+ .Fa s1
+ and
+ .Fa s2
+-according to the current locale collation
+ and returns an integer greater than, equal to, or less than 0,
+ according to whether
+ .Fa s1
+ is greater than, equal to, or less than
+ .Fa s2 .
++The function
++.Fn strcoll
++uses the current locale collation, while
++.Fn strcoll_l uses the given locale, see
++.Xr xlocale 3
+ .Sh SEE ALSO
+ .Xr bcmp 3 ,
+ .Xr memcmp 3 ,
+ .Xr setlocale 3 ,
+ .Xr strcasecmp 3 ,
+ .Xr strcmp 3 ,
+-.Xr strxfrm 3
++.Xr strxfrm 3 ,
++.Xr xlocale 3
+ .Sh STANDARDS
+ The
+ .Fn strcoll
+diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/string/string.3 src53xlocale2/lib/libc/string/string.3
+--- src53xlocale1/lib/libc/string/string.3	Mon Mar 25 18:28:29 2013
++++ src53xlocale2/lib/libc/string/string.3	Fri Apr 12 11:59:35 2013
+@@ -29,7 +29,7 @@
+ .\"
+ .\"	$OpenBSD: string.3,v 1.12 2007/05/31 19:19:32 jmc Exp $
+ .\"
+-.Dd $Mdocdate$
++.Dd $Mdocdate: April 13 2013$
+ .Dt STRING 3
+ .Os
+ .Sh NAME
+@@ -102,6 +102,7 @@
+ .Xr strcat 3 ,
+ .Xr strchr 3 ,
+ .Xr strcmp 3 ,
++.Xr strcoll 3 ,
+ .Xr strcpy 3 ,
+ .Xr strcspn 3 ,
+ .Xr strerror 3 ,
+@@ -113,7 +114,8 @@
+ .Xr strsep 3 ,
+ .Xr strspn 3 ,
+ .Xr strstr 3 ,
+-.Xr strtok 3
++.Xr strtok 3 ,
++.Xr strxfrm 3
+ .Sh STANDARDS
+ The
+ .Fn strcat ,
+@@ -121,6 +123,7 @@
+ .Fn strchr ,
+ .Fn strrchr ,
+ .Fn strcmp ,
++.Fn strcoll ,
+ .Fn strncmp ,
+ .Fn strcpy ,
+ .Fn strncpy ,
+@@ -130,7 +133,8 @@
+ .Fn strspn ,
+ .Fn strcspn ,
+ .Fn strstr ,
+-and
+ .Fn strtok
++and
++.Fn strxfrm
+ functions conform to
+ .St -ansiC .
+diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/string/strstr.3 src53xlocale2/lib/libc/string/strstr.3
+--- src53xlocale1/lib/libc/string/strstr.3	Mon Mar 25 18:28:29 2013
++++ src53xlocale2/lib/libc/string/strstr.3	Fri Apr 12 11:57:50 2013
+@@ -35,7 +35,9 @@
+ .Dt STRSTR 3
+ .Os
+ .Sh NAME
+-.Nm strstr , strcasestr
++.Nm strstr ,
++.Nm strcasestr ,
++.Nm strcasestr_l
+ .Nd locate a substring in a string
+ .Sh SYNOPSIS
+ .Fd #include <string.h>
+@@ -55,8 +57,15 @@
+ .Fn strcasestr
+ function is similar to
+ .Fn strstr
+-but ignores the case of both strings.
++but ignores the case of both strings and uses the current locale.
+ .Pp
++The
++.Fn strcasestr_l
++funciont is similar to
++.Fn strcasestr
++but uses the locale provided as parameter, see
++.Xr xlocale 3
++.Pp
+ If
+ .Fa little
+ is an empty string,
+@@ -80,7 +89,8 @@
+ .Xr strsep 3 ,
+ .Xr strspn 3 ,
+ .Xr strtok 3 ,
+-.Xr wcsstr 3
++.Xr wcsstr 3 ,
++.Xr xlocale 3
+ .Sh STANDARDS
+ The
+ .Fn strstr
+diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/string/strxfrm.3 src53xlocale2/lib/libc/string/strxfrm.3
+--- src53xlocale1/lib/libc/string/strxfrm.3	Mon Apr  8 21:20:25 2013
++++ src53xlocale2/lib/libc/string/strxfrm.3	Fri Apr 12 11:55:20 2013
+@@ -31,7 +31,7 @@
+ .\"
+ .\"	$OpenBSD: strxfrm.3,v 1.9 2011/07/25 00:38:53 schwarze Exp $
+ .\"
+-.Dd $Mdocdate: May 31 2007 $
++.Dd $Mdocdate: Apr 11 2013 $
+ .Dt STRXFRM 3
+ .Os
+ .Sh NAME
+@@ -41,12 +41,17 @@
+ .Fd #include <string.h>
+ .Ft size_t
+ .Fn strxfrm "char *dst" "const char *src" "size_t n"
++.Ft size_t
++.Fn strxfrm_l "char *dst" "const char *src" "size_t n" "locale_t locale"
+ .Sh DESCRIPTION
+ The idea of
+ .Fn strxfrm
++and
++.Fn strxfrm_l
+ is to
+ .Dq un-localize
+-a string: the function transforms
++a string: these functions transform according to the default locale (or
++the locale provided to strxfrm_l) the string
+ .Ar src ,
+ storing the result in
+ .Ar dst ,
+@@ -55,12 +60,28 @@
+ on transformed strings returns what
+ .Xr strcoll 3
+ on the original untransformed strings would return.
++.Pp
++.Ar n
++is the maximal amount of bytes that can be written to
++.Ar dst
++, however if
++.Ar n
++is 0 this function returns the amount of bytes that the transformed string
++would require --usefull to allocate space before calling  again.
++.Sh RETURN VALUE
++Length of the string transformed (not counting NUL).  If such lenght is grather
++than
++.Ar n
++the contents of
++.Ar dst
++is unspecified.
+ .Sh SEE ALSO
+ .Xr bcmp 3 ,
+ .Xr memcmp 3 ,
+ .Xr setlocale 3 ,
+ .Xr strcasecmp 3 ,
+ .Xr strcmp 3 ,
++.Xr xlocale 3 ,
+ .Xr strcoll 3
+ .Sh STANDARDS
+ The
+@@ -68,10 +89,7 @@
+ function conforms to
+ .St -ansiC .
+ .Sh HISTORY
+-The
+-.Fn strxfrm
+-function first appeared in
+-.Bx 4.3 Reno .
++The implementation is derived from FreeBSD
+ .\" ----------------------------------------------------------------------
+ .Sh BUGS
+ The current implementation is enough only for single byte encodings and UTF-8
+diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/string/wcscasecmp.3 src53xlocale2/lib/libc/string/wcscasecmp.3
+--- src53xlocale1/lib/libc/string/wcscasecmp.3	Mon Mar 25 18:28:29 2013
++++ src53xlocale2/lib/libc/string/wcscasecmp.3	Fri Apr 12 11:57:25 2013
+@@ -36,19 +36,22 @@
+ .Os
+ .Sh NAME
+ .Nm wcscasecmp ,
+-.Nm wcsncasecmp
++.Nm wcscasecmp_l ,
++.Nm wcsncasecmp ,
++.Nm wcsncasecmp_l
+ .Nd compare wide strings, ignoring case
+ .Sh SYNOPSIS
+ .Fd #include <wchar.h>
+ .Ft int
+ .Fn wcscasecmp "const wchar_t *s1" "const wchar_t *s2"
+ .Ft int
++.Fn wcscasecmp_l "const wchar_t *s1" "const wchar_t *s2" "locale_t l"
++.Ft int
+ .Fn wcsncasecmp "const wchar_t *s1" "const wchar_t *s2" "size_t len"
++.Ft int
++.Fn wcsncasecmp_l "const wchar_t *s1" "const wchar_t *s2" "size_t len" "locale_t l"
+ .Sh DESCRIPTION
+-The
+-.Fn wcscasecmp
+-and
+-.Fn wcsncasecmp
++These
+ functions compare the wide strings
+ .Fa s1
+ and
+@@ -62,19 +65,40 @@
+ The wide strings themselves are not modified.
+ .Pp
+ .Fn wcsncasecmp
++and
++.Fn wcsncasecmp_l
+ compares at most
+ .Fa len
+ wide characters.
++.Pp
++The behavior of the functions
++.Fn wcscasecmp
++and
++.Fn wcsncasecmp
++is affected by the
++.Dv LC_CTYPE
++category of the current locale, while
++the behavior of the functions
++.Fn wcscasecmp_l
++and
++.Fn wcsncasecmp_l
++is affected by the
++.Dv LC_CTYPE
++category of the locale provided as parameter, see
++.Xr xlocale 3 .
+ .Sh SEE ALSO
+ .Xr strcasecmp 3 ,
+ .Xr wcscmp 3 ,
+-.Xr wmemcmp 3
++.Xr wmemcmp 3 ,
++.Xr setlocale 3 ,
++.Xr xlocale 3
+ .Sh STANDARDS
+ The
+ .Fn wcscasecmp
+ and
+ .Fn wcsncasecmp
+ functions conform to
++POSIX 2008 ,
+ .St -p1003.1-2008 .
+ .Sh HISTORY
+ The
