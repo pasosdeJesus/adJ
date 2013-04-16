@@ -470,63 +470,21 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/regress/lib/libc/locale/che
  	return bad !=0;
  }
 diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regress/lib/libc/locale/check_xlocale/check_xlocale.c
---- src53xlocale2/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Mon Apr  8 21:20:56 2013
-+++ src/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Thu Apr 11 22:17:25 2013
-@@ -4,7 +4,6 @@
-  * 2013. vtamara@pasosdeJesus.org.
-  */
- 
--#include <xlocale.h>
- #include <ctype.h>
- #include <inttypes.h>
- #include <langinfo.h>
-@@ -15,6 +14,7 @@
- #include <time.h>
- #include <wchar.h>
- #include <wctype.h>
-+#include <xlocale.h>
- 
- int bad;
- 
-@@ -143,7 +143,6 @@
- 
- }
- 
--#if 0
- void test_ctype() {
- 	char *nl = setlocale(LC_ALL, "es_CO.UTF-8");
- 	printf("locale %s\n", nl);
-@@ -151,6 +150,8 @@
- 
- 	size_t s;
- 	wchar_t ws[100];
-+	p((s = mbstowcs_l(ws, "niño", 10, es_CO_UTF_8)) > 0 && 
-+	    wcsncmp(ws, L"niño", 10) == 0);
- 	p((s = wcswidth_l(ws, 10, es_CO_UTF_8)) == 4);
- 	p((s = wcwidth_l(L'a', es_CO_UTF_8)) == 1);
- 	p(wctype("lower") == wctype_l("lower", es_CO_UTF_8));
-@@ -235,14 +236,13 @@
- 	p(!iswspecial_l(L'\0', es_CO_UTF_8));
- 	p(nextwctype(-1, wctype("graph")) > 0);
- 	p(tolower_l('A', es_CO_UTF_8) == 'a');
--	p(_tolower_l('A', es_CO_UTF_8) == 'a');
- 	p(tolower('A') == 'a');
+--- src53xlocale2/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Tue Apr 16 09:47:00 2013
++++ src/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Tue Apr 16 09:52:42 2013
+@@ -240,6 +240,7 @@
  	p(_tolower('A') == 'a');
  	p(towlower_l(L'Á', es_CO_UTF_8) == L'á');
  	p(towupper_l(L'á', es_CO_UTF_8) == L'Á');
 +	p(towupper(L'á') == L'Á');
  	p(toupper_l('a', es_CO_UTF_8) == 'A');
  	p(toupper('a') == 'A');
--	p(_toupper_l('a', es_CO_UTF_8) == 'A');
  	p(_toupper('a') == 'A');
- 	p(wctrans_l("invalido", es_CO_UTF_8) == 0);
- 	wchar_t lu[7][2] = {{ L'ñ', L'Ñ'},
-@@ -267,24 +267,31 @@
+@@ -266,13 +267,26 @@
  
  }
  
--
--
+-#if 0
  void test_string() 
  {
 -	char *nl = setlocale(LC_ALL, "es_CO.UTF-8");
@@ -534,34 +492,24 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/regress/lib/libc/locale/che
 +	nl = setlocale(LC_ALL, "es_CO.ISO8859-1");
 +	printf("locale %s\n", nl);
 +	printf("__mb_cur_max=%i\n", __mb_cur_max);
++	p(__mb_cur_max == 1);
 +
 +	p(strcasecmp("n", "N") == 0);
 +	p(strcasecmp("\0xf1", "\0xd1") == 0); // ñ Ñ
-+
 +	nl = setlocale(LC_ALL, "es_CO.UTF-8");
  	locale_t es_CO_UTF_8 = uselocale(NULL);
  	printf("locale %s\n", nl);
 +	printf("__mb_cur_max=%i\n", __mb_cur_max);
++	p(__mb_cur_max == 4); 
  
 +	p(strcasecmp("n", "N") == 0);
 +	p(strcasecmp("ñ", "Ñ") == 0); 
 +	p(strcasecmp("á", "Á") == 0); 
- 	p(strcoll_l("b", "é", es_CO_UTF_8) < 0);
--	wchar_t wcsb[1000];
 +
-+	wchar_t wcsb[1000], wcse[1000];
+ 	p(strcoll_l("b", "é", es_CO_UTF_8) < 0);
+ 	wchar_t wcsb[1000];
  	mbstowcs(wcsb, "b", 1000);
--	wchar_t wcse[1000];
- 	mbstowcs(wcse, "é", 1000);
- 	p(wcscoll_l(wcsb, wcse, es_CO_UTF_8) < 0);
- 	
--	mbstowcs(wcsb, "b", 1000);
--	mbstowcs(wcse, "é", 1000);
--	p(wcscoll_l(wcsb, wcse, es_CO_UTF_8) < 0);
- 	p(wcscoll_l(L"b", L"é", es_CO_UTF_8) < 0);
- 	p(strcoll("á", "e") < 0);
- 	p(strcoll("ama", "ana") < 0);
-@@ -384,25 +391,24 @@
+@@ -382,25 +396,24 @@
  	p(strncasecmp_l("n", "N", 1, es_CO_UTF_8) == 0);
  	p(strcasestr_l("nino", "O", es_CO_UTF_8) != NULL);
  	p(wcscasecmp_l(L"ñ", L"Ñ", es_CO_UTF_8) == 0);
@@ -584,9 +532,8 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/regress/lib/libc/locale/che
  {
  	test_xlocale();
  	test_wchar();
--//	test_ctype();
+ 	test_ctype();
 -//	test_string();
-+	test_ctype();  
 +	test_string();
  	
  	return bad != 0;
