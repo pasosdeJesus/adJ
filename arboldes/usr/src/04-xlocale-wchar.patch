@@ -2590,8 +2590,8 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/xl
 +The xlocale APIs first appeared in Darwin 8.0.
 +David Chisnall implemented it for FreeBSD 9.1
 +under sponsorship from the FreeBSD Foundation.
-+For OpenBSD 5.2, vtamara@pasosdeJesus.org mixed the collation support of 
-+such implementation with the existing locale support.
++For adJ 5.2, vtamara@pasosdeJesus.org mixed the collation support of 
++such implementation with the existing locale support of OpenBSD 5.2.
 +.Sh CAVEATS
 +Due to the lack of _Thread_local storage, this implementation still
 +is not thread safe, all the threads share the same global locale.
@@ -3808,3 +3808,448 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/regress/lib/libc/l
 +	
 +	return bad != 0;
 +}
+diff -ruN -x CVS -x obj src53collation/include/Makefile src/include/Makefile
+--- src53collation/include/Makefile	Sun Mar 31 21:52:28 2013
++++ src/include/Makefile	Tue Apr 16 14:30:26 2013
+@@ -22,7 +22,7 @@
+ 	stdbool.h stddef.h stdio.h stdlib.h \
+ 	string.h strings.h struct.h sysexits.h tar.h tgmath.h \
+ 	time.h ttyent.h tzfile.h unistd.h utime.h utmp.h vis.h \
+-	wchar.h wctype.h
++	wchar.h wctype.h xlocale.h
+ 
+ FILES+=	link.h link_aout.h link_elf.h
+ 
+diff -ruN -x CVS -x obj src53collation/include/xlocale.h src/include/xlocale.h
+--- src53collation/include/xlocale.h	Wed Dec 31 19:00:00 1969
++++ src/include/xlocale.h	Tue Apr 16 14:28:06 2013
+@@ -0,0 +1,429 @@
++/*-
++ * Copyright (c) 2011, 2012 The FreeBSD Foundation
++ * All rights reserved.
++ *
++ * This software was developed by David Chisnall under sponsorship from
++ * the FreeBSD Foundation.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
++ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
++ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++ * SUCH DAMAGE.
++ *
++ * $FreeBSD: src/include/xlocale.h,v 1.6 2012/11/17 01:49:15 svnexp Exp $
++ * * $FreeBSD: src/include/xlocale/_locale.h,v 1.4 2012/11/17 01:49:16 svnexp Exp $
++ *  $FreeBSD: src/include/xlocale/_string.h,v 1.4 2012/11/17 01:49:16 svnexp Exp  $
++ * $FreeBSD: src/include/xlocale/_inttypes.h,v 1.4 2012/11/17 01:49:16 svnexp Exp $
++ * $FreeBSD: src/include/xlocale/_monetary.h,v 1.4 2012/11/17 01:49:16 svnexp Exp $
++ * $FreeBSD: src/include/xlocale/_stdlib.h,v 1.4 2012/11/17 01:49:16 svnexp Exp $
++ * $FreeBSD: src/include/xlocale/_time.h,v 1.4 2012/11/17 01:49:16 svnexp Exp $
++ * $FreeBSD: src/include/xlocale/_langinfo.h,v 1.4 2012/11/17 01:49:16 svnexp Exp $
++ * $FreeBSD: src/include/xlocale/_stdio.h,v 1.4 2012/11/17 01:49:16 svnexp Exp $
++ * $FreeBSD: src/include/xlocale/_wchar.h,v 1.4 2012/11/17 01:49:16 svnexp Exp $
++ */
++
++#ifndef _XLOCALE_H_
++#define _XLOCALE_H_
++
++#include <locale.h>
++
++#define LC_COLLATE_MASK  (1<<0)
++#define LC_CTYPE_MASK    (1<<1)
++#define LC_MESSAGES_MASK (1<<2)
++#define LC_MONETARY_MASK (1<<3)
++#define LC_NUMERIC_MASK  (1<<4)
++#define LC_TIME_MASK     (1<<5)
++#define LC_ALL_MASK      (LC_COLLATE_MASK | LC_CTYPE_MASK | LC_MESSAGES_MASK | \
++			  LC_MONETARY_MASK | LC_NUMERIC_MASK | LC_TIME_MASK)
++#define LC_GLOBAL_LOCALE ((locale_t)-1)
++
++#ifndef _LOCALE_T_DEFINED
++#define _LOCALE_T_DEFINED
++typedef struct	_xlocale *locale_t;
++#endif
++
++#if !defined(_WCHAR_T_DEFINED_) && !defined(__cplusplus)
++#include <wchar.h>
++#endif
++
++
++locale_t	 duplocale(locale_t base);
++int		 freelocale(locale_t loc);
++locale_t	 newlocale(int mask, const char *locale, locale_t base);
++const char	*querylocale(int mask, locale_t loc);
++locale_t	 uselocale(locale_t loc);
++
++
++#ifdef _STRING_H_
++
++/* POSIX2008 functions */
++int	 strcoll_l(const char *, const char *, locale_t);
++int	 wcscoll_l(const wchar_t *, const wchar_t *, locale_t);
++size_t	 strxfrm_l(char *, const char *, size_t, locale_t);
++
++/* XLOCALE */ 
++int	 strcasecmp_l(const char *, const char *, locale_t);
++char	*strcasestr_l(const char *, const char *, locale_t);
++int	 strncasecmp_l(const char *, const char *, size_t, locale_t);
++
++#endif /* _STRING_H_ */
++
++
++#ifdef _INTTYPES_H_
++
++/*
++ * Extended locale versions of the locale-aware functions from inttypes.h.
++ * Include <inttypes.h> before <xlocale.h> to expose these.
++ */
++intmax_t	strtoimax_l(const char * __restrict, char ** __restrict,
++		    int, locale_t);
++uintmax_t	strtoumax_l(const char * __restrict, char ** __restrict, int,
++		    locale_t);
++intmax_t	wcstoimax_l(const wchar_t * __restrict, wchar_t ** __restrict,
++		    int , locale_t);
++uintmax_t	wcstoumax_l(const wchar_t * __restrict, wchar_t ** __restrict,
++		    int, locale_t);
++#endif /* _INTTYPES_H_ */
++
++
++#ifdef _MONETARY_H_
++
++#ifndef _XLOCALE_MONETARY_H
++#define _XLOCALE_MONETARY_H
++
++ssize_t strfmon_l(char *, size_t, locale_t, const char *, ...);
++/*    __strfmonlike(4, 5); */
++
++#endif /* _XLOCALE_MONETARY_H */
++#endif /* _MONETARY_H_ */
++
++#ifdef _STDLIB_H_
++
++/*
++ * Extended locale versions of the locale-aware functions from stdlib.h.
++ *
++ * Include <stdlib.h> before <xlocale.h> to expose these.
++ */
++double			 atof_l(const char *, locale_t);
++int			 atoi_l(const char *, locale_t);
++long			 atol_l(const char *, locale_t);
++long long		 atoll_l(const char *, locale_t);
++int			 mblen_l(const char *, size_t, locale_t);
++size_t			 mbstowcs_l(wchar_t * __restrict,
++			    const char * __restrict, size_t, locale_t);
++int			 mbtowc_l(wchar_t * __restrict,
++			    const char * __restrict, size_t, locale_t);
++double			 strtod_l(const char *, char **, locale_t);
++float			 strtof_l(const char *, char **, locale_t);
++long			 strtol_l(const char *, char **, int, locale_t);
++long double		 strtold_l(const char *, char **, locale_t);
++long long		 strtoll_l(const char *, char **, int, locale_t);
++unsigned long		 strtoul_l(const char *, char **, int, locale_t);
++unsigned long long	 strtoull_l(const char *, char **, int, locale_t);
++size_t			 wcstombs_l(char * __restrict,
++			    const wchar_t * __restrict, size_t, locale_t);
++int			 wctomb_l(char *, wchar_t, locale_t);
++
++int			 ___mb_cur_max_l(locale_t);
++#define MB_CUR_MAX_L(x) (___mb_cur_max_l(x))
++
++#endif /* _STDLIB_H_ */
++
++#ifdef _TIME_H_
++
++/* POSIX2008 */
++size_t	 strftime_l(char * __restrict, size_t, const char * __restrict,
++	    const struct tm * __restrict, locale_t); /* __strftimelike(3, 0); */
++
++/* XLOCALE */
++char	*strptime_l(const char * __restrict, const char * __restrict,
++           struct tm * __restrict, locale_t);
++
++#endif /* _TIME_H_ */
++
++#ifdef _LANGINFO_H_
++
++char	*nl_langinfo_l(nl_item, locale_t);
++
++#endif /* _LANGINFO_H */
++
++#if defined(_CTYPE_H_) || defined(_WCTYPE_H)
++
++#include <sys/types.h>
++
++#ifndef	_WCTYPE_T_DEFINED_
++#define	_WCTYPE_T_DEFINED_
++typedef	__wctype_t	wctype_t;
++#endif
++
++#ifndef	_WINT_T_DEFINED_
++#define	_WINT_T_DEFINED_
++typedef	__wint_t	wint_t;
++#endif
++
++#ifndef _WCTRANS_T_DEFINED_
++#define _WCTRANS_T_DEFINED_
++typedef __wctrans_t     wctrans_t;
++#endif
++
++#ifndef _RUNE_T_DEFINED_
++#define _RUNE_T_DEFINED_
++typedef uint32_t        rune_t;
++#endif
++
++
++inline int iswctype_l(wint_t, wctype_t, locale_t);
++
++inline int isalnum_l(int, locale_t);
++
++inline int isalpha_l(int, locale_t);
++
++inline int isblank_l(int, locale_t);
++
++inline int iscntrl_l(int, locale_t);
++
++inline int isdigit_l(int, locale_t);
++
++inline int isgraph_l(int, locale_t);
++
++inline int ishexnumber_l(int, locale_t);
++
++inline int isideogram_l(int, locale_t);
++
++inline int islower_l(int, locale_t);
++
++inline int isnumber_l(int, locale_t);
++
++inline int isphonogram_l(int, locale_t);
++
++inline int isprint_l(int, locale_t);
++
++inline int ispunct_l(int, locale_t);
++
++inline int isrune_l(int, locale_t);
++
++inline int isspace_l(int, locale_t);
++
++inline int isspecial_l(int, locale_t);
++
++inline int isupper_l(int, locale_t);
++
++inline int isxdigit_l(int, locale_t);
++
++inline int iswalnum_l(wint_t, locale_t);
++
++inline int iswalpha_l(wint_t, locale_t);
++
++inline int iswblank_l(wint_t, locale_t);
++
++inline int iswcntrl_l(wint_t, locale_t);
++
++inline int iswdigit_l(wint_t, locale_t);
++
++inline int iswgraph_l(wint_t, locale_t);
++
++inline int iswhexnumber_l(wint_t, locale_t);
++
++inline int iswideogram_l(wint_t, locale_t);
++
++inline int iswlower_l(wint_t, locale_t);
++
++inline int iswnumber_l(wint_t, locale_t);
++
++inline int iswphonogram_l(wint_t, locale_t);
++
++inline int iswprint_l(wint_t, locale_t);
++
++inline int iswpunct_l(wint_t, locale_t);
++
++inline int iswrune_l(wint_t, locale_t);
++
++inline int iswspace_l(wint_t, locale_t);
++
++inline int iswspecial_l(wint_t, locale_t);
++
++inline int iswupper_l(wint_t, locale_t);
++
++inline int iswxdigit_l(wint_t, locale_t);
++
++inline wint_t towlower_l(wint_t, locale_t);
++
++inline wint_t towupper_l(wint_t, locale_t);
++
++inline int __wcwidth_l(rune_t, locale_t);
++
++int iswctype_l(wint_t, wctype_t, locale_t);
++
++wctype_t wctype_l(const char *, locale_t);
++
++wint_t towctrans_l(wint_t, wctrans_t, locale_t);
++
++wint_t nextwctype_l(wint_t, wctype_t, locale_t);
++
++wctrans_t wctrans_l(const char *, locale_t);
++
++inline int digittoint_l(int, locale_t);
++
++inline int tolower_l(int, locale_t);
++
++inline int toupper_l(int, locale_t);
++
++inline int _tolower_l(int, locale_t);
++
++inline int _toupper_l(int, locale_t);
++
++#endif /* defined(_CTYPE_H_) || defined(_WCTYPE_H) */
++
++
++#ifdef _STDIO_H_
++
++int	 asprintf_l(char **, locale_t, const char *, ...); /* __printflike(3, 4); */
++int	 dprintf_l(int, locale_t, const char * __restrict, ...);
++	    /* __printflike(3, 4); */
++int	 fprintf_l(FILE * __restrict, locale_t, const char * __restrict, ...);
++	    /*__printflike(3, 4); */
++int	 fscanf_l(FILE * __restrict, locale_t, const char * __restrict, ...);
++	    /*__scanflike(3, 4);*/
++int	 printf_l(locale_t, const char * __restrict, ...);
++		/* __printflike(2, 3); */
++int	 scanf_l(locale_t, const char * __restrict, ...);
++		/* __scanflike(2, 3); */
++int	 snprintf_l(char * __restrict, size_t, locale_t,
++	    const char * __restrict, ...); /* __printflike(4, 5); */
++int	 sprintf_l(char * __restrict, locale_t, const char * __restrict, ...);
++	    /* __printflike(3, 4); */
++int	 sscanf_l(const char * __restrict, locale_t, const char * __restrict,
++	    ...); /* __scanflike(3, 4); */
++int	 vfprintf_l(FILE * __restrict, locale_t, const char * __restrict,
++	    __va_list); /* __printflike(3, 0); */
++int	 vprintf_l(locale_t, const char * __restrict, __va_list);
++	    /*__printflike(2, 0); */
++int	 vsprintf_l(char * __restrict, locale_t, const char * __restrict,
++	    __va_list); /* __printflike(3, 0); */
++int	 vfscanf_l(FILE * __restrict, locale_t, const char * __restrict,
++	    __va_list); /* __scanflike(3, 0); */
++int	 vscanf_l(locale_t, const char * __restrict, __va_list);
++	    /*__scanflike(2, 0);*/
++int	 vsnprintf_l(char * __restrict, size_t, locale_t,
++	    const char * __restrict, __va_list); /* __printflike(4, 0); */
++int	 vsscanf_l(const char * __restrict, locale_t, const char * __restrict,
++	    __va_list); /* __scanflike(3, 0); */
++int	 vdprintf_l(int, locale_t, const char * __restrict, __va_list);
++	    /* __printflike(3, 0); */
++int	 vasprintf_l(char **, locale_t, const char *, __va_list);
++	    /* __printflike(3, 0); */
++#endif
++
++
++#ifdef _WCHAR_H_
++
++/* POSIX2008 */
++int			 wcscasecmp_l(const wchar_t *, const wchar_t *,
++			   locale_t);
++int			 wcsncasecmp_l(const wchar_t *, const wchar_t *, size_t,
++			   locale_t);
++int			 wcscoll_l(const wchar_t *, const wchar_t *, locale_t);
++size_t			 wcsxfrm_l(wchar_t * __restrict,
++			   const wchar_t * __restrict, size_t, locale_t);
++
++/* XLOCALE */
++wint_t			 btowc_l(int, locale_t);
++wint_t			 fgetwc_l(FILE *, locale_t);
++wchar_t			*fgetws_l(wchar_t * __restrict, int, FILE * __restrict,
++			    locale_t);
++wint_t			 fputwc_l(wchar_t, FILE *, locale_t);
++int			 fputws_l(const wchar_t * __restrict, FILE * __restrict,
++			   locale_t);
++int			 fwprintf_l(FILE * __restrict, locale_t,
++			    const wchar_t * __restrict, ...);
++int			 fwscanf_l(FILE * __restrict, locale_t,
++			    const wchar_t * __restrict, ...);
++wint_t			 getwc_l(FILE *, locale_t);
++wint_t			 getwchar_l(locale_t);
++size_t			 mbrlen_l(const char * __restrict, size_t,
++			   mbstate_t * __restrict, locale_t);
++size_t			 mbrtowc_l(wchar_t * __restrict,
++			    const char * __restrict, size_t,
++			    mbstate_t * __restrict, locale_t);
++int			 mbsinit_l(const mbstate_t *, locale_t);
++size_t			 mbsrtowcs_l(wchar_t * __restrict,
++			    const char ** __restrict, size_t,
++			    mbstate_t * __restrict, locale_t);
++wint_t			 putwc_l(wchar_t, FILE *, locale_t);
++wint_t			 putwchar_l(wchar_t, locale_t);
++int			 swprintf_l(wchar_t * __restrict, size_t n, locale_t,
++			    const wchar_t * __restrict, ...);
++int			 swscanf_l(const wchar_t * __restrict, locale_t,
++			   const wchar_t * __restrict, ...);
++wint_t			 ungetwc_l(wint_t, FILE *, locale_t);
++int			 vfwprintf_l(FILE * __restrict, locale_t,
++			    const wchar_t * __restrict, __va_list);
++int			 vswprintf_l(wchar_t * __restrict, size_t n, locale_t,
++			    const wchar_t * __restrict, __va_list);
++int			 vwprintf_l(locale_t, const wchar_t * __restrict,
++			    __va_list);
++size_t			 wcrtomb_l(char * __restrict, wchar_t,
++			    mbstate_t * __restrict, locale_t);
++size_t			 wcsftime_l(wchar_t * __restrict, size_t,
++			    const wchar_t * __restrict,
++			    const struct tm * __restrict, locale_t);
++size_t			 wcsrtombs_l(char * __restrict,
++			    const wchar_t ** __restrict, size_t,
++			    mbstate_t * __restrict, locale_t);
++double			 wcstod_l(const wchar_t * __restrict,
++			    wchar_t ** __restrict, locale_t);
++long			 wcstol_l(const wchar_t * __restrict,
++			    wchar_t ** __restrict, int, locale_t);
++unsigned long		 wcstoul_l(const wchar_t * __restrict,
++			    wchar_t ** __restrict, int, locale_t);
++int			 wcswidth_l(const wchar_t *, size_t, locale_t);
++int			 wctob_l(wint_t, locale_t);
++int			 wcwidth_l(wchar_t, locale_t);
++int			 wprintf_l(locale_t, const wchar_t * __restrict, ...);
++int			 wscanf_l(locale_t, const wchar_t * __restrict, ...);
++int			 vfwscanf_l(FILE * __restrict, locale_t,
++			    const wchar_t * __restrict, __va_list);
++int			 vswscanf_l(const wchar_t * __restrict, locale_t,
++			    const wchar_t *__restrict, __va_list);
++int			 vwscanf_l(locale_t, const wchar_t * __restrict,
++			    __va_list);
++float			 wcstof_l(const wchar_t * __restrict,
++			    wchar_t ** __restrict, locale_t);
++long double		 wcstold_l(const wchar_t * __restrict,
++			    wchar_t ** __restrict, locale_t);
++long long		 wcstoll_l(const wchar_t * __restrict,
++			    wchar_t ** __restrict, int, locale_t);
++unsigned long long	 wcstoull_l(const wchar_t * __restrict,
++			    wchar_t ** __restrict, int, locale_t);
++size_t			 mbsnrtowcs_l(wchar_t * __restrict,
++			    const char ** __restrict, size_t, size_t,
++			    mbstate_t * __restrict, locale_t);
++size_t			 wcsnrtombs_l(char * __restrict,
++			    const wchar_t ** __restrict, size_t, size_t,
++			    mbstate_t * __restrict, locale_t);
++
++#endif /* _WCHAR_H */
++
++
++
++__BEGIN_DECLS
++struct lconv	*localeconv_l(locale_t);
++__END_DECLS
++
++#endif

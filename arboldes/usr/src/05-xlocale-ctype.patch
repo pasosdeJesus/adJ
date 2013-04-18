@@ -2299,9 +2299,9 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/string/str
  The
  .Fn strstr
 diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/string/strxfrm.3 src53xlocale2/lib/libc/string/strxfrm.3
---- src53xlocale1/lib/libc/string/strxfrm.3	Mon Apr  8 21:20:25 2013
-+++ src53xlocale2/lib/libc/string/strxfrm.3	Fri Apr 12 11:55:20 2013
-@@ -31,7 +31,7 @@
+--- src53collation/lib/libc/string/strxfrm.3	Mon Apr  1 08:25:36 2013
++++ src53xlocale2/lib/libc/string/strxfrm.3	Tue Apr 16 15:12:03 2013
+@@ -31,22 +31,28 @@
  .\"
  .\"	$OpenBSD: strxfrm.3,v 1.9 2011/07/25 00:38:53 schwarze Exp $
  .\"
@@ -2310,7 +2310,11 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/string/str
  .Dt STRXFRM 3
  .Os
  .Sh NAME
-@@ -41,12 +41,17 @@
+-.Nm strxfrm
++.Nm strxfrm ,
++.Nm strxfrm_l
+ .Nd transform a string under locale
+ .Sh SYNOPSIS
  .Fd #include <string.h>
  .Ft size_t
  .Fn strxfrm "char *dst" "const char *src" "size_t n"
@@ -2329,7 +2333,7 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/string/str
  .Ar src ,
  storing the result in
  .Ar dst ,
-@@ -55,12 +60,28 @@
+@@ -55,12 +61,28 @@
  on transformed strings returns what
  .Xr strcoll 3
  on the original untransformed strings would return.
@@ -2358,7 +2362,7 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/string/str
  .Xr strcoll 3
  .Sh STANDARDS
  The
-@@ -68,10 +89,7 @@
+@@ -68,10 +90,7 @@
  function conforms to
  .St -ansiC .
  .Sh HISTORY

@@ -1,6 +1,9 @@
 
-5.2
-* Revisiones
+5.3
+* Actualizar parche que incluye lib/libc/string/Makefile.inc con wcscasecmp_l
+* No hay pagina man para extensiones FreeBSD a is* como ishexnumber (si hay 
+  algo para ishexnumber_l pero referencia ishexnumber).
+* No hay man para __mb_cur_max() (ni implementacion) ni wcswidth_l,
 
 Futuro
 * Incluir el resto de xlocale de FreeBSD
