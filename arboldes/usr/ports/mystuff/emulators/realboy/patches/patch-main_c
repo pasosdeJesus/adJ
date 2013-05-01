@@ -1,0 +1,12 @@
+$OpenBSD$
+--- main.c.orig	Mon Apr  1 11:00:53 2013
++++ main.c	Mon Apr  1 11:01:06 2013
+@@ -39,7 +39,7 @@ main(int argc, char *argv[])
+ 			gboy_init_interp(); // call the command-line interface
+ 		else {
+ 			argc=1;
+-			if ( (rom_fd=open(argv[1], O_RDWR)) == -1) {
++			if ( (rom_fd=open(argv[1], O_RDONLY)) == -1) {
+ 				write(1, argv[1], strnlen(argv[1], 255));
+ 				perror(" couldn't be opened.\nopen()");
+ 			}

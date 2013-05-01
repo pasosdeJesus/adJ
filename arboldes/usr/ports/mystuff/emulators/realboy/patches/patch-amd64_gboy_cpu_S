@@ -1,0 +1,25 @@
+$OpenBSD$
+--- amd64/gboy_cpu.S.orig	Mon Apr  1 10:15:30 2013
++++ amd64/gboy_cpu.S	Mon Apr  1 10:16:27 2013
+@@ -381,7 +381,9 @@ timer_divider_update:
+ 	jz 5f
+ 4:
+ 	addb $4, %dl # advance div control
+-	lahf # load flags to %ah
++	pushf # load flags to %ah
++	popq %rax
++	shlq $8, %rax
+ 	testb $0x10, %ah # test if div passed a 16 cycle boundary
+ 	jnz 1b
+ 	jmp 3b
+@@ -444,7 +446,9 @@ beg_exe:
+ last_run:
+ 2:
+ 	addb $4, div_ctrl # advance div control (per-cycle control)
+-	lahf # load flags to %ah
++	pushf # load flags to %ah
++	popq %rax
++	shlq $8, %rax
+ 	testb $0x10, %ah # test if div passed a 16 byte boundary
+ 	jz 2f
+ 	testq $1, tac_on # test for TAC on bit
