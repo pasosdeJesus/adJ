@@ -5,6 +5,7 @@ ONLY_FOR_ARCHS=	amd64
 COMMENT=	Emulador de Game Boy Classic
 
 PKGNAME=	realboy-0.9
+REVISION=	1
 DISTNAME=	realboy
 
 CATEGORIES=	emulators games
