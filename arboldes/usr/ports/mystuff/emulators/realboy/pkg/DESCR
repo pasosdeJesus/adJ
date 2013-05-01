@@ -13,5 +13,8 @@ Para usar
         a -> Boton Select 
         s -> Boton B 
         d -> Boton A 
- Es bueno pasar a pantalla completa presionando F
-* Consulte la documentación completa en ${PREFIX}share/doc/pkg-readmes/${FULLPKGNAME}
+* Es bueno pasar a pantalla completa presionando F
+* Para cerrar, abra una terminal y ejecute
+    pkill -9 realboy
+* Consulte la documentación completa en 
+  ${PREFIX}share/doc/pkg-readmes/${FULLPKGNAME}
