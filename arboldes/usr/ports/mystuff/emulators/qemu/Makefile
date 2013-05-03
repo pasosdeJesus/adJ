@@ -16,6 +16,10 @@ MAINTAINER=	Brad Smith <brad@comstyle.com>
 
 # GPLv2, LGPLv2 and BSD
 PERMIT_PACKAGE_CDROM=	Yes
+PERMIT_PACKAGE_FTP=	Yes
+PERMIT_DISTFILES_CDROM=	Yes
+PERMIT_DISTFILES_FTP=	Yes
+
 
 WANTLIB=	GL SDL X11 c curl glib-2.0 gnutls gthread-2.0 jpeg m ncurses \
 		pixman-1 png pthread pthread-stubs util z
