@@ -3,9 +3,9 @@
 # Dominio público de acuerdo a legislación colombiana. http://www.pasosdejesus.org/dominio_publico_colombia.html. 
 # 2012. vtamara@pasosdeJesus.org
 
-VER=5.2
+VER=5.3
 VESP=""
-VERP=52
+VERP=53
 
 # Falta /standard/root.hint
 
@@ -793,9 +793,6 @@ EOF
 if (test -f /etc/rc.d/cron) then {
 	activarcs cron
 } fi;
-if (test -f /etc/rc.d/httpd) then {
-	activarcs httpd
-} fi;
 
 echo "* Crear scripts para montar imagenes encriptadas como servicios" >> /var/tmp/inst-adJ.bitacora;
 nuevomonta=0;
@@ -1218,6 +1215,8 @@ f=`ls /var/db/pkg/postgresql-server* 2> /dev/null > /dev/null`;
 if (test "$?" != "0") then {
 	p=`ls $PKG_PATH/libxml-* $PKG_PATH/libiconv-* $PKG_PATH/postgresql-client-* $PKG_PATH/postgresql-server* $PKG_PATH/postgresql-contrib* $PKG_PATH/postgresql-doc*`
 	pkg_add -I -r -D update -D updatedepends $p >> /var/tmp/inst-adJ.bitacora 2>&1;
+	insacp tiff
+	insacp gdal 
 	insacp postgis
 	echo -n "La clave del administrador de 'postgres' quedará en /var/postresql/.pgpass " >> /var/tmp/inst-adJ.bitacora;
 	clpg=`apg | head -n 1`
@@ -1334,9 +1333,10 @@ if (test "$p" != "") then {
 	} fi;
 } fi;
 
-echo "* Configurar Apache" >> /var/tmp/inst-adJ.bitacora ;
+
+echo "* Configurar servidor web" >> /var/tmp/inst-adJ.bitacora ;
 if (test ! -f /etc/ssl/server.crt) then {
-	echo "* Configurando SSL en Apache" >> /var/tmp/inst-adJ.bitacora;
+	echo "* Configurando Certificado SSL" >> /var/tmp/inst-adJ.bitacora;
 	openssl genrsa -out /etc/ssl/private/server.key 1024
 	openssl req -new -key /etc/ssl/private/server.key \
        		-out /etc/ssl/private/server.csr
@@ -1344,12 +1344,21 @@ if (test ! -f /etc/ssl/server.crt) then {
       		-signkey /etc/ssl/private/server.key -out /etc/ssl/server.crt
 } fi;
 
+conapache=0
+connginx=0
 grep "httpd_flags.*-DSSL" /etc/rc.conf.local > /dev/null 2>/dev/null
-if (test "$?" != "0") then {
-	echo "* Configurando opciones para Apache en archivo de arranque" >> /var/tmp/inst-adJ.bitacora;
-	echo httpd_flags="-DSSL"  >> /etc/rc.conf.local
+if (test "$?" = "0") then {
+	conapache=1;
 } fi;
 
+if (test "$conapache" = "1" -a -f /etc/rc.d/httpd) then {
+	activarcs httpd
+} else {
+	activarcs nginx
+	connginx=1
+} fi;
+
+	
 grep "#ServerName" /var/www/conf/httpd.conf > /dev/null 2> /dev/null
 if (test "$?" = "0") then  {
 	echo "* Estableciendo nombre del servidor en configuración de Apache" >> /var/tmp/inst-adJ.bitacora;
@@ -1364,6 +1373,13 @@ pgrep httpd > /dev/null 2>&1
 if (test "$?" = "0") then {
 	echo "* Deteniendo apache"  >> /var/tmp/inst-adJ.bitacora 2>&1
 	/etc/rc.d/httpd stop >> /var/tmp/inst-adJ.bitacora 2>&1
+} fi;
+
+pgrep nginx > /dev/null 2>&1
+if (test "$?" = "0") then {
+	echo "* Deteniendo nginx"  >> /var/tmp/inst-adJ.bitacora 2>&1
+	/etc/rc.d/nginx stop >> /var/tmp/inst-adJ.bitacora 2>&1
+	connginx=1
 } fi;
 
 echo "* Instalar PHP" >> /var/tmp/inst-adJ.bitacora;
@@ -1422,16 +1438,28 @@ EOF
 	echo "   Saltando..."  >> /var/tmp/inst-adJ.bitacora;
 } fi;
 
-echo "* Corriendo Apache" >> /var/tmp/inst-adJ.bitacora
-/etc/rc.d/httpd start >> /var/tmp/inst-adJ.bitacora 2>&1
+if (test "$connginx" = "1") then {
+	echo "* Corriendo nginx" >> /var/tmp/inst-adJ.bitacora
+	/etc/rc.d/nginx start >> /var/tmp/inst-adJ.bitacora 2>&1
+} else {
+	echo "* Corriendo Apache" >> /var/tmp/inst-adJ.bitacora
+	/etc/rc.d/httpd start >> /var/tmp/inst-adJ.bitacora 2>&1
+} fi;
 sleep 1
 
-pgrep httpd > /dev/null 2>&1
-if (test "$?" != "0") then {
-	dialog --title 'Fallo httpd' --msgbox '\nFalló httpd, revisar, asegurar que funciona y regresar con "exit"' 15 60
+if (test "$connginx" = "1") then {
+	pgrep nginx > /dev/null 2>&1
+	rs=$?
+} else {
+	pgrep httpd > /dev/null 2>&1
+	rs=$?
+} fi;
+if (test "$rs" != "0") then {
+	dialog --title 'Fallo servidor web' --msgbox '\nFalló servidor web, revisar, asegurar que funciona y regresar con "exit"' 15 60
 	sh
 } fi;
 cat /var/www/conf/httpd.conf >> /var/tmp/inst-adJ.bitacora 
+cat /etc/nginx/nginx.conf >> /var/tmp/inst-adJ.bitacora 
 
 
 apdocroot=`awk '
@@ -1594,7 +1622,7 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 	[exec] (xterm) {xterm -en utf8 -e /bin/ksh -l}
 	[exec] (mozilla-firefox) {ulimit -d 200000 && /usr/local/bin/firefox -UILocale es-AR}
 	[exec] (midori) {/usr/local/bin/midori}
-	[exec] (chromium) {/usr/local/bin/chromium}
+	[exec] (chromium) {/usr/local/bin/chrome}
 [submenu] (Espiritualidad)
 	[exec] (xiphos) {/usr/local/bin/xiphos}
 	[exec] (Evangelios de dominio publico) {/usr/local/bin/firefox /usr/local/share/doc/evangelios_dp/index.html}
@@ -1914,6 +1942,10 @@ XTerm*oldXtermFKeys:            true
 EOF
 		chown -R $uadJ:$uadJ /home/$uadJ/.Xdefaults
 } fi;
+
+for i in ruby19-railties-3.1.3 ruby19-actionmailer-3.1.3 ruby19-actionpack-3.1.3 ruby19-erubis-2.7.0 ruby19-tzinfo-0.3.29 ruby19-activeresource-3.1.3 ruby19-rack-ssl-1.3.2 ruby19-activerecord-3.1.3 ruby19-activemodel-3.1.3 ruby19-railties-3.1.3 ruby19-hike-1.2.1 ruby19-arel-2.2.1 ruby19-rack-mount-0.8.3 ruby19-thor-0.14.6p1 ruby19-activesupport-3.1.3 ruby19-actionmailer-3.1.3 ruby19-sprockets-2.0.3 ruby19-rack-cache-1.1 ruby19-actionpack-3.1.3 ; do
+	sudo pkg_delete $i >> /var/tmp/inst-adJ.bitacora 2>&1
+done
 
 echo "* Configurar ruby-1.9" >> /var/tmp/inst-adJ.bitacora;
 if (test ! -f "/usr/local/bin/ruby") then {

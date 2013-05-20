@@ -1,10 +1,10 @@
-Index: citrus/citrus_ctype.c
+Index: src/lib/libc/citrus/citrus_ctype.c
 ===================================================================
 RCS file: /cvs/src/lib/libc/citrus/citrus_ctype.c,v
 retrieving revision 1.3
 diff -u -r1.3 citrus_ctype.c
---- citrus/citrus_ctype.c	5 Dec 2012 23:19:59 -0000	1.3
-+++ citrus/citrus_ctype.c	28 Apr 2013 13:10:48 -0000
+--- src/lib/libc/citrus/citrus/citrus_ctype.c	5 Dec 2012 23:19:59 -0000	1.3
++++ src/lib/libc/citrus/citrus_ctype.c	28 Apr 2013 13:10:48 -0000
 @@ -38,10 +38,12 @@
  
  struct _citrus_ctype_rec _citrus_ctype_none = {
@@ -30,13 +30,13 @@ diff -u -r1.3 citrus_ctype.c
  		return (0);
  	}
  
-Index: citrus/citrus_ctype_local.h
+Index: src/lib/libc/citrus/citrus_ctype_local.h
 ===================================================================
 RCS file: /cvs/src/lib/libc/citrus/citrus_ctype_local.h,v
 retrieving revision 1.3
 diff -u -r1.3 citrus_ctype_local.h
---- citrus/citrus_ctype_local.h	6 Jun 2012 16:58:02 -0000	1.3
-+++ citrus/citrus_ctype_local.h	28 Apr 2013 13:10:49 -0000
+--- src/lib/libc/citrus/citrus_ctype_local.h	6 Jun 2012 16:58:02 -0000	1.3
++++ src/lib/libc/citrus/citrus_ctype_local.h	28 Apr 2013 13:10:49 -0000
 @@ -81,6 +81,7 @@
  
  struct _citrus_ctype_rec {
@@ -45,13 +45,13 @@ diff -u -r1.3 citrus_ctype_local.h
  };
  
  #endif
-Index: locale/setrunelocale.c
+Index: src/lib/libc/locale/setrunelocale.c
 ===================================================================
 RCS file: /cvs/src/lib/libc/locale/setrunelocale.c,v
 retrieving revision 1.7
 diff -u -r1.7 setrunelocale.c
---- locale/setrunelocale.c	5 Dec 2012 23:20:00 -0000	1.7
-+++ locale/setrunelocale.c	28 Apr 2013 13:10:49 -0000
+--- src/lib/libc/locale/setrunelocale.c	5 Dec 2012 23:20:00 -0000	1.7
++++ src/lib/libc/locale/setrunelocale.c	28 Apr 2013 13:10:49 -0000
 @@ -88,18 +88,20 @@
   * SUCH DAMAGE.
   */

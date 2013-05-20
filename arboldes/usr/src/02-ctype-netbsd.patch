@@ -1,7 +1,7 @@
 diff -ruN -x obj -x CVS -x *~ src53/share/locale/ctype/Makefile src/share/locale/ctype/Makefile
---- src53/share/locale/ctype/Makefile	Mon Apr  1 06:09:17 2013
-+++ src/share/locale/ctype/Makefile	Tue Apr  2 05:58:15 2013
-@@ -80,14 +80,17 @@
+--- src53/share/locale/ctype/Makefile	16 Jul 2011 21:33:30 -0000	1.6
++++ src/share/locale/ctype/Makefile	13 May 2013 11:00:16 -0000
+@@ -80,14 +80,15 @@ LOCALES += en_US.ISO8859-15
  LOCALES += en_US.UTF-8
   LOCALESRC_en_US.UTF-8 = en_US.UTF-8
  
@@ -13,20 +13,52 @@ diff -ruN -x obj -x CVS -x *~ src53/share/locale/ctype/Makefile src/share/locale
 -
 -LOCALES += es_ES.UTF-8
 - LOCALESRC_es_ES.UTF-8 = en_US.UTF-8
-+#http://en.wikipedia.org/wiki/List_of_countries_where_Spanish_is_an_official_language
-+ES_COUNTRIES= AR BO CH CO CR CU DO EC ES GQ GT HN MX NI PA PE PR PY SV US UY VE 
-+ES_ENCODINGS= ISO8859-1 ISO8859-15 UTF-8
-+.for c in ${ES_COUNTRIES}
-+LOCALES += es_${c}.UTF-8
-+LOCALESRC_es_${c}.UTF-8 = en_US.UTF-8
-+LOCALES += es_${c}.ISO8859-1
-+LOCALESRC_es_${c}.ISO8859-1 = en_US.ISO_8859-1
-+LOCALES += es_${c}.ISO8859-15
-+LOCALESRC_es_${c}.ISO8859-15 = en_US.DIS_8859-15
++LOCALES_ES = es_AR es_BO es_CH es_CO es_CR es_CU es_DO es_EC es_ES es_GQ es_GT es_HN es_MX es_NI es_PA es_PE es_PR es_PY es_SV es_US es_UY es_VE
++.for c in ${LOCALES_ES}
++LOCALES += ${c}.ISO8859-1
++ LOCALESRC_${c}.ISO8859-1 = en_US.ISO_8859-1
++LOCALES += ${c}.ISO8859-15
++ LOCALESRC_${c}.ISO8859-15 = en_US.DIS_8859-15
++LOCALES += ${c}.UTF-8
++ LOCALESRC_${c}.UTF-8 = en_US.UTF-8
 +.endfor
  
  LOCALES += fa_IR.UTF-8
   LOCALESRC_fa_IR.UTF-8 = en_US.UTF-8
+@@ -293,7 +294,6 @@ LOCALESRCS+=	${LOCALESRC_${locale}}
+ .endfor
+ CLEANFILES+=	${LOCALES:S/$/.out/g}
+ 
+-# TODO: more use of symlinks?
+ FILES=	${LOCALES:S/$/.out/g}
+ .for locale in ${LOCALES}
+ FILESDIR_${locale}.out=	${LOCALEDIR}/${locale}
+@@ -304,14 +304,21 @@ install:
+ .for locale in ${LOCALES}
+ 	install -o ${LOCALEOWN} -g ${LOCALEGRP} -m ${DIRMODE} -d \
+ 	    ${DESTDIR}${LOCALEDIR}/${locale}
+-	install -o ${LOCALEOWN} -g ${LOCALEGRP} -m ${LOCALEMODE} \
+-	    ${locale}.out ${DESTDIR}${LOCALEDIR}/${locale}/LC_CTYPE
++	if (test "${LOCALESRC_${locale}:S/ISO_/ISO/g:S/DIS_/ISO/g}" != "${locale}") then { \
++		ln -fs ../${LOCALESRC_${locale}:S/ISO_/ISO/g:S/DIS_/ISO/g}/LC_CTYPE ${DESTDIR}${LOCALEDIR}/${locale}/LC_CTYPE; \
++	} else { \
++		install -o ${LOCALEOWN} -g ${LOCALEGRP} -m ${LOCALEMODE} \
++	    	${locale}.out ${DESTDIR}${LOCALEDIR}/${locale}/LC_CTYPE; \
++	} fi;
++
+ .endfor
+ 
+ .for locale in ${LOCALES}
+ ${locale}.out: ${LOCALESRC_${locale}}.src
+-	${CPP} -I${.CURDIR} < ${.CURDIR}/${LOCALESRC_${locale}}.src | \
+-	    sed -e '/^#/d' | mklocale -o ${.TARGET}
++	if (test "${LOCALESRC_${locale}:S/ISO_/ISO/g:S/DIS_/ISO/g}" = "${locale}") then { \
++		${CPP} -I${.CURDIR} < ${.CURDIR}/${LOCALESRC_${locale}}.src | \
++	    sed -e '/^#/d' | mklocale -o ${.TARGET}; \
++	} fi;
+ .endfor
+ 
+ .SUFFIXES: .src .out
 diff -ruN -x obj -x CVS -x *~ src53/share/locale/ctype/charset/JISX0201-right src/share/locale/ctype/charset/JISX0201-right
 --- src53/share/locale/ctype/charset/JISX0201-right	Sun Aug  7 05:03:45 2005
 +++ src/share/locale/ctype/charset/JISX0201-right	Tue Apr  2 05:47:25 2013
