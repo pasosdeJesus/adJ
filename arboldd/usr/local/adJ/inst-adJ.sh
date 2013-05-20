@@ -1216,7 +1216,7 @@ insacp apg
 echo "* Instalar PostgreSQL y PostGIS"  >> /var/tmp/inst-adJ.bitacora
 f=`ls /var/db/pkg/postgresql-server* 2> /dev/null > /dev/null`;
 if (test "$?" != "0") then {
-	p=`ls $PKG_PATH/libxml-* $PKG_PATH/libiconv-* $PKG_PATH/postgresql-client-* $PKG_PATH/postgresql-server*`
+	p=`ls $PKG_PATH/libxml-* $PKG_PATH/libiconv-* $PKG_PATH/postgresql-client-* $PKG_PATH/postgresql-server* $PKG_PATH/postgresql-contrib* $PKG_PATH/postgresql-doc*`
 	pkg_add -I -r -D update -D updatedepends $p >> /var/tmp/inst-adJ.bitacora 2>&1;
 	insacp postgis
 	echo -n "La clave del administrador de 'postgres' quedará en /var/postresql/.pgpass " >> /var/tmp/inst-adJ.bitacora;
@@ -1307,6 +1307,8 @@ if (test "$t" != "1") then {
 	for i in $ES_COUNTRIES; do
 		echo "psql -h /var/www/tmp -U postgres -c \"CREATE COLLATION es_${i}_UTF_8 (LOCALE='es_${i}.UTF-8');\"" >> /tmp/cu.sh
 	done;
+	echo "CREATE EXTENSION unaccent;" >> /tmp/cu.sh
+	echo "ALTER TEXT SEARCH DICTIONARY unaccent (RULES='unaccent');" >> /tmp/cu.sh
 	echo "exit \$?" >> /tmp/cu.sh;
 	chmod +x /tmp/cu.sh 2>&1 >> /var/tmp/inst-adJ.bitacora
 	cat /tmp/cu.sh >> /var/tmp/inst-adJ.bitacora
