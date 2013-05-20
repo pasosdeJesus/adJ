@@ -1613,15 +1613,13 @@ diff -ruN -x obj -x CVS -x *~ src-orig/share/locale/Makefile src/share/locale/Ma
  #	$OpenBSD: Makefile,v 1.1 2005/08/07 10:03:44 espie Exp $
  
 -SUBDIR=	ctype
-+SUBDIR=	colldef ctype
++SUBDIR=	ctype colldef
  	
  
  .include <bsd.subdir.mk>
 diff -ruN -x obj -x CVS -x *~ src-orig/share/locale/colldef/Makefile src/share/locale/colldef/Makefile
 --- src-orig/share/locale/colldef/Makefile	Wed Dec 31 19:00:00 1969
 +++ src/share/locale/colldef/Makefile	Sat Mar 23 08:46:02 2013
---- Makefile.orig	Sat Jun 15 18:56:55 2013
-+++ Makefile	Sat Jun 15 16:02:54 2013
 @@ -0,0 +1,92 @@
 +.include <bsd.own.mk>
 +
@@ -2036,7 +2034,7 @@ diff -ruN -x obj -x CVS -x *~ src-orig/share/locale/colldef/hy_AM.ARMSCII-8.src 
 +# Made available by Vahe Khachikyan <vahe@khachikyan.de>
 +#
 +charmap map.ARMSCII-8
-+substitute <armew> with "»õ"
++substitute <armew> with "??"
 +order \
 +# controls
 +	<armeternity>;<NU>;...;<US>;\x80;...;\xA0;\

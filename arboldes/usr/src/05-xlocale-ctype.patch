@@ -295,7 +295,7 @@ diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src53xlocale1/
  }
 --- src53xlocale1/lib/libc/locale/Makefile.inc	Mon Apr  8 20:43:35 2013
 +++ src/lib/libc/locale/Makefile.inc	Mon Apr  8 20:52:11 2013
-@@ -10,15 +10,15 @@
+@@ -10,18 +10,40 @@
  	wcstoul.c wcstoll.c wcstoull.c wcstoimax.c wcstoumax.c \
  	setrunelocale.c runeglue.c rune.c runetable.c ___runetype_mb.c \
  	_wctrans.c wcsxfrm.c \
@@ -313,8 +313,58 @@ diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src53xlocale1/
 +	iswalnum_l.3 newlocale.3 nextwctype.3 \
  	querylocale.3 uselocale.3 wcscoll.3 wcsxfrm.3 xlocale.3
  
- MLINKS+= iswalnum.3 iswalpha.3 \
-@@ -37,6 +37,7 @@
+-MLINKS+= iswalnum.3 iswalpha.3 \
++MLINKS+= ctype_l.3 digittoint_l.3 \
++	ctype_l.3 isalnum_l.3 \
++	ctype_l.3 isalpha_l.3 \
++	ctype_l.3 isascii_l.3 \
++	ctype_l.3 isblank_l.3 \
++	ctype_l.3 iscntrl_l.3 \
++	ctype_l.3 isdigit_l.3 \
++	ctype_l.3 isgraph_l.3 \
++	ctype_l.3 ishexnumber_l.3 \
++	ctype_l.3 isideogram_l.3 \
++	ctype_l.3 islower_l.3 \
++	ctype_l.3 isnumber_l.3 \
++	ctype_l.3 isphonogram_l.3 \
++	ctype_l.3 isprint_l.3 \
++	ctype_l.3 ispunct_l.3 \
++	ctype_l.3 isrune_l.3 \
++	ctype_l.3 isspace_l.3 \
++	ctype_l.3 isspecial_l.3 \
++	ctype_l.3 isupper_l.3 \
++	ctype_l.3 isxdigit_l.3 \
++	ctype_l.3 tolower_l.3 \
++	ctype_l.3 toupper_l.3 \
++	iswalnum.3 iswalpha.3 \
+ 	iswalnum.3 iswblank.3 \
+ 	iswalnum.3 iswcntrl.3 \
+ 	iswalnum.3 iswdigit.3 \
+@@ -32,11 +54,31 @@
+ 	iswalnum.3 iswspace.3 \
+ 	iswalnum.3 iswupper.3 \
+ 	iswalnum.3 iswxdigit.3 \
++	iswalnum_l.3 iswalpha_l.3 \
++	iswalnum_l.3 iswblank_l.3 \
++	iswalnum_l.3 iswcntrl_l.3 \
++	iswalnum_l.3 iswctype_l.3 \
++	iswalnum_l.3 iswdigit_l.3 \
++	iswalnum_l.3 iswgraph_l.3 \
++	iswalnum_l.3 iswideogram_l.3 \
++	iswalnum_l.3 iswlower_l.3 \
++	iswalnum_l.3 iswnumber_l.3 \
++	iswalnum_l.3 iswphonogram_l.3 \
++	iswalnum_l.3 iswprint_l.3 \
++	iswalnum_l.3 iswpunct_l.3 \
++	iswalnum_l.3 iswrune_l.3 \
++	iswalnum_l.3 iswspace_l.3 \
++	iswalnum_l.3 iswspecial_l.3 \
++	iswalnum_l.3 iswupper_l.3 \
++	iswalnum_l.3 iswxdigit_l.3 \
++	iswalnum_l.3 towctrans_l.3 \
++	iswalnum_l.3 wctype_l.3 \
+ 	mblen.3 mblen_l.3\
+ 	mbrtowc.3 mbrtowc_l.3\
  	mbsinit.3 mbsinit_l.3\
  	mbstowcs.3 mbstowcs_l.3\
  	mbtowc.3 mbtowc_l.3\
