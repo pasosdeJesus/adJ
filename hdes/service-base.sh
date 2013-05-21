@@ -207,8 +207,6 @@ for i in `cat /tmp/tc`; do
 	remplazad $i;
 done;
 
-
-exit 1;
 echo "Buscando /var/log/daemon";
 find . -exec grep -i -l -I "/var/log/daemon" {} ';' > /tmp/tc 2> /dev/null
 echo "Remplazando por /var/log/service";
