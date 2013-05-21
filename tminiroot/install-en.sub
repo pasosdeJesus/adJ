@@ -1,4 +1,4 @@
-#       $OpenBSD: install.sub,v 1.635 2011/02/25 12:55:45 krw Exp $
+#	$OpenBSD: install.sub,v 1.674 2013/01/02 20:35:00 krw Exp $
 #	$NetBSD: install.sub,v 1.5.2.8 1996/09/02 23:25:02 pk Exp $
 #
 # Copyright (c) 1997-2009 Todd Miller, Theo de Raadt, Ken Westerback
@@ -114,7 +114,7 @@ get_cddevs () {
 }
 
 get_ifdevs() {
-	ifconfig "$@" 2>&- \
+	ifconfig "$@" 2>/dev/null \
 		| egrep -v '^[[:space:]]|(bridge|enc|gif|gre|lo|pflog|pfsync|ppp|sl|tun)[[:digit:]]+:' \
 		| sed -ne 's/^\(.*\):.*/\1/p'
 }
@@ -134,11 +134,11 @@ mount_mnt2() {
 
 	_parts=$(sed -e 's/^  \(.\): .*/\1/' $_file)
 	set -- $_parts
-	[[ $# == 0 ]] && { echo "No filesystems found on $_dev." ; return 1 ; }
+	(($# == 0)) && { echo "No filesystems found on $_dev." ; return 1 ; }
 
 	if isin "c" $_parts; then
 		resp=c
-	elif [[ $# == 1 ]]; then
+	elif (($# == 1)); then
 		resp=$1
 	else
 		cat /tmp/parts.$_dev
@@ -166,15 +166,15 @@ askpass() {
 rm -df /tmp/lock
 
 lock() {
-	while ! mkdir /tmp/lock 2>&- && sleep .1; do done
+	while ! mkdir /tmp/lock 2>/dev/null && sleep .1; do done
 }
 
 unlock() {
-	rm -d /tmp/lock 2>&-
+	rm -d /tmp/lock 2>/dev/null
 }
 
 retrap() {
-	trap '>&- && kill -KILL $cppid 2>&-; echo; stty echo; exit 0' \
+	trap 'kill -KILL $cppid 2>/dev/null; echo; stty echo; exit 0' \
 		INT EXIT TERM
 }
 
@@ -185,7 +185,7 @@ rm -f /tmp/update
 		lock
 		if test -e /tmp/update && [[ "`dmesg`" != "`cat /tmp/update`" ]]; then
 			dmesg >/tmp/update
-			kill -TERM 2>&- $$ || exit 1
+			kill -TERM 2>/dev/null $$ || exit 1
 		fi
 		unlock
 		sleep .5
@@ -196,11 +196,12 @@ cppid=$!
 retrap
 
 _ask() {
-	local _int _redo=0 _pid
+	local _q=$1 _def=$2 _int _redo=0 _pid
 
 	trap "_int=1" INT
 	trap "_redo=1" TERM
 	lock; dmesg >/tmp/update; unlock
+	echo -n "${_q:+$_q }${_def:+[$_def] }"
 	read resp
 	lock; rm /tmp/update; unlock
 	if (( _redo )); then
@@ -219,17 +220,12 @@ _ask() {
 	fi
 	retrap
 	(( _int )) && kill -INT $$
+	: ${resp:=$_def}
 	return $_redo
 }
 
 ask() {
-	local _question=$1 _default=$2
-
-	while :; do
-		echo -n "$_question "
-		[[ -z $_default ]] || echo -n "[$_default] "
-		_ask && : ${resp:=$_default} && break
-	done
+	while ! _ask "$1" "$2"; do done
 }
 
 askpassword() {
@@ -294,7 +290,7 @@ ask_until() {
 }
 
 ask_yn() {
-	local _q=$1 _a=${2:-no} _resp
+	local _q=$1 _a=${2:-no}
 	typeset -l _resp
 
 	while :; do
@@ -363,7 +359,7 @@ rmel() {
 bsort() {
 	local _l _a=$1 _b
 
-	[[ $# -gt 0 ]] || return
+	(($# > 0)) || return
 
 	shift
 	for _b; do
@@ -395,11 +391,6 @@ showcols() {
 	rm -rf -- $_cdir
 }
 
-manual_net_cfg() {
-	ask_yn "Do you want to do any manual network configuration?"
-
-	[[ $resp == y ]] && { echo "Type 'exit' to return to $_SMODE." ; sh ; }
-}
 
 # Create a device.
 #
@@ -412,7 +403,7 @@ makedev() {
 		return 1
 	fi
 
-	(cd /dev && sh MAKEDEV "$_dev") >/dev/null 2>&1
+	[[ -z $(cd /dev && sh MAKEDEV "$_dev" 2>&1) ]]
 }
 
 addhostent() {
@@ -476,9 +467,11 @@ configure_ifs() {
 		_vd=$(ifconfig vlan$_vl 2>&1)
 		[[ $_vd == @(*no such interface*) ]] && break
 		[[ $_vd == @(vlan$_vl: flags=0<>*) ]] && break
-		: $(( _vl++ ))
+		((_vl++))
 	done
 	_vd=
+
+	ifconfig lo0 inet 127.0.0.1/8
 
 	while :; do
 		ifconfig vlan$_vl create >/dev/null 2>&1
@@ -499,7 +492,7 @@ configure_ifs() {
 			[[ -n $_tags ]] && _tags=$(rmel "$_vi" $_tags)
 			if [[ -z $_vi ]]; then
 				_vi=0
-				while (( (_vi += 1) < 4096 )); do
+				while ((++_vi < 4096)); do
 					! isin "$_vi" $_tags && break
 				done
 			fi
@@ -530,10 +523,10 @@ configure_ifs() {
 			ifconfig $_ifs destroy >/dev/null 2>&1
 			ifconfig $_ifs vlan $_vi vlandev $_vd
 			echo "vlan $_vi vlandev $_vd" >>$_hn
-			[[ ${_ifs##vlan} == $_vl ]] && (( _vl += 1 ))
+			[[ ${_ifs##vlan} == $_vl ]] && ((_vl++))
 		fi
 
-		ifconfig $_ifs 2>&- | grep -q "^[[:space:]]*ieee80211:" &&
+		ifconfig $_ifs 2>/dev/null | grep -q "^[[:space:]]*ieee80211:" &&
 			ieee80211_config $_ifs $_hn
 
 		resp=$(hostname -s)
@@ -546,7 +539,7 @@ configure_ifs() {
 
 		if [[ -f $_hn ]]; then
 			chmod 640 $_hn
-			(( nifs += 1 ))
+			((nifs++))
 			: ${_first:=$_ifs}
 			_p=done
 		fi
@@ -566,6 +559,7 @@ v6_info() {
 		1s/.*<UP,.*/UP/p
 		1s/.*<.*/DOWN/p
 		/scopeid/d
+		/inet6/s/prefixlen//
 		/inet6/s///p'
 }
 
@@ -599,7 +593,7 @@ __EOT
 		return 0
 	fi
 
-	ifconfig $_ifs delete down -group dhcp 2>&-
+	ifconfig $_ifs delete down -group dhcp 2>/dev/null
 	rm /etc/dhclient.conf /etc/resolv.conf.tail
 	return 1
 }
@@ -625,7 +619,7 @@ ieee80211_config() {
 
 	# Reset 802.11 settings and determine wpa capability
 	ifconfig $_ifs -nwid -nwkey
-	ifconfig $_ifs -wpa 2>&- && _haswpa=1
+	ifconfig $_ifs -wpa 2>/dev/null && _haswpa=1
 
 	# Empty scan cache
 	rm -f $WLANLIST
@@ -651,7 +645,7 @@ ieee80211_config() {
 		quote nwid "$_nwid" >>$_hn
 
 		_prompt="Security protocol? (O)pen, (W)EP"
-		[[ $_haswpa == 1 ]] && _prompt="$_prompt, WPA-(P)SK"
+		((_haswpa == 1)) && _prompt="$_prompt, WPA-(P)SK"
 		while :; do
 			ask_until "$_prompt" "O"
 			case "$_haswpa-$resp" in
@@ -660,7 +654,7 @@ ieee80211_config() {
 			?-[Ww]) ask_until "WEP key? (will echo)"
 				# Make sure ifconfig accepts the key
 				if _err=$(ifconfig $_ifs nwkey "$resp" 2>&1) &&
-				    [[ -z $_err ]]; then
+					[[ -z $_err ]]; then
 					quote nwkey "$resp" >>$_hn
 					break
 				fi
@@ -684,7 +678,7 @@ ieee80211_config() {
 v4_config() {
 	local _ifs=$1 _name=$2 _hn=$3 _prompt _addr _mask
 
-	if ifconfig $_ifs | grep 'groups:.* dhcp' >/dev/null 2>&1; then
+	if ifconfig $_ifs | grep -q 'groups:.* dhcp'; then
 		_addr=dhcp
 	else
 		set -- $(v4_info $_ifs)
@@ -826,7 +820,7 @@ enable_network() {
 	ifconfig lo0 inet 127.0.0.1/8
 
 	for hn in /mnt/etc/hostname.*; do
-		(( nifs += 1 ))
+		((nifs++))
 
 		if=${hn#/mnt/etc/hostname.}
 
@@ -836,12 +830,13 @@ enable_network() {
 			if [ "$cmd2" ]; then
 				set -- $cmd2
 				af=$1 name=$2 mask=$3 bcaddr=$4 ext1=$5 cmd2=
-				i=1; while [ i -lt 6 -a -n "$1" ]; do shift; let i=i+1; done
+				i=1
+				while [ i -lt 6 -a -n "$1" ]; do shift; let i=i+1; done
 				ext2="$@"
 			else
 				read af name mask bcaddr ext1 ext2 || break
 			fi
-			case $af in
+			case "$af" in
 			"#"*|"!"*|"bridge"|"")
 				continue
 				;;
@@ -857,9 +852,6 @@ enable_network() {
 				rtsolif="$rtsolif $if"
 				cmd="ifconfig $if $name $mask $bcaddr $ext1 $ext2 up"
 				;;
-			"up")
-				cmd="ifconfig $if $name $mask $bcaddr $ext1 $ext2 up"
-				;;
 			*)	read dt dtaddr
 				if [ "$name" = "alias" ]; then
 					alias=$name
@@ -872,25 +864,31 @@ enable_network() {
 					alias=
 				fi
 				cmd="ifconfig $if $af $alias $name "
-				case $dt in
+				case "$dt" in
 				dest)	cmd="$cmd $dtaddr"
 					;;
-				[a-z!]*)
+				*)
 					cmd2="$dt $dtaddr"
 					;;
 				esac
-				if [ -z "$name" ]; then
-					echo "/mnt/etc/hostname.$if: invalid network configuration file"
-					return
-				fi
 				case $af in
-				inet)	[ "$mask" ] && cmd="$cmd netmask $mask"
-					if [ "$bcaddr" -a "$bcaddr" != "NONE" ]; then
-						cmd="$cmd broadcast $bcaddr"
+				inet)
+					if [ ! -n "$name" ]; then
+						echo "/etc/hostname.$if: inet alone is invalid"
+						return
 					fi
-					[ "$alias" ] && rtcmd="; route -qn add -host $name 127.0.0.1"
-					;;
-				inet6)
+					[ "$mask" ] && cmd="$cmd netmask $mask"
+					if [ "$bcaddr" -a X"$bcaddr" != "XNONE" ]; then
+
+                                                cmd="$cmd broadcast $bcaddr"
+                                        fi
+					[ "$alias" ] && rtcmd=";route -qn add -host $name 127.0.0.1"
+                                        ;;
+                                inet6)
+					if [ ! -n "$name" ]; then
+						echo "/etc/hostname.$if: inet6 alone is invalid"
+						return
+					fi
 					[ "$mask" ] && cmd="$cmd prefixlen $mask"
 					cmd="$cmd $bcaddr"
 					;;
@@ -967,14 +965,14 @@ install_files() {
 		echo -n "Getting $_f ..."
 		rm -f /tmp/h
 		case $_f in
-		*.tgz)	ftp $FTPOPTS -o - -m "$_src/$_f" | \
+		*.tgz)	ftp -Vmo - "$_src/$_f" | \
 				$shacmd | tar zxphf - -C /mnt
 			;;
-		*)	ftp $FTPOPTS -o - -m "$_src/$_f" | \
+		*)	ftp -Vmo - "$_src/$_f" | \
 				$shacmd > "/mnt/$_f"
 			;;
 		esac
-		if [ $? -ne 0 ]; then
+		if (($? != 0)); then
 			echo "'$_f' did not install correctly."
 		elif [ -f /tmp/h -a -f "/var/hash/$_f" ]; then
 			if [ "$(</tmp/h)" != "$(</var/hash/$_f)" ]; then
@@ -988,12 +986,12 @@ install_files() {
 			GOTSETS="$GOTSETS $_f"
 		fi
 		[[ $_f == base$VERSION.tgz ]] && \
-			ftp $FTPOPTS -o /mnt/tmp/etc$VERSION.tgz \
-				-m "$_src/etc$VERSION.tgz" >/dev/null 2>&1 && \
+			ftp -Vmo /mnt/tmp/etc$VERSION.tgz \
+				"$_src/etc$VERSION.tgz" >/dev/null 2>&1 && \
 			SM_ARGS="-s /tmp/etc$VERSION.tgz"
 		[[ $_f == xbase$VERSION.tgz ]] && \
-			ftp $FTPOPTS -o /mnt/tmp/xetc$VERSION.tgz \
-				-m "$_src/xetc$VERSION.tgz" >/dev/null 2>&1  && \
+			ftp -Vmo /mnt/tmp/xetc$VERSION.tgz \
+				"$_src/xetc$VERSION.tgz" >/dev/null 2>&1  && \
 			SM_ARGSX="-x /tmp/xetc$VERSION.tgz"
 	done
 }
@@ -1049,7 +1047,7 @@ startftplist() {
 
 	set -m
 	(
-		ftp $FTPOPTS -a -o - "http://129.128.5.191/cgi-bin/ftplist.cgi?path=$FTPSETDIR" \
+		ftp -Vao - "http://129.128.5.191/cgi-bin/ftplist.cgi?path=$FTPSETDIR" \
 			2>/tmp/ftplisterr > $SERVERLISTALL
 		echo -n $SECONDS >$SERVERLISTSEC
 	) & ftppid=$!
@@ -1059,20 +1057,12 @@ startftplist() {
 }
 
 waitftplist() {
-	local _dot						# XXX
-
-	[[ -z $ftppid ]] && return
-	while [[ -n $(jobs $ftppid 2>/dev/null) ]]; do
-		echo -n .					# XXX
-		_dot=.						# XXX
-		sleep 0.2					# XXX
-	done
-	[[ -n $_dot ]] && echo					# XXX
+	wait "$ftppid" 2>/dev/null
 }
 
 ftp_time() {
-	local _ftplist_sec=$(cat $SERVERLISTSEC 2>&-)
-	local _time=$(sed '/^TIME=\([0-9]*\)$/!d;s//\1/;q' $SERVERLISTALL 2>&-)
+	local _ftplist_sec=$(cat $SERVERLISTSEC 2>/dev/null)
+	local _time=$(sed '/^TIME=\([0-9]*\)$/!d;s//\1/;q' $SERVERLISTALL 2>/dev/null)
 	[[ -n $_ftplist_sec && -n $_time ]] &&
 		echo $((_time + SECONDS - _ftplist_sec))
 }
@@ -1109,7 +1099,7 @@ install_url() {
 		+([0-9]))
 			[[ -s $SERVERLIST ]] || continue
 			set -- $(sed -n "${resp}p" $SERVERLIST)
-			[[ $# -lt 1 ]] && { echo "There is no line $resp." ; continue ; }
+			(($# < 1)) && { echo "There is no line $resp." ; continue ; }
 			_server_ip=${1%%/*}
 			;;
 		+([A-Za-z0-9\:.\[\]_-]))
@@ -1122,7 +1112,7 @@ install_url() {
 	done
 	eval _${_url_type}_server_ip=$_server_ip
 
-	set -- $(sed "/^$_server_ip/x;\$!d;x" $SERVERLIST 2>&-)
+	set -- $(sed "/^$_server_ip/x;\$!d;x" $SERVERLIST 2>/dev/null)
 	resp=${1#*/}
 	[[ $resp == "$1" ]] && resp=
 	if (( $# > 1 )); then
@@ -1159,14 +1149,12 @@ install_url() {
 	fi
 	_url_base=$_url_base$_server_ip/$_server_dir
 
-	ifconfig lo0 127.0.0.1
-
 	if [[ $_url_type == ftp && -z $ftp_proxy ]] ; then
-		_file_list=$(ftp $FTPOPTS "$_url_base/")
+		_file_list=$(ftp -V "$_url_base/")
 		ftp_error "Login failed." "$_file_list" && return
 		ftp_error "No such file or directory." "$_file_list" && return
 	else
-		_file_list=$(ftp $FTPOPTS -o - "$_url_base/index.txt" | \
+		_file_list=$(ftp -Vo - "$_url_base/index.txt" | \
 			sed -e 's/^.* //' | sed -e 's///')
 	fi
 
@@ -1175,13 +1163,12 @@ install_url() {
 	installedfrom=$_url_type://$_server_ip/$_server_dir
 
 	if [[ -n $_mirror ]]; then
-		package_path=$(print -r -- "$installedfrom" |
+		PACKAGE_PATH=$(print -r -- "$installedfrom" |
 			sed -E "/\/(snapshots|[0-9]\.[0-9])\/($ARCH)\/*$/!d
 				s!!/\1/packages/$(arch -s)/!;q")
 	else
-		package_path=
+		PACKAGE_PATH=
 	fi
-
 }
 
 install_mounted_fs() {
@@ -1252,7 +1239,6 @@ install_tape() {
 		ask_until "Skip how many files? (or 'done')" 0
 		[[ $resp == done ]] && return
 		[[ $resp == +([0-9]) ]] || continue
-		(($resp < 0)) && continue
 
 		if (($resp > 0)); then
 			echo -n "Skipping $resp file(s)..."
@@ -1304,7 +1290,7 @@ set_timezone() {
 			continue ;;
 		esac
 
-		while isin $_zonepath/ $(cat $_zonefile); do
+		while isin "$_zonepath/" $(cat $_zonefile); do
 			ask "What sub-timezone of '$_zonepath' are you in? ('?' for list)"
 			_zsed=$(echo $_zonepath/ | sed 's,/,\\/,g')
 			resp=${resp%%*(/)}
@@ -1315,7 +1301,7 @@ set_timezone() {
 			esac
 		done
 
-		if isin $_zonepath $(cat $_zonefile); then
+		if isin "$_zonepath" $(cat $_zonefile); then
 			TZ=${_zonepath#$_zoneroot}
 			return
 		fi
@@ -1389,11 +1375,7 @@ run_sysmerge() {
 }
 
 update_firmware() {
-	local _get="Install"
-	[[ $MODE == upgrade ]] && _get="Update"
-	ask_yn "$_get non-free firmware files on first boot?" no
-	[[ $resp == y ]] && \
-		echo "/usr/sbin/fw_update -v" >> /mnt/etc/rc.firsttime
+	echo "/usr/sbin/fw_update -v" >> /mnt/etc/rc.firsttime
 }
 
 munge_fstab() {
@@ -1465,7 +1447,7 @@ check_fs() {
 		[ "$_dev" != /dev/"$ROOTDEV" ] || continue
 		[ -f "/sbin/fsck_$_fstype" ] || continue
 		makedev "$(getdevname "$_dev")" || continue
-		[[ $_passno > 0 ]] || continue
+		((_passno > 0)) || continue
 
 		echo -n "fsck -${_f}p $_dev..."
 		if ! fsck -${_f}p $_dev >/dev/null 2>&1; then
@@ -1529,30 +1511,28 @@ donetconfig() {
 		done
 		cp /tmp/resolv.conf /tmp/resolv.conf.shadow
 	fi
-
-	manual_net_cfg
 }
 
 populateusrlocal() {
 	if [ -f /mnt/etc/mtree/BSD.local.dist ]; then
 		/mnt/usr/sbin/chroot /mnt /usr/sbin/mtree -Uedqn -p /usr/local -f /etc/mtree/BSD.local.dist >/dev/null
-	fi
+			fi
 }
 
 apply()
 {
 	if [[ $sshd == n ]]; then
 		echo "sshd_flags=NO		# disabled during install" \
-			>>/mnt/etc/rc.conf.local
+		>>/mnt/etc/rc.conf.local
 	fi
 	if [[ $sshd_disableroot == y ]]; then
 		sed -e "/^#\(PermitRootLogin\) yes/s//\1 no/" \
-			< /mnt/etc/ssh/sshd_config > /tmp/sshd_config
+		< /mnt/etc/ssh/sshd_config > /tmp/sshd_config
 		cp /tmp/sshd_config /mnt/etc/ssh/sshd_config
 	fi
 	if [[ $ntpd == y ]]; then
 		echo "ntpd_flags=		# enabled during install" \
-			>>/mnt/etc/rc.conf.local
+		>>/mnt/etc/rc.conf.local
 		if [[ $ntpd_server != default ]]; then
 			set -- $ntpd_server
 			sed -e "s/^servers /#&/;/#server /a\\
@@ -1561,18 +1541,15 @@ servers $1
 			cp /tmp/ntpd.conf /mnt/etc/ntpd.conf
 		fi
 	fi
-
 	if [[ $x11 == y ]]; then
 		sed -e "/^#\(machdep\.allowaperture=${MDXAPERTURE}\)/s//\1	/" \
-			/mnt/etc/sysctl.conf >/tmp/sysctl.conf
+		/mnt/etc/sysctl.conf >/tmp/sysctl.conf
 		cp /tmp/sysctl.conf /mnt/etc/sysctl.conf
 	fi
-
 	if [[ $xdm == y && -x /mnt/usr/X11R6/bin/xdm ]]; then
 		echo "xdm_flags=		# enabled during install" \
-			>>/mnt/etc/rc.conf.local
+		>>/mnt/etc/rc.conf.local
 	fi
-
 	if [[ $defcons == y ]]; then
 		cp /mnt/etc/ttys /tmp/ttys
 		sed	-e "/^$CTTY/s/std.9600/std.${CSPEED}/" \
@@ -1581,7 +1558,6 @@ servers $1
 		[[ -n $CPROM ]] && \
 			echo "stty $CPROM $CSPEED\nset tty $CPROM" >>/mnt/etc/boot.conf
 	fi
-
 	ln -sf /usr/share/zoneinfo/$TZ /mnt/etc/localtime
 }
 
@@ -1597,7 +1573,6 @@ questions() {
 		ask "NTP server? (hostname or 'default')" default
 		ntpd_server=$resp
 	fi
-
 	def=no
 	[[ -n $DISPLAY ]] && def=yes
 	if [[ -n $MDXAPERTURE ]]; then
@@ -1607,13 +1582,11 @@ questions() {
 			_xdmask=no
 		fi
 	fi
-
 	if [[ -n $MDXDM && $_xdmask == yes ]]; then
 		ask_yn "Do you want the X Window System to be started by xdm(1)?" $_xdmask
 		xdm=$resp
 	fi
-
-	if [[ -n $CDEV ]]; then
+											if [[ -n $CDEV ]]; then
 		_d=${CPROM:-$CDEV}
 		ask_yn "Change the default console to $_d?"
 		defcons=$resp
@@ -1639,9 +1612,9 @@ finish_up() {
 		done </mnt/etc/fstab
 	fi
 
-	if [[ -n $package_path ]]; then
-		grep -v '^[     ]*installpath[  ]*=' /mnt/etc/pkg.conf 2>&- > /tmp/pkgconf
-		print -r -- "installpath = $package_path" >> /tmp/pkgconf
+	if [[ -n $PACKAGE_PATH ]]; then
+		grep -v '^[     ]*installpath[  ]*=' /mnt/etc/pkg.conf 2>/dev/null > /tmp/pkgconf
+		print -r -- "installpath = $PACKAGE_PATH" >> /tmp/pkgconf
 		cp /tmp/pkgconf /mnt/etc/pkg.conf
 	fi
 
@@ -1687,13 +1660,12 @@ __EOT
 
 ROOTDISK=
 ROOTDEV=
-package_path=
+PACKAGE_PATH=
 SM_ARGS=
 SM_ARGSX=
 
 SETDIR="$VNAME/$ARCH"
 FTPDIR="pub/OpenBSD/$VNAME"
-FTPOPTS="-V"
 SERVERLISTALL=/tmp/serverlistall
 SERVERLISTSEC=/tmp/serverlistsec
 SERVERLIST=/tmp/serverlist
@@ -1744,7 +1716,7 @@ SANESETS="${SANESETS:-bsd} base${VERSION}.tgz etc${VERSION}.tgz"
 
 # prepare COLUMNS sanely
 COLUMNS=$(stty -a | sed -n '/columns/{s/^.* \([0-9]*\) columns.*$/\1/;p;}')
-[ COLUMNS -eq 0 ] && COLUMNS=80
+((COLUMNS == 0)) && COLUMNS=80
 
 # decide upon an editor
 : ${EDITOR:=ed}
@@ -1758,7 +1730,7 @@ umount -af 1>/dev/null 2>&1
 for _ifs in $(get_ifdevs dhcp); do
 	set -- $(v4_info $_ifs)
 	[[ $1 == UP && -n $2 ]] && continue
-	ifconfig $_ifs delete down -group dhcp 2>&-
+	ifconfig $_ifs delete down -group dhcp 2>/dev/null
 done
 
 cat <<__EOT
@@ -1803,11 +1775,31 @@ if [[ $MODE == install ]]; then
 	echo
 fi
 
+diskinfo() {
+	local _d
+	for _d; do
+		makedev $_d
+		echo -n "$_d: "
+		disklabel -dpg $_d 2>/dev/null |
+		sed     -e '/^label: /{s,,,;s/ *$//;s/^$/<no label>/;H;d;}' \
+			-e '/.*# total bytes: \(.*\)/{s//(\1)/;H;}' \
+			-e '$!d;x;s/\n/ /'
+		rm -f /dev/{r,}$_d?
+	done
+}
+
+
 # Get ROOTDISK, ROOTDEV and SWAPDEV.
 while :; do
-	ask_which "disk" "is the root disk" '$(get_dkdevs | sed s,^$,none, )'
-	[[ $resp == done ]] && exit
-	[[ $resp != none ]] && break
+	echo "Available disks are: $(get_dkdevs | sed 's/^$/none/')."
+	_ask "Which disk is the root disk? ('?' for details)" \
+		$(get_dkdevs | sed 's/ .*//') || continue
+	case $resp in
+	"?")    diskinfo $(get_dkdevs);;
+	'')     ;;
+	*)      isin "$resp" $(get_dkdevs) && break
+		echo "no such disk";;
+	esac
 done
 makedev $resp || exit
 

@@ -1,5 +1,5 @@
 #!/bin/ksh
-#	$OpenBSD: install.sh,v 1.225 2011/07/24 15:33:41 fgsch Exp $
+#	$OpenBSD: install.sh,v 1.231 2012/09/28 16:23:25 rpe Exp $
 #	$NetBSD: install.sh,v 1.5.2.8 1996/08/27 18:15:05 gwr Exp $
 #
 # Copyright (c) 1997-2009 Todd Miller, Theo de Raadt, Ken Westerback
@@ -60,6 +60,7 @@ MODE=install
 DISK=
 DISKS_DONE=
 _DKDEVS=$(get_dkdevs)
+_fsent=
 
 rm -f /tmp/fstab.shadow /tmp/fstab /tmp/fstab.*
 
@@ -93,7 +94,7 @@ while :; do
 
 	if [[ -f /tmp/fstab.$DISK ]]; then
 		while read _pp _mp _rest; do
-			if [[ $_mp == "none" ]]; then
+			if [[ $_mp == none ]]; then
 				echo "$_pp $_mp $_rest" >>/tmp/fstab
 				continue
 			fi
@@ -107,19 +108,17 @@ while :; do
 			echo "$_pp and $1 can't both be mounted at $_mp."
 			continue
 		fi
-		_i=${#_fsent[*]}
 		while read _pp _mp _fstype _rest; do
 			[[ $_fstype == ffs ]] || continue
 			_OPT=
 			[[ $_mp == / ]] && _OPT=$MDROOTFSOPT
 			newfs -q $_OPT ${_pp##/dev/}
-			_fsent[$_i]="$_mp!$_pp"
-			: $(( _i += 1 ))
+			_fsent="$_fsent $_mp!$_pp"
 		done </tmp/fstab.$DISK
 	fi
 done
 
-for _mp in $(bsort ${_fsent[*]}); do
+for _mp in $(bsort $_fsent); do
 	_pp=${_mp##*!}
 	_mp=${_mp%!*}
 	echo -n "$_pp $_mp ffs rw"
@@ -146,7 +145,7 @@ install_sets
 
 if [[ -z $TZ ]]; then
 	(cd /mnt/usr/share/zoneinfo
-	    ls -1dF `tar cvf /dev/null [A-Za-y]*` >/mnt/tmp/tzlist )
+	    ls -1dF $(tar cvf /dev/null [A-Za-y]*) >/mnt/tmp/tzlist )
 	echo
 	set_timezone /mnt/tmp/tzlist
 	rm -f /mnt/tmp/tzlist
@@ -167,7 +166,7 @@ if [[ -s $SERVERLISTALL ]]; then
 	[[ -n $TZ ]] && _i="$_i&TZ=$TZ"
 	[[ -n $method ]] && _i="$_i&method=$method"
 
-	[[ -n $_i ]] && ftp $FTPOPTS -a -o - \
+	[[ -n $_i ]] && ftp -Vao - \
 		"http://129.128.5.191/cgi-bin/ftpinstall.cgi?$_i" >/dev/null 2>&1 &
 fi
 
@@ -177,7 +176,7 @@ mv /tmp/ttys /mnt/etc/ttys
 
 echo -n "Saving configuration files..."
 
-(cd /var/db; [ -f dhclient.leases ] && mv dhclient.leases /mnt/var/db/. )
+(cd /var/db; [[ -f dhclient.leases ]] && mv dhclient.leases /mnt/var/db/. )
 
 hostname >/tmp/myname
 
@@ -213,7 +212,7 @@ apply
 
 if [[ -n $user ]]; then
 	_encr="*"
-	[[ -n "$userpass" ]] && _encr=`/mnt/usr/bin/encrypt -b 8 -- "$userpass"`
+	[[ -n "$userpass" ]] && _encr=$(/mnt/usr/bin/encrypt -b 8 -- "$userpass")
 	uline="${user}:${_encr}:1000:1000:staff:0:0:${username}:/home/${user}:/bin/ksh"
 	echo "$uline" >> /mnt/etc/master.passwd
 	echo "${user}:*:1000:" >> /mnt/etc/group
@@ -231,7 +230,7 @@ q" | /mnt/bin/ed /mnt/etc/group 2>/dev/null
 fi
 
 if [[ -n "$_rootpass" ]]; then
-	_encr=`/mnt/usr/bin/encrypt -b 8 -- "$_rootpass"`
+	_encr=$(/mnt/usr/bin/encrypt -b 8 -- "$_rootpass")
 	echo "1,s@^root::@root:${_encr}:@
 w
 q" | /mnt/bin/ed /mnt/etc/master.passwd 2>/dev/null
@@ -239,10 +238,10 @@ fi
 /mnt/usr/sbin/pwd_mkdb -p -d /mnt/etc /etc/master.passwd
 
 if grep -qs '^rtsol' /mnt/etc/hostname.*; then
-       sed -e "/^#\(net\.inet6\.ip6\.accept_rtadv\)/s//\1/" \
+	sed -e "/^#\(net\.inet6\.ip6\.accept_rtadv\)/s//\1/" \
        	   -e "/^#\(net\.inet6\.icmp6\.rediraccept\)/s//\1/" \
                /mnt/etc/sysctl.conf >/tmp/sysctl.conf
-       cp /tmp/sysctl.conf /mnt/etc/sysctl.conf
+	cp /tmp/sysctl.conf /mnt/etc/sysctl.conf
 fi
 
 finish_up

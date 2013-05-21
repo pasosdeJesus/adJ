@@ -1,4 +1,4 @@
-#     $OpenBSD: install.md,v 1.31 2011/07/06 20:02:16 halex Exp $
+#      $OpenBSD: install.md,v 1.32 2012/10/15 17:21:04 deraadt Exp $
 #
 #
 # Copyright (c) 1996 The NetBSD Foundation, Inc.
@@ -39,8 +39,8 @@ NCPU=$(sysctl -n hw.ncpufound)
 ((NCPU > 1)) && { DEFAULTSETS="bsd bsd.rd bsd.mp" ; SANESETS="bsd bsd.mp" ; }
 
 md_installboot() {
-	cat /usr/mdec/boot > /mnt/boot
-	if ! /usr/mdec/installboot /mnt/boot /usr/mdec/biosboot ${1} ; then
+	cat /mnt/usr/mdec/boot > /mnt/boot
+	if ! /mnt/usr/mdec/installboot /mnt/boot /mnt/usr/mdec/biosboot ${1} ; then
 		echo "\nFalla al instalar bloques de arranque."
 		echo "No podra arrancar OpenBSD de ${1}."
 		exit
