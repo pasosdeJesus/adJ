@@ -161,7 +161,9 @@ _slinitialize="You will now initialize the disk(s) that OpenBSD will use. To ena
 available security features you should configure the disk(s) to allow the
 creation of separate filesystems for /, /tmp, /var, /usr, and /home.";
 _sldisk="disk";
-_slroot="is the root disk";
+_slavailabledisks="Available disks are"
+_slwhichroot="Which disk is the root disk? ('?' for details)"
+_slnosuchdisk="no such disk"
 _slnomoredisks="No more disks to initialize";
 _slerrornoroot="ERROR: No root partition"
 _slusec="Use"
