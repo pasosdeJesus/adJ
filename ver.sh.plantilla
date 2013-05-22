@@ -1,10 +1,10 @@
 #!/bin/sh
-# Variables de configuración para generar distribución Aprendiendo de Jesús
-# Dominio público. 2007. vtamara@pasosdeJesus.org
+# Variables de configuraciÃ³n para generar distribuciÃ³n Aprendiendo de JesÃºs
+# Dominio pÃºblico. 2007. vtamara@pasosdeJesus.org
 
 V=5.3
 VESP=""
-# Versión que se está desarrollando
+# VersiÃ³n que se estÃ¡ desarrollando
 
 VP=`echo $V | sed -e "s/[.]//g"`
 VU=`echo $V | sed -e "s/[.]/_/g"`
@@ -20,10 +20,10 @@ PKG_PATH=ftp://ftp.openbsd.org/pub/OpenBSD/$V/packages/$ARQ/
 PKG_PATH=ftp://ftp3.usa.openbsd.org/pub/OpenBSD/$V/packages/$ARQ/
 PKG_PATH=ftp://filedump.se.rit.edu/pub/OpenBSD/$V/packages/$ARQ/
 PKG_PATH=ftp://ftp.pasosdeJesus.org/pub/OpenBSD/$V/packages/$ARQ/
-#Repositorio de paquetes usado --el último es el usado
+#Repositorio de paquetes usado --el Ãºltimo es el usado
 
 METODOACT=ftp
-# Metodo de actualización, puede ser ftp o rsync
+# Metodo de actualizaciÃ³n, puede ser ftp o rsync
 
 SERVACT="vtamara@ftp.pasosdeJesus.org"
 # Usado si METODOACT es rsync
@@ -36,7 +36,7 @@ DIROTRO="comp"
 
 RSYNCHOST="ftp.pasosdeJesus.org"
 
-excluye="dialog-.* gnupg-2.* libstdc++-.* python-.* php-5.2.* php-gd-5.2.* php-pdo_pgsql-5.2.* php-pgsql-5.2.* php-mcrypt-5.2.* php-sqlite-5.2.* pear-Validate-.* pear-Auth-[0-9p.]*.tgz pear-HTML-QuickForm-.* postgresql-.* ruby-1.8.* xfe-.*"
+excluye="dialog-.* gnupg-2.* libstdc++-.* python-.* php-5.2.* php-gd-5.2.* php-pdo_pgsql-5.2.* php-pgsql-5.2.* php-mcrypt-5.2.*fphp-sqlite-5.2.* pear-Validate-.* pear-Auth-[0-9p.]*.tgz pear-HTML-QuickForm-.* postgresql-.* ruby-1.8.* tcl-* tk-* xfe-.*"
 # Paquetes por excluir de descarga ftp de OpenBSD
 
 RUTAKERNELREESPECIAL=""
@@ -45,7 +45,7 @@ RUTAKERNELREESPECIAL=""
 export DESTDIR=/destdir; 
 export RELEASEDIR=/releasedir
 export XSRCDIR=/usr/src/xenocara;
-# Directorios para compilación 
+# Directorios para compilaciÃ³n 
 
 # Estas variables controlan operacion de distribucion.sh pueden ser s o n
 export autoCvs=n
@@ -61,29 +61,29 @@ export autoCompBase=n
 export autoElimCompBase=n
 # Elimina Compila Base
 export autoDist=n
-# Crear distribución en /releasedir y /destdir
+# Crear distribuciÃ³n en /releasedir y /destdir
 export autoBsdrd=n
 # Crear bsd.rd
 export autoElimDist=n
-# Eliminar distribución de /destdir y /releasedir
+# Eliminar distribuciÃ³n de /destdir y /releasedir
 export autoX=n
 # Transformar y compilar Xenocara
 export autoXDist=n
-# Distribución de Xenocara en /destdir y /releasedir
+# DistribuciÃ³n de Xenocara en /destdir y /releasedir
 export autoElimXDist=n
-# Elimina distribución de Xenocara
+# Elimina distribuciÃ³n de Xenocara
 export autoJuegosInstalacion=n
-# Crear juegos de instalación en subdirectorio de este
+# Crear juegos de instalaciÃ³n en subdirectorio de este
 export autoPaquetes=n
-# Compilar paquetes especiales que hacen parte de la distribución
+# Compilar paquetes especiales que hacen parte de la distribuciÃ³n
 
 export autoMasPaquetes=s
 # Descargar resto de paquetes de repositorio PKG_PATH
 export autoSite=s
 # Generar siteXX.tgz
 export autoTextos=s
-# Generar textos Novedades.txt y demás
+# Generar textos Novedades.txt y demÃ¡s
 
 
-qemuboot=c
+qemuboot=d
 # Unidad por la cual arrancar por defecto con hdes/qemu.sh
