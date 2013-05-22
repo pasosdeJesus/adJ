@@ -1942,7 +1942,14 @@ EOF
 		chown -R $uadJ:$uadJ /home/$uadJ/.Xdefaults
 } fi;
 
-for i in ruby19-railties-3.1.3 ruby19-actionmailer-3.1.3 ruby19-actionpack-3.1.3 ruby19-erubis-2.7.0 ruby19-tzinfo-0.3.29 ruby19-activeresource-3.1.3 ruby19-rack-ssl-1.3.2 ruby19-activerecord-3.1.3 ruby19-activemodel-3.1.3 ruby19-railties-3.1.3 ruby19-hike-1.2.1 ruby19-arel-2.2.1 ruby19-rack-mount-0.8.3 ruby19-thor-0.14.6p1 ruby19-activesupport-3.1.3 ruby19-actionmailer-3.1.3 ruby19-sprockets-2.0.3 ruby19-rack-cache-1.1 ruby19-actionpack-3.1.3 ; do
+for i in ruby19-railties-3.1.3 ruby19-actionmailer-3.1.3 \
+    ruby19-actionpack-3.1.3 ruby19-erubis-2.7.0 ruby19-tzinfo-0.3.29 \
+    ruby19-activeresource-3.1.3 ruby19-rack-ssl-1.3.2 \
+    ruby19-activerecord-3.1.3 ruby19-activemodel-3.1.3 \
+    ruby19-hike-1.2.1 ruby19-arel-2.2.1 ruby19-rack-mount-0.8.3 \
+    ruby19-thor-0.14.6p1 ruby19-activesupport-3.1.3 \
+    ruby19-actionmailer-3.1.3 ruby19-sprockets-2.0.3 ruby19-rack-cache-1.1 \
+    ruby19-actionpack-3.1.3 ; do
 	sudo pkg_delete $i >> /var/tmp/inst-adJ.bitacora 2>&1
 done
 
