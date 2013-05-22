@@ -196,11 +196,12 @@ cppid=$!
 retrap
 
 _ask() {
-	local _int _redo=0 _pid
+	local _q=$1 _def=$2 _int _redo=0 _pid
 
 	trap "_int=1" INT
 	trap "_redo=1" TERM
 	lock; dmesg >/tmp/update; unlock
+	echo -n "${_q:+$_q }${_def:+[$_def] }"
 	read resp
 	lock; rm /tmp/update; unlock
 	if (( _redo )); then
@@ -219,17 +220,12 @@ _ask() {
 	fi
 	retrap
 	(( _int )) && kill -INT $$
+	: ${resp:=$_def}
 	return $_redo
 }
 
 ask() {
-	local _question=$1 _default=$2
-
-	while :; do
-		echo -n "$_question "
-		[[ -z $_default ]] || echo -n "[$_default] "
-		_ask && : ${resp:=$_default} && break
-	done
+	while ! _ask "$1" "$2"; do done
 }
 
 askpassword() {
@@ -294,7 +290,7 @@ ask_until() {
 }
 
 ask_yn() {
-	local _q=$1 _a=${2:-no} _resp
+	local _q=$1 _a=${2:-no}
 	typeset -l _resp
 
 	while :; do
@@ -395,11 +391,6 @@ showcols() {
 	rm -rf -- $_cdir
 }
 
-manual_net_cfg() {
-	ask_yn "¿Configurar manualmente la red?"
-
-	[[ $resp == y ]] && { echo "'exit' regresa." ; sh ; }
-}
 
 # Create a device.
 #
@@ -412,7 +403,7 @@ makedev() {
 		return 1
 	fi
 
-	(cd /dev && sh MAKEDEV "$_dev") >/dev/null 2>&1
+	[[ -z $(cd /dev && sh MAKEDEV "$_dev" 2>&1) ]]
 }
 
 addhostent() {
@@ -535,7 +526,7 @@ configure_ifs() {
 			[[ ${_ifs##vlan} == $_vl ]] && ((_vl++))
 		fi
 
-		ifconfig $_ifs 2>&- | grep -q "^[[:space:]]*ieee80211:" &&
+		ifconfig $_ifs 2>/dev/null | grep -q "^[[:space:]]*ieee80211:" &&
 			ieee80211_config $_ifs $_hn
 
 		resp=$(hostname -s)
@@ -602,7 +593,7 @@ __EOT
 		return 0
 	fi
 
-	ifconfig $_ifs delete down -group dhcp 2>&-
+	ifconfig $_ifs delete down -group dhcp 2>/dev/null
 	rm /etc/dhclient.conf /etc/resolv.conf.tail
 	return 1
 }
@@ -628,7 +619,7 @@ ieee80211_config() {
 
 	# Reset 802.11 settings and determine wpa capability
 	ifconfig $_ifs -nwid -nwkey
-	ifconfig $_ifs -wpa 2>&- && _haswpa=1
+	ifconfig $_ifs -wpa 2>/dev/null && _haswpa=1
 
 	# Empty scan cache
 	rm -f $WLANLIST
@@ -655,7 +646,7 @@ ieee80211_config() {
 		quote nwid "$_nwid" >>$_hn
 
 		_prompt="¿Protocolo de Seguridad? (A)bierto, (W)EP, W(P)A"
-		(($_haswpa == 1)) && _prompt="$_prompt, WPA-(P)SK"
+		((_haswpa == 1)) && _prompt="$_prompt, WPA-(P)SK"
 		while :; do
 			ask_until "$_prompt" "A"
 			case "$_haswpa-$resp" in
@@ -664,7 +655,7 @@ ieee80211_config() {
 			?-[Ww]) ask_until "¿Llave WEP? (no se verá)"
 				# Make sure ifconfig accepts the key
 				if _err=$(ifconfig $_ifs nwkey "$resp" 2>&1) &&
-				    [[ -z $_err ]]; then
+					[[ -z $_err ]]; then
 					quote nwkey "$resp" >>$_hn
 					break
 				fi
@@ -688,7 +679,7 @@ ieee80211_config() {
 v4_config() {
 	local _ifs=$1 _name=$2 _hn=$3 _prompt _addr _mask
 
-	if ifconfig $_ifs | grep -q 'groups:.* dhcp' 2>&1; then
+	if ifconfig $_ifs | grep -q 'groups:.* dhcp'; then
 		_addr=dhcp
 	else
 		set -- $(v4_info $_ifs)
@@ -840,7 +831,7 @@ enable_network() {
 			if [ "$cmd2" ]; then
 				set -- $cmd2
 				af=$1 name=$2 mask=$3 bcaddr=$4 ext1=$5 cmd2=
-				i=1; 
+				i=1
 				while [ i -lt 6 -a -n "$1" ]; do shift; let i=i+1; done
 				ext2="$@"
 			else
@@ -862,9 +853,6 @@ enable_network() {
 				rtsolif="$rtsolif $if"
 				cmd="ifconfig $if $name $mask $bcaddr $ext1 $ext2 up"
 				;;
-			"up")
-				cmd="ifconfig $if $name $mask $bcaddr $ext1 $ext2 up"
-				;;
 			*)	read dt dtaddr
 				if [ "$name" = "alias" ]; then
 					alias=$name
@@ -884,10 +872,6 @@ enable_network() {
 					cmd2="$dt $dtaddr"
 					;;
 				esac
-				if [ -z "$name" ]; then
-					echo "/mnt/etc/hostname.$if: archivo de configuración de red inválido"
-					return
-				fi
 				case $af in
 				inet)
 					if [ ! -n "$name" ]; then
@@ -1166,8 +1150,6 @@ install_url() {
 	fi
 	_url_base=$_url_base$_server_ip/$_server_dir
 
-	ifconfig lo0 127.0.0.1
-
 	if [[ $_url_type == ftp && -z $ftp_proxy ]] ; then
 		_file_list=$(ftp -V "$_url_base/")
 		ftp_error "Falló el ingreso." "$_file_list" && return
@@ -1188,7 +1170,6 @@ install_url() {
 	else
 		PACKAGE_PATH=
 	fi
-
 }
 
 install_mounted_fs() {
@@ -1310,7 +1291,7 @@ set_timezone() {
 			continue ;;
 		esac
 
-		while isin $_zonepath/ $(cat $_zonefile); do
+		while isin "$_zonepath/" $(cat $_zonefile); do
 			ask "¿En que sub-zona de '$_zonepath' está? ('?' muestra lista)"
 			_zsed=$(echo $_zonepath/ | sed 's,/,\\/,g')
 			resp=${resp%%*(/)}
@@ -1321,7 +1302,7 @@ set_timezone() {
 			esac
 		done
 
-		if isin $_zonepath $(cat $_zonefile); then
+		if isin "$_zonepath" $(cat $_zonefile); then
 			TZ=${_zonepath#$_zoneroot}
 			return
 		fi
@@ -1545,104 +1526,97 @@ apply()
 {
 	if [[ $sshd == n ]]; then
 		echo "sshd_flags=NO		# deshabilitado durante instalación" \
-			>>/mnt/etc/rc.conf.local
-			fi
-			if [[ $sshd_disableroot == y ]]; then
-				sed -e "/^#\(PermitRootLogin\) yes/s//\1 no/" \
-					< /mnt/etc/ssh/sshd_config > /tmp/sshd_config
-					cp /tmp/sshd_config /mnt/etc/ssh/sshd_config
-					fi
-					if [[ $ntpd == y ]]; then
-						echo "ntpd_flags=		# habilitado durante instalación" \
-							>>/mnt/etc/rc.conf.local
-							if [[ $ntpd_server != default ]]; then
-								set -- $ntpd_server
-									sed -e "s/^servers /#&/;/#server /a\\
-									servers $1
-									" /mnt/etc/ntpd.conf >/tmp/ntpd.conf
-									cp /tmp/ntpd.conf /mnt/etc/ntpd.conf
-									fi
-									fi
-
-									if [[ $x11 == y ]]; then
-										sed -e "/^#\(machdep\.allowaperture=${MDXAPERTURE}\)/s//\1	/" \
-											/mnt/etc/sysctl.conf >/tmp/sysctl.conf
-											cp /tmp/sysctl.conf /mnt/etc/sysctl.conf
-											fi
-
-											if [[ $xdm == y && -x /mnt/usr/X11R6/bin/xdm ]]; then
-												echo "xdm_flags=		# habilitado durante instalación" \
-													>>/mnt/etc/rc.conf.local
-													fi
-
-													if [[ $defcons == y ]]; then
-														cp /mnt/etc/ttys /tmp/ttys
-															sed	-e "/^$CTTY/s/std.9600/std.${CSPEED}/" \
-															-e "/^$CTTY/s/unknown/vt220	/" \
-															-e "/$CTTY/s/off.*/on secure/" /tmp/ttys >/mnt/etc/ttys
-															[[ -n $CPROM ]] && \
-															echo "stty $CPROM $CSPEED\nset tty $CPROM" >>/mnt/etc/boot.conf
-															fi
-
-															ln -sf /usr/share/zoneinfo/$TZ /mnt/etc/localtime
+		>>/mnt/etc/rc.conf.local
+	fi
+	if [[ $sshd_disableroot == y ]]; then
+		sed -e "/^#\(PermitRootLogin\) yes/s//\1 no/" \
+		< /mnt/etc/ssh/sshd_config > /tmp/sshd_config
+		cp /tmp/sshd_config /mnt/etc/ssh/sshd_config
+	fi
+	if [[ $ntpd == y ]]; then
+		echo "ntpd_flags=		# habilitado durante instalación" \
+		>>/mnt/etc/rc.conf.local
+		if [[ $ntpd_server != default ]]; then
+			set -- $ntpd_server
+			sed -e "s/^servers /#&/;/#server /a\\
+servers $1
+" /mnt/etc/ntpd.conf >/tmp/ntpd.conf
+			cp /tmp/ntpd.conf /mnt/etc/ntpd.conf
+		fi
+	fi
+	if [[ $x11 == y ]]; then
+		sed -e "/^#\(machdep\.allowaperture=${MDXAPERTURE}\)/s//\1	/" \
+		/mnt/etc/sysctl.conf >/tmp/sysctl.conf
+		cp /tmp/sysctl.conf /mnt/etc/sysctl.conf
+	fi
+	if [[ $xdm == y && -x /mnt/usr/X11R6/bin/xdm ]]; then
+		echo "xdm_flags=		# habilitado durante instalación" \
+		>>/mnt/etc/rc.conf.local
+	fi
+	if [[ $defcons == y ]]; then
+		cp /mnt/etc/ttys /tmp/ttys
+		sed	-e "/^$CTTY/s/std.9600/std.${CSPEED}/" \
+			-e "/^$CTTY/s/unknown/vt220	/" \
+			-e "/$CTTY/s/off.*/on secure/" /tmp/ttys >/mnt/etc/ttys
+		[[ -n $CPROM ]] && \
+			echo "stty $CPROM $CSPEED\nset tty $CPROM" >>/mnt/etc/boot.conf
+	fi
+	ln -sf /usr/share/zoneinfo/$TZ /mnt/etc/localtime
 }
 
 questions() {
 	local _d _xdmask=si _def
 
-		ask_yn "¿Iniciar sshd(8) por defecto?" si
-		sshd=$resp
+	ask_yn "¿Iniciar sshd(8) por defecto?" si
+	sshd=$resp
 
-		ask_yn "¿Iniciar ntpd(8) por defecto?"
-		ntpd=$resp
-		if [[ $resp == y ]]; then
-			ask "¿Servidor NTP? (nombre o 'predefinida')" default
-				ntpd_server=$resp
-				fi
-
-				def=no
-				[[ -n $DISPLAY ]] && def=si
-				if [[ -n $MDXAPERTURE ]]; then
-					ask_yn "¿Usará X Window?" $def
-						x11=$resp
-						if [[ $resp == n ]]; then
-							_xdmask=no
-								fi
-								fi
-
-								if [[ -n $MDXDM && $_xdmask == si ]]; then
-									ask_yn "¿Desea que el sistema X Window sea iniciado por xdm(1)?" $_xdmask
-										xdm=$resp
-										fi
-
-										if [[ -n $CDEV ]]; then
-											_d=${CPROM:-$CDEV}
-	ask_yn "¿Cambiar consola a $_d?"
+	ask_yn "¿Iniciar ntpd(8) por defecto?"
+	ntpd=$resp
+	if [[ $resp == y ]]; then
+		ask "¿Servidor NTP? (nombre o 'predefinida')" default
+		ntpd_server=$resp
+	fi
+	def=no
+	[[ -n $DISPLAY ]] && def=si
+	if [[ -n $MDXAPERTURE ]]; then
+		ask_yn "¿Usará X Window?" $def
+		x11=$resp
+		if [[ $resp == n ]]; then
+			_xdmask=no
+		fi
+	fi
+	if [[ -n $MDXDM && $_xdmask == si ]]; then
+		ask_yn "¿Desea que el sistema X Window sea iniciado por xdm(1)?" $_xdmask
+		xdm=$resp
+	fi
+											if [[ -n $CDEV ]]; then
+		_d=${CPROM:-$CDEV}
+		ask_yn "¿Cambiar consola a $_d?"
 		defcons=$resp
 		if [[ $resp == y ]]; then
 			ask_which "velocidad" "debería $_d usar" \
 				"9600 19200 38400 57600 115200" $CSPEED
-				case $resp in
-				listo)	defcons=n ;;
-	*)	CSPEED=$resp ;;
-	esac
+			case $resp in
+			listo)	defcons=n ;;
+			*)	CSPEED=$resp ;;
+			esac
 		fi
-		fi
+	fi
 }
 
 finish_up() {
 	local _dev _mp _fstype _rest
 
-		if [[ -x /mnt/sbin/swapctl ]]; then
-			/mnt/sbin/swapctl -a /dev/$SWAPDEV >/dev/null 2>&1
-				while read _dev _mp _fstype _rest; do
-					[[ $_fstype == swap ]] && \
-						     /mnt/sbin/swapctl -a $_dev >/dev/null 2>&1
-						     done </mnt/etc/fstab
-						     fi
+	if [[ -x /mnt/sbin/swapctl ]]; then
+		/mnt/sbin/swapctl -a /dev/$SWAPDEV >/dev/null 2>&1
+		while read _dev _mp _fstype _rest; do
+			[[ $_fstype == swap ]] && \
+				/mnt/sbin/swapctl -a $_dev >/dev/null 2>&1
+		done </mnt/etc/fstab
+	fi
 
-						     if [[ -n $PACKAGE_PATH ]]; then
-							     grep -v '^[     ]*installpath[  ]*=' /mnt/etc/pkg.conf 2>/dev/null > /tmp/pkgconf
+	if [[ -n $PACKAGE_PATH ]]; then
+		grep -v '^[     ]*installpath[  ]*=' /mnt/etc/pkg.conf 2>/dev/null > /tmp/pkgconf
 		print -r -- "installpath = $PACKAGE_PATH" >> /tmp/pkgconf
 		cp /tmp/pkgconf /mnt/etc/pkg.conf
 	fi
