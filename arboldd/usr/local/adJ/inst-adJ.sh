@@ -1293,28 +1293,27 @@ if (test -f "$pb") then {
 } fi;
 
 
-echo "* Agregar cotejaciones en español"  >> /var/tmp/inst-adJ.bitacora
-ES_COUNTRIES="ES CO PE VE EC GT CU BO HN PY SV CR PA GQ MX AR CH DO NI UY PR"
+echo "* Agregar cotejaciones en español y facilidades de busqueda para PostgreSQL"  >> /var/tmp/inst-adJ.bitacora
+ES_COUNTRIES="AR BO CH CO CR CU DO EC ES GQ GT HN MX NI PA PE PR PY SV VE US UY"
 echo "psql -h /var/www/tmp -U postgres -c \"SELECT COUNT(*) FROM pg_collation WHERE collname = 'es_co_utf_8';\"" > /tmp/cu.sh
 echo "exit \$?" >> /tmp/cu.sh;
 chmod +x /tmp/cu.sh | tee -a /var/tmp/inst-adJ.bitacora
 cat /tmp/cu.sh >> /var/tmp/inst-adJ.bitacora
 su - _postgresql /tmp/cu.sh > /tmp/cu.out 2>> /var/tmp/inst-adJ.bitacora
+echo "" > /tmp/cu.sh
 t=`head -n 3 /tmp/cu.out | tail -n 1 | sed -e "s/ *//g" 2>/dev/null`
 if (test "$t" != "1") then {
-	echo "" > /tmp/cu.sh
 	for i in $ES_COUNTRIES; do
 		echo "psql -h /var/www/tmp -U postgres -c \"CREATE COLLATION es_${i}_UTF_8 (LOCALE='es_${i}.UTF-8');\"" >> /tmp/cu.sh
 	done;
-	echo "CREATE EXTENSION unaccent;" >> /tmp/cu.sh
-	echo "ALTER TEXT SEARCH DICTIONARY unaccent (RULES='unaccent');" >> /tmp/cu.sh
-	echo "exit \$?" >> /tmp/cu.sh;
-	chmod +x /tmp/cu.sh 2>&1 >> /var/tmp/inst-adJ.bitacora
-	cat /tmp/cu.sh >> /var/tmp/inst-adJ.bitacora
-	su - _postgresql /tmp/cu.sh  2>&1
-} else {
-	echo "   Saltando..." >> /var/tmp/inst-adJ.bitacora;
 } fi;
+echo "CREATE EXTENSION unaccent;" >> /tmp/cu.sh
+echo "ALTER TEXT SEARCH DICTIONARY unaccent (RULES='unaccent');" >> /tmp/cu.sh
+echo "ALTER FUNCTION unaccent(text) IMMUTABLE;" >> /tmp/cu.sh
+echo "exit \$?" >> /tmp/cu.sh;
+chmod +x /tmp/cu.sh 2>&1 >> /var/tmp/inst-adJ.bitacora
+cat /tmp/cu.sh >> /var/tmp/inst-adJ.bitacora
+su - _postgresql /tmp/cu.sh  2>&1
 				
 
 insacp libidn
