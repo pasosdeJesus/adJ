@@ -1,5 +1,5 @@
 #!/bin/ksh
-#	$OpenBSD: install.sh,v 1.225 2012/01/31 20:01:12 halex Exp $
+#	$OpenBSD: install.sh,v 1.231 2012/09/28 16:23:25 rpe Exp $
 #	$NetBSD: install.sh,v 1.5.2.8 1996/08/27 18:15:05 gwr Exp $
 #
 # Copyright (c) 1997-2009 Todd Miller, Theo de Raadt, Ken Westerback
@@ -66,6 +66,7 @@ MODE=install
 DISK=
 DISKS_DONE=
 _DKDEVS=$(get_dkdevs)
+_fsent=
 
 # Remove traces of previous install attempt.
 rm -f /tmp/fstab.shadow /tmp/fstab /tmp/fstab.*
@@ -81,8 +82,6 @@ while :; do
 	if isin $ROOTDISK $_DKDEVS; then
 		resp=$ROOTDISK
 		rm -f /tmp/fstab
-		# Make sure empty files exist so we don't have to
-		# keep checking for their existence before grep'ing.
 	else
 		# Force the user to think and type in a disk name by
 		# making 'done' the default choice.
@@ -112,7 +111,7 @@ while :; do
 	if [[ -f /tmp/fstab.$DISK ]]; then
 		# Avoid duplicate mount points on different disks.
 		while read _pp _mp _rest; do
-			if [[ $_mp == "none" ]]; then
+			if [[ $_mp == none ]]; then
 				# Multiple swap partitions are ok.
 				echo "$_pp $_mp $_rest" >>/tmp/fstab
 				continue
@@ -134,7 +133,6 @@ while :; do
 
 		# Add ffs filesystems to list after newfs'ing them. Ignore
 		# other filesystems.
-		_i=${#_fsent[*]}
 		while read _pp _mp _fstype _rest; do
 			[[ $_fstype == ffs ]] || continue
 			_OPT=
@@ -143,15 +141,14 @@ while :; do
 			# N.B.: '!' is lexically < '/'. That is
 			#	required for correct sorting of
 			#	mount points.
-			_fsent[$_i]="$_mp!$_pp"
-			: $(( _i += 1 ))
+			_fsent="$_fsent $_mp!$_pp"
 		done </tmp/fstab.$DISK
 	fi
 done
 
 # Write fstab entries to fstab in mount point alphabetic order
 # to enforce a rational mount order.
-for _mp in $(bsort ${_fsent[*]}); do
+for _mp in $(bsort $_fsent); do
 	_pp=${_mp##*!}
 	_mp=${_mp%!*}
 	echo -n "$_pp $_mp ffs rw"
@@ -202,7 +199,7 @@ install_sets
 # using the timezone names extracted from the base set
 if [[ -z $TZ ]]; then
 	(cd /mnt/usr/share/zoneinfo
-	    ls -1dF `tar cvf /dev/null [A-Za-y]*` >/mnt/tmp/tzlist )
+	    ls -1dF $(tar cvf /dev/null [A-Za-y]*) >/mnt/tmp/tzlist )
 	echo
 	set_timezone /mnt/tmp/tzlist
 	rm -f /mnt/tmp/tzlist
@@ -230,7 +227,7 @@ if [[ -s $SERVERLISTALL ]]; then
 	[[ -n $TZ ]] && _i="$_i&TZ=$TZ"
 	[[ -n $method ]] && _i="$_i&method=$method"
 
-	[[ -n $_i ]] && ftp $FTPOPTS -a -o - \
+	[[ -n $_i ]] && ftp -Vao - \
 		"http://129.128.5.191/cgi-bin/ftpinstall.cgi?$_i" >/dev/null 2>&1 &
 fi
 
@@ -242,7 +239,7 @@ mv /tmp/ttys /mnt/etc/ttys
 echo -n "Saving configuration files..."
 
 # Save any leases obtained during install.
-(cd /var/db; [ -f dhclient.leases ] && mv dhclient.leases /mnt/var/db/. )
+(cd /var/db; [[ -f dhclient.leases ]] && mv dhclient.leases /mnt/var/db/. )
 
 # Move configuration files from /tmp to /mnt/etc.
 hostname >/tmp/myname
@@ -288,7 +285,7 @@ apply
 
 if [[ -n $user ]]; then
 	_encr="*"
-	[[ -n "$userpass" ]] && _encr=`/mnt/usr/bin/encrypt -b 8 -- "$userpass"`
+	[[ -n "$userpass" ]] && _encr=$(/mnt/usr/bin/encrypt -b 8 -- "$userpass")
 	uline="${user}:${_encr}:1000:1000:staff:0:0:${username}:/home/${user}:/bin/ksh"
 	echo "$uline" >> /mnt/etc/master.passwd
 	echo "${user}:*:1000:" >> /mnt/etc/group
@@ -306,7 +303,7 @@ q" | /mnt/bin/ed /mnt/etc/group 2>/dev/null
 fi
 
 if [[ -n "$_rootpass" ]]; then
-	_encr=`/mnt/usr/bin/encrypt -b 8 -- "$_rootpass"`
+	_encr=$(/mnt/usr/bin/encrypt -b 8 -- "$_rootpass")
 	echo "1,s@^root::@root:${_encr}:@
 w
 q" | /mnt/bin/ed /mnt/etc/master.passwd 2>/dev/null
