@@ -1,22 +1,22 @@
-# $OpenBSD: Makefile,v 1.165.2.3 2013/01/09 12:18:59 pea Exp $
+# $OpenBSD: Makefile,v 1.171 2013/02/07 17:29:05 jasper Exp $
 
 COMMENT-main=	PostgreSQL RDBMS (client)
 COMMENT-server=	PostgreSQL RDBMS (server)
 COMMENT-docs=	PostgreSQL RDBMS documentation
 COMMENT-contrib=PostgreSQL RDBMS contributions
 
-VERSION=	9.1.7
+VERSION=	9.2.3
 DISTNAME=	postgresql-${VERSION}
-PKGNAME-main=	postgresql-client-${VERSION}p0
-PKGNAME-server=	postgresql-server-${VERSION}p0
-PKGNAME-docs=	postgresql-docs-${VERSION}p0
-PKGNAME-contrib=postgresql-contrib-${VERSION}p0
+PKGNAME-main=	postgresql-client-${VERSION}
+PKGNAME-server=	postgresql-server-${VERSION}
+PKGNAME-docs=	postgresql-docs-${VERSION}
+PKGNAME-contrib=postgresql-contrib-${VERSION}
 
 CATEGORIES=	databases
-SHARED_LIBS=	ecpg		7.3 \
-		ecpg_compat	4.3 \
-		pgtypes		4.2 \
-		pq		5.4
+SHARED_LIBS=	ecpg		7.4 \
+		ecpg_compat	4.4 \
+		pgtypes		4.3 \
+		pq		5.5
 
 HOMEPAGE=	http://www.postgresql.org/
 
@@ -29,8 +29,7 @@ PERMIT_DISTFILES_CDROM=	Yes
 PERMIT_DISTFILES_FTP=	Yes
 WANTLIB=		c com_err crypto m readline ssl termcap z
 
-MASTER_SITES= ftp://ftp2.uk.postgresql.org/sites/ftp.postgresql.org/source/v${VERSION}/ \
-	ftp://ftp5.us.postgresql.org/pub/PostgreSQL/source/v${VERSION}/ \
+MASTER_SITES= 	ftp://ftp5.us.postgresql.org/pub/PostgreSQL/source/v${VERSION}/ \
 	ftp://ftp5.es.postgresql.org/mirror/postgresql/source/v${VERSION}/ \
 	ftp://ftp.postgresql.org/pub/source/v${VERSION}/
 
@@ -65,8 +64,6 @@ CONFIGURE_ARGS=	--disable-rpath --with-openssl=/usr \
 		--with-libxml \
 		--disable-thread-safety \
 		--with-krb5
-#		--enable-cassert \
-#		--enable-debug \
 
 # There is no spinlock support for hppa yet. Until we have access to
 # a system to get this working, disable them for now. There is
@@ -123,8 +120,6 @@ NO_REGRESS=	Yes
 DOCS=	${WRKSRC}/COPYRIGHT ${WRKSRC}/HISTORY \
 	${WRKSRC}/INSTALL ${WRKSRC}/README \
 	${WRKSRC}/doc/TODO
-
-CFLAGS= -g
 
 post-install:
 	${INSTALL_DATA_DIR} ${PREFIX}/share/doc/postgresql

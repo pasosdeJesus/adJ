@@ -1,0 +1,540 @@
+diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/lib/libc/locale/collate.c src/lib/libc/locale/collate.c
+--- src53xlocale2/lib/libc/locale/collate.c	Mon Apr  8 21:20:56 2013
++++ src/lib/libc/locale/collate.c	Tue Apr  9 05:01:26 2013
+@@ -416,9 +416,9 @@
+ /** Duplicate a mb string as wc string, 
+  * https://buildsecurityin.us-cert.gov/bsi/articles/knowledge/coding/769-BSI.html
+  */
+-wchar_t *__dup_as_wcs_l(const char *s)
++wchar_t *__dup_as_wcs_l(const char *s, locale_t l)
+ {
+-	int numc = mbstowcs(NULL, s, 0) + 1; 
++	int numc = mbstowcs_l(NULL, s, 0, l) + 1; 
+ 	if (numc == 0 || numc > ULONG_MAX / sizeof(wchar_t)
+ 			|| numc == (size_t)-1) { 
+ 		errno = EINVAL;
+@@ -429,7 +429,7 @@
+ 		errno = ENOMEM;
+ 		return NULL;
+ 	}
+-	mbstowcs(ws, s, numc);
++	mbstowcs_l(ws, s, numc, l);
+ 
+ 	return ws;
+ }
+diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/lib/libc/locale/collate.h src/lib/libc/locale/collate.h
+--- src53xlocale2/lib/libc/locale/collate.h	Mon Apr  8 21:20:56 2013
++++ src/lib/libc/locale/collate.h	Tue Apr  9 05:01:08 2013
+@@ -104,7 +104,7 @@
+ void	__collate_print_tables(struct xlocale_collate *);
+ #endif
+ int 	strncmp_wc(wchar_t *ws, char *cs, size_t l);
+-wchar_t *__dup_as_wcs_l(const char *s);
++wchar_t *__dup_as_wcs_l(const char *s, locale_t l);
+ __END_DECLS
+ 
+ #define _LDP_LOADED 0
+}
+diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/lib/libc/locale/wcscoll.c src/lib/libc/locale/wcscoll.c
+--- src53xlocale2/lib/libc/locale/wcscoll.c	Mon Apr  8 21:20:56 2013
++++ src/lib/libc/locale/wcscoll.c	Tue Apr  9 05:08:08 2013
+@@ -61,19 +61,18 @@
+ #include <wchar.h>
+ 
+ #include "collate.h"
++#include "xlocale_private.h"
+ 
+-/*
+- * Compare strings using collating information.
+- */
+ int
+-wcscoll(const wchar_t *s1, const wchar_t *s2)
++wcscoll_l(const wchar_t *s1, const wchar_t *s2, locale_t loc)
+ {
+ 	int len1, len2, ret, ret2;
+ 	wint_t prim1, prim2, sec1, sec2;
+ 	const wchar_t *t1, *t2;
+ 	wchar_t *tt1, *tt2;
+-	struct xlocale_collate *table;
+-	table = (struct xlocale_collate *)&__xlocale_global_collate;
++	FIX_LOCALE(loc);
++	struct xlocale_collate *table =
++	    ((struct xlocale_collate *)(loc)->components[XLC_COLLATE]);
+ 
+ 	if (table->__collate_load_error)
+ 		return wcscmp(s1, s2);
+@@ -120,4 +119,13 @@
+ 		free(tt2);
+ 
+ 	return ret;
++}
++
++/*
++ * Compare strings using collating information.
++ */
++int
++wcscoll(const wchar_t *s1, const wchar_t *s2)
++{
++	return wcscoll_l(s1, s2, __get_locale());
+ }
+diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/lib/libc/locale/wcsxfrm.c src/lib/libc/locale/wcsxfrm.c
+--- src53xlocale2/lib/libc/locale/wcsxfrm.c	Mon Apr  8 21:20:56 2013
++++ src/lib/libc/locale/wcsxfrm.c	Tue Apr  9 05:08:02 2013
+@@ -71,16 +71,19 @@
+ #include <wchar.h>
+ 
+ #include "collate.h"
++#include "xlocale_private.h"
+ 
+ size_t
+-wcsxfrm(wchar_t * __restrict dest, const wchar_t * __restrict src, size_t len)
++wcsxfrm_l(wchar_t * __restrict dest, const wchar_t * __restrict src, 
++    size_t len, locale_t loc)
+ {
+ 	wint_t prim, sec;
+ 	int l;
+ 	size_t slen;
+ 	wchar_t *s, *ss;
+-	struct xlocale_collate *table;
+-	table = (struct xlocale_collate *)&__xlocale_global_collate;
++	FIX_LOCALE(loc);
++	struct xlocale_collate *table =
++	    ((struct xlocale_collate *)(loc)->components[XLC_COLLATE]);
+ 
+ 	if (*src == L'\0') {
+ 		if (len > 0 && dest != NULL)
+@@ -119,3 +122,8 @@
+ }
+ 
+ 
++size_t
++wcsxfrm(wchar_t * __restrict dest, const wchar_t * __restrict src, size_t len)
++{
++	return wcsxfrm_l(dest, src, len, __get_locale());
++}
+diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/lib/libc/string/strcasecmp.c src/lib/libc/string/strcasecmp.c
+--- src53xlocale2/lib/libc/string/strcasecmp.c	Mon Mar 25 18:28:29 2013
++++ src/lib/libc/string/strcasecmp.c	Wed Apr 10 07:53:41 2013
+@@ -29,8 +29,14 @@
+  * SUCH DAMAGE.
+  */
+ 
++#include <stdlib.h>
+ #include <string.h>
++#include <wchar.h>
++#include <wctype.h>
+ 
++#include "../locale/mblocal.h"
++#include "../locale/xlocale_private.h"
++
+ typedef unsigned char u_char;
+ 
+ /*
+@@ -76,18 +82,17 @@
+ int
+ strcasecmp(const char *s1, const char *s2)
+ {
+-	const u_char *cm = charmap;
+-	const u_char *us1 = (const u_char *)s1;
+-	const u_char *us2 = (const u_char *)s2;
++	return strncasecmp(s1, s2, strlen(s1) + 1);
++}
+ 
+-	while (cm[*us1] == cm[*us2++])
+-		if (*us1++ == '\0')
+-			return (0);
+-	return (cm[*us1] - cm[*--us2]);
++int
++strcasecmp_l(const char *s1, const char *s2, locale_t loc)
++{
++	return strncasecmp_l(s1, s2, strlen(s1) + 1, loc);
+ }
+ 
+ int
+-strncasecmp(const char *s1, const char *s2, size_t n)
++sbstrncasecmp(const char *s1, const char *s2, size_t n)
+ {
+ 	if (n != 0) {
+ 		const u_char *cm = charmap;
+@@ -102,4 +107,52 @@
+ 		} while (--n != 0);
+ 	}
+ 	return (0);
++}
++
++int
++strncasecmp_l(const char *s1, const char *s2, size_t n, locale_t loc)
++{
++	FIX_LOCALE(loc);
++	struct xlocale_ctype *xc = XLOCALE_CTYPE(loc);
++	mbstate_t mb1, mb2;
++
++	bzero(&mb1, sizeof(mb1));
++	bzero(&mb2, sizeof(mb2));
++	mbsinit_l(&mb1, loc);
++	mbsinit_l(&mb2, loc);
++	if (n != 0) {
++		const u_char *us1 = (const u_char *)s1;
++		const u_char *us2 = (const u_char *)s2;
++		size_t d1, d2;
++
++		do {
++			wchar_t w1, w2, l1, l2;
++			size_t ml = n < xc->__mb_cur_max ? n : xc->__mb_cur_max;
++			d1 = mbrtowc_l(&w1, us1, ml, &mb1, loc);
++			if (d1 == (size_t)-1 || d1 == (size_t)-2) {
++				return sbstrncasecmp(s1, s2, n);
++			}
++			d2 = mbrtowc_l(&w2, us2, ml, &mb2, loc);
++			if (d2 == (size_t)-1 || d2 == (size_t)-2) {
++				return sbstrncasecmp(s1, s2, n);
++			}
++			if ((l1 = towlower_l(w1, loc)) != 
++					(l2 = towlower_l(w2, loc))) {
++				return l1 - l2;
++			}
++			if (*us1 == '\0')
++				break;
++			us2 += d2;
++			us1 += d1;
++			n -= d1;
++		} while (n != 0);
++	}
++	return (0);
++}
++
++
++int
++strncasecmp(const char *s1, const char *s2, size_t n)
++{
++	return strncasecmp_l(s1, s2, n, __get_locale());
+ }
+diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/lib/libc/string/strcasestr.c src/lib/libc/string/strcasestr.c
+--- src53xlocale2/lib/libc/string/strcasestr.c	Mon Mar 25 18:28:29 2013
++++ src/lib/libc/string/strcasestr.c	Thu Apr 11 17:36:41 2013
+@@ -36,25 +36,33 @@
+ #include <ctype.h>
+ #include <string.h>
+ 
+-/*
+- * Find the first occurrence of find in s, ignore case.
+- */
++#include "../locale/xlocale_private.h"
++
+ char *
+-strcasestr(const char *s, const char *find)
++strcasestr_l(const char *s, const char *find, locale_t loc)
+ {
+ 	char c, sc;
+ 	size_t len;
+ 
+ 	if ((c = *find++) != 0) {
+-		c = (char)tolower((unsigned char)c);
++		c = (char)tolower_l((unsigned char)c, loc);
+ 		len = strlen(find);
+ 		do {
+ 			do {
+ 				if ((sc = *s++) == 0)
+ 					return (NULL);
+-			} while ((char)tolower((unsigned char)sc) != c);
+-		} while (strncasecmp(s, find, len) != 0);
++			} while ((char)tolower_l((unsigned char)sc, loc) != c);
++		} while (strncasecmp_l(s, find, len, loc) != 0);
+ 		s--;
+ 	}
+ 	return ((char *)s);
++}
++
++/*
++ * Find the first occurrence of find in s, ignore case.
++ */
++char *
++strcasestr(const char *s, const char *find)
++{
++	return strcasestr_l(s, find, __get_locale());
+ }
+diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/lib/libc/string/strcoll.c src/lib/libc/string/strcoll.c
+--- src53xlocale2/lib/libc/string/strcoll.c	Mon Apr  8 21:20:25 2013
++++ src/lib/libc/string/strcoll.c	Mon Apr  8 21:44:18 2013
+@@ -44,26 +44,36 @@
+ #include <wchar.h>
+ 
+ #include "../locale/collate.h"
++#include "../locale/xlocale_private.h"
+ 
+ 
+ /*
+  * Compare strings according to LC_COLLATE category of current locale.
+  */
+ int
+-strcoll(const char *s1, const char *s2)
++strcoll_l(const char *s1, const char *s2, locale_t l)
+ {
+ 	int r = 0;
+ 	wchar_t *ws1 = NULL;
+ 	wchar_t *ws2 = NULL;
+ 
+-	ws1 = __dup_as_wcs_l(s1);
++	ws1 = __dup_as_wcs_l(s1, l);
+ 	if (ws1 != NULL) {
+-		ws2 = __dup_as_wcs_l(s2);
++		ws2 = __dup_as_wcs_l(s2, l);
+ 		if (ws2 != NULL) {
+-			r = wcscoll(ws1, ws2);
++			r = wcscoll_l(ws1, ws2, l);
+ 			free(ws2);
+ 		}
+ 		free(ws1);
+ 	} 
+ 	return r;
++}
++
++/*
++ * Compare strings according to LC_COLLATE category of current locale.
++ */
++int
++strcoll(const char *s1, const char *s2)
++{
++	return strcoll_l(s1, s2, __get_locale());
+ }
+diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/lib/libc/string/strxfrm.c src/lib/libc/string/strxfrm.c
+--- src53xlocale2/lib/libc/string/strxfrm.c	Mon Apr  8 21:20:25 2013
++++ src/lib/libc/string/strxfrm.c	Tue Apr  9 05:35:29 2013
+@@ -34,13 +34,17 @@
+  * Public domain according to Colombian Legislation. 
+  * http://www.pasosdejesus.org/dominio_publico_colombia.html
+  * 2013. vtamara@pasosdeJesus.org.
++ *
++ * $adJ$
+  */
+ 
+ #include <errno.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
++
+ #include "../locale/collate.h"
++#include "../locale/xlocale_private.h"
+ 
+ /*
+  * Transform src, storing the result in dst, such that
+@@ -48,13 +52,13 @@
+  * on the original untransformed strings would return.
+  */
+ size_t
+-strxfrm(char *dst, const char *src, size_t n)
++strxfrm_l(char *dst, const char *src, size_t n, locale_t l)
+ {
+ 	size_t r = 0;
+ 	wchar_t *ws = NULL;
+ 	wchar_t *wd = NULL;
+ 
+-	ws = __dup_as_wcs_l(src);
++	ws = __dup_as_wcs_l(src, l);
+ 	if (ws != NULL) {
+ 		if (n > 0 && dst != NULL) {
+ 			if (n > ULONG_MAX / sizeof(wchar_t)) { 
+@@ -67,9 +71,9 @@
+ 				goto end;
+ 			}
+ 		}
+-		r = wcsxfrm(wd, ws, n);
++		r = wcsxfrm_l(wd, ws, n, l);
+ 		if (n > 0 && dst != NULL) {
+-			wcstombs(dst, wd, n);
++			wcstombs_l(dst, wd, n, l);
+ 		}
+ 	}
+ end:
+@@ -81,3 +85,14 @@
+ 	}
+ 	return r; 
+ }
++
++/*
++ * Transform src, storing the result in dst, such that
++ * strcmp() on transformed strings returns what strcoll()
++ * on the original untransformed strings would return.
++ */
++size_t
++strxfrm(char *dst, const char *src, size_t n)
++{
++	return strxfrm_l(dst, src, n, __get_locale());
++}	
+diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/lib/libc/string/wcscasecmp.c src/lib/libc/string/wcscasecmp.c
+--- src53xlocale2/lib/libc/string/wcscasecmp.c	Mon Mar 25 18:28:29 2013
++++ src/lib/libc/string/wcscasecmp.c	Thu Apr 11 17:44:13 2013
+@@ -27,14 +27,16 @@
+ 
+ #include <wchar.h>
+ #include <wctype.h>
++
+ #include "locale/runetype.h"
++#include "locale/xlocale_private.h"
+ 
+ int
+-wcscasecmp(const wchar_t *s1, const wchar_t *s2)
++wcscasecmp_l(const wchar_t *s1, const wchar_t *s2, locale_t loc)
+ {
+ 	wchar_t l1, l2;
+ 
+-	while ((l1 = towlower(*s1++)) == (l2 = towlower(*s2++))) {
++	while ((l1 = towlower_l(*s1++, loc)) == (l2 = towlower_l(*s2++, loc))) {
+ 		if (l1 == 0)
+ 			return (0);
+ 	}
+@@ -43,14 +45,21 @@
+ }
+ 
+ int
+-wcsncasecmp(const wchar_t *s1, const wchar_t *s2, size_t n)
++wcscasecmp(const wchar_t *s1, const wchar_t *s2)
+ {
++	return wcscasecmp_l(s1, s2, __get_locale());
++}
++
++int
++wcsncasecmp_l(const wchar_t *s1, const wchar_t *s2, size_t n, locale_t loc)
++{
+ 	wchar_t l1, l2;
+ 
+ 	if (n == 0)
+ 		return (0);
+ 	do {
+-		if (((l1 = towlower(*s1++))) != (l2 = towlower(*s2++))) {
++		if (((l1 = towlower_l(*s1++, loc))) != 
++		    (l2 = towlower_l(*s2++, loc))) {
+ 			/* XXX assumes wchar_t = int */
+ 			return ((rune_t)l1 - (rune_t)l2);
+ 		}
+@@ -58,4 +67,11 @@
+ 			break;
+ 	} while (--n != 0);
+ 	return (0);
++}
++
++
++int
++wcsncasecmp(const wchar_t *s1, const wchar_t *s2, size_t n)
++{
++	return wcsncasecmp_l(s1, s2, n, __get_locale());
+ }
+diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/regress/lib/libc/locale/check_isw/check_isw.c src/regress/lib/libc/locale/check_isw/check_isw.c
+--- src53xlocale2/regress/lib/libc/locale/check_isw/check_isw.c	Fri Apr 12 05:23:22 2013
++++ src/regress/lib/libc/locale/check_isw/check_isw.c	Wed Apr 10 04:21:31 2013
+@@ -20,9 +20,11 @@
+  */
+ 
+ #include <ctype.h>
++#include <errno.h>
+ #include <locale.h>
+ #include <stdio.h>
+ #include <stdlib.h>
++#include <string.h>
+ #include <wchar.h>
+ #include <wctype.h>
+ 
+@@ -225,11 +227,34 @@
+ 
+ }
+ 
++/* wcscasecmp and friends */
++void
++test4()
++{
++	char *nl = setlocale(LC_ALL, "es_CO.UTF-8");
++	wchar_t wcs1[100], wcs2[100];
++	mbstowcs(wcs1, "ñ", 10);
++	mbstowcs(wcs2, "Ñ", 10);
++	p(wcscasecmp(wcs1, wcs2) == 0);
++	p(strcasecmp("ñ", "Ñ") == 0);
++	p(strcasecmp("niño", "NIÑO") == 0);
++	p(strcasecmp("niña", "NIÑO") < 0);
++	p(strcasecmp("niño", "NIÑA") > 0);
++	p(strcasecmp("ñ", "Ñandu") < 0);
++	p(strcasecmp("ñandu", "ñe") < 0);
++	p(strcasecmp("Choza", "Comino") < 0); // Withouth collation
++	errno = 0;
++	int r = strcasecmp("\x81", "\x82"); // Invalid sequence
++	p(errno != 0);
++	printf("r=%i, errno=%i\n", r, errno);
++}
++	
+ int
+ main()
+ {
+ 	test1();
+ 	test2();
+ 	test3();
++	test4();
+ 	return bad !=0;
+ }
+diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regress/lib/libc/locale/check_xlocale/check_xlocale.c
+--- src53xlocale2/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Tue Apr 16 09:47:00 2013
++++ src/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Tue Apr 16 09:52:42 2013
+@@ -240,6 +240,7 @@
+ 	p(_tolower('A') == 'a');
+ 	p(towlower_l(L'Á', es_CO_UTF_8) == L'á');
+ 	p(towupper_l(L'á', es_CO_UTF_8) == L'Á');
++	p(towupper(L'á') == L'Á');
+ 	p(toupper_l('a', es_CO_UTF_8) == 'A');
+ 	p(toupper('a') == 'A');
+ 	p(_toupper('a') == 'A');
+@@ -266,13 +267,26 @@
+ 
+ }
+ 
+-#if 0
+ void test_string() 
+ {
+-	char *nl = setlocale(LC_ALL, "es_CO.UTF-8");
++	char *nl;
++	nl = setlocale(LC_ALL, "es_CO.ISO8859-1");
++	printf("locale %s\n", nl);
++	printf("__mb_cur_max=%i\n", __mb_cur_max);
++	p(__mb_cur_max == 1);
++
++	p(strcasecmp("n", "N") == 0);
++	p(strcasecmp("\0xf1", "\0xd1") == 0); // ñ Ñ
++	nl = setlocale(LC_ALL, "es_CO.UTF-8");
+ 	locale_t es_CO_UTF_8 = uselocale(NULL);
+ 	printf("locale %s\n", nl);
++	printf("__mb_cur_max=%i\n", __mb_cur_max);
++	p(__mb_cur_max == 4); 
+ 
++	p(strcasecmp("n", "N") == 0);
++	p(strcasecmp("ñ", "Ñ") == 0); 
++	p(strcasecmp("á", "Á") == 0); 
++
+ 	p(strcoll_l("b", "é", es_CO_UTF_8) < 0);
+ 	wchar_t wcsb[1000];
+ 	mbstowcs(wcsb, "b", 1000);
+@@ -382,25 +396,24 @@
+ 	p(strncasecmp_l("n", "N", 1, es_CO_UTF_8) == 0);
+ 	p(strcasestr_l("nino", "O", es_CO_UTF_8) != NULL);
+ 	p(wcscasecmp_l(L"ñ", L"Ñ", es_CO_UTF_8) == 0);
+-	p(wcscasecmp_l(L"á", L"b", es_CO_UTF_8) < 0);
++	p(wcscasecmp_l(L"á", L"Á", es_CO_UTF_8) == 0);
+ 	p(wcscasecmp_l(L"a", L"á", es_CO_UTF_8) <= 0);
+ 	p(wcscasecmp_l(L"", L"á", es_CO_UTF_8) < 0);
+ 	p(wcscasecmp_l(L"", L"a", es_CO_UTF_8) < 0);
+ 	p(wcscasecmp_l(L"", L"a", es_CO_UTF_8) < 0);
+ 	p(wcscasecmp_l(L"á", L"", es_CO_UTF_8) > 0);
+ 	p(wcscasecmp_l(L"áá", L"á", es_CO_UTF_8) > 0);
+-	p(wcscasecmp(L"á", L"b") < 0);
++	p(wcscasecmp(L"á", L"Á") == 0);
+ 	p(wcscasecmp(L"a", L"á") <= 0);
+ 	p(wcsncasecmp_l(L"n", L"N", 1, es_CO_UTF_8) == 0);
+ }
+-#endif
+ 
+ int main()
+ {
+ 	test_xlocale();
+ 	test_wchar();
+ 	test_ctype();
+-//	test_string();
++	test_string();
+ 	
+ 	return bad != 0;
+ }
