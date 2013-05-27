@@ -32,7 +32,7 @@ if (test "$mp" != ".mp") then {
 } fi;
 ARQ=amd64
 rutak=$V$VESP-$ARQ
-if (test ! -f $rutak/bsd -o ! -f $rutak/base$VP.tgz) then {
+if (test ! -f $rutak/bsd -o ! -f $rutak/site$VP.tgz) then {
 	echo "No se encontró kernel e instaladores en $rutak";
 	exit 1;
 } fi;

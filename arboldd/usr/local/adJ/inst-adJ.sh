@@ -1213,12 +1213,11 @@ chown $uadJ:$uadJ /var/www/resbase
 
 insacp apg
 
-echo "* Instalar PostgreSQL y PostGIS"  >> /var/tmp/inst-adJ.bitacora
+echo "* Instalar PostgreSQL"  >> /var/tmp/inst-adJ.bitacora
 f=`ls /var/db/pkg/postgresql-server* 2> /dev/null > /dev/null`;
 if (test "$?" != "0") then {
 	p=`ls $PKG_PATH/libxml-* $PKG_PATH/libiconv-* $PKG_PATH/postgresql-client-* $PKG_PATH/postgresql-server*`
 	pkg_add -I -r -D update -D updatedepends $p >> /var/tmp/inst-adJ.bitacora 2>&1;
-	insacp postgis
 	echo -n "La clave del administrador de 'postgres' quedará en /var/postresql/.pgpass " >> /var/tmp/inst-adJ.bitacora;
 	clpg=`apg | head -n 1`
 	mkdir -p /var/postgresql/data
@@ -1326,9 +1325,12 @@ if (test "$p" != "") then {
 	dialog --title 'Eliminar PHP' --yesno "\\nPaquete PHP ya instalado. ¿Eliminar para instalar el de esta versión de adJ?" 15 60
 	if (test "$?" = "0") then {
 		rm -f /var/www/conf/modules/php5.conf 
-		for i in php php-2 php5-core partial-php5-core partial-php5-pear partial-php; do
-			pkg_delete -I -D dependencies $i >> /var/tmp/inst-adJ.bitacora 2>&1
-		done;
+		pkg_delete -I -D dependencies php >> /var/tmp/inst-adJ.bitacora 2>&1
+		pkg_delete -I -D dependencies php-2. >> /var/tmp/inst-adJ.bitacora 2>&1
+		pkg_delete -I -D dependencies php5-core >> /var/tmp/inst-adJ.bitacora 2>&1
+		pkg_delete -I -D dependencies partial-php5-core >> /var/tmp/inst-adJ.bitacora 2>&1
+		pkg_delete -I -D dependencies partial-php5-pear >> /var/tmp/inst-adJ.bitacora 2>&1
+		pkg_delete -I -D dependencies partial-php >> /var/tmp/inst-adJ.bitacora 2>&1
 	} fi;
 } fi;
 

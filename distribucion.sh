@@ -5,7 +5,6 @@
 # 2007. vtamara@pasosdeJesus.org. 
 
 inter=$1;
-sp=$2;
 
 if (test ! -f "ver.sh") then {
 	echo "Falta archivo de configuración ver.sh";
@@ -16,12 +15,7 @@ if (test ! -f "ver.sh") then {
 		exit 0;
 	} fi;
 } fi;
-if (test "$inter" = "-c") then {
-	. ./$sp
-} else {
-	. ./ver.sh
-} fi;
-
+. ./ver.sh
 
 mkdir -p ./tmp
 
@@ -246,10 +240,11 @@ if (test "$sn" = "s") then {
 		sn=$autoElimCompBase
 	} fi;
 	if (test "$sn" = "s" ) then {
-		echo "Uyy, Eliminando"; 
+		echo "Uyy, Eliminando"; exit 1;
 		rm -rf /usr/obj/*
 	} fi;
-	echo "Esta operacion modificar tanto las fuentes en /usr como archivos en /etc e /include del sistema donde se emplea para hacer posible la compilación;"
+	echo "Esta operacion modificar tanto las fuentes en /usr como archivos en /etc e /include del sistema donde se emplea para hacer posible la compilación, presione [ENTER] para continuar";
+	read
 	rm -f ${DESTDIR}/usr/include/g++ 
 	mkdir -p ${DESTDIR}/usr/include/g++
 	#export CFLAGS=-I/usr/include/g++/${ARQ}-unknown-openbsd${V}/
@@ -265,7 +260,7 @@ if (test "$sn" = "s") then {
 	cd /usr/src/
 	$dini/hdes/service-base.sh	
 	echo "* Aplicando parches a /usr/src" | tee -a /var/tmp/distrib-adJ.bitacora 
-	(cd $dini/arboldes/usr/src; for i in *patch; do echo $i; if (test ! -f /usr/src/$i) then { sudo cp $i /usr/src; (cd /usr/src; sudo patch -p1 < $i;) } fi; done) |  tee -a  /var/tmp/distrib-adJ.bitacora
+	(cd $dini/arboldes/usr/src; for i in *patch; do echo $i; if (test ! -f /usr/src/$i) then { sudo cp $i /usr/src; (cd /usr/src; sudo patch < $i;) } fi; done) |  tee -a  /var/tmp/distrib-adJ.bitacora
 	grep LOG_SERVICE  /usr/include/syslog.h > /dev/null 2>&1
 	if (test "$?" != "0") then {
 		cd /usr/src/sys

@@ -3,12 +3,12 @@ adJ - Aprendiendo de Jesús.
 Distribución para fomentar la construcción del Reino de Dios desde la educación,
 el respeto por la dignidad humana y la memoria.
 
-Versión: 5.3%%%
-Fecha de publicación: 26/Jul/2013
+Versión: 5.2%%%
+Fecha de publicación: 26/Feb/2013
 
 !!!NOVEDADES
 
-Con respecto a OpenBSD 5.3 para amd64 y a la edición anterior de este DVD
+Con respecto a OpenBSD 5.2 para amd64 y a la edición anterior de este DVD
 
 !KERNEL Y SISTEMA BASE
 
@@ -19,42 +19,32 @@ Con respecto a OpenBSD 5.3 para amd64 y a la edición anterior de este DVD
 Entre las novedades reportadas en las `Notas de publicación de OpenBSD 5.2' destacamos:
 * Soporte para pthreads (sin _Thread_local).
 
-* Controladores nuevos para amd64
-** Ethernet: USB 100MB ==smsc==, 10GB: ==oce== para Emulex OneConect
-** Lectores de tarjetas: ==rtsx== para Realtek RTS5209
-** Controladores SCSI/SAS/RADI ==mfii== soporta LSI Logi MegaRaid SAS
-** Sensores: OAK USB ==uoaklux== (luminosidad), ==uoakrh== (temperatura y humedad), =uoakv== (ADC)
-
-* Controaldores ampliados para amd64
-** Ethernet: 10/100MB ==vr== mitiga interrupción TX y soporta frames baby jumbo también en ==sis==, 10GB ==bge== soporta Broadcom 5718/5719/5720, ==ix== soporta Intel X540 y SFP+ hot-plug (82599), mejoras a ==em==, ==gem==, ==jme==
-** Wifi: ==iwn== soporta Centrino Advanced-N 6235. Mejoras a ==acx==, ==athn==, ==ral==
-** Controladores SCSI/SAS/RADI ==ahd== soporta ADaptec 39320LPE
-** Procesadores: Contadores con estampillas de tiempo constante en chips x86 recientes, instrucción RDRAND para leer numero aleatorio en procesadores Intel, soporte para SMEP y SMAP. 
-** Touchpad: pms, synaptics
+* Controladores ampliados
+** Video: ==nviic==,  soporte para touch pads ALPS
+** Sonido: ==azalia==
+** Ethernet: USB 100MB ==axe==, ==mos==, 1GB: ==em==, ==bnx==, ==axe== 10GB: ==ix== 
+*  * Wifi: ==iwn== soporta Centrino Advanced-N 6205
+** Generales: Mejoras a ==usb== en algunos portatiles
+** Controladores SCSI/SAS/RADI ==mfi== soporta !MegaRaid 9240, pciide soporta SIS 1182/1183 SATA
+** Modems: ==umsm== 
+** Sensores: ==lm== soporta Nuvoton NCT6776F
+** Procesadores: Implementación para el modo AES-GCM de CPUs Intel y futuras AMD
 
 * Red
-** Mejorada compatibilidad con IPsec v3, con soporte de Secuencias Extendidas de Número en el controlado AES-NI.
-** Nuevo npppd y driver pppx que maneja PPP, PPPOE y aumenta velocidad manejando tablas en kernel.
-** Nuevo tftp-proxy 
-** snmpd soporta SNMPv3
-** Mejoras a dhclient, pf y OpenSMTP
-
-Seguridad
-* Ejecutables independientes de posición (PIE) se usan por defecto en amd64
-* Mejoras en desempeño a make en modo paralelo
-* softreadi RAID1 y volumenes cifrados pueden arrancarse en amd64
-* OpenSSH 6.2. Soporta para más métodos de autenticación. 
+** Mejoras a pila de red y servicios. Mejoras a pf, IPSec, IPv6, servicios de enrutamiento y utilidades para usuarios
+** nginx: Nuevo servidor HTTP, proxy reverso y proxy de correo
+** smtpd mejorado.
 
 * Librerías y herramientas mejoradas: 
 ** Ampliado soporte de caracteres amplios y cadenas multibyte (importante en localización).
 ** Mejoras entre otros a  ==tmux==, ==libtool==, ==ssh 6.1==
-* El sistema base incluye mejoras a componentes auditados como ==Xenocara== (Xorg 7.7), ==gcc== 4.2.1, ==perl== 5.12.2, Apache 1.3 mejorado, OpenSSL 1.0.1c, ==sendmail== 8.14.6, bind 9.4.2-P2, nginx 1.2.6
+* El sistema base incluye mejoras a componentes auditados como ==Xenocara== (Xorg 7.7), ==gcc== 4.2.1, ==perl== 5.12.2, Apache 1.3 mejorado, OpenSSL 1.0.0f, ==sendmail== 8.14.5, bind 9.4.2-P2
 
 !PAQUETES EXCLUSIVOS DE ADJ
 
-* SIVeL 1.x con 
-* xfe actualizado a ...
-* PostgreSQL actualizado a 9.2.3 con soporte para UTF-8 y cotejaciones nativas (COLLATE) listas para todos los paises de habla hispana. Ver detalles de como usar cotejación en http://aprendiendo.pasosdejesus.org/?id=i18n
+* SIVeL 1.1.4 con gran actualización a DIVIPOLA.
+* xfe actualizado a 1.34 con nueva traducción es_CO y ordenamiento de archivos empleando el locale.
+* PostgreSQL actualizado a 9.1.7 con soporte para UTF-8 y cotejaciones nativas (COLLATE) listas para todos los paises de habla hispana. Ver detalles de como usar cotejación en http://aprendiendo.pasosdejesus.org/?id=i18n
 * Los paquetes exclusivos los encuentra en [ftp://ftp.pasosdeJesus.org/pub/AprendiendoDeJesus/5.2-amd64/paquetes]
 * Nuevos archivos de comandos para facilitar mantener servidor de correo con Sednmail, SASL, IMAPS, POP3S
 
@@ -70,10 +60,10 @@ La instalación del sistema base, de las particiones cifradas y de todos los paqu
 * Nuevos paquetes para emplear como sistema de escritorio incluidos en el DVD: ==audacious, audacity, dia, djview, fontforge, scribus, xarchiver== y ==xfig==
 * Nuevos paquetes para emplear como servidor de correo: ==courier-authlib, courier-imap, courier-pop3, mysql-client, mysql-server== y  ==!SpamAssasin==
 * Mejores permisos en paquetes ==pear-*== 
-* Navegadores actualizados: Firefox a 18.0.2, Chromium a 24.0.1312.68, Midori a 
-* !LibreOffice actualizado a 3.6.5.2, gimp a 2.8.0, vlc a 2.0
-* PHP actualizado a 5.3.21, ruby a 1.9.3.392, LLVM/Clang 3.2, asi como los demás lenguajes de programación
-* Se incluyen otros paquetes típicos del repositorio de OpenBSD, en donde hay   más de 7600 disponibles para amd64
+* Navegadores actualizados: Firefox a 13.01, Chromium a 20.0.1132.57, Midori a 0.4.6
+* !LibreOffice actualizado a 3.5.5.3, gimp a 2.8.0, vlc a 2.0
+* PHP actualizado a 5.3.14 así como todos los lenguajes de programación.
+* Se incluyen otros paquetes típicos del repositorio de OpenBSD, en donde hay   más de 7400 disponibles para amd64
 
 !ESCRITORIO
 
