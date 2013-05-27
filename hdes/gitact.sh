@@ -1,3 +1,4 @@
+b=`git branch | grep "^*" | sed -e  "s/^* //g"`
 git fetch origin
-git merge origin/master
+git merge origin/${b}
 
