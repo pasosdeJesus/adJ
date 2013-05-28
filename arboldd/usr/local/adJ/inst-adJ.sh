@@ -1712,6 +1712,7 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 [separator]
 [exit] (Exit)
 [end]
+[exec] (Reiniciar) {sudo /sbin/reboot}
 [exec] (Apagar) {sudo /sbin/halt -p}
 [end]
 EOF
