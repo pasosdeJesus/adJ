@@ -1763,13 +1763,12 @@ if (test -x /usr/X11R6/bin/xcompmgr) then {
 
 exec /usr/local/bin/fluxbox -log ~/.fluxbox/log
 EOF
-	grep "display -backdrop"  /home/$uadJ/.fluxbox/apps > /dev/null 2>&1
-	if (test "$?" != "0") then {
-		cat >> /home/$uadJ/.fluxbox/apps <<EOF
+grep -v "display -backdrop -window .*\$im"  /home/$uadJ/.fluxbox/apps > /tmp/a 2>/dev/null
+cat /tmp/a - > /home/$uadJ/.fluxbox/apps <<EOF
 	[startup] {display -backdrop -window root /home/$uadJ/.fluxbox/backgrounds/fondo.jpg}
 EOF
-	} fi;
 } fi;
+
 if (test ! -f /home/$uadJ/.fluxbox/fbdesk) then {
 	mkdir -p /home/$uadJ/.fluxbox/
 	cat > /home/$uadJ/.fluxbox/fbdesk <<EOF
@@ -2080,8 +2079,9 @@ for i in partial-*; do
 done
 
 echo "Eliminando problemáticos" >> /var/tmp/inst-adJ.bitacora 
-sudo pkg_delete -D dependencies libstdc++ >> /var/tmp/inst-adJ.bitacora  2>&1
-sudo pkg_delete -D dependencies lua >> /var/tmp/inst-adJ.bitacora  2>&1
+sudo pkg_delete -I -D dependencies libstdc++ >> /var/tmp/inst-adJ.bitacora  2>&1
+sudo pkg_delete -I -D dependencies lua >> /var/tmp/inst-adJ.bitacora  2>&1
+sudo pkg_delete -I -D dependencies gtk+2 >> /var/tmp/inst-adJ.bitacora  2>&1
 
 echo "Instalando algunos comunes" >> /var/tmp/inst-adJ.bitacora 
 pkg_add -I -D updatedepends -D update -D libdepends -r $PKG_PATH/sdl*tgz $PKG_PATH/libxml*tgz $PKG_PATH/libgpg-error*tgz $PKG_PATH/libart-*.tgz  >> /var/tmp/inst-adJ.bitacora 2>&1;

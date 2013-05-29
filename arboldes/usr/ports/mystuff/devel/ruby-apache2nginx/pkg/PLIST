@@ -1,0 +1,17 @@
+@comment $OpenBSD$
+${GEM_BIN}/apache2nginx${GEM_BIN_SUFFIX}
+${GEM_LIB}/cache/${DISTNAME}.gem
+${GEM_LIB}/gems/${DISTNAME}/
+${GEM_LIB}/gems/${DISTNAME}/.gitignore
+${GEM_LIB}/gems/${DISTNAME}/Gemfile
+${GEM_LIB}/gems/${DISTNAME}/LICENCIA.txt
+${GEM_LIB}/gems/${DISTNAME}/README.md
+${GEM_LIB}/gems/${DISTNAME}/Rakefile
+${GEM_LIB}/gems/${DISTNAME}/apache2nginx.gemspec
+${GEM_LIB}/gems/${DISTNAME}/bin/
+${GEM_LIB}/gems/${DISTNAME}/bin/apache2nginx
+${GEM_LIB}/gems/${DISTNAME}/lib/
+${GEM_LIB}/gems/${DISTNAME}/lib/apache2nginx/
+${GEM_LIB}/gems/${DISTNAME}/lib/apache2nginx.rb
+${GEM_LIB}/gems/${DISTNAME}/lib/apache2nginx/version.rb
+${GEM_LIB}/specifications/${DISTNAME}.gemspec
