@@ -2119,8 +2119,8 @@ echo "* Configurar vim con UTF-8" >> /var/tmp/inst-adJ.bitacora;
 grep "set  *tenc" /home/$uadJ/.vimrc> /dev/null
 if (test "$?" != "0") then {
 	cat >> /home/$uadJ/.vimrc <<EOF
-set tenc=utf8
-set enc=utf8
+set encoding&       " terminal charset: follows current locale 
+set fileencoding&   " auto-sensed charset of current buffer
 EOF
 } fi;
 	
