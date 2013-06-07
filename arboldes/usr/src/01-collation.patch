@@ -281,7 +281,7 @@ diff -ruN -x obj -x CVS -x *~ src-orig/lib/libc/locale/collate.c src/lib/libc/lo
 +	int t = 0;
 +	while (*s != '\0' && sd > 0) {
 +		*d = (wchar_t)*s;
-+		s++;
++		s++; d++;
 +		sd--;
 +		t++;
 +	}
