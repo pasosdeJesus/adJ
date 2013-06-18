@@ -1620,66 +1620,55 @@ diff -ruN -x obj -x CVS -x *~ src-orig/share/locale/Makefile src/share/locale/Ma
 diff -ruN -x obj -x CVS -x *~ src-orig/share/locale/colldef/Makefile src/share/locale/colldef/Makefile
 --- src-orig/share/locale/colldef/Makefile	Wed Dec 31 19:00:00 1969
 +++ src/share/locale/colldef/Makefile	Sat Mar 23 08:46:02 2013
-@@ -0,0 +1,147 @@
-+
+--- Makefile.orig	Sat Jun 15 18:56:55 2013
++++ Makefile	Sat Jun 15 16:02:54 2013
+@@ -0,0 +1,92 @@
 +.include <bsd.own.mk>
 +
-+# The contents of this directory is based on FreeBSD
++# The collation sources come from FreeBSD
 +
-+B_LATIN= da_DK en_AU en_CA en_GB en_US fi_FI fr_BE fr_CA fr_CH fr_FR it_CH it_IT nl_NL nl_BE pt_PT 
-+.for c in ${B_LATIN}
-+LOCALES+=${c}.ISO8859-1
-+LOCALES+=${c}.ISO8859-15
-+.endfor
-+LOCALES+=en_US.UTF-8
-+LOCALES+=fr_BE.UTF-8
-+LOCALES+=fr_CA.UTF-8
-+LOCALES+=fr_CH.UTF-8
-+LOCALES+=fr_FR.UTF-8
-+LOCALES+=it_CH.UTF-8
-+LOCALES+=it_IT.UTF-8
-+LOCALES+=pt_PT.UTF-8
++LOCALES = it_IT.ISO8859-1
++LOCALES += it_IT.ISO8859-15
++LOCALES_UTF8 = it_IT
 +
-+B_DE=de_AT de_CH de_DE  
-+.for c in ${B_DE}
-+LOCALES+=${c}.ISO8859-1
-+LOCALES+=${c}.ISO8859-15
-+.endfor
-+LOCALES+=de_DE.UTF-8
++B_it_IT= da_DK en_CA en_AU en_GB en_US fi_FI fr_BE fr_CA fr_CH fr_FR it_CH nl_BE nl_NL pt_PT 
 +
-+B_ES=ca_ES es_ES 
-+#es_CO es_PE es_VE es_EC es_GT es_CU es_BO es_HN es_PY es_SV es_CR es_PA es_GQ es_MX es_AR es_CH es_DO es_NI es_US es_UY es_PR
-+.for c in ${B_ES}
-+LOCALES+=${c}.ISO8859-1
-+LOCALES+=${c}.ISO8859-15
-+.endfor
-+LOCALES+=es_ES.UTF-8
++LOCALES += de_DE.ISO8859-1
++LOCALES += de_DE.ISO8859-15
++LOCALES_UTF8 += de_DE
 +
-+B_88591=is_IS  no_NO sv_SE
-+.for c in ${B_88591}
-+LOCALES+=$c.ISO8859-1
-+LOCALES+=$c.ISO8859-15
-+.endfor
++B_de_DE=de_AT de_CH 
 +
-+B_SL= hr_HR sk_SK sl_SI hu_HU
-+.for c in ${B_SL}
-+LOCALES+=$c.ISO8859-2
-+.endfor
++LOCALES += es_CO.ISO8859-1
++LOCALES += es_CO.ISO8859-15
++LOCALES_UTF8 += es_CO
 +
-+B_SELF= bg_BG.CP1251 cs_CZ.ISO8859-2 el_GR.ISO8859-7 \
-+	hy_AM.ARMSCII-8 lt_LT.ISO8859-4 lt_LT.ISO8859-13 \
-+	pl_PL.ISO8859-2 ru_RU.CP866 ru_RU.ISO8859-5 ru_RU.KOI8-R \
-+	uk_UA.KOI8-U
-+.for c in ${B_SELF}
-+LOCALES+=$c
-+.endfor
-+LOCALES+=hr_HR.ISO8859-2 
++B_es_CO = ca_ES es_AR es_BO es_CH es_CR es_CU es_DO es_EC es_ES es_GQ es_GT es_HN es_MX es_NI es_PA es_PE es_PR es_PY es_SV es_US es_UY es_VE 
++
++LOCALES += is_IS.ISO8859-1
++LOCALES += is_IS.ISO8859-15
++LOCALES += no_NO.ISO8859-1
++LOCALES += no_NO.ISO8859-15
++LOCALES += sv_SE.ISO8859-1
++LOCALES += sv_SE.ISO8859-15
++
++LOCALES += bg_BG.CP1251
++LOCALES += cs_CZ.ISO8859-2
++LOCALES += el_GR.ISO8859-7
++LOCALES += hy_AM.ARMSCII-8
++LOCALES += lt_LT.ISO8859-4
++LOCALES += lt_LT.ISO8859-13
++LOCALES += pl_PL.ISO8859-2
++LOCALES += ru_RU.CP866
++LOCALES += ru_RU.ISO8859-5
++LOCALES += ru_RU.KOI8-R
++LOCALES += sl_SI.ISO8859-2 
++LOCALES += uk_UA.KOI8-U
 +
 +
-+all: ${LOCALES:S/$/.out/g}
-+	echo ${LOCALES}
++all: ${LOCALES:S/$/.out/g} ${LOCALES_UTF8:S/$/.UTF-8.out/g}
 +
-+realall: ${LOCALES:S/$/.out/g}
++realall: ${LOCALES:S/$/.out/g} ${LOCALES_UTF8:S/$/.UTF-8.out/g}
 +
 +.SUFFIXES: .src .out
 +
@@ -1690,73 +1679,18 @@ diff -ruN -x obj -x CVS -x *~ src-orig/share/locale/colldef/Makefile src/share/l
 +
 +NOMAN=	# defined
 +
-+.for c in ${B_LATIN}
-+${c}.ISO8859-1.out: it_IT.ISO8859-1.src
-+	colldef -I ${.CURDIR} -o ${c}.ISO8859-1.out ${.CURDIR}/it_IT.ISO8859-15.src
-+
-+${c}.ISO8859-15.out: it_IT.ISO8859-15.src
-+	colldef -I ${.CURDIR} -o ${c}.ISO8859-15.out ${.CURDIR}/it_IT.ISO8859-15.src
-+
-+${c}.UTF-8.out: it_IT.ISO8859-1.src
-+	colldef -I ${.CURDIR} -o ${c}.UTF-8.out ${.CURDIR}/it_IT.ISO8859-1.src
++.for c in ${LOCALES}
++${c}.out: ${c}.src
++	colldef -I ${.CURDIR} -o ${c}.out ${.CURDIR}/${c}.src
 +.endfor
 +
-+.for c in ${B_DE}
-+${c}.ISO8859-1.out: de_DE.ISO8859-1.src
-+	colldef -I ${.CURDIR} -o ${c}.ISO8859-1.out ${.CURDIR}/de_DE.ISO8859-1.src
-+
-+${c}.ISO8859-15.out: de_DE.ISO8859-15.src
-+	colldef -I ${.CURDIR} -o ${c}.ISO8859-15.out ${.CURDIR}/de_DE.ISO8859-15.src
-+
-+${c}.UTF-8.out: de_DE.ISO8859-1.src
-+	colldef -I ${.CURDIR} -o ${c}.UTF-8.out ${.CURDIR}/de_DE.ISO8859-1.src
-+.endfor
-+
-+
-+.for c in ${B_ES}
-+${c}.ISO8859-1.out: es_CO.ISO8859-1.src
-+	colldef -I ${.CURDIR} -o ${c}.ISO8859-1.out ${.CURDIR}/es_CO.ISO8859-1.src
-+
-+${c}.ISO8859-15.out: es_CO.ISO8859-15.src
-+	colldef -I ${.CURDIR} -o ${c}.ISO8859-15.out ${.CURDIR}/es_CO.ISO8859-15.src
-+
-+${c}.UTF-8.out: es_CO.ISO8859-1.src
-+	colldef -I ${.CURDIR} -o ${c}.UTF-8.out ${.CURDIR}/es_CO.ISO8859-1.src
-+.endfor
-+
-+.for c in ${B_FR}
-+${c}.ISO8859-1.out: es_CO.ISO8859-1.src
-+	colldef -I ${.CURDIR} -o ${c}.ISO8859-1.out ${.CURDIR}/es_CO.ISO8859-1.src
-+
-+${c}.ISO8859-15.out: es_CO.ISO8859-15.src
-+	colldef -I ${.CURDIR} -o ${c}.ISO8859-15.out ${.CURDIR}/es_CO.ISO8859-15.src
-+
-+${c}.UTF-8.out: es_CO.ISO8859-1.src
-+	colldef -I ${.CURDIR} -o ${c}.UTF-8.out ${.CURDIR}/es_CO.ISO8859-1.src
-+.endfor
-+
-+
-+.for c in ${B_88591}
-+${c}.ISO8859-1.out: ${c}.ISO8859-1.src
-+
-+${c}.ISO8859-15.out: ${c}.ISO8859-15.src
-+
++.for c in ${LOCALES_UTF8}
 +${c}.UTF-8.out: ${c}.ISO8859-1.src
 +	colldef -I ${.CURDIR} -o ${c}.UTF-8.out ${.CURDIR}/${c}.ISO8859-1.src
 +.endfor
 +
-+.for c in ${B_SELF}
-+${c}.out: ${c}.src
-+.endfor
 +
-+.for c in ${B_SL}
-+${c}.ISO8859-2.out: sl_SI.ISO8859-2.src
-+	colldef -I ${.CURDIR} -o ${c}.ISO8859-2.out ${.CURDIR}/sl_SI.ISO8859-2.src
-+.endfor
-+
-+
-+CLEANFILES+=	${LOCALES:S/$/.out/g}
-+
++CLEANFILES += ${LOCALES:S/$/.out/g} ${LOCALES_UTF8:S/$/.UTF-8.out/g}
 +
 +install:
 +.for locale in ${LOCALES}
@@ -1764,6 +1698,19 @@ diff -ruN -x obj -x CVS -x *~ src-orig/share/locale/colldef/Makefile src/share/l
 +	    ${DESTDIR}${LOCALEDIR}/${locale}
 +	install -o ${LOCALEOWN} -g ${LOCALEGRP} -m ${LOCALEMODE} \
 +	    ${locale}.out ${DESTDIR}${LOCALEDIR}/${locale}/LC_COLLATE
++.endfor
++.for locale in ${LOCALES_UTF8}
++	install -o ${LOCALEOWN} -g ${LOCALEGRP} -m ${LOCALEMODE} \
++	    ${locale}.UTF-8.out ${DESTDIR}${LOCALEDIR}/${locale}.UTF-8/LC_COLLATE
++.endfor
++.for f in it_IT de_DE es_CO
++.for locale in ${B_${f}}
++	ln -fs ../${f}.ISO8859-1/LC_COLLATE ${DESTDIR}${LOCALEDIR}/${locale}.ISO8859-1/LC_COLLATE; 
++	ln -fs ../${f}.ISO8859-15/LC_COLLATE ${DESTDIR}${LOCALEDIR}/${locale}.ISO8859-15/LC_COLLATE;
++	if (test -d ${DESTDIR}${LOCALEDIR}/${locale}.UTF-8) then { \
++		ln -fs ../${f}.UTF-8/LC_COLLATE ${DESTDIR}${LOCALEDIR}/${locale}.UTF-8/LC_COLLATE; \
++	} fi;
++.endfor
 +.endfor
 +
 +
