@@ -1592,7 +1592,7 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 	[exec] (xterm) {xterm -en utf8 -e /bin/ksh -l}
 	[exec] (mozilla-firefox) {ulimit -d 200000 && /usr/local/bin/firefox -UILocale es-AR}
 	[exec] (midori) {/usr/local/bin/midori}
-	[exec] (chromium) {/usr/local/bin/chromium}
+	[exec] (chromium) {/usr/local/bin/chrome}
 [submenu] (Espiritualidad)
 	[exec] (xiphos) {/usr/local/bin/xiphos}
 	[exec] (Evangelios de dominio publico) {/usr/local/bin/firefox /usr/local/share/doc/evangelios_dp/index.html}
