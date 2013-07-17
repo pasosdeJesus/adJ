@@ -27,7 +27,8 @@ CONFIGURE_ARGS += --enable-gtkhtml
 
 CFLAGS += 
 
-CONFIGURE_ENV+= CPPFLAGS="-I${LOCALBASE}/include"
+CONFIGURE_ENV+= CPPFLAGS="-I${LOCALBASE}/include" 
+MAKE_ENV += LD_PRELOAD=/usr/local/lib/python2.7/site-packages/libxml2mod.so
 
 BUILD_DEPENDS=	textproc/intltool converters/libiconv textproc/sword www/gtkhtml3 textproc/clucene devel/libglade2 x11/gnome/doc-utils textproc/libxml devel/glib2 x11/gtk+2  x11/dbus-glib devel/libgsf devel/pango devel/atk graphics/cairo  graphics/png textproc/enchant devel/gconf2 devel/ORBit2 devel/pcre archivers/bzip2 net/curl devel/libidn
 
