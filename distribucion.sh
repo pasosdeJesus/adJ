@@ -607,8 +607,8 @@ if (test "$sn" = "s") then {
  	paquete pear-HTML-Menu www
  	paquete pear-HTML-Table www
  	
-    paquete ruby-apacheconf_parser devel paquetes "ruby19-apacheconf-parser"
-    paquete ruby-apache2nginx devel paquetes "ruby19-apache2nginx"
+    	paquete ruby-apacheconf_parser devel paquetes "ruby19-apacheconf-parser"
+    	paquete ruby-apache2nginx devel paquetes "ruby19-apache2nginx"
 
 	paquete evangelios_dp books
 	paquete sword textproc 
