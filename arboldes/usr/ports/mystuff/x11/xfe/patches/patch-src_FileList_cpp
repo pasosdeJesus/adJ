@@ -1,0 +1,15 @@
+$OpenBSD$
+--- src/FileList.cpp.orig	Mon Aug 26 14:46:52 2013
++++ src/FileList.cpp	Mon Aug 26 14:47:40 2013
+@@ -46,10 +46,10 @@
+ #define HASH2(x,n) (1|(((unsigned int)(x)*17)%((n)-1)))   // Probe Distance [1..n-1]
+ 
+ 
+-#if defined(linux)
+ FXStringDict* fsdevices=NULL; // Devices from fstab
+ FXStringDict* mtdevices=NULL; // Mounted devices
+ FXStringDict* updevices=NULL; // Responding devices
++#if defined(linux)
+ #endif
+ 
+ extern FXbool allowPopupScroll;

@@ -1,0 +1,39 @@
+$OpenBSD$
+--- src/main.cpp.orig	Mon Aug 26 14:47:15 2013
++++ src/main.cpp	Mon Aug 26 14:47:44 2013
+@@ -194,9 +194,10 @@ bool FXApp::runOneEvent(bool blocking)
+ 
+ // Global variables
+ char **args;
+-#if defined(linux)
+ FXbool deb_based=FALSE;
+ FXbool rpm_based=FALSE;
++FXbool tgz_based=FALSE;
++#if defined(linux)
+ #endif
+ 
+ // Base directories (according to the Freedesktop specification version 0.7)
+@@ -293,12 +294,12 @@ int main(int argc,char *argv[])
+   	textdomain(PACKAGE);
+ #endif
+ 
+-#if defined(linux)
++    FXString cmd="dpkg --version 2>&1";
+ 
++#if defined(linux)
+     // Test the existence of dpkg to see if the Linux distro is Debian based
+ 	// This is done by checking the existence of the string 'Debian'
+ 	// in the response to the command 'dpkg' (with --version argument)
+-	FXString cmd="dpkg --version 2>&1";
+     FILE *debcmd=popen(cmd.text(),"r");
+     if(!debcmd)
+     {
+@@ -335,6 +336,8 @@ int main(int argc,char *argv[])
+ 			rpm_based=TRUE;
+ 		pclose(rpmcmd);
+ 	}
++#elif defined(__OpenBSD__)
++	tgz_based=TRUE;
+ #endif
+ 
+ 	// Parse basic arguments

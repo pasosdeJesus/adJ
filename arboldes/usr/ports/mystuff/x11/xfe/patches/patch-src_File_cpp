@@ -1,0 +1,45 @@
+$OpenBSD$
+--- src/File.cpp.orig	Mon Aug 26 10:05:54 2013
++++ src/File.cpp	Mon Aug 26 10:11:52 2013
+@@ -7,6 +7,9 @@
+ #include <utime.h>
+ #if defined(linux)
+ #include <sys/statfs.h>
++#elif defined(__OpenBSD__)
++#include <sys/param.h>
++#include <sys/mount.h>
+ #endif
+ 
+ // For Sun compatibility
+@@ -145,7 +148,6 @@ File::File(FXWindow *owner, FXString title, const unsi
+ 			getApp()->addTimeout(this,File::ID_TIMEOUT,SHOW_PROGRESSBAR_DELAY);
+ 			break;
+ 
+-#if defined(linux)
+     	case MOUNT:
+ 	    	// Labels
+ 			uplabel=new FXLabel(contents,_("Mount file system..."),NULL,JUSTIFY_LEFT|LAYOUT_FILL_X);
+@@ -157,6 +159,7 @@ File::File(FXWindow *owner, FXString title, const unsi
+ 			uplabel=new FXLabel(contents,_("Unmount file system..."),NULL,JUSTIFY_LEFT|LAYOUT_FILL_X);
+     		downlabel=new FXLabel(contents,_("Unmount the folder:"),NULL,JUSTIFY_LEFT|LAYOUT_FILL_X);
+ 			break;
++#if defined(linux)
+ #endif
+ 
+ 		default: // Other : RENAME, SYMLINK, ARCHIVE, EXTRACT, PKG_INSTALL, PKG_UNINSTALL
+@@ -1663,7 +1666,6 @@ int File::archive(const FXString name, const FXString 
+ }
+ 
+ 
+-#if defined(linux)
+ int File::mount(const FXString dir, const FXString msg, const FXString cmd, const unsigned int op)
+ {
+ 	FXbool mount_messages=getApp()->reg().readUnsignedEntry("OPTIONS","mount_messages",TRUE);
+@@ -1753,6 +1755,7 @@ int File::pkgUninstall(const FXString name, const FXSt
+ 
+     return 1;
+ }
++#if defined(linux)
+ #endif
+ 
+ 

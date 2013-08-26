@@ -1,0 +1,162 @@
+$OpenBSD$
+--- src/FilePanel.cpp.orig	Mon Aug 26 09:44:40 2013
++++ src/FilePanel.cpp	Mon Aug 26 10:02:30 2013
+@@ -61,11 +61,12 @@ extern char OpenHistory[OPEN_HIST_SIZE][MAX_COMMAND_SI
+ extern int OpenNum;
+ extern char FilterHistory[FILTER_HIST_SIZE][MAX_PATTERN_SIZE];
+ extern int FilterNum;
+-#if defined(linux)
+ extern FXStringDict* fsdevices;
+ extern FXStringDict* mtdevices;
+ extern FXbool deb_based;
+ extern FXbool rpm_based;
++extern FXbool tgz_based;
++#if defined(linux)
+ #endif
+ 
+ extern FXbool allowPopupScroll;
+@@ -149,7 +150,6 @@ FXDEFMAP(FilePanel) FilePanelMap[]=
+ 	FXMAPFUNC(SEL_UPDATE,FilePanel::ID_SHOW_DETAILS,FilePanel::onUpdShow),
+ 	FXMAPFUNC(SEL_UPDATE,FilePanel::ID_TOGGLE_HIDDEN,FilePanel::onUpdToggleHidden),
+ 	FXMAPFUNC(SEL_UPDATE,FilePanel::ID_TOGGLE_THUMBNAILS,FilePanel::onUpdToggleThumbnails),
+-#if defined(linux)
+ 	FXMAPFUNC(SEL_COMMAND,FilePanel::ID_MOUNT,FilePanel::onCmdMount),
+ 	FXMAPFUNC(SEL_COMMAND,FilePanel::ID_UMOUNT,FilePanel::onCmdMount),
+ 	FXMAPFUNC(SEL_UPDATE,FilePanel::ID_MOUNT,FilePanel::onUpdMount),
+@@ -158,6 +158,7 @@ FXDEFMAP(FilePanel) FilePanelMap[]=
+ 	FXMAPFUNC(SEL_COMMAND,FilePanel::ID_PKG_INSTALL,FilePanel::onCmdPkgInstall),
+ 	FXMAPFUNC(SEL_COMMAND,FilePanel::ID_PKG_UNINSTALL,FilePanel::onCmdPkgUninstall),
+ 	FXMAPFUNC(SEL_UPDATE,FilePanel::ID_PKG_QUERY,FilePanel::onUpdPkgQuery),
++#if defined(linux)
+ #endif
+ };
+ 
+@@ -3565,7 +3566,6 @@ long FilePanel::onCmdPopupMenu(FXObject* o,FXSelector 
+ 		new FXMenuCascade(menu,_("Pane&l"),NULL,submenu);
+         new FXMenuSeparator(menu);
+ 		
+-#if defined(linux)
+ 		FXString name=current->list->getItemPathname(itm);
+     	if(num==1 && (fsdevices->find(name.text()) || mtdevices->find(name.text()) ) )
+ 		{
+@@ -3573,6 +3573,7 @@ long FilePanel::onCmdPopupMenu(FXObject* o,FXSelector 
+ 			new FXMenuCommand(menu,_("Unmount"),unmaphosticon,current,FilePanel::ID_UMOUNT);
+     		new FXMenuSeparator(menu);
+ 		}
++#if defined(linux)
+ #endif
+ 
+         FXbool ar=FALSE;
+@@ -3617,14 +3618,15 @@ long FilePanel::onCmdPopupMenu(FXObject* o,FXSelector 
+ 				new FXMenuCommand(menu,extract_to_folder,archexticon,current,FilePanel::ID_EXTRACT_TO_FOLDER);
+ 				new FXMenuCommand(menu,_("E&xtract to..."),archexticon,current,FilePanel::ID_EXTRACT);
+ 			}
+-#if defined(linux)
+-			else if(num==1 && (ext1=="rpm" || ext1=="deb"))
++			else if(num==1 && (ext1=="rpm" || ext1=="deb" || 
++						ext1=="tgz"))
+ 			{
+ 				ar=TRUE;
+ 				new FXMenuCommand(menu,_("&View"),packageicon,current,FilePanel::ID_VIEW);
+ 				new FXMenuCommand(menu,_("Install/Up&grade"),packageicon,current,ID_PKG_INSTALL);
+ 				new FXMenuCommand(menu,_("Un&install"),packageicon,current,ID_PKG_UNINSTALL);
+ 			}
++#if defined(linux)
+ #endif
+ 			// Not archive nor package
+ 			if(!ar)
+@@ -3635,9 +3637,9 @@ long FilePanel::onCmdPopupMenu(FXObject* o,FXSelector 
+         }
+         if(!ar)
+             new FXMenuCommand(menu,_("&Add to archive..."),archaddicon,current,FilePanel::ID_ADD_TO_ARCH);
+-#if defined(linux)
+         if (!ar)
+ 			new FXMenuCommand(menu,_("Packages &query "),packageicon,current,FilePanel::ID_PKG_QUERY);
++#if defined(linux)
+ #endif
+ 
+ 		// Build scripts menu
+@@ -4235,7 +4237,6 @@ long FilePanel::onCmdExtractHere(FXObject*,FXSelector,
+     return 1;
+ }
+ 
+-#if defined(linux)
+ // Install/Upgrade package
+ long FilePanel::onCmdPkgInstall(FXObject*,FXSelector,void*)
+ {
+@@ -4254,10 +4255,16 @@ long FilePanel::onCmdPkgInstall(FXObject*,FXSelector,v
+ 
+ 		// Command to perform
+ 		FXString ext=FXPath::extension(name);
++#if defined(linux)
+ 		if(comparecase(ext,"rpm")==0)
+ 			cmd="rpm -Uvh " + path;
+ 		else if(comparecase(ext,"deb")==0)
+ 			cmd="dpkg -i "+ path;
++#elif defined(__OpenBSD__)
++		if(comparecase(ext,"tgz")==0)
++			cmd="pkg_add -r "+ path;
++#endif
++
+                    
+ 		// Wait cursor
+ 		getApp()->beginWaitCursor();
+@@ -4296,6 +4303,7 @@ long FilePanel::onCmdPkgUninstall(FXObject*,FXSelector
+ 
+ 		// Command to perform
+ 		FXString ext=FXPath::extension(name);
++#if defined(linux)
+ 		if(comparecase(ext,"rpm")==0)
+ 		{
+ 			name=name.section('-',0);
+@@ -4306,6 +4314,13 @@ long FilePanel::onCmdPkgUninstall(FXObject*,FXSelector
+ 			name=name.section('_',0);
+ 			cmd="dpkg -r "+ name;
+ 		}
++#elif defined(__OpenBSD__)
++		if(comparecase(ext,"tgz")==0)
++		{
++			name=name.section('_',0);
++			cmd="pkg_delete "+ name;
++		}
++#endif
+ 		
+ 		// Wait cursor
+ 		getApp()->beginWaitCursor();
+@@ -4327,7 +4342,6 @@ long FilePanel::onCmdPkgUninstall(FXObject*,FXSelector
+ 	return 1;
+ }
+ 
+-#endif
+ 
+ 
+ // Force FilePanel and DirPanel refresh
+@@ -4450,7 +4464,6 @@ long FilePanel::onUpdToggleThumbnails(FXObject* sender
+ }
+ 
+ 
+-#if defined(linux)
+ // Mount/Unmount file systems
+ long FilePanel::onCmdMount(FXObject*,FXSelector sel,void*)
+ {
+@@ -4721,9 +4734,11 @@ long FilePanel::onCmdPkgQuery(FXObject* o,FXSelector s
+ 		cmd="rpm -qf " + ::quote(file);
+ 	else if(deb_based)
+ 		cmd="dpkg -S " + ::quote(file);
++	else if(tgz_based)
++		cmd="pkg_info -L " + ::quote(file);
+ 	else
+ 	{
+-		MessageBox::error(this,BOX_OK,_("Error"),_("No compatible package manager (rpm or dpkg) found!"));
++		MessageBox::error(this,BOX_OK,_("Error"),_("No compatible package manager (rpm or dpkg or tgz) found!"));
+ 		return 0;
+ 	}
+ 
+@@ -4813,6 +4828,7 @@ long FilePanel::onUpdPkgQuery(FXObject* o, FXSelector 
+ 			
+ 	return 1;
+ }
++#if defined(linux)
+ #endif // End #if defined(linux)
+ 
+ 

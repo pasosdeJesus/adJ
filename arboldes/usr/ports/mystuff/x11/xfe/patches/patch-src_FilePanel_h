@@ -1,0 +1,33 @@
+$OpenBSD$
+--- src/FilePanel.h.orig	Mon Aug 26 10:03:11 2013
++++ src/FilePanel.h	Mon Aug 26 10:04:10 2013
+@@ -127,12 +127,12 @@ FilePanel(FXWindow *owner, const char*,FXComposite*, D
+         ID_SHOW_DETAILS,
+         ID_TOGGLE_HIDDEN,
+         ID_TOGGLE_THUMBNAILS,
+-#if defined(linux)
+         ID_MOUNT,
+         ID_UMOUNT,
+ 		ID_PKG_QUERY,
+ 		ID_PKG_INSTALL,
+ 		ID_PKG_UNINSTALL,
++#if defined(linux)
+ #endif
+         ID_LAST,
+     };
+@@ -192,7 +192,6 @@ FilePanel(FXWindow *owner, const char*,FXComposite*, D
+ 	long onUpdRunScript(FXObject*,FXSelector,void*);
+ 	long onCmdGoScriptDir(FXObject*, FXSelector, void*);
+ 
+-#if defined(linux)
+     long onCmdMount(FXObject*,FXSelector,void*);
+     long onUpdMount(FXObject*,FXSelector,void*);
+     long onUpdUnmount(FXObject*,FXSelector,void*);
+@@ -200,6 +199,7 @@ FilePanel(FXWindow *owner, const char*,FXComposite*, D
+     long onUpdPkgQuery(FXObject*,FXSelector,void*);
+     long onCmdPkgInstall(FXObject*,FXSelector,void*);
+     long onCmdPkgUninstall(FXObject*,FXSelector,void*);
++#if defined(linux)
+ #endif
+ public:
+ 

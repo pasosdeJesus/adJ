@@ -1,0 +1,28 @@
+$OpenBSD$
+--- src/File.h.orig	Mon Aug 26 10:05:44 2013
++++ src/File.h	Mon Aug 26 10:08:16 2013
+@@ -19,11 +19,11 @@ enum
+ 	CHOWN,
+ 	EXTRACT,
+ 	ARCHIVE,
+-#if defined(linux)
+ 	PKG_INSTALL,
+ 	PKG_UNINSTALL,
+ 	MOUNT,
+ 	UNMOUNT
++#if defined(linux)
+ #endif
+ };
+ 
+@@ -118,10 +118,10 @@ class File : public DialogBox (public)
+ 	int extract(const FXString name, const FXString dir,const FXString cmd);
+ 	int archive(const FXString name, const FXString cmd);
+ 
+-#if defined(linux)
+ 	int mount(const FXString dir, const FXString msg, const FXString cmd, const  unsigned int op);
+ 	int pkgInstall(const FXString name, const FXString cmd);
+ 	int pkgUninstall(const FXString name, const FXString cmd);
++#if defined(linux)
+ #endif
+ 	long onCmdCancel(FXObject*, FXSelector,void*);
+     long onTimeout(FXObject*,FXSelector,void*);
