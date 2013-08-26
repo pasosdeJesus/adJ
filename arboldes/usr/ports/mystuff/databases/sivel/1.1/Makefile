@@ -2,10 +2,11 @@
 
 # Port in the public domain.
 
-VERSION=1.1.4
+VERSION=1.1.5
 
 DISTNAME=sivel-${VERSION}
 HOMEPAGE=	http://sivel.sourceforge.net/
+PKGSPEC = sivel->=1.1,<1.2
 
 RUN_DEPENDS= lang/php/5.3 \
 	www/pear \
@@ -30,5 +31,13 @@ RUN_DEPENDS= lang/php/5.3 \
 
 MASTER_SITES=	${MASTER_SITE_SOURCEFORGE:=sivel/}
 EXTRACT_SUFX=	.tar.gz
+
+do-install:
+	echo @mkdir -p ${PREFIX}/${SIVEL_RAIZ}
+	@mkdir -p ${PREFIX}/${SIVEL_RAIZ}
+	echo @cp ${PREFIX}/../../../${DCOMP}/conf.sh ${PREFIX}/${SIVEL_RAIZ}
+	@cp -rf ${PREFIX}/../../../${DCOMP}/* ${PREFIX}/${SIVEL_RAIZ}
+	@find ${PREFIX}/../../../${DCOMP}/ -name ".*" -exec cp -rf {} ${PREFIX}/${SIVEL_RAIZ} ';'
+	@find ${PREFIX}/${SIVEL_RAIZ} -name "*.orig" -exec rm {} ';'
 
 .include <bsd.port.mk>

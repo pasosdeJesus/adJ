@@ -627,7 +627,8 @@ if (test "$sn" = "s") then {
 	paquete repasa education
 	paquete sigue education
 
-	paquete sivel databases sivel
+	paquete sivel databases sivel sivel 1.1
+	paquete sivel databases sivel sivel 1.2
 
 	paquete fbdesk x11
 	paquete xfe x11

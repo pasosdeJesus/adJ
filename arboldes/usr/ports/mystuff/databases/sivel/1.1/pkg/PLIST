@@ -1,7 +1,7 @@
-@comment $OpenBSD$
+@comment $adJ$
 @group service
+@option no-default-conflict
 ${SIVEL_RAIZ}/
-${SIVEL_RAIZ}/.htacces
 ${SIVEL_RAIZ}/.htaccess
 ${SIVEL_RAIZ}/CVS/
 ${SIVEL_RAIZ}/CVS/Entries
@@ -282,6 +282,7 @@ ${SIVEL_RAIZ}/doc/para-recoger-datos.xdbk
 ${SIVEL_RAIZ}/doc/personaliza.ent.plantilla
 ${SIVEL_RAIZ}/doc/personalizacion.xdbk
 ${SIVEL_RAIZ}/doc/principios.xdbk
+${SIVEL_RAIZ}/doc/publica.txt
 ${SIVEL_RAIZ}/doc/soluciones.xdbk
 ${SIVEL_RAIZ}/doc/uso.xdbk
 ${SIVEL_RAIZ}/doc/varconfphp.xdbk
@@ -472,10 +473,9 @@ ${SIVEL_RAIZ}/modulos/mapag/js/CVS/Entries
 ${SIVEL_RAIZ}/modulos/mapag/js/CVS/Repository
 ${SIVEL_RAIZ}/modulos/mapag/js/CVS/Root
 ${SIVEL_RAIZ}/modulos/mapag/js/CVS/Tag
-${SIVEL_RAIZ}/modulos/mapag/js/datepicker_mapa.js
-${SIVEL_RAIZ}/modulos/mapag/js/layout.js
 ${SIVEL_RAIZ}/modulos/mapag/js/mapa.js
 ${SIVEL_RAIZ}/modulos/mapag/js/municipios_autopopulate.js
+${SIVEL_RAIZ}/modulos/mapag/mapag_misc.php
 ${SIVEL_RAIZ}/modulos/mapag/municipios_json.php
 ${SIVEL_RAIZ}/modulos/segjudicial/
 ${SIVEL_RAIZ}/modulos/segjudicial/CVS/

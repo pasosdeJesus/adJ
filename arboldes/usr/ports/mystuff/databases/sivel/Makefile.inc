@@ -48,11 +48,3 @@ RUN_DEPENDS= lang/php/5.3 \
 DISTFILES=      ${DISTNAME}${EXTRACT_SUFX} 
 DCOMP ?= ${DISTNAME}
 
-do-install:
-	echo @mkdir -p ${PREFIX}/${SIVEL_RAIZ}
-	@mkdir -p ${PREFIX}/${SIVEL_RAIZ}
-	echo @cp ${PREFIX}/../../../${DCOMP}/conf.sh ${PREFIX}/${SIVEL_RAIZ}
-	@cp -rf ${PREFIX}/../../../${DCOMP}/* ${PREFIX}/${SIVEL_RAIZ}
-	@find ${PREFIX}/../../../${DCOMP}/ -name ".*" -exec cp -rf {} ${PREFIX}/${SIVEL_RAIZ} ';'
-	@find ${PREFIX}/${SIVEL_RAIZ} -name "*.orig" -exec rm {} ';'
-
