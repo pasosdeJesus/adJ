@@ -41,8 +41,5 @@ CONFIGURE_ENV=	CPPFLAGS="-I${LOCALBASE}/include \
 
 MAKE_FLAGS=	CXXFLAGS="${CXXFLAGS} -DHAVE_XFT_H"
 
-post-extract:
-	@cp files/es_CO.po ${WRKSRC}/po/
-
 
 .include <bsd.port.mk>
