@@ -1,0 +1,598 @@
+$OpenBSD$
+--- po/es_CO.po.orig	Thu Aug 22 04:42:30 2013
++++ po/es_CO.po	Tue Aug 27 11:25:56 2013
+@@ -6,7 +6,7 @@
+ # If you prefer different licesing terms, simply change them (just remember to give credit)
+ msgid ""
+ msgstr ""
+-"Project-Id-Version: xfe 1.34\n"
++"Project-Id-Version: xfe 1.35\n"
+ "Report-Msgid-Bugs-To: \n"
+ "POT-Creation-Date: 2013-08-22 11:42+0200\n"
+ "PO-Revision-Date: 2013-02-12 10:16-0500\n"
+@@ -20,7 +20,6 @@ msgstr ""
+ 
+ #. Usage message
+ #: ../src/main.cpp:243
+-#, fuzzy
+ msgid ""
+ "\n"
+ "Usage: xfe [options] [startdir1] [startdir2]\n"
+@@ -888,9 +887,8 @@ msgstr "Propi&edades"
+ #: ../src/XFileExplorer.cpp:2237 ../src/XFileExplorer.cpp:2685
+ #: ../src/XFileExplorer.cpp:2766 ../src/XFileExplorer.cpp:2795
+ #: ../src/XFileExplorer.cpp:2835
+-#, fuzzy, c-format
+ msgid "Can't enter folder %s: %s"
+-msgstr "No se puede eliminar el directorio %s: %s"
++msgstr "No se puede ingresar al directorio %s: %s"
+ 
+ #: ../src/DirPanel.cpp:802 ../src/DirPanel.cpp:888 ../src/DirPanel.cpp:2246
+ #: ../src/DirPanel.cpp:2268 ../src/DirPanel.cpp:2317 ../src/DirPanel.cpp:2340
+@@ -904,9 +902,8 @@ msgstr "No se puede eliminar el directorio %s: %s"
+ #: ../src/XFileExplorer.cpp:2239 ../src/XFileExplorer.cpp:2687
+ #: ../src/XFileExplorer.cpp:2768 ../src/XFileExplorer.cpp:2797
+ #: ../src/XFileExplorer.cpp:2837
+-#, fuzzy, c-format
+ msgid "Can't enter folder %s"
+-msgstr "No se puede crear el directorio %s"
++msgstr "No se puede ingresar al directorio %s"
+ 
+ #. File object
+ #: ../src/DirPanel.cpp:876 ../src/FilePanel.cpp:3898
+@@ -1061,7 +1058,6 @@ msgid "Restore information not available for %s"
+ msgstr "La información para restaurar %s, no está disponible"
+ 
+ #: ../src/DirPanel.cpp:2125 ../src/FilePanel.cpp:2234
+-#, fuzzy, c-format
+ msgid "Parent folder %s does not exist, do you want to create it?"
+ msgstr "El directorio padre %s no existe, ¿desea crearlo?"
+ 
+@@ -1097,9 +1093,8 @@ msgstr "Directorio nuevo"
+ #: ../src/XFileExplorer.cpp:2195 ../src/XFileExplorer.cpp:2227
+ #: ../src/XFileExplorer.cpp:2728 ../src/XFileImage.cpp:1248
+ #: ../src/WriteWindow.cpp:1743 ../src/ViewWindow.cpp:583
+-#, fuzzy, c-format
+ msgid "Can't execute command %s"
+-msgstr "Ejecutar comando"
++msgstr "No se puede ejecutar comando %s"
+ 
+ #: ../src/DirPanel.cpp:2299 ../src/FilePanel.cpp:4485
+ msgid "Mount"
+@@ -1184,14 +1179,12 @@ msgid "Unmount the folder:"
+ msgstr "Desmontar el directorio:"
+ 
+ #: ../src/File.cpp:266
+-#, fuzzy, c-format
+ msgid ""
+ "Folder %s already exists. Overwrite?\n"
+ "=> Caution, all files within this folder will be definitively lost!"
+ msgstr ""
+-"Directorio %s ya existe. ¿Sobreescribir?\n"
+-" => Precaución, ¡todos los archivos de este directorio se perderán "
+-"definitivamente!"
++"El directorio %s ya existe. ¿Sobreescribirlo?\n"
++" => !Precaución, todos los archivos se perderán definitivamente!"
+ 
+ #: ../src/File.cpp:268 ../src/File.cpp:1619
+ #, c-format
+@@ -1408,19 +1401,16 @@ msgstr "Solo lectura"
+ 
+ #: ../src/FileDialog.cpp:132 ../src/Preferences.cpp:613
+ #: ../src/XFileExplorer.cpp:425
+-#, fuzzy
+ msgid "Go to previous folder"
+-msgstr "Mover al directorio anterior."
++msgstr "Ir al directorio anterior"
+ 
+ #: ../src/FileDialog.cpp:139 ../src/Preferences.cpp:617
+ #: ../src/XFileExplorer.cpp:432
+-#, fuzzy
+ msgid "Go to next folder"
+-msgstr "Mover al directorio siguiente."
++msgstr "Ir al directorio siguiente"
+ 
+ #: ../src/FileDialog.cpp:145 ../src/Preferences.cpp:621
+ #: ../src/XFileExplorer.cpp:439
+-#, fuzzy
+ msgid "Go to parent folder"
+ msgstr "Ir al directorio superior"
+ 
+@@ -1596,9 +1586,8 @@ msgstr "&Grupo"
+ 
+ #: ../src/FileDialog.cpp:1434 ../src/FilePanel.cpp:3522
+ #: ../src/FilePanel.cpp:3563 ../src/XFileImage.cpp:657
+-#, fuzzy
+ msgid "Fold&ers first"
+-msgstr "Directorios"
++msgstr "Primero Dir&ectorios"
+ 
+ #: ../src/FileDialog.cpp:1435 ../src/FilePanel.cpp:3523
+ #: ../src/FilePanel.cpp:3564 ../src/XFileExplorer.cpp:806
+@@ -1892,9 +1881,8 @@ msgid "Size: "
+ msgstr "Tamaño: "
+ 
+ #: ../src/FileList.cpp:141
+-#, fuzzy
+ msgid "Folder name"
+-msgstr "Directorio: "
++msgstr "Nombre del Directorio: "
+ 
+ #: ../src/FileList.cpp:142
+ msgid "Size"
+@@ -2159,12 +2147,11 @@ msgstr "&Consultar Paquetes"
+ 
+ #: ../src/FilePanel.cpp:3647
+ msgid "Scripts"
+-msgstr ""
++msgstr "Archivos de comandos"
+ 
+ #: ../src/FilePanel.cpp:3650 ../src/XFileExplorer.cpp:880
+-#, fuzzy
+ msgid "Go to script folder"
+-msgstr "Ir al directorio superior"
++msgstr "Ir al directorio de archivos de comandos"
+ 
+ #: ../src/FilePanel.cpp:3658
+ msgid "Copy &to..."
+@@ -2204,19 +2191,16 @@ msgstr "Desinstalación de Paquete"
+ 
+ #: ../src/FilePanel.cpp:4592 ../src/startupnotification.cpp:157
+ #: ../src/xfeutils.cpp:1231
+-#, fuzzy, c-format
+ msgid "Error: Fork failed: %s\n"
+-msgstr "¡Error! Fork (bifuración) falló: %s\n"
++msgstr "Error: Fork (bifuración) falló: %s\n"
+ 
+ #: ../src/FilePanel.cpp:4634
+-#, fuzzy, c-format
+ msgid "Can't create script folder %s: %s"
+-msgstr "No se puede crear el directorio %s : %s"
++msgstr "No se puede crear directorio de archivos de comandos %s : %s"
+ 
+ #: ../src/FilePanel.cpp:4636
+-#, fuzzy, c-format
+ msgid "Can't create script folder %s"
+-msgstr "No se puede crear el directorio %s"
++msgstr "No se puede crear directorio de archivos de comandos %s"
+ 
+ #: ../src/FilePanel.cpp:4726 ../src/XFilePackage.cpp:799
+ msgid "No compatible package manager (rpm or dpkg) found!"
+@@ -2280,14 +2264,12 @@ msgid "Cl&ose"
+ msgstr "C&errar"
+ 
+ #: ../src/CommandWindow.cpp:169
+-#, fuzzy, c-format
+ msgid "Can't duplicate pipes: %s"
+-msgstr "No se puede eliminar el archivo %s: %s"
++msgstr "No se pueden duplicar tuberias: %s"
+ 
+ #: ../src/CommandWindow.cpp:171
+-#, fuzzy
+ msgid "Can't duplicate pipes"
+-msgstr "No se puede eliminar el archivo %s"
++msgstr "No se pueden duplicar tuberias"
+ 
+ #: ../src/CommandWindow.cpp:258
+ msgid ""
+@@ -2405,16 +2387,14 @@ msgid "Save window position"
+ msgstr "Guardar posición de la ventana"
+ 
+ #: ../src/Preferences.cpp:175
+-#, fuzzy
+ msgid "Single click folder open"
+-msgstr "Una sóla pulsación abre archivo"
++msgstr "Una sóla pulsación abre directorio"
+ 
+ #: ../src/Preferences.cpp:176
+ msgid "Single click file open"
+ msgstr "Una sóla pulsación abre archivo"
+ 
+ #: ../src/Preferences.cpp:177
+-#, fuzzy
+ msgid "Display tooltips in file and folder lists"
+ msgstr "Mostrar ayudas emergentes en listados de archivos y directorios"
+ 
+@@ -2431,7 +2411,6 @@ msgid "Notify when applications start up"
+ msgstr "Notificar cuando las aplicaciones inicien"
+ 
+ #: ../src/Preferences.cpp:185
+-#, fuzzy
+ msgid ""
+ "Date format used in file and folder lists:\n"
+ "(Type 'man strftime' in a terminal for help on the format)"
+@@ -2493,9 +2472,8 @@ msgid "Confirm delete"
+ msgstr "Confirmar eliminación"
+ 
+ #: ../src/Preferences.cpp:284
+-#, fuzzy
+ msgid "Confirm delete non empty folders"
+-msgstr "Confirmar borrar directorios no vacíos"
++msgstr "Confirmar borrado de directorios no vacíos"
+ 
+ #: ../src/Preferences.cpp:285
+ msgid "Confirm overwrite"
+@@ -2895,9 +2873,8 @@ msgid "Edit"
+ msgstr "Editar"
+ 
+ #: ../src/Preferences.cpp:836
+-#, fuzzy
+ msgid "Toggle display hidden folders"
+-msgstr "Alternar mostrar archivos ocultos"
++msgstr "Alternar mostrar directorios ocultos"
+ 
+ #: ../src/Preferences.cpp:840
+ msgid "Filter files"
+@@ -3272,9 +3249,8 @@ msgid "I&gnore case"
+ msgstr "Ignorar capitali&zación"
+ 
+ #: ../src/XFileExplorer.cpp:805
+-#, fuzzy
+ msgid "Fol&ders first"
+-msgstr "Directorios"
++msgstr "&Directorios primero"
+ 
+ #: ../src/XFileExplorer.cpp:807 ../src/XFileExplorer.cpp:2522
+ #: ../src/XFileExplorer.cpp:2565
+@@ -3286,9 +3262,8 @@ msgid "&Filter"
+ msgstr "Filt&ro"
+ 
+ #: ../src/XFileExplorer.cpp:835
+-#, fuzzy
+ msgid "&Folders first"
+-msgstr "Directorios"
++msgstr "&Directorios primero"
+ 
+ #: ../src/XFileExplorer.cpp:837 ../src/XFileExplorer.cpp:2521
+ #: ../src/XFileExplorer.cpp:2564
+@@ -4012,9 +3987,8 @@ msgid "Zoom to fit window when opening an image."
+ msgstr "Ampliar para encajar a la ventana al abrir una imagen."
+ 
+ #: ../src/XFileImage.cpp:522
+-#, fuzzy
+ msgid "Show hidden files and folders."
+-msgstr "Mostrar todos los archivos y directorios ocultos."
++msgstr "Mostrar archivos y directorios ocultos."
+ 
+ #: ../src/XFileImage.cpp:528
+ msgid "Show image thumbnails."
+@@ -4758,9 +4732,8 @@ msgstr ""
+ "\n"
+ 
+ #: ../src/foxhacks.cpp:125
+-#, fuzzy
+ msgid "Root folder"
+-msgstr "Módo Superusuario"
++msgstr "Directorio raíz"
+ 
+ #: ../src/foxhacks.cpp:557
+ msgid "Ready."
+@@ -4799,7 +4772,6 @@ msgid "&Backward"
+ msgstr "Hacia &atrás"
+ 
+ #: ../src/help.h:7
+-#, fuzzy, c-format
+ msgid ""
+ "\n"
+ " \n"
+@@ -5212,8 +5184,8 @@ msgstr ""
+ "\n"
+ "                                   Xfe, X File Explorer File Manager\n"
+ "\n"
+-"                                     <http://roland65.free.fr/xfe>\n"
+-"                                 <http://sourceforge.net/projects/xfe>\n"
++"                                     <http://roland65.free.fr/Xfe>\n"
++"                                 <http://sourceforge.net/projects/Xfe>\n"
+ "\n"
+ "\n"
+ "\n"
+@@ -5240,7 +5212,7 @@ msgstr ""
+ "   Descripción\n"
+ "   =-=-=-=-=-=\n"
+ "\n"
+-"  X File Explorer (xfe) es un administrador de archivos ligero para X11, "
++"  X File Explorer (Xfe) es un administrador de archivos ligero para X11, "
+ "escrito utilizando el kit de herramientas FOX.\n"
+ "  Es independiente de escritorio y puede personalizarse con facilidad.\n"
+ "  Cuenta con estilos Comandos o Explorador y es muy rápido y pequeño.\n"
+@@ -5264,6 +5236,7 @@ msgstr ""
+ "     - Visor de imágenes integrado (X File Image, xfi)\n"
+ "     - Visor/Instalador/Desinstalador de paquetes (rpm o deb) integrado (X "
+ "File Package, xfp)\n"
++"     - Archivos de comandos personalizados (como los archivos de comandos de Nautilus)\n"
+ "     - Copia/Corta/Pega archivos desde y hacia su escritorio favorito (GNOME/"
+ "KDE/XFCE/ROX)\n"
+ "     - Permite arrastrar y soltar archivos desde y hacia su escritorio "
+@@ -5322,7 +5295,7 @@ msgstr ""
+ "     * Cortar al portapapeles - Ctrl-X\n"
+ "     * Deseleccionar todo - Ctrl-Z\n"
+ "     * Mostrar ayuda - F1\n"
+-"     * Crear un archivo nuevo - F2\n"
++"     * Crear un archivo nuevo - Ctrol-N\n"
+ "     * Crear un directorio nuevo - F7\n"
+ "     * Listado con iconos grandes - F10\n"
+ "     * Listado con iconos pequeños - F11\n"
+@@ -5336,7 +5309,7 @@ msgstr ""
+ "\n"
+ "\n"
+ "  A continuación están los atajos de teclado de X File Explorer. Estos "
+-"atajos de teclado son específicos de la aplicación xfe\n"
++"atajos de teclado son específicos de la aplicación Xfe\n"
+ "\n"
+ "     * Agregar marcador - Ctrl-B\n"
+ "     * Filtrar archivos - Ctrl-D\n"
+@@ -5345,7 +5318,7 @@ msgstr ""
+ "     * Cambiar los paneles - Ctrl-K\n"
+ "     * Eliminar Barra de Ubicación - Ctrl-L\n"
+ "     * Montar sistema de archivos (sólo Linux) - Ctrl-M\n"
+-"     * Renombrar archivo - Ctrl-N\n"
++"     * Renombrar archivo - F2\n"
+ "     * Actualizar páneles Ctrl-R\n"
+ "     * Enlazar archivos a la ubicación - Ctrl-S\n"
+ "     * Lanzar terminal - Ctrl-T\n"
+@@ -5401,7 +5374,7 @@ msgstr ""
+ "\n"
+ "  Note que todos los atajos de teclado predeterminados enumerados "
+ "anteriormente se pueden personalizar en el cuadro de diálogo Preferencias "
+-"xfe. Sin embargo,  la acción de algunas teclas es innerente a la aplicación "
++"Xfe. Sin embargo,  la acción de algunas teclas es innerente a la aplicación "
+ "y no puede cambiarse. Estas incluyen:\n"
+ "\n"
+ "     * Ctrl-+ y Ctrl-- acercar y alejar la imagen en xfi\n"
+@@ -5427,10 +5400,10 @@ msgstr ""
+ "   Sistema de Papelera\n"
+ "   =-=-=-=-=-=-=-=-=-=-=-\n"
+ "\n"
+-"  Desde la versión 1.32, xfe implementa un sistema de papelera que cumple "
++"  Desde la versión 1.32, Xfe implementa un sistema de papelera que cumple "
+ "por completo con los estándares de freedesktop.org.\n"
+ "  Este permite al usuario mover archivos a la papelera y restaurar archivos "
+-"desde xfe o su escritorio favorito.\n"
++"desde Xfe o su escritorio favorito.\n"
+ "  Tenga en cuenta que la ubicación de los archivos en la papelera ahora es: "
+ "~/local/share/Trash/files\n"
+ "\n"
+@@ -5440,14 +5413,14 @@ msgstr ""
+ "   Configuración\n"
+ "   =-=-=-=-=-=-=\n"
+ "\n"
+-"  Usted puede realizar cualquier personalización de xfe (diseño, "
++"  Usted puede realizar cualquier personalización de Xfe (diseño, "
+ "asociaciones de archivos, atajos de teclado, etc) sin necesidad de editar "
+ "archivo alguno\n"
+ " a mano. Sin embargo, es posible que usted desee entender los principios de "
+ "configuración, ya que algunas personalizaciones también pueden\n"
+ " hacerse fácilmente mediante la edición manual de los archivos de "
+ "configuración.\n"
+-"  Asegurese de salir de xfe antes de editar manualmente cualquier archivo de "
++"  Asegurese de salir de Xfe antes de editar manualmente cualquier archivo de "
+ "configuración, o de lo contrario los cambios no se tendrán\n"
+ " en cuenta.\n"
+ "\n"
+@@ -5459,17 +5432,17 @@ msgstr ""
+ "locales ha cambiado. Esto es para cumplir \n"
+ " con los estándares de freedesktop.org.\n"
+ "\n"
+-"  Los archivos de configuración locales para xfe, xfw, xfv, xfi y xfp ahora "
++"  Los archivos de configuración locales para Xfe, xfw, xfv, xfi y xfp ahora "
+ "se encuentran en el directorio ~/.config/xfe\n"
+ " Sus nombre son xferc, xfwrc, xfvrc, xfirc y xfprc.\n"
+ "\n"
+-"  La primera vez que inicie xfe, el archivo de configuración global del "
++"  La primera vez que inicie Xfe, el archivo de configuración global del "
+ "sistema se copiará en el archivo de configuración local\n"
+ " ~/.config/xfe/xferc que no debe existir. Si no se encuentra el archivo de "
+ "configuración global\n"
+ " (en caso de un lugar de instalación inusal), un cuadro de diálogo le pedirá "
+ "al usuario seleccionar la ubicación correcta. Así resulta más fácil\n"
+-" personalizar xfe (particularmente cierto para las asociaciones de archivos) "
++" personalizar Xfe (particularmente cierto para las asociaciones de archivos) "
+ "mediante edición manual pues todas las opciones locales están\n"
+ " en el mismo archivo.\n"
+ "\n"
+@@ -5480,6 +5453,48 @@ msgstr ""
+ "\n"
+ "\n"
+ "\n"
++"   Scripts\n"
++"   =-=-=-=\n"
++" \n"
++"  Un archivo de comando puede ejecutarse desde Xfe sobre un grupo de archivos "
++" que usted elija en un panel.  Primero debe elegir\n"
++" los archivos con los que desea proceder, después pulsar el botón derecho "
++" sobre la lista de archivos e ir al sub menú Archivos de Comandos.\n"
++" Finalmente  elija el archivo de comandos que desea aplicar a los archivos "
++" seleccionados.\n"
++" \n"
++"  Los archivos de comandos debe ubicarse en el directorio ~/.config/xfe/scripts y "
++"deben ser ejecutables.  Puede organizar\n"
++"  este folder como lo dese por ejemplo usando sub-directorios.  Puede usar el menú Herramientas / Ir "
++" al directorio de archivos para ir directamente\n"
++"  al directorio de archivos de comanods y manejarlo.\n"
++" \n"
++"  Aquí está un ejemplo de un archivo de comandos simple que lista cada archivo elegido "
++"en la terminal desde la cual se inicio Xfe:\n"
++" \n"
++"  #!/bin/sh\n"
++"  for arg\n"
++"  do\n"
++"  /bin/ls -la \"$arg\"\n"
++"  done\n"
++" \n"
++"  Por supues que puede emplear programas como xmessage, zenity o kdialog para mostrar "
++"una ventana con botones que le permita \n"
++"  interactuar con el archivo de comandos. A continuación una modificación del ejemplo anterior que usa xmessage:\n"
++" \n"
++"  #!/bin/sh\n"
++"  (\n"
++"  echo  \"ls -la\"\n"
++"  for arg\n"
++"  do\n"
++"  /bin/ls -la \"$arg\"\n"
++"  done\n"
++"  ) | xmessage -file -\n"
++" \n"
++"  A menudo, es posible usar directamente sin modificaciones los archivos de comandos para Nautilus que se encuentran en Internet.\n"
++" \n"
++" \n"
++" \n"
+ "   Idiomas no basado en Latín\n"
+ "   =-=-=-=-=-=-=-=-=-=-=-=-=\n"
+ "\n"
+@@ -5527,7 +5542,7 @@ msgstr ""
+ "retroalimentación al usuario (un puntero con un reloj u otra forma) cuando\n"
+ " ha iniciado una acción (copia de archivos, inicio de una aplicación, etc.) "
+ "Dependiendo del sistema, puede haber\n"
+-" algunos problemas con la notificación de inicio. Si xfe fue compilado con "
++" algunos problemas con la notificación de inicio. Si Xfe fue compilado con "
+ "soporte de notificación de inicio, el usuario puede\n"
+ " desactivarlo para todas las aplicaciones a nivel global de las "
+ "Preferencias. También puede desactivarlo para \n"
+@@ -5544,7 +5559,7 @@ msgstr ""
+ "   =-=-=-\n"
+ "\n"
+ "  Por favor reporte cualquier falla que encuentre a Roland Baudin "
+-"<roland65@free.fr>. No olvide mencionar la versión de xfe que utiliza,\n"
++"<roland65@free.fr>. No olvide mencionar la versión de Xfe que utiliza,\n"
+ " la versión de la biblioteca FOX y el nombre y versión de su sistema "
+ "operativo.\n"
+ "\n"
+@@ -5553,14 +5568,14 @@ msgstr ""
+ "   Traducciones\n"
+ "   =-=-=-=-=-=-=\n"
+ "\n"
+-"  xfe ahora está disponible en 19 idiomas, pero algunas traducciones son "
+-"sólo parciales. Para traducir xfe a su idioma,\n"
++"  Xfe ahora está disponible en 19 idiomas, pero algunas traducciones son "
++"sólo parciales. Para traducir Xfe a su idioma,\n"
+ "  abra el archivo xfe.pot ubicado en el directorio po del árbol de código "
+ "fuente con un software como poedit, kbabel\n"
+ "  o gtranslator y llenelo con sus cadenas traducidas (tenga cuidado con los "
+ "atajos de teclado y los caracteres en c-formato),\n"
+ "  y luego enviemelo. Estaré complacido de integrar su trabajo en la próxima "
+-"publicación de xfe\n"
++"publicación de Xfe\n"
+ "\n"
+ "\n"
+ "\n"
+@@ -5575,7 +5590,7 @@ msgstr ""
+ "las personas que han proveido\n"
+ "parches útiles, traducciones, pruebas y consejos.\n"
+ "\n"
+-"  [Última revisión: 06/04/2012]\n"
++"  [Última revisión: 26/Ago/2013]\n"
+ "\n"
+ "  "
+ 
+@@ -5710,21 +5725,18 @@ msgstr ""
+ #: ../src/startupnotification.cpp:83 ../src/startupnotification.cpp:129
+ #: ../src/startupnotification.cpp:191 ../src/startupnotification.cpp:215
+ #: ../src/startupnotification.cpp:240
+-#, fuzzy, c-format
+ msgid "Error: Can't enter folder %s: %s"
+-msgstr "No se puede eliminar el directorio %s: %s"
++msgstr "Error: No puede ingresar al directorio %s: %s"
+ 
+ #: ../src/startupnotification.cpp:85 ../src/startupnotification.cpp:131
+ #: ../src/startupnotification.cpp:193 ../src/startupnotification.cpp:217
+ #: ../src/startupnotification.cpp:242
+-#, fuzzy, c-format
+ msgid "Error: Can't enter folder %s"
+-msgstr "No se puede crear el directorio %s"
++msgstr "Error: No se puede ingresar el directorio %s"
+ 
+ #: ../src/startupnotification.cpp:123
+-#, fuzzy, c-format
+ msgid "Error: Can't open display\n"
+-msgstr "¡Error! No se puede abrir la pantalla\n"
++msgstr "Error: No puede abrir la pantalla\n"
+ 
+ #: ../src/startupnotification.cpp:138
+ #, c-format
+@@ -5732,14 +5744,12 @@ msgid "Start of %s"
+ msgstr "Inicio de %s"
+ 
+ #: ../src/startupnotification.cpp:177 ../src/startupnotification.cpp:227
+-#, fuzzy, c-format
+ msgid "Error: Can't execute command %s"
+-msgstr "Ejecutar comando"
++msgstr "Error: No se puede ejecutar comando %s"
+ 
+ #: ../src/xfeutils.cpp:615 ../src/xfeutils.cpp:670
+-#, fuzzy, c-format
+ msgid "Error: Can't close folder %s\n"
+-msgstr "No se puede cerrar el directorio %s\n"
++msgstr "Error: No se puede cerrar el directorio %s\n"
+ 
+ #: ../src/xfeutils.cpp:686
+ msgid "bytes"
+@@ -5760,12 +5770,11 @@ msgstr "KB"
+ #: ../src/xfeutils.cpp:964
+ #, c-format
+ msgid "Error: Can't read group list: %s"
+-msgstr ""
++msgstr "Error: No se puede leer listado de grupo: %s"
+ 
+ #: ../src/xfeutils.cpp:966
+-#, fuzzy, c-format
+ msgid "Error: Can't read group list"
+-msgstr "¡Error! No se puede abrir la pantalla\n"
++msgstr "Error: No se puede leer listado de grupo"
+ 
+ #: ../xfe.desktop.in.h:1
+ msgid "Xfe"
+@@ -5827,54 +5836,3 @@ msgstr "Administrador de Paquetes"
+ msgid "A simple package manager for Xfe"
+ msgstr "Un administrador de paquetes sencillo para Xfe"
+ 
+-#~ msgid "Dir&ectories first"
+-#~ msgstr "Primero Dir&ectorios"
+-
+-#~ msgid "Toggle display hidden directories"
+-#~ msgstr "Alternar mostrar directorios ocultos"
+-
+-#~ msgid "&Directories first"
+-#~ msgstr "Primero &directorios"
+-
+-#, fuzzy
+-#~ msgid "Error: Can't enter directory %s: %s"
+-#~ msgstr "No se puede eliminar el directorio %s: %s"
+-
+-#, fuzzy
+-#~ msgid "Error: Can't enter directory %s"
+-#~ msgstr "Ir al directorio superior"
+-
+-#~ msgid "Go to working directory"
+-#~ msgstr "Ir al directorio de trabajo"
+-
+-#~ msgid "Go to previous directory"
+-#~ msgstr "Ir al directorio anterior"
+-
+-#~ msgid "Go to next directory"
+-#~ msgstr "Ir al directorio siguiente"
+-
+-#~ msgid "Go to parent directory"
+-#~ msgstr "Ir al directorio superior"
+-
+-#~ msgid "Go to home directory"
+-#~ msgstr "Ir al directorio personal"
+-
+-#~ msgid "Root directory"
+-#~ msgstr "Directorio raíz"
+-
+-#~ msgid "Parent directory %s does not exist, do you want to create it?"
+-#~ msgstr "El directorio padre %s no existe, ¿desea crearlo?"
+-
+-#, fuzzy
+-#~ msgid "Can't enter directory %s: %s"
+-#~ msgstr "No se puede eliminar el directorio %s: %s"
+-
+-#, fuzzy
+-#~ msgid "Can't enter directory %s"
+-#~ msgstr "No se puede crear el directorio %s"
+-
+-#~ msgid "Directory name"
+-#~ msgstr "Nombre del directorio"
+-
+-#~ msgid "Single click directory open"
+-#~ msgstr "Una sola pulsación abre directorio"

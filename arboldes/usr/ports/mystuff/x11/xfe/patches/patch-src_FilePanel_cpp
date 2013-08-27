@@ -1,6 +1,6 @@
 $OpenBSD$
---- src/FilePanel.cpp.orig	Mon Aug 26 09:44:40 2013
-+++ src/FilePanel.cpp	Mon Aug 26 10:02:30 2013
+--- src/FilePanel.cpp.orig	Wed Aug 21 06:32:33 2013
++++ src/FilePanel.cpp	Tue Aug 27 11:15:00 2013
 @@ -61,11 +61,12 @@ extern char OpenHistory[OPEN_HIST_SIZE][MAX_COMMAND_SI
  extern int OpenNum;
  extern char FilterHistory[FILTER_HIST_SIZE][MAX_PATTERN_SIZE];
@@ -31,15 +31,16 @@ $OpenBSD$
  #endif
  };
  
-@@ -3565,7 +3566,6 @@ long FilePanel::onCmdPopupMenu(FXObject* o,FXSelector 
+@@ -3565,14 +3566,14 @@ long FilePanel::onCmdPopupMenu(FXObject* o,FXSelector 
  		new FXMenuCascade(menu,_("Pane&l"),NULL,submenu);
          new FXMenuSeparator(menu);
  		
 -#if defined(linux)
  		FXString name=current->list->getItemPathname(itm);
-     	if(num==1 && (fsdevices->find(name.text()) || mtdevices->find(name.text()) ) )
+-    	if(num==1 && (fsdevices->find(name.text()) || mtdevices->find(name.text()) ) )
++    	if(num==1 && ((fsdevices != NULL && fsdevices->find(name.text())) || (mtdevices != NULL && mtdevices->find(name.text())) ) )
  		{
-@@ -3573,6 +3573,7 @@ long FilePanel::onCmdPopupMenu(FXObject* o,FXSelector 
+ 			new FXMenuCommand(menu,_("&Mount"),maphosticon,current,FilePanel::ID_MOUNT);
  			new FXMenuCommand(menu,_("Unmount"),unmaphosticon,current,FilePanel::ID_UMOUNT);
      		new FXMenuSeparator(menu);
  		}
