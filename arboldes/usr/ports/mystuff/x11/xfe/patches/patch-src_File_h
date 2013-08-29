@@ -1,7 +1,7 @@
 $OpenBSD$
---- src/File.h.orig	Mon Aug 26 10:05:44 2013
-+++ src/File.h	Mon Aug 26 10:08:16 2013
-@@ -19,11 +19,11 @@ enum
+--- src/File.h.orig	Wed Jan 23 09:53:15 2013
++++ src/File.h	Thu Aug 29 06:59:54 2013
+@@ -19,12 +19,10 @@ enum
  	CHOWN,
  	EXTRACT,
  	ARCHIVE,
@@ -10,11 +10,11 @@ $OpenBSD$
  	PKG_UNINSTALL,
  	MOUNT,
  	UNMOUNT
-+#if defined(linux)
- #endif
+-#endif
  };
  
-@@ -118,10 +118,10 @@ class File : public DialogBox (public)
+ // To search visited inodes
+@@ -118,11 +116,9 @@ class File : public DialogBox (public)
  	int extract(const FXString name, const FXString dir,const FXString cmd);
  	int archive(const FXString name, const FXString cmd);
  
@@ -22,7 +22,7 @@ $OpenBSD$
  	int mount(const FXString dir, const FXString msg, const FXString cmd, const  unsigned int op);
  	int pkgInstall(const FXString name, const FXString cmd);
  	int pkgUninstall(const FXString name, const FXString cmd);
-+#if defined(linux)
- #endif
+-#endif
  	long onCmdCancel(FXObject*, FXSelector,void*);
      long onTimeout(FXObject*,FXSelector,void*);
+ };

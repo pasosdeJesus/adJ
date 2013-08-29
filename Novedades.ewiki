@@ -53,8 +53,8 @@ Seguridad
 !PAQUETES EXCLUSIVOS DE ADJ
 
 * SIVeL 1.1.5 con corrección de fallas y mejoras menores
-* SIVeL 1.2 con módulos nuevos de desplazamiento, mezcla de casos, más usable, internacionalización y localización
-* xfe actualizado a 1.3.5
+* Experimental SIVeL 1.2a1 con módulos nuevos de desplazamiento, mezcla de casos, más usable, internacionalización y localización
+* xfe actualizado a 1.3.5 y modificado para instalar/desinstalar paquetes en OpenBSD y soportar cotejación en idioma nativo.  Nueva opción sudo_nopasswd utilizable en ~/.config/xfe/xferc cuando sudo no requiere clave (por ejemplo al ejecutar Herramientas->Nueva ventana root).
 * PostgreSQL actualizado a 9.2.4 con soporte para UTF-8 y cotejaciones nativas (COLLATE) listas para todos los paises de habla hispana. Ver detalles de como usar cotejación en http://aprendiendo.pasosdejesus.org/?id=i18n
 * Los paquetes exclusivos los encuentra en [ftp://ftp.pasosdeJesus.org/pub/AprendiendoDeJesus/5.3-amd64/paquetes]
 * Nuevos archivos de comandos para facilitar mantener servidor de correo con Sednmail, SASL, IMAPS, POP3S
