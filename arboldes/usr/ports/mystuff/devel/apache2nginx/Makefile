@@ -20,6 +20,10 @@ PERMIT_DISTFILES_FTP=	Yes
 
 MODULES=	lang/ruby
 
+BUILD_DEPENDS =		${RUN_DEPENDS}
+RUN_DEPENDS =		devel/ruby-apacheconf_parser
+
+
 CONFIGURE_STYLE=ruby gem 
 
 .include <bsd.port.mk>
