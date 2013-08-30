@@ -1,6 +1,6 @@
 $OpenBSD$
---- src/FileList.cpp.orig	Tue Feb  5 07:26:35 2013
-+++ src/FileList.cpp	Thu Feb 21 07:36:19 2013
+--- src/FileList.cpp.orig	Tue Aug 20 10:17:39 2013
++++ src/FileList.cpp	Tue Aug 27 11:20:32 2013
 @@ -3,6 +3,9 @@
  #include "i18n.h"
  
@@ -11,7 +11,181 @@ $OpenBSD$
  #include <time.h>
  
  
-@@ -1896,131 +1899,297 @@ long FileList::onUpdHeader(FXObject*,FXSelector,void*)
+@@ -46,11 +49,9 @@
+ #define HASH2(x,n) (1|(((unsigned int)(x)*17)%((n)-1)))   // Probe Distance [1..n-1]
+ 
+ 
+-#if defined(linux)
+ FXStringDict* fsdevices=NULL; // Devices from fstab
+ FXStringDict* mtdevices=NULL; // Mounted devices
+ FXStringDict* updevices=NULL; // Responding devices
+-#endif
+ 
+ extern FXbool allowPopupScroll;
+ extern FXString xdgdatahome;
+@@ -163,83 +164,89 @@ FileList::FileList(FXWindow* focuswin, FXComposite *p,
+ 	forwardhist=NULL;
+ 	focuswindow=focuswin;
+ 	
+-#if defined(linux)
+ 
+ 	// Initialize the fsdevices, mtdevices and updevices lists
+ 	// if it was not done in DirList (useful for XFileView, XFileQuery and XFileImage) 
+-    struct mntent *mnt;
+     if (fsdevices==NULL)
+-	{
+-		// To list file system devices
+-    	fsdevices=new FXStringDict();
+-		FILE *fstab=setmntent(FSTAB_PATH,"r");
+-    	if(fstab)
+-    	{
+-        	while((mnt=getmntent(fstab)))
+-        	{
+-            	if(!streq(mnt->mnt_type,MNTTYPE_IGNORE) && !streq(mnt->mnt_type,MNTTYPE_SWAP)
+-					&& !streq(mnt->mnt_dir,"/"))
+-            	{				
+-                	if(!strncmp(mnt->mnt_fsname,"/dev/fd",7))
+-                    	fsdevices->insert(mnt->mnt_dir,"floppy");
+-                	else if (!strncmp(mnt->mnt_type,"iso",3))
+-                    	fsdevices->insert(mnt->mnt_dir,"cdrom");
+-                	else if (!strncmp(mnt->mnt_fsname,"/dev/zip",8))
+-                    	fsdevices->insert(mnt->mnt_dir,"zip");
+-                	else if (streq(mnt->mnt_type,"nfs"))
+-                    	fsdevices->insert(mnt->mnt_dir,"nfsdisk");
+-                	else if (streq(mnt->mnt_type,"smbfs"))
+-                    	fsdevices->insert(mnt->mnt_dir,"smbdisk");
+-                	else
+-                    	fsdevices->insert(mnt->mnt_dir,"harddisk");
+-            	}
+-        	}
+-        	endmntent(fstab);
+-    	}
+-	}
+-	if (mtdevices==NULL)
+-	{
+-		// To list mounted devices
+-    	mtdevices=new FXStringDict();
+-		FILE *mtab=setmntent(MTAB_PATH,"r");
+-		if(mtab)
+-		{
+-			while((mnt=getmntent(mtab)))
+-			{
+-				// To fix an issue with some Linux distributions
+-				FXString mntdir=mnt->mnt_dir;
+-				if (mntdir!="/dev/.static/dev" &&   mntdir.rfind(".gvfs",5,mntdir.length())==-1)
+-					mtdevices->insert(mnt->mnt_dir,mnt->mnt_type);
+-			}
+-			endmntent(mtab);
+-		}
+-	}
+-	if (updevices==NULL)
+-	{
+-		// To mark mount points that are up or down
+-    	updevices=new FXStringDict();
+- 		struct stat statbuf;
+-		FXString mtstate;
+-		FILE *mtab=setmntent(MTAB_PATH,"r");
+-		if(mtab)
+-    	{
+-        	while((mnt=getmntent(mtab)))
+-			{
+-				// To fix an issue with some Linux distributions
+-				FXString mntdir=mnt->mnt_dir;
+-				if (mntdir!="/dev/.static/dev" &&   mntdir.rfind(".gvfs",5,mntdir.length())==-1)
+-				{
+-					if (lstatmt(mnt->mnt_dir,&statbuf)==-1)
+-						mtstate="down";
+-					else
+-						mtstate="up";	
+-					updevices->insert(mnt->mnt_dir,mtstate.text());
+-				}
+-			}
+-        	endmntent(mtab);
+-    	}
+-	}
++    {
++        // To list file system devices
++        fsdevices=new FXStringDict();
++#if defined(linux)
++        struct mntent *mnt;
++        FILE *fstab=setmntent(FSTAB_PATH,"r");
++        if(fstab)
++        {
++            while((mnt=getmntent(fstab)))
++            {
++                if(!streq(mnt->mnt_type,MNTTYPE_IGNORE) && !streq(mnt->mnt_type,MNTTYPE_SWAP)
++                        && !streq(mnt->mnt_dir,"/"))
++                {				
++                    if(!strncmp(mnt->mnt_fsname,"/dev/fd",7))
++                        fsdevices->insert(mnt->mnt_dir,"floppy");
++                    else if (!strncmp(mnt->mnt_type,"iso",3))
++                        fsdevices->insert(mnt->mnt_dir,"cdrom");
++                    else if (!strncmp(mnt->mnt_fsname,"/dev/zip",8))
++                        fsdevices->insert(mnt->mnt_dir,"zip");
++                    else if (streq(mnt->mnt_type,"nfs"))
++                        fsdevices->insert(mnt->mnt_dir,"nfsdisk");
++                    else if (streq(mnt->mnt_type,"smbfs"))
++                        fsdevices->insert(mnt->mnt_dir,"smbdisk");
++                    else
++                        fsdevices->insert(mnt->mnt_dir,"harddisk");
++                }
++            }
++            endmntent(fstab);
++        }
+ #endif
++    }
++    if (mtdevices==NULL)
++    {
++        // To list mounted devices
++        mtdevices=new FXStringDict();
++#if defined(linux)
++        struct mntent *mnt;
++        FILE *mtab=setmntent(MTAB_PATH,"r");
++        if(mtab)
++        {
++            while((mnt=getmntent(mtab)))
++            {
++                // To fix an issue with some Linux distributions
++                FXString mntdir=mnt->mnt_dir;
++                if (mntdir!="/dev/.static/dev" &&   mntdir.rfind(".gvfs",5,mntdir.length())==-1)
++                    mtdevices->insert(mnt->mnt_dir,mnt->mnt_type);
++            }
++            endmntent(mtab);
++        }
++#endif
++    }
++    if (updevices==NULL)
++    {
++        // To mark mount points that are up or down
++        updevices=new FXStringDict();
++#if defined(linux)
++        struct mntent *mnt;
++        struct stat statbuf;
++        FXString mtstate;
++        FILE *mtab=setmntent(MTAB_PATH,"r");
++        if(mtab)
++        {
++            while((mnt=getmntent(mtab)))
++            {
++                // To fix an issue with some Linux distributions
++                FXString mntdir=mnt->mnt_dir;
++                if (mntdir!="/dev/.static/dev" &&   mntdir.rfind(".gvfs",5,mntdir.length())==-1)
++                {
++                    if (lstatmt(mnt->mnt_dir,&statbuf)==-1)
++                        mtstate="down";
++                    else
++                        mtstate="up";	
++                    updevices->insert(mnt->mnt_dir,mtstate.text());
++                }
++            }
++            endmntent(mtab);
++        }
++#endif
++    }
+ 	
+ 	// Trahscan location
+ 	trashfileslocation=xdgdatahome + PATHSEPSTRING TRASHFILESPATH;
+@@ -1896,131 +1903,297 @@ long FileList::onUpdHeader(FXObject*,FXSelector,void*)
  }
  
  
@@ -410,7 +584,7 @@ $OpenBSD$
  }
  
  
-@@ -2028,372 +2197,94 @@ int FileList::ascendingCaseMix(const IconItem* pa,cons
+@@ -2028,372 +2201,94 @@ int FileList::ascendingCaseMix(const IconItem* pa,cons
  int FileList::ascendingDir(const IconItem* pa,const IconItem* pb)
  {
  
@@ -818,7 +992,7 @@ $OpenBSD$
  }
  
  
-@@ -2401,36 +2292,42 @@ int FileList::ascendingSize(const IconItem* pa,const I
+@@ -2401,36 +2296,42 @@ int FileList::ascendingSize(const IconItem* pa,const I
  // Mixing files and directories
  int FileList::ascendingSizeMix(const IconItem* pa,const IconItem* pb)
  {
@@ -882,7 +1056,7 @@ $OpenBSD$
  }
  
  
-@@ -2485,52 +2382,7 @@ int FileList::ascendingTimeMix(const IconItem* pa,cons
+@@ -2485,52 +2386,7 @@ int FileList::ascendingTimeMix(const IconItem* pa,cons
  // Compare file user
  int FileList::ascendingUser(const IconItem* pa,const IconItem* pb)
  {
@@ -936,7 +1110,7 @@ $OpenBSD$
  }
  
  
-@@ -2538,254 +2390,35 @@ int FileList::ascendingUser(const IconItem* pa,const I
+@@ -2538,254 +2394,35 @@ int FileList::ascendingUser(const IconItem* pa,const I
  // Compare file user, mixing files and directories
  int FileList::ascendingUserMix(const IconItem* pa,const IconItem* pb)
  {
@@ -1196,7 +1370,7 @@ $OpenBSD$
  }
  
  
-@@ -2839,528 +2472,96 @@ int FileList::ascendingDeltimeMix(const IconItem* pa,c
+@@ -2839,528 +2476,96 @@ int FileList::ascendingDeltimeMix(const IconItem* pa,c
  // Compare original path
  int FileList::ascendingOrigpath(const IconItem* pa,const IconItem* pb)
  {
@@ -1739,7 +1913,7 @@ $OpenBSD$
  }
  
  
-@@ -3483,257 +2684,35 @@ int FileList::descendingTimeMix(const IconItem* pa,con
+@@ -3483,257 +2688,35 @@ int FileList::descendingTimeMix(const IconItem* pa,con
  // Reversed compare file user
  int FileList::descendingUser(const IconItem* pa,const IconItem* pb)
  {
@@ -2002,7 +2176,7 @@ $OpenBSD$
  }
  
  
-@@ -3741,49 +2720,7 @@ int FileList::descendingPerm(const IconItem* pa,const 
+@@ -3741,49 +2724,7 @@ int FileList::descendingPerm(const IconItem* pa,const 
  // Reversed compare file permission, mixing files and directories
  int FileList::descendingPermMix(const IconItem* pa,const IconItem* pb)
  {
@@ -2053,7 +2227,7 @@ $OpenBSD$
  }
  
  
-@@ -3837,39 +2774,7 @@ int FileList::descendingDeltimeMix(const IconItem* pa,
+@@ -3837,39 +2778,7 @@ int FileList::descendingDeltimeMix(const IconItem* pa,
  // Reversed compare original path
  int FileList::descendingOrigpath(const IconItem* pa,const IconItem* pb)
  {
@@ -2094,7 +2268,7 @@ $OpenBSD$
  }
  
  
-@@ -3877,35 +2782,7 @@ int FileList::descendingOrigpath(const IconItem* pa,co
+@@ -3877,35 +2786,7 @@ int FileList::descendingOrigpath(const IconItem* pa,co
  // Reversed original path, mixing files and directories
  int FileList::descendingOrigpathMix(const IconItem* pa,const IconItem* pb)
  {
@@ -2131,3 +2305,31 @@ $OpenBSD$
  }
  
  
+@@ -4685,9 +3566,8 @@ fnd:          	*pn=item;
+ 					item->cdate=filectime;
+ 					item->deldate=deldate;
+ 
+-#if defined(linux)
+ 					// Mounted devices may have a specific icon
+-					if(mtdevices->find(pathname.text()))
++					if(mtdevices != NULL && mtdevices->find(pathname.text()))
+ 					{
+ 						filetype=_("Mount point");
+ 						
+@@ -4704,7 +3584,7 @@ fnd:          	*pn=item;
+ 					}
+ 
+ 					// Devices found in fstab may have a specific icon
+-					if(fsdevices->find(pathname.text()))
++					if(fsdevices != NULL && fsdevices->find(pathname.text()))
+ 					{
+ 						filetype=_("Mount point");
+ 						
+@@ -4739,7 +3619,6 @@ fnd:          	*pn=item;
+ 							item->setMiniIcon(zipicon);
+ 						}
+ 					}
+-#endif
+ 
+ 					// Update item label
+ 					// NB : Item del is empty if we are not in trash can

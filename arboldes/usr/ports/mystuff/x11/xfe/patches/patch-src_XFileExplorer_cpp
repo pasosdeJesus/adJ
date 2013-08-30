@@ -1,11 +1,118 @@
 $OpenBSD$
---- src/XFileExplorer.cpp.orig	Fri Feb  8 08:16:42 2013
-+++ src/XFileExplorer.cpp	Tue Feb 19 13:22:32 2013
-@@ -2252,6 +2252,7 @@ Bilalovi, Omar Cogo Emir\n\
- Catalan: muzzol\n\
- Chinese: Xin Li\n\
- Chinese (Taïwan): Wei-Lun Chao\n\
-+Colombian Spanish: Vladimir Támara (Pasos de Jesús)\n\
- Czech: David Vachulka\n\
- Danish: Jonas Bardino, Vidar Jon Bauge\n\
- Dutch: Hans Strijards\n\
+--- src/XFileExplorer.cpp.orig	Thu Aug 22 02:50:44 2013
++++ src/XFileExplorer.cpp	Thu Aug 29 07:28:20 2013
+@@ -2778,30 +2778,51 @@ long XFileExplorer::onCmdRun(FXObject*,FXSelector,void
+ // Run an Xfe as root
+ long XFileExplorer::onCmdSu(FXObject*,FXSelector,void*)
+ {
+-	int ret;
+-	
++	int ret = 0;
++    int errcode = 0, status = 0;
++	FXString title, sucmd;
++	char color[64];
++	FXString bg=" -bg ";
++	FXString fg=" -fg ";
++	FXString command;
++
+ 	// Wait cursor
+ 	getApp()->beginWaitCursor();
+ 
+ 	// Obtain preferred root mode
+ 	FXbool use_sudo=getApp()->reg().readUnsignedEntry("OPTIONS","use_sudo",FALSE);
++	FXbool sudo_nopasswd=getApp()->reg().readUnsignedEntry("OPTIONS","sudo_nopasswd",FALSE);
+ 
+ 	// Select sudo or su to launch xfe as root
+ 	ret=chdir(lpanel->getCurrent()->getDirectory().text());
+ 	if (ret < 0)
+ 	{
+-		int errcode=errno;	
++		errcode=errno;	
+ 		if (errcode)
+ 			MessageBox::error(this,BOX_OK,_("Error"),_("Can't enter folder %s: %s"),lpanel->getCurrent()->getDirectory().text(),strerror(errcode));
+ 		else
+ 			MessageBox::error(this,BOX_OK,_("Error"),_("Can't enter folder %s"),lpanel->getCurrent()->getDirectory().text());
+ 		
+-		return 0;
++		ret = 0;
++        goto end;
+ 	}
+ 
+-	FXString title, sucmd;
+-	if (use_sudo)
+-	{
++	if (use_sudo & sudo_nopasswd) 
++    {
++        sucmd="sudo xfe " + homedir + " &";
++
++        ret=system(sucmd.text());
++        if (ret < 0)
++        {
++            MessageBox::error(this,BOX_OK,_("Error"),_("Can't execute command %s"),sucmd.text());
++            ret = 0;
++            goto end;
++        }
++        ret = 1;
++        goto end;
++    } 
++    else if (use_sudo) 
++    {
+ 		title = _("Enter the user password:");
+ 		sucmd = SUDOCMD;
+ 	}
+@@ -2810,45 +2831,43 @@ long XFileExplorer::onCmdSu(FXObject*,FXSelector,void*
+ 		title = _("Enter the root password:");
+ 		sucmd = SUCMD;
+ 	}
+-	
+ 	// Use appropriate background and foreground colors for Xvt
+-	char color[64];
+ 	fxnamefromcolor(color,getApp()->getBackColor());
+-	FXString bg=" -bg ";
+ 	bg = bg + color;
+ 	fxnamefromcolor(color,getApp()->getForeColor());
+-	FXString fg=" -fg ";
+ 	fg = fg + color + " ";
+ 	
+ 	// Command string
+-	FXString command = "xvt -title " + ::quote(title) + bg + fg + sucmd;
++	command = "xvt -title " + ::quote(title) + bg + fg + sucmd;
+ 	
+ 	// Execute su or sudo command in an internal Xvt terminal
+-	int status=runinxvt(command);
++	status=runinxvt(command);
+ 	
+ 	// If error
+ 	ret=chdir(startlocation.text());
+ 	if (ret < 0)
+ 	{
+-		int errcode=errno;	
++		errcode=errno;	
+ 		if (errcode)
+ 			MessageBox::error(this,BOX_OK,_("Error"),_("Can't enter folder %s: %s"),startlocation.text(),strerror(errcode));
+ 		else
+ 			MessageBox::error(this,BOX_OK,_("Error"),_("Can't enter folder %s"),startlocation.text());
+ 		
+-		return 0;
++		ret = 0;
++        goto end;
+ 	}
+ 
+ 	if (status<0)
+ 	{
+ 		MessageBox::error(getApp(),BOX_OK,_("Error"),_("An error has occurred!"));
+-		getApp()->endWaitCursor();
+-		return 0;
++		ret = 0;
++        goto end;
+ 	}	
+-	
++
++end:    
+  	// Wait cursor
+ 	getApp()->endWaitCursor();
+-    return 1;
++    return ret;
+ }
+ 
+ 

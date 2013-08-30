@@ -1,6 +1,6 @@
 $OpenBSD$
---- src/FileList.h.orig	Wed Feb 20 09:04:50 2013
-+++ src/FileList.h	Wed Feb 20 11:32:38 2013
+--- src/FileList.h.orig	Tue Aug 27 09:37:57 2013
++++ src/FileList.h	Tue Aug 27 09:38:23 2013
 @@ -215,6 +215,8 @@ class FXAPI FileList : public IconList (public)
  	long onCmdDragReject(FXObject* sender,FXSelector,void*);
  	long onUpdRefreshTimer(FXObject* sender,FXSelector,void*);

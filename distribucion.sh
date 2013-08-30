@@ -607,8 +607,8 @@ if (test "$sn" = "s") then {
  	paquete pear-HTML-Menu www
  	paquete pear-HTML-Table www
  	
-    paquete ruby-apacheconf_parser devel paquetes "ruby19-apacheconf-parser"
-    paquete ruby-apache2nginx devel paquetes "ruby19-apache2nginx"
+    	paquete ruby-apacheconf_parser devel paquetes "ruby19-apacheconf-parser"
+    	paquete ruby-apache2nginx devel paquetes "ruby19-apache2nginx"
 
 	paquete evangelios_dp books
 	paquete sword textproc 
@@ -627,7 +627,8 @@ if (test "$sn" = "s") then {
 	paquete repasa education
 	paquete sigue education
 
-	paquete sivel databases sivel
+	paquete sivel databases sivel sivel 1.1
+	paquete sivel databases sivel sivel 1.2
 
 	paquete fbdesk x11
 	paquete xfe x11
