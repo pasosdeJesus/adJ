@@ -1342,6 +1342,7 @@ connginx=0
 grep "httpd_flags.*-DSSL" /etc/rc.conf.local > /dev/null 2>/dev/null
 if (test "$?" = "0") then {
 	conapache=1;
+	connginx=0;
 } fi;
 
 if (test "$conapache" = "1" -a -f /etc/rc.d/httpd) then {
