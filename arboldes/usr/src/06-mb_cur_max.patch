@@ -52,36 +52,12 @@ retrieving revision 1.7
 diff -u -r1.7 setrunelocale.c
 --- src/lib/libc/locale/setrunelocale.c	5 Dec 2012 23:20:00 -0000	1.7
 +++ src/lib/libc/locale/setrunelocale.c	28 Apr 2013 13:10:49 -0000
-@@ -88,18 +88,20 @@
-  * SUCH DAMAGE.
-  */
- 
--#include "rune.h"
- #include <assert.h>
- #include <errno.h>
- #include <limits.h>
-+#include <locale.h>
- #include <paths.h>
--#include <string.h>
- #include <stdio.h>
- #include <stdlib.h>
- #include <stddef.h>
-+#include <string.h>
- #include <unistd.h>
--#include <locale.h>
--#include <citrus/citrus_ctype.h>
-+
-+#include "citrus_ctype.h"
-+#include "citrus_ctype_local.h"
-+#include "rune.h"
- #include "rune_local.h"
- 
- struct localetable {
-@@ -195,6 +197,7 @@
+@@ -215,7 +215,8 @@
  
  found:
- 	_CurrentRuneLocale = rl;
-+	__mb_cur_max = rl->rl_citrus_ctype->cc_mb_cur_max;
- 
- 	return 0;
+        xc->runes = rl;
+-
++    __mb_cur_max = rl->rl_citrus_ctype->cc_mb_cur_max;
++    
+        return 0;
  }
