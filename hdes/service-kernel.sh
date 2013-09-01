@@ -106,4 +106,5 @@ EOF
 
 # Copia cambios en encabezados a encabezados del sistema
 cp -rf /usr/src/sys/sys/*h /usr/include/sys/
+cp -rf /usr/src/sys/sys/syslog.h /usr/include/
 
