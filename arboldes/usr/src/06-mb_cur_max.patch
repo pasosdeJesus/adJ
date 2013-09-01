@@ -52,12 +52,11 @@ retrieving revision 1.7
 diff -u -r1.7 setrunelocale.c
 --- src/lib/libc/locale/setrunelocale.c	5 Dec 2012 23:20:00 -0000	1.7
 +++ src/lib/libc/locale/setrunelocale.c	28 Apr 2013 13:10:49 -0000
-@@ -215,7 +215,8 @@
+@@ -215,6 +215,7 @@
  
  found:
-        xc->runes = rl;
--
-+    __mb_cur_max = rl->rl_citrus_ctype->cc_mb_cur_max;
-+    
-        return 0;
+ 	xc->runes = rl;
++	__mb_cur_max = rl->rl_citrus_ctype->cc_mb_cur_max;
+ 
+ 	return 0;
  }
