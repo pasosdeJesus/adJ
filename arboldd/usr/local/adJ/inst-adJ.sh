@@ -113,13 +113,13 @@ function activarcs {
 		echo "En /etc/rc.d falta servicio de nombre $ns" 
 		exit 1;
 	} fi;
-	echo "activando $ns" >> /var/tmp/inst-adJ.bitacora 2>&1 
-	grep "^ *pkg_scripts.*[^a-zA-Z0-9_]$ns[^a-zA-Z0-9_]" /etc/rc.conf.local >> /var/tmp/inst-adJ.bitacora 2>&1 
+	echo "activando $ns" >> /var/tmp/inst-adJ.bitacora 2>&1
+	grep "^ *pkg_scripts.*[^a-zA-Z0-9_]$ns[^a-zA-Z0-9_]" /etc/rc.conf.local >> /var/tmp/inst-adJ.bitacora 2>&1
 	if (test "$?" != "0") then {
-		echo "No  hay pkg_scripts con $ns"  >> /var/tmp/inst-adJ.bitacora 2>&1 
-		grep "^ *pkg_script" /etc/rc.conf.local >> /var/tmp/inst-adJ.bitacora 2>&1 
+		echo "No  hay pkg_scripts con $ns"  >> /var/tmp/inst-adJ.bitacora 2>&1
+		grep "^ *pkg_script" /etc/rc.conf.local >> /var/tmp/inst-adJ.bitacora 2>&1
 		if (test "$?" != "0") then {
-			echo "No hay pkg_script" >> /var/tmp/inst-adJ.bitacora 2>&1 
+			echo "No hay pkg_script" >> /var/tmp/inst-adJ.bitacora 2>&1
 			ed /etc/rc.conf.local >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
 $
 a
@@ -135,7 +135,7 @@ EOF
 			} else {
 				cs=$ns;
 			} fi;
-			echo "cs=$cs" >> /var/tmp/inst-adJ.bitacora 2>&1 
+			echo "cs=$cs" >> /var/tmp/inst-adJ.bitacora 2>&1
 			ed /etc/rc.conf.local >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
 /^ *pkg_scripts *=
 .c
@@ -146,7 +146,7 @@ q
 EOF
 		} fi;
 	} else  {
-		echo "Activo" >> /var/tmp/inst-adJ.bitacora 2>&1 
+		echo "Activo" >> /var/tmp/inst-adJ.bitacora 2>&1
 	} fi;
 } 
 
@@ -1301,13 +1301,13 @@ if (test "$t" != "1") then {
 		echo "psql -h /var/www/tmp -U postgres -c \"CREATE COLLATION es_${i}_UTF_8 (LOCALE='es_${i}.UTF-8');\"" >> /tmp/cu.sh
 	done;
 } fi;
-echo "CREATE EXTENSION unaccent;" >> /tmp/cu.sh
-echo "ALTER TEXT SEARCH DICTIONARY unaccent (RULES='unaccent');" >> /tmp/cu.sh
-echo "ALTER FUNCTION unaccent(text) IMMUTABLE;" >> /tmp/cu.sh
+echo "psql -h /var/www/tmp -U postgres -c \"CREATE EXTENSION unaccent;\"" >> /tmp/cu.sh
+echo "psql -h /var/www/tmp -U postgres -c \"ALTER TEXT SEARCH DICTIONARY unaccent (RULES='unaccent');\"" >> /tmp/cu.sh
+echo "psql -h /var/www/tmp -U postgres -c \"ALTER FUNCTION unaccent(text) IMMUTABLE;\"" >> /tmp/cu.sh
 echo "exit \$?" >> /tmp/cu.sh;
-chmod +x /tmp/cu.sh 2>&1 >> /var/tmp/inst-adJ.bitacora
+chmod +x /tmp/cu.sh >> /var/tmp/inst-adJ.bitacora 2>&1
 cat /tmp/cu.sh >> /var/tmp/inst-adJ.bitacora
-su - _postgresql /tmp/cu.sh  2>&1
+su - _postgresql /tmp/cu.sh  >> /var/tmp/inst-adJ.bitacora 2>&1
 				
 
 insacp libidn
@@ -1579,7 +1579,7 @@ f=`ls /var/db/pkg/fluxbox* 2> /dev/null > /dev/null`;
 if (test "$?" = "0") then {
 	dialog --title 'Eliminar Fluxbox' --yesno "\\nfluxbox instalado. ¿Eliminarlo para instalar uno más nuevo?" 15 60
 	if (test "$?" = "0") then {
-		pkg_delete -I -D dependencies fluxbox >> /var/tmp/inst-adJ.bitacora 2>&1 
+		pkg_delete -I -D dependencies fluxbox >> /var/tmp/inst-adJ.bitacora 2>&1
 		pkg_delete -I -D dependencies partial-fluxbox >> /var/tmp/inst-adJ.bitacora 2>&1
 	} fi;
 } fi;
@@ -1619,7 +1619,7 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 	[exec] (chromium) {/usr/local/bin/chrome}
 [submenu] (Espiritualidad)
 	[exec] (xiphos) {/usr/local/bin/xiphos}
-	[exec] (Evangelios de dominio publico) {/usr/local/bin/firefox /usr/local/share/doc/evangelios_dp/index.html}
+	[exec] (Evangelios de dominio publico) {/usr/local/bin/firefox /usr/local/share/doc/evangelios_dp/}
 [end]
 [submenu] (Dispositivos)
 	[exec] (Apagar) {sudo /sbin/halt -p}
@@ -1674,6 +1674,7 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 [end]
 [submenu] (Otros)
 [exec] (gvim) {gvim}
+[exec] (plan) {plan}
 [exec] (qgis) {qgis}
 [exec] (xarchiver) {xarchiver}
 [exec] (xfw) {xfw}
@@ -1881,7 +1882,7 @@ session.focusTabMinWidth:	0
 session.doubleClickInterval:	250
 session.groupFile:	~/.fluxbox/groups
 session.autoRaiseDelay:	250
-session.styleFile:	/usr/local/share/fluxbox/styles/MerleyKay
+session.styleFile:	/usr/local/share/fluxbox/styles/BlueNight
 session.tabPadding:	0
 session.styleOverlay:	~/.fluxbox/overlay
 session.useMod1:	true
@@ -2053,7 +2054,37 @@ if (test "$?" != "0") then {
 	echo "   Saltando..." >> /var/tmp/inst-adJ.bitacora;
 } fi;
 
+echo "* Configurar xfe" >> /var/tmp/inst-adJ.bitacora;
+if (test ! -f "/home/$uadJ/.config/xfe/xferc") then {
+	cat > /home/$uadJ/.config/xfe/xferc <<EOF
+[OPTIONS]
+uso_sudo=1
+sudo_passwd=1
+EOF
+} else {
+	for m in uso_sudo sudo_passwd; do
+		grep "^ *$m" /home/$uadJ/.config/xfe/xferc > /dev/null 2>&1
+		if (test "$?" = "0") then {
+			ed /home/$uadJ/.config/xfe/xferc >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+,s/\($m\).*/\1=1/g
+w
+q
+EOF
+		} else {
+			ed /home/$uadJ/.config/xfe/xferc >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+/[OPTIONS]
+a
+$m=1
+.
+w
+q
+EOF
+		} fi;
+	done;
+} fi;
+
 chmod a+rxw /var/www/tmp > /dev/null 2>&1
+
 
 dialog --title 'Componentes básicos instalados' --msgbox "\\nInstalación y configuración de los componentes básicos de adJ completada.\\n\\nPor instalar los demás paquetes de $ARCH/paquetes" 15 60
 #, mientras tanto puede instalar SIVeL:"
@@ -2069,7 +2100,7 @@ echo "Eliminando parciales" >> /var/tmp/inst-adJ.bitacora
 cd /var/db/pkg
 for i in partial-*; do 
 	echo $i >> /var/tmp/inst-adJ.bitacora ; 
-	sudo pkg_delete -I $i >> /var/tmp/inst-adJ.bitacora 2>&1 ; 
+	sudo pkg_delete -I $i >> /var/tmp/inst-adJ.bitacora 2>&1
 done
 
 echo "Eliminando problemáticos" >> /var/tmp/inst-adJ.bitacora 
@@ -2093,7 +2124,7 @@ echo "Eliminando librerías innecesarias" >> /var/tmp/inst-adJ.bitacora
 cd /var/db/pkg
 for i in .libs*; do 
 	echo $i >> /var/tmp/inst-adJ.bitacora ; 
-	sudo pkg_delete -I $i >> /var/tmp/inst-adJ.bitacora 2>&1 ; 
+	sudo pkg_delete -I $i >> /var/tmp/inst-adJ.bitacora 2>&1
 done
 
 for i in $PKG_PATH/*tgz; do
