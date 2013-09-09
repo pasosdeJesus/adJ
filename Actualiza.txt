@@ -1,4 +1,4 @@
-Instalación/Actualización a Aprendiendo De Jesús 5.2
+Instalación/Actualización a Aprendiendo De Jesús 5.3
 ****************************************************
 
 La instalación consta de 2 partes:
@@ -15,7 +15,7 @@ Para la primera tener en cuenta:
 	  con una imagen como floppy52.fs, (3) si actualiza puede iniciar 
 	  con el kernel bsd.rd de la versión a la cual se actualiza 
 	  copiándolo en el directorio raíz y en la línea "boot>" ingresando 
-	  bsd.rd, (4) por red local con DHCP y TFTP
+	  bsd.rd, (4) por red local con PXE, DHCP y TFTP
 	* Elegir un medio del que se sacarán los juegos de instalación. Puede 
 	  ser del DVD, disco duro en un sistema de archivos de OpenBSD, 
 	  por red con ftp o http.
@@ -47,7 +47,7 @@ Para la segunda tener en cuenta:
 	* Por defecto este instalador intenta obtener las aplicaciones de un 
  	  DVD, pero si las aplicaciones están en un disco duro (digamos en 
           /root/adJ/5.1-amd64) puede iniciarse con:
-		ARCH=/root/adJ/5.1-amd64 /usr/local/adJ/inst.sh
+		sudo ARCH=/root/adJ/5.1-amd64 /usr/local/adJ/inst.sh
 	* Si el proceso no concluye exitosamente por favor después de ejecutar
 	  el instalador y avanzar tanto como pueda envíe el archivo
 	  /var/tmp/inst-adJ.bitacora a info@pasosdeJesus.org
