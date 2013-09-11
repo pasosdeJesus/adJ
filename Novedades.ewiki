@@ -17,7 +17,7 @@ Con respecto a OpenBSD 5.3 para amd64 y a la edición anterior de este DVD
 * Parches de seguridad de sistema base hasta:  31.Ago.2013
 * Hemos remplazando `daemon' por `service' en buena parte del sistem base (ver por ejemplo ==vmstat -s== o ==less /var/log/service== o ==man service==).
 * En instalaciones nuevas se emplea nginx por defecto en lugar de Apache
-* Nuevos archivos de comandos para facilitar mantener servidor de correo con OpenSMTPD e IMAPS: prepopensmtpd, elimcuenta, adicuenta
+* Nuevos archivos de comandos para facilitar mantener servidor de correo con OpenSMTPD e IMAPS con dovecot: prepopensmtpd, elimcuenta, adicuenta. Ver documentación en http://structio.sourceforge.net/guias/servidor_OpenBSD/servicios-correo.html#opensmtpd y http://structio.sourceforge.net/guias/servidor_OpenBSD/servicios-correo.html#dovecot 
 
 Entre las novedades reportadas en las `Notas de publicación de OpenBSD 5.3' destacamos:
 
