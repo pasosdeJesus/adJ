@@ -1349,7 +1349,13 @@ grep "httpd_flags.*-DSSL" /etc/rc.conf.local > /dev/null 2>/dev/null
 if (test "$?" = "0") then {
 	conapache=1;
 	connginx=0;
+} elif (test "$CONNGINX" != "") then {
+	connginx=1;
+} else {
+	conapache=1;  
+	# En migracion probando mas
 } fi;
+
 
 if (test "$conapache" = "1" -a -f /etc/rc.d/httpd) then {
 	activarcs httpd
@@ -2093,10 +2099,10 @@ if (test "$?" != "0") then {
 
 	p=`ls $PKG_PATH/libxml-* $PKG_PATH/shared-mime-info-* $PKG_PATH/pcre-* $PKG_PATH/png-* $PKG_PATH/jpeg-* $PKG_PATH/glib2-* $PKG_PATH/tiff-* $PKG_PATH/libiconv-* $PKG_PATH/esound-* $PKG_PATH/atk-* $PKG_PATH/desktop-file-utils-* $PKG_PATH/gettext-* $PKG_PATH/libaudiofile-* $PKG_PATH/gtk+2-* $PKG_PATH/cairo-* $PKG_PATH/pango-* $PKG_PATH/nss-* $PKG_PATH/nspr-* $PKG_PATH/jasper-* $PKG_PATH/hicolor-icon-theme-* $PKG_PATH/firefox-* $PKG_PATH/firefox-i18n-es-AR*`
         pkg_add -I -D update -D updatedepends -r $p >> /var/tmp/inst-adJ.bitacora 2>&1;
-	grep "browser.startup.homepage.*https://localhost" /usr/local/mozilla-firefox/defaults/profile/prefs.js > /dev/null
+	grep "browser.startup.homepage.*https://localhost" /usr/local/lib/firefox-18.0.2/defaults/pref/prefs.js > /dev/null 2>&1
 	if (test "$?" != "0") then {
-		echo 'user_pref("general.useragent.locale", "es-AR")' >> /usr/local/mozilla-firefox/defaults/profile/prefs.js;
-		echo 'user_pref("browser.startup.homepage", "https://127.0.0.1/");' >> /usr/local/mozilla-firefox/defaults/profile/prefs.js;
+		echo 'user_pref("general.useragent.locale", "es-AR")' >>/usr/local/lib/firefox-18.0.2/defaults/pref/prefs.js 2>> /var/tmp/inst-adJ.bitacora;
+	       	echo 'user_pref("browser.startup.homepage", "https://127.0.0.1/");' >>/usr/local/lib/firefox-18.0.2/defaults/pref/prefs.js 2>> /var/tmp/inst-adJ.bitacora;
 	} fi;
 	echo "Sugerencias: " >> /var/tmp/inst-adJ.bitacora;
 	echo "  * Configure localización en español desde about:config general.useragent.local es-AR"

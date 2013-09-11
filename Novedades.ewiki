@@ -16,7 +16,7 @@ Con respecto a OpenBSD 5.3 para amd64 y a la edición anterior de este DVD
 * Se ha incluido soporte para cotejación (COLLATE) en idioma nativo en el sistema base importado de FreeBSD, tablas de caracteres y cotejación para todos los paises de habla hispana y portes de PostgreSQL y xfe que soportan cotejación. Vea detalles y una captura de pantalla en http://aprendiendo.pasosdejesus.org/?id=i18n.  Las mejoras se han aportado a OpenBSD y xfe y han sido parcialmente integradas, se espera más integración en futuras versiones de esos proyectos.
 * Parches de seguridad de sistema base hasta:  31.Ago.2013
 * Hemos remplazando `daemon' por `service' en buena parte del sistem base (ver por ejemplo ==vmstat -s== o ==less /var/log/service== o ==man service==).
-* En instalaciones nuevas se emplea nginx por defecto en lugar de Apache
+* En instalaciones nuevas puede emplear nginx en lugar de Apache si inicia el script de instalación con ==CONNGINX=1 /inst-adJ.sh==
 * Nuevos archivos de comandos para facilitar mantener servidor de correo con OpenSMTPD e IMAPS con dovecot: prepopensmtpd, elimcuenta, adicuenta. Ver documentación en http://structio.sourceforge.net/guias/servidor_OpenBSD/servicios-correo.html#opensmtpd y http://structio.sourceforge.net/guias/servidor_OpenBSD/servicios-correo.html#dovecot 
 
 Entre las novedades reportadas en las `Notas de publicación de OpenBSD 5.3' destacamos:
