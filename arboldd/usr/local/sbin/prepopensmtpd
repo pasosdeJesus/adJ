@@ -17,21 +17,9 @@ activarcs smtpd
 
 echo "Instalando lo necesario para IMAP, Enter para continuar"
 read
-insacp courier-authlib
+insacp dovecot
 
-activarcs courier_authdaemond
-
-insacp courier-imap
-
-grep "IMAPDSTART *= *YES" /etc/courier/imapd > /dev/null 2>&1
-if (test "$?" != "0") then {
-	echo "Configurando /etc/courier/imapd";
-	cp /etc/courier/imapd /etc/courier/imapd.copia
-	sed -e "s/IMAPDSTART=NO/IMAPDSTART=YES/g;s/MAILDIRPATH=Maildir/MAILDIRPATH=$Maildir/g" /etc/courier/imapd.copia > /etc/courier/imapd
-	(cd /etc/ssl/private; cat server.key ../server.crt > imapd.pem)
-} fi;
-
-activarcs courier_imap_ssl
+activarcs dovecot
 
 echo "Recuerde abrir puerto 993 de su cortafuegos"
 

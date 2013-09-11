@@ -4,17 +4,20 @@ Distribución para fomentar la construcción del Reino de Dios desde la educaci�
 el respeto por la dignidad humana y la memoria.
 
 Versión: 5.3%%%
-Fecha de publicación: 10/Sep/2013
+Fecha de publicación: 12/Sep/2013
 
 !!!NOVEDADES
 
 Con respecto a OpenBSD 5.3 para amd64 y a la edición anterior de este DVD
+
 
 !KERNEL Y SISTEMA BASE
 
 * Se ha incluido soporte para cotejación (COLLATE) en idioma nativo en el sistema base importado de FreeBSD, tablas de caracteres y cotejación para todos los paises de habla hispana y portes de PostgreSQL y xfe que soportan cotejación. Vea detalles y una captura de pantalla en http://aprendiendo.pasosdejesus.org/?id=i18n.  Las mejoras se han aportado a OpenBSD y xfe y han sido parcialmente integradas, se espera más integración en futuras versiones de esos proyectos.
 * Parches de seguridad de sistema base hasta:  31.Ago.2013
 * Hemos remplazando `daemon' por `service' en buena parte del sistem base (ver por ejemplo ==vmstat -s== o ==less /var/log/service== o ==man service==).
+* En instalaciones nuevas se emplea nginx por defecto en lugar de Apache
+* Nuevos archivos de comandos para facilitar mantener servidor de correo con OpenSMTPD e IMAPS con dovecot: prepopensmtpd, elimcuenta, adicuenta. Ver documentación en http://structio.sourceforge.net/guias/servidor_OpenBSD/servicios-correo.html#opensmtpd y http://structio.sourceforge.net/guias/servidor_OpenBSD/servicios-correo.html#dovecot 
 
 Entre las novedades reportadas en las `Notas de publicación de OpenBSD 5.3' destacamos:
 
@@ -49,22 +52,24 @@ Seguridad
 ** Mejoras entre otros a  ==tmux==, ==libtool==, ==ssh 6.1==
 * El sistema base incluye mejoras a componentes auditados como ==Xenocara== (Xorg 7.7), ==gcc== 4.2.1, ==perl== 5.12.2, Apache 1.3 mejorado, OpenSSL 1.0.1c, ==sendmail== 8.14.6, bind 9.4.2-P2, nginx 1.2.6
 
+
+!PROCESO DE INSTALACIÓN
+
+Es en español y consta de instalación o actualización del sistema base seguido de instalación/actualización de paquetes y entornos.
+
+La instalación del sistema base, de las particiones cifradas y de todos los paquetes del DVD instalador requiere por lo menos 13G, de los cuales 10G deben reservarse en ==/usr== y 1.5G en ==/var==
+
+El instalador  de adJ emplea codificación UTF8, por lo que para iniciarlo se recomienda desde una terminal gráfica con ==/inst-adJ.sh==
+
+
 !PAQUETES EXCLUSIVOS DE ADJ
 
 * SIVeL 1.1.5 con corrección de fallas y mejoras menores
 * Experimental SIVeL 1.2a1 con módulos nuevos de desplazamiento, mezcla de casos, más usable, internacionalización y localización
 * xfe actualizado a 1.3.5 y modificado para administrar paquetes en OpenBSD (ver pantallazo en http://structio.sf.net/guias/basico_OpenBSD/medios.html#xfe Soporta cotejación en idioma nativo.  Nueva opción sudo_nopasswd utilizable en ~/.config/xfe/xferc cuando sudo no requiere clave (útil para que opere bien Herramientas->Nueva ventana root).
 * PostgreSQL actualizado a 9.2.4 con soporte para UTF-8 y cotejaciones nativas listas para todos los paises de habla hispana. Ver detalles de como usar cotejación en http://aprendiendo.pasosdejesus.org/?id=i18n
-* Los paquetes exclusivos los encuentra en [ftp://ftp.pasosdeJesus.org/pub/AprendiendoDeJesus/5.3-amd64/paquetes]
-* Nuevos archivos de comandos para facilitar mantener servidor de correo con OpenSMTPD e IMAPS: prepopensmtpd.sh
 * Nuevo paquete ruby19-apache2ngingx que ayuda a migrar archivos de configuración de Apache a Nginx
-
-
-!PROCESO DE INSTALACIÓN
-
-La instalación del sistema base, de las particiones cifradas y de todos los paquetes del DVD instalador requiere por lo menos 13G, de los cuales 10G deben reservarse en ==/usr== y 1.5G en ==/var==
-
-* El instalador  de adJ emplea codificación UTF8, por lo que para iniciarlo se recomienda desde una terminal gráfica con ==/inst-adJ.sh==
+* Los paquetes exclusivos los encuentra en [ftp://ftp.pasosdeJesus.org/pub/AprendiendoDeJesus/5.3-amd64/paquetes]
 
 
 !PAQUETES
@@ -75,6 +80,7 @@ La instalación del sistema base, de las particiones cifradas y de todos los paq
 * Navegadores actualizados: Firefox a 18.0.2, Chromium a 24.0.1312.68, Midori a 0.4.7
 * !LibreOffice actualizado a 3.6.5.2, gimp a 2.8.1, vlc a 2.0.5p3
 * PHP actualizado a 5.3.21, ruby a 1.9.3.392, LLVM/Clang 3.2, asi como los demás lenguajes de programación
+* Se incluye lo básico de Ruby para desarrollar aplicaciones con Ruby on Rails, ver http://dhobsd.pasosdejesus.org/index.php?id=Ruby+on+Rails+en+OpenBSD
 * Se incluyen otros paquetes típicos del repositorio de OpenBSD, en donde hay   más de 7600 disponibles para amd64
 
 !ESCRITORIO
