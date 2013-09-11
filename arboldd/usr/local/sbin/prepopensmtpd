@@ -1,0 +1,34 @@
+#!/bin/sh
+# Instala o actualiza programas requeridos por un servidor de correo
+# configurado:
+#   smtpd con SSL 
+#   SpamAssasin y Procmail
+#   IMAPS, POP3S
+# Dominio público de acuerdo a legislación colombiana. 
+# vtamara@pasosdeJesus.org. 2013
+
+. /etc/varcorreo.sh
+
+. /usr/local/adJ/rutinas.sh
+
+activarcs smtpd
+
+# IMAP
+
+echo "Instalando lo necesario para IMAP, Enter para continuar"
+read
+insacp dovecot
+
+activarcs dovecot
+
+echo "Recuerde abrir puerto 993 de su cortafuegos"
+
+echo "Agregando SpamAssassin y Procmail";
+insacp p5-Mail-SpamAssassin
+
+insacp procmail
+
+activarcs spamassassin
+
+# Reiniciamos servicios
+sh /etc/rc.d/smtpd restart
