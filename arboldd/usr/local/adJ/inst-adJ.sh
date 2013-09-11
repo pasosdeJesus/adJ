@@ -1154,8 +1154,10 @@ if (test "$?" = "0") then {
 	dialog --title 'Eliminar PostgreSQL' --yesno "\\nDesea eliminar la actual versión de PostgreSQL y los datos asociados para actualizarla\\n" 15 60
 	if (test "$?" = "0") then {
 		echo "s" >> /var/tmp/inst-adJ.bitacora
+		pkg_delete -I -D dependencies postgresql-contrib >> /var/tmp/inst-adJ.bitacora 2>&1
 		pkg_delete -I -D dependencies postgresql-server >> /var/tmp/inst-adJ.bitacora 2>&1
 		pkg_delete -I -D dependencies postgresql-client >> /var/tmp/inst-adJ.bitacora 2>&1
+		pkg_delete -I -D dependencies postgresql-docs >> /var/tmp/inst-adJ.bitacora 2>&1
 		pkg_delete -I -D dependencies .libs-postgresql-client >> /var/tmp/inst-adJ.bitacora 2>&1
 		pkg_delete -I -D dependencies .libs1-postgresql-client >> /var/tmp/inst-adJ.bitacora 2>&1
 		pkg_delete -I -D dependencies .libs-postgresql-server >> /var/tmp/inst-adJ.bitacora 2>&1
@@ -1207,6 +1209,9 @@ insacp apg
 echo "* Instalar PostgreSQL y PostGIS"  >> /var/tmp/inst-adJ.bitacora
 f=`ls /var/db/pkg/postgresql-server* 2> /dev/null > /dev/null`;
 if (test "$?" != "0") then {
+	insacp libxml
+	insacp libiconv
+	insacp ossp-uuid
 	p=`ls $PKG_PATH/libxml-* $PKG_PATH/libiconv-* $PKG_PATH/postgresql-client-* $PKG_PATH/postgresql-server* $PKG_PATH/postgresql-contrib* $PKG_PATH/postgresql-doc*`
 	pkg_add -I -r -D update -D updatedepends $p >> /var/tmp/inst-adJ.bitacora 2>&1;
 	insacp tiff
@@ -1337,6 +1342,7 @@ if (test ! -f /etc/ssl/server.crt) then {
       		-signkey /etc/ssl/private/server.key -out /etc/ssl/server.crt
 } fi;
 
+# Si ya tenía apache lo dejamos, si no ponemos nginx
 conapache=0
 connginx=0
 grep "httpd_flags.*-DSSL" /etc/rc.conf.local > /dev/null 2>/dev/null
@@ -1348,8 +1354,39 @@ if (test "$?" = "0") then {
 if (test "$conapache" = "1" -a -f /etc/rc.d/httpd) then {
 	activarcs httpd
 } else {
-	activarcs nginx
-	connginx=1
+	connginx=1;
+	grep "nginx_flags" /etc/rc.conf.local > /dev/null 2>/dev/null
+	if (test "$?" != "0") then {
+		activarcs nginx
+		ed /etc/rc.conf.local >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+/pkg_scripts
+i
+nginx_flags=""
+.
+w
+q
+EOF
+		ed /etc/nginx/nginx.conf >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+1
+?}
+i
+    server {
+        listen       443;
+        server_name  localhost;
+        root         /var/www/htdocs;
+        ssl                  on;
+        ssl_certificate      /etc/ssl/server.crt;
+        ssl_certificate_key  /etc/ssl/private/server.key;
+        ssl_session_timeout  5m;
+        ssl_protocols  SSLv3 TLSv1;
+        ssl_ciphers  HIGH:!aNULL:!MD5;
+        ssl_prefer_server_ciphers   on;
+    }
+.
+w
+q
+EOF
+	} fi;
 } fi;
 
 	
@@ -1376,7 +1413,7 @@ if (test "$?" = "0") then {
 	connginx=1
 } fi;
 
-echo "* Instalar PHP" >> /var/tmp/inst-adJ.bitacora;
+echo "* Instalando PHP" >> /var/tmp/inst-adJ.bitacora;
 p=`ls /var/db/pkg | grep "^php"`
 if (test "$p" = "") then {
 	insacp libltdl
@@ -1389,27 +1426,44 @@ if (test "$p" = "") then {
 	rm -f /var/www/conf/modules/php.conf /var/www/conf/php.ini /etc/php.ini
 	ln -s /var/www/conf/modules.sample/php-5.3.conf \
 		/var/www/conf/modules/php.conf
-	rm -f /etc/php-5.3/{gd.ini,mcrypt.ini,pgsql.ini,pdo_pgsql.ini,sqlite.ini}
-	ln -fs /etc/php-5.3.sample/gd.ini \
-        	/etc/php-5.3/gd.ini
-	ln -fs /etc/php-5.3.sample/mcrypt.ini \
-		/etc/php-5.3/mcrypt.ini
-	ln -fs /etc/php-5.3.sample/pgsql.ini \
-        	/etc/php-5.3/pgsql.ini
-	ln -fs /etc/php-5.3.sample/pdo_pgsql.ini \
-        	/etc/php-5.3/pdo_pgsql.ini
-	ln -fs /etc/php-5.3.sample/sqlite.ini \
-		/etc/php-5.3/sqlite.ini
-	ln -sf /etc/php-5.3.sample/uploadprogress.ini \
-	       	/etc/php-5.3/uploadprogress.ini
-	chmod +w /var/www/conf/httpd.conf
-	ed /var/www/conf/httpd.conf >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+	for sp in gd mcrypt pgsql pdo_pgsql sqlite uploadprogress; do
+		rm -f /etc/php-5.3/$sp
+		ln -fs /etc/php-5.3.sample/$sp.ini /etc/php-5.3/
+	done;
+	if (test "$conapache" = "1") then {
+		chmod +w /var/www/conf/httpd.conf
+		ed /var/www/conf/httpd.conf >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/\#AddType application\/x-httpd-php .php/AddType application\/x-httpd-php .php/g
 ,s/DirectoryIndex index.html.*/DirectoryIndex index.html index.php/g
 ,s/UseCanonicalName *On/UseCanonicalName Off/g
 w
 q
 EOF
+	} else {
+		insacp php-fpm
+		activarcs php_fpm
+		grep "^ *location .*php" /etc/nginx/nginx.conf > /dev/null 2>&1
+		if (test "$?" != "0") then {
+			grep "^ *ssl_prefer_server_ciphers" /etc/nginx/nginx.conf > /dev/null 2>&1
+			if (test "$?" = "0") then {
+				ed /etc/nginx/nginx.conf >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+/^ *ssl_prefer_server_ciphers
+a
+
+        location ~ \.php\$ {
+            root           /var/www/htdocs;
+            fastcgi_pass   127.0.0.1:9000;
+            fastcgi_index  index.php;
+            fastcgi_param  SCRIPT_FILENAME  \$document_root\$fastcgi_script_name;
+            include        fastcgi_params;
+        }
+.
+w
+q
+EOF
+			} fi;
+		} fi;
+	} fi;
 # Antes ,s/session.auto_start = 0/session.auto_start = 1/g
 # Pero no es indispensable y si entra en conflicto con horde 3.1.4
 	ed /etc/php-5.3.ini >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
@@ -1426,7 +1480,6 @@ w
 q
 EOF
 	chmod -w /var/www/conf/httpd.conf
-	pkg_add -I -D update -D updatedepends -r $PKG_PATH/php5-pgsql*.tgz >> /var/tmp/inst-adJ.bitacora 2>&1
 
 } else {
 	echo "   Saltando..."  >> /var/tmp/inst-adJ.bitacora;
@@ -1434,6 +1487,7 @@ EOF
 
 if (test "$connginx" = "1") then {
 	echo "* Corriendo nginx" >> /var/tmp/inst-adJ.bitacora
+	/etc/rc.d/php_fpm start >> /var/tmp/inst-adJ.bitacora 2>&1
 	/etc/rc.d/nginx start >> /var/tmp/inst-adJ.bitacora 2>&1
 } else {
 	echo "* Corriendo Apache" >> /var/tmp/inst-adJ.bitacora
@@ -1456,7 +1510,8 @@ cat /var/www/conf/httpd.conf >> /var/tmp/inst-adJ.bitacora
 cat /etc/nginx/nginx.conf >> /var/tmp/inst-adJ.bitacora 
 
 
-apdocroot=`awk '
+if (test "$conapache" = "1") then {
+	docroot=`awk '
 /DocumentRoot  */ {
 	if (paso==3) {
 		match($0, /DocumentRoot  */);
@@ -1501,13 +1556,48 @@ END {
 	}
 }
 ' /var/www/conf/httpd.conf`
+} else {
+	docroot=`awk '
+/^ *root  */ {
+	if (paso==1) {
+		match($0, /root  */);
+		sc=substr($0, RSTART+RLENGTH, length($0)-RSTART-RLENGTH+1);
+		gsub(/"/, "", sc);
+		gsub(/; *$/, "", sc);
+		paso=2;
+	}
+}
 
-echo "apdocroot=$apdocroot" >>  /var/tmp/inst-adJ.bitacora;
+/^ *listen  *443 *;/ {
+	if (paso==0) {
+		paso=1;
+	}
+}
+
+/.*/ {
+}
+
+BEGIN {
+	paso=0;
+}
+
+END {
+	if (paso == 2) {
+		print sc;
+	} else {
+		print "/var/www/htdocs"
+	}
+}
+' /etc/nginx/nginx.conf`
+
+} fi;
+
+echo "docroot=$docroot" >>  /var/tmp/inst-adJ.bitacora;
 
 echo "* Probando PHP" >> /var/tmp/inst-adJ.bitacora;
 p=`ls /var/db/pkg | grep "^php"`
 if (test "$p" != "") then {
-	cat > $apdocroot/phpinfo-adJ.php <<EOF
+	cat > $docroot/phpinfo-adJ.php <<EOF
 <?php
 	phpinfo();
 ?>
@@ -1520,8 +1610,8 @@ EOF
 		sh
 	} fi;
 
-rm -f $apdocroot/phpinfo-adJ.php
-rm -f $apdocroot/phpinfo.php
+rm -f $docroot/phpinfo-adJ.php
+rm -f $docroot/phpinfo.php
 } else {
 	echo "* Saltando"; >> /var/tmp/inst-adJ.sh
 } fi;
