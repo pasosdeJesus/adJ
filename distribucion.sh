@@ -614,6 +614,8 @@ if (test "$sn" = "s") then {
 	paquete sword textproc 
 	paquete xiphos textproc 
 
+	paquete realboy emulators
+
 	paquete basico_OpenBSD books
 	paquete usuario_OpenBSD books
 	paquete servidor_OpenBSD books
