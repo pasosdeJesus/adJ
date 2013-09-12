@@ -1,0 +1,17 @@
+$OpenBSD$
+--- src/Makefile.am.orig	Wed Sep 11 19:37:59 2013
++++ src/Makefile.am	Wed Sep 11 19:39:06 2013
+@@ -26,6 +26,8 @@ realboy_SOURCES += gboy_x86_64.S
+ AM_CPPFLAGS = -DUSE_X86_64_ASM
+ if HOST_IS_OPENBSD
+ AM_LDFLAGS = -Wl,-non_shared
++else
++AM_CFLAGS = -Wno-unused-result
+ endif
+ else
+ AM_CPPFLAGS =
+@@ -35,4 +37,3 @@ endif
+ if USE_CLI
+ AM_CPPFLAGS += -DUSE_CLI
+ endif
+-AM_CFLAGS = -Wno-unused-result
