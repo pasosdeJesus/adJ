@@ -8,6 +8,10 @@ VESP=""
 
 VP=`echo $V | sed -e "s/[.]//g"`
 VU=`echo $V | sed -e "s/[.]/_/g"`
+VNUM=`echo $V | sed -e "s/\.//g"`
+VNUMS=`expr $VNUM + 1`
+VS=`echo $VNUMS | sed -e "s/\([0-9]\)\([0-9]\)/\1.\2/g"`
+# Versión siguiente
 
 ARQ=`uname -m`
 # Arquitectura

@@ -11,14 +11,14 @@ if (test "$V" = "") then {
 		. ./ver.sh
 	} else {
 		echo "Primer parámetro debe ser versión por descargar, e.g:"
-		echo "rsync-adJ 5.2"
+		echo "rsync-adJ 5.4"
 		exit 1;
 	} fi;
 } fi;
 
 mkdir -p $V$VESP-amd64
 cruta="";
-cmd="rsync rsync://ftp.pasosdeJesus.org/AprendiendoDeJesus/$cruta$V$VESP-amd64/"
+cmd="rsync rsync://ftp.pasosdeJesus.org/AprendiendoDeJesus/$cruta$V$VESP-amd64/ > /dev/null 2>&1"
 echo $cmd;
 eval $cmd;
 if (test "$?" != "0") then {
