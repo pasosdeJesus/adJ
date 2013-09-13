@@ -721,7 +721,7 @@ if (test -f /usr/bin/lint) then {
 	       	/usr/share/man/man4/raid.4 /usr/share/man/man8/raidctl.8
 	rm -rf /usr/libdata/lint /usr/libexec/tftpd
 	rm -rf /usr/lib/gcc-lib/*-unknown-openbsd5.1
-	pkg_delete -I sqlite3 > /dev/null 2>&1
+	pkg_delete -I -D dependencies sqlite3 > /dev/null 2>&1
 } fi;
 
 
@@ -1635,9 +1635,9 @@ if (test "$inspear" = "s") then {
 	echo "* Actualizando paquetes de pear"  >> /var/tmp/inst-adJ.bitacora;
 	echo "* Eliminando paquetes y librerías" >> /var/tmp/inst-adJ.bitacora;
 	p=`ls /var/db/pkg/ | grep "pear-"`;
-	pkg_delete -I $p >> /var/tmp/inst-adJ.bitacora 2>&1
+	pkg_delete -I -D dependencies $p >> /var/tmp/inst-adJ.bitacora 2>&1
 	p=`ls /var/db/pkg/ | grep "pear-"`;
-	pkg_delete -I $p >> /var/tmp/inst-adJ.bitacora 2>&1;
+	pkg_delete -I -D dependencies $p >> /var/tmp/inst-adJ.bitacora 2>&1;
 	rm -rf /var/www/pear
 	echo "Antes de pkg_add" >> /var/tmp/inst-adJ.bitacora
 	p=`ls $PKG_PATH/pear-*`;
@@ -1645,7 +1645,7 @@ if (test "$inspear" = "s") then {
 	echo "Antes de pkg_delete" >> /var/tmp/inst-adJ.bitacora
 	ls -l /var/www/pear/lib/DB/ >> /var/tmp/inst-adJ.bitacora
 	cd /var/db/pkg
-	pkg_delete -I partial-pear-*  >> /var/tmp/inst-adJ.bitacora 2>&1;
+	pkg_delete -I -D dependencies partial-pear-*  >> /var/tmp/inst-adJ.bitacora 2>&1;
 } fi;
 
 }
@@ -1687,6 +1687,7 @@ if (test "$?" != "0") then {
 	echo "* Instalando escritorio fluxbox" >> /var/tmp/inst-adJ.bitacora;
 	p=`ls $PKG_PATH/tiff-*`
         pkg_add -I -D update -D updatedepends -r $p >> /var/tmp/inst-adJ.bitacora 2>&1;
+	insacp fribidi
 	p=`ls $PKG_PATH/jpeg-* $PKG_PATH/libid3tag-* $PKG_PATH/png-* $PKG_PATH/bzip2-* $PKG_PATH/libungif-* $PKG_PATH/imlib2-* $PKG_PATH/libltdl-* $PKG_PATH/fluxbox-* $PKG_PATH/fluxter-* $PKG_PATH/fbdesk-*`
         pkg_add -I -D update -D updatedepends -r $p >> /var/tmp/inst-adJ.bitacora 2>&1;
 	if (test ! -f /home/$uadJ/.xsession) then {
@@ -2041,7 +2042,7 @@ for i in ruby19-railties-3.1.3 ruby19-actionmailer-3.1.3 \
     ruby19-thor-0.14.6p1 ruby19-activesupport-3.1.3 \
     ruby19-actionmailer-3.1.3 ruby19-sprockets-2.0.3 ruby19-rack-cache-1.1 \
     ruby19-actionpack-3.1.3 ; do
-	sudo pkg_delete $i >> /var/tmp/inst-adJ.bitacora 2>&1
+	sudo pkg_delete -I -D dependencies $i >> /var/tmp/inst-adJ.bitacora 2>&1
 done
 
 echo "* Configurar ruby-1.9" >> /var/tmp/inst-adJ.bitacora;
@@ -2061,7 +2062,7 @@ if (test ! -f "/usr/local/bin/ruby") then {
 echo "* Configurar tmux" >> /var/tmp/inst-adJ.bitacora;
 f=`ls /var/db/pkg/tmux* 2> /dev/null`;
 if (test "$f" != "") then {
-	pkg_delete -I tmux >> /var/tmp/inst-adJ.bitacora 2>&1
+	pkg_delete -I -D dependencies tmux >> /var/tmp/inst-adJ.bitacora 2>&1
 } fi;
 
 if (test ! -f /home/$uadJ/.tmux.conf) then {
@@ -2196,7 +2197,7 @@ echo "Eliminando parciales" >> /var/tmp/inst-adJ.bitacora
 cd /var/db/pkg
 for i in partial-*; do 
 	echo $i >> /var/tmp/inst-adJ.bitacora ; 
-	sudo pkg_delete -I $i >> /var/tmp/inst-adJ.bitacora 2>&1
+	sudo pkg_delete -I-D dependencies  $i >> /var/tmp/inst-adJ.bitacora 2>&1
 done
 
 echo "Eliminando problemáticos" >> /var/tmp/inst-adJ.bitacora 
@@ -2220,7 +2221,7 @@ echo "Eliminando librerías innecesarias" >> /var/tmp/inst-adJ.bitacora
 cd /var/db/pkg
 for i in .libs*; do 
 	echo $i >> /var/tmp/inst-adJ.bitacora ; 
-	sudo pkg_delete -I $i >> /var/tmp/inst-adJ.bitacora 2>&1
+	sudo pkg_delete -I-D dependencies  $i >> /var/tmp/inst-adJ.bitacora 2>&1
 done
 
 for i in $PKG_PATH/*tgz; do
