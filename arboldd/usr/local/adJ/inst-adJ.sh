@@ -256,12 +256,13 @@ if (test "$padJ" = "") then {
 } fi;
 uadJ="";
 while (test "$uadJ" = "") ; do
-clear;
-echo "Cuenta (prefiera un nombre corto en minusculas y sin espacio) [$padJ]: ";
-read uadJ;
-if (test "$uadJ" = "") then {
-	uadJ=$padJ;
-} fi;
+	clear;
+	echo "Cuenta (prefiera un nombre corto en minusculas y sin espacio) [$padJ]: ";
+	read uadJ;
+	uadJ=`echo $uadJ | sed -e "s/ //g"`
+	if (test "$uadJ" = "") then {
+		uadJ=$padJ;
+	} fi;
 done;
 ADMADJ=$uadJ;
 
