@@ -48,11 +48,12 @@ EOF
 done;
 
 echo "Archivos de etc/rc.d"  >> /var/tmp/inst-adJ.bitacora
-l=`grep -l "daemon" rc.d/* | grep -v "rc.subr"`
+# No cambiamos todos porque los instalados por paquetes tendran problemas cuando se quiera desinstalar el paquete por la suma cambiada.
+l="amd apmd bgpd bootparamd cron dhcpd dhcrelay dvmrpd ftpd ftpproxy hostapd hotplugd httpd identd ifstated iked inetd isakmpd kadmind kdc kpasswdd ldapd ldattach ldomd ldpd lockd lpd mopd mountd mrouted named nfsd nginx npppd nsd ntpd ospf6d ospfd pflogd popa3d portmap rarpd rbootd relayd ripd route6d rtadvd rtsold rwhod sasyncd sendmail sensorsd smtpd sndiod snmpd spamd spamlogd sshd statd syslogd tftpd tftpproxy watchdogd wsmoused xdm ypbind ypldap yppasswdd ypserv"
 echo "l=$l" >> /var/tmp/inst-adJ.bitacora 
 for i in $l; do 
-	echo $i  >> /var/tmp/inst-adJ.bitacora
-	ed $i >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+	echo rc.d/$i  >> /var/tmp/inst-adJ.bitacora
+	ed rc.d/$i >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/^ *daemon *=/service=/g
 w
 q

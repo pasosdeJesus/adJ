@@ -2084,6 +2084,7 @@ EOF
 } fi;
 
 echo "* Configurar cups" >> /var/tmp/inst-adJ.bitacora;
+rm -f /etc/rc.d/dbus_daemon
 insacp dbus	
 insacp libusb1
 insacp lcms2
