@@ -361,25 +361,25 @@ export PKG_PATH=$ARCH/paquetes/
 
 # Instala un paquete y opcionalmente otro 
 function insacp {
-n=$1;
-popc=$2;
-pre=$3;
-if (test "$n" = "") then {
-	echo "insacp: Falta nombre de paquete";
-	exit 1;
-} fi;
-echo "* Instalar $n"  >> /var/tmp/inst-adJ.bitacora;
-opbor="-I";
-f=`ls /var/db/pkg/$n-* 2> /dev/null > /dev/null`;
-if (test "$?" = "0") then {
-	echo "$n instalado. Intentando remplazar " >> /var/tmp/inst-adJ.bitacora
-	opbor="-I -r -D update -D updatedepends"
-} fi;
+	n=$1;
+	popc=$2;
+	pre=$3;
+	if (test "$n" = "") then {
+		echo "insacp: Falta nombre de paquete";
+		exit 1;
+	} fi;
+	echo "* Instalar $n"  >> /var/tmp/inst-adJ.bitacora;
+	opbor="-I";
+	f=`ls /var/db/pkg/$n-* 2> /dev/null > /dev/null`;
+	if (test "$?" = "0") then {
+		echo "$n instalado. Intentando remplazar " >> /var/tmp/inst-adJ.bitacora
+		opbor="-I -r -D update -D updatedepends"
+	} fi;
 
-pkg_add $opbor $PKG_PATH/$n-[0-9]*.tgz >> /var/tmp/inst-adJ.bitacora 2>&1
-if (test "$popc" != "") then {
-	pkg_add $opbor $PKG_PATH/${popc}*.tgz >> /var/tmp/inst-adJ.bitacora 2>&1
-} fi;
+	pkg_add $opbor $PKG_PATH/$n-[0-9]*.tgz >> /var/tmp/inst-adJ.bitacora 2>&1
+	if (test "$popc" != "") then {
+		pkg_add $opbor $PKG_PATH/${popc}*.tgz >> /var/tmp/inst-adJ.bitacora 2>&1
+	} fi;
 }
 
 
@@ -1348,22 +1348,32 @@ connginx=0
 grep "httpd_flags.*-DSSL" /etc/rc.conf.local > /dev/null 2>/dev/null
 if (test "$?" = "0") then {
 	conapache=1;
-	connginx=0;
 } elif (test "$CONNGINX" != "") then {
 	connginx=1;
 } else {
 	conapache=1;  
 	# En migracion probando mas
+
 } fi;
 
 
 if (test "$conapache" = "1" -a -f /etc/rc.d/httpd) then {
+	grep "httpd_flags.*-DSSL" /etc/rc.conf.local > /dev/null 2>/dev/null
+	if (test "$?" != "0") then {
+		ed /etc/rc.conf.local >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+/pkg_scripts
+i
+httpd_flags=-DSSL
+.
+w
+q
+EOF
+	} fi;
 	activarcs httpd
 } else {
 	connginx=1;
 	grep "nginx_flags" /etc/rc.conf.local > /dev/null 2>/dev/null
 	if (test "$?" != "0") then {
-		activarcs nginx
 		ed /etc/rc.conf.local >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
 /pkg_scripts
 i
@@ -1392,6 +1402,7 @@ i
 w
 q
 EOF
+		activarcs nginx
 	} fi;
 } fi;
 
@@ -2075,6 +2086,8 @@ EOF
 echo "* Configurar cups" >> /var/tmp/inst-adJ.bitacora;
 insacp dbus	
 insacp libusb1
+insacp lcms2
+insacp poppler
 insacp cups
 activarcs cupsd
 
@@ -2095,6 +2108,10 @@ if (test "$?" != "0") then {
 	insacp libelf
 	insacp glib2
 	insacp cairo
+	insacp libffi
+	insacp pcre
+	insacp icu4c
+	insacp harfbuzz
 	insacp pango
 	insacp gtk+2
 
