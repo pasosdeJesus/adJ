@@ -787,6 +787,23 @@ else {
 
 
 if (test "$sn" = "s") then {
+	#Asegurar versiones 
+	grep "rsync-adJ $V" arboldd/usr/local/bin/rsync-adJ > /dev/null
+	if (test "$?" = "0") then {
+		ed arboldd/usr/local/bin/rsync-adJ <<EOF
+,s/rsync-adJ $V/rsync-adJ $VS/g
+w
+q
+EOF
+	} fi;
+	grep "actbase.sh $V" arboldd/usr/local/adJ/actbase.sh > /dev/null
+	if (test "$?" = "0") then {
+		ed arboldd/usr/local/adJ/actbase.sh <<EOF
+,s/actbase.sh $V/actbase.sh $VS/g
+w
+q
+EOF
+	} fi;
 	mkdir -p /tmp/i
 	rm -rf /tmp/i/*
 	mkdir -p /tmp/i/usr/local/adJ/

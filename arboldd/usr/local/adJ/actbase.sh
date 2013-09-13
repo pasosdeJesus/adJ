@@ -15,7 +15,7 @@ if (test -f "ver.sh") then {
 	V=$1
 	if (test "$V" = "") then {
 		echo "Primer parámetro debería ser versión, e.g"
-		echo "actbase 5.2"
+		echo "actbase.sh 5.4"
 		exit 1;
 	} fi;
 	VP=`echo $V | sed -e "s/[.]//g"`
