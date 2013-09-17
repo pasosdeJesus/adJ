@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!-- XSL to convert from GBF XML in HTML -->
 <!-- Source released to the public domain 2003 vtamara@informatik.uni-kl.de -->
@@ -16,7 +16,7 @@
 <xsl:variable name="numf" select="1"/>
 
 
-<xsl:output method="html" version="4.0" doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN" encoding="ISO-8859-1"/>
+<xsl:output method="html" version="4.0" doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN" encoding="UTF-8"/>
 
 
 <xsl:key name="numstrong" match="//wi" use="substring-before(./@value,',')"/>
@@ -71,20 +71,20 @@ function changeIt() {
     <xsl:text> 
     </xsl:text>
     <span class="srightstitle">
-	    <a href="#srights">Términos</a> | 
-	    <a href="#credits">Créditos</a>
+	    <a href="#srights">TÃ©rminos</a> | 
+	    <a href="#credits">CrÃ©ditos</a>
     </span>
     <div align="right">
 	    <input name="mostrarStrong" type="checkbox" checked="checked"
 		    id="mostrarStrong" onclick="changeIt();"/>
-	    <label for="mostrarStrong">Números Strong</label>
+	    <label for="mostrarStrong">NÃºmeros Strong</label>
     </div>
 
     <xsl:apply-templates select=".//sb">
     </xsl:apply-templates><xsl:text>
     </xsl:text> 
     <a name="strong"/>
-    <h3>Números Strong</h3>
+    <h3>NÃºmeros Strong</h3>
     <ul> 
     <!-- http://www.dpawson.co.uk/xsl/sect2/N4486.html -->
     <xsl:for-each select=".//wi[@type='G' and generate-id(.)=generate-id(key('numstrong', substring-before(@value,',')))]" >
@@ -121,12 +121,12 @@ function changeIt() {
     </xsl:apply-templates><xsl:text>
     </xsl:text>
     <a name="srights"/>
-    <h3>Términos</h3>
+    <h3>TÃ©rminos</h3>
 	<xsl:apply-templates select=".//rights">
 	</xsl:apply-templates><xsl:text> 
     </xsl:text>  
     <a name="credits"/>
-    <h3>Créditos</h3>
+    <h3>CrÃ©ditos</h3>
     <xsl:apply-templates select=".//credits">
 	</xsl:apply-templates><xsl:text> 
     </xsl:text>  
@@ -365,7 +365,7 @@ function changeIt() {
 <xsl:key name="footnote" match="rb" use="."/>
 
 <xsl:template match="rb">
-	<!-- Numeración con base en num. pies de páginas de Docbook (N. Walsh) -->
+	<!-- NumeraciÃ³n con base en num. pies de pÃ¡ginas de Docbook (N. Walsh) -->
 	<xsl:variable name="pf" select="preceding::rb"/>
 	<xsl:variable name="pf2" select="preceding::rb[@xml:lang='es']"/>
 	<xsl:variable name="pf3" select="preceding::rb/t[@xml:lang='es']"/>
@@ -424,12 +424,12 @@ function changeIt() {
 				<xsl:apply-templates>
 					<xsl:with-param name="interior" select="1"/>	
 				</xsl:apply-templates>
-				<sup class="strong"><a href="#st{$ns}" class="strong">
-						<xsl:value-of select="$ns"/></a>
-					<xsl:if test="$interior='1'">
-						<xsl:text>,</xsl:text>
-					</xsl:if>
-				</sup>
+				<a href="#st{$ns}" class="strong"><sup class="strong">
+						<xsl:value-of select="$ns"/>
+				</sup></a>
+				<xsl:if test="$interior='1'">
+					<sup><xsl:text>,</xsl:text></sup>
+				</xsl:if>
 			</u>
 		</xsl:when>
 		<xsl:when  test="./@type='GC'">
