@@ -29,7 +29,7 @@ WANTLIB =       SDL c m pthread sndio
 LIB_DEPENDS =           devel/sdl
 
 CONFIGURE_STYLE=	gnu
-CONFIGURE_ENV =         CPPFLAGS="-I${LOCALBASE}/include" \
+CONFIGURE_ENV =         CPPFLAGS="-I${LOCALBASE}/include -g -O0" \
                         LDFLAGS="-L${LOCALBASE}/lib"
 
 do-install:
