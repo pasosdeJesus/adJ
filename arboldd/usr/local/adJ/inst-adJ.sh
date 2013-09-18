@@ -1017,6 +1017,10 @@ if (test "$postencripta" = "s") then {
 	if (test ! -f /$RUTAIMG/post.img ) then {
 		dd of=/$RUTAIMG/post.img bs=1024 seek=$TAM count=0
 		vnconfig -u vnd0
+		echo "A continuación por favor ingrese la clave de cifrado para cada una de las"
+	 	echo "particiones cifradas, no verá lo que teclee --procure no
+equivocarse y "
+		echo "recuerde la clave que digite porque necesitará darla en cada arranque"
 		vnconfig -ckv vnd0 /$RUTAIMG/post.img
 		newfs /dev/rvnd0c
 		vnconfig -u vnd0
@@ -1268,7 +1272,7 @@ cat /etc/rc.local >> /var/tmp/inst-adJ.bitacora
 cat /etc/rc.conf.local >> /var/tmp/inst-adJ.bitacora
 cat /etc/sysctl.conf >> /var/tmp/inst-adJ.bitacora
 
-echo "* Iniciar PostgreSQL"  >> /var/tmp/inst-adJ.bitacora
+echo "* Iniciando PostgreSQL"  | tee -a /var/tmp/inst-adJ.bitacora
 . /etc/rc.conf >> /var/tmp/inst-adJ.bitacora
 . /etc/rc.local >> /var/tmp/inst-adJ.bitacora
 echo
@@ -1320,7 +1324,7 @@ insacp libidn
 insacp curl 
 insacp libidn
 
-echo "* PHP" >> /var/tmp/inst-adJ.bitacora;
+echo "* Instalando PHP" | tee -a /var/tmp/inst-adJ.bitacora;
 p=`ls /var/db/pkg | grep "^php"`
 if (test "$p" != "") then {
 	dialog --title 'Eliminar PHP' --yesno "\\nPaquete PHP ya instalado. ¿Eliminar para instalar el de esta versión de adJ?" 15 60
@@ -1335,7 +1339,7 @@ if (test "$p" != "") then {
 
 echo "* Configurar servidor web" >> /var/tmp/inst-adJ.bitacora ;
 if (test ! -f /etc/ssl/server.crt) then {
-	echo "* Configurando Certificado SSL" >> /var/tmp/inst-adJ.bitacora;
+	echo "* Configurando Certificado SSL" | tee -a /var/tmp/inst-adJ.bitacora;
 	openssl genrsa -out /etc/ssl/private/server.key 1024
 	openssl req -new -key /etc/ssl/private/server.key \
        		-out /etc/ssl/private/server.csr
@@ -1682,7 +1686,7 @@ EOF
 	echo "   Saltando..." >> /var/tmp/inst-adJ.bitacora;
 } fi;
 
-echo "* Configurar escritorio de cuenta inicial" >> /var/tmp/inst-adJ.bitacora;
+echo "* Configurando escritorio de cuenta de administrador(a)" | tee -a /var/tmp/inst-adJ.bitacora;
 f=`ls /var/db/pkg/fluxbox* 2> /dev/null > /dev/null`;
 if (test "$?" = "0") then {
 	dialog --title 'Eliminar Fluxbox' --yesno "\\nfluxbox instalado. ¿Eliminarlo para instalar uno más nuevo?" 15 60
@@ -2084,7 +2088,7 @@ EOF
 	chown $uadJ:$uadJ /home/$uadJ/.tmux.conf
 } fi;
 
-echo "* Configurar cups" >> /var/tmp/inst-adJ.bitacora;
+echo "* Configurando sistema de impresión cups" | tee -a /var/tmp/inst-adJ.bitacora;
 rm -f /etc/rc.d/dbus_daemon
 insacp dbus	
 insacp libusb1
@@ -2094,7 +2098,7 @@ insacp cups
 activarcs cupsd
 
 
-echo "* Instalar mozilla-firefox" >> /var/tmp/inst-adJ.bitacora;
+echo "* Instalando navegador mozilla-firefox" | tee -a /var/tmp/inst-adJ.bitacora;
 f=`ls /var/db/pkg/*firefox* 2> /dev/null > /dev/null`;
 if (test "$?" = "0") then {
 	dialog --title 'Eliminar Firefox' --yesno "\\nFirefox instalado. ¿Eliminarlo para instalar uno más nuevo?" 15 60
@@ -2150,7 +2154,7 @@ if (test "$?" != "0") then {
 } fi;
 
 
-echo "* Instalar xfe" >> /var/tmp/inst-adJ.bitacora;
+echo "* Instalando adminstrador de archivos xfe" | tee -a /var/tmp/inst-adJ.bitacora;
 f=`ls /var/db/pkg/xfe* 2> /dev/null > /dev/null`;
 if (test "$?" = "0") then {
 	dialog --title 'Eliminar xfe' --yesno "\\nxfe instalado. ¿Eliminarlo para instalar uno más nuevo?" 15 60
