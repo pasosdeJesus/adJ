@@ -2,8 +2,7 @@ realboy es un emulador para Unix de Game Boy Classic/Color, es completo,
 rápido y preciso.
 
 Para usar
-* Aliste un ROM para Game Boy (asegurarse que no sea para Game Boy Advanced, 
-  ni para Game Boy Color, sino para Game Boy solito o Game Boy Classic). 
+* Aliste un ROM para Game Boy Classic o Game Boy Color 
   Por ejemplo descargue de: http://hirudov.com/nintendo/MazezaM.php
 * Ejecute realboy pasando el ROM como parametro, por ejemplo: 
         realboy MazezaM.gb
@@ -14,7 +13,7 @@ Para usar
         s -> Boton B 
         d -> Boton A 
 * Es bueno pasar a pantalla completa presionando F
-* Para cerrar, abra una terminal y ejecute
+* Para terminar presiona la tecla q o desde una terminal ejecute
     pkill -9 realboy
-* Consulte la documentación completa en 
+* Consulte más documentación en 
   ${PREFIX}share/doc/pkg-readmes/${FULLPKGNAME}
