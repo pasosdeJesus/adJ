@@ -5,8 +5,10 @@ ONLY_FOR_ARCHS=	amd64
 COMMENT=	Emulador de Game Boy Classic/Game Boy Color
 
 VERSION=0.1
-PKGNAME=	realboy-${VERSION}
-DISTNAME=	realboy-${VERSION}
+DISTNAME=       realboy-${VERSION}
+REVISION=1
+#PKGNAME=        ${DISTNAME:L}
+
 
 CATEGORIES=	emulators games
 HOMEPAGE=	http://realboyemulator.wordpress.com/

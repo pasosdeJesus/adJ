@@ -1,43 +1,31 @@
 $OpenBSD$
---- src/gboy_x86_64.S.orig	Mon Jun 24 12:00:03 2013
-+++ src/gboy_x86_64.S	Mon Sep 23 22:47:40 2013
-@@ -147,9 +147,9 @@ exec_next:
- 	testq $1, gbddb # are we debugging?
- 	jz no_ddb # no
- 	movq %r13, %rsi # argument to debugger
--	movq %rdx, %rbp # save reg
-+	movq %rdx, %rcx # save reg
- 	call gddb_main
--	movq %rbp, %rdx # restore reg
-+	movq %rcx, %rdx # restore reg
- no_ddb:
- 	movq $0, inst_is_cb
- 	testq $DELAY, %r12 # should we delay instruction execution due to memory access?
-@@ -201,15 +201,15 @@ proc_ints:
- 	andb %cl, IR_REG+addr_sp # clear interrupt request bit
- 	subq $2, SP(%r11) # decrement stack pointer
- 	movq PC(%r11), %rdx # copy PC register
--	movq SP(%r11), %rbp # copy SP register
-+	movq SP(%r11), %rcx # copy SP register
- 	movq $addr_sp_ptrs, %rdi # copy address spaces
--	movq %rbp, %rax # save
--	shrq $9, %rbp # get...
--	andq $0x78, %rbp # ...offset to pointer in addr_sp_ptrs
--	addq %rbp, %rdi # point to address space
--	movq %rax, %rbp # restore
--	addq (%rdi), %rbp # pointer to stack
--	movw %dx, (%rbp) # push return address to stack
-+	movq %rcx, %rax # save
-+	shrq $9, %rcx # get...
-+	andq $0x78, %rcx # ...offset to pointer in addr_sp_ptrs
-+	addq %rcx, %rdi # point to address space
-+	movq %rax, %rcx # restore
-+	addq (%rdi), %rcx # pointer to stack
-+	movw %dx, (%rcx) # push return address to stack
- 	xorq %r13, %r13 # PC register = 0
- 	addq (%r10), %r13 # new PC for interrupt
- 	movq $addr_sp_ptrs, %rdi # copy address spaces
-@@ -223,7 +223,7 @@ proc_ints:
+--- src/gboy_x86_64.S.orig	Tue Sep 24 20:11:07 2013
++++ src/gboy_x86_64.S	Tue Sep 24 20:16:12 2013
+@@ -121,11 +121,23 @@
+  * Prepare to execute
+  */
+ rom_exec:
++	pushq %rbp
++	pushq %rbx
++	pushq %r12
++	pushq %r13
++	pushq %r14
++	pushq %r15
+ 	movq $addr_sp, %r13 # set PC to 0x0000
+ 	addq %rdi, %r13
+ 	movq $z80_ldex, %r15 # %r15 holds pointer to opcode records
+ 	movq (%r13), %r12 # %r12 holds the instruction's opcode
+ 	call exec_next # GO GO GO!
++	popq %r15
++	popq %r14
++	popq %r13
++	popq %r12
++	popq %rbx
++	popq %rbp
+ 	ret # return and change game
+ 
+ /*
+@@ -223,7 +235,7 @@ proc_ints:
  4:
  end_ints:
  	movq (%r13), %r12 # copy opcode for next instruction
@@ -46,7 +34,7 @@ $OpenBSD$
  	testq $0x80, LCDC_REG+addr_sp # is LCD on?
  	jnz 1f # yes
  	jmp timer_divider_update # no; execute next instruction
-@@ -240,7 +240,7 @@ lcd_refrshing:
+@@ -240,7 +252,7 @@ lcd_refrshing:
  h_blank:
  	subq %r14, gb_hblank_clks # is h_blank period over?
  	js hblank_exit # yes
@@ -55,7 +43,7 @@ $OpenBSD$
  hblank_exit:
  	testq $1, type # if CGB, check for HBlank-Driven DMA
  	jz 1f
-@@ -300,7 +300,7 @@ h_blank_chk_dma:
+@@ -300,7 +312,7 @@ h_blank_chk_dma:
  	orq $2, IR_REG+addr_sp # request LCDS interrupt
  hblank_end:
  	orq $1, IR_REG+addr_sp # request vblank interrupt
@@ -64,7 +52,7 @@ $OpenBSD$
  1:
  	addq %r14, gb_oam_clks
  	movq gb_hblank_clks+8, %r14
-@@ -310,7 +310,7 @@ hblank_end:
+@@ -310,7 +322,7 @@ hblank_end:
  	jz 1f # XXX
  	orq $2, IR_REG+addr_sp # request lcd status interrupt
  1:
@@ -73,7 +61,7 @@ $OpenBSD$
  v_blank:
  	subq %r14, gb_vbln_clks # is v_blank period over?
  	js 2f # yes
-@@ -318,7 +318,7 @@ v_blank:
+@@ -318,7 +330,7 @@ v_blank:
  	movq gb_vbln_clks, %r14 # copy vblank ticks
  	cmpq %r14, %rax # need to increment LY?
  	ja 1f # yes; increment LY
@@ -82,7 +70,7 @@ $OpenBSD$
  1:
  	movq gb_line_clks, %r14 # copy ticks-per-horizontal-line
  	subq %r14, lcd_vbln_hbln_ctrl # one line less
-@@ -332,7 +332,7 @@ v_blank:
+@@ -332,7 +344,7 @@ v_blank:
  	jz 1f # no; don't request interrupt
  	orq $2, IR_REG+addr_sp # request LCD STAT interrupt
  1:
@@ -91,7 +79,7 @@ $OpenBSD$
  2:
  	movq gb_vbln_clks, %r14 # copy tick
  	addq %r14, gb_oam_clks # add difference to new period
-@@ -360,11 +360,11 @@ vbln_end:
+@@ -360,11 +372,11 @@ vbln_end:
  1:
  	call frame_skip # call frame skip function
  	movb %al, skip_next_frame # save return value
@@ -105,7 +93,7 @@ $OpenBSD$
  oam_exit:
  	#movq $0, nb_spr
  	#testq $2, addr_sp+LCDC_REG
-@@ -388,11 +388,11 @@ oam_exit:
+@@ -388,11 +400,11 @@ oam_exit:
  	movq gb_oam_clks+8, %r14 # copy oam ticks' backup
  	movq %r14, gb_oam_clks # restore oam ticks
  	orq $3, LCDS_REG+addr_sp # change mode to vram read mode
@@ -119,7 +107,7 @@ $OpenBSD$
  vram_exit:
  	movq gb_vram_clks, %r14 # load excess from vram ticks
  	movq gb_hblank_clks, %r10 # copy hblank ticks
-@@ -412,7 +412,7 @@ vram_exit:
+@@ -412,7 +424,7 @@ vram_exit:
  	shrq $2, %rdi # shift bit to position
  	orq %rdi, IR_REG+addr_sp # request/ignore lcd status interrupt
  vram_end:
@@ -128,7 +116,7 @@ $OpenBSD$
  	movq temp_var, %r14
  timer_divider_update:
  	movq cpu_cur_mode, %rcx # if current mode is CGB, timer and divider stuff are 2 times faster
-@@ -439,7 +439,9 @@ timer_divider_update:
+@@ -439,7 +451,9 @@ timer_divider_update:
  	jz 5f
  4:
  	addb $4, %dl # advance div control
@@ -139,30 +127,7 @@ $OpenBSD$
  	testb $0x10, %ah # test if div passed a 16 cycle boundary
  	jnz 1b
  	jmp 3b
-@@ -477,9 +479,10 @@ change_game:
-  */
- execute_precise:
- 	movq $0, write_is_delayed
--	movq %r14, %rbp # copy ticks
--	shrq $2, %rbp # scale
--	decq %rbp # start counting with one less
-+# Not using %rbp that according to ABI specification should be conserved across function calls --http://c9x.me/gthreads/mach.html
-+	movq %r14, %rcx # copy ticks
-+	shrq $2, %rcx # scale
-+	decq %rcx # start counting with one less
- beg_exe:
- 	testq $3, write_is_delayed
- 	jz 1f
-@@ -487,7 +490,7 @@ beg_exe:
- 	jnz mem_delayed
- 	jmp end_execute_precise
- 1:
--	decq %rbp # advance tick counter
-+	decq %rcx # advance tick counter
- 	jnz 1f
- 	testq $RD_WR, %r12 # we should execute instruction if it reads AND writes memory
- 	jz 2f
-@@ -502,7 +505,9 @@ beg_exe:
+@@ -502,7 +516,9 @@ beg_exe:
  last_run:
  2:
  	addb $4, div_ctrl # advance div control (per-cycle control)
@@ -173,7 +138,7 @@ $OpenBSD$
  	testb $0x10, %ah # test if div passed a 16 byte boundary
  	jz 2f
  	testq $1, tac_on # test for TAC on bit
-@@ -537,7 +542,7 @@ mem_delayed:
+@@ -537,7 +553,7 @@ mem_delayed:
  	movq $2, write_is_delayed
  	jmp last_run
  end_execute_precise:
@@ -182,463 +147,3 @@ $OpenBSD$
  	testq $0x80, LCDC_REG+addr_sp # is LCD on?
  	jz proc_ints_del # no
  1:
-@@ -760,15 +765,15 @@ proc_ints_del:
- 	andb %cl, IR_REG+addr_sp # clear interrupt request bit
- 	subq $2, SP(%r11) # decrement stack pointer
- 	movq PC(%r11), %rdx # copy PC register
--	movq SP(%r11), %rbp # copy SP register
-+	movq SP(%r11), %rcx # copy SP register
- 	movq $addr_sp_ptrs, %rdi # copy address spaces
--	movq %rbp, %rax # save
--	shrq $9, %rbp # get...
--	andq $0x78, %rbp # ...offset to pointer in addr_sp_ptrs
--	addq %rbp, %rdi # point to address space
--	movq %rax, %rbp # restore
--	addq (%rdi), %rbp # pointer to stack
--	movw %dx, (%rbp) # push return address to stack
-+	movq %rcx, %rax # save
-+	shrq $9, %rcx # get...
-+	andq $0x78, %rcx # ...offset to pointer in addr_sp_ptrs
-+	addq %rcx, %rdi # point to address space
-+	movq %rax, %rcx # restore
-+	addq (%rdi), %rcx # pointer to stack
-+	movw %dx, (%rcx) # push return address to stack
- 	xorq %r13, %r13 # PC register = 0
- 	addq (%r10), %r13 # new PC for interrupt
- 	movq $addr_sp_ptrs, %rdi # copy address spaces
-@@ -2709,6 +2714,7 @@ op_rot_lf_reg:
-  *
-  */
- op_rot_rgh_c_reg:
-+	pushq %rbp
- 	movq %rsp, %rbp
- 	xorq %rcx, %rcx # zero
- 	incq %rax # advance PC
-@@ -2731,6 +2737,7 @@ op_rot_rgh_c_reg:
- 	orq $F_ZERO, (%rdi)
- 1:
- 	incq %r13
-+	popq %rbp
- 	ret
- 
- /* 
-@@ -2738,6 +2745,7 @@ op_rot_rgh_c_reg:
-  *
-  */
- op_rot_lf_c_reg:
-+	pushq %rbp
- 	movq %rsp, %rbp
- 	xorq %rcx, %rcx # zero
- 	incq %rax # advance PC
-@@ -2760,6 +2768,7 @@ op_rot_lf_c_reg:
- 	orq $F_ZERO, (%rdi)
- 1:
- 	incq %r13
-+	popq %rbp
- 	ret
- 
- /* 
-@@ -2767,6 +2776,7 @@ op_rot_lf_c_reg:
-  *
-  */
- op_rot_lf_c_acc:
-+	pushq %rbp
- 	movq %rsp, %rbp
- 	incq %rax # advance PC
- 	movq $regs_sets, %r10 # pointer to registers
-@@ -2783,6 +2793,7 @@ op_rot_lf_c_acc:
- 	andq $~F_SUBTRACT, (%rdi) # unset subtract
- 	andq $~F_HCARRY, (%rdi) # unset hcarry
- 	incq %r13
-+	popq %rbp
- 	ret
- 
- /* 
-@@ -3010,6 +3021,7 @@ op_rot_rgh_acc:
-  *
-  */
- op_rot_rgh_c_acc:
-+	pushq %rbp
- 	movq %rsp, %rbp
- 	incq %rax # advance PC
- 	movq $regs_sets, %r10 # pointer to registers
-@@ -3026,6 +3038,7 @@ op_rot_rgh_c_acc:
- 	andq $~F_SUBTRACT, (%rdi) # unset subtract
- 	andq $~F_HCARRY, (%rdi) # unset hcarry
- 	incq %r13
-+	popq %rbp
- 	ret
- 
- /* 
-@@ -3209,6 +3222,7 @@ op_bit_mem:
-  *
-  */
- op_bit:
-+	pushq %rbp;
- 	movq $regs_sets, %rbp # pointer to registers
- 	movq $regs_sets, %rdi # pointer to registers
- 	incq PC(%rdi)
-@@ -3226,6 +3240,7 @@ op_bit:
- 	andq $~F_SUBTRACT, (%rdi) # unset flag
- 	orq $F_HCARRY, (%rdi) # set flag
- 	incq %r13
-+	popq %rbp
- 	ret
- 
- op_daa:
-@@ -3322,6 +3337,7 @@ op_stop:
-  *
-  */
- op_call_z:
-+	pushq %rbp
- 	addq $3, %r13 # PC when return
- 	movq $regs_sets, %rdi # pointer to registers
- 	incq PC(%rdi)
-@@ -3353,8 +3369,8 @@ op_call_z:
- 	addq %r13, %rdi # point to address space
- 	movq %r11, %r13 # restore
- 	addq (%rdi), %r13 # new PC
--	ret
- 1:
-+	popq %rbp
- 	ret
- 
- /*
-@@ -3362,6 +3378,7 @@ op_call_z:
-  *
-  */
- op_call_nz:
-+	pushq %rbp
- 	addq $3, %r13 # PC when return
- 	movq $regs_sets, %rdi # pointer to registers
- 	incq PC(%rdi)
-@@ -3393,8 +3410,8 @@ op_call_nz:
- 	addq %r13, %rdi # point to address space
- 	movq %r11, %r13 # restore
- 	addq (%rdi), %r13 # new PC
--	ret
- 1:
-+	popq %rbp
- 	ret
- 
- /*
-@@ -3402,6 +3419,7 @@ op_call_nz:
-  *
-  */
- op_call_nc:
-+	pushq %rbp
- 	addq $3, %r13 # PC when return
- 	movq $regs_sets, %rdi # pointer to registers
- 	incq PC(%rdi)
-@@ -3433,8 +3451,8 @@ op_call_nc:
- 	addq %r13, %rdi # point to address space
- 	movq %r11, %r13 # restore
- 	addq (%rdi), %r13 # new PC
--	ret
- 1:
-+	popq %rbp
- 	ret
- 
- /*
-@@ -3442,6 +3460,7 @@ op_call_nc:
-  *
-  */
- op_call_c:
-+	pushq %rbp
- 	addq $3, %r13 # PC when return
- 	movq $regs_sets, %rdi # pointer to registers
- 	incq PC(%rdi)
-@@ -3473,6 +3492,7 @@ op_call_c:
- 	addq %r13, %rdi # point to address space
- 	movq %r11, %r13 # restore
- 	addq (%rdi), %r13 # new PC
-+	popq %rbp
- 	ret
- 1:
- 	ret
-@@ -3482,6 +3502,7 @@ op_call_c:
-  *
-  */
- op_call:
-+	pushq %rbp
- 	addq $3, %r13 # PC when return
- 	movq $regs_sets, %r10 # pointer to registers
- 	subq $2, SP(%r10) # SP-=4 XXX SP-=2 for z80
-@@ -3506,6 +3527,7 @@ op_call:
- 	addq %r13, %rdi # point to address space
- 	movq %r11, %r13 # restore
- 	addq (%rdi), %r13 # new PC
-+	popq %rbp
- 	ret
- 
- /*
-@@ -3515,6 +3537,7 @@ op_call:
-  * tested: no
-  */
- op_reset_0:
-+	pushq %rbp
- 	incq %r13 # PC when return
- 	movq $regs_sets, %r10 # pointer to registers
- 	subq $2, SP(%r10) # SP-=4 XXX SP-=2 for z80
-@@ -3538,6 +3561,7 @@ op_reset_0:
- 	addq %r13, %rdi # point to address space
- 	movq %r11, %r13 # restore
- 	addq (%rdi), %r13 # new PC
-+	popq %rbp
- 	ret
- 
- /*
-@@ -3547,6 +3571,7 @@ op_reset_0:
-  * tested: no
-  */
- op_reset_8h:
-+	pushq %rbp
- 	incq %r13 # PC when return
- 	movq $regs_sets, %r10 # pointer to registers
- 	subq $2, SP(%r10) # SP-=4 XXX SP-=2 for z80
-@@ -3570,6 +3595,7 @@ op_reset_8h:
- 	addq %r13, %rdi # point to address space
- 	movq %r11, %r13 # restore
- 	addq (%rdi), %r13 # new PC
-+	popq %rbp
- 	ret
- 
- /*
-@@ -3579,6 +3605,7 @@ op_reset_8h:
-  * tested: no
-  */
- op_reset_10h:
-+	pushq %rbp
- 	incq %r13 # PC when return
- 	movq $regs_sets, %r10 # pointer to registers
- 	subq $2, SP(%r10) # SP-=4 XXX SP-=2 for z80
-@@ -3602,6 +3629,7 @@ op_reset_10h:
- 	addq %r13, %rdi # point to address space
- 	movq %r11, %r13 # restore
- 	addq (%rdi), %r13 # new PC
-+	popq %rbp
- 	ret
- 
- /*
-@@ -3640,6 +3668,7 @@ op_ret:
-  * tested: no
-  */
- op_reset_18h:
-+	pushq %rbp
- 	incq %r13 # PC when return
- 	movq $regs_sets, %r10 # pointer to registers
- 	subq $2, SP(%r10) # SP-=4 XXX SP-=2 for z80
-@@ -3663,6 +3692,7 @@ op_reset_18h:
- 	addq %r13, %rdi # point to address space
- 	movq %r11, %r13 # restore
- 	addq (%rdi), %r13 # new PC
-+	popq %rbp
- 	ret
- 
- /*
-@@ -3672,6 +3702,7 @@ op_reset_18h:
-  * tested: no
-  */
- op_reset_20h:
-+	pushq %rbp
- 	incq %r13 # PC when return
- 	movq $regs_sets, %r10 # pointer to registers
- 	subq $2, SP(%r10) # SP-=4 XXX SP-=2 for z80
-@@ -3695,6 +3726,7 @@ op_reset_20h:
- 	addq %r13, %rdi # point to address space
- 	movq %r11, %r13 # restore
- 	addq (%rdi), %r13 # new PC
-+	popq %rbp
- 	ret
- 
- /*
-@@ -3704,6 +3736,7 @@ op_reset_20h:
-  * tested: no
-  */
- op_reset_28h:
-+	pushq %rbp
- 	incq %r13 # PC when return
- 	movq $regs_sets, %r10 # pointer to registers
- 	subq $2, SP(%r10) # SP-=4 XXX SP-=2 for z80
-@@ -3727,6 +3760,7 @@ op_reset_28h:
- 	addq %r13, %rdi # point to address space
- 	movq %r11, %r13 # restore
- 	addq (%rdi), %r13 # new PC
-+	popq %rbp
- 	ret
- 
- /*
-@@ -3736,6 +3770,7 @@ op_reset_28h:
-  * tested: no
-  */
- op_reset_30h:
-+	pushq %rbp
- 	incq %r13 # PC when return
- 	movq $regs_sets, %r10 # pointer to registers
- 	subq $2, SP(%r10) # SP-=4 XXX SP-=2 for z80
-@@ -3759,6 +3794,7 @@ op_reset_30h:
- 	addq %r13, %rdi # point to address space
- 	movq %r11, %r13 # restore
- 	addq (%rdi), %r13 # new PC
-+	popq %rbp
- 	ret
- 
- /*
-@@ -3768,6 +3804,7 @@ op_reset_30h:
-  * tested: no
-  */
- op_reset_38h:
-+	pushq %rbp
- 	incq %r13 # PC when return
- 	movq $regs_sets, %r10 # pointer to registers
- 	subq $2, SP(%r10) # SP-=4 XXX SP-=2 for z80
-@@ -3791,6 +3828,7 @@ op_reset_38h:
- 	addq %r13, %rdi # point to address space
- 	movq %r11, %r13 # restore
- 	addq (%rdi), %r13 # new PC
-+	popq %rbp
- 	ret
- 
- /*
-@@ -3956,6 +3994,7 @@ op_jmp:
-  *
-  */
- op_jmp_nz:
-+	pushq %rbp
- 	addq $3, %r13 # new PC
- 	movq $regs_sets, %rbx # copy flags
- 	incq PC(%rbx)
-@@ -3977,8 +4016,8 @@ op_jmp_nz:
- 	addq %r13, %rdi # point to address space
- 	movq %r11, %r13 # restore
- 	addq (%rdi), %r13 # new PC
--	ret
- 2:
-+	popq %rbp
- 	ret
- 
- /*
-@@ -3986,6 +4025,7 @@ op_jmp_nz:
-  *
-  */
- op_jmp_z:
-+	pushq %rbp
- 	addq $3, %r13 # new PC
- 	movq regs_sets, %rbx # copy flags
- 	movq $regs_sets, %r10 # copy flags
-@@ -4006,8 +4046,8 @@ op_jmp_z:
- 	addq %r13, %rdi # point to address space
- 	movq %r11, %r13 # restore
- 	addq (%rdi), %r13 # new PC
--	ret
- 2:
-+	popq %rbp
- 	ret
- 
- /*
-@@ -4015,6 +4055,7 @@ op_jmp_z:
-  *
-  */
- op_jmp_c:
-+	pushq %rbp
- 	addq $3, %r13 # new PC
- 	movq $regs_sets, %rbx # copy flags
- 	incq PC(%rbx)
-@@ -4036,8 +4077,8 @@ op_jmp_c:
- 	addq %r13, %rdi # point to address space
- 	movq %r11, %r13 # restore
- 	addq (%rdi), %r13 # new PC
--	ret
- 2:
-+	popq %rbp
- 	ret
- 
- /*
-@@ -4045,6 +4086,7 @@ op_jmp_c:
-  *
-  */
- op_jmp_nc:
-+	pushq %rbp
- 	addq $3, %r13 # new PC
- 	movq $regs_sets, %rbx # copy flags
- 	incq PC(%rbx)
-@@ -4066,8 +4108,8 @@ op_jmp_nc:
- 	addq %r13, %rdi # point to address space
- 	movq %r11, %r13 # restore
- 	addq (%rdi), %r13 # new PC
--	ret
- 2:
-+	popq %rbp
- 	ret
- 
- /* 
-@@ -4097,6 +4139,7 @@ op_jmp_rl:
-  *
-  */
- op_jmp_rl_nz:
-+	pushq %rbp
- 	addq $2, %r13 # new PC
- 	movq $regs_sets, %r10
- 	addq $2, PC(%r10)
-@@ -4117,6 +4160,7 @@ op_jmp_rl_nz:
- 	movq %r11, %r13 # restore
- 	addq (%rdi), %r13 # new PC
- 2:
-+	popq %rbp
- 	ret
- 
- /* 
-@@ -4124,6 +4168,7 @@ op_jmp_rl_nz:
-  *
-  */
- op_jmp_rl_z:
-+	pushq %rbp
- 	addq $2, %r13 # new PC
- 	movq $regs_sets, %r10
- 	incq PC(%r10)
-@@ -4145,6 +4190,7 @@ op_jmp_rl_z:
- 	movq %r11, %r13 # restore
- 	addq (%rdi), %r13 # new PC
- 2:
-+	popq %rbp
- 	ret
- 
- /* 
-@@ -4152,6 +4198,7 @@ op_jmp_rl_z:
-  *
-  */
- op_jmp_rl_nc:
-+	pushq %rbp
- 	addq $2, %r13 # new PC
- 	movq $regs_sets, %r10
- 	incq PC(%r10)
-@@ -4173,6 +4220,7 @@ op_jmp_rl_nc:
- 	movq %r11, %r13 # restore
- 	addq (%rdi), %r13 # new PC
- 2:
-+	popq %rbp
- 	ret
- 
- /* 
-@@ -4180,6 +4228,7 @@ op_jmp_rl_nc:
-  *
-  */
- op_jmp_rl_c:
-+	pushq %rbp
- 	addq $2, %r13 # new PC
- 	movq $regs_sets, %r10
- 	incq PC(%r10)
-@@ -4201,6 +4250,7 @@ op_jmp_rl_c:
- 	movq %r11, %r13 # restore
- 	addq (%rdi), %r13 # new PC
- 2:
-+	popq %rbp
- 	ret
- 
- /* 
-@@ -6962,3 +7012,5 @@ temp_var:
- set_zero_addr_end:
- print_str:
- .asciz "%x "
-+depura:
-+.quad 0
