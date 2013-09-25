@@ -4,6 +4,7 @@
 # 2012. vtamara@pasosdeJesus.org
 
 VER=5.3
+REV=0
 VESP=""
 VERP=53
 
@@ -724,6 +725,15 @@ if (test -f /usr/bin/lint) then {
 	rm -rf /usr/lib/gcc-lib/*-unknown-openbsd5.1
 	pkg_delete -I -D dependencies sqlite3 > /dev/null 2>&1
 } fi;
+if (test -f /usr/bin/pmdb) then {
+	vac="$vac 5.2 a 5.3";	
+	echo "Aplicando actualizaciones de 5.2 a 5.3 " >> /var/tmp/inst-adJ.bitacora;
+	rm -f /usr/bin/pmdb /usr/share/man/man1/pmdb.1
+	rm -rf /usr/X11R6/lib/X11/config
+	rm -f /usr/X11R6/bin/{ccmakedep,cleanlinks,imake,makeg,mergelib,mkdirhier,mkhtmlindex,revpath,xmkmf}
+	rm -f /usr/X11R6/man/man1/{ccmakedep,cleanlinks,imake,makeg,mergelib,mkdirhier,mkhtmlindex,revpath,xmkmf}.1
+	rm -r /usr/lib/gcc-lib/*-unknown-openbsd5.2
+} fi;
 
 
 if  (test "$vac" != "") then {
@@ -817,11 +827,21 @@ EOF
 	activarcs montaencres
 } fi;
 
+actualiza=0
+nv="$VERP$REV"
+if (test "$vac" != "") then {
+	actualiza=1;
+} else {
+	if (test -f /var/adJ/verinstadJ.txt) then {
+		ov=`cat /var/adJ/verinstadJ.txt`;
+		if (test "$nv" -gt "$ov") then {
+			actualiza=1;
+		} fi;
+	} fi;
+} fi;
 
-echo "¿Actualizar archivos de /etc? (requerido si actualizó sistema base) (s/n)" #>> /var/tmp/inst-adJ.bitacora;
-dialog --title 'Archivos de configuración de /etc' --yesno '\nActualizar archivos del directorio /etc?\n\nRequerido si actualizó sistema base de una versión previa' 15 60 
-if (test "$?" = "0") then {
-	dialog --title 'sysmerge' --msgbox '\nDurante la ejecución de sysmerge, recomendamos que instale nuevas versiones de todos los archivos (con la opción i), excepto de los archivos:\n  /etc/group\n  /etc/master.passwd\n  /etc/sysctl.conf\n  /var/www/conf/httpd.conf\n  /var/named/etc/named.conf\n' 15 60 
+if (test "$actualiza" = "1") then {
+	dialog --title 'Actualización de /etc con sysmerge' --msgbox '\nDurante la ejecución de sysmerge, recomendamos que instale nuevas versiones de todos los archivos (con la opción i), excepto de los archivos:\n  /etc/group\n  /etc/master.passwd\n  /etc/sysctl.conf\n  /var/www/conf/httpd.conf\n  /var/named/etc/named.conf\n' 15 60 
 
 	mkdir -p /var/tmp/temproot
 	tar xzpf $ARCH/etc??.tgz -C /var/tmp/temproot
@@ -859,7 +879,7 @@ EOF
 		eval $cmd;
 	} fi;
 } fi;
-
+echo $nv > /var/adJ/verinstadJ.txt
 sh /etc/rc.local >> /var/tmp/inst-adJ.bitacora 2>&1
 
 echo "* Configurar script de inicio de root (root/.profile)" >> /var/tmp/inst-adJ.bitacora;
@@ -1014,27 +1034,33 @@ else {
 if (test "$postencripta" = "s") then {
 	echo "* Crear imagen encriptada para base de ${TAM}Kbytes (se espeicifica otra con var. TAM) en directorio $RUTAIMG (se especifica otra con var RUTAIMG)"  >> /var/tmp/inst-adJ.bitacora
 	clear;
+	cat <<EOF
+
+A continuación por favor ingrese la clave de cifrado para cada una de las
+particiones cifradas, no las verá cuando las teclee --procure no equivocarse y 
+recuerdelas porque debe digitarlas en cada arranque.
+
+EOF
+
 	if (test ! -f /$RUTAIMG/post.img ) then {
-		dd of=/$RUTAIMG/post.img bs=1024 seek=$TAM count=0
-		vnconfig -u vnd0
-		echo "A continuación por favor ingrese la clave de cifrado para cada una de las"
-	 	echo "particiones cifradas, no verá lo que teclee --procure no
-equivocarse y "
-		echo "recuerde la clave que digite porque necesitará darla en cada arranque"
-		vnconfig -ckv vnd0 /$RUTAIMG/post.img
-		newfs /dev/rvnd0c
-		vnconfig -u vnd0
+		vnconfig -u vnd0 >> /var/tmp/inst-adJ.bitacora 2>&1 
+		dd of=/$RUTAIMG/post.img bs=1024 seek=$TAM count=0 >> /var/tmp/inst-adJ.bitacora 2>&1
+		echo -n "Clave para PostgreSQL (/var/postgresql) "
+		vnconfig -ckv vnd0 /$RUTAIMG/post.img 
+		newfs /dev/rvnd0c >> /var/tmp/inst-adJ.bitacora 2>&1
+		vnconfig -u vnd0 >> /var/tmp/inst-adJ.bitacora 2>&1
 	} else {
-		echo "   Saltando..." >> /var/tmp/inst-adJ.bitacora;
+		echo "   Saltando..." >> /var/tmp/inst-adJ.bitacora
 	} fi;
 
 	echo "* Crear imagen encriptada para respaldo de ${TAM}Kbytes (se espeicifica otra con var. TAM) en directorio $RUTAIMG (se especifica otra con var RUTAIMG)"  >> /var/tmp/inst-adJ.bitacora
 	if (test ! -f /$RUTAIMG/resbase.img -a ! -f /$RUTAIMG/bakbase.img) then {
-		dd of=/$RUTAIMG/resbase.img bs=1024 seek=$TAM count=0
-		vnconfig -u vnd0
-		vnconfig -ckv vnd0 /$RUTAIMG/resbase.img
-		newfs /dev/rvnd0c
-		vnconfig -u vnd0
+		vnconfig -u vnd0 >> /var/tmp/inst-adJ.bitacora 2>&1 
+		dd of=/$RUTAIMG/resbase.img bs=1024 seek=$TAM count=0 >> /var/tmp/inst-adJ.bitacora 2>&1
+		echo -n "Clave para respaldos (/var/www/resbase)"
+		vnconfig -ckv vnd0 /$RUTAIMG/resbase.img 
+		newfs /dev/rvnd0c >> /var/tmp/inst-adJ.bitacora 2>&1
+		vnconfig -u vnd0 >> /var/tmp/inst-adJ.bitacora 2>&1
 	} else {
 		echo "   Saltando..." >> /var/tmp/inst-adJ.bitacora;
 	} fi;
