@@ -2100,6 +2100,22 @@ if (test ! -f "/usr/local/bin/ruby") then {
 	ln -sf /usr/local/bin/testrb19 /usr/local/bin/testrb
 } fi;
 
+if (test ! -f /home/$uadJ/.irbrc) then {
+	cat > /home/$uadJ/.irbrc << EOF
+# Configuración de irb
+# Basado en script disponible en http://girliemangalo.wordpress.com/2009/02/20/using-irbrc-file-to-configure-your-irb/
+require 'irb/completion'
+require 'pp'
+IRB.conf[:AUTO_INDENT] = true
+IRB.conf[:USE_READLINE] = true
+
+def clear
+    system('clear')
+end
+EOF
+	chown $uadJ:$uadJ /home/$uadJ/.irbrc
+} fi;
+
 
 echo "* Configurar tmux" >> /var/tmp/inst-adJ.bitacora;
 f=`ls /var/db/pkg/tmux* 2> /dev/null`;
@@ -2281,12 +2297,19 @@ done;
 pkg_add -I -D update -u
 
 # Configuraciones típicas
-if (test ! -f /home/$uadJ/.vimrc) then {
-	cp -f /usr/local/share/vim/vim*/vimrc_example.vim ~/.vimrc
-	chown $uadJ:$uadJ ~/.vimrc
-} fi;
 
 echo "* Configurar vim con UTF-8" >> /var/tmp/inst-adJ.bitacora;
+if (test ! -d /home/$uadJ/.vim) then {
+	mkdir -p /home/$uadJ/.vim
+	cp -rf /usr/local/share/vim/vim*/* /home/$uadJ/.vim/
+	chown -R $uadJ:$uadJ /home/$uadJ/.vim
+} fi;
+
+if (test ! -f /home/$uadJ/.vimrc) then {
+	cp -f /usr/local/share/vim/vim*/vimrc_example.vim /home/$uadJ/.vimrc
+	chown $uadJ:$uadJ /home/$uadJ/.vimrc
+} fi;
+
 grep "set  *tenc" /home/$uadJ/.vimrc> /dev/null
 if (test "$?" != "0") then {
 	cat >> /home/$uadJ/.vimrc <<EOF
