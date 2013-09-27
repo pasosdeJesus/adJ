@@ -1,0 +1,56 @@
+$OpenBSD$
+--- libmetrics/openbsd/metrics.c.orig	Tue May  7 09:39:40 2013
++++ libmetrics/openbsd/metrics.c	Fri Sep 13 13:07:43 2013
+@@ -11,6 +11,7 @@
+ #include <kvm.h>
+ 
+ #include <sys/param.h> 
++#include <sys/proc.h> 
+ #include <sys/mount.h>
+ #include <sys/sysctl.h>
+ #include <sys/time.h>
+@@ -437,12 +438,12 @@ proc_total_func ( void )
+    g_val_t val;
+ 
+    kvm_t *kd;
+-   struct kinfo_proc2 *kp;
++   struct kinfo_proc *kp;
+    int cnt;
+    char err_buf[_POSIX2_LINE_MAX];
+ 
+    kd = kvm_openfiles(NULL, NULL, NULL, KVM_NO_FILES, err_buf);
+-   kp = kvm_getproc2(kd, KERN_PROC_ALL, 0, sizeof(struct kinfo_proc2), &cnt);
++   kp = kvm_getprocs(kd, KERN_PROC_ALL, 0, sizeof(struct kinfo_proc), &cnt);
+ 
+    val.uint32 = cnt;
+    
+@@ -456,13 +457,13 @@ proc_run_func( void )
+    g_val_t val;
+ 
+    kvm_t *kd;
+-   struct kinfo_proc2 *kp;
++   struct kinfo_proc *kp;
+    int cnt, i;
+    unsigned int count = 0;
+    char err_buf[_POSIX2_LINE_MAX];
+ 
+    kd = kvm_openfiles(NULL, NULL, NULL, KVM_NO_FILES, err_buf);
+-   kp = kvm_getproc2(kd, KERN_PROC_ALL, 0, sizeof(struct kinfo_proc2), &cnt);
++   kp = kvm_getprocs(kd, KERN_PROC_ALL, 0, sizeof(struct kinfo_proc), &cnt);
+    for (i = 0; i < cnt; i++)
+       if (((kp + i) -> p_stat == SRUN) || ((kp + i) -> p_stat == SONPROC))
+          count ++;
+@@ -1088,3 +1089,13 @@ counterdiff(uint64_t oldval, uint64_t newval, uint64_t
+ 
+ 	return diff;
+ }
++
++g_val_t
++cpu_steal_func ( void )
++{
++   static g_val_t val;
++   val.f = 0.0;
++
++   return val;
++}
++

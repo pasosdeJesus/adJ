@@ -5,13 +5,12 @@
 . ./ver.sh
 
 sudo mkdir -p /mnt/tmp
-sudo vnconfig -c vnd0 virtual.hd 
-exit 1;
+sudo vnconfig -c vnd0c virtual.vdi
 sudo fsck -y /dev/vnd0a 
 sudo mount /dev/vnd0a /mnt/tmp
-sudo cp /mnt/tmp/inst-adJ.sh inst-adJ-qemu.sh
-sudo cp /mnt/tmp/inst-sivel.sh inst-sivel-qemu.sh
-sudo cp inst-adJ$VP.sh /mnt/tmp/inst-adJ.sh
-sudo cp inst-sivel$VP.sh /mnt/tmp/inst-sivel.sh
+sudo cp /mnt/tmp/usr/local/adJ/inst-adJ.sh tmp/inst-adJ-qemu.sh
+sudo cp /mnt/tmp/usr/local/adJ/inst-sivel.sh tmp/inst-sivel-qemu.sh
+sudo cp arboldd/usr/local/adJ/inst-adJ.sh /mnt/tmp/usr/local/adJ/
+sudo cp arboldd/usr/local/adJ/inst-sivel.sh /mnt/tmp/usr/local/adJ/
 sudo umount /mnt/tmp
 sudo vnconfig -u vnd0c

@@ -4,6 +4,7 @@
 # 2012. vtamara@pasosdeJesus.org
 
 VER=5.3
+REV=0
 VESP=""
 VERP=53
 
@@ -256,12 +257,13 @@ if (test "$padJ" = "") then {
 } fi;
 uadJ="";
 while (test "$uadJ" = "") ; do
-clear;
-echo "Cuenta (prefiera un nombre corto en minusculas y sin espacio) [$padJ]: ";
-read uadJ;
-if (test "$uadJ" = "") then {
-	uadJ=$padJ;
-} fi;
+	clear;
+	echo "Cuenta (prefiera un nombre corto en minusculas y sin espacio) [$padJ]: ";
+	read uadJ;
+	uadJ=`echo $uadJ | sed -e "s/ //g"`
+	if (test "$uadJ" = "") then {
+		uadJ=$padJ;
+	} fi;
 done;
 ADMADJ=$uadJ;
 
@@ -361,25 +363,25 @@ export PKG_PATH=$ARCH/paquetes/
 
 # Instala un paquete y opcionalmente otro 
 function insacp {
-n=$1;
-popc=$2;
-pre=$3;
-if (test "$n" = "") then {
-	echo "insacp: Falta nombre de paquete";
-	exit 1;
-} fi;
-echo "* Instalar $n"  >> /var/tmp/inst-adJ.bitacora;
-opbor="-I";
-f=`ls /var/db/pkg/$n-* 2> /dev/null > /dev/null`;
-if (test "$?" = "0") then {
-	echo "$n instalado. Intentando remplazar " >> /var/tmp/inst-adJ.bitacora
-	opbor="-I -r -D update -D updatedepends"
-} fi;
+	n=$1;
+	popc=$2;
+	pre=$3;
+	if (test "$n" = "") then {
+		echo "insacp: Falta nombre de paquete";
+		exit 1;
+	} fi;
+	echo "* Instalar $n"  >> /var/tmp/inst-adJ.bitacora;
+	opbor="-I";
+	f=`ls /var/db/pkg/$n-* 2> /dev/null > /dev/null`;
+	if (test "$?" = "0") then {
+		echo "$n instalado. Intentando remplazar " >> /var/tmp/inst-adJ.bitacora
+		opbor="-I -r -D update -D updatedepends"
+	} fi;
 
-pkg_add $opbor $PKG_PATH/$n-[0-9]*.tgz >> /var/tmp/inst-adJ.bitacora 2>&1
-if (test "$popc" != "") then {
-	pkg_add $opbor $PKG_PATH/${popc}*.tgz >> /var/tmp/inst-adJ.bitacora 2>&1
-} fi;
+	pkg_add $opbor $PKG_PATH/$n-[0-9]*.tgz >> /var/tmp/inst-adJ.bitacora 2>&1
+	if (test "$popc" != "") then {
+		pkg_add $opbor $PKG_PATH/${popc}*.tgz >> /var/tmp/inst-adJ.bitacora 2>&1
+	} fi;
 }
 
 
@@ -723,6 +725,15 @@ if (test -f /usr/bin/lint) then {
 	rm -rf /usr/lib/gcc-lib/*-unknown-openbsd5.1
 	pkg_delete -I -D dependencies sqlite3 > /dev/null 2>&1
 } fi;
+if (test -f /usr/bin/pmdb) then {
+	vac="$vac 5.2 a 5.3";	
+	echo "Aplicando actualizaciones de 5.2 a 5.3 " >> /var/tmp/inst-adJ.bitacora;
+	rm -f /usr/bin/pmdb /usr/share/man/man1/pmdb.1
+	rm -rf /usr/X11R6/lib/X11/config
+	rm -f /usr/X11R6/bin/{ccmakedep,cleanlinks,imake,makeg,mergelib,mkdirhier,mkhtmlindex,revpath,xmkmf}
+	rm -f /usr/X11R6/man/man1/{ccmakedep,cleanlinks,imake,makeg,mergelib,mkdirhier,mkhtmlindex,revpath,xmkmf}.1
+	rm -r /usr/lib/gcc-lib/*-unknown-openbsd5.2
+} fi;
 
 
 if  (test "$vac" != "") then {
@@ -816,11 +827,21 @@ EOF
 	activarcs montaencres
 } fi;
 
+actualiza=0
+nv="$VERP$REV"
+if (test "$vac" != "") then {
+	actualiza=1;
+} else {
+	if (test -f /var/adJ/verinstadJ.txt) then {
+		ov=`cat /var/adJ/verinstadJ.txt`;
+		if (test "$nv" -gt "$ov") then {
+			actualiza=1;
+		} fi;
+	} fi;
+} fi;
 
-echo "¿Actualizar archivos de /etc? (requerido si actualizó sistema base) (s/n)" #>> /var/tmp/inst-adJ.bitacora;
-dialog --title 'Archivos de configuración de /etc' --yesno '\nActualizar archivos del directorio /etc?\n\nRequerido si actualizó sistema base de una versión previa' 15 60 
-if (test "$?" = "0") then {
-	dialog --title 'sysmerge' --msgbox '\nDurante la ejecución de sysmerge, recomendamos que instale nuevas versiones de todos los archivos (con la opción i), excepto de los archivos:\n  /etc/group\n  /etc/master.passwd\n  /etc/sysctl.conf\n  /var/www/conf/httpd.conf\n  /var/named/etc/named.conf\n' 15 60 
+if (test "$actualiza" = "1") then {
+	dialog --title 'Actualización de /etc con sysmerge' --msgbox '\nDurante la ejecución de sysmerge, recomendamos que instale nuevas versiones de todos los archivos (con la opción i), excepto de los archivos:\n  /etc/group\n  /etc/master.passwd\n  /etc/sysctl.conf\n  /var/www/conf/httpd.conf\n  /var/named/etc/named.conf\n' 15 60 
 
 	mkdir -p /var/tmp/temproot
 	tar xzpf $ARCH/etc??.tgz -C /var/tmp/temproot
@@ -858,7 +879,7 @@ EOF
 		eval $cmd;
 	} fi;
 } fi;
-
+echo $nv > /var/adJ/verinstadJ.txt
 sh /etc/rc.local >> /var/tmp/inst-adJ.bitacora 2>&1
 
 echo "* Configurar script de inicio de root (root/.profile)" >> /var/tmp/inst-adJ.bitacora;
@@ -1013,23 +1034,33 @@ else {
 if (test "$postencripta" = "s") then {
 	echo "* Crear imagen encriptada para base de ${TAM}Kbytes (se espeicifica otra con var. TAM) en directorio $RUTAIMG (se especifica otra con var RUTAIMG)"  >> /var/tmp/inst-adJ.bitacora
 	clear;
+	cat <<EOF
+
+A continuación por favor ingrese la clave de cifrado para cada una de las
+particiones cifradas, no las verá cuando las teclee --procure no equivocarse y 
+recuerdelas porque debe digitarlas en cada arranque.
+
+EOF
+
 	if (test ! -f /$RUTAIMG/post.img ) then {
-		dd of=/$RUTAIMG/post.img bs=1024 seek=$TAM count=0
-		vnconfig -u vnd0
-		vnconfig -ckv vnd0 /$RUTAIMG/post.img
-		newfs /dev/rvnd0c
-		vnconfig -u vnd0
+		vnconfig -u vnd0 >> /var/tmp/inst-adJ.bitacora 2>&1 
+		dd of=/$RUTAIMG/post.img bs=1024 seek=$TAM count=0 >> /var/tmp/inst-adJ.bitacora 2>&1
+		echo -n "Clave para PostgreSQL (/var/postgresql) "
+		vnconfig -ckv vnd0 /$RUTAIMG/post.img 
+		newfs /dev/rvnd0c >> /var/tmp/inst-adJ.bitacora 2>&1
+		vnconfig -u vnd0 >> /var/tmp/inst-adJ.bitacora 2>&1
 	} else {
-		echo "   Saltando..." >> /var/tmp/inst-adJ.bitacora;
+		echo "   Saltando..." >> /var/tmp/inst-adJ.bitacora
 	} fi;
 
 	echo "* Crear imagen encriptada para respaldo de ${TAM}Kbytes (se espeicifica otra con var. TAM) en directorio $RUTAIMG (se especifica otra con var RUTAIMG)"  >> /var/tmp/inst-adJ.bitacora
 	if (test ! -f /$RUTAIMG/resbase.img -a ! -f /$RUTAIMG/bakbase.img) then {
-		dd of=/$RUTAIMG/resbase.img bs=1024 seek=$TAM count=0
-		vnconfig -u vnd0
-		vnconfig -ckv vnd0 /$RUTAIMG/resbase.img
-		newfs /dev/rvnd0c
-		vnconfig -u vnd0
+		vnconfig -u vnd0 >> /var/tmp/inst-adJ.bitacora 2>&1 
+		dd of=/$RUTAIMG/resbase.img bs=1024 seek=$TAM count=0 >> /var/tmp/inst-adJ.bitacora 2>&1
+		echo -n "Clave para respaldos (/var/www/resbase)"
+		vnconfig -ckv vnd0 /$RUTAIMG/resbase.img 
+		newfs /dev/rvnd0c >> /var/tmp/inst-adJ.bitacora 2>&1
+		vnconfig -u vnd0 >> /var/tmp/inst-adJ.bitacora 2>&1
 	} else {
 		echo "   Saltando..." >> /var/tmp/inst-adJ.bitacora;
 	} fi;
@@ -1267,7 +1298,7 @@ cat /etc/rc.local >> /var/tmp/inst-adJ.bitacora
 cat /etc/rc.conf.local >> /var/tmp/inst-adJ.bitacora
 cat /etc/sysctl.conf >> /var/tmp/inst-adJ.bitacora
 
-echo "* Iniciar PostgreSQL"  >> /var/tmp/inst-adJ.bitacora
+echo "* Iniciando PostgreSQL"  | tee -a /var/tmp/inst-adJ.bitacora
 . /etc/rc.conf >> /var/tmp/inst-adJ.bitacora
 . /etc/rc.local >> /var/tmp/inst-adJ.bitacora
 echo
@@ -1319,7 +1350,7 @@ insacp libidn
 insacp curl 
 insacp libidn
 
-echo "* PHP" >> /var/tmp/inst-adJ.bitacora;
+echo "* Instalando PHP" | tee -a /var/tmp/inst-adJ.bitacora;
 p=`ls /var/db/pkg | grep "^php"`
 if (test "$p" != "") then {
 	dialog --title 'Eliminar PHP' --yesno "\\nPaquete PHP ya instalado. ¿Eliminar para instalar el de esta versión de adJ?" 15 60
@@ -1334,7 +1365,7 @@ if (test "$p" != "") then {
 
 echo "* Configurar servidor web" >> /var/tmp/inst-adJ.bitacora ;
 if (test ! -f /etc/ssl/server.crt) then {
-	echo "* Configurando Certificado SSL" >> /var/tmp/inst-adJ.bitacora;
+	echo "* Configurando Certificado SSL" | tee -a /var/tmp/inst-adJ.bitacora;
 	openssl genrsa -out /etc/ssl/private/server.key 1024
 	openssl req -new -key /etc/ssl/private/server.key \
        		-out /etc/ssl/private/server.csr
@@ -1348,22 +1379,32 @@ connginx=0
 grep "httpd_flags.*-DSSL" /etc/rc.conf.local > /dev/null 2>/dev/null
 if (test "$?" = "0") then {
 	conapache=1;
-	connginx=0;
 } elif (test "$CONNGINX" != "") then {
 	connginx=1;
 } else {
 	conapache=1;  
 	# En migracion probando mas
+
 } fi;
 
 
 if (test "$conapache" = "1" -a -f /etc/rc.d/httpd) then {
+	grep "httpd_flags.*-DSSL" /etc/rc.conf.local > /dev/null 2>/dev/null
+	if (test "$?" != "0") then {
+		ed /etc/rc.conf.local >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+/pkg_scripts
+i
+httpd_flags=-DSSL
+.
+w
+q
+EOF
+	} fi;
 	activarcs httpd
 } else {
 	connginx=1;
 	grep "nginx_flags" /etc/rc.conf.local > /dev/null 2>/dev/null
 	if (test "$?" != "0") then {
-		activarcs nginx
 		ed /etc/rc.conf.local >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
 /pkg_scripts
 i
@@ -1392,6 +1433,7 @@ i
 w
 q
 EOF
+		activarcs nginx
 	} fi;
 } fi;
 
@@ -1670,7 +1712,7 @@ EOF
 	echo "   Saltando..." >> /var/tmp/inst-adJ.bitacora;
 } fi;
 
-echo "* Configurar escritorio de cuenta inicial" >> /var/tmp/inst-adJ.bitacora;
+echo "* Configurando escritorio de cuenta de administrador(a)" | tee -a /var/tmp/inst-adJ.bitacora;
 f=`ls /var/db/pkg/fluxbox* 2> /dev/null > /dev/null`;
 if (test "$?" = "0") then {
 	dialog --title 'Eliminar Fluxbox' --yesno "\\nfluxbox instalado. ¿Eliminarlo para instalar uno más nuevo?" 15 60
@@ -2058,6 +2100,22 @@ if (test ! -f "/usr/local/bin/ruby") then {
 	ln -sf /usr/local/bin/testrb19 /usr/local/bin/testrb
 } fi;
 
+if (test ! -f /home/$uadJ/.irbrc) then {
+	cat > /home/$uadJ/.irbrc << EOF
+# Configuración de irb
+# Basado en script disponible en http://girliemangalo.wordpress.com/2009/02/20/using-irbrc-file-to-configure-your-irb/
+require 'irb/completion'
+require 'pp'
+IRB.conf[:AUTO_INDENT] = true
+IRB.conf[:USE_READLINE] = true
+
+def clear
+    system('clear')
+end
+EOF
+	chown $uadJ:$uadJ /home/$uadJ/.irbrc
+} fi;
+
 
 echo "* Configurar tmux" >> /var/tmp/inst-adJ.bitacora;
 f=`ls /var/db/pkg/tmux* 2> /dev/null`;
@@ -2072,14 +2130,17 @@ EOF
 	chown $uadJ:$uadJ /home/$uadJ/.tmux.conf
 } fi;
 
-echo "* Configurar cups" >> /var/tmp/inst-adJ.bitacora;
+echo "* Configurando sistema de impresión cups" | tee -a /var/tmp/inst-adJ.bitacora;
+rm -f /etc/rc.d/dbus_daemon
 insacp dbus	
 insacp libusb1
+insacp lcms2
+insacp poppler
 insacp cups
 activarcs cupsd
 
 
-echo "* Instalar mozilla-firefox" >> /var/tmp/inst-adJ.bitacora;
+echo "* Instalando navegador mozilla-firefox" | tee -a /var/tmp/inst-adJ.bitacora;
 f=`ls /var/db/pkg/*firefox* 2> /dev/null > /dev/null`;
 if (test "$?" = "0") then {
 	dialog --title 'Eliminar Firefox' --yesno "\\nFirefox instalado. ¿Eliminarlo para instalar uno más nuevo?" 15 60
@@ -2095,6 +2156,10 @@ if (test "$?" != "0") then {
 	insacp libelf
 	insacp glib2
 	insacp cairo
+	insacp libffi
+	insacp pcre
+	insacp icu4c
+	insacp harfbuzz
 	insacp pango
 	insacp gtk+2
 
@@ -2131,7 +2196,7 @@ if (test "$?" != "0") then {
 } fi;
 
 
-echo "* Instalar xfe" >> /var/tmp/inst-adJ.bitacora;
+echo "* Instalando adminstrador de archivos xfe" | tee -a /var/tmp/inst-adJ.bitacora;
 f=`ls /var/db/pkg/xfe* 2> /dev/null > /dev/null`;
 if (test "$?" = "0") then {
 	dialog --title 'Eliminar xfe' --yesno "\\nxfe instalado. ¿Eliminarlo para instalar uno más nuevo?" 15 60
@@ -2232,12 +2297,19 @@ done;
 pkg_add -I -D update -u
 
 # Configuraciones típicas
-if (test ! -f /home/$uadJ/.vimrc) then {
-	cp -f /usr/local/share/vim/vim*/vimrc_example.vim ~/.vimrc
-	chown $uadJ:$uadJ ~/.vimrc
-} fi;
 
 echo "* Configurar vim con UTF-8" >> /var/tmp/inst-adJ.bitacora;
+if (test ! -d /home/$uadJ/.vim) then {
+	mkdir -p /home/$uadJ/.vim
+	cp -rf /usr/local/share/vim/vim*/* /home/$uadJ/.vim/
+	chown -R $uadJ:$uadJ /home/$uadJ/.vim
+} fi;
+
+if (test ! -f /home/$uadJ/.vimrc) then {
+	cp -f /usr/local/share/vim/vim*/vimrc_example.vim /home/$uadJ/.vimrc
+	chown $uadJ:$uadJ /home/$uadJ/.vimrc
+} fi;
+
 grep "set  *tenc" /home/$uadJ/.vimrc> /dev/null
 if (test "$?" != "0") then {
 	cat >> /home/$uadJ/.vimrc <<EOF

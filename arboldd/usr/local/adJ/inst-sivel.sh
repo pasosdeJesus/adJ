@@ -2,7 +2,7 @@
 # Instala/Actualiza un Aprendiendo de Jesús con SIVeL
 # Dominio público. 2010. vtamara@pasosdeJesus.org
 
-VER=4.9
+VER=5.3
 VESP=
 ACVER=`uname -r`
 
