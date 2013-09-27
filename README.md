@@ -17,7 +17,8 @@ Prerequisitos
 1. Computador con procesador de 64 bits.
 2. OpenBSD o adJ para 64 bits instalados.
 3. Fuentes de la versión de OpenBSD que usa descargadas e instaladas en /usr/src, /usr/src/sys, /usr/ports y /usr/src/xenocara
-4. Clone estas a su directorio preferido, por ejemplo:
+4. Desde github bifurque (fork) el repositorio https://github.com/pasosdeJesus/adJ
+4. Clone su bifuración a su directorio preferido, (cambie en el siguiente ejemplo pasosdeJesus por su usuario en github):
 ```
 mkdir ~/comp; cd ~/comp; git clone git://github.com/pasosdeJesus/adJ.git
 ```
@@ -32,7 +33,8 @@ Organización de fuentes
 - distribucion.sh	Archivo de comandos para generar distribución
 - hdes       Herramientas para generar distribución
 - tminiroot  Transforma instalador que va en DVD a español
-- ver.sh.plantilla	Plantilla con variables que controlan distribucion.sh
+- ver.sh     Valores por defecto que controlan distribucion.sh
+- ver-local.sh		Personalización de ver.sh
 
 
 
@@ -41,8 +43,8 @@ Pasos típicos para desarrollar
 
 Muchas de las operaciones típicas se controlan activando o desactivando pasos 
 que el archivo de comandos distribucion.sh hará.  Los pasos se 
-activan/desactivan en el archivo ver.sh (si no tiene uno ejecute 
-```cp ver.sh.plantilla ver.sh```), activa un paso poniendo "s" en la 
+activan/desactivan en el archivo ver-local.sh (si no tiene uno ejecute 
+```cp ver-local.sh.plantilla ver.sh```), activa un paso poniendo "s" en la 
 variable asociada y lo desactiva poniendo "n".
 
 * Enlace arboldes/usr/ports/mystuff en /usr/ports/mystuff.  ```sudo ln -s ~/comp/adJ/usr/ports/mystuff /usr/ports```
@@ -54,5 +56,5 @@ variable asociada y lo desactiva poniendo "n".
 * Compile fuentes y portes siguiendo pasos de distribucion.sh cambiando paulatinamente variables auto* en ver.sh: transforme y compile kernel (autoKernel), instalelo (autoInsKernel), transforme y compile base (autoCompBase), instale y genere .tgz del sistema base (autoDist), genere bsd.rd (autoBsdrd), transforme y compile Xenocara (autoX), instale y genere .tgz de Xenocara (autoXDist), copie juegos de instalación a subdirectorio de la forma 5.x-amd64 (autoJuegosInst), compile portes particulares (autoPaquetes), descargue otros paquetes de repositorio (autoMasPaquetes), genere juego de instalación siteXX.tgz empleando arboldd y listado lista-site (autoSite), genere textos en el instalador (autoContenido)
 * Una vez con juegos de instalación, paquetes y textos listos en subdirectorio 5.x-amd64 genere imagen ISO con sudo hdes/creaiso.sh
 * Pruebe ISO con QEMU, primero arrancando desde CD (en ver.sh ponga qemuboot=d) con hdes/qemu.sh.  Después de instalar pruebe arrancando desde disco (en ver.sh ponga qemuboot=c)
-* Envie sus mejoras a github --respecto a ramas mantenemos una rama para cada versión publicada (e.g ADJ_5_2) en la que eventualmente se aplicarán actualizaciones de seguridad para esa versión, la versión en desarrollo se mantiene en la rama Master.
+* Envie sus mejoras a github --respecto a etiquetas (tags) ponemos cada vez que publicamos en http://aprendiendo.pasosdeJesus.org (e.g v5.3), y mantenemos una rama para cada versión mayor publicada (e.g ADJ_5_3) en la que eventualmente se aplicarán actualizaciones de seguridad para esa versión, la versión en desarrollo se mantiene en la rama master.
 

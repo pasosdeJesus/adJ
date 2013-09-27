@@ -3,12 +3,12 @@ adJ - Aprendiendo de Jesús.
 Distribución para fomentar la construcción del Reino de Dios desde 
 la educación, el respeto por la dignidad humana y la memoria.
 
-Versión: 5.3%%%
-Fecha de publicación: 26/Sep/2013
+Versión: 5.4%%%
+Fecha de publicación: 1/Feb/2013
 
 !!!NOVEDADES
 
-Con respecto a OpenBSD 5.3 para amd64 y a la edición anterior de este DVD
+Con respecto a OpenBSD 5.4 para amd64 y a la edición anterior de este DVD
 
 
 !KERNEL Y SISTEMA BASE
@@ -19,7 +19,7 @@ Con respecto a OpenBSD 5.3 para amd64 y a la edición anterior de este DVD
 * En instalaciones nuevas puede emplear nginx en lugar de Apache si inicia el script de instalación con ==CONNGINX=1 /inst-adJ.sh==
 * Nuevos archivos de comandos para facilitar mantener servidor de correo con OpenSMTPD e IMAPS con dovecot: prepopensmtpd, elimcuenta, adicuenta. Ver documentación en http://structio.sourceforge.net/guias/servidor_OpenBSD/servicios-correo.html#opensmtpd y http://structio.sourceforge.net/guias/servidor_OpenBSD/servicios-correo.html#dovecot 
 
-Entre las novedades reportadas en las `Notas de publicación de OpenBSD 5.3' destacamos:
+Entre las novedades reportadas en las `Notas de publicación de OpenBSD 5.4' destacamos:
 
 * Controladores nuevos para amd64
 ** Ethernet: USB 100MB ==smsc==, 10GB: ==oce== para Emulex OneConect
@@ -70,7 +70,7 @@ El instalador  de adJ emplea codificación UTF8, por lo que para iniciarlo se re
 * PostgreSQL actualizado a 9.2.4 con soporte para UTF-8 y cotejaciones nativas listas para todos los paises de habla hispana. Ver detalles de como usar cotejación en http://aprendiendo.pasosdejesus.org/?id=i18n
 * Nuevo paquete ruby19-apache2ngingx que ayuda a migrar archivos de configuración de Apache a Nginx
 * Nuevo paquete realboy por Sergio Andŕes Gómez del Real para emular Game Boy Classic/Color 
-* Los paquetes exclusivos los encuentra en [ftp://ftp.pasosdeJesus.org/pub/AprendiendoDeJesus/5.3-amd64/paquetes]
+* Los paquetes exclusivos los encuentra en [ftp://ftp.pasosdeJesus.org/pub/AprendiendoDeJesus/5.4-amd64/paquetes]
 
 
 !PAQUETES
@@ -79,7 +79,7 @@ El instalador  de adJ emplea codificación UTF8, por lo que para iniciarlo se re
 * Nuevos paquetes para emplear como servidor de correo: ==dovecot==
 * Mejores permisos en paquetes ==pear-*== 
 * Navegadores actualizados: Firefox a 18.0.2, Chromium a 24.0.1312.68, Midori a 0.4.7
-* !LibreOffice actualizado a 3.6.5.2, gimp a 2.8.1, vlc a 2.0.5p3
+* !LibreOffice actualizado a 3.6.5.2, gimp a 2.8.1, vlc a 2.0.5.4
 * PHP actualizado a 5.3.21, ruby a 1.9.3.392, LLVM/Clang 3.2, asi como los demás lenguajes de programación
 * Se incluye lo básico de Ruby para desarrollar aplicaciones con Ruby on Rails, ver http://dhobsd.pasosdejesus.org/index.php?id=Ruby+on+Rails+en+OpenBSD
 * Se incluyen otros paquetes típicos del repositorio de OpenBSD, en donde hay   más de 7600 disponibles para amd64

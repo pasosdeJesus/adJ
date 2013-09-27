@@ -1,27 +1,42 @@
 
-Actualizar documentación, publicar en Structio, actualizar portes, 
+Anhelamos publicar versión mayor (e.g 5.4) 3 meses después de OpenBSD:
+	1.Ago
+	1.Feb
+
+Publicamos revisiones (e.g 5.4p1) si la seguridad o calidad lo ameritan.
+
+Anhelamos publicar al menos una versión alfa (e.g directorio desarrollo) 
+20 días antes de la versión mayor:
+	10.Jul
+	10.Ene
+
+Pasos importantes para publicar
+===============================
+
+Actualizar documentación, publicar en Structio, actualizar portes de esta, 
 generar y probar paquetes
 
-
 Verificar operación de:
+* http://structio.sf.net/guias/
 * http://aprendiendo.pasosdeJesus.org
 * http://www.pasosdeJesus.org
 * ftp://ftp.pasosdeJesus.org
 * rsync://ftp.pasosdeJesus.org
 
-Retocar fecha de publicacion en Novedades.ewiki, publicar y probar en 
+Retocar fecha de publicacion en Novedades.ewiki y publicar escondido en
   http://aprendiendo.pasosdeJesus.org
 
-Retocar Dedicatoria.txt y archivos .txt y regenar en distribución (sin
+Retocar Dedicatoria.txt y archivos *.txt y regenar en distribución (sin
   paquetes ni otras compilaciones) con:
 	sudo ./distribucion.sh
 
-En computador de desarrollo tras configurar var-local.sh:
+En computador de desarrollo tras configurar var-local.sh enviar a
+ftp.pasosdeJesus.org:
 	hdes/rsync-aotro.sh
 
 En ftp.pasosdeJesus.org
 	hdes/creaiso.sh
-	cp -rf AprendiendoDeJesus-5.3-amd64.iso 5.3-amd64 /dirftp
+	cp -rf AprendiendoDeJesus-5.4-amd64.iso 5.4-amd64 /dirftp
 
 Actualiza reto en P2PU.
 
@@ -32,7 +47,7 @@ Correo a listas: openbsd-colombia@googlegroups.com,
 A: openbsd-colombia@googlegroups.com, colibri@listas.el-directorio.org, 
 openbsd-mexico@googlegroups.com, sivel-soporte@lists.sourceforge.net
 
-Tema: Publicado adJ 5.3 para amd64
+Tema: Publicado adJ 5.4 para amd64
 
 Descargue imagen para DVD de:                                                   
 ftp://ftp.pasosdejesus.org/pub/AprendiendoDeJesus/                              
@@ -45,9 +60,9 @@ puede aprender a instalar o actualizar con:
   2. La guía de instalación:
   http://structio.sourceforge.net/guias/usuario_OpenBSD/sobre-la-instalacion.html
                                                                                 
-Vea las novedades completas de la versión 5.3 (con enlaces a documentación      
+Vea las novedades completas de la versión 5.4 (con enlaces a documentación      
 y tutoriales):                                                                  
-  http://aprendiendo.pasosdejesus.org/?id=AdJ+5.3+-+Aprendiendo+de+Jesus+5.3    
+  http://aprendiendo.pasosdejesus.org/?id=AdJ+5.4+-+Aprendiendo+de+Jesus+5.4    
 
 De las novedades destacamos:
 ...
@@ -57,8 +72,10 @@ Bendiciones
 
 Publicar en Twitter que retrasnmite a cuenta y página en Facebook
 ----
-Publicado adJ 5.3 sistema operativo para servidores y cortafuegos, seguro, amigable para cristian@s y en español, ver http://aprendiendo.pasosdejesus.org/?id=AdJ+5.3+-+Aprendiendo+de+Jesus+5.3
+Publicado adJ 5.4 sistema operativo para servidores y cortafuegos, seguro, amigable para cristian@s y en español, ver http://aprendiendo.pasosdejesus.org/?id=AdJ+5.4+-+Aprendiendo+de+Jesus+5.4
 ----
 
 Poner Tag en github e iniciar rama
+	git tag -a v5.4 -m "Versión 5.4"
+	git push origin v5.4
 
