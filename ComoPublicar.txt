@@ -1,44 +1,61 @@
 
+Actualizar documentación, publicar en Structio, actualizar portes, 
+generar y probar paquetes
+
+
 Verificar operación de:
 * http://aprendiendo.pasosdeJesus.org
 * http://www.pasosdeJesus.org
 * ftp://ftp.pasosdeJesus.org
 * rsync://ftp.pasosdeJesus.org
 
-Actualizar documentación, publicar en Structio, actualizar portes, 
-generar y probar paquetes
+Retocar fecha de publicacion en Novedades.ewiki, publicar y probar en 
+  http://aprendiendo.pasosdeJesus.org
 
-Verificar fecha de publicacion en Novedades.ewiki
+Retocar Dedicatoria.txt y archivos .txt y regenar en distribución (sin
+  paquetes ni otras compilaciones) con:
+	sudo ./distribucion.sh
 
 En computador de desarrollo tras configurar var-local.sh:
 	hdes/rsync-aotro.sh
 
 En ftp.pasosdeJesus.org
 	hdes/creaiso.sh
-	cp -rf AprendiendoDeJesus-x.y-amd64.iso x.y-amd64 /dirftp
-
-Actualizar artículo como Noticia en http://aprendiendo.pasosdeJesus.org
+	cp -rf AprendiendoDeJesus-5.3-amd64.iso 5.3-amd64 /dirftp
 
 Actualiza reto en P2PU.
 
+Actualizar Artículo como Noticia en http://aprendiendo.pasosdeJesus.org
+
 Correo a listas: openbsd-colombia@googlegroups.com, 
 ----
+A: openbsd-colombia@googlegroups.com, colibri@listas.el-directorio.org, 
+openbsd-mexico@googlegroups.com, sivel-soporte@lists.sourceforge.net
 
-Tema: Publicado adJ x.y
+Tema: Publicado adJ 5.3 para amd64
 
-Para instalar o actualizar puede hacer una de las siguientes:                   
+Descargue imagen para DVD de:                                                   
+ftp://ftp.pasosdejesus.org/pub/AprendiendoDeJesus/                              
                                                                                 
-1. Tomar el curso/reto que da una medalla a quienes completen:                  
-https://p2pu.org/es/groups/openbsd-adj-como-sistema-de-escritorio/              
+Si no tiene experiencia con esta distribución de OpenBSD para servidores
+y cortafuegos, que es segura, usable en español y amigable para cristian@s, 
+puede aprender a instalar o actualizar con:  
+  1. El curso/reto que da una medalla a quienes completen:                
+  https://p2pu.org/es/groups/openbsd-adj-como-sistema-de-escritorio/            
+  2. La guía de instalación:
+  http://structio.sourceforge.net/guias/usuario_OpenBSD/sobre-la-instalacion.html
                                                                                 
-2. Consultar la documentación                                                   
-http://structio.sourceforge.net/guias/usuario_OpenBSD/sobre-la-instalacion.html 
-                                                                                
-                                  
-Se adjunta las novedades, también disponibles en                                               
-Se adjunta el archivo de Novedades, de estas se destaca:      
+Vea las novedades completas de la versión 5.3 (con enlaces a documentación      
+y tutoriales):                                                                  
+  http://aprendiendo.pasosdejesus.org/?id=AdJ+5.3+-+Aprendiendo+de+Jesus+5.3    
+
+De las novedades destacamos:
+...
+
+Bendiciones
+
 ----
 
 Publicar en Twitter y retrasmitir a página en Facebook
 ----
-Publicado adJ x.y sistema operativo para servidores y cortafuegos, seguro y en español, 
+Publicado adJ 5.3 sistema operativo para servidores y cortafuegos, seguro, amigable para cristian@s y en español, ver http://aprendiendo.pasosdejesus.org/?id=AdJ+5.3+-+Aprendiendo+de+Jesus+5.3
