@@ -1,0 +1,44 @@
+
+Verificar operación de:
+* http://aprendiendo.pasosdeJesus.org
+* http://www.pasosdeJesus.org
+* ftp://ftp.pasosdeJesus.org
+* rsync://ftp.pasosdeJesus.org
+
+Actualizar documentación, publicar en Structio, actualizar portes, 
+generar y probar paquetes
+
+Verificar fecha de publicacion en Novedades.ewiki
+
+En computador de desarrollo tras configurar var-local.sh:
+	hdes/rsync-aotro.sh
+
+En ftp.pasosdeJesus.org
+	hdes/creaiso.sh
+	cp -rf AprendiendoDeJesus-x.y-amd64.iso x.y-amd64 /dirftp
+
+Actualizar artículo como Noticia en http://aprendiendo.pasosdeJesus.org
+
+Actualiza reto en P2PU.
+
+Correo a listas: openbsd-colombia@googlegroups.com, 
+----
+
+Tema: Publicado adJ x.y
+
+Para instalar o actualizar puede hacer una de las siguientes:                   
+                                                                                
+1. Tomar el curso/reto que da una medalla a quienes completen:                  
+https://p2pu.org/es/groups/openbsd-adj-como-sistema-de-escritorio/              
+                                                                                
+2. Consultar la documentación                                                   
+http://structio.sourceforge.net/guias/usuario_OpenBSD/sobre-la-instalacion.html 
+                                                                                
+                                  
+Se adjunta las novedades, también disponibles en                                               
+Se adjunta el archivo de Novedades, de estas se destaca:      
+----
+
+Publicar en Twitter y retrasmitir a página en Facebook
+----
+Publicado adJ x.y sistema operativo para servidores y cortafuegos, seguro y en español, 
