@@ -877,7 +877,7 @@ echo " *> Revisando faltantes con respecto a Contenido.txt" | tee -a /var/tmp/di
 	if (test -f Novedades.ewiki) then {
 		echo "*** De Ewiki a Texto" | tee -a /var/tmp/distrib-adJ.bitacora
 		awk -f hdes/ewikiAtexto.awk Novedades.ewiki > tmp/Novedades.txt
-		recode latin1..utf8 tmp/Novedades.txt
+		#recode latin1..utf8 tmp/Novedades.txt
 	} fi;
 	if (test -f tmp/Novedades.txt) then {
 		echo "*** Novedades" | tee -a /var/tmp/distrib-adJ.bitacora;
