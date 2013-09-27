@@ -1,0 +1,41 @@
+#!/bin/sh
+# Sus cambios a las  variables de configuración para generar distribución 
+
+# Estas variables controlan operacion de distribucion.sh pueden ser s o n
+export autoCvs=n
+# Actualizar fuentes y portes del CVS de OpenBSD 
+export autoCompKernel=n
+# Transformar y compilar kernel 
+export autoInsKernel=n
+# Instalar kernel compilado
+export autoActZonasHorarias=n
+# Actualizar zonas horarias
+export autoCompBase=n
+# Transformar y compilar sistema base
+export autoElimCompBase=n
+# Elimina Compila Base
+export autoDist=n
+# Crear distribución en /releasedir y /destdir
+export autoBsdrd=n
+# Crear bsd.rd
+export autoElimDist=n
+# Eliminar distribución de /destdir y /releasedir
+export autoX=n
+# Transformar y compilar Xenocara
+export autoXDist=n
+# Distribución de Xenocara en /destdir y /releasedir
+export autoElimXDist=n
+# Elimina distribución de Xenocara
+export autoJuegosInstalacion=n
+# Crear juegos de instalación en subdirectorio de este
+export autoPaquetes=n
+# Compilar paquetes especiales que hacen parte de la distribución
+
+export autoMasPaquetes=s
+# Descargar resto de paquetes de repositorio PKG_PATH
+export autoSite=s
+# Generar siteXX.tgz
+export autoTextos=s
+# Generar textos Novedades.txt y demás
+
+qemuboot=d
