@@ -1,19 +1,19 @@
 diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/lib/libc/locale/collate.c src/lib/libc/locale/collate.c
 --- src53xlocale2/lib/libc/locale/collate.c	Mon Apr  8 21:20:56 2013
 +++ src/lib/libc/locale/collate.c	Tue Apr  9 05:01:26 2013
-@@ -416,9 +416,9 @@
- /** Duplicate a mb string as wc string, 
-  * https://buildsecurityin.us-cert.gov/bsi/articles/knowledge/coding/769-BSI.html
-  */
+@@ -423,9 +423,9 @@
+ }
+ #endif
+ 
 -wchar_t *__dup_as_wcs_l(const char *s)
 +wchar_t *__dup_as_wcs_l(const char *s, locale_t l)
  {
--	int numc = mbstowcs(NULL, s, 0) + 1; 
-+	int numc = mbstowcs_l(NULL, s, 0, l) + 1; 
- 	if (numc == 0 || numc > ULONG_MAX / sizeof(wchar_t)
- 			|| numc == (size_t)-1) { 
- 		errno = EINVAL;
-@@ -429,7 +429,7 @@
+-	size_t numc = mbstowcs(NULL, s, 0) + 1; 
++	size_t numc = mbstowcs_l(NULL, s, 0, l) + 1; 
+ 	wchar_t *ws = NULL;
+ 
+ 	if (numc == 0 || numc == (size_t)-1) { 
+@@ -437,7 +437,7 @@
  		errno = ENOMEM;
  		return NULL;
  	}

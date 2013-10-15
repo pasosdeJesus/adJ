@@ -23,7 +23,13 @@ export RADJ="ADJ_$VU"
 PKG_PATH=ftp://ftp.openbsd.org/pub/OpenBSD/$V/packages/$ARQ/
 PKG_PATH=ftp://ftp3.usa.openbsd.org/pub/OpenBSD/$V/packages/$ARQ/
 PKG_PATH=ftp://filedump.se.rit.edu/pub/OpenBSD/$V/packages/$ARQ/
+PKG_PATH=ftp://openbsd.mirrors.pair.com/pub/OpenBSD/$V/packages/$ARQ/
+PKG_PATH=ftp://mirror.planetunix.net/pub/OpenBSD/$V/packages/$ARQ/
+PKG_PATH=ftp://mirror.esc7.net/pub/OpenBSD/$V/packages/$ARQ/
+PKG_PATH=ftp://mirrors.nycbug.org/pub/OpenBSD/$V/packages/$ARQ/
 PKG_PATH=ftp://ftp.pasosdeJesus.org/pub/OpenBSD/$V/packages/$ARQ/
+
+
 #Repositorio de paquetes usado --el último es el usado
 
 METODOACT=ftp

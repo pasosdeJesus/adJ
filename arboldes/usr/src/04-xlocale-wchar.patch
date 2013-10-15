@@ -92,34 +92,31 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/bt
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/collate.c src/lib/libc/locale/collate.c
 --- src53collation/lib/libc/locale/collate.c	Mon Apr  1 08:25:36 2013
 +++ src/lib/libc/locale/collate.c	Wed Apr  3 06:29:38 2013
-@@ -71,37 +71,47 @@
+@@ -66,32 +66,44 @@
  int __collate_load_error;
  
  
 -struct __collate __global_collate = {
--	1, 0
 +struct xlocale_collate __xlocale_global_collate = {
-+	{{0}, "C"}, 1, 0
+ 	1, 0
  };
  
 -struct __collate __C_collate = {
--	1, 0
 +struct xlocale_collate __xlocale_C_collate = {
-+	{{0}, "C"}, 1, 0
+ 	1, 0
  };
- 
- __dead void __collate_err(int ex, const char *f);
  
  int
 -__collate_load_tables_l(const char *encoding, struct __collate *table);
 +__collate_load_tables_l(const char *encoding, struct xlocale_collate *table);
  
++
 +static void
 +destruct_collate(void *t)
 +{
 +	struct xlocale_collate *table = t;
-+	if (__collate_chain_pri_table) {
-+		free(__collate_chain_pri_table);
++	if (table->__collate_chain_pri_table) {
++		free(table->__collate_chain_pri_table);
 +	}
 +	free(t);
 +}
@@ -132,63 +129,62 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/co
 -__collate_load(const char *encoding)
 +__collate_load(const char *encoding, locale_t unused)
  {
+-	struct __collate *table;
++	struct xlocale_collate *table;
+ 
  	if (strcmp(encoding, "C") == 0 || strcmp(encoding, "POSIX") == 0) {
 -		return &__C_collate;
 +		return &__xlocale_C_collate;
  	}
--	struct __collate *table = calloc(sizeof(struct __collate), 1);
-+	struct xlocale_collate *table = calloc(sizeof(struct xlocale_collate), 1);
+-	table = calloc(sizeof(struct __collate), 1);
++	table = calloc(sizeof(struct xlocale_collate), 1);
 +	table->header.header.destructor = destruct_collate;
- 	/* FIXME: Make sure that _LDP_CACHE is never returned.  
- 	 * We should be doing the caching outside of this section */
  	if (__collate_load_tables_l(encoding, table) != _LDP_LOADED) {
 -		free(table);
 +		xlocale_release(table);
  		return NULL;
  	}
--
- 	return table;
- }
  
-@@ -111,8 +121,8 @@
+@@ -104,9 +116,9 @@
  int
  __collate_load_tables(const char *encoding)
  {
 -	int ret = __collate_load_tables_l(encoding, &__global_collate);
--	__collate_load_error = __global_collate.__collate_load_error;
 +	int ret = __collate_load_tables_l(encoding, &__xlocale_global_collate);
+ 
+-	__collate_load_error = __global_collate.__collate_load_error;
 +	__collate_load_error = __xlocale_global_collate.__collate_load_error;
  	return ret;
  }
  
-@@ -121,7 +131,7 @@
-  * given as parameter.
+@@ -136,7 +148,7 @@
+  * 		before the 4 bytes of the integer prim.
   */
  int
--__collate_load_tables_l(const char *encoding, struct __collate *table)
-+__collate_load_tables_l(const char *encoding, struct xlocale_collate *table)
+-__collate_load_tables_l(const char *locname, struct __collate *table)
++__collate_load_tables_l(const char *locname, struct xlocale_collate *table)
  {
- 	FILE *fp;
- 	int i, saverr, chains;
-@@ -282,7 +292,7 @@
-  * table applied to the wide string s
+ 	FILE *fp = NULL;
+ 	int i, saverr, chains, len;
+@@ -294,7 +306,7 @@
+  * table applied to the wide string s.
   */
  wchar_t *
--__collate_substitute_w(struct __collate *table, const wchar_t *s)
-+__collate_substitute_w(struct xlocale_collate *table, const wchar_t *s)
+-__collate_substitute_w(struct __collate *table, const wchar_t *wcs)
++__collate_substitute_w(struct xlocale_collate *table, const wchar_t *wcs)
  {
  	int dest_len, len, nlen;
- 	int delta = wcslen(s);
-@@ -322,7 +332,7 @@
+ 	size_t delta = wcslen(wcs);
+@@ -362,7 +374,7 @@
   * beginning in t. In len returns the amount of characters of t processed.
   */
  void
--__collate_lookup_w(struct __collate *table, const wchar_t *t, int *len, int *prim, int *sec)
-+__collate_lookup_w(struct xlocale_collate *table, const wchar_t *t, int *len, int *prim, int *sec)
+-__collate_lookup_w(struct __collate *table, const wchar_t *t, int *len, 
++__collate_lookup_w(struct xlocale_collate *table, const wchar_t *t, int *len, 
+ 		int *prim, int *sec)
  {
  	struct __collate_st_chain_pri *p2;
- 
-@@ -365,12 +375,12 @@
+@@ -385,13 +397,13 @@
  
  #ifdef COLLATE_DEBUG
  void
@@ -197,6 +193,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/co
  {
  	int i;
  	struct __collate_st_chain_pri *p2;
+ 
  	if (table == NULL) {
 -		table = &__global_collate;
 +		table = &__xlocale_global_collate;
@@ -410,7 +407,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mb
  .Nd get number of bytes in a multibyte character
  .\" ----------------------------------------------------------------------
  .Sh SYNOPSIS
- .Fd #include <stdlib.h>
+ .In stdlib.h
  .Ft int
  .Fn mblen "const char *s" "size_t n"
 +.Ft int
@@ -423,7 +420,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mb
 -function usually determines the number of bytes in
 +and
 +.Fn mblen_l
-+usually determine the number of bytes in
++usually determines the number of bytes in
  a multibyte character pointed to by
  .Fa s
 -and returns it.
@@ -438,9 +435,9 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mb
  is affected by the
  .Dv LC_CTYPE
 -category of the current locale.
-+category of the current locale.  The funcion 
++category of the current locale.  The funcion
 +.Fn mblen_l
-+allows you to provide a different locale, see 
++allows you to provide a different locale, see
 +.Xr xlocale 3
  .Pp
  There are special cases:
@@ -601,17 +598,17 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mb
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53/lib/libc/locale/mbrtowc.3 src/lib/libc/locale/mbrtowc.3
 --- src53/lib/libc/locale/mbrtowc.3	Mon Mar 25 18:28:42 2013
 +++ src/lib/libc/locale/mbrtowc.3	Tue Apr  9 09:45:12 2013
-@@ -29,17 +29,24 @@
+@@ -29,21 +29,27 @@
  .Dt MBRTOWC 3
  .Os
  .Sh NAME
 -.Nm mbrtowc
+-.Nd converts a multibyte character to a wide character (restartable)
 +.Nm mbrtowc ,
-+.Nm mbrtowc_l 
- .Nd converts a multibyte character to a wide character (restartable)
++.Nm mbrtowc_l
++.Nd convert a multibyte character to a wide character (restartable)
  .Sh SYNOPSIS
- .Fd #include <wchar.h>
-+.Fd #include <xlocale.h>
+ .In wchar.h
  .Ft size_t
  .Fn mbrtowc "wchar_t * restrict wc" "const char * restrict s" "size_t n" \
  "mbstate_t * restrict mbs"
@@ -619,31 +616,35 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53/lib/libc/locale/mbrtowc.3 s
 +.Fn mbrtowc_l "wchar_t * restrict wc" "const char * restrict s" "size_t n" \
 +"mbstate_t * restrict mbs" "locale_t l"
  .Sh DESCRIPTION
- The
+-The
++The functions
  .Fn mbrtowc
 -function examines at most
 +and
 +.Fn mbrtowc_l
-+functions examine at most
++examine at most
  .Fa n
  bytes of the multibyte character byte string pointed to by
  .Fa s ,
-@@ -59,9 +66,11 @@
+-converts those bytes to a wide character, and stores the wide character
++convert those bytes to a wide character, and store the wide character
+ in the wchar_t object pointed to by
+ .Fa wc
+ if
+@@ -59,9 +65,10 @@
  .Fa mbs .
  The mbstate_t object must be initialized to zero before the application's
  first call to
 -.Fn mbrtowc .
 -If the previous call to
--.Fn mbrtowc
-+.Fn mbrtowc 
+ .Fn mbrtowc
 +or
 +.Fn mbrtowc_l .
-+
 +If the previous call to the function
  did not return (size_t)-1, the mbstate_t object can safely be reused
  without reinitialization.
  .Pp
-@@ -69,7 +78,12 @@
+@@ -69,7 +76,12 @@
  .Fn mbrtowc
  is affected by the
  .Dv LC_CTYPE
@@ -657,7 +658,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53/lib/libc/locale/mbrtowc.3 s
  If the locale is changed without reinitialization of the mbstate_t object
  pointed to by
  .Fa mbs ,
-@@ -238,12 +252,14 @@
+@@ -238,12 +250,14 @@
  .Sh SEE ALSO
  .Xr mbrlen 3 ,
  .Xr mbtowc 3 ,
@@ -676,21 +677,23 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53/lib/libc/locale/mbrtowc.3 s
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mbsinit.3 src/lib/libc/locale/mbsinit.3
 --- src53collation/lib/libc/locale/mbsinit.3	Mon Mar 25 18:28:42 2013
 +++ src/lib/libc/locale/mbsinit.3	Wed Apr  3 11:15:27 2013
-@@ -30,26 +30,40 @@
+@@ -30,20 +30,32 @@
  .Os
  .\" ----------------------------------------------------------------------
  .Sh NAME
 -.Nm mbsinit
+-.Nd determines whether the state object is in initial state
 +.Nm mbsinit ,
 +.Nm mbsinit_l
- .Nd determines whether the state object is in initial state
++.Nd determine whether the state object is in initial state
  .\" ----------------------------------------------------------------------
  .Sh SYNOPSIS
- .Fd #include <wchar.h>
+ .In wchar.h
  .Ft int
  .Fn mbsinit "const mbstate_t *ps"
++.In xlocale.h
 +.Ft int
-+.Fn mbsinit_l "const mbstate_t *ps" "locale_t l"
++.Fn mbsinit_l "const mbstate_t *ps" "locale_t"
  .\" ----------------------------------------------------------------------
  .Sh DESCRIPTION
  .Fn mbsinit
@@ -699,28 +702,18 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mb
 +.Fn mbsinit_l
 +determine whether the state object pointed to by
  .Fa ps
--is in initial conversion state, or not.
-+is in initial conversion state, or not.  
+ is in initial conversion state, or not.
  .Pp
-+The behavior of 
-+.Fn mbsinit 
++The behavior of
++.Fn mbsinit
 +depends on the current locale, while the behavior of
 +.Fn mbsinit_l
 +depends on the locale provided as parameter, see
-+.Xr xlocale 3
-+.Pp
++.Xr xlocale 3 .
  .Fa ps
  may be a
  .Dv NULL
- pointer.
- In this case,
- .Fn mbsinit
-+and
-+.Fn mbsinit_l
- will always return non-zero.
- .\" ----------------------------------------------------------------------
- .Sh RETURN VALUES
-@@ -74,5 +88,6 @@
+@@ -74,5 +86,6 @@
  .Fn mbsinit
  conforms to
  .\" .St -isoC-amd1 .
@@ -856,22 +849,28 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mb
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mbstowcs.3 src/lib/libc/locale/mbstowcs.3
 --- src53collation/lib/libc/locale/mbstowcs.3	Mon Mar 25 18:28:42 2013
 +++ src/lib/libc/locale/mbstowcs.3	Wed Apr  3 11:15:27 2013
-@@ -31,22 +31,34 @@
+@@ -30,23 +30,30 @@
+ .Os
  .\" ----------------------------------------------------------------------
  .Sh NAME
- .Nm mbstowcs
+-.Nm mbstowcs
+-.Nd converts a multibyte character string to a wide-character string
++.Nm mbstowcs ,
 +.Nm mbstowcs_l
- .Nd converts a multibyte character string to a wide-character string
++.Nd convert a multibyte character string to a wide-character string
  .\" ----------------------------------------------------------------------
  .Sh SYNOPSIS
- .Fd #include <stdlib.h>
+ .In stdlib.h
  .Ft size_t
  .Fn mbstowcs "wchar_t * restrict pwcs" "const char * restrict s" "size_t n"
++.In xlocale.h
 +.Ft size_t
 +.Fn mbstowcs_l "wchar_t * restrict pwcs" "const char * restrict s" "size_t n" "locale_t l"
++.\" ----------------------------------------------------------------------
  .\" ----------------------------------------------------------------------
  .Sh DESCRIPTION
- The
+-The
++The functions
  .Fn mbstowcs
 -converts a null-terminated multibyte character string pointed to by
 +and
@@ -883,18 +882,25 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mb
  pointed to by
  .Fa pwcs .
 -This function may modify the first at most
-+The funcion 
-+.Fn mbstowcs
-+uses the current locale, while 
-+.Fn mbstowcs_l
-+uses the locale provided, see
-+.Xr xlocale 3
-+.Pp
 +These functions may modify the first at most
  .Fa n
  elements of the array pointed to by
  .Fa pwcs .
-@@ -117,7 +129,8 @@
+@@ -56,6 +63,13 @@
+ .Xr mbtowc 3
+ will not be affected.
+ .Pp
++The funcion
++.Fn mbstowcs
++uses the current locale, while
++.Fn mbstowcs_l
++uses the locale provided, see
++.Xr xlocale 3
++.Pp
+ For state-dependent encoding,
+ .Fn mbstowcs
+ implies the multibyte character string pointed to by
+@@ -117,7 +131,8 @@
  .\" ----------------------------------------------------------------------
  .Sh SEE ALSO
  .Xr mbtowc 3 ,
@@ -938,26 +944,30 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mb
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mbtowc.3 src/lib/libc/locale/mbtowc.3
 --- src53collation/lib/libc/locale/mbtowc.3	Mon Mar 25 18:28:42 2013
 +++ src/lib/libc/locale/mbtowc.3	Wed Apr  3 11:15:27 2013
-@@ -30,26 +30,30 @@
+@@ -30,26 +30,33 @@
  .Os
  .\" ----------------------------------------------------------------------
  .Sh NAME
 -.Nm mbtowc
-+.Nm mbtowc,
+-.Nd converts a multibyte character to a wide character
++.Nm mbtowc ,
 +.Nm mbtowc_l
- .Nd converts a multibyte character to a wide character
++.Nd convert a multibyte character to a wide character
  .\" ----------------------------------------------------------------------
  .Sh SYNOPSIS
- .Fd #include <stdlib.h>
+ .In stdlib.h
  .Ft int
  .Fn mbtowc "wchar_t * restrict pwc" "const char * restrict s" "size_t n"
++.In xlocale.h
 +.Ft int
 +.Fn mbtowc_l "wchar_t * restrict pwc" "const char * restrict s" "size_t n" "locale_t l"
  .Sh DESCRIPTION
 -The
++.Sh DESCRIPTION
++The functions
  .Fn mbtowc
 -usually converts the multibyte character pointed to by
-+and
++and 
 +.Fn mbtowc_l
 +usually convert the multibyte character pointed to by
  .Fa s
@@ -974,7 +984,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mb
  .Fa s .
  .Pp
  In state-dependent encodings,
-@@ -88,7 +92,10 @@
+@@ -88,7 +95,10 @@
  .Fn mbtowc
  is affected by the
  .Dv LC_CTYPE
@@ -986,7 +996,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mb
  .Pp
  These are the special cases:
  .Bl -tag -width 012345678901
-@@ -166,7 +173,8 @@
+@@ -166,7 +176,8 @@
  .Sh SEE ALSO
  .Xr mblen 3 ,
  .Xr mbrtowc 3 ,
@@ -1712,44 +1722,26 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/se
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/setrunelocale.c src/lib/libc/locale/setrunelocale.c
 --- src53collation/lib/libc/locale/setrunelocale.c	Mon Mar 25 18:28:42 2013
 +++ src/lib/libc/locale/setrunelocale.c	Wed Apr  3 06:46:51 2013
-@@ -88,20 +88,27 @@
-  * SUCH DAMAGE.
-  */
- 
--#include "rune.h"
-+
- #include <assert.h>
- #include <errno.h>
- #include <limits.h>
-+#include <locale.h>
- #include <paths.h>
--#include <string.h>
-+#include <stddef.h>
- #include <stdio.h>
- #include <stdlib.h>
--#include <stddef.h>
-+#include <string.h>
+@@ -98,10 +98,13 @@
+ #include <stddef.h>
+ #include <string.h>
  #include <unistd.h>
--#include <locale.h>
--#include <citrus/citrus_ctype.h>
 +#include <xlocale.h>
-+
+ 
+ #include "citrus_ctype.h"
 +#include "mblocal.h"
-+#include "rune.h"
-+#include "runetype.h"
+ #include "rune.h"
  #include "rune_local.h"
 +#include "xlocale_private.h"
  
-+#include <citrus/citrus_ctype.h>
-+
  struct localetable {
  	char path[PATH_MAX];
- 	_RuneLocale *runelocale;
-@@ -172,10 +179,23 @@
+@@ -173,11 +176,27 @@
  int
- _xpg4_setrunelocale(const char *encoding)
+ _xpg4_setrunelocale(const char *locname)
  {
-+	int rv = xlocale_setrunelocale(&__xlocale_global_ctype, encoding);
++
++	int rv = xlocale_setrunelocale(&__xlocale_global_ctype, locname);
 +	if (rv == 0) {
 +		_CurrentRuneLocale = __xlocale_global_ctype.runes;
 +	}
@@ -1757,28 +1749,36 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/se
 +}
 +
 +int
-+xlocale_setrunelocale(struct xlocale_ctype *xc, const char *encoding)
++xlocale_setrunelocale(struct xlocale_ctype *xc, const char *locname)
 +{
  	char path[PATH_MAX];
  	_RuneLocale *rl;
  	int error, len;
+ 	const char *dot, *encoding;
  
-+	if (xc == NULL || encoding == NULL) {
-+		return EINVAL;
++	if (xc == NULL || locname == NULL) {
++		rl = &_DefaultRuneLocale;
++		goto found;
 +	}
- 	if (!strcmp(encoding, "C") || !strcmp(encoding, "POSIX")) {
++
+ 	if (!strcmp(locname, "C") || !strcmp(locname, "POSIX")) {
  		rl = &_DefaultRuneLocale;
  		goto found;
-@@ -194,7 +214,37 @@
- 		return ENOENT;
+@@ -206,7 +225,43 @@
  
  found:
--	_CurrentRuneLocale = rl;
+ 	_CurrentRuneLocale = rl;
 +	xc->runes = rl;
++	xc->__mbrtowc = (void *)(rl->rl_citrus_ctype->cc_ops->co_mbrtowc);
++	xc->__mbsinit = (void *)(rl->rl_citrus_ctype->cc_ops->co_mbsinit);
++	xc->__mbsnrtowcs = (void *)rl->rl_citrus_ctype->cc_ops->co_mbsnrtowcs;
++	xc->__wcrtomb = (void *)rl->rl_citrus_ctype->cc_ops->co_wcrtomb;
++	xc->__wcsnrtombs = (void *)rl->rl_citrus_ctype->cc_ops->co_wcsnrtombs;
++	xc->__mb_cur_max = rl->rl_citrus_ctype->cc_mb_cur_max;
+ 	__mb_cur_max = rl->rl_citrus_ctype->cc_mb_cur_max;
  
  	return 0;
  }
-+
 +
 +
 +void
@@ -1794,12 +1794,12 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/se
 +
 +/** Based on __collate_load */
 +void *
-+__ctype_load(const char *locale, locale_t unused)
++__ctype_load(const char *locname, locale_t unused)
 +{
 +	struct xlocale_ctype *l = calloc(sizeof(struct xlocale_ctype), 1);
 +
 +	l->header.header.destructor = destruct_ctype;
-+	if (xlocale_setrunelocale(l, locale))
++	if (xlocale_setrunelocale(l, locname))
 +	{
 +		xlocale_release(l);
 +		return NULL;
@@ -2011,23 +2011,26 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/wc
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/wcstombs.3 src/lib/libc/locale/wcstombs.3
 --- src53collation/lib/libc/locale/wcstombs.3	Mon Mar 25 18:28:42 2013
 +++ src/lib/libc/locale/wcstombs.3	Wed Apr  3 11:15:27 2013
-@@ -30,22 +30,27 @@
+@@ -30,22 +30,29 @@
  .Os
  .\" ----------------------------------------------------------------------
  .Sh NAME
 -.Nm wcstombs
+-.Nd converts a wide-character string to a multibyte character string
 +.Nm wcstombs ,
 +.Nm wcstombs_l
- .Nd converts a wide-character string to a multibyte character string
++.Nd convert a wide-character string to a multibyte character string
  .\" ----------------------------------------------------------------------
  .Sh SYNOPSIS
- .Fd #include <stdlib.h>
+ .In stdlib.h
  .Ft size_t
  .Fn wcstombs "char * restrict s" "const wchar_t * restrict pwcs" "size_t n"
++.In xlocale.h
 +.Ft size_t
 +.Fn wcstombs_l "char * restrict s" "const wchar_t * restrict pwcs" "size_t n" "locale_t l"
  .\" ----------------------------------------------------------------------
  .Sh DESCRIPTION
++The functions
  .Fn wcstombs
 -converts the null-terminated wide-character string pointed to by
 +and
@@ -2039,11 +2042,11 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/wc
 +and store it in the array pointed to by
  .Fa s .
 -This function may modify the first at most
-+These function may modify the first at most
++These functions may modify the first at most
  .Fa n
  bytes of the array pointed to by
  .Fa s .
-@@ -57,6 +62,8 @@
+@@ -57,6 +64,8 @@
  .Pp
  For state-dependent encoding, the
  .Fn wcstombs
@@ -2052,7 +2055,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/wc
  implies the result multibyte character string pointed to by
  .Fa s
  always to begin with an initial state.
-@@ -65,7 +72,10 @@
+@@ -65,7 +74,10 @@
  .Fn wcstombs
  is affected by the
  .Dv LC_CTYPE
@@ -2064,7 +2067,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/wc
  .Pp
  There are special cases:
  .Bl -tag -width 012345678901
-@@ -119,7 +129,8 @@
+@@ -119,7 +131,8 @@
  .\" ----------------------------------------------------------------------
  .Sh SEE ALSO
  .Xr setlocale 3 ,
@@ -2217,34 +2220,41 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/wc
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/wctomb.3 src/lib/libc/locale/wctomb.3
 --- src53collation/lib/libc/locale/wctomb.3	Mon Mar 25 18:28:42 2013
 +++ src/lib/libc/locale/wctomb.3	Wed Apr  3 11:15:27 2013
-@@ -29,18 +29,23 @@
+@@ -29,27 +29,37 @@
  .Dt WCTOMB 3
  .Os
  .Sh NAME
 -.Nm wctomb
+-.Nd converts a wide character to a multibyte character
 +.Nm wctomb ,
 +.Nm wctomb_l
- .Nd converts a wide character to a multibyte character
++.Nd convert a wide character to a multibyte character
  .Sh SYNOPSIS
- .Fd #include <stdlib.h>
+ .In stdlib.h
  .Ft int
  .Fn wctomb "char * s" "const wchar_t wchar"
++.In xlocale.h
 +.Ft int
 +.Fn wctomb_l "char * s" "const wchar_t wchar" "locale_t l"
  .Sh DESCRIPTION
- The
+-The
++The functions
  .Fn wctomb
 -converts the wide character
 +and
 +.Fn wctomb_l
-+functions convert the wide character
++convert the wide character
  .Fa wchar
 -to the corresponding multibyte character, and stores it in the array
 +to the corresponding multibyte character, and store it in the array
  pointed to by
  .Fa s .
  .Fn wctomb
-@@ -50,6 +55,8 @@
++and
++.Fn wctomb_l
+ may store at most
+ .Dv MB_CUR_MAX
+ bytes in the array.
  .Pp
  In state-dependent encoding,
  .Fn wctomb
@@ -2253,7 +2263,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/wc
  may store the special sequence to change the conversion state
  before an actual multibyte character into the array pointed to by
  .Fa s .
-@@ -57,13 +64,15 @@
+@@ -57,13 +67,15 @@
  .Fa wchar
  is a null wide character
  .Pq Sq \e0 ,
@@ -2271,7 +2281,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/wc
  except for calling
  .Xr setlocale 3
  with the
-@@ -77,7 +86,10 @@
+@@ -77,7 +89,10 @@
  .Fn wctomb
  is affected by
  .Dv LC_CTYPE
@@ -2283,7 +2293,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/wc
  .Pp
  There is a special case:
  .Bl -tag -width 012345678901
-@@ -123,7 +135,8 @@
+@@ -123,7 +138,8 @@
  .Sh ERRORS
  No errors are defined.
  .Sh SEE ALSO
