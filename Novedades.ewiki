@@ -30,17 +30,18 @@ Entre las novedades reportadas en las `Notas de publicación de OpenBSD 5.4' des
 * Controaldores ampliados o mejorados para amd64
 ** Ethernet: 10/100MB  10GB 
 ** Wifi: 
-** Video:  inteldrm
+** Video: Acelaracion�n DRI para tarjetas Intel y Radeon con ==inteldrm== 
 ** Controladores SCSI/SAS/RADI 
 ** Procesadores: 
 ** Touchpad: ==pms= soporta Elantech 4
 
 * Red
-** 
-** 
+** Mejoras a ldapd incluyendo más velocidad en proceso de establecer sesión
 ** inetd ya no inicia por defecto 
 ** Añadido slowcgi implementación de FastCGI
-** OpenSMTP 5.3.3
+** Mejorados dhcpd y dhclient
+** OpenSMTP 5.3.3: Soporte para envios locales LMTP, tipos de transmisión SECURE y AUTH. Nombres helo pueden buscar en tabla db. Cola más robusta para sobrellevar errores en tiempo de ejecución.
+
 
 * Seguridad
 **
@@ -49,7 +50,7 @@ Entre las novedades reportadas en las `Notas de publicación de OpenBSD 5.4' des
 ** OpenSSH 6.3. Entre otras sftp soporta reget para continuar descargas interrumpidas
 
 * Librerías y herramientas nuevas o mejoradas: 
-** Nueva utilidad locale.  Nueva herramienta ltrace para . 
+** Nueva utilidad locale (que lista locales para paises de habla hispana).  Nueva herramienta ltrace para . 
 ** Soporte experimenta de fuse (Sistema de archivos en espacio de usuarios 
 --en lugar del kernel), por ejemplo para habilitar montajes sobre ssh.
 ** 
