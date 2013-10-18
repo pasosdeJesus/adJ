@@ -109,6 +109,16 @@ q
 EOF
 } fi;
 
+# Arreglando los que definian service
+for i in `find kerberosV -name "*[h]" -exec grep -l "const char \*service" {} ';'; find kerberosV -name "*[c]" -exec grep -l "const char \*service" {} ';'`; do 
+	echo "$i - kservice";
+	ed $i << EOF
+,s/service/kservice/g
+,s/kservice_/service_/g
+w
+q
+EOF
+done
 
 find /usr/include -name stdlib.h -exec grep -l daemon {} ';' > /tmp/tc
 find . -name stdlib.h -exec grep -l daemon {} ';' >> /tmp/tc
