@@ -194,6 +194,7 @@ function compilabase 	{
 	cd /usr/src/gnu/lib/libiberty/ && make -f Makefile.bsd-wrapper config.status | tee -a /var/tmp/distrib-adJ.bitacora
 	cd /usr/src/kerberosV/usr.sbin/kadmin/ && make kadmin-commands.h | tee -a /var/tmp/distrib-adJ.bitacora
 	cd /usr/src/kerberosV/usr.sbin/ktutil/ && make ktutil-commands.h | tee -a /var/tmp/distrib-adJ.bitacora
+	cd /usr/src/kerberosV/lib/libasn1 && make rfc2459_asn1.h && make rfc2459_asn1-priv.h && make cms_asn1.h && make cms_asn1-priv.h && make krb5_asn1-priv.h | tee -a /var/tmp/distrib-adJ.bitacora
 	#find /usr/obj -name ".depend" -exec rm {} ';'
 	DT=$DESTDIR
 	unset DESTDIR 
@@ -255,6 +256,11 @@ if (test "$sn" = "s") then {
 	rm -f ${DESTDIR}/usr/include/g++ 
 	mkdir -p ${DESTDIR}/usr/include/g++
 	#export CFLAGS=-I/usr/include/g++/${ARQ}-unknown-openbsd${V}/
+	# Aplicando parches sobre las fuentes de OpenBSD sin cambios para
+	# facilitar aportar  a OpenBSD con prioridad cambios que posiblemente
+	# serán aceptados más facilmente
+	(cd $dini/arboldes/usr/src; for i in *patch; do echo $i; if (test ! -f /usr/src/$i) then { sudo cp $i /usr/src; (cd /usr/src; echo "A mano"; sudo patch -p1 < $i;) } fi; done) |  tee -a  /var/tmp/distrib-adJ.bitacora
+
 	echo "* Copiando archivos nuevos en /usr/src" | tee -a /var/tmp/distrib-adJ.bitacora
 	(cd $dini/arboldes/usr/src ; for i in `find . -type f | grep -v CVS | grep -v .patch`; do  if (test ! -f /usr/src/$i) then { echo $i; n=`dirname $i`; sudo mkdir -p /usr/src/$n; sudo cp $i /usr/src/$i; } fi; done )
 	echo "* Cambiando /etc " | tee -a /var/tmp/distrib-adJ.bitacora
@@ -267,7 +273,6 @@ if (test "$sn" = "s") then {
 	cd /usr/src/
 	$dini/hdes/service-base.sh	
 	echo "* Aplicando parches a /usr/src" | tee -a /var/tmp/distrib-adJ.bitacora 
-	(cd $dini/arboldes/usr/src; for i in *patch; do echo $i; if (test ! -f /usr/src/$i) then { sudo cp $i /usr/src; (cd /usr/src; echo "A mano"; exit 1;sudo patch -p1 < $i;) } fi; done) |  tee -a  /var/tmp/distrib-adJ.bitacora
 	grep LOG_SERVICE  /usr/include/syslog.h > /dev/null 2>&1
 	if (test "$?" != "0") then {
 		cd /usr/src/sys
