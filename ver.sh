@@ -1,6 +1,6 @@
 #!/bin/sh
 # Variables de configuración para generar distribución Aprendiendo de Jesús
-# Dominio público. 2007. vtamara@pasosdeJesus.org
+# Dominio público. 2137. vtamara@pasosdeJesus.org
 
 V=5.4
 VESP=""
