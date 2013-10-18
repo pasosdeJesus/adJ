@@ -524,7 +524,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mb
 +#ifndef _MBLOCAL_H_
 +#define	_MBLOCAL_H_
 +
-+#include <runetype.h>
++#include "runetype.h"
 +#include "xlocale_private.h"
 +
 +
@@ -1407,7 +1407,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/ne
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/none.c src/lib/libc/locale/none.c
 --- src53collation/lib/libc/locale/none.c	Wed Dec 31 19:00:00 1969
 +++ src/lib/libc/locale/none.c	Tue Apr  2 14:07:41 2013
-@@ -0,0 +1,121 @@
+@@ -0,0 +1,122 @@
 +/*-
 + * Copyright (c) 2002-2004 Tim J. Robbins. All rights reserved.
 + * Copyright (c) 1993
@@ -1456,14 +1456,15 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/no
 +
 +#include <errno.h>
 +#include <limits.h>
-+#include <runetype.h>
 +#include <stddef.h>
 +#include <stdio.h>
 +#include <stdlib.h>
 +#include <string.h>
 +#include <wchar.h>
++
 +#include "mblocal.h"
 +#include "rune.h"
++#include "runetype.h"
 +
 +size_t	_citrus_none_ctype_mbrtowc(wchar_t * __restrict, 
 +    const char * __restrict, size_t, mbstate_t * __restrict);
