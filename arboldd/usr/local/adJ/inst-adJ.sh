@@ -3,10 +3,10 @@
 # Dominio público de acuerdo a legislación colombiana. http://www.pasosdejesus.org/dominio_publico_colombia.html. 
 # 2012. vtamara@pasosdeJesus.org
 
-VER=5.3
+VER=5.5
 REV=0
 VESP=""
-VERP=53
+VERP=55
 
 # Falta /standard/root.hint
 
@@ -355,7 +355,7 @@ if (test "$p" != "/") then {
 } fi;
 
 if (test ! -f "$ARCH/Novedades.txt" -o ! -d "$ARCH/paquetes") then {
-echo "En la ruta $ARCH no está el CD Aprendiendo de Jesús" >> /var/tmp/inst-adJ.bitacora;
+echo "En la ruta $ARCH no está el CD Aprendiendo de Jesús" | tee -a /var/tmp/inst-adJ.bitacora;
 exit 1;
 } fi;
 

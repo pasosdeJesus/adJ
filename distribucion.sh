@@ -684,7 +684,11 @@ if (test "$sn" = "s") then {
 			cmd="ls $PKG_PATH > /tmp/actu2-l";
 		} fi;
 		echo $cmd; eval $cmd;
-		cmd="grep -a \".tgz\" /tmp/actu2-l > /tmp/actu2-g"
+		cmd="grep -a \".tgz\" /tmp/actu2-l | sort "
+		if (test "$autoMasPaquetesInv" = "s") then {
+			cmd="$cmd -r ";
+		} fi;
+		cmd="$cmd > /tmp/actu2-g"
 		echo $cmd; eval $cmd;
 		cmd="sed -e \"s/.*\( [A-Za-z0-9.-][_A-Za-z0-9.@+-]*.tgz\).*/\1 /g\" /tmp/actu2-g > /tmp/actu2-s"
 		echo $cmd; eval $cmd;
@@ -708,7 +712,11 @@ if (test "$sn" = "s") then {
 	tr " " "\\n" < $arcdis > $arcdis2
 
 	echo "Buscando paquetes sobrantes con respecto a Contenido.txt" | tee -a /var/tmp/distrib-adJ.bitacora
-	grep ".-\[v\]" Contenido.txt | sed -e "s/-\[v\]\([-a-zA-Z_0-9]*\).*/-[0-9][0-9alphabetrcvSTABLERC._]*\1.tgz/g" > tmp/esperados.txt
+	inv=""
+	if (test "$autoMasPaquetesInv" = "s") then {
+		inv="-r"
+	} fi;
+	grep ".-\[v\]" Contenido.txt | sed -e "s/-\[v\]\([-a-zA-Z_0-9]*\).*/-[0-9][0-9alphabetrcvSTABLERC._]*\1.tgz/g" | sort $inv > tmp/esperados.txt
 	ne=`(ls $V$VESP-$ARQ/paquetes/ ; ls $V$VESP-$ARQ/sivel/*tgz) | grep -v -f tmp/esperados.txt`;
 	if (test "$ne" != "") then {
 		echo "Los siguientes paquetes presentes en el directorio $V$VESP-$ARQ/paquetes no están entre los esperados:" | tee -a /var/tmp/distrib-adJ.bitacora;

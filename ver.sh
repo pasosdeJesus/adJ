@@ -2,7 +2,7 @@
 # Variables de configuración para generar distribución Aprendiendo de Jesús
 # Dominio público. 2137. vtamara@pasosdeJesus.org
 
-V=5.4
+V=5.5
 VESP=""
 # Versión que se está desarrollando
 
@@ -27,7 +27,9 @@ PKG_PATH=ftp://openbsd.mirrors.pair.com/pub/OpenBSD/$V/packages/$ARQ/
 PKG_PATH=ftp://mirror.planetunix.net/pub/OpenBSD/$V/packages/$ARQ/
 PKG_PATH=ftp://mirror.esc7.net/pub/OpenBSD/$V/packages/$ARQ/
 PKG_PATH=ftp://mirrors.nycbug.org/pub/OpenBSD/$V/packages/$ARQ/
-PKG_PATH=ftp://ftp.pasosdeJesus.org/pub/OpenBSD/$V/packages/$ARQ/
+PKG_PATH=ftp://mirror.esc7.net/pub/OpenBSD/snapshots/packages/$ARQ/
+PKG_PATH=ftp://mirror.planetunix.net/pub/OpenBSD/snapshots/packages/$ARQ/
+PKG_PATH=ftp://ftp.pasosdeJesus.org/pub/OpenBSD/snapshots/packages/$ARQ/
 
 
 #Repositorio de paquetes usado --el último es el usado
@@ -89,6 +91,8 @@ export autoPaquetes=n
 
 export autoMasPaquetes=s
 # Descargar resto de paquetes de repositorio PKG_PATH
+export autoMasPaquetesInv=n
+# Descargar en orden inverso
 export autoSite=s
 # Generar siteXX.tgz
 export autoTextos=s
