@@ -1,3 +1,4 @@
+# adJ. Dominio Público de acuerdo a legislación colombiana.
 
 COMMENT=		fluxbox-util application that creates and manage icons
 
@@ -14,7 +15,6 @@ HOMEPAGE=		http://fluxbox.sourceforge.net/fbdesk/
 # 
 PERMIT_PACKAGE_CDROM=	Yes
 PERMIT_PACKAGE_FTP=	Yes
-PERMIT_DISTFILES_CDROM=	Yes
 PERMIT_DISTFILES_FTP=	Yes
 
 MASTER_SITES=		http://fluxbox.sourceforge.net/download/

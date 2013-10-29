@@ -16,7 +16,6 @@ HOMEPAGE =	http://invisible-island.net/dialog/dialog.html
 # LGPL
 PERMIT_PACKAGE_CDROM =	Yes
 PERMIT_PACKAGE_FTP =	Yes
-PERMIT_DISTFILES_CDROM =Yes
 PERMIT_DISTFILES_FTP =	Yes
 
 WANTLIB =	c m ncurses
@@ -31,7 +30,7 @@ CONFIGURE_ARGS+= --includedir="/usr/local/include"
 CONFIGURE_ENV= LDFLAGS="-L/usr/local/lib -liconv"
 
 USE_GROFF =	Yes
-NO_REGRESS =	Yes
+NO_TEST =	Yes
 
 post-build:
 	cd ${WRKSRC}/po; make 

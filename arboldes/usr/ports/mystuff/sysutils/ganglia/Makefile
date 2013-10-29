@@ -1,4 +1,4 @@
-# Dominio Público. vtamara@pasosdeJesus.org. 2013
+# adJ. Dominio Público. vtamara@pasosdeJesus.org. 2013
 
 COMMENT=	Scalable distributed monitoring system
 
@@ -11,7 +11,6 @@ HOMEPAGE=	http://ganglia.sourceforge.net/
 # BSD
 PERMIT_PACKAGE_CDROM=	Yes
 PERMIT_PACKAGE_FTP=	Yes
-PERMIT_DISTFILES_CDROM=	Yes
 PERMIT_DISTFILES_FTP=	Yes
 
 MASTER_SITES=	${MASTER_SITE_SOURCEFORGE:=ganglia/}
