@@ -300,15 +300,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/lib/libc/string/strcoll.c s
 diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/lib/libc/string/strxfrm.c src/lib/libc/string/strxfrm.c
 --- src53xlocale2/lib/libc/string/strxfrm.c	Mon Apr  8 21:20:25 2013
 +++ src/lib/libc/string/strxfrm.c	Tue Apr  9 05:35:29 2013
-@@ -34,13 +34,17 @@
-  * Public domain according to Colombian Legislation. 
-  * http://www.pasosdejesus.org/dominio_publico_colombia.html
-  * 2013. vtamara@pasosdeJesus.org.
-+ *
-+ * $adJ$
-  */
- 
- #include <errno.h>
+@@ -42,7 +42,9 @@
  #include <stdio.h>
  #include <stdlib.h>
  #include <string.h>
@@ -318,7 +310,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/lib/libc/string/strxfrm.c s
  
  /*
   * Transform src, storing the result in dst, such that
-@@ -48,13 +52,13 @@
+@@ -50,13 +52,13 @@
   * on the original untransformed strings would return.
   */
  size_t
@@ -334,7 +326,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/lib/libc/string/strxfrm.c s
  	if (ws != NULL) {
  		if (n > 0 && dst != NULL) {
  			if (n > ULONG_MAX / sizeof(wchar_t)) { 
-@@ -67,9 +71,9 @@
+@@ -69,9 +71,9 @@
  				goto end;
  			}
  		}
@@ -346,7 +338,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/lib/libc/string/strxfrm.c s
  		}
  	}
  end:
-@@ -81,3 +85,14 @@
+@@ -83,3 +85,14 @@
  	}
  	return r; 
  }

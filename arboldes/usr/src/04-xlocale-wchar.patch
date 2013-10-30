@@ -2714,7 +2714,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/xl
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/xlocale.c src/lib/libc/locale/xlocale.c
 --- src53collation/lib/libc/locale/xlocale.c	Wed Dec 31 19:00:00 1969
 +++ src/lib/libc/locale/xlocale.c	Wed Apr  3 11:04:42 2013
-@@ -0,0 +1,434 @@
+@@ -0,0 +1,437 @@
 +/*-
 + * Copyright (c) 2011 The FreeBSD Foundation
 + * All rights reserved.
@@ -2874,7 +2874,10 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/xl
 +
 +static pthread_once_t once_control = PTHREAD_ONCE_INIT;
 +
-+/* Single threaded pthread_once(3).  libc won't have to -lpthread.  */
++/**
++ * Single threaded pthread_once(3).  libc won't have to -lpthread.  
++ * Martin Pelikan <martin.pelikan@gmail.com>
++ **/
 +static int
 +_once(pthread_once_t *o, void (*init_routine)(void))
 +{
@@ -3452,11 +3455,13 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/regress/lib/libc/l
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regress/lib/libc/locale/check_xlocale/check_xlocale.c
 --- src53collation/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Wed Dec 31 19:00:00 1969
 +++ src/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Wed Apr  3 12:47:22 2013
-@@ -0,0 +1,408 @@
+@@ -0,0 +1,410 @@
 +/**
 + * Public domain according to Colombian Legislation. 
 + * http://www.pasosdejesus.org/dominio_publico_colombia.html
-+ * 2013. vtamara@pasosdeJesus.org.
++ * 2013. vtamara@pasosdeJesus.org
++ *
++ * $adJ$
 + */
 +
 +#include <xlocale.h>
