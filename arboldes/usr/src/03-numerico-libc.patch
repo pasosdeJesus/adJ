@@ -1,0 +1,887 @@
+diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/Makefile.inc src/lib/libc/locale/Makefile.inc
+--- src55-orig/lib/libc/locale/Makefile.inc	Fri Oct 18 09:22:17 2013
++++ src/lib/libc/locale/Makefile.inc	Mon Nov 11 12:07:40 2013
+@@ -6,7 +6,8 @@
+ # for LOCALECHARSETS
+ .include "${.CURDIR}/../../share/locale/ctype/Makefile.inc"
+ 
+-SRCS+=	btowc.c _def_messages.c _def_monetary.c _def_numeric.c _def_time.c \
++SRCS+=	btowc.c _def_messages.c _def_monetary.c _def_time.c \
++	fix_grouping.c ldpart.c lnumeric.c \
+ 	localeconv.c nl_langinfo.c setlocale.c iswctype.c __mb_cur_max.c \
+ 	mblen.c mbrlen.c mbstowcs.c mbtowc.c multibyte_citrus.c wcscoll.c \
+ 	wcstombs.c wctob.c wctomb.c wcstof.c wcstod.c wcstold.c wcstol.c \
+diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/_def_numeric.c src/lib/libc/locale/_def_numeric.c
+--- src55-orig/lib/libc/locale/_def_numeric.c	Mon Aug  8 03:05:35 2005
++++ src/lib/libc/locale/_def_numeric.c	Wed Dec 31 19:00:00 1969
+@@ -1,17 +0,0 @@
+-/*	$OpenBSD: _def_numeric.c,v 1.4 2005/08/08 08:05:35 espie Exp $ */
+-/*
+- * Written by J.T. Conklin <jtc@netbsd.org>.
+- * Public domain.
+- */
+-
+-#include <sys/localedef.h>
+-#include <locale.h>
+-
+-const _NumericLocale _DefaultNumericLocale =
+-{
+-	".",
+-	"",
+-	""
+-};
+-
+-const _NumericLocale *_CurrentNumericLocale = &_DefaultNumericLocale;
+diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/fix_grouping.c src/lib/libc/locale/fix_grouping.c
+--- src55-orig/lib/libc/locale/fix_grouping.c	Wed Dec 31 19:00:00 1969
++++ src/lib/libc/locale/fix_grouping.c	Mon Nov 11 11:54:09 2013
+@@ -0,0 +1,85 @@
++/*
++ * Copyright (c) 2001 Alexey Zelkin <phantom@FreeBSD.org>
++ * All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
++ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
++ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++ * SUCH DAMAGE.
++ */
++
++#include <sys/cdefs.h>
++
++#include <ctype.h>
++#include <limits.h>
++#include <stddef.h>
++
++static const char nogrouping[] = { CHAR_MAX, '\0' };
++
++/*
++ * Internal helper used to convert grouping sequences from string
++ * representation into POSIX specified form, i.e.
++ *
++ * "3;3;-1" -> "\003\003\177\000"
++ */
++
++const char *
++__fix_locale_grouping_str(const char *str)
++{
++	char *src, *dst;
++	char n;
++
++	if (str == NULL || *str == '\0') {
++		return nogrouping;
++	}
++
++	for (src = (char*)str, dst = (char*)str; *src != '\0'; src++) {
++
++		/* input string examples: "3;3", "3;2;-1" */
++		if (*src == ';')
++			continue;
++	
++		if (*src == '-' && *(src+1) == '1') {
++			*dst++ = CHAR_MAX;
++			src++;
++			continue;
++		}
++
++		if (!isdigit((unsigned char)*src)) {
++			/* broken grouping string */
++			return nogrouping;
++		}
++
++		/* assume all numbers <= 99 */
++		n = *src - '0';
++		if (isdigit((unsigned char)*(src+1))) {
++			src++;
++			n *= 10;
++			n += *src - '0';
++		}
++
++		*dst = n;
++		/* NOTE: assume all input started with "0" as 'no grouping' */
++		if (*dst == '\0')
++			return (dst == (char*)str) ? nogrouping : str;
++		dst++;
++	}
++	*dst = '\0';
++	return str;
++}
+diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/ldpart.c src/lib/libc/locale/ldpart.c
+--- src55-orig/lib/libc/locale/ldpart.c	Wed Dec 31 19:00:00 1969
++++ src/lib/libc/locale/ldpart.c	Mon Nov 11 10:09:32 2013
+@@ -0,0 +1,222 @@
++/*
++ * Copyright (c) 2000, 2001 Alexey Zelkin <phantom@FreeBSD.org>
++ * All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
++ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
++ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++ * SUCH DAMAGE.
++ */
++
++#include <sys/cdefs.h>
++
++#include <sys/types.h>
++#include <sys/stat.h>
++
++#include <errno.h>
++#include <fcntl.h>
++#include <limits.h>
++#include <paths.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <unistd.h>
++
++#include "ldpart.h"
++#include "namespace.h"
++
++static int split_lines(char *, const char *);
++
++/**
++ * In OpenBSD builds filename for a category of a locale (lang_terr.enc) 
++ * by trying to find it in directories of /usr/share/locale in this order:
++ * 1. lang_terr.enc
++ * 2. lang.enc
++ * 3. enc
++ * If it finds in any of them and the path size is less than sfilename,
++ * fills filename and returns a pointer to it, otherwise return NULL
++ */
++char *__category_filename(const char *locname, const char *category_filename, 
++		char *filename, size_t sfilename)
++{
++	int len, fd;
++	char *dot, *und;
++
++	len = snprintf(filename, sfilename, "%s/%s/%s", _PATH_LOCALE, 
++			locname, category_filename);
++	if (len < 0 || len >= sfilename)
++		return NULL;
++
++	strcpy(filename, _PATH_LOCALE);
++	strcat(filename, "/");
++	strcat(filename, locname);
++	strcat(filename, "/");
++	strcat(filename, category_filename);
++	if ((fd = open(filename, O_RDONLY | O_CLOEXEC)) < 0) {
++		/* Assumes "lang[_territory][.codeset]" locale name. */
++		dot = strrchr(locname, '.');
++		if (dot == NULL) {
++			return NULL;
++		}
++		und = strchr(locname, '_');
++		if (und == NULL) {
++			len = snprintf(filename, sfilename, "%s/%s/%s", 
++					_PATH_LOCALE, dot + 1, 
++					category_filename );
++			if (len < 0 || len >= sfilename)
++				return NULL;
++			if ((fd = open(filename, O_RDONLY | O_CLOEXEC)) < 0) 
++				return NULL;
++		} else {
++			// If locname is lang_territory.enc try with lang.enc
++			len = snprintf(filename, sfilename, "%s/", 
++					_PATH_LOCALE);
++			if (len + (und - locname) + 1 > sfilename) 
++				return NULL;
++			len += (und - locname) + 1;
++			strlcat(filename, locname, len);
++			len = snprintf(filename, sfilename, 
++					"%s.%s/%s", 
++					filename, dot + 1, category_filename);
++			if (len < 0 || len >= sfilename)
++				return NULL;
++			if ((fd = open(filename, O_RDONLY | O_CLOEXEC)) < 0) 
++				return NULL;
++		}
++	}
++	close(fd);
++
++	return filename;
++}
++
++int
++__part_load_locale(const char *name,
++		int *using_locale,
++		char **locale_buf,
++		const char *category_filename,
++		int locale_buf_size_max,
++		int locale_buf_size_min,
++		const char **dst_localebuf)
++{
++	int		saverr, fd, i, num_lines;
++	char		*lbuf, *p;
++	const char	*plim;
++	char		filename[PATH_MAX];
++	struct stat	st;
++	size_t		namesize, bufsize;
++
++	/* 'name' must be already checked. */
++	if (strcmp(name, "C") == 0 || strcmp(name, "POSIX") == 0) {
++		*using_locale = 0;
++		return (_LDP_CACHE);
++	}
++
++	/*
++	 * If the locale name is the same as our cache, use the cache.
++	 */
++	if (*locale_buf != NULL && strcmp(name, *locale_buf) == 0) {
++		*using_locale = 1;
++		return (_LDP_CACHE);
++	}
++
++	/*
++	 * Slurp the locale file into the cache.
++	 */
++	namesize = strlen(name) + 1;
++
++	if (__category_filename(name, category_filename, filename, PATH_MAX) 
++			== NULL)
++		return _LDP_ERROR;
++	if ((fd = open(filename, O_RDONLY | O_CLOEXEC)) < 0)  
++		return _LDP_ERROR;
++	if (fstat(fd, &st) != 0)
++		goto bad_locale;
++	if (st.st_size <= 0) {
++		errno = EFTYPE;
++		goto bad_locale;
++	}
++	bufsize = namesize + st.st_size;
++	if ((lbuf = malloc(bufsize)) == NULL) {
++		errno = ENOMEM;
++		goto bad_locale;
++	}
++	(void)strcpy(lbuf, name);
++	p = lbuf + namesize;
++	plim = p + st.st_size;
++	if (read(fd, p, (size_t) st.st_size) != st.st_size)
++		goto bad_lbuf;
++	/*
++	 * Parse the locale file into localebuf.
++	 */
++	if (plim[-1] != '\n') {
++		errno = EFTYPE;
++		goto bad_lbuf;
++	}
++	num_lines = split_lines(p, plim);
++	if (num_lines >= locale_buf_size_max)
++		num_lines = locale_buf_size_max;
++	else if (num_lines >= locale_buf_size_min)
++		num_lines = locale_buf_size_min;
++	else {
++		errno = EFTYPE;
++		goto bad_lbuf;
++	}
++	(void)close(fd);
++	/*
++	 * Record the successful parse in the cache.
++	 */
++	if (*locale_buf != NULL)
++		free(*locale_buf);
++	*locale_buf = lbuf;
++	for (p = *locale_buf, i = 0; i < num_lines; i++)
++		dst_localebuf[i] = (p += strlen(p) + 1);
++	for (i = num_lines; i < locale_buf_size_max; i++)
++		dst_localebuf[i] = NULL;
++	*using_locale = 1;
++
++	return (_LDP_LOADED);
++
++bad_lbuf:
++	saverr = errno;
++	free(lbuf);
++	errno = saverr;
++bad_locale:
++	saverr = errno;
++	(void)close(fd);
++	errno = saverr;
++
++	return (_LDP_ERROR);
++}
++
++static int
++split_lines(char *p, const char *plim)
++{
++	int i;
++
++	i = 0;
++	while (p < plim) {
++		if (*p == '\n') {
++			*p = '\0';
++			i++;
++		}
++		p++;
++	}
++	return (i);
++}
++
+diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/ldpart.h src/lib/libc/locale/ldpart.h
+--- src55-orig/lib/libc/locale/ldpart.h	Wed Dec 31 19:00:00 1969
++++ src/lib/libc/locale/ldpart.h	Mon Nov 11 08:05:50 2013
+@@ -0,0 +1,39 @@
++/*-
++ * Copyright (c) 2000, 2001 Alexey Zelkin <phantom@FreeBSD.org>
++ * All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
++ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
++ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++ * SUCH DAMAGE.
++ *
++ * From FreeBSD
++ */
++
++#ifndef _LDPART_H_
++#define	_LDPART_H_
++
++#define _LDP_LOADED 0
++#define _LDP_ERROR  (-1)
++#define _LDP_CACHE  1
++
++int	__part_load_locale(const char *, int*, char **, const char *,
++		    int, int, const char **);
++
++#endif /* !_LDPART_H_ */
+diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/lnumeric.c src/lib/libc/locale/lnumeric.c
+--- src55-orig/lib/libc/locale/lnumeric.c	Wed Dec 31 19:00:00 1969
++++ src/lib/libc/locale/lnumeric.c	Mon Nov 11 12:07:27 2013
+@@ -0,0 +1,118 @@
++/*
++ * Copyright (c) 2000, 2001 Alexey Zelkin <phantom@FreeBSD.org>
++ * All rights reserved.
++ *
++ * Copyright (c) 2011 The FreeBSD Foundation
++ * All rights reserved.
++ * Portions of this software were developed by David Chisnall
++ * under sponsorship from the FreeBSD Foundation.
++ *
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
++ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
++ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++ * SUCH DAMAGE.
++ */
++/*
++ * J.T. Conklin <jtc@netbsd.org>.
++ * vtamara@pasosdeJesus.org  adJ
++ *
++ * Public domain.
++ */
++
++
++#include <sys/cdefs.h>
++
++#include <limits.h>
++
++#include "ldpart.h"
++#include "lnumeric.h"
++
++extern const char *__fix_locale_grouping_str(const char *);
++
++#define LCNUMERIC_SIZE (sizeof(_NumericLocale) / sizeof(char *))
++
++static char	numempty[] = { CHAR_MAX, '\0' };
++
++const _NumericLocale _DefaultNumericLocale =
++{
++	".",
++	"",
++	numempty
++};
++
++const _NumericLocale *_CurrentNumericLocale = &_DefaultNumericLocale;
++
++static _NumericLocale _numeric_locale = {
++	".",
++	"",
++	numempty
++};
++
++static char *_numeric_buffer = NULL;
++
++static int
++numeric_load_locale(_NumericLocale *l, int *changed, const char *name)
++{
++	int ret;
++	int using_locale;
++
++	ret = __part_load_locale(name, &using_locale,
++		&_numeric_buffer, "LC_NUMERIC",
++		LCNUMERIC_SIZE, LCNUMERIC_SIZE,
++		(const char**)l);
++	if (ret != _LDP_ERROR)
++		*changed= 1;
++	if (ret == _LDP_LOADED) {
++		/* Can't be empty according to C99 */
++		if (*l->decimal_point == '\0')
++			l->decimal_point =
++			    _DefaultNumericLocale.decimal_point;
++		l->grouping =
++			__fix_locale_grouping_str(l->grouping);
++	}
++	return (ret);
++}
++
++
++extern int __nlocale_changed;
++
++int
++__numeric_load_locale(const char *name)
++{
++	int ret = numeric_load_locale(&_numeric_locale,
++			&__nlocale_changed, name);
++	if (ret != _LDP_ERROR) {
++		_CurrentNumericLocale = &_numeric_locale;
++	}
++	return ret;
++}
++
++#ifdef LOCALE_DEBUG
++void
++numericdebug(void) {
++printf(	"decimal_point = %s\n"
++	"thousands_sep = %s\n"
++	"grouping = %s\n",
++	_numeric_locale.decimal_point,
++	_numeric_locale.thousands_sep,
++	_numeric_locale.grouping
++);
++}
++#endif /* LOCALE_DEBUG */
+diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/lnumeric.h src/lib/libc/locale/lnumeric.h
+--- src55-orig/lib/libc/locale/lnumeric.h	Wed Dec 31 19:00:00 1969
++++ src/lib/libc/locale/lnumeric.h	Mon Nov 11 09:06:03 2013
+@@ -0,0 +1,40 @@
++/*-
++ * Copyright (c) 2000, 2001 Alexey Zelkin <phantom@FreeBSD.org>
++ * All rights reserved.
++ *
++ * Copyright (c) 2011 The FreeBSD Foundation
++ * All rights reserved.
++ * Portions of this software were developed by David Chisnall
++ * under sponsorship from the FreeBSD Foundation.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
++ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
++ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++ * SUCH DAMAGE.
++ *
++ * From FreeBSD
++ */
++
++#ifndef _LNUMERIC_H_
++#define	_LNUMERIC_H_
++#include <sys/localedef.h>
++
++int	__numeric_load_locale(const char *);
++
++#endif /* !_LNUMERIC_H_ */
+diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/setlocale.c src/lib/libc/locale/setlocale.c
+--- src55-orig/lib/libc/locale/setlocale.c	Fri Oct 18 09:22:17 2013
++++ src/lib/libc/locale/setlocale.c	Mon Nov 11 08:10:01 2013
+@@ -202,7 +202,12 @@
+ 	case LC_MESSAGES:
+ 	case LC_COLLATE:
+ 	case LC_MONETARY:
++		break;
+ 	case LC_NUMERIC:
++		if (__numeric_load_locale("C")) {
++			return;
++		}
++		break;
+ 	case LC_TIME:
+ 		break;
+ 	}
+@@ -263,7 +268,12 @@
+ 
+ 	case LC_COLLATE:
+ 	case LC_MONETARY:
++		break;
+ 	case LC_NUMERIC:
++		if (__numeric_load_locale(locname)) {
++			return -1;
++		}
++		break;
+ 	case LC_TIME:
+ 		return -1;
+ 	}
+diff -ruN src55-orig/lib/libc/stdio/printf.3 src/lib/libc/stdio/printf.3
+--- src55-orig/lib/libc/stdio/printf.3	Sun Oct  6 20:04:49 2013
++++ src/lib/libc/stdio/printf.3	Mon Nov 11 21:11:57 2013
+@@ -183,6 +183,13 @@
+ Zero or more of the following flags:
+ .Bl -hyphen
+ .It
++An apostrophe
++.Sq Cm '
++character
++specifying thousands' grouping of the integer part of a decimal conversion
++(%i, %d, %u, %f, %F, %g, %G).  The current locale is used to separate in
++groups and to use a thousands' separator.
++.It
+ A hash
+ .Sq Cm #
+ character
+@@ -754,6 +761,7 @@
+ .Sh SEE ALSO
+ .Xr printf 1 ,
+ .Xr scanf 3
++.Xr localeconv 3
+ .Sh STANDARDS
+ The
+ .Fn fprintf ,
+diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/stdio/vfprintf.c src/lib/libc/stdio/vfprintf.c
+--- src55-orig/lib/libc/stdio/vfprintf.c	Fri Nov  8 21:13:37 2013
++++ src/lib/libc/stdio/vfprintf.c	Mon Nov 11 11:56:21 2013
+@@ -6,6 +6,11 @@
+  * This code is derived from software contributed to Berkeley by
+  * Chris Torek.
+  *
++ * Copyright (c) 2011 The FreeBSD Foundation
++ * All rights reserved.
++ * Portions of this software were developed by David Chisnall
++ * under sponsorship from the FreeBSD Foundation.
++ *
+  * Redistribution and use in source and binary forms, with or without
+  * modification, are permitted provided that the following conditions
+  * are met:
+@@ -37,6 +42,7 @@
+  * This code is large and complicated...
+  */
+ 
++#include <sys/localedef.h>
+ #include <sys/types.h>
+ #include <sys/mman.h>
+ 
+@@ -52,8 +58,8 @@
+ #include <unistd.h>
+ #include <wchar.h>
+ 
+-#include "local.h"
+ #include "fvwrite.h"
++#include "local.h"
+ 
+ union arg {
+ 	int			intarg;
+@@ -87,6 +93,15 @@
+ #endif
+ };
+ 
++struct grouping_state {
++       const char *thousands_sep;    /* locale-specific thousands separator */
++       int thousep_len;        /* length of thousands_sep */
++       const char *grouping;   /* locale-specific numeric grouping rules */
++       int lead;               /* sig figs before decimal or group sep */
++       int nseps;              /* number of group separators with ' */
++       int nrepeats;           /* number of repeats of the last group */
++};
++
+ static int __find_arguments(const char *fmt0, va_list ap, union arg **argtable,
+     size_t *argtablesiz);
+ static int __grow_type_table(unsigned char **typetable, int *tablesize);
+@@ -257,6 +272,7 @@
+ #define SIZEINT		0x0400		/* (signed) size_t */
+ #define CHARINT		0x0800		/* 8 bit integer */
+ #define MAXINT		0x1000		/* largest integer size (intmax_t) */
++#define GROUPING	0x2000		/* largest integer size (intmax_t) */
+ 
+ int
+ vfprintf(FILE *fp, const char *fmt0, __va_list ap)
+@@ -269,6 +285,76 @@
+ 	return (ret);
+ }
+ 
++
++/*
++ * Initialize the thousands' grouping state in preparation to print a
++ * number with ndigits digits. This routine returns the total number
++ * of bytes that will be needed.
++ */
++static int
++grouping_init(struct grouping_state *gs, int ndigits)
++{
++	struct lconv *locale;
++
++	locale = localeconv();
++	gs->grouping = locale->grouping;
++	gs->thousands_sep = locale->thousands_sep;
++	gs->thousep_len = strlen(gs->thousands_sep);
++
++	gs->nseps = gs->nrepeats = 0;
++	gs->lead = ndigits;
++	while (*gs->grouping != CHAR_MAX) {
++		if (gs->lead <= *gs->grouping)
++			break;
++		gs->lead -= *gs->grouping;
++		if (*(gs->grouping+1)) {
++			gs->nseps++;
++			gs->grouping++;
++		} else
++			gs->nrepeats++;
++	}
++	return ((gs->nseps + gs->nrepeats) * gs->thousep_len);
++}
++
++
++
++
++char *
++__print_intdec(int flags, uintmax_t _umax, char *cp, 
++		struct grouping_state gs)
++{
++	const char *grp = NULL;	/* Size of next group of digits */
++	int ndig, i;
++
++	/* many numbers are 1 digit */
++	if (flags && GROUPING) {
++		grouping_init(&gs, 0);
++		grp = gs.grouping;
++	} 
++	ndig = 0;
++	while (_umax >= 10) {
++		*--cp = to_char(_umax % 10);
++		ndig++;
++		if ((flags & GROUPING) && *grp != CHAR_MAX
++				&& ndig == *grp) {
++			for (i = gs.thousep_len - 1; i >= 0; i--) { 
++				*--cp = gs.thousands_sep[i];
++			}
++			ndig = 0;
++			/*
++			 * If (*(grp+1) == '\0') then we have to
++			 * use *grp character (last grouping rule)
++			 * for all next cases
++			 */
++			if (*(grp+1) != '\0')
++				grp++;
++		}
++		_umax /= 10;
++	}
++	*--cp = to_char(_umax);
++	return cp;
++}
++
+ int
+ __vfprintf(FILE *fp, const char *fmt0, __va_list ap)
+ {
+@@ -282,6 +368,7 @@
+ 	int width;		/* width from format (%8d), or 0 */
+ 	int prec;		/* precision from format; <0 for N/A */
+ 	char sign;		/* sign prefix (' ', '+', '-', or \0) */
++	struct grouping_state gs; /* thousands' grouping info */
+ 	wchar_t wc;
+ 	mbstate_t ps;
+ #ifdef FLOATING_POINT
+@@ -299,7 +386,10 @@
+ 	 * D:	expchar holds this character; '\0' if no exponent, e.g. %f
+ 	 * F:	at least two digits for decimal, at least one digit for hex
+ 	 */
+-	char *decimal_point = NULL;
++	const char *decimal_point = nl_langinfo(RADIXCHAR);
++	if (strlen(decimal_point) > 1) {
++		decimal_point = _DefaultNumericLocale.decimal_point;
++	}
+ 	int signflag;		/* true if float is negative */
+ 	union {			/* floating point arguments %[aAeEfFgG] */
+ 		double dbl;
+@@ -353,7 +443,7 @@
+ 	 * BEWARE, these `goto error' on error, and PAD uses `n'.
+ 	 */
+ #define	PRINT(ptr, len) do { \
+-	iovp->iov_base = (ptr); \
++	iovp->iov_base = (char *)(ptr); \
+ 	iovp->iov_len = (len); \
+ 	uio.uio_resid += (len); \
+ 	iovp++; \
+@@ -386,7 +476,28 @@
+ 	uio.uio_iovcnt = 0; \
+ 	iovp = iov; \
+ } while (0)
++/*
++ * Print a number with thousands' separators.
++ */
++#define	GROUPINGPRINT(gs, cp, ep) do {	\
++	PRINTANDPAD((cp), (ep), (gs)->lead, zeroes); \
++	cp += (gs)->lead; \
++	while ((gs)->nseps > 0 || (gs)->nrepeats > 0) { \
++		if ((gs)->nrepeats > 0) \
++			(gs)->nrepeats--; \
++		else { \
++			(gs)->grouping--; \
++			(gs)->nseps--; \
++		} \
++		PRINT((gs)->thousands_sep, (gs)->thousep_len); \
++		PRINTANDPAD((cp), (ep), *(gs)->grouping, zeroes); \
++		cp += *(gs)->grouping; \
++	} \
++	if ((cp) > (ep)) \
++		cp = (ep); \
++} while(0)
+ 
++
+ 	/*
+ 	 * To extend shorts properly, we need both signed and unsigned
+ 	 * argument extraction methods.
+@@ -508,6 +619,7 @@
+ 		dprec = 0;
+ 		width = 0;
+ 		prec = -1;
++		gs.grouping = NULL;
+ 		sign = '\0';
+ 		ox[1] = '\0';
+ 
+@@ -526,7 +638,7 @@
+ 			flags |= ALT;
+ 			goto rflag;
+ 		case '\'':
+-			/* grouping not implemented */
++			flags |= GROUPING;
+ 			goto rflag;
+ 		case '*':
+ 			/*
+@@ -797,6 +909,8 @@
+ 				/* space for decimal pt and following digits */
+ 				if (prec || flags & ALT)
+ 					size += prec + 1;
++				if ((flags & GROUPING) && expt > 0) 
++					size += grouping_init(&gs, expt);
+ 				lead = expt;
+ 			}
+ 			break;
+@@ -898,7 +1012,7 @@
+ 			/* leading 0x/X only if non-zero */
+ 			if (flags & ALT && _umax != 0)
+ 				ox[1] = ch;
+-
++			flags &=  ~GROUPING;
+ 			/* unsigned conversions */
+ nosign:			sign = '\0';
+ 			/*
+@@ -933,12 +1047,8 @@
+ 					break;
+ 
+ 				case DEC:
+-					/* many numbers are 1 digit */
+-					while (_umax >= 10) {
+-						*--cp = to_char(_umax % 10);
+-						_umax /= 10;
+-					}
+-					*--cp = to_char(_umax);
++					cp = __print_intdec(flags, _umax, 
++							cp, gs);
+ 					break;
+ 
+ 				case HEX:
+@@ -1012,10 +1122,12 @@
+ 		/* the string or number proper */
+ #ifdef FLOATING_POINT
+ 		if ((flags & FPT) == 0) {
+-			PRINT(cp, size);
++			if (gs.grouping) {
++				GROUPINGPRINT(&gs, cp, buf+BUF);
++			} else {
++				PRINT(cp, size);
++			}
+ 		} else {	/* glue together f_p fragments */
+-			if (decimal_point == NULL)
+-				decimal_point = nl_langinfo(RADIXCHAR);
+ 			if (!expchar) {	/* %[fF] or sufficiently short %[gG] */
+ 				if (expt <= 0) {
+ 					PRINT(zeroes, 1);
+@@ -1025,8 +1137,14 @@
+ 					/* already handled initial 0's */
+ 					prec += expt;
+  				} else {
+-					PRINTANDPAD(cp, dtoaend, lead, zeroes);
+-					cp += lead;
++					if (gs.grouping) { 
++						GROUPINGPRINT(&gs, cp, 
++								dtoaend);
++					} else {
++						PRINTANDPAD(cp, dtoaend, 
++								lead, zeroes);
++						cp += lead;
++					}
+ 					if (prec || flags & ALT)
+ 						PRINT(decimal_point, 1);
+ 				}

@@ -2202,7 +2202,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/share/locale/colldef/KO
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/share/locale/colldef/Makefile src/share/locale/colldef/Makefile
 --- src54-s/share/locale/colldef/Makefile	Wed Dec 31 19:00:00 1969
 +++ src/share/locale/colldef/Makefile	Sat Oct 12 18:32:19 2013
-@@ -0,0 +1,86 @@
+@@ -0,0 +1,112 @@
 +.include <bsd.own.mk>
 +
 +
@@ -2287,6 +2287,32 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/share/locale/colldef/Ma
 +	install -o ${LOCALEOWN} -g ${LOCALEGRP} -m ${LOCALEMODE} \
 +	    ${locale}.UTF-8.out ${DESTDIR}${LOCALEDIR}/${locale}.UTF-8/LC_COLLATE
 +.endfor
++
++uninstall:
++.for locale in ${LOCALES}
++	if (test -f ${DESTDIR}${LOCALEDIR}/${locale}/LC_COLLATE) then { \
++	rm -f ${DESTDIR}${LOCALEDIR}/${locale}/LC_COLLATE; \
++	} fi; \
++        if (test -d ${DESTDIR}${LOCALEDIR}/${locale}/) then { \
++        r=`ls ${DESTDIR}${LOCALEDIR}/${locale}/`; \
++        if (test "$$r" = "") then { \
++        rm -rf ${DESTDIR}${LOCALEDIR}/${locale}/; \
++        } fi; \
++        } fi;
++.endfor
++	rm -f ${DESTDIR}${LOCALEDIR}/UTF-8/LC_COLLATE
++.for locale in ${LOCALES_UTF8}
++	if (test -f ${DESTDIR}${LOCALEDIR}/${locale}.UTF-8/LC_COLLATE) then { \
++	rm -f ${DESTDIR}${LOCALEDIR}/${locale}.UTF-8/LC_COLLATE; \
++	} fi; \
++        if (test -d ${DESTDIR}${LOCALEDIR}/${locale}.UTF-8/) then { \
++        r=`ls ${DESTDIR}${LOCALEDIR}/${locale}.UTF-8/`; \
++        if (test "$$r" = "") then { \
++        rm -rf ${DESTDIR}${LOCALEDIR}/${locale}.UTF-8/; \
++        } fi; \
++        } fi;
++.endfor
++
 +
 +.include <bsd.prog.mk>
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/share/locale/colldef/de.ISO8859-1.src src/share/locale/colldef/de.ISO8859-1.src
