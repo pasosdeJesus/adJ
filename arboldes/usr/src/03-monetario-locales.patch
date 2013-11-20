@@ -1,0 +1,4551 @@
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/Makefile src/share/locale/Makefile
+--- src55-orig/share/locale/Makefile	Sun Jun  2 16:05:47 2013
++++ src/share/locale/Makefile	Wed Nov 20 08:32:27 2013
+@@ -1,6 +1,6 @@
+ #	$OpenBSD: Makefile,v 1.1 2005/08/07 10:03:44 espie Exp $
+ 
+-SUBDIR=	ctype
++SUBDIR=	ctype monetarydef
+ 	
+ 
+ .include <bsd.subdir.mk>
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/Makefile src/share/locale/monetdef/Makefile
+--- src55-orig/share/locale/monetdef/Makefile	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/Makefile	Wed Nov 20 09:07:04 2013
+@@ -0,0 +1,208 @@
++# From FreeBSD
++
++LOCALES=	af_ZA.ISO8859-1 \
++		am_ET.UTF-8 \
++		be_BY.CP1131 \
++		be_BY.CP1251 \
++		be_BY.ISO8859-5 \
++		be_BY.UTF-8 \
++		bg_BG.CP1251 \
++		bg_BG.UTF-8 \
++		ca_ES.ISO8859-1 \
++		cs_CZ.ISO8859-2 \
++		cs_CZ.UTF-8 \
++		da_DK.ISO8859-1 \
++		de_AT.ISO8859-1 \
++		de_CH.ISO8859-1 \
++		de_DE.ISO8859-1 \
++		el_GR.ISO8859-7 \
++		en_AU.ISO8859-1 \
++		en_CA.ISO8859-1 \
++		en_GB.ISO8859-1 \
++		en_GB.UTF-8 \
++		en_IE.UTF-8 \
++		en_NZ.ISO8859-1 \
++		en_US.ISO8859-1 \
++		es_AR.ISO8859-1 \
++		es_BO.ISO8859-1 \
++		es_CL.ISO8859-1 \
++		es_CO.ISO8859-1 \
++		es_CR.ISO8859-1 \
++		es_CR.UTF-8 \
++		es_DO.ISO8859-1 \
++		es_EC.ISO8859-1 \
++		es_ES.ISO8859-1 \
++		es_ES.UTF-8 \
++		es_GT.ISO8859-1 \
++		es_GQ.ISO8859-1 \
++		es_HN.ISO8859-1 \
++		es_MX.ISO8859-1 \
++		es_NI.ISO8859-1 \
++		es_PA.ISO8859-1 \
++		es_PE.ISO8859-1 \
++		es_PR.ISO8859-1 \
++		es_PY.ISO8859-1 \
++		es_SV.ISO8859-1 \
++		es_US.ISO8859-1 \
++		es_UY.ISO8859-1 \
++		es_VE.ISO8859-1 \
++		et_EE.ISO8859-15 \
++		fi_FI.ISO8859-1 \
++		fr_BE.ISO8859-1 \
++		fr_CA.ISO8859-1 \
++		fr_FR.ISO8859-1 \
++		he_IL.UTF-8 \
++		hi_IN.ISCII-DEV \
++		hr_HR.ISO8859-2 \
++		hu_HU.ISO8859-2 \
++		hy_AM.ARMSCII-8 \
++		hy_AM.UTF-8 \
++		is_IS.ISO8859-1 \
++		it_IT.ISO8859-1 \
++		ja_JP.eucJP \
++		ja_JP.UTF-8 \
++		kk_KZ.PT154 \
++		kk_KZ.UTF-8 \
++		ko_KR.eucKR \
++		ko_KR.UTF-8 \
++		lt_LT.ISO8859-13 \
++		lv_LV.ISO8859-13 \
++		mn_MN.UTF-8 \
++		nl_BE.ISO8859-1 \
++		nl_NL.ISO8859-1 \
++		no_NO.ISO8859-1 \
++		pl_PL.ISO8859-2 \
++		pl_PL.UTF-8 \
++		pt_BR.ISO8859-1 \
++		pt_PT.ISO8859-1 \
++		pt_PT.ISO8859-15 \
++		pt_PT.UTF-8 \
++		ro_RO.ISO8859-2 \
++		ru_RU.CP1251 \
++		ru_RU.CP866 \
++		ru_RU.ISO8859-5 \
++		ru_RU.KOI8-R \
++		ru_RU.UTF-8 \
++		sk_SK.ISO8859-2 \
++		sl_SI.ISO8859-2 \
++		sr_YU.ISO8859-2 \
++		sr_YU.ISO8859-5 \
++		sr_YU.UTF-8 \
++		sv_SE.ISO8859-1 \
++		tr_TR.ISO8859-9 \
++		uk_UA.CP1251 \
++		uk_UA.ISO8859-5 \
++		uk_UA.KOI8-U \
++		uk_UA.UTF-8 \
++		zh_CN.eucCN \
++		zh_CN.GB18030 \
++		zh_CN.GB2312 \
++		zh_CN.UTF-8 \
++		zh_HK.UTF-8 \
++		zh_TW.Big5
++
++LOCALEDIR=	/usr/share/locale
++
++.SUFFIXES: .src .out
++
++.src.out:
++	grep -v '^#' < ${.IMPSRC} > ${.TARGET}
++
++FILES=		${LOCALES:S/$/.out/}
++FILESNAME=	LC_MONETARY
++
++all: ${FILES}
++
++.for lang in ${LOCALES}
++FILESDIR_${lang}.out= ${LOCALEDIR}/${lang}
++.endfor
++
++CLEANFILES=	${FILES}
++
++ENCODINGS=	Big5 Big5HKSCS CP949 eucJP eucKR GB2312 GBK \
++		ISO8859-1 ISO8859-2 ISO8859-4 ISO8859-7 ISO8859-9 \
++		ISO8859-13 ISO8859-15 SJIS US-ASCII UTF-8
++
++Big5_UTF-8=	zh_TW
++eucJP_SJIS=	ja_JP
++eucKR_CP949=	ko_KR
++GB2312_GBK=	zh_CN
++ISO8859-1_ISO8859-1= ca_ES:ca_AD ca_ES:ca_FR ca_ES:ca_IT es_ES:eu_ES \
++		de_CH:fr_CH de_CH:it_CH no_NO:nb_NO no_NO:nn_NO
++ISO8859-1_ISO8859-15= af_ZA ca_AD ca_ES ca_FR ca_IT da_DK de_AT de_CH de_DE \
++		en_AU en_CA en_GB en_NZ en_US \
++		es_AR es_BO es_CL es_CO es_CR es_DO es_EC \
++		es_ES es_GT es_GQ es_HN es_MX es_NI es_PA es_PE \
++		es_PR es_PY es_SV es_US es_UY es_VE \
++		fi_FI fr_BE fr_CA fr_CH fr_FR \
++		is_IS it_IT it_CH nl_BE nl_NL nb_NO nn_NO no_NO sv_SE
++ISO8859-1_US-ASCII= en_AU en_CA en_GB en_NZ en_US
++ISO8859-1_UTF-8= af_ZA ca_AD ca_ES ca_FR ca_IT da_DK de_AT de_CH de_DE \
++		en_AU en_CA en_NZ en_US \
++		es_AR es_BO es_CL es_CO es_DO es_EC \
++		es_GT es_GQ es_HN es_MX es_NI es_PA es_PE \
++		es_PR es_PY es_SV es_US es_UY es_VE \
++		fi_FI fr_BE fr_CA fr_FR is_IS it_IT nl_BE \
++		nl_NL nb_NO nn_NO no_NO pt_BR sv_SE
++ISO8859-2_UTF-8= hr_HR hu_HU ro_RO sk_SK sl_SI sr_YU
++ISO8859-7_UTF-8= el_GR
++ISO8859-9_UTF-8= tr_TR
++ISO8859-13_ISO8859-4= lt_LT
++ISO8859-13_UTF-8= lt_LT lv_LV
++ISO8859-15_ISO8859-15= es_ES:eu_ES
++ISO8859-15_UTF-8= et_EE
++UTF-8_Big5HKSCS= zh_HK
++UTF-8_UTF-8=	ca_ES:ca_AD ca_ES:ca_FR ca_ES:ca_IT es_ES:eu_ES \
++	de_CH:fr_CH de_CH:it_CH
++
++SYMLINKS=
++.for enc1 in ${ENCODINGS}
++.for enc2 in ${ENCODINGS}
++.for lang_terr in ${${enc1}_${enc2}}
++SYMLINKS+=	../${lang_terr:C/:.*$//}.${enc1}/${FILESNAME} \
++		${LOCALEDIR}/${lang_terr:C/^.*://}.${enc2}
++.endfor
++.endfor
++.endfor
++
++install:
++.for locale in ${LOCALES}
++	install -o ${LOCALEOWN} -g ${LOCALEGRP} -m ${DIRMODE} -d \
++	    ${DESTDIR}${FILESDIR_${locale}.out}
++	install -o ${LOCALEOWN} -g ${LOCALEGRP} -m ${LOCALEMODE} \
++	    ${locale}.out ${DESTDIR}${FILESDIR_${locale}.out}/${FILESNAME}
++.endfor
++.for lnk file in ${SYMLINKS}
++	@l=${DESTDIR}${lnk}; \
++	 t=${DESTDIR}${file}; \
++	 echo $$t -\> $$l; \
++	 rm -f $$t/${FILESNAME}; mkdir -p $$t; ln -s $$l $$t
++.endfor
++
++uninstall:
++.for locale in ${LOCALES}
++	if (test -f ${DESTDIR}${FILESDIR_${locale}.out}/${FILESNAME}) then { \
++	rm -f ${DESTDIR}${FILESDIR_${locale}.out}/${FILESNAME}; \
++	} fi; \
++	if (test -d ${DESTDIR}${FILESDIR_${locale}.out}/) then { \
++	r=`ls ${DESTDIR}${FILESDIR_${locale}.out}/`; \
++	if (test "$$r" = "") then { \
++	rm -rf ${DESTDIR}${FILESDIR_${locale}.out}/; \
++	} fi; \
++	} fi;
++.endfor
++.for lnk file in ${SYMLINKS}
++	@l=${DESTDIR}${lnk}; \
++	t=${DESTDIR}${file}; \
++	echo $$t -\> $$l; \
++	rm -f $$t/${FILESNAME}; \
++	if (test -d $$t) then { \
++	r=`ls $$t/`; \
++	if (test "$$r" = "") then { \
++	rm -rf $$t; \
++	} fi; \
++	} fi;
++.endfor
++
++
++.include <bsd.prog.mk>
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/af_ZA.ISO8859-1.src src/share/locale/monetdef/af_ZA.ISO8859-1.src
+--- src55-orig/share/locale/monetdef/af_ZA.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/af_ZA.ISO8859-1.src	Wed Nov 20 08:32:27 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++ZAR 
++# currency_symbol
++R
++# mon_decimal_point
++,
++# mon_thousands_sep
++.
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++1
++# p_sep_by_space
++0
++# n_cs_precedes
++1
++# n_sep_by_space
++0
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/am_ET.UTF-8.src src/share/locale/monetdef/am_ET.UTF-8.src
+--- src55-orig/share/locale/monetdef/am_ET.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/am_ET.UTF-8.src	Wed Nov 20 08:32:27 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++ETB 
++# currency_symbol
++$
++# mon_decimal_point
++.
++# mon_thousands_sep
++,
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++1
++# p_sep_by_space
++0
++# n_cs_precedes
++1
++# n_sep_by_space
++0
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/be_BY.CP1131.src src/share/locale/monetdef/be_BY.CP1131.src
+--- src55-orig/share/locale/monetdef/be_BY.CP1131.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/be_BY.CP1131.src	Wed Nov 20 08:32:27 2013
+@@ -0,0 +1,35 @@
++# $FreeBSD$
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++BYR 
++# currency_symbol
++‡„°.
++# mon_decimal_point
++,
++# mon_thousands_sep
++ 
++# mon_grouping
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++0
++# p_sep_by_space
++1
++# n_cs_precedes
++0
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/be_BY.CP1251.src src/share/locale/monetdef/be_BY.CP1251.src
+--- src55-orig/share/locale/monetdef/be_BY.CP1251.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/be_BY.CP1251.src	Wed Nov 20 08:32:27 2013
+@@ -0,0 +1,35 @@
++# $FreeBSD$
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++BYR 
++# currency_symbol
++Û·.
++# mon_decimal_point
++,
++# mon_thousands_sep
++ 
++# mon_grouping
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++0
++# p_sep_by_space
++1
++# n_cs_precedes
++0
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/be_BY.ISO8859-5.src src/share/locale/monetdef/be_BY.ISO8859-5.src
+--- src55-orig/share/locale/monetdef/be_BY.ISO8859-5.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/be_BY.ISO8859-5.src	Wed Nov 20 08:32:27 2013
+@@ -0,0 +1,35 @@
++# $FreeBSD$
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++BYR 
++# currency_symbol
++‡„—.
++# mon_decimal_point
++,
++# mon_thousands_sep
++ 
++# mon_grouping
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++0
++# p_sep_by_space
++1
++# n_cs_precedes
++0
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/be_BY.UTF-8.src src/share/locale/monetdef/be_BY.UTF-8.src
+--- src55-orig/share/locale/monetdef/be_BY.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/be_BY.UTF-8.src	Wed Nov 20 08:32:27 2013
+@@ -0,0 +1,35 @@
++# $FreeBSD$
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++BYR 
++# currency_symbol
++—Ä—É–±.
++# mon_decimal_point
++,
++# mon_thousands_sep
++ 
++# mon_grouping
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++0
++# p_sep_by_space
++1
++# n_cs_precedes
++0
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/bg_BG.CP1251.src src/share/locale/monetdef/bg_BG.CP1251.src
+--- src55-orig/share/locale/monetdef/bg_BG.CP1251.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/bg_BG.CP1251.src	Wed Nov 20 08:32:27 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++BGN 
++# currency_symbol
++Î‚.
++# mon_decimal_point
++,
++# mon_thousands_sep
++ 
++# mon_grouping
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++0
++# p_sep_by_space
++1
++# n_cs_precedes
++0
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/bg_BG.UTF-8.src src/share/locale/monetdef/bg_BG.UTF-8.src
+--- src55-orig/share/locale/monetdef/bg_BG.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/bg_BG.UTF-8.src	Wed Nov 20 08:32:27 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++BGN 
++# currency_symbol
++–ª–≤.
++# mon_decimal_point
++,
++# mon_thousands_sep
++ 
++# mon_grouping
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++0
++# p_sep_by_space
++1
++# n_cs_precedes
++0
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/ca_ES.ISO8859-1.src src/share/locale/monetdef/ca_ES.ISO8859-1.src
+--- src55-orig/share/locale/monetdef/ca_ES.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/ca_ES.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++EUR 
++# currency_symbol
++Eu
++# mon_decimal_point
++,
++# mon_thousands_sep
++.
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++0
++# frac_digits
++0
++# p_cs_precedes
++1
++# p_sep_by_space
++1
++# n_cs_precedes
++1
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/cs_CZ.ISO8859-2.src src/share/locale/monetdef/cs_CZ.ISO8859-2.src
+--- src55-orig/share/locale/monetdef/cs_CZ.ISO8859-2.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/cs_CZ.ISO8859-2.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++CZK 
++# currency_symbol
++KË
++# mon_decimal_point
++,
++# mon_thousands_sep
++ 
++# mon_grouping
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++0
++# p_sep_by_space
++1
++# n_cs_precedes
++0
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/cs_CZ.UTF-8.src src/share/locale/monetdef/cs_CZ.UTF-8.src
+--- src55-orig/share/locale/monetdef/cs_CZ.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/cs_CZ.UTF-8.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++CZK 
++# currency_symbol
++Kƒç
++# mon_decimal_point
++,
++# mon_thousands_sep
++ 
++# mon_grouping
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++0
++# p_sep_by_space
++1
++# n_cs_precedes
++0
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/da_DK.ISO8859-1.src src/share/locale/monetdef/da_DK.ISO8859-1.src
+--- src55-orig/share/locale/monetdef/da_DK.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/da_DK.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++DKK 
++# currency_symbol
++kr
++# mon_decimal_point
++,
++# mon_thousands_sep
++.
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++1
++# p_sep_by_space
++2
++# n_cs_precedes
++1
++# n_sep_by_space
++2
++# p_sign_posn
++4
++# n_sign_posn
++4
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/de_AT.ISO8859-1.src src/share/locale/monetdef/de_AT.ISO8859-1.src
+--- src55-orig/share/locale/monetdef/de_AT.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/de_AT.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++EUR 
++# currency_symbol
++Eu
++# mon_decimal_point
++,
++# mon_thousands_sep
++ 
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++1
++# p_sep_by_space
++1
++# n_cs_precedes
++1
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/de_CH.ISO8859-1.src src/share/locale/monetdef/de_CH.ISO8859-1.src
+--- src55-orig/share/locale/monetdef/de_CH.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/de_CH.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++CHF 
++# currency_symbol
++Fr.
++# mon_decimal_point
++.
++# mon_thousands_sep
++'
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++1
++# p_sep_by_space
++1
++# n_cs_precedes
++1
++# n_sep_by_space
++1
++# p_sign_posn
++4
++# n_sign_posn
++4
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/de_DE.ISO8859-1.src src/share/locale/monetdef/de_DE.ISO8859-1.src
+--- src55-orig/share/locale/monetdef/de_DE.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/de_DE.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++EUR 
++# currency_symbol
++Eu
++# mon_decimal_point
++,
++# mon_thousands_sep
++.
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++1
++# p_sep_by_space
++0
++# n_cs_precedes
++1
++# n_sep_by_space
++0
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/el_GR.ISO8859-7.src src/share/locale/monetdef/el_GR.ISO8859-7.src
+--- src55-orig/share/locale/monetdef/el_GR.ISO8859-7.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/el_GR.ISO8859-7.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++EUR 
++# currency_symbol
++Eu
++# mon_decimal_point
++,
++# mon_thousands_sep
++.
++# mon_grouping
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++0
++# p_sep_by_space
++1
++# n_cs_precedes
++0
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/en_AU.ISO8859-1.src src/share/locale/monetdef/en_AU.ISO8859-1.src
+--- src55-orig/share/locale/monetdef/en_AU.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/en_AU.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,48 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++AUD 
++# currency_symbol
++$
++# mon_decimal_point
++.
++# mon_thousands_sep
++,
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++1
++# p_sep_by_space
++0
++# n_cs_precedes
++1
++# n_sep_by_space
++0
++# p_sign_posn
++1
++# n_sign_posn
++1
++# int_p_cs_precedes
++1
++# int_n_cs_precedes;
++1
++# int_p_sep_by_space;
++0
++# int_n_sep_by_space;
++0
++# int_p_sign_posn;
++1
++# int_n_sign_posn;
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/en_CA.ISO8859-1.src src/share/locale/monetdef/en_CA.ISO8859-1.src
+--- src55-orig/share/locale/monetdef/en_CA.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/en_CA.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++CAD 
++# currency_symbol
++$
++# mon_decimal_point
++.
++# mon_thousands_sep
++,
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++1
++# p_sep_by_space
++0
++# n_cs_precedes
++1
++# n_sep_by_space
++0
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/en_GB.ISO8859-1.src src/share/locale/monetdef/en_GB.ISO8859-1.src
+--- src55-orig/share/locale/monetdef/en_GB.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/en_GB.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++GBP 
++# currency_symbol
++£
++# mon_decimal_point
++.
++# mon_thousands_sep
++,
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++1
++# p_sep_by_space
++0
++# n_cs_precedes
++1
++# n_sep_by_space
++0
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/en_GB.UTF-8.src src/share/locale/monetdef/en_GB.UTF-8.src
+--- src55-orig/share/locale/monetdef/en_GB.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/en_GB.UTF-8.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++GBP 
++# currency_symbol
++¬£
++# mon_decimal_point
++.
++# mon_thousands_sep
++,
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++1
++# p_sep_by_space
++0
++# n_cs_precedes
++1
++# n_sep_by_space
++0
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/en_IE.UTF-8.src src/share/locale/monetdef/en_IE.UTF-8.src
+--- src55-orig/share/locale/monetdef/en_IE.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/en_IE.UTF-8.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++EUR 
++# currency_symbol
++‚Ç¨
++# mon_decimal_point
++.
++# mon_thousands_sep
++,
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++1
++# p_sep_by_space
++0
++# n_cs_precedes
++1
++# n_sep_by_space
++0
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/en_NZ.ISO8859-1.src src/share/locale/monetdef/en_NZ.ISO8859-1.src
+--- src55-orig/share/locale/monetdef/en_NZ.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/en_NZ.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++NZD 
++# currency_symbol
++$
++# mon_decimal_point
++.
++# mon_thousands_sep
++,
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++1
++# p_sep_by_space
++0
++# n_cs_precedes
++1
++# n_sep_by_space
++0
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/en_US.ISO8859-1.src src/share/locale/monetdef/en_US.ISO8859-1.src
+--- src55-orig/share/locale/monetdef/en_US.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/en_US.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++USD 
++# currency_symbol
++$
++# mon_decimal_point
++.
++# mon_thousands_sep
++,
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++1
++# p_sep_by_space
++0
++# n_cs_precedes
++1
++# n_sep_by_space
++0
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_AR.ISO8859-1.src src/share/locale/monetdef/es_AR.ISO8859-1.src
+--- src55-orig/share/locale/monetdef/es_AR.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/es_AR.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,49 @@
++# $adJ$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++# Based on http://unicode.org/cldr/trac/browser/tags/release-1-9/posix/ and locale of other operating systems
++#
++# int_curr_symbol (last character always SPACE)
++ARS 
++# currency_symbol
++$
++# mon_decimal_point
++,
++# mon_thousands_sep
++.
++# mon_grouping, separated by ;
++3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++1
++# p_sep_by_space
++1
++# n_cs_precedes
++1
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++#int_p_cs_precedes     
++1
++#int_n_cs_precedes     
++1
++#int_p_sep_by_space    
++1
++#int_n_sep_by_space    
++1
++#int_p_sign_posn       
++1
++#int_n_sign_posn       
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_BO.ISO8859-1.src src/share/locale/monetdef/es_BO.ISO8859-1.src
+--- src55-orig/share/locale/monetdef/es_BO.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/es_BO.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,49 @@
++# $adJ$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++# Based on http://unicode.org/cldr/trac/browser/tags/release-1-9/posix/,  locale of other operating systems and http://www.xe.com/symbols.php
++#
++# int_curr_symbol (last character always SPACE)
++BOB 
++# currency_symbol
++$b
++# mon_decimal_point
++,
++# mon_thousands_sep
++.
++# mon_grouping, separated by ;
++3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++1
++# n_cs_precedes
++1
++# p_sep_by_space
++1
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++#int_p_cs_precedes     
++1
++#int_p_sep_by_space    
++1
++#int_n_cs_precedes     
++1
++#int_n_sep_by_space    
++1
++#int_p_sign_posn       
++1
++#int_n_sign_posn       
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_CL.ISO8859-1.src src/share/locale/monetdef/es_CL.ISO8859-1.src
+--- src55-orig/share/locale/monetdef/es_CL.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/es_CL.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,49 @@
++# $adJ$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++# Based on http://unicode.org/cldr/trac/browser/tags/release-1-9/posix/ and locale of other operating systems
++#
++# int_curr_symbol (last character always SPACE)
++CLP 
++# currency_symbol
++$
++# mon_decimal_point
++,
++# mon_thousands_sep
++.
++# mon_grouping, separated by ;
++3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++1
++# n_cs_precedes
++1
++# p_sep_by_space
++1
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++#int_p_cs_precedes     
++1
++#int_p_sep_by_space    
++1
++#int_n_cs_precedes     
++1
++#int_n_sep_by_space    
++1
++#int_p_sign_posn       
++1
++#int_n_sign_posn       
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_CO.ISO8859-1.src src/share/locale/monetdef/es_CO.ISO8859-1.src
+--- src55-orig/share/locale/monetdef/es_CO.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/es_CO.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,49 @@
++# $adJ$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++# Based on http://unicode.org/cldr/trac/browser/tags/release-1-9/posix/ and locale of other operating systems
++#
++# int_curr_symbol (last character always SPACE)
++COP 
++# currency_symbol
++$
++# mon_decimal_point
++,
++# mon_thousands_sep
++.
++# mon_grouping, separated by ;
++3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++1
++# n_cs_precedes
++1
++# p_sep_by_space
++1
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++#int_p_cs_precedes     
++1
++#int_p_sep_by_space    
++1
++#int_n_cs_precedes     
++1
++#int_n_sep_by_space    
++1
++#int_p_sign_posn       
++1
++#int_n_sign_posn       
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_CR.ISO8859-1.src src/share/locale/monetdef/es_CR.ISO8859-1.src
+--- src55-orig/share/locale/monetdef/es_CR.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/es_CR.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,49 @@
++# $adJ$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++# Based on http://unicode.org/cldr/trac/browser/tags/release-1-9/posix/, locale of other operating systems and http://en.wikipedia.org/wiki/Costa_Rican_col%C3%B3n
++#
++# int_curr_symbol (last character always SPACE)
++CRC 
++# currency_symbol (not exactly colÛn symbol but what we can with ISO8859-1)
++¢
++# mon_decimal_point
++,
++# mon_thousands_sep
++ 
++# mon_grouping, separated by ;
++3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++1
++# n_cs_precedes
++1
++# p_sep_by_space
++1
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++#int_p_cs_precedes     
++1
++#int_p_sep_by_space    
++1
++#int_n_cs_precedes     
++1
++#int_n_sep_by_space    
++1
++#int_p_sign_posn       
++1
++#int_n_sign_posn       
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_CR.UTF-8.src src/share/locale/monetdef/es_CR.UTF-8.src
+--- src55-orig/share/locale/monetdef/es_CR.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/es_CR.UTF-8.src	Wed Nov 20 08:56:04 2013
+@@ -0,0 +1,49 @@
++# $adJ$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++# Based on http://unicode.org/cldr/trac/browser/tags/release-1-9/posix/, locale of other operating systems and http://en.wikipedia.org/wiki/Costa_Rican_col%C3%B3n
++#
++# int_curr_symbol (last character always SPACE)
++CRC 
++# currency_symbol (not exactly col√≥n symbol but what we can with ISO8859-1)
++‚Ç°
++# mon_decimal_point
++,
++# mon_thousands_sep
++ 
++# mon_grouping, separated by ;
++3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++1
++# n_cs_precedes
++1
++# p_sep_by_space
++1
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++#int_p_cs_precedes     
++1
++#int_p_sep_by_space    
++1
++#int_n_cs_precedes     
++1
++#int_n_sep_by_space    
++1
++#int_p_sign_posn       
++1
++#int_n_sign_posn       
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_DO.ISO8859-1.src src/share/locale/monetdef/es_DO.ISO8859-1.src
+--- src55-orig/share/locale/monetdef/es_DO.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/es_DO.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,49 @@
++# $adJ$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++# Based on http://unicode.org/cldr/trac/browser/tags/release-1-9/posix/, locale of other operating systems and http://www.xe.com/symbols.php
++#
++# int_curr_symbol (last character always SPACE)
++DOP 
++# currency_symbol
++RD$
++# mon_decimal_point
++.
++# mon_thousands_sep
++,
++# mon_grouping, separated by ;
++3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++1
++# n_cs_precedes
++1
++# p_sep_by_space
++1
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++#int_p_cs_precedes     
++1
++#int_p_sep_by_space    
++1
++#int_n_cs_precedes     
++1
++#int_n_sep_by_space    
++1
++#int_p_sign_posn       
++1
++#int_n_sign_posn       
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_EC.ISO8859-1.src src/share/locale/monetdef/es_EC.ISO8859-1.src
+--- src55-orig/share/locale/monetdef/es_EC.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/es_EC.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,49 @@
++# $adJ$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++# Based on http://unicode.org/cldr/trac/browser/tags/release-1-9/posix/ and locale of other operating systems
++#
++# int_curr_symbol (last character always SPACE)
++USD 
++# currency_symbol
++$
++# mon_decimal_point
++,
++# mon_thousands_sep
++.
++# mon_grouping, separated by ;
++3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++1
++# n_cs_precedes
++1
++# p_sep_by_space
++1
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++#int_p_cs_precedes     
++1
++#int_p_sep_by_space    
++1
++#int_n_cs_precedes     
++1
++#int_n_sep_by_space    
++1
++#int_p_sign_posn       
++1
++#int_n_sign_posn       
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_ES.ISO8859-1.src src/share/locale/monetdef/es_ES.ISO8859-1.src
+--- src55-orig/share/locale/monetdef/es_ES.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/es_ES.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,48 @@
++# Adapted from FreeBSD
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++EUR 
++# currency_symbol
++Eu
++# mon_decimal_point
++,
++# mon_thousands_sep
++.
++# mon_grouping, separated by ;
++3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++0
++# p_sep_by_space
++1
++# n_cs_precedes
++0
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++#int_p_cs_precedes     
++0
++#int_n_cs_precedes     
++0
++#int_p_sep_by_space    
++1
++#int_n_sep_by_space    
++1
++#int_p_sign_posn       
++1
++#int_n_sign_posn       
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_ES.UTF-8.src src/share/locale/monetdef/es_ES.UTF-8.src
+--- src55-orig/share/locale/monetdef/es_ES.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/es_ES.UTF-8.src	Wed Nov 20 09:06:17 2013
+@@ -0,0 +1,50 @@
++# $adJ$
++#
++# Based on es_ES.ISO8859-1.src
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++EUR 
++# currency_symbol
++‚Ç¨
++# mon_decimal_point
++,
++# mon_thousands_sep
++.
++# mon_grouping, separated by ;
++3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++0
++# p_sep_by_space
++1
++# n_cs_precedes
++0
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++#int_p_cs_precedes     
++0
++#int_n_cs_precedes     
++0
++#int_p_sep_by_space    
++1
++#int_n_sep_by_space    
++1
++#int_p_sign_posn       
++1
++#int_n_sign_posn       
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_GQ.ISO8859-1.src src/share/locale/monetdef/es_GQ.ISO8859-1.src
+--- src55-orig/share/locale/monetdef/es_GQ.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/es_GQ.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,49 @@
++# $adJ$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++# Based on http://unicode.org/cldr/trac/browser/tags/release-1-9/posix/ and locale of other operating systems
++#
++# int_curr_symbol (last character always SPACE)
++XAF 
++# currency_symbol
++FCFA
++# mon_decimal_point
++,
++# mon_thousands_sep
++.
++# mon_grouping, separated by ;
++3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++0
++# frac_digits
++0
++# p_cs_precedes
++1
++# n_cs_precedes
++1
++# p_sep_by_space
++1
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++#int_p_cs_precedes     
++1
++#int_p_sep_by_space    
++1
++#int_n_cs_precedes     
++1
++#int_n_sep_by_space    
++1
++#int_p_sign_posn       
++1
++#int_n_sign_posn       
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_GT.ISO8859-1.src src/share/locale/monetdef/es_GT.ISO8859-1.src
+--- src55-orig/share/locale/monetdef/es_GT.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/es_GT.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,49 @@
++# $adJ$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++# Based on http://unicode.org/cldr/trac/browser/tags/release-1-9/posix/ and locale of other operating systems
++#
++# int_curr_symbol (last character always SPACE)
++GTQ 
++# currency_symbol
++Q
++# mon_decimal_point
++.
++# mon_thousands_sep
++,
++# mon_grouping, separated by ;
++3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++1
++# n_cs_precedes
++1
++# p_sep_by_space
++1
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++#int_p_cs_precedes     
++1
++#int_p_sep_by_space    
++1
++#int_n_cs_precedes     
++1
++#int_n_sep_by_space    
++1
++#int_p_sign_posn       
++1
++#int_n_sign_posn       
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_HN.ISO8859-1.src src/share/locale/monetdef/es_HN.ISO8859-1.src
+--- src55-orig/share/locale/monetdef/es_HN.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/es_HN.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,49 @@
++# $adJ$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++# Based on http://unicode.org/cldr/trac/browser/tags/release-1-9/posix/, locale of other operating systems and http://www.xe.com/symbols.php
++#
++# int_curr_symbol (last character always SPACE)
++HNL 
++# currency_symbol
++L
++# mon_decimal_point
++.
++# mon_thousands_sep
++,
++# mon_grouping, separated by ;
++3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++1
++# n_cs_precedes
++1
++# p_sep_by_space
++1
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++#int_p_cs_precedes     
++1
++#int_p_sep_by_space    
++1
++#int_n_cs_precedes     
++1
++#int_n_sep_by_space    
++1
++#int_p_sign_posn       
++1
++#int_n_sign_posn       
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_MX.ISO8859-1.src src/share/locale/monetdef/es_MX.ISO8859-1.src
+--- src55-orig/share/locale/monetdef/es_MX.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/es_MX.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,49 @@
++# $adJ$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++# Based on http://unicode.org/cldr/trac/browser/tags/release-1-9/posix/ and locale of other operating systems
++#
++# int_curr_symbol (last character always SPACE)
++MXN 
++# currency_symbol
++$
++# mon_decimal_point
++.
++# mon_thousands_sep
++,
++# mon_grouping, separated by ;
++3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++1
++# p_sep_by_space
++1
++# n_cs_precedes
++1
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++#int_p_cs_precedes     
++1
++#int_n_cs_precedes     
++1
++#int_p_sep_by_space    
++1
++#int_n_sep_by_space    
++1
++#int_p_sign_posn       
++1
++#int_n_sign_posn       
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_NI.ISO8859-1.src src/share/locale/monetdef/es_NI.ISO8859-1.src
+--- src55-orig/share/locale/monetdef/es_NI.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/es_NI.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,49 @@
++# $adJ$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++# Based on http://unicode.org/cldr/trac/browser/tags/release-1-9/posix/ and locale of other operating systems
++#
++# int_curr_symbol (last character always SPACE)
++NIO 
++# currency_symbol
++C$
++# mon_decimal_point
++.
++# mon_thousands_sep
++,
++# mon_grouping, separated by ;
++3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++1
++# p_sep_by_space
++1
++# n_cs_precedes
++1
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++#int_p_cs_precedes     
++1
++#int_n_cs_precedes     
++1
++#int_p_sep_by_space    
++1
++#int_n_sep_by_space    
++1
++#int_p_sign_posn       
++1
++#int_n_sign_posn       
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_PA.ISO8859-1.src src/share/locale/monetdef/es_PA.ISO8859-1.src
+--- src55-orig/share/locale/monetdef/es_PA.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/es_PA.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,49 @@
++# $adJ$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++# Based on http://unicode.org/cldr/trac/browser/tags/release-1-9/posix/ and locale of other operating systems
++#
++# int_curr_symbol (last character always SPACE)
++PAB 
++# currency_symbol
++B/.
++# mon_decimal_point
++.
++# mon_thousands_sep
++,
++# mon_grouping, separated by ;
++3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++1
++# p_sep_by_space
++1
++# n_cs_precedes
++1
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++#int_p_cs_precedes     
++1
++#int_n_cs_precedes     
++1
++#int_p_sep_by_space    
++1
++#int_n_sep_by_space    
++1
++#int_p_sign_posn       
++1
++#int_n_sign_posn       
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_PE.ISO8859-1.src src/share/locale/monetdef/es_PE.ISO8859-1.src
+--- src55-orig/share/locale/monetdef/es_PE.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/es_PE.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,49 @@
++# $adJ$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++# Based on http://unicode.org/cldr/trac/browser/tags/release-1-9/posix/ and locale of other operating systems
++#
++# int_curr_symbol (last character always SPACE)
++PEN 
++# currency_symbol
++S/.
++# mon_decimal_point
++.
++# mon_thousands_sep
++,
++# mon_grouping, separated by ;
++3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++1
++# p_sep_by_space
++1
++# n_cs_precedes
++1
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++#int_p_cs_precedes     
++1
++#int_n_cs_precedes     
++1
++#int_p_sep_by_space    
++1
++#int_n_sep_by_space    
++1
++#int_p_sign_posn       
++1
++#int_n_sign_posn       
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_PR.ISO8859-1.src src/share/locale/monetdef/es_PR.ISO8859-1.src
+--- src55-orig/share/locale/monetdef/es_PR.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/es_PR.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,49 @@
++# $adJ$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++# Based on http://unicode.org/cldr/trac/browser/tags/release-1-9/posix/ and locale of other operating systems
++#
++# int_curr_symbol (last character always SPACE)
++USD 
++# currency_symbol
++$
++# mon_decimal_point
++.
++# mon_thousands_sep
++,
++# mon_grouping, separated by ;
++3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++1
++# p_sep_by_space
++1
++# n_cs_precedes
++1
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++#int_p_cs_precedes     
++1
++#int_n_cs_precedes     
++1
++#int_p_sep_by_space    
++1
++#int_n_sep_by_space    
++1
++#int_p_sign_posn       
++1
++#int_n_sign_posn       
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_PY.ISO8859-1.src src/share/locale/monetdef/es_PY.ISO8859-1.src
+--- src55-orig/share/locale/monetdef/es_PY.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/es_PY.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,49 @@
++# $adJ$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++# Based on http://unicode.org/cldr/trac/browser/tags/release-1-9/posix/, locale of other operating systems and http://www.xe.com/symbols.php
++#
++# int_curr_symbol (last character always SPACE)
++PYG 
++# currency_symbol
++Gs
++# mon_decimal_point
++,
++# mon_thousands_sep
++.
++# mon_grouping, separated by ;
++3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++1
++# p_sep_by_space
++1
++# n_cs_precedes
++1
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++#int_p_cs_precedes     
++1
++#int_n_cs_precedes     
++1
++#int_p_sep_by_space    
++1
++#int_n_sep_by_space    
++1
++#int_p_sign_posn       
++1
++#int_n_sign_posn       
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_SV.ISO8859-1.src src/share/locale/monetdef/es_SV.ISO8859-1.src
+--- src55-orig/share/locale/monetdef/es_SV.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/es_SV.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,49 @@
++# $adJ$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++# Based on http://unicode.org/cldr/trac/browser/tags/release-1-9/posix/ and locale of other operating systems
++#
++# int_curr_symbol (last character always SPACE)
++USD 
++# currency_symbol
++US$
++# mon_decimal_point
++.
++# mon_thousands_sep
++,
++# mon_grouping, separated by ;
++3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++1
++# p_sep_by_space
++1
++# n_cs_precedes
++1
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++#int_p_cs_precedes     
++1
++#int_n_cs_precedes     
++1
++#int_p_sep_by_space    
++1
++#int_n_sep_by_space    
++1
++#int_p_sign_posn       
++1
++#int_n_sign_posn       
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_US.ISO8859-1.src src/share/locale/monetdef/es_US.ISO8859-1.src
+--- src55-orig/share/locale/monetdef/es_US.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/es_US.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,49 @@
++# $adJ$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++# Based on http://unicode.org/cldr/trac/browser/tags/release-1-9/posix/ and locale of other operating systems
++#
++# int_curr_symbol (last character always SPACE)
++USD 
++# currency_symbol
++$
++# mon_decimal_point
++.
++# mon_thousands_sep
++,
++# mon_grouping, separated by ;
++3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++1
++# p_sep_by_space
++0
++# n_cs_precedes
++1
++# n_sep_by_space
++0
++# p_sign_posn
++1
++# n_sign_posn
++1
++#int_p_cs_precedes     
++1
++#int_n_cs_precedes     
++1
++#int_p_sep_by_space    
++0
++#int_n_sep_by_space    
++0
++#int_p_sign_posn       
++1
++#int_n_sign_posn       
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_UY.ISO8859-1.src src/share/locale/monetdef/es_UY.ISO8859-1.src
+--- src55-orig/share/locale/monetdef/es_UY.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/es_UY.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,49 @@
++# $adJ$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++# Based on http://unicode.org/cldr/trac/browser/tags/release-1-9/posix/ and locale of other operating systems
++#
++# int_curr_symbol (last character always SPACE)
++UYU 
++# currency_symbol
++$
++# mon_decimal_point
++,
++# mon_thousands_sep
++.
++# mon_grouping, separated by ;
++3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++1
++# p_sep_by_space
++1
++# n_cs_precedes
++1
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++#int_p_cs_precedes     
++1
++#int_n_cs_precedes     
++1
++#int_p_sep_by_space    
++1
++#int_n_sep_by_space    
++1
++#int_p_sign_posn       
++1
++#int_n_sign_posn       
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_VE.ISO8859-1.src src/share/locale/monetdef/es_VE.ISO8859-1.src
+--- src55-orig/share/locale/monetdef/es_VE.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/es_VE.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,49 @@
++# $adJ$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++# Based on http://unicode.org/cldr/trac/browser/tags/release-1-9/posix/, locale of other operating systems and http://www.xe.com/symbols.php
++#
++# int_curr_symbol (last character always SPACE)
++VEF 
++# currency_symbol
++Bs
++# mon_decimal_point
++,
++# mon_thousands_sep
++.
++# mon_grouping, separated by ;
++3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++1
++# p_sep_by_space
++1
++# n_cs_precedes
++1
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++#int_p_cs_precedes     
++1
++#int_n_cs_precedes     
++1
++#int_p_sep_by_space    
++1
++#int_n_sep_by_space    
++1
++#int_p_sign_posn       
++1
++#int_n_sign_posn       
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/et_EE.ISO8859-15.src src/share/locale/monetdef/et_EE.ISO8859-15.src
+--- src55-orig/share/locale/monetdef/et_EE.ISO8859-15.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/et_EE.ISO8859-15.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++EEK 
++# currency_symbol
++kr
++# mon_decimal_point
++.
++# mon_thousands_sep
++ 
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++0
++# p_sep_by_space
++1
++# n_cs_precedes
++0
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/fi_FI.ISO8859-1.src src/share/locale/monetdef/fi_FI.ISO8859-1.src
+--- src55-orig/share/locale/monetdef/fi_FI.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/fi_FI.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++EUR 
++# currency_symbol
++Eu
++# mon_decimal_point
++,
++# mon_thousands_sep
++.
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++0
++# p_sep_by_space
++2
++# n_cs_precedes
++0
++# n_sep_by_space
++2
++# p_sign_posn
++1
++# n_sign_posn
++2
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/fr_BE.ISO8859-1.src src/share/locale/monetdef/fr_BE.ISO8859-1.src
+--- src55-orig/share/locale/monetdef/fr_BE.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/fr_BE.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++EUR 
++# currency_symbol
++Eu
++# mon_decimal_point
++,
++# mon_thousands_sep
++.
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++0
++# p_sep_by_space
++1
++# n_cs_precedes
++0
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/fr_CA.ISO8859-1.src src/share/locale/monetdef/fr_CA.ISO8859-1.src
+--- src55-orig/share/locale/monetdef/fr_CA.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/fr_CA.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++CAD 
++# currency_symbol
++$
++# mon_decimal_point
++,
++# mon_thousands_sep
++ 
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++0
++# p_sep_by_space
++1
++# n_cs_precedes
++0
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++2
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/fr_FR.ISO8859-1.src src/share/locale/monetdef/fr_FR.ISO8859-1.src
+--- src55-orig/share/locale/monetdef/fr_FR.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/fr_FR.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++EUR 
++# currency_symbol
++Eu
++# mon_decimal_point
++,
++# mon_thousands_sep
++ 
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++0
++# p_sep_by_space
++1
++# n_cs_precedes
++0
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++2
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/he_IL.UTF-8.src src/share/locale/monetdef/he_IL.UTF-8.src
+--- src55-orig/share/locale/monetdef/he_IL.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/he_IL.UTF-8.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++ILS 
++# currency_symbol
++‚Ç™
++# mon_decimal_point
++.
++# mon_thousands_sep
++,
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++1
++# p_sep_by_space
++1
++# n_cs_precedes
++1
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/hi_IN.ISCII-DEV.src src/share/locale/monetdef/hi_IN.ISCII-DEV.src
+--- src55-orig/share/locale/monetdef/hi_IN.ISCII-DEV.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/hi_IN.ISCII-DEV.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++INR 
++# currency_symbol
++œﬁ»¨ 
++# mon_decimal_point
++.
++# mon_thousands_sep
++,
++# mon_grouping, separated by ;
++3;2;0
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++1
++# p_sep_by_space
++0
++# n_cs_precedes
++1
++# n_sep_by_space
++0
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/hr_HR.ISO8859-2.src src/share/locale/monetdef/hr_HR.ISO8859-2.src
+--- src55-orig/share/locale/monetdef/hr_HR.ISO8859-2.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/hr_HR.ISO8859-2.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++HRK 
++# currency_symbol
++Kn
++# mon_decimal_point
++,
++# mon_thousands_sep
++ 
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++0
++# frac_digits
++0
++# p_cs_precedes
++1
++# p_sep_by_space
++1
++# n_cs_precedes
++1
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/hu_HU.ISO8859-2.src src/share/locale/monetdef/hu_HU.ISO8859-2.src
+--- src55-orig/share/locale/monetdef/hu_HU.ISO8859-2.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/hu_HU.ISO8859-2.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++HUF 
++# currency_symbol
++Ft
++# mon_decimal_point
++,
++# mon_thousands_sep
++ 
++# mon_grouping
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++1
++# p_sep_by_space
++2
++# n_cs_precedes
++1
++# n_sep_by_space
++2
++# p_sign_posn
++4
++# n_sign_posn
++4
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/hy_AM.ARMSCII-8.src src/share/locale/monetdef/hy_AM.ARMSCII-8.src
+--- src55-orig/share/locale/monetdef/hy_AM.ARMSCII-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/hy_AM.ARMSCII-8.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,39 @@
++# $FreeBSD$
++#
++# LC_MONETARY source for ARMSCII-8 locale for FreeBSD
++# Made available by Vahe Khachikyan <vahe@khachikyan.de>
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++AMD 
++# currency_symbol
++∏  
++# mon_decimal_point
++.
++# mon_thousands_sep
++,
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++0
++# p_sep_by_space
++1
++# n_cs_precedes
++0
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/hy_AM.UTF-8.src src/share/locale/monetdef/hy_AM.UTF-8.src
+--- src55-orig/share/locale/monetdef/hy_AM.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/hy_AM.UTF-8.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,39 @@
++# $FreeBSD$
++#
++# LC_MONETARY source for ARMSCII-8 locale for FreeBSD
++# Made available by Vahe Khachikyan <vahe@khachikyan.de>
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++AMD 
++# currency_symbol
++‘¥’ê  
++# mon_decimal_point
++.
++# mon_thousands_sep
++,
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++0
++# p_sep_by_space
++1
++# n_cs_precedes
++0
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/is_IS.ISO8859-1.src src/share/locale/monetdef/is_IS.ISO8859-1.src
+--- src55-orig/share/locale/monetdef/is_IS.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/is_IS.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++ISK 
++# currency_symbol
++kr
++# mon_decimal_point
++,
++# mon_thousands_sep
++.
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++0
++# p_sep_by_space
++1
++# n_cs_precedes
++0
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/it_IT.ISO8859-1.src src/share/locale/monetdef/it_IT.ISO8859-1.src
+--- src55-orig/share/locale/monetdef/it_IT.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/it_IT.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++EUR 
++# currency_symbol
++Eu
++# mon_decimal_point
++,
++# mon_thousands_sep
++.
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++0
++# frac_digits
++0
++# p_cs_precedes
++1
++# p_sep_by_space
++1
++# n_cs_precedes
++1
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/ja_JP.UTF-8.src src/share/locale/monetdef/ja_JP.UTF-8.src
+--- src55-orig/share/locale/monetdef/ja_JP.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/ja_JP.UTF-8.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++JPY 
++# currency_symbol
++¬•
++# mon_decimal_point
++.
++# mon_thousands_sep
++,
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++0
++# frac_digits
++0
++# p_cs_precedes
++1
++# p_sep_by_space
++0
++# n_cs_precedes
++1
++# n_sep_by_space
++0
++# p_sign_posn
++1
++# n_sign_posn
++4
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/ja_JP.eucJP.src src/share/locale/monetdef/ja_JP.eucJP.src
+--- src55-orig/share/locale/monetdef/ja_JP.eucJP.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/ja_JP.eucJP.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++JPY 
++# currency_symbol
++\
++# mon_decimal_point
++.
++# mon_thousands_sep
++,
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++0
++# frac_digits
++0
++# p_cs_precedes
++1
++# p_sep_by_space
++0
++# n_cs_precedes
++1
++# n_sep_by_space
++0
++# p_sign_posn
++1
++# n_sign_posn
++4
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/kk_KZ.PT154.src src/share/locale/monetdef/kk_KZ.PT154.src
+--- src55-orig/share/locale/monetdef/kk_KZ.PT154.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/kk_KZ.PT154.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++KZT 
++# currency_symbol
++Ú„.
++# mon_decimal_point
++,
++# mon_thousands_sep
++ 
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++0
++# p_sep_by_space
++1
++# n_cs_precedes
++0
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/kk_KZ.UTF-8.src src/share/locale/monetdef/kk_KZ.UTF-8.src
+--- src55-orig/share/locale/monetdef/kk_KZ.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/kk_KZ.UTF-8.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++KZT 
++# currency_symbol
++—Ç–≥.
++# mon_decimal_point
++,
++# mon_thousands_sep
++ 
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++0
++# p_sep_by_space
++1
++# n_cs_precedes
++0
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/ko_KR.UTF-8.src src/share/locale/monetdef/ko_KR.UTF-8.src
+--- src55-orig/share/locale/monetdef/ko_KR.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/ko_KR.UTF-8.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++KRW 
++# currency_symbol
++‚Ç©
++# mon_decimal_point
++.
++# mon_thousands_sep
++,
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++0
++# frac_digits
++0
++# p_cs_precedes
++1
++# p_sep_by_space
++0
++# n_cs_precedes
++1
++# n_sep_by_space
++0
++# p_sign_posn
++1
++# n_sign_posn
++4
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/ko_KR.eucKR.src src/share/locale/monetdef/ko_KR.eucKR.src
+--- src55-orig/share/locale/monetdef/ko_KR.eucKR.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/ko_KR.eucKR.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++KRW 
++# currency_symbol
++\
++# mon_decimal_point
++.
++# mon_thousands_sep
++,
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++0
++# frac_digits
++0
++# p_cs_precedes
++1
++# p_sep_by_space
++0
++# n_cs_precedes
++1
++# n_sep_by_space
++0
++# p_sign_posn
++1
++# n_sign_posn
++4
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/lt_LT.ISO8859-13.src src/share/locale/monetdef/lt_LT.ISO8859-13.src
+--- src55-orig/share/locale/monetdef/lt_LT.ISO8859-13.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/lt_LT.ISO8859-13.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++LTL 
++# currency_symbol
++Lt
++# mon_decimal_point
++,
++# mon_thousands_sep
++ 
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++0
++# p_sep_by_space
++1
++# n_cs_precedes
++0
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/lv_LV.ISO8859-13.src src/share/locale/monetdef/lv_LV.ISO8859-13.src
+--- src55-orig/share/locale/monetdef/lv_LV.ISO8859-13.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/lv_LV.ISO8859-13.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++LVL 
++# currency_symbol
++Ls
++# mon_decimal_point
++,
++# mon_thousands_sep
++ 
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++0
++# p_sep_by_space
++1
++# n_cs_precedes
++0
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/mn_MN.UTF-8.src src/share/locale/monetdef/mn_MN.UTF-8.src
+--- src55-orig/share/locale/monetdef/mn_MN.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/mn_MN.UTF-8.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++MNT 
++# currency_symbol
++‚ÇÆ
++# mon_decimal_point
++.
++# mon_thousands_sep
++,
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++1
++# p_sep_by_space
++0
++# n_cs_precedes
++1
++# n_sep_by_space
++0
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/nl_BE.ISO8859-1.src src/share/locale/monetdef/nl_BE.ISO8859-1.src
+--- src55-orig/share/locale/monetdef/nl_BE.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/nl_BE.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++EUR 
++# currency_symbol
++Eu
++# mon_decimal_point
++,
++# mon_thousands_sep
++.
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++0
++# p_sep_by_space
++1
++# n_cs_precedes
++0
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/nl_NL.ISO8859-1.src src/share/locale/monetdef/nl_NL.ISO8859-1.src
+--- src55-orig/share/locale/monetdef/nl_NL.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/nl_NL.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++EUR 
++# currency_symbol
++Eu
++# mon_decimal_point
++,
++# mon_thousands_sep
++ 
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++1
++# p_sep_by_space
++1
++# n_cs_precedes
++1
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++2
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/no_NO.ISO8859-1.src src/share/locale/monetdef/no_NO.ISO8859-1.src
+--- src55-orig/share/locale/monetdef/no_NO.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/no_NO.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++NOK 
++# currency_symbol
++kr
++# mon_decimal_point
++,
++# mon_thousands_sep
++.
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++1
++# p_sep_by_space
++0
++# n_cs_precedes
++1
++# n_sep_by_space
++0
++# p_sign_posn
++4
++# n_sign_posn
++4
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/pl_PL.ISO8859-2.src src/share/locale/monetdef/pl_PL.ISO8859-2.src
+--- src55-orig/share/locale/monetdef/pl_PL.ISO8859-2.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/pl_PL.ISO8859-2.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++PLN 
++# currency_symbol
++z≥
++# mon_decimal_point
++,
++# mon_thousands_sep
++ 
++# mon_grouping
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++1
++# p_sep_by_space
++2
++# n_cs_precedes
++1
++# n_sep_by_space
++2
++# p_sign_posn
++4
++# n_sign_posn
++4
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/pl_PL.UTF-8.src src/share/locale/monetdef/pl_PL.UTF-8.src
+--- src55-orig/share/locale/monetdef/pl_PL.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/pl_PL.UTF-8.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++PLN 
++# currency_symbol
++z≈Ç
++# mon_decimal_point
++,
++# mon_thousands_sep
++ 
++# mon_grouping
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++1
++# p_sep_by_space
++2
++# n_cs_precedes
++1
++# n_sep_by_space
++2
++# p_sign_posn
++4
++# n_sign_posn
++4
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/pt_BR.ISO8859-1.src src/share/locale/monetdef/pt_BR.ISO8859-1.src
+--- src55-orig/share/locale/monetdef/pt_BR.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/pt_BR.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,49 @@
++# $adJ$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++# Based on http://unicode.org/cldr/trac/browser/tags/release-1-9/posix/ and locale of other operating systems
++#
++# int_curr_symbol (last character always SPACE)
++BRL 
++# currency_symbol
++R$
++# mon_decimal_point
++,
++# mon_thousands_sep
++.
++# mon_grouping, separated by ;
++3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++1
++# p_sep_by_space
++0
++# n_cs_precedes
++1
++# n_sep_by_space
++0
++# p_sign_posn
++1
++# n_sign_posn
++1
++#int_p_cs_precedes     
++1
++#int_n_cs_precedes
++1
++#int_p_sep_by_space    
++0
++#int_n_sep_by_space    
++0
++#int_p_sign_posn       
++1
++#int_n_sign_posn       
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/pt_PT.ISO8859-1.src src/share/locale/monetdef/pt_PT.ISO8859-1.src
+--- src55-orig/share/locale/monetdef/pt_PT.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/pt_PT.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++EUR 
++# currency_symbol
++Eu
++# mon_decimal_point
++,
++# mon_thousands_sep
++.
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++0
++# p_sep_by_space
++1
++# n_cs_precedes
++0
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/pt_PT.ISO8859-15.src src/share/locale/monetdef/pt_PT.ISO8859-15.src
+--- src55-orig/share/locale/monetdef/pt_PT.ISO8859-15.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/pt_PT.ISO8859-15.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++EUR 
++# currency_symbol
++§
++# mon_decimal_point
++,
++# mon_thousands_sep
++.
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++0
++# p_sep_by_space
++1
++# n_cs_precedes
++0
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/pt_PT.UTF-8.src src/share/locale/monetdef/pt_PT.UTF-8.src
+--- src55-orig/share/locale/monetdef/pt_PT.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/pt_PT.UTF-8.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++EUR 
++# currency_symbol
++‚Ç¨
++# mon_decimal_point
++,
++# mon_thousands_sep
++.
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++0
++# p_sep_by_space
++1
++# n_cs_precedes
++0
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/ro_RO.ISO8859-2.src src/share/locale/monetdef/ro_RO.ISO8859-2.src
+--- src55-orig/share/locale/monetdef/ro_RO.ISO8859-2.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/ro_RO.ISO8859-2.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++ROL 
++# currency_symbol
++Lei
++# mon_decimal_point
++,
++# mon_thousands_sep
++ 
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++0
++# p_sep_by_space
++1
++# n_cs_precedes
++0
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/ru_RU.CP1251.src src/share/locale/monetdef/ru_RU.CP1251.src
+--- src55-orig/share/locale/monetdef/ru_RU.CP1251.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/ru_RU.CP1251.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++RUB 
++# currency_symbol
++Û·.
++# mon_decimal_point
++,
++# mon_thousands_sep
++ 
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++0
++# p_sep_by_space
++1
++# n_cs_precedes
++0
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/ru_RU.CP866.src src/share/locale/monetdef/ru_RU.CP866.src
+--- src55-orig/share/locale/monetdef/ru_RU.CP866.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/ru_RU.CP866.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++RUB 
++# currency_symbol
++‡„°.
++# mon_decimal_point
++,
++# mon_thousands_sep
++ 
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++0
++# p_sep_by_space
++1
++# n_cs_precedes
++0
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/ru_RU.ISO8859-5.src src/share/locale/monetdef/ru_RU.ISO8859-5.src
+--- src55-orig/share/locale/monetdef/ru_RU.ISO8859-5.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/ru_RU.ISO8859-5.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++RUB 
++# currency_symbol
++‡„—.
++# mon_decimal_point
++,
++# mon_thousands_sep
++ 
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++0
++# p_sep_by_space
++1
++# n_cs_precedes
++0
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/ru_RU.KOI8-R.src src/share/locale/monetdef/ru_RU.KOI8-R.src
+--- src55-orig/share/locale/monetdef/ru_RU.KOI8-R.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/ru_RU.KOI8-R.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++RUB 
++# currency_symbol
++“’¬.
++# mon_decimal_point
++,
++# mon_thousands_sep
++ 
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++0
++# p_sep_by_space
++1
++# n_cs_precedes
++0
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/ru_RU.UTF-8.src src/share/locale/monetdef/ru_RU.UTF-8.src
+--- src55-orig/share/locale/monetdef/ru_RU.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/ru_RU.UTF-8.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++RUB 
++# currency_symbol
++—Ä—É–±.
++# mon_decimal_point
++,
++# mon_thousands_sep
++ 
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++0
++# p_sep_by_space
++1
++# n_cs_precedes
++0
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/sk_SK.ISO8859-2.src src/share/locale/monetdef/sk_SK.ISO8859-2.src
+--- src55-orig/share/locale/monetdef/sk_SK.ISO8859-2.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/sk_SK.ISO8859-2.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,38 @@
++# $FreeBSD$
++#
++# Slovak monetary definition by Juraj Bednar <juraj@bednar.sk>
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++SKK
++# currency_symbol
++Sk
++# mon_decimal_point
++,
++# mon_thousands_sep
++ 
++# mon_grouping
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++1
++# p_sep_by_space
++2
++# n_cs_precedes
++1
++# n_sep_by_space
++2
++# p_sign_posn
++4
++# n_sign_posn
++4
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/sl_SI.ISO8859-2.src src/share/locale/monetdef/sl_SI.ISO8859-2.src
+--- src55-orig/share/locale/monetdef/sl_SI.ISO8859-2.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/sl_SI.ISO8859-2.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++SIT 
++# currency_symbol
++SIT
++# mon_decimal_point
++,
++# mon_thousands_sep
++ 
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++0
++# p_sep_by_space
++2
++# n_cs_precedes
++0
++# n_sep_by_space
++2
++# p_sign_posn
++2
++# n_sign_posn
++2
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/sr_YU.ISO8859-2.src src/share/locale/monetdef/sr_YU.ISO8859-2.src
+--- src55-orig/share/locale/monetdef/sr_YU.ISO8859-2.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/sr_YU.ISO8859-2.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++YUD 
++# currency_symbol
++din
++# mon_decimal_point
++,
++# mon_thousands_sep
++ 
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++0
++# p_sep_by_space
++2
++# n_cs_precedes
++0
++# n_sep_by_space
++2
++# p_sign_posn
++2
++# n_sign_posn
++2
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/sr_YU.ISO8859-5.src src/share/locale/monetdef/sr_YU.ISO8859-5.src
+--- src55-orig/share/locale/monetdef/sr_YU.ISO8859-5.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/sr_YU.ISO8859-5.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++YUD 
++# currency_symbol
++‘ÿ›
++# mon_decimal_point
++,
++# mon_thousands_sep
++ 
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++0
++# p_sep_by_space
++1
++# n_cs_precedes
++0
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/sr_YU.UTF-8.src src/share/locale/monetdef/sr_YU.UTF-8.src
+--- src55-orig/share/locale/monetdef/sr_YU.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/sr_YU.UTF-8.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++YUD 
++# currency_symbol
++–¥–∏–Ω
++# mon_decimal_point
++,
++# mon_thousands_sep
++ 
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++0
++# p_sep_by_space
++1
++# n_cs_precedes
++0
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/sv_SE.ISO8859-1.src src/share/locale/monetdef/sv_SE.ISO8859-1.src
+--- src55-orig/share/locale/monetdef/sv_SE.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/sv_SE.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++SEK 
++# currency_symbol
++kr
++# mon_decimal_point
++,
++# mon_thousands_sep
++ 
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++0
++# p_sep_by_space
++1
++# n_cs_precedes
++0
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/tr_TR.ISO8859-9.src src/share/locale/monetdef/tr_TR.ISO8859-9.src
+--- src55-orig/share/locale/monetdef/tr_TR.ISO8859-9.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/tr_TR.ISO8859-9.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++TRL 
++# currency_symbol
++L
++# mon_decimal_point
++,
++# mon_thousands_sep
++.
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++1
++# p_sep_by_space
++1
++# n_cs_precedes
++1
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/uk_UA.CP1251.src src/share/locale/monetdef/uk_UA.CP1251.src
+--- src55-orig/share/locale/monetdef/uk_UA.CP1251.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/uk_UA.CP1251.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++UAH 
++# currency_symbol
++„Ì.
++# mon_decimal_point
++,
++# mon_thousands_sep
++ 
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++0
++# p_sep_by_space
++1
++# n_cs_precedes
++0
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/uk_UA.ISO8859-5.src src/share/locale/monetdef/uk_UA.ISO8859-5.src
+--- src55-orig/share/locale/monetdef/uk_UA.ISO8859-5.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/uk_UA.ISO8859-5.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++UAH 
++# currency_symbol
++”‡›.
++# mon_decimal_point
++,
++# mon_thousands_sep
++ 
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++0
++# p_sep_by_space
++1
++# n_cs_precedes
++0
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/uk_UA.KOI8-U.src src/share/locale/monetdef/uk_UA.KOI8-U.src
+--- src55-orig/share/locale/monetdef/uk_UA.KOI8-U.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/uk_UA.KOI8-U.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++UAH 
++# currency_symbol
++«“Œ.
++# mon_decimal_point
++,
++# mon_thousands_sep
++ 
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++0
++# p_sep_by_space
++1
++# n_cs_precedes
++0
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/uk_UA.UTF-8.src src/share/locale/monetdef/uk_UA.UTF-8.src
+--- src55-orig/share/locale/monetdef/uk_UA.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/uk_UA.UTF-8.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++UAH 
++# currency_symbol
++–≥—Ä–Ω.
++# mon_decimal_point
++,
++# mon_thousands_sep
++ 
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++0
++# p_sep_by_space
++1
++# n_cs_precedes
++0
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/zh_CN.GB18030.src src/share/locale/monetdef/zh_CN.GB18030.src
+--- src55-orig/share/locale/monetdef/zh_CN.GB18030.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/zh_CN.GB18030.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++CNY 
++# currency_symbol
++£§
++# mon_decimal_point
++.
++# mon_thousands_sep
++,
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++0
++# frac_digits
++0
++# p_cs_precedes
++1
++# p_sep_by_space
++0
++# n_cs_precedes
++1
++# n_sep_by_space
++0
++# p_sign_posn
++1
++# n_sign_posn
++4
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/zh_CN.GB2312.src src/share/locale/monetdef/zh_CN.GB2312.src
+--- src55-orig/share/locale/monetdef/zh_CN.GB2312.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/zh_CN.GB2312.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++CNY 
++# currency_symbol
++£§
++# mon_decimal_point
++.
++# mon_thousands_sep
++,
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++0
++# frac_digits
++0
++# p_cs_precedes
++1
++# p_sep_by_space
++0
++# n_cs_precedes
++1
++# n_sep_by_space
++0
++# p_sign_posn
++1
++# n_sign_posn
++4
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/zh_CN.UTF-8.src src/share/locale/monetdef/zh_CN.UTF-8.src
+--- src55-orig/share/locale/monetdef/zh_CN.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/zh_CN.UTF-8.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++CNY 
++# currency_symbol
++Ôø•
++# mon_decimal_point
++.
++# mon_thousands_sep
++,
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++1
++# p_sep_by_space
++0
++# n_cs_precedes
++1
++# n_sep_by_space
++0
++# p_sign_posn
++1
++# n_sign_posn
++4
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/zh_CN.eucCN.src src/share/locale/monetdef/zh_CN.eucCN.src
+--- src55-orig/share/locale/monetdef/zh_CN.eucCN.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/zh_CN.eucCN.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++CNY 
++# currency_symbol
++£§
++# mon_decimal_point
++.
++# mon_thousands_sep
++,
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++0
++# frac_digits
++0
++# p_cs_precedes
++1
++# p_sep_by_space
++0
++# n_cs_precedes
++1
++# n_sep_by_space
++0
++# p_sign_posn
++1
++# n_sign_posn
++4
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/zh_HK.UTF-8.src src/share/locale/monetdef/zh_HK.UTF-8.src
+--- src55-orig/share/locale/monetdef/zh_HK.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/zh_HK.UTF-8.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++HKD
++# currency_symbol
++HK$
++# mon_decimal_point
++.
++# mon_thousands_sep
++,
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++1
++# p_sep_by_space
++0
++# n_cs_precedes
++1
++# n_sep_by_space
++0
++# p_sign_posn
++1
++# n_sign_posn
++0
++# EOF
+diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/zh_TW.Big5.src src/share/locale/monetdef/zh_TW.Big5.src
+--- src55-orig/share/locale/monetdef/zh_TW.Big5.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/zh_TW.Big5.src	Wed Nov 20 08:32:28 2013
+@@ -0,0 +1,36 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# int_curr_symbol (last character always SPACE)
++TWD 
++# currency_symbol
++NT$
++# mon_decimal_point
++.
++# mon_thousands_sep
++,
++# mon_grouping, separated by ;
++3;3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++0
++# frac_digits
++0
++# p_cs_precedes
++1
++# p_sep_by_space
++0
++# n_cs_precedes
++1
++# n_sep_by_space
++0
++# p_sign_posn
++1
++# n_sign_posn
++4
++# EOF

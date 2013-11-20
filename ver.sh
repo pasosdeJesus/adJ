@@ -28,8 +28,8 @@ PKG_PATH=ftp://mirror.planetunix.net/pub/OpenBSD/$V/packages/$ARQ/
 PKG_PATH=ftp://mirror.esc7.net/pub/OpenBSD/$V/packages/$ARQ/
 PKG_PATH=ftp://mirrors.nycbug.org/pub/OpenBSD/$V/packages/$ARQ/
 PKG_PATH=ftp://mirror.esc7.net/pub/OpenBSD/snapshots/packages/$ARQ/
-PKG_PATH=ftp://mirror.planetunix.net/pub/OpenBSD/snapshots/packages/$ARQ/
 PKG_PATH=ftp://ftp.pasosdeJesus.org/pub/OpenBSD/snapshots/packages/$ARQ/
+PKG_PATH=ftp://mirror.planetunix.net/pub/OpenBSD/snapshots/packages/$ARQ/
 
 
 #Repositorio de paquetes usado --el último es el usado
@@ -48,7 +48,7 @@ DIROTRO="comp"
 
 RSYNCHOST="ftp.pasosdeJesus.org"
 
-excluye="dialog-.* gnupg-2.* libstdc++-.* python-.* php-5.2.* php-gd-5.2.* php-pdo_pgsql-5.2.* php-pgsql-5.2.* php-mcrypt-5.2.*fphp-sqlite-5.2.* pear-Validate-.* pear-Auth-[0-9p.]*.tgz pear-HTML-QuickForm-.* postgresql-.* ruby-1.8.* tcl-* tk-* xfe-.*"
+excluye="dialog-.* firefox-* gnupg-2.* libstdc++-.* python-.* php-.* pear-Validate-.* pear-Auth-[0-9p.]*.tgz pear-HTML-QuickForm-.* postgresql-.* ruby-1.8.* tcl-* tk-* xfe-.*"
 # Paquetes por excluir de descarga ftp de OpenBSD
 
 RUTAKERNELREESPECIAL=""

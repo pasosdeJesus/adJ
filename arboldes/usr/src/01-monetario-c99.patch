@@ -25,11 +25,12 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/include/locale.h src/include/l
  #ifndef NULL
 diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/localeconv.c src/lib/libc/locale/localeconv.c
 --- src55-orig/lib/libc/locale/localeconv.c	Mon Aug  8 03:05:35 2005
-+++ src/lib/libc/locale/localeconv.c	Mon Nov 11 11:24:36 2013
-@@ -29,13 +29,13 @@
++++ src/lib/libc/locale/localeconv.c	Sat Nov 16 08:37:44 2013
+@@ -28,14 +28,18 @@
+     static struct lconv ret;
  
      if (__mlocale_changed) {
- 	/* LC_MONETARY */
+-	/* LC_MONETARY */
 -	ret.int_curr_symbol	= _CurrentMonetaryLocale->int_curr_symbol;
 -	ret.currency_symbol	= _CurrentMonetaryLocale->currency_symbol;
 -	ret.mon_decimal_point	= _CurrentMonetaryLocale->mon_decimal_point;
@@ -37,17 +38,22 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/localeconv.c s
 -	ret.mon_grouping	= _CurrentMonetaryLocale->mon_grouping;
 -	ret.positive_sign	= _CurrentMonetaryLocale->positive_sign;
 -	ret.negative_sign	= _CurrentMonetaryLocale->negative_sign;
++	// struct lconv should use const char *, but POSIX says char *
 +	ret.int_curr_symbol	= (char *)_CurrentMonetaryLocale->int_curr_symbol;
 +	ret.currency_symbol	= (char *)_CurrentMonetaryLocale->currency_symbol;
 +	ret.mon_decimal_point	= (char *)_CurrentMonetaryLocale->mon_decimal_point;
 +	ret.mon_thousands_sep	= (char *)_CurrentMonetaryLocale->mon_thousands_sep;
-+	ret.mon_grouping	= (char *)_CurrentMonetaryLocale->mon_grouping;
++	// Special case to return "" in POSIX locale as shown in column
++	// localeconv() in table of section LC_MONETARY of
++	// http://pubs.opengroup.org/onlinepubs/009695399/basedefs/xbd_chap07.html#tag_07_03
++	ret.mon_grouping	= (_CurrentMonetaryLocale == &_DefaultMonetaryLocale) ?
++		"" : (char *)_CurrentMonetaryLocale->mon_grouping;
 +	ret.positive_sign	= (char *)_CurrentMonetaryLocale->positive_sign;
 +	ret.negative_sign	= (char *)_CurrentMonetaryLocale->negative_sign;
  	ret.int_frac_digits	= _CurrentMonetaryLocale->int_frac_digits;
  	ret.frac_digits		= _CurrentMonetaryLocale->frac_digits;
  	ret.p_cs_precedes	= _CurrentMonetaryLocale->p_cs_precedes;
-@@ -44,6 +44,13 @@
+@@ -44,6 +48,13 @@
  	ret.n_sep_by_space	= _CurrentMonetaryLocale->n_sep_by_space;
  	ret.p_sign_posn		= _CurrentMonetaryLocale->p_sign_posn;
  	ret.n_sign_posn		= _CurrentMonetaryLocale->n_sign_posn;
@@ -60,8 +66,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/localeconv.c s
 +
  	__mlocale_changed = 0;
      }
-
-
+ 
 diff -u src55-orig/lib/libc/locale/setlocale.3 src/lib/libc/locale/setlocale.3
 --- src55-orig/lib/libc/locale/setlocale.3	Sun Oct  6 20:04:49 2013
 +++ src/lib/libc/locale/setlocale.3	Mon Nov 11 17:18:06 2013
