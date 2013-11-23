@@ -1,22 +1,16 @@
 $OpenBSD$
---- src/Makefile.am.orig	Mon Jun 24 13:55:35 2013
-+++ src/Makefile.am	Wed Sep 11 23:44:34 2013
-@@ -25,14 +25,16 @@ if USE_X86_64_ASM
+--- src/Makefile.am.orig	Thu Nov 14 15:44:42 2013
++++ src/Makefile.am	Thu Nov 21 22:31:59 2013
+@@ -25,10 +25,10 @@ if USE_X86_64_ASM
  realboy_SOURCES += gboy_x86_64.S
  AM_CPPFLAGS = -DUSE_X86_64_ASM
  if HOST_IS_OPENBSD
 -AM_LDFLAGS = -Wl,-non_shared
 +AM_LDFLAGS = -lSDL -lc -pthread -Wl,-non_shared -L/usr/local/lib
-+else
-+AM_CFLAGS = -Wno-unused-result
  endif
  else
  AM_CPPFLAGS =
  realboy_SOURCES += gboy_cpu.c
-+AM_CFLAGS = -Wno-unused-result
- endif
- 
- if USE_CLI
- AM_CPPFLAGS += -DUSE_CLI
- endif
--AM_CFLAGS = -Wno-unused-result
+-endif
+ AM_CFLAGS = -Wno-unused-result
++endif

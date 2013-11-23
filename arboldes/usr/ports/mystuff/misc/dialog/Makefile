@@ -24,18 +24,16 @@ CONFIGURE_STYLE=gnu
 MAKE_FILE =	makefile
 
 CONFIGURE_ARGS= --enable-nls
-CONFIGURE_ARGS+= --includedir="/usr/local/include"
-CONFIGURE_ENV= LDFLAGS="-L/usr/local/lib -liconv"
+CONFIGURE_ARGS+= --includedir="${LOCALBASE}/include"
+CONFIGURE_ENV= LDFLAGS="-L${LOCALBASE}/lib -liconv"
 
-USE_GROFF =	Yes
 NO_TEST =	Yes
 
 post-build:
-	cd ${WRKSRC}/po; make 
-
+	cd ${WRKSRC}/po; ${SETENV} ${MAKE_ENV} ${MAKE_PROGRAM} ${MAKE_FLAGS}
 
 post-install:
-	cd ${WRKSRC}/po; make install
-
+	echo "PREFIX=$(PREFIX)"
+	cd ${WRKSRC}/po; ${SETENV} ${MAKE_ENV} ${MAKE_PROGRAM} DESTDIR=${DESTDIR} ${MAKE_FLAGS} install
 
 .include <bsd.port.mk>

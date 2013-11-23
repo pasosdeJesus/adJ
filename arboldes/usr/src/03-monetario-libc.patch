@@ -203,8 +203,8 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/fix_grouping.c
 +}
 diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/ldpart.c src/lib/libc/locale/ldpart.c
 --- src55-orig/lib/libc/locale/ldpart.c	Wed Dec 31 19:00:00 1969
-+++ src/lib/libc/locale/ldpart.c	Tue Nov 12 02:16:24 2013
-@@ -0,0 +1,222 @@
++++ src/lib/libc/locale/ldpart.c	Thu Nov 21 20:25:48 2013
+@@ -0,0 +1,217 @@
 +/*
 + * Copyright (c) 2000, 2001 Alexey Zelkin <phantom@FreeBSD.org>
 + * All rights reserved.
@@ -270,11 +270,6 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/ldpart.c src/l
 +	if (len < 0 || len >= sfilename)
 +		return NULL;
 +
-+	strcpy(filename, _PATH_LOCALE);
-+	strcat(filename, "/");
-+	strcat(filename, locname);
-+	strcat(filename, "/");
-+	strcat(filename, category_filename);
 +	if ((fd = open(filename, O_RDONLY | O_CLOEXEC)) < 0) {
 +		/* Assumes "lang[_territory][.codeset]" locale name. */
 +		dot = strrchr(locname, '.');
@@ -363,7 +358,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/ldpart.c src/l
 +		errno = ENOMEM;
 +		goto bad_locale;
 +	}
-+	(void)strcpy(lbuf, name);
++	(void)strlcpy(lbuf, name, bufsize);
 +	p = lbuf + namesize;
 +	plim = p + st.st_size;
 +	if (read(fd, p, (size_t) st.st_size) != st.st_size)

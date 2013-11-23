@@ -15,13 +15,11 @@ MAINTAINER=	Vladimir Támara Patiño <vtamara@pasosdeJesus.org>
 
 # sword: GPL  kjv: free for any purpose
 PERMIT_PACKAGE_CDROM=	Yes
-PERMIT_PACKAGE_FTP=	Yes
-PERMIT_DISTFILES_FTP=	Yes
 
 BUILD_DEPENDS= archivers/unzip 
 LIB_DEPENDS= net/curl
 
-MASTER_SITES=	http://crosswire.org/ftpmirror/pub/sword/source/v1.6/
+MASTER_SITES=	http://crosswire.org/ftpmirror/pub/sword/source/v1.7/
 MASTER_SITES0=	http://crosswire.org/ftpmirror/pub/sword/packages/rawzip/
 DISTFILES=	${DISTNAME}${EXTRACT_SUFX} 
 DISTFILES+=	KJV.zip:0

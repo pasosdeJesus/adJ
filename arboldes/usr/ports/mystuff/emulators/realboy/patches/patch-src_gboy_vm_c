@@ -1,54 +1,12 @@
 $OpenBSD$
---- src/gboy_vm.c.orig	Mon Jun 24 13:57:15 2013
-+++ src/gboy_vm.c	Mon Sep 23 22:56:36 2013
-@@ -16,6 +16,7 @@
-  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. 
-  */
- 
-+#include <stdio.h>
- #include "gboy.h"
- #define CART_HDR 336
- #define NIN_LOG 0x104
-@@ -51,13 +52,13 @@ extern long gb_vbln_clks;
+--- src/gboy_vm.c.orig	Fri Nov 22 10:09:00 2013
++++ src/gboy_vm.c	Fri Nov 22 10:09:07 2013
+@@ -56,7 +56,7 @@ extern long gb_vbln_clks;
  extern long gb_oam_clks;
  extern long gb_vram_clks;
  extern long gb_hblank_clks;
--extern long addr_sp_ptrs[0x10]; // pointers to address spaces
-+extern long addr_sp_ptrs[0x11]; // pointers to address spaces
- extern Uint8 addr_sp[]; // pointers to address spaces
+-extern long addr_sp_ptrs[0x10];
++extern long addr_sp_ptrs[0x11];
  
- int with_boot=0;
- const char *gb_boot_strs[] = { "boot_roms/dmg_rom.bin", "boot_roms/gbc_bios.bin" };
- /* Temporary space for cartridge's header */
--static Uint8 cart_init_rd[336];
-+static Uint8 cart_init_rd[CART_HDR];
- /* Nintendo Gameboy signature */
- static const unsigned char nin_log[] = { 0xce, 0xed, 0x66, 0x66,  0xcc, 0x0d, 0x00, 0x0b, 0x03, 0x73, 0x00, 0x83, 0x00, 0x0c, 0x00, 0x0d, 0x00, 0x08, 0x11, 0x1f,  0x88, 0x89, 0x00, 0x0e, 0xdc, 0xcc, 0x6e, 0xe6, 0xdd, 0xdd, 0xd9, 0x99, 0xbb, 0xbb, 0x67, 0x63,  0x6e, 0x0e, 0xec, 0xcc, 0xdd, 0xdc, 0x99, 0x9f, 0xbb, 0xb9, 0x33, 0x3e };
- 
-@@ -368,6 +369,14 @@ alloc_addr_sp()
- 		{
- 			/* There is no RAM file; create one */
- 			gb_cart.cart_ram_fd = fopen(gb_cart.cart_name, "w+");
-+			if (gb_cart.cart_ram_fd == NULL) {
-+				char merr[FILENAME_MAX];
-+				snprintf(merr, FILENAME_MAX, 
-+						"Cannot write file %s",
-+						gb_cart.cart_name);
-+				perror(merr);
-+				exit(1);
-+			}
- 			fwrite(gb_cart.cart_ram_banks, 1, 1024*gb_cart.cart_ram_size, gb_cart.cart_ram_fd);
- 		}
- 		/* There exists a RAM file, so read it to RAM space */
-@@ -488,7 +497,10 @@ start_vm()
- 		return -1;
- 
- 	/* Free resources */
--	free(gb_cart.cart_rom_banks);
-+	if (gb_cart.cart_rom_banks != NULL) {
-+		free(gb_cart.cart_rom_banks);
-+		gb_cart.cart_rom_banks = NULL;
-+	}
- 	if (gb_cart.cart_ram_size && (gb_cart.cart_ram_banks!=NULL))
- 	{
- 		free(gb_cart.cart_ram_banks);
+ /* Defined in globals.c */
+ extern FILE *open_save_try(char *);

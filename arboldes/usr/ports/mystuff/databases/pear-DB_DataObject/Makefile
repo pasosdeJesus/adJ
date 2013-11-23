@@ -1,20 +1,17 @@
+# $OpenBSD: Makefile,v 1.10 2013/03/11 02:52:07 espie Exp $
 
-COMMENT=	"object interface to database tables"
+COMMENT=	SQL builder, object interface to database tables
 
 DISTNAME=	DB_DataObject-1.11.2
 REVISION=	1
-PKGNAME=        pear-${DISTNAME:S/_/-/}
-CATEGORIES=	databases 
+PKGNAME=	pear-${DISTNAME}# does not substitute _ for -
+CATEGORIES=	databases
 
-MASTER_SITES=	http://pear.php.net/get/
-EXTRACT_SUFX=	.tgz
-
-MAINTAINER=	Vladimir T?mara Pati?o <vtamara@pasosdeJesus.org>
 MODULES=	www/pear
 
 # PHP License
 PERMIT_PACKAGE_CDROM=	Yes
-PERMIT_PACKAGE_FTP=	Yes
-PERMIT_DISTFILES_FTP=	Yes
+
+RUN_DEPENDS=	databases/pear-MDB2
 
 .include <bsd.port.mk>
