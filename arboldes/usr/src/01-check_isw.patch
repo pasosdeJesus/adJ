@@ -1,6 +1,7 @@
 diff -ruN src55-orig/regress/lib/libc/locale/check_isw/check_isw.c src/regress/lib/libc/locale/check_isw/check_isw.c
+diff -u src55-orig/regress/lib/libc/locale/check_isw/check_isw.c src/regress/lib/libc/locale/check_isw/check_isw.c
 --- src55-orig/regress/lib/libc/locale/check_isw/check_isw.c	Thu Aug 11 16:57:02 2005
-+++ src/regress/lib/libc/locale/check_isw/check_isw.c	Sun Nov 10 07:22:38 2013
++++ src/regress/lib/libc/locale/check_isw/check_isw.c	Sun Nov 24 07:17:09 2013
 @@ -19,9 +19,10 @@
   * functions.
   */
@@ -58,14 +59,12 @@ diff -ruN src55-orig/regress/lib/libc/locale/check_isw/check_isw.c src/regress/l
  		printf(" %02x: ", s[j]);
  		check_bool(isalnum(s[j]), iswalnum(c), '1');
  		check_bool(isalpha(s[j]), iswalpha(c), '2');
-@@ -129,9 +131,6 @@
- 		if (s[j] % 8 == 7)
+@@ -130,7 +132,7 @@
  			printf("\n");
  		j++;
--	}
+ 	}
 -	if (n != 0 || j != 255) {
--		bad++;
++	if (j != 127) {
+ 		bad++;
  	}
  	free(s);
- 	free(buf);
-
