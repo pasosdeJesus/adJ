@@ -1,10 +1,10 @@
 $OpenBSD$
---- src/Makefile.in.orig	Mon Jun 24 13:55:37 2013
-+++ src/Makefile.in	Wed Sep 11 23:53:36 2013
-@@ -212,8 +212,7 @@ realboy_SOURCES = gboy_cmd.c gboy_events.c gboy_frame.
- 	$(am__append_2)
- @USE_X86_64_ASM_FALSE@AM_CPPFLAGS = $(am__append_3)
- @USE_X86_64_ASM_TRUE@AM_CPPFLAGS = -DUSE_X86_64_ASM $(am__append_3)
+--- src/Makefile.in.orig	Thu Nov 14 15:59:08 2013
++++ src/Makefile.in	Thu Nov 21 22:32:08 2013
+@@ -303,8 +303,7 @@ realboy_SOURCES = gboy_conf.c gboy_keys.c gboy_events.
+ 	gboy.h $(am__append_1) $(am__append_2)
+ @USE_X86_64_ASM_FALSE@AM_CPPFLAGS = 
+ @USE_X86_64_ASM_TRUE@AM_CPPFLAGS = -DUSE_X86_64_ASM
 -@HOST_IS_OPENBSD_TRUE@@USE_X86_64_ASM_TRUE@AM_LDFLAGS = -Wl,-non_shared
 -AM_CFLAGS = -Wno-unused-result
 +@HOST_IS_OPENBSD_TRUE@@USE_X86_64_ASM_TRUE@AM_LDFLAGS = -lSDL -lc -pthread -Wl,-non_shared -L/usr/local/lib

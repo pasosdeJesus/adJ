@@ -17,14 +17,11 @@ DISTFILES=	plantas_cursiva-${V}.tar.gz
 
 #Public domain
 PERMIT_PACKAGE_CDROM=	Yes
-PERMIT_PACKAGE_FTP=	Yes
-PERMIT_DISTFILES_CDROM= Yes
-PERMIT_DISTFILES_FTP=	Yes
 
 do-build:
 
 do-install:
-	mkdir -p $(PREFIX)/share/structio/plantascursiva
-	cd ${WRKDIR} && cp *pdf *png *svg *html $(PREFIX)/share/structio/plantascursiva
+	${INSTALL_DATA_DIR} $(PREFIX)/share/structio/PlantasCursiva
+	cd ${WRKDIR} && ${INSTALL_DATA} *pdf *png *svg *html $(PREFIX)/share/structio/PlantasCursiva
 
 .include <bsd.port.mk>

@@ -17,14 +17,11 @@ DISTFILES=	${DISTNAME}.tar.gz
 
 #Public domain
 PERMIT_PACKAGE_CDROM=	Yes
-PERMIT_PACKAGE_FTP=	Yes
-PERMIT_DISTFILES_CDROM= Yes
-PERMIT_DISTFILES_FTP=	Yes
 
 do-build:
 
 do-install:
-	mkdir -p $(PREFIX)/share/structio/aprestamiento1
-	cd ${WRKDIR} && cp *pdf *png *svg *html $(PREFIX)/share/structio/aprestamiento1
+	${INSTALL_DATA_DIR} $(PREFIX)/share/structio/AprestamientoI
+	cd ${WRKDIR} && ${INSTALL_DATA} *pdf *png *svg *html $(PREFIX)/share/structio/AprestamientoI
 
 .include <bsd.port.mk>

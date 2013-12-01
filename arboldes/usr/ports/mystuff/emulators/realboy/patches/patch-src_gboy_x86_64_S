@@ -1,149 +1,33 @@
 $OpenBSD$
---- src/gboy_x86_64.S.orig	Tue Sep 24 20:11:07 2013
-+++ src/gboy_x86_64.S	Tue Sep 24 20:16:12 2013
-@@ -121,11 +121,23 @@
-  * Prepare to execute
-  */
- rom_exec:
-+	pushq %rbp
-+	pushq %rbx
-+	pushq %r12
-+	pushq %r13
-+	pushq %r14
-+	pushq %r15
- 	movq $addr_sp, %r13 # set PC to 0x0000
- 	addq %rdi, %r13
- 	movq $z80_ldex, %r15 # %r15 holds pointer to opcode records
- 	movq (%r13), %r12 # %r12 holds the instruction's opcode
- 	call exec_next # GO GO GO!
-+	popq %r15
-+	popq %r14
-+	popq %r13
-+	popq %r12
-+	popq %rbx
-+	popq %rbp
- 	ret # return and change game
- 
- /*
-@@ -223,7 +235,7 @@ proc_ints:
- 4:
- end_ints:
- 	movq (%r13), %r12 # copy opcode for next instruction
--lcd_refrshing:
-+lcd_refreshing:
- 	testq $0x80, LCDC_REG+addr_sp # is LCD on?
- 	jnz 1f # yes
- 	jmp timer_divider_update # no; execute next instruction
-@@ -240,7 +252,7 @@ lcd_refrshing:
- h_blank:
- 	subq %r14, gb_hblank_clks # is h_blank period over?
- 	js hblank_exit # yes
--	jmp end_lcd_refrshing # no; execute next instruction
-+	jmp end_lcd_refreshing # no; execute next instruction
- hblank_exit:
- 	testq $1, type # if CGB, check for HBlank-Driven DMA
- 	jz 1f
-@@ -300,7 +312,7 @@ h_blank_chk_dma:
- 	orq $2, IR_REG+addr_sp # request LCDS interrupt
- hblank_end:
- 	orq $1, IR_REG+addr_sp # request vblank interrupt
--	jmp end_lcd_refrshing # execute next instruction
-+	jmp end_lcd_refreshing # execute next instruction
- 1:
- 	addq %r14, gb_oam_clks
- 	movq gb_hblank_clks+8, %r14
-@@ -310,7 +322,7 @@ hblank_end:
- 	jz 1f # XXX
- 	orq $2, IR_REG+addr_sp # request lcd status interrupt
- 1:
--	jmp end_lcd_refrshing # execute next instruction
-+	jmp end_lcd_refreshing # execute next instruction
- v_blank:
- 	subq %r14, gb_vbln_clks # is v_blank period over?
- 	js 2f # yes
-@@ -318,7 +330,7 @@ v_blank:
- 	movq gb_vbln_clks, %r14 # copy vblank ticks
- 	cmpq %r14, %rax # need to increment LY?
- 	ja 1f # yes; increment LY
--	jmp end_lcd_refrshing # no; execute next instruction
-+	jmp end_lcd_refreshing # no; execute next instruction
- 1:
- 	movq gb_line_clks, %r14 # copy ticks-per-horizontal-line
- 	subq %r14, lcd_vbln_hbln_ctrl # one line less
-@@ -332,7 +344,7 @@ v_blank:
- 	jz 1f # no; don't request interrupt
- 	orq $2, IR_REG+addr_sp # request LCD STAT interrupt
- 1:
--	jmp end_lcd_refrshing # execute next instruction
-+	jmp end_lcd_refreshing # execute next instruction
- 2:
- 	movq gb_vbln_clks, %r14 # copy tick
- 	addq %r14, gb_oam_clks # add difference to new period
-@@ -360,11 +372,11 @@ vbln_end:
- 1:
- 	call frame_skip # call frame skip function
- 	movb %al, skip_next_frame # save return value
--	jmp end_lcd_refrshing # execute next instruction
-+	jmp end_lcd_refreshing # execute next instruction
- oam:
- 	subq %r14, gb_oam_clks # is oam period over?
- 	js oam_exit # yes
--	jmp end_lcd_refrshing # no; execute next instruction
-+	jmp end_lcd_refreshing # no; execute next instruction
- oam_exit:
- 	#movq $0, nb_spr
- 	#testq $2, addr_sp+LCDC_REG
-@@ -388,11 +400,11 @@ oam_exit:
- 	movq gb_oam_clks+8, %r14 # copy oam ticks' backup
- 	movq %r14, gb_oam_clks # restore oam ticks
- 	orq $3, LCDS_REG+addr_sp # change mode to vram read mode
--	jmp end_lcd_refrshing # execute next instruction
-+	jmp end_lcd_refreshing # execute next instruction
- vram:
- 	subq %r14, gb_vram_clks # is transfer period over?
- 	js vram_exit # yes
--	jmp end_lcd_refrshing # no; execute next instruction
-+	jmp end_lcd_refreshing # no; execute next instruction
- vram_exit:
- 	movq gb_vram_clks, %r14 # load excess from vram ticks
- 	movq gb_hblank_clks, %r10 # copy hblank ticks
-@@ -412,7 +424,7 @@ vram_exit:
- 	shrq $2, %rdi # shift bit to position
- 	orq %rdi, IR_REG+addr_sp # request/ignore lcd status interrupt
- vram_end:
--end_lcd_refrshing:
-+end_lcd_refreshing:
- 	movq temp_var, %r14
- timer_divider_update:
- 	movq cpu_cur_mode, %rcx # if current mode is CGB, timer and divider stuff are 2 times faster
-@@ -439,7 +451,9 @@ timer_divider_update:
+--- src/gboy_x86_64.S.orig	Sat Nov  9 23:05:09 2013
++++ src/gboy_x86_64.S	Fri Nov 22 10:43:01 2013
+@@ -453,7 +453,13 @@ timer_divider_update:
  	jz 5f
  4:
  	addb $4, %dl # advance div control
 -	lahf # load flags to %ah
++#ifdef __OpenBSD__
 +	pushf # load flags to %ah
 +	popq %rax
 +	shlq $8, %rax
++#else
++	lahf
++#endif
  	testb $0x10, %ah # test if div passed a 16 cycle boundary
  	jnz 1b
  	jmp 3b
-@@ -502,7 +516,9 @@ beg_exe:
+@@ -516,7 +522,13 @@ beg_exe:
  last_run:
  2:
  	addb $4, div_ctrl # advance div control (per-cycle control)
 -	lahf # load flags to %ah
++#ifdef __OpenBSD__
 +	pushf # load flags to %ah
 +	popq %rax
 +	shlq $8, %rax
++#else
++	lahf
++#endif
  	testb $0x10, %ah # test if div passed a 16 byte boundary
  	jz 2f
  	testq $1, tac_on # test for TAC on bit
-@@ -537,7 +553,7 @@ mem_delayed:
- 	movq $2, write_is_delayed
- 	jmp last_run
- end_execute_precise:
--lcd_refrshing_del:
-+lcd_refreshing_del:
- 	testq $0x80, LCDC_REG+addr_sp # is LCD on?
- 	jz proc_ints_del # no
- 1:
