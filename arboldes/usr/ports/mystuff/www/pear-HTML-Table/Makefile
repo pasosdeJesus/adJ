@@ -1,3 +1,4 @@
+# adJ. Dominio Público de acuerdo a legislación colombiana. 2013. vtamara@pasosdeJesus.or
 
 COMMENT=	"design of HTML tables easy, flexible, reusable and efficient"
 

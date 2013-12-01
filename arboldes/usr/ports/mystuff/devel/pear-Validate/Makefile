@@ -1,4 +1,4 @@
-# $OpenBSD: Makefile,v 1.6 2011/09/16 09:24:53 espie Exp $
+# $OpenBSD: Makefile,v 1.7 2013/03/11 10:50:24 espie Exp $
 
 COMMENT=	validation class
 

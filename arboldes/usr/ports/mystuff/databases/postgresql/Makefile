@@ -28,6 +28,10 @@ MAINTAINER=	Pierre-Emmanuel Andre <pea@openbsd.org>
 
 # BSD
 PERMIT_PACKAGE_CDROM=	Yes
+PERMIT_PACKAGE_FTP=    Yes
+PERMIT_DISTFILES_CDROM=        Yes
+PERMIT_DISTFILES_FTP=  Yes
+
 
 WANTLIB=		c com_err crypto m readline ssl termcap z asn1 \
 			heimbase krb5 roken wind

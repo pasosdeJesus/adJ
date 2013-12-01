@@ -11,11 +11,6 @@ PKGNAME=    	${DISTNAME}p1
 HOMEPAGE=	http://structio.sourceforge.net/repasa
 MAINTAINER=	Vladimir Támara Patiño <vtamara@pasosdejesus.org>
 
-PERMIT_PACKAGE_CDROM=	Yes
-PERMIT_PACKAGE_FTP=	Yes
-PERMIT_DISTFILES_CDROM=	Yes
-PERMIT_DISTFILES_FTP=	Yes
-
 MASTER_SITES=	${MASTER_SITE_SOURCEFORGE:=structio/}
 DISTFILES=	${DISTNAME}.tar.gz
 

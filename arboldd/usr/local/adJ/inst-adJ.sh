@@ -1,12 +1,12 @@
 #!/bin/sh
 # Instala/Actualiza un Aprendiendo de Jesús 
 # Dominio público de acuerdo a legislación colombiana. http://www.pasosdejesus.org/dominio_publico_colombia.html. 
-# 2012. vtamara@pasosdeJesus.org
+# 2013. vtamara@pasosdeJesus.org
 
-VER=5.3
+VER=5.4
 REV=0
 VESP=""
-VERP=53
+VERP=54
 
 # Falta /standard/root.hint
 
@@ -736,6 +736,41 @@ if (test -f /usr/bin/pmdb) then {
 } fi;
 
 
+if (test -d /usr/share/locale/de_AT) then {
+	vac="$vac 5.3 a 5.4";        
+	echo "Aplicando actualizaciones de 5.3 a 5.4 " >> /var/tmp/inst-adJ.bitacora;
+	rm -rf /usr/share/locale/*_*.*
+	rm -rf /usr/include/pcap-int.h
+	rm -rf /usr/libdata/perl5/site_perl/*/pcap-int.ph
+
+	rm -f /usr/X11R6/include/xorg/{mibstore.h,synaptics.h,xaa.h,xaalocal.h}
+	rm -f /usr/X11R6/lib/modules/extensions/lib{dbe,dri,dri2,extmod,record}.{la,so}
+	rm -f /usr/X11R6/lib/modules/extensions/lib/libxaa.{la,so}
+	rm -f /usr/share/man/man{9/{re,}lookup.9,/_Exit.3}
+	rm -f /usr/include/spinlock.h
+	rm -f /usr/libdata/perl5/site_perl/*/spinlock.ph
+	rm -f /etc/kerberosV/README
+	rm -f /usr/bin/{afslog,hxtool,kauth,kadmin,ksu,pagsh,kswitch}
+	rm -f /usr/lib/lib{heimntlm.*,heimntlm_p.*,hx509.*,hx509_p.*}
+	rm -f /usr/libdata/perl5/site_perl/*-openbsd/com_err.ph
+	rm -f /usr/libdata/perl5/site_perl/*-openbsd/kerberosV/{crmf_asn1,heimntlm-protos,heimntlm,hx509-private,hdb-private}.ph
+	rm -f /usr/libdata/perl5/site_perl/*-openbsd/kerberosV/{hx509-protos,hx509,hx509_err,kx509_asn1,ntlm_err,ocsp_asn1,pkcs10_asn1}.ph
+	rm -f /usr/libdata/perl5/site_perl/*-openbsd/kerberosV/{pkcs12_asn1,pkcs8_asn1,pkcs9_asn1,pkinit_asn1,gssapi/gssapi_spnego,spnego_asn1}.ph
+	rm -f /usr/libexec/{digest-service,kimpersonate,kdigest,kcm}
+	rm -f /usr/include/com_err.h
+	rm -f /usr/include/kerberosV/{crmf_asn1,hdb-private,heimntlm-protos,heimntlm,hx509-private}.h
+	rm -f /usr/include/kerberosV/{hx509-protos,hx509,hx509_err,kx509_asn1,ntlm_err,ocsp_asn1,pkcs10_asn1,pkcs12_asn1}.h
+	rm -f /usr/include/kerberosV/{pkcs8_asn1,pkcs9_asn1,pkinit_asn1,spnego_asn1,gssapi/gssapi_spnego}.h
+	rm -f /usr/sbin/kdigest
+	if (test -f "/var/heimdal") then {
+		echo "Kerberos requiere actualización especial";
+		echo "/etc/rc.d/kadmind stop; /etc/rc.d/kpasswdd stop; /etc/rc.d/kdc stop; cp -Rp /var/heimdal /var/kerberosV"
+		echo "Actualizar y después: rm -rf /var/heimdal";
+		echo "Regrese a este script con 'exit'";
+		sh
+	} fi;
+} fi;
+
 if  (test "$vac" != "") then {
 	dialog --title 'Actualizaciones aplicadas' --msgbox "\\nSe aplicaron actualizaciones: $vac\\n\\n$mac\\n" 15 60
 } fi;
@@ -1166,7 +1201,7 @@ if (test "$?" = "0") then {
 	if (test -d "/var/postgresql") then {
 		dialog --title 'PostgreSQL no opera' --yesno "\\nAunque PostgreSQL no esta operando en el disco parece haber datos para ese motor.  Puede detener este archivo de comandos para verificar.\\n   ¿Continuar?\\n" 15 60
 		if (test "$?" != "0") then {
-			clear;
+			echo "";
         		echo "Vuelva a ejecutar este script cuando termine de verificar" 
 			exit 1;
 		} fi;

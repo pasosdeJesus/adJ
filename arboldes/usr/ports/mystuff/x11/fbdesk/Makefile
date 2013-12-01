@@ -1,3 +1,4 @@
+# adJ. Dominio Público de acuerdo a legislación colombiana. 2013. vtamara@pasosdeJesus.or
 
 COMMENT=		fluxbox-util application that creates and manage icons
 

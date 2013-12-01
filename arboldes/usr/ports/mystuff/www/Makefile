@@ -1,5 +1,4 @@
 
-SUBDIR += pear-Validate
 SUBDIR += pear-HTML-Menu
 SUBDIR += pear-DB-DataObject-FormBuilder          
 SUBDIR += pear-HTML-QuickForm

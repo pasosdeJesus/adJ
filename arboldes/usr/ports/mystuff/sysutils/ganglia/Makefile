@@ -1,4 +1,4 @@
-# Dominio Público. vtamara@pasosdeJesus.org. 2013
+# adJ. Dominio Público. vtamara@pasosdeJesus.org. 2013
 
 COMMENT=	Scalable distributed monitoring system
 

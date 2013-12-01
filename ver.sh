@@ -1,6 +1,6 @@
 #!/bin/sh
 # Variables de configuración para generar distribución Aprendiendo de Jesús
-# Dominio público. 2007. vtamara@pasosdeJesus.org
+# Dominio público. 2013. vtamara@pasosdeJesus.org
 
 V=5.4
 VESP=""
@@ -89,6 +89,8 @@ export autoPaquetes=n
 
 export autoMasPaquetes=s
 # Descargar resto de paquetes de repositorio PKG_PATH
+export autoMasPaquetesInv=n
+# Descargar en orden inverso
 export autoSite=s
 # Generar siteXX.tgz
 export autoTextos=s
