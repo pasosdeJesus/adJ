@@ -1,0 +1,1340 @@
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/locale/Makefile.inc src/lib/libc/locale/Makefile.inc
+--- src54-s/lib/libc/locale/Makefile.inc	Mon Oct  7 07:54:44 2013
++++ src/lib/libc/locale/Makefile.inc	Sat Oct 12 13:23:41 2013
+@@ -9,7 +9,7 @@
+ 	wcstombs.c wctob.c wctomb.c wcstof.c wcstod.c wcstold.c wcstol.c \
+ 	wcstoul.c wcstoll.c wcstoull.c wcstoimax.c wcstoumax.c \
+ 	setrunelocale.c runeglue.c rune.c runetable.c ___runetype_mb.c \
+-	_wctrans.c wcsxfrm.c
++	_wctrans.c wcsxfrm.c collate.c
+ 
+ MAN+=	nl_langinfo.3 setlocale.3 iswalnum.3 towlower.3 \
+ 	btowc.3 mblen.3 mbrlen.3 mbrtowc.3 mbsinit.3 mbsrtowcs.3 \
+@@ -39,4 +39,4 @@
+ 	mbsrtowcs.3 mbsnrtowcs.3 \
+ 	wcsrtombs.3 wcsnrtombs.3
+ 
+-CFLAGS+=-I${.CURDIR} -I${LIBCSRCDIR}/citrus
++CFLAGS+=-I${.CURDIR} -I${LIBCSRCDIR}/citrus -DCOLLATE_DEBUG
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/locale/collate.c src/lib/libc/locale/collate.c
+--- src54-s/lib/libc/locale/collate.c	Wed Dec 31 19:00:00 1969
++++ src/lib/libc/locale/collate.c	Sat Oct 12 18:43:30 2013
+@@ -0,0 +1,424 @@
++/*-
++ * Copyright (c) 1995 Alex Tatmanjants <alex@elvisti.kiev.ua>
++ *		at Electronni Visti IA, Kiev, Ukraine.
++ *			All rights reserved.
++ *
++ * Copyright (c) 2011 The FreeBSD Foundation
++ * All rights reserved.
++ * Portions of this software were developed by David Chisnall
++ * under sponsorship from the FreeBSD Foundation.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND
++ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE LIABLE
++ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++ * SUCH DAMAGE.
++ */
++/**
++ * Public domain according to Colombian Legislation. 
++ * http://www.pasosdejesus.org/dominio_publico_colombia.html
++ * 2013. vtamara@pasosdeJesus.org
++ *
++ * $adJ$
++ */
++
++#include <sys/cdefs.h>
++#include <arpa/inet.h>
++
++#include <errno.h>
++#include <paths.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <sysexits.h>
++#include <unistd.h>
++#include <wchar.h>
++
++#include "collate.h"
++#include "rune.h"
++#include "runetype.h"
++
++#define TABLE_SIZE 100
++
++int __collate_load_error;
++
++
++struct __collate __global_collate = {
++	1, 0
++};
++
++struct __collate __C_collate = {
++	1, 0
++};
++
++int
++__collate_load_tables_l(const char *encoding, struct __collate *table);
++
++/*
++ * Allocates space and loads collation table for the given locale and 
++ * returns it
++ */
++void *
++__collate_load(const char *encoding)
++{
++	struct __collate *table;
++
++	if (strcmp(encoding, "C") == 0 || strcmp(encoding, "POSIX") == 0) {
++		return &__C_collate;
++	}
++	table = calloc(sizeof(struct __collate), 1);
++	if (__collate_load_tables_l(encoding, table) != _LDP_LOADED) {
++		free(table);
++		return NULL;
++	}
++
++	return table;
++}
++
++/*
++ * Load the collation tables for the specified encoding into the global table.
++ */
++int
++__collate_load_tables(const char *encoding)
++{
++	int ret = __collate_load_tables_l(encoding, &__global_collate);
++
++	__collate_load_error = __global_collate.__collate_load_error;
++	return ret;
++}
++
++/*
++ * Load the collation tables for the specified locale into the table 
++ * given as parameter.
++ *
++ * The parameter "locname" is used to build the path of the collation table,
++ * this function will try with
++ * 	/usr/share/locale/locname/LC_COLLATE
++ * if it isn't found and locname is of the form language_territory.enc 
++ * it tries first with
++ * 	/usr/share/locale/language.enc/LC_COLLATE
++ * and then with
++ * 	/usr/share/locale/enc/LC_COLLATE
++ *
++ * The file format of collation table is
++ * 	Version: 10 bytes                                                       
++ * 	Amount of chains: 4 bytes                                               
++ * 	Substitute table: (UCHAR_MAX + 1)*(COLLATE_MAX_STR_LEN) = 2560          
++ * 	Char priority table: (UCHAR_MAX + 1)*8 = 2048                           
++ * 	Sequence of Chains, each one of 20 bytes.  They end with
++ * 		NUL-chain (20 NILs).
++ * 		The structure to hold it, __collate_st_chain_pri, 
++ * 		should be 10 + 4 + 4 (18), but due to alignment will 
++ * 		have 2 bytes in NIL after the 10 bytes of the string and 
++ * 		before the 4 bytes of the integer prim.
++ */
++int
++__collate_load_tables_l(const char *locname, struct __collate *table)
++{
++	FILE *fp = NULL;
++	int i, saverr, chains, len;
++	uint32_t u32;
++	char strbuf[COLLATE_MAX_STR_LEN], buf[PATH_MAX];
++	void *tmp_substitute_table = NULL, 
++	     *tmp_char_pri_table = NULL, 
++	     *tmp_chain_pri_table = NULL;
++	char *dot = NULL, 
++	     *und = NULL;
++
++	/* 'locname' must be already checked. */
++	if (strcmp(locname, "C") == 0 || strcmp(locname, "POSIX") == 0) {
++		table->__collate_load_error = 1;
++		return (_LDP_CACHE);
++	}
++
++	/* '_PATH_LOCALE' must be already set & checked. */
++	len = snprintf(buf, sizeof(buf), "%s/%s/LC_COLLATE", 
++		_PATH_LOCALE, locname);
++	if (len < 0 || len >= sizeof(buf)) {
++		errno = ENAMETOOLONG;
++		goto err;
++	}
++	if ((fp = fopen(buf, "r")) == NULL) {
++		und = strchr(locname, '_');
++		dot = strchr(locname, '.'); 
++		if (und == NULL || dot == NULL) {
++			goto err;
++		}
++		// If locname is lang_territory.enc try with lang.enc
++		len = snprintf(buf, sizeof(buf), "%s/", _PATH_LOCALE);
++		len += (und - locname) + 1;
++		if (sizeof(buf) < len) {
++			len = sizeof(buf);
++		}
++		strlcat(buf, locname, len);
++		len = snprintf(buf, sizeof(buf), "%s.%s/LC_COLLATE", 
++				buf, dot + 1);
++		if ((fp = fopen(buf, "r")) == NULL) {
++			// Then try with enc
++			len = snprintf(buf, sizeof(buf), "%s/%s/LC_COLLATE", 
++					_PATH_LOCALE, dot + 1);
++			if ((fp = fopen(buf, "r")) == NULL) {
++				goto err;
++			}
++		}
++	}
++	if (fread(strbuf, sizeof(strbuf), 1, fp) != 1) 
++		goto err;
++	strbuf[sizeof(strbuf) - 1] = '\0';
++	if (strcmp(strbuf, COLLATE_VERSION1_2) != 0) {
++		errno = EFTYPE;
++		goto err;
++	}
++	if (fread(&u32, sizeof(u32), 1, fp) != 1) 
++		goto err;
++	if ((chains = (int)ntohl(u32)) < 1) {
++		errno = EFTYPE;
++		goto err;
++	}
++	tmp_substitute_table = 
++		malloc(sizeof(*(table->__collate_substitute_table_ptr)));
++	if (tmp_substitute_table == NULL)
++		goto err;
++	tmp_char_pri_table = 
++		malloc(sizeof(*(table->__collate_char_pri_table_ptr)));
++	if (tmp_char_pri_table == NULL) 
++		goto err;
++	tmp_chain_pri_table = 
++		calloc(sizeof(*(table->__collate_chain_pri_table)), chains);
++	if (tmp_chain_pri_table == NULL) 
++		goto err;
++
++	if (fread(tmp_substitute_table, 
++		sizeof(*(table->__collate_substitute_table_ptr)), 1, fp) != 1) {
++		goto err;
++	}
++	if (fread(tmp_char_pri_table, 
++		sizeof(*(table->__collate_char_pri_table_ptr)), 1, fp) != 1) {
++		goto err;
++	}
++	if (fread(tmp_chain_pri_table,
++		sizeof(*(table->__collate_chain_pri_table)), chains, fp) 
++		!= chains) 
++		goto err;
++	(void)fclose(fp);
++
++	free(table->__collate_substitute_table_ptr);
++	table->__collate_substitute_table_ptr = tmp_substitute_table;
++	free(table->__collate_char_pri_table_ptr);
++	table->__collate_char_pri_table_ptr = tmp_char_pri_table;
++	for (i = 0; i < UCHAR_MAX + 1; i++) {
++		(*(table->__collate_char_pri_table_ptr))[i].prim =
++			ntohl((*(table->__collate_char_pri_table_ptr))[i].prim);
++		(*(table->__collate_char_pri_table_ptr))[i].sec =
++			ntohl((*(table->__collate_char_pri_table_ptr))[i].sec);
++	}
++	free(table->__collate_chain_pri_table);
++	table->__collate_chain_pri_table = tmp_chain_pri_table;
++	for (i = 0; i < chains; i++) {
++		table->__collate_chain_pri_table[i].prim =
++			ntohl(table->__collate_chain_pri_table[i].prim);
++		table->__collate_chain_pri_table[i].sec =
++			ntohl(table->__collate_chain_pri_table[i].sec);
++	}
++	table->__collate_substitute_nontrivial = 0;
++	for (i = 0; i < UCHAR_MAX + 1; i++) {
++		if ((*(table->__collate_substitute_table_ptr))[i][0] != i ||
++			(*(table->__collate_substitute_table_ptr))[i][1] != 0) {
++			table->__collate_substitute_nontrivial = 1;
++			break;
++		}
++	}
++	table->__collate_load_error = 0;
++
++	return (_LDP_LOADED);
++err:
++	if (fp != NULL) {
++		saverr = errno;
++		(void)fclose(fp);
++		errno = saverr;
++	}
++	free(tmp_substitute_table);
++	free(tmp_char_pri_table);
++	free(tmp_chain_pri_table);
++
++	return (_LDP_ERROR);
++}
++
++/*
++ * Copies and converts at most mlen characters from single-byte string s to 
++ * wide-character string wcs
++ */
++static size_t
++__strlcpy_wc(wchar_t *wcs, u_char *s, size_t l) {
++	int t = 0;
++
++	if (wcs == NULL || s == NULL || l == 0) {
++		return 0;
++	}
++	while (*s != '\0' && l > 0) {
++		*wcs = (wchar_t)*s;
++		s++;
++		wcs++;
++		l--;
++		t++;
++	}
++	return  t;
++}
++
++
++/*
++ * Returns a newly allocated wide string with the substitions of the given
++ * table applied to the wide string s.
++ */
++wchar_t *
++__collate_substitute_w(struct __collate *table, const wchar_t *wcs)
++{
++	int dest_len, len, nlen;
++	size_t delta = wcslen(wcs);
++	wchar_t *dest_str = NULL;
++	size_t i;
++
++	if (wcs == NULL || *wcs == L'\0')
++		return (wcsdup(L""));
++	for (i = 0; i < delta; i++) {
++		if ((u_long)wcs[i] > (u_long)UCHAR_MAX) {
++			errno = EINVAL;
++			return wcsdup(wcs);
++		}
++	}
++	dest_len = delta;
++	dest_str = calloc(dest_len, sizeof(wchar_t));
++	if (dest_str == NULL) {
++		errno = ENOMEM;
++		return NULL;
++	}
++	len = nlen = 0;
++	while (*wcs != L'\0') {
++		nlen = len + strlen(
++			(*(table->__collate_substitute_table_ptr))[(u_char)*wcs]);
++		if (dest_len <= nlen) {
++			size_t size = (nlen + delta)*sizeof(wchar_t);
++			wchar_t *ndest_str = (wchar_t *)realloc(dest_str, size);
++			if (ndest_str == NULL) {
++				free(dest_str);
++				errno = ENOMEM;
++				return NULL;
++			}
++			dest_str = ndest_str;
++			dest_len = nlen + delta;
++		}
++		(void)__strlcpy_wc(dest_str + len, 
++				(*(table->__collate_substitute_table_ptr))[(u_char)*wcs], 
++				dest_len - len);
++		len = nlen;
++		wcs++;
++	}
++	dest_str[len] = L'\0';
++	return (dest_str);
++}
++
++/*
++ * Compares at most l bytes of single-byte string s and wide-char string wcs
++ */
++static int 
++__strncmp_wc(const wchar_t *wcs, const char *s, size_t l) 
++{
++	if (wcs == NULL || s == NULL || l == 0) {
++		return -1;
++	}
++	while (*wcs != 0 && *s != 0 && l > 0 && *wcs == (wchar_t)*s) {
++		wcs++;
++		s++;
++		l--;
++	}
++	return *wcs - *s;
++}
++
++/*
++ * Fills the primary and secondary values of the first character or chain 
++ * beginning in t. In len returns the amount of characters of t processed.
++ */
++void
++__collate_lookup_w(struct __collate *table, const wchar_t *t, int *len, 
++		int *prim, int *sec)
++{
++	struct __collate_st_chain_pri *p2;
++
++	*len = 1;
++	*prim = *sec = 0;
++	for (p2 = table->__collate_chain_pri_table; p2->str[0] != '\0'; p2++) {
++		if (*t == (wchar_t)p2->str[0] &&
++		    __strncmp_wc(t, p2->str, strlen(p2->str)) == 0) {
++			*len = strlen(p2->str);
++			*prim = p2->prim;
++			*sec = p2->sec;
++			return;
++		}
++	}
++	*prim = (*(table->__collate_char_pri_table_ptr))[(u_char)*t].prim;
++	*sec = (*(table->__collate_char_pri_table_ptr))[(u_char)*t].sec;
++}
++
++
++#ifdef COLLATE_DEBUG
++void
++__collate_print_tables(struct __collate *table)
++{
++	int i;
++	struct __collate_st_chain_pri *p2;
++
++	if (table == NULL) {
++		table = &__global_collate;
++ 	}
++
++	printf("Substitute table:\n");
++	for (i = 0; i < UCHAR_MAX + 1; i++)
++	    if (i != *(*(table->__collate_substitute_table_ptr))[i])
++		printf("\t'%c' --> \"%s\"\n", i,
++		       (*(table->__collate_substitute_table_ptr))[i]);
++	printf("Chain priority table:\n");
++	for (p2 = table->__collate_chain_pri_table; p2->str[0] != '\0'; p2++)
++		printf("\t%d\t\"%s\" : %d %d\n", 
++				p2->str[0], p2->str, p2->prim, p2->sec);
++	printf("Char priority table:\n");
++	for (i = 0; i < UCHAR_MAX + 1; i++)
++		printf("\t%3d\t'%c' : %d %d\n", i, i, 
++			(*(table->__collate_char_pri_table_ptr))[i].prim,
++			(*(table->__collate_char_pri_table_ptr))[i].sec);
++}
++#endif
++
++wchar_t *__dup_as_wcs_l(const char *s)
++{
++	size_t numc = mbstowcs(NULL, s, 0) + 1; 
++	wchar_t *ws = NULL;
++
++	if (numc == 0 || numc == (size_t)-1) { 
++		errno = EINVAL;
++		return NULL;
++	}
++	ws = (wchar_t *)calloc(numc, sizeof(wchar_t));
++	if (ws == NULL) {
++		errno = ENOMEM;
++		return NULL;
++	}
++	mbstowcs(ws, s, numc);
++
++	return ws;
++}
++
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/locale/collate.h src/lib/libc/locale/collate.h
+--- src54-s/lib/libc/locale/collate.h	Wed Dec 31 19:00:00 1969
++++ src/lib/libc/locale/collate.h	Sat Oct 12 13:23:41 2013
+@@ -0,0 +1,111 @@
++/*-
++ * Copyright (c) 1995 Alex Tatmanjants <alex@elvisti.kiev.ua>
++ *		at Electronni Visti IA, Kiev, Ukraine.
++ *			All rights reserved.
++ *
++ * Copyright (c) 2011 The FreeBSD Foundation
++ * All rights reserved.
++ * Portions of this software were developed by David Chisnall
++ * under sponsorship from the FreeBSD Foundation.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND
++ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE LIABLE
++ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++ * SUCH DAMAGE.
++ *
++ * $FreeBSD: src/lib/libc/locale/collate.h,v 1.17 2012/11/17 01:49:29 svnexp Exp $
++ */
++/*-
++ * Copyright (c) 2000, 2001 Alexey Zelkin <phantom@FreeBSD.org>
++ * All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
++ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
++ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++ * SUCH DAMAGE.
++ *
++ * From lib/libc/locale/ldpart.h of FreeBSD
++ */
++
++#ifndef _COLLATE_H_
++#define	_COLLATE_H_
++
++#include <sys/cdefs.h>
++#include <sys/types.h>
++#include <limits.h>
++#include <wchar.h>
++
++#define COLLATE_MAX_STR_LEN 10
++#define COLLATE_VERSION1_2 "1.2\n"
++
++struct __collate_st_char_pri {
++		int prim, sec;
++};
++struct __collate_st_chain_pri {
++	u_char str[COLLATE_MAX_STR_LEN];
++	int prim, sec;
++};
++
++struct __collate {
++	int __collate_load_error;
++	int __collate_substitute_nontrivial;
++
++	u_char (*__collate_substitute_table_ptr)[UCHAR_MAX + 1][COLLATE_MAX_STR_LEN];
++	struct __collate_st_char_pri (*__collate_char_pri_table_ptr)[UCHAR_MAX + 1];
++	struct __collate_st_chain_pri *__collate_chain_pri_table;
++};
++
++
++/* Current LC_COLLATE */
++struct __collate __global_collate;
++
++__BEGIN_DECLS
++wchar_t *__collate_substitute_w(struct __collate *table, const wchar_t *s);
++void 	__collate_lookup_w(struct __collate *table, const wchar_t *t, int *len, int *prim, int *sec);
++int	__collate_load_tables(const char *);
++int	__collate_range_cmp(struct __collate *, int, int);
++#ifdef COLLATE_DEBUG
++void	__collate_print_tables(struct __collate *);
++#endif
++int 	strncmp_wc(wchar_t *ws, char *cs, size_t l);
++wchar_t *__dup_as_wcs_l(const char *s);
++__END_DECLS
++
++#define _LDP_LOADED 0
++#define _LDP_ERROR  (-1)
++#define _LDP_CACHE  1
++
++
++#endif /* !_COLLATE_H_ */
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/locale/setlocale.c src/lib/libc/locale/setlocale.c
+--- src54-s/lib/libc/locale/setlocale.c	Mon Oct  7 07:54:44 2013
++++ src/lib/libc/locale/setlocale.c	Sat Oct 12 13:23:41 2013
+@@ -40,6 +40,7 @@
+ #include <string.h>
+ #include <unistd.h>
+ 
++#include "collate.h"
+ #include "rune.h"
+ #include "rune_local.h"
+ /*
+@@ -200,7 +201,12 @@
+ 		__install_currentrunelocale_ctype();
+ 		break;
+ 	case LC_MESSAGES:
++		break;
+ 	case LC_COLLATE:
++ 		if (__collate_load_tables("C")) {
++			return;
++		}
++		break;
+ 	case LC_MONETARY:
+ 	case LC_NUMERIC:
+ 	case LC_TIME:
+@@ -262,6 +268,11 @@
+ 		return set_lc_messages_locale(locname);
+ 
+ 	case LC_COLLATE:
++		if (__collate_load_tables(locname)) {
++			return -1;
++		}       
++		break;
++
+ 	case LC_MONETARY:
+ 	case LC_NUMERIC:
+ 	case LC_TIME:
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/locale/wcscoll.3 src/lib/libc/locale/wcscoll.3
+--- src54-s/lib/libc/locale/wcscoll.3	Wed Dec 31 19:00:00 1969
++++ src/lib/libc/locale/wcscoll.3	Sat Oct 12 13:23:41 2013
+@@ -0,0 +1,115 @@
++.\" Copyright (c) 1990, 1991, 1993
++.\"	The Regents of the University of California.  All rights reserved.
++.\"
++.\" This code is derived from software contributed to Berkeley by
++.\" Chris Torek and the American National Standards Committee X3,
++.\" on Information Processing Systems.
++.\"
++.\" Redistribution and use in source and binary forms, with or without
++.\" modification, are permitted provided that the following conditions
++.\" are met:
++.\" 1. Redistributions of source code must retain the above copyright
++.\"    notice, this list of conditions and the following disclaimer.
++.\" 2. Redistributions in binary form must reproduce the above copyright
++.\"    notice, this list of conditions and the following disclaimer in the
++.\"    documentation and/or other materials provided with the distribution.
++.\" 4. Neither the name of the University nor the names of its contributors
++.\"    may be used to endorse or promote products derived from this software
++.\"    without specific prior written permission.
++.\"
++.\" THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
++.\" ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++.\" IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++.\" ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
++.\" FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++.\" DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++.\" OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++.\" HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++.\" LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++.\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++.\" SUCH DAMAGE.
++.\"
++.\"     @(#)strcoll.3	8.1 (Berkeley) 6/4/93
++.\" FreeBSD: src/lib/libc/string/strcoll.3,v 1.11 2001/10/01 16:09:00 ru Exp
++.\" $FreeBSD: src/lib/libc/string/wcscoll.3,v 1.3 2007/01/09 00:28:12 imp Exp $
++.\"
++.Dd $Mdocdate: March 17, 2013
++.Dt WCSCOLL 3
++.Os
++.\" ----------------------------------------------------------------------
++.Sh NAME
++.Nm wcscoll
++.Nd compare wide strings according to current collation
++.\" ----------------------------------------------------------------------
++.Sh SYNOPSIS
++.Fd #include <wchar.h>
++.Ft int
++.Fn wcscoll "const wchar_t *s1" "const wchar_t *s2"
++.\" ----------------------------------------------------------------------
++.Sh DESCRIPTION
++The
++.Fn wcscoll
++function compares the null-terminated strings
++.Fa s1
++and
++.Fa s2
++according to the current locale collation order.
++In the
++.Dq Li C
++locale,
++.Fn wcscoll
++is equivalent to
++.Fn wcscmp .
++.\" ----------------------------------------------------------------------
++.Sh RETURN VALUES
++The
++.Fn wcscoll
++function
++returns an integer greater than, equal to, or less than 0,
++if
++.Fa s1
++is greater than, equal to, or less than
++.Fa s2 .
++.Pp
++No return value is reserved to indicate errors;
++callers should set
++.Va errno
++to 0 before calling
++.Fn wcscoll .
++If it is non-zero upon return from
++.Fn wcscoll ,
++an error has occurred.
++.\" ----------------------------------------------------------------------
++.Sh ERRORS
++The
++.Fn wcscoll
++function will fail if:
++.Bl -tag -width Er
++.It Bq Er EILSEQ
++An invalid wide character code was specified.
++.It Bq Er ENOMEM
++Cannot allocate enough memory for temporary buffers.
++.El
++.\" ----------------------------------------------------------------------
++.Sh SEE ALSO
++.Xr setlocale 3 ,
++.Xr strcoll 3 ,
++.Xr wcscmp 3 ,
++.Xr wcsxfrm 3
++.\" ----------------------------------------------------------------------
++.Sh STANDARDS
++The
++.Fn wcscoll
++function
++conforms to
++ISO/IEC 9899/AMD1:1995
++.Pq Dq ISO C99 .
++.Pp
++The
++.Fn wcsnrtombs
++function conforms to
++.St -p1003.1-2008 .
++.\" ----------------------------------------------------------------------
++.Sh BUGS
++The current implementation is enough only for single byte encodings and UTF-8
++translatable to ISO8859-1.
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/locale/wcscoll.c src/lib/libc/locale/wcscoll.c
+--- src54-s/lib/libc/locale/wcscoll.c	Mon Oct  7 07:54:44 2013
++++ src/lib/libc/locale/wcscoll.c	Sat Oct 12 13:23:41 2013
+@@ -1,6 +1,5 @@
+ /*	$OpenBSD: wcscoll.c,v 1.2 2012/12/05 23:20:00 deraadt Exp $ */
+ /*	$NetBSD: wcscoll.c,v 1.1 2003/03/02 22:18:16 tshiozak Exp $	*/
+-
+ /*-
+  * Copyright (c)2003 Citrus Project,
+  * All rights reserved.
+@@ -26,16 +25,99 @@
+  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+  * SUCH DAMAGE.
+  */
++/*-
++ * Copyright (c) 2002 Tim J. Robbins
++ * All rights reserved.
++ *
++ * Copyright (c) 2011 The FreeBSD Foundation
++ * All rights reserved.
++ * Portions of this software were developed by David Chisnall
++ * under sponsorship from the FreeBSD Foundation.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
++ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
++ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++ * SUCH DAMAGE.
++ *
++ * Adapted from lib/libc/string/wcscoll.c of FreeBSD
++ */
+ 
+-#include <assert.h>
+ #include <wchar.h>
+ 
++#include "collate.h"
++
+ /*
+- * Compare strings with using collating information.
++ * Compare strings using collating information.
+  */
+ int
+ wcscoll(const wchar_t *s1, const wchar_t *s2)
+ {
+-	/* XXX: LC_COLLATE should be implemented. */
+-	return (wcscmp(s1, s2));
++	int len1, len2, ret, ret2;
++	wint_t prim1, prim2, sec1, sec2;
++	const wchar_t *t1, *t2;
++	wchar_t *tt1, *tt2;
++	struct __collate *table;
++	table = (struct __collate *)&__global_collate;
++
++	if (table->__collate_load_error)
++		return wcscmp(s1, s2);
++
++	len1 = len2 = 1;
++	ret = ret2 = 0;
++	if (table->__collate_substitute_nontrivial) {
++		t1 = tt1 = __collate_substitute_w(table, s1);
++		t2 = tt2 = __collate_substitute_w(table, s2);
++	} else {
++		tt1 = tt2 = NULL;
++		t1 = s1;
++		t2 = s2;
++	}
++	while (*t1 != L'\0' && *t2 != L'\0') {
++		prim1 = prim2 = 0;
++		while (*t1 != L'\0'  && prim1 == 0) {
++			__collate_lookup_w(table, t1, &len1, &prim1, &sec1);
++			t1 += len1;
++		}
++		while (*t2 != L'\0' && prim2 == 0) {
++			__collate_lookup_w(table, t2, &len2, &prim2, &sec2);
++			t2 += len2;
++		}
++		if (prim1 == 0 || prim2 == 0)
++			break;
++		if (prim1 != prim2) {
++			ret = prim1 - prim2;
++			goto end;
++		}
++		if (ret2 == 0)
++			ret2 = sec1 - sec2;
++	}
++	if (*t1 == L'\0' && *t2 != L'\0')
++		ret = -(int)((u_char)*t2);
++	else if (*t1 != L'\0' && *t2 == L'\0')
++		ret = (u_char)*t1;
++	else if (*t1 == L'\0' && *t2 == L'\0')
++		ret = ret2;
++  end:
++	if (tt1 != NULL)
++		free(tt1);
++	if (tt2 != NULL)
++		free(tt2);
++
++	return ret;
+ }
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/locale/wcsxfrm.3 src/lib/libc/locale/wcsxfrm.3
+--- src54-s/lib/libc/locale/wcsxfrm.3	Wed Dec 31 19:00:00 1969
++++ src/lib/libc/locale/wcsxfrm.3	Sat Oct 12 13:23:41 2013
+@@ -0,0 +1,267 @@
++.\" Copyright (c) 1990, 1991, 1993
++.\"	The Regents of the University of California.  All rights reserved.
++.\"
++.\" This code is derived from software contributed to Berkeley by
++.\" Chris Torek and the American National Standards Committee X3,
++.\" on Information Processing Systems.
++.\"
++.\" Redistribution and use in source and binary forms, with or without
++.\" modification, are permitted provided that the following conditions
++.\" are met:
++.\" 1. Redistributions of source code must retain the above copyright
++.\"    notice, this list of conditions and the following disclaimer.
++.\" 2. Redistributions in binary form must reproduce the above copyright
++.\"    notice, this list of conditions and the following disclaimer in the
++.\"    documentation and/or other materials provided with the distribution.
++.\" 4. Neither the name of the University nor the names of its contributors
++.\"    may be used to endorse or promote products derived from this software
++.\"    without specific prior written permission.
++.\"
++.\" THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
++.\" ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++.\" IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++.\" ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
++.\" FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++.\" DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++.\" OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++.\" HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++.\" LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++.\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++.\" SUCH DAMAGE.
++.\"
++.\"     @(#)strxfrm.3	8.1 (Berkeley) 6/4/93
++.\" FreeBSD: src/lib/libc/string/strxfrm.3,v 1.16 2002/09/06 11:24:06 tjr Exp
++.\" $FreeBSD$
++.\"
++.Dd October 4, 2002
++.Dt WCSXFRM 3
++.Os
++.Sh NAME
++.Nm wcsxfrm
++.Nd transform a wide string under locale
++.Sh LIBRARY
++.Lb libc
++.Sh SYNOPSIS
++.In wchar.h
++.Ft size_t
++.Fn wcsxfrm "wchar_t * restrict dst" "const wchar_t * restrict src" "size_t n"
++.Sh DESCRIPTION
++The
++.Fn wcsxfrm
++function transforms a null-terminated wide character string pointed to by
++.Fa src
++according to the current locale collation order
++then copies the transformed string
++into
++.Fa dst .
++No more than
++.Fa n
++wide characters are copied into
++.Fa dst ,
++including the terminating null character added.
++If
++.Fa n
++is set to 0
++(it helps to determine an actual size needed
++for transformation),
++.Fa dst
++is permitted to be a
++.Dv NULL
++pointer.
++.Pp
++Comparing two strings using
++.Fn wcscmp
++after
++.Fn wcsxfrm
++is equivalent to comparing
++two original strings with
++.Fn wcscoll .
++.Sh RETURN VALUES
++Upon successful completion,
++.Fn wcsxfrm
++returns the length of the transformed string not including
++the terminating null character.
++If this value is
++.Fa n
++or more, the contents of
++.Fa dst
++are indeterminate.
++.Sh SEE ALSO
++.Xr setlocale 3 ,
++.Xr strxfrm 3 ,
++.Xr wcscmp 3 ,
++.Xr wcscoll 3
++.Sh STANDARDS
++The
++.Fn wcsxfrm
++function
++conforms to
++.St -isoC-99 .
++
++
++.Dd $Mdocdate: March 17 2013 $
++.Dt WCSXFRM 3
++.Os
++.\" ----------------------------------------------------------------------
++.Sh NAME
++.Nm wcsxfrm
++.Nd transform a wide string under locale
++.\" ----------------------------------------------------------------------
++.Sh SYNOPSIS
++.In wchar.h
++.Ft size_t
++.Fn wcsxfrm "wchar_t * restrict dst" "const wchar_t * restrict src" "size_t n"
++.\" ----------------------------------------------------------------------
++.Sh DESCRIPTION
++The
++.Fn wcsrtombs
++function converts the wide-character string indirectly pointed to by
++.Fa src
++to the corresponding multibyte character string
++and stores it to the array pointed to by
++.Fa dst .
++The conversion stops due to the following reasons:
++.Bl -bullet
++.It
++The conversion reaches a null wide character.
++In this case, the null wide character is also converted.
++.It
++The conversion has already stored
++.Fa len
++bytes to the array pointed to by
++.Fa dst .
++.It
++The conversion encounters an invalid character.
++.El
++.Pp
++The
++.Fn wcsnrtombs
++function is equivalent to
++.Fn wcsrtombs
++except that it additionally stops the conversion after processing
++.Fa nwc
++wide characters.
++.Pp
++Each character will be converted as if
++.Xr wcrtomb 3
++is continuously called, except the internal state of
++.Xr wcrtomb 3
++will not be affected.
++.Pp
++After conversion,
++if
++.Fa dst
++is not a null pointer,
++the pointer object pointed to by
++.Fa src
++is a null pointer (if the conversion is stopped due to reaching a null wide character)
++or the address just past the last wide character processed.
++.Pp
++If
++.Fa dst
++is not a null pointer and the conversion is stopped due to reaching
++a null wide character,
++the state object pointed to by
++.Fa ps
++is set to an initial state after the conversion has taken place.
++.Pp
++The behaviour of the
++.Fn wcsrtombs
++and
++.Fn wcsnrtombs
++functions is affected by the
++.Dv LC_CTYPE
++category of the current locale.
++.Pp
++There are two special cases:
++.Bl -tag -width 012345678901
++.It "dst == NULL"
++The conversion takes place, but the resulting multibyte string is discarded.
++In this case, the pointer object pointed to by
++.Fa src
++is not modified and
++.Fa len
++is ignored.
++.It "ps == NULL"
++The
++.Fn wcsrtombs
++and
++.Fn wcsnrtombs
++functions use their own internal state objects to keep the conversion state,
++instead of
++.Fa ps
++as mentioned in this manual page.
++.Pp
++Calling any other functions in
++.Em libc
++never change these internal states,
++which are initialized at startup time of the program.
++.El
++.\" ----------------------------------------------------------------------
++.Sh RETURN VALUES
++The
++.Fn wcsrtombs
++and
++.Fn wcsnrtombs
++functions return:
++.Bl -tag -width 012345678901
++.It 0 or positive
++Number of bytes stored to the array pointed to by
++.Fa dst ,
++except for a null byte.
++There is no cases that the value returned is greater than
++.Fa len
++(unless
++.Fa dst
++is a null pointer).
++If the return value is equal to
++.Fa len ,
++the string pointed to by
++.Fa dst
++will not be null-terminated.
++.It (size_t)-1
++.Fa src
++points to the string containing invalid wide character.
++In this case,
++.Va errno
++is set to indicate the error.
++.El
++.\" ----------------------------------------------------------------------
++.Sh ERRORS
++The
++.Fn wcsrtombs
++and
++.Fn wcsnrtombs
++functions may return the following errors:
++.Bl -tag -width Er
++.It Bq Er EILSEQ
++.Fa src
++points to the string containing an invalid wide character.
++.It Bq Er EINVAL
++.Fa ps
++points to an invalid or uninitialized mbstate_t object.
++.El
++.\" ----------------------------------------------------------------------
++.Sh SEE ALSO
++.Xr setlocale 3 ,
++.Xr wcrtomb 3 ,
++.Xr wcstombs 3
++.\" ----------------------------------------------------------------------
++.Sh STANDARDS
++The
++.Fn wcsrtombs
++function conforms to
++.St -ansiC .
++The restrict qualifier is added at
++.\" .St -isoC99 .
++ISO/IEC 9899/AMD1:1995
++.Pq Dq ISO C99 .
++.Pp
++The
++.Fn wcsnrtombs
++function conforms to
++.St -p1003.1-2008 .
++.\" ----------------------------------------------------------------------
++.Sh BUGS
++The current implementation is enough only for single byte encodings and UTF-8
++translatable to ISO8859-1.
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/locale/wcsxfrm.c src/lib/libc/locale/wcsxfrm.c
+--- src54-s/lib/libc/locale/wcsxfrm.c	Mon Oct  7 07:54:44 2013
++++ src/lib/libc/locale/wcsxfrm.c	Sat Oct 12 13:23:41 2013
+@@ -30,13 +30,92 @@
+  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+  * SUCH DAMAGE.
+  */
++/*-
++ * Copyright (c) 1995 Alex Tatmanjants <alex@elvisti.kiev.ua>
++ *		at Electronni Visti IA, Kiev, Ukraine.
++ *			All rights reserved.
++ *
++ * Copyright (c) 2011 The FreeBSD Foundation
++ * All rights reserved.
++ * Portions of this software were developed by David Chisnall
++ * under sponsorship from the FreeBSD Foundation.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND
++ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE LIABLE
++ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++ * SUCH DAMAGE.
+ 
++ * Adapted from lib/libc/string/wcsxfrm.c of FreeBSD 
++ */
++
++#include <sys/cdefs.h>
++
++#include <stdlib.h>
++#include <string.h>
+ #include <wchar.h>
+ 
+-size_t 
+-wcsxfrm(wchar_t *dest, const wchar_t *src, size_t n)
++#include "collate.h"
++
++size_t
++wcsxfrm(wchar_t * __restrict dest, const wchar_t * __restrict src, size_t len)
+ {
+-	if (n == 0)
+-		return wcslen(src);
+-	return wcslcpy(dest, src, n);
++	wint_t prim, sec;
++	int l;
++	size_t slen;
++	wchar_t *s, *ss;
++	struct __collate *table;
++	table = (struct __collate *)&__global_collate;
++
++	if (*src == L'\0') {
++		if (len > 0 && dest != NULL)
++			*dest = L'\0';
++		return 0;
++	}
++
++	if (table->__collate_load_error != 0)
++		return wcslcpy(dest, src, len);
++
++	slen = 0;
++	prim = sec = 0;
++	ss = s = __collate_substitute_w(table, src);
++	while (*s != L'\0') {
++		while (*s != L'\0' && prim == 0) {
++			__collate_lookup_w(table, s, &l, &prim, &sec);
++			s += l;
++		}
++		if (prim != 0) {
++			if (len > 1) {
++			       	if (dest != NULL) {
++					*dest++ = prim;
++				}
++				len--;
++			}
++			slen++;
++			prim = 0;
++		}
++	}
++	free(ss);
++	if (len > 0 && dest != NULL) {
++		*dest = '\0';
++	}
++
++	return slen;
+ }
++
++
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/string/strcoll.3 src/lib/libc/string/strcoll.3
+--- src54-s/lib/libc/string/strcoll.3	Mon Oct  7 07:49:09 2013
++++ src/lib/libc/string/strcoll.3	Sat Oct 12 13:23:41 2013
+@@ -71,3 +71,7 @@
+ .Fn strcoll
+ function first appeared in
+ .Bx 4.3 Reno .
++.\" ----------------------------------------------------------------------
++.Sh BUGS
++The current implementation is enough only for single byte encodings and UTF-8
++translatable to ISO8859-1.
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/string/strcoll.c src/lib/libc/string/strcoll.c
+--- src54-s/lib/libc/string/strcoll.c	Mon Oct  7 07:49:09 2013
++++ src/lib/libc/string/strcoll.c	Sat Oct 12 13:23:41 2013
+@@ -30,15 +30,42 @@
+  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+  * SUCH DAMAGE.
+  */
++/**
++ * Public domain according to Colombian Legislation. 
++ * http://www.pasosdejesus.org/dominio_publico_colombia.html
++ * 2013. vtamara@pasosdeJesus.org
++ *
++ * $adJ$
++ */
+ 
++
++#include <errno.h>
++#include <stdio.h>
++#include <stdlib.h>
+ #include <string.h>
++#include <wchar.h>
+ 
++#include "../locale/collate.h"
++
++
+ /*
+  * Compare strings according to LC_COLLATE category of current locale.
+  */
+ int
+ strcoll(const char *s1, const char *s2)
+ {
+-	/* LC_COLLATE is unimplemented, hence always "C" */
+-	return (strcmp(s1, s2));
++	int r = 0;
++	wchar_t *ws1 = NULL;
++	wchar_t *ws2 = NULL;
++
++	ws1 = __dup_as_wcs_l(s1);
++	if (ws1 != NULL) {
++		ws2 = __dup_as_wcs_l(s2);
++		if (ws2 != NULL) {
++			r = wcscoll(ws1, ws2);
++			free(ws2);
++		}
++		free(ws1);
++	} 
++	return r;
+ }
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/string/strxfrm.3 src/lib/libc/string/strxfrm.3
+--- src54-s/lib/libc/string/strxfrm.3	Mon Oct  7 07:49:09 2013
++++ src/lib/libc/string/strxfrm.3	Sat Oct 12 13:23:41 2013
+@@ -72,8 +72,7 @@
+ .Fn strxfrm
+ function first appeared in
+ .Bx 4.3 Reno .
++.\" ----------------------------------------------------------------------
+ .Sh BUGS
+-Since locales are not fully implemented on
+-.Ox ,
+-.Fn strxfrm
+-just returns a copy of the original string.
++The current implementation is enough only for single byte encodings and UTF-8
++translatable to ISO8859-1.
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/string/strxfrm.c src/lib/libc/string/strxfrm.c
+--- src54-s/lib/libc/string/strxfrm.c	Mon Oct  7 07:49:09 2013
++++ src/lib/libc/string/strxfrm.c	Sat Oct 12 13:23:41 2013
+@@ -30,8 +30,19 @@
+  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+  * SUCH DAMAGE.
+  */
++/**
++ * Public domain according to Colombian Legislation. 
++ * http://www.pasosdejesus.org/dominio_publico_colombia.html
++ * 2013. vtamara@pasosdeJesus.org
++ *
++ * $adJ$
++ */
+ 
++#include <errno.h>
++#include <stdio.h>
++#include <stdlib.h>
+ #include <string.h>
++#include "../locale/collate.h"
+ 
+ /*
+  * Transform src, storing the result in dst, such that
+@@ -41,11 +52,34 @@
+ size_t
+ strxfrm(char *dst, const char *src, size_t n)
+ {
++	size_t r = 0;
++	wchar_t *ws = NULL;
++	wchar_t *wd = NULL;
+ 
+-	/*
+-	 * Since locales are unimplemented, this is just a copy.
+-	 */
+-	if (n == 0)
+-		return (strlen(src));
+-	return (strlcpy(dst, src, n));
++	ws = __dup_as_wcs_l(src);
++	if (ws != NULL) {
++		if (n > 0 && dst != NULL) {
++			if (n > ULONG_MAX / sizeof(wchar_t)) { 
++				errno = EINVAL;
++				goto end;
++			}
++			wd = (wchar_t *)malloc(n * sizeof(wchar_t) );
++			if (wd == NULL) {
++				errno = ENOMEM;
++				goto end;
++			}
++		}
++		r = wcsxfrm(wd, ws, n);
++		if (n > 0 && dst != NULL) {
++			wcstombs(dst, wd, n);
++		}
++	}
++end:
++	if (ws != NULL) {
++		free(ws);
++	}
++	if (wd != NULL) {
++		free(wd);
++	}
++	return r; 
+ }

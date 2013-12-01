@@ -1,0 +1,166 @@
+diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/include/locale.h src/include/locale.h
+--- src55-orig/include/locale.h	Wed Jul 20 13:24:25 2011
++++ src/include/locale.h	Mon Nov 11 10:44:44 2013
+@@ -29,7 +29,7 @@
+  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+  * SUCH DAMAGE.
+  *
+- *	@(#)locale.h	5.2 (Berkeley) 2/24/91
++ *	@(#)locale.h	8.1 (Berkeley) 6/2/93
+  */
+ 
+ #ifndef _LOCALE_H_
+@@ -54,6 +54,12 @@
+ 	char	n_sep_by_space;
+ 	char	p_sign_posn;
+ 	char	n_sign_posn;
++	char	int_p_cs_precedes;
++	char	int_n_cs_precedes;
++	char	int_p_sep_by_space;
++	char	int_n_sep_by_space;
++	char	int_p_sign_posn;
++	char	int_n_sign_posn;
+ };
+ 
+ #ifndef NULL
+diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/localeconv.c src/lib/libc/locale/localeconv.c
+--- src55-orig/lib/libc/locale/localeconv.c	Mon Aug  8 03:05:35 2005
++++ src/lib/libc/locale/localeconv.c	Sat Nov 16 08:37:44 2013
+@@ -28,14 +28,18 @@
+     static struct lconv ret;
+ 
+     if (__mlocale_changed) {
+-	/* LC_MONETARY */
+-	ret.int_curr_symbol	= _CurrentMonetaryLocale->int_curr_symbol;
+-	ret.currency_symbol	= _CurrentMonetaryLocale->currency_symbol;
+-	ret.mon_decimal_point	= _CurrentMonetaryLocale->mon_decimal_point;
+-	ret.mon_thousands_sep	= _CurrentMonetaryLocale->mon_thousands_sep;
+-	ret.mon_grouping	= _CurrentMonetaryLocale->mon_grouping;
+-	ret.positive_sign	= _CurrentMonetaryLocale->positive_sign;
+-	ret.negative_sign	= _CurrentMonetaryLocale->negative_sign;
++	// struct lconv should use const char *, but POSIX says char *
++	ret.int_curr_symbol	= (char *)_CurrentMonetaryLocale->int_curr_symbol;
++	ret.currency_symbol	= (char *)_CurrentMonetaryLocale->currency_symbol;
++	ret.mon_decimal_point	= (char *)_CurrentMonetaryLocale->mon_decimal_point;
++	ret.mon_thousands_sep	= (char *)_CurrentMonetaryLocale->mon_thousands_sep;
++	// Special case to return "" in POSIX locale as shown in column
++	// localeconv() in table of section LC_MONETARY of
++	// http://pubs.opengroup.org/onlinepubs/009695399/basedefs/xbd_chap07.html#tag_07_03
++	ret.mon_grouping	= (_CurrentMonetaryLocale == &_DefaultMonetaryLocale) ?
++		"" : (char *)_CurrentMonetaryLocale->mon_grouping;
++	ret.positive_sign	= (char *)_CurrentMonetaryLocale->positive_sign;
++	ret.negative_sign	= (char *)_CurrentMonetaryLocale->negative_sign;
+ 	ret.int_frac_digits	= _CurrentMonetaryLocale->int_frac_digits;
+ 	ret.frac_digits		= _CurrentMonetaryLocale->frac_digits;
+ 	ret.p_cs_precedes	= _CurrentMonetaryLocale->p_cs_precedes;
+@@ -44,6 +48,13 @@
+ 	ret.n_sep_by_space	= _CurrentMonetaryLocale->n_sep_by_space;
+ 	ret.p_sign_posn		= _CurrentMonetaryLocale->p_sign_posn;
+ 	ret.n_sign_posn		= _CurrentMonetaryLocale->n_sign_posn;
++	ret.int_p_cs_precedes	= _CurrentMonetaryLocale->int_p_cs_precedes;
++	ret.int_n_cs_precedes	= _CurrentMonetaryLocale->int_n_cs_precedes;
++	ret.int_p_sep_by_space	= _CurrentMonetaryLocale->int_p_sep_by_space;
++	ret.int_n_sep_by_space	= _CurrentMonetaryLocale->int_n_sep_by_space;
++	ret.int_p_sign_posn	= _CurrentMonetaryLocale->int_p_sign_posn;
++	ret.int_n_sign_posn	= _CurrentMonetaryLocale->int_n_sign_posn;
++
+ 	__mlocale_changed = 0;
+     }
+ 
+diff -u src55-orig/lib/libc/locale/setlocale.3 src/lib/libc/locale/setlocale.3
+--- src55-orig/lib/libc/locale/setlocale.3	Sun Oct  6 20:04:49 2013
++++ src/lib/libc/locale/setlocale.3	Mon Nov 11 17:18:06 2013
+@@ -150,6 +150,12 @@
+ 	char	n_sep_by_space;
+ 	char	p_sign_posn;
+ 	char	n_sign_posn;
++	char	int_p_cs_precedes;
++	char	int_n_cs_precedes;
++	char	int_p_sep_by_space;
++	char	int_n_sep_by_space;
++	char	int_p_sign_posn;
++	char	int_n_sign_posn;
+ };
+ .Ed
+ .Pp
+@@ -236,6 +242,38 @@
+ Like
+ .Fa p_sign_posn
+ but for negative currency values.
++.It Fa int_p_cs_precedes
++1 if the
++.Fa int_curr_symbol
++precedes the currency value for non-negative values, 0 if it follows.
++.It Fa int_n_cs_precedes
++1 if the
++.Fa int_curr_symbol
++precedes the currency value for negative values, 0 if it follows.
++.It Fa int_p_sep_by_space
++Indicates separation between currency symbol, sign string and quantity
++for non-negative quantities.
++.Pp
++.Bl -tag -width 3n -compact
++.It Li 0
++No space between currency symbol and quantity.
++.It Li 1
++When currency symbol and sign string are adjacent, space between them and the quantity.  When currency symbol and sign string are not adjacent, space between currency symbol and quantity.
++.It Li 2
++When currency symbol and sign string are adjacent, space between them and the quantity.  When currency symbol and sign string are not adjacent, space between sign string and quantity.
++.El
++.It Fa int_n_sep_by_space
++Like
++.Fa int_p_sep_by_space
++but for negative quantity.
++.It Fa int_p_sign_posn
++Like
++.Fa p_sign_posn
++but for monetary quantity formatted internationally.
++.It Fa int_n_sign_posn
++Like
++.Fa int_p_sign_posn
++but for negative quantity.
+ .El
+ .Pp
+ Unless mentioned above,
+diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/sys/sys/localedef.h src/sys/sys/localedef.h
+--- src55-orig/sys/sys/localedef.h	Sun Apr 21 17:31:47 1996
++++ src/sys/sys/localedef.h	Mon Nov 11 11:11:23 2013
+@@ -51,13 +51,13 @@
+ 
+ typedef struct
+ {
+-	char *int_curr_symbol;
+-	char *currency_symbol;
+-	char *mon_decimal_point;
+-	char *mon_thousands_sep;
+-	char *mon_grouping;
+-	char *positive_sign;
+-	char *negative_sign;
++	const char *int_curr_symbol;
++	const char *currency_symbol;
++	const char *mon_decimal_point;
++	const char *mon_thousands_sep;
++	const char *mon_grouping;
++	const char *positive_sign;
++	const char *negative_sign;
+ 	char int_frac_digits;
+ 	char frac_digits;
+ 	char p_cs_precedes;
+@@ -66,11 +66,16 @@
+ 	char n_sep_by_space;
+ 	char p_sign_posn;
+ 	char n_sign_posn;
++	char int_p_cs_precedes;
++	char int_n_cs_precedes;
++	char int_p_sep_by_space;
++	char int_n_sep_by_space;
++	char int_p_sign_posn;
++	char int_n_sign_posn;
+ } _MonetaryLocale;
+ 
+ extern const _MonetaryLocale *_CurrentMonetaryLocale;
+ extern const _MonetaryLocale  _DefaultMonetaryLocale;
+-
+ 
+ typedef struct
+ {

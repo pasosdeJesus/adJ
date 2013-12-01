@@ -1,0 +1,605 @@
+diff -ruN -x *~ -x obj -x *orig src55-orig/regress/lib/libc/locale/Makefile src55-mon/regress/lib/libc/locale/Makefile
+--- src55-orig/regress/lib/libc/locale/Makefile	Fri Oct 18 09:22:50 2013
++++ src55-mon/regress/lib/libc/locale/Makefile	Wed Nov 20 09:12:20 2013
+@@ -1,7 +1,7 @@
+ # $OpenBSD: Makefile,v 1.2 2013/08/01 21:26:30 kettenis Exp $
+ 
+ .if defined(REGRESS_FULL)
+-SUBDIR+= check_isw
++SUBDIR+= check_isw check_monetary
+ .endif
+ 
+ install:
+diff -ruN -x *~ -x obj -x *orig src55-orig/regress/lib/libc/locale/check_monetary/Makefile src55-mon/regress/lib/libc/locale/check_monetary/Makefile
+--- src55-orig/regress/lib/libc/locale/check_monetary/Makefile	Wed Dec 31 19:00:00 1969
++++ src55-mon/regress/lib/libc/locale/check_monetary/Makefile	Tue Nov 19 20:34:54 2013
+@@ -0,0 +1,11 @@
++
++NOMAN=
++PROG=check_monetary
++
++CFLAGS=-g
++
++
++run-regress-check_monetary: ${PROG}
++	./${PROG} >/dev/null
++
++.include <bsd.regress.mk>
+diff -ruN -x *~ -x obj -x *orig src55-orig/regress/lib/libc/locale/check_monetary/check_monetary.c src55-mon/regress/lib/libc/locale/check_monetary/check_monetary.c
+--- src55-orig/regress/lib/libc/locale/check_monetary/check_monetary.c	Wed Dec 31 19:00:00 1969
++++ src55-mon/regress/lib/libc/locale/check_monetary/check_monetary.c	Wed Nov 20 09:08:21 2013
+@@ -0,0 +1,574 @@
++/**
++ * Public domain according to Colombian Legislation. 
++ * http://www.pasosdejesus.org/dominio_publico_colombia.html
++ * 2013. vtamara@pasosdeJesus.org
++ *
++ * $adJ$
++ */
++
++#include <langinfo.h>
++#include <limits.h>
++#include <locale.h>
++#include <monetary.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <wchar.h>
++#include <wctype.h>
++
++int bad;
++
++#define p(t) printf("%s:\t ",#t); \
++	if (t) { \
++		printf("\x1b[38;5;2mOK\x1b[0m\n"); \
++	} else { \
++		bad++; \
++		printf("\x1b[38;5;1mERROR\x1b[0m\n"); \
++	}
++
++/** Adapted from lmonetary.c */
++void
++m_monetarydebug(struct lconv *p) {
++	printf(	"int_curr_symbol = %s\n"
++		"currency_symbol = %s\n"
++		"mon_decimal_point = %s\n"
++		"mon_thousands_sep = %s\n"
++		"mon_grouping[0] = %d\n"
++		"positive_sign = %s\n"
++		"negative_sign = %s\n"
++		"int_frac_digits = %d\n"
++		"frac_digits = %d\n"
++		"p_cs_precedes = %d\n"
++		"p_sep_by_space = %d\n"
++		"n_cs_precedes = %d\n"
++		"n_sep_by_space = %d\n"
++		"p_sign_posn = %d\n"
++		"n_sign_posn = %d\n",
++		p->int_curr_symbol,
++		p->currency_symbol,
++		p->mon_decimal_point,
++		p->mon_thousands_sep,
++		p->mon_grouping[0],
++		p->positive_sign,
++		p->negative_sign,
++		p->int_frac_digits,
++		p->frac_digits,
++		p->p_cs_precedes,
++		p->p_sep_by_space,
++		p->n_cs_precedes,
++		p->n_sep_by_space,
++		p->p_sign_posn,
++		p->n_sign_posn
++	);
++	printf(	"\n\n"
++		"int_p_cs_precedes = %d\n"
++		"int_p_sep_by_space = %d\n"
++		"int_n_cs_precedes = %d\n"
++		"int_n_sep_by_space = %d\n"
++		"int_p_sign_posn = %d\n"
++		"int_n_sign_posn = %d\n",
++		p->int_p_cs_precedes,
++		p->int_p_sep_by_space,
++		p->int_n_cs_precedes,
++		p->int_n_sep_by_space,
++		p->int_p_sign_posn,
++		p->int_n_sign_posn
++	);
++}
++
++void test_posix()
++{
++	char *nl = setlocale(LC_ALL, "POSIX");
++	printf("locale %s\n", nl);
++	struct lconv *p = localeconv();
++	char col[512];
++
++	// Values from http://pubs.opengroup.org/onlinepubs/009695399/basedefs/xbd_chap07.html#tag_07_03
++	p(strcmp(p->int_curr_symbol, "") == 0);
++	p(strcmp(p->currency_symbol, "") == 0);
++	p(strcmp(p->mon_decimal_point, "") == 0);
++	p(strcmp(p->mon_thousands_sep, "") == 0);
++	// there is like inconsistency in http://pubs.opengroup.org/onlinepubs/009695399/basedefs/xbd_chap07.html#tag_07_03 
++	// Since in the locale definition it shows mon_grouping -1 for POSIX
++	// locale
++	// But in the table below it shows "" as the return value for
++	// localeconv
++	p(p->mon_grouping[0] == '\0');
++	p(strcmp(p->positive_sign, "") == 0);
++	p(strcmp(p->negative_sign, "") == 0);
++	p(p->int_frac_digits == CHAR_MAX);
++	p(p->frac_digits == CHAR_MAX);
++	p(p->p_cs_precedes == CHAR_MAX);
++	p(p->p_sep_by_space == CHAR_MAX);
++	p(p->n_cs_precedes == CHAR_MAX);
++	p(p->n_sep_by_space == CHAR_MAX);
++	p(p->p_sign_posn == CHAR_MAX);
++	p(p->n_sign_posn == CHAR_MAX);
++	p(p->int_p_cs_precedes == CHAR_MAX);
++	p(p->int_p_sep_by_space == CHAR_MAX);
++	p(p->int_n_cs_precedes == CHAR_MAX);
++	p(p->int_n_sep_by_space == CHAR_MAX);
++	p(p->int_p_sign_posn == CHAR_MAX);
++	p(p->int_n_sign_posn == CHAR_MAX);
++	p(p->n_sign_posn == CHAR_MAX);
++
++	p(strlen(nl_langinfo(CRNCYSTR)) == 0);
++}
++
++void test_us()
++{
++	char *enc[]= { "ISO8859-1", "ISO8859-15", "UTF-8" };
++	char nom[256];
++	char col[512];
++	struct lconv *p;
++	char *nl;
++	int i, j;
++
++	snprintf(nom, sizeof(nom), "en_US.UTF-8");
++	printf("nom=%s\n", nom);
++	nl = setlocale(LC_ALL, nom);
++	printf("locale %s\n", nl);
++	p = localeconv();
++	p(strcmp(p->int_curr_symbol, "USD ") == 0);
++	p(strcmp(p->currency_symbol, "$") == 0);
++	p(strcmp(p->mon_decimal_point, ".") == 0);
++	p(strcmp(p->mon_thousands_sep, ",") == 0);
++	p(p->mon_grouping[0] == 3);
++	p(strcmp(p->positive_sign, "") == 0);
++	p(strcmp(p->negative_sign, "-") == 0);
++	p(p->int_frac_digits == 2);
++	p(p->frac_digits == 2);
++	p(p->p_cs_precedes == 1);
++	p(p->p_sep_by_space == 0);
++	p(p->n_cs_precedes == 1);
++	p(p->n_sep_by_space == 0);
++	p(p->p_sign_posn == 1);
++	p(p->n_sign_posn == 1);
++	p(p->int_p_cs_precedes == 1);
++	p(p->int_p_sep_by_space == 0);
++	p(p->int_n_cs_precedes == 1);
++	p(p->int_n_sep_by_space == 0);
++	p(p->int_p_sign_posn == 1);
++	p(p->int_n_sign_posn == 1);
++	p(p->n_sign_posn == 1);
++
++	printf("CRNCYSTR=%s\n", nl_langinfo(CRNCYSTR));
++	p(strcmp(nl_langinfo(CRNCYSTR), "$") == 0);
++
++	// Testing with examples from http://pubs.opengroup.org/onlinepubs/009695299/functions/strfmon.html
++	strfmon(col, sizeof(col), "%n", 123.45); 
++	printf("col=%s\n", col);
++	p(strcmp(col, "$123.45") == 0);
++	strfmon(col, sizeof(col), "%n", -123.45); 
++	printf("col=%s\n", col);
++	p(strcmp(col, "-$123.45") == 0);
++	strfmon(col, sizeof(col), "%n", -3456.781); 
++	printf("col=%s\n", col);
++	p(strcmp(col, "-$3,456.78") == 0);
++
++	strfmon(col, sizeof(col), "%11n", 123.45); 
++	printf("col=%s\n", col);
++	p(strcmp(col, "    $123.45") == 0);
++	strfmon(col, sizeof(col), "%11n", -123.45); 
++	printf("col=%s\n", col);
++	p(strcmp(col, "   -$123.45") == 0);
++	strfmon(col, sizeof(col), "%11n", -3456.781); 
++	printf("col=%s\n", col);
++	p(strcmp(col, " -$3,456.78") == 0);
++
++	strfmon(col, sizeof(col), "%#5n", 123.45); 
++	printf("col=%s\n", col);
++	p(strcmp(col, " $   123.45") == 0);
++	strfmon(col, sizeof(col), "%#5n", -123.45); 
++	printf("col=%s\n", col);
++	p(strcmp(col, "-$   123.45") == 0);
++	strfmon(col, sizeof(col), "%#5n", -3456.781); 
++	printf("col=%s\n", col);
++	p(strcmp(col, "-$ 3,456.78") == 0);
++
++
++	strfmon(col, sizeof(col), "%=*#5n", 123.45); 
++	printf("col=%s\n", col);
++	p(strcmp(col, " $***123.45") == 0);
++	strfmon(col, sizeof(col), "%=*#5n", -123.45); 
++	printf("col=%s\n", col);
++	p(strcmp(col, "-$***123.45") == 0);
++	strfmon(col, sizeof(col), "%=*#5n", -3456.781); 
++	printf("col=%s\n", col);
++	p(strcmp(col, "-$*3,456.78") == 0);
++
++	strfmon(col, sizeof(col), "%=0#5n", 123.45); 
++	printf("col=%s\n", col);
++	p(strcmp(col, " $000123.45") == 0);
++	strfmon(col, sizeof(col), "%=0#5n", -123.45); 
++	printf("col=%s\n", col);
++	p(strcmp(col, "-$000123.45") == 0);
++	strfmon(col, sizeof(col), "%=0#5n", -3456.781); 
++	printf("col=%s\n", col);
++	p(strcmp(col, "-$03,456.78") == 0);
++
++	strfmon(col, sizeof(col), "%^#5n", 123.45); 
++	printf("col=%s\n", col);
++	p(strcmp(col, " $  123.45") == 0);
++	strfmon(col, sizeof(col), "%^#5n", -123.45); 
++	printf("col=%s\n", col);
++	p(strcmp(col, "-$  123.45") == 0);
++	strfmon(col, sizeof(col), "%^#5n", -3456.781); 
++	printf("col=%s\n", col);
++	p(strcmp(col, "-$ 3456.78") == 0);
++
++	strfmon(col, sizeof(col), "%^#5.0n", 123.45); 
++	printf("col=%s\n", col);
++	p(strcmp(col, " $  123") == 0);
++	strfmon(col, sizeof(col), "%^#5.0n", -123.45); 
++	printf("col=%s\n", col);
++	p(strcmp(col, "-$  123") == 0);
++	strfmon(col, sizeof(col), "%^#5.0n", -3456.781); 
++	printf("col=%s\n", col);
++	p(strcmp(col, "-$ 3457") == 0);
++
++	strfmon(col, sizeof(col), "%^#5.4n", 123.45); 
++	printf("col=%s\n", col);
++	p(strcmp(col, " $  123.4500") == 0);
++	strfmon(col, sizeof(col), "%^#5.4n", -123.45); 
++	printf("col=%s\n", col);
++	p(strcmp(col, "-$  123.4500") == 0);
++	strfmon(col, sizeof(col), "%^#5.4n", -3456.781); 
++	printf("col=%s\n", col);
++	p(strcmp(col, "-$ 3456.7810") == 0);
++
++	strfmon(col, sizeof(col), "%(#5n", 123.45); 
++	printf("col=%s\n", col);
++	p(strcmp(col, "$   123.45") == 0);
++	strfmon(col, sizeof(col), "%(#5n", -123.45); 
++	printf("col=%s\n", col);
++	p(strcmp(col, "($   123.45)") == 0);
++	strfmon(col, sizeof(col), "%(#5n", -3456.781); 
++	printf("col=%s\n", col);
++	p(strcmp(col, "($ 3,456.78)") == 0);
++
++	strfmon(col, sizeof(col), "%-14#5.4n", 123.45); 
++	printf("col=%s\n", col);
++	p(strcmp(col, " $   123.4500 ") == 0);
++	strfmon(col, sizeof(col), "%-14#5.4n", -123.45); 
++	printf("col=%s\n", col);
++	p(strcmp(col, "-$   123.4500 ") == 0);
++	strfmon(col, sizeof(col), "%-14#5.4n", -3456.781); 
++	printf("col=%s\n", col);
++	p(strcmp(col, "-$ 3,456.7810 ") == 0);
++
++	strfmon(col, sizeof(col), "%14#5.4n", 123.45); 
++	printf("col=%s\n", col);
++	p(strcmp(col, "  $   123.4500") == 0);
++	strfmon(col, sizeof(col), "%14#5.4n", -123.45); 
++	printf("col=%s\n", col);
++	p(strcmp(col, " -$   123.4500") == 0);
++	strfmon(col, sizeof(col), "%14#5.4n", -3456.781); 
++	printf("col=%s\n", col);
++	p(strcmp(col, " -$ 3,456.7810") == 0);
++
++}
++
++void test_ibe()
++{
++	char *c1[] = { 
++		"es_AR", "es_BO", "es_CL", "es_CO", "es_EC",
++		"es_PY", "es_UY", "es_VE"
++	};
++	char *nc1[] = { 
++		"ARS ", "BOB ", "CLP ", "COP ", "USD ",
++		"PYG ", "UYU ", "VEF "
++	};
++	char *sc1[] = { 
++		"$", "$b" // http://www.xe.com/symbols.php
++			, "$", "$", "$",
++		"Gs", "$", "Bs" // http://www.xe.com/symbols.php
++	};
++	char *c2[] = { 
++		"es_DO", "es_GT", "es_HN","es_MX","es_NI", "es_PA", "es_PE", 
++		"es_PR", "es_SV"
++	};
++	char *nc2[] = { 
++		"DOP ", "GTQ ", "HNL ", "MXN ", "NIO ", "PAB ", "PEN ", 
++		"USD ", "USD "
++	};
++	char *sc2[] = { 
++		"RD$", "Q", "L","$","C$", "B/.", "S/.", 
++		"$", "US$"
++	};
++	char *ct[] = { 
++		"es_AR", "es_BO", "es_CL", "es_CO", "es_CR", "es_DO",
++		"es_EC", "es_ES", "es_GQ", "es_GT", "es_HN","es_MX",
++		"es_NI", "es_PA", "es_PE", "es_PR", "es_PY", "es_SV", 
++		"es_UY", "es_US", "es_VE", "pt_BR"
++	};
++
++	char *enc[]= { "ISO8859-1", "ISO8859-15", "UTF-8" };
++	char nom[256];
++	char col[512];
++	struct lconv *p;
++	char *nl;
++	int i, j;
++
++	for(i = 0; i < sizeof(enc) / sizeof(char *) ; i++) {
++		for(j = 0; j < sizeof(c1) / sizeof(char *) ; j++) {
++			snprintf(nom, sizeof(nom), "%s.%s", c1[j], enc[i]);
++			printf("nom=%s\n", nom);
++			nl = setlocale(LC_ALL, nom);
++			printf("locale %s (%s, %s)\n", nl, nc1[j], sc1[j]);
++			p = localeconv();
++			p(strcmp(p->int_curr_symbol, nc1[j]) == 0);
++			p(strcmp(p->currency_symbol, sc1[j]) == 0);
++			printf("CRNCYSTR=%s\n", nl_langinfo(CRNCYSTR));
++			p(strcmp(nl_langinfo(CRNCYSTR), sc1[j]) == 0);
++			p(strcmp(p->mon_decimal_point, ",") == 0);
++			p(strcmp(p->mon_thousands_sep, ".") == 0);
++			p(p->mon_grouping[0] == 3);
++			p(strcmp(p->positive_sign, "") == 0);
++			p(strcmp(p->negative_sign, "-") == 0);
++			p(p->int_frac_digits == 2);
++			p(p->frac_digits == 2);
++			p(p->p_cs_precedes == 1);
++			p(p->p_sep_by_space == 1);
++			p(p->n_cs_precedes == 1);
++			p(p->n_sep_by_space == 1);
++			p(p->p_sign_posn == 1);
++			p(p->n_sign_posn == 1);
++			p(p->int_p_cs_precedes == 1);
++			p(p->int_n_cs_precedes == 1);
++			p(p->int_n_sep_by_space == 1);
++			p(p->int_p_sep_by_space == 1);
++			p(p->int_p_sign_posn == 1);
++			p(p->int_n_sign_posn == 1);
++			p(p->n_sign_posn == 1);
++		}
++		for(j = 0; j < sizeof(c2) / sizeof(char *) ; j++) {
++			snprintf(nom, sizeof(nom), "%s.%s", c2[j], enc[i]);
++			printf("nom=%s\n", nom);
++			nl = setlocale(LC_ALL, nom);
++			printf("locale %s (%s, %s)\n", nl, nc2[j], sc2[j]);
++			p = localeconv();
++			p(strcmp(p->int_curr_symbol, nc2[j]) == 0);
++			p(strcmp(p->currency_symbol, sc2[j]) == 0);
++			printf("CRNCYSTR=%s\n", nl_langinfo(CRNCYSTR));
++			p(strcmp(nl_langinfo(CRNCYSTR), sc2[j]) == 0);
++			p(strcmp(p->mon_decimal_point, ".") == 0);
++			p(strcmp(p->mon_thousands_sep, ",") == 0);
++			p(p->mon_grouping[0] == 3);
++			p(strcmp(p->positive_sign, "") == 0);
++			p(strcmp(p->negative_sign, "-") == 0);
++			p(p->int_frac_digits == 2);
++			p(p->frac_digits == 2);
++			p(p->p_cs_precedes == 1);
++			p(p->p_sep_by_space == 1);
++			p(p->n_cs_precedes == 1);
++			p(p->n_sep_by_space == 1);
++			p(p->p_sign_posn == 1);
++			p(p->n_sign_posn == 1);
++			p(p->int_p_cs_precedes == 1);
++			p(p->int_p_sep_by_space == 1);
++			p(p->int_n_cs_precedes == 1);
++			p(p->int_n_sep_by_space == 1);
++			p(p->int_p_sign_posn == 1);
++			p(p->int_n_sign_posn == 1);
++			p(p->n_sign_posn == 1);
++		}
++	}
++	nl = setlocale(LC_ALL, "es_CR.ISO8859-1");
++	printf("locale %s\n", nl);
++	p = localeconv();
++	m_monetarydebug(p);
++	p(strcmp(p->int_curr_symbol, "CRC ") == 0);
++	p(strcmp(p->currency_symbol, "\xa2") == 0); // http://en.wikipedia.org/wiki/Costa_Rican_col%C3%B3n
++	p(strcmp(p->mon_decimal_point, ",") == 0);
++	p(strcmp(p->mon_thousands_sep, " ") == 0);
++	p(p->mon_grouping[0] == 3);
++	p(strcmp(p->positive_sign, "") == 0);
++	p(strcmp(p->negative_sign, "-") == 0);
++	p(p->int_frac_digits == 2);
++	p(p->frac_digits == 2);
++	p(p->p_cs_precedes == 1);
++	p(p->p_sep_by_space == 1);
++	p(p->n_cs_precedes == 1);
++	p(p->n_sep_by_space == 1);
++	p(p->p_sign_posn == 1);
++	p(p->n_sign_posn == 1);
++	p(p->int_p_cs_precedes == 1);
++	p(p->int_n_cs_precedes == 1);
++	p(p->int_n_sep_by_space == 1);
++	p(p->int_p_sep_by_space == 1);
++	p(p->int_p_sign_posn == 1);
++	p(p->int_n_sign_posn == 1);
++	p(p->n_sign_posn == 1);
++	nl = setlocale(LC_ALL, "es_CR.UTF-8");
++	printf("locale %s\n", nl);
++	p = localeconv();
++	p(strcmp(p->int_curr_symbol, "CRC ") == 0);
++	p(strcmp(p->currency_symbol, "₡") == 0); // http://www.xe.com/symbols.php
++	p(strcmp(p->mon_decimal_point, ",") == 0);
++	p(strcmp(p->mon_thousands_sep, " ") == 0);
++	p(p->mon_grouping[0] == 3);
++	p(strcmp(p->positive_sign, "") == 0);
++	p(strcmp(p->negative_sign, "-") == 0);
++	p(p->int_frac_digits == 2);
++	p(p->frac_digits == 2);
++	p(p->p_cs_precedes == 1);
++	p(p->p_sep_by_space == 1);
++	p(p->n_cs_precedes == 1);
++	p(p->n_sep_by_space == 1);
++	p(p->p_sign_posn == 1);
++	p(p->n_sign_posn == 1);
++	p(p->int_p_cs_precedes == 1);
++	p(p->int_n_cs_precedes == 1);
++	p(p->int_n_sep_by_space == 1);
++	p(p->int_p_sep_by_space == 1);
++	p(p->int_p_sign_posn == 1);
++	p(p->int_n_sign_posn == 1);
++	p(p->n_sign_posn == 1);
++	nl = setlocale(LC_ALL, "es_GQ.ISO8859-1");
++	printf("locale %s\n", nl);
++	p = localeconv();
++	p(strcmp(p->int_curr_symbol, "XAF ") == 0);
++	p(strcmp(p->currency_symbol, "FCFA") == 0); 
++	p(strcmp(p->mon_decimal_point, ",") == 0);
++	p(strcmp(p->mon_thousands_sep, ".") == 0);
++	p(p->mon_grouping[0] == 3);
++	p(strcmp(p->positive_sign, "") == 0);
++	p(strcmp(p->negative_sign, "-") == 0);
++	p(p->int_frac_digits == 0);
++	p(p->frac_digits == 0);
++	p(p->p_cs_precedes == 1);
++	p(p->p_sep_by_space == 1);
++	p(p->n_cs_precedes == 1);
++	p(p->n_sep_by_space == 1);
++	p(p->p_sign_posn == 1);
++	p(p->n_sign_posn == 1);
++	p(p->int_p_cs_precedes == 1);
++	p(p->int_n_cs_precedes == 1);
++	p(p->int_n_sep_by_space == 1);
++	p(p->int_p_sep_by_space == 1);
++	p(p->int_p_sign_posn == 1);
++	p(p->int_n_sign_posn == 1);
++	p(p->n_sign_posn == 1);
++
++	nl = setlocale(LC_ALL, "es_ES.ISO8859-1");
++	printf("locale %s\n", nl);
++	p = localeconv();
++	p(strcmp(p->int_curr_symbol, "EUR ") == 0);
++	p(strcmp(p->currency_symbol, "Eu") == 0); 
++	p(strcmp(p->mon_decimal_point, ",") == 0);
++	p(strcmp(p->mon_thousands_sep, ".") == 0);
++	p(p->mon_grouping[0] == 3);
++	p(strcmp(p->positive_sign, "") == 0);
++	p(strcmp(p->negative_sign, "-") == 0);
++	p(p->int_frac_digits == 2);
++	p(p->frac_digits == 2);
++	p(p->p_cs_precedes == 0);
++	p(p->p_sep_by_space == 1);
++	p(p->n_cs_precedes == 0);
++	p(p->n_sep_by_space == 1);
++	p(p->p_sign_posn == 1);
++	p(p->n_sign_posn == 1);
++	p(p->int_p_cs_precedes == 0);
++	p(p->int_n_cs_precedes == 0);
++	p(p->int_n_sep_by_space == 1);
++	p(p->int_p_sep_by_space == 1);
++	p(p->int_p_sign_posn == 1);
++	p(p->int_n_sign_posn == 1);
++	p(p->n_sign_posn == 1);
++
++	nl = setlocale(LC_ALL, "es_ES.UTF-8");
++	printf("locale %s\n", nl);
++	p = localeconv();
++	p(strcmp(p->int_curr_symbol, "EUR ") == 0);
++	p(strcmp(p->currency_symbol, "€") == 0); 
++	p(strcmp(p->mon_decimal_point, ",") == 0);
++	p(strcmp(p->mon_thousands_sep, ".") == 0);
++	p(p->mon_grouping[0] == 3);
++	p(strcmp(p->positive_sign, "") == 0);
++	p(strcmp(p->negative_sign, "-") == 0);
++	p(p->int_frac_digits == 2);
++	p(p->frac_digits == 2);
++	p(p->p_cs_precedes == 0);
++	p(p->p_sep_by_space == 1);
++	p(p->n_cs_precedes == 0);
++	p(p->n_sep_by_space == 1);
++	p(p->p_sign_posn == 1);
++	p(p->n_sign_posn == 1);
++	p(p->int_p_cs_precedes == 0);
++	p(p->int_n_cs_precedes == 0);
++	p(p->int_n_sep_by_space == 1);
++	p(p->int_p_sep_by_space == 1);
++	p(p->int_p_sign_posn == 1);
++	p(p->int_n_sign_posn == 1);
++	p(p->n_sign_posn == 1);
++
++
++	nl = setlocale(LC_ALL, "es_US.ISO8859-1");
++	printf("locale %s\n", nl);
++	p = localeconv();
++	p(strcmp(p->int_curr_symbol, "USD ") == 0);
++	p(strcmp(p->currency_symbol, "$") == 0); 
++	p(strcmp(p->mon_decimal_point, ".") == 0);
++	p(strcmp(p->mon_thousands_sep, ",") == 0);
++	p(p->mon_grouping[0] == 3);
++	p(strcmp(p->positive_sign, "") == 0);
++	p(strcmp(p->negative_sign, "-") == 0);
++	p(p->int_frac_digits == 2);
++	p(p->frac_digits == 2);
++	p(p->p_cs_precedes == 1);
++	p(p->p_sep_by_space == 0);
++	p(p->n_cs_precedes == 1);
++	p(p->n_sep_by_space == 0);
++	p(p->p_sign_posn == 1);
++	p(p->n_sign_posn == 1);
++	p(p->int_p_cs_precedes == 1);
++	p(p->int_n_cs_precedes == 1);
++	p(p->int_n_sep_by_space == 0);
++	p(p->int_p_sep_by_space == 0);
++	p(p->int_p_sign_posn == 1);
++	p(p->int_n_sign_posn == 1);
++	p(p->n_sign_posn == 1);
++
++	nl = setlocale(LC_ALL, "pt_BR.ISO8859-1");
++	printf("locale %s\n", nl);
++	p = localeconv();
++	p(strcmp(p->int_curr_symbol, "BRL ") == 0);
++	p(strcmp(p->currency_symbol, "R$") == 0); 
++	p(strcmp(p->mon_decimal_point, ",") == 0);
++	p(strcmp(p->mon_thousands_sep, ".") == 0);
++	p(p->mon_grouping[0] == 3);
++	p(strcmp(p->positive_sign, "") == 0);
++	p(strcmp(p->negative_sign, "-") == 0);
++	p(p->int_frac_digits == 2);
++	p(p->frac_digits == 2);
++	p(p->p_cs_precedes == 1);
++	p(p->p_sep_by_space == 0);
++	p(p->n_cs_precedes == 1);
++	p(p->n_sep_by_space == 0);
++	p(p->p_sign_posn == 1);
++	p(p->n_sign_posn == 1);
++	p(p->int_p_cs_precedes == 1);
++	p(p->int_n_cs_precedes == 1);
++	p(p->int_n_sep_by_space == 0);
++	p(p->int_p_sep_by_space == 0);
++	p(p->int_p_sign_posn == 1);
++	p(p->int_n_sign_posn == 1);
++	p(p->n_sign_posn == 1);
++
++	for(j = 0; j < sizeof(ct) / sizeof(char *) ; j++) {
++		snprintf(nom, sizeof(nom), "%s.UTF-8", ct[j]);
++		nl = setlocale(LC_ALL, nom);
++		strfmon(col, sizeof(col), "%n", -3456.781); 
++		printf("%s %s\n", nom, col);
++	}
++}
++
++int main()
++{
++	test_posix();
++	test_ibe();
++	test_us();
++	
++	return bad != 0;
++}

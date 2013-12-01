@@ -1,0 +1,334 @@
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/regress/lib/libc/locale/Makefile src/regress/lib/libc/locale/Makefile
+--- src54-s/regress/lib/libc/locale/Makefile	Mon Oct  7 07:49:09 2013
++++ src/regress/lib/libc/locale/Makefile	Sat Oct 12 13:23:41 2013
+@@ -1,7 +1,7 @@
+ # $OpenBSD: Makefile,v 1.2 2013/08/01 21:26:30 kettenis Exp $
+ 
+ .if defined(REGRESS_FULL)
+-SUBDIR+= check_isw
++SUBDIR+= check_isw check_collate
+ .endif
+ 
+ install:
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/regress/lib/libc/locale/check_collate/Makefile src/regress/lib/libc/locale/check_collate/Makefile
+--- src54-s/regress/lib/libc/locale/check_collate/Makefile	Wed Dec 31 19:00:00 1969
++++ src/regress/lib/libc/locale/check_collate/Makefile	Sat Oct 12 13:23:41 2013
+@@ -0,0 +1,11 @@
++
++NOMAN=
++PROG=check_collate
++
++CFLAGS=-g
++
++
++run-regress-check_collate: ${PROG}
++	./${PROG} >/dev/null
++
++.include <bsd.regress.mk>
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/regress/lib/libc/locale/check_collate/check_collate.c src/regress/lib/libc/locale/check_collate/check_collate.c
+--- src54-s/regress/lib/libc/locale/check_collate/check_collate.c	Wed Dec 31 19:00:00 1969
++++ src/regress/lib/libc/locale/check_collate/check_collate.c	Sat Oct 12 13:23:41 2013
+@@ -0,0 +1,303 @@
++/**
++ * Public domain according to Colombian Legislation. 
++ * http://www.pasosdejesus.org/dominio_publico_colombia.html
++ * 2013. vtamara@pasosdeJesus.org
++ *
++ * $adJ$
++ */
++
++#include <locale.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <wchar.h>
++#include <wctype.h>
++
++int bad;
++
++#define p(t) printf("%s:\t ",#t); \
++	if (t) { \
++		printf("\x1b[38;5;2mOK\x1b[0m\n"); \
++	} else { \
++		bad++; \
++		printf("\x1b[38;5;1mERROR\x1b[0m\n"); \
++	}
++
++void test_esCO88591()
++{
++	char *nl = setlocale(LC_ALL, "es_CO.ISO8859-1");
++	printf("locale %s\n", nl);
++	p(strcoll("\xe9", "f") < 0); /* \xe9 is e with acute accent in LATIN1 */
++	p(strcoll("b", "\xe9") < 0);
++	nl = setlocale(LC_ALL, "es.ISO8859-1");
++	printf("locale %s\n", nl);
++	p(strcoll("\xe9", "f") < 0); /* \xe9 is e with acute accent in LATIN1 */
++	p(strcoll("b", "\xe9") < 0);
++	nl = setlocale(LC_ALL, "ISO8859-1");
++	printf("locale %s\n", nl);
++	p(strcoll("\xe9", "f") < 0); /* \xe9 is e with acute accent in LATIN1 */
++	p(strcoll("b", "\xe9") < 0);
++
++
++}
++
++
++void test_posix() 
++{
++	char *nl = setlocale(LC_ALL, "C");
++	printf("locale %s\n", nl);
++	p(strcoll("\xe9", "f") > 0); 
++	p(strcoll("b", "\xe9") < 0);
++	p(strcoll("", "\xe9") < 0);
++	p(strcoll("a", "") > 0);
++	p(strcoll("", "") == 0);
++}
++
++void test_esCOUTF8() 
++{
++	char *nl = setlocale(LC_ALL, "es.UTF-8");
++	printf("locale %s\n", nl);
++	p(strcoll("é", "f") < 0); 
++	p(strcoll("b", "é") < 0);
++	nl = setlocale(LC_ALL, "es_CO.UTF-8");
++	printf("locale %s\n", nl);
++	p(strcoll("é", "f") < 0); 
++	p(strcoll("b", "é") < 0);
++
++	wchar_t wcsb[1000];
++	mbstowcs(wcsb, "b", 1000);
++	wchar_t wcse[1000];
++	mbstowcs(wcse, "é", 1000);
++	p(wcscoll(wcsb, wcse) < 0);
++	mbstowcs(wcsb, "b", 1000);
++	mbstowcs(wcse, "é", 1000);
++	p(wcscoll(wcsb, wcse) < 0);
++	p(wcscoll(L"b", L"é") < 0);
++	p(strcoll("á", "e") < 0);
++	p(strcoll("ama", "ana") < 0);
++	p(strcoll("á", "e") < 0);
++	p(wcscoll(L"b", L"é") < 0);
++	p(wcscoll(L"á", L"e") < 0);
++	p(wcscoll(L"á", L"e") < 0);
++	/* Order in spanish*/
++	p(wcscoll(L" ", L"á") < 0);
++	p(wcscoll(L"á", L"b") < 0);
++	p(wcscoll(L"d", L"é") < 0);
++	p(wcscoll(L"é", L"f") < 0);
++	p(wcscoll(L"h", L"í") < 0);
++	p(wcscoll(L"í", L"j") < 0);
++	p(wcscoll(L"n", L"ñ") < 0);
++	p(wcscoll(L"ñ", L"o") < 0);
++	p(wcscoll(L"ñ", L"ó") < 0);
++	p(wcscoll(L"ó", L"p") < 0);
++	p(wcscoll(L"t", L"ú") < 0);
++	p(wcscoll(L"t", L"ü") < 0);
++	p(wcscoll(L"ú", L"v") < 0);
++	p(wcscoll(L"ü", L"v") < 0);
++	p(wcscoll(L"Á", L"B") < 0);
++	p(wcscoll(L"D", L"É") < 0);
++	p(wcscoll(L"É", L"F") < 0);
++	p(wcscoll(L"H", L"Í") < 0);
++	p(wcscoll(L"Í", L"J") < 0);
++	p(wcscoll(L"N", L"Ñ") < 0);
++	p(wcscoll(L"Ñ", L"O") < 0);
++	p(wcscoll(L"Ñ", L"Ó") < 0);
++	p(wcscoll(L"Ó", L"P") < 0);
++	p(wcscoll(L"T", L"Ú") < 0);
++	p(wcscoll(L"T", L"Ü") < 0);
++	p(wcscoll(L"Ú", L"V") < 0);
++	p(wcscoll(L"Ü", L"V") < 0);
++	p(wcscoll(L"", L"Á") < 0);
++	p(wcscoll(L"á", L"") > 0);
++	p(wcscoll(L"áá", L"á") > 0);
++	p(wcscoll(L"ÁB", L"ÁC") < 0);
++	p(wcscoll(L"ÁB", L"AC") < 0);
++	p(wcscoll(L"ÁB", L"AB") > 0);
++	
++	wchar_t wa[10], wb[10], we[10], wf[10], wn[10], wegne[10],
++		wo[10];
++
++	p(wcsxfrm(wo, L"oro", 1000) > 0);
++	printf("oro wo='%ls'\n", wo);
++	p(wcsxfrm(wa, L"", 1000) >= 0);
++	printf("wa='%ls'\n", wa);
++	p(wcsxfrm(wa, L"á", 1000) > 0);
++	printf("wa='%ls'\n", wa);
++	p(wcsxfrm(wb, L"b", 1000) > 0);
++	printf("wb='%ls'\n", wb);
++	p(wcscmp(wa, wb) < 0);
++	p(wcsxfrm(we, L"é", 1000) > 0);
++	printf("we='%ls'\n", we);
++	p(wcscmp(wb, we) < 0);
++	p(wcsxfrm(wf, L"f", 1000) > 0);
++	printf("wf='%ls'\n", wf);
++	p(wcscmp(wb, wf) < 0);
++	p(wcscmp(we, wf) < 0);
++	p(wcsxfrm(wn, L"n", 1000) > 0);
++	printf("wn='%ls'\n", wn);
++	p(wcsxfrm(wegne, L"ñ", 1000) > 0);
++	printf("wegne='%ls'\n", wegne);
++	p(wcsxfrm(wo, L"o", 1000) > 0);
++	printf("o wo='%ls'\n", wo);
++	p(wcsxfrm(wo, L"oso", 1000) > 0);
++	printf("oso wo='%ls'\n", wo);
++	p(wcscmp(wn, wegne) < 0);
++	p(wcscmp(wegne, wo) < 0);
++	
++	char a[1000], b[1000], e[1000], f[1000];
++	size_t sr = 0;
++	p((sr = strxfrm(NULL, "equis", 0)) == 5);
++	p(strxfrm(NULL, "", 1000) == 0);
++	p(strxfrm(a, "", 1000) == 0 && a[0] == '\0');
++	p(strxfrm(a, "á", 1000) > 0);
++	p(strxfrm(b, "b", 1000) > 0);
++	p(strcmp(a, b) < 0);
++	p(strxfrm(e, "é", 1000) > 0);
++	printf("é e=%s\n", e);
++	p(strcmp(b, e) < 0);
++	p(strxfrm(f, "f", 1000) > 0);
++	p(strcmp(b, f) < 0);
++	p(strcmp(e, f) < 0);
++	p(strxfrm(e, "éa", 1000) > 0);
++	printf("e=%s\n", e);
++	p(strxfrm(f, "éb", 1000) > 0);
++	printf("f=%s\n", f);
++	p(strcmp(e, f) < 0);
++	p(strxfrm(f, "oso", 1000) > 0);
++	printf("oso f=%s\n", f);
++	p(strcmp(e, f) < 0);
++
++}
++
++void test_ruRUKOI8R() 
++{
++	char *nl = setlocale(LC_ALL, "KOI8-R");
++	printf("locale %s\n", nl);
++	p(strcoll("\xc1", "\xc2") < 0); /* a, б */
++	p(strcoll("\xc2", "\xd7") < 0); /* б, в */
++	nl = setlocale(LC_ALL, "ru.KOI8-R");
++	printf("locale %s\n", nl);
++	p(strcoll("\xc1", "\xc2") < 0); /* a, б */
++	p(strcoll("\xc2", "\xd7") < 0); /* б, в */
++	nl = setlocale(LC_ALL, "ru_RU.KOI8-R");
++	printf("locale %s\n", nl);
++	p(strcoll("\xc1", "\xc2") < 0); /* a, б */
++	p(strcoll("\xc2", "\xd7") < 0); /* б, в */
++	p(strcoll("\xd7", "\xc7") < 0); /* в, г */
++	p(strcoll("\xe1", "\xe2") < 0); /* A, Б */
++	p(strcoll("\xe2", "\xf7") < 0); /* Б, В */
++	p(strcoll("\xf7", "\xe7") < 0); /* В, Г */
++	p(strcoll("\xe7", "\xc1") < 0); /* Г, a */
++}
++
++void test_bgcp1251() 
++{
++	char *nl = setlocale(LC_ALL, "bg_BG.CP1251");
++	printf("locale %s\n", nl);
++	p(strcoll("\xc0", "\xc1") < 0); /* A, Б */
++	p(strcoll("\xc0", "\xa8") < 0); /* A, Ë */
++	nl = setlocale(LC_ALL, "bg.CP1251");
++	printf("locale %s\n", nl);
++	p(strcoll("\xc0", "\xc1") < 0); /* A, Б */
++	p(strcoll("\xc0", "\xa8") < 0); /* A, Ë */
++	nl = setlocale(LC_ALL, "CP1251");
++	printf("locale %s\n", nl);
++	p(strcoll("\xc0", "\xc1") < 0); /* A, Б */
++	p(strcoll("\xc0", "\xa8") < 0); /* A, Ë */
++
++}
++
++void test_csCZ88592()
++{
++	char *nl = setlocale(LC_ALL, "cs_CZ.ISO8859-2");
++	printf("locale %s\n", nl);
++	p(strcoll("\xea", "f") < 0); /* é */
++	p(strcoll("\xf0", "e") < 0); /* đ */
++	nl = setlocale(LC_ALL, "cs.ISO8859-2");
++	printf("locale %s\n", nl);
++	p(strcoll("\xea", "f") < 0); /* é */
++	p(strcoll("\xf0", "e") < 0); /* đ */
++}
++
++	
++void test_elGR88597()
++{
++	char *nl = setlocale(LC_ALL, "el_GR.ISO8859-7");
++	printf("locale %s\n", nl);
++	p(strcoll("\xdc", "\xc0") < 0); /* ά, ΐ */
++	nl = setlocale(LC_ALL, "el.ISO8859-7");
++	printf("locale %s\n", nl);
++	p(strcoll("\xdc", "\xc0") < 0); /* ά, ΐ */
++	nl = setlocale(LC_ALL, "ISO8859-7");
++	printf("locale %s\n", nl);
++	p(strcoll("\xdc", "\xc0") < 0); /* ά, ΐ */
++}
++
++void test_hyAMARMSCII8()
++{
++	char *nl = setlocale(LC_ALL, "hy_AM.ARMSCII-8");
++	printf("locale %s\n", nl);
++	p(strcoll("\xa9", "A") < 0); 
++	nl = setlocale(LC_ALL, "hy.ARMSCII-8");
++	printf("locale %s\n", nl);
++	p(strcoll("\xa9", "A") < 0); 
++	nl = setlocale(LC_ALL, "ARMSCII-8");
++	printf("locale %s\n", nl);
++	p(strcoll("\xa9", "A") < 0); 
++}
++
++void test_ltLT88594()
++{
++	char *nl = setlocale(LC_ALL, "lt_LT.ISO8859-4");
++	printf("locale %s\n", nl);
++	p(strcoll("\xc1", "B") < 0); 
++	nl = setlocale(LC_ALL, "lt.ISO8859-4");
++	printf("locale %s\n", nl);
++	p(strcoll("\xc1", "B") < 0); 
++	nl = setlocale(LC_ALL, "ISO8859-4");
++	printf("locale %s\n", nl);
++	p(strcoll("\xc1", "B") < 0); 
++}
++
++void test_ruRUCP866()
++{
++	char *nl = setlocale(LC_ALL, "ru_RU.CP866");
++	printf("locale %s\n", nl);
++	p(strcoll("\x80", "a") < 0); 
++	nl = setlocale(LC_ALL, "ru.CP866");
++	printf("locale %s\n", nl);
++	p(strcoll("\x80", "a") < 0); 
++	nl = setlocale(LC_ALL, "CP866");
++	printf("locale %s\n", nl);
++	p(strcoll("\x80", "a") < 0); 
++}
++
++void test_ruRU88595()
++{
++	char *nl = setlocale(LC_ALL, "ru_RU.ISO8859-5");
++	printf("locale %s\n", nl);
++	p(strcoll("\xb0", "a") < 0); 
++	nl = setlocale(LC_ALL, "ru.ISO8859-5");
++	printf("locale %s\n", nl);
++	p(strcoll("\xb0", "a") < 0); 
++	nl = setlocale(LC_ALL, "ISO8859-5");
++	printf("locale %s\n", nl);
++	p(strcoll("\xb0", "a") < 0); 
++}
++
++int main()
++{
++	test_esCO88591();
++	test_posix();
++	test_esCOUTF8();
++	test_ruRUKOI8R();
++	test_bgcp1251();
++	test_csCZ88592();
++	test_elGR88597();
++	test_hyAMARMSCII8();
++	test_ltLT88594();
++	test_ruRUCP866();
++	test_ruRU88595();
++	
++	return bad != 0;
++}

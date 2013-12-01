@@ -1,7 +1,7 @@
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/Makefile.inc src/lib/libc/locale/Makefile.inc
 --- src53collation/lib/libc/locale/Makefile.inc	Mon Apr  1 08:25:36 2013
 +++ src/lib/libc/locale/Makefile.inc	Thu Apr  4 05:27:02 2013
-@@ -9,15 +9,19 @@
+@@ -12,15 +12,19 @@
  	wcstombs.c wctob.c wctomb.c wcstof.c wcstod.c wcstold.c wcstol.c \
  	wcstoul.c wcstoll.c wcstoull.c wcstoimax.c wcstoumax.c \
  	setrunelocale.c runeglue.c rune.c runetable.c ___runetype_mb.c \
@@ -25,7 +25,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/Ma
  	iswalnum.3 iswblank.3 \
  	iswalnum.3 iswcntrl.3 \
  	iswalnum.3 iswdigit.3 \
-@@ -28,7 +32,15 @@
+@@ -31,7 +35,15 @@
  	iswalnum.3 iswspace.3 \
  	iswalnum.3 iswupper.3 \
  	iswalnum.3 iswxdigit.3 \
@@ -41,7 +41,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/Ma
  	wcstod.3 wcstof.3 \
  	wcstod.3 wcstold.3 \
  	wcstol.3 wcstoul.3 \
-@@ -36,7 +48,14 @@
+@@ -39,8 +51,15 @@
  	wcstol.3 wcstoull.3 \
  	wcstol.3 wcstoimax.3 \
  	wcstol.3 wcstoumax.3 \
@@ -57,6 +57,8 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/Ma
 +	wcsrtombs.3 wcsnrtombs_l.3
  
  CFLAGS+=-I${.CURDIR} -I${LIBCSRCDIR}/citrus -DCOLLATE_DEBUG
+-CFLAGS+=-DLOCALE_CHARSETS="\"${LOCALECHARSETS}\""
++CFLAGS+=-D__NO_TLS -DLOCALE_CHARSETS="\"${LOCALECHARSETS}\""
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/btowc.c src/lib/libc/locale/btowc.c
 --- src53collation/lib/libc/locale/btowc.c	Mon Mar 25 18:28:42 2013
 +++ src/lib/libc/locale/btowc.c	Wed Apr  3 11:15:27 2013
@@ -97,13 +99,15 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/co
  
  
 -struct __collate __global_collate = {
+-	1, 0
 +struct xlocale_collate __xlocale_global_collate = {
- 	1, 0
++	{{0}, "C"}, 1, 0
  };
  
 -struct __collate __C_collate = {
+-	1, 0
 +struct xlocale_collate __xlocale_C_collate = {
- 	1, 0
++	{{0}, "C"}, 1, 0
  };
  
  int
@@ -570,7 +574,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mb
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mbrlen.c src/lib/libc/locale/mbrlen.c
 --- src53collation/lib/libc/locale/mbrlen.c	Mon Mar 25 18:28:42 2013
 +++ src/lib/libc/locale/mbrlen.c	Wed Apr  3 11:15:27 2013
-@@ -27,13 +27,22 @@
+@@ -27,13 +27,23 @@
   */
  
  #include <wchar.h>
@@ -584,6 +588,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mb
  {
  	static mbstate_t mbs;
  
++	memset(&mbs, 0, sizeof(mbs)); 
  	if (ps == NULL)
  		ps = &mbs;
 -	return (mbrtowc(NULL, s, n, ps));
@@ -1063,7 +1068,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mu
  {
  	struct _citrus_ctype_rec *cc;
  	_RuneLocale *rl;
-@@ -46,63 +51,108 @@
+@@ -46,80 +51,140 @@
  		return 1;
  
  	rl = _ps_to_runelocale(ps);
@@ -1183,7 +1188,9 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mu
  	static mbstate_t mbs;
  
  	if (ps == NULL)
-@@ -111,15 +161,30 @@
+ 		ps = &mbs;
+-	return (wcsnrtombs(dst, src, SIZE_MAX, len, ps));
++	return (wcsnrtombs_l(dst, src, SIZE_MAX, len, ps, l));
  }
  
  size_t
@@ -1591,6 +1598,37 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/qu
 +.Sh STANDARDS
 +This function, conforms to
 +.St -p1003.1-2008
+diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/rune.h src/lib/libc/locale/rune.h
+--- src53collation/lib/libc/locale/rune.h	Mon Mar 25 18:28:42 2013
++++ src/lib/libc/locale/rune.h	Tue Apr  2 06:24:51 2013
+@@ -74,7 +74,7 @@
+  * global variables
+  */
+ extern size_t __mb_len_max_runtime;
+-extern _RuneLocale _DefaultRuneLocale;
+-extern _RuneLocale *_CurrentRuneLocale;
++extern const _RuneLocale _DefaultRuneLocale;
++extern const _RuneLocale *_CurrentRuneLocale;
+ 
+ #endif	/*! _RUNE_H_ */
+diff -u src55-orig/lib/libc/locale/runetable.c src/lib/libc/locale/runetable.c
+--- src55-orig/lib/libc/locale/runetable.c	Sat Feb  9 14:26:52 2013
++++ src/lib/libc/locale/runetable.c	Wed Oct 23 06:27:50 2013
+@@ -45,7 +45,7 @@
+ #include "citrus_none.h"
+ #include <stdlib.h>
+ 
+-_RuneLocale _DefaultRuneLocale = {
++const _RuneLocale _DefaultRuneLocale = {
+     _RUNE_MAGIC_1,
+     "NONE",
+     _DEFAULT_INVALID_RUNE,
+@@ -400,4 +400,4 @@
+     NULL
+ };
+ 
+-_RuneLocale *_CurrentRuneLocale = &_DefaultRuneLocale;
++const _RuneLocale *_CurrentRuneLocale = &_DefaultRuneLocale;
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/runetype.h src/lib/libc/locale/runetype.h
 --- src53collation/lib/libc/locale/runetype.h	Mon Mar 25 18:28:42 2013
 +++ src/lib/libc/locale/runetype.h	Tue Apr  2 06:24:51 2013
@@ -1646,29 +1684,28 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/se
  		break;
  	case LC_MONETARY:
  	case LC_NUMERIC:
-@@ -241,13 +249,19 @@
+@@ -262,6 +270,9 @@
  		if (_xpg4_setrunelocale(locname))
  			return -1;
  		__install_currentrunelocale_ctype();
 +		(void)strlcpy(__xlocale_global_locale.components[category-1]->locale, 
-+		    locname, 
-+		    sizeof(__xlocale_global_locale.components[category-1]->locale) );
++			locname, 
++			sizeof(__xlocale_global_locale.components[category-1]->locale) );
  		break;
+ 
  	case LC_MESSAGES:
--		break;
-+		return -1;
- 	case LC_COLLATE:
+@@ -271,6 +282,10 @@
  		if (__collate_load_tables(locname)) {
  			return -1;
--		}	
-+		}
+ 		}       
 +		(void)strlcpy(__xlocale_global_locale.components[category-1]->locale, 
-+		    locname, 
-+		    sizeof(__xlocale_global_locale.components[category-1]->locale) );
++			locname, 
++			sizeof(__xlocale_global_locale.components[category-1]->locale) );
++
  		break;
+ 
  	case LC_MONETARY:
- 	case LC_NUMERIC:
-@@ -265,7 +279,7 @@
+@@ -289,7 +304,7 @@
  	    current_categories[category]) == 0)
  		return (current_categories[category]);
  
@@ -1677,7 +1714,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/se
  		(void)strlcpy(current_categories[category],
  		    new_categories[category], sizeof(current_categories[category]));
  		return current_categories[category];
-@@ -274,7 +288,7 @@
+@@ -298,7 +313,7 @@
  	}
  }
  
@@ -1686,40 +1723,6 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/se
  __get_locale_env(int category)
  {
  	const char *env;
-@@ -296,3 +310,33 @@
- 
- 	return env;
- }
-+
-+/** Extra-simplistic */
-+
-+
-+void *
-+__numeric_load(const char *locale, locale_t unused)
-+{
-+	return NULL;
-+}
-+
-+void *
-+__monetary_load(const char *locale, locale_t unused)
-+{
-+	return NULL;
-+}
-+	
-+
-+void *
-+__time_load(const char *locale, locale_t unused)
-+{
-+	return NULL;
-+}
-+
-+void *
-+__messages_load(const char *locale, locale_t unused)
-+{
-+	return NULL;
-+}
-+
-+
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/setrunelocale.c src/lib/libc/locale/setrunelocale.c
 --- src53collation/lib/libc/locale/setrunelocale.c	Mon Mar 25 18:28:42 2013
 +++ src/lib/libc/locale/setrunelocale.c	Wed Apr  3 06:46:51 2013
@@ -2711,7 +2714,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/xl
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/xlocale.c src/lib/libc/locale/xlocale.c
 --- src53collation/lib/libc/locale/xlocale.c	Wed Dec 31 19:00:00 1969
 +++ src/lib/libc/locale/xlocale.c	Wed Apr  3 11:04:42 2013
-@@ -0,0 +1,396 @@
+@@ -0,0 +1,437 @@
 +/*-
 + * Copyright (c) 2011 The FreeBSD Foundation
 + * All rights reserved.
@@ -2784,11 +2787,6 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/xl
 +const char *
 +__get_locale_env(int category);
 +
-+int
-+__detect_path_locale(void)
-+{
-+}
-+
 +struct _xlocale __xlocale_global_locale = {
 +	{0},
 +	{
@@ -2819,6 +2817,32 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/xl
 +	0
 +};
 +
++
++void *
++__numeric_load(const char *locale, locale_t unused)
++{
++	return NULL;
++}
++
++void *
++__monetary_load(const char *locale, locale_t unused)
++{
++	return NULL;
++}
++	
++
++void *
++__time_load(const char *locale, locale_t unused)
++{
++	return NULL;
++}
++
++void *
++__messages_load(const char *locale, locale_t unused)
++{
++	return NULL;
++}
++
 +static void*(*constructors[])(const char*, locale_t) =
 +{
 +	__collate_load,
@@ -2829,7 +2853,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/xl
 +	__messages_load 
 +};
 +
-+/* FIXME static pthread_key_t locale_info_key; */
++static pthread_key_t locale_info_key; 
 +static int fake_tls;
 +static locale_t thread_local_locale = NULL;
 +
@@ -2846,16 +2870,30 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/xl
 +	fake_tls = 1;
 +	/* At least one per-thread locale has now been set. */
 +	__has_thread_locale = 1;
-+	__detect_path_locale();
 +}
 +
 +static pthread_once_t once_control = PTHREAD_ONCE_INIT;
++
++/**
++ * Single threaded pthread_once(3).  libc won't have to -lpthread.  
++ * Martin Pelikan <martin.pelikan@gmail.com>
++ **/
++static int
++_once(pthread_once_t *o, void (*init_routine)(void))
++{
++	if (o->state == PTHREAD_DONE_INIT)
++		return (0);
++	init_routine();
++	o->state = PTHREAD_DONE_INIT;
++	return (0);
++}
++
 +
 +static locale_t
 +get_thread_locale(void)
 +{
 +
-+	/* FIXME _once(&once_control, init_key); */
++	_once(&once_control, init_key);
 +
 +	if (thread_local_locale == NULL) {
 +		thread_local_locale = &__xlocale_global_locale;	
@@ -2884,6 +2922,12 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/xl
 +static void
 +set_thread_locale(locale_t loc)
 +{
++	_once(&once_control, init_key);
++	
++	if (NULL != loc) {
++		xlocale_retain((struct xlocale_refcounted*)loc);
++	}
++
 +	thread_local_locale = loc;	
 +}
 +
@@ -2965,7 +3009,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/xl
 +	int useenv = 0;
 +	int success = 1;
 +
-+	/* FIXME _once(&once_control, init_key);*/
++	_once(&once_control, init_key);
 +
 +	locale_t new = alloc_locale();
 +	if (NULL == new) {
@@ -3017,7 +3061,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/xl
 +	locale_t new = alloc_locale();
 +	int type;
 +
-+	/* FIXME _once(&once_control, init_key); */
++	_once(&once_control, init_key); 
 +
 +	if (NULL == new) {
 +		return (NULL);
@@ -3077,8 +3121,8 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/xl
 +		if (LC_GLOBAL_LOCALE == loc) {
 +			loc = NULL;
 +		}
++		set_thread_locale(loc);
 +	}
-+	set_thread_locale(loc);
 +	return (old ? old : LC_GLOBAL_LOCALE);
 +}
 +
@@ -3257,7 +3301,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/xl
 +	struct xlocale_refcounted *obj = val;
 +	/** FIXME should be atomic 
 +	atomic_add_long(&(obj->retain_count), 1); */
-+	obj->retain_count += 1;
++	obj->retain_count++;
 +	return (val);
 +}
 +
@@ -3269,7 +3313,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/xl
 +xlocale_release(void *val)
 +{
 +	struct xlocale_refcounted *obj = val;
-+	obj->retain_count -= 1;
++	obj->retain_count--;
 +/* FIXME long count = atomic_fetchadd_long(&(obj->retain_count), -1) - 1;*/
 +	long count = obj->retain_count;
 +	if (count < 0) {
@@ -3383,14 +3427,15 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/string/Ma
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/regress/lib/libc/locale/Makefile src/regress/lib/libc/locale/Makefile
 --- src53collation/regress/lib/libc/locale/Makefile	Mon Apr  1 08:25:36 2013
 +++ src/regress/lib/libc/locale/Makefile	Wed Apr  3 12:49:00 2013
-@@ -1,6 +1,6 @@
- # $OpenBSD: Makefile,v 1.1 2005/08/11 21:57:02 espie Exp $
+@@ -1,7 +1,7 @@
+ # $OpenBSD: Makefile,v 1.2 2013/08/01 21:26:30 kettenis Exp $
  
--SUBDIR+= check_collate check_isw
-+SUBDIR+= check_collate check_isw check_xlocale
+ .if defined(REGRESS_FULL)
+-SUBDIR+= check_isw check_collate
++SUBDIR+= check_isw check_collate check_xlocale
+ .endif
  
  install:
- 
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/regress/lib/libc/locale/check_xlocale/Makefile src/regress/lib/libc/locale/check_xlocale/Makefile
 --- src53collation/regress/lib/libc/locale/check_xlocale/Makefile	Wed Dec 31 19:00:00 1969
 +++ src/regress/lib/libc/locale/check_xlocale/Makefile	Tue Apr  2 21:37:08 2013
@@ -3410,11 +3455,13 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/regress/lib/libc/l
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regress/lib/libc/locale/check_xlocale/check_xlocale.c
 --- src53collation/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Wed Dec 31 19:00:00 1969
 +++ src/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Wed Apr  3 12:47:22 2013
-@@ -0,0 +1,408 @@
+@@ -0,0 +1,410 @@
 +/**
 + * Public domain according to Colombian Legislation. 
 + * http://www.pasosdejesus.org/dominio_publico_colombia.html
-+ * 2013. vtamara@pasosdeJesus.org.
++ * 2013. vtamara@pasosdeJesus.org
++ *
++ * $adJ$
 + */
 +
 +#include <xlocale.h>

@@ -7,7 +7,7 @@
 +/**
 + * Public domain according to Colombian Legislation. 
 + * http://www.pasosdejesus.org/dominio_publico_colombia.html
-+ * 2013. vtamara@pasosdeJesus.org.
++ * 2013. vtamara@pasosdeJesus.org
 + *
 + * $adJ$
 + */
@@ -733,7 +733,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig -x *rej src53xlocale1/lib/libc/locale/isw
 +/**
 + * Public domain according to Colombian Legislation.
 + * http://www.pasosdejesus.org/dominio_publico_colombia.html
-+ * 2013. vtamara@pasosdeJesus.org.
++ * 2013. vtamara@pasosdeJesus.org
 + *
 + * $adJ$
 + */
@@ -1316,15 +1316,15 @@ diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src53xlocale1/
 diff -ruN -x *.o -x obj -x CVS -x *~ src53xlocale2/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regress/lib/libc/locale/check_xlocale/check_xlocale.c
 --- src53xlocale2/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Mon Apr  8 21:20:56 2013
 +++ src/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Tue Apr  9 05:20:20 2013
-@@ -4,7 +4,6 @@
-  * 2013. vtamara@pasosdeJesus.org.
+@@ -6,7 +6,6 @@
+  * $adJ$
   */
  
 -#include <xlocale.h>
  #include <ctype.h>
  #include <inttypes.h>
  #include <langinfo.h>
-@@ -15,6 +14,7 @@
+@@ -17,6 +16,7 @@
  #include <time.h>
  #include <wchar.h>
  #include <wctype.h>
@@ -1332,7 +1332,7 @@ diff -ruN -x *.o -x obj -x CVS -x *~ src53xlocale2/regress/lib/libc/locale/check
  
  int bad;
  
-@@ -143,7 +143,6 @@
+@@ -145,7 +145,6 @@
  
  }
  
@@ -1340,7 +1340,7 @@ diff -ruN -x *.o -x obj -x CVS -x *~ src53xlocale2/regress/lib/libc/locale/check
  void test_ctype() {
  	char *nl = setlocale(LC_ALL, "es_CO.UTF-8");
  	printf("locale %s\n", nl);
-@@ -151,6 +150,8 @@
+@@ -153,6 +152,8 @@
  
  	size_t s;
  	wchar_t ws[100];
@@ -1349,7 +1349,7 @@ diff -ruN -x *.o -x obj -x CVS -x *~ src53xlocale2/regress/lib/libc/locale/check
  	p((s = wcswidth_l(ws, 10, es_CO_UTF_8)) == 4);
  	p((s = wcwidth_l(L'a', es_CO_UTF_8)) == 1);
  	p(wctype("lower") == wctype_l("lower", es_CO_UTF_8));
-@@ -235,14 +236,12 @@
+@@ -237,14 +238,12 @@
  	p(!iswspecial_l(L'\0', es_CO_UTF_8));
  	p(nextwctype(-1, wctype("graph")) > 0);
  	p(tolower_l('A', es_CO_UTF_8) == 'a');
@@ -1364,7 +1364,7 @@ diff -ruN -x *.o -x obj -x CVS -x *~ src53xlocale2/regress/lib/libc/locale/check
  	p(_toupper('a') == 'A');
  	p(wctrans_l("invalido", es_CO_UTF_8) == 0);
  	wchar_t lu[7][2] = {{ L'ñ', L'Ñ'},
-@@ -267,8 +266,7 @@
+@@ -269,8 +268,7 @@
  
  }
  
@@ -1374,7 +1374,7 @@ diff -ruN -x *.o -x obj -x CVS -x *~ src53xlocale2/regress/lib/libc/locale/check
  void test_string() 
  {
  	char *nl = setlocale(LC_ALL, "es_CO.UTF-8");
-@@ -401,7 +399,7 @@
+@@ -403,7 +401,7 @@
  {
  	test_xlocale();
  	test_wchar();

@@ -1,0 +1,1739 @@
+diff -u src55-orig/lib/libc/locale/Makefile.inc src/lib/libc/locale/Makefile.inc
+--- src55-orig/lib/libc/locale/Makefile.inc	Fri Oct 18 09:22:17 2013
++++ src/lib/libc/locale/Makefile.inc	Tue Nov 19 07:37:18 2013
+@@ -6,7 +6,8 @@
+ # for LOCALECHARSETS
+ .include "${.CURDIR}/../../share/locale/ctype/Makefile.inc"
+ 
+-SRCS+=	btowc.c _def_messages.c _def_monetary.c _def_numeric.c _def_time.c \
++SRCS+=	btowc.c _def_messages.c _def_numeric.c _def_time.c \
++	lmonetary.c ldpart.c fix_grouping.c \
+ 	localeconv.c nl_langinfo.c setlocale.c iswctype.c __mb_cur_max.c \
+ 	mblen.c mbrlen.c mbstowcs.c mbtowc.c multibyte_citrus.c wcscoll.c \
+ 	wcstombs.c wctob.c wctomb.c wcstof.c wcstod.c wcstold.c wcstol.c \
+diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/sys/sys/localedef.h src/sys/sys/localedef.h
+--- src55-orig/sys/sys/localedef.h	Sun Apr 21 17:31:47 1996
++++ src/sys/sys/localedef.h	Mon Nov 11 11:11:23 2013
+@@ -51,13 +51,13 @@
+ 
+ typedef struct
+ {
+-	char *int_curr_symbol;
+-	char *currency_symbol;
+-	char *mon_decimal_point;
+-	char *mon_thousands_sep;
+-	char *mon_grouping;
+-	char *positive_sign;
+-	char *negative_sign;
++	const char *int_curr_symbol;
++	const char *currency_symbol;
++	const char *mon_decimal_point;
++	const char *mon_thousands_sep;
++	const char *mon_grouping;
++	const char *positive_sign;
++	const char *negative_sign;
+ 	char int_frac_digits;
+ 	char frac_digits;
+ 	char p_cs_precedes;
+@@ -66,11 +66,16 @@
+ 	char n_sep_by_space;
+ 	char p_sign_posn;
+ 	char n_sign_posn;
++	char int_p_cs_precedes;
++	char int_n_cs_precedes;
++	char int_p_sep_by_space;
++	char int_n_sep_by_space;
++	char int_p_sign_posn;
++	char int_n_sign_posn;
+ } _MonetaryLocale;
+ 
+ extern const _MonetaryLocale *_CurrentMonetaryLocale;
+ extern const _MonetaryLocale  _DefaultMonetaryLocale;
+-
+ 
+ typedef struct
+ {
+diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/include/locale.h src/include/locale.h
+--- src55-orig/include/locale.h	Wed Jul 20 13:24:25 2011
++++ src/include/locale.h	Mon Nov 11 10:44:44 2013
+@@ -29,7 +29,7 @@
+  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+  * SUCH DAMAGE.
+  *
+- *	@(#)locale.h	5.2 (Berkeley) 2/24/91
++ *	@(#)locale.h	8.1 (Berkeley) 6/2/93
+  */
+ 
+ #ifndef _LOCALE_H_
+@@ -54,6 +54,12 @@
+ 	char	n_sep_by_space;
+ 	char	p_sign_posn;
+ 	char	n_sign_posn;
++	char	int_p_cs_precedes;
++	char	int_n_cs_precedes;
++	char	int_p_sep_by_space;
++	char	int_n_sep_by_space;
++	char	int_p_sign_posn;
++	char	int_n_sign_posn;
+ };
+ 
+ #ifndef NULL
+diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/_def_monetary.c src/lib/libc/locale/_def_monetary.c
+--- src55-orig/lib/libc/locale/_def_monetary.c	Mon Aug  8 03:05:35 2005
++++ src/lib/libc/locale/_def_monetary.c	Wed Dec 31 19:00:00 1969
+@@ -1,30 +0,0 @@
+-/*	$OpenBSD: _def_monetary.c,v 1.4 2005/08/08 08:05:35 espie Exp $ */
+-/*
+- * Written by J.T. Conklin <jtc@netbsd.org>.
+- * Public domain.
+- */
+-
+-#include <sys/localedef.h>
+-#include <limits.h>
+-#include <locale.h>
+-
+-const _MonetaryLocale _DefaultMonetaryLocale =
+-{
+-	"",
+-	"",
+-	"",
+-	"",
+-	"",
+-	"",
+-	"",
+-	CHAR_MAX,
+-	CHAR_MAX,
+-	CHAR_MAX,
+-	CHAR_MAX,
+-	CHAR_MAX,
+-	CHAR_MAX,
+-	CHAR_MAX,
+-	CHAR_MAX
+-};
+-
+-const _MonetaryLocale *_CurrentMonetaryLocale = &_DefaultMonetaryLocale;
+diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/fix_grouping.c src/lib/libc/locale/fix_grouping.c
+--- src55-orig/lib/libc/locale/fix_grouping.c	Wed Dec 31 19:00:00 1969
++++ src/lib/libc/locale/fix_grouping.c	Tue Nov 12 02:16:24 2013
+@@ -0,0 +1,85 @@
++/*
++ * Copyright (c) 2001 Alexey Zelkin <phantom@FreeBSD.org>
++ * All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
++ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
++ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++ * SUCH DAMAGE.
++ */
++
++#include <sys/cdefs.h>
++
++#include <ctype.h>
++#include <limits.h>
++#include <stddef.h>
++
++static const char nogrouping[] = { CHAR_MAX, '\0' };
++
++/*
++ * Internal helper used to convert grouping sequences from string
++ * representation into POSIX specified form, i.e.
++ *
++ * "3;3;-1" -> "\003\003\177\000"
++ */
++
++const char *
++__fix_locale_grouping_str(const char *str)
++{
++	char *src, *dst;
++	char n;
++
++	if (str == NULL || *str == '\0') {
++		return nogrouping;
++	}
++
++	for (src = (char*)str, dst = (char*)str; *src != '\0'; src++) {
++
++		/* input string examples: "3;3", "3;2;-1" */
++		if (*src == ';')
++			continue;
++	
++		if (*src == '-' && *(src+1) == '1') {
++			*dst++ = CHAR_MAX;
++			src++;
++			continue;
++		}
++
++		if (!isdigit((unsigned char)*src)) {
++			/* broken grouping string */
++			return nogrouping;
++		}
++
++		/* assume all numbers <= 99 */
++		n = *src - '0';
++		if (isdigit((unsigned char)*(src+1))) {
++			src++;
++			n *= 10;
++			n += *src - '0';
++		}
++
++		*dst = n;
++		/* NOTE: assume all input started with "0" as 'no grouping' */
++		if (*dst == '\0')
++			return (dst == (char*)str) ? nogrouping : str;
++		dst++;
++	}
++	*dst = '\0';
++	return str;
++}
+diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/ldpart.c src/lib/libc/locale/ldpart.c
+--- src55-orig/lib/libc/locale/ldpart.c	Wed Dec 31 19:00:00 1969
++++ src/lib/libc/locale/ldpart.c	Thu Nov 21 20:25:48 2013
+@@ -0,0 +1,217 @@
++/*
++ * Copyright (c) 2000, 2001 Alexey Zelkin <phantom@FreeBSD.org>
++ * All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
++ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
++ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++ * SUCH DAMAGE.
++ */
++
++#include <sys/cdefs.h>
++
++#include <sys/types.h>
++#include <sys/stat.h>
++
++#include <errno.h>
++#include <fcntl.h>
++#include <limits.h>
++#include <paths.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <unistd.h>
++
++#include "ldpart.h"
++#include "namespace.h"
++
++static int split_lines(char *, const char *);
++
++/**
++ * In OpenBSD builds filename for a category of a locale (lang_terr.enc) 
++ * by trying to find it in directories of /usr/share/locale in this order:
++ * 1. lang_terr.enc
++ * 2. lang.enc
++ * 3. enc
++ * If it finds in any of them and the path size is less than sfilename,
++ * fills filename and returns a pointer to it, otherwise return NULL
++ */
++char *__category_filename(const char *locname, const char *category_filename, 
++		char *filename, size_t sfilename)
++{
++	int len, fd;
++	char *dot, *und;
++
++	len = snprintf(filename, sfilename, "%s/%s/%s", _PATH_LOCALE, 
++			locname, category_filename);
++	if (len < 0 || len >= sfilename)
++		return NULL;
++
++	if ((fd = open(filename, O_RDONLY | O_CLOEXEC)) < 0) {
++		/* Assumes "lang[_territory][.codeset]" locale name. */
++		dot = strrchr(locname, '.');
++		if (dot == NULL) {
++			return NULL;
++		}
++		und = strchr(locname, '_');
++		if (und == NULL) {
++			len = snprintf(filename, sfilename, "%s/%s/%s", 
++					_PATH_LOCALE, dot + 1, 
++					category_filename );
++			if (len < 0 || len >= sfilename)
++				return NULL;
++			if ((fd = open(filename, O_RDONLY | O_CLOEXEC)) < 0) 
++				return NULL;
++		} else {
++			// If locname is lang_territory.enc try with lang.enc
++			len = snprintf(filename, sfilename, "%s/", 
++					_PATH_LOCALE);
++			if (len + (und - locname) + 1 > sfilename) 
++				return NULL;
++			len += (und - locname) + 1;
++			strlcat(filename, locname, len);
++			len = snprintf(filename, sfilename, 
++					"%s.%s/%s", 
++					filename, dot + 1, category_filename);
++			if (len < 0 || len >= sfilename)
++				return NULL;
++			if ((fd = open(filename, O_RDONLY | O_CLOEXEC)) < 0) 
++				return NULL;
++		}
++	}
++	close(fd);
++
++	return filename;
++}
++
++int
++__part_load_locale(const char *name,
++		int *using_locale,
++		char **locale_buf,
++		const char *category_filename,
++		int locale_buf_size_max,
++		int locale_buf_size_min,
++		const char **dst_localebuf)
++{
++	int		saverr, fd, i, num_lines;
++	char		*lbuf, *p;
++	const char	*plim;
++	char		filename[PATH_MAX];
++	struct stat	st;
++	size_t		namesize, bufsize;
++
++	/* 'name' must be already checked. */
++	if (strcmp(name, "C") == 0 || strcmp(name, "POSIX") == 0) {
++		*using_locale = 0;
++		return (_LDP_CACHE);
++	}
++
++	/*
++	 * If the locale name is the same as our cache, use the cache.
++	 */
++	if (*locale_buf != NULL && strcmp(name, *locale_buf) == 0) {
++		*using_locale = 1;
++		return (_LDP_CACHE);
++	}
++
++	/*
++	 * Slurp the locale file into the cache.
++	 */
++	namesize = strlen(name) + 1;
++
++	if (__category_filename(name, category_filename, filename, PATH_MAX) 
++			== NULL)
++		return _LDP_ERROR;
++	if ((fd = open(filename, O_RDONLY | O_CLOEXEC)) < 0)  
++		return _LDP_ERROR;
++	if (fstat(fd, &st) != 0)
++		goto bad_locale;
++	if (st.st_size <= 0) {
++		errno = EFTYPE;
++		goto bad_locale;
++	}
++	bufsize = namesize + st.st_size;
++	if ((lbuf = malloc(bufsize)) == NULL) {
++		errno = ENOMEM;
++		goto bad_locale;
++	}
++	(void)strlcpy(lbuf, name, bufsize);
++	p = lbuf + namesize;
++	plim = p + st.st_size;
++	if (read(fd, p, (size_t) st.st_size) != st.st_size)
++		goto bad_lbuf;
++	/*
++	 * Parse the locale file into localebuf.
++	 */
++	if (plim[-1] != '\n') {
++		errno = EFTYPE;
++		goto bad_lbuf;
++	}
++	num_lines = split_lines(p, plim);
++	if (num_lines >= locale_buf_size_max)
++		num_lines = locale_buf_size_max;
++	else if (num_lines >= locale_buf_size_min)
++		num_lines = locale_buf_size_min;
++	else {
++		errno = EFTYPE;
++		goto bad_lbuf;
++	}
++	(void)close(fd);
++	/*
++	 * Record the successful parse in the cache.
++	 */
++	if (*locale_buf != NULL)
++		free(*locale_buf);
++	*locale_buf = lbuf;
++	for (p = *locale_buf, i = 0; i < num_lines; i++)
++		dst_localebuf[i] = (p += strlen(p) + 1);
++	for (i = num_lines; i < locale_buf_size_max; i++)
++		dst_localebuf[i] = NULL;
++	*using_locale = 1;
++
++	return (_LDP_LOADED);
++
++bad_lbuf:
++	saverr = errno;
++	free(lbuf);
++	errno = saverr;
++bad_locale:
++	saverr = errno;
++	(void)close(fd);
++	errno = saverr;
++
++	return (_LDP_ERROR);
++}
++
++static int
++split_lines(char *p, const char *plim)
++{
++	int i;
++
++	i = 0;
++	while (p < plim) {
++		if (*p == '\n') {
++			*p = '\0';
++			i++;
++		}
++		p++;
++	}
++	return (i);
++}
++
+diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/ldpart.h src/lib/libc/locale/ldpart.h
+--- src55-orig/lib/libc/locale/ldpart.h	Wed Dec 31 19:00:00 1969
++++ src/lib/libc/locale/ldpart.h	Tue Nov 12 02:16:24 2013
+@@ -0,0 +1,39 @@
++/*-
++ * Copyright (c) 2000, 2001 Alexey Zelkin <phantom@FreeBSD.org>
++ * All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
++ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
++ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++ * SUCH DAMAGE.
++ *
++ * From FreeBSD
++ */
++
++#ifndef _LDPART_H_
++#define	_LDPART_H_
++
++#define _LDP_LOADED 0
++#define _LDP_ERROR  (-1)
++#define _LDP_CACHE  1
++
++int	__part_load_locale(const char *, int*, char **, const char *,
++		    int, int, const char **);
++
++#endif /* !_LDPART_H_ */
+diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/lmonetary.c src/lib/libc/locale/lmonetary.c
+--- src55-orig/lib/libc/locale/lmonetary.c	Wed Dec 31 19:00:00 1969
++++ src/lib/libc/locale/lmonetary.c	Sat Nov 16 06:32:16 2013
+@@ -0,0 +1,251 @@
++/*
++ * Copyright (c) 2000, 2001 Alexey Zelkin <phantom@FreeBSD.org>
++ * All rights reserved.
++ *
++ * Copyright (c) 2011 The FreeBSD Foundation
++ * All rights reserved.
++ * Portions of this software were developed by David Chisnall
++ * under sponsorship from the FreeBSD Foundation.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
++ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
++ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++ * SUCH DAMAGE.
++ */
++/*
++ * Written by J.T. Conklin <jtc@netbsd.org>.
++ * vtamara@pasosdeJesus.org. 2013. adJ
++ *
++ * Public domain.
++ */
++
++
++#include <sys/cdefs.h>
++#include <sys/localedef.h>
++
++#include <limits.h>
++#include <stddef.h>
++#include <stdlib.h>
++
++#include "ldpart.h"
++#include "lmonetary.h"
++
++extern const char * __fix_locale_grouping_str(const char *);
++
++#define LCMONETARY_SIZE_FULL (sizeof(struct lc_monetary_T) / sizeof(char *))
++#define LCMONETARY_SIZE_MIN \
++		(offsetof(struct lc_monetary_T, int_p_cs_precedes) / \
++		    sizeof(char *))
++
++static char	empty[] = "";
++static char	numempty[] = { CHAR_MAX, '\0'};
++
++const _MonetaryLocale _DefaultMonetaryLocale =
++{
++	"",		/* int_curr_symbol */
++	"",		/* currency_symbol */
++	"",		/* mon_decimal_point */
++	"",		/* mon_thousands_sep */
++	numempty,	/* mon_grouping */
++	"",		/* positive_sign */
++	"",		/* negative_sign */
++	CHAR_MAX,	/* int_frac_digits */
++	CHAR_MAX,	/* frac_digits */
++	CHAR_MAX,	/* p_cs_precedes */
++	CHAR_MAX,	/* p_sep_by_space */
++	CHAR_MAX,	/* n_cs_precedes */
++	CHAR_MAX,	/* n_sep_by_space */
++	CHAR_MAX,	/* p_sign_posn */
++	CHAR_MAX,	/* n_sign_posn */
++	CHAR_MAX,	/* int_p_cs_precedes */
++	CHAR_MAX,	/* int_n_cs_precedes */
++	CHAR_MAX,	/* int_p_sep_by_space */
++	CHAR_MAX,	/* int_n_sep_by_space */
++	CHAR_MAX,	/* int_p_sign_posn */
++	CHAR_MAX	/* int_n_sign_posn */
++};
++
++const _MonetaryLocale *_CurrentMonetaryLocale = &_DefaultMonetaryLocale;
++
++_MonetaryLocale _monetary_locale;
++
++/* This structure is used to load with __part_load_locale, after
++ * loading will be converted to _MonetaryLocale */
++struct lc_monetary_T {
++	const char	*int_curr_symbol;
++	const char	*currency_symbol;
++	const char	*mon_decimal_point;
++	const char	*mon_thousands_sep;
++	const char	*mon_grouping;
++	const char	*positive_sign;
++	const char	*negative_sign;
++	const char	*int_frac_digits;
++	const char	*frac_digits;
++	const char	*p_cs_precedes;
++	const char	*p_sep_by_space;
++	const char	*n_cs_precedes;
++	const char	*n_sep_by_space;
++	const char	*p_sign_posn;
++	const char	*n_sign_posn;
++	const char	*int_p_cs_precedes;
++	const char	*int_n_cs_precedes;
++	const char	*int_p_sep_by_space;
++	const char	*int_n_sep_by_space;
++	const char	*int_p_sign_posn;
++	const char	*int_n_sign_posn;
++};
++
++static char
++cnv(const char *str)
++{
++	int i = strtol(str, NULL, 10);
++
++	if (i == -1)
++		i = CHAR_MAX;
++	return ((char)i);
++}
++
++static char *_monetary_buffer = NULL;
++
++static int
++monetary_load_locale(_MonetaryLocale *l, int *using_locale,
++		int *changed, const char *name)
++{
++	int ret;
++
++	struct lc_monetary_T t;
++	ret = __part_load_locale(name, using_locale,
++		&_monetary_buffer, "LC_MONETARY",
++		LCMONETARY_SIZE_FULL, LCMONETARY_SIZE_MIN,
++		(const char **)&t);
++	if (ret != _LDP_ERROR)
++		*changed = 1;
++	if (ret == _LDP_LOADED) {
++		l->mon_grouping =
++		     __fix_locale_grouping_str(t.mon_grouping);
++
++#define M_ASSIGN_STR(NAME) (l->NAME = t.NAME)
++		M_ASSIGN_STR(int_curr_symbol);
++		M_ASSIGN_STR(currency_symbol);
++		M_ASSIGN_STR(mon_decimal_point);
++		M_ASSIGN_STR(mon_thousands_sep);
++		M_ASSIGN_STR(positive_sign);
++		M_ASSIGN_STR(negative_sign);
++
++#define M_ASSIGN_CHAR(NAME) ((l->NAME) = \
++			     cnv(t.NAME))
++		M_ASSIGN_CHAR(int_frac_digits);
++		M_ASSIGN_CHAR(frac_digits);
++		M_ASSIGN_CHAR(p_cs_precedes);
++		M_ASSIGN_CHAR(p_sep_by_space);
++		M_ASSIGN_CHAR(n_cs_precedes);
++		M_ASSIGN_CHAR(n_sep_by_space);
++		M_ASSIGN_CHAR(p_sign_posn);
++		M_ASSIGN_CHAR(n_sign_posn);
++
++		/*
++		 * The six additional C99 international monetary formatting
++		 * parameters default to the national parameters when
++		 * reading FreeBSD LC_MONETARY data files.
++		 */
++#define	M_ASSIGN_ICHAR(NAME)						\
++		do {							\
++			if (t.int_##NAME == NULL)	\
++				l->int_##NAME =		\
++				    l->NAME;		\
++			else						\
++				M_ASSIGN_CHAR(int_##NAME);		\
++		} while (0)
++
++		M_ASSIGN_ICHAR(p_cs_precedes);
++		M_ASSIGN_ICHAR(n_cs_precedes);
++		M_ASSIGN_ICHAR(p_sep_by_space);
++		M_ASSIGN_ICHAR(n_sep_by_space);
++		M_ASSIGN_ICHAR(p_sign_posn);
++		M_ASSIGN_ICHAR(n_sign_posn);
++	}
++	return (ret);
++}
++
++extern int __mlocale_changed;
++
++int
++__monetary_load_locale(const char *name)
++{
++	int using_locale = 0;
++	int ret = monetary_load_locale(&_monetary_locale, &using_locale,
++			&__mlocale_changed, name);
++	if (ret != _LDP_ERROR) {
++		if (using_locale) {
++			_CurrentMonetaryLocale = &_monetary_locale;
++		} else {
++			_CurrentMonetaryLocale = &_DefaultMonetaryLocale;
++		}
++	}
++	return  ret;
++}
++
++#ifdef LOCALE_DEBUG
++void
++monetdebug() {
++printf(	"int_curr_symbol = %s\n"
++	"currency_symbol = %s\n"
++	"mon_decimal_point = %s\n"
++	"mon_thousands_sep = %s\n"
++	"mon_grouping = %s\n"
++	"positive_sign = %s\n"
++	"negative_sign = %s\n"
++	"int_frac_digits = %d\n"
++	"frac_digits = %d\n"
++	"p_cs_precedes = %d\n"
++	"p_sep_by_space = %d\n"
++	"n_cs_precedes = %d\n"
++	"n_sep_by_space = %d\n"
++	"p_sign_posn = %d\n"
++	"n_sign_posn = %d\n",
++	"int_p_cs_precedes = %d\n"
++	"int_p_sep_by_space = %d\n"
++	"int_n_cs_precedes = %d\n"
++	"int_n_sep_by_space = %d\n"
++	"int_p_sign_posn = %d\n"
++	"int_n_sign_posn = %d\n",
++	_monetary_locale.int_curr_symbol,
++	_monetary_locale.currency_symbol,
++	_monetary_locale.mon_decimal_point,
++	_monetary_locale.mon_thousands_sep,
++	_monetary_locale.mon_grouping,
++	_monetary_locale.positive_sign,
++	_monetary_locale.negative_sign,
++	_monetary_locale.int_frac_digits[0],
++	_monetary_locale.frac_digits[0],
++	_monetary_locale.p_cs_precedes[0],
++	_monetary_locale.p_sep_by_space[0],
++	_monetary_locale.n_cs_precedes[0],
++	_monetary_locale.n_sep_by_space[0],
++	_monetary_locale.p_sign_posn[0],
++	_monetary_locale.n_sign_posn[0],
++	_monetary_locale.int_p_cs_precedes[0],
++	_monetary_locale.int_p_sep_by_space[0],
++	_monetary_locale.int_n_cs_precedes[0],
++	_monetary_locale.int_n_sep_by_space[0],
++	_monetary_locale.int_p_sign_posn[0],
++	_monetary_locale.int_n_sign_posn[0]
++);
++}
++#endif /* LOCALE_DEBUG */
+diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/lmonetary.h src/lib/libc/locale/lmonetary.h
+--- src55-orig/lib/libc/locale/lmonetary.h	Wed Dec 31 19:00:00 1969
++++ src/lib/libc/locale/lmonetary.h	Wed Nov 13 00:06:41 2013
+@@ -0,0 +1,40 @@
++/*-
++ * Copyright (c) 2000, 2001 Alexey Zelkin <phantom@FreeBSD.org>
++ * All rights reserved.
++ *
++ * Copyright (c) 2011 The FreeBSD Foundation
++ * All rights reserved.
++ * Portions of this software were developed by David Chisnall
++ * under sponsorship from the FreeBSD Foundation.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
++ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
++ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++ * SUCH DAMAGE.
++ *
++ * From FreeBSD
++ */
++
++#ifndef _LMONETARY_H_
++#define	_LMONETARY_H_
++#include <sys/localedef.h>
++
++int	__monetary_load_locale(const char *);
++
++#endif /* !_LMONETARY_H_ */
+diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/localeconv.c src/lib/libc/locale/localeconv.c
+--- src55-orig/lib/libc/locale/localeconv.c	Mon Aug  8 03:05:35 2005
++++ src/lib/libc/locale/localeconv.c	Sat Nov 16 08:37:44 2013
+@@ -28,14 +28,18 @@
+     static struct lconv ret;
+ 
+     if (__mlocale_changed) {
+-	/* LC_MONETARY */
+-	ret.int_curr_symbol	= _CurrentMonetaryLocale->int_curr_symbol;
+-	ret.currency_symbol	= _CurrentMonetaryLocale->currency_symbol;
+-	ret.mon_decimal_point	= _CurrentMonetaryLocale->mon_decimal_point;
+-	ret.mon_thousands_sep	= _CurrentMonetaryLocale->mon_thousands_sep;
+-	ret.mon_grouping	= _CurrentMonetaryLocale->mon_grouping;
+-	ret.positive_sign	= _CurrentMonetaryLocale->positive_sign;
+-	ret.negative_sign	= _CurrentMonetaryLocale->negative_sign;
++	// struct lconv should use const char *, but POSIX says char *
++	ret.int_curr_symbol	= (char *)_CurrentMonetaryLocale->int_curr_symbol;
++	ret.currency_symbol	= (char *)_CurrentMonetaryLocale->currency_symbol;
++	ret.mon_decimal_point	= (char *)_CurrentMonetaryLocale->mon_decimal_point;
++	ret.mon_thousands_sep	= (char *)_CurrentMonetaryLocale->mon_thousands_sep;
++	// Special case to return "" in POSIX locale as shown in column
++	// localeconv() in table of section LC_MONETARY of
++	// http://pubs.opengroup.org/onlinepubs/009695399/basedefs/xbd_chap07.html#tag_07_03
++	ret.mon_grouping	= (_CurrentMonetaryLocale == &_DefaultMonetaryLocale) ?
++		"" : (char *)_CurrentMonetaryLocale->mon_grouping;
++	ret.positive_sign	= (char *)_CurrentMonetaryLocale->positive_sign;
++	ret.negative_sign	= (char *)_CurrentMonetaryLocale->negative_sign;
+ 	ret.int_frac_digits	= _CurrentMonetaryLocale->int_frac_digits;
+ 	ret.frac_digits		= _CurrentMonetaryLocale->frac_digits;
+ 	ret.p_cs_precedes	= _CurrentMonetaryLocale->p_cs_precedes;
+@@ -44,6 +48,13 @@
+ 	ret.n_sep_by_space	= _CurrentMonetaryLocale->n_sep_by_space;
+ 	ret.p_sign_posn		= _CurrentMonetaryLocale->p_sign_posn;
+ 	ret.n_sign_posn		= _CurrentMonetaryLocale->n_sign_posn;
++	ret.int_p_cs_precedes	= _CurrentMonetaryLocale->int_p_cs_precedes;
++	ret.int_n_cs_precedes	= _CurrentMonetaryLocale->int_n_cs_precedes;
++	ret.int_p_sep_by_space	= _CurrentMonetaryLocale->int_p_sep_by_space;
++	ret.int_n_sep_by_space	= _CurrentMonetaryLocale->int_n_sep_by_space;
++	ret.int_p_sign_posn	= _CurrentMonetaryLocale->int_p_sign_posn;
++	ret.int_n_sign_posn	= _CurrentMonetaryLocale->int_n_sign_posn;
++
+ 	__mlocale_changed = 0;
+     }
+ 
+diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/nl_langinfo.c src/lib/libc/locale/nl_langinfo.c
+--- src55-orig/lib/libc/locale/nl_langinfo.c	Wed Nov 16 11:48:15 2005
++++ src/lib/libc/locale/nl_langinfo.c	Sat Nov 16 08:04:36 2013
+@@ -97,8 +97,8 @@
+ 	case NOEXPR:
+ 		s = _CurrentMessagesLocale->noexpr;
+ 		break;
+-	case CRNCYSTR:				/* XXX */
+-		s = "";
++	case CRNCYSTR:				
++		s = _CurrentMonetaryLocale->currency_symbol;
+ 		break;
+ 	case CODESET:
+ 		s = _CurrentRuneLocale->rl_codeset;
+diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/setlocale.3 src/lib/libc/locale/setlocale.3
+--- src55-orig/lib/libc/locale/setlocale.3	Sun Oct  6 20:04:49 2013
++++ src/lib/libc/locale/setlocale.3	Sat Nov 16 08:36:17 2013
+@@ -150,6 +150,12 @@
+ 	char	n_sep_by_space;
+ 	char	p_sign_posn;
+ 	char	n_sign_posn;
++	char	int_p_cs_precedes;
++	char	int_n_cs_precedes;
++	char	int_p_sep_by_space;
++	char	int_n_sep_by_space;
++	char	int_p_sign_posn;
++	char	int_n_sign_posn;
+ };
+ .Ed
+ .Pp
+@@ -236,6 +242,38 @@
+ Like
+ .Fa p_sign_posn
+ but for negative currency values.
++.It Fa int_p_cs_precedes
++1 if the
++.Fa int_curr_symbol
++precedes the currency value for non-negative values, 0 if it follows.
++.It Fa int_n_cs_precedes
++1 if the
++.Fa int_curr_symbol
++precedes the currency value for negative values, 0 if it follows.
++.It Fa int_p_sep_by_space
++Indicates separation between currency symbol, sign string and quantity
++for non-negative quantities.
++.Pp
++.Bl -tag -width 3n -compact
++.It Li 0
++No space between currency symbol and quantity.
++.It Li 1
++When currency symbol and sign string are adjacent, space between them and the quantity.  When currency symbol and sign string are not adjacent, space between currency symbol and quantity.
++.It Li 2
++When currency symbol and sign string are adjacent, space between them and the quantity.  When currency symbol and sign string are not adjacent, space between sign string and quantity.
++.El
++.It Fa int_n_sep_by_space
++Like
++.Fa int_p_sep_by_space
++but for negative quantity.
++.It Fa int_p_sign_posn
++Like
++.Fa p_sign_posn
++but for monetary quantity formatted internationally.
++.It Fa int_n_sign_posn
++Like
++.Fa int_p_sign_posn
++but for negative quantity.
+ .El
+ .Pp
+ Unless mentioned above,
+diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/setlocale.c src/lib/libc/locale/setlocale.c
+--- src55-orig/lib/libc/locale/setlocale.c	Fri Oct 18 09:22:17 2013
++++ src/lib/libc/locale/setlocale.c	Mon Nov 18 06:52:08 2013
+@@ -201,7 +201,12 @@
+ 		break;
+ 	case LC_MESSAGES:
+ 	case LC_COLLATE:
++		break;
+ 	case LC_MONETARY:
++		if (__monetary_load_locale("C")) {
++			return;
++		}
++		break;
+ 	case LC_NUMERIC:
+ 	case LC_TIME:
+ 		break;
+@@ -262,7 +267,13 @@
+ 		return set_lc_messages_locale(locname);
+ 
+ 	case LC_COLLATE:
++		return -1;
++		break;
+ 	case LC_MONETARY:
++		if (__monetary_load_locale(locname)) {
++			return -1;
++		}
++		break;
+ 	case LC_NUMERIC:
+ 	case LC_TIME:
+ 		return -1;
+diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/stdlib/Makefile.inc src/lib/libc/stdlib/Makefile.inc
+--- src55-orig/lib/libc/stdlib/Makefile.inc	Sun Oct  6 20:04:50 2013
++++ src/lib/libc/stdlib/Makefile.inc	Wed Nov 13 00:05:15 2013
+@@ -7,7 +7,7 @@
+ 	cfree.c exit.c ecvt.c gcvt.c getenv.c getopt_long.c \
+ 	getsubopt.c hcreate.c heapsort.c imaxabs.c imaxdiv.c l64a.c llabs.c \
+ 	lldiv.c lsearch.c malloc.c merge.c posix_pty.c qsort.c radixsort.c \
+-	rand.c random.c realpath.c setenv.c strtoimax.c strtol.c \
++	rand.c random.c realpath.c setenv.c strfmon.c strtoimax.c strtol.c \
+ 	strtoll.c strtonum.c strtoul.c strtoull.c strtoumax.c system.c \
+ 	tfind.c tsearch.c _rand48.c drand48.c erand48.c jrand48.c lcong48.c \
+ 	lrand48.c mrand48.c nrand48.c seed48.c srand48.c qabs.c qdiv.c _Exit.c
+@@ -36,7 +36,7 @@
+ 	getsubopt.3 hcreate.3 imaxabs.3 imaxdiv.3 insque.3 labs.3 ldiv.3 \
+ 	lldiv.3 lsearch.3 malloc.3 posix_memalign.3 posix_openpt.3 ptsname.3 \
+ 	qabs.3 qdiv.3 qsort.3 radixsort.3 rand48.3 rand.3 random.3 realpath.3 \
+-	strtod.3 strtonum.3 strtol.3 strtoul.3 system.3 tsearch.3
++	strfmon.3 strtod.3 strtonum.3 strtol.3 strtoul.3 system.3 tsearch.3
+ 
+ MLINKS+=ecvt.3 fcvt.3 ecvt.3 gcvt.3
+ MLINKS+=getenv.3 setenv.3 getenv.3 unsetenv.3 getenv.3 putenv.3
+diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/stdlib/strfmon.3 src/lib/libc/stdlib/strfmon.3
+--- src55-orig/lib/libc/stdlib/strfmon.3	Wed Dec 31 19:00:00 1969
++++ src/lib/libc/stdlib/strfmon.3	Fri Nov 15 22:20:42 2013
+@@ -0,0 +1,174 @@
++.\" Copyright (c) 2001 Jeroen Ruigrok van der Werven <asmodai@FreeBSD.org>
++.\" All rights reserved.
++.\"
++.\" Redistribution and use in source and binary forms, with or without
++.\" modification, are permitted provided that the following conditions
++.\" are met:
++.\" 1. Redistributions of source code must retain the above copyright
++.\"    notice, this list of conditions and the following disclaimer.
++.\" 2. Redistributions in binary form must reproduce the above copyright
++.\"    notice, this list of conditions and the following disclaimer in the
++.\"    documentation and/or other materials provided with the distribution.
++.\"
++.\" THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
++.\" ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++.\" IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++.\" ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
++.\" FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++.\" DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++.\" OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++.\" HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++.\" LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++.\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++.\" SUCH DAMAGE.
++.\"
++.\" From FreeBSD
++.\"
++.Dd $Mdocdate: June 25 2012 $
++.Dt STRFMON 3
++.Os
++.\" ----------------------------------------------------------------------
++.Sh NAME
++.Nm strfmon
++.Nd convert monetary value to string
++.\" ----------------------------------------------------------------------
++.Sh LIBRARY
++.Lb libc
++.Sh SYNOPSIS
++.In monetary.h
++.Ft ssize_t
++.Fn strfmon "char * restrict s" "size_t maxsize" "const char * restrict format" "..."
++.\" ----------------------------------------------------------------------
++.Sh DESCRIPTION
++The
++.Fn strfmon
++function places characters into the array pointed to by
++.Fa s
++as controlled by the string pointed to by
++.Fa format .
++No more than
++.Fa maxsize
++bytes are placed into the array.
++.Pp
++The format string is composed of zero or more directives:
++ordinary characters (not
++.Cm % ) ,
++which are copied unchanged to the output stream; and conversion
++specifications, each of which results in fetching zero or more subsequent
++arguments.
++Each conversion specification is introduced by the
++.Cm %
++character.
++After the
++.Cm % ,
++the following appear in sequence:
++.Bl -bullet
++.It
++Zero or more of the following flags:
++.Bl -tag -width "XXX"
++.It Cm = Ns Ar f
++A
++.Sq Cm =
++character followed by another character
++.Ar f
++which is used as the numeric fill character.
++.It Cm ^
++Do not use grouping characters, regardless of the current locale default.
++.It Cm +
++Represent positive values by prefixing them with a positive sign,
++and negative values by prefixing them with a negative sign.
++This is the default.
++.It Cm \&(
++Enclose negative values in parentheses.
++.It Cm \&!
++Do not include a currency symbol in the output.
++.It Cm \-
++Left justify the result.
++Only valid when a field width is specified.
++.El
++.It
++An optional minimum field width as a decimal number.
++By default, there is no minimum width.
++.It
++A
++.Sq Cm #
++sign followed by a decimal number specifying the maximum
++expected number of digits after the radix character.
++.It
++A
++.Sq Cm \&.
++character followed by a decimal number specifying the number
++the number of digits after the radix character.
++.It
++One of the following conversion specifiers:
++.Bl -tag -width "XXX"
++.It Cm i
++The
++.Vt double
++argument is formatted as an international monetary amount.
++.It Cm n
++The
++.Vt double
++argument is formatted as a national monetary amount.
++.It Cm %
++A
++.Sq Li %
++character is written.
++.El
++.\" ----------------------------------------------------------------------
++.Sh RETURN VALUES
++If the total number of resulting bytes including the terminating
++.Dv NUL
++byte is not more than
++.Fa maxsize ,
++.Fn strfmon
++returns the number of bytes placed into the array pointed to by
++.Fa s ,
++not including the terminating
++.Dv NUL
++byte.
++Otherwise, \-1 is returned,
++the contents of the array are indeterminate,
++and
++.Va errno
++is set to indicate the error.
++.\" ----------------------------------------------------------------------
++.Sh ERRORS
++The
++.Fn strfmon
++function will fail if:
++.Bl -tag -width Er
++.It Bq Er E2BIG
++Conversion stopped due to lack of space in the buffer.
++.It Bq Er EINVAL
++The format string is invalid.
++.It Bq Er ENOMEM
++Not enough memory for temporary buffers.
++.El
++.\" ----------------------------------------------------------------------
++.Sh SEE ALSO
++.Xr localeconv 3
++.\" ----------------------------------------------------------------------
++.Sh STANDARDS
++The
++.Fn strfmon
++function
++conforms to
++.St -p1003.1-2001 .
++.Sh AUTHORS
++.An -nosplit
++The
++.Fn strfmon
++function was implemented by
++.An Alexey Zelkin Aq phantom@FreeBSD.org .
++.Pp
++This manual page was written by
++.An Jeroen Ruigrok van der Werven Aq asmodai@FreeBSD.org
++based on the standards' text.
++.\" ----------------------------------------------------------------------
++.Sh BUGS
++The
++.Fn strfmon
++function does not correctly handle multibyte characters in the
++.Fa format
++argument.
+diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/stdlib/strfmon.c src/lib/libc/stdlib/strfmon.c
+--- src55-orig/lib/libc/stdlib/strfmon.c	Wed Dec 31 19:00:00 1969
++++ src/lib/libc/stdlib/strfmon.c	Wed Nov 13 12:08:13 2013
+@@ -0,0 +1,627 @@
++/*-
++ * Copyright (c) 2001 Alexey Zelkin <phantom@FreeBSD.org>
++ * All rights reserved.
++ *
++ * Copyright (c) 2011 The FreeBSD Foundation
++ * All rights reserved.
++ * Portions of this software were developed by David Chisnall
++ * under sponsorship from the FreeBSD Foundation.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
++ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
++ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++ * SUCH DAMAGE.
++ *
++ */
++
++#include <sys/cdefs.h>
++#include <sys/types.h>
++
++#include <ctype.h>
++#include <errno.h>
++#include <limits.h>
++#include <locale.h>
++#include <monetary.h>
++#include <stdarg.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++
++/* internal flags */
++#define	NEED_GROUPING		0x01	/* print digits grouped (default) */
++#define	SIGN_POSN_USED		0x02	/* '+' or '(' usage flag */
++#define	LOCALE_POSN		0x04	/* use locale defined +/- (default) */
++#define	PARENTH_POSN		0x08	/* enclose negative amount in () */
++#define	SUPRESS_CURR_SYMBOL	0x10	/* supress the currency from output */
++#define	LEFT_JUSTIFY		0x20	/* left justify */
++#define	USE_INTL_CURRENCY	0x40	/* use international currency symbol */
++#define IS_NEGATIVE		0x80	/* is argument value negative ? */
++
++/* internal macros */
++#define PRINT(CH) do {						\
++	if (dst >= s + maxsize) 				\
++		goto e2big_error;				\
++	*dst++ = CH;						\
++} while (0)
++
++#define PRINTS(STR) do {					\
++	char *tmps = STR;					\
++	while (*tmps != '\0')					\
++		PRINT(*tmps++);					\
++} while (0)
++
++#define GET_NUMBER(VAR)	do {					\
++	VAR = 0;						\
++	while (isdigit((unsigned char)*fmt)) {			\
++		if (VAR > INT_MAX / 10)				\
++			goto e2big_error;			\
++		VAR *= 10;					\
++		VAR += *fmt - '0';				\
++		if (VAR < 0)					\
++			goto e2big_error;			\
++		fmt++;						\
++	}							\
++} while (0)
++
++#define GRPCPY(howmany) do {					\
++	int i = howmany;					\
++	while (i-- > 0) {					\
++		avalue_size--;					\
++		*--bufend = *(avalue+avalue_size+padded);	\
++	}							\
++} while (0)
++
++#define GRPSEP do {						\
++	*--bufend = thousands_sep;				\
++	groups++;						\
++} while (0)
++
++static void __setup_vars(int, char *, char *, char *, char **);
++static int __calc_left_pad(int, char *);
++static char *__format_grouped_double(double, int *, int, int, int);
++
++static ssize_t
++vstrfmon(char * __restrict s, size_t maxsize, 
++		const char * __restrict format, va_list ap)
++{
++	char 		*dst;		/* output destination pointer */
++	const char 	*fmt;		/* current format poistion pointer */
++	struct lconv 	*lc;		/* pointer to lconv structure */
++	char		*asciivalue;	/* formatted double pointer */
++
++	int		flags;		/* formatting options */
++	int		pad_char;	/* padding character */
++	int		pad_size;	/* pad size */
++	int		width;		/* field width */
++	int		left_prec;	/* left precision */
++	int		right_prec;	/* right precision */
++	double		value;		/* just value */
++	char		space_char = ' '; /* space after currency */
++
++	char		cs_precedes,	/* values gathered from struct lconv */
++			sep_by_space,
++			sign_posn,
++			*signstr,
++			*currency_symbol;
++
++	char		*tmpptr;	/* temporary vars */
++	int		sverrno;
++
++
++	lc = localeconv();
++	dst = s;
++	fmt = format;
++	asciivalue = NULL;
++	currency_symbol = NULL;
++	pad_size = 0;
++
++	while (*fmt) {
++		/* pass nonformating characters AS IS */
++		if (*fmt != '%')
++			goto literal;
++
++		/* '%' found ! */
++
++		/* "%%" mean just '%' */
++		if (*(fmt+1) == '%') {
++			fmt++;
++	literal:
++			PRINT(*fmt++);
++			continue;
++		}
++
++		/* set up initial values */
++		flags = (NEED_GROUPING|LOCALE_POSN);
++		pad_char = ' ';		/* padding character is "space" */
++		left_prec = -1;		/* no left precision specified */
++		right_prec = -1;	/* no right precision specified */
++		width = -1;		/* no width specified */
++		value = 0;		/* we have no value to print now */
++
++		/* Flags */
++		while (1) {
++			switch (*++fmt) {
++				case '=':	/* fill character */
++					pad_char = *++fmt;
++					if (pad_char == '\0')
++						goto format_error;
++					continue;
++				case '^':	/* not group currency  */
++					flags &= ~(NEED_GROUPING);
++					continue;
++				case '+':	/* use locale defined signs */
++					if (flags & SIGN_POSN_USED)
++						goto format_error;
++					flags |= (SIGN_POSN_USED|LOCALE_POSN);
++					continue;
++				case '(':	/* enclose negatives with () */
++					if (flags & SIGN_POSN_USED)
++						goto format_error;
++					flags |= (SIGN_POSN_USED|PARENTH_POSN);
++					continue;
++				case '!':	/* suppress currency symbol */
++					flags |= SUPRESS_CURR_SYMBOL;
++					continue;
++				case '-':	/* alignment (left)  */
++					flags |= LEFT_JUSTIFY;
++					continue;
++				default:
++					break;
++			}
++			break;
++		}
++
++		/* field Width */
++		if (isdigit((unsigned char)*fmt)) {
++			GET_NUMBER(width);
++			/* Do we have enough space to put number with
++			 * required width ?
++			 */
++			if ((unsigned int)width >= maxsize - (dst - s))
++				goto e2big_error;
++		}
++
++		/* Left precision */
++		if (*fmt == '#') {
++			if (!isdigit((unsigned char)*++fmt))
++				goto format_error;
++			GET_NUMBER(left_prec);
++			if ((unsigned int)left_prec >= maxsize - (dst - s))
++				goto e2big_error;
++		}
++
++		/* Right precision */
++		if (*fmt == '.') {
++			if (!isdigit((unsigned char)*++fmt))
++				goto format_error;
++			GET_NUMBER(right_prec);
++			if ((unsigned int)right_prec >= maxsize - (dst - s) -
++			    left_prec)
++				goto e2big_error;
++		}
++
++		/* Conversion Characters */
++		switch (*fmt++) {
++			case 'i':	/* use internaltion currency format */
++				flags |= USE_INTL_CURRENCY;
++				break;
++			case 'n':	/* use national currency format */
++				flags &= ~(USE_INTL_CURRENCY);
++				break;
++			default:	/* required character is missing or
++					   premature EOS */
++				goto format_error;
++		}
++
++		if (currency_symbol != NULL)
++			free(currency_symbol);
++		if (flags & USE_INTL_CURRENCY) {
++			currency_symbol = strdup(lc->int_curr_symbol);
++			if (currency_symbol != NULL)
++				space_char = *(currency_symbol+3);
++		} else
++			currency_symbol = strdup(lc->currency_symbol);
++
++		if (currency_symbol == NULL)
++			goto end_error;			/* ENOMEM. */
++
++		/* value itself */
++		value = va_arg(ap, double);
++
++		/* detect sign */
++		if (value < 0) {
++			flags |= IS_NEGATIVE;
++			value = -value;
++		}
++
++		/* fill left_prec with amount of padding chars */
++		if (left_prec >= 0) {
++			pad_size = __calc_left_pad((flags ^ IS_NEGATIVE),
++							currency_symbol) -
++				   __calc_left_pad(flags, currency_symbol);
++			if (pad_size < 0)
++				pad_size = 0;
++		}
++
++		if (asciivalue != NULL)
++			free(asciivalue);
++		asciivalue = __format_grouped_double(value, &flags,
++				left_prec, right_prec, pad_char);
++		if (asciivalue == NULL)
++			goto end_error;		/* errno already set     */
++						/* to ENOMEM by malloc() */
++
++		/* set some variables for later use */
++		__setup_vars(flags, &cs_precedes, &sep_by_space,
++				&sign_posn, &signstr);
++
++		/*
++		 * Description of some LC_MONETARY's values:
++		 *
++		 * p_cs_precedes & n_cs_precedes
++		 *
++		 * = 1 - $currency_symbol precedes the value
++		 *       for a monetary quantity with a non-negative value
++		 * = 0 - symbol succeeds the value
++		 *
++		 * p_sep_by_space & n_sep_by_space
++                 *
++		 * = 0 - no space separates $currency_symbol
++		 *       from the value for a monetary quantity with a
++		 *	 non-negative value
++		 * = 1 - space separates the symbol from the value
++		 * = 2 - space separates the symbol and the sign string,
++		 *       if adjacent.
++                 *
++		 * p_sign_posn & n_sign_posn
++                 *
++		 * = 0 - parentheses enclose the quantity and the
++		 *	 $currency_symbol
++		 * = 1 - the sign string precedes the quantity and the 
++		 *       $currency_symbol
++		 * = 2 - the sign string succeeds the quantity and the 
++		 *       $currency_symbol
++		 * = 3 - the sign string precedes the $currency_symbol
++		 * = 4 - the sign string succeeds the $currency_symbol
++                 *
++		 */
++
++		tmpptr = dst;
++
++		while (pad_size-- > 0)
++			PRINT(' ');
++
++		if (sign_posn == 0 && (flags & IS_NEGATIVE))
++			PRINT('(');
++
++		if (cs_precedes == 1) {
++			if (sign_posn == 1 || sign_posn == 3) {
++				PRINTS(signstr);
++				if (sep_by_space == 2)		/* XXX: ? */
++					PRINT(' ');
++			}
++
++			if (!(flags & SUPRESS_CURR_SYMBOL)) {
++				PRINTS(currency_symbol);
++
++				if (sign_posn == 4) {
++					if (sep_by_space == 2)
++						PRINT(space_char);
++					PRINTS(signstr);
++					if (sep_by_space == 1)
++						PRINT(' ');
++				} else if (sep_by_space == 1)
++					PRINT(space_char);
++			}
++		} else if (sign_posn == 1)
++			PRINTS(signstr);
++
++		PRINTS(asciivalue);
++
++		if (cs_precedes == 0) {
++			if (sign_posn == 3) {
++				if (sep_by_space == 1)
++					PRINT(' ');
++				PRINTS(signstr);
++			}
++
++			if (!(flags & SUPRESS_CURR_SYMBOL)) {
++				if ((sign_posn == 3 && sep_by_space == 2)
++				    || (sep_by_space == 1
++				    && (sign_posn == 0
++				    || sign_posn == 1
++				    || sign_posn == 2
++				    || sign_posn == 4)))
++					PRINT(space_char);
++				PRINTS(currency_symbol); /* XXX: len */
++				if (sign_posn == 4) {
++					if (sep_by_space == 2)
++						PRINT(' ');
++					PRINTS(signstr);
++				}
++			}
++		}
++
++		if (sign_posn == 2) {
++			if (sep_by_space == 2)
++				PRINT(' ');
++			PRINTS(signstr);
++		}
++
++		if (sign_posn == 0 && (flags & IS_NEGATIVE))
++			PRINT(')');
++
++		if (dst - tmpptr < width) {
++			if (flags & LEFT_JUSTIFY) {
++				while (dst - tmpptr < width)
++					PRINT(' ');
++			} else {
++				pad_size = dst-tmpptr;
++				memmove(tmpptr + width-pad_size, tmpptr,
++				    pad_size);
++				memset(tmpptr, ' ', width-pad_size);
++				dst += width-pad_size;
++			}
++		}
++	}
++
++	PRINT('\0');
++	free(asciivalue);
++	free(currency_symbol);
++	return (dst - s - 1);	/* return size of put data except trailing '\0' */
++
++e2big_error:
++	errno = E2BIG;
++	goto end_error;
++
++format_error:
++	errno = EINVAL;
++
++end_error:
++	sverrno = errno;
++	if (asciivalue != NULL)
++		free(asciivalue);
++	if (currency_symbol != NULL)
++		free(currency_symbol);
++	errno = sverrno;
++	return (-1);
++}
++ssize_t
++strfmon(char * __restrict s, size_t maxsize, const char * __restrict format,
++    ...)
++{
++	size_t ret;
++	va_list ap;
++	va_start(ap, format);
++	ret = vstrfmon(s, maxsize, format, ap);
++	va_end(ap);
++	return ret;
++}
++
++static void
++__setup_vars(int flags, char *cs_precedes, char *sep_by_space,
++		char *sign_posn, char **signstr) {
++
++	struct lconv *lc = localeconv();
++
++	if ((flags & IS_NEGATIVE) && (flags & USE_INTL_CURRENCY)) {
++		*cs_precedes = lc->int_n_cs_precedes;
++		*sep_by_space = lc->int_n_sep_by_space;
++		*sign_posn = (flags & PARENTH_POSN) ? 0 : lc->int_n_sign_posn;
++		*signstr = (lc->negative_sign[0] == '\0') ? "-"
++		    : lc->negative_sign;
++	} else if (flags & USE_INTL_CURRENCY) {
++		*cs_precedes = lc->int_p_cs_precedes;
++		*sep_by_space = lc->int_p_sep_by_space;
++		*sign_posn = (flags & PARENTH_POSN) ? 0 : lc->int_p_sign_posn;
++		*signstr = lc->positive_sign;
++	} else if (flags & IS_NEGATIVE) {
++		*cs_precedes = lc->n_cs_precedes;
++		*sep_by_space = lc->n_sep_by_space;
++		*sign_posn = (flags & PARENTH_POSN) ? 0 : lc->n_sign_posn;
++		*signstr = (lc->negative_sign[0] == '\0') ? "-"
++		    : lc->negative_sign;
++	} else {
++		*cs_precedes = lc->p_cs_precedes;
++		*sep_by_space = lc->p_sep_by_space;
++		*sign_posn = (flags & PARENTH_POSN) ? 0 : lc->p_sign_posn;
++		*signstr = lc->positive_sign;
++	}
++
++	/* Set defult values for unspecified information. */
++	if (*cs_precedes != 0)
++		*cs_precedes = 1;
++	if (*sep_by_space == CHAR_MAX)
++		*sep_by_space = 0;
++	if (*sign_posn == CHAR_MAX)
++		*sign_posn = 0;
++}
++
++static int
++__calc_left_pad(int flags, char *cur_symb) {
++
++	char cs_precedes, sep_by_space, sign_posn, *signstr;
++	int left_chars = 0;
++
++	__setup_vars(flags, &cs_precedes, &sep_by_space, &sign_posn, &signstr);
++
++	if (cs_precedes != 0) {
++		left_chars += strlen(cur_symb);
++		if (sep_by_space != 0)
++			left_chars++;
++	}
++
++	switch (sign_posn) {
++		case 1:
++			left_chars += strlen(signstr);
++			break;
++		case 3:
++		case 4:
++			if (cs_precedes != 0)
++				left_chars += strlen(signstr);
++	}
++	return (left_chars);
++}
++
++static int
++get_groups(int size, char *grouping) {
++
++	int	chars = 0;
++
++	if (*grouping == CHAR_MAX || *grouping <= 0)	/* no grouping ? */
++		return (0);
++
++	while (size > (int)*grouping) {
++		chars++;
++		size -= (int)*grouping++;
++		/* no more grouping ? */
++		if (*grouping == CHAR_MAX)
++			break;
++		/* rest grouping with same value ? */
++		if (*grouping == 0) {
++			chars += (size - 1) / *(grouping - 1);
++			break;
++		}
++	}
++	return (chars);
++}
++
++/* convert double to ASCII */
++static char *
++__format_grouped_double(double value, int *flags,
++			int left_prec, int right_prec, int pad_char) {
++
++	char		*rslt;
++	char		*avalue;
++	int		avalue_size;
++	char		fmt[32];
++
++	size_t		bufsize;
++	char		*bufend;
++
++	int		padded;
++
++	struct lconv	*lc = localeconv();
++	char		*grouping;
++	char		decimal_point;
++	char		thousands_sep;
++
++	int groups = 0;
++
++	grouping = lc->mon_grouping;
++	decimal_point = *lc->mon_decimal_point;
++	if (decimal_point == '\0')
++		decimal_point = *lc->decimal_point;
++	thousands_sep = *lc->mon_thousands_sep;
++	if (thousands_sep == '\0')
++		thousands_sep = *lc->thousands_sep;
++
++	/* fill left_prec with default value */
++	if (left_prec == -1)
++		left_prec = 0;
++
++	/* fill right_prec with default value */
++	if (right_prec == -1) {
++                if (*flags & USE_INTL_CURRENCY)
++                        right_prec = lc->int_frac_digits;
++                else
++                        right_prec = lc->frac_digits;
++
++		if (right_prec == CHAR_MAX)	/* POSIX locale ? */
++			right_prec = 2;
++	}
++
++	if (*flags & NEED_GROUPING)
++		left_prec += get_groups(left_prec, grouping);
++
++	/* convert to string */
++	snprintf(fmt, sizeof(fmt), "%%%d.%df", left_prec + right_prec + 1,
++	    right_prec);
++	avalue_size = asprintf(&avalue, fmt, value);
++	if (avalue_size < 0)
++		return (NULL);
++
++	/* make sure that we've enough space for result string */
++	bufsize = strlen(avalue)*2+1;
++	rslt = calloc(1, bufsize);
++	if (rslt == NULL) {
++		free(avalue);
++		return (NULL);
++	}
++	bufend = rslt + bufsize - 1;	/* reserve space for trailing '\0' */
++
++	/* skip spaces at beggining */
++	padded = 0;
++	while (avalue[padded] == ' ') {
++		padded++;
++		avalue_size--;
++	}
++
++	if (right_prec > 0) {
++		bufend -= right_prec;
++		memcpy(bufend, avalue + avalue_size+padded-right_prec,
++		    right_prec);
++		*--bufend = decimal_point;
++		avalue_size -= (right_prec + 1);
++	}
++
++	if ((*flags & NEED_GROUPING) &&
++	    thousands_sep != '\0' &&	/* XXX: need investigation */
++	    *grouping != CHAR_MAX &&
++	    *grouping > 0) {
++		while (avalue_size > (int)*grouping) {
++			GRPCPY(*grouping);
++			GRPSEP;
++			grouping++;
++
++			/* no more grouping ? */
++			if (*grouping == CHAR_MAX)
++				break;
++
++			/* rest grouping with same value ? */
++			if (*grouping == 0) {
++				grouping--;
++				while (avalue_size > *grouping) {
++					GRPCPY(*grouping);
++					GRPSEP;
++				}
++			}
++		}
++		if (avalue_size != 0)
++			GRPCPY(avalue_size);
++		padded -= groups;
++
++	} else {
++		bufend -= avalue_size;
++		memcpy(bufend, avalue+padded, avalue_size);
++		if (right_prec == 0)
++			padded--;	/* decrease assumed $decimal_point */
++	}
++
++	/* do padding with pad_char */
++	if (padded > 0) {
++		bufend -= padded;
++		memset(bufend, pad_char, padded);
++	}
++
++	bufsize = bufsize - (bufend - rslt) + 1;
++	memmove(rslt, bufend, bufsize);
++	free(avalue);
++	return (rslt);
++}
