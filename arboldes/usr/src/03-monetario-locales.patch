@@ -4,8 +4,8 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/Makefile src/share/local
 @@ -1,6 +1,6 @@
  #	$OpenBSD: Makefile,v 1.1 2005/08/07 10:03:44 espie Exp $
  
--SUBDIR=	ctype
-+SUBDIR=	ctype monetarydef
+-SUBDIR=	ctype colldef
++SUBDIR=	ctype colldef monetarydef
  	
  
  .include <bsd.subdir.mk>
