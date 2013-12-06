@@ -411,10 +411,10 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/lib/libc/string/wcscasecmp.
 +{
 +	return wcsncasecmp_l(s1, s2, n, __get_locale());
  }
-diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/regress/lib/libc/locale/check_isw/check_isw.c src/regress/lib/libc/locale/check_isw/check_isw.c
---- src53xlocale2/regress/lib/libc/locale/check_isw/check_isw.c	Fri Apr 12 05:23:22 2013
-+++ src/regress/lib/libc/locale/check_isw/check_isw.c	Wed Apr 10 04:21:31 2013
-@@ -20,9 +20,11 @@
+diff -ruN -x obj -x CVS -x *~ -x *orig src54-x5/regress/lib/libc/locale/check_isw/check_isw.c src/regress/lib/libc/locale/check_isw/check_isw.c
+--- src54-x5/regress/lib/libc/locale/check_isw/check_isw.c	Tue Dec  3 13:48:26 2013
++++ src/regress/lib/libc/locale/check_isw/check_isw.c	Tue Dec  3 15:35:06 2013
+@@ -20,6 +20,7 @@
   */
  
  #include <ctype.h>
@@ -422,11 +422,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/regress/lib/libc/locale/che
  #include <locale.h>
  #include <stdio.h>
  #include <stdlib.h>
-+#include <string.h>
- #include <wchar.h>
- #include <wctype.h>
- 
-@@ -225,11 +227,34 @@
+@@ -224,11 +225,34 @@
  
  }
  
