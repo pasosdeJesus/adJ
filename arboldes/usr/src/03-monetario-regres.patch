@@ -1,15 +1,14 @@
-diff -ruN -x *~ -x obj -x *orig src55-orig/regress/lib/libc/locale/Makefile src55-mon/regress/lib/libc/locale/Makefile
---- src55-orig/regress/lib/libc/locale/Makefile	Fri Oct 18 09:22:50 2013
-+++ src55-mon/regress/lib/libc/locale/Makefile	Wed Nov 20 09:12:20 2013
-@@ -1,7 +1,7 @@
- # $OpenBSD: Makefile,v 1.2 2013/08/01 21:26:30 kettenis Exp $
+diff -ruN -x *~ -x obj -x *orig src54-coll/regress/lib/libc/locale/Makefile src/regress/lib/libc/locale/Makefile
+--- src54-coll/regress/lib/libc/locale/Makefile	Tue Dec  3 10:55:37 2013
++++ src/regress/lib/libc/locale/Makefile	Tue Dec  3 11:55:54 2013
+@@ -1,6 +1,6 @@
+ # $OpenBSD: Makefile,v 1.1 2005/08/11 21:57:02 espie Exp $
  
- .if defined(REGRESS_FULL)
--SUBDIR+= check_isw
-+SUBDIR+= check_isw check_monetary
- .endif
+-SUBDIR+= check_isw check_collate
++SUBDIR+= check_isw check_collate check_monetary
  
  install:
+ 
 diff -ruN -x *~ -x obj -x *orig src55-orig/regress/lib/libc/locale/check_monetary/Makefile src55-mon/regress/lib/libc/locale/check_monetary/Makefile
 --- src55-orig/regress/lib/libc/locale/check_monetary/Makefile	Wed Dec 31 19:00:00 1969
 +++ src55-mon/regress/lib/libc/locale/check_monetary/Makefile	Tue Nov 19 20:34:54 2013
@@ -25,10 +24,10 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/regress/lib/libc/locale/check_monetar
 +	./${PROG} >/dev/null
 +
 +.include <bsd.regress.mk>
-diff -ruN -x *~ -x obj -x *orig src55-orig/regress/lib/libc/locale/check_monetary/check_monetary.c src55-mon/regress/lib/libc/locale/check_monetary/check_monetary.c
---- src55-orig/regress/lib/libc/locale/check_monetary/check_monetary.c	Wed Dec 31 19:00:00 1969
-+++ src55-mon/regress/lib/libc/locale/check_monetary/check_monetary.c	Wed Nov 20 09:08:21 2013
-@@ -0,0 +1,574 @@
+diff -ruN -x *~ -x obj -x *orig src54-coll/regress/lib/libc/locale/check_monetary/check_monetary.c src/regress/lib/libc/locale/check_monetary/check_monetary.c
+--- src54-coll/regress/lib/libc/locale/check_monetary/check_monetary.c	Wed Dec 31 19:00:00 1969
++++ src/regress/lib/libc/locale/check_monetary/check_monetary.c	Thu Dec  5 06:23:21 2013
+@@ -0,0 +1,617 @@
 +/**
 + * Public domain according to Colombian Legislation. 
 + * http://www.pasosdejesus.org/dominio_publico_colombia.html
@@ -595,8 +594,51 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/regress/lib/libc/locale/check_monetar
 +	}
 +}
 +
++void test_switch()
++{
++	char nom[256];
++	char ol[512];
++	char op[512];
++	char *nl;
++	struct lconv *p;
++	int i;
++	nl = setlocale(LC_MONETARY, NULL);
++	printf("lc_monetary %s\n", nl);
++	snprintf(ol, sizeof(ol), "%s", nl);	
++	p = localeconv();
++	snprintf(op, sizeof(op), "%s", p->mon_decimal_point);
++	printf("op='%s'\n", op);
++
++	nl = setlocale(LC_MONETARY, "C"); 
++	printf("lc_monetary %s\n", nl);
++	p = localeconv();
++	p(strcmp(p->mon_decimal_point, "") == 0);
++
++	nl = setlocale(LC_MONETARY, ol);
++	printf("lc_monetary %s\n", nl);
++	p = localeconv();
++	p(strcmp(p->mon_decimal_point, op) == 0);
++
++
++	nl = setlocale(LC_ALL, "es_CO.UTF-8");
++	printf("locale %s\n", nl);
++	p = localeconv();
++	p(strcmp(p->mon_decimal_point, ",") == 0);
++
++	nl = setlocale(LC_ALL, "en_US.UTF-8");
++	printf("locale %s\n", nl);
++	p = localeconv();
++	p(strcmp(p->mon_decimal_point, ".") == 0);
++
++	nl = setlocale(LC_ALL, "C");
++	printf("locale %s\n", nl);
++	p = localeconv();
++	p(strcmp(p->mon_decimal_point, "") == 0);
++}
++
 +int main()
 +{
++	test_switch();
 +	test_posix();
 +	test_ibe();
 +	test_us();
