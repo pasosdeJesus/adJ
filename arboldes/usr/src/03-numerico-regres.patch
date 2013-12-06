@@ -1,15 +1,14 @@
-diff -u src55-orig/regress/lib/libc/locale/Makefile src/regress/lib/libc/locale/Makefile
---- src55-orig/regress/lib/libc/locale/Makefile	Fri Oct 18 09:22:50 2013
-+++ src/regress/lib/libc/locale/Makefile	Mon Nov 11 15:25:35 2013
-@@ -1,7 +1,7 @@
- # $OpenBSD: Makefile,v 1.2 2013/08/01 21:26:30 kettenis Exp $
+diff -u src54-mon/regress/lib/libc/locale/Makefile src/regress/lib/libc/locale/Makefile
+--- src54-mon/regress/lib/libc/locale/Makefile	Tue Dec  3 12:26:53 2013
++++ src/regress/lib/libc/locale/Makefile	Tue Dec  3 12:58:34 2013
+@@ -1,6 +1,6 @@
+ # $OpenBSD: Makefile,v 1.1 2005/08/11 21:57:02 espie Exp $
  
- .if defined(REGRESS_FULL)
--SUBDIR+= check_isw
-+SUBDIR+= check_isw check_numeric
- .endif
+-SUBDIR+= check_isw check_collate check_monetary
++SUBDIR+= check_isw check_collate check_monetary check_numeric
  
  install:
+ 
 diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/regress/lib/libc/locale/check_numeric/Makefile src/regress/lib/libc/locale/check_numeric/Makefile
 --- src55-orig/regress/lib/libc/locale/check_numeric/Makefile	Wed Dec 31 19:00:00 1969
 +++ src/regress/lib/libc/locale/check_numeric/Makefile	Mon Nov 11 12:01:52 2013
@@ -25,10 +24,10 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/regress/lib/libc/locale/check_
 +	./${PROG} >/dev/null
 +
 +.include <bsd.regress.mk>
-diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/regress/lib/libc/locale/check_numeric/check_numeric.c src/regress/lib/libc/locale/check_numeric/check_numeric.c
---- src55-orig/regress/lib/libc/locale/check_numeric/check_numeric.c	Wed Dec 31 19:00:00 1969
-+++ src/regress/lib/libc/locale/check_numeric/check_numeric.c	Mon Nov 11 12:01:52 2013
-@@ -0,0 +1,159 @@
+diff -ruN -x obj -x CVS -x *~ -x *orig src54-mon/regress/lib/libc/locale/check_numeric/check_numeric.c src/regress/lib/libc/locale/check_numeric/check_numeric.c
+--- src54-mon/regress/lib/libc/locale/check_numeric/check_numeric.c	Wed Dec 31 19:00:00 1969
++++ src/regress/lib/libc/locale/check_numeric/check_numeric.c	Thu Dec  5 06:23:54 2013
+@@ -0,0 +1,197 @@
 +/**
 + * Public domain according to Colombian Legislation. 
 + * http://www.pasosdejesus.org/dominio_publico_colombia.html
@@ -180,8 +179,46 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/regress/lib/libc/locale/check_
 +	}
 +}
 +
++void test_switch()
++{
++	char nom[256];
++	char ol[512];
++	char op[512];
++	char *nl;
++	struct lconv *p;
++	int i;
++	nl = setlocale(LC_NUMERIC, NULL);
++	snprintf(ol, sizeof(ol), "%s", nl);	
++	printf("lc_numeric %s\n", nl);
++	p = localeconv();
++	snprintf(op, sizeof(op), "%s", p->decimal_point);
++
++
++	nl = setlocale(LC_NUMERIC, "C");
++	printf("lc_numeric %s\n", nl);
++	p = localeconv();
++	p(strcmp(p->decimal_point, ".") == 0);
++
++	nl = setlocale(LC_NUMERIC, ol);
++	printf("lc_numeric %s\n", nl);
++	p = localeconv();
++	p(strcmp(p->decimal_point, op) == 0);
++
++
++	nl = setlocale(LC_ALL, "es_CO.UTF-8");
++	printf("locale %s\n", nl);
++	p = localeconv();
++	p(strcmp(p->decimal_point, ",") == 0);
++
++	nl = setlocale(LC_ALL, "C");
++	printf("locale %s\n", nl);
++	p = localeconv();
++	p(strcmp(p->decimal_point, ".") == 0);
++}
++
 +int main()
 +{
++	test_switch();
 +	test_posix();
 +	test_radixcomma_thousandsdot();
 +	test_radixdot_thousandscomma();
