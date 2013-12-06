@@ -560,8 +560,8 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/locale/collate
 +
 +#endif /* !_COLLATE_H_ */
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/locale/setlocale.c src/lib/libc/locale/setlocale.c
---- src54-s/lib/libc/locale/setlocale.c	Mon Oct  7 07:54:44 2013
-+++ src/lib/libc/locale/setlocale.c	Sat Oct 12 13:23:41 2013
+--- src54-orig/lib/libc/locale/setlocale.c	Sun Jun  2 16:07:50 2013
++++ src/lib/libc/locale/setlocale.c	Tue Dec  3 10:49:34 2013
 @@ -40,6 +40,7 @@
  #include <string.h>
  #include <unistd.h>
@@ -583,15 +583,16 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/locale/setloca
  	case LC_MONETARY:
  	case LC_NUMERIC:
  	case LC_TIME:
-@@ -262,6 +268,11 @@
- 		return set_lc_messages_locale(locname);
+@@ -230,7 +236,12 @@
+ 		break;
  
+ 	case LC_MESSAGES:
++		break;
  	case LC_COLLATE:
 +		if (__collate_load_tables(locname)) {
 +			return -1;
 +		}       
 +		break;
-+
  	case LC_MONETARY:
  	case LC_NUMERIC:
  	case LC_TIME:
