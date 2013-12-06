@@ -1208,7 +1208,7 @@ if (test "$?" = "0") then {
 	} fi;
 } fi;
 
-echo "* Deteniendo PostgreSQL" >> /var/tmp/inst-adJ.bitacora;
+echo "* Deteniendo PostgreSQL" >> /var/tmp/inst-adJ.bitacora
 pgrep post > /dev/null 2>&1
 if (test "$?" = "0") then {
 	su -l _postgresql -c "/usr/local/bin/pg_ctl stop -m fast -D /var/postgresql/data" >> /var/tmp/inst-adJ.bitacora
