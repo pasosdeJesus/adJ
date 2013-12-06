@@ -196,7 +196,7 @@ avahi-[v]		Descubrimiento de servicio DNS multidistribución
 babl-[v]		Librería para conversión dinámica de formatos de puntos
 bash-[v]		Interprete de comandos
 blas-[v]		Subprogramas básicos de álgebra lineal
-boehm-gc-[v]		Recolector de basura y detector de fallas para C y C++
+#boehm-gc-[v]		Recolector de basura y detector de fallas para C y C++
 cairo-[v]		Librería de gráficos vectoriales
 cairomm-[v]	Interfaz en C++ para cairo
 clisp-[v]		Implementación de ANSI Common Lisp
@@ -220,7 +220,6 @@ dvi2tty-[v]		Convierte archivos dvi a texto plano
 enca-[v]		Detecta codificación de caracteres de textos planos
 enchant-[v]		Librería genérica para corrección ortográfica
 esound-[v]	Librería de sonido para enlightment
-expect-[v]-no_tk	Lenguaje basado en Tcl/Tk
 faad-[v]		Decodificar AAC MPEG-2 y MPEG-4	
 fcgi-[v]		Herramientas de Desarrollo FastCGI
 femail-[v]		Cliente simple de SMTP
@@ -235,6 +234,7 @@ foomatic-filters-[v]	Filtros PPD de impresión foomatic
 foomatic-db-engine-[v]	Generador de PPDs de Foomatic
 fox-[v]		Juego de herramientas para interfaces en C++
 freetype-[v]	Motor para renderización de fuentes True Type
+freexl-[v]	
 fribidi-[v]		Librería Unicode
 gamin-[v]		Servidor para monitorear archivos
 gconf2-[v]		Sistema de configuración de G
@@ -245,6 +245,7 @@ gdk-pixbuf-[v]	Librería gráfica para GTK+2
 gegl-[v]		Entorno para procesamiento de imágenes basado en grafos
 GeoIP-[v]		Base de datos de paises de IPs
 gettext-[v]	Internacionalización
+ggrep-[v]	
 geoclue-[v]	Servicio modular de geoinformación sobre D-Bus
 geos-[v]		Motor de geometría y topología bidimensional
 giblib-[v]		Librería de utilidades
@@ -257,6 +258,7 @@ gmake-[v]		Herramienta para construir programas a partir de fuentes
 gmp-[v]		Librería de aritmética de precisión arbitraría
 gnome-doc-utils-[v]	Utilidades para documentación del proyecto GNOME
 gnome-icon-theme-[v]	Iconos para GNOME
+gnome-icon-theme-symbolic-[v]	
 gnome-mime-data-[v]	Base de datos MIME y de aplicaciones
 gnome-vfs2-[v]	Sistema de archivos virtual
 gnugetopt-[v]	Utilidad getopt(1) de GNU
@@ -264,6 +266,7 @@ gnupg-[v]		Remplazo de PGP
 gnutls-[v]		Librearía segura para la capa de transporte
 goffice-[v]	Utilidades y objetos centrados en documentos
 gpsd-[v]		Servicio que monitorea uno o más GPSes
+graphite2-[v]
 gsettings-desktop-schemas-[v]	Esquemas compartidos GSettings
 gsl-[v]		Libería científica
 gsm-[v]		Conversor de audio u-law a gsm
@@ -272,6 +275,9 @@ gstreamer-ffmpeg-[v]	Elemento ffmpeg para GStreamer
 gstreamer-plugins-bad-[v]	Elementos malos para GStreamer
 gstreamer-plugins-base-[v]	Elementos básicos para GStreamer
 gstreamer-plugins-good-[v]	Elementos buenos para GStreamer
+gstreamer1-[v]	
+gstreamer1-plugins-base-[v]	
+gstreamer1-plugins-libav-[v]	
 gtk+2-[v]		Componentes gráficos GTK+2
 gtk+3-[v]		Componentes gráficos GTK+2
 gtk-update-icon-cache-[v]	Utilidad para almacenar temas de iconos
@@ -280,6 +286,7 @@ gtkhtml3-[v]	Motor liviano para presentar HTML
 gtkspell-[v]	Corrector ortográfico para gtk2
 gvfs-[v]		Sistema de archivos virtual de GNOME
 harfbuzz-[v]    	Librería para dar formas a texto OpenType
+harfbuzz-icu-[v]    	
 hevea-[v]		Traductor de LaTeX a HTML
 hicolor-icon-theme-[v]	Tema de iconos con colores altos
 hplip-libs-[v]  	Librerías para el backend HPLIP
@@ -367,8 +374,9 @@ libsigsegv-[v]		Librería para manejar fallos de página en modo usuario
 libsndfile-[v]	Maneja varios formatos de audio
 libsoup-[v]		Implementación SOAP en C
 libsoup-gnome-[v]	Partes específicas de GNOME de libsoup
+libspatialite-[v]  	
 libspectre-[v]  	Librería para presentar documentos Postscript
-libstdc++-[v]	Librería de C++ del GCC
+#libstdc++-[v]	Librería de C++ del GCC
 libtar-[v]		Librería en C para manipular archivos tar
 libtasn1-[v]		Reconocer Notación de Sintaxis Abstracta Uno
 libtheora-[v]	Codec abierto de video
@@ -495,6 +503,7 @@ proj-[v]		Utilidades para proyección cartográfica
 ps2eps-[v]		Convierte Postscript a Postscript Encapsulado
 psutils-[v]		Utilidades para manipular documentos Postscript
 py-cairo-[v]	Conexión con Cairo para Python
+py-dbus-common-[v]
 py-gdal-[v]		Interfaz con GDAL desde Python
 py-gobject-[v]	Conexión con gobject de glib2 en Python
 py-gtk2-[v]	Conexión con GTK+2 en Python
@@ -517,8 +526,6 @@ re2c-[v]		Generador de reconocedores de expresiones regulares
 recode-[v]		Convertir archivos entre juegos de caracters y usos
 redland-[v]		Interfaz de alto nivel para RDF 
 ruby-ri_docs-[v]	Documentación de nucleo y librería estándar de Ruby
-ruby19-polyglot-[v]	Provee registro de tipos de archivos
-ruby19-treetop-[v]	Reconocimiento e interpretación de textos DSL
 sane-backends-[v]	API para acceder a scanners
 shared-mime-info-[v]	Base de datos mime compartida para escritorios
 schroedinger-[v]	Codec Dirac de alta velocidad
@@ -534,14 +541,13 @@ t1lib-[v]		Librería para presentación de fuentes tipo 1
 t1utils-[v]		Utilidades para fuentes PostScript tipo 1
 taglib-[v]		Para manejar meta-datos de formatos de audio
 tango-icon-theme-[v]	Para manejar meta-datos de formatos de audio
-tcl-[v]		Lenguaje de programación
 tiff-[v]		Manipula formato gráfico TIFF
-tk-[v]		Complemento gráfico para TCL
 transfig-[v]	Conversión entre formato XFIG y otros
 tremor-[v]		Decodificador OGG con aritmética entera
 twolame-[v]	Codificaodr de MPEG Audio Capa 2 (MP2) optimizado
 vamp-plugin-sdk-[v]	API para plugins de audio
-vim-lang-[v]-gtk2	Soporte de idiomas para vim
+vim-lang-[v]	Soporte de idiomas para vim
+vte-[v]
 wavpack-[v]	Codificador de audio para compresión con y sin perdida
 webkit-[v]	Motor de fuentes abiertas para navegadores web
 webkit-gtk3-[v]	Interfaz para GTK+3
