@@ -1694,9 +1694,9 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/se
  __get_locale_env(int category)
  {
  	const char *env;
-diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/setrunelocale.c src/lib/libc/locale/setrunelocale.c
+diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src54-num/lib/libc/locale/setrunelocale.c src/lib/libc/locale/setrunelocale.c
 --- src54-num/lib/libc/locale/setrunelocale.c	Sun Jun  2 15:10:49 2013
-+++ src/lib/libc/locale/setrunelocale.c	Tue Dec  3 15:49:41 2013
++++ src/lib/libc/locale/setrunelocale.c	Fri Dec  6 07:48:31 2013
 @@ -98,10 +98,13 @@
  #include <stddef.h>
  #include <string.h>
@@ -1727,8 +1727,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/se
 +xlocale_setrunelocale(struct xlocale_ctype *xc, const char *locname)
 +{
  	char path[PATH_MAX];
--	_RuneLocale *rl;
-+	_RuneLocale *rl;
+ 	_RuneLocale *rl;
  	int error, len;
  	const char *dot, *encoding;
  
@@ -1740,10 +1739,12 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/se
  	if (!strcmp(locname, "C") || !strcmp(locname, "POSIX")) {
  		rl = &_DefaultRuneLocale;
  		goto found;
-@@ -206,7 +225,43 @@
+@@ -205,8 +224,43 @@
+ 		return ENOENT;
  
  found:
- 	_CurrentRuneLocale = rl;
+-	_CurrentRuneLocale = rl;
++	_CurrentRuneLocale = (_RuneLocale *)rl;
 +	xc->runes = (_RuneLocale *)rl;
 +	xc->__mbrtowc = (void *)(rl->rl_citrus_ctype->cc_ops->co_mbrtowc);
 +	xc->__mbsinit = (void *)(rl->rl_citrus_ctype->cc_ops->co_mbsinit);
@@ -1751,11 +1752,11 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/se
 +	xc->__wcrtomb = (void *)rl->rl_citrus_ctype->cc_ops->co_wcrtomb;
 +	xc->__wcsnrtombs = (void *)rl->rl_citrus_ctype->cc_ops->co_wcsnrtombs;
 +	xc->__mb_cur_max = rl->rl_citrus_ctype->cc_mb_cur_max;
++
  	__mb_cur_max = rl->rl_citrus_ctype->cc_mb_cur_max;
  
  	return 0;
  }
-+
 +
 +void
 +destruct_ctype(void *t)
@@ -1766,7 +1767,6 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/se
 +		free(t);
 +	}
 +}
-+
 +
 +/** Based on __collate_load */
 +void *

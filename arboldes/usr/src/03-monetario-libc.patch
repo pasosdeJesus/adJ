@@ -52,6 +52,30 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/_def_monetary.
 -};
 -
 -const _MonetaryLocale *_CurrentMonetaryLocale = &_DefaultMonetaryLocale;
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/collate.c src/lib/libc/locale/collate.c
+--- src54-x6/lib/libc/locale/collate.c	Tue Dec  3 16:09:41 2013
++++ src/lib/libc/locale/collate.c	Tue Dec  3 16:12:25 2013
+@@ -50,6 +50,7 @@
+ #include <wchar.h>
+ 
+ #include "collate.h"
++#include "ldpart.h"
+ #include "rune.h"
+ #include "runetype.h"
+ 
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/collate.h src/lib/libc/locale/collate.h
+--- src54-x6/lib/libc/locale/collate.h	Tue Dec  3 16:09:41 2013
++++ src/lib/libc/locale/collate.h	Tue Dec  3 16:12:25 2013
+@@ -107,9 +107,5 @@
+ wchar_t *__dup_as_wcs_l(const char *s, locale_t l);
+ __END_DECLS
+ 
+-#define _LDP_LOADED 0
+-#define _LDP_ERROR  (-1)
+-#define _LDP_CACHE  1
+-
+ 
+ #endif /* !_COLLATE_H_ */
 diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/fix_grouping.c src/lib/libc/locale/fix_grouping.c
 --- src55-orig/lib/libc/locale/fix_grouping.c	Wed Dec 31 19:00:00 1969
 +++ src/lib/libc/locale/fix_grouping.c	Tue Nov 12 02:16:24 2013
