@@ -728,17 +728,56 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/lmonetary.h sr
 +int	__monetary_load_locale(const char *);
 +
 +#endif /* !_LMONETARY_H_ */
-diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/nl_langinfo.c src/lib/libc/locale/nl_langinfo.c
---- src55-orig/lib/libc/locale/nl_langinfo.c	Wed Nov 16 11:48:15 2005
-+++ src/lib/libc/locale/nl_langinfo.c	Sat Nov 16 08:04:36 2013
-@@ -97,8 +97,8 @@
+diff -ruN -x *~ -x *orig src54-orig/lib/libc/locale/nl_langinfo.3 src/lib/libc/locale/nl_langinfo.3
+--- src54-orig/lib/libc/locale/nl_langinfo.3	Sun Oct  6 20:04:49 2013
++++ src/lib/libc/locale/nl_langinfo.3	Wed Dec 11 08:16:55 2013
+@@ -28,5 +28,14 @@
+ returns a pointer to an empty string if
+ .Fa item
+ is invalid.
++.Sh ERRORS
++Regarding CRNCYSTR from
++http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/langinfo.h.html
++it is not clear how to detect when to use '.' (i.e currency
++symbol replaces radix char).  Such information is not present at
++http://unicode.org/cldr/trac/browser/tags/release-1-9/posix/.
++.Pp
++FreeBSD implements p_cs_precedes == CHAR_MAX to mean that currency symbol
++replaces radix char.
+ .Sh SEE ALSO
+ .Xr setlocale 3
+diff -ruN -x *~ -x *orig src54-orig/lib/libc/locale/nl_langinfo.c src/lib/libc/locale/nl_langinfo.c
+--- src54-orig/lib/libc/locale/nl_langinfo.c	Wed Nov 16 11:48:15 2005
++++ src/lib/libc/locale/nl_langinfo.c	Wed Dec 11 08:11:54 2013
+@@ -11,6 +11,8 @@
+ #include "rune.h"
+ #include "runetype.h"
+ 
++static char _bufcrncystr[16];
++
+ char *
+ nl_langinfo(nl_item item)
+ {
+@@ -97,8 +99,20 @@
  	case NOEXPR:
  		s = _CurrentMessagesLocale->noexpr;
  		break;
 -	case CRNCYSTR:				/* XXX */
 -		s = "";
 +	case CRNCYSTR:				
-+		s = _CurrentMonetaryLocale->currency_symbol;
++		_bufcrncystr[0] = '\0';
++		
++		if (_CurrentMonetaryLocale->currency_symbol[0] != '\0' 
++			&& _CurrentMonetaryLocale->p_cs_precedes == _CurrentMonetaryLocale->n_cs_precedes) {
++			if (_CurrentMonetaryLocale->p_cs_precedes == 1) {
++				strlcat(_bufcrncystr, "-", sizeof(_bufcrncystr));
++			} else {
++				strlcat(_bufcrncystr, "+", sizeof(_bufcrncystr));
++			}
++		}
++		strlcat(_bufcrncystr, _CurrentMonetaryLocale->currency_symbol, 
++				sizeof(_bufcrncystr));
++		s = _bufcrncystr;
  		break;
  	case CODESET:
  		s = _CurrentRuneLocale->rl_codeset;

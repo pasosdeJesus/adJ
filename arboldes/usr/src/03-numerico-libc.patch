@@ -407,7 +407,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/stdio/vfprintf.c src/
 -	char *decimal_point = NULL;
 +	const char *decimal_point = nl_langinfo(RADIXCHAR);
 +	if (strlen(decimal_point) > 1) {
-+		decimal_point = _DefaultNumericLocale.decimal_point;
++		decimal_point = "."; // POSIX
 +	}
  	int signflag;		/* true if float is negative */
  	union {			/* floating point arguments %[aAeEfFgG] */
@@ -533,3 +533,100 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/stdio/vfprintf.c src/
  					if (prec || flags & ALT)
  						PRINT(decimal_point, 1);
  				}
+diff -ruN -x *~ -x *orig -x *rej src54-mon/lib/libc/stdio/scanf.3 src/lib/libc/stdio/scanf.3
+--- src54-mon/lib/libc/stdio/scanf.3	Sun Oct  6 20:04:49 2013
++++ src/lib/libc/stdio/scanf.3	Tue Dec 10 06:04:34 2013
+@@ -295,7 +295,9 @@
+ Equivalent to
+ .Cm f .
+ .It Cm fF
+-Matches an optionally signed floating-point number;
++Matches an optionally signed floating-point number that uses
++the decimal point of the current LC_NUMERIC category of the locale
++.Xr setlocale(3) ;
+ the next pointer must be a pointer to
+ .Vt float .
+ .It Cm gG
+diff -ruN -x *~ -x *orig -x *rej src54-mon/lib/libc/stdio/vfscanf.c src/lib/libc/stdio/vfscanf.c
+--- src54-mon/lib/libc/stdio/vfscanf.c	Sat Apr 27 21:08:40 2013
++++ src/lib/libc/stdio/vfscanf.c	Mon Dec  9 10:02:00 2013
+@@ -32,13 +32,14 @@
+  */
+ 
+ #include <ctype.h>
+-#include <wctype.h>
+ #include <inttypes.h>
++#include <locale.h>
+ #include <stdarg.h>
+ #include <stddef.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
++#include <wctype.h>
+ #include "local.h"
+ 
+ #ifdef FLOATING_POINT
+@@ -110,6 +111,7 @@
+ 	int base;		/* base argument to strtoimax/strtouimax */
+ 	char ccltab[256];	/* character class table for %[...] */
+ 	char buf[BUF];		/* buffer for numeric conversions */
++	const char *decimal_point;
+ #ifdef SCANF_WIDE_CHAR
+ 	wchar_t *wcp;		/* handy wide character pointer */
+ 	size_t nconv;		/* length of multibyte sequence converted */
+@@ -769,6 +771,10 @@
+ 				width = sizeof(buf) - 2;
+ 			width++;
+ #endif
++			decimal_point=localeconv()->decimal_point;
++			if (strlen(decimal_point) > 1) {
++				decimal_point="."; // POSIX
++			}
+ 			flags |= SIGNOK | NDIGITS | DPTOK | EXPOK;
+ 			for (p = buf; width; width--) {
+ 				c = *fp->_p;
+@@ -776,6 +782,10 @@
+ 				 * This code mimicks the integer conversion
+ 				 * code, but is much simpler.
+ 				 */
++				if (decimal_point[0] == c  && (flags & DPTOK)) {
++					flags &= ~(SIGNOK | DPTOK);
++					goto fok;
++				}
+ 				switch (c) {
+ 
+ 				case '0': case '1': case '2': case '3':
+@@ -790,18 +800,12 @@
+ 						goto fok;
+ 					}
+ 					break;
+-				case '.':
+-					if (flags & DPTOK) {
+-						flags &= ~(SIGNOK | DPTOK);
+-						goto fok;
+-					}
+-					break;
+ 				case 'e': case 'E':
+ 					/* no exponent without some digits */
+ 					if ((flags&(NDIGITS|EXPOK)) == EXPOK) {
+ 						flags =
+-						    (flags & ~(EXPOK|DPTOK)) |
+-						    SIGNOK | NDIGITS;
++							(flags & ~(EXPOK|DPTOK)) |
++							SIGNOK | NDIGITS;
+ 						goto fok;
+ 					}
+ 					break;
+diff -ruN -x *~ -x *orig -x *rej src54-mon/lib/libc/stdlib/strtod.3 src/lib/libc/stdlib/strtod.3
+--- src54-mon/lib/libc/stdlib/strtod.3	Sun Oct  6 20:04:50 2013
++++ src/lib/libc/stdlib/strtod.3	Tue Dec 10 06:07:04 2013
+@@ -80,6 +80,9 @@
+ .Pq Ql -
+ followed by a sequence of digits optionally containing
+ a decimal-point character, optionally followed by an exponent.
++The decimal-point character depends on the category LC_NUMERIC
++of the current locale,
++.Xr setlocale 3 .
+ An exponent consists of an
+ .Sq E
+ or

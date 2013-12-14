@@ -26,8 +26,8 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/regress/lib/libc/locale/check_
 +.include <bsd.regress.mk>
 diff -ruN -x obj -x CVS -x *~ -x *orig src54-mon/regress/lib/libc/locale/check_numeric/check_numeric.c src/regress/lib/libc/locale/check_numeric/check_numeric.c
 --- src54-mon/regress/lib/libc/locale/check_numeric/check_numeric.c	Wed Dec 31 19:00:00 1969
-+++ src/regress/lib/libc/locale/check_numeric/check_numeric.c	Thu Dec  5 06:23:54 2013
-@@ -0,0 +1,197 @@
++++ src/regress/lib/libc/locale/check_numeric/check_numeric.c	Tue Dec 10 21:46:25 2013
+@@ -0,0 +1,211 @@
 +/**
 + * Public domain according to Colombian Legislation. 
 + * http://www.pasosdejesus.org/dominio_publico_colombia.html
@@ -36,8 +36,10 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src54-mon/regress/lib/libc/locale/check_n
 + * $adJ$
 + */
 +
++#include <float.h>
 +#include <langinfo.h>
 +#include <locale.h>
++#include <math.h>
 +#include <stdio.h>
 +#include <stdlib.h>
 +#include <string.h>
@@ -114,6 +116,9 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src54-mon/regress/lib/libc/locale/check_n
 +	char col[512];
 +	char *nl;
 +	int i, j;
++	float fl;
++	double dl;
++	long double ldl;
 +
 +	for(i = 0; i < sizeof(enc) / sizeof(char *) ; i++) {
 +		for(j = 0; j < sizeof(c) / sizeof(char *) ; j++) {
@@ -137,6 +142,15 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src54-mon/regress/lib/libc/locale/check_n
 +			p(strcmp(col, "1.000.000,010000") == 0);
 +			p(strcmp(nl_langinfo(RADIXCHAR), ",") == 0);
 +			p(strcmp(nl_langinfo(THOUSEP), ".") == 0);
++
++			fl = strtof("3,1", NULL);
++			p(fabs(fl - 3.1) < FLT_EPSILON);
++			dl = strtod("3,1", NULL);
++			p(fabs(dl - 3.1) < DBL_EPSILON);
++			ldl = strtold("3,1", NULL);
++			p(fabs(ldl - 3.1) < DBL_EPSILON);
++			sscanf("3,1", "%f", &fl);
++			p(fabs(fl - 3.1) < FLT_EPSILON);
 +		}
 +	}
 +}
@@ -225,3 +239,4 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src54-mon/regress/lib/libc/locale/check_n
 +	
 +	return bad != 0;
 +}
+

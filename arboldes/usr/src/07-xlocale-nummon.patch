@@ -1172,8 +1172,8 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/setrun
  	const char *dot, *encoding;
  
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/xlocale.c src/lib/libc/locale/xlocale.c --- src54-x6/lib/libc/locale/xlocale.c	Tue Dec  3 16:05:33 2013
---- src54-x6/lib/libc/locale/xlocale.c	Thu Dec  5 19:12:07 2013
-+++ src/lib/libc/locale/xlocale.c	Fri Dec  6 03:54:44 2013
+--- src54-x6/lib/libc/locale/xlocale.c	Wed Dec 11 22:06:50 2013
++++ src/lib/libc/locale/xlocale.c	Fri Dec 13 15:43:35 2013
 @@ -74,10 +74,11 @@
  	{0},
  	{
@@ -1188,12 +1188,10 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/xlocal
  		&__xlocale_global_time,
  		&__xlocale_global_messages */
  	},
-@@ -100,19 +101,6 @@
- 	0
- };
+@@ -102,19 +103,6 @@
  
--
--void *
+ 
+ void *
 -__numeric_load(const char *locale, locale_t unused)
 -{
 -	return NULL;
@@ -1205,9 +1203,42 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/xlocal
 -	return NULL;
 -}
 -	
- 
- void *
+-
+-void *
  __time_load(const char *locale, locale_t unused)
+ {
+ 	return NULL;
+@@ -228,9 +216,6 @@
+ 			xlocale_release(loc->components[type]);
+ 		}
+ 	}
+-	if (loc->csym) {
+-		free(loc->csym);
+-	}
+ 	free(l);
+ }
+ 
+@@ -432,6 +417,6 @@
+ 		}
+ 		printf("\n");
+ 	}
+-	printf("csym=%p\n", loc->csym);
++	printf("_bufcrncystr=%p\n", loc->_bufcrncystr);
+ }
+
+diff -ruN -x *~ -x *orig -x *rej src54-x6/lib/libc/locale/xlocale_private.h src/lib/libc/locale/xlocale_private.h
+--- src54-x6/lib/libc/locale/xlocale_private.h	Wed Dec 11 22:06:50 2013
++++ src/lib/libc/locale/xlocale_private.h	Fri Dec 13 15:43:02 2013
+@@ -129,7 +129,7 @@
+ 	/** Persistent state used by wctomb() calls. */
+ 	__mbstate_t wctomb;
+ 	/** Buffer used by nl_langinfo_l() */
+-	char *csym;
++	char _bufcrncystr[16];
+ };
+ 
+ /**
+
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/asprintf.c src/lib/libc/stdio/asprintf.c
 --- src54-x6/lib/libc/stdio/asprintf.c	Sat Jun 25 00:32:56 2011
 +++ src/lib/libc/stdio/asprintf.c	Tue Dec  3 16:12:41 2013
@@ -1527,8 +1558,8 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vdprint
  
  	return fflush(&f) ? EOF : ret;
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfprintf.c src/lib/libc/stdio/vfprintf.c
---- src54-x6/lib/libc/stdio/vfprintf.c	Thu Dec  5 19:11:57 2013
-+++ src/lib/libc/stdio/vfprintf.c	Fri Dec  6 03:11:33 2013
+--- src54-x6/lib/libc/stdio/vfprintf.c	Wed Dec 11 21:53:32 2013
++++ src/lib/libc/stdio/vfprintf.c	Fri Dec 13 15:24:15 2013
 @@ -60,6 +60,8 @@
  
  #include "fvwrite.h"
@@ -1574,7 +1605,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfprint
  	if (ret >= 0 && __sflush(&fake))
  		ret = EOF;
  	if (fake._flags & __SERR)
-@@ -276,17 +278,31 @@
+@@ -276,30 +278,44 @@
  #define GROUPING	0x2000		/* largest integer size (intmax_t) */
  
  int
@@ -1608,6 +1639,41 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfprint
  /*
   * Initialize the thousands' grouping state in preparation to print a
   * number with ndigits digits. This routine returns the total number
+  * of bytes that will be needed.
+  */
+ static int
+-grouping_init(struct grouping_state *gs, int ndigits)
++grouping_init(struct grouping_state *gs, int ndigits, locale_t locale)
+ {
+-	struct lconv *locale;
++	struct lconv *lconv;
+ 
+-	locale = localeconv();
+-	gs->grouping = locale->grouping;
+-	gs->thousands_sep = locale->thousands_sep;
++	lconv = localeconv_l(locale);
++	gs->grouping = lconv->grouping;
++	gs->thousands_sep = lconv->thousands_sep;
+ 	gs->thousep_len = strlen(gs->thousands_sep);
+ 
+ 	gs->nseps = gs->nrepeats = 0;
+@@ -322,14 +338,14 @@
+ 
+ char *
+ __print_intdec(int flags, uintmax_t _umax, char *cp, 
+-		struct grouping_state gs)
++		struct grouping_state gs, locale_t locale)
+ {
+ 	const char *grp = NULL;	/* Size of next group of digits */
+ 	int ndig, i;
+ 
+ 	/* many numbers are 1 digit */
+ 	if (flags && GROUPING) {
+-		grouping_init(&gs, 0);
++		grouping_init(&gs, 0, locale);
+ 		grp = gs.grouping;
+ 	} 
+ 	ndig = 0;
 @@ -357,7 +373,7 @@
  }
  
@@ -1617,6 +1683,15 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfprint
  {
  	char *fmt;		/* format string */
  	int ch;			/* character from fmt */
+@@ -387,7 +403,7 @@
+ 	 * D:	expchar holds this character; '\0' if no exponent, e.g. %f
+ 	 * F:	at least two digits for decimal, at least one digit for hex
+ 	 */
+-	const char *decimal_point = nl_langinfo(RADIXCHAR);
++	const char *decimal_point = localeconv_l(locale)->decimal_point;
+ 	if (strlen(decimal_point) > 1) {
+ 		decimal_point = "."; // POSIX
+ 	}
 @@ -449,7 +465,7 @@
  	uio.uio_resid += (len); \
  	iovp++; \
@@ -1696,6 +1771,24 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfprint
  				if (mbseqlen == (size_t)-1) {
  					fp->_flags |= __SERR;
  					errno = EILSEQ;
+@@ -911,7 +924,7 @@
+ 				if (prec || flags & ALT)
+ 					size += prec + 1;
+ 				if ((flags & GROUPING) && expt > 0) 
+-					size += grouping_init(&gs, expt);
++					size += grouping_init(&gs, expt, locale);
+ 				lead = expt;
+ 			}
+ 			break;
+@@ -1049,7 +1062,7 @@
+ 
+ 				case DEC:
+ 					cp = __print_intdec(flags, _umax, 
+-							cp, gs);
++							cp, gs, locale);
+ 					break;
+ 
+ 				case HEX:
 @@ -1250,7 +1263,7 @@
   */
  static int
@@ -1723,18 +1816,18 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfprint
  			if (wc == '%') {
  				fmt--;
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfscanf.c src/lib/libc/stdio/vfscanf.c
---- src54-x6/lib/libc/stdio/vfscanf.c	Sat Apr 27 21:08:40 2013
-+++ src/lib/libc/stdio/vfscanf.c	Tue Dec  3 16:12:45 2013
-@@ -40,6 +40,8 @@
- #include <stdlib.h>
+--- src54-x6/lib/libc/stdio/vfscanf.c	Wed Dec 11 21:53:32 2013
++++ src/lib/libc/stdio/vfscanf.c	Fri Dec 13 15:26:11 2013
+@@ -41,6 +41,8 @@
  #include <string.h>
+ #include <wctype.h>
  #include "local.h"
 +#include "../locale/mblocal.h"
 +#include "../locale/xlocale_private.h"
  
  #ifdef FLOATING_POINT
  #include "floatio.h"
-@@ -96,7 +98,7 @@
+@@ -97,7 +99,7 @@
   * Internal, unlocked version of vfscanf
   */
  int
@@ -1743,7 +1836,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfscanf
  {
  	u_char *fmt = (u_char *)fmt0;
  	int c;		/* character from format, or conversion */
-@@ -129,9 +131,9 @@
+@@ -131,9 +133,9 @@
  		c = *fmt++;
  		if (c == 0)
  			return (nassigned);
@@ -1755,7 +1848,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfscanf
  				nread++, fp->_r--, fp->_p++;
  			continue;
  		}
-@@ -315,7 +317,7 @@
+@@ -317,7 +319,7 @@
  		 * that suppress this.
  		 */
  		if ((flags & NOSKIP) == 0) {
@@ -1764,7 +1857,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfscanf
  				nread++;
  				if (--fp->_r > 0)
  					fp->_p++;
-@@ -354,7 +356,8 @@
+@@ -356,7 +358,8 @@
  					fp->_p++;
  					fp->_r--;
  					bzero(&mbs, sizeof(mbs));
@@ -1774,7 +1867,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfscanf
  					if (nconv == (size_t)-1) {
  						fp->_flags |= __SERR;
  						goto input_failure;
-@@ -436,7 +439,8 @@
+@@ -438,7 +441,8 @@
  					fp->_p++;
  					fp->_r--;
  					bzero(&mbs, sizeof(mbs));
@@ -1784,7 +1877,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfscanf
  					if (nconv == (size_t)-1) {
  						fp->_flags |= __SERR;
  						goto input_failure;
-@@ -444,8 +448,8 @@
+@@ -446,8 +450,8 @@
  					if (nconv == 0)
  						*wcp = L'\0';
  					if (nconv != (size_t)-2) {
@@ -1795,7 +1888,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfscanf
  							while (n != 0) {
  								n--;
  								ungetc(buf[n],
-@@ -531,7 +535,7 @@
+@@ -533,7 +537,7 @@
  				else
  					wcp = &twc;
  				n = 0;
@@ -1804,7 +1897,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfscanf
  					if (n == MB_CUR_MAX) {
  						fp->_flags |= __SERR;
  						goto input_failure;
-@@ -540,7 +544,8 @@
+@@ -542,7 +546,8 @@
  					fp->_p++;
  					fp->_r--;
  					bzero(&mbs, sizeof(mbs));
@@ -1814,7 +1907,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfscanf
  					if (nconv == (size_t)-1) {
  						fp->_flags |= __SERR;
  						goto input_failure;
-@@ -578,7 +583,7 @@
+@@ -580,7 +585,7 @@
  #endif /* SCANF_WIDE_CHAR */
  			if (flags & SUPPRESS) {
  				n = 0;
@@ -1823,7 +1916,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfscanf
  					n++, fp->_r--, fp->_p++;
  					if (--width == 0)
  						break;
-@@ -588,7 +593,7 @@
+@@ -590,7 +595,7 @@
  				nread += n;
  			} else {
  				p0 = p = va_arg(ap, char *);
@@ -1832,7 +1925,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfscanf
  					fp->_r--;
  					*p++ = *fp->_p++;
  					if (--width == 0)
-@@ -730,9 +735,9 @@
+@@ -732,9 +737,9 @@
  
  				*p = '\0';
  				if (flags & UNSIGNED)
@@ -1844,7 +1937,16 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfscanf
  				if (flags & POINTER)
  					*va_arg(ap, void **) =
  					    (void *)(uintptr_t)res;
-@@ -837,14 +842,14 @@
+@@ -771,7 +776,7 @@
+ 				width = sizeof(buf) - 2;
+ 			width++;
+ #endif
+-			decimal_point=localeconv()->decimal_point;
++			decimal_point=localeconv_l(locale)->decimal_point;
+ 			if (strlen(decimal_point) > 1) {
+ 				decimal_point="."; // POSIX
+ 			}
+@@ -841,14 +846,14 @@
  			if ((flags & SUPPRESS) == 0) {
  				*p = '\0';
  				if (flags & LONGDBL) {
@@ -1863,7 +1965,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfscanf
  					*va_arg(ap, float *) = res;
  				}
  				nassigned++;
-@@ -958,12 +963,22 @@
+@@ -962,12 +967,22 @@
  }
  
  int
@@ -2425,6 +2527,225 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strftime
  				continue;
  			case '%':
  			/*
+diff -ruN src54-x6/lib/libc/stdlib/strfmon.3 src/lib/libc/stdlib/strfmon.3
+--- src54-x6/lib/libc/stdlib/strfmon.3	Tue Dec 10 06:14:08 2013
++++ src/lib/libc/stdlib/strfmon.3	Wed Dec 11 04:35:17 2013
+@@ -38,6 +38,9 @@
+ .In monetary.h
+ .Ft ssize_t
+ .Fn strfmon "char * restrict s" "size_t maxsize" "const char * restrict format" "..."
++.In xlocale.h
++.Ft ssize_t
++.Fn strfmon_l "char * restrict s" "size_t maxsize" "locale_t loc" "const char * restrict format" "..."
+ .\" ----------------------------------------------------------------------
+ .Sh DESCRIPTION
+ The
+@@ -50,6 +53,12 @@
+ .Fa maxsize
+ bytes are placed into the array.
+ .Pp
++The
++.Fn strfmon_l
++function does the same as
++.Fn strfmon
++but takes an explicit locale rather than using the current locale.
++.Pp
+ The format string is composed of zero or more directives:
+ ordinary characters (not
+ .Cm % ) ,
+@@ -115,6 +124,7 @@
+ .Sq Li %
+ character is written.
+ .El
++.El
+ .\" ----------------------------------------------------------------------
+ .Sh RETURN VALUES
+ If the total number of resulting bytes including the terminating
+@@ -132,6 +142,11 @@
+ and
+ .Va errno
+ is set to indicate the error.
++.Pp
++The
++.Fn strfmon_l
++function returns the same values as
++.Fn strfmon .
+ .\" ----------------------------------------------------------------------
+ .Sh ERRORS
+ The
+@@ -155,6 +170,11 @@
+ function
+ conforms to
+ .St -p1003.1-2001 .
++The
++.Fn strfmon_l
++function conforms to
++.St -p1003.1-2008 .
++.\" ----------------------------------------------------------------------
+ .Sh AUTHORS
+ .An -nosplit
+ The
+diff -ruN src54-x6/lib/libc/stdlib/strfmon.c src/lib/libc/stdlib/strfmon.c
+--- src54-x6/lib/libc/stdlib/strfmon.c	Tue Dec 10 06:14:10 2013
++++ src/lib/libc/stdlib/strfmon.c	Wed Dec 11 04:46:41 2013
+@@ -42,7 +42,10 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
++#include <xlocale.h>
+ 
++#include "../locale/xlocale_private.h"
++
+ /* internal flags */
+ #define	NEED_GROUPING		0x01	/* print digits grouped (default) */
+ #define	SIGN_POSN_USED		0x02	/* '+' or '(' usage flag */
+@@ -92,12 +95,12 @@
+ 	groups++;						\
+ } while (0)
+ 
+-static void __setup_vars(int, char *, char *, char *, char **);
+-static int __calc_left_pad(int, char *);
+-static char *__format_grouped_double(double, int *, int, int, int);
++static void __setup_vars_l(int, char *, char *, char *, char **, locale_t);
++static int __calc_left_pad_l(int, char *, locale_t);
++static char *__format_grouped_double_l(double, int *, int, int, int, locale_t);
+ 
+ static ssize_t
+-vstrfmon(char * __restrict s, size_t maxsize, 
++vstrfmon_l(char * __restrict s, size_t maxsize, locale_t locale,
+ 		const char * __restrict format, va_list ap)
+ {
+ 	char 		*dst;		/* output destination pointer */
+@@ -123,8 +126,8 @@
+ 	char		*tmpptr;	/* temporary vars */
+ 	int		sverrno;
+ 
+-
+-	lc = localeconv();
++	FIX_LOCALE(locale);
++	lc = localeconv_l(locale);
+ 	dst = s;
+ 	fmt = format;
+ 	asciivalue = NULL;
+@@ -252,24 +255,25 @@
+ 
+ 		/* fill left_prec with amount of padding chars */
+ 		if (left_prec >= 0) {
+-			pad_size = __calc_left_pad((flags ^ IS_NEGATIVE),
+-							currency_symbol) -
+-				   __calc_left_pad(flags, currency_symbol);
++			pad_size = __calc_left_pad_l((flags ^ IS_NEGATIVE),
++					currency_symbol, locale) -
++				__calc_left_pad_l(flags, currency_symbol,
++						locale);
+ 			if (pad_size < 0)
+ 				pad_size = 0;
+ 		}
+ 
+ 		if (asciivalue != NULL)
+ 			free(asciivalue);
+-		asciivalue = __format_grouped_double(value, &flags,
+-				left_prec, right_prec, pad_char);
++		asciivalue = __format_grouped_double_l(value, &flags,
++				left_prec, right_prec, pad_char, locale);
+ 		if (asciivalue == NULL)
+ 			goto end_error;		/* errno already set     */
+ 						/* to ENOMEM by malloc() */
+ 
+ 		/* set some variables for later use */
+-		__setup_vars(flags, &cs_precedes, &sep_by_space,
+-				&sign_posn, &signstr);
++		__setup_vars_l(flags, &cs_precedes, &sep_by_space,
++				&sign_posn, &signstr, locale);
+ 
+ 		/*
+ 		 * Description of some LC_MONETARY's values:
+@@ -402,23 +406,35 @@
+ 	errno = sverrno;
+ 	return (-1);
+ }
++
+ ssize_t
++strfmon_l(char * __restrict s, size_t maxsize, locale_t locale, 
++		const char * __restrict format, ...)
++{
++	size_t ret;
++	va_list ap;
++	va_start(ap, format);
++	ret = vstrfmon_l(s, maxsize, locale, format, ap);
++	va_end(ap);
++	return ret;
++}
++ssize_t
+ strfmon(char * __restrict s, size_t maxsize, const char * __restrict format,
+     ...)
+ {
+ 	size_t ret;
+ 	va_list ap;
+ 	va_start(ap, format);
+-	ret = vstrfmon(s, maxsize, format, ap);
++	ret = vstrfmon_l(s, maxsize, __get_locale(), format, ap);
+ 	va_end(ap);
+ 	return ret;
+ }
+ 
+ static void
+-__setup_vars(int flags, char *cs_precedes, char *sep_by_space,
+-		char *sign_posn, char **signstr) {
++__setup_vars_l(int flags, char *cs_precedes, char *sep_by_space,
++		char *sign_posn, char **signstr, locale_t locale) {
+ 
+-	struct lconv *lc = localeconv();
++	struct lconv *lc = localeconv_l(locale);
+ 
+ 	if ((flags & IS_NEGATIVE) && (flags & USE_INTL_CURRENCY)) {
+ 		*cs_precedes = lc->int_n_cs_precedes;
+@@ -454,12 +470,13 @@
+ }
+ 
+ static int
+-__calc_left_pad(int flags, char *cur_symb) {
++__calc_left_pad_l(int flags, char *cur_symb, locale_t locale) {
+ 
+ 	char cs_precedes, sep_by_space, sign_posn, *signstr;
+ 	int left_chars = 0;
+ 
+-	__setup_vars(flags, &cs_precedes, &sep_by_space, &sign_posn, &signstr);
++	__setup_vars_l(flags, &cs_precedes, &sep_by_space, &sign_posn, 
++			&signstr, locale);
+ 
+ 	if (cs_precedes != 0) {
+ 		left_chars += strlen(cur_symb);
+@@ -504,8 +521,9 @@
+ 
+ /* convert double to ASCII */
+ static char *
+-__format_grouped_double(double value, int *flags,
+-			int left_prec, int right_prec, int pad_char) {
++__format_grouped_double_l(double value, int *flags,
++			int left_prec, int right_prec, int pad_char, 
++			locale_t locale) {
+ 
+ 	char		*rslt;
+ 	char		*avalue;
+@@ -517,7 +535,7 @@
+ 
+ 	int		padded;
+ 
+-	struct lconv	*lc = localeconv();
++	struct lconv	*lc = localeconv_l(locale);
+ 	char		*grouping;
+ 	char		decimal_point;
+ 	char		thousands_sep;
+@@ -553,7 +571,7 @@
+ 	/* convert to string */
+ 	snprintf(fmt, sizeof(fmt), "%%%d.%df", left_prec + right_prec + 1,
+ 	    right_prec);
+-	avalue_size = asprintf(&avalue, fmt, value);
++	avalue_size = asprintf_l(&avalue, locale, fmt, value);
+ 	if (avalue_size < 0)
+ 		return (NULL);
+ 
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdlib/strtod.3 src/lib/libc/time/strtod.3
 --- src54-x6/lib/libc/stdlib/strtod.3	Sun Oct  6 20:04:50 2013
 +++ src/lib/libc/stdlib/strtod.3	Fri Dec  6 08:51:22 2013
@@ -2506,3 +2827,197 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdlib/strtod
  .Sh RETURN VALUES
  The
  .Fn strtod ,
+diff -ruN src54-x6/lib/libc/locale/nl_langinfo.c src/lib/libc/locale/nl_langinfo.c
+--- src54-x6/lib/libc/locale/nl_langinfo.c	Wed Dec 11 08:11:54 2013
++++ src/lib/libc/locale/nl_langinfo.c	Fri Dec 13 15:42:55 2013
+@@ -5,19 +5,23 @@
+  */
+ 
+ #include <sys/localedef.h>
++
++#include <langinfo.h>
+ #include <locale.h>
+ #include <nl_types.h>
+-#include <langinfo.h>
++#include <xlocale.h>
++
+ #include "rune.h"
+ #include "runetype.h"
++#include "xlocale_private.h"
+ 
+-static char _bufcrncystr[16];
+-
+ char *
+-nl_langinfo(nl_item item)
++nl_langinfo_l(nl_item item, locale_t locale)
+ {
+ 	const char *s;
+-
++	FIX_LOCALE(locale); 
++	struct lconv *lc = &locale->lconv;
++	
+ 	switch (item) {
+ 	case D_T_FMT:
+ 		s = _CurrentTimeLocale->d_t_fmt;
+@@ -82,10 +86,10 @@
+ 		s = _CurrentTimeLocale->abmon[item - ABMON_1];
+ 		break;
+ 	case RADIXCHAR:
+-		s = _CurrentNumericLocale->decimal_point;
++		s = lc->decimal_point;
+ 		break;
+ 	case THOUSEP:
+-		s = _CurrentNumericLocale->thousands_sep;
++		s = lc->thousands_sep;
+ 		break;
+ 	case YESSTR:
+ 		s = _CurrentMessagesLocale->yesstr;
+@@ -100,19 +104,19 @@
+ 		s = _CurrentMessagesLocale->noexpr;
+ 		break;
+ 	case CRNCYSTR:				
+-		_bufcrncystr[0] = '\0';
++		locale->_bufcrncystr[0] = '\0';
+ 		
+-		if (_CurrentMonetaryLocale->currency_symbol[0] != '\0' 
+-			&& _CurrentMonetaryLocale->p_cs_precedes == _CurrentMonetaryLocale->n_cs_precedes) {
+-			if (_CurrentMonetaryLocale->p_cs_precedes == 1) {
+-				strlcat(_bufcrncystr, "-", sizeof(_bufcrncystr));
++		if (lc->currency_symbol[0] != '\0' 
++			&& lc->p_cs_precedes == lc->n_cs_precedes) {
++			if (lc->p_cs_precedes == 1) {
++				strlcat(locale->_bufcrncystr, "-", sizeof(locale->_bufcrncystr));
+ 			} else {
+-				strlcat(_bufcrncystr, "+", sizeof(_bufcrncystr));
++				strlcat(locale->_bufcrncystr, "+", sizeof(locale->_bufcrncystr));
+ 			}
+ 		}
+-		strlcat(_bufcrncystr, _CurrentMonetaryLocale->currency_symbol, 
+-				sizeof(_bufcrncystr));
+-		s = _bufcrncystr;
++		strlcat(locale->_bufcrncystr, lc->currency_symbol, 
++				sizeof(locale->_bufcrncystr));
++		s = locale->_bufcrncystr;
+ 		break;
+ 	case CODESET:
+ 		s = _CurrentRuneLocale->rl_codeset;
+@@ -125,4 +129,10 @@
+ 	}
+ 
+ 	return (char *) s;
++}
++
++char *
++nl_langinfo(nl_item item)
++{
++	return nl_langinfo_l(item, __get_locale());
+ }
+diff -ruN src54-x6/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regress/lib/libc/locale/check_xlocale/check_xlocale.c
+--- src54-x6/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Wed Dec 11 22:07:06 2013
++++ src/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Fri Dec 13 15:25:23 2013
+@@ -8,8 +8,10 @@
+ 
+ #include <ctype.h>
+ #include <inttypes.h>
++#include <float.h>
+ #include <langinfo.h>
+ #include <locale.h>
++#include <math.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
+@@ -410,12 +412,94 @@
+ 	p(wcsncasecmp_l(L"n", L"N", 1, es_CO_UTF_8) == 0);
+ }
+ 
++void test_monetary() 
++{
++	struct lconv *p;
++	char col[256];
++	char *nl = setlocale(LC_ALL, "es_CO.UTF-8");
++	locale_t tloc = uselocale(NULL);
++	locale_t es_CO_UTF_8 = duplocale(tloc);
++	setlocale(LC_ALL, "POSIX");
++	p = localeconv_l(es_CO_UTF_8);
++	p(strcmp(p->int_curr_symbol, "COP ") == 0);
++	p(strcmp(p->currency_symbol, "$") == 0);
++	printf("CRNCYSTR=%s\n", nl_langinfo_l(CRNCYSTR, es_CO_UTF_8));
++	p(strcmp(nl_langinfo_l(CRNCYSTR, es_CO_UTF_8), "-$") == 0);
++	p(strcmp(p->mon_decimal_point, ",") == 0);
++	p(strcmp(p->mon_thousands_sep, ".") == 0);
++	p(p->mon_grouping[0] == 3);
++	p(strcmp(p->positive_sign, "") == 0);
++	p(strcmp(p->negative_sign, "-") == 0);
++	p(p->int_frac_digits == 2);
++	p(p->frac_digits == 2);
++	p(p->p_cs_precedes == 1);
++	p(p->p_sep_by_space == 1);
++	p(p->n_cs_precedes == 1);
++	p(p->n_sep_by_space == 1);
++	p(p->p_sign_posn == 1);
++	p(p->n_sign_posn == 1);
++	p(p->int_p_cs_precedes == 1);
++	p(p->int_n_cs_precedes == 1);
++	p(p->int_n_sep_by_space == 1);
++	p(p->int_p_sep_by_space == 1);
++	p(p->int_p_sign_posn == 1);
++	p(p->int_n_sign_posn == 1);
++	p(p->n_sign_posn == 1);
++	strfmon_l(col, sizeof(col), es_CO_UTF_8, "%n", -3456.781); 
++	p(strcmp(col, "-$ 3.456,78") == 0);
++}
++
++
++void test_numeric() 
++{
++	struct lconv *p;
++	char col[256];
++	char *nl = setlocale(LC_ALL, "es_CO.UTF-8");
++	locale_t tloc = uselocale(NULL);
++	locale_t es_CO_UTF_8 = duplocale(tloc);
++	float fl;
++	double dl;
++	long double ldl;
++
++	setlocale(LC_ALL, "POSIX");
++	p = localeconv_l(es_CO_UTF_8);
++
++	p(strcmp(p->decimal_point, ",") == 0);
++	p(strcmp(p->thousands_sep, ".") == 0);
++	p(p->grouping[0] == 3);
++
++	snprintf_l(col, sizeof(col), es_CO_UTF_8, "%f", 1000000.01);
++	p(strcmp(col, "1000000,010000") == 0);
++	snprintf_l(col, sizeof(col), es_CO_UTF_8, "%'d", 1000000);
++	printf("col=%s\n", col);
++	p(strcmp(col, "1.000.000") == 0);
++	snprintf_l(col, sizeof(col), es_CO_UTF_8, "%'f", 1000000.01);
++	printf("col=%s\n", col);
++	p(strcmp(col, "1.000.000,010000") == 0);
++	p(strcmp(nl_langinfo(RADIXCHAR), ".") == 0);
++	p(strcmp(nl_langinfo_l(RADIXCHAR, es_CO_UTF_8), ",") == 0);
++	p(strcmp(nl_langinfo(THOUSEP), "") == 0);
++	p(strcmp(nl_langinfo_l(THOUSEP, es_CO_UTF_8), ".") == 0);
++
++	fl = strtof_l("3,1", NULL, es_CO_UTF_8);
++	p(fabs(fl - 3.1) < FLT_EPSILON);
++	dl = strtod_l("3,1", NULL, es_CO_UTF_8);
++	p(fabs(dl - 3.1) < DBL_EPSILON);
++	ldl = strtold_l("3,1", NULL, es_CO_UTF_8);
++	p(fabs(ldl - 3.1) < DBL_EPSILON);
++	sscanf_l("3,1", es_CO_UTF_8, "%f", &fl);
++	printf("fl=%f\n", fl);
++	p(fabs(fl - 3.1) < FLT_EPSILON);
++}
++
+ int main()
+ {
+ 	test_xlocale();
+ 	test_wchar();
+ 	test_ctype();
+ 	test_string();
++	test_monetary();
++	test_numeric();
+ 	
+ 	return bad != 0;
+ }

@@ -24,10 +24,10 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/regress/lib/libc/locale/check_monetar
 +	./${PROG} >/dev/null
 +
 +.include <bsd.regress.mk>
-diff -ruN -x *~ -x obj -x *orig src54-coll/regress/lib/libc/locale/check_monetary/check_monetary.c src/regress/lib/libc/locale/check_monetary/check_monetary.c
---- src54-coll/regress/lib/libc/locale/check_monetary/check_monetary.c	Wed Dec 31 19:00:00 1969
-+++ src/regress/lib/libc/locale/check_monetary/check_monetary.c	Thu Dec  5 06:23:21 2013
-@@ -0,0 +1,617 @@
+diff -ruN -x *~ -x *orig src54-orig/regress/lib/libc/locale/check_monetary/check_monetary.c src/regress/lib/libc/locale/check_monetary/check_monetary.c
+--- src54-orig/regress/lib/libc/locale/check_monetary/check_monetary.c	Wed Dec 31 19:00:00 1969
++++ src/regress/lib/libc/locale/check_monetary/check_monetary.c	Wed Dec 11 08:08:48 2013
+@@ -0,0 +1,622 @@
 +/**
 + * Public domain according to Colombian Legislation. 
 + * http://www.pasosdejesus.org/dominio_publico_colombia.html
@@ -183,7 +183,7 @@ diff -ruN -x *~ -x obj -x *orig src54-coll/regress/lib/libc/locale/check_monetar
 +	p(p->n_sign_posn == 1);
 +
 +	printf("CRNCYSTR=%s\n", nl_langinfo(CRNCYSTR));
-+	p(strcmp(nl_langinfo(CRNCYSTR), "$") == 0);
++	p(strcmp(nl_langinfo(CRNCYSTR), "-$") == 0);
 +
 +	// Testing with examples from http://pubs.opengroup.org/onlinepubs/009695299/functions/strfmon.html
 +	strfmon(col, sizeof(col), "%n", 123.45); 
@@ -311,7 +311,7 @@ diff -ruN -x *~ -x obj -x *orig src54-coll/regress/lib/libc/locale/check_monetar
 +	};
 +	char *sc1[] = { 
 +		"$", "$b" // http://www.xe.com/symbols.php
-+			, "$", "$", "$",
++		, "$", "$", "$",
 +		"Gs", "$", "Bs" // http://www.xe.com/symbols.php
 +	};
 +	char *c2[] = { 
@@ -336,6 +336,7 @@ diff -ruN -x *~ -x obj -x *orig src54-coll/regress/lib/libc/locale/check_monetar
 +	char *enc[]= { "ISO8859-1", "ISO8859-15", "UTF-8" };
 +	char nom[256];
 +	char col[512];
++	char col2[512];
 +	struct lconv *p;
 +	char *nl;
 +	int i, j;
@@ -350,7 +351,8 @@ diff -ruN -x *~ -x obj -x *orig src54-coll/regress/lib/libc/locale/check_monetar
 +			p(strcmp(p->int_curr_symbol, nc1[j]) == 0);
 +			p(strcmp(p->currency_symbol, sc1[j]) == 0);
 +			printf("CRNCYSTR=%s\n", nl_langinfo(CRNCYSTR));
-+			p(strcmp(nl_langinfo(CRNCYSTR), sc1[j]) == 0);
++			p(nl_langinfo(CRNCYSTR)[1] == sc1[j][0]);
++			p(nl_langinfo(CRNCYSTR)[0] == '-');
 +			p(strcmp(p->mon_decimal_point, ",") == 0);
 +			p(strcmp(p->mon_thousands_sep, ".") == 0);
 +			p(p->mon_grouping[0] == 3);
@@ -381,7 +383,8 @@ diff -ruN -x *~ -x obj -x *orig src54-coll/regress/lib/libc/locale/check_monetar
 +			p(strcmp(p->int_curr_symbol, nc2[j]) == 0);
 +			p(strcmp(p->currency_symbol, sc2[j]) == 0);
 +			printf("CRNCYSTR=%s\n", nl_langinfo(CRNCYSTR));
-+			p(strcmp(nl_langinfo(CRNCYSTR), sc2[j]) == 0);
++			p(nl_langinfo(CRNCYSTR)[1] == sc2[j][0]);
++			p(nl_langinfo(CRNCYSTR)[0] == '-');
 +			p(strcmp(p->mon_decimal_point, ".") == 0);
 +			p(strcmp(p->mon_thousands_sep, ",") == 0);
 +			p(p->mon_grouping[0] == 3);
@@ -586,11 +589,13 @@ diff -ruN -x *~ -x obj -x *orig src54-coll/regress/lib/libc/locale/check_monetar
 +	p(p->int_n_sign_posn == 1);
 +	p(p->n_sign_posn == 1);
 +
-+	for(j = 0; j < sizeof(ct) / sizeof(char *) ; j++) {
-+		snprintf(nom, sizeof(nom), "%s.UTF-8", ct[j]);
++	for(j = 0; j < sizeof(c1) / sizeof(char *) ; j++) {
++		snprintf(nom, sizeof(nom), "%s.UTF-8", c1[j]);
 +		nl = setlocale(LC_ALL, nom);
 +		strfmon(col, sizeof(col), "%n", -3456.781); 
-+		printf("%s %s\n", nom, col);
++		snprintf(col2, sizeof(col2), "-%s 3.456,78", sc1[j]);
++		p(strcmp(col, col2) == 0)
++		printf("%s col=%s, col2=%s\n", nom, col, col2);
 +	}
 +}
 +
