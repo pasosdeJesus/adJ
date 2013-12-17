@@ -1,7 +1,7 @@
 $OpenBSD$
---- src/gboy_x86_64.S.orig	Sat Nov  9 23:05:09 2013
-+++ src/gboy_x86_64.S	Fri Nov 22 10:43:01 2013
-@@ -453,7 +453,13 @@ timer_divider_update:
+--- src/gboy_x86_64.S.orig	Thu Dec  5 19:08:34 2013
++++ src/gboy_x86_64.S	Tue Dec 17 07:18:06 2013
+@@ -444,7 +444,13 @@ timer_divider_update:
  	jz 5f
  4:
  	addb $4, %dl # advance div control
@@ -16,7 +16,7 @@ $OpenBSD$
  	testb $0x10, %ah # test if div passed a 16 cycle boundary
  	jnz 1b
  	jmp 3b
-@@ -516,7 +522,13 @@ beg_exe:
+@@ -507,7 +513,13 @@ beg_exe:
  last_run:
  2:
  	addb $4, div_ctrl # advance div control (per-cycle control)
