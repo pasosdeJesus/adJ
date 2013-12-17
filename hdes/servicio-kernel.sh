@@ -1,11 +1,11 @@
 #!/bin/sh
 # Dominio público de acurdo a legislación colombiana. vtamara@pasosdeJesus.org
-# Replaces daemon with service in kernel of OpenBSD.  Respects christians and non-christians, more neutral.
+# Replaces daemon with servicio in kernel of OpenBSD.  Respects christians and non-christians, more neutral.
 # Run from /usr/src/sys
 # Tested from 4.7 
 
 
-# Remplaza ocurrencias de daemon por service con manejo especial de casos
+# Remplaza ocurrencias de daemon por servicio con manejo especial de casos
 # como el de syslog.h
 function remplaza {
 	i=$1;
@@ -16,34 +16,35 @@ function remplaza {
 	rem=1;
 	s=`echo $i | sed -e "s/.*syslog.h//g"`;
 	if (test "$s" = "") then {
-		grep 'daemon.*LOG_SERVICE' $i > /dev/null 2>&1
+		grep 'daemon.*LOG_SERVICIO' $i > /dev/null 2>&1
 		if (test "$?" = "0") then {
 			rem=0;
 		} fi;
 	} fi;
 	if (test "$rem" = "1") then {
+		echo "Remplazando en $i" >> /var/tmp/inst-adJ.bitacora
 		ed $i <<EOF
-,s/daemon/service/g
+,s/daemon/servicio/g
 w
 q
 EOF
 	} fi;
 	ed $i <<EOF
-,s/Daemon/Service/g
+,s/Daemon/Servicio/g
 w
 q
 EOF
 	rem=1;
 	s=`echo $i | sed -e "s/.*syslog.h//g"`;
 	if (test "$s" = "") then {
-		grep 'LOG_SERVICE' $i > /dev/null 2>&1
+		grep 'LOG_SERVICIO' $i > /dev/null 2>&1
 		if (test "$?" = "0") then {
 			rem=0;
 		} fi;
 	} fi;
 	if (test "$rem" = "1") then {
 		ed $i <<EOF
-,s/DAEMON/SERVICE/g
+,s/DAEMON/SERVICIO/g
 w
 q
 EOF
@@ -51,18 +52,18 @@ EOF
 }
 
 cd /usr/src/sys
-# Renombra uvm/uvm_pdaemon.{c,h} por uvm/uvm_pservice.{c,h} --pageservice
+# Renombra uvm/uvm_pdaemon.{c,h} por uvm/uvm_pservicio.{c,h} --pageservicio
 a=`find . | grep -i daemon`;
 for i in $a; do 
-	ni=`echo $i | sed -e "s/daemon/service/g;s/Daemon/Service/g;s/DAEMON/SERVICE/g"`
+	ni=`echo $i | sed -e "s/daemon/servicio/g;s/Daemon/Servicio/g;s/DAEMON/SERVICIO/g"`
 	echo "$i -> $ni";
 	mv $i $ni
 done
 #if (test -f uvm/uvm_pdaemon.c) then {
-#	sudo mv uvm/uvm_pdaemon.c uvm/uvm_pservice.c
+#	sudo mv uvm/uvm_pdaemon.c uvm/uvm_pservicio.c
 #} fi;
 #if (test -f uvm/uvm_pdaemon.h) then {
-#	sudo mv uvm/uvm_pdaemon.h uvm/uvm_pservice.h
+#	sudo mv uvm/uvm_pdaemon.h uvm/uvm_pservicio.h
 #} fi;
 
 # En las fuentes remplaza ocurrencias, manejando de forma especial casos
@@ -83,12 +84,12 @@ done
 grep LOG_DAEMON "sys/syslog.h" > /dev/null 2>&1
 if (test "$?" != "0") then {
 	ed sys/syslog.h << EOF
-/define.*LOG_SERVICE
+/define.*LOG_SERVICIO
 .t.
-.s/SERVICE/DAEMON/
-/"service",.*LOG_SERVICE
+.s/SERVICIO/DAEMON/
+/"servicio",.*LOG_SERVICIO
 .t.
-.s/service/daemon/
+.s/servicio/daemon/
 w
 q
 EOF
@@ -98,13 +99,13 @@ EOF
 # antiguos
 if (test -f "../usr.bin/vmstat/vmstat.c") then {
 	ed ../usr.bin/vmstat/vmstat.c << EOF
-,s/daemon/service/g
+,s/daemon/servicio/g
 w
 q
 EOF
 } fi;
 
-# Copia cambios en encabezados a encabezados del sistema
+
 cp -rf /usr/src/sys/sys/*h /usr/include/sys/
 cp -rf /usr/src/sys/sys/syslog.h /usr/include/
 

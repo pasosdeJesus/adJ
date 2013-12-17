@@ -4,7 +4,7 @@ ONLY_FOR_ARCHS=	amd64
 
 COMMENT=	Emulador de Game Boy Classic/Game Boy Color
 
-VERSION=	0.1.4
+VERSION=	0.2.1
 DISTNAME=       realboy-${VERSION}
 #REVISION=	0
 #PKGNAME=        ${DISTNAME:L}
@@ -17,7 +17,6 @@ HOMEPAGE=	http://realboyemulator.wordpress.com/
 # GPL 2
 PERMIT_PACKAGE_CDROM=	Yes
 PERMIT_PACKAGE_FTP=	Yes
-PERMIT_DISTFILES_CDROM= Yes
 PERMIT_DISTFILES_FTP=	Yes
 
 MASTER_SITES=	${MASTER_SITE_SOURCEFORGE:=realboy/}

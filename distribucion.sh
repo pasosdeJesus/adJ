@@ -129,7 +129,7 @@ if (test "$sn" = "s") then {
 	} fi;
 
 	cd /usr/src/sys
-	$dini/hdes/service-kernel.sh	
+	$dini/hdes/servicio-kernel.sh	
 	# Esta en general se cambiaron comentarios a lo largo de todas
     # las fuentes.  Ver documentación en 
     # http://aprendiendo.pasosdejesus.org/?id=Renombrando+Daemon+por+Service
@@ -265,18 +265,17 @@ if (test "$sn" = "s") then {
 	(cd $dini/arboldes/usr/src ; for i in `find . -type f | grep -v CVS | grep -v .patch`; do  if (test ! -f /usr/src/$i) then { echo $i; n=`dirname $i`; sudo mkdir -p /usr/src/$n; sudo cp $i /usr/src/$i; } fi; done )
 	echo "* Cambiando /etc " | tee -a /var/tmp/distrib-adJ.bitacora
 	cd /etc
-	$dini/arboldd/usr/local/adJ/service-etc.sh	
+	$dini/arboldd/usr/local/adJ/servicio-etc.sh	
 	echo "* Cambiando /usr/src/etc" | tee -a /var/tmp/distrib-adJ.bitacora
 	cd /usr/src/etc
-	$dini/arboldd/usr/local/adJ/service-etc.sh	
+	$dini/arboldd/usr/local/adJ/servicio-etc.sh	
 	echo "* Cambios iniciales a /usr/src" | tee -a /var/tmp/distrib-adJ.bitacora
 	cd /usr/src/
-	$dini/hdes/service-base.sh	
-	echo "* Aplicando parches a /usr/src" | tee -a /var/tmp/distrib-adJ.bitacora 
+	$dini/hdes/servicio-base.sh	
 	grep LOG_SERVICE  /usr/include/syslog.h > /dev/null 2>&1
 	if (test "$?" != "0") then {
 		cd /usr/src/sys
-		$dini/hdes/service-kernel.sh	
+		$dini/hdes/servicio-kernel.sh	
 	} fi;
 	cd /usr/src && make obj
 	echo "* Completo make obj" | tee -a /var/tmp/distrib-adJ.bitacora
@@ -598,6 +597,8 @@ if (test "$sn" = "s") then {
 	} fi;
 	rm tmp/disponibles*
 	paquete dialog misc
+	paquete php lang paquetes "php php-fpm php-gd php-mcrypt php-pdo_pgsql" 5.5
+	paquete ruby lang paquetes "ruby ruby20-ri_docs" 2.0
 
 	paquete pear-Auth security
 	#paquete pear-DB databases

@@ -185,7 +185,7 @@ if (test "$im" = "") then {
 cat > $ar << EOF
 #!/bin/sh
 
-service="/sbin/mount"
+servicio="/sbin/mount"
 
 . /etc/rc.d/rc.subr
 
@@ -775,13 +775,16 @@ if  (test "$vac" != "") then {
 	dialog --title 'Actualizaciones aplicadas' --msgbox "\\nSe aplicaron actualizaciones: $vac\\n\\n$mac\\n" 15 60
 } fi;
 
-cd /etc && /usr/local/adJ/service-etc.sh >> /var/tmp/inst-adJ.bitacora 2>&1
+cd /etc && /usr/local/adJ/servicio-etc.sh >> /var/tmp/inst-adJ.bitacora 2>&1
 
-if (test ! -f /var/log/service) then {
+if (test ! -f /var/log/servicio) then {
 	if (test -f /var/log/daemon) then {
-		mv /var/log/daemon /var/log/service
+		mv /var/log/daemon /var/log/servicio
 	} fi;
-	touch /var/log/service
+	if (test -f /var/log/service) then {
+		mv /var/log/service /var/log/servicio
+	} fi;
+	touch /var/log/servicio
 } fi;
 
 echo "* Preparar /etc/rc.local para que reinicie servicios faltantes" >> /var/tmp/inst-adJ.bitacora;
@@ -2411,7 +2414,7 @@ if (test ! -h /usr/local/bin/python) then {
  ln -sf /usr/local/bin/pydoc2.7  /usr/local/bin/pydoc
 } fi;
 
-echo "* Volviendo a cambiar en por service en etc" >> /var/tmp/inst-adJ.bitacora;
-cd /etc && /usr/local/adJ/service-etc.sh >> /var/tmp/inst-adJ.bitacora 2>&1
+echo "* Volviendo a cambiar en por servicio en etc" >> /var/tmp/inst-adJ.bitacora;
+cd /etc && /usr/local/adJ/servicio-etc.sh >> /var/tmp/inst-adJ.bitacora 2>&1
 dialog --title 'Componentes básicos instalados' --msgbox "\\nFELICITACIONES!  La instalación/actualización de la distribución Aprendiendo de Jesús $VER se completó satisfactoriamente\\n\\n Para instalar SIVeL ejecute sudo /usr/local/adJ/inst-sivel.sh" 15 60
 

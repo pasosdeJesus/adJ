@@ -14,11 +14,10 @@ MAINTAINER=	Vladimir Támara Patiño <vtamara@pasosdeJesus.org>
 # Public Domain  & BSD License
 PERMIT_PACKAGE_CDROM=	Yes
 PERMIT_PACKAGE_FTP=	Yes
-PERMIT_DISTFILES_CDROM=	Yes
 PERMIT_DISTFILES_FTP=	Yes
 
 NO_BUILD=	Yes
-NO_REGRESS=	Yes
+NO_TEST =	Yes
 
 WRKDIST=	${WRKDIR}
 DIRTIPOS=	${PREFIX}/lib/X11/fonts/structio
