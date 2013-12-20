@@ -398,7 +398,14 @@ echo "Sistemas de archivos para USB en /etc/fstab" >> /var/tmp/inst-adJ.bitacora
 grep "/mnt/usb" /etc/fstab > /dev/null
 if (test "$?" != "0") then {
 	echo "Detectando dispositivo que corresponde a memoria USB" >> /var/tmp/inst-adJ.bitacora;
-	dialog --title 'Configurando USB (1)' --msgbox '\nDesmonte y retire toda memoria USB que pueda haber\n' 15 60
+	ayuda="2";
+	while (test "$ayuda" = "2"); do
+		dialog --title 'Configurando USB (1)' --help-button --msgbox '\nDesmonte y retire toda memoria USB que pueda haber\n' 15 60
+		ayuda="$?"
+		if (test "$ayuda" = "2") then {
+			dialog --title 'Ayuda configuración USB' --msgbox '\nLa prueba de insertar y retirar memoria USB se hace para diferenciar discos duros de memorias USB y configurar el dispositivo que típicamente usan las memorias USB, de forma que puedan montarse facilmente en /mnt/usb.\n' 15 60 
+		} fi;
+	done;
 	dmesg > /tmp/dmesg1
 	dialog --title 'Configurando USB (2)' --msgbox '\nPonga una memoria USB\n' 15 60
 	dmesg > /tmp/dmesg2
@@ -1061,11 +1068,19 @@ if (test -f /$RUTAIMG/post.img) then {
 	postencripta="s";
 }
 else {
-	postecnripta="n";
-	dialog --title 'Cifrado de datos de PostgreSQL' --yesno '\n¿Preparar imagenes cifradas para los datos de PostgreSQL?' 15 60 
-	if (test "$?" = "0") then {
+	postecnripta="h";
+	while (test "$postecnripta" != "h") ; do
+		dialog --title 'Cifrado de datos de PostgreSQL' --help-button --yesno '\n¿Preparar imagenes cifradas para los datos de PostgreSQL?' 15 60 
+		postencripta="$?"
+		if (test "$postencripta" = "2") then {
+			postencripta="h";
+			dialog --title 'Ayuda cifrado de datos de PostgreSQL' --msgbox '\nEn adJ todas las bases de datos de PostgreSQL pueden mantenerse en una partición cifrada con una clave que debe darse durante el arranque (si la clave es errada no podrán usarse las bases de datos).\n' 15 60 
+		} fi;
+	done;
+	if (test "$postencripta" = "0") then {
 		postencripta="s";
 	} fi;
+
 } fi;
 
 
