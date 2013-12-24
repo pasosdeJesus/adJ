@@ -1339,3 +1339,52 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/string/strxfrm
 +	}
 +	return r; 
  }
+diff -ruN -x *~ -x *orig -x *rej src54-orig/lib/libc/string/wcscasecmp.c src/lib/libc/string/wcscasecmp.c
+--- src54-orig/lib/libc/string/wcscasecmp.c	Sat Jun 25 00:32:57 2011
++++ src/lib/libc/string/wcscasecmp.c	Mon Dec 23 12:04:47 2013
+@@ -27,32 +27,41 @@
+ 
+ #include <wchar.h>
+ #include <wctype.h>
++
+ #include "locale/runetype.h"
+ 
+ int
+ wcscasecmp(const wchar_t *s1, const wchar_t *s2)
+ {
+ 	wchar_t l1, l2;
++	wchar_t c1[2], c2[2];
+ 
+ 	while ((l1 = towlower(*s1++)) == (l2 = towlower(*s2++))) {
+ 		if (l1 == 0)
+ 			return (0);
+ 	}
+-	/* XXX assumes wchar_t = int */
+-	return ((rune_t)l1 - (rune_t)l2);
++	c1[0] = l1;
++	c1[1] = L'\0';
++	c2[0] = l2;
++	c2[1] = L'\0';
++	return wcscoll(c1, c2);
+ }
+ 
+ int
+ wcsncasecmp(const wchar_t *s1, const wchar_t *s2, size_t n)
+ {
+ 	wchar_t l1, l2;
++	wchar_t c1[2], c2[2];
+ 
+ 	if (n == 0)
+ 		return (0);
+ 	do {
+ 		if (((l1 = towlower(*s1++))) != (l2 = towlower(*s2++))) {
+-			/* XXX assumes wchar_t = int */
+-			return ((rune_t)l1 - (rune_t)l2);
++			c1[0] = l1;
++			c1[1] = L'\0';
++			c2[0] = l2;
++			c2[1] = L'\0';
++			return wcscoll(c1, c2);
+ 		}
+ 		if (l1 == 0)
+ 			break;
