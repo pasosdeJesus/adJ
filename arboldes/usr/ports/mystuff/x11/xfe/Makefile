@@ -2,7 +2,7 @@
 
 COMMENT=	MS-Explorer like file manager for X
 
-DISTNAME= 	xfe-1.35
+DISTNAME= 	xfe-1.37
 CATEGORIES= 	x11
 
 HOMEPAGE=	http://roland65.free.fr/xfe/
@@ -12,7 +12,6 @@ MAINTAINER=	Amit Kulkarni <amitkulz@gmail.com>
 # GPLv2
 PERMIT_PACKAGE_CDROM=	Yes
 PERMIT_PACKAGE_FTP=	Yes
-PERMIT_DISTFILES_CDROM= Yes
 PERMIT_DISTFILES_FTP=	Yes
 
 MASTER_SITES=	${MASTER_SITE_SOURCEFORGE:=xfe/}

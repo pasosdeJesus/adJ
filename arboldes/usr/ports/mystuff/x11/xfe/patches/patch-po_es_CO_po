@@ -1,6 +1,6 @@
 $OpenBSD$
---- po/es_CO.po.orig	Thu Aug 22 04:42:30 2013
-+++ po/es_CO.po	Tue Aug 27 11:25:56 2013
+--- po/es_CO.po.orig	Sun Nov 24 10:43:29 2013
++++ po/es_CO.po	Sun Dec 22 14:53:06 2013
 @@ -6,7 +6,7 @@
  # If you prefer different licesing terms, simply change them (just remember to give credit)
  msgid ""
@@ -8,20 +8,31 @@ $OpenBSD$
 -"Project-Id-Version: xfe 1.34\n"
 +"Project-Id-Version: xfe 1.35\n"
  "Report-Msgid-Bugs-To: \n"
- "POT-Creation-Date: 2013-08-22 11:42+0200\n"
+ "POT-Creation-Date: 2013-11-24 15:43+0000\n"
  "PO-Revision-Date: 2013-02-12 10:16-0500\n"
 @@ -20,7 +20,6 @@ msgstr ""
  
  #. Usage message
- #: ../src/main.cpp:243
+ #: ../src/main.cpp:244
 -#, fuzzy
  msgid ""
  "\n"
  "Usage: xfe [options] [startdir1] [startdir2]\n"
-@@ -888,9 +887,8 @@ msgstr "Propi&edades"
- #: ../src/XFileExplorer.cpp:2237 ../src/XFileExplorer.cpp:2685
- #: ../src/XFileExplorer.cpp:2766 ../src/XFileExplorer.cpp:2795
- #: ../src/XFileExplorer.cpp:2835
+@@ -417,9 +416,8 @@ msgstr "Fecha de Eliminación:"
+ 
+ #: ../src/Properties.cpp:684 ../src/Properties.cpp:1601
+ #: ../src/Properties.cpp:1667
+-#, fuzzy, c-format
+ msgid "%s (%lu bytes)"
+-msgstr "%s (%llu bytes)"
++msgstr "%s (%lu bytes)"
+ 
+ #: ../src/Properties.cpp:686 ../src/Properties.cpp:1603
+ #: ../src/Properties.cpp:1669
+@@ -947,9 +945,8 @@ msgstr "Propi&edades"
+ #: ../src/XFileExplorer.cpp:2373 ../src/XFileExplorer.cpp:2821
+ #: ../src/XFileExplorer.cpp:2902 ../src/XFileExplorer.cpp:2931
+ #: ../src/XFileExplorer.cpp:2971
 -#, fuzzy, c-format
  msgid "Can't enter folder %s: %s"
 -msgstr "No se puede eliminar el directorio %s: %s"
@@ -29,37 +40,37 @@ $OpenBSD$
  
  #: ../src/DirPanel.cpp:802 ../src/DirPanel.cpp:888 ../src/DirPanel.cpp:2246
  #: ../src/DirPanel.cpp:2268 ../src/DirPanel.cpp:2317 ../src/DirPanel.cpp:2340
-@@ -904,9 +902,8 @@ msgstr "No se puede eliminar el directorio %s: %s"
- #: ../src/XFileExplorer.cpp:2239 ../src/XFileExplorer.cpp:2687
- #: ../src/XFileExplorer.cpp:2768 ../src/XFileExplorer.cpp:2797
- #: ../src/XFileExplorer.cpp:2837
+@@ -964,9 +961,8 @@ msgstr "No se puede eliminar el directorio %s: %s"
+ #: ../src/XFileExplorer.cpp:2375 ../src/XFileExplorer.cpp:2823
+ #: ../src/XFileExplorer.cpp:2904 ../src/XFileExplorer.cpp:2933
+ #: ../src/XFileExplorer.cpp:2973
 -#, fuzzy, c-format
  msgid "Can't enter folder %s"
 -msgstr "No se puede crear el directorio %s"
 +msgstr "No se puede ingresar al directorio %s"
  
  #. File object
- #: ../src/DirPanel.cpp:876 ../src/FilePanel.cpp:3898
-@@ -1061,7 +1058,6 @@ msgid "Restore information not available for %s"
+ #: ../src/DirPanel.cpp:876 ../src/FilePanel.cpp:3905
+@@ -1138,7 +1134,6 @@ msgid "Restore information not available for %s"
  msgstr "La información para restaurar %s, no está disponible"
  
- #: ../src/DirPanel.cpp:2125 ../src/FilePanel.cpp:2234
+ #: ../src/DirPanel.cpp:2125 ../src/FilePanel.cpp:2228
 -#, fuzzy, c-format
  msgid "Parent folder %s does not exist, do you want to create it?"
  msgstr "El directorio padre %s no existe, ¿desea crearlo?"
  
-@@ -1097,9 +1093,8 @@ msgstr "Directorio nuevo"
- #: ../src/XFileExplorer.cpp:2195 ../src/XFileExplorer.cpp:2227
- #: ../src/XFileExplorer.cpp:2728 ../src/XFileImage.cpp:1248
+@@ -1174,9 +1169,8 @@ msgstr "Directorio nuevo"
+ #: ../src/XFileExplorer.cpp:2331 ../src/XFileExplorer.cpp:2363
+ #: ../src/XFileExplorer.cpp:2864 ../src/XFileImage.cpp:1249
  #: ../src/WriteWindow.cpp:1743 ../src/ViewWindow.cpp:583
 -#, fuzzy, c-format
  msgid "Can't execute command %s"
 -msgstr "Ejecutar comando"
 +msgstr "No se puede ejecutar comando %s"
  
- #: ../src/DirPanel.cpp:2299 ../src/FilePanel.cpp:4485
+ #: ../src/DirPanel.cpp:2299 ../src/FilePanel.cpp:4594
  msgid "Mount"
-@@ -1184,14 +1179,12 @@ msgid "Unmount the folder:"
+@@ -1261,14 +1255,12 @@ msgid "Unmount the folder:"
  msgstr "Desmontar el directorio:"
  
  #: ../src/File.cpp:266
@@ -74,108 +85,123 @@ $OpenBSD$
 +"El directorio %s ya existe. ¿Sobreescribirlo?\n"
 +" => !Precaución, todos los archivos se perderán definitivamente!"
  
- #: ../src/File.cpp:268 ../src/File.cpp:1619
+ #: ../src/File.cpp:268 ../src/File.cpp:1635
  #, c-format
-@@ -1408,19 +1401,16 @@ msgstr "Solo lectura"
+@@ -1486,19 +1478,16 @@ msgstr "Solo lectura"
  
- #: ../src/FileDialog.cpp:132 ../src/Preferences.cpp:613
- #: ../src/XFileExplorer.cpp:425
+ #: ../src/FileDialog.cpp:132 ../src/Preferences.cpp:616
+ #: ../src/XFileExplorer.cpp:427
 -#, fuzzy
  msgid "Go to previous folder"
 -msgstr "Mover al directorio anterior."
-+msgstr "Ir al directorio anterior"
++msgstr "Ir al directorio anterior."
  
- #: ../src/FileDialog.cpp:139 ../src/Preferences.cpp:617
- #: ../src/XFileExplorer.cpp:432
+ #: ../src/FileDialog.cpp:139 ../src/Preferences.cpp:620
+ #: ../src/XFileExplorer.cpp:434
 -#, fuzzy
  msgid "Go to next folder"
 -msgstr "Mover al directorio siguiente."
-+msgstr "Ir al directorio siguiente"
++msgstr "Ir al directorio siguiente."
  
- #: ../src/FileDialog.cpp:145 ../src/Preferences.cpp:621
- #: ../src/XFileExplorer.cpp:439
+ #: ../src/FileDialog.cpp:145 ../src/Preferences.cpp:624
+ #: ../src/SearchPanel.cpp:154 ../src/XFileExplorer.cpp:441
 -#, fuzzy
  msgid "Go to parent folder"
  msgstr "Ir al directorio superior"
  
-@@ -1596,9 +1586,8 @@ msgstr "&Grupo"
- 
- #: ../src/FileDialog.cpp:1434 ../src/FilePanel.cpp:3522
- #: ../src/FilePanel.cpp:3563 ../src/XFileImage.cpp:657
+@@ -1688,9 +1677,8 @@ msgstr "&Grupo"
+ #: ../src/FileDialog.cpp:1434 ../src/FilePanel.cpp:3519
+ #: ../src/FilePanel.cpp:3560 ../src/SearchPanel.cpp:1646
+ #: ../src/SearchPanel.cpp:1674 ../src/XFileImage.cpp:658
 -#, fuzzy
  msgid "Fold&ers first"
 -msgstr "Directorios"
 +msgstr "Primero Dir&ectorios"
  
- #: ../src/FileDialog.cpp:1435 ../src/FilePanel.cpp:3523
- #: ../src/FilePanel.cpp:3564 ../src/XFileExplorer.cpp:806
-@@ -1892,9 +1881,8 @@ msgid "Size: "
+ #: ../src/FileDialog.cpp:1435 ../src/FilePanel.cpp:3520
+ #: ../src/FilePanel.cpp:3561 ../src/SearchPanel.cpp:1647
+@@ -1985,9 +1973,8 @@ msgid "Size: "
  msgstr "Tamaño: "
  
- #: ../src/FileList.cpp:141
+ #: ../src/FileList.cpp:147
 -#, fuzzy
  msgid "Folder name"
 -msgstr "Directorio: "
 +msgstr "Nombre del Directorio: "
  
- #: ../src/FileList.cpp:142
+ #: ../src/FileList.cpp:148
  msgid "Size"
-@@ -2159,12 +2147,11 @@ msgstr "&Consultar Paquetes"
+@@ -2256,26 +2243,22 @@ msgid "Packages &query "
+ msgstr "&Consultar Paquetes"
  
- #: ../src/FilePanel.cpp:3647
+ #: ../src/FilePanel.cpp:3644 ../src/SearchPanel.cpp:1736
+-#, fuzzy
  msgid "Scripts"
--msgstr ""
+-msgstr "De&scripción"
 +msgstr "Archivos de comandos"
  
- #: ../src/FilePanel.cpp:3650 ../src/XFileExplorer.cpp:880
+ #: ../src/FilePanel.cpp:3647 ../src/SearchPanel.cpp:1739
 -#, fuzzy
- msgid "Go to script folder"
+ msgid "&Go to script folder"
 -msgstr "Ir al directorio superior"
-+msgstr "Ir al directorio de archivos de comandos"
++msgstr "Ir al directorio con archivos de comandos"
  
- #: ../src/FilePanel.cpp:3658
+ #: ../src/FilePanel.cpp:3655 ../src/SearchPanel.cpp:1747
  msgid "Copy &to..."
-@@ -2204,19 +2191,16 @@ msgstr "Desinstalación de Paquete"
+ msgstr "Copiar &a..."
  
- #: ../src/FilePanel.cpp:4592 ../src/startupnotification.cpp:157
- #: ../src/xfeutils.cpp:1231
+ #: ../src/FilePanel.cpp:3658 ../src/SearchPanel.cpp:1750
+-#, fuzzy
+ msgid "M&ove to trash"
+-msgstr "Mover a la papelera"
++msgstr "M&over a la papelera"
+ 
+ #: ../src/FilePanel.cpp:3659
+-#, fuzzy
+ msgid "Restore &from trash"
+ msgstr "Restaurar de papelera"
+ 
+@@ -2312,19 +2295,16 @@ msgstr "Desinstalación de Paquete"
+ 
+ #: ../src/FilePanel.cpp:4501 ../src/startupnotification.cpp:157
+ #: ../src/xfeutils.cpp:1236
 -#, fuzzy, c-format
  msgid "Error: Fork failed: %s\n"
 -msgstr "¡Error! Fork (bifuración) falló: %s\n"
 +msgstr "Error: Fork (bifuración) falló: %s\n"
  
- #: ../src/FilePanel.cpp:4634
+ #: ../src/FilePanel.cpp:4543 ../src/SearchPanel.cpp:3207
 -#, fuzzy, c-format
  msgid "Can't create script folder %s: %s"
 -msgstr "No se puede crear el directorio %s : %s"
 +msgstr "No se puede crear directorio de archivos de comandos %s : %s"
  
- #: ../src/FilePanel.cpp:4636
+ #: ../src/FilePanel.cpp:4545 ../src/SearchPanel.cpp:3209
 -#, fuzzy, c-format
  msgid "Can't create script folder %s"
 -msgstr "No se puede crear el directorio %s"
-+msgstr "No se puede crear directorio de archivos de comandos %s"
++msgstr "No se puede crear el directorio de archivos de comandos %s"
  
- #: ../src/FilePanel.cpp:4726 ../src/XFilePackage.cpp:799
- msgid "No compatible package manager (rpm or dpkg) found!"
-@@ -2280,14 +2264,12 @@ msgid "Cl&ose"
+ #: ../src/FilePanel.cpp:4733 ../src/SearchPanel.cpp:3373
+ #: ../src/XFilePackage.cpp:800
+@@ -2395,14 +2375,12 @@ msgid "Cl&ose"
  msgstr "C&errar"
  
- #: ../src/CommandWindow.cpp:169
+ #: ../src/CommandWindow.cpp:169 ../src/SearchWindow.cpp:643
 -#, fuzzy, c-format
  msgid "Can't duplicate pipes: %s"
 -msgstr "No se puede eliminar el archivo %s: %s"
 +msgstr "No se pueden duplicar tuberias: %s"
  
- #: ../src/CommandWindow.cpp:171
+ #: ../src/CommandWindow.cpp:171 ../src/SearchWindow.cpp:645
 -#, fuzzy
  msgid "Can't duplicate pipes"
 -msgstr "No se puede eliminar el archivo %s"
 +msgstr "No se pueden duplicar tuberias"
  
- #: ../src/CommandWindow.cpp:258
+ #: ../src/CommandWindow.cpp:259
  msgid ""
-@@ -2405,16 +2387,14 @@ msgid "Save window position"
+@@ -2520,16 +2498,14 @@ msgid "Save window position"
  msgstr "Guardar posición de la ventana"
  
  #: ../src/Preferences.cpp:175
@@ -193,7 +219,7 @@ $OpenBSD$
  msgid "Display tooltips in file and folder lists"
  msgstr "Mostrar ayudas emergentes en listados de archivos y directorios"
  
-@@ -2431,7 +2411,6 @@ msgid "Notify when applications start up"
+@@ -2546,7 +2522,6 @@ msgid "Notify when applications start up"
  msgstr "Notificar cuando las aplicaciones inicien"
  
  #: ../src/Preferences.cpp:185
@@ -201,73 +227,369 @@ $OpenBSD$
  msgid ""
  "Date format used in file and folder lists:\n"
  "(Type 'man strftime' in a terminal for help on the format)"
-@@ -2493,9 +2472,8 @@ msgid "Confirm delete"
+@@ -2608,7 +2583,6 @@ msgid "Confirm delete"
  msgstr "Confirmar eliminación"
  
- #: ../src/Preferences.cpp:284
+ #: ../src/Preferences.cpp:283
 -#, fuzzy
  msgid "Confirm delete non empty folders"
--msgstr "Confirmar borrar directorios no vacíos"
-+msgstr "Confirmar borrado de directorios no vacíos"
+ msgstr "Confirmar borrar directorios no vacíos"
  
- #: ../src/Preferences.cpp:285
- msgid "Confirm overwrite"
-@@ -2895,9 +2873,8 @@ msgid "Edit"
+@@ -3015,7 +2989,6 @@ msgid "Edit"
  msgstr "Editar"
  
- #: ../src/Preferences.cpp:836
+ #: ../src/Preferences.cpp:839
 -#, fuzzy
  msgid "Toggle display hidden folders"
--msgstr "Alternar mostrar archivos ocultos"
-+msgstr "Alternar mostrar directorios ocultos"
+ msgstr "Alternar mostrar archivos ocultos"
  
- #: ../src/Preferences.cpp:840
- msgid "Filter files"
-@@ -3272,9 +3249,8 @@ msgid "I&gnore case"
- msgstr "Ignorar capitali&zación"
+@@ -3190,7 +3163,6 @@ msgid "&Close"
+ msgstr "&Cerrar"
  
- #: ../src/XFileExplorer.cpp:805
+ #: ../src/SearchPanel.cpp:148
+-#, fuzzy
+ msgid "Refresh panel"
+ msgstr "Actualizar paneles"
+ 
+@@ -3235,39 +3207,32 @@ msgid "&Autosize"
+ msgstr "Tamaño &automático"
+ 
+ #: ../src/SearchPanel.cpp:1729
+-#, fuzzy
+ msgid "&Packages query "
+ msgstr "&Consultar Paquetes"
+ 
+ #: ../src/SearchPanel.cpp:1742
+-#, fuzzy
+ msgid "&Go to parent folder"
+ msgstr "Ir al directorio superior"
+ 
+ #: ../src/SearchPanel.cpp:2748
+-#, fuzzy, c-format
+ msgid "Copy %s items"
+-msgstr "Copiar %s elementos de: %s"
++msgstr "Copiar %s elementos"
+ 
+ #: ../src/SearchPanel.cpp:2762
+-#, fuzzy, c-format
+ msgid "Move %s items"
+-msgstr "Moviendo %s elementos de: %s"
++msgstr "Moviendo %s elementos"
+ 
+ #: ../src/SearchPanel.cpp:2776
+-#, fuzzy, c-format
+ msgid "Symlink %s items"
+-msgstr "Enlanzar %s elementos de: %s"
++msgstr "Enlanzar %s elementos"
+ 
+ #: ../src/SearchPanel.cpp:3230
+-#, fuzzy
+ msgid "0 items"
+-msgstr " elementos"
++msgstr "0 elementos"
+ 
+ #: ../src/SearchWindow.cpp:67
+-#, fuzzy
+ msgid "Find files:"
+-msgstr "Imprimir archivo"
++msgstr "Encontrar archivos:"
+ 
+ #: ../src/SearchWindow.cpp:70
+ msgid "Ignore case\tIgnore file name case"
+@@ -3275,49 +3240,41 @@ msgstr ""
+ 
+ #. Hidden files
+ #: ../src/SearchWindow.cpp:75
+-#, fuzzy
+ msgid "Hidden files\tShow hidden files and folders"
+-msgstr "Mostrar todos los archivos y directorios ocultos."
++msgstr "Archivos ocultos\tMostrar archivos y directorios ocultos"
+ 
+ #: ../src/SearchWindow.cpp:80
+-#, fuzzy
+ msgid "In folder:"
+-msgstr "Al directorio:"
++msgstr "En directorio:"
+ 
+ #: ../src/SearchWindow.cpp:82
+-#, fuzzy
+ msgid "\tIn folder..."
+-msgstr "&Directorio nuevo..."
++msgstr "\tEn directorio..."
+ 
+ #: ../src/SearchWindow.cpp:85
+-#, fuzzy
+ msgid "Text contains:"
+-msgstr "Tipo de letra del texto:"
++msgstr "El texto contiene:"
+ 
+ #: ../src/SearchWindow.cpp:88
+ msgid "Ignore case\tIgnore text case"
+-msgstr ""
++msgstr "Ignorar capitalización\tIgnora capitalización del texto"
+ 
+ #. Search options
+ #: ../src/SearchWindow.cpp:93
+-#, fuzzy
+ msgid "More options"
+-msgstr "Buscar anterior"
++msgstr "Más opciones"
+ 
+ #: ../src/SearchWindow.cpp:94
+-#, fuzzy
+ msgid "Search options"
+-msgstr "Buscar anterior"
++msgstr "Opciones de Búsqueda"
+ 
+ #: ../src/SearchWindow.cpp:95
+-#, fuzzy
+ msgid "Reset\tReset search options"
+-msgstr "Buscar anterior"
++msgstr "Restaurar\tRestaurar opciones de búsqueda"
+ 
+ #: ../src/SearchWindow.cpp:111
+-#, fuzzy
+ msgid "Min size:"
+-msgstr "Imprimir archivo"
++msgstr "Tamaño Mínimo"
+ 
+ #: ../src/SearchWindow.cpp:113
+ msgid "Filter by minimum file size (KBytes)"
+@@ -3329,9 +3286,8 @@ msgid "KB"
+ msgstr "KB"
+ 
+ #: ../src/SearchWindow.cpp:116
+-#, fuzzy
+ msgid "Max size:"
+-msgstr "Tamaño total:"
++msgstr "Tamaño máximo:"
+ 
+ #: ../src/SearchWindow.cpp:118
+ msgid "Filter by maximum file size (KBytes)"
+@@ -3339,9 +3295,8 @@ msgstr ""
+ 
+ #. Modification date
+ #: ../src/SearchWindow.cpp:122
+-#, fuzzy
+ msgid "Last modified before:"
+-msgstr "Última Modificación:"
++msgstr "Última Modificación antes:"
+ 
+ #: ../src/SearchWindow.cpp:124
+ msgid "Filter by maximum modification date (days)"
+@@ -3352,9 +3307,8 @@ msgid "Days"
+ msgstr ""
+ 
+ #: ../src/SearchWindow.cpp:127
+-#, fuzzy
+ msgid "Last modified after:"
+-msgstr "Última Modificación:"
++msgstr "Última Modificación después:"
+ 
+ #: ../src/SearchWindow.cpp:129
+ msgid "Filter by minimum modification date (days)"
+@@ -3362,33 +3316,27 @@ msgstr ""
+ 
+ #. User and group
+ #: ../src/SearchWindow.cpp:133
+-#, fuzzy
+ msgid "User:"
+ msgstr "Usuario: "
+ 
+ #: ../src/SearchWindow.cpp:136
+-#, fuzzy
+ msgid "\tFilter by user name"
+-msgstr "Filtrar archivos"
++msgstr "\tFiltrar por nombre de usuario"
+ 
+ #: ../src/SearchWindow.cpp:138
+-#, fuzzy
+ msgid "Group:"
+ msgstr "Grupo: "
+ 
+ #: ../src/SearchWindow.cpp:141
+-#, fuzzy
+ msgid "\tFilter by group name"
+-msgstr "Filtrar archivos"
++msgstr "\tFiltrar por nombre de grupo"
+ 
+ #. File type
+ #: ../src/SearchWindow.cpp:170
+-#, fuzzy
+ msgid "File type:"
+-msgstr "Sistema de archivos:"
++msgstr "Tipo de archivo:"
+ 
+ #: ../src/SearchWindow.cpp:173
+-#, fuzzy
+ msgid "File"
+ msgstr "Archivo:"
+ 
+@@ -3397,41 +3345,34 @@ msgid "Pipe"
+ msgstr ""
+ 
+ #: ../src/SearchWindow.cpp:179
+-#, fuzzy
+ msgid "\tFilter by file type"
+-msgstr "Filtrar archivos"
++msgstr "\tFiltrar por tipo de archivo"
+ 
+ #. Permissions (in octal)
+ #: ../src/SearchWindow.cpp:182
+-#, fuzzy
+ msgid "Permissions:"
+ msgstr "Permisos: "
+ 
+ #: ../src/SearchWindow.cpp:186
+-#, fuzzy
+ msgid "\tFilter by permissions (octal)"
+-msgstr "Permisos de archivo"
++msgstr "\tFiltrar por permisos (octal)"
+ 
+ #. Empty files
+ #: ../src/SearchWindow.cpp:189
+-#, fuzzy
+ msgid "Empty files:"
+-msgstr "Mostrar todos los archivos:"
++msgstr "Archivos vacíos:"
+ 
+ #: ../src/SearchWindow.cpp:190
+-#, fuzzy
+ msgid "\tEmpty files only"
+-msgstr "Mostrar todos los archivos:"
++msgstr "\tArchivos vacíos solamente"
+ 
+ #: ../src/SearchWindow.cpp:194
+-#, fuzzy
+ msgid "Follow symbolic links:"
+-msgstr "Crear un enlace simbólico nuevo:"
++msgstr "Seguir enlaces simbólicos:"
+ 
+ #: ../src/SearchWindow.cpp:195
+-#, fuzzy
+ msgid "\tSearch while following symbolic links"
+-msgstr "Crear un enlace simbólico nuevo"
++msgstr "\tBuscar mientras sigue enlaces simbólicos"
+ 
+ #. Start
+ #: ../src/SearchWindow.cpp:201
+@@ -3446,28 +3387,24 @@ msgstr ""
+ #. Search results
+ #: ../src/SearchWindow.cpp:207 ../src/SearchWindow.cpp:481
+ #: ../src/SearchWindow.cpp:495 ../src/SearchWindow.cpp:742
+-#, fuzzy
+ msgid "Search results"
+-msgstr "Buscar anterior"
++msgstr "Resultados de búsqueda"
+ 
+ #: ../src/SearchWindow.cpp:602
+-#, fuzzy
+ msgid "Search started - Please wait..."
+-msgstr "Buscar anterior"
++msgstr "Búsqueda iniciada - Por favor espere..."
+ 
+ #: ../src/SearchWindow.cpp:760
+ msgid "Input / Output error"
+ msgstr ""
+ 
+ #: ../src/SearchWindow.cpp:777
+-#, fuzzy
+ msgid "Search stopped..."
+-msgstr "Buscar en el texto."
++msgstr "Búsqueda detenida..."
+ 
+ #: ../src/SearchWindow.cpp:936
+-#, fuzzy
+ msgid "Select path"
+-msgstr "\tSeleccionar ruta..."
++msgstr "Seleccionar ruta"
+ 
+ #: ../src/XFileExplorer.cpp:462
+ msgid "Create new symlink"
+@@ -3482,9 +3419,8 @@ msgid "Launch Xfe"
+ msgstr "Inicie Xfe"
+ 
+ #: ../src/XFileExplorer.cpp:502
+-#, fuzzy
+ msgid "Search files and folders..."
+-msgstr "Mostrar todos los archivos y directorios ocultos."
++msgstr "Buscar archivos y directorios..."
+ 
+ #: ../src/XFileExplorer.cpp:509
+ msgid "Mount (Linux only)"
+@@ -3649,9 +3585,8 @@ msgid "Gr&oup"
+ msgstr "&Grupo"
+ 
+ #: ../src/XFileExplorer.cpp:810
 -#, fuzzy
  msgid "Fol&ders first"
 -msgstr "Directorios"
-+msgstr "&Directorios primero"
++msgstr "Directorios primero"
  
- #: ../src/XFileExplorer.cpp:807 ../src/XFileExplorer.cpp:2522
- #: ../src/XFileExplorer.cpp:2565
-@@ -3286,9 +3262,8 @@ msgid "&Filter"
+ #: ../src/XFileExplorer.cpp:812 ../src/XFileExplorer.cpp:2658
+ #: ../src/XFileExplorer.cpp:2701
+@@ -3663,9 +3598,8 @@ msgid "&Filter"
  msgstr "Filt&ro"
  
- #: ../src/XFileExplorer.cpp:835
+ #: ../src/XFileExplorer.cpp:840
 -#, fuzzy
  msgid "&Folders first"
 -msgstr "Directorios"
 +msgstr "&Directorios primero"
  
- #: ../src/XFileExplorer.cpp:837 ../src/XFileExplorer.cpp:2521
- #: ../src/XFileExplorer.cpp:2564
-@@ -4012,9 +3987,8 @@ msgid "Zoom to fit window when opening an image."
+ #: ../src/XFileExplorer.cpp:842 ../src/XFileExplorer.cpp:2657
+ #: ../src/XFileExplorer.cpp:2700
+@@ -3697,14 +3631,12 @@ msgid "Sw&itch panels"
+ msgstr "Cam&biar paneles"
+ 
+ #: ../src/XFileExplorer.cpp:885
+-#, fuzzy
+ msgid "Go to script folder"
+-msgstr "Ir al directorio superior"
++msgstr "Ir al directorio de archivos de comandos"
+ 
+ #: ../src/XFileExplorer.cpp:887
+-#, fuzzy
+ msgid "&Search files..."
+-msgstr "&Buscar..."
++msgstr "&Buscar archivos..."
+ 
+ #: ../src/XFileExplorer.cpp:900
+ msgid "&Unmount"
+@@ -3890,9 +3822,8 @@ msgid "Console mode"
+ msgstr "Modo consola"
+ 
+ #: ../src/XFileExplorer.cpp:2996
+-#, fuzzy
+ msgid "Search files and folders"
+-msgstr "Mostrar todos los archivos y directorios ocultos."
++msgstr "Buscar archivos y directorios"
+ 
+ #. Confirmation message
+ #: ../src/XFileExplorer.cpp:3014
+@@ -4404,9 +4335,8 @@ msgid "Zoom to fit window when opening an image."
  msgstr "Ampliar para encajar a la ventana al abrir una imagen."
  
- #: ../src/XFileImage.cpp:522
+ #: ../src/XFileImage.cpp:523
 -#, fuzzy
  msgid "Show hidden files and folders."
 -msgstr "Mostrar todos los archivos y directorios ocultos."
 +msgstr "Mostrar archivos y directorios ocultos."
  
- #: ../src/XFileImage.cpp:528
+ #: ../src/XFileImage.cpp:529
  msgid "Show image thumbnails."
-@@ -4758,9 +4732,8 @@ msgstr ""
+@@ -5146,9 +5076,8 @@ msgstr ""
  "\n"
  
- #: ../src/foxhacks.cpp:125
+ #: ../src/foxhacks.cpp:127
 -#, fuzzy
  msgid "Root folder"
 -msgstr "Módo Superusuario"
-+msgstr "Directorio raíz"
++msgstr "Directorio de Superusuario"
  
- #: ../src/foxhacks.cpp:557
+ #: ../src/foxhacks.cpp:563
  msgid "Ready."
-@@ -4799,7 +4772,6 @@ msgid "&Backward"
+@@ -5187,7 +5116,6 @@ msgid "&Backward"
  msgstr "Hacia &atrás"
  
  #: ../src/help.h:7
@@ -275,7 +597,7 @@ $OpenBSD$
  msgid ""
  "\n"
  " \n"
-@@ -5212,8 +5184,8 @@ msgstr ""
+@@ -5622,8 +5550,8 @@ msgstr ""
  "\n"
  "                                   Xfe, X File Explorer File Manager\n"
  "\n"
@@ -286,7 +608,7 @@ $OpenBSD$
  "\n"
  "\n"
  "\n"
-@@ -5240,7 +5212,7 @@ msgstr ""
+@@ -5650,7 +5578,7 @@ msgstr ""
  "   Descripción\n"
  "   =-=-=-=-=-=\n"
  "\n"
@@ -295,7 +617,7 @@ $OpenBSD$
  "escrito utilizando el kit de herramientas FOX.\n"
  "  Es independiente de escritorio y puede personalizarse con facilidad.\n"
  "  Cuenta con estilos Comandos o Explorador y es muy rápido y pequeño.\n"
-@@ -5264,6 +5236,7 @@ msgstr ""
+@@ -5674,6 +5602,7 @@ msgstr ""
  "     - Visor de imágenes integrado (X File Image, xfi)\n"
  "     - Visor/Instalador/Desinstalador de paquetes (rpm o deb) integrado (X "
  "File Package, xfp)\n"
@@ -303,7 +625,7 @@ $OpenBSD$
  "     - Copia/Corta/Pega archivos desde y hacia su escritorio favorito (GNOME/"
  "KDE/XFCE/ROX)\n"
  "     - Permite arrastrar y soltar archivos desde y hacia su escritorio "
-@@ -5322,7 +5295,7 @@ msgstr ""
+@@ -5732,7 +5661,7 @@ msgstr ""
  "     * Cortar al portapapeles - Ctrl-X\n"
  "     * Deseleccionar todo - Ctrl-Z\n"
  "     * Mostrar ayuda - F1\n"
@@ -312,7 +634,7 @@ $OpenBSD$
  "     * Crear un directorio nuevo - F7\n"
  "     * Listado con iconos grandes - F10\n"
  "     * Listado con iconos pequeños - F11\n"
-@@ -5336,7 +5309,7 @@ msgstr ""
+@@ -5746,7 +5675,7 @@ msgstr ""
  "\n"
  "\n"
  "  A continuación están los atajos de teclado de X File Explorer. Estos "
@@ -321,7 +643,7 @@ $OpenBSD$
  "\n"
  "     * Agregar marcador - Ctrl-B\n"
  "     * Filtrar archivos - Ctrl-D\n"
-@@ -5345,7 +5318,7 @@ msgstr ""
+@@ -5755,7 +5684,7 @@ msgstr ""
  "     * Cambiar los paneles - Ctrl-K\n"
  "     * Eliminar Barra de Ubicación - Ctrl-L\n"
  "     * Montar sistema de archivos (sólo Linux) - Ctrl-M\n"
@@ -330,7 +652,7 @@ $OpenBSD$
  "     * Actualizar páneles Ctrl-R\n"
  "     * Enlazar archivos a la ubicación - Ctrl-S\n"
  "     * Lanzar terminal - Ctrl-T\n"
-@@ -5401,7 +5374,7 @@ msgstr ""
+@@ -5811,7 +5740,7 @@ msgstr ""
  "\n"
  "  Note que todos los atajos de teclado predeterminados enumerados "
  "anteriormente se pueden personalizar en el cuadro de diálogo Preferencias "
@@ -339,7 +661,7 @@ $OpenBSD$
  "y no puede cambiarse. Estas incluyen:\n"
  "\n"
  "     * Ctrl-+ y Ctrl-- acercar y alejar la imagen en xfi\n"
-@@ -5427,10 +5400,10 @@ msgstr ""
+@@ -5837,10 +5766,10 @@ msgstr ""
  "   Sistema de Papelera\n"
  "   =-=-=-=-=-=-=-=-=-=-=-\n"
  "\n"
@@ -352,7 +674,7 @@ $OpenBSD$
  "  Tenga en cuenta que la ubicación de los archivos en la papelera ahora es: "
  "~/local/share/Trash/files\n"
  "\n"
-@@ -5440,14 +5413,14 @@ msgstr ""
+@@ -5850,14 +5779,14 @@ msgstr ""
  "   Configuración\n"
  "   =-=-=-=-=-=-=\n"
  "\n"
@@ -369,7 +691,7 @@ $OpenBSD$
  "configuración, o de lo contrario los cambios no se tendrán\n"
  " en cuenta.\n"
  "\n"
-@@ -5459,17 +5432,17 @@ msgstr ""
+@@ -5869,17 +5798,17 @@ msgstr ""
  "locales ha cambiado. Esto es para cumplir \n"
  " con los estándares de freedesktop.org.\n"
  "\n"
@@ -390,7 +712,7 @@ $OpenBSD$
  "mediante edición manual pues todas las opciones locales están\n"
  " en el mismo archivo.\n"
  "\n"
-@@ -5480,6 +5453,48 @@ msgstr ""
+@@ -5890,6 +5819,48 @@ msgstr ""
  "\n"
  "\n"
  "\n"
@@ -439,7 +761,7 @@ $OpenBSD$
  "   Idiomas no basado en Latín\n"
  "   =-=-=-=-=-=-=-=-=-=-=-=-=\n"
  "\n"
-@@ -5527,7 +5542,7 @@ msgstr ""
+@@ -5937,7 +5908,7 @@ msgstr ""
  "retroalimentación al usuario (un puntero con un reloj u otra forma) cuando\n"
  " ha iniciado una acción (copia de archivos, inicio de una aplicación, etc.) "
  "Dependiendo del sistema, puede haber\n"
@@ -448,7 +770,7 @@ $OpenBSD$
  "soporte de notificación de inicio, el usuario puede\n"
  " desactivarlo para todas las aplicaciones a nivel global de las "
  "Preferencias. También puede desactivarlo para \n"
-@@ -5544,7 +5559,7 @@ msgstr ""
+@@ -5954,7 +5925,7 @@ msgstr ""
  "   =-=-=-\n"
  "\n"
  "  Por favor reporte cualquier falla que encuentre a Roland Baudin "
@@ -457,7 +779,7 @@ $OpenBSD$
  " la versión de la biblioteca FOX y el nombre y versión de su sistema "
  "operativo.\n"
  "\n"
-@@ -5553,14 +5568,14 @@ msgstr ""
+@@ -5963,14 +5934,14 @@ msgstr ""
  "   Traducciones\n"
  "   =-=-=-=-=-=-=\n"
  "\n"
@@ -475,7 +797,7 @@ $OpenBSD$
  "\n"
  "\n"
  "\n"
-@@ -5575,7 +5590,7 @@ msgstr ""
+@@ -5985,7 +5956,7 @@ msgstr ""
  "las personas que han proveido\n"
  "parches útiles, traducciones, pruebas y consejos.\n"
  "\n"
@@ -484,7 +806,7 @@ $OpenBSD$
  "\n"
  "  "
  
-@@ -5710,21 +5725,18 @@ msgstr ""
+@@ -6120,21 +6091,18 @@ msgstr ""
  #: ../src/startupnotification.cpp:83 ../src/startupnotification.cpp:129
  #: ../src/startupnotification.cpp:191 ../src/startupnotification.cpp:215
  #: ../src/startupnotification.cpp:240
@@ -509,7 +831,7 @@ $OpenBSD$
  
  #: ../src/startupnotification.cpp:138
  #, c-format
-@@ -5732,14 +5744,12 @@ msgid "Start of %s"
+@@ -6142,14 +6110,12 @@ msgid "Start of %s"
  msgstr "Inicio de %s"
  
  #: ../src/startupnotification.cpp:177 ../src/startupnotification.cpp:227
@@ -526,25 +848,112 @@ $OpenBSD$
  
  #: ../src/xfeutils.cpp:686
  msgid "bytes"
-@@ -5760,12 +5770,11 @@ msgstr "KB"
- #: ../src/xfeutils.cpp:964
- #, c-format
- msgid "Error: Can't read group list: %s"
--msgstr ""
-+msgstr "Error: No se puede leer listado de grupo: %s"
+@@ -6169,9 +6135,8 @@ msgid "Error: Can't read group list: %s"
+ msgstr ""
  
- #: ../src/xfeutils.cpp:966
+ #: ../src/xfeutils.cpp:971
 -#, fuzzy, c-format
  msgid "Error: Can't read group list"
 -msgstr "¡Error! No se puede abrir la pantalla\n"
-+msgstr "Error: No se puede leer listado de grupo"
++msgstr "Error: No se pudo abrir lista de grupos"
  
  #: ../xfe.desktop.in.h:1
  msgid "Xfe"
-@@ -5827,54 +5836,3 @@ msgstr "Administrador de Paquetes"
+@@ -6233,142 +6198,3 @@ msgstr "Administrador de Paquetes"
  msgid "A simple package manager for Xfe"
  msgstr "Un administrador de paquetes sencillo para Xfe"
  
+-#, fuzzy
+-#~ msgid "Ignore case"
+-#~ msgstr "Ignorar capitali&zación"
+-
+-#, fuzzy
+-#~ msgid "In directory:"
+-#~ msgstr "Directorio raíz"
+-
+-#, fuzzy
+-#~ msgid "\tIn directory..."
+-#~ msgstr "Directorio raíz"
+-
+-#~ msgid "Re&store from trash"
+-#~ msgstr "Re&staurar de papelera"
+-
+-#, fuzzy
+-#~ msgid "File size at least:"
+-#~ msgstr "Archivos y directorios"
+-
+-#, fuzzy
+-#~ msgid "File size at most:"
+-#~ msgstr "Asociaciones de A&rchivos"
+-
+-#, fuzzy
+-#~ msgid " in "
+-#~ msgstr " en la raíz"
+-
+-#, fuzzy
+-#~ msgid " selected items"
+-#~ msgstr "%s en %s elementos seleccionados"
+-
+-#, fuzzy
+-#~ msgid " Items"
+-#~ msgstr " elementos"
+-
+-#, fuzzy
+-#~ msgid " in one selected item"
+-#~ msgstr "%s en %s elementos seleccionados"
+-
+-#, fuzzy
+-#~ msgid "Search results - "
+-#~ msgstr "Buscar anterior"
+-
+-#, fuzzy
+-#~ msgid "\tBig icon list\tDisplay folder with big icons."
+-#~ msgstr "Mostrar directorio con iconos grandes."
+-
+-#, fuzzy
+-#~ msgid "\tSmall icon list\tDisplay folder with small icons."
+-#~ msgstr "Mostrar directorio con iconos pequeños."
+-
+-#, fuzzy
+-#~ msgid "\tDetailed list\tDisplay detailed folder listing."
+-#~ msgstr "Mostrar listado detallado del directorio."
+-
+-#, fuzzy
+-#~ msgid "\tShow thumbnails (Ctrl-F7)"
+-#~ msgstr "Mostrar miniaturas"
+-
+-#, fuzzy
+-#~ msgid "\tHide thumbnails (Ctrl-F7)"
+-#~ msgstr "Ocultar miniaturas"
+-
+-#, fuzzy
+-#~ msgid "\tCopy selected files to clipboard (Ctrl-C)"
+-#~ msgstr "Copiar archivos seleccionados en el portapapeles"
+-
+-#, fuzzy
+-#~ msgid "\tCut selected files to clipboard (Ctrl-X)"
+-#~ msgstr "Cortar archivos seleccionados al portapapeles"
+-
+-#, fuzzy
+-#~ msgid "\tShow properties of selected files (F9)"
+-#~ msgstr "Mostrar propiedades de los archivos seleccionados"
+-
+-#, fuzzy
+-#~ msgid "\tMove selected files to trash can (Del, F8)"
+-#~ msgstr "Mover los archivos seleccionados a la papelera"
+-
+-#, fuzzy
+-#~ msgid "\tDelete selected files (Shift-Del)"
+-#~ msgstr "Eliminar los archivos seleccionados"
+-
+-#, fuzzy
+-#~ msgid "Show hidden files and directories"
+-#~ msgstr "Mostrar todos los archivos y directorios ocultos."
+-
+-#, fuzzy
+-#~ msgid "Search files..."
+-#~ msgstr "\tSeleccionar archivo..."
+-
 -#~ msgid "Dir&ectories first"
 -#~ msgstr "Primero Dir&ectorios"
 -
@@ -576,9 +985,6 @@ $OpenBSD$
 -
 -#~ msgid "Go to home directory"
 -#~ msgstr "Ir al directorio personal"
--
--#~ msgid "Root directory"
--#~ msgstr "Directorio raíz"
 -
 -#~ msgid "Parent directory %s does not exist, do you want to create it?"
 -#~ msgstr "El directorio padre %s no existe, ¿desea crearlo?"

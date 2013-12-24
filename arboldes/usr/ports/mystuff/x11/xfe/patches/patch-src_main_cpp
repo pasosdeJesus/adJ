@@ -1,7 +1,7 @@
 $OpenBSD$
---- src/main.cpp.orig	Tue Aug 20 10:40:36 2013
-+++ src/main.cpp	Thu Aug 29 07:06:02 2013
-@@ -194,10 +194,9 @@ bool FXApp::runOneEvent(bool blocking)
+--- src/main.cpp.orig	Fri Sep  6 07:30:55 2013
++++ src/main.cpp	Sun Dec 22 09:06:53 2013
+@@ -195,10 +195,9 @@ bool FXApp::runOneEvent(bool blocking)
  
  // Global variables
  char **args;
@@ -13,7 +13,7 @@ $OpenBSD$
  
  // Base directories (according to the Freedesktop specification version 0.7)
  FXString homedir;
-@@ -293,12 +292,12 @@ int main(int argc,char *argv[])
+@@ -294,12 +293,12 @@ int main(int argc,char *argv[])
    	textdomain(PACKAGE);
  #endif
  
@@ -28,7 +28,7 @@ $OpenBSD$
      FILE *debcmd=popen(cmd.text(),"r");
      if(!debcmd)
      {
-@@ -335,6 +334,8 @@ int main(int argc,char *argv[])
+@@ -336,6 +335,8 @@ int main(int argc,char *argv[])
  			rpm_based=TRUE;
  		pclose(rpmcmd);
  	}
