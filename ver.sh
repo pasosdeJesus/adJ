@@ -46,7 +46,7 @@ DIROTRO="comp"
 
 RSYNCHOST="ftp.pasosdeJesus.org"
 
-excluye="dialog-.* gnupg-2.* libstdc++-.* python-.* php-5.2.* php-gd-5.2.* php-pdo_pgsql-5.2.* php-pgsql-5.2.* php-mcrypt-5.2.*fphp-sqlite-5.2.* pear-Validate-.* pear-Auth-[0-9p.]*.tgz pear-HTML-QuickForm-.* postgresql-.* ruby-1.8.* tcl-* tk-* xfe-.*"
+excluye="dialog-.* gnupg-2.* libstdc++-.* python-.* php-5.2.* php-gd-5.2.* php-pdo_pgsql-5.2.* php-pgsql-5.2.* php-mcrypt-5.2.*fphp-sqlite-5.2.* pear-Validate-.* pear-HTML-QuickForm-.* postgresql-.* ruby-2.0.* tcl-* tk-* xfe-.*"
 # Paquetes por excluir de descarga ftp de OpenBSD
 
 RUTAKERNELREESPECIAL=""

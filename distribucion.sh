@@ -597,9 +597,11 @@ if (test "$sn" = "s") then {
 	} fi;
 	rm tmp/disponibles*
 	paquete dialog misc
-	paquete php lang paquetes "php php-fpm php-gd php-mcrypt php-pdo_pgsql" 5.5
+	# paquete php lang paquetes "php php-fpm php-gd php-mcrypt php-pdo_pgsql" 5.5  Tocó dejar 5.3 por pear -> SIVeL 1.2
 	paquete ruby lang paquetes "ruby ruby20-ri_docs" 2.0
 
+        # paquete pear www paquetes "pear pear-utils"  Toco quedarse en PHP 5.3 para SIVeL 1.2
+	paquete pear www 
 	paquete pear-Auth security
 	#paquete pear-DB databases
 	paquete pear-DB-DataObject databases

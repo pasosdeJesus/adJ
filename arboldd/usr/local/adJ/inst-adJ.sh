@@ -1068,8 +1068,8 @@ if (test -f /$RUTAIMG/post.img) then {
 	postencripta="s";
 }
 else {
-	postecnripta="h";
-	while (test "$postecnripta" != "h") ; do
+	postencripta="h";
+	while (test "$postencripta" = "h") ; do
 		dialog --title 'Cifrado de datos de PostgreSQL' --help-button --yesno '\n¿Preparar imagenes cifradas para los datos de PostgreSQL?' 15 60 
 		postencripta="$?"
 		if (test "$postencripta" = "2") then {
@@ -2368,6 +2368,12 @@ if (test "$?" != "0") then {
 	cat >> /home/$uadJ/.vimrc <<EOF
 set encoding&       " terminal charset: follows current locale 
 set fileencoding&   " auto-sensed charset of current buffer
+EOF
+} fi;
+if (test ! -f "/home/$uadJ/.vim/after/ftplugin/ruby.vim") then {
+	cat > /home/$uadJ/.vim/after/ftplugin/ruby.vim <<EOF
+setlocal shiftwidth=2
+setlocal tabstop=2
 EOF
 } fi;
 	

@@ -4,7 +4,7 @@ ONLY_FOR_ARCHS=	amd64
 
 COMMENT=	Emulador de Game Boy Classic/Game Boy Color
 
-VERSION=	0.2.1
+VERSION=	0.2.2
 DISTNAME=       realboy-${VERSION}
 #REVISION=	0
 #PKGNAME=        ${DISTNAME:L}
