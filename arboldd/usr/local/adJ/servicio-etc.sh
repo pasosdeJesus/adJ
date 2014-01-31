@@ -121,7 +121,7 @@ w
 q
 EOF
 	ed rc.d/$i >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
-,s/^ *service*=/servicio=/g
+,s/^ *service *=/servicio=/g
 w
 q
 EOF
@@ -158,25 +158,41 @@ EOF
 
 done;
 
-
 echo "Particularidades de rc.subr"  >> /var/tmp/inst-adJ.bitacora
 if (test -f "rc.d/rc.subr") then {
 	grep "daemon_user.*servicio_user" rc.d/rc.subr > /dev/null 2>&1
 	if (test "$?" = "1") then {
-		ed rc.d/rc.subr >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
-,s/daemon/servicio/g
+		grep "daemon_user.*service_user" rc.d/rc.subr > /dev/null 2>&1
+		if (test "$?" = "0") then {
+			ed rc.d/rc.subr >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/service/servicio/g
 w
 q
 EOF
-		ed rc.d/rc.subr >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
-,s/Daemon/Servicio/g
-,s/Service/Servicio/g
+			ed rc.d/rc.subr  >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+/daemon_class.*servicio_class
+a
+
+[ ! -z "\${service}"  ] && servicio=\${service}
+[ ! -z "\${service_user}"  ] && servicio_user=\${service_user}
+[ ! -z "\${service_flags}"  ] && servicio_flags=\${service_flags}
+[ ! -z "\${service_class}"  ] && servicio_class=\${service_class}
+
+.
 w
 q
 EOF
-		grep "Compatibilidad con formato anterior" rc.d/rc.subr > /dev/null 2>&1
-		if (test "$?" != "0") then {
+		} else {
+			ed rc.d/rc.subr >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+,s/daemon/servicio/g
+w
+q
+EOF
+			ed rc.d/rc.subr >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+,s/Daemon/Servicio/g
+w
+q
+EOF
 			ed rc.d/rc.subr  >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
 /servicio is not set
 i
@@ -193,6 +209,7 @@ EOF
 		} fi;
 	} fi;
 } fi;
+
 
 echo "Particularidades de login.conf"  >> /var/tmp/inst-adJ.bitacora
 for i in login.conf login.conf.in; do
@@ -238,6 +255,10 @@ for i in group master.passwd mail/aliases; do
 		if (test "$?" = "0") then {
 			ed $i  >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/service/servicio/g
+w
+q
+EOF
+			ed $i  >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/Service/Servicio/g
 w
 q
@@ -283,12 +304,28 @@ for i in rc.d.8 rc.8 rc.conf.8 rc.conf.local.8 rc.local.8 rc.subr.8 rc.shutdown.
 		echo $i  >> /var/tmp/inst-adJ.bitacora
 		ed $dm/$i  >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/daemon/servicio/g
+w
+q
+EOF
+		ed $dm/$i  >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/service/servicio/g
+w
+q
+EOF
+		ed $dm/$i  >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/Daemon/Servicio/g
+w
+q
+EOF
+
+
+		ed $dm/$i  >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/Service/Servicio/g
 w
 q
 EOF
+
+
 	} fi;
 done;
 
