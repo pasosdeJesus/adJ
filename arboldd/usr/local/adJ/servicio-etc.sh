@@ -58,12 +58,25 @@ for i in $l; do
 	echo $i  >> /var/tmp/inst-adJ.bitacora
 	ed $i >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/daemon/servicio/g
+w
+q
+EOF
+	ed $i >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/service/servicio/g
 w
 q
 EOF
 	ed $i >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+,s/etc\/servicios/etc\/services/g
+w
+q
+EOF
+	ed $i >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/Daemon/Servicio/g
+w
+q
+EOF
+	ed $i >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/Service/Servicio/g
 w
 q
@@ -76,6 +89,11 @@ for i in $l; do
 	echo $i  >> /var/tmp/inst-adJ.bitacora
 	ed $i >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/service/servicio/g
+w
+q
+EOF
+	ed $i >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+,s/etc\/servicios/etc\/services/g
 w
 q
 EOF
