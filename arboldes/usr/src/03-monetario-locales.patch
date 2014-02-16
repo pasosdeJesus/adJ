@@ -174,7 +174,7 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/Makefile src/sh
 +.for enc1 in ${ENCODINGS}
 +.for enc2 in ${ENCODINGS}
 +.for lang_terr in ${${enc1}_${enc2}}
-+SYMLINKS+=	../${lang_terr:C/:.*$//}.${enc1}/${FILESNAME} \
++SYMLINKS+=	${LOCALEDIR}/${lang_terr:C/:.*$//}.${enc1}/${FILESNAME} \
 +		${LOCALEDIR}/${lang_terr:C/^.*://}.${enc2}
 +.endfor
 +.endfor

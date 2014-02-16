@@ -107,7 +107,7 @@ diff -ruN -x *out -x *orig -x obj -x *~ src55-orig/share/locale/numericdef/Makef
 +KOI8-R_CP866=	ru
 +KOI8-R_ISO8859-5= ru
 +KOI8-U_ISO8859-5= uk
-+US-ASCII_UTF-8=	en:he
++US-ASCII_UTF-8=	
 +UTF-8_UTF-8=	${BE_LINKS} ${CA_LINKS} de \
 +		${NO_LINKS} ${ESPR_LINKS}
 +
@@ -115,7 +115,7 @@ diff -ruN -x *out -x *orig -x obj -x *~ src55-orig/share/locale/numericdef/Makef
 +.for enc1 in ${ENCODINGS}
 +.for enc2 in ${ENCODINGS}
 +.for lang_terr in ${${enc1}_${enc2}}
-+SYMLINKS+=	../${lang_terr:C/:.*$//}.${enc1}/${FILESNAME} \
++SYMLINKS+=	${LOCALEDIR}/${lang_terr:C/:.*$//}.${enc1}/${FILESNAME} \
 +		${LOCALEDIR}/${lang_terr:C/^.*://}.${enc2}
 +.endfor
 +.endfor
