@@ -1321,12 +1321,17 @@ if (test "$?" != "0") then {
 		echo "---" >> /var/tmp/inst-adJ.bitacora;
 	} fi;
 	ed /var/postgresql/data/postgresql.conf >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
-,s/#unix_socket_directory = .*/unix_socket_directory = '\/var\/www\/tmp'/g
+,s/#unix_socket_directory *=.*/unix_socket_directory = '\/var\/www\/tmp'/g
 w
 q
 EOF
 	ed /var/postgresql/data/postgresql.conf >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
-,s/#listen_addresses = .*/listen_addresses = '127.0.0.1'/g
+,s/#unix_socket_directories *=.*/unix_socket_directories = '\/var\/www\/tmp'/g
+w
+q
+EOF
+	ed /var/postgresql/data/postgresql.conf >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+,s/#listen_addresses *=.*/listen_addresses = '127.0.0.1'/g
 w
 q
 EOF

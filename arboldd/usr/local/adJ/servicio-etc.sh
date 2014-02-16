@@ -52,7 +52,7 @@ EOF
 
 
 echo "Archivos de etc en general exceptuando casos especiales de compatibilidad"  >> /var/tmp/inst-adJ.bitacora
-l=`find . -exec grep -l "daemon" {} ';' | grep -v "login.conf" | grep -v "group" | grep -v "passwd" | grep -v "pwd.db" | grep -v "syslog.conf" | grep -v "rc.subr" | grep -v "mail/aliases" | grep -v "mail/.*cf" | grep -v "Xsetup_0" | grep -v "dbus-1/system.conf" | grep -v "rc.conf.local" | grep -v "rc.local" | grep -v "rc.d/" | grep -v "php-fpm.conf"`
+l=`find . -exec grep -l "daemon" {} ';' | grep -v "login.conf" | grep -v "group" | grep -v "passwd" | grep -v "pwd.db" | grep -v "syslog.conf" | grep -v "rc.subr" | grep -v "mail/aliases" | grep -v "mail/.*cf" | grep -v "Xsetup_0" | grep -v "dbus-1/system.conf" | grep -v "rc.conf.local" | grep -v "rc.local" | grep -v "rc.d/" | grep -v "php-fpm.conf" | grep -v Makefile`
 echo "l=$l" >> /var/tmp/inst-adJ.bitacora 
 for i in $l; do 
 	echo $i  >> /var/tmp/inst-adJ.bitacora
@@ -83,7 +83,7 @@ q
 EOF
 done;
 echo "Archivos de etc con service en general exceptuando casos especiales de compatibilidad"  >> /var/tmp/inst-adJ.bitacora
-l=`find . -exec grep -l "service" {} ';' | grep -v "changelist" | grep -v "esd.conf" | grep -v "inetd.conf" | grep -v "pwd.db" | grep -v "php-*.ini" | grep -v "rc.subr" | grep -v "rc.d/" | grep -v "services"`
+l=`find . -exec grep -l "service" {} ';' | grep -v "changelist" | grep -v "esd.conf" | grep -v "inetd.conf" | grep -v "pwd.db" | grep -v "php-*.ini" | grep -v "rc.subr" | grep -v "rc.d/" | grep -v "services" | grep -v Makefile`
 echo "l=$l" >> /var/tmp/inst-adJ.bitacora 
 for i in $l; do 
 	echo $i  >> /var/tmp/inst-adJ.bitacora
@@ -111,7 +111,7 @@ done;
 
 echo "Archivos de etc/rc.d"  >> /var/tmp/inst-adJ.bitacora
 # No cambiamos todos porque los instalados por paquetes tendran problemas cuando se quiera desinstalar el paquete por la suma cambiada.
-l=`cd rc.d ; ls | grep -v daemon`
+l=`cd rc.d ; ls | grep -v daemon | grep -v rc.subr`
 echo "l=$l" >> /var/tmp/inst-adJ.bitacora 
 for i in $l; do 
 	echo rc.d/$i  >> /var/tmp/inst-adJ.bitacora
