@@ -1,4 +1,4 @@
-@comment $OpenBSD: PLIST-server,v 1.24 2013/10/22 06:26:09 kili Exp $
+@comment $OpenBSD: PLIST-server,v 1.25 2014/01/06 10:47:15 pea Exp $
 @conflict pgsql-*
 @conflict pgsql-clients-*
 @conflict postgresql-clients-*
@@ -339,7 +339,7 @@ include/postgresql/server/port/sco.h
 include/postgresql/server/port/solaris.h
 include/postgresql/server/port/unixware.h
 @comment include/postgresql/server/port/win32/
-include/postgresql/server/port/win32.h
+@comment include/postgresql/server/port/win32.h
 @comment include/postgresql/server/port/win32/arpa/
 @comment include/postgresql/server/port/win32/arpa/inet.h
 @comment include/postgresql/server/port/win32/dlfcn.h
@@ -599,9 +599,8 @@ lib/postgresql/utf8_and_win.so
 @man man/man1/pg_resetxlog.1
 @man man/man1/postgres.1
 @man man/man1/postmaster.1
+share/doc/pkg-readmes/${FULLPKGNAME}
 share/postgresql/extension/
-share/postgresql/extension/hstore--1.1--1.2.sql
-share/postgresql/extension/hstore--1.2.sql
 share/postgresql/extension/plperl--1.0.sql
 share/postgresql/extension/plperl--unpackaged--1.0.sql
 share/postgresql/extension/plperl.control
@@ -639,8 +638,8 @@ share/postgresql/tsearch_data/thesaurus_sample.ths
 share/postgresql/tsearch_data/turkish.stop
 share/postgresql/tsearch_data/unaccent.rules
 share/postgresql/tsearch_data/xsyn_sample.rules
-@mode 755
 @rcscript ${RCDIR}/postgresql
+@mode 755
 @owner _postgresql
 @group _postgresql
 @sample /var/postgresql/

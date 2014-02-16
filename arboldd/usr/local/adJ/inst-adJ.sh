@@ -743,7 +743,7 @@ if (test -f /usr/bin/pmdb) then {
 } fi;
 
 
-if (test -d /usr/share/locale/de_AT) then {
+if (test -f /usr/include/pcap-int.h) then {
 	vac="$vac 5.3 a 5.4";        
 	echo "Aplicando actualizaciones de 5.3 a 5.4 " >> /var/tmp/inst-adJ.bitacora;
 	rm -rf /usr/share/locale/*_*.*
@@ -1322,9 +1322,13 @@ if (test "$?" != "0") then {
 	} fi;
 	ed /var/postgresql/data/postgresql.conf >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/#unix_socket_directory *=.*/unix_socket_directory = '\/var\/www\/tmp'/g
+w
+q
 EOF
 	ed /var/postgresql/data/postgresql.conf >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/#unix_socket_directories *=.*/unix_socket_directories = '\/var\/www\/tmp'/g
+w
+q
 EOF
 	ed /var/postgresql/data/postgresql.conf >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/#listen_addresses *=.*/listen_addresses = '127.0.0.1'/g
