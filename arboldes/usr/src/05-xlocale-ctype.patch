@@ -1813,79 +1813,52 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/wcs
 diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/wcsxfrm.3 src53xlocale2/lib/libc/locale/wcsxfrm.3
 --- src53xlocale1/lib/libc/locale/wcsxfrm.3	Mon Apr  8 21:20:25 2013
 +++ src53xlocale2/lib/libc/locale/wcsxfrm.3	Fri Apr 12 12:12:05 2013
-@@ -33,72 +33,6 @@
- .\" FreeBSD: src/lib/libc/string/strxfrm.3,v 1.16 2002/09/06 11:24:06 tjr Exp
- .\" $FreeBSD$
- .\"
--.Dd October 4, 2002
--.Dt WCSXFRM 3
--.Os
--.Sh NAME
--.Nm wcsxfrm
--.Nd transform a wide string under locale
--.Sh LIBRARY
--.Lb libc
--.Sh SYNOPSIS
--.In wchar.h
--.Ft size_t
--.Fn wcsxfrm "wchar_t * restrict dst" "const wchar_t * restrict src" "size_t n"
--.Sh DESCRIPTION
--The
--.Fn wcsxfrm
--function transforms a null-terminated wide character string pointed to by
--.Fa src
--according to the current locale collation order
--then copies the transformed string
--into
--.Fa dst .
--No more than
--.Fa n
--wide characters are copied into
--.Fa dst ,
--including the terminating null character added.
--If
--.Fa n
--is set to 0
--(it helps to determine an actual size needed
--for transformation),
--.Fa dst
--is permitted to be a
--.Dv NULL
--pointer.
--.Pp
--Comparing two strings using
--.Fn wcscmp
--after
--.Fn wcsxfrm
--is equivalent to comparing
--two original strings with
--.Fn wcscoll .
--.Sh RETURN VALUES
--Upon successful completion,
--.Fn wcsxfrm
--returns the length of the transformed string not including
--the terminating null character.
--If this value is
--.Fa n
--or more, the contents of
--.Fa dst
--are indeterminate.
--.Sh SEE ALSO
--.Xr setlocale 3 ,
--.Xr strxfrm 3 ,
--.Xr wcscmp 3 ,
--.Xr wcscoll 3
--.Sh STANDARDS
--The
--.Fn wcsxfrm
--function
--conforms to
--.St -isoC-99 .
--
--
- .Dd $Mdocdate: March 17 2013 $
+@@ -37,7 +37,9 @@
  .Dt WCSXFRM 3
  .Os
+ .Sh NAME
+-.Nm wcsxfrm
++.Nm wcsxfrm ,
++and
++.Nm wcsxfrm_l
+ .Nd transform a wide string under locale
+ .Sh LIBRARY
+ .Lb libc
+@@ -45,10 +47,12 @@
+ .In wchar.h
+ .Ft size_t
+ .Fn wcsxfrm "wchar_t * restrict dst" "const wchar_t * restrict src" "size_t n"
++.Ft size_t
++.Fn wcsxfrm_l "wchar_t * restrict dst" "const wchar_t * restrict src" "size_t n" "locale_t loc"
+ .Sh DESCRIPTION
+ The
+ .Fn wcsxfrm
+-function transforms a null-terminated wide character string pointed to by
++function transform a null-terminated wide character string pointed to by
+ .Fa src
+ according to the current locale collation order
+ then copies the transformed string
+@@ -76,6 +80,10 @@
+ is equivalent to comparing
+ two original strings with
+ .Fn wcscoll .
++The function
++.Fn wcsxfrm_l
++does the same but uses the locale provided as parameter, see
++.Xr xlocale 3 .
+ .Sh RETURN VALUES
+ Upon successful completion,
+ .Fn wcsxfrm
+@@ -90,7 +98,8 @@
+ .Xr setlocale 3 ,
+ .Xr strxfrm 3 ,
+ .Xr wcscmp 3 ,
+-.Xr wcscoll 3
++.Xr wcscoll 3 ,
++.Xr xlocale 3
+ .Sh STANDARDS
+ The
+ .Fn wcsxfrm
 diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/wctob.3 src53xlocale2/lib/libc/locale/wctob.3
 --- src53xlocale1/lib/libc/locale/wctob.3	Mon Apr  8 21:20:56 2013
 +++ src53xlocale2/lib/libc/locale/wctob.3	Fri Apr 12 12:05:48 2013
