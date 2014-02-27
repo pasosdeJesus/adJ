@@ -1880,7 +1880,7 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 [exec] (xarchiver) {xarchiver}
 [exec] (xfw) {xfw}
 [end]
-[submenu] (Menú de fluxbox)
+[submenu] (Menu de fluxbox)
 [config] (Configurar)
 [submenu] (Estilos del sistema) {Elija un estilo ...}
 [stylesdir] (/usr/local/share/fluxbox/styles)
