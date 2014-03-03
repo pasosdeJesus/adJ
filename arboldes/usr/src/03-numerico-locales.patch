@@ -108,7 +108,7 @@ diff -ruN -x *out -x *orig -x obj -x *~ src55-orig/share/locale/numericdef/Makef
 +KOI8-R_ISO8859-5= ru
 +KOI8-U_ISO8859-5= uk
 +US-ASCII_UTF-8=	
-+UTF-8_UTF-8=	${BE_LINKS} ${CA_LINKS} de \
++UTF-8_UTF-8=	${BE_LINKS} ${CA_LINKS} \
 +		${NO_LINKS} ${ESPR_LINKS}
 +
 +SYMLINKS=
