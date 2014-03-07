@@ -53,9 +53,8 @@ if (test "$nom" = "") then {
 groupinfo $gru > /dev/null 2>&1
 if (test "$?" != "0") then {
     echo "Agregando grupo $gru";
-	groupadd $gru
+    groupadd $gru 
 } fi;
-
 
 if (test "$claveplana" != "") then {
     en=`echo "$claveplana" | sed -e 's/.*\$.*/si/g'`;
@@ -74,8 +73,10 @@ if (test "$?" != "0") then {
 		echo "Agregando sin shell";
 	    adduser -v -batch $us $gru "$nom" "$clave" -shell /sbin/nologin -group $gru
     } else {
-		echo "Agregando con shell";
-	    adduser -v -batch $us $us "$nom" "$clave"
+	    echo "Agregando con shell";
+	    cmd="adduser -v -batch $us $gru \"$nom\" \"$clave\""
+	    echo "cmd=$cmd";
+	    eval "$cmd";
     } fi;
     if (test "$clave" = "") then {
         passwd $us
