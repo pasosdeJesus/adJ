@@ -1,15 +1,27 @@
 Instalación/Actualización a Aprendiendo De Jesús 5.4
 ****************************************************
 
-La instalación consta de 2 partes:
+La instalación/actualización consta de 3 partes:
 
-a) Instalación/Actualización del Sistema Base
+	a) Preparar su sistema 
+	b) Instalación/Actualización del Sistema Base
+	c) Instalación/Actualización de Aplicaciones 
 
-b) Instalación/Actualización de Aplicaciones 
 
-Para la primera tener en cuenta:
+a) Para preparar su sistema:
 	* Si va a instalar reservar espacio en un disco duro, en una
 	  partición primaria, cuya primera cabeza (head) no sea 0 sino 1.
+	  La instalación del sistema base, de las particiones cifradas 
+	  y de todos los paquetes del DVD instalador requiere por lo menos 
+	  13G, de los cuales 10G deben reservarse en /usr y 
+	  1.5G en /var
+	* Si va a actualizar, puede ejecutar un archivo de comandos
+	  incluido en el DVD de instalación que prepara para actualizar
+	  por ejemplo sacando respaldo de base de datos cuando se requiere:
+  		mount /mnt/cdrom
+	        sudo /mnt/cdrom/util/preact-adJ.sh
+
+b) Para la instalación/actualización del sistema base :
 	* Elegir un método para arrancar el computador con el disco virtual de
 	  instalación.  Puede ser: (1) DVD configurando el BIOS, (2) disquete 
 	  con una imagen como floppy52.fs, (3) si actualiza puede iniciar 
@@ -27,12 +39,17 @@ Para la primera tener en cuenta:
 	  cuenta sacar copia de las bases de datos para PostgreSQL antes de 
 	  actualizar el sistema base.
 
-Para la segunda tener en cuenta:
-	* Se inicia con:
-		/inst-adJ.sh
+c) Para la instalación/actualización de aplicaciones:
+	* Se inicia con: 
+	  	/inst-adJ.sh
+	  Este archivo de comandos emplea codificación UTF8, por lo que para 
+          iniciarlo se recomienda desde una terminal gráfica.
 	  Que iniciará una sesión del administrador (por lo cual
           debe suministrar clave del usuario root) y ejecutar el 
 	  archivo de comnados de instalación de acuerdo a su entorno.
+          Si planea emplear Apache como servidor web, pero si prefiere 
+	  nginx use: 
+		CONNGINX=1 /inst-adJ.sh
 	  Este archivo de comandos además de asistir actualizaciones 
 	  que puedan hacer falta de una versión a otra del sistema base, 
 	  instala y configura los paquetes y componentes que conforman 
@@ -43,7 +60,6 @@ Para la segunda tener en cuenta:
 	  que facilitan el uso (Si prefiere o debe hacer actualización manual 
 	  del sistema base, tenga en cuenta la lista oficial de cambios 
 	  requeridos disponible en: http://openbsd.org/faq/upgrade51.html )
-
 	* Por defecto este instalador intenta obtener las aplicaciones de un 
  	  DVD, pero si las aplicaciones están en un disco duro (digamos en 
           /root/adJ/5.1-amd64) puede iniciarse con:

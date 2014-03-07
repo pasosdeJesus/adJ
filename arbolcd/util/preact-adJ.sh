@@ -36,7 +36,7 @@ if (test "$l" = "") then {
 vac="";
 mac="";
 
-if (test -f /usr/include/pcap-int.h) then {
+if (test "0" = "1") then {
 	vac="$vac 5.3 a 5.4";        
 	echo "Aplicando actualizaciones de 5.3 a 5.4 " >> /var/tmp/preact-adJ.bitacora;
 } fi;

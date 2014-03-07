@@ -14,11 +14,10 @@ Con respecto a OpenBSD 5.4 para amd64 y a la edición anterior de este DVD
 !KERNEL Y SISTEMA BASE
 
 * Desde la versión 5.4 se ha importado de FreeBSD soporte y datos para presentar cantidades monetarias y numerícas con las convenciones de cada uno de los paises de latinoamérica (y otros locales soportados por OpenBSD).  Esta mejora fue aportada a OpenBSD y se anhela su integración en futuras versiones.
-* Incluye desde la versión 5.2 cotejación (COLLATE) en idioma nativo en el sistema base importado de FreeBSD, tablas de caracteres y cotejación para todos los paises de latinoamérica (incluyendo Portugues de Brazil) y portes de PostgreSQL y xfe que soportan cotejación. Vea detalles y una captura de pantalla en http://aprendiendo.pasosdejesus.org/?id=i18n.  Las mejoras se han aportado a OpenBSD y xfe y han sido parcialmente integradas, se espera más integración en futuras versiones de esos proyectos.
+* Desde la versión 5.2 incluye cotejación (COLLATE) en idioma nativo en el sistema base importado de FreeBSD, tablas de caracteres y cotejación para todos los paises de latinoamérica (incluyendo Portugues de Brazil) y portes de PostgreSQL y xfe que soportan cotejación. Vea detalles y una captura de pantalla en http://aprendiendo.pasosdejesus.org/?id=i18n.  Las mejoras se han aportado a OpenBSD y xfe y han sido parcialmente integradas, se espera más integración en futuras versiones de esos proyectos.
 * Parches de seguridad de sistema base hasta:  15.Feb.2014
-* Hemos remplazando `daemon' por `servicio' en buena parte del sistem base (ver por ejemplo ==vmstat -s== o ==less /var/log/servicio== o ==man servicio==).  Hasta la versión 5.3 usabamo ==service==, pero para disminuir colisiones de nombres desde la 5.4 empleamos ==servicio==.
-* En instalaciones nuevas puede emplear nginx en lugar de Apache si inicia el script de instalación con ==CONNGINX=1 /inst-adJ.sh==
-* Nuevos archivos de comandos para facilitar mantener servidor de correo con OpenSMTPD e IMAPS con dovecot: prepopensmtpd, elimcuenta, adicuenta. Ver documentación en http://structio.sourceforge.net/guias/servidor_OpenBSD/servicios-correo.html#opensmtpd y http://structio.sourceforge.net/guias/servidor_OpenBSD/servicios-correo.html#dovecot 
+* Hemos remplazando `daemon' por `servicio' en buena parte del sistem base (ver por ejemplo ==vmstat -s== o ==less /var/log/servicio== o ==man servicio==).  Hasta la versión 5.3 se usó ==service==, pero para disminuir colisiones de nombres desde la 5.4 emplea ==servicio==.
+* El CD ahora incluye un archivo de comandos en ==/util/preact-adJ.sh== para preparar el sistema antes de actualizar --por ejemplo sacar copia de base de datos.
 
 Entre las novedades reportadas en las `Notas de publicación de OpenBSD 5.4' destacamos:
 
@@ -48,11 +47,7 @@ Entre las novedades reportadas en las `Notas de publicación de OpenBSD 5.4' des
 
 !PROCESO DE INSTALACIÓN
 
-Es en español y consta de instalación o actualización del sistema base seguido de instalación/actualización de paquetes y entornos.
-
-La instalación del sistema base, de las particiones cifradas y de todos los paquetes del DVD instalador requiere por lo menos 13G, de los cuales 10G deben reservarse en ==/usr== y 1.5G en ==/var==
-
-El instalador  de adJ emplea codificación UTF8, por lo que para iniciarlo se recomienda desde una terminal gráfica con ==/inst-adJ.sh==
+Es en español, consta de: (a) preparación, (b) instalación/actualización del sistema base y (c) instalación de aplicaciones y entorno.  Por favor vea más detalles en Actualiza.txt
 
 
 !PAQUETES EXCLUSIVOS DE ADJ
