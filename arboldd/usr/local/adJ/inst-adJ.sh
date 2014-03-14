@@ -2199,7 +2199,11 @@ insacp libusb1
 insacp lcms2
 insacp poppler
 insacp cups
-activarcs cupsd
+if (test -f /etc/rc.d/cupsd) then {
+	activarcs cupsd
+} else {
+	echo "** No pudo instalarse cups" | tee -a /var/tmp/inst-adJ.bitacora;
+} fi;
 
 
 echo "* Instalando navegador mozilla-firefox" | tee -a /var/tmp/inst-adJ.bitacora;
@@ -2348,7 +2352,7 @@ echo "Eliminando librerías innecesarias" >> /var/tmp/inst-adJ.bitacora
 cd /var/db/pkg
 for i in .libs*; do 
 	echo $i >> /var/tmp/inst-adJ.bitacora ; 
-	sudo pkg_delete -I-D dependencies  $i >> /var/tmp/inst-adJ.bitacora 2>&1
+	sudo pkg_delete -I $i >> /var/tmp/inst-adJ.bitacora 2>&1
 done
 
 for i in $PKG_PATH/*tgz; do
