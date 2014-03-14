@@ -1,6 +1,18 @@
 #!/bin/sh
 # Sus cambios a las  variables de configuración para generar distribución 
 
+SERVACT="miusuario@ftp.pasosdeJesus.org"
+# Usado si METODOACT es rsync
+
+OTRO="172.16.0.1"
+OPSSHOTRO="-p11022"
+USOTRO="micuenta"
+DIROTRO="comp"
+# Otro servidor para enviar/recibir adJ
+
+RSYNCHOST="ftp.pasosdeJesus.org"
+
+
 # Estas variables controlan operacion de distribucion.sh pueden ser s o n
 export autoCvs=n
 # Actualizar fuentes y portes del CVS de OpenBSD 

@@ -16,8 +16,8 @@ Con respecto a OpenBSD 5.4 para amd64 y a la edición anterior de este DVD
 * Desde la versión 5.4 se ha importado de FreeBSD soporte y datos para presentar cantidades monetarias y numerícas con las convenciones de cada uno de los paises de latinoamérica (y otros locales soportados por OpenBSD).  Esta mejora fue aportada a OpenBSD y se anhela su integración en futuras versiones.
 * Desde la versión 5.2 incluye cotejación (COLLATE) en idioma nativo en el sistema base importado de FreeBSD, tablas de caracteres y cotejación para todos los paises de latinoamérica (incluyendo Portugues de Brazil) y portes de PostgreSQL y xfe que soportan cotejación. Vea detalles y una captura de pantalla en http://aprendiendo.pasosdejesus.org/?id=i18n.  Las mejoras se han aportado a OpenBSD y xfe y han sido parcialmente integradas, se espera más integración en futuras versiones de esos proyectos.
 * Parches de seguridad de sistema base hasta:  15.Feb.2014
-* Hemos remplazando `daemon' por `servicio' en buena parte del sistem base (ver por ejemplo ==vmstat -s== o ==less /var/log/servicio== o ==man servicio==).  Hasta la versión 5.3 se usó ==service==, pero para disminuir colisiones de nombres desde la 5.4 emplea ==servicio==.
-* El CD ahora incluye un archivo de comandos en ==/util/preact-adJ.sh== para preparar el sistema antes de actualizar --por ejemplo sacar copia de base de datos.
+* Hemos remplazando `daemon' por `servicio' en buena parte del sistem base (ver por ejemplo ==vmstat -s== o ==less /var/log/servicio== o ==man servicio==).  Hasta la versión 5.3 se usó ==service==, pero para disminuir colisiones de nombres desde la 5.4 se emplea ==servicio==.
+* El CD ahora incluye un archivo de comandos ==/util/preact-adJ.sh== para preparar un sistema antes de iniciar actualización --por ejemplo sacar copia de base de datos.
 
 Entre las novedades reportadas en las `Notas de publicación de OpenBSD 5.4' destacamos:
 
@@ -53,19 +53,15 @@ Es en español, consta de: (a) preparación, (b) instalación/actualización del
 !PAQUETES EXCLUSIVOS DE ADJ
 
 * SIVeL actualizado a 1.2a2       
-* xfe actualizado a       y modificado para administrar paquetes en OpenBSD (ver pantallazo en http://structio.sf.net/guias/basico_OpenBSD/medios.html#xfe Soporta cotejación en idioma nativo.  Nueva opción sudo_nopasswd utilizable en ~/.config/xfe/xferc cuando sudo no requiere clave (útil para que opere bien Herramientas->Nueva ventana root).
-* PostgreSQL actualizado a       con soporte para UTF-8 y cotejaciones nativas listas para todos los paises de habla hispana. Ver detalles de como usar cotejación en http://aprendiendo.pasosdejesus.org/?id=i18n
-* ruby19-apache2ngingx
-* realboy 
+* xfe actualizado a 1.37 y modificado para administrar paquetes en OpenBSD (ver pantallazo en http://structio.sf.net/guias/basico_OpenBSD/medios.html#xfe ). Soporta cotejación en idioma nativo.  Nueva opción sudo_nopasswd utilizable en ~/.config/xfe/xferc cuando sudo no requiere clave (útil para que opere bien Herramientas->Nueva ventana root).
+* PostgreSQL actualizado a 9.3.2 con soporte para UTF-8 y cotejaciones nativas listas para todos los paises de habla hispana. Ver detalles de como usar cotejación en http://aprendiendo.pasosdejesus.org/?id=i18n
+* realboy 0.2.2
 * Los paquetes exclusivos los encuentra en [ftp://ftp.pasosdeJesus.org/pub/AprendiendoDeJesus/5.4-amd64/paquetes]
 
 
 !PAQUETES
 
-* Nuevos paquetes para emplear como sistema de escritorio incluidos en el DVD: 
-* Nuevos paquetes para emplear como servidor de correo: 
-* Mejores permisos en paquetes 
-* Navegadores actualizados: Firefox a , Chromium a , Midori a 
+* Navegadores actualizados: Firefox a 22, Chromium a , Midori a 
 * !LibreOffice actualizado a gimp a vlc a 
 * PHP actualizado a ruby a LLVM/Clang a asi como los demás lenguajes de programación
 * Se incluye lo básico de Ruby para desarrollar aplicaciones con Ruby on Rails, ver http://dhobsd.pasosdejesus.org/index.php?id=Ruby+on+Rails+en+OpenBSD
