@@ -151,7 +151,7 @@ function changeIt() {
 <!-- ** Entry point -->
 <xsl:template match="gbfxml">
     <xsl:variable name="titulo">
-        <xsl:apply-templates select="sb/tt">
+        <xsl:apply-templates select="tt">
         </xsl:apply-templates>
     </xsl:variable>
     <xsl:variable name="fc" select="sb//sc[position()=1]"/>
@@ -176,7 +176,7 @@ function changeIt() {
             <center><h1><xsl:value-of select="$titulo"/></h1>
                 <h3>Tabla de Contenido</h3></center>
             <ul>
-                <li><xsl:apply-templates select=".//sb" mode="tdc"/></li>
+                <xsl:apply-templates select=".//sb" mode="tdc"/>
                 <li> <a href="strong.html">Números Strong</a></li>
                 <li> <a href="terminos.html">Términos y Créditos</a> </li>
                 <li> <a href="referencias.html">Referencias</a></li>
@@ -219,7 +219,7 @@ function changeIt() {
                             </xsl:for-each>
                             <xsl:text> </xsl:text>
                             <a href="{$fver}#{$ver}">
-                                <xsl:value-of select="$nver"/>
+                                <xsl:value-of select="$ver"/>
                             </a>
                             <xsl:text> </xsl:text>
                         </xsl:for-each>
@@ -296,14 +296,26 @@ function changeIt() {
 <!-- Book --> 
 <xsl:template match="sb">
     <xsl:param name="titulo"/>
+    <xsl:variable name="titulosb">
+        <xsl:apply-templates select="tt">
+        </xsl:apply-templates>
+    </xsl:variable>
+
     <xsl:apply-templates select=".//sc">
-        <xsl:with-param name="titulo" select="$titulo"/>
+        <xsl:with-param name="titulo" select="$titulosb"/>
     </xsl:apply-templates>
 </xsl:template>
 
 <xsl:template match="sb" mode="tdc">
-    <xsl:apply-templates select=".//sc" mode="tdc">
-    </xsl:apply-templates>
+    <li>
+        <xsl:variable name="titulo">
+            <xsl:apply-templates select="tt">
+            </xsl:apply-templates>
+        </xsl:variable>
+        <xsl:value-of select="$titulo"/>:
+        <xsl:apply-templates select=".//sc" mode="tdc">
+        </xsl:apply-templates>
+    </li>
 </xsl:template>
 
 
@@ -349,7 +361,7 @@ function changeIt() {
             <xsl:when test="$nsc!=''">
                 <xsl:value-of select="concat($nsc/@id,'.html')"/>
             </xsl:when>
-            <xsl:otherwise>strong.html</xsl:otherwise>
+            <xsl:otherwise>index.html</xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
 
