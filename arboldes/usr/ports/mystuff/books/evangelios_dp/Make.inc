@@ -1,4 +1,4 @@
 COMMENT=	"Traducción de los evangelios de dominio público"
-V=		0.9.2
+V=		0.9.3
 PNAME=evangelios_dp
-HOMEPAGE=	http://amigo.pasosdeJesus.org/
+HOMEPAGE=	http://traduccion.pasosdeJesus.org/
