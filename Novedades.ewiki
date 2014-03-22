@@ -52,9 +52,10 @@ Es en español, consta de: (a) preparación, (b) instalación/actualización del
 
 !PAQUETES EXCLUSIVOS DE ADJ
 
-* SIVeL actualizado a 1.2a2       
+* SIVeL actualizado a 1.2a2
+* ruby 2.0.0p353 retroportado de OpenBSD-Current, probado con aplicaciones Rails 4.1.0rc1.  Tipicamente aumenta velocidad de aplicaciones rails.  Ver  http://dhobsd.pasosdejesus.org/index.php?id=Ruby+on+Rails+en+OpenBSD
 * xfe actualizado a 1.37 y modificado para administrar paquetes en OpenBSD (ver pantallazo en http://structio.sf.net/guias/basico_OpenBSD/medios.html#xfe ). Soporta cotejación en idioma nativo.  Nueva opción sudo_nopasswd utilizable en ~/.config/xfe/xferc cuando sudo no requiere clave (útil para que opere bien Herramientas->Nueva ventana root).
-* PostgreSQL actualizado a 9.3.2 con soporte para UTF-8 y cotejaciones nativas listas para todos los paises de habla hispana. Ver detalles de como usar cotejación en http://aprendiendo.pasosdejesus.org/?id=i18n
+* PostgreSQL 9.3.2 retroportado de OpenBSD-Current con soporte para UTF-8 y cotejaciones nativas listas para todos los paises de habla hispana. Ver detalles de como usar cotejación en http://aprendiendo.pasosdejesus.org/?id=i18n
 * realboy 0.2.2
 * Los paquetes exclusivos los encuentra en [ftp://ftp.pasosdeJesus.org/pub/AprendiendoDeJesus/5.4-amd64/paquetes]
 
