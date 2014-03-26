@@ -9,10 +9,10 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/Makefile src/share/local
  	
  
  .include <bsd.subdir.mk>
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/Makefile src/share/locale/monetdef/Makefile
---- src55-orig/share/locale/monetdef/Makefile	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/Makefile	Wed Nov 20 09:07:04 2013
-@@ -0,0 +1,208 @@
+diff -ruN -x *~ -x obj -x *orig src54-orig/share/locale/monetdef/Makefile src/share/locale/monetdef/Makefile
+--- src54-orig/share/locale/monetdef/Makefile	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/Makefile	Tue Mar 25 05:38:06 2014
+@@ -0,0 +1,209 @@
 +# From FreeBSD
 +
 +LOCALES=	af_ZA.ISO8859-1 \
@@ -44,6 +44,7 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/Makefile src/sh
 +		es_CO.ISO8859-1 \
 +		es_CR.ISO8859-1 \
 +		es_CR.UTF-8 \
++		es_CU.ISO8859-1 \
 +		es_DO.ISO8859-1 \
 +		es_EC.ISO8859-1 \
 +		es_ES.ISO8859-1 \
@@ -146,7 +147,7 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/Makefile src/sh
 +		de_CH:fr_CH de_CH:it_CH no_NO:nb_NO no_NO:nn_NO
 +ISO8859-1_ISO8859-15= af_ZA ca_AD ca_ES ca_FR ca_IT da_DK de_AT de_CH de_DE \
 +		en_AU en_CA en_GB en_NZ en_US \
-+		es_AR es_BO es_CL es_CO es_CR es_DO es_EC \
++		es_AR es_BO es_CL es_CO es_CR es_CU es_DO es_EC \
 +		es_ES es_GT es_GQ es_HN es_MX es_NI es_PA es_PE \
 +		es_PR es_PY es_SV es_US es_UY es_VE \
 +		fi_FI fr_BE fr_CA fr_CH fr_FR \
@@ -154,7 +155,7 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/Makefile src/sh
 +ISO8859-1_US-ASCII= en_AU en_CA en_GB en_NZ en_US
 +ISO8859-1_UTF-8= af_ZA ca_AD ca_ES ca_FR ca_IT da_DK de_AT de_CH de_DE \
 +		en_AU en_CA en_NZ en_US \
-+		es_AR es_BO es_CL es_CO es_DO es_EC \
++		es_AR es_BO es_CL es_CO es_CU es_DO es_EC \
 +		es_GT es_GQ es_HN es_MX es_NI es_PA es_PE \
 +		es_PR es_PY es_SV es_US es_UY es_VE \
 +		fi_FI fr_BE fr_CA fr_FR is_IS it_IT nl_BE \
@@ -1460,6 +1461,59 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_CR.UTF-8.src
 +1
 +#int_n_cs_precedes     
 +1
++#int_n_sep_by_space    
++1
++#int_p_sign_posn       
++1
++#int_n_sign_posn       
++1
++# EOF
+diff -ruN src54-orig/share/locale/monetdef/es_CU.ISO8859-1.src src/share/locale/monetdef/es_CU.ISO8859-1.src
+--- src54-orig/share/locale/monetdef/es_CU.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/monetdef/es_CU.ISO8859-1.src	Tue Mar 25 05:36:40 2014
+@@ -0,0 +1,49 @@
++# $adJ$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++# Based on http://sourceware.org/git/?p=glibc.git;a=commitdiff;h=1eb0b490809a681ea801a1cbd93df5b51a4a47e0;hp=c24a9a8aaea37ac630611eb2c75a6517802a1a9d
++#
++# int_curr_symbol (last character always SPACE)
++CUP 
++# currency_symbol
++$
++# mon_decimal_point
++,
++# mon_thousands_sep
++ 
++# mon_grouping, separated by ;
++3
++# positive_sign
++
++# negative_sign
++-
++# int_frac_digits
++2
++# frac_digits
++2
++# p_cs_precedes
++0
++# n_cs_precedes
++0
++# p_sep_by_space
++1
++# n_sep_by_space
++1
++# p_sign_posn
++1
++# n_sign_posn
++1
++#int_p_cs_precedes     
++0
++#int_p_sep_by_space    
++1
++#int_n_cs_precedes     
++0
 +#int_n_sep_by_space    
 +1
 +#int_p_sign_posn       
