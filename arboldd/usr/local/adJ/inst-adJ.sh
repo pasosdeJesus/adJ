@@ -1435,18 +1435,14 @@ if (test ! -f /etc/ssl/server.crt) then {
       		-signkey /etc/ssl/private/server.key -out /etc/ssl/server.crt
 } fi;
 
-# Si ya tenía apache lo dejamos, si no ponemos nginx
+# Ponemos ngingx si ya lo tenía o si CONNGINX esta definido de resto Apache
 conapache=0
 connginx=0
-grep "httpd_flags.*-DSSL" /etc/rc.conf.local > /dev/null 2>/dev/null
-if (test "$?" = "0") then {
-	conapache=1;
-} elif (test "$CONNGINX" != "") then {
+grep "^ *pkg_scripts=.*[ \"]nginx[ \"]." /etc/rc.conf.local > /dev/null 2>/dev/null
+if (test "$?" = "0" -o "$CONNGINX" != "") then {
 	connginx=1;
 } else {
 	conapache=1;  
-	# En migracion probando mas
-
 } fi;
 
 
@@ -1702,6 +1698,10 @@ END {
 
 } fi;
 
+cr=`echo "$docroot" | sed -e "s/^\/var\/www\/.*/SIPI"`
+if (test "$cr" != "SIPI") then {
+	docroot="/var/www/$docroot"
+} fi;
 echo "docroot=$docroot" >>  /var/tmp/inst-adJ.bitacora;
 
 echo "* Probando PHP" >> /var/tmp/inst-adJ.bitacora;
