@@ -9,8 +9,8 @@ SOURCE_GBFXML=mateo.gbfxml marcos.gbfxml lucas.gbfxml juan.gbfxml hechos.gbfxml
 
 EXT_DOCBOOK=xdbk
 
-VS_SWORDBOOK_I=Mark
-VS_SWORDBOOK=Mark
+VS_SWORDBOOK_I=Luke
+VS_SWORDBOOK=Luke
 
 # Variables requeridas por comdocbook.mak
 SOURCES=$(PROYECTO).$(EXT_DOCBOOK)
@@ -156,6 +156,10 @@ instala:
 	$(CP) html/*html $(DESTDIR)$(INSDOC)
 	$(CP) imp/*ps $(DESTDIR)$(INSDOC)
 	$(CP) imp/*pdf $(DESTDIR)$(INSDOC)
+
+instalahtml:
+	$(MKDIR) -p $(DESTDIR)$(INSDOC)
+	$(CP) html/*html $(DESTDIR)$(INSDOC)
 
 desinstala:
 	$(RM) -rf $(DESTDIR)$(INSDOC)
