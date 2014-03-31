@@ -144,7 +144,7 @@ if (test "$sn" = "s") then {
 	cd ../compile/APRENDIENDODEJESUS
 	rm .depend
 	make clean 
-	make 
+	make -j4
 	cp /usr/src/sys/arch/$ARQ/compile/APRENDIENDODEJESUS/bsd $dini/$V$VESP-$ARQ/bsd
 	cd /usr/src/sys/arch/$ARQ/conf
 	sed -e "s/GENERIC/APRENDIENDODEJESUS/g" GENERIC.MP > APRENDIENDODEJESUS.MP
@@ -153,7 +153,7 @@ if (test "$sn" = "s") then {
 	cd ../compile/APRENDIENDODEJESUS.MP
 	rm .depend
 	make clean 
-	make 
+	make -j4
 	cp /usr/src/sys/arch/$ARQ/compile/APRENDIENDODEJESUS.MP/bsd $dini/$V$VESP-$ARQ/bsd.mp
 
 } fi;
@@ -200,7 +200,7 @@ function compilabase 	{
 	unset DESTDIR 
 	echo "whoami 1" >> /var/tmp/distrib-adJ.bitacora
 	whoami >> /var/tmp/distrib-adJ.bitacora 2>&1
-	cd /usr/src && make | tee -a /var/tmp/distrib-adJ.bitacora
+	cd /usr/src && make -j4 | tee -a /var/tmp/distrib-adJ.bitacora
 	echo "whoami 1" >> /var/tmp/distrib-adJ.bitacora
 	whoami >> /var/tmp/distrib-adJ.bitacora 2>&1
 	export DESTDIR=$DT;
@@ -287,11 +287,13 @@ if (test "$sn" = "s") then {
 	echo "* Completo make distrib-dirs" | tee -a /var/tmp/distrib-adJ.bitacora
 	#cd /usr/src/etc && env DESTDIR=$DESTDIR make distrib-dirs
 	# Algunos necesarios para que make lo logre
+	cd /usr/src/include
+	make includes
 	compilabase
 	echo "* Completo compilabase" | tee -a /var/tmp/distrib-adJ.bitacora
 	echo "whoami 3" >> /var/tmp/distrib-adJ.bitacora
 	whoami >> /var/tmp/distrib-adJ.bitacora 2>&1
-	cd /usr/src && unset DESTDIR && nice make SUDO=sudo build | tee -a /var/tmp/distrib-adJ.bitacora
+	cd /usr/src && unset DESTDIR && nice make -j4 SUDO=sudo build | tee -a /var/tmp/distrib-adJ.bitacora
 	echo "whoami 3" >> /var/tmp/distrib-adJ.bitacora
 	whoami >> /var/tmp/distrib-adJ.bitacora 2>&1
 	echo "* Completo make build" | tee -a /var/tmp/distrib-adJ.bitacora
@@ -412,7 +414,7 @@ if (test "$sn" = "s") then {
 	#clean:
 	# mv  $(_SRCDIR)/config.status $(_SRCDIR)/config.status-copia
 	mkdir -p ${DESTDIR}
-	make build
+	make -j4 build
 	# Despues de este toco
 	#cp /usr/xenocara/xserver/config.status-copia /usr/xenocara/xserver/config.status 
 	#rm -rf /usr/xobj/*

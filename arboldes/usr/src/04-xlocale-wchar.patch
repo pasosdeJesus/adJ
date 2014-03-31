@@ -3834,8 +3834,8 @@ diff -ruN -x CVS -x obj src53collation/include/Makefile src/include/Makefile
  	stdbool.h stddef.h stdio.h stdlib.h \
  	string.h strings.h struct.h sysexits.h tar.h tgmath.h \
  	time.h ttyent.h tzfile.h unistd.h utime.h utmp.h vis.h \
--	wchar.h wctype.h
-+	wchar.h wctype.h xlocale.h
+-	wchar.h wctype.h monetary.h
++	wchar.h wctype.h monetary.h xlocale.h
  
  FILES+=	link.h link_aout.h link_elf.h
  
