@@ -2,7 +2,7 @@
 
 # Port in the public domain.
 
-VERSION=1.2a1
+VERSION=1.2b1
 DISTNAME=v${VERSION}
 
 HOMEPAGE=http://pasosdeJesus.github.io/SIVeL/
