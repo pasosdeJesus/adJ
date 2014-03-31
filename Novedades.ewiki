@@ -4,7 +4,7 @@ Distribución para fomentar la construcción del Reino de Dios desde
 la educación, el respeto por la dignidad humana y la memoria.
 
 Versión: 5.4%%%
-Fecha de publicación: 10/Mar/2013
+Fecha de publicación: 31/Mar/2014
 
 !!!NOVEDADES
 
@@ -15,7 +15,7 @@ Con respecto a OpenBSD 5.4 para amd64 y a la edición anterior de este DVD
 
 * Desde la versión 5.4 se ha importado de FreeBSD soporte y datos para presentar cantidades monetarias y numerícas con las convenciones de cada uno de los paises de latinoamérica (y otros locales soportados por OpenBSD).  Esta mejora fue aportada a OpenBSD y se anhela su integración en futuras versiones.
 * Desde la versión 5.2 incluye cotejación (COLLATE) en idioma nativo en el sistema base importado de FreeBSD, tablas de caracteres y cotejación para todos los paises de latinoamérica (incluyendo Portugues de Brazil) y portes de PostgreSQL y xfe que soportan cotejación. Vea detalles y una captura de pantalla en http://aprendiendo.pasosdejesus.org/?id=i18n.  Las mejoras se han aportado a OpenBSD y xfe y han sido parcialmente integradas, se espera más integración en futuras versiones de esos proyectos.
-* Parches de seguridad de sistema base hasta:  15.Feb.2014
+* Parches de seguridad de sistema base hasta:  20.Mar.2014
 * Hemos remplazando `daemon' por `servicio' en buena parte del sistem base (ver por ejemplo ==vmstat -s== o ==less /var/log/servicio== o ==man servicio==).  Hasta la versión 5.3 se usó ==service==, pero para disminuir colisiones de nombres desde la 5.4 se emplea ==servicio==.
 * El CD ahora incluye un archivo de comandos ==/util/preact-adJ.sh== para preparar un sistema antes de iniciar actualización --por ejemplo sacar copia de base de datos.
 
@@ -52,20 +52,20 @@ Es en español, consta de: (a) preparación, (b) instalación/actualización del
 
 !PAQUETES EXCLUSIVOS DE ADJ
 
-* SIVeL actualizado a 1.2a2
+* SIVeL actualizado a 1.2b1 que incluye: módulo de homónimos, mejores relaciones entre personas, claves más seguras, DIVIPOLA actualizado a 2013, más posibilidad de configuración de reportes, más validaciones.
 * ruby 2.0.0p353 retroportado de OpenBSD-Current, probado con aplicaciones Rails 4.1.0rc1.  Tipicamente aumenta velocidad de aplicaciones rails.  Ver  http://dhobsd.pasosdejesus.org/index.php?id=Ruby+on+Rails+en+OpenBSD
 * xfe actualizado a 1.37 y modificado para administrar paquetes en OpenBSD (ver pantallazo en http://structio.sf.net/guias/basico_OpenBSD/medios.html#xfe ). Soporta cotejación en idioma nativo.  Nueva opción sudo_nopasswd utilizable en ~/.config/xfe/xferc cuando sudo no requiere clave (útil para que opere bien Herramientas->Nueva ventana root).
 * PostgreSQL 9.3.2 retroportado de OpenBSD-Current con soporte para UTF-8 y cotejaciones nativas listas para todos los paises de habla hispana. Ver detalles de como usar cotejación en http://aprendiendo.pasosdejesus.org/?id=i18n
+* evangelios_dp actualizado a 0.9.3 que incluye marcado Strong de Mateo, Marcos y Hechos.
 * realboy 0.2.2
 * Los paquetes exclusivos los encuentra en [ftp://ftp.pasosdeJesus.org/pub/AprendiendoDeJesus/5.4-amd64/paquetes]
 
 
 !PAQUETES
 
-* Navegadores actualizados: Firefox a 22, Chromium a , Midori a 
-* !LibreOffice actualizado a gimp a vlc a 
-* PHP actualizado a ruby a LLVM/Clang a asi como los demás lenguajes de programación
-* Se incluye lo básico de Ruby para desarrollar aplicaciones con Ruby on Rails, ver http://dhobsd.pasosdejesus.org/index.php?id=Ruby+on+Rails+en+OpenBSD
+* Navegadores actualizados: Firefox a 22, Chromium a 28.0.1500.45, Midori a 0.5.2
+* !LibreOffice actualizado a 4.0.4.2v0 gimp a 2.8.4p2 vlc a 2.0.7p0.
+* PHP actualizado a 5.3.27 LLVM/Clang a 3.3 asi como los demás lenguajes de programación
 * Se incluyen otros paquetes típicos del repositorio de OpenBSD, en donde hay   más de 7900 disponibles para amd64
 
 !ESCRITORIO
