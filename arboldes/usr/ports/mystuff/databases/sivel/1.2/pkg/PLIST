@@ -1,7 +1,9 @@
-@comment $adJ$
-@group service
+@comment $OpenBSD$
+@group servicio
 @option no-default-conflict
+@comment $adJ$
 ${SIVEL_RAIZ}/
+${SIVEL_RAIZ}/.gitignore
 ${SIVEL_RAIZ}/.htaccess
 ${SIVEL_RAIZ}/Creditos.txt
 ${SIVEL_RAIZ}/DB_DataObject_SIVeL.php
@@ -20,9 +22,9 @@ ${SIVEL_RAIZ}/DataObjects/Caso_contexto.php
 ${SIVEL_RAIZ}/DataObjects/Caso_ffrecuente.php
 ${SIVEL_RAIZ}/DataObjects/Caso_fotra.php
 ${SIVEL_RAIZ}/DataObjects/Caso_frontera.php
-${SIVEL_RAIZ}/DataObjects/Caso_funcionario.php
 ${SIVEL_RAIZ}/DataObjects/Caso_presponsable.php
 ${SIVEL_RAIZ}/DataObjects/Caso_region.php
+${SIVEL_RAIZ}/DataObjects/Caso_usuario.php
 ${SIVEL_RAIZ}/DataObjects/Categoria.php
 ${SIVEL_RAIZ}/DataObjects/Categoria_caso.php
 ${SIVEL_RAIZ}/DataObjects/Clase.php
@@ -43,7 +45,6 @@ ${SIVEL_RAIZ}/DataObjects/Ffrecuente.php
 ${SIVEL_RAIZ}/DataObjects/Filiacion.php
 ${SIVEL_RAIZ}/DataObjects/Fotra.php
 ${SIVEL_RAIZ}/DataObjects/Frontera.php
-${SIVEL_RAIZ}/DataObjects/Funcionario.php
 ${SIVEL_RAIZ}/DataObjects/Grupoper.php
 ${SIVEL_RAIZ}/DataObjects/Iglesia.php
 ${SIVEL_RAIZ}/DataObjects/Intervalo.php
@@ -97,8 +98,10 @@ ${SIVEL_RAIZ}/ResConsulta.php
 ${SIVEL_RAIZ}/Tareas.txt
 ${SIVEL_RAIZ}/act-coor.sql
 ${SIVEL_RAIZ}/act-nom2012.sql
+${SIVEL_RAIZ}/act-nom2013.sql
 ${SIVEL_RAIZ}/actualiza.php
 ${SIVEL_RAIZ}/aut.php
+${SIVEL_RAIZ}/bcrypt.php
 ${SIVEL_RAIZ}/bin/
 ${SIVEL_RAIZ}/bin/.htaccess
 ${SIVEL_RAIZ}/bin/actweb.grep
@@ -111,6 +114,7 @@ ${SIVEL_RAIZ}/bin/creapg.sh
 ${SIVEL_RAIZ}/bin/cuenta.sh
 ${SIVEL_RAIZ}/bin/elim-belicas.sh
 ${SIVEL_RAIZ}/bin/elim-rango.sh
+${SIVEL_RAIZ}/bin/elimcaso.sh
 ${SIVEL_RAIZ}/bin/elimcomun.sh
 ${SIVEL_RAIZ}/bin/elimus.sh
 ${SIVEL_RAIZ}/bin/importacd.sh
@@ -254,7 +258,6 @@ ${SIVEL_RAIZ}/doc/img/toc-minus.png
 ${SIVEL_RAIZ}/doc/img/toc-plus.png
 ${SIVEL_RAIZ}/doc/img/up.png
 ${SIVEL_RAIZ}/doc/img/warning.png
-${SIVEL_RAIZ}/doc/indice.xdbk
 ${SIVEL_RAIZ}/doc/infoversion.ent
 ${SIVEL_RAIZ}/doc/instala.xdbk
 ${SIVEL_RAIZ}/doc/llamado.xdbk
@@ -291,6 +294,8 @@ ${SIVEL_RAIZ}/herram/confaux.sh
 ${SIVEL_RAIZ}/herram/creatabla.sh
 ${SIVEL_RAIZ}/herram/estandares.sh
 ${SIVEL_RAIZ}/herram/estandares.xml
+${SIVEL_RAIZ}/herram/geo/
+${SIVEL_RAIZ}/herram/geo/dump-a-datos.sh
 ${SIVEL_RAIZ}/herram/gitact.sh
 ${SIVEL_RAIZ}/herram/gitcommit.sh
 ${SIVEL_RAIZ}/herram/hex2bin.php
@@ -424,6 +429,13 @@ ${SIVEL_RAIZ}/modulos/etiquetas/estructura.sql
 ${SIVEL_RAIZ}/modulos/etiquetas/prepara_indices.sql
 ${SIVEL_RAIZ}/modulos/etiquetas/pruebasinterfaz/
 ${SIVEL_RAIZ}/modulos/etiquetas/pruebasinterfaz/etiquetas.selenio
+${SIVEL_RAIZ}/modulos/homonimos/
+${SIVEL_RAIZ}/modulos/homonimos/DataObjects/
+${SIVEL_RAIZ}/modulos/homonimos/DataObjects/Homonimosim.php
+${SIVEL_RAIZ}/modulos/homonimos/DataObjects/estructura-dataobject.ini
+${SIVEL_RAIZ}/modulos/homonimos/DataObjects/estructura-dataobject.links.ini
+${SIVEL_RAIZ}/modulos/homonimos/actualiza.php
+${SIVEL_RAIZ}/modulos/homonimos/estructura.sql
 ${SIVEL_RAIZ}/modulos/mapag/
 ${SIVEL_RAIZ}/modulos/mapag/Creditos.txt
 ${SIVEL_RAIZ}/modulos/mapag/Instala.txt
@@ -454,7 +466,7 @@ ${SIVEL_RAIZ}/modulos/mezcla/actualiza.php
 ${SIVEL_RAIZ}/modulos/mezcla/compara.php
 ${SIVEL_RAIZ}/modulos/mezcla/conf.php
 ${SIVEL_RAIZ}/modulos/mezcla/datos.sql
-${SIVEL_RAIZ}/modulos/mezcla/elije.php
+${SIVEL_RAIZ}/modulos/mezcla/elige.php
 ${SIVEL_RAIZ}/modulos/mezcla/mezcla.php
 ${SIVEL_RAIZ}/modulos/segjudicial/
 ${SIVEL_RAIZ}/modulos/segjudicial/DataObjects/
@@ -476,7 +488,6 @@ ${SIVEL_RAIZ}/modulos/segjudicial/prepara_indices.sql
 ${SIVEL_RAIZ}/modulos/segjudicial/pruebasinterfaz/
 ${SIVEL_RAIZ}/modulos/segjudicial/pruebasinterfaz/segjudicial.selenio
 ${SIVEL_RAIZ}/opcion.php
-${SIVEL_RAIZ}/pcvs.sh
 ${SIVEL_RAIZ}/prepara_indices.sql
 ${SIVEL_RAIZ}/pruebasinterfaz/
 ${SIVEL_RAIZ}/pruebasinterfaz/basicas.selenio
@@ -491,16 +502,19 @@ ${SIVEL_RAIZ}/sitios/pordefecto/
 ${SIVEL_RAIZ}/sitios/pordefecto/DataObjects/
 ${SIVEL_RAIZ}/sitios/pordefecto/DataObjects/estructura-dataobject.ini
 ${SIVEL_RAIZ}/sitios/pordefecto/DataObjects/estructura-dataobject.links.ini
+${SIVEL_RAIZ}/sitios/pordefecto/conf-local.php.plantilla
 ${SIVEL_RAIZ}/sitios/pordefecto/conf.php
+${SIVEL_RAIZ}/sitios/pordefecto/conf.php.plantilla
+${SIVEL_RAIZ}/sitios/pordefecto/conf.php.todomodulo.plantilla
+${SIVEL_RAIZ}/sitios/pordefecto/conf_int-local.php.plantilla
 ${SIVEL_RAIZ}/sitios/pordefecto/conf_int.php
+${SIVEL_RAIZ}/sitios/pordefecto/conf_int.php.plantilla
 ${SIVEL_RAIZ}/sitios/pordefecto/fondo.jpg
 ${SIVEL_RAIZ}/sitios/pordefecto/inibdmod.php
 ${SIVEL_RAIZ}/sitios/pordefecto/iniint.php
-${SIVEL_RAIZ}/sitios/pordefecto/plantilla-conf.php
-${SIVEL_RAIZ}/sitios/pordefecto/plantilla-conf_int.php
-${SIVEL_RAIZ}/sitios/pordefecto/plantilla-todomodulo-conf.php
-${SIVEL_RAIZ}/sitios/pordefecto/plantilla-vardb.sh
+${SIVEL_RAIZ}/sitios/pordefecto/vardb-local.sh.plantilla
 ${SIVEL_RAIZ}/sitios/pordefecto/vardb.sh
+${SIVEL_RAIZ}/sitios/pordefecto/vardb.sh.plantilla
 ${SIVEL_RAIZ}/sitios/pruebas/
 ${SIVEL_RAIZ}/sitios/pruebas/.htaccess
 ${SIVEL_RAIZ}/sitios/pruebas/actdep.php

@@ -52,7 +52,7 @@ EOF
 
 
 echo "Archivos de etc en general exceptuando casos especiales de compatibilidad"  >> /var/tmp/inst-adJ.bitacora
-l=`find . -exec grep -l "daemon" {} ';' | grep -v "login.conf" | grep -v "group" | grep -v "passwd" | grep -v "pwd.db" | grep -v "syslog.conf" | grep -v "rc.subr" | grep -v "mail/aliases" | grep -v "mail/.*cf" | grep -v "Xsetup_0" | grep -v "dbus-1/system.conf" | grep -v "rc.conf.local" | grep -v "rc.local" | grep -v "rc.d/" | grep -v "php-fpm.conf" | grep -v Makefile`
+l=`find . -exec grep -l "daemon" {} ';' | grep -v "login.conf" | grep -v "group" | grep -v "passwd" | grep -v "pwd.db" | grep -v "syslog.conf" | grep -v "rc.subr" | grep -v "mail/aliases" | grep -v "mail/.*cf" | grep -v "Xsetup_0" | grep -v "dbus-1" | grep -v "rc.conf.local" | grep -v "rc.local" | grep -v "rc.d/" | grep -v "php-fpm.conf" | grep -v Makefile`
 echo "l=$l" >> /var/tmp/inst-adJ.bitacora 
 for i in $l; do 
 	echo $i  >> /var/tmp/inst-adJ.bitacora

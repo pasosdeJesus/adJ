@@ -28,11 +28,10 @@ RUN_DEPENDS= lang/php/5.3 \
 	devel/pear-Validate \
 	databases/postgresql 
 
-
 MASTER_SITES=https://github.com/pasosdeJesus/SIVeL/archive/
 EXTRACT_SUFX=.zip
-DCOMP=SIVeL-${VERSION}
-SIVEL_RAIZ ?=	htdocs/sivel12
+DCOMP=SIVeL-SIVeL-v${VERSION}
+SIVEL_RAIZ ?= htdocs/sivel12
 
 do-install:
 	echo @mkdir -p ${PREFIX}/${SIVEL_RAIZ}
