@@ -672,7 +672,7 @@ cmd="echo \$excluye | tr \" \" \"\\n\" | sed -e \"s/^/ /g\" >> tmp/excluye.txt"
 eval "$cmd"
 if (test "$sn" = "s") then {
 	mkdir -p $V$VESP-$ARQ/paquetes
-	cp -rf arbolcd/* $V$VESP-$ARQ/
+	cp -rf arboldvd/* $V$VESP-$ARQ/
 	find $V$VESP-$ARQ/ -name CVS | xargs rm -rf
 
 	arcdis="tmp/disponibles.txt";
