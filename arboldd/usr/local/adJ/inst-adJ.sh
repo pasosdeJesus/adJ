@@ -427,6 +427,27 @@ if (test "$?" != "0") then {
 sudo chown $uadJ:$uadJ /mnt/usb 
 sudo chown $uadJ:$uadJ /mnt/usbc
 
+echo "/var sin nodev en /etc/fstab (para tener /var/www/dev/random)" >> /var/tmp/inst-adJ.bitacora
+grep " /var.*nodev," /etc/fstab > /dev/null
+if (test "$?" = "0") then {
+	echo "Por quitar opcion nodev en /var en fstab" >> /var/tmp/inst-adJ.bitacora;
+	ed /etc/fstab <<EOF
+/ \/var.*nodev,/
+s/nodev,//g
+w
+q
+EOF
+} else {
+	echo "   Saltando quitar nodev..." >> /var/tmp/inst-adJ.bitacora;
+} fi;
+
+echo "/var/www/dev/random" >> /var/tmp/inst-adJ.bitacora
+if (test ! -f "/var/www/dev/random") then {
+	mkdir -p /var/www/dev/
+	sudo mknod -m 644 /var/www/dev/random c 45 0
+} else {
+	echo "   Saltando /var/www/dev/random..." >> /var/tmp/inst-adJ.bitacora;
+} fi;
 
 userinfo _hostapd >/dev/null
 if (test "$?" != "0") then {
