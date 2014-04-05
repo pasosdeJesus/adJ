@@ -1028,151 +1028,81 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/mbrlen
  	return (mbrtowc_l(NULL, s, n, ps, loc));
  }
  
-diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/setlocale.c src/lib/libc/locale/setlocale.c
---- src54-x6/lib/libc/locale/setlocale.c	Thu Dec  5 19:12:06 2013
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src55-orig/lib/libc/locale/setlocale.c src/lib/libc/locale/setlocale.c
+--- src55-orig/lib/libc/locale/setlocale.c	Thu Dec  5 19:12:06 2013
 +++ src/lib/libc/locale/setlocale.c	Fri Dec  6 03:38:39 2013
-@@ -197,37 +197,35 @@
- revert_to_default(int category)
- {
- 	switch (category) {
--	case LC_CTYPE:
--		(void)_xpg4_setrunelocale("C");
--		__install_currentrunelocale_ctype();
--		(void)strlcpy(__xlocale_global_locale.components[category-1]->locale, 
--		    "C", 
--		    sizeof(__xlocale_global_locale.components[category-1]->locale) );
--		break;
--	case LC_MESSAGES:
--		break;
--	case LC_COLLATE:
-- 		if (__collate_load_tables("C")) {
-+		case LC_CTYPE:
-+			(void)_xpg4_setrunelocale("C");
-+			__install_currentrunelocale_ctype();
-+			break;
-+		case LC_MESSAGES:
- 			return;
--		}
--		(void)strlcpy(__xlocale_global_locale.components[category-1]->locale, 
--		    "C", 
--		    sizeof(__xlocale_global_locale.components[category-1]->locale) );
+@@ -200,20 +200,12 @@
+ 	case LC_CTYPE:
+ 		(void)_xpg4_setrunelocale("C");
+ 		__install_currentrunelocale_ctype();
+-(void)strlcpy(__xlocale_global_locale.components[category-1]->locale, 
+-			"C", 
+-			sizeof(__xlocale_global_locale.components[category-1]->locale) );
 -
+ 		break;
+ 	case LC_MESSAGES:
 -		break;
--	case LC_MONETARY:
--		if (__monetary_load_locale("C")) {
-+			break;
-+		case LC_COLLATE:
-+			if (__collate_load_tables("C")) {
-+				return;
-+			}
-+			break;
-+		case LC_MONETARY:
-+			if (__monetary_load_locale("C")) {
-+				return;
-+			}
-+			break;
-+		case LC_NUMERIC:
-+			if (__numeric_load_locale("C")) {
-+				return;
-+			}
-+			break;
-+		case LC_TIME:
++		return;
+ 	case LC_COLLATE:
+  		if (__collate_load_tables("C"))
  			return;
--		}
--               break;
--	case LC_NUMERIC:
--		if (__numeric_load_locale("C")) {
--			return;
--		}
+-
+-	(void)strlcpy(__xlocale_global_locale.components[category-1]->locale, 
+-			"C", 
+-			sizeof(__xlocale_global_locale.components[category-1]->locale) );
+ 		break;
+ 	case LC_MONETARY:
+ 		if (__monetary_load_locale("C")) 
+@@ -224,9 +216,11 @@
+ 			return;
+ 		break;
+ 	case LC_TIME:
 -		break;
--	case LC_TIME:
--		break;
-+			break;
++		return;
  	}
+-
 +	(void)strlcpy(__xlocale_global_locale.components[category-1]->locale, 
-+		"C", 
-+		sizeof(__xlocale_global_locale.components[category-1]->locale));
++			"C", 
++			sizeof(__xlocale_global_locale.components[category-1]->locale) );
  }
  
  static int
-@@ -245,39 +243,33 @@
- 		return -1;
- 
- 	switch (category) {
--	case LC_CTYPE:
--		if (_xpg4_setrunelocale(locname))
--			return -1;
--		__install_currentrunelocale_ctype();
--		(void)strlcpy(__xlocale_global_locale.components[category-1]->locale, 
--			locname, 
--			sizeof(__xlocale_global_locale.components[category-1]->locale) );
--		break;
-+		case LC_CTYPE:
-+			if (_xpg4_setrunelocale(locname))
-+				return -1;
-+			__install_currentrunelocale_ctype();
-+			break;
- 
--	case LC_MESSAGES:
--		break;
--	case LC_COLLATE:
--		if (__collate_load_tables(locname)) {
-+		case LC_MESSAGES:
+@@ -277,22 +271,16 @@
+ 		if (_xpg4_setrunelocale(locname))
  			return -1;
--		}       
+ 		__install_currentrunelocale_ctype();
 -		(void)strlcpy(__xlocale_global_locale.components[category-1]->locale, 
+-				locname, 
+-				sizeof(__xlocale_global_locale.components[category-1]->locale) );
+ 		break;
+ 
+ 	case LC_MESSAGES:
+ 		if (set_lc_messages_locale(locname))
+ 			return -1;
+-		break;
++		return;
+ 
+ 	case LC_COLLATE:
+ 		if (__collate_load_tables(locname))
+ 			return -1;
+-	(void)strlcpy(__xlocale_global_locale.components[category-1]->locale, 
 -			locname, 
 -			sizeof(__xlocale_global_locale.components[category-1]->locale) );
--
--		break;
--	case LC_MONETARY:
--		if (__monetary_load_locale(locname)) {
--			return;
--		}
--		break;
--	case LC_NUMERIC:
--		if (__numeric_load_locale(locname)) {
--			return;
--		}
--		break;
--	case LC_TIME:
--		return -1;
-+			break;
-+		case LC_COLLATE:
-+			if (__collate_load_tables(locname))
-+				return -1;
-+			break;
-+		case LC_MONETARY:
-+			if (__monetary_load_locale(locname))
-+				return -1;
-+			break;
-+		case LC_NUMERIC:
-+			if (__numeric_load_locale(locname))
-+				return -1;
-+			break;
-+		case LC_TIME:
-+			return -1;
+ 		break;
+ 		
+ 	case LC_MONETARY:
+@@ -310,6 +298,9 @@
+ 		return -1;
  	}
-+	(void)strlcpy(__xlocale_global_locale.components[category-1]->locale, 
-+		locname, 
-+		sizeof(__xlocale_global_locale.components[category-1]->locale));
  
++	(void)strlcpy(__xlocale_global_locale.components[category-1]->locale, 
++			locname, 
++			sizeof(__xlocale_global_locale.components[category-1]->locale) );
  	return 0;
  }
-diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/setrunelocale.c src/lib/libc/locale/setrunelocale.c
---- src54-x6/lib/libc/locale/setrunelocale.c	Fri Dec  6 07:53:02 2013
-+++ src/lib/libc/locale/setrunelocale.c	Fri Dec  6 07:51:47 2013
-@@ -188,7 +188,7 @@
- xlocale_setrunelocale(struct xlocale_ctype *xc, const char *locname)
- {
- 	char path[PATH_MAX];
--	_RuneLocale *rl;
-+	const _RuneLocale *rl;
- 	int error, len;
- 	const char *dot, *encoding;
  
-diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/xlocale.c src/lib/libc/locale/xlocale.c --- src54-x6/lib/libc/locale/xlocale.c	Tue Dec  3 16:05:33 2013
---- src54-x6/lib/libc/locale/xlocale.c	Wed Dec 11 22:06:50 2013
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src55-orig/lib/libc/locale/xlocale.c src/lib/libc/locale/xlocale.c 
+--- src55-orig/lib/libc/locale/xlocale.c	Wed Dec 11 22:06:50 2013
 +++ src/lib/libc/locale/xlocale.c	Fri Dec 13 15:43:35 2013
 @@ -74,10 +74,11 @@
  	{0},
@@ -1208,24 +1138,13 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/xlocal
  __time_load(const char *locale, locale_t unused)
  {
  	return NULL;
-@@ -228,9 +216,6 @@
- 			xlocale_release(loc->components[type]);
- 		}
- 	}
--	if (loc->csym) {
--		free(loc->csym);
--	}
- 	free(l);
- }
- 
-@@ -432,6 +417,6 @@
+@@ -429,5 +417,6 @@
  		}
  		printf("\n");
  	}
--	printf("csym=%p\n", loc->csym);
 +	printf("_bufcrncystr=%p\n", loc->_bufcrncystr);
  }
-
+ 
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/asprintf.c src/lib/libc/stdio/asprintf.c
 --- src54-x6/lib/libc/stdio/asprintf.c	Sat Jun 25 00:32:56 2011
 +++ src/lib/libc/stdio/asprintf.c	Tue Dec  3 16:12:41 2013
@@ -2733,22 +2652,23 @@ diff -ruN src54-x6/lib/libc/stdlib/strfmon.c src/lib/libc/stdlib/strfmon.c
  	if (avalue_size < 0)
  		return (NULL);
  
-diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdlib/strtod.3 src/lib/libc/time/strtod.3
---- src54-x6/lib/libc/stdlib/strtod.3	Sun Oct  6 20:04:50 2013
-+++ src/lib/libc/stdlib/strtod.3	Fri Dec  6 08:51:22 2013
-@@ -37,7 +37,10 @@
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src55-orig/lib/libc/stdlib/strtod.3 src/lib/libc/time/strtod.3
+--- src55-orig/lib/libc/stdlib/strtod.3	Thu Apr  3 13:00:44 2014
++++ src/lib/libc/stdlib/strtod.3	Thu Apr  3 13:04:01 2014
+@@ -36,8 +36,11 @@
+ .Os
  .Sh NAME
  .Nm strtod ,
++.Nm strtod_l ,
  .Nm strtof ,
 -.Nm strtold
-+.Nm strtold ,
-+.Nm strtod_l ,
 +.Nm strtof_l ,
++.Nm strtold ,
 +.Nm strtold_l
- .Nd convert
- .Tn ASCII
- string to double, float or long double
-@@ -51,24 +54,39 @@
+ .Nd convert ASCII string to double, float or long double
+ .Sh SYNOPSIS
+ .In stdlib.h
+@@ -49,24 +52,39 @@
  .Pp
  .Ft long double
  .Fn strtold "const char *nptr" "char **endptr"
@@ -2791,7 +2711,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdlib/strtod
  .Fa nptr
  to
  .Li long double
-@@ -114,6 +132,22 @@
+@@ -115,6 +133,22 @@
  string (as defined by the
  .Xr isspace 3
  function) are skipped.

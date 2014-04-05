@@ -781,28 +781,27 @@ diff -ruN -x *~ -x *orig src54-orig/lib/libc/locale/nl_langinfo.c src/lib/libc/l
  		break;
  	case CODESET:
  		s = _CurrentRuneLocale->rl_codeset;
-diff -ruN -x obj -x CVS -x *~ -x *orig src54-coll/lib/libc/locale/setlocale.c src/lib/libc/locale/setlocale.c
---- src54-coll/lib/libc/locale/setlocale.c	Tue Dec  3 10:55:22 2013
+diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/setlocale.c src/lib/libc/locale/setlocale.c
+--- src55-orig/lib/libc/locale/setlocale.c	Tue Dec  3 10:55:22 2013
 +++ src/lib/libc/locale/setlocale.c	Tue Dec  3 11:54:07 2013
-@@ -208,6 +208,10 @@
- 		}
+@@ -207,6 +207,9 @@
+ 			return;
  		break;
  	case LC_MONETARY:
-+		if (__monetary_load_locale("C")) {
++		if (__monetary_load_locale("C")) 
 +			return;
-+		}
-+               break;
++		break;
  	case LC_NUMERIC:
  	case LC_TIME:
  		break;
-@@ -243,6 +247,10 @@
- 		}       
+@@ -272,6 +275,10 @@
  		break;
+ 		
  	case LC_MONETARY:
-+		if (__monetary_load_locale(locname)) {
++		if (__monetary_load_locale(locname)) 
 +			return;
-+		}
 +		break;
++
  	case LC_NUMERIC:
  	case LC_TIME:
  		return -1;
@@ -1700,15 +1699,16 @@ diff -ruN src54-orig/include/monetary.h src/include/monetary.h
 +__END_DECLS
 +
 +#endif /* !_MONETARY_H_ */
-diff -ruN src54-orig/include/Makefile src/include/Makefile
---- src54-orig/include/Makefile.orig	Sun Jul  7 11:12:41 2013
-+++ src/include/Makefile	Mon Mar 24 15:40:54 2014
-@@ -22,7 +22,7 @@
- 	stdbool.h stddef.h stdio.h stdlib.h \
- 	string.h strings.h struct.h sysexits.h tar.h tgmath.h \
- 	time.h ttyent.h tzfile.h unistd.h utime.h utmp.h vis.h \
--	wchar.h wctype.h
-+	wchar.h wctype.h monetary.h
- 
- FILES+=	link.h link_aout.h link_elf.h
- 
+diff -ruN src55-orig/include/Makefile src/include/Makefile
+--- src55-orig/include/Makefile	Wed Apr  2 23:43:56 2014
++++ src/include/Makefile	Thu Apr  3 09:30:29 2014
+@@ -14,7 +14,8 @@
+ 	dlfcn.h elf_abi.h err.h errno.h fenv.h float.h fnmatch.h fstab.h fts.h \
+ 	ftw.h getopt.h glob.h grp.h ifaddrs.h inttypes.h iso646.h kvm.h \
+ 	langinfo.h libgen.h limits.h locale.h login_cap.h malloc.h math.h md4.h \
+-	md5.h memory.h mpool.h ndbm.h netdb.h netgroup.h nlist.h nl_types.h \
++	md5.h memory.h monetary.h mpool.h \
++	ndbm.h netdb.h netgroup.h nlist.h nl_types.h \
+ 	ohash.h paths.h poll.h pwd.h ranlib.h readpassphrase.h regex.h \
+ 	resolv.h rmd160.h search.h setjmp.h sha1.h sha2.h signal.h sndio.h \
+ 	spawn.h stdbool.h stddef.h stdio.h stdlib.h string.h strings.h struct.h \

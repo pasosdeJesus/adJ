@@ -1,10 +1,12 @@
-diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/regress/lib/libc/locale/Makefile src/regress/lib/libc/locale/Makefile
---- src54-s/regress/lib/libc/locale/Makefile	Mon Oct  7 07:49:09 2013
-+++ src/regress/lib/libc/locale/Makefile	Sat Oct 12 13:23:41 2013
-@@ -1,6 +1,6 @@
- # $OpenBSD: Makefile,v 1.1 2005/08/11 21:57:02 espie Exp $
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src55-src/regress/lib/libc/locale/Makefile src/regress/lib/libc/locale/Makefile
+--- src55-orig/regress/lib/libc/locale/Makefile	Fri Oct 18 09:22:50 2013
++++ src/regress/lib/libc/locale/Makefile	Thu Apr  3 09:23:23 2014
+@@ -1,8 +1,6 @@
+ # $OpenBSD: Makefile,v 1.2 2013/08/01 21:26:30 kettenis Exp $
  
+-.if defined(REGRESS_FULL)
 -SUBDIR+= check_isw
+-.endif
 +SUBDIR+= check_isw check_collate
  
  install:
