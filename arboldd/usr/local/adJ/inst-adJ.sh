@@ -1836,12 +1836,11 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 [begin] (Fluxbox)
 	[exec] (xfe - Archivos) {PATH=\$PATH:/usr/sbin:/usr/local/sbin:/sbin /usr/local/bin/xfe}
 	[exec] (xterm) {xterm -en utf8 -e /bin/ksh -l}
-	[exec] (mozilla-firefox) {ulimit -d 200000 && /usr/local/bin/firefox -UILocale es-AR}
-	[exec] (midori) {/usr/local/bin/midori}
 	[exec] (chromium) {/usr/local/bin/chrome -allow-file-access-from-files}
+	[exec] (midori) {/usr/local/bin/midori}
 [submenu] (Espiritualidad)
 	[exec] (xiphos) {/usr/local/bin/xiphos}
-	[exec] (Evangelios de dominio publico) {/usr/local/bin/firefox /usr/local/share/doc/evangelios_dp/}
+	[exec] (Evangelios de dominio publico) {/usr/local/bin/chrome /usr/local/share/doc/evangelios_dp/}
 [end]
 [submenu] (Dispositivos)
 	[exec] (Apagar) {sudo /sbin/halt -p}
@@ -1854,7 +1853,7 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 	[exec] (Desmontar USBC) {/sbin/umount -f /mnt/usbc}
 	[exec] (Montar Floppy) {/sbin/mount /mnt/floppy ; xfe /mnt/floppy}
 	[exec] (Desmontar Floppy) {/sbin/umount -f /mnt/floppy}
-	[exec] (Configurar Impresora con CUPS) {echo y | sudo cups-enable; sudo chmod a+rw /dev/ulpt* /dev/lpt*; /usr/local/bin/firefox -UILocale es-AR http://127.0.0.1:631}
+	[exec] (Configurar Impresora con CUPS) {echo y | sudo cups-enable; sudo chmod a+rw /dev/ulpt* /dev/lpt*; /usr/local/bin/chrome http://127.0.0.1:631}
 	[submenu] (Red)
                 [exec] (Examinar red) {xterm -en utf8 -e '/sbin/ifconfig; echo -n "\n[RETORNO] para examinar enrutamiento (podrá salir con q)"; read; /sbin/route -n show | less'}
                 [exec] (Examinar configuracion cortafuegos) {xterm  -en utf8 -e 'sudo /sbin/pfctl -s all | less '}
@@ -1890,9 +1889,9 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 	[exec] (Pidgin) {pidgin}
 [end]
 [submenu] (Documentos)
-	[exec] (OpenBSD basico) {/usr/local/bin/firefox -UILocale es-AR /usr/local/share/doc/basico_OpenBSD/index.html}
-	[exec] (OpenBSD usuario) {/usr/local/bin/firefox -UILocale es-AR /usr/local/share/doc/usuario_OpenBSD/index.html}
-	[exec] (OpenBSD servidor) {/usr/local/bin/firefox -UILocale es-AR /usr/local/share/doc/servidor_OpenBSD/index.html}
+	[exec] (OpenBSD basico) {/usr/local/bin/chrome /usr/local/share/doc/basico_OpenBSD/index.html}
+	[exec] (OpenBSD usuario) {/usr/local/bin/chrome /usr/local/share/doc/usuario_OpenBSD/index.html}
+	[exec] (OpenBSD servidor) {/usr/local/bin/chrome /usr/local/share/doc/servidor_OpenBSD/index.html}
 [end]
 [submenu] (Otros)
 [exec] (gvim) {gvim}
@@ -2011,8 +2010,8 @@ Pos= 23 5
 [end]
 
 [Desktop Entry]
-Name=firefox
-Exec=firefox
+Name=chromium
+Exec=chrome
 Icon=/usr/local/share/icons/hicolor/48x48/apps/applications-internet.png
 Pos= 27 86
 [end]
@@ -2227,16 +2226,16 @@ if (test -f /etc/rc.d/cupsd) then {
 } fi;
 
 
-echo "* Instalando navegador mozilla-firefox" | tee -a /var/tmp/inst-adJ.bitacora;
-f=`ls /var/db/pkg/*firefox* 2> /dev/null > /dev/null`;
+echo "* Instalando navegador chromium" | tee -a /var/tmp/inst-adJ.bitacora;
+f=`ls /var/db/pkg/*chromum* 2> /dev/null > /dev/null`;
 if (test "$?" = "0") then {
-	dialog --title 'Eliminar Firefox' --yesno "\\nFirefox instalado. ¿Eliminarlo para instalar uno más nuevo?" 15 60
+	dialog --title 'Eliminar chromium' --yesno "\\nChrome instalado. ¿Eliminarlo para instalar uno más nuevo?" 15 60
 	if (test "$?" = "0") then {
-		pkg_delete -I -D dependencies mozilla-firefox >> /var/tmp/inst-adJ.bitacora 2>&1
-		pkg_delete -I -D dependencies firefox >> /var/tmp/inst-adJ.bitacora 2>&1
+		pkg_delete -I -D dependencies chromium >> /var/tmp/inst-adJ.bitacora 2>&1
+		pkg_delete -I -D dependencies chromium >> /var/tmp/inst-adJ.bitacora 2>&1
 	} fi;
 } fi;
-f=`ls /var/db/pkg/firefox* 2> /dev/null > /dev/null`;
+f=`ls /var/db/pkg/chromium* 2> /dev/null > /dev/null`;
 if (test "$?" != "0") then {
 
 	insacp png
@@ -2250,16 +2249,11 @@ if (test "$?" != "0") then {
 	insacp pango
 	insacp gtk+2
 
-	p=`ls $PKG_PATH/libxml-* $PKG_PATH/shared-mime-info-* $PKG_PATH/pcre-* $PKG_PATH/png-* $PKG_PATH/jpeg-* $PKG_PATH/glib2-* $PKG_PATH/tiff-* $PKG_PATH/libiconv-* $PKG_PATH/esound-* $PKG_PATH/atk-* $PKG_PATH/desktop-file-utils-* $PKG_PATH/gettext-* $PKG_PATH/libaudiofile-* $PKG_PATH/gtk+2-* $PKG_PATH/cairo-* $PKG_PATH/pango-* $PKG_PATH/nss-* $PKG_PATH/nspr-* $PKG_PATH/jasper-* $PKG_PATH/hicolor-icon-theme-* $PKG_PATH/firefox-* $PKG_PATH/firefox-i18n-es-AR*`
+	p=`ls $PKG_PATH/libxml-* $PKG_PATH/shared-mime-info-* $PKG_PATH/pcre-* $PKG_PATH/png-* $PKG_PATH/jpeg-* $PKG_PATH/glib2-* $PKG_PATH/tiff-* $PKG_PATH/libiconv-* $PKG_PATH/esound-* $PKG_PATH/atk-* $PKG_PATH/desktop-file-utils-* $PKG_PATH/gettext-* $PKG_PATH/libaudiofile-* $PKG_PATH/gtk+2-* $PKG_PATH/cairo-* $PKG_PATH/pango-* $PKG_PATH/nss-* $PKG_PATH/nspr-* $PKG_PATH/jasper-* $PKG_PATH/hicolor-icon-theme-* $PKG_PATH/chromium-*`
         pkg_add -I -D update -D updatedepends -r $p >> /var/tmp/inst-adJ.bitacora 2>&1;
-	grep "browser.startup.homepage.*https://localhost" /usr/local/lib/firefox-18.0.2/defaults/pref/prefs.js > /dev/null 2>&1
-	if (test "$?" != "0") then {
-		echo 'user_pref("general.useragent.locale", "es-AR")' >>/usr/local/lib/firefox-18.0.2/defaults/pref/prefs.js 2>> /var/tmp/inst-adJ.bitacora;
-	       	echo 'user_pref("browser.startup.homepage", "https://127.0.0.1/");' >>/usr/local/lib/firefox-18.0.2/defaults/pref/prefs.js 2>> /var/tmp/inst-adJ.bitacora;
-	} fi;
-	echo "Sugerencias: " >> /var/tmp/inst-adJ.bitacora;
-	echo "  * Configure localización en español desde about:config general.useragent.local es-AR"
-	echo "  * Como página de inicio use https://127.0.0.1/";
+	#echo "Sugerencias: " >> /var/tmp/inst-adJ.bitacora;
+	#echo "  * Configure localización en español desde about:config general.useragent.local es-AR"
+	#echo "  * Como página de inicio use https://127.0.0.1/";
 } else {
 	echo "   Saltando..." >> /var/tmp/inst-adJ.bitacora;
 } fi;
@@ -2338,7 +2332,7 @@ chmod a+rxw /var/www/tmp > /dev/null 2>&1
 dialog --title 'Componentes básicos instalados' --msgbox "\\nInstalación y configuración de los componentes básicos de adJ completada.\\n\\nPor instalar los demás paquetes de $ARCH/paquetes" 15 60
 #, mientras tanto puede instalar SIVeL:"
 #echo "1. Pase a la consola gráfica con [Ctrl]-[Alt]-[F5] o si no es gráfica iniciela desde la segunda consola [Ctrl]-[Alt]-[F2] con 'xdm'"
-#echo "2. Abra mozilla-firefox (o en modo texto lynx) y use la dirección 'https://127.0.0.1/actualiza.php'"
+#echo "2. Abra chromium (o en modo texto lynx) y use la dirección 'https://127.0.0.1/actualiza.php'"
 #echo "3. Debe poder ingresar con el usuario que creó"
 #echo "4. Complete actualización de SIVeL siguiendo las instrucciones"
 #echo ""
