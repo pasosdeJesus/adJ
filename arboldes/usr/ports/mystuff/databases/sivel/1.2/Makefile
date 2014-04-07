@@ -2,8 +2,8 @@
 
 # Port in the public domain.
 
-VERSION=1.2a1
-DISTNAME=v${VERSION}
+VERSION=1.2b1
+DISTNAME=SIVeL-v${VERSION}
 
 HOMEPAGE=http://pasosdeJesus.github.io/SIVeL/
 PKGSPEC = sivel->=1.2,<1.3
@@ -28,11 +28,10 @@ RUN_DEPENDS= lang/php/5.3 \
 	devel/pear-Validate \
 	databases/postgresql 
 
-
 MASTER_SITES=https://github.com/pasosdeJesus/SIVeL/archive/
 EXTRACT_SUFX=.zip
-DCOMP=SIVeL-${VERSION}
-SIVEL_RAIZ ?=	htdocs/sivel12
+DCOMP=SIVeL-SIVeL-v${VERSION}
+SIVEL_RAIZ ?= htdocs/sivel12
 
 do-install:
 	echo @mkdir -p ${PREFIX}/${SIVEL_RAIZ}

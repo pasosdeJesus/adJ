@@ -1,0 +1,12 @@
+$OpenBSD$
+--- config.h.in.orig	Fri Nov 22 06:32:51 2013
++++ config.h.in	Fri Nov 22 06:33:21 2013
+@@ -1,5 +1,8 @@
+ /* config.h.in.  Generated from configure.ac by autoheader.  */
+ 
++/* Define to 1 if you have the `arc4random' function. */
++#undef HAVE_ARC4RANDOM
++
+ /* Define to 1 if you have the `atexit' function. */
+ #undef HAVE_ATEXIT
+ 

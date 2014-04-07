@@ -1,0 +1,12 @@
+$OpenBSD$
+--- configure.orig	Mon Nov 27 02:47:59 2006
++++ configure	Fri Nov 22 05:56:46 2013
+@@ -4740,7 +4740,7 @@ fi
+ 
+ 
+ 
+-for ac_func in memcmp memmem memrmem memrchr strdup strerror basename
++for ac_func in memcmp memmem memrmem memrchr strdup strlcpy strerror basename
+ do
+ as_ac_var=`echo "ac_cv_func_$ac_func" | $as_tr_sh`
+ { echo "$as_me:$LINENO: checking for $ac_func" >&5

@@ -5,13 +5,16 @@
 include Make.inc
 
 DISTNAME=	${PNAME}-${V}
-PKGNAME=   	${DISTNAME}p1
+PKGNAME=   	${DISTNAME}
 CATEGORIES=    	books
 
-MAINTAINER=	Vladimir Támara Patiño <vtamara@pasosdeJesus.org>
+MAINTAINER=	Vladimir TÃ¡mara PatiÃ±o <vtamara@pasosdeJesus.org>
 
-MASTER_SITES=	${HOMEPAGE}
-DISTFILES=	${DISTNAME}.tar.gz
+HOMEPAGE=	http://traduccion.pasosdeJesus.org
+MASTER_SITES=	https://github.com/pasosdeJesus/biblia_dp/archive/
+DISTFILES=	v${V}.zip
+
+WRKDIST=        ${WRKDIR}/biblia_dp-${V}
 
 #Public domain
 PERMIT_PACKAGE_CDROM=	Yes
@@ -24,10 +27,12 @@ BUILD_DEPENDS=  textproc/docbook-xsl textproc/docbook-dsssl textproc/docbook tex
 
 
 INSTALL_TARGET = instala
-ALL_TARGET = all
+ALL_TARGET = multi
 
-post-install:
+do-install:
 	${INSTALL_DATA_DIR} ${PREFIX}/share/doc/evangelios_dp
 	${INSTALL_DATA} ${WRKBUILD}/html/* ${PREFIX}/share/doc/evangelios_dp
+
+post-install:
 
 .include <bsd.port.mk>

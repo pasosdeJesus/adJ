@@ -1,15 +1,16 @@
-diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/regress/lib/libc/locale/Makefile src/regress/lib/libc/locale/Makefile
---- src54-s/regress/lib/libc/locale/Makefile	Mon Oct  7 07:49:09 2013
-+++ src/regress/lib/libc/locale/Makefile	Sat Oct 12 13:23:41 2013
-@@ -1,7 +1,7 @@
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src55-src/regress/lib/libc/locale/Makefile src/regress/lib/libc/locale/Makefile
+--- src55-orig/regress/lib/libc/locale/Makefile	Fri Oct 18 09:22:50 2013
++++ src/regress/lib/libc/locale/Makefile	Thu Apr  3 09:23:23 2014
+@@ -1,8 +1,6 @@
  # $OpenBSD: Makefile,v 1.2 2013/08/01 21:26:30 kettenis Exp $
  
- .if defined(REGRESS_FULL)
+-.if defined(REGRESS_FULL)
 -SUBDIR+= check_isw
+-.endif
 +SUBDIR+= check_isw check_collate
- .endif
  
  install:
+ 
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/regress/lib/libc/locale/check_collate/Makefile src/regress/lib/libc/locale/check_collate/Makefile
 --- src54-s/regress/lib/libc/locale/check_collate/Makefile	Wed Dec 31 19:00:00 1969
 +++ src/regress/lib/libc/locale/check_collate/Makefile	Sat Oct 12 13:23:41 2013
@@ -26,9 +27,9 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/regress/lib/libc/locale
 +
 +.include <bsd.regress.mk>
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/regress/lib/libc/locale/check_collate/check_collate.c src/regress/lib/libc/locale/check_collate/check_collate.c
---- src54-s/regress/lib/libc/locale/check_collate/check_collate.c	Wed Dec 31 19:00:00 1969
-+++ src/regress/lib/libc/locale/check_collate/check_collate.c	Sat Oct 12 13:23:41 2013
-@@ -0,0 +1,303 @@
+--- src54-orig/regress/lib/libc/locale/check_collate/check_collate.c	Wed Dec 31 19:00:00 1969
++++ src/regress/lib/libc/locale/check_collate/check_collate.c	Mon Dec 23 12:02:59 2013
+@@ -0,0 +1,331 @@
 +/**
 + * Public domain according to Colombian Legislation. 
 + * http://www.pasosdejesus.org/dominio_publico_colombia.html
@@ -144,7 +145,35 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/regress/lib/libc/locale
 +	p(wcscoll(L"ÁB", L"ÁC") < 0);
 +	p(wcscoll(L"ÁB", L"AC") < 0);
 +	p(wcscoll(L"ÁB", L"AB") > 0);
-+	
++	p(wcscasecmp(L"Á", L"b") < 0);
++	p(wcscasecmp(L"D", L"é") < 0);
++	p(wcscasecmp(L"É", L"f") < 0);
++	p(wcscasecmp(L"H", L"í") < 0);
++	p(wcscasecmp(L"Í", L"j") < 0);
++	p(wcscasecmp(L"N", L"ñ") < 0);
++	p(wcscasecmp(L"Ñ", L"o") < 0);
++	p(wcscasecmp(L"Ñ", L"ó") < 0);
++	p(wcscasecmp(L"Ó", L"p") < 0);
++	p(wcscasecmp(L"T", L"ú") < 0);
++	p(wcscasecmp(L"T", L"ü") < 0);
++	p(wcscasecmp(L"Ú", L"v") < 0);
++	p(wcscasecmp(L"Ü", L"v") < 0);
++	p(wcsncasecmp(L"Á", L"b", 0) == 0);
++	p(wcsncasecmp(L"D", L"é", 1) < 0);
++	p(wcsncasecmp(L"É", L"f", 2) < 0);
++	p(wcsncasecmp(L"H", L"í", 1) < 0);
++	p(wcsncasecmp(L"Í", L"j", 1) < 0);
++	p(wcsncasecmp(L"N", L"ñ", 1) < 0);
++	p(wcsncasecmp(L"Ñ", L"o", 1) < 0);
++	p(wcsncasecmp(L"Ñ", L"ó", 1) < 0);
++	p(wcsncasecmp(L"Ó", L"p", 1) < 0);
++	p(wcsncasecmp(L"T", L"ú", 1) < 0);
++	p(wcsncasecmp(L"T", L"ü", 1) < 0);
++	p(wcsncasecmp(L"Ú", L"v", 1) < 0);
++	p(wcsncasecmp(L"Ü", L"v", 1) < 0);
++
++
++
 +	wchar_t wa[10], wb[10], we[10], wf[10], wn[10], wegne[10],
 +		wo[10];
 +

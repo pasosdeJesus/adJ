@@ -129,7 +129,7 @@ if (test "$sn" = "s") then {
 	} fi;
 
 	cd /usr/src/sys
-	$dini/hdes/service-kernel.sh	
+	$dini/hdes/servicio-kernel.sh	
 	# Esta en general se cambiaron comentarios a lo largo de todas
     # las fuentes.  Ver documentación en 
     # http://aprendiendo.pasosdejesus.org/?id=Renombrando+Daemon+por+Service
@@ -144,7 +144,7 @@ if (test "$sn" = "s") then {
 	cd ../compile/APRENDIENDODEJESUS
 	rm .depend
 	make clean 
-	make 
+	make -j4
 	cp /usr/src/sys/arch/$ARQ/compile/APRENDIENDODEJESUS/bsd $dini/$V$VESP-$ARQ/bsd
 	cd /usr/src/sys/arch/$ARQ/conf
 	sed -e "s/GENERIC/APRENDIENDODEJESUS/g" GENERIC.MP > APRENDIENDODEJESUS.MP
@@ -153,7 +153,7 @@ if (test "$sn" = "s") then {
 	cd ../compile/APRENDIENDODEJESUS.MP
 	rm .depend
 	make clean 
-	make 
+	make -j4
 	cp /usr/src/sys/arch/$ARQ/compile/APRENDIENDODEJESUS.MP/bsd $dini/$V$VESP-$ARQ/bsd.mp
 
 } fi;
@@ -194,13 +194,13 @@ function compilabase 	{
 	cd /usr/src/gnu/lib/libiberty/ && make -f Makefile.bsd-wrapper config.status | tee -a /var/tmp/distrib-adJ.bitacora
 	cd /usr/src/kerberosV/usr.sbin/kadmin/ && make kadmin-commands.h | tee -a /var/tmp/distrib-adJ.bitacora
 	cd /usr/src/kerberosV/usr.sbin/ktutil/ && make ktutil-commands.h | tee -a /var/tmp/distrib-adJ.bitacora
-	cd /usr/src/kerberosV/lib/libasn1 && make rfc2459_asn1.h && make rfc2459_asn1-priv.h && make cms_asn1.h && make cms_asn1-priv.h && make krb5_asn1-priv.h | tee -a /var/tmp/distrib-adJ.bitacora
+	cd /usr/src/kerberosV/lib/libasn1 && make rfc2459_asn1.h && make rfc2459_asn1-priv.h && make cms_asn1.h && make cms_asn1-priv.h && make krb5_asn1-priv.h && make  digest_asn1-priv.h | tee -a /var/tmp/distrib-adJ.bitacora
 	#find /usr/obj -name ".depend" -exec rm {} ';'
 	DT=$DESTDIR
 	unset DESTDIR 
 	echo "whoami 1" >> /var/tmp/distrib-adJ.bitacora
 	whoami >> /var/tmp/distrib-adJ.bitacora 2>&1
-	cd /usr/src && make | tee -a /var/tmp/distrib-adJ.bitacora
+	cd /usr/src && make -j4 | tee -a /var/tmp/distrib-adJ.bitacora
 	echo "whoami 1" >> /var/tmp/distrib-adJ.bitacora
 	whoami >> /var/tmp/distrib-adJ.bitacora 2>&1
 	export DESTDIR=$DT;
@@ -265,18 +265,17 @@ if (test "$sn" = "s") then {
 	(cd $dini/arboldes/usr/src ; for i in `find . -type f | grep -v CVS | grep -v .patch`; do  if (test ! -f /usr/src/$i) then { echo $i; n=`dirname $i`; sudo mkdir -p /usr/src/$n; sudo cp $i /usr/src/$i; } fi; done )
 	echo "* Cambiando /etc " | tee -a /var/tmp/distrib-adJ.bitacora
 	cd /etc
-	$dini/arboldd/usr/local/adJ/service-etc.sh	
+	$dini/arboldd/usr/local/adJ/servicio-etc.sh	
 	echo "* Cambiando /usr/src/etc" | tee -a /var/tmp/distrib-adJ.bitacora
 	cd /usr/src/etc
-	$dini/arboldd/usr/local/adJ/service-etc.sh	
+	$dini/arboldd/usr/local/adJ/servicio-etc.sh	
 	echo "* Cambios iniciales a /usr/src" | tee -a /var/tmp/distrib-adJ.bitacora
 	cd /usr/src/
-	$dini/hdes/service-base.sh	
-	echo "* Aplicando parches a /usr/src" | tee -a /var/tmp/distrib-adJ.bitacora 
+	$dini/hdes/servicio-base.sh	
 	grep LOG_SERVICE  /usr/include/syslog.h > /dev/null 2>&1
 	if (test "$?" != "0") then {
 		cd /usr/src/sys
-		$dini/hdes/service-kernel.sh	
+		$dini/hdes/servicio-kernel.sh	
 	} fi;
 	cd /usr/src && make obj
 	echo "* Completo make obj" | tee -a /var/tmp/distrib-adJ.bitacora
@@ -288,11 +287,13 @@ if (test "$sn" = "s") then {
 	echo "* Completo make distrib-dirs" | tee -a /var/tmp/distrib-adJ.bitacora
 	#cd /usr/src/etc && env DESTDIR=$DESTDIR make distrib-dirs
 	# Algunos necesarios para que make lo logre
+	cd /usr/src/include
+	make includes
 	compilabase
 	echo "* Completo compilabase" | tee -a /var/tmp/distrib-adJ.bitacora
 	echo "whoami 3" >> /var/tmp/distrib-adJ.bitacora
 	whoami >> /var/tmp/distrib-adJ.bitacora 2>&1
-	cd /usr/src && unset DESTDIR && nice make SUDO=sudo build | tee -a /var/tmp/distrib-adJ.bitacora
+	cd /usr/src && unset DESTDIR && nice make -j4 SUDO=sudo build | tee -a /var/tmp/distrib-adJ.bitacora
 	echo "whoami 3" >> /var/tmp/distrib-adJ.bitacora
 	whoami >> /var/tmp/distrib-adJ.bitacora 2>&1
 	echo "* Completo make build" | tee -a /var/tmp/distrib-adJ.bitacora
@@ -413,7 +414,7 @@ if (test "$sn" = "s") then {
 	#clean:
 	# mv  $(_SRCDIR)/config.status $(_SRCDIR)/config.status-copia
 	mkdir -p ${DESTDIR}
-	make build
+	make -j4 build
 	# Despues de este toco
 	#cp /usr/xenocara/xserver/config.status-copia /usr/xenocara/xserver/config.status 
 	#rm -rf /usr/xobj/*
@@ -598,7 +599,11 @@ if (test "$sn" = "s") then {
 	} fi;
 	rm tmp/disponibles*
 	paquete dialog misc
+	# paquete php lang paquetes "php php-fpm php-gd php-mcrypt php-pdo_pgsql" 5.5  Tocó dejar 5.3 por pear -> SIVeL 1.2
+	paquete ruby lang paquetes "ruby ruby20-ri_docs" 2.0
 
+        # paquete pear www paquetes "pear pear-utils"  Toco quedarse en PHP 5.3 para SIVeL 1.2
+	paquete pear www 
 	paquete pear-Auth security
 	#paquete pear-DB databases
 	paquete pear-DB-DataObject databases
@@ -667,7 +672,7 @@ cmd="echo \$excluye | tr \" \" \"\\n\" | sed -e \"s/^/ /g\" >> tmp/excluye.txt"
 eval "$cmd"
 if (test "$sn" = "s") then {
 	mkdir -p $V$VESP-$ARQ/paquetes
-	cp -rf arbolcd/* $V$VESP-$ARQ/
+	cp -rf arboldvd/* $V$VESP-$ARQ/
 	find $V$VESP-$ARQ/ -name CVS | xargs rm -rf
 
 	arcdis="tmp/disponibles.txt";
@@ -716,7 +721,7 @@ if (test "$sn" = "s") then {
 	if (test "$autoMasPaquetesInv" = "s") then {
 		inv="-r"
 	} fi;
-	grep ".-\[v\]" Contenido.txt | sed -e "s/-\[v\]\([-a-zA-Z_0-9]*\).*/-[0-9][0-9alphabetrcvSTABLERC._]*\1.tgz/g" | sort $inv > tmp/esperados.txt
+	grep ".-\[v\]" Contenido.txt | sed -e "s/-\[v\]\([-a-zA-Z_0-9]*\).*/-[0-9][0-9alphabetrcvSTABLERCd._]*\1.tgz/g" | sort $inv > tmp/esperados.txt
 	ne=`(ls $V$VESP-$ARQ/paquetes/ ; ls $V$VESP-$ARQ/sivel/*tgz) | grep -v -f tmp/esperados.txt`;
 	if (test "$ne" != "") then {
 		echo "Los siguientes paquetes presentes en el directorio $V$VESP-$ARQ/paquetes no están entre los esperados:" | tee -a /var/tmp/distrib-adJ.bitacora;

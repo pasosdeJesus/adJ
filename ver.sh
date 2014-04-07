@@ -1,6 +1,6 @@
 #!/bin/sh
 # Variables de configuración para generar distribución Aprendiendo de Jesús
-# Dominio público. 2137. vtamara@pasosdeJesus.org
+# Dominio público. 2013. vtamara@pasosdeJesus.org
 
 V=5.5
 VESP=""
@@ -31,24 +31,12 @@ PKG_PATH=ftp://mirror.esc7.net/pub/OpenBSD/snapshots/packages/$ARQ/
 PKG_PATH=ftp://ftp.pasosdeJesus.org/pub/OpenBSD/snapshots/packages/$ARQ/
 PKG_PATH=ftp://mirror.planetunix.net/pub/OpenBSD/snapshots/packages/$ARQ/
 
-
 #Repositorio de paquetes usado --el último es el usado
 
 METODOACT=ftp
 # Metodo de actualización, puede ser ftp o rsync
 
-SERVACT="miusuario@ftp.pasosdeJesus.org"
-# Usado si METODOACT es rsync
-
-OTRO="172.16.0.1"
-OPSSHOTRO="-p11022"
-USOTRO="micuenta"
-DIROTRO="comp"
-# Otro servidor para enviar/recibir adJ
-
-RSYNCHOST="ftp.pasosdeJesus.org"
-
-excluye="dialog-.* firefox-* gnupg-2.* libstdc++-.* python-.* php-.* pear-Validate-.* pear-Auth-[0-9p.]*.tgz pear-HTML-QuickForm-.* postgresql-.* ruby-1.8.* tcl-* tk-* xfe-.*"
+excluye="dialog-.* gnupg-2.* libstdc++-.* python-* python-tkinter-* php-5.2.* php-gd-5.2.* php-pdo_pgsql-5.2.* php-pgsql-5.2.* php-mcrypt-5.2.* php-sqlite-5.2.* pear-Auth-.* pear-Validate-.* pear-HTML-QuickForm-Controller.* postgresql-.* ruby-1.* ruby-2.0.* tcl-.* tk-.* xfe-.*"
 # Paquetes por excluir de descarga ftp de OpenBSD
 
 RUTAKERNELREESPECIAL=""

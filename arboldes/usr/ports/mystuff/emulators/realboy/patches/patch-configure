@@ -1,0 +1,12 @@
+$OpenBSD$
+--- configure.orig	Fri Nov 22 06:32:43 2013
++++ configure	Fri Nov 22 06:33:01 2013
+@@ -4967,7 +4967,7 @@ done
+ # Checks for typedefs, structures, and compiler characteristics.
+ 
+ # Checks for library functions.
+-for ac_func in atexit getcwd gettimeofday memset strndup
++for ac_func in arc4random atexit getcwd gettimeofday memset strndup
+ do :
+   as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
+ ac_fn_c_check_func "$LINENO" "$ac_func" "$as_ac_var"

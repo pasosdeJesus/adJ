@@ -1,0 +1,21 @@
+--- src55-orig/gnu/usr.bin/perl/Makefile.bsd-wrapper	Fri Oct 18 09:21:01 2013
++++ src/gnu/usr.bin/perl/Makefile.bsd-wrapper	Thu Apr  3 10:05:27 2014
+@@ -15,7 +15,7 @@
+ CFLAGS+= -fno-strict-aliasing
+ CFLAGS+= -fno-delete-null-pointer-checks
+ 
+-CONFIGURE_ARGS= -dsE -Dopenbsd_distribution=defined -Dccflags='-DNO_LOCALE_NUMERIC -DNO_LOCALE_COLLATE'
++CONFIGURE_ARGS= -dsE -Dopenbsd_distribution=defined -Dccflags=''
+ 
+ .if !exists(${.OBJDIR}/config.over)
+ CONFIGURE_ARGS+= -Dmksymlinks
+@@ -44,7 +44,7 @@
+ 
+ # Arguments passed to Configure...
+ 
+-CPPFLAGS+= -DPERL_CORE -DNO_LOCALE_NUMERIC -DNO_LOCALE_COLLATE -DPERL_RANDOM_DEVICE=\"/dev/arandom\" -DBIG_TIME -I.
++CPPFLAGS+= -DPERL_CORE -DPERL_RANDOM_DEVICE=\"/dev/arandom\" -DBIG_TIME -I.
+ 
+ .if defined (INSTALL_STRIP) && ${INSTALL_STRIP} == "-s"
+ STRIPFLAGS='-s'
+

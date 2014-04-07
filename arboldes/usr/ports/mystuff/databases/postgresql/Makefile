@@ -1,4 +1,4 @@
-# $OpenBSD: Makefile,v 1.180 2013/10/22 06:26:09 kili Exp $
+# $OpenBSD: Makefile,v 1.182 2014/01/06 10:47:14 pea Exp $
 
 COMMENT-main=	PostgreSQL RDBMS (client)
 COMMENT-server=	PostgreSQL RDBMS (server)
@@ -6,15 +6,16 @@ COMMENT-docs=	PostgreSQL RDBMS documentation
 COMMENT-contrib=PostgreSQL RDBMS contributions
 COMMENT-plpython=Python procedural language for PostgreSQL
 
-VERSION=	9.3.0
+# DO NOT FORGET to also change the @ask-update entry in pkg/PLIST-server
+# in case a dump before / restore after pkg_add -u is required!
+
+VERSION=	9.3.2
 DISTNAME=	postgresql-${VERSION}
 PKGNAME-main=	postgresql-client-${VERSION}
 PKGNAME-server=	postgresql-server-${VERSION}
 PKGNAME-docs=	postgresql-docs-${VERSION}
 PKGNAME-contrib=postgresql-contrib-${VERSION}
 PKGNAME-plpython=postgresql-plpython-${VERSION}
-
-REVISION-server=	0
 
 CATEGORIES=	databases
 SHARED_LIBS=	ecpg		7.5 \
@@ -31,11 +32,10 @@ PERMIT_PACKAGE_CDROM=	Yes
 
 WANTLIB=		c com_err crypto m readline ssl termcap z asn1 \
 			heimbase krb5 roken wind
-
-MASTER_SITES= 	http://ftp.postgresql.org/pub/source/v${VERSION}/ \
-       http://ftp5.es.postgresql.org/mirror/postgresql/source/v${VERSION}/ \
-       ftp://ftp.postgresql.org/pub/source/v${VERSION}/ \
-       ftp://ftp5.us.postgresql.org/pub/PostgreSQL/source/v${VERSION}/
+MASTER_SITES=	http://ftp.postgresql.org/pub/source/v${VERSION}/ \
+	http://ftp5.es.postgresql.org/mirror/postgresql/source/v${VERSION}/ \
+	ftp://ftp.postgresql.org/pub/source/v${VERSION}/ \
+	ftp://ftp5.us.postgresql.org/pub/PostgreSQL/source/v${VERSION}/
 
 MULTI_PACKAGES=	-docs -main -server -contrib -plpython
 
@@ -50,15 +50,17 @@ MAKE_FILE=	GNUmakefile
 SUBST_VARS=	VERSION
 
 USE_GMAKE=	Yes
-USE_GROFF =	Yes
+USE_GROFF=	Yes
+
 CONFIGURE_STYLE=gnu
 
 MODULES=	lang/python
-MODPY_RUNDEP=	No 
+MODPY_RUNDEP=	No
 
-CONFIGURE_ENV= ac_cv_path_PYTHON=${MODPY_BIN} \
-               CPPFLAGS="-I${LOCALBASE}/include $$(krb5-config --cflags)" \
-               LDFLAGS="-L${LOCALBASE}/lib $$(krb5-config --libs)"
+#INCLUDES=	${LOCALBASE}/include /usr/include/kerberosV
+CONFIGURE_ENV=	ac_cv_path_PYTHON=${MODPY_BIN} \
+		CPPFLAGS="-I${LOCALBASE}/include $$(krb5-config --cflags)" \
+		LDFLAGS="-L${LOCALBASE}/lib $$(krb5-config --libs)"
 
 CONFIGURE_ARGS=	--disable-rpath --with-openssl=/usr \
 		--with-perl \
@@ -74,8 +76,8 @@ CONFIGURE_ARGS=	--disable-rpath --with-openssl=/usr \
 		--with-openssl \
 		--with-ossp-uuid \
 		--with-libxml \
-		--disable-thread-safety \
-		--with-krb5 
+		--with-krb5 \
+		--disable-thread-safety
 
 # There is no spinlock support for hppa yet. Until we have access to
 # a system to get this working, disable them for now. There is
@@ -102,11 +104,12 @@ RUN_DEPENDS-contrib= databases/postgresql,-server=${VERSION}
 LIB_DEPENDS-contrib= databases/postgresql=${VERSION} \
 		     ${LIB_DEPENDS-main} \
 		     devel/uuid
-WANTLIB-contrib = 	${WANTLIB-main} pq>=4 ossp-uuid
+WANTLIB-contrib=	${WANTLIB-main} pq>=4 ossp-uuid
 
-LIB_DEPENDS-plpython=  ${MODPY_LIB_DEPENDS}
-WANTLIB-plpython =     c m pthread util ${MODPY_WANTLIB}
-RUN_DEPENDS-plpython=  databases/postgresql,-server=${VERSION}
+LIB_DEPENDS-plpython=	${MODPY_LIB_DEPENDS}
+WANTLIB-plpython =	c m pthread util com_err crypto asn1 \
+			heimbase krb5 roken wind ${MODPY_WANTLIB}
+RUN_DEPENDS-plpython=	databases/postgresql,-server=${VERSION}
 
 WANTLIB-docs=
 PKG_ARCH-docs=	*
@@ -131,7 +134,7 @@ MAKE_ENV=	LIBpq_MAJOR=${LIBpq_VERSION:R} \
 #
 # Note, you may also need to change a variety of SYSV IPC parameters.
 # See pkg/README-server for more details
-NO_TEST	=	Yes
+NO_TEST=	Yes
 
 DOCS=	${WRKSRC}/COPYRIGHT ${WRKSRC}/HISTORY \
 	${WRKSRC}/INSTALL ${WRKSRC}/README \

@@ -42,6 +42,7 @@ if (test "$RUTAKERNELREESPECIAL" != "") then {
 } fi;
 
 nk=${rutak}/bsd${mp}
+echo "Antes de continuar, recomendamos que ejecute util/preact-adJ.sh"
 echo "Presione [ENTER] para instalar kernel $nk"
 read
 rm /obsd ; ln /bsd /obsd 

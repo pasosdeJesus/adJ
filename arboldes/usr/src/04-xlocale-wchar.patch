@@ -1,13 +1,13 @@
-diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/Makefile.inc src/lib/libc/locale/Makefile.inc
---- src53collation/lib/libc/locale/Makefile.inc	Mon Apr  1 08:25:36 2013
-+++ src/lib/libc/locale/Makefile.inc	Thu Apr  4 05:27:02 2013
-@@ -12,15 +12,19 @@
- 	wcstombs.c wctob.c wctomb.c wcstof.c wcstod.c wcstold.c wcstol.c \
+diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src54-num/lib/libc/locale/Makefile.inc src/lib/libc/locale/Makefile.inc
+--- src54-num/lib/libc/locale/Makefile.inc	Thu Dec  5 18:53:15 2013
++++ src/lib/libc/locale/Makefile.inc	Thu Dec  5 19:03:47 2013
+@@ -10,15 +10,18 @@
  	wcstoul.c wcstoll.c wcstoull.c wcstoimax.c wcstoumax.c \
  	setrunelocale.c runeglue.c rune.c runetable.c ___runetype_mb.c \
--	_wctrans.c wcsxfrm.c collate.c
-+	_wctrans.c wcsxfrm.c \
-+	collate.c none.c xlocale.c
+ 	_wctrans.c wcsxfrm.c collate.c \
+-	ldpart.c fix_grouping.c lmonetary.c lnumeric.c
++	ldpart.c fix_grouping.c lmonetary.c lnumeric.c \
++	none.c xlocale.c
  
  MAN+=	nl_langinfo.3 setlocale.3 iswalnum.3 towlower.3 \
  	btowc.3 mblen.3 mbrlen.3 mbrtowc.3 mbsinit.3 mbsrtowcs.3 \
@@ -17,15 +17,14 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/Ma
 -MLINKS+=setlocale.3 localeconv.3 \
 -	iswalnum.3 iswalpha.3 \
 +	wctype.3 iswctype.3 wctrans.3 towctrans.3 wcwidth.3 \
-+	duplocale.3  \
-+	freelocale.3 newlocale.3 nextwctype.3 \
++	duplocale.3  freelocale.3 newlocale.3 nextwctype.3 \
 +	querylocale.3 uselocale.3 wcscoll.3 wcsxfrm.3 xlocale.3
 +
 +MLINKS+= iswalnum.3 iswalpha.3 \
  	iswalnum.3 iswblank.3 \
  	iswalnum.3 iswcntrl.3 \
  	iswalnum.3 iswdigit.3 \
-@@ -31,7 +35,15 @@
+@@ -29,7 +32,18 @@
  	iswalnum.3 iswspace.3 \
  	iswalnum.3 iswupper.3 \
  	iswalnum.3 iswxdigit.3 \
@@ -33,6 +32,9 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/Ma
 +	mbrtowc.3 mbrtowc_l.3\
 +	mbsinit.3 mbsinit_l.3\
 +	mbstowcs.3 mbstowcs_l.3\
++	mbsrtowcs.3 mbsnrtowcs.3 \
++	mbsrtowcs.3 mbsnrtowcs_l.3 \
++	mbsrtowcs.3 mbsrtowcs_l.3 \
 +	mbtowc.3 mbtowc_l.3\
 +	setlocale.3 localeconv.3 \
 +	towlower.3 towlower_l.3 \
@@ -41,24 +43,21 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/Ma
  	wcstod.3 wcstof.3 \
  	wcstod.3 wcstold.3 \
  	wcstol.3 wcstoul.3 \
-@@ -39,8 +51,15 @@
+@@ -37,7 +51,12 @@
  	wcstol.3 wcstoull.3 \
  	wcstol.3 wcstoimax.3 \
  	wcstol.3 wcstoumax.3 \
+-	mbsrtowcs.3 mbsnrtowcs.3 \
+-	wcsrtombs.3 wcsnrtombs.3
 +	wcstombs.3 wcstombs_l.3 \
 +	wctob.3 wctob_l.3 \
 +	wctomb.3 wctomb_l.3 \
- 	mbsrtowcs.3 mbsnrtowcs.3 \
--	wcsrtombs.3 wcsnrtombs.3
-+	mbsrtowcs.3 mbsnrtowcs_l.3 \
-+	mbsrtowcs.3 mbsrtowcs_l.3 \
 +	wcsrtombs.3 wcsnrtombs.3 \
 +	wcsrtombs.3 wcsrtombs_l.3 \
 +	wcsrtombs.3 wcsnrtombs_l.3
  
  CFLAGS+=-I${.CURDIR} -I${LIBCSRCDIR}/citrus -DCOLLATE_DEBUG
--CFLAGS+=-DLOCALE_CHARSETS="\"${LOCALECHARSETS}\""
-+CFLAGS+=-D__NO_TLS -DLOCALE_CHARSETS="\"${LOCALECHARSETS}\""
++CFLAGS+=-D__NO_TLS 
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/btowc.c src/lib/libc/locale/btowc.c
 --- src53collation/lib/libc/locale/btowc.c	Mon Mar 25 18:28:42 2013
 +++ src/lib/libc/locale/btowc.c	Wed Apr  3 11:15:27 2013
@@ -571,16 +570,19 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mb
 +	size_t, size_t, mbstate_t * __restrict);
 +
 +#endif	/* _MBLOCAL_H_ */
-diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mbrlen.c src/lib/libc/locale/mbrlen.c
---- src53collation/lib/libc/locale/mbrlen.c	Mon Mar 25 18:28:42 2013
-+++ src/lib/libc/locale/mbrlen.c	Wed Apr  3 11:15:27 2013
-@@ -27,13 +27,23 @@
+diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src54-num/lib/libc/locale/mbrlen.c src/lib/libc/locale/mbrlen.c
+--- src54-num/lib/libc/locale/mbrlen.c	Sat Feb  9 14:26:52 2013
++++ src/lib/libc/locale/mbrlen.c	Tue Dec  3 15:52:34 2013
+@@ -26,14 +26,26 @@
+  * SUCH DAMAGE.
   */
  
- #include <wchar.h>
 +#include <locale.h>
-+#include "../locale/xlocale_private.h"
++#include <string.h>
+ #include <wchar.h>
  
++#include "../locale/xlocale_private.h"
++
  size_t
 -mbrlen(const char * __restrict s, size_t n, mbstate_t * __restrict ps)
 +mbrlen_l(const char * __restrict s, size_t n, mbstate_t * __restrict ps,
@@ -1643,8 +1645,8 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/ru
  typedef uint64_t	__runepad_t;
  
  
-diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/setlocale.c src/lib/libc/locale/setlocale.c
---- src53collation/lib/libc/locale/setlocale.c	Mon Apr  1 08:25:36 2013
+diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src55-orig/lib/libc/locale/setlocale.c src/lib/libc/locale/setlocale.c
+--- src55-orig/lib/libc/locale/setlocale.c	Mon Apr  1 08:25:36 2013
 +++ src/lib/libc/locale/setlocale.c	Wed Apr  3 06:41:58 2013
 @@ -43,6 +43,7 @@
  #include "collate.h"
@@ -1663,49 +1665,84 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/se
  
  char *
  setlocale(int category, const char *locale)
-@@ -199,6 +200,9 @@
+@@ -199,25 +200,33 @@
  	case LC_CTYPE:
  		(void)_xpg4_setrunelocale("C");
  		__install_currentrunelocale_ctype();
-+		(void)strlcpy(__xlocale_global_locale.components[category-1]->locale, 
-+		    "C", 
-+		    sizeof(__xlocale_global_locale.components[category-1]->locale) );
++(void)strlcpy(__xlocale_global_locale.components[category-1]->locale, 
++			"C", 
++			sizeof(__xlocale_global_locale.components[category-1]->locale) );
++
  		break;
  	case LC_MESSAGES:
  		break;
-@@ -206,6 +210,10 @@
-  		if (__collate_load_tables("C")) {
+ 	case LC_COLLATE:
+  		if (__collate_load_tables("C"))
  			return;
- 		}
-+		(void)strlcpy(__xlocale_global_locale.components[category-1]->locale, 
-+		    "C", 
-+		    sizeof(__xlocale_global_locale.components[category-1]->locale) );
 +
++	(void)strlcpy(__xlocale_global_locale.components[category-1]->locale, 
++			"C", 
++			sizeof(__xlocale_global_locale.components[category-1]->locale) );
  		break;
  	case LC_MONETARY:
+ 		if (__monetary_load_locale("C")) 
+ 			return;
+ 		break;
  	case LC_NUMERIC:
-@@ -262,6 +270,9 @@
+-		if (__numeric_load_locale("C")) {
++		if (__numeric_load_locale("C")) 
+ 			return;
+-		}
+ 		break;
+ 	case LC_TIME:
+ 		break;
+ 	}
++
+ }
+ 
+ static int
+@@ -268,26 +277,35 @@
  		if (_xpg4_setrunelocale(locname))
  			return -1;
  		__install_currentrunelocale_ctype();
 +		(void)strlcpy(__xlocale_global_locale.components[category-1]->locale, 
-+			locname, 
-+			sizeof(__xlocale_global_locale.components[category-1]->locale) );
++				locname, 
++				sizeof(__xlocale_global_locale.components[category-1]->locale) );
  		break;
  
  	case LC_MESSAGES:
-@@ -271,6 +282,10 @@
- 		if (__collate_load_tables(locname)) {
+-		return set_lc_messages_locale(locname);
++		if (set_lc_messages_locale(locname))
++			return -1;
++		break;
+ 
+ 	case LC_COLLATE:
+ 		if (__collate_load_tables(locname))
  			return -1;
- 		}       
-+		(void)strlcpy(__xlocale_global_locale.components[category-1]->locale, 
++	(void)strlcpy(__xlocale_global_locale.components[category-1]->locale, 
 +			locname, 
 +			sizeof(__xlocale_global_locale.components[category-1]->locale) );
-+
+ 		break;
+ 		
+ 	case LC_MONETARY:
+ 		if (__monetary_load_locale(locname)) 
+-			return;
++			return -1;
  		break;
  
- 	case LC_MONETARY:
-@@ -289,7 +304,7 @@
+ 	case LC_NUMERIC:
+-		if (__numeric_load_locale(locname)) {
+-			return;
+-		}
++		if (__numeric_load_locale(locname)) 
++			return -1;
++
+ 		break;
++
+ 	case LC_TIME:
+ 		return -1;
+ 	}
+@@ -302,7 +320,7 @@
  	    current_categories[category]) == 0)
  		return (current_categories[category]);
  
@@ -1714,7 +1751,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/se
  		(void)strlcpy(current_categories[category],
  		    new_categories[category], sizeof(current_categories[category]));
  		return current_categories[category];
-@@ -298,7 +313,7 @@
+@@ -311,7 +329,7 @@
  	}
  }
  
@@ -1723,9 +1760,9 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/se
  __get_locale_env(int category)
  {
  	const char *env;
-diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/setrunelocale.c src/lib/libc/locale/setrunelocale.c
---- src53collation/lib/libc/locale/setrunelocale.c	Mon Mar 25 18:28:42 2013
-+++ src/lib/libc/locale/setrunelocale.c	Wed Apr  3 06:46:51 2013
+diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src54-num/lib/libc/locale/setrunelocale.c src/lib/libc/locale/setrunelocale.c
+--- src54-num/lib/libc/locale/setrunelocale.c	Sun Jun  2 15:10:49 2013
++++ src/lib/libc/locale/setrunelocale.c	Fri Dec  6 07:48:31 2013
 @@ -98,10 +98,13 @@
  #include <stddef.h>
  #include <string.h>
@@ -1768,22 +1805,24 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/se
  	if (!strcmp(locname, "C") || !strcmp(locname, "POSIX")) {
  		rl = &_DefaultRuneLocale;
  		goto found;
-@@ -206,7 +225,43 @@
+@@ -205,8 +224,43 @@
+ 		return ENOENT;
  
  found:
- 	_CurrentRuneLocale = rl;
-+	xc->runes = rl;
+-	_CurrentRuneLocale = rl;
++	_CurrentRuneLocale = (_RuneLocale *)rl;
++	xc->runes = (_RuneLocale *)rl;
 +	xc->__mbrtowc = (void *)(rl->rl_citrus_ctype->cc_ops->co_mbrtowc);
 +	xc->__mbsinit = (void *)(rl->rl_citrus_ctype->cc_ops->co_mbsinit);
 +	xc->__mbsnrtowcs = (void *)rl->rl_citrus_ctype->cc_ops->co_mbsnrtowcs;
 +	xc->__wcrtomb = (void *)rl->rl_citrus_ctype->cc_ops->co_wcrtomb;
 +	xc->__wcsnrtombs = (void *)rl->rl_citrus_ctype->cc_ops->co_wcsnrtombs;
 +	xc->__mb_cur_max = rl->rl_citrus_ctype->cc_mb_cur_max;
++
  	__mb_cur_max = rl->rl_citrus_ctype->cc_mb_cur_max;
  
  	return 0;
  }
-+
 +
 +void
 +destruct_ctype(void *t)
@@ -1794,7 +1833,6 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/se
 +		free(t);
 +	}
 +}
-+
 +
 +/** Based on __collate_load */
 +void *
@@ -2711,10 +2749,10 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/xl
 +.\"You should avoid this idiom and prefer to use the
 +.\".Fa _l
 +.\"suffixed versions instead.
-diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/xlocale.c src/lib/libc/locale/xlocale.c
---- src53collation/lib/libc/locale/xlocale.c	Wed Dec 31 19:00:00 1969
+diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src55-orig/lib/libc/locale/xlocale.c src/lib/libc/locale/xlocale.c
+--- src55-orig/lib/libc/locale/xlocale.c	Wed Dec 31 19:00:00 1969
 +++ src/lib/libc/locale/xlocale.c	Wed Apr  3 11:04:42 2013
-@@ -0,0 +1,437 @@
+@@ -0,0 +1,433 @@
 +/*-
 + * Copyright (c) 2011 The FreeBSD Foundation
 + * All rights reserved.
@@ -2945,9 +2983,6 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/xl
 +			xlocale_release(loc->components[type]);
 +		}
 +	}
-+	if (loc->csym) {
-+		free(loc->csym);
-+	}
 +	free(l);
 +}
 +
@@ -3149,13 +3184,12 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/xl
 +		}
 +		printf("\n");
 +	}
-+	printf("csym=%p\n", loc->csym);
 +}
 +
-diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/xlocale_private.h src/lib/libc/locale/xlocale_private.h
---- src53collation/lib/libc/locale/xlocale_private.h	Wed Dec 31 19:00:00 1969
-+++ src/lib/libc/locale/xlocale_private.h	Tue Apr  2 21:28:01 2013
-@@ -0,0 +1,226 @@
+diff -ruN src54-num/lib/libc/locale/xlocale_private.h src/lib/libc/locale/xlocale_private.h
+--- src54-num/lib/libc/locale/xlocale_private.h	Wed Dec 31 19:00:00 1969
++++ src/lib/libc/locale/xlocale_private.h	Sun Dec 15 17:27:07 2013
+@@ -0,0 +1,216 @@
 +/*-
 + * Copyright (c) 2011 The FreeBSD Foundation
 + * All rights reserved.
@@ -3199,8 +3233,6 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/xl
 +
 +
 +#define ENCODING_LEN 31
-+
-+#define __NO_TLS
 +
 +enum {
 +	XLC_COLLATE = 0,
@@ -3289,7 +3321,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/xl
 +	/** Persistent state used by wctomb() calls. */
 +	__mbstate_t wctomb;
 +	/** Buffer used by nl_langinfo_l() */
-+	char *csym;
++	char _bufcrncystr[16];
 +};
 +
 +/**
@@ -3348,14 +3380,6 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/xl
 + */
 +extern int __has_thread_locale;
 +
-+#ifndef __NO_TLS
-+/**
-+ * The per-thread locale.  Avoids the need to use pthread lookup functions when
-+ * getting the per-thread locale.
-+ */
-+extern _Thread_local locale_t __thread_locale;
-+#endif
-+
 +inline locale_t __get_locale(void);
 +
 +/**
@@ -3383,8 +3407,8 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/xl
 +
 +#endif
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/string/Makefile.inc src/lib/libc/string/Makefile.inc
---- src53collation/lib/libc/string/Makefile.inc	Mon Mar 25 18:28:28 2013
-+++ src/lib/libc/string/Makefile.inc	Wed Apr  3 11:15:27 2013
+--- src55-orig/lib/libc/string/Makefile.inc	Wed Apr  2 23:44:30 2014
++++ src/lib/libc/string/Makefile.inc	Thu Apr  3 11:18:01 2014
 @@ -9,7 +9,8 @@
  	strsignal.c strtok.c strxfrm.c \
  	wcscat.c wcschr.c wcscmp.c wcscpy.c wcscspn.c wcslcat.c wcslcpy.c \
@@ -3395,25 +3419,14 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/string/Ma
  	wmemmove.c wmemset.c wcsdup.c \
  	timingsafe_bcmp.c wcscasecmp.c
  
-@@ -124,7 +125,7 @@
- 	memcmp.3 memcpy.3 memmove.3 memset.3 stpcpy.3 strcasecmp.3 strcat.3 \
- 	strchr.3 strcmp.3 strcoll.3 strcpy.3 strcspn.3 strerror.3 \
- 	string.3 strlen.3 strmode.3 strdup.3 strpbrk.3 strrchr.3 strsep.3 \
--	strsignal.3 strspn.3 strstr.3 strtok.3 strxfrm.3 swab.3 strlcpy.3 \
-+	strsignal.3 strspn.3 strstr.3 strtok.3 swab.3 strxfrm.3 strlcpy.3 \
- 	wcscasecmp.3 wcscat.3 wcschr.3 wcscmp.3 wcscpy.3 wcscspn.3 wcsdup.3 \
- 	wcslcpy.3 wcslen.3 wcspbrk.3 wcsrchr.3 wcsspn.3 wcsstr.3 wcstok.3 \
- 	wcswidth.3 wmemchr.3 wmemcmp.3 wmemcpy.3 wmemmove.3 wmemset.3
-@@ -135,14 +136,19 @@
+@@ -161,12 +162,17 @@
  MLINKS+=strchr.3 index.3
  MLINKS+=strrchr.3 rindex.3
  MLINKS+=strcasecmp.3 strncasecmp.3
 +MLINKS+=strcasecmp.3 strcasecmp_l.3
 +MLINKS+=strcasecmp.3 strncasecmp_l.3
- MLINKS+=strcat.3 strncat.3
  MLINKS+=strcmp.3 strncmp.3
 +MLINKS+=strcoll.3 strncoll_l.3
- MLINKS+=strcpy.3 strncpy.3
  MLINKS+=strdup.3 strndup.3
  MLINKS+=strlcpy.3 strlcat.3
  MLINKS+=strlen.3 strnlen.3
@@ -3424,16 +3437,14 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/string/Ma
  MLINKS+=strerror.3 strerror_r.3
  MLINKS+=wcscasecmp.3 wcsncasecmp.3
  MLINKS+=wcscat.3 wcsncat.3
-diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/regress/lib/libc/locale/Makefile src/regress/lib/libc/locale/Makefile
---- src53collation/regress/lib/libc/locale/Makefile	Mon Apr  1 08:25:36 2013
-+++ src/regress/lib/libc/locale/Makefile	Wed Apr  3 12:49:00 2013
-@@ -1,7 +1,7 @@
- # $OpenBSD: Makefile,v 1.2 2013/08/01 21:26:30 kettenis Exp $
+diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src54-num/regress/lib/libc/locale/Makefile src/regress/lib/libc/locale/Makefile
+--- src54-num/regress/lib/libc/locale/Makefile	Tue Dec  3 13:55:09 2013
++++ src/regress/lib/libc/locale/Makefile	Tue Dec  3 14:48:00 2013
+@@ -1,6 +1,6 @@
+ # $OpenBSD: Makefile,v 1.1 2005/08/11 21:57:02 espie Exp $
  
- .if defined(REGRESS_FULL)
--SUBDIR+= check_isw check_collate
-+SUBDIR+= check_isw check_collate check_xlocale
- .endif
+-SUBDIR+= check_isw check_collate check_monetary check_numeric
++SUBDIR+= check_isw check_collate check_monetary check_numeric check_xlocale
  
  install:
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/regress/lib/libc/locale/check_xlocale/Makefile src/regress/lib/libc/locale/check_xlocale/Makefile
@@ -3866,17 +3877,17 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/regress/lib/libc/l
 +	
 +	return bad != 0;
 +}
-diff -ruN -x CVS -x obj src53collation/include/Makefile src/include/Makefile
---- src53collation/include/Makefile	Sun Mar 31 21:52:28 2013
-+++ src/include/Makefile	Tue Apr 16 14:30:26 2013
-@@ -22,7 +22,7 @@
- 	stdbool.h stddef.h stdio.h stdlib.h \
- 	string.h strings.h struct.h sysexits.h tar.h tgmath.h \
- 	time.h ttyent.h tzfile.h unistd.h utime.h utmp.h vis.h \
--	wchar.h wctype.h
-+	wchar.h wctype.h xlocale.h
+diff -ruN -x CVS -x obj src55-orig/include/Makefile src/include/Makefile
+--- src55-orig/include/Makefile	Wed Apr  2 23:43:56 2014
++++ src/include/Makefile	Thu Apr  3 11:28:07 2014
+@@ -20,7 +20,7 @@
+ 	resolv.h rmd160.h search.h setjmp.h sha1.h sha2.h signal.h sndio.h \
+ 	spawn.h stdbool.h stddef.h stdio.h stdlib.h string.h strings.h struct.h \
+ 	sysexits.h tar.h tgmath.h time.h ttyent.h tzfile.h unistd.h utime.h \
+-	utmp.h vis.h wchar.h wctype.h
++	utmp.h vis.h wchar.h wctype.h xlocale.h
  
- FILES+=	link.h link_aout.h link_elf.h
+ FILES+=	link.h link_elf.h
  
 diff -ruN -x CVS -x obj src53collation/include/xlocale.h src/include/xlocale.h
 --- src53collation/include/xlocale.h	Wed Dec 31 19:00:00 1969

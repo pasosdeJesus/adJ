@@ -1,12 +1,12 @@
 #!/bin/sh
 # Instala/Actualiza un Aprendiendo de Jesús 
 # Dominio público de acuerdo a legislación colombiana. http://www.pasosdejesus.org/dominio_publico_colombia.html. 
-# 2012. vtamara@pasosdeJesus.org
+# 2013. vtamara@pasosdeJesus.org
 
-VER=5.5
+VER=5.6
 REV=0
 VESP=""
-VERP=55
+VERP=56
 
 # Falta /standard/root.hint
 
@@ -185,7 +185,7 @@ if (test "$im" = "") then {
 cat > $ar << EOF
 #!/bin/sh
 
-service="/sbin/mount"
+servicio="/sbin/mount"
 
 . /etc/rc.d/rc.subr
 
@@ -398,7 +398,14 @@ echo "Sistemas de archivos para USB en /etc/fstab" >> /var/tmp/inst-adJ.bitacora
 grep "/mnt/usb" /etc/fstab > /dev/null
 if (test "$?" != "0") then {
 	echo "Detectando dispositivo que corresponde a memoria USB" >> /var/tmp/inst-adJ.bitacora;
-	dialog --title 'Configurando USB (1)' --msgbox '\nDesmonte y retire toda memoria USB que pueda haber\n' 15 60
+	ayuda="2";
+	while (test "$ayuda" = "2"); do
+		dialog --title 'Configurando USB (1)' --help-button --msgbox '\nDesmonte y retire toda memoria USB que pueda haber\n' 15 60
+		ayuda="$?"
+		if (test "$ayuda" = "2") then {
+			dialog --title 'Ayuda configuración USB' --msgbox '\nLa prueba de insertar y retirar memoria USB se hace para diferenciar discos duros de memorias USB y configurar el dispositivo que típicamente usan las memorias USB, de forma que puedan montarse facilmente en /mnt/usb.\n' 15 60 
+		} fi;
+	done;
 	dmesg > /tmp/dmesg1
 	dialog --title 'Configurando USB (2)' --msgbox '\nPonga una memoria USB\n' 15 60
 	dmesg > /tmp/dmesg2
@@ -420,6 +427,27 @@ if (test "$?" != "0") then {
 sudo chown $uadJ:$uadJ /mnt/usb 
 sudo chown $uadJ:$uadJ /mnt/usbc
 
+echo "/var sin nodev en /etc/fstab (para tener /var/www/dev/random)" >> /var/tmp/inst-adJ.bitacora
+grep " /var.*nodev," /etc/fstab > /dev/null
+if (test "$?" = "0") then {
+	echo "Por quitar opcion nodev en /var en fstab" >> /var/tmp/inst-adJ.bitacora;
+	ed /etc/fstab <<EOF
+/ \/var.*nodev,/
+s/nodev,//g
+w
+q
+EOF
+} else {
+	echo "   Saltando quitar nodev..." >> /var/tmp/inst-adJ.bitacora;
+} fi;
+
+echo "/var/www/dev/random" >> /var/tmp/inst-adJ.bitacora
+if (test ! -f "/var/www/dev/random") then {
+	mkdir -p /var/www/dev/
+	sudo mknod -m 644 /var/www/dev/random c 45 0
+} else {
+	echo "   Saltando /var/www/dev/random..." >> /var/tmp/inst-adJ.bitacora;
+} fi;
 
 userinfo _hostapd >/dev/null
 if (test "$?" != "0") then {
@@ -770,17 +798,55 @@ if (test -d /usr/share/locale/de_AT) then {
 	} fi;
 } fi;
 
+if (test -f /usr/include/pcap-int.h) then {
+	vac="$vac 5.3 a 5.4";        
+	echo "Aplicando actualizaciones de 5.3 a 5.4 " >> /var/tmp/inst-adJ.bitacora;
+	rm -rf /usr/share/locale/*_*.*
+	rm -rf /usr/include/pcap-int.h
+	rm -rf /usr/libdata/perl5/site_perl/*/pcap-int.ph
+
+	rm -f /usr/X11R6/include/xorg/{mibstore.h,synaptics.h,xaa.h,xaalocal.h}
+	rm -f /usr/X11R6/lib/modules/extensions/lib{dbe,dri,dri2,extmod,record}.{la,so}
+	rm -f /usr/X11R6/lib/modules/extensions/lib/libxaa.{la,so}
+	rm -f /usr/share/man/man{9/{re,}lookup.9,/_Exit.3}
+	rm -f /usr/include/spinlock.h
+	rm -f /usr/libdata/perl5/site_perl/*/spinlock.ph
+	rm -f /etc/kerberosV/README
+	rm -f /usr/bin/{afslog,hxtool,kauth,kadmin,ksu,pagsh,kswitch}
+	rm -f /usr/lib/lib{heimntlm.*,heimntlm_p.*,hx509.*,hx509_p.*}
+	rm -f /usr/libdata/perl5/site_perl/*-openbsd/com_err.ph
+	rm -f /usr/libdata/perl5/site_perl/*-openbsd/kerberosV/{crmf_asn1,heimntlm-protos,heimntlm,hx509-private,hdb-private}.ph
+	rm -f /usr/libdata/perl5/site_perl/*-openbsd/kerberosV/{hx509-protos,hx509,hx509_err,kx509_asn1,ntlm_err,ocsp_asn1,pkcs10_asn1}.ph
+	rm -f /usr/libdata/perl5/site_perl/*-openbsd/kerberosV/{pkcs12_asn1,pkcs8_asn1,pkcs9_asn1,pkinit_asn1,gssapi/gssapi_spnego,spnego_asn1}.ph
+	rm -f /usr/libexec/{digest-service,kimpersonate,kdigest,kcm}
+	rm -f /usr/include/com_err.h
+	rm -f /usr/include/kerberosV/{crmf_asn1,hdb-private,heimntlm-protos,heimntlm,hx509-private}.h
+	rm -f /usr/include/kerberosV/{hx509-protos,hx509,hx509_err,kx509_asn1,ntlm_err,ocsp_asn1,pkcs10_asn1,pkcs12_asn1}.h
+	rm -f /usr/include/kerberosV/{pkcs8_asn1,pkcs9_asn1,pkinit_asn1,spnego_asn1,gssapi/gssapi_spnego}.h
+	rm -f /usr/sbin/kdigest
+	if (test -f "/var/heimdal") then {
+		echo "Kerberos requiere actualización especial";
+		echo "/etc/rc.d/kadmind stop; /etc/rc.d/kpasswdd stop; /etc/rc.d/kdc stop; cp -Rp /var/heimdal /var/kerberosV"
+		echo "Actualizar y después: rm -rf /var/heimdal";
+		echo "Regrese a este script con 'exit'";
+		sh
+	} fi;
+} fi;
+
 if  (test "$vac" != "") then {
 	dialog --title 'Actualizaciones aplicadas' --msgbox "\\nSe aplicaron actualizaciones: $vac\\n\\n$mac\\n" 15 60
 } fi;
 
-cd /etc && /usr/local/adJ/service-etc.sh >> /var/tmp/inst-adJ.bitacora 2>&1
+cd /etc && /usr/local/adJ/servicio-etc.sh >> /var/tmp/inst-adJ.bitacora 2>&1
 
-if (test ! -f /var/log/service) then {
+if (test ! -f /var/log/servicio) then {
 	if (test -f /var/log/daemon) then {
-		mv /var/log/daemon /var/log/service
+		mv /var/log/daemon /var/log/servicio
 	} fi;
-	touch /var/log/service
+	if (test -f /var/log/service) then {
+		mv /var/log/service /var/log/servicio
+	} fi;
+	touch /var/log/servicio
 } fi;
 
 echo "* Preparar /etc/rc.local para que reinicie servicios faltantes" >> /var/tmp/inst-adJ.bitacora;
@@ -1057,11 +1123,19 @@ if (test -f /$RUTAIMG/post.img) then {
 	postencripta="s";
 }
 else {
-	postecnripta="n";
-	dialog --title 'Cifrado de datos de PostgreSQL' --yesno '\n¿Preparar imagenes cifradas para los datos de PostgreSQL?' 15 60 
-	if (test "$?" = "0") then {
+	postencripta="h";
+	while (test "$postencripta" = "h") ; do
+		dialog --title 'Cifrado de datos de PostgreSQL' --help-button --yesno '\n¿Preparar imagenes cifradas para los datos de PostgreSQL?' 15 60 
+		postencripta="$?"
+		if (test "$postencripta" = "2") then {
+			postencripta="h";
+			dialog --title 'Ayuda cifrado de datos de PostgreSQL' --msgbox '\nEn adJ todas las bases de datos de PostgreSQL pueden mantenerse en una partición cifrada con una clave que debe darse durante el arranque (si la clave es errada no podrán usarse las bases de datos).\n' 15 60 
+		} fi;
+	done;
+	if (test "$postencripta" = "0") then {
 		postencripta="s";
 	} fi;
+
 } fi;
 
 
@@ -1207,7 +1281,7 @@ if (test "$?" = "0") then {
 	} fi;
 } fi;
 
-echo "* Deteniendo PostgreSQL" >> /var/tmp/inst-adJ.bitacora;
+echo "* Deteniendo PostgreSQL" >> /var/tmp/inst-adJ.bitacora
 pgrep post > /dev/null 2>&1
 if (test "$?" = "0") then {
 	su -l _postgresql -c "/usr/local/bin/pg_ctl stop -m fast -D /var/postgresql/data" >> /var/tmp/inst-adJ.bitacora
@@ -1302,8 +1376,17 @@ if (test "$?" != "0") then {
 		echo "---" >> /var/tmp/inst-adJ.bitacora;
 	} fi;
 	ed /var/postgresql/data/postgresql.conf >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
-,s/#unix_socket_directory = .*/unix_socket_directory = '\/var\/www\/tmp'/g
-,s/#listen_addresses = .*/listen_addresses = '127.0.0.1'/g
+,s/#unix_socket_directory *=.*/unix_socket_directory = '\/var\/www\/tmp'/g
+w
+q
+EOF
+	ed /var/postgresql/data/postgresql.conf >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+,s/#unix_socket_directories *=.*/unix_socket_directories = '\/var\/www\/tmp'/g
+w
+q
+EOF
+	ed /var/postgresql/data/postgresql.conf >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+,s/#listen_addresses *=.*/listen_addresses = '127.0.0.1'/g
 w
 q
 EOF
@@ -1407,18 +1490,14 @@ if (test ! -f /etc/ssl/server.crt) then {
       		-signkey /etc/ssl/private/server.key -out /etc/ssl/server.crt
 } fi;
 
-# Si ya tenía apache lo dejamos, si no ponemos nginx
+# Ponemos ngingx si ya lo tenía o si CONNGINX esta definido de resto Apache
 conapache=0
 connginx=0
-grep "httpd_flags.*-DSSL" /etc/rc.conf.local > /dev/null 2>/dev/null
-if (test "$?" = "0") then {
-	conapache=1;
-} elif (test "$CONNGINX" != "") then {
+grep "^ *pkg_scripts=.*[ \"]nginx[ \"]." /etc/rc.conf.local > /dev/null 2>/dev/null
+if (test "$?" = "0" -o "$CONNGINX" != "") then {
 	connginx=1;
 } else {
 	conapache=1;  
-	# En migracion probando mas
-
 } fi;
 
 
@@ -1674,6 +1753,10 @@ END {
 
 } fi;
 
+cr=`echo "$docroot" | sed -e "s/^\/var\/www\/.*/SIPI"`
+if (test "$cr" != "SIPI") then {
+	docroot="/var/www/$docroot"
+} fi;
 echo "docroot=$docroot" >>  /var/tmp/inst-adJ.bitacora;
 
 echo "* Probando PHP" >> /var/tmp/inst-adJ.bitacora;
@@ -1787,12 +1870,11 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 [begin] (Fluxbox)
 	[exec] (xfe - Archivos) {PATH=\$PATH:/usr/sbin:/usr/local/sbin:/sbin /usr/local/bin/xfe}
 	[exec] (xterm) {xterm -en utf8 -e /bin/ksh -l}
-	[exec] (mozilla-firefox) {ulimit -d 200000 && /usr/local/bin/firefox -UILocale es-AR}
+	[exec] (chromium) {/usr/local/bin/chrome -allow-file-access-from-files}
 	[exec] (midori) {/usr/local/bin/midori}
-	[exec] (chromium) {/usr/local/bin/chrome}
 [submenu] (Espiritualidad)
 	[exec] (xiphos) {/usr/local/bin/xiphos}
-	[exec] (Evangelios de dominio publico) {/usr/local/bin/firefox /usr/local/share/doc/evangelios_dp/}
+	[exec] (Evangelios de dominio publico) {/usr/local/bin/chrome /usr/local/share/doc/evangelios_dp/}
 [end]
 [submenu] (Dispositivos)
 	[exec] (Apagar) {sudo /sbin/halt -p}
@@ -1805,7 +1887,7 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 	[exec] (Desmontar USBC) {/sbin/umount -f /mnt/usbc}
 	[exec] (Montar Floppy) {/sbin/mount /mnt/floppy ; xfe /mnt/floppy}
 	[exec] (Desmontar Floppy) {/sbin/umount -f /mnt/floppy}
-	[exec] (Configurar Impresora con CUPS) {echo y | sudo cups-enable; sudo chmod a+rw /dev/ulpt* /dev/lpt*; /usr/local/bin/firefox -UILocale es-AR http://127.0.0.1:631}
+	[exec] (Configurar Impresora con CUPS) {echo y | sudo cups-enable; sudo chmod a+rw /dev/ulpt* /dev/lpt*; /usr/local/bin/chrome http://127.0.0.1:631}
 	[submenu] (Red)
                 [exec] (Examinar red) {xterm -en utf8 -e '/sbin/ifconfig; echo -n "\n[RETORNO] para examinar enrutamiento (podrá salir con q)"; read; /sbin/route -n show | less'}
                 [exec] (Examinar configuracion cortafuegos) {xterm  -en utf8 -e 'sudo /sbin/pfctl -s all | less '}
@@ -1841,9 +1923,9 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 	[exec] (Pidgin) {pidgin}
 [end]
 [submenu] (Documentos)
-	[exec] (OpenBSD basico) {/usr/local/bin/firefox -UILocale es-AR /usr/local/share/doc/basico_OpenBSD/index.html}
-	[exec] (OpenBSD usuario) {/usr/local/bin/firefox -UILocale es-AR /usr/local/share/doc/usuario_OpenBSD/index.html}
-	[exec] (OpenBSD servidor) {/usr/local/bin/firefox -UILocale es-AR /usr/local/share/doc/servidor_OpenBSD/index.html}
+	[exec] (OpenBSD basico) {/usr/local/bin/chrome /usr/local/share/doc/basico_OpenBSD/index.html}
+	[exec] (OpenBSD usuario) {/usr/local/bin/chrome /usr/local/share/doc/usuario_OpenBSD/index.html}
+	[exec] (OpenBSD servidor) {/usr/local/bin/chrome /usr/local/share/doc/servidor_OpenBSD/index.html}
 [end]
 [submenu] (Otros)
 [exec] (gvim) {gvim}
@@ -1852,7 +1934,7 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 [exec] (xarchiver) {xarchiver}
 [exec] (xfw) {xfw}
 [end]
-[submenu] (Menú de fluxbox)
+[submenu] (Menu de fluxbox)
 [config] (Configurar)
 [submenu] (Estilos del sistema) {Elija un estilo ...}
 [stylesdir] (/usr/local/share/fluxbox/styles)
@@ -1962,8 +2044,8 @@ Pos= 23 5
 [end]
 
 [Desktop Entry]
-Name=firefox
-Exec=firefox
+Name=chromium
+Exec=chrome
 Icon=/usr/local/share/icons/hicolor/48x48/apps/applications-internet.png
 Pos= 27 86
 [end]
@@ -2171,19 +2253,23 @@ insacp libusb1
 insacp lcms2
 insacp poppler
 insacp cups
-activarcs cupsd
+if (test -f /etc/rc.d/cupsd) then {
+	activarcs cupsd
+} else {
+	echo "** No pudo instalarse cups" | tee -a /var/tmp/inst-adJ.bitacora;
+} fi;
 
 
-echo "* Instalando navegador mozilla-firefox" | tee -a /var/tmp/inst-adJ.bitacora;
-f=`ls /var/db/pkg/*firefox* 2> /dev/null > /dev/null`;
+echo "* Instalando navegador chromium" | tee -a /var/tmp/inst-adJ.bitacora;
+f=`ls /var/db/pkg/*chromum* 2> /dev/null > /dev/null`;
 if (test "$?" = "0") then {
-	dialog --title 'Eliminar Firefox' --yesno "\\nFirefox instalado. ¿Eliminarlo para instalar uno más nuevo?" 15 60
+	dialog --title 'Eliminar chromium' --yesno "\\nChrome instalado. ¿Eliminarlo para instalar uno más nuevo?" 15 60
 	if (test "$?" = "0") then {
-		pkg_delete -I -D dependencies mozilla-firefox >> /var/tmp/inst-adJ.bitacora 2>&1
-		pkg_delete -I -D dependencies firefox >> /var/tmp/inst-adJ.bitacora 2>&1
+		pkg_delete -I -D dependencies chromium >> /var/tmp/inst-adJ.bitacora 2>&1
+		pkg_delete -I -D dependencies chromium >> /var/tmp/inst-adJ.bitacora 2>&1
 	} fi;
 } fi;
-f=`ls /var/db/pkg/firefox* 2> /dev/null > /dev/null`;
+f=`ls /var/db/pkg/chromium* 2> /dev/null > /dev/null`;
 if (test "$?" != "0") then {
 
 	insacp png
@@ -2197,16 +2283,11 @@ if (test "$?" != "0") then {
 	insacp pango
 	insacp gtk+2
 
-	p=`ls $PKG_PATH/libxml-* $PKG_PATH/shared-mime-info-* $PKG_PATH/pcre-* $PKG_PATH/png-* $PKG_PATH/jpeg-* $PKG_PATH/glib2-* $PKG_PATH/tiff-* $PKG_PATH/libiconv-* $PKG_PATH/esound-* $PKG_PATH/atk-* $PKG_PATH/desktop-file-utils-* $PKG_PATH/gettext-* $PKG_PATH/libaudiofile-* $PKG_PATH/gtk+2-* $PKG_PATH/cairo-* $PKG_PATH/pango-* $PKG_PATH/nss-* $PKG_PATH/nspr-* $PKG_PATH/jasper-* $PKG_PATH/hicolor-icon-theme-* $PKG_PATH/firefox-* $PKG_PATH/firefox-i18n-es-AR*`
+	p=`ls $PKG_PATH/libxml-* $PKG_PATH/shared-mime-info-* $PKG_PATH/pcre-* $PKG_PATH/png-* $PKG_PATH/jpeg-* $PKG_PATH/glib2-* $PKG_PATH/tiff-* $PKG_PATH/libiconv-* $PKG_PATH/esound-* $PKG_PATH/atk-* $PKG_PATH/desktop-file-utils-* $PKG_PATH/gettext-* $PKG_PATH/libaudiofile-* $PKG_PATH/gtk+2-* $PKG_PATH/cairo-* $PKG_PATH/pango-* $PKG_PATH/nss-* $PKG_PATH/nspr-* $PKG_PATH/jasper-* $PKG_PATH/hicolor-icon-theme-* $PKG_PATH/chromium-*`
         pkg_add -I -D update -D updatedepends -r $p >> /var/tmp/inst-adJ.bitacora 2>&1;
-	grep "browser.startup.homepage.*https://localhost" /usr/local/lib/firefox-18.0.2/defaults/pref/prefs.js > /dev/null 2>&1
-	if (test "$?" != "0") then {
-		echo 'user_pref("general.useragent.locale", "es-AR")' >>/usr/local/lib/firefox-18.0.2/defaults/pref/prefs.js 2>> /var/tmp/inst-adJ.bitacora;
-	       	echo 'user_pref("browser.startup.homepage", "https://127.0.0.1/");' >>/usr/local/lib/firefox-18.0.2/defaults/pref/prefs.js 2>> /var/tmp/inst-adJ.bitacora;
-	} fi;
-	echo "Sugerencias: " >> /var/tmp/inst-adJ.bitacora;
-	echo "  * Configure localización en español desde about:config general.useragent.local es-AR"
-	echo "  * Como página de inicio use https://127.0.0.1/";
+	#echo "Sugerencias: " >> /var/tmp/inst-adJ.bitacora;
+	#echo "  * Configure localización en español desde about:config general.useragent.local es-AR"
+	#echo "  * Como página de inicio use https://127.0.0.1/";
 } else {
 	echo "   Saltando..." >> /var/tmp/inst-adJ.bitacora;
 } fi;
@@ -2285,7 +2366,7 @@ chmod a+rxw /var/www/tmp > /dev/null 2>&1
 dialog --title 'Componentes básicos instalados' --msgbox "\\nInstalación y configuración de los componentes básicos de adJ completada.\\n\\nPor instalar los demás paquetes de $ARCH/paquetes" 15 60
 #, mientras tanto puede instalar SIVeL:"
 #echo "1. Pase a la consola gráfica con [Ctrl]-[Alt]-[F5] o si no es gráfica iniciela desde la segunda consola [Ctrl]-[Alt]-[F2] con 'xdm'"
-#echo "2. Abra mozilla-firefox (o en modo texto lynx) y use la dirección 'https://127.0.0.1/actualiza.php'"
+#echo "2. Abra chromium (o en modo texto lynx) y use la dirección 'https://127.0.0.1/actualiza.php'"
 #echo "3. Debe poder ingresar con el usuario que creó"
 #echo "4. Complete actualización de SIVeL siguiendo las instrucciones"
 #echo ""
@@ -2320,7 +2401,7 @@ echo "Eliminando librerías innecesarias" >> /var/tmp/inst-adJ.bitacora
 cd /var/db/pkg
 for i in .libs*; do 
 	echo $i >> /var/tmp/inst-adJ.bitacora ; 
-	sudo pkg_delete -I-D dependencies  $i >> /var/tmp/inst-adJ.bitacora 2>&1
+	sudo pkg_delete -I $i >> /var/tmp/inst-adJ.bitacora 2>&1
 done
 
 for i in $PKG_PATH/*tgz; do
@@ -2349,6 +2430,12 @@ if (test "$?" != "0") then {
 	cat >> /home/$uadJ/.vimrc <<EOF
 set encoding&       " terminal charset: follows current locale 
 set fileencoding&   " auto-sensed charset of current buffer
+EOF
+} fi;
+if (test ! -f "/home/$uadJ/.vim/after/ftplugin/ruby.vim") then {
+	cat > /home/$uadJ/.vim/after/ftplugin/ruby.vim <<EOF
+setlocal shiftwidth=2
+setlocal tabstop=2
 EOF
 } fi;
 	
@@ -2410,7 +2497,7 @@ if (test ! -h /usr/local/bin/python) then {
  ln -sf /usr/local/bin/pydoc2.7  /usr/local/bin/pydoc
 } fi;
 
-echo "* Volviendo a cambiar en por service en etc" >> /var/tmp/inst-adJ.bitacora;
-cd /etc && /usr/local/adJ/service-etc.sh >> /var/tmp/inst-adJ.bitacora 2>&1
+echo "* Volviendo a cambiar en por servicio en etc" >> /var/tmp/inst-adJ.bitacora;
+cd /etc && /usr/local/adJ/servicio-etc.sh >> /var/tmp/inst-adJ.bitacora 2>&1
 dialog --title 'Componentes básicos instalados' --msgbox "\\nFELICITACIONES!  La instalación/actualización de la distribución Aprendiendo de Jesús $VER se completó satisfactoriamente\\n\\n Para instalar SIVeL ejecute sudo /usr/local/adJ/inst-sivel.sh" 15 60
 

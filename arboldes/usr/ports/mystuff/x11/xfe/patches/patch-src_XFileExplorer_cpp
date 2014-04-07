@@ -1,7 +1,7 @@
 $OpenBSD$
---- src/XFileExplorer.cpp.orig	Thu Aug 22 02:50:44 2013
-+++ src/XFileExplorer.cpp	Thu Aug 29 07:28:20 2013
-@@ -2778,30 +2778,51 @@ long XFileExplorer::onCmdRun(FXObject*,FXSelector,void
+--- src/XFileExplorer.cpp.orig	Mon Sep 23 02:04:04 2013
++++ src/XFileExplorer.cpp	Sun Dec 22 09:06:53 2013
+@@ -2914,30 +2914,51 @@ long XFileExplorer::onCmdRun(FXObject*,FXSelector,void
  // Run an Xfe as root
  long XFileExplorer::onCmdSu(FXObject*,FXSelector,void*)
  {
@@ -60,7 +60,7 @@ $OpenBSD$
  		title = _("Enter the user password:");
  		sucmd = SUDOCMD;
  	}
-@@ -2810,45 +2831,43 @@ long XFileExplorer::onCmdSu(FXObject*,FXSelector,void*
+@@ -2946,45 +2967,43 @@ long XFileExplorer::onCmdSu(FXObject*,FXSelector,void*
  		title = _("Enter the root password:");
  		sucmd = SUCMD;
  	}

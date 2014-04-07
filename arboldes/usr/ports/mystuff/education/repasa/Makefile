@@ -14,10 +14,6 @@ MAINTAINER=	Vladimir Támara Patiño <vtamara@pasosdejesus.org>
 #Public domain
 PERMIT_PACKAGE_CDROM=	Yes
 
-MASTER_SITES=	${MASTER_SITE_SOURCEFORGE:=structio/}
-DISTFILES=	${DISTNAME}.tar.gz
-
-
 CONFIGURE_STYLE=	simple 
 CONFIGURE_SCRIPT=	conf.sh
 CONFIGURE_ARGS+=-p ${PREFIX}

@@ -1,18 +1,18 @@
-diff -ruN -x *out -x *orig -x obj -x *~ src55-orig/share/locale/Makefile src/share/locale/Makefile
---- src55-orig/share/locale/Makefile	Sun Jun  2 16:05:47 2013
-+++ src/share/locale/Makefile	Tue Nov 12 01:18:01 2013
+diff -ruN -x *out -x *orig -x obj -x *~ src54-mon/share/locale/Makefile src/share/locale/Makefile
+--- src54-mon/share/locale/Makefile	Tue Dec  3 12:26:43 2013
++++ src/share/locale/Makefile	Tue Dec  3 12:56:41 2013
 @@ -1,6 +1,6 @@
  #	$OpenBSD: Makefile,v 1.1 2005/08/07 10:03:44 espie Exp $
  
--SUBDIR=	ctype
-+SUBDIR=	ctype numericdef
+-SUBDIR=	ctype colldef monetdef
++SUBDIR=	ctype colldef monetdef numericdef
  	
  
  .include <bsd.subdir.mk>
-diff -ruN -x *out -x *orig -x obj -x *~ src55-orig/share/locale/numericdef/Makefile src/share/locale/numericdef/Makefile
---- src55-orig/share/locale/numericdef/Makefile	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/numericdef/Makefile	Tue Nov 12 01:47:50 2013
-@@ -0,0 +1,150 @@
+diff -ruN -x *out -x *orig -x obj -x *~ src54-orig/share/locale/numericdef/Makefile src/share/locale/numericdef/Makefile
+--- src54-orig/share/locale/numericdef/Makefile	Wed Dec 31 19:00:00 1969
++++ src/share/locale/numericdef/Makefile	Tue Mar 25 05:48:27 2014
+@@ -0,0 +1,151 @@
 +# Adapted from FreeBSD
 +
 +LOCALES=	af.ISO8859-1 \
@@ -28,6 +28,7 @@ diff -ruN -x *out -x *orig -x obj -x *~ src55-orig/share/locale/numericdef/Makef
 +		en.ISO8859-1 \
 +		es.ISO8859-1 \
 +		es_PR.ISO8859-1 \
++		es_CU.ISO8859-1 \
 +		et.ISO8859-15 \
 +		eu.ISO8859-1 \
 +		fi.ISO8859-1 \
@@ -81,18 +82,18 @@ diff -ruN -x *out -x *orig -x obj -x *~ src55-orig/share/locale/numericdef/Makef
 +
 +BE_LINKS=	fr_BE:nl_BE
 +NO_LINKS=	no:nb_NO no:nn_NO
-+ESPR_LINKS=	es_PR:es_CR es_PR:es_MX es_PR:es_SV es_PR:es_US 
++ESPR_LINKS=	es_PR:es_CR es_PR:es_MX es_PR:es_SV es_PR:es_US es_PR:es_HN
 +
 +ARMSCII-8_UTF-8= hy
 +CP1251_ISO8859-5= be
 +CP1251_UTF-8=	be bg
 +CP866_UTF-8=	ru
-+ISO8859-1_ISO8859-15= af ca da de_CH de en es es_PR eu \
++ISO8859-1_ISO8859-15= af ca da de_CH de en es es_PR es_CU eu \
 +	fi fr_BE fr is it nl no pt_BR pt sv \
 +	${BE_LINKS} ${NO_LINKS} ${ESPR_LINKS}
 +ISO8859-1_ISO8859-1= ${BE_LINKS} ${CA_LINKS} \
 +	${NO_LINKS} ${ESPR_LINKS}
-+ISO8859-1_UTF-8= af ca da de_CH de en es es_PR eu fi fr \
++ISO8859-1_UTF-8= af ca da de_CH de en es es_PR es_CU eu fi fr \
 +	fr_BE fr is it nl no pt_BR pt sv
 +ISO8859-2_UTF-8= cs hr hu pl ro sk sl
 +ISO8859-5_UTF-8= sr uk
@@ -107,15 +108,15 @@ diff -ruN -x *out -x *orig -x obj -x *~ src55-orig/share/locale/numericdef/Makef
 +KOI8-R_CP866=	ru
 +KOI8-R_ISO8859-5= ru
 +KOI8-U_ISO8859-5= uk
-+US-ASCII_UTF-8=	en:he
-+UTF-8_UTF-8=	${BE_LINKS} ${CA_LINKS} de \
++US-ASCII_UTF-8=	
++UTF-8_UTF-8=	${BE_LINKS} ${CA_LINKS} \
 +		${NO_LINKS} ${ESPR_LINKS}
 +
 +SYMLINKS=
 +.for enc1 in ${ENCODINGS}
 +.for enc2 in ${ENCODINGS}
 +.for lang_terr in ${${enc1}_${enc2}}
-+SYMLINKS+=	../${lang_terr:C/:.*$//}.${enc1}/${FILESNAME} \
++SYMLINKS+=	${LOCALEDIR}/${lang_terr:C/:.*$//}.${enc1}/${FILESNAME} \
 +		${LOCALEDIR}/${lang_terr:C/^.*://}.${enc2}
 +.endfor
 +.endfor
@@ -372,6 +373,23 @@ diff -ruN -x *out -x *orig -x obj -x *~ src55-orig/share/locale/numericdef/es_PR
 +,
 +# grouping, separated by ; 
 +3
++# EOF
+diff -ruN src54-orig/share/locale/numericdef/es_CU.ISO8859-1.src src/share/locale/numericdef/es_CU.ISO8859-1.src
+--- src54-orig/share/locale/numericdef/es_CU.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/numericdef/es_CU.ISO8859-1.src	Tue Mar 25 05:47:22 2014
+@@ -0,0 +1,13 @@
++# $adJ$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++# Based on 
++# https://sourceware.org/git/?p=glibc.git;a=blob_plain;f=localedata/locales/es_CU;hb=1eb0b490809a681ea801a1cbd93df5b51a4a47e0
++# decimal_point
++,
++# thousands_sep
++
++# grouping, separated by ; 
++-1
 +# EOF
 diff -ruN -x *out -x *orig -x obj -x *~ src55-orig/share/locale/numericdef/et.ISO8859-15.src src/share/locale/numericdef/et.ISO8859-15.src
 --- src55-orig/share/locale/numericdef/et.ISO8859-15.src	Wed Dec 31 19:00:00 1969

@@ -13,7 +13,6 @@ MAINTAINER=	Vladimir Támara Patiño <vtamara@pasosdeJesus.org>
 
 # Public Domain  & BSD License
 PERMIT_PACKAGE_CDROM=	Yes
-
 NO_BUILD=	Yes
 NO_TEST=	Yes
 

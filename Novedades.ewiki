@@ -4,7 +4,7 @@ Distribución para fomentar la construcción del Reino de Dios desde
 la educación, el respeto por la dignidad humana y la memoria.
 
 Versión: 5.4%%%
-Fecha de publicación: 1/Feb/2013
+Fecha de publicación: 1/Abr/2014
 
 !!!NOVEDADES
 
@@ -13,26 +13,16 @@ Con respecto a OpenBSD 5.4 para amd64 y a la edición anterior de este DVD
 
 !KERNEL Y SISTEMA BASE
 
-* Se ha incluido soporte para cotejación (COLLATE) en idioma nativo en el sistema base importado de FreeBSD, tablas de caracteres y cotejación para todos los paises de habla hispana y portes de PostgreSQL y xfe que soportan cotejación. Vea detalles y una captura de pantalla en http://aprendiendo.pasosdejesus.org/?id=i18n.  Las mejoras se han aportado a OpenBSD y xfe y han sido parcialmente integradas, se espera más integración en futuras versiones de esos proyectos.
-* Parches de seguridad de sistema base hasta:  31.Dic.2013
-* Hemos remplazando `daemon' por `service' en buena parte del sistem base (ver por ejemplo ==vmstat -s== o ==less /var/log/service== o ==man service==).
-* En instalaciones nuevas puede emplear nginx en lugar de Apache si inicia el script de instalación con ==CONNGINX=1 /inst-adJ.sh==
-* Nuevos archivos de comandos para facilitar mantener servidor de correo con OpenSMTPD e IMAPS con dovecot: prepopensmtpd, elimcuenta, adicuenta. Ver documentación en http://structio.sourceforge.net/guias/servidor_OpenBSD/servicios-correo.html#opensmtpd y http://structio.sourceforge.net/guias/servidor_OpenBSD/servicios-correo.html#dovecot 
+* Desde la versión 5.4 se ha importado de FreeBSD soporte y datos para presentar cantidades monetarias y numéricas con las convenciones de cada uno de los países de latinoamérica (y otros locales soportados por OpenBSD).  Esta mejora fue aportada a OpenBSD y se anhela su integración en futuras versiones.
+* Desde la versión 5.2 incluye cotejación (COLLATE) en idioma nativo en el sistema base importado de FreeBSD, tablas de caracteres y cotejación para todos los países de latinoamérica (incluyendo Portugués de Brasil) y portes de PostgreSQL y xfe que soportan cotejación. Vea detalles y una captura de pantalla en http://aprendiendo.pasosdejesus.org/?id=i18n.  Las mejoras se han aportado a OpenBSD y xfe y han sido parcialmente integradas, se espera más integración en futuras versiones de esos proyectos.
+* Parches de seguridad de sistema base hasta:  20.Mar.2014
+* Hemos remplazando `daemon' por `servicio' en buena parte del sistema base (ver por ejemplo ==vmstat -s== o ==less /var/log/servicio== o ==man servicio==).  Hasta la versión 5.3 se usó ==service==, pero para disminuir colisiones de nombres desde la 5.4 se emplea ==servicio==.
+* El CD ahora incluye un archivo de comandos ==/util/preact-adJ.sh== para preparar un sistema antes de iniciar actualización --por ejemplo sacar copia de base de datos.
 
 Entre las novedades reportadas en las `Notas de publicación de OpenBSD 5.4' destacamos:
 
-* Controladores nuevos para amd64
-** Ethernet: 1GB  ==vmx== para soportar tarjeta de red de VirtualBox 10GB
-** Lectores de tarjetas: 
-** Controladores SCSI/SAS/RADI 
-** Sensores: 
-
 * Controaldores ampliados o mejorados para amd64
-** Ethernet: 10/100MB  10GB 
-** Wifi: 
-** Video: Acelaracion�n DRI para tarjetas Intel y Radeon con ==inteldrm== 
-** Controladores SCSI/SAS/RADI 
-** Procesadores: 
+** Vídeo: Acelaracion DRI para tarjetas Intel y Radeon con ==inteldrm== 
 ** Touchpad: ==pms= soporta Elantech 4
 
 * Red
@@ -40,52 +30,41 @@ Entre las novedades reportadas en las `Notas de publicación de OpenBSD 5.4' des
 ** inetd ya no inicia por defecto 
 ** Añadido slowcgi implementación de FastCGI
 ** Mejorados dhcpd y dhclient
-** OpenSMTP 5.3.3: Soporte para envios locales LMTP, tipos de transmisión SECURE y AUTH. Nombres helo pueden buscar en tabla db. Cola más robusta para sobrellevar errores en tiempo de ejecución.
+** OpenSMTP 5.3.3: Soporte para envíos locales LMTP, tipos de transmisión SECURE y AUTH. Nombres ==helo== pueden buscar en tabla ==db==. Cola más robusta para sobrellevar errores en tiempo de ejecución.
 
 
 * Seguridad
-**
-**
-**
 ** OpenSSH 6.3. Entre otras sftp soporta reget para continuar descargas interrumpidas
 
 * Librerías y herramientas nuevas o mejoradas: 
-** Nueva utilidad locale (que lista locales para paises de habla hispana).  Nueva herramienta ltrace para . 
-** Soporte experimenta de fuse (Sistema de archivos en espacio de usuarios 
+** Nueva utilidad ==locale== (que lista locales para países de habla hispana).  
+** Soporte experimental de fuse (Sistema de archivos en espacio de usuarios 
 --en lugar del kernel), por ejemplo para habilitar montajes sobre ssh.
-** 
 
 * El sistema base incluye mejoras a componentes auditados como ==Xenocara== (Xorg 7.7), ==gcc== 4.2.1, ==perl== 5.16.3, Apache 1.3 mejorado, OpenSSL 1.0.1c, ==sendmail== 8.14.7, bind 9.4.2-P2, nginx 1.4.1
 
 
 !PROCESO DE INSTALACIÓN
 
-Es en español y consta de instalación o actualización del sistema base seguido de instalación/actualización de paquetes y entornos.
-
-La instalación del sistema base, de las particiones cifradas y de todos los paquetes del DVD instalador requiere por lo menos 13G, de los cuales 10G deben reservarse en ==/usr== y 1.5G en ==/var==
-
-El instalador  de adJ emplea codificación UTF8, por lo que para iniciarlo se recomienda desde una terminal gráfica con ==/inst-adJ.sh==
+Es en español, consta de: (a) preparación, (b) instalación/actualización del sistema base y (c) instalación de aplicaciones y entorno.  Por favor vea más detalles en Actualiza.txt
 
 
 !PAQUETES EXCLUSIVOS DE ADJ
 
-* SIVeL       
-* xfe actualizado a       y modificado para administrar paquetes en OpenBSD (ver pantallazo en http://structio.sf.net/guias/basico_OpenBSD/medios.html#xfe Soporta cotejación en idioma nativo.  Nueva opción sudo_nopasswd utilizable en ~/.config/xfe/xferc cuando sudo no requiere clave (útil para que opere bien Herramientas->Nueva ventana root).
-* PostgreSQL actualizado a       con soporte para UTF-8 y cotejaciones nativas listas para todos los paises de habla hispana. Ver detalles de como usar cotejación en http://aprendiendo.pasosdejesus.org/?id=i18n
-* ruby19-apache2ngingx
-* realboy 
+* SIVeL 1.1.5. Incluye experimentalmetne 1.2b1 que incluye: módulo de homónimos, mejores relaciones entre personas, claves más seguras, DIVIPOLA actualizado a 2013, más posibilidad de configuración de reportes, más validaciones.
+* ruby 2.0.0p353 retroportado de OpenBSD-Current, probado con aplicaciones Rails 4.1.0rc1.  Tipicamente aumenta velocidad de aplicaciones Rails.  Ver  http://dhobsd.pasosdejesus.org/index.php?id=Ruby+on+Rails+en+OpenBSD
+* xfe actualizado a 1.37 y modificado para administrar paquetes en OpenBSD (ver pantallazo en http://structio.sf.net/guias/basico_OpenBSD/medios.html#xfe ). Soporta cotejación en idioma nativo.  Nueva opción sudo_nopasswd utilizable en ~/.config/xfe/xferc cuando sudo no requiere clave (útil para que opere bien Herramientas->Nueva ventana root).
+* PostgreSQL 9.3.2 retroportado de OpenBSD-Current con soporte para UTF-8 y cotejaciones nativas listas para todos los paises de habla hispana. Ver detalles de como usar cotejación en http://aprendiendo.pasosdejesus.org/?id=i18n
+* evangelios_dp actualizado a 0.9.3 que incluye marcado Strong de Mateo, Marcos y Hechos.
+* realboy 0.2.2
 * Los paquetes exclusivos los encuentra en [ftp://ftp.pasosdeJesus.org/pub/AprendiendoDeJesus/5.4-amd64/paquetes]
 
 
 !PAQUETES
 
-* Nuevos paquetes para emplear como sistema de escritorio incluidos en el DVD: 
-* Nuevos paquetes para emplear como servidor de correo: 
-* Mejores permisos en paquetes 
-* Navegadores actualizados: Firefox a , Chromium a , Midori a 
-* !LibreOffice actualizado a gimp a vlc a 
-* PHP actualizado a ruby a LLVM/Clang a asi como los demás lenguajes de programación
-* Se incluye lo básico de Ruby para desarrollar aplicaciones con Ruby on Rails, ver http://dhobsd.pasosdejesus.org/index.php?id=Ruby+on+Rails+en+OpenBSD
+* Navegadores actualizados: Firefox a 22, Chromium a 28.0.1500.45, Midori a 0.5.2
+* !LibreOffice actualizado a 4.0.4.2v0 gimp a 2.8.4p2 vlc a 2.0.7p0.
+* PHP actualizado a 5.3.27 LLVM/Clang a 3.3 asi como los demás lenguajes de programación
 * Se incluyen otros paquetes típicos del repositorio de OpenBSD, en donde hay   más de 7900 disponibles para amd64
 
 !ESCRITORIO

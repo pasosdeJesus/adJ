@@ -293,25 +293,25 @@ diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src53xlocale1/
 +	return (__c < 0 || __c >= __ct->__mb_sb_limit) ? __c :
 +		__runes->rl_mapupper[__c];
  }
---- src53xlocale1/lib/libc/locale/Makefile.inc	Mon Apr  8 20:43:35 2013
-+++ src/lib/libc/locale/Makefile.inc	Mon Apr  8 20:52:11 2013
-@@ -10,18 +10,40 @@
- 	wcstoul.c wcstoll.c wcstoull.c wcstoimax.c wcstoumax.c \
+diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src54-x4/lib/libc/gen/toupper_.c src/lib/libc/gen/toupper_.c
+--- src54-x4/lib/libc/locale/Makefile.inc	Thu Dec  5 19:12:05 2013
++++ src/lib/libc/locale/Makefile.inc	Thu Dec  5 19:17:22 2013
+@@ -11,7 +11,7 @@
  	setrunelocale.c runeglue.c rune.c runetable.c ___runetype_mb.c \
- 	_wctrans.c wcsxfrm.c \
--	collate.c none.c xlocale.c
-+	collate.c nextwctype.c none.c xlocale.c
+ 	_wctrans.c wcsxfrm.c collate.c \
+ 	ldpart.c fix_grouping.c lmonetary.c lnumeric.c \
+-	none.c xlocale.c
++	none.c xlocale.c nextwctype.c
  
  MAN+=	nl_langinfo.3 setlocale.3 iswalnum.3 towlower.3 \
  	btowc.3 mblen.3 mbrlen.3 mbrtowc.3 mbsinit.3 mbsrtowcs.3 \
- 	mbstowcs.3 mbtowc.3 wcrtomb.3 wcsrtombs.3 wcstod.3 wcstol.3 \
+@@ -19,9 +19,32 @@
  	wcstombs.3 wctob.3 wctomb.3 \
  	wctype.3 iswctype.3 wctrans.3 towctrans.3 wcwidth.3 \
--	duplocale.3  \
--	freelocale.3 newlocale.3 nextwctype.3 \
-+	ctype_l.3 duplocale.3  freelocale.3 \
-+	iswalnum_l.3 newlocale.3 nextwctype.3 \
- 	querylocale.3 uselocale.3 wcscoll.3 wcsxfrm.3 xlocale.3
+ 	duplocale.3  freelocale.3 newlocale.3 nextwctype.3 \
+-	querylocale.3 uselocale.3 wcscoll.3 wcsxfrm.3 xlocale.3
++	querylocale.3 uselocale.3 wcscoll.3 wcsxfrm.3 xlocale.3 \
++	ctype_l.3 iswalnum_l.3
  
 -MLINKS+= iswalnum.3 iswalpha.3 \
 +MLINKS+= ctype_l.3 digittoint_l.3 \
@@ -340,7 +340,7 @@ diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src53xlocale1/
  	iswalnum.3 iswblank.3 \
  	iswalnum.3 iswcntrl.3 \
  	iswalnum.3 iswdigit.3 \
-@@ -32,11 +54,31 @@
+@@ -32,6 +55,25 @@
  	iswalnum.3 iswspace.3 \
  	iswalnum.3 iswupper.3 \
  	iswalnum.3 iswxdigit.3 \
@@ -366,7 +366,9 @@ diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src53xlocale1/
  	mblen.3 mblen_l.3\
  	mbrtowc.3 mbrtowc_l.3\
  	mbsinit.3 mbsinit_l.3\
- 	mbstowcs.3 mbstowcs_l.3\
+@@ -40,6 +82,7 @@
+ 	mbsrtowcs.3 mbsnrtowcs_l.3 \
+ 	mbsrtowcs.3 mbsrtowcs_l.3 \
  	mbtowc.3 mbtowc_l.3\
 +	nextwctype.3 nextwctype_l.3 \
  	setlocale.3 localeconv.3 \
@@ -1685,18 +1687,6 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/que
  .Sh SYNOPSIS
  .In xlocale.h
  .Ft const char *
-diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/towctrans.3 src53xlocale2/lib/libc/locale/towctrans.3
---- src53xlocale1/lib/libc/locale/towctrans.3	Mon Mar 25 18:28:42 2013
-+++ src53xlocale2/lib/libc/locale/towctrans.3	Fri Apr 12 12:05:50 2013
-@@ -26,7 +26,7 @@
- .\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
- .\" SUCH DAMAGE.
- .\"
--.Dd $Mdocdate$
-+.Dd $Mdocdate: January 25 2013 $
- .Dt TOWCTRANS 3
- .Os
- .\" ----------------------------------------------------------------------
 diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/towlower.3 src53xlocale2/lib/libc/locale/towlower.3
 --- src53xlocale1/lib/libc/locale/towlower.3	Mon Mar 25 18:28:42 2013
 +++ src53xlocale2/lib/libc/locale/towlower.3	Fri Apr 12 12:02:28 2013
@@ -1811,91 +1801,55 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/wcs
 diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/wcsxfrm.3 src53xlocale2/lib/libc/locale/wcsxfrm.3
 --- src53xlocale1/lib/libc/locale/wcsxfrm.3	Mon Apr  8 21:20:25 2013
 +++ src53xlocale2/lib/libc/locale/wcsxfrm.3	Fri Apr 12 12:12:05 2013
-@@ -33,72 +33,6 @@
- .\" FreeBSD: src/lib/libc/string/strxfrm.3,v 1.16 2002/09/06 11:24:06 tjr Exp
- .\" $FreeBSD$
- .\"
--.Dd October 4, 2002
--.Dt WCSXFRM 3
--.Os
--.Sh NAME
--.Nm wcsxfrm
--.Nd transform a wide string under locale
--.Sh LIBRARY
--.Lb libc
--.Sh SYNOPSIS
--.In wchar.h
--.Ft size_t
--.Fn wcsxfrm "wchar_t * restrict dst" "const wchar_t * restrict src" "size_t n"
--.Sh DESCRIPTION
--The
--.Fn wcsxfrm
--function transforms a null-terminated wide character string pointed to by
--.Fa src
--according to the current locale collation order
--then copies the transformed string
--into
--.Fa dst .
--No more than
--.Fa n
--wide characters are copied into
--.Fa dst ,
--including the terminating null character added.
--If
--.Fa n
--is set to 0
--(it helps to determine an actual size needed
--for transformation),
--.Fa dst
--is permitted to be a
--.Dv NULL
--pointer.
--.Pp
--Comparing two strings using
--.Fn wcscmp
--after
--.Fn wcsxfrm
--is equivalent to comparing
--two original strings with
--.Fn wcscoll .
--.Sh RETURN VALUES
--Upon successful completion,
--.Fn wcsxfrm
--returns the length of the transformed string not including
--the terminating null character.
--If this value is
--.Fa n
--or more, the contents of
--.Fa dst
--are indeterminate.
--.Sh SEE ALSO
--.Xr setlocale 3 ,
--.Xr strxfrm 3 ,
--.Xr wcscmp 3 ,
--.Xr wcscoll 3
--.Sh STANDARDS
--The
--.Fn wcsxfrm
--function
--conforms to
--.St -isoC-99 .
--
--
- .Dd $Mdocdate: March 17 2013 $
+@@ -37,7 +37,9 @@
  .Dt WCSXFRM 3
  .Os
+ .Sh NAME
+-.Nm wcsxfrm
++.Nm wcsxfrm ,
++and
++.Nm wcsxfrm_l
+ .Nd transform a wide string under locale
+ .Sh LIBRARY
+ .Lb libc
+@@ -45,10 +47,12 @@
+ .In wchar.h
+ .Ft size_t
+ .Fn wcsxfrm "wchar_t * restrict dst" "const wchar_t * restrict src" "size_t n"
++.Ft size_t
++.Fn wcsxfrm_l "wchar_t * restrict dst" "const wchar_t * restrict src" "size_t n" "locale_t loc"
+ .Sh DESCRIPTION
+ The
+ .Fn wcsxfrm
+-function transforms a null-terminated wide character string pointed to by
++function transform a null-terminated wide character string pointed to by
+ .Fa src
+ according to the current locale collation order
+ then copies the transformed string
+@@ -76,6 +80,10 @@
+ is equivalent to comparing
+ two original strings with
+ .Fn wcscoll .
++The function
++.Fn wcsxfrm_l
++does the same but uses the locale provided as parameter, see
++.Xr xlocale 3 .
+ .Sh RETURN VALUES
+ Upon successful completion,
+ .Fn wcsxfrm
+@@ -90,7 +98,8 @@
+ .Xr setlocale 3 ,
+ .Xr strxfrm 3 ,
+ .Xr wcscmp 3 ,
+-.Xr wcscoll 3
++.Xr wcscoll 3 ,
++.Xr xlocale 3
+ .Sh STANDARDS
+ The
+ .Fn wcsxfrm
 diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/wctob.3 src53xlocale2/lib/libc/locale/wctob.3
 --- src53xlocale1/lib/libc/locale/wctob.3	Mon Apr  8 21:20:56 2013
 +++ src53xlocale2/lib/libc/locale/wctob.3	Fri Apr 12 12:05:48 2013
-@@ -25,7 +25,7 @@
- .\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
- .\" SUCH DAMAGE.
- .\"
--.Dd $Mdocdate$
-+.Dd $Mdocdate: January 25 2013 $
- .Dt WCTOB 3
- .Os
- .\" ----------------------------------------------------------------------
 @@ -49,9 +49,9 @@
  functions converts a wide character
  .Fa wc
@@ -1917,30 +1871,6 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/wct
  .Dv LC_CTYPE
  category of the provided locale.
  .\" ----------------------------------------------------------------------
-diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/wctrans.3 src53xlocale2/lib/libc/locale/wctrans.3
---- src53xlocale1/lib/libc/locale/wctrans.3	Mon Mar 25 18:28:42 2013
-+++ src53xlocale2/lib/libc/locale/wctrans.3	Fri Apr 12 12:05:27 2013
-@@ -26,7 +26,7 @@
- .\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
- .\" SUCH DAMAGE.
- .\"
--.Dd $Mdocdate$
-+.Dd $Mdocdate: January 25 2013 $
- .Dt WCTRANS 3
- .Os
- .\" ----------------------------------------------------------------------
-diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/wcwidth.3 src53xlocale2/lib/libc/locale/wcwidth.3
---- src53xlocale1/lib/libc/locale/wcwidth.3	Mon Mar 25 18:28:42 2013
-+++ src53xlocale2/lib/libc/locale/wcwidth.3	Fri Apr 12 12:07:12 2013
-@@ -24,7 +24,7 @@
- .\" SUCH DAMAGE.
- .\"
- .\"
--.Dd $Mdocdate$
-+.Dd $Mdocdate: January 25 2013 $
- .Dt WCWIDTH 3
- .Os
- .Sh NAME
 diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/string/strcasecmp.3 src53xlocale2/lib/libc/string/strcasecmp.3
 --- src53xlocale1/lib/libc/string/strcasecmp.3	Mon Mar 25 18:28:29 2013
 +++ src53xlocale2/lib/libc/string/strcasecmp.3	Fri Apr 12 11:57:00 2013

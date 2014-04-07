@@ -1,4 +1,4 @@
-@comment $OpenBSD: PLIST-server,v 1.24 2013/10/22 06:26:09 kili Exp $
+@comment $OpenBSD: PLIST-server,v 1.25 2014/01/06 10:47:15 pea Exp $
 @conflict pgsql-*
 @conflict pgsql-clients-*
 @conflict postgresql-clients-*
@@ -339,7 +339,7 @@ include/postgresql/server/port/sco.h
 include/postgresql/server/port/solaris.h
 include/postgresql/server/port/unixware.h
 @comment include/postgresql/server/port/win32/
-include/postgresql/server/port/win32.h
+@comment include/postgresql/server/port/win32.h
 @comment include/postgresql/server/port/win32/arpa/
 @comment include/postgresql/server/port/win32/arpa/inet.h
 @comment include/postgresql/server/port/win32/dlfcn.h

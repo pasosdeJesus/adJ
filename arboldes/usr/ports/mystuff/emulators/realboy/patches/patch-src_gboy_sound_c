@@ -1,0 +1,27 @@
+$OpenBSD$
+--- src/gboy_sound.c.orig	Tue Dec 17 07:43:02 2013
++++ src/gboy_sound.c	Tue Dec 17 07:45:30 2013
+@@ -17,9 +17,14 @@
+  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. 
+  */
+ 
++#include "config.h"
+ #include "gboy.h"
+ #include "gboy_sound.h"
+ 
++#ifndef HAVE_ARC4RANDOM
++#define arc4random() rand()
++#endif
++
+ void
+ sound_update()
+ {
+@@ -410,7 +415,7 @@ write_sound_reg(Uint8 reg, Uint8 val)
+ 				noise.on=1;
+ 				addr_sp[0xff26] |= 0x8;
+ 				noise.shf_reg=0xff;
+-				noise.sig = rand();
++				noise.sig = arc4random();
+ 				noise.env=(addr_sp[0xff21]&0x7);
+ 				noise.init_env=(addr_sp[0xff21]&0xf0)>>4;
+ 				noise.shf_reg=0x7fff;

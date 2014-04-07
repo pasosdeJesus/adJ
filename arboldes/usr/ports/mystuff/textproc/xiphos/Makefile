@@ -3,7 +3,7 @@
 #
 COMMENT=	"Bible study tool with modules from Sword project"
 
-V=		3.1.5
+V=		3.1.6
 DISTNAME=	xiphos-${V}
 CATEGORIES=	textproc misc
 PKGNAME=	${DISTNAME}
@@ -20,7 +20,7 @@ PERMIT_PACKAGE_CDROM=	Yes
 
 MODULES =       devel/waf  
 
-CONFIGURE_ARGS += --enable-gtkhtml
+#CONFIGURE_ARGS += --enable-gtkhtml
 
 CFLAGS += 
 
