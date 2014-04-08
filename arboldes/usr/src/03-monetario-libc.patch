@@ -1705,7 +1705,7 @@ diff -ruN src55-orig/include/Makefile src/include/Makefile
 @@ -14,7 +14,8 @@
  	dlfcn.h elf_abi.h err.h errno.h fenv.h float.h fnmatch.h fstab.h fts.h \
  	ftw.h getopt.h glob.h grp.h ifaddrs.h inttypes.h iso646.h kvm.h \
- 	langinfo.h libgen.h limits.h locale.h login_cap.h malloc.h math.h md4.h \
+ 	langinfo.h libgen.h limits.h locale.h login_cap.h malloc.h math.h \
 -	md5.h memory.h mpool.h ndbm.h netdb.h netgroup.h nlist.h nl_types.h \
 +	md5.h memory.h monetary.h mpool.h \
 +	ndbm.h netdb.h netgroup.h nlist.h nl_types.h \
