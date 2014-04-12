@@ -1600,37 +1600,6 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/qu
 +.Sh STANDARDS
 +This function, conforms to
 +.St -p1003.1-2008
-diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/rune.h src/lib/libc/locale/rune.h
---- src53collation/lib/libc/locale/rune.h	Mon Mar 25 18:28:42 2013
-+++ src/lib/libc/locale/rune.h	Tue Apr  2 06:24:51 2013
-@@ -74,7 +74,7 @@
-  * global variables
-  */
- extern size_t __mb_len_max_runtime;
--extern _RuneLocale _DefaultRuneLocale;
--extern _RuneLocale *_CurrentRuneLocale;
-+extern const _RuneLocale _DefaultRuneLocale;
-+extern const _RuneLocale *_CurrentRuneLocale;
- 
- #endif	/*! _RUNE_H_ */
-diff -u src55-orig/lib/libc/locale/runetable.c src/lib/libc/locale/runetable.c
---- src55-orig/lib/libc/locale/runetable.c	Sat Feb  9 14:26:52 2013
-+++ src/lib/libc/locale/runetable.c	Wed Oct 23 06:27:50 2013
-@@ -45,7 +45,7 @@
- #include "citrus_none.h"
- #include <stdlib.h>
- 
--_RuneLocale _DefaultRuneLocale = {
-+const _RuneLocale _DefaultRuneLocale = {
-     _RUNE_MAGIC_1,
-     "NONE",
-     _DEFAULT_INVALID_RUNE,
-@@ -400,4 +400,4 @@
-     NULL
- };
- 
--_RuneLocale *_CurrentRuneLocale = &_DefaultRuneLocale;
-+const _RuneLocale *_CurrentRuneLocale = &_DefaultRuneLocale;
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/runetype.h src/lib/libc/locale/runetype.h
 --- src53collation/lib/libc/locale/runetype.h	Mon Mar 25 18:28:42 2013
 +++ src/lib/libc/locale/runetype.h	Tue Apr  2 06:24:51 2013
@@ -3447,6 +3416,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src54-num/regress/lib/libc/locale
 +SUBDIR+= check_isw check_collate check_monetary check_numeric check_xlocale
  
  install:
+ 
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/regress/lib/libc/locale/check_xlocale/Makefile src/regress/lib/libc/locale/check_xlocale/Makefile
 --- src53collation/regress/lib/libc/locale/check_xlocale/Makefile	Wed Dec 31 19:00:00 1969
 +++ src/regress/lib/libc/locale/check_xlocale/Makefile	Tue Apr  2 21:37:08 2013

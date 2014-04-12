@@ -40,27 +40,6 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/arch/i386/gdt
 +	strtorx_l(s, sp, FLT_ROUNDS, &result, locale);
  	return result;
  }
-diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/arch/m68k/gdtoa/strtold.c src/lib/libc/arch/m68k/gdtoa/strtold.c
---- src54-x6/lib/libc/arch/m68k/gdtoa/strtold.c	Sun Sep  7 15:36:07 2008
-+++ src/lib/libc/arch/m68k/gdtoa/strtold.c	Tue Dec  3 16:12:24 2013
-@@ -32,14 +32,15 @@
-  */
- 
- #include <float.h>
-+#include <xlocale.h>
- 
- #include "gdtoaimp.h"
- 
- long double
--strtold(const char * __restrict s, char ** __restrict sp)
-+strtold_l(const char * __restrict s, char ** __restrict sp, locale_t locale)
- {
- 	long double result;
- 
--	strtorx(s, sp, FLT_ROUNDS, &result);
-+	strtorx_l(s, sp, FLT_ROUNDS, &result, locale);
- 	return result;
- }
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/arch/mips64/gdtoa/strtold.c src/lib/libc/arch/mips64/gdtoa/strtold.c
 --- src54-x6/lib/libc/arch/mips64/gdtoa/strtold.c	Sun Sep  7 15:36:07 2008
 +++ src/lib/libc/arch/mips64/gdtoa/strtold.c	Tue Dec  3 16:12:24 2013

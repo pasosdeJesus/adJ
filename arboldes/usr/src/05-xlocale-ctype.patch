@@ -1687,27 +1687,27 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/que
  .Sh SYNOPSIS
  .In xlocale.h
  .Ft const char *
-diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/towlower.3 src53xlocale2/lib/libc/locale/towlower.3
---- src53xlocale1/lib/libc/locale/towlower.3	Mon Mar 25 18:28:42 2013
-+++ src53xlocale2/lib/libc/locale/towlower.3	Fri Apr 12 12:02:28 2013
-@@ -38,33 +38,62 @@
- .Dt TOWLOWER 3
+diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src56-orig/lib/libc/locale/towlower.3 src/lib/libc/locale/towlower.3
+--- src56-orig/lib/libc/locale/towlower.3	Mon Mar 25 18:28:42 2013
++++ src/lib/libc/locale/towlower.3	Fri Apr 12 12:02:28 2013
+@@ -39,7 +39,9 @@
  .Os
  .Sh NAME
--.Nm towlower
-+.Nm towlower ,
+ .Nm towlower ,
+-.Nm towupper
 +.Nm towlower_l ,
-+.Nm towupper
++.Nm towupper ,
 +.Nm towupper_l
  .Nd wide-character case letter conversion utilities
  .Sh SYNOPSIS
  .In wctype.h
- .Ft wint_t
+@@ -47,18 +49,45 @@
  .Fn towlower "wint_t wc"
  .Ft wint_t
-+.Fn towlower_l "wint_t wc" "locale_t l"
-+.Ft wint_t
  .Fn towupper "wint_t wc"
++.In xlocale.h
++.Ft wint_t
++.Fn towlower_l "wint_t wc" "locale_t l"
 +.Ft wint_t
 +.Fn towupper_l "wint_t wc" "locale_t l"
  .Sh DESCRIPTION
@@ -1725,11 +1725,6 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/tow
 +.Fn towupper_l
 +functions convert an lower-case wide character to the corresponding upper-case
  letter.
- .Sh RETURN VALUES
- If the argument is an upper/lower-case letter, the
- .Fn tolower
- function returns the corresponding counterpart if there is
- one; otherwise the argument is returned unchanged.
 +.Pp
 +The behavior of the functions
 +.Fn towupper
@@ -1746,16 +1741,14 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/tow
 +.Dv LC_CTYPE
 +category of the locale provided as parameter, see
 +.Xr xlocale 3 .
+ .Sh RETURN VALUES
+ If the argument is an upper/lower-case letter, the
+ .Fn tolower
++and
++.Fn tolower_l
+ function returns the corresponding counterpart if there is
+ one; otherwise the argument is returned unchanged.
  .Sh SEE ALSO
- .Xr tolower 3 ,
- .Xr toupper 3
-+.Xr xlocale 3
- .Sh STANDARDS
- The functions conform to
-+POSIX 2008,
- .St -isoC-amd1
- and
- .St -isoC-99 .
 diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/uselocale.3 src53xlocale2/lib/libc/locale/uselocale.3
 --- src53xlocale1/lib/libc/locale/uselocale.3	Mon Apr  8 21:20:56 2013
 +++ src53xlocale2/lib/libc/locale/uselocale.3	Fri Apr 12 12:15:27 2013

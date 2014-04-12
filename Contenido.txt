@@ -225,6 +225,7 @@ dvi2tty-[v]		Convierte archivos dvi a texto plano
 enca-[v]		Detecta codificación de caracteres de textos planos
 enchant-[v]		Librería genérica para corrección ortográfica
 esound-[v]	Librería de sonido para enlightment
+expect-[v]	
 faad-[v]		Decodificar AAC MPEG-2 y MPEG-4	
 fcgi-[v]		Herramientas de Desarrollo FastCGI
 femail-[v]		Cliente simple de SMTP
@@ -236,6 +237,7 @@ flac-[v]		Codec abierto de audio sin perdidas
 flock-[v]	Administrador de flock para archivos de comandos
 foomatic-filters-[v]	Filtros PPD de impresión foomatic
 foomatic-db-engine-[v]	Generador de PPDs de Foomatic
+foomatic-db-[v]	
 fox-[v]		Juego de herramientas para interfaces en C++
 freetype-[v]	Motor para renderización de fuentes True Type
 freexl-[v]		Extrae datos válidos de una hoja de cálculo Excel
@@ -244,6 +246,7 @@ gamin-[v]		Servidor para monitorear archivos
 gconf2-[v]		Sistema de configuración de G
 gd-[v]		Librería para creación dinámica de imágenes
 gdal-[v]		Libreria de traduccion de formatos geoespaciales
+gcr-[v]		
 gdbm-[v]		Versión de dbm		
 gdk-pixbuf-[v]	Librería gráfica para GTK+2
 gegl-[v]		Entorno para procesamiento de imágenes basado en grafos
@@ -253,6 +256,7 @@ ggrep-[v]	Versión GNU del programa de reconocimiento de patrones grep
 geoclue-[v]	Servicio modular de geoinformación sobre D-Bus
 geos-[v]		Motor de geometría y topología bidimensional
 giblib-[v]		Librería de utilidades
+giflib-[v]		
 ghostscript-[v]	Genera PostScript
 ghostscript-fonts-[v]	Fuentes para GhostScript
 glib2-[v]		Más rutinas
@@ -263,6 +267,7 @@ gmp-[v]		Librería de aritmética de precisión arbitraría
 gnome-doc-utils-[v]	Utilidades para documentación del proyecto GNOME
 gnome-icon-theme-[v]	Iconos para GNOME
 gnome-icon-theme-symbolic-[v]	Extensión al tema de iconos base
+gnome-keyring-[v]  Libreria para integrar anillo de llaves GNOME
 gnome-mime-data-[v]	Base de datos MIME y de aplicaciones
 gnome-vfs2-[v]	Sistema de archivos virtual
 gnugetopt-[v]	Utilidad getopt(1) de GNU
@@ -282,6 +287,7 @@ gstreamer-plugins-good-[v]	Elementos buenos para GStreamer
 gstreamer1-[v]		Ambiente para emitir multimedios
 gstreamer1-plugins-base-[v]	Elementos base para Gstreamer
 gstreamer1-plugins-libav-[v]	Elementos ffmpeg para Gstreamer
+gtar-[v]
 gtk+2-[v]		Componentes gráficos GTK+2
 gtk+3-[v]		Componentes gráficos GTK+2
 gtk-update-icon-cache-[v]	Utilidad para almacenar temas de iconos
@@ -368,6 +374,7 @@ libmspack-[v]	Librería para manejar formatos de compresión de MS
 libnettle-[v]		Envía notificaciones de escritorio a un servicio 
 libnotify-[v]	Envía notificaciones de escritorio a un servicio 
 libogg-[v]		Librería para flujos de bits OGG
+libpaper-[v]	
 libproxy-[v]	Librería para manejar detalles de un proxy
 libpurple-[v]	Librería multiprotocolo de mensajería instantánea
 librsvg-[v]	Librería para reconocer archivos SVG basada en SAX
@@ -379,6 +386,7 @@ libsigsegv-[v]		Librería para manejar fallos de página en modo usuario
 libsndfile-[v]	Maneja varios formatos de audio
 libsoup-[v]		Implementación SOAP en C
 libsoup-gnome-[v]	Partes específicas de GNOME de libsoup
+libsoxr-[v]		
 libspatialite-[v]  	sqlite extendido con capacidades SQL espaciales
 libspectre-[v]  	Librería para presentar documentos Postscript
 libssh2-[v]	Librería que implement protocolo ssh2
@@ -433,14 +441,17 @@ p5-DBI-[v]		Interfaz unificada para acceso a bases de datos
 p5-DBD-mysql-[v]	Controladores MySQL para perl
 p5-Digest-SHA1-[v]	Módulo para calcular condensado SHA1
 p5-Digest-HMAC-[v]	Interfaz para los algoritmos HMAC
+p5-Encode-Detect-[v]	
 p5-Error-[v]	Manejo de errores al estilo objetos
 p5-FreezeThaw-[v]	Convierte estructuras a cadena y viceversa
 p5-Geography-Countries-[v]	Códigos para países
+p5-Geo-IP-[v]
 p5-HTML-Tagset-[v]	Tablas de datos útiles para reconocer HTML	
 p5-HTML-Parser-[v]	Reconoce y extrae información de HTML	
 p5-HTTP-GHTTP-[v]	Interfaz para GNOME GHTTP	
-p5-IO-Socket-SSL-[v]	Interfaz para sockets SSL	
 p5-IO-Socket-INET6-[v]	Interfaz para objetos AF_INET y AF_INET6
+p5-IO-Socket-IP-[v]	
+p5-IO-Socket-SSL-[v]	Interfaz para sockets SSL	
 p5-IP-Country-[v]	Para buscar códigos de paises por dirección IP
 p5-libwww-[v]		Librería de acceso WWW
 p5-Mail-SPF-[v]	Implementación OO de Sender Policy Framerwork
@@ -448,9 +459,11 @@ p5-Mail-Tools-[v]	Módulo para manejar correo con Perl
 p5-Mail-DKIM-[v]	Implementación de firmas DKIM y DomainKeys
 p5-MLDBM-[v]		Almacena estrucutra de hash multi nivel en uno solo
 p5-NetAddr-IP-[v]	Maneja direcciones y subredes IPv4 e IPv6
+p5-Net-CIDR-Lite-[v]	
 p5-Net-Daemon-[v]	Extensión para servicios portables
 p5-Net-DNS-[v]		Interfaz al resolvedor DNS	
 p5-Net-DNS-Resolver-Programmable-[v]	Emulación fuera de línea de resolvedor	
+p5-Net-Patricia-[v]
 p5-Net-SSLeay-[v]	Módulo para usar OpenSSL	
 p5-Params-Util-[v]	Facilita revisión de parámetros	
 p5-PlRPC-[v]	Módulo para escribir clientes y servidores RPC
@@ -464,6 +477,7 @@ p5-XML-NamespaceSupport-[v]	Interfaz a clase SAX2 NamespaceSupport
 p5-XML-Parser-[v]	Módulo perl para reconocer documentos XML
 p5-XML-SAX-[v]	Interfaz al reconocedor SAX2 de XML
 p5-YAML-Syck-[v]	YAML y JSON para perl opmtimizado en C
+p7zip-[v]
 pango-[v]		Organización y presentación de texto
 pangomm-[v]	Interfaz en C++ para pango
 pcre-[v]		Librería de expresiones regulares a la Perl
@@ -501,6 +515,7 @@ pear-XML-Util-[v]	Utilidad XML
 pecl-uploadprogress-[v]	Medida de progreso de archivos subidos para PHP
 png-[v]		Librería para manipular imágenes PNG
 poppler-[v]		Librería para presentar PDF
+poppler-data-[v]		
 poppler-utils-[v]	Utilidades para conversión de PDF
 popt-[v]		Librería estilo getopt
 portaudio-svn-[v]	API de audio portable y multi-plataforma
