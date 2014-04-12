@@ -1437,7 +1437,7 @@ if (test "$p" != "") then {
 echo "* Configurar servidor web" >> /var/tmp/inst-adJ.bitacora ;
 if (test ! -f /etc/ssl/server.crt) then {
 	echo "* Configurando Certificado SSL" | tee -a /var/tmp/inst-adJ.bitacora;
-	openssl genrsa -out /etc/ssl/private/server.key 1024
+	openssl genrsa -out /etc/ssl/private/server.key 2048
 	openssl req -new -key /etc/ssl/private/server.key \
        		-out /etc/ssl/private/server.csr
 	openssl x509 -req -days 3650 -in /etc/ssl/private/server.csr \
