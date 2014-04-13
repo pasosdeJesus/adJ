@@ -1,74 +1,52 @@
-Instalación/Actualización a Aprendiendo De Jesús 5.4
-****************************************************
+Actualización a Aprendiendo De Jesús 5.4p1
+******************************************
 
-La instalación/actualización consta de 3 partes:
+La actualización consta de 3 partes:
 
       a) Preparar su sistema y descargar instalador
-      b) Instalación/Actualización del Sistema Base
-      c) Instalación/Actualización de Aplicaciones 
+      b) Actualizar el Sistema Base
+      c) Actualizar Aplicaciones 
 
 
 a) Para preparar su sistema:
-      * Si va a instalar reserve espacio en un disco duro, en una
-        partición primaria, cuya primera cabeza (head) no sea 0 sino 1.
-        La instalación del sistema base, de las particiones cifradas 
-        y de todos los paquetes del DVD instalador requiere por lo menos 
-        13G, de los cuales 10G deben reservarse en /usr y 
-        1.5G en /var
-        * Para instalaciones nuevas recomendamos descargar el DVD, para
-          actualizaciones suele ser más rápido descargar los directorios 
-          y archivos con:
-              rsync-adJ 5.4
-      * Si va a actualizar, puede ejecutar el archivo de comandos 
-        preact-adJ.sh incluido en el directorio util del DVD de instalación.
-        Este archivo de comandos prepara para actualizar por ejemplo 
-        sacando respaldo de base de datos cuando se requiere:
-              mount /mnt/cdrom
-              sudo /mnt/cdrom/util/preact-adJ.sh
+      * Aunque puede descargar DVD de instalación, es más breve y robusto ante
+	fallas descargar los directorios y archivos del instalador con:
+              	mkdir -p ~/comp/adJ;
+		cd ~/comp/adJ;
+		rsync-adJ 5.4p1
+	Si ocurre alguna falla durante la transmisión podrá continuar donde
+	quedó repitiendo estas instrucciones.
+      * Si va a actualizar, debe sacar copia de la base de datos y realizar
+        otras operaciones para preparar sus sitema, puede hacerlo ejecutando
+	el archivo de ordenes preact-adJ.sh incluido en el directorio util 
+	del DVD de instalación.
+	Si descargó fuentes con el procedimiento anterior ejecutelo con:
+              ~/comp/adJ/5.4p1-amd64/util/preact-adJ.sh
 
-b) Para la instalación/actualización del sistema base :
-      * Elegir un método para arrancar el computador con el disco virtual de
-        instalación.  Puede ser: (1) DVD configurando el BIOS, (2) disquete 
-        con una imagen como floppy52.fs, (3) si actualiza puede iniciar 
-        con el kernel bsd.rd de la versión a la cual se actualiza 
-        copiándolo en el directorio raíz y en la línea "boot>" ingresando 
-        bsd.rd, (4) por red local con PXE, DHCP y TFTP
-      * Elegir un medio del que se sacarán los juegos de instalación. Puede 
-        ser del DVD, disco duro en un sistema de archivos de OpenBSD, 
-        por red con ftp o http.
-      * Si se comparte el computador con otro sistema operativo, configure
-        un manejador de arranque (LILO, GRUB, NTLDR, etc) o inicie siempre
-        con el DVD y en la línea "boot>" ingrese "hd0a:bsd" si instaló
-        en el primer disco IDE o "hd1a:bsd" si instaló en el segundo.
-      * Si requiere actualizar de una versión de 32 bits a una de 64, tenga en
-        cuenta sacar copia de las bases de datos para PostgreSQL antes de 
-        actualizar el sistema base.
+b) Para actualizar el sistema base:
+      * Copie kernel y descomprima los archivos comprimidos con el sistema 
+        base en su directorio raiz y reinicie, esto lo puede hacer con el 
+	archivo de órdenes actbase.sh:
+		cd ~/comp/adJ; 
+		/usr/local/adJ/actbase.sh 5.4p1
 
 c) Para la instalación/actualización de aplicaciones:
-      * Se inicia con: 
-              /inst-adJ.sh
+      * Después de reinicar debe ejecutar  el archivo de ordenes /inst-adJ.sh.
         Este archivo de comandos emplea codificación UTF8, por lo que para 
-          iniciarlo se recomienda desde una terminal gráfica.
-        Que iniciará una sesión del administrador (por lo cual
-          debe suministrar clave del usuario root) y ejecutar el 
-        archivo de comnados de instalación de acuerdo a su entorno.
-          Si planea emplear Apache como servidor web, pero si prefiere 
-        nginx use: 
-            CONNGINX=1 /inst-adJ.sh
+        iniciarlo se recomienda desde una terminal gráfica.  Suponiendo que 
+        descargo con las instrucciones dadas previamente puede usar:
+		sudo ARCH=~/comp/adJ/5.4p1-amd64 /inst-adJ.sh
+
         Este archivo de comandos además de asistir actualizaciones 
         que puedan hacer falta de una versión a otra del sistema base, 
         instala y configura los paquetes y componentes que conforman 
         la distribución adJ: zonas de disco encriptadas, base de 
         datos PostgreSQL --preferiblemente en imagen encriptada--, Apache 
-        de OpenBSD con SSL, PHP Hardened, ispell, escritorio gráfico con 
+        de OpenBSD con SSL, PHP Hardened, ispell, ruby, escritorio gráfico con 
         fluxbox, navegadores recientes y otras aplicaciones gráficas
         que facilitan el uso (Si prefiere o debe hacer actualización manual 
         del sistema base, tenga en cuenta la lista oficial de cambios 
-        requeridos disponible en: http://openbsd.org/faq/upgrade51.html )
-      * Por defecto este instalador intenta obtener las aplicaciones de un 
-         DVD, pero si las aplicaciones están en un disco duro (digamos en 
-          /root/adJ/5.1-amd64) puede iniciarse con:
-            sudo ARCH=/root/adJ/5.1-amd64 /usr/local/adJ/inst.sh
+        requeridos disponible en: http://openbsd.org/faq/upgrade54.html )
       * Si el proceso no concluye exitosamente por favor después de ejecutar
         el instalador y avanzar tanto como pueda envíe el archivo
         /var/tmp/inst-adJ.bitacora a info@pasosdeJesus.org
