@@ -1253,14 +1253,23 @@ if (test "$?" = "0") then {
 			if (test -f /tmp/penc.txt -a ! -z /tmp/penc.txt) then {
 				dbenc=`grep -v "(1 row)" /tmp/penc.txt | grep -v "server_encoding" | grep -v "[-]-----" | grep -v "^ *$" | sed -e "s/  *//g"`
 			} fi;
-			echo -n "pg_dumpall $acuspos --inserts --column-inserts --host=/var/www/tmp > /var/www/resbase/pga-conc.sql" > /tmp/cu.sh
+			echo "pg_dumpall $acuspos --inserts --column-inserts --host=/var/www/tmp > /var/www/resbase/pga-conc.sql" > /tmp/cu.sh
+			echo "if (test \"\$?\" != \"0\") then {" >> /tmp/cu.sh 
+			echo "  echo \"No pudo completarse la copia\";" >> /tmp/cu.sh 
+			echo "  exit 1;" >> /tmp/cu.sh 
+			echo "} fi;" >> /tmp/cu.sh 
 			chmod +x /tmp/cu.sh
 			cat /tmp/cu.sh >> /var/tmp/inst-adJ.bitacora
 			su - _postgresql /tmp/cu.sh >> /var/tmp/inst-adJ.bitacora;
-			grep "CREATE DATABASE" /var/www/resbase/pga-conc.sql | grep -v "ENCODING" > /tmp/cb.sed
-			sed -e "s/\(.*\);$/s\/\1;\/\1 ENCODING='$dbenc';\/g/g" /tmp/cb.sed  > /tmp/cb2.sed
-			cat /tmp/cb2.sed >> /var/tmp/inst-adJ.bitacora
-			grep -v "ALTER ROLE $uspos" /var/www/resbase/pga-conc.sql | sed -f /tmp/cb2.sed > /var/www/resbase/pga-$nb.sql
+			if (test "$?" != "0" -a -f /var/www/resbase/pga-conc.sql) then {
+				echo "* Copia incompleta dejada en /var/www/resbase/pga-par.sql"
+				mv /var/www/resbase/pga-conc.sql /var/www/resbase/pga-par.sql
+			} else {
+				grep "CREATE DATABASE" /var/www/resbase/pga-conc.sql | grep -v "ENCODING" > /tmp/cb.sed
+				sed -e "s/\(.*\);$/s\/\1;\/\1 ENCODING='$dbenc';\/g/g" /tmp/cb.sed  > /tmp/cb2.sed
+				cat /tmp/cb2.sed >> /var/tmp/inst-adJ.bitacora
+				grep -v "ALTER ROLE $uspos" /var/www/resbase/pga-conc.sql | sed -f /tmp/cb2.sed > /var/www/resbase/pga-$nb.sql
+			} fi;
 		} else {
 			echo "PostgreSQL no está corriendo, no fue posible sacar copia" >> /var/tmp/inst-adJ.bitacora;
 		} fi;
@@ -1483,7 +1492,7 @@ if (test "$p" != "") then {
 echo "* Configurar servidor web" >> /var/tmp/inst-adJ.bitacora ;
 if (test ! -f /etc/ssl/server.crt) then {
 	echo "* Configurando Certificado SSL" | tee -a /var/tmp/inst-adJ.bitacora;
-	openssl genrsa -out /etc/ssl/private/server.key 1024
+	openssl genrsa -out /etc/ssl/private/server.key 2048
 	openssl req -new -key /etc/ssl/private/server.key \
        		-out /etc/ssl/private/server.csr
 	openssl x509 -req -days 3650 -in /etc/ssl/private/server.csr \

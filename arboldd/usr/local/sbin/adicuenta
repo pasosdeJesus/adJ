@@ -53,8 +53,9 @@ if (test "$nom" = "") then {
 groupinfo $gru > /dev/null 2>&1
 if (test "$?" != "0") then {
     echo "Agregando grupo $gru";
-    groupadd $gru 
+	groupadd $gru
 } fi;
+
 
 if (test "$claveplana" != "") then {
     en=`echo "$claveplana" | sed -e 's/.*\$.*/si/g'`;
@@ -70,13 +71,11 @@ if (test "$claveplana" != "") then {
 userinfo $us >/dev/null 2> /dev/null
 if (test "$?" != "0") then {
     if (test "$virtualuser" != "") then {
-		echo "Agregando sin shell";
+	    echo "Agregando sin shell";
 	    adduser -v -batch $us $gru "$nom" "$clave" -shell /sbin/nologin -group $gru
     } else {
-	    echo "Agregando con shell";
-	    cmd="adduser -v -batch $us $gru \"$nom\" \"$clave\""
-	    echo "cmd=$cmd";
-	    eval "$cmd";
+		echo "Agregando con shell";
+	    adduser -v -batch $us $gru "$nom" "$clave"
     } fi;
     if (test "$clave" = "") then {
         passwd $us
@@ -186,13 +185,13 @@ if (test "$virtualuser" = "") then {
 	chmod go-wrx $partenc/$us/personal
 	chmod o-rxw $partenc/$us/
 	if (test ! -h $dhome/enc) then {
-		ln -s $partenc/$us/ $dhome/enc
+		ln -fs $partenc/$us/ $dhome/enc
 	} fi;
 	if (test ! -h $dhome/personal) then {
-		ln -s $partenc/$us/personal $dhome/enc_personal
+		ln -fs $partenc/$us/personal $dhome/enc_personal
 	} fi;
 	if (test ! -h $dhome/recibe) then {
-		ln -s $partenc/$us/recibe $dhome/enc_recibe
+		ln -fs $partenc/$us/recibe $dhome/enc_recibe
 	} fi;
 
 
@@ -209,7 +208,7 @@ if (test "$virtualuser" = "") then {
 	chmod -R g+w $partenc/compartido
 
 	if (test -d $partenc/compartido -a ! -h $dhome/compartido) then {
-		ln -s $partenc/compartido $dhome/enc_compartido
+		ln -fs $partenc/compartido $dhome/enc_compartido
 	} fi;
 
 
@@ -217,12 +216,12 @@ if (test "$virtualuser" = "") then {
 	mkdir -p /var/www/users/$us
 	chown $us:$gru /var/www/users/$us
 	if (test ! -h $dhome/publico) then {
-		ln -s /var/www/users/$us/ $dhome/publico
+		ln -fs /var/www/users/$us/ $dhome/publico
 	} fi;
 } fi;
 
 if (test ! -h $dhome/$Maildir ) then {
-	cmd="ln -s $partenc/$us/$Maildir $dhome/$Maildir"
+	cmd="ln -fs $partenc/$us/$Maildir $dhome/$Maildir"
 	echo "$cmd";
 	eval "$cmd";
 } fi;
