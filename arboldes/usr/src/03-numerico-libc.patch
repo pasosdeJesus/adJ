@@ -227,7 +227,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src54-mon/lib/libc/locale/setlocale.c src
  		break;
  	case LC_NUMERIC:
 +		if (__numeric_load_locale(locname)) {
-+			return;
++			return -1;
 +		}
 +		break;
  	case LC_TIME:

@@ -744,7 +744,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/lnumer
 -			_CurrentNumericLocale = &_DefaultNumericLocale;
 -		else 
 -			_CurrentNumericLocale = &_numeric_locale;
-+	int ret;
++	int ret = 0;
 +	if (strcmp(name, "C") == 0 || strcmp(name, "POSIX") == 0) {
 +		__xlocale_global_numeric.header.header.retain_count = 0;
 +		__xlocale_global_numeric.header.header.destructor = NULL;

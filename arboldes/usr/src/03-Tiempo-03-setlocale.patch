@@ -1,0 +1,430 @@
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/locale/_def_time.c src/lib/libc/locale/_def_time.c
+--- src56-orig/lib/libc/locale/_def_time.c	Mon Apr 28 06:20:02 2014
++++ /usr/src56-lctime/lib/libc/locale/_def_time.c	Thu Apr 24 21:20:12 2014
+@@ -35,3 +35,39 @@
+ };
+ 
+ const _TimeLocale *_CurrentTimeLocale = &_DefaultTimeLocale;
++
++/* This will point to time locale data when not using DefaultTimeLocale */
++_TimeLocale _time_locale;
++
++/* Buffer for time locale data when not using C / POSIX */
++static char *_time_buffer = NULL;
++
++/* 1 if the locale changes, 0 otherwise */
++int __tlocale_changed;
++
++
++/* Loads time locale from file in text format */
++int
++__time_load_locale(const char *name)
++{
++	int ret;
++	char error_buf[2048];
++
++	__tlocale_changed = 0;
++	if (strcmp(name, "C") == 0 || strcmp(name, "POSIX") == 0) {
++		if (_CurrentTimeLocale != &_DefaultTimeLocale) {
++			__tlocale_changed = 1;
++			_CurrentTimeLocale = &_DefaultTimeLocale;
++		}
++	} else {
++		ret = __loadtextcat(name, LC_TIME, &__tlocale_changed,
++				&_time_buffer, 
++				(const char**)&_time_locale, 
++				sizeof(_time_locale), 
++				error_buf, sizeof(error_buf));
++		if (ret == 0) {
++			_CurrentTimeLocale = &_time_locale;
++		}
++	}
++	return ret;
++}
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/locale/Makefile.inc src/lib/libc/locale/Makefile.inc
+--- src56-orig/lib/libc/locale/Makefile.inc	Wed Aug 28 11:53:34 2013
++++ src/lib/libc/locale/Makefile.inc	Fri Apr 25 10:11:05 2014
+@@ -12,7 +12,7 @@
+ 	wcstombs.c wctob.c wctomb.c wcstof.c wcstod.c wcstold.c wcstol.c \
+ 	wcstoul.c wcstoll.c wcstoull.c wcstoimax.c wcstoumax.c \
+ 	setrunelocale.c runeglue.c rune.c runetable.c ___runetype_mb.c \
+-	_wctrans.c wcsxfrm.c
++	_wctrans.c wcsxfrm.c loadtextcat.c 
+ 
+ MAN+=	nl_langinfo.3 setlocale.3 iswalnum.3 towlower.3 \
+ 	btowc.3 mblen.3 mbrlen.3 mbrtowc.3 mbsinit.3 mbsrtowcs.3 \
+diff -ruN src56-orig/lib/libc/locale/loadtextcat.h src/lib/libc/locale/loadtextcat.h
+--- src56-orig/lib/libc/locale/loadtextcat.h	Wed Dec 31 19:00:00 1969
++++ src/lib/libc/locale/loadtextcat.h	Mon Apr 28 22:16:18 2014
+@@ -0,0 +1,44 @@
++/*
++** Copyright (c) 1989, 1993
++**	The Regents of the University of California.  All rights reserved.
++**
++** Redistribution and use in source and binary forms, with or without
++** modification, are permitted provided that the following conditions
++** are met:
++** 1. Redistributions of source code must retain the above copyright
++**    notice, this list of conditions and the following disclaimer.
++** 2. Redistributions in binary form must reproduce the above copyright
++**    notice, this list of conditions and the following disclaimer in the
++**    documentation and/or other materials provided with the distribution.
++** 3. Neither the name of the University nor the names of its contributors
++**    may be used to endorse or promote products derived from this software
++**    without specific prior written permission.
++**
++** THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
++** ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++** IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++** ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
++** FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++** DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++** OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++** HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++** LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++** OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++** SUCH DAMAGE.
++*/
++
++#ifndef _LOADTEXTCAT_H_
++#define _LOADTEXTCAT_H_
++
++char *__category_filename(const char *locname, const char *category_filename, 
++		char *filename, size_t sfilename, 
++		char *error_buf, int error_buf_size);
++
++int
++__loadtextcat(const char *name, int category, int *changed, 
++		char **locale_buf, 
++		const char **dst_locale_buf, size_t dst_locale_buf_size,
++		char *error_buf, size_t error_buf_size);
++
++
++#endif
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/locale/loadtextcat.c src/lib/libc/locale/loadtextcat.c
+--- src56-orig/lib/libc/locale/loadtextcat.c	Wed Dec 31 19:00:00 1969
++++ src/lib/libc/locale/loadtextcat.c	Thu Apr 24 15:47:09 2014
+@@ -0,0 +1,295 @@
++/*
++** Copyright (c) 1989, 1993
++**	The Regents of the University of California.  All rights reserved.
++**
++** Redistribution and use in source and binary forms, with or without
++** modification, are permitted provided that the following conditions
++** are met:
++** 1. Redistributions of source code must retain the above copyright
++**    notice, this list of conditions and the following disclaimer.
++** 2. Redistributions in binary form must reproduce the above copyright
++**    notice, this list of conditions and the following disclaimer in the
++**    documentation and/or other materials provided with the distribution.
++** 3. Neither the name of the University nor the names of its contributors
++**    may be used to endorse or promote products derived from this software
++**    without specific prior written permission.
++**
++** THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
++** ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++** IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++** ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
++** FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++** DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++** OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++** HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++** LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++** OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++** SUCH DAMAGE.
++*/
++
++#include <sys/stat.h>
++
++#include <fcntl.h>
++#include <locale.h>
++#include <paths.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++
++/* Amount of lines in a text file with LC_TIME locale */
++#define LC_TIME_LINES 45
++
++
++/**
++ * In OpenBSD builds filename for a category of a locale (lang_terr.enc) 
++ * by trying to find it in directories of /usr/share/locale in this order:
++ * 1. lang_terr.enc
++ * 2. lang.enc
++ * 3. enc
++ * If it finds in any of them and the path size is less than sfilename,
++ * fills filename and returns a pointer to it, otherwise return NULL
++ */
++char *__category_filename(const char *locname, const char *category_filename, 
++		char *filename, size_t sfilename, 
++		char *error_buf, int error_buf_size)
++{
++	int len, fd;
++	char *dot, *und;
++
++	len = snprintf(filename, sfilename, "%s/%s/%s", _PATH_LOCALE, 
++			locname, category_filename);
++	if (len < 0 || len >= sfilename) {
++		snprintf(error_buf, error_buf_size, 
++				"Length %i outside bounds (1)", len);
++		return NULL;
++	}
++
++	if ((fd = open(filename, O_RDONLY | O_CLOEXEC)) < 0) {
++		/* Assumes "lang[_territory][.codeset]" locale name. */
++		dot = strrchr(locname, '.');
++		if (dot == NULL) {
++			snprintf(error_buf, error_buf_size, 
++				"Locale name %s without dot", locname);
++			return NULL;
++		}
++		und = strchr(locname, '_');
++		if (und == NULL) {
++			len = snprintf(filename, sfilename, "%s/%s/%s", 
++					_PATH_LOCALE, dot + 1, 
++					category_filename );
++			if (len < 0 || len >= sfilename) {
++				snprintf(error_buf, error_buf_size, 
++						"Length %i outside bounds (2)",
++					       	len);
++				return NULL;
++			}
++			if ((fd = open(filename, O_RDONLY | O_CLOEXEC)) < 0)  {
++				snprintf(error_buf, error_buf_size, 
++						"Can't open %s (1)",
++					       	filename);
++				return NULL;
++			}
++		} else {
++			// If locname is lang_territory.enc try with lang.enc
++			len = snprintf(filename, sfilename, "%s/", 
++					_PATH_LOCALE);
++			if (len + (und - locname) + 1 > sfilename)  {
++				snprintf(error_buf, error_buf_size, 
++						"Length %i outside bounds (3)",
++					       	len);
++				return NULL;
++			}
++			len += (und - locname) + 1;
++			strlcat(filename, locname, len);
++			len = snprintf(filename, sfilename, 
++					"%s.%s/%s", 
++					filename, dot + 1, category_filename);
++			if (len < 0 || len >= sfilename) {
++				snprintf(error_buf, error_buf_size, 
++						"Length %i outside bounds (4)",
++					       	len);
++				return NULL;
++			}
++			if ((fd = open(filename, O_RDONLY | O_CLOEXEC)) < 0) {
++				snprintf(error_buf, error_buf_size, 
++						"Can't open %s (2)",
++						filename);
++				return NULL;
++			}
++		}
++	}
++	close(fd);
++
++	return filename;
++}
++
++
++/** 
++ * Reads a LC_TIME locale category from a file in text format 
++ * (each element is a line).  
++ * The amount of lines in file must be locale_buf_lines.
++ * Locates the file by using the name of the wanted locale (name), 
++ *   and the category (category) --see __category_filename.  If it cannot 
++ *   find the file returns -1;
++ * The contents of the file will be in locale_buf, changing \n by \0 and
++ *   pointing the start of each line with dst_locale_buf
++ *
++ * Returns 0 if it can read the locale or if it already was loaded in 
++ *   locale_buf (in the former case sets *changed to 1 in the later to 0).
++ * Returns -1 if an error ocurrs and a description of the error for debugging
++ *   purposes is filled in error_buf (of size error_buf_size).
++ *
++ * This function shouldn't be called to load the locales C or POSIX since 
++ *   those locales should be constant and always in memory.
++ *
++ * Adapted from function _loc located before at lib/libc/time/strftime.c.
++ * As done in FreeBSD in ldpart by Alexey Zelkin the idea is to 
++ * reuse this function to read several locale categories (LC_NUMERIC, 
++ * LC_MONETARY and LC_TIME) and xlocales.
++ */
++int
++__loadtextcat(const char *name, int category, int *changed, 
++		char **locale_buf, 
++		const char **dst_locale_buf, size_t dst_locale_buf_size,
++		char *error_buf, size_t error_buf_size)
++{
++	const char *		cfname;  // Base name for category
++	int 			locale_buf_lines; // Lines that file should have
++	size_t			namesize; // Size of name
++	char			filename[FILENAME_MAX]; // Path to category
++	int			fd; // File descriptor for filename
++	struct stat		st; // For filename
++	char *			lbuf; // Buffer to put filename and its contents
++	size_t			bufsize; // Size of lbuf
++	char *			p; // Pointer to lbuf
++	const char *		plim; // Pointer to end of lbuf
++	int 			num_lines; // Lines in lbuf
++	int 			i;
++
++	*changed = 0;
++	if (locale_buf == NULL) {
++		snprintf(error_buf, error_buf_size, 
++				"locale_buf cannot be NULL");
++		goto no_locale;
++	}
++
++
++	switch (category) {
++		case LC_TIME:
++			cfname = "LC_TIME";
++			locale_buf_lines = LC_TIME_LINES;
++			break;
++		default:
++			snprintf(error_buf, error_buf_size, 
++					"Unsupported category %i", category);
++			goto no_locale;
++			break;
++	}
++	if ((dst_locale_buf_size / sizeof(char *)) < locale_buf_lines) {
++		snprintf(error_buf, error_buf_size, 
++				"Wrong size of dst_locale_buf %i", 
++				sizeof(dst_locale_buf));
++		goto no_locale;
++	}
++
++	/*
++	 ** If the locale is already in cache, use the cache.
++	 */
++	if (locale_buf != NULL && *locale_buf != NULL && 
++			strcmp(name, *locale_buf) == 0) {
++		return 0;
++	}
++
++	/*
++	 ** Slurp the locale file into the cache.
++	 */
++	namesize = strlen(name) + 1;
++	if (__category_filename(name, cfname, filename, sizeof(filename), 
++				error_buf, error_buf_size) == NULL)
++		goto no_locale;
++
++	fd = open(filename, O_RDONLY | O_CLOEXEC);
++	if (fd < 0) {
++		snprintf(error_buf, error_buf_size, 
++				"Can't open %s (3)", filename);
++		goto no_locale;
++	}
++	if (fstat(fd, &st) != 0) {
++		snprintf(error_buf, error_buf_size, 
++				"Can't fstat %s", filename);
++		goto bad_locale;
++	}
++	if (st.st_size <= 0) {
++		snprintf(error_buf, error_buf_size, 
++				"Wrong file size %i", st.st_size);
++		goto bad_locale;
++	}
++	bufsize = namesize + st.st_size;
++	lbuf = malloc(bufsize);
++	if (lbuf == NULL) {
++		snprintf(error_buf, error_buf_size, "Not enough memory");
++		goto bad_locale;
++	}
++	(void) strlcpy(lbuf, name, bufsize);
++	p = lbuf + namesize;
++	plim = p + st.st_size;
++	if (read(fd, p, (size_t) st.st_size) != st.st_size) {
++		snprintf(error_buf, error_buf_size, 
++				"Couldn't read %i bytes", st.st_size);
++		goto bad_lbuf;
++	}
++	if (close(fd) != 0) {
++		snprintf(error_buf, error_buf_size, 
++				"Couldn't close file with descriptor %i ", fd);
++		goto bad_lbuf;
++	}
++
++	/*
++	** Parse the locale file into localebuf.
++	*/
++	if (plim[-1] != '\n') {
++		snprintf(error_buf, error_buf_size, 
++				"File %s should end with new line ", filename);
++		goto bad_lbuf;
++	}
++	num_lines = 0;
++	while (p < plim) {
++		if (*p == '\n') {
++			*p = '\0';
++			num_lines++;
++		}
++		p++;
++	}
++	if (num_lines != locale_buf_lines) {
++		snprintf(error_buf, error_buf_size, 
++				"File %s should have %i lines", 
++				filename, locale_buf_lines);
++		goto bad_lbuf;
++	}
++		
++	/*
++	** Record the successful parse in the cache.
++	*/
++	if (*locale_buf != NULL) 
++		free(*locale_buf);
++
++	*changed = 1;
++	*locale_buf = lbuf;
++	p = lbuf + namesize;
++	i = 0;
++	do {
++		dst_locale_buf[i] = p;
++		p += strlen(p) + 1;
++		i++;
++	} while (p < plim);
++
++	return 0;
++
++bad_lbuf:
++	free(lbuf);
++bad_locale:
++	(void) close(fd);
++no_locale:
++	return -1;
++}
++
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/locale/setlocale.c src/lib/libc/locale/setlocale.c
+--- src56-orig/lib/libc/locale/setlocale.c	Wed Aug 28 11:53:34 2013
++++ src/lib/libc/locale/setlocale.c	Thu Apr 24 13:57:31 2014
+@@ -203,7 +203,10 @@
+ 	case LC_COLLATE:
+ 	case LC_MONETARY:
+ 	case LC_NUMERIC:
++		break;
+ 	case LC_TIME:
++		if (__time_load_locale("C"))
++			return;
+ 		break;
+ 	}
+ }
+@@ -264,8 +267,11 @@
+ 	case LC_COLLATE:
+ 	case LC_MONETARY:
+ 	case LC_NUMERIC:
+-	case LC_TIME:
+ 		return -1;
++	case LC_TIME:
++		if (__time_load_locale(locname)) 
++			return -1;
++		break;
+ 	}
+ 
+ 	return 0;
+

@@ -44,7 +44,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src54-mon/regress/lib/libc/locale/check_n
 +#include <stdlib.h>
 +#include <string.h>
 +
-+int bad;
++int bad = 0;
 +
 +#define p(t) printf("%s:\t ",#t); \
 +	if (t) { \

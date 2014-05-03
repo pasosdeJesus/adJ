@@ -82,7 +82,7 @@ diff -ruN -x *out -x *orig -x obj -x *~ src54-orig/share/locale/numericdef/Makef
 +
 +BE_LINKS=	fr_BE:nl_BE
 +NO_LINKS=	no:nb_NO no:nn_NO
-+ESPR_LINKS=	es_PR:es_CR es_PR:es_MX es_PR:es_SV es_PR:es_US es_PR:es_HN
++ES_LINKS=	es_PR:es_CR es_PR:es_MX es_PR:es_SV es_PR:es_US es_PR:es_HN
 +
 +ARMSCII-8_UTF-8= hy
 +CP1251_ISO8859-5= be
@@ -90,9 +90,9 @@ diff -ruN -x *out -x *orig -x obj -x *~ src54-orig/share/locale/numericdef/Makef
 +CP866_UTF-8=	ru
 +ISO8859-1_ISO8859-15= af ca da de_CH de en es es_PR es_CU eu \
 +	fi fr_BE fr is it nl no pt_BR pt sv \
-+	${BE_LINKS} ${NO_LINKS} ${ESPR_LINKS}
++	${BE_LINKS} ${NO_LINKS} ${ES_LINKS}
 +ISO8859-1_ISO8859-1= ${BE_LINKS} ${CA_LINKS} \
-+	${NO_LINKS} ${ESPR_LINKS}
++	${NO_LINKS} ${ES_LINKS}
 +ISO8859-1_UTF-8= af ca da de_CH de en es es_PR es_CU eu fi fr \
 +	fr_BE fr is it nl no pt_BR pt sv
 +ISO8859-2_UTF-8= cs hr hu pl ro sk sl
@@ -110,7 +110,7 @@ diff -ruN -x *out -x *orig -x obj -x *~ src54-orig/share/locale/numericdef/Makef
 +KOI8-U_ISO8859-5= uk
 +US-ASCII_UTF-8=	
 +UTF-8_UTF-8=	${BE_LINKS} ${CA_LINKS} \
-+		${NO_LINKS} ${ESPR_LINKS}
++		${NO_LINKS} ${ES_LINKS}
 +
 +SYMLINKS=
 +.for enc1 in ${ENCODINGS}

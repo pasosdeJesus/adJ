@@ -799,7 +799,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/setlocale.c sr
  		
  	case LC_MONETARY:
 +		if (__monetary_load_locale(locname)) 
-+			return;
++			return -1;
 +		break;
 +
  	case LC_NUMERIC:

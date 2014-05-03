@@ -1,0 +1,8234 @@
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/Makefile src/share/locale/Makefile
+--- src56-orig/share/locale/Makefile	Sun Aug  7 05:03:44 2005
++++ src/share/locale/Makefile	Mon Apr 28 07:42:08 2014
+@@ -1,6 +1,6 @@
+ #	$OpenBSD: Makefile,v 1.1 2005/08/07 10:03:44 espie Exp $
+ 
+-SUBDIR=	ctype
++SUBDIR=	ctype timedef
+ 	
+ 
+ .include <bsd.subdir.mk>
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/Makefile src/share/locale/timedef/Makefile
+--- src56-orig/share/locale/timedef/Makefile	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/Makefile	Mon Apr 28 07:42:08 2014
+@@ -0,0 +1,198 @@
++# Based on $FreeBSD$
++
++TIME_SIZE=	45
++
++LOCALES=	am.UTF-8 \
++		be.CP1251 \
++		be.ISO8859-5 \
++		be.UTF-8 \
++		bg.CP1251 \
++		bg.UTF-8 \
++		ca.ISO8859-1 \
++		ca.UTF-8 \
++		cs.ISO8859-2 \
++		cs.UTF-8 \
++		da.ISO8859-1 \
++		da.UTF-8 \
++		de_AT.ISO8859-1 \
++		de_AT.UTF-8 \
++		de.ISO8859-1 \
++		de.UTF-8 \
++		el.ISO8859-7 \
++		el.UTF-8 \
++		en.ISO8859-1 \
++		en_US.ISO8859-1 \
++		es.ISO8859-1 \
++		es.UTF-8 \
++		es_CL.ISO8859-1 \
++		es_CL.UTF-8 \
++		es_CO.ISO8859-1 \
++		es_CO.UTF-8 \
++		es_PR.ISO8859-1 \
++		es_PR.UTF-8 \
++		es_US.ISO8859-1 \
++		es_US.UTF-8 \
++		et.ISO8859-15 \
++		et.UTF-8 \
++		eu.ISO8859-1 \
++		fi.ISO8859-1 \
++		fi.UTF-8 \
++		fr.ISO8859-1 \
++		fr.UTF-8 \
++		he.UTF-8 \
++		hr.ISO8859-2 \
++		hr.UTF-8 \
++		hu.ISO8859-2 \
++		hu.UTF-8 \
++		hy.ARMSCII-8 \
++		hy.UTF-8 \
++		is.ISO8859-1 \
++		is.UTF-8 \
++		it.ISO8859-1 \
++		it.UTF-8 \
++		ja.UTF-8 \
++		kk.UTF-8 \
++		ko.UTF-8 \
++		lt.ISO8859-4 \
++		lt.ISO8859-13 \
++		lt.UTF-8 \
++		lv.ISO8859-13 \
++		lv.UTF-8 \
++		mn.UTF-8 \
++		nb.ISO8859-1 \
++		nb.UTF-8 \
++		nl.ISO8859-1 \
++		nn.ISO8859-1 \
++		nn.UTF-8 \
++		pl.ISO8859-2 \
++		pl.UTF-8 \
++		pt_BR.ISO8859-1 \
++		pt_BR.UTF-8 \
++		pt.ISO8859-1 \
++		pt.UTF-8 \
++		ro.ISO8859-2 \
++		ro.UTF-8 \
++		ru.CP1251 \
++		ru.CP866 \
++		ru.ISO8859-5 \
++		ru.KOI8-R \
++		ru.UTF-8 \
++		sk.ISO8859-2 \
++		sk.UTF-8 \
++		sl.ISO8859-2 \
++		sl.UTF-8 \
++		sr.ISO8859-2 \
++		sr.ISO8859-5 \
++		sr.UTF-8 \
++		sv.ISO8859-1 \
++		sv.UTF-8 \
++		tr.ISO8859-9 \
++		tr.UTF-8 \
++		uk.CP1251 \
++		uk.ISO8859-5 \
++		uk.KOI8-U \
++		uk.UTF-8 \
++		zh.UTF-8 \
++		zh_TW.UTF-8
++
++LOCALEDIR=      /usr/share/locale
++
++.SUFFIXES: .src .out
++
++.src.out:
++	grep -v '^#' < ${.IMPSRC} > ${.TARGET}
++	@nl=`wc -l ${.TARGET} | sed -e "s/ ${.TARGET}//g;s/  *//g"`; \
++	if (test "$$nl" != "${TIME_SIZE}") then { \
++	echo "Wrong size of ${.TARGET}: $$nl but expected ${TIME_SIZE}"; \
++	exit 1; \
++	} fi;
++
++FILES=		${LOCALES:S/$/.out/}
++FILESNAME=	LC_TIME
++
++all: ${FILES}
++
++.for locale in ${LOCALES}
++FILESDIR_${locale}.out= ${LOCALEDIR}/${locale}
++.endfor
++
++CLEANFILES=	${FILES}
++
++ENCODINGS=	ISO8859-1 ISO8859-2 ISO8859-4 ISO8859-15 \
++		US-ASCII UTF-8
++
++ES_LINKS=	es_CO:es_GT es_CO:es_PE 
++NO_LINKS=	nb:no_NO
++
++eucKR_CP949=	ko
++GB2312_GBK=	zh
++ISO8859-1_ISO8859-1= ${ES_LINKS} ${NO_LINKS} en_US:af_ZA
++ISO8859-1_ISO8859-15= ca da de de en \
++		es es_CL es_CO es_PR es_US eu \
++		fi fr is it la nb nn pt pt_BR \
++		sv ${ES_LINKS} 
++ISO8859-1_US-ASCII= en la
++ISO8859-1_ISO8859-2= la
++ISO8859-1_ISO8859-4= la
++ISO8859-1_UTF-8= en eu nl
++ISO8859-15_ISO8859-15= en_US:af_ZA
++UTF-8_Big5HKSCS= zh_TW:zh_HK
++UTF-8_UTF-8=	${ES_LINKS} ${NO_LINKS} en_US:af_ZA zh_TW:zh_HK
++
++SYMLINKS=
++.for enc1 in ${ENCODINGS}
++.for enc2 in ${ENCODINGS}
++.for lang_terr in ${${enc1}_${enc2}}
++SYMLINKS+=	../${lang_terr:C/:.*$//}.${enc1}/${FILESNAME} \
++		${LOCALEDIR}/${lang_terr:C/^.*://}.${enc2}
++.endfor
++.endfor
++.endfor
++
++install:
++.for locale in ${LOCALES}
++	install -o ${LOCALEOWN} -g ${LOCALEGRP} -m ${DIRMODE} -d \
++	    ${DESTDIR}${FILESDIR_${locale}.out}
++	install -o ${LOCALEOWN} -g ${LOCALEGRP} -m ${LOCALEMODE} \
++	    ${locale}.out ${DESTDIR}${FILESDIR_${locale}.out}/${FILESNAME}
++.endfor
++.for lnk file in ${SYMLINKS}
++	@l=${DESTDIR}${lnk}; \
++	 t=${DESTDIR}${file}; \
++	 echo $$t -\> $$l; \
++	 rm -f $$t/${FILESNAME}; mkdir -p $$t; ln -s $$l $$t
++.endfor
++
++uninstall:
++.for locale in ${LOCALES}
++	if (test -f ${DESTDIR}${FILESDIR_${locale}.out}/${FILESNAME}) then { \
++	rm -f ${DESTDIR}${FILESDIR_${locale}.out}/${FILESNAME}; \
++	} fi; \
++	if (test -d ${DESTDIR}${FILESDIR_${locale}.out}/) then { \
++	r=`ls ${DESTDIR}${FILESDIR_${locale}.out}/`; \
++	if (test "$$r" = "") then { \
++	rm -rf ${DESTDIR}${FILESDIR_${locale}.out}/; \
++	} fi; \
++	} fi;
++.endfor
++.for lnk file in ${SYMLINKS}
++	@l=${DESTDIR}${lnk}; \
++	t=${DESTDIR}${file}; \
++	echo $$t -\> $$l; \
++	rm -f $$t/${FILESNAME}; \
++	if (test -d $$t) then { \
++	r=`ls $$t/`; \
++	if (test "$$r" = "") then { \
++	rm -rf $$t; \
++	} fi; \
++	} fi;
++.endfor
++
++transform-fromfreebsd:
++.for locale in ${LOCALES}
++	awk '/# Long month names \(without case ending\)/ { long=1 } /.*/ { if (p != "INI" && long == 0) { print p; } if (long > 0) { long++; if (long == 16) { long = 0; } } p =$$0;} BEGIN { p="INI";} END { print p;}' ${locale}.src | \
++	awk '/# md_order/ { md=1 } /.*/ { if (p != "INI" && md == 0) { print p; } if (md > 0) { md++; if (md == 5) { md = 0; } } p =$$0;} BEGIN { p="INI";} END { print p;}' > /tmp/${locale}
++	cp /tmp/${locale} ${locale}.src
++.endfor
++
++.include <bsd.prog.mk>
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/am.UTF-8.src src/share/locale/timedef/am.UTF-8.src
+--- src56-orig/share/locale/timedef/am.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/am.UTF-8.src	Mon Apr 28 07:42:08 2014
+@@ -0,0 +1,83 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++áŒƒáŠ•á‹©
++áŒá‰¥áˆ©
++áˆ›áˆ­á‰½
++áŠ¤á•áˆ¨
++áˆœá‹­
++áŒáŠ•
++áŒáˆ‹á‹­
++áŠ¦áŒˆáˆµ
++áˆ´á•á‰´
++áŠ¦áŠ­á‰¶
++áŠ–á‰¬áˆ
++á‹²áˆ´áˆ
++#
++# Long month names
++#
++áŒƒáŠ•á‹©á‹ˆáˆª
++áŒá‰¥áˆ©á‹ˆáˆª
++áˆ›áˆ­á‰½
++áŠ¤á•áˆ¨áˆ
++áˆœá‹­
++áŒáŠ•
++áŒáˆ‹á‹­
++áŠ¦áŒˆáˆµá‰µ
++áˆ´á•á‰´áˆá‰ áˆ­
++áŠ¦áŠ­á‰¶á‰ áˆ­
++áŠ–á‰¬áˆá‰ áˆ­
++á‹²áˆ´áˆá‰ áˆ­
++#
++# Short weekday names
++#
++áŠ¥áˆ‘á‹µ
++áˆ°áŠ
++áˆ›áŠ­áˆ°
++áˆ¨á‰¡á‹•
++áˆáˆ™áˆµ
++á‹“áˆ­á‰¥
++á‰…á‹³áˆœ
++#
++# Long weekday names
++#
++áŠ¥áˆ‘á‹µ
++áˆ°áŠ
++áˆ›áŠ­áˆ°áŠ
++áˆ¨á‰¡á‹•
++áˆáˆ™áˆµ
++á‹“áˆ­á‰¥
++á‰…á‹³áˆœ
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d/%m/%Y
++#
++# c_fmt
++#
++%a %b %e %X %Y
++#
++# am
++#
++AM
++#
++# pm
++#
++PM
++#
++# date_fmt
++#
++%a %b %e %X %Z %Y
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/be.CP1251.src src/share/locale/timedef/be.CP1251.src
+--- src56-orig/share/locale/timedef/be.CP1251.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/be.CP1251.src	Mon Apr 28 07:42:08 2014
+@@ -0,0 +1,81 @@
++# $FreeBSD$
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++ñòó
++ëşò
++ñàê
++êğà
++òğà
++÷ığ
++ë³ï
++æí³
++âåğ
++êàñ
++ë³ñ
++ñíå
++#
++# Long month names (as in a date)
++#
++ñòóäçåíÿ
++ëşòàãà
++ñàêàâ³êà
++êğàñàâ³êà
++òğà¢íÿ
++÷ığâåíÿ
++ë³ïåíÿ
++æí³¢íÿ
++âåğàñíÿ
++êàñòğû÷í³êà
++ë³ñòàïàäà
++ñíåæíÿ
++#
++# Short weekday names
++# (padded with a space to conform with other languages)
++íä 
++ïí 
++à¢ 
++ñğ 
++÷ö 
++ïò 
++ñá 
++#
++# Long weekday names
++#
++íÿäçåëÿ
++ïàíÿäçåëàê
++à¢òîğàê
++ñåğàäà
++÷àöâåğ
++ïÿòí³öà
++ñóáîòà
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d.%m.%y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++am
++#
++# pm
++#
++pm
++#
++# date_fmt
++#
++%a %e %b %Y %X %Z
++#
++# ampm_fmt
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/be.ISO8859-5.src src/share/locale/timedef/be.ISO8859-5.src
+--- src56-orig/share/locale/timedef/be.ISO8859-5.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/be.ISO8859-5.src	Mon Apr 28 07:42:08 2014
+@@ -0,0 +1,81 @@
++# $FreeBSD$
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++áâã
++Ûîâ
++áĞÚ
++ÚàĞ
++âàĞ
++çíà
++Ûöß
++Öİö
++ÒÕà
++ÚĞá
++Ûöá
++áİÕ
++#
++# Long month names (as in a date)
++#
++áâãÔ×Õİï
++ÛîâĞÓĞ
++áĞÚĞÒöÚĞ
++ÚàĞáĞÒöÚĞ
++âàĞşİï
++çíàÒÕİï
++ÛößÕİï
++Öİöşİï
++ÒÕàĞáİï
++ÚĞáâàëçİöÚĞ
++ÛöáâĞßĞÔĞ
++áİÕÖİï
++#
++# Short weekday names
++# (padded with a space to conform with other languages)
++İÔ 
++ßİ 
++Ğş 
++áà 
++çæ 
++ßâ 
++áÑ 
++#
++# Long weekday names
++#
++İïÔ×ÕÛï
++ßĞİïÔ×ÕÛĞÚ
++ĞşâŞàĞÚ
++áÕàĞÔĞ
++çĞæÒÕà
++ßïâİöæĞ
++áãÑŞâĞ
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d.%m.%y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++am
++#
++# pm
++#
++pm
++#
++# date_fmt
++#
++%a %e %b %Y %X %Z
++#
++# ampm_fmt
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/be.UTF-8.src src/share/locale/timedef/be.UTF-8.src
+--- src56-orig/share/locale/timedef/be.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/be.UTF-8.src	Mon Apr 28 07:42:08 2014
+@@ -0,0 +1,81 @@
++# $FreeBSD$
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++ÑÑ‚Ñƒ
++Ğ»ÑÑ‚
++ÑĞ°Ğº
++ĞºÑ€Ğ°
++Ñ‚Ñ€Ğ°
++Ñ‡ÑÑ€
++Ğ»Ñ–Ğ¿
++Ğ¶Ğ½Ñ–
++Ğ²ĞµÑ€
++ĞºĞ°Ñ
++Ğ»Ñ–Ñ
++ÑĞ½Ğµ
++#
++# Long month names (as in a date)
++#
++ÑÑ‚ÑƒĞ´Ğ·ĞµĞ½Ñ
++Ğ»ÑÑ‚Ğ°Ğ³Ğ°
++ÑĞ°ĞºĞ°Ğ²Ñ–ĞºĞ°
++ĞºÑ€Ğ°ÑĞ°Ğ²Ñ–ĞºĞ°
++Ñ‚Ñ€Ğ°ÑĞ½Ñ
++Ñ‡ÑÑ€Ğ²ĞµĞ½Ñ
++Ğ»Ñ–Ğ¿ĞµĞ½Ñ
++Ğ¶Ğ½Ñ–ÑĞ½Ñ
++Ğ²ĞµÑ€Ğ°ÑĞ½Ñ
++ĞºĞ°ÑÑ‚Ñ€Ñ‹Ñ‡Ğ½Ñ–ĞºĞ°
++Ğ»Ñ–ÑÑ‚Ğ°Ğ¿Ğ°Ğ´Ğ°
++ÑĞ½ĞµĞ¶Ğ½Ñ
++#
++# Short weekday names
++# (padded with a space to conform with other languages)
++Ğ½Ğ´ 
++Ğ¿Ğ½ 
++Ğ°Ñ 
++ÑÑ€ 
++Ñ‡Ñ† 
++Ğ¿Ñ‚ 
++ÑĞ± 
++#
++# Long weekday names
++#
++Ğ½ÑĞ´Ğ·ĞµĞ»Ñ
++Ğ¿Ğ°Ğ½ÑĞ´Ğ·ĞµĞ»Ğ°Ğº
++Ğ°ÑÑ‚Ğ¾Ñ€Ğ°Ğº
++ÑĞµÑ€Ğ°Ğ´Ğ°
++Ñ‡Ğ°Ñ†Ğ²ĞµÑ€
++Ğ¿ÑÑ‚Ğ½Ñ–Ñ†Ğ°
++ÑÑƒĞ±Ğ¾Ñ‚Ğ°
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d.%m.%y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++am
++#
++# pm
++#
++pm
++#
++# date_fmt
++#
++%a %e %b %Y %X %Z
++#
++# ampm_fmt
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/bg.CP1251.src src/share/locale/timedef/bg.CP1251.src
+--- src56-orig/share/locale/timedef/bg.CP1251.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/bg.CP1251.src	Mon Apr 28 07:42:08 2014
+@@ -0,0 +1,82 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++ßíó
++Ôåâ
++Ìàğ
++Àïğ
++Ìàé
++Şíè
++Şëè
++Àâã
++Ñåï
++Îêò
++Íîâ
++Äåê
++#
++# Long month names (as in a date)
++#
++ßíóàğè
++Ôåâğóàğè
++Ìàğò
++Àïğèë
++Ìàé
++Şíè
++Şëè
++Àâãóñò
++Ñåïòåìâğè
++Îêòîìâğè
++Íîåìâğè
++Äåêåìâğè
++#
++# Short weekday names
++# (padded with a space to conform with other languages)
++Íä 
++Ïí 
++Âò 
++Ñğ 
++×ò 
++Ïò 
++Ñá 
++#
++# Long weekday names
++#
++Íåäåëÿ
++Ïîíåäåëíèê
++Âòîğíèê
++Ñğÿäà
++×åòâúğòúê
++Ïåòúê
++Ñúáîòà
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d.%m.%y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++am
++#
++# pm
++#
++pm
++#
++# date_fmt
++#
++%a %e %b %Y %X %Z
++#
++# ampm_fmt
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/bg.UTF-8.src src/share/locale/timedef/bg.UTF-8.src
+--- src56-orig/share/locale/timedef/bg.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/bg.UTF-8.src	Mon Apr 28 07:42:08 2014
+@@ -0,0 +1,82 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++Ğ¯Ğ½Ñƒ
++Ğ¤ĞµĞ²
++ĞœĞ°Ñ€
++ĞĞ¿Ñ€
++ĞœĞ°Ğ¹
++Ğ®Ğ½Ğ¸
++Ğ®Ğ»Ğ¸
++ĞĞ²Ğ³
++Ğ¡ĞµĞ¿
++ĞĞºÑ‚
++ĞĞ¾Ğ²
++Ğ”ĞµĞº
++#
++# Long month names (as in a date)
++#
++Ğ¯Ğ½ÑƒĞ°Ñ€Ğ¸
++Ğ¤ĞµĞ²Ñ€ÑƒĞ°Ñ€Ğ¸
++ĞœĞ°Ñ€Ñ‚
++ĞĞ¿Ñ€Ğ¸Ğ»
++ĞœĞ°Ğ¹
++Ğ®Ğ½Ğ¸
++Ğ®Ğ»Ğ¸
++ĞĞ²Ğ³ÑƒÑÑ‚
++Ğ¡ĞµĞ¿Ñ‚ĞµĞ¼Ğ²Ñ€Ğ¸
++ĞĞºÑ‚Ğ¾Ğ¼Ğ²Ñ€Ğ¸
++ĞĞ¾ĞµĞ¼Ğ²Ñ€Ğ¸
++Ğ”ĞµĞºĞµĞ¼Ğ²Ñ€Ğ¸
++#
++# Short weekday names
++# (padded with a space to conform with other languages)
++ĞĞ´ 
++ĞŸĞ½ 
++Ğ’Ñ‚ 
++Ğ¡Ñ€ 
++Ğ§Ñ‚ 
++ĞŸÑ‚ 
++Ğ¡Ğ± 
++#
++# Long weekday names
++#
++ĞĞµĞ´ĞµĞ»Ñ
++ĞŸĞ¾Ğ½ĞµĞ´ĞµĞ»Ğ½Ğ¸Ğº
++Ğ’Ñ‚Ğ¾Ñ€Ğ½Ğ¸Ğº
++Ğ¡Ñ€ÑĞ´Ğ°
++Ğ§ĞµÑ‚Ğ²ÑŠÑ€Ñ‚ÑŠĞº
++ĞŸĞµÑ‚ÑŠĞº
++Ğ¡ÑŠĞ±Ğ¾Ñ‚Ğ°
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d.%m.%y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++am
++#
++# pm
++#
++pm
++#
++# date_fmt
++#
++%a %e %b %Y %X %Z
++#
++# ampm_fmt
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/ca.ISO8859-1.src src/share/locale/timedef/ca.ISO8859-1.src
+--- src56-orig/share/locale/timedef/ca.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/ca.ISO8859-1.src	Mon Apr 28 07:42:08 2014
+@@ -0,0 +1,83 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++gen
++feb
++mar
++abr
++mai
++jun
++jul
++ago
++set
++oct
++nov
++des
++#
++# Long month names (as in a date)
++#
++gener
++febrer
++març
++abril
++maig
++juny
++juliol
++agost
++setembre
++octubre
++novembre
++desembre
++#
++# Short weekday names
++#
++diu
++dil
++dim
++dmc
++dij
++div
++dis
++#
++# Long weekday names
++#
++diumenge
++dilluns
++dimarts
++dimecres
++dijous
++divendres
++dissabte
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d/%m/%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++AM
++#
++# pm
++#
++PM
++#
++# date_fmt
++#
++%A, %e de %B de %Y, %X %Z
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/ca.UTF-8.src src/share/locale/timedef/ca.UTF-8.src
+--- src56-orig/share/locale/timedef/ca.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/ca.UTF-8.src	Mon Apr 28 07:42:08 2014
+@@ -0,0 +1,83 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++gen
++feb
++mar
++abr
++mai
++jun
++jul
++ago
++set
++oct
++nov
++des
++#
++# Long month names (as in a date)
++#
++gener
++febrer
++marÃ§
++abril
++maig
++juny
++juliol
++agost
++setembre
++octubre
++novembre
++desembre
++#
++# Short weekday names
++#
++diu
++dil
++dim
++dmc
++dij
++div
++dis
++#
++# Long weekday names
++#
++diumenge
++dilluns
++dimarts
++dimecres
++dijous
++divendres
++dissabte
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d/%m/%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++AM
++#
++# pm
++#
++PM
++#
++# date_fmt
++#
++%A, %e de %B de %Y, %X %Z
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/cs.ISO8859-2.src src/share/locale/timedef/cs.ISO8859-2.src
+--- src56-orig/share/locale/timedef/cs.ISO8859-2.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/cs.ISO8859-2.src	Mon Apr 28 07:42:08 2014
+@@ -0,0 +1,86 @@
++# Czech month and day names
++# by Rudolf Cejka <cejkar@dcse.fee.vutbr.cz>
++#
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++led
++úno
++bøe
++dub
++kvì
++èrv
++èvc
++srp
++záø
++øíj
++lis
++pro
++#
++# Long month names (as in a date)
++#
++ledna
++února
++bøezna
++dubna
++kvìtna
++èervna
++èervence
++srpna
++záøí
++øíjna
++listopadu
++prosince
++#
++# Short weekday names
++#
++ne
++po
++út
++st
++èt
++pá
++so
++#
++# Long weekday names
++#
++nedìle
++pondìlí
++úterı
++støeda
++ètvrtek
++pátek
++sobota
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%Y/%m/%d
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++dp
++#
++# pm
++#
++od
++#
++# date_fmt
++#
++%a %e. %B %Y %X %Z
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/cs.UTF-8.src src/share/locale/timedef/cs.UTF-8.src
+--- src56-orig/share/locale/timedef/cs.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/cs.UTF-8.src	Mon Apr 28 07:42:08 2014
+@@ -0,0 +1,86 @@
++# Czech month and day names
++# by Rudolf Cejka <cejkar@dcse.fee.vutbr.cz>
++#
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++led
++Ãºno
++bÅ™e
++dub
++kvÄ›
++Ärv
++Ävc
++srp
++zÃ¡Å™
++Å™Ã­j
++lis
++pro
++#
++# Long month names (as in a date)
++#
++ledna
++Ãºnora
++bÅ™ezna
++dubna
++kvÄ›tna
++Äervna
++Äervence
++srpna
++zÃ¡Å™Ã­
++Å™Ã­jna
++listopadu
++prosince
++#
++# Short weekday names
++#
++ne
++po
++Ãºt
++st
++Ät
++pÃ¡
++so
++#
++# Long weekday names
++#
++nedÄ›le
++pondÄ›lÃ­
++ÃºterÃ½
++stÅ™eda
++Ätvrtek
++pÃ¡tek
++sobota
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%Y/%m/%d
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++dp
++#
++# pm
++#
++od
++#
++# date_fmt
++#
++%a %e. %B %Y %X %Z
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/da.ISO8859-1.src src/share/locale/timedef/da.ISO8859-1.src
+--- src56-orig/share/locale/timedef/da.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/da.ISO8859-1.src	Mon Apr 28 07:42:08 2014
+@@ -0,0 +1,83 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++jan
++feb
++mar
++apr
++maj
++jun
++jul
++aug
++sep
++okt
++nov
++dec
++#
++# Long month names (as in a date)
++#
++januar
++februar
++marts
++april
++maj
++juni
++juli
++august
++september
++oktober
++november
++december
++#
++# Short weekday names
++#
++søn
++man
++tir
++ons
++tor
++fre
++lør
++#
++# Long weekday names
++#
++søndag
++mandag
++tirsdag
++onsdag
++torsdag
++fredag
++lørdag
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d.%m.%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++am
++#
++# pm
++#
++pm
++#
++# date_fmt
++#
++%a %e %b %Y %X %Z
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/da.UTF-8.src src/share/locale/timedef/da.UTF-8.src
+--- src56-orig/share/locale/timedef/da.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/da.UTF-8.src	Mon Apr 28 07:42:08 2014
+@@ -0,0 +1,83 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++jan
++feb
++mar
++apr
++maj
++jun
++jul
++aug
++sep
++okt
++nov
++dec
++#
++# Long month names (as in a date)
++#
++januar
++februar
++marts
++april
++maj
++juni
++juli
++august
++september
++oktober
++november
++december
++#
++# Short weekday names
++#
++sÃ¸n
++man
++tir
++ons
++tor
++fre
++lÃ¸r
++#
++# Long weekday names
++#
++sÃ¸ndag
++mandag
++tirsdag
++onsdag
++torsdag
++fredag
++lÃ¸rdag
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d.%m.%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++am
++#
++# pm
++#
++pm
++#
++# date_fmt
++#
++%a %e %b %Y %X %Z
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/de.ISO8859-1.src src/share/locale/timedef/de.ISO8859-1.src
+--- src56-orig/share/locale/timedef/de.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/de.ISO8859-1.src	Mon Apr 28 07:42:08 2014
+@@ -0,0 +1,87 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++Jan
++Feb
++Mär
++Apr
++Mai
++Jun
++Jul
++Aug
++Sep
++Okt
++Nov
++Dez
++#
++# Long month names (as in a date)
++#
++Januar
++Februar
++März
++April
++Mai
++Juni
++Juli
++August
++September
++Oktober
++November
++Dezember
++#
++# Short weekday names
++#
++So
++Mo
++Di
++Mi
++Do
++Fr
++Sa
++#
++# Long weekday names
++#
++Sonntag
++Montag
++Dienstag
++Mittwoch
++Donnerstag
++Freitag
++Samstag
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++# Note about the new DIN5008, ISO8601 and EN28601 format of %Y-%m-%d:
++# A quick poll on IRC and the -doc mailinglist (June 2009) showed that
++# this format was not used often enough to push this change through.
++#
++%d.%m.%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++am
++#
++# pm
++#
++pm
++#
++# date_fmt
++#
++%a %e %b %Y %X %Z
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/de.UTF-8.src src/share/locale/timedef/de.UTF-8.src
+--- src56-orig/share/locale/timedef/de.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/de.UTF-8.src	Mon Apr 28 07:42:08 2014
+@@ -0,0 +1,87 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++Jan
++Feb
++MÃ¤r
++Apr
++Mai
++Jun
++Jul
++Aug
++Sep
++Okt
++Nov
++Dez
++#
++# Long month names (as in a date)
++#
++Januar
++Februar
++MÃ¤rz
++April
++Mai
++Juni
++Juli
++August
++September
++Oktober
++November
++Dezember
++#
++# Short weekday names
++#
++So
++Mo
++Di
++Mi
++Do
++Fr
++Sa
++#
++# Long weekday names
++#
++Sonntag
++Montag
++Dienstag
++Mittwoch
++Donnerstag
++Freitag
++Samstag
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++# Note about the new DIN5008, ISO8601 and EN28601 format of %Y-%m-%d:
++# A quick poll on IRC and the -doc mailinglist (June 2009) showed that
++# this format was not used often enough to push this change through.
++#
++%d.%m.%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++am
++#
++# pm
++#
++pm
++#
++# date_fmt
++#
++%a %e %b %Y %X %Z
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/de_AT.ISO8859-1.src src/share/locale/timedef/de_AT.ISO8859-1.src
+--- src56-orig/share/locale/timedef/de_AT.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/de_AT.ISO8859-1.src	Mon Apr 28 07:42:08 2014
+@@ -0,0 +1,83 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++Jan
++Feb
++Mär
++Apr
++Mai
++Jun
++Jul
++Aug
++Sep
++Okt
++Nov
++Dez
++#
++# Long month names (as in a date)
++#
++Jänner
++Februar
++März
++April
++Mai
++Juni
++Juli
++August
++September
++Oktober
++November
++Dezember
++#
++# Short weekday names
++#
++So
++Mo
++Di
++Mi
++Do
++Fr
++Sa
++#
++# Long weekday names
++#
++Sonntag
++Montag
++Dienstag
++Mittwoch
++Donnerstag
++Freitag
++Samstag
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d.%m.%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++am
++#
++# pm
++#
++pm
++#
++# date_fmt
++#
++%a %e %b %Y %X %Z
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/de_AT.UTF-8.src src/share/locale/timedef/de_AT.UTF-8.src
+--- src56-orig/share/locale/timedef/de_AT.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/de_AT.UTF-8.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,83 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++Jan
++Feb
++MÃ¤r
++Apr
++Mai
++Jun
++Jul
++Aug
++Sep
++Okt
++Nov
++Dez
++#
++# Long month names (as in a date)
++#
++JÃ¤nner
++Februar
++MÃ¤rz
++April
++Mai
++Juni
++Juli
++August
++September
++Oktober
++November
++Dezember
++#
++# Short weekday names
++#
++So
++Mo
++Di
++Mi
++Do
++Fr
++Sa
++#
++# Long weekday names
++#
++Sonntag
++Montag
++Dienstag
++Mittwoch
++Donnerstag
++Freitag
++Samstag
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d.%m.%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++am
++#
++# pm
++#
++pm
++#
++# date_fmt
++#
++%a %e %b %Y %X %Z
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/el.ISO8859-7.src src/share/locale/timedef/el.ISO8859-7.src
+--- src56-orig/share/locale/timedef/el.ISO8859-7.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/el.ISO8859-7.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,83 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++Éáí
++Öåâ
++Ìáñ
++Áğñ
++Ìáú
++Éïí
++Éïë
++Áõã
++Óåğ
++Ïêô
++Íïå
++Äåê
++#
++# Long month names (as in a date)
++#
++Éáíïõáñßïõ
++Öåâñïõáñßïõ
++Ìáñôßïõ
++Áğñéëßïõ
++ÌáÀïõ
++Éïõíßïõ
++Éïõëßïõ
++Áõãïıóôïõ
++Óåğôåìâñßïõ
++Ïêôùâñßïõ
++Íïåìâñßïõ
++Äåêåìâñßïõ
++#
++# Short weekday names
++#
++Êõñ
++Äåõ
++Ôñé
++Ôåô
++Ğåì
++Ğáñ
++Óáâ
++#
++# Long weekday names
++#
++ÊõñéáêŞ
++Äåõôİñá
++Ôñßôç
++ÔåôÜñôç
++Ğİìğôç
++ĞáñáóêåõŞ
++ÓÜââáôï
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d/%m/%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++ğì
++#
++# pm
++#
++ìì
++#
++# date_fmt
++#
++%a %e %b %Y %X %Z
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/el.UTF-8.src src/share/locale/timedef/el.UTF-8.src
+--- src56-orig/share/locale/timedef/el.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/el.UTF-8.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,83 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++Î™Î±Î½
++Î¦ÎµÎ²
++ÎœÎ±Ï
++Î‘Ï€Ï
++ÎœÎ±ÏŠ
++Î™Î¿Î½
++Î™Î¿Î»
++Î‘Ï…Î³
++Î£ÎµÏ€
++ÎŸÎºÏ„
++ÎÎ¿Îµ
++Î”ÎµÎº
++#
++# Long month names (as in a date)
++#
++Î™Î±Î½Î¿Ï…Î±ÏÎ¯Î¿Ï…
++Î¦ÎµÎ²ÏÎ¿Ï…Î±ÏÎ¯Î¿Ï…
++ÎœÎ±ÏÏ„Î¯Î¿Ï…
++Î‘Ï€ÏÎ¹Î»Î¯Î¿Ï…
++ÎœÎ±ÎÎ¿Ï…
++Î™Î¿Ï…Î½Î¯Î¿Ï…
++Î™Î¿Ï…Î»Î¯Î¿Ï…
++Î‘Ï…Î³Î¿ÏÏƒÏ„Î¿Ï…
++Î£ÎµÏ€Ï„ÎµÎ¼Î²ÏÎ¯Î¿Ï…
++ÎŸÎºÏ„Ï‰Î²ÏÎ¯Î¿Ï…
++ÎÎ¿ÎµÎ¼Î²ÏÎ¯Î¿Ï…
++Î”ÎµÎºÎµÎ¼Î²ÏÎ¯Î¿Ï…
++#
++# Short weekday names
++#
++ÎšÏ…Ï
++Î”ÎµÏ…
++Î¤ÏÎ¹
++Î¤ÎµÏ„
++Î ÎµÎ¼
++Î Î±Ï
++Î£Î±Î²
++#
++# Long weekday names
++#
++ÎšÏ…ÏÎ¹Î±ÎºÎ®
++Î”ÎµÏ…Ï„Î­ÏÎ±
++Î¤ÏÎ¯Ï„Î·
++Î¤ÎµÏ„Î¬ÏÏ„Î·
++Î Î­Î¼Ï€Ï„Î·
++Î Î±ÏÎ±ÏƒÎºÎµÏ…Î®
++Î£Î¬Î²Î²Î±Ï„Î¿
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d/%m/%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++Ï€Î¼
++#
++# pm
++#
++Î¼Î¼
++#
++# date_fmt
++#
++%a %e %b %Y %X %Z
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/en.ISO8859-1.src src/share/locale/timedef/en.ISO8859-1.src
+--- src56-orig/share/locale/timedef/en.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/en.ISO8859-1.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,83 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++Jan
++Feb
++Mar
++Apr
++May
++Jun
++Jul
++Aug
++Sep
++Oct
++Nov
++Dec
++#
++# Long month names (as in a date)
++#
++January
++February
++March
++April
++May
++June
++July
++August
++September
++October
++November
++December
++#
++# Short weekday names
++#
++Sun
++Mon
++Tue
++Wed
++Thu
++Fri
++Sat
++#
++# Long weekday names
++#
++Sunday
++Monday
++Tuesday
++Wednesday
++Thursday
++Friday
++Saturday
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d/%m/%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++am
++#
++# pm
++#
++pm
++#
++# date_fmt
++#
++%a %e %b %Y %X %Z
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/en_US.ISO8859-1.src src/share/locale/timedef/en_US.ISO8859-1.src
+--- src56-orig/share/locale/timedef/en_US.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/en_US.ISO8859-1.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,83 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++Jan
++Feb
++Mar
++Apr
++May
++Jun
++Jul
++Aug
++Sep
++Oct
++Nov
++Dec
++#
++# Long month names (as in a date)
++#
++January
++February
++March
++April
++May
++June
++July
++August
++September
++October
++November
++December
++#
++# Short weekday names
++#
++Sun
++Mon
++Tue
++Wed
++Thu
++Fri
++Sat
++#
++# Long weekday names
++#
++Sunday
++Monday
++Tuesday
++Wednesday
++Thursday
++Friday
++Saturday
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%m/%d/%Y
++#
++# c_fmt
++#
++%a %b %e %X %Y
++#
++# am
++#
++AM
++#
++# pm
++#
++PM
++#
++# date_fmt
++#
++%a %b %e %X %Z %Y
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/es.ISO8859-1.src src/share/locale/timedef/es.ISO8859-1.src
+--- src56-orig/share/locale/timedef/es.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/es.ISO8859-1.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,83 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++ene
++feb
++mar
++abr
++may
++jun
++jul
++ago
++sep
++oct
++nov
++dic
++#
++# Long month names (as in a date)
++#
++enero
++febrero
++marzo
++abril
++mayo
++junio
++julio
++agosto
++septiembre
++octubre
++noviembre
++diciembre
++#
++# Short weekday names
++#
++dom
++lun
++mar
++mié
++jue
++vie
++sáb
++#
++# Long weekday names
++#
++domingo
++lunes
++martes
++miércoles
++jueves
++viernes
++sábado
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d/%m/%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++AM
++#
++# pm
++#
++PM
++#
++# date_fmt
++#
++%A, %e de %B de %Y, %X %Z
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/es.UTF-8.src src/share/locale/timedef/es.UTF-8.src
+--- src56-orig/share/locale/timedef/es.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/es.UTF-8.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,83 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++ene
++feb
++mar
++abr
++may
++jun
++jul
++ago
++sep
++oct
++nov
++dic
++#
++# Long month names (as in a date)
++#
++enero
++febrero
++marzo
++abril
++mayo
++junio
++julio
++agosto
++septiembre
++octubre
++noviembre
++diciembre
++#
++# Short weekday names
++#
++dom
++lun
++mar
++miÃ©
++jue
++vie
++sÃ¡b
++#
++# Long weekday names
++#
++domingo
++lunes
++martes
++miÃ©rcoles
++jueves
++viernes
++sÃ¡bado
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d/%m/%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++AM
++#
++# pm
++#
++PM
++#
++# date_fmt
++#
++%A, %e de %B de %Y, %X %Z
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/es_CL.ISO8859-1.src src/share/locale/timedef/es_CL.ISO8859-1.src
+--- src56-orig/share/locale/timedef/es_CL.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/es_CL.ISO8859-1.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,84 @@
++# Based on FreeBSD and 
++# http://unicode.org/cldr/trac/browser/tags/release-1-9/posix/
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++ene
++feb
++mar
++abr
++may
++jun
++jul
++ago
++sep
++oct
++nov
++dic
++#
++# Long month names (as in a date)
++#
++enero
++febrero
++marzo
++abril
++mayo
++junio
++julio
++agosto
++septiembre
++octubre
++noviembre
++diciembre
++#
++# Short weekday names
++#
++dom
++lun
++mar
++mié
++jue
++vie
++sáb
++#
++# Long weekday names
++#
++domingo
++lunes
++martes
++miércoles
++jueves
++viernes
++sábado
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d-%m-%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++AM
++#
++# pm
++#
++PM
++#
++# date_fmt
++#
++%A, %e de %B de %Y, %X %Z
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/es_CL.UTF-8.src src/share/locale/timedef/es_CL.UTF-8.src
+--- src56-orig/share/locale/timedef/es_CL.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/es_CL.UTF-8.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,84 @@
++# Based on FreeBSD and 
++# http://unicode.org/cldr/trac/browser/tags/release-1-9/posix/
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++ene
++feb
++mar
++abr
++may
++jun
++jul
++ago
++sep
++oct
++nov
++dic
++#
++# Long month names (as in a date)
++#
++enero
++febrero
++marzo
++abril
++mayo
++junio
++julio
++agosto
++septiembre
++octubre
++noviembre
++diciembre
++#
++# Short weekday names
++#
++dom
++lun
++mar
++miÃ©
++jue
++vie
++sÃ¡b
++#
++# Long weekday names
++#
++domingo
++lunes
++martes
++miÃ©rcoles
++jueves
++viernes
++sÃ¡bado
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d-%m-%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++AM
++#
++# pm
++#
++PM
++#
++# date_fmt
++#
++%A, %e de %B de %Y, %X %Z
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/es_CO.ISO8859-1.src src/share/locale/timedef/es_CO.ISO8859-1.src
+--- src56-orig/share/locale/timedef/es_CO.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/es_CO.ISO8859-1.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,84 @@
++# Based on FreeBSD and 
++# http://unicode.org/cldr/trac/browser/tags/release-1-9/posix/
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++ene
++feb
++mar
++abr
++may
++jun
++jul
++ago
++sep
++oct
++nov
++dic
++#
++# Long month names (as in a date)
++#
++enero
++febrero
++marzo
++abril
++mayo
++junio
++julio
++agosto
++septiembre
++octubre
++noviembre
++diciembre
++#
++# Short weekday names
++#
++dom
++lun
++mar
++mié
++jue
++vie
++sáb
++#
++# Long weekday names
++#
++domingo
++lunes
++martes
++miércoles
++jueves
++viernes
++sábado
++#
++# X_fmt
++#
++%I:%M:%S %p
++#
++# x_fmt
++#
++%e/%m/%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++AM
++#
++# pm
++#
++PM
++#
++# date_fmt
++#
++%A, %e de %B de %Y, %X %Z
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/es_CO.UTF-8.src src/share/locale/timedef/es_CO.UTF-8.src
+--- src56-orig/share/locale/timedef/es_CO.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/es_CO.UTF-8.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,84 @@
++# Based on FreeBSD and 
++# http://unicode.org/cldr/trac/browser/tags/release-1-9/posix/
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++ene
++feb
++mar
++abr
++may
++jun
++jul
++ago
++sep
++oct
++nov
++dic
++#
++# Long month names (as in a date)
++#
++enero
++febrero
++marzo
++abril
++mayo
++junio
++julio
++agosto
++septiembre
++octubre
++noviembre
++diciembre
++#
++# Short weekday names
++#
++dom
++lun
++mar
++miÃ©
++jue
++vie
++sÃ¡b
++#
++# Long weekday names
++#
++domingo
++lunes
++martes
++miÃ©rcoles
++jueves
++viernes
++sÃ¡bado
++#
++# X_fmt
++#
++%I:%M:%S %p
++#
++# x_fmt
++#
++%e/%m/%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++AM
++#
++# pm
++#
++PM
++#
++# date_fmt
++#
++%A, %e de %B de %Y, %X %Z
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/es_PR.ISO8859-1.src src/share/locale/timedef/es_PR.ISO8859-1.src
+--- src56-orig/share/locale/timedef/es_PR.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/es_PR.ISO8859-1.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,84 @@
++# Based on FreeBSD and 
++# http://unicode.org/cldr/trac/browser/tags/release-1-9/posix/
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++ene
++feb
++mar
++abr
++may
++jun
++jul
++ago
++sep
++oct
++nov
++dic
++#
++# Long month names (as in a date)
++#
++enero
++febrero
++marzo
++abril
++mayo
++junio
++julio
++agosto
++septiembre
++octubre
++noviembre
++diciembre
++#
++# Short weekday names
++#
++dom
++lun
++mar
++mié
++jue
++vie
++sáb
++#
++# Long weekday names
++#
++domingo
++lunes
++martes
++miércoles
++jueves
++viernes
++sábado
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%m/%d/%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++AM
++#
++# pm
++#
++PM
++#
++# date_fmt
++#
++%A, %e de %B de %Y, %X %Z
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/es_PR.UTF-8.src src/share/locale/timedef/es_PR.UTF-8.src
+--- src56-orig/share/locale/timedef/es_PR.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/es_PR.UTF-8.src	Mon Apr 28 08:01:59 2014
+@@ -0,0 +1,84 @@
++# Based on FreeBSD and 
++# http://unicode.org/cldr/trac/browser/tags/release-1-9/posix/
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++ene
++feb
++mar
++abr
++may
++jun
++jul
++ago
++sep
++oct
++nov
++dic
++#
++# Long month names (as in a date)
++#
++enero
++febrero
++marzo
++abril
++mayo
++junio
++julio
++agosto
++septiembre
++octubre
++noviembre
++diciembre
++#
++# Short weekday names
++#
++dom
++lun
++mar
++miÃ©
++jue
++vie
++sÃ¡b
++#
++# Long weekday names
++#
++domingo
++lunes
++martes
++miÃ©rcoles
++jueves
++viernes
++sÃ¡bado
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%m/%d/%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++AM
++#
++# pm
++#
++PM
++#
++# date_fmt
++#
++%A, %e de %B de %Y, %X %Z
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/es_US.ISO8859-1.src src/share/locale/timedef/es_US.ISO8859-1.src
+--- src56-orig/share/locale/timedef/es_US.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/es_US.ISO8859-1.src	Mon Apr 28 08:03:42 2014
+@@ -0,0 +1,84 @@
++# Based on FreeBSD and 
++# http://unicode.org/cldr/trac/browser/tags/release-1-9/posix/
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++ene
++feb
++mar
++abr
++may
++jun
++jul
++ago
++sep
++oct
++nov
++dic
++#
++# Long month names (as in a date)
++#
++enero
++febrero
++marzo
++abril
++mayo
++junio
++julio
++agosto
++septiembre
++octubre
++noviembre
++diciembre
++#
++# Short weekday names
++#
++dom
++lun
++mar
++mié
++jue
++vie
++sáb
++#
++# Long weekday names
++#
++domingo
++lunes
++martes
++miércoles
++jueves
++viernes
++sábado
++#
++# X_fmt
++#
++%I:%M:%S %p
++#
++# x_fmt
++#
++%m/%e/%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++AM
++#
++# pm
++#
++PM
++#
++# date_fmt
++#
++%A, %e de %B de %Y, %I:%M:%S %p %Z
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/es_US.UTF-8.src src/share/locale/timedef/es_US.UTF-8.src
+--- src56-orig/share/locale/timedef/es_US.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/es_US.UTF-8.src	Mon Apr 28 08:01:20 2014
+@@ -0,0 +1,84 @@
++# Based on FreeBSD and 
++# http://unicode.org/cldr/trac/browser/tags/release-1-9/posix/
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++ene
++feb
++mar
++abr
++may
++jun
++jul
++ago
++sep
++oct
++nov
++dic
++#
++# Long month names (as in a date)
++#
++enero
++febrero
++marzo
++abril
++mayo
++junio
++julio
++agosto
++septiembre
++octubre
++noviembre
++diciembre
++#
++# Short weekday names
++#
++dom
++lun
++mar
++miÃ©
++jue
++vie
++sÃ¡b
++#
++# Long weekday names
++#
++domingo
++lunes
++martes
++miÃ©rcoles
++jueves
++viernes
++sÃ¡bado
++#
++# X_fmt
++#
++%I:%M:%S %p
++#
++# x_fmt
++#
++%m/%e/%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++AM
++#
++# pm
++#
++PM
++#
++# date_fmt
++#
++%A, %e de %B de %Y, %I:%M:%S %p %Z
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/et.ISO8859-15.src src/share/locale/timedef/et.ISO8859-15.src
+--- src56-orig/share/locale/timedef/et.ISO8859-15.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/et.ISO8859-15.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,83 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++jaan 
++veebr
++märts
++apr  
++mai  
++juuni
++juuli
++aug  
++sept 
++okt  
++nov  
++dets 
++#
++# Long month names (as in a date)
++#
++jaanuar
++veebruar
++märts
++aprill
++mai
++juuni
++juuli
++august
++september
++oktoober
++november
++detsember
++#
++# Short weekday names
++#
++P
++E
++T
++K
++N
++R
++L
++#
++# Long weekday names
++#
++pühapäev
++esmaspäev
++teisipäev
++kolmapäev
++neljapäev
++reede
++laupäev
++#
++# t_fmt
++#
++%H:%M:%S
++#
++# d_fmt
++#
++%d.%m.%Y
++#
++# c_fmt
++#
++%a, %d. %b %Y. %T
++#
++# am
++#
++
++#
++# pm
++#
++
++#
++# d_t_fmt
++#
++%A, %d. %B %Y. %T %Z
++#
++# ampm_fmt
++#
++
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/et.UTF-8.src src/share/locale/timedef/et.UTF-8.src
+--- src56-orig/share/locale/timedef/et.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/et.UTF-8.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,83 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++jaan 
++veebr
++mÃ¤rts
++apr  
++mai  
++juuni
++juuli
++aug  
++sept 
++okt  
++nov  
++dets 
++#
++# Long month names (as in a date)
++#
++jaanuar
++veebruar
++mÃ¤rts
++aprill
++mai
++juuni
++juuli
++august
++september
++oktoober
++november
++detsember
++#
++# Short weekday names
++#
++P
++E
++T
++K
++N
++R
++L
++#
++# Long weekday names
++#
++pÃ¼hapÃ¤ev
++esmaspÃ¤ev
++teisipÃ¤ev
++kolmapÃ¤ev
++neljapÃ¤ev
++reede
++laupÃ¤ev
++#
++# t_fmt
++#
++%H:%M:%S
++#
++# d_fmt
++#
++%d.%m.%Y
++#
++# c_fmt
++#
++%a, %d. %b %Y. %T
++#
++# am
++#
++
++#
++# pm
++#
++
++#
++# d_t_fmt
++#
++%A, %d. %B %Y. %T %Z
++#
++# ampm_fmt
++#
++
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/eu.ISO8859-1.src src/share/locale/timedef/eu.ISO8859-1.src
+--- src56-orig/share/locale/timedef/eu.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/eu.ISO8859-1.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,83 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++Urt
++Ots
++Mar
++Apr
++Mai
++Eka
++Uzt
++Abu
++Ira
++Urr
++Aza
++Abe
++#
++# Long month names (as in a date)
++#
++urtarrila
++otsaila
++martxoa
++apirila
++maiatza
++ekaina
++uztaila
++abuztua
++iraila
++urria 
++azaroa
++abendua
++#
++# Short weekday names
++#
++ig.
++al.
++as.
++az.
++og.
++or.
++lr.
++#
++# Long weekday names
++#
++igandea
++astelehena
++asteartea
++asteazkena
++osteguna
++ostirala
++larunbata
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%Y/%m/%d
++#
++# c_fmt
++#
++%Y - %b - %e %a %X
++#
++# am
++#
++a.m.
++#
++# pm
++#
++p.m.
++#
++# date_fmt
++#
++%Y(e)ko %B-ren %ea, %X %Z
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/fi.ISO8859-1.src src/share/locale/timedef/fi.ISO8859-1.src
+--- src56-orig/share/locale/timedef/fi.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/fi.ISO8859-1.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,82 @@
++# $FreeBSD$
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++Tam
++Hel
++Maa
++Huh
++Tou
++Kes
++Hei
++Elo
++Syy
++Lok
++Mar
++Jou
++#
++# Long month names (as in a date)
++#
++Tammikuu
++Helmikuu
++Maaliskuu
++Huhtikuu
++Toukokuu
++Kesäkuu
++Heinäkuu
++Elokuu
++Syyskuu
++Lokakuu
++Marraskuu
++Joulukuu
++#
++# Short weekday names
++#
++Su
++Ma
++Ti
++Ke
++To
++Pe
++La
++#
++# Long weekday names
++#
++Sunnuntai
++Maanantai
++Tiistai
++Keskiviikko
++Torstai
++Perjantai
++Lauantai
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d.%m.%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++am
++#
++# pm
++#
++pm
++#
++# date_fmt
++#
++%a %e %b %Y %X %Z
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/fi.UTF-8.src src/share/locale/timedef/fi.UTF-8.src
+--- src56-orig/share/locale/timedef/fi.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/fi.UTF-8.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,82 @@
++# $FreeBSD$
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++Tam
++Hel
++Maa
++Huh
++Tou
++Kes
++Hei
++Elo
++Syy
++Lok
++Mar
++Jou
++#
++# Long month names (as in a date)
++#
++Tammikuu
++Helmikuu
++Maaliskuu
++Huhtikuu
++Toukokuu
++KesÃ¤kuu
++HeinÃ¤kuu
++Elokuu
++Syyskuu
++Lokakuu
++Marraskuu
++Joulukuu
++#
++# Short weekday names
++#
++Su
++Ma
++Ti
++Ke
++To
++Pe
++La
++#
++# Long weekday names
++#
++Sunnuntai
++Maanantai
++Tiistai
++Keskiviikko
++Torstai
++Perjantai
++Lauantai
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d.%m.%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++am
++#
++# pm
++#
++pm
++#
++# date_fmt
++#
++%a %e %b %Y %X %Z
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/fr.ISO8859-1.src src/share/locale/timedef/fr.ISO8859-1.src
+--- src56-orig/share/locale/timedef/fr.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/fr.ISO8859-1.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,83 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++jan
++fév
++mar
++avr
++mai
++jui
++jul
++aoû
++sep
++oct
++nov
++déc
++#
++# Long month names (as in a date)
++#
++janvier
++février
++mars
++avril
++mai
++juin
++juillet
++août
++septembre
++octobre
++novembre
++décembre
++#
++# Short weekday names
++#
++dim
++lun
++mar
++mer
++jeu
++ven
++sam
++#
++# Long weekday names
++#
++dimanche
++lundi
++mardi
++mercredi
++jeudi
++vendredi
++samedi
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d.%m.%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++
++#
++# pm
++#
++
++#
++# date_fmt
++#
++%a %e %b %Y %X %Z
++#
++# ampm_fmt
++#
++
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/fr.UTF-8.src src/share/locale/timedef/fr.UTF-8.src
+--- src56-orig/share/locale/timedef/fr.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/fr.UTF-8.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,83 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++jan
++fÃ©v
++mar
++avr
++mai
++jui
++jul
++aoÃ»
++sep
++oct
++nov
++dÃ©c
++#
++# Long month names (as in a date)
++#
++janvier
++fÃ©vrier
++mars
++avril
++mai
++juin
++juillet
++aoÃ»t
++septembre
++octobre
++novembre
++dÃ©cembre
++#
++# Short weekday names
++#
++dim
++lun
++mar
++mer
++jeu
++ven
++sam
++#
++# Long weekday names
++#
++dimanche
++lundi
++mardi
++mercredi
++jeudi
++vendredi
++samedi
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d.%m.%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++
++#
++# pm
++#
++
++#
++# date_fmt
++#
++%a %e %b %Y %X %Z
++#
++# ampm_fmt
++#
++
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/he.UTF-8.src src/share/locale/timedef/he.UTF-8.src
+--- src56-orig/share/locale/timedef/he.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/he.UTF-8.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,82 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++×™× ×•
++×¤×‘×¨
++××¨×¥
++××¤×¨
++×××™
++×™×•× 
++×™×•×œ
++××•×’
++×¡×¤×˜
++××•×§
++× ×•×‘
++×“×¦×
++#
++# Long month names (as in a date)
++#
++×™× ×•××¨
++×¤×‘×¨×•××¨
++××¨×¥
++××¤×¨×™×œ
++×××™
++×™×•× ×™
++×™×•×œ×™
++××•×’×•×¡×˜
++×¡×¤×˜××‘×¨
++××•×§×˜×•×‘×¨
++× ×•×‘××‘×¨
++×“×¦××‘×¨
++#
++# Short weekday names
++#
++×'
++×‘'
++×’'
++×“'
++×”'
++×•'
++×©'
++#
++# Long weekday names
++#
++×¨××©×•×Ÿ
++×©× ×™
++×©×œ×™×©×™
++×¨×‘×™×¢×™
++×—××™×©×™
++×©×™×©×™
++×©×‘×ª
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d/%m/%y
++#
++# c_fmt
++#
++%Z %H:%M:%S %Y %b %d %a
++#
++# am
++#
++AM
++#
++# pm
++#
++PM
++#
++# date_fmt
++#
++%a %b %e %H:%M:%S %Z %Y
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/hr.ISO8859-2.src src/share/locale/timedef/hr.ISO8859-2.src
+--- src56-orig/share/locale/timedef/hr.ISO8859-2.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/hr.ISO8859-2.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,83 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++Sij
++Vel
++O¾u
++Tra
++Svi
++Lip
++Srp
++Kol
++Ruj
++Lis
++Stu
++Pro
++#
++# Long month names (as in a date)
++#
++Sijeèanj
++Veljaèa
++O¾ujak
++Travanj
++Svibanj
++Lipanj
++Srpanj
++Kolovoz
++Rujan
++Listopad
++Studeni
++Prosinac
++#
++# Short weekday names
++#
++Ne
++Po
++Ut
++Sr
++Èe
++Pe
++Su
++#
++# Long weekday names
++#
++Nedjelja
++Ponedjeljak
++Utorak
++Srijeda
++Èetvrtak
++Petak
++Subota
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d.%m.%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++am
++#
++# pm
++#
++pm
++#
++# date_fmt
++#
++%a %e %b %Y %X %Z
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/hr.UTF-8.src src/share/locale/timedef/hr.UTF-8.src
+--- src56-orig/share/locale/timedef/hr.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/hr.UTF-8.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,83 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++Sij
++Vel
++OÅ¾u
++Tra
++Svi
++Lip
++Srp
++Kol
++Ruj
++Lis
++Stu
++Pro
++#
++# Long month names (as in a date)
++#
++SijeÄanj
++VeljaÄa
++OÅ¾ujak
++Travanj
++Svibanj
++Lipanj
++Srpanj
++Kolovoz
++Rujan
++Listopad
++Studeni
++Prosinac
++#
++# Short weekday names
++#
++Ne
++Po
++Ut
++Sr
++ÄŒe
++Pe
++Su
++#
++# Long weekday names
++#
++Nedjelja
++Ponedjeljak
++Utorak
++Srijeda
++ÄŒetvrtak
++Petak
++Subota
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d.%m.%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++am
++#
++# pm
++#
++pm
++#
++# date_fmt
++#
++%a %e %b %Y %X %Z
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/hu.ISO8859-2.src src/share/locale/timedef/hu.ISO8859-2.src
+--- src56-orig/share/locale/timedef/hu.ISO8859-2.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/hu.ISO8859-2.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,82 @@
++# This is a Hungarian LC_TIME file for ISO 8859-2 code-table
++# Made by Gabor Zahemszky <zgabor@CoDe.hu>
++# $FreeBSD$
++#
++# Short month names
++#
++jan
++feb
++már
++ápr
++máj
++jún
++júl
++aug
++sze
++okt
++nov
++dec
++#
++# Long month names (as in a date)
++#
++január
++február
++március
++április
++május
++június
++július
++augusztus
++szeptember
++október
++november
++december
++#
++# Short weekday names
++#
++vas
++hét
++ked
++sze
++csü
++pén
++szo
++#
++# Long weekday names
++#
++vasárnap
++hétfõ
++kedd
++szerda
++csütörtök
++péntek
++szombat
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%Y/%m/%d
++#
++# c_fmt
++#
++%a %b %e %X %Y
++#
++# am
++#
++de
++#
++# pm
++#
++du
++#
++# date_fmt
++#
++%Y %b %e %a %X %Z
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/hu.UTF-8.src src/share/locale/timedef/hu.UTF-8.src
+--- src56-orig/share/locale/timedef/hu.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/hu.UTF-8.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,82 @@
++# This is a Hungarian LC_TIME file for ISO 8859-2 code-table
++# Made by Gabor Zahemszky <zgabor@CoDe.hu>
++# $FreeBSD$
++#
++# Short month names
++#
++jan
++feb
++mÃ¡r
++Ã¡pr
++mÃ¡j
++jÃºn
++jÃºl
++aug
++sze
++okt
++nov
++dec
++#
++# Long month names (as in a date)
++#
++januÃ¡r
++februÃ¡r
++mÃ¡rcius
++Ã¡prilis
++mÃ¡jus
++jÃºnius
++jÃºlius
++augusztus
++szeptember
++oktÃ³ber
++november
++december
++#
++# Short weekday names
++#
++vas
++hÃ©t
++ked
++sze
++csÃ¼
++pÃ©n
++szo
++#
++# Long weekday names
++#
++vasÃ¡rnap
++hÃ©tfÅ‘
++kedd
++szerda
++csÃ¼tÃ¶rtÃ¶k
++pÃ©ntek
++szombat
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%Y/%m/%d
++#
++# c_fmt
++#
++%a %b %e %X %Y
++#
++# am
++#
++de
++#
++# pm
++#
++du
++#
++# date_fmt
++#
++%Y %b %e %a %X %Z
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/hy.ARMSCII-8.src src/share/locale/timedef/hy.ARMSCII-8.src
+--- src56-orig/share/locale/timedef/hy.ARMSCII-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/hy.ARMSCII-8.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,86 @@
++# $FreeBSD$
++#
++# LC_TIME source for ARMSCII-8 locale for FreeBSD
++# Made available by Vahe Khachikyan <vahe@khachikyan.de>
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++Ğİí
++öïñ
++Øñï
++²åñ
++ØÛë
++Ğİë
++ĞÉë
++ú·ë
++êåï
++ĞÏï
++ÜÛÙ
++¸Ïï
++#
++# Long month names (as in a date)
++#
++Ğáõİí³ñ
++ö»ïñí³ñ
++Ø³ñï
++²åñÇÉ
++Ø³ÛÇë
++ĞáõİÇë
++ĞáõÉÇë
++ú·áëïáë
++ê»åï»Ùµ»ñ
++ĞáÏï»Ùµ»ñ
++ÜáÛ»Ùµ»ñ
++¸»Ïï»Ùµ»ñ
++#
++# Short weekday names
++#
++ÎñÏ
++ºñÏ
++ºñù
++âñù
++Ğİ·
++àõñ
++ŞµÃ
++#
++# Long weekday names
++#
++ÎÇñ³ÏÇ
++ºñÏáõß³µÃÇ
++ºñ»ùß³µÃÇ
++âáñ»ùß³µÃÇ
++ĞÇİ·ß³µÃÇ
++àõñµ³Ã
++Ş³µ³Ã
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d.%m.%Y
++#
++# c_fmt
++#
++%A, %e %B %Y Ç. %X
++#
++# am
++#
++
++#
++# pm
++#
++
++#
++# date_fmt
++#
++%A, %e %B %Y Ã© %X (%Z)
++#
++# ampm_fmt
++#
++
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/hy.UTF-8.src src/share/locale/timedef/hy.UTF-8.src
+--- src56-orig/share/locale/timedef/hy.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/hy.UTF-8.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,86 @@
++# $FreeBSD$
++#
++# LC_TIME source for ARMSCII-8 locale for FreeBSD
++# Made available by Vahe Khachikyan <vahe@khachikyan.de>
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++Õ€Õ¶Õ¾
++Õ“Õ¿Ö€
++Õ„Ö€Õ¿
++Ô±ÕºÖ€
++Õ„ÕµÕ½
++Õ€Õ¶Õ½
++Õ€Õ¬Õ½
++Õ•Õ£Õ½
++ÕÕºÕ¿
++Õ€Õ¯Õ¿
++Õ†ÕµÕ´
++Ô´Õ¯Õ¿
++#
++# Long month names (as in a date)
++#
++Õ€Õ¸Ö‚Õ¶Õ¾Õ¡Ö€
++Õ“Õ¥Õ¿Ö€Õ¾Õ¡Ö€
++Õ„Õ¡Ö€Õ¿
++Ô±ÕºÖ€Õ«Õ¬
++Õ„Õ¡ÕµÕ«Õ½
++Õ€Õ¸Ö‚Õ¶Õ«Õ½
++Õ€Õ¸Ö‚Õ¬Õ«Õ½
++Õ•Õ£Õ¸Õ½Õ¿Õ¸Õ½
++ÕÕ¥ÕºÕ¿Õ¥Õ´Õ¢Õ¥Ö€
++Õ€Õ¸Õ¯Õ¿Õ¥Õ´Õ¢Õ¥Ö€
++Õ†Õ¸ÕµÕ¥Õ´Õ¢Õ¥Ö€
++Ô´Õ¥Õ¯Õ¿Õ¥Õ´Õ¢Õ¥Ö€
++#
++# Short weekday names
++#
++Ô¿Ö€Õ¯
++ÔµÖ€Õ¯
++ÔµÖ€Ö„
++Õ‰Ö€Ö„
++Õ€Õ¶Õ£
++ÕˆÖ‚Ö€
++Õ‡Õ¢Õ©
++#
++# Long weekday names
++#
++Ô¿Õ«Ö€Õ¡Õ¯Õ«
++ÔµÖ€Õ¯Õ¸Ö‚Õ·Õ¡Õ¢Õ©Õ«
++ÔµÖ€Õ¥Ö„Õ·Õ¡Õ¢Õ©Õ«
++Õ‰Õ¸Ö€Õ¥Ö„Õ·Õ¡Õ¢Õ©Õ«
++Õ€Õ«Õ¶Õ£Õ·Õ¡Õ¢Õ©Õ«
++ÕˆÖ‚Ö€Õ¢Õ¡Õ©
++Õ‡Õ¡Õ¢Õ¡Õ©
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d.%m.%Y
++#
++# c_fmt
++#
++%A, %e %B %Y Õ«. %X
++#
++# am
++#
++
++#
++# pm
++#
++
++#
++# date_fmt
++#
++%A, %e %B %Y Õ©. %X (%Z)
++#
++# ampm_fmt
++#
++
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/is.ISO8859-1.src src/share/locale/timedef/is.ISO8859-1.src
+--- src56-orig/share/locale/timedef/is.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/is.ISO8859-1.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,83 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++jan
++feb
++mar
++apr
++maí
++jún
++júl
++ágú
++sep
++okt
++nóv
++des
++#
++# Long month names (as in a date)
++#
++janúar
++febrúar
++mars
++apríl
++maí
++júní
++júlí
++ágúst
++september
++október
++nóvember
++desember
++#
++# Short weekday names
++#
++sun
++mán
++şri
++miğ
++fim
++fös
++lau
++#
++# Long weekday names
++#
++sunnudagur
++mánudagur
++şriğjudagur
++miğvikudagur
++fimmtudagur
++föstudagur
++laugardagur
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d.%m.%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++fh
++#
++# pm
++#
++eh
++#
++# date_fmt
++#
++%a %e %b %Y %X %Z
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/is.UTF-8.src src/share/locale/timedef/is.UTF-8.src
+--- src56-orig/share/locale/timedef/is.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/is.UTF-8.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,83 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++jan
++feb
++mar
++apr
++maÃ­
++jÃºn
++jÃºl
++Ã¡gÃº
++sep
++okt
++nÃ³v
++des
++#
++# Long month names (as in a date)
++#
++janÃºar
++febrÃºar
++mars
++aprÃ­l
++maÃ­
++jÃºnÃ­
++jÃºlÃ­
++Ã¡gÃºst
++september
++oktÃ³ber
++nÃ³vember
++desember
++#
++# Short weekday names
++#
++sun
++mÃ¡n
++Ã¾ri
++miÃ°
++fim
++fÃ¶s
++lau
++#
++# Long weekday names
++#
++sunnudagur
++mÃ¡nudagur
++Ã¾riÃ°judagur
++miÃ°vikudagur
++fimmtudagur
++fÃ¶studagur
++laugardagur
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d.%m.%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++fh
++#
++# pm
++#
++eh
++#
++# date_fmt
++#
++%a %e %b %Y %X %Z
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/it.ISO8859-1.src src/share/locale/timedef/it.ISO8859-1.src
+--- src56-orig/share/locale/timedef/it.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/it.ISO8859-1.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,83 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++Gen
++Feb
++Mar
++Apr
++Mag
++Giu
++Lug
++Ago
++Set
++Ott
++Nov
++Dic
++#
++# Long month names (as in a date)
++#
++Gennaio
++Febbraio
++Marzo
++Aprile
++Maggio
++Giugno
++Luglio
++Agosto
++Settembre
++Ottobre
++Novembre
++Dicembre
++#
++# Short weekday names
++#
++Dom
++Lun
++Mar
++Mer
++Gio
++Ven
++Sab
++#
++# Long weekday names
++#
++Domenica
++Lunedì
++Martedì
++Mercoledì
++Giovedì
++Venerdì
++Sabato
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d.%m.%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++am
++#
++# pm
++#
++pm
++#
++# date_fmt
++#
++%a %e %b %Y %X %Z
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/it.UTF-8.src src/share/locale/timedef/it.UTF-8.src
+--- src56-orig/share/locale/timedef/it.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/it.UTF-8.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,83 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++Gen
++Feb
++Mar
++Apr
++Mag
++Giu
++Lug
++Ago
++Set
++Ott
++Nov
++Dic
++#
++# Long month names (as in a date)
++#
++Gennaio
++Febbraio
++Marzo
++Aprile
++Maggio
++Giugno
++Luglio
++Agosto
++Settembre
++Ottobre
++Novembre
++Dicembre
++#
++# Short weekday names
++#
++Dom
++Lun
++Mar
++Mer
++Gio
++Ven
++Sab
++#
++# Long weekday names
++#
++Domenica
++LunedÃ¬
++MartedÃ¬
++MercoledÃ¬
++GiovedÃ¬
++VenerdÃ¬
++Sabato
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d.%m.%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++am
++#
++# pm
++#
++pm
++#
++# date_fmt
++#
++%a %e %b %Y %X %Z
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/ja.UTF-8.src src/share/locale/timedef/ja.UTF-8.src
+--- src56-orig/share/locale/timedef/ja.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/ja.UTF-8.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,84 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++ 1æœˆ
++ 2æœˆ
++ 3æœˆ
++ 4æœˆ
++ 5æœˆ
++ 6æœˆ
++ 7æœˆ
++ 8æœˆ
++ 9æœˆ
++10æœˆ
++11æœˆ
++12æœˆ
++#
++# Long month names (as in a date)
++#
++1æœˆ
++2æœˆ
++3æœˆ
++4æœˆ
++5æœˆ
++6æœˆ
++7æœˆ
++8æœˆ
++9æœˆ
++10æœˆ
++11æœˆ
++12æœˆ
++#
++# Short weekday names
++#
++æ—¥
++æœˆ
++ç«
++æ°´
++æœ¨
++é‡‘
++åœŸ
++#
++# Long weekday names
++#
++æ—¥æ›œæ—¥
++æœˆæ›œæ—¥
++ç«æ›œæ—¥
++æ°´æ›œæ—¥
++æœ¨æ›œæ—¥
++é‡‘æ›œæ—¥
++åœŸæ›œæ—¥
++#
++# X_fmt
++#
++%Hæ™‚%Måˆ†%Sç§’
++#
++# x_fmt
++#
++%Y/%m/%d
++#
++# c_fmt
++#
++# just following tradition...
++# %a %b %e %H:%M:%S %Y
++%a %_m/%e %T %Y
++#
++# am
++#
++åˆå‰
++#
++# pm
++#
++åˆå¾Œ
++#
++# date_fmt
++#
++%Yå¹´ %B%eæ—¥ %A %X %Z
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/kk.UTF-8.src src/share/locale/timedef/kk.UTF-8.src
+--- src56-orig/share/locale/timedef/kk.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/kk.UTF-8.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,83 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++Ò›Ğ°Ò£
++Ğ°Ò›Ğ¿
++Ğ½Ğ°Ñƒ
++ÑÓ™Ñƒ
++Ğ¼Ğ°Ğ¼
++Ğ¼Ğ°Ñƒ
++ÑˆÑ–Ğ»
++Ñ‚Ğ°Ğ¼
++Ò›Ñ‹Ñ€
++Ò›Ğ°Ğ·
++Ò›Ğ°Ñ€
++Ğ¶ĞµĞ»
++#
++# Long month names (as in a date)
++#
++Ò›Ğ°Ò£Ñ‚Ğ°Ñ€
++Ğ°Ò›Ğ¿Ğ°Ğ½
++Ğ½Ğ°ÑƒÑ€Ñ‹Ğ·
++ÑÓ™ÑƒÑ–Ñ€
++Ğ¼Ğ°Ğ¼Ñ‹Ñ€
++Ğ¼Ğ°ÑƒÑÑ‹Ğ¼
++ÑˆÑ–Ğ»Ğ´Ğµ
++Ñ‚Ğ°Ğ¼Ñ‹Ğ·
++Ò›Ñ‹Ñ€ĞºÒ¯Ğ¹ĞµĞº
++Ò›Ğ°Ğ·Ğ°Ğ½
++Ò›Ğ°Ñ€Ğ°ÑˆĞ°
++Ğ¶ĞµĞ»Ñ‚Ğ¾Ò›ÑĞ°Ğ½
++#
++# Short weekday names
++#
++Ğ¶Ğº
++Ğ´Ñ
++ÑÑ
++ÑÑ€
++Ğ±Ñ
++Ğ¶Ğ¼
++ÑĞ½
++#
++# Long weekday names
++#
++Ğ¶ĞµĞºÑĞµĞ½Ğ±Ñ–
++Ğ´Ò¯Ğ¹ÑĞµĞ½Ğ±Ñ–
++ÑĞµĞ¹ÑĞµĞ½Ğ±Ñ–
++ÑÓ™Ñ€ÑĞµĞ½Ğ±Ñ–
++Ğ±ĞµĞ¹ÑĞµĞ½Ğ±Ñ–
++Ğ¶Ò±Ğ¼Ğ°
++ÑĞµĞ½Ğ±Ñ–
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d.%m.%Y
++#
++# c_fmt
++#
++%A, %e %B %Y Ğ¶. %X
++#
++# am
++#
++
++#
++# pm
++#
++
++#
++# date_fmt
++#
++%A, %e %B %Y Ğ¶. %X (%Z)
++#
++# ampm_fmt
++#
++
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/ko.UTF-8.src src/share/locale/timedef/ko.UTF-8.src
+--- src56-orig/share/locale/timedef/ko.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/ko.UTF-8.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,85 @@
++# $FreeBSD$
++#
++# Originally by CHOI Junho <cjh@FreeBSD.org>
++# 27 Mar 1997
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++ 1
++ 2
++ 3
++ 4
++ 5
++ 6
++ 7
++ 8
++ 9
++10
++11
++12
++#
++# Long month names (as in a date)
++#
++1ì›”
++2ì›”
++3ì›”
++4ì›”
++5ì›”
++6ì›”
++7ì›”
++8ì›”
++9ì›”
++10ì›”
++11ì›”
++12ì›”
++#
++# Short weekday names
++#
++ì¼
++ì›”
++í™”
++ìˆ˜
++ëª©
++ê¸ˆ
++í† 
++#
++# Long weekday names
++#
++ì¼ìš”ì¼
++ì›”ìš”ì¼
++í™”ìš”ì¼
++ìˆ˜ìš”ì¼
++ëª©ìš”ì¼
++ê¸ˆìš”ì¼
++í† ìš”ì¼
++#
++# X_fmt
++#
++%Hì‹œ %Më¶„ %Sì´ˆ
++#
++# x_fmt
++#
++%Yë…„ %bì›” %eì¼
++#
++# c_fmt
++#
++%x %A %X
++#
++# am
++#
++ì˜¤ì „
++#
++# pm
++#
++ì˜¤í›„
++#
++# date_fmt
++#
++%c %Z
++#
++# ampm_fmt
++#
++%p %I:%M:%S
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/lt.ISO8859-13.src src/share/locale/timedef/lt.ISO8859-13.src
+--- src56-orig/share/locale/timedef/lt.ISO8859-13.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/lt.ISO8859-13.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,82 @@
++# $FreeBSD$
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++Sau
++Vas
++Kov
++Bal
++Geg
++Bir
++Lie
++Rgp
++Rgs
++Spa
++Lap
++Grd
++#
++# Long month names (as in a date)
++#
++sausio
++vasario
++kovo
++balandşio
++geguşës
++birşelio
++liepos
++rugpjûèio
++rugsëjo
++spalio
++lapkrièio
++gruodşio
++#
++# Short weekday names
++#
++Sk
++Pr
++An
++Tr
++Kt
++Pn
++Ğt
++#
++# Long weekday names
++#
++Sekmadienis
++Pirmadienis
++Antradienis
++Treèiadienis
++Ketvirtadienis
++Penktadienis
++Ğeğtadienis
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%Y.%m.%d
++#
++# c_fmt
++# %A, %Y m. %B %e d. %T
++%a %b %e %X %Y
++#
++# am
++#
++
++#
++# pm
++#
++
++#
++# date_fmt
++#
++%A, %Y m. %B %e d. %T %Z
++#
++# ampm_fmt
++#
++
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/lt.ISO8859-4.src src/share/locale/timedef/lt.ISO8859-4.src
+--- src56-orig/share/locale/timedef/lt.ISO8859-4.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/lt.ISO8859-4.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,82 @@
++# $FreeBSD$
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++Sau
++Vas
++Kov
++Bal
++Geg
++Bir
++Lie
++Rgp
++Rgs
++Spa
++Lap
++Grd
++#
++# Long month names (as in a date)
++#
++sausio
++vasario
++kovo
++baland¾io
++gegu¾ìs
++bir¾elio
++liepos
++rugpjşèio
++rugsìjo
++spalio
++lapkrièio
++gruod¾io
++#
++# Short weekday names
++#
++Sk
++Pr
++An
++Tr
++Kt
++Pn
++©t
++#
++# Long weekday names
++#
++Sekmadienis
++Pirmadienis
++Antradienis
++Treèiadienis
++Ketvirtadienis
++Penktadienis
++©e¹tadienis
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%Y.%m.%d
++#
++# c_fmt
++# %A, %Y m. %B %e d. %T
++%a %b %e %X %Y
++#
++# am
++#
++
++#
++# pm
++#
++
++#
++# date_fmt
++#
++%A, %Y m. %B %e d. %T %Z
++#
++# ampm_fmt
++#
++
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/lt.UTF-8.src src/share/locale/timedef/lt.UTF-8.src
+--- src56-orig/share/locale/timedef/lt.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/lt.UTF-8.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,82 @@
++# $FreeBSD$
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++Sau
++Vas
++Kov
++Bal
++Geg
++Bir
++Lie
++Rgp
++Rgs
++Spa
++Lap
++Grd
++#
++# Long month names (as in a date)
++#
++sausio
++vasario
++kovo
++balandÅ¾io
++geguÅ¾Ä—s
++birÅ¾elio
++liepos
++rugpjÅ«Äio
++rugsÄ—jo
++spalio
++lapkriÄio
++gruodÅ¾io
++#
++# Short weekday names
++#
++Sk
++Pr
++An
++Tr
++Kt
++Pn
++Å t
++#
++# Long weekday names
++#
++Sekmadienis
++Pirmadienis
++Antradienis
++TreÄiadienis
++Ketvirtadienis
++Penktadienis
++Å eÅ¡tadienis
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%Y.%m.%d
++#
++# c_fmt
++# %A, %Y m. %B %e d. %T
++%a %b %e %X %Y
++#
++# am
++#
++
++#
++# pm
++#
++
++#
++# date_fmt
++#
++%A, %Y m. %B %e d. %T %Z
++#
++# ampm_fmt
++#
++
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/lv.ISO8859-13.src src/share/locale/timedef/lv.ISO8859-13.src
+--- src56-orig/share/locale/timedef/lv.ISO8859-13.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/lv.ISO8859-13.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,82 @@
++# $FreeBSD$
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++Jan
++Feb
++Mar
++Apr
++Mai
++Jûn
++Jûl
++Aug
++Sep
++Okt
++Nov
++Dec
++#
++# Long month names
++#
++janvâris
++februâris
++marts
++aprîlis
++maijs
++jûnijs
++jûlijs
++augusts
++septembris
++oktobris
++novembris
++decembris
++#
++# Short weekday names
++#
++Sv
++Pr
++Ot
++Tr
++Ct
++Pk
++Ss
++#
++# Long weekday names
++#
++Svçtdiena
++Pirmdiena
++Otrdiena
++Treğdiena
++Ceturtdiena
++Piektdiena
++Sestdiena
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d/%m/%Y
++#
++# c_fmt
++# %A, %Y m. %B %e d. %T
++%e. %b, %Y. gads %X
++#
++# am
++#
++
++#
++# pm
++#
++
++#
++# date_fmt
++#
++%A, %Y. gada %e. %B %T %Z
++#
++# ampm_fmt
++#
++
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/lv.UTF-8.src src/share/locale/timedef/lv.UTF-8.src
+--- src56-orig/share/locale/timedef/lv.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/lv.UTF-8.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,82 @@
++# $FreeBSD$
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++Jan
++Feb
++Mar
++Apr
++Mai
++JÅ«n
++JÅ«l
++Aug
++Sep
++Okt
++Nov
++Dec
++#
++# Long month names
++#
++janvÄris
++februÄris
++marts
++aprÄ«lis
++maijs
++jÅ«nijs
++jÅ«lijs
++augusts
++septembris
++oktobris
++novembris
++decembris
++#
++# Short weekday names
++#
++Sv
++Pr
++Ot
++Tr
++Ct
++Pk
++Ss
++#
++# Long weekday names
++#
++SvÄ“tdiena
++Pirmdiena
++Otrdiena
++TreÅ¡diena
++Ceturtdiena
++Piektdiena
++Sestdiena
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d/%m/%Y
++#
++# c_fmt
++# %A, %Y m. %B %e d. %T
++%e. %b, %Y. gads %X
++#
++# am
++#
++
++#
++# pm
++#
++
++#
++# date_fmt
++#
++%A, %Y. gada %e. %B %T %Z
++#
++# ampm_fmt
++#
++
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/mn.UTF-8.src src/share/locale/timedef/mn.UTF-8.src
+--- src56-orig/share/locale/timedef/mn.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/mn.UTF-8.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,83 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++ĞÑĞ³
++Ğ¥Ğ¾Ñ‘
++Ğ“ÑƒÑ€
++Ğ”Ó©Ñ€
++Ğ¢Ğ°Ğ²
++Ğ—ÑƒÑ€
++Ğ”Ğ¾Ğ»
++ĞĞ°Ğ¹
++Ğ•ÑÓ©
++ĞÑ€Ğ²
++11Ñ€
++12Ñ€
++#
++# Long month names (as in a date)
++#
++ĞÑĞ³Ğ´Ò¯Ğ³ÑÑÑ€
++Ğ¥Ğ¾Ñ‘Ñ€Ğ´ÑƒĞ³Ğ°Ğ°Ñ€
++Ğ“ÑƒÑ€Ğ°Ğ²Ğ´ÑƒĞ³Ğ°Ğ°Ñ€
++Ğ”Ó©Ñ€Ó©Ğ²Ğ´Ò¯Ğ³ÑÑÑ€
++Ğ¢Ğ°Ğ²Ğ´ÑƒĞ³Ğ°Ğ°Ñ€
++Ğ—ÑƒÑ€Ğ³Ğ°Ğ°Ğ´ÑƒĞ³Ğ°Ğ°Ñ€
++Ğ”Ğ¾Ğ»Ğ¾Ğ¾Ğ´ÑƒĞ³Ğ°Ğ°Ñ€
++ĞĞ°Ğ¹Ğ¼Ğ´ÑƒĞ³Ğ°Ğ°Ñ€
++Ğ•ÑĞ´Ò¯Ğ³ÑÑÑ€
++ĞÑ€Ğ°Ğ²Ğ´ÑƒĞ³Ğ°Ğ°Ñ€
++ĞÑ€Ğ²Ğ°Ğ½ Ğ½ÑĞ³Ğ´Ò¯Ğ³ÑÑÑ€
++ĞÑ€Ğ²Ğ°Ğ½ Ñ…Ğ¾Ñ‘Ñ€Ğ´ÑƒĞ³Ğ°Ğ°Ñ€
++#
++# Short weekday names
++#
++ĞÑĞ¼
++Ğ”Ğ°Ğ²
++ĞœÑĞ³
++Ğ›Ñ…Ğ°
++ĞŸÒ¯Ñ€
++Ğ‘Ğ°Ğ°
++Ğ‘ÑĞ¼
++#
++# Long weekday names
++#
++ĞÑĞ¼
++Ğ”Ğ°Ğ²Ğ°Ğ°
++ĞœÑĞ³Ğ¼Ğ°Ñ€
++Ğ›Ñ…Ğ°Ğ³Ğ²Ğ°
++ĞŸÒ¯Ñ€ÑĞ²
++Ğ‘Ğ°Ğ°ÑĞ°Ğ½
++Ğ‘ÑĞ¼Ğ±Ğ°
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%Y.%m.%d
++#
++# c_fmt
++#
++%Y Ğ¾Ğ½Ñ‹ %B ÑĞ°Ñ€Ñ‹Ğ½ %e, %A Ğ³Ğ°Ñ€Ğ°Ğ³, %X 
++#
++# am
++#
++Ò®Ó¨
++#
++# pm
++#
++Ò®Ğ¨
++#
++# date_fmt
++#
++%Y Ğ¾Ğ½Ñ‹ %B ÑĞ°Ñ€Ñ‹Ğ½ %e, %A Ğ³Ğ°Ñ€Ğ°Ğ³, %X
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/nb.ISO8859-1.src src/share/locale/timedef/nb.ISO8859-1.src
+--- src56-orig/share/locale/timedef/nb.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/nb.ISO8859-1.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,83 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++jan
++feb
++mar
++apr
++mai
++jun
++jul
++aug
++sep
++okt
++nov
++des
++#
++# Long month names (as in a date)
++#
++januar
++februar
++mars
++april
++mai
++juni
++juli
++august
++september
++oktober
++november
++desember
++#
++# Short weekday names
++#
++søn
++man
++tir
++ons
++tor
++fre
++lør
++#
++# Long weekday names
++#
++søndag
++mandag
++tirsdag
++onsdag
++torsdag
++fredag
++lørdag
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d.%m.%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++am
++#
++# pm
++#
++pm
++#
++# date_fmt
++#
++%a %e %b %Y %X %Z
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/nb.UTF-8.src src/share/locale/timedef/nb.UTF-8.src
+--- src56-orig/share/locale/timedef/nb.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/nb.UTF-8.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,83 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++jan
++feb
++mar
++apr
++mai
++jun
++jul
++aug
++sep
++okt
++nov
++des
++#
++# Long month names (as in a date)
++#
++januar
++februar
++mars
++april
++mai
++juni
++juli
++august
++september
++oktober
++november
++desember
++#
++# Short weekday names
++#
++sÃ¸n
++man
++tir
++ons
++tor
++fre
++lÃ¸r
++#
++# Long weekday names
++#
++sÃ¸ndag
++mandag
++tirsdag
++onsdag
++torsdag
++fredag
++lÃ¸rdag
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d.%m.%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++am
++#
++# pm
++#
++pm
++#
++# date_fmt
++#
++%a %e %b %Y %X %Z
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/nl.ISO8859-1.src src/share/locale/timedef/nl.ISO8859-1.src
+--- src56-orig/share/locale/timedef/nl.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/nl.ISO8859-1.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,82 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++jan
++feb
++mrt
++apr
++mei
++jun
++jul
++aug
++sep
++okt
++nov
++dec
++#
++# Long month names (as in a date)
++#
++januari
++februari
++maart
++april
++mei
++juni
++juli
++augustus
++september
++oktober
++november
++december
++#
++# Short weekday names
++zo
++ma
++di
++wo
++do
++vr
++za
++#
++# Long weekday names
++#
++zondag
++maandag
++dinsdag
++woensdag
++donderdag
++vrijdag
++zaterdag
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d-%m-%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++am
++#
++# pm
++#
++pm
++#
++# date_fmt
++#
++%a %e %b %Y %X %Z
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/nn.ISO8859-1.src src/share/locale/timedef/nn.ISO8859-1.src
+--- src56-orig/share/locale/timedef/nn.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/nn.ISO8859-1.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,83 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++jan
++feb
++mar
++apr
++mai
++jun
++jul
++aug
++sep
++okt
++nov
++des
++#
++# Long month names (as in a date)
++#
++januar
++februar
++mars
++april
++mai
++juni
++juli
++august
++september
++oktober
++november
++desember
++#
++# Short weekday names
++#
++sun
++mån
++tys
++ons
++tor
++fre
++lau
++#
++# Long weekday names
++#
++sundag
++måndag
++tysdag
++onsdag
++torsdag
++fredag
++laurdag
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d.%m.%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++am
++#
++# pm
++#
++pm
++#
++# date_fmt
++#
++%a %e %b %Y %X %Z
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/nn.UTF-8.src src/share/locale/timedef/nn.UTF-8.src
+--- src56-orig/share/locale/timedef/nn.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/nn.UTF-8.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,83 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++jan
++feb
++mar
++apr
++mai
++jun
++jul
++aug
++sep
++okt
++nov
++des
++#
++# Long month names (as in a date)
++#
++januar
++februar
++mars
++april
++mai
++juni
++juli
++august
++september
++oktober
++november
++desember
++#
++# Short weekday names
++#
++sun
++mÃ¥n
++tys
++ons
++tor
++fre
++lau
++#
++# Long weekday names
++#
++sundag
++mÃ¥ndag
++tysdag
++onsdag
++torsdag
++fredag
++laurdag
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d.%m.%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++am
++#
++# pm
++#
++pm
++#
++# date_fmt
++#
++%a %e %b %Y %X %Z
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/pl.ISO8859-2.src src/share/locale/timedef/pl.ISO8859-2.src
+--- src56-orig/share/locale/timedef/pl.ISO8859-2.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/pl.ISO8859-2.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,80 @@
++# $FreeBSD$
++#
++# Short month names
++#
++sty
++lut
++mar
++kwi
++maj
++cze
++lip
++sie
++wrz
++pa¼
++lis
++gru
++#
++# Long month names (as in a date)
++#
++stycznia
++lutego
++marca
++kwietnia
++maja
++czerwca
++lipca
++sierpnia
++wrze¶nia
++pa¼dziernika
++listopada
++grudnia
++#
++# Short weekday names
++#
++nie
++pon
++wto
++¶ro
++czw
++pi±
++sob
++#
++# Long weekday names
++#
++niedziela
++poniedzia³ek
++wtorek
++¶roda
++czwartek
++pi±tek
++sobota
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%Y.%m.%d
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++
++#
++# pm
++#
++
++#
++# date_fmt
++#
++%a %e %b %Y %X %Z
++#
++# ampm_fmt
++#
++
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/pl.UTF-8.src src/share/locale/timedef/pl.UTF-8.src
+--- src56-orig/share/locale/timedef/pl.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/pl.UTF-8.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,80 @@
++# $FreeBSD$
++#
++# Short month names
++#
++sty
++lut
++mar
++kwi
++maj
++cze
++lip
++sie
++wrz
++paÅº
++lis
++gru
++#
++# Long month names (as in a date)
++#
++stycznia
++lutego
++marca
++kwietnia
++maja
++czerwca
++lipca
++sierpnia
++wrzeÅ›nia
++paÅºdziernika
++listopada
++grudnia
++#
++# Short weekday names
++#
++nie
++pon
++wto
++Å›ro
++czw
++piÄ…
++sob
++#
++# Long weekday names
++#
++niedziela
++poniedziaÅ‚ek
++wtorek
++Å›roda
++czwartek
++piÄ…tek
++sobota
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%Y.%m.%d
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++
++#
++# pm
++#
++
++#
++# date_fmt
++#
++%a %e %b %Y %X %Z
++#
++# ampm_fmt
++#
++
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/pt.ISO8859-1.src src/share/locale/timedef/pt.ISO8859-1.src
+--- src56-orig/share/locale/timedef/pt.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/pt.ISO8859-1.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,84 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++# In Portugal we don't use the 12 + am/pm but the 24h format
++#
++# Short month names
++#
++Jan
++Fev
++Mar
++Abr
++Mai
++Jun
++Jul
++Ago
++Set
++Out
++Nov
++Dez
++#
++# Long month names (as in a date)
++#
++Janeiro
++Fevereiro
++Março
++Abril
++Maio
++Junho
++Julho
++Agosto
++Setembro
++Outubro
++Novembro
++Dezembro
++#
++# Short weekday names
++#
++dom
++seg
++ter
++qua
++qui
++sex
++sáb
++#
++# Long weekday names
++#
++domingo
++segunda-feira
++terça-feira
++quarta-feira
++quinta-feira
++sexta-feira
++sábado
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d/%m/%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++
++#
++# pm
++#
++
++#
++# date_fmt
++#
++%a %e %b %Y %X %Z
++#
++# ampm_fmt
++#
++
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/pt.UTF-8.src src/share/locale/timedef/pt.UTF-8.src
+--- src56-orig/share/locale/timedef/pt.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/pt.UTF-8.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,84 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++# In Portugal we don't use the 12 + am/pm but the 24h format
++#
++# Short month names
++#
++Jan
++Fev
++Mar
++Abr
++Mai
++Jun
++Jul
++Ago
++Set
++Out
++Nov
++Dez
++#
++# Long month names (as in a date)
++#
++Janeiro
++Fevereiro
++MarÃ§o
++Abril
++Maio
++Junho
++Julho
++Agosto
++Setembro
++Outubro
++Novembro
++Dezembro
++#
++# Short weekday names
++#
++dom
++seg
++ter
++qua
++qui
++sex
++sÃ¡b
++#
++# Long weekday names
++#
++domingo
++segunda-feira
++terÃ§a-feira
++quarta-feira
++quinta-feira
++sexta-feira
++sÃ¡bado
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d/%m/%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++
++#
++# pm
++#
++
++#
++# date_fmt
++#
++%a %e %b %Y %X %Z
++#
++# ampm_fmt
++#
++
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/pt_BR.ISO8859-1.src src/share/locale/timedef/pt_BR.ISO8859-1.src
+--- src56-orig/share/locale/timedef/pt_BR.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/pt_BR.ISO8859-1.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,84 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++# In Portugal we don't use the 12 + am/pm but the 24h format
++#
++# Short month names
++#
++Jan
++Fev
++Mar
++Abr
++Mai
++Jun
++Jul
++Ago
++Set
++Out
++Nov
++Dez
++#
++# Long month names (as in a date)
++#
++Janeiro
++Fevereiro
++Março
++Abril
++Maio
++Junho
++Julho
++Agosto
++Setembro
++Outubro
++Novembro
++Dezembro
++#
++# Short weekday names
++#
++Dom
++Seg
++Ter
++Qua
++Qui
++Sex
++Sáb
++#
++# Long weekday names
++#
++Domingo
++Segunda Feira
++Terça Feira
++Quarta Feira
++Quinta Feira
++Sexta Feira
++Sábado
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d/%m/%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++
++#
++# pm
++#
++
++#
++# date_fmt
++#
++%a %e %b %Y %X %Z
++#
++# ampm_fmt
++#
++
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/pt_BR.UTF-8.src src/share/locale/timedef/pt_BR.UTF-8.src
+--- src56-orig/share/locale/timedef/pt_BR.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/pt_BR.UTF-8.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,84 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++# In Portugal we don't use the 12 + am/pm but the 24h format
++#
++# Short month names
++#
++Jan
++Fev
++Mar
++Abr
++Mai
++Jun
++Jul
++Ago
++Set
++Out
++Nov
++Dez
++#
++# Long month names (as in a date)
++#
++Janeiro
++Fevereiro
++MarÃ§o
++Abril
++Maio
++Junho
++Julho
++Agosto
++Setembro
++Outubro
++Novembro
++Dezembro
++#
++# Short weekday names
++#
++Dom
++Seg
++Ter
++Qua
++Qui
++Sex
++SÃ¡b
++#
++# Long weekday names
++#
++Domingo
++Segunda Feira
++TerÃ§a Feira
++Quarta Feira
++Quinta Feira
++Sexta Feira
++SÃ¡bado
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d/%m/%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++
++#
++# pm
++#
++
++#
++# date_fmt
++#
++%a %e %b %Y %X %Z
++#
++# ampm_fmt
++#
++
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/ro.ISO8859-2.src src/share/locale/timedef/ro.ISO8859-2.src
+--- src56-orig/share/locale/timedef/ro.ISO8859-2.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/ro.ISO8859-2.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,83 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++Ian
++Feb
++Mar
++Apr
++Mai
++Iun
++Iul
++Aug
++Sep
++Oct
++Noi
++Dec
++#
++# Long month names (as in a date)
++#
++Ianuarie
++Februarie
++Martie
++Aprilie
++Mai
++Iunie
++Iulie
++August
++Septembrie
++Octombrie
++Noiembrie
++Decembrie
++#
++# Short weekday names
++#
++Dum
++Lun
++Mar
++Mie
++Joi
++Vin
++Sâm
++#
++# Long weekday names
++#
++Duminicã
++Luni
++Marşi
++Miercuri
++Joi
++Vineri
++Sâmbãtã
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d.%m.%Y
++#
++# c_fmt
++#
++%a %e %b %Y %X
++#
++# am
++#
++am
++#
++# pm
++#
++pm
++#
++# date_fmt
++#
++%a %e %b %Y %X %Z
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/ro.UTF-8.src src/share/locale/timedef/ro.UTF-8.src
+--- src56-orig/share/locale/timedef/ro.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/ro.UTF-8.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,83 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++Ian
++Feb
++Mar
++Apr
++Mai
++Iun
++Iul
++Aug
++Sep
++Oct
++Noi
++Dec
++#
++# Long month names (as in a date)
++#
++Ianuarie
++Februarie
++Martie
++Aprilie
++Mai
++Iunie
++Iulie
++August
++Septembrie
++Octombrie
++Noiembrie
++Decembrie
++#
++# Short weekday names
++#
++Dum
++Lun
++Mar
++Mie
++Joi
++Vin
++SÃ¢m
++#
++# Long weekday names
++#
++DuminicÄƒ
++Luni
++MarÅ£i
++Miercuri
++Joi
++Vineri
++SÃ¢mbÄƒtÄƒ
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d.%m.%Y
++#
++# c_fmt
++#
++%a %e %b %Y %X
++#
++# am
++#
++am
++#
++# pm
++#
++pm
++#
++# date_fmt
++#
++%a %e %b %Y %X %Z
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/ru.CP1251.src src/share/locale/timedef/ru.CP1251.src
+--- src56-orig/share/locale/timedef/ru.CP1251.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/ru.CP1251.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,83 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++ÿíâ
++ôåâ
++ìàğ
++àïğ
++ìàé
++èşí
++èşë
++àâã
++ñåí
++îêò
++íîÿ
++äåê
++#
++# Long month names (as in a date)
++#
++ÿíâàğÿ
++ôåâğàëÿ
++ìàğòà
++àïğåëÿ
++ìàÿ
++èşíÿ
++èşëÿ
++àâãóñòà
++ñåíòÿáğÿ
++îêòÿáğÿ
++íîÿáğÿ
++äåêàáğÿ
++#
++# Short weekday names
++#
++âñ
++ïí
++âò
++ñğ
++÷ò
++ïò
++ñá
++#
++# Long weekday names
++#
++âîñêğåñåíüå
++ïîíåäåëüíèê
++âòîğíèê
++ñğåäà
++÷åòâåğã
++ïÿòíèöà
++ñóááîòà
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d.%m.%Y
++#
++# c_fmt
++#
++%A, %e %B %Y ã. %X
++#
++# am
++#
++
++#
++# pm
++#
++
++#
++# date_fmt
++#
++%A, %e %B %Y ã. %X (%Z)
++#
++# ampm_fmt
++#
++
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/ru.CP866.src src/share/locale/timedef/ru.CP866.src
+--- src56-orig/share/locale/timedef/ru.CP866.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/ru.CP866.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,83 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++ï­¢
++ä¥¢
++¬ à
++ ¯à
++¬ ©
++¨î­
++¨î«
++ ¢£
++á¥­
++®ªâ
++­®ï
++¤¥ª
++#
++# Long month names (as in a date)
++#
++ï­¢ àï
++ä¥¢à «ï
++¬ àâ 
++ ¯à¥«ï
++¬ ï
++¨î­ï
++¨î«ï
++ ¢£ãáâ 
++á¥­âï¡àï
++®ªâï¡àï
++­®ï¡àï
++¤¥ª ¡àï
++#
++# Short weekday names
++#
++¢á
++¯­
++¢â
++áà
++çâ
++¯â
++á¡
++#
++# Long weekday names
++#
++¢®áªà¥á¥­ì¥
++¯®­¥¤¥«ì­¨ª
++¢â®à­¨ª
++áà¥¤ 
++ç¥â¢¥à£
++¯ïâ­¨æ 
++áã¡¡®â 
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d.%m.%Y
++#
++# c_fmt
++#
++%A, %e %B %Y £. %X
++#
++# am
++#
++
++#
++# pm
++#
++
++#
++# date_fmt
++#
++%A, %e %B %Y £. %X (%Z)
++#
++# ampm_fmt
++#
++
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/ru.ISO8859-5.src src/share/locale/timedef/ru.ISO8859-5.src
+--- src56-orig/share/locale/timedef/ru.ISO8859-5.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/ru.ISO8859-5.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,83 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++ïİÒ
++äÕÒ
++ÜĞà
++Ğßà
++ÜĞÙ
++Øîİ
++ØîÛ
++ĞÒÓ
++áÕİ
++ŞÚâ
++İŞï
++ÔÕÚ
++#
++# Long month names (as in a date)
++#
++ïİÒĞàï
++äÕÒàĞÛï
++ÜĞàâĞ
++ĞßàÕÛï
++ÜĞï
++Øîİï
++ØîÛï
++ĞÒÓãáâĞ
++áÕİâïÑàï
++ŞÚâïÑàï
++İŞïÑàï
++ÔÕÚĞÑàï
++#
++# Short weekday names
++#
++Òá
++ßİ
++Òâ
++áà
++çâ
++ßâ
++áÑ
++#
++# Long weekday names
++#
++ÒŞáÚàÕáÕİìÕ
++ßŞİÕÔÕÛìİØÚ
++ÒâŞàİØÚ
++áàÕÔĞ
++çÕâÒÕàÓ
++ßïâİØæĞ
++áãÑÑŞâĞ
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d.%m.%Y
++#
++# c_fmt
++#
++%A, %e %B %Y Ó. %X
++#
++# am
++#
++
++#
++# pm
++#
++
++#
++# date_fmt
++#
++%A, %e %B %Y Ó. %X (%Z)
++#
++# ampm_fmt
++#
++
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/ru.KOI8-R.src src/share/locale/timedef/ru.KOI8-R.src
+--- src56-orig/share/locale/timedef/ru.KOI8-R.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/ru.KOI8-R.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,83 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++ÑÎ×
++ÆÅ×
++ÍÁÒ
++ÁĞÒ
++ÍÁÊ
++ÉÀÎ
++ÉÀÌ
++Á×Ç
++ÓÅÎ
++ÏËÔ
++ÎÏÑ
++ÄÅË
++#
++# Long month names (as in a date)
++#
++ÑÎ×ÁÒÑ
++ÆÅ×ÒÁÌÑ
++ÍÁÒÔÁ
++ÁĞÒÅÌÑ
++ÍÁÑ
++ÉÀÎÑ
++ÉÀÌÑ
++Á×ÇÕÓÔÁ
++ÓÅÎÔÑÂÒÑ
++ÏËÔÑÂÒÑ
++ÎÏÑÂÒÑ
++ÄÅËÁÂÒÑ
++#
++# Short weekday names
++#
++×Ó
++ĞÎ
++×Ô
++ÓÒ
++ŞÔ
++ĞÔ
++ÓÂ
++#
++# Long weekday names
++#
++×ÏÓËÒÅÓÅÎØÅ
++ĞÏÎÅÄÅÌØÎÉË
++×ÔÏÒÎÉË
++ÓÒÅÄÁ
++ŞÅÔ×ÅÒÇ
++ĞÑÔÎÉÃÁ
++ÓÕÂÂÏÔÁ
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d.%m.%Y
++#
++# c_fmt
++#
++%A, %e %B %Y Ç. %X
++#
++# am
++#
++
++#
++# pm
++#
++
++#
++# date_fmt
++#
++%A, %e %B %Y Ç. %X (%Z)
++#
++# ampm_fmt
++#
++
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/ru.UTF-8.src src/share/locale/timedef/ru.UTF-8.src
+--- src56-orig/share/locale/timedef/ru.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/ru.UTF-8.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,83 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++ÑĞ½Ğ²
++Ñ„ĞµĞ²
++Ğ¼Ğ°Ñ€
++Ğ°Ğ¿Ñ€
++Ğ¼Ğ°Ğ¹
++Ğ¸ÑĞ½
++Ğ¸ÑĞ»
++Ğ°Ğ²Ğ³
++ÑĞµĞ½
++Ğ¾ĞºÑ‚
++Ğ½Ğ¾Ñ
++Ğ´ĞµĞº
++#
++# Long month names (as in a date)
++#
++ÑĞ½Ğ²Ğ°Ñ€Ñ
++Ñ„ĞµĞ²Ñ€Ğ°Ğ»Ñ
++Ğ¼Ğ°Ñ€Ñ‚Ğ°
++Ğ°Ğ¿Ñ€ĞµĞ»Ñ
++Ğ¼Ğ°Ñ
++Ğ¸ÑĞ½Ñ
++Ğ¸ÑĞ»Ñ
++Ğ°Ğ²Ğ³ÑƒÑÑ‚Ğ°
++ÑĞµĞ½Ñ‚ÑĞ±Ñ€Ñ
++Ğ¾ĞºÑ‚ÑĞ±Ñ€Ñ
++Ğ½Ğ¾ÑĞ±Ñ€Ñ
++Ğ´ĞµĞºĞ°Ğ±Ñ€Ñ
++#
++# Short weekday names
++#
++Ğ²Ñ
++Ğ¿Ğ½
++Ğ²Ñ‚
++ÑÑ€
++Ñ‡Ñ‚
++Ğ¿Ñ‚
++ÑĞ±
++#
++# Long weekday names
++#
++Ğ²Ğ¾ÑĞºÑ€ĞµÑĞµĞ½ÑŒĞµ
++Ğ¿Ğ¾Ğ½ĞµĞ´ĞµĞ»ÑŒĞ½Ğ¸Ğº
++Ğ²Ñ‚Ğ¾Ñ€Ğ½Ğ¸Ğº
++ÑÑ€ĞµĞ´Ğ°
++Ñ‡ĞµÑ‚Ğ²ĞµÑ€Ğ³
++Ğ¿ÑÑ‚Ğ½Ğ¸Ñ†Ğ°
++ÑÑƒĞ±Ğ±Ğ¾Ñ‚Ğ°
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d.%m.%Y
++#
++# c_fmt
++#
++%A, %e %B %Y Ğ³. %X
++#
++# am
++#
++
++#
++# pm
++#
++
++#
++# date_fmt
++#
++%A, %e %B %Y Ğ³. %X (%Z)
++#
++# ampm_fmt
++#
++
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/sk.ISO8859-2.src src/share/locale/timedef/sk.ISO8859-2.src
+--- src56-orig/share/locale/timedef/sk.ISO8859-2.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/sk.ISO8859-2.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,86 @@
++# Slovak month and day names
++# by Juraj Bednar <juraj@bednar.sk>
++#
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++jan
++feb
++mar
++apr
++máj
++jún
++júl
++aug
++sep
++okt
++nov
++dec
++#
++# Long month names (as in a date)
++#
++január
++február
++marec
++apríl
++máj
++jún
++júl
++august
++september
++október
++november
++december
++#
++# Short weekday names
++#
++ne 
++po 
++ut 
++st 
++¹t 
++pi 
++so 
++#
++# Long weekday names
++#
++nedeµa
++pondelok
++utorok
++streda
++¹tvrtok
++piatok
++sobota
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d.%m.%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++
++#
++# pm
++#
++
++#
++# date_fmt
++#
++%a %e. %B %Y %X %Z
++#
++# ampm_fmt
++#
++
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/sk.UTF-8.src src/share/locale/timedef/sk.UTF-8.src
+--- src56-orig/share/locale/timedef/sk.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/sk.UTF-8.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,86 @@
++# Slovak month and day names
++# by Juraj Bednar <juraj@bednar.sk>
++#
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++jan
++feb
++mar
++apr
++mÃ¡j
++jÃºn
++jÃºl
++aug
++sep
++okt
++nov
++dec
++#
++# Long month names (as in a date)
++#
++januÃ¡r
++februÃ¡r
++marec
++aprÃ­l
++mÃ¡j
++jÃºn
++jÃºl
++august
++september
++oktÃ³ber
++november
++december
++#
++# Short weekday names
++#
++ne 
++po 
++ut 
++st 
++Å¡t 
++pi 
++so 
++#
++# Long weekday names
++#
++nedeÄ¾a
++pondelok
++utorok
++streda
++Å¡tvrtok
++piatok
++sobota
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d.%m.%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++
++#
++# pm
++#
++
++#
++# date_fmt
++#
++%a %e. %B %Y %X %Z
++#
++# ampm_fmt
++#
++
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/sl.ISO8859-2.src src/share/locale/timedef/sl.ISO8859-2.src
+--- src56-orig/share/locale/timedef/sl.ISO8859-2.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/sl.ISO8859-2.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,83 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++jan
++feb
++mar
++apr
++maj
++jun
++jul
++avg
++sep
++okt
++nov
++dec
++#
++# Long month names (as in a date)
++#
++januar
++februar
++marec
++april
++maj
++junij
++julij
++avgust
++september
++oktober
++november
++december
++#
++# Short weekday names
++#
++ned
++pon
++tor
++sre
++èet
++pet
++sob
++#
++# Long weekday names
++#
++nedelja
++ponedeljek
++torek
++sreda
++èetrtek
++petek
++sobota
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d.%m.%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++am
++#
++# pm
++#
++pm
++#
++# date_fmt
++#
++%a %e %b %Y %X %Z
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/sl.UTF-8.src src/share/locale/timedef/sl.UTF-8.src
+--- src56-orig/share/locale/timedef/sl.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/sl.UTF-8.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,83 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++jan
++feb
++mar
++apr
++maj
++jun
++jul
++avg
++sep
++okt
++nov
++dec
++#
++# Long month names (as in a date)
++#
++januar
++februar
++marec
++april
++maj
++junij
++julij
++avgust
++september
++oktober
++november
++december
++#
++# Short weekday names
++#
++ned
++pon
++tor
++sre
++Äet
++pet
++sob
++#
++# Long weekday names
++#
++nedelja
++ponedeljek
++torek
++sreda
++Äetrtek
++petek
++sobota
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d.%m.%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++am
++#
++# pm
++#
++pm
++#
++# date_fmt
++#
++%a %e %b %Y %X %Z
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/sr.ISO8859-2.src src/share/locale/timedef/sr.ISO8859-2.src
+--- src56-orig/share/locale/timedef/sr.ISO8859-2.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/sr.ISO8859-2.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,83 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++jan
++feb
++mar
++apr
++maj
++jun
++jul
++avg
++sep
++okt
++nov
++dec
++#
++# Long month names (as in a date)
++#
++januar
++februar
++mart
++april
++maj
++juni
++juli
++avgust
++septembar
++oktobar
++novembar
++decembar
++#
++# Short weekday names
++#
++ned
++pon
++uto
++sre
++èet
++pet
++sub
++#
++# Long weekday names
++#
++nedelja
++ponedeljak
++utorak
++sreda
++èetvrtak
++petak
++subota
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d.%m.%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++am
++#
++# pm
++#
++pm
++#
++# date_fmt
++#
++%a %e %b %Y %X %Z
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/sr.ISO8859-5.src src/share/locale/timedef/sr.ISO8859-5.src
+--- src56-orig/share/locale/timedef/sr.ISO8859-5.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/sr.ISO8859-5.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,83 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++øĞİ
++äÕÑ
++ÜĞà
++Ğßà
++ÜĞø
++øãİ
++øãÛ
++ĞÒÓ
++áÕß
++ŞÚâ
++İŞÒ
++ÔÕæ
++#
++# Long month names (as in a date)
++#
++øĞİãaà
++äÕÑàãĞà
++ÜĞàâ
++ĞßàØÛ
++ÜĞø
++øãİØ
++øãÛØ
++ĞÒÓãáâ
++áÕßâÕÜÑĞà
++ŞÚâŞÑĞà
++İŞÒÕÜÑĞà
++ÔÕæÕÜÑĞà
++#
++# Short weekday names
++#
++İÕÔ
++ßŞİ
++ãâŞ
++áàÕ
++çÕâ
++ßÕâ
++áãÑ
++#
++# Long weekday names
++#
++İÕÔÕùĞ
++ßŞİÕÔÕùĞÚ
++ãâŞàĞÚ
++áàÕÔĞ
++çÕâÒàâĞÚ
++ßÕâĞÚ
++áãÑŞâĞ
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d.%m.%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++
++#
++# pm
++#
++
++#
++# date_fmt
++#
++%a %e %b %Y %X %Z
++#
++# ampm_fmt
++#
++
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/sr.UTF-8.src src/share/locale/timedef/sr.UTF-8.src
+--- src56-orig/share/locale/timedef/sr.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/sr.UTF-8.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,83 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++Ñ˜Ğ°Ğ½
++Ñ„ĞµĞ±
++Ğ¼Ğ°Ñ€
++Ğ°Ğ¿Ñ€
++Ğ¼Ğ°Ñ˜
++Ñ˜ÑƒĞ½
++Ñ˜ÑƒĞ»
++Ğ°Ğ²Ğ³
++ÑĞµĞ¿
++Ğ¾ĞºÑ‚
++Ğ½Ğ¾Ğ²
++Ğ´ĞµÑ†
++#
++# Long month names (as in a date)
++#
++Ñ˜Ğ°Ğ½ÑƒaÑ€
++Ñ„ĞµĞ±Ñ€ÑƒĞ°Ñ€
++Ğ¼Ğ°Ñ€Ñ‚
++Ğ°Ğ¿Ñ€Ğ¸Ğ»
++Ğ¼Ğ°Ñ˜
++Ñ˜ÑƒĞ½Ğ¸
++Ñ˜ÑƒĞ»Ğ¸
++Ğ°Ğ²Ğ³ÑƒÑÑ‚
++ÑĞµĞ¿Ñ‚ĞµĞ¼Ğ±Ğ°Ñ€
++Ğ¾ĞºÑ‚Ğ¾Ğ±Ğ°Ñ€
++Ğ½Ğ¾Ğ²ĞµĞ¼Ğ±Ğ°Ñ€
++Ğ´ĞµÑ†ĞµĞ¼Ğ±Ğ°Ñ€
++#
++# Short weekday names
++#
++Ğ½ĞµĞ´
++Ğ¿Ğ¾Ğ½
++ÑƒÑ‚Ğ¾
++ÑÑ€Ğµ
++Ñ‡ĞµÑ‚
++Ğ¿ĞµÑ‚
++ÑÑƒĞ±
++#
++# Long weekday names
++#
++Ğ½ĞµĞ´ĞµÑ™Ğ°
++Ğ¿Ğ¾Ğ½ĞµĞ´ĞµÑ™Ğ°Ğº
++ÑƒÑ‚Ğ¾Ñ€Ğ°Ğº
++ÑÑ€ĞµĞ´Ğ°
++Ñ‡ĞµÑ‚Ğ²Ñ€Ñ‚Ğ°Ğº
++Ğ¿ĞµÑ‚Ğ°Ğº
++ÑÑƒĞ±Ğ¾Ñ‚Ğ°
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d.%m.%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++
++#
++# pm
++#
++
++#
++# date_fmt
++#
++%a %e %b %Y %X %Z
++#
++# ampm_fmt
++#
++
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/sv.ISO8859-1.src src/share/locale/timedef/sv.ISO8859-1.src
+--- src56-orig/share/locale/timedef/sv.ISO8859-1.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/sv.ISO8859-1.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,82 @@
++# $FreeBSD$
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++Jan
++Feb
++Mar
++Apr
++Maj
++Jun
++Jul
++Aug
++Sep
++Okt
++Nov
++Dec
++#
++# Long month names (as in a date)
++#
++Januari
++Februari
++Mars
++April
++Maj
++Juni
++Juli
++Augusti
++September
++Oktober
++November
++December
++#
++# Short weekday names
++#
++Sön
++Mån
++Tis
++Ons
++Tor
++Fre
++Lör
++#
++# Long weekday names
++#
++Söndag
++Måndag
++Tisdag
++Onsdag
++Torsdag
++Fredag
++Lördag
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%Y-%m-%d
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++am
++#
++# pm
++#
++pm
++#
++# date_fmt
++#
++%a %e %b %Y %X %Z
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/sv.UTF-8.src src/share/locale/timedef/sv.UTF-8.src
+--- src56-orig/share/locale/timedef/sv.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/sv.UTF-8.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,82 @@
++# $FreeBSD$
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++Jan
++Feb
++Mar
++Apr
++Maj
++Jun
++Jul
++Aug
++Sep
++Okt
++Nov
++Dec
++#
++# Long month names (as in a date)
++#
++Januari
++Februari
++Mars
++April
++Maj
++Juni
++Juli
++Augusti
++September
++Oktober
++November
++December
++#
++# Short weekday names
++#
++SÃ¶n
++MÃ¥n
++Tis
++Ons
++Tor
++Fre
++LÃ¶r
++#
++# Long weekday names
++#
++SÃ¶ndag
++MÃ¥ndag
++Tisdag
++Onsdag
++Torsdag
++Fredag
++LÃ¶rdag
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%Y-%m-%d
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++am
++#
++# pm
++#
++pm
++#
++# date_fmt
++#
++%a %e %b %Y %X %Z
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/tr.ISO8859-9.src src/share/locale/timedef/tr.ISO8859-9.src
+--- src56-orig/share/locale/timedef/tr.ISO8859-9.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/tr.ISO8859-9.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,85 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Evren Yurtesen <yurtesen@ispro.net.tr>
++# 
++# Short month names
++#
++Oca
++Şub
++Mar
++Nis
++May
++Haz
++Tem
++Ağu
++Eyl
++Eki
++Kas
++Ara
++#
++# Long month names (as in a date)
++#
++Ocak
++Şubat
++Mart
++Nisan
++Mayıs
++Haziran
++Temmuz
++Ağustos
++Eylül
++Ekim
++Kasım
++Aralık
++#
++# Short weekday names
++#
++Paz
++Pts
++Sal
++Çar
++Per
++Cum
++Cts
++#
++# Long weekday names
++#
++Pazar
++Pazartesi
++Salı
++Çarşamba
++Perşembe
++Cuma
++Cumartesi
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d/%m/%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++AM
++#
++# pm
++#
++PM
++#
++# date_fmt
++#
++%e %b %Y %a %Z %X
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/tr.UTF-8.src src/share/locale/timedef/tr.UTF-8.src
+--- src56-orig/share/locale/timedef/tr.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/tr.UTF-8.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,85 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Evren Yurtesen <yurtesen@ispro.net.tr>
++# 
++# Short month names
++#
++Oca
++Åub
++Mar
++Nis
++May
++Haz
++Tem
++AÄŸu
++Eyl
++Eki
++Kas
++Ara
++#
++# Long month names (as in a date)
++#
++Ocak
++Åubat
++Mart
++Nisan
++MayÄ±s
++Haziran
++Temmuz
++AÄŸustos
++EylÃ¼l
++Ekim
++KasÄ±m
++AralÄ±k
++#
++# Short weekday names
++#
++Paz
++Pts
++Sal
++Ã‡ar
++Per
++Cum
++Cts
++#
++# Long weekday names
++#
++Pazar
++Pazartesi
++SalÄ±
++Ã‡arÅŸamba
++PerÅŸembe
++Cuma
++Cumartesi
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d/%m/%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++AM
++#
++# pm
++#
++PM
++#
++# date_fmt
++#
++%e %b %Y %a %Z %X
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/uk.CP1251.src src/share/locale/timedef/uk.CP1251.src
+--- src56-orig/share/locale/timedef/uk.CP1251.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/uk.CP1251.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,83 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++ñ³÷
++ëşò
++áåğ
++êâ³
++òğà
++÷åğ
++ëèï
++ñåğ
++âåğ
++æîâ
++ëèñ
++ãğó
++#
++# Long month names (as in a date)
++#
++ñ³÷íÿ
++ëşòîãî
++áåğåçíÿ
++êâ³òíÿ
++òğàâíÿ
++÷åğâíÿ
++ëèïíÿ
++ñåğïíÿ
++âåğåñíÿ
++æîâòíÿ
++ëèñòîïàäà
++ãğóäíÿ
++#
++# Short weekday names
++#
++íä
++ïí
++âò
++ñğ
++÷ò
++ïò
++ñá
++#
++# Long weekday names
++#
++íåä³ëÿ
++ïîíåä³ëîê
++â³âòîğîê
++ñåğåäà
++÷åòâåğ
++ï'ÿòíèöÿ
++ñóáîòà
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d.%m.%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++
++#
++# pm
++#
++
++#
++# date_fmt
++#
++%a %e %b %Y %X %Z
++#
++# ampm_fmt
++#
++
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/uk.ISO8859-5.src src/share/locale/timedef/uk.ISO8859-5.src
+--- src56-orig/share/locale/timedef/uk.ISO8859-5.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/uk.ISO8859-5.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,83 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++áöç
++Ûîâ
++ÑÕà
++ÚÒö
++âàĞ
++çÕà
++ÛØß
++áÕà
++ÒÕà
++ÖŞÒ
++ÛØá
++Óàã
++#
++# Long month names (as in a date)
++#
++áöçİï
++ÛîâŞÓŞ
++ÑÕàÕ×İï
++ÚÒöâİï
++âàĞÒİï
++çÕàÒİï
++ÛØßİï
++áÕàßİï
++ÒÕàÕáİï
++ÖŞÒâİï
++ÛØáâŞßĞÔĞ
++ÓàãÔİï
++#
++# Short weekday names
++#
++İÔ
++ßİ
++Òâ
++áà
++çâ
++ßâ
++áÑ
++#
++# Long weekday names
++#
++İÕÔöÛï
++ßŞİÕÔöÛŞÚ
++ÒöÒâŞàŞÚ
++áÕàÕÔĞ
++çÕâÒÕà
++ß'ïâİØæï
++áãÑŞâĞ
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d.%m.%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++
++#
++# pm
++#
++
++#
++# date_fmt
++#
++%a %e %b %Y %X %Z
++#
++# ampm_fmt
++#
++
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/uk.KOI8-U.src src/share/locale/timedef/uk.KOI8-U.src
+--- src56-orig/share/locale/timedef/uk.KOI8-U.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/uk.KOI8-U.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,83 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++Ó¦Ş
++ÌÀÔ
++ÂÅÒ
++Ë×¦
++ÔÒÁ
++ŞÅÒ
++ÌÉĞ
++ÓÅÒ
++×ÅÒ
++ÖÏ×
++ÌÉÓ
++ÇÒÕ
++#
++# Long month names (as in a date)
++#
++Ó¦ŞÎÑ
++ÌÀÔÏÇÏ
++ÂÅÒÅÚÎÑ
++Ë×¦ÔÎÑ
++ÔÒÁ×ÎÑ
++ŞÅÒ×ÎÑ
++ÌÉĞÎÑ
++ÓÅÒĞÎÑ
++×ÅÒÅÓÎÑ
++ÖÏ×ÔÎÑ
++ÌÉÓÔÏĞÁÄÁ
++ÇÒÕÄÎÑ
++#
++# Short weekday names
++#
++ÎÄ
++ĞÎ
++×Ô
++ÓÒ
++ŞÔ
++ĞÔ
++ÓÂ
++#
++# Long weekday names
++#
++ÎÅÄ¦ÌÑ
++ĞÏÎÅÄ¦ÌÏË
++×¦×ÔÏÒÏË
++ÓÅÒÅÄÁ
++ŞÅÔ×ÅÒ
++Ğ'ÑÔÎÉÃÑ
++ÓÕÂÏÔÁ
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d.%m.%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++
++#
++# pm
++#
++
++#
++# date_fmt
++#
++%a %e %b %Y %X %Z
++#
++# ampm_fmt
++#
++
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/uk.UTF-8.src src/share/locale/timedef/uk.UTF-8.src
+--- src56-orig/share/locale/timedef/uk.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/uk.UTF-8.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,83 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++ÑÑ–Ñ‡
++Ğ»ÑÑ‚
++Ğ±ĞµÑ€
++ĞºĞ²Ñ–
++Ñ‚Ñ€Ğ°
++Ñ‡ĞµÑ€
++Ğ»Ğ¸Ğ¿
++ÑĞµÑ€
++Ğ²ĞµÑ€
++Ğ¶Ğ¾Ğ²
++Ğ»Ğ¸Ñ
++Ğ³Ñ€Ñƒ
++#
++# Long month names (as in a date)
++#
++ÑÑ–Ñ‡Ğ½Ñ
++Ğ»ÑÑ‚Ğ¾Ğ³Ğ¾
++Ğ±ĞµÑ€ĞµĞ·Ğ½Ñ
++ĞºĞ²Ñ–Ñ‚Ğ½Ñ
++Ñ‚Ñ€Ğ°Ğ²Ğ½Ñ
++Ñ‡ĞµÑ€Ğ²Ğ½Ñ
++Ğ»Ğ¸Ğ¿Ğ½Ñ
++ÑĞµÑ€Ğ¿Ğ½Ñ
++Ğ²ĞµÑ€ĞµÑĞ½Ñ
++Ğ¶Ğ¾Ğ²Ñ‚Ğ½Ñ
++Ğ»Ğ¸ÑÑ‚Ğ¾Ğ¿Ğ°Ğ´Ğ°
++Ğ³Ñ€ÑƒĞ´Ğ½Ñ
++#
++# Short weekday names
++#
++Ğ½Ğ´
++Ğ¿Ğ½
++Ğ²Ñ‚
++ÑÑ€
++Ñ‡Ñ‚
++Ğ¿Ñ‚
++ÑĞ±
++#
++# Long weekday names
++#
++Ğ½ĞµĞ´Ñ–Ğ»Ñ
++Ğ¿Ğ¾Ğ½ĞµĞ´Ñ–Ğ»Ğ¾Ğº
++Ğ²Ñ–Ğ²Ñ‚Ğ¾Ñ€Ğ¾Ğº
++ÑĞµÑ€ĞµĞ´Ğ°
++Ñ‡ĞµÑ‚Ğ²ĞµÑ€
++Ğ¿'ÑÑ‚Ğ½Ğ¸Ñ†Ñ
++ÑÑƒĞ±Ğ¾Ñ‚Ğ°
++#
++# X_fmt
++#
++%H:%M:%S
++#
++# x_fmt
++#
++%d.%m.%Y
++#
++# c_fmt
++#
++%a %e %b %X %Y
++#
++# am
++#
++
++#
++# pm
++#
++
++#
++# date_fmt
++#
++%a %e %b %Y %X %Z
++#
++# ampm_fmt
++#
++
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/zh.UTF-8.src src/share/locale/timedef/zh.UTF-8.src
+--- src56-orig/share/locale/timedef/zh.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/zh.UTF-8.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,83 @@
++# $FreeBSD$
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++#
++ 1
++ 2
++ 3
++ 4
++ 5
++ 6
++ 7
++ 8
++ 9
++10
++11
++12
++#
++# Long month names (as in a date)
++#
++ä¸€æœˆ
++äºŒæœˆ
++ä¸‰æœˆ
++å››æœˆ
++äº”æœˆ
++å…­æœˆ
++ä¸ƒæœˆ
++å…«æœˆ
++ä¹æœˆ
++åæœˆ
++åä¸€æœˆ
++åäºŒæœˆ
++#
++# Short weekday names
++#
++æ—¥
++ä¸€
++äºŒ
++ä¸‰
++å››
++äº”
++å…­
++#
++# Long weekday names
++#
++æ˜ŸæœŸæ—¥
++æ˜ŸæœŸä¸€
++æ˜ŸæœŸäºŒ
++æ˜ŸæœŸä¸‰
++æ˜ŸæœŸå››
++æ˜ŸæœŸäº”
++æ˜ŸæœŸå…­
++#
++# X_fmt
++#
++%Hæ—¶%Måˆ†%Sç§’
++#
++# x_fmt
++#
++%Y/%m/%d
++#
++# c_fmt
++#
++%a %b/%e %T %Y
++#
++# am
++#
++ä¸Šåˆ
++#
++# pm
++#
++ä¸‹åˆ
++#
++# date_fmt
++#
++%Yå¹´%bæœˆ%eæ—¥ %A %X %Z
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
+diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/zh_TW.UTF-8.src src/share/locale/timedef/zh_TW.UTF-8.src
+--- src56-orig/share/locale/timedef/zh_TW.UTF-8.src	Wed Dec 31 19:00:00 1969
++++ src/share/locale/timedef/zh_TW.UTF-8.src	Mon Apr 28 07:42:09 2014
+@@ -0,0 +1,82 @@
++# $FreeBSD: head/share/timedef/zh_TW.UTF-8.src 174990 2007-12-30 03:08:52Z ache $
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# Short month names
++ 1
++ 2
++ 3
++ 4
++ 5
++ 6
++ 7
++ 8
++ 9
++10
++11
++12
++#
++# Long month names (as in a date)
++#
++1æœˆ
++2æœˆ
++3æœˆ
++4æœˆ
++5æœˆ
++6æœˆ
++7æœˆ
++8æœˆ
++9æœˆ
++10æœˆ
++11æœˆ
++12æœˆ
++#
++# Short weekday names
++#
++æ—¥
++ä¸€
++äºŒ
++ä¸‰
++å››
++äº”
++å…­
++#
++# Long weekday names
++#
++å‘¨æ—¥
++å‘¨ä¸€
++å‘¨äºŒ
++å‘¨ä¸‰
++å‘¨å››
++å‘¨äº”
++å‘¨å…­
++#
++# X_fmt
++#
++%Hæ™‚%Måˆ†%Sç§’
++#
++# x_fmt
++#
++%Y/%m/%d
++#
++# c_fmt
++#
++%a %b/%e %T %Y
++#
++# am
++#
++ä¸Šåˆ
++#
++# pm
++#
++ä¸‹åˆ
++#
++# date_fmt
++#
++%Yå¹´%bæœˆ%eæ—¥ %A %X %Z
++#
++# ampm_fmt
++#
++%I:%M:%S %p
++# EOF
