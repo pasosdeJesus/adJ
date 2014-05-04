@@ -6,7 +6,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/locale/_def
  
  const _TimeLocale *_CurrentTimeLocale = &_DefaultTimeLocale;
 +
-+/* This will point to time locale data when not using DefaultTimeLocale */
++/* This will be time locale when not using DefaultTimeLocale */
 +_TimeLocale _time_locale;
 +
 +/* Buffer for time locale data when not using C / POSIX */
