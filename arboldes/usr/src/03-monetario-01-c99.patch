@@ -164,3 +164,49 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/sys/sys/localedef.h src/sys/sy
  
  typedef struct
  {
+diff -ruN -x obj -x CVS -x *~ -x *orig src56-orig/lib/libc/locale/_def_monetary.c src/lib/libc/locale/_def_monetary.c
+--- src55-orig/lib/libc/locale/_def_monetary.c	Mon Aug  8 03:05:35 2005
++++ src/lib/libc/locale/_def_monetary.c	Wed Dec 31 19:00:00 1969
+@@ -10,21 +10,27 @@
+ 
+ const _MonetaryLocale _DefaultMonetaryLocale =
+ {
+-	"",
+-	"",
+-	"",
+-	"",
+-	"",
+-	"",
+-	"",
+-	CHAR_MAX,
+-	CHAR_MAX,
+-	CHAR_MAX,
+-	CHAR_MAX,
+-	CHAR_MAX,
+-	CHAR_MAX,
+-	CHAR_MAX,
+-	CHAR_MAX
++	"", 		/* int_curr_symbol */
++	"", 		/* currency_symbol */
++	"", 		/* mon_decimal_point */
++	"", 		/* mon_thousands_sep */
++	"",		/* mon_grouping */
++	"",		/* positive_sign */
++	"",		/* negative_sign */
++	CHAR_MAX,	/* int_frac_digits */
++	CHAR_MAX,	/* frac_digits */
++	CHAR_MAX,	/* p_cs_precedes */
++	CHAR_MAX,	/* p_sep_by_space */
++	CHAR_MAX,	/* n_cs_precedes */
++	CHAR_MAX,	/* n_sep_by_space */
++	CHAR_MAX,	/* p_sign_posn */
++	CHAR_MAX,	/* n_sign_posn */
++	CHAR_MAX, 	/* int_p_cs_precedes */
++	CHAR_MAX,	/* int_n_cs_precedes */
++	CHAR_MAX,	/* int_p_sep_by_space */
++	CHAR_MAX,	/* int_n_sep_by_space */
++	CHAR_MAX,	/* int_p_sign_posn */
++	CHAR_MAX	/* int_n_sign_posn */
+ };
+ 
+ const _MonetaryLocale *_CurrentMonetaryLocale = &_DefaultMonetaryLocale;

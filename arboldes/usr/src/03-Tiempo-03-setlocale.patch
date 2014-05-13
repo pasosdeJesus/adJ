@@ -102,9 +102,9 @@ diff -ruN src56-orig/lib/libc/locale/loadtextcat.h src/lib/libc/locale/loadtextc
 +
 +#endif
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/locale/loadtextcat.c src/lib/libc/locale/loadtextcat.c
---- src56-orig/lib/libc/locale/loadtextcat.c	Wed Dec 31 19:00:00 1969
-+++ src/lib/libc/locale/loadtextcat.c	Thu Apr 24 15:47:09 2014
-@@ -0,0 +1,295 @@
+--- src56-orig/lib/libc/locale/loadtextcat.c	Thu Jan  1 03:00:00 1970
++++ src/lib/libc/locale/loadtextcat.c	Wed May  7 09:09:20 2014
+@@ -0,0 +1,300 @@
 +/*
 +** Copyright (c) 1989, 1993
 +**	The Regents of the University of California.  All rights reserved.
@@ -145,7 +145,6 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/locale/load
 +
 +/* Amount of lines in a text file with LC_TIME locale */
 +#define LC_TIME_LINES 45
-+
 +
 +/**
 + * In OpenBSD builds filename for a category of a locale (lang_terr.enc) 
@@ -238,11 +237,14 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/locale/load
 + * Locates the file by using the name of the wanted locale (name), 
 + *   and the category (category) --see __category_filename.  If it cannot 
 + *   find the file returns -1;
-+ * The contents of the file will be in locale_buf, changing \n by \0 and
-+ *   pointing the start of each line with dst_locale_buf
++ * If the file was already loaded in locale_buf sets *changed to 0 and 
++ *   returns 0.
++ * If the file was not loaded in locale_buf tries to load it in a new
++ *   buffer, after reading it succesfully, changes \n with \0 in the
++ *   new buffer, frees locale_buf if required and points it to the new buffer,
++ *   points the start of each string with dst_locale_buf, sets *changed to
++ *   1 and returns 0
 + *
-+ * Returns 0 if it can read the locale or if it already was loaded in 
-+ *   locale_buf (in the former case sets *changed to 1 in the later to 0).
 + * Returns -1 if an error ocurrs and a description of the error for debugging
 + *   purposes is filled in error_buf (of size error_buf_size).
 + *
@@ -273,7 +275,9 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/locale/load
 +	int 			num_lines; // Lines in lbuf
 +	int 			i;
 +
-+	*changed = 0;
++	*changed = 0; 
++	if (error_buf_size > 0) 
++		error_buf[0] = '\0';
 +	if (locale_buf == NULL) {
 +		snprintf(error_buf, error_buf_size, 
 +				"locale_buf cannot be NULL");
@@ -286,6 +290,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/locale/load
 +			cfname = "LC_TIME";
 +			locale_buf_lines = LC_TIME_LINES;
 +			break;
++
 +		default:
 +			snprintf(error_buf, error_buf_size, 
 +					"Unsupported category %i", category);

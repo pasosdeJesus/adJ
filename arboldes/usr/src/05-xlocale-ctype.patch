@@ -296,16 +296,16 @@ diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src53xlocale1/
 diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src54-x4/lib/libc/gen/toupper_.c src/lib/libc/gen/toupper_.c
 --- src54-x4/lib/libc/locale/Makefile.inc	Thu Dec  5 19:12:05 2013
 +++ src/lib/libc/locale/Makefile.inc	Thu Dec  5 19:17:22 2013
-@@ -11,7 +11,7 @@
+@@ -13,7 +13,7 @@
+ 	wcstoul.c wcstoll.c wcstoull.c wcstoimax.c wcstoumax.c \
  	setrunelocale.c runeglue.c rune.c runetable.c ___runetype_mb.c \
- 	_wctrans.c wcsxfrm.c collate.c \
- 	ldpart.c fix_grouping.c lmonetary.c lnumeric.c \
--	none.c xlocale.c
-+	none.c xlocale.c nextwctype.c
+ 	_wctrans.c wcsxfrm.c loadtextcat.c collate.c \
+-	fix_grouping.c none.c xlocale.c
++	fix_grouping.c none.c xlocale.c nextwctype.c
  
  MAN+=	nl_langinfo.3 setlocale.3 iswalnum.3 towlower.3 \
  	btowc.3 mblen.3 mbrlen.3 mbrtowc.3 mbsinit.3 mbsrtowcs.3 \
-@@ -19,9 +19,32 @@
+@@ -21,9 +21,32 @@
  	wcstombs.3 wctob.3 wctomb.3 \
  	wctype.3 iswctype.3 wctrans.3 towctrans.3 wcwidth.3 \
  	duplocale.3  freelocale.3 newlocale.3 nextwctype.3 \
@@ -340,7 +340,7 @@ diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src54-x4/lib/l
  	iswalnum.3 iswblank.3 \
  	iswalnum.3 iswcntrl.3 \
  	iswalnum.3 iswdigit.3 \
-@@ -32,6 +55,25 @@
+@@ -34,6 +57,25 @@
  	iswalnum.3 iswspace.3 \
  	iswalnum.3 iswupper.3 \
  	iswalnum.3 iswxdigit.3 \
@@ -366,7 +366,7 @@ diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src54-x4/lib/l
  	mblen.3 mblen_l.3\
  	mbrtowc.3 mbrtowc_l.3\
  	mbsinit.3 mbsinit_l.3\
-@@ -40,6 +82,7 @@
+@@ -42,6 +84,7 @@
  	mbsrtowcs.3 mbsnrtowcs_l.3 \
  	mbsrtowcs.3 mbsrtowcs_l.3 \
  	mbtowc.3 mbtowc_l.3\
