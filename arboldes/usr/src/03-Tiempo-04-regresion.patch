@@ -46,7 +46,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/regress/lib/libc/loc
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/regress/lib/libc/locale/check_time/check_time.c src/regress/lib/libc/locale/check_time/check_time.c
 --- src56-orig/regress/lib/libc/locale/check_time/check_time.c	Wed Dec 31 19:00:00 1969
 +++ src/regress/lib/libc/locale/check_time/check_time.c	Sun Apr 27 17:43:08 2014
-@@ -0,0 +1,523 @@
+@@ -0,0 +1,526 @@
 +/**
 + * Public domain according to Colombian Legislation. 
 + * http://www.pasosdejesus.org/dominio_publico_colombia.html
@@ -139,7 +139,6 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/regress/lib/libc/loc
 +		"es_VE"
 +       	};
 +
-+	struct lconv *lc;
 +	struct tm tl;
 +	int i, j;
 +	time_t ti;
@@ -267,7 +266,11 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/regress/lib/libc/loc
 +			p(strcmp(nl_langinfo(ABMON_11), "nov") == 0);
 +			p(strcmp(nl_langinfo(ABMON_12), "dic") == 0);
 +
-+			lc = localeconv();
++			strptime("dom", "%a", &tl);
++			p(tl.tm_wday == 0);
++			strptime("lun", "%a", &tl);
++			p(tl.tm_wday == 1);
++
 +			ti = (time_t)1396950000; //Tue Apr  8 09:40:00 2014
 +			gmtime_r(&ti, &tl) ;
 +			strftime(col, sizeof(col), "%A", &tl);

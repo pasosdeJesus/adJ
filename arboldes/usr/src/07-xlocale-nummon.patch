@@ -1015,7 +1015,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src55-orig/lib/libc/locale/_def
  static char	numempty[] = { CHAR_MAX, '\0' };
  
  const _NumericLocale _DefaultNumericLocale =
-@@ -49,52 +52,106 @@
+@@ -49,52 +52,105 @@
  
  const _NumericLocale *_CurrentNumericLocale = &_DefaultNumericLocale;
  
@@ -1039,8 +1039,9 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src55-orig/lib/libc/locale/_def
 -extern int __nlocale_changed;
 -
 -/* Loads numeric locale from file in text format */
- int
+-int
 -__numeric_load_locale(const char *name)
++static int
 +__nload(const char *name, locale_t loc, struct xlocale_numeric *xnum)
  {
 -	int ret;
@@ -1086,7 +1087,6 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src55-orig/lib/libc/locale/_def
 +			return -1;
  		}
  	}
-+
  	return ret;
  }
  
