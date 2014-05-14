@@ -27,14 +27,16 @@ PKG_PATH=ftp://openbsd.mirrors.pair.com/pub/OpenBSD/$V/packages/$ARQ/
 PKG_PATH=ftp://mirror.planetunix.net/pub/OpenBSD/$V/packages/$ARQ/
 PKG_PATH=ftp://mirror.esc7.net/pub/OpenBSD/$V/packages/$ARQ/
 PKG_PATH=ftp://mirrors.nycbug.org/pub/OpenBSD/$V/packages/$ARQ/
-PKG_PATH=ftp://ftp.pasosdeJesus.org/pub/OpenBSD/$V/packages/$ARQ/
+PKG_PATH=ftp://mirror.esc7.net/pub/OpenBSD/snapshots/packages/$ARQ/
+PKG_PATH=ftp://ftp.pasosdeJesus.org/pub/OpenBSD/snapshots/packages/$ARQ/
+PKG_PATH=ftp://mirror.planetunix.net/pub/OpenBSD/snapshots/packages/$ARQ/
 
 #Repositorio de paquetes usado --el último es el usado
 
 METODOACT=ftp
 # Metodo de actualización, puede ser ftp o rsync
 
-excluye="dialog-.* gnupg-2.* libstdc++-.* python-* python-tkinter-* php-5.2.* php-gd-5.2.* php-pdo_pgsql-5.2.* php-pgsql-5.2.* php-mcrypt-5.2.* php-sqlite-5.2.* pear-Auth-.* pear-Validate-.* pear-HTML-QuickForm-Controller.* postgresql-.* ruby-1.* ruby-2.0.* tcl-.* tk-.* xfe-.*"
+excluye="gnupg-2.* libstdc++-.* python-* python-tkinter-* php-5.2.* php-gd-5.2.* php-pdo_pgsql-5.2.* php-pgsql-5.2.* php-mcrypt-5.2.* php-sqlite-5.2.* pear-Auth-.* pear-Validate-.* pear-HTML-QuickForm-Controller.* postgresql-.* ruby-1.* ruby-2.0.* tcl-.* tk-.* xfe-.*"
 # Paquetes por excluir de descarga ftp de OpenBSD
 
 RUTAKERNELREESPECIAL=""

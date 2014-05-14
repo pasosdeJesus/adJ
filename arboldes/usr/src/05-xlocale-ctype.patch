@@ -296,16 +296,16 @@ diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src53xlocale1/
 diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src54-x4/lib/libc/gen/toupper_.c src/lib/libc/gen/toupper_.c
 --- src54-x4/lib/libc/locale/Makefile.inc	Thu Dec  5 19:12:05 2013
 +++ src/lib/libc/locale/Makefile.inc	Thu Dec  5 19:17:22 2013
-@@ -11,7 +11,7 @@
+@@ -13,7 +13,7 @@
+ 	wcstoul.c wcstoll.c wcstoull.c wcstoimax.c wcstoumax.c \
  	setrunelocale.c runeglue.c rune.c runetable.c ___runetype_mb.c \
- 	_wctrans.c wcsxfrm.c collate.c \
- 	ldpart.c fix_grouping.c lmonetary.c lnumeric.c \
--	none.c xlocale.c
-+	none.c xlocale.c nextwctype.c
+ 	_wctrans.c wcsxfrm.c loadtextcat.c collate.c \
+-	fix_grouping.c none.c xlocale.c
++	fix_grouping.c none.c xlocale.c nextwctype.c
  
  MAN+=	nl_langinfo.3 setlocale.3 iswalnum.3 towlower.3 \
  	btowc.3 mblen.3 mbrlen.3 mbrtowc.3 mbsinit.3 mbsrtowcs.3 \
-@@ -19,9 +19,32 @@
+@@ -21,9 +21,32 @@
  	wcstombs.3 wctob.3 wctomb.3 \
  	wctype.3 iswctype.3 wctrans.3 towctrans.3 wcwidth.3 \
  	duplocale.3  freelocale.3 newlocale.3 nextwctype.3 \
@@ -340,7 +340,7 @@ diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src54-x4/lib/l
  	iswalnum.3 iswblank.3 \
  	iswalnum.3 iswcntrl.3 \
  	iswalnum.3 iswdigit.3 \
-@@ -32,6 +55,25 @@
+@@ -34,6 +57,25 @@
  	iswalnum.3 iswspace.3 \
  	iswalnum.3 iswupper.3 \
  	iswalnum.3 iswxdigit.3 \
@@ -366,7 +366,7 @@ diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src54-x4/lib/l
  	mblen.3 mblen_l.3\
  	mbrtowc.3 mbrtowc_l.3\
  	mbsinit.3 mbsinit_l.3\
-@@ -40,6 +82,7 @@
+@@ -42,6 +84,7 @@
  	mbsrtowcs.3 mbsnrtowcs_l.3 \
  	mbsrtowcs.3 mbsrtowcs_l.3 \
  	mbtowc.3 mbtowc_l.3\
@@ -1687,27 +1687,27 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/que
  .Sh SYNOPSIS
  .In xlocale.h
  .Ft const char *
-diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/towlower.3 src53xlocale2/lib/libc/locale/towlower.3
---- src53xlocale1/lib/libc/locale/towlower.3	Mon Mar 25 18:28:42 2013
-+++ src53xlocale2/lib/libc/locale/towlower.3	Fri Apr 12 12:02:28 2013
-@@ -38,33 +38,62 @@
- .Dt TOWLOWER 3
+diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src56-orig/lib/libc/locale/towlower.3 src/lib/libc/locale/towlower.3
+--- src56-orig/lib/libc/locale/towlower.3	Mon Mar 25 18:28:42 2013
++++ src/lib/libc/locale/towlower.3	Fri Apr 12 12:02:28 2013
+@@ -39,7 +39,9 @@
  .Os
  .Sh NAME
--.Nm towlower
-+.Nm towlower ,
+ .Nm towlower ,
+-.Nm towupper
 +.Nm towlower_l ,
-+.Nm towupper
++.Nm towupper ,
 +.Nm towupper_l
  .Nd wide-character case letter conversion utilities
  .Sh SYNOPSIS
  .In wctype.h
- .Ft wint_t
+@@ -47,18 +49,45 @@
  .Fn towlower "wint_t wc"
  .Ft wint_t
-+.Fn towlower_l "wint_t wc" "locale_t l"
-+.Ft wint_t
  .Fn towupper "wint_t wc"
++.In xlocale.h
++.Ft wint_t
++.Fn towlower_l "wint_t wc" "locale_t l"
 +.Ft wint_t
 +.Fn towupper_l "wint_t wc" "locale_t l"
  .Sh DESCRIPTION
@@ -1725,11 +1725,6 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/tow
 +.Fn towupper_l
 +functions convert an lower-case wide character to the corresponding upper-case
  letter.
- .Sh RETURN VALUES
- If the argument is an upper/lower-case letter, the
- .Fn tolower
- function returns the corresponding counterpart if there is
- one; otherwise the argument is returned unchanged.
 +.Pp
 +The behavior of the functions
 +.Fn towupper
@@ -1746,16 +1741,14 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/tow
 +.Dv LC_CTYPE
 +category of the locale provided as parameter, see
 +.Xr xlocale 3 .
+ .Sh RETURN VALUES
+ If the argument is an upper/lower-case letter, the
+ .Fn tolower
++and
++.Fn tolower_l
+ function returns the corresponding counterpart if there is
+ one; otherwise the argument is returned unchanged.
  .Sh SEE ALSO
- .Xr tolower 3 ,
- .Xr toupper 3
-+.Xr xlocale 3
- .Sh STANDARDS
- The functions conform to
-+POSIX 2008,
- .St -isoC-amd1
- and
- .St -isoC-99 .
 diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/uselocale.3 src53xlocale2/lib/libc/locale/uselocale.3
 --- src53xlocale1/lib/libc/locale/uselocale.3	Mon Apr  8 21:20:56 2013
 +++ src53xlocale2/lib/libc/locale/uselocale.3	Fri Apr 12 12:15:27 2013

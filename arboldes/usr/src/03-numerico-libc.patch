@@ -1,48 +1,10 @@
-diff -ruN -x obj -x CVS -x *~ -x *orig src54-mon/lib/libc/locale/Makefile.inc src-num/lib/libc/locale/Makefile.inc
---- src54-mon/lib/libc/locale/Makefile.inc	Thu Dec  5 15:39:51 2013
-+++ src54-num/lib/libc/locale/Makefile.inc	Thu Dec  5 15:41:56 2013
-@@ -3,14 +3,14 @@
- # locale sources
- .PATH: ${LIBCSRCDIR}/arch/${MACHINE_CPU}/locale ${LIBCSRCDIR}/locale
- 
--SRCS+=	btowc.c _def_messages.c _def_numeric.c _def_time.c \
-+SRCS+=	btowc.c _def_messages.c _def_time.c \
- 	localeconv.c nl_langinfo.c setlocale.c iswctype.c __mb_cur_max.c \
- 	mblen.c mbrlen.c mbstowcs.c mbtowc.c multibyte_citrus.c wcscoll.c \
- 	wcstombs.c wctob.c wctomb.c wcstof.c wcstod.c wcstold.c wcstol.c \
- 	wcstoul.c wcstoll.c wcstoull.c wcstoimax.c wcstoumax.c \
- 	setrunelocale.c runeglue.c rune.c runetable.c ___runetype_mb.c \
- 	_wctrans.c wcsxfrm.c collate.c \
--	ldpart.c fix_grouping.c lmonetary.c
-+	ldpart.c fix_grouping.c lmonetary.c lnumeric.c
- 
- MAN+=	nl_langinfo.3 setlocale.3 iswalnum.3 towlower.3 \
- 	btowc.3 mblen.3 mbrlen.3 mbrtowc.3 mbsinit.3 mbsrtowcs.3 \
 diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/_def_numeric.c src/lib/libc/locale/_def_numeric.c
 --- src55-orig/lib/libc/locale/_def_numeric.c	Mon Aug  8 03:05:35 2005
 +++ src/lib/libc/locale/_def_numeric.c	Wed Dec 31 19:00:00 1969
-@@ -1,17 +0,0 @@
--/*	$OpenBSD: _def_numeric.c,v 1.4 2005/08/08 08:05:35 espie Exp $ */
--/*
-- * Written by J.T. Conklin <jtc@netbsd.org>.
-- * Public domain.
-- */
--
--#include <sys/localedef.h>
--#include <locale.h>
--
--const _NumericLocale _DefaultNumericLocale =
--{
--	".",
--	"",
--	""
--};
--
--const _NumericLocale *_CurrentNumericLocale = &_DefaultNumericLocale;
-diff -ruN -x obj -x CVS -x *~ -x *orig src54-mon/lib/libc/locale/lnumeric.c src/lib/libc/locale/lnumeric.c
---- src54-mon/lib/libc/locale/lnumeric.c	Wed Dec 31 19:00:00 1969
-+++ src/lib/libc/locale/lnumeric.c	Wed Dec  4 20:13:40 2013
-@@ -0,0 +1,121 @@
+@@ -3,15 +3,98 @@
+  * Written by J.T. Conklin <jtc@netbsd.org>.
+  * Public domain.
+  */
 +/*
 + * Copyright (c) 2000, 2001 Alexey Zelkin <phantom@FreeBSD.org>
 + * All rights reserved.
@@ -74,80 +36,55 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src54-mon/lib/libc/locale/lnumeric.c src/
 + * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 + * SUCH DAMAGE.
 + */
-+/*
-+ * J.T. Conklin <jtc@netbsd.org>.
-+ * vtamara@pasosdeJesus.org  adJ
-+ *
-+ * Public domain.
-+ */
+ 
+ #include <sys/localedef.h>
+ #include <locale.h>
+ 
++static char	numempty[] = { CHAR_MAX, '\0' };
 +
-+
-+#include <sys/cdefs.h>
-+
-+#include <limits.h>
-+
-+#include "ldpart.h"
-+#include "lnumeric.h"
+ const _NumericLocale _DefaultNumericLocale =
+ {
+ 	".",
+ 	"",
+-	""
++	numempty
+ };
+ 
+ const _NumericLocale *_CurrentNumericLocale = &_DefaultNumericLocale;
 +
 +extern const char *__fix_locale_grouping_str(const char *);
 +
-+#define LCNUMERIC_SIZE (sizeof(_NumericLocale) / sizeof(char *))
-+
-+static char	numempty[] = { CHAR_MAX, '\0' };
-+
-+const _NumericLocale _DefaultNumericLocale =
-+{
-+	".",
-+	"",
-+	numempty
-+};
-+
-+const _NumericLocale *_CurrentNumericLocale = &_DefaultNumericLocale;
-+
-+static _NumericLocale _numeric_locale = {
-+	".",
-+	"",
-+	numempty
-+};
-+
 +static char *_numeric_buffer = NULL;
 +
-+static int
-+numeric_load_locale(_NumericLocale *l, int *changed, const char *name)
-+{
-+	int ret;
-+	int using_locale;
++_NumericLocale _numeric_locale;
 +
-+	ret = __part_load_locale(name, &using_locale,
-+		&_numeric_buffer, "LC_NUMERIC",
-+		LCNUMERIC_SIZE, LCNUMERIC_SIZE,
-+		(const char**)l);
-+	if (ret != _LDP_ERROR)
-+		*changed= 1;
-+	if (ret == _LDP_LOADED) {
-+		/* Can't be empty according to C99 */
-+		if (*l->decimal_point == '\0')
-+			l->decimal_point =
-+			    _DefaultNumericLocale.decimal_point;
-+		l->grouping =
-+			__fix_locale_grouping_str(l->grouping);
-+	}
-+	return (ret);
-+}
-+
-+
++/* Used by localeconv, should be set to 0 only by that function */
 +extern int __nlocale_changed;
 +
++/* Loads numeric locale from file in text format */
 +int
 +__numeric_load_locale(const char *name)
 +{
-+	int ret = numeric_load_locale(&_numeric_locale,
-+			&__nlocale_changed, name);
-+	if (ret != _LDP_ERROR) {
-+		if (ret == _LDP_CACHE) 
++	int ret;
++	char error_buf[2048];
++	int changed;
++
++	if (strcmp(name, "C") == 0 || strcmp(name, "POSIX") == 0) {
++		if (_CurrentNumericLocale != &_DefaultNumericLocale) {
++			__nlocale_changed = 1;
 +			_CurrentNumericLocale = &_DefaultNumericLocale;
-+		else 
++		}
++	} else {
++		ret = __loadtextcat(name, LC_NUMERIC, &changed,
++				&_numeric_buffer, 
++				(const char**)&_numeric_locale, 
++				sizeof(_numeric_locale), 
++				error_buf, sizeof(error_buf));
++		if (ret == 0 && changed == 1) {
++			(void)__fix_locale_grouping_str(_numeric_locale.grouping);
++			__nlocale_changed = 1;
 +			_CurrentNumericLocale = &_numeric_locale;
++		}
 +	}
 +	return ret;
 +}
@@ -155,84 +92,62 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src54-mon/lib/libc/locale/lnumeric.c src/
 +#ifdef LOCALE_DEBUG
 +void
 +numericdebug(void) {
-+printf(	"decimal_point = %s\n"
-+	"thousands_sep = %s\n"
-+	"grouping = %s\n",
-+	_numeric_locale.decimal_point,
-+	_numeric_locale.thousands_sep,
-+	_numeric_locale.grouping
-+);
++	printf(	"decimal_point = %s\n"
++			"thousands_sep = %s\n"
++			"grouping = %s\n",
++			_numeric_locale.decimal_point,
++			_numeric_locale.thousands_sep,
++			_numeric_locale.grouping
++	      );
 +}
 +#endif /* LOCALE_DEBUG */
-diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/lnumeric.h src/lib/libc/locale/lnumeric.h
---- src55-orig/lib/libc/locale/lnumeric.h	Wed Dec 31 19:00:00 1969
-+++ src/lib/libc/locale/lnumeric.h	Mon Nov 11 09:06:03 2013
-@@ -0,0 +1,40 @@
-+/*-
-+ * Copyright (c) 2000, 2001 Alexey Zelkin <phantom@FreeBSD.org>
-+ * All rights reserved.
-+ *
-+ * Copyright (c) 2011 The FreeBSD Foundation
-+ * All rights reserved.
-+ * Portions of this software were developed by David Chisnall
-+ * under sponsorship from the FreeBSD Foundation.
-+ *
-+ * Redistribution and use in source and binary forms, with or without
-+ * modification, are permitted provided that the following conditions
-+ * are met:
-+ * 1. Redistributions of source code must retain the above copyright
-+ *    notice, this list of conditions and the following disclaimer.
-+ * 2. Redistributions in binary form must reproduce the above copyright
-+ *    notice, this list of conditions and the following disclaimer in the
-+ *    documentation and/or other materials provided with the distribution.
-+ *
-+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
-+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
-+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-+ * SUCH DAMAGE.
-+ *
-+ * From FreeBSD
-+ */
+diff -ruN -x *~ -x *orig src55-orig/lib/libc/locale/loadtextcat.c src/lib/libc/locale/loadtextcat.c
+--- src55-orig/lib/libc/locale/loadtextcat.c	Sun Oct  6 20:04:49 2013
++++ src/lib/libc/locale/loadtextcat.c	Wed Dec 11 08:16:55 2013
+@@ -39,6 +39,9 @@
+ /* Amount of lines in a text file with LC_MONETARY locale */
+ #define LC_MONETARY_LINES 21
+ 
++/* Amount of lines in a text file with LC_NUMERIC locale */
++#define LC_NUMERIC_LINES 3
 +
-+#ifndef _LNUMERIC_H_
-+#define	_LNUMERIC_H_
-+#include <sys/localedef.h>
-+
-+int	__numeric_load_locale(const char *);
-+
-+#endif /* !_LNUMERIC_H_ */
+ /* Amount of lines in a text file with LC_TIME locale */
+ #define LC_TIME_LINES 45
+ 
+@@ -185,6 +188,10 @@
+ 		case LC_MONETARY:
+ 			cfname = "LC_MONETARY";
+ 			locale_buf_lines = LC_MONETARY_LINES;
++			break;
++		case LC_NUMERIC:
++			cfname = "LC_NUMERIC";
++			locale_buf_lines = LC_NUMERIC_LINES;
+ 			break;
+ 		case LC_TIME:
+ 			cfname = "LC_TIME";
 diff -ruN -x obj -x CVS -x *~ -x *orig src54-mon/lib/libc/locale/setlocale.c src/lib/libc/locale/setlocale.c
 --- src54-mon/lib/libc/locale/setlocale.c	Tue Dec  3 12:26:37 2013
 +++ src/lib/libc/locale/setlocale.c	Tue Dec  3 12:51:12 2013
-@@ -213,6 +213,10 @@
- 		}
-                break;
- 	case LC_NUMERIC:
-+		if (__numeric_load_locale("C")) {
-+			return;
-+		}
-+		break;
- 	case LC_TIME:
- 		break;
- 	}
-@@ -252,6 +256,10 @@
- 		}
+@@ -211,6 +211,8 @@
+ 			return;
  		break;
  	case LC_NUMERIC:
-+		if (__numeric_load_locale(locname)) {
++		if (__numeric_load_locale("C")) 
 +			return;
-+		}
+ 		break;
+ 	case LC_TIME:
+ 		if (__time_load_locale("C"))
+@@ -283,7 +285,9 @@
+ 		break;
+ 
+ 	case LC_NUMERIC:
+-		return -1;
++		if (__numeric_load_locale(locname)) 
++			return -1;
 +		break;
  	case LC_TIME:
- 		return -1;
- 	}
+ 		if (__time_load_locale(locname)) 
+ 			return -1;
 diff -ruN src55-orig/lib/libc/stdio/printf.3 src/lib/libc/stdio/printf.3
 --- src55-orig/lib/libc/stdio/printf.3	Sun Oct  6 20:04:49 2013
 +++ src/lib/libc/stdio/printf.3	Mon Nov 11 21:11:57 2013

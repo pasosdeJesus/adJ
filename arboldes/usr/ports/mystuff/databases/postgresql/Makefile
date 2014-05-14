@@ -17,7 +17,6 @@ PKGNAME-docs=	postgresql-docs-${VERSION}
 PKGNAME-contrib=postgresql-contrib-${VERSION}
 PKGNAME-plpython=postgresql-plpython-${VERSION}
 
-
 CATEGORIES=	databases
 SHARED_LIBS=	ecpg		7.5 \
 		ecpg_compat	4.5 \
@@ -33,7 +32,6 @@ PERMIT_PACKAGE_CDROM=	Yes
 
 WANTLIB=		c com_err crypto m readline ssl termcap z asn1 \
 			heimbase krb5 roken wind
-
 MASTER_SITES=	http://ftp.postgresql.org/pub/source/v${VERSION}/ \
 	http://ftp5.es.postgresql.org/mirror/postgresql/source/v${VERSION}/ \
 	ftp://ftp.postgresql.org/pub/source/v${VERSION}/ \

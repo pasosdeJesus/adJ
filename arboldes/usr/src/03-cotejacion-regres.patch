@@ -45,7 +45,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/regress/lib/libc/locale
 +#include <wchar.h>
 +#include <wctype.h>
 +
-+int bad;
++int bad = 0;
 +
 +#define p(t) printf("%s:\t ",#t); \
 +	if (t) { \

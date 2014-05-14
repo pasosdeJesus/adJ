@@ -293,7 +293,7 @@ if (test "$sn" = "s") then {
 	echo "* Completo compilabase" | tee -a /var/tmp/distrib-adJ.bitacora
 	echo "whoami 3" >> /var/tmp/distrib-adJ.bitacora
 	whoami >> /var/tmp/distrib-adJ.bitacora 2>&1
-	cd /usr/src && unset DESTDIR && nice make -j4 SUDO=sudo build | tee -a /var/tmp/distrib-adJ.bitacora
+	cd /usr/src && unset DESTDIR && LANG=POSIX nice make -j4 SUDO=sudo build | tee -a /var/tmp/distrib-adJ.bitacora
 	echo "whoami 3" >> /var/tmp/distrib-adJ.bitacora
 	whoami >> /var/tmp/distrib-adJ.bitacora 2>&1
 	echo "* Completo make build" | tee -a /var/tmp/distrib-adJ.bitacora
@@ -561,9 +561,15 @@ function paquete {
 	} fi;
 	echo "*> Creando paquete $nom:$cat" | tee -a /var/tmp/distrib-adJ.bitacora;
 	(cd /usr/ports/$mys/$cat/$nom/$subd/ ; make package)
+	if (test ! -f /etc/signify/adJ-$VP-pkg.sec) then {
+		echo "No hay llave privada /etc/signify/adJ-$VP-pkg.sec";
+		echo "Si no lo ha hecho con signify -G -c \"Firma adJ $V para paquetes\" -n -s /etc/signify/adJ-$VP-pkg.sec -p /etc/signify/adJ-$VP-pkg.pub"
+		exit 1;
+	} fi;
 	if (test "$copiar" = "") then {
-		echo "*> Copiando /usr/ports/packages/$ARQ/all/$nom-*.tgz" | tee -a /var/tmp/distrib-adJ.bitacora
+		echo "*> Firmando y copiando /usr/ports/packages/$ARQ/all/$nom-*.tgz" | tee -a /var/tmp/distrib-adJ.bitacora
 		cmd="cp /usr/ports/packages/$ARQ/all/$nom-[0-9][0-9a-z.]*.tgz $dini/$V$VESP-$ARQ/$dest/";
+		cmd="pkg_sign -v -o $dini/$V$VESP-$ARQ/$dest/ -s signify -s /etc/signify/adJ-$VP-pkg.sec /usr/ports/packages/$ARQ/all/$nom-[0-9][0-9a-z.]*.tgz"
 		echo "cmd=$cmd";
 		eval "$cmd";
 		if (test "$paraexc" != "") then {
@@ -574,6 +580,7 @@ function paquete {
 	} else {
 		for i in $copiar; do
 			cmd="cp /usr/ports/packages/$ARQ/all/$i-[0-9][0-9a-z.]*.tgz $dini/$V$VESP-$ARQ/$dest/"
+			cmd="pkg_sign -v -o $dini/$V$VESP-$ARQ/$dest/ -s signify -s /etc/signify/adJ-$VP-pkg.sec /usr/ports/packages/$ARQ/all/$i-[0-9][0-9a-z.]*.tgz"
 			echo $cmd;
 			eval $cmd
 			if (test "$paraexc" != "") then {
@@ -598,12 +605,12 @@ if (test "$sn" = "s") then {
 		ln -s $dini/arboldes/usr/ports/mystuff /usr/ports/mystuff
 	} fi;
 	rm tmp/disponibles*
-	paquete dialog misc
+	#paquete dialog misc
 	# paquete php lang paquetes "php php-fpm php-gd php-mcrypt php-pdo_pgsql" 5.5  Tocó dejar 5.3 por pear -> SIVeL 1.2
-	paquete ruby lang paquetes "ruby ruby20-ri_docs" 2.0
+	#paquete ruby lang paquetes "ruby ruby20-ri_docs" 2.0
 
         # paquete pear www paquetes "pear pear-utils"  Toco quedarse en PHP 5.3 para SIVeL 1.2
-	paquete pear www 
+	#paquete pear www 
 	paquete pear-Auth security
 	#paquete pear-DB databases
 	paquete pear-DB-DataObject databases

@@ -27,7 +27,7 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/regress/lib/libc/locale/check_monetar
 diff -ruN -x *~ -x *orig src54-orig/regress/lib/libc/locale/check_monetary/check_monetary.c src/regress/lib/libc/locale/check_monetary/check_monetary.c
 --- src54-orig/regress/lib/libc/locale/check_monetary/check_monetary.c	Wed Dec 31 19:00:00 1969
 +++ src/regress/lib/libc/locale/check_monetary/check_monetary.c	Wed Dec 11 08:08:48 2013
-@@ -0,0 +1,622 @@
+@@ -0,0 +1,627 @@
 +/**
 + * Public domain according to Colombian Legislation. 
 + * http://www.pasosdejesus.org/dominio_publico_colombia.html
@@ -46,7 +46,7 @@ diff -ruN -x *~ -x *orig src54-orig/regress/lib/libc/locale/check_monetary/check
 +#include <wchar.h>
 +#include <wctype.h>
 +
-+int bad;
++int bad = 0;
 +
 +#define p(t) printf("%s:\t ",#t); \
 +	if (t) { \
@@ -624,7 +624,12 @@ diff -ruN -x *~ -x *orig src54-orig/regress/lib/libc/locale/check_monetary/check
 +	p = localeconv();
 +	p(strcmp(p->mon_decimal_point, op) == 0);
 +
++	nl = setlocale(LC_ALL, "es_CO.UTF-8");
++	printf("locale %s\n", nl);
++	p = localeconv();
++	p(strcmp(p->mon_decimal_point, ",") == 0);
 +
++	// Load twice same locale
 +	nl = setlocale(LC_ALL, "es_CO.UTF-8");
 +	printf("locale %s\n", nl);
 +	p = localeconv();

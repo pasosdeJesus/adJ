@@ -1,13 +1,12 @@
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src54-num/lib/libc/locale/Makefile.inc src/lib/libc/locale/Makefile.inc
 --- src54-num/lib/libc/locale/Makefile.inc	Thu Dec  5 18:53:15 2013
 +++ src/lib/libc/locale/Makefile.inc	Thu Dec  5 19:03:47 2013
-@@ -10,15 +10,18 @@
+@@ -13,15 +13,17 @@
  	wcstoul.c wcstoll.c wcstoull.c wcstoimax.c wcstoumax.c \
  	setrunelocale.c runeglue.c rune.c runetable.c ___runetype_mb.c \
- 	_wctrans.c wcsxfrm.c collate.c \
--	ldpart.c fix_grouping.c lmonetary.c lnumeric.c
-+	ldpart.c fix_grouping.c lmonetary.c lnumeric.c \
-+	none.c xlocale.c
+ 	_wctrans.c wcsxfrm.c loadtextcat.c collate.c \
+-	fix_grouping.c 
++	fix_grouping.c none.c xlocale.c
  
  MAN+=	nl_langinfo.3 setlocale.3 iswalnum.3 towlower.3 \
  	btowc.3 mblen.3 mbrlen.3 mbrtowc.3 mbsinit.3 mbsrtowcs.3 \
@@ -24,7 +23,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src54-num/lib/libc/locale/Makefil
  	iswalnum.3 iswblank.3 \
  	iswalnum.3 iswcntrl.3 \
  	iswalnum.3 iswdigit.3 \
-@@ -29,7 +32,18 @@
+@@ -32,7 +34,18 @@
  	iswalnum.3 iswspace.3 \
  	iswalnum.3 iswupper.3 \
  	iswalnum.3 iswxdigit.3 \
@@ -43,7 +42,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src54-num/lib/libc/locale/Makefil
  	wcstod.3 wcstof.3 \
  	wcstod.3 wcstold.3 \
  	wcstol.3 wcstoul.3 \
-@@ -37,7 +51,12 @@
+@@ -40,8 +53,13 @@
  	wcstol.3 wcstoull.3 \
  	wcstol.3 wcstoimax.3 \
  	wcstol.3 wcstoumax.3 \
@@ -58,6 +57,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src54-num/lib/libc/locale/Makefil
  
  CFLAGS+=-I${.CURDIR} -I${LIBCSRCDIR}/citrus -DCOLLATE_DEBUG
 +CFLAGS+=-D__NO_TLS 
+ CFLAGS+=-DLOCALE_CHARSETS="\"${LOCALECHARSETS}\""
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/btowc.c src/lib/libc/locale/btowc.c
 --- src53collation/lib/libc/locale/btowc.c	Mon Mar 25 18:28:42 2013
 +++ src/lib/libc/locale/btowc.c	Wed Apr  3 11:15:27 2013
@@ -1634,43 +1634,26 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src55-orig/lib/libc/locale/setloc
  
  char *
  setlocale(int category, const char *locale)
-@@ -199,25 +200,33 @@
+@@ -199,12 +200,18 @@
  	case LC_CTYPE:
  		(void)_xpg4_setrunelocale("C");
  		__install_currentrunelocale_ctype();
-+(void)strlcpy(__xlocale_global_locale.components[category-1]->locale, 
-+			"C", 
-+			sizeof(__xlocale_global_locale.components[category-1]->locale) );
-+
++		(void)strlcpy(__xlocale_global_locale.components[category-1]->locale, 
++				"C", 
++				sizeof(__xlocale_global_locale.components[category-1]->locale) );
  		break;
  	case LC_MESSAGES:
  		break;
  	case LC_COLLATE:
   		if (__collate_load_tables("C"))
  			return;
-+
-+	(void)strlcpy(__xlocale_global_locale.components[category-1]->locale, 
-+			"C", 
-+			sizeof(__xlocale_global_locale.components[category-1]->locale) );
++		(void)strlcpy(__xlocale_global_locale.components[category-1]->locale, 
++				"C", 
++				sizeof(__xlocale_global_locale.components[category-1]->locale) );
  		break;
  	case LC_MONETARY:
  		if (__monetary_load_locale("C")) 
- 			return;
- 		break;
- 	case LC_NUMERIC:
--		if (__numeric_load_locale("C")) {
-+		if (__numeric_load_locale("C")) 
- 			return;
--		}
- 		break;
- 	case LC_TIME:
- 		break;
- 	}
-+
- }
- 
- static int
-@@ -268,26 +277,35 @@
+@@ -269,6 +276,9 @@
  		if (_xpg4_setrunelocale(locname))
  			return -1;
  		__install_currentrunelocale_ctype();
@@ -1680,38 +1663,17 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src55-orig/lib/libc/locale/setloc
  		break;
  
  	case LC_MESSAGES:
--		return set_lc_messages_locale(locname);
-+		if (set_lc_messages_locale(locname))
-+			return -1;
-+		break;
- 
+@@ -277,6 +287,9 @@
  	case LC_COLLATE:
  		if (__collate_load_tables(locname))
  			return -1;
-+	(void)strlcpy(__xlocale_global_locale.components[category-1]->locale, 
-+			locname, 
-+			sizeof(__xlocale_global_locale.components[category-1]->locale) );
++		(void)strlcpy(__xlocale_global_locale.components[category-1]->locale, 
++				locname, 
++				sizeof(__xlocale_global_locale.components[category-1]->locale) );
  		break;
  		
  	case LC_MONETARY:
- 		if (__monetary_load_locale(locname)) 
--			return;
-+			return -1;
- 		break;
- 
- 	case LC_NUMERIC:
--		if (__numeric_load_locale(locname)) {
--			return;
--		}
-+		if (__numeric_load_locale(locname)) 
-+			return -1;
-+
- 		break;
-+
- 	case LC_TIME:
- 		return -1;
- 	}
-@@ -302,7 +320,7 @@
+@@ -304,7 +317,7 @@
  	    current_categories[category]) == 0)
  		return (current_categories[category]);
  
@@ -1720,7 +1682,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src55-orig/lib/libc/locale/setloc
  		(void)strlcpy(current_categories[category],
  		    new_categories[category], sizeof(current_categories[category]));
  		return current_categories[category];
-@@ -311,7 +329,7 @@
+@@ -313,7 +326,7 @@
  	}
  }
  
