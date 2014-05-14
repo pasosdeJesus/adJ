@@ -1,0 +1,254 @@
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime.c src/lib/libc/time/strptime.c
+--- src54-x6/lib/libc/time/strptime.c	Sat Feb  9 14:26:54 2013
++++ src/lib/libc/time/strptime.c	Tue Dec  3 16:12:45 2013
+@@ -36,8 +36,10 @@
+ #include <time.h>
+ #include <tzfile.h>
+ 
+-#define	_ctloc(x)		(_CurrentTimeLocale->x)
++#include "locale/xlocale_private.h"
+ 
++#define	_ctloc(x, loc)		(__get_current_time_locale(loc)->x)
++
+ /*
+  * We do not implement alternate representations. However, we always
+  * check whether a given modifier is allowed for a certain conversion.
+@@ -74,19 +76,26 @@
+ 
+ static	int _conv_num(const unsigned char **, int *, int, int);
+ static	int leaps_thru_end_of(const int y);
+-static	char *_strptime(const char *, const char *, struct tm *, int);
++static	char *_strptime(const char *, const char *, struct tm *, int, locale_t);
+ static	const u_char *_find_string(const u_char *, int *, const char * const *,
+-	    const char * const *, int);
++	    const char * const *, int, locale_t);
+ 
+ 
+ char *
+ strptime(const char *buf, const char *fmt, struct tm *tm)
+ {
+-	return(_strptime(buf, fmt, tm, 1));
++	return(_strptime(buf, fmt, tm, 1, __get_locale()));
+ }
+ 
++char *
++strptime_l(const char *buf, const char *fmt, struct tm *tm, locale_t loc)
++{
++	return(_strptime(buf, fmt, tm, 1, loc));
++}
++
+ static char *
+-_strptime(const char *buf, const char *fmt, struct tm *tm, int initialize)
++_strptime(const char *buf, const char *fmt, struct tm *tm, int initialize,
++		locale_t loc)
+ {
+ 	unsigned char c;
+ 	const unsigned char *bp, *ep;
+@@ -107,8 +116,8 @@
+ 		alt_format = 0;
+ 
+ 		/* Eat up white-space. */
+-		if (isspace(c)) {
+-			while (isspace(*bp))
++		if (isspace_l(c, loc)) {
++			while (isspace_l(*bp, loc))
+ 				bp++;
+ 
+ 			fmt++;
+@@ -146,49 +155,49 @@
+ 		 */
+ 		case 'c':	/* Date and time, using the locale's format. */
+ 			_LEGAL_ALT(_ALT_E);
+-			if (!(bp = _strptime(bp, _ctloc(d_t_fmt), tm, 0)))
++			if (!(bp = _strptime(bp, _ctloc(d_t_fmt, loc), tm, 0, loc)))
+ 				return (NULL);
+ 			break;
+ 
+ 		case 'D':	/* The date as "%m/%d/%y". */
+ 			_LEGAL_ALT(0);
+-			if (!(bp = _strptime(bp, "%m/%d/%y", tm, 0)))
++			if (!(bp = _strptime(bp, "%m/%d/%y", tm, 0, loc)))
+ 				return (NULL);
+ 			break;
+ 
+ 		case 'F':	/* The date as "%Y-%m-%d". */
+ 			_LEGAL_ALT(0);
+-			if (!(bp = _strptime(bp, "%Y-%m-%d", tm, 0)))
++			if (!(bp = _strptime(bp, "%Y-%m-%d", tm, 0, loc)))
+ 				return (NULL);
+ 			continue;
+ 
+ 		case 'R':	/* The time as "%H:%M". */
+ 			_LEGAL_ALT(0);
+-			if (!(bp = _strptime(bp, "%H:%M", tm, 0)))
++			if (!(bp = _strptime(bp, "%H:%M", tm, 0, loc)))
+ 				return (NULL);
+ 			break;
+ 
+ 		case 'r':	/* The time as "%I:%M:%S %p". */
+ 			_LEGAL_ALT(0);
+-			if (!(bp = _strptime(bp, "%I:%M:%S %p", tm, 0)))
++			if (!(bp = _strptime(bp, "%I:%M:%S %p", tm, 0, loc)))
+ 				return (NULL);
+ 			break;
+ 
+ 		case 'T':	/* The time as "%H:%M:%S". */
+ 			_LEGAL_ALT(0);
+-			if (!(bp = _strptime(bp, "%H:%M:%S", tm, 0)))
++			if (!(bp = _strptime(bp, "%H:%M:%S", tm, 0, loc)))
+ 				return (NULL);
+ 			break;
+ 
+ 		case 'X':	/* The time, using the locale's format. */
+ 			_LEGAL_ALT(_ALT_E);
+-			if (!(bp = _strptime(bp, _ctloc(t_fmt), tm, 0)))
++			if (!(bp = _strptime(bp, _ctloc(t_fmt, loc), tm, 0, loc)))
+ 				return (NULL);
+ 			break;
+ 
+ 		case 'x':	/* The date, using the locale's format. */
+ 			_LEGAL_ALT(_ALT_E);
+-			if (!(bp = _strptime(bp, _ctloc(d_fmt), tm, 0)))
++			if (!(bp = _strptime(bp, _ctloc(d_fmt, loc), tm, 0, loc)))
+ 				return (NULL);
+ 			break;
+ 
+@@ -200,13 +209,13 @@
+ 			_LEGAL_ALT(0);
+ 			for (i = 0; i < 7; i++) {
+ 				/* Full name. */
+-				len = strlen(_ctloc(day[i]));
+-				if (strncasecmp(_ctloc(day[i]), bp, len) == 0)
++				len = strlen(_ctloc(day[i], loc));
++				if (strncasecmp_l(_ctloc(day[i], loc), bp, len, loc) == 0)
+ 					break;
+ 
+ 				/* Abbreviated name. */
+-				len = strlen(_ctloc(abday[i]));
+-				if (strncasecmp(_ctloc(abday[i]), bp, len) == 0)
++				len = strlen(_ctloc(abday[i], loc));
++				if (strncasecmp_l(_ctloc(abday[i], loc), bp, len, loc) == 0)
+ 					break;
+ 			}
+ 
+@@ -225,13 +234,13 @@
+ 			_LEGAL_ALT(0);
+ 			for (i = 0; i < 12; i++) {
+ 				/* Full name. */
+-				len = strlen(_ctloc(mon[i]));
+-				if (strncasecmp(_ctloc(mon[i]), bp, len) == 0)
++				len = strlen(_ctloc(mon[i], loc));
++				if (strncasecmp_l(_ctloc(mon[i], loc), bp, len, loc) == 0)
+ 					break;
+ 
+ 				/* Abbreviated name. */
+-				len = strlen(_ctloc(abmon[i]));
+-				if (strncasecmp(_ctloc(abmon[i]), bp, len) == 0)
++				len = strlen(_ctloc(abmon[i], loc));
++				if (strncasecmp_l(_ctloc(abmon[i], loc), bp, len, loc) == 0)
+ 					break;
+ 			}
+ 
+@@ -303,8 +312,8 @@
+ 		case 'p':	/* The locale's equivalent of AM/PM. */
+ 			_LEGAL_ALT(0);
+ 			/* AM? */
+-			len = strlen(_ctloc(am_pm[0]));
+-			if (strncasecmp(_ctloc(am_pm[0]), bp, len) == 0) {
++			len = strlen(_ctloc(am_pm[0], loc));
++			if (strncasecmp_l(_ctloc(am_pm[0], loc), bp, len, loc) == 0) {
+ 				if (tm->tm_hour > 12)	/* i.e., 13:00 AM ?! */
+ 					return (NULL);
+ 				else if (tm->tm_hour == 12)
+@@ -314,8 +323,8 @@
+ 				break;
+ 			}
+ 			/* PM? */
+-			len = strlen(_ctloc(am_pm[1]));
+-			if (strncasecmp(_ctloc(am_pm[1]), bp, len) == 0) {
++			len = strlen(_ctloc(am_pm[1], loc));
++			if (strncasecmp_l(_ctloc(am_pm[1], loc), bp, len, loc) == 0) {
+ 				if (tm->tm_hour > 12)	/* i.e., 13:00 PM ?! */
+ 					return (NULL);
+ 				else if (tm->tm_hour < 12)
+@@ -374,7 +383,7 @@
+ 				 */
+ 			do
+ 				bp++;
+-			while (isdigit(*bp));
++			while (isdigit_l(*bp, loc));
+ 			continue;
+ 
+ 		case 'V':	/* The ISO 8601:1988 week number as decimal */
+@@ -412,7 +421,7 @@
+ 			} else {
+ 				ep = _find_string(bp, &i,
+ 					       	 (const char * const *)tzname,
+-					       	  NULL, 2);
++					       	  NULL, 2, loc);
+ 				if (ep != NULL) {
+ 					tm->tm_isdst = i;
+ #ifdef TM_GMTOFF
+@@ -444,7 +453,7 @@
+ 			 * [A-IL-M] = -1 ... -9 (J not used)
+ 			 * [N-Y]  = +1 ... +12
+ 			 */
+-			while (isspace(*bp))
++			while (isspace_l(*bp, loc))
+ 				bp++;
+ 
+ 			switch (*bp++) {
+@@ -473,7 +482,7 @@
+ 				break;
+ 			default:
+ 				--bp;
+-				ep = _find_string(bp, &i, nast, NULL, 4);
++				ep = _find_string(bp, &i, nast, NULL, 4, loc);
+ 				if (ep != NULL) {
+ #ifdef TM_GMTOFF
+ 					tm->TM_GMTOFF = -5 - i;
+@@ -484,7 +493,7 @@
+ 					bp = ep;
+ 					continue;
+ 				}
+-				ep = _find_string(bp, &i, nadt, NULL, 4);
++				ep = _find_string(bp, &i, nadt, NULL, 4, loc);
+ 				if (ep != NULL) {
+ 					tm->tm_isdst = 1;
+ #ifdef TM_GMTOFF
+@@ -519,7 +528,7 @@
+ 			}
+ 			offs = 0;
+ 			for (i = 0; i < 4; ) {
+-				if (isdigit(*bp)) {
++				if (isdigit_l(*bp, loc)) {
+ 					offs = offs * 10 + (*bp++ - '0');
+ 					i++;
+ 					continue;
+@@ -561,7 +570,7 @@
+ 		case 'n':	/* Any kind of white-space. */
+ 		case 't':
+ 			_LEGAL_ALT(0);
+-			while (isspace(*bp))
++			while (isspace_l(*bp, loc))
+ 				bp++;
+ 			break;
+ 
+@@ -652,7 +661,7 @@
+ 
+ static const u_char *
+ _find_string(const u_char *bp, int *tgt, const char * const *n1,
+-		const char * const *n2, int c)
++		const char * const *n2, int c, locale_t loc)
+ {
+ 	int i;
+ 	unsigned int len;
+@@ -661,7 +670,7 @@
+ 	for (; n1 != NULL; n1 = n2, n2 = NULL) {
+ 		for (i = 0; i < c; i++, n1++) {
+ 			len = strlen(*n1);
+-			if (strncasecmp(*n1, (const char *)bp, len) == 0) {
++			if (strncasecmp_l(*n1, (const char *)bp, len, loc) == 0) {
+ 				*tgt = i;
+ 				return bp + len;
+ 			}
