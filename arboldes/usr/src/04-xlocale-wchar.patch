@@ -1736,7 +1736,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src54-num/lib/libc/locale/setrune
  	if (!strcmp(locname, "C") || !strcmp(locname, "POSIX")) {
  		rl = &_DefaultRuneLocale;
  		goto found;
-@@ -205,8 +224,43 @@
+@@ -205,8 +224,44 @@
  		return ENOENT;
  
  found:
@@ -1749,6 +1749,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src54-num/lib/libc/locale/setrune
 +	xc->__wcrtomb = (void *)rl->rl_citrus_ctype->cc_ops->co_wcrtomb;
 +	xc->__wcsnrtombs = (void *)rl->rl_citrus_ctype->cc_ops->co_wcsnrtombs;
 +	xc->__mb_cur_max = rl->rl_citrus_ctype->cc_mb_cur_max;
++	xc->__mb_sb_limit = rl->rl_citrus_ctype->cc_mb_sb_limit;
 +
  	__mb_cur_max = rl->rl_citrus_ctype->cc_mb_cur_max;
  
@@ -3398,7 +3399,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/regress/lib/libc/l
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regress/lib/libc/locale/check_xlocale/check_xlocale.c
 --- src53collation/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Wed Dec 31 19:00:00 1969
 +++ src/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Wed Apr  3 12:47:22 2013
-@@ -0,0 +1,410 @@
+@@ -0,0 +1,156 @@
 +/**
 + * Public domain according to Colombian Legislation. 
 + * http://www.pasosdejesus.org/dominio_publico_colombia.html
@@ -3407,19 +3408,21 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/regress/lib/libc/l
 + * $adJ$
 + */
 +
-+#include <xlocale.h>
 +#include <ctype.h>
 +#include <inttypes.h>
++#include <float.h>
 +#include <langinfo.h>
 +#include <locale.h>
++#include <math.h>
 +#include <stdio.h>
 +#include <stdlib.h>
 +#include <string.h>
 +#include <time.h>
 +#include <wchar.h>
 +#include <wctype.h>
++#include <xlocale.h>
 +
-+int bad;
++int bad = 0;
 +
 +#define p(t) printf("%s:\t ",#t); \
 +	if (t) { \
@@ -3546,266 +3549,10 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/regress/lib/libc/l
 +
 +}
 +
-+#if 0
-+void test_ctype() {
-+	char *nl = setlocale(LC_ALL, "es_CO.UTF-8");
-+	printf("locale %s\n", nl);
-+	locale_t es_CO_UTF_8 = uselocale(NULL);
-+
-+	size_t s;
-+	wchar_t ws[100];
-+	p((s = wcswidth_l(ws, 10, es_CO_UTF_8)) == 4);
-+	p((s = wcwidth_l(L'a', es_CO_UTF_8)) == 1);
-+	p(wctype("lower") == wctype_l("lower", es_CO_UTF_8));
-+	p(iswctype(L'ñ', wctype("lower")));
-+	p(iswctype_l(L'ñ', wctype("lower"), es_CO_UTF_8));
-+	p(!iswctype_l(L'Ñ', wctype("lower"), es_CO_UTF_8));
-+	p(isalnum_l('a', es_CO_UTF_8));
-+	p(isalnum_l('1', es_CO_UTF_8));
-+	p(iswalnum_l(L'ñ', es_CO_UTF_8));
-+	p(iswalnum_l(L'1', es_CO_UTF_8));
-+	p(!iswalnum_l(L' ', es_CO_UTF_8));
-+	p(isalpha_l('a', es_CO_UTF_8));
-+	p(!isalpha_l('1', es_CO_UTF_8));
-+	p(iswalpha_l(L'ñ', es_CO_UTF_8));
-+	p(!iswalpha_l(L'1', es_CO_UTF_8));
-+	p(iscntrl_l('\n', es_CO_UTF_8));
-+	p(!iscntrl_l(' ', es_CO_UTF_8));
-+	p(iswcntrl(L'\n'));
-+	p(iswcntrl_l(L'\n', es_CO_UTF_8));
-+	p(!iswcntrl_l(L'n', es_CO_UTF_8));
-+	p(isdigit_l('1', es_CO_UTF_8));
-+	p(!isdigit_l(' ', es_CO_UTF_8));
-+	p(iswdigit_l(L'1', es_CO_UTF_8));
-+	p(!iswdigit_l(L'ñ', es_CO_UTF_8));
-+	p(isgraph_l('a', es_CO_UTF_8));
-+	p(!isgraph_l('\0', es_CO_UTF_8));
-+	p(iswgraph_l(L'ñ', es_CO_UTF_8));
-+	p(!iswgraph_l(L'\0', es_CO_UTF_8));
-+	p(islower_l('a', es_CO_UTF_8));
-+	p(!islower_l('A', es_CO_UTF_8));
-+	p(iswlower_l(L'ñ', es_CO_UTF_8));
-+	p(!iswlower_l(L'Ñ', es_CO_UTF_8));
-+	p(iswprint_l(L'ñ', es_CO_UTF_8));
-+	p(!iswprint_l(L'\0', es_CO_UTF_8));
-+	p(ispunct_l('.', es_CO_UTF_8));
-+	p(!ispunct_l(' ', es_CO_UTF_8));
-+	p(iswpunct_l(L'.', es_CO_UTF_8));
-+	p(iswpunct_l(L'.', es_CO_UTF_8));
-+	p(!iswpunct_l(L'ñ', es_CO_UTF_8));
-+	p(isspace_l(' ', es_CO_UTF_8));
-+	p(!isspace_l('n', es_CO_UTF_8));
-+	p(iswspace_l(L' ', es_CO_UTF_8));
-+	p(!iswspace_l(L'ñ', es_CO_UTF_8));
-+	p(isupper_l('N', es_CO_UTF_8));
-+	p(!isupper_l('n', es_CO_UTF_8));
-+	p(iswupper_l(L'Ñ', es_CO_UTF_8));
-+	p(iswupper_l(L'Ñ', es_CO_UTF_8));
-+	p(!iswupper_l(L'ñ', es_CO_UTF_8));
-+	p(iswxdigit_l(L'a', es_CO_UTF_8));
-+	p(iswxdigit_l(L'1', es_CO_UTF_8));
-+	p(iswxdigit_l(L'f', es_CO_UTF_8));
-+	p(!iswxdigit_l(L'g', es_CO_UTF_8));
-+	p(isxdigit_l('f', es_CO_UTF_8));
-+	p(!isxdigit_l('g', es_CO_UTF_8));
-+	p(digittoint_l(L'1', es_CO_UTF_8) == 1);
-+	p(isblank_l(' ', es_CO_UTF_8));
-+	p(!isblank_l('a', es_CO_UTF_8));
-+	p(iswblank_l(L'\t', es_CO_UTF_8));
-+	p(!iswblank_l(L'ñ', es_CO_UTF_8));
-+	p(ishexnumber_l('a', es_CO_UTF_8));
-+	p(!ishexnumber_l(' ', es_CO_UTF_8));
-+	p(iswhexnumber_l(L'a', es_CO_UTF_8));
-+	p(!iswhexnumber_l(L' ', es_CO_UTF_8));
-+	p(!isideogram_l(' ', es_CO_UTF_8));
-+	p(iswideogram_l(0x3006, es_CO_UTF_8));
-+	p(!iswideogram_l(L' ', es_CO_UTF_8));
-+	p(isnumber_l('1', es_CO_UTF_8));
-+	p(!isnumber_l(' ', es_CO_UTF_8));
-+	p(iswnumber_l(L'1', es_CO_UTF_8));
-+	p(!iswnumber_l(L' ', es_CO_UTF_8));
-+	p(!isphonogram_l(' ', es_CO_UTF_8));
-+	p(iswphonogram_l(0x0f00, es_CO_UTF_8));
-+	p(!iswphonogram_l(L' ', es_CO_UTF_8));
-+	p(isprint_l('1', es_CO_UTF_8));
-+	p(!isprint_l('\0', es_CO_UTF_8));
-+	p(isrune_l('1', es_CO_UTF_8));
-+	p(!isrune_l(EOF, es_CO_UTF_8));
-+	p(iswrune_l(L'1', es_CO_UTF_8));
-+	p(!iswrune_l(WEOF, es_CO_UTF_8));
-+	p(!isspecial_l('a', es_CO_UTF_8));
-+	p(iswspecial_l(0x00b2, es_CO_UTF_8));
-+	p(!iswspecial_l(L'\0', es_CO_UTF_8));
-+	p(nextwctype(-1, wctype("graph")) > 0);
-+	p(tolower_l('A', es_CO_UTF_8) == 'a');
-+	p(_tolower_l('A', es_CO_UTF_8) == 'a');
-+	p(tolower('A') == 'a');
-+	p(_tolower('A') == 'a');
-+	p(towlower_l(L'Á', es_CO_UTF_8) == L'á');
-+	p(towupper_l(L'á', es_CO_UTF_8) == L'Á');
-+	p(toupper_l('a', es_CO_UTF_8) == 'A');
-+	p(toupper('a') == 'A');
-+	p(_toupper_l('a', es_CO_UTF_8) == 'A');
-+	p(_toupper('a') == 'A');
-+	p(wctrans_l("invalido", es_CO_UTF_8) == 0);
-+	wchar_t lu[7][2] = {{ L'ñ', L'Ñ'},
-+		{L'á', L'Á'},
-+		{L'é', L'É'},
-+		{L'í', L'Í'},
-+		{L'ó', L'Ó'},
-+		{L'ú', L'Ú'},
-+		{L'ü', L'Ü'}
-+	};
-+	wctrans_t tl;
-+	p((tl = wctrans_l("tolower", es_CO_UTF_8)) != 0);
-+	wctrans_t tu;
-+	p((tu = wctrans_l("toupper", es_CO_UTF_8)) != 0);
-+	int c;
-+	for(c=0; c<7; c++) {
-+		p(towctrans_l(lu[c][1], tl, es_CO_UTF_8) == lu[c][0]);
-+		p(towlower_l(lu[c][1], es_CO_UTF_8) == lu[c][0]);
-+		p(towctrans_l(lu[c][0], tu, es_CO_UTF_8) == lu[c][1]);
-+		p(towupper_l(lu[c][0], es_CO_UTF_8) == lu[c][1]);
-+	}
-+
-+}
-+
-+
-+
-+void test_string() 
-+{
-+	char *nl = setlocale(LC_ALL, "es_CO.UTF-8");
-+	locale_t es_CO_UTF_8 = uselocale(NULL);
-+	printf("locale %s\n", nl);
-+
-+	p(strcoll_l("b", "é", es_CO_UTF_8) < 0);
-+	wchar_t wcsb[1000];
-+	mbstowcs(wcsb, "b", 1000);
-+	wchar_t wcse[1000];
-+	mbstowcs(wcse, "é", 1000);
-+	p(wcscoll_l(wcsb, wcse, es_CO_UTF_8) < 0);
-+	
-+	mbstowcs(wcsb, "b", 1000);
-+	mbstowcs(wcse, "é", 1000);
-+	p(wcscoll_l(wcsb, wcse, es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"b", L"é", es_CO_UTF_8) < 0);
-+	p(strcoll("á", "e") < 0);
-+	p(strcoll("ama", "ana") < 0);
-+	p(strcoll_l("á", "e", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"b", L"é", es_CO_UTF_8) < 0);
-+	p(wcscoll(L"á", L"e") < 0);
-+	p(wcscoll_l(L"á", L"e", es_CO_UTF_8) < 0);
-+	/* Order in spanish*/
-+	p(wcscoll_l(L" ", L"á", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"á", L"b", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"d", L"é", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"é", L"f", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"h", L"í", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"í", L"j", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"n", L"ñ", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"ñ", L"o", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"ñ", L"ó", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"ó", L"p", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"t", L"ú", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"t", L"ü", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"ú", L"v", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"ü", L"v", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"Á", L"B", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"D", L"É", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"É", L"F", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"H", L"Í", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"Í", L"J", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"N", L"Ñ", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"Ñ", L"O", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"Ñ", L"Ó", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"Ó", L"P", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"T", L"Ú", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"T", L"Ü", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"Ú", L"V", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"Ü", L"V", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"", L"Á", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"á", L"", es_CO_UTF_8) > 0);
-+	p(wcscoll_l(L"áá", L"á", es_CO_UTF_8) > 0);
-+	
-+	wchar_t wa[10], wb[10], we[10], wf[10], wn[10], wegne[10],
-+		wo[10];
-+
-+	p(wcsxfrm_l(wo, L"oro", 1000, es_CO_UTF_8) > 0);
-+	printf("oro wo='%ls'\n", wo);
-+	p(wcsxfrm_l(wa, L"", 1000, es_CO_UTF_8) >= 0);
-+	printf("wa='%ls'\n", wa);
-+	p(wcsxfrm_l(wa, L"á", 1000, es_CO_UTF_8) > 0);
-+	printf("wa='%ls'\n", wa);
-+	p(wcsxfrm_l(wb, L"b", 1000, es_CO_UTF_8) > 0);
-+	printf("wb='%ls'\n", wb);
-+	p(wcscmp(wa, wb) < 0);
-+	p(wcsxfrm_l(we, L"é", 1000, es_CO_UTF_8) > 0);
-+	printf("we='%ls'\n", we);
-+	p(wcscmp(wb, we) < 0);
-+	p(wcsxfrm_l(wf, L"f", 1000, es_CO_UTF_8) > 0);
-+	printf("wf='%ls'\n", wf);
-+	p(wcscmp(wb, wf) < 0);
-+	p(wcscmp(we, wf) < 0);
-+	p(wcsxfrm_l(wn, L"n", 1000, es_CO_UTF_8) > 0);
-+	printf("wn='%ls'\n", wn);
-+	p(wcsxfrm_l(wegne, L"ñ", 1000, es_CO_UTF_8) > 0);
-+	printf("wegne='%ls'\n", wegne);
-+	p(wcsxfrm_l(wo, L"o", 1000, es_CO_UTF_8) > 0);
-+	printf("o wo='%ls'\n", wo);
-+	p(wcsxfrm_l(wo, L"oso", 1000, es_CO_UTF_8) > 0);
-+	printf("oso wo='%ls'\n", wo);
-+	p(wcscmp(wn, wegne) < 0);
-+	p(wcscmp(wegne, wo) < 0);
-+	
-+	char a[1000], b[1000], e[1000], f[1000];
-+	size_t sr = 0;
-+	__collate_print_tables(NULL);
-+	p((sr = strxfrm_l(NULL, "equis", 0, es_CO_UTF_8)) == 5);
-+	p(strxfrm_l(NULL, "", 1000, es_CO_UTF_8) == 0);
-+	p(strxfrm_l(a, "", 1000, es_CO_UTF_8) == 0 && a[0] == '\0');
-+	p(strxfrm_l(a, "á", 1000, es_CO_UTF_8) > 0);
-+	p(strxfrm_l(b, "b", 1000, es_CO_UTF_8) > 0);
-+	p(strcmp(a, b) < 0);
-+	p(strxfrm_l(e, "é", 1000, es_CO_UTF_8) > 0);
-+	printf("é e=%s\n", e);
-+	p(strcmp(b, e) < 0);
-+	p(strxfrm_l(f, "f", 1000, es_CO_UTF_8) > 0);
-+	p(strcmp(b, f) < 0);
-+	p(strcmp(e, f) < 0);
-+	p(strxfrm_l(e, "éa", 1000, es_CO_UTF_8) > 0);
-+	printf("e=%s\n", e);
-+	p(strxfrm_l(f, "éb", 1000, es_CO_UTF_8) > 0);
-+	printf("f=%s\n", f);
-+	p(strcmp(e, f) < 0);
-+	p(strxfrm_l(f, "oso", 1000, es_CO_UTF_8) > 0);
-+	printf("oso f=%s\n", f);
-+	p(strcmp(e, f) < 0);
-+
-+	p(strcasecmp_l("n", "N", es_CO_UTF_8) == 0);
-+	p(strcasecmp_l("largo", "largote", es_CO_UTF_8) < 0);
-+	p(strcasecmp_l("cortote", "corto", es_CO_UTF_8) > 0);
-+	p(strncasecmp_l("n", "N", 1, es_CO_UTF_8) == 0);
-+	p(strcasestr_l("nino", "O", es_CO_UTF_8) != NULL);
-+	p(wcscasecmp_l(L"ñ", L"Ñ", es_CO_UTF_8) == 0);
-+	p(wcscasecmp_l(L"á", L"b", es_CO_UTF_8) < 0);
-+	p(wcscasecmp_l(L"a", L"á", es_CO_UTF_8) <= 0);
-+	p(wcscasecmp_l(L"", L"á", es_CO_UTF_8) < 0);
-+	p(wcscasecmp_l(L"", L"a", es_CO_UTF_8) < 0);
-+	p(wcscasecmp_l(L"", L"a", es_CO_UTF_8) < 0);
-+	p(wcscasecmp_l(L"á", L"", es_CO_UTF_8) > 0);
-+	p(wcscasecmp_l(L"áá", L"á", es_CO_UTF_8) > 0);
-+	p(wcscasecmp(L"á", L"b") < 0);
-+	p(wcscasecmp(L"a", L"á") <= 0);
-+	p(wcsncasecmp_l(L"n", L"N", 1, es_CO_UTF_8) == 0);
-+}
-+#endif
-+
 +int main()
 +{
 +	test_xlocale();
 +	test_wchar();
-+//	test_ctype();
-+//	test_string();
 +	
 +	return bad != 0;
 +}
@@ -3824,7 +3571,7 @@ diff -ruN -x CVS -x obj src55-orig/include/Makefile src/include/Makefile
 diff -ruN -x CVS -x obj src53collation/include/xlocale.h src/include/xlocale.h
 --- src53collation/include/xlocale.h	Wed Dec 31 19:00:00 1969
 +++ src/include/xlocale.h	Tue Apr 16 14:28:06 2013
-@@ -0,0 +1,429 @@
+@@ -0,0 +1,426 @@
 +/*-
 + * Copyright (c) 2011, 2012 The FreeBSD Foundation
 + * All rights reserved.
@@ -3942,6 +3689,7 @@ diff -ruN -x CVS -x obj src53collation/include/xlocale.h src/include/xlocale.h
 +
 +#ifdef _STDLIB_H_
 +
++#include <inttypes.h>
 +/*
 + * Extended locale versions of the locale-aware functions from stdlib.h.
 + *
@@ -3961,6 +3709,9 @@ diff -ruN -x CVS -x obj src53collation/include/xlocale.h src/include/xlocale.h
 +long			 strtol_l(const char *, char **, int, locale_t);
 +long double		 strtold_l(const char *, char **, locale_t);
 +long long		 strtoll_l(const char *, char **, int, locale_t);
++long long		 strtonum_l(const char *, long long, long long, const char **, locale_t);
++quad_t                   strtoq_l(const char *, char **, int, locale_t);
++u_quad_t          	 strtouq_l(const char *, char **, int, locale_t);
 +unsigned long		 strtoul_l(const char *, char **, int, locale_t);
 +unsigned long long	 strtoull_l(const char *, char **, int, locale_t);
 +size_t			 wcstombs_l(char * __restrict,
@@ -4093,8 +3844,6 @@ diff -ruN -x CVS -x obj src53collation/include/xlocale.h src/include/xlocale.h
 +
 +inline wint_t towupper_l(wint_t, locale_t);
 +
-+inline int __wcwidth_l(rune_t, locale_t);
-+
 +int iswctype_l(wint_t, wctype_t, locale_t);
 +
 +wctype_t wctype_l(const char *, locale_t);
@@ -4110,10 +3859,6 @@ diff -ruN -x CVS -x obj src53collation/include/xlocale.h src/include/xlocale.h
 +inline int tolower_l(int, locale_t);
 +
 +inline int toupper_l(int, locale_t);
-+
-+inline int _tolower_l(int, locale_t);
-+
-+inline int _toupper_l(int, locale_t);
 +
 +#endif /* defined(_CTYPE_H_) || defined(_WCTYPE_H) */
 +
@@ -4198,7 +3943,6 @@ diff -ruN -x CVS -x obj src53collation/include/xlocale.h src/include/xlocale.h
 +			    const wchar_t * __restrict, ...);
 +int			 swscanf_l(const wchar_t * __restrict, locale_t,
 +			   const wchar_t * __restrict, ...);
-+wint_t			 ungetwc_l(wint_t, FILE *, locale_t);
 +int			 vfwprintf_l(FILE * __restrict, locale_t,
 +			    const wchar_t * __restrict, __va_list);
 +int			 vswprintf_l(wchar_t * __restrict, size_t n, locale_t,
@@ -4254,3 +3998,45 @@ diff -ruN -x CVS -x obj src53collation/include/xlocale.h src/include/xlocale.h
 +__END_DECLS
 +
 +#endif
+diff -ruN -x *.o -x *~ src56-orig/lib/libc/citrus/citrus_ctype.c src/lib/libc/citrus/citrus_ctype.c
+--- src56-orig/lib/libc/citrus/citrus_ctype.c	Fri May  3 08:53:49 2013
++++ src/lib/libc/citrus/citrus_ctype.c	Sun May 18 19:06:58 2014
+@@ -38,12 +38,14 @@
+ 
+ struct _citrus_ctype_rec _citrus_ctype_none = {
+ 	&_citrus_none_ctype_ops,	/* cc_ops */
+-	1				/* cc_mb_cur_max */
++	1,				/* cc_mb_cur_max */
++	256				/* cc_mb_sb_limit */
+ };
+ 
+ struct _citrus_ctype_rec _citrus_ctype_utf8 = {
+ 	&_citrus_utf8_ctype_ops,	/* cc_ops */
+-	_CITRUS_UTF8_MB_CUR_MAX		/* cc_mb_cur_max */
++	_CITRUS_UTF8_MB_CUR_MAX,	/* cc_mb_cur_max */
++	_CITRUS_UTF8_MB_SB_LIMIT	/* cc_mb_sb_limit */
+ };
+ 
+ int
+diff -ruN -x *.o -x *~ src56-orig/lib/libc/citrus/citrus_ctype_local.h src/lib/libc/citrus/citrus_ctype_local.h
+--- src56-orig/lib/libc/citrus/citrus_ctype_local.h	Fri May  3 08:53:49 2013
++++ src/lib/libc/citrus/citrus_ctype_local.h	Sun May 18 19:04:54 2014
+@@ -82,6 +82,7 @@
+ struct _citrus_ctype_rec {
+ 	struct _citrus_ctype_ops_rec	*cc_ops;
+ 	size_t				cc_mb_cur_max;
++	size_t				cc_mb_sb_limit;
+ };
+ 
+ #endif
+diff -ruN -x *.o -x *~ src56-orig/lib/libc/citrus/citrus_utf8.h src/lib/libc/citrus/citrus_utf8.h
+--- src56-orig/lib/libc/citrus/citrus_utf8.h	Wed Jul 28 19:50:10 2010
++++ src/lib/libc/citrus/citrus_utf8.h	Sun May 18 19:30:21 2014
+@@ -33,6 +33,7 @@
+ extern struct _citrus_ctype_ops_rec	_citrus_utf8_ctype_ops;
+ 
+ #define _CITRUS_UTF8_MB_CUR_MAX	4
++#define _CITRUS_UTF8_MB_SB_LIMIT	128
+ 
+ _CITRUS_CTYPE_DECLS(utf8);
+ 

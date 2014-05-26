@@ -1,3 +1,192 @@
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strftime.c src/lib/libc/time/strftime.c
+--- src54-x6/lib/libc/time/strftime.c	Sat Feb  9 14:26:54 2013
++++ src/lib/libc/time/strftime.c	Tue Dec  3 16:12:45 2013
+@@ -33,13 +33,14 @@
+ #include <sys/localedef.h>
+ 
+ #include "fcntl.h"
+-#include "locale.h"
+ #include "tzfile.h"
+ 
++#include "locale/xlocale_private.h"
++
+ static char *	_add(const char *, char *, const char *);
+ static char *	_conv(int, const char *, char *, const char *);
+ static char *	_fmt(const char *, const struct tm *, char *, const char *,
+-			int *);
++			int *, locale_t);
+ static char *	_yconv(int, int, int, int, char *, const char *);
+ 
+ extern char *	tzname[];
+@@ -50,18 +51,20 @@
+ #define IN_ALL	3
+ 
+ size_t
+-strftime(s, maxsize, format, t)
++strftime_l(s, maxsize, format, t, loc)
+ char * const		s;
+ const size_t		maxsize;
+ const char * const	format;
+ const struct tm * const	t;
++locale_t loc;
+ {
+ 	char *	p;
+ 	int	warn;
+ 
++	FIX_LOCALE(loc);
+ 	tzset();
+ 	warn = IN_NONE;
+-	p = _fmt(((format == NULL) ? "%c" : format), t, s, s + maxsize, &warn);
++	p = _fmt(((format == NULL) ? "%c" : format), t, s, s + maxsize, &warn, loc);
+ 	if (p == s + maxsize) {
+ 		if (maxsize > 0)
+ 			s[maxsize - 1] = '\0';
+@@ -71,13 +74,21 @@
+ 	return p - s;
+ }
+ 
++size_t
++strftime(char * const __restrict s, const size_t maxsize, 
++    const char * __restrict format, const struct tm * __restrict t)
++{
++	return strftime_l(s, maxsize, format, t, __get_locale());
++}
++
+ static char *
+-_fmt(format, t, pt, ptlim, warnp)
++_fmt(format, t, pt, ptlim, warnp, loc)
+ const char *		format;
+ const struct tm * const	t;
+ char *			pt;
+ const char * const	ptlim;
+ int *			warnp;
++locale_t	loc;
+ {
+ 	for ( ; *format; ++format) {
+ 		if (*format == '%') {
+@@ -89,26 +100,26 @@
+ 			case 'A':
+ 				pt = _add((t->tm_wday < 0 ||
+ 					t->tm_wday >= DAYSPERWEEK) ?
+-					"?" : _CurrentTimeLocale->day[t->tm_wday],
++					"?" : __get_current_time_locale(loc)->day[t->tm_wday],
+ 					pt, ptlim);
+ 				continue;
+ 			case 'a':
+ 				pt = _add((t->tm_wday < 0 ||
+ 					t->tm_wday >= DAYSPERWEEK) ?
+-					"?" : _CurrentTimeLocale->abday[t->tm_wday],
++					"?" : __get_current_time_locale(loc)->abday[t->tm_wday],
+ 					pt, ptlim);
+ 				continue;
+ 			case 'B':
+ 				pt = _add((t->tm_mon < 0 ||
+ 					t->tm_mon >= MONSPERYEAR) ?
+-					"?" : _CurrentTimeLocale->mon[t->tm_mon],
++					"?" : __get_current_time_locale(loc)->mon[t->tm_mon],
+ 					pt, ptlim);
+ 				continue;
+ 			case 'b':
+ 			case 'h':
+ 				pt = _add((t->tm_mon < 0 ||
+ 					t->tm_mon >= MONSPERYEAR) ?
+-					"?" : _CurrentTimeLocale->abmon[t->tm_mon],
++					"?" : __get_current_time_locale(loc)->abmon[t->tm_mon],
+ 					pt, ptlim);
+ 				continue;
+ 			case 'C':
+@@ -126,7 +137,7 @@
+ 				{
+ 				int warn2 = IN_SOME;
+ 
+-				pt = _fmt(_CurrentTimeLocale->d_t_fmt, t, pt, ptlim, &warn2);
++				pt = _fmt(__get_current_time_locale(loc)->d_t_fmt, t, pt, ptlim, &warn2, loc);
+ 				if (warn2 == IN_ALL)
+ 					warn2 = IN_THIS;
+ 				if (warn2 > *warnp)
+@@ -134,7 +145,7 @@
+ 				}
+ 				continue;
+ 			case 'D':
+-				pt = _fmt("%m/%d/%y", t, pt, ptlim, warnp);
++				pt = _fmt("%m/%d/%y", t, pt, ptlim, warnp, loc);
+ 				continue;
+ 			case 'd':
+ 				pt = _conv(t->tm_mday, "%02d", pt, ptlim);
+@@ -155,7 +166,7 @@
+ 				pt = _conv(t->tm_mday, "%2d", pt, ptlim);
+ 				continue;
+ 			case 'F':
+-				pt = _fmt("%Y-%m-%d", t, pt, ptlim, warnp);
++				pt = _fmt("%Y-%m-%d", t, pt, ptlim, warnp, loc);
+ 				continue;
+ 			case 'H':
+ 				pt = _conv(t->tm_hour, "%02d", pt, ptlim);
+@@ -214,15 +225,15 @@
+ 				continue;
+ 			case 'p':
+ 				pt = _add((t->tm_hour >= (HOURSPERDAY / 2)) ?
+-					_CurrentTimeLocale->am_pm[1] :
+-					_CurrentTimeLocale->am_pm[0],
++					__get_current_time_locale(loc)->am_pm[1] :
++					__get_current_time_locale(loc)->am_pm[0],
+ 					pt, ptlim);
+ 				continue;
+ 			case 'R':
+-				pt = _fmt("%H:%M", t, pt, ptlim, warnp);
++				pt = _fmt("%H:%M", t, pt, ptlim, warnp, loc);
+ 				continue;
+ 			case 'r':
+-				pt = _fmt(_CurrentTimeLocale->t_fmt_ampm, t, pt, ptlim, warnp);
++				pt = _fmt(__get_current_time_locale(loc)->t_fmt_ampm, t, pt, ptlim, warnp, loc);
+ 				continue;
+ 			case 'S':
+ 				pt = _conv(t->tm_sec, "%02d", pt, ptlim);
+@@ -245,7 +256,7 @@
+ 				}
+ 				continue;
+ 			case 'T':
+-				pt = _fmt("%H:%M:%S", t, pt, ptlim, warnp);
++				pt = _fmt("%H:%M:%S", t, pt, ptlim, warnp, loc);
+ 				continue;
+ 			case 't':
+ 				pt = _add("\t", pt, ptlim);
+@@ -360,7 +371,7 @@
+ 				** "date as dd-bbb-YYYY"
+ 				** (ado, 1993-05-24)
+ 				*/
+-				pt = _fmt("%e-%b-%Y", t, pt, ptlim, warnp);
++				pt = _fmt("%e-%b-%Y", t, pt, ptlim, warnp, loc);
+ 				continue;
+ 			case 'W':
+ 				pt = _conv((t->tm_yday + DAYSPERWEEK -
+@@ -373,13 +384,13 @@
+ 				pt = _conv(t->tm_wday, "%d", pt, ptlim);
+ 				continue;
+ 			case 'X':
+-				pt = _fmt(_CurrentTimeLocale->t_fmt, t, pt, ptlim, warnp);
++				pt = _fmt(__get_current_time_locale(loc)->t_fmt, t, pt, ptlim, warnp, loc);
+ 				continue;
+ 			case 'x':
+ 				{
+ 				int	warn2 = IN_SOME;
+ 
+-				pt = _fmt(_CurrentTimeLocale->d_fmt, t, pt, ptlim, &warn2);
++				pt = _fmt(__get_current_time_locale(loc)->d_fmt, t, pt, ptlim, &warn2, loc);
+ 				if (warn2 == IN_ALL)
+ 					warn2 = IN_THIS;
+ 				if (warn2 > *warnp)
+@@ -464,8 +475,8 @@
+ 				}
+ 				continue;
+ 			case '+':
+-				pt = _fmt(_CurrentTimeLocale->date_fmt, t, pt, ptlim,
+-					warnp);
++				pt = _fmt(__get_current_time_locale(loc)->date_fmt, t, pt, ptlim,
++					warnp, loc);
+ 				continue;
+ 			case '%':
+ 			/*
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime.c src/lib/libc/time/strptime.c
 --- src54-x6/lib/libc/time/strptime.c	Sat Feb  9 14:26:54 2013
 +++ src/lib/libc/time/strptime.c	Tue Dec  3 16:12:45 2013
@@ -252,3 +441,747 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
  				*tgt = i;
  				return bp + len;
  			}
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/wcsftime.c src/lib/libc/time/wcsftime.c
+--- src54-x6/lib/libc/time/wcsftime.c	Sat Feb  9 14:26:54 2013
++++ src/lib/libc/time/wcsftime.c	Tue Dec  3 16:12:45 2013
+@@ -39,13 +39,14 @@
+ 
+ #include "fcntl.h"
+ #include "tzfile.h"
++#include "locale/xlocale_private.h"
+ 
+ #define UNKNOWN L"?"
+ static wchar_t *	_add(const wchar_t *, wchar_t *, const wchar_t *);
+ static wchar_t *	_sadd(const char *, wchar_t *, const wchar_t *);
+ static wchar_t *	_conv(int, const wchar_t *, wchar_t *, const wchar_t *);
+-static wchar_t *	_fmt(const wchar_t *, const struct tm *, wchar_t *, const wchar_t *,
+-			int *);
++static wchar_t *	_fmt(const wchar_t *, const struct tm *, wchar_t *, 
++		const wchar_t *, int *, locale_t);
+ static wchar_t *	_yconv(int, int, int, int, wchar_t *, const wchar_t *);
+ 
+ extern char *	tzname[];
+@@ -56,15 +57,18 @@
+ #define IN_ALL	3
+ 
+ size_t
+-wcsftime(wchar_t *__restrict s, size_t maxsize, 
+-    const wchar_t *__restrict format, const struct tm *__restrict t)
++wcsftime_l(wchar_t *__restrict s, size_t maxsize, 
++    const wchar_t *__restrict format, const struct tm *__restrict t,
++    locale_t loc)
+ {
+ 	wchar_t *p;
+ 	int	warn;
+ 
++	FIX_LOCALE(loc);
+ 	tzset();
+ 	warn = IN_NONE;
+-	p = _fmt(((format == NULL) ? L"%c" : format), t, s, s + maxsize, &warn);
++	p = _fmt(((format == NULL) ? L"%c" : format), t, s, s + maxsize, &warn,
++			loc);
+ 	if (p == s + maxsize) {
+ 		if (maxsize > 0)
+ 			s[maxsize - 1] = '\0';
+@@ -74,23 +78,30 @@
+ 	return p - s;
+ }
+ 
++size_t
++wcsftime(wchar_t *__restrict s, size_t maxsize, 
++    const wchar_t *__restrict format, const struct tm *__restrict t) 
++{
++	return wcsftime_l(s, maxsize, format, t, __get_locale());
++}
++
+ wchar_t *
+-_towcs(wchar_t *bL, size_t bLsize, const char *s)
++_towcs(wchar_t *bL, size_t bLsize, const char *s, locale_t loc)
+ {
+-	size_t numc = mbstowcs(NULL, s, 0) + 1; 
++	size_t numc = mbstowcs_l(NULL, s, 0, loc) + 1; 
+ 	if (numc <= 0 || numc >= bLsize) { 
+ 		(void) fprintf(stderr, "Cannot translate %s to wchar_t *\n", s);
+ 		errno = EINVAL;
+ 		return NULL;
+ 	}
+-	mbstowcs(bL, s, numc);
++	mbstowcs_l(bL, s, numc, loc);
+ 	return bL;
+ }
+ 
+ 
+ static wchar_t *
+ _fmt(const wchar_t *format, const struct tm *t, wchar_t *pt, 
+-    const wchar_t *ptlim, int *warnp)
++    const wchar_t *ptlim, int *warnp, locale_t loc)
+ {
+ 	// In the moment of this writing the biggest LC_TIME file
+         // is 479 bytes, the next buffer should be enough to store
+@@ -112,26 +123,26 @@
+ 		case 'A':
+ 			pt = _add((t->tm_wday < 0 ||
+ 				t->tm_wday >= DAYSPERWEEK) ?
+-				UNKNOWN : _towcs(bL, sizeof(bL), _CurrentTimeLocale->day[t->tm_wday]),
++				UNKNOWN : _towcs(bL, sizeof(bL), __get_current_time_locale(loc)->day[t->tm_wday], loc),
+ 				pt, ptlim);
+ 			continue;
+ 		case 'a':
+ 			pt = _add((t->tm_wday < 0 ||
+ 				t->tm_wday >= DAYSPERWEEK) ?
+-				UNKNOWN : _towcs(bL, sizeof(bL), _CurrentTimeLocale->abday[t->tm_wday]),
++				UNKNOWN : _towcs(bL, sizeof(bL), __get_current_time_locale(loc)->abday[t->tm_wday], loc),
+ 				pt, ptlim);
+ 			continue;
+ 		case 'B':
+ 			pt = _add((t->tm_mon < 0 ||
+ 				t->tm_mon >= MONSPERYEAR) ?
+-				UNKNOWN : _towcs(bL, sizeof(bL), _CurrentTimeLocale->mon[t->tm_mon]),
++				UNKNOWN : _towcs(bL, sizeof(bL), __get_current_time_locale(loc)->mon[t->tm_mon], loc),
+ 				pt, ptlim);
+ 			continue;
+ 		case 'b':
+ 		case 'h':
+ 			pt = _add((t->tm_mon < 0 ||
+ 				t->tm_mon >= MONSPERYEAR) ?
+-				UNKNOWN : _towcs(bL, sizeof(bL), _CurrentTimeLocale->abmon[t->tm_mon]),
++				UNKNOWN : _towcs(bL, sizeof(bL), __get_current_time_locale(loc)->abmon[t->tm_mon], loc),
+ 				pt, ptlim);
+ 			continue;
+ 		case 'C':
+@@ -149,7 +160,7 @@
+ 			{
+ 			int warn2 = IN_SOME;
+ 
+-			pt = _fmt(_towcs(bL, sizeof(bL), _CurrentTimeLocale->d_t_fmt), t, pt, ptlim, &warn2);
++			pt = _fmt(_towcs(bL, sizeof(bL), __get_current_time_locale(loc)->d_t_fmt, loc), t, pt, ptlim, &warn2, loc);
+ 			if (warn2 == IN_ALL)
+ 				warn2 = IN_THIS;
+ 			if (warn2 > *warnp)
+@@ -157,7 +168,7 @@
+ 			}
+ 			continue;
+ 		case 'D':
+-			pt = _fmt(L"%m/%d/%y", t, pt, ptlim, warnp);
++			pt = _fmt(L"%m/%d/%y", t, pt, ptlim, warnp, loc);
+ 			continue;
+ 		case 'd':
+ 			pt = _conv(t->tm_mday, L"%02d", pt, ptlim);
+@@ -178,7 +189,7 @@
+ 			pt = _conv(t->tm_mday, L"%2d", pt, ptlim);
+ 			continue;
+ 		case 'F':
+-			pt = _fmt(L"%Y-%m-%d", t, pt, ptlim, warnp);
++			pt = _fmt(L"%Y-%m-%d", t, pt, ptlim, warnp, loc);
+ 			continue;
+ 		case 'H':
+ 			pt = _conv(t->tm_hour, L"%02d", pt, ptlim);
+@@ -229,15 +240,15 @@
+ 			continue;
+ 		case 'p':
+ 			pt = _add((t->tm_hour >= (HOURSPERDAY / 2)) ?
+-				_towcs(bL, sizeof(bL), _CurrentTimeLocale->am_pm[1]) :
+-				_towcs(bL, sizeof(bL), _CurrentTimeLocale->am_pm[0]),
++				_towcs(bL, sizeof(bL), __get_current_time_locale(loc)->am_pm[1], loc) :
++				_towcs(bL, sizeof(bL), __get_current_time_locale(loc)->am_pm[0], loc),
+ 				pt, ptlim);
+ 			continue;
+ 		case 'R':
+-			pt = _fmt(L"%H:%M", t, pt, ptlim, warnp);
++			pt = _fmt(L"%H:%M", t, pt, ptlim, warnp, loc);
+ 			continue;
+ 		case 'r':
+-			pt = _fmt(L"%I:%M:%S %p", t, pt, ptlim, warnp);
++			pt = _fmt(L"%I:%M:%S %p", t, pt, ptlim, warnp, loc);
+ 			continue;
+ 		case 'S':
+ 			pt = _conv(t->tm_sec, L"%02d", pt, ptlim);
+@@ -263,7 +274,7 @@
+ 			}
+ 			continue;
+ 		case 'T':
+-			pt = _fmt(L"%H:%M:%S", t, pt, ptlim, warnp);
++			pt = _fmt(L"%H:%M:%S", t, pt, ptlim, warnp, loc);
+ 			continue;
+ 		case 't':
+ 			pt = _add(L"\t", pt, ptlim);
+@@ -368,7 +379,7 @@
+ 			** "date as dd-bbb-YYYY"
+ 			** (ado, 1993-05-24)
+ 			*/
+-			pt = _fmt(L"%e-%b-%Y", t, pt, ptlim, warnp);
++			pt = _fmt(L"%e-%b-%Y", t, pt, ptlim, warnp, loc);
+ 			continue;
+ 		case 'W':
+ 			pt = _conv((t->tm_yday + DAYSPERWEEK -
+@@ -381,13 +392,13 @@
+ 			pt = _conv(t->tm_wday, L"%d", pt, ptlim);
+ 			continue;
+ 		case 'X':
+-			pt = _fmt(_towcs(bL, sizeof(bL), _CurrentTimeLocale->t_fmt), t, pt, ptlim, warnp);
++			pt = _fmt(_towcs(bL, sizeof(bL), __get_current_time_locale(loc)->t_fmt, loc), t, pt, ptlim, warnp, loc);
+ 			continue;
+ 		case 'x':
+ 			{
+ 			int	warn2 = IN_SOME;
+ 
+-			pt = _fmt(_towcs(bL, sizeof(bL), _CurrentTimeLocale->d_fmt), t, pt, ptlim, &warn2);
++			pt = _fmt(_towcs(bL, sizeof(bL), __get_current_time_locale(loc)->d_fmt, loc), t, pt, ptlim, &warn2, loc);
+ 			if (warn2 == IN_ALL)
+ 				warn2 = IN_THIS;
+ 			if (warn2 > *warnp)
+@@ -435,7 +446,7 @@
+ 			}
+ 			continue;
+ 		case '+':
+-			pt = _fmt(_towcs(bL, sizeof(bL), _CurrentTimeLocale->date_fmt), t, pt, ptlim, warnp);
++			pt = _fmt(_towcs(bL, sizeof(bL), __get_current_time_locale(loc)->date_fmt, loc), t, pt, ptlim, warnp, loc);
+ 			continue;
+ 		case '%':
+ 		/*
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/_def_time.c src/lib/libc/locale/_def_time.c
+--- src54-x6/lib/libc/locale/_def_time.c	Sat Feb  9 14:26:54 2013
++++ src/lib/libc/locale/_def_time.c	Tue Dec  3 16:12:45 2013
+@@ -5,8 +5,11 @@
+  */
+ 
+ #include <sys/localedef.h>
++
+ #include <locale.h>
+ 
++#include "locale/xlocale_private.h"
++
+ const _TimeLocale _DefaultTimeLocale =
+ {
+ 	{
+@@ -37,37 +40,111 @@
+ const _TimeLocale *_CurrentTimeLocale = &_DefaultTimeLocale;
+ 
+ /* This will be time locale when not using DefaultTimeLocale */
+-_TimeLocale _time_locale;
++struct xlocale_time __xlocale_global_time;
+ 
+-/* Buffer for time locale data when not using C / POSIX */
+-static char *_time_buffer = NULL;
++static void
++destruct_time(void *v)
++{
++	struct xlocale_time *l = v;
++	if (l->buffer)
++		free(l->buffer);
++	free(l);
++}
+ 
+-/* 1 if the locale changes, 0 otherwise */
+-int __tlocale_changed;
+-
+-
+ /* Loads time locale from file in text format */
+-int
+-__time_load_locale(const char *name)
++static int
++__tload(const char *name, locale_t loc, struct xlocale_time *xtime)
+ {
+-	int ret;
++	int ret = 0;
+ 	char error_buf[2048];
++	_TimeLocale *l;
++	int changed = 0;
+ 
+-	__tlocale_changed = 0;
++	FIX_LOCALE(loc);
++	l = &xtime->locale;
+ 	if (strcmp(name, "C") == 0 || strcmp(name, "POSIX") == 0) {
+-		if (_CurrentTimeLocale != &_DefaultTimeLocale) {
+-			__tlocale_changed = 1;
+-			_CurrentTimeLocale = &_DefaultTimeLocale;
+-		}
++		xtime->header.header.retain_count = 0;
++		xtime->header.header.destructor = NULL;
++		xtime->header.locale[0] = 'C';
++		xtime->header.locale[1] = '\0';
++		xtime->buffer = NULL;
++		xtime->locale = _DefaultTimeLocale;
++		loc->using_time_locale = 0;
+ 	} else {
+-		ret = __loadtextcat(name, LC_TIME, &__tlocale_changed,
+-				&_time_buffer, 
+-				(const char**)&_time_locale, 
+-				sizeof(_time_locale), 
++		xtime->header.header.destructor = destruct_time;
++		ret = __loadtextcat(name, LC_TIME, &changed,
++				&xtime->buffer, 
++				(const char **)l, 
++				sizeof(_TimeLocale), 
+ 				error_buf, sizeof(error_buf));
+-		if (ret == 0) {
+-			_CurrentTimeLocale = &_time_locale;
++		if (ret == 0 && changed == 1) {
++			loc->using_time_locale = 1;
++		} else {
++			return -1;
+ 		}
+ 	}
+ 	return ret;
+ }
++
++/* Loads time locale from file in text format */
++int
++__time_load_locale(const char *name)
++{
++	int ret = 0;
++
++	ret = __tload(name, &__xlocale_global_locale, &__xlocale_global_time);
++	_CurrentTimeLocale = &__xlocale_global_time.locale;
++	return ret;
++}
++
++void *
++__time_load(const char *name, locale_t loc)
++{
++	int ret;
++	struct xlocale_time *new;
++        
++	new = calloc(sizeof(struct xlocale_time), 1);
++	if (new == NULL) {
++		return NULL;
++	}
++	ret = __tload(name, loc, new);
++	if (ret != 0) {
++		xlocale_release(new);
++		return NULL;
++	}
++	return new;
++}
++
++_TimeLocale *
++__get_current_time_locale(locale_t loc)
++{
++	return (loc->using_time_locale
++			? &((struct xlocale_time *)loc->components[XLC_TIME])->locale
++			: (_TimeLocale *)&_DefaultTimeLocale);
++}
++
++#ifdef LOCALE_DEBUG
++void
++timedebug(_TimeLocale l) {
++	int i;
++	for(i = 0; i < 12; i++) {
++		printf("abmon[%i]: %s\n", i, l.abmon[i]);
++	}
++	for(i = 0; i < 12; i++) {
++		printf("mon[%i]: %s\n", i, l.mon[i]);
++	}
++	for(i = 0; i < 7; i++) {
++		printf("abday[%i]: %s\n", i, l.abday[i]);
++	}
++	for(i = 0; i < 7; i++) {
++		printf("day[%i]: %s\n", i, l.day[i]);
++	}
++	printf("t_fmt: %s\n", l.t_fmt);
++	printf("d_fmt: %s\n", l.d_fmt);
++	printf("d_t_fmt: %s\n", l.d_t_fmt);
++	printf("am_pm[0]: %s\n", l.am_pm[0]);
++	printf("am_pm[1]: %s\n", l.am_pm[1]);
++	printf("date_fmt: %s\n", l.date_fmt);
++	printf("t_fmt_ampm: %s\n", l.t_fmt_ampm);
++}
++#endif /* LOCALE_DEBUG */
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/nl_langinfo.c src/lib/libc/locale/nl_langinfo.c
+--- src54-x6/lib/libc/locale/nl_langinfo.c	Sat Feb  9 14:26:54 2013
++++ src/lib/libc/locale/nl_langinfo.c	Tue Dec  3 16:12:45 2013
+@@ -11,6 +11,7 @@
+ #include <nl_types.h>
+ #include <xlocale.h>
+ 
++#include "mblocal.h"
+ #include "rune.h"
+ #include "runetype.h"
+ #include "xlocale_private.h"
+@@ -21,23 +22,25 @@
+ 	const char *s;
+ 	FIX_LOCALE(locale); 
+ 	struct lconv *lc = &locale->lconv;
+-	
++	_TimeLocale *tl = __get_current_time_locale(locale);
++	_RuneLocale *rl = ((struct xlocale_ctype *)locale->components[XLC_CTYPE])->runes;
++
+ 	switch (item) {
+ 	case D_T_FMT:
+-		s = _CurrentTimeLocale->d_t_fmt;
++		s = tl->d_t_fmt;
+ 		break;
+ 	case D_FMT:
+-		s = _CurrentTimeLocale->d_fmt;
++		s = tl->d_fmt;
+ 		break;
+ 	case T_FMT:
+-		s = _CurrentTimeLocale->t_fmt;
++		s = tl->t_fmt;
+ 		break;
+ 	case T_FMT_AMPM:
+-		s = _CurrentTimeLocale->t_fmt_ampm;
++		s = tl->t_fmt_ampm;
+ 		break;
+ 	case AM_STR:
+ 	case PM_STR:
+-		s = _CurrentTimeLocale->am_pm[item - AM_STR];
++		s = tl->am_pm[item - AM_STR];
+ 		break;
+ 	case DAY_1:
+ 	case DAY_2:
+@@ -46,7 +49,7 @@
+ 	case DAY_5:
+ 	case DAY_6:
+ 	case DAY_7:
+-		s = _CurrentTimeLocale->day[item - DAY_1];
++		s = tl->day[item - DAY_1];
+ 		break;
+ 	case ABDAY_1:
+ 	case ABDAY_2:
+@@ -55,7 +58,7 @@
+ 	case ABDAY_5:
+ 	case ABDAY_6:
+ 	case ABDAY_7:
+-		s = _CurrentTimeLocale->abday[item - ABDAY_1];
++		s = tl->abday[item - ABDAY_1];
+ 		break;
+ 	case MON_1:
+ 	case MON_2:
+@@ -69,7 +72,7 @@
+ 	case MON_10:
+ 	case MON_11:
+ 	case MON_12:
+-		s = _CurrentTimeLocale->mon[item - MON_1];
++		s = tl->mon[item - MON_1];
+ 		break;
+ 	case ABMON_1:
+ 	case ABMON_2:
+@@ -83,7 +86,7 @@
+ 	case ABMON_10:
+ 	case ABMON_11:
+ 	case ABMON_12:
+-		s = _CurrentTimeLocale->abmon[item - ABMON_1];
++		s = tl->abmon[item - ABMON_1];
+ 		break;
+ 	case RADIXCHAR:
+ 		s = lc->decimal_point;
+@@ -119,7 +122,7 @@
+ 		s = locale->_bufcrncystr;
+ 		break;
+ 	case CODESET:
+-		s = _CurrentRuneLocale->rl_codeset;
++		s = rl->rl_codeset;
+ 		if (!s)
+ 			s = "";
+ 		break;
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/xlocale.c src/lib/libc/locale/xlocale.c
+--- src54-x6/lib/libc/locale/xlocale.c	Sat Feb  9 14:26:54 2013
++++ src/lib/libc/locale/xlocale.c	Tue Dec  3 16:12:45 2013
+@@ -77,9 +77,9 @@
+ 		&__xlocale_global_ctype, 
+ 		&__xlocale_global_monetary,
+ 		&__xlocale_global_numeric,
+-		0, 0
++		&__xlocale_global_time, 
++		0
+ 		/* FIXME
+-		&__xlocale_global_time,
+ 		&__xlocale_global_messages */
+ 	},
+ 	1,
+@@ -101,12 +101,6 @@
+ 	0
+ };
+ 
+-
+-void *
+-__time_load(const char *locale, locale_t unused)
+-{
+-	return NULL;
+-}
+ 
+ void *
+ __messages_load(const char *locale, locale_t unused)
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/setlocale.c src/lib/libc/locale/setlocale.c
+--- src54-x6/lib/libc/locale/setlocale.c	Sat Feb  9 14:26:54 2013
++++ src/lib/libc/locale/setlocale.c	Tue Dec  3 16:12:45 2013
+@@ -297,7 +297,6 @@
+ 	case LC_TIME:
+ 		if (__time_load_locale(locname)) 
+ 			return -1;
+-		return 0;
+ 		break;
+ 	}
+ 	(void)strlcpy(__xlocale_global_locale.components[category-1]->locale, 
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/xlocale_private.h src/lib/libc/locale/xlocale_private.h
+--- src54-x6/lib/libc/locale/xlocale_private.h	Sat Feb  9 14:26:54 2013
++++ src/lib/libc/locale/xlocale_private.h	Tue Dec  3 16:12:45 2013
+@@ -55,7 +55,6 @@
+ 	XLC_LAST
+ };
+ 
+-
+ /**
+  * Header used for objects that are reference counted.  Objects may optionally
+  * have a destructor associated, which is responsible for destroying the
+@@ -211,7 +210,6 @@
+  */
+ #define FIX_LOCALE(l) (l = get_real_locale(l))
+ 
+-
+ struct xlocale_numeric {
+ 	struct xlocale_component header;
+ 	char *buffer;
+@@ -227,5 +225,13 @@
+ };
+ 
+ _MonetaryLocale *__get_current_monetary_locale(locale_t loc);
++
++struct xlocale_time {
++	struct xlocale_component header;
++	char *buffer;
++	_TimeLocale locale;
++};
++
++_TimeLocale *__get_current_time_locale(locale_t loc);
+ 
+ #endif
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regress/lib/libc/locale/check_xlocale/check_xlocale.c
+--- src54-x6/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Sat Feb  9 14:26:54 2013
++++ src/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Tue Dec  3 16:12:45 2013
+@@ -507,6 +507,30 @@
+ 	p(fabs(fl + 3.1) < FLT_EPSILON);
+ }
+ 
++void test_time() 
++{
++	char col[256];
++	wchar_t wcol[256];
++	char *nl = setlocale(LC_ALL, "es_CO.UTF-8");
++	locale_t tloc = uselocale(NULL);
++	locale_t esc = duplocale(tloc);
++	struct tm tl;
++	time_t ti;
++
++	setlocale(LC_ALL, "POSIX");
++
++	p(strcmp(nl_langinfo_l(DAY_1, esc),"domingo") == 0);
++	strptime_l("lun", "%a", &tl, esc);
++	p(tl.tm_wday == 1);
++
++	ti = (time_t)1396950000; //Tue Apr  8 09:40:00 2014
++	gmtime_r(&ti, &tl) ;
++	strftime_l(col, sizeof(col), "%A", &tl, esc);
++	p(strcmp(col, "martes") == 0);
++	wcsftime_l(wcol, sizeof(wcol), L"%A", &tl, esc);
++	p(wcscmp(wcol, L"martes") == 0);
++}
++
+ int main()
+ {
+ 	test_xlocale();
+@@ -515,6 +539,7 @@
+ 	test_string();
+ 	test_monetary();
+ 	test_numeric();
++	test_time();
+ 	
+ 	return bad != 0;
+ }
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/Makefile.inc src/lib/libc/locale/Makefile.inc
+--- src54-x6/lib/libc/locale/Makefile.inc	Sat Feb  9 14:26:54 2013
++++ src/lib/libc/locale/Makefile.inc	Tue Dec  3 16:12:45 2013
+@@ -85,6 +85,7 @@
+ 	mbsrtowcs.3 mbsrtowcs_l.3 \
+ 	mbtowc.3 mbtowc_l.3\
+ 	nextwctype.3 nextwctype_l.3 \
++	nl_langinfo.3 nl_langinfo_l.3 \
+ 	setlocale.3 localeconv.3 \
+ 	towlower.3 towlower_l.3 \
+ 	towlower.3 towupper.3 \
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/nl_langinfo.3 src/lib/libc/locale/nl_langinfo.3
+--- src54-x6/lib/libc/locale/nl_langinfo.3	Sat Feb  9 14:26:54 2013
++++ src/lib/libc/locale/nl_langinfo.3	Tue Dec  3 16:12:45 2013
+@@ -7,17 +7,24 @@
+ .Dt NL_LANGINFO 3
+ .Os
+ .Sh NAME
++.Nm nl_langinfo ,
+ .Nm nl_langinfo
+ .Nd get locale information
+ .Sh SYNOPSIS
+ .In langinfo.h
+ .Ft char *
+ .Fn nl_langinfo "nl_item item"
++.In xlocale.h
++.Ft char *
++.Fn nl_langinfo_l "nl_item item"
+ .Sh DESCRIPTION
+ The
+ .Fn nl_langinfo
+ function returns a pointer to a string containing information
+-set by the program's locale.
++set by the program's locale.  The function
++.Fn nl_langinfo_l
++does the same but uses the locale given as parameter, see
++.Xr xlocale 3
+ .Pp
+ The names and values of
+ .Fa item
+@@ -39,3 +46,4 @@
+ replaces radix char.
+ .Sh SEE ALSO
+ .Xr setlocale 3
++.Xr xlocale 3
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/Makefile.inc src/lib/libc/time/Makefile.inc
+--- src54-x6/lib/libc/time/Makefile.inc	Sat Feb  9 14:26:54 2013
++++ src/lib/libc/time/Makefile.inc	Tue Dec  3 16:12:45 2013
+@@ -9,6 +9,10 @@
+ MLINKS+=ctime.3 asctime.3 ctime.3 difftime.3 ctime.3 gmtime.3 \
+ 	ctime.3 localtime.3 ctime.3 mktime.3 ctime.3 asctime_r.3 \
+ 	ctime.3 ctime_r.3 ctime.3 gmtime_r.3 ctime.3 localtime_r.3 \
+-	ctime.3 timelocal.3 ctime.3 timegm.3
++	ctime.3 timelocal.3 ctime.3 timegm.3 
+ MLINKS+=tzset.3 tzsetwall.3
+ MLINKS+=time2posix.3 posix2time.3
++MLINKS+=strftime.3 strftime_l.3 \
++	strptime.3 strptime_l.3 \
++	wcsftime.3 wcsftime_l.3 
++
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime.3 src/lib/libc/time/strptime.3
+--- src54-x6/lib/libc/time/strptime.3	Sat Feb  9 14:26:54 2013
++++ src/lib/libc/time/strptime.3	Tue Dec  3 16:12:45 2013
+@@ -30,16 +30,22 @@
+ .Dt STRPTIME 3
+ .Os
+ .Sh NAME
+-.Nm strptime
+-.Nd converts a character string to a time value
++.Nm strptime ,
++.Nm strptime_l
++.Nd convert a character string to a time value
+ .Sh SYNOPSIS
+ .In time.h
+ .Ft char *
+ .Fn strptime "const char *buf" "const char *format" "struct tm *tm"
++.In xlocale.h
++.Ft char *
++.Fn strptime_l "const char *buf" "const char *format" "struct tm *tm" "locale_t locale"
+ .Sh DESCRIPTION
+ The
+-.Nm
+-function converts the character string pointed to by
++.Nm strptime
++and
++.Nm strptime_l
++functions convert the character string pointed to by
+ .Fa buf
+ to values which are stored in the ``tm'' structure pointed to by
+ .Fa tm ,
+@@ -66,7 +72,13 @@
+ The
+ .Dv LC_TIME
+ category defines the locale values for the conversion
+-specifications.
++specifications. The function
++.Fn strptime
++uses the current locale, while
++.Fn strptime_l
++uses the locale received as last parameter, see
++.Xr xlocale 3
++.Pp
+ The following conversion specifications are supported:
+ .Bl -tag -width "xxxx"
+ .It Cm \&%a
+@@ -289,6 +301,7 @@
+ .Sh SEE ALSO
+ .Xr mktime 3 ,
+ .Xr strftime 3
++.Xr xlocale 3
+ .Sh STANDARDS
+ The
+ .Fn strptime
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strftime.3 src/lib/libc/time/strftime.3
+--- src54-x6/lib/libc/time/strftime.3	Sat Feb  9 14:26:54 2013
++++ src/lib/libc/time/strftime.3	Tue Dec  3 16:12:45 2013
+@@ -36,16 +36,22 @@
+ .Dt STRFTIME 3
+ .Os
+ .Sh NAME
+-.Nm strftime
++.Nm strftime ,
++.Nm strftime_l
+ .Nd format date and time
+ .Sh SYNOPSIS
+ .In time.h
+ .Ft size_t
+ .Fn strftime "char *buf" "size_t maxsize" "const char *format" "const struct tm *timeptr"
++.In xlocale.h
++.Ft size_t
++.Fn strftime_l "char *buf" "size_t maxsize" "const char *format" "const struct tm *timeptr" "locale_t locale"
+ .Sh DESCRIPTION
+ The
+ .Fn strftime
+-function formats the information from
++and
++.Fn strftime_l
++functions format the information from
+ .Fa timeptr
+ into the buffer
+ .Fa buf
+@@ -73,7 +79,12 @@
+ Otherwise, zero is returned.
+ .Pp
+ Each conversion specification is replaced by the characters as
+-follows which are then copied into the buffer.
++follows which are then copied into the buffer.  The locale used by
++.Fn strftime
++is the current locale, while
++.Fn strftime_l
++uses the locale given as parameter, see
++.Xr xlocale 3
+ .Bl -tag -width "xxxx"
+ .It Cm \&%A
+ is replaced by the locale's full weekday name.
+@@ -206,6 +217,7 @@
+ .Xr time 3 ,
+ .Xr tzset 3 ,
+ .Xr tzfile 5
++.Xr xlocale 3
+ .Sh STANDARDS
+ The
+ .Fn strftime
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/wcsftime.3 src/lib/libc/time/wcsftime.3
+--- src54-x6/lib/libc/time/wcsftime.3	Sat Feb  9 14:26:54 2013
++++ src/lib/libc/time/wcsftime.3	Tue Dec  3 16:12:45 2013
+@@ -17,16 +17,26 @@
+ .Dt WCSFTIME 3
+ .Os
+ .Sh NAME
+-.Nm wcsftime
++.Nm wcsftime ,
++.Nm wcsftime_l
+ .Nd format date and time to wide characters string
+ .Sh SYNOPSIS
+ .In wchar.h
+ .Ft size_t
+ .Fn wcsftime "wchar_t *buf" "size_t maxsize" "const wchar_t *format" "const struct tm *timeptr"
++.In xlocale.h
++.Ft size_t
++.Fn wcsftime_l "wchar_t *buf" "size_t maxsize" "const wchar_t *format" "const struct tm *timeptr" "locale_t locale"
+ .Sh DESCRIPTION
+ The
+ .Fn wcsftime
+-is a wide char equivalent of
+-.Xr strftime 3 .
++and
++.Fn wcsftime_l
++functions are char equivalent of
++.Xr strftime 3
++and
++.Xr strftime_l 3
+ .Sh SEE ALSO
+ .Xr strftime 3
++.Xr strftime_l 3
++.Xr xlocale 3
