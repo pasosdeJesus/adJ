@@ -4,16 +4,18 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/Makefile src/share/local
 @@ -1,6 +1,6 @@
  #	$OpenBSD: Makefile,v 1.1 2005/08/07 10:03:44 espie Exp $
  
--SUBDIR=	ctype colldef
-+SUBDIR=	ctype colldef monetdef
+-SUBDIR=	ctype colldef timedef 
++SUBDIR=	colldef ctype monetdef timedef 
  	
  
  .include <bsd.subdir.mk>
-diff -ruN -x *~ -x obj -x *orig src54-orig/share/locale/monetdef/Makefile src/share/locale/monetdef/Makefile
---- src54-orig/share/locale/monetdef/Makefile	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/Makefile	Tue Mar 25 05:38:06 2014
-@@ -0,0 +1,209 @@
+diff -ruN src56-orig/share/locale/monetdef/Makefile src/share/locale/monetdef/Makefile
+--- src56-orig/share/locale/monetdef/Makefile	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/Makefile	Tue May  6 09:30:30 2014
+@@ -0,0 +1,227 @@
 +# From FreeBSD
++
++LC_MONETARY_LINES=21
 +
 +LOCALES=	af_ZA.ISO8859-1 \
 +		am_ET.UTF-8 \
@@ -123,6 +125,12 @@ diff -ruN -x *~ -x obj -x *orig src54-orig/share/locale/monetdef/Makefile src/sh
 +
 +.src.out:
 +	grep -v '^#' < ${.IMPSRC} > ${.TARGET}
++	@nl=`wc -l ${.TARGET} | sed -e "s/ ${.TARGET}//g;s/  *//g"`; \
++	if (test "$$nl" != "${LC_MONETARY_LINES}") then { \
++	echo "Wrong size of ${.TARGET}: $$nl but expected ${LC_MONETARY_LINES}"; \
++	exit 1; \
++	} fi;
++
 +
 +FILES=		${LOCALES:S/$/.out/}
 +FILESNAME=	LC_MONETARY
@@ -220,12 +228,22 @@ diff -ruN -x *~ -x obj -x *orig src54-orig/share/locale/monetdef/Makefile src/sh
 +	} fi;
 +.endfor
 +
++transform-fromfreebsd:
++.for locale in ${LOCALES}
++	@nl=`grep -v '^#' ${locale}.src | wc -l | sed -e "s/ ${.TARGET}//g;s/  *//g"`; \
++	if (test "$$nl" = "15") then { \
++		echo ${locale}; \
++		cp ${locale}.src ${locale}.src-noint; \
++		awk -f compint.awk ${locale}.src-noint > ${locale}.src; \
++	} fi;
++.endfor
++
 +
 +.include <bsd.prog.mk>
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/af_ZA.ISO8859-1.src src/share/locale/monetdef/af_ZA.ISO8859-1.src
---- src55-orig/share/locale/monetdef/af_ZA.ISO8859-1.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/af_ZA.ISO8859-1.src	Wed Nov 20 08:32:27 2013
-@@ -0,0 +1,36 @@
+diff -ruN src56-orig/share/locale/monetdef/af_ZA.ISO8859-1.src src/share/locale/monetdef/af_ZA.ISO8859-1.src
+--- src56-orig/share/locale/monetdef/af_ZA.ISO8859-1.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/af_ZA.ISO8859-1.src	Tue May  6 07:31:06 2014
+@@ -0,0 +1,48 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -261,51 +279,23 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/af_ZA.ISO8859-1
 +1
 +# n_sign_posn
 +1
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/am_ET.UTF-8.src src/share/locale/monetdef/am_ET.UTF-8.src
---- src55-orig/share/locale/monetdef/am_ET.UTF-8.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/am_ET.UTF-8.src	Wed Nov 20 08:32:27 2013
-@@ -0,0 +1,36 @@
-+# $FreeBSD$
-+#
-+# WARNING: spaces may be essential at the end of lines
-+# WARNING: empty lines are essential too
-+#
-+# int_curr_symbol (last character always SPACE)
-+ETB 
-+# currency_symbol
-+$
-+# mon_decimal_point
-+.
-+# mon_thousands_sep
-+,
-+# mon_grouping, separated by ;
-+3;3
-+# positive_sign
-+
-+# negative_sign
-+-
-+# int_frac_digits
-+2
-+# frac_digits
-+2
-+# p_cs_precedes
++# int_p_cs_precedes
 +1
-+# p_sep_by_space
++# int_n_cs_precedes
++1
++# int_p_sep_by_space
 +0
-+# n_cs_precedes
-+1
-+# n_sep_by_space
++# int_n_sep_by_space
 +0
-+# p_sign_posn
++# int_p_sign_posn
 +1
-+# n_sign_posn
++# int_n_sign_posn
 +1
 +# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/be_BY.CP1131.src src/share/locale/monetdef/be_BY.CP1131.src
---- src55-orig/share/locale/monetdef/be_BY.CP1131.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/be_BY.CP1131.src	Wed Nov 20 08:32:27 2013
-@@ -0,0 +1,35 @@
+diff -ruN src56-orig/share/locale/monetdef/be_BY.CP1131.src src/share/locale/monetdef/be_BY.CP1131.src
+--- src56-orig/share/locale/monetdef/be_BY.CP1131.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/be_BY.CP1131.src	Tue May  6 09:22:37 2014
+@@ -0,0 +1,46 @@
 +# $FreeBSD$
 +# WARNING: spaces may be essential at the end of lines
 +# WARNING: empty lines are essential too
@@ -340,11 +330,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/be_BY.CP1131.sr
 +1
 +# n_sign_posn
 +1
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/be_BY.CP1251.src src/share/locale/monetdef/be_BY.CP1251.src
---- src55-orig/share/locale/monetdef/be_BY.CP1251.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/be_BY.CP1251.src	Wed Nov 20 08:32:27 2013
-@@ -0,0 +1,35 @@
++# int_p_cs_precedes
++0
++# int_n_cs_precedes
++0
++# int_p_sep_by_space
++1
++# int_n_sep_by_space
++1
++# int_p_sign_posn
++1
++# int_n_sign_posn
++1
+diff -ruN src56-orig/share/locale/monetdef/be_BY.CP1251.src src/share/locale/monetdef/be_BY.CP1251.src
+--- src56-orig/share/locale/monetdef/be_BY.CP1251.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/be_BY.CP1251.src	Tue May  6 09:22:37 2014
+@@ -0,0 +1,46 @@
 +# $FreeBSD$
 +# WARNING: spaces may be essential at the end of lines
 +# WARNING: empty lines are essential too
@@ -379,11 +380,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/be_BY.CP1251.sr
 +1
 +# n_sign_posn
 +1
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/be_BY.ISO8859-5.src src/share/locale/monetdef/be_BY.ISO8859-5.src
---- src55-orig/share/locale/monetdef/be_BY.ISO8859-5.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/be_BY.ISO8859-5.src	Wed Nov 20 08:32:27 2013
-@@ -0,0 +1,35 @@
++# int_p_cs_precedes
++0
++# int_n_cs_precedes
++0
++# int_p_sep_by_space
++1
++# int_n_sep_by_space
++1
++# int_p_sign_posn
++1
++# int_n_sign_posn
++1
+diff -ruN src56-orig/share/locale/monetdef/be_BY.ISO8859-5.src src/share/locale/monetdef/be_BY.ISO8859-5.src
+--- src56-orig/share/locale/monetdef/be_BY.ISO8859-5.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/be_BY.ISO8859-5.src	Tue May  6 09:22:37 2014
+@@ -0,0 +1,46 @@
 +# $FreeBSD$
 +# WARNING: spaces may be essential at the end of lines
 +# WARNING: empty lines are essential too
@@ -418,11 +430,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/be_BY.ISO8859-5
 +1
 +# n_sign_posn
 +1
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/be_BY.UTF-8.src src/share/locale/monetdef/be_BY.UTF-8.src
---- src55-orig/share/locale/monetdef/be_BY.UTF-8.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/be_BY.UTF-8.src	Wed Nov 20 08:32:27 2013
-@@ -0,0 +1,35 @@
++# int_p_cs_precedes
++0
++# int_n_cs_precedes
++0
++# int_p_sep_by_space
++1
++# int_n_sep_by_space
++1
++# int_p_sign_posn
++1
++# int_n_sign_posn
++1
+diff -ruN src56-orig/share/locale/monetdef/be_BY.UTF-8.src src/share/locale/monetdef/be_BY.UTF-8.src
+--- src56-orig/share/locale/monetdef/be_BY.UTF-8.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/be_BY.UTF-8.src	Tue May  6 09:22:37 2014
+@@ -0,0 +1,46 @@
 +# $FreeBSD$
 +# WARNING: spaces may be essential at the end of lines
 +# WARNING: empty lines are essential too
@@ -457,11 +480,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/be_BY.UTF-8.src
 +1
 +# n_sign_posn
 +1
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/bg_BG.CP1251.src src/share/locale/monetdef/bg_BG.CP1251.src
---- src55-orig/share/locale/monetdef/bg_BG.CP1251.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/bg_BG.CP1251.src	Wed Nov 20 08:32:27 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++0
++# int_n_cs_precedes
++0
++# int_p_sep_by_space
++1
++# int_n_sep_by_space
++1
++# int_p_sign_posn
++1
++# int_n_sign_posn
++1
+diff -ruN src56-orig/share/locale/monetdef/bg_BG.CP1251.src src/share/locale/monetdef/bg_BG.CP1251.src
+--- src56-orig/share/locale/monetdef/bg_BG.CP1251.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/bg_BG.CP1251.src	Tue May  6 09:22:37 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -497,11 +531,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/bg_BG.CP1251.sr
 +1
 +# n_sign_posn
 +1
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/bg_BG.UTF-8.src src/share/locale/monetdef/bg_BG.UTF-8.src
---- src55-orig/share/locale/monetdef/bg_BG.UTF-8.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/bg_BG.UTF-8.src	Wed Nov 20 08:32:27 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++0
++# int_n_cs_precedes
++0
++# int_p_sep_by_space
++1
++# int_n_sep_by_space
++1
++# int_p_sign_posn
++1
++# int_n_sign_posn
++1
+diff -ruN src56-orig/share/locale/monetdef/bg_BG.UTF-8.src src/share/locale/monetdef/bg_BG.UTF-8.src
+--- src56-orig/share/locale/monetdef/bg_BG.UTF-8.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/bg_BG.UTF-8.src	Tue May  6 09:22:37 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -537,11 +582,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/bg_BG.UTF-8.src
 +1
 +# n_sign_posn
 +1
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/ca_ES.ISO8859-1.src src/share/locale/monetdef/ca_ES.ISO8859-1.src
---- src55-orig/share/locale/monetdef/ca_ES.ISO8859-1.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/ca_ES.ISO8859-1.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++0
++# int_n_cs_precedes
++0
++# int_p_sep_by_space
++1
++# int_n_sep_by_space
++1
++# int_p_sign_posn
++1
++# int_n_sign_posn
++1
+diff -ruN src56-orig/share/locale/monetdef/ca_ES.ISO8859-1.src src/share/locale/monetdef/ca_ES.ISO8859-1.src
+--- src56-orig/share/locale/monetdef/ca_ES.ISO8859-1.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/ca_ES.ISO8859-1.src	Tue May  6 09:22:37 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -577,11 +633,84 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/ca_ES.ISO8859-1
 +1
 +# n_sign_posn
 +1
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/cs_CZ.ISO8859-2.src src/share/locale/monetdef/cs_CZ.ISO8859-2.src
---- src55-orig/share/locale/monetdef/cs_CZ.ISO8859-2.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/cs_CZ.ISO8859-2.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++1
++# int_n_cs_precedes
++1
++# int_p_sep_by_space
++1
++# int_n_sep_by_space
++1
++# int_p_sign_posn
++1
++# int_n_sign_posn
++1
+diff -ruN src56-orig/share/locale/monetdef/compint.awk src/share/locale/monetdef/compint.awk
+--- src56-orig/share/locale/monetdef/compint.awk	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/compint.awk	Tue May  6 07:35:32 2014
+@@ -0,0 +1,58 @@
++/^[0-9]+/ { 
++	if (nf >= 0) {
++		r[nf] = $0;
++	} 
++}
++
++/# p_cs_precedes/ { 
++	nf = 0; 
++}
++
++/# p_sep_by_space/ { 
++	nf = 2; 
++}
++
++/# n_cs_precedes/ { 
++	nf = 1; 
++}
++
++/# n_sep_by_space/ { 
++	nf = 3; 
++}
++
++/# p_sign_posn/ { 
++	nf = 4; 
++}
++
++/# n_sign_posn/ { 
++	nf = 5; 
++}
++
++/# EOF/ {
++	nop = 1;
++}
++
++/.*/ {
++	if (nop == 0) {
++		print $0;
++	}
++}
++
++BEGIN {
++	nf = -1;
++	nop = 0;
++}
++END {
++	print "# int_p_cs_precedes"
++	print r[0];
++	print "# int_n_cs_precedes"
++	print r[1];
++	print "# int_p_sep_by_space"
++	print r[2];
++	print "# int_n_sep_by_space"
++	print r[3];
++	print "# int_p_sign_posn"
++	print r[4];
++	print "# int_n_sign_posn"
++	print r[5];
++}
+diff -ruN src56-orig/share/locale/monetdef/cs_CZ.ISO8859-2.src src/share/locale/monetdef/cs_CZ.ISO8859-2.src
+--- src56-orig/share/locale/monetdef/cs_CZ.ISO8859-2.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/cs_CZ.ISO8859-2.src	Tue May  6 09:22:37 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -617,11 +746,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/cs_CZ.ISO8859-2
 +1
 +# n_sign_posn
 +1
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/cs_CZ.UTF-8.src src/share/locale/monetdef/cs_CZ.UTF-8.src
---- src55-orig/share/locale/monetdef/cs_CZ.UTF-8.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/cs_CZ.UTF-8.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++0
++# int_n_cs_precedes
++0
++# int_p_sep_by_space
++1
++# int_n_sep_by_space
++1
++# int_p_sign_posn
++1
++# int_n_sign_posn
++1
+diff -ruN src56-orig/share/locale/monetdef/cs_CZ.UTF-8.src src/share/locale/monetdef/cs_CZ.UTF-8.src
+--- src56-orig/share/locale/monetdef/cs_CZ.UTF-8.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/cs_CZ.UTF-8.src	Tue May  6 09:22:37 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -657,11 +797,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/cs_CZ.UTF-8.src
 +1
 +# n_sign_posn
 +1
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/da_DK.ISO8859-1.src src/share/locale/monetdef/da_DK.ISO8859-1.src
---- src55-orig/share/locale/monetdef/da_DK.ISO8859-1.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/da_DK.ISO8859-1.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++0
++# int_n_cs_precedes
++0
++# int_p_sep_by_space
++1
++# int_n_sep_by_space
++1
++# int_p_sign_posn
++1
++# int_n_sign_posn
++1
+diff -ruN src56-orig/share/locale/monetdef/da_DK.ISO8859-1.src src/share/locale/monetdef/da_DK.ISO8859-1.src
+--- src56-orig/share/locale/monetdef/da_DK.ISO8859-1.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/da_DK.ISO8859-1.src	Tue May  6 09:22:37 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -697,11 +848,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/da_DK.ISO8859-1
 +4
 +# n_sign_posn
 +4
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/de_AT.ISO8859-1.src src/share/locale/monetdef/de_AT.ISO8859-1.src
---- src55-orig/share/locale/monetdef/de_AT.ISO8859-1.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/de_AT.ISO8859-1.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++1
++# int_n_cs_precedes
++1
++# int_p_sep_by_space
++2
++# int_n_sep_by_space
++2
++# int_p_sign_posn
++4
++# int_n_sign_posn
++4
+diff -ruN src56-orig/share/locale/monetdef/de_AT.ISO8859-1.src src/share/locale/monetdef/de_AT.ISO8859-1.src
+--- src56-orig/share/locale/monetdef/de_AT.ISO8859-1.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/de_AT.ISO8859-1.src	Tue May  6 09:22:37 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -737,11 +899,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/de_AT.ISO8859-1
 +1
 +# n_sign_posn
 +1
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/de_CH.ISO8859-1.src src/share/locale/monetdef/de_CH.ISO8859-1.src
---- src55-orig/share/locale/monetdef/de_CH.ISO8859-1.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/de_CH.ISO8859-1.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++1
++# int_n_cs_precedes
++1
++# int_p_sep_by_space
++1
++# int_n_sep_by_space
++1
++# int_p_sign_posn
++1
++# int_n_sign_posn
++1
+diff -ruN src56-orig/share/locale/monetdef/de_CH.ISO8859-1.src src/share/locale/monetdef/de_CH.ISO8859-1.src
+--- src56-orig/share/locale/monetdef/de_CH.ISO8859-1.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/de_CH.ISO8859-1.src	Tue May  6 09:22:37 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -777,11 +950,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/de_CH.ISO8859-1
 +4
 +# n_sign_posn
 +4
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/de_DE.ISO8859-1.src src/share/locale/monetdef/de_DE.ISO8859-1.src
---- src55-orig/share/locale/monetdef/de_DE.ISO8859-1.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/de_DE.ISO8859-1.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++1
++# int_n_cs_precedes
++1
++# int_p_sep_by_space
++1
++# int_n_sep_by_space
++1
++# int_p_sign_posn
++4
++# int_n_sign_posn
++4
+diff -ruN src56-orig/share/locale/monetdef/de_DE.ISO8859-1.src src/share/locale/monetdef/de_DE.ISO8859-1.src
+--- src56-orig/share/locale/monetdef/de_DE.ISO8859-1.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/de_DE.ISO8859-1.src	Tue May  6 09:22:37 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -817,11 +1001,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/de_DE.ISO8859-1
 +1
 +# n_sign_posn
 +1
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/el_GR.ISO8859-7.src src/share/locale/monetdef/el_GR.ISO8859-7.src
---- src55-orig/share/locale/monetdef/el_GR.ISO8859-7.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/el_GR.ISO8859-7.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++1
++# int_n_cs_precedes
++1
++# int_p_sep_by_space
++0
++# int_n_sep_by_space
++0
++# int_p_sign_posn
++1
++# int_n_sign_posn
++1
+diff -ruN src56-orig/share/locale/monetdef/el_GR.ISO8859-7.src src/share/locale/monetdef/el_GR.ISO8859-7.src
+--- src56-orig/share/locale/monetdef/el_GR.ISO8859-7.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/el_GR.ISO8859-7.src	Tue May  6 09:22:37 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -857,10 +1052,21 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/el_GR.ISO8859-7
 +1
 +# n_sign_posn
 +1
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/en_AU.ISO8859-1.src src/share/locale/monetdef/en_AU.ISO8859-1.src
---- src55-orig/share/locale/monetdef/en_AU.ISO8859-1.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/en_AU.ISO8859-1.src	Wed Nov 20 08:32:28 2013
++# int_p_cs_precedes
++0
++# int_n_cs_precedes
++0
++# int_p_sep_by_space
++1
++# int_n_sep_by_space
++1
++# int_p_sign_posn
++1
++# int_n_sign_posn
++1
+diff -ruN src56-orig/share/locale/monetdef/en_AU.ISO8859-1.src src/share/locale/monetdef/en_AU.ISO8859-1.src
+--- src56-orig/share/locale/monetdef/en_AU.ISO8859-1.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/en_AU.ISO8859-1.src	Tue May  6 07:03:17 2014
 @@ -0,0 +1,48 @@
 +# $FreeBSD$
 +#
@@ -910,10 +1116,10 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/en_AU.ISO8859-1
 +# int_n_sign_posn;
 +1
 +# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/en_CA.ISO8859-1.src src/share/locale/monetdef/en_CA.ISO8859-1.src
---- src55-orig/share/locale/monetdef/en_CA.ISO8859-1.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/en_CA.ISO8859-1.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
+diff -ruN src56-orig/share/locale/monetdef/en_CA.ISO8859-1.src src/share/locale/monetdef/en_CA.ISO8859-1.src
+--- src56-orig/share/locale/monetdef/en_CA.ISO8859-1.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/en_CA.ISO8859-1.src	Tue May  6 09:22:37 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -949,11 +1155,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/en_CA.ISO8859-1
 +1
 +# n_sign_posn
 +1
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/en_GB.ISO8859-1.src src/share/locale/monetdef/en_GB.ISO8859-1.src
---- src55-orig/share/locale/monetdef/en_GB.ISO8859-1.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/en_GB.ISO8859-1.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++1
++# int_n_cs_precedes
++1
++# int_p_sep_by_space
++0
++# int_n_sep_by_space
++0
++# int_p_sign_posn
++1
++# int_n_sign_posn
++1
+diff -ruN src56-orig/share/locale/monetdef/en_GB.ISO8859-1.src src/share/locale/monetdef/en_GB.ISO8859-1.src
+--- src56-orig/share/locale/monetdef/en_GB.ISO8859-1.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/en_GB.ISO8859-1.src	Tue May  6 09:22:37 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -989,11 +1206,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/en_GB.ISO8859-1
 +1
 +# n_sign_posn
 +1
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/en_GB.UTF-8.src src/share/locale/monetdef/en_GB.UTF-8.src
---- src55-orig/share/locale/monetdef/en_GB.UTF-8.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/en_GB.UTF-8.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++1
++# int_n_cs_precedes
++1
++# int_p_sep_by_space
++0
++# int_n_sep_by_space
++0
++# int_p_sign_posn
++1
++# int_n_sign_posn
++1
+diff -ruN src56-orig/share/locale/monetdef/en_GB.UTF-8.src src/share/locale/monetdef/en_GB.UTF-8.src
+--- src56-orig/share/locale/monetdef/en_GB.UTF-8.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/en_GB.UTF-8.src	Tue May  6 09:22:37 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -1029,11 +1257,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/en_GB.UTF-8.src
 +1
 +# n_sign_posn
 +1
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/en_IE.UTF-8.src src/share/locale/monetdef/en_IE.UTF-8.src
---- src55-orig/share/locale/monetdef/en_IE.UTF-8.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/en_IE.UTF-8.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++1
++# int_n_cs_precedes
++1
++# int_p_sep_by_space
++0
++# int_n_sep_by_space
++0
++# int_p_sign_posn
++1
++# int_n_sign_posn
++1
+diff -ruN src56-orig/share/locale/monetdef/en_IE.UTF-8.src src/share/locale/monetdef/en_IE.UTF-8.src
+--- src56-orig/share/locale/monetdef/en_IE.UTF-8.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/en_IE.UTF-8.src	Tue May  6 09:22:37 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -1069,11 +1308,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/en_IE.UTF-8.src
 +1
 +# n_sign_posn
 +1
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/en_NZ.ISO8859-1.src src/share/locale/monetdef/en_NZ.ISO8859-1.src
---- src55-orig/share/locale/monetdef/en_NZ.ISO8859-1.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/en_NZ.ISO8859-1.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++1
++# int_n_cs_precedes
++1
++# int_p_sep_by_space
++0
++# int_n_sep_by_space
++0
++# int_p_sign_posn
++1
++# int_n_sign_posn
++1
+diff -ruN src56-orig/share/locale/monetdef/en_NZ.ISO8859-1.src src/share/locale/monetdef/en_NZ.ISO8859-1.src
+--- src56-orig/share/locale/monetdef/en_NZ.ISO8859-1.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/en_NZ.ISO8859-1.src	Tue May  6 09:22:37 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -1109,11 +1359,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/en_NZ.ISO8859-1
 +1
 +# n_sign_posn
 +1
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/en_US.ISO8859-1.src src/share/locale/monetdef/en_US.ISO8859-1.src
---- src55-orig/share/locale/monetdef/en_US.ISO8859-1.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/en_US.ISO8859-1.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++1
++# int_n_cs_precedes
++1
++# int_p_sep_by_space
++0
++# int_n_sep_by_space
++0
++# int_p_sign_posn
++1
++# int_n_sign_posn
++1
+diff -ruN src56-orig/share/locale/monetdef/en_US.ISO8859-1.src src/share/locale/monetdef/en_US.ISO8859-1.src
+--- src56-orig/share/locale/monetdef/en_US.ISO8859-1.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/en_US.ISO8859-1.src	Tue May  6 09:22:37 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -1149,10 +1410,21 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/en_US.ISO8859-1
 +1
 +# n_sign_posn
 +1
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_AR.ISO8859-1.src src/share/locale/monetdef/es_AR.ISO8859-1.src
---- src55-orig/share/locale/monetdef/es_AR.ISO8859-1.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/es_AR.ISO8859-1.src	Wed Nov 20 08:32:28 2013
++# int_p_cs_precedes
++1
++# int_n_cs_precedes
++1
++# int_p_sep_by_space
++0
++# int_n_sep_by_space
++0
++# int_p_sign_posn
++1
++# int_n_sign_posn
++1
+diff -ruN src56-orig/share/locale/monetdef/es_AR.ISO8859-1.src src/share/locale/monetdef/es_AR.ISO8859-1.src
+--- src56-orig/share/locale/monetdef/es_AR.ISO8859-1.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/es_AR.ISO8859-1.src	Tue May  6 07:03:17 2014
 @@ -0,0 +1,49 @@
 +# $adJ$
 +#
@@ -1203,9 +1475,9 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_AR.ISO8859-1
 +#int_n_sign_posn       
 +1
 +# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_BO.ISO8859-1.src src/share/locale/monetdef/es_BO.ISO8859-1.src
---- src55-orig/share/locale/monetdef/es_BO.ISO8859-1.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/es_BO.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+diff -ruN src56-orig/share/locale/monetdef/es_BO.ISO8859-1.src src/share/locale/monetdef/es_BO.ISO8859-1.src
+--- src56-orig/share/locale/monetdef/es_BO.ISO8859-1.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/es_BO.ISO8859-1.src	Tue May  6 07:03:17 2014
 @@ -0,0 +1,49 @@
 +# $adJ$
 +#
@@ -1256,9 +1528,9 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_BO.ISO8859-1
 +#int_n_sign_posn       
 +1
 +# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_CL.ISO8859-1.src src/share/locale/monetdef/es_CL.ISO8859-1.src
---- src55-orig/share/locale/monetdef/es_CL.ISO8859-1.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/es_CL.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+diff -ruN src56-orig/share/locale/monetdef/es_CL.ISO8859-1.src src/share/locale/monetdef/es_CL.ISO8859-1.src
+--- src56-orig/share/locale/monetdef/es_CL.ISO8859-1.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/es_CL.ISO8859-1.src	Tue May  6 07:03:17 2014
 @@ -0,0 +1,49 @@
 +# $adJ$
 +#
@@ -1309,9 +1581,9 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_CL.ISO8859-1
 +#int_n_sign_posn       
 +1
 +# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_CO.ISO8859-1.src src/share/locale/monetdef/es_CO.ISO8859-1.src
---- src55-orig/share/locale/monetdef/es_CO.ISO8859-1.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/es_CO.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+diff -ruN src56-orig/share/locale/monetdef/es_CO.ISO8859-1.src src/share/locale/monetdef/es_CO.ISO8859-1.src
+--- src56-orig/share/locale/monetdef/es_CO.ISO8859-1.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/es_CO.ISO8859-1.src	Tue May  6 07:03:17 2014
 @@ -0,0 +1,49 @@
 +# $adJ$
 +#
@@ -1362,9 +1634,9 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_CO.ISO8859-1
 +#int_n_sign_posn       
 +1
 +# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_CR.ISO8859-1.src src/share/locale/monetdef/es_CR.ISO8859-1.src
---- src55-orig/share/locale/monetdef/es_CR.ISO8859-1.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/es_CR.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+diff -ruN src56-orig/share/locale/monetdef/es_CR.ISO8859-1.src src/share/locale/monetdef/es_CR.ISO8859-1.src
+--- src56-orig/share/locale/monetdef/es_CR.ISO8859-1.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/es_CR.ISO8859-1.src	Tue May  6 07:03:17 2014
 @@ -0,0 +1,49 @@
 +# $adJ$
 +#
@@ -1415,9 +1687,9 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_CR.ISO8859-1
 +#int_n_sign_posn       
 +1
 +# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_CR.UTF-8.src src/share/locale/monetdef/es_CR.UTF-8.src
---- src55-orig/share/locale/monetdef/es_CR.UTF-8.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/es_CR.UTF-8.src	Wed Nov 20 08:56:04 2013
+diff -ruN src56-orig/share/locale/monetdef/es_CR.UTF-8.src src/share/locale/monetdef/es_CR.UTF-8.src
+--- src56-orig/share/locale/monetdef/es_CR.UTF-8.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/es_CR.UTF-8.src	Tue May  6 07:03:17 2014
 @@ -0,0 +1,49 @@
 +# $adJ$
 +#
@@ -1468,9 +1740,9 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_CR.UTF-8.src
 +#int_n_sign_posn       
 +1
 +# EOF
-diff -ruN src54-orig/share/locale/monetdef/es_CU.ISO8859-1.src src/share/locale/monetdef/es_CU.ISO8859-1.src
---- src54-orig/share/locale/monetdef/es_CU.ISO8859-1.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/es_CU.ISO8859-1.src	Tue Mar 25 05:36:40 2014
+diff -ruN src56-orig/share/locale/monetdef/es_CU.ISO8859-1.src src/share/locale/monetdef/es_CU.ISO8859-1.src
+--- src56-orig/share/locale/monetdef/es_CU.ISO8859-1.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/es_CU.ISO8859-1.src	Tue May  6 07:03:17 2014
 @@ -0,0 +1,49 @@
 +# $adJ$
 +#
@@ -1521,9 +1793,9 @@ diff -ruN src54-orig/share/locale/monetdef/es_CU.ISO8859-1.src src/share/locale/
 +#int_n_sign_posn       
 +1
 +# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_DO.ISO8859-1.src src/share/locale/monetdef/es_DO.ISO8859-1.src
---- src55-orig/share/locale/monetdef/es_DO.ISO8859-1.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/es_DO.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+diff -ruN src56-orig/share/locale/monetdef/es_DO.ISO8859-1.src src/share/locale/monetdef/es_DO.ISO8859-1.src
+--- src56-orig/share/locale/monetdef/es_DO.ISO8859-1.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/es_DO.ISO8859-1.src	Tue May  6 07:03:17 2014
 @@ -0,0 +1,49 @@
 +# $adJ$
 +#
@@ -1574,9 +1846,9 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_DO.ISO8859-1
 +#int_n_sign_posn       
 +1
 +# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_EC.ISO8859-1.src src/share/locale/monetdef/es_EC.ISO8859-1.src
---- src55-orig/share/locale/monetdef/es_EC.ISO8859-1.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/es_EC.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+diff -ruN src56-orig/share/locale/monetdef/es_EC.ISO8859-1.src src/share/locale/monetdef/es_EC.ISO8859-1.src
+--- src56-orig/share/locale/monetdef/es_EC.ISO8859-1.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/es_EC.ISO8859-1.src	Tue May  6 07:03:17 2014
 @@ -0,0 +1,49 @@
 +# $adJ$
 +#
@@ -1627,9 +1899,9 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_EC.ISO8859-1
 +#int_n_sign_posn       
 +1
 +# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_ES.ISO8859-1.src src/share/locale/monetdef/es_ES.ISO8859-1.src
---- src55-orig/share/locale/monetdef/es_ES.ISO8859-1.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/es_ES.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+diff -ruN src56-orig/share/locale/monetdef/es_ES.ISO8859-1.src src/share/locale/monetdef/es_ES.ISO8859-1.src
+--- src56-orig/share/locale/monetdef/es_ES.ISO8859-1.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/es_ES.ISO8859-1.src	Tue May  6 07:03:17 2014
 @@ -0,0 +1,48 @@
 +# Adapted from FreeBSD
 +#
@@ -1679,9 +1951,9 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_ES.ISO8859-1
 +#int_n_sign_posn       
 +1
 +# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_ES.UTF-8.src src/share/locale/monetdef/es_ES.UTF-8.src
---- src55-orig/share/locale/monetdef/es_ES.UTF-8.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/es_ES.UTF-8.src	Wed Nov 20 09:06:17 2013
+diff -ruN src56-orig/share/locale/monetdef/es_ES.UTF-8.src src/share/locale/monetdef/es_ES.UTF-8.src
+--- src56-orig/share/locale/monetdef/es_ES.UTF-8.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/es_ES.UTF-8.src	Tue May  6 07:03:17 2014
 @@ -0,0 +1,50 @@
 +# $adJ$
 +#
@@ -1733,9 +2005,9 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_ES.UTF-8.src
 +#int_n_sign_posn       
 +1
 +# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_GQ.ISO8859-1.src src/share/locale/monetdef/es_GQ.ISO8859-1.src
---- src55-orig/share/locale/monetdef/es_GQ.ISO8859-1.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/es_GQ.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+diff -ruN src56-orig/share/locale/monetdef/es_GQ.ISO8859-1.src src/share/locale/monetdef/es_GQ.ISO8859-1.src
+--- src56-orig/share/locale/monetdef/es_GQ.ISO8859-1.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/es_GQ.ISO8859-1.src	Tue May  6 07:03:17 2014
 @@ -0,0 +1,49 @@
 +# $adJ$
 +#
@@ -1786,9 +2058,9 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_GQ.ISO8859-1
 +#int_n_sign_posn       
 +1
 +# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_GT.ISO8859-1.src src/share/locale/monetdef/es_GT.ISO8859-1.src
---- src55-orig/share/locale/monetdef/es_GT.ISO8859-1.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/es_GT.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+diff -ruN src56-orig/share/locale/monetdef/es_GT.ISO8859-1.src src/share/locale/monetdef/es_GT.ISO8859-1.src
+--- src56-orig/share/locale/monetdef/es_GT.ISO8859-1.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/es_GT.ISO8859-1.src	Tue May  6 07:03:17 2014
 @@ -0,0 +1,49 @@
 +# $adJ$
 +#
@@ -1839,9 +2111,9 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_GT.ISO8859-1
 +#int_n_sign_posn       
 +1
 +# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_HN.ISO8859-1.src src/share/locale/monetdef/es_HN.ISO8859-1.src
---- src55-orig/share/locale/monetdef/es_HN.ISO8859-1.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/es_HN.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+diff -ruN src56-orig/share/locale/monetdef/es_HN.ISO8859-1.src src/share/locale/monetdef/es_HN.ISO8859-1.src
+--- src56-orig/share/locale/monetdef/es_HN.ISO8859-1.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/es_HN.ISO8859-1.src	Tue May  6 07:03:17 2014
 @@ -0,0 +1,49 @@
 +# $adJ$
 +#
@@ -1892,9 +2164,9 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_HN.ISO8859-1
 +#int_n_sign_posn       
 +1
 +# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_MX.ISO8859-1.src src/share/locale/monetdef/es_MX.ISO8859-1.src
---- src55-orig/share/locale/monetdef/es_MX.ISO8859-1.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/es_MX.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+diff -ruN src56-orig/share/locale/monetdef/es_MX.ISO8859-1.src src/share/locale/monetdef/es_MX.ISO8859-1.src
+--- src56-orig/share/locale/monetdef/es_MX.ISO8859-1.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/es_MX.ISO8859-1.src	Tue May  6 07:03:17 2014
 @@ -0,0 +1,49 @@
 +# $adJ$
 +#
@@ -1945,9 +2217,9 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_MX.ISO8859-1
 +#int_n_sign_posn       
 +1
 +# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_NI.ISO8859-1.src src/share/locale/monetdef/es_NI.ISO8859-1.src
---- src55-orig/share/locale/monetdef/es_NI.ISO8859-1.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/es_NI.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+diff -ruN src56-orig/share/locale/monetdef/es_NI.ISO8859-1.src src/share/locale/monetdef/es_NI.ISO8859-1.src
+--- src56-orig/share/locale/monetdef/es_NI.ISO8859-1.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/es_NI.ISO8859-1.src	Tue May  6 07:03:17 2014
 @@ -0,0 +1,49 @@
 +# $adJ$
 +#
@@ -1998,9 +2270,9 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_NI.ISO8859-1
 +#int_n_sign_posn       
 +1
 +# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_PA.ISO8859-1.src src/share/locale/monetdef/es_PA.ISO8859-1.src
---- src55-orig/share/locale/monetdef/es_PA.ISO8859-1.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/es_PA.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+diff -ruN src56-orig/share/locale/monetdef/es_PA.ISO8859-1.src src/share/locale/monetdef/es_PA.ISO8859-1.src
+--- src56-orig/share/locale/monetdef/es_PA.ISO8859-1.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/es_PA.ISO8859-1.src	Tue May  6 07:03:17 2014
 @@ -0,0 +1,49 @@
 +# $adJ$
 +#
@@ -2051,9 +2323,9 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_PA.ISO8859-1
 +#int_n_sign_posn       
 +1
 +# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_PE.ISO8859-1.src src/share/locale/monetdef/es_PE.ISO8859-1.src
---- src55-orig/share/locale/monetdef/es_PE.ISO8859-1.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/es_PE.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+diff -ruN src56-orig/share/locale/monetdef/es_PE.ISO8859-1.src src/share/locale/monetdef/es_PE.ISO8859-1.src
+--- src56-orig/share/locale/monetdef/es_PE.ISO8859-1.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/es_PE.ISO8859-1.src	Tue May  6 07:03:17 2014
 @@ -0,0 +1,49 @@
 +# $adJ$
 +#
@@ -2104,9 +2376,9 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_PE.ISO8859-1
 +#int_n_sign_posn       
 +1
 +# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_PR.ISO8859-1.src src/share/locale/monetdef/es_PR.ISO8859-1.src
---- src55-orig/share/locale/monetdef/es_PR.ISO8859-1.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/es_PR.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+diff -ruN src56-orig/share/locale/monetdef/es_PR.ISO8859-1.src src/share/locale/monetdef/es_PR.ISO8859-1.src
+--- src56-orig/share/locale/monetdef/es_PR.ISO8859-1.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/es_PR.ISO8859-1.src	Tue May  6 07:03:17 2014
 @@ -0,0 +1,49 @@
 +# $adJ$
 +#
@@ -2157,9 +2429,9 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_PR.ISO8859-1
 +#int_n_sign_posn       
 +1
 +# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_PY.ISO8859-1.src src/share/locale/monetdef/es_PY.ISO8859-1.src
---- src55-orig/share/locale/monetdef/es_PY.ISO8859-1.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/es_PY.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+diff -ruN src56-orig/share/locale/monetdef/es_PY.ISO8859-1.src src/share/locale/monetdef/es_PY.ISO8859-1.src
+--- src56-orig/share/locale/monetdef/es_PY.ISO8859-1.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/es_PY.ISO8859-1.src	Tue May  6 07:03:17 2014
 @@ -0,0 +1,49 @@
 +# $adJ$
 +#
@@ -2210,9 +2482,9 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_PY.ISO8859-1
 +#int_n_sign_posn       
 +1
 +# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_SV.ISO8859-1.src src/share/locale/monetdef/es_SV.ISO8859-1.src
---- src55-orig/share/locale/monetdef/es_SV.ISO8859-1.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/es_SV.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+diff -ruN src56-orig/share/locale/monetdef/es_SV.ISO8859-1.src src/share/locale/monetdef/es_SV.ISO8859-1.src
+--- src56-orig/share/locale/monetdef/es_SV.ISO8859-1.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/es_SV.ISO8859-1.src	Tue May  6 07:03:17 2014
 @@ -0,0 +1,49 @@
 +# $adJ$
 +#
@@ -2263,9 +2535,9 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_SV.ISO8859-1
 +#int_n_sign_posn       
 +1
 +# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_US.ISO8859-1.src src/share/locale/monetdef/es_US.ISO8859-1.src
---- src55-orig/share/locale/monetdef/es_US.ISO8859-1.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/es_US.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+diff -ruN src56-orig/share/locale/monetdef/es_US.ISO8859-1.src src/share/locale/monetdef/es_US.ISO8859-1.src
+--- src56-orig/share/locale/monetdef/es_US.ISO8859-1.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/es_US.ISO8859-1.src	Tue May  6 07:03:17 2014
 @@ -0,0 +1,49 @@
 +# $adJ$
 +#
@@ -2316,9 +2588,9 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_US.ISO8859-1
 +#int_n_sign_posn       
 +1
 +# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_UY.ISO8859-1.src src/share/locale/monetdef/es_UY.ISO8859-1.src
---- src55-orig/share/locale/monetdef/es_UY.ISO8859-1.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/es_UY.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+diff -ruN src56-orig/share/locale/monetdef/es_UY.ISO8859-1.src src/share/locale/monetdef/es_UY.ISO8859-1.src
+--- src56-orig/share/locale/monetdef/es_UY.ISO8859-1.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/es_UY.ISO8859-1.src	Tue May  6 07:03:17 2014
 @@ -0,0 +1,49 @@
 +# $adJ$
 +#
@@ -2369,9 +2641,9 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_UY.ISO8859-1
 +#int_n_sign_posn       
 +1
 +# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_VE.ISO8859-1.src src/share/locale/monetdef/es_VE.ISO8859-1.src
---- src55-orig/share/locale/monetdef/es_VE.ISO8859-1.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/es_VE.ISO8859-1.src	Wed Nov 20 08:32:28 2013
+diff -ruN src56-orig/share/locale/monetdef/es_VE.ISO8859-1.src src/share/locale/monetdef/es_VE.ISO8859-1.src
+--- src56-orig/share/locale/monetdef/es_VE.ISO8859-1.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/es_VE.ISO8859-1.src	Tue May  6 07:03:17 2014
 @@ -0,0 +1,49 @@
 +# $adJ$
 +#
@@ -2422,10 +2694,10 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/es_VE.ISO8859-1
 +#int_n_sign_posn       
 +1
 +# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/et_EE.ISO8859-15.src src/share/locale/monetdef/et_EE.ISO8859-15.src
---- src55-orig/share/locale/monetdef/et_EE.ISO8859-15.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/et_EE.ISO8859-15.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
+diff -ruN src56-orig/share/locale/monetdef/et_EE.ISO8859-15.src src/share/locale/monetdef/et_EE.ISO8859-15.src
+--- src56-orig/share/locale/monetdef/et_EE.ISO8859-15.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/et_EE.ISO8859-15.src	Tue May  6 09:22:38 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -2461,11 +2733,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/et_EE.ISO8859-1
 +1
 +# n_sign_posn
 +1
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/fi_FI.ISO8859-1.src src/share/locale/monetdef/fi_FI.ISO8859-1.src
---- src55-orig/share/locale/monetdef/fi_FI.ISO8859-1.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/fi_FI.ISO8859-1.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++0
++# int_n_cs_precedes
++0
++# int_p_sep_by_space
++1
++# int_n_sep_by_space
++1
++# int_p_sign_posn
++1
++# int_n_sign_posn
++1
+diff -ruN src56-orig/share/locale/monetdef/fi_FI.ISO8859-1.src src/share/locale/monetdef/fi_FI.ISO8859-1.src
+--- src56-orig/share/locale/monetdef/fi_FI.ISO8859-1.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/fi_FI.ISO8859-1.src	Tue May  6 09:22:38 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -2501,11 +2784,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/fi_FI.ISO8859-1
 +1
 +# n_sign_posn
 +2
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/fr_BE.ISO8859-1.src src/share/locale/monetdef/fr_BE.ISO8859-1.src
---- src55-orig/share/locale/monetdef/fr_BE.ISO8859-1.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/fr_BE.ISO8859-1.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++0
++# int_n_cs_precedes
++0
++# int_p_sep_by_space
++2
++# int_n_sep_by_space
++2
++# int_p_sign_posn
++1
++# int_n_sign_posn
++2
+diff -ruN src56-orig/share/locale/monetdef/fr_BE.ISO8859-1.src src/share/locale/monetdef/fr_BE.ISO8859-1.src
+--- src56-orig/share/locale/monetdef/fr_BE.ISO8859-1.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/fr_BE.ISO8859-1.src	Tue May  6 09:22:38 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -2541,11 +2835,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/fr_BE.ISO8859-1
 +1
 +# n_sign_posn
 +1
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/fr_CA.ISO8859-1.src src/share/locale/monetdef/fr_CA.ISO8859-1.src
---- src55-orig/share/locale/monetdef/fr_CA.ISO8859-1.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/fr_CA.ISO8859-1.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++0
++# int_n_cs_precedes
++0
++# int_p_sep_by_space
++1
++# int_n_sep_by_space
++1
++# int_p_sign_posn
++1
++# int_n_sign_posn
++1
+diff -ruN src56-orig/share/locale/monetdef/fr_CA.ISO8859-1.src src/share/locale/monetdef/fr_CA.ISO8859-1.src
+--- src56-orig/share/locale/monetdef/fr_CA.ISO8859-1.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/fr_CA.ISO8859-1.src	Tue May  6 09:22:38 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -2581,11 +2886,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/fr_CA.ISO8859-1
 +1
 +# n_sign_posn
 +2
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/fr_FR.ISO8859-1.src src/share/locale/monetdef/fr_FR.ISO8859-1.src
---- src55-orig/share/locale/monetdef/fr_FR.ISO8859-1.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/fr_FR.ISO8859-1.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++0
++# int_n_cs_precedes
++0
++# int_p_sep_by_space
++1
++# int_n_sep_by_space
++1
++# int_p_sign_posn
++1
++# int_n_sign_posn
++2
+diff -ruN src56-orig/share/locale/monetdef/fr_FR.ISO8859-1.src src/share/locale/monetdef/fr_FR.ISO8859-1.src
+--- src56-orig/share/locale/monetdef/fr_FR.ISO8859-1.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/fr_FR.ISO8859-1.src	Tue May  6 09:22:38 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -2621,11 +2937,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/fr_FR.ISO8859-1
 +1
 +# n_sign_posn
 +2
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/he_IL.UTF-8.src src/share/locale/monetdef/he_IL.UTF-8.src
---- src55-orig/share/locale/monetdef/he_IL.UTF-8.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/he_IL.UTF-8.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++0
++# int_n_cs_precedes
++0
++# int_p_sep_by_space
++1
++# int_n_sep_by_space
++1
++# int_p_sign_posn
++1
++# int_n_sign_posn
++2
+diff -ruN src56-orig/share/locale/monetdef/he_IL.UTF-8.src src/share/locale/monetdef/he_IL.UTF-8.src
+--- src56-orig/share/locale/monetdef/he_IL.UTF-8.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/he_IL.UTF-8.src	Tue May  6 09:22:38 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -2661,11 +2988,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/he_IL.UTF-8.src
 +1
 +# n_sign_posn
 +1
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/hi_IN.ISCII-DEV.src src/share/locale/monetdef/hi_IN.ISCII-DEV.src
---- src55-orig/share/locale/monetdef/hi_IN.ISCII-DEV.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/hi_IN.ISCII-DEV.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++1
++# int_n_cs_precedes
++1
++# int_p_sep_by_space
++1
++# int_n_sep_by_space
++1
++# int_p_sign_posn
++1
++# int_n_sign_posn
++1
+diff -ruN src56-orig/share/locale/monetdef/hi_IN.ISCII-DEV.src src/share/locale/monetdef/hi_IN.ISCII-DEV.src
+--- src56-orig/share/locale/monetdef/hi_IN.ISCII-DEV.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/hi_IN.ISCII-DEV.src	Tue May  6 09:22:38 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -2701,11 +3039,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/hi_IN.ISCII-DEV
 +1
 +# n_sign_posn
 +1
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/hr_HR.ISO8859-2.src src/share/locale/monetdef/hr_HR.ISO8859-2.src
---- src55-orig/share/locale/monetdef/hr_HR.ISO8859-2.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/hr_HR.ISO8859-2.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++1
++# int_n_cs_precedes
++1
++# int_p_sep_by_space
++0
++# int_n_sep_by_space
++0
++# int_p_sign_posn
++1
++# int_n_sign_posn
++1
+diff -ruN src56-orig/share/locale/monetdef/hr_HR.ISO8859-2.src src/share/locale/monetdef/hr_HR.ISO8859-2.src
+--- src56-orig/share/locale/monetdef/hr_HR.ISO8859-2.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/hr_HR.ISO8859-2.src	Tue May  6 09:22:38 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -2741,11 +3090,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/hr_HR.ISO8859-2
 +1
 +# n_sign_posn
 +1
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/hu_HU.ISO8859-2.src src/share/locale/monetdef/hu_HU.ISO8859-2.src
---- src55-orig/share/locale/monetdef/hu_HU.ISO8859-2.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/hu_HU.ISO8859-2.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++1
++# int_n_cs_precedes
++1
++# int_p_sep_by_space
++1
++# int_n_sep_by_space
++1
++# int_p_sign_posn
++1
++# int_n_sign_posn
++1
+diff -ruN src56-orig/share/locale/monetdef/hu_HU.ISO8859-2.src src/share/locale/monetdef/hu_HU.ISO8859-2.src
+--- src56-orig/share/locale/monetdef/hu_HU.ISO8859-2.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/hu_HU.ISO8859-2.src	Tue May  6 09:22:38 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -2781,11 +3141,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/hu_HU.ISO8859-2
 +4
 +# n_sign_posn
 +4
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/hy_AM.ARMSCII-8.src src/share/locale/monetdef/hy_AM.ARMSCII-8.src
---- src55-orig/share/locale/monetdef/hy_AM.ARMSCII-8.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/hy_AM.ARMSCII-8.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,39 @@
++# int_p_cs_precedes
++1
++# int_n_cs_precedes
++1
++# int_p_sep_by_space
++2
++# int_n_sep_by_space
++2
++# int_p_sign_posn
++4
++# int_n_sign_posn
++4
+diff -ruN src56-orig/share/locale/monetdef/hy_AM.ARMSCII-8.src src/share/locale/monetdef/hy_AM.ARMSCII-8.src
+--- src56-orig/share/locale/monetdef/hy_AM.ARMSCII-8.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/hy_AM.ARMSCII-8.src	Tue May  6 09:22:38 2014
+@@ -0,0 +1,50 @@
 +# $FreeBSD$
 +#
 +# LC_MONETARY source for ARMSCII-8 locale for FreeBSD
@@ -2824,11 +3195,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/hy_AM.ARMSCII-8
 +1
 +# n_sign_posn
 +1
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/hy_AM.UTF-8.src src/share/locale/monetdef/hy_AM.UTF-8.src
---- src55-orig/share/locale/monetdef/hy_AM.UTF-8.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/hy_AM.UTF-8.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,39 @@
++# int_p_cs_precedes
++0
++# int_n_cs_precedes
++0
++# int_p_sep_by_space
++1
++# int_n_sep_by_space
++1
++# int_p_sign_posn
++1
++# int_n_sign_posn
++1
+diff -ruN src56-orig/share/locale/monetdef/hy_AM.UTF-8.src src/share/locale/monetdef/hy_AM.UTF-8.src
+--- src56-orig/share/locale/monetdef/hy_AM.UTF-8.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/hy_AM.UTF-8.src	Tue May  6 09:22:38 2014
+@@ -0,0 +1,50 @@
 +# $FreeBSD$
 +#
 +# LC_MONETARY source for ARMSCII-8 locale for FreeBSD
@@ -2867,11 +3249,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/hy_AM.UTF-8.src
 +1
 +# n_sign_posn
 +1
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/is_IS.ISO8859-1.src src/share/locale/monetdef/is_IS.ISO8859-1.src
---- src55-orig/share/locale/monetdef/is_IS.ISO8859-1.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/is_IS.ISO8859-1.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++0
++# int_n_cs_precedes
++0
++# int_p_sep_by_space
++1
++# int_n_sep_by_space
++1
++# int_p_sign_posn
++1
++# int_n_sign_posn
++1
+diff -ruN src56-orig/share/locale/monetdef/is_IS.ISO8859-1.src src/share/locale/monetdef/is_IS.ISO8859-1.src
+--- src56-orig/share/locale/monetdef/is_IS.ISO8859-1.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/is_IS.ISO8859-1.src	Tue May  6 09:22:38 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -2907,11 +3300,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/is_IS.ISO8859-1
 +1
 +# n_sign_posn
 +1
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/it_IT.ISO8859-1.src src/share/locale/monetdef/it_IT.ISO8859-1.src
---- src55-orig/share/locale/monetdef/it_IT.ISO8859-1.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/it_IT.ISO8859-1.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++0
++# int_n_cs_precedes
++0
++# int_p_sep_by_space
++1
++# int_n_sep_by_space
++1
++# int_p_sign_posn
++1
++# int_n_sign_posn
++1
+diff -ruN src56-orig/share/locale/monetdef/it_IT.ISO8859-1.src src/share/locale/monetdef/it_IT.ISO8859-1.src
+--- src56-orig/share/locale/monetdef/it_IT.ISO8859-1.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/it_IT.ISO8859-1.src	Tue May  6 09:22:38 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -2947,11 +3351,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/it_IT.ISO8859-1
 +1
 +# n_sign_posn
 +1
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/ja_JP.UTF-8.src src/share/locale/monetdef/ja_JP.UTF-8.src
---- src55-orig/share/locale/monetdef/ja_JP.UTF-8.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/ja_JP.UTF-8.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++1
++# int_n_cs_precedes
++1
++# int_p_sep_by_space
++1
++# int_n_sep_by_space
++1
++# int_p_sign_posn
++1
++# int_n_sign_posn
++1
+diff -ruN src56-orig/share/locale/monetdef/ja_JP.UTF-8.src src/share/locale/monetdef/ja_JP.UTF-8.src
+--- src56-orig/share/locale/monetdef/ja_JP.UTF-8.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/ja_JP.UTF-8.src	Tue May  6 09:22:38 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -2987,11 +3402,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/ja_JP.UTF-8.src
 +1
 +# n_sign_posn
 +4
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/ja_JP.eucJP.src src/share/locale/monetdef/ja_JP.eucJP.src
---- src55-orig/share/locale/monetdef/ja_JP.eucJP.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/ja_JP.eucJP.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++1
++# int_n_cs_precedes
++1
++# int_p_sep_by_space
++0
++# int_n_sep_by_space
++0
++# int_p_sign_posn
++1
++# int_n_sign_posn
++4
+diff -ruN src56-orig/share/locale/monetdef/ja_JP.eucJP.src src/share/locale/monetdef/ja_JP.eucJP.src
+--- src56-orig/share/locale/monetdef/ja_JP.eucJP.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/ja_JP.eucJP.src	Tue May  6 09:22:38 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -3027,11 +3453,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/ja_JP.eucJP.src
 +1
 +# n_sign_posn
 +4
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/kk_KZ.PT154.src src/share/locale/monetdef/kk_KZ.PT154.src
---- src55-orig/share/locale/monetdef/kk_KZ.PT154.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/kk_KZ.PT154.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++1
++# int_n_cs_precedes
++1
++# int_p_sep_by_space
++0
++# int_n_sep_by_space
++0
++# int_p_sign_posn
++1
++# int_n_sign_posn
++4
+diff -ruN src56-orig/share/locale/monetdef/kk_KZ.PT154.src src/share/locale/monetdef/kk_KZ.PT154.src
+--- src56-orig/share/locale/monetdef/kk_KZ.PT154.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/kk_KZ.PT154.src	Tue May  6 09:22:38 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -3067,11 +3504,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/kk_KZ.PT154.src
 +1
 +# n_sign_posn
 +1
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/kk_KZ.UTF-8.src src/share/locale/monetdef/kk_KZ.UTF-8.src
---- src55-orig/share/locale/monetdef/kk_KZ.UTF-8.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/kk_KZ.UTF-8.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++0
++# int_n_cs_precedes
++0
++# int_p_sep_by_space
++1
++# int_n_sep_by_space
++1
++# int_p_sign_posn
++1
++# int_n_sign_posn
++1
+diff -ruN src56-orig/share/locale/monetdef/kk_KZ.UTF-8.src src/share/locale/monetdef/kk_KZ.UTF-8.src
+--- src56-orig/share/locale/monetdef/kk_KZ.UTF-8.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/kk_KZ.UTF-8.src	Tue May  6 09:22:38 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -3107,11 +3555,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/kk_KZ.UTF-8.src
 +1
 +# n_sign_posn
 +1
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/ko_KR.UTF-8.src src/share/locale/monetdef/ko_KR.UTF-8.src
---- src55-orig/share/locale/monetdef/ko_KR.UTF-8.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/ko_KR.UTF-8.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++0
++# int_n_cs_precedes
++0
++# int_p_sep_by_space
++1
++# int_n_sep_by_space
++1
++# int_p_sign_posn
++1
++# int_n_sign_posn
++1
+diff -ruN src56-orig/share/locale/monetdef/ko_KR.UTF-8.src src/share/locale/monetdef/ko_KR.UTF-8.src
+--- src56-orig/share/locale/monetdef/ko_KR.UTF-8.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/ko_KR.UTF-8.src	Tue May  6 09:22:38 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -3147,11 +3606,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/ko_KR.UTF-8.src
 +1
 +# n_sign_posn
 +4
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/ko_KR.eucKR.src src/share/locale/monetdef/ko_KR.eucKR.src
---- src55-orig/share/locale/monetdef/ko_KR.eucKR.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/ko_KR.eucKR.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++1
++# int_n_cs_precedes
++1
++# int_p_sep_by_space
++0
++# int_n_sep_by_space
++0
++# int_p_sign_posn
++1
++# int_n_sign_posn
++4
+diff -ruN src56-orig/share/locale/monetdef/ko_KR.eucKR.src src/share/locale/monetdef/ko_KR.eucKR.src
+--- src56-orig/share/locale/monetdef/ko_KR.eucKR.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/ko_KR.eucKR.src	Tue May  6 09:22:38 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -3187,11 +3657,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/ko_KR.eucKR.src
 +1
 +# n_sign_posn
 +4
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/lt_LT.ISO8859-13.src src/share/locale/monetdef/lt_LT.ISO8859-13.src
---- src55-orig/share/locale/monetdef/lt_LT.ISO8859-13.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/lt_LT.ISO8859-13.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++1
++# int_n_cs_precedes
++1
++# int_p_sep_by_space
++0
++# int_n_sep_by_space
++0
++# int_p_sign_posn
++1
++# int_n_sign_posn
++4
+diff -ruN src56-orig/share/locale/monetdef/lt_LT.ISO8859-13.src src/share/locale/monetdef/lt_LT.ISO8859-13.src
+--- src56-orig/share/locale/monetdef/lt_LT.ISO8859-13.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/lt_LT.ISO8859-13.src	Tue May  6 09:22:39 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -3227,11 +3708,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/lt_LT.ISO8859-1
 +1
 +# n_sign_posn
 +1
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/lv_LV.ISO8859-13.src src/share/locale/monetdef/lv_LV.ISO8859-13.src
---- src55-orig/share/locale/monetdef/lv_LV.ISO8859-13.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/lv_LV.ISO8859-13.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++0
++# int_n_cs_precedes
++0
++# int_p_sep_by_space
++1
++# int_n_sep_by_space
++1
++# int_p_sign_posn
++1
++# int_n_sign_posn
++1
+diff -ruN src56-orig/share/locale/monetdef/lv_LV.ISO8859-13.src src/share/locale/monetdef/lv_LV.ISO8859-13.src
+--- src56-orig/share/locale/monetdef/lv_LV.ISO8859-13.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/lv_LV.ISO8859-13.src	Tue May  6 09:22:39 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -3267,11 +3759,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/lv_LV.ISO8859-1
 +1
 +# n_sign_posn
 +1
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/mn_MN.UTF-8.src src/share/locale/monetdef/mn_MN.UTF-8.src
---- src55-orig/share/locale/monetdef/mn_MN.UTF-8.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/mn_MN.UTF-8.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++0
++# int_n_cs_precedes
++0
++# int_p_sep_by_space
++1
++# int_n_sep_by_space
++1
++# int_p_sign_posn
++1
++# int_n_sign_posn
++1
+diff -ruN src56-orig/share/locale/monetdef/mn_MN.UTF-8.src src/share/locale/monetdef/mn_MN.UTF-8.src
+--- src56-orig/share/locale/monetdef/mn_MN.UTF-8.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/mn_MN.UTF-8.src	Tue May  6 09:22:39 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -3307,11 +3810,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/mn_MN.UTF-8.src
 +1
 +# n_sign_posn
 +1
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/nl_BE.ISO8859-1.src src/share/locale/monetdef/nl_BE.ISO8859-1.src
---- src55-orig/share/locale/monetdef/nl_BE.ISO8859-1.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/nl_BE.ISO8859-1.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++1
++# int_n_cs_precedes
++1
++# int_p_sep_by_space
++0
++# int_n_sep_by_space
++0
++# int_p_sign_posn
++1
++# int_n_sign_posn
++1
+diff -ruN src56-orig/share/locale/monetdef/nl_BE.ISO8859-1.src src/share/locale/monetdef/nl_BE.ISO8859-1.src
+--- src56-orig/share/locale/monetdef/nl_BE.ISO8859-1.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/nl_BE.ISO8859-1.src	Tue May  6 09:22:39 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -3347,11 +3861,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/nl_BE.ISO8859-1
 +1
 +# n_sign_posn
 +1
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/nl_NL.ISO8859-1.src src/share/locale/monetdef/nl_NL.ISO8859-1.src
---- src55-orig/share/locale/monetdef/nl_NL.ISO8859-1.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/nl_NL.ISO8859-1.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++0
++# int_n_cs_precedes
++0
++# int_p_sep_by_space
++1
++# int_n_sep_by_space
++1
++# int_p_sign_posn
++1
++# int_n_sign_posn
++1
+diff -ruN src56-orig/share/locale/monetdef/nl_NL.ISO8859-1.src src/share/locale/monetdef/nl_NL.ISO8859-1.src
+--- src56-orig/share/locale/monetdef/nl_NL.ISO8859-1.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/nl_NL.ISO8859-1.src	Tue May  6 09:22:39 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -3387,11 +3912,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/nl_NL.ISO8859-1
 +1
 +# n_sign_posn
 +2
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/no_NO.ISO8859-1.src src/share/locale/monetdef/no_NO.ISO8859-1.src
---- src55-orig/share/locale/monetdef/no_NO.ISO8859-1.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/no_NO.ISO8859-1.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++1
++# int_n_cs_precedes
++1
++# int_p_sep_by_space
++1
++# int_n_sep_by_space
++1
++# int_p_sign_posn
++1
++# int_n_sign_posn
++2
+diff -ruN src56-orig/share/locale/monetdef/no_NO.ISO8859-1.src src/share/locale/monetdef/no_NO.ISO8859-1.src
+--- src56-orig/share/locale/monetdef/no_NO.ISO8859-1.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/no_NO.ISO8859-1.src	Tue May  6 09:22:39 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -3427,11 +3963,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/no_NO.ISO8859-1
 +4
 +# n_sign_posn
 +4
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/pl_PL.ISO8859-2.src src/share/locale/monetdef/pl_PL.ISO8859-2.src
---- src55-orig/share/locale/monetdef/pl_PL.ISO8859-2.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/pl_PL.ISO8859-2.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++1
++# int_n_cs_precedes
++1
++# int_p_sep_by_space
++0
++# int_n_sep_by_space
++0
++# int_p_sign_posn
++4
++# int_n_sign_posn
++4
+diff -ruN src56-orig/share/locale/monetdef/pl_PL.ISO8859-2.src src/share/locale/monetdef/pl_PL.ISO8859-2.src
+--- src56-orig/share/locale/monetdef/pl_PL.ISO8859-2.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/pl_PL.ISO8859-2.src	Tue May  6 09:22:39 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -3467,11 +4014,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/pl_PL.ISO8859-2
 +4
 +# n_sign_posn
 +4
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/pl_PL.UTF-8.src src/share/locale/monetdef/pl_PL.UTF-8.src
---- src55-orig/share/locale/monetdef/pl_PL.UTF-8.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/pl_PL.UTF-8.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++1
++# int_n_cs_precedes
++1
++# int_p_sep_by_space
++2
++# int_n_sep_by_space
++2
++# int_p_sign_posn
++4
++# int_n_sign_posn
++4
+diff -ruN src56-orig/share/locale/monetdef/pl_PL.UTF-8.src src/share/locale/monetdef/pl_PL.UTF-8.src
+--- src56-orig/share/locale/monetdef/pl_PL.UTF-8.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/pl_PL.UTF-8.src	Tue May  6 09:22:39 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -3507,10 +4065,21 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/pl_PL.UTF-8.src
 +4
 +# n_sign_posn
 +4
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/pt_BR.ISO8859-1.src src/share/locale/monetdef/pt_BR.ISO8859-1.src
---- src55-orig/share/locale/monetdef/pt_BR.ISO8859-1.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/pt_BR.ISO8859-1.src	Wed Nov 20 08:32:28 2013
++# int_p_cs_precedes
++1
++# int_n_cs_precedes
++1
++# int_p_sep_by_space
++2
++# int_n_sep_by_space
++2
++# int_p_sign_posn
++4
++# int_n_sign_posn
++4
+diff -ruN src56-orig/share/locale/monetdef/pt_BR.ISO8859-1.src src/share/locale/monetdef/pt_BR.ISO8859-1.src
+--- src56-orig/share/locale/monetdef/pt_BR.ISO8859-1.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/pt_BR.ISO8859-1.src	Tue May  6 07:03:17 2014
 @@ -0,0 +1,49 @@
 +# $adJ$
 +#
@@ -3561,10 +4130,10 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/pt_BR.ISO8859-1
 +#int_n_sign_posn       
 +1
 +# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/pt_PT.ISO8859-1.src src/share/locale/monetdef/pt_PT.ISO8859-1.src
---- src55-orig/share/locale/monetdef/pt_PT.ISO8859-1.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/pt_PT.ISO8859-1.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
+diff -ruN src56-orig/share/locale/monetdef/pt_PT.ISO8859-1.src src/share/locale/monetdef/pt_PT.ISO8859-1.src
+--- src56-orig/share/locale/monetdef/pt_PT.ISO8859-1.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/pt_PT.ISO8859-1.src	Tue May  6 09:22:39 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -3600,11 +4169,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/pt_PT.ISO8859-1
 +1
 +# n_sign_posn
 +1
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/pt_PT.ISO8859-15.src src/share/locale/monetdef/pt_PT.ISO8859-15.src
---- src55-orig/share/locale/monetdef/pt_PT.ISO8859-15.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/pt_PT.ISO8859-15.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++0
++# int_n_cs_precedes
++0
++# int_p_sep_by_space
++1
++# int_n_sep_by_space
++1
++# int_p_sign_posn
++1
++# int_n_sign_posn
++1
+diff -ruN src56-orig/share/locale/monetdef/pt_PT.ISO8859-15.src src/share/locale/monetdef/pt_PT.ISO8859-15.src
+--- src56-orig/share/locale/monetdef/pt_PT.ISO8859-15.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/pt_PT.ISO8859-15.src	Tue May  6 09:22:39 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -3640,11 +4220,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/pt_PT.ISO8859-1
 +1
 +# n_sign_posn
 +1
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/pt_PT.UTF-8.src src/share/locale/monetdef/pt_PT.UTF-8.src
---- src55-orig/share/locale/monetdef/pt_PT.UTF-8.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/pt_PT.UTF-8.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++0
++# int_n_cs_precedes
++0
++# int_p_sep_by_space
++1
++# int_n_sep_by_space
++1
++# int_p_sign_posn
++1
++# int_n_sign_posn
++1
+diff -ruN src56-orig/share/locale/monetdef/pt_PT.UTF-8.src src/share/locale/monetdef/pt_PT.UTF-8.src
+--- src56-orig/share/locale/monetdef/pt_PT.UTF-8.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/pt_PT.UTF-8.src	Tue May  6 09:22:39 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -3680,11 +4271,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/pt_PT.UTF-8.src
 +1
 +# n_sign_posn
 +1
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/ro_RO.ISO8859-2.src src/share/locale/monetdef/ro_RO.ISO8859-2.src
---- src55-orig/share/locale/monetdef/ro_RO.ISO8859-2.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/ro_RO.ISO8859-2.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++0
++# int_n_cs_precedes
++0
++# int_p_sep_by_space
++1
++# int_n_sep_by_space
++1
++# int_p_sign_posn
++1
++# int_n_sign_posn
++1
+diff -ruN src56-orig/share/locale/monetdef/ro_RO.ISO8859-2.src src/share/locale/monetdef/ro_RO.ISO8859-2.src
+--- src56-orig/share/locale/monetdef/ro_RO.ISO8859-2.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/ro_RO.ISO8859-2.src	Tue May  6 09:22:39 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -3720,11 +4322,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/ro_RO.ISO8859-2
 +1
 +# n_sign_posn
 +1
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/ru_RU.CP1251.src src/share/locale/monetdef/ru_RU.CP1251.src
---- src55-orig/share/locale/monetdef/ru_RU.CP1251.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/ru_RU.CP1251.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++0
++# int_n_cs_precedes
++0
++# int_p_sep_by_space
++1
++# int_n_sep_by_space
++1
++# int_p_sign_posn
++1
++# int_n_sign_posn
++1
+diff -ruN src56-orig/share/locale/monetdef/ru_RU.CP1251.src src/share/locale/monetdef/ru_RU.CP1251.src
+--- src56-orig/share/locale/monetdef/ru_RU.CP1251.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/ru_RU.CP1251.src	Tue May  6 09:22:39 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -3760,11 +4373,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/ru_RU.CP1251.sr
 +1
 +# n_sign_posn
 +1
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/ru_RU.CP866.src src/share/locale/monetdef/ru_RU.CP866.src
---- src55-orig/share/locale/monetdef/ru_RU.CP866.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/ru_RU.CP866.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++0
++# int_n_cs_precedes
++0
++# int_p_sep_by_space
++1
++# int_n_sep_by_space
++1
++# int_p_sign_posn
++1
++# int_n_sign_posn
++1
+diff -ruN src56-orig/share/locale/monetdef/ru_RU.CP866.src src/share/locale/monetdef/ru_RU.CP866.src
+--- src56-orig/share/locale/monetdef/ru_RU.CP866.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/ru_RU.CP866.src	Tue May  6 09:22:39 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -3800,11 +4424,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/ru_RU.CP866.src
 +1
 +# n_sign_posn
 +1
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/ru_RU.ISO8859-5.src src/share/locale/monetdef/ru_RU.ISO8859-5.src
---- src55-orig/share/locale/monetdef/ru_RU.ISO8859-5.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/ru_RU.ISO8859-5.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++0
++# int_n_cs_precedes
++0
++# int_p_sep_by_space
++1
++# int_n_sep_by_space
++1
++# int_p_sign_posn
++1
++# int_n_sign_posn
++1
+diff -ruN src56-orig/share/locale/monetdef/ru_RU.ISO8859-5.src src/share/locale/monetdef/ru_RU.ISO8859-5.src
+--- src56-orig/share/locale/monetdef/ru_RU.ISO8859-5.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/ru_RU.ISO8859-5.src	Tue May  6 09:22:39 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -3840,11 +4475,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/ru_RU.ISO8859-5
 +1
 +# n_sign_posn
 +1
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/ru_RU.KOI8-R.src src/share/locale/monetdef/ru_RU.KOI8-R.src
---- src55-orig/share/locale/monetdef/ru_RU.KOI8-R.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/ru_RU.KOI8-R.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++0
++# int_n_cs_precedes
++0
++# int_p_sep_by_space
++1
++# int_n_sep_by_space
++1
++# int_p_sign_posn
++1
++# int_n_sign_posn
++1
+diff -ruN src56-orig/share/locale/monetdef/ru_RU.KOI8-R.src src/share/locale/monetdef/ru_RU.KOI8-R.src
+--- src56-orig/share/locale/monetdef/ru_RU.KOI8-R.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/ru_RU.KOI8-R.src	Tue May  6 09:22:39 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -3880,11 +4526,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/ru_RU.KOI8-R.sr
 +1
 +# n_sign_posn
 +1
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/ru_RU.UTF-8.src src/share/locale/monetdef/ru_RU.UTF-8.src
---- src55-orig/share/locale/monetdef/ru_RU.UTF-8.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/ru_RU.UTF-8.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++0
++# int_n_cs_precedes
++0
++# int_p_sep_by_space
++1
++# int_n_sep_by_space
++1
++# int_p_sign_posn
++1
++# int_n_sign_posn
++1
+diff -ruN src56-orig/share/locale/monetdef/ru_RU.UTF-8.src src/share/locale/monetdef/ru_RU.UTF-8.src
+--- src56-orig/share/locale/monetdef/ru_RU.UTF-8.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/ru_RU.UTF-8.src	Tue May  6 09:22:39 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -3920,11 +4577,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/ru_RU.UTF-8.src
 +1
 +# n_sign_posn
 +1
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/sk_SK.ISO8859-2.src src/share/locale/monetdef/sk_SK.ISO8859-2.src
---- src55-orig/share/locale/monetdef/sk_SK.ISO8859-2.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/sk_SK.ISO8859-2.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,38 @@
++# int_p_cs_precedes
++0
++# int_n_cs_precedes
++0
++# int_p_sep_by_space
++1
++# int_n_sep_by_space
++1
++# int_p_sign_posn
++1
++# int_n_sign_posn
++1
+diff -ruN src56-orig/share/locale/monetdef/sk_SK.ISO8859-2.src src/share/locale/monetdef/sk_SK.ISO8859-2.src
+--- src56-orig/share/locale/monetdef/sk_SK.ISO8859-2.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/sk_SK.ISO8859-2.src	Tue May  6 09:22:39 2014
+@@ -0,0 +1,49 @@
 +# $FreeBSD$
 +#
 +# Slovak monetary definition by Juraj Bednar <juraj@bednar.sk>
@@ -3962,11 +4630,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/sk_SK.ISO8859-2
 +4
 +# n_sign_posn
 +4
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/sl_SI.ISO8859-2.src src/share/locale/monetdef/sl_SI.ISO8859-2.src
---- src55-orig/share/locale/monetdef/sl_SI.ISO8859-2.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/sl_SI.ISO8859-2.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++1
++# int_n_cs_precedes
++1
++# int_p_sep_by_space
++2
++# int_n_sep_by_space
++2
++# int_p_sign_posn
++4
++# int_n_sign_posn
++4
+diff -ruN src56-orig/share/locale/monetdef/sl_SI.ISO8859-2.src src/share/locale/monetdef/sl_SI.ISO8859-2.src
+--- src56-orig/share/locale/monetdef/sl_SI.ISO8859-2.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/sl_SI.ISO8859-2.src	Tue May  6 09:22:39 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -4002,11 +4681,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/sl_SI.ISO8859-2
 +2
 +# n_sign_posn
 +2
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/sr_YU.ISO8859-2.src src/share/locale/monetdef/sr_YU.ISO8859-2.src
---- src55-orig/share/locale/monetdef/sr_YU.ISO8859-2.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/sr_YU.ISO8859-2.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++0
++# int_n_cs_precedes
++0
++# int_p_sep_by_space
++2
++# int_n_sep_by_space
++2
++# int_p_sign_posn
++2
++# int_n_sign_posn
++2
+diff -ruN src56-orig/share/locale/monetdef/sr_YU.ISO8859-2.src src/share/locale/monetdef/sr_YU.ISO8859-2.src
+--- src56-orig/share/locale/monetdef/sr_YU.ISO8859-2.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/sr_YU.ISO8859-2.src	Tue May  6 09:22:39 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -4042,11 +4732,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/sr_YU.ISO8859-2
 +2
 +# n_sign_posn
 +2
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/sr_YU.ISO8859-5.src src/share/locale/monetdef/sr_YU.ISO8859-5.src
---- src55-orig/share/locale/monetdef/sr_YU.ISO8859-5.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/sr_YU.ISO8859-5.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++0
++# int_n_cs_precedes
++0
++# int_p_sep_by_space
++2
++# int_n_sep_by_space
++2
++# int_p_sign_posn
++2
++# int_n_sign_posn
++2
+diff -ruN src56-orig/share/locale/monetdef/sr_YU.ISO8859-5.src src/share/locale/monetdef/sr_YU.ISO8859-5.src
+--- src56-orig/share/locale/monetdef/sr_YU.ISO8859-5.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/sr_YU.ISO8859-5.src	Tue May  6 09:22:39 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -4082,11 +4783,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/sr_YU.ISO8859-5
 +1
 +# n_sign_posn
 +1
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/sr_YU.UTF-8.src src/share/locale/monetdef/sr_YU.UTF-8.src
---- src55-orig/share/locale/monetdef/sr_YU.UTF-8.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/sr_YU.UTF-8.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++0
++# int_n_cs_precedes
++0
++# int_p_sep_by_space
++1
++# int_n_sep_by_space
++1
++# int_p_sign_posn
++1
++# int_n_sign_posn
++1
+diff -ruN src56-orig/share/locale/monetdef/sr_YU.UTF-8.src src/share/locale/monetdef/sr_YU.UTF-8.src
+--- src56-orig/share/locale/monetdef/sr_YU.UTF-8.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/sr_YU.UTF-8.src	Tue May  6 09:22:40 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -4122,11 +4834,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/sr_YU.UTF-8.src
 +1
 +# n_sign_posn
 +1
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/sv_SE.ISO8859-1.src src/share/locale/monetdef/sv_SE.ISO8859-1.src
---- src55-orig/share/locale/monetdef/sv_SE.ISO8859-1.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/sv_SE.ISO8859-1.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++0
++# int_n_cs_precedes
++0
++# int_p_sep_by_space
++1
++# int_n_sep_by_space
++1
++# int_p_sign_posn
++1
++# int_n_sign_posn
++1
+diff -ruN src56-orig/share/locale/monetdef/sv_SE.ISO8859-1.src src/share/locale/monetdef/sv_SE.ISO8859-1.src
+--- src56-orig/share/locale/monetdef/sv_SE.ISO8859-1.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/sv_SE.ISO8859-1.src	Tue May  6 09:22:40 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -4162,11 +4885,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/sv_SE.ISO8859-1
 +1
 +# n_sign_posn
 +1
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/tr_TR.ISO8859-9.src src/share/locale/monetdef/tr_TR.ISO8859-9.src
---- src55-orig/share/locale/monetdef/tr_TR.ISO8859-9.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/tr_TR.ISO8859-9.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++0
++# int_n_cs_precedes
++0
++# int_p_sep_by_space
++1
++# int_n_sep_by_space
++1
++# int_p_sign_posn
++1
++# int_n_sign_posn
++1
+diff -ruN src56-orig/share/locale/monetdef/tr_TR.ISO8859-9.src src/share/locale/monetdef/tr_TR.ISO8859-9.src
+--- src56-orig/share/locale/monetdef/tr_TR.ISO8859-9.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/tr_TR.ISO8859-9.src	Tue May  6 09:22:40 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -4202,11 +4936,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/tr_TR.ISO8859-9
 +1
 +# n_sign_posn
 +1
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/uk_UA.CP1251.src src/share/locale/monetdef/uk_UA.CP1251.src
---- src55-orig/share/locale/monetdef/uk_UA.CP1251.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/uk_UA.CP1251.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++1
++# int_n_cs_precedes
++1
++# int_p_sep_by_space
++1
++# int_n_sep_by_space
++1
++# int_p_sign_posn
++1
++# int_n_sign_posn
++1
+diff -ruN src56-orig/share/locale/monetdef/uk_UA.CP1251.src src/share/locale/monetdef/uk_UA.CP1251.src
+--- src56-orig/share/locale/monetdef/uk_UA.CP1251.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/uk_UA.CP1251.src	Tue May  6 09:22:40 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -4242,11 +4987,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/uk_UA.CP1251.sr
 +1
 +# n_sign_posn
 +1
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/uk_UA.ISO8859-5.src src/share/locale/monetdef/uk_UA.ISO8859-5.src
---- src55-orig/share/locale/monetdef/uk_UA.ISO8859-5.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/uk_UA.ISO8859-5.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++0
++# int_n_cs_precedes
++0
++# int_p_sep_by_space
++1
++# int_n_sep_by_space
++1
++# int_p_sign_posn
++1
++# int_n_sign_posn
++1
+diff -ruN src56-orig/share/locale/monetdef/uk_UA.ISO8859-5.src src/share/locale/monetdef/uk_UA.ISO8859-5.src
+--- src56-orig/share/locale/monetdef/uk_UA.ISO8859-5.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/uk_UA.ISO8859-5.src	Tue May  6 09:22:40 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -4282,11 +5038,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/uk_UA.ISO8859-5
 +1
 +# n_sign_posn
 +1
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/uk_UA.KOI8-U.src src/share/locale/monetdef/uk_UA.KOI8-U.src
---- src55-orig/share/locale/monetdef/uk_UA.KOI8-U.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/uk_UA.KOI8-U.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++0
++# int_n_cs_precedes
++0
++# int_p_sep_by_space
++1
++# int_n_sep_by_space
++1
++# int_p_sign_posn
++1
++# int_n_sign_posn
++1
+diff -ruN src56-orig/share/locale/monetdef/uk_UA.KOI8-U.src src/share/locale/monetdef/uk_UA.KOI8-U.src
+--- src56-orig/share/locale/monetdef/uk_UA.KOI8-U.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/uk_UA.KOI8-U.src	Tue May  6 09:22:40 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -4322,11 +5089,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/uk_UA.KOI8-U.sr
 +1
 +# n_sign_posn
 +1
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/uk_UA.UTF-8.src src/share/locale/monetdef/uk_UA.UTF-8.src
---- src55-orig/share/locale/monetdef/uk_UA.UTF-8.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/uk_UA.UTF-8.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++0
++# int_n_cs_precedes
++0
++# int_p_sep_by_space
++1
++# int_n_sep_by_space
++1
++# int_p_sign_posn
++1
++# int_n_sign_posn
++1
+diff -ruN src56-orig/share/locale/monetdef/uk_UA.UTF-8.src src/share/locale/monetdef/uk_UA.UTF-8.src
+--- src56-orig/share/locale/monetdef/uk_UA.UTF-8.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/uk_UA.UTF-8.src	Tue May  6 09:22:40 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -4362,11 +5140,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/uk_UA.UTF-8.src
 +1
 +# n_sign_posn
 +1
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/zh_CN.GB18030.src src/share/locale/monetdef/zh_CN.GB18030.src
---- src55-orig/share/locale/monetdef/zh_CN.GB18030.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/zh_CN.GB18030.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++0
++# int_n_cs_precedes
++0
++# int_p_sep_by_space
++1
++# int_n_sep_by_space
++1
++# int_p_sign_posn
++1
++# int_n_sign_posn
++1
+diff -ruN src56-orig/share/locale/monetdef/zh_CN.GB18030.src src/share/locale/monetdef/zh_CN.GB18030.src
+--- src56-orig/share/locale/monetdef/zh_CN.GB18030.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/zh_CN.GB18030.src	Tue May  6 09:22:40 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -4402,11 +5191,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/zh_CN.GB18030.s
 +1
 +# n_sign_posn
 +4
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/zh_CN.GB2312.src src/share/locale/monetdef/zh_CN.GB2312.src
---- src55-orig/share/locale/monetdef/zh_CN.GB2312.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/zh_CN.GB2312.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++1
++# int_n_cs_precedes
++1
++# int_p_sep_by_space
++0
++# int_n_sep_by_space
++0
++# int_p_sign_posn
++1
++# int_n_sign_posn
++4
+diff -ruN src56-orig/share/locale/monetdef/zh_CN.GB2312.src src/share/locale/monetdef/zh_CN.GB2312.src
+--- src56-orig/share/locale/monetdef/zh_CN.GB2312.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/zh_CN.GB2312.src	Tue May  6 09:22:40 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -4442,11 +5242,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/zh_CN.GB2312.sr
 +1
 +# n_sign_posn
 +4
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/zh_CN.UTF-8.src src/share/locale/monetdef/zh_CN.UTF-8.src
---- src55-orig/share/locale/monetdef/zh_CN.UTF-8.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/zh_CN.UTF-8.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++1
++# int_n_cs_precedes
++1
++# int_p_sep_by_space
++0
++# int_n_sep_by_space
++0
++# int_p_sign_posn
++1
++# int_n_sign_posn
++4
+diff -ruN src56-orig/share/locale/monetdef/zh_CN.UTF-8.src src/share/locale/monetdef/zh_CN.UTF-8.src
+--- src56-orig/share/locale/monetdef/zh_CN.UTF-8.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/zh_CN.UTF-8.src	Tue May  6 09:22:40 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -4482,11 +5293,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/zh_CN.UTF-8.src
 +1
 +# n_sign_posn
 +4
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/zh_CN.eucCN.src src/share/locale/monetdef/zh_CN.eucCN.src
---- src55-orig/share/locale/monetdef/zh_CN.eucCN.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/zh_CN.eucCN.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++1
++# int_n_cs_precedes
++1
++# int_p_sep_by_space
++0
++# int_n_sep_by_space
++0
++# int_p_sign_posn
++1
++# int_n_sign_posn
++4
+diff -ruN src56-orig/share/locale/monetdef/zh_CN.eucCN.src src/share/locale/monetdef/zh_CN.eucCN.src
+--- src56-orig/share/locale/monetdef/zh_CN.eucCN.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/zh_CN.eucCN.src	Tue May  6 09:22:40 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -4522,11 +5344,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/zh_CN.eucCN.src
 +1
 +# n_sign_posn
 +4
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/zh_HK.UTF-8.src src/share/locale/monetdef/zh_HK.UTF-8.src
---- src55-orig/share/locale/monetdef/zh_HK.UTF-8.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/zh_HK.UTF-8.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++1
++# int_n_cs_precedes
++1
++# int_p_sep_by_space
++0
++# int_n_sep_by_space
++0
++# int_p_sign_posn
++1
++# int_n_sign_posn
++4
+diff -ruN src56-orig/share/locale/monetdef/zh_HK.UTF-8.src src/share/locale/monetdef/zh_HK.UTF-8.src
+--- src56-orig/share/locale/monetdef/zh_HK.UTF-8.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/zh_HK.UTF-8.src	Tue May  6 09:22:40 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -4562,11 +5395,22 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/zh_HK.UTF-8.src
 +1
 +# n_sign_posn
 +0
-+# EOF
-diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/zh_TW.Big5.src src/share/locale/monetdef/zh_TW.Big5.src
---- src55-orig/share/locale/monetdef/zh_TW.Big5.src	Wed Dec 31 19:00:00 1969
-+++ src/share/locale/monetdef/zh_TW.Big5.src	Wed Nov 20 08:32:28 2013
-@@ -0,0 +1,36 @@
++# int_p_cs_precedes
++1
++# int_n_cs_precedes
++1
++# int_p_sep_by_space
++0
++# int_n_sep_by_space
++0
++# int_p_sign_posn
++1
++# int_n_sign_posn
++0
+diff -ruN src56-orig/share/locale/monetdef/zh_TW.Big5.src src/share/locale/monetdef/zh_TW.Big5.src
+--- src56-orig/share/locale/monetdef/zh_TW.Big5.src	Thu Jan  1 03:00:00 1970
++++ src/share/locale/monetdef/zh_TW.Big5.src	Tue May  6 09:22:40 2014
+@@ -0,0 +1,47 @@
 +# $FreeBSD$
 +#
 +# WARNING: spaces may be essential at the end of lines
@@ -4602,4 +5446,15 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/monetdef/zh_TW.Big5.src 
 +1
 +# n_sign_posn
 +4
-+# EOF
++# int_p_cs_precedes
++1
++# int_n_cs_precedes
++1
++# int_p_sep_by_space
++0
++# int_n_sep_by_space
++0
++# int_p_sign_posn
++1
++# int_n_sign_posn
++4

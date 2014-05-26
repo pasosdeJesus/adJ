@@ -3,10 +3,10 @@
 # Dominio público de acuerdo a legislación colombiana. http://www.pasosdejesus.org/dominio_publico_colombia.html. 
 # 2014. vtamara@pasosdeJesus.org
 
-VER=5.4
+VER=5.5
 REV=0
 VESP=""
-VERP=54
+VERP=55
 
 ACVER=`uname -r`
 ARQ=`uname -m`
@@ -62,13 +62,7 @@ if (test "$postencripta" = "s") then {
 
 } fi; #postencripta
 
-# Nuevo usuario PostgreSQL
-if (ltf $ACVER "4.1") then {
-	uspos='_postgresql';
-}
-else {
-	uspos='postgres';
-} fi;
+uspos='postgres'; # Antes de 4.1 era _postgresql
 
 acuspos="-U$uspos"
 

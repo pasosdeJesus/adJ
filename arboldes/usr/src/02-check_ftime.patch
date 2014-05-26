@@ -1,0 +1,297 @@
+diff -ruN src56-orig/regress/lib/libc/time/Makefile src/regress/lib/libc/time/Makefile
+--- src56-orig/regress/lib/libc/time/Makefile	Tue Jan 20 11:47:55 2004
++++ src/regress/lib/libc/time/Makefile	Thu Apr 17 08:37:20 2014
+@@ -1,5 +1,5 @@
+ #	$OpenBSD: Makefile,v 1.1 2004/01/20 16:47:55 millert Exp $
+ 
+-SUBDIR+=strptime
++SUBDIR+=ftime strptime
+ 
+ .include <bsd.subdir.mk>
+diff -ruN src56-orig/regress/lib/libc/time/ftime/Makefile src/regress/lib/libc/time/ftime/Makefile
+--- src56-orig/regress/lib/libc/time/ftime/Makefile	Wed Dec 31 19:00:00 1969
++++ src/regress/lib/libc/time/ftime/Makefile	Thu Apr 17 08:37:05 2014
+@@ -0,0 +1,11 @@
++
++NOMAN=
++PROG=check_ftime
++
++CFLAGS=-g
++
++
++run-regress-check_ftime: ${PROG}
++	./${PROG} >/dev/null
++
++.include <bsd.regress.mk>
+diff -ruN src56-orig/regress/lib/libc/time/ftime/check_ftime.c src/regress/lib/libc/time/ftime/check_ftime.c
+--- src56-orig/regress/lib/libc/time/ftime/check_ftime.c	Wed Dec 31 19:00:00 1969
++++ src/regress/lib/libc/time/ftime/check_ftime.c	Thu Apr 17 11:46:19 2014
+@@ -0,0 +1,268 @@
++/**
++ * Public domain according to Colombian Legislation. 
++ * http://www.pasosdejesus.org/dominio_publico_colombia.html
++ * 2014. vtamara@pasosdeJesus.org
++ *
++ * $adJ$
++ */
++
++#include <locale.h>
++#include <stdio.h>
++#include <stdlib.h>
++
++int bad = 0;
++
++#define p(t) printf("%s:\t ",#t); \
++	if (t) { \
++		printf("\x1b[38;5;2mOK\x1b[0m\n"); \
++	} else { \
++		bad++; \
++		printf("\x1b[38;5;1mERROR\x1b[0m\n"); \
++	}
++
++
++void test_ftime_posix()
++{
++	char nom[256];
++	char col[512];
++	wchar_t wcol[512];
++	char *nl;
++	char *enc[]= { "ISO8859-1", "ISO8859-15", "UTF-8" };
++	struct lconv *p;
++	struct tm tl;
++	int i;
++	time_t ti;
++	long ts;
++	for(i = 0; i < sizeof(enc) / sizeof(char *) ; i++) {
++		snprintf(nom, sizeof(nom), "POSIX.%s", enc[i]);
++		printf("nom=%s\n", nom);
++		nl = setlocale(LC_ALL, nom);
++		printf("locale %s\n", nl);
++		p = localeconv();
++		ti = (time_t)1396950000; //Tue Apr  8 09:40:00 2014
++		gmtime_r(&ti, &tl) ;
++		/*p = strptime("", "", &tm); */
++		strftime(col, sizeof(col), "%A", &tl);
++		p(strcmp(col, "Tuesday") == 0);
++		wcsftime(wcol, sizeof(wcol), L"%A", &tl);
++		p(wcscmp(wcol, L"Tuesday") == 0);
++
++		strftime(col, sizeof(col), "%a", &tl);
++		p(strcmp(col, "Tue") == 0);
++		wcsftime(wcol, sizeof(wcol), L"%a", &tl);
++		p(wcscmp(wcol, L"Tue") == 0);
++
++		strftime(col, sizeof(col), "%B", &tl);
++		p(strcmp(col, "April") == 0);
++		wcsftime(wcol, sizeof(wcol), L"%B", &tl);
++		p(wcscmp(wcol, L"April") == 0);
++
++		strftime(col, sizeof(col), "%b", &tl);
++		p(strcmp(col, "Apr") == 0);
++		wcsftime(wcol, sizeof(wcol), L"%b", &tl);
++		p(wcscmp(wcol, L"Apr") == 0);
++
++		strftime(col, sizeof(col), "%C", &tl);
++		p(strcmp(col, "20") == 0);
++		wcsftime(wcol, sizeof(wcol), L"%C", &tl);
++		p(wcscmp(wcol, L"20") == 0);
++
++		strftime(col, sizeof(col), "%c", &tl);
++		printf("%s\n", col);
++		p(strcmp(col, "Tue Apr  8 09:40:00 2014") == 0);
++		wcsftime(wcol, sizeof(wcol), L"%c", &tl);
++		p(wcscmp(wcol, L"Tue Apr  8 09:40:00 2014") == 0);
++
++		strftime(col, sizeof(col), "%D", &tl);
++		p(strcmp(col, "04/08/14") == 0);
++		wcsftime(wcol, sizeof(wcol), L"%D", &tl);
++		p(wcscmp(wcol, L"04/08/14") == 0);
++
++		strftime(col, sizeof(col), "%d", &tl);
++		p(strcmp(col, "08") == 0);
++		wcsftime(wcol, sizeof(wcol), L"%d", &tl);
++		p(wcscmp(wcol, L"08") == 0);
++
++		strftime(col, sizeof(col), "%e", &tl);
++		p(strcmp(col, " 8") == 0);
++		wcsftime(wcol, sizeof(wcol), L"%e", &tl);
++		p(wcscmp(wcol, L" 8") == 0);
++
++		strftime(col, sizeof(col), "%F", &tl);
++		p(strcmp(col, "2014-04-08") == 0);
++		wcsftime(wcol, sizeof(wcol), L"%F", &tl);
++		p(wcscmp(wcol, L"2014-04-08") == 0);
++
++		strftime(col, sizeof(col), "%G", &tl);
++		p(strcmp(col, "2014") == 0);
++		wcsftime(wcol, sizeof(wcol), L"%G", &tl);
++		p(wcscmp(wcol, L"2014") == 0);
++
++		strftime(col, sizeof(col), "%g", &tl);
++		p(strcmp(col, "14") == 0);
++		wcsftime(wcol, sizeof(wcol), L"%g", &tl);
++		p(wcscmp(wcol, L"14") == 0);
++
++		strftime(col, sizeof(col), "%H", &tl);
++		p(strcmp(col, "09") == 0);
++		wcsftime(wcol, sizeof(wcol), L"%H", &tl);
++		p(wcscmp(wcol, L"09") == 0);
++
++		strftime(col, sizeof(col), "%I", &tl);
++		p(strcmp(col, "09") == 0);
++		wcsftime(wcol, sizeof(wcol), L"%I", &tl);
++		p(wcscmp(wcol, L"09") == 0);
++
++		strftime(col, sizeof(col), "%j", &tl);
++		p(strcmp(col, "098") == 0);
++		wcsftime(wcol, sizeof(wcol), L"%j", &tl);
++		p(wcscmp(wcol, L"098") == 0);
++		
++		strftime(col, sizeof(col), "%k", &tl);
++		p(strcmp(col, " 9") == 0);
++		wcsftime(wcol, sizeof(wcol), L"%k", &tl);
++		p(wcscmp(wcol, L" 9") == 0);
++
++		strftime(col, sizeof(col), "%l", &tl);
++		p(strcmp(col, " 9") == 0);
++		wcsftime(wcol, sizeof(wcol), L"%l", &tl);
++		p(wcscmp(wcol, L" 9") == 0);
++		
++		strftime(col, sizeof(col), "%M", &tl);
++		p(strcmp(col, "40") == 0);
++		wcsftime(wcol, sizeof(wcol), L"%M", &tl);
++		p(wcscmp(wcol, L"40") == 0);
++
++		strftime(col, sizeof(col), "%m", &tl);
++		p(strcmp(col, "04") == 0);
++		wcsftime(wcol, sizeof(wcol), L"%m", &tl);
++		p(wcscmp(wcol, L"04") == 0);
++
++		strftime(col, sizeof(col), "%n", &tl);
++		p(strcmp(col, "\n") == 0);
++		wcsftime(wcol, sizeof(wcol), L"%n", &tl);
++		p(wcscmp(wcol, L"\n") == 0);
++
++		strftime(col, sizeof(col), "%p", &tl);
++		p(strcmp(col, "AM") == 0);
++		wcsftime(wcol, sizeof(wcol), L"%p", &tl);
++		p(wcscmp(wcol, L"AM") == 0);
++
++		strftime(col, sizeof(col), "%R", &tl);
++		p(strcmp(col, "09:40") == 0);
++		wcsftime(wcol, sizeof(wcol), L"%R", &tl);
++		p(wcscmp(wcol, L"09:40") == 0);
++
++		strftime(col, sizeof(col), "%r", &tl);
++		p(strcmp(col, "09:40:00 AM") == 0);
++		wcsftime(wcol, sizeof(wcol), L"%r", &tl);
++		p(wcscmp(wcol, L"09:40:00 AM") == 0);
++
++		strftime(col, sizeof(col), "%S", &tl);
++		p(strcmp(col, "00") == 0);
++		wcsftime(wcol, sizeof(wcol), L"%S", &tl);
++		p(wcscmp(wcol, L"00") == 0);
++
++		strftime(col, sizeof(col), "%s", &tl);
++		ts = atol(col);
++		printf("%li\n", ts);
++		// Checking from any timezone from GMT-12 to GMT+12
++		p(1396950000-43200 <= ts && ts <=1396950000+43200);
++		wcsftime(wcol, sizeof(wcol), L"%s", &tl);
++		ts = wcstol(wcol, NULL, 10);
++		printf("%li\n", ts);
++		p(1396950000-43200 <= ts && ts <=1396950000+43200);
++
++		strftime(col, sizeof(col), "%T", &tl);
++		p(strcmp(col, "09:40:00") == 0);
++		wcsftime(wcol, sizeof(wcol), L"%T", &tl);
++		p(wcscmp(wcol, L"09:40:00") == 0);
++
++		strftime(col, sizeof(col), "%t", &tl);
++		p(strcmp(col, "\t") == 0);
++		wcsftime(wcol, sizeof(wcol), L"%t", &tl);
++		p(wcscmp(wcol, L"\t") == 0);
++
++		strftime(col, sizeof(col), "%U", &tl);
++		p(strcmp(col, "14") == 0);
++		wcsftime(wcol, sizeof(wcol), L"%U", &tl);
++		p(wcscmp(wcol, L"14") == 0);
++
++		strftime(col, sizeof(col), "%u", &tl);
++		p(strcmp(col, "2") == 0);
++		wcsftime(wcol, sizeof(wcol), L"%u", &tl);
++		p(wcscmp(wcol, L"2") == 0);
++
++		strftime(col, sizeof(col), "%V", &tl);
++		p(strcmp(col, "15") == 0);
++		wcsftime(wcol, sizeof(wcol), L"%V", &tl);
++		p(wcscmp(wcol, L"15") == 0);
++	
++		strftime(col, sizeof(col), "%v", &tl);
++		p(strcmp(col, " 8-Apr-2014") == 0);
++		wcsftime(wcol, sizeof(wcol), L"%v", &tl);
++		p(wcscmp(wcol, L" 8-Apr-2014") == 0);
++
++		strftime(col, sizeof(col), "%w", &tl);
++		p(strcmp(col, "2") == 0);
++		wcsftime(wcol, sizeof(wcol), L"%w", &tl);
++		p(wcscmp(wcol, L"2") == 0);
++
++		strftime(col, sizeof(col), "%W", &tl);
++		p(strcmp(col, "14") == 0);
++		wcsftime(wcol, sizeof(wcol), L"%W", &tl);
++		p(wcscmp(wcol, L"14") == 0);
++
++		strftime(col, sizeof(col), "%X", &tl);
++		p(strcmp(col, "09:40:00") == 0);
++		wcsftime(wcol, sizeof(wcol), L"%X", &tl);
++		p(wcscmp(wcol, L"09:40:00") == 0);
++
++		strftime(col, sizeof(col), "%x", &tl);
++		p(strcmp(col, "04/08/14") == 0);
++		wcsftime(wcol, sizeof(wcol), L"%x", &tl);
++		p(wcscmp(wcol, L"04/08/14") == 0);
++
++		strftime(col, sizeof(col), "%Y", &tl);
++		p(strcmp(col, "2014") == 0);
++		wcsftime(wcol, sizeof(wcol), L"%Y", &tl);
++		p(wcscmp(wcol, L"2014") == 0);
++
++		strftime(col, sizeof(col), "%y", &tl);
++		p(strcmp(col, "14") == 0);
++		wcsftime(wcol, sizeof(wcol), L"%y", &tl);
++		p(wcscmp(wcol, L"14") == 0);
++
++		strftime(col, sizeof(col), "%Z", &tl);
++		p(strcmp(col, "GMT") == 0);
++		wcsftime(wcol, sizeof(wcol), L"%Z", &tl);
++		p(wcscmp(wcol, L"GMT") == 0);
++
++		strftime(col, sizeof(col), "%z", &tl);
++		p(strcmp(col, "+0000") == 0);
++		wcsftime(wcol, sizeof(wcol), L"%z", &tl);
++		p(wcscmp(wcol, L"+0000") == 0);
++
++		strftime(col, sizeof(col), "%%", &tl);
++		p(strcmp(col, "%") == 0);
++		wcsftime(wcol, sizeof(wcol), L"%%", &tl);
++		p(wcscmp(wcol, L"%") == 0);
++
++		strftime(col, sizeof(col), "%+", &tl);
++		p(strcmp(col, "Tue Apr  8 09:40:00 GMT 2014") == 0);
++		wcsftime(wcol, sizeof(wcol), L"%+", &tl);
++		p(wcscmp(wcol, L"Tue Apr  8 09:40:00 GMT 2014") == 0);
++
++		
++
++	}
++}
++
++
++int main()
++{
++	test_ftime_posix();
++	
++	return bad != 0;
++}
++

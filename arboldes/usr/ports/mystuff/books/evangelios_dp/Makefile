@@ -18,8 +18,6 @@ WRKDIST=        ${WRKDIR}/biblia_dp-${V}
 
 #Public domain
 PERMIT_PACKAGE_CDROM=	Yes
-PERMIT_PACKAGE_FTP=	Yes
-PERMIT_DISTFILES_FTP=	Yes
 
 CONFIGURE_STYLE=        simple
 CONFIGURE_SCRIPT=       conf.sh

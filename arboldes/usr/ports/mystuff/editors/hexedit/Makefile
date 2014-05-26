@@ -14,8 +14,6 @@ HOMEPAGE=	http://www.chez.com/prigaux/hexedit.html
 
 # GPL
 PERMIT_PACKAGE_CDROM=	Yes
-PERMIT_PACKAGE_FTP=    Yes
-PERMIT_DISTFILES_FTP=  Yes
 
 WANTLIB=		c curses
 

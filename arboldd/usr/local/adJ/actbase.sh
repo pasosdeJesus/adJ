@@ -15,7 +15,7 @@ if (test -f "ver.sh") then {
 	V=$1
 	if (test "$V" = "") then {
 		echo "Primer parámetro debería ser versión, e.g"
-		echo "actbase.sh 5.5"
+		echo "actbase.sh 5.6"
 		exit 1;
 	} fi;
 	VP=`echo $V | sed -e "s/[.]//g"`
@@ -42,6 +42,7 @@ if (test "$RUTAKERNELREESPECIAL" != "") then {
 } fi;
 
 nk=${rutak}/bsd${mp}
+echo "Antes de continuar, recomendamos que ejecute util/preact-adJ.sh"
 echo "Presione [ENTER] para instalar kernel $nk"
 read
 rm /obsd ; ln /bsd /obsd 
@@ -55,7 +56,7 @@ read
 sudo cp /sbin/reboot /sbin/oreboot
 for i in xserv xfont xshare xbase game comp man site base; do
 	echo $i;
-	sudo tar -C / -xzphf $V-$ARQ/$i$VP.tgz
+	sudo tar -C / -xzphf $V$VESP-$ARQ/$i$VP.tgz
 done
 echo "Tras el reinicio recuerde ejecutar:"
 echo "  cd /dev && ./MAKEDEV all"

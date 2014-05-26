@@ -16,6 +16,6 @@ ed /usr/src/xenocara/app/xdm/config/Xresources.cpp << EOF
 w
 q
 EOF
-cp arbolcd/medios/adJ_*xpm /etc/X11/xdm/pixmaps/
+cp arboldvd/medios/adJ_*xpm /etc/X11/xdm/pixmaps/
 
 

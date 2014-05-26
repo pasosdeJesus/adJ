@@ -1,0 +1,601 @@
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/sys/sys/localedef.h src/sys/sys/localedef.h
+--- src56-orig/sys/sys/localedef.h	Sun Apr 21 17:31:47 1996
++++ src/sys/sys/localedef.h	Thu Apr 24 21:44:36 2014
+@@ -84,15 +84,16 @@
+ 
+ 
+ typedef struct {
+-	const char *abday[7];
+-	const char *day[7];
+-	const char *abmon[12];
+-	const char *mon[12];
+-	const char *am_pm[2];
+-	const char *d_t_fmt;
+-	const char *d_fmt;
+-	const char *t_fmt;
+-	const char *t_fmt_ampm;
++	const char *abmon[12];	/*	mon 	*/
++	const char *mon[12];	/*	month 	*/
++	const char *abday[7];   /*	wday 	*/
++	const char *day[7];	/*	weekday */
++	const char *t_fmt; 	/* %X 	X_fmt	*/
++	const char *d_fmt; 	/* %x 	x_fmt */
++	const char *d_t_fmt; 	/* %c 	c_fmt */
++	const char *am_pm[2];	/*	am pm */
++ 	const char *date_fmt; 	/* %+ 	date_fmt */
++	const char *t_fmt_ampm; /* %r 	ampm_fmt */
+ } _TimeLocale;
+ 
+ extern const _TimeLocale *_CurrentTimeLocale;
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/locale/_def_time.c src/lib/libc/locale/_def_time.c
+--- src56-orig/lib/libc/locale/_def_time.c	Sun Oct  9 01:39:53 2011
++++ src/lib/libc/locale/_def_time.c	Thu Apr 24 21:20:12 2014
+@@ -10,13 +10,6 @@
+ const _TimeLocale _DefaultTimeLocale =
+ {
+ 	{
+-		"Sun","Mon","Tue","Wed","Thu","Fri","Sat",
+-	},
+-	{
+-		"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday",
+-		"Friday", "Saturday"
+-	},
+-	{
+ 		"Jan", "Feb", "Mar", "Apr", "May", "Jun",
+ 		"Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+ 	},
+@@ -25,11 +18,19 @@
+ 		"August", "September", "October", "November", "December"
+ 	},
+ 	{
+-		"AM", "PM"
++		"Sun","Mon","Tue","Wed","Thu","Fri","Sat",
+ 	},
+-	"%a %b %e %H:%M:%S %Y",
+-	"%m/%d/%y",
++	{
++		"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday",
++		"Friday", "Saturday"
++	},
+ 	"%H:%M:%S",
++	"%m/%d/%y",
++	"%a %b %e %H:%M:%S %Y",
++	{
++		"AM", "PM"
++	},
++	"%a %b %e %H:%M:%S %Z %Y",
+ 	"%I:%M:%S %p"
+ };
+ 
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/strftime.c src/lib/libc/time/strftime.c
+--- src56-orig/lib/libc/time/strftime.c	Thu Sep 13 06:14:20 2012
++++ src/lib/libc/time/strftime.c	Fri Apr 25 10:16:20 2014
+@@ -30,79 +30,12 @@
+ ** SUCH DAMAGE.
+ */
+ 
+-#include "tzfile.h"
++#include <sys/localedef.h>
++
+ #include "fcntl.h"
+ #include "locale.h"
++#include "tzfile.h"
+ 
+-struct lc_time_T {
+-	const char *	mon[MONSPERYEAR];
+-	const char *	month[MONSPERYEAR];
+-	const char *	wday[DAYSPERWEEK];
+-	const char *	weekday[DAYSPERWEEK];
+-	const char *	X_fmt;
+-	const char *	x_fmt;
+-	const char *	c_fmt;
+-	const char *	am;
+-	const char *	pm;
+-	const char *	date_fmt;
+-};
+-
+-#ifdef LOCALE_HOME
+-#include "sys/stat.h"
+-static struct lc_time_T		localebuf;
+-static struct lc_time_T *	_loc(void);
+-#define Locale	_loc()
+-#endif /* defined LOCALE_HOME */
+-#ifndef LOCALE_HOME
+-#define Locale	(&C_time_locale)
+-#endif /* !defined LOCALE_HOME */
+-
+-static const struct lc_time_T	C_time_locale = {
+-	{
+-		"Jan", "Feb", "Mar", "Apr", "May", "Jun",
+-		"Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+-	}, {
+-		"January", "February", "March", "April", "May", "June",
+-		"July", "August", "September", "October", "November", "December"
+-	}, {
+-		"Sun", "Mon", "Tue", "Wed",
+-		"Thu", "Fri", "Sat"
+-	}, {
+-		"Sunday", "Monday", "Tuesday", "Wednesday",
+-		"Thursday", "Friday", "Saturday"
+-	},
+-
+-	/* X_fmt */
+-	"%H:%M:%S",
+-
+-	/*
+-	** x_fmt
+-	** C99 requires this format.
+-	** Using just numbers (as here) makes Quakers happier;
+-	** it's also compatible with SVR4.
+-	*/
+-	"%m/%d/%y",
+-
+-	/*
+-	** c_fmt
+-	** C99 requires this format.
+-	** Previously this code used "%D %X", but we now conform to C99.
+-	** Note that
+-	**	"%a %b %d %H:%M:%S %Y"
+-	** is used by Solaris 2.3.
+-	*/
+-	"%a %b %e %T %Y",
+-
+-	/* am */
+-	"AM",
+-
+-	/* pm */
+-	"PM",
+-
+-	/* date_fmt */
+-	"%a %b %e %H:%M:%S %Z %Y"
+-};
+-
+ static char *	_add(const char *, char *, const char *);
+ static char *	_conv(int, const char *, char *, const char *);
+ static char *	_fmt(const char *, const struct tm *, char *, const char *,
+@@ -131,9 +64,6 @@
+ 	int	warn;
+ 
+ 	tzset();
+-#ifdef LOCALE_HOME
+-	localebuf.mon[0] = 0;
+-#endif /* defined LOCALE_HOME */
+ 	warn = IN_NONE;
+ 	p = _fmt(((format == NULL) ? "%c" : format), t, s, s + maxsize, &warn);
+ #ifndef NO_RUN_TIME_WARNINGS_ABOUT_YEAR_2000_PROBLEMS_THANK_YOU
+@@ -179,26 +109,26 @@
+ 			case 'A':
+ 				pt = _add((t->tm_wday < 0 ||
+ 					t->tm_wday >= DAYSPERWEEK) ?
+-					"?" : Locale->weekday[t->tm_wday],
++					"?" : _CurrentTimeLocale->day[t->tm_wday],
+ 					pt, ptlim);
+ 				continue;
+ 			case 'a':
+ 				pt = _add((t->tm_wday < 0 ||
+ 					t->tm_wday >= DAYSPERWEEK) ?
+-					"?" : Locale->wday[t->tm_wday],
++					"?" : _CurrentTimeLocale->abday[t->tm_wday],
+ 					pt, ptlim);
+ 				continue;
+ 			case 'B':
+ 				pt = _add((t->tm_mon < 0 ||
+ 					t->tm_mon >= MONSPERYEAR) ?
+-					"?" : Locale->month[t->tm_mon],
++					"?" : _CurrentTimeLocale->mon[t->tm_mon],
+ 					pt, ptlim);
+ 				continue;
+ 			case 'b':
+ 			case 'h':
+ 				pt = _add((t->tm_mon < 0 ||
+ 					t->tm_mon >= MONSPERYEAR) ?
+-					"?" : Locale->mon[t->tm_mon],
++					"?" : _CurrentTimeLocale->abmon[t->tm_mon],
+ 					pt, ptlim);
+ 				continue;
+ 			case 'C':
+@@ -216,7 +146,7 @@
+ 				{
+ 				int warn2 = IN_SOME;
+ 
+-				pt = _fmt(Locale->c_fmt, t, pt, ptlim, &warn2);
++				pt = _fmt(_CurrentTimeLocale->d_t_fmt, t, pt, ptlim, &warn2);
+ 				if (warn2 == IN_ALL)
+ 					warn2 = IN_THIS;
+ 				if (warn2 > *warnp)
+@@ -304,15 +234,15 @@
+ 				continue;
+ 			case 'p':
+ 				pt = _add((t->tm_hour >= (HOURSPERDAY / 2)) ?
+-					Locale->pm :
+-					Locale->am,
++					_CurrentTimeLocale->am_pm[1] :
++					_CurrentTimeLocale->am_pm[0],
+ 					pt, ptlim);
+ 				continue;
+ 			case 'R':
+ 				pt = _fmt("%H:%M", t, pt, ptlim, warnp);
+ 				continue;
+ 			case 'r':
+-				pt = _fmt("%I:%M:%S %p", t, pt, ptlim, warnp);
++				pt = _fmt(_CurrentTimeLocale->t_fmt_ampm, t, pt, ptlim, warnp);
+ 				continue;
+ 			case 'S':
+ 				pt = _conv(t->tm_sec, "%02d", pt, ptlim);
+@@ -381,13 +311,13 @@
+ 					int	year;
+ 					int	base;
+ 					int	yday;
+-					int	wday;
++					int	abday;
+ 					int	w;
+ 
+ 					year = t->tm_year;
+ 					base = TM_YEAR_BASE;
+ 					yday = t->tm_yday;
+-					wday = t->tm_wday;
++					abday = t->tm_wday;
+ 					for ( ; ; ) {
+ 						int	len;
+ 						int	bot;
+@@ -400,7 +330,7 @@
+ 						** What yday (-3 ... 3) does
+ 						** the ISO year begin on?
+ 						*/
+-						bot = ((yday + 11 - wday) %
++						bot = ((yday + 11 - abday) %
+ 							DAYSPERWEEK) - 3;
+ 						/*
+ 						** What yday does the NEXT
+@@ -463,13 +393,13 @@
+ 				pt = _conv(t->tm_wday, "%d", pt, ptlim);
+ 				continue;
+ 			case 'X':
+-				pt = _fmt(Locale->X_fmt, t, pt, ptlim, warnp);
++				pt = _fmt(_CurrentTimeLocale->t_fmt, t, pt, ptlim, warnp);
+ 				continue;
+ 			case 'x':
+ 				{
+ 				int	warn2 = IN_SOME;
+ 
+-				pt = _fmt(Locale->x_fmt, t, pt, ptlim, &warn2);
++				pt = _fmt(_CurrentTimeLocale->d_fmt, t, pt, ptlim, &warn2);
+ 				if (warn2 == IN_ALL)
+ 					warn2 = IN_THIS;
+ 				if (warn2 > *warnp)
+@@ -554,7 +484,7 @@
+ 				}
+ 				continue;
+ 			case '+':
+-				pt = _fmt(Locale->date_fmt, t, pt, ptlim,
++				pt = _fmt(_CurrentTimeLocale->date_fmt, t, pt, ptlim,
+ 					warnp);
+ 				continue;
+ 			case '%':
+@@ -639,135 +569,4 @@
+ 	return pt;
+ }
+ 
+-#ifdef LOCALE_HOME
+-static struct lc_time_T *
+-_loc(void)
+-{
+-	static const char	locale_home[] = LOCALE_HOME;
+-	static const char	lc_time[] = "LC_TIME";
+-	static char *		locale_buf;
+ 
+-	int			fd;
+-	int			oldsun;	/* "...ain't got nothin' to do..." */
+-	int			len;
+-	char *			lbuf;
+-	char *			nlbuf;
+-	char *			name;
+-	char *			p;
+-	const char **		ap;
+-	const char *		plim;
+-	char			filename[FILENAME_MAX];
+-	struct stat		st;
+-	size_t			namesize;
+-	size_t			bufsize;
+-
+-	/*
+-	** Use localebuf.mon[0] to signal whether locale is already set up.
+-	*/
+-	if (localebuf.mon[0])
+-		return &localebuf;
+-	name = setlocale(LC_TIME, (char *) NULL);
+-	if (name == NULL || *name == '\0')
+-		goto no_locale;
+-	/*
+-	** If the locale name is the same as our cache, use the cache.
+-	*/
+-	lbuf = locale_buf;
+-	if (lbuf != NULL && strcmp(name, lbuf) == 0) {
+-		p = lbuf;
+-		for (ap = (const char **) &localebuf;
+-			ap < (const char **) (&localebuf + 1);
+-				++ap)
+-					*ap = p += strlen(p) + 1;
+-		return &localebuf;
+-	}
+-	/*
+-	** Slurp the locale file into the cache.
+-	*/
+-	namesize = strlen(name) + 1;
+-	if (sizeof filename <
+-		((sizeof locale_home) + namesize + (sizeof lc_time)))
+-			goto no_locale;
+-	oldsun = 0;
+-	len = snprintf(filename, sizeof filename, "%s/%s/%s", locale_home,
+-	    name, lc_time);
+-	if (len < 0 || len >= sizeof filename)
+-		goto no_locale;
+-	fd = open(filename, O_RDONLY);
+-	if (fd < 0) {
+-		/*
+-		** Old Sun systems have a different naming and data convention.
+-		*/
+-		oldsun = 1;
+-		len = snprintf(filename, sizeof filename, "%s/%s/%s",
+-			locale_home, lc_time, name);
+-		if (len < 0 || len >= sizeof filename)
+-			goto no_locale;
+-		fd = open(filename, O_RDONLY);
+-		if (fd < 0)
+-			goto no_locale;
+-	}
+-	if (fstat(fd, &st) != 0)
+-		goto bad_locale;
+-	if (st.st_size <= 0)
+-		goto bad_locale;
+-	bufsize = namesize + st.st_size;
+-	locale_buf = NULL;
+-	nlbuf = (lbuf == NULL) ? malloc(bufsize) : realloc(lbuf, bufsize);
+-	if (nlbuf == NULL) {
+-		if (lbuf)
+-			free(lbuf);
+-		lbuf = NULL;
+-		goto bad_locale;
+-	}
+-	lbuf = nlbuf;
+-	(void) strlcpy(lbuf, name, bufsize);
+-	p = lbuf + namesize;
+-	plim = p + st.st_size;
+-	if (read(fd, p, (size_t) st.st_size) != st.st_size)
+-		goto bad_lbuf;
+-	if (close(fd) != 0)
+-		goto bad_lbuf;
+-	/*
+-	** Parse the locale file into localebuf.
+-	*/
+-	if (plim[-1] != '\n')
+-		goto bad_lbuf;
+-	for (ap = (const char **) &localebuf;
+-		ap < (const char **) (&localebuf + 1);
+-			++ap) {
+-				if (p == plim)
+-					goto bad_lbuf;
+-				*ap = p;
+-				while (*p != '\n')
+-					++p;
+-				*p++ = '\0';
+-	}
+-	if (oldsun) {
+-		/*
+-		** SunOS 4 used an obsolescent format; see localdtconv(3).
+-		** c_fmt had the ``short format for dates and times together''
+-		** (SunOS 4 date, "%a %b %e %T %Z %Y" in the C locale);
+-		** date_fmt had the ``long format for dates''
+-		** (SunOS 4 strftime %C, "%A, %B %e, %Y" in the C locale).
+-		** Discard the latter in favor of the former.
+-		*/
+-		localebuf.date_fmt = localebuf.c_fmt;
+-	}
+-	/*
+-	** Record the successful parse in the cache.
+-	*/
+-	locale_buf = lbuf;
+-
+-	return &localebuf;
+-
+-bad_lbuf:
+-	free(lbuf);
+-bad_locale:
+-	(void) close(fd);
+-no_locale:
+-	localebuf = C_time_locale;
+-	locale_buf = NULL;
+-	return &localebuf;
+-}
+-#endif /* defined LOCALE_HOME */
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/wcsftime.c src/lib/libc/time/wcsftime.c
+--- src56-orig/lib/libc/time/wcsftime.c	Sun Jan 20 15:29:02 2013
++++ src/lib/libc/time/wcsftime.c	Sun Apr 27 17:43:58 2014
+@@ -33,73 +33,13 @@
+ ** SUCH DAMAGE.
+ */
+ 
+-#include "tzfile.h"
+-#include "fcntl.h"
++#include <sys/localedef.h>
+ #include <locale.h>
+ #include <wchar.h>
+ 
+-struct lc_time_T {
+-	const wchar_t *	mon[MONSPERYEAR];
+-	const wchar_t *	month[MONSPERYEAR];
+-	const wchar_t *	wday[DAYSPERWEEK];
+-	const wchar_t *	weekday[DAYSPERWEEK];
+-	const wchar_t *	X_fmt;
+-	const wchar_t *	x_fmt;
+-	const wchar_t *	c_fmt;
+-	const wchar_t *	am;
+-	const wchar_t *	pm;
+-	const wchar_t *	date_fmt;
+-};
++#include "fcntl.h"
++#include "tzfile.h"
+ 
+-#define Locale	(&C_time_locale)
+-
+-static const struct lc_time_T	C_time_locale = {
+-	{
+-		L"Jan", L"Feb", L"Mar", L"Apr", L"May", L"Jun",
+-		L"Jul", L"Aug", L"Sep", L"Oct", L"Nov", L"Dec"
+-	}, {
+-		L"January", L"February", L"March", L"April", L"May", L"June",
+-		L"July", L"August", L"September", L"October", L"November", 
+-		L"December"
+-	}, {
+-		L"Sun", L"Mon", L"Tue", L"Wed",
+-		L"Thu", L"Fri", L"Sat"
+-	}, {
+-		L"Sunday", L"Monday", L"Tuesday", L"Wednesday",
+-		L"Thursday", L"Friday", L"Saturday"
+-	},
+-
+-	/* X_fmt */
+-	L"%H:%M:%S",
+-
+-	/*
+-	** x_fmt
+-	** C99 requires this format.
+-	** Using just numbers (as here) makes Quakers happier;
+-	** it's also compatible with SVR4.
+-	*/
+-	L"%m/%d/%y",
+-
+-	/*
+-	** c_fmt
+-	** C99 requires this format.
+-	** Previously this code used "%D %X", but we now conform to C99.
+-	** Note that
+-	**	"%a %b %d %H:%M:%S %Y"
+-	** is used by Solaris 2.3.
+-	*/
+-	L"%a %b %e %T %Y",
+-
+-	/* am */
+-	L"AM",
+-
+-	/* pm */
+-	L"PM",
+-
+-	/* date_fmt */
+-	L"%a %b %e %H:%M:%S %Z %Y"
+-};
+-
+ #define UNKNOWN L"?"
+ static wchar_t *	_add(const wchar_t *, wchar_t *, const wchar_t *);
+ static wchar_t *	_sadd(const char *, wchar_t *, const wchar_t *);
+@@ -154,10 +94,29 @@
+ 	return p - s;
+ }
+ 
++wchar_t *
++_towcs(wchar_t *bL, size_t bLsize, const char *s)
++{
++	size_t numc = mbstowcs(NULL, s, 0) + 1; 
++	if (numc <= 0 || numc >= bLsize) { 
++		(void) fprintf(stderr, "Cannot translate %s to wchar_t *\n", s);
++		errno = EINVAL;
++		return NULL;
++	}
++	mbstowcs(bL, s, numc);
++	return bL;
++}
++
++
+ static wchar_t *
+ _fmt(const wchar_t *format, const struct tm *t, wchar_t *pt, 
+     const wchar_t *ptlim, int *warnp)
+ {
++	// In the moment of this writing the biggest LC_TIME file
++        // is 479 bytes, the next buffer should be enough to store
++        // any string in them.
++        wchar_t bL[1024];
++
+ 	for ( ; *format; ++format) {
+ 		if (*format != L'%') {
+ 			if (pt == ptlim)
+@@ -173,26 +132,26 @@
+ 		case 'A':
+ 			pt = _add((t->tm_wday < 0 ||
+ 				t->tm_wday >= DAYSPERWEEK) ?
+-				UNKNOWN : Locale->weekday[t->tm_wday],
++				UNKNOWN : _towcs(bL, sizeof(bL), _CurrentTimeLocale->day[t->tm_wday]),
+ 				pt, ptlim);
+ 			continue;
+ 		case 'a':
+ 			pt = _add((t->tm_wday < 0 ||
+ 				t->tm_wday >= DAYSPERWEEK) ?
+-				UNKNOWN : Locale->wday[t->tm_wday],
++				UNKNOWN : _towcs(bL, sizeof(bL), _CurrentTimeLocale->abday[t->tm_wday]),
+ 				pt, ptlim);
+ 			continue;
+ 		case 'B':
+ 			pt = _add((t->tm_mon < 0 ||
+ 				t->tm_mon >= MONSPERYEAR) ?
+-				UNKNOWN : Locale->month[t->tm_mon],
++				UNKNOWN : _towcs(bL, sizeof(bL), _CurrentTimeLocale->mon[t->tm_mon]),
+ 				pt, ptlim);
+ 			continue;
+ 		case 'b':
+ 		case 'h':
+ 			pt = _add((t->tm_mon < 0 ||
+ 				t->tm_mon >= MONSPERYEAR) ?
+-				UNKNOWN : Locale->mon[t->tm_mon],
++				UNKNOWN : _towcs(bL, sizeof(bL), _CurrentTimeLocale->abmon[t->tm_mon]),
+ 				pt, ptlim);
+ 			continue;
+ 		case 'C':
+@@ -210,7 +169,7 @@
+ 			{
+ 			int warn2 = IN_SOME;
+ 
+-			pt = _fmt(Locale->c_fmt, t, pt, ptlim, &warn2);
++			pt = _fmt(_towcs(bL, sizeof(bL), _CurrentTimeLocale->d_t_fmt), t, pt, ptlim, &warn2);
+ 			if (warn2 == IN_ALL)
+ 				warn2 = IN_THIS;
+ 			if (warn2 > *warnp)
+@@ -290,8 +249,8 @@
+ 			continue;
+ 		case 'p':
+ 			pt = _add((t->tm_hour >= (HOURSPERDAY / 2)) ?
+-				Locale->pm :
+-				Locale->am,
++				_towcs(bL, sizeof(bL), _CurrentTimeLocale->am_pm[1]) :
++				_towcs(bL, sizeof(bL), _CurrentTimeLocale->am_pm[0]),
+ 				pt, ptlim);
+ 			continue;
+ 		case 'R':
+@@ -442,13 +401,13 @@
+ 			pt = _conv(t->tm_wday, L"%d", pt, ptlim);
+ 			continue;
+ 		case 'X':
+-			pt = _fmt(Locale->X_fmt, t, pt, ptlim, warnp);
++			pt = _fmt(_towcs(bL, sizeof(bL), _CurrentTimeLocale->t_fmt), t, pt, ptlim, warnp);
+ 			continue;
+ 		case 'x':
+ 			{
+ 			int	warn2 = IN_SOME;
+ 
+-			pt = _fmt(Locale->x_fmt, t, pt, ptlim, &warn2);
++			pt = _fmt(_towcs(bL, sizeof(bL), _CurrentTimeLocale->d_fmt), t, pt, ptlim, &warn2);
+ 			if (warn2 == IN_ALL)
+ 				warn2 = IN_THIS;
+ 			if (warn2 > *warnp)
+@@ -496,7 +455,7 @@
+ 			}
+ 			continue;
+ 		case '+':
+-			pt = _fmt(Locale->date_fmt, t, pt, ptlim, warnp);
++			pt = _fmt(_towcs(bL, sizeof(bL), _CurrentTimeLocale->date_fmt), t, pt, ptlim, warnp);
+ 			continue;
+ 		case '%':
+ 		/*
+@@ -572,4 +531,3 @@
+ 		pt = _conv(((trail < 0) ? -trail : trail), L"%02d", pt, ptlim);
+ 	return pt;
+ }
+-

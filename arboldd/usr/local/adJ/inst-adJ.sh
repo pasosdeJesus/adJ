@@ -3,10 +3,10 @@
 # Dominio público de acuerdo a legislación colombiana. http://www.pasosdejesus.org/dominio_publico_colombia.html. 
 # 2013. vtamara@pasosdeJesus.org
 
-VER=5.4
+VER=5.6
 REV=0
 VESP=""
-VERP=54
+VERP=56
 
 # Falta /standard/root.hint
 
@@ -355,7 +355,7 @@ if (test "$p" != "/") then {
 } fi;
 
 if (test ! -f "$ARCH/Novedades.txt" -o ! -d "$ARCH/paquetes") then {
-echo "En la ruta $ARCH no está el CD Aprendiendo de Jesús" >> /var/tmp/inst-adJ.bitacora;
+echo "En la ruta $ARCH no está el CD Aprendiendo de Jesús" | tee -a /var/tmp/inst-adJ.bitacora;
 exit 1;
 } fi;
 
@@ -427,6 +427,27 @@ if (test "$?" != "0") then {
 sudo chown $uadJ:$uadJ /mnt/usb 
 sudo chown $uadJ:$uadJ /mnt/usbc
 
+echo "/var sin nodev en /etc/fstab (para tener /var/www/dev/random)" >> /var/tmp/inst-adJ.bitacora
+grep " /var.*nodev," /etc/fstab > /dev/null
+if (test "$?" = "0") then {
+	echo "Por quitar opcion nodev en /var en fstab" >> /var/tmp/inst-adJ.bitacora;
+	ed /etc/fstab <<EOF
+/ \/var.*nodev,/
+s/nodev,//g
+w
+q
+EOF
+} else {
+	echo "   Saltando quitar nodev..." >> /var/tmp/inst-adJ.bitacora;
+} fi;
+
+echo "/var/www/dev/random" >> /var/tmp/inst-adJ.bitacora
+if (test ! -f "/var/www/dev/random") then {
+	mkdir -p /var/www/dev/
+	sudo mknod -m 644 /var/www/dev/random c 45 0
+} else {
+	echo "   Saltando /var/www/dev/random..." >> /var/tmp/inst-adJ.bitacora;
+} fi;
 
 userinfo _hostapd >/dev/null
 if (test "$?" != "0") then {
@@ -742,6 +763,40 @@ if (test -f /usr/bin/pmdb) then {
 	rm -r /usr/lib/gcc-lib/*-unknown-openbsd5.2
 } fi;
 
+if (test -d /usr/share/locale/de_AT) then {
+	vac="$vac 5.3 a 5.4";	
+	echo "Aplicando actualizaciones de 5.3 a 5.4 " >> /var/tmp/inst-adJ.bitacora;
+	rm -rf /usr/share/locale/*_*.*
+	rm -rf /usr/include/pcap-int.h
+	rm -rf /usr/libdata/perl5/site_perl/*/pcap-int.ph
+
+	rm -f /usr/X11R6/include/xorg/{mibstore.h,synaptics.h,xaa.h,xaalocal.h}
+	rm -f /usr/X11R6/lib/modules/extensions/lib{dbe,dri,dri2,extmod,record}.{la,so}
+	rm -f /usr/X11R6/lib/modules/extensions/lib/libxaa.{la,so}
+	rm -f /usr/share/man/man{9/{re,}lookup.9,/_Exit.3}
+	rm -f /usr/include/spinlock.h
+	rm -f /usr/libdata/perl5/site_perl/*/spinlock.ph
+	rm -f /etc/kerberosV/README
+	rm -f /usr/bin/{afslog,hxtool,kauth,kadmin,ksu,pagsh,kswitch}
+	rm -f /usr/lib/lib{heimntlm.*,heimntlm_p.*,hx509.*,hx509_p.*}
+	rm -f /usr/libdata/perl5/site_perl/*-openbsd/com_err.ph
+	rm -f /usr/libdata/perl5/site_perl/*-openbsd/kerberosV/{crmf_asn1,heimntlm-protos,heimntlm,hx509-private,hdb-private}.ph
+	rm -f /usr/libdata/perl5/site_perl/*-openbsd/kerberosV/{hx509-protos,hx509,hx509_err,kx509_asn1,ntlm_err,ocsp_asn1,pkcs10_asn1}.ph
+	rm -f /usr/libdata/perl5/site_perl/*-openbsd/kerberosV/{pkcs12_asn1,pkcs8_asn1,pkcs9_asn1,pkinit_asn1,gssapi/gssapi_spnego,spnego_asn1}.ph
+	rm -f /usr/libexec/{digest-service,kimpersonate,kdigest,kcm}
+	rm -f /usr/include/com_err.h
+	rm -f /usr/include/kerberosV/{crmf_asn1,hdb-private,heimntlm-protos,heimntlm,hx509-private}.h
+	rm -f /usr/include/kerberosV/{hx509-protos,hx509,hx509_err,kx509_asn1,ntlm_err,ocsp_asn1,pkcs10_asn1,pkcs12_asn1}.h
+	rm -f /usr/include/kerberosV/{pkcs8_asn1,pkcs9_asn1,pkinit_asn1,spnego_asn1,gssapi/gssapi_spnego}.h
+	rm -f /usr/sbin/kdigest
+	if (test -f "/var/heimdal") then {
+		echo "Kerberos requiere actualización especial";
+		echo "/etc/rc.d/kadmind stop; /etc/rc.d/kpasswdd stop; /etc/rc.d/kdc stop; cp -Rp /var/heimdal /var/kerberosV"
+		echo "Actualizar y después: rm -rf /var/heimdal";
+		echo "Regrese a este script con 'exit'";
+		sh
+	} fi;
+} fi;
 
 if (test -f /usr/include/pcap-int.h) then {
 	vac="$vac 5.3 a 5.4";        
@@ -1198,14 +1253,23 @@ if (test "$?" = "0") then {
 			if (test -f /tmp/penc.txt -a ! -z /tmp/penc.txt) then {
 				dbenc=`grep -v "(1 row)" /tmp/penc.txt | grep -v "server_encoding" | grep -v "[-]-----" | grep -v "^ *$" | sed -e "s/  *//g"`
 			} fi;
-			echo -n "pg_dumpall $acuspos --inserts --column-inserts --host=/var/www/tmp > /var/www/resbase/pga-conc.sql" > /tmp/cu.sh
+			echo "pg_dumpall $acuspos --inserts --column-inserts --host=/var/www/tmp > /var/www/resbase/pga-conc.sql" > /tmp/cu.sh
+			echo "if (test \"\$?\" != \"0\") then {" >> /tmp/cu.sh 
+			echo "  echo \"No pudo completarse la copia\";" >> /tmp/cu.sh 
+			echo "  exit 1;" >> /tmp/cu.sh 
+			echo "} fi;" >> /tmp/cu.sh 
 			chmod +x /tmp/cu.sh
 			cat /tmp/cu.sh >> /var/tmp/inst-adJ.bitacora
 			su - _postgresql /tmp/cu.sh >> /var/tmp/inst-adJ.bitacora;
-			grep "CREATE DATABASE" /var/www/resbase/pga-conc.sql | grep -v "ENCODING" > /tmp/cb.sed
-			sed -e "s/\(.*\);$/s\/\1;\/\1 ENCODING='$dbenc';\/g/g" /tmp/cb.sed  > /tmp/cb2.sed
-			cat /tmp/cb2.sed >> /var/tmp/inst-adJ.bitacora
-			grep -v "ALTER ROLE $uspos" /var/www/resbase/pga-conc.sql | sed -f /tmp/cb2.sed > /var/www/resbase/pga-$nb.sql
+			if (test "$?" != "0" -a -f /var/www/resbase/pga-conc.sql) then {
+				echo "* Copia incompleta dejada en /var/www/resbase/pga-par.sql"
+				mv /var/www/resbase/pga-conc.sql /var/www/resbase/pga-par.sql
+			} else {
+				grep "CREATE DATABASE" /var/www/resbase/pga-conc.sql | grep -v "ENCODING" > /tmp/cb.sed
+				sed -e "s/\(.*\);$/s\/\1;\/\1 ENCODING='$dbenc';\/g/g" /tmp/cb.sed  > /tmp/cb2.sed
+				cat /tmp/cb2.sed >> /var/tmp/inst-adJ.bitacora
+				grep -v "ALTER ROLE $uspos" /var/www/resbase/pga-conc.sql | sed -f /tmp/cb2.sed > /var/www/resbase/pga-$nb.sql
+			} fi;
 		} else {
 			echo "PostgreSQL no está corriendo, no fue posible sacar copia" >> /var/tmp/inst-adJ.bitacora;
 		} fi;
@@ -1428,7 +1492,7 @@ if (test "$p" != "") then {
 echo "* Configurar servidor web" >> /var/tmp/inst-adJ.bitacora ;
 if (test ! -f /etc/ssl/server.crt) then {
 	echo "* Configurando Certificado SSL" | tee -a /var/tmp/inst-adJ.bitacora;
-	openssl genrsa -out /etc/ssl/private/server.key 1024
+	openssl genrsa -out /etc/ssl/private/server.key 2048
 	openssl req -new -key /etc/ssl/private/server.key \
        		-out /etc/ssl/private/server.csr
 	openssl x509 -req -days 3650 -in /etc/ssl/private/server.csr \
@@ -1815,12 +1879,11 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 [begin] (Fluxbox)
 	[exec] (xfe - Archivos) {PATH=\$PATH:/usr/sbin:/usr/local/sbin:/sbin /usr/local/bin/xfe}
 	[exec] (xterm) {xterm -en utf8 -e /bin/ksh -l}
-	[exec] (mozilla-firefox) {ulimit -d 200000 && /usr/local/bin/firefox -UILocale es-AR}
-	[exec] (midori) {/usr/local/bin/midori}
 	[exec] (chromium) {/usr/local/bin/chrome -allow-file-access-from-files}
+	[exec] (midori) {/usr/local/bin/midori}
 [submenu] (Espiritualidad)
 	[exec] (xiphos) {/usr/local/bin/xiphos}
-	[exec] (Evangelios de dominio publico) {/usr/local/bin/firefox /usr/local/share/doc/evangelios_dp/}
+	[exec] (Evangelios de dominio publico) {/usr/local/bin/chrome /usr/local/share/doc/evangelios_dp/}
 [end]
 [submenu] (Dispositivos)
 	[exec] (Apagar) {sudo /sbin/halt -p}
@@ -1833,7 +1896,7 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 	[exec] (Desmontar USBC) {/sbin/umount -f /mnt/usbc}
 	[exec] (Montar Floppy) {/sbin/mount /mnt/floppy ; xfe /mnt/floppy}
 	[exec] (Desmontar Floppy) {/sbin/umount -f /mnt/floppy}
-	[exec] (Configurar Impresora con CUPS) {echo y | sudo cups-enable; sudo chmod a+rw /dev/ulpt* /dev/lpt*; /usr/local/bin/firefox -UILocale es-AR http://127.0.0.1:631}
+	[exec] (Configurar Impresora con CUPS) {echo y | sudo cups-enable; sudo chmod a+rw /dev/ulpt* /dev/lpt*; /usr/local/bin/chrome http://127.0.0.1:631}
 	[submenu] (Red)
                 [exec] (Examinar red) {xterm -en utf8 -e '/sbin/ifconfig; echo -n "\n[RETORNO] para examinar enrutamiento (podrá salir con q)"; read; /sbin/route -n show | less'}
                 [exec] (Examinar configuracion cortafuegos) {xterm  -en utf8 -e 'sudo /sbin/pfctl -s all | less '}
@@ -1869,9 +1932,9 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 	[exec] (Pidgin) {pidgin}
 [end]
 [submenu] (Documentos)
-	[exec] (OpenBSD basico) {/usr/local/bin/firefox -UILocale es-AR /usr/local/share/doc/basico_OpenBSD/index.html}
-	[exec] (OpenBSD usuario) {/usr/local/bin/firefox -UILocale es-AR /usr/local/share/doc/usuario_OpenBSD/index.html}
-	[exec] (OpenBSD servidor) {/usr/local/bin/firefox -UILocale es-AR /usr/local/share/doc/servidor_OpenBSD/index.html}
+	[exec] (OpenBSD basico) {/usr/local/bin/chrome /usr/local/share/doc/basico_OpenBSD/index.html}
+	[exec] (OpenBSD usuario) {/usr/local/bin/chrome /usr/local/share/doc/usuario_OpenBSD/index.html}
+	[exec] (OpenBSD servidor) {/usr/local/bin/chrome /usr/local/share/doc/servidor_OpenBSD/index.html}
 [end]
 [submenu] (Otros)
 [exec] (gvim) {gvim}
@@ -1990,8 +2053,8 @@ Pos= 23 5
 [end]
 
 [Desktop Entry]
-Name=firefox
-Exec=firefox
+Name=chromium
+Exec=chrome
 Icon=/usr/local/share/icons/hicolor/48x48/apps/applications-internet.png
 Pos= 27 86
 [end]
@@ -2206,16 +2269,16 @@ if (test -f /etc/rc.d/cupsd) then {
 } fi;
 
 
-echo "* Instalando navegador mozilla-firefox" | tee -a /var/tmp/inst-adJ.bitacora;
-f=`ls /var/db/pkg/*firefox* 2> /dev/null > /dev/null`;
+echo "* Instalando navegador chromium" | tee -a /var/tmp/inst-adJ.bitacora;
+f=`ls /var/db/pkg/*chromum* 2> /dev/null > /dev/null`;
 if (test "$?" = "0") then {
-	dialog --title 'Eliminar Firefox' --yesno "\\nFirefox instalado. ¿Eliminarlo para instalar uno más nuevo?" 15 60
+	dialog --title 'Eliminar chromium' --yesno "\\nChrome instalado. ¿Eliminarlo para instalar uno más nuevo?" 15 60
 	if (test "$?" = "0") then {
-		pkg_delete -I -D dependencies mozilla-firefox >> /var/tmp/inst-adJ.bitacora 2>&1
-		pkg_delete -I -D dependencies firefox >> /var/tmp/inst-adJ.bitacora 2>&1
+		pkg_delete -I -D dependencies chromium >> /var/tmp/inst-adJ.bitacora 2>&1
+		pkg_delete -I -D dependencies chromium >> /var/tmp/inst-adJ.bitacora 2>&1
 	} fi;
 } fi;
-f=`ls /var/db/pkg/firefox* 2> /dev/null > /dev/null`;
+f=`ls /var/db/pkg/chromium* 2> /dev/null > /dev/null`;
 if (test "$?" != "0") then {
 
 	insacp png
@@ -2229,16 +2292,11 @@ if (test "$?" != "0") then {
 	insacp pango
 	insacp gtk+2
 
-	p=`ls $PKG_PATH/libxml-* $PKG_PATH/shared-mime-info-* $PKG_PATH/pcre-* $PKG_PATH/png-* $PKG_PATH/jpeg-* $PKG_PATH/glib2-* $PKG_PATH/tiff-* $PKG_PATH/libiconv-* $PKG_PATH/esound-* $PKG_PATH/atk-* $PKG_PATH/desktop-file-utils-* $PKG_PATH/gettext-* $PKG_PATH/libaudiofile-* $PKG_PATH/gtk+2-* $PKG_PATH/cairo-* $PKG_PATH/pango-* $PKG_PATH/nss-* $PKG_PATH/nspr-* $PKG_PATH/jasper-* $PKG_PATH/hicolor-icon-theme-* $PKG_PATH/firefox-* $PKG_PATH/firefox-i18n-es-AR*`
+	p=`ls $PKG_PATH/libxml-* $PKG_PATH/shared-mime-info-* $PKG_PATH/pcre-* $PKG_PATH/png-* $PKG_PATH/jpeg-* $PKG_PATH/glib2-* $PKG_PATH/tiff-* $PKG_PATH/libiconv-* $PKG_PATH/esound-* $PKG_PATH/atk-* $PKG_PATH/desktop-file-utils-* $PKG_PATH/gettext-* $PKG_PATH/libaudiofile-* $PKG_PATH/gtk+2-* $PKG_PATH/cairo-* $PKG_PATH/pango-* $PKG_PATH/nss-* $PKG_PATH/nspr-* $PKG_PATH/jasper-* $PKG_PATH/hicolor-icon-theme-* $PKG_PATH/chromium-*`
         pkg_add -I -D update -D updatedepends -r $p >> /var/tmp/inst-adJ.bitacora 2>&1;
-	grep "browser.startup.homepage.*https://localhost" /usr/local/lib/firefox-18.0.2/defaults/pref/prefs.js > /dev/null 2>&1
-	if (test "$?" != "0") then {
-		echo 'user_pref("general.useragent.locale", "es-AR")' >>/usr/local/lib/firefox-18.0.2/defaults/pref/prefs.js 2>> /var/tmp/inst-adJ.bitacora;
-	       	echo 'user_pref("browser.startup.homepage", "https://127.0.0.1/");' >>/usr/local/lib/firefox-18.0.2/defaults/pref/prefs.js 2>> /var/tmp/inst-adJ.bitacora;
-	} fi;
-	echo "Sugerencias: " >> /var/tmp/inst-adJ.bitacora;
-	echo "  * Configure localización en español desde about:config general.useragent.local es-AR"
-	echo "  * Como página de inicio use https://127.0.0.1/";
+	#echo "Sugerencias: " >> /var/tmp/inst-adJ.bitacora;
+	#echo "  * Configure localización en español desde about:config general.useragent.local es-AR"
+	#echo "  * Como página de inicio use https://127.0.0.1/";
 } else {
 	echo "   Saltando..." >> /var/tmp/inst-adJ.bitacora;
 } fi;
@@ -2317,7 +2375,7 @@ chmod a+rxw /var/www/tmp > /dev/null 2>&1
 dialog --title 'Componentes básicos instalados' --msgbox "\\nInstalación y configuración de los componentes básicos de adJ completada.\\n\\nPor instalar los demás paquetes de $ARCH/paquetes" 15 60
 #, mientras tanto puede instalar SIVeL:"
 #echo "1. Pase a la consola gráfica con [Ctrl]-[Alt]-[F5] o si no es gráfica iniciela desde la segunda consola [Ctrl]-[Alt]-[F2] con 'xdm'"
-#echo "2. Abra mozilla-firefox (o en modo texto lynx) y use la dirección 'https://127.0.0.1/actualiza.php'"
+#echo "2. Abra chromium (o en modo texto lynx) y use la dirección 'https://127.0.0.1/actualiza.php'"
 #echo "3. Debe poder ingresar con el usuario que creó"
 #echo "4. Complete actualización de SIVeL siguiendo las instrucciones"
 #echo ""
