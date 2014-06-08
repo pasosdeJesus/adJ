@@ -1771,18 +1771,19 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/que
 diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src56-orig/lib/libc/locale/towlower.3 src/lib/libc/locale/towlower.3
 --- src56-orig/lib/libc/locale/towlower.3	Mon Mar 25 18:28:42 2013
 +++ src/lib/libc/locale/towlower.3	Fri Apr 12 12:02:28 2013
-@@ -39,7 +39,9 @@
+@@ -38,7 +38,10 @@
+ .Dt TOWLOWER 3
  .Os
  .Sh NAME
- .Nm towlower ,
--.Nm towupper
+-.Nm towlower
++.Nm towlower ,
 +.Nm towlower_l ,
 +.Nm towupper ,
-+.Nm towupper_l
++.Nm towupper_l ,
  .Nd wide-character case letter conversion utilities
  .Sh SYNOPSIS
  .In wctype.h
-@@ -47,18 +49,45 @@
+@@ -46,18 +49,45 @@
  .Fn towlower "wint_t wc"
  .Ft wint_t
  .Fn towupper "wint_t wc"

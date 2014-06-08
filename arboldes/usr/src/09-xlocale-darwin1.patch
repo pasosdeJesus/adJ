@@ -224,6 +224,37 @@ diff -u src-ant/lib/libc/stdio/printf.c src/lib/libc/stdio/printf.c
  	va_end(ap);
  	return (ret);
  }
+diff -u src-ant/lib/libc/stdio/fwprintf.c src/lib/libc/stdio/fwprintf.c
+--- src-ant/lib/libc/stdio/fwprintf.c	Thu May 15 05:31:32 2014
++++ src/lib/libc/stdio/fwprintf.c	Thu May 15 05:32:01 2014
+@@ -34,6 +34,7 @@
+ #include <stdio.h>
+ #include <stdarg.h>
+ #include <wchar.h>
++#include <xlocale.h>
+ 
+ int
+ fwprintf(FILE * __restrict fp, const wchar_t * __restrict fmt, ...)
+@@ -43,6 +44,19 @@
+ 
+ 	va_start(ap, fmt);
+ 	ret = vfwprintf(fp, fmt, ap);
++	va_end(ap);
++	return (ret);
++}
++
++int
++fwprintf_l(FILE * __restrict fp, locale_t loc, 
++		const wchar_t * __restrict fmt, ...)
++{
++	int ret;
++	va_list ap;
++
++	va_start(ap, fmt);
++	ret = vfwprintf_l(fp, loc, fmt, ap);
+ 	va_end(ap);
+ 	return (ret);
+ }
 diff -u src-ant/lib/libc/stdio/fputwc.c src/lib/libc/stdio/fputwc.c
 --- src-ant/lib/libc/stdio/fputwc.c	Thu May 15 05:31:32 2014
 +++ src/lib/libc/stdio/fputwc.c	Thu May 15 05:32:01 2014
