@@ -1,5 +1,5 @@
 #!/bin/ksh
-#	$OpenBSD: install.sh,v 1.231 2012/09/28 16:23:25 rpe Exp $
+#	$OpenBSD: install.sh,v 1.245 2014/02/21 17:11:02 deraadt Exp $
 #	$NetBSD: install.sh,v 1.5.2.8 1996/08/27 18:15:05 gwr Exp $
 #
 # Copyright (c) 1997-2009 Todd Miller, Theo de Raadt, Ken Westerback
@@ -53,6 +53,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
+
 MODE=install
 
 . install.sub
@@ -62,7 +63,7 @@ DISKS_DONE=
 _DKDEVS=$(get_dkdevs)
 _fsent=
 
-rm -f /tmp/fstab.shadow /tmp/fstab /tmp/fstab.*
+rm -f /tmp/fstab*
 
 ask_yn "Use DUIDs rather than device names in fstab?" yes
 [[ $resp == y ]] && FSTABFLAG=-F
@@ -86,10 +87,9 @@ while :; do
 	makedev $DISK || continue
 
 	rm -f /tmp/*.$DISK
-	AUTOROOT=n
 	md_prep_disklabel $DISK || { DISK= ; continue ; }
 
-	grep -qs " / ffs " /tmp/fstab.$ROOTDISK || \
+	grep -qs " / ffs " /tmp/fstab.$ROOTDISK ||
 		{ DISK= ; echo "'/' must be configured!" ; continue ; }
 
 	if [[ -f /tmp/fstab.$DISK ]]; then
@@ -98,7 +98,7 @@ while :; do
 				echo "$_pp $_mp $_rest" >>/tmp/fstab
 				continue
 			fi
-			[[ /tmp/fstab.$DISK == $(grep -l " $_mp " /tmp/fstab.*) ]] || \
+			[[ /tmp/fstab.$DISK == $(grep -l " $_mp " /tmp/fstab.*) ]] ||
 				{ _rest=$DISK ; DISK= ; break ; }
 		done </tmp/fstab.$DISK
 		if [[ -z $DISK ]]; then
@@ -108,6 +108,7 @@ while :; do
 			echo "$_pp and $1 can't both be mounted at $_mp."
 			continue
 		fi
+
 		while read _pp _mp _fstype _rest; do
 			[[ $_fstype == ffs ]] || continue
 			_OPT=
@@ -141,6 +142,8 @@ done >>/tmp/fstab
 munge_fstab
 mount_fs "-o async"
 
+feed_random
+
 install_sets
 
 if [[ -z $TZ ]]; then
@@ -151,7 +154,7 @@ if [[ -z $TZ ]]; then
 	rm -f /mnt/tmp/tzlist
 fi
 
-if _time=$(ftp_time) && _now=$(date +%s) && \
+if _time=$(ftp_time) && _now=$(date +%s) &&
 	(( _now - _time > 120 || _time - _now > 120 )); then
 	_tz=/mnt/usr/share/zoneinfo/$TZ
 	ask_yn "Time appears wrong.  Set to '$(TZ=$_tz date -r "$(ftp_time)")'?" yes
@@ -170,7 +173,7 @@ if [[ -s $SERVERLISTALL ]]; then
 		"http://129.128.5.191/cgi-bin/ftpinstall.cgi?$_i" >/dev/null 2>&1 &
 fi
 
-sed -e "/^console.*on.*secure.*$/s/std\.[0-9]*/std.$(stty speed)/" \
+sed "/^console.*on.*secure.*$/s/std\.[0-9]*/std.$(stty speed </dev/console)/" \
 	/mnt/etc/ttys >/tmp/ttys
 mv /tmp/ttys /mnt/etc/ttys
 
@@ -199,48 +202,49 @@ _f=dhclient.conf
 	[[ -f $_f && -s $_f ]] && mv $_f /mnt/etc/.
 done)
 
-(dmesg; cat $SERVERLISTALL; sysctl; route -n show; df;
-    ifconfig -A; hostname) >/mnt/dev/arandom 2>&1
-
-echo -n "done.\nGenerating initial host.random file..."
-/mnt/bin/dd if=/mnt/dev/arandom of=/mnt/var/db/host.random \
-	bs=65536 count=1 >/dev/null 2>&1
-chmod 600 /mnt/var/db/host.random >/dev/null 2>&1
-echo "done."
-
 apply
 
 if [[ -n $user ]]; then
-	_encr="*"
-	[[ -n "$userpass" ]] && _encr=$(/mnt/usr/bin/encrypt -b 8 -- "$userpass")
-	uline="${user}:${_encr}:1000:1000:staff:0:0:${username}:/home/${user}:/bin/ksh"
+	_encr=$(encr_pwd "$userpass")
+	_home=/home/$user
+	uline="${user}:${_encr}:1000:1000:staff:0:0:${username}:$_home:/bin/ksh"
 	echo "$uline" >> /mnt/etc/master.passwd
 	echo "${user}:*:1000:" >> /mnt/etc/group
 	echo ${user} > /mnt/root/.forward
 
-	mkdir -p /mnt/home/$user
-	(cd /mnt/etc/skel; cp -pR . /mnt/home/$user)
+	_home=/mnt$_home
+	mkdir -p $_home
+	(cd /mnt/etc/skel; cp -pR . $_home)
 	(umask 077 &&
 		sed "s,^To: root\$,To: ${username} <${user}>," \
 		/mnt/var/mail/root > /mnt/var/mail/$user )
-	chown -R 1000:1000 /mnt/home/$user /mnt/var/mail/$user
+	chown -R 1000:1000 $_home /mnt/var/mail/$user
 	echo "1,s@wheel:.:0:root\$@wheel:\*:0:root,${user}@
 w
-q" | /mnt/bin/ed /mnt/etc/group 2>/dev/null
+q" | ed /mnt/etc/group 2>/dev/null
+
+	[[ -n "$userkey" ]] &&
+		print -r -- "$userkey" >> $_home/.ssh/authorized_keys
 fi
 
 if [[ -n "$_rootpass" ]]; then
-	_encr=$(/mnt/usr/bin/encrypt -b 8 -- "$_rootpass")
+	_encr=$(encr_pwd "$_rootpass")
 	echo "1,s@^root::@root:${_encr}:@
 w
-q" | /mnt/bin/ed /mnt/etc/master.passwd 2>/dev/null
+q" | ed /mnt/etc/master.passwd 2>/dev/null
 fi
 /mnt/usr/sbin/pwd_mkdb -p -d /mnt/etc /etc/master.passwd
 
+[[ -n "$rootkey" ]] && (
+	umask 077
+	mkdir /mnt/root/.ssh
+	print -r -- "$rootkey" >> /mnt/root/.ssh/authorized_keys
+)
+
 if grep -qs '^rtsol' /mnt/etc/hostname.*; then
 	sed -e "/^#\(net\.inet6\.ip6\.accept_rtadv\)/s//\1/" \
-       	   -e "/^#\(net\.inet6\.icmp6\.rediraccept\)/s//\1/" \
-               /mnt/etc/sysctl.conf >/tmp/sysctl.conf
+		-e "/^#\(net\.inet6\.icmp6\.rediraccept\)/s//\1/" \
+		/mnt/etc/sysctl.conf >/tmp/sysctl.conf
 	cp /tmp/sysctl.conf /mnt/etc/sysctl.conf
 fi
 
