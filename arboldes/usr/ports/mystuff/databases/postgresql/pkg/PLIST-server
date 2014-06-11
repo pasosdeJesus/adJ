@@ -638,8 +638,8 @@ share/postgresql/tsearch_data/thesaurus_sample.ths
 share/postgresql/tsearch_data/turkish.stop
 share/postgresql/tsearch_data/unaccent.rules
 share/postgresql/tsearch_data/xsyn_sample.rules
-@mode 755
 @rcscript ${RCDIR}/postgresql
+@mode 755
 @owner _postgresql
 @group _postgresql
 @sample /var/postgresql/

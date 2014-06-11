@@ -44,7 +44,7 @@ RUTAKERNELREESPECIAL=""
 
 export DESTDIR=/destdir; 
 export RELEASEDIR=/releasedir
-export XSRCDIR=/usr/src/xenocara;
+export XSRCDIR=/usr/xenocara;
 # Directorios para compilación 
 
 # Estas variables controlan operacion de distribucion.sh pueden ser s o n
