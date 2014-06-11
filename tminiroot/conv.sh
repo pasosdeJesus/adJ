@@ -21,7 +21,11 @@ sed -e "s/\\\\/\\\\\\\\/g;s/\\\\n/\\\\\\\\n/g;s/\(\$[^_]\)/\\\\\1/g;s/\(\$_[^s]\
 . ./install-$DLENG
 
 . /tmp/install-lang-inst.sh > install-$DLENG.sh
+echo "1";
 . /tmp/install-sub-inst.sh > install-$DLENG.sub
+echo "2";
 . /tmp/upgrade-lang-inst.sh > upgrade-$DLENG.sh
+echo "3";
 . /tmp/install-amd64-lang-inst.sh > install-amd64-$DLENG.md
+echo "4";
 

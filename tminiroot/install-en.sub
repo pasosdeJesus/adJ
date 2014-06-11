@@ -1755,9 +1755,9 @@ feed_random() {
 
 store_random() {
 	{
-		dd if=/dev/random of=/mnt/var/db/host.random bs=65536 count=1
-		dd if=/dev/random of=/mnt/etc/random.seed bs=512 count=1
-		chmod 600 /mnt/var/db/host.random /mnt/etc/random.seed
+	    dd if=/dev/random of=/mnt/var/db/host.random bs=65536 count=1
+	    dd if=/dev/random of=/mnt/etc/random.seed bs=512 count=1
+	    chmod 600 /mnt/var/db/host.random /mnt/etc/random.seed
 	} >/dev/null 2>&1
 }
 
@@ -1917,8 +1917,8 @@ get_responsefile() {
 		else
 			while :; do
 				ask_which "network interface" \
-				   "should be used for the initial DHCP request" \
-				   "$*"
+				    "should be used for the initial DHCP request" \
+				    "$*"
 				isin "$resp" $* && _ifdev=$resp && break
 			done
 		fi
@@ -2034,7 +2034,6 @@ diskinfo() {
 		rm -f /dev/{r,}$_d?
 	done
 }
-
 
 # Get ROOTDISK, ROOTDEV and SWAPDEV.
 while :; do
