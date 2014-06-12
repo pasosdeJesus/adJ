@@ -12,13 +12,12 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/Makefile src/share/local
 diff -ruN src56-orig/share/locale/monetdef/Makefile src/share/locale/monetdef/Makefile
 --- src56-orig/share/locale/monetdef/Makefile	Thu Jan  1 03:00:00 1970
 +++ src/share/locale/monetdef/Makefile	Tue May  6 09:30:30 2014
-@@ -0,0 +1,227 @@
+@@ -0,0 +1,226 @@
 +# From FreeBSD
 +
 +LC_MONETARY_LINES=21
 +
 +LOCALES=	af_ZA.ISO8859-1 \
-+		am_ET.UTF-8 \
 +		be_BY.CP1131 \
 +		be_BY.CP1251 \
 +		be_BY.ISO8859-5 \

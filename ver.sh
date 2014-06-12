@@ -36,7 +36,7 @@ PKG_PATH=ftp://mirror.planetunix.net/pub/OpenBSD/snapshots/packages/$ARQ/
 METODOACT=ftp
 # Metodo de actualización, puede ser ftp o rsync
 
-excluye="gnupg-2.* libstdc++-.* python-* python-tkinter-* php-5.2.* php-gd-5.2.* php-pdo_pgsql-5.2.* php-pgsql-5.2.* php-mcrypt-5.2.* php-sqlite-5.2.* pear-Auth-.* pear-Validate-.* pear-HTML-QuickForm-Controller.* postgresql-.* ruby-1.* ruby-2.0.* tcl-.* tk-.* xfe-.*"
+excluye="gnupg-2.* libstdc++-.* python-.* python-tkinter-.* php-.*5.2.* php-.*5.3.* pear-Auth-.* pear-Validate-.* pear-HTML-QuickForm-Controller.* postgresql-.* ruby-1.* ruby-2.0.* tcl-.* tk-.* xfe-.*"
 # Paquetes por excluir de descarga ftp de OpenBSD
 
 RUTAKERNELREESPECIAL=""
@@ -44,7 +44,7 @@ RUTAKERNELREESPECIAL=""
 
 export DESTDIR=/destdir; 
 export RELEASEDIR=/releasedir
-export XSRCDIR=/usr/src/xenocara;
+export XSRCDIR=/usr/xenocara;
 # Directorios para compilación 
 
 # Estas variables controlan operacion de distribucion.sh pueden ser s o n

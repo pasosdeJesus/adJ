@@ -1,4 +1,4 @@
-# $OpenBSD: Makefile,v 1.182 2014/01/06 10:47:14 pea Exp $
+# $OpenBSD: Makefile,v 1.188 2014/04/21 22:15:09 ajacoutot Exp $
 
 COMMENT-main=	PostgreSQL RDBMS (client)
 COMMENT-server=	PostgreSQL RDBMS (server)
@@ -9,13 +9,15 @@ COMMENT-plpython=Python procedural language for PostgreSQL
 # DO NOT FORGET to also change the @ask-update entry in pkg/PLIST-server
 # in case a dump before / restore after pkg_add -u is required!
 
-VERSION=	9.3.2
+VERSION=	9.3.4
 DISTNAME=	postgresql-${VERSION}
 PKGNAME-main=	postgresql-client-${VERSION}
 PKGNAME-server=	postgresql-server-${VERSION}
 PKGNAME-docs=	postgresql-docs-${VERSION}
 PKGNAME-contrib=postgresql-contrib-${VERSION}
 PKGNAME-plpython=postgresql-plpython-${VERSION}
+
+REVISION=		0
 
 CATEGORIES=	databases
 SHARED_LIBS=	ecpg		7.5 \
@@ -30,8 +32,8 @@ MAINTAINER=	Pierre-Emmanuel Andre <pea@openbsd.org>
 # BSD
 PERMIT_PACKAGE_CDROM=	Yes
 
-WANTLIB=		c com_err crypto m readline ssl termcap z asn1 \
-			heimbase krb5 roken wind
+WANTLIB += c crypto m readline ssl termcap z
+
 MASTER_SITES=	http://ftp.postgresql.org/pub/source/v${VERSION}/ \
 	http://ftp5.es.postgresql.org/mirror/postgresql/source/v${VERSION}/ \
 	ftp://ftp.postgresql.org/pub/source/v${VERSION}/ \
@@ -57,10 +59,9 @@ CONFIGURE_STYLE=gnu
 MODULES=	lang/python
 MODPY_RUNDEP=	No
 
-#INCLUDES=	${LOCALBASE}/include /usr/include/kerberosV
 CONFIGURE_ENV=	ac_cv_path_PYTHON=${MODPY_BIN} \
-		CPPFLAGS="-I${LOCALBASE}/include $$(krb5-config --cflags)" \
-		LDFLAGS="-L${LOCALBASE}/lib $$(krb5-config --libs)"
+		CPPFLAGS="-I${LOCALBASE}/include" \
+		LDFLAGS="-L${LOCALBASE}/lib"
 
 CONFIGURE_ARGS=	--disable-rpath --with-openssl=/usr \
 		--with-perl \
@@ -76,7 +77,6 @@ CONFIGURE_ARGS=	--disable-rpath --with-openssl=/usr \
 		--with-openssl \
 		--with-ossp-uuid \
 		--with-libxml \
-		--with-krb5 \
 		--disable-thread-safety
 
 # There is no spinlock support for hppa yet. Until we have access to
@@ -107,8 +107,8 @@ LIB_DEPENDS-contrib= databases/postgresql=${VERSION} \
 WANTLIB-contrib=	${WANTLIB-main} pq>=4 ossp-uuid
 
 LIB_DEPENDS-plpython=	${MODPY_LIB_DEPENDS}
-WANTLIB-plpython =	c m pthread util com_err crypto asn1 \
-			heimbase krb5 roken wind ${MODPY_WANTLIB}
+WANTLIB-plpython =	c m pthread util \
+			${MODPY_WANTLIB}
 RUN_DEPENDS-plpython=	databases/postgresql,-server=${VERSION}
 
 WANTLIB-docs=

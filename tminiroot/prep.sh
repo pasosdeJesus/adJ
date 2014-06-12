@@ -5,24 +5,23 @@ cp /usr/src/distrib/miniroot/install.sh install.sh
 cp /usr/src/distrib/miniroot/install.sub install.sub
 cp /usr/src/distrib/miniroot/upgrade.sh upgrade.sh
 cp /usr/src/distrib/amd64/common/install.md install-amd64.md
-cp /usr/src/distrib/i386/common/install.md install-i386.md
 
 for a in install upgrade; do
-	git diff -u $a.sh
-	echo "Editar $a-lang.sh para incluir cambios mostrados";
+	git diff -u $a.sh > /tmp/d
+	echo "Editar $a-lang.sh para incluir cambios que se mostrarán";
 	echo "RETORNO para continuar";
 	read
+	less /tmp/d
 done
 
-if (test ! -f install-lang.sub) then {
-	git diff -u install.sub
-	echo "Editar install-lang.sub para incluir cambios mostrados";
-	echo "RETORNO para continuar";
-	read
-} fi;
-for a in install-amd64 install-i386; do
-	git diff -u $a.md 
-	echo "Editar $a-lang.md para incluir cambios mostrados";
-	echo "RETORNO para continuar";
-	read
-done;
+git diff -u install.sub > /tmp/d
+echo "Editar install-lang.sub para incluir cambios por mostrar";
+echo "RETORNO para continuar";
+read
+less /tmp/d
+
+git diff -u install-amd64.md  > /tmp/d
+echo "Editar install-amd64-lang.md para incluir cambios mostrados";
+echo "RETORNO para continuar";
+read
+less /tmp/d

@@ -129,3 +129,5 @@ if (test "$?" = "0") then {
 	} fi;
 } fi;
 
+dialog --title 'Preparado' --msgbox "\\nSistema preparado para actualizar\\n" 15 60
+clear

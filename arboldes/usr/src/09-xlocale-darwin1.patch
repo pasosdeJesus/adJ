@@ -1,0 +1,2728 @@
+diff -u src-ant/lib/libc/gdtoa/Makefile.inc src/lib/libc/gdtoa/Makefile.inc
+--- src-ant/lib/libc/gdtoa/Makefile.inc	Thu May 15 06:12:10 2014
++++ src/lib/libc/gdtoa/Makefile.inc	Thu May 15 07:45:56 2014
+@@ -10,6 +10,7 @@
+ CFLAGS+= -DMULTIPLE_THREADS
+ CFLAGS+= -DNO_FENV_H
+ CFLAGS+= -DUSE_LOCALE
++CFLAGS+= -DNO_LOCALE_CACHE
+ 
+ SRCS+= dmisc.c dtoa.c gdtoa.c gethex.c gmisc.c hd_init.c hdtoa.c \
+ 	hexnan.c ldtoa.c locks.c misc.c smisc.c strtod.c strtodg.c \
+diff -u src-ant/lib/libc/stdio/Makefile.inc src/lib/libc/stdio/Makefile.inc
+--- src-ant/lib/libc/stdio/Makefile.inc	Thu May 15 06:12:10 2014
++++ src/lib/libc/stdio/Makefile.inc	Thu May 15 07:45:56 2014
+@@ -44,10 +44,17 @@
+ MLINKS+=printf.3 fprintf.3 printf.3 snprintf.3 printf.3 sprintf.3 \
+ 	printf.3 vfprintf.3 printf.3 vprintf.3 printf.3 vsnprintf.3 \
+ 	printf.3 vsprintf.3 printf.3 asprintf.3 printf.3 vasprintf.3 \
+-	printf.3 dprintf.3 printf.3 vdprintf.3
++	printf.3 dprintf.3 printf.3 vdprintf.3 
++MLINKS+=printf.3 printf_l.3 printf.3 fprintf_l.3 \
++	printf.3 snprintf_l.3 printf.3 sprintf_l.3 \
++	printf_l.3 vfprintf_l.3 printf.3 vprintf_l.3 printf.3 vsnprintf_l.3 \
++	printf.3 vsprintf_l.3 printf.3 asprintf_l.3 printf.3 vasprintf_l.3 \
++	printf_l.3 dprintf_l.3 printf.3 vdprintf_l.3
+ MLINKS+=putc.3 fputc.3 putc.3 putchar.3 putc.3 putw.3
+ MLINKS+=scanf.3 fscanf.3 scanf.3 sscanf.3 scanf.3 vfscanf.3 scanf.3 vscanf.3 \
+-	scanf.3 vsscanf.3
++	scanf.3 vsscanf.3 \
++	scanf.3 scanf_l.3 scanf.3 fscanf_l.3 scanf.3 sscanf_l.3 scanf.3 \
++	vfscanf_l.3 scanf.3 vscanf_l.3 scanf.3 vsscanf_l.3
+ MLINKS+=setbuf.3 setbuffer.3 setbuf.3 setlinebuf.3 setbuf.3 setvbuf.3
+ MLINKS+=tmpnam.3 tempnam.3 tmpnam.3 tmpfile.3
+ MLINKS+=wprintf.3 fwprintf.3 wprintf.3 swprintf.3 wprintf.3 vwprintf.3 \
+diff -u src-ant/lib/libc/stdio/printf.3 src/lib/libc/stdio/printf.3
+--- src-ant/lib/libc/stdio/printf.3	Wed May 14 21:10:56 2014
++++ src/lib/libc/stdio/printf.3	Thu May 15 06:11:27 2014
+@@ -49,6 +49,18 @@
+ .Nm vsnprintf ,
+ .Nm vasprintf ,
+ .Nm vdprintf
++.Nm printf_l ,
++.Nm fprintf_l ,
++.Nm sprintf_l ,
++.Nm snprintf_l ,
++.Nm asprintf_l ,
++.Nm dprintf_l ,
++.Nm vprintf_l ,
++.Nm vfprintf_l ,
++.Nm vsprintf_l ,
++.Nm vsnprintf_l ,
++.Nm vasprintf_l ,
++.Nm vdprintf_l
+ .Nd formatted output conversion
+ .Sh SYNOPSIS
+ .In stdio.h
+@@ -78,12 +90,39 @@
+ .Fn vasprintf "char **ret" "const char *format" "va_list ap"
+ .Ft int
+ .Fn vdprintf "int fd" "const char * restrict format" "va_list ap"
++.In xlocale.h
++.Ft int
++.Fn printf_l "locale_t locale" "const char *format" ...
++.Ft int
++.Fn fprintf_l "FILE *stream" "locale_t locale" "const char *format" ...
++.Ft int
++.Fn sprintf_l "char *str" "locale_t locale" "const char *format" ...
++.Ft int
++.Fn snprintf_l "char *str" "size_t size" "locale_t locale" "const char *format" ...
++.Ft int
++.Fn asprintf_l "char **ret" "locale_t locale" "const char *format" ...
++.Ft int
++.Fn dprintf_l "int fd" "locale_t locale" "const char * restrict format" ...
++.Ft int
++.Fn vprintf_l "locale_t locale" "const char *format" "va_list ap"
++.Ft int
++.Fn vfprintf_l "FILE *stream" "locale_t locale" "const char *format" "va_list ap"
++.Ft int
++.Fn vsprintf_l "char *str" "locale_t locale" "const char *format" "va_list ap"
++.Ft int
++.Fn vsnprintf_l "char *str" "size_t size" "locale_t locale" "const char *format" "va_list ap"
++.Ft int
++.Fn vasprintf_l "char **ret" "locale_t locale" "const char *format" "va_list ap"
++.Ft int
++.Fn vdprintf_l "int fd" "locale_t locale" "const char * restrict format" "va_list ap"
+ .Sh DESCRIPTION
+ The
+ .Fn printf
+ family of functions produce output according to the given
+ .Fa format
+-as described below.
++described below and a locale, the functions with postfix "_l" use the locale given as argument (see
++.Xr xlocale 3 )
++other functions use the current locale.
+ This format may contain
+ .Dq conversion specifiers ;
+ the results of such conversions, if any, depend on the arguments
+@@ -92,30 +131,42 @@
+ string.
+ .Pp
+ The
+-.Fn printf
+-and
++.Fn printf ,
++.Fn printf_l ,
+ .Fn vprintf
++and
++.Fn vprintf_l
+ functions write output to the standard output stream,
+ .Em stdout ;
+-.Fn fprintf
+-and
++.Fn fprintf ,
++.Fn fprintf_l ,
+ .Fn vfprintf
++and
++.Fn vfprintf_l
+ write output to the supplied stream pointer
+ .Fa stream ;
+ .Fn dprintf
+-and
++.Fn dprintf_l
+ .Fn vdprintf
++and
++.Fn vdprintf_l
+ write output to the given file descriptor;
+ .Fn sprintf ,
++.Fn sprintf_l ,
+ .Fn snprintf ,
++.Fn snprintf_l ,
+ .Fn vsprintf ,
+-and
++.Fn vsprintf_l ,
+ .Fn vsnprintf
++and
++.Fn vsnprintf_l
+ write to the character string
+ .Fa str ;
+ .Fn asprintf
+-and
++.Fn asprintf_l
+ .Fn vasprintf
++and
++.Fn vasprintf_l
+ write to a dynamically allocated string that is stored in
+ .Fa ret .
+ .Pp
+@@ -127,8 +178,10 @@
+ are converted for output.
+ .Pp
+ .Fn snprintf
+-and
++.Fn snprintf_l
+ .Fn vsnprintf
++and
++.Fn vsnprintf_l
+ will write at most
+ .Fa size Ns \-1
+ of the characters printed into the output string
+@@ -150,8 +203,10 @@
+ byte, or \-1 on error, will be returned.
+ .Pp
+ .Fn sprintf
+-and
++.Fn sprintf_l
+ .Fn vsprintf
++and
++.Fn vsprintf_l
+ effectively assume an infinite
+ .Fa size .
+ .Pp
+@@ -188,7 +243,7 @@
+ character
+ specifying thousands' grouping of the integer part of a decimal conversion
+ (%i, %d, %u, %f, %F, %g, %G).  The current locale is used to separate in
+-groups and to use a thousands' separator.
++groups and to use a thousands' separator, and in the case of functions with postfix "_l" the given locale is used.
+ .It
+ A hash
+ .Sq Cm #
+@@ -753,6 +808,7 @@
+ .Xr printf 1 ,
+ .Xr scanf 3
+ .Xr localeconv 3
++.Xr xlocale 3
+ .Sh STANDARDS
+ The
+ .Fn fprintf ,
+@@ -772,6 +828,7 @@
+ .Fn vdprintf
+ functions conform to
+ .St -p1003.1-2008 .
++The functions with postfix "_l" are Darwin extensions.
+ .Sh HISTORY
+ The predecessors
+ .Fn ftoa
+diff -u src-ant/lib/libc/stdio/printf.c src/lib/libc/stdio/printf.c
+--- src-ant/lib/libc/stdio/printf.c	Thu May 15 05:31:32 2014
++++ src/lib/libc/stdio/printf.c	Thu May 15 05:32:01 2014
+@@ -33,6 +33,7 @@
+ 
+ #include <stdio.h>
+ #include <stdarg.h>
++#include <xlocale.h>
+ 
+ /* PRINTFLIKE1 */
+ int
+@@ -43,6 +44,18 @@
+ 
+ 	va_start(ap, fmt);
+ 	ret = vfprintf(stdout, fmt, ap);
++	va_end(ap);
++	return (ret);
++}
++ 
++int
++printf_l(locale_t loc, const char *fmt, ...)
++{
++	int ret;
++	va_list ap;
++
++	va_start(ap, fmt);
++	ret = vfprintf_l(stdout, loc, fmt, ap);
+ 	va_end(ap);
+ 	return (ret);
+ }
+diff -u src-ant/lib/libc/stdio/fwprintf.c src/lib/libc/stdio/fwprintf.c
+--- src-ant/lib/libc/stdio/fwprintf.c	Thu May 15 05:31:32 2014
++++ src/lib/libc/stdio/fwprintf.c	Thu May 15 05:32:01 2014
+@@ -34,6 +34,7 @@
+ #include <stdio.h>
+ #include <stdarg.h>
+ #include <wchar.h>
++#include <xlocale.h>
+ 
+ int
+ fwprintf(FILE * __restrict fp, const wchar_t * __restrict fmt, ...)
+@@ -43,6 +44,19 @@
+ 
+ 	va_start(ap, fmt);
+ 	ret = vfwprintf(fp, fmt, ap);
++	va_end(ap);
++	return (ret);
++}
++
++int
++fwprintf_l(FILE * __restrict fp, locale_t loc, 
++		const wchar_t * __restrict fmt, ...)
++{
++	int ret;
++	va_list ap;
++
++	va_start(ap, fmt);
++	ret = vfwprintf_l(fp, loc, fmt, ap);
+ 	va_end(ap);
+ 	return (ret);
+ }
+diff -u src-ant/lib/libc/stdio/fputwc.c src/lib/libc/stdio/fputwc.c
+--- src-ant/lib/libc/stdio/fputwc.c	Thu May 15 05:31:32 2014
++++ src/lib/libc/stdio/fputwc.c	Thu May 15 05:32:01 2014
+@@ -33,11 +33,14 @@
+ #include <limits.h>
+ #include <stdio.h>
+ #include <wchar.h>
++#include <xlocale.h>
++
+ #include "local.h"
++#include "locale/xlocale_private.h"
+ #include "fvwrite.h"
+ 
+ wint_t
+-__fputwc_unlock(wchar_t wc, FILE *fp)
++__fputwc_unlock(wchar_t wc, FILE *fp, locale_t loc)
+ {
+ 	struct wchar_io_data *wcio;
+ 	mbstate_t *st;
+@@ -61,7 +64,7 @@
+ 	wcio->wcio_ungetwc_inbuf = 0;
+ 	st = &wcio->wcio_mbstate_out;
+ 
+-	size = wcrtomb(buf, wc, st);
++	size = wcrtomb_l(buf, wc, st, loc);
+ 	if (size == (size_t)-1) {
+ 		errno = EILSEQ;
+ 		return WEOF;
+@@ -76,13 +79,20 @@
+ }
+ 
+ wint_t
+-fputwc(wchar_t wc, FILE *fp)
++fputwc_l(wchar_t wc, FILE *fp, locale_t loc)
+ {
+ 	wint_t r;
+ 
+ 	FLOCKFILE(fp);
+-	r = __fputwc_unlock(wc, fp);
++	r = __fputwc_unlock(wc, fp, loc);
+ 	FUNLOCKFILE(fp);
+ 
+ 	return (r);
+ }
++
++wint_t
++fputwc(wchar_t wc, FILE *fp)
++{
++	return fputwc_l(wc, fp, __get_locale());
++}
++
+diff -u src-ant/lib/libc/stdio/fgetwc.c src/lib/libc/stdio/fgetwc.c
+--- src-ant/lib/libc/stdio/fgetwc.c	Thu May 15 05:35:00 2014
++++ src/lib/libc/stdio/fgetwc.c	Thu May 15 05:35:39 2014
+@@ -32,10 +32,13 @@
+ #include <errno.h>
+ #include <stdio.h>
+ #include <wchar.h>
++#include <xlocale.h>
++
+ #include "local.h"
++#include "locale/xlocale_private.h"
+ 
+ wint_t
+-__fgetwc_unlock(FILE *fp)
++__fgetwc_unlock(FILE *fp, locale_t loc)
+ {
+ 	struct wchar_io_data *wcio;
+ 	mbstate_t *st;
+@@ -67,7 +70,7 @@
+ 		}
+ 
+ 		c = ch;
+-		size = mbrtowc(&wc, &c, 1, st);
++		size = mbrtowc_l(&wc, &c, 1, st, loc);
+ 		if (size == (size_t)-1) {
+ 			errno = EILSEQ;
+ 			return WEOF;
+@@ -83,7 +86,19 @@
+ 	wint_t r;
+ 
+ 	FLOCKFILE(fp);
+-	r = __fgetwc_unlock(fp);
++	r = __fgetwc_unlock(fp, __get_locale());
++	FUNLOCKFILE(fp);
++
++	return (r);
++}
++
++wint_t
++fgetwc_l(FILE *fp, locale_t loc)
++{
++	wint_t r;
++
++	FLOCKFILE(fp);
++	r = __fgetwc_unlock(fp, loc);
+ 	FUNLOCKFILE(fp);
+ 
+ 	return (r);
+diff -u src-ant/lib/libc/stdio/fwscanf.c src/lib/libc/stdio/fwscanf.c
+--- src-ant/lib/libc/stdio/fwscanf.c	Thu May 15 05:35:00 2014
++++ src/lib/libc/stdio/fwscanf.c	Thu May 15 05:35:39 2014
+@@ -29,6 +29,7 @@
+ #include <stdarg.h>
+ #include <stdio.h>
+ #include <wchar.h>
++#include <xlocale.h>
+ 
+ int
+ fwscanf(FILE * __restrict fp, const wchar_t * __restrict fmt, ...)
+@@ -38,6 +39,19 @@
+ 
+ 	va_start(ap, fmt);
+ 	r = vfwscanf(fp, fmt, ap);
++	va_end(ap);
++
++	return (r);
++}
++
++int
++fwscanf_l(FILE * __restrict fp, locale_t loc, const wchar_t * __restrict fmt, ...)
++{
++	va_list ap;
++	int r;
++
++	va_start(ap, fmt);
++	r = vfwscanf_l(fp, loc, fmt, ap);
+ 	va_end(ap);
+ 
+ 	return (r);
+diff -u src-ant/lib/libc/stdio/fputws.c src/lib/libc/stdio/fputws.c
+--- src-ant/lib/libc/stdio/fputws.c	Thu May 15 05:35:00 2014
++++ src/lib/libc/stdio/fputws.c	Thu May 15 05:35:39 2014
+@@ -33,19 +33,23 @@
+ #include <errno.h>
+ #include <stdio.h>
+ #include <wchar.h>
++#include <xlocale.h>
++
+ #include "local.h"
++#include "locale/xlocale_private.h"
+ #include "fvwrite.h"
+ 
+ int
+-fputws(ws, fp)
++fputws_l(ws, fp, loc)
+ 	const wchar_t * __restrict ws;
+ 	FILE * __restrict fp;
++	locale_t loc;
+ {
+ 	FLOCKFILE(fp);
+ 	_SET_ORIENTATION(fp, 1);
+ 
+ 	while (*ws != '\0') {
+-		if (__fputwc_unlock(*ws++, fp) == WEOF) {
++		if (__fputwc_unlock(*ws++, fp, loc) == WEOF) {
+ 			FUNLOCKFILE(fp);
+ 			return (-1);
+ 		}
+@@ -54,4 +58,12 @@
+ 	FUNLOCKFILE(fp);
+ 
+ 	return (0);
++}
++
++int
++fputws(ws, fp)
++	const wchar_t * __restrict ws;
++	FILE * __restrict fp;
++{
++	return fputws_l(ws, fp, __get_locale());
+ }
+diff -u src-ant/lib/libc/stdio/fgetws.c src/lib/libc/stdio/fgetws.c
+--- src-ant/lib/libc/stdio/fgetws.c	Thu May 15 05:35:00 2014
++++ src/lib/libc/stdio/fgetws.c	Thu May 15 05:35:39 2014
+@@ -34,10 +34,13 @@
+ #include <errno.h>
+ #include <stdio.h>
+ #include <wchar.h>
++#include <xlocale.h>
++
+ #include "local.h"
++#include "locale/xlocale_private.h"
+ 
+ wchar_t *
+-fgetws(wchar_t * __restrict ws, int n, FILE * __restrict fp)
++fgetws_l(wchar_t * __restrict ws, int n, FILE * __restrict fp, locale_t loc)
+ {
+ 	wchar_t *wsp;
+ 	wint_t wc;
+@@ -52,7 +55,7 @@
+ 
+ 	wsp = ws;
+ 	while (n-- > 1) {
+-		if ((wc = __fgetwc_unlock(fp)) == WEOF && errno == EILSEQ) {
++		if ((wc = __fgetwc_unlock(fp, loc)) == WEOF && errno == EILSEQ) {
+ 			goto error;
+ 		}
+ 		if (wc == WEOF) {
+@@ -77,3 +80,11 @@
+ 	FUNLOCKFILE(fp);
+ 	return (NULL);
+ }
++
++
++wchar_t *
++fgetws(wchar_t * __restrict ws, int n, FILE * __restrict fp) 
++{
++	return fgetws_l(ws, n, fp, __get_locale());
++}
++
+diff -u src-ant/lib/libc/stdio/fvwrite.h src/lib/libc/stdio/fvwrite.h
+--- src-ant/lib/libc/stdio/fvwrite.h	Thu May 15 05:35:00 2014
++++ src/lib/libc/stdio/fvwrite.h	Thu May 15 05:35:39 2014
+@@ -46,4 +46,4 @@
+ };
+ 
+ extern int __sfvwrite(FILE *, struct __suio *);
+-wint_t __fputwc_unlock(wchar_t wc, FILE *fp);
++wint_t __fputwc_unlock(wchar_t wc, FILE *fp, locale_t loc);
+diff -u src-ant/lib/libc/stdio/local.h src/lib/libc/stdio/local.h
+--- src-ant/lib/libc/stdio/local.h	Thu May 15 05:35:00 2014
++++ src/lib/libc/stdio/local.h	Thu May 15 05:35:39 2014
+@@ -57,12 +57,12 @@
+ int	_fwalk(int (*)(FILE *));
+ int	__swsetup(FILE *);
+ int	__sflags(const char *, int *);
+-wint_t __fgetwc_unlock(FILE *);
++wint_t __fgetwc_unlock(FILE *, locale_t loc);
+ wint_t	__ungetwc(wint_t, FILE *);
+ int	__vfprintf(FILE *, locale_t, const char *, __va_list);
+ int	__svfscanf(FILE * __restrict, locale_t, const char * __restrict, __va_list);
+-int	__vfwprintf(FILE * __restrict, const wchar_t * __restrict, __va_list);
+-int	__vfwscanf(FILE * __restrict, const wchar_t * __restrict, __va_list);
++int	__vfwprintf(FILE * __restrict, locale_t, const wchar_t * __restrict, __va_list);
++int	__vfwscanf(FILE * __restrict, locale_t, const wchar_t * __restrict, __va_list);
+ 
+ extern void __atexit_register_cleanup(void (*)(void));
+ extern int __sdidinit;
+diff -u src-ant/lib/libc/stdio/vfwscanf.c src/lib/libc/stdio/vfwscanf.c
+--- src-ant/lib/libc/stdio/vfwscanf.c	Thu May 15 05:35:00 2014
++++ src/lib/libc/stdio/vfwscanf.c	Thu May 15 05:35:39 2014
+@@ -40,7 +40,11 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <wctype.h>
++#include <xlocale.h>
++
+ #include "local.h"
++#include "locale/mblocal.h"
++#include "locale/xlocale_private.h"
+ 
+ #ifdef FLOATING_POINT
+ #include "floatio.h"
+@@ -99,7 +103,8 @@
+  * vfwscanf
+  */
+ int
+-__vfwscanf(FILE * __restrict fp, const wchar_t * __restrict fmt, __va_list ap)
++__vfwscanf(FILE * __restrict fp, locale_t loc, const wchar_t * __restrict fmt, 
++		__va_list ap)
+ {
+ 	wint_t c;	/* character from format, or conversion */
+ 	size_t width;	/* field width, or 0 */
+@@ -140,9 +145,9 @@
+ 		if (c == 0) {
+ 			return (nassigned);
+ 		}
+-		if (iswspace(c)) {
+-			while ((c = __fgetwc_unlock(fp)) != WEOF &&
+-			    iswspace(c))
++		if (iswspace_l(c, loc)) {
++			while ((c = __fgetwc_unlock(fp, loc)) != WEOF &&
++			    iswspace_l(c, loc))
+ 				;
+ 			if (c != WEOF)
+ 				__ungetwc(c, fp);
+@@ -160,7 +165,7 @@
+ 		switch (c) {
+ 		case '%':
+ literal:
+-			if ((wi = __fgetwc_unlock(fp)) == WEOF)
++			if ((wi = __fgetwc_unlock(fp, loc)) == WEOF)
+ 				goto input_failure;
+ 			if (wi != c) {
+ 				__ungetwc(wi, fp);
+@@ -323,7 +328,7 @@
+ 			return (EOF);
+ 
+ 		default:	/* compat */
+-			if (iswupper(c))
++			if (iswupper_l(c, loc))
+ 				flags |= LONG;
+ 			c = CT_INT;
+ 			base = 10;
+@@ -335,8 +340,8 @@
+ 		 * that suppress this.
+ 		 */
+ 		if ((flags & NOSKIP) == 0) {
+-			while ((wi = __fgetwc_unlock(fp)) != WEOF &&
+-			    iswspace(wi))
++			while ((wi = __fgetwc_unlock(fp, loc)) != WEOF &&
++			    iswspace_l(wi, loc))
+ 				nread++;
+ 			if (wi == WEOF)
+ 				goto input_failure;
+@@ -357,7 +362,7 @@
+ 					p = va_arg(ap, wchar_t *);
+ 				n = 0;
+ 				while (width-- != 0 &&
+-				    (wi = __fgetwc_unlock(fp)) != WEOF) {
++				    (wi = __fgetwc_unlock(fp, loc)) != WEOF) {
+ 					if (!(flags & SUPPRESS))
+ 						*p++ = (wchar_t)wi;
+ 					n++;
+@@ -373,15 +378,16 @@
+ 				n = 0;
+ 				bzero(&mbs, sizeof(mbs));
+ 				while (width != 0 &&
+-				    (wi = __fgetwc_unlock(fp)) != WEOF) {
+-					if (width >= MB_CUR_MAX &&
++				    (wi = __fgetwc_unlock(fp, loc)) != WEOF) {
++					if (width >= XLOCALE_CTYPE(loc)->__mb_cur_max &&
+ 					    !(flags & SUPPRESS)) {
+-						nconv = wcrtomb(mbp, wi, &mbs);
++						nconv = wcrtomb_l(mbp, wi, 
++						    &mbs, loc);
+ 						if (nconv == (size_t)-1)
+ 							goto input_failure;
+ 					} else {
+-						nconv = wcrtomb(mbbuf, wi,
+-						    &mbs);
++						nconv = wcrtomb_l(mbbuf, wi,
++						    &mbs, loc);
+ 						if (nconv == (size_t)-1)
+ 							goto input_failure;
+ 						if (nconv > width) {
+@@ -413,7 +419,7 @@
+ 			/* take only those things in the class */
+ 			if ((flags & SUPPRESS) && (flags & LONG)) {
+ 				n = 0;
+-				while ((wi = __fgetwc_unlock(fp)) != WEOF &&
++				while ((wi = __fgetwc_unlock(fp, loc)) != WEOF &&
+ 				    width-- != 0 && INCCL(wi))
+ 					n++;
+ 				if (wi != WEOF)
+@@ -422,7 +428,7 @@
+ 					goto match_failure;
+ 			} else if (flags & LONG) {
+ 				p0 = p = va_arg(ap, wchar_t *);
+-				while ((wi = __fgetwc_unlock(fp)) != WEOF &&
++				while ((wi = __fgetwc_unlock(fp, loc)) != WEOF &&
+ 				    width-- != 0 && INCCL(wi))
+ 					*p++ = (wchar_t)wi;
+ 				if (wi != WEOF)
+@@ -437,16 +443,17 @@
+ 					mbp = va_arg(ap, char *);
+ 				n = 0;
+ 				bzero(&mbs, sizeof(mbs));
+-				while ((wi = __fgetwc_unlock(fp)) != WEOF &&
++				while ((wi = __fgetwc_unlock(fp, loc)) != WEOF &&
+ 				    width != 0 && INCCL(wi)) {
+-					if (width >= MB_CUR_MAX &&
++					if (width >= XLOCALE_CTYPE(loc)->__mb_cur_max &&
+ 					   !(flags & SUPPRESS)) {
+-						nconv = wcrtomb(mbp, wi, &mbs);
++						nconv = wcrtomb_l(mbp, wi, 
++								&mbs, loc);
+ 						if (nconv == (size_t)-1)
+ 							goto input_failure;
+ 					} else {
+-						nconv = wcrtomb(mbbuf, wi,
+-						    &mbs);
++						nconv = wcrtomb_l(mbbuf, wi,
++						    &mbs, loc);
+ 						if (nconv == (size_t)-1)
+ 							goto input_failure;
+ 						if (nconv > width)
+@@ -476,17 +483,17 @@
+ 			if (width == 0)
+ 				width = (size_t)~0;
+ 			if ((flags & SUPPRESS) && (flags & LONG)) {
+-				while ((wi = __fgetwc_unlock(fp)) != WEOF &&
++				while ((wi = __fgetwc_unlock(fp, loc)) != WEOF &&
+ 				    width-- != 0 &&
+-				    !iswspace(wi))
++				    !iswspace_l(wi, loc))
+ 					nread++;
+ 				if (wi != WEOF)
+ 					__ungetwc(wi, fp);
+ 			} else if (flags & LONG) {
+ 				p0 = p = va_arg(ap, wchar_t *);
+-				while ((wi = __fgetwc_unlock(fp)) != WEOF &&
++				while ((wi = __fgetwc_unlock(fp, loc)) != WEOF &&
+ 				    width-- != 0 &&
+-				    !iswspace(wi)) {
++				    !iswspace_l(wi, loc)) {
+ 					*p++ = (wchar_t)wi;
+ 					nread++;
+ 				}
+@@ -498,17 +505,18 @@
+ 				if (!(flags & SUPPRESS))
+ 					mbp = va_arg(ap, char *);
+ 				bzero(&mbs, sizeof(mbs));
+-				while ((wi = __fgetwc_unlock(fp)) != WEOF &&
++				while ((wi = __fgetwc_unlock(fp, loc)) != WEOF &&
+ 				    width != 0 &&
+-				    !iswspace(wi)) {
+-					if (width >= MB_CUR_MAX &&
++				    !iswspace_l(wi, loc)) {
++					if (width >= XLOCALE_CTYPE(loc)->__mb_cur_max &&
+ 					    !(flags & SUPPRESS)) {
+-						nconv = wcrtomb(mbp, wi, &mbs);
++						nconv = wcrtomb_l(mbp, wi, 
++								&mbs, loc);
+ 						if (nconv == (size_t)-1)
+ 							goto input_failure;
+ 					} else {
+-						nconv = wcrtomb(mbbuf, wi,
+-						    &mbs);
++						nconv = wcrtomb_l(mbbuf, wi,
++						    &mbs, loc);
+ 						if (nconv == (size_t)-1)
+ 							goto input_failure;
+ 						if (nconv > width)
+@@ -539,7 +547,7 @@
+ 				width = sizeof(buf) / sizeof(*buf) - 1;
+ 			flags |= SIGNOK | NDIGITS | NZDIGITS;
+ 			for (p = buf; width; width--) {
+-				c = __fgetwc_unlock(fp);
++				c = __fgetwc_unlock(fp, loc);
+ 				/*
+ 				 * Switch on the character; `goto ok'
+ 				 * if we accept it as a part of number.
+@@ -652,9 +660,9 @@
+ 
+ 				*p = '\0';
+ 				if (flags & UNSIGNED)
+-					res = wcstoimax(buf, NULL, base);
++					res = wcstoimax_l(buf, NULL, base, loc);
+ 				else
+-					res = wcstoumax(buf, NULL, base);
++					res = wcstoumax_l(buf, NULL, base, loc);
+ 				if (flags & POINTER)
+ 					*va_arg(ap, void **) =
+ 					    (void *)(uintptr_t)res;
+@@ -688,7 +696,7 @@
+ 				width = sizeof(buf) / sizeof(*buf) - 1;
+ 			flags |= SIGNOK | NDIGITS | DPTOK | EXPOK;
+ 			for (p = buf; width; width--) {
+-				c = __fgetwc_unlock(fp);
++				c = __fgetwc_unlock(fp, loc);
+ 				/*
+ 				 * This code mimicks the integer conversion
+ 				 * code, but is much simpler.
+@@ -719,9 +727,10 @@
+ 				default:
+ 					if (decimal_point == 0) {
+ 						bzero(&mbs, sizeof(mbs));
+-						nconv = mbrtowc(&decimal_point,
+-						    localeconv()->decimal_point,
+-					    	    MB_CUR_MAX, &mbs);
++						nconv = mbrtowc_l(
++						    &decimal_point,
++						    localeconv_l(loc)->decimal_point,
++					    	    XLOCALE_CTYPE(loc)->__mb_cur_max, &mbs, loc);
+ 						if (nconv == 0 ||
+ 						    nconv == (size_t)-1 ||
+ 						    nconv == (size_t)-2)
+@@ -763,13 +772,13 @@
+ 			if ((flags & SUPPRESS) == 0) {
+ 				*p = 0;
+ 				if (flags & LONGDBL) {
+-					long double res = wcstold(buf, NULL);
++					long double res = wcstold_l(buf, NULL, loc);
+ 					*va_arg(ap, long double *) = res;
+ 				} else if (flags & LONG) {
+-					double res = wcstod(buf, NULL);
++					double res = wcstod_l(buf, NULL, loc);
+ 					*va_arg(ap, double *) = res;
+ 				} else {
+-					float res = wcstof(buf, NULL);
++					float res = wcstof_l(buf, NULL, loc);
+ 					*va_arg(ap, float *) = res;
+ 				}
+ 				nassigned++;
+@@ -792,7 +801,19 @@
+ 	int r;
+ 
+ 	FLOCKFILE(fp);
+-	r = __vfwscanf(fp, fmt, ap);
++	r = __vfwscanf(fp, __get_locale(), fmt, ap);
++	FUNLOCKFILE(fp);
++	return (r);
++}
++
++int
++vfwscanf_l(FILE * __restrict fp, locale_t loc, const wchar_t * __restrict fmt, 
++		__va_list ap)
++{
++	int r;
++
++	FLOCKFILE(fp);
++	r = __vfwscanf(fp, loc, fmt, ap);
+ 	FUNLOCKFILE(fp);
+ 	return (r);
+ }
+diff -u src-ant/lib/libc/stdio/vswprintf.c src/lib/libc/stdio/vswprintf.c
+--- src-ant/lib/libc/stdio/vswprintf.c	Thu May 15 05:35:00 2014
++++ src/lib/libc/stdio/vswprintf.c	Thu May 15 05:35:39 2014
+@@ -34,11 +34,14 @@
+ #include <string.h>
+ #include <wchar.h>
+ #include <stdarg.h>
++#include <xlocale.h>
++
+ #include "local.h"
++#include "locale/xlocale_private.h"
+ 
+ int
+-vswprintf(wchar_t * __restrict s, size_t n, const wchar_t * __restrict fmt,
+-    __va_list ap)
++vswprintf_l(wchar_t * __restrict s, size_t n, locale_t loc,
++		const wchar_t * __restrict fmt, __va_list ap)
+ {
+ 	mbstate_t mbs;
+ 	FILE f;
+@@ -61,7 +64,7 @@
+ 		return (-1);
+ 	}
+ 	f._bf._size = f._w = 127;		/* Leave room for the NUL */
+-	ret = __vfwprintf(&f, fmt, ap);
++	ret = __vfwprintf(&f, loc, fmt, ap);
+ 	if (ret < 0) {
+ 		sverrno = errno;
+ 		free(f._bf._base);
+@@ -80,7 +83,7 @@
+ 	 * fputwc() did in __vfwprintf().
+ 	 */
+ 	bzero(&mbs, sizeof(mbs));
+-	nwc = mbsrtowcs(s, (const char **)&mbp, n, &mbs);
++	nwc = mbsrtowcs_l(s, (const char **)&mbp, n, &mbs, loc);
+ 	free(f._bf._base);
+ 	if (nwc == (size_t)-1) {
+ 		errno = EILSEQ;
+@@ -93,4 +96,11 @@
+ 	}
+ 
+ 	return (ret);
++}
++
++int
++vswprintf(wchar_t * __restrict s, size_t n, const wchar_t * __restrict fmt,
++    __va_list ap)
++{
++	return vswprintf_l(s, n, __get_locale(), fmt, ap);
+ }
+diff -u src-ant/lib/libc/stdio/vswscanf.c src/lib/libc/stdio/vswscanf.c
+--- src-ant/lib/libc/stdio/vswscanf.c	Thu May 15 05:35:00 2014
++++ src/lib/libc/stdio/vswscanf.c	Thu May 15 05:35:39 2014
+@@ -38,7 +38,11 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <wchar.h>
++#include <xlocale.h>
++
+ #include "local.h"
++#include "locale/mblocal.h"
++#include "locale/xlocale_private.h"
+ 
+ static int	eofread(void *, char *, int);
+ 
+@@ -49,8 +53,8 @@
+ }
+ 
+ int
+-vswscanf(const wchar_t * __restrict str, const wchar_t * __restrict fmt,
+-    __va_list ap)
++vswscanf_l(const wchar_t * __restrict str, locale_t loc,
++		const wchar_t * __restrict fmt, __va_list ap)
+ {
+ 	mbstate_t mbs;
+ 	FILE f;
+@@ -64,12 +68,12 @@
+ 	 * XXX Convert the wide character string to multibyte, which
+ 	 * __vfwscanf() will convert back to wide characters.
+ 	 */
+-	len = wcslen(str) * MB_CUR_MAX;
++	len = wcslen(str) * XLOCALE_CTYPE(loc)->__mb_cur_max;
+ 	if ((mbstr = malloc(len + 1)) == NULL)
+ 		return (EOF);
+ 	bzero(&mbs, sizeof(mbs));
+ 	strp = str;
+-	if ((mlen = wcsrtombs(mbstr, &strp, len, &mbs)) == (size_t)-1) {
++	if ((mlen = wcsrtombs_l(mbstr, &strp, len, &mbs, loc)) == (size_t)-1) {
+ 		free(mbstr);
+ 		return (EOF);
+ 	}
+@@ -81,8 +85,16 @@
+ 	f._bf._size = f._r = mlen;
+ 	f._read = eofread;
+ 	f._lb._base = NULL;
+-	r = __vfwscanf(&f, fmt, ap);
++	r = __vfwscanf(&f, loc, fmt, ap);
+ 	free(mbstr);
+ 
+ 	return (r);
+ }
++
++int
++vswscanf(const wchar_t * __restrict str, const wchar_t * __restrict fmt,
++    __va_list ap)
++{
++	return vswscanf_l(str, __get_locale(), fmt, ap);
++}
++
+diff -u src-ant/lib/libc/stdio/vfwprintf.c src/lib/libc/stdio/vfwprintf.c
+--- src-ant/lib/libc/stdio/vfwprintf.c	Thu May 15 05:35:00 2014
++++ src/lib/libc/stdio/vfwprintf.c	Thu May 15 05:35:39 2014
+@@ -50,8 +50,11 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <unistd.h>
++#include <xlocale.h>
+ 
+ #include "local.h"
++#include "locale/mblocal.h"
++#include "locale/xlocale_private.h"
+ #include "fvwrite.h"
+ 
+ union arg {
+@@ -94,7 +97,7 @@
+  * worries about ungetc buffers and so forth.
+  */
+ static int
+-__sbprintf(FILE *fp, const wchar_t *fmt, va_list ap)
++__sbprintf(FILE *fp, locale_t loc, const wchar_t *fmt, va_list ap)
+ {
+ 	int ret;
+ 	FILE fake;
+@@ -114,7 +117,7 @@
+ 	fake._lbfsize = 0;	/* not actually used, but Just In Case */
+ 
+ 	/* do the work, then copy any error status */
+-	ret = __vfwprintf(&fake, fmt, ap);
++	ret = __vfwprintf(&fake, loc, fmt, ap);
+ 	if (ret >= 0 && __sflush(&fake))
+ 		ret = EOF;
+ 	if (fake._flags & __SERR)
+@@ -127,7 +130,7 @@
+  * File must already be locked.
+  */
+ static wint_t
+-__xfputwc(wchar_t wc, FILE *fp)
++__xfputwc(wchar_t wc, FILE *fp, locale_t loc)
+ {
+ 	mbstate_t mbs;
+ 	char buf[MB_LEN_MAX];
+@@ -136,10 +139,10 @@
+ 	size_t len;
+ 
+ 	if ((fp->_flags & __SSTR) == 0)
+-		return (__fputwc_unlock(wc, fp));
++		return (__fputwc_unlock(wc, fp, loc));
+ 
+ 	bzero(&mbs, sizeof(mbs));
+-	len = wcrtomb(buf, wc, &mbs);
++	len = wcrtomb_l(buf, wc, &mbs, loc);
+ 	if (len == (size_t)-1) {
+ 		fp->_flags |= __SERR;
+ 		errno = EILSEQ;
+@@ -163,7 +166,7 @@
+  * To find out what happened check errno for ENOMEM, EILSEQ and EINVAL.
+  */
+ static wchar_t *
+-__mbsconv(char *mbsarg, int prec)
++__mbsconv(char *mbsarg, int prec, locale_t locale)
+ {
+ 	mbstate_t mbs;
+ 	wchar_t *convbuf, *wcp;
+@@ -186,7 +189,8 @@
+ 		insize = nchars = nconv = 0;
+ 		bzero(&mbs, sizeof(mbs));
+ 		while (nchars != (size_t)prec) {
+-			nconv = mbrlen(p, MB_CUR_MAX, &mbs);
++			size_t sm = XLOCALE_CTYPE(locale)->__mb_cur_max;
++			nconv = mbrlen_l(p, sm, &mbs, locale);
+ 			if (nconv == (size_t)0 || nconv == (size_t)-1 ||
+ 			    nconv == (size_t)-2)
+ 				break;
+@@ -212,7 +216,7 @@
+ 	bzero(&mbs, sizeof(mbs));
+ 	nconv = 0;
+ 	while (insize != 0) {
+-		nconv = mbrtowc(wcp, p, insize, &mbs);
++		nconv = mbrtowc_l(wcp, p, insize, &mbs, locale);
+ 		if (nconv == 0 || nconv == (size_t)-1 || nconv == (size_t)-2)
+ 			break;
+ 		wcp++;
+@@ -276,7 +280,8 @@
+ #define MAXINT		0x1000		/* largest integer size (intmax_t) */
+ 
+ int
+-__vfwprintf(FILE * __restrict fp, const wchar_t * __restrict fmt0, __va_list ap)
++__vfwprintf(FILE * __restrict fp, locale_t loc, 
++		const wchar_t * __restrict fmt0, __va_list ap)
+ {
+ 	wchar_t *fmt;		/* format string */
+ 	wchar_t ch;		/* character from fmt */
+@@ -356,7 +361,7 @@
+ 	 */
+ #define	PRINT(ptr, len)	do {	\
+ 	for (n3 = 0; n3 < (len); n3++) {	\
+-		if ((__xfputwc((ptr)[n3], fp)) == WEOF)	\
++		if ((__xfputwc((ptr)[n3], fp, loc)) == WEOF)	\
+ 			goto error; \
+ 	} \
+ } while (0)
+@@ -457,7 +462,7 @@
+ 	/* optimise fwprintf(stderr) (and other unbuffered Unix files) */
+ 	if ((fp->_flags & (__SNBF|__SWR|__SRW)) == (__SNBF|__SWR) &&
+ 	    fp->_file >= 0)
+-		return (__sbprintf(fp, fmt0, ap));
++		return (__sbprintf(fp, loc, fmt0, ap ));
+ 
+ 	fmt = (wchar_t *)fmt0;
+ 	argtable = NULL;
+@@ -677,7 +682,7 @@
+ 				free(convbuf);
+ 				convbuf = NULL;
+ 			}
+-			cp = convbuf = __mbsconv(dtoaresult, -1);
++			cp = convbuf = __mbsconv(dtoaresult, -1, loc);
+ 			if (cp == NULL)
+ 				goto error;
+ 			ndig = dtoaend - dtoaresult;
+@@ -729,7 +734,7 @@
+ 				free(convbuf);
+ 				convbuf = NULL;
+ 			}
+-			cp = convbuf = __mbsconv(dtoaresult, -1);
++			cp = convbuf = __mbsconv(dtoaresult, -1, loc);
+ 			if (cp == NULL)
+ 				goto error;
+ 			ndig = dtoaend - dtoaresult;
+@@ -840,7 +845,7 @@
+ 					free(convbuf);
+ 					convbuf = NULL;
+ 				}
+-				convbuf = __mbsconv(mbsarg, prec);
++				convbuf = __mbsconv(mbsarg, prec, loc);
+ 				if (convbuf == NULL) {
+ 					fp->_flags |= __SERR;
+ 					goto error;
+@@ -998,8 +1003,11 @@
+ 		if ((flags & FPT) == 0) {
+ 			PRINT(cp, size);
+ 		} else {	/* glue together f_p fragments */
+-			if (decimal_point == NULL)
+-				decimal_point = nl_langinfo(RADIXCHAR);
++			if (decimal_point == NULL) {
++				decimal_point = nl_langinfo_l(RADIXCHAR, loc);
++				if (strlen(decimal_point) != 1) 
++					decimal_point = ".";
++			}
+ 			if (!expchar) {	/* %[fF] or sufficiently short %[gG] */
+ 				if (expt <= 0) {
+ 					PRINT(zeroes, 1);
+@@ -1069,17 +1077,23 @@
+ }
+ 
+ int
+-vfwprintf(FILE * __restrict fp, const wchar_t * __restrict fmt0, __va_list ap)
++vfwprintf_l(FILE * __restrict fp, locale_t loc, 
++		const wchar_t * __restrict fmt0, __va_list ap)
+ {
+ 	int r;
+ 
+ 	FLOCKFILE(fp);
+-	r = __vfwprintf(fp, fmt0, ap);
++	r = __vfwprintf(fp, loc, fmt0, ap);
+ 	FUNLOCKFILE(fp);
+ 
+ 	return (r);
+ }
+ 
++int
++vfwprintf(FILE * __restrict fp, const wchar_t * __restrict fmt0, __va_list ap)
++{
++	return vfwprintf_l(fp, __get_locale(), fmt0, ap);
++}
+ /*
+  * Type ids for argument type table.
+  */
+diff -u src-ant/lib/libc/stdio/vscanf.c src/lib/libc/stdio/vscanf.c
+--- src-ant/lib/libc/stdio/vscanf.c	Thu May 15 05:35:00 2014
++++ src/lib/libc/stdio/vscanf.c	Thu May 15 05:35:39 2014
+@@ -32,10 +32,16 @@
+  */
+ 
+ #include <stdio.h>
++#include <xlocale.h>
+ 
+ int
+ vscanf(const char *fmt, __va_list ap)
+ {
+-
+ 	return (vfscanf(stdin, fmt, ap));
++}
++
++int
++vscanf_l(locale_t loc, const char *fmt, __va_list ap)
++{
++	return (vfscanf_l(stdin, loc, fmt, ap));
+ }
+diff -u src-ant/lib/libc/stdio/vprintf.c src/lib/libc/stdio/vprintf.c
+--- src-ant/lib/libc/stdio/vprintf.c	Thu May 15 05:34:02 2014
++++ src/lib/libc/stdio/vprintf.c	Thu May 15 05:34:40 2014
+@@ -32,9 +32,17 @@
+  */
+ 
+ #include <stdio.h>
++#include <xlocale.h>
+ 
+ int
+ vprintf(const char *fmt, __va_list ap)
+ {
+ 	return (vfprintf(stdout, fmt, ap));
++}
++
++
++int
++vprintf_l(locale_t loc, const char *fmt, __va_list ap)
++{
++	return (vfprintf_l(stdout, loc, fmt, ap));
+ }
+diff -u src-ant/lib/libc/stdio/fprintf.c src/lib/libc/stdio/fprintf.c
+--- src-ant/lib/libc/stdio/fprintf.c	Thu May 15 05:29:50 2014
++++ src/lib/libc/stdio/fprintf.c	Thu May 15 05:30:43 2014
+@@ -33,6 +33,7 @@
+ 
+ #include <stdio.h>
+ #include <stdarg.h>
++#include <xlocale.h>
+ 
+ /* PRINTFLIKE2 */
+ int
+@@ -43,6 +44,18 @@
+ 
+ 	va_start(ap, fmt);
+ 	ret = vfprintf(fp, fmt, ap);
++	va_end(ap);
++	return (ret);
++}
++
++int
++fprintf_l(FILE *fp, locale_t loc, const char *fmt, ...)
++{
++	int ret;
++	va_list ap;
++
++	va_start(ap, fmt);
++	ret = vfprintf_l(fp, loc, fmt, ap);
+ 	va_end(ap);
+ 	return (ret);
+ }
+diff -u src-ant/lib/libc/stdlib/atof.c src/lib/libc/stdlib/atof.c
+--- src-ant/lib/libc/stdlib/atof.c	Thu May 15 05:42:35 2014
++++ src/lib/libc/stdlib/atof.c	Thu May 15 05:43:12 2014
+@@ -29,9 +29,16 @@
+  */
+ 
+ #include <stdlib.h>
++#include <xlocale.h>
+ 
+ double
+ atof(const char *ascii)
+ {
+ 	return(strtod(ascii, (char **)NULL));
++}
++
++double
++atof_l(const char *ascii, locale_t loc)
++{
++	return(strtod_l(ascii, (char **)NULL, loc));
+ }
+diff -u src-ant/lib/libc/stdlib/atoi.c src/lib/libc/stdlib/atoi.c
+--- src-ant/lib/libc/stdlib/atoi.c	Thu May 15 05:43:35 2014
++++ src/lib/libc/stdlib/atoi.c	Thu May 15 06:09:28 2014
+@@ -29,9 +29,16 @@
+  */
+ 
+ #include <stdlib.h>
++#include <xlocale.h>
+ 
+ int
+ atoi(const char *str)
+ {
+ 	return((int)strtol(str, (char **)NULL, 10));
++}
++
++int
++atoi_l(const char *str, locale_t loc)
++{
++	return((int)strtol_l(str, (char **)NULL, 10, loc));
+ }
+diff -u src-ant/lib/libc/stdlib/atol.c src/lib/libc/stdlib/atol.c
+--- src-ant/lib/libc/stdlib/atol.c	Thu May 15 05:44:15 2014
++++ src/lib/libc/stdlib/atol.c	Thu May 15 06:09:37 2014
+@@ -29,9 +29,16 @@
+  */
+ 
+ #include <stdlib.h>
++#include <xlocale.h>
+ 
+ long
+ atol(const char *str)
+ {
+ 	return(strtol(str, (char **)NULL, 10));
++}
++
++long
++atol_l(const char *str, locale_t loc)
++{
++	return(strtol_l(str, (char **)NULL, 10, loc));
+ }
+diff -u src-ant/lib/libc/stdlib/strtoll.c src/lib/libc/stdlib/strtoll.c
+--- src-ant/lib/libc/stdlib/strtoll.c	Thu May 15 05:48:00 2014
++++ src/lib/libc/stdlib/strtoll.c	Thu May 15 05:48:12 2014
+@@ -149,3 +149,4 @@
+ }
+ 
+ __strong_alias(strtoq, strtoll);
++__strong_alias(strtoq_l, strtoll_l);
+diff -u src-ant/lib/libc/stdlib/strtoull.c src/lib/libc/stdlib/strtoull.c
+--- src-ant/lib/libc/stdlib/strtoull.c	Thu May 15 05:51:01 2014
++++ src/lib/libc/stdlib/strtoull.c	Thu May 15 05:52:40 2014
+@@ -111,3 +111,4 @@
+ }
+ 
+ __strong_alias(strtouq, strtoull);
++__strong_alias(strtouq_l, strtoull_l);
+diff -u src-ant/lib/libc/stdlib/atoll.c src/lib/libc/stdlib/atoll.c
+--- src-ant/lib/libc/stdlib/atoll.c	Thu May 15 07:59:00 2014
++++ src/lib/libc/stdlib/atoll.c	Thu May 15 08:00:28 2014
+@@ -29,10 +29,17 @@
+  */
+ 
+ #include <stdlib.h>
++#include <xlocale.h>
+ 
+ long long
+ atoll(str)
+ 	const char *str;
+ {
+ 	return(strtoll(str, (char **)NULL, 10));
++}
++
++long long
++atoll_l(const char *str, locale_t loc)
++{
++	return(strtoll_l(str, (char **)NULL, 10, loc));
+ }
+diff -u src-ant/lib/libc/stdlib/atof.3 src/lib/libc/stdlib/atof.3
+--- src-ant/lib/libc/stdlib/atof.3	Thu May 15 06:48:04 2014
++++ src/lib/libc/stdlib/atof.3	Thu May 15 06:49:51 2014
+@@ -35,7 +35,8 @@
+ .Dt ATOF 3
+ .Os
+ .Sh NAME
+-.Nm atof
++.Nm atof ,
++.Nm atof_l
+ .Nd convert
+ .Tn ASCII
+ string to double
+@@ -43,14 +44,23 @@
+ .In stdlib.h
+ .Ft double
+ .Fn atof "const char *nptr"
++.In xlocale.h
++.Ft double
++.Fn atof_l "const char *nptr" "locale_t loc"
+ .Sh DESCRIPTION
+ The
+ .Fn atof
+-function converts the initial portion of the string pointed to by
++and
++.Fn atof_l
++functions convert the initial portion of the string pointed to by
+ .Fa nptr
+ to
+ .Li double
+-representation.
++representation. The
++.Fn atof
++function uses the current locale while
++.Fn atof_l
++uses the locale provided as parameter.
+ .Pp
+ It is equivalent to:
+ .Bd -literal -offset indent
+@@ -62,11 +72,15 @@
+ .Xr strtod 3 ,
+ .Xr strtol 3 ,
+ .Xr strtoul 3
++.Xr xlocale 3
+ .Sh STANDARDS
+ The
+ .Fn atof
+ function conforms to
+ .St -ansiC .
++The
++.Fn atof_l
++function is a Darwin extension.
+ .Sh HISTORY
+ An
+ .Fn atof
+diff -u src-ant/lib/libc/stdlib/Makefile.inc src/lib/libc/stdlib/Makefile.inc
+--- src-ant/lib/libc/stdlib/Makefile.inc	Thu May 15 06:45:56 2014
++++ src/lib/libc/stdlib/Makefile.inc	Thu May 15 07:52:57 2014
+@@ -56,10 +56,17 @@
+ MLINKS+=rand48.3 mrand48.3 rand48.3 nrand48.3 rand48.3 jrand48.3
+ MLINKS+=rand48.3 srand48.3 rand48.3 seed48.3 rand48.3 lcong48.3
+ MLINKS+=ptsname.3 grantpt.3 ptsname.3 unlockpt.3
++MLINKS+=atoi.3 atoi_l.3 atol.3 atol_l.3 atof.3 atof_l.3 atoll.3 atoll_l.3
+ MLINKS+=strfmon.3 strfmon_l.3
+ MLINKS+=strtod.3 strtof.3 strtod.3 strtold.3
++MLINKS+=strtod.3 strtod_l.3
++MLINKS+=strtod.3 strtof_l.3 strtod.3 strtold_l.3
++MLINKS+=strtol.3 strtol_l.3 
+ MLINKS+=strtol.3 strtoll.3 strtol.3 strtoq.3 strtol.3 strtoimax.3
++MLINKS+=strtol.3 strtoll_l.3 strtol.3 strtoq_l.3 strtol.3 strtoimax_l.3
+ MLINKS+=strtoul.3 strtoull.3 strtoul.3 strtouq.3 strtoul.3 strtoumax.3
++MLINKS+=strtoul.3 strtoul_l.3
++MLINKS+=strtoul.3 strtoull_l.3 strtoul.3 strtouq_l.3 strtoul.3 strtoumax_l.3
+ MLINKS+=tsearch.3 tfind.3
+ MLINKS+=tsearch.3 tdelete.3
+ MLINKS+=tsearch.3 twalk.3
+diff -u src-ant/lib/libc/stdlib/strtonum.3 src/lib/libc/stdlib/strtonum.3
+--- src-ant/lib/libc/stdlib/strtonum.3	Thu May 15 06:40:45 2014
++++ src/lib/libc/stdlib/strtonum.3	Thu May 15 06:43:20 2014
+@@ -18,7 +18,8 @@
+ .Dt STRTONUM 3
+ .Os
+ .Sh NAME
+-.Nm strtonum
++.Nm strtonum ,
++.Nm strtonum_l
+ .Nd reliably convert string value to an integer
+ .Sh SYNOPSIS
+ .In stdlib.h
+@@ -29,14 +30,30 @@
+ .Fa "long long maxval"
+ .Fa "const char **errstr"
+ .Fc
++.In xlocale.h
++.Ft long long
++.Fo strtonum_l
++.Fa "const char *nptr"
++.Fa "long long minval"
++.Fa "long long maxval"
++.Fa "const char **errstr"
++.Fa "locale_t loc"
++.Fc
+ .Sh DESCRIPTION
+ The
+ .Fn strtonum
+-function converts the string in
++and
++.Fn strtonum_l
++functions convert the string in
+ .Fa nptr
+ to a
+ .Li long long
+-value.
++value. The
++.Fn strtonum
++function uses the current locale (to determine digits and decimal point
++character), while the
++.Fn strtonum_l
++function uses the locale given as parameter.
+ The
+ .Fn strtonum
+ function was designed to facilitate safe, robust programming
+diff -u src-ant/lib/libc/stdlib/strtonum.c src/lib/libc/stdlib/strtonum.c
+--- src-ant/lib/libc/stdlib/strtonum.c	Thu May 15 06:40:37 2014
++++ src/lib/libc/stdlib/strtonum.c	Thu May 15 06:41:09 2014
+@@ -20,14 +20,17 @@
+ #include <errno.h>
+ #include <limits.h>
+ #include <stdlib.h>
++#include <xlocale.h>
+ 
++#include "locale/xlocale_private.h"
++
+ #define	INVALID		1
+ #define	TOOSMALL	2
+ #define	TOOLARGE	3
+ 
+ long long
+-strtonum(const char *numstr, long long minval, long long maxval,
+-    const char **errstrp)
++strtonum_l(const char *numstr, long long minval, long long maxval,
++    const char **errstrp, locale_t loc)
+ {
+ 	long long ll = 0;
+ 	int error = 0;
+@@ -47,7 +50,7 @@
+ 	if (minval > maxval) {
+ 		error = INVALID;
+ 	} else {
+-		ll = strtoll(numstr, &ep, 10);
++		ll = strtoll_l(numstr, &ep, 10, loc);
+ 		if (numstr == ep || *ep != '\0')
+ 			error = INVALID;
+ 		else if ((ll == LLONG_MIN && errno == ERANGE) || ll < minval)
+@@ -62,4 +65,11 @@
+ 		ll = 0;
+ 
+ 	return (ll);
++}
++
++long long
++strtonum(const char *numstr, long long minval, long long maxval,
++    const char **errstrp)
++{
++	return strtonum_l(numstr, minval, maxval, errstrp, __get_locale());
+ }
+diff -u src-ant/lib/libc/stdlib/atoll.3 src/lib/libc/stdlib/atoll.3
+--- src-ant/lib/libc/stdlib/atoll.3	Thu May 15 06:29:57 2014
++++ src/lib/libc/stdlib/atoll.3	Thu May 15 06:31:17 2014
+@@ -35,7 +35,8 @@
+ .Dt ATOLL 3
+ .Os
+ .Sh NAME
+-.Nm atoll
++.Nm atoll ,
++.Nm atoll_l
+ .Nd convert
+ .Tn ASCII
+ string to long long integer
+@@ -43,14 +44,23 @@
+ .In stdlib.h
+ .Ft long long
+ .Fn atoll "const char *nptr"
++.In xlocale.h
++.Ft long long
++.Fn atoll_l "const char *nptr" "locale_t loc"
+ .Sh DESCRIPTION
+ The
+ .Fn atoll
+-function converts the initial portion of the string pointed to by
++and
++.Fn atoll_l
++functions convert the initial portion of the string pointed to by
+ .Fa nptr
+ to
+ .Li long long integer
+-representation.
++representation. The
++.Fn atoll
++function uses the current locale, while
++.Fn atoll_l
++uses the locale provided as second argument.
+ .Pp
+ It is equivalent to:
+ .Bd -literal -offset indent
+@@ -63,8 +73,12 @@
+ .Xr strtod 3 ,
+ .Xr strtol 3 ,
+ .Xr strtoul 3
++.Xr xlocale 3
+ .Sh STANDARDS
+ The
+ .Fn atoll
+ function conforms to
+ .St -ansiC-99 .
++The
++.Fn atoll_l
++function is a Darwin extension.
+diff -u src-ant/lib/libc/stdlib/atol.3 src/lib/libc/stdlib/atol.3
+--- src-ant/lib/libc/stdlib/atol.3	Thu May 15 06:28:30 2014
++++ src/lib/libc/stdlib/atol.3	Thu May 15 06:29:41 2014
+@@ -35,7 +35,8 @@
+ .Dt ATOL 3
+ .Os
+ .Sh NAME
+-.Nm atol
++.Nm atol ,
++.Nm atol_l
+ .Nd convert
+ .Tn ASCII
+ string to long integer
+@@ -43,14 +44,23 @@
+ .In stdlib.h
+ .Ft long
+ .Fn atol "const char *nptr"
++.In xlocale.h
++.Ft long
++.Fn atol_l "const char *nptr" "locale_t loc"
+ .Sh DESCRIPTION
+ The
+ .Fn atol
+-function converts the initial portion of the string pointed to by
++and
++.Fn atol_l
++functions convert the initial portion of the string pointed to by
+ .Fa nptr
+ to
+ .Li long integer
+-representation.
++representation.  The
++.Fn atol
++function uses the current locale while
++.Fn atol_l
++uses the locale provided as parameter.
+ .Pp
+ It is equivalent to:
+ .Bd -literal -offset indent
+@@ -63,8 +73,12 @@
+ .Xr strtod 3 ,
+ .Xr strtol 3 ,
+ .Xr strtoul 3
++.Xr xlocale 3
+ .Sh STANDARDS
+ The
+ .Fn atol
+ function conforms to
+ .St -ansiC-99 .
++The
++.Fn atol_l
++function is a Darwin extension.
+diff -u src-ant/lib/libc/stdlib/atoi.3 src/lib/libc/stdlib/atoi.3
+--- src-ant/lib/libc/stdlib/atoi.3	Thu May 15 06:23:46 2014
++++ src/lib/libc/stdlib/atoi.3	Thu May 15 06:26:45 2014
+@@ -35,7 +35,8 @@
+ .Dt ATOI 3
+ .Os
+ .Sh NAME
+-.Nm atoi
++.Nm atoi ,
++.Nm atoi_l
+ .Nd convert
+ .Tn ASCII
+ string to integer
+@@ -43,14 +44,24 @@
+ .In stdlib.h
+ .Ft int
+ .Fn atoi "const char *nptr"
++.In xlocale.h
++.Ft int
++.Fn atoi_l "const char *nptr" "locale_t loc"
+ .Sh DESCRIPTION
+ The
+ .Fn atoi
++and
++.Fn atoi_l
+ function converts the initial portion of the string pointed to by
+ .Fa nptr
+ to
+ .Li integer
+-representation.
++representation.  The
++.Fn atoi
++function uses the current locale while 
++.Fn atoi_l
++uses the locale given as parameter, see
++.Xr xlocale 3 .
+ .Pp
+ It is equivalent to:
+ .Bd -literal -offset indent
+@@ -63,11 +74,15 @@
+ .Xr strtol 3 ,
+ .Xr strtonum 3 ,
+ .Xr strtoul 3
++.Xr xlocale 3 .
+ .Sh STANDARDS
+ The
+ .Fn atoi
+ function conforms to
+ .St -ansiC .
++The
++.Fn atoi_l
++function is a Darwin extension.
+ .Sh HISTORY
+ An
+ .Fn atoi
+@@ -81,9 +96,11 @@
+ .Dq "123abc" )
+ poorly.
+ Careful use of
+-.Xr strtol 3
+-and
++.Xr strtol 3 ,
++.Xr strtol_l 3 ,
+ .Xr strtoul 3
++and
++.Xr strtoul_l 3
+ can alleviate these problems,
+ but
+ .Xr strtonum 3
+diff -u src-ant/lib/libc/stdlib/strtol.3 src/lib/libc/stdlib/strtol.3
+--- src-ant/lib/libc/stdlib/strtol.3	Thu May 15 06:15:56 2014
++++ src/lib/libc/stdlib/strtol.3	Thu May 15 07:57:33 2014
+@@ -36,9 +36,13 @@
+ .Os
+ .Sh NAME
+ .Nm strtol ,
++.Nm strtol_l ,
+ .Nm strtoll ,
++.Nm strtoll_l ,
+ .Nm strtoimax ,
++.Nm strtoimax_l ,
+ .Nm strtoq ,
++.Nm strtoq_l ,
+ .Nd convert string value to a long, long long or intmax_t integer
+ .Sh SYNOPSIS
+ .In limits.h
+@@ -58,40 +62,63 @@
+ .In stdlib.h
+ .Ft quad_t
+ .Fn strtoq "const char *nptr" "char **endptr" "int base"
++.In xlocale
++.Ft long
++.Fn strtol_l "const char *nptr" "char **endptr" "int base" "locale_t loc"
++.Ft long long
++.Fn strtoll_l "const char *nptr" "char **endptr" "int base" "locale_t loc"
++.Ft intmax_t
++.Fn strtoimax_l "const char *nptr" "char **endptr" "int base" "locale_t loc"
++.Ft quad_t
++.Fn strtoq_l "const char *nptr" "char **endptr" "int base" "locale_t loc"
+ .Sh DESCRIPTION
++For the conversion the functions with postfix _l use the locale provided 
++as parameter to check spaces and digits in the string, the other functions 
++use the current locale.
+ The
+ .Fn strtol
+-function converts the string in
++and
++.Fn strtol_l
++functions convert the string in
+ .Fa nptr
+ to a
+ .Li long
+-value.
++value. 
+ The
+ .Fn strtoll
+-function converts the string in
++and
++.Fn strtoll_l
++functions convert the string in
+ .Fa nptr
+ to a
+ .Li long long
+ value.
+ The
+ .Fn strtoimax
+-function converts the string in
++and
++.Fn strtoimax_l
++functions convert the string in
+ .Fa nptr
+ to an
+ .Li intmax_t
+ value.
+ The
+ .Fn strtoq
+-function is a deprecated equivalent of
+-.Fn strtoll
+-and is provided for backwards compatibility with legacy programs.
++and
++.Fn strtoq_l
++functions are deprecated equivalent of
++.Fn strtoll ,
++.Fn strtoll_l
++and are provided for backwards compatibility with legacy programs.
+ The conversion is done according to the given
+ .Fa base ,
+ which must be a number between 2 and 36 inclusive or the special value 0.
+ .Pp
+ The string may begin with an arbitrary amount of whitespace
+ (as determined by
+-.Xr isspace 3 )
++.Xr isspace 3
++or
++.Xr isspace_l 3 )
+ followed by a single optional
+ .Ql +
+ or
+@@ -145,13 +172,7 @@
+ .Ql \e0
+ on return, the entire string was valid.)
+ .Sh RETURN VALUES
+-The
+-.Fn strtol ,
+-.Fn strtoll ,
+-.Fn strtoimax ,
+-and
+-.Fn strtoq
+-functions return the result of the conversion,
++These functions return the result of the conversion,
+ unless the value would underflow or overflow.
+ If no conversion could be performed, 0 is returned;
+ the global variable
+@@ -246,7 +267,8 @@
+ .Xr sscanf 3 ,
+ .Xr strtod 3 ,
+ .Xr strtonum 3 ,
+-.Xr strtoul 3
++.Xr strtoul 3 ,
++.Xr xlocale 3
+ .Sh STANDARDS
+ The
+ .Fn strtol ,
+@@ -260,5 +282,11 @@
+ function is a
+ .Bx
+ extension and is provided for backwards compatibility with legacy programs.
++The 
++.Fn strtol_l ,
++.Fn strtoll_l ,
++.Fn strtoimax_l
++and
++.Fn strtoq_l
++functions are Darwin extensions.
+ .Sh BUGS
+-Ignores the current locale.
+diff -u src-ant/lib/libc/stdlib/strtoul.3 src/lib/libc/stdlib/strtoul.3
+--- src-ant/lib/libc/stdlib/strtoul.3	Thu May 15 06:15:56 2014
++++ src/lib/libc/stdlib/strtoul.3	Thu May 15 07:57:33 2014
+@@ -36,9 +36,13 @@
+ .Os
+ .Sh NAME
+ .Nm strtoul ,
++.Nm strtoul_l ,
+ .Nm strtoull ,
++.Nm strtoull_l ,
+ .Nm strtoumax ,
+-.Nm strtouq
++.Nm strtoumax_l ,
++.Nm strtouq ,
++.Nm strtouq_l
+ .Nd convert a string to an unsigned long, unsigned long long or uintmax_t integer
+ .Sh SYNOPSIS
+ .In limits.h
+@@ -55,33 +59,51 @@
+ .In stdlib.h
+ .Ft u_quad_t
+ .Fn strtouq "const char *nptr" "char **endptr" "int base"
++.In xlocale.h
++.Ft unsigned long
++.Fn strtoul_l "const char *nptr" "char **endptr" "int base" "locale_t loc"
++.Ft unsigned long long
++.Fn strtoull_l "const char *nptr" "char **endptr" "int base" "locale_t loc"
++.Ft uintmax_t
++.Fn strtoumax_l "const char *nptr" "char **endptr" "int base" "locale_t loc"
++.Ft u_quad_t
++.Fn strtouq_l "const char *nptr" "char **endptr" "int base" "locale_t loc"
+ .Sh DESCRIPTION
+ The
+ .Fn strtoul
+-function converts the string in
++and
++.Fn strtoul_l
++functions convert the string in
+ .Fa nptr
+ to an
+ .Li unsigned long
+ value.
+ The
+ .Fn strtoull
+-function converts the string in
++and
++.Fn strtoull_l
++functions convert the string in
+ .Fa nptr
+ to an
+ .Li unsigned long long
+ value.
+ The
+ .Fn strtoumax
+-function converts the string in
++and
++.Fn strtoumax_l
++functions convert the string in
+ .Fa nptr
+ to a
+ .Li umaxint_t
+ value.
+ The
+ .Fn strtouq
+-function is a deprecated equivalent of
++and
++.Fn strtouq_l
++functions are deprecated equivalent of
+ .Fn strtoull
+-and is provided for backwards compatibility with legacy programs.
++.Fn strtoull_l
++and are provided for backwards compatibility with legacy programs.
+ The conversion is done according to the given
+ .Fa base ,
+ which must be a number between 2 and 36 inclusive
+@@ -123,6 +145,9 @@
+ .Ql Z
+ representing 35.)
+ .Pp
++The functions with postfix "_l" use the locale
++provided as parameter, while the other functions use the current locale.
++.Pp
+ If
+ .Fa endptr
+ is non-null,
+@@ -147,25 +172,38 @@
+ .Sh RETURN VALUES
+ The
+ .Fn strtoul ,
++.Fn strtoul_l ,
+ .Fn strtoull ,
+-.Fn strtoumax
+-and
++.Fn strtoull_l ,
++.Fn strtoumax ,
++.Fn strtoumax_l ,
++.Fn strtoumax_l ,
+ .Fn strtouq
++and
++.Fn strtouq_l
+ functions return either the result of the conversion or,
+ if there was a leading minus sign,
+ the negation of the result of the conversion,
+ unless the original (non-negated) value would overflow.
+ If overflow occurs,
+ .Fn strtoul
+-returns
++and
++.Fn strtoul_l
++return
+ .Dv ULONG_MAX ,
+ .Fn strtoull
+-returns
++and
++.Fn strtoull_l
++return
+ .Dv ULLONG_MAX ,
+ .Fn strtoumax
++and
++.Fn strtoumax_l
+ returns
+ .Dv UINTMAX_MAX ,
+ .Fn strtouq
++and
++.Fn strtouq_l
+ returns
+ .Dv ULLONG_MAX
+ and the global variable
+@@ -228,6 +266,7 @@
+ .Sh SEE ALSO
+ .Xr sscanf 3 ,
+ .Xr strtol 3
++.Xr xlocale 3
+ .Sh STANDARDS
+ The
+ .Fn strtoul ,
+@@ -241,5 +280,11 @@
+ function is a
+ .Bx
+ extension and is provided for backwards compatibility with legacy programs.
++The
++.Fn strtoul_l ,
++.Fn strtoull_l ,
++.Fn strtoumax_l
++and
++.Fn strtouq_l
++functions are Darwin extensions.
+ .Sh BUGS
+-Ignores the current locale.
+diff -u src-ant/lib/libc/stdio/scanf.3 src/lib/libc/stdio/scanf.3
+--- src-ant/lib/libc/stdio/scanf.3	Thu May 15 06:15:56 2014
++++ src/lib/libc/stdio/scanf.3	Thu May 15 07:57:33 2014
+@@ -36,11 +36,17 @@
+ .Os
+ .Sh NAME
+ .Nm scanf ,
++.Nm scanf_l ,
+ .Nm fscanf ,
++.Nm fscanf_l ,
+ .Nm sscanf ,
++.Nm sscanf_l ,
+ .Nm vscanf ,
++.Nm vscanf_l ,
+ .Nm vsscanf ,
+-.Nm vfscanf
++.Nm vsscanf_l ,
++.Nm vfscanf ,
++.Nm vfscanf_l
+ .Nd input format conversion
+ .Sh SYNOPSIS
+ .In stdio.h
+@@ -57,6 +63,19 @@
+ .Fn vsscanf "const char *str" "const char *format" "va_list ap"
+ .Ft int
+ .Fn vfscanf "FILE *stream" "const char *format" "va_list ap"
++.In xlocale.h
++.Ft int
++.Fn scanf_l "locale_t loc" "const char *format" ...
++.Ft int
++.Fn fscanf_l "FILE *stream" "locale_t loc" "const char *format" ...
++.Ft int
++.Fn sscanf_l "const char *str" "locale_t loc" "const char *format" ...
++.Ft int
++.Fn vscanf_l "locale_t loc" "const char *format" "va_list ap"
++.Ft int
++.Fn vsscanf_l "const char *str" "locale_t loc" "const char *format" "va_list ap"
++.Ft int
++.Fn vfscanf_l "FILE *stream" "locale_t loc" "const char *format" "va_list ap"
+ .Sh DESCRIPTION
+ The
+ .Fn scanf
+@@ -70,34 +89,53 @@
+ .Pp
+ The
+ .Fn scanf
+-function reads input from the standard input stream
++and
++.Fn scanf_l
++functions read input from the standard input stream
+ .Em stdin ,
+ .Fn fscanf
+-reads input from the supplied stream pointer
++and
++.Fn fscanf_l
++read input from the supplied stream pointer
+ .Fa stream ,
+ and
+ .Fn sscanf
+-reads its input from the character string pointed to by
++and
++.Fn sscanf_l
++read its input from the character string pointed to by
+ .Fa str .
+ .Pp
+ The
+ .Fn vfscanf
+-function is analogous to
++and
++.Fn vfscanf_l
++functions are analogous to
+ .Xr vfprintf 3
++and
++.Xr vfprintf_l 3
+ and reads input from the stream pointer
+ .Fa stream
+ using a variable argument list of pointers (see
+ .Xr stdarg 3 ) .
+ The
+ .Fn vscanf
+-function scans a variable argument list from the standard input and the
++and
++.Fn vscanf_l
++functions scan a variable argument list from the standard input and the
+ .Fn vsscanf
+-function scans it from a string; these are analogous to the
+-.Fn vprintf
+ and
++.Fn vsscanf_l
++functions scan it from a string; these are analogous to the
++.Fn vprintf ,
++.Fn vprintf_l ,
+ .Fn vsprintf
++and
++.Fn vsprintf_l
+ functions, respectively.
+ .Pp
++The functions with postfix "_l" use the locale provided as parameter,
++while the other functions use the current locale.
++.Pp
+ Each successive
+ .Em pointer
+ argument must correspond properly with each successive conversion specifier
+@@ -296,7 +334,10 @@
+ .Cm f .
+ .It Cm fF
+ Matches an optionally signed floating-point number that uses
+-the decimal point of the current LC_NUMERIC category of the locale
++the decimal point of the LC_NUMERIC category of the locale
++provided (if the function has postfix "_l"), see
++.Xr xlocale(3) ,
++or of the current locale, see
+ .Xr setlocale(3) ;
+ the next pointer must be a pointer to
+ .Vt float .
+@@ -436,7 +477,8 @@
+ .Xr printf 3 ,
+ .Xr strtod 3 ,
+ .Xr strtol 3 ,
+-.Xr strtoul 3
++.Xr strtoul 3 ,
++.Xr xlocale 3
+ .Sh STANDARDS
+ The functions
+ .Fn fscanf ,
+@@ -445,6 +487,7 @@
+ .Fn sscanf
+ conform to
+ .St -ansiC .
++The functions with postfix "_l" are Darwin extensions.
+ .Sh HISTORY
+ The functions
+ .Fn scanf ,
+diff -u src-ant/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regress/lib/libc/locale/check_xlocale.c
+--- src-ant/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Thu May 15 05:35:00 2014
++++ src/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Thu May 15 05:35:39 2014
+@@ -250,7 +250,7 @@
+ 	p(!isspecial_l('a', es_CO_UTF_8));
+ 	p(iswspecial_l(0x00b2, es_CO_UTF_8));
+ 	p(!iswspecial_l(L'\0', es_CO_UTF_8));
+-	p(nextwctype(-1, wctype("graph")) > 0);
++	p(nextwctype_l(-1, wctype("graph"), es_CO_UTF_8) > 0);
+ 	p(tolower_l('A', es_CO_UTF_8) == 'a');
+ 	p(tolower('A') == 'a');
+ 	p(_tolower('A') == 'a');
+@@ -461,7 +461,6 @@
+ 	p(strcmp(col, "-$ 3.456,78") == 0);
+ }
+ 
+-
+ void test_numeric() 
+ {
+ 	struct lconv *p;
+@@ -475,8 +474,16 @@
+ 	long l;
+ 	int i;
+ 	long long ll;
++	quad_t q;
++	unsigned long ul;
++	unsigned long long ull;
++	u_quad_t uq;
++	intmax_t im;
++	uintmax_t uim;
++	const char *errstr = NULL;
+ 
+ 	setlocale(LC_ALL, "POSIX");
++	tloc = uselocale(NULL);
+ 	p = localeconv_l(es_CO_UTF_8);
+ 
+ 	p(strcmp(p->decimal_point, ",") == 0);
+@@ -498,13 +505,70 @@
+ 
+ 	fl = strtof_l(" -3,1", NULL, es_CO_UTF_8);
+ 	p(fabs(fl + 3.1) < FLT_EPSILON);
++	fl = strtof_l(" -3,1", NULL, es_CO_UTF_8);
++	p(fabs(fl + 3.1) < FLT_EPSILON);
++	fl = strtof_l(" -3.1", NULL, tloc);
++	p(fabs(fl + 3.1) < FLT_EPSILON);
+ 	dl = strtod_l(" -3,1", NULL, es_CO_UTF_8);
+ 	p(fabs(dl + 3.1) < DBL_EPSILON);
+ 	ldl = strtold_l(" -3,1", NULL, es_CO_UTF_8);
+ 	p(fabs(ldl + 3.1) < DBL_EPSILON);
+ 	sscanf_l(" -3,1", es_CO_UTF_8, "%f", &fl);
++	printf("OJO fl=%f\n", fl);
++	p(fabs(fl + 3.1) < FLT_EPSILON);
++
++	fl = atof_l(" -3,1", es_CO_UTF_8);
++	p(fabs(fl + 3.1) < FLT_EPSILON);
++	l = strtol_l(" -3", NULL, 10, es_CO_UTF_8);
++	p(l == -3);
++	ul = strtoul_l(" 3", NULL, 10, es_CO_UTF_8);
++	p(ul == 3);
++	ull = strtoull_l(" 3", NULL, 10, es_CO_UTF_8);
++	p(ull == 3);
++	i = atoi_l(" -3", es_CO_UTF_8);
++	p(i == -3);
++	l = atol_l(" -3", es_CO_UTF_8);
++	p(l == -3);
++	ll = atoll_l(" -3", es_CO_UTF_8);
++	p(ll == -3);
++	ll = strtoll_l(" -3", NULL, 10, es_CO_UTF_8);
++	p(ll == -3);
++	ll = strtonum_l("-3", -10, 10, &errstr, es_CO_UTF_8);
++	printf("ll=%Li, errstr=%s\n", ll, errstr);
++	p(errstr == NULL);
++	q = strtoq_l(" -3", NULL, 10, es_CO_UTF_8);
++	p(q == -3);
++	uq = strtouq_l(" -3", NULL, 10, es_CO_UTF_8);
++	p(uq == -3);
++	im = strtoimax_l(" -3", NULL, 10, es_CO_UTF_8);
++	p(im == -3);
++	uim = strtoumax_l("  3", NULL, 10, es_CO_UTF_8);
++	p(uim == 3);
++
++	l = wcstol_l(L" -4", NULL, 10, es_CO_UTF_8);
++	p(l == -4);
++	ll = wcstoll_l(L" -4", NULL, 10, es_CO_UTF_8);
++	p(ll == -4);
++	ul = wcstoul_l(L"  4", NULL, 10, es_CO_UTF_8);
++	p(ul == 4);
++	ull = wcstoull_l(L" 4", NULL, 10, es_CO_UTF_8);
++	p(ull == 4);
++	im = wcstoimax_l(L" -4", NULL, 10, es_CO_UTF_8);
++	p(im == -4);
++	uim = wcstoumax_l(L" 4", NULL, 10, es_CO_UTF_8);
++	p(uim == 4);
++
++	fl = wcstof_l(L" -3.1", NULL, tloc);
++	p(fabs(fl + 3.1) < FLT_EPSILON);
++	fl = wcstof_l(L" -3,1", NULL, es_CO_UTF_8);
+ 	printf("fl=%f\n", fl);
+ 	p(fabs(fl + 3.1) < FLT_EPSILON);
++	dl = wcstod_l(L" -3,1", NULL, es_CO_UTF_8);
++	printf("dl=%lf\n", dl);
++	p(fabs(dl + 3.1) < DBL_EPSILON);
++	ldl = wcstold_l(L" -3,1", NULL, es_CO_UTF_8);
++	printf("ldl=%Lf\n", ldl);
++	p(fabs(ldl + 3.1) < DBL_EPSILON);
+ }
+ 
+ void test_time() 
+@@ -531,6 +595,126 @@
+ 	p(wcscmp(wcol, L"martes") == 0);
+ }
+ 
++void test_io() 
++{
++	char col[256];
++	wchar_t wcol[256];
++	wchar_t wcol2[256];
++	char *nl;
++	locale_t tloc;
++	locale_t esc;
++	float fl, fl2;
++	char *dm = NULL;
++	FILE *f;
++	wchar_t wc;
++	int i;
++
++	nl = setlocale(LC_ALL, "es_CO.UTF-8");
++	tloc = uselocale(NULL);
++	esc = duplocale(tloc);
++	setlocale(LC_ALL, "POSIX");
++	tloc = uselocale(NULL);
++
++	asprintf_l(&dm, esc, "%'f", 1000000.01);
++	p(strcmp(dm, "1.000.000,010000") == 0);
++	free(dm);
++	fprintf_l(stdout, esc, "%'f\n", 1000000.01);
++	printf_l(esc, "%'f\n", 1000000.01);
++	dprintf_l(1, esc, "%'f\n", 1000000.01);
++
++	// The following doesn't work because requires more than 23 bits 
++	// that is the size of significant in float. 
++	// fl = strtof_l(" 1000000,010000", NULL, esc);
++	// fl2 = 1000000.010000;
++	fl = strtof_l(" -3,01", NULL, esc);
++	fl2 = -3.01; 
++	p(fabs(fl - fl2) <= FLT_EPSILON);
++	printf("fl=%f, fl-%f=%.20f, FLT_EPSILON=%.20f\n", fl, fl2, fl-fl2, FLT_EPSILON);
++	fl = strtof_l("1000000,0", NULL, esc);
++	printf("es fl=%f\n", fl);
++	p(fabs(fl - 1000000.0) < FLT_EPSILON);
++	fl = strtof_l("1000000.0", NULL, tloc);
++	printf("POSIX fl=%f\n", fl);
++	p(fabs(fl - 1000000.0) < FLT_EPSILON);
++
++	f = fopen("/tmp/check_xlocale.tmp", "w");
++	p(f != NULL);
++	if (f) {
++		fprintf_l(f, esc, "   %f\n", 100.5);
++		fclose(f);
++	} else {
++		perror("abrir para escribir");
++	}
++	f = fopen("/tmp/check_xlocale.tmp", "r");
++	p(f != NULL);
++	if (f) {
++		fscanf_l(f, esc, "   %f", &fl);
++		fclose(f);
++	} else {
++		perror("abrir para leer");
++	}
++	printf("fl=%f\n", fl);
++	p(fabs(fl - 100.5) < FLT_EPSILON);
++	sprintf_l(col, esc, "%f", fl);
++	printf("col=%s\n", col);
++	p(strcmp(col, "100,500000") == 0);
++
++	/* Due to the implementation of stdio in libc, testing:
++	 *   asprintf_l(3), fprintf_l(3), fscanf_l(3), snprintf_l(3), 
++	 *   sprintf_l(3), sscanf_l(3)
++	 * also covers testing:
++	 *   vasprintf_l(3), vfprintf_l(3), vfscanf_l(3), vprintf_l(3),
++	 *   vscanf_l(3), vsnprintf_l(3), vsprintf_l(3), vsscanf_l(3)
++	 * and dprintf_l, vdprintf_l, printf_l, scanf_l are practically done 
++	 * because they use main functions of fprintf_l and fscanf_l
++	 */
++	f = fopen("/tmp/check_xlocale.tmp", "w");
++	p(f != NULL);
++	if (f) {
++		fputwc_l(L'Á', f, esc);
++		fputws_l(L"guila ñ\n", f, esc);
++		fwprintf_l(f, esc, L"niño\n");
++		fclose(f);
++	} else {
++		perror("abrir para escribir");
++	}
++	f = fopen("/tmp/check_xlocale.tmp", "r");
++	p(f != NULL);
++	if (f) {
++		wc = fgetwc_l(f, esc);
++		p(wc == L'Á');
++		ungetwc(L'A', f);  // ungetwc_l not implemented
++		wc = fgetwc_l(f, esc);
++		p(wc == L'A');
++		fgetws_l(wcol, sizeof(wcol), f, esc);
++		printf_l(esc, "fgetws wcol=%ls\n", wcol);
++		p(wcscmp(wcol, L"guila ñ\n") == 0);
++		fwscanf_l(f, esc, L"%ls", &wcol);
++		printf_l(esc, "fwscanf wcol=%ls\n", wcol);
++		p(wcscmp(wcol, L"niño") == 0);
++
++		fclose(f);
++	} else {
++		perror("abrir para leer");
++	}
++	swprintf_l(wcol, sizeof(wcol), esc, L"%i %ls", 10, L"niña");
++	wprintf_l(esc, L"%ls", L"niña");
++	p(wcscmp(wcol, L"10 niña") == 0);
++	swscanf_l(wcol, esc, L"%i %ls", &i, wcol2);
++	p(i == 10);
++
++	printf("swscanf_l wcslen(wcol2)=%i, wcol2=%ls\n", wcslen(wcol2), wcol2);
++	p(wcscmp(wcol2, L"niña") == 0);
++	/* Implementation of fwprintf_l and fwscanf_l test vfwprintf_l and vfwscanf_l
++	 * Implementation of swprintf_l and swscanf_l test vswprintf_l and vswscanf_l
++	 * Implementation of getwc_l and getwchar_l are mostly tested with fgetwc_l
++	 * Implementation of putwc_l and putwchar_l are mostly tested with fgetwc_l
++	 *
++	 * Implementation of vwprintf_l, wprintf_l, vwscanf_l, wscanf_l are
++	 * mostly tested with fwprintf_l and fwscanf_l
++	 */
++}
++
+ int main()
+ {
+ 	test_xlocale();
+@@ -540,6 +724,7 @@
+ 	test_monetary();
+ 	test_numeric();
+ 	test_time();
++	test_io();
+ 	
+ 	return bad != 0;
+ }
+diff -u src-ant/lib/libc/locale/xlocale.3 src/lib/libc/locale/xlocale.3
+--- src-ant/lib/libc/locale/xlocale.3	Thu May 15 06:15:56 2014
++++ src/lib/libc/locale/xlocale.3	Thu May 15 07:57:33 2014
+@@ -27,20 +27,19 @@
+ .\"
+ .\" $FreeBSD: src/lib/libc/locale/xlocale.3,v 1.6 2012/11/17 01:49:31 svnexp Exp $
+ .\"
+-.Dd January 25 2013
++.Dd $Mdocdate: January 25 2013 $
+ .Dt XLOCALE 3
+ .Os
+ .Sh NAME
+ .Nm xlocale
+-.Nd Extended locale support for collations and ctype
++.Nd Extended locale support
+ .Sh LIBRARY
+ .Lb libc
+ .Sh SYNOPSIS
+ .In xlocale.h
+ .Sh DESCRIPTION
+-The extended locale support for collations and ctype includes 
+-convenience functions for performing locale-aware calls with a 
+-specified locale.
++The extended locale support includes convenience functions for 
++performing locale-aware calls with a specified locale.
+ .Pp
+ The core of the xlocale API is the
+ .Fa locale_t
+@@ -54,7 +53,7 @@
+ values are available:
+ .Bl -bullet -offset indent
+ .It
+-NULL refers to the current locale 
++NULL refers to the current locale
+ .It
+ LC_GLOBAL_LOCALE refers to the global locale.
+ .El
+@@ -85,23 +84,13 @@
+ then use the unsuffixed version of the function.
+ .Pp
+ These functions are exposed by including
+-.In xlocale.h
+-.Em after
+-including the relevant headers for the standard variant.
+-For example, the
+-.Xr iswalnum_l 3
+-function is exposed by including
+-.In xlocale.h
+-after
+-.In wctype.h ,
+-which defines
+-.Xr iswalnum 3 .
++.In xlocale.h .
+ .Pp
+ For reference,
+-a complete list of the locale-aware functions that are available in this form,
+-along with the headers that expose them, is provided here:
++a complete list of the locale-aware functions that are available,
++is provided here:
+ .Bl -tag -width "<monetary.h> "
+-.It In wctype.h
++.It Related to wctype.h
+ .Xr iswalnum_l 3 ,
+ .Xr iswalpha_l 3 ,
+ .Xr iswcntrl_l 3 ,
+@@ -117,7 +106,7 @@
+ .Xr towlower_l 3 ,
+ .Xr towupper_l 3 ,
+ .Xr wctype_l 3 ,
+-.It In ctype.h
++.It Related to ctype.h
+ .Xr digittoint_l 3 ,
+ .Xr isalnum_l 3 ,
+ .Xr isalpha_l 3 ,
+@@ -139,154 +128,18 @@
+ .Xr isxdigit_l 3 ,
+ .Xr tolower_l 3 ,
+ .Xr toupper_l 3
+-.\".It In inttypes.h
+-.\".Xr strtoimax_l 3 ,
+-.\".Xr strtoumax_l 3 ,
+-.\".Xr wcstoimax_l 3 ,
+-.\".Xr wcstoumax_l 3
+-.\".It In langinfo.h
+-.\".Xr nl_langinfo_l 3
+-.\".It In monetary.h
+-.\".Xr strfmon_l 3
+-.\".It In stdio.h
+-.\".Xr asprintf_l 3 ,
+-.\".Xr fprintf_l 3 ,
+-.\".Xr fscanf_l 3 ,
+-.\".Xr printf_l 3 ,
+-.\".Xr scanf_l 3 ,
+-.\".Xr snprintf_l 3 ,
+-.\".Xr sprintf_l 3 ,
+-.\".Xr sscanf_l 3 ,
+-.\".Xr vasprintf_l 3 ,
+-.\".Xr vfprintf_l 3 ,
+-.\".Xr vfscanf_l 3 ,
+-.\".Xr vprintf_l 3 ,
+-.\".Xr vscanf_l 3 ,
+-.\".Xr vsnprintf_l 3 ,
+-.\".Xr vsprintf_l 3 ,
+-.\".Xr vsscanf_l 3
+-.It In stdlib.h
+-.\".Xr atof_l 3 ,
+-.\".Xr atoi_l 3 ,
+-.\".Xr atol_l 3 ,
+-.\".Xr atoll_l 3 ,
+-.Xr mblen_l 3 ,
+-.Xr mbstowcs_l 3 ,
+-.Xr mbtowc_l 3 ,
+-.\".Xr strtod_l 3 ,
+-.\".Xr strtof_l 3 ,
+-.\".Xr strtol_l 3 ,
+-.\".Xr strtold_l 3 ,
+-.\".Xr strtoll_l 3 ,
+-.\".Xr strtoq_l 3 ,
+-.\".Xr strtoul_l 3 ,
+-.\".Xr strtoull_l 3 ,
+-.\".Xr strtouq_l 3 ,
+-.Xr wcstombs_l 3 ,
+-.Xr wctomb_l 3
+-.It In string.h
+-.Xr strcoll_l 3 ,
+-.Xr strxfrm_l 3 ,
+-.Xr strcasecmp_l 3 ,
+-.Xr strcasestr_l 3 ,
+-.Xr strncasecmp_l 3
+-.\".It In time.h
+-.\".Xr strftime_l 3
+-.\".Xr strptime_l 3
+-.It In wchar.h
+-.Xr btowc_l 3 ,
+-.\".Xr fgetwc_l 3 ,
+-.\".Xr fgetws_l 3 ,
+-.\".Xr fputwc_l 3 ,
+-.\".Xr fputws_l 3 ,
+-.\".Xr fwprintf_l 3 ,
+-.\".Xr fwscanf_l 3 ,
+-.\".Xr getwc_l 3 ,
+-.\".Xr getwchar_l 3 ,
+-.Xr mbrlen_l 3 ,
+-.Xr mbrtowc_l 3 ,
+-.Xr mbsinit_l 3 ,
+-.Xr mbsnrtowcs_l 3 ,
+-.Xr mbsrtowcs_l 3 ,
+-.\".Xr putwc_l 3 ,
+-.\".Xr putwchar_l 3 ,
+-.\".Xr swprintf_l 3 ,
+-.\".Xr swscanf_l 3 ,
+-.\".Xr ungetwc_l 3 ,
+-.\".Xr vfwprintf_l 3 ,
+-.\".Xr vfwscanf_l 3 ,
+-.\".Xr vswprintf_l 3 ,
+-.\".Xr vswscanf_l 3 ,
+-.\".Xr vwprintf_l 3 ,
+-.\".Xr vwscanf_l 3 ,
+-.Xr wcrtomb_l 3 ,
+-.Xr wcscasecmp_l 3
+-.Xr wcscoll_l 3 ,
+-.\".Xr wcsftime_l 3 ,
+-.Xr wcsncasecmp_l 3
+-.Xr wcsnrtombs_l 3 ,
+-.Xr wcsrtombs_l 3 ,
+-.\".Xr wcstod_l 3 ,
+-.\".Xr wcstof_l 3 ,
+-.\".Xr wcstol_l 3 ,
+-.\".Xr wcstold_l 3 ,
+-.\".Xr wcstoll_l 3 ,
+-.\".Xr wcstoul_l 3 ,
+-.\".Xr wcstoull_l 3 ,
+-.Xr wcswidth_l 3 ,
+-.Xr wcsxfrm_l 3 ,
+-.Xr wctob_l 3 ,
+-.Xr wcwidth_l 3 ,
+-.\".Xr wprintf_l 3 ,
+-.\".Xr wscanf_l 3
+-.It In wctype.h
+-.Xr iswblank_l 3 ,
+-.Xr iswhexnumber_l 3 ,
+-.Xr iswideogram_l 3 ,
+-.Xr iswnumber_l 3 ,
+-.Xr iswphonogram_l 3 ,
+-.Xr iswrune_l 3 ,
+-.Xr iswspecial_l 3 ,
+-.Xr nextwctype_l 3 ,
+-.Xr towctrans_l 3 ,
+-.Xr wctrans_l 3
+-.El
+-.Sh STANDARDS
+-The functions
+-follow 
+-.St -p1003.1-2008 
+-except in thread safety.
+-.Sh HISTORY
+-The xlocale APIs first appeared in Darwin 8.0.
+-David Chisnall implemented it for FreeBSD 9.1
+-under sponsorship from the FreeBSD Foundation.
+-For adJ 5.2, vtamara@pasosdeJesus.org mixed the collation support of 
+-such implementation with the existing locale support of OpenBSD 5.2.
+-.Sh CAVEATS
+-Due to the lack of _Thread_local storage, this implementation still
+-is not thread safe, all the threads share the same global locale.
+-Better use the 
+-.Fa _l
+-suffixed versions of the functions.
+-.Pp
+-We have implemented only functions related with 
+-.In ctype.h
+-,
+-.In wctype.h
+-and collations. 
+-The convenience functions that still has not been implemented are:
+-.Bl -tag -width "<monetary.h> "
+-.It In inttypes.h
++.It Related to inttypes.h
+ .Xr strtoimax_l 3 ,
+ .Xr strtoumax_l 3 ,
+ .Xr wcstoimax_l 3 ,
+ .Xr wcstoumax_l 3
+-.It In langinfo.h
++.It Related to langinfo.h
+ .Xr nl_langinfo_l 3
+-.It In monetary.h
++.It Related to monetary.h
+ .Xr strfmon_l 3
+-.It In stdio.h
++.It Related to stdio.h
+ .Xr asprintf_l 3 ,
++.Xr dprintf_l 3 ,
+ .Xr fprintf_l 3 ,
+ .Xr fscanf_l 3 ,
+ .Xr printf_l 3 ,
+@@ -295,6 +148,7 @@
+ .Xr sprintf_l 3 ,
+ .Xr sscanf_l 3 ,
+ .Xr vasprintf_l 3 ,
++.Xr vdprintf_l 3 ,
+ .Xr vfprintf_l 3 ,
+ .Xr vfscanf_l 3 ,
+ .Xr vprintf_l 3 ,
+@@ -302,25 +156,37 @@
+ .Xr vsnprintf_l 3 ,
+ .Xr vsprintf_l 3 ,
+ .Xr vsscanf_l 3
+-.It In stdlib.h
++.It Related to stdlib.h
+ .Xr atof_l 3 ,
+ .Xr atoi_l 3 ,
+ .Xr atol_l 3 ,
+ .Xr atoll_l 3 ,
++.Xr mblen_l 3 ,
++.Xr mbstowcs_l 3 ,
++.Xr mbtowc_l 3 ,
+ .Xr strtod_l 3 ,
+ .Xr strtof_l 3 ,
+ .Xr strtol_l 3 ,
+ .Xr strtold_l 3 ,
+ .Xr strtoll_l 3 ,
++.Xr strtonum_l 3 ,
+ .Xr strtoq_l 3 ,
+ .Xr strtoul_l 3 ,
+ .Xr strtoull_l 3 ,
+ .Xr strtouq_l 3 ,
+-.It In string.h
+-.It In time.h
++.Xr wcstombs_l 3 ,
++.Xr wctomb_l 3
++.It Related to string.h
++.Xr strcoll_l 3 ,
++.Xr strxfrm_l 3 ,
++.Xr strcasecmp_l 3 ,
++.Xr strcasestr_l 3 ,
++.Xr strncasecmp_l 3
++.It Related to time.h
+ .Xr strftime_l 3
+ .Xr strptime_l 3
+-.It In wchar.h
++.It Related to wchar.h
++.Xr btowc_l 3 ,
+ .Xr fgetwc_l 3 ,
+ .Xr fgetws_l 3 ,
+ .Xr fputwc_l 3 ,
+@@ -329,18 +195,28 @@
+ .Xr fwscanf_l 3 ,
+ .Xr getwc_l 3 ,
+ .Xr getwchar_l 3 ,
++.Xr mbrlen_l 3 ,
++.Xr mbrtowc_l 3 ,
++.Xr mbsinit_l 3 ,
++.Xr mbsnrtowcs_l 3 ,
++.Xr mbsrtowcs_l 3 ,
+ .Xr putwc_l 3 ,
+ .Xr putwchar_l 3 ,
+ .Xr swprintf_l 3 ,
+ .Xr swscanf_l 3 ,
+-.Xr ungetwc_l 3 ,
+ .Xr vfwprintf_l 3 ,
+ .Xr vfwscanf_l 3 ,
+ .Xr vswprintf_l 3 ,
+ .Xr vswscanf_l 3 ,
+ .Xr vwprintf_l 3 ,
+ .Xr vwscanf_l 3 ,
++.Xr wcrtomb_l 3 ,
++.Xr wcscasecmp_l 3
++.Xr wcscoll_l 3 ,
+ .Xr wcsftime_l 3 ,
++.Xr wcsncasecmp_l 3
++.Xr wcsnrtombs_l 3 ,
++.Xr wcsrtombs_l 3 ,
+ .Xr wcstod_l 3 ,
+ .Xr wcstof_l 3 ,
+ .Xr wcstol_l 3 ,
+@@ -348,11 +224,49 @@
+ .Xr wcstoll_l 3 ,
+ .Xr wcstoul_l 3 ,
+ .Xr wcstoull_l 3 ,
++.Xr wcswidth_l 3 ,
++.Xr wcsxfrm_l 3 ,
++.Xr wctob_l 3 ,
++.Xr wcwidth_l 3 ,
+ .Xr wprintf_l 3 ,
+-.It In xlocale.h
+-.Xr localeconv_l 3
++.Xr wscanf_l 3
++.It Related to wctype.h
++.Xr iswblank_l 3 ,
++.Xr iswhexnumber_l 3 ,
++.Xr iswideogram_l 3 ,
++.Xr iswnumber_l 3 ,
++.Xr iswphonogram_l 3 ,
++.Xr iswrune_l 3 ,
++.Xr iswspecial_l 3 ,
++.Xr nextwctype_l 3 ,
++.Xr towctrans_l 3 ,
++.Xr wctrans_l 3
+ .El
+-.
++.Sh STANDARDS
++Most of the functions
++follow
++.St -p1003.1-2008
++except in thread safety.
++Some functions are Darwin extensions.
++The function strtonum_l is an adJ's extension.
++.Sh HISTORY
++The xlocale APIs first appeared in Darwin 8.0.
++David Chisnall implemented it for FreeBSD 9.1
++under sponsorship from the FreeBSD Foundation.
++For adJ (between versions 5.2 and 5.5) vtamara@pasosdeJesus.org mixed
++the collation, numeric, monetary, time and xlocale support of FreeBSD.
++.Sh CAVEATS
++Due to the lack of _Thread_local storage, this implementation still
++is not thread safe, all the threads share the same global locale.
++Better use the
++.Fa _l
++suffixed versions of the functions.
++The function 
++.Fn ungetwc_l
++present in Darwin xlocale has not been implemented, use
++.Fn ungetwc
++that in OpenBSD is independent of the encoding of the file.
++.Xr ungetwc_l 3 ,
+ .\"The
+ .\".Xr setlocale 3
+ .\"function, and others in the family, refer to the global locale.
+diff -u src-ant/lib/libc/stdlib/Makefile.inc src/lib/libc/stdlib/Makefile.inc
+--- src-ant/lib/libc/stdlib/Makefile.inc	Thu May 15 06:15:56 2014
++++ src/lib/libc/stdlib/Makefile.inc	Thu May 15 07:57:33 2014
+@@ -64,6 +64,7 @@
+ MLINKS+=strtol.3 strtol_l.3 
+ MLINKS+=strtol.3 strtoll.3 strtol.3 strtoq.3 strtol.3 strtoimax.3
+ MLINKS+=strtol.3 strtoll_l.3 strtol.3 strtoq_l.3 strtol.3 strtoimax_l.3
++MLINKS+=strtonum.3 strtonum_l.3
+ MLINKS+=strtoul.3 strtoull.3 strtoul.3 strtouq.3 strtoul.3 strtoumax.3
+ MLINKS+=strtoul.3 strtoul_l.3
+ MLINKS+=strtoul.3 strtoull_l.3 strtoul.3 strtouq_l.3 strtoul.3 strtoumax_l.3
+diff -u src-ant/lib/libc/locale/wcstol.3 src/lib/libc/locale/wcstol.3
+--- src-ant/lib/libc/locale/wcstol.3	Thu May 15 06:15:56 2014
++++ src/lib/libc/locale/wcstol.3	Thu May 15 07:57:33 2014
+@@ -34,6 +34,10 @@
+ .Nm wcstol , wcstoul ,
+ .Nm wcstoll , wcstoull ,
+ .Nm wcstoimax , wcstoumax
++.Nm wcstol_l , wcstoul_l ,
++.Nm wcstoll_l , wcstoull_l ,
++.Nm wcstoimax_l , wcstoumax_l
++
+ .Nd convert a wide-character string value to a long, unsigned long,
+ long long, unsigned long long, intmax_t or uintmax_t integer
+ .Sh SYNOPSIS
+@@ -51,21 +55,47 @@
+ .Fn wcstoimax "const wchar_t * restrict nptr" "wchar_t ** restrict endptr" "int base"
+ .Ft uintmax_t
+ .Fn wcstoumax "const wchar_t * restrict nptr" "wchar_t ** restrict endptr" "int base"
++.In xlocale.h
++.Ft long
++.Fn wcstol_l "const wchar_t * restrict nptr" "wchar_t ** restrict endptr" "int base"
++.Ft "unsigned long" "locale_t loc"
++.Fn wcstoul_l "const wchar_t * restrict nptr" "wchar_t ** restrict endptr" "int base"
++.Ft "long long"  "locale_t loc"
++.Fn wcstoll_l "const wchar_t * restrict nptr" "wchar_t ** restrict endptr" "int base"
++.Ft "unsigned long long"  "locale_t loc"
++.Fn wcstoull_l "const wchar_t * restrict nptr" "wchar_t ** restrict endptr" "int base" "locale_t loc"
++.Ft intmax_t
++.Fn wcstoimax_l "const wchar_t * restrict nptr" "wchar_t ** restrict endptr" "int base" "locale_t loc"
++.Ft uintmax_t
++.Fn wcstoumax_l "const wchar_t * restrict nptr" "wchar_t ** restrict endptr" "int base" "locale_t loc"
++
+ .Sh DESCRIPTION
+ The
+ .Fn wcstol ,
+ .Fn wcstoul ,
+ .Fn wcstoll ,
+ .Fn wcstoull ,
+-.Fn wcstoimax
++.Fn wcstoimax ,
++.Fn wcstoumax ,
++.Fn wcstol_l ,
++.Fn wcstoul_l ,
++.Fn wcstoll_l ,
++.Fn wcstoull_l ,
++.Fn wcstoimax_l
+ and
+-.Fn wcstoumax
++.Fn wcstoumax_l
+ functions are wide-character versions of the
+ .Fn strtol ,
+ .Fn strtoul ,
+ .Fn strtoll ,
+ .Fn strtoull ,
+-.Fn strtoimax
++.Fn strtoimax ,
++.Fn strtoumax ,
++.Fn strtol_l ,
++.Fn strtoul_l ,
++.Fn strtoll_l ,
++.Fn strtoull_l ,
++.Fn strtoimax_l
+ and
+ .Fn strtoumax
+ functions, respectively.
+@@ -75,6 +105,7 @@
+ .Sh SEE ALSO
+ .Xr strtol 3 ,
+ .Xr strtoul 3
++.Xr xlocale 3
+ .Sh STANDARDS
+ The
+ .Fn wcstol ,
+@@ -86,3 +117,4 @@
+ .Fn wcstoumax
+ functions conform to
+ .St -isoC-99 .
++The functions with postfix "_l" are Darwin extension.
+diff -u src-ant/lib/libc/locale/wcstod.3 src/lib/libc/locale/wcstod.3
+--- src-ant/lib/libc/locale/wcstod.3	Thu May 15 06:15:56 2014
++++ src/lib/libc/locale/wcstod.3	Thu May 15 07:57:33 2014
+@@ -33,7 +33,10 @@
+ .Sh NAME
+ .Nm wcstod ,
+ .Nm wcstof ,
+-.Nm wcstold
++.Nm wcstold ,
++.Nm wcstod_l ,
++.Nm wcstof_l ,
++.Nm wcstold_l
+ .Nd convert wide-character string to double, float or "long double"
+ .Sh SYNOPSIS
+ .In wchar.h
+@@ -43,17 +46,30 @@
+ .Fn wcstof "const wchar_t * restrict nptr" "wchar_t ** restrict endptr"
+ .Ft "long double"
+ .Fn wcstold "const wchar_t * restrict nptr" "wchar_t ** restrict endptr"
++.In xlocale.h
++.Ft double
++.Fn wcstod_l "const wchar_t * restrict nptr" "wchar_t ** restrict endptr" "locale_t loc"
++.Ft float
++.Fn wcstof_l "const wchar_t * restrict nptr" "wchar_t ** restrict endptr" "locale_t loc"
++.Ft "long double"
++.Fn wcstold_l "const wchar_t * restrict nptr" "wchar_t ** restrict endptr" "locale_t loc"
+ .Sh DESCRIPTION
+ The
+ .Fn wcstod ,
+ .Fn wcstof ,
++.Fn wcstold ,
++.Fn wcstod_l ,
++.Fn wcstof_l ,
+ and
+-.Fn wcstold
++.Fn wcstold_l
+ functions are the wide-character versions of the
+ .Fn strtod ,
+ .Fn strtof ,
++.Fn strtold ,
++.Fn strtod_l ,
++.Fn strtof_l ,
+ and
+-.Fn strtold
++.Fn strtold_l
+ functions.
+ Refer to
+ .Xr strtod 3
+@@ -61,6 +77,7 @@
+ .Sh SEE ALSO
+ .Xr strtod 3 ,
+ .Xr wcstol 3
++.Xr xlocale 3
+ .Sh STANDARDS
+ The
+ .Fn wcstod
+@@ -72,3 +89,4 @@
+ .Fn wcstold
+ functions conform to
+ .St -isoC-99 .
++The functions with postfix "_l" are Darwin extensions.

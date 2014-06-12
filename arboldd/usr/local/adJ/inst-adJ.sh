@@ -3,10 +3,10 @@
 # Dominio público de acuerdo a legislación colombiana. http://www.pasosdejesus.org/dominio_publico_colombia.html. 
 # 2013. vtamara@pasosdeJesus.org
 
-VER=5.6
+VER=5.5
 REV=0
 VESP=""
-VERP=56
+VERP=55
 
 # Falta /standard/root.hint
 
@@ -763,7 +763,7 @@ if (test -f /usr/bin/pmdb) then {
 	rm -r /usr/lib/gcc-lib/*-unknown-openbsd5.2
 } fi;
 
-if (test -d /usr/share/locale/de_AT) then {
+if (test -d /usr/share/locale/de_AT -o -f /usr/include/pcap-int.h) then {
 	vac="$vac 5.3 a 5.4";	
 	echo "Aplicando actualizaciones de 5.3 a 5.4 " >> /var/tmp/inst-adJ.bitacora;
 	rm -rf /usr/share/locale/*_*.*
@@ -798,39 +798,31 @@ if (test -d /usr/share/locale/de_AT) then {
 	} fi;
 } fi;
 
-if (test -f /usr/include/pcap-int.h) then {
-	vac="$vac 5.3 a 5.4";        
-	echo "Aplicando actualizaciones de 5.3 a 5.4 " >> /var/tmp/inst-adJ.bitacora;
-	rm -rf /usr/share/locale/*_*.*
-	rm -rf /usr/include/pcap-int.h
-	rm -rf /usr/libdata/perl5/site_perl/*/pcap-int.ph
+if (test -f /usr/libexec/identd) then {
+	vac="$vac 5.4 a 5.5";	
+	echo "Aplicando actualizaciones de 5.4 a 5.5 " >> /var/tmp/inst-adJ.bitacora;
+	rm -f /usr/libexec/identd
+	rm -f /usr/lib/libcompat.a /usr/lib/libcompat_p.a
+	rm -f /usr/include/{re_comp,regexp,sgtty,sys/timeb}.h
+	rm -f /usr/share/man/man3/{re_comp,re_exec,rexec,regexp}.3
+	rm -f /usr/share/man/man3/{cuserid,ftime,gtty,setrgid,setruid,stty}.3
+	rm -f /etc/rc.d/popa3d
+	rm -f /usr/bin/{crunchgen,nawk}
+	rm -f /usr/sbin/{iopctl,popa3d}
+	rm -f /usr/share/man/man8/{iopctl,popa3d}.8
+	rm -rf /usr/X11R6/include/freetype2/freetype
+	rm -f /usr/X11R6/include/ft2build.h
+	rm -f /usr/mdec/installboot
+	rm -f /usr/share/man/man8/{amd64,i386}/installboot.8
+	rm -f /var/account/acct
+	rm -f /var/games/tetris.scores
 
-	rm -f /usr/X11R6/include/xorg/{mibstore.h,synaptics.h,xaa.h,xaalocal.h}
-	rm -f /usr/X11R6/lib/modules/extensions/lib{dbe,dri,dri2,extmod,record}.{la,so}
-	rm -f /usr/X11R6/lib/modules/extensions/lib/libxaa.{la,so}
-	rm -f /usr/share/man/man{9/{re,}lookup.9,/_Exit.3}
-	rm -f /usr/include/spinlock.h
-	rm -f /usr/libdata/perl5/site_perl/*/spinlock.ph
-	rm -f /etc/kerberosV/README
-	rm -f /usr/bin/{afslog,hxtool,kauth,kadmin,ksu,pagsh,kswitch}
-	rm -f /usr/lib/lib{heimntlm.*,heimntlm_p.*,hx509.*,hx509_p.*}
-	rm -f /usr/libdata/perl5/site_perl/*-openbsd/com_err.ph
-	rm -f /usr/libdata/perl5/site_perl/*-openbsd/kerberosV/{crmf_asn1,heimntlm-protos,heimntlm,hx509-private,hdb-private}.ph
-	rm -f /usr/libdata/perl5/site_perl/*-openbsd/kerberosV/{hx509-protos,hx509,hx509_err,kx509_asn1,ntlm_err,ocsp_asn1,pkcs10_asn1}.ph
-	rm -f /usr/libdata/perl5/site_perl/*-openbsd/kerberosV/{pkcs12_asn1,pkcs8_asn1,pkcs9_asn1,pkinit_asn1,gssapi/gssapi_spnego,spnego_asn1}.ph
-	rm -f /usr/libexec/{digest-service,kimpersonate,kdigest,kcm}
-	rm -f /usr/include/com_err.h
-	rm -f /usr/include/kerberosV/{crmf_asn1,hdb-private,heimntlm-protos,heimntlm,hx509-private}.h
-	rm -f /usr/include/kerberosV/{hx509-protos,hx509,hx509_err,kx509_asn1,ntlm_err,ocsp_asn1,pkcs10_asn1,pkcs12_asn1}.h
-	rm -f /usr/include/kerberosV/{pkcs8_asn1,pkcs9_asn1,pkinit_asn1,spnego_asn1,gssapi/gssapi_spnego}.h
-	rm -f /usr/sbin/kdigest
-	if (test -f "/var/heimdal") then {
-		echo "Kerberos requiere actualización especial";
-		echo "/etc/rc.d/kadmind stop; /etc/rc.d/kpasswdd stop; /etc/rc.d/kdc stop; cp -Rp /var/heimdal /var/kerberosV"
-		echo "Actualizar y después: rm -rf /var/heimdal";
-		echo "Regrese a este script con 'exit'";
-		sh
-	} fi;
+	mv /etc/nsd.conf /var/nsd/etc/nsd.conf
+	cd /usr/sbin && rm nsd-notify nsd-patch nsd-xfer nsd-zonec nsdc
+	cd /usr/share/man/man8 && rm nsd-notify.8 nsd-patch.8 nsd-xfer.8 \
+		nsd-zonec.8 nsdc.8
+	chown _nsd /var/nsd/db/nsd.db
+	printf '\nremote-control:\n\tcontrol-enable: yes\n' >> /var/nsd/etc/nsd.conf
 } fi;
 
 if  (test "$vac" != "") then {
@@ -1770,7 +1762,7 @@ echo "docroot=$docroot" >>  /var/tmp/inst-adJ.bitacora;
 
 echo "* Probando PHP" >> /var/tmp/inst-adJ.bitacora;
 p=`ls /var/db/pkg | grep "^php"`
-if (test "$p" != "") then {
+if (test "no" = "probar" -a "$p" != "") then {
 	cat > $docroot/phpinfo-adJ.php <<EOF
 <?php
 	phpinfo();

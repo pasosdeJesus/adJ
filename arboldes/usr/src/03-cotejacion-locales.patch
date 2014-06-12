@@ -12,7 +12,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/share/locale/Makefile s
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/share/locale/colldef/Makefile src/share/locale/colldef/Makefile
 --- src54-s/share/locale/colldef/Makefile	Wed Dec 31 19:00:00 1969
 +++ src/share/locale/colldef/Makefile	Sat Oct 12 18:32:19 2013
-@@ -0,0 +1,112 @@
+@@ -0,0 +1,114 @@
 +.include <bsd.own.mk>
 +
 +
@@ -89,6 +89,8 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/share/locale/colldef/Ma
 +	install -o ${LOCALEOWN} -g ${LOCALEGRP} -m ${LOCALEMODE} \
 +	    ${locale}.out ${DESTDIR}${LOCALEDIR}/${locale}/LC_COLLATE
 +.endfor
++	install -o ${LOCALEOWN} -g ${LOCALEGRP} -m ${DIRMODE} -d \
++	    ${DESTDIR}${LOCALEDIR}/UTF-8
 +	install -o ${LOCALEOWN} -g ${LOCALEGRP} -m ${LOCALEMODE} \
 +	    UTF-8.out ${DESTDIR}${LOCALEDIR}/UTF-8/LC_COLLATE
 +.for locale in ${LOCALES_UTF8}
