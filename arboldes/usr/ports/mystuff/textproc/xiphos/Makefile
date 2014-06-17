@@ -1,5 +1,5 @@
 # $OpenBSD$
-# This port is released to the public domain. 2010
+# This port is released to the public domain. 2014
 #
 COMMENT=	"Bible study tool with modules from Sword project"
 
