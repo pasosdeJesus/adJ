@@ -13,7 +13,7 @@ EXTRACT_SUFX=	.tgz
 MAINTAINER=	Vladimir Támara Patiño <vtamara@pasosdeJesus.org>
 MODULES=	www/pear
 
-RUN_DEPENDS=	databases/pear-DB-DataObject
+RUN_DEPENDS=	databases/pear-DB_DataObject
 
 # PHP License
 PERMIT_PACKAGE_CDROM=	Yes

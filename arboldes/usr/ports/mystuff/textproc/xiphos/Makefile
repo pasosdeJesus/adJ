@@ -3,7 +3,7 @@
 #
 COMMENT=	"Bible study tool with modules from Sword project"
 
-V=		3.1.6
+V=		3.2.1
 DISTNAME=	xiphos-${V}
 CATEGORIES=	textproc misc
 PKGNAME=	${DISTNAME}
@@ -22,14 +22,15 @@ MODULES =       devel/waf
 
 #CONFIGURE_ARGS += --enable-gtkhtml
 
-CFLAGS += 
+CFLAGS += -I/usr/local/include/ossp/
+LDFLAGS += -I/usr/local/include/ossp/
 
-CONFIGURE_ENV+= CPPFLAGS="-I${LOCALBASE}/include" 
+CONFIGURE_ENV+= CPPFLAGS="-I${LOCALBASE}/include -I/usr/local/include/ossp/" 
 MAKE_ENV += LD_PRELOAD=/usr/local/lib/python2.7/site-packages/libxml2mod.so
 
-BUILD_DEPENDS=	textproc/intltool converters/libiconv textproc/sword www/gtkhtml3 textproc/clucene devel/libglade2 x11/gnome/doc-utils textproc/libxml devel/glib2 x11/gtk+2  x11/dbus-glib devel/libgsf devel/pango devel/atk graphics/cairo  graphics/png textproc/enchant devel/gconf2 devel/ORBit2 devel/pcre archivers/bzip2 net/curl devel/libidn
+BUILD_DEPENDS=	textproc/intltool converters/libiconv textproc/sword www/gtkhtml3 textproc/clucene devel/libglade2 x11/gnome/doc-utils textproc/libxml devel/glib2 x11/gtk+2  x11/dbus-glib devel/libgsf devel/pango devel/atk graphics/cairo  graphics/png textproc/enchant devel/gconf2 devel/ORBit2 devel/pcre archivers/bzip2 net/curl devel/libidn www/webkit sysutils/e2fsprogs
 
-RUN_DEPENDS+= 	converters/libiconv textproc/sword www/gtkhtml3 textproc/clucene devel/libglade2 x11/gnome/doc-utils textproc/libxml devel/glib2 x11/gtk+2  x11/dbus-glib devel/libgsf devel/pango devel/atk graphics/cairo  graphics/png textproc/enchant devel/gconf2 devel/ORBit2 devel/pcre archivers/bzip2 net/curl devel/libidn
+RUN_DEPENDS+= 	converters/libiconv textproc/sword www/gtkhtml3 textproc/clucene devel/libglade2 x11/gnome/doc-utils textproc/libxml devel/glib2 x11/gtk+2  x11/dbus-glib devel/libgsf devel/pango devel/atk graphics/cairo  graphics/png textproc/enchant devel/gconf2 devel/ORBit2 devel/pcre archivers/bzip2 net/curl devel/libidn www/webkit
 
 WANTLIB=	X11 c m stdc++ ssl
 

@@ -16,6 +16,7 @@ MASTER_SITES =	https://github.com/vtamara/apache2nginx/raw/master/pkg/
 PERMIT_PACKAGE_CDROM=	Yes
 
 MODULES=	lang/ruby
+FLAVOR =	ruby21
 
 BUILD_DEPENDS =		${RUN_DEPENDS}
 RUN_DEPENDS =		devel/ruby-apacheconf_parser

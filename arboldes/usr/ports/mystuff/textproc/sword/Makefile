@@ -2,13 +2,13 @@
 
 COMMENT=	"Bible study platform with KJV module"
 
-V=              1.7.2
+V=              1.7.3
 DISTNAME=	sword-${V}
 PKGNAME=        ${DISTNAME}
 #REVISION=	1
 CATEGORIES=    	textproc books
 SHARED_LIBS=	sword 0.0 \
-		sword-1.7.2 0.0 
+		sword-1.7.3 0.0 
 
 HOMEPAGE=	http://crosswire.org/sword/software/swordapi.jsp
 MAINTAINER=	Vladimir Támara Patiño <vtamara@pasosdeJesus.org>

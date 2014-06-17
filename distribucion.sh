@@ -613,7 +613,7 @@ if (test "$sn" = "s") then {
 	#paquete pear www 
 	paquete pear-Auth security
 	#paquete pear-DB databases
-	paquete pear-DB-DataObject databases
+	paquete pear-DB_DataObject databases
 	paquete pear-DB-DataObject-FormBuilder www
 	paquete pear-HTML-Common www
  	paquete pear-HTML-CSS www
@@ -624,8 +624,8 @@ if (test "$sn" = "s") then {
  	paquete pear-HTML-Menu www
  	paquete pear-HTML-Table www
  	
-    	paquete ruby-apacheconf_parser devel paquetes "ruby19-apacheconf-parser"
-    	paquete ruby-apache2nginx devel paquetes "ruby19-apache2nginx"
+    	paquete ruby-apacheconf_parser devel paquetes "ruby21-apacheconf-parser"
+    	paquete ruby-apache2nginx devel paquetes "ruby21-apache2nginx"
 
 	paquete evangelios_dp books
 	paquete sword textproc 
@@ -651,13 +651,6 @@ if (test "$sn" = "s") then {
 
 	paquete fbdesk x11
 	paquete xfe x11
-        #paquete sqlite3 databases
-	#paquete nspr devel paquetes "nspr"
-        #paquete nss security 
-        #paquete cairo graphics
-        #paquete mozilla-firefox www 
-        #paquete firefox-i18n www paquetes "firefox-i18n-es-AR"
-#        paquete evince graphics
         paquete postgresql databases paquetes "postgresql-server postgresql-client postgresql-contrib"
 	rm $dini/$V$VESP-$ARQ/$dest/php5-gd-*-no_x11.tgz
 
