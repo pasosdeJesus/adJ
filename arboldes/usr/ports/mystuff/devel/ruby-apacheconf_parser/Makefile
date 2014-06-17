@@ -14,6 +14,7 @@ MASTER_SITES =	https://github.com/vtamara/apacheconf-parser/raw/master/pkg/
 PERMIT_PACKAGE_CDROM=	Yes
 
 MODULES=	lang/ruby
+FLAVOR =	ruby21
 
 CONFIGURE_STYLE=ruby gem 
 

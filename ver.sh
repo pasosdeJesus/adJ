@@ -6,6 +6,7 @@ V=5.5
 VESP=""
 # Versión que se está desarrollando
 
+VPKGPATH=$V
 VP=`echo $V | sed -e "s/[.]//g"`
 VU=`echo $V | sed -e "s/[.]/_/g"`
 VNUM=`echo $V | sed -e "s/\.//g"`
@@ -20,16 +21,15 @@ export R="OPENBSD_$VU"
 export RADJ="ADJ_$VU"
 # Ramas
 
-PKG_PATH=ftp://ftp.openbsd.org/pub/OpenBSD/$V/packages/$ARQ/
-PKG_PATH=ftp://ftp3.usa.openbsd.org/pub/OpenBSD/$V/packages/$ARQ/
-PKG_PATH=ftp://filedump.se.rit.edu/pub/OpenBSD/$V/packages/$ARQ/
-PKG_PATH=ftp://openbsd.mirrors.pair.com/pub/OpenBSD/$V/packages/$ARQ/
-PKG_PATH=ftp://mirror.planetunix.net/pub/OpenBSD/$V/packages/$ARQ/
-PKG_PATH=ftp://mirror.esc7.net/pub/OpenBSD/$V/packages/$ARQ/
-PKG_PATH=ftp://mirrors.nycbug.org/pub/OpenBSD/$V/packages/$ARQ/
-PKG_PATH=ftp://mirror.esc7.net/pub/OpenBSD/snapshots/packages/$ARQ/
-PKG_PATH=ftp://ftp.pasosdeJesus.org/pub/OpenBSD/snapshots/packages/$ARQ/
-PKG_PATH=ftp://mirror.planetunix.net/pub/OpenBSD/snapshots/packages/$ARQ/
+PKG_PATH=ftp://ftp.openbsd.org/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
+PKG_PATH=ftp://ftp3.usa.openbsd.org/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
+PKG_PATH=ftp://filedump.se.rit.edu/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
+PKG_PATH=ftp://openbsd.mirrors.pair.com/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
+PKG_PATH=ftp://mirror.planetunix.net/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
+PKG_PATH=ftp://mirror.esc7.net/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
+PKG_PATH=ftp://mirrors.nycbug.org/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
+PKG_PATH=ftp://mirror.esc7.net/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
+PKG_PATH=ftp://ftp.pasosdeJesus.org/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
 
 #Repositorio de paquetes usado --el último es el usado
 

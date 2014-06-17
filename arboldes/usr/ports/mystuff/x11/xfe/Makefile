@@ -19,6 +19,7 @@ WANTLIB=	X11 Xau Xdmcp Xft Xrender c expat fontconfig freetype \
 
 MODULES=	devel/gettext textproc/intltool
 LIB_DEPENDS =	devel/fox
+BUILD_DEPENDS =	textproc/groff
 WANTLIB +=	FOX-1.6>=1
 
 RUN_DEPENDS=	devel/desktop-file-utils
