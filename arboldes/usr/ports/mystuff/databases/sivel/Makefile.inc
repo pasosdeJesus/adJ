@@ -1,4 +1,4 @@
-# $OpenBSD$
+# $adJ$
 
 # Port in the public domain.
 
@@ -39,7 +39,7 @@ RUN_DEPENDS= lang/php/5.3 \
 	www/pear-HTML-QuickForm-Controller \
 	www/pear-HTML-Javascript \
 	www/pear-HTML-CSS \
-	databases/pear-DB-DataObject \
+	databases/pear-DB_DataObject \
 	www/pear-DB-DataObject-FormBuilder \
 	devel/pear-Validate \
 	databases/postgresql 

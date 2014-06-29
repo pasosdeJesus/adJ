@@ -1,5 +1,6 @@
 @comment $OpenBSD$
-@group service
+@group servicio
+@conflict pear-DB-DataObject-*
 pear/doc/DB_DataObject/
 pear/doc/DB_DataObject/docs/
 pear/doc/DB_DataObject/docs/example.ini

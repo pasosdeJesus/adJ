@@ -36,7 +36,7 @@ PKG_PATH=ftp://ftp.pasosdeJesus.org/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
 METODOACT=ftp
 # Metodo de actualización, puede ser ftp o rsync
 
-excluye="gnupg-2.* libstdc++-.* python-.* python-tkinter-.* php-.*5.2.* php-.*5.3.* pear-Auth-.* pear-Validate-.* pear-HTML-QuickForm-Controller.* postgresql-.* ruby-1.* ruby-2.0.* tcl-.* tk-.* xfe-.*"
+excluye="chromium-.*-proprietary.* gnupg-2.* libstdc++-.* python-.* python-tkinter-.* php-.*5.2.* php-.*5.3.* pear-Auth-.* pear-DB_DataObject.* pear-HTML-QuickForm-Controller.* pear-Validate-.* postgresql-.* ruby-1.* ruby-2.0.* tcl-.* tk-.* xfe-.*"
 # Paquetes por excluir de descarga ftp de OpenBSD
 
 RUTAKERNELREESPECIAL=""

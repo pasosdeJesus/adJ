@@ -2295,8 +2295,8 @@ if (test "$?" != "0") then {
 
 echo "* Permisos para aplicaciones" >> /var/tmp/inst-adJ.bitacora;
 
-if (test -d /home/$uadJ/.mozilla) then {
-	sudo chown -R $uadJ:$uadJ /home/$uadJ/.mozilla
+if (test -d /home/$uadJ/.config/chromium) then {
+	sudo chown -R $uadJ:$uadJ /home/$uadJ/.config/chromium
 } fi;
 
 if (test -d /home/$uadJ/.openoffice.org2) then {
