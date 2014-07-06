@@ -1077,7 +1077,7 @@ install_files() {
 			_issue="$_slcannotfetch SHA256.sig" && break
 
 		# Verify signature file with public keys
-		! signify -Vep /etc/signify/openbsd-${VERSION}-base.pub \
+		! signify -Vep /etc/signify/adJ-${VERSION}-base.pub \
 			-x "$_cfile.sig" -m "$_cfile" &&
 			_issue="$_slsignaturecheck SHA256.sig $_slfailedl" && break
 

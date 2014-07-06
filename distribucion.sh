@@ -488,8 +488,12 @@ if (test "$sn" = "s") then {
 	verleng /usr/src/distrib/amd64/common/list 
 	verleng /usr/src/distrib/i386/common/list 
 
+	cp /etc/signify/adJ-*pub /destdir/etc/signify/
 	cp /usr/src/distrib/ramdisk/list /tmp/ramdisk_list
+	cp /usr/src/distrib/amd64/common/list /tmp/common_list
 	sed -e 's/signify\/openbsd/signify\/adJ/g' /tmp/ramdisk_list > /usr/src/distrib/ramdisk/list 
+	sed -e 's/signify\/openbsd/signify\/adJ/g' /tmp/common_list > /usr/src/distrib/amd64/common/list
+
 	cd /usr/src/distrib/special/libstubs
 	make
 	cd /usr/src/sys/arch/$ARQ/stand/
