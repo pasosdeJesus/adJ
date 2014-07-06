@@ -906,9 +906,13 @@ echo " *> Revisando faltantes con respecto a Contenido.txt" | tee -a /var/tmp/di
 } fi;
 
 echo "** Generando suma sha256" | tee -a /var/tmp/distrib-adJ.bitacora
-rm $V$VESP-$ARQ/SHA256
+if (test ! -f /etc/signify/adJ-$VP-base.sec) then {
+	echo "*** Falta llave /etc/signify/adJ-$VP-base.sec, generarla de forma análoga a la de paquetes";
+	exit 1;
+} fi;
+rm $V$VESP-$ARQ/SHA256*
 l=`ls $V$VESP-$ARQ`;
-cmd="(cd $V$VESP-$ARQ; cksum -a sha256 $l >  SHA256)";
+cmd="(cd $V$VESP-$ARQ; cksum -a sha256 $l >  SHA256; signify -S -e -s /etc/signify/adJ-$VP-base.sec -x SHA256.sig -m SHA256)";
 echo $cmd;
 eval $cmd;
 
