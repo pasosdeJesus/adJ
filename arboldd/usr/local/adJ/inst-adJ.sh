@@ -1721,13 +1721,6 @@ if (test "$p" != "") then {
 	phpinfo();
 ?>
 EOF
-	sed -e "s/#FORCE_SSL_PROMPT.*/FORCE_SSL_PROMPT:yes/g" /etc/lynx.cfg > /tmp/lynx.cfg
-	curl -k "https://127.0.0.1/phpinfo-adJ.php" > /tmp/rescurl.html 2> /dev/null
-	grep "PHP" /tmp/rescurl.html > /dev/null 2>&1
-	if (test "$?" != "0") then {
-		dialog --title 'Fallo PHP' --msgbox '\nPHP parece no estar corriendo. Favor revisar y volver a este script con "exit"' 15 60
-		sh
-	} fi;
 
 rm -f $docroot/phpinfo-adJ.php
 rm -f $docroot/phpinfo.php
