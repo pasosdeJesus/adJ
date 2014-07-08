@@ -619,6 +619,12 @@ if (test "$sn" = "s") then {
 
         # paquete pear www paquetes "pear pear-utils"  Toco quedarse en PHP 5.3 para SIVeL 1.2
 	#paquete pear www 
+
+	# Actualizados
+	paquete png graphics
+	paquete libxml textproc
+	paquete php lang php php 5.4
+
 	paquete pear-Auth security
 	#paquete pear-DB databases
 	paquete pear-DB_DataObject databases
@@ -626,7 +632,7 @@ if (test "$sn" = "s") then {
 	paquete pear-HTML-Common www
  	paquete pear-HTML-CSS www
  	paquete pear-Validate devel
- 	#paquete pear-HTML-QuickForm www
+ 	paquete pear-HTML-QuickForm www
  	paquete pear-HTML-QuickForm-Controller www
  	paquete pear-HTML-Javascript www
  	paquete pear-HTML-Menu www
@@ -852,9 +858,6 @@ EOF
 		} fi;
 	done;
 	mkdir -p /tmp/i/etc/
-	cat > /tmp/i/etc/rc.firsttime <<EOF
-/usr/local/adJ/inst-adJ.sh
-EOF
 	d=`pwd`
 	(cd /tmp/i ; tar cvfz $d/$V$VESP-$ARQ/site$VP.tgz .)
 } fi;
