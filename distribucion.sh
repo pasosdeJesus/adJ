@@ -496,7 +496,9 @@ if (test "$sn" = "s") then {
 
 	cd /usr/src/distrib/special/libstubs
 	make
-	cd /usr/src/sys/arch/$ARQ/stand/
+	cd /usr/src/sys/arch/$ARQ/stand/cdbr
+	make clean
+	cd ..
 	make
 	DESTDIR=/destdir make install
 	cd /usr/src/distrib/$ARQ/ramdisk_cd
@@ -914,8 +916,12 @@ if (test ! -f /etc/signify/adJ-$VP-base.sec) then {
 	echo "*** Falta llave /etc/signify/adJ-$VP-base.sec, generarla de forma análoga a la de paquetes";
 	exit 1;
 } fi;
+if (test ! -f $V$VESP-$ARQ/INSTALL.amd64) then {
+	echo "*** Falta $V$VESP-$ARQ/INSTALL.amd64 que será examinado al instalar";
+	exit 1;
+} fi;
 rm $V$VESP-$ARQ/SHA256*
-l=`ls $V$VESP-$ARQ`;
+l=`(cd $V$VESP-$ARQ; ls *tgz INSTALL.amd64 bsd* cd*)`;
 cmd="(cd $V$VESP-$ARQ; cksum -a sha256 $l >  SHA256; signify -S -e -s /etc/signify/adJ-$VP-base.sec -x SHA256.sig -m SHA256)";
 echo $cmd;
 eval $cmd;
