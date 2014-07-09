@@ -1754,7 +1754,7 @@ END {
 
 } fi;
 
-cr=`echo "$docroot" | sed -e "s/^\/var\/www\/.*/SIPI"`
+cr=`echo "$docroot" | sed -e "s/^\/var\/www\/.*/SIPI/g"`
 if (test "$cr" != "SIPI") then {
 	docroot="/var/www/$docroot"
 } fi;
