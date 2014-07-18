@@ -1586,11 +1586,11 @@ if (test "$p" = "") then {
 	echo $p >> /var/tmp/inst-adJ.bitacora 2>&1;
 	pkg_add -I -D libdepends -D update -D updatedepends -r $p >> /var/tmp/inst-adJ.bitacora 2>&1
 	rm -f /var/www/conf/modules/php.conf /var/www/conf/php.ini /etc/php.ini
-	ln -s /var/www/conf/modules.sample/php-5.3.conf \
+	ln -s /var/www/conf/modules.sample/php-5.4.conf \
 		/var/www/conf/modules/php.conf
 	for sp in gd mcrypt pgsql pdo_pgsql sqlite uploadprogress; do
-		rm -f /etc/php-5.3/$sp
-		ln -fs /etc/php-5.3.sample/$sp.ini /etc/php-5.3/
+		rm -f /etc/php-5.4/$sp
+		ln -fs /etc/php-5.4.sample/$sp.ini /etc/php-5.4/
 	done;
 	if (test "$conapache" = "1") then {
 		chmod +w /var/www/conf/httpd.conf
@@ -1628,7 +1628,7 @@ EOF
 	} fi;
 # Antes ,s/session.auto_start = 0/session.auto_start = 1/g
 # Pero no es indispensable y si entra en conflicto con horde 3.1.4
-	ed /etc/php-5.3.ini >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+	ed /etc/php-5.4.ini >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/max_execution_time = 30/max_execution_time = 900/g
 w
 ,s/max_input_time = 60/max_input_time = 900/g
@@ -1637,7 +1637,9 @@ w
 w
 ,s/;date.timezone =.*/date.timezone = America\/Bogota/g
 w
-,s/memory_limit = 128M/memory_limit = 256M/g
+,s/memory_limit = 128M/memory_limit = 1024M/g
+w
+,s/upload_max_filesize = 2M/upload_max_filesize = 32M/g
 w
 q
 EOF
