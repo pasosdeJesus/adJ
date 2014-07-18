@@ -3,6 +3,7 @@
 COMMENT=	MS-Explorer like file manager for X
 
 DISTNAME= 	xfe-1.37
+REVISION=	1
 CATEGORIES= 	x11
 
 HOMEPAGE=	http://roland65.free.fr/xfe/
