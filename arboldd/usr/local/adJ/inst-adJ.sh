@@ -115,6 +115,7 @@ function activarcs {
 		exit 1;
 	} fi;
 	echo "activando $ns" >> /var/tmp/inst-adJ.bitacora 2>&1
+	touch /etc/rc.conf.local
 	grep "^ *pkg_scripts.*[^a-zA-Z0-9_]$ns[^a-zA-Z0-9_]" /etc/rc.conf.local >> /var/tmp/inst-adJ.bitacora 2>&1
 	if (test "$?" != "0") then {
 		echo "No  hay pkg_scripts con $ns"  >> /var/tmp/inst-adJ.bitacora 2>&1
@@ -568,12 +569,12 @@ if (test "$?" != "0") then {
 #  :%s/\(VirtualHost.* \)\([0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\) /\1\2:80 /g
 } fi;
 
-userinfo _btd >/dev/null
-if (test "$?" != "0") then {
+a=`ls /var/db/pkg/p5-Archive-Tar`
+if (test "$a" != "") then {
 # http://www.openbsd.org/faq/upgrade45.html
 	vac="$vac 4.4 a 4.5";	
 	echo "Aplicando actualizaciones de 4.4 a 4.5" >> /var/tmp/inst-adJ.bitacora;
-	useradd -u94 -g=uid -c"Servicio Bluetooth" -d/var/empty -s/sbin/nologin _btd
+	#useradd -u94 -g=uid -c"Servicio Bluetooth" -d/var/empty -s/sbin/nologin _btd Retirado en 5.5
 	for i in p5-Archive-Tar p5-Compress-Raw-Zlib p5-Compress-Zlib \
 p5-IO-Compress-Base p5-IO-Compress-Zlib p5-IO-Zlib p5-Module-Build \
 p5-Module-CoreList p5-Module-Load p5-version p5-Digest-SHA \
@@ -1491,14 +1492,15 @@ if (test ! -f /etc/ssl/server.crt) then {
       		-signkey /etc/ssl/private/server.key -out /etc/ssl/server.crt
 } fi;
 
-# Ponemos ngingx si ya lo tenía o si CONNGINX esta definido de resto Apache
+# Ponemos ngingx si es nueva instacion, si ya lo tenía 
+# Apache si ya lo tenia o si CONAPACHE esta definido
 conapache=0
 connginx=0
-grep "^ *pkg_scripts=.*[ \"]nginx[ \"]." /etc/rc.conf.local > /dev/null 2>/dev/null
-if (test "$?" = "0" -o "$CONNGINX" != "") then {
-	connginx=1;
-} else {
+grep "^ *pkg_scripts=.*[ \"]httpd[ \"]." /etc/rc.conf.local > /dev/null 2>/dev/null
+if (test "$?" = "0" -o "$CONAPACHE" != "") then {
 	conapache=1;  
+} else {
+	connginx=1;
 } fi;
 
 
@@ -1530,11 +1532,13 @@ EOF
 		ed /etc/nginx/nginx.conf >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
 1
 ?}
-i
+a
     server {
         listen       443;
-        server_name  localhost;
-        root         /var/www/htdocs;
+        server_name  127.0.0.1;
+        root         /var/www/htdocs/;
+        index		index.php index.html index.htm;
+
         ssl                  on;
         ssl_certificate      /etc/ssl/server.crt;
         ssl_certificate_key  /etc/ssl/private/server.key;
@@ -1542,12 +1546,20 @@ i
         ssl_protocols  SSLv3 TLSv1;
         ssl_ciphers  HIGH:!aNULL:!MD5;
         ssl_prefer_server_ciphers   on;
+
+	location ~ \.php$ {
+            fastcgi_pass   127.0.0.1:9000;
+            fastcgi_index  index.php;
+            fastcgi_param  SCRIPT_FILENAME  \$document_root\$fastcgi_script_name;
+            include        fastcgi_params;
+        }
     }
 .
 w
 q
 EOF
 		activarcs nginx
+		activarcs php-fpm 
 	} fi;
 } fi;
 
@@ -1588,7 +1600,7 @@ if (test "$p" = "") then {
 	rm -f /var/www/conf/modules/php.conf /var/www/conf/php.ini /etc/php.ini
 	ln -s /var/www/conf/modules.sample/php-5.4.conf \
 		/var/www/conf/modules/php.conf
-	for sp in gd mcrypt pgsql pdo_pgsql sqlite uploadprogress; do
+	for sp in gd mcrypt pgsql pdo_pgsql sqlite uploadprogress zip; do
 		rm -f /etc/php-5.4/$sp
 		ln -fs /etc/php-5.4.sample/$sp.ini /etc/php-5.4/
 	done;
@@ -1609,7 +1621,8 @@ EOF
 			grep "^ *ssl_prefer_server_ciphers" /etc/nginx/nginx.conf > /dev/null 2>&1
 			if (test "$?" = "0") then {
 				ed /etc/nginx/nginx.conf >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
-/^ *ssl_prefer_server_ciphers
+1
+?ssl_prefer_server_ciphers
 a
 
         location ~ \.php\$ {
