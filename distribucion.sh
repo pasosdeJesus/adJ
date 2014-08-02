@@ -621,9 +621,9 @@ if (test "$sn" = "s") then {
 	#paquete pear www 
 
 	# Actualizados
+	paquete php lang paquetes "php php-fpm php-gd php-mcrypt php-pdo_pgsql" 5.4
 	paquete png graphics
 	paquete libxml textproc
-	paquete php lang php php 5.4
 
 	paquete pear-Auth security
 	#paquete pear-DB databases
