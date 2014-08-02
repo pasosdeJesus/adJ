@@ -122,14 +122,7 @@ function activarcs {
 		grep "^ *pkg_script" /etc/rc.conf.local >> /var/tmp/inst-adJ.bitacora 2>&1
 		if (test "$?" != "0") then {
 			echo "No hay pkg_script" >> /var/tmp/inst-adJ.bitacora 2>&1
-			ed /etc/rc.conf.local >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
-$
-a
-pkg_scripts="$ns"
-.
-w
-q
-EOF
+			echo "pkg_scripts=\"$ns\"" >> /etc/rc.conf.local 2>/var/tmp/inst-adJ.bitacora 
 		} else {
 			cs=`grep "^ *pkg_scripts *=" /etc/rc.conf.local | sed -e "s/pkg_scripts *= *\"\([^\"]*\)\".*/\1/g"`
 			if (test "$cs" != "") then {
@@ -569,7 +562,7 @@ if (test "$?" != "0") then {
 #  :%s/\(VirtualHost.* \)\([0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\) /\1\2:80 /g
 } fi;
 
-a=`ls /var/db/pkg/p5-Archive-Tar`
+a=`ls /var/db/pkg/p5-Archive-Tar 2> /var/tmp/inst-adJ.bitacora`
 if (test "$a" != "") then {
 # http://www.openbsd.org/faq/upgrade45.html
 	vac="$vac 4.4 a 4.5";	
@@ -1020,29 +1013,125 @@ EOF
 echo "* Configurar X-Window" >> /var/tmp/inst-adJ.bitacora
 pgrep xdm > /dev/null 2>&1
 if (test "$?" != "0" -a ! -f /etc/X11/xorg.conf) then {
-	dialog --title 'Configuración de X-Window' --msgbox "\nPodría ocurrir que al ejecutar 'X -config' se congele su sistema, en ese caso reinicie y si el archivo /root/xorg.conf no es vacío ejecute \n
-	cp /home/$uadJ/xorg.conf.new /etc/X11/xorg.conf\n
-o cree un archivo de configuración con\n
-	Xorg -configure\n
+	dialog --title 'Configuración de X-Window' --msgbox "\nSe ejecutará 'X -configure' Si se congela su sistema reinicie y si el archivo /root/xorg.conf.new no es vacío ejecute \n 
+       cp /root/xorg.conf.new /etc/X11/xorg.conf\n
 Puede examinar errores, causas y soluciones al final de la bitacora que puede examinar con:\n
         less /var/log/Xorg.log.0\n" 15 60
+	nt=`cat /etc/kbdtype`;
+	cat > /root/xorg.conf.generico <<EOF
+Section "ServerLayout"
+	Identifier     "X.org Configured"
+	Screen      0  "Screen0" 0 0
+	InputDevice    "Mouse0" "CorePointer"
+	InputDevice    "Keyboard0" "CoreKeyboard"
+EndSection
+
+Section "Files"
+	#	RgbPath      "/usr/X11R6/share/X11/rgb"
+	#	ModulePath   "/usr/X11R6/lib/modules"
+	FontPath     "/usr/X11R6/lib/X11/fonts/misc/"
+	FontPath     "/usr/X11R6/lib/X11/fonts/TTF/"
+	FontPath     "/usr/X11R6/lib/X11/fonts/Type1/"
+	FontPath     "/usr/X11R6/lib/X11/fonts/CID/"
+	FontPath     "/usr/X11R6/lib/X11/fonts/75dpi/"
+	FontPath     "/usr/X11R6/lib/X11/fonts/100dpi/"
+	FontPath     "/usr/local/lib/X11/fonts/local/"
+	FontPath     "/usr/local/lib/X11/fonts/Speedo/"
+	FontPath     "/usr/local/lib/X11/fonts/TrueType/"
+	FontPath     "/usr/local/lib/X11/fonts/freefont/"
+EndSection
+
+Section "Module"
+	Load  "dbe"
+	Load  "freetype"
+EndSection
+
+Section "InputDevice"
+	Identifier  "Keyboard0"
+	Driver      "kbd"
+	Option      "XkbLayout" "$nt"
+	# Si el teclado fuera latinoamericano en vez de "es" usar "latam"
+	Option      "XkbModel" "pc105"
+EndSection
+
+Section "InputDevice"
+	Identifier  "Mouse0"
+	Driver      "mouse"
+	Option      "Protocol" "wsmouse"
+	Option      "Device" "/dev/wsmouse"
+	# Si es serial usar protocolo "Microsoft" y dispositivo "/dev/tty00" 
+	Option      "ZAxisMapping" "4 5"
+EndSection
+
+Section "Monitor"
+	#       HorizSync    30.0 - 70.0
+	#       VertRefresh  50.0 - 90.0
+	# Puede funcionar quitar el comentario en HorizSync (vea /var/log/Xorg.0.log)
+	Identifier   "Monitor0"
+	Option      "DPMS"
+EndSection
+
+Section "Device"
+	Identifier  "Card0"
+	Driver      "vesa
+	#	BusID       "PCI:0:1:0"
+EndSection
+
+Section "Screen"     
+	Identifier "Screen0"
+	Device     "Card0"
+	Monitor    "Monitor0"
+	DefaultDepth     16
+	SubSection "Display"
+		Viewport   0 0
+		Depth     1
+	EndSubSection
+	SubSection "Display"
+		Viewport   0 0
+		Depth     4
+	EndSubSection
+	SubSection "Display"
+		Viewport   0 0
+		Depth     8
+	EndSubSection
+	SubSection "Display"
+		Viewport   0 0
+		Depth     15
+	EndSubSection
+	SubSection "Display"
+		Viewport   0 0
+		Depth     16
+		Modes    "1024x768"
+	EndSubSection
+	SubSection "Display"
+		Viewport   0 0
+		Depth     24
+	EndSubSection
+EndSection
+EOF	
 	X -configure
 	cat /var/log/Xorg.0.log >> /var/tmp/inst-adJ.bitacora
+	if (test ! -f /root/xorg.conf.new) then {
+		dialog --title 'Configuración de X-Window' --msgbox "\nNo pudo configurarse automaticamente, se empleara un archivo de configuracion genérico que puede requerir su edicion.\n
+Vea la documentacion con man xorg.conf, editelo por ejemplo con mg /etc/X11/xorg.conf y pruebelo con Xorg.  \n" 15 60
+		cp /root/xorg.conf.pordefecto /root/xorg.conf.new
+	} fi;
+
+
 	clear
 	echo "Verifique si corre X-Window (modo gráfico) ejecutando"
-	echo "     Xorg -config /home/$uadJ/xorg.conf.new"
+	echo "     Xorg -config /root/xorg.conf.new"
 	echo "Puede salir de X-Window con [Ctrl]-[Alt]-[BackSpace]."
+	echo "Puede examinar errores, causas y soluciones al final de la bitacora que puede examinar con:"
+	echo "    less /var/log/Xorg.log.0"
 	echo "De requerirlo ajuste la configuración con:"
-	echo "     mg /home/$uadJ/xorg.conf.new"
+	echo "     sudo mg /root/xorg.conf.new"
+	echo "Vea la documentacion con:"
+	echo "     man xorg.conf"
 	echo "Regrese a este script con 'exit'";
-	sh
+	/bin/sh
 	dialog --title 'Configuración de X-Window' --yesno '\n¿Logró configurar X-Window?' 15 60 
 	if (test "$?" = "0") then {
-		cp /home/$uadJ/xorg.conf.new /etc/X11/xorg.conf
-		nt=`cat /etc/kbdtype`;
-		if (test "$nt" != "us") then {
-			awk  "/.*/ { print \$0; } /\"kbd\"/ { print \"    Option \\\"XkbLayout\\\" \\\"$nt\\\"\"; }" /root/xorg.conf.new > /etc/X11/xorg.conf
-		} fi;
 		echo "xdm_flags=\"\"" >> /etc/rc.conf.local
 	} fi;
 } else {
@@ -1532,7 +1621,7 @@ EOF
 		ed /etc/nginx/nginx.conf >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
 1
 ?}
-a
+i
     server {
         listen       443;
         server_name  127.0.0.1;
@@ -1559,7 +1648,6 @@ w
 q
 EOF
 		activarcs nginx
-		activarcs php-fpm 
 	} fi;
 } fi;
 
