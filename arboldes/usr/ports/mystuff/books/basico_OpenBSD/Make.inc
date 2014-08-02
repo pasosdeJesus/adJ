@@ -1,3 +1,3 @@
-V=		5.4
+V=		5.5
 HOMEPAGE=       http://structio.sourceforge.net/guias/${PNAME}/
 

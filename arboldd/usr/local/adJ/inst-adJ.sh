@@ -438,7 +438,7 @@ EOF
 echo "/var/www/dev/random" >> /var/tmp/inst-adJ.bitacora
 if (test ! -f "/var/www/dev/random") then {
 	mkdir -p /var/www/dev/
-	sudo mknod -m 644 /var/www/dev/random c 45 0
+	sudo mknod -m 644 /var/www/dev/random c 45 0 2>> /var/tmp/inst-adJ.bitacora
 } else {
 	echo "   Saltando /var/www/dev/random..." >> /var/tmp/inst-adJ.bitacora;
 } fi;
