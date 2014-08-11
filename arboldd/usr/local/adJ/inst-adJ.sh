@@ -757,7 +757,7 @@ if (test -f /usr/bin/pmdb) then {
 	rm -r /usr/lib/gcc-lib/*-unknown-openbsd5.2
 } fi;
 
-if (test -d /usr/share/locale/de_AT -o -f /usr/include/pcap-int.h) then {
+if (test -d /usr/share/locale/de_AT.UTF-8 -o -f /usr/include/pcap-int.h) then {
 	vac="$vac 5.3 a 5.4";	
 	echo "Aplicando actualizaciones de 5.3 a 5.4 " >> /var/tmp/inst-adJ.bitacora;
 	rm -rf /usr/share/locale/*_*.*
@@ -1017,7 +1017,6 @@ if (test "$?" != "0" -a ! -f /etc/X11/xorg.conf) then {
        cp /root/xorg.conf.new /etc/X11/xorg.conf\n
 Puede examinar errores, causas y soluciones al final de la bitacora que puede examinar con:\n
         less /var/log/Xorg.log.0\n" 15 60
-	nt=`cat /etc/kbdtype`;
 	cat > /root/xorg.conf.generico <<EOF
 Section "ServerLayout"
 	Identifier     "X.org Configured"
@@ -1108,8 +1107,8 @@ Section "Screen"
 		Depth     24
 	EndSubSection
 EndSection
-EOF	
-	X -configure
+EOF
+	Xorg -configure
 	cat /var/log/Xorg.0.log >> /var/tmp/inst-adJ.bitacora
 	if (test ! -f /root/xorg.conf.new) then {
 		dialog --title 'Configuración de X-Window' --msgbox "\nNo pudo configurarse automaticamente, se empleara un archivo de configuracion genérico que puede requerir su edicion.\n
@@ -1117,12 +1116,12 @@ Vea la documentacion con man xorg.conf, editelo por ejemplo con mg /etc/X11/xorg
 		cp /root/xorg.conf.pordefecto /root/xorg.conf.new
 	} fi;
 
-
 	clear
 	echo "Verifique si corre X-Window (modo gráfico) ejecutando"
-	echo "     Xorg -config /root/xorg.conf.new"
+	echo "     cd /root/"
+	echo "     Xorg -config xorg.conf.new"
 	echo "Puede salir de X-Window con [Ctrl]-[Alt]-[BackSpace]."
-	echo "Puede examinar errores, causas y soluciones al final de la bitacora que puede examinar con:"
+	echo "Si no opera examine errores, causas y soluciones al final de la bitacora:"
 	echo "    less /var/log/Xorg.log.0"
 	echo "De requerirlo ajuste la configuración con:"
 	echo "     sudo mg /root/xorg.conf.new"
