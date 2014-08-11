@@ -53,7 +53,7 @@ if (test "$V" = "5.5") then {
 		echo "Para actualizar a 5.5 debe ejecutar como root y no con sudo";
 		exit 1;
 	} fi;
-	dd=`sysctl hw.disknames | sed -e "s/.*sd0.*/sd0/g;s/.*wd0.*/wd0/g"`
+	dd=`sysctl hw.disknames | sed -e "s/.*=sd0.*/sd0/g;s/.*=wd0.*/wd0/g"`
 	echo "Esta operacion para actualizar a adJ 5.5 no es recomendable"
 	echo "1. Saque copias de respaldo por ejemplo de bases de datos";
 	echo "2. Elimine todos los paquetes y binarios que no son sistema base";
