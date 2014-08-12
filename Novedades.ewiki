@@ -23,7 +23,7 @@ Con respecto a OpenBSD 5.5 para amd64 y a la edición anterior de este DVD
 
 Entre las novedades reportadas en las `Notas de publicación de OpenBSD 5.5' destacamos:
 
-* Cambiado todo el sistema base para aumentar rango de tiempo (OpenBSD 5.4 y anteriores tienen problemas para representar fechas posteriores al año 2038). 
+* Cambiado todo el sistema base para aumentar rango de tiempo de time_t (OpenBSD 5.4 y anteriores tienen problemas para representar fechas posteriores al año 2038). 
 * Los instaladores y paquetes ahoran son firmados con herramienta signify.
 
 * Controaldores ampliados o mejorados para amd64
