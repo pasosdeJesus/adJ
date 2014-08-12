@@ -5,7 +5,10 @@
 
 . ./ver.sh
 
-echo $V$VESP-$ARQ/cdemu$VP.iso
+if (test ! -d $V$VESP-$ARQ) then {
+	echo "No existe el directorio $V$VESP-$ARQ";
+	exit 1;
+} fi;
 if (test -f $V$VESP-$ARQ/cdemu$VP.iso) then {
 	# crear cdrom42.fs 
 	./hdes/geteltorito.pl $V$VESP-$ARQ/cdemu$VP.iso  > $V$VESP-$ARQ/cdrom$VP.fs
