@@ -665,7 +665,7 @@ if (test "$sn" = "s") then {
 
 	paquete fbdesk x11
 	paquete xfe x11
-        paquete postgresql databases paquetes "postgresql-server postgresql-client postgresql-contrib"
+        paquete postgresql databases paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-doc"
 	rm $dini/$V$VESP-$ARQ/$dest/php5-gd-*-no_x11.tgz
 
 } fi;	
