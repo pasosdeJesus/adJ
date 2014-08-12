@@ -760,7 +760,7 @@ if (test -f /usr/bin/pmdb) then {
 if (test -d /usr/share/locale/de_AT.UTF-8 -o -f /usr/include/pcap-int.h) then {
 	vac="$vac 5.3 a 5.4";	
 	echo "Aplicando actualizaciones de 5.3 a 5.4 " >> /var/tmp/inst-adJ.bitacora;
-	rm -rf /usr/share/locale/*_*.*
+	rm -rf /usr/share/locale/*_*.* /usr/share/locale/de_AT
 	rm -rf /usr/include/pcap-int.h
 	rm -rf /usr/libdata/perl5/site_perl/*/pcap-int.ph
 
