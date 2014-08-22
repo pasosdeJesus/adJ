@@ -771,7 +771,7 @@ if (test "$sn" = "s") then {
 		echo -n " -> $p"; 
 		e=`grep "^$i" tmp/excluye.txt | tail -n 1`;
 		echo " $e"; 
-		if (test "$da" != "$p" -a "$p" != "$e" -a "X$p" != "X") then {
+		if (test "$da" = "" -a "$p" != "$e" -a "X$p" != "X") then {
 			echo $p >> tmp/poract.txt
 			t=1;
 		} fi;
@@ -779,7 +779,6 @@ if (test "$sn" = "s") then {
 
 	if (test "$t" = "1") then {
 		pa=`cat tmp/poract.txt | grep . | tr "\n" "," | sed -e "s/,$//g"`
-		#	cmd="rsync -avz vtamara@uvirtual.ean.edu.co:'$pa' $V$VESP-$ARQ/paquetes/"
 		if (test "$pftp" = "ftp") then {
 			cmd="(cd $V$VESP-$ARQ/paquetes; ftp $PKG_PATH/{$pa} )"
 		} else {
