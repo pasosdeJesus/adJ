@@ -36,15 +36,6 @@ if (test "$l" = "") then {
 vac="";
 mac="";
 
-if (test "0" = "1") then {
-	vac="$vac 5.3 a 5.4";        
-	echo "Aplicando actualizaciones de 5.3 a 5.4 " >> /var/tmp/preact-adJ.bitacora;
-} fi;
-
-if  (test "$vac" != "") then {
-	dialog --title 'Pre-Actualizaciones aplicadas' --msgbox "\\nSe aplicaron pre-actualizaciones: $vac\\n\\n$mac\\n" 15 60
-} fi;
-
 if (test -f /$RUTAIMG/post.img) then {
 	echo "Existe imagen para datos encriptados de PostgreSQL /$RUTAIMG/post.img. " >> /var/tmp/preact-adJ.bitacora
 	echo "Suponiendo que la base PostgreSQL tendrá datos encriptados allí" >> /var/tmp/preact-adJ.bitacora
@@ -129,5 +120,26 @@ if (test "$?" = "0") then {
 	} fi;
 } fi;
 
-dialog --title 'Preparado' --msgbox "\\nSistema preparado para actualizar\\n" 15 60
-clear
+if (test "$VER" = "5.5") then {
+	dialog --title 'Advertencia: respaldar datos binarios' --yesno "\\nPara actualizar a 5.5 debe eliminar todos los paquetes del sistema.\\n
+Este archivo de comandos hará eso a continuación,\\n
+pero antes le recomendamos sacar en un formato portable\\n
+copias de otras bases de datos o datos binarios usados\\n
+por los paquetes instalados (por ejemplo mysql, rrdtol,\\n
+ldapd, OpenLDAP, etc), emplear métodos alternos de \\n
+ingreso si depende de paquetes para ingresar al sistema\\n
+(e.g interprete de comandos, VPN, etc).\\n\\n
+¿Aún le falta respaldar datos en formatos portables?" 17 60
+	if (test "$?" = "0") then {
+		echo "";
+		echo "Saque copia portable de los datos binarios que usen los paquetes y despues"
+		echo "ejecute nuevamente este archivo de comandos";
+		exit 0;
+	} fi;
+	cd /var/db/pkg
+	sudo pkg_delete *
+	echo "\\nSistema preparado para actualizar\\n"
+} else {
+	dialog --title 'Preparado' --msgbox "\\nSistema preparado para actualizar\\n" 15 60
+	clear
+} fi;
