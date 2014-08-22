@@ -64,6 +64,7 @@ if (test "$V" = "5.5") then {
 	echo "[RETORNO] para continuar, [CTRL]+[C] para cancelar";
 	read
 	echo "/usr/sbin/pwd_mkdb -d /etc /etc/master.passwd" >>/etc/rc.firsttime
+	echo "/usr/bin/cap_mkdb /etc/login.conf" >>/etc/rc.firsttime
 	echo "cp /dev/null /var/log/lastlog" >>/etc/rc.firsttime
 	echo "cp /dev/null /var/log/wtmp" >>/etc/rc.firsttime    
 	echo "installboot -v sd0" >>/etc/rc.firsttime    

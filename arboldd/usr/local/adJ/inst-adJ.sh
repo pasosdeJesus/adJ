@@ -1013,9 +1013,8 @@ EOF
 echo "* Configurar X-Window" >> /var/tmp/inst-adJ.bitacora
 pgrep xdm > /dev/null 2>&1
 if (test "$?" != "0" -a ! -f /etc/X11/xorg.conf) then {
-	dialog --title 'Configuración de X-Window' --msgbox "\nSe ejecutará 'X -configure' Si se congela su sistema reinicie y si el archivo /root/xorg.conf.new no es vacío ejecute \n 
-       cp /root/xorg.conf.new /etc/X11/xorg.conf\n
-Puede examinar errores, causas y soluciones al final de la bitacora que puede examinar con:\n
+	dialog --title 'Configuración de X-Window' --msgbox "\nSe ejecutará 'X -configure' Si se congela su sistema reinicie, si logra ingresar a modo gráfico vuelva a la consola presionando [Ctrl]+[Alt]+[Backspace]\n
+Puede examinar errores, causas y soluciones al final de la bitacora:\n
         less /var/log/Xorg.log.0\n" 15 60
 	cat > /root/xorg.conf.generico <<EOF
 Section "ServerLayout"
