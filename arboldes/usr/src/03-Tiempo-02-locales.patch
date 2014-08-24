@@ -12,7 +12,7 @@ diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/Makefil
 diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/Makefile src/share/locale/timedef/Makefile
 --- src56-orig/share/locale/timedef/Makefile	Wed Dec 31 19:00:00 1969
 +++ src/share/locale/timedef/Makefile	Mon Apr 28 07:42:08 2014
-@@ -0,0 +1,198 @@
+@@ -0,0 +1,202 @@
 +# Based on $FreeBSD$
 +
 +TIME_SIZE=	45
@@ -163,6 +163,10 @@ diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef
 +.endfor
 +.endfor
 +.endfor
++
++.ifdef DESTDIR
++DESTDIR:=${DESTDIR}/
++.endif
 +
 +install:
 +.for locale in ${LOCALES}
