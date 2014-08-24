@@ -277,6 +277,12 @@ if (test "$sn" = "s") then {
 		cd /usr/src/sys
 		$dini/hdes/servicio-kernel.sh	
 	} fi;
+	# usar llaves de adJ en lugar de las de OpenBSD
+	grep "signfiy\/adJ" /usr/src/usr.sbin/sysmerge/sysmerge.sh > /dev/null 2>&1
+	if (test "$?" != "0") then {
+		cp /usr/src/usr.sbin/sysmerge/sysmerge.sh /usr/src/usr.sbin/sysmerge/sysmerge.sh.orig
+		sed -e 's/signify\/openbsd/signify\/adJ/g' /usr/src/usr.sbin/sysmerge/sysmerge.sh.orig > /usr/src/usr.sbin/sysmerge/sysmerge.sh
+	} fi;
 	cd /usr/src && make obj
 	echo "* Completo make obj" | tee -a /var/tmp/distrib-adJ.bitacora
 	echo "whoami 2" >>  /var/tmp/distrib-adJ.bitacora
