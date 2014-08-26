@@ -121,12 +121,13 @@ if (test "$?" = "0") then {
 } fi;
 
 if (test "$VER" = "5.5") then {
-	dialog --title 'Advertencia: respaldar datos binarios' --yesno "\\nPara actualizar a 5.5 debe eliminar todos los paquetes del sistema.\\n
+	dialog --title 'Advertencia: respaldar datos binarios' --yesno "\\nPara actualizar a 5.5 deben detenerse servicios y \\n
+eliminar todos los paquetes del sistema.\\n
 Este archivo de comandos hará eso a continuación,\\n
-pero antes le recomendamos sacar en un formato portable\\n
+pero antes le recomendamos (1) sacar en un formato portable\\n
 copias de otras bases de datos o datos binarios usados\\n
 por los paquetes instalados (por ejemplo mysql, rrdtol,\\n
-ldapd, OpenLDAP, etc), emplear métodos alternos de \\n
+ldapd, OpenLDAP, etc) y (2) configurar métodos alternos de \\n
 ingreso si depende de paquetes para ingresar al sistema\\n
 (e.g interprete de comandos, VPN, etc).\\n\\n
 ¿Aún le falta respaldar datos en formatos portables?" 17 60
@@ -136,8 +137,14 @@ ingreso si depende de paquetes para ingresar al sistema\\n
 		echo "ejecute nuevamente este archivo de comandos";
 		exit 0;
 	} fi;
+	if (test -f /etc/rc.d/postgresql) then {
+		sh /etc/rc.d/postgresql stop
+	} fi;
+	if (test -f /etc/rc.d/cupsd) then {
+		sh /etc/rc.d/cupsd stop
+	} fi;
 	cd /var/db/pkg
-	sudo pkg_delete *
+	pkg_delete *
 	echo "\\nSistema preparado para actualizar\\n"
 } else {
 	dialog --title 'Preparado' --msgbox "\\nSistema preparado para actualizar\\n" 15 60

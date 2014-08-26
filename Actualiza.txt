@@ -1,4 +1,4 @@
-Actualización a Aprendiendo De Jesús 5.4p1
+Actualización a Aprendiendo De Jesús 5.5
 ******************************************
 
 La actualización consta de 3 partes:
@@ -14,33 +14,34 @@ a) Para preparar su sistema:
  	del instalador con rsync:
               	mkdir -p ~/comp/adJ;
 		cd ~/comp/adJ;
-		rsync-adJ 5.4p1
+		rsync-adJ 5.5
 	Si ocurre alguna falla durante la transmisión podrá continuar donde
 	quedó repitiendo estas instrucciones.
       * Si va a actualizar, debe sacar copia de la base de datos y realizar
-        otras operaciones para preparar su sistema, puede hacerlo ejecutando
-	el archivo de ordenes preact-adJ.sh incluido en el directorio util 
-	del DVD de instalación.
+        otras operaciones para preparar su sistema (por ejemplo para
+	actualizar a 5.5 debe eliminar todos los paquetes del sistema), 
+	puede hacerlo ejecutando el archivo de ordenes preact-adJ.sh 
+ 	incluido en el directorio util del DVD de instalación.
 	Si descargó fuentes con el procedimiento anterior ejecutelo con:
-              ~/comp/adJ/5.4p1-amd64/util/preact-adJ.sh
+              ~/comp/adJ/5.5-amd64/util/preact-adJ.sh
 
 b) Para actualizar el sistema base:
       * Copie kernel y descomprima los archivos comprimidos con el sistema 
         base en su directorio raiz y reinicie, esto lo puede hacer con el 
 	archivo de órdenes actbase.sh:
 		cd ~/comp/adJ; 
-		/usr/local/adJ/actbase.sh 5.4p1
+		/usr/local/adJ/actbase.sh 5.5
 
 c) Para la instalación/actualización de aplicaciones:
       * Después de reinicar debe ejecutar  el archivo de ordenes /inst-adJ.sh.
         Este archivo de comandos emplea codificación UTF8, por lo que para 
         iniciarlo se recomienda desde una terminal gráfica.  Suponiendo que 
         descargo con las instrucciones dadas previamente puede usar:
-		sudo ARCH=~/comp/adJ/5.4p1-amd64 /inst-adJ.sh
+		sudo ARCH=~/comp/adJ/5.5-amd64 /inst-adJ.sh
 
         Este archivo de comandos asiste actualizaciones que puedan hacer 
 	falta de una versión a otra del sistema base (descritas en
-	http://openbsd.org/faq/upgrade54.html ) y actualiza cuando es posible
+	http://openbsd.org/faq/upgrade55.html ) y actualiza cuando es posible
 	archivos de configuración de diversos paquetes.
       * Puede ejecutar varias veces este archivo de órdenes, pero si el 
 	proceso no concluye exitosamente por favor después de ejecutar
