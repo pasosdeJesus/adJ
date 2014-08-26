@@ -13,11 +13,11 @@ Con respecto a OpenBSD 5.5 para amd64 y a la edición anterior de este DVD
 
 !KERNEL Y SISTEMA BASE
 
-* Aplicado parche de OpenBSD del 7/Abr/2014 para la librería openssl que cierra vulnerabilidad CVE-2014-0160 también conocida como "heartbleed bug" y que permitiría a un atacante leer memoria del servidor, que a su vez podría permitir al atacante conocer llaves privadas SSL, claves y tráfico cifrado.
-* En 5.5 aplicado parche de OpenBSD del 14/Feb/2014 para el paquete gnutls que cierra vulnerabilidades CVE-2014-0092 y CVE-2014-1959 (esto podia afectar verificacion de certificados de firefox, courier, filezilla, gnumeric, midori, qemu, qgis, scribus, vlc).
+* Incluye soluciones a fallas no corregidas en binarios de OpenBSD 5.5 (si han sido corregidas en fuentes de OpenBSD):  (1) cerrada vulnerabilidad CVE-2014-0160 también conocida como "heartbleed bug" y que permitiría a un atacante leer memoria del servidor, que a su vez podría permitir al atacante conocer llaves privadas SSL, claves y tráfico cifrado; (2) solucionada falla en libc en función gethostbyaddr --pendiente que parche sea adoptado por OpenBSD; (3) solucionada falla en paquete gnutls que cierra vulnerabilidades CVE-2014-0092 y CVE-2014-1959 (esto podia afectar verificacion de certificados de firefox, courier, filezilla, gnumeric, midori, qemu, qgis, scribus, vlc).
+* Desde la versión 5.5 soporte en la librería de C para presentar fechas y horas con las convenciones de cada país de latinoamérica (y de otros locales soportados por OpenBSD).  Esta mejora fue aportada a OpenBSD y se anhela su integración en futuras versiones.
 * Desde la versión 5.4 se ha importado de FreeBSD soporte y datos para presentar cantidades monetarias y numéricas con las convenciones de cada uno de los países de latinoamérica (y otros locales soportados por OpenBSD).  Esta mejora fue aportada a OpenBSD y se anhela su integración en futuras versiones.
 * Desde la versión 5.2 incluye cotejación (COLLATE) en idioma nativo en el sistema base importado de FreeBSD, tablas de caracteres y cotejación para todos los países de latinoamérica (incluyendo Portugués de Brasil) y portes de PostgreSQL y xfe que soportan cotejación. Vea detalles y una captura de pantalla en http://aprendiendo.pasosdejesus.org/?id=i18n.  Las mejoras se han aportado a OpenBSD y xfe y han sido parcialmente integradas, se espera más integración en futuras versiones de esos proyectos.
-* Parches de seguridad de sistema base hasta:  9.Abr.2014
+* Parches de seguridad de sistema base hasta:  20.Ago.2014
 * Hemos remplazando `daemon' por `servicio' en buena parte del sistema base (ver por ejemplo ==vmstat -s== o ==less /var/log/servicio== o ==man servicio==).  Hasta la versión 5.3 se usó ==service==, pero para disminuir colisiones de nombres desde la 5.4 se emplea ==servicio==.
 * El CD ahora incluye un archivo de comandos ==/util/preact-adJ.sh== para preparar un sistema antes de iniciar actualización --por ejemplo sacar copia de base de datos.
 
@@ -36,23 +36,23 @@ durante el arranque).  Actualizado ==inteldrm==.
 
 * Mejoras a herramientas de Red
 ** pf tiene nueva sintaxis para sistema de colas
-** Añadido interfaz tunel para entronos virtualizados vxlan
+** Añadido interfaz tunel para entornos virtualizados vxlan
 ** popa3d eliminado
 ** Soporte rdomain en IPv6 añadido a ndp, rtsold, ping6 y traceroute6.
 ** Nuevo ntpctl para controlar servicio NTP.
 ** Mejorados slowcgi y relayd (que ahora soporta TLS), dhcpd y dhclient, iked (inlcuyendo soporte DPD Dead Peer Detection). 
-** OpenSMTPD mejorado (incluye soporte para TLS Perfect Forward Secrecy).
+** OpenSMTP 5.3.3: Soporte para envíos locales LMTP, tipos de transmisión SECURE y AUTH. Nombres ==helo== pueden buscar en tabla ==db==. Cola más robusta para sobrellevar errores en tiempo de ejecución. Sintaxis cambiada para declarar certificados.
+
 
 * Otras mejoras
 ** Mejoras a sistema de hilos, 
 ** inetd ya no inicia por defecto 
 ** Añadido slowcgi implementación de FastCGI
 ** Mejorados dhcpd y dhclient
-** OpenSMTP 5.3.3: Soporte para envíos locales LMTP, tipos de transmisión SECURE y AUTH. Nombres ==helo== pueden buscar en tabla ==db==. Cola más robusta para sobrellevar errores en tiempo de ejecución.
 
 * Seguridad
 ** arc4random ahora usa ChaCha20
-** sistema del kenrel de números aleatorios ahora es alimentado por el cargador de arranque, dando más aleatoridad desde el comienzo. 
+** sistema del kernel de números aleatorios ahora es alimentado por el cargador de arranque, dando más aleatoridad desde el comienzo. 
 ** OpenSSH 6.6. Rechaza clientes que usen el obsoleto RSA+MD5
 
 
@@ -70,7 +70,7 @@ En adJ es en español, consta de: (a) preparación, (b) instalación/actualizaci
 
 !PAQUETES EXCLUSIVOS DE ADJ
 
-* SIVeL 1.1.5. También se incluye experimentalmetne SIVeL 1.2b1 que tiene: módulo de mezcla y homónimos, módulo de desplazamiento, relaciones inversas entre personas, claves más seguras, DIVIPOLA actualizado a 2013, más posibilidad de configuración de reportes, más validaciones, búsquedas mejoradas, autocompletación de latitud, longitud y edad.
+* SIVeL 1.1.5. También se incluye experimentalmetne SIVeL 1.2b3 que tiene: módulo de mezcla y homónimos, módulo de desplazamiento, relaciones inversas entre personas, claves más seguras, DIVIPOLA actualizado a 2013, más posibilidad de configuración de reportes, más validaciones, búsquedas mejoradas, autocompletación de latitud, longitud y edad.
 * ruby 2.0.0p353 retroportado de OpenBSD-5.5, probado con aplicaciones Rails 4.1.0.  Tipicamente aumenta velocidad de aplicaciones Rails.  Ver  http://dhobsd.pasosdejesus.org/index.php?id=Ruby+on+Rails+en+OpenBSD .   Guillermo Iguaran y otros latinos está en el grupo de desarrollo de Ruby on Rails.
 * xfe actualizado a 1.37 y modificado para administrar paquetes en OpenBSD (ver pantallazo en http://structio.sf.net/guias/basico_OpenBSD/medios.html#xfe ). Soporta cotejación en idioma nativo.  Nueva opción sudo_nopasswd utilizable en ~/.config/xfe/xferc cuando sudo no requiere clave (útil para que opere bien Herramientas->Nueva ventana root).
 * PostgreSQL 9.3.2 retroportado de OpenBSD-Current con soporte para UTF-8 y cotejaciones nativas listas para todos los paises de habla hispana. Ver detalles de como usar cotejación en http://aprendiendo.pasosdejesus.org/?id=i18n
