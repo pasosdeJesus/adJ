@@ -280,6 +280,11 @@ cat /tmp/cu.sh >> /var/tmp/inst-sivel.log
 	echo "Saltando ..." | tee -a /var/tmp/inst-sivel.log;
 } fi;
 #alter ROLE sivel superuser
+echo "* Poniendo usuario sivel como superusuario" | tee -a /var/tmp/inst-sivel.log
+echo "/usr/local/bin/psql -h /var/www/tmp -U$uspos template1 -c \"ALTER USER sivel WITH SUPERUSER;\"  > /tmp/sivel" > /tmp/cu.sh
+chmod +x /tmp/cu.sh
+cat /tmp/cu.sh >> /var/tmp/inst-sivel.log
+su - _postgresql /tmp/cu.sh | tee -a /var/tmp/inst-sivel.log
 
 echo "* Clave para usuario sivel de PostgreSQL ($CLSIVELPG)" | tee -a /var/tmp/inst-sivel.log;
 echo "psql -h /var/www/tmp -U $uspos template1 -c \"ALTER USER sivel WITH PASSWORD '${CLSIVELPG}'\"" > /tmp/cu.sh
