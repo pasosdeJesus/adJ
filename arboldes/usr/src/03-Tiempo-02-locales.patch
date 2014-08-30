@@ -12,7 +12,7 @@ diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/Makefil
 diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef/Makefile src/share/locale/timedef/Makefile
 --- src56-orig/share/locale/timedef/Makefile	Wed Dec 31 19:00:00 1969
 +++ src/share/locale/timedef/Makefile	Mon Apr 28 07:42:08 2014
-@@ -0,0 +1,198 @@
+@@ -0,0 +1,195 @@
 +# Based on $FreeBSD$
 +
 +TIME_SIZE=	45
@@ -146,13 +146,10 @@ diff -x obj -x CVS -x *~ -x *patch -x *orig -ruN src56-orig/share/locale/timedef
 +		es es_CL es_CO es_PR es_US eu \
 +		fi fr is it la nb nn pt pt_BR \
 +		sv ${ES_LINKS} 
-+ISO8859-1_US-ASCII= en la
-+ISO8859-1_ISO8859-2= la
-+ISO8859-1_ISO8859-4= la
++ISO8859-1_US-ASCII= en
 +ISO8859-1_UTF-8= en eu nl
-+ISO8859-15_ISO8859-15= en_US:af_ZA
 +UTF-8_Big5HKSCS= zh_TW:zh_HK
-+UTF-8_UTF-8=	${ES_LINKS} ${NO_LINKS} en_US:af_ZA zh_TW:zh_HK
++UTF-8_UTF-8=	${ES_LINKS} ${NO_LINKS} zh_TW:zh_HK
 +
 +SYMLINKS=
 +.for enc1 in ${ENCODINGS}
