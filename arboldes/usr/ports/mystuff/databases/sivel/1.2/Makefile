@@ -2,15 +2,17 @@
 
 # Port in the public domain.
 
-VERSION=1.2b2
-DISTNAME=SIVeL-v${VERSION}
+VERSION=1.2b3
+DISTNAME=v${VERSION}
+PKGNAME=sivel-v${VERSION}
 
 HOMEPAGE=http://pasosdeJesus.github.io/SIVeL/
 PKGSPEC = sivel->=1.2,<1.3
 
 MASTER_SITES=https://github.com/pasosdeJesus/SIVeL/archive/
 EXTRACT_SUFX=.zip
-DCOMP=SIVeL-SIVeL-v${VERSION}
+DISTFILES=xv${VERSION}${EXTRACT_SUFX}
+DCOMP=SIVeL-${VERSION}
 SIVEL_RAIZ ?= htdocs/sivel12
 
 do-install:
