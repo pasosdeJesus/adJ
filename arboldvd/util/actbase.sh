@@ -84,7 +84,7 @@ EOF
 	(cd /usr/mdec; cp boot /boot; ./installboot -v /boot ./biosboot $dd)
 } fi;
 
-mp=`uname -a | sed -e "s/.*\.MP.*/.mp/g"`
+mp=`uname -a | sed -e "s/.*\.MP\#.*/.mp/g"`
 if (test "$mp" != ".mp") then {
 	mp="";
 } fi;
