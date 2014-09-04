@@ -627,6 +627,7 @@ if (test "$sn" = "s") then {
 	#paquete pear www 
 
 	# Actualizados
+        paquete postgresql databases paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs"
 	paquete php lang paquetes "php php-fpm php-gd php-mcrypt php-pdo_pgsql php-pgsql php-zip" 5.4
 	paquete png graphics
 	paquete libxml textproc
@@ -644,8 +645,8 @@ if (test "$sn" = "s") then {
  	paquete pear-HTML-Menu www
  	paquete pear-HTML-Table www
  	
-    	paquete ruby-apacheconf_parser devel paquetes "ruby21-apacheconf-parser"
-    	paquete ruby-apache2nginx devel paquetes "ruby21-apache2nginx"
+    	#paquete ruby-apacheconf_parser devel paquetes "ruby21-apacheconf-parser"
+    	#paquete ruby-apache2nginx devel paquetes "ruby21-apache2nginx"
 
 	paquete evangelios_dp books
 	paquete sword textproc 
@@ -671,7 +672,6 @@ if (test "$sn" = "s") then {
 
 	paquete fbdesk x11
 	paquete xfe x11
-        paquete postgresql databases paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-doc"
 	rm $dini/$V$VESP-$ARQ/$dest/php5-gd-*-no_x11.tgz
 
 } fi;	
@@ -741,7 +741,7 @@ if (test "$sn" = "s") then {
 	if (test "$autoMasPaquetesInv" = "s") then {
 		inv="-r"
 	} fi;
-	grep ".-\[v\]" Contenido.txt | sed -e "s/-\[v\]\([-a-zA-Z_0-9]*\).*/-[0-9][0-9alphabetrcvSTABLERCd._]*\1.tgz/g" | sort $inv > tmp/esperados.txt
+	grep ".-\[v\]" Contenido.txt | sed -e "s/-\[v\]\([-a-zA-Z_0-9]*\).*/-[0-9][0-9alphabetprcvSTABLERCd._]*\1.tgz/g" | sort $inv > tmp/esperados.txt
 	ne=`(ls $V$VESP-$ARQ/paquetes/ ; ls $V$VESP-$ARQ/sivel/*tgz) | grep -v -f tmp/esperados.txt`;
 	if (test "$ne" != "") then {
 		echo "Los siguientes paquetes presentes en el directorio $V$VESP-$ARQ/paquetes no están entre los esperados:" | tee -a /var/tmp/distrib-adJ.bitacora;
@@ -833,9 +833,9 @@ w
 q
 EOF
 	} fi;
-	grep "actbase.sh $V" arboldd/usr/local/adJ/actbase.sh > /dev/null
+	grep "actbase.sh $V" arboldvd/util/actbase.sh > /dev/null
 	if (test "$?" = "0") then {
-		ed arboldd/usr/local/adJ/actbase.sh <<EOF
+		ed arboldvd/util/actbase.sh <<EOF
 ,s/actbase.sh $V/actbase.sh $VS/g
 w
 q
