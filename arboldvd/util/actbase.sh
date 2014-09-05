@@ -37,6 +37,10 @@ if (test "$RUTAKERNELREESPECIAL" != "") then {
         rutak="$RUTAKERNELREESPECIAL";
         echo "Usando kernel re-especial";
 } fi;
+mp=`uname -a | sed -e "s/.*\.MP\#.*/.mp/g"`
+if (test "$mp" != ".mp") then {
+	mp="";
+} fi;
 
 nk=${rutak}/bsd${mp}
 echo "Antes de continuar, recomendamos que ejecute util/preact-adJ.sh"
@@ -84,10 +88,6 @@ EOF
 	(cd /usr/mdec; cp boot /boot; ./installboot -v /boot ./biosboot $dd)
 } fi;
 
-mp=`uname -a | sed -e "s/.*\.MP\#.*/.mp/g"`
-if (test "$mp" != ".mp") then {
-	mp="";
-} fi;
 rm /obsd ; ln /bsd /obsd 
 cp $nk /nbsd 
 mv /nbsd /bsd
