@@ -627,6 +627,7 @@ if (test "$sn" = "s") then {
 	#paquete pear www 
 
 	# Actualizados
+	paquete ganglia sysutils
         paquete postgresql databases paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs"
 	paquete php lang paquetes "php php-fpm php-gd php-mcrypt php-pdo_pgsql php-pgsql php-zip" 5.4
 	paquete png graphics
