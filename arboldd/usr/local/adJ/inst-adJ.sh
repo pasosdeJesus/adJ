@@ -2299,17 +2299,17 @@ for i in ruby19-railties-3.1.3 ruby19-actionmailer-3.1.3 \
 	sudo pkg_delete -I -D dependencies $i >> /var/tmp/inst-adJ.bitacora 2>&1
 done
 
-echo "* Configurar ruby-1.9" >> /var/tmp/inst-adJ.bitacora;
+echo "* Configurar ruby-2.1" >> /var/tmp/inst-adJ.bitacora;
 if (test ! -f "/usr/local/bin/ruby") then {
 	insacp ruby
-	ln -sf /usr/local/bin/ruby19 /usr/local/bin/ruby
-	ln -sf /usr/local/bin/erb19 /usr/local/bin/erb
-	ln -sf /usr/local/bin/irb19 /usr/local/bin/irb
-	ln -sf /usr/local/bin/rdoc19 /usr/local/bin/rdoc
-	ln -sf /usr/local/bin/ri19 /usr/local/bin/ri
-	ln -sf /usr/local/bin/rake19 /usr/local/bin/rake
-	ln -sf /usr/local/bin/gem19 /usr/local/bin/gem
-	ln -sf /usr/local/bin/testrb19 /usr/local/bin/testrb
+	ln -sf /usr/local/bin/ruby21 /usr/local/bin/ruby
+	ln -sf /usr/local/bin/erb21 /usr/local/bin/erb
+	ln -sf /usr/local/bin/irb21 /usr/local/bin/irb
+	ln -sf /usr/local/bin/rdoc21 /usr/local/bin/rdoc
+	ln -sf /usr/local/bin/ri21 /usr/local/bin/ri
+	ln -sf /usr/local/bin/rake21 /usr/local/bin/rake
+	ln -sf /usr/local/bin/gem21 /usr/local/bin/gem
+	ln -sf /usr/local/bin/testrb21 /usr/local/bin/testrb
 } fi;
 
 if (test ! -f /home/$uadJ/.irbrc) then {
