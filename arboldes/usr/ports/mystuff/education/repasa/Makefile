@@ -11,6 +11,10 @@ PKGNAME=    	${DISTNAME}p1
 HOMEPAGE=	http://structio.sourceforge.net/repasa
 MAINTAINER=	Vladimir Támara Patiño <vtamara@pasosdejesus.org>
 
+MASTER_SITES=	${MASTER_SITE_SOURCEFORGE:=structio/}
+MASTER_SITES0=	${HOMEPAGE}/
+DISTFILES=	${DISTNAME}.tar.gz
+
 #Public domain
 PERMIT_PACKAGE_CDROM=	Yes
 
