@@ -627,53 +627,53 @@ if (test "$sn" = "s") then {
 	#paquete pear www 
 
 	# Actualizados
-	paquete ganglia sysutils
-        paquete postgresql databases paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs"
-	paquete php lang paquetes "php php-fpm php-gd php-mcrypt php-pdo_pgsql php-pgsql php-zip" 5.4
-	paquete png graphics
-	paquete libxml textproc
+  paquete ganglia sysutils
+  paquete postgresql databases paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs"
+  paquete php lang paquetes "php php-fpm php-gd php-ldap php-mcrypt php-pdo_pgsql php-pgsql php-zip" 5.4
+  paquete png graphics
+  paquete libxml textproc
 
-	paquete pear-Auth security
-	#paquete pear-DB databases
-	paquete pear-DB_DataObject databases
-	paquete pear-DB-DataObject-FormBuilder www
-	paquete pear-HTML-Common www
- 	paquete pear-HTML-CSS www
- 	paquete pear-Validate devel
- 	paquete pear-HTML-QuickForm www
- 	paquete pear-HTML-QuickForm-Controller www
- 	paquete pear-HTML-Javascript www
- 	paquete pear-HTML-Menu www
- 	paquete pear-HTML-Table www
- 	
-    	#paquete ruby-apacheconf_parser devel paquetes "ruby21-apacheconf-parser"
-    	#paquete ruby-apache2nginx devel paquetes "ruby21-apache2nginx"
+  paquete pear-Auth security
+  #paquete pear-DB databases
+  paquete pear-DB_DataObject databases
+  paquete pear-DB-DataObject-FormBuilder www
+  paquete pear-HTML-Common www
+  paquete pear-HTML-CSS www
+  paquete pear-Validate devel
+  paquete pear-HTML-QuickForm www
+  paquete pear-HTML-QuickForm-Controller www
+  paquete pear-HTML-Javascript www
+  paquete pear-HTML-Menu www
+  paquete pear-HTML-Table www
 
-	paquete evangelios_dp books
-	paquete sword textproc 
-	paquete xiphos textproc 
+  #paquete ruby-apacheconf_parser devel paquetes "ruby21-apacheconf-parser"
+  #paquete ruby-apache2nginx devel paquetes "ruby21-apache2nginx"
 
-	paquete realboy emulators
+  paquete evangelios_dp books
+  paquete sword textproc 
+  paquete xiphos textproc 
 
-	paquete basico_OpenBSD books
-	paquete usuario_OpenBSD books
-	paquete servidor_OpenBSD books
-	paquete AnimalesI education
-	paquete AprestamientoI education
-	paquete PlantasCursiva education
-	paquete NombresCursiva education
-	paquete TiposLectoEscritura fonts
-	paquete asigna education
-	paquete markup textproc 
-	paquete repasa education
-	paquete sigue education
+  paquete realboy emulators
 
-	paquete sivel databases sivel sivel 1.1
-	paquete sivel databases sivel sivel 1.2
+  paquete basico_OpenBSD books
+  paquete usuario_OpenBSD books
+  paquete servidor_OpenBSD books
+  paquete AnimalesI education
+  paquete AprestamientoI education
+  paquete PlantasCursiva education
+  paquete NombresCursiva education
+  paquete TiposLectoEscritura fonts
+  paquete asigna education
+  paquete markup textproc 
+  paquete repasa education
+  paquete sigue education
 
-	paquete fbdesk x11
-	paquete xfe x11
-	rm $dini/$V$VESP-$ARQ/$dest/php5-gd-*-no_x11.tgz
+  paquete sivel databases sivel sivel 1.1
+  paquete sivel databases sivel sivel 1.2
+
+  paquete fbdesk x11
+  paquete xfe x11
+  rm $dini/$V$VESP-$ARQ/$dest/php5-gd-*-no_x11.tgz
 
 } fi;	
 
@@ -919,6 +919,13 @@ echo " *> Revisando faltantes con respecto a Contenido.txt" | tee -a /var/tmp/di
 		cp tmp/Novedades.txt $V$VESP-$ARQ/Novedades.txt
 	} fi;
 } fi;
+
+echo "** Generando semilla de aleatoreidad" | tee -a /var/tmp/distrib-adJ.bitacora
+# https://github.com/yellowman/flashrd/issues/17
+touch $V$VESP-$ARQ/etc/random.seed
+chmod 600 $V$VESP-$ARQ/etc/random.seed
+dd if=/dev/random of=$V$VESP-$ARQ/etc/random.seed bs=512 count=1 | tee -a /var/tmp/distrib-adJ.bitacora
+
 
 echo "** Generando suma sha256" | tee -a /var/tmp/distrib-adJ.bitacora
 if (test ! -f /etc/signify/adJ-$VP-base.sec) then {
