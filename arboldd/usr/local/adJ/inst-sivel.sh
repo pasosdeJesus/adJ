@@ -1,6 +1,6 @@
 #!/bin/sh
-# Instala/Actualiza un Aprendiendo de Jesús con SIVeL
-# Dominio público. 2010. vtamara@pasosdeJesus.org
+# Instala/Actualiza un Aprendiendo de JesÃºs con SIVeL
+# Dominio pÃºblico. 2010. vtamara@pasosdeJesus.org
 
 VER=5.3
 VESP=
@@ -25,7 +25,7 @@ if (test "$RUTAIMG" = "") then {
 } fi;
 
 echo "-+-+-+-+-+-+" >> /var/tmp/inst-sivel.log
-echo "Bitácora de instalación " >> /var/tmp/inst-sivel.log
+echo "BitÃ¡cora de instalaciÃ³n " >> /var/tmp/inst-sivel.log
 date >> /var/tmp/inst-sivel.log
 echo "VER=$VER ARCVER=$ARCVER TAM=$TAM RUTAIMG=$RUTAIMG ARCH=$ARCH ARCHSIVEL=$ARCHSIVEL " >> /var/tmp/inst-sivel.log
 
@@ -92,7 +92,7 @@ function ltf {
 
 if (test "$ARCH" = "") then {
 	echo "Suponiendo que se instala de CD-ROM"| tee -a /var/tmp/inst-sivel.log;
-	echo "Podría específicar otra ruta ejecutando";
+	echo "PodrÃ­a especÃ­ficar otra ruta ejecutando";
 	echo "	export ARCH=/miruta/";
 	echo "antes de ejecutar este script";
 	export ARCH=/mnt/cdrom;
@@ -109,7 +109,7 @@ if (test "$ARCH" = "") then {
 } fi;
 
 if (test ! -d "$ARCH/sivel/" -o ! -d "$ARCH/paquetes") then {
-	echo "En la ruta $ARCH no está Aprendiendo de Jesús" | tee -a /var/tmp/inst-sivel.log;
+	echo "En la ruta $ARCH no estÃ¡ Aprendiendo de JesÃºs" | tee -a /var/tmp/inst-sivel.log;
 	exit 1;
 } fi;
 
@@ -127,16 +127,16 @@ echo "Actualizando/Instalando SIVeL $o" | tee -a /var/tmp/inst-sivel.log;
 echo ""
 
 usivel="";
-psivel="";
-if (test -f /var/www/htdocs/sivel/conf.sh) then {
-	psivel=`stat -f "%Su" /var/www/htdocs/sivel/conf.sh 2> /dev/null`
-} elif (test -f /var/www/users/sivel/conf.sh) then {
-	psivel=`stat -f "%Su" /var/www/users/sivel/conf.sh 2> /dev/null`
-} elif (test -f /var/www/users/sivel/confv.php) then {
-	psivel=`stat -f "%Su" /var/www/users/sivel/confv.php 2> /dev/null`
+psivel="$USER";
+if (test -f /var/www/htdocs/sivel/confv.php) then {
+	psivel=`stat -f "%Su" /var/www/htdocs/sivel/confv.php 2> /dev/null`
+} elif (test -f /var/www/users/sivel/confv.sh) then {
+	psivel=`stat -f "%Su" /var/www/users/sivel/confv.sh 2> /dev/null`
+} elif (test -f /var/www/htdocs/sivel/confv.copia) then {
+	psivel=`stat -f "%Su" /var/www/users/sivel/confv.copia 2> /dev/null`
 } fi;
 while (test "$usivel" = "") ; do
-	echo "Nombre de cuenta que administrará y operará SIVeL [$psivel]? ";
+	echo "Nombre de cuenta que administrarÃ¡ y operarÃ¡ SIVeL [$psivel]? ";
 	read usivel;
 	if (test "$usivel" = "") then {
 		usivel="$psivel";
@@ -154,7 +154,7 @@ done;
 
 
 if (test ! -f /$RUTAIMG/post.img ) then {
-	echo "Debería existir imagen encriptada (post.img) para PostgreSQL en ruta $RUTAIMG (o especifique otra en variable RUTAIMG)."| tee -a /var/tmp/inst-sivel.log;
+	echo "DeberÃ­a existir imagen encriptada (post.img) para PostgreSQL en ruta $RUTAIMG (o especifique otra en variable RUTAIMG)."| tee -a /var/tmp/inst-sivel.log;
 	exit 1;
 } fi;
 
@@ -163,15 +163,15 @@ if (test ! -f /$RUTAIMG/resbase.img) then {
 
 mount | grep "postgresql" > /dev/null
 if (test "$?" != "0" ) then {
-	echo "No está montada imagen encriptada para PostgreSQL" | tee -a /var/tmp/inst-sivel.log;
-	echo ' Intente ejecutando "sudo /usr/local/sbin/monta.sh"';
+	echo "No estÃ¡ montada imagen encriptada para PostgreSQL" | tee -a /var/tmp/inst-sivel.log;
+	echo ' Intente ejecutando "sudo /etc/rc.local"';
 	exit 1;
 } fi;
 
 mount | grep "resbase" > /dev/null
 if (test "$?" != "0") then {
-	echo "No está montada imagen encriptada para Archivo Digital" | tee -a /var/tmp/inst-sivel.log;
-	echo ' Intente ejecutando "sudo /usr/local/sbin/monta.sh"';
+	echo "No estÃ¡ montada imagen encriptada para Archivo Digital" | tee -a /var/tmp/inst-sivel.log;
+	echo ' Intente ejecutando "sudo /etc/rc.local"';
 	exit 1;
 } fi;
 
@@ -191,11 +191,11 @@ if (test "$?" != "0") then {
 
 dext=`date +%Y%m%d`;
 echo "* De requerirlo sacar respaldo de datos y fuentes de SIVeL" | tee -a /var/tmp/inst-sivel.log
-if (test -d "/var/www/htdocs/sivel" -a ! -f /var/www/resbase/up$o.sql) then {
+if (test "(" -d "/var/www/htdocs/sivel" -o -d "/var/www/htdocs/sivel12" ")" -a -f /var/www/resbase/up$o.sql) then {
 	cd /tmp
 	pgrep post > /dev/null
 	if (test "$?" = "0") then {
-		echo -n "psql -h /var/www/tmp $acuspos -c \"select usename from pg_user where usename='postgres';\"" > /tmp/cu.sh
+		echo -n "psql -h /var/www/tmp $acuspos -c \"SELECT usename FROM pg_user WHERE usename='postgres';\"" > /tmp/cu.sh
         	su - _postgresql /tmp/cu.sh
 		if (test "$?" != "0") then {
 			us='_postgresql';
@@ -258,6 +258,8 @@ if (test -f /var/www/htdocs/sivel/aut/conf.php) then {
 	CLSIVELPG=`grep "dbclave *=" /var/www/users/sivel/aut/conf.php | sed -e 's/.*=.*"\([^"]*\)".*$/\1/g' 2> /dev/null`
 } elif (test -f /var/www/htdocs/sivel/sitios/sivel/conf.php) then {
 	CLSIVELPG=`grep "dbclave *=" /var/www/htdocs/sivel/sitios/sivel/conf.php | sed -e 's/.*=.*"\([^"]*\)".*$/\1/g' 2> /dev/null`
+} elif (test -f /var/www/htdocs/sivel12/sitios/sivel/conf.php) then {
+	CLSIVELPG=`grep "dbclave *=" /var/www/htdocs/sivel12/sitios/sivel/conf.php | sed -e 's/.*=.*"\([^"]*\)".*$/\1/g' 2> /dev/null`
 } elif (test -f /home/$usivel/.pgpass) then {
 	CLSIVELPG=`grep ":sivel:" /home/$usivel/.pgpass | sed -e 's/.*:sivel://g' 2> /dev/null`
 } fi;
@@ -295,7 +297,7 @@ echo "*:*:*:sivel:$CLSIVELPG" > /home/$usivel/.pgpass;
 chmod 0600 /home/$usivel/.pgpass;
 chown $usivel:$usivel /home/$usivel/.pgpass
 
-echo "* Poniendo /var/www/htdocs/sivel como raíz de documentos de Apache" | tee -a /var/tmp/inst-sivel.log;
+echo "* Poniendo /var/www/htdocs/sivel como raÃ­z de documentos de Apache" | tee -a /var/tmp/inst-sivel.log;
 grep "DocumentRoot.*\"/var/www/htdocs/sivel\"" /var/www/conf/httpd.conf > /dev/null
 if (test "$?" != "0") then {
 	chmod +w /var/www/conf/httpd.conf
@@ -343,7 +345,7 @@ else {
 		echo "   Saltando..."| tee -a /var/tmp/inst-sivel.log;
 } fi;
 
-echo "* Mejorando permisos en configuración de Apache" | tee -a /var/tmp/inst-sivel.log;
+echo "* Mejorando permisos en configuraciÃ³n de Apache" | tee -a /var/tmp/inst-sivel.log;
 grep "Files.*Entries" /var/www/conf/httpd.conf > /dev/null
 if (test "$?" != "0") then {
 	chmod +w /var/www/conf/httpd.conf
@@ -391,11 +393,11 @@ else {
 		echo "   Saltando..."| tee -a /var/tmp/inst-sivel.log;
 } fi;
 
-apachectl stop
-. /etc/rc.conf
+apachectl stop | tee -a /var/tmp/inst-sivel.log;
+. /etc/rc.conf | tee -a /var/tmp/inst-sivel.log;
 httpd $httpd_flags | tee -a /var/tmp/inst-sivel.log
 if (test "$?" != "0") then {
-	echo "Falló httpd, revisar, asegurar que funciona y regresar con 'exit'" | tee -a /var/tmp/inst-sivel.log;
+	echo "FallÃ³ httpd, revisar, asegurar que funciona y regresar con 'exit'" | tee -a /var/tmp/inst-sivel.log;
 	sh
 } fi;
 cat /var/www/conf/httpd.conf >> /var/tmp/inst-sivel.log 
@@ -405,83 +407,83 @@ if (test -f "/var/www/htdocs/sivel/confv.php") then {
 	if (test "$vsant" = "1.0") then {
 		dpl=`stat -f "%Su" /var/www/htdocs/sivel/confv.php`
 
-		echo "SIVeL 1.0 encontrado en ruta por defecto, RETORNO para moverla a /var/www/htdocs/sivel10 y base de sivel a sivel10 y despues eliminar"
+		echo "SIVeL 1.0 encontrado en ruta por defecto, RETORNO para moverla a /var/www/htdocs/sivel10 y base de sivel a sivel10 y despues eliminar" | tee -a /var/tmp/inst-sivel.log;
 		read
 		
-		su $dpl -c "cd /var/www/htdocs/sivel; bin/mueve.sh"
+		su $dpl -c "cd /var/www/htdocs/sivel; bin/mueve.sh" | tee -a /var/tmp/inst-sivel.log;
 	} fi;
 } fi;
 
 if (test -f "/var/www/htdocs/sivel/aut/conf.php.plantilla" -o -f /var/www/htdocs/sivel/sitios/pordefecto/conf.php.plantilla) then {
-	echo -n "¿Desinstalar versión anterior de SIVeL (s/n)? "
+	echo -n "Â¿Desinstalar versiÃ³n anterior de SIVeL (s/n)? " | tee -a /var/tmp/inst-sivel.log;
 	read sn;
 	if (test "$sn" = "s") then {
 		d=`date "+%Y%m%d"`
 		tar cvfz /var/www/resbase/sivelant-$d.tar.gz /var/www/htdocs/sivel
 		f=`ls /var/db/pkg/sivel-* 2> /dev/null > /dev/null`;
 		if (test "$?" = "0") then {
-			sudo pkg_delete sivel
+			sudo pkg_delete sivel | tee -a /var/tmp/inst-sivel.log;
 		} else {
-			rm -rf /var/www/htdocs/sivel
-			tar xvfz -C / /var/www/resbase/sivelant-$d.tar.gz /var/www/htdocs/sivel/{aut/conf.php,vardb.sh}
-			tar xvfz -C / /var/www/resbase/sivelant-$d.tar.gz /var/www/htdocs/sivel/{sitios/sivel/conf.php,sitios/sivel/vardb.sh}
+			rm -rf /var/www/htdocs/sivel | tee -a /var/tmp/inst-sivel.log;
+			tar xvfz -C / /var/www/resbase/sivelant-$d.tar.gz /var/www/htdocs/sivel/{aut/conf.php,vardb.sh} | tee -a /var/tmp/inst-sivel.log;
+			tar xvfz -C / /var/www/resbase/sivelant-$d.tar.gz /var/www/htdocs/sivel/{sitios/sivel/conf.php,sitios/sivel/vardb.sh}| tee -a /var/tmp/inst-sivel.log;
 		} fi;
 	} fi;
 } fi;
 
-echo "* Instalar SIVeL"
+echo "* Instalar SIVeL" | tee -a /var/tmp/inst-sivel.log;
 f=`ls /var/db/pkg/sivel-* 2> /dev/null > /dev/null`;
 if (test "$?" != "0") then {
-	sudo pkg_add $ARCHSIVEL/sivel-*.tgz 2>&1 | tee -a /var/tmp/inst-sivel.log
+	sudo pkg_add $ARCHSIVEL/sivel-1.1*.tgz 2>&1 | tee -a /var/tmp/inst-sivel.log
 	if (test "$?" != "0") then {
 		echo "No pudo instalar $ARCHSIVEL/sivel-*.tgz" | tee -a /var/tmp/inst-sivel.log
 		exit 1;
 	} fi;
 } fi;
-echo "* Estableciendo permisos"
-cd /var/www/htdocs/sivel
-chown -R $usivel:$usivel .
-chmod -R a+r .
-chmod -R go-rx bin
+
+echo "* Estableciendo permisos" | tee -a /var/tmp/inst-sivel.log;
+cd /var/www/htdocs/sivel  | tee -a /var/tmp/inst-sivel.log;
+chown -R $usivel:$usivel .  | tee -a /var/tmp/inst-sivel.log;
+chmod -R a+r .  | tee -a /var/tmp/inst-sivel.log;
+chmod -R go-rx /var/www/htdocs/sivel/bin  | tee -a /var/tmp/inst-sivel.log;
 f=`ls /var/www/usr/local/bin/ispell 2> /dev/null > /dev/null`;
 if (test "$?" = "0") then {
-	echo -n "¿Desinstalar ispell y openssl de entorno chroot para instalarlos de nuevo? "
+	echo -n "Â¿Desinstalar ispell y openssl de entorno chroot para instalarlos de nuevo? "  | tee -a /var/tmp/inst-sivel.log;
 	read sn;
 	if (test "$sn" = "s") then {
-		sudo rm /var/www/usr/local/bin/ispell /var/www/usr/sbin/openssl
+		sudo rm /var/www/usr/local/bin/ispell /var/www/usr/sbin/openssl  | tee -a /var/tmp/inst-sivel.log;
 	} fi;
 } fi;
 
-echo "* Entorno chroot"
+echo "* Entorno chroot" | tee -a /var/tmp/inst-sivel.log;
 f=`ls /var/www/usr/local/bin/ispell 2> /dev/null > /dev/null`;
 if (test "$?" != "0") then {
-	cd /var/www/htdocs/sivel
-	bin/prep-chroot.sh /var/www | tee -a /var/tmp/inst-sivel.log
+	(cd /var/www/htdocs/sivel; ./bin/prep-chroot.sh /var/www) | tee -a /var/tmp/inst-sivel.log
 } else {
         echo "   Saltando..." | tee -a /var/tmp/inst-sivel.log;
 } fi;
 
 
-echo "* Configuración"
+echo "* ConfiguraciÃ³n" | tee -a /var/tmp/inst-sivel.log;
 if (test -f /var/www/htdocs/sivel/sitios/sivel/vardb.sh) then {
 	echo "vardb.sh anterior:" >> /var/tmp/inst-sivel.log
 	cat /var/www/htdocs/sivel/sitios/sivel/vardb.sh >> /var/tmp/inst-sivel.log
-	cp /var/www/htdocs/sivel/sitios/sivel/vardb.sh /var/www/htdocs/sivel/sitios/sivel/vardb-copia.sh
+	cp /var/www/htdocs/sivel/sitios/sivel/vardb.sh /var/www/htdocs/sivel/sitios/sivel/vardb-copia.sh | tee -a /var/tmp/inst-sivel.log; 
 } fi;
-rm -f /var/www/htdocs/sivel/{confv.sh,confaux.tmp}	
-cd /var/www/htdocs/sivel
-sudo touch /var/www/pear/lib/.lock
+rm -f /var/www/htdocs/sivel/{confv.sh,confaux.tmp} | tee -a /var/tmp/inst-sivel.log;	
+cd /var/www/htdocs/sivel | tee -a /var/tmp/inst-sivel.log; 
+sudo touch /var/www/pear/lib/.lock  | tee -a /var/tmp/inst-sivel.log;
 
-echo "* Información para Relatos" | tee -a /var/tmp/inst-sivel.log;
-echo "Organización:"
+echo "* InformaciÃ³n para Relatos" | tee -a /var/tmp/inst-sivel.log;
+echo "OrganizaciÃ³n:" | tee -a /var/tmp/inst-sivel.log;
 read nomorg
-echo "Sigla o abreviatura de organización:"
+echo "Sigla o abreviatura de organizaciÃ³n:" | tee -a /var/tmp/inst-sivel.log;
 read aborg
-echo "Derechos de reproduccion para relatos producidos [Dominio Público]:"
+echo "Derechos de reproduccion para relatos producidos [Dominio PÃºblico]:" | tee -a /var/tmp/inst-sivel.log;
 read derechos
 
 if (test "$derechos" = "") then {
-	derechos="Dominio Público";
+	derechos="Dominio PÃºblico";
 } fi;
 
 su $usivel ./conf.sh -i | tee -a /var/tmp/inst-sivel.log
@@ -521,18 +523,17 @@ echo "psql -h /var/www/tmp -U sivel sivel -c \"SELECT COUNT(*) FROM departamento
 echo "exit \$?" >> /tmp/cu.sh;
 chmod +x /tmp/cu.sh
 cat /tmp/cu.sh
-# El siguiente sin tee porque retornaría 0
+# El siguiente sin tee porque retornarÃ­a 0
 su - $usivel /tmp/cu.sh 
 if (test "$?" != "0") then {
 	su $usivel ../../bin/creapg.sh | tee -a /var/tmp/inst-sivel.log
-	echo "Creación de primer usuario para SIVeL." | tee -a /var/tmp/inst-sivel.log;
+	echo "CreaciÃ³n de primer usuario para SIVeL." | tee -a /var/tmp/inst-sivel.log;
        #	A password responda con clave de usuario sivel de PostgreSQL"
 	su $usivel ../../bin/agus.sh | tee -a /var/tmp/inst-sivel.log
 } else {
 	echo "   Saltando..." | tee -a /var/tmp/inst-sivel.log;
 } fi;
 	
-
 
 echo "* Configurar respaldos" | tee -a /var/tmp/inst-sivel.log;
 su - $usivel -c "crontab -l 2>/dev/null" > /tmp/crontab.sivel
@@ -545,10 +546,10 @@ if (test "$?" != "0") then {
 cat /tmp/crontab.sivel >> /var/tmp/inst-sivel.log;
 
 
-echo "* Personalizando menú de fluxbox" | tee -a /var/tmp/inst-sivel.log;
+echo "* Personalizando menÃº de fluxbox" | tee -a /var/tmp/inst-sivel.log;
 grep "SIVeL" /home/$usivel/.fluxbox/menu > /dev/null 2> /dev/null
 if (test "$?" != "0") then {
-	echo -n "¿Nombre de usuario para conectarse a www.nocheyniebla.org? ";
+	echo -n "Â¿Nombre de usuario para conectarse a www.nocheyniebla.org? ";
 	read usnyn
 	ed /home/$usivel/.fluxbox/menu <<EOF
 /(Dispositivos)
@@ -570,6 +571,6 @@ else {
 	echo "   Saltando..." | tee -a /var/tmp/inst-sivel.log;
 } fi;
 
-echo "FELICITACIONES!  La instalación/actualización de SIVeL se completó satisfactoriamente";
+echo "FELICITACIONES!  La instalaciÃ³n/actualizaciÃ³n de SIVeL se completÃ³ satisfactoriamente";
 echo "";
 echo "Ahora puede actualizar SIVeL abriendo con un navegador https://127.0.0.1/actualiza.php y autenticandose.";
