@@ -3,10 +3,10 @@
 # Dominio público de acuerdo a legislación colombiana. http://www.pasosdejesus.org/dominio_publico_colombia.html. 
 # 2014. vtamara@pasosdeJesus.org
 
-VER=5.5
+VER=5.6
 REV=0
 VESP=""
-VERP=55
+VERP=56
 
 ACVER=`uname -r`
 ARQ=`uname -m`

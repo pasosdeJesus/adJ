@@ -1,11 +1,11 @@
 
-Anhelamos publicar versión mayor (e.g 5.5) 3 meses después de OpenBSD:
+Anhelamos publicar versión mayor (e.g 5.6) 3 meses después de OpenBSD:
 	1.Ago
 	1.Feb
 
-Publicamos revisiones (e.g 5.5) si la seguridad o calidad lo ameritan.
+Publicamos revisiones (e.g 5.6) si la seguridad o calidad lo ameritan.
 
-Anhelamos publicar al menos una versión alfa (e.g 5.5a1 en directorio
+Anhelamos publicar al menos una versión alfa (e.g 5.6a1 en directorio
 desarrollo) 20 días antes de la versión mayor:
 	10.Jul
 	10.Ene
@@ -39,7 +39,7 @@ ftp.pasosdeJesus.org:
 
 En ftp.pasosdeJesus.org
 	hdes/creaiso.sh
-	cp -rf AprendiendoDeJesus-5.5-amd64.iso 5.5-amd64 /dirftp
+	cp -rf AprendiendoDeJesus-5.6-amd64.iso 5.6-amd64 /dirftp
 
 Actualiza version en reto en P2PU (las 4 primeras tareas)
 
@@ -53,13 +53,13 @@ Correo a listas: openbsd-colombia@googlegroups.com,
 A: openbsd-colombia@googlegroups.com, colibri@listas.el-directorio.org,
 openbsd-mexico@googlegroups.com, sivel-soporte@lists.sourceforge.net
 
-Tema: Publicado adJ 5.5 para amd64
+Tema: Publicado adJ 5.6 para amd64
 
 Para instalar por primera vez descargue imagen para DVD de:
   ftp://ftp.pasosdejesus.org/pub/AprendiendoDeJesus/
 O solicite un CD por correo postal.
 
-Si planea actualizar de una version anterior de adJ a adJ 5.5
+Si planea actualizar de una version anterior de adJ a adJ 5.6
 hay un procedimiento mas rápido con rsync (ver
 https://github.com/pasosdeJesus/adJ/blob/master/Actualiza.txt ).
 
@@ -71,8 +71,8 @@ puede aprender a instalar o actualizar con:
   2. La guía de instalación:
   http://structio.sourceforge.net/guias/usuario_OpenBSD/sobre-la-instalacion.html
 
-Vea las novedades completas de la versión 5.5 en:
-  http://aprendiendo.pasosdejesus.org/?id=AdJ+5.5+-+Aprendiendo+de+Jesus+5.5
+Vea las novedades completas de la versión 5.6 en:
+  http://aprendiendo.pasosdejesus.org/?id=AdJ+5.6+-+Aprendiendo+de+Jesus+5.6
 
 De estas destacamos:
 
@@ -80,13 +80,13 @@ De estas destacamos:
   Así se completa todo el soporte de locale y xlocale.  Incluye tablas
   revisadas de cotejación, formatos númericos, monetarios, formato de hora 
   y fecha para todos los paises de latinoamérica.  
-* OpenBSD 5.5 amplió rango de tiempo, ya no sufre de falla en año 2038 como
+* OpenBSD 5.6 amplió rango de tiempo, ya no sufre de falla en año 2038 como
   les ocurre a los demás sistemas tipo UNIX, pero la actualización de 5.4
-  a 5.5 es más delicada.
+  a 5.6 es más delicada.
 * OpenBSD y adJ ahora firman paquetes y distribución del sistema base.  Las
   llaves públicas de OpenBSD y adJ quedan en /etc/signify.  Las de adJ
   pueden compararse con las publicadas en
-  http://aprendiendo.pasosdejesus.org/?id=AdJ+5.5+-+Aprendiendo+de+Jesus+5.5
+  http://aprendiendo.pasosdejesus.org/?id=AdJ+5.6+-+Aprendiendo+de+Jesus+5.6
 * Más entropia para generador de números aleatorios y función arc4random
   más aleatoria.
 * Incluye SIVeL 1.2b3 que tiene bastantes mejoras y esperamos sea 
@@ -104,12 +104,12 @@ Publicar en Twitter que retrasnmite a cuenta y página en Facebook
 Si es tambien publicacion de SIVeL en sitio de noticias de SIVeL y Structio.
 
 ----
-Publicado adJ 5.5 sistema operativo para servidores y cortafuegos, seguro, amigable para cristian@s y en español, ver http://aprendiendo.pasosdejesus.org/
+Publicado adJ 5.6 sistema operativo para servidores y cortafuegos, seguro, amigable para cristian@s y en español, ver http://aprendiendo.pasosdejesus.org/
 ----
 
 Poner Tag en github e iniciar rama
-	git tag -a v5.5 -m "Version 5.5"
-	git push origin v5.5
+	git tag -a v5.6 -m "Version 5.6"
+	git push origin v5.6
 
 	git checkout -b ADJ_5_5
 	git push origin ADJ_5_5
