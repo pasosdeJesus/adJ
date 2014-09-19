@@ -619,19 +619,20 @@ if (test "$sn" = "s") then {
 		ln -s $dini/arboldes/usr/ports/mystuff /usr/ports/mystuff
 	} fi;
 	rm tmp/disponibles*
-	#paquete dialog misc
-	# paquete php lang paquetes "php php-fpm php-gd php-mcrypt php-pdo_pgsql" 5.5  Tocó dejar 5.3 por pear -> SIVeL 1.2
-	#paquete ruby lang paquetes "ruby ruby20-ri_docs" 2.0
+  #paquete dialog misc
+  # paquete php lang paquetes "php php-fpm php-gd php-mcrypt php-pdo_pgsql" 5.5  Tocó dejar 5.4 por pear -> SIVeL 1.2
+  #paquete ruby lang paquetes "ruby ruby20-ri_docs" 2.0
 
-        # paquete pear www paquetes "pear pear-utils"  Toco quedarse en PHP 5.3 para SIVeL 1.2
-	#paquete pear www 
+  # paquete pear www paquetes "pear pear-utils"  Toco quedarse en PHP 5.3 para SIVeL 1.2
+  #paquete pear www 
 
-	# Actualizados
-  paquete ganglia sysutils
+
+  # Retroportados
   paquete postgresql databases paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs"
   paquete php lang paquetes "php php-fpm php-gd php-ldap php-mcrypt php-pdo_pgsql php-pgsql php-zip" 5.4
   paquete png graphics
   paquete libxml textproc
+  paquete gnutls security
 
   paquete pear-Auth security
   #paquete pear-DB databases
@@ -654,6 +655,7 @@ if (test "$sn" = "s") then {
   paquete xiphos textproc 
 
   paquete realboy emulators
+  paquete ganglia sysutils
 
   paquete basico_OpenBSD books
   paquete usuario_OpenBSD books
