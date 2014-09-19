@@ -628,8 +628,8 @@ if (test "$sn" = "s") then {
 
 
   # Retroportados
+  paquete php lang paquetes "php php-fpm php-gd php-intl php-ldap php-mcrypt php-pdo_pgsql php-pgsql php-zip" 5.4
   paquete postgresql databases paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs"
-  paquete php lang paquetes "php php-fpm php-gd php-ldap php-mcrypt php-pdo_pgsql php-pgsql php-zip" 5.4
   paquete png graphics
   paquete libxml textproc
   paquete gnutls security

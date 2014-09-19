@@ -1680,7 +1680,7 @@ if (test "$p" = "") then {
 	rm -f /var/www/conf/modules/php.conf /var/www/conf/php.ini /etc/php.ini
 	ln -s /var/www/conf/modules.sample/php-5.4.conf \
 		/var/www/conf/modules/php.conf
-	for sp in gd mcrypt pgsql pdo_pgsql sqlite uploadprogress zip; do
+	for sp in gd intl ldap mcrypt pdo_pgsql pgsql zip; do
 		rm -f /etc/php-5.4/$sp
 		ln -fs /etc/php-5.4.sample/$sp.ini /etc/php-5.4/
 	done;
