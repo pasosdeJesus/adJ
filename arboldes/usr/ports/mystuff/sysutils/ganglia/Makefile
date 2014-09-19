@@ -14,7 +14,7 @@ PERMIT_PACKAGE_CDROM=	Yes
 MASTER_SITES=	${MASTER_SITE_SOURCEFORGE:=ganglia/}
 DISTFILES=	${DISTNAME}.tar.gz
 
-BUILD_DEPENDS= 	devel/apr devel/libconfuse
+BUILD_DEPENDS= 	devel/apr devel/libconfuse net/rrdtool
 RUN_DEPENDS=	net/rrdtool
 WANTLIB =       c kvm z expat pthread
 

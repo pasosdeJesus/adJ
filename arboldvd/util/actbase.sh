@@ -37,6 +37,10 @@ if (test "$RUTAKERNELREESPECIAL" != "") then {
         rutak="$RUTAKERNELREESPECIAL";
         echo "Usando kernel re-especial";
 } fi;
+mp=`uname -a | sed -e "s/.*\.MP\#.*/.mp/g"`
+if (test "$mp" != ".mp") then {
+	mp="";
+} fi;
 
 nk=${rutak}/bsd${mp}
 echo "Antes de continuar, recomendamos que ejecute util/preact-adJ.sh"
@@ -53,9 +57,9 @@ if (test "$V" = "5.5") then {
 		echo "Para actualizar a 5.5 debe ejecutar como root y no con sudo";
 		exit 1;
 	} fi;
-	dd=`sysctl hw.disknames | sed -e "s/.*=sd0.*/sd0/g;s/.*wd0.*/wd0/g"`
+	dd=`sysctl hw.disknames | sed -e "s/.*=sd0.*/sd0/g;s/.*wd0.*/wd0/g;s/.*sd0.*/sd0/g"`
 	echo "Esta operacion para actualizar a adJ 5.5 no es recomendable"
-	echo "1. Saque copias de respaldo por ejemplo de bases de datos";
+	echo "1. Saque copias de respaldo en formato portable de bases de datos (bd, mysql, ldapd, OpenLDAP, rrdtool, etc)";
 	echo "2. Elimine todos los paquetes y binarios que no son sistema base";
 	echo "Si continua este script:"
 	echo "1. Intentara detener todos los servicios"
@@ -84,10 +88,6 @@ EOF
 	(cd /usr/mdec; cp boot /boot; ./installboot -v /boot ./biosboot $dd)
 } fi;
 
-mp=`uname -a | sed -e "s/.*\.MP.*/.mp/g"`
-if (test "$mp" != ".mp") then {
-	mp="";
-} fi;
 rm /obsd ; ln /bsd /obsd 
 cp $nk /nbsd 
 mv /nbsd /bsd

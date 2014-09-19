@@ -52,7 +52,7 @@ EOF
 
 
 echo "Archivos de etc en general exceptuando casos especiales de compatibilidad"  >> /var/tmp/inst-adJ.bitacora
-l=`find . -exec grep -l "daemon" {} ';' | grep -v "login.conf" | grep -v "group" | grep -v "passwd" | grep -v "pwd.db" | grep -v "syslog.conf" | grep -v "rc.subr" | grep -v "mail/aliases" | grep -v "mail/.*cf" | grep -v "Xsetup_0" | grep -v "dbus-1" | grep -v "rc.conf.local" | grep -v "rc.local" | grep -v "rc.d/" | grep -v "php-fpm.conf" | grep -v Makefile`
+l=`find . -exec grep -l "daemon" {} ';' | grep -v "login.conf" | grep -v "dovecot" | grep -v "group" | grep -v "passwd" | grep -v "pwd.db" | grep -v "syslog.conf" | grep -v "rc.subr" | grep -v "mail/aliases" | grep -v "mail/.*cf" | grep -v "Xsetup_0" | grep -v "dbus-1" | grep -v "rc.conf.local" | grep -v "rc.local" | grep -v "rc.d/" | grep -v "php-fpm.conf" | grep -v redis.conf | grep -v Makefile`
 echo "l=$l" >> /var/tmp/inst-adJ.bitacora 
 for i in $l; do 
 	echo $i  >> /var/tmp/inst-adJ.bitacora
@@ -83,7 +83,7 @@ q
 EOF
 done;
 echo "Archivos de etc con service en general exceptuando casos especiales de compatibilidad"  >> /var/tmp/inst-adJ.bitacora
-l=`find . -exec grep -l "service" {} ';' | grep -v "changelist" | grep -v "esd.conf" | grep -v "inetd.conf" | grep -v "pwd.db" | grep -v "php-*.ini" | grep -v "rc.subr" | grep -v "rc.d/" | grep -v "services" | grep -v Makefile`
+l=`find . -exec grep -l "service" {} ';' | grep -v "dovecot" | grep -v "changelist" | grep -v "esd.conf" | grep -v "inetd.conf" | grep -v "pwd.db" | grep -v "php-*.ini" | grep -v "rc.subr" | grep -v "rc.d/" | grep -v "services" | grep -v Makefile`
 echo "l=$l" >> /var/tmp/inst-adJ.bitacora 
 for i in $l; do 
 	echo $i  >> /var/tmp/inst-adJ.bitacora
@@ -161,7 +161,7 @@ done;
 echo "Particularidades de rc.subr"  >> /var/tmp/inst-adJ.bitacora
 if (test -f "rc.d/rc.subr") then {
 	grep "daemon_user.*servicio_user" rc.d/rc.subr > /dev/null 2>&1
-	if (test "$?" = "1") then {
+	if (test "$?" != "0") then {
 		grep "daemon_user.*service_user" rc.d/rc.subr > /dev/null 2>&1
 		if (test "$?" = "0") then {
 			ed rc.d/rc.subr >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF

@@ -4,7 +4,7 @@ Distribución para fomentar la construcción del Reino de Dios desde
 la educación, el respeto por la dignidad humana y la memoria.
 
 Versión: 5.5%%%
-Fecha de publicación: 1/Jul/2014
+Fecha de publicación: 18/Sep/2014
 
 !!!NOVEDADES
 
@@ -13,50 +13,41 @@ Con respecto a OpenBSD 5.5 para amd64 y a la edición anterior de este DVD
 
 !KERNEL Y SISTEMA BASE
 
-* Aplicado parche de OpenBSD del 7/Abr/2014 para la librería openssl que cierra vulnerabilidad CVE-2014-0160 también conocida como "heartbleed bug" y que permitiría a un atacante leer memoria del servidor, que a su vez podría permitir al atacante conocer llaves privadas SSL, claves y tráfico cifrado.
-* En 5.5 aplicado parche de OpenBSD del 14/Feb/2014 para el paquete gnutls que cierra vulnerabilidades CVE-2014-0092 y CVE-2014-1959 (esto podia afectar verificacion de certificados de firefox, courier, filezilla, gnumeric, midori, qemu, qgis, scribus, vlc).
+* Incluye soluciones a 7 fallas de seguridad no corregidas en binarios del sistema base de OpenBSD 5.5 (si han sido corregidas en fuentes de OpenBSD, ver http://www.openbsd.org/errata55.html), en particular cierra CVE-2014-0160 también conocida como "heartbleed bug" (que permitiría a un atacante leer memoria del servidor, que a su vez podría permitir al atacante conocer llaves privadas SSL, claves y tráfico cifrado), y diversos paquetes parchados en particular paquete gnutls que cierra vulnerabilidades CVE-2014-0092 y CVE-2014-1959 (esto podia afectar verificacion de certificados de firefox, courier, filezilla, gnumeric, midori, qemu, qgis, scribus, vlc).
+* Incluye solución a falla en libc en función gethostbyaddr no corregida en fuentes de OpenBSD 5.5 (si solucionado en fuentes de -current que será futuro OpenBSD 5.6, ver http://comments.gmane.org/gmane.os.openbsd.tech/38272).  Por esta falla algunas aplicaciones (como tcpdump) generen un fallo de segmentación cuando hay entradas sin nombre en /etc/hosts.  
+* Desde la versión 5.5 soporte en la librería de C para presentar fechas y horas con las convenciones de cada país de latinoamérica (y de otros locales soportados por OpenBSD).  Esta mejora fue aportada a OpenBSD y se anhela su integración en futuras versiones.
 * Desde la versión 5.4 se ha importado de FreeBSD soporte y datos para presentar cantidades monetarias y numéricas con las convenciones de cada uno de los países de latinoamérica (y otros locales soportados por OpenBSD).  Esta mejora fue aportada a OpenBSD y se anhela su integración en futuras versiones.
 * Desde la versión 5.2 incluye cotejación (COLLATE) en idioma nativo en el sistema base importado de FreeBSD, tablas de caracteres y cotejación para todos los países de latinoamérica (incluyendo Portugués de Brasil) y portes de PostgreSQL y xfe que soportan cotejación. Vea detalles y una captura de pantalla en http://aprendiendo.pasosdejesus.org/?id=i18n.  Las mejoras se han aportado a OpenBSD y xfe y han sido parcialmente integradas, se espera más integración en futuras versiones de esos proyectos.
-* Parches de seguridad de sistema base hasta:  9.Abr.2014
+* Parches de seguridad de sistema base hasta:  20.Ago.2014
 * Hemos remplazando `daemon' por `servicio' en buena parte del sistema base (ver por ejemplo ==vmstat -s== o ==less /var/log/servicio== o ==man servicio==).  Hasta la versión 5.3 se usó ==service==, pero para disminuir colisiones de nombres desde la 5.4 se emplea ==servicio==.
-* El CD ahora incluye un archivo de comandos ==/util/preact-adJ.sh== para preparar un sistema antes de iniciar actualización --por ejemplo sacar copia de base de datos.
 
 Entre las novedades reportadas en las `Notas de publicación de OpenBSD 5.5' destacamos:
 
-* Cambiado todo el sistema base para aumentar rango de tiempo de time_t (OpenBSD 5.4 y anteriores tienen problemas para representar fechas posteriores al año 2038). 
-* Los instaladores y paquetes ahoran son firmados con herramienta signify.
+* Cambiado todo el sistema base para aumentar rango de tiempo (OpenBSD 5.4 y anteriores así como los demás sistemas tipo Unix, en el momento de este escrito, tienen problemas para representar fechas posteriores al año 2038). 
+* Los instaladores y paquetes ahoran son firmados con la herramienta signify.  Las llaves públicas de OpenBSD y de adJ quedan en ==/etc/signify/==
 
 * Controaldores ampliados o mejorados para amd64
-** Vídeo: Mejorado ==radeondrm== que ahora soporta consola framebuffer (se nota
-durante el arranque).  Actualizado ==inteldrm==.
+** Vídeo: Mejorado ==radeondrm== que ahora soporta consola framebuffer (se nota durante el arranque).  Actualizado ==inteldrm==.
 ** Touchpads y controles: Mejorado ==pms== para soportar Elantech v2. ==uhid== soporta controladores de Xbox 360. ==uhts== integrado en ==ums==
-** Red: Fibra: Nuevo ==qla== que soporta canales de fibra QLogic.  Ethernet: Ampliado ==em== para soportar serie Eterhnet Intel (i210, i211, i354), mejorado ==re== para soportar RTL8106E, mejorado ==jme==.  Ethernet USB: ==udav== soporta CoreChip RD9700. Inalámbrico: ==iwn== ampliado para soportar Intel Centrino Wireless 2200, 2230 y 105/135; mejorados ==wpi== y ==iwn==, aumentado ==ral== para soportar chips RT3572.
+** Red: Fibra: Nuevo ==qla== que soporta canales de fibra QLogic.  Ethernet: Ampliado ==em== para soportar serie Eterhnet Intel (i210, i211, i354); mejorado ==re== para soportar RTL8106E; mejorado ==jme==.  Ethernet USB: ==udav== soporta !CoreChip RD9700. Inalámbrico: ==iwn== ampliado para soportar Intel Centrino Wireless 2200, 2230 y 105/135; mejorados ==wpi== y ==iwn==, aumentado ==ral== para soportar chips RT3572.
 ** Discos: Mejorado ==arc== para soportar controladores RAID Areca ARC-1880/1182/1883/1223/1214/1264/1284.
 ** Temperatura: Nuevo ==ugold==
 
 * Mejoras a herramientas de Red
-** pf tiene nueva sintaxis para sistema de colas
-** Añadido interfaz tunel para entronos virtualizados vxlan
-** popa3d eliminado
-** Soporte rdomain en IPv6 añadido a ndp, rtsold, ping6 y traceroute6.
-** Nuevo ntpctl para controlar servicio NTP.
-** Mejorados slowcgi y relayd (que ahora soporta TLS), dhcpd y dhclient, iked (inlcuyendo soporte DPD Dead Peer Detection). 
-** OpenSMTPD mejorado (incluye soporte para TLS Perfect Forward Secrecy).
+** ==pf== tiene nueva sintaxis para sistema de colas
+** Añadido interfaz tunel para entornos virtualizados ==vxlan==
+** ==popa3d== eliminado
+** Soporte ==rdomain== en IPv6 añadido a ==ndp==, ==rtsold==, ==ping6== y ==traceroute6==.
+** Nuevo ==ntpctl== para controlar servicio NTP.
+** Mejorados ==slowcgi== y ==relayd== (que ahora soporta TLS), ==dhcpd== y ==dhclient==, ==iked== (inlcuyendo soporte DPD --Dead Peer Detection). 
+** OpenSMTP 5.3.3: Soporte para envíos locales LMTP, tipos de transmisión ==SECURE== y ==AUTH==. Nombres ==helo== pueden buscar en tabla ==db==. Cola más robusta para sobrellevar errores en tiempo de ejecución. Sintaxis cambiada para declarar certificados.
 
-* Otras mejoras
-** Mejoras a sistema de hilos, 
-** inetd ya no inicia por defecto 
-** Añadido slowcgi implementación de FastCGI
-** Mejorados dhcpd y dhclient
-** OpenSMTP 5.3.3: Soporte para envíos locales LMTP, tipos de transmisión SECURE y AUTH. Nombres ==helo== pueden buscar en tabla ==db==. Cola más robusta para sobrellevar errores en tiempo de ejecución.
 
 * Seguridad
-** arc4random ahora usa ChaCha20
-** sistema del kenrel de números aleatorios ahora es alimentado por el cargador de arranque, dando más aleatoridad desde el comienzo. 
+** ==arc4random== ahora usa !ChaCha20
+** Sistema del kernel de números aleatorios ahora es alimentado por el cargador de arranque, dando más aleatoriedad desde el comienzo. 
 ** OpenSSH 6.6. Rechaza clientes que usen el obsoleto RSA+MD5
 
-
-* Librerías y herramientas nuevas o mejoradas: 
 
 * El sistema base incluye mejoras a componentes auditados y mejorados como ==Xenocara== (Xorg 7.7), ==gcc== 4.2.1, ==perl== 5.16.3, nginx 1.4.4, OpenSSL 1.0.1c parchado, ==sendmail== 8.14.8, bind 9.4.2-P2, nsd 4.0.1
 
@@ -70,25 +61,26 @@ En adJ es en español, consta de: (a) preparación, (b) instalación/actualizaci
 
 !PAQUETES EXCLUSIVOS DE ADJ
 
-* SIVeL 1.1.5. También se incluye experimentalmetne SIVeL 1.2b1 que tiene: módulo de mezcla y homónimos, módulo de desplazamiento, relaciones inversas entre personas, claves más seguras, DIVIPOLA actualizado a 2013, más posibilidad de configuración de reportes, más validaciones, búsquedas mejoradas, autocompletación de latitud, longitud y edad.
-* ruby 2.0.0p353 retroportado de OpenBSD-5.5, probado con aplicaciones Rails 4.1.0.  Tipicamente aumenta velocidad de aplicaciones Rails.  Ver  http://dhobsd.pasosdejesus.org/index.php?id=Ruby+on+Rails+en+OpenBSD .   Guillermo Iguaran y otros latinos está en el grupo de desarrollo de Ruby on Rails.
-* xfe actualizado a 1.37 y modificado para administrar paquetes en OpenBSD (ver pantallazo en http://structio.sf.net/guias/basico_OpenBSD/medios.html#xfe ). Soporta cotejación en idioma nativo.  Nueva opción sudo_nopasswd utilizable en ~/.config/xfe/xferc cuando sudo no requiere clave (útil para que opere bien Herramientas->Nueva ventana root).
-* PostgreSQL 9.3.2 retroportado de OpenBSD-Current con soporte para UTF-8 y cotejaciones nativas listas para todos los paises de habla hispana. Ver detalles de como usar cotejación en http://aprendiendo.pasosdejesus.org/?id=i18n
-* evangelios_dp actualizado a 0.9.3 que incluye marcado Strong de Mateo, Marcos y Hechos.
-* realboy 0.2.2. Veloz emulador de Game Boy desarrollado por Sergio Gómez del Real.
-* Los paquetes exclusivos los encuentra en [ftp://ftp.pasosdeJesus.org/pub/AprendiendoDeJesus/5.5-amd64/paquetes]
+* Se incluye SIVeL 1.2b3 que tiene: (1) módulo de mezcla y homónimos, módulo de desplazamiento; (2) mejoras a ficha: relaciones inversas entre personas, autocompletación de latitud, longitud y edad; (3) mejoras a consulta web: búsquedas de textos completos y con posibilidad de buscar similares, permite especificar dos etiquetas y buscar por sexo de la víctima; (4) mejoras a reportes: posibilidad de columnas separadas para apellidos y nombres, departamento y municipio; (5) mejores validaciones: emplea modelos probabilisticos para identificar hombres con nombre que parece de mujer, mujeres con nombre que parece de hombre, nombres que parecen apellidos; (6) mejoras de seguridad: claves más seguras con algoritmo bcrypt, cuentas se bloquean por un tiempo tras 5 intentos fallidos de ingreso; (7) otras mejoras: DIVIPOLA actualizado a 2013, mejoras a etnias e iglesias, importar/exportar etiquetas, interfaz configurable en inglés o español, listados emplean ordenamiento de español (Úmbita/Boyaca que tiene tilde sale entre las Us y no al final), se emplea codificación UTF-8.
+* Se incluye paquete ganglia que es un sistema de monitoreo distribuido.
+* xfe actualizado a 1.37 y modificado para administrar paquetes en OpenBSD (ver http://structio.sf.net/guias/basico_OpenBSD/medios.html#xfe ).
+* PostgreSQL 9.3.5 retroportado de OpenBSD-current con soporte para UTF-8 y cotejaciones nativas listas para todos los paises de habla hispana. Ver detalles de como usar cotejación en http://aprendiendo.pasosdejesus.org/?id=i18n
+* PHP-5.4.32 retroportado
+* Incluuye versiones más recientes de png y libxml que cierran fallas de seguridad.
+* Los paquetes exclusivos los encuentra en [ftp://ftp.pasosdeJesus.org/pub/AprendiendoDeJesus/5.5-amd64/paquetes] y otras extensiones de PostgreSQL y PHP que no hacen parte de la distribución en [ftp://ftp.pasosdeJesus.org/pub/AprendiendoDeJesus/5.5-amd64-paquetes-extra] 
 
 
 !PAQUETES
 
-* Navegadores actualizados: Firefox sacado por inestabilidad y #NoZilla, Chromium actualizado a 32.0.1700.102, midori a 0.5.6
+* Navegadores actualizados: Firefox sacado por inestabilidad y #nozilla, Chromium actualizado a 32.0.1700.102, midori a 0.5.6
 * !LibreOffice actualizado a 4.1.4.2, gimp a 2.8.45 , vlc a 2.0.9
-* PHP actualizado a 5.4.24, LLVM/Clang a 3.3 asi como los demás lenguajes de programación
+* Incluye ruby 2.1.0p0 probado con aplicaciones Rails 4.1.0.  Ver http://dhobsd.pasosdejesus.org/index.php?id=Ruby+on+Rails+en+OpenBSD .
+*  LLVM/Clang a 3.3 asi como los demás lenguajes de programación
 * Se incluyen otros paquetes típicos del repositorio de OpenBSD, en donde hay   más de 8500 disponibles para amd64
 
 !ESCRITORIO
 
-==ksh== con ==xterm== no soportan del todo UTF-8, por ejemplo al borrar una vocal con tilde o ñ debe presionarse 2 veces espacio atras.  Si requiere una terminal con codificación ASCII ejecute:
+==ksh== con ==xterm== no soportan del todo UTF-8, por ejemplo al borrar una vocal con tilde o ñ debe presionarse 2 veces espacio atrás.  Si requiere una terminal con codificación ASCII ejecute:
 <pre>
     xterm -en ascii
 </pre>
@@ -102,11 +94,9 @@ y ponga la variable LANG en otro valor por ejemplo:
 
 Puede descargar imagenes ISO para amd64 de ==ftp://ftp.pasosdeJesus.org/pub/AprendiendoDeJesus==, o si prefiere asumir gastos de manufactura, envío y eventualmente una donación con gusto le enviamos un DVD ([correo de contacto|mailto:info@pasosdeJesus.org]).
 
-El condensado sha256 del DVD es: 
-<pre>
-$ sha256 AprendiendoDeJesus-5.5-amd64.iso
-SHA256 (AprendiendoDeJesus-5.5-amd64.iso) = aa547046be5a22551b118c66c1ff1c3f3ba146db60aca682d1efec5cecb33c1d
-</pre>
+Las claves públicas empleadas para firmar digitalmente el CD de instalación y los paquetes se ubican en /etc/signify y deben coincidir con estas:
+* adJ-55-base.pub: ![RWTIsX3AvpIvBF6qIvt0X1rBKlSo4rdhnuihezaYhr68Yr7CnPmwn03h]
+* adJ-55-pkg.pub: ![RWT7tG8qXTqyFBMQ8xQRZ07zM/SqgzPoV5SW+R2mhKLwp7OQi9Z1ts7L]
 
 Eventualmente podrá contar con ayuda voluntaria para utilizar los programas disponibles en este DVD en la lista pública ==openbsd-colombia== a la cual puede suscribirse enviando un correo a openbsd-colombia-subscribe@googlegroups.com (Agradecemos amabilidad del moderador Fernando Quintero).
 
