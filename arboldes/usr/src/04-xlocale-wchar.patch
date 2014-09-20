@@ -3341,17 +3341,7 @@ diff -ruN src54-num/lib/libc/locale/xlocale_private.h src/lib/libc/locale/xlocal
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/string/Makefile.inc src/lib/libc/string/Makefile.inc
 --- src55-orig/lib/libc/string/Makefile.inc	Wed Apr  2 23:44:30 2014
 +++ src/lib/libc/string/Makefile.inc	Thu Apr  3 11:18:01 2014
-@@ -9,7 +9,8 @@
- 	strsignal.c strtok.c strxfrm.c \
- 	wcscat.c wcschr.c wcscmp.c wcscpy.c wcscspn.c wcslcat.c wcslcpy.c \
- 	wcslen.c wcsncat.c wcsncmp.c wcsncpy.c wcspbrk.c wcsrchr.c wcsspn.c \
--	wcsstr.c wcstok.c wcswcs.c wcswidth.c wmemchr.c wmemcmp.c wmemcpy.c \
-+	wcsstr.c wcstok.c wcswcs.c wcswidth.c \
-+	wmemchr.c wmemcmp.c wmemcpy.c \
- 	wmemmove.c wmemset.c wcsdup.c \
- 	timingsafe_bcmp.c wcscasecmp.c
- 
-@@ -161,12 +162,17 @@
+@@ -161,12 +161,17 @@
  MLINKS+=strchr.3 index.3
  MLINKS+=strrchr.3 rindex.3
  MLINKS+=strcasecmp.3 strncasecmp.3
@@ -3367,19 +3357,19 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/string/Ma
  MLINKS+=strtok.3 strtok_r.3
 +MLINKS+=strxfrm.3 strxfrm_l.3
  MLINKS+=strerror.3 strerror_r.3
+ MLINKS+=timingsafe_bcmp.3 timingsafe_memcmp.3
  MLINKS+=wcscasecmp.3 wcsncasecmp.3
- MLINKS+=wcscat.3 wcsncat.3
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src54-num/regress/lib/libc/locale/Makefile src/regress/lib/libc/locale/Makefile
 --- src54-num/regress/lib/libc/locale/Makefile	Tue Dec  3 13:55:09 2013
 +++ src/regress/lib/libc/locale/Makefile	Tue Dec  3 14:48:00 2013
 @@ -1,6 +1,6 @@
- # $OpenBSD: Makefile,v 1.1 2005/08/11 21:57:02 espie Exp $
+ # $OpenBSD: Makefile,v 1.3 2014/07/03 21:12:24 miod Exp $
  
--SUBDIR+= check_isw check_collate check_monetary check_numeric
-+SUBDIR+= check_isw check_collate check_monetary check_numeric check_xlocale
+-SUBDIR+= check_isw check_time check_collate check_monetary check_numeric
++SUBDIR+= check_isw check_time check_collate check_monetary check_numeric check_xlocale
  
- install:
- 
+ .if defined(REGRESS_FULL) || make(clean) || make(cleandir) || make(obj)
+ SUBDIR+= check_isw
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/regress/lib/libc/locale/check_xlocale/Makefile src/regress/lib/libc/locale/check_xlocale/Makefile
 --- src53collation/regress/lib/libc/locale/check_xlocale/Makefile	Wed Dec 31 19:00:00 1969
 +++ src/regress/lib/libc/locale/check_xlocale/Makefile	Tue Apr  2 21:37:08 2013

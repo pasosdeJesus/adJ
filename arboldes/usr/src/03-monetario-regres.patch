@@ -2,13 +2,13 @@ diff -ruN -x *~ -x obj -x *orig src54-coll/regress/lib/libc/locale/Makefile src/
 --- src54-coll/regress/lib/libc/locale/Makefile	Tue Dec  3 10:55:37 2013
 +++ src/regress/lib/libc/locale/Makefile	Tue Dec  3 11:55:54 2013
 @@ -1,6 +1,6 @@
- # $OpenBSD: Makefile,v 1.1 2005/08/11 21:57:02 espie Exp $
+ # $OpenBSD: Makefile,v 1.3 2014/07/03 21:12:24 miod Exp $
  
--SUBDIR+= check_isw check_collate
-+SUBDIR+= check_isw check_collate check_monetary
+-SUBDIR+= check_isw check_time check_collate
++SUBDIR+= check_isw check_time check_collate check_monetary
  
- install:
- 
+ .if defined(REGRESS_FULL) || make(clean) || make(cleandir) || make(obj)
+ SUBDIR+= check_isw
 diff -ruN -x *~ -x obj -x *orig src55-orig/regress/lib/libc/locale/check_monetary/Makefile src55-mon/regress/lib/libc/locale/check_monetary/Makefile
 --- src55-orig/regress/lib/libc/locale/check_monetary/Makefile	Wed Dec 31 19:00:00 1969
 +++ src55-mon/regress/lib/libc/locale/check_monetary/Makefile	Tue Nov 19 20:34:54 2013

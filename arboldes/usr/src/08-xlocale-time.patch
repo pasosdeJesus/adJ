@@ -18,7 +18,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strftime
  static char *	_yconv(int, int, int, int, char *, const char *);
  
  extern char *	tzname[];
-@@ -54,18 +55,20 @@
+@@ -50,18 +51,20 @@
  #define IN_ALL	3
  
  size_t
@@ -28,7 +28,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strftime
  const size_t		maxsize;
  const char * const	format;
  const struct tm * const	t;
-+locale_t loc;
++locale_t_loc
  {
  	char *	p;
  	int	warn;
@@ -38,10 +38,10 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strftime
  	warn = IN_NONE;
 -	p = _fmt(((format == NULL) ? "%c" : format), t, s, s + maxsize, &warn);
 +	p = _fmt(((format == NULL) ? "%c" : format), t, s, s + maxsize, &warn, loc);
- #ifndef NO_RUN_TIME_WARNINGS_ABOUT_YEAR_2000_PROBLEMS_THANK_YOU
- 	if (warn != IN_NONE && getenv(YEAR_2000_NAME) != NULL) {
- 		(void) fprintf(stderr, "\n");
-@@ -91,13 +94,21 @@
+ 	if (p == s + maxsize) {
+ 		if (maxsize > 0)
+ 			s[maxsize - 1] = '\0';
+@@ -71,13 +74,21 @@
  	return p - s;
  }
  
@@ -64,7 +64,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strftime
  {
  	for ( ; *format; ++format) {
  		if (*format == '%') {
-@@ -109,26 +120,26 @@
+@@ -89,26 +100,26 @@
  			case 'A':
  				pt = _add((t->tm_wday < 0 ||
  					t->tm_wday >= DAYSPERWEEK) ?
@@ -95,7 +95,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strftime
  					pt, ptlim);
  				continue;
  			case 'C':
-@@ -146,7 +157,7 @@
+@@ -126,7 +137,7 @@
  				{
  				int warn2 = IN_SOME;
  
@@ -104,7 +104,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strftime
  				if (warn2 == IN_ALL)
  					warn2 = IN_THIS;
  				if (warn2 > *warnp)
-@@ -154,7 +165,7 @@
+@@ -134,7 +145,7 @@
  				}
  				continue;
  			case 'D':
@@ -113,7 +113,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strftime
  				continue;
  			case 'd':
  				pt = _conv(t->tm_mday, "%02d", pt, ptlim);
-@@ -175,7 +186,7 @@
+@@ -155,7 +166,7 @@
  				pt = _conv(t->tm_mday, "%2d", pt, ptlim);
  				continue;
  			case 'F':
@@ -122,7 +122,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strftime
  				continue;
  			case 'H':
  				pt = _conv(t->tm_hour, "%02d", pt, ptlim);
-@@ -234,15 +245,15 @@
+@@ -214,15 +225,15 @@
  				continue;
  			case 'p':
  				pt = _add((t->tm_hour >= (HOURSPERDAY / 2)) ?
@@ -142,7 +142,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strftime
  				continue;
  			case 'S':
  				pt = _conv(t->tm_sec, "%02d", pt, ptlim);
-@@ -265,7 +276,7 @@
+@@ -245,7 +256,7 @@
  				}
  				continue;
  			case 'T':
@@ -151,7 +151,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strftime
  				continue;
  			case 't':
  				pt = _add("\t", pt, ptlim);
-@@ -380,7 +391,7 @@
+@@ -360,7 +371,7 @@
  				** "date as dd-bbb-YYYY"
  				** (ado, 1993-05-24)
  				*/
@@ -160,7 +160,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strftime
  				continue;
  			case 'W':
  				pt = _conv((t->tm_yday + DAYSPERWEEK -
-@@ -393,13 +404,13 @@
+@@ -373,13 +384,13 @@
  				pt = _conv(t->tm_wday, "%d", pt, ptlim);
  				continue;
  			case 'X':
@@ -176,7 +176,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strftime
  				if (warn2 == IN_ALL)
  					warn2 = IN_THIS;
  				if (warn2 > *warnp)
-@@ -484,8 +495,8 @@
+@@ -464,8 +475,8 @@
  				}
  				continue;
  			case '+':
@@ -461,7 +461,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/wcsftime
  static wchar_t *	_yconv(int, int, int, int, wchar_t *, const wchar_t *);
  
  extern char *	tzname[];
-@@ -60,15 +61,17 @@
+@@ -56,15 +57,17 @@
  #define IN_ALL	3
  
  size_t
@@ -479,10 +479,10 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/wcsftime
  	warn = IN_NONE;
 -	p = _fmt(((format == NULL) ? L"%c" : format), t, s, s + maxsize, &warn);
 +	p = _fmt(((format == NULL) ? L"%c" : format), t, s, s + maxsize, &warn, loc);
- #ifndef NO_RUN_TIME_WARNINGS_ABOUT_YEAR_2000_PROBLEMS_THANK_YOU
- 	if (warn != IN_NONE && getenv(YEAR_2000_NAME) != NULL) {
- 		(void) fprintf(stderr, "\n");
-@@ -94,23 +97,30 @@
+ 	if (p == s + maxsize) {
+ 		if (maxsize > 0)
+ 			s[maxsize - 1] = '\0';
+@@ -74,23 +77,30 @@
  	return p - s;
  }
  
@@ -517,7 +517,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/wcsftime
  {
  	// In the moment of this writing the biggest LC_TIME file
          // is 479 bytes, the next buffer should be enough to store
-@@ -132,26 +142,26 @@
+@@ -112,26 +122,26 @@
  		case 'A':
  			pt = _add((t->tm_wday < 0 ||
  				t->tm_wday >= DAYSPERWEEK) ?
@@ -548,7 +548,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/wcsftime
  				pt, ptlim);
  			continue;
  		case 'C':
-@@ -169,7 +179,7 @@
+@@ -149,7 +159,7 @@
  			{
  			int warn2 = IN_SOME;
  
@@ -557,7 +557,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/wcsftime
  			if (warn2 == IN_ALL)
  				warn2 = IN_THIS;
  			if (warn2 > *warnp)
-@@ -177,7 +187,7 @@
+@@ -157,7 +167,7 @@
  			}
  			continue;
  		case 'D':
@@ -566,7 +566,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/wcsftime
  			continue;
  		case 'd':
  			pt = _conv(t->tm_mday, L"%02d", pt, ptlim);
-@@ -198,7 +208,7 @@
+@@ -178,7 +188,7 @@
  			pt = _conv(t->tm_mday, L"%2d", pt, ptlim);
  			continue;
  		case 'F':
@@ -575,7 +575,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/wcsftime
  			continue;
  		case 'H':
  			pt = _conv(t->tm_hour, L"%02d", pt, ptlim);
-@@ -249,15 +259,15 @@
+@@ -229,15 +239,15 @@
  			continue;
  		case 'p':
  			pt = _add((t->tm_hour >= (HOURSPERDAY / 2)) ?
@@ -595,7 +595,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/wcsftime
  			continue;
  		case 'S':
  			pt = _conv(t->tm_sec, L"%02d", pt, ptlim);
-@@ -283,7 +293,7 @@
+@@ -263,7 +273,7 @@
  			}
  			continue;
  		case 'T':
@@ -604,7 +604,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/wcsftime
  			continue;
  		case 't':
  			pt = _add(L"\t", pt, ptlim);
-@@ -388,7 +398,7 @@
+@@ -368,7 +378,7 @@
  			** "date as dd-bbb-YYYY"
  			** (ado, 1993-05-24)
  			*/
@@ -613,7 +613,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/wcsftime
  			continue;
  		case 'W':
  			pt = _conv((t->tm_yday + DAYSPERWEEK -
-@@ -401,13 +411,13 @@
+@@ -381,13 +391,13 @@
  			pt = _conv(t->tm_wday, L"%d", pt, ptlim);
  			continue;
  		case 'X':
@@ -629,7 +629,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/wcsftime
  			if (warn2 == IN_ALL)
  				warn2 = IN_THIS;
  			if (warn2 > *warnp)
-@@ -455,7 +465,7 @@
+@@ -435,7 +445,7 @@
  			}
  			continue;
  		case '+':
