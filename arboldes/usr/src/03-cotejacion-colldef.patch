@@ -3,13 +3,13 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/usr.bin/Makefile src/us
 +++ src/usr.bin/Makefile	Sat Oct 12 13:23:41 2013
 @@ -4,7 +4,7 @@
  
- SUBDIR= apply apropos arch asa at aucat audioctl awk banner \
- 	basename bc bdes bgplg \
+ SUBDIR= apply arch at aucat audioctl awk banner \
+ 	basename bc bgplg \
 -	biff cal calendar cap_mkdb cdio chpass cmp col colrm \
 +	biff cal calendar cap_mkdb cdio chpass cmp col colldef colrm \
  	column comm compress cpp crontab csplit ctags cu cut \
  	dc deroff diff diff3 dirname du encrypt env expand false file \
- 	file2c find fgen finger fmt fold from fsplit fstat ftp gencat getcap \
+ 	find fgen finger fmt fold from fstat ftp gencat getcap \
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/usr.bin/colldef/Makefile src/usr.bin/colldef/Makefile
 --- src54-s/usr.bin/colldef/Makefile	Wed Dec 31 19:00:00 1969
 +++ src/usr.bin/colldef/Makefile	Sat Oct 12 13:23:42 2013
