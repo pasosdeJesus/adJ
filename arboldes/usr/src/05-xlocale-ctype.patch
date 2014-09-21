@@ -1771,19 +1771,18 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/que
 diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src56-orig/lib/libc/locale/towlower.3 src/lib/libc/locale/towlower.3
 --- src56-orig/lib/libc/locale/towlower.3	Mon Mar 25 18:28:42 2013
 +++ src/lib/libc/locale/towlower.3	Fri Apr 12 12:02:28 2013
-@@ -38,7 +38,10 @@
- .Dt TOWLOWER 3
+@@ -39,7 +39,9 @@
  .Os
  .Sh NAME
--.Nm towlower
-+.Nm towlower ,
+ .Nm towlower ,
+-.Nm towupper
 +.Nm towlower_l ,
 +.Nm towupper ,
-+.Nm towupper_l ,
++.Nm towupper_l
  .Nd wide-character case letter conversion utilities
  .Sh SYNOPSIS
  .In wctype.h
-@@ -46,18 +49,45 @@
+@@ -47,18 +49,45 @@
  .Fn towlower "wint_t wc"
  .Ft wint_t
  .Fn towupper "wint_t wc"
@@ -2909,9 +2908,9 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/string/Mak
  MLINKS+=strdup.3 strndup.3
  MLINKS+=strlcpy.3 strlcat.3
  MLINKS+=strlen.3 strnlen.3
-@@ -174,8 +174,11 @@
- MLINKS+=strxfrm.3 strxfrm_l.3
+@@ -175,7 +175,10 @@
  MLINKS+=strerror.3 strerror_r.3
+ MLINKS+=timingsafe_bcmp.3 timingsafe_memcmp.3
  MLINKS+=wcscasecmp.3 wcsncasecmp.3
 +MLINKS+=wcscasecmp.3 wcscasecmp_l.3
 +MLINKS+=wcscasecmp.3 wcsncasecmp_l.3
@@ -2920,7 +2919,6 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/string/Mak
  MLINKS+=wcscpy.3 wcsncpy.3
  MLINKS+=wcslcpy.3 wcslcat.3
 +MLINKS+=wcswidth.3 wcswidth_l.3
- MLINKS+=bcmp.3 timingsafe_bcmp.3
 diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/string/wcswidth.3 src53xlocale2/lib/libc/string/wcswidth.3
 --- src53xlocale1/lib/libc/string/wcswidth.3	Mon Apr  8 21:20:25 2013
 +++ src53xlocale2/lib/libc/string/wcswidth.3	Fri Apr 12 12:07:57 2013

@@ -14,63 +14,62 @@ diff -u src54-coll/lib/libc/locale/Makefile.inc src54-mon/lib/libc/locale/Makefi
 diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/_def_monetary.c src/lib/libc/locale/_def_monetary.c
 --- src55-orig/lib/libc/locale/_def_monetary.c	Mon Aug  8 03:05:35 2005
 +++ src/lib/libc/locale/_def_monetary.c	Wed Dec 31 19:00:00 1969
-@@ -3,18 +3,54 @@
+@@ -3,20 +3,52 @@
   * Written by J.T. Conklin <jtc@netbsd.org>.
   * Public domain.
   */
+-
 +/*
-+* Copyright (c) 2000, 2001 Alexey Zelkin <phantom@FreeBSD.org>
-+* All rights reserved.
-+*
-+* Copyright (c) 2011 The FreeBSD Foundation
-+* All rights reserved.
-+* Portions of this software were developed by David Chisnall
-+* under sponsorship from the FreeBSD Foundation.
-+*
-+* Redistribution and use in source and binary forms, with or without
-+* modification, are permitted provided that the following conditions
-+* are met:
-+* 1. Redistributions of source code must retain the above copyright
-+*    notice, this list of conditions and the following disclaimer.
-+* 2. Redistributions in binary form must reproduce the above copyright
-+*    notice, this list of conditions and the following disclaimer in the
-+*    documentation and/or other materials provided with the distribution.
-+*
-+* THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
-+* ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-+* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-+* ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
-+* FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-+* DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-+* OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-+* HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-+* LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-+* OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-+* SUCH DAMAGE.
-+*/
- 
-+#include <sys/cdefs.h>
++ * Copyright (c) 2000, 2001 Alexey Zelkin <phantom@FreeBSD.org>
++ * All rights reserved.
++ *
++ * Copyright (c) 2011 The FreeBSD Foundation
++ * All rights reserved.
++ * Portions of this software were developed by David Chisnall
++ * under sponsorship from the FreeBSD Foundation.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
++ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
++ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++ * SUCH DAMAGE.
++ */
++ 
  #include <sys/localedef.h>
-+
  #include <limits.h>
  #include <locale.h>
-+#include <stddef.h>
-+#include <stdlib.h>
  
-+static char	numempty[] = { CHAR_MAX, '\0'};
++static char    numempty[] = { CHAR_MAX, '\0'};
 +
  const _MonetaryLocale _DefaultMonetaryLocale =
  {
- 	"", 		/* int_curr_symbol */
- 	"", 		/* currency_symbol */
- 	"", 		/* mon_decimal_point */
- 	"", 		/* mon_thousands_sep */
--	"",		/* mon_grouping */
+ 	"",
+ 	"",
+ 	"",
+ 	"",
 +	numempty,	/* mon_grouping */
- 	"",		/* positive_sign */
- 	"",		/* negative_sign */
- 	CHAR_MAX,	/* int_frac_digits */
-@@ -34,3 +70,151 @@
+ 	"",
+ 	"",
+-	"",
+ 	CHAR_MAX,
+ 	CHAR_MAX,
+ 
+@@ -36,3 +68,151 @@
  };
  
  const _MonetaryLocale *_CurrentMonetaryLocale = &_DefaultMonetaryLocale;
@@ -415,16 +414,15 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/setlocale.c sr
 diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/stdlib/Makefile.inc src/lib/libc/stdlib/Makefile.inc
 --- src55-orig/lib/libc/stdlib/Makefile.inc	Sun Oct  6 20:04:50 2013
 +++ src/lib/libc/stdlib/Makefile.inc	Wed Nov 13 00:05:15 2013
-@@ -7,7 +7,7 @@
- 	cfree.c exit.c ecvt.c gcvt.c getenv.c getopt_long.c \
+@@ -8,6 +8,7 @@
  	getsubopt.c hcreate.c heapsort.c imaxabs.c imaxdiv.c l64a.c llabs.c \
- 	lldiv.c lsearch.c malloc.c merge.c posix_pty.c qsort.c radixsort.c \
--	rand.c random.c realpath.c setenv.c strtoimax.c strtol.c \
-+	rand.c random.c realpath.c setenv.c strtoimax.c strfmon.c strtol.c \
- 	strtoll.c strtonum.c strtoul.c strtoull.c strtoumax.c system.c \
- 	tfind.c tsearch.c _rand48.c drand48.c erand48.c jrand48.c lcong48.c \
- 	lrand48.c mrand48.c nrand48.c seed48.c srand48.c qabs.c qdiv.c _Exit.c
-@@ -36,7 +36,7 @@
+ 	lldiv.c lsearch.c malloc.c reallocarray.c merge.c posix_pty.c \
+ 	qsort.c radixsort.c rand.c random.c realpath.c setenv.c strtoimax.c \
++	strfmon.c \
+ 	strtol.c strtoll.c strtonum.c strtoul.c strtoull.c strtoumax.c \
+ 	system.c tfind.c tsearch.c _rand48.c drand48.c erand48.c jrand48.c \
+ 	lcong48.c lrand48.c mrand48.c nrand48.c seed48.c srand48.c qabs.c \
+@@ -35,7 +36,7 @@
  	getsubopt.3 hcreate.3 imaxabs.3 imaxdiv.3 insque.3 labs.3 ldiv.3 \
  	lldiv.3 lsearch.3 malloc.3 posix_memalign.3 posix_openpt.3 ptsname.3 \
  	qabs.3 qdiv.3 qsort.3 radixsort.3 rand48.3 rand.3 random.3 realpath.3 \
@@ -433,7 +431,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/stdlib/Makefile.inc s
  
  MLINKS+=ecvt.3 fcvt.3 ecvt.3 gcvt.3
  MLINKS+=getenv.3 setenv.3 getenv.3 unsetenv.3 getenv.3 putenv.3
-@@ -56,6 +56,7 @@
+@@ -55,6 +56,7 @@
  MLINKS+=rand48.3 mrand48.3 rand48.3 nrand48.3 rand48.3 jrand48.3
  MLINKS+=rand48.3 srand48.3 rand48.3 seed48.3 rand48.3 lcong48.3
  MLINKS+=ptsname.3 grantpt.3 ptsname.3 unlockpt.3
