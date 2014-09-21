@@ -1,5 +1,13 @@
 
 5.6
+OpenBSD (pelikan@) incluyó los mismos cambios que yo había sugerido para 
+ampliar monetary, sin embargo en orden diferente:
+intercambiando int_p_sep_by_space con int_n_cs_precedes respecto
+a parche enviado.  Esto implica cambio en las tablas para intercambiar esos 
+dos campos.
+
+
+
 Ajustar volumen de forma grafica pues xmixer no está haciendo:
 mixerctl outputs.master=255
 LC_TIME que use formato localedef 

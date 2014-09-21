@@ -1,12 +1,12 @@
 #!/bin/sh
 # Instala/Actualiza un Aprendiendo de Jesús 
 # Dominio público de acuerdo a legislación colombiana. http://www.pasosdejesus.org/dominio_publico_colombia.html. 
-# 2013. vtamara@pasosdeJesus.org
+# 2014. vtamara@pasosdeJesus.org
 
-VER=5.5
+VER=5.6
 REV=0
 VESP=""
-VERP=55
+VERP=56
 
 # Falta /standard/root.hint
 
@@ -818,7 +818,32 @@ if (test -f /usr/libexec/identd) then {
 	chown _nsd /var/nsd/db/nsd.db
 	printf '\nremote-control:\n\tcontrol-enable: yes\n' >> /var/nsd/etc/nsd.conf
 } fi;
+if (test -f /usr/sbin/spray) then {
+	vac="$vac 5.4 a 5.5";	
+	echo "Aplicando actualizaciones de 5.5 a 5.6 " >> /var/tmp/inst-adJ.bitacora;
 
+	rm -f /usr/sbin/spray
+	rm -f /usr/libexec/rpc.sprayd
+	rm -f /usr/share/man/man8/{,rpc.}spray{,d}.8
+	#vi /etc/inetd.conf
+	groupadd -g 103 _smtpq
+	useradd -u103 -g=uid -c"Servicio SMTP" -d/var/empty -s/sbin/nologin _smtpq
+	(cd /var/spool/smtdp; chown -R _smtpq corrupt incoming purge queue temporary)
+	# apache httpd eliminado
+	rm -rf /usr/lib/apache /usr/share/doc/html/httpd /usr/bin{dbmmanage,htdigest} 
+	rm -rf /usr/sbin/{apacehctl,apxs,httpd,logresolve,rotatelogs,suexec}
+	rm -rf /usr/share/man/man1/{dbmmanage.1,htdigest.1}
+	rm -rf /usr/share/man/man8/{apacehctl.8,apxs.8,httpd.8,logresolve.8}
+	rm -rf /usr/share/man/man8/{rotatelogs.8,suexec.8}
+	rm -rf /etc/rc.d/httpd
+
+	groupadd -g 53 _unbound
+	useradd -u53 -g=uid -c"Servicio Unbound" -d/var/unbound -s/sbin/nologin _unbound
+
+	rm -f /usr/include/sys/agpio.h
+
+	exit 1;
+} fi;
 if  (test "$vac" != "") then {
 	dialog --title 'Actualizaciones aplicadas' --msgbox "\\nSe aplicaron actualizaciones: $vac\\n\\n$mac\\n" 15 60
 } fi;

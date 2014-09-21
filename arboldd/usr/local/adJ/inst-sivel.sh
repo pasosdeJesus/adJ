@@ -555,12 +555,12 @@ if (test "$?" != "0") then {
 /(Dispositivos)
 i
 [submenu] (SIVeL)
-	[exec] (SIVeL) {/usr/local/bin/firefox -UILocale es-AR https://127.0.0.1}
+	[exec] (SIVeL) {/usr/local/bin/chrome https://127.0.0.1}
 	[exec] (Editar sitios/sivel/conf.php) {LANG=es xfw /var/www/htdocs/sivel/sitios/sivel/conf.php}
-        [exec] (Sacar copia de base en /var/www/resbase) {cd /var/www/htdocs/sivel/ && bin/pgdump.sh}
-	[exec] (Quemar /var/resbase.img en CD-R) {xterm -e "cd /var/www/htdocs/sivel && bin/copiacd.sh"}
+        [exec] (Sacar copia de bases en /var/www/resbase) {cd /var/www/htdocs/sivel/ && bin/resptodositio.sh}
+	[exec] (Quemar /var/resbase.img en CD-R) {xterm -e "cd /var/www/htdocs/sivel && bin/copiadvd.sh"}
 	[exec] (Conectar a ${usnyn}www.nocheyniebla.org) {xterm -e "ssh -p10022 -R 1234:localhost:22 ${usnyn}@www.nocheyniebla.org"}
-	[exec] (Enviar volcado de la base a ${usnyn}@www.nocheyniebla.org) {cd /var/www/htdocs/sivel/sitios/sivel && ../../bin/pgdump.sh && dm=`date "+%d"` scp -P10022 /var/www/resbase/sivel-dump-$dm.sql.gz ${usnyn}@www.nocheyniebla.org:"}
+	[exec] (Enviar volcado de la base a ${usnyn}@www.nocheyniebla.org) {cd /var/www/htdocs/sivel/sitios/sivel && ../../bin/pgdump.sh && rsync -ravz -e "ssh -p10022" /var/www/resbase/sivel-dump-*.sql.gz ${usnyn}@www.nocheyniebla.org:"}
 [end]
 .
 w
