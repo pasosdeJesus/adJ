@@ -3,8 +3,8 @@ adJ - Aprendiendo de Jesús.
 Distribución para fomentar la construcción del Reino de Dios desde 
 la educación, el respeto por la dignidad humana y la memoria.
 
-Versión: 5.5%%%
-Fecha de publicación: 19/Sep/2014
+Versión: 5.5p1%%%
+Fecha de publicación: xx/yy/2014
 
 !!!NOVEDADES
 
@@ -13,12 +13,12 @@ Con respecto a OpenBSD 5.5 para amd64 y a la edición anterior de este DVD
 
 !KERNEL Y SISTEMA BASE
 
-* Incluye soluciones a 7 fallas de seguridad no corregidas en binarios del sistema base de OpenBSD 5.5 (si han sido corregidas en fuentes de OpenBSD, ver http://www.openbsd.org/errata55.html), en particular cierra CVE-2014-0160 también conocida como "heartbleed bug" (que permitiría a un atacante leer memoria del servidor, que a su vez podría permitir al atacante conocer llaves privadas SSL, claves y tráfico cifrado), y diversos paquetes parchados en particular paquete gnutls que cierra vulnerabilidades CVE-2014-0092 y CVE-2014-1959 (esto podia afectar verificacion de certificados de firefox, courier, filezilla, gnumeric, midori, qemu, qgis, scribus, vlc).
-* Incluye solución a falla en libc en función gethostbyaddr no corregida en fuentes de OpenBSD 5.5 (si solucionado en fuentes de -current que será futuro OpenBSD 5.6, ver http://comments.gmane.org/gmane.os.openbsd.tech/38272).  Por esta falla algunas aplicaciones (como tcpdump) generen un fallo de segmentación cuando hay entradas sin nombre en /etc/hosts.  
 * Desde la versión 5.5 soporte en la librería de C para presentar fechas y horas con las convenciones de cada país de latinoamérica (y de otros locales soportados por OpenBSD).  También soporta xlocale completo.  Estas mejoras fueron aportadas a OpenBSD y se anhela su integración en futuras versiones.  
 * Desde la versión 5.4 se ha importado de FreeBSD soporte y datos para presentar cantidades monetarias y numéricas con las convenciones de cada uno de los países de latinoamérica (y otros locales soportados por OpenBSD).  Esta mejora fue aportada a OpenBSD y se anhela su integración en futuras versiones.
 * Desde la versión 5.2 incluye cotejación (COLLATE) en idioma nativo en el sistema base importado de FreeBSD, tablas de caracteres y cotejación para todos los países de latinoamérica (incluyendo Portugués de Brasil) y portes de PostgreSQL y xfe que soportan cotejación. Vea detalles y una captura de pantalla en http://aprendiendo.pasosdejesus.org/?id=i18n.  Las mejoras se han aportado a OpenBSD y xfe y han sido parcialmente integradas, se espera más integración en futuras versiones de esos proyectos.
-* Parches de seguridad de sistema base hasta:  20.Ago.2014
+* Parches de seguridad de sistema base hasta:  20.Ago.2014, que solucionan 7 fallas de seguridad no corregidas en binarios del sistema base de OpenBSD 5.5 (si han sido corregidas en fuentes de OpenBSD, ver http://www.openbsd.org/errata55.html), en particular cierra CVE-2014-0160 también conocida como "heartbleed bug" (que permitiría a un atacante leer memoria del servidor, que a su vez podría permitir al atacante conocer llaves privadas SSL, claves y tráfico cifrado). Diversos paquetes parchados en particular paquete gnutls que cierra vulnerabilidades CVE-2014-0092 y CVE-2014-1959 (esto podia afectar verificacion de certificados de firefox, courier, filezilla, gnumeric, midori, qemu, qgis, scribus, vlc) y cierra fallas shellshock (CVE-2014-6271) en bash.
+* Incluye solución a falla en libc en función gethostbyaddr no corregida en fuentes de OpenBSD 5.5 (si solucionado en fuentes de -current que será futuro OpenBSD 5.6, ver http://comments.gmane.org/gmane.os.openbsd.tech/38272).  Por esta falla algunas aplicaciones (como tcpdump) generen un fallo de segmentación cuando hay entradas sin nombre en /etc/hosts.  
+
 * Hemos remplazando `daemon' por `servicio' en buena parte del sistema base (ver por ejemplo ==vmstat -s== o ==less /var/log/servicio== o ==man servicio==).  Hasta la versión 5.3 se usó ==service==, pero para disminuir colisiones de nombres desde la 5.4 se emplea ==servicio==.
 
 Entre las novedades reportadas en las `Notas de publicación de OpenBSD 5.5' destacamos:
