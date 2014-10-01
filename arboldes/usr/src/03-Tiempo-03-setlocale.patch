@@ -1,7 +1,20 @@
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/locale/_def_time.c src/lib/libc/locale/_def_time.c
 --- src56-orig/lib/libc/locale/_def_time.c	Mon Apr 28 06:20:02 2014
 +++ /usr/src56-lctime/lib/libc/locale/_def_time.c	Thu Apr 24 21:20:12 2014
-@@ -35,3 +35,39 @@
+@@ -5,8 +5,12 @@
+  */
+ 
+ #include <sys/localedef.h>
++
+ #include <locale.h>
++#include <string.h>
+ 
++#include "locale/loadtextcat.h"
++
+ const _TimeLocale _DefaultTimeLocale =
+ {
+ 	{
+@@ -35,3 +39,39 @@
  };
  
  const _TimeLocale *_CurrentTimeLocale = &_DefaultTimeLocale;
@@ -104,7 +117,7 @@ diff -ruN src56-orig/lib/libc/locale/loadtextcat.h src/lib/libc/locale/loadtextc
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/locale/loadtextcat.c src/lib/libc/locale/loadtextcat.c
 --- src56-orig/lib/libc/locale/loadtextcat.c	Thu Jan  1 03:00:00 1970
 +++ src/lib/libc/locale/loadtextcat.c	Wed May  7 09:09:20 2014
-@@ -0,0 +1,300 @@
+@@ -0,0 +1,301 @@
 +/*
 +** Copyright (c) 1989, 1993
 +**	The Regents of the University of California.  All rights reserved.
@@ -142,6 +155,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/locale/load
 +#include <stdio.h>
 +#include <stdlib.h>
 +#include <string.h>
++#include <unistd.h>
 +
 +/* Amount of lines in a text file with LC_TIME locale */
 +#define LC_TIME_LINES 45
@@ -408,7 +422,17 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/locale/load
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/locale/setlocale.c src/lib/libc/locale/setlocale.c
 --- src56-orig/lib/libc/locale/setlocale.c	Wed Aug 28 11:53:34 2013
 +++ src/lib/libc/locale/setlocale.c	Thu Apr 24 13:57:31 2014
-@@ -203,7 +203,10 @@
+@@ -81,6 +81,9 @@
+ static char	*loadlocale(int);
+ static const char *__get_locale_env(int);
+ 
++extern int __time_load_locale(const char *name);
++
++
+ char *
+ setlocale(int category, const char *locale)
+ {
+@@ -203,7 +206,10 @@
  	case LC_COLLATE:
  	case LC_MONETARY:
  	case LC_NUMERIC:
@@ -419,7 +443,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/locale/setl
  		break;
  	}
  }
-@@ -264,8 +267,11 @@
+@@ -264,8 +270,11 @@
  	case LC_COLLATE:
  	case LC_MONETARY:
  	case LC_NUMERIC:
@@ -432,4 +456,3 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/locale/setl
  	}
  
  	return 0;
-

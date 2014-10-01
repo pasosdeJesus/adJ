@@ -727,8 +727,8 @@ diff -ruN -x obj -x CVS -x *~ -x *orig -x *rej src53xlocale1/lib/libc/locale/isw
 +.Fx
 +extensions.
 --- src53xlocale1/lib/libc/locale/iswctype.c	Mon Mar 25 18:28:42 2013
-+++ src/lib/libc/locale/iswctype.c	Mon Apr  8 21:03:28 2013
-@@ -34,16 +34,26 @@
++++ src/lib/libc/locale/iswctype.c	Mon Apr  8 21:03:28 2013AAA
+@@ -34,22 +34,35 @@
   * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
   * SUCH DAMAGE.
   */
@@ -740,6 +740,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig -x *rej src53xlocale1/lib/libc/locale/isw
 + * $adJ$
 + */
  
++
  #include <wchar.h>
  #include <wctype.h>
  #include <ctype.h>
@@ -753,9 +754,17 @@ diff -ruN -x obj -x CVS -x *~ -x *orig -x *rej src53xlocale1/lib/libc/locale/isw
  #include "_wctrans_local.h"
 +#include "xlocale_private.h"
  
- #ifdef lint
- #define __inline
-@@ -63,12 +73,28 @@
+ static __inline _RuneType __runetype_w(wint_t);
+ static __inline int __isctype_w(wint_t, _RuneType);
+ static __inline wint_t __toupper_w(wint_t);
+ static __inline wint_t __tolower_w(wint_t);
+ 
++int iswspace_l(wint_t, locale_t);
++
+ static __inline _RuneType
+ __runetype_w(wint_t c)
+ {
+@@ -59,12 +72,28 @@
  		rl->rl_runetype[c] : ___runetype_mb(c));
  }
  
@@ -784,7 +793,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig -x *rej src53xlocale1/lib/libc/locale/isw
  static __inline wint_t
  __toupper_w(wint_t c)
  {
-@@ -76,95 +102,233 @@
+@@ -72,95 +101,233 @@
  }
  
  static __inline wint_t
@@ -1018,7 +1027,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig -x *rej src53xlocale1/lib/libc/locale/isw
  int
  wcwidth(wchar_t c)
  {
-@@ -173,6 +337,15 @@
+@@ -169,6 +336,15 @@
  	return -1;
  }
  
@@ -1034,7 +1043,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig -x *rej src53xlocale1/lib/libc/locale/isw
  wctrans_t
  wctrans(const char *charclass)
  {
-@@ -189,6 +362,23 @@
+@@ -185,6 +361,23 @@
  	return ((wctrans_t)NULL);
  }
  
@@ -1058,7 +1067,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig -x *rej src53xlocale1/lib/libc/locale/isw
  wint_t
  towctrans(wint_t c, wctrans_t desc)
  {
-@@ -199,6 +389,22 @@
+@@ -195,6 +388,22 @@
  	return (_towctrans(c, (_WCTransEntry *)desc));
  }
  
@@ -1081,7 +1090,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig -x *rej src53xlocale1/lib/libc/locale/isw
  wctype_t
  wctype(const char *property)
  {
-@@ -211,6 +417,20 @@
+@@ -207,6 +416,20 @@
  	return ((wctype_t)NULL);
  }
  
@@ -1102,7 +1111,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig -x *rej src53xlocale1/lib/libc/locale/isw
  int
  iswctype(wint_t c, wctype_t charclass)
  {
-@@ -224,3 +444,10 @@
+@@ -220,3 +443,10 @@
  
  	return (__isctype_w(c, ((_WCTypeEntry *)charclass)->te_mask));
  }
@@ -2632,7 +2641,7 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/_wc
 diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/_wcstod.h src53xlocale2/lib/libc/locale/_wcstod.h
 --- src53xlocale1/lib/libc/locale/_wcstod.h	Mon Apr  8 21:20:25 2013
 +++ src53xlocale2/lib/libc/locale/_wcstod.h	Fri Apr 12 12:07:57 2013
-@@ -34,17 +34,26 @@
+@@ -34,17 +34,30 @@
   *
   * parameters:
   *	FUNCNAME : function name
@@ -2642,6 +2651,10 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/_wc
 + *      STRTOD_FUNC : conversion function with postfix _l
   */
  
++#include <xlocale.h>
++
++int iswspace_l(wint_t, locale_t);
++
 +
  float_type
 -FUNCNAME(const wchar_t *nptr, wchar_t **endptr)
@@ -2661,7 +2674,7 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/_wc
  
  	/*
  	 * check length of string and call strtod
-@@ -52,7 +61,7 @@
+@@ -52,7 +65,7 @@
  	src = nptr;
  
  	/* skip space first */
@@ -2670,7 +2683,7 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/_wc
  		src++;
  	}
  
-@@ -61,13 +70,13 @@
+@@ -61,13 +74,13 @@
  	if (*src && wcschr(L"+-", *src))
  		src++;
  	aftersign = src;
@@ -2687,7 +2700,7 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/_wc
  		src += 3;
  		if (*src == L'(') {
  			size = 1;
-@@ -80,7 +89,7 @@
+@@ -80,7 +93,7 @@
  	}
  	size = wcsspn(src, L"0123456789");
  	src += size;
@@ -2696,7 +2709,7 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/_wc
  		src++;
  		size = wcsspn(src, L"0123456789");
  		src += size;
-@@ -109,7 +118,7 @@
+@@ -109,7 +122,7 @@
  
  		s = start;
  		memset(&st, 0, sizeof(st));
@@ -2705,7 +2718,7 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/_wc
  
  		buf = malloc(bufsize + 1);
  		if (!buf) {
-@@ -119,7 +128,7 @@
+@@ -119,7 +132,7 @@
  
  		s = start;
  		memset(&st, 0, sizeof(st));
@@ -2714,7 +2727,7 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/_wc
  		if (size_converted != bufsize) {
  			/* XXX should not happen */
  			free(buf);
-@@ -128,12 +137,12 @@
+@@ -128,12 +141,12 @@
  		}
  
  		buf[bufsize] = 0;
@@ -2729,7 +2742,7 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/_wc
  
  			/* LINTED bad interface */
  			*endptr = (wchar_t*)start + size;
-@@ -150,4 +159,10 @@
+@@ -150,4 +163,10 @@
  		*endptr = (wchar_t*)nptr;
  
  	return 0;
@@ -2997,7 +3010,15 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/stdio/Make
 diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/stdio/vdprintf.c src53xlocale2/lib/libc/stdio/vdprintf.c
 --- src53xlocale1/lib/libc/stdio/vdprintf.c	Mon Apr  8 21:20:25 2013
 +++ src53xlocale2/lib/libc/stdio/vdprintf.c	Fri Apr 12 12:07:57 2013
-@@ -48,7 +48,7 @@
+@@ -39,6 +39,7 @@
+ #include <unistd.h>
+ 
+ #include "local.h"
++#include "locale/xlocale_private.h"
+ 
+ static int
+ __dwrite(void *cookie, const char *buf, int n)
+@@ -48,7 +49,7 @@
  }
  
  int
@@ -3006,13 +3027,7 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/stdio/vdpr
  {
  	FILE f;
  	struct __sfileext fext;
-@@ -66,8 +66,15 @@
- 	f._cookie = &fd;
- 	f._write = __dwrite;
- 
--	if ((ret = __vfprintf(&f, fmt, ap)) < 0)
-+	if ((ret = __vfprintf(&f, loc, fmt, ap)) < 0)
- 		return ret;
+@@ -71,3 +72,10 @@
  
  	return fflush(&f) ? EOF : ret;
  }
@@ -3826,3 +3841,22 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/stdio/getw
 +
 +	return fgetwc_l(fp, l);
  }
+diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src56xlocale1/lib/libc/locale/rune_local.h src56xlocale2/lib/libc/locale/rune_local.h
+--- src56xlocale1/lib/libc/locale/rune_local.h	Mon Apr  8 21:20:25 2013
++++ src56xlocale2/lib/libc/locale/rune_local.h	Fri Apr 12 12:07:57 2013
+@@ -30,6 +30,8 @@
+ #ifndef _RUNE_LOCAL_H_
+ #define _RUNE_LOCAL_H_
+ 
++#include <xlocale.h>
++
+ /* rune.c */
+ extern _RuneLocale *_Read_RuneMagi(FILE *fp);
+ extern void _NukeRune(_RuneLocale *);
+@@ -45,5 +47,6 @@
+ 
+ /* ___runetype_mb.c */
+ extern _RuneType ___runetype_mb(wint_t);
++extern _RuneType ___runetype_mb_l(wint_t c, locale_t l);
+ 
+ #endif

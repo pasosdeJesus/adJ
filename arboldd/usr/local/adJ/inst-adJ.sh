@@ -818,17 +818,18 @@ if (test -f /usr/libexec/identd) then {
 	chown _nsd /var/nsd/db/nsd.db
 	printf '\nremote-control:\n\tcontrol-enable: yes\n' >> /var/nsd/etc/nsd.conf
 } fi;
+
 if (test -f /usr/sbin/spray) then {
-	vac="$vac 5.4 a 5.5";	
+	vac="$vac 5.5 a 5.6";	
 	echo "Aplicando actualizaciones de 5.5 a 5.6 " >> /var/tmp/inst-adJ.bitacora;
 
 	rm -f /usr/sbin/spray
 	rm -f /usr/libexec/rpc.sprayd
 	rm -f /usr/share/man/man8/{,rpc.}spray{,d}.8
 	#vi /etc/inetd.conf
-	groupadd -g 103 _smtpq
 	useradd -u103 -g=uid -c"Servicio SMTP" -d/var/empty -s/sbin/nologin _smtpq
 	(cd /var/spool/smtdp; chown -R _smtpq corrupt incoming purge queue temporary)
+
 	# apache httpd eliminado
 	rm -rf /usr/lib/apache /usr/share/doc/html/httpd /usr/bin{dbmmanage,htdigest} 
 	rm -rf /usr/sbin/{apacehctl,apxs,httpd,logresolve,rotatelogs,suexec}
@@ -837,13 +838,165 @@ if (test -f /usr/sbin/spray) then {
 	rm -rf /usr/share/man/man8/{rotatelogs.8,suexec.8}
 	rm -rf /etc/rc.d/httpd
 
-	groupadd -g 53 _unbound
 	useradd -u53 -g=uid -c"Servicio Unbound" -d/var/unbound -s/sbin/nologin _unbound
 
 	rm -f /usr/include/sys/agpio.h
 
-	exit 1;
+	rm -f /etc/ppp/ppp.{conf,linkdown,linkup,secret}.sample
+	rm -f /usr/sbin/ppp /usr/share/man/man8/ppp.8
+	rm -f /usr/sbin/pppctl /usr/share/man/man8/pppctl.8
+	rm -f /usr/sbin/pppoe /usr/share/man/man8/pppoe.8
+
+	rm -f /bin/rcp /usr/share/man/man1/rcp.1
+
+	rm -f /usr/lib/librt{,_p}.a
+
+	rm -f /usr/include/bm.h
+	rm -f /usr/include/md4.h
+
+	rm -f /usr/lib/libwrap{,_p}.*
+	rm -f /usr/libexec/tcpd
+	rm -f /usr/include/tcpd.h
+	rm -f /usr/sbin/tcpd{chk,match}
+	rm -f /usr/share/man/man3/hosts_access.3
+	rm -f /usr/share/man/man5/hosts.{allow,deny}.5
+	rm -f /usr/share/man/man5/hosts_{access,options}.5
+	rm -f /usr/share/man/man8/tcpd{,chk,match}.8
+	rm -f /etc/hosts.{allow,deny}
+
+	rm -f /bin/rmail
+	rm -f /usr/share/man/man8/rmail.8
+	rm -f /usr/libexec/uucpd
+	rm -f /usr/share/man/man8/uucpd.8
+
+	rm -rf /usr/include/altq
+	rm -rf /etc/kerberosV/
+	rm -f /etc/rc.d/{kadmind,kdc,kpasswdd,ipropd_master,ipropd_slave}
+	rm -f /usr/bin/asn1_compile
+	rm -f /usr/bin/compile_et
+	rm -f /usr/bin/kcc
+	rm -f /usr/bin/kdestroy
+	rm -f /usr/bin/kf
+	rm -f /usr/bin/kgetcred
+	rm -f /usr/bin/kinit
+	rm -f /usr/bin/klist
+	rm -f /usr/bin/krb5-config
+	rm -f /usr/bin/slc
+	rm -f /usr/bin/string2key
+	rm -f /usr/bin/verify_krb5_conf
+	rm -rf /usr/include/kerberosV/
+	rm -f /usr/lib/libasn1{,_p}.*
+	rm -f /usr/lib/libcom_err{,_p}.*
+	rm -f /usr/lib/libgssapi{,_p}.*
+	rm -f /usr/lib/libhdb{,_p}.*
+	rm -f /usr/lib/libheimbase{,_p}.*
+	rm -f /usr/lib/libkadm5clnt{,_p}.*
+	rm -f /usr/lib/libkadm5srv{,_p}.*
+	rm -f /usr/lib/libkafs{,_p}.*
+	rm -f /usr/lib/libkdc{,_p}.*
+	rm -f /usr/lib/libkrb5{,_p}.*
+	rm -f /usr/lib/libroken{,_p}.*
+	rm -f /usr/lib/libwind{,_p}.*
+	rm -rf /usr/libdata/perl5/site_perl/*-openbsd/kerberosV/
+	rm -f /usr/libexec/auth/login_krb5{,-or-pwd}
+	rm -f /usr/libexec/hprop{,d}
+	rm -f /usr/libexec/ipropd-{master,slave}
+	rm -f /usr/libexec/kadmind
+	rm -f /usr/libexec/kdc
+	rm -f /usr/libexec/kfd
+	rm -f /usr/libexec/kpasswdd
+	rm -f /usr/sbin/iprop-log
+	rm -f /usr/sbin/kadmin
+	rm -f /usr/sbin/kimpersonate
+	rm -f /usr/sbin/kstash
+	rm -f /usr/sbin/ktutil
+	rm -f /usr/share/info/heimdal.info
+	rm -f /usr/share/man/man1/kdestroy.1
+	rm -f /usr/share/man/man1/kf.1
+	rm -f /usr/share/man/man1/kgetcred.1
+	rm -f /usr/share/man/man1/kinit.1
+	rm -f /usr/share/man/man1/klist.1
+	rm -f /usr/share/man/man1/krb5-config.1
+	rm -f /usr/share/man/man1/kswitch.1
+	rm -f /usr/share/man/man3/ecalloc.3
+	rm -f /usr/share/man/man3/getarg.3
+	rm -f /usr/share/man/man3/{gss,krb5,krb}_*.3
+	rm -f /usr/share/man/man3/gssapi.3
+	rm -f /usr/share/man/man3/gsskrb5_extract_authz_data_from_sec_context.3
+	rm -f /usr/share/man/man3/gsskrb5_register_acceptor_identity.3
+	rm -f /usr/share/man/man3/k_afs_cell_of_file.3
+	rm -f /usr/share/man/man3/k_hasafs.3
+	rm -f /usr/share/man/man3/k_hasafs_recheck.3
+	rm -f /usr/share/man/man3/k_pioctl.3
+	rm -f /usr/share/man/man3/k_setpag.3
+	rm -f /usr/share/man/man3/k_unlog.3
+	rm -f /usr/share/man/man3/kadm5_pwcheck.3
+	rm -f /usr/share/man/man3/kafs*.3
+	rm -f /usr/share/man/man3/krb524_*.3
+	rm -f /usr/share/man/man3/parse_time.3
+	rm -f /usr/share/man/man3/rtbl.3
+	rm -f /usr/share/man/man5/krb5.conf.5
+	rm -f /usr/share/man/man5/mech.5
+	rm -f /usr/share/man/man8/hprop{,d}.8
+	rm -f /usr/share/man/man8/iprop{,-log}.8
+	rm -f /usr/share/man/man8/ipropd-{master,slave}.8
+	rm -f /usr/share/man/man8/kadmin{,d}.8
+	rm -f /usr/share/man/man8/kdc.8
+	rm -f /usr/share/man/man8/kerberos.8
+	rm -f /usr/share/man/man8/kfd.8
+	rm -f /usr/share/man/man8/kimpersonate.8
+	rm -f /usr/share/man/man8/kpasswdd.8
+	rm -f /usr/share/man/man8/kstash.8
+	rm -f /usr/share/man/man8/ktutil.8
+	rm -f /usr/share/man/man8/login_krb5{,-or-pwd}.8
+	rm -f /usr/share/man/man8/string2key.8
+	rm -f /usr/share/man/man8/verify_krb5_conf.8
+
+	rm -f /usr/bin/lynx
+	rm -f /usr/share/man/man1/lynx.1
+	rm -rf /usr/share/doc/html/lynx_help
+	rm -f /etc/lynx.cfg
+
 } fi;
+
+#if (test -f /usr/sbin/named) then {
+#	vac="$vac 5.6 a 5.7";	
+#	echo "Aplicando actualizaciones de 5.6 a 5.7 " >> /var/tmp/inst-adJ.bitacora;
+#
+#
+#	cd /etc/X11/app-defaults
+#	rm Beforelight Bitmap Bitmap-color Bitmap-nocase Chooser Clock-color 
+#	rm Editres Editres-color KOI8RXTerm SshAskpass UXTerm Viewres
+#	rm Viewres-color XCalc XCalc-color XClipboard XClock
+#	rm XClock-color XConsole XFontSel XLoad XLock XLogo
+#	rm XLogo-color XMore XSm XTerm XTerm-color Xedit
+#	rm Xedit-color Xfd Xgc Xgc-color Xmag Xman Xmessage
+#	rm Xmessage-color Xsystrace Xvidtune
+#
+#	rm -f /etc/rc.d/named
+#	rm -f /usr/sbin/dnssec-keygen
+#	rm -f /usr/sbin/dnssec-signzone
+#	rm -f /usr/sbin/named
+#	rm -f /usr/sbin/named-checkconf
+#	rm -f /usr/sbin/named-checkzone
+#	rm -f /usr/sbin/nsupdate
+#	rm -f /usr/sbin/rndc
+#	rm -f /usr/sbin/rndc-confgen
+#	rm -f /usr/share/man/man5/named.conf.5
+#	rm -f /usr/share/man/man5/rndc.conf.5
+#	rm -f /usr/share/man/man8/dnssec-keygen.8
+#	rm -f /usr/share/man/man8/dnssec-signzone.8
+#	rm -f /usr/share/man/man8/named.8
+#	rm -f /usr/share/man/man8/named-checkconf.8
+#	rm -f /usr/share/man/man8/named-checkzone.8
+#	rm -f /usr/share/man/man8/nsupdate.8
+#	rm -f /usr/share/man/man8/rndc-confgen.8
+#	rm -f /usr/share/man/man8/rndc.8
+#
+#	rm -f /usr/sbin/openssl
+#
+#} fi;
+
 if  (test "$vac" != "") then {
 	dialog --title 'Actualizaciones aplicadas' --msgbox "\\nSe aplicaron actualizaciones: $vac\\n\\n$mac\\n" 15 60
 } fi;
@@ -952,43 +1105,20 @@ if (test "$vac" != "") then {
 } fi;
 
 if (test "$actualiza" = "1") then {
-	dialog --title 'Actualización de /etc con sysmerge' --msgbox '\nDurante la ejecución de sysmerge, recomendamos que instale nuevas versiones de todos los archivos (con la opción i), excepto de los archivos:\n  /etc/group\n  /etc/master.passwd\n  /etc/sysctl.conf\n  /var/www/conf/httpd.conf\n  /var/named/etc/named.conf\n' 15 60 
+	dialog --title 'Actualización de /etc con sysmerge' --msgbox '\nDurInstale nuevas versiones de los archivos que no haya modificado (con la opción i)' 15 60 
 
-	mkdir -p /var/tmp/temproot
-	tar xzpf $ARCH/etc??.tgz -C /var/tmp/temproot
-	tar xzpf $ARCH/xetc??.tgz -C /var/tmp/temproot
-	if (test "$?" = "0") then {
-		cmd="cd /var/tmp/temproot/etc;
-		cp -f changelist chio.conf daily dvmrpd.conf ftpusers hostapd.conf lynx.cfg moduli monthly netstart ospf6d.conf pf.os rc rc.conf relayd.conf >> /
-security sensorsd.conf services snmpd.conf syslog.conf weekly /etc;
-                cp mail/README mail/submit.cf mail/helpfile mail/localhost.cf /etc/mail/;
-		#cp ppp/ppp.conf.sample /etc/ppp/;
-		#cp ssh/ssh_config ssh/sshd_config /etc/ssh/;
-		cp ../var/named/etc/root.hint /var/named/etc/
-		cp mtree/* /etc/mtree/;
-		newaliases
-		mtree -qdef /etc/mtree/4.4BSD.dist -p / -u"
-		echo "Por ejecutar: $cmd" >>  /var/tmp/inst-adJ.bitacora
-		eval $cmd;
-		cd /var/tmp/temproot/etc
-		cmd="";
-		if (test "$EDITOR" = "" -a "$VISUAL" = "") then {
-echo "EDITOR=$EDITOR"
-echo "VISUAL=$VISUAL"
-			cmd="EDITOR=mg ";
-		} fi;
-		if (test ! -f /etc/sysmerge.ignore) then {
-			cat > /etc/sysmerge.ignore <<EOF
-/etc/master.passwd
-/etc/group
-/etc/rc.local
-EOF
-		} fi;
-		clear
-		cmd="$cmd sysmerge -s $ARCH/etc$VERP.tgz -x $ARCH/xetc$VERP.tgz"
-		echo $cmd;
-		eval $cmd;
+	if (test "$EDITOR" = "" -a "$VISUAL" = "") then {
+		cmd="EDITOR=mg ";
 	} fi;
+	if (test ! -f /etc/sysmerge.ignore) then {
+		cat > /etc/sysmerge.ignore <<EOF
+EOF
+	} fi;
+	clear
+	# A partir de 5.6 sysmerge utiliza /usr/share/sysmerge/{etc.tgz,xetc.tgz}
+	cmd="$cmd sysmerge "
+	echo $cmd;
+	eval $cmd;
 } fi;
 echo $nv > /var/adJ/verinstadJ.txt
 sh /etc/rc.local >> /var/tmp/inst-adJ.bitacora 2>&1

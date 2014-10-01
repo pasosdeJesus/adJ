@@ -1708,21 +1708,13 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src54-num/lib/libc/locale/setrune
  
  struct localetable {
  	char path[PATH_MAX];
-@@ -173,11 +176,27 @@
+@@ -171,13 +174,18 @@
+ }
+ 
  int
- _xpg4_setrunelocale(const char *locname)
- {
-+
-+	int rv = xlocale_setrunelocale(&__xlocale_global_ctype, locname);
-+	if (rv == 0) {
-+		_CurrentRuneLocale = __xlocale_global_ctype.runes;
-+	}
-+	return rv;
-+}
-+
-+int
+-_xpg4_setrunelocale(const char *locname)
 +xlocale_setrunelocale(struct xlocale_ctype *xc, const char *locname)
-+{
+ {
  	char path[PATH_MAX];
  	_RuneLocale *rl;
  	int error, len;
@@ -1736,7 +1728,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src54-num/lib/libc/locale/setrune
  	if (!strcmp(locname, "C") || !strcmp(locname, "POSIX")) {
  		rl = &_DefaultRuneLocale;
  		goto found;
-@@ -205,8 +224,44 @@
+@@ -205,8 +213,55 @@
  		return ENOENT;
  
  found:
@@ -1755,6 +1747,17 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src54-num/lib/libc/locale/setrune
  
  	return 0;
  }
++
++int
++_xpg4_setrunelocale(const char *locname)
++{
++
++	int rv = xlocale_setrunelocale(&__xlocale_global_ctype, locname);
++	if (rv == 0) {
++		_CurrentRuneLocale = __xlocale_global_ctype.runes;
++	}
++	return rv;
++}
 +
 +void
 +destruct_ctype(void *t)
@@ -3731,7 +3734,7 @@ diff -ruN -x CVS -x obj src53collation/include/xlocale.h src/include/xlocale.h
 +
 +#endif /* _LANGINFO_H */
 +
-+#if defined(_CTYPE_H_) || defined(_WCTYPE_H)
++#if defined(_CTYPE_H_) || defined(_WCTYPE_H_)
 +
 +#include <sys/types.h>
 +

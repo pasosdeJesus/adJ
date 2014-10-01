@@ -115,7 +115,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/lib/libc/locale/wcsxfrm.c s
 diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/lib/libc/string/strcasecmp.c src/lib/libc/string/strcasecmp.c
 --- src53xlocale2/lib/libc/string/strcasecmp.c	Mon Mar 25 18:28:29 2013
 +++ src/lib/libc/string/strcasecmp.c	Wed Apr 10 07:53:41 2013
-@@ -29,8 +29,14 @@
+@@ -29,8 +29,16 @@
   * SUCH DAMAGE.
   */
  
@@ -127,10 +127,12 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/lib/libc/string/strcasecmp.
 +#include "../locale/mblocal.h"
 +#include "../locale/xlocale_private.h"
 +
++inline wint_t towlower_l(wint_t, locale_t);
++
  typedef unsigned char u_char;
  
  /*
-@@ -76,18 +82,17 @@
+@@ -76,18 +84,17 @@
  int
  strcasecmp(const char *s1, const char *s2)
  {
@@ -156,7 +158,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/lib/libc/string/strcasecmp.
  {
  	if (n != 0) {
  		const u_char *cm = charmap;
-@@ -102,4 +107,52 @@
+@@ -102,4 +109,52 @@
  		} while (--n != 0);
  	}
  	return (0);
@@ -356,12 +358,14 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/lib/libc/string/strxfrm.c s
 diff -ruN -x obj -x CVS -x *~ -x *orig src54-num/lib/libc/string/wcscasecmp.c src/lib/libc/string/wcscasecmp.c
 --- src54-num/lib/libc/string/wcscasecmp.c	Mon Dec 23 13:18:26 2013
 +++ src/lib/libc/string/wcscasecmp.c	Mon Dec 23 13:18:42 2013
-@@ -29,14 +29,15 @@
+@@ -29,14 +29,17 @@
  #include <wctype.h>
  
  #include "locale/runetype.h"
 +#include "locale/xlocale_private.h"
  
++inline wint_t towlower_l(wint_t, locale_t);
++
  int
 -wcscasecmp(const wchar_t *s1, const wchar_t *s2)
 +wcscasecmp_l(const wchar_t *s1, const wchar_t *s2, locale_t loc)
@@ -374,7 +378,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src54-num/lib/libc/string/wcscasecmp.c sr
  		if (l1 == 0)
  			return (0);
  	}
-@@ -44,27 +45,41 @@
+@@ -44,27 +47,41 @@
  	c1[1] = L'\0';
  	c2[0] = l2;
  	c2[1] = L'\0';

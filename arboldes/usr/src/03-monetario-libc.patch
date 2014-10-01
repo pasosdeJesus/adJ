@@ -14,7 +14,7 @@ diff -u src54-coll/lib/libc/locale/Makefile.inc src54-mon/lib/libc/locale/Makefi
 diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/_def_monetary.c src/lib/libc/locale/_def_monetary.c
 --- src55-orig/lib/libc/locale/_def_monetary.c	Mon Aug  8 03:05:35 2005
 +++ src/lib/libc/locale/_def_monetary.c	Wed Dec 31 19:00:00 1969
-@@ -3,20 +3,52 @@
+@@ -3,20 +3,57 @@
   * Written by J.T. Conklin <jtc@netbsd.org>.
   * Public domain.
   */
@@ -51,9 +51,14 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/_def_monetary.
 + */
 + 
  #include <sys/localedef.h>
++
  #include <limits.h>
  #include <locale.h>
++#include <stdlib.h>
++#include <string.h>
  
++#include "locale/loadtextcat.h"
++
 +static char    numempty[] = { CHAR_MAX, '\0'};
 +
  const _MonetaryLocale _DefaultMonetaryLocale =
@@ -69,7 +74,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/_def_monetary.
  	CHAR_MAX,
  	CHAR_MAX,
  
-@@ -36,3 +68,151 @@
+@@ -36,3 +73,152 @@
  };
  
  const _MonetaryLocale *_CurrentMonetaryLocale = &_DefaultMonetaryLocale;
@@ -140,9 +145,10 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/_def_monetary.
 +				sizeof(tmon), 
 +				error_buf, sizeof(error_buf));
 +		if (ret == 0 && changed == 1) {
-+			_monetary_locale.mon_grouping =
-+				__fix_locale_grouping_str(tmon.mon_grouping);
-+#define M_ASSIGN_STR(NAME) (_monetary_locale.NAME = tmon.NAME)
++			_monetary_locale.mon_grouping = 
++				(char *)__fix_locale_grouping_str(
++						tmon.mon_grouping);
++#define M_ASSIGN_STR(NAME) (_monetary_locale.NAME = (char *)tmon.NAME)
 +			M_ASSIGN_STR(int_curr_symbol);
 +			M_ASSIGN_STR(currency_symbol);
 +			M_ASSIGN_STR(mon_decimal_point);
@@ -355,7 +361,17 @@ diff -ruN -x *~ -x *orig src54-orig/lib/libc/locale/nl_langinfo.3 src/lib/libc/l
 diff -ruN -x *~ -x *orig src54-orig/lib/libc/locale/nl_langinfo.c src/lib/libc/locale/nl_langinfo.c
 --- src54-orig/lib/libc/locale/nl_langinfo.c	Wed Nov 16 11:48:15 2005
 +++ src/lib/libc/locale/nl_langinfo.c	Wed Dec 11 08:11:54 2013
-@@ -11,6 +11,8 @@
+@@ -5,12 +5,17 @@
+  */
+ 
+ #include <sys/localedef.h>
++
++#include <langinfo.h>
+ #include <locale.h>
+ #include <nl_types.h>
+-#include <langinfo.h>
++#include <string.h>
++
  #include "rune.h"
  #include "runetype.h"
  
@@ -364,7 +380,7 @@ diff -ruN -x *~ -x *orig src54-orig/lib/libc/locale/nl_langinfo.c src/lib/libc/l
  char *
  nl_langinfo(nl_item item)
  {
-@@ -97,8 +99,20 @@
+@@ -97,8 +102,20 @@
  	case NOEXPR:
  		s = _CurrentMessagesLocale->noexpr;
  		break;
@@ -390,7 +406,17 @@ diff -ruN -x *~ -x *orig src54-orig/lib/libc/locale/nl_langinfo.c src/lib/libc/l
 diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/setlocale.c src/lib/libc/locale/setlocale.c
 --- src55-orig/lib/libc/locale/setlocale.c	Tue Dec  3 10:55:22 2013
 +++ src/lib/libc/locale/setlocale.c	Tue Dec  3 11:54:07 2013
-@@ -207,6 +207,9 @@
+@@ -83,8 +83,8 @@
+ static const char *__get_locale_env(int);
+ 
+ extern int __time_load_locale(const char *name);
++extern int __monetary_load_locale(const char *name);
+ 
+-
+ char *
+ setlocale(int category, const char *locale)
+ {
+@@ -210,6 +210,9 @@
  			return;
  		break;
  	case LC_MONETARY:
@@ -398,9 +424,9 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/setlocale.c sr
 +			return;
 +		break;
  	case LC_NUMERIC:
- 	case LC_TIME:
  		break;
-@@ -272,6 +275,10 @@
+ 	case LC_TIME:
+@@ -278,6 +281,10 @@
  		break;
  		
  	case LC_MONETARY:
@@ -409,8 +435,8 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/setlocale.c sr
 +		break;
 +
  	case LC_NUMERIC:
- 	case LC_TIME:
  		return -1;
+ 	case LC_TIME:
 diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/stdlib/Makefile.inc src/lib/libc/stdlib/Makefile.inc
 --- src55-orig/lib/libc/stdlib/Makefile.inc	Sun Oct  6 20:04:50 2013
 +++ src/lib/libc/stdlib/Makefile.inc	Wed Nov 13 00:05:15 2013

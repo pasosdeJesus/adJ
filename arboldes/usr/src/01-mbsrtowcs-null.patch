@@ -1,0 +1,24 @@
+diff -u src56-orig/lib/libc/citrus/citrus_utf8.c src/lib/libc/citrus/citrus_utf8.c
+--- src56-orig/lib/libc/citrus/citrus_utf8.c	Wed May 14 06:10:17 2014
++++ src/lib/libc/citrus/citrus_utf8.c	Wed Oct  1 09:41:56 2014
+@@ -200,7 +200,9 @@
+ 		 * character appears as anything but the first byte of a
+ 		 * multibyte sequence. Check now to avoid doing it in the loop.
+ 		 */
+-		if (nmc > 0 && us->want > 0 && (unsigned char)(*src)[0] < 0x80) {
++		if (*src == NULL || 
++			(nmc > 0 && us->want > 0 
++			 && (unsigned char)(*src)[0] < 0x80)) {
+ 			errno = EILSEQ;
+ 			return ((size_t)-1);
+ 		}
+@@ -229,7 +231,8 @@
+ 	 * character appears as anything but the first byte of a
+ 	 * multibyte sequence. Check now to avoid doing it in the loop.
+ 	 */
+-	if (len > 0 && nmc > 0 && us->want > 0 && (unsigned char)(*src)[0] < 0x80) {
++	if (*src == NULL || (len > 0 && nmc > 0 && us->want > 0 
++				&& (unsigned char)(*src)[0] < 0x80)) {
+ 		errno = EILSEQ;
+ 		return ((size_t)-1);
+ 	}

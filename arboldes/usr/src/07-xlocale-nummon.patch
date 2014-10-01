@@ -1,3 +1,65 @@
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-x6/lib/libc/gdtoa/gdtoaimp.h src/lib/libc/gdtoa/gdtoaimp.h
+--- src56-x6/lib/libc/gdtoa/gdtoaimp.h 	Fri Sep 26 07:55:22 2014
++++ src/lib/libc/gdtoa/gdtoaimp.h	Fri Sep 26 07:49:05 2014
+@@ -492,7 +492,7 @@
+ #define dtoa __dtoa
+ #define gdtoa __gdtoa
+ #define freedtoa __freedtoa
+-#define strtodg __strtodg
++#define strtodg_l __strtodg_l
+ #define g_ddfmt __g_ddfmt
+ #define g_dfmt __g_dfmt
+ #define g_ffmt __g_ffmt
+@@ -509,7 +509,7 @@
+ #define strtordd __strtordd
+ #define strtorf __strtorf
+ #define strtorQ __strtorQ
+-#define strtorx __strtorx
++#define strtorx_l __strtorx_l
+ #define strtorxL __strtorxL
+ #define strtodI __strtodI
+ #define strtopd __strtopd
+@@ -589,7 +589,7 @@
+  extern char *dtoa ANSI((double d, int mode, int ndigits,
+ 			int *decpt, int *sign, char **rve));
+  extern char *g__fmt ANSI((char*, char*, char*, int, ULong, size_t));
+- extern int gethex ANSI((CONST char**, FPI*, Long*, Bigint**, int));
++ extern int gethex ANSI((CONST char**, FPI*, Long*, Bigint**, int, locale_t));
+  extern void hexdig_init_D2A(Void);
+  extern int hexnan ANSI((CONST char**, FPI*, ULong*));
+  extern int hi0bits_D2A ANSI((ULong));
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-x6/lib/libc/gdtoa/gdtoa.h src/lib/libc/gdtoa/gdtoa.h
+--- src56-x6/lib/libc/gdtoa/gdtoa.h 	Fri Sep 26 07:56:59 2014
++++ src/lib/libc/gdtoa/gdtoa.h	Fri Sep 26 07:59:33 2014
+@@ -34,6 +34,7 @@
+ 
+ #include "arith.h"
+ #include <stddef.h> /* for size_t */
++#include <xlocale.h> /* for size_t */
+ 
+ #ifndef Long
+ #define Long int
+@@ -109,9 +110,9 @@
+ extern char* __gdtoa ANSI((FPI *fpi, int be, ULong *bits, int *kindp,
+ 			int mode, int ndigits, int *decpt, char **rve));
+ extern void __freedtoa ANSI((char*));
+-extern float  strtof ANSI((CONST char *, char **));
++extern float  strtof_l ANSI((CONST char *, char **, locale_t));
+ extern double strtod ANSI((CONST char *, char **));
+-extern int __strtodg ANSI((CONST char*, char**, FPI*, Long*, ULong*));
++extern int __strtodg_l ANSI((CONST char*, char**, FPI*, Long*, ULong*, locale_t));
+ 
+ extern char*	__g_ddfmt  ANSI((char*, double*, int, size_t));
+ extern char*	__g_dfmt   ANSI((char*, double*, int, size_t));
+@@ -130,7 +131,7 @@
+ extern int	__strtordd ANSI((CONST char*, char**, int, double*));
+ extern int	__strtorf  ANSI((CONST char*, char**, int, float*));
+ extern int	__strtorQ  ANSI((CONST char*, char**, int, void*));
+-extern int	__strtorx  ANSI((CONST char*, char**, int, void*));
++extern int	__strtorx_l  ANSI((CONST char*, char**, int, void*, locale_t));
+ extern int	__strtorxL ANSI((CONST char*, char**, int, void*));
+ #if 1
+ extern int	__strtodI  ANSI((CONST char*, char**, double*));
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/arch/amd64/gdtoa/strtold.c src/lib/libc/arch/amd64/gdtoa/strtold.c
 --- src54-x6/lib/libc/arch/amd64/gdtoa/strtold.c	Sun Sep  7 15:36:07 2008
 +++ src/lib/libc/arch/amd64/gdtoa/strtold.c	Tue Dec  3 16:12:24 2013
@@ -147,24 +209,41 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/gdtoa/strtod.
  #endif
  {
  #ifdef Avoid_Underflow
-@@ -106,14 +109,14 @@
+@@ -105,23 +108,8 @@
+ 	int inexact, oldinexact;
  #endif
  #ifdef USE_LOCALE /*{{*/
- #ifdef NO_LOCALE_CACHE
+-#ifdef NO_LOCALE_CACHE
 -	char *decimalpoint = localeconv()->decimal_point;
 +	char *decimalpoint = localeconv_l(loc)->decimal_point;
  	int dplen = strlen(decimalpoint);
- #else
- 	char *decimalpoint;
- 	static char *decimalpoint_cache;
- 	static int dplen;
- 	if (!(s0 = decimalpoint_cache)) {
+-#else
+-	char *decimalpoint;
+-	static char *decimalpoint_cache;
+-	static int dplen;
+-	if (!(s0 = decimalpoint_cache)) {
 -		s0 = localeconv()->decimal_point;
-+		s0 = localeconv_l(loc)->decimal_point;
- 		if ((decimalpoint_cache = (char*)MALLOC(strlen(s0) + 1))) {
- 			strlcpy(decimalpoint_cache, s0, strlen(s0) + 1);
- 			s0 = decimalpoint_cache;
-@@ -1102,4 +1105,10 @@
+-		if ((decimalpoint_cache = (char*)MALLOC(strlen(s0) + 1))) {
+-			strlcpy(decimalpoint_cache, s0, strlen(s0) + 1);
+-			s0 = decimalpoint_cache;
+-			}
+-		dplen = strlen(s0);
+-		}
+-	decimalpoint = (char*)s0;
+-#endif /*NO_LOCALE_CACHE*/
+ #else  /*USE_LOCALE}{*/
+ #define dplen 1
+ #endif /*USE_LOCALE}}*/
+@@ -179,7 +167,7 @@
+ #else
+ #define fpi1 fpi
+ #endif
+-			switch((i = gethex(&s, &fpi1, &exp, &bb, sign)) & STRTOG_Retmask) {
++			switch((i = gethex(&s, &fpi1, &exp, &bb, sign, loc)) & STRTOG_Retmask) {
+ 			  case STRTOG_NoMemory:
+ 				goto ovfl;
+ 			  case STRTOG_NoNumber:
+@@ -1102,4 +1090,10 @@
  		*se = (char *)s;
  	return sign ? -dval(&rv) : dval(&rv);
  	}
@@ -204,23 +283,89 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/gdtoa/strtodg
  #endif
  {
  	int abe, abits, asub;
-@@ -355,14 +357,14 @@
+@@ -354,23 +356,8 @@
+ 	ULong *b, *be, y, z;
  	Bigint *ab, *bb, *bb1, *bd, *bd0, *bs, *delta, *rvb, *rvb0;
  #ifdef USE_LOCALE /*{{*/
- #ifdef NO_LOCALE_CACHE
+-#ifdef NO_LOCALE_CACHE
 -	char *decimalpoint = localeconv()->decimal_point;
 +	char *decimalpoint = localeconv_l(loc)->decimal_point;
  	int dplen = strlen(decimalpoint);
- #else
- 	char *decimalpoint;
- 	static char *decimalpoint_cache;
- 	static int dplen;
- 	if (!(s0 = decimalpoint_cache)) {
+-#else
+-	char *decimalpoint;
+-	static char *decimalpoint_cache;
+-	static int dplen;
+-	if (!(s0 = decimalpoint_cache)) {
 -		s0 = localeconv()->decimal_point;
-+		s0 = localeconv_l(loc)->decimal_point;
- 		if ((decimalpoint_cache = (char*)MALLOC(strlen(s0) + 1))) {
- 			strlcpy(decimalpoint_cache, s0, strlen(s0) + 1);
- 			s0 = decimalpoint_cache;
+-		if ((decimalpoint_cache = (char*)MALLOC(strlen(s0) + 1))) {
+-			strlcpy(decimalpoint_cache, s0, strlen(s0) + 1);
+-			s0 = decimalpoint_cache;
+-			}
+-		dplen = strlen(s0);
+-		}
+-	decimalpoint = (char*)s0;
+-#endif /*NO_LOCALE_CACHE*/
+ #else  /*USE_LOCALE}{*/
+ #define dplen 1
+ #endif /*USE_LOCALE}}*/
+@@ -409,7 +396,7 @@
+ 		switch(s[1]) {
+ 		  case 'x':
+ 		  case 'X':
+-			irv = gethex(&s, fpi, exp, &rvb, sign);
++			irv = gethex(&s, fpi, exp, &rvb, sign, loc);
+ 			if (irv == STRTOG_NoMemory)
+ 				return (STRTOG_NoMemory);
+ 			if (irv == STRTOG_NoNumber) {
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-x6/lib/libc/gdtoa/gethex.c src/lib/libc/gdtoa/gethex.c
+--- src56-x6/lib/libc/gdtoa/gethex.c	Wed Jul 20 13:24:47 2011
++++ src/lib/libc/gdtoa/gethex.c	Tue Dec  3 16:12:24 2013
+@@ -29,18 +29,20 @@
+ /* Please send bug reports to David M. Gay (dmg at acm dot org,
+  * with " at " changed at "@" and " dot " changed to ".").	*/
+ 
++
+ #include "gdtoaimp.h"
+ 
+ #ifdef USE_LOCALE
++#include <xlocale.h>
+ #include "locale.h"
+ #endif
+ 
+  int
+ #ifdef KR_headers
+-gethex(sp, fpi, exp, bp, sign)
+-	CONST char **sp; FPI *fpi; Long *exp; Bigint **bp; int sign;
++gethex(sp, fpi, exp, bp, sign, loc)
++	CONST char **sp; FPI *fpi; Long *exp; Bigint **bp; int sign; locale_t loc;
+ #else
+-gethex( CONST char **sp, FPI *fpi, Long *exp, Bigint **bp, int sign)
++gethex( CONST char **sp, FPI *fpi, Long *exp, Bigint **bp, int sign, locale_t loc)
+ #endif
+ {
+ 	Bigint *b;
+@@ -50,20 +52,7 @@
+ 	Long e, e1;
+ #ifdef USE_LOCALE
+ 	int i;
+-#ifdef NO_LOCALE_CACHE
+-	const unsigned char *decimalpoint = (unsigned char*)localeconv()->decimal_point;
+-#else
+-	const unsigned char *decimalpoint;
+-	static unsigned char *decimalpoint_cache;
+-	if (!(s0 = decimalpoint_cache)) {
+-		s0 = (unsigned char*)localeconv()->decimal_point;
+-		if ((decimalpoint_cache = (char*)MALLOC(strlen(s0) + 1))) {
+-			strlcpy(decimalpoint_cache, s0, strlen(s0) + 1);
+-			s0 = decimalpoint_cache;
+-			}
+-		}
+-	decimalpoint = s0;
+-#endif
++	const unsigned char *decimalpoint = (unsigned char*)localeconv_l(loc)->decimal_point;
+ #endif
+ 
+ 	if (!hexdig['0'])
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/gdtoa/strtof.c src/lib/libc/gdtoa/strtof.c
 --- src54-x6/lib/libc/gdtoa/strtof.c	Wed Jul 20 13:24:47 2011
 +++ src/lib/libc/gdtoa/strtof.c	Tue Dec  3 16:12:24 2013
@@ -709,7 +854,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/iswcty
 -	ret.currency_symbol	= _CurrentMonetaryLocale->currency_symbol;
 -	ret.mon_decimal_point	= _CurrentMonetaryLocale->mon_decimal_point;
 -	ret.mon_thousands_sep	= _CurrentMonetaryLocale->mon_thousands_sep;
-+	_MonetaryLocale *mptr = __get_current_monetary_locale(loc)
++	_MonetaryLocale *mptr = __get_current_monetary_locale(loc);
 +	ret->int_curr_symbol	= mptr->int_curr_symbol;
 +	ret->currency_symbol	= mptr->currency_symbol;
 +	ret->mon_decimal_point	= mptr->mon_decimal_point;
@@ -920,20 +1065,15 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src55-orig/lib/libc/locale/xloc
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src55-orig/lib/libc/locale/_def_monetary.c src/lib/libc/locale/_def_monetary.c 
 --- src55-orig/lib/libc/locale/_def_monetary.c	Wed Dec 11 22:06:50 2013
 +++ src/lib/libc/locale/_def_monetary.c	Fri Dec 13 15:43:35 2013
-@@ -35,9 +35,12 @@
-  */
-  
- #include <sys/localedef.h>
-+
- #include <limits.h>
- #include <locale.h>
+@@ -42,6 +42,7 @@
+ #include <string.h>
  
+ #include "locale/loadtextcat.h"
 +#include "locale/xlocale_private.h"
-+
+ 
  static char    numempty[] = { CHAR_MAX, '\0'};
  
- const _MonetaryLocale _DefaultMonetaryLocale =
-@@ -69,42 +72,20 @@
+@@ -74,42 +75,20 @@
  
  const _MonetaryLocale *_CurrentMonetaryLocale = &_DefaultMonetaryLocale;
  
@@ -986,14 +1126,12 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src55-orig/lib/libc/locale/_def
  static char
  cnv(const char *str)
  {
-@@ -114,37 +95,70 @@
- 		i = CHAR_MAX;
+@@ -120,37 +99,71 @@
  	return ((char)i);
  }
--		
+ 		
 -int
 -__monetary_load_locale(const char *name)
-+
 +static int
 +__mload(const char *name, locale_t loc, struct xlocale_monetary *xmon)
  {
@@ -1003,36 +1141,36 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src55-orig/lib/libc/locale/_def
 +	/* This structure is used to load with __part_load_locale, after
 +	 * loading will be converted to _MonetaryLocale */
 +	struct lc_monetary_T {
-+		const char	*int_curr_symbol;
-+		const char	*currency_symbol;
-+		const char	*mon_decimal_point;
-+		const char	*mon_thousands_sep;
-+		const char	*mon_grouping;
-+		const char	*positive_sign;
-+		const char	*negative_sign;
-+		const char	*int_frac_digits;
-+		const char	*frac_digits;
-+		const char	*p_cs_precedes;
-+		const char	*p_sep_by_space;
-+		const char	*n_cs_precedes;
-+		const char	*n_sep_by_space;
-+		const char	*p_sign_posn;
-+		const char	*n_sign_posn;
-+		const char	*int_p_cs_precedes;
-+		const char	*int_n_cs_precedes;
-+		const char	*int_p_sep_by_space;
-+		const char	*int_n_sep_by_space;
-+		const char	*int_p_sign_posn;
-+		const char	*int_n_sign_posn;
++		const char      *int_curr_symbol;
++		const char      *currency_symbol;
++		const char      *mon_decimal_point;
++		const char      *mon_thousands_sep;
++		const char      *mon_grouping;
++		const char      *positive_sign;
++		const char      *negative_sign;
++		const char      *int_frac_digits;
++		const char      *frac_digits;
++		const char      *p_cs_precedes;
++		const char      *p_sep_by_space;
++		const char      *n_cs_precedes;
++		const char      *n_sep_by_space;
++		const char      *p_sign_posn;
++		const char      *n_sign_posn;
++		const char      *int_p_cs_precedes;
++		const char      *int_n_cs_precedes;
++		const char      *int_p_sep_by_space;
++		const char      *int_n_sep_by_space;
++		const char      *int_p_sign_posn;
++		const char      *int_n_sign_posn;
 +	};
  	struct lc_monetary_T tmon;
 -	int changed;
--
 +	_MonetaryLocale *l;
 +	int changed = 0;
-+	
-+ 	FIX_LOCALE(loc);	
-+	l = &xmon->locale;	
+ 
++	FIX_LOCALE(loc);
++	l = &xmon->locale;
++
  	if (strcmp(name, "C") == 0 || strcmp(name, "POSIX") == 0) {
 -		if (_CurrentMonetaryLocale != &_DefaultMonetaryLocale) {
 -			__mlocale_changed = 1;
@@ -1047,20 +1185,21 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src55-orig/lib/libc/locale/_def
 +		loc->using_monetary_locale = 0;
 +		loc->monetary_locale_changed = 1;
  	} else {
-+		xmon->header.header.destructor = destruct_monetary;
++               xmon->header.header.destructor = destruct_monetary;
  		ret = __loadtextcat(name, LC_MONETARY, &changed,
 -				&_monetary_buffer, 
 -				(const char**)&tmon,
-+				&xmon->buffer, 
-+				(const char **)&tmon, 
++                               &xmon->buffer,
++                               (const char **)&tmon,
  				sizeof(tmon), 
  				error_buf, sizeof(error_buf));
  		if (ret == 0 && changed == 1) {
--			_monetary_locale.mon_grouping =
+-			_monetary_locale.mon_grouping = 
 +			xmon->locale.mon_grouping =
- 				__fix_locale_grouping_str(tmon.mon_grouping);
--#define M_ASSIGN_STR(NAME) (_monetary_locale.NAME = tmon.NAME)
-+#define M_ASSIGN_STR(NAME) (xmon->locale.NAME = tmon.NAME)
+ 				(char *)__fix_locale_grouping_str(
+ 						tmon.mon_grouping);
+-#define M_ASSIGN_STR(NAME) (_monetary_locale.NAME = (char *)tmon.NAME)
++#define M_ASSIGN_STR(NAME) (xmon->locale.NAME = (char *)tmon.NAME)
  			M_ASSIGN_STR(int_curr_symbol);
  			M_ASSIGN_STR(currency_symbol);
  			M_ASSIGN_STR(mon_decimal_point);
@@ -1072,7 +1211,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src55-orig/lib/libc/locale/_def
  			M_ASSIGN_CHAR(int_frac_digits);
  			M_ASSIGN_CHAR(frac_digits);
  			M_ASSIGN_CHAR(p_cs_precedes);
-@@ -159,18 +173,58 @@
+@@ -165,18 +178,57 @@
  			M_ASSIGN_CHAR(int_n_sep_by_space);
  			M_ASSIGN_CHAR(int_p_sign_posn);
  			M_ASSIGN_CHAR(int_n_sign_posn);
@@ -1087,7 +1226,6 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src55-orig/lib/libc/locale/_def
 +	return ret;
 +}
  
-+		
 +int
 +__monetary_load_locale(const char *name)
 +{
@@ -1134,7 +1272,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src55-orig/lib/libc/locale/_def
  	printf(	"int_curr_symbol = %s\n"
  			"currency_symbol = %s\n"
  			"mon_decimal_point = %s\n"
-@@ -192,27 +246,27 @@
+@@ -198,27 +250,27 @@
  			"int_n_sep_by_space = %d\n"
  			"int_p_sign_posn = %d\n"
  			"int_n_sign_posn = %d\n",
@@ -1186,19 +1324,15 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src55-orig/lib/libc/locale/_def
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src55-orig/lib/libc/locale/_def_numeric.c src/lib/libc/locale/_def_numeric.c 
 --- src55-orig/lib/libc/locale/_def_numeric.c	Wed Dec 11 22:06:50 2013
 +++ src/lib/libc/locale/_def_numeric.c	Fri Dec 13 15:43:35 2013
-@@ -36,8 +36,11 @@
-  */
+@@ -41,6 +41,7 @@
+ #include <string.h>
  
- #include <sys/localedef.h>
-+
- #include <locale.h>
- 
+ #include "locale/loadtextcat.h"
 +#include "locale/xlocale_private.h"
-+
+ 
  static char	numempty[] = { CHAR_MAX, '\0' };
  
- const _NumericLocale _DefaultNumericLocale =
-@@ -49,52 +52,105 @@
+@@ -53,52 +54,105 @@
  
  const _NumericLocale *_CurrentNumericLocale = &_DefaultNumericLocale;
  
@@ -1371,7 +1505,19 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src55-orig/lib/libc/locale/xloc
  	}
 +	printf("_bufcrncystr=%p\n", loc->_bufcrncystr);
  }
+
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-x6/lib/libc/stdio/vdprintf.c src/lib/libc/stdio/vdprintf.c
+--- src56-x6/lib/libc/stdio/vdprintf.c.orig	Fri Sep 26 10:31:04 2014
++++ src/lib/libc/stdio/vdprintf.c	Fri Sep 26 10:29:35 2014
+@@ -67,7 +67,7 @@
+ 	f._cookie = &fd;
+ 	f._write = __dwrite;
  
+-	if ((ret = __vfprintf(&f, fmt, ap)) < 0)
++	if ((ret = __vfprintf(&f, loc, fmt, ap)) < 0)
+ 		return ret;
+ 
+ 	return fflush(&f) ? EOF : ret;
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/asprintf.c src/lib/libc/stdio/asprintf.c
 --- src54-x6/lib/libc/stdio/asprintf.c	Sat Jun 25 00:32:56 2011
 +++ src/lib/libc/stdio/asprintf.c	Tue Dec  3 16:12:41 2013
@@ -2825,36 +2971,30 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src55-orig/lib/libc/stdlib/strt
 diff -ruN src54-x6/lib/libc/locale/nl_langinfo.c src/lib/libc/locale/nl_langinfo.c
 --- src54-x6/lib/libc/locale/nl_langinfo.c	Wed Dec 11 08:11:54 2013
 +++ src/lib/libc/locale/nl_langinfo.c	Fri Dec 13 15:42:55 2013
-@@ -5,19 +5,23 @@
-  */
- 
- #include <sys/localedef.h>
-+
-+#include <langinfo.h>
+@@ -10,17 +10,21 @@
  #include <locale.h>
  #include <nl_types.h>
--#include <langinfo.h>
+ #include <string.h>
 +#include <xlocale.h>
-+
+ 
  #include "rune.h"
  #include "runetype.h"
 +#include "xlocale_private.h"
  
--static char _bufcrncystr[16];
--
+ static char _bufcrncystr[16];
+ 
  char *
 -nl_langinfo(nl_item item)
 +nl_langinfo_l(nl_item item, locale_t locale)
  {
  	const char *s;
--
+ 
 +	FIX_LOCALE(locale); 
-+	struct lconv *lc = &locale->lconv;
-+	
++        struct lconv *lc = &locale->lconv;
  	switch (item) {
  	case D_T_FMT:
  		s = _CurrentTimeLocale->d_t_fmt;
-@@ -82,10 +86,10 @@
+@@ -85,10 +89,10 @@
  		s = _CurrentTimeLocale->abmon[item - ABMON_1];
  		break;
  	case RADIXCHAR:
@@ -2867,7 +3007,7 @@ diff -ruN src54-x6/lib/libc/locale/nl_langinfo.c src/lib/libc/locale/nl_langinfo
  		break;
  	case YESSTR:
  		s = _CurrentMessagesLocale->yesstr;
-@@ -100,19 +104,19 @@
+@@ -103,19 +107,19 @@
  		s = _CurrentMessagesLocale->noexpr;
  		break;
  	case CRNCYSTR:				
@@ -2896,7 +3036,7 @@ diff -ruN src54-x6/lib/libc/locale/nl_langinfo.c src/lib/libc/locale/nl_langinfo
  		break;
  	case CODESET:
  		s = _CurrentRuneLocale->rl_codeset;
-@@ -125,4 +129,10 @@
+@@ -128,4 +132,10 @@
  	}
  
  	return (char *) s;

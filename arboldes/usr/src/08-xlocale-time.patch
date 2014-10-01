@@ -28,7 +28,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strftime
  const size_t		maxsize;
  const char * const	format;
  const struct tm * const	t;
-+locale_t_loc
++locale_t loc;
  {
  	char *	p;
  	int	warn;
