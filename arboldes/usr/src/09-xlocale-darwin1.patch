@@ -497,9 +497,11 @@ diff -u src-ant/lib/libc/stdio/local.h src/lib/libc/stdio/local.h
 diff -u src-ant/lib/libc/stdio/vfwscanf.c src/lib/libc/stdio/vfwscanf.c
 --- src-ant/lib/libc/stdio/vfwscanf.c	Thu May 15 05:35:00 2014
 +++ src/lib/libc/stdio/vfwscanf.c	Thu May 15 05:35:39 2014
-@@ -40,7 +40,11 @@
+@@ -39,8 +39,13 @@
+ #include <stdio.h>
  #include <stdlib.h>
  #include <string.h>
++#include <wchar.h>
  #include <wctype.h>
 +#include <xlocale.h>
 +
@@ -509,7 +511,7 @@ diff -u src-ant/lib/libc/stdio/vfwscanf.c src/lib/libc/stdio/vfwscanf.c
  
  #ifdef FLOATING_POINT
  #include "floatio.h"
-@@ -99,7 +103,8 @@
+@@ -99,7 +104,8 @@
   * vfwscanf
   */
  int
@@ -519,7 +521,7 @@ diff -u src-ant/lib/libc/stdio/vfwscanf.c src/lib/libc/stdio/vfwscanf.c
  {
  	wint_t c;	/* character from format, or conversion */
  	size_t width;	/* field width, or 0 */
-@@ -140,9 +145,9 @@
+@@ -140,9 +146,9 @@
  		if (c == 0) {
  			return (nassigned);
  		}
@@ -532,7 +534,7 @@ diff -u src-ant/lib/libc/stdio/vfwscanf.c src/lib/libc/stdio/vfwscanf.c
  				;
  			if (c != WEOF)
  				__ungetwc(c, fp);
-@@ -160,7 +165,7 @@
+@@ -160,7 +166,7 @@
  		switch (c) {
  		case '%':
  literal:
@@ -541,7 +543,7 @@ diff -u src-ant/lib/libc/stdio/vfwscanf.c src/lib/libc/stdio/vfwscanf.c
  				goto input_failure;
  			if (wi != c) {
  				__ungetwc(wi, fp);
-@@ -323,7 +328,7 @@
+@@ -323,7 +329,7 @@
  			return (EOF);
  
  		default:	/* compat */
@@ -550,7 +552,7 @@ diff -u src-ant/lib/libc/stdio/vfwscanf.c src/lib/libc/stdio/vfwscanf.c
  				flags |= LONG;
  			c = CT_INT;
  			base = 10;
-@@ -335,8 +340,8 @@
+@@ -335,8 +341,8 @@
  		 * that suppress this.
  		 */
  		if ((flags & NOSKIP) == 0) {
@@ -561,7 +563,7 @@ diff -u src-ant/lib/libc/stdio/vfwscanf.c src/lib/libc/stdio/vfwscanf.c
  				nread++;
  			if (wi == WEOF)
  				goto input_failure;
-@@ -357,7 +362,7 @@
+@@ -357,7 +363,7 @@
  					p = va_arg(ap, wchar_t *);
  				n = 0;
  				while (width-- != 0 &&
@@ -570,7 +572,7 @@ diff -u src-ant/lib/libc/stdio/vfwscanf.c src/lib/libc/stdio/vfwscanf.c
  					if (!(flags & SUPPRESS))
  						*p++ = (wchar_t)wi;
  					n++;
-@@ -373,15 +378,16 @@
+@@ -373,15 +379,16 @@
  				n = 0;
  				bzero(&mbs, sizeof(mbs));
  				while (width != 0 &&
@@ -592,7 +594,7 @@ diff -u src-ant/lib/libc/stdio/vfwscanf.c src/lib/libc/stdio/vfwscanf.c
  						if (nconv == (size_t)-1)
  							goto input_failure;
  						if (nconv > width) {
-@@ -413,7 +419,7 @@
+@@ -413,7 +420,7 @@
  			/* take only those things in the class */
  			if ((flags & SUPPRESS) && (flags & LONG)) {
  				n = 0;
@@ -601,7 +603,7 @@ diff -u src-ant/lib/libc/stdio/vfwscanf.c src/lib/libc/stdio/vfwscanf.c
  				    width-- != 0 && INCCL(wi))
  					n++;
  				if (wi != WEOF)
-@@ -422,7 +428,7 @@
+@@ -422,7 +429,7 @@
  					goto match_failure;
  			} else if (flags & LONG) {
  				p0 = p = va_arg(ap, wchar_t *);
@@ -610,7 +612,7 @@ diff -u src-ant/lib/libc/stdio/vfwscanf.c src/lib/libc/stdio/vfwscanf.c
  				    width-- != 0 && INCCL(wi))
  					*p++ = (wchar_t)wi;
  				if (wi != WEOF)
-@@ -437,16 +443,17 @@
+@@ -437,16 +444,17 @@
  					mbp = va_arg(ap, char *);
  				n = 0;
  				bzero(&mbs, sizeof(mbs));
@@ -633,7 +635,7 @@ diff -u src-ant/lib/libc/stdio/vfwscanf.c src/lib/libc/stdio/vfwscanf.c
  						if (nconv == (size_t)-1)
  							goto input_failure;
  						if (nconv > width)
-@@ -476,17 +483,17 @@
+@@ -476,17 +484,17 @@
  			if (width == 0)
  				width = (size_t)~0;
  			if ((flags & SUPPRESS) && (flags & LONG)) {
@@ -655,7 +657,7 @@ diff -u src-ant/lib/libc/stdio/vfwscanf.c src/lib/libc/stdio/vfwscanf.c
  					*p++ = (wchar_t)wi;
  					nread++;
  				}
-@@ -498,17 +505,18 @@
+@@ -498,17 +506,18 @@
  				if (!(flags & SUPPRESS))
  					mbp = va_arg(ap, char *);
  				bzero(&mbs, sizeof(mbs));
@@ -680,7 +682,7 @@ diff -u src-ant/lib/libc/stdio/vfwscanf.c src/lib/libc/stdio/vfwscanf.c
  						if (nconv == (size_t)-1)
  							goto input_failure;
  						if (nconv > width)
-@@ -539,7 +547,7 @@
+@@ -539,7 +548,7 @@
  				width = sizeof(buf) / sizeof(*buf) - 1;
  			flags |= SIGNOK | NDIGITS | NZDIGITS;
  			for (p = buf; width; width--) {
@@ -689,7 +691,7 @@ diff -u src-ant/lib/libc/stdio/vfwscanf.c src/lib/libc/stdio/vfwscanf.c
  				/*
  				 * Switch on the character; `goto ok'
  				 * if we accept it as a part of number.
-@@ -652,9 +660,9 @@
+@@ -652,9 +661,9 @@
  
  				*p = '\0';
  				if (flags & UNSIGNED)
@@ -701,7 +703,7 @@ diff -u src-ant/lib/libc/stdio/vfwscanf.c src/lib/libc/stdio/vfwscanf.c
  				if (flags & POINTER)
  					*va_arg(ap, void **) =
  					    (void *)(uintptr_t)res;
-@@ -688,7 +696,7 @@
+@@ -688,7 +697,7 @@
  				width = sizeof(buf) / sizeof(*buf) - 1;
  			flags |= SIGNOK | NDIGITS | DPTOK | EXPOK;
  			for (p = buf; width; width--) {
@@ -710,7 +712,7 @@ diff -u src-ant/lib/libc/stdio/vfwscanf.c src/lib/libc/stdio/vfwscanf.c
  				/*
  				 * This code mimicks the integer conversion
  				 * code, but is much simpler.
-@@ -719,9 +727,10 @@
+@@ -719,9 +728,10 @@
  				default:
  					if (decimal_point == 0) {
  						bzero(&mbs, sizeof(mbs));
@@ -724,7 +726,7 @@ diff -u src-ant/lib/libc/stdio/vfwscanf.c src/lib/libc/stdio/vfwscanf.c
  						if (nconv == 0 ||
  						    nconv == (size_t)-1 ||
  						    nconv == (size_t)-2)
-@@ -763,13 +772,13 @@
+@@ -763,13 +773,13 @@
  			if ((flags & SUPPRESS) == 0) {
  				*p = 0;
  				if (flags & LONGDBL) {
@@ -741,7 +743,7 @@ diff -u src-ant/lib/libc/stdio/vfwscanf.c src/lib/libc/stdio/vfwscanf.c
  					*va_arg(ap, float *) = res;
  				}
  				nassigned++;
-@@ -792,7 +801,19 @@
+@@ -792,7 +802,19 @@
  	int r;
  
  	FLOCKFILE(fp);
@@ -874,10 +876,11 @@ diff -u src-ant/lib/libc/stdio/vswscanf.c src/lib/libc/stdio/vswscanf.c
 diff -u src-ant/lib/libc/stdio/vfwprintf.c src/lib/libc/stdio/vfwprintf.c
 --- src-ant/lib/libc/stdio/vfwprintf.c	Thu May 15 05:35:00 2014
 +++ src/lib/libc/stdio/vfwprintf.c	Thu May 15 05:35:39 2014
-@@ -50,8 +50,11 @@
+@@ -50,8 +50,12 @@
  #include <stdlib.h>
  #include <string.h>
  #include <unistd.h>
++#include <wchar.h>
 +#include <xlocale.h>
  
  #include "local.h"
@@ -886,7 +889,7 @@ diff -u src-ant/lib/libc/stdio/vfwprintf.c src/lib/libc/stdio/vfwprintf.c
  #include "fvwrite.h"
  
  union arg {
-@@ -94,7 +97,7 @@
+@@ -94,7 +98,7 @@
   * worries about ungetc buffers and so forth.
   */
  static int
@@ -895,7 +898,7 @@ diff -u src-ant/lib/libc/stdio/vfwprintf.c src/lib/libc/stdio/vfwprintf.c
  {
  	int ret;
  	FILE fake;
-@@ -114,7 +117,7 @@
+@@ -114,7 +118,7 @@
  	fake._lbfsize = 0;	/* not actually used, but Just In Case */
  
  	/* do the work, then copy any error status */
@@ -904,7 +907,7 @@ diff -u src-ant/lib/libc/stdio/vfwprintf.c src/lib/libc/stdio/vfwprintf.c
  	if (ret >= 0 && __sflush(&fake))
  		ret = EOF;
  	if (fake._flags & __SERR)
-@@ -127,7 +130,7 @@
+@@ -127,7 +131,7 @@
   * File must already be locked.
   */
  static wint_t
@@ -913,7 +916,7 @@ diff -u src-ant/lib/libc/stdio/vfwprintf.c src/lib/libc/stdio/vfwprintf.c
  {
  	mbstate_t mbs;
  	char buf[MB_LEN_MAX];
-@@ -136,10 +139,10 @@
+@@ -136,10 +140,10 @@
  	size_t len;
  
  	if ((fp->_flags & __SSTR) == 0)
@@ -926,7 +929,7 @@ diff -u src-ant/lib/libc/stdio/vfwprintf.c src/lib/libc/stdio/vfwprintf.c
  	if (len == (size_t)-1) {
  		fp->_flags |= __SERR;
  		errno = EILSEQ;
-@@ -163,7 +166,7 @@
+@@ -163,7 +167,7 @@
   * To find out what happened check errno for ENOMEM, EILSEQ and EINVAL.
   */
  static wchar_t *
@@ -935,7 +938,7 @@ diff -u src-ant/lib/libc/stdio/vfwprintf.c src/lib/libc/stdio/vfwprintf.c
  {
  	mbstate_t mbs;
  	wchar_t *convbuf, *wcp;
-@@ -186,7 +189,8 @@
+@@ -186,7 +190,8 @@
  		insize = nchars = nconv = 0;
  		bzero(&mbs, sizeof(mbs));
  		while (nchars != (size_t)prec) {
@@ -945,7 +948,7 @@ diff -u src-ant/lib/libc/stdio/vfwprintf.c src/lib/libc/stdio/vfwprintf.c
  			if (nconv == (size_t)0 || nconv == (size_t)-1 ||
  			    nconv == (size_t)-2)
  				break;
-@@ -212,7 +216,7 @@
+@@ -212,7 +217,7 @@
  	bzero(&mbs, sizeof(mbs));
  	nconv = 0;
  	while (insize != 0) {
@@ -954,7 +957,7 @@ diff -u src-ant/lib/libc/stdio/vfwprintf.c src/lib/libc/stdio/vfwprintf.c
  		if (nconv == 0 || nconv == (size_t)-1 || nconv == (size_t)-2)
  			break;
  		wcp++;
-@@ -276,7 +280,8 @@
+@@ -276,7 +281,8 @@
  #define MAXINT		0x1000		/* largest integer size (intmax_t) */
  
  int
@@ -964,7 +967,7 @@ diff -u src-ant/lib/libc/stdio/vfwprintf.c src/lib/libc/stdio/vfwprintf.c
  {
  	wchar_t *fmt;		/* format string */
  	wchar_t ch;		/* character from fmt */
-@@ -356,7 +361,7 @@
+@@ -353,7 +359,7 @@
  	 */
  #define	PRINT(ptr, len)	do {	\
  	for (n3 = 0; n3 < (len); n3++) {	\
@@ -973,7 +976,7 @@ diff -u src-ant/lib/libc/stdio/vfwprintf.c src/lib/libc/stdio/vfwprintf.c
  			goto error; \
  	} \
  } while (0)
-@@ -457,7 +462,7 @@
+@@ -454,7 +460,7 @@
  	/* optimise fwprintf(stderr) (and other unbuffered Unix files) */
  	if ((fp->_flags & (__SNBF|__SWR|__SRW)) == (__SNBF|__SWR) &&
  	    fp->_file >= 0)
@@ -982,7 +985,7 @@ diff -u src-ant/lib/libc/stdio/vfwprintf.c src/lib/libc/stdio/vfwprintf.c
  
  	fmt = (wchar_t *)fmt0;
  	argtable = NULL;
-@@ -677,7 +682,7 @@
+@@ -671,7 +677,7 @@
  				free(convbuf);
  				convbuf = NULL;
  			}
@@ -991,7 +994,7 @@ diff -u src-ant/lib/libc/stdio/vfwprintf.c src/lib/libc/stdio/vfwprintf.c
  			if (cp == NULL)
  				goto error;
  			ndig = dtoaend - dtoaresult;
-@@ -729,7 +734,7 @@
+@@ -723,7 +729,7 @@
  				free(convbuf);
  				convbuf = NULL;
  			}
@@ -1000,7 +1003,7 @@ diff -u src-ant/lib/libc/stdio/vfwprintf.c src/lib/libc/stdio/vfwprintf.c
  			if (cp == NULL)
  				goto error;
  			ndig = dtoaend - dtoaresult;
-@@ -840,7 +845,7 @@
+@@ -834,7 +840,7 @@
  					free(convbuf);
  					convbuf = NULL;
  				}
@@ -1009,7 +1012,7 @@ diff -u src-ant/lib/libc/stdio/vfwprintf.c src/lib/libc/stdio/vfwprintf.c
  				if (convbuf == NULL) {
  					fp->_flags |= __SERR;
  					goto error;
-@@ -998,8 +1003,11 @@
+@@ -992,8 +998,11 @@
  		if ((flags & FPT) == 0) {
  			PRINT(cp, size);
  		} else {	/* glue together f_p fragments */
@@ -1023,7 +1026,7 @@ diff -u src-ant/lib/libc/stdio/vfwprintf.c src/lib/libc/stdio/vfwprintf.c
  			if (!expchar) {	/* %[fF] or sufficiently short %[gG] */
  				if (expt <= 0) {
  					PRINT(zeroes, 1);
-@@ -1069,17 +1077,23 @@
+@@ -1063,17 +1072,23 @@
  }
  
  int
@@ -2033,7 +2036,7 @@ diff -u src-ant/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regres
  	mb3[s] = '\0';
  	snprintf(bp, 1000, "%s", mb3);
  	//printf("bp=%s, bp[0]=%i && bp[1]==%i && bp[2]==%i && bp[3]==%i && bp[4]==%i\n", bp, bp[0], bp[1], bp[2], bp[3], bp[4]);
-@@ -129,22 +138,27 @@
+@@ -129,22 +138,46 @@
  	p(btowc_l('a', l) == L'a');	
  	mbstate_t mbst;
          bzero(&mbst, sizeof(mbst));
@@ -2065,15 +2068,34 @@ diff -u src-ant/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regres
 +	p((s = wcsnrtombs_l(bp, (const wchar_t **)&ws, 10, 10, &mbst, lu)) > 0);
 +	p(wctob_l(L'a', lu) == 'a');
  
-+	mbs=NULL;
-+	p((s = mbsnrtowcs_l(ws, (const char **)&mbs, 7, 5, &mbst, lu)) == (size_t)-1);
-+
 +	freelocale(l);
 +	freelocale(lu);
++
++	// Bug in 5.5 fixed
++	char *msrc = NULL;
++	char mdst[100];
++	wchar_t *wsrc = NULL;
++	wchar_t wdst[100];
++
++	bzero(&mbst, sizeof(mbst));
++        mbsinit(&mbst);
++
++	setlocale(LC_ALL, "POSIX");
++	p((s = wcsrtombs(mdst, (const wchar_t **)NULL, 5, &mbst)) == (size_t)-1);
++	p((s = wcsrtombs(mdst, (const wchar_t **)&wsrc, 5, &mbst)) == (size_t)-1);
++        p((s = mbsrtowcs(wdst, (const char **)NULL, 5, &mbst)) == (size_t)-1);
++        p((s = mbsrtowcs(wdst, (const char **)&msrc, 5, &mbst)) == (size_t)-1);
++
++	setlocale(LC_ALL, "POSIX.UTF-8");
++	p((s = wcsrtombs(mdst, (const wchar_t **)NULL, 5, &mbst)) == (size_t)-1);
++	p((s = wcsrtombs(mdst, (const wchar_t **)&wsrc, 5, &mbst)) == (size_t)-1);
++        p((s = mbsrtowcs(wdst, (const char **)NULL, 5, &mbst)) == (size_t)-1);
++        p((s = mbsrtowcs(wdst, (const char **)&msrc, 5, &mbst)) == (size_t)-1);
++
  }
  
  void test_ctype() {
-@@ -250,7 +264,7 @@
+@@ -250,7 +283,7 @@
  	p(!isspecial_l('a', es_CO_UTF_8));
  	p(iswspecial_l(0x00b2, es_CO_UTF_8));
  	p(!iswspecial_l(L'\0', es_CO_UTF_8));
@@ -2082,7 +2104,7 @@ diff -u src-ant/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regres
  	p(tolower_l('A', es_CO_UTF_8) == 'a');
  	p(tolower('A') == 'a');
  	p(_tolower('A') == 'a');
-@@ -280,6 +294,7 @@
+@@ -280,6 +313,7 @@
  		p(towctrans_l(lu[c][0], tu, es_CO_UTF_8) == lu[c][1]);
  		p(towupper_l(lu[c][0], es_CO_UTF_8) == lu[c][1]);
  	}
@@ -2090,7 +2112,7 @@ diff -u src-ant/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regres
  
  }
  
-@@ -294,7 +309,7 @@
+@@ -294,7 +328,7 @@
  	p(strcasecmp("n", "N") == 0);
  	p(strcasecmp("\0xf1", "\0xd1") == 0); // ñ Ñ
  	nl = setlocale(LC_ALL, "es_CO.UTF-8");
@@ -2099,7 +2121,7 @@ diff -u src-ant/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regres
  	printf("locale %s\n", nl);
  	printf("__mb_cur_max=%i\n", __mb_cur_max);
  	p(__mb_cur_max == 4); 
-@@ -422,6 +437,7 @@
+@@ -422,6 +456,7 @@
  	p(wcscasecmp(L"á", L"Á") == 0);
  	p(wcscasecmp(L"a", L"á") <= 0);
  	p(wcsncasecmp_l(L"n", L"N", 1, es_CO_UTF_8) == 0);
@@ -2107,7 +2129,7 @@ diff -u src-ant/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regres
  }
  
  void test_monetary() 
-@@ -459,30 +475,48 @@
+@@ -459,30 +494,48 @@
  	p(p->n_sign_posn == 1);
  	strfmon_l(col, sizeof(col), es_CO_UTF_8, "%n", -3456.781); 
  	p(strcmp(col, "-$ 3.456,78") == 0);
@@ -2159,7 +2181,7 @@ diff -u src-ant/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regres
  	snprintf_l(col, sizeof(col), es_CO_UTF_8, "%f", 1000000.01);
  	p(strcmp(col, "1000000,010000") == 0);
  	snprintf_l(col, sizeof(col), es_CO_UTF_8, "%'d", 1000000);
-@@ -498,13 +532,71 @@
+@@ -498,13 +551,71 @@
  
  	fl = strtof_l(" -3,1", NULL, es_CO_UTF_8);
  	p(fabs(fl + 3.1) < FLT_EPSILON);
@@ -2231,7 +2253,7 @@ diff -u src-ant/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regres
  }
  
  void test_time() 
-@@ -529,8 +621,130 @@
+@@ -529,8 +640,130 @@
  	p(strcmp(col, "martes") == 0);
  	wcsftime_l(wcol, sizeof(wcol), L"%A", &tl, esc);
  	p(wcscmp(wcol, L"martes") == 0);
@@ -2362,7 +2384,7 @@ diff -u src-ant/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regres
  int main()
  {
  	test_xlocale();
-@@ -540,6 +754,7 @@
+@@ -540,6 +773,7 @@
  	test_monetary();
  	test_numeric();
  	test_time();

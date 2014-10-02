@@ -641,19 +641,15 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/wcsftime
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/_def_time.c src/lib/libc/locale/_def_time.c
 --- src54-x6/lib/libc/locale/_def_time.c	Sat Feb  9 14:26:54 2013
 +++ src/lib/libc/locale/_def_time.c	Tue Dec  3 16:12:45 2013
-@@ -5,8 +5,11 @@
-  */
+@@ -10,6 +10,7 @@
+ #include <string.h>
  
- #include <sys/localedef.h>
-+
- #include <locale.h>
- 
+ #include "locale/loadtextcat.h"
 +#include "locale/xlocale_private.h"
-+
+ 
  const _TimeLocale _DefaultTimeLocale =
  {
- 	{
-@@ -37,37 +40,111 @@
+@@ -41,37 +42,111 @@
  const _TimeLocale *_CurrentTimeLocale = &_DefaultTimeLocale;
  
  /* This will be time locale when not using DefaultTimeLocale */
@@ -789,19 +785,18 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/_def_t
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/nl_langinfo.c src/lib/libc/locale/nl_langinfo.c
 --- src54-x6/lib/libc/locale/nl_langinfo.c	Sat Feb  9 14:26:54 2013
 +++ src/lib/libc/locale/nl_langinfo.c	Tue Dec  3 16:12:45 2013
-@@ -11,6 +11,7 @@
- #include <nl_types.h>
+@@ -12,6 +12,7 @@
+ #include <string.h>
  #include <xlocale.h>
  
 +#include "mblocal.h"
  #include "rune.h"
  #include "runetype.h"
  #include "xlocale_private.h"
-@@ -21,23 +22,25 @@
- 	const char *s;
+@@ -25,22 +26,25 @@
+ 
  	FIX_LOCALE(locale); 
- 	struct lconv *lc = &locale->lconv;
--	
+         struct lconv *lc = &locale->lconv;
 +	_TimeLocale *tl = __get_current_time_locale(locale);
 +	_RuneLocale *rl = ((struct xlocale_ctype *)locale->components[XLC_CTYPE])->runes;
 +
@@ -829,7 +824,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/nl_lan
  		break;
  	case DAY_1:
  	case DAY_2:
-@@ -46,7 +49,7 @@
+@@ -49,7 +53,7 @@
  	case DAY_5:
  	case DAY_6:
  	case DAY_7:
@@ -838,7 +833,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/nl_lan
  		break;
  	case ABDAY_1:
  	case ABDAY_2:
-@@ -55,7 +58,7 @@
+@@ -58,7 +62,7 @@
  	case ABDAY_5:
  	case ABDAY_6:
  	case ABDAY_7:
@@ -847,7 +842,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/nl_lan
  		break;
  	case MON_1:
  	case MON_2:
-@@ -69,7 +72,7 @@
+@@ -72,7 +76,7 @@
  	case MON_10:
  	case MON_11:
  	case MON_12:
@@ -856,7 +851,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/nl_lan
  		break;
  	case ABMON_1:
  	case ABMON_2:
-@@ -83,7 +86,7 @@
+@@ -86,7 +90,7 @@
  	case ABMON_10:
  	case ABMON_11:
  	case ABMON_12:
@@ -865,7 +860,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/nl_lan
  		break;
  	case RADIXCHAR:
  		s = lc->decimal_point;
-@@ -119,7 +122,7 @@
+@@ -122,7 +126,7 @@
  		s = locale->_bufcrncystr;
  		break;
  	case CODESET:

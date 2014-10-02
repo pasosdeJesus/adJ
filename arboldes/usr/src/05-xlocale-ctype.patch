@@ -1716,7 +1716,21 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/fre
 diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/mbsrtowcs.3 src53xlocale2/lib/libc/locale/mbsrtowcs.3
 --- src53xlocale1/lib/libc/locale/mbsrtowcs.3	Mon Apr  8 21:20:56 2013
 +++ src53xlocale2/lib/libc/locale/mbsrtowcs.3	Fri Apr 12 12:02:06 2013
-@@ -74,7 +74,7 @@
+@@ -41,11 +41,13 @@
+ .In wchar.h
+ .Ft size_t
+ .Fn mbsrtowcs "wchar_t * restrict dst" "const char ** restrict src" "size_t len" \
++"mbstate_t * restrict ps"
+ .Ft size_t
+ .Fn mbsrtowcs_l "wchar_t * restrict dst" "const char ** restrict src" "size_t len" \
+ "mbstate_t * restrict ps" "locale_t l"
+ .Ft size_t
+ .Fn mbsnrtowcs "wchar_t * restrict dst" "const char ** restrict src" "size_t nmc" \
++"size_t len" "mbstate_t * restrict ps"
+ .Ft size_t
+ .Fn mbsnrtowcs_l "wchar_t * restrict dst" "const char ** restrict src" "size_t nmc" \
+ "size_t len" "mbstate_t * restrict ps" "locale_t l"
+@@ -74,7 +76,7 @@
  .El
  .Pp
  The
@@ -1725,7 +1739,7 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/mbs
  and
  .Fn mbsnrtowcs_l
  functions are equivalent to
-@@ -117,7 +117,7 @@
+@@ -117,7 +119,7 @@
  .Fn mbsnrtowcs_l
  functions is affected by the
  .Dv LC_CTYPE
@@ -1949,7 +1963,24 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/wcs
 diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/wcsrtombs.3 src53xlocale2/lib/libc/locale/wcsrtombs.3
 --- src53xlocale1/lib/libc/locale/wcsrtombs.3	Mon Apr  8 21:20:56 2013
 +++ src53xlocale2/lib/libc/locale/wcsrtombs.3	Fri Apr 12 12:12:43 2013
-@@ -122,7 +122,6 @@
+@@ -41,13 +41,15 @@
+ .In wchar.h
+ .Ft size_t
+ .Fn wcsrtombs "const char * restrict dst" "const wchar_t ** restrict src" \
++"size_t len" "mbstate_t * restrict ps"
+ .Ft size_t
+ .Fn wcsrtombs_l "const char * restrict dst" "const wchar_t ** restrict src" \
+ "size_t len" "mbstate_t * restrict ps" "locale_t l"
+ .Ft size_t
+ .Fn wcsnrtombs "const char * restrict dst" "const wchar_t ** restrict src" \
++"size_t nwc" "size_t len" "mbstate_t * restrict ps"
+ .Ft size_t
+-.Fn wcsnrtombs "const char * restrict dst" "const wchar_t ** restrict src" \
++.Fn wcsnrtombs_l "const char * restrict dst" "const wchar_t ** restrict src" \
+ "size_t nwc" "size_t len" "mbstate_t * restrict ps" "locale_t l"
+ .\" ----------------------------------------------------------------------
+ .Sh DESCRIPTION
+@@ -122,7 +124,6 @@
  .Dv LC_CTYPE
  category of the locale provided as parameter, see
  .Xr xlocale 3
