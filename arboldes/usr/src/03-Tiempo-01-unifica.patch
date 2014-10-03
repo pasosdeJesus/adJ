@@ -1,72 +1,27 @@
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/sys/sys/localedef.h src/sys/sys/localedef.h
---- src56-orig/sys/sys/localedef.h	Sun Apr 21 17:31:47 1996
-+++ src/sys/sys/localedef.h	Thu Apr 24 21:44:36 2014
-@@ -84,15 +84,16 @@
- 
- 
- typedef struct {
--	const char *abday[7];
--	const char *day[7];
--	const char *abmon[12];
--	const char *mon[12];
--	const char *am_pm[2];
--	const char *d_t_fmt;
--	const char *d_fmt;
--	const char *t_fmt;
--	const char *t_fmt_ampm;
-+	const char *abmon[12];	/*	mon 	*/
-+	const char *mon[12];	/*	month 	*/
-+	const char *abday[7];   /*	wday 	*/
-+	const char *day[7];	/*	weekday */
-+	const char *t_fmt; 	/* %X 	X_fmt	*/
-+	const char *d_fmt; 	/* %x 	x_fmt */
-+	const char *d_t_fmt; 	/* %c 	c_fmt */
-+	const char *am_pm[2];	/*	am pm */
-+ 	const char *date_fmt; 	/* %+ 	date_fmt */
-+	const char *t_fmt_ampm; /* %r 	ampm_fmt */
+--- src56-orig/sys/sys/localedef.h	Fri Sep 19 13:09:44 2014
++++ src/sys/sys/localedef.h	Thu Oct  2 20:15:19 2014
+@@ -99,6 +99,7 @@
+ 	const char *d_fmt;
+ 	const char *t_fmt;
+ 	const char *t_fmt_ampm;
++	const char *date_fmt;
  } _TimeLocale;
  
  extern const _TimeLocale *_CurrentTimeLocale;
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/locale/_def_time.c src/lib/libc/locale/_def_time.c
 --- src56-orig/lib/libc/locale/_def_time.c	Sun Oct  9 01:39:53 2011
-+++ src/lib/libc/locale/_def_time.c	Thu Apr 24 21:20:12 2014
-@@ -10,13 +10,6 @@
- const _TimeLocale _DefaultTimeLocale =
- {
- 	{
--		"Sun","Mon","Tue","Wed","Thu","Fri","Sat",
--	},
--	{
--		"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday",
--		"Friday", "Saturday"
--	},
--	{
- 		"Jan", "Feb", "Mar", "Apr", "May", "Jun",
- 		"Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
- 	},
-@@ -25,11 +18,19 @@
- 		"August", "September", "October", "November", "December"
- 	},
- 	{
--		"AM", "PM"
-+		"Sun","Mon","Tue","Wed","Thu","Fri","Sat",
- 	},
--	"%a %b %e %H:%M:%S %Y",
--	"%m/%d/%y",
-+	{
-+		"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday",
-+		"Friday", "Saturday"
-+	},
++++ src/lib/libc/locale/_def_time.c	Thu Oct  2 20:19:54 2014
+@@ -30,7 +30,8 @@
+ 	"%a %b %e %H:%M:%S %Y",
+ 	"%m/%d/%y",
  	"%H:%M:%S",
-+	"%m/%d/%y",
-+	"%a %b %e %H:%M:%S %Y",
-+	{
-+		"AM", "PM"
-+	},
-+	"%a %b %e %H:%M:%S %Z %Y",
- 	"%I:%M:%S %p"
+-	"%I:%M:%S %p"
++	"%I:%M:%S %p",
++	"%a %b %e %H:%M:%S %Z %Y"
  };
  
+ const _TimeLocale *_CurrentTimeLocale = &_DefaultTimeLocale;
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/strftime.c src/lib/libc/time/strftime.c
 --- src56-orig/lib/libc/time/strftime.c	Thu Sep 13 06:14:20 2012
 +++ src/lib/libc/time/strftime.c	Fri Apr 25 10:16:20 2014
@@ -227,14 +182,14 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/strfti
  					int	base;
  					int	yday;
 -					int	wday;
-+					int	abday;
++					int	wday;
  					int	w;
  
  					year = t->tm_year;
  					base = TM_YEAR_BASE;
  					yday = t->tm_yday;
 -					wday = t->tm_wday;
-+					abday = t->tm_wday;
++					wday = t->tm_wday;
  					for ( ; ; ) {
  						int	len;
  						int	bot;
@@ -243,7 +198,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/strfti
  						** the ISO year begin on?
  						*/
 -						bot = ((yday + 11 - wday) %
-+						bot = ((yday + 11 - abday) %
++						bot = ((yday + 11 - wday) %
  							DAYSPERWEEK) - 3;
  						/*
  						** What yday does the NEXT
