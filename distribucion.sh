@@ -537,15 +537,6 @@ if (test "$sn" = "s") then {
 	rm -f $dini/$V$VESP-$ARQ/{MD5,CKSUM,index.txt,cd??.iso,}
 } fi;
 
-echo " *> Generar paquetes de la distribución AprendiendoDeJesús en $dini/$V$VESP-$ARQ/paquetes " | tee -a /var/tmp/distrib-adJ.bitacora;
-if (test "$inter" = "-i") then {
-	echo -n "(s/n)? "
-	read sn
-}
-else {
-	sn=$autoPaquetes
-} fi;
-
 
 paraexc="";
 function paquete {
@@ -574,7 +565,7 @@ function paquete {
 		exit 1;
 	} fi;
 	echo "*> Creando paquete $nom:$cat" | tee -a /var/tmp/distrib-adJ.bitacora;
-	(cd /usr/ports/$mys/$cat/$nom/$subd/ ; make package)
+	(cd /usr/ports/$mys/$cat/$nom/$subd/ ; make -j4 package)
 	if (test ! -f /etc/signify/adJ-$VP-pkg.sec) then {
 		echo "No hay llave privada /etc/signify/adJ-$VP-pkg.sec";
 		echo "Si no lo ha hecho con signify -G -c \"Firma adJ $V para paquetes\" -n -s /etc/signify/adJ-$VP-pkg.sec -p /etc/signify/adJ-$VP-pkg.pub"
@@ -606,6 +597,51 @@ function paquete {
 	} fi;
 }
 
+echo " *> Compilar todos los paquetes de Conteniod.txt en $dini/$V$VESP-$ARQ/paquetes " | tee -a /var/tmp/distrib-adJ.bitacora;
+if (test "$inter" = "-i") then {
+	echo -n "(s/n)? "
+	read sn
+}
+else {
+	sn=$autoTodosPaquetes
+} fi;
+echo $sn
+if (test "$sn" = "s") then {
+
+  #paquete qemu emulators
+  #paquete postgis geo
+  #paquete libv8 lang
+  #paquete py-lxml textproc
+  #paquete py-qt4 x11
+  #paquete qgis geo
+  
+  #paquete ORBit2 devel
+  #paquete libreoffice editors paquetes "libreoffice libreoffice-i18n-es" 
+  #paquete aspell textproc paquetes "aspell aspell-es" 
+  #libreoffice-i18n-es
+  exit 1;
+  for i in `grep "^.*-\\[v\\]" Contenido.txt | sed -e "s/^\(.*\)-\[v\].*/\1/g"`; do 
+	s=`grep "^${i}-[0-9]" /usr/ports/INDEX | head -n 1 | sed -e "s/^[^|]*|\([^\/]*\)\/.*/\1/g"`
+	echo "$i - $s"
+	if (test "$s" = "" -o ! -d /usr/ports/$s/$i) then {
+		echo "Paquete $i no es compilable en /usr/ports/"
+	} else {
+		paquete $i $s
+	} fi;
+  done
+ 
+} fi;
+	
+echo " *> Generar paquetes de la distribución AprendiendoDeJesús en $dini/$V$VESP-$ARQ/paquetes " | tee -a /var/tmp/distrib-adJ.bitacora;
+if (test "$inter" = "-i") then {
+	echo -n "(s/n)? "
+	read sn
+}
+else {
+	sn=$autoPaquetes
+} fi;
+
+
 echo $sn
 if (test "$sn" = "s") then {
 	if (test "$ARQ" != "$narq") then {
@@ -622,14 +658,15 @@ if (test "$sn" = "s") then {
   #paquete dialog misc
   # paquete php lang paquetes "php php-fpm php-gd php-mcrypt php-pdo_pgsql" 5.5  Tocó dejar 5.4 por pear -> SIVeL 1.2
 
+ 
   # paquete pear www paquetes "pear pear-utils"  Toco quedarse en PHP 5.3 para SIVeL 1.2
   #paquete pear www 
 
-
   # Retroportados
-  #paquete ruby lang paquetes "ruby ruby21-ri_docs" 2.1
-  paquete php lang paquetes "php php-fpm php-gd php-intl php-ldap php-mcrypt php-pdo_pgsql php-pgsql php-zip" 5.4
   paquete postgresql databases paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs"
+  exit 1;
+  paquete php lang paquetes "php php-fpm php-gd php-intl php-ldap php-mcrypt php-pdo_pgsql php-pgsql php-zip" 5.4
+  paquete ruby lang paquetes "ruby ruby21-ri_docs" 2.1
   #paquete png graphics
   #paquete libxml textproc
   #paquete gnutls security
@@ -943,4 +980,3 @@ l=`(cd $V$VESP-$ARQ; ls *tgz INSTALL.amd64 bsd* cd*)`;
 cmd="(cd $V$VESP-$ARQ; cksum -a sha256 $l >  SHA256; signify -S -e -s /etc/signify/adJ-$VP-base.sec -x SHA256.sig -m SHA256)";
 echo $cmd;
 eval $cmd;
-

@@ -74,6 +74,8 @@ export autoElimXDist=n
 # Elimina distribución de Xenocara
 export autoJuegosInstalacion=n
 # Crear juegos de instalación en subdirectorio de este
+export autoTodosPaquetes=n
+# Compilar todos los paquetes (util en Octubre y Abril)
 export autoPaquetes=n
 # Compilar paquetes especiales que hacen parte de la distribución
 

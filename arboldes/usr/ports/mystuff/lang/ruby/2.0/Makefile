@@ -1,8 +1,4 @@
-# $OpenBSD: Makefile,v 1.9 2013/11/25 14:16:23 sthen Exp $
-
-BROKEN-sparc64	=	segfaults during build
-BROKEN-hppa =		miniruby abort trap when generating rdoc
-BROKEN-alpha =		miniruby abort trap when generating rdoc
+# $OpenBSD: Makefile,v 1.14 2014/09/22 15:14:48 jeremy Exp $
 
 COMMENT-main =		object oriented script language with threads
 COMMENT-gdbm =		gdbm interface for ruby
@@ -10,7 +6,7 @@ COMMENT-tk =		tk interface for ruby
 COMMENT-ri_docs =	ri documentation files for ruby
 
 VERSION =		2.0.0
-PATCHLEVEL =		353
+PATCHLEVEL =		576
 RUBYLIBREV =		2.0
 DISTNAME =		ruby-${VERSION}-p${PATCHLEVEL}
 
@@ -52,7 +48,8 @@ LIB_DEPENDS-main =	devel/libyaml \
 
 PSEUDO_FLAVORS=		no_x11 no_ri_docs
 # Do not build the RI docs on slow arches
-.if ${MACHINE_ARCH:Marm} || ${MACHINE_ARCH:Msparc} || ${MACHINE_ARCH:Mvax}
+.if ${MACHINE_ARCH:Marm} || ${MACHINE_ARCH:Msparc} || ${MACHINE_ARCH:Mvax} || \
+	${MACHINE_ARCH:Malpha} || ${MACHINE_ARCH:Mhppa}
 FLAVOR?=		no_ri_docs
 .else
 FLAVOR?=
@@ -63,17 +60,19 @@ MULTI_PACKAGES =	-main -gdbm
 WANTLIB-gdbm =		c m gdbm pthread ruby20
 LIB_DEPENDS-gdbm =	databases/gdbm \
 			lang/ruby/${REV},-main>=${VERSION}.${PATCHLEVEL},<2.1
-RUN_DEPENDS-gdbm =	
+RUN_DEPENDS-gdbm =
 
 .if !${FLAVOR:Mno_x11}
 MULTI_PACKAGES+=	-tk
 CONFIGURE_ARGS+=	--with-tcl-include=${PREFIX}/include/tcl8.5 \
 			--with-tk-include=${PREFIX}/include/tk8.5 \
+			--with-tcllib=tcl85 \
+			--with-tklib=tk85 \
 			--with-X11-dir=${X11BASE}
 WANTLIB-tk =		X11 c m pthread ruby20 tcl85 tk85
 LIB_DEPENDS-tk =	tk->=8.5,<8.6:x11/tk/8.5 \
 			lang/ruby/${REV},-main>=${VERSION}.${PATCHLEVEL},<2.1
-RUN_DEPENDS-tk =	
+RUN_DEPENDS-tk =
 .endif
 
 .if !${FLAVOR:Mno_ri_docs}
@@ -87,7 +86,7 @@ SUBST_VARS +=		RUBYLIBREV
 TEST_DEPENDS =		${FULLPKGNAME-main}:${BUILD_PKGPATH}
 
 pre-install:
-	find ${WRKSRC} -name '*.orig' -print0 | xargs -0 rm 
+	find ${WRKSRC} -name '*.orig' -print0 | xargs -0 rm
 
 post-install:
 	${INSTALL_DATA_DIR} ${PREFIX}/share/doc/ruby

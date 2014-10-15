@@ -1,4 +1,4 @@
-# $OpenBSD: Makefile,v 1.188 2014/04/21 22:15:09 ajacoutot Exp $
+# $OpenBSD: Makefile,v 1.193 2014/09/23 08:41:10 sthen Exp $
 
 COMMENT-main=	PostgreSQL RDBMS (client)
 COMMENT-server=	PostgreSQL RDBMS (server)
@@ -10,12 +10,15 @@ COMMENT-plpython=Python procedural language for PostgreSQL
 # in case a dump before / restore after pkg_add -u is required!
 
 VERSION=	9.3.5
+REVISION-server= 0
 DISTNAME=	postgresql-${VERSION}
 PKGNAME-main=	postgresql-client-${VERSION}
 PKGNAME-server=	postgresql-server-${VERSION}
 PKGNAME-docs=	postgresql-docs-${VERSION}
 PKGNAME-contrib=postgresql-contrib-${VERSION}
 PKGNAME-plpython=postgresql-plpython-${VERSION}
+FAKE_AS_ROOT=	always-wrap
+
 
 CATEGORIES=	databases
 SHARED_LIBS=	ecpg		7.5 \

@@ -1,6 +1,6 @@
-$OpenBSD: patch-php_ini-production,v 1.3.2.1 2014/05/19 10:06:51 jasper Exp $
+$OpenBSD: patch-php_ini-production,v 1.5 2014/03/20 13:02:19 ajacoutot Exp $
 --- php.ini-production.orig.port	Wed Mar  5 09:07:14 2014
-+++ php.ini-production	Wed May  7 06:27:13 2014
++++ php.ini-production	Thu Mar 20 14:01:41 2014
 @@ -693,11 +693,8 @@ default_mimetype = "text/html"
  ;;;;;;;;;;;;;;;;;;;;;;;;;
  
@@ -31,3 +31,12 @@ $OpenBSD: patch-php_ini-production,v 1.3.2.1 2014/05/19 10:06:51 jasper Exp $
  
  ; Whether to allow include/require to open URLs (like http:// or ftp://) as files.
  ; http://php.net/allow-url-include
+@@ -906,7 +904,7 @@ cli_server.color = On
+ [Date]
+ ; Defines the default timezone used by the date functions
+ ; http://php.net/date.timezone
+-;date.timezone =
++date.timezone = UTC
+ 
+ ; http://php.net/date.default-latitude
+ ;date.default_latitude = 31.7667
