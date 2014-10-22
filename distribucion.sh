@@ -608,6 +608,32 @@ else {
 echo $sn
 if (test "$sn" = "s") then {
 
+  paquete apg security
+  #paquete ossp-uuid devel
+  paquete gdal geo
+  paquete php lang paquetes "php php-fpm php-gd php-intl php-ldap php-mcrypt php-pdo_pgsql php-pgsql php-zip" 5.4
+  paquete ORBit2 devel
+  paquete a2ps print
+  paquete aalib graphics
+  paquete abiword editors
+  paquete antiword textproc
+  paquete audacious-plugins audio
+  paquete clisp lang
+  paquete cppcheck devel
+  paquete cups-filters print
+  paquete dovecot mail
+  paquete dtc mail
+
+
+
+  #paquete boost devel
+  #paquete openldap databases
+  #paquete fox devel
+  #paquete ocaml lang
+  #paquete libwmf graphics 
+  #paquete dbus x11
+  #paquete GeoIP net
+  #paquete dialog misc
   #paquete qemu emulators
   #paquete postgis geo
   #paquete libv8 lang
@@ -619,7 +645,6 @@ if (test "$sn" = "s") then {
   #paquete libreoffice editors paquetes "libreoffice libreoffice-i18n-es" 
   #paquete aspell textproc paquetes "aspell aspell-es" 
   #libreoffice-i18n-es
-  exit 1;
   for i in `grep "^.*-\\[v\\]" Contenido.txt | sed -e "s/^\(.*\)-\[v\].*/\1/g"`; do 
 	s=`grep "^${i}-[0-9]" /usr/ports/INDEX | head -n 1 | sed -e "s/^[^|]*|\([^\/]*\)\/.*/\1/g"`
 	echo "$i - $s"
@@ -664,7 +689,6 @@ if (test "$sn" = "s") then {
 
   # Retroportados
   paquete postgresql databases paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs"
-  exit 1;
   paquete php lang paquetes "php php-fpm php-gd php-intl php-ldap php-mcrypt php-pdo_pgsql php-pgsql php-zip" 5.4
   paquete ruby lang paquetes "ruby ruby21-ri_docs" 2.1
   #paquete png graphics
