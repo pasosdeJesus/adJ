@@ -198,14 +198,14 @@ WANTLIB-mcrypt=		mcrypt ltdl>=1 pthread
 MULTI_PACKAGES+=	-mysql
 COMMENT-mysql=		mysql database access extensions for php5
 CONFIGURE_ARGS+=	--with-mysql=shared,${LOCALBASE}
-LIB_DEPENDS-mysql=	databases/mariadb
+LIB_DEPENDS-mysql=	databases/mysql
 WANTLIB-mysql=		pthread lib/mysql/mysqlclient
 
 # mysqli
 MULTI_PACKAGES+=	-mysqli
 COMMENT-mysqli=		mysql database access extensions for php5
 CONFIGURE_ARGS+=	--with-mysqli=shared,${LOCALBASE}/bin/mysql_config
-LIB_DEPENDS-mysqli=	databases/mariadb
+LIB_DEPENDS-mysqli=	databases/mysql
 WANTLIB-mysqli=		crypto m pthread ssl z lib/mysql/mysqlclient
 
 # odbc
@@ -219,7 +219,7 @@ WANTLIB-odbc=		iodbcinst iodbc>=2 pthread
 MULTI_PACKAGES+=	-pdo_mysql
 COMMENT-pdo_mysql=	PDO mysql database access extensions for php5
 CONFIGURE_ARGS+=	--with-pdo-mysql=shared,${LOCALBASE}
-LIB_DEPENDS-pdo_mysql=	databases/mariadb
+LIB_DEPENDS-pdo_mysql=	databases/mysql
 WANTLIB-pdo_mysql=	crypto m pthread ssl z lib/mysql/mysqlclient
 
 # pdo-pgsql

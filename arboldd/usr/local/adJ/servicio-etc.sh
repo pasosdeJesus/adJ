@@ -212,7 +212,7 @@ EOF
 
 
 echo "Particularidades de login.conf"  >> /var/tmp/inst-adJ.bitacora
-for i in login.conf login.conf.in; do
+for i in login.conf login.conf.in etc.amd64/login.conf; do
 	echo $i >> /var/tmp/inst-adJ.bitacora
 	grep "^servicio:" $i > /dev/null 2>&1
 	if (test -f $i -a "$?" != "0") then {
