@@ -1,5 +1,5 @@
 #!/bin/ksh
-#	$OpenBSD: install.sh,v 1.245 2014/02/21 17:11:02 deraadt Exp $
+#	$OpenBSD: install.sh,v 1.253 2014/07/22 10:03:56 ajacoutot Exp $
 #	$NetBSD: install.sh,v 1.5.2.8 1996/08/27 18:15:05 gwr Exp $
 #
 # Copyright (c) 1997-2009 Todd Miller, Theo de Raadt, Ken Westerback
@@ -65,8 +65,7 @@ _fsent=
 
 rm -f /tmp/fstab*
 
-ask_yn "Use DUIDs rather than device names in fstab?" yes
-[[ $resp == y ]] && FSTABFLAG=-F
+ask_yn "Use DUIDs rather than device names in fstab?" yes && FSTABFLAG=-F
 
 while :; do
 	DISKS_DONE=$(addel "$DISK" $DISKS_DONE)
@@ -154,20 +153,19 @@ if [[ -z $TZ ]]; then
 	rm -f /mnt/tmp/tzlist
 fi
 
-if _time=$(ftp_time) && _now=$(date +%s) &&
+if _time=$(http_time) && _now=$(date +%s) &&
 	(( _now - _time > 120 || _time - _now > 120 )); then
 	_tz=/mnt/usr/share/zoneinfo/$TZ
-	ask_yn "Time appears wrong.  Set to '$(TZ=$_tz date -r "$(ftp_time)")'?" yes
-	if [[ $resp == y ]]; then
-		date $(date -r "$(ftp_time)" "+%Y%m%d%H%M.%S") >/dev/null
+	if ask_yn "Time appears wrong.  Set to '$(TZ=$_tz date -r "$(http_time)")'?" yes; then
+		date $(date -r "$(http_time)" "+%Y%m%d%H%M.%S") >/dev/null
 	fi
 fi
 
-if [[ -s $SERVERLISTALL ]]; then
+if [[ -s $HTTP_LIST ]]; then
 	_i=
-	[[ -n $installedfrom ]] && _i="install=$installedfrom"
+	[[ -n $INSTALL ]] && _i="install=$INSTALL"
 	[[ -n $TZ ]] && _i="$_i&TZ=$TZ"
-	[[ -n $method ]] && _i="$_i&method=$method"
+	[[ -n $METHOD ]] && _i="$_i&method=$METHOD"
 
 	[[ -n $_i ]] && ftp -Vao - \
 		"http://129.128.5.191/cgi-bin/ftpinstall.cgi?$_i" >/dev/null 2>&1 &
@@ -242,10 +240,7 @@ fi
 )
 
 if grep -qs '^rtsol' /mnt/etc/hostname.*; then
-	sed -e "/^#\(net\.inet6\.ip6\.accept_rtadv\)/s//\1/" \
-		-e "/^#\(net\.inet6\.icmp6\.rediraccept\)/s//\1/" \
-		/mnt/etc/sysctl.conf >/tmp/sysctl.conf
-	cp /tmp/sysctl.conf /mnt/etc/sysctl.conf
+	echo 'net.inet6.icmp6.rediraccept=1 # 1=Accept IPv6 ICMP redirects (for hosts)' >>/mnt/etc/sysctl.conf
 fi
 
 finish_up

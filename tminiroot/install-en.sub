@@ -1,4 +1,4 @@
-#	$OpenBSD: install.sub,v 1.752 2014/03/02 14:12:16 deraadt Exp $
+#	$OpenBSD: install.sub,v 1.788 2014/07/28 14:12:14 kettenis Exp $
 #
 # Copyright (c) 1997-2009 Todd Miller, Theo de Raadt, Ken Westerback
 # All rights reserved.
@@ -160,7 +160,7 @@ mount_mnt2() {
 
 	_parts=$(sed 's/^  \(.\): .*/\1/' $_file)
 	set -- $_parts
-	(($# == 0)) && { echo "No filesystems found on $_dev."; return 1 ; }
+	(($# == 0)) && { echo "No filesystems found on $_dev."; return 1; }
 
 	if isin "c" $_parts; then
 		resp=c
@@ -330,7 +330,7 @@ user_setup() {
 		root|daemon|operator|bin|smmsp|popa3d) ;;
 		sshd|uucp|www|named|proxy|nobody|ftp) ;;
 		[a-z]*([a-z0-9_]))
-			(( ${#resp} <= 31 )) && break;;
+			((${#resp} <= 31 )) && break;;
 		esac
 		echo "$resp is not a useable loginname."
 	done
@@ -499,7 +499,6 @@ addhostent() {
 
 select_sets() {
 	local _avail=$1 _selected=$2 _f _action _col=$COLUMNS
-	local _comp=comp${VERSION}.tgz _xbase=xbase${VERSION}.tgz
 	let COLUMNS=_col-8
 
 	cat <<__EOT
@@ -529,11 +528,6 @@ __EOT
 				[[ $_f = $resp ]] && _selected=$($_action $_f $_selected)
 			done
 		done
-		if isin $_xbase $_selected && ! isin $_comp $_selected &&
-			isin $_comp $_avail; then
-			_selected=$(addel $_comp $_selected)
-			echo "The xbase set requires the comp set, so adding it back in."
-		fi
 	done
 
 	set +o noglob
@@ -549,12 +543,14 @@ configure_ifs() {
 	while :; do
 		_vd=$(ifconfig vlan$_vl 2>&1)
 		[[ $_vd == @(*no such interface*) ]] && break
-		[[ $_vd == @(vlan$_vl: flags=0<>*) ]] && break
+		[[ $_vd == @(*vlan: +([[:digit:]]) parent interface:*) ]] || break
 		((_vl++))
 	done
 	_vd=
 
 	ifconfig lo0 inet 127.0.0.1/8
+
+	rm -f /tmp/mygate
 
 	while :; do
 		ifconfig vlan$_vl create >/dev/null 2>&1
@@ -624,10 +620,10 @@ configure_ifs() {
 
 		if [[ -f $_hn ]]; then
 			chmod 640 $_hn
-			((nifs++))
 			: ${_first:=$_ifs}
-			_p=done
 		fi
+		NIFS=$(ls -1 /tmp/hostname.* 2>/dev/null | grep -c ^)
+		_p=done
 	done
 }
 
@@ -660,35 +656,19 @@ dhcp_request() {
 	local _ifs=$1 _hn=$2
 
 	echo "lookup file bind" >/etc/resolv.conf.tail
-
-	if [[ -n $_hn ]]; then
-		_hn="send host-name \"$_hn\";"
-		echo "Issuing hostname-associated DHCP request for $_ifs."
-	else
-		echo "Issuing free-roaming DHCP request for $_ifs."
-	fi
-
-	cat >/etc/dhclient.conf <<__EOT
-initial-interval 1;
-$_hn
-request subnet-mask, broadcast-address, routers, domain-name,
-	domain-name-servers, host-name;
-__EOT
+	echo "send host-name \"$_hn\";" >/etc/dhclient.conf
 
 	ifconfig $_ifs group dhcp >/dev/null 2>&1
-	dhclient $_ifs
 
-	set -- $(v4_info $_ifs)
+	dhclient -c /dev/stdin $_ifs << __EOT
+initial-interval 1;
+backoff-cutoff 2;
+reboot 5;
+send host-name "$_hn";
+__EOT
 
-	if [[ $1 == UP && -n $2 ]]; then
-		mv /etc/dhclient.conf /tmp/dhclient.conf
-		mv /etc/resolv.conf.tail /tmp/resolv.conf.tail
-		return 0
-	fi
-
-	ifconfig $_ifs delete down -group dhcp 2>/dev/null
-	rm /etc/dhclient.conf /etc/resolv.conf.tail
-	return 1
+	mv /etc/dhclient.conf /tmp/dhclient.conf
+	mv /etc/resolv.conf.tail /tmp/resolv.conf.tail
 }
 
 hextodec() {
@@ -791,12 +771,13 @@ v4_config() {
 	none)	;;
 	dhcp)	if [[ ! -x /sbin/dhclient ]]; then
 			echo "DHCP not possible - no /sbin/dhclient."
-		elif dhcp_request $_ifs "$_name" || dhcp_request $_ifs; then
+		else
+			dhcp_request $_ifs "$_name"
 			echo "dhcp" >>$_hn
 		fi
 		;;
 	*)	_addr=$resp
-		ask_until "Netmask?" "${_mask:=255.255.255.0}"
+		ask_until "Netmask for $_ifs?" "${_mask:=255.255.255.0}"
 		ifconfig $_ifs -group dhcp >/dev/null 2>&1
 		if ifconfig $_ifs inet $_addr netmask $resp up; then
 			addhostent "$_addr" "$_name"
@@ -846,7 +827,7 @@ v4_defroute() {
 	[[ -n $(ifconfig | sed -n '/[ 	]inet .* broadcast /p') ]] || return
 
 	# If only one interface, and it is running dhclient, ask nothing
-	[[ -f /tmp/dhclient.conf && $nifs == 1 ]] && return
+	[[ -f /tmp/dhclient.conf && $NIFS == 1 ]] && return
 
 	[[ -x /sbin/dhclient ]] && _prompt=", 'dhcp'$_prompt"
 	_prompt="Default IPv4 route? (IPv4 address$_prompt)"
@@ -858,13 +839,13 @@ v4_defroute() {
 		ask_until "$_prompt" "$_dr"
 		[[ $resp == @(none|dhcp) ]] && break
 		route delete -inet default >/dev/null 2>&1
-		route -n add -inet -host default "$resp" && { echo "$resp" >/tmp/mygate; break; }
+		route -n add -inet -host default "$resp" && { echo "$resp" >>/tmp/mygate; break; }
 		route -n add -inet -host default $_dr >/dev/null 2>&1
 	done
 }
 
 v6_defroute() {
-	local _if=$1 _resp _routers
+	local _if=$1 _prompt _resp _routers
 
 	route -n show -inet6 | egrep -q '^default[[:space:]]' && return
 
@@ -872,12 +853,18 @@ v6_defroute() {
 		sed -n '/bytes from/{s/^.*from //;s/,.*$//;p;}' |
 		sed -n 'G;s/\n/&&/;/^\(.*\n\).*\n\1/d;h;P'))
 
-	local PS3="IPv6 default router? (${_routers:+list #, }IPv6 address or 'none'): "
-	select _resp in $_routers; do
-		[[ ${_resp:=$REPLY} == *:* ]] && break
-		[[ $_resp == none ]] && return
-	done
+	_prompt="IPv6 default router?"
 
+	if $auto; then
+		_autorespond "$_prompt" && _resp=$resp && echo "$_prompt $_resp"
+	else
+		local PS3="$_prompt (${_routers:+list #, }IPv6 address or 'none'): "
+		select _resp in $_routers; do
+			[[ ${_resp:=$REPLY} == *:* ]] && break
+			[[ $_resp == none ]] && return
+		done
+	fi
+ 
 	route -n add -inet6 -host default "$_resp" &&
 		echo "$_resp" >>/tmp/mygate
 }
@@ -894,7 +881,7 @@ enable_network() {
 	ifconfig lo0 inet 127.0.0.1/8
 
 	for hn in /mnt/etc/hostname.*; do
-		((nifs++))
+		((NIFS++))
 
 		if=${hn#/mnt/etc/hostname.}
 
@@ -996,7 +983,7 @@ enable_network() {
 
 install_files() {
 	local _src=$1 _files=$2 _f _sets _get_sets _n _col=$COLUMNS \
-		_tmpfs _tmpsrc _cfile _fsrc _unver _t _issue _srclocal _size
+		_tmpfs _tmpsrc _cfile _fsrc _unver _t _issue _srclocal 
 
 	for _f in $THESETS; do
 		isin $_f $_files || continue;
@@ -1010,8 +997,7 @@ install_files() {
 	done
 
 	if [[ -z $_sets ]]; then
-		echo -n "Looked at "
-		echo $_src | sed 's/\(^ftp:\/\/[^/]*\)\(:[^/]*\)\(@.*\)/\1\3/'
+		echo -n "Looked at $_src "
 		echo "and found no $OBSD sets.  The set names looked for were:"
 
 		let COLUMNS=_col-8
@@ -1034,14 +1020,6 @@ install_files() {
 
 	_get_sets=$(for s in $THESETS; do isin $s $_get_sets && echo $s; done)
 
-	_size=$( ( [[ $_src == file://* ]] && ls -lT "${_src#file://}" ||
-		ftp -V -o - "$_src/index.txt" 2>/dev/null ) | (
-		sum=0
-		while read x x x x s x x x f2 f && : ${f:=$f2}; do
-			isin $f $_get_sets && let sum+=s
-		done; echo $sum ) )
-
-	_size=$((${_size:-536870912} / 1024))
 	_unver=$_get_sets
 
 	for _issue in ''; do
@@ -1056,9 +1034,9 @@ install_files() {
 		) | (
 			while read a a a a m m; do
 				[[ $m == /mnt/@(@(|var/)tmp|home|usr/@(src,obj,xobj))@(|/*) ]] &&
-					((a > _size + 10240)) && echo $m && exit
+					((a > 524288)) && echo $m && exit
 				[[ $m == /mnt@(|/*) ]] &&
-					((a > _size * 4)) && echo $m && exit
+					((a > 524288 * 4)) && echo $m && exit
 			done
 		) )
 
@@ -1142,176 +1120,108 @@ install_files() {
 	[[ -d $_tmpsrc ]] && rm -rf "$_tmpsrc"
 }
 
-encode_for_url() {
-	echo "$1" | sed "
-s/%/%25/g
-s/ /%20/g
-s/!/%21/g
-s/\"/%22/g
-s/#/%23/g
-s/\\\$/%24/g
-s/&/%26/g
-s/'/%27/g
-s/(/%28/g
-s/)/%29/g
-s/\*/%2a/g
-s/+/%2b/g
-s/,/%2c/g
-s/-/%2d/g
-s/\./%2e/g
-s/\//%2f/g
-s/:/%3a/g
-s/;/%3b/g
-s/</%3c/g
-s/=/%3d/g
-s/>/%3e/g
-s/?/%3f/g
-s/@/%40/g
-s/\[/%5b/g
-s/\\\\/%5c/g
-s/]/%5d/g
-s/\^/%5e/g
-s/_/%5f/g
-s/\`/%60/g
-s/{/%7b/g
-s/|/%7c/g
-s/}/%7d/g
-s/~/%7e/g
-"
-}
-
-ftp_error() {
-	if [[ -n $(echo "$2" | grep "$1") ]]; then
-		echo $1
-		return 0
-	fi
-	return 1
-}
-
-startftplist() {
-	((nifs < 1)) && return
+startcgiinfo() {
+	((NIFS < 1)) && return
 
 	set -m
 	(
-		ftp -Vao - "http://129.128.5.191/cgi-bin/ftplist.cgi?path=$FTPSETDIR" \
-			2>/tmp/ftplisterr >$SERVERLISTALL
+		ftp -Vao - "http://129.128.5.191/cgi-bin/ftplist.cgi?path=$HTTP_SETDIR" \
+			2>/dev/null >$CGI_INFO
 
-		echo -n $SECONDS >$SERVERLISTSEC
+		echo -n $SECONDS >$HTTP_SEC
 		feed_random
-	) & ftppid=$!
+	) & CGIPID=$!
 	set +m
 
-	(sleep 12; kill -INT -$ftppid >/dev/null 2>&1) &
+	(sleep 12; kill -INT -$CGIPID >/dev/null 2>&1) &
 }
 
-waitftplist() {
-	wait "$ftppid" 2>/dev/null
+waitcgiinfo() {
+	wait "$CGIPID" 2>/dev/null
+
+	[[ -s $CGI_INFO ]] || return
+
+	sed -n "s,^http://"'\([[A-Za-z0-9\:_][]A-Za-z0-9:._-]*\),\1,p' \
+		$CGI_INFO >$HTTP_LIST 2>/dev/null
+	set -- $(sed q $HTTP_LIST)
+	: ${HTTP_SERVER:=${1%%/*}}
+
+	CGI_METHOD=$(sed -n '/^method=/s///p' $CGI_INFO 2>/dev/null)
+	CGI_TZ=$(sed -n '/^TZ=/s///p' $CGI_INFO 2>/dev/null)
+	CGI_TIME=$(sed -n '/^TIME=/s///p' $CGI_INFO 2>/dev/null)
 }
 
-ftp_time() {
-	local _ftplist_sec=$(cat $SERVERLISTSEC 2>/dev/null)
-	local _time=$(sed '/^TIME=\([0-9]*\)$/!d;s//\1/;q' $SERVERLISTALL 2>/dev/null)
-	[[ -n $_ftplist_sec && -n $_time ]] &&
-		echo $((_time + SECONDS - _ftplist_sec))
+
+http_time() {
+	local _sec=$(cat $HTTP_SEC 2>/dev/null)
+
+	[[ -n $_sec && -n $CGI_TIME ]] &&
+		echo $((CGI_TIME + SECONDS - _sec))
 }
 
-install_url() {
-	local _url_type=$1 _file_list _url_base _prompt _passwd _mirror
-	eval local _server_ip=\$_${_url_type}_server_ip \
-		_server_dir=\$_${_url_type}_server_dir
+install_http() {
+	local _file_list _prompt _mirror _url_base
 
-	waitftplist
-	ask "HTTP/FTP proxy URL? (e.g. 'http://proxy:8080', or 'none')" \
-		"${ftp_proxy:-none}"
-	unset ftp_proxy http_proxy
-	[[ $resp == none ]] || export ftp_proxy=$resp http_proxy=$resp
+	waitcgiinfo
+	ask "HTTP proxy URL? (e.g. 'http://proxy:8080', or 'none')" \
+		"${http_proxy:-none}"
+	unset http_proxy
+	[[ $resp == none ]] || export http_proxy=$resp
 
-	if [[ -s $SERVERLISTALL ]]; then
-		_prompt="Server? (hostname, list#, 'done' or '?')"
-		sed -n "s,^${_url_type}://"'\([[A-Za-z0-9\:_][]A-Za-z0-9:._-]*\),\1,p' \
-			$SERVERLISTALL >$SERVERLIST
-		set -- $(sed q $SERVERLIST)
-		_server_ip=${1%%/*}
+	if [[ -s $HTTP_LIST ]]; then
+		_prompt="HTTP Server? (hostname, list#, 'done' or '?')"
 	else
-		echo "(Was not able to get ftplist from ftp.openbsd.org, but that is OK)"
-		_prompt="Server? (hostname or 'done')"
+		echo "(Unable to get list from ftp.openbsd.org, but that is OK)"
+		_prompt="HTTP Server? (hostname or 'done')"
 	fi
 
 	while :; do
-		ask_until "$_prompt" "$_server_ip"
+		ask_until "$_prompt" "$HTTP_SERVER"
 		case $resp in
 		done)	return;;
-		"?")	[[ -s $SERVERLIST ]] || continue
-			less -XEN < $SERVERLIST
+		"?")	[[ -s $HTTP_LIST ]] || continue
+			less -XEN < $HTTP_LIST
 			;;
 		+([0-9]))
-			[[ -s $SERVERLIST ]] || continue
-			set -- $(sed -n "${resp}p" $SERVERLIST)
-			(($# < 1)) && { echo "There is no line $resp."; continue ; }
-			_server_ip=${1%%/*}
+			[[ -s $HTTP_LIST ]] || continue
+			set -- $(sed -n "${resp}p" $HTTP_LIST)
+			(($# < 1)) && { echo "There is no line $resp."; continue; }
+			HTTP_SERVER=${1%%/*}
 			;;
 		+([A-Za-z0-9\:.\[\]_-]))
-			_server_ip=$resp
+			HTTP_SERVER=$resp
 			break
 			;;
 		*)	echo "'$resp' is not a valid hostname."
 			;;
 		esac
 	done
-	eval _${_url_type}_server_ip=$_server_ip
 
-	set -- $(sed "/^$_server_ip/x;\$!d;x" $SERVERLIST 2>/dev/null)
+	set -- $(sed "/^$HTTP_SERVER/x;\$!d;x" $HTTP_LIST 2>/dev/null)
 	resp=${1#*/}
 	[[ $resp == "$1" ]] && resp=
 	if (($# > 1)); then
-		resp=$resp/$FTPSETDIR
+		resp=$resp/$HTTP_SETDIR
 		_mirror=yes
 	fi
 
-	ask_until "Server directory?" "${resp:-pub/OpenBSD/$FTPSETDIR}"
-	_server_dir=$resp
-	eval _${_url_type}_server_dir=$_server_dir
+	: ${HTTP_DIR:=pub/OpenBSD/$HTTP_SETDIR}
+	ask_until "Server directory?" "${resp:-$HTTP_DIR}"
+	HTTP_DIR=$resp
+	_url_base="http://$HTTP_SERVER/$HTTP_DIR"
 
-	if [[ $_url_type == ftp ]]; then
-		IFS= ask_until "Login?" "${_ftp_server_login:=anonymous}"
-		_ftp_server_login=$resp
-
-		if [[ $_ftp_server_login == @(anonymous|ftp) ]]; then
-			_passwd=root@`hostname`
-		else
-			resp=
-			while [[ -z $resp ]]; do
-				askpass "Password? (will not echo)"
-			done
-			_passwd=$resp
-		fi
-	fi
-
-	_url_base=$_url_type://
-	if [[ $_url_type == ftp && $_ftp_server_login != anonymous ]]; then
-		_url_base=$_url_base$(encode_for_url "$_ftp_server_login"):$(encode_for_url "$_passwd")@
-	fi
-	_url_base=$_url_base$_server_ip/$_server_dir
-
-	if [[ $_url_type == ftp && -z $ftp_proxy ]]; then
-		_file_list=$(ftp -V "$_url_base/")
-		ftp_error "Login failed." "$_file_list" && return
-		ftp_error "No such file or directory." "$_file_list" && return
-	else
-		_file_list=$(ftp -Vo - "$_url_base/index.txt" |
-			sed 's/^.* //' | sed 's///')
-	fi
-
+	_file_list=$(ftp -Vo - "$_url_base/index.txt" |
+		sed 's/^.* //' | sed 's///')
+ 
 	install_files "$_url_base" "$_file_list"
 
-	installedfrom=$_url_type://$_server_ip/$_server_dir
+	INSTALL=$_url_base
 
+	PACKAGE_PATH=
 	if [[ -n $_mirror ]]; then
-		PACKAGE_PATH=$(print -r -- "$installedfrom" |
+		PACKAGE_PATH=$(print -r -- "$_url_base" |
 			sed -E "/\/(snapshots|[0-9]\.[0-9])\/($ARCH)\/*$/!d
 				s!!/\1/packages/$(arch -s)/!;q")
-	else
-		PACKAGE_PATH=
 	fi
 }
 
@@ -1325,6 +1235,7 @@ install_mounted_fs() {
 		[[ -d /mnt/$resp ]] && { _dir=/mnt/$resp; break; }
 		[[ -d /$resp ]] && { _dir=/$resp; break; }
 		echo "The directory '$resp' does not exist."
+		$auto && exit 1
 	done
 
 	install_files "file://$_dir" "$(ls $_dir/)"
@@ -1338,8 +1249,7 @@ install_cdrom() {
 }
 
 install_disk() {
-	ask_yn "Is the disk partition already mounted?"
-	if [[ $resp == n ]]; then
+	if ! ask_yn "Is the disk partition already mounted?"; then
 		get_drive "disk" '$(bsort $(get_dkdevs))' \
 			'$(bsort $(rmel $ROOTDISK $(get_dkdevs)))' || return
 		mount_mnt2 $resp || return
@@ -1357,52 +1267,11 @@ install_nfs() {
 	ask_until "Filesystem on server to mount?" "$NFS_PATH"
 	NFS_PATH=$resp
 
-	ask_yn "Use TCP transport? (requires TCP-capable NFS server)"
-	[[ $resp == y ]] && _tcp=-T
+	ask_yn "Use TCP transport? (requires TCP-capable NFS server)" && _tcp=-T
 
 	mount_nfs $_tcp -o ro -R 5 $NFS_ADDR:$NFS_PATH /mnt2 || return
 
 	install_mounted_fs
-}
-
-install_tape() {
-	local _z _bs
-
-	get_drive "tape drive" '$MTDEVS' || return
-	export TAPE=/dev/nr$resp
-	if [[ ! -c $TAPE ]]; then
-		echo "$TAPE is not a character special file."
-		return
-	fi
-
-	echo -n "Rewinding $TAPE (mt rewind)..."
-	mt rewind || return
-	echo "done."
-
-	while :; do
-		ask_until "Skip how many files? (or 'done')" 0
-		[[ $resp == done ]] && return
-		[[ $resp == +([0-9]) ]] || continue
-
-		if (($resp > 0)); then
-			echo -n "Skipping $resp file(s)..."
-			mt fsf $resp || return
-			echo "done."
-		elif [[ -n $_bs ]]; then
-			mt bsf; mt fsf
-		fi
-
-		unset _z
-		ask_yn "Is the file gzipped?" yes
-		[[ $resp == y ]] && _z=z
-
-		[[ $_z == z ]] || _bs=10240
-		ask_until "Blocksize for this file?" "${_bs:-8k}"
-		[[ $resp == done ]] && return
-		_bs=$resp
-
-		dd if=$TAPE bs=$_bs | tar ${_z}xvphf - -C /mnt || return
-	done
 }
 
 set_timezone() {
@@ -1418,9 +1287,9 @@ set_timezone() {
 		TZ=${TZ#*${_zoneroot#/mnt}/}
 	fi
 
-	waitftplist
-	if [[ -s $SERVERLISTALL ]]; then
-		_tz=$(sed -n '/^TZ=/s/TZ=//p' <$SERVERLISTALL)
+	waitcgiinfo
+	if [[ -n $CGI_TZ ]]; then
+		_tz=$CGI_TZ
 		[[ -n $_tz ]] && isin "$_tz" `cat $_zonefile` && TZ=$_tz
 	fi
 
@@ -1461,28 +1330,27 @@ sane_install() {
 
 	for _s in $SANESETS; do
 		isin $_s $DEFAULTSETS || continue
-		[[ -z $_q ]] &&
-			ask_yn "Are you *SURE* your $_SMODE is complete without '$_s'?" ||
-			return
+		[[ -n $_q ]] && return 1
+		if ! ask_yn "Are you *SURE* your $_SMODE is complete without '$_s'?"; then
+			$auto && exit 1 || return 1
+		fi
 	done
 }
 
 install_sets() {
-	local _d _locs="disk ftp http"
+	local _d _locs="disk http"
 
 	echo
 
-	[[ -s $SERVERLISTALL ]] &&
-		_d=$(sed -n '/^method=/s/method=//p' $SERVERLISTALL)
+	_d=$CGI_METHOD
 
 	ifconfig netboot >/dev/null 2>&1 && : ${_d:=http}
 	[[ -n $(get_cddevs) ]] && { _locs="cd $_locs"; : ${_d:=cd}; }
 	[[ -x /sbin/mount_nfs ]] && _locs="$_locs nfs"
-	[[ -n $MTDEVS && -x /bin/mt ]] && _locs="$_locs tape"
 	: ${_d:=http}
 
 	if ! isin "$_d" $_locs; then
-		for a in http ftp cd nfs tape disk; do
+		for a in http cd nfs disk; do
 			isin $a $_locs && _d=$a && break
 		done
 	fi
@@ -1490,21 +1358,18 @@ install_sets() {
 	echo "Let's $_SMODE the sets!"
 	while :; do
 		umount -f /mnt2 >/dev/null 2>&1
-		[[ -n $method ]] && _d=$method
-		sane_install quiet && _d=done
 
 		ask "Location of sets? ($_locs or 'done')" "$_d"
 		case $resp in
 		done)	sane_install && return;;
-		c*|C*)	isin cd $_locs && install_cdrom && method=cd;;
-		d*|D*)	install_disk && method=disk;;
-		f*|F*)	isin ftp $_locs && install_url ftp && method=ftp;;
-		h*|H*)	isin http $_locs && install_url http && method=http;;
-		n*|N*)	isin nfs $_locs && install_nfs && method=nfs;;
-		t*|T*)	isin tape $_locs && install_tape && method=tape;;
+		c*|C*)	isin cd $_locs && install_cdrom && METHOD=cd;;
+		d*|D*)	install_disk && METHOD=disk;;
+		h*|H*)	isin http $_locs && install_http && METHOD=http;;
+		n*|N*)	isin nfs $_locs && install_nfs && METHOD=nfs;;
+		*) 	$auto && echo "'$resp' is not a valid choice." && exit 1;;
 		esac
-
-		$auto && break
+		[[ -n $METHOD ]] && _d=$METHOD
+		sane_install quiet || $auto && _d=done
 	done
 }
 
@@ -1551,10 +1416,7 @@ mount_fs() {
 
 	if [[ -n $_fail ]]; then
 		echo "\nWARNING! The following filesystems were not properly mounted:$_fail"
-		ask_yn "Continue anyway?" no
-		if [[ $resp == n ]]; then
-			exit
-		fi
+		ask_yn "Continue anyway?" || exit
 	fi
 }
 
@@ -1573,8 +1435,7 @@ getdevname() {
 check_fs() {
 	local _dev _dn _mp _fstype _rest _fail _f _passno
 
-	ask_yn "Force checking of clean non-root filesystems?"
-	[[ $resp == y ]] && _f=f
+	ask_yn "Force checking of clean non-root filesystems?" && _f=f
 
 	while read _dev _mp _fstype _rest _rest _passno _rest; do
 		_dn=$(getdevname "$_dev")
@@ -1624,7 +1485,7 @@ donetconfig() {
 	fi
 
 	resp="${_dn:=$(get_fqdn)}"
-	if [[ ! -f /tmp/dhclient.conf || $nifs != 1 ]]; then
+	if [[ ! -f /tmp/dhclient.conf || $NIFS != 1 ]]; then
 		ask "DNS domain name? (e.g. 'bar.com')" "$resp"
 	else
 		echo "Using DNS domainname $resp"
@@ -1632,7 +1493,7 @@ donetconfig() {
 	hostname "$(hostname -s).$resp"
 
 	resp="${_ns:=none}"
-	if [[ ! -f /tmp/dhclient.conf || $nifs != 1 || $resp == none ]]; then
+	if [[ ! -f /tmp/dhclient.conf || $NIFS != 1 || $resp == none ]]; then
 		ask "DNS nameservers? (IP address list or 'none')" "$resp"
 	else
 		echo "Using DNS nameservers at $resp"
@@ -1646,17 +1507,10 @@ donetconfig() {
 	fi
 }
 
-populateusrlocal() {
-	if [ -f /mnt/etc/mtree/BSD.local.dist ]; then
-		/mnt/usr/sbin/chroot /mnt /usr/sbin/mtree -Uedqn -p /usr/local -f /etc/mtree/BSD.local.dist >/dev/null
-	fi
-}
-
 apply()
 {
 	if [[ $sshd == n ]]; then
-		echo "sshd_flags=NO		# disabled during install" \
-			>>/mnt/etc/rc.conf.local
+		echo "sshd_flags=NO" >>/mnt/etc/rc.conf.local
 	fi
 	if [[ $sshd_disableroot == y ]]; then
 		sed "/^#\(PermitRootLogin\) yes/s//\1 no/" \
@@ -1664,26 +1518,24 @@ apply()
 		cp /tmp/sshd_config /mnt/etc/ssh/sshd_config
 	fi
 	if [[ $ntpd == y ]]; then
-		echo "ntpd_flags=		# enabled during install" \
-			>>/mnt/etc/rc.conf.local
-		if [[ $ntpd_server != default ]]; then
-			set -- $ntpd_server
-			sed "s/^servers /#&/;/#server /a\\
-servers $1
-" /mnt/etc/ntpd.conf >/tmp/ntpd.conf
-			cp /tmp/ntpd.conf /mnt/etc/ntpd.conf
-		fi
+		echo "ntpd_flags=" >>/mnt/etc/rc.conf.local
+		[[ $ntpd_server == default ]] && ntpd_server=pool.ntp.org
+		echo "servers ${ntpd_server%% *}" >>/mnt/etc/ntpd.conf
 	fi
 
-	if [[ $x11 == y ]]; then
-		sed "/^#\(machdep\.allowaperture=${MDXAPERTURE}\)/s//\1	/" \
-			/mnt/etc/sysctl.conf >/tmp/sysctl.conf
-		cp /tmp/sysctl.conf /mnt/etc/sysctl.conf
+
+	if [[ -n $aperture ]]; then
+		echo "machdep.allowaperture=$aperture # See xf86(4)" \
+		    >>/mnt/etc/sysctl.conf
+	fi
+
+	if [[ -n $lidsuspend ]]; then
+		echo "machdep.lidsuspend=1 # Try to suspend on lid close" \
+		    >>/mnt/etc/sysctl.conf
 	fi
 
 	if [[ $xdm == y && -x /mnt/usr/X11R6/bin/xdm ]]; then
-		echo "xdm_flags=		# enabled during install" \
-			>>/mnt/etc/rc.conf.local
+		echo "xdm_flags=" >>/mnt/etc/rc.conf.local
 	fi
 
 	if [[ $defcons == y ]]; then
@@ -1699,7 +1551,7 @@ servers $1
 }
 
 questions() {
-	local _d _xdmask=y _def
+	local _d
 
 	ask_yn "Start sshd(8) by default?" yes
 	sshd=$resp
@@ -1711,17 +1563,22 @@ questions() {
 		ntpd_server=$resp
 	fi
 
-	def=no
-	[[ -n $DISPLAY ]] && def=yes
-	if [[ -n $MDXAPERTURE ]]; then
-		ask_yn "Do you expect to run the X Window System?" $def
-		x11=$resp
-		_xdmask=$resp
-	fi
-
-	if [[ -n $MDXDM && $_xdmask == y ]]; then
-		ask_yn "Do you want the X Window System to be started by xdm(1)?" $_xdmask
-		xdm=$resp
+	aperture=
+	xdm=
+	lidsuspend=
+	if [[ -n $DISPLAY ]]; then
+		if [[ -n $(scan_dmesg '/^[a-z]*[01]: aperture needed/p') ]]; then
+			ask_yn "Do you expect to run the X Window System?" yes &&
+			    aperture=$MDXAPERTURE
+		fi
+		if [[ -n $MDXDM ]]; then
+			ask_yn "Do you want the X Window System to be started by xdm(1)?"
+			xdm=$resp
+		fi
+		if [[ -n $MDLID ]]; then
+			ask_yn "Do you want to suspend on lid close?" yes && \
+			    lidsuspend=$resp
+		fi
 	fi
 
 	if [[ -n $CDEV ]]; then
@@ -1746,19 +1603,19 @@ upgrade_to64time_t() {
 }
 
 feed_random() {
-	{
-	    (dmesg; cat $SERVERLISTALL /*.conf; sysctl; route -n show; df;
-	    ifconfig -A; hostname) >/dev/random 2>&1
-	    dd if=/mnt/var/db/host.random of=/dev/random bs=65536 count=1
-	} >/dev/null 2>&1
+	(dmesg; cat $CGI_INFO /*.conf; sysctl; route -n show; df;
+		ifconfig -A; hostname) >/dev/random 2>&1
+	if [[ -e /mnt/var/db/host.random ]]; then
+		dd if=/mnt/var/db/host.random of=/dev/random bs=65536 count=1 \
+		    status=none
+	fi
 }
 
 store_random() {
-	{
-	    dd if=/dev/random of=/mnt/var/db/host.random bs=65536 count=1
-	    dd if=/dev/random of=/mnt/etc/random.seed bs=512 count=1
-	    chmod 600 /mnt/var/db/host.random /mnt/etc/random.seed
-	} >/dev/null 2>&1
+	dd if=/dev/random of=/mnt/var/db/host.random bs=65536 count=1 \
+	    status=none
+	dd if=/dev/random of=/mnt/etc/random.seed bs=512 count=1 status=none
+	chmod 600 /mnt/var/db/host.random /mnt/etc/random.seed
 }
 
 finish_up() {
@@ -1787,8 +1644,6 @@ finish_up() {
 	echo "done."
 
 	rm -f /mnt/var/run/ld.so.hints
-
-	populateusrlocal
 
 	[ -x /mnt/$MODE.site ] && /mnt/usr/sbin/chroot /mnt /$MODE.site
 
@@ -1827,14 +1682,17 @@ __EOT
 ROOTDISK=
 ROOTDEV=
 PACKAGE_PATH=
-SM_ARGS=
-SM_ARGSX=
 
 SETDIR="$VNAME/$ARCH"
-FTPDIR="pub/OpenBSD/$VNAME"
-SERVERLISTALL=/tmp/serverlistall
-SERVERLISTSEC=/tmp/serverlistsec
-SERVERLIST=/tmp/serverlist
+CGI_INFO=/tmp/cgiinfo
+CGI_TZ=
+CGI_TIME=
+CGI_METHOD=
+INSTALL=
+METHOD=
+HTTP_DIR=
+HTTP_SEC=/tmp/httpsec
+HTTP_LIST=/tmp/httplist
 WLANLIST=/tmp/wlanlist
 FSTABFLAG=-f
 
@@ -1846,13 +1704,13 @@ dmesg | sed -n '/^OpenBSD /h;/^OpenBSD /!H;${g;p;}' >/var/run/dmesg.boot
 
 # Are we in a real release, or a snapshot?  If this is a snapshot
 # install media, default us to a snapshot directory.
-FTPSETDIR=$SETDIR
+HTTP_SETDIR=$SETDIR
 set -- $(scan_dmesg "/^OpenBSD $VNAME\([^ ]*\).*$/s//\1/p")
-[[ $1 == -!(stable) ]] && FTPSETDIR=snapshots/$ARCH
+[[ $1 == -!(stable) ]] && HTTP_SETDIR=snapshots/$ARCH
 
 # Scan /var/run/dmesg.boot for interesting devices.
 MTDEVS=$(scan_dmesg "${MDMTDEVS:-/^[cms]t[0-9][0-9]* /s/ .*//p}")
-nifs=0
+NIFS=0
 DISPLAY=$(scan_dmesg '/^wsdisplay[0-9]* /s/ .*//p')
 
 CONSOLE=$(scan_dmesg '/^\([^ ]*\).*: console$/s//\1/p')
@@ -1870,7 +1728,7 @@ md_consoleinfo
 THESETS="bsd bsd.rd bsd.mp $MDSETS"
 : ${DEFAULTSETS:="bsd bsd.rd"}
 for _set in base etc comp man game xbase xetc xshare xfont xserv site; do
-	[[ $MODE == upgrade && ( $_set == etc || $_set == xetc ) ]] && continue
+	[[ $MODE == upgrade && $_set == @(etc|xetc) ]] && continue
 	THESETS="$THESETS ${_set}${VERSION}.tgz"
  	#siteXX si esta por defecto
 	#isin $_set site && continue
@@ -1964,10 +1822,10 @@ elif [[ -z $respfile ]]; then
 	fi
 	rm -f /ai.done
 	echo "Performing non-interactive $action..."
-	/$action -af /$action.conf 2>&1 </dev/null | sed 'w/ai.log'
+	/$action -af /$action.conf 2>&1 </dev/null | sed 's/^.*//;w/ai.log'
 	if [[ -f /ai.done ]]; then
 		while _lf=/mnt/var/tmp/ai.log.$RANDOM && test -e $_lf; do done
-		sed 's/^.*^M//' /ai.log >>$_lf
+		cp /ai.log $_lf
 		chmod 600 $_lf
 		_lf=${_lf#/mnt}
 		cat <<__EOT >>/mnt/etc/rc.firsttime
@@ -2001,7 +1859,7 @@ if [[ $MODE == install ]]; then
 	echo
 	donetconfig
 
-	((nifs != 0)) && startftplist
+	((NIFS != 0)) && startcgiinfo
 
 	echo
 	while :; do

@@ -1,5 +1,5 @@
 #!/bin/ksh
-#	$OpenBSD: upgrade.sh,v 1.76 2014/02/21 17:11:02 deraadt Exp $
+#	$OpenBSD: upgrade.sh,v 1.78 2014/08/03 16:00:15 rpe Exp $
 #	$NetBSD: upgrade.sh,v 1.2.4.5 1996/08/27 18:15:08 gwr Exp $
 #
 # Copyright (c) 1997-2009 Todd Miller, Theo de Raadt, Ken Westerback
@@ -70,7 +70,7 @@ THESETS="$THESETS site$VERSION-$(hostname -s).tgz"
 # Configure the network.
 enable_network
 
-startftplist
+startcgiinfo
 
 # Create fstab for use during upgrade.
 munge_fstab
@@ -86,6 +86,13 @@ feed_random
 
 # Install sets.
 install_sets
+
+# XXX To be removed after 5.6 is released.
+# XXX smtpd got privsep'ed and the _smtpq user is now used to manage these
+# XXX directories. Ensure proper ownership in case smtpd has been started
+# XXX before this change.
+(cd /mnt/var/spool/smtpd &&
+	chown -R 103 corrupt incoming purge queue temporary) 2>/dev/null
 
 # Perform final steps common to both an install and an upgrade.
 finish_up
