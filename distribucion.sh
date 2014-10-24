@@ -541,10 +541,9 @@ if (test "$sn" = "s") then {
 paraexc="";
 function paquete {
 	nom=$1;
-	cat=$2;
-	dest=$3;
-	copiar=$4;
-	subd=$5;
+	dest=$2;
+	copiar=$3;
+	subd=$4;
 	if (test "$dest" = "") then {
 		dest=paquetes;
 	} fi;
@@ -552,20 +551,37 @@ function paquete {
 		echo "En llamado a funcion paquete falta nombre del paquete";
 		exit 1;
 	} fi;
-	if (test "$cat" = "") then {
-		echo "En llamado a funcion paquete falta categoria del paquete";
-		exit 1;
+	echo $nom | grep "\/" > /dev/null 2>&1
+	if (test "$?" = "0") then {
+		# categoria va con nombre para paquetes en mystuff
+		cat=`echo $nom | sed -e "s/\/.*//g"`
+		d1="$nom"
+		nom=`echo $nom | sed -e "s/.*\///g"`
+	} else {
+		l=`grep "^$nom-[0-9]" /usr/ports/INDEX | head -n 1`
+		if (test "$l" = "") then {
+			echo "Desconocido $nom en /usr/ports/INDEX"
+			exit 1;
+		} fi;
+		d1=`echo "$l" | sed -e 's/^[^|]*|\([^,|]*\)[,|].*/\1/g'`
+		if (test "$subd" != "") then {
+			d1=`echo $d1 | sed -e 's/\/[^\/]*$//g'`
+			d1="$d1/$subd"
+		} fi;
+		cat=`echo $d1 | sed -e 's/\/[^\/]*$//g'`
 	} fi;
 	mys="mystuff";
-	if (test ! -d "/usr/ports/$mys/$cat/$nom/$subd/") then {
-		mys="";
+	if (test -d "/usr/ports/mystuff/$d1/") then {
+		dir="/usr/ports/mystuff/$d1/"
+	} else {
+		dir="/usr/ports/$d1/"
 	} fi;
-	if (test ! -d "/usr/ports/$mys/$cat/$nom/$subd/") then {
-		echo "No es directorio /usr/ports/$mys/$cat/$nom/$subd/";
+	if (test ! -d "$dir") then {
+		echo "No es directorio $dir";
 		exit 1;
 	} fi;
 	echo "*> Creando paquete $nom:$cat" | tee -a /var/tmp/distrib-adJ.bitacora;
-	(cd /usr/ports/$mys/$cat/$nom/$subd/ ; make -j4 package)
+	(cd "$dir" ; make -j4 package)
 	if (test ! -f /etc/signify/adJ-$VP-pkg.sec) then {
 		echo "No hay llave privada /etc/signify/adJ-$VP-pkg.sec";
 		echo "Si no lo ha hecho con signify -G -c \"Firma adJ $V para paquetes\" -n -s /etc/signify/adJ-$VP-pkg.sec -p /etc/signify/adJ-$VP-pkg.pub"
@@ -608,51 +624,31 @@ else {
 echo $sn
 if (test "$sn" = "s") then {
 
-  paquete apg security
-  #paquete ossp-uuid devel
-  paquete gdal geo
-  paquete php lang paquetes "php php-fpm php-gd php-intl php-ldap php-mcrypt php-pdo_pgsql php-pgsql php-zip" 5.4
-  paquete ORBit2 devel
-  paquete a2ps print
-  paquete aalib graphics
-  paquete abiword editors
-  paquete antiword textproc
-  paquete audacious-plugins audio
-  paquete clisp lang
-  paquete cppcheck devel
-  paquete cups-filters print
-  paquete dovecot mail
-  paquete dtc mail
 
+  paquete chromium
+  exit 1;
 
-
-  #paquete boost devel
-  #paquete openldap databases
-  #paquete fox devel
-  #paquete ocaml lang
-  #paquete libwmf graphics 
-  #paquete dbus x11
-  #paquete GeoIP net
-  #paquete dialog misc
-  #paquete qemu emulators
-  #paquete postgis geo
-  #paquete libv8 lang
-  #paquete py-lxml textproc
-  #paquete py-qt4 x11
-  #paquete qgis geo
+  exit 1;
+  #paquete openldap
+  #paquete fox
+  #paquete ocaml
+  #paquete libwmf 
+  #paquete dbus
+  #paquete GeoIP
+  #paquete dialog
+  #paquete qemu
+  #paquete postgis
+  #paquete libv8
+  #paquete py-lxml
+  #paquete py-qt4
+  #paquete qgis
   
-  #paquete ORBit2 devel
-  #paquete libreoffice editors paquetes "libreoffice libreoffice-i18n-es" 
-  #paquete aspell textproc paquetes "aspell aspell-es" 
+  #paquete ORBit2
+  #paquete libreoffice paquetes "libreoffice libreoffice-i18n-es" 
+  #paquete aspell paquetes "aspell aspell-es" 
   #libreoffice-i18n-es
   for i in `grep "^.*-\\[v\\]" Contenido.txt | sed -e "s/^\(.*\)-\[v\].*/\1/g"`; do 
-	s=`grep "^${i}-[0-9]" /usr/ports/INDEX | head -n 1 | sed -e "s/^[^|]*|\([^\/]*\)\/.*/\1/g"`
-	echo "$i - $s"
-	if (test "$s" = "" -o ! -d /usr/ports/$s/$i) then {
-		echo "Paquete $i no es compilable en /usr/ports/"
-	} else {
 		paquete $i $s
-	} fi;
   done
  
 } fi;
@@ -680,62 +676,61 @@ if (test "$sn" = "s") then {
 		ln -s $dini/arboldes/usr/ports/mystuff /usr/ports/mystuff
 	} fi;
 	rm tmp/disponibles*
-  #paquete dialog misc
-  # paquete php lang paquetes "php php-fpm php-gd php-mcrypt php-pdo_pgsql" 5.5  Tocó dejar 5.4 por pear -> SIVeL 1.2
 
- 
-  # paquete pear www paquetes "pear pear-utils"  Toco quedarse en PHP 5.3 para SIVeL 1.2
-  #paquete pear www 
+
+# pruebas
 
   # Retroportados
-  paquete postgresql databases paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs"
-  paquete php lang paquetes "php php-fpm php-gd php-intl php-ldap php-mcrypt php-pdo_pgsql php-pgsql php-zip" 5.4
-  paquete ruby lang paquetes "ruby ruby21-ri_docs" 2.1
-  #paquete png graphics
-  #paquete libxml textproc
-  #paquete gnutls security
+  
+  #paquete dialog
+  paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs"
+  paquete php paquetes "php php-fpm php-gd php-intl php-ldap php-mcrypt php-pdo_pgsql php-pgsql php-zip" 5.4
+  paquete ruby paquetes "ruby ruby21-ri_docs" 2.1
+  # paquete pear paquetes "pear pear-utils"  Toco quedarse en PHP 5.4 para SIVeL 1.2
 
-  paquete pear-Auth security
-  #paquete pear-DB databases
-  paquete pear-DB_DataObject databases
-  paquete pear-DB-DataObject-FormBuilder www
-  paquete pear-HTML-Common www
-  paquete pear-HTML-CSS www
-  paquete pear-Validate devel
-  paquete pear-HTML-QuickForm www
-  paquete pear-HTML-QuickForm-Controller www
-  paquete pear-HTML-Javascript www
-  paquete pear-HTML-Menu www
-  paquete pear-HTML-Table www
+  # Retroportados con mejoras para adJ
+  paquete pear-Auth
+  paquete pear-Validate
+  paquete pear-HTML-QuickForm
+  paquete xfe
+  paquete vlc
 
-  #paquete ruby-apacheconf_parser devel paquetes "ruby21-apacheconf-parser"
-  #paquete ruby-apache2nginx devel paquetes "ruby21-apache2nginx"
+  # Unicos en adJ liderados por otros
+  paquete databases/pear-DB_DataObject
+  paquete www/pear-HTML-Common
+  paquete www/pear-HTML-CSS
+  paquete www/pear-HTML-Javascript
+  paquete www/pear-HTML-Menu
+  paquete www/pear-HTML-Table
+  paquete emulators/realboy
+  paquete sysutils/ganglia
+  paquete textproc/sword
+  paquete textproc/xiphos
+  paquete x11/fbdesk
+  paquete www/pear-DB-DataObject-FormBuilder
+  paquete www/pear-HTML-QuickForm-Controller
+  #paquete devel/ruby-apacheconf_parser paquetes "ruby21-apacheconf-parser"
 
-  paquete evangelios_dp books
-  paquete sword textproc 
-  paquete xiphos textproc 
+  # Unicos de adJ liderados por pdJ
+  paquete books/evangelios_dp
+  paquete books/basico_OpenBSD
+  paquete books/usuario_OpenBSD
+  paquete books/servidor_OpenBSD
+  paquete education/AnimalesI
+  paquete education/AprestamientoI
+  paquete education/PlantasCursiva
+  paquete education/NombresCursiva
+  paquete fonts/TiposLectoEscritura
+  paquete education/asigna
+  paquete textproc/markup
+  paquete education/repasa
+  paquete education/sigue
 
-  paquete realboy emulators
-  paquete ganglia sysutils
+  paquete databases/sivel sivel sivel 1.1
+  paquete databases/sivel sivel sivel 1.2
 
-  paquete basico_OpenBSD books
-  paquete usuario_OpenBSD books
-  paquete servidor_OpenBSD books
-  paquete AnimalesI education
-  paquete AprestamientoI education
-  paquete PlantasCursiva education
-  paquete NombresCursiva education
-  paquete TiposLectoEscritura fonts
-  paquete asigna education
-  paquete markup textproc 
-  paquete repasa education
-  paquete sigue education
+  #paquete devel/ruby-apache2nginx paquetes "ruby21-apache2nginx"
 
-  paquete sivel databases sivel sivel 1.1
-  paquete sivel databases sivel sivel 1.2
-
-  paquete fbdesk x11
-  paquete xfe x11
   rm $dini/$V$VESP-$ARQ/$dest/php5-gd-*-no_x11.tgz
 
 } fi;	

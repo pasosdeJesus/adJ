@@ -1,0 +1,16 @@
+$OpenBSD$
+--- src/text/charset.c.orig	Sat Oct 18 22:07:48 2014
++++ src/text/charset.c	Sat Oct 18 22:07:59 2014
+@@ -35,10 +35,8 @@
+ # include <windows.h>
+ #endif
+ 
+-#ifdef __APPLE__
+-#   include <string.h>
+-#   include <xlocale.h>
+-#endif
++#include <string.h>
++#include <xlocale.h>
+ 
+ #include "libvlc.h"
+ #include <vlc_charset.h>

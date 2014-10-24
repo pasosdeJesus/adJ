@@ -1,0 +1,16 @@
+$OpenBSD$
+--- src/misc/messages.c.orig	Sat Oct 18 22:15:23 2014
++++ src/misc/messages.c	Sat Oct 18 22:15:35 2014
+@@ -35,11 +35,7 @@
+ #include <vlc_common.h>
+ 
+ #include <stdarg.h>                                       /* va_list for BSD */
+-#ifdef __APPLE__
+-# include <xlocale.h>
+-#elif defined(HAVE_LOCALE_H)
+-# include <locale.h>
+-#endif
++#include <xlocale.h>
+ #include <errno.h>                                                  /* errno */
+ 
+ #ifdef WIN32
