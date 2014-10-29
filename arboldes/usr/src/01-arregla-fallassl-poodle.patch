@@ -1,0 +1,14 @@
+diff -ruN -x *~ src55-orig/lib/libssl/src/ssl/ssl_lib.c src/lib/libssl/src/ssl/ssl_lib.c
+--- src55-orig/lib/libssl/src/ssl/ssl_lib.c	Sun Oct 26 08:54:08 2014
++++ src/lib/libssl/src/ssl/ssl_lib.c	Wed Oct 29 15:22:09 2014
+@@ -1869,6 +1869,9 @@
+ 	 */
+ 	ret->options |= SSL_OP_LEGACY_SERVER_CONNECT;
+ 
++	/* Disable SSLv3 by default. */
++	ret->options |= SSL_OP_NO_SSLv3;
++
+ 	return(ret);
+ err:
+ 	SSLerr(SSL_F_SSL_CTX_NEW,ERR_R_MALLOC_FAILURE);
+				    ssl_cipher_id);
