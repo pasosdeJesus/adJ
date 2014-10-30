@@ -581,6 +581,9 @@ function paquete {
 		exit 1;
 	} fi;
 	echo "*> Creando paquete $nom:$cat" | tee -a /var/tmp/distrib-adJ.bitacora;
+	if (test "$PAQ_LIMPIA_PRIMERO" != "") then {
+		(cd "$dir" ; make clean; rm /usr/ports/packages/$ARQ/all/$nom-[0-9][0-9a-z.]*.tgz)
+	} fi;
 	(cd "$dir" ; make -j4 package)
 	if (test ! -f /etc/signify/adJ-$VP-pkg.sec) then {
 		echo "No hay llave privada /etc/signify/adJ-$VP-pkg.sec";
@@ -623,34 +626,12 @@ else {
 } fi;
 echo $sn
 if (test "$sn" = "s") then {
-
-
-  paquete chromium
-  exit 1;
-
-  exit 1;
-  #paquete openldap
-  #paquete fox
-  #paquete ocaml
-  #paquete libwmf 
-  #paquete dbus
-  #paquete GeoIP
-  #paquete dialog
-  #paquete qemu
-  #paquete postgis
-  #paquete libv8
-  #paquete py-lxml
-  #paquete py-qt4
-  #paquete qgis
-  
-  #paquete ORBit2
-  #paquete libreoffice paquetes "libreoffice libreoffice-i18n-es" 
-  #paquete aspell paquetes "aspell aspell-es" 
-  #libreoffice-i18n-es
+  #PAQ_LIMPIA_PRIMERO=1
+  #paquete webkit-gtk3
+  #exit 1;
   for i in `grep "^.*-\\[v\\]" Contenido.txt | sed -e "s/^\(.*\)-\[v\].*/\1/g"`; do 
 		paquete $i $s
   done
- 
 } fi;
 	
 echo " *> Generar paquetes de la distribución AprendiendoDeJesús en $dini/$V$VESP-$ARQ/paquetes " | tee -a /var/tmp/distrib-adJ.bitacora;
@@ -694,6 +675,7 @@ if (test "$sn" = "s") then {
   paquete pear-HTML-QuickForm
   paquete xfe
   paquete vlc
+  paquete bash 
 
   # Unicos en adJ liderados por otros
   paquete databases/pear-DB_DataObject

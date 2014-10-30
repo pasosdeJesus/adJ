@@ -1013,6 +1013,7 @@ if (test ! -f /var/log/servicio) then {
 	touch /var/log/servicio
 } fi;
 
+touch /etc/rc.local
 echo "* Preparar /etc/rc.local para que reinicie servicios faltantes" >> /var/tmp/inst-adJ.bitacora;
 grep "\. /etc/rc.conf" /etc/rc.local > /dev/null 2> /dev/null
 if (test "$?" != "0") then {
@@ -1828,7 +1829,7 @@ if (test "$?" = "0") then {
 echo "* Instalando PHP" >> /var/tmp/inst-adJ.bitacora;
 p=`ls /var/db/pkg | grep "^php"`
 if (test "$p" = "") then {
-	insacr libltdl
+	insacp libltdl
 	insacp libgpg-error
 	insacp libgcrypt
 	p=`ls $PKG_PATH/png*` 
