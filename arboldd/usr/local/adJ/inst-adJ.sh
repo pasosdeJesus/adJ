@@ -1445,10 +1445,20 @@ if (test "$?" != "0") then {
 	insacp tiff
 	insacp gdal 
 	insacp postgis
+	grep "^postgresql:" /etc/login.conf > /dev/null 2>&1
+	if (test "$?" = "1") then {
+		echo "
+postgresql:\
+	:setenv=LD_PRELOAD=libpthread.so:\
+	:tc=servicio:
+" >> /etc/login.conf
+		cap_mkdb /etc/login.conf
+	} fi;		
 	echo -n "La clave del administrador de 'postgres' quedará en /var/postresql/.pgpass " >> /var/tmp/inst-adJ.bitacora;
 	clpg=`apg | head -n 1`
 	mkdir -p /var/postgresql/data
 	echo "*:*:*:$uspos:$clpg" > /var/postgresql/.pgpass;
+	echo "export HISTFILE=/var/postgresql/.pdksh_history" > /var/postgresql/.profile
 	chown -R _postgresql:_postgresql /var/postgresql/
 	chmod 0600 /var/postgresql/.pgpass;
 	if (test ! -f /var/postgresql/data/postgresql.conf) then {
