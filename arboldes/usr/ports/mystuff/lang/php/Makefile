@@ -2,5 +2,6 @@
 
 SUBDIR =
 SUBDIR += 5.4
+SUBDIR += 5.4,ap2
 
 .include <bsd.port.subdir.mk>
