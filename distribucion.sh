@@ -620,39 +620,49 @@ if (test "$sn" = "s") then {
 	} fi;
 	rm tmp/disponibles*
 
-	# Retroportados
+	# Recompilados para cerrar fallas, tomando de fuentes de OpenBSD 5.5
+	paquete webkit www
+	paquete py-lxml textproc
+	paquete wget net
+	paquete pidgin net
 	paquete dbus x11
-	paquete bash shells
+	paquete libxml textproc
+	paquete png graphics
+	paquete gnutls security
 
+	# Retroportados de current para cerrar fallas
+	paquete bash shells
+	paquete ruby lang paquetes "ruby ruby21-ri_docs" 2.1
 	paquete postgresql databases paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs"
 	paquete php lang paquetes "php php-fpm php-gd php-intl php-ldap php-mcrypt php-pdo_pgsql php-pgsql php-zip" 5.4
 	# Tocó dejar 5.4 por pear -> SIVeL 1.2
-	paquete png graphics
-	paquete libxml textproc
-	paquete gnutls security
+	rm $dini/$V$VESP-$ARQ/$dest/php5-gd-*-no_x11.tgz
 
+	# Mejorados para adJ
 	paquete pear-Auth security
+	paquete pear-Validate devel
+	paquete pear-HTML-QuickForm www
+	paquete xfe x11
+
+	# Unicos en adJ liderados por otros
 	paquete pear-DB_DataObject databases
 	paquete pear-DB-DataObject-FormBuilder www
 	paquete pear-HTML-Common www
 	paquete pear-HTML-CSS www
-	paquete pear-Validate devel
-	paquete pear-HTML-QuickForm www
 	paquete pear-HTML-QuickForm-Controller www
 	paquete pear-HTML-Javascript www
 	paquete pear-HTML-Menu www
 	paquete pear-HTML-Table www
-
-	#paquete ruby-apacheconf_parser devel paquetes "ruby21-apacheconf-parser"
-	#paquete ruby-apache2nginx devel paquetes "ruby21-apache2nginx"
-
-	paquete evangelios_dp books
 	paquete sword textproc 
 	paquete xiphos textproc 
-
 	paquete realboy emulators
 	paquete ganglia sysutils
-
+	paquete fbdesk x11
+	#paquete ruby-apacheconf_parser devel paquetes "ruby21-apacheconf-parser"
+	 
+	# Únicos de adJ liderados por pdJ
+	#paquete ruby-apache2nginx devel paquetes "ruby21-apache2nginx"
+	paquete evangelios_dp books
 	paquete basico_OpenBSD books
 	paquete usuario_OpenBSD books
 	paquete servidor_OpenBSD books
@@ -665,13 +675,8 @@ if (test "$sn" = "s") then {
 	paquete markup textproc 
 	paquete repasa education
 	paquete sigue education
-
 	paquete sivel databases sivel sivel 1.1
 	paquete sivel databases sivel sivel 1.2
-
-	paquete fbdesk x11
-	paquete xfe x11
-	rm $dini/$V$VESP-$ARQ/$dest/php5-gd-*-no_x11.tgz
 
 } fi;	
 
