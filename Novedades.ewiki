@@ -3,22 +3,22 @@ adJ - Aprendiendo de Jesús.
 Distribución para fomentar la construcción del Reino de Dios desde 
 la educación, el respeto por la dignidad humana y la memoria.
 
-Versión: 5.6%%%
+Versión: 5.7%%%
 Fecha de publicación: 1/Feb/2015
 
 !!!NOVEDADES
 
-Con respecto a OpenBSD 5.6 para amd64 y a la edición anterior de este DVD
+Con respecto a OpenBSD 5.7 para amd64 y a la edición anterior de este DVD
 
 
 !KERNEL Y SISTEMA BASE
 
 * Soporte en la librería de C para presentar fechas, horas, cantidades monetarias, números y ordenamientos alfabéticos (cotejación) con las convenciones de cada país de latinoamérica (y de otros locales soportados por OpenBSD). Opera bien en codificaciones de 8 bits o para español en codificación UTF-8. Este soporte, las tablas por paises y el soporte completo de  xlocale se basaron en FreeBSD.  Estas mejoras fueron aportadas a OpenBSD (cotejación desde adJ 5.2, cantidades monetarias y números desde 5.4 y fechas y horas desde 5.5) y se anhela su integración en futuras versiones.    Así en adJ por ejemplo los ordenamientos alfabéticos en LibreOffice y otros programas son correctos en español (que no ocurre en OpenBSD).
-* Parches de seguridad del sistema base hasta 23.Oct.2014. En particular cerradas fallas  CVE-2014-3616 en nginx y deshabilitado SSLv3 en LibreSSL para evitar falla Poodle CVE-2014-3566. Aunque estas 2 fallas tienen parches para aplicar a fuentes de OpenBSD 5.6 de fechas 1.Oct y 20.Oct están presentes en los binarios del CD de OpenBSD (que se había quemado antes) y posiblemente en los binarios que podrán descargarse de Internet desde el 1.Nov.
-* Parchados diversos paquetes para cerrar fallas de seguridad en particular paquete bash que cierra vulnerabilidad "shellshock" (CVE-2014-6271) (a diferencia de los binarios de OpenBSD 5.6 que lo incluirán).   
+* Parches de seguridad del sistema base hasta 23.Oct.2014. En particular cerradas fallas  CVE-2014-3616 en nginx y deshabilitado SSLv3 en LibreSSL para evitar falla Poodle CVE-2014-3566. Aunque estas 2 fallas tienen parches para aplicar a fuentes de OpenBSD 5.7 de fechas 1.Oct y 20.Oct están presentes en los binarios del CD de OpenBSD (que se había quemado antes) y posiblemente en los binarios que podrán descargarse de Internet desde el 1.Nov.
+* Parchados diversos paquetes para cerrar fallas de seguridad en particular paquete bash que cierra vulnerabilidad "shellshock" (CVE-2014-6271) (a diferencia de los binarios de OpenBSD 5.7 que lo incluirán).   
 * Hemos remplazando `daemon' por `servicio' en buena parte del sistema base (ver por ejemplo ==vmstat -s== o ==less /var/log/servicio== o ==man servicio==).  Hasta la versión 5.3 se usó ==service==, pero para disminuir colisiones de nombres desde la 5.4 se emplea ==servicio==.
 
-Entre las novedades reportadas en las `Notas de publicación de OpenBSD 5.6' destacamos:
+Entre las novedades reportadas en las `Notas de publicación de OpenBSD 5.7' destacamos:
 
 
 * Controladores ampliados o mejorados para amd64
@@ -51,9 +51,9 @@ Entre las novedades reportadas en las `Notas de publicación de OpenBSD 5.6' des
 
 !PROCESO DE INSTALACIÓN
 
-En adJ es en español, consta de: (a) preparación, (b) instalación/actualización del sistema base y (c) instalación de aplicaciones y entorno.  Por favor vea más detalles en [ Actualiza.txt | ftp://ftp.pasosdejesus.org/pub/AprendiendoDeJesus/5.6-amd64/Actualiza.txt ]
+En adJ es en español, consta de: (a) preparación, (b) instalación/actualización del sistema base y (c) instalación de aplicaciones y entorno.  Por favor vea más detalles en [ Actualiza.txt | ftp://ftp.pasosdejesus.org/pub/AprendiendoDeJesus/5.7-amd64/Actualiza.txt ]
 
-Desde 5.6 el instalador no soporta métodos ftp ni cinta.
+Desde 5.7 el instalador no soporta métodos ftp ni cinta.
 
 !PAQUETES EXCLUSIVOS DE ADJ
 
@@ -63,7 +63,7 @@ Desde 5.6 el instalador no soporta métodos ftp ni cinta.
 * PHP-5.4.33 retroportado de OpenBSD-current
 * vlc-2.0.2 compilado con soporte de xlocale
 * Incluye bash-4.3.27 que cierra falla shellshock.
-* Los paquetes exclusivos los encuentra en [ftp://ftp.pasosdeJesus.org/pub/AprendiendoDeJesus/5.6-amd64/paquetes] y otras extensiones de PostgreSQL y PHP que no hacen parte de la distribución en [ftp://ftp.pasosdeJesus.org/pub/AprendiendoDeJesus/5.6-amd64-paquetes-extra] 
+* Los paquetes exclusivos los encuentra en [ftp://ftp.pasosdeJesus.org/pub/AprendiendoDeJesus/5.7-amd64/paquetes] y otras extensiones de PostgreSQL y PHP que no hacen parte de la distribución en [ftp://ftp.pasosdeJesus.org/pub/AprendiendoDeJesus/5.7-amd64-paquetes-extra] 
 
 
 !PAQUETES

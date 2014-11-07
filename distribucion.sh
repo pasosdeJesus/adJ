@@ -65,6 +65,11 @@ if (test ! -d /usr/obj) then {
 
 narq=`uname -m`
 
+if (test ! -d $V$VESP-$ARQ) then {
+	mkdir -p $V$VESP-$ARQ/paquetes/
+	cp -rf arboldvd/* $V$VESP-$ARQ/
+} fi;
+
 ANONCVS="anoncvs@anoncvs1.ca.openbsd.org:/cvs"
 ANONCVS="anoncvs@mirror.planetunix.net:/cvs"
 

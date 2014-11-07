@@ -1,11 +1,8 @@
 
-5.6
-OpenBSD (pelikan@) incluyó los mismos cambios que yo había sugerido para 
-ampliar monetary, sin embargo en orden diferente:
-intercambiando int_p_sep_by_space con int_n_cs_precedes respecto
-a parche enviado.  Esto podría implicar cambio en las tablas para 
-intercambiar esos dos campos.
+5.7
 
+que rbx21 compile con llvm --ahora no lo hace, eventualmente por falta de
+lic++ en llvm?
 
 
 Ajustar volumen de forma grafica pues xmixer no está haciendo:
@@ -16,7 +13,8 @@ LC_TIME que use formato localedef
 
 
 Futuro
-* LC_COLLATE con wchar y algoritmo de cotejación Unicode ?
+* LC_COLLATE con wchar y algoritmo de cotejación Unicode ? Ya implementado
+  en FreeBSD
 * localedef al menos para cotejación ?
 * xiphos debería incluir módulos por defecto.
 * Paginas man en español
