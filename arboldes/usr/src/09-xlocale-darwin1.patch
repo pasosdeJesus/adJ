@@ -1705,7 +1705,7 @@ diff -u src-ant/lib/libc/stdlib/strtoul.3 src/lib/libc/stdlib/strtoul.3
  .Nd convert a string to an unsigned long, unsigned long long or uintmax_t integer
  .Sh SYNOPSIS
  .In limits.h
-@@ -55,33 +59,51 @@
+@@ -55,33 +59,50 @@
  .In stdlib.h
  .Ft u_quad_t
  .Fn strtouq "const char *nptr" "char **endptr" "int base"
@@ -1727,7 +1727,7 @@ diff -u src-ant/lib/libc/stdlib/strtoul.3 src/lib/libc/stdlib/strtoul.3
 +functions convert the string in
  .Fa nptr
  to an
- .Li unsigned long
+ .Vt unsigned long
  value.
  The
  .Fn strtoull
@@ -1737,7 +1737,7 @@ diff -u src-ant/lib/libc/stdlib/strtoul.3 src/lib/libc/stdlib/strtoul.3
 +functions convert the string in
  .Fa nptr
  to an
- .Li unsigned long long
+ .Vt unsigned long long
  value.
  The
  .Fn strtoumax
@@ -1747,7 +1747,7 @@ diff -u src-ant/lib/libc/stdlib/strtoul.3 src/lib/libc/stdlib/strtoul.3
 +functions convert the string in
  .Fa nptr
  to a
- .Li umaxint_t
+ .Vt umaxint_t
  value.
  The
  .Fn strtouq
@@ -1757,12 +1757,11 @@ diff -u src-ant/lib/libc/stdlib/strtoul.3 src/lib/libc/stdlib/strtoul.3
 +functions are deprecated equivalent of
  .Fn strtoull
 -and is provided for backwards compatibility with legacy programs.
-+.Fn strtoull_l
 +and are provided for backwards compatibility with legacy programs.
  The conversion is done according to the given
  .Fa base ,
- which must be a number between 2 and 36 inclusive
-@@ -123,6 +145,9 @@
+ which must be a number between 2 and 36 inclusive or the special value 0.
+@@ -125,6 +146,9 @@
  .Ql Z
  representing 35.)
  .Pp
@@ -1772,7 +1771,7 @@ diff -u src-ant/lib/libc/stdlib/strtoul.3 src/lib/libc/stdlib/strtoul.3
  If
  .Fa endptr
  is non-null,
-@@ -147,25 +172,38 @@
+@@ -149,25 +173,38 @@
  .Sh RETURN VALUES
  The
  .Fn strtoul ,
@@ -1815,7 +1814,7 @@ diff -u src-ant/lib/libc/stdlib/strtoul.3 src/lib/libc/stdlib/strtoul.3
  returns
  .Dv ULLONG_MAX
  and the global variable
-@@ -228,6 +266,7 @@
+@@ -236,6 +273,7 @@
  .Sh SEE ALSO
  .Xr sscanf 3 ,
  .Xr strtol 3
@@ -1823,7 +1822,7 @@ diff -u src-ant/lib/libc/stdlib/strtoul.3 src/lib/libc/stdlib/strtoul.3
  .Sh STANDARDS
  The
  .Fn strtoul ,
-@@ -241,5 +280,11 @@
+@@ -256,5 +294,11 @@
  function is a
  .Bx
  extension and is provided for backwards compatibility with legacy programs.
