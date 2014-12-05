@@ -621,6 +621,7 @@ if (test "$sn" = "s") then {
 	rm tmp/disponibles*
 
 	# Recompilados para cerrar fallas, tomando de fuentes de OpenBSD 5.5
+	#paquete webkit-gtk3 www
 	paquete webkit www
 	paquete py-lxml textproc
 	paquete wget net
