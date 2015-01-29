@@ -2,7 +2,7 @@ adJ - Aprendiendo de Jesús.
 Anhelamos que sea el sistema operativo escogido por Jesús durante el milenio.
 
 Versión: 5.5p1%%%
-Fecha de publicación: 10/Dic/2014
+Fecha de publicación: 29/Ene/2014
 
 !!!NOVEDADES
 
@@ -12,15 +12,17 @@ cambios con respecto a adJ 5.5.
 
 !KERNEL Y SISTEMA BASE
 
-* Parches de seguridad de sistema base hasta 1.Dic.2014, que solucionan 8 fallas de seguridad no corregidas en binarios del sistema base de OpenBSD 5.5 y 7 de robustez (si han sido corregidas en fuentes de OpenBSD, ver http://www.openbsd.org/errata55.html). En particular:
-	* nginx con falla CVE-2014-3616 cerrada (abierta en distribución binariade OpenBSD 5.6)
+* Parches de seguridad de sistema base hasta 10.Dic.2014, que solucionan 9 fallas de seguridad no corregidas en binarios del sistema base de OpenBSD 5.5 y 8 de robustez (si han sido corregidas en fuentes de OpenBSD, ver http://www.openbsd.org/errata55.html). En particular:
+	* nginx con falla CVE-2014-3616 cerrada (abierta en distribución binaria de OpenBSD 5.6)
 	* libressl con diversas fallas cerradas
 	* sendmail con falla CVE-2014-3956 cerrada
-	* XOrg con fallas cerradas CVE-2014-0209, CVE-2014-0210, CVE-2014-0211
+	* Xenocara con fallas cerradas CVE-2014-0209, CVE-2014-0210, CVE-2014-0211 y otras en manejo de requerimientos por parte de clientes X.
 * Deshabilita SSLv3 en libssl así que cierra falla CVE-2014-3566 también conocida como "Poodle" para servicios que empleen esta librería (este cambio se recomienda en fuentes 5.6, pero no se incluyó en  binarios de esa versión).
+* Incluye 
 
 !PAQUETES
-
+* Creados para esta versión:
+	* pear-HTML-QuickForm-3.2.14p1 que acepta datos con tildes en áreas de texto cuando se usa cdificación ISO-8859-1 (como el pronto obsoleto SIVeL 1.1).
 * Compilados diversos paquetes actualizados en fuentes de OpenBSD 5.5 --pero no incluidos en binarios de OpenBSD 5.5 ni de adJ 5.5: 
 	* libxml que cierra CVE-2014-3660 
         * py-lxml que cierra CVE-2014-3146
