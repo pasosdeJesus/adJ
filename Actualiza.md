@@ -3,21 +3,21 @@ Actualización a Aprendiendo De Jesús 5.6
 
 La actualización consta de 3 partes:
 
-      a) Preparar su sistema y descargar instalador
-      b) Actualizar el Sistema Base
-      c) Actualizar Aplicaciones 
+a) Preparar su sistema y descargar instalador
+b) Actualizar el Sistema Base
+c) Actualizar Aplicaciones 
 
 
 a) Preparar su sistema
 ----------------------
-* Aunque puede descargar el DVD de instalación, es más breve y 
-  robusto ante fallas que descargue los directorios y archivos 
-  del instalador con rsync:
+
+* Aunque puede descargar el DVD de instalación, es más breve y robusto ante fallas que descargue los directorios y archivos del instalador con rsync:
 	```	
 	mkdir -p ~/comp/adJ;
 	cd ~/comp/adJ;
 	rsync-adJ 5.6
 	```
+
   Si ocurre alguna falla durante la transmisión podrá continuar donde
   quedó repitiendo estas instrucciones.
 * Si va a actualizar, debe sacar copia de la base de datos y realizar
