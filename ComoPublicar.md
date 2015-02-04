@@ -2,13 +2,15 @@ COMO PUBLICAR
 =============
 
 Anhelamos publicar versión mayor (e.g 5.6) 3 meses después de OpenBSD:
+
 	1.Ago
 	1.Feb
 
-Publicamos revisiones (e.g 5.6) si la seguridad o calidad lo ameritan.
+Publicamos revisiones (e.g 5.6p1) si la seguridad o calidad lo ameritan.
 
 Anhelamos publicar al menos una versión alfa (e.g 5.6a1 en directorio
-desarrollo del sitio de distribución) 20 días antes de la versión mayor:
+```desarrollo``` del sitio de distribución) 20 días antes de la versión mayor:
+
 	10.Jul
 	10.Ene
 
@@ -16,10 +18,8 @@ Pasos importantes para publicar
 -------------------------------
 
 1. Actualizar SIVeL, evangelios y paquetes propios de adJ.
-
 2. Actualizar documentación, publicar en Structio, actualizar portes de esta,
 generar y probar paquetes
-
 3. Verificar operación de:
   * http://structio.sf.net/guias/
   * http://sivel.sf.net/guias/
@@ -27,17 +27,14 @@ generar y probar paquetes
   * http://www.pasosdeJesus.org
   * ftp://ftp.pasosdeJesus.org
   * rsync://ftp.pasosdeJesus.org
-
 4. Retocar fecha de publicacion en ```Novedades.ewiki``` y publicar escondido en
   http://aprendiendo.pasosdeJesus.org
-
 5. Retocar ```Dedicatoria.txt``` y archivos *.txt y regenar en distribución (sin
   paquetes ni otras compilaciones) con:
 
 	```
 	sudo ./distribucion.sh
 	```
-
 6. En computador de desarrollo tras configurar ```var-local.sh``` enviar a
 ftp.pasosdeJesus.org:
 
