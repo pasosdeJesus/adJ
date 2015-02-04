@@ -41,20 +41,15 @@ ftp.pasosdeJesus.org:
 	```
 	hdes/rsync-aotro.sh
 	```
-
 7. En ftp.pasosdeJesus.org
 
 	```
 	hdes/creaiso.sh
 	cp -rf AprendiendoDeJesus-5.6-amd64.iso 5.6-amd64 /dirftp
 	```
-
-8. Actualiza version en reto en P2PU (las 4 primeras tareas)
-
-https://p2pu.org/es/groups/openbsd-adj-como-sistema-de-escritorio/
-
+8. Actualiza version en reto de P2PU (las 4 primeras tareas) 
+   https://p2pu.org/es/groups/openbsd-adj-como-sistema-de-escritorio/
 9. Actualizar Artículo como Noticia en http://aprendiendo.pasosdeJesus.org
-
 10. Correo a listas: openbsd-colombia@googlegroups.com, 
     openbsd-colombia@googlegroups.com, colibri@listas.el-directorio.org, 
     openbsd-mexico@googlegroups.com, sivel-soporte@lists.sourceforge.net
@@ -85,7 +80,6 @@ https://p2pu.org/es/groups/openbsd-adj-como-sistema-de-escritorio/
 
 
 	Bendiciones
-
 
 11. Publicar en Twitter que retrasnmite a cuenta y página en Facebook. 
     Si es tambien publicacion de SIVeL en sitio de noticias de SIVeL y Structio.
