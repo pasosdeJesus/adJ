@@ -8,7 +8,7 @@ La actualización consta de 3 partes:
 3. Actualizar Aplicaciones
 
 
-1) Preparar su sistema
+1. Preparar su sistema
 ----------------------
 
 * Aunque puede descargar el DVD de instalación, es más breve y robusto ante 
@@ -32,7 +32,7 @@ La actualización consta de 3 partes:
        	~/comp/adJ/5.6-amd64/util/preact-adJ.sh
 	```
 
-2) Actualizar el sistema base:
+2. Actualizar el sistema base:
 ------------------------------
 * Copie kernel y descomprima los archivos comprimidos con el sistema base en 
   su directorio raiz y reinicie, esto lo puede hacer con el 
@@ -43,7 +43,7 @@ La actualización consta de 3 partes:
 		/usr/local/adJ/actbase.sh 5.6
 		```
 
-3) Instalación/actualización de aplicaciones:
+3. Instalación/actualización de aplicaciones:
 ---------------------------------------------
 * Después de reinicar debe ejecutar  el archivo de ordenes ```/inst-adJ.sh```
   Este archivo de comandos emplea codificación UTF8, por lo que para 
