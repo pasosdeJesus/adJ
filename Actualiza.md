@@ -1,5 +1,5 @@
 Actualización a Aprendiendo De Jesús 5.6
-******************************************
+========================================
 
 La actualización consta de 3 partes:
 
@@ -8,37 +8,40 @@ La actualización consta de 3 partes:
       c) Actualizar Aplicaciones 
 
 
-a) Para preparar su sistema:
-      * Aunque puede descargar el DVD de instalación, es más breve y 
-	robusto ante fallas que descargue los directorios y archivos 
- 	del instalador con rsync:
-		```	
-              	mkdir -p ~/comp/adJ;
-		cd ~/comp/adJ;
-		rsync-adJ 5.6
-		```
-	Si ocurre alguna falla durante la transmisión podrá continuar donde
-	quedó repitiendo estas instrucciones.
-      * Si va a actualizar, debe sacar copia de la base de datos y realizar
-        otras operaciones para preparar su sistema (por ejemplo para
-	actualizar a 5.6 debe eliminar todos los paquetes del sistema), 
-	puede hacerlo ejecutando el archivo de ordenes preact-adJ.sh 
- 	incluido en el directorio util del DVD de instalación.
-	Si descargó fuentes con el procedimiento anterior ejecutelo con:
-		```
-              ~/comp/adJ/5.6-amd64/util/preact-adJ.sh
-		```
+a) Preparar su sistema
+----------------------
+* Aunque puede descargar el DVD de instalación, es más breve y 
+  robusto ante fallas que descargue los directorios y archivos 
+  del instalador con rsync:
+	```	
+	mkdir -p ~/comp/adJ;
+	cd ~/comp/adJ;
+	rsync-adJ 5.6
+	```
+  Si ocurre alguna falla durante la transmisión podrá continuar donde
+  quedó repitiendo estas instrucciones.
+* Si va a actualizar, debe sacar copia de la base de datos y realizar
+  otras operaciones para preparar su sistema (por ejemplo para
+  actualizar a 5.6 debe eliminar todos los paquetes del sistema), 
+  puede hacerlo ejecutando el archivo de ordenes ```preact-adJ.sh```
+  incluido en el directorio útil del DVD de instalación.
+  Si descargó fuentes con el procedimiento anterior ejecutelo con:
+	```
+       	~/comp/adJ/5.6-amd64/util/preact-adJ.sh
+	```
 
-b) Para actualizar el sistema base:
+b) Actualizar el sistema base:
+------------------------------
       * Copie kernel y descomprima los archivos comprimidos con el sistema 
         base en su directorio raiz y reinicie, esto lo puede hacer con el 
-	archivo de órdenes actbase.sh:
+	archivo de órdenes ```actbase.sh```:
 		```
 		cd ~/comp/adJ; 
 		/usr/local/adJ/actbase.sh 5.6
 		```
 
-c) Para la instalación/actualización de aplicaciones:
+c) Instalación/actualización de aplicaciones:
+-----------------------------------------------------
       * Después de reinicar debe ejecutar  el archivo de ordenes 
 	```/inst-adJ.sh```.
         Este archivo de comandos emplea codificación UTF8, por lo que para 
