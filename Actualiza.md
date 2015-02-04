@@ -3,9 +3,9 @@ Actualización a Aprendiendo De Jesús 5.6
 
 La actualización consta de 3 partes:
 
-a) Preparar su sistema y descargar instalador
-b) Actualizar el Sistema Base
-c) Actualizar Aplicaciones 
+a) Preparar su sistema y descargar instalador.
+b) Actualizar el Sistema Base.
+c) Actualizar Aplicaciones.
 
 
 a) Preparar su sistema
