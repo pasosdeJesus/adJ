@@ -12,9 +12,11 @@ a) Para preparar su sistema:
       * Aunque puede descargar el DVD de instalación, es más breve y 
 	robusto ante fallas que descargue los directorios y archivos 
  	del instalador con rsync:
+		```	
               	mkdir -p ~/comp/adJ;
 		cd ~/comp/adJ;
 		rsync-adJ 5.6
+		```
 	Si ocurre alguna falla durante la transmisión podrá continuar donde
 	quedó repitiendo estas instrucciones.
       * Si va a actualizar, debe sacar copia de la base de datos y realizar
@@ -23,22 +25,28 @@ a) Para preparar su sistema:
 	puede hacerlo ejecutando el archivo de ordenes preact-adJ.sh 
  	incluido en el directorio util del DVD de instalación.
 	Si descargó fuentes con el procedimiento anterior ejecutelo con:
+		```
               ~/comp/adJ/5.6-amd64/util/preact-adJ.sh
+		```
 
 b) Para actualizar el sistema base:
       * Copie kernel y descomprima los archivos comprimidos con el sistema 
         base en su directorio raiz y reinicie, esto lo puede hacer con el 
 	archivo de órdenes actbase.sh:
+		```
 		cd ~/comp/adJ; 
 		/usr/local/adJ/actbase.sh 5.6
+		```
 
 c) Para la instalación/actualización de aplicaciones:
-      * Después de reinicar debe ejecutar  el archivo de ordenes /inst-adJ.sh.
+      * Después de reinicar debe ejecutar  el archivo de ordenes 
+	```/inst-adJ.sh```.
         Este archivo de comandos emplea codificación UTF8, por lo que para 
         iniciarlo se recomienda desde una terminal gráfica.  Suponiendo que 
         descargo con las instrucciones dadas previamente puede usar:
+		```
 		sudo ARCH=~/comp/adJ/5.6-amd64 /inst-adJ.sh
-
+		```
         Este archivo de comandos asiste actualizaciones que puedan hacer 
 	falta de una versión a otra del sistema base (descritas en
 	http://openbsd.org/faq/upgrade55.html ) y actualiza cuando es posible
@@ -46,7 +54,7 @@ c) Para la instalación/actualización de aplicaciones:
       * Puede ejecutar varias veces este archivo de órdenes, pero si el 
 	proceso no concluye exitosamente por favor después de ejecutar
         el instalador y avanzar tanto como pueda envíe el archivo
-        /var/tmp/inst-adJ.bitacora a info@pasosdeJesus.org
+        ```/var/tmp/inst-adJ.bitacora``` a info@pasosdeJesus.org
       * Este archivo de ordenes utiliza sysmerge para actualizar algunos 
 	archivos de configuración, como se explica en 
  	  http://www.openbsd.org/faq/upgrade48.html :
@@ -54,14 +62,14 @@ c) Para la instalación/actualización de aplicaciones:
 	por un paginador (el que haya configurado en la variable de ambiente 
 	$PAGER) y para la mayoría de archivos presenta un mensaje como el 
 	siguiente:
-	
+		```	
 		Use 'd' to delete the temporary ./var/www/htdocs/index.html
 		Use 'i' to install the temporary ./var/www/htdocs/index.html
 		Use 'm' to merge the temporary and installed versions
 		Use 'v' to view the diff results again
 	
 		Default is to leave the temporary file to deal with by hand
-	
+		```	
 	Si desea retener su archivo actual, borre el temporal con la opción 
 	'd', si dese remplazar su archivo existente con la nueva versión, 
 	instale el archivo temporal con 'i' Si desea mezclar los dos, 
@@ -85,11 +93,11 @@ c) Para la instalación/actualización de aplicaciones:
 	servicios que preste el servidor, hay algunos archivos de 
 	configuración que es mejor no remplazar (opción 'd') o que es      
 	mejor mezclar si conoce la sintaxis (opción 'm').
-	* Evite remplazar /etc/rc.local y /etc/hosts
-	* Si es cortafuegos evite remplazar /etc/pf.conf y /etc/sysctl.conf
-	* Si es servidor DNS evite remplazar /var/named/etc/named.conf
+	* Evite remplazar ```/etc/rc.local``` y ```/etc/hosts```
+	* Si es cortafuegos evite remplazar ```/etc/pf.conf``` y ```/etc/sysctl.conf```
+	* Si es servidor DNS evite remplazar ```/var/named/etc/named.conf```
 	* Si es servidor de correo evite remplazar archivos del directorio 
-	  /etc/mail (tras actualizar recuerde recompilar sendmail).
-	* Si es servidor web evite remplazar /var/www/conf/httpd.conf
+	  ```/etc/mail``` (tras actualizar recuerde recompilar sendmail).
+	* Si es servidor web evite remplazar ```/var/www/conf/httpd.conf```
 	
 
