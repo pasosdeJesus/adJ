@@ -4,7 +4,7 @@ Distribución para fomentar la construcción del Reino de Dios desde
 la educación, el respeto por la dignidad humana y la memoria.
 
 Versión: 5.6%%%
-Fecha de publicación: 1/Feb/2015
+Fecha de publicación: 1/Mar/2015
 
 !!!NOVEDADES
 
@@ -13,32 +13,30 @@ Con respecto a OpenBSD 5.6 para amd64 y a la edición anterior de este DVD
 
 !KERNEL Y SISTEMA BASE
 
+* Nueva utilidad localedef para convertir formatos de fechas y horas en un formato estándar POSIX al formato de OpenBSD.
 * Soporte en la librería de C para presentar fechas, horas, cantidades monetarias, números y ordenamientos alfabéticos (cotejación) con las convenciones de cada país de latinoamérica (y de otros locales soportados por OpenBSD). Opera bien en codificaciones de 8 bits o para español en codificación UTF-8. Este soporte, las tablas por paises y el soporte completo de  xlocale se basaron en FreeBSD.  Estas mejoras fueron aportadas a OpenBSD (cotejación desde adJ 5.2, cantidades monetarias y números desde 5.4 y fechas y horas desde 5.5) y se anhela su integración en futuras versiones.    Así en adJ por ejemplo los ordenamientos alfabéticos en LibreOffice y otros programas son correctos en español (que no ocurre en OpenBSD).
-* Parches de seguridad del sistema base hasta 23.Oct.2014. En particular cerradas fallas  CVE-2014-3616 en nginx y deshabilitado SSLv3 en LibreSSL para evitar falla Poodle CVE-2014-3566. Aunque estas 2 fallas tienen parches para aplicar a fuentes de OpenBSD 5.6 de fechas 1.Oct y 20.Oct están presentes en los binarios del CD de OpenBSD (que se había quemado antes) y posiblemente en los binarios que podrán descargarse de Internet desde el 1.Nov.
-* Parchados diversos paquetes para cerrar fallas de seguridad en particular paquete bash que cierra vulnerabilidad "shellshock" (CVE-2014-6271) (a diferencia de los binarios de OpenBSD 5.6 que lo incluirán).   
-* Hemos remplazando `daemon' por `servicio' en buena parte del sistema base (ver por ejemplo ==vmstat -s== o ==less /var/log/servicio== o ==man servicio==).  Hasta la versión 5.3 se usó ==service==, pero para disminuir colisiones de nombres desde la 5.4 se emplea ==servicio==.
+* Parches de seguridad del sistema base hasta 15.Feb.2015, que cierran 4 fallas de seguridad y 11 de robustez. En particular cerradas fallas  CVE-2014-3616 en nginx ydeshabilitado SSLv3 en LibreSSL para evitar falla Poodle CVE-2014-3566. Aunque estas 2 fallas tienen parches para aplicar a fuentes de OpenBSD 5.6 de fechas 1.Oct y 20.Oct están presentes en los binarios del CD de OpenBSD (que se había quemado antes) y en los binarios que podían descargarse de Internet desde el 1.Nov.2014
+* Parchados diversos paquetes para cerrar fallas de seguridad en particular paquete bash que cierra vulnerabilidad "shellshock" (CVE-2014-6271)
+* Hemos remplazando `daemon' por `servicio' en buena parte del sistema base (ver por ejemplo ==vmstat -s== o ==less /var/log/servicio== o ==man servicio==).  
 
 Entre las novedades reportadas en las `Notas de publicación de OpenBSD 5.6' destacamos:
 
+* Apache 1.3 eliminado de sistema base, ahora incluye un servidor web mínimo httpd cuya operación describimos en: http://dhobsd.pasosdejesus.org/index.php?id=httpd .  Apache 1.3 se mantiene como paquete
+* OpenSMTP remplaza a sendmail com MTA por defecto
 
 * Controladores ampliados o mejorados para amd64
-** Vídeo: Mejora suspender/resumir en ==inteldrm== y ==radeondrm==
+** Vídeo: Mejor suspender/resumir en ==inteldrm== y ==radeondrm==
 ** Touchpads y controles: 
-** Red: Fibra: nuevo ==qla== que soporta QLogic ISP2100/2200/2300.  Ethernet: Ampliado ==x== ..; nuevo ==brswphy== que soporta Broadcom BCM53xx 10/100/1000TX, nuevo ==axen== que soporta ASIX Electronics AX88179 10/100/Gigabit, mejorado ==re== para soportar RTL8168EP/8111EP, RTL8168G/8111G, y RTL8168GU/8111GU. Ethernet USB: . Inalámbrico: mejorados ==zyd==, ==bwi== . USB Serial: ==uscom==. Inalámbrico USB: mejorado ==run== para soportar RT3900E y nuevo firmware. 
+** Red: Fibra: nuevo ==qla== que soporta QLogic ISP2100/2200/2300.  Ethernet: nuevo ==brswphy== que soporta Broadcom BCM53xx 10/100/1000TX, nuevo ==axen== que soporta ASIX Electronics AX88179 10/100/Gigabit USB, mejorado ==re== para soportar RTL8168EP/8111EP, RTL8168G/8111G, y RTL8168GU/8111GU. Ethernet USB: . Inalámbrico: mejorados ==zyd==, ==bwi== . USB Serial: ==uscom==. Inalámbrico USB: mejorado ==run== para soportar RT3900E y nuevo firmware. 
 ** Discos: ==mpath== mejorado, nuevo ==qlw== que soporta QLogic ISP SCSI HBAs. 
 ** Temperatura, sensores y otros:   Nuevo ==upd== que es sensor para UPS. Lector de tarjetas RTS5227 and RTL8402 ==rtsx==
 
 * Mejoras a herramientas de Red
-** Mejor soporte a IPv6
-** Servicio ppp  a nivel de usuario eliminado.
-** relayd mejorado en sintaxis de filtrado.
-** Eliminado Apache de sistema base (está como porte) y nuevo servidor httpd con soporte para FastCGI y SSL.
-** OpenSMTP es ahora MTA por defecto --en lugar de sendmail que fue eliminado.
+** ALTQ eliminado
 ** 
 
 * Seguridad
 ** Inclusión de LibreSSL que es una pila para TLS que remplaza OpenSSL con fuentes más legibles y auditadas.
-** Eliminado kerberos
 ** bcrypt con nueva API y tipo de condensado $2b$
 ** OpenSSH 6.7: reenvio de puertos UDP a UDP o TCP, sftp permite continuar envios interrumpidos, 
 
@@ -46,21 +44,21 @@ Entre las novedades reportadas en las `Notas de publicación de OpenBSD 5.6' des
 ** Soporte para leer sistemas de archivos ext4
 ** apropos, whatis y makewhatis ahora usan SQLite3
 
-* El sistema base incluye mejoras a componentes auditados y mejorados como ==Xenocara== (Xorg 7.7), ==gcc== 4.2.1, ==perl== 5.18, nginx 1.6.0, LibreSSL 2.0, OpenSMTP 5.4.3, nsd 4.0.3
+* El sistema base incluye mejoras a componentes auditados y mejorados como ==Xenocara== (Xorg 7.7), ==gcc== 4.2.1, ==perl== 5.18.2, nginx 1.6.0, LibreSSL 2.0, OpenSMTP 5.4.3, nsd 4.0.3
 
 
 !PROCESO DE INSTALACIÓN
 
 En adJ es en español, consta de: (a) preparación, (b) instalación/actualización del sistema base y (c) instalación de aplicaciones y entorno.  Por favor vea más detalles en [ Actualiza.txt | ftp://ftp.pasosdejesus.org/pub/AprendiendoDeJesus/5.6-amd64/Actualiza.txt ]
 
-Desde 5.6 el instalador no soporta métodos ftp ni cinta.
+Desde 5.6 el instalador no soporta métodos ftp ni cinta e incluye mejoras para el modo de instalación automático (autoinstall).
 
 !PAQUETES EXCLUSIVOS DE ADJ
 
 * Se incluye SIVeL 1.2 que tiene: (1) módulo de mezcla y homónimos, módulo de desplazamiento; (2) mejoras a ficha: relaciones inversas entre personas, autocompletación de latitud, longitud y edad; (3) mejoras a consulta web: búsquedas de textos completos y con posibilidad de buscar similares, permite especificar dos etiquetas y buscar por sexo de la víctima; (4) mejoras a reportes: posibilidad de columnas separadas para apellidos y nombres, departamento y municipio; (5) mejores validaciones: emplea modelos probabilisticos para identificar hombres con nombre que parece de mujer, mujeres con nombre que parece de hombre, nombres que parecen apellidos; (6) mejoras de seguridad: claves más seguras con algoritmo bcrypt, cuentas se bloquean por un tiempo tras 5 intentos fallidos de ingreso; (7) otras mejoras: DIVIPOLA actualizado a 2013, mejoras a etnias e iglesias, importar/exportar etiquetas, interfaz configurable en inglés o español, listados emplean ordenamiento de español (Úmbita/Boyaca que tiene tilde sale entre las Us y no al final), se emplea codificación UTF-8.
 * PostgreSQL 9.3.5 retroportado de OpenBSD-current con soporte para UTF-8 y cotejaciones nativas listas para todos los paises de habla hispana. Ver detalles de como usar cotejación en http://aprendiendo.pasosdejesus.org/?id=i18n
 * ruby 2.1.3 retroportado de OpenBSD-current y probado con aplicaciones Rails 4.2.0beta2 Ver http://dhobsd.pasosdejesus.org/index.php?id=Ruby+on+Rails+en+OpenBSD .
-* PHP-5.4.33 retroportado de OpenBSD-current
+* PHP-5.4.34 retroportado de OpenBSD-current
 * vlc-2.0.2 compilado con soporte de xlocale
 * Incluye bash-4.3.27 que cierra falla shellshock.
 * Los paquetes exclusivos los encuentra en [ftp://ftp.pasosdeJesus.org/pub/AprendiendoDeJesus/5.6-amd64/paquetes] y otras extensiones de PostgreSQL y PHP que no hacen parte de la distribución en [ftp://ftp.pasosdeJesus.org/pub/AprendiendoDeJesus/5.6-amd64-paquetes-extra] 
@@ -77,7 +75,7 @@ Desde 5.6 el instalador no soporta métodos ftp ni cinta.
 !ESCRITORIO
 
 ==ksh== con ==xterm== no soportan del todo UTF-8, por ejemplo al borrar una vocal con tilde o ñ debe presionarse 2 veces espacio atrás.  Si requiere una terminal con codificación ASCII ejecute:
-<pre>
+<lpre>
     xterm -en ascii
 </pre>
 y ponga la variable LANG en otro valor por ejemplo:
