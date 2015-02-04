@@ -12,9 +12,8 @@ a) Preparar su sistema
 ----------------------
 
 * Aunque puede descargar el DVD de instalación, es más breve y robusto ante 
-  fallas que descargue los directorios y archivos del instalador con 
-  ```rsync```:
-	```	
+  fallas que descargue los directorios y archivos del instalador con rsync
+	```
 	mkdir -p ~/comp/adJ;
 	cd ~/comp/adJ;
 	rsync-adJ 5.6
