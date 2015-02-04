@@ -25,8 +25,9 @@ a) Preparar su sistema
   otras operaciones para preparar su sistema (por ejemplo la actualización
   a 5.5 requería eliminar todos los paquetes del sistema), 
   puede hacerlo ejecutando el archivo de ordenes ```preact-adJ.sh```
-  incluido en el directorio util del DVD de instalación.
+  incluido en el directorio ```util``` del DVD de instalación.
   Si descargó fuentes con el procedimiento anterior ejecutelo con:
+
 	```
        	~/comp/adJ/5.6-amd64/util/preact-adJ.sh
 	```
@@ -36,6 +37,7 @@ b) Actualizar el sistema base:
 * Copie kernel y descomprima los archivos comprimidos con el sistema base en 
   su directorio raiz y reinicie, esto lo puede hacer con el 
   archivo de órdenes ```actbase.sh```:
+
 		```
 		cd ~/comp/adJ; 
 		/usr/local/adJ/actbase.sh 5.6
@@ -43,9 +45,7 @@ b) Actualizar el sistema base:
 
 c) Instalación/actualización de aplicaciones:
 ---------------------------------------------
-* Después de reinicar debe ejecutar  el archivo de ordenes 
-	```/inst-adJ.sh```
-
+* Después de reinicar debe ejecutar  el archivo de ordenes ```/inst-adJ.sh```
   Este archivo de comandos emplea codificación UTF8, por lo que para 
   iniciarlo se recomienda desde una terminal gráfica.  Suponiendo que 
   descargo con las instrucciones dadas previamente puede usar:
