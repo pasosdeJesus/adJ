@@ -636,7 +636,8 @@ if (test "$sn" = "s") then {
 	paquete ruby lang paquetes "ruby ruby21-ri_docs" 2.1
 	paquete postgresql databases paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs"
 	paquete php lang paquetes "php php-fpm php-gd php-intl php-ldap php-mcrypt php-pdo_pgsql php-pgsql php-zip" 5.4
-	# Tocó dejar 5.4 por pear -> SIVeL 1.2
+
+	# Tocó dejar PHP 5.4 por pear -> SIVeL 1.2
 	rm $dini/$V$VESP-$ARQ/$dest/php5-gd-*-no_x11.tgz
 
 	# Mejorados para adJ
@@ -644,6 +645,7 @@ if (test "$sn" = "s") then {
 	paquete pear-Validate devel
 	paquete pear-HTML-QuickForm www
 	paquete xfe x11
+	paquete git devel 
 
 	# Unicos en adJ liderados por otros
 	paquete pear-DB_DataObject databases
