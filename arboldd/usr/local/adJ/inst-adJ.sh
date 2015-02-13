@@ -2325,7 +2325,7 @@ if (test ! -f "/usr/local/bin/ruby") then {
 if (test ! -f /home/$uadJ/.irbrc) then {
 	cat > /home/$uadJ/.irbrc << EOF
 # Configuración de irb
-# Basado en script disponible en http://girliemangalo.wordpress.com/2009/02/20/using-irbrc-file-to-configure-your-irb/
+# Basado en archivo de ordenes disponible en http://girliemangalo.wordpress.com/2009/02/20/using-irbrc-file-to-configure-your-irb/
 require 'irb/completion'
 require 'pp'
 IRB.conf[:AUTO_INDENT] = true
