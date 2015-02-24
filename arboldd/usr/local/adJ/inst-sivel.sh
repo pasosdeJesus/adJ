@@ -442,7 +442,7 @@ if (test "$?" != "0") then {
 } fi;
 
 echo "* Estableciendo permisos" | tee -a /var/tmp/inst-sivel.log;
-cd /var/www/htdocs/sivel  | tee -a /var/tmp/inst-sivel.log;
+cd /var/www/htdocs/sivel  
 chown -R $usivel:$usivel .  | tee -a /var/tmp/inst-sivel.log;
 chmod -R a+r .  | tee -a /var/tmp/inst-sivel.log;
 chmod -R go-rx /var/www/htdocs/sivel/bin  | tee -a /var/tmp/inst-sivel.log;
@@ -471,7 +471,7 @@ if (test -f /var/www/htdocs/sivel/sitios/sivel/vardb.sh) then {
 	cp /var/www/htdocs/sivel/sitios/sivel/vardb.sh /var/www/htdocs/sivel/sitios/sivel/vardb-copia.sh | tee -a /var/tmp/inst-sivel.log; 
 } fi;
 rm -f /var/www/htdocs/sivel/{confv.sh,confaux.tmp} | tee -a /var/tmp/inst-sivel.log;	
-cd /var/www/htdocs/sivel | tee -a /var/tmp/inst-sivel.log; 
+cd /var/www/htdocs/sivel 
 sudo touch /var/www/pear/lib/.lock  | tee -a /var/tmp/inst-sivel.log;
 
 echo "* Información para Relatos" | tee -a /var/tmp/inst-sivel.log;

@@ -2,8 +2,8 @@
 
 # Port in the public domain.
 
-VERSION=1.1.5
-
+VERSION=1.1.6
+REVISION=1
 DISTNAME=sivel-${VERSION}
 HOMEPAGE=	http://sivel.sourceforge.net/
 PKGSPEC = sivel->=1.1,<1.2
