@@ -9,9 +9,9 @@ diff -uN src56-orig/regress/lib/libc/locale/Makefile src/regress/lib/libc/locale
  .if defined(REGRESS_FULL) || make(clean) || make(cleandir) || make(obj)
  SUBDIR+= check_isw
  .endif
-diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/regress/lib/libc/locale/check_time/Makefile src/regress/lib/libc/locale/check_time/Makefile
+diff -ruN -x *~ -x *orig src56-orig/regress/lib/libc/locale/check_time/Makefile src/regress/lib/libc/locale/check_time/Makefile
 --- src56-orig/regress/lib/libc/locale/check_time/Makefile	Wed Dec 31 19:00:00 1969
-+++ src/regress/lib/libc/locale/check_time/Makefile	Thu Apr 24 21:17:02 2014
++++ src/regress/lib/libc/locale/check_time/Makefile	Wed Feb  4 05:17:12 2015
 @@ -0,0 +1,30 @@
 +
 +.include "/usr/src/share/locale/ctype/Makefile.inc"
@@ -43,10 +43,10 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/regress/lib/libc/loc
 +	cc ${CFLAGS} -o setlocale.o -c /usr/src/lib/libc/locale/setlocale.c
 +
 +.include <bsd.regress.mk>
-diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/regress/lib/libc/locale/check_time/check_time.c src/regress/lib/libc/locale/check_time/check_time.c
+diff -ruN -x *~ -x *orig src56-orig/regress/lib/libc/locale/check_time/check_time.c src/regress/lib/libc/locale/check_time/check_time.c
 --- src56-orig/regress/lib/libc/locale/check_time/check_time.c	Wed Dec 31 19:00:00 1969
-+++ src/regress/lib/libc/locale/check_time/check_time.c	Sun Apr 27 17:43:08 2014
-@@ -0,0 +1,526 @@
++++ src/regress/lib/libc/locale/check_time/check_time.c	Sat Mar  7 07:02:13 2015
+@@ -0,0 +1,617 @@
 +/**
 + * Public domain according to Colombian Legislation. 
 + * http://www.pasosdejesus.org/dominio_publico_colombia.html
@@ -197,29 +197,49 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/regress/lib/libc/loc
 +			printf("nom=%s\n", nom);
 +			nl = setlocale(LC_ALL, nom);
 +			printf("locale: %s\n", nl);
-+			p(strcmp(nl_langinfo(D_T_FMT), "%a %e %b %X %Y") == 0);
-+			if (strcmp(es[j], "es_CO") == 0 || 
-+					strcmp(es[j], "es_PE") == 0 || 
-+					strcmp(es[j], "es_GT") == 0 ) {
-+				p(strcmp(nl_langinfo(D_FMT), "%e/%m/%Y") == 0);
-+				p(strcmp(nl_langinfo(T_FMT), "%I:%M:%S %p") == 0);
-+			} else if (strcmp(es[j], "es_US") == 0) {
-+				p(strcmp(nl_langinfo(D_FMT), "%m/%e/%Y") == 0);
-+				//printf("** nl_langinfo(T_FMT)=%s\n", nl_langinfo(T_FMT));
-+				p(strcmp(nl_langinfo(T_FMT), "%I:%M:%S %p") == 0);
-+			} else if (strcmp(es[j], "es_PR") == 0) {
-+				p(strcmp(nl_langinfo(D_FMT), "%m/%d/%Y") == 0);
-+				p(strcmp(nl_langinfo(T_FMT), "%H:%M:%S") == 0);
-+			} else if (strcmp(es[j], "es_CL") == 0) {
++			timedebug();
++			printf("es[j]=%s\n", es[j]);
++
++			if (strcmp(es[j], "es_CL") == 0) {
++				p(strcmp(nl_langinfo(D_T_FMT), "%e de %B de %Y %H:%M:%S %Z") == 0);
 +				p(strcmp(nl_langinfo(D_FMT), "%d-%m-%Y") == 0);
 +				p(strcmp(nl_langinfo(T_FMT), "%H:%M:%S") == 0);
++			} else if (strcmp(es[j], "es_CO") == 0) {
++				p(strcmp(nl_langinfo(D_T_FMT), "%e de %B de %Y %H:%M:%S %Z") == 0);
++				p(strcmp(nl_langinfo(D_FMT), "%e/%m/%Y") == 0);
++				p(strcmp(nl_langinfo(T_FMT), "%I:%M:%S %p") == 0);
++			} else if (strcmp(es[j], "es_GT") == 0) {
++				p(strcmp(nl_langinfo(D_T_FMT), "%e de %B de %Y %H:%M:%S %Z") == 0);
++				p(strcmp(nl_langinfo(D_FMT), "%e/%m/%Y") == 0);
++				p(strcmp(nl_langinfo(T_FMT), "%H:%M:%S") == 0);
++			} else if (strcmp(es[j], "es_HN") == 0) {
++				p(strcmp(nl_langinfo(D_T_FMT), "%d de %B de %Y %H:%M:%S %Z") == 0);
++				p(strcmp(nl_langinfo(D_FMT), "%d/%m/%Y") == 0);
++				p(strcmp(nl_langinfo(T_FMT), "%H:%M:%S") == 0);
++			} else if (strcmp(es[j], "es_PA") == 0) {
++				p(strcmp(nl_langinfo(D_T_FMT), "%e de %B de %Y %H:%M:%S %Z") == 0);
++				p(strcmp(nl_langinfo(D_FMT), "%m/%d/%Y") == 0);
++				p(strcmp(nl_langinfo(T_FMT), "%H:%M:%S") == 0);
++			} else if (strcmp(es[j], "es_PE") == 0) {
++				p(strcmp(nl_langinfo(D_T_FMT), "%e de %B de %Y %H:%M:%S %Z") == 0);
++				p(strcmp(nl_langinfo(D_FMT), "%e/%m/%Y") == 0);
++				p(strcmp(nl_langinfo(T_FMT), "%H:%M:%S") == 0);
++			} else if (strcmp(es[j], "es_PR") == 0) {
++				p(strcmp(nl_langinfo(D_T_FMT), "%e de %B de %Y %H:%M:%S %Z") == 0);
++				p(strcmp(nl_langinfo(D_FMT), "%m/%d/%Y") == 0);
++				p(strcmp(nl_langinfo(T_FMT), "%H:%M:%S") == 0);
++			} else if (strcmp(es[j], "es_US") == 0) {
++				p(strcmp(nl_langinfo(D_T_FMT), "%e de %B de %Y %I:%M:%S %p %Z") == 0);
++				p(strcmp(nl_langinfo(D_FMT), "%m/%e/%y") == 0);
++				p(strcmp(nl_langinfo(T_FMT), "%I:%M:%S %p") == 0);
 +			} else {
++				p(strcmp(nl_langinfo(D_T_FMT), "%e de %B de %Y %H:%M:%S %Z") == 0);
 +				p(strcmp(nl_langinfo(D_FMT), "%d/%m/%Y") == 0);
 +				p(strcmp(nl_langinfo(T_FMT), "%H:%M:%S") == 0);
 +			}
 +			p(strcmp(nl_langinfo(T_FMT_AMPM), "%I:%M:%S %p") == 0);
-+			p(strcmp(nl_langinfo(AM_STR), "AM") == 0);
-+			p(strcmp(nl_langinfo(PM_STR), "PM") == 0);
++			p(strcmp(nl_langinfo(AM_STR), "a.m.") == 0);
++			p(strcmp(nl_langinfo(PM_STR), "p.m.") == 0);
 +			p(strcmp(nl_langinfo(DAY_1), "domingo") == 0);
 +			p(strcmp(nl_langinfo(DAY_2), "lunes") == 0);
 +			p(strcmp(nl_langinfo(DAY_3), "martes") == 0);
@@ -298,71 +318,11 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/regress/lib/libc/loc
 +			wcsftime(wcol, sizeof(wcol), L"%C", &tl);
 +			p(wcscmp(wcol, L"20") == 0);
 +
-+			if (strcmp(es[j], "es_CO") == 0 || 
-+					strcmp(es[j], "es_PE") == 0 || 
-+					strcmp(es[j], "es_GT") == 0 ) {
++			if (strcmp(es[j], "es_CL") == 0) {
 +				strftime(col, sizeof(col), "%c", &tl);
-+				p(strcmp(col, "mar  8 abr 09:40:00 AM 2014") == 0);
++				p(strcmp(col, " 8 de abril de 2014 09:40:00 GMT") == 0);
 +				wcsftime(wcol, sizeof(wcol), L"%c", &tl);
-+				p(wcscmp(wcol, L"mar  8 abr 09:40:00 AM 2014") == 0);
-+				strftime(col, sizeof(col), "%x", &tl);
-+				p(strcmp(col, " 8/04/2014") == 0);
-+				wcsftime(wcol, sizeof(wcol), L"%x", &tl);
-+				p(wcscmp(wcol, L" 8/04/2014") == 0);
-+				strftime(col, sizeof(col), "%X", &tl);
-+				p(strcmp(col, "09:40:00 AM") == 0);
-+				wcsftime(wcol, sizeof(wcol), L"%X", &tl);
-+				p(wcscmp(wcol, L"09:40:00 AM") == 0);
-+				strftime(col, sizeof(col), "%+", &tl);
-+				p(strcmp(col, "martes,  8 de abril de 2014, 09:40:00 AM GMT") == 0);
-+				wcsftime(wcol, sizeof(wcol), L"%+", &tl);
-+				//wprintf(L"w wcol=%ls\n", wcol);
-+				p(wcscmp(wcol, L"martes,  8 de abril de 2014, 09:40:00 AM GMT") == 0);
-+
-+
-+
-+			} else if (strcmp(es[j], "es_US") == 0) {
-+				strftime(col, sizeof(col), "%c", &tl);
-+				p(strcmp(col, "mar  8 abr 09:40:00 AM 2014") == 0);
-+				wcsftime(wcol, sizeof(wcol), L"%c", &tl);
-+				p(wcscmp(wcol, L"mar  8 abr 09:40:00 AM 2014") == 0);
-+				strftime(col, sizeof(col), "%x", &tl);
-+				p(strcmp(col, "04/ 8/2014") == 0);
-+				wcsftime(wcol, sizeof(wcol), L"%x", &tl);
-+				p(wcscmp(wcol, L"04/ 8/2014") == 0);
-+				strftime(col, sizeof(col), "%X", &tl);
-+				p(strcmp(col, "09:40:00 AM") == 0);
-+				wcsftime(wcol, sizeof(wcol), L"%X", &tl);
-+				p(wcscmp(wcol, L"09:40:00 AM") == 0);
-+				strftime(col, sizeof(col), "%+", &tl);
-+				printf("col=%s\n", col);
-+				p(strcmp(col, "martes,  8 de abril de 2014, 09:40:00 AM GMT") == 0);
-+				wcsftime(wcol, sizeof(wcol), L"%+", &tl);
-+				p(wcscmp(wcol, L"martes,  8 de abril de 2014, 09:40:00 AM GMT") == 0);
-+			} else if (strcmp(es[j], "es_PR") == 0) {
-+				strftime(col, sizeof(col), "%c", &tl);
-+				printf("col=%s\n", col);
-+				p(strcmp(col, "mar  8 abr 09:40:00 2014") == 0);
-+				wcsftime(wcol, sizeof(wcol), L"%c", &tl);
-+				p(wcscmp(wcol, L"mar  8 abr 09:40:00 2014") == 0);
-+				strftime(col, sizeof(col), "%x", &tl);
-+				p(strcmp(col, "04/08/2014") == 0);
-+				wcsftime(wcol, sizeof(wcol), L"%x", &tl);
-+				p(wcscmp(wcol, L"04/08/2014") == 0);
-+				strftime(col, sizeof(col), "%X", &tl);
-+				p(strcmp(col, "09:40:00") == 0);
-+				wcsftime(wcol, sizeof(wcol), L"%X", &tl);
-+				p(wcscmp(wcol, L"09:40:00") == 0);
-+				strftime(col, sizeof(col), "%+", &tl);
-+				p(strcmp(col, "martes,  8 de abril de 2014, 09:40:00 GMT") == 0);
-+				wcsftime(wcol, sizeof(wcol), L"%+", &tl);
-+				p(wcscmp(wcol, L"martes,  8 de abril de 2014, 09:40:00 GMT") == 0);
-+			} else if (strcmp(es[j], "es_CL") == 0) {
-+				strftime(col, sizeof(col), "%c", &tl);
-+
-+				p(strcmp(col, "mar  8 abr 09:40:00 2014") == 0);
-+				wcsftime(wcol, sizeof(wcol), L"%c", &tl);
-+				p(wcscmp(wcol, L"mar  8 abr 09:40:00 2014") == 0);
++				p(wcscmp(wcol, L" 8 de abril de 2014 09:40:00 GMT") == 0);
 +				strftime(col, sizeof(col), "%x", &tl);
 +				p(strcmp(col, "08-04-2014") == 0);
 +				wcsftime(wcol, sizeof(wcol), L"%x", &tl);
@@ -375,12 +335,141 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/regress/lib/libc/loc
 +				p(strcmp(col, "martes,  8 de abril de 2014, 09:40:00 GMT") == 0);
 +				wcsftime(wcol, sizeof(wcol), L"%+", &tl);
 +				p(wcscmp(wcol, L"martes,  8 de abril de 2014, 09:40:00 GMT") == 0);
++
++			} else if (strcmp(es[j], "es_CO") == 0) {
++				strftime(col, sizeof(col), "%c", &tl);
++				printf("col=%s\n", col);
++				p(strcmp(col, " 8 de abril de 2014 09:40:00 GMT") == 0);
++				wcsftime(wcol, sizeof(wcol), L"%c", &tl);
++				p(wcscmp(wcol, L" 8 de abril de 2014 09:40:00 GMT") == 0);
++				strftime(col, sizeof(col), "%x", &tl);
++				p(strcmp(col, " 8/04/2014") == 0);
++				wcsftime(wcol, sizeof(wcol), L"%x", &tl);
++				p(wcscmp(wcol, L" 8/04/2014") == 0);
++				strftime(col, sizeof(col), "%X", &tl);
++				p(strcmp(col, "09:40:00 a.m.") == 0);
++				wcsftime(wcol, sizeof(wcol), L"%X", &tl);
++				p(wcscmp(wcol, L"09:40:00 a.m.") == 0);
++				strftime(col, sizeof(col), "%+", &tl);
++				printf("col=%s\n", col);
++				p(strcmp(col, "martes,  8 de abril de 2014, 09:40:00 GMT") == 0);
++				wcsftime(wcol, sizeof(wcol), L"%+", &tl);
++				//wprintf(L"w wcol=%ls\n", wcol);
++				p(wcscmp(wcol, L"martes,  8 de abril de 2014, 09:40:00 GMT") == 0);
++			} else if (strcmp(es[j], "es_GT") == 0) {
++				strftime(col, sizeof(col), "%c", &tl);
++				p(strcmp(col, " 8 de abril de 2014 09:40:00 GMT") == 0);
++				wcsftime(wcol, sizeof(wcol), L"%c", &tl);
++				p(wcscmp(wcol, L" 8 de abril de 2014 09:40:00 GMT") == 0);
++				strftime(col, sizeof(col), "%x", &tl);
++				p(strcmp(col, " 8/04/2014") == 0);
++				wcsftime(wcol, sizeof(wcol), L"%x", &tl);
++				p(wcscmp(wcol, L" 8/04/2014") == 0);
++				strftime(col, sizeof(col), "%X", &tl);
++				printf("col=%s\n", col);
++				p(strcmp(col, "09:40:00") == 0);
++				wcsftime(wcol, sizeof(wcol), L"%X", &tl);
++				p(wcscmp(wcol, L"09:40:00") == 0);
++				strftime(col, sizeof(col), "%+", &tl);
++				printf("col=%s\n", col);
++				p(strcmp(col, "martes,  8 de abril de 2014, 09:40:00 GMT") == 0);
++				wcsftime(wcol, sizeof(wcol), L"%+", &tl);
++				//wprintf(L"w wcol=%ls\n", wcol);
++				p(wcscmp(wcol, L"martes,  8 de abril de 2014, 09:40:00 GMT") == 0);
++			} else if (strcmp(es[j], "es_HN") == 0) {
++				strftime(col, sizeof(col), "%c", &tl);
++				p(strcmp(col, "08 de abril de 2014 09:40:00 GMT") == 0);
++				wcsftime(wcol, sizeof(wcol), L"%c", &tl);
++				p(wcscmp(wcol, L"08 de abril de 2014 09:40:00 GMT") == 0);
++				strftime(col, sizeof(col), "%x", &tl);
++				p(strcmp(col, "08/04/2014") == 0);
++				wcsftime(wcol, sizeof(wcol), L"%x", &tl);
++				p(wcscmp(wcol, L"08/04/2014") == 0);
++				strftime(col, sizeof(col), "%X", &tl);
++				printf("col=%s\n", col);
++				p(strcmp(col, "09:40:00") == 0);
++				wcsftime(wcol, sizeof(wcol), L"%X", &tl);
++				p(wcscmp(wcol, L"09:40:00") == 0);
++				strftime(col, sizeof(col), "%+", &tl);
++				printf("col=%s\n", col);
++				p(strcmp(col, "martes,  8 de abril de 2014, 09:40:00 GMT") == 0);
++				wcsftime(wcol, sizeof(wcol), L"%+", &tl);
++				//wprintf(L"w wcol=%ls\n", wcol);
++				p(wcscmp(wcol, L"martes,  8 de abril de 2014, 09:40:00 GMT") == 0);
++			} else if (strcmp(es[j], "es_PA") == 0) {
++				strftime(col, sizeof(col), "%c", &tl);
++				p(strcmp(col, " 8 de abril de 2014 09:40:00 GMT") == 0);
++				wcsftime(wcol, sizeof(wcol), L"%c", &tl);
++				p(wcscmp(wcol, L" 8 de abril de 2014 09:40:00 GMT") == 0);
++				strftime(col, sizeof(col), "%x", &tl);
++				p(strcmp(col, "04/08/2014") == 0);
++				wcsftime(wcol, sizeof(wcol), L"%x", &tl);
++				p(wcscmp(wcol, L"04/08/2014") == 0);
++				strftime(col, sizeof(col), "%X", &tl);
++				p(strcmp(col, "09:40:00") == 0);
++				wcsftime(wcol, sizeof(wcol), L"%X", &tl);
++				p(wcscmp(wcol, L"09:40:00") == 0);
++				strftime(col, sizeof(col), "%+", &tl);
++				p(strcmp(col, "martes,  8 de abril de 2014, 09:40:00 GMT") == 0);
++				wcsftime(wcol, sizeof(wcol), L"%+", &tl);
++				p(wcscmp(wcol, L"martes,  8 de abril de 2014, 09:40:00 GMT") == 0);
++			} else if (strcmp(es[j], "es_PE") == 0) {
++				strftime(col, sizeof(col), "%c", &tl);
++				p(strcmp(col, " 8 de abril de 2014 09:40:00 GMT") == 0);
++				wcsftime(wcol, sizeof(wcol), L"%c", &tl);
++				p(wcscmp(wcol, L" 8 de abril de 2014 09:40:00 GMT") == 0);
++				strftime(col, sizeof(col), "%x", &tl);
++				p(strcmp(col, " 8/04/2014") == 0);
++				wcsftime(wcol, sizeof(wcol), L"%x", &tl);
++				p(wcscmp(wcol, L" 8/04/2014") == 0);
++				strftime(col, sizeof(col), "%X", &tl);
++				printf("col=%s\n", col);
++				p(strcmp(col, "09:40:00") == 0);
++				wcsftime(wcol, sizeof(wcol), L"%X", &tl);
++				p(wcscmp(wcol, L"09:40:00") == 0);
++			} else if (strcmp(es[j], "es_PR") == 0) {
++				strftime(col, sizeof(col), "%c", &tl);
++				p(strcmp(col, " 8 de abril de 2014 09:40:00 GMT") == 0);
++				wcsftime(wcol, sizeof(wcol), L"%c", &tl);
++				p(wcscmp(wcol, L" 8 de abril de 2014 09:40:00 GMT") == 0);
++				strftime(col, sizeof(col), "%x", &tl);
++				p(strcmp(col, "04/08/2014") == 0);
++				wcsftime(wcol, sizeof(wcol), L"%x", &tl);
++				p(wcscmp(wcol, L"04/08/2014") == 0);
++				strftime(col, sizeof(col), "%X", &tl);
++				p(strcmp(col, "09:40:00") == 0);
++				wcsftime(wcol, sizeof(wcol), L"%X", &tl);
++				p(wcscmp(wcol, L"09:40:00") == 0);
++				strftime(col, sizeof(col), "%+", &tl);
++				p(strcmp(col, "martes,  8 de abril de 2014, 09:40:00 GMT") == 0);
++				wcsftime(wcol, sizeof(wcol), L"%+", &tl);
++				p(wcscmp(wcol, L"martes,  8 de abril de 2014, 09:40:00 GMT") == 0);
++
++			} else if (strcmp(es[j], "es_US") == 0) {
++				strftime(col, sizeof(col), "%c", &tl);
++				p(strcmp(col, " 8 de abril de 2014 09:40:00 a.m. GMT") == 0);
++				wcsftime(wcol, sizeof(wcol), L"%c", &tl);
++				p(wcscmp(wcol, L" 8 de abril de 2014 09:40:00 a.m. GMT") == 0);
++				strftime(col, sizeof(col), "%x", &tl);
++				printf("col=%s\n", col);
++				p(strcmp(col, "04/ 8/14") == 0);
++				wcsftime(wcol, sizeof(wcol), L"%x", &tl);
++				p(wcscmp(wcol, L"04/ 8/14") == 0);
++				strftime(col, sizeof(col), "%X", &tl);
++				p(strcmp(col, "09:40:00 a.m.") == 0);
++				wcsftime(wcol, sizeof(wcol), L"%X", &tl);
++				p(wcscmp(wcol, L"09:40:00 a.m.") == 0);
++				strftime(col, sizeof(col), "%+", &tl);
++				printf("col=%s\n", col);
++				p(strcmp(col, "martes,  8 de abril de 2014, 09:40:00 GMT") == 0);
++				wcsftime(wcol, sizeof(wcol), L"%+", &tl);
++				p(wcscmp(wcol, L"martes,  8 de abril de 2014, 09:40:00 GMT") == 0);
 +			} else {
 +				strftime(col, sizeof(col), "%c", &tl);
-+
-+				p(strcmp(col, "mar  8 abr 09:40:00 2014") == 0);
++				printf("col=%s\n", col);
++				p(strcmp(col, " 8 de abril de 2014 09:40:00 GMT") == 0);
 +				wcsftime(wcol, sizeof(wcol), L"%c", &tl);
-+				p(wcscmp(wcol, L"mar  8 abr 09:40:00 2014") == 0);
++				p(wcscmp(wcol, L" 8 de abril de 2014 09:40:00 GMT") == 0);
 +				strftime(col, sizeof(col), "%x", &tl);
 +				p(strcmp(col, "08/04/2014") == 0);
 +				wcsftime(wcol, sizeof(wcol), L"%x", &tl);
@@ -390,9 +479,11 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/regress/lib/libc/loc
 +				wcsftime(wcol, sizeof(wcol), L"%X", &tl);
 +				p(wcscmp(wcol, L"09:40:00") == 0);
 +				strftime(col, sizeof(col), "%+", &tl);
-+				p(strcmp(col, "martes,  8 de abril de 2014, 09:40:00 GMT") == 0);
++				printf("col=%s\n", col);
++				p(strcmp(col, "martes,  8 de abril de 2014, 09:40:00 a.m. GMT") == 0);
 +				wcsftime(wcol, sizeof(wcol), L"%+", &tl);
-+				p(wcscmp(wcol, L"martes,  8 de abril de 2014, 09:40:00 GMT") == 0);
++				printf("wcol=%ls\n", wcol);
++				p(wcscmp(wcol, L"martes,  8 de abril de 2014, 09:40:00 a.m. GMT") == 0);
 +			}
 +
 +
@@ -467,9 +558,9 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/regress/lib/libc/loc
 +			p(wcscmp(wcol, L"\n") == 0);
 +
 +			strftime(col, sizeof(col), "%p", &tl);
-+			p(strcmp(col, "AM") == 0);
++			p(strcmp(col, "a.m.") == 0);
 +			wcsftime(wcol, sizeof(wcol), L"%p", &tl);
-+			p(wcscmp(wcol, L"AM") == 0);
++			p(wcscmp(wcol, L"a.m.") == 0);
 +
 +			strftime(col, sizeof(col), "%R", &tl);
 +			p(strcmp(col, "09:40") == 0);
@@ -477,9 +568,9 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/regress/lib/libc/loc
 +			p(wcscmp(wcol, L"09:40") == 0);
 +
 +			strftime(col, sizeof(col), "%r", &tl);
-+			p(strcmp(col, "09:40:00 AM") == 0);
++			p(strcmp(col, "09:40:00 a.m.") == 0);
 +			wcsftime(wcol, sizeof(wcol), L"%r", &tl);
-+			p(wcscmp(wcol, L"09:40:00 AM") == 0);
++			p(wcscmp(wcol, L"09:40:00 a.m.") == 0);
 +
 +			strftime(col, sizeof(col), "%S", &tl);
 +			p(strcmp(col, "00") == 0);
