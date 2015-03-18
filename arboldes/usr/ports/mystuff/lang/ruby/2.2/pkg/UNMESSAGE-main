@@ -1,4 +1,4 @@
-If you set up the symlinks to make ruby 2.0 the system
+If you set up the symlinks to make ruby 2.2 the system
 ruby, don't forget to remove the following files:
 
  rm ${PREFIX}/bin/ruby
@@ -8,4 +8,3 @@ ruby, don't forget to remove the following files:
  rm ${PREFIX}/bin/ri
  rm ${PREFIX}/bin/gem
  rm ${PREFIX}/bin/rake
- rm ${PREFIX}/bin/testrb

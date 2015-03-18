@@ -14,7 +14,7 @@ rep="$d/auditabitacoras.txt"
 echo "Auditando y enviando reporte a $rep" 
 
 
-mkdir -p $d |
+mkdir -p $d 
 cp -rf /var/log/* $d
 gzip -fd $d/*gz
 #mkdir -p $d/www

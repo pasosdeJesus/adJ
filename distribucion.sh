@@ -658,62 +658,80 @@ if (test "$sn" = "s") then {
 	} fi;
 	rm tmp/disponibles*
 
+	# Recompilados para cerrar fallas, tomando de fuentes de OpenBSD 5.6
+	paquete php paquetes "php php-fpm php-gd php-intl php-ldap php-mcrypt php-pdo_pgsql php-pgsql php-zip" 5.4
+	paquete postgis
 
-# pruebas
+	# Examinar
+	paquete cups
+	paquete cups-filters
+	paquete curl
+	paquete gnupg
+	paquete gnutls
+	paquete libxml 
+	paquete libvpx
+	paquete p5-Mail-SpamAssassin
+	#paquete php
+	paquete pidgin
+	paquete webkit
+	paquete wget
 
-  # Retroportados
+	# Retroportados de current para cerrar fallas o actualizar
+	paquete antiword
+	paquete bash
+	paquete freetype
+	paquete ruby paquetes "ruby ruby22-ri_docs" 2.2
+
   
-  #paquete dialog
-  paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs"
-  paquete php paquetes "php php-fpm php-gd php-intl php-ldap php-mcrypt php-pdo_pgsql php-pgsql php-zip" 5.4
-  paquete ruby paquetes "ruby ruby21-ri_docs" 2.1
-  # paquete pear paquetes "pear pear-utils"  Toco quedarse en PHP 5.4 para SIVeL 1.2
+	paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs"
+	#paquete ruby paquetes "ruby ruby21-ri_docs" 2.1
+	# paquete pear paquetes "pear pear-utils"  Toco quedarse en PHP 5.4 para SIVeL 1.2
 
-  # Retroportados con mejoras para adJ
-  paquete pear-Auth
-  paquete pear-Validate
-  paquete pear-HTML-QuickForm
-  paquete xfe
-  paquete vlc
-  paquete bash 
+	# Mejorados para adJ
+	paquete pear-Auth
+	paquete pear-Validate
+	paquete pear-HTML-QuickForm
+	paquete xfe
+	paquete vlc
+	paquete bash 
 
-  # Unicos en adJ liderados por otros
-  paquete databases/pear-DB_DataObject
-  paquete www/pear-HTML-Common
-  paquete www/pear-HTML-CSS
-  paquete www/pear-HTML-Javascript
-  paquete www/pear-HTML-Menu
-  paquete www/pear-HTML-Table
-  paquete emulators/realboy
-  paquete sysutils/ganglia
-  paquete textproc/sword
-  paquete textproc/xiphos
-  paquete x11/fbdesk
-  paquete www/pear-DB-DataObject-FormBuilder
-  paquete www/pear-HTML-QuickForm-Controller
-  #paquete devel/ruby-apacheconf_parser paquetes "ruby21-apacheconf-parser"
+	# Unicos en adJ liderados por otros
+	paquete databases/pear-DB_DataObject
+	paquete www/pear-HTML-Common
+	paquete www/pear-HTML-CSS
+	paquete www/pear-HTML-Javascript
+	paquete www/pear-HTML-Menu
+	paquete www/pear-HTML-Table
+	paquete emulators/realboy
+	paquete sysutils/ganglia
+	paquete textproc/sword
+	paquete textproc/xiphos
+	paquete x11/fbdesk
+	paquete www/pear-DB-DataObject-FormBuilder
+	paquete www/pear-HTML-QuickForm-Controller
+	#paquete devel/ruby-apacheconf_parser paquetes "ruby21-apacheconf-parser"
 
-  # Unicos de adJ liderados por pdJ
-  paquete books/evangelios_dp
-  paquete books/basico_OpenBSD
-  paquete books/usuario_OpenBSD
-  paquete books/servidor_OpenBSD
-  paquete education/AnimalesI
-  paquete education/AprestamientoI
-  paquete education/PlantasCursiva
-  paquete education/NombresCursiva
-  paquete fonts/TiposLectoEscritura
-  paquete education/asigna
-  paquete textproc/markup
-  paquete education/repasa
-  paquete education/sigue
+	# Unicos de adJ liderados por pdJ
+	paquete books/evangelios_dp
+	paquete books/basico_OpenBSD
+	paquete books/usuario_OpenBSD
+	paquete books/servidor_OpenBSD
+	paquete education/AnimalesI
+	paquete education/AprestamientoI
+	paquete education/PlantasCursiva
+	paquete education/NombresCursiva
+	paquete fonts/TiposLectoEscritura
+	paquete education/asigna
+	paquete textproc/markup
+	paquete education/repasa
+	paquete education/sigue
 
-  paquete databases/sivel sivel sivel 1.1
-  paquete databases/sivel sivel sivel 1.2
+	paquete databases/sivel sivel sivel 1.1
+	paquete databases/sivel sivel sivel 1.2
 
-  #paquete devel/ruby-apache2nginx paquetes "ruby21-apache2nginx"
+	#paquete devel/ruby-apache2nginx paquetes "ruby21-apache2nginx"
 
-  rm $dini/$V$VESP-$ARQ/$dest/php5-gd-*-no_x11.tgz
+	rm $dini/$V$VESP-$ARQ/$dest/php5-gd-*-no_x11.tgz
 
 } fi;	
 

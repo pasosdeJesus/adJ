@@ -83,7 +83,7 @@ q
 EOF
 done;
 echo "Archivos de etc con service en general exceptuando casos especiales de compatibilidad"  >> /var/tmp/inst-adJ.bitacora
-l=`find . -exec grep -l "service" {} ';' | grep -v "dovecot" | grep -v "changelist" | grep -v "esd.conf" | grep -v "inetd.conf" | grep -v "pwd.db" | grep -v "php-*.ini" | grep -v "rc.subr" | grep -v "rc.d/" | grep -v "services" | grep -v Makefile`
+l=`find . -exec grep -l "service" {} ';' | grep -v "changelist" | grep -v "dbus" | grep -v "dovecot" | grep -v "esd.conf" | grep -v "inetd.conf" | grep -v "pwd.db" | grep -v "php-*.ini" | grep -v "rc.subr" | grep -v "rc.d/" | grep -v "services" | grep -v Makefile`
 echo "l=$l" >> /var/tmp/inst-adJ.bitacora 
 for i in $l; do 
 	echo $i  >> /var/tmp/inst-adJ.bitacora

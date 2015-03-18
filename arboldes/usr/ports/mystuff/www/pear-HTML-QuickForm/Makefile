@@ -2,7 +2,7 @@
 
 COMMENT=	package provides methods for HTML forms
 
-DISTNAME=	HTML_QuickForm-3.2.13
+DISTNAME=	HTML_QuickForm-3.2.14
 REVISION=	1
 CATEGORIES=	devel www
 

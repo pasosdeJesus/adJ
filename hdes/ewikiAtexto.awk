@@ -66,7 +66,7 @@
 				uet = p;
 			}
 			#print "OJO uea=" uea " uet=" uet " r=" r;
-			if (uea < 5 && uet - uea > 70 ) {
+			if (uea < 5 && uet - uea > 60 ) {
 				a = substr(r, 1, uet);
 				r = ind substr(r, uet+1);
 			} else	if (uea > 0) {

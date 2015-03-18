@@ -152,6 +152,7 @@ while (test "$usivel" = "") ; do
 	} fi;
 done;
 
+echo "usivel=$usivel" >> /var/tmp/inst-sivel.log;
 
 if (test ! -f /$RUTAIMG/post.img ) then {
 	echo "Debería existir imagen encriptada (post.img) para PostgreSQL en ruta $RUTAIMG (o especifique otra en variable RUTAIMG)."| tee -a /var/tmp/inst-sivel.log;
@@ -297,91 +298,7 @@ echo "*:*:*:sivel:$CLSIVELPG" > /home/$usivel/.pgpass;
 chmod 0600 /home/$usivel/.pgpass;
 chown $usivel:$usivel /home/$usivel/.pgpass
 
-echo "* Poniendo /var/www/htdocs/sivel como raíz de documentos de Apache" | tee -a /var/tmp/inst-sivel.log;
-grep "DocumentRoot.*\"/var/www/htdocs/sivel\"" /var/www/conf/httpd.conf > /dev/null
-if (test "$?" != "0") then {
-	chmod +w /var/www/conf/httpd.conf
-	cp /var/www/conf/httpd.conf /tmp/httpd.conf
-	awk '
-/DocumentRoot .*/ {
-	if (paso==1) {
-		$0="DocumentRoot \"/var/www/htdocs/sivel\"";
-	}
-}
-
-/^ServerName .*/ {
-	if (paso==1) {
-		print "    <Directory />";
-		print "        AllowOverride Options";
-		print "    </Directory>";
-		print "    <Files ~ \"pruebas.bitacora|vardb.sh|vardb-copia.sh|Entries|Entries.Log|Repository|Root\">";
-		print "        Order allow,deny";
-		print "        Deny from all";
-		print "    </Files>";
-		$0="ServerName servidor";
-	}
-}
-
-/^ServerAdmin .*/ {
-	if (paso==1) {
-		$0="ServerAdmin info@pasosdeJesus.org";
-	}
-}
-
-/<VirtualHost _default_:443>/ {
-	paso=1;
-}
-
-/.*/ {
-	print $0;
-}
-
-BEGIN {
-	paso=0;
-}' /tmp/httpd.conf > /var/www/conf/httpd.conf
-	chmod -w /var/www/conf/httpd.conf
-}
-else {
-		echo "   Saltando..."| tee -a /var/tmp/inst-sivel.log;
-} fi;
-
-echo "* Mejorando permisos en configuración de Apache" | tee -a /var/tmp/inst-sivel.log;
-grep "Files.*Entries" /var/www/conf/httpd.conf > /dev/null
-if (test "$?" != "0") then {
-	chmod +w /var/www/conf/httpd.conf
-	cp /var/www/conf/httpd.conf /tmp/httpd.conf
-	awk '
-/^ServerName .*/ {
-	if (paso==1) {
-		print "<Directory />";
-		print "    AllowOverride Options";
-		print "</Directory>";
-		print "<Files ~ \"Entries|Entries.Log|Repository|Root\">";
-		print "    Order allow,deny";
-		print "    Deny from all";
-		print "</Files>";
-		paso = 0;
-	}
-}
-
-/DocumentRoot .*var.www.htdocs.sivel/ {
-	paso=1;
-}
-
-/.*/ {
-	print $0;
-}
-
-BEGIN {
-	paso=0;
-}' /tmp/httpd.conf > /var/www/conf/httpd.conf
-	chmod -w /var/www/conf/httpd.conf
-}
-else {
-		echo "   Saltando..."| tee -a /var/tmp/inst-sivel.log;
-} fi;
-
-echo "* Enlaces y directorios para Apache y SIVeL" | tee -a /var/tmp/inst-sivel.log;
+echo "* Enlaces y directorios para web y SIVeL" | tee -a /var/tmp/inst-sivel.log;
 if (test ! -d /var/www/htdocs/sivel -o ! -d /home/$usivel/public_html/sivel -o ! -d /home/$usivel/sivel) then {
 	mkdir -p /var/www/htdocs/sivel/
 	mkdir -p /home/$usivel/public_html/
@@ -393,14 +310,141 @@ else {
 		echo "   Saltando..."| tee -a /var/tmp/inst-sivel.log;
 } fi;
 
-apachectl stop | tee -a /var/tmp/inst-sivel.log;
-. /etc/rc.conf | tee -a /var/tmp/inst-sivel.log;
-httpd $httpd_flags | tee -a /var/tmp/inst-sivel.log
-if (test "$?" != "0") then {
-	echo "Falló httpd, revisar, asegurar que funciona y regresar con 'exit'" | tee -a /var/tmp/inst-sivel.log;
-	sh
-} fi;
-cat /var/www/conf/httpd.conf >> /var/tmp/inst-sivel.log 
+
+pgrep nginx
+if (test "$?" = "0") then {
+        echo "* Poniendo /var/www/htdocs/sivel como raíz de documentos de nginx " | tee -a /var/tmp/inst-sivel.log;
+	grep "root.*/var/www/htdcos/sivel" /etc/nginx/nginx.conf > /dev/null 2>&1
+	if (test "$?" != "0") then {
+        	cp /etc/nginx/nginx.conf /tmp/nginx.conf
+		chmod +w /tmp/nginx.conf
+        	awk '
+        	/^[ \t]*root .*/ {
+        		if (paso >=1 && paso<=2) {
+        			$0="       root /var/www/htdocs/sivel;";
+			}
+			paso = paso + 1;
+		}
+
+        	/algoasi/ {
+        		if (paso==1) {
+        			print "    <Directory />";
+        			print "        AllowOverride Options";
+        			print "    </Directory>";
+        			print "    <Files ~ \"pruebas.bitacora|vardb.sh|vardb-copia.sh|Entries|Entries.Log|Repository|Root\">";
+        			print "        Order allow,deny";
+        			print "        Deny from all";
+        			print "    </Files>";
+        			$0="ServerName servidor";
+        		}
+        	}
+        
+        	/listen.*443/ {
+        		paso=1;
+        	}
+        
+        	/.*/ {
+        		print $0;
+        	}
+        
+        	BEGIN {
+        		paso=0;
+        	}' /tmp/nginx.conf > /etc/nginx/nginx.conf
+        	chmod -w /etc/nginx/nginx.conf
+		sudo sh /etc/rc.d/nginx restart
+	} else {
+        	echo "   Saltando..."| tee -a /var/tmp/inst-sivel.log;
+        } fi;
+} else {
+        echo "* Poniendo /var/www/htdocs/sivel como raíz de documentos de Apache" | tee -a /var/tmp/inst-sivel.log;
+        grep "DocumentRoot.*\"/var/www/htdocs/sivel\"" /var/www/conf/httpd.conf > /dev/null
+        if (test "$?" != "0") then {
+        	chmod +w /var/www/conf/httpd.conf
+        	cp /var/www/conf/httpd.conf /tmp/httpd.conf
+        	awk '
+        	/DocumentRoot .*/ {
+        		if (paso==1) {
+        			$0="DocumentRoot \"/var/www/htdocs/sivel\"";
+			}
+		}
+
+        	/^ServerName .*/ {
+        		if (paso==1) {
+        			print "    <Directory />";
+        			print "        AllowOverride Options";
+        			print "    </Directory>";
+        			print "    <Files ~ \"pruebas.bitacora|vardb.sh|vardb-copia.sh|Entries|Entries.Log|Repository|Root\">";
+        			print "        Order allow,deny";
+        			print "        Deny from all";
+        			print "    </Files>";
+        			$0="ServerName servidor";
+        		}
+        	}
+        
+        	/^ServerAdmin .*/ {
+        		if (paso==1) {
+        			$0="ServerAdmin info@pasosdeJesus.org";
+        		}
+        	}
+        
+        	/<VirtualHost _default_:443>/ {
+        		paso=1;
+        	}
+        
+        	/.*/ {
+        		print $0;
+        	}
+        
+        	BEGIN {
+        		paso=0;
+        	}' /tmp/httpd.conf > /var/www/conf/httpd.conf
+        	chmod -w /var/www/conf/httpd.conf
+        } else {
+        	echo "   Saltando..."| tee -a /var/tmp/inst-sivel.log;
+        } fi;
+        
+        echo "* Mejorando permisos en configuración de Apache" | tee -a /var/tmp/inst-sivel.log;
+        grep "Files.*Entries" /var/www/conf/httpd.conf > /dev/null
+        if (test "$?" != "0") then {
+        	chmod +w /var/www/conf/httpd.conf
+        	cp /var/www/conf/httpd.conf /tmp/httpd.conf
+        	awk '
+		/^ServerName .*/ {
+        	if (paso==1) {
+        		print "<Directory />";
+        		print "    AllowOverride Options";
+        		print "</Directory>";
+        		print "<Files ~ \"Entries|Entries.Log|Repository|Root\">";
+        		print "    Order allow,deny";
+        		print "    Deny from all";
+        		print "</Files>";
+        		paso = 0;
+        	}
+        	}
+        
+        	/DocumentRoot .*var.www.htdocs.sivel/ {
+        	paso=1;
+        	}
+        
+        	/.*/ {
+        	print $0;
+        	}
+        
+        	BEGIN {
+        	paso=0;
+        	}' /tmp/httpd.conf > /var/www/conf/httpd.conf
+        	chmod -w /var/www/conf/httpd.conf
+        }
+        else {
+        	echo "   Saltando..."| tee -a /var/tmp/inst-sivel.log;
+        } fi;
+	sudo sh /etc/rc.d/httpd restart
+        if (test "$?" != "0") then {
+        	echo "Falló httpd, revisar, asegurar que funciona y regresar con 'exit'" | tee -a /var/tmp/inst-sivel.log;
+        	sh
+        } fi;
+        cat /var/www/conf/httpd.conf >> /var/tmp/inst-sivel.log 
+} fi;	  
 
 if (test -f "/var/www/htdocs/sivel/confv.php") then {
 	vsant=`grep "PRY_VERSION" /var/www/htdocs/sivel/confv.php | sed -e "s/.*PRY_VERSION *= *\"\(...\).*/\1/g"`;
@@ -442,7 +486,7 @@ if (test "$?" != "0") then {
 } fi;
 
 echo "* Estableciendo permisos" | tee -a /var/tmp/inst-sivel.log;
-cd /var/www/htdocs/sivel  | tee -a /var/tmp/inst-sivel.log;
+cd /var/www/htdocs/sivel  
 chown -R $usivel:$usivel .  | tee -a /var/tmp/inst-sivel.log;
 chmod -R a+r .  | tee -a /var/tmp/inst-sivel.log;
 chmod -R go-rx /var/www/htdocs/sivel/bin  | tee -a /var/tmp/inst-sivel.log;
@@ -471,7 +515,7 @@ if (test -f /var/www/htdocs/sivel/sitios/sivel/vardb.sh) then {
 	cp /var/www/htdocs/sivel/sitios/sivel/vardb.sh /var/www/htdocs/sivel/sitios/sivel/vardb-copia.sh | tee -a /var/tmp/inst-sivel.log; 
 } fi;
 rm -f /var/www/htdocs/sivel/{confv.sh,confaux.tmp} | tee -a /var/tmp/inst-sivel.log;	
-cd /var/www/htdocs/sivel | tee -a /var/tmp/inst-sivel.log; 
+cd /var/www/htdocs/sivel 
 sudo touch /var/www/pear/lib/.lock  | tee -a /var/tmp/inst-sivel.log;
 
 echo "* Información para Relatos" | tee -a /var/tmp/inst-sivel.log;
@@ -486,8 +530,15 @@ if (test "$derechos" = "") then {
 	derechos="Dominio Público";
 } fi;
 
+echo "* Configurando" | tee -a /var/tmp/inst-sivel.log; 
+pwd
+cd /var/www/htdocs/sivel/ 
+pwd
+echo -n "pwd=" >> /var/tmp/inst-sivel.log
+pwd >> /var/tmp/inst-sivel.log
 su $usivel ./conf.sh -i | tee -a /var/tmp/inst-sivel.log
 
+echo "* Nuevo sitio" | tee -a /var/tmp/inst-sivel.log;
 if (test ! -d /var/www/htdocs/sivel/sitios/sivel) then {
 	cd sitios/
 	# ahora nuevo.sh saca clave de .pgpass
@@ -496,6 +547,8 @@ if (test ! -d /var/www/htdocs/sivel/sitios/sivel) then {
 	sudo chown www:www sivel/ultimoenvio.txt
 	ln -s sivel 127.0.0.1
 	cd ..
+} else {
+	echo "   Saltando..." | tee -a /var/tmp/inst-sivel.log;
 } fi;
 
 echo "* Estableciendo clave" | tee -a /var/tmp/inst-sivel.log;
@@ -555,12 +608,12 @@ if (test "$?" != "0") then {
 /(Dispositivos)
 i
 [submenu] (SIVeL)
-	[exec] (SIVeL) {/usr/local/bin/chrome https://127.0.0.1}
+	[exec] (SIVeL) {/usr/local/bin/firefox -UILocale es-AR https://127.0.0.1}
 	[exec] (Editar sitios/sivel/conf.php) {LANG=es xfw /var/www/htdocs/sivel/sitios/sivel/conf.php}
-        [exec] (Sacar copia de bases en /var/www/resbase) {cd /var/www/htdocs/sivel/ && bin/resptodositio.sh}
-	[exec] (Quemar /var/resbase.img en CD-R) {xterm -e "cd /var/www/htdocs/sivel && bin/copiadvd.sh"}
+        [exec] (Sacar copia de base en /var/www/resbase) {cd /var/www/htdocs/sivel/ && bin/pgdump.sh}
+	[exec] (Quemar /var/resbase.img en CD-R) {xterm -e "cd /var/www/htdocs/sivel && bin/copiacd.sh"}
 	[exec] (Conectar a ${usnyn}www.nocheyniebla.org) {xterm -e "ssh -p10022 -R 1234:localhost:22 ${usnyn}@www.nocheyniebla.org"}
-	[exec] (Enviar volcado de la base a ${usnyn}@www.nocheyniebla.org) {cd /var/www/htdocs/sivel/sitios/sivel && ../../bin/pgdump.sh && rsync -ravz -e "ssh -p10022" /var/www/resbase/sivel-dump-*.sql.gz ${usnyn}@www.nocheyniebla.org:"}
+	[exec] (Enviar volcado de la base a ${usnyn}@www.nocheyniebla.org) {cd /var/www/htdocs/sivel/sitios/sivel && ../../bin/pgdump.sh && dm=`date "+%d"` scp -P10022 /var/www/resbase/sivel-dump-$dm.sql.gz ${usnyn}@www.nocheyniebla.org:"}
 [end]
 .
 w

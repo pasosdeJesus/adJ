@@ -1,4 +1,4 @@
-@comment $OpenBSD: PLIST-tk,v 1.1.1.1 2013/03/19 23:38:30 jeremy Exp $
+@comment $OpenBSD: PLIST-tk,v 1.1.1.1 2015/01/08 18:48:36 jeremy Exp $
 lib/ruby/${RUBYLIBREV}/multi-tk.rb
 lib/ruby/${RUBYLIBREV}/remote-tk.rb
 lib/ruby/${RUBYLIBREV}/tcltk.rb
@@ -62,6 +62,7 @@ lib/ruby/${RUBYLIBREV}/tk/textmark.rb
 lib/ruby/${RUBYLIBREV}/tk/texttag.rb
 lib/ruby/${RUBYLIBREV}/tk/textwindow.rb
 lib/ruby/${RUBYLIBREV}/tk/timer.rb
+lib/ruby/${RUBYLIBREV}/tk/tk_mac.rb
 lib/ruby/${RUBYLIBREV}/tk/toplevel.rb
 lib/ruby/${RUBYLIBREV}/tk/ttk_selector.rb
 lib/ruby/${RUBYLIBREV}/tk/txtwin_abst.rb
@@ -261,6 +262,7 @@ lib/ruby/${RUBYLIBREV}/tkextlib/tcllib/tablelist_tile.rb
 lib/ruby/${RUBYLIBREV}/tkextlib/tcllib/tkpiechart.rb
 lib/ruby/${RUBYLIBREV}/tkextlib/tcllib/toolbar.rb
 lib/ruby/${RUBYLIBREV}/tkextlib/tcllib/tooltip.rb
+lib/ruby/${RUBYLIBREV}/tkextlib/tcllib/validator.rb
 lib/ruby/${RUBYLIBREV}/tkextlib/tcllib/widget.rb
 lib/ruby/${RUBYLIBREV}/tkextlib/tclx/
 lib/ruby/${RUBYLIBREV}/tkextlib/tclx.rb
@@ -302,6 +304,7 @@ lib/ruby/${RUBYLIBREV}/tkextlib/tkHTML/setup.rb
 lib/ruby/${RUBYLIBREV}/tkextlib/tkimg/
 lib/ruby/${RUBYLIBREV}/tkextlib/tkimg.rb
 lib/ruby/${RUBYLIBREV}/tkextlib/tkimg/bmp.rb
+lib/ruby/${RUBYLIBREV}/tkextlib/tkimg/dted.rb
 lib/ruby/${RUBYLIBREV}/tkextlib/tkimg/gif.rb
 lib/ruby/${RUBYLIBREV}/tkextlib/tkimg/ico.rb
 lib/ruby/${RUBYLIBREV}/tkextlib/tkimg/jpeg.rb
@@ -310,6 +313,7 @@ lib/ruby/${RUBYLIBREV}/tkextlib/tkimg/pixmap.rb
 lib/ruby/${RUBYLIBREV}/tkextlib/tkimg/png.rb
 lib/ruby/${RUBYLIBREV}/tkextlib/tkimg/ppm.rb
 lib/ruby/${RUBYLIBREV}/tkextlib/tkimg/ps.rb
+lib/ruby/${RUBYLIBREV}/tkextlib/tkimg/raw.rb
 lib/ruby/${RUBYLIBREV}/tkextlib/tkimg/setup.rb
 lib/ruby/${RUBYLIBREV}/tkextlib/tkimg/sgi.rb
 lib/ruby/${RUBYLIBREV}/tkextlib/tkimg/sun.rb
