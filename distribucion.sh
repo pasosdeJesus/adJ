@@ -757,13 +757,15 @@ if (test "$sn" = "s") then {
 	arcdis="tmp/disponibles.txt";
 	arcdis2="tmp/disponibles2.txt";
 
-	pftp=`echo $PKG_PATH | sed -e "s/^ftp:.*/ftp/g;s/^http:.*/ftp/g"`;
+	pftp=`echo $PKG_PATH | sed -e "s/^ftp:.*/ftp/g;s/^http:.*/http/g"`;
 	echo pftp $pftp
 
 	if (test ! -f "$arcdis") then {
 		echo "Obteniendo lista de paquetes disponibles de $PKG_PATH" | tee -a /var/tmp/distrib-adJ.bitacora;
 		if (test "$pftp" = "ftp") then {
 			cmd="echo \"ls\" | ftp $PKG_PATH > /tmp/actu2-l"
+		} elif (test "$pftp" = "http") then {
+			cmd="ftp -o /tmp/actu2-l $PKG_PATH"
 		} else {
 			cmd="ls $PKG_PATH > /tmp/actu2-l";
 		} fi;
@@ -774,7 +776,7 @@ if (test "$sn" = "s") then {
 		} fi;
 		cmd="$cmd > /tmp/actu2-g"
 		echo $cmd; eval $cmd;
-		cmd="sed -e \"s/.*\( [A-Za-z0-9.-][_A-Za-z0-9.@+-]*.tgz\).*/\1 /g\" /tmp/actu2-g > /tmp/actu2-s"
+		cmd="sed -e \"s/.*[^_A-Za-z0-9.@+-]\([A-Za-z0-9.-][_A-Za-z0-9.@+-_]*.tgz\).*/\1 /g\" /tmp/actu2-g > /tmp/actu2-s"
 		echo $cmd; eval $cmd;
 		if (test "$excluye" != "") then {
 			cmd="grep -v -f tmp/excluye.txt /tmp/actu2-s > $arcdis";
@@ -844,7 +846,7 @@ if (test "$sn" = "s") then {
 
 	if (test "$t" = "1") then {
 		pa=`cat tmp/poract.txt | grep . | tr "\n" "," | sed -e "s/,$//g"`
-		if (test "$pftp" = "ftp") then {
+		if (test "$pftp" = "ftp" -o "$pftp" = "http") then {
 			cmd="(cd $V$VESP-$ARQ/paquetes; ftp $PKG_PATH/{$pa} )"
 		} else {
 			echo $pa | grep "," > /dev/null
