@@ -17,10 +17,10 @@ Prerequisitos
 1. Computador con procesador de 64 bits.
 2. OpenBSD o adJ para 64 bits instalados.
 3. Fuentes de la versión de OpenBSD que usa descargadas e instaladas en ```/usr/src```, ```/usr/src/sys```, ```/usr/ports``` y ```/usr/xenocara```
-4. Desde github bifurque (fork) la rama de la versión que desea del repositorio https://github.com/pasosdeJesus/adJ.  La versión estable ya publicada 5.5 está en la rama ```ADJ_5_5``` y la versión en desarrollo --que sera 5.6-- esta en la rama ```master```, para apoyar desarrollo de OpenBSD por un periodo de tiempo proponemos cambios a la rama ```current``` de OpenBSD desde la rama ```OBSD_CURRENT```.
-4. Clone su bifuración a su directorio preferido, (cambie en el siguiente ejemplo ```pasosdeJesus``` por su usuario en github y ```master``` por ```OBSD_CURRENT``` si prefiere trabajar sobre la versión para ```current``` de OpenBSD):
+4. Desde github bifurque (fork) la rama de la versión que desea del repositorio https://github.com/pasosdeJesus/adJ.  La versión estable ya publicada 5.6 está en la rama ```ADJ_5_6``` y la versión en desarrollo --que sera 5.7-- esta en la rama ```master```. Para apoyar desarrollo de OpenBSD por un periodo de tiempo proponemos cambios a la rama ```current``` de OpenBSD desde la rama ```OBSD_CURRENT```.
+5. Clone su bifuración a su directorio preferido, (cambie en el siguiente ejemplo ```pasosdeJesus``` por su usuario en github y ```ADJ_5_6``` por ```master``` si prefier trabajar sobre la versión en desarrollo o por ```OBSD_CURRENT``` si prefiere trabajar sobre la versión para ```current``` de OpenBSD):
 ```
-mkdir ~/comp; cd ~/comp; git clone -b master git://github.com/pasosdeJesus/adJ.git
+mkdir ~/comp; cd ~/comp; git clone -b ADJ_5_6r git://github.com/pasosdeJesus/adJ.git
 ```
 
 
