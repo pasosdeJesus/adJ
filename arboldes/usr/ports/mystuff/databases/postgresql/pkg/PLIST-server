@@ -1,4 +1,4 @@
-@comment $OpenBSD: PLIST-server,v 1.25 2014/01/06 10:47:15 pea Exp $
+@comment $OpenBSD: PLIST-server,v 1.25.4.1 2015/02/06 11:00:33 pea Exp $
 @conflict pgsql-*
 @conflict pgsql-clients-*
 @conflict postgresql-clients-*
@@ -173,6 +173,7 @@ include/postgresql/server/commands/view.h
 include/postgresql/server/common/
 include/postgresql/server/common/fe_memutils.h
 include/postgresql/server/common/relpath.h
+include/postgresql/server/common/string.h
 include/postgresql/server/datatype/
 include/postgresql/server/datatype/timestamp.h
 include/postgresql/server/dynloader.h

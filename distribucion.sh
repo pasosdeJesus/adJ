@@ -76,8 +76,12 @@ if (test "$inter" = "-i") then {
 else {
 	sn=$autoCvs;
 } fi;
-if (test "$sn" = "s") then {
-	cd /usr/src
+if (test "$sn" = "s") then {	
+	if (test -d /usr/src$VP-orig/) then {
+		cd /usr/src$VP-orig
+	} else {
+		cd /usr/src
+	} fi;
 	if (test ! -f CVS/Root) then {
 		for i in `find . -name CVS`; do 
 			echo $i;
@@ -85,7 +89,11 @@ if (test "$sn" = "s") then {
 		done;
 	} fi;
 	cvs -z3 update -Pd -r$R
-	cd /usr/src/sys
+	if (test -d /usr/src$VP-orig/) then {
+		cd /usr/src$VP-orig/sys
+	} else {
+		cd /usr/src/sys
+	} fi;
 	if (test ! -f CVS/Root) then {
 		for i in `find . -name CVS`; do 
 			echo $i;
@@ -93,7 +101,11 @@ if (test "$sn" = "s") then {
 		done;
 	} fi;
 	cvs -z3 update -Pd -r$R
-	cd $XSRCDIR
+	if (test -d /usr/xenocara$VP-orig/) then {
+		cd /usr/xenocara$VP-orig/sys
+	} else {
+		cd $XSRCDIR
+	} fi;
 	if (test ! -f CVS/Root) then {
 		for i in `find . -name CVS`; do 
 			echo $i;
@@ -658,60 +670,71 @@ if (test "$sn" = "s") then {
 	} fi;
 	rm tmp/disponibles*
 
-	# Recompilados para cerrar fallas, tomando de fuentes de OpenBSD 5.6
-	paquete php paquetes "php php-fpm php-gd php-intl php-ldap php-mcrypt php-pdo_pgsql php-pgsql php-zip" 5.4
-	paquete postgis
+	####
+	# Recompilados para cerrar fallas, portes actualizados de OpenBSD 5.6
+	# Para que operen bien basta actualizar CVS de /usr/ports 
+	# Los siguientes no deben estar en arboldes/usr/ports/mystuff
+
+	# Tocó quedarse en 5.4 por pear y SIVeL 1.2
+	# OJO paquete php paquetes "php php-fpm php-gd php-intl php-ldap php-mcrypt php-pdo_pgsql php-pgsql php-zip" 5.4
+	paquete curl
+	#paquete vlc
+	#paquete bash 
 
 	# Examinar
-	paquete cups
-	paquete cups-filters
-	paquete curl
-	paquete gnupg
-	paquete gnutls
-	paquete libxml 
-	paquete libvpx
-	paquete p5-Mail-SpamAssassin
-	#paquete php
-	paquete pidgin
-	paquete webkit
-	paquete wget
+	#paquete postgis
+	#paquete cups
+	#paquete cups-filters
+	#paquete gnupg
+	#paquete gnutls
+	#paquete libxml 
+	#paquete libvpx
+	#paquete p5-Mail-SpamAssassin
+	#paquete pidgin
+	#paquete webkit
+	#paquete wget
 
-	# Retroportados de current para cerrar fallas o actualizar
-	paquete antiword
-	paquete bash
-	paquete freetype
-	paquete ruby paquetes "ruby ruby22-ri_docs" 2.2
+	####
+	# Tomados de portes de OpenBSD 5.6 pero mejorados para adJ
+	# Deben estar en arboldes/usr/ports/mystuff 
 
-  
-	paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs"
-	#paquete ruby paquetes "ruby ruby21-ri_docs" 2.1
-	# paquete pear paquetes "pear pear-utils"  Toco quedarse en PHP 5.4 para SIVeL 1.2
-
-	# Mejorados para adJ
-	paquete pear-Auth
-	paquete pear-Validate
-	paquete pear-HTML-QuickForm
+	# servicio
+	# OJO paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs" 
 	paquete xfe
-	paquete vlc
-	paquete bash 
 
+	####
+	# Retroportados de current para cerrar fallas o actualizar
+	# Deben estar en arboldes/usr/ports/mystuff y en /usr/ports de current
+	#paquete antiword
+	#paquete ruby paquetes "ruby ruby22-ri_docs" 2.2
+	paquete pear-Validate
+
+	###
+        # Actualizados.  Está pero desactualizado en OpenBSD 5.6 y en current
+	paquete pear-Auth
+	paquete pear-HTML-QuickForm
+       		
+	####
 	# Unicos en adJ liderados por otros
+	# Deben estar en arboldes/usr/ports/mystuff pero no en /usr/ports
 	paquete databases/pear-DB_DataObject
 	paquete www/pear-HTML-Common
 	paquete www/pear-HTML-CSS
 	paquete www/pear-HTML-Javascript
 	paquete www/pear-HTML-Menu
 	paquete www/pear-HTML-Table
-	paquete emulators/realboy
-	paquete sysutils/ganglia
-	paquete textproc/sword
-	paquete textproc/xiphos
-	paquete x11/fbdesk
+	#OJO paquete emulators/realboy
+	#OJO paquete sysutils/ganglia
+	#OJO paquete textproc/sword
+	#OJO paquete textproc/xiphos
+	#OJO paquete x11/fbdesk
 	paquete www/pear-DB-DataObject-FormBuilder
 	paquete www/pear-HTML-QuickForm-Controller
 	#paquete devel/ruby-apacheconf_parser paquetes "ruby21-apacheconf-parser"
 
+	####
 	# Unicos de adJ liderados por pdJ
+	# Deben estar en arboldes/usr/ports/mystuff pero no en /usr/ports
 	paquete books/evangelios_dp
 	paquete books/basico_OpenBSD
 	paquete books/usuario_OpenBSD
