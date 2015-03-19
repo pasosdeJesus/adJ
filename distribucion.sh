@@ -706,7 +706,7 @@ if (test "$sn" = "s") then {
 	# Retroportados de current para cerrar fallas o actualizar
 	# Deben estar en arboldes/usr/ports/mystuff y en /usr/ports de current
 	#paquete antiword
-	#paquete ruby paquetes "ruby ruby22-ri_docs" 2.2
+	paquete ruby paquetes "ruby ruby22-ri_docs" 2.2
 	paquete pear-Validate
 
 	###
