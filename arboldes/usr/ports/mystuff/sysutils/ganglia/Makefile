@@ -2,8 +2,9 @@
 
 COMMENT=	Scalable distributed monitoring system
 
-VERSION=3.6.0
+VERSION=	3.6.0
 DISTNAME=	ganglia-${VERSION}
+REVISION=	1
 
 CATEGORIES=	sysutils
 HOMEPAGE=	http://ganglia.sourceforge.net/

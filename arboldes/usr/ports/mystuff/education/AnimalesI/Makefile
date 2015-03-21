@@ -4,6 +4,7 @@
 COMMENT=	"worksheets for learning to read and write"
 
 V=		1.1
+REVISION=	0
 DISTNAME=	AnimalesI-${V}
 CATEGORIES=    	education
 

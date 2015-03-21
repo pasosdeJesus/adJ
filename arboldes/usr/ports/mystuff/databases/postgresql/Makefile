@@ -1,4 +1,4 @@
-# $OpenBSD: Makefile,v 1.188.2.1 2015/02/06 11:00:33 pea Exp $
+# $OpenBSD: Makefile,v 1.200 2015/02/18 17:49:56 jca Exp $
 
 COMMENT-main=	PostgreSQL RDBMS (client)
 COMMENT-server=	PostgreSQL RDBMS (server)
@@ -9,7 +9,8 @@ COMMENT-plpython=Python procedural language for PostgreSQL
 # DO NOT FORGET to also change the @ask-update entry in pkg/PLIST-server
 # in case a dump before / restore after pkg_add -u is required!
 
-VERSION=	9.3.6
+VERSION=	9.4.1
+REVISION-server= 1
 DISTNAME=	postgresql-${VERSION}
 PKGNAME-main=	postgresql-client-${VERSION}
 PKGNAME-server=	postgresql-server-${VERSION}
@@ -17,12 +18,11 @@ PKGNAME-docs=	postgresql-docs-${VERSION}
 PKGNAME-contrib=postgresql-contrib-${VERSION}
 PKGNAME-plpython=postgresql-plpython-${VERSION}
 
-
 CATEGORIES=	databases
-SHARED_LIBS=	ecpg		7.5 \
-		ecpg_compat	4.5 \
-		pgtypes		4.4 \
-		pq		5.6
+SHARED_LIBS=	ecpg		7.6 \
+		ecpg_compat	4.6 \
+		pgtypes		4.5 \
+		pq		5.7
 
 HOMEPAGE=	http://www.postgresql.org/
 
@@ -66,6 +66,7 @@ CONFIGURE_ARGS=	--disable-rpath --with-openssl=/usr \
 		--with-perl \
 		--with-python \
 		--with-pam=no \
+		--with-uuid=ossp \
 		--enable-integer-datetimes \
 		--includedir="${PREFIX}/include/postgresql" \
 		--datadir="${PREFIX}/share/postgresql" \
@@ -74,7 +75,6 @@ CONFIGURE_ARGS=	--disable-rpath --with-openssl=/usr \
 		--with-libraries="${LOCALBASE}/lib" \
 		--with-system-tzdata="/usr/share/zoneinfo" \
 		--with-openssl \
-		--with-ossp-uuid \
 		--with-libxml \
 		--disable-thread-safety
 
@@ -101,9 +101,8 @@ WANTLIB-server=	${WANTLIB-main} perl pq>=4
 RUN_DEPENDS-contrib= databases/postgresql,-server=${VERSION}
 
 LIB_DEPENDS-contrib= databases/postgresql=${VERSION} \
-		     ${LIB_DEPENDS-main} \
-		     devel/uuid
-WANTLIB-contrib=	${WANTLIB-main} pq>=4 ossp-uuid
+		     ${LIB_DEPENDS-main}
+WANTLIB-contrib=	${WANTLIB-main} pq>=4
 
 LIB_DEPENDS-plpython=	${MODPY_LIB_DEPENDS}
 WANTLIB-plpython =	c m pthread util \
@@ -144,8 +143,14 @@ DOCS=	${WRKSRC}/COPYRIGHT ${WRKSRC}/HISTORY \
 pre-build:
 	touch ${WRKSRC}/doc/src/sgml/*-stamp
 
+INSTALL_REPLACE = 's/^install_bin = .*$$/ifdef BSD_INSTALL_SCRIPT\ninstall_bin
+INSTALL_REPLACE += = \$$\(subst -m 755,,\$${BSD_INSTALL_SCRIPT}\)
+INSTALL_REPLACE += \nelse\ninstall_bin = \/usr\/bin\/install -c -o ${BINOWN}
+INSTALL_REPLACE += -g ${BINGRP}\nendif/'
 post-install:
 	${INSTALL_DATA_DIR} ${PREFIX}/share/doc/postgresql
 	${INSTALL_DATA} ${DOCS} ${PREFIX}/share/doc/postgresql
+	perl -i -pe ${INSTALL_REPLACE} \
+		${PREFIX}/lib/postgresql/pgxs/src/Makefile.global
 
 .include <bsd.port.mk>

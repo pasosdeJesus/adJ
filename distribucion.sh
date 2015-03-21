@@ -676,7 +676,6 @@ if (test "$sn" = "s") then {
 	# Los siguientes no deben estar en arboldes/usr/ports/mystuff
 
 	# Tocó quedarse en 5.4 por pear y SIVeL 1.2
-	# OJO paquete php paquetes "php php-fpm php-gd php-intl php-ldap php-mcrypt php-pdo_pgsql php-pgsql php-zip" 5.4
 	paquete curl
 	#paquete vlc
 	#paquete bash 
@@ -698,8 +697,6 @@ if (test "$sn" = "s") then {
 	# Tomados de portes de OpenBSD 5.6 pero mejorados para adJ
 	# Deben estar en arboldes/usr/ports/mystuff 
 
-	# servicio
-	# OJO paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs" 
 	paquete xfe
 
 	####
@@ -708,9 +705,11 @@ if (test "$sn" = "s") then {
 	#paquete antiword
 	paquete ruby paquetes "ruby ruby22-ri_docs" 2.2
 	paquete pear-Validate
+	paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs" 
 
 	###
         # Actualizados.  Está pero desactualizado en OpenBSD 5.6 y en current
+	paquete php paquetes "php php-fpm php-gd php-intl php-ldap php-mcrypt php-pdo_pgsql php-pgsql php-zip" 5.4
 	paquete pear-Auth
 	paquete pear-HTML-QuickForm
        		
@@ -723,11 +722,11 @@ if (test "$sn" = "s") then {
 	paquete www/pear-HTML-Javascript
 	paquete www/pear-HTML-Menu
 	paquete www/pear-HTML-Table
-	#OJO paquete emulators/realboy
-	#OJO paquete sysutils/ganglia
-	#OJO paquete textproc/sword
-	#OJO paquete textproc/xiphos
-	#OJO paquete x11/fbdesk
+	paquete emulators/realboy
+	paquete sysutils/ganglia
+	paquete textproc/sword
+	paquete textproc/xiphos
+	paquete x11/fbdesk
 	paquete www/pear-DB-DataObject-FormBuilder
 	paquete www/pear-HTML-QuickForm-Controller
 	#paquete devel/ruby-apacheconf_parser paquetes "ruby21-apacheconf-parser"
