@@ -1172,7 +1172,7 @@ diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src53xlocale1/
 diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src53xlocale1/lib/libc/locale/nextwctype.c src/lib/libc/locale/nextwctype.c
 --- src53xlocale1/lib/libc/locale/nextwctype.c	Wed Dec 31 19:00:00 1969
 +++ src/lib/libc/locale/nextwctype.c	Thu Apr  4 17:32:11 2013
-@@ -0,0 +1,109 @@
+@@ -0,0 +1,110 @@
 +/*-
 + * Copyright (c) 2004 Tim J. Robbins.
 + * All rights reserved.
@@ -1210,6 +1210,7 @@ diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src53xlocale1/
 +#include <wctype.h>
 +#include <errno.h>
 +
++#include "locale/xlocale_private.h"
 +#include "mblocal.h"
 +#include "runetype.h"
 +
@@ -2999,7 +3000,15 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/stdio/Make
 diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/stdio/vdprintf.c src53xlocale2/lib/libc/stdio/vdprintf.c
 --- src53xlocale1/lib/libc/stdio/vdprintf.c	Mon Apr  8 21:20:25 2013
 +++ src53xlocale2/lib/libc/stdio/vdprintf.c	Fri Apr 12 12:07:57 2013
-@@ -48,7 +48,7 @@
+@@ -39,6 +39,7 @@
+ #include <unistd.h>
+ 
+ #include "local.h"
++#include "locale/xlocale_private.h"
+ 
+ static int
+ __dwrite(void *cookie, const char *buf, int n)
+@@ -48,7 +49,7 @@
  }
  
  int
@@ -3008,7 +3017,7 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/stdio/vdpr
  {
  	FILE f;
  	struct __sfileext fext;
-@@ -66,8 +66,15 @@
+@@ -66,8 +67,15 @@
  	f._cookie = &fd;
  	f._write = __dwrite;
  
