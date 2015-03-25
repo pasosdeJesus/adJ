@@ -1,0 +1,52 @@
+$OpenBSD$
+--- estadisticas.php.orig	Mon Feb 16 08:13:55 2015
++++ estadisticas.php	Fri Feb 20 17:25:06 2015
+@@ -579,11 +579,6 @@ class PagEstadisticasInd extends HTML_QuickForm_Page
+             )
+         );
+ 
+-        $supra =& $this->addElement(
+-            'select', 'id_supracategoria',
+-            'Supracategoria: ', array()
+-        );
+-
+         $ntipoviolencia = $this->idTipoViolencia();
+         if ($ntipoviolencia != null) {
+             $tipo->setValue($ntipoviolencia);
+@@ -595,7 +590,6 @@ class PagEstadisticasInd extends HTML_QuickForm_Page
+             );
+             $supra->loadArray($options);
+         }
+-        $nsupra = $this->idSupracategoria();
+ 
+         $sel =& $this->addElement(
+             'select', 'segun', 'Según'
+@@ -605,21 +599,15 @@ class PagEstadisticasInd extends HTML_QuickForm_Page
+                 '' => '',
+                 'id_p_responsable' =>
+                 'ACTOS ' .
+-                strtoupper($GLOBALS['etiqueta']['p_responsable']),
+-                    'id_rango_edad' => strtoupper(
+-                        $GLOBALS['etiqueta']['rango_edad']
+-                    ),
+-                    'sexo' => strtoupper($GLOBALS['etiqueta']['sexo']),
+-                    'id_filiacion' => strtoupper(
+-                        $GLOBALS['etiqueta']['filiacion']
+-                    ),
+-                    'id_profesion' => strtoupper(
+-                        $GLOBALS['etiqueta']['profesion']
+-                    ),
++                a_mayusculas($GLOBALS['etiqueta']['p_responsable']),
++                    'id_rango_edad' => a_mayusculas($GLOBALS['etiqueta']['rango_edad']),
++                    'sexo' => a_mayusculas($GLOBALS['etiqueta']['sexo']),
++                    'id_filiacion' => a_mayusculas($GLOBALS['etiqueta']['filiacion']),
++                    'id_profesion' => a_mayusculas($GLOBALS['etiqueta']['profesion']),
+                     'id_sector_social' =>
+-                    strtoupper($GLOBALS['etiqueta']['sector_social']),
++                    a_mayusculas($GLOBALS['etiqueta']['sector_social']),
+                         'id_organizacion' =>
+-                        strtoupper($GLOBALS['etiqueta']['organizacion']),
++                        a_mayusculas($GLOBALS['etiqueta']['organizacion']),
+                             'meses' => 'MESES',
+                             'anios' => 'AÑOS',
+                             'fuentes' => 'FUENTE FRECUENTE',

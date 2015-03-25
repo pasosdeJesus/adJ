@@ -1,0 +1,16 @@
+$OpenBSD$
+--- index.php.orig	Mon Feb 16 08:13:55 2015
++++ index.php	Fri Feb 20 17:25:06 2015
+@@ -20,11 +20,11 @@
+ /**
+  * Menú de SIVeL.
+  */
++require_once 'misc.php';
+ require_once 'aut.php';
+ require_once 'HTML/Menu.php';
+ require_once 'confv.php';
+ require_once $_SESSION['dirsitio'] . '/conf.php';
+-require_once 'misc.php';
+ require_once 'misc_caso.php';
+ require_once 'PresentaMenuPrincipal.php';
+ 

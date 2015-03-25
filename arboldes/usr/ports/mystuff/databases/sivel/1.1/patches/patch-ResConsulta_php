@@ -1,0 +1,20 @@
+$OpenBSD$
+--- ResConsulta.php.orig	Mon Feb 16 08:13:52 2015
++++ ResConsulta.php	Fri Feb 20 17:25:06 2015
+@@ -473,6 +473,16 @@ class ResConsulta
+         } else if ($tablas != '') {
+             $etablas = explode(',', $tablas);
+         }
++        foreach($etablas as $ind => $plj) {
++            //echo "OJO ind=$ind, plj=$plj<br>";
++            $pp = explode(' ', $plj);
++            //print_r($pp);
++            if (strtoupper($pp[1]) == 'LEFT' && strtoupper($pp[2]) == 'JOIN') {
++                $etablas[$ind] = $pp[0];
++                $etablas[] = $pp[3];
++            }
++        }
++        //print_r($etablas); die("x");
+         $etablas = array_merge(
+             $etablas, array('caso',
+             'victima', 'departamento', 'municipio',

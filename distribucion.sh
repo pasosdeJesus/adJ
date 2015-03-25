@@ -632,6 +632,7 @@ if (test "$sn" = "s") then {
 	paquete gnutls security
 
 	# Retroportados de current para cerrar fallas
+	paquete samba net
 	paquete bash shells
 	paquete ruby lang paquetes "ruby ruby21-ri_docs" 2.1
 	paquete postgresql databases paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs"
