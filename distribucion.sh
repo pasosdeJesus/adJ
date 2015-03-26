@@ -675,23 +675,25 @@ if (test "$sn" = "s") then {
 	# Para que operen bien basta actualizar CVS de /usr/ports 
 	# Los siguientes no deben estar en arboldes/usr/ports/mystuff
 
-	# Tocó quedarse en 5.4 por pear y SIVeL 1.2
+	paquete flac
+	paquete libcanberra
 	paquete curl
-	#paquete vlc
-	#paquete bash 
+	paquete antiword
+	paquete dbus
+	paquete node
+	paquete cups
+	paquete db paquetes "db" v4
+	paquete libvpx
+	paquete unzip
+	paquete p5-Mail-SpamAssassin
+	paquete py-numpy
+	paquete pidgin
+	paquete gnutls
 
-	# Examinar
-	#paquete postgis
-	#paquete cups
-	#paquete cups-filters
-	#paquete gnupg
-	#paquete gnutls
-	#paquete libxml 
-	#paquete libvpx
-	#paquete p5-Mail-SpamAssassin
-	#paquete pidgin
-	#paquete webkit
-	#paquete wget
+	####
+	# Recompilados para que soporten características de localización
+	# de adJ
+	# quisieramos paquete pulseaudio
 
 	####
 	# Tomados de portes de OpenBSD 5.6 pero mejorados para adJ
@@ -702,13 +704,15 @@ if (test "$sn" = "s") then {
 	####
 	# Retroportados de current para cerrar fallas o actualizar
 	# Deben estar en arboldes/usr/ports/mystuff y en /usr/ports de current
-	#paquete antiword
 	paquete ruby paquetes "ruby ruby22-ri_docs" 2.2
 	paquete pear-Validate
 	paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs" 
+	paquete bash 
 
 	###
         # Actualizados.  Está pero desactualizado en OpenBSD 5.6 y en current
+	
+	# Tocó quedarse en PHP 5.4 por pear y SIVeL 1.2
 	paquete php paquetes "php php-fpm php-gd php-intl php-ldap php-mcrypt php-pdo_pgsql php-pgsql php-zip" 5.4
 	paquete pear-Auth
 	paquete pear-HTML-QuickForm
@@ -733,7 +737,7 @@ if (test "$sn" = "s") then {
 
 	####
 	# Unicos de adJ liderados por pdJ
-	# Deben estar en arboldes/usr/ports/mystuff pero no en /usr/ports
+	# Deben estar en arboldes/usr/ports/mystuff 
 	paquete books/evangelios_dp
 	paquete books/basico_OpenBSD
 	paquete books/usuario_OpenBSD
