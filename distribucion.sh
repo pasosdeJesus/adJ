@@ -675,30 +675,30 @@ if (test "$sn" = "s") then {
 	# Para que operen bien basta actualizar CVS de /usr/ports 
 	# Los siguientes no deben estar en arboldes/usr/ports/mystuff
 
-	paquete flac
-	paquete libcanberra
-	paquete curl
 	paquete antiword
-	paquete dbus
-	paquete node
 	paquete cups
+	paquete curl
 	paquete db paquetes "db" v4
+	paquete dbus
+	paquete flac
+	paquete gnutls
+	paquete libcanberra
 	paquete libvpx
-	paquete unzip
+	paquete node
 	paquete p5-Mail-SpamAssassin
 	paquete py-numpy
 	paquete pidgin paquetes "pidgin libpurple"
-	paquete gnutls
+	paquete unzip
 
 	####
 	# Recompilados para que soporten características de localización
 	# de adJ
 	# quisieramos paquete pulseaudio
+	paquete vlc
 
 	####
 	# Tomados de portes de OpenBSD 5.6 pero mejorados para adJ
 	# Deben estar en arboldes/usr/ports/mystuff 
-
 	paquete xfe
 
 	####
