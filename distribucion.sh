@@ -687,7 +687,7 @@ if (test "$sn" = "s") then {
 	paquete unzip
 	paquete p5-Mail-SpamAssassin
 	paquete py-numpy
-	paquete pidgin
+	paquete pidgin paquetes "pidgin libpurple"
 	paquete gnutls
 
 	####
