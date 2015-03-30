@@ -4,46 +4,22 @@ Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y que esperamos será la elegida por Jesús durante el Milenio.
 
 Versión: 5.5p3%%%
-Fecha de publicación: 24/Mar/2014
+Fecha de publicación: 30/Mar/2014
 
 !!!NOVEDADES
 
-Dado que esta es sólo actualización en binarios a adJ 5.5 referenciamos 
-al archivo de novedades de esa versión ( http://aprendiendo.pasosdejesus.org/?id=AdJ+5.5+-+Aprendiendo+de+Jesus+5.5 ), y aquí sólo listamos
-cambios con respecto a adJ 5.5.
+Dado que esta es sólo actualización en binarios a adJ 5.5p2 referenciamos 
+al archivo de novedades de esa versión ( http://aprendiendo.pasosdejesus.org/?id=AdJ+5.5p2+-+Aprendiendo+de+Jesus+5.5p2 ), y aquí sólo listamos
+cambios con respecto a adJ 5.5p2.
 
 !KERNEL Y SISTEMA BASE
 
-* Parches de seguridad de sistema base hasta 24.Mar.2015, que solucionan 14 fallas de seguridad no corregidas en binarios del sistema base de OpenBSD 5.5 y 10 de robustez (si han sido corregidas en fuentes de OpenBSD, ver http://www.openbsd.org/errata55.html). En particular:
-** nginx con falla CVE-2014-3616 cerrada (abierta en distribución binaria de OpenBSD 5.6)
-** libressl con diversas fallas cerradas
-** sendmail con falla CVE-2014-3956 cerrada
-** Xenocara con fallas cerradas CVE-2014-0209, CVE-2014-0210, CVE-2014-0211 y otras en manejo de requerimientos por parte de clientes X.
-* Deshabilita SSLv3 en libssl así que cierra falla CVE-2014-3566 también conocida como "Poodle" para servicios que empleen esta librería (este cambio se recomienda en fuentes 5.6, pero no se incluyó en  binarios de esa versión).
+* Parches de seguridad de sistema base hasta 24.Mar.2015, que solucionan 14 fallas de seguridad no corregidas en binarios del sistema base de OpenBSD 5.5 y 10 de robustez (si han sido corregidas en fuentes de OpenBSD, ver http://www.openbsd.org/errata55.html). 
+* Falla resuelta con locale en función vdprintf --por ejemplo usada por smbclient
+
 
 !PAQUETES
-* Creados para esta versión:
-** SIVeL 1.1.6 que posiblemente será la última de la serie 1.1.  Es posible migrar al SIVeL 1.2b3 incluido en el DVD. Fallas en script de instalación resueltas.
-** pear-HTML-!QuickForm-3.2.14p1 que acepta datos con tildes en áreas de texto cuando se usa cdificación ISO-8859-1 (como requiere el pronto obsoleto SIVeL 1.1).
-* Compilados diversos paquetes actualizados en fuentes de OpenBSD 5.5 --pero no incluidos en binarios de OpenBSD 5.5 ni de adJ 5.5: 
-** libxml que cierra CVE-2014-3660 
-** py-lxml que cierra CVE-2014-3146
-** wget que cierra acceso arbitrario a enlaces CVE-2014-4877
-** pidgin y libpurple que cierran CVE-2014-3695, CVE-2014-3696, CVE-2014-3697, CVE-2014-3698 
-** dbus que cierra entre otras CVE-2014-3532, CVE-2014-3533, CVE-2014-3477, 
-** png para evitar denegación de servicio de CVE-2014-0333
-** gnutls que actualiza a 3.2.19 y cierra CVE-2014-3466, CVE-2014-0092 y CVE-2014-1959 (esto podia afectar verificacion de certificados de firefox, courier, filezilla, gnumeric, midori, qemu, qgis, scribus, vlc)
-** ruby 2.1.5 que cierra negaciones de servicio CVE-2014-8080 y CVE-2014-8090. Ver http://dhobsd.pasosdejesus.org/index.php?id=Ruby+on+Rails+en+OpenBSD .  Es buen fundamento para aplicaciones Rails 4.2 como el experimental SIVeL 2.0alfa4.  L@ invitamos a ver las que estamos desarrollando en Pasos de Jesús en https://github.com/pasosdeJesus/
-** webkit 
-** curl que cierra CVE-2014-3613, CVE-2014-3707, CVE-2014-8150
-* Retroportados paquetes recientes que cierran fallas:
-** bash que cierra falla shellshock (CVE-2014-6271) 
-** php 5.4.34 que cierra CVE-2014-3668, CVE-2014-3669 and CVE-2014-3670
-** PostgreSQL 9.3.6 que asegura mejor socket, cierra vulnerabilidades CVE-2015-0241, CVE-2015-0242, CVE-2015-0243, CVE-2015-0244, CVE-2014-8161 y que incluye soporte para ordenamientos alfabéticos en español.
-*** git 1.8.5.6 que cierra falla CVE-2014-9390
-
-!!USO
-* Se recomienda iniciar chrome con la opción ==--ssl-version-min=tls1== para evitar uso de SSLv3.  Puede probar con https://www.poodletest.com/
+* Retroportado e incluido samba
 
 !!!DESCARGAS
 
@@ -60,10 +36,9 @@ Las claves públicas empleadas para firmar digitalmente el CD de instalación y 
 
 !!!ACTUALIZACIÓN E INSTALACIÓN
 
-Si planea actualizar de una versión anterior de adJ a adJ 5.5p2
+Si planea actualizar de una versión anterior de adJ a adJ 5.5p3
 hay un procedimiento mas rápido con rsync (ver
 https://github.com/pasosdeJesus/adJ/blob/master/Actualiza.md ).
-
 
 Si no tiene experiencia con esta distribución de OpenBSD para servidores
 y cortafuegos, que es segura, usable en español y amigable para cristian@s,

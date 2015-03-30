@@ -888,7 +888,7 @@ else {
 if (test "$sn" = "s") then {
 	echo "s/\[V\]/$V/g"  > tmp/rempCont.sed
 	for i in `grep ".-\[v\]" Contenido.txt | sed -e "s/-\[v\]\([-a-zA-Z_0-9]*\).*/-[v]\1/g"`; do
-		n=`echo $i | sed -e "s/-\[v\]\([-a-zA-Z_0-9]*\).*/-[0-9][0-9alphabetvrc._]*\1.tgz/g"`
+		n=`echo $i | sed -e "s/-\[v\]\([-a-zA-Z_0-9]*\).*/-[0-9][0-9alphabetdvrc._]*\1.tgz/g"`
 		d=`(cd $V$VESP-$ARQ/paquetes; ls | grep "^$n"; cd ../sivel; ls | grep "^$n" 2>/dev/null | tail -n 1)`
 		e=`echo $d | sed -e 's/.tgz//g'`;
 		ic=`echo $i | sed -e 's/\[v\]/\\\\[v\\\\]/g'`;
