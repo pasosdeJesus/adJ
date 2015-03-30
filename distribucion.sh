@@ -688,6 +688,7 @@ if (test "$sn" = "s") then {
 	paquete p5-Mail-SpamAssassin
 	paquete py-numpy
 	paquete pidgin paquetes "pidgin libpurple"
+	paquete samba
 	paquete unzip
 
 	####
