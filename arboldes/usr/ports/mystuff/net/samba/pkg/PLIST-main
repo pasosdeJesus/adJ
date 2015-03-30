@@ -1,0 +1,247 @@
+@comment $OpenBSD: PLIST-main,v 1.27 2015/02/05 02:04:00 jca Exp $
+@conflict samba-docs-<3.6.15p1
+@pkgpath ${BASE_PKGPATH}
+@pkgpath ${BASE_PKGPATH},ads,-main
+@pkgpath ${BASE_PKGPATH},cups[,ads][,ldap]
+@bin bin/eventlogadm
+bin/findsmb
+bin/mksmbpasswd
+@bin bin/net
+@bin bin/nmblookup
+@bin bin/ntlm_auth
+@bin bin/pdbedit
+@bin bin/profiles
+@bin bin/rpcclient
+@bin bin/sharesec
+@bin bin/smbcacls
+@bin bin/smbclient
+@bin bin/smbcontrol
+@bin bin/smbcquotas
+@bin bin/smbget
+@bin bin/smbpasswd
+@bin bin/smbspool
+@bin bin/smbstatus
+@bin bin/smbta-util
+bin/smbtar
+@bin bin/smbtree
+@bin bin/testparm
+@bin bin/wbinfo
+include/libsmbclient.h
+include/netapi.h
+include/smb_share_modes.h
+include/wbclient.h
+@lib lib/libnetapi.so.${LIBnetapi_VERSION}
+@lib lib/libsmbclient.so.${LIBsmbclient_VERSION}
+@lib lib/libsmbsharemodes.so.${LIBsmbsharemodes_VERSION}
+@lib lib/libwbclient.so.${LIBwbclient_VERSION}
+lib/pkgconfig/netapi.pc
+lib/pkgconfig/smbclient.pc
+lib/pkgconfig/smbsharemodes.pc
+lib/pkgconfig/wbclient.pc
+lib/samba/
+lib/samba/auth/
+lib/samba/auth/script.so
+lib/samba/charset/
+lib/samba/charset/CP437.so
+lib/samba/charset/CP850.so
+lib/samba/de.msg
+lib/samba/en.msg
+lib/samba/fi.msg
+lib/samba/fr.msg
+lib/samba/gpext/
+lib/samba/idmap/
+lib/samba/idmap/autorid.so
+lib/samba/it.msg
+lib/samba/ja.msg
+lib/samba/libnetapi.so
+@lib lib/samba/libnetapi.so.${LIBnetapi_VERSION}
+lib/samba/libsmbclient.so
+@lib lib/samba/libsmbclient.so.${LIBsmbclient_VERSION}
+lib/samba/libsmbsharemodes.so
+@lib lib/samba/libsmbsharemodes.so.${LIBsmbsharemodes_VERSION}
+lib/samba/libwbclient.so
+@lib lib/samba/libwbclient.so.${LIBwbclient_VERSION}
+lib/samba/lowcase.dat
+lib/samba/nl.msg
+lib/samba/nss_info/
+lib/samba/pdb/
+lib/samba/perfcount/
+lib/samba/pl.msg
+lib/samba/ru.msg
+lib/samba/tr.msg
+lib/samba/upcase.dat
+lib/samba/valid.dat
+lib/samba/vfs/
+lib/samba/vfs/acl_tdb.so
+lib/samba/vfs/acl_xattr.so
+lib/samba/vfs/audit.so
+lib/samba/vfs/cap.so
+lib/samba/vfs/catia.so
+lib/samba/vfs/crossrename.so
+lib/samba/vfs/default_quota.so
+lib/samba/vfs/dirsort.so
+lib/samba/vfs/expand_msdfs.so
+lib/samba/vfs/extd_audit.so
+lib/samba/vfs/fake_perms.so
+lib/samba/vfs/full_audit.so
+lib/samba/vfs/linux_xfs_sgid.so
+lib/samba/vfs/netatalk.so
+lib/samba/vfs/preopen.so
+lib/samba/vfs/readahead.so
+lib/samba/vfs/readonly.so
+lib/samba/vfs/recycle.so
+lib/samba/vfs/scannedonly.so
+lib/samba/vfs/shadow_copy.so
+lib/samba/vfs/shadow_copy2.so
+lib/samba/vfs/smb_traffic_analyzer.so
+lib/samba/vfs/streams_depot.so
+lib/samba/vfs/streams_xattr.so
+lib/samba/vfs/syncops.so
+lib/samba/vfs/time_audit.so
+lib/samba/vfs/xattr_tdb.so
+@bin libexec/nmbd
+@bin libexec/smbd
+@bin libexec/swat
+@bin libexec/winbindd
+@man man/man1/dbwrap_tool.1
+@man man/man1/findsmb.1
+@man man/man1/log2pcap.1
+@man man/man1/nmblookup.1
+@man man/man1/ntlm_auth.1
+@man man/man1/profiles.1
+@man man/man1/rpcclient.1
+@man man/man1/sharesec.1
+@man man/man1/smbcacls.1
+@man man/man1/smbclient.1
+@man man/man1/smbcontrol.1
+@man man/man1/smbcquotas.1
+@man man/man1/smbget.1
+@man man/man1/smbstatus.1
+@man man/man1/smbtar.1
+@man man/man1/smbtree.1
+@man man/man1/testparm.1
+@man man/man1/vfstest.1
+@man man/man1/wbinfo.1
+@man man/man5/lmhosts.5
+@comment @man man/man5/pam_winbind.conf.5
+@man man/man5/smb.conf.5
+@man man/man5/smbgetrc.5
+@man man/man5/smbpasswd.5
+@man man/man7/libsmbclient.7
+@man man/man7/samba.7
+@man man/man7/winbind_krb5_locator.7
+@man man/man8/eventlogadm.8
+@man man/man8/idmap_ad.8
+@man man/man8/idmap_adex.8
+@man man/man8/idmap_autorid.8
+@man man/man8/idmap_hash.8
+@man man/man8/idmap_ldap.8
+@man man/man8/idmap_nss.8
+@man man/man8/idmap_rid.8
+@man man/man8/idmap_tdb.8
+@man man/man8/idmap_tdb2.8
+@man man/man8/net.8
+@man man/man8/nmbd.8
+@comment @man man/man8/pam_winbind.8
+@man man/man8/pdbedit.8
+@man man/man8/smbd.8
+@man man/man8/smbpasswd.8
+@man man/man8/smbspool.8
+@man man/man8/smbta-util.8
+@man man/man8/swat.8
+@man man/man8/tdbbackup.8
+@man man/man8/tdbdump.8
+@man man/man8/tdbtool.8
+@man man/man8/vfs_acl_tdb.8
+@man man/man8/vfs_acl_xattr.8
+@man man/man8/vfs_aio_fork.8
+@man man/man8/vfs_aio_pthread.8
+@man man/man8/vfs_audit.8
+@man man/man8/vfs_cacheprime.8
+@man man/man8/vfs_cap.8
+@man man/man8/vfs_catia.8
+@man man/man8/vfs_commit.8
+@man man/man8/vfs_crossrename.8
+@man man/man8/vfs_default_quota.8
+@man man/man8/vfs_dirsort.8
+@man man/man8/vfs_extd_audit.8
+@man man/man8/vfs_fake_perms.8
+@man man/man8/vfs_fileid.8
+@man man/man8/vfs_full_audit.8
+@man man/man8/vfs_gpfs.8
+@man man/man8/vfs_netatalk.8
+@man man/man8/vfs_notify_fam.8
+@man man/man8/vfs_prealloc.8
+@man man/man8/vfs_preopen.8
+@man man/man8/vfs_readahead.8
+@man man/man8/vfs_readonly.8
+@man man/man8/vfs_recycle.8
+@man man/man8/vfs_scannedonly.8
+@man man/man8/vfs_shadow_copy.8
+@man man/man8/vfs_shadow_copy2.8
+@man man/man8/vfs_smb_traffic_analyzer.8
+@man man/man8/vfs_streams_depot.8
+@man man/man8/vfs_streams_xattr.8
+@man man/man8/vfs_time_audit.8
+@man man/man8/vfs_xattr_tdb.8
+@man man/man8/winbindd.8
+share/doc/pkg-readmes/${FULLPKGNAME}
+share/doc/samba/
+share/doc/samba/README
+share/examples/samba/
+@sample ${SYSCONFDIR}/samba/
+share/examples/samba/LDAP/
+share/examples/samba/LDAP/README
+share/examples/samba/LDAP/convertSambaAccount
+share/examples/samba/LDAP/get_next_oid
+share/examples/samba/LDAP/ol-schema-migrate.pl
+share/examples/samba/LDAP/samba-nds.schema
+share/examples/samba/LDAP/samba-schema-FDS.ldif
+share/examples/samba/LDAP/samba-schema-netscapeds5.x.README
+share/examples/samba/LDAP/samba-schema.IBMSecureWay
+share/examples/samba/LDAP/samba.ldif
+share/examples/samba/LDAP/samba.schema
+share/examples/samba/LDAP/samba.schema.at.IBM-DS
+share/examples/samba/LDAP/samba.schema.oc.IBM-DS
+share/examples/samba/ad-bench/
+share/examples/samba/ad-bench/README
+share/examples/samba/ad-bench/ad-bench.sh
+share/examples/samba/ad-bench/settings.sh
+share/examples/samba/ad-bench/test_utils.sh
+share/examples/samba/ad-bench/time_group.sh
+share/examples/samba/ad-bench/time_join.sh
+share/examples/samba/ad-bench/time_kinit.sh
+share/examples/samba/ad-bench/time_ldap.sh
+share/examples/samba/ad-bench/time_user.sh
+share/examples/samba/ad-bench/utils.sh
+share/examples/samba/bind9-patches/
+share/examples/samba/bind9-patches/0001-leave-the-question-section-in-update-responses.patch
+share/examples/samba/bind9-patches/0002-prevent-a-valgrind-uninitialised-memory-warning.patch
+share/examples/samba/bind9-patches/0003-don-t-compress-TSIG-names.patch
+share/examples/samba/bind9-patches/0004-If-tkey-gssapi-initialisation-fails-then-heck-for-th.patch
+share/examples/samba/bind9-patches/0005-windows-doesn-t-return-valid-GSSAPI-sequence-numbers.patch
+share/examples/samba/bind9-patches/README
+share/examples/samba/smb.conf.default
+@sample ${SYSCONFDIR}/samba/smb.conf
+share/swat/
+share/swat/help/
+share/swat/help/welcome-no-samba-doc.html
+share/swat/images/
+share/swat/images/globals.gif
+share/swat/images/home.gif
+share/swat/images/passwd.gif
+share/swat/images/printers.gif
+share/swat/images/samba.gif
+share/swat/images/shares.gif
+share/swat/images/status.gif
+share/swat/images/viewconfig.gif
+share/swat/images/wizard.gif
+share/swat/include/
+share/swat/include/footer.html
+share/swat/include/header.html
+@sample /var/log/samba/
+@sample /var/spool/samba/
+@rcscript ${RCDIR}/nmbd
+@rcscript ${RCDIR}/samba
+@rcscript ${RCDIR}/smbd
+@rcscript ${RCDIR}/winbindd
