@@ -2111,7 +2111,7 @@ if (test "$?" != "0") then {
 	p=`ls $PKG_PATH/tiff-*`
         pkg_add -I -D update -D updatedepends -r $p >> /var/tmp/inst-adJ.bitacora 2>&1;
 	insacp fribidi
-	p=`ls $PKG_PATH/jpeg-* $PKG_PATH/libid3tag-* $PKG_PATH/png-* $PKG_PATH/bzip2-* $PKG_PATH/libungif-* $PKG_PATH/imlib2-* $PKG_PATH/libltdl-* $PKG_PATH/fluxbox-* $PKG_PATH/fluxter-* $PKG_PATH/fbdesk-*`
+	p=`ls $PKG_PATH/jpeg-* $PKG_PATH/libid3tag-* $PKG_PATH/png-* $PKG_PATH/bzip2-* $PKG_PATH/libungif-* $PKG_PATH/imlib2-* $PKG_PATH/libltdl-* $PKG_PATH/fluxbox-* $PKG_PATH/fluxter-* $PKG_PATH/fbdesk-* 2>/dev/null`
         pkg_add -I -D update -D updatedepends -r $p >> /var/tmp/inst-adJ.bitacora 2>&1;
 	if (test ! -f /home/$uadJ/.xsession) then {
 		cat > /home/$uadJ/.xsession <<EOF
