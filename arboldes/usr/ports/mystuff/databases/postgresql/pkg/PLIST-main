@@ -61,17 +61,22 @@ include/postgresql/sqlda.h
 lib/libecpg.a
 @comment lib/libecpg.so
 @comment lib/libecpg.so.7
+@lib lib/libecpg.so.${LIBecpg_VERSION}
 lib/libecpg_compat.a
 @comment lib/libecpg_compat.so
 @comment lib/libecpg_compat.so.4
+@lib lib/libecpg_compat.so.${LIBecpg_compat_VERSION}
 lib/libpgcommon.a
 lib/libpgport.a
 lib/libpgtypes.a
 @comment lib/libpgtypes.so
 @comment lib/libpgtypes.so.4
+@lib lib/libpgtypes.so.${LIBpgtypes_VERSION}
 lib/libpq.a
 @comment lib/libpq.so
 @comment lib/libpq.so.5
+@lib lib/libpq.so.${LIBpq_VERSION}
+lib/pkgconfig/
 lib/pkgconfig/libecpg.pc
 lib/pkgconfig/libecpg_compat.pc
 lib/pkgconfig/libpgtypes.pc
