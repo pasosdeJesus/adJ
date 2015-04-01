@@ -685,6 +685,7 @@ if (test "$sn" = "s") then {
 	paquete libcanberra
 	paquete libvpx
 	paquete node
+	paquete nss
 	paquete p5-Mail-SpamAssassin
 	paquete py-numpy
 	paquete pidgin paquetes "pidgin libpurple"
@@ -692,10 +693,23 @@ if (test "$sn" = "s") then {
 	paquete unzip
 
 	####
-	# Recompilados para que soporten características de localización
-	# de adJ
-	# quisieramos paquete pulseaudio
+	# Recompilados por usar xlocale
+
+	paquete boost
+	paquete djvulibre
+	paquete ggrep
+	paquete glib2
+	paquete gtar
+	paquete libidn
+	paquete libxslt
+	paquete llvm
+	#paquete pulseaudio Problema compilando
+	paquete qt4
+	paquete scribus
 	paquete vlc
+	paquete wget
+	paquete wxWidgets-gtk2
+	
 
 	####
 	# Tomados de portes de OpenBSD 5.6 pero mejorados para adJ
@@ -709,6 +723,7 @@ if (test "$sn" = "s") then {
 	paquete pear-Validate
 	paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs" 
 	paquete bash 
+	paquete chromium
 
 	###
         # Actualizados.  Está pero desactualizado en OpenBSD 5.6 y en current
