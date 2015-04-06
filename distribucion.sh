@@ -691,6 +691,8 @@ if (test "$sn" = "s") then {
 	paquete pidgin paquetes "pidgin libpurple"
 	paquete samba
 	paquete unzip
+	paquete webkit
+	# FLAVOR=gtk3 make paquete webkit-gtk3
 
 	####
 	# Recompilados por usar xlocale

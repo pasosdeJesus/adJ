@@ -1,10 +1,6 @@
 @comment $OpenBSD: PLIST-docs,v 1.67 2015/02/06 09:01:21 pea Exp $
-@lib lib/libecpg.so.${LIBecpg_VERSION}
-@lib lib/libecpg_compat.so.${LIBecpg_compat_VERSION}
-@lib lib/libpgtypes.so.${LIBpgtypes_VERSION}
-@lib lib/libpq.so.${LIBpq_VERSION}
-share/doc/pkg-readmes/${FULLPKGNAME\-plpython}
-share/doc/pkg-readmes/${FULLPKGNAME\-server}
+share/doc/pkg-readmes/postgresql-plpython-${VERSION}
+share/doc/pkg-readmes/postgresql-server-${VERSION}p1
 share/doc/postgresql/
 share/doc/postgresql/COPYRIGHT
 share/doc/postgresql/HISTORY
