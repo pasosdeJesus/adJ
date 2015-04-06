@@ -691,7 +691,7 @@ if (test "$sn" = "s") then {
 	paquete pidgin paquetes "pidgin libpurple"
 	paquete samba
 	paquete unzip
-	paquete webkit
+	paquete webkit paquetes "webkit webkit-gtk3"
 	# FLAVOR=gtk3 make paquete webkit-gtk3
 
 	####

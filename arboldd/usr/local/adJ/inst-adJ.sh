@@ -372,7 +372,7 @@ function insacp {
 		opbor="-I -r -D update -D updatedepends"
 	} fi;
 
-	pkg_add $opbor $PKG_PATH/$n-[0-9]*.tgz >> /var/tmp/inst-adJ.bitacora 2>&1
+	pkg_add $opbor $PKG_PATH/$n-[0-9]*.*.tgz >> /var/tmp/inst-adJ.bitacora 2>&1
 	if (test "$popc" != "") then {
 		pkg_add $opbor $PKG_PATH/${popc}*.tgz >> /var/tmp/inst-adJ.bitacora 2>&1
 	} fi;
@@ -1598,7 +1598,7 @@ if (test "$?" != "0") then {
 	insacp ossp-uuid
 	p=`ls $PKG_PATH/libxml-* $PKG_PATH/libiconv-* $PKG_PATH/postgresql-client-* $PKG_PATH/postgresql-server* $PKG_PATH/postgresql-contrib* $PKG_PATH/postgresql-doc*`
 	pkg_add -I -r -D update -D updatedepends $p >> /var/tmp/inst-adJ.bitacora 2>&1;
-	insacp jpeg-9a
+	insacp jpeg
 	insacp tiff
 	insacp curl
 	insacp png
@@ -1841,6 +1841,7 @@ if (test "$p" = "") then {
 	insacp libltdl
 	insacp libgpg-error
 	insacp libgcrypt
+	insacp icu4c
 	p=`ls $PKG_PATH/png*` 
 	pkg_add -I -D libdepends -D update -D updatedepends -r $p >> /var/tmp/inst-adJ.bitacora 2>&1
 	p=`ls $PKG_PATH/libxslt* $PKG_PATH/gettext* $PKG_PATH/libxml* $PKG_PATH/png* $PKG_PATH/jpeg* $PKG_PATH/t1lib* $PKG_PATH/libiconv* $PKG_PATH/php*` 

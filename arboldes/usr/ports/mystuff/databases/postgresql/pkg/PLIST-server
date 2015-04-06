@@ -665,3 +665,4 @@ share/postgresql/tsearch_data/xsyn_sample.rules
 @owner _postgresql
 @group _postgresql
 @sample /var/postgresql/
+@rcscript ${RCDIR}/postgresql
