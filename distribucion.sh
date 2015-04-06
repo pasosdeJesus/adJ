@@ -678,7 +678,7 @@ if (test "$sn" = "s") then {
 	paquete antiword
 	paquete cups
 	paquete curl
-	paquete db paquetes "db" v4
+	#paquete db paquetes "db" v4
 	paquete dbus
 	paquete flac
 	paquete gnutls

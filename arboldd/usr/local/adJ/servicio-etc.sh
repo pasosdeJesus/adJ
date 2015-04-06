@@ -3,13 +3,28 @@
 # Dominio público de acuerdo a legislación colombiana. 2012. vtamara@pasosdeJesus.org
 
 
+dirac=`pwd`
+b=`basename $dirac`
+if (test "$b" != "etc") then {
+	echo "Debería ejecutar desde un etc (como /etc o /usr/src/etc)."
+	exit 1;
+} fi;
+
+echo "Cambia logo" >> /var/tmp/inst-adJ.bitacora
+if (test -f "X11/xdm/pixmaps/adJ_1bpp.xpm") then {
+	ed X11/xdm/Xresources >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+,s/OpenBSD_/adJ_/g
+w
+q
+EOF
+} fi;
 
 echo "Renombra bitacoras, suponemos que sistema base fue compilado con facilidad servicio"  >> /var/tmp/inst-adJ.bitacora
 # syslog
-grep ".var.log.daemon" /etc/syslog.conf > /dev/null 2>&1
+grep ".var.log.daemon" syslog.conf > /dev/null 2>&1
 if (test "$?" = "0") then {
-	echo "Cambiando daemon por servicio en /etc/syslog.conf"  >> /var/tmp/inst-adJ.bitacora
-	ed /etc/syslog.conf  >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+	echo "Cambiando daemon por servicio en syslog.conf"  >> /var/tmp/inst-adJ.bitacora
+	ed syslog.conf  >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
 /daemon
 ,s/daemon.info\([^;].*\)\/var/daemon.info;servicio.info\1\/var/g
 ,s/\/var\/log\/daemon/\/var\/log\/servicio/g
@@ -18,10 +33,10 @@ w
 q
 EOF
 } fi;
-grep ".var.log.service" /etc/syslog.conf > /dev/null 2>&1
+grep ".var.log.service" syslog.conf > /dev/null 2>&1
 if (test "$?" = "0") then {
-	echo "Cambiando service por servicio en /etc/syslog.conf"  >> /var/tmp/inst-adJ.bitacora
-	ed /etc/syslog.conf  >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+	echo "Cambiando service por servicio en syslog.conf"  >> /var/tmp/inst-adJ.bitacora
+	ed syslog.conf  >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/service/servicio/g
 w
 q
@@ -29,20 +44,20 @@ EOF
 } fi;
 
 
-grep ".var.log.daemon" /etc/newsyslog.conf > /dev/null 2>&1
+grep ".var.log.daemon" newsyslog.conf > /dev/null 2>&1
 if (test "$?" = "0") then {
-	echo "Cambiando por servicio en /etc/newsyslog.conf"  >> /var/tmp/inst-adJ.bitacora
-	ed /etc/newsyslog.conf  >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+	echo "Cambiando por servicio en newsyslog.conf"  >> /var/tmp/inst-adJ.bitacora
+	ed newsyslog.conf  >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
 /daemon
 s/var\/log\/daemon/var\/log\/servicio/g
 w
 q
 EOF
 } fi;
-grep ".var.log.service" /etc/newsyslog.conf > /dev/null 2>&1
+grep ".var.log.service" newsyslog.conf > /dev/null 2>&1
 if (test "$?" = "0") then {
-	echo "Cambiando por servicio en /etc/newsyslog.conf"  >> /var/tmp/inst-adJ.bitacora
-	ed /etc/newsyslog.conf  >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+	echo "Cambiando por servicio en newsyslog.conf"  >> /var/tmp/inst-adJ.bitacora
+	ed newsyslog.conf  >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
 /service
 s/var\/log\/service/var\/log\/servicio/g
 w
@@ -67,7 +82,7 @@ w
 q
 EOF
 	ed $i >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
-,s/etc\/servicios/etc\/services/g
+,setc\/servicios/etc\/services/g
 w
 q
 EOF
@@ -242,7 +257,7 @@ w
 q
 EOF
 		} fi;
-		cap_mkdb /etc/login.conf
+		cap_mkdb login.conf
 	} fi;
 done;
 
@@ -289,7 +304,7 @@ q
 EOF
 		} fi; 
 	} fi; done;
-pwd_mkdb -p /etc/master.passwd
+pwd_mkdb -p $dirac/master.passwd
 
 echo "Manual"  >> /var/tmp/inst-adJ.bitacora
 if (test -f "../share/man/man8/rc.d.8") then {
