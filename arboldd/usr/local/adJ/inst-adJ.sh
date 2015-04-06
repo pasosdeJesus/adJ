@@ -822,38 +822,26 @@ if (test -f /usr/libexec/identd) then {
 if (test -f /usr/sbin/spray) then {
 	vac="$vac 5.5 a 5.6";	
 	echo "Aplicando actualizaciones de 5.5 a 5.6 " >> /var/tmp/inst-adJ.bitacora;
-
 	rm -f /usr/sbin/spray
 	rm -f /usr/libexec/rpc.sprayd
 	rm -f /usr/share/man/man8/{,rpc.}spray{,d}.8
-	#vi /etc/inetd.conf
-	useradd -u103 -g=uid -c"Servicio SMTP" -d/var/empty -s/sbin/nologin _smtpq
-	(cd /var/spool/smtdp; chown -R _smtpq corrupt incoming purge queue temporary)
-
-	# apache httpd eliminado
-	rm -rf /usr/lib/apache /usr/share/doc/html/httpd /usr/bin{dbmmanage,htdigest} 
-	rm -rf /usr/sbin/{apacehctl,apxs,httpd,logresolve,rotatelogs,suexec}
-	rm -rf /usr/share/man/man1/{dbmmanage.1,htdigest.1}
-	rm -rf /usr/share/man/man8/{apacehctl.8,apxs.8,httpd.8,logresolve.8}
-	rm -rf /usr/share/man/man8/{rotatelogs.8,suexec.8}
-	rm -rf /etc/rc.d/httpd
-
-	useradd -u53 -g=uid -c"Servicio Unbound" -d/var/unbound -s/sbin/nologin _unbound
-
+	rm -rf /usr/lib/apache
+	rm -rf /usr/share/doc/html/httpd
+	rm -f /usr/bin/{dbmmanage,htdigest}
+	rm -f /usr/sbin/{apachectl,apxs,logresolve,rotatelogs,suexec}
+	rm -f /usr/share/man/man1/{dbmmanage.1,htdigest.1}
+	rm -f /usr/share/man/man8/{apachectl.8,apxs.8,logresolve.8}
+	rm -f /usr/share/man/man8/{rotatelogs.8,suexec.8}
 	rm -f /usr/include/sys/agpio.h
-
 	rm -f /etc/ppp/ppp.{conf,linkdown,linkup,secret}.sample
 	rm -f /usr/sbin/ppp /usr/share/man/man8/ppp.8
 	rm -f /usr/sbin/pppctl /usr/share/man/man8/pppctl.8
 	rm -f /usr/sbin/pppoe /usr/share/man/man8/pppoe.8
-
+	
 	rm -f /bin/rcp /usr/share/man/man1/rcp.1
-
 	rm -f /usr/lib/librt{,_p}.a
-
 	rm -f /usr/include/bm.h
 	rm -f /usr/include/md4.h
-
 	rm -f /usr/lib/libwrap{,_p}.*
 	rm -f /usr/libexec/tcpd
 	rm -f /usr/include/tcpd.h
@@ -863,12 +851,11 @@ if (test -f /usr/sbin/spray) then {
 	rm -f /usr/share/man/man5/hosts_{access,options}.5
 	rm -f /usr/share/man/man8/tcpd{,chk,match}.8
 	rm -f /etc/hosts.{allow,deny}
-
 	rm -f /bin/rmail
 	rm -f /usr/share/man/man8/rmail.8
+	
 	rm -f /usr/libexec/uucpd
 	rm -f /usr/share/man/man8/uucpd.8
-
 	rm -rf /usr/include/altq
 	rm -rf /etc/kerberosV/
 	rm -f /etc/rc.d/{kadmind,kdc,kpasswdd,ipropd_master,ipropd_slave}
@@ -882,6 +869,7 @@ if (test -f /usr/sbin/spray) then {
 	rm -f /usr/bin/klist
 	rm -f /usr/bin/krb5-config
 	rm -f /usr/bin/slc
+	
 	rm -f /usr/bin/string2key
 	rm -f /usr/bin/verify_krb5_conf
 	rm -rf /usr/include/kerberosV/
@@ -897,6 +885,7 @@ if (test -f /usr/sbin/spray) then {
 	rm -f /usr/lib/libkrb5{,_p}.*
 	rm -f /usr/lib/libroken{,_p}.*
 	rm -f /usr/lib/libwind{,_p}.*
+	
 	rm -rf /usr/libdata/perl5/site_perl/*-openbsd/kerberosV/
 	rm -f /usr/libexec/auth/login_krb5{,-or-pwd}
 	rm -f /usr/libexec/hprop{,d}
@@ -912,6 +901,7 @@ if (test -f /usr/sbin/spray) then {
 	rm -f /usr/sbin/ktutil
 	rm -f /usr/share/info/heimdal.info
 	rm -f /usr/share/man/man1/kdestroy.1
+	
 	rm -f /usr/share/man/man1/kf.1
 	rm -f /usr/share/man/man1/kgetcred.1
 	rm -f /usr/share/man/man1/kinit.1
@@ -927,6 +917,7 @@ if (test -f /usr/sbin/spray) then {
 	rm -f /usr/share/man/man3/k_afs_cell_of_file.3
 	rm -f /usr/share/man/man3/k_hasafs.3
 	rm -f /usr/share/man/man3/k_hasafs_recheck.3
+	
 	rm -f /usr/share/man/man3/k_pioctl.3
 	rm -f /usr/share/man/man3/k_setpag.3
 	rm -f /usr/share/man/man3/k_unlog.3
@@ -942,6 +933,7 @@ if (test -f /usr/sbin/spray) then {
 	rm -f /usr/share/man/man8/ipropd-{master,slave}.8
 	rm -f /usr/share/man/man8/kadmin{,d}.8
 	rm -f /usr/share/man/man8/kdc.8
+	
 	rm -f /usr/share/man/man8/kerberos.8
 	rm -f /usr/share/man/man8/kfd.8
 	rm -f /usr/share/man/man8/kimpersonate.8
@@ -951,12 +943,32 @@ if (test -f /usr/sbin/spray) then {
 	rm -f /usr/share/man/man8/login_krb5{,-or-pwd}.8
 	rm -f /usr/share/man/man8/string2key.8
 	rm -f /usr/share/man/man8/verify_krb5_conf.8
-
 	rm -f /usr/bin/lynx
 	rm -f /usr/share/man/man1/lynx.1
 	rm -rf /usr/share/doc/html/lynx_help
 	rm -f /etc/lynx.cfg
+	
+	rm -f /usr/bin/{rsh,ruptime,rwho}
+	rm -f /usr/sbin/rwhod
+	rm -f /etc/rc.d/rwhod
+	rm -f /usr/libexec/rshd
+	rm -f /usr/share/man/man1/{rwho,ruptime,rsh}.1
+	rm -f /usr/share/man/man8/{rwhod,rshd}.8
+	rm -rf /var/rwho
+	
+	chown -R _smtpq /var/spool/smtpd/{corrupt,incoming,purge,queue,temporary}
+	useradd -u103 -g=uid -c"Servicio SMTP" -d/var/empty -s/sbin/nologin _smtpq
 
+	# apache httpd eliminado
+	rm -rf /usr/lib/apache /usr/share/doc/html/httpd /usr/bin{dbmmanage,htdigest} 
+	rm -rf /usr/sbin/{apacehctl,apxs,httpd,logresolve,rotatelogs,suexec}
+	rm -rf /usr/share/man/man1/{dbmmanage.1,htdigest.1}
+	rm -rf /usr/share/man/man8/{apacehctl.8,apxs.8,httpd.8,logresolve.8}
+	rm -rf /usr/share/man/man8/{rotatelogs.8,suexec.8}
+	rm -rf /etc/rc.d/httpd
+
+	useradd -u53 -g=uid -c"Servicio Unbound" -d/var/unbound -s/sbin/nologin _unbound
+	
 } fi;
 
 #if (test -f /usr/sbin/named) then {
@@ -1106,7 +1118,7 @@ if (test "$vac" != "") then {
 } fi;
 
 if (test "$actualiza" = "1") then {
-	dialog --title 'Actualización de /etc con sysmerge' --msgbox '\nDurInstale nuevas versiones de los archivos que no haya modificado (con la opción i)' 15 60 
+	dialog --title 'Actualización de /etc con sysmerge' --msgbox '\nDurante la ejecución de sysmerge, mezcle archivos de los servicios que tenga instalados e instale nuevas versiones de los que no use' 15 60 
 
 	if (test "$EDITOR" = "" -a "$VISUAL" = "") then {
 		cmd="EDITOR=mg ";
@@ -1116,8 +1128,7 @@ if (test "$actualiza" = "1") then {
 EOF
 	} fi;
 	clear
-	# A partir de 5.6 sysmerge utiliza /usr/share/sysmerge/{etc.tgz,xetc.tgz}
-	cmd="$cmd sysmerge "
+	cmd="$cmd sysmerge -s $ARCH/etc$VERP.tgz -x $ARCH/xetc$VERP.tgz"
 	echo $cmd;
 	eval $cmd;
 } fi;
