@@ -1,0 +1,28 @@
+$OpenBSD: patch-backend_dll_conf_in,v 1.7 2012/08/28 08:26:40 ajacoutot Exp $
+--- backend/dll.conf.in.orig	Sun Jul  1 04:00:44 2012
++++ backend/dll.conf.in	Tue Aug 28 09:06:54 2012
+@@ -30,7 +30,7 @@ genesys
+ gt68xx
+ hp
+ hp3900
+-hpsj5s
++#hpsj5s
+ hp3500
+ hp4200
+ hp5400
+@@ -62,7 +62,7 @@ pixma
+ plustek
+ #plustek_pp
+ #pnm
+-qcam
++#qcam
+ ricoh
+ rts8891
+ s9036
+@@ -83,5 +83,5 @@ u12
+ umax
+ #umax_pp
+ umax1220u
+-v4l
++#v4l
+ xerox_mfp

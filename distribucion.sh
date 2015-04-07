@@ -671,12 +671,11 @@ if (test "$sn" = "s") then {
 	rm tmp/disponibles*
 
 	###
-	# Modificados para mejorar dependencias (que solo fallan en unos sitios)
+	# Modificados de 5.6 para mejorar dependencias (que solo fallan en unos sitios)
 	paquete libspectre
 	paquete gtk+2
-
-	exit 1;
-
+	paquete sane-backends
+	paquete cups-filters
 
 	####
 	# Recompilados para cerrar fallas, portes actualizados de OpenBSD 5.6
