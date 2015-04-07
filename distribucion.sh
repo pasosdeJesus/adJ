@@ -688,6 +688,7 @@ if (test "$sn" = "s") then {
 	#paquete db paquetes "db" v4
 	paquete dbus
 	paquete flac
+	paquete gnupg
 	paquete gnutls
 	paquete libcanberra
 	paquete libvpx

@@ -304,7 +304,9 @@ q
 EOF
 		} fi; 
 	} fi; done;
-pwd_mkdb -p $dirac/master.passwd
+cmd="pwd_mkdb -p $dirac/master.passwd -d $dirac"
+echo "$cmd"
+eval "$cmd"
 
 echo "Manual"  >> /var/tmp/inst-adJ.bitacora
 if (test -f "../share/man/man8/rc.d.8") then {
