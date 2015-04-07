@@ -1,0 +1,140 @@
+$OpenBSD: patch-gtk_gtkmountoperation-x11_c,v 1.2 2014/04/25 15:11:55 ajacoutot Exp $
+
+From ad9da2727d3e3243fd052c9feb0c55645e87d384 Mon Sep 17 00:00:00 2001
+From: Jonathan Matthew <jmatthew@openbsd.org>
+Date: Fri, 8 Jul 2011 10:24:32 +1000
+Subject: GMountOperation::show-processes support for OpenBSD using kvm(3)
+
+From 3d165c1a902fc0a5f32898e406a79e53ed4bcc97 Mon Sep 17 00:00:00 2001
+From: Antoine Jacoutot <ajacoutot@openbsd.org>
+Date: Tue, 20 Sep 2011 11:57:49 +0200
+Subject: gtkmountoperation-x11: unbreak compilation on OpenBSD.
+
+From d987a01d80126ee351727d1603a599c4edb66eca Mon Sep 17 00:00:00 2001
+From: Antoine Jacoutot <ajacoutot@openbsd.org>
+Date: Sat, 15 Oct 2011 11:27:47 +0200
+Subject: GMountOperation on OpenBSD: remove the need for kvm(3)
+
+From 974212ec825d8d50bdea8ab955b6f19b8ed1672f Mon Sep 17 00:00:00 2001
+From: Antoine Jacoutot <ajacoutot@gnome.org>
+Date: Mon, 9 Jul 2012 18:20:34 +0200
+Subject: OpenBSD: use G_N_ELEMENTS instead of nitems
+
+From 8935d2f123878c31af69b6c6034069ad540b13c7 Mon Sep 17 00:00:00 2001
+From: Antoine Jacoutot <ajacoutot@gnome.org>
+Date: Fri, 25 Apr 2014 14:37:59 +0200
+Subject: openbsd: properly set len for gtkmountoperation-x11
+
+--- gtk/gtkmountoperation-x11.c.orig	Wed Apr 16 16:16:11 2014
++++ gtk/gtkmountoperation-x11.c	Wed Apr 16 16:17:59 2014
+@@ -43,9 +43,6 @@
+ #include <errno.h>
+ 
+ #if defined(__OpenBSD__)
+-#include <sys/param.h>
+-#include <kvm.h>
+-#include <fcntl.h>
+ #include <sys/sysctl.h>
+ #endif
+ 
+@@ -724,6 +721,100 @@ pid_get_command_line (GPid pid)
+ }
+ 
+ /* ---------------------------------------------------------------------------------------------------- */
++
++#elif defined(__OpenBSD__)
++
++/* ---------------------------------------------------------------------------------------------------- */
++
++static GPid
++pid_get_parent (GPid pid)
++{
++  struct kinfo_proc kp;
++  size_t len;
++  GPid ppid;
++
++  int mib[] = { CTL_KERN, KERN_PROC, KERN_PROC_PID, pid,
++                sizeof(struct kinfo_proc), 0 };
++
++  if (sysctl (mib, G_N_ELEMENTS (mib), NULL, &len, NULL, 0) == -1)
++      return (-1);
++  mib[5] = (len / sizeof(struct kinfo_proc));
++
++  if (sysctl (mib, G_N_ELEMENTS (mib), &kp, &len, NULL, 0) < 0)
++      return -1;
++
++  ppid = kp.p_ppid;
++
++  return ppid;
++}
++
++static gchar *
++pid_get_env (GPid pid, const gchar *key)
++{
++  size_t len;
++  char **strs;
++  char *ret = NULL;
++  char *end;
++  int key_len;
++  int i;
++
++  int mib[] = { CTL_KERN, KERN_PROC_ARGS, pid, KERN_PROC_ENV };
++
++  if (sysctl (mib, G_N_ELEMENTS (mib), NULL, &len, NULL, 0) == -1)
++    return ret;
++
++  strs = g_malloc0 (len);
++
++  key_len = strlen (key);
++
++  if (sysctl (mib, G_N_ELEMENTS (mib), strs, &len, NULL, 0) != -1)
++    {
++      for (i = 0; strs[i] != NULL; i++)
++	{
++	  if (g_str_has_prefix (strs[i], key) && (*(strs[i] + key_len) == '='))
++	    {
++	      ret = g_strdup (strs[i] + key_len + 1);
++
++	      /* skip invalid UTF-8 */
++	      if (!g_utf8_validate (ret, -1, (const gchar **) &end))
++		*end = '\0';
++	      break;
++	    }
++	}
++    }
++
++  g_free (strs);
++  return ret;
++}
++
++static gchar *
++pid_get_command_line (GPid pid)
++{
++  size_t len;
++  char **strs;
++  char *ret, *end;
++
++  int mib[] = { CTL_KERN, KERN_PROC_ARGS, pid, KERN_PROC_ARGV };
++
++  if (sysctl (mib, G_N_ELEMENTS (mib), NULL, &len, NULL, 0) == -1)
++    return NULL;
++
++  strs = g_malloc0 (len);
++
++  if (sysctl (mib, G_N_ELEMENTS (mib), strs, &len, NULL, 0) == -1) {
++    g_free (strs);
++    return NULL;
++  }
++
++  ret = g_strjoinv (" ", strs);
++  /* skip invalid UTF-8 */
++  if (!g_utf8_validate (ret, -1, (const gchar **) &end))
++    *end = '\0';
++
++  g_free (strs);
++  return ret;
++}
++
+ #else
+ 
+ /* TODO: please implement for your OS - must return valid UTF-8 */
