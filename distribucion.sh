@@ -670,6 +670,14 @@ if (test "$sn" = "s") then {
 	} fi;
 	rm tmp/disponibles*
 
+	###
+	# Modificados para mejorar dependencias (que solo fallan en unos sitios)
+	paquete libspectre
+	paquete gtk+2
+
+	exit 1;
+
+
 	####
 	# Recompilados para cerrar fallas, portes actualizados de OpenBSD 5.6
 	# Para que operen bien basta actualizar CVS de /usr/ports 
