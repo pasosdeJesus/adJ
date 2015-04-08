@@ -304,7 +304,7 @@ q
 EOF
 		} fi; 
 	} fi; done;
-cmd="pwd_mkdb -p $dirac/master.passwd -d $dirac"
+cmd="pwd_mkdb -p -d $dirac $dirac/master.passwd"
 echo "$cmd"
 eval "$cmd"
 
