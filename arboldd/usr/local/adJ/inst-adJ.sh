@@ -1140,7 +1140,7 @@ grep "PKG_PATH" /root/.profile > /dev/null 2>&1
 if (test "$?" != "0") then {
 	cat >> /root/.profile <<EOF
 export PKG_PATH=ftp://carroll.cac.psu.edu/pub/OpenBSD/$VER/packages/$ARQ/
-export PKG_PATH=ftp://ftp.pasosdeJesus.org/pub/OpenBSD/$VER/packages/$ARQ/
+export PKG_PATH=http://adJ.pasosdeJesus.org/pub/OpenBSD/$VER/packages/$ARQ/
 if (test "\$TERM" = "xterm") then {
 	        export TERM=xterm-color
 }
@@ -1310,7 +1310,7 @@ echo "* Configurar scripts de cuenta inicial"  >> /var/tmp/inst-adJ.bitacora;
 grep "PKG_PATH" /home/$uadJ/.profile > /dev/null
 if (test "$?" != "0") then {
 	cat >> /home/$uadJ/.profile <<EOF
-export PKG_PATH=ftp://ftp.pasosdeJesus.org/pub/OpenBSD/$VER/packages/$ARQ/
+export PKG_PATH=http://adJ.pasosdeJesus.org/pub/OpenBSD/$VER/packages/$ARQ/
 if (test "\$TERM" = "xterm") then {
 	        export TERM=xterm-color
 }

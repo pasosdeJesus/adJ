@@ -29,7 +29,7 @@ PKG_PATH=ftp://mirror.planetunix.net/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
 PKG_PATH=ftp://mirror.esc7.net/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
 PKG_PATH=ftp://mirrors.nycbug.org/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
 PKG_PATH=ftp://mirror.esc7.net/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
-PKG_PATH=http://ftp.pasosdeJesus.org/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
+PKG_PATH=http://adJ.pasosdeJesus.org/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
 
 #Repositorio de paquetes usado --el último es el usado
 
