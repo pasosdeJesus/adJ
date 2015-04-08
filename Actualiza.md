@@ -40,7 +40,7 @@ La actualización consta de 3 partes:
 
 		```
 		cd ~/comp/adJ; 
-		/usr/local/adJ/actbase.sh 5.6
+		5.6-amd64/util/actbase.sh 5.6
 		```
 
 3. Instalación/actualización de aplicaciones:
