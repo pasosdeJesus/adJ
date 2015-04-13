@@ -1,6 +1,7 @@
 # $OpenBSD: Makefile,v 1.22 2015/01/24 22:09:40 zhuk Exp $
 
 SHARED_ONLY =		Yes
+USE_GMAKE =		Yes
 ONLY_FOR_ARCHS =	${GCC4_ARCHS}
 IGNORE-html =		qdoc segfaults
 BROKEN-sparc64 =	tries to include a non-existent qatomic_sparc.h in src/corelib/thread/qbasicatomic.h
@@ -178,7 +179,8 @@ LIB_DEPENDS-tds =	${BUILD_PKGPATH},-main \
 
 # QtWebKit & Co. requirements
 BUILD_DEPENDS =		devel/flex \
-			devel/bison
+			devel/bison \
+			devel/gmake
 
 RUN_DEPENDS-main =
 RUN_DEPENDS-examples =
@@ -261,7 +263,7 @@ CONFIGURE_ARGS +=	-sysconfdir ${SYSCONFDIR} \
 			-L${X11BASE}/lib
 
 # other options
-CONFIGURE_ARGS +=	-c++11 \
+CONFIGURE_ARGS +=	-no-c++11 \
 			-no-alsa \
 			-no-journald \
 			-no-mtdev \
@@ -269,7 +271,7 @@ CONFIGURE_ARGS +=	-c++11 \
 			-system-sqlite \
 			-system-xcb \
 
-CONFIGURE_ENV =		MAKE=make \
+CONFIGURE_ENV =		MAKE=gmake \
 			MAKEFLAGS="-j ${MAKE_JOBS}" \
 			EXTRA_CPPFLAGS="-DLOCALBASE=\\\"${LOCALBASE}\\\" -DX11BASE=\\\"${X11BASE}\\\""
 
@@ -397,6 +399,7 @@ pre-configure:
 		qtscript/src/3rdparty/javascriptcore/JavaScriptCore/wscript \
 		qtwebkit/Source/WebCore/inspector/generate-inspector-protocol-version \
 		qtwebkit/Source/WebCore/html/parser/create-html-entity-table
+	echo "OJO 1";
 
 	cd ${WRKSRC}; ${MODRUBY_RUBY_ADJ} \
 		`find qtwebkit -name '*.rb'` \
@@ -412,6 +415,7 @@ pre-configure:
 		qtwebkit/Source/WebCore/make-export-file-generator \
 		qtwebkit/Source/JavaScriptCore/JavaScriptCore.vcxproj/LLInt/LLIntDesiredOffsets/build-LLIntDesiredOffsets.sh \
 		qtwebkit/Source/JavaScriptCore/JavaScriptCore.vcxproj/LLInt/LLIntAssembly/build-LLIntAssembly.sh
+	echo "OJO 2";
 
 	cd ${WRKSRC}; perl -pi.otheradj \
 		-e 's,/usr/bin/(env )?python\b,${MODPY_BIN},g;' \
@@ -426,15 +430,18 @@ pre-configure:
 		qtwebkit/Tools/Scripts/webkitpy/common/system/executive_unittest.py \
 		qtxmlpatterns/src/xmlpatterns/parser/createParser.sh \
 		qtgraphicaleffects/tools/pngdumper/pngdumper.sh
+	echo "OJO 3";
 
 	cd ${WRKSRC}; perl -pi.symname \
 		-e 's/^__/_/;' \
 		qtscript/src/3rdparty/javascriptcore/JavaScriptCore/JavaScriptCore.order \
 		qtwebkit/Source/JavaScriptCore/JavaScriptCore.order
+	echo "OJO 4";
 
 	cd ${WRKSRC}/qtwebkit/Tools/qmake/config.tests; perl -pi.objdir \
 		-e 's/^OBJECTS_DIR/#$$&/;' \
 		*/*.pro
+	echo "OJO 5";
 
 	@gccbasedir=`echo ${LOCALBASE}/lib/gcc/*-openbsd${OSREV}/${MODGCC4_VERSION}.*`; \
 	cd ${WRKSRC}/qtwebkit/Source/WebCore; \
@@ -442,5 +449,7 @@ pre-configure:
 		echo ln -sf $$f >&2; \
 		ln -sf $$f; \
 	done;
+	echo "OJO 6";
+
 
 .include <bsd.port.mk>
