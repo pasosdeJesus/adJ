@@ -1041,8 +1041,22 @@ a
 w
 q
 EOF
-} 
-else {
+} else {
+	echo "   Saltando..." >>  /var/tmp/inst-adJ.bitacora;
+} fi;
+grep "\. /etc/rc.conf.local" /etc/rc.local > /dev/null 2> /dev/null
+if (test "$?" != "0") then {
+	ed /etc/rc.local >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+/. .etc.rc.conf
+a
+if (test -f /etc/rc.conf.local) then {
+	. /etc/rc.conf.local
+} fi;
+.
+w
+q
+EOF
+} else {
 	echo "   Saltando..." >>  /var/tmp/inst-adJ.bitacora;
 } fi;
 
