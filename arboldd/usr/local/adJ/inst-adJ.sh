@@ -1041,8 +1041,22 @@ a
 w
 q
 EOF
-} 
-else {
+} else {
+	echo "   Saltando..." >>  /var/tmp/inst-adJ.bitacora;
+} fi;
+grep "\. /etc/rc.conf.local" /etc/rc.local > /dev/null 2> /dev/null
+if (test "$?" != "0") then {
+	ed /etc/rc.local >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+/. .etc.rc.conf
+a
+if (test -f /etc/rc.conf.local) then {
+	. /etc/rc.conf.local
+} fi;
+.
+w
+q
+EOF
+} else {
 	echo "   Saltando..." >>  /var/tmp/inst-adJ.bitacora;
 } fi;
 
@@ -2484,14 +2498,14 @@ done
 echo "* Configurar ruby-2.1" >> /var/tmp/inst-adJ.bitacora;
 if (test ! -f "/usr/local/bin/ruby") then {
 	insacp ruby
-	ln -sf /usr/local/bin/ruby21 /usr/local/bin/ruby
-	ln -sf /usr/local/bin/erb21 /usr/local/bin/erb
-	ln -sf /usr/local/bin/irb21 /usr/local/bin/irb
-	ln -sf /usr/local/bin/rdoc21 /usr/local/bin/rdoc
-	ln -sf /usr/local/bin/ri21 /usr/local/bin/ri
-	ln -sf /usr/local/bin/rake21 /usr/local/bin/rake
-	ln -sf /usr/local/bin/gem21 /usr/local/bin/gem
-	ln -sf /usr/local/bin/testrb21 /usr/local/bin/testrb
+	ln -sf /usr/local/bin/ruby22 /usr/local/bin/ruby
+	ln -sf /usr/local/bin/erb22 /usr/local/bin/erb
+	ln -sf /usr/local/bin/irb22 /usr/local/bin/irb
+	ln -sf /usr/local/bin/rdoc22 /usr/local/bin/rdoc
+	ln -sf /usr/local/bin/ri22 /usr/local/bin/ri
+	ln -sf /usr/local/bin/rake22 /usr/local/bin/rake
+	ln -sf /usr/local/bin/gem22 /usr/local/bin/gem
+	ln -sf /usr/local/bin/testrb22 /usr/local/bin/testrb
 } fi;
 
 if (test ! -f /home/$uadJ/.irbrc) then {
