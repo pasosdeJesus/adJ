@@ -2498,14 +2498,14 @@ done
 echo "* Configurar ruby-2.1" >> /var/tmp/inst-adJ.bitacora;
 if (test ! -f "/usr/local/bin/ruby") then {
 	insacp ruby
-	ln -sf /usr/local/bin/ruby21 /usr/local/bin/ruby
-	ln -sf /usr/local/bin/erb21 /usr/local/bin/erb
-	ln -sf /usr/local/bin/irb21 /usr/local/bin/irb
-	ln -sf /usr/local/bin/rdoc21 /usr/local/bin/rdoc
-	ln -sf /usr/local/bin/ri21 /usr/local/bin/ri
-	ln -sf /usr/local/bin/rake21 /usr/local/bin/rake
-	ln -sf /usr/local/bin/gem21 /usr/local/bin/gem
-	ln -sf /usr/local/bin/testrb21 /usr/local/bin/testrb
+	ln -sf /usr/local/bin/ruby22 /usr/local/bin/ruby
+	ln -sf /usr/local/bin/erb22 /usr/local/bin/erb
+	ln -sf /usr/local/bin/irb22 /usr/local/bin/irb
+	ln -sf /usr/local/bin/rdoc22 /usr/local/bin/rdoc
+	ln -sf /usr/local/bin/ri22 /usr/local/bin/ri
+	ln -sf /usr/local/bin/rake22 /usr/local/bin/rake
+	ln -sf /usr/local/bin/gem22 /usr/local/bin/gem
+	ln -sf /usr/local/bin/testrb22 /usr/local/bin/testrb
 } fi;
 
 if (test ! -f /home/$uadJ/.irbrc) then {
