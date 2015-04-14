@@ -408,6 +408,12 @@ if (test "$sn" = "s") then {
 		ln -s $XSRCDIR /usr/xenocara;
 	} fi;
 	cd $XSRCDIR
+
+	echo "* Aplicando parches en /usr/xenocara/" | tee -a /var/tmp/distrib-adJ.bitacora
+	(cd $dini/arboldes/usr/xenocara/; for i in *patch; do echo $i; if (test ! -f /usr/xenocara/$i) then { sudo cp $i /usr/xenocara/; (cd /usr/xenocara/; echo "A mano"; sudo patch -p1 < $i;) } fi; done) |  tee -a  /var/tmp/distrib-adJ.bitacora
+	echo "* Copiando archivos nuevos en /usr/xenocara" | tee -a /var/tmp/distrib-adJ.bitacora
+	(cd $dini/arboldes/usr/xenocara; for i in `find . -type f | grep -v CVS | grep -v .patch`; do  if (test ! -f /usr/xenocara/$i) then { echo $i; n=`dirname $i`; sudo mkdir -p /usr/xenocara/$n; sudo cp $i /usr/xenocara/$i; } fi; done )
+	# Pequeños cambios (logo, bienvenida)
 	$dini/hdes/xenocaraadJ.sh	
 	mkdir -p ${DESTDIR}/usr/X11R6/bin
 	mkdir -p ${DESTDIR}/usr/X11R6/man/cat1
