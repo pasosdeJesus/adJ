@@ -2495,8 +2495,8 @@ for i in ruby19-railties-3.1.3 ruby19-actionmailer-3.1.3 \
 	sudo pkg_delete -I -D dependencies $i >> /var/tmp/inst-adJ.bitacora 2>&1
 done
 
-echo "* Configurar ruby-2.1" >> /var/tmp/inst-adJ.bitacora;
-if (test ! -f "/usr/local/bin/ruby") then {
+echo "* Configurar ruby-2.2" >> /var/tmp/inst-adJ.bitacora;
+if (test ! -f "/usr/local/bin/ruby22") then {
 	insacp ruby
 	ln -sf /usr/local/bin/ruby22 /usr/local/bin/ruby
 	ln -sf /usr/local/bin/erb22 /usr/local/bin/erb
@@ -2506,6 +2506,7 @@ if (test ! -f "/usr/local/bin/ruby") then {
 	ln -sf /usr/local/bin/rake22 /usr/local/bin/rake
 	ln -sf /usr/local/bin/gem22 /usr/local/bin/gem
 	ln -sf /usr/local/bin/testrb22 /usr/local/bin/testrb
+	ln -sf /usr/local/bin/bundle22 /usr/local/bin/bundle
 } fi;
 
 if (test ! -f /home/$uadJ/.irbrc) then {
@@ -2726,6 +2727,7 @@ EOF
 } fi;
 if (test ! -f "/home/$uadJ/.vim/after/ftplugin/ruby.vim") then {
 	cat > /home/$uadJ/.vim/after/ftplugin/ruby.vim <<EOF
+set expandtab
 setlocal shiftwidth=2
 setlocal tabstop=2
 EOF
