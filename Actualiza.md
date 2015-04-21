@@ -103,11 +103,11 @@ La actualización consta de 3 partes:
 	configuración que es mejor no remplazar (opción ```d```) o que es      
 	mejor mezclar si conoce la sintaxis (opción ```m```).
 
-  * Evite remplazar ```/etc/rc.local``` y ```/etc/hosts```
-  * Si es cortafuegos evite remplazar ```/etc/pf.conf``` y ```/etc/sysctl.conf```
-  * Si es servidor DNS evite remplazar ```/var/named/etc/named.conf```
-  * Si es servidor de correo evite remplazar archivos del directorio 
+  ** Evite remplazar ```/etc/rc.local``` y ```/etc/hosts```
+  ** Si es cortafuegos evite remplazar ```/etc/pf.conf``` y ```/etc/sysctl.conf```
+  ** Si es servidor DNS evite remplazar ```/var/named/etc/named.conf```
+  ** Si es servidor de correo evite remplazar archivos del directorio 
    ```/etc/mail``` (tras actualizar recuerde recompilar sendmail).
-  * Si es servidor web evite remplazar ```/var/www/conf/httpd.conf```
+  ** Si es servidor web evite remplazar ```/var/www/conf/httpd.conf```
 	
 
