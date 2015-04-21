@@ -103,11 +103,13 @@ La actualización consta de 3 partes:
 	configuración que es mejor no remplazar (opción ```d```) o que es      
 	mejor mezclar si conoce la sintaxis (opción ```m```).
 
-  ** Evite remplazar ```/etc/rc.local``` y ```/etc/hosts```
-  ** Si es cortafuegos evite remplazar ```/etc/pf.conf``` y ```/etc/sysctl.conf```
-  ** Si es servidor DNS evite remplazar ```/var/named/etc/named.conf```
-  ** Si es servidor de correo evite remplazar archivos del directorio 
+  * Evite remplazar ```/etc/rc.local``` y ```/etc/hosts```
+  * Si es cortafuegos evite remplazar ```/etc/pf.conf``` y ```/etc/sysctl.conf```
+  * Si es servidor DNS evite remplazar ```/var/named/etc/named.conf```
+  * Si es servidor de correo evite remplazar archivos del directorio 
    ```/etc/mail``` (tras actualizar recuerde recompilar sendmail).
-  ** Si es servidor web evite remplazar ```/var/www/conf/httpd.conf```
-	
+  * Si es servidor web evite remplazar ```/var/www/conf/httpd.conf```
+* Si tras instalar sistema base, da el comando ```ls``` y obtiene ```Bad system call``` seguramente aún le falta actualizar el paquete ```colorls```, el actualizador ```inst-adJ.sh``` lo hará, pero mientras tanto puede ejecutar ```unalias ls```
+* Si tras instalar el sistema base al intentar ingresar a un usuario, antes de pedir la clave aparece ```Unkown user``` seguramente falta convertir la base de datos de usuarios a un formato más nuevo, lo que puede hacer es: (1) reiniciar en modo single (```boot -s``` cuando arranque y aparezca ```boot>```), (2) una vez ingrese a una terminal reparar discos con ```fsck -y```, (3) poner un tipo de terminal usable ```export TERM=vt220```, (4) regenerar algunos archivos con ```cap_mkdbd /etc/master.passwd``` y (5) verificar y completar regeneración de archivos, suando ```vipw``` haciendo un cambio mínimo como insertar un espacio en la descripción de un usuario y saliendo.
+
 
