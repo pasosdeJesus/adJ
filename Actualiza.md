@@ -43,7 +43,7 @@ La actualización consta de 3 partes:
 		5.6-amd64/util/actbase.sh 5.6
 		```
 
-3. Instalación/actualización de aplicaciones:
+3. Actualizar aplicaciones:
 ---------------------------------------------
 * Después de reinicar debe ejecutar  el archivo de ordenes ```/inst-adJ.sh```
   Este archivo de comandos emplea codificación UTF8, por lo que para 
