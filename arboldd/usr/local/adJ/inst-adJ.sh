@@ -372,7 +372,7 @@ function insacp {
 		opbor="-I -r -D update -D updatedepends"
 	} fi;
 
-	pkg_add $opbor $PKG_PATH/$n-[0-9]*.*.tgz >> /var/tmp/inst-adJ.bitacora 2>&1
+	pkg_add $opbor $PKG_PATH/$n-*.tgz >> /var/tmp/inst-adJ.bitacora 2>&1
 	if (test "$popc" != "") then {
 		pkg_add $opbor $PKG_PATH/${popc}*.tgz >> /var/tmp/inst-adJ.bitacora 2>&1
 	} fi;
@@ -1014,6 +1014,8 @@ if  (test "$vac" != "") then {
 } fi;
 
 cd /etc && /usr/local/adJ/servicio-etc.sh >> /var/tmp/inst-adJ.bitacora 2>&1
+cap_mkdb /etc/login.conf
+cap_mkdb /etc/master.passwd
 
 if (test ! -f /var/log/servicio) then {
 	if (test -f /var/log/daemon) then {
@@ -1627,6 +1629,26 @@ if (test "$?" != "0") then {
 	insacp tiff
 	insacp curl
 	insacp png
+	insacp opus
+	insacp x264
+	insacp lcms2
+	insacp openjp2
+	insacp giflib
+	insacp imlib2
+	insacp geos
+	insacp proj
+	insacp libspatialite
+	insacp libgeotiff
+	insacp jasper
+	insacp libidn
+	insacp libffi
+	insacp tcl
+	insacp tk
+	insacp python
+	insacp pcre
+	insacp json-c
+	insacp bzip2
+	insacp py-setuptools
 	insacp gdal 
 	insacp postgis
 	grep "^postgresql:" /etc/login.conf > /dev/null 2>&1
@@ -1654,6 +1676,7 @@ postgresql:\
 		chmod +x /tmp/cu.sh
 		cat /tmp/cu.sh >> /var/tmp/inst-adJ.bitacora
 		echo "Preparado PostgreSQL" >> /var/tmp/inst-adJ.bitacora
+		rm -rf /var/postgresql/data
 		su - _postgresql /tmp/cu.sh >> /var/tmp/inst-adJ.bitacora;
 		echo "---" >> /var/tmp/inst-adJ.bitacora;
 	} fi;
