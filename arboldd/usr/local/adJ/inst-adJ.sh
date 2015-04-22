@@ -2214,11 +2214,11 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
         [end]
 [end]
 [submenu] (Oficina)
-	[exec] (abiword) {/usr/local/bin/abiword}
+	[exec] (abiword) {LC_MESSAGES=C /usr/local/bin/abiword}
 	[exec] (dia) {/usr/local/bin/dia}
-	[exec] (gnumeric) {/usr/local/bin/gnumeric}
+	[exec] (gnumeric) {LC_CTYPE=C /usr/local/bin/gnumeric}
 	[exec] (gv) {gv}
-	[exec] (gimp) {gimp}
+	[exec] (gimp) {LC_CTYPE=C /usr/local/bin/gimp}
 	[exec] (inkscape) {inkscape}
 	[exec] (LibreOffice) {/usr/local/bin/soffice}
 	[exec] (scribus) {scribus}

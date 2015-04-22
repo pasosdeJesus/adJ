@@ -2,6 +2,7 @@
 5.7
 ===
 
+* Investigar problema con locale y abiword, gnumeric y gimp
 * Cambiar localedef para no requerir recode en Makefile de locale/cldr
 
 5.8

@@ -135,16 +135,17 @@ Lo invitamos a consultar https://github.com/pasosdeJesus/adJ y a enviar sus mejo
 
 !!! FE DE ERRATAS
 
-Cuando se usa codificación de caracteres UTF-8 gimp y abiword están 
-presentando problemas para arrancar, inicielos estableciendo antes
-la variable LC_COLLATE en C, por ejemplo
+Cuando se usa locale (por ejemplo con codificación de caracteres UTF-8)
+==gimp==, ==abiword== y ==gnumeric== presentan problemas para arrancar, inicielos así:
 <pre>
-LC_COLLATE=C gimp
+LC_CTYPE=C gimp
+LC_CTYPE=C gnumeric
+LC_MESSAGES=C abiword
 </pre>
+
 
 !!! DONACIONES 
 
 Para mejorar el financiamiento de OpenBSD, donamos y aportamos trabajo voluntario a ese proyecto.  Por lo mismo publicamos adJ varios meses después de la respectiva versión de OpenBSD.
 
 '''Agradecemos sus oraciones y si le resulta posible sus [donaciones | Donaciones]'''.
-
