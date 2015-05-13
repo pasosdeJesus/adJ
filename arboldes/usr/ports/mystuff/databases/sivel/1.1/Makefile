@@ -2,8 +2,8 @@
 
 # Port in the public domain.
 
-VERSION=1.1.6
-REVISION=1
+VERSION=1.1.7
+REVISION=
 
 DISTNAME=sivel-${VERSION}
 HOMEPAGE=	http://sivel.sourceforge.net/
