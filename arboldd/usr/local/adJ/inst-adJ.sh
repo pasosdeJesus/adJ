@@ -1915,6 +1915,13 @@ q
 EOF
 	} else {
 		insacp php-fpm
+	ed /etc/php-fpm.conf >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+,s/; listen.owner = www/listen.owner = www/g
+w
+,s/; listen.group = www/listen.group = www/g
+w
+q
+EOF
 		activarcs php_fpm
 		grep "^ *location .*php" /etc/nginx/nginx.conf > /dev/null 2>&1
 		if (test "$?" != "0") then {

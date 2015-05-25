@@ -676,9 +676,9 @@ if (test "$sn" = "s") then {
 	} fi;
 	rm tmp/disponibles*
 
+	paquete databases/sivel sivel sivel 1.2
 	paquete libtasn1
 	exit 1;
-	paquete databases/sivel sivel sivel 1.1
 	###
 	# Modificados de 5.6 para mejorar dependencias (que solo fallan en unos sitios)
 	paquete libspectre
