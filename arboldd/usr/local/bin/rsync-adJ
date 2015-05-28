@@ -18,12 +18,12 @@ if (test "$V" = "") then {
 
 mkdir -p $V$VESP-amd64
 cruta="";
-cmd="rsync rsync://ftp.pasosdeJesus.org/AprendiendoDeJesus/$cruta$V$VESP-amd64/ > /dev/null 2>&1"
+cmd="rsync rsync://adJ.pasosdeJesus.org/AprendiendoDeJesus/$cruta$V$VESP-amd64/ > /dev/null 2>&1"
 echo $cmd;
 eval $cmd;
 if (test "$?" != "0") then {
 	cruta="endesarrollo/"
 } fi;
-cmd="rsync --delete -ravz rsync://ftp.pasosdeJesus.org/AprendiendoDeJesus/$cruta$V$VESP-amd64/* $V$VESP-amd64/"
+cmd="rsync --delete -ravz rsync://adJ.pasosdeJesus.org/AprendiendoDeJesus/$cruta$V$VESP-amd64/* $V$VESP-amd64/"
 echo $cmd;
 eval $cmd;

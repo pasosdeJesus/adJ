@@ -2,8 +2,13 @@
 # Variables de configuración para generar distribución Aprendiendo de Jesús
 # Dominio público. 2013. vtamara@pasosdeJesus.org
 
+<<<<<<< HEAD
 V=5.7
 VESP="a1"
+=======
+V=5.6
+VESP="b1"
+>>>>>>> c5f64cf9a3e578bc3a6724bbd9c7aa31bfeb5e94
 # Versión que se está desarrollando
 
 VPKGPATH=$V
@@ -29,7 +34,7 @@ PKG_PATH=ftp://mirror.planetunix.net/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
 PKG_PATH=ftp://mirror.esc7.net/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
 PKG_PATH=ftp://mirrors.nycbug.org/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
 PKG_PATH=ftp://mirror.esc7.net/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
-PKG_PATH=ftp://ftp.pasosdeJesus.org/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
+PKG_PATH=http://adJ.pasosdeJesus.org/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
 
 #Repositorio de paquetes usado --el último es el usado
 

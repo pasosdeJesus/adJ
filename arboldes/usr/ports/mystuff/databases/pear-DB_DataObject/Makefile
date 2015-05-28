@@ -2,8 +2,7 @@
 
 COMMENT=	SQL builder, object interface to database tables
 
-DISTNAME=	DB_DataObject-1.11.2
-REVISION=	1
+DISTNAME=	DB_DataObject-1.11.3
 PKGNAME=	pear-${DISTNAME}# does not substitute _ for -
 CATEGORIES=	databases
 

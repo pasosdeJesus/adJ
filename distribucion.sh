@@ -81,8 +81,12 @@ if (test "$inter" = "-i") then {
 else {
 	sn=$autoCvs;
 } fi;
-if (test "$sn" = "s") then {
-	cd /usr/src
+if (test "$sn" = "s") then {	
+	if (test -d /usr/src$VP-orig/) then {
+		cd /usr/src$VP-orig
+	} else {
+		cd /usr/src
+	} fi;
 	if (test ! -f CVS/Root) then {
 		for i in `find . -name CVS`; do 
 			echo $i;
@@ -90,7 +94,11 @@ if (test "$sn" = "s") then {
 		done;
 	} fi;
 	cvs -z3 update -Pd -r$R
-	cd /usr/src/sys
+	if (test -d /usr/src$VP-orig/) then {
+		cd /usr/src$VP-orig/sys
+	} else {
+		cd /usr/src/sys
+	} fi;
 	if (test ! -f CVS/Root) then {
 		for i in `find . -name CVS`; do 
 			echo $i;
@@ -98,7 +106,11 @@ if (test "$sn" = "s") then {
 		done;
 	} fi;
 	cvs -z3 update -Pd -r$R
-	cd $XSRCDIR
+	if (test -d /usr/xenocara$VP-orig/) then {
+		cd /usr/xenocara$VP-orig/sys
+	} else {
+		cd $XSRCDIR
+	} fi;
 	if (test ! -f CVS/Root) then {
 		for i in `find . -name CVS`; do 
 			echo $i;
@@ -663,62 +675,120 @@ if (test "$sn" = "s") then {
 	} fi;
 	rm tmp/disponibles*
 
+	###
+	# Modificados de 5.6 para mejorar dependencias (que solo fallan en unos sitios)
+	paquete libspectre
+	paquete gtk+2
+	paquete sane-backends
+	paquete cups-filters
 
-# pruebas
+	####
+	# Recompilados para cerrar fallas, portes actualizados de OpenBSD 5.6
+	# Para que operen bien basta actualizar CVS de /usr/ports 
+	# Los siguientes no deben estar en arboldes/usr/ports/mystuff
 
-  # Retroportados
-  
-  #paquete dialog
-  paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs"
-  paquete php paquetes "php php-fpm php-gd php-intl php-ldap php-mcrypt php-pdo_pgsql php-pgsql php-zip" 5.4
-  paquete ruby paquetes "ruby ruby21-ri_docs" 2.1
-  # paquete pear paquetes "pear pear-utils"  Toco quedarse en PHP 5.4 para SIVeL 1.2
+	paquete antiword
+	paquete cups
+	paquete curl
+	#paquete db paquetes "db" v4
+	paquete dbus
+	paquete flac
+	paquete gnupg
+	paquete gnutls
+	paquete libcanberra
+	paquete libvpx
+	paquete node
+	paquete nss
+	paquete p5-Mail-SpamAssassin
+	paquete py-numpy
+	paquete pidgin paquetes "pidgin libpurple"
+	paquete samba
+	paquete unzip
+	paquete webkit paquetes "webkit webkit-gtk3"
+	# FLAVOR=gtk3 make paquete webkit-gtk3
 
-  # Retroportados con mejoras para adJ
-  paquete pear-Auth
-  paquete pear-Validate
-  paquete pear-HTML-QuickForm
-  paquete xfe
-  paquete vlc
-  paquete bash 
+	####
+	# Recompilados por usar xlocale
 
-  # Unicos en adJ liderados por otros
-  paquete databases/pear-DB_DataObject
-  paquete www/pear-HTML-Common
-  paquete www/pear-HTML-CSS
-  paquete www/pear-HTML-Javascript
-  paquete www/pear-HTML-Menu
-  paquete www/pear-HTML-Table
-  paquete emulators/realboy
-  paquete sysutils/ganglia
-  paquete textproc/sword
-  paquete textproc/xiphos
-  paquete x11/fbdesk
-  paquete www/pear-DB-DataObject-FormBuilder
-  paquete www/pear-HTML-QuickForm-Controller
-  #paquete devel/ruby-apacheconf_parser paquetes "ruby21-apacheconf-parser"
+	paquete boost
+	paquete djvulibre
+	paquete ggrep
+	paquete glib2
+	paquete gtar
+	paquete libidn
+	paquete libxslt
+	paquete llvm
+	#paquete pulseaudio Problema compilando
+	paquete qt4
+	paquete scribus
+	paquete vlc
+	paquete wget
+	paquete wxWidgets-gtk2
+	
 
-  # Unicos de adJ liderados por pdJ
-  paquete books/evangelios_dp
-  paquete books/basico_OpenBSD
-  paquete books/usuario_OpenBSD
-  paquete books/servidor_OpenBSD
-  paquete education/AnimalesI
-  paquete education/AprestamientoI
-  paquete education/PlantasCursiva
-  paquete education/NombresCursiva
-  paquete fonts/TiposLectoEscritura
-  paquete education/asigna
-  paquete textproc/markup
-  paquete education/repasa
-  paquete education/sigue
+	####
+	# Tomados de portes de OpenBSD 5.6 pero mejorados para adJ
+	# Deben estar en arboldes/usr/ports/mystuff 
+	paquete xfe
 
-  paquete databases/sivel sivel sivel 1.1
-  paquete databases/sivel sivel sivel 1.2
+	####
+	# Retroportados de current para cerrar fallas o actualizar
+	# Deben estar en arboldes/usr/ports/mystuff y en /usr/ports de current
+	paquete ruby paquetes "ruby ruby22-ri_docs" 2.2
+	paquete pear-Validate
+	paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs" 
+	paquete bash 
+	paquete chromium
 
-  #paquete devel/ruby-apache2nginx paquetes "ruby21-apache2nginx"
+	###
+        # Actualizados.  Está pero desactualizado en OpenBSD 5.6 y en current
+	
+	# Tocó quedarse en PHP 5.4 por pear y SIVeL 1.2
+	paquete php paquetes "php php-fpm php-gd php-intl php-ldap php-mcrypt php-pdo_pgsql php-pgsql php-zip" 5.4
+	paquete pear-Auth
+	paquete pear-HTML-QuickForm
+       		
+	####
+	# Unicos en adJ liderados por otros
+	# Deben estar en arboldes/usr/ports/mystuff pero no en /usr/ports
+	paquete databases/pear-DB_DataObject
+	paquete www/pear-HTML-Common
+	paquete www/pear-HTML-CSS
+	paquete www/pear-HTML-Javascript
+	paquete www/pear-HTML-Menu
+	paquete www/pear-HTML-Table
+	paquete emulators/realboy
+	paquete sysutils/ganglia
+	paquete textproc/sword
+	paquete textproc/xiphos
+	paquete x11/fbdesk
+	paquete www/pear-DB-DataObject-FormBuilder
+	paquete www/pear-HTML-QuickForm-Controller
+	#paquete devel/ruby-apacheconf_parser paquetes "ruby21-apacheconf-parser"
 
-  rm $dini/$V$VESP-$ARQ/$dest/php5-gd-*-no_x11.tgz
+	####
+	# Unicos de adJ liderados por pdJ
+	# Deben estar en arboldes/usr/ports/mystuff 
+	paquete books/evangelios_dp
+	paquete books/basico_OpenBSD
+	paquete books/usuario_OpenBSD
+	paquete books/servidor_OpenBSD
+	paquete education/AnimalesI
+	paquete education/AprestamientoI
+	paquete education/PlantasCursiva
+	paquete education/NombresCursiva
+	paquete fonts/TiposLectoEscritura
+	paquete education/asigna
+	paquete textproc/markup
+	paquete education/repasa
+	paquete education/sigue
+
+	paquete databases/sivel sivel sivel 1.1
+	paquete databases/sivel sivel sivel 1.2
+
+	#paquete devel/ruby-apache2nginx paquetes "ruby21-apache2nginx"
+
+	rm $dini/$V$VESP-$ARQ/$dest/php5-gd-*-no_x11.tgz
 
 } fi;	
 
@@ -744,13 +814,15 @@ if (test "$sn" = "s") then {
 	arcdis="tmp/disponibles.txt";
 	arcdis2="tmp/disponibles2.txt";
 
-	pftp=`echo $PKG_PATH | sed -e "s/^ftp:.*/ftp/g;s/^http:.*/ftp/g"`;
+	pftp=`echo $PKG_PATH | sed -e "s/^ftp:.*/ftp/g;s/^http:.*/http/g"`;
 	echo pftp $pftp
 
 	if (test ! -f "$arcdis") then {
 		echo "Obteniendo lista de paquetes disponibles de $PKG_PATH" | tee -a /var/tmp/distrib-adJ.bitacora;
 		if (test "$pftp" = "ftp") then {
 			cmd="echo \"ls\" | ftp $PKG_PATH > /tmp/actu2-l"
+		} elif (test "$pftp" = "http") then {
+			cmd="ftp -o /tmp/actu2-l $PKG_PATH"
 		} else {
 			cmd="ls $PKG_PATH > /tmp/actu2-l";
 		} fi;
@@ -761,7 +833,7 @@ if (test "$sn" = "s") then {
 		} fi;
 		cmd="$cmd > /tmp/actu2-g"
 		echo $cmd; eval $cmd;
-		cmd="sed -e \"s/.*\( [A-Za-z0-9.-][_A-Za-z0-9.@+-]*.tgz\).*/\1 /g\" /tmp/actu2-g > /tmp/actu2-s"
+		cmd="sed -e \"s/.*[^_A-Za-z0-9.@+-]\([A-Za-z0-9.-][_A-Za-z0-9.@+-_]*.tgz\).*/\1 /g\" /tmp/actu2-g > /tmp/actu2-s"
 		echo $cmd; eval $cmd;
 		if (test "$excluye" != "") then {
 			cmd="grep -v -f tmp/excluye.txt /tmp/actu2-s > $arcdis";
@@ -831,7 +903,7 @@ if (test "$sn" = "s") then {
 
 	if (test "$t" = "1") then {
 		pa=`cat tmp/poract.txt | grep . | tr "\n" "," | sed -e "s/,$//g"`
-		if (test "$pftp" = "ftp") then {
+		if (test "$pftp" = "ftp" -o "$pftp" = "http") then {
 			cmd="(cd $V$VESP-$ARQ/paquetes; ftp $PKG_PATH/{$pa} )"
 		} else {
 			echo $pa | grep "," > /dev/null
@@ -926,7 +998,7 @@ else {
 if (test "$sn" = "s") then {
 	echo "s/\[V\]/$V/g"  > tmp/rempCont.sed
 	for i in `grep ".-\[v\]" Contenido.txt | sed -e "s/-\[v\]\([-a-zA-Z_0-9]*\).*/-[v]\1/g"`; do
-		n=`echo $i | sed -e "s/-\[v\]\([-a-zA-Z_0-9]*\).*/-[0-9][0-9alphabetvrc._]*\1.tgz/g"`
+		n=`echo $i | sed -e "s/-\[v\]\([-a-zA-Z_0-9]*\).*/-[0-9][0-9alphabetdvrc._]*\1.tgz/g"`
 		d=`(cd $V$VESP-$ARQ/paquetes; ls | grep "^$n"; cd ../sivel; ls | grep "^$n" 2>/dev/null | tail -n 1)`
 		e=`echo $d | sed -e 's/.tgz//g'`;
 		ic=`echo $i | sed -e 's/\[v\]/\\\\[v\\\\]/g'`;

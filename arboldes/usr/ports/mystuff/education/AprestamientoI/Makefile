@@ -4,6 +4,7 @@
 COMMENT=	"worksheets for learning to read and write"
 
 V=		1.0
+REVISION=	0
 DISTNAME=	AprestamientoI-${V}
 CATEGORIES=    	education
 

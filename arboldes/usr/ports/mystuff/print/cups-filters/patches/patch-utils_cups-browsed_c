@@ -1,0 +1,14 @@
+$OpenBSD: patch-utils_cups-browsed_c,v 1.4.4.1 2015/03/01 10:00:59 ajacoutot Exp $
+
+http://bzr.linuxfoundation.org/loggerhead/openprinting/cups-filters/revision/7333#utils/cups-browsed.c
+
+--- utils/cups-browsed.c.orig	Wed May  7 16:09:53 2014
++++ utils/cups-browsed.c	Sun Mar  1 10:45:17 2015
+@@ -627,6 +627,7 @@ remove_bad_chars(const char *str_orig, /* I - Original
+ 		       str[i] == '.' || str[i] == ','))) {
+       /* Letter or number, keep it */
+       havedash = 0;
++      str[j] = str[i];
+     } else {
+       /* Replace all other characters by a single '-' */
+       if (havedash == 1)

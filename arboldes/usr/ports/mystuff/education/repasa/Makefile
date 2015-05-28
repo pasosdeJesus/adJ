@@ -22,7 +22,7 @@ CONFIGURE_STYLE=	simple
 CONFIGURE_SCRIPT=	conf.sh
 CONFIGURE_ARGS+=-p ${PREFIX}
 
-BUILD_DEPENDS=	lang/ocaml textproc/markup print/texlive_base
+BUILD_DEPENDS=	lang/ocaml textproc/markup print/texlive/base
 RUN_DEPENDS=	textproc/markup
 
 FAKE_TARGET=	instala-sin-catalogo-opt

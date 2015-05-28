@@ -1,4 +1,4 @@
-# $OpenBSD: Makefile.inc,v 1.56 2014/09/13 18:09:21 brad Exp $
+# $OpenBSD: Makefile.inc,v 1.55.2.1 2014/10/22 12:23:08 robert Exp $
 
 # This port currently only works with archs supporting dynamic loading
 # and has Apache that supports DSO's.
@@ -59,7 +59,11 @@ CONFIGURE_STYLE=	autoconf
 AUTOCONF_VERSION?=	2.69
 CONFIGURE_ENV=          CFLAGS="${CFLAGS} -I${LOCALBASE}/include -pthread" \
                         LDFLAGS="-L${LOCALBASE}/lib -pthread" \
-			EXTENSION_DIR=${MODULES_DIR} lt_cv_path_SED=/usr/bin/sed
+			EXTENSION_DIR=${MODULES_DIR} \
+			lt_cv_path_SED=/usr/bin/sed
+# configure detects us as having decimal fp support but it's not built in
+# in libgcc. https://bugs.php.net/bug.php?id=68114
+CONFIGURE_ENV+=		ac_cv_decimal_fp_supported=no
 MAKE_ENV=               ${CONFIGURE_ENV}
 
 CONFIGURE_ARGS+=	--enable-shared \
@@ -199,14 +203,14 @@ MULTI_PACKAGES+=	-mysql
 COMMENT-mysql=		mysql database access extensions for php5
 CONFIGURE_ARGS+=	--with-mysql=shared,${LOCALBASE}
 LIB_DEPENDS-mysql=	databases/mysql
-WANTLIB-mysql=		pthread lib/mysql/mysqlclient
+WANTLIB-mysql=		pthread lib/mysql/mysqlclient>=10
 
 # mysqli
 MULTI_PACKAGES+=	-mysqli
 COMMENT-mysqli=		mysql database access extensions for php5
 CONFIGURE_ARGS+=	--with-mysqli=shared,${LOCALBASE}/bin/mysql_config
 LIB_DEPENDS-mysqli=	databases/mysql
-WANTLIB-mysqli=		crypto m pthread ssl z lib/mysql/mysqlclient
+WANTLIB-mysqli=		crypto m pthread ssl z lib/mysql/mysqlclient>=10
 
 # odbc
 MULTI_PACKAGES+=	-odbc
@@ -220,7 +224,7 @@ MULTI_PACKAGES+=	-pdo_mysql
 COMMENT-pdo_mysql=	PDO mysql database access extensions for php5
 CONFIGURE_ARGS+=	--with-pdo-mysql=shared,${LOCALBASE}
 LIB_DEPENDS-pdo_mysql=	databases/mysql
-WANTLIB-pdo_mysql=	crypto m pthread ssl z lib/mysql/mysqlclient
+WANTLIB-pdo_mysql=	crypto m pthread ssl z lib/mysql/mysqlclient>=10
 
 # pdo-pgsql
 MULTI_PACKAGES+=	-pdo_pgsql

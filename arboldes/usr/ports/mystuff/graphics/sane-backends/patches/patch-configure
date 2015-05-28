@@ -1,0 +1,48 @@
+$OpenBSD: patch-configure,v 1.14 2013/10/01 08:59:11 ajacoutot Exp $
+--- configure.orig	Tue Oct  1 03:01:13 2013
++++ configure	Tue Oct  1 10:18:32 2013
+@@ -7450,18 +7450,6 @@ if test "${with_group+set}" = set; then :
+ 
+ fi
+ 
+-    # check if the group does exist
+-    lasterror=""
+-    touch sanetest.file
+-    chgrp $LOCKPATH_GROUP sanetest.file 2>/dev/null || lasterror=$?
+-    rm -f sanetest.file
+-    if test ! -z "$lasterror"; then
+-      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Group $LOCKPATH_GROUP does not exist on this system." >&5
+-$as_echo "$as_me: WARNING: Group $LOCKPATH_GROUP does not exist on this system." >&2;}
+-      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Locking feature will be disabled." >&5
+-$as_echo "$as_me: WARNING: Locking feature will be disabled." >&2;}
+-      use_locking=no
+-    fi
+   fi
+   if test $use_locking = yes ; then
+     INSTALL_LOCKPATH=install-lockpath
+@@ -8114,7 +8102,7 @@ $as_echo "#define STDC_HEADERS 1" >>confdefs.h
+ 
+ fi
+ 
+-for ac_header in fcntl.h unistd.h libc.h sys/dsreq.h sys/select.h \
++for ac_header in fcntl.h unistd.h sys/dsreq.h sys/select.h \
+     sys/time.h sys/shm.h sys/ipc.h sys/signal.h sys/scanio.h os2.h \
+     sys/socket.h sys/io.h sys/hw.h sys/types.h linux/ppdev.h \
+     dev/ppbus/ppi.h machine/cpufunc.h sys/bitypes.h sys/sem.h sys/poll.h \
+@@ -8372,6 +8360,7 @@ $as_echo_n "checking for socklen_t in <sys/socket.h>..
+ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+ 
++#include <sys/types.h>
+ #include <sys/socket.h>
+ 
+ int
+@@ -9650,7 +9639,7 @@ $as_echo "#define HAVE_DEV_URANDOM 1" >>confdefs.h
+ fi
+ 
+ $as_echo "checking for cups"
+-if test -e /usr/include/cups/cups.h ; then
++if test -e ${LOCALBASE}/include/cups/cups.h ; then
+ 
+ $as_echo "#define HAVE_CUPS 1" >>confdefs.h
+ 

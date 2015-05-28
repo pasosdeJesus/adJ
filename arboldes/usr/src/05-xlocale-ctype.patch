@@ -1181,7 +1181,7 @@ diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src53xlocale1/
 diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src53xlocale1/lib/libc/locale/nextwctype.c src/lib/libc/locale/nextwctype.c
 --- src53xlocale1/lib/libc/locale/nextwctype.c	Wed Dec 31 19:00:00 1969
 +++ src/lib/libc/locale/nextwctype.c	Thu Apr  4 17:32:11 2013
-@@ -0,0 +1,109 @@
+@@ -0,0 +1,110 @@
 +/*-
 + * Copyright (c) 2004 Tim J. Robbins.
 + * All rights reserved.
@@ -1219,6 +1219,7 @@ diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src53xlocale1/
 +#include <wctype.h>
 +#include <errno.h>
 +
++#include "locale/xlocale_private.h"
 +#include "mblocal.h"
 +#include "runetype.h"
 +

@@ -1,0 +1,1453 @@
+diff -ruN -x *~ -x *orig -x obj* src56-orig/usr.bin/Makefile src/usr.bin/Makefile
+--- src56-orig/usr.bin/Makefile	Fri Sep 19 14:34:34 2014
++++ src/usr.bin/Makefile	Sat Mar  7 09:05:29 2015
+@@ -12,7 +12,7 @@
+ 	infocmp ipcrm ipcs \
+ 	join jot kdump keynote ktrace lam last lastcomm leave less lex \
+ 	libtool lndir \
+-	locale locate lock logger login logname look lorder \
++	locale localedef locate lock logger login logname look lorder \
+ 	m4 mail make man mandoc mesg mg \
+ 	midiplay mixerctl mkdep mklocale mktemp modstat nc netstat \
+ 	newsyslog \
+diff -ruN -x *~ -x *orig -x obj* src56-orig/usr.bin/localedef/Makefile src/usr.bin/localedef/Makefile
+--- src56-orig/usr.bin/localedef/Makefile	Wed Dec 31 19:00:00 1969
++++ src/usr.bin/localedef/Makefile	Sat Mar  7 07:31:33 2015
+@@ -0,0 +1,19 @@
++
++PROG=   localedef
++CFLAGS+= -std=c99 -g
++LDFLAGS+= -g
++
++SRCS=   localedef.c lexer.l parser.y
++MAN=    localedef.1
++
++parser.c parser.h: parser.y
++	${YACC} -t -v -d ${.ALLSRC}
++	mv y.tab.c parser.c
++	mv y.tab.h parser.h
++
++lexer.o: parser.h
++
++CLEANFILES+=parser.c parser.h lexer.o
++
++.include <bsd.prog.mk>
++
+diff -ruN -x *~ -x *orig -x obj* src56-orig/usr.bin/localedef/lexer.l src/usr.bin/localedef/lexer.l
+--- src56-orig/usr.bin/localedef/lexer.l	Wed Dec 31 19:00:00 1969
++++ src/usr.bin/localedef/lexer.l	Sat Mar  7 07:37:03 2015
+@@ -0,0 +1,927 @@
++/**
++ * Lexical analysis for LC_TIME in localedef files
++ * Public domain according to Colombian Legislation. 
++ * http://www.pasosdejesus.org/dominio_publico_colombia.html
++ * 2014. vtamara@pasosdeJesus.org
++ *
++ * This file must be in UTF-8 encoding
++ * $adJ$
++ */
++
++/*
++ * From the specification
++ *  http://pubs.opengroup.org/onlinepubs/009604499/basedefs/xbd_chap07.html
++ * Still not recognizing:
++ * - "escape_char %c\n", <escape character>
++ * - charmaps different to portable
++ * - multibyte characters in octal \dd\dd, hexadecimal \x63\x68  and
++ *   decimal \d99\d104
++ * - copy
++ * - era, era_d_ftm, era_t_fmt, alt_digits
++ */
++
++%x quote
++%x comment
++
++%{
++
++#include <assert.h>
++#include <stdlib.h>
++#include <string.h>
++#include <wchar.h>
++#include "parser.h"
++
++char *strxndup(const char *s, size_t maxl) {
++	char *r = strndup(s, maxl);
++	if (r == NULL) {
++		perror("Out of memory");
++		exit(1);
++	}
++	r[maxl] = '\0';
++	return r;
++}
++
++char *ccallocx(size_t nmemb, size_t size)  {
++	char *r = (char *)calloc(nmemb, size);
++	if (r == NULL) {
++		perror("Out of memory");
++		exit(1);
++	}
++	return r;
++}
++
++// Converts character s written as numeric constant
++// f specifies the base, %o is octal, %d is decimal and %x hexadecimal.
++char *parsechar(char *s, char *f) 
++{
++	assert(strlen(f)==2 && f[0] == '%' &&
++		 (f[1] == 'o' || f[1] == 'd' || f[1] == 'x'));
++	wchar_t w;
++	char *r;
++	//printf("OJO parsechar(%s, %s)", s, f);
++	sscanf(s, f, &w);
++	//printf("OJO w=%i\n", w);
++	r = ccallocx(1, MB_CUR_MAX+1);
++	if (wctomb(r, w) <= 0) {
++		perror("Invalid wide character");
++		exit(1);
++	}
++	//printf("OJO yylval.mbc=%s\n", yylval.mbc);
++	return r;
++}
++
++struct sdic {
++	char *name;
++	char *mbc;
++};
++
++struct sdic dic[] = {
++	{"nul", "\x0"},
++	{"alert", "\x7"},
++	{"backspace", "\x8"},
++	{"tab", "\x9"},
++	{"carriage_return", "\xD"},
++	{"newline", "\xA"},
++	{"vertical_tab", "\xB"},
++	{"form_feed", "\xC"},
++	{"space", "\x20"},
++	{"exclamation_mark", "\x21"},
++	{"quotation_mark", "\x22"},
++	{"number_sign", "\x23"},
++	{"dollar_sign", "\x24"},
++	{"percent_sign", "\x25"},
++	{"percent-sign", "%"},
++	{"ampersand", "\x26"},
++	{"apostrophe", "\x27"},
++	{"left_parenthesis", "\x28"},
++	{"right_parenthesis", "\x29"},
++	{"asterisk", "\x2A"},
++	{"plus_sign", "\x2B"},
++	{"comma", "\x2C"},
++	{"hyphen_minus", "\x2D"},
++	{"hyphen", "\x2D"},
++	{"full_stop", "\x2E"},
++	{"period", "\x2E"},
++	{"slash", "\x2F"},
++	{"solidus", "\x2F"},
++	{"zero", "\x30"},
++	{"one", "\x31"},
++	{"two", "\x32"},
++	{"three", "\x33"},
++	{"four", "\x34"},
++	{"five", "\x35"},
++	{"six", "\x36"},
++	{"seven", "\x37"},
++	{"eight", "\x38"},
++	{"nine", "\x39"},
++	{"colon", "\x3A"},
++	{"semicolon", "\x3B"},
++	{"less_than_sign", "\x3C"},
++	{"equals_sign", "\x3D"},
++	{"greater_than_sign", "\x3E"},
++	{"question_mark", "\x3F"},
++	{"commercial_at", "\x40"},
++	{"left_square_bracket", "\x5B"},
++	{"backslash", "\x5C"},
++	{"reverse_solidus", "\x5C"},
++	{"right_square_bracket", "\x5D"},
++	{"circumflex_accent", "\x5E"},
++	{"circumflex", "\x5E"},
++	{"low_line", "\x5F"},
++	{"underscore", "\x5F"},
++	{"grave_accent", "\x60"},
++	{"left_brace", "\x7B"},
++	{"left_curly_bracket", "\x7B"},
++	{"vertical_line", "\x7C"},
++	{"right_brace", "\x7D"},
++	{"right_curly_bracket", "\x7D"},
++	{"tilde", "\x7E"},
++	{"ARMENIAN_CAPITAL_LETTER_AYB", "Ա"},
++	{"ARMENIAN_CAPITAL_LETTER_CHA", "Չ"},
++	{"ARMENIAN_CAPITAL_LETTER_DA", "Դ"},
++	{"ARMENIAN_CAPITAL_LETTER_ECH", "Ե"},
++	{"ARMENIAN_CAPITAL_LETTER_HO", "Հ"},
++	{"ARMENIAN_CAPITAL_LETTER_KEN", "Կ"},
++	{"ARMENIAN_CAPITAL_LETTER_MEN", "Մ"},
++	{"ARMENIAN_CAPITAL_LETTER_NOW", "Ն"},
++	{"ARMENIAN_CAPITAL_LETTER_OH", "Օ"},
++	{"ARMENIAN_CAPITAL_LETTER_PIWR", "Փ"},
++	{"ARMENIAN_CAPITAL_LETTER_SEH", "Ս"},
++	{"ARMENIAN_CAPITAL_LETTER_SHA", "Շ"},
++	{"ARMENIAN_CAPITAL_LETTER_VO", "Ո"},
++	{"ARMENIAN_SMALL_LETTER_AYB", "ա"},
++	{"ARMENIAN_SMALL_LETTER_BEN", "բ"},
++	{"ARMENIAN_SMALL_LETTER_ECH", "ե"},
++	{"ARMENIAN_SMALL_LETTER_GIM", "գ"},
++	{"ARMENIAN_SMALL_LETTER_INI", "ի"},
++	{"ARMENIAN_SMALL_LETTER_KEH", "ք"},
++	{"ARMENIAN_SMALL_LETTER_KEN", "կ"},
++	{"ARMENIAN_SMALL_LETTER_LIWN", "լ"},
++	{"ARMENIAN_SMALL_LETTER_MEN", "մ"},
++	{"ARMENIAN_SMALL_LETTER_NOW", "ն"},
++	{"ARMENIAN_SMALL_LETTER_PEH", "պ"},
++	{"ARMENIAN_SMALL_LETTER_RA", "ռ"},
++	{"ARMENIAN_SMALL_LETTER_REH", "ր"},
++	{"ARMENIAN_SMALL_LETTER_SEH", "ս"},
++	{"ARMENIAN_SMALL_LETTER_SHA", "շ"},
++	{"ARMENIAN_SMALL_LETTER_TIWN", "տ"},
++	{"ARMENIAN_SMALL_LETTER_TO", "թ"},
++	{"ARMENIAN_SMALL_LETTER_VEW", "վ"},
++	{"ARMENIAN_SMALL_LETTER_VO", "ո"},
++	{"ARMENIAN_SMALL_LETTER_YI", "յ"},
++	{"ARMENIAN_SMALL_LETTER_YIWN", "ւ"},
++	{"CJK_UNIFIED_IDEOGRAPH-4E00", "一"},
++	{"CYRILLIC_CAPITAL_LETTER_BE", "Б"},
++	{"CYRILLIC_CAPITAL_LETTER_CHE", "Ч"},
++	{"CYRILLIC_CAPITAL_LETTER_CHE_WITH_DESCENDER", "Ҷ"},
++	{"CYRILLIC_CAPITAL_LETTER_CHE_WITH_DIAERESIS", "Ӵ"},
++	{"CYRILLIC_CAPITAL_LETTER_CHE_WITH_VERTICAL_STROKE", "Ҹ"},
++	{"CYRILLIC_CAPITAL_LETTER_DE", "Д"},
++	{"CYRILLIC_CAPITAL_LETTER_EL", "Л"},
++	{"CYRILLIC_CAPITAL_LETTER_EL_WITH_DESCENDER", "Ԯ"},
++	{"CYRILLIC_CAPITAL_LETTER_EL_WITH_HOOK", "Ԓ"},
++	{"CYRILLIC_CAPITAL_LETTER_EL_WITH_MIDDLE_HOOK", "Ԡ"},
++	{"CYRILLIC_CAPITAL_LETTER_EL_WITH_TAIL", "Ӆ"},
++	{"CYRILLIC_CAPITAL_LETTER_EM", "М"},
++	{"CYRILLIC_CAPITAL_LETTER_EM_WITH_TAIL", "Ӎ"},
++	{"CYRILLIC_CAPITAL_LETTER_EN", "Н"},
++	{"CYRILLIC_CAPITAL_LETTER_EN_WITH_DESCENDER", "Ң"},
++	{"CYRILLIC_CAPITAL_LETTER_EN_WITH_HOOK", "Ӈ"},
++	{"CYRILLIC_CAPITAL_LETTER_EN_WITH_LEFT_HOOK", "Ԩ"},
++	{"CYRILLIC_CAPITAL_LETTER_EN_WITH_MIDDLE_HOOK", "Ԣ"},
++	{"CYRILLIC_CAPITAL_LETTER_EN_WITH_TAIL", "Ӊ"},
++	{"CYRILLIC_CAPITAL_LETTER_ES", "С"},
++	{"CYRILLIC_CAPITAL_LETTER_ES_WITH_DESCENDER", "Ҫ"},
++	{"CYRILLIC_CAPITAL_LETTER_GHE", "Г"},
++	{"CYRILLIC_CAPITAL_LETTER_GHE_WITH_DESCENDER", "Ӷ"},
++	{"CYRILLIC_CAPITAL_LETTER_GHE_WITH_MIDDLE_HOOK", "Ҕ"},
++	{"CYRILLIC_CAPITAL_LETTER_GHE_WITH_STROKE", "Ғ"},
++	{"CYRILLIC_CAPITAL_LETTER_GHE_WITH_STROKE_AND_HOOK", "Ӻ"},
++	{"CYRILLIC_CAPITAL_LETTER_GHE_WITH_UPTURN", "Ґ"},
++	{"CYRILLIC_CAPITAL_LETTER_HA", "Х"},
++	{"CYRILLIC_CAPITAL_LETTER_HARD_SIGN", "Ъ"},
++	{"CYRILLIC_CAPITAL_LETTER_HA_WITH_DESCENDER", "Ҳ"},
++	{"CYRILLIC_CAPITAL_LETTER_HA_WITH_HOOK", "Ӽ"},
++	{"CYRILLIC_CAPITAL_LETTER_HA_WITH_STROKE", "Ӿ"},
++	{"CYRILLIC_CAPITAL_LETTER_PE", "П"},
++	{"CYRILLIC_CAPITAL_LETTER_PE_WITH_DESCENDER", "Ԥ"},
++	{"CYRILLIC_CAPITAL_LETTER_PE_WITH_MIDDLE_HOOK", "Ҧ"},
++	{"CYRILLIC_CAPITAL_LETTER_STRAIGHT_U", "Ү"},
++	{"CYRILLIC_CAPITAL_LETTER_STRAIGHT_U_WITH_STROKE", "Ұ"},
++	{"CYRILLIC_CAPITAL_LETTER_TE", "Т"},
++	{"CYRILLIC_CAPITAL_LETTER_TE_WITH_DESCENDER", "Ҭ"},
++	{"CYRILLIC_CAPITAL_LETTER_TE_WITH_MIDDLE_HOOK", "Ꚋ"},
++	{"CYRILLIC_CAPITAL_LETTER_VE", "В"},
++	{"CYRILLIC_SMALL_LETTER_A", "а"},
++	{"CYRILLIC_SMALL_LETTER_ABKHASIAN_CHE", "ҽ"},
++	{"CYRILLIC_SMALL_LETTER_ABKHASIAN_CHE_WITH_DESCENDER", "ҿ"},
++	{"CYRILLIC_SMALL_LETTER_ABKHASIAN_DZE", "ӡ"},
++	{"CYRILLIC_SMALL_LETTER_ABKHASIAN_HA", "ҩ"},
++	{"CYRILLIC_SMALL_LETTER_ALEUT_KA", "ԟ"},
++	{"CYRILLIC_SMALL_LETTER_A_WITH_BREVE", "ӑ"},
++	{"CYRILLIC_SMALL_LETTER_A_WITH_DIAERESIS", "ӓ"},
++	{"CYRILLIC_SMALL_LETTER_BE", "б"},
++	{"CYRILLIC_SMALL_LETTER_BYELORUSSIAN-UKRAINIAN_I", "і"},
++	{"CYRILLIC_SMALL_LETTER_CHE", "ч"},
++	{"CYRILLIC_SMALL_LETTER_CHE_WITH_DESCENDER", "ҷ"},
++	{"CYRILLIC_SMALL_LETTER_CHE_WITH_DIAERESIS", "ӵ"},
++	{"CYRILLIC_SMALL_LETTER_CHE_WITH_VERTICAL_STROKE", "ҹ"},
++	{"CYRILLIC_SMALL_LETTER_DE", "д"},
++	{"CYRILLIC_SMALL_LETTER_E", "э"},
++	{"CYRILLIC_SMALL_LETTER_EF", "ф"},
++	{"CYRILLIC_SMALL_LETTER_EL", "л"},
++	{"CYRILLIC_SMALL_LETTER_EL_WITH_DESCENDER", "ԯ"},
++	{"CYRILLIC_SMALL_LETTER_EL_WITH_HOOK", "ԓ"},
++	{"CYRILLIC_SMALL_LETTER_EL_WITH_MIDDLE_HOOK", "ԡ"},
++	{"CYRILLIC_SMALL_LETTER_EL_WITH_TAIL", "ӆ"},
++	{"CYRILLIC_SMALL_LETTER_EM", "м"},
++	{"CYRILLIC_SMALL_LETTER_EM_WITH_TAIL", "ӎ"},
++	{"CYRILLIC_SMALL_LETTER_EN", "н"},
++	{"CYRILLIC_SMALL_LETTER_EN_WITH_DESCENDER", "ң"},
++	{"CYRILLIC_SMALL_LETTER_EN_WITH_HOOK", "ӈ"},
++	{"CYRILLIC_SMALL_LETTER_EN_WITH_LEFT_HOOK", "ԩ"},
++	{"CYRILLIC_SMALL_LETTER_EN_WITH_MIDDLE_HOOK", "ԣ"},
++	{"CYRILLIC_SMALL_LETTER_EN_WITH_TAIL", "ӊ"},
++	{"CYRILLIC_SMALL_LETTER_ER", "р"},
++	{"CYRILLIC_SMALL_LETTER_ER_WITH_TICK", "ҏ"},
++	{"CYRILLIC_SMALL_LETTER_ES", "с"},
++	{"CYRILLIC_SMALL_LETTER_ES_WITH_DESCENDER", "ҫ"},
++	{"CYRILLIC_SMALL_LETTER_E_WITH_DIAERESIS", "ӭ"},
++	{"CYRILLIC_SMALL_LETTER_GHE", "г"},
++	{"CYRILLIC_SMALL_LETTER_GHE_WITH_DESCENDER", "ӷ"},
++	{"CYRILLIC_SMALL_LETTER_GHE_WITH_MIDDLE_HOOK", "ҕ"},
++	{"CYRILLIC_SMALL_LETTER_GHE_WITH_STROKE", "ғ"},
++	{"CYRILLIC_SMALL_LETTER_GHE_WITH_STROKE_AND_HOOK", "ӻ"},
++	{"CYRILLIC_SMALL_LETTER_GHE_WITH_UPTURN", "ґ"},
++	{"CYRILLIC_SMALL_LETTER_HA", "х"},
++	{"CYRILLIC_SMALL_LETTER_HARD_SIGN", "ъ"},
++	{"CYRILLIC_SMALL_LETTER_HA_WITH_DESCENDER", "ҳ"},
++	{"CYRILLIC_SMALL_LETTER_HA_WITH_HOOK", "ӽ"},
++	{"CYRILLIC_SMALL_LETTER_HA_WITH_STROKE", "ӿ"},
++	{"CYRILLIC_SMALL_LETTER_I", "и"},
++	{"CYRILLIC_SMALL_LETTER_IE", "е"},
++	{"CYRILLIC_SMALL_LETTER_IE_WITH_BREVE", "ӗ"},
++	{"CYRILLIC_SMALL_LETTER_IE_WITH_GRAVE", "ѐ"},
++	{"CYRILLIC_SMALL_LETTER_IO", "ё"},
++	{"CYRILLIC_SMALL_LETTER_IOTA", "ꙇ"},
++	{"CYRILLIC_SMALL_LETTER_IOTIFIED_A", "ꙗ"},
++	{"CYRILLIC_SMALL_LETTER_IOTIFIED_BIG_YUS", "ѭ"},
++	{"CYRILLIC_SMALL_LETTER_IOTIFIED_CLOSED_LITTLE_YUS", "ꙝ"},
++	{"CYRILLIC_SMALL_LETTER_IOTIFIED_E", "ѥ"},
++	{"CYRILLIC_SMALL_LETTER_IOTIFIED_LITTLE_YUS", "ѩ"},
++	{"CYRILLIC_SMALL_LETTER_IOTIFIED_YAT", "ꙓ"},
++	{"CYRILLIC_SMALL_LETTER_IZHITSA", "ѵ"},
++	{"CYRILLIC_SMALL_LETTER_IZHITSA_WITH_DOUBLE_GRAVE_ACCENT", "ѷ"},
++	{"CYRILLIC_SMALL_LETTER_I_WITH_DIAERESIS", "ӥ"},
++	{"CYRILLIC_SMALL_LETTER_I_WITH_GRAVE", "ѝ"},
++	{"CYRILLIC_SMALL_LETTER_I_WITH_MACRON", "ӣ"},
++	{"CYRILLIC_SMALL_LETTER_JE", "ј"},
++	{"CYRILLIC_SMALL_LETTER_KA", "к"},
++	{"CYRILLIC_SMALL_LETTER_KA_WITH_DESCENDER", "қ"},
++	{"CYRILLIC_SMALL_LETTER_KA_WITH_HOOK", "ӄ"},
++	{"CYRILLIC_SMALL_LETTER_KA_WITH_STROKE", "ҟ"},
++	{"CYRILLIC_SMALL_LETTER_KA_WITH_VERTICAL_STROKE", "ҝ"},
++	{"CYRILLIC_SMALL_LETTER_LJE", "љ"},
++	{"CYRILLIC_SMALL_LETTER_O", "о"},
++	{"CYRILLIC_SMALL_LETTER_OMEGA", "ѡ"},
++	{"CYRILLIC_SMALL_LETTER_OMEGA_WITH_TITLO", "ѽ"},
++	{"CYRILLIC_SMALL_LETTER_OT", "ѿ"},
++	{"CYRILLIC_SMALL_LETTER_O_WITH_DIAERESIS", "ӧ"},
++	{"CYRILLIC_SMALL_LETTER_PE", "п"},
++	{"CYRILLIC_SMALL_LETTER_PE_WITH_DESCENDER", "ԥ"},
++	{"CYRILLIC_SMALL_LETTER_PE_WITH_MIDDLE_HOOK", "ҧ"},
++	{"CYRILLIC_SMALL_LETTER_SCHWA", "ә"},
++	{"CYRILLIC_SMALL_LETTER_SCHWA_WITH_DIAERESIS", "ӛ"},
++	{"CYRILLIC_SMALL_LETTER_SHA", "ш"},
++	{"CYRILLIC_SMALL_LETTER_SHHA", "һ"},
++	{"CYRILLIC_SMALL_LETTER_SHHA_WITH_DESCENDER", "ԧ"},
++	{"CYRILLIC_SMALL_LETTER_SHORT_I", "й"},
++	{"CYRILLIC_SMALL_LETTER_SHORT_I_WITH_TAIL", "ҋ"},
++	{"CYRILLIC_SMALL_LETTER_SHORT_U", "ў"},
++	{"CYRILLIC_SMALL_LETTER_SOFT_SIGN", "ь"},
++	{"CYRILLIC_SMALL_LETTER_STRAIGHT_U", "ү"},
++	{"CYRILLIC_SMALL_LETTER_STRAIGHT_U_WITH_STROKE", "ұ"},
++	{"CYRILLIC_SMALL_LETTER_TE", "т"},
++	{"CYRILLIC_SMALL_LETTER_TE_WITH_DESCENDER", "ҭ"},
++	{"CYRILLIC_SMALL_LETTER_TE_WITH_MIDDLE_HOOK", "ꚋ"},
++	{"CYRILLIC_SMALL_LETTER_TSE", "ц"},
++	{"CYRILLIC_SMALL_LETTER_U", "у"},
++	{"CYRILLIC_SMALL_LETTER_UK", "ѹ"},
++	{"CYRILLIC_SMALL_LETTER_UKRAINIAN_IE", "є"},
++	{"CYRILLIC_SMALL_LETTER_U_WITH_DIAERESIS", "ӱ"},
++	{"CYRILLIC_SMALL_LETTER_U_WITH_DOUBLE_ACUTE", "ӳ"},
++	{"CYRILLIC_SMALL_LETTER_U_WITH_MACRON", "ӯ"},
++	{"CYRILLIC_SMALL_LETTER_VE", "в"},
++	{"CYRILLIC_SMALL_LETTER_YA", "я"},
++	{"CYRILLIC_SMALL_LETTER_YAE", "ԙ"},
++	{"CYRILLIC_SMALL_LETTER_YAT", "ѣ"},
++	{"CYRILLIC_SMALL_LETTER_YERU", "ы"},
++	{"CYRILLIC_SMALL_LETTER_YERU_WITH_BACK_YER", "ꙑ"},
++	{"CYRILLIC_SMALL_LETTER_YERU_WITH_DIAERESIS", "ӹ"},
++	{"CYRILLIC_SMALL_LETTER_YU", "ю"},
++	{"CYRILLIC_SMALL_LETTER_ZE", "з"},
++	{"CYRILLIC_SMALL_LETTER_ZEMLYA", "ꙁ"},
++	{"CYRILLIC_SMALL_LETTER_ZE_WITH_DESCENDER", "ҙ"},
++	{"CYRILLIC_SMALL_LETTER_ZE_WITH_DIAERESIS", "ӟ"},
++	{"CYRILLIC_SMALL_LETTER_ZHE", "ж"},
++	{"CYRILLIC_SMALL_LETTER_ZHE_WITH_BREVE", "ӂ"},
++	{"CYRILLIC_SMALL_LETTER_ZHE_WITH_DESCENDER", "җ"},
++	{"CYRILLIC_SMALL_LETTER_ZHE_WITH_DIAERESIS", "ӝ"},
++	{"ETHIOPIC_SYLLABLE_BA", "በ"},
++	{"ETHIOPIC_SYLLABLE_BAA", "ባ"},
++	{"ETHIOPIC_SYLLABLE_BE", "ብ"},
++	{"ETHIOPIC_SYLLABLE_BEE", "ቤ"},
++	{"ETHIOPIC_SYLLABLE_BU", "ቡ"},
++	{"ETHIOPIC_SYLLABLE_CE", "ች"},
++	{"ETHIOPIC_SYLLABLE_CEE", "ቼ"},
++	{"ETHIOPIC_SYLLABLE_DAA", "ዳ"},
++	{"ETHIOPIC_SYLLABLE_DE", "ድ"},
++	{"ETHIOPIC_SYLLABLE_DEE", "ዴ"},
++	{"ETHIOPIC_SYLLABLE_DI", "ዲ"},
++	{"ETHIOPIC_SYLLABLE_FEE", "ፌ"},
++	{"ETHIOPIC_SYLLABLE_GA", "ገ"},
++	{"ETHIOPIC_SYLLABLE_GAA", "ጋ"},
++	{"ETHIOPIC_SYLLABLE_GLOTTAL_E", "እ"},
++	{"ETHIOPIC_SYLLABLE_GLOTTAL_EE", "ኤ"},
++	{"ETHIOPIC_SYLLABLE_GLOTTAL_O", "ኦ"},
++	{"ETHIOPIC_SYLLABLE_GLOTTAL_OA", "ⶊ"},
++	{"ETHIOPIC_SYLLABLE_HHA", "ሐ"},
++	{"ETHIOPIC_SYLLABLE_HHAA", "ሓ"},
++	{"ETHIOPIC_SYLLABLE_HHU", "ሑ"},
++	{"ETHIOPIC_SYLLABLE_JAA", "ጃ"},
++	{"ETHIOPIC_SYLLABLE_JU", "ጁ"},
++	{"ETHIOPIC_SYLLABLE_KA", "ከ"},
++	{"ETHIOPIC_SYLLABLE_KAA", "ካ"},
++	{"ETHIOPIC_SYLLABLE_KE", "ክ"},
++	{"ETHIOPIC_SYLLABLE_KEE", "ኬ"},
++	{"ETHIOPIC_SYLLABLE_LAA", "ላ"},
++	{"ETHIOPIC_SYLLABLE_LE", "ል"},
++	{"ETHIOPIC_SYLLABLE_LEE", "ሌ"},
++	{"ETHIOPIC_SYLLABLE_MAA", "ማ"},
++	{"ETHIOPIC_SYLLABLE_ME", "ም"},
++	{"ETHIOPIC_SYLLABLE_MEE", "ሜ"},
++	{"ETHIOPIC_SYLLABLE_MU", "ሙ"},
++	{"ETHIOPIC_SYLLABLE_NE", "ን"},
++	{"ETHIOPIC_SYLLABLE_NEE", "ኔ"},
++	{"ETHIOPIC_SYLLABLE_NO", "ኖ"},
++	{"ETHIOPIC_SYLLABLE_NOA", "ⶈ"},
++	{"ETHIOPIC_SYLLABLE_NYO", "ኞ"},
++	{"ETHIOPIC_SYLLABLE_NYOA", "ⶉ"},
++	{"ETHIOPIC_SYLLABLE_PE", "ፕ"},
++	{"ETHIOPIC_SYLLABLE_PEE", "ፔ"},
++	{"ETHIOPIC_SYLLABLE_PHARYNGEAL_AA", "ዓ"},
++	{"ETHIOPIC_SYLLABLE_PHARYNGEAL_E", "ዕ"},
++	{"ETHIOPIC_SYLLABLE_PHARYNGEAL_EE", "ዔ"},
++	{"ETHIOPIC_SYLLABLE_QE", "ቅ"},
++	{"ETHIOPIC_SYLLABLE_QEE", "ቄ"},
++	{"ETHIOPIC_SYLLABLE_RA", "ረ"},
++	{"ETHIOPIC_SYLLABLE_RAA", "ራ"},
++	{"ETHIOPIC_SYLLABLE_RE", "ር"},
++	{"ETHIOPIC_SYLLABLE_REE", "ሬ"},
++	{"ETHIOPIC_SYLLABLE_RI", "ሪ"},
++	{"ETHIOPIC_SYLLABLE_RU", "ሩ"},
++	{"ETHIOPIC_SYLLABLE_SA", "ሰ"},
++	{"ETHIOPIC_SYLLABLE_SAA", "ሳ"},
++	{"ETHIOPIC_SYLLABLE_SE", "ስ"},
++	{"ETHIOPIC_SYLLABLE_SEBATBEIT_BWA", "ᎄ"},
++	{"ETHIOPIC_SYLLABLE_SEBATBEIT_FWA", "ᎈ"},
++	{"ETHIOPIC_SYLLABLE_SEBATBEIT_MWA", "ᎀ"},
++	{"ETHIOPIC_SYLLABLE_SEBATBEIT_PWA", "ᎌ"},
++	{"ETHIOPIC_SYLLABLE_SEE", "ሴ"},
++	{"ETHIOPIC_SYLLABLE_TA", "ተ"},
++	{"ETHIOPIC_SYLLABLE_TAA", "ታ"},
++	{"ETHIOPIC_SYLLABLE_TE", "ት"},
++	{"ETHIOPIC_SYLLABLE_TEE", "ቴ"},
++	{"ETHIOPIC_SYLLABLE_THU", "ጡ"},
++	{"ETHIOPIC_SYLLABLE_VEE", "ቬ"},
++	{"ETHIOPIC_SYLLABLE_WA", "ወ"},
++	{"ETHIOPIC_SYLLABLE_WAA", "ዋ"},
++	{"ETHIOPIC_SYLLABLE_WE", "ው"},
++	{"ETHIOPIC_SYLLABLE_WEE", "ዌ"},
++	{"ETHIOPIC_SYLLABLE_YE", "ይ"},
++	{"ETHIOPIC_SYLLABLE_YEE", "ዬ"},
++	{"ETHIOPIC_SYLLABLE_YU", "ዩ"},
++	{"FULL_STOP", "."},
++	{"GREEK_CAPITAL_LETTER_ALPHA", "Α"},
++	{"GREEK_CAPITAL_LETTER_ALPHA_WITH_DASIA", "Ἁ"},
++	{"GREEK_CAPITAL_LETTER_ALPHA_WITH_DASIA_AND_OXIA", "Ἅ"},
++	{"GREEK_CAPITAL_LETTER_ALPHA_WITH_DASIA_AND_OXIA_AND_PROSGEGRAMMENI", "ᾍ"},
++	{"GREEK_CAPITAL_LETTER_ALPHA_WITH_DASIA_AND_PERISPOMENI", "Ἇ"},
++	{"GREEK_CAPITAL_LETTER_ALPHA_WITH_DASIA_AND_PERISPOMENI_AND_PROSGEGRAMMENI", "ᾏ"},
++	{"GREEK_CAPITAL_LETTER_ALPHA_WITH_DASIA_AND_PROSGEGRAMMENI", "ᾉ"},
++	{"GREEK_CAPITAL_LETTER_ALPHA_WITH_DASIA_AND_VARIA", "Ἃ"},
++	{"GREEK_CAPITAL_LETTER_ALPHA_WITH_DASIA_AND_VARIA_AND_PROSGEGRAMMENI", "ᾋ"},
++	{"GREEK_CAPITAL_LETTER_ALPHA_WITH_MACRON", "Ᾱ"},
++	{"GREEK_CAPITAL_LETTER_ALPHA_WITH_PROSGEGRAMMENI", "ᾼ"},
++	{"GREEK_CAPITAL_LETTER_ALPHA_WITH_PSILI", "Ἀ"},
++	{"GREEK_CAPITAL_LETTER_ALPHA_WITH_PSILI_AND_OXIA", "Ἄ"},
++	{"GREEK_CAPITAL_LETTER_ALPHA_WITH_PSILI_AND_OXIA_AND_PROSGEGRAMMENI", "ᾌ"},
++	{"GREEK_CAPITAL_LETTER_ALPHA_WITH_PSILI_AND_PERISPOMENI", "Ἆ"},
++	{"GREEK_CAPITAL_LETTER_ALPHA_WITH_PSILI_AND_PERISPOMENI_AND_PROSGEGRAMMENI", "ᾎ"},
++	{"GREEK_CAPITAL_LETTER_ALPHA_WITH_PSILI_AND_PROSGEGRAMMENI", "ᾈ"},
++	{"GREEK_CAPITAL_LETTER_ALPHA_WITH_PSILI_AND_VARIA", "Ἂ"},
++	{"GREEK_CAPITAL_LETTER_ALPHA_WITH_PSILI_AND_VARIA_AND_PROSGEGRAMMENI", "ᾊ"},
++	{"GREEK_CAPITAL_LETTER_ALPHA_WITH_TONOS", "Ά"},
++	{"GREEK_CAPITAL_LETTER_ALPHA_WITH_VARIA", "Ὰ"},
++	{"GREEK_CAPITAL_LETTER_ALPHA_WITH_VRACHY", "Ᾰ"},
++	{"GREEK_CAPITAL_LETTER_DELTA", "Δ"},
++	{"GREEK_CAPITAL_LETTER_IOTA", "Ι"},
++	{"GREEK_CAPITAL_LETTER_IOTA_WITH_DASIA", "Ἱ"},
++	{"GREEK_CAPITAL_LETTER_IOTA_WITH_DASIA_AND_OXIA", "Ἵ"},
++	{"GREEK_CAPITAL_LETTER_IOTA_WITH_DASIA_AND_PERISPOMENI", "Ἷ"},
++	{"GREEK_CAPITAL_LETTER_IOTA_WITH_DASIA_AND_VARIA", "Ἳ"},
++	{"GREEK_CAPITAL_LETTER_IOTA_WITH_DIALYTIKA", "Ϊ"},
++	{"GREEK_CAPITAL_LETTER_IOTA_WITH_MACRON", "Ῑ"},
++	{"GREEK_CAPITAL_LETTER_IOTA_WITH_PSILI", "Ἰ"},
++	{"GREEK_CAPITAL_LETTER_IOTA_WITH_PSILI_AND_OXIA", "Ἴ"},
++	{"GREEK_CAPITAL_LETTER_IOTA_WITH_PSILI_AND_PERISPOMENI", "Ἶ"},
++	{"GREEK_CAPITAL_LETTER_IOTA_WITH_PSILI_AND_VARIA", "Ἲ"},
++	{"GREEK_CAPITAL_LETTER_IOTA_WITH_TONOS", "Ί"},
++	{"GREEK_CAPITAL_LETTER_IOTA_WITH_VARIA", "Ὶ"},
++	{"GREEK_CAPITAL_LETTER_IOTA_WITH_VRACHY", "Ῐ"},
++	{"GREEK_CAPITAL_LETTER_KAPPA", "Κ"},
++	{"GREEK_CAPITAL_LETTER_MU", "Μ"},
++	{"GREEK_CAPITAL_LETTER_NU", "Ν"},
++	{"GREEK_CAPITAL_LETTER_OMICRON", "Ο"},
++	{"GREEK_CAPITAL_LETTER_OMICRON_WITH_DASIA", "Ὁ"},
++	{"GREEK_CAPITAL_LETTER_OMICRON_WITH_DASIA_AND_OXIA", "Ὅ"},
++	{"GREEK_CAPITAL_LETTER_OMICRON_WITH_DASIA_AND_VARIA", "Ὃ"},
++	{"GREEK_CAPITAL_LETTER_OMICRON_WITH_PSILI", "Ὀ"},
++	{"GREEK_CAPITAL_LETTER_OMICRON_WITH_PSILI_AND_OXIA", "Ὄ"},
++	{"GREEK_CAPITAL_LETTER_OMICRON_WITH_PSILI_AND_VARIA", "Ὂ"},
++	{"GREEK_CAPITAL_LETTER_OMICRON_WITH_TONOS", "Ό"},
++	{"GREEK_CAPITAL_LETTER_OMICRON_WITH_VARIA", "Ὸ"},
++	{"GREEK_CAPITAL_LETTER_PHI", "Φ"},
++	{"GREEK_CAPITAL_LETTER_PI", "Π"},
++	{"GREEK_CAPITAL_LETTER_SIGMA", "Σ"},
++	{"GREEK_CAPITAL_LETTER_TAU", "Τ"},
++	{"GREEK_SMALL_LETTER_ALPHA", "α"},
++	{"GREEK_SMALL_LETTER_ALPHA_WITH_DASIA", "ἁ"},
++	{"GREEK_SMALL_LETTER_ALPHA_WITH_DASIA_AND_OXIA", "ἅ"},
++	{"GREEK_SMALL_LETTER_ALPHA_WITH_DASIA_AND_OXIA_AND_YPOGEGRAMMENI", "ᾅ"},
++	{"GREEK_SMALL_LETTER_ALPHA_WITH_DASIA_AND_PERISPOMENI", "ἇ"},
++	{"GREEK_SMALL_LETTER_ALPHA_WITH_DASIA_AND_PERISPOMENI_AND_YPOGEGRAMMENI", "ᾇ"},
++	{"GREEK_SMALL_LETTER_ALPHA_WITH_DASIA_AND_VARIA", "ἃ"},
++	{"GREEK_SMALL_LETTER_ALPHA_WITH_DASIA_AND_VARIA_AND_YPOGEGRAMMENI", "ᾃ"},
++	{"GREEK_SMALL_LETTER_ALPHA_WITH_DASIA_AND_YPOGEGRAMMENI", "ᾁ"},
++	{"GREEK_SMALL_LETTER_ALPHA_WITH_MACRON", "ᾱ"},
++	{"GREEK_SMALL_LETTER_ALPHA_WITH_OXIA_AND_YPOGEGRAMMENI", "ᾴ"},
++	{"GREEK_SMALL_LETTER_ALPHA_WITH_PERISPOMENI", "ᾶ"},
++	{"GREEK_SMALL_LETTER_ALPHA_WITH_PERISPOMENI_AND_YPOGEGRAMMENI", "ᾷ"},
++	{"GREEK_SMALL_LETTER_ALPHA_WITH_PSILI", "ἀ"},
++	{"GREEK_SMALL_LETTER_ALPHA_WITH_PSILI_AND_OXIA", "ἄ"},
++	{"GREEK_SMALL_LETTER_ALPHA_WITH_PSILI_AND_OXIA_AND_YPOGEGRAMMENI", "ᾄ"},
++	{"GREEK_SMALL_LETTER_ALPHA_WITH_PSILI_AND_PERISPOMENI", "ἆ"},
++	{"GREEK_SMALL_LETTER_ALPHA_WITH_PSILI_AND_PERISPOMENI_AND_YPOGEGRAMMENI", "ᾆ"},
++	{"GREEK_SMALL_LETTER_ALPHA_WITH_PSILI_AND_VARIA", "ἂ"},
++	{"GREEK_SMALL_LETTER_ALPHA_WITH_PSILI_AND_VARIA_AND_YPOGEGRAMMENI", "ᾂ"},
++	{"GREEK_SMALL_LETTER_ALPHA_WITH_PSILI_AND_YPOGEGRAMMENI", "ᾀ"},
++	{"GREEK_SMALL_LETTER_ALPHA_WITH_TONOS", "ά"},
++	{"GREEK_SMALL_LETTER_ALPHA_WITH_VARIA", "ὰ"},
++	{"GREEK_SMALL_LETTER_ALPHA_WITH_VARIA_AND_YPOGEGRAMMENI", "ᾲ"},
++	{"GREEK_SMALL_LETTER_ALPHA_WITH_VRACHY", "ᾰ"},
++	{"GREEK_SMALL_LETTER_ALPHA_WITH_YPOGEGRAMMENI", "ᾳ"},
++	{"GREEK_SMALL_LETTER_BETA", "β"},
++	{"GREEK_SMALL_LETTER_EPSILON", "ε"},
++	{"GREEK_SMALL_LETTER_EPSILON_WITH_DASIA", "ἑ"},
++	{"GREEK_SMALL_LETTER_EPSILON_WITH_DASIA_AND_OXIA", "ἕ"},
++	{"GREEK_SMALL_LETTER_EPSILON_WITH_DASIA_AND_VARIA", "ἓ"},
++	{"GREEK_SMALL_LETTER_EPSILON_WITH_PSILI", "ἐ"},
++	{"GREEK_SMALL_LETTER_EPSILON_WITH_PSILI_AND_OXIA", "ἔ"},
++	{"GREEK_SMALL_LETTER_EPSILON_WITH_PSILI_AND_VARIA", "ἒ"},
++	{"GREEK_SMALL_LETTER_EPSILON_WITH_TONOS", "έ"},
++	{"GREEK_SMALL_LETTER_EPSILON_WITH_VARIA", "ὲ"},
++	{"GREEK_SMALL_LETTER_ETA", "η"},
++	{"GREEK_SMALL_LETTER_ETA_WITH_DASIA", "ἡ"},
++	{"GREEK_SMALL_LETTER_ETA_WITH_DASIA_AND_OXIA", "ἥ"},
++	{"GREEK_SMALL_LETTER_ETA_WITH_DASIA_AND_OXIA_AND_YPOGEGRAMMENI", "ᾕ"},
++	{"GREEK_SMALL_LETTER_ETA_WITH_DASIA_AND_PERISPOMENI", "ἧ"},
++	{"GREEK_SMALL_LETTER_ETA_WITH_DASIA_AND_PERISPOMENI_AND_YPOGEGRAMMENI", "ᾗ"},
++	{"GREEK_SMALL_LETTER_ETA_WITH_DASIA_AND_VARIA", "ἣ"},
++	{"GREEK_SMALL_LETTER_ETA_WITH_DASIA_AND_VARIA_AND_YPOGEGRAMMENI", "ᾓ"},
++	{"GREEK_SMALL_LETTER_ETA_WITH_DASIA_AND_YPOGEGRAMMENI", "ᾑ"},
++	{"GREEK_SMALL_LETTER_ETA_WITH_OXIA_AND_YPOGEGRAMMENI", "ῄ"},
++	{"GREEK_SMALL_LETTER_ETA_WITH_PERISPOMENI", "ῆ"},
++	{"GREEK_SMALL_LETTER_ETA_WITH_PERISPOMENI_AND_YPOGEGRAMMENI", "ῇ"},
++	{"GREEK_SMALL_LETTER_ETA_WITH_PSILI", "ἠ"},
++	{"GREEK_SMALL_LETTER_ETA_WITH_PSILI_AND_OXIA", "ἤ"},
++	{"GREEK_SMALL_LETTER_ETA_WITH_PSILI_AND_OXIA_AND_YPOGEGRAMMENI", "ᾔ"},
++	{"GREEK_SMALL_LETTER_ETA_WITH_PSILI_AND_PERISPOMENI", "ἦ"},
++	{"GREEK_SMALL_LETTER_ETA_WITH_PSILI_AND_PERISPOMENI_AND_YPOGEGRAMMENI", "ᾖ"},
++	{"GREEK_SMALL_LETTER_ETA_WITH_PSILI_AND_VARIA", "ἢ"},
++	{"GREEK_SMALL_LETTER_ETA_WITH_PSILI_AND_VARIA_AND_YPOGEGRAMMENI", "ᾒ"},
++	{"GREEK_SMALL_LETTER_ETA_WITH_PSILI_AND_YPOGEGRAMMENI", "ᾐ"},
++	{"GREEK_SMALL_LETTER_ETA_WITH_TONOS", "ή"},
++	{"GREEK_SMALL_LETTER_ETA_WITH_VARIA", "ὴ"},
++	{"GREEK_SMALL_LETTER_ETA_WITH_VARIA_AND_YPOGEGRAMMENI", "ῂ"},
++	{"GREEK_SMALL_LETTER_ETA_WITH_YPOGEGRAMMENI", "ῃ"},
++	{"GREEK_SMALL_LETTER_GAMMA", "γ"},
++	{"GREEK_SMALL_LETTER_IOTA", "ι"},
++	{"GREEK_SMALL_LETTER_IOTA_WITH_DASIA", "ἱ"},
++	{"GREEK_SMALL_LETTER_IOTA_WITH_DASIA_AND_OXIA", "ἵ"},
++	{"GREEK_SMALL_LETTER_IOTA_WITH_DASIA_AND_PERISPOMENI", "ἷ"},
++	{"GREEK_SMALL_LETTER_IOTA_WITH_DASIA_AND_VARIA", "ἳ"},
++	{"GREEK_SMALL_LETTER_IOTA_WITH_DIALYTIKA", "ϊ"},
++	{"GREEK_SMALL_LETTER_IOTA_WITH_DIALYTIKA_AND_PERISPOMENI", "ῗ"},
++	{"GREEK_SMALL_LETTER_IOTA_WITH_DIALYTIKA_AND_TONOS", "ΐ"},
++	{"GREEK_SMALL_LETTER_IOTA_WITH_DIALYTIKA_AND_VARIA", "ῒ"},
++	{"GREEK_SMALL_LETTER_IOTA_WITH_MACRON", "ῑ"},
++	{"GREEK_SMALL_LETTER_IOTA_WITH_PERISPOMENI", "ῖ"},
++	{"GREEK_SMALL_LETTER_IOTA_WITH_PSILI", "ἰ"},
++	{"GREEK_SMALL_LETTER_IOTA_WITH_PSILI_AND_OXIA", "ἴ"},
++	{"GREEK_SMALL_LETTER_IOTA_WITH_PSILI_AND_PERISPOMENI", "ἶ"},
++	{"GREEK_SMALL_LETTER_IOTA_WITH_PSILI_AND_VARIA", "ἲ"},
++	{"GREEK_SMALL_LETTER_IOTA_WITH_TONOS", "ί"},
++	{"GREEK_SMALL_LETTER_IOTA_WITH_VARIA", "ὶ"},
++	{"GREEK_SMALL_LETTER_IOTA_WITH_VRACHY", "ῐ"},
++	{"GREEK_SMALL_LETTER_KAPPA", "κ"},
++	{"GREEK_SMALL_LETTER_LAMDA", "λ"},
++	{"GREEK_SMALL_LETTER_MU", "μ"},
++	{"GREEK_SMALL_LETTER_NU", "ν"},
++	{"GREEK_SMALL_LETTER_OMEGA", "ω"},
++	{"GREEK_SMALL_LETTER_OMEGA_WITH_DASIA", "ὡ"},
++	{"GREEK_SMALL_LETTER_OMEGA_WITH_DASIA_AND_OXIA", "ὥ"},
++	{"GREEK_SMALL_LETTER_OMEGA_WITH_DASIA_AND_OXIA_AND_YPOGEGRAMMENI", "ᾥ"},
++	{"GREEK_SMALL_LETTER_OMEGA_WITH_DASIA_AND_PERISPOMENI", "ὧ"},
++	{"GREEK_SMALL_LETTER_OMEGA_WITH_DASIA_AND_PERISPOMENI_AND_YPOGEGRAMMENI", "ᾧ"},
++	{"GREEK_SMALL_LETTER_OMEGA_WITH_DASIA_AND_VARIA", "ὣ"},
++	{"GREEK_SMALL_LETTER_OMEGA_WITH_DASIA_AND_VARIA_AND_YPOGEGRAMMENI", "ᾣ"},
++	{"GREEK_SMALL_LETTER_OMEGA_WITH_DASIA_AND_YPOGEGRAMMENI", "ᾡ"},
++	{"GREEK_SMALL_LETTER_OMEGA_WITH_OXIA_AND_YPOGEGRAMMENI", "ῴ"},
++	{"GREEK_SMALL_LETTER_OMEGA_WITH_PERISPOMENI", "ῶ"},
++	{"GREEK_SMALL_LETTER_OMEGA_WITH_PERISPOMENI_AND_YPOGEGRAMMENI", "ῷ"},
++	{"GREEK_SMALL_LETTER_OMEGA_WITH_PSILI", "ὠ"},
++	{"GREEK_SMALL_LETTER_OMEGA_WITH_PSILI_AND_OXIA", "ὤ"},
++	{"GREEK_SMALL_LETTER_OMEGA_WITH_PSILI_AND_OXIA_AND_YPOGEGRAMMENI", "ᾤ"},
++	{"GREEK_SMALL_LETTER_OMEGA_WITH_PSILI_AND_PERISPOMENI", "ὦ"},
++	{"GREEK_SMALL_LETTER_OMEGA_WITH_PSILI_AND_PERISPOMENI_AND_YPOGEGRAMMENI", "ᾦ"},
++	{"GREEK_SMALL_LETTER_OMEGA_WITH_PSILI_AND_VARIA", "ὢ"},
++	{"GREEK_SMALL_LETTER_OMEGA_WITH_PSILI_AND_VARIA_AND_YPOGEGRAMMENI", "ᾢ"},
++	{"GREEK_SMALL_LETTER_OMEGA_WITH_PSILI_AND_YPOGEGRAMMENI", "ᾠ"},
++	{"GREEK_SMALL_LETTER_OMEGA_WITH_TONOS", "ώ"},
++	{"GREEK_SMALL_LETTER_OMEGA_WITH_VARIA", "ὼ"},
++	{"GREEK_SMALL_LETTER_OMEGA_WITH_VARIA_AND_YPOGEGRAMMENI", "ῲ"},
++	{"GREEK_SMALL_LETTER_OMEGA_WITH_YPOGEGRAMMENI", "ῳ"},
++	{"GREEK_SMALL_LETTER_OMICRON", "ο"},
++	{"GREEK_SMALL_LETTER_OMICRON_WITH_DASIA", "ὁ"},
++	{"GREEK_SMALL_LETTER_OMICRON_WITH_DASIA_AND_OXIA", "ὅ"},
++	{"GREEK_SMALL_LETTER_OMICRON_WITH_DASIA_AND_VARIA", "ὃ"},
++	{"GREEK_SMALL_LETTER_OMICRON_WITH_PSILI", "ὀ"},
++	{"GREEK_SMALL_LETTER_OMICRON_WITH_PSILI_AND_OXIA", "ὄ"},
++	{"GREEK_SMALL_LETTER_OMICRON_WITH_PSILI_AND_VARIA", "ὂ"},
++	{"GREEK_SMALL_LETTER_OMICRON_WITH_TONOS", "ό"},
++	{"GREEK_SMALL_LETTER_OMICRON_WITH_VARIA", "ὸ"},
++	{"GREEK_SMALL_LETTER_PI", "π"},
++	{"GREEK_SMALL_LETTER_RHO", "ρ"},
++	{"GREEK_SMALL_LETTER_RHO_WITH_DASIA", "ῥ"},
++	{"GREEK_SMALL_LETTER_RHO_WITH_PSILI", "ῤ"},
++	{"GREEK_SMALL_LETTER_SIGMA", "σ"},
++	{"GREEK_SMALL_LETTER_TAU", "τ"},
++	{"GREEK_SMALL_LETTER_UPSILON", "υ"},
++	{"GREEK_SMALL_LETTER_UPSILON_WITH_DASIA", "ὑ"},
++	{"GREEK_SMALL_LETTER_UPSILON_WITH_DASIA_AND_OXIA", "ὕ"},
++	{"GREEK_SMALL_LETTER_UPSILON_WITH_DASIA_AND_PERISPOMENI", "ὗ"},
++	{"GREEK_SMALL_LETTER_UPSILON_WITH_DASIA_AND_VARIA", "ὓ"},
++	{"GREEK_SMALL_LETTER_UPSILON_WITH_DIALYTIKA", "ϋ"},
++	{"GREEK_SMALL_LETTER_UPSILON_WITH_DIALYTIKA_AND_PERISPOMENI", "ῧ"},
++	{"GREEK_SMALL_LETTER_UPSILON_WITH_DIALYTIKA_AND_TONOS", "ΰ"},
++	{"GREEK_SMALL_LETTER_UPSILON_WITH_DIALYTIKA_AND_VARIA", "ῢ"},
++	{"GREEK_SMALL_LETTER_UPSILON_WITH_MACRON", "ῡ"},
++	{"GREEK_SMALL_LETTER_UPSILON_WITH_PERISPOMENI", "ῦ"},
++	{"GREEK_SMALL_LETTER_UPSILON_WITH_PSILI", "ὐ"},
++	{"GREEK_SMALL_LETTER_UPSILON_WITH_PSILI_AND_OXIA", "ὔ"},
++	{"GREEK_SMALL_LETTER_UPSILON_WITH_PSILI_AND_PERISPOMENI", "ὖ"},
++	{"GREEK_SMALL_LETTER_UPSILON_WITH_PSILI_AND_VARIA", "ὒ"},
++	{"GREEK_SMALL_LETTER_UPSILON_WITH_TONOS", "ύ"},
++	{"GREEK_SMALL_LETTER_UPSILON_WITH_VARIA", "ὺ"},
++	{"GREEK_SMALL_LETTER_UPSILON_WITH_VRACHY", "ῠ"},
++	{"HEBREW_LETTER_ALEF", "‎א‎"},
++	{"HEBREW_LETTER_AYIN", "‎ע‎"},
++	{"HEBREW_LETTER_BET", "‎ב‎"},
++	{"HEBREW_LETTER_DALET", "‎ד‎"},
++	{"HEBREW_LETTER_FINAL_MEM", "‎ם‎"},
++	{"HEBREW_LETTER_FINAL_NUN", "‎ן‎"},
++	{"HEBREW_LETTER_FINAL_TSADI", "‎ץ‎"},
++	{"HEBREW_LETTER_GIMEL", "‎ג‎"},
++	{"HEBREW_LETTER_HE", "‎ה‎"},
++	{"HEBREW_LETTER_HET", "‎ח‎"},
++	{"HEBREW_LETTER_LAMED", "‎ל‎"},
++	{"HEBREW_LETTER_MEM", "‎מ‎"},
++	{"HEBREW_LETTER_NUN", "‎נ‎"},
++	{"HEBREW_LETTER_PE", "‎פ‎"},
++	{"HEBREW_LETTER_QOF", "‎ק‎"},
++	{"HEBREW_LETTER_RESH", "‎ר‎"},
++	{"HEBREW_LETTER_SAMEKH", "‎ס‎"},
++	{"HEBREW_LETTER_SHIN", "‎ש‎"},
++	{"HEBREW_LETTER_TAV", "‎ת‎"},
++	{"HEBREW_LETTER_TET", "‎ט‎"},
++	{"HEBREW_LETTER_TSADI", "‎צ‎"},
++	{"HEBREW_LETTER_VAV", "‎ו‎"},
++	{"HEBREW_LETTER_YOD", "‎י‎"},
++	{"HEBREW_PUNCTUATION_GERESH", "‎׳‎"},
++	{"HEBREW_PUNCTUATION_GERSHAYIM", "‎״‎"},
++	{"HYPHEN-MINUS", "-"},
++	{"LATIN_CAPITAL_LETTER_C_WITH_CARON", "Č"},
++	{"LATIN_CAPITAL_LETTER_C_WITH_CEDILLA", "Ç"},
++	{"LATIN_CAPITAL_LETTER_C_WITH_CEDILLA_AND_ACUTE", "Ḉ"},
++	{"LATIN_CAPITAL_LETTER_R_WITH_CARON", "Ř"},
++	{"LATIN_CAPITAL_LETTER_S_WITH_CARON", "Š"},
++	{"LATIN_CAPITAL_LETTER_S_WITH_CARON_AND_DOT_ABOVE", "Ṧ"},
++	{"LATIN_CAPITAL_LETTER_S_WITH_CEDILLA", "Ş"},
++	{"LATIN_CAPITAL_LETTER_U_WITH_ACUTE", "Ú"},
++	{"LATIN_SMALL_LETTER_A_WITH_ACUTE", "á"},
++	{"LATIN_SMALL_LETTER_A_WITH_BREVE", "ă"},
++	{"LATIN_SMALL_LETTER_A_WITH_BREVE_AND_ACUTE", "ắ"},
++	{"LATIN_SMALL_LETTER_A_WITH_BREVE_AND_DOT_BELOW", "ặ"},
++	{"LATIN_SMALL_LETTER_A_WITH_BREVE_AND_GRAVE", "ằ"},
++	{"LATIN_SMALL_LETTER_A_WITH_BREVE_AND_HOOK_ABOVE", "ẳ"},
++	{"LATIN_SMALL_LETTER_A_WITH_BREVE_AND_TILDE", "ẵ"},
++	{"LATIN_SMALL_LETTER_A_WITH_CIRCUMFLEX", "â"},
++	{"LATIN_SMALL_LETTER_A_WITH_CIRCUMFLEX_AND_ACUTE", "ấ"},
++	{"LATIN_SMALL_LETTER_A_WITH_CIRCUMFLEX_AND_DOT_BELOW", "ậ"},
++	{"LATIN_SMALL_LETTER_A_WITH_CIRCUMFLEX_AND_GRAVE", "ầ"},
++	{"LATIN_SMALL_LETTER_A_WITH_CIRCUMFLEX_AND_HOOK_ABOVE", "ẩ"},
++	{"LATIN_SMALL_LETTER_A_WITH_CIRCUMFLEX_AND_TILDE", "ẫ"},
++	{"LATIN_SMALL_LETTER_A_WITH_DIAERESIS", "ä"},
++	{"LATIN_SMALL_LETTER_A_WITH_DIAERESIS_AND_MACRON", "ǟ"},
++	{"LATIN_SMALL_LETTER_A_WITH_MACRON", "ā"},
++	{"LATIN_SMALL_LETTER_A_WITH_OGONEK", "ą"},
++	{"LATIN_SMALL_LETTER_A_WITH_RING_ABOVE", "å"},
++	{"LATIN_SMALL_LETTER_A_WITH_RING_ABOVE_AND_ACUTE", "ǻ"},
++	{"LATIN_SMALL_LETTER_C_WITH_CARON", "č"},
++	{"LATIN_SMALL_LETTER_C_WITH_CEDILLA", "ç"},
++	{"LATIN_SMALL_LETTER_C_WITH_CEDILLA_AND_ACUTE", "ḉ"},
++	{"LATIN_SMALL_LETTER_DOTLESS_I", "ı"},
++	{"LATIN_SMALL_LETTER_ETH", "ð"},
++	{"LATIN_SMALL_LETTER_E_WITH_ACUTE", "é"},
++	{"LATIN_SMALL_LETTER_E_WITH_CARON", "ě"},
++	{"LATIN_SMALL_LETTER_E_WITH_DOT_ABOVE", "ė"},
++	{"LATIN_SMALL_LETTER_E_WITH_MACRON", "ē"},
++	{"LATIN_SMALL_LETTER_E_WITH_MACRON_AND_ACUTE", "ḗ"},
++	{"LATIN_SMALL_LETTER_E_WITH_MACRON_AND_GRAVE", "ḕ"},
++	{"LATIN_SMALL_LETTER_G_WITH_BREVE", "ğ"},
++	{"LATIN_SMALL_LETTER_I_WITH_ACUTE", "í"},
++	{"LATIN_SMALL_LETTER_I_WITH_GRAVE", "ì"},
++	{"LATIN_SMALL_LETTER_I_WITH_MACRON", "ī"},
++	{"LATIN_SMALL_LETTER_L_WITH_CARON", "ľ"},
++	{"LATIN_SMALL_LETTER_L_WITH_STROKE", "ł"},
++	{"LATIN_SMALL_LETTER_O_WITH_ACUTE", "ó"},
++	{"LATIN_SMALL_LETTER_O_WITH_DIAERESIS", "ö"},
++	{"LATIN_SMALL_LETTER_O_WITH_DIAERESIS_AND_MACRON", "ȫ"},
++	{"LATIN_SMALL_LETTER_O_WITH_DOUBLE_ACUTE", "ő"},
++	{"LATIN_SMALL_LETTER_O_WITH_STROKE", "ø"},
++	{"LATIN_SMALL_LETTER_O_WITH_STROKE_AND_ACUTE", "ǿ"},
++	{"LATIN_SMALL_LETTER_R_WITH_CARON", "ř"},
++	{"LATIN_SMALL_LETTER_S_WITH_ACUTE", "ś"},
++	{"LATIN_SMALL_LETTER_S_WITH_ACUTE_AND_DOT_ABOVE", "ṥ"},
++	{"LATIN_SMALL_LETTER_S_WITH_CARON", "š"},
++	{"LATIN_SMALL_LETTER_S_WITH_CARON_AND_DOT_ABOVE", "ṧ"},
++	{"LATIN_SMALL_LETTER_S_WITH_CEDILLA", "ş"},
++	{"LATIN_SMALL_LETTER_THORN", "þ"},
++	{"LATIN_SMALL_LETTER_THORN_WITH_STROKE", "ꝥ"},
++	{"LATIN_SMALL_LETTER_THORN_WITH_STROKE_THROUGH_DESCENDER", "ꝧ"},
++	{"LATIN_SMALL_LETTER_T_WITH_COMMA_BELOW", "ț"},
++	{"LATIN_SMALL_LETTER_U_WITH_ACUTE", "ú"},
++	{"LATIN_SMALL_LETTER_U_WITH_CIRCUMFLEX", "û"},
++	{"LATIN_SMALL_LETTER_U_WITH_CIRCUMFLEX_BELOW", "ṷ"},
++	{"LATIN_SMALL_LETTER_U_WITH_DIAERESIS", "ü"},
++	{"LATIN_SMALL_LETTER_U_WITH_DIAERESIS_AND_ACUTE", "ǘ"},
++	{"LATIN_SMALL_LETTER_U_WITH_DIAERESIS_AND_CARON", "ǚ"},
++	{"LATIN_SMALL_LETTER_U_WITH_DIAERESIS_AND_GRAVE", "ǜ"},
++	{"LATIN_SMALL_LETTER_U_WITH_DIAERESIS_AND_MACRON", "ǖ"},
++	{"LATIN_SMALL_LETTER_U_WITH_DIAERESIS_BELOW", "ṳ"},
++	{"LATIN_SMALL_LETTER_U_WITH_MACRON", "ū"},
++	{"LATIN_SMALL_LETTER_U_WITH_MACRON_AND_DIAERESIS", "ṻ"},
++	{"LATIN_SMALL_LETTER_Y_WITH_ACUTE", "ý"},
++	{"LATIN_SMALL_LETTER_Z_WITH_ACUTE", "ź"},
++	{"LATIN_SMALL_LETTER_Z_WITH_CARON", "ž"},
++	{"MODIFIER_LETTER_APOSTROPHE", "ʼ"},
++	{"NO-BREAK_SPACE", " "},
++	{"ONE_DOT_LEADER", "․"},
++	{"RIGHT_SINGLE_QUOTATION_MARK", "’"},
++
++	// OJO Por completar
++	{"CJK_UNIFIED_IDEOGRAPH-4E09", ""},
++	{"CJK_UNIFIED_IDEOGRAPH-4E0A", ""},
++	{"CJK_UNIFIED_IDEOGRAPH-4E0B", ""},
++	{"CJK_UNIFIED_IDEOGRAPH-4E8C", ""},
++	{"CJK_UNIFIED_IDEOGRAPH-4E94", ""},
++	{"CJK_UNIFIED_IDEOGRAPH-516D", ""},
++	{"CJK_UNIFIED_IDEOGRAPH-5206", ""},
++	{"CJK_UNIFIED_IDEOGRAPH-524D", ""},
++	{"CJK_UNIFIED_IDEOGRAPH-5348", ""},
++	{"CJK_UNIFIED_IDEOGRAPH-5468", ""},
++	{"CJK_UNIFIED_IDEOGRAPH-56DB", ""},
++	{"CJK_UNIFIED_IDEOGRAPH-571F", ""},
++	{"CJK_UNIFIED_IDEOGRAPH-5E74", ""},
++	{"CJK_UNIFIED_IDEOGRAPH-5F8C", ""},
++	{"CJK_UNIFIED_IDEOGRAPH-65E5", ""},
++	{"CJK_UNIFIED_IDEOGRAPH-65F6", ""},
++	{"CJK_UNIFIED_IDEOGRAPH-661F", ""},
++	{"CJK_UNIFIED_IDEOGRAPH-6642", ""},
++	{"CJK_UNIFIED_IDEOGRAPH-66DC", ""},
++	{"CJK_UNIFIED_IDEOGRAPH-6708", ""},
++	{"CJK_UNIFIED_IDEOGRAPH-671F", ""},
++	{"CJK_UNIFIED_IDEOGRAPH-6728", ""},
++	{"CJK_UNIFIED_IDEOGRAPH-6C34", ""},
++	{"CJK_UNIFIED_IDEOGRAPH-706B", ""},
++	{"CJK_UNIFIED_IDEOGRAPH-79D2", ""},
++	{"CJK_UNIFIED_IDEOGRAPH-9031", ""},
++	{"CJK_UNIFIED_IDEOGRAPH-91D1", ""},
++	{"HANGUL_SYLLABLE_BUN", ""},
++	{"HANGUL_SYLLABLE_CO", ""},
++	{"HANGUL_SYLLABLE_GEUM", ""},
++	{"HANGUL_SYLLABLE_HU", ""},
++	{"HANGUL_SYLLABLE_HWA", ""},
++	{"HANGUL_SYLLABLE_IL", ""},
++	{"HANGUL_SYLLABLE_JEON", ""},
++	{"HANGUL_SYLLABLE_MOG", ""},
++	{"HANGUL_SYLLABLE_NYEON", ""},
++	{"HANGUL_SYLLABLE_O", ""},
++	{"HANGUL_SYLLABLE_SI", ""},
++	{"HANGUL_SYLLABLE_SU", ""},
++	{"HANGUL_SYLLABLE_TO", ""},
++	{"HANGUL_SYLLABLE_WEOL", ""},
++	{"HANGUL_SYLLABLE_YO", ""},
++};
++
++//dic_utf8
++//dic_iso8859-1..
++
++char *search_sym(const char *yytext) {
++	int i;
++	if (strlen(yytext) == 3) {
++		return strxndup(yytext+1, 1);
++	}
++	for(i = 0; i < sizeof(dic) / sizeof(struct sdic); i++) {
++		if ((strlen(dic[i].name) == strlen(yytext) - 2) && 
++		(strncasecmp(yytext + 1, dic[i].name, strlen(yytext) - 2) == 0)) {
++			return strxndup(dic[i].mbc, strlen(dic[i].mbc) + 5); 
++		}
++	}
++	fprintf(stderr, "Symbol not found: \"%s\"\n", yytext);
++	return strxndup(" ", 2);
++}
++
++char comchar[6] = "*";
++char escchar[6] = "\\";
++int yyline = 1;
++
++#define MAX_INCLUDE_DEPTH 10
++YY_BUFFER_STATE include_stack[MAX_INCLUDE_DEPTH];
++int include_stack_ptr = 0;
++
++%}
++
++YYSTYPE yylval;
++esp [ \t\n]
++sesp	{esp}+
++uchar \<[^>]*>
++octchar \\[0-7][0-7][0-7]?
++decchar \\d[0-9][0-9][0-9]?
++hexchar \\x[0-9a-f][0-9a-f]
++char [-a-zA-Z%:.,]
++alpha [a-zA-Z]
++cont [/][\n]
++commentchar comment_char{esp}+[^ ]
++escapechar escape_char{esp}+[^ ]
++
++%%
++
++{sesp}		{ 
++	for (int i=0; yytext[i]; yyline += yytext[i] == '\n' ? 1 : 0, i++); 
++}
++{cont}		{ }
++\"		{ BEGIN(quote); return QUOTE; }
++
++;		{  return SEMIC; }
++
++LC_TIME		{ return LCTIME; }
++END		{ return END; }
++abday		{ return ABDAY; }
++day		{ return DAY; }
++abmon		{ return ABMON; }
++mon		{ return MON; }
++d_fmt		{ return DFMT; }
++t_fmt		{ return TFMT; }
++d_t_fmt		{ return DTFMT; }
++date_fmt	{ return DATEFMT; }
++am_pm		{ return AMPM; }
++t_fmt_ampm	{ return TFMTAMPM; }
++era 		{ return ERA; }
++era_d_fmt	{ return ERADFMT; }
++era_t_fmt	{ return ERATFMT; }
++alt_digits	{ return ALTDIGITS; }
++LC_CTYPE	{ return LCCTYPE; }
++upper 		{ return UPPER; }
++lower 		{ return LOWER; }
++alpha		{ return ALPHA; }
++space		{ return SPACE; }
++cntrl		{ return CNTRL; }
++graph		{ return GRAPH; }
++print		{ return PRINT; }
++punct		{ return PUNCT; }
++digit		{ return DIGIT; }
++xdigit		{ return XDIGIT; }
++blank		{ return BLANK; }
++toupper		{ return TOUPPER; }
++tolower		{ return TOLOWER; }
++LC_COLLATE	{ return LCCOLLATE; }
++collating-symbol { return COLLATINGSYMBOL; }
++order_start 	{ return ORDERSTART; }
++forward		{ return FORWARD; }
++UNDEFINED	{ return UNDEFINED; }
++IGNORE		{ return IGNORE; }
++order_end 	{ return ORDEREND; }
++LC_NUMERIC	{ return LCNUMERIC; }
++decimal_point	{ return DECIMALPOINT; }
++thousands_sep 	{ return THOUSANDSSEP; }
++gruouping	{ return GROUPING; }
++LC_MONETARY	{ return LCMONETARY; }
++int_curr_symbol	{ return INTCURRSYMBOL; }
++currency_symbol	{ return CURRENCYSYMBOL; }
++mon_decimal_point	{ return MONDECIMALPOINT; }
++mon_thousands_sep	{ return MONTHOUSANDSSEP; }
++mon_grouping	{ return MONGROUPING; }
++positive_sign	{ return POSITIVESIGN; }
++negative_sign	{ return NEGATIVESIGN; }
++int_frac_digits	{ return INTFRACDIGITS; }
++frac_digits	{ return FRACDIGITS; }
++p_cs_precedes	{ return PCSPRECEDES; }
++p_sep_by_space	{ return PSEPBYSPACE; }
++n_cs_precedes	{ return NCSPRECEDES; }
++n_sep_by_space	{ return NSEPBYSPACE; }
++p_sign_posn	{ return PSIGNPOSN; }
++n_sign_posn	{ return NSIGNPOSN; }
++int_p_cs_precedes	{ return INTPCSPRECEDES; }
++int_p_sep_by_space	{ return INTPSEPBYSPACE; }
++int_n_cs_precedes	{ return INTNCSPRECEDES; }
++int_n_sep_by_space	{ return INTNSEPBYSPACE; }
++int_p_sign_posn	{ return INTPSIGNPOSN; }
++int_n_sign_posn	{ return INTNSIGNPOSN; }
++LC_MESSAGES	{ return LCMESSAGES; }
++yesstr 		{ return YESSTR; }
++nostr 		{ return NOSTR; }
++yesexpr		{ return YESEXPR; }
++noexpr 		{ return NOEXPR; }
++
++{commentchar} 	{ 
++	comchar[0] = yytext[strlen(yytext) - 1];
++	comchar[1] = 0;
++}
++{escapechar} 	{ 
++	escchar[0] = yytext[strlen(yytext) - 1];
++	escchar[1] = 0;
++}
++
++{char}		{ 
++	yylval.mbc = strxndup(yytext, 5); 
++	return CHAR; 
++}
++{octchar}	{ yylval.mbc = parsechar(yytext+1, "%o"); return CHAR; }
++{decchar}	{ yylval.mbc = parsechar(yytext+2, "%d"); return CHAR; }
++{hexchar}	{ yylval.mbc = parsechar(yytext+2, "%x"); return CHAR; }
++{uchar}		{
++	yylval.mbc = search_sym(yytext);
++	return CHAR;
++}
++.	{
++	//printf("OJO, otro, yytext=%s, yyline=%i\n", yytext, yyline);
++	if (strcmp(yytext, comchar) == 0) {
++		BEGIN(comment);
++	} else {
++		printf("desconocido, yytext=%s, yyline=%i\n", yytext, yyline);
++	}
++}
++
++<quote>\<{alpha}> { 
++	yylval.mbc = strxndup(yytext + 1, 1); 
++	// Supposing POSIX.UTF-8 as running locale, and sources in UTF-8
++	return CHAR;
++}
++<quote>{uchar}	{ 
++	yylval.mbc = search_sym(yytext);
++	return CHAR;
++}
++<quote>{char}	{ yylval.mbc = strxndup(yytext, 5); return CHAR; }
++<quote>{octchar} { yylval.mbc = parsechar(yytext+1, "%o"); return CHAR; }
++<quote>{decchar} { yylval.mbc = parsechar(yytext+2, "%d"); return CHAR; }
++<quote>{hexchar} { yylval.mbc = parsechar(yytext+2, "%x"); return CHAR; }
++<quote>{esp}	{ yylval.mbc = strxndup(yytext, 5); return CHAR; }
++<quote>{cont}	{ }
++<quote>\"	{ BEGIN(INITIAL); return QUOTE; }
++
++
++<comment>\n	{ yyline++; BEGIN(INITIAL); }
++<comment>.	{  }
++
++%%
++
++#if     !defined(yywrap)
++int
++yywrap()
++{
++        return(1);
++}
++#endif
++
+diff -ruN -x *~ -x *orig -x obj* src56-orig/usr.bin/localedef/localedef.1 src/usr.bin/localedef/localedef.1
+--- src56-orig/usr.bin/localedef/localedef.1	Wed Dec 31 19:00:00 1969
++++ src/usr.bin/localedef/localedef.1	Sat Mar  7 09:02:12 2015
+@@ -0,0 +1,69 @@
++.\" adJ
++.\" Public domain according to Colombian Legislation. 
++.\" http://www.pasosdejesus.org/dominio_publico_colombia.html
++.\" 2015. vtamara@pasosdeJesus.org
++.Dd $Mdocdate: March 7 2015 $
++.Dt localedef 1
++.Os
++.Sh NAME
++.Nm localedef
++.Nd generate locale files from POSIX locale definitions
++.Sh SYNOPSIS
++.Nm
++.Op Fl c
++.Op Fl f Ar charmap
++.Op Fl i Ar inputfile
++.Op Fl u Ar code_set_name
++.Ar name
++.Sh DESCRIPTION
++The
++.Nm
++utility transforms a POSIX locale definition to the locale files used
++by adJ.
++If no sourcefile is given,
++.Nm
++reads from the standard input,
++and generates the locale specified with argument
++.Ar name
++.Pp
++Input file must be in the POSIX localedef format.
++.Nm
++writes
++to the system locale specified as argument
++.Ar name
++or if 
++.Ar name
++is path to a directory it writes locale files in that directory.
++.Pp
++The options are as follows:
++.Bl -tag -width Ds
++.It Fl c
++writes output files even if there are warnings
++.It Fl f Ar "charmap"
++Specifies files with mapping of character symbols and collating element 
++symbols to actual character encodings. If not specified the character 
++mapping is the standard Unicode in encoding UTF-8.
++.It Fl i Ar "inputfile"
++Path to file in POSIX locale definition format
++.It Fl u Ar "code_set_name"
++codeset used as target mapping of character symbols and collating element symbols.
++.El
++.Sh EXIT STATUS
++.Ex -std localedef
++.Pp
++.Sh STANDARDS
++The
++.Nm
++utility is compliant with the
++.St -p1003.1-2008
++specification.
++.Pp
++Supports an extension borrowed from Illumos in the input file in the section LC_TIME:
++.Pp
++.Ic date_fmt 
++that allows to specify format for the utility 
++.Nm date
++.
++.Sh AUTHORS
++.An -nosplit
++.An Vladimir Tamara vtamara@pasosdeJesus.org
+diff -ruN -x *~ -x *orig -x obj* src56-orig/usr.bin/localedef/localedef.c src/usr.bin/localedef/localedef.c
+--- src56-orig/usr.bin/localedef/localedef.c	Wed Dec 31 19:00:00 1969
++++ src/usr.bin/localedef/localedef.c	Sat Mar  7 07:35:30 2015
+@@ -0,0 +1,154 @@
++/**
++ * Public domain according to Colombian Legislation. 
++ * http://www.pasosdejesus.org/dominio_publico_colombia.html
++ * 2014. vtamara@pasosdeJesus.org
++ *
++ * $adJ$
++ */
++ /* 
++  * Wants to conform:
++  * http://pubs.opengroup.org/onlinepubs/009696699/basedefs/xbd_chap12.html#tag_12_02 
++  *
++  * TODO:
++  *  - Support for complete grammar (see lexer.l)
++  *  - Options -f charmap and -u codeset
++  *
++  * References:
++  *  - sources of systrace and signify in OpenBSD
++  *  - http://www.opensource.apple.com/source/adv_cmds/adv_cmds-149/localedef/localedef.pl
++  *  - https://github.com/illumos/illumos-gate/blob/master/usr/src/cmd/localedef/parser.y
++  **/
++
++#include <sys/localedef.h>
++#include <sys/stat.h>
++
++#include <netinet/in.h>
++
++#include <err.h>
++#include <locale.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <unistd.h>
++
++extern char *__progname;
++
++static void
++usage(const char *error)
++{
++	if (error)
++		fprintf(stderr, "%s\n", error);
++	fprintf(stderr, "usage:"
++	    "\t%1$s -c [-i inputfile] name\n",
++	    __progname);
++	exit(1);
++}
++
++extern int yyparse(void);
++extern FILE *yyin;
++
++_TimeLocale _timelocale;
++
++int
++main(int argc, char **argv)
++{
++	const char *comment = "localedef";
++	int poutput = 0; /* Permanent output even if warnings */
++	char *infile = NULL;
++	FILE * hinfile = NULL;
++	/*char *charmap = NULL;
++	char *codeset = NULL; */
++	FILE *fout = stdout;
++	char nout[FILENAME_MAX] = "-";
++	int ch = 0, i;
++
++	/* To process arguments and some input files use environment */
++	char *nl = setlocale(LC_ALL, "");
++
++	while ((ch = getopt(argc, argv, "ci:")) != -1) {
++		switch (ch) {
++		case 'c':
++			poutput = 1;
++			break;
++		case 'f': /* TODO 
++http://pubs.opengroup.org/onlinepubs/7908799/xbd/charset.html#tag_001_004 
++			charmap = optarg;
++		*/
++			break;
++		case 'i':
++			infile = optarg;
++			break;
++		case 'u':
++			/* TODO 
++http://pubs.opengroup.org/onlinepubs/009696699/utilities/localedef.html
++			codeset = optarg;
++		*/
++			break;
++		default:
++			usage(NULL);
++			break;
++		}
++	}
++	argc -= optind;
++	argv += optind;
++
++	if (argc != 1)
++		usage(NULL);
++
++	if (strchr(argv[0], '/') != NULL) {
++		snprintf(nout, sizeof(nout), "%s", argv[0]);
++		fout = fopen(argv[0], "w");
++	} else if (argv[0][0] != '-' || argv[0][1] != '\0') {
++		snprintf(nout, sizeof(nout), "/usr/share/locale/%s/LC_TIME", 
++				argv[0]);
++		fout = fopen(nout, "w");
++	}
++	if (fout == NULL) {
++		perror(nout);
++		usage("Cannot write to output file");
++		exit(1);
++	}
++	if (infile != NULL) {
++		hinfile = fopen(infile, "r");
++		if (!hinfile) {
++			perror(infile);
++			usage("Cannot read from input file");
++			exit(1);
++		}
++		yyin = hinfile;
++	}
++	_timelocale.date_fmt = NULL;
++
++	/* Use POSIX locale to process input file */
++	nl = setlocale(LC_CTYPE, "POSIX.UTF-8");
++	yyparse();
++
++	/* To write output use encoding specified with file name */
++	for(i = 0; i < 7; i++)
++		fprintf(fout, "%s\n", _timelocale.abday[i]);
++	for(i = 0; i < 7; i++)
++		fprintf(fout, "%s\n", _timelocale.day[i]);
++	for(i = 0; i < 12; i++)
++		fprintf(fout, "%s\n", _timelocale.abmon[i]);
++	for(i = 0; i < 12; i++)
++		fprintf(fout, "%s\n", _timelocale.mon[i]);
++	for(i = 0; i < 2; i++)
++		fprintf(fout, "%s\n", _timelocale.am_pm[i]);
++	fprintf(fout, "%s\n", _timelocale.d_t_fmt);
++	fprintf(fout, "%s\n", _timelocale.d_fmt);
++	fprintf(fout, "%s\n", _timelocale.t_fmt);
++	fprintf(fout, "%s\n", _timelocale.t_fmt_ampm);
++	if (_timelocale.date_fmt != NULL) {
++		fprintf(fout, "%s\n", _timelocale.date_fmt);
++	} else {
++		fprintf(fout, "%s\n", _timelocale.d_t_fmt);
++	}
++
++	if (hinfile != NULL) 
++		fclose(hinfile);
++
++	if (fout != stdout) 
++		fclose(fout);
++
++	return 0;
++}
+diff -ruN -x *~ -x *orig -x obj* src56-orig/usr.bin/localedef/parser.y src/usr.bin/localedef/parser.y
+--- src56-orig/usr.bin/localedef/parser.y	Wed Dec 31 19:00:00 1969
++++ src/usr.bin/localedef/parser.y	Sat Mar  7 08:59:35 2015
+@@ -0,0 +1,252 @@
++/**
++ * Grammar for localedef files
++ * Public domain according to Colombian Legislation. 
++ * http://www.pasosdejesus.org/dominio_publico_colombia.html
++ * 2014. vtamara@pasosdeJesus.org
++ *
++ * $adJ$
++ */
++%{
++
++#include <sys/localedef.h>
++#include <stdio.h>
++#include <wchar.h>
++
++#define YYDEBUG 0
++
++int yydebug = YYDEBUG;
++extern int yylex(void);
++extern _TimeLocale _timelocale;
++
++%}
++
++%union {
++	char *mbc;
++	char *mbs;
++}
++
++%token 	<mbc> CHAR
++%type 	<mbs> string
++%type 	<mbs> sletters
++%token END SEMIC QUOTE COPY
++
++%token LCTIME ABDAY DAY ABMON MON DFMT TFMT DTFMT AMPM TFMTAMPM DATEFMT
++%token ERA ERADFMT ERATFMT ALTDIGITS 
++
++%token LCCTYPE UPPER LOWER ALPHA SPACE CNTRL GRAPH PRINT PUNCT 
++%token DIGIT XDIGIT BLANK TOUPPER TOLOWER
++
++%token LCCOLLATE COLLATINGSYMBOL ORDERSTART FORWARD UNDEFINED IGNORE ORDEREND
++
++%token LCNUMERIC DECIMALPOINT THOUSANDSSEP GROUPING 
++
++%token LCMONETARY INTCURRSYMBOL CURRENCYSYMBOL 
++%token MONDECIMALPOINT MONTHOUSANDSSEP MONGROUPING 
++%token POSITIVESIGN NEGATIVESIGN INTFRACDIGITS FRACDIGITS 
++%token PCSPRECEDES PSEPBYSPACE NCSPRECEDES NSEPBYSPACE PSIGNPOSN NSIGNPOSN
++%token INTPCSPRECEDES INTPSEPBYSPACE INTNCSPRECEDES INTNSEPBYSPACE 
++%token INTPSIGNPOSN INTNSIGNPOSN 
++
++%token LCMESSAGES YESSTR NOSTR YESEXPR NOEXPR
++
++
++%%
++
++localedef:
++	 localecat { }
++	| localedef localecat { }
++;
++
++localecat:
++	LCTIME slctime END LCTIME { }
++	| LCCTYPE slctype END LCCTYPE { }
++	| LCCOLLATE any END LCCOLLATE{ }
++	| LCMONETARY any END LCMONETARY{ }
++	| LCNUMERIC any END LCNUMERIC { }
++	| LCMESSAGES any END LCMESSAGES { }
++;
++
++any:
++   | CHAR {}
++   | any CHAR {}
++   | any SEMIC {}
++;
++
++slctime:
++       	/* empty */ 		{ }
++	| slctime abday 	{ }
++	| slctime day 		{ }
++	| slctime abmon 	{ } 
++	| slctime mon 		{ }
++	| slctime dfmt 		{ }
++	| slctime tfmt 		{ }
++	| slctime dtfmt 	{ } 
++	| slctime ampm 		{ }
++	| slctime tfmtampm 	{ }
++	| slctime datefmt  	{ /* extension, not in POSIX */ }
++	| slctime era		{ }
++	| slctime eradfmt	{ }
++	| slctime eratfmt	{ }
++	| slctime altdigits	{ }
++;
++
++abday:
++	ABDAY string SEMIC string SEMIC string SEMIC string SEMIC string 
++		SEMIC string SEMIC string {
++		_timelocale.abday[0] = $2;
++		_timelocale.abday[1] = $4;
++		_timelocale.abday[2] = $6;
++		_timelocale.abday[3] = $8;
++		_timelocale.abday[4] = $10;
++		_timelocale.abday[5] = $12;
++		_timelocale.abday[6] = $14;
++	}
++;
++
++day:
++	DAY string SEMIC string SEMIC string SEMIC string SEMIC string 
++		SEMIC string SEMIC string {
++		_timelocale.day[0] = $2;
++		_timelocale.day[1] = $4;
++		_timelocale.day[2] = $6;
++		_timelocale.day[3] = $8;
++		_timelocale.day[4] = $10;
++		_timelocale.day[5] = $12;
++		_timelocale.day[6] = $14;
++
++	}
++;
++
++abmon:
++     	ABMON string SEMIC string SEMIC string SEMIC string SEMIC string 
++		SEMIC string SEMIC string SEMIC string SEMIC string 
++		SEMIC string SEMIC string SEMIC string {
++		_timelocale.abmon[0] = $2;
++		_timelocale.abmon[1] = $4;
++		_timelocale.abmon[2] = $6;
++		_timelocale.abmon[3] = $8;
++		_timelocale.abmon[4] = $10;
++		_timelocale.abmon[5] = $12;
++		_timelocale.abmon[6] = $14;
++		_timelocale.abmon[7] = $16;
++		_timelocale.abmon[8] = $18;
++		_timelocale.abmon[9] = $20;
++		_timelocale.abmon[10] = $22;
++		_timelocale.abmon[11] = $24;
++	}
++;
++
++mon:	MON string SEMIC string SEMIC string SEMIC string SEMIC string 
++		SEMIC string SEMIC string SEMIC string SEMIC string 
++		SEMIC string SEMIC string SEMIC string {
++		_timelocale.mon[0] = $2;
++		_timelocale.mon[1] = $4;
++		_timelocale.mon[2] = $6;
++		_timelocale.mon[3] = $8;
++		_timelocale.mon[4] = $10;
++		_timelocale.mon[5] = $12;
++		_timelocale.mon[6] = $14;
++		_timelocale.mon[7] = $16;
++		_timelocale.mon[8] = $18;
++		_timelocale.mon[9] = $20;
++		_timelocale.mon[10] = $22;
++		_timelocale.mon[11] = $24;
++	}
++;
++
++ampm:	
++    	AMPM string SEMIC string {
++		_timelocale.am_pm[0] = $2;
++		_timelocale.am_pm[1] = $4;
++	}
++;
++
++dtfmt:
++	DTFMT string {
++		_timelocale.d_t_fmt = $2;
++	}
++;
++
++dfmt:
++    	DFMT string {
++		_timelocale.d_fmt = $2;
++	}
++;
++
++tfmt:
++	TFMT string {
++		_timelocale.t_fmt = $2;
++	}
++;
++
++tfmtampm:
++	TFMTAMPM string {
++		_timelocale.t_fmt_ampm = $2;
++	}
++;
++
++datefmt:
++	DATEFMT string { /* Extension like in Illumos */
++		_timelocale.date_fmt = $2;
++	}
++;
++
++era:
++   	ERA strings	{ }
++;
++
++eradfmt:
++   	ERADFMT string	{ }
++;
++
++eratfmt:
++   	ERATFMT string	{ }
++;
++
++altdigits:
++   	ALTDIGITS strings	{ }
++;
++
++slctype:
++       	/* empty */ 		{ }
++	| slctype upper		{ }
++;
++
++upper:
++     	UPPER seqchars 		{ }
++;
++
++seqchars:
++	 CHAR			{ }
++	| seqchars SEMIC CHAR	{ }
++;
++
++string: QUOTE sletters QUOTE
++	{
++ 		$$ = $2; 
++	}
++;
++
++sletters: { 
++       		$$ = NULL; 
++	}
++       	| sletters CHAR { 
++		if ($1 != NULL) {
++			$1 = realloc($1, strlen($1) + strlen($2) + 1);
++			strlcat($1, $2, strlen($1) + strlen($2) + 1);
++			$$ = $1;
++		} else {
++			$$ = $2;
++		}
++	}
++;
++
++strings:
++       	strings SEMIC string 	{ }
++	| string		{ }
++%%
++
++void yyerror(char *s) {
++	fprintf(stderr, "Parsing Error: %s\n", s);
++}
++

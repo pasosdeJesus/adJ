@@ -4,6 +4,7 @@
 COMMENT=	"worksheets for learning to write with cursive font"
 
 V=		1.0
+REVISION=0
 DISTNAME=	NombresCursiva-${V}
 CATEGORIES=    	education
 
