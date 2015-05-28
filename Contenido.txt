@@ -188,6 +188,7 @@ w3m-[v]		Navegador modo texto que soporta UTF-8 y colores
 * Soporte, librerías y desarrollo
 a2ps-[v]		Para imprimir en impresoras PostScript
 aalib-[v]		Librería de arte ASCII
+adwaita-icon-theme-[v]  
 aspell-[v]	Chequeador de ortografía
 aspell-es-[v]	Diccionario en español para aspell
 at-spi2-atk-[v] 	Puente atk para at-spi2
@@ -253,11 +254,13 @@ GeoIP-[v]		Base de datos de paises de IPs
 gettext-[v]	Internacionalización
 ggrep-[v]		Versión del programa de reconocimiento de patrones grep
 geoclue-[v]	Servicio modular de geoinformación sobre D-Bus
+geoclue2-[v]	
 geos-[v]		Motor de geometría y topología bidimensional
 giblib-[v]		Librería de utilidades
 giflib-[v]		Librería y herramientas para operar gráficos GIF
 ghostscript-[v]	Genera PostScript
 ghostscript-fonts-[v]	Fuentes para GhostScript
+glew-[v]		
 glib2-[v]		Más rutinas
 glib2-networking-[v]	Más rutinas
 glib2mm-[v]		Interfaz en C++ para glib2
@@ -313,6 +316,7 @@ jbigkit-[v]		Librería para compresión de imágenes sin perdidas
 jbig2dec-[v]		Decodificador para formato comprimido monocromo JBIG2
 jpeg-[v]			Utilidades de compresión JPEG
 json-c-[v]  		Implementación de JSON en C
+json-glib-[v]  		
 lame-[v]		Codificador de MP3
 lapack-[v]		Librería de subrutinas de álgebra lineal
 latex-mk-[v]	Segmentos de Makefiles para manejar documentos LaTeX
@@ -408,6 +412,7 @@ libxml-[v]		Librería para reconocimiento de XML
 libxslt-[v]	Librería para transformaciones XSL en C
 libyaml-[v]		Reconocedor y emisor de YAML 1.1 escrito en C
 libyajl-[v]		Pequeña librería JSON escrita en ANSI C
+lz4-[v]
 lzo2-[v]		Libería de compresión portable
 meanwhile-[v]	Implementación del protocolo Lotus Sametime Community
 mowgli-[v]		Extensión a C orientada a usabilidad y desempeño
@@ -419,6 +424,7 @@ neon-[v]		Librería cliente de HTTP y WebDAV, con interfaz en C
 netpbm-[v]		Convierte imágenes entre diversos formatos
 net-snmp-[v]	Implementación de SNMP extensible
 node-[v]		JavaScript V8 para clientes y servidores
+npth-[v]
 nspr-[v]		Herramientas para ejecución de netscape
 nss-[v]		Desarrollo de aplicaciones con protocolos seguros
 opencdk-[v]		Librería de criptografía
@@ -441,31 +447,44 @@ p5-Crypt-OpenSSL-RSA-[v]	Codificación y decodificación RSA con OpenSSL
 p5-Crypt-SSLeay-[v]	Librería que provee soport https LWP con OpenSSL
 p5-DateManip-[v]	Manipulación de fechas en perl
 p5-DBI-[v]		Interfaz unificada para acceso a bases de datos
-p5-DBD-mysql-[v]	Controladores MySQL para perl
 p5-Digest-SHA1-[v]	Módulo para calcular condensado SHA1
 p5-Digest-HMAC-[v]	Interfaz para los algoritmos HMAC
 p5-Encode-Detect-[v]	Detecta codificación de datos
+p5-Encode-Locale-[v]
 p5-Error-[v]	Manejo de errores al estilo objetos
+p5-File-Listing-[v]
 p5-FreezeThaw-[v]	Convierte estructuras a cadena y viceversa
 p5-Geography-Countries-[v]	Códigos para países
 p5-Geo-IP-[v]	Busca pais de una IP
 p5-HTML-Tagset-[v]	Tablas de datos útiles para reconocer HTML	
 p5-HTML-Parser-[v]	Reconoce y extrae información de HTML	
-p5-HTTP-GHTTP-[v]	Interfaz para GNOME GHTTP	
+p5-HTTP-Cookies-[v]	
+p5-HTTP-Daemon-[v]	
+p5-HTTP-Date-[v]	
+p5-HTTP-HTTP-[v]	Interfaz para GNOME GHTTP	
+p5-HTTP-Message-[v]
+p5-HTTP-Negotiate-[v]
+p5-IO-HTML-[v]	Interfaz para objetos AF_INET y AF_INET6
 p5-IO-Socket-INET6-[v]	Interfaz para objetos AF_INET y AF_INET6
 p5-IO-Socket-IP-[v]	Socket IP que soporta IPv4 e IPv6
 p5-IO-Socket-SSL-[v]	Interfaz para sockets SSL	
 p5-IP-Country-[v]	Para buscar códigos de paises por dirección IP
 p5-libwww-[v]	Librería de acceso WWW
+p5-LWP-Protocol-https-[v]	
+p5-LWP-MediaTypes-[v]	
 p5-Mail-SPF-[v]	Implementación OO de Sender Policy Framerwork
 p5-Mail-Tools-[v]	Módulo para manejar correo con Perl
 p5-Mail-DKIM-[v]	Implementación de firmas DKIM y DomainKeys
 p5-MLDBM-[v]		Almacena estrucutra de hash multi nivel en uno solo
+p5-Mozilla-CA-Fake-[v]
 p5-NetAddr-IP-[v]	Maneja direcciones y subredes IPv4 e IPv6
 p5-Net-CIDR-Lite-[v]	Extensión para mezclar direcciones IPv4 e IPv6
 p5-Net-Daemon-[v]	Extensión para servicios portables
 p5-Net-DNS-[v]		Interfaz al resolvedor DNS	
 p5-Net-DNS-Resolver-Programmable-[v]	Emulación fuera de línea de resolvedor	
+p5-Net-HTTP-[v]
+p5-Net-LWP-MediaTypes-[v]
+p5-Net-LWP-Protocol-https-[v]
 p5-Net-Patricia-[v]	Tries Patricia para ubicar IPs rapidamente
 p5-Net-SSLeay-[v]	Módulo para usar OpenSSL	
 p5-Params-Util-[v]	Facilita revisión de parámetros	
@@ -480,6 +499,7 @@ p5-XML-NamespaceSupport-[v]	Interfaz a clase SAX2 NamespaceSupport
 p5-XML-Parser-[v]	Módulo perl para reconocer documentos XML
 p5-XML-SAX-[v]	Interfaz al reconocedor SAX2 de XML
 p5-YAML-Syck-[v]	YAML y JSON para perl opmtimizado en C
+p5-WWW-RobotRules-[v]
 p7zip-[v]		Archivador con alta rata de compresión
 pango-[v]		Organización y presentación de texto
 pangomm-[v]	Interfaz en C++ para pango
@@ -542,11 +562,14 @@ py-libxslt-[v]	Uniones de Python con libxslt
 py-lxml-[v]		Uniones en Python para libxml2 y libxslt
 py-numpy-[v]	Librearía numérica y de arreglos rápida en Python
 py-Pillow-[v]		Librería en python para imágenes
+py-psycopg2-[v]
 py-qt4-[v]		Uniones de Python con Qt4
+py-qscintilla-[v]
 py-setuptools-[v]	Sistema de empaquetamiento de módulos Python
 py-sip-[v]		Uniones entre python y C generadas automaticamente
 python-tkinter-[v]	Módulo para interfaces gráficas en Python
 qpdf-[v]    		Utilidad para inspeccionar y transformar PDF
+qscintilla-[v]
 qt4-[v]		Juego de herramientas en C++ para GUI en X11
 qwt-[v]		Widgets Qt para acplicaciones téncicas
 raptor-[v]		Herramientas para reconocer RDF usadas por redland
@@ -569,6 +592,7 @@ smarty-[v]		Motor de plantillas en PHP
 sound-theme-freedesktop-[v] 	Tema de sonido XDG
 soundtouch-[v]	Librería para procesamiento de tempo/tono
 spandsp-[v]	Librería de PDS (DPS) para telefonía
+spatialindex-[v]
 speex-[v]		Codec para voz libre de patentes
 t1lib-[v]		Librería para presentación de fuentes tipo 1
 t1utils-[v]		Utilidades para fuentes PostScript tipo 1
@@ -588,6 +612,7 @@ webkit-gtk3-[v]	Interfaz para GTK+3
 wv-[v]		Convierte de varios formatos Microsoft a HTML
 wxWidgets-gtk2-[v]	Herramientas para GUIs multi-plataforma
 Xaw3d-[v]		Componentes gráficos 3D Athena similares a Motif
+x265-[v]
 x264-[v]		Codificador abierto h264/avc
 xcdroast-[v]	Quemador de CD
 xdg-utils-[v]	Asisten integración de tareas de escritorio
