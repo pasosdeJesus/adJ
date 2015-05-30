@@ -372,7 +372,7 @@ function insacp {
 		opbor="-I -r -D update -D updatedepends"
 	} fi;
 
-	pkg_add $opbor $PKG_PATH/$n-[0-9]*.*.tgz >> /var/tmp/inst-adJ.bitacora 2>&1
+	pkg_add $opbor $PKG_PATH/$n-*.tgz >> /var/tmp/inst-adJ.bitacora 2>&1
 	if (test "$popc" != "") then {
 		pkg_add $opbor $PKG_PATH/${popc}*.tgz >> /var/tmp/inst-adJ.bitacora 2>&1
 	} fi;
@@ -1014,6 +1014,8 @@ if  (test "$vac" != "") then {
 } fi;
 
 cd /etc && /usr/local/adJ/servicio-etc.sh >> /var/tmp/inst-adJ.bitacora 2>&1
+cap_mkdb /etc/login.conf
+cap_mkdb /etc/master.passwd
 
 if (test ! -f /var/log/servicio) then {
 	if (test -f /var/log/daemon) then {
@@ -1041,8 +1043,22 @@ a
 w
 q
 EOF
-} 
-else {
+} else {
+	echo "   Saltando..." >>  /var/tmp/inst-adJ.bitacora;
+} fi;
+grep "\. /etc/rc.conf.local" /etc/rc.local > /dev/null 2> /dev/null
+if (test "$?" != "0") then {
+	ed /etc/rc.local >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+/. .etc.rc.conf
+a
+if (test -f /etc/rc.conf.local) then {
+	. /etc/rc.conf.local
+} fi;
+.
+w
+q
+EOF
+} else {
 	echo "   Saltando..." >>  /var/tmp/inst-adJ.bitacora;
 } fi;
 
@@ -1613,6 +1629,26 @@ if (test "$?" != "0") then {
 	insacp tiff
 	insacp curl
 	insacp png
+	insacp opus
+	insacp x264
+	insacp lcms2
+	insacp openjp2
+	insacp giflib
+	insacp imlib2
+	insacp geos
+	insacp proj
+	insacp libspatialite
+	insacp libgeotiff
+	insacp jasper
+	insacp libidn
+	insacp libffi
+	insacp tcl
+	insacp tk
+	insacp python
+	insacp pcre
+	insacp json-c
+	insacp bzip2
+	insacp py-setuptools
 	insacp gdal 
 	insacp postgis
 	grep "^postgresql:" /etc/login.conf > /dev/null 2>&1
@@ -1640,6 +1676,7 @@ postgresql:\
 		chmod +x /tmp/cu.sh
 		cat /tmp/cu.sh >> /var/tmp/inst-adJ.bitacora
 		echo "Preparado PostgreSQL" >> /var/tmp/inst-adJ.bitacora
+		rm -rf /var/postgresql/data
 		su - _postgresql /tmp/cu.sh >> /var/tmp/inst-adJ.bitacora;
 		echo "---" >> /var/tmp/inst-adJ.bitacora;
 	} fi;
@@ -1878,6 +1915,13 @@ q
 EOF
 	} else {
 		insacp php-fpm
+	ed /etc/php-fpm.conf >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+,s/; listen.owner = www/listen.owner = www/g
+w
+,s/; listen.group = www/listen.group = www/g
+w
+q
+EOF
 		activarcs php_fpm
 		grep "^ *location .*php" /etc/nginx/nginx.conf > /dev/null 2>&1
 		if (test "$?" != "0") then {
@@ -2177,11 +2221,11 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
         [end]
 [end]
 [submenu] (Oficina)
-	[exec] (abiword) {/usr/local/bin/abiword}
+	[exec] (abiword) {LC_MESSAGES=C /usr/local/bin/abiword}
 	[exec] (dia) {/usr/local/bin/dia}
-	[exec] (gnumeric) {/usr/local/bin/gnumeric}
+	[exec] (gnumeric) {LC_CTYPE=C /usr/local/bin/gnumeric}
 	[exec] (gv) {gv}
-	[exec] (gimp) {gimp}
+	[exec] (gimp) {LC_CTYPE=C /usr/local/bin/gimp}
 	[exec] (inkscape) {inkscape}
 	[exec] (LibreOffice) {/usr/local/bin/soffice}
 	[exec] (scribus) {scribus}
@@ -2481,17 +2525,18 @@ for i in ruby19-railties-3.1.3 ruby19-actionmailer-3.1.3 \
 	sudo pkg_delete -I -D dependencies $i >> /var/tmp/inst-adJ.bitacora 2>&1
 done
 
-echo "* Configurar ruby-2.1" >> /var/tmp/inst-adJ.bitacora;
-if (test ! -f "/usr/local/bin/ruby") then {
+echo "* Configurar ruby-2.2" >> /var/tmp/inst-adJ.bitacora;
+if (test ! -f "/usr/local/bin/ruby22") then {
 	insacp ruby
-	ln -sf /usr/local/bin/ruby21 /usr/local/bin/ruby
-	ln -sf /usr/local/bin/erb21 /usr/local/bin/erb
-	ln -sf /usr/local/bin/irb21 /usr/local/bin/irb
-	ln -sf /usr/local/bin/rdoc21 /usr/local/bin/rdoc
-	ln -sf /usr/local/bin/ri21 /usr/local/bin/ri
-	ln -sf /usr/local/bin/rake21 /usr/local/bin/rake
-	ln -sf /usr/local/bin/gem21 /usr/local/bin/gem
-	ln -sf /usr/local/bin/testrb21 /usr/local/bin/testrb
+	ln -sf /usr/local/bin/ruby22 /usr/local/bin/ruby
+	ln -sf /usr/local/bin/erb22 /usr/local/bin/erb
+	ln -sf /usr/local/bin/irb22 /usr/local/bin/irb
+	ln -sf /usr/local/bin/rdoc22 /usr/local/bin/rdoc
+	ln -sf /usr/local/bin/ri22 /usr/local/bin/ri
+	ln -sf /usr/local/bin/rake22 /usr/local/bin/rake
+	ln -sf /usr/local/bin/gem22 /usr/local/bin/gem
+	ln -sf /usr/local/bin/testrb22 /usr/local/bin/testrb
+	ln -sf /usr/local/bin/bundle22 /usr/local/bin/bundle
 } fi;
 
 if (test ! -f /home/$uadJ/.irbrc) then {
@@ -2712,6 +2757,7 @@ EOF
 } fi;
 if (test ! -f "/home/$uadJ/.vim/after/ftplugin/ruby.vim") then {
 	cat > /home/$uadJ/.vim/after/ftplugin/ruby.vim <<EOF
+set expandtab
 setlocal shiftwidth=2
 setlocal tabstop=2
 EOF

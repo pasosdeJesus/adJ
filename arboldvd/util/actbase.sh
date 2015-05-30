@@ -9,6 +9,7 @@ if (test "$USER" != "root") then {
 	echo "Ejecutar como usuario root"
 	exit 1;
 } fi;
+VCORSP=`echo $VCOR | sed -e "s/\.//g"`
 
 if (test -f "ver.sh") then {
 	. ./ver.sh
@@ -44,21 +45,21 @@ if (test "$mp" != ".mp") then {
 
 nk=${rutak}/bsd${mp}
 echo "Antes de continuar, recomendamos que ejecute util/preact-adJ.sh"
-echo "Presione [ENTER] para instalar kernel $nk"
+echo "Presione [ENTER] para preparar primer arranque tras actualizacion"
 read
 echo "(cd /dev; ./MAKEDEV all)" >/etc/rc.firsttime
-if (test "$V" = "5.5") then {
+if (test "$VCORSP" -lt "55" ) then {
 	eusr=`df -kP /usr | awk '{ print $2; }' | tail -n 1`
 	if (test "$eusr" -lt "200000") then {
 		echo "Debe haber al menos 200M disponibles en /usr";
 		exit 1;
 	} fi;
 	if (test "${HOME}" != "/root") then {
-		echo "Para actualizar a 5.5 debe ejecutar como root y no con sudo";
+		echo "Para actualizar desde 5.4 o anteriores debe ejecutar como root y no con sudo";
 		exit 1;
 	} fi;
 	dd=`sysctl hw.disknames | sed -e "s/.*=sd0.*/sd0/g;s/.*wd0.*/wd0/g;s/.*sd0.*/sd0/g"`
-	echo "Esta operacion para actualizar a adJ 5.5 no es recomendable"
+	echo "Esta operacion para actualizar desde 5.4 o anteriores no es recomendable, pero si continua:"
 	echo "1. Saque copias de respaldo en formato portable de bases de datos (bd, mysql, ldapd, OpenLDAP, rrdtool, etc)";
 	echo "2. Elimine todos los paquetes y binarios que no son sistema base";
 	echo "Si continua este script:"
@@ -87,7 +88,9 @@ q
 EOF
 	(cd /usr/mdec; cp boot /boot; ./installboot -v /boot ./biosboot $dd)
 } fi;
-
+echo "/inst-adJ.sh" >>/etc/rc.firsttime    
+echo "Presione [ENTER] para instalar kernel $nk"
+read
 rm /obsd ; ln /bsd /obsd 
 cp $nk /nbsd 
 mv /nbsd /bsd

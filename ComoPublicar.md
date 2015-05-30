@@ -37,11 +37,12 @@ adJ.pasosdeJesus.org:
 6. En adJ.pasosdeJesus.org
 	```
 	hdes/creaiso.sh
-	cp -rf AprendiendoDeJesus-5.6b1-amd64.iso 5.6b1-amd64 /dirftp
+	cp -rf AprendiendoDeJesus-5.6-amd64.iso 5.6-amd64 /dirftp
 	mkdir /dirftp/5.6b1-amd64-extra
 	rsync compdes:/usr/ports/packages/amd64/all/* /dirftp/5.6b1-amd64-extra
 	```
-7. Verificar operación de:
+7. Enviar CD también a github.com como release
+8. Verificar operación de:
   * http://structio.sf.net/guias/
   * http://sivel.sf.net/guias/
   * http://aprendiendo.pasosdeJesus.org
@@ -66,12 +67,18 @@ Pasos importantes para publicar versión mayor
 2. Actualizar SIVeL, evangelios y paquetes propios de adJ.
 3. Actualizar documentación, publicar en Structio, actualizar portes de esta,
    generar y probar paquetes
-4. Generar distribución y pasar a adJ.pasosdeJesus.org análogo a pasos
-   4-6 de versión beta
+4. Generar distribución y pasar a adJ.pasosdeJesus.org y github.com 
+   análogo a pasos 4-7 de versión beta
 5. Actualiza version en reto de P2PU (las 4 primeras tareas) 
    https://p2pu.org/es/groups/openbsd-adj-como-sistema-de-escritorio/
 6. Actualizar Artículo como Noticia en http://aprendiendo.pasosdeJesus.org
-7. Correo a listas: 
+7. Poner Tag en github
+
+	```
+	git tag -a v5.6 -m "Version 5.6"
+	git push origin v5.6
+	```
+8. Correo a listas: 
     openbsd-colombia@googlegroups.com, colibri@listas.el-directorio.org, 
     openbsd-mexico@googlegroups.com, sivel-soporte@lists.sourceforge.net
 
@@ -102,16 +109,11 @@ Pasos importantes para publicar versión mayor
 
 	Bendiciones
 
-8. Publicar en Twitter que retrasnmite a cuenta y página en Facebook. 
+9. Publicar en Twitter que retrasnmite a cuenta y página en Facebook. 
    Si es tambien publicacion de SIVeL en sitio de noticias de SIVeL y Structio.
 
 	Publicado adJ 5.6 sistema operativo para servidores y cortafuegos, 
 	seguro, amigable para cristian@s y en español, ver 
 	http://aprendiendo.pasosdejesus.org/
 
-9. Poner Tag en github
 
-	```
-	git tag -a v5.6 -m "Version 5.6"
-	git push origin v5.6
-	```
