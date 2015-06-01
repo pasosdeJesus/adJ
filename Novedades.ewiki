@@ -3,7 +3,7 @@ Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y que esperamos será la elegida por Jesús durante el Milenio.
 
 Versión: 5.6p1%%%
-Fecha de publicación: 29/Abr/2015
+Fecha de publicación: 2/Jun/2015
 
 !!!NOVEDADES
 
@@ -13,6 +13,7 @@ Con respecto a OpenBSD 5.6 para amd64 y a la edición anterior de este DVD
 !KERNEL Y SISTEMA BASE
 
 * Ahora si nueva utilidad ==localedef== para convertir formatos de fechas y horas en un formato estándar POSIX al formato de OpenBSD.  locale de paises tomado de CLDR de Unicode.
+* Resuelta falla en funciones ==strxfrm== y ==strxfrm_l== que retornaban longitud errada, y que impedian arrancar a gnumeric y gimp con locales con codificación UTF-8.
 * Soporte en la librería de C para presentar fechas, horas, cantidades monetarias, números y ordenamientos alfabéticos (cotejación) con las convenciones de cada país de latinoamérica (y de otros locales soportados por OpenBSD). Opera bien en codificaciones de 8 bits o para español en codificación UTF-8. Buena parte de este soporte, así como el de xlocale se basaron en FreeBSD.  Estas mejoras fueron aportadas a OpenBSD (cotejación desde adJ 5.2, cantidades monetarias y números desde 5.4 y fechas y horas desde 5.5) y se anhela su integración en futuras versiones.    Así en adJ por ejemplo los ordenamientos alfabéticos en !LibreOffice y otros programas son correctos en español (que no ocurre en OpenBSD).
 * Parches de seguridad del sistema base hasta 12.May.2015, que cierran las 13 fallas de seguridad y las 11 de robustez resueltas para fuentes de OpenBSD en http://www.openbsd.org/errata56.html.  Los binarios distribuidos de OpenBSD 5.6 no resuelven estas fallas.
 * Mejora a freetype de sistema base para cerrar CVE-2014-9656 a CVE-2014-9675, estas mejoras fueron implementadas en el repositorio CVS de OpenBSD,  rama !OPENBSD_5_6, pero no fueron publicadas en http://www.openbsd.org/errata56.html
@@ -137,11 +138,10 @@ Lo invitamos a consultar https://github.com/pasosdeJesus/adJ y a enviar sus mejo
 
 !!! FE DE ERRATAS
 
-Cuando se usa locale (por ejemplo con codificación de caracteres UTF-8)
-==gimp==, ==abiword== y ==gnumeric== presentan problemas para arrancar, inicielos así:
+Tanto en OpenBSD como en adJ cuando se usa locale (por ejemplo con 
+codificación de caracteres UTF-8) ==abiword== presenta problemas para 
+arrancar, inicielo así:
 <pre>
-LC_CTYPE=C gimp
-LC_CTYPE=C gnumeric
 LC_MESSAGES=C abiword
 </pre>
 

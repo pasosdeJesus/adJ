@@ -204,7 +204,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/regress/lib/libc/locale
 +	
 +	char a[1000], b[1000], e[1000], f[1000];
 +	size_t sr = 0;
-+	p((sr = strxfrm(NULL, "equis", 0)) == 5);
++	p((sr = strxfrm(NULL, "equis", 0)) > 5);
 +	p(strxfrm(NULL, "", 1000) == 0);
 +	p(strxfrm(a, "", 1000) == 0 && a[0] == '\0');
 +	p(strxfrm(a, "á", 1000) > 0);
