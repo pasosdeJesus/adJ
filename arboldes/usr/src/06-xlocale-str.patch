@@ -312,7 +312,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/lib/libc/string/strxfrm.c s
  
  /*
   * Transform src, storing the result in dst, such that
-@@ -50,13 +52,13 @@
+@@ -50,15 +52,15 @@
   * on the original untransformed strings would return.
   */
  size_t
@@ -326,21 +326,26 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/lib/libc/string/strxfrm.c s
 -	ws = __dup_as_wcs_l(src);
 +	ws = __dup_as_wcs_l(src, l);
  	if (ws != NULL) {
- 		if (n > 0 && dst != NULL) {
- 			if (n > ULONG_MAX / sizeof(wchar_t)) { 
-@@ -69,9 +71,9 @@
- 				goto end;
- 			}
+-		r = wcsxfrm(NULL, ws, 0);
++		r = wcsxfrm_l(NULL, ws, 0, l);
+ 		if (r > ULONG_MAX / sizeof(wchar_t)) { 
+ 			errno = EINVAL;
+ 			goto end;
+@@ -68,10 +70,10 @@
+ 			errno = ENOMEM;
+ 			goto end;
  		}
--		r = wcsxfrm(wd, ws, n);
-+		r = wcsxfrm_l(wd, ws, n, l);
- 		if (n > 0 && dst != NULL) {
--			wcstombs(dst, wd, n);
-+			wcstombs_l(dst, wd, n, l);
+-		wcsxfrm(wd, ws, r + 1);
+-		r = wcstombs(NULL, wd, 0);
++		wcsxfrm_l(wd, ws, r + 1, l);
++		r = wcstombs_l(NULL, wd, 0, l);
+ 		if (n > 0 && dst != NULL && r < n) {
+-			r = wcstombs(dst, wd, n);
++			r = wcstombs_l(dst, wd, n, l);
  		}
+ 		/* if r>=n contents of dst is unspecified */
  	}
- end:
-@@ -83,3 +85,14 @@
+@@ -84,3 +86,14 @@
  	}
  	return r; 
  }
