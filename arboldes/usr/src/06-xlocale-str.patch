@@ -584,7 +584,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/regress/lib/libc/locale/che
 +	char a[1000], b[1000], e[1000], f[1000];
 +	size_t sr = 0;
 +	__collate_print_tables(NULL);
-+	p((sr = strxfrm_l(NULL, "equis", 0, es_CO_UTF_8)) == 5);
++	p((sr = strxfrm_l(NULL, "equis", 0, es_CO_UTF_8)) > 5);
 +	p(strxfrm_l(NULL, "", 1000, es_CO_UTF_8) == 0);
 +	p(strxfrm_l(a, "", 1000, es_CO_UTF_8) == 0 && a[0] == '\0');
 +	p(strxfrm_l(a, "á", 1000, es_CO_UTF_8) > 0);
