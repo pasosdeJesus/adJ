@@ -2,34 +2,31 @@ adJ - Aprendiendo de Jesús.
 Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y que esperamos será la elegida por Jesús durante el Milenio.
 
-Versión: 5.6p1%%%
-Fecha de publicación: 2/Jun/2015
+Versión: 5.7b1%%%
+Fecha de publicación: 2/Ago/2015
 
 !!!NOVEDADES
 
-Con respecto a OpenBSD 5.6 para amd64 y a la edición anterior de este DVD
+Con respecto a OpenBSD 5.7 para amd64 y a la edición anterior de este DVD
 
 
 !KERNEL Y SISTEMA BASE
 
 * Ahora si nueva utilidad ==localedef== para convertir formatos de fechas y horas en un formato estándar POSIX al formato de OpenBSD.  locale de paises tomado de CLDR de Unicode.
-* Resuelta falla en funciones ==strxfrm== y ==strxfrm_l== que retornaban longitud errada, y que impedian arrancar a gnumeric y gimp con locales con codificación UTF-8.
 * Soporte en la librería de C para presentar fechas, horas, cantidades monetarias, números y ordenamientos alfabéticos (cotejación) con las convenciones de cada país de latinoamérica (y de otros locales soportados por OpenBSD). Opera bien en codificaciones de 8 bits o para español en codificación UTF-8. Buena parte de este soporte, así como el de xlocale se basaron en FreeBSD.  Estas mejoras fueron aportadas a OpenBSD (cotejación desde adJ 5.2, cantidades monetarias y números desde 5.4 y fechas y horas desde 5.5) y se anhela su integración en futuras versiones.    Así en adJ por ejemplo los ordenamientos alfabéticos en !LibreOffice y otros programas son correctos en español (que no ocurre en OpenBSD).
-* Parches de seguridad del sistema base hasta 12.May.2015, que cierran las 13 fallas de seguridad y las 11 de robustez resueltas para fuentes de OpenBSD en http://www.openbsd.org/errata56.html.  Los binarios distribuidos de OpenBSD 5.6 no resuelven estas fallas.
-* Mejora a freetype de sistema base para cerrar CVE-2014-9656 a CVE-2014-9675, estas mejoras fueron implementadas en el repositorio CVS de OpenBSD,  rama !OPENBSD_5_6, pero no fueron publicadas en http://www.openbsd.org/errata56.html
+* Parches de seguridad del sistema base hasta x.Ago.2015, que cierran las y fallas de seguridad y las z de robustez resueltas para fuentes de OpenBSD en http://www.openbsd.org/errata57.html.  Los binarios distribuidos de OpenBSD 5.7 no resuelven estas fallas.
 * Retroportados y/o parchados más de 30 paquetes para cerrar fallas de seguridad o emplear xlocale,  ver detalles en sección PAQUETES EXCLUSIVOS DE ADJ.
 * Hemos remplazando `daemon' por `servicio' en buena parte del sistema base (ver por ejemplo ==vmstat -s== o ==less /var/log/servicio== o ==man servicio==).  
 
-Entre las novedades reportadas en las `Notas de publicación de OpenBSD 5.6' destacamos:
-
-* Apache 1.3.29 eliminado de sistema base, ahora incluye un servidor web mínimo httpd cuya operación describimos en: http://structio.sourceforge.net/guias/servidor_OpenBSD/sevidorweb.html#openbsd-httpd .  Apache 1.3 se mantiene como paquete cuya operación y sugerencias para migrar sitios puede ver en http://dhobsd.pasosdejesus.org/index.php?id=apache+openbsd+5.6+y+5.7
-* OpenSMTP remplaza a sendmail com MTA por defecto.  Puede consultar sobre su configuración en http://structio.sourceforge.net/guias/servidor_OpenBSD/servicios-correo.html#opensmtpd
+Entre las novedades reportadas en las `Notas de publicación de OpenBSD 5.7' destacamos:
 
 * Controladores ampliados o mejorados para amd64
-** Vídeo: Mejor suspender/resumir en ==inteldrm== y ==radeondrm==
-** Red: Fibra: nuevo ==qla== que soporta QLogic ISP2100/2200/2300.  Ethernet: nuevo ==brswphy== que soporta Broadcom BCM53xx 10/100/1000TX, nuevo ==axen== que soporta ASIX Electronics AX88179 10/100/Gigabit USB, mejorado ==re== para soportar RTL8168EP/8111EP, RTL8168G/8111G, y RTL8168GU/8111GU. Inalámbrico: mejorados ==zyd==, ==bwi== . Inalámbrico USB: mejorado ==run== para soportar RT3900E y nuevo firmware. USB Serial: ==uscom==. 
-** Discos: ==mpath== mejorado, nuevo ==qlw== que soporta QLogic ISP SCSI HBAs. 
-** Temperatura, sensores y otros:   Nuevo ==upd== que es sensor para UPS. Lector de tarjetas RTS5227 and RTL8402 ==rtsx==
+** Vídeo: 
+** Audio: Mejorado ==azalia== para soportar codecs Realtek ALC885  y dipositivos Bay Trail HD Audio.
+** Red: Fibra:   Ethernet:  Nuevo ==nep== que soporta Sun Neptune 10GB, mejorado ==myx== que soporta yricom Myri-10G PCI Express, mejorado ==msk== para soporta Yukon Prime, Yukon Optima 2, Yukon 88E8079,  y varios EC U y chipsets Supreme; mejorado ==bge== para soportar frames jumbo. Inalámbrico:  Nuevo ==iwm== que soporta dispositivos Intel 7200 IEEE 802.11a/ac/b/g/n; mejorado ==athn== para soprotar Atheros UB94. Inalámbrico USB: 
+** Discos: Mejorado ==ciss== para soportar Arreglos RAIS HP Gen9 Smart, mejorados ==mpi== y ==mfi==, ==mfii== que soportan arreglos RAID.
+** Temperatura, sensores y otros:
+** Otros: USB 3.0 soportado en ==xhci==, varios adaptadores seriales a usb soportados con nuevos ==umcs== y ==uslhcom==; mejorado ==umass== para soportar ARchos 24y Vision. gpio: controlador ==skgpio= para Soekris net6501. Lectores de tarjetas: mejorado ==rtsx== para soportar RTS5227 y RTL8411B. Puentes y Buses PCI: mejorados ==ppb==, ==puc==. Memoria:mejorado ==sdmmc== para soportar memorias SD/MMC de mas de 2G y más tarjetas reconocidas por ==sdhc==
 
 * Mejoras a herramientas de Red
 ** ALTQ eliminado
@@ -54,30 +51,30 @@ Entre las novedades reportadas en las `Notas de publicación de OpenBSD 5.6' des
 
 !PROCESO DE INSTALACIÓN
 
-En adJ es en español, consta de: (a) preparación, (b) instalación/actualización del sistema base y (c) instalación de aplicaciones y entorno.  Por favor vea más detalles en [ Actualiza.md | https://github.com/pasosdeJesus/adJ/blob/ADJ_5_6/Actualiza.md ]
+En adJ es en español, consta de: (a) preparación, (b) instalación/actualización del sistema base y (c) instalación de aplicaciones y entorno.  Por favor vea más detalles en [ Actualiza.md | https://github.com/pasosdeJesus/adJ/blob/ADJ_5_7/Actualiza.md ]
 
 Desde 5.6 el instalador no soporta métodos ftp ni cinta e incluye mejoras para el modo de instalación automático (autoinstall).
 
 !PAQUETES EXCLUSIVOS DE ADJ
 
-Puede ver el listado completo en https://github.com/pasosdeJesus/adJ/blob/master/Contenido.txt a continuación se describen sólo novedades respecto a versión anterior de adJ y OpenBSD 5.6:
+Puede ver el listado completo en https://github.com/pasosdeJesus/adJ/blob/master/Contenido.txt a continuación se describen sólo novedades respecto a versión anterior de adJ y OpenBSD 5.7:
 * SIVeL 1.1.7 y SIVeL 1.2b4.  La versión 1.1.7 seguramente será la última de la serie 1.1.  Es bueno intentar la migración a 1.2b4 siguiendo instrucciones de http://sivel.sourceforge.net/1.2/actualizacion-sivel.html#actualizaciondeunounoaunodos
 * PostgreSQL 9.4.1 con soporte UTF-8 y ordenamientos alfabéticos en español retroportado de OpenBSD-Current. La información queda cifrada cuando así se elije al instalar o actualizar adJ.  Ver detalles de como usar cotejación en http://aprendiendo.pasosdejesus.org/?id=i18n
 * ruby 2.2.2 retroportado de OpenBSD-current y probado con aplicaciones Rails 4.2.1 Ver http://dhobsd.pasosdejesus.org/index.php?id=Ruby+on+Rails+en+OpenBSD .
 * PHP-5.4.39 
-* Para activar soporte de xlocale se ha recompilado los siguientes paquetes que están en portes de OpenBSD 5.6: boost-1.53.0p5, djvulibre, ggrep, glib2, gtar, libidn, libxslt, llvm, qt4, scribus, vlc, wget, wxWidgets-gtk2
-* Para cerrar fallas se han recompilado los siguientes paquetes a partir de portes actualizados de OpenBSD 5.6 (pero no incluidos en binarios de ese sistema): antiword-0.37p0, cups-1.7.4p3, cups-filters-1.0.54p3, curl-7.37.0p1, dbus-1.8.8v0, flac-1.3.0p1, gnutls-3.2.15p0, libcanberra-0.30p1, libpurple-2.10.9p1, libtasn1-4.0p0, libvpx-1.3.0p1, node-0.10.28p2, p5-Mail-!SpamAssassin-3.4.0p4, py-numpy-1.6.0p4, unzip-6.0p5.  Y se han mejorado dependencias y recompilado: sane-backends-1.0.24p2, gtk+2-2.24.24, libspectre-0.2.7p4
+* Para activar soporte de xlocale se ha recompilado los siguientes paquetes que están en portes de OpenBSD 5.7: boost-1.53.0p5, djvulibre, ggrep, glib2, gtar, libidn, libxslt, llvm, qt4, scribus, vlc, wget, wxWidgets-gtk2
+* Para cerrar fallas se han recompilado los siguientes paquetes a partir de portes actualizados de OpenBSD 5.7 (pero no incluidos en binarios de ese sistema): antiword-0.37p0, cups-1.7.4p3, cups-filters-1.0.54p3, curl-7.37.0p1, dbus-1.8.8v0, flac-1.3.0p1, gnutls-3.2.15p0, libcanberra-0.30p1, libpurple-2.10.9p1, libtasn1-4.0p0, libvpx-1.3.0p1, node-0.10.28p2, p5-Mail-!SpamAssassin-3.4.0p4, py-numpy-1.6.0p4, unzip-6.0p5.  Y se han mejorado dependencias y recompilado: sane-backends-1.0.24p2, gtk+2-2.24.24, libspectre-0.2.7p4
 * Se han retroportado otros paquetes de OpenBSD-Current: pear-Validate-0.8.5, bash-4.3.33 que cierra falla shellshock, chromium-40.0.2214.115p0
 * Se incluye el navegador modo texto w3m para remplazar a lynx que salió del sistema base. w3m soporta UTF-8 y colores.
-* Los paquetes exclusivos los encuentra en [http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/5.6-amd64/paquetes] y otras extensiones de PostgreSQL y PHP que no hacen parte de la distribución en [http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/5.6-amd64-paquetes-extra] 
+* Los paquetes exclusivos los encuentra en [http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/5.7-amd64/paquetes] y otras extensiones de PostgreSQL y PHP que no hacen parte de la distribución en [http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/5.7-amd64-paquetes-extra] 
 
 
 !PAQUETES DE OPENBSD
 
-Los paquetes para OpenBSD 5.6 también funcionan sin cambios, resaltamos:
+Los paquetes para OpenBSD 5.7 también funcionan sin cambios, resaltamos:
 * !LibreOffice actualizado a 4.1.6.2, gimp a 2.8.10
 * LLVM/Clang a 3.5.2040228p8 asi como los demás lenguajes de programación
-* Se incluyen en total 517 paquetes, en los repositorios de paquetes para OpenBSD 5.6 hay 8588 disponibles para amd64
+* Se incluyen en total 517 paquetes, en los repositorios de paquetes para OpenBSD 5.7 hay 8588 disponibles para amd64
 
 
 !ESCRITORIO
@@ -103,14 +100,14 @@ Puede descargar imagenes ISO para amd64:
 Si prefiere asumir gastos de manufactura, envío y eventualmente una donación con gusto le enviamos un DVD ([correo de contacto|mailto:info@pasosdeJesus.org]).
 
 Las claves públicas empleadas para firmar digitalmente el CD de instalación y los paquetes se ubican en /etc/signify y deben coincidir con estas:
-* adJ-56-base.pub: ![RWSVRS40bejXKteyPsiqbDWusza8y7Uxxqjyif/PosZ47gWh7sfBEAvY]
-* adJ-56-pkg.pub: ![RWTi21eRU5H2HGAKp+HFNM5a7MoFnKeoiUBeiSUg/gKLqSclZgvVE6Gt]
+* adJ-57-base.pub: ![x]
+* adJ-57-pkg.pub: ![y]
 
 !!!ACTUALIZACIÓN E INSTALACIÓN
 
-Si planea actualizar de una versión anterior de adJ a adJ 5.6
+Si planea actualizar de una versión anterior de adJ a adJ 5.7
 hay un procedimiento mas rápido con rsync (ver
-https://github.com/pasosdeJesus/adJ/blob/ADJ_5_6/Actualiza.md ).
+https://github.com/pasosdeJesus/adJ/blob/ADJ_5_7/Actualiza.md ).
 
 Allí mismo se documentan algunos problemas comunes al actualizar y su solución.
 
