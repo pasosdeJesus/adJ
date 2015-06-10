@@ -3556,8 +3556,8 @@ diff -ruN -x CVS -x obj src55-orig/include/Makefile src/include/Makefile
  	resolv.h rmd160.h search.h setjmp.h sha1.h sha2.h signal.h sndio.h \
  	spawn.h stdbool.h stddef.h stdio.h stdlib.h string.h strings.h struct.h \
  	sysexits.h tar.h tgmath.h time.h ttyent.h tzfile.h unistd.h utime.h \
--	utmp.h vis.h wchar.h wctype.h
-+	utmp.h vis.h wchar.h wctype.h xlocale.h
+-	utmp.h uuid.h vis.h wchar.h wctype.h
++	utmp.h uuid.h vis.h wchar.h wctype.h xlocale.h
  
  FILES+=	link.h link_elf.h
  

@@ -2176,45 +2176,6 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/string/str
  .Sh STANDARDS
  The
  .Fn strcoll
-diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/string/string.3 src53xlocale2/lib/libc/string/string.3
---- src53xlocale1/lib/libc/string/string.3	Mon Mar 25 18:28:29 2013
-+++ src53xlocale2/lib/libc/string/string.3	Fri Apr 12 11:59:35 2013
-@@ -102,6 +102,7 @@
- .Xr strcat 3 ,
- .Xr strchr 3 ,
- .Xr strcmp 3 ,
-+.Xr strcoll 3 ,
- .Xr strcpy 3 ,
- .Xr strcspn 3 ,
- .Xr strerror 3 ,
-@@ -113,7 +114,8 @@
- .Xr strsep 3 ,
- .Xr strspn 3 ,
- .Xr strstr 3 ,
--.Xr strtok 3
-+.Xr strtok 3 ,
-+.Xr strxfrm 3
- .Sh STANDARDS
- The
- .Fn strcat ,
-@@ -121,6 +123,7 @@
- .Fn strchr ,
- .Fn strrchr ,
- .Fn strcmp ,
-+.Fn strcoll ,
- .Fn strncmp ,
- .Fn strcpy ,
- .Fn strncpy ,
-@@ -130,7 +133,8 @@
- .Fn strspn ,
- .Fn strcspn ,
- .Fn strstr ,
--and
- .Fn strtok
-+and
-+.Fn strxfrm
- functions conform to
- .St -ansiC .
 diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/string/strstr.3 src53xlocale2/lib/libc/string/strstr.3
 --- src53xlocale1/lib/libc/string/strstr.3	Mon Mar 25 18:28:29 2013
 +++ src53xlocale2/lib/libc/string/strstr.3	Fri Apr 12 11:57:50 2013

@@ -676,39 +676,23 @@ if (test "$sn" = "s") then {
 	} fi;
 	rm tmp/disponibles*
 
-	paquete databases/sivel sivel sivel 1.2
-	paquete libtasn1
-	exit 1;
 	###
-	# Modificados de 5.6 para mejorar dependencias (que solo fallan en unos sitios)
-	paquete libspectre
-	paquete gtk+2
-	paquete sane-backends
-	paquete cups-filters
+	# Modificados de 5.7 para mejorar dependencias 
 
 	####
-	# Recompilados para cerrar fallas, portes actualizados de OpenBSD 5.6
+	# Recompilados para cerrar fallas, portes actualizados de OpenBSD 5.7
 	# Para que operen bien basta actualizar CVS de /usr/ports 
 	# Los siguientes no deben estar en arboldes/usr/ports/mystuff
 
-	paquete antiword
-	paquete cups
 	paquete curl
-	#paquete db paquetes "db" v4
-	paquete dbus
-	paquete flac
-	paquete gnupg
 	paquete gnutls
-	paquete libcanberra
-	paquete libvpx
-	paquete node
-	paquete nss
+	paquete icu4c
+	paquete libtasn1
+	paquete net-snmp
 	paquete p5-Mail-SpamAssassin
-	paquete py-numpy
-	paquete pidgin paquetes "pidgin libpurple"
+	paquete rrdtool
 	paquete samba
-	paquete unzip
-	paquete webkit paquetes "webkit webkit-gtk3"
+	#paquete webkit paquetes "webkit webkit-gtk3"
 	# FLAVOR=gtk3 make paquete webkit-gtk3
 
 	####
@@ -722,32 +706,28 @@ if (test "$sn" = "s") then {
 	paquete libidn
 	paquete libxslt
 	paquete llvm
-	#paquete pulseaudio Problema compilando
+	paquete pulseaudio 
 	paquete qt4
 	paquete scribus
 	paquete vlc
 	paquete wget
 	paquete wxWidgets-gtk2
-	
 
 	####
-	# Tomados de portes de OpenBSD 5.6 pero mejorados para adJ
+	# Tomados de portes de OpenBSD 5.7 pero mejorados para adJ
 	# Deben estar en arboldes/usr/ports/mystuff 
 	paquete xfe
+	paquete pear-Validate
 
 	####
 	# Retroportados de current para cerrar fallas o actualizar
 	# Deben estar en arboldes/usr/ports/mystuff y en /usr/ports de current
 	paquete ruby paquetes "ruby ruby22-ri_docs" 2.2
-	paquete pear-Validate
 	paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs" 
-	paquete bash 
 	paquete chromium
 
 	###
-        # Actualizados.  Está pero desactualizado en OpenBSD 5.6 y en current
-	
-	# Tocó quedarse en PHP 5.4 por pear y SIVeL 1.2
+        # Actualizados.  Está pero desactualizado en OpenBSD 5.7 y en current
 	paquete php paquetes "php php-fpm php-gd php-intl php-ldap php-mcrypt php-pdo_pgsql php-pgsql php-zip" 5.4
 	paquete pear-Auth
 	paquete pear-HTML-QuickForm
@@ -790,7 +770,6 @@ if (test "$sn" = "s") then {
 	paquete databases/sivel sivel sivel 1.1
 	paquete databases/sivel sivel sivel 1.2
 
-	#paquete devel/ruby-apache2nginx paquetes "ruby21-apache2nginx"
 
 	rm $dini/$V$VESP-$ARQ/$dest/php5-gd-*-no_x11.tgz
 

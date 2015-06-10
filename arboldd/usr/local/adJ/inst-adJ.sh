@@ -1092,7 +1092,7 @@ if (test -f /etc/rc.d/cron) then {
 	activarcs cron
 } fi;
 
-echo "* Crear scripts para montar imagenes encriptadas como servicios" >> /var/tmp/inst-adJ.bitacora;
+echo "* Crear scripts para montar imagenes cifradas como servicios" >> /var/tmp/inst-adJ.bitacora;
 nuevomonta=0;
 
 creamontador /etc/rc.d/montaencres /var/www/resbase 2 $uadJ $uadJ /var/resbase.img
@@ -1381,29 +1381,29 @@ EOF
 } fi;
 
 if (test -f /$RUTAIMG/post.img) then {
-	echo "Existe imagen para datos encriptados de PostgreSQL /$RUTAIMG/post.img. " >> /var/tmp/inst-adJ.bitacora
-	echo "Suponiendo que la base PostgreSQL tendrá datos encriptados allí" >> /var/tmp/inst-adJ.bitacora
-	postencripta="s";
+	echo "Existe imagen para datos cifrados de PostgreSQL /$RUTAIMG/post.img. " >> /var/tmp/inst-adJ.bitacora
+	echo "Suponiendo que la base PostgreSQL tendrá datos cifrados allí" >> /var/tmp/inst-adJ.bitacora
+	postcifra="s";
 }
 else {
-	postencripta="h";
-	while (test "$postencripta" = "h") ; do
+	postcifra="h";
+	while (test "$postcifra" = "h") ; do
 		dialog --title 'Cifrado de datos de PostgreSQL' --help-button --yesno '\n¿Preparar imagenes cifradas para los datos de PostgreSQL?' 15 60 
-		postencripta="$?"
-		if (test "$postencripta" = "2") then {
-			postencripta="h";
+		postcifra="$?"
+		if (test "$postcifra" = "2") then {
+			postcifra="h";
 			dialog --title 'Ayuda cifrado de datos de PostgreSQL' --msgbox '\nEn adJ todas las bases de datos de PostgreSQL pueden mantenerse en una partición cifrada con una clave que debe darse durante el arranque (si la clave es errada no podrán usarse las bases de datos).\n' 15 60 
 		} fi;
 	done;
-	if (test "$postencripta" = "0") then {
-		postencripta="s";
+	if (test "$postcifra" = "0") then {
+		postcifra="s";
 	} fi;
 
 } fi;
 
 
-if (test "$postencripta" = "s") then {
-	echo "* Crear imagen encriptada para base de ${TAM}Kbytes (se espeicifica otra con var. TAM) en directorio $RUTAIMG (se especifica otra con var RUTAIMG)"  >> /var/tmp/inst-adJ.bitacora
+if (test "$postcifra" = "s") then {
+	echo "* Crear imagen cifrada para base de ${TAM}Kbytes (se espeicifica otra con var. TAM) en directorio $RUTAIMG (se especifica otra con var RUTAIMG)"  >> /var/tmp/inst-adJ.bitacora
 	clear;
 	cat <<EOF
 
@@ -1424,7 +1424,7 @@ EOF
 		echo "   Saltando..." >> /var/tmp/inst-adJ.bitacora
 	} fi;
 
-	echo "* Crear imagen encriptada para respaldo de ${TAM}Kbytes (se espeicifica otra con var. TAM) en directorio $RUTAIMG (se especifica otra con var RUTAIMG)"  >> /var/tmp/inst-adJ.bitacora
+	echo "* Crear imagen cifrada para respaldo de ${TAM}Kbytes (se espeicifica otra con var. TAM) en directorio $RUTAIMG (se especifica otra con var RUTAIMG)"  >> /var/tmp/inst-adJ.bitacora
 	if (test ! -f /$RUTAIMG/resbase.img -a ! -f /$RUTAIMG/bakbase.img) then {
 		vnconfig -u vnd0 >> /var/tmp/inst-adJ.bitacora 2>&1 
 		dd of=/$RUTAIMG/resbase.img bs=1024 seek=$TAM count=0 >> /var/tmp/inst-adJ.bitacora 2>&1
@@ -1436,7 +1436,7 @@ EOF
 		echo "   Saltando..." >> /var/tmp/inst-adJ.bitacora;
 	} fi;
 
-} fi; #postencripta
+} fi; #postcifra
 
 echo "* Preparando espacio para respaldos de bases de datos" >> /var/tmp/inst-adJ.bitacora;
 if (test ! -d /var/www/resbase) then {
@@ -1464,12 +1464,12 @@ clear;
 
 sh /etc/rc.local >> /var/tmp/inst-adJ.bitacora 2>&1; # En caso de que falte montar bien
 
-if (test "$postencripta" = "s") then {
-	echo "* Montar imagenes encriptadas durante arranque" >> /var/tmp/inst-adJ.bitacora;
+if (test "$postcifra" = "s") then {
+	echo "* Montar imagenes cifradas durante arranque" >> /var/tmp/inst-adJ.bitacora;
 	activarcs montaencres
 	activarcs montaencpos
 
-} fi; #postencripta
+} fi; #postcifra
 
 # Nuevo usuario PostgreSQL
 if (ltf $ACVER "4.1") then {
@@ -1582,7 +1582,7 @@ if (test "$?" = "0") then {
 	} fi;
 } fi;
 
-echo "* Desmontando particiones encriptadas" >> /var/tmp/inst-adJ.bitacora;
+echo "* Desmontando particiones cifradas" >> /var/tmp/inst-adJ.bitacora;
 umount -f /var/bakbase 2>/dev/null >> /var/tmp/inst-adJ.bitacora;
 umount -f /var/www/bakbase 2>/dev/null >> /var/tmp/inst-adJ.bitacora;
 umount -f /var/www/resbase 2>/dev/null >> /var/tmp/inst-adJ.bitacora;
@@ -1597,17 +1597,22 @@ else {
 } fi;
 
 
-if (test "$postencripta" = "s") then {
-	echo "* Volviendo a montar imagenes encriptadas" >> /var/tmp/inst-adJ.bitacora;
+grep "^ *pkg_scripts.*montaencres" /etc/rc.conf.local > /dev/null 2>&1
+if (test "$?" = "0") then {
+	echo "* Montando imagen cifrada para respaldos" >> /var/tmp/inst-adJ.bitacora;
 	clear;
 	/etc/rc.d/montaencres check
 	if (test "$?" != "0") then {
-		echo "No está montada imagen encriptada para respaldo" >> /var/tmp/inst-adJ.bitacora;
+		echo "No está montada imagen cifrada para respaldo" >> /var/tmp/inst-adJ.bitacora;
 		/etc/rc.d/montaencres start
 	} fi;
+} fi;
+if (test "$postcifra" = "s") then {
+	echo "* Montando imagen cifrada para PostgreSQL" >> /var/tmp/inst-adJ.bitacora;
+	clear;
 	/etc/rc.d/montaencpos check
 	if (test "$?" != "0") then {
-		echo "No está montada imagen encriptada para PostgreSQL" >> /var/tmp/inst-adJ.bitacora;
+		echo "No está montada imagen cifrada para PostgreSQL" >> /var/tmp/inst-adJ.bitacora;
 		/etc/rc.d/montaencpos start
 	} fi;
 } fi; 

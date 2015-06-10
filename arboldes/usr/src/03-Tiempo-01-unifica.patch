@@ -25,16 +25,17 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/locale/_def
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/strftime.c src/lib/libc/time/strftime.c
 --- src56-orig/lib/libc/time/strftime.c	Thu Sep 13 06:14:20 2012
 +++ src/lib/libc/time/strftime.c	Fri Apr 25 10:16:20 2014
-@@ -30,79 +30,12 @@
+@@ -28,81 +28,14 @@
  ** SUCH DAMAGE.
  */
  
--#include "tzfile.h"
 +#include <sys/localedef.h>
 +
- #include "fcntl.h"
- #include "locale.h"
-+#include "tzfile.h"
+ #include <fcntl.h>
+ #include <locale.h>
+ 
+ #include "private.h"
+ #include "tzfile.h"
  
 -struct lc_time_T {
 -	const char *	mon[MONSPERYEAR];
@@ -108,7 +109,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/strfti
  static char *	_add(const char *, char *, const char *);
  static char *	_conv(int, const char *, char *, const char *);
  static char *	_fmt(const char *, const struct tm *, char *, const char *,
-@@ -131,9 +64,6 @@
+@@ -123,9 +56,6 @@
  	int	warn;
  
  	tzset();
@@ -117,8 +118,8 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/strfti
 -#endif /* defined LOCALE_HOME */
  	warn = IN_NONE;
  	p = _fmt(((format == NULL) ? "%c" : format), t, s, s + maxsize, &warn);
- #ifndef NO_RUN_TIME_WARNINGS_ABOUT_YEAR_2000_PROBLEMS_THANK_YOU
-@@ -179,26 +109,26 @@
+ 	if (p == s + maxsize) {
+@@ -150,26 +80,26 @@
  			case 'A':
  				pt = _add((t->tm_wday < 0 ||
  					t->tm_wday >= DAYSPERWEEK) ?
@@ -149,7 +150,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/strfti
  					pt, ptlim);
  				continue;
  			case 'C':
-@@ -216,7 +146,7 @@
+@@ -187,7 +117,7 @@
  				{
  				int warn2 = IN_SOME;
  
@@ -158,7 +159,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/strfti
  				if (warn2 == IN_ALL)
  					warn2 = IN_THIS;
  				if (warn2 > *warnp)
-@@ -304,15 +234,15 @@
+@@ -275,15 +205,15 @@
  				continue;
  			case 'p':
  				pt = _add((t->tm_hour >= (HOURSPERDAY / 2)) ?
@@ -177,32 +178,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/strfti
  				continue;
  			case 'S':
  				pt = _conv(t->tm_sec, "%02d", pt, ptlim);
-@@ -381,13 +311,13 @@
- 					int	year;
- 					int	base;
- 					int	yday;
--					int	wday;
-+					int	wday;
- 					int	w;
- 
- 					year = t->tm_year;
- 					base = TM_YEAR_BASE;
- 					yday = t->tm_yday;
--					wday = t->tm_wday;
-+					wday = t->tm_wday;
- 					for ( ; ; ) {
- 						int	len;
- 						int	bot;
-@@ -400,7 +330,7 @@
- 						** What yday (-3 ... 3) does
- 						** the ISO year begin on?
- 						*/
--						bot = ((yday + 11 - wday) %
-+						bot = ((yday + 11 - wday) %
- 							DAYSPERWEEK) - 3;
- 						/*
- 						** What yday does the NEXT
-@@ -463,13 +393,13 @@
+@@ -431,13 +361,13 @@
  				pt = _conv(t->tm_wday, "%d", pt, ptlim);
  				continue;
  			case 'X':
@@ -218,7 +194,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/strfti
  				if (warn2 == IN_ALL)
  					warn2 = IN_THIS;
  				if (warn2 > *warnp)
-@@ -554,7 +484,7 @@
+@@ -522,7 +452,7 @@
  				}
  				continue;
  			case '+':
@@ -227,7 +203,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/strfti
  					warnp);
  				continue;
  			case '%':
-@@ -639,135 +569,4 @@
+@@ -594,135 +524,4 @@
  	return pt;
  }
  
@@ -366,15 +342,18 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/strfti
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/wcsftime.c src/lib/libc/time/wcsftime.c
 --- src56-orig/lib/libc/time/wcsftime.c	Sun Jan 20 15:29:02 2013
 +++ src/lib/libc/time/wcsftime.c	Sun Apr 27 17:43:58 2014
-@@ -33,73 +33,13 @@
+@@ -31,6 +31,8 @@
  ** SUCH DAMAGE.
  */
  
--#include "tzfile.h"
--#include "fcntl.h"
 +#include <sys/localedef.h>
++
+ #include <fcntl.h>
  #include <locale.h>
  #include <wchar.h>
+@@ -38,68 +40,6 @@
+ #include "private.h"
+ #include "tzfile.h"
  
 -struct lc_time_T {
 -	const wchar_t *	mon[MONSPERYEAR];
@@ -388,9 +367,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/wcsfti
 -	const wchar_t *	pm;
 -	const wchar_t *	date_fmt;
 -};
-+#include "fcntl.h"
-+#include "tzfile.h"
- 
+-
 -#define Locale	(&C_time_locale)
 -
 -static const struct lc_time_T	C_time_locale = {
@@ -443,7 +420,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/wcsfti
  #define UNKNOWN L"?"
  static wchar_t *	_add(const wchar_t *, wchar_t *, const wchar_t *);
  static wchar_t *	_sadd(const char *, wchar_t *, const wchar_t *);
-@@ -154,10 +94,29 @@
+@@ -134,10 +74,29 @@
  	return p - s;
  }
  
@@ -473,7 +450,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/wcsfti
  	for ( ; *format; ++format) {
  		if (*format != L'%') {
  			if (pt == ptlim)
-@@ -173,26 +132,26 @@
+@@ -153,26 +112,26 @@
  		case 'A':
  			pt = _add((t->tm_wday < 0 ||
  				t->tm_wday >= DAYSPERWEEK) ?
@@ -504,7 +481,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/wcsfti
  				pt, ptlim);
  			continue;
  		case 'C':
-@@ -210,7 +169,7 @@
+@@ -190,7 +149,7 @@
  			{
  			int warn2 = IN_SOME;
  
@@ -513,7 +490,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/wcsfti
  			if (warn2 == IN_ALL)
  				warn2 = IN_THIS;
  			if (warn2 > *warnp)
-@@ -290,8 +249,8 @@
+@@ -270,8 +229,8 @@
  			continue;
  		case 'p':
  			pt = _add((t->tm_hour >= (HOURSPERDAY / 2)) ?
@@ -524,7 +501,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/wcsfti
  				pt, ptlim);
  			continue;
  		case 'R':
-@@ -442,13 +401,13 @@
+@@ -417,13 +376,13 @@
  			pt = _conv(t->tm_wday, L"%d", pt, ptlim);
  			continue;
  		case 'X':
@@ -540,7 +517,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/wcsfti
  			if (warn2 == IN_ALL)
  				warn2 = IN_THIS;
  			if (warn2 > *warnp)
-@@ -496,7 +455,7 @@
+@@ -471,7 +430,7 @@
  			}
  			continue;
  		case '+':
@@ -549,7 +526,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/wcsfti
  			continue;
  		case '%':
  		/*
-@@ -572,4 +531,3 @@
+@@ -547,4 +506,3 @@
  		pt = _conv(((trail < 0) ? -trail : trail), L"%02d", pt, ptlim);
  	return pt;
  }

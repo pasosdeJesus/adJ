@@ -4,7 +4,7 @@
 # 2014. vtamara@pasosdeJesus.org
 
 VER=5.6
-REV=0
+REV=1
 VESP=""
 VERP=56
 
@@ -120,8 +120,8 @@ if (test "$?" = "0") then {
 	} fi;
 } fi;
 
-if (test "$VER" = "5.5") then {
-	dialog --title 'Advertencia: respaldar datos binarios' --yesno "\\nPara actualizar a 5.5 deben detenerse servicios y \\n
+if (test "$ARCVER" -lt "5.5") then {
+	dialog --title 'Advertencia: respaldar datos binarios' --yesno "\\nPara actualizar de versiones anteriores a 5.5 deben detenerse servicios y \\n
 eliminar todos los paquetes del sistema.\\n
 Este archivo de comandos hará eso a continuación,\\n
 pero antes le recomendamos (1) sacar en un formato portable\\n
