@@ -1,0 +1,33 @@
+$OpenBSD: patch-configure_ac,v 1.9 2014/03/20 17:33:09 ajacoutot Exp $
+--- configure.ac.orig	Sat Feb 15 09:33:32 2014
++++ configure.ac	Thu Mar 20 15:54:34 2014
+@@ -174,7 +174,7 @@ esac
+ #### Compiler flags ####
+ 
+ AX_APPEND_COMPILE_FLAGS(
+-    [-Wall -W -Wextra -pipe -Wno-long-long -Wno-overlength-strings -Wunsafe-loop-optimizations -Wundef -Wformat=2 -Wlogical-op -Wsign-compare -Wformat-security -Wmissing-include-dirs -Wformat-nonliteral -Wold-style-definition -Wpointer-arith -Winit-self -Wdeclaration-after-statement -Wfloat-equal -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-declarations -Wmissing-noreturn -Wshadow -Wendif-labels -Wcast-align -Wstrict-aliasing -Wwrite-strings -Wno-unused-parameter -ffast-math -fno-common -fdiagnostics-show-option],
++    [-Wall -W -Wextra -pipe -Wno-long-long -Wno-overlength-strings -Wunsafe-loop-optimizations -Wundef -Wformat=2 -Wlogical-op -Wsign-compare -Wformat-security -Wmissing-include-dirs -Wformat-nonliteral -Wold-style-definition -Wpointer-arith -Winit-self -Wdeclaration-after-statement -Wfloat-equal -Wmissing-prototypes -Wstrict-prototypes -Wmissing-declarations -Wmissing-noreturn -Wshadow -Wendif-labels -Wcast-align -Wstrict-aliasing -Wwrite-strings -Wno-unused-parameter -ffast-math -fno-common -fdiagnostics-show-option],
+     [], [-pedantic -Werror])
+ 
+ # Only enable fastpath asserts when doing a debug build, e.g. from bootstrap.sh.
+@@ -988,7 +988,7 @@ AS_IF([test "x$HAVE_DBUS" = "x1"], AC_DEFINE([HAVE_DBU
+ 
+ PA_MACHINE_ID="${sysconfdir}/machine-id"
+ AX_DEFINE_DIR(PA_MACHINE_ID, PA_MACHINE_ID, [D-Bus machine-id file])
+-PA_MACHINE_ID_FALLBACK="${localstatedir}/lib/dbus/machine-id"
++PA_MACHINE_ID_FALLBACK="${localstatedir}/db/dbus/machine-id"
+ AX_DEFINE_DIR(PA_MACHINE_ID_FALLBACK, PA_MACHINE_ID_FALLBACK,
+ 	      [Fallback machine-id file])
+ 
+@@ -1234,9 +1234,9 @@ fi
+ 
+ PA_SYSTEM_RUNTIME_PATH="${localstatedir}/run/pulse"
+ AX_DEFINE_DIR(PA_SYSTEM_RUNTIME_PATH, PA_SYSTEM_RUNTIME_PATH, [System runtime dir])
+-PA_SYSTEM_CONFIG_PATH="${localstatedir}/lib/pulse"
++PA_SYSTEM_CONFIG_PATH="${localstatedir}/db/pulse"
+ AX_DEFINE_DIR(PA_SYSTEM_CONFIG_PATH, PA_SYSTEM_CONFIG_PATH, [System config dir])
+-PA_SYSTEM_STATE_PATH="${localstatedir}/lib/pulse"
++PA_SYSTEM_STATE_PATH="${localstatedir}/db/pulse"
+ AX_DEFINE_DIR(PA_SYSTEM_STATE_PATH, PA_SYSTEM_STATE_PATH, [System state dir])
+ 
+ PA_BINARY=${bindir}/pulseaudio${EXEEXT}

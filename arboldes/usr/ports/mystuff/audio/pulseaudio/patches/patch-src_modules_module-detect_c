@@ -1,0 +1,54 @@
+$OpenBSD: patch-src_modules_module-detect_c,v 1.8 2014/03/20 17:33:09 ajacoutot Exp $
+--- src/modules/module-detect.c.orig	Thu Jan 23 19:57:55 2014
++++ src/modules/module-detect.c	Thu Mar 20 15:49:28 2014
+@@ -34,6 +34,10 @@
+ #include <sys/types.h>
+ #include <sys/stat.h>
+ 
++#ifdef __OpenBSD__
++#include <sndio.h>
++#endif
++
+ #include <pulsecore/core-error.h>
+ #include <pulsecore/module.h>
+ #include <pulsecore/modargs.h>
+@@ -48,7 +52,9 @@ PA_MODULE_DESCRIPTION("Detect available audio hardware
+ PA_MODULE_VERSION(PACKAGE_VERSION);
+ PA_MODULE_LOAD_ONCE(true);
+ PA_MODULE_USAGE("just-one=<boolean>");
++#ifdef __linux__
+ PA_MODULE_DEPRECATED("Please use module-udev-detect instead of module-detect!");
++#endif
+ 
+ static const char* const valid_modargs[] = {
+     "just-one",
+@@ -205,6 +211,19 @@ static int detect_solaris(pa_core *c, int just_one) {
+ }
+ #endif
+ 
++#ifdef __OpenBSD__
++static int detect_sndio(pa_core *c, int just_one) {
++    char args[64];
++
++    pa_snprintf(args, sizeof(args), "device=%s", SIO_DEVANY);
++
++    if (!pa_module_load(c, "module-sndio", args))
++        return 0;
++
++    return 1;
++}
++#endif
++
+ #ifdef OS_IS_WIN32
+ static int detect_waveout(pa_core *c, int just_one) {
+     /*
+@@ -246,6 +265,9 @@ int pa__init(pa_module*m) {
+ #endif
+ #ifdef OS_IS_WIN32
+     if ((n = detect_waveout(m->core, just_one)) <= 0)
++#endif
++#ifdef __OpenBSD__
++    if ((n = detect_sndio(m->core, just_one)) <= 0)
+ #endif
+     {
+         pa_log_warn("failed to detect any sound hardware.");

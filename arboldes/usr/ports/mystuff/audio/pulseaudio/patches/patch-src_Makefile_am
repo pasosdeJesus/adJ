@@ -1,0 +1,43 @@
+$OpenBSD: patch-src_Makefile_am,v 1.8 2014/03/20 17:33:09 ajacoutot Exp $
+--- src/Makefile.am.orig	Fri Feb 14 14:45:45 2014
++++ src/Makefile.am	Thu Mar 20 15:53:23 2014
+@@ -679,7 +679,7 @@ endif
+ 
+ libpulsecommon_@PA_MAJORMINOR@_la_CFLAGS = $(AM_CFLAGS) $(LIBJSON_CFLAGS) $(LIBSNDFILE_CFLAGS)
+ libpulsecommon_@PA_MAJORMINOR@_la_LDFLAGS = $(AM_LDFLAGS) -avoid-version
+-libpulsecommon_@PA_MAJORMINOR@_la_LIBADD = $(AM_LIBADD) $(LIBJSON_LIBS)  $(LIBWRAP_LIBS) $(WINSOCK_LIBS) $(LTLIBICONV) $(LIBSNDFILE_LIBS)
++libpulsecommon_@PA_MAJORMINOR@_la_LIBADD = $(AM_LIBADD) $(LIBJSON_LIBS)  $(LIBWRAP_LIBS) $(WINSOCK_LIBS) $(LTLIBICONV) $(LIBSNDFILE_LIBS) -lexecinfo
+ 
+ if HAVE_X11
+ libpulsecommon_@PA_MAJORMINOR@_la_SOURCES += \
+@@ -1180,6 +1180,9 @@ modlibexec_LTLIBRARIES += \
+ 		module-oss.la
+ endif
+ 
++modlibexec_LTLIBRARIES += \
++		module-sndio.la
++
+ if HAVE_COREAUDIO
+ modlibexec_LTLIBRARIES += \
+ 		module-coreaudio-detect.la \
+@@ -1407,6 +1410,7 @@ SYMDEF_FILES = \
+ 		module-x11-xsmp-symdef.h \
+ 		module-x11-cork-request-symdef.h \
+ 		module-oss-symdef.h \
++		module-sndio-symdef.h \
+ 		module-alsa-sink-symdef.h \
+ 		module-alsa-source-symdef.h \
+ 		module-alsa-card-symdef.h \
+@@ -1727,6 +1731,12 @@ liboss_util_la_LIBADD = $(MODULE_LIBADD)
+ module_oss_la_SOURCES = modules/oss/module-oss.c
+ module_oss_la_LDFLAGS = $(MODULE_LDFLAGS)
+ module_oss_la_LIBADD = $(MODULE_LIBADD) liboss-util.la
++
++# SNDIO
++
++module_sndio_la_SOURCES = modules/module-sndio.c
++module_sndio_la_LDFLAGS = $(MODULE_LDFLAGS)
++module_sndio_la_LIBADD = $(MODULE_LIBADD) -lsndio
+ 
+ # COREAUDIO
+ 
