@@ -67,7 +67,7 @@ CONFIGURE_ARGS=	--disable-rpath --with-openssl=/usr \
 		--with-perl \
 		--with-python \
 		--with-pam=no \
-		--with-uuid=ossp\
+		--with-uuid=ossp \
 		--enable-integer-datetimes \
 		--includedir="${PREFIX}/include/postgresql" \
 		--datadir="${PREFIX}/share/postgresql" \
