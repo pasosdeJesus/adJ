@@ -1,0 +1,12 @@
+$OpenBSD: patch-chrome_app_theme_theme_resources_grd,v 1.14 2015/05/24 15:51:52 robert Exp $
+--- chrome/app/theme/theme_resources.grd.orig.port	Thu May 14 00:35:45 2015
++++ chrome/app/theme/theme_resources.grd	Wed May 20 08:34:56 2015
+@@ -500,7 +500,7 @@
+         <structure type="chrome_scaled_image" name="IDR_NOTIFICATION_PERIPHERAL_BATTERY_LOW" file="cros/notification_peripheral_battery_low.png" />
+         <structure type="chrome_scaled_image" name="IDR_PORTAL_DETECTION_ALERT" file="cros/captive_portal_icon.png" />
+       </if>
+-      <if expr="is_win or desktop_linux">
++      <if expr="is_win or desktop_linux or is_posix">
+         <structure type="chrome_scaled_image" name="IDR_NOTIFICATION_TRAY_DO_NOT_DISTURB_ATTENTION" file="common/notification_tray_do_not_disturb_attention.png" />
+         <structure type="chrome_scaled_image" name="IDR_NOTIFICATION_TRAY_DO_NOT_DISTURB_EMPTY" file="common/notification_tray_do_not_disturb_empty.png" />
+         <structure type="chrome_scaled_image" name="IDR_NOTIFICATION_TRAY_ATTENTION" file="common/notification_tray_attention.png" />

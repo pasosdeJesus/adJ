@@ -1,0 +1,12 @@
+$OpenBSD: patch-chrome_browser_browser_resources_grd,v 1.19 2015/05/24 15:51:52 robert Exp $
+--- chrome/browser/browser_resources.grd.orig.port	Thu May 14 00:35:45 2015
++++ chrome/browser/browser_resources.grd	Wed May 20 08:34:56 2015
+@@ -238,7 +238,7 @@
+       <if expr="chromeos">
+         <include name="IDR_PLUGIN_DB_JSON" file="resources\plugin_metadata\plugins_chromeos.json" type="BINDATA" />
+       </if>
+-      <if expr="desktop_linux or (is_android and enable_plugins)">
++      <if expr="desktop_linux or (is_android and enable_plugins) or is_posix">
+         <include name="IDR_PLUGIN_DB_JSON" file="resources\plugin_metadata\plugins_linux.json" type="BINDATA" />
+       </if>
+       <if expr="is_android">

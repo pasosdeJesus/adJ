@@ -1,0 +1,30 @@
+$OpenBSD: patch-content_browser_renderer_host_render_widget_host_view_aura_cc,v 1.9 2015/05/24 15:51:53 robert Exp $
+--- content/browser/renderer_host/render_widget_host_view_aura.cc.orig.port	Thu May 14 00:35:46 2015
++++ content/browser/renderer_host/render_widget_host_view_aura.cc	Wed May 20 08:34:56 2015
+@@ -92,7 +92,7 @@
+ #include "ui/gfx/win/dpi.h"
+ #endif
+ 
+-#if defined(OS_LINUX) && !defined(OS_CHROMEOS)
++#if (defined(OS_LINUX) || defined(OS_BSD)) && !defined(OS_CHROMEOS)
+ #include "content/common/input_messages.h"
+ #include "ui/events/linux/text_edit_command_auralinux.h"
+ #include "ui/events/linux/text_edit_key_bindings_delegate_auralinux.h"
+@@ -2365,7 +2365,7 @@ bool RenderWidgetHostViewAura::NeedsInputGrab() {
+ }
+ 
+ bool RenderWidgetHostViewAura::NeedsMouseCapture() {
+-#if defined(OS_LINUX) && !defined(OS_CHROMEOS)
++#if (defined(OS_BSD) || defined(OS_LINUX)) && !defined(OS_CHROMEOS)
+   return NeedsInputGrab();
+ #endif
+   return false;
+@@ -2587,7 +2587,7 @@ void RenderWidgetHostViewAura::DetachFromInputMethod()
+ 
+ void RenderWidgetHostViewAura::ForwardKeyboardEvent(
+     const NativeWebKeyboardEvent& event) {
+-#if defined(OS_LINUX) && !defined(OS_CHROMEOS)
++#if (defined(OS_LINUX) || defined(OS_BSD)) && !defined(OS_CHROMEOS)
+   ui::TextEditKeyBindingsDelegateAuraLinux* keybinding_delegate =
+       ui::GetTextEditKeyBindingsDelegate();
+   std::vector<ui::TextEditCommandAuraLinux> commands;

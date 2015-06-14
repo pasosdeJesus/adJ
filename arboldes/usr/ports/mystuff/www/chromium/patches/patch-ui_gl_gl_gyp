@@ -1,0 +1,28 @@
+$OpenBSD: patch-ui_gl_gl_gyp,v 1.14 2015/05/24 15:51:53 robert Exp $
+--- ui/gl/gl.gyp.orig.port	Thu May 14 00:23:12 2015
++++ ui/gl/gl.gyp	Wed May 20 08:34:57 2015
+@@ -123,7 +123,7 @@
+         'sync_control_vsync_provider.h',
+       ],
+       'conditions': [
+-        ['OS in ("win", "android", "linux")', {
++        ['OS in ("win", "android", "linux", "openbsd")', {
+           'sources': [
+             'egl_util.cc',
+             'egl_util.h',
+@@ -144,13 +144,13 @@
+             '<(DEPTH)/third_party/khronos',
+         ],
+         }],
+-        ['OS in ("android", "linux")', {
++        ['OS in ("android", "linux", "openbsd")', {
+           'sources': [
+             'gl_implementation_osmesa.cc',
+             'gl_implementation_osmesa.h',
+           ],
+         }],
+-        ['OS=="linux"', {
++        ['OS=="linux" or OS=="openbsd"', {
+           'sources': [
+             'gl_image_linux_dma_buffer.cc',
+             'gl_image_linux_dma_buffer.h',

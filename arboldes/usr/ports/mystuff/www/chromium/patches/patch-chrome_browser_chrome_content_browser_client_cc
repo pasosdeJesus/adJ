@@ -1,0 +1,39 @@
+$OpenBSD: patch-chrome_browser_chrome_content_browser_client_cc,v 1.19 2015/05/24 15:51:52 robert Exp $
+--- chrome/browser/chrome_content_browser_client.cc.orig.port	Thu May 14 00:35:45 2015
++++ chrome/browser/chrome_content_browser_client.cc	Wed May 20 08:34:56 2015
+@@ -160,7 +160,7 @@
+ #include "chrome/browser/chrome_browser_main_posix.h"
+ #endif
+ 
+-#if defined(OS_POSIX) && !defined(OS_MACOSX)
++#if defined(OS_POSIX) && !defined(OS_MACOSX) && !defined(OS_BSD)
+ #include "base/debug/leak_annotations.h"
+ #include "components/crash/app/breakpad_linux.h"
+ #include "components/crash/browser/crash_handler_host_linux.h"
+@@ -428,7 +428,7 @@ bool CertMatchesFilter(const net::X509Certificate& cer
+   return false;
+ }
+ 
+-#if defined(OS_POSIX) && !defined(OS_ANDROID) && !defined(OS_MACOSX)
++#if defined(OS_POSIX) && !defined(OS_ANDROID) && !defined(OS_MACOSX) && !defined(OS_BSD)
+ breakpad::CrashHandlerHostLinux* CreateCrashHandlerHost(
+     const std::string& process_type) {
+   base::FilePath dumps_path;
+@@ -1155,7 +1155,7 @@ void ChromeContentBrowserClient::AppendExtraCommandLin
+     command_line->AppendSwitchASCII(switches::kMetricsClientID,
+                                     client_info->client_id);
+   }
+-#elif defined(OS_POSIX)
++#elif defined(OS_POSIX) && !defined(OS_BSD)
+   if (breakpad::IsCrashReporterEnabled()) {
+     scoped_ptr<metrics::ClientInfo> client_info =
+         GoogleUpdateSettings::LoadMetricsClientInfo();
+@@ -2177,7 +2177,7 @@ void ChromeContentBrowserClient::GetAdditionalFileSyst
+   }
+ }
+ 
+-#if defined(OS_POSIX) && !defined(OS_MACOSX)
++#if defined(OS_POSIX) && !defined(OS_MACOSX) && !defined(OS_BSD)
+ void ChromeContentBrowserClient::GetAdditionalMappedFilesForChildProcess(
+     const base::CommandLine& command_line,
+     int child_process_id,

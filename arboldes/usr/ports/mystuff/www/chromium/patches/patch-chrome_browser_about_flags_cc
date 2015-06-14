@@ -1,0 +1,21 @@
+$OpenBSD: patch-chrome_browser_about_flags_cc,v 1.18 2015/05/24 15:51:52 robert Exp $
+--- chrome/browser/about_flags.cc.orig.port	Thu May 14 00:35:45 2015
++++ chrome/browser/about_flags.cc	Sat May 23 01:01:26 2015
+@@ -674,7 +674,7 @@ const Experiment kExperiments[] = {
+     kOsLinux,
+     SINGLE_VALUE_TYPE(switches::kEnableSmoothScrolling)
+   },
+-#if defined(USE_AURA) || defined(OS_LINUX)
++#if defined(USE_AURA) || defined(OS_LINUX) || defined(OS_BSD)
+   {
+     "overlay-scrollbars",
+     IDS_FLAGS_ENABLE_OVERLAY_SCROLLBARS_NAME,
+@@ -1538,7 +1538,7 @@ const Experiment kExperiments[] = {
+     SINGLE_VALUE_TYPE(switches::kResetAppListInstallState)
+   },
+ #if defined(ENABLE_APP_LIST)
+-#if defined(OS_LINUX)
++#if defined(OS_LINUX) || defined(OS_BSD)
+   {
+     // This is compiled out on non-Linux platforms because otherwise it would be
+     // visible on Win/Mac/CrOS but not on Linux GTK, which would be confusing.

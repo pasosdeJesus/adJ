@@ -1,0 +1,12 @@
+$OpenBSD: patch-third_party_WebKit_Source_platform_heap_ThreadState_cpp,v 1.7 2015/05/24 15:51:53 robert Exp $
+--- third_party/WebKit/Source/platform/heap/ThreadState.cpp.orig.port	Thu May 14 00:49:00 2015
++++ third_party/WebKit/Source/platform/heap/ThreadState.cpp	Wed May 20 08:34:56 2015
+@@ -64,7 +64,7 @@ extern "C" void* __libc_stack_end;  // NOLINT
+ #include <limits>
+ #endif
+ 
+-#if OS(FREEBSD)
++#if OS(FREEBSD) || OS(OPENBSD)
+ #include <pthread_np.h>
+ #endif
+ 

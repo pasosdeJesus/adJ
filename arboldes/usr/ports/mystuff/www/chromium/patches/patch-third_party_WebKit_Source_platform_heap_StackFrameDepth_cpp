@@ -1,0 +1,43 @@
+$OpenBSD: patch-third_party_WebKit_Source_platform_heap_StackFrameDepth_cpp,v 1.2 2015/05/24 15:51:53 robert Exp $
+--- third_party/WebKit/Source/platform/heap/StackFrameDepth.cpp.orig.port	Thu May 14 00:49:00 2015
++++ third_party/WebKit/Source/platform/heap/StackFrameDepth.cpp	Fri May 22 23:50:07 2015
+@@ -14,6 +14,10 @@
+ #elif defined(__GLIBC__)
+ extern "C" void* __libc_stack_end;  // NOLINT
+ #endif
++#if OS(OPENBSD)
++#include <sys/signal.h>
++#include <pthread_np.h>
++#endif
+ 
+ namespace blink {
+ 
+@@ -84,7 +88,7 @@ size_t StackFrameDepth::getUnderestimatedStackSize()
+ #endif
+ 
+     return 0;
+-#elif OS(MACOSX)
++#elif OS(MACOSX) || OS(OPENBSD)
+     // FIXME: pthread_get_stacksize_np() returns shorter size than actual stack
+     // size for the main thread on Mavericks(10.9).
+     return 0;
+@@ -105,12 +109,18 @@ size_t StackFrameDepth::getUnderestimatedStackSize()
+ 
+ void* StackFrameDepth::getStackStart()
+ {
+-#if defined(__GLIBC__) || OS(ANDROID) || OS(FREEBSD)
++#if defined(__GLIBC__) || OS(ANDROID) || OS(FREEBSD) || OS(OPENBSD)
+     pthread_attr_t attr;
+     int error;
+ #if OS(FREEBSD)
+     pthread_attr_init(&attr);
+     error = pthread_attr_get_np(pthread_self(), &attr);
++#elif OS(OPENBSD)
++    stack_t ss;
++    void *base;
++    error = pthread_stackseg_np(pthread_self(), &ss);
++    base = (void*)((size_t) ss.ss_sp - ss.ss_size);
++    return reinterpret_cast<Address>(base) + ss.ss_size;
+ #else
+     error = pthread_getattr_np(pthread_self(), &attr);
+ #endif

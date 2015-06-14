@@ -1,0 +1,12 @@
+$OpenBSD: patch-chrome_chrome_exe_gypi,v 1.8 2015/05/24 15:51:53 robert Exp $
+--- chrome/chrome_exe.gypi.orig.port	Thu May 14 00:35:46 2015
++++ chrome/chrome_exe.gypi	Wed May 20 08:34:56 2015
+@@ -200,7 +200,7 @@
+                 '../build/linux/system.gyp:xext',
+               ],
+             }],
+-            ['OS=="linux" and enable_plugins==1', {
++            ['(OS=="openbsd" or OS=="linux") and enable_plugins==1', {
+               'dependencies': [
+                 '../pdf/pdf.gyp:pdf',
+               ],
