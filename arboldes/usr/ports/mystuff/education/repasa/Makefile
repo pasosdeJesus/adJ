@@ -5,8 +5,8 @@ COMMENT=	"creation and study of contents for schools"
 
 V=		1.4
 DISTNAME=	repasa-${V}
+REVISION=	2
 CATEGORIES=    	education
-PKGNAME=    	${DISTNAME}p1
 
 HOMEPAGE=	http://structio.sourceforge.net/repasa
 MAINTAINER=	Vladimir Támara Patiño <vtamara@pasosdejesus.org>
@@ -22,8 +22,8 @@ CONFIGURE_STYLE=	simple
 CONFIGURE_SCRIPT=	conf.sh
 CONFIGURE_ARGS+=-p ${PREFIX}
 
-BUILD_DEPENDS=	lang/ocaml textproc/markup print/texlive/base
-RUN_DEPENDS=	textproc/markup
+BUILD_DEPENDS=	lang/ocaml lang/ocaml-labltk x11/tk/8.5 textproc/markup print/texlive/base lang/ocaml-camlp4
+RUN_DEPENDS=	textproc/markup x11/tk/8.5
 
 FAKE_TARGET=	instala-sin-catalogo-opt
 FAKE_FLAGS=	PREFIX=${WRKINST}${PREFIX}
@@ -31,7 +31,7 @@ FAKE_FLAGS=	PREFIX=${WRKINST}${PREFIX}
 ALL_TARGET=	opt usrdoc
 REGRESS_TARGET=	regr
 
-WANTLIB=	X11 c m 
+WANTLIB=	X11 c m tk85
 
 post-install:
 	${INSTALL_DATA_DIR} ${PREFIX}/share/doc/repasa

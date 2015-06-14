@@ -677,13 +677,14 @@ if (test "$sn" = "s") then {
 	rm tmp/disponibles*
 
 	###
-	# Modificados de 5.7 para mejorar dependencias 
+	# Modificados de 5.7 para posibilitar compilación
+	# Deben estar en mystuff
+	paquete pulseaudio 
 
 	####
 	# Recompilados para cerrar fallas, portes actualizados de OpenBSD 5.7
 	# Para que operen bien basta actualizar CVS de /usr/ports 
 	# Los siguientes no deben estar en arboldes/usr/ports/mystuff
-
 	paquete curl
 	paquete gnutls
 	paquete icu4c
@@ -691,13 +692,13 @@ if (test "$sn" = "s") then {
 	paquete net-snmp
 	paquete p5-Mail-SpamAssassin
 	paquete rrdtool
-	paquete samba
+	#paquete samba
 	#paquete webkit paquetes "webkit webkit-gtk3"
 	# FLAVOR=gtk3 make paquete webkit-gtk3
 
 	####
-	# Recompilados por usar xlocale
-
+	# Recompilados de 5.7 para usar xlocale
+	# No deben estar en mystuff
 	paquete boost
 	paquete djvulibre
 	paquete ggrep
@@ -706,8 +707,7 @@ if (test "$sn" = "s") then {
 	paquete libidn
 	paquete libxslt
 	paquete llvm
-	paquete pulseaudio 
-	paquete qt4
+	#paquete qt4
 	paquete scribus
 	paquete vlc
 	paquete wget
@@ -733,25 +733,26 @@ if (test "$sn" = "s") then {
 	paquete pear-HTML-QuickForm
        		
 	####
-	# Unicos en adJ liderados por otros
+	# Unicos en adJ 
 	# Deben estar en arboldes/usr/ports/mystuff pero no en /usr/ports
 	paquete databases/pear-DB_DataObject
+	paquete emulators/realboy
+	paquete lang/ocaml-labltk
+	paquete sysutils/ganglia
+	paquete textproc/sword
+	paquete textproc/xiphos
 	paquete www/pear-HTML-Common
 	paquete www/pear-HTML-CSS
 	paquete www/pear-HTML-Javascript
 	paquete www/pear-HTML-Menu
 	paquete www/pear-HTML-Table
-	paquete emulators/realboy
-	paquete sysutils/ganglia
-	paquete textproc/sword
-	paquete textproc/xiphos
-	paquete x11/fbdesk
 	paquete www/pear-DB-DataObject-FormBuilder
 	paquete www/pear-HTML-QuickForm-Controller
+	paquete x11/fbdesk
 	#paquete devel/ruby-apacheconf_parser paquetes "ruby21-apacheconf-parser"
 
 	####
-	# Unicos de adJ liderados por pdJ
+	# Unicos en adJ liderados por pdJ
 	# Deben estar en arboldes/usr/ports/mystuff 
 	paquete books/evangelios_dp
 	paquete books/basico_OpenBSD
@@ -769,7 +770,6 @@ if (test "$sn" = "s") then {
 
 	paquete databases/sivel sivel sivel 1.1
 	paquete databases/sivel sivel sivel 1.2
-
 
 	rm $dini/$V$VESP-$ARQ/$dest/php5-gd-*-no_x11.tgz
 

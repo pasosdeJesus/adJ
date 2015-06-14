@@ -18,7 +18,7 @@ DISTFILES=	${DISTNAME}.tar.gz
 #GPL
 PERMIT_PACKAGE_CDROM=	Yes
 
-MODULES =       devel/waf  
+#MODULES =       devel/waf  
 
 #CONFIGURE_ARGS += --enable-gtkhtml
 

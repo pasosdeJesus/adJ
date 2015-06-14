@@ -2,7 +2,7 @@
 
 COMMENT=	MS-Explorer like file manager for X
 
-DISTNAME= 	xfe-1.37
+DISTNAME= 	xfe-1.40
 REVISION=	1
 CATEGORIES= 	x11
 
