@@ -9,7 +9,8 @@
 * Cambiar localedef para no requerir recode en Makefile de locale/cldr
   Enviar propuesta para OpenBSD 5.8 antes de 1.Agosto.
 * Actualizar e incluir Mt77
-* Método para incluir gemas y lo requerido por ejemplo por SIVeL 2.
+* Método para incluir gemas y lo requerido por ejemplo por SIVeL 2. 
+  Observaciones: bundle install no emplea red si todo está ya instalado.
 * En documentacion garantizar que cubrimos lo del FAQ de OpenBSD
 
 5.8
