@@ -12,5 +12,5 @@ Con respecto a adJ 5.6p1 para amd64:
 
 !PAQUETES
 
-* Paquete openpoppassd mejorado porque el legado de OpenBSD 5.6 por defecto (con optimización) falla con "fatal: bind: Can't assign requested address"
+* Paquete openpoppassd retroportado de OpenBSD 5.7, porque el de 5.6 falla con "fatal: bind: Can't assign requested address"
 
