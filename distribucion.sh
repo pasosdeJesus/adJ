@@ -731,6 +731,7 @@ if (test "$sn" = "s") then {
 	# Tomados de portes de OpenBSD 5.6 pero mejorados para adJ
 	# Deben estar en arboldes/usr/ports/mystuff 
 	paquete xfe
+	paquete openpoppassd
 
 	####
 	# Retroportados de current para cerrar fallas o actualizar
