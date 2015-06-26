@@ -679,8 +679,7 @@ if (test "$sn" = "s") then {
 	###
 	# Modificados de 5.7 para posibilitar compilación
 	# Deben estar en mystuff
-	paquete pulseaudio 
-
+	
 	####
 	# Recompilados para cerrar fallas, portes actualizados de OpenBSD 5.7
 	# Para que operen bien basta actualizar CVS de /usr/ports 
@@ -728,7 +727,7 @@ if (test "$sn" = "s") then {
 
 	###
         # Actualizados.  Está pero desactualizado en OpenBSD 5.7 y en current
-	paquete php paquetes "php php-fpm php-gd php-intl php-ldap php-mcrypt php-pdo_pgsql php-pgsql php-zip" 5.4
+	paquete php paquetes "php php-fpm php-gd php-intl php-ldap php-mcrypt php-pdo_pgsql php-pgsql php-zip" 5.5
 	paquete pear-Auth
 	paquete pear-HTML-QuickForm
        		

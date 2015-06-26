@@ -1,0 +1,33 @@
+$OpenBSD$
+--- src/xfedefs.h.orig	Mon Dec 22 11:57:44 2014
++++ src/xfedefs.h	Thu Jun 18 04:31:49 2015
+@@ -261,19 +261,24 @@
+ 
+ #if defined(linux)
+ 
+-// fstab path
+-#ifndef FSTAB_PATH
+-#define FSTAB_PATH "/etc/fstab"
+-#endif
+-
+ // mtab path
+ #ifndef MTAB_PATH
+ #define MTAB_PATH "/proc/mounts"
+ #endif
+ 
++#endif
++
++#if defined(linux) || defined(__OpenBSD__)
++
++// fstab path
++#ifndef FSTAB_PATH
++#define FSTAB_PATH "/etc/fstab"
++#endif
++
+ // Package format
+ #define DEB_PKG 0
+ #define RPM_PKG 1
+ #define OTHER_PKG 2
++#define OPENBSD_PKG 3
+ 
+ #endif

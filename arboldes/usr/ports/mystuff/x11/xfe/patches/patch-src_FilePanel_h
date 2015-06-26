@@ -1,7 +1,7 @@
 $adJ$
---- src/FilePanel.h.orig	Tue Aug 20 08:14:01 2013
-+++ src/FilePanel.h	Thu Aug 29 06:58:38 2013
-@@ -127,13 +127,11 @@ FilePanel(FXWindow *owner, const char*,FXComposite*, D
+--- src/FilePanel.h.orig	Fri Dec  5 03:19:30 2014
++++ src/FilePanel.h	Thu Jun 11 15:53:45 2015
+@@ -142,13 +142,11 @@ FilePanel(FXWindow *owner, const char*,FXComposite*, D
          ID_SHOW_DETAILS,
          ID_TOGGLE_HIDDEN,
          ID_TOGGLE_THUMBNAILS,
@@ -15,7 +15,7 @@ $adJ$
          ID_LAST,
      };
  public:
-@@ -192,7 +190,6 @@ FilePanel(FXWindow *owner, const char*,FXComposite*, D
+@@ -209,7 +207,6 @@ FilePanel(FXWindow *owner, const char*,FXComposite*, D
  	long onUpdRunScript(FXObject*,FXSelector,void*);
  	long onCmdGoScriptDir(FXObject*, FXSelector, void*);
  
@@ -23,7 +23,7 @@ $adJ$
      long onCmdMount(FXObject*,FXSelector,void*);
      long onUpdMount(FXObject*,FXSelector,void*);
      long onUpdUnmount(FXObject*,FXSelector,void*);
-@@ -200,7 +197,6 @@ FilePanel(FXWindow *owner, const char*,FXComposite*, D
+@@ -217,7 +214,6 @@ FilePanel(FXWindow *owner, const char*,FXComposite*, D
      long onUpdPkgQuery(FXObject*,FXSelector,void*);
      long onCmdPkgInstall(FXObject*,FXSelector,void*);
      long onCmdPkgUninstall(FXObject*,FXSelector,void*);

@@ -1,0 +1,18 @@
+$OpenBSD$
+--- wscript.orig	Tue Jun 16 17:18:48 2015
++++ wscript	Tue Jun 16 17:19:08 2015
+@@ -409,12 +409,8 @@ def configure(conf):
+     # Check for header files
+     for h in _headers:
+         conf.check(header_name=h)
+-
+-    # Define to 1 if you have the `strcasestr' function.
+-    # this function is part of some glibc, string.h
+-    # could be missing in win32
+-    conf.check_cc(msg='Checking for function strcasestr', define_name="HAVE_STRCASESTR",
+-            fragment='int main() {strcasestr("hello","he");}\n')
++    
++    dfn('HAVE_STRCASESTR', 1)
+ 
+     # appropriate cflags
+     env.append_value('CXXFLAGS', env['CXXFLAGS_%s' % opt.debug_level.upper()])
