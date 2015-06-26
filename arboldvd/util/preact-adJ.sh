@@ -3,14 +3,14 @@
 # Dominio público de acuerdo a legislación colombiana. http://www.pasosdejesus.org/dominio_publico_colombia.html. 
 # 2014. vtamara@pasosdeJesus.org
 
-VER=5.6
-REV=1
+VER=5.7
+REV=0
 VESP=""
-VERP=56
+VERP=57
 
-ACVER=`uname -r`
+ACVERC=`uname -r`
+ACVER=`echo $ACVERC | sed -e "s/\.//g"`
 ARQ=`uname -m`
-
 if (test "$USER" != "root") then {
 	echo "Este script debe ser ejecutado por root o con sudo";
 	exit 1;
@@ -33,6 +33,7 @@ if (test "$l" = "") then {
 	exit 1;
 } fi;
 
+dialog --title 'Prepara actualización' --msgbox "\\nPor preparar actualización de $ACVERC a $VER\\n" 15 60
 vac="";
 mac="";
 
@@ -120,7 +121,7 @@ if (test "$?" = "0") then {
 	} fi;
 } fi;
 
-if (test "$ARCVER" -lt "5.5") then {
+if (test "$ACVER" -lt "55") then {
 	dialog --title 'Advertencia: respaldar datos binarios' --yesno "\\nPara actualizar de versiones anteriores a 5.5 deben detenerse servicios y \\n
 eliminar todos los paquetes del sistema.\\n
 Este archivo de comandos hará eso a continuación,\\n

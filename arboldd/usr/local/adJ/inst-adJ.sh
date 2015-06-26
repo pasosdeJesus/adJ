@@ -1157,10 +1157,9 @@ if (test "$?" != "0") then {
 	cat >> /root/.profile <<EOF
 export PKG_PATH=ftp://carroll.cac.psu.edu/pub/OpenBSD/$VER/packages/$ARQ/
 export PKG_PATH=http://adJ.pasosdeJesus.org/pub/OpenBSD/$VER/packages/$ARQ/
-if (test "\$TERM" = "xterm") then {
+if (test "\$TERM" = "xterm" -o "\$TERM" = "xterm-color") then {
 	        export TERM=xterm-color
-}
-else {
+} elif (test "\$TERM" != "screen" -a "\$TERM" != "screen-256color") then {
 	        export TERM=wsvt25
 } fi;
 which colorls > /dev/null 2>&1
@@ -1621,12 +1620,13 @@ echo "* Poniendo permisos de /var/www/resbase" >> /var/tmp/inst-adJ.bitacora;
 chown $uadJ:$uadJ /var/www/resbase
 
 insacp apg
+insacp xz
+insacp libxml
+insacp libiconv
 
 echo "* Instalar PostgreSQL y PostGIS"  >> /var/tmp/inst-adJ.bitacora
 f=`ls /var/db/pkg/postgresql-server* 2> /dev/null > /dev/null`;
 if (test "$?" != "0") then {
-	insacp libxml
-	insacp libiconv
 	insacp ossp-uuid
 	p=`ls $PKG_PATH/libxml-* $PKG_PATH/libiconv-* $PKG_PATH/postgresql-client-* $PKG_PATH/postgresql-server* $PKG_PATH/postgresql-contrib* $PKG_PATH/postgresql-doc*`
 	pkg_add -I -r -D update -D updatedepends $p >> /var/tmp/inst-adJ.bitacora 2>&1;
@@ -2094,7 +2094,6 @@ if (test "no" = "probar" -a "$p" != "") then {
 	phpinfo();
 ?>
 EOF
-	sed -e "s/#FORCE_SSL_PROMPT.*/FORCE_SSL_PROMPT:yes/g" /etc/lynx.cfg > /tmp/lynx.cfg
 	curl -k "https://127.0.0.1/phpinfo-adJ.php" > /tmp/rescurl.html 2> /dev/null
 	grep "PHP" /tmp/rescurl.html > /dev/null 2>&1
 	if (test "$?" != "0") then {
@@ -2570,6 +2569,42 @@ if (test "$f" != "") then {
 if (test ! -f /home/$uadJ/.tmux.conf) then {
 	cat > /home/$uadJ/.tmux.conf << EOF
 set-option -g history-limit 20000
+
+EOF
+	chown $uadJ:$uadJ /home/$uadJ/.tmux.conf
+} fi;
+grep "default-terminal" /home/$uadJ/.tmux.conf > /dev/null 2>&1
+if (test "$?" != "0") then {
+	cat >> /home/$uadJ/.tmux.conf << EOF
+set -g default-terminal "screen"
+EOF
+} fi;
+
+echo "* Configurar elinks para que opere en xterm, consolas virtuales y tmux en xterm-color" >> /var/tmp/inst-adJ.bitacora;
+if (test ! -f /home/$uadJ/.elinks/elinks.conf) then {
+	cat > /home/$uadJ/.elinks/elinks.conf << EOF
+set config.saving_style_w = 1
+set terminal.xterm-color.utf_8_io = 1
+set terminal.xterm-color.colors = 2
+set terminal.xterm-color.charset = "utf-8"
+set terminal.xterm-color.type = 1
+set terminal.xterm-256color.utf_8_io = 1
+set terminal.xterm-256color.colors = 2
+set terminal.xterm-256color.charset = "utf-8"
+set terminal.xterm-256color.type = 1
+set terminal.screen.utf_8_io = 1
+set terminal.screen.colors = 2
+set terminal.screen.charset = "utf-8"
+set terminal.screen.type = 1
+set terminal.screen-256color.utf_8_io = 1
+set terminal.screen-256color.colors = 2
+set terminal.screen-256color.charset = "utf-8"
+set terminal.screen-256color.type = 1
+set terminal.wsvt25.utf_8_io = 0
+set terminal.wsvt25.colors = 1
+set terminal.wsvt25.charset = "ISO-8859-1"
+set terminal.wsvt25.type = 0
+set ui.language = "System"
 EOF
 	chown $uadJ:$uadJ /home/$uadJ/.tmux.conf
 } fi;
@@ -2694,7 +2729,7 @@ chmod a+rxw /var/www/tmp > /dev/null 2>&1
 dialog --title 'Componentes básicos instalados' --msgbox "\\nInstalación y configuración de los componentes básicos de adJ completada.\\n\\nPor instalar los demás paquetes de $ARCH/paquetes" 15 60
 #, mientras tanto puede instalar SIVeL:"
 #echo "1. Pase a la consola gráfica con [Ctrl]-[Alt]-[F5] o si no es gráfica iniciela desde la segunda consola [Ctrl]-[Alt]-[F2] con 'xdm'"
-#echo "2. Abra chromium (o en modo texto lynx) y use la dirección 'https://127.0.0.1/actualiza.php'"
+#echo "2. Abra chromium (o en modo texto elinks) y use la dirección 'https://127.0.0.1/actualiza.php'"
 #echo "3. Debe poder ingresar con el usuario que creó"
 #echo "4. Complete actualización de SIVeL siguiendo las instrucciones"
 #echo ""
@@ -2731,13 +2766,14 @@ for i in .libs*; do
 	echo $i >> /var/tmp/inst-adJ.bitacora ; 
 	sudo pkg_delete -I $i >> /var/tmp/inst-adJ.bitacora 2>&1
 done
+sudo rm -rf *core
 
 for i in $PKG_PATH/*tgz; do
 	echo $i | tee -a /var/tmp/inst-adJ.bitacora
 	pkg_add -I -D updatedepends -D update -D libdepends -r $i >> /var/tmp/inst-adJ.bitacora 2>&1
 done;
 
-pkg_add -I -D update -u
+pkg_add -I -D update -u 2>&1 | tee -a /var/tmp/inst-adJ.bitacora 
 
 # Configuraciones típicas
 
