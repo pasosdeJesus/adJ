@@ -1,5 +1,5 @@
 #!/bin/ksh
-#	$OpenBSD: install.sh,v 1.253 2014/07/22 10:03:56 ajacoutot Exp $
+#      $OpenBSD: install.sh,v 1.259 2015/01/02 22:38:50 rpe Exp $
 #	$NetBSD: install.sh,v 1.5.2.8 1996/08/27 18:15:05 gwr Exp $
 #
 # Copyright (c) 1997-2009 Todd Miller, Theo de Raadt, Ken Westerback
@@ -86,10 +86,10 @@ while :; do
 	makedev $DISK || continue
 
 	rm -f /tmp/*.$DISK
-	md_prep_disklabel $DISK || { DISK= ; continue ; }
+	md_prep_disklabel $DISK || { DISK=; continue ; }
 
 	grep -qs " / ffs " /tmp/fstab.$ROOTDISK ||
-		{ DISK= ; echo "'/' must be configured!" ; continue ; }
+		{ DISK=; echo "'/' must be configured!"; continue ; }
 
 	if [[ -f /tmp/fstab.$DISK ]]; then
 		while read _pp _mp _rest; do
@@ -98,7 +98,7 @@ while :; do
 				continue
 			fi
 			[[ /tmp/fstab.$DISK == $(grep -l " $_mp " /tmp/fstab.*) ]] ||
-				{ _rest=$DISK ; DISK= ; break ; }
+				{ _rest=$DISK; DISK=; break; }
 		done </tmp/fstab.$DISK
 		if [[ -z $DISK ]]; then
 			cat /tmp/fstab.$_rest >/etc/fstab
@@ -123,7 +123,7 @@ for _mp in $(bsort $_fsent); do
 	_mp=${_mp%!*}
 	echo -n "$_pp $_mp ffs rw"
 
-	[[ $_mp == / ]] && { echo " 1 1" ; continue ; }
+	[[ $_mp == / ]] && { echo " 1 1"; continue; }
 
 	echo -n ",nodev"
 
@@ -147,7 +147,7 @@ install_sets
 
 if [[ -z $TZ ]]; then
 	(cd /mnt/usr/share/zoneinfo
-	    ls -1dF $(tar cvf /dev/null [A-Za-y]*) >/mnt/tmp/tzlist )
+		ls -1dF $(tar cvf /dev/null [A-Za-y]*) >/mnt/tmp/tzlist )
 	echo
 	set_timezone /mnt/tmp/tzlist
 	rm -f /mnt/tmp/tzlist
@@ -177,10 +177,13 @@ mv /tmp/ttys /mnt/etc/ttys
 
 echo -n "Saving configuration files..."
 
-(cd /var/db; [[ -f dhclient.leases ]] && mv dhclient.leases /mnt/var/db/. )
+(cd /var/db; for _f in dhclient.leases.*; do
+	[[ -f $_f ]] && mv $_f /mnt/var/db/.
+done)
 
 hostname >/tmp/myname
-
+echo "127.0.0.1	localhost" >/mnt/etc/hosts
+echo "::1		localhost" >>/mnt/etc/hosts
 if [[ -f /tmp/hosts ]]; then
 	_dn=$(get_fqdn)
 	while read _addr _hn _aliases; do
@@ -194,12 +197,13 @@ if [[ -f /tmp/hosts ]]; then
 fi
 
 _f=dhclient.conf
-[[ -f /tmp/$_f ]] && { cat /tmp/$_f >>/mnt/etc/$_f ; rm /tmp/$_f ; }
+[[ -f /tmp/$_f ]] && { cat /tmp/$_f >>/mnt/etc/$_f; rm /tmp/$_f; }
 
 (cd /tmp; for _f in fstab hostname* kbdtype my* ttys *.conf *.tail; do
 	[[ -f $_f && -s $_f ]] && mv $_f /mnt/etc/.
 done)
 
+echo "done."
 apply
 
 if [[ -n $user ]]; then
@@ -238,9 +242,5 @@ fi
 	mkdir /mnt/root/.ssh
 	print -r -- "$rootkey" >> /mnt/root/.ssh/authorized_keys
 )
-
-if grep -qs '^rtsol' /mnt/etc/hostname.*; then
-	echo 'net.inet6.icmp6.rediraccept=1 # 1=Accept IPv6 ICMP redirects (for hosts)' >>/mnt/etc/sysctl.conf
-fi
 
 finish_up

@@ -86,10 +86,10 @@ while :; do
 	makedev $DISK || continue
 
 	rm -f /tmp/*.$DISK
-	md_prep_disklabel $DISK || { DISK=; continue ; }
+	md_prep_disklabel $DISK || { DISK=; continue; }
 
 	grep -qs " / ffs " /tmp/fstab.$ROOTDISK ||
-		{ DISK=; echo "'/' $_slmustbeconfigured!"; continue ; }
+		{ DISK=; echo "'/' $_slmustbeconfigured!"; continue; }
 
 	if [[ -f /tmp/fstab.$DISK ]]; then
 		while read _pp _mp _rest; do

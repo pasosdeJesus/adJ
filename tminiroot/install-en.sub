@@ -1,4 +1,4 @@
-#	$OpenBSD: install.sub,v 1.788 2014/07/28 14:12:14 kettenis Exp $
+#	$OpenBSD: install.sub,v 1.815 2015/03/08 13:15:00 deraadt Exp $
 #
 # Copyright (c) 1997-2009 Todd Miller, Theo de Raadt, Ken Westerback
 # All rights reserved.
@@ -59,12 +59,12 @@ usage() {
 }
 
 # Parse parameters
-auto=false
-respfile=
+AUTO=false
+RESPFILE=
 while getopts "af:" opt; do
 	case $opt in
-	a)	auto=true;;
-	f)	respfile=$OPTARG;;
+	a)	AUTO=true;;
+	f)	RESPFILE=$OPTARG;;
 	*)	usage;;
 	esac
 done
@@ -140,9 +140,12 @@ get_cddevs () {
 }
 
 get_ifdevs() {
-	ifconfig "$@" 2>/dev/null |
-		egrep -v '^[[:space:]]|(bridge|enc|gif|gre|lo|pflog|pfsync|ppp|sl|tun)[[:digit:]]+:' |
-		sed -n 's/^\(.*\):.*/\1/p'
+	local _if _iflist=$(rmel vlan $(ifconfig -C))
+
+	for _if in $(ifconfig "$@" 2>/dev/null |
+		sed -n 's/^\([^[:space:]]*\):.*/\1/p'); do
+		isin ${_if%%+([0-9])} $_iflist || echo $_if
+	done
 }
 
 get_drive() {
@@ -202,7 +205,7 @@ retrap() {
 
 rm -f /tmp/update
 
-if ! $auto; then
+if ! $AUTO; then
 	# Start listener process looking for dmesg changes
 	(
 		while :; do
@@ -250,7 +253,7 @@ _ask() {
 	return $_redo
 }
 
-# Search question in $respfile, return answer in $resp
+# Search question in $RESPFILE, return answer in $resp
 #
 # - split question and answer at leftmost =
 # - strip leading/trailing blanks
@@ -265,7 +268,7 @@ _ask() {
 _autorespond() {
 	typeset -l _q=$1 _key
 	local _def=$2 _l _val
-	[[ -f $respfile ]] || return
+	[[ -f $RESPFILE ]] || return
 	# Find a suitable response in /ai.conf and remove it if found.
 	mv /ai.conf /ai.conf.tmp
 	while IFS='	' read -r _l; do
@@ -287,7 +290,7 @@ ask() {
 
 askpassword() {
 	local _q=$1
-	if $auto; then
+	if $AUTO; then
 		echo -n "$_q "
 		_autorespond "$_q"
 		echo '<provided>'
@@ -314,7 +317,7 @@ encr_pwd() {
 		$_p == '*************' ]]; then
 		echo "$_p"
 	else
-		/mnt/usr/bin/encrypt -b 8 -- "$_p"
+		encrypt -b a -- "$_p"
 	fi
 }
 
@@ -351,7 +354,7 @@ user_setup() {
 	userpass=$_password
 
 	userkey=
-	$auto && ask "Public ssh key for user $user" none &&
+	$AUTO && ask "Public ssh key for user $user" none &&
 		[[ $resp != none ]] && userkey=$resp
 
 	if [[ $sshd == y ]]; then
@@ -367,7 +370,7 @@ function ask_until {
 		ask "$1" "$2"
 		[[ -n $resp ]] && break
 		echo "A response is required."
-		$auto && exit 1
+		$AUTO && exit 1
 	done
 }
 
@@ -383,7 +386,7 @@ ask_yn() {
 		n|no)	resp=n; return 1;;
 		esac
 		echo "'$resp' is not a valid choice."
-		$auto && exit 1
+		$AUTO && exit 1
 	done
 }
 
@@ -412,7 +415,7 @@ ask_which() {
 
 		isin "$resp" $_dynlist done && break
 		echo "'$resp' is not a valid choice."
-		$auto && [[ -n $respfile ]] && exit 1
+		$AUTO && [[ -n $RESPFILE ]] && exit 1
 	done
 }
 
@@ -471,7 +474,7 @@ showcols() {
 	mkdir -p $_cdir
 	rm -rf -- $_cdir/*
 	while read _l; do
-		[ "$_l" ] || continue
+		[ -n $_l ] || continue
 		mkdir -p /tmp/cdir/"$_l"
 		_clist[${#_clist[*]}]="$_l"
 	done
@@ -564,7 +567,7 @@ configure_ifs() {
 		_hn=/tmp/hostname.$_ifs
 		rm -f $_hn
 
-		if [[ $_ifs == vlan[0-9]* ]]; then
+		if [[ $_ifs == vlan+([0-9]) ]]; then
 			_vi=$(ifconfig $_ifs 2>/dev/null |
 				sed -n 's/vlan: \([0-9]*\).*/\1/p')
 			_tags=$(ifconfig vlan 2>/dev/null |
@@ -578,14 +581,14 @@ configure_ifs() {
 			fi
 			_ifdevs=$(get_ifdevs)
 			set -- $_ifdevs
-			while [[ $1 == vlan[0-9]* ]]; do
+			while [[ $1 == vlan+([0-9]) ]]; do
 				shift
 			done
 			ask "Which interface:tag should $_ifs be on?" "${_vd:=$1}:$_vi"
 			_vd=${resp%%:*}
 			_vi=${resp##*:}
 
-			if ! (isin "$_vd" $_ifdevs && [[ $_vd != vlan[0-9]* ]]); then
+			if ! (isin "$_vd" $_ifdevs && [[ $_vd != vlan+([0-9]) ]]); then
 				echo "Invalid interface choice '$_vd'"
 				_vd=
 				continue
@@ -622,6 +625,7 @@ configure_ifs() {
 			chmod 640 $_hn
 			: ${_first:=$_ifs}
 		fi
+
 		NIFS=$(ls -1 /tmp/hostname.* 2>/dev/null | grep -c ^)
 		_p=done
 	done
@@ -795,18 +799,16 @@ v6_config() {
 	set -- $(v6_info $_ifs)
 	[[ -n $2 ]] && { _addr=$2; _prefixlen=$3; }
 
-	[[ -x /sbin/rtsol ]] && _prompt="or 'rtsol' "
+	ifconfig $_ifs inet6 >/dev/null 2>&1 && _prompt="or 'rtsol' "
 	_prompt="IPv6 address for $_ifs? (${_prompt}or 'none')"
 	ask_until "$_prompt" "${_addr:-none}"
 
 	case $resp in
 	none)	return
 		;;
-	rtsol)	[[ ! -x /sbin/rtsol ]] && { echo "No /sbin/rtsol."; return; }
+	rtsol)  ifconfig $_ifs inet6 >/dev/null 2>&1 || { echo "No INET6 support."; return; }
 		ifconfig $_ifs up
-		if rtsol -F $_ifs; then
-			echo "up\nrtsol" >>$_hn
-		fi
+		ifconfig $_ifs inet6 autoconf && echo "up\nrtsol" >>$_hn
 		return
 		;;
 	esac
@@ -855,7 +857,7 @@ v6_defroute() {
 
 	_prompt="IPv6 default router?"
 
-	if $auto; then
+	if $AUTO; then
 		_autorespond "$_prompt" && _resp=$resp && echo "$_prompt $_resp"
 	else
 		local PS3="$_prompt (${_routers:+list #, }IPv6 address or 'none'): "
@@ -869,8 +871,94 @@ v6_defroute() {
 		echo "$_resp" >>/tmp/mygate
 }
 
+ifstart () {
+	local _hn=$1 if=${1#/mnt/etc/hostname.}
+
+	((NIFS++))
+	while :; do
+		if [ "$cmd2" ]; then
+			set -- $cmd2
+			af=$1 name=$2 mask=$3 bcaddr=$4 ext1=$5 cmd2=
+			i=1
+			while [ i -lt 6 -a -n "$1" ]; do shift; let i=i+1; done
+			ext2="$@"
+		else
+			read af name mask bcaddr ext1 ext2 || break
+		fi
+		case "$af" in
+		"#"*|"!"*|"bridge"|"")
+			continue
+		;;
+		"dhcp") [ "$name" = "NONE" ] && name=
+			[ "$mask" = "NONE" ] && mask=
+			[ "$bcaddr" = "NONE" ] && bcaddr=
+			dhcpif="$dhcpif $if"
+			cmd="ifconfig $if $name $mask $bcaddr $ext1 $ext2 down"
+			if [[ -x /sbin/dhclient ]]; then
+				cmd="$cmd; dhclient $if"
+			else
+				cmd="$cmd; echo /sbin/dhclient missing - skipping dhcp request."
+			fi
+			;;
+		"rtsol")
+			if ifconfig $if inet6 >/dev/null 2>&1; then
+				rtsolif="$rtsolif $if"
+				cmd="ifconfig $if $name $mask $bcaddr $ext1 $ext2 up"
+			else
+				cmd="$cmd; echo No INET6 support - skipping rtsol request."
+			fi
+			;;
+		*)      read dt dtaddr
+			if [ "$name" = "alias" ]; then
+				alias=$name
+				name=$mask
+				mask=$bcaddr
+				bcaddr=$ext1
+				ext1=$ext2
+				ext2=
+			else
+				alias=
+			fi
+			cmd="ifconfig $if $af $alias $name"
+			case "$dt" in
+			dest)   cmd="$cmd $dtaddr"
+				;;
+			*)
+				cmd2="$dt $dtaddr"
+				;;
+			esac
+			case $af in
+			inet)
+				if [ ! -n "$name" ]; then
+					echo "/etc/hostname.$if: inet alone is invalid"
+					return
+				fi
+				[ "$mask" ] && cmd="$cmd netmask $mask"
+				if [ "$bcaddr" -a X"$bcaddr" != "XNONE" ]; then
+					cmd="$cmd broadcast $bcaddr"
+				fi
+				[ "$alias" ] && rtcmd=";route -qn add -host $name 127.0.0.1"
+				;;
+			inet6)
+				if [ ! -n "$name" ]; then
+					echo "/etc/hostname.$if: inet6 alone is invalid"
+					return
+				fi
+				[ "$mask" ] && cmd="$cmd prefixlen $mask"
+				cmd="$cmd $bcaddr"
+				;;
+			*)      cmd="$cmd $mask $bcaddr"
+				;;
+			esac
+			cmd="$cmd $ext1 $ext2$rtcmd" rtcmd=
+			;;
+		esac
+		eval "$cmd"
+	done <$_hn
+}
+
 enable_network() {
-	local _f _gw
+	local _f _gw _trunks _svlans _vlans
 
 	for _f in dhclient.conf resolv.conf resolv.conf.tail; do
 		if [ -f /mnt/etc/$_f ]; then
@@ -881,91 +969,22 @@ enable_network() {
 	ifconfig lo0 inet 127.0.0.1/8
 
 	for hn in /mnt/etc/hostname.*; do
-		((NIFS++))
-
 		if=${hn#/mnt/etc/hostname.}
-
-		(ifconfig $if||ifconfig $if create) >/dev/null 2>&1 || continue
-
-		while :; do
-			if [ "$cmd2" ]; then
-				set -- $cmd2
-				af=$1 name=$2 mask=$3 bcaddr=$4 ext1=$5 cmd2=
-				i=1
-				while [ i -lt 6 -a -n "$1" ]; do shift; let i=i+1; done
-				ext2="$@"
-			else
-				read af name mask bcaddr ext1 ext2 || break
-			fi
-			case "$af" in
-			"#"*|"!"*|"bridge"|"")
-				continue
-				;;
-			"dhcp")	[ "$name" = "NONE" ] && name=
-				[ "$mask" = "NONE" ] && mask=
-				[ "$bcaddr" = "NONE" ] && bcaddr=
-				dhcpif="$dhcpif $if"
-				cmd="ifconfig $if $name $mask $bcaddr $ext1 $ext2 down"
-				if [[ -x /sbin/dhclient ]]; then
-					cmd="$cmd; dhclient $if"
-				else
-					cmd="$cmd; echo /sbin/dhclient missing - skipping dhcp request."
-				fi
-				;;
-			"rtsol")
-				rtsolif="$rtsolif $if"
-				cmd="ifconfig $if $name $mask $bcaddr $ext1 $ext2 up"
-				;;
-			*)	read dt dtaddr
-				if [ "$name" = "alias" ]; then
-					alias=$name
-					name=$mask
-					mask=$bcaddr
-					bcaddr=$ext1
-					ext1=$ext2
-					ext2=
-				else
-					alias=
-				fi
-				cmd="ifconfig $if $af $alias $name"
-				case "$dt" in
-				dest)	cmd="$cmd $dtaddr"
-					;;
-				*)
-					cmd2="$dt $dtaddr"
-					;;
-				esac
-				case $af in
-				inet)
-					if [ ! -n "$name" ]; then
-						echo "/etc/hostname.$if: inet alone is invalid"
-						return
-					fi
-					[ "$mask" ] && cmd="$cmd netmask $mask"
-					if [ "$bcaddr" -a X"$bcaddr" != "XNONE" ]; then
-						cmd="$cmd broadcast $bcaddr"
-					fi
-					[ "$alias" ] && rtcmd=";route -qn add -host $name 127.0.0.1"
-					;;
-				inet6)
-					if [ ! -n "$name" ]; then
-						echo "/etc/hostname.$if: inet6 alone is invalid"
-						return
-					fi
-					[ "$mask" ] && cmd="$cmd prefixlen $mask"
-					cmd="$cmd $bcaddr"
-					;;
-				*)	cmd="$cmd $mask $bcaddr"
-					;;
-				esac
-				cmd="$cmd $ext1 $ext2$rtcmd" rtcmd=
-				;;
+		if isin ${if%% ([0-9])} $(ifconfig -C); then
+			case ${if%% ([0-9])} in
+			trunk)  _trunks="$_trunks $hn"  ;;
+			svlan)  _svlans="$_svlans $hn"  ;;
+			vlan)   _vlans="$_vlans $hn"    ;;
 			esac
-			eval "$cmd"
-		done </mnt/etc/hostname.$if
+		else
+			ifconfig $if >/dev/null 2>&1 && ifstart $hn
+		fi
+	done
+	for hn in $_trunks $_svlans $_vlans; do
+		ifstart $hn
 	done
 
-	[[ -n $rtsolif ]] && /mnt/sbin/rtsol -F $rtsolif
+	[[ -n $rtsolif ]] && ifconfig $rtsolif inet6 autoconf
 
 	[[ -z $dhcpif ]] && stripcom /mnt/etc/mygate | while read _gw; do
 		[[ $_gw == @(*:*) ]] && continue
@@ -988,10 +1007,9 @@ install_files() {
 	for _f in $THESETS; do
 		isin $_f $_files || continue;
 		_sets=$(addel $_f $_sets)
-		if [[ -z $DISPLAY && ! -d /mnt/etc/X11 ]]; then
-			# No displays and X isn't installed ==> skip X sets
-			isin ${_f%${VERSION}.tgz} xbase xetc xshare xfont xserv && continue
-		fi
+		[[ -z $DISPLAY && ! -d /mnt/etc/X11 ]] &&
+			isin ${_f%${VERSION}.tgz} xbase xshare xfont xserv &&
+			continue
 		isin $_f $DEFAULTSETS "site$VERSION-$(hostname -s).tgz" &&
 			_get_sets=$(addel $_f $_get_sets)
 	done
@@ -1004,7 +1022,7 @@ install_files() {
 		for _n in $THESETS; do echo $_n; done | showcols | sed 's/^/    /'
 		COLUMNS=$_col
 
-		$auto && exit 1
+		$AUTO && exit 1
 		echo
 		return
 	fi
@@ -1072,7 +1090,7 @@ install_files() {
 				rm -f "$_tmpsrc/$_f"
 				if ! ask_yn "Fetching of $_f failed. Continue anyway?"; then
 					[[ -d $_tmpsrc ]] && rm -rf "$_tmpsrc"
-					$auto && exit 1
+					$AUTO && exit 1
 					return
 				fi
 				continue
@@ -1083,7 +1101,7 @@ install_files() {
 			else
 				if ! ask_yn "Checksum test for $_f failed. Continue anyway?"; then
 					[[ -d $_tmpsrc ]] && rm -rf "$_tmpsrc"
-					$auto && exit 1
+					$AUTO && exit 1
 					return
 				fi
 			fi
@@ -1094,21 +1112,28 @@ install_files() {
 	if [[ -n $_issue ]] &&
 		! ask_yn "$_issue. Continue without verification?"; then
 		[[ -d $_tmpsrc ]] && rm -rf "$_tmpsrc"
-		$auto && exit 1
+		$AUTO && exit 1
 		return
 	fi
-
+	# XXX Delete this chunk after 5.8 (not a supported upgrade path)
+	[[ $MODE == upgrade ]] && rm -rf /mnt/var/tmp
 	for _f in $_get_sets; do
 		_fsrc="$_src/$_f"
 		[[ -f $_tmpsrc/$_f ]] && _fsrc="file://$_tmpsrc/$_f"
 		case $_fsrc in
-		*.tgz)	ftp -D Installing -Vmo - "$_fsrc" | tar -zxphf - -C /mnt;;
+		*.tgz)  ftp -D Installing -Vmo - "$_fsrc" | tar -zxphf - -C /mnt
+			if [[ $_f == ?(x)base*.tgz && $MODE == install ]]; then
+				ftp -D Extracting -Vmo - \
+				file:///mnt/usr/share/sysmerge/${_f%%base*}etc.tgz |
+				tar -zxphf - -C /mnt
+			fi;;
+
 		*)	ftp -D Installing -Vmo "/mnt/$_f" "$_fsrc";;
 		esac
 		if (($?)); then
 			if ! ask_yn "Installation of $_f failed. Continue anyway?"; then
 				[[ -d $_tmpsrc ]] && rm -rf "$_tmpsrc"
-				$auto && exit 1
+				$AUTO && exit 1
 				return
 			fi
 		else
@@ -1235,7 +1260,7 @@ install_mounted_fs() {
 		[[ -d /mnt/$resp ]] && { _dir=/mnt/$resp; break; }
 		[[ -d /$resp ]] && { _dir=/$resp; break; }
 		echo "The directory '$resp' does not exist."
-		$auto && exit 1
+		$AUTO && exit 1
 	done
 
 	install_files "file://$_dir" "$(ls $_dir/)"
@@ -1332,7 +1357,7 @@ sane_install() {
 		isin $_s $DEFAULTSETS || continue
 		[[ -n $_q ]] && return 1
 		if ! ask_yn "Are you *SURE* your $_SMODE is complete without '$_s'?"; then
-			$auto && exit 1 || return 1
+			$AUTO && exit 1 || return 1
 		fi
 	done
 }
@@ -1366,10 +1391,10 @@ install_sets() {
 		d*|D*)	install_disk && METHOD=disk;;
 		h*|H*)	isin http $_locs && install_http && METHOD=http;;
 		n*|N*)	isin nfs $_locs && install_nfs && METHOD=nfs;;
-		*) 	$auto && echo "'$resp' is not a valid choice." && exit 1;;
+		*) 	$AUTO && echo "'$resp' is not a valid choice." && exit 1;;
 		esac
 		[[ -n $METHOD ]] && _d=$METHOD
-		sane_install quiet || $auto && _d=done
+		sane_install quiet || $AUTO && _d=done
 	done
 }
 
@@ -1389,15 +1414,17 @@ munge_fstab() {
 
 		_opt=$(echo $_opt | sed 's/softdep//')
 
-		[[ $_fstype == ffs ]] && _opt=$(echo $_opt | sed 's/ro/rw/')
+		[[ $_fstype == ffs ]] &&
+			_opt=$(echo $_opt | sed 's/[[:<:]]ro[[:>:]]/rw/')
 
-		[[ $_fstype == ffs ]] || _opt=$(echo $_opt | sed 's/rw/ro/')
+		[[ $_fstype == ffs ]] ||
+			_opt=$(echo $_opt | sed 's/[[:<:]]rw[[:>:]]/ro/')
 
 		echo $_dev /mnt${_mp%/} $_fstype $_opt $_rest
 
 	done </tmp/fstab >/etc/fstab
 
-	if [ ! -s /etc/fstab ]; then
+	if [[ ! -s /etc/fstab ]]; then
 		echo "Unable to create valid /etc/fstab."
 		exit
 	fi
@@ -1407,7 +1434,7 @@ mount_fs() {
 	local _async=$1 _dev _mp _fstype _opt _rest _msg _fail
 
 	while read _dev _mp _fstype _opt _rest; do
-		[ "$_mp" = "/mnt" ] || mkdir -p $_mp
+		[[ "$_mp" = "/mnt" ]] || mkdir -p $_mp
 
 		_msg=$(mount -v -t $_fstype $_async -o $_opt $_dev $_mp) ||
 			_fail="$_fail\n$_mp ($_dev)"
@@ -1440,7 +1467,7 @@ check_fs() {
 	while read _dev _mp _fstype _rest _rest _passno _rest; do
 		_dn=$(getdevname "$_dev")
 		[[ $ROOTDEV == @(${_dev#/dev/}|$_dn${_dev##*.}) ]] && continue
-		[ -f "/sbin/fsck_$_fstype" ] || continue
+		[[ -f "/sbin/fsck_$_fstype" ]] || continue
 		makedev "$_dn" || continue
 		((_passno > 0)) || continue
 		echo -n "fsck -${_f}p $_dev..."
@@ -1452,7 +1479,7 @@ check_fs() {
 		fi
 	done </etc/fstab
 
-	[ "$_fail" ] && exit
+	[[ "$_fail" ]] && exit
 }
 
 get_fqdn() {
@@ -1471,7 +1498,7 @@ donetconfig() {
 	configure_ifs
 	v4_defroute
 
-	if [ -f /tmp/resolv.conf.shadow ]; then
+	if [[ -f /tmp/resolv.conf.shadow ]]; then
 		mv /tmp/resolv.conf.shadow /tmp/resolv.conf
 		for _n in $(grep '^nameserver ' /tmp/resolv.conf); do
 			[[ $_n == nameserver ]] || _ns="$_ns$_n "
@@ -1509,9 +1536,7 @@ donetconfig() {
 
 apply()
 {
-	if [[ $sshd == n ]]; then
-		echo "sshd_flags=NO" >>/mnt/etc/rc.conf.local
-	fi
+	[[ $sshd == n ]] && echo "sshd_flags=NO" >>/mnt/etc/rc.conf.local
 	if [[ $sshd_disableroot == y ]]; then
 		sed "/^#\(PermitRootLogin\) yes/s//\1 no/" \
 			< /mnt/etc/ssh/sshd_config >/tmp/sshd_config
@@ -1524,19 +1549,11 @@ apply()
 	fi
 
 
-	if [[ -n $aperture ]]; then
-		echo "machdep.allowaperture=$aperture # See xf86(4)" \
+	[[ -n $aperture ]] && echo "machdep.allowaperture=$aperture # See xf86(4)" \
 		    >>/mnt/etc/sysctl.conf
-	fi
 
-	if [[ -n $lidsuspend ]]; then
-		echo "machdep.lidsuspend=1 # Try to suspend on lid close" \
-		    >>/mnt/etc/sysctl.conf
-	fi
-
-	if [[ $xdm == y && -x /mnt/usr/X11R6/bin/xdm ]]; then
+	[[ $xdm == y && -x /mnt/usr/X11R6/bin/xdm ]] &&
 		echo "xdm_flags=" >>/mnt/etc/rc.conf.local
-	fi
 
 	if [[ $defcons == y ]]; then
 		cp /mnt/etc/ttys /tmp/ttys
@@ -1551,7 +1568,7 @@ apply()
 }
 
 questions() {
-	local _d
+	local _d _cdef=no
 
 	ask_yn "Start sshd(8) by default?" yes
 	sshd=$resp
@@ -1565,7 +1582,6 @@ questions() {
 
 	aperture=
 	xdm=
-	lidsuspend=
 	if [[ -n $DISPLAY ]]; then
 		if [[ -n $(scan_dmesg '/^[a-z]*[01]: aperture needed/p') ]]; then
 			ask_yn "Do you expect to run the X Window System?" yes &&
@@ -1575,15 +1591,12 @@ questions() {
 			ask_yn "Do you want the X Window System to be started by xdm(1)?"
 			xdm=$resp
 		fi
-		if [[ -n $MDLID ]]; then
-			ask_yn "Do you want to suspend on lid close?" yes && \
-			    lidsuspend=$resp
-		fi
 	fi
 
 	if [[ -n $CDEV ]]; then
 		_d=${CPROM:-$CDEV}
-		ask_yn "Change the default console to $_d?"
+		[[ -n $CONSOLE ]] && _cdef=yes
+		ask_yn "Change the default console to $_d?" $_cdef
 		defcons=$resp
 		if [[ $resp == y ]]; then
 			ask_which "speed" "should $_d use" \
@@ -1594,12 +1607,6 @@ questions() {
 			esac
 		fi
 	fi
-}
-
-upgrade_to64time_t() {
-	/mnt/usr/sbin/pwd_mkdb -d /mnt/etc master.passwd
-	>/mnt/var/log/lastlog
-	>/mnt/var/run/utmp
 }
 
 feed_random() {
@@ -1645,7 +1652,7 @@ finish_up() {
 
 	rm -f /mnt/var/run/ld.so.hints
 
-	[ -x /mnt/$MODE.site ] && /mnt/usr/sbin/chroot /mnt /$MODE.site
+	[[ -x /mnt/$MODE.site ]] && /mnt/usr/sbin/chroot /mnt /$MODE.site
 
 	makedev $(bioctl $ROOTDISK 2>/dev/null | sed -n 's/.*<\(.*\)>$/\1/p')
 	md_installboot $ROOTDISK
@@ -1657,8 +1664,6 @@ finish_up() {
 	fi
 
 	update_firmware
-
-	upgrade_to64time_t
 
 	store_random
 
@@ -1673,9 +1678,9 @@ using the 'mail' command.
 __EOT
 
 	md_congrats
-	[[ "$MODE" == upgrade ]] && \
+	[[ $MODE == upgrade ]] && \
 		echo "After rebooting, run sysmerge(8) to update your system configuration."
-	$auto && >/ai.done
+	$AUTO && >/ai.done
 }
 
 
@@ -1727,8 +1732,7 @@ md_consoleinfo
 # the contents of the other sets, not the other way around.
 THESETS="bsd bsd.rd bsd.mp $MDSETS"
 : ${DEFAULTSETS:="bsd bsd.rd"}
-for _set in base etc comp man game xbase xetc xshare xfont xserv site; do
-	[[ $MODE == upgrade && $_set == @(etc|xetc) ]] && continue
+for _set in base comp man game xbase xshare xfont xserv site; do
 	THESETS="$THESETS ${_set}${VERSION}.tgz"
  	#siteXX si esta por defecto
 	#isin $_set site && continue
@@ -1736,7 +1740,7 @@ for _set in base etc comp man game xbase xetc xshare xfont xserv site; do
 done
 # Since etc${VERSION}.tgz is not in DEFAULTSETS for upgrades, it can always be
 # in SANESETS.
-SANESETS="${SANESETS:-bsd} base${VERSION}.tgz etc${VERSION}.tgz"
+SANESETS="${SANESETS:-bsd} base${VERSION}.tgz"
 
 # prepare COLUMNS sanely
 COLUMNS=$(stty -a </dev/console | sed -n '/columns/{s/^.* \([0-9]*\) columns.*$/\1/;p;}')
@@ -1757,57 +1761,78 @@ for _ifs in $(get_ifdevs dhcp); do
 	ifconfig $_ifs delete down -group dhcp 2>/dev/null
 done
 
-# Fetch a response file from a http server.
-#
-# Select a network interface for an initial dhcp request to get the IP
-# from the lease file via the next-server attribute.
-#
 get_responsefile() {
-	local _f _ifdev _mac _mode _server _lf
-	[[ -x /sbin/dhclient ]] || return
-
-	_ifdev=$(get_ifdevs netboot)
-	if [[ -z $_ifdev ]]; then
-		set -- $(get_ifdevs)
-		(($#)) || return
-		if (($# == 1)); then
-			_ifdev=$1
-		else
-			while :; do
-				ask_which "network interface" \
-				    "should be used for the initial DHCP request" \
-				    "$*"
-				isin "$resp" $* && _ifdev=$resp && break
-			done
-		fi
-	fi
-	[[ -n $_ifdev ]] || return
-
-	dhclient $_ifdev
-
-	_lf=/var/db/dhclient.leases.$_ifdev
-	_server=$(sed "/^ *next-server /!d;s///;s/;$//;q" $_lf)
-	_mode=$(sed -E '/^ *filename "auto_(install|upgrade)";$/!d;s//\1/;q' \
-		$_lf)
-	_mac=$(ifconfig $_ifdev | sed 's/.*lladdr \(.*\)/\1/p;d')
-
-	hostname "$(sed -E '/^ *option host-name "(.*)";$/!d;s//\1/;q' $_lf)"
-
-	if [[ -z $_server ]]; then
-		echo "Could not determine next-server."
-	elif [[ -z $_mode ]]; then
-		echo "Could not determine auto mode."
-	else
-		for _f in {$_mac-,}$_mode; do
-			ftp -o "/$_mode.conf" "http://$_server/$_f.conf" &&
-				action=$_mode && return 0
+	local _rf _ifdev _mac _mode _server _lf
+	action=
+ 
+	[[ -f /auto_upgrade.conf ]] && _rf=/auto_upgrade.conf _mode=upgrade
+	[[ -f /auto_install.conf ]] && _rf=/auto_install.conf _mode=install
+	[[ -f $_rf ]] && cp $_rf /ai.$_mode.conf && action=$_mode && return
+ 
+	# Select a network interface for initial dhcp request.
+	# Ask if multiple were found and system was not netbooted.
+	# Extract server ip address and installer mode from lease file.
+	# Prime hostname with host-name option.
+	for _ifdev in ''; do
+		[[ -x /sbin/dhclient ]] || break
+		set -- $(get_ifdevs netboot)
+		(($# == 0)) && set -- $(get_ifdevs)
+		(($# == 1)) && _ifdev=$1
+		while (($# > 1)); do
+			ask_which "network interface" \
+				"should be used for the initial DHCP request" "$*"
+			isin "$resp" $* && _ifdev=$resp && break
 		done
+		[[ -n $_ifdev ]] && dhclient $_ifdev || break
+		_lf=/var/db/dhclient.leases.$_ifdev
+		_server=$(sed "/^ *next-server /!d;s///;s/;$//;q" $_lf)
+		_mode=$(sed -E '/^ *filename "auto_(install|upgrade)";$/!d;s//\1/;q' $_lf)
+		hostname "$(sed -E '/^ *option host-name "(.*)";$/!d;s//\1/;q' $_lf)"
+	done
+
+	# Fetch response file if server and mode are known, otherwise tell which
+	# one was missing. First try to fetch mac-mode.conf, then mode.conf.
+	if [[ -n $_server && -n $_mode ]]; then
+		_mac=$(ifconfig $_ifdev | sed 's/.*lladdr \(.*\)/\1/p;d')
+		for _rf in {$_mac-,}$_mode; do
+			_url=http://$_server/$_rf.conf
+			echo "Fetching $_url"
+			if ftp -Vo "/ai.$_mode.conf" "$_url" 2>/dev/null; then
+				action=$_mode
+				ifconfig $_ifdev delete down 2>/dev/null
+				return 0
+			fi
+
+		done
+	else
+		[[ -z $_server ]] && echo "Could not determine next-server."
+		[[ -z $_mode ]] && echo "Could not determine auto mode."
 	fi
 
-	return 1
+	# Ask for url or local path to response file. Provide a default url if
+	# server was found in lease file.
+	while :; do
+		ask "Response file location?" \
+			"${_server:+http://$_server/install.conf}"
+		[[ -n $resp ]] && _rf=$resp && break
+	done
+ 
+	# Ask for the installer mode only if auto-detection failed.
+	_mode=$(echo "$_rf" | sed -En 's/^.*(install|upgrade).conf$/\1/p')
+	while [[ -z $_mode ]]; do
+		ask "(I)nstall or (U)pgrade?"
+		[[ $resp == [iI]* ]] && _mode=install
+		[[ $resp == [uU]* ]] && _mode=upgrade
+	done
+ 
+	echo "Fetching $_rf"
+	[[ -f $_rf ]] && _rf="file://$_rf"
+	ftp -Vo "/ai.$_mode.conf" "$_rf" 2>/dev/null && action=$_mode
+	ifconfig $_ifdev delete down 2>/dev/null
+	[[ -n $action ]]
 }
 
-if ! $auto; then
+if ! $AUTO; then
 	cat <<__EOT
 At any prompt except password prompts you can escape to a shell by 
 typing '!'. Default answers are shown in []'s and are selected by 
@@ -1815,16 +1840,16 @@ pressing RETURN.  You can exit this program at any time by pressing
 Control-C, but this can leave your system in an inconsistent state.
 
 __EOT
-elif [[ -z $respfile ]]; then
+elif [[ -z $RESPFILE ]]; then
 	if ! get_responsefile; then
 		echo "No response file found; non-interactive mode aborted."
 		exit 1
 	fi
 	rm -f /ai.done
 	echo "Performing non-interactive $action..."
-	/$action -af /$action.conf 2>&1 </dev/null | sed 's/^.*//;w/ai.log'
+	/$action -af /ai.$action.conf 2>&1 </dev/null | sed 's/^.*//;w/ai.log'
 	if [[ -f /ai.done ]]; then
-		while _lf=/mnt/var/tmp/ai.log.$RANDOM && test -e $_lf; do done
+		while _lf=/mnt/var/log/ai.log.$RANDOM && test -e $_lf; do done
 		cp /ai.log $_lf
 		chmod 600 $_lf
 		_lf=${_lf#/mnt}
@@ -1838,7 +1863,7 @@ __EOT
 		exit 1
 	fi
 else
-	cp $respfile /ai.conf || exit
+	cp $RESPFILE /ai.conf || exit
 fi
 
 
@@ -1870,7 +1895,7 @@ if [[ $MODE == install ]]; then
 	done
 
 	rootkey=
-	$auto && ask "Public ssh key for root account?" none &&
+	$AUTO && ask "Public ssh key for root account?" none &&
 		[[ $resp != none ]] && rootkey=$resp
 
 	questions

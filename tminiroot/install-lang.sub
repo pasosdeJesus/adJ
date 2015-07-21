@@ -333,7 +333,7 @@ user_setup() {
 		root|daemon|operator|bin|smmsp|popa3d) ;;
 		sshd|uucp|www|named|proxy|nobody|ftp) ;;
 		[a-z]*([a-z0-9_]))
-			((${#resp} <= 31 )) && break;;
+			((${#resp} <= 31)) && break;;
 		esac
 		echo "$resp $_slisnotauseable."
 	done
@@ -474,7 +474,7 @@ showcols() {
 	mkdir -p $_cdir
 	rm -rf -- $_cdir/*
 	while read _l; do
-		[ -n $_l ] || continue
+		[[ -n $_l ]] || continue
 		mkdir -p /tmp/cdir/"$_l"
 		_clist[${#_clist[*]}]="$_l"
 	done
@@ -666,6 +666,7 @@ dhcp_request() {
 initial-interval 1;
 backoff-cutoff 2;
 reboot 5;
+timeout 10;
 send host-name "$_hn";
 __EOT
 
@@ -886,7 +887,7 @@ ifstart () {
 		case "$af" in
 		"#"*|"!"*|"bridge"|"")
 			continue
-		;;
+			;;
 		"dhcp") [ "$name" = "NONE" ] && name=
 			[ "$mask" = "NONE" ] && mask=
 			[ "$bcaddr" = "NONE" ] && bcaddr=
@@ -968,7 +969,7 @@ enable_network() {
 
 	for hn in /mnt/etc/hostname.*; do
 		if=${hn#/mnt/etc/hostname.}
-		if isin ${if%% ([0-9])} $(ifconfig -C); then
+		if isin ${if%%+([0-9])} $(ifconfig -C); then
 			case ${if%% ([0-9])} in
 			trunk)  _trunks="$_trunks $hn"  ;;
 			svlan)  _svlans="$_svlans $hn"  ;;
@@ -1432,7 +1433,7 @@ mount_fs() {
 	local _async=$1 _dev _mp _fstype _opt _rest _msg _fail
 
 	while read _dev _mp _fstype _opt _rest; do
-		[[ "$_mp" = "/mnt" ]] || mkdir -p $_mp
+		[[ $_mp = /mnt ]] || mkdir -p $_mp
 
 		_msg=$(mount -v -t $_fstype $_async -o $_opt $_dev $_mp) ||
 			_fail="$_fail\n$_mp ($_dev)"
@@ -1465,7 +1466,7 @@ check_fs() {
 	while read _dev _mp _fstype _rest _rest _passno _rest; do
 		_dn=$(getdevname "$_dev")
 		[[ $ROOTDEV == @(${_dev#/dev/}|$_dn${_dev##*.}) ]] && continue
-		[[ -f "/sbin/fsck_$_fstype" ]] || continue
+		[[ -f /sbin/fsck_$_fstype ]] || continue
 		makedev "$_dn" || continue
 		((_passno > 0)) || continue
 		echo -n "fsck -${_f}p $_dev..."
@@ -1477,7 +1478,7 @@ check_fs() {
 		fi
 	done </etc/fstab
 
-	[[ "$_fail" ]] && exit
+	[[ -n $_fail ]] && exit
 }
 
 get_fqdn() {
@@ -1547,8 +1548,9 @@ apply()
 	fi
 
 
-	[[ -n $aperture ]] && echo "machdep.allowaperture=$aperture # See xf86(4)" \
-		    >>/mnt/etc/sysctl.conf
+	[[ -n $aperture ]] && 
+		echo "machdep.allowaperture=$aperture # See xf86(4)" \
+			>>/mnt/etc/sysctl.conf
 
 	[[ $xdm == y && -x /mnt/usr/X11R6/bin/xdm ]] &&
 		echo "xdm_flags=" >>/mnt/etc/rc.conf.local
