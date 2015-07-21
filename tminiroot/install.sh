@@ -1,5 +1,5 @@
 #!/bin/ksh
-#	$OpenBSD: install.sh,v 1.253 2014/07/22 10:03:56 ajacoutot Exp $
+#	$OpenBSD: install.sh,v 1.259 2015/01/02 22:38:50 rpe Exp $
 #	$NetBSD: install.sh,v 1.5.2.8 1996/08/27 18:15:05 gwr Exp $
 #
 # Copyright (c) 1997-2009 Todd Miller, Theo de Raadt, Ken Westerback
@@ -98,11 +98,11 @@ while :; do
 	# /tmp/fstab.$DISK is created here with 'disklabel -f' or
 	# 'disklabel -F' depending on the value of $FSTABFLAG.
 	rm -f /tmp/*.$DISK
-	md_prep_disklabel $DISK || { DISK= ; continue ; }
+	md_prep_disklabel $DISK || { DISK=; continue; }
 
 	# Make sure there is a '/' mount point.
 	grep -qs " / ffs " /tmp/fstab.$ROOTDISK ||
-		{ DISK= ; echo "'/' must be configured!" ; continue ; }
+		{ DISK=; echo "'/' must be configured!"; continue; }
 
 	if [[ -f /tmp/fstab.$DISK ]]; then
 		# Avoid duplicate mount points on different disks.
@@ -114,7 +114,7 @@ while :; do
 			fi
 			# Non-swap mountpoints must be in only one file.
 			[[ /tmp/fstab.$DISK == $(grep -l " $_mp " /tmp/fstab.*) ]] ||
-				{ _rest=$DISK ; DISK= ; break ; }
+				{ _rest=$DISK; DISK=; break; }
 		done </tmp/fstab.$DISK
 		if [[ -z $DISK ]]; then
 			# Duplicate mountpoint.
@@ -151,7 +151,7 @@ for _mp in $(bsort $_fsent); do
 
 	# Only '/' is neither nodev nor nosuid. i.e. it can obviously
 	# *always* contain devices or setuid programs.
-	[[ $_mp == / ]] && { echo " 1 1" ; continue ; }
+	[[ $_mp == / ]] && { echo " 1 1"; continue; }
 
 	# Every other mounted filesystem is nodev. If the user chooses
 	# to mount /dev as a separate filesystem, then on the user's
@@ -197,7 +197,7 @@ install_sets
 # using the timezone names extracted from the base set
 if [[ -z $TZ ]]; then
 	(cd /mnt/usr/share/zoneinfo
-	    ls -1dF $(tar cvf /dev/null [A-Za-y]*) >/mnt/tmp/tzlist )
+		ls -1dF $(tar cvf /dev/null [A-Za-y]*) >/mnt/tmp/tzlist )
 	echo
 	set_timezone /mnt/tmp/tzlist
 	rm -f /mnt/tmp/tzlist
@@ -236,7 +236,9 @@ mv /tmp/ttys /mnt/etc/ttys
 echo -n "Saving configuration files..."
 
 # Save any leases obtained during install.
-(cd /var/db; [[ -f dhclient.leases ]] && mv dhclient.leases /mnt/var/db/. )
+(cd /var/db; for _f in dhclient.leases.*; do
+	[[ -f $_f ]] && mv $_f /mnt/var/db/.
+done)
 
 # Move configuration files from /tmp to /mnt/etc.
 hostname >/tmp/myname
@@ -244,7 +246,11 @@ hostname >/tmp/myname
 # Append entries to installed hosts file, changing '1.2.3.4 hostname'
 # to '1.2.3.4 hostname.$FQDN hostname'. Leave untouched lines containing
 # domain information or aliases. These are lines the user added/changed
-# manually. Note we may have no hosts file if no interfaces were configured.
+# manually.
+# Add common entries.
+echo "127.0.0.1\tlocalhost" >/mnt/etc/hosts
+echo "::1\t\tlocalhost" >>/mnt/etc/hosts
+# Note we may have no hosts file if no interfaces were configured.
 if [[ -f /tmp/hosts ]]; then
 	_dn=$(get_fqdn)
 	while read _addr _hn _aliases; do
@@ -259,7 +265,7 @@ fi
 
 # Append dhclient.conf to installed dhclient.conf.
 _f=dhclient.conf
-[[ -f /tmp/$_f ]] && { cat /tmp/$_f >>/mnt/etc/$_f ; rm /tmp/$_f ; }
+[[ -f /tmp/$_f ]] && { cat /tmp/$_f >>/mnt/etc/$_f; rm /tmp/$_f; }
 
 # Possible files to copy from /tmp: fstab hostname.* kbdtype mygate
 #     myname ttys boot.conf resolv.conf sysctl.conf resolv.conf.tail
@@ -267,6 +273,8 @@ _f=dhclient.conf
 (cd /tmp; for _f in fstab hostname* kbdtype my* ttys *.conf *.tail; do
 	[[ -f $_f && -s $_f ]] && mv $_f /mnt/etc/.
 done)
+
+echo "done."
 
 apply
 
@@ -308,10 +316,6 @@ fi
 	mkdir /mnt/root/.ssh
 	print -r -- "$rootkey" >> /mnt/root/.ssh/authorized_keys
 )
-
-if grep -qs '^rtsol' /mnt/etc/hostname.*; then
-	echo 'net.inet6.icmp6.rediraccept=1 # 1=Accept IPv6 ICMP redirects (for hosts)' >>/mnt/etc/sysctl.conf
-fi
 
 # Perform final steps common to both an install and an upgrade.
 finish_up

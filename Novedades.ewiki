@@ -12,10 +12,10 @@ Con respecto a OpenBSD 5.7 para amd64 y a la edición anterior de este DVD
 
 !KERNEL Y SISTEMA BASE
 
-* Ahora si nueva utilidad ==localedef== para convertir formatos de fechas y horas en un formato estándar POSIX al formato de OpenBSD.  locale de paises tomado de CLDR de Unicode.
-* Soporte en la librería de C para presentar fechas, horas, cantidades monetarias, números y ordenamientos alfabéticos (cotejación) con las convenciones de cada país de latinoamérica (y de otros locales soportados por OpenBSD). Opera bien en codificaciones de 8 bits o para español en codificación UTF-8. Buena parte de este soporte, así como el de xlocale se basaron en FreeBSD.  Estas mejoras fueron aportadas a OpenBSD (cotejación desde adJ 5.2, cantidades monetarias y números desde 5.4 y fechas y horas desde 5.5) y se anhela su integración en futuras versiones.    Así en adJ por ejemplo los ordenamientos alfabéticos en !LibreOffice y otros programas son correctos en español (que no ocurre en OpenBSD).
-* Parches de seguridad del sistema base hasta x.Ago.2015, que cierran las y fallas de seguridad y las z de robustez resueltas para fuentes de OpenBSD en http://www.openbsd.org/errata57.html.  Los binarios distribuidos de OpenBSD 5.7 no resuelven estas fallas.
-* Retroportados y/o parchados más de 30 paquetes para cerrar fallas de seguridad o emplear xlocale,  ver detalles en sección PAQUETES EXCLUSIVOS DE ADJ.
+* OJO Utilidad ==localedef== no requiere recode. ==localedef== es herramienta especificada en el estándar POSIX para convertir formatos de fechas y horas en un formato estándar POSIX al formato de OpenBSD.  locale de paises tomado de CLDR de Unicode.
+* Soporte en la librería de C para presentar fechas, horas, cantidades monetarias, números y ordenamientos alfabéticos (cotejación) con las convenciones de cada país de latinoamérica (y de otros locales soportados por OpenBSD) de acuerdo al estándar POSIX. Opera bien en codificaciones de 8 bits o para español en codificación UTF-8. Buena parte de este soporte, así como el de xlocale se basaron en FreeBSD.  Estas mejoras fueron aportadas a OpenBSD (cotejación desde adJ 5.2, cantidades monetarias y números desde 5.4 y fechas y horas desde 5.5) y se anhela su integración en futuras versiones.    Así en adJ por ejemplo los ordenamientos alfabéticos en !LibreOffice y otros programas son correctos en español (que no ocurre en OpenBSD).
+* Parches de seguridad del sistema base hasta x.Jul.2015, que cierran las y fallas de seguridad y las z de robustez resueltas para fuentes de OpenBSD en http://www.openbsd.org/errata57.html.  Los binarios distribuidos de OpenBSD 5.7 no resuelven estas fallas.
+* Retroportados, recompilados o mejorados más de 25 paquetes de OpenBSD para cerrar fallas de seguridad o emplear xlocale,  ver detalles en sección PAQUETES EXCLUSIVOS DE ADJ.
 * Hemos remplazando `daemon' por `servicio' en buena parte del sistema base (ver por ejemplo ==vmstat -s== o ==less /var/log/servicio== o ==man servicio==).  
 
 Entre las novedades reportadas en las `Notas de publicación de OpenBSD 5.7' destacamos las siguientes relacionadas con amd64:
@@ -28,18 +28,24 @@ Entre las novedades reportadas en las `Notas de publicación de OpenBSD 5.7' des
 ** Temperatura, sensores y otros: USB 3.0 soportado en ==xhci==, varios adaptadores seriales a usb soportados con nuevos ==umcs== y ==uslhcom==; mejorado ==umass== para soportar ARchos 24y Vision. gpio: controlador ==skgpio= para Soekris net6501. Lectores de tarjetas: mejorado ==rtsx== para soportar RTS5227 y RTL8411B. Puentes y Buses PCI: mejorados ==ppb==, ==puc==. Memoria:mejorado ==sdmmc== para soportar memorias SD/MMC de mas de 2G y más tarjetas reconocidas por ==sdhc==. UPS: Mejorado ==upd== para soportar más UPS. Mejorado ==ums== para soportar tabletas emuladas por Qemu. Teclado: Mejorado ==ukbd== para soportar Apple "wellspring". touchpads: Mejorado ==pms== para soportar Elantech v4.
 
 * Mejoras a herramientas de Red
-** OpenSMTP 
+** OpenBSD httpd: No soporta SSLv3, mejora soporte para virtualhosts, autenticación básica, redirección en URLs específicos, mejoras a FastCGI
+** OpenSMTP 5.4.4:  No soporta SSLv3, mejoras a reconocedor de encabezados
+** tcpdump presenta tráfico destinadoa a direcciones IPv6 de Enlace-local (FE80::/65)
+** Las solicitudes de IPv6 ahora las hace el kernel ("inet6 autoconf") no se requieren rtsol y rtsold que se han eliminado.
 
 * Seguridad
-** Inclusión de LibreSSL que es una pila para TLS que remplaza OpenSSL con fuentes más legibles y auditadas.
-** bcrypt con nueva API y tipo de condensado $2b$
-** OpenSSH 6.7: reenvio de puertos UDP a UDP o TCP, sftp permite continuar envios interrumpidos, 
+** Chequeo más estricto W^X en kernel
+** /var/tmp es enlace a /tmp
+** Las funciones rand, random, drand48, lrand48, mrand48, srand48 ahora son no-deterministicas.
+** passwd ahora sólo soporta cifrado blowfish
+** Mejoras LibreSSL que es una pila para TLS que remplaza OpenSSL con fuentes más legibles y auditadas.
+** OpenSSH 6.8
 
 * Otros
-** Soporte para leer sistemas de archivos ext4
-** apropos, whatis y makewhatis ahora usan SQLite3
-** Eliminados diversos programas obsoletos: rcp, rsh, rshd, rwho, rwhod, ruptime, asa, bdes, fpr, mkstr, page, spray, xstr, oldrdist, fsplit, uyap, bluetooth, TCP wrappers
-** Diversos programas pasados de base a portes: Apache, rmail, uucpd, lynx
+** mandoc ahora soporta UTF-8 especificado con -K y a salida por defecto ahora es -Tlocale en lugar -Tascii
+** syslogd puede enviar mensajes por TLS
+** Nueva rcctl para controlar servicios
+** Diversos programas pasados de base a portes: Sendmail, nginx
 
 
 * El sistema base incluye mejoras a componentes auditados y mejorados como ==Xenocara== (Xorg 7.7), ==gcc== 4.2.1, ==perl== 5.18.2, nginx 1.6.0, LibreSSL 2.0 con parches posteriores, OpenSMTP 5.4.3, nsd 4.0.3
@@ -49,19 +55,20 @@ Entre las novedades reportadas en las `Notas de publicación de OpenBSD 5.7' des
 
 En adJ es en español, consta de: (a) preparación, (b) instalación/actualización del sistema base y (c) instalación de aplicaciones y entorno.  Por favor vea más detalles en [ Actualiza.md | https://github.com/pasosdeJesus/adJ/blob/ADJ_5_7/Actualiza.md ]
 
-Desde 5.6 el instalador no soporta métodos ftp ni cinta e incluye mejoras para el modo de instalación automático (autoinstall).
+Desde 5.7 el instalador no incluye etc ni xetc pues hacen part de base y xbase
+
 
 !PAQUETES EXCLUSIVOS DE ADJ
 
 Puede ver el listado completo en https://github.com/pasosdeJesus/adJ/blob/master/Contenido.txt a continuación se describen sólo novedades respecto a la versión anterior de adJ y OpenBSD 5.7:
 * SIVeL 1.1.7 y SIVeL 1.2b4.  La versión 1.1.7 seguramente será la última de la serie 1.1.  Es bueno intentar la migración a 1.2b4 siguiendo instrucciones de http://sivel.sourceforge.net/1.2/actualizacion-sivel.html#actualizaciondeunounoaunodos
-* PostgreSQL 9.4.3 retroportado de OpenBSD-current, pero además con soporte UTF-8 y ordenamientos alfabéticos en español. En adJ la información queda cifrada cuando así se elije al instalar o actualizar adJ.  Ver detalles de como usar cotejación en http://aprendiendo.pasosdejesus.org/?id=i18n
-* ruby 2.2.2 retroportado de OpenBSD-current y probado con aplicaciones Rails 4.2.1 Ver http://dhobsd.pasosdejesus.org/index.php?id=Ruby+on+Rails+en+OpenBSD .
-* PHP-5.4.39 
-* Para activar soporte de xlocale se ha recompilado los siguientes paquetes que están en portes de OpenBSD 5.7: boost, djvulibre, ggrep, glib2, gtar, libidn, libxslt, llvm, qt4, scribus, vlc, wget, wxWidgets-gtk2
-* Para cerrar fallas se han recompilado los siguientes paquetes a partir de portes actualizados de OpenBSD 5.7 (pero no incluidos en binarios de ese sistema): 
+* PostgreSQL 9.4.4 recompilado de fuentes actualizadas de OpenBSD-5.7 para cerrar fallas, pero además con soporte UTF-8 y ordenamientos alfabéticos en español. En adJ la información queda cifrada cuando así se elije al instalar o actualizar adJ.  Ver detalles de como usar cotejación en http://aprendiendo.pasosdejesus.org/?id=i18n
+* ruby 2.2.2 retroportado de OpenBSD-current y probado con aplicaciones Rails 4.2.3 Ver http://dhobsd.pasosdejesus.org/index.php?id=Ruby+on+Rails+en+OpenBSD .
+* 
+* Para activar soporte de xlocale se ha recompilado los siguientes paquetes que están en portes de OpenBSD 5.7: boost, djvulibre, ggrep, glib2, gtar, libidn, libxslt, llvm, scribus, vlc, wget, wxWidgets-gtk2
+* Para cerrar fallas se han recompilado los siguientes paquetes a partir de portes actualizados de OpenBSD 5.7 (pero no incluidos en binarios de ese sistema): cus, cups-libs, curl, gnutls, icu4c, libtasn1, libwmf, net-snmp, p5-Mail-SpamAssassin, rrdtool, php-5.5.26
 * Se han retroportado otros paquetes de OpenBSD-Current: chromium-43
-* Se incluye el navegador modo texto elinks para remplazar a lynx que salió del sistema base. elinks soporta UTF-8 y descargas grandes (no soportadas por w3m).
+* Se incluye el navegador modo texto elinks para remplazar a lynx que salió del sistema base. elinks soporta UTF-8, colores y descargas grandes (no soportadas por w3m).
 * Nuevo porte ocaml-labltk
 * Los paquetes exclusivos los encuentra en [http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/5.7-amd64/paquetes] y otras extensiones de PostgreSQL y PHP que no hacen parte de la distribución en [http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/5.7-amd64-paquetes-extra] 
 

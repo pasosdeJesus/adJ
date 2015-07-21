@@ -684,10 +684,12 @@ if (test "$sn" = "s") then {
 	# Recompilados para cerrar fallas, portes actualizados de OpenBSD 5.7
 	# Para que operen bien basta actualizar CVS de /usr/ports 
 	# Los siguientes no deben estar en arboldes/usr/ports/mystuff
+	paquete cups paquetes "cups cups-libs"
 	paquete curl
 	paquete gnutls
 	paquete icu4c
 	paquete libtasn1
+	paquete libwmf
 	paquete net-snmp
 	paquete p5-Mail-SpamAssassin
 	paquete rrdtool
@@ -696,7 +698,7 @@ if (test "$sn" = "s") then {
 	# FLAVOR=gtk3 make paquete webkit-gtk3
 
 	####
-	# Recompilados de 5.7 para usar xlocale
+	# Recompilados de 5.7 para usar xlocale (y eventualmente cerrar fallas)
 	# No deben estar en mystuff
 	paquete boost
 	paquete djvulibre
@@ -706,6 +708,7 @@ if (test "$sn" = "s") then {
 	paquete libidn
 	paquete libxslt
 	paquete llvm
+	paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs" 
 	#paquete qt4
 	paquete scribus
 	paquete vlc
@@ -722,7 +725,6 @@ if (test "$sn" = "s") then {
 	# Retroportados de current para cerrar fallas o actualizar
 	# Deben estar en arboldes/usr/ports/mystuff y en /usr/ports de current
 	paquete ruby paquetes "ruby ruby22-ri_docs" 2.2
-	paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs" 
 	paquete chromium
 
 	###

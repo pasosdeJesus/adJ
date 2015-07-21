@@ -1,5 +1,5 @@
 #!/bin/ksh
-#	$OpenBSD: upgrade.sh,v 1.78 2014/08/03 16:00:15 rpe Exp $
+#	$OpenBSD: upgrade.sh,v 1.82 2015/01/30 17:11:00 sthen Exp $
 #	$NetBSD: upgrade.sh,v 1.2.4.5 1996/08/27 18:15:08 gwr Exp $
 #
 # Copyright (c) 1997-2009 Todd Miller, Theo de Raadt, Ken Westerback
@@ -52,15 +52,15 @@ done
 ROOTDEV=$resp
 
 echo -n "$_slcheckingroot (fsck -fp /dev/$ROOTDEV)..."
-fsck -fp /dev/$ROOTDEV >/dev/null 2>&1 || { echo "$_slfailed." ; exit ; }
+fsck -fp /dev/$ROOTDEV >/dev/null 2>&1 || { echo "$_slfailed."; exit; }
 echo	"$_slok"
 
 echo -n "$_slmountingroot (mount -o ro /dev/$ROOTDEV /mnt)..."
-mount -o ro /dev/$ROOTDEV /mnt || { echo "FAILED." ; exit ; }
+mount -o ro /dev/$ROOTDEV /mnt || { echo "FAILED."; exit; }
 echo	"OK."
 
 for _f in fstab hosts myname; do
-	[[ -f /mnt/etc/$_f ]] || { echo "No /mnt/etc/$_f!" ; exit ; }
+	[[ -f /mnt/etc/$_f ]] || { echo "No /mnt/etc/$_f!"; exit; }
 	cp /mnt/etc/$_f /tmp/$_f
 done
 hostname $(stripcom /tmp/myname)
@@ -74,14 +74,14 @@ munge_fstab
 
 check_fs
 
-umount /mnt || { echo "$_slcantumount" ; exit ; }
+umount /mnt || { echo "$_slcantumount"; exit; }
 mount_fs
 
 feed_random
 
 install_sets
 
-(cd /mnt/var/spool/smtpd &&
-	 chown -R 103 corrupt incoming purge queue temporary) 2>/dev/null
+rm -rf /mnt/usr/libexec/sendmail
+rm -f /mnt/usr/sbin/{named,rndc,nginx,openssl}
 
 finish_up
