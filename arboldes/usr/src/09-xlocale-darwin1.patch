@@ -1832,8 +1832,8 @@ diff -u src-ant/lib/libc/stdlib/strtoul.3 src/lib/libc/stdlib/strtoul.3
  .Sh BUGS
 -Ignores the current locale.
 diff -ruN /usr/src57-orig/lib/libc/stdio/fgetwln.c src/lib/libc/stdio/fgetwln.c
---- /usr/src57-orig/lib/libc/stdio/fgetwln.c	Mon Jan 12 15:58:07 2015
-+++ /usr/src/lib/libc/stdio/fgetwln.c	Sun Jun  7 07:34:27 2015
+--- src57-orig/lib/libc/stdio/fgetwln.c	Mon Jan 12 15:58:07 2015
++++ src/lib/libc/stdio/fgetwln.c	Sun Jun  7 07:34:27 2015
 @@ -29,7 +29,9 @@
  #include <stdio.h>
  #include <stdlib.h>

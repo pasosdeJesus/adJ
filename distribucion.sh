@@ -610,8 +610,10 @@ function paquete {
 	} fi;
 	if (test "$copiar" = "") then {
 		echo "*> Firmando y copiando /usr/ports/packages/$ARQ/all/$nom-*.tgz" | tee -a /var/tmp/distrib-adJ.bitacora
-		cmd="cp /usr/ports/packages/$ARQ/all/$nom-[0-9][0-9a-z.]*.tgz $dini/$V$VESP-$ARQ/$dest/";
 		cmd="pkg_sign -v -o $dini/$V$VESP-$ARQ/$dest/ -s signify -s /etc/signify/adJ-$VP-pkg.sec /usr/ports/packages/$ARQ/all/$nom-[0-9][0-9a-z.]*.tgz"
+		echo "cmd=$cmd";
+		eval "$cmd";
+		cmd="cp /usr/ports/packages/$ARQ/all/$nom-[0-9][0-9a-z.]*.tgz $dini/$V$VESP-$ARQ/$dest/";
 		echo "cmd=$cmd";
 		eval "$cmd";
 		if (test "$paraexc" != "") then {
@@ -676,6 +678,16 @@ if (test "$sn" = "s") then {
 	} fi;
 	rm tmp/disponibles*
 
+	paquete ruby paquetes "ruby ruby22-ri_docs" 2.2
+	#paquete glib2
+	#paquete libtasn1
+	#paquete djvulibre
+	#paquete gnutls
+	#paquete libwmf
+	#paquete curl
+	#paquete libidn
+	#paquete wget
+	exit 1;
 	###
 	# Modificados de 5.7 para posibilitar compilación
 	# Deben estar en mystuff

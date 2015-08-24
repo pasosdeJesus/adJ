@@ -1,4 +1,4 @@
-# $OpenBSD: ruby.port.mk,v 1.79 2015/01/08 18:51:20 jeremy Exp $
+# $OpenBSD: ruby.port.mk,v 1.83 2015/07/26 04:41:37 jeremy Exp $
 
 # ruby module
 
@@ -46,9 +46,9 @@ FULLPKGNAME?=		${MODRUBY_PKG_PREFIX}-${PKGNAME}
 SUBST_VARS+=		GEM_BIN_SUFFIX GEM_MAN_SUFFIX
 
 FLAVOR?=
-# Without a FLAVOR, assume the use of ruby 2.1.
+# Without a FLAVOR, assume the use of ruby 2.2.
 .    if empty(FLAVOR)
-FLAVOR =		ruby21
+FLAVOR =		ruby22
 .    endif
 
 # Check for conflicting FLAVORs and set MODRUBY_REV appropriately based
@@ -75,8 +75,8 @@ PKG_ARGS+=	-f ${PORTSDIR}/lang/ruby/ruby18.PLIST
 .endif
 
 # The default ruby version to use for non-gem/extconf ports.  Defaults to ruby
-# 2.1 for consistency with the default ruby21 FLAVOR for gem/extconf ports.
-MODRUBY_REV?=		2.1
+# 2.2 for consistency with the default ruby22 FLAVOR for gem/extconf ports.
+MODRUBY_REV?=		2.2
 
 # Because the rbx and jruby FLAVORs use same binary names but in
 # different directories, GEM_MAN_SUFFIX is used for the man pages to avoid
@@ -113,7 +113,7 @@ MODRUBY_BINREV =	22
 MODRUBY_FLAVOR =	ruby22
 GEM_BIN_SUFFIX =	22
 .elif ${MODRUBY_REV} == jruby
-MODRUBY_LIBREV =	1.9
+MODRUBY_LIBREV =	2.2.0
 
 # Set these during development of ruby.port.mk to make sure
 # nothing is broken.  However, turn them off before committing,
@@ -132,7 +132,6 @@ MODRUBY_FLAVOR =	rbx
 GEM_MAN_SUFFIX =	-${MODRUBY_FLAVOR}
 .endif
 
-MODRUBY_RAKE_DEPENDS =	
 MODRUBY_RSPEC_DEPENDS =	devel/ruby-rspec/1,${MODRUBY_FLAVOR}<2.0
 MODRUBY_RSPEC3_DEPENDS = devel/ruby-rspec/3/rspec,${MODRUBY_FLAVOR}>=3.0
 
@@ -156,7 +155,6 @@ RUBY=			${LOCALBASE}/bin/ruby${MODRUBY_BINREV}
 RAKE=			${LOCALBASE}/bin/rake${MODRUBY_BINREV}
 MODRUBY_BIN_TESTRB =	${LOCALBASE}/bin/testrb${MODRUBY_BINREV}
 .  if ${MODRUBY_REV} == 1.8
-MODRUBY_RAKE_DEPENDS =	devel/ruby-rake
 RSPEC=			${LOCALBASE}/bin/spec
 MODRUBY_BIN_RSPEC =	${LOCALBASE}/bin/rspec
 .  else
@@ -198,12 +196,6 @@ MODRUBY_LIB_DEPENDS=	${MODRUBY_RUN_DEPENDS}
 .endif
 
 MODRUBY_BUILD_DEPENDS=	${MODRUBY_RUN_DEPENDS}
-
-.if ${MODRUBY_REV} == 1.8
-MODRUBY_ICONV_DEPENDS=	ruby-iconv->=1.8,<1.9:lang/ruby/${MODRUBY_REV},-iconv
-.else
-MODRUBY_ICONV_DEPENDS=	${MODRUBY_RUN_DEPENDS}
-.endif
 
 # location of ruby libraries
 .if ${MODRUBY_REV} == jruby
@@ -248,8 +240,8 @@ BUILD_DEPENDS+=		${MODRUBY_BUILD_DEPENDS}
 RUN_DEPENDS+=		${MODRUBY_RUN_DEPENDS}
 .endif
 
-.if ${MODRUBY_TEST:L:Mrake}
-TEST_DEPENDS+=	${MODRUBY_RAKE_DEPENDS}
+.if ${MODRUBY_TEST:L:Mrake} && ${MODRUBY_REV} == 1.8
+TEST_DEPENDS+=	devel/ruby-rake
 .endif
 .if ${MODRUBY_TEST:L:Mrspec}
 TEST_DEPENDS+=	${MODRUBY_RSPEC_DEPENDS}

@@ -1,4 +1,4 @@
-# $OpenBSD: Makefile.inc,v 1.55.2.1 2014/10/22 12:23:08 robert Exp $
+# $OpenBSD: Makefile.inc,v 1.63 2014/11/19 09:41:05 brad Exp $
 
 # This port currently only works with archs supporting dynamic loading
 # and has Apache that supports DSO's.
@@ -48,7 +48,7 @@ MODULES_SUBDIR=		lib/php-${PV}/modules
 MODULES_DIR=		${LOCALBASE}/${MODULES_SUBDIR}
 
 FLAVORS=		ap2
-.if ${PV} != "5.4" && ${PV} != "5.5"
+.if ${PV} == "5.3"
 FLAVORS+=		no_suhosin
 .endif
 FLAVOR?=
@@ -61,7 +61,7 @@ CONFIGURE_ENV=          CFLAGS="${CFLAGS} -I${LOCALBASE}/include -pthread" \
                         LDFLAGS="-L${LOCALBASE}/lib -pthread" \
 			EXTENSION_DIR=${MODULES_DIR} \
 			lt_cv_path_SED=/usr/bin/sed
-# configure detects us as having decimal fp support but it's not built in
+# configure detects us as having decimal fp support but it's not built in 
 # in libgcc. https://bugs.php.net/bug.php?id=68114
 CONFIGURE_ENV+=		ac_cv_decimal_fp_supported=no
 MAKE_ENV=               ${CONFIGURE_ENV}
@@ -119,7 +119,18 @@ CONFIGURE_ARGS+= 	--with-openssl \
 TEST_TARGET=		test
 TEST_FLAGS=		NO_INTERACTION=1
 
-MULTI_PACKAGES+=	-main -fastcgi
+MULTI_PACKAGES+=	-main -fastcgi -fpm
+
+# fpm
+PKGNAME-fpm?=		php-fpm-${V}
+COMMENT-fpm=		stand-alone FPM version of PHP
+CONFIGURE_ARGS+=	--enable-fpm \
+			--with-fpm-user=www \
+			--with-fpm-group=www
+LIB_DEPENDS-fpm=	${LIB_DEPENDS-main}
+WANTLIB-fpm=		${WANTLIB-main}
+RUN_DEPENDS-fpm=	${RUN_DEPENDS-main} \
+			php-${V}:lang/php/${PV}
 
 #
 # Loadable php extensions by name that are included in all versions
@@ -174,7 +185,7 @@ COMMENT-intl=		intl library support for php5
 CONFIGURE_ARGS+=	--enable-intl=shared \
 			--with-icu-dir=${LOCALBASE}
 LIB_DEPENDS-intl=	textproc/icu4c
-WANTLIB-intl=		icudata icui18n icuio icuuc m pthread
+WANTLIB-intl=		icudata icui18n icuio icuuc pthread
 
 # imap
 MULTI_PACKAGES+=	-imap
@@ -202,29 +213,39 @@ WANTLIB-mcrypt=		mcrypt ltdl>=1 pthread
 MULTI_PACKAGES+=	-mysql
 COMMENT-mysql=		mysql database access extensions for php5
 CONFIGURE_ARGS+=	--with-mysql=shared,${LOCALBASE}
-LIB_DEPENDS-mysql=	databases/mysql
-WANTLIB-mysql=		pthread lib/mysql/mysqlclient>=10
+LIB_DEPENDS-mysql=	databases/mariadb
+WANTLIB-mysql=		pthread lib/mysql/mysqlclient
 
 # mysqli
 MULTI_PACKAGES+=	-mysqli
 COMMENT-mysqli=		mysql database access extensions for php5
 CONFIGURE_ARGS+=	--with-mysqli=shared,${LOCALBASE}/bin/mysql_config
-LIB_DEPENDS-mysqli=	databases/mysql
-WANTLIB-mysqli=		crypto m pthread ssl z lib/mysql/mysqlclient>=10
+LIB_DEPENDS-mysqli=	databases/mariadb
+WANTLIB-mysqli=		crypto m pthread ssl z lib/mysql/mysqlclient
 
 # odbc
 MULTI_PACKAGES+=	-odbc
 COMMENT-odbc=		odbc database access extensions for php5
 CONFIGURE_ARGS+=        --with-iodbc=shared,${LOCALBASE}
 LIB_DEPENDS-odbc=	databases/iodbc
-WANTLIB-odbc=		iodbcinst iodbc>=2 pthread
+WANTLIB-odbc=		iodbc>=2 pthread
+.if ${PV} != "5.3"
+WANTLIB-odbc+=		iodbcinst
+.endif
+
+# pcntl
+MULTI_PACKAGES+=	-pcntl
+COMMENT-pcntl=		PCNTL extensions for php5
+CONFIGURE_ARGS+=	--enable-pcntl=shared
+LIB_DEPENDS-pcntl=
+WANTLIB-pcntl=		pthread
 
 # pdo-mysql
 MULTI_PACKAGES+=	-pdo_mysql
 COMMENT-pdo_mysql=	PDO mysql database access extensions for php5
 CONFIGURE_ARGS+=	--with-pdo-mysql=shared,${LOCALBASE}
-LIB_DEPENDS-pdo_mysql=	databases/mysql
-WANTLIB-pdo_mysql=	crypto m pthread ssl z lib/mysql/mysqlclient>=10
+LIB_DEPENDS-pdo_mysql=	databases/mariadb
+WANTLIB-pdo_mysql=	crypto m pthread ssl z lib/mysql/mysqlclient
 
 # pdo-pgsql
 MULTI_PACKAGES+=	-pdo_pgsql
@@ -320,7 +341,12 @@ PHPXS_SUBST+= -e 's,${i},${${i}},'
 
 MODULES=		converters/libiconv devel/gettext
 
-WANTLIB-main+=		c crypto m pthread ssl xml2>=8 z ${MODGETTEXT_WANTLIB}
+WANTLIB-main+=		c crypto lzma m pthread ssl xml2>=8 z ${MODGETTEXT_WANTLIB}
+
+.if ${PV} != "5.3"
+WANTLIB-main+=		ncurses readline stdc++
+.endif
+
 # php 5.4/5.5 : WANTLIB-main += stdc++
 WANTLIB-fastcgi=	${WANTLIB-main}
 LIB_DEPENDS-main=	textproc/libxml
@@ -328,7 +354,7 @@ RUN_DEPENDS-main=	${MODGETTEXT_RUN_DEPENDS} \
 			mail/femail,-chroot
 LIB_DEPENDS-fastcgi=	${LIB_DEPENDS-main}
 
-.if ${PV} != "5.4" && ${PV} != "5.5"
+.if ${PV} == "5.3"
 .  if ${FLAVOR:Mno_suhosin}
 SUPDISTFILES=		suhosin-${SUHOSIN_V}.tgz:0 \
 			suhosin-patch-${SUHOSIN_PHPV}-${SUHOSIN_P_V}.patch.gz:0
@@ -360,7 +386,7 @@ pre-configure:
 MULTI_PACKAGES :=       ${MULTI_PACKAGES:N-fpm:N-fastcgi}
 .endif
 
-.for i in ${MULTI_PACKAGES:N-main:N-fastcgi:N-fpm:N-pcntl:S/-//g}
+.for i in ${MULTI_PACKAGES:N-main:N-fastcgi:N-fpm:S/-//g}
 MODULE_NAME-${i}=	${i}
 DESCR-${i}=		${.CURDIR}/../files/DESCR-${i}
 MESSAGE-${i}=		${.CURDIR}/../files/MESSAGE-ext
@@ -371,10 +397,12 @@ FULLPKGNAME-${i}=	php-${i}-${V}${FLAVOR_EXT:S/-ap2//}
 FULLPKGPATH-${i}=	${PKGPATH},-${i}${FLAVOR_EXT:S/-ap2//:S/-/,/g}
 .if ${V:M5.3*}
 PKGSPEC-${i}=		php-${i}->=5.3,<5.4
-.else if ${V:M5.4*}
+.elif ${V:M5.4*}
 PKGSPEC-${i}=		php-${i}->=5.4,<5.5
-.else if ${V:M5.5*}
+.elif ${V:M5.5*}
 PKGSPEC-${i}=		php-${i}->=5.5,<5.6
+.elif ${V:M5.6*}
+PKGSPEC-${i}=		php-${i}->=5.6,<5.7
 .endif
 RUN_DEPENDS-${i}+=	php-${V}:lang/php/${PV}
 .endfor
@@ -391,13 +419,10 @@ post-install:
 	${INSTALL_DATA_DIR} ${PREFIX}/share/examples/php-${PV}
 	${INSTALL_PROGRAM} ${WRKBUILD}/sapi/cli/php ${PREFIX}/bin/php-${PV}
 	${INSTALL_PROGRAM} ${WRKBUILD}/sapi/cgi/php-cgi ${PREFIX}/bin/php-fastcgi-${PV}
-
-.if ${V:M5.3*} || ${V:M5.4*} || ${V:M5.5*}
 	${INSTALL_PROGRAM} ${WRKBUILD}/sapi/fpm/php-fpm ${PREFIX}/sbin/php-fpm-${PV}
 	${INSTALL_MAN} ${WRKBUILD}/sapi/fpm/php-fpm.8 ${PREFIX}/man/man8/php-fpm-${PV}.8
 	${INSTALL_DATA} ${WRKBUILD}/sapi/fpm/php-fpm.conf \
 		${PREFIX}/share/examples/php-${PV}/php-fpm.conf
-.endif
 
 	${INSTALL_DATA} ${.CURDIR}/../files/php.conf \
 		${PREFIX}/share/examples/php-${PV}/php.conf
@@ -410,6 +435,11 @@ post-install:
 	echo "extension=${m}.so" > \
 		${PREFIX}/share/examples/php-${PV}/${m}.ini
 .endfor
+	if [ -f ${WRKBUILD}/modules/opcache.so ]; then \
+		${INSTALL_DATA} ${WRKBUILD}/modules/opcache.so \
+		    ${PREFIX}/${MODULES_SUBDIR}/opcache.so; \
+		echo "zend_extension=opcache.so" > \
+		    ${PREFIX}/share/examples/php-${PV}/opcache.ini; fi
 	${INSTALL_DATA_DIR} ${WRKINST}/${CHROOT_DIR}/etc
 	echo "www:*:67:67::0:0:dummy user to appease c-client:/nonexistent:/sbin/nologin" > \
 		${WRKINST}/${CHROOT_DIR}/etc/master.passwd.imap

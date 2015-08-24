@@ -3,7 +3,7 @@ Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y que esperamos será la elegida por Jesús durante el Milenio.
 
 Versión: 5.7b1%%%
-Fecha de publicación: 2/Ago/2015
+Fecha de publicación: 23/Ago/2015
 
 !!!NOVEDADES
 
@@ -12,9 +12,9 @@ Con respecto a OpenBSD 5.7 para amd64 y a la edición anterior de este DVD
 
 !KERNEL Y SISTEMA BASE
 
-* OJO Utilidad ==localedef== no requiere recode. ==localedef== es herramienta especificada en el estándar POSIX para convertir formatos de fechas y horas en un formato estándar POSIX al formato de OpenBSD.  locale de paises tomado de CLDR de Unicode.
+* Utilidad ==localedef== especificada en el estándar POSIX para convertir formatos de fechas y horas en un formato estándar POSIX al formato de OpenBSD.  Configuraciones regionales de paises tomadas del CLDR de Unicode.
 * Soporte en la librería de C para presentar fechas, horas, cantidades monetarias, números y ordenamientos alfabéticos (cotejación) con las convenciones de cada país de latinoamérica (y de otros locales soportados por OpenBSD) de acuerdo al estándar POSIX. Opera bien en codificaciones de 8 bits o para español en codificación UTF-8. Buena parte de este soporte, así como el de xlocale se basaron en FreeBSD.  Estas mejoras fueron aportadas a OpenBSD (cotejación desde adJ 5.2, cantidades monetarias y números desde 5.4 y fechas y horas desde 5.5) y se anhela su integración en futuras versiones.    Así en adJ por ejemplo los ordenamientos alfabéticos en !LibreOffice y otros programas son correctos en español (que no ocurre en OpenBSD).
-* Parches de seguridad del sistema base hasta x.Jul.2015, que cierran las y fallas de seguridad y las z de robustez resueltas para fuentes de OpenBSD en http://www.openbsd.org/errata57.html.  Los binarios distribuidos de OpenBSD 5.7 no resuelven estas fallas.
+* Parches de seguridad del sistema base hasta 21.Ago.2015, que cierran las 9 fallas de seguridad y las 4 de robustez resueltas para fuentes de OpenBSD en http://www.openbsd.org/errata57.html. También cierra falla en patch resuelta sólo en repositorio CVS (ver http://cvsweb.openbsd.org/cgi-bin/cvsweb/src/usr.bin/patch/pch.c.diff?r1=1.51.2.1&r2=1.51.2.2 ).  Los binarios distribuidos de OpenBSD 5.7 no resuelven estas fallas.
 * Retroportados, recompilados o mejorados más de 25 paquetes de OpenBSD para cerrar fallas de seguridad o emplear xlocale,  ver detalles en sección PAQUETES EXCLUSIVOS DE ADJ.
 * Hemos remplazando `daemon' por `servicio' en buena parte del sistema base (ver por ejemplo ==vmstat -s== o ==less /var/log/servicio== o ==man servicio==).  
 
@@ -61,13 +61,12 @@ Desde 5.7 el instalador no incluye etc ni xetc pues hacen part de base y xbase
 !PAQUETES EXCLUSIVOS DE ADJ
 
 Puede ver el listado completo en https://github.com/pasosdeJesus/adJ/blob/master/Contenido.txt a continuación se describen sólo novedades respecto a la versión anterior de adJ y OpenBSD 5.7:
-* SIVeL 1.1.7 y SIVeL 1.2b4.  La versión 1.1.7 seguramente será la última de la serie 1.1.  Es bueno intentar la migración a 1.2b4 siguiendo instrucciones de http://sivel.sourceforge.net/1.2/actualizacion-sivel.html#actualizaciondeunounoaunodos
+* SIVeL 1.1.7 y SIVeL 1.2.  La versión 1.1.7 seguramente será la última de la serie 1.1.  Es bueno intentar la migración a 1.2 siguiendo instrucciones de http://sivel.sourceforge.net/1.2/actualizacion-sivel.html#actualizaciondeunounoaunodos
 * PostgreSQL 9.4.4 recompilado de fuentes actualizadas de OpenBSD-5.7 para cerrar fallas, pero además con soporte UTF-8 y ordenamientos alfabéticos en español. En adJ la información queda cifrada cuando así se elije al instalar o actualizar adJ.  Ver detalles de como usar cotejación en http://aprendiendo.pasosdejesus.org/?id=i18n
-* ruby 2.2.2 retroportado de OpenBSD-current y probado con aplicaciones Rails 4.2.3 Ver http://dhobsd.pasosdejesus.org/index.php?id=Ruby+on+Rails+en+OpenBSD .
-* 
+* ruby 2.2.3 retroportado de OpenBSD-current y probado con aplicaciones Rails 4.2.4 Ver http://dhobsd.pasosdejesus.org/2012/07/03/Ruby_on_Rails_en_OpenBSD.html 
 * Para activar soporte de xlocale se ha recompilado los siguientes paquetes que están en portes de OpenBSD 5.7: boost, djvulibre, ggrep, glib2, gtar, libidn, libxslt, llvm, scribus, vlc, wget, wxWidgets-gtk2
-* Para cerrar fallas se han recompilado los siguientes paquetes a partir de portes actualizados de OpenBSD 5.7 (pero no incluidos en binarios de ese sistema): cus, cups-libs, curl, gnutls, icu4c, libtasn1, libwmf, net-snmp, p5-Mail-SpamAssassin, rrdtool, php-5.5.26
-* Se han retroportado otros paquetes de OpenBSD-Current: chromium-43
+* Para cerrar fallas se han recompilado los siguientes paquetes a partir de portes actualizados de OpenBSD 5.7 (pero no incluidos en binarios de ese sistema): cups, cups-libs, curl, gnutls, icu4c, libtasn1, libwmf, net-snmp, p5-Mail-SpamAssassin, php-5.5.28, qemu, rrdtool
+* Se han retroportado otros paquetes de OpenBSD-Current: chromium-43 (más estable)
 * Se incluye el navegador modo texto elinks para remplazar a lynx que salió del sistema base. elinks soporta UTF-8, colores y descargas grandes (no soportadas por w3m).
 * Nuevo porte ocaml-labltk
 * Los paquetes exclusivos los encuentra en [http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/5.7-amd64/paquetes] y otras extensiones de PostgreSQL y PHP que no hacen parte de la distribución en [http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/5.7-amd64-paquetes-extra] 
@@ -104,8 +103,8 @@ Puede descargar imagenes ISO para amd64:
 Si prefiere asumir gastos de manufactura, envío y eventualmente una donación con gusto le enviamos un DVD ([correo de contacto|mailto:info@pasosdeJesus.org]).
 
 Las claves públicas empleadas para firmar digitalmente el CD de instalación y los paquetes se ubican en /etc/signify y deben coincidir con estas:
-* adJ-57-base.pub: ![x]
-* adJ-57-pkg.pub: ![y]
+* adJ-57-base.pub: ![RWSHIU7tODYAqTiwkmrJclJb1WZXWrP7GcAmxueSChfaZ35o18ckZzUO]
+* adJ-57-pkg.pub: ![RWRJU9sVRyykCZtxkoXZfKfFYxboSbotEpLjGErsJ7XikPM+Qm+k6zcC]
 
 !!!ACTUALIZACIÓN E INSTALACIÓN
 
