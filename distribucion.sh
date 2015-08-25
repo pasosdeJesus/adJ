@@ -609,13 +609,17 @@ function paquete {
 		exit 1;
 	} fi;
 	if (test "$copiar" = "") then {
-		echo "*> Firmando y copiando /usr/ports/packages/$ARQ/all/$nom-*.tgz" | tee -a /var/tmp/distrib-adJ.bitacora
-		cmd="pkg_sign -v -o $dini/$V$VESP-$ARQ/$dest/ -s signify -s /etc/signify/adJ-$VP-pkg.sec /usr/ports/packages/$ARQ/all/$nom-[0-9][0-9a-z.]*.tgz"
-		echo "cmd=$cmd";
-		eval "$cmd";
-		cmd="cp /usr/ports/packages/$ARQ/all/$nom-[0-9][0-9a-z.]*.tgz $dini/$V$VESP-$ARQ/$dest/";
-		echo "cmd=$cmd";
-		eval "$cmd";
+		f1=`ls /usr/ports/packages/$ARQ/all/$nom-[0-9][0-9a-z.]*.tgz | head -n 1`
+		f2=`ls $dini/$V$VESP-$ARQ/$dest/$nom-[0-9][0-9a-z.]*.tgz | head -n 1`
+		if (test ! -f "$f2" -o "$f2" -ot "$f1") then {
+			echo "*> Firmando y copiando /usr/ports/packages/$ARQ/all/$nom-*.tgz" | tee -a /var/tmp/distrib-adJ.bitacora
+			cmd="rm -f $dini/$V$VESP-$ARQ/$dest/$nom-[0-9][0-9a-z.]*.tgz"
+			echo "cmd=$cmd";
+			eval "$cmd";
+			cmd="pkg_sign -v -o $dini/$V$VESP-$ARQ/$dest/ -s signify -s /etc/signify/adJ-$VP-pkg.sec /usr/ports/packages/$ARQ/all/$nom-[0-9][0-9a-z.]*.tgz"
+			echo "cmd=$cmd";
+			eval "$cmd";
+		} fi;
 		if (test "$paraexc" != "") then {
 			paraexc="$paraexc $nom-*"
 		} else {
@@ -623,10 +627,16 @@ function paquete {
 		} fi;
 	} else {
 		for i in $copiar; do
-			cmd="cp /usr/ports/packages/$ARQ/all/$i-[0-9][0-9a-z.]*.tgz $dini/$V$VESP-$ARQ/$dest/"
-			cmd="pkg_sign -v -o $dini/$V$VESP-$ARQ/$dest/ -s signify -s /etc/signify/adJ-$VP-pkg.sec /usr/ports/packages/$ARQ/all/$i-[0-9][0-9a-z.]*.tgz"
-			echo $cmd;
-			eval $cmd
+			f1=`ls /usr/ports/packages/$ARQ/all/$i-[0-9][0-9a-z.]*.tgz | head -n 1`
+			f2=`ls $dini/$V$VESP-$ARQ/$dest/$i-[0-9][0-9a-z.]*.tgz | head -n 1`
+			if (test ! -f "$f2" -o "$f2" -ot "$f1") then {
+				cmd="rm -f $f2"
+				echo "cmd=$cmd";
+				eval "$cmd";
+				cmd="pkg_sign -v -o $dini/$V$VESP-$ARQ/$dest/ -s signify -s /etc/signify/adJ-$VP-pkg.sec /usr/ports/packages/$ARQ/all/$i-[0-9][0-9a-z.]*.tgz"
+				echo $cmd;
+				eval $cmd
+			} fi;
 			if (test "$paraexc" != "") then {
 				paraexc="$paraexc $i-*"
 			} else {
@@ -678,16 +688,6 @@ if (test "$sn" = "s") then {
 	} fi;
 	rm tmp/disponibles*
 
-	paquete ruby paquetes "ruby ruby22-ri_docs" 2.2
-	#paquete glib2
-	#paquete libtasn1
-	#paquete djvulibre
-	#paquete gnutls
-	#paquete libwmf
-	#paquete curl
-	#paquete libidn
-	#paquete wget
-	exit 1;
 	###
 	# Modificados de 5.7 para posibilitar compilación
 	# Deben estar en mystuff
