@@ -704,6 +704,7 @@ if (test "$sn" = "s") then {
 	paquete libwmf
 	paquete net-snmp
 	paquete p5-Mail-SpamAssassin
+	paquete qemu
 	paquete rrdtool
 	#paquete samba
 	#paquete webkit paquetes "webkit webkit-gtk3"
