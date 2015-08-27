@@ -1236,7 +1236,7 @@ EOF
 	
 echo "* Configurar X-Window" >> /var/tmp/inst-adJ.bitacora
 pgrep xdm > /dev/null 2>&1
-if (test "$?" != "0" -a ! -f /etc/X11/xorg.conf) then {
+if (test "$?" != "0" -a ! -f /etc/X11/xorg.conf -a ! -f /etc/X11/xorg-automatico ) then {
 	dialog --title 'Configuración de X-Window' --msgbox "\nSe ejecutará 'X -configure' Si se congela su sistema reinicie, si logra ingresar a modo gráfico vuelva a la consola presionando [Ctrl]+[Alt]+[Backspace]\n
 Puede examinar errores, causas y soluciones al final de la bitacora:\n
         less /var/log/Xorg.log.0\n" 15 60
@@ -1357,6 +1357,7 @@ Vea la documentacion con man xorg.conf, editelo por ejemplo con mg /etc/X11/xorg
 		echo "xdm_flags=\"\"" >> /etc/rc.conf.local
 	} fi;
 } else {
+	rm -f /etc/X11/xorg-automatico
 	echo "   Saltando..."  >> /var/tmp/inst-adJ.bitacora;
 } fi;
 echo "/etc/X11/xorg.conf" >> /var/tmp/inst-adJ.bitacora

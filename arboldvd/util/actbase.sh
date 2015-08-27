@@ -47,6 +47,10 @@ nk=${rutak}/bsd${mp}
 echo "Antes de continuar, recomendamos que ejecute util/preact-adJ.sh"
 echo "Presione [ENTER] para preparar primer arranque tras actualizacion"
 read
+pgrep xdm > /dev/null  2>&1
+if (test "$?" = "0" -a ! -f /etc/X11/xorg.conf) then {
+	touch /etc/X11/xorg-automatico
+} fi;
 echo "(cd /dev; ./MAKEDEV all)" >/etc/rc.firsttime
 if (test "$VCORSP" -lt "55" ) then {
 	eusr=`df -kP /usr | awk '{ print $2; }' | tail -n 1`
