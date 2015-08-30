@@ -1393,7 +1393,7 @@ install_sets() {
 		*) 	$AUTO && echo "'$resp' $_slisnotvalidchoice" && exit 1;;
 		esac
 		[[ -n $METHOD ]] && _d=$METHOD
-		sane_install quiet || $AUTO && _d=done
+		sane_install quiet || $AUTO && _d=$_sldone
 	done
 }
 
@@ -1584,18 +1584,18 @@ questions() {
 	xdm=
 	if [[ -n $DISPLAY ]]; then
 		if [[ -n $(scan_dmesg '/^[a-z]*[01]: aperture needed/p') ]]; then
-			ask_yn "Do you expect to run the X Window System?" yes &&
+			ask_yn "$_slexpectX" $_slyes &&
 			    aperture=$MDXAPERTURE
 		fi
 		if [[ -n $MDXDM ]]; then
-			ask_yn "Do you want the X Window System to be started by xdm(1)?"
+			ask_yn "$_slxdm"
 			xdm=$resp
 		fi
 	fi
 
 	if [[ -n $CDEV ]]; then
 		_d=${CPROM:-$CDEV}
-		[[ -n $CONSOLE ]] && _cdef=yes
+		[[ -n $CONSOLE ]] && _cdef=$_slyes
 		ask_yn "$_slchangeconsole $_d?" $_cdef
 		defcons=$resp
 		if [[ $resp == y ]]; then
