@@ -12,12 +12,16 @@ sword-[v]		Permite consultar Biblia, incluye módulo KJV
 xiphos-[v]		Herramienta para estudiar Biblia, usa módulos de sword.
 
 
-** Del proyecto SIVeL (dominio público y BSD) 
-        http://sivel.sf.net
+** Para organizaciones de Derechos Humanos y Comunidades en Resistencia 
+   a la violencia
 
 sivel-1.2		Sistema de Información de Violencia Política en Línea
 inst-sivel.sh           Instala/Actualizar SIVeL 1.2 en un OpenBSD
-sivel-2a7		Versión experimental de la próxima versión
+sivel-2.0a7		Versión experimental de la próxima versión
+basico_adJ-[v]	Manual de uso básico de OpenBSD
+servidor_adJ-[v]	Documentación de OpenBSD como servidor
+usuario_adJ-[v]	Documentación para usuarios de OpenBSD
+
 
 ** Del proyecto Structio (dominio público) útil para educación:
         http://structio.sf.net/
@@ -31,10 +35,6 @@ AprestamientoI-[v]	Hojas de lectoescritura letra script
 NombresCursiva-[v]	Hojas de lectoescritura letra cursiva
 PlantasCursiva-[v]	Hojas de lectoescritura letra cursiva
 TiposLectoEscritura-[v]	Tipos de letra para aprender a leer y escribir
-basico_OpenBSD-[v]	Manual de uso básico de OpenBSD
-servidor_OpenBSD-[v]	Documentación de OpenBSD como servidor
-usuario_OpenBSD-[v]	Documentación para usuarios de OpenBSD
-
 
 ** Del Banco de Datos de Derechos Humanos, Derecho Internacional Humanitario
   y Violencia Política del CINEP:
@@ -64,7 +64,7 @@ Como parte de los componente básicos, entre otros están los siguientes
 programas auditados:
         gcc             Compilador de C con licencia mejorable
         Kit Unix        Herramientas típicas en sistemas Unix
-        nginx	        Servidor web
+        OpenBSD httpd	Servidor web
         OpenNTPD        Servidor y cliente de NTPD (para sincronizar tiempo)
         OpenSMTPD       Agente para transferencia de correo (MTA)
         OpenSSH         Servidor y cliente SSH
@@ -96,12 +96,12 @@ fontforge-[v]	Editor/conversor de tipos de letra vectoriales
 gimp-[v]		Editor gráfico por pixels
 gnumeric-[v]	Hoja de cálculo
 gv-[v]		Visualizador de PostScript y PDF
-inkscape-[v]	Editor gráfico vectorial
+inkscape-[v]		Editor gráfico vectorial
 midori-[v]		Navegador web liviano
 mplayer-[v]	Escuchar y ver diversidad de audio y vídeo
 libreoffice-[v]	Aplicaciones de oficina
 libreoffice-i18n-es-[v]	Localización en Español para LibreOffice
-pidgin-[v]		Mensajería (soporta protocolo SILC)
+pidgin-[v]	Mensajería (soporta protocolo SILC)
 plan-[v]		Planeador y calendario Motif
 qemu-[v]		Emulador de varios sistemas
 qgis-[v]		Sistema de información geográfica de escritorio
@@ -147,6 +147,7 @@ zip-[v]			Comprime en formato ZIP
 * Servidor / Plataforma de comunicaciones:
 dovecot-[v]	Servidor compacto de IMAP/POP3
 ldapvi-[v]		Actualiza entradas LDAP con un editor de texto
+nginx-[v]		Servidor web
 openpoppassd-[v]	Serivicio para cambio de claves
 p5-Mail-SpamAssassin-[v]	Filtro de correo para identificar y marcar spam
 php-[v]		Lenguaje script empotrado en HTML que opera en servidor
@@ -175,18 +176,18 @@ cppcheck-[v]		Verificador estático de C/C++
 cppunit-[v]		Infraestructura para probar programas en C++
 elinks-[v]		Navegador modo texto que soporta UTF-8 y descargas
 git-[v]		Almacenar historia de árbol de directorios
-llvm-[v]    	Compilador modular y rápido de C/C++/ObjC
+llvm-[v]    Compilador modular y rápido de C/C++/ObjC
 lua-[v]		Lenguaje de programación potente y liviano
 ocaml-[v]		Lenguaje de programación funcional
-python-[v]		Lenguaje de programación
-ruby-[v]    	Lenguaje de programación
+python-[v]	Lenguaje de programación
+ruby-[v]    		Lenguaje de programación
 tcl-[v]		Lenguaje de programación
 tk-[v]		Complemento gráfico para TCL
 
 * Soporte, librerías y desarrollo
 a2ps-[v]		Para imprimir en impresoras PostScript
 aalib-[v]		Librería de arte ASCII
-adwaita-icon-theme-[v]  
+adwaita-icon-theme-[v]  Tema de íconos para GNOME
 aspell-[v]	Chequeador de ortografía
 aspell-es-[v]	Diccionario en español para aspell
 at-spi2-atk-[v] 	Puente atk para at-spi2
@@ -204,7 +205,7 @@ cairo-[v]		Librería de gráficos vectoriales
 cairomm-[v]	Interfaz en C++ para cairo
 clisp-[v]		Implementación de ANSI Common Lisp
 clucene-core-[v]	Librería para búsquedas de textos completos
-consolekit-[v]
+consolekit-[v]	Entorno para definir y seguir usuarios
 cups-libs-[v]   	Librearias y encabezados de CUPS
 cups-filters-[v]	Filtros para CUPS de OpenPrinting
 cvsps-[v]		Genera conjuntos de parches de repositorios CVS
@@ -249,19 +250,18 @@ gdbm-[v]		Versión de dbm
 gdk-pixbuf-[v]	Librería gráfica para GTK+2
 gegl-[v]		Entorno para procesamiento de imágenes basado en grafos
 GeoIP-[v]		Base de datos de paises de IPs
-gettext-[v]	Internacionalización
+gettext-[v]		Internacionalización
 ggrep-[v]		Versión del programa de reconocimiento de patrones grep
-geoclue-[v]	Servicio modular de geoinformación sobre D-Bus
-geoclue2-[v]	
+geoclue2-[v]	Servicio modular de geoinformación sobre D-Bus
 geos-[v]		Motor de geometría y topología bidimensional
 giblib-[v]		Librería de utilidades
 giflib-[v]		Librería y herramientas para operar gráficos GIF
 ghostscript-[v]	Genera PostScript
 ghostscript-fonts-[v]	Fuentes para GhostScript
-glew-[v]		
+glew-[v]		Librería GL Extension Wrangler
 glib2-[v]		Más rutinas
 glib2-networking-[v]	Más rutinas
-glib2mm-[v]		Interfaz en C++ para glib2
+glib2mm-[v]	Interfaz en C++ para glib2
 gmake-[v]		Herramienta para construir programas a partir de fuentes
 gmp-[v]		Librería de aritmética de precisión arbitraría
 gnome-doc-utils-[v]	Utilidades para documentación del proyecto GNOME
@@ -270,10 +270,11 @@ gnome-icon-theme-symbolic-[v]	Extensión al tema de iconos base
 gnome-keyring-[v]	Libreria para integrar anillo de llaves GNOME
 gnome-mime-data-[v]	Base de datos MIME y de aplicaciones
 gnome-vfs2-[v]	Sistema de archivos virtual
-gnugetopt-[v]	Utilidad getopt(1) de GNU
+gnugetopt-[v]		Utilidad getopt(1) de GNU
 gnupg-[v]		Remplazo de PGP
 gnutls-[v]		Librearía segura para la capa de transporte
 goffice-[v]		Utilidades y objetos centrados en documentos
+gperf-[v]		Funciones de hash perfectas, para reconocedores
 gpsd-[v]		Servicio que monitorea uno o más GPSes
 graphite2-[v] 	Presentación de sistemas de escritura complejos
 gsettings-desktop-schemas-[v]	Esquemas compartidos GSettings
@@ -305,7 +306,7 @@ hunspell-[v]	Análisis ortográfico, de raices y morfológico
 icu4c-[v]		Componentes internacionales para Unicode
 ijs-[v]		Librería para transmisión de imágenes raster
 imlib2-[v]		Librería para manipulación de imágenes 2
-iniparser-[v]           Librería para reconocer archivos ini
+iniparser-[v]		Librería para reconocer archivos ini
 iodbc-[v]		Manejador ODBC 2
 iso-codes-[v]		Lista de códigos ISO de países, idiomas y monedas
 iso8879-[v]		Conjuntos de entidades de caracteres para ISO 8879:1986
@@ -314,7 +315,7 @@ jbigkit-[v]		Librería para compresión de imágenes sin perdidas
 jbig2dec-[v]		Decodificador para formato comprimido monocromo JBIG2
 jpeg-[v]			Utilidades de compresión JPEG
 json-c-[v]  		Implementación de JSON en C
-json-glib-[v]  		
+json-glib-[v]  	Reconocedor de JSON para liberías y aplicaciones GLib
 lame-[v]		Codificador de MP3
 lapack-[v]		Librería de subrutinas de álgebra lineal
 latex-mk-[v]	Segmentos de Makefiles para manejar documentos LaTeX
@@ -339,7 +340,7 @@ libdaemon-[v]	Librería en C que facilita escribir servicios
 libdca-[v]		Librería para decodificar flujos DTS Coherent Acoustic
 libdv-[v]		Codec Quasar DV
 libdvbpsi-[v]		Librería para decodificar/generar tablas MPEG TS/DVB
-libdvdcss-[v]	Desenmaraña DVDs enmarañados
+libdvdcss-[v]		Desenmaraña DVDs enmarañados
 libdvdnav-[v]	Lectura/navegación de DVD
 libdvdread-[v]	Acceso a archivos DVD
 libebml-[v]		Librería extensible de meta lenguaje binario
@@ -349,11 +350,11 @@ libexif-[v]		Extrae tags de cámara digital de imágenes JPEG
 libf2c-[v]		Librería de fortran 77
 libffi-[v]		Interfaz de funciones foráneas
 libgadu-[v]	Implementación del protocolo de Mensajería Gadu-Gadu
-libgcrypt-[v]	Criptografía basada en GnuPG
+libgcrypt-[v]		Criptografía basada en GnuPG
 libgeotiff-[v]	Libreria pata intercambio TIFF en GIS
 libglade2-[v]	Carga interfaces Glade
 libgnome-[v]	Librerías para el proyecto GNOME
-libgnome-keyring-[v]  Libreria para integrar anillo de llaves GNOME
+libgnome-keyring-[v]	Libreria para integrar anillo de llaves GNOME
 libgnomecanvas-[v]	Librería gráfica para GNOME
 libgpg-error-[v]	Códigos de error de GnuPG
 libgsf-[v]		Archivos estructurados de Gnome
@@ -379,20 +380,20 @@ libogg-[v]		Librería para flujos de bits OGG
 libpaper-[v]	Librería para manejar tipos de papel
 libproxy-[v]	Librería para manejar detalles de un proxy
 libpurple-[v]	Librería multiprotocolo de mensajería instantánea
-librsvg-[v]	Librería para reconocer archivos SVG basada en SAX
+librsvg-[v]		Librería para reconocer archivos SVG basada en SAX
 libsamplerate-[v]	Librería de conversión de rata de audios
 libsecret-[v]   	Librería para almacenar y recuperar claves y secretos
 libshout-[v]	Librería para comunicarse con un servidor icecast	
-libsigc++-[v]	Plataforma de retrollamadas para C++
+libsigc++-[v]		Plataforma de retrollamadas para C++
 libsigsegv-[v]	Librería para manejar fallos de página en modo usuario
 libsndfile-[v]	Maneja varios formatos de audio
-libsoup-[v]	Implementación SOAP en C
+libsoup-[v]		Implementación SOAP en C
 libsoxr-[v]		Conversión de la rata de muestro de calidad y rapida	
 libspatialite-[v]  	sqlite extendido con capacidades SQL espaciales
 libspectre-[v]  	Librería para presentar documentos Postscript
 libssh2-[v]		Librería que implement protocolo ssh2
-libstdc++-[v]		Librería de C++ del GCC
-libtalloc-[v]   Piscina de memoria jerarquica con destructores
+libstdc++-[v]	Librería de C++ del GCC
+libtalloc-[v]	Piscina de memoria jerarquica con destructores
 libtar-[v]		Librería en C para manipular archivos tar
 libtasn1-[v]		Reconocer Notación de Sintaxis Abstracta Uno
 libtheora-[v]	Codec abierto de video
@@ -405,16 +406,17 @@ libvorbis-[v]		Codec para compresión de audio
 libvpx-[v]		Codec para video VP8 de Google
 libwebp-[v]		Conversión del formatos gráficos Google WebP
 libwmf-[v]	Conversión y manejo WMF
+libxkbcommon-[v]	Librería para manejar descripciones de teclado
 libxml-[v]		Librería para reconocimiento de XML
 libxslt-[v]	Librería para transformaciones XSL en C
 libyaml-[v]		Reconocedor y emisor de YAML 1.1 escrito en C
 libyajl-[v]		Pequeña librería JSON escrita en ANSI C
-lz4-[v]
+lz4-[v]		Compresión de datos rápida con licencia BSD
 lzo2-[v]		Libería de compresión portable
 meanwhile-[v]	Implementación del protocolo Lotus Sametime Community
 mowgli-[v]		Extensión a C orientada a usabilidad y desempeño
 mozilla-dicts-en-GB-[v]	Diccionario requerido por hunspell
-mozjs17-[v]
+mozjs17-[v]		Implementacion en C de Javascript de Mozilla
 mpfr-[v]        	Librería de punto flotante de precisión múltiple
 mpg123-[v]		Librería para decodificar y reproducir MPEG
 musepack-[v]		Co/decodificación y reproducción de archivos musepack
@@ -422,9 +424,9 @@ neon-[v]		Librería cliente de HTTP y WebDAV, con interfaz en C
 netpbm-[v]		Convierte imágenes entre diversos formatos
 net-snmp-[v]	Implementación de SNMP extensible
 node-[v]		JavaScript V8 para clientes y servidores
-npth-[v]
 nspr-[v]		Herramientas para ejecución de netscape
 nss-[v]		Desarrollo de aplicaciones con protocolos seguros
+openal-[v]	API de audio 3D multiplataforma
 opencdk-[v]		Librería de criptografía
 opencore-amr-[v]	Codec de pronunciación Adaptativo Multi Rata 
 openjade-[v]	Motor DSSSL orientado a objetos 
@@ -448,40 +450,37 @@ p5-DBI-[v]		Interfaz unificada para acceso a bases de datos
 p5-Digest-SHA1-[v]	Módulo para calcular condensado SHA1
 p5-Digest-HMAC-[v]	Interfaz para los algoritmos HMAC
 p5-Encode-Detect-[v]	Detecta codificación de datos
-p5-Encode-Locale-[v]
+p5-Encode-Locale-[v]	Determina codificación del locale
 p5-Error-[v]	Manejo de errores al estilo objetos
-p5-File-Listing-[v]
+p5-File-Listing-[v]	Reconoce listados de directorios
 p5-FreezeThaw-[v]	Convierte estructuras a cadena y viceversa
 p5-Geography-Countries-[v]	Códigos para países
-p5-Geo-IP-[v]	Busca pais de una IP
+p5-Geo-IP-[v]		Busca pais de una IP
 p5-HTML-Tagset-[v]	Tablas de datos útiles para reconocer HTML	
 p5-HTML-Parser-[v]	Reconoce y extrae información de HTML	
-p5-HTTP-Cookies-[v]	
-p5-HTTP-Daemon-[v]	
-p5-HTTP-Date-[v]	
-p5-HTTP-Message-[v]
-p5-HTTP-Negotiate-[v]
+p5-HTTP-Cookies-[v]	Jarras de galletas HTTP	
+p5-HTTP-Daemon-[v]	Clase con un servidor http simple
+p5-HTTP-Date-[v]	Rutinas para conversión de fechas
+p5-HTTP-Message-[v]	Mensajes al estilo HTTP
+p5-HTTP-Negotiate-[v]	Elegir una variante para servir
 p5-IO-HTML-[v]	Interfaz para objetos AF_INET y AF_INET6
 p5-IO-Socket-INET6-[v]	Interfaz para objetos AF_INET y AF_INET6
-p5-IO-Socket-IP-[v]	Socket IP que soporta IPv4 e IPv6
 p5-IO-Socket-SSL-[v]	Interfaz para sockets SSL	
 p5-IP-Country-[v]	Para buscar códigos de paises por dirección IP
 p5-libwww-[v]	Librería de acceso WWW
-p5-LWP-Protocol-https-[v]	
-p5-LWP-MediaTypes-[v]	
+p5-LWP-Protocol-https-[v]	Añade soporte para https a p5-libwww
+p5-LWP-MediaTypes-[v]	Adivina tipo de medio de un url
 p5-Mail-SPF-[v]	Implementación OO de Sender Policy Framerwork
 p5-Mail-Tools-[v]	Módulo para manejar correo con Perl
 p5-Mail-DKIM-[v]	Implementación de firmas DKIM y DomainKeys
 p5-MLDBM-[v]		Almacena estrucutra de hash multi nivel en uno solo
-p5-Mozilla-CA-Fake-[v]
+p5-Mozilla-CA-Fake-[v]	Accede a certificados SSL del sistema con Perl
 p5-NetAddr-IP-[v]	Maneja direcciones y subredes IPv4 e IPv6
 p5-Net-CIDR-Lite-[v]	Extensión para mezclar direcciones IPv4 e IPv6
 p5-Net-Daemon-[v]	Extensión para servicios portables
 p5-Net-DNS-[v]		Interfaz al resolvedor DNS	
 p5-Net-DNS-Resolver-Programmable-[v]	Emulación fuera de línea de resolvedor	
-p5-Net-HTTP-[v]
-p5-Net-LWP-MediaTypes-[v]
-p5-Net-LWP-Protocol-https-[v]
+p5-Net-HTTP-[v]	Cliente en perl para conexiones HTTP
 p5-Net-Patricia-[v]	Tries Patricia para ubicar IPs rapidamente
 p5-Net-SSLeay-[v]	Módulo para usar OpenSSL	
 p5-Params-Util-[v]	Facilita revisión de parámetros	
@@ -496,7 +495,7 @@ p5-XML-NamespaceSupport-[v]	Interfaz a clase SAX2 NamespaceSupport
 p5-XML-Parser-[v]	Módulo perl para reconocer documentos XML
 p5-XML-SAX-[v]	Interfaz al reconocedor SAX2 de XML
 p5-YAML-Syck-[v]	YAML y JSON para perl opmtimizado en C
-p5-WWW-RobotRules-[v]
+p5-WWW-RobotRules-[v]	Base de datos de permisos derivados de robots.txt
 p7zip-[v]		Archivador con alta rata de compresión
 pango-[v]		Organización y presentación de texto
 pangomm-[v]	Interfaz en C++ para pango
@@ -536,7 +535,7 @@ pear-XML-Util-[v]	Utilidad XML
 pecl-uploadprogress-[v]	Medida de progreso de archivos subidos para PHP
 pinentry-[v]	Dialogo (ncurses) para ingesar clave o PIN	
 png-[v]		Librería para manipular imágenes PNG
-polkit-[v]
+polkit-[v]		PolicyKit Agente de autenticion para Qt4
 poppler-[v]		Librería para presentar PDF
 poppler-data-[v]	Archivos de codificación para poppler
 poppler-utils-[v]	Utilidades para conversión de PDF
@@ -549,6 +548,7 @@ proj-[v]		Utilidades para proyección cartográfica
 ps2eps-[v]		Convierte Postscript a Postscript Encapsulado
 psutils-[v]		Utilidades para manipular documentos Postscript
 pth-[v]		Threads portables GNU
+pulseaudio-[v]	Servidor de sonido en red y multi plataforma
 py-cairo-[v]	Conexión con Cairo para Python
 py-dbus-[v]	Uniones para dbus en Python
 py-dbus-common-[v]	Archivos comunes para py-dbus
@@ -560,15 +560,16 @@ py-libxslt-[v]	Uniones de Python con libxslt
 py-lxml-[v]		Uniones en Python para libxml2 y libxslt
 py-numpy-[v]	Librearía numérica y de arreglos rápida en Python
 py-Pillow-[v]		Librería en python para imágenes
-py-psycopg2-[v]
+py-psycopg2-[v]	Adaptador a bases de datos PostgreSQL para Ptyhon
 py-qt4-[v]		Uniones de Python con Qt4
-py-qscintilla-[v]
+py-qscintilla-[v]	Uniones en python con editor de código fuente Scintilla
 py-setuptools-[v]	Sistema de empaquetamiento de módulos Python
 py-sip-[v]		Uniones entre python y C generadas automaticamente
-python-tkinter-[v]	Módulo para interfaces gráficas en Python
+python-tkinter-[v]	Interfaces gráficas Python
 qpdf-[v]    		Utilidad para inspeccionar y transformar PDF
-qscintilla-[v]
-qt4-[v]		Juego de herramientas en C++ para GUI en X11
+qscintilla-[v]	Porte a qt4 del editor de código fuente Scintilla
+qt4-[v]		Juego de herramientas en C++ para GUI en X11 v4
+qt5-[v]		Juego de herramientas en C++ para GUI en X11 v5
 qwt-[v]		Widgets Qt para acplicaciones téncicas
 raptor-[v]		Herramientas para reconocer RDF usadas por redland
 rarian-[v]		Librería para metadatos de documentación
@@ -576,8 +577,8 @@ rasqal-[v]		Librería de consultas RDF para Redland
 re2c-[v]		Generador de reconocedores de expresiones regulares
 recode-[v]		Convertir archivos entre juegos de caracters y usos
 redland-[v]	Interfaz de alto nivel para RDF 
-rrdtool-[v]	Sistema para almacenar y presentar series de tiempo
-rrdupdate-[v]	Herramienta liviana de sólo-actualiación para rrdtool
+rrdtool-[v]		Sistema para almacenar y presentar series de tiempo
+rrdupdate-[v]		Herramienta liviana de sólo-actualiación para rrdtool
 ruby22-ri_docs-[v]	Documentación de nucleo y librería estándar de Ruby
 samba-[v]		Interconexión con Windows con protocolos SMB/CIFS
 sane-backends-[v]	API para acceder a scanners
@@ -586,17 +587,16 @@ schroedinger-[v]	Codec Dirac de alta velocidad
 sdl-[v]		Librería multimedia
 sdl-image-[v]	Librería de imágenes de SDL
 silc-toolkit-[v]	Herramientas para desarrollo de aplicaciones SILC
-smarty-[v]		Motor de plantillas en PHP
 sound-theme-freedesktop-[v] 	Tema de sonido XDG
 soundtouch-[v]	Librería para procesamiento de tempo/tono
 spandsp-[v]	Librería de PDS (DPS) para telefonía
-spatialindex-[v]
+spatialindex-[v]	Librería para indexado y consultas espaciales
 speex-[v]		Codec para voz libre de patentes
 t1lib-[v]		Librería para presentación de fuentes tipo 1
 t1utils-[v]		Utilidades para fuentes PostScript tipo 1
 taglib-[v]		Para manejar meta-datos de formatos de audio
 tango-icon-theme-[v]	Para manejar meta-datos de formatos de audio
-tdb-[v]         Librería para base de datos trivial
+tdb-[v]		Librería para base de datos trivial
 tiff-[v]		Manipula formato gráfico TIFF
 transfig-[v]	Conversión entre formato XFIG y otros
 tremor-[v]	Decodificador OGG con aritmética entera
@@ -605,12 +605,12 @@ vamp-plugin-sdk-[v]	API para plugins de audio
 vim-lang-[v]	Soporte de idiomas para vim
 vte-[v]		Librería para emulación de terminal
 wavpack-[v]	Codificador de audio para compresión con y sin perdida
-webkit-[v]		Motor de fuentes abiertas para navegadores web
+webkit-[v]	Motor de fuentes abiertas para navegadores web
 webkit-gtk3-[v]	Interfaz para GTK+3
 wv-[v]		Convierte de varios formatos Microsoft a HTML
 wxWidgets-gtk2-[v]	Herramientas para GUIs multi-plataforma
 Xaw3d-[v]		Componentes gráficos 3D Athena similares a Motif
-x265-[v]
+x265-[v]		Codificador H.265/HEVC libre
 x264-[v]		Codificador abierto h264/avc
 xcdroast-[v]	Quemador de CD
 xdg-utils-[v]	Asisten integración de tareas de escritorio

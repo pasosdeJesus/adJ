@@ -3,7 +3,7 @@ Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y que esperamos será la elegida por Jesús durante el Milenio.
 
 Versión: 5.7b1%%%
-Fecha de publicación: 23/Ago/2015
+Fecha de publicación: 29/Ago/2015
 
 !!!NOVEDADES
 
@@ -45,10 +45,10 @@ Entre las novedades reportadas en las `Notas de publicación de OpenBSD 5.7' des
 ** mandoc ahora soporta UTF-8 especificado con -K y a salida por defecto ahora es -Tlocale en lugar -Tascii
 ** syslogd puede enviar mensajes por TLS
 ** Nueva rcctl para controlar servicios
-** Diversos programas pasados de base a portes: Sendmail, nginx
+** Diversos programas pasados de base a portes: Sendmail, nginx.  Estos están disponibles como paquetes.
 
 
-* El sistema base incluye mejoras a componentes auditados y mejorados como ==Xenocara== (Xorg 7.7), ==gcc== 4.2.1, ==perl== 5.18.2, nginx 1.6.0, LibreSSL 2.0 con parches posteriores, OpenSMTP 5.4.3, nsd 4.0.3
+* El sistema base incluye mejoras a componentes auditados y mejorados como ==Xenocara== (Xorg 7.7), ==gcc== 4.2.1, ==perl== 5.18.2, LibreSSL 2.0 con parches posteriores, OpenSMTP 5.4.3, nsd 4.0.3
 
 
 !PROCESO DE INSTALACIÓN
@@ -75,8 +75,10 @@ Puede ver el listado completo en https://github.com/pasosdeJesus/adJ/blob/master
 !PAQUETES DE OPENBSD
 
 Los paquetes para OpenBSD 5.7 también funcionan sin cambios, resaltamos:
+* nginx 1.7.1 que puede ser util mientras migra a OpenBSD httpd, ver http://structio.sourceforge.net/guias/servidor_OpenBSD/sevidorweb.html#openbsd-httpd
 * !LibreOffice actualizado a 4.1.6.2, gimp a 2.8.10
 * LLVM/Clang a 3.5.2040228p8 asi como los demás lenguajes de programación
+* No hay paquete para mysql, ha sido remplazado por mariadb
 * Se incluyen en total 517 paquetes, en los repositorios de paquetes para OpenBSD 5.7 hay 8588 disponibles para amd64
 
 

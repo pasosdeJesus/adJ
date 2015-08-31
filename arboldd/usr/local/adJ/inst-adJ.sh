@@ -37,16 +37,16 @@ if (test "$?" != "0") then {
 	exit 1;
 } fi;
 
-echo "-+-+-+-+-+-+" >> /var/tmp/inst-adJ.bitacora
-echo "Bitácora de instalación " >> /var/tmp/inst-adJ.bitacora
-date >> /var/tmp/inst-adJ.bitacora
-echo "VER=$VER ARCVER=$ARCVER TAM=$TAM RUTAIMG=$RUTAIMG ARCH=$ARCH ARCHSIVEL=$ARCHSIVEL ARCHSIVELPEAR=$ARCHSIVELPEAR" >> /var/tmp/inst-adJ.bitacora
+echo "-+-+-+-+-+-+" >> /var/www/tmp/inst-adJ.bitacora
+echo "Bitácora de instalación " >> /var/www/tmp/inst-adJ.bitacora
+date >> /var/www/tmp/inst-adJ.bitacora
+echo "VER=$VER ARCVER=$ARCVER TAM=$TAM RUTAIMG=$RUTAIMG ARCH=$ARCH ARCHSIVEL=$ARCHSIVEL ARCHSIVELPEAR=$ARCHSIVELPEAR" >> /var/www/tmp/inst-adJ.bitacora
 
 # Creates a string by concatenating $1, $2 times to $3 prints the result.
 # From configuration tool of http://structio.sf.net/sigue
 function mkstr {
 	if (test "$2" -lt "0") then {
-		echo "Bug.  Times cannot be negative" >> /var/tmp/inst-adJ.bitacora;
+		echo "Bug.  Times cannot be negative" >> /var/www/tmp/inst-adJ.bitacora;
 		exit 1;
 	}
 	elif (test "$2" == "0") then {
@@ -114,15 +114,15 @@ function activarcs {
 		echo "En /etc/rc.d falta servicio de nombre $ns" 
 		exit 1;
 	} fi;
-	echo "activando $ns" >> /var/tmp/inst-adJ.bitacora 2>&1
+	echo "activando $ns" >> /var/www/tmp/inst-adJ.bitacora 2>&1
 	touch /etc/rc.conf.local
-	grep "^ *pkg_scripts.*[^a-zA-Z0-9_]$ns[^a-zA-Z0-9_]" /etc/rc.conf.local >> /var/tmp/inst-adJ.bitacora 2>&1
+	grep "^ *pkg_scripts.*[^a-zA-Z0-9_]$ns[^a-zA-Z0-9_]" /etc/rc.conf.local >> /var/www/tmp/inst-adJ.bitacora 2>&1
 	if (test "$?" != "0") then {
-		echo "No  hay pkg_scripts con $ns"  >> /var/tmp/inst-adJ.bitacora 2>&1
-		grep "^ *pkg_script" /etc/rc.conf.local >> /var/tmp/inst-adJ.bitacora 2>&1
+		echo "No  hay pkg_scripts con $ns"  >> /var/www/tmp/inst-adJ.bitacora 2>&1
+		grep "^ *pkg_script" /etc/rc.conf.local >> /var/www/tmp/inst-adJ.bitacora 2>&1
 		if (test "$?" != "0") then {
-			echo "No hay pkg_script" >> /var/tmp/inst-adJ.bitacora 2>&1
-			echo "pkg_scripts=\"$ns\"" >> /etc/rc.conf.local 2>/var/tmp/inst-adJ.bitacora 
+			echo "No hay pkg_script" >> /var/www/tmp/inst-adJ.bitacora 2>&1
+			echo "pkg_scripts=\"$ns\"" >> /etc/rc.conf.local 2>/var/www/tmp/inst-adJ.bitacora 
 		} else {
 			cs=`grep "^ *pkg_scripts *=" /etc/rc.conf.local | sed -e "s/pkg_scripts *= *\"\([^\"]*\)\".*/\1/g"`
 			if (test "$cs" != "") then {
@@ -130,8 +130,8 @@ function activarcs {
 			} else {
 				cs=$ns;
 			} fi;
-			echo "cs=$cs" >> /var/tmp/inst-adJ.bitacora 2>&1
-			ed /etc/rc.conf.local >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+			echo "cs=$cs" >> /var/www/tmp/inst-adJ.bitacora 2>&1
+			ed /etc/rc.conf.local >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 /^ *pkg_scripts *=
 .c
 pkg_scripts="$cs"
@@ -141,7 +141,7 @@ q
 EOF
 		} fi;
 	} else  {
-		echo "Activo" >> /var/tmp/inst-adJ.bitacora 2>&1
+		echo "Activo" >> /var/www/tmp/inst-adJ.bitacora 2>&1
 	} fi;
 } 
 
@@ -220,9 +220,9 @@ chmod +x $ar
 }
 
 
-echo "Script de instalación de adJ $VER" >> /var/tmp/inst-adJ.bitacora
-echo "---------------------------- " >> /var/tmp/inst-adJ.bitacora
-echo "Se recomienda ejecutarlo desde una terminal en X-Window" >> /var/tmp/inst-adJ.bitacora
+echo "Script de instalación de adJ $VER" >> /var/www/tmp/inst-adJ.bitacora
+echo "---------------------------- " >> /var/www/tmp/inst-adJ.bitacora
+echo "Se recomienda ejecutarlo desde una terminal en X-Window" >> /var/www/tmp/inst-adJ.bitacora
 
 mount > /dev/null 2> /dev/null
 if (test "$?" != "0") then {
@@ -235,9 +235,9 @@ exit 1;
 umount /mnt/cdrom 2> /dev/null > /dev/null
 mount | grep "/mnt/cdrom" > /dev/null 2> /dev/null
 if (test "$?" = "0") then {
-echo "No puede desmontarse el CDROM" >> /var/tmp/inst-adJ.bitacora ;
+echo "No puede desmontarse el CDROM" >> /var/www/tmp/inst-adJ.bitacora ;
 echo "Desmontelo y vuelva a ejecutar este archivo de comandos" | tee -a 
-/var/tmp/inst-adJ.bitacora;
+/var/www/tmp/inst-adJ.bitacora;
 exit 1;
 } fi;
 
@@ -261,7 +261,7 @@ while (test "$uadJ" = "") ; do
 done;
 ADMADJ=$uadJ;
 
-echo "* Creando cuenta inicial"  >> /var/tmp/inst-adJ.bitacora
+echo "* Creando cuenta inicial"  >> /var/www/tmp/inst-adJ.bitacora
 groupinfo $uadJ > /dev/null 2>&1
 if (test "$?" != "0") then {
 groupadd $uadJ
@@ -271,7 +271,7 @@ if (test "$?" != "0") then {
 adduser -v -batch $uadJ $uadJ,wheel $uadJ
 passwd $uadJ
 } else {
-echo "   Saltando..."  >> /var/tmp/inst-adJ.bitacora;
+echo "   Saltando..."  >> /var/www/tmp/inst-adJ.bitacora;
 } fi;
 user mod -g $uadJ $uadJ
 user mod -G users $uadJ
@@ -284,7 +284,7 @@ sudo chown $uadJ:$uadJ /home/$uadJ/.Xauthority > /dev/null 2>&1
 sudo rm -rf /home/$uadJ/.font*
 
 usermod -G operator $uadJ
-echo "* Dispositivos montables por usuarios" >> /var/tmp/inst-adJ.bitacora;
+echo "* Dispositivos montables por usuarios" >> /var/www/tmp/inst-adJ.bitacora;
 grep "^ *kern.usermount *= *1" /etc/sysctl.conf > /dev/null 2> /dev/null
 if (test "$?" != "0") then {
 cat >> /etc/sysctl.conf <<EOF
@@ -292,10 +292,10 @@ kern.usermount=1
 EOF
 sysctl -w kern.usermount=1 > /dev/null
 } else {
-echo "   Saltando..."  >> /var/tmp/inst-adJ.bitacora;
+echo "   Saltando..."  >> /var/www/tmp/inst-adJ.bitacora;
 } fi;
 
-echo "* Permisos de /mnt" >> /var/tmp/inst-adJ.bitacora;
+echo "* Permisos de /mnt" >> /var/www/tmp/inst-adJ.bitacora;
 ls -l /mnt/ | grep "root  wheel" > /dev/null 2> /dev/null
 if (test "$?" = "0") then {
 sudo chown $uadJ:$uadJ /mnt/*	2> /dev/null > /dev/null
@@ -303,13 +303,13 @@ sudo chown $uadJ:$uadJ /mnt/*	2> /dev/null > /dev/null
 
 
 
-echo "Sistemas de archivos de CDROM en /etc/fstab" >> /var/tmp/inst-adJ.bitacora
+echo "Sistemas de archivos de CDROM en /etc/fstab" >> /var/www/tmp/inst-adJ.bitacora
 grep "/mnt/cdrom" /etc/fstab > /dev/null
 if (test "$?" != "0") then {
 echo "/dev/cd0a /mnt/cdrom cd9660 noauto,ro 0 0" >> /etc/fstab
 mkdir -p /mnt/cdrom
 } else {
-echo "   Saltando cd0a..." >> /var/tmp/inst-adJ.bitacora;
+echo "   Saltando cd0a..." >> /var/www/tmp/inst-adJ.bitacora;
 } fi;
 sudo chown $uadJ:$uadJ /mnt/cdrom
 
@@ -325,7 +325,7 @@ chmod a+rxw /var/www/tmp > /dev/null 2>&1
 # MAKEDEV sd5
 
 if (test "$ARCH" = "") then {
-echo "Suponiendo que se instala de CD-ROM." >> /var/tmp/inst-adJ.bitacora;
+echo "Suponiendo que se instala de CD-ROM." >> /var/www/tmp/inst-adJ.bitacora;
 clear;
 echo "Instalando desde CD-ROM";
 echo ""
@@ -338,7 +338,7 @@ mount | grep "cdrom" > /dev/null 2>&1
 if (test "$?" != "0") then {
 	mount /mnt/cdrom
 } else {
-	echo "   Saltando..."| tee -a /var/tmp/inst-adJ.bitacora;
+	echo "   Saltando..."| tee -a /var/www/tmp/inst-adJ.bitacora;
 } fi;
 } else {
 p=`echo $ARCH | sed -e "s/^\(.\).*/\1/g"`;
@@ -349,7 +349,7 @@ if (test "$p" != "/") then {
 } fi;
 
 if (test ! -f "$ARCH/Novedades.txt" -o ! -d "$ARCH/paquetes") then {
-echo "En la ruta $ARCH no está el CD Aprendiendo de Jesús" | tee -a /var/tmp/inst-adJ.bitacora;
+echo "En la ruta $ARCH no está el CD Aprendiendo de Jesús" | tee -a /var/www/tmp/inst-adJ.bitacora;
 exit 1;
 } fi;
 
@@ -364,17 +364,17 @@ function insacp {
 		echo "insacp: Falta nombre de paquete";
 		exit 1;
 	} fi;
-	echo "* Instalar $n"  >> /var/tmp/inst-adJ.bitacora;
+	echo "* Instalar $n"  >> /var/www/tmp/inst-adJ.bitacora;
 	opbor="-I";
 	f=`ls /var/db/pkg/$n-* 2> /dev/null > /dev/null`;
 	if (test "$?" = "0") then {
-		echo "$n instalado. Intentando remplazar " >> /var/tmp/inst-adJ.bitacora
+		echo "$n instalado. Intentando remplazar " >> /var/www/tmp/inst-adJ.bitacora
 		opbor="-I -r -D update -D updatedepends"
 	} fi;
 
-	pkg_add $opbor $PKG_PATH/$n-*.tgz >> /var/tmp/inst-adJ.bitacora 2>&1
+	pkg_add $opbor $PKG_PATH/$n-*.tgz >> /var/www/tmp/inst-adJ.bitacora 2>&1
 	if (test "$popc" != "") then {
-		pkg_add $opbor $PKG_PATH/${popc}*.tgz >> /var/tmp/inst-adJ.bitacora 2>&1
+		pkg_add $opbor $PKG_PATH/${popc}*.tgz >> /var/www/tmp/inst-adJ.bitacora 2>&1
 	} fi;
 }
 
@@ -388,10 +388,10 @@ echo "El paquete dialog es indispensable";
 exit 1;
 } fi;
 
-echo "Sistemas de archivos para USB en /etc/fstab" >> /var/tmp/inst-adJ.bitacora
+echo "Sistemas de archivos para USB en /etc/fstab" >> /var/www/tmp/inst-adJ.bitacora
 grep "/mnt/usb" /etc/fstab > /dev/null
 if (test "$?" != "0") then {
-	echo "Detectando dispositivo que corresponde a memoria USB" >> /var/tmp/inst-adJ.bitacora;
+	echo "Detectando dispositivo que corresponde a memoria USB" >> /var/www/tmp/inst-adJ.bitacora;
 	ayuda="2";
 	while (test "$ayuda" = "2"); do
 		dialog --title 'Configurando USB (1)' --help-button --msgbox '\nDesmonte y retire toda memoria USB que pueda haber\n' 15 60
@@ -409,22 +409,22 @@ if (test "$?" != "0") then {
 	if (test "$?" = "0") then {
 		nusb=`grep "[>] sd" /tmp/dmesgdiff | head -n 1 | sed -e  "s/.* sd\([0-9]\).*/\1/g"` 
 	} fi;
-	echo "    Configurando dispositivo /dev/sd${nusb}c" >> /var/tmp/inst-adJ.bitacora;
+	echo "    Configurando dispositivo /dev/sd${nusb}c" >> /var/www/tmp/inst-adJ.bitacora;
 	dialog --title 'Configurando USB (3)' --msgbox '\nRetire la memoria USB\n' 15 60
 	echo "/dev/sd${nusb}i /mnt/usb msdos noauto,rw 0 0" >> /etc/fstab
 	mkdir -p /mnt/usb
 	echo "/dev/sd${nusb}c /mnt/usbc msdos noauto,rw 0 0" >> /etc/fstab
 	mkdir -p /mnt/usbc
 } else {
-	echo "   Saltando USB..." >> /var/tmp/inst-adJ.bitacora;
+	echo "   Saltando USB..." >> /var/www/tmp/inst-adJ.bitacora;
 } fi;
 sudo chown $uadJ:$uadJ /mnt/usb 
 sudo chown $uadJ:$uadJ /mnt/usbc
 
-echo "/var sin nodev en /etc/fstab (para tener /var/www/dev/random)" >> /var/tmp/inst-adJ.bitacora
+echo "/var sin nodev en /etc/fstab (para tener /var/www/dev/random)" >> /var/www/tmp/inst-adJ.bitacora
 grep " /var.*nodev," /etc/fstab > /dev/null
 if (test "$?" = "0") then {
-	echo "Por quitar opcion nodev en /var en fstab" >> /var/tmp/inst-adJ.bitacora;
+	echo "Por quitar opcion nodev en /var en fstab" >> /var/www/tmp/inst-adJ.bitacora;
 	ed /etc/fstab <<EOF
 / \/var.*nodev,/
 s/nodev,//g
@@ -432,27 +432,27 @@ w
 q
 EOF
 } else {
-	echo "   Saltando quitar nodev..." >> /var/tmp/inst-adJ.bitacora;
+	echo "   Saltando quitar nodev..." >> /var/www/tmp/inst-adJ.bitacora;
 } fi;
 
-echo "/var/www/dev/random" >> /var/tmp/inst-adJ.bitacora
+echo "/var/www/dev/random" >> /var/www/tmp/inst-adJ.bitacora
 if (test ! -f "/var/www/dev/random") then {
 	mkdir -p /var/www/dev/
-	sudo mknod -m 644 /var/www/dev/random c 45 0 2>> /var/tmp/inst-adJ.bitacora
+	sudo mknod -m 644 /var/www/dev/random c 45 0 2>> /var/www/tmp/inst-adJ.bitacora
 } else {
-	echo "   Saltando /var/www/dev/random..." >> /var/tmp/inst-adJ.bitacora;
+	echo "   Saltando /var/www/dev/random..." >> /var/www/tmp/inst-adJ.bitacora;
 } fi;
 
 userinfo _hostapd >/dev/null
 if (test "$?" != "0") then {
-	echo "Aplicando actualizaciones de 3.7 a 3.8"  >> /var/tmp/inst-adJ.bitacora;
+	echo "Aplicando actualizaciones de 3.7 a 3.8"  >> /var/www/tmp/inst-adJ.bitacora;
 	
 	useradd -u86 -g=uid -c"HostAP Service" -d/var/empty -s/sbin/nologin _hostapd
 } fi;
 
 #grep "nat-anchor" /etc/pf.conf > /dev/null
 #if (test "$?" != "0") then {
-#	echo "Aplicando actualizaciones de 3.8 a 3.9"  >> /var/tmp/inst-adJ.bitacora;
+#	echo "Aplicando actualizaciones de 3.8 a 3.9"  >> /var/www/tmp/inst-adJ.bitacora;
 #	# In the NAT section you need:
 #	ed /etc/pf.conf <<EOF
 #/nat on
@@ -478,7 +478,7 @@ userinfo _dvmrpd >/dev/null
 if (test "$?" != "0") then {
 	vac="$vac 3.9 a 4.0";	
 	mac="$mac Hay cambios manuales por hacer si usa PPPOE del PPP del kernel\n";
-	echo "Aplicando actualizaciones de 3.9 a 4.0"  >> /var/tmp/inst-adJ.bitacora;
+	echo "Aplicando actualizaciones de 3.9 a 4.0"  >> /var/www/tmp/inst-adJ.bitacora;
 	useradd -u87 -g=uid -c"DVMRP Service" -d/var/empty -s/sbin/nologin _dvmrpd
 
 	#Previously, the /etc/hostname.pppoe0 file looked like this:
@@ -511,10 +511,10 @@ if (test "$?" != "0") then {
 userinfo _ripd >/dev/null
 if (test "$?" != "0") then {
 	vac="$vac 4.0 a 4.1";	
-	echo "Aplicando actualizaciones de 4.0 a 4.1" >> /var/tmp/inst-adJ.bitacora;
+	echo "Aplicando actualizaciones de 4.0 a 4.1" >> /var/www/tmp/inst-adJ.bitacora;
 
-	useradd -u88 -g=uid -c"RIP Service" -d/var/empty -s/sbin/nologin _ripd >> /var/tmp/inst-adJ.bitacora
-	useradd -u89 -g=uid -c"Relay Service" -d/var/empty -s/sbin/nologin _relayd >> /var/tmp/inst-adJ.bitacora
+	useradd -u88 -g=uid -c"RIP Service" -d/var/empty -s/sbin/nologin _ripd >> /var/www/tmp/inst-adJ.bitacora
+	useradd -u89 -g=uid -c"Relay Service" -d/var/empty -s/sbin/nologin _relayd >> /var/www/tmp/inst-adJ.bitacora
 } fi;
 
 userinfo _ospf6d >/dev/null
@@ -523,7 +523,7 @@ if (test "$?" != "0") then {
 	# sean actualizados por mergemaster
 
 	vac="$vac 4.2 a 4.3";	
-	echo "Aplicando actualizaciones de 4.2 a 4.3" >> /var/tmp/inst-adJ.bitacora;
+	echo "Aplicando actualizaciones de 4.2 a 4.3" >> /var/www/tmp/inst-adJ.bitacora;
 	useradd -u90 -g=uid -c"OSPF6 Service" -d/var/empty -s/sbin/nologin _ospf6d
 	useradd -u91 -g=uid -c"SNMP Service" -d/var/empty -s/sbin/nologin _snmpd
 
@@ -535,7 +535,7 @@ if (test "$?" != "0") then {
 		rm -f /etc/hoststated.conf /var/named/standard/root.hint
 		chown root:operator /etc/chio.conf
 		chmod 644 /etc/chio.conf
-		ed /var/www/conf/httpd.conf >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+		ed /var/www/conf/httpd.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 /LoadModule php5_module .*
 d
 i
@@ -552,7 +552,7 @@ EOF
 userinfo _rtadvd >/dev/null
 if (test "$?" != "0") then {
 	vac="$vac 4.3 a 4.4";	
-	echo "Aplicando actualizaciones de 4.3 a 4.4" >> /var/tmp/inst-adJ.bitacora;
+	echo "Aplicando actualizaciones de 4.3 a 4.4" >> /var/www/tmp/inst-adJ.bitacora;
 	useradd -u92 -g=uid -c"IPv6 Router Advertisement Service" -d/var/empty -s/sbin/nologin _rtadvd
 	useradd -u93 -g=uid -c"YP to LDAP Service" -d/var/empty -s/sbin/nologin _ypldap
 	rm -f /etc/dhcpd.interfaces
@@ -562,11 +562,11 @@ if (test "$?" != "0") then {
 #  :%s/\(VirtualHost.* \)\([0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\) /\1\2:80 /g
 } fi;
 
-a=`ls /var/db/pkg/p5-Archive-Tar 2> /var/tmp/inst-adJ.bitacora`
+a=`ls /var/db/pkg/p5-Archive-Tar 2> /var/www/tmp/inst-adJ.bitacora`
 if (test "$a" != "") then {
 # http://www.openbsd.org/faq/upgrade45.html
 	vac="$vac 4.4 a 4.5";	
-	echo "Aplicando actualizaciones de 4.4 a 4.5" >> /var/tmp/inst-adJ.bitacora;
+	echo "Aplicando actualizaciones de 4.4 a 4.5" >> /var/www/tmp/inst-adJ.bitacora;
 	#useradd -u94 -g=uid -c"Servicio Bluetooth" -d/var/empty -s/sbin/nologin _btd Retirado en 5.5
 	for i in p5-Archive-Tar p5-Compress-Raw-Zlib p5-Compress-Zlib \
 p5-IO-Compress-Base p5-IO-Compress-Zlib p5-IO-Zlib p5-Module-Build \
@@ -574,22 +574,22 @@ p5-Module-CoreList p5-Module-Load p5-version p5-Digest-SHA \
 p5-Locale-Maketext-Simple p5-Pod-Escapes p5-Pod-Simple \
 p5-ExtUtils-ParseXS p5-ExtUtils-CBuilder p5-Module-Pluggable \
 p5-Time-Piece p5-Module-Loaded xcompmgr; do
-		pkg_delete -I -D dependencies $i 2>> /var/tmp/inst-adJ.bitacora 2>&1
+		pkg_delete -I -D dependencies $i 2>> /var/www/tmp/inst-adJ.bitacora 2>&1
 	done;
-	ed /etc/mixerctl.conf >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+	ed /etc/mixerctl.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/headphones/hp/g
 ,s/speaker/spkr/g
 w
 q
 EOF
-	ed /etc/X11/xorg.conf >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+	ed /etc/X11/xorg.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/i810/intel/g
 ,s/.*RgbPath .*//g
 w
 q
 EOF
 
-	find /usr/X11R6/lib/modules ! -newer libscanpci.la | xargs sudo rm -f >> /var/tmp/inst-adJ.bitacora 2>&1
+	find /usr/X11R6/lib/modules ! -newer libscanpci.la | xargs sudo rm -f >> /var/www/tmp/inst-adJ.bitacora 2>&1
 
 } fi;
 
@@ -599,7 +599,7 @@ if (test "$?" != "0") then {
 # http://www.openbsd.org/faq/upgrade47.html
 	vac="$vac 4.6 a 4.7";	
 	mac="$mac Copia de respaldo de /etc/pf.conf inicial dejada en /etc/pf46.conf. Es importante verificar /etc/pf.conf manualmente\n"
-	echo "Aplicando actualizaciones de 4.6 a 4.7" >> /var/tmp/inst-adJ.bitacora;
+	echo "Aplicando actualizaciones de 4.6 a 4.7" >> /var/www/tmp/inst-adJ.bitacora;
 	useradd -u 97 -g =uid -c "NSD Service" -d /var/empty -s /sbin/nologin _nsd
 	useradd -u 98 -g =uid -c "LDP Service" -d /var/empty -s /sbin/nologin _ldpd
 
@@ -628,7 +628,7 @@ userinfo _sndio >/dev/null 2>&1
 if (test "$?" != "0") then {
 # http://www.openbsd.org/faq/upgrade48.html
 	vac="$vac 4.7 a 4.8";	
-	echo "Aplicando actualizaciones de 4.7 a 4.8" >> /var/tmp/inst-adJ.bitacora;
+	echo "Aplicando actualizaciones de 4.7 a 4.8" >> /var/www/tmp/inst-adJ.bitacora;
 	rm -f /usr/include/evdns.h
 	rm -f /usr/libdata/perl5/site_perl/*-openbsd/evdns.ph
 
@@ -663,7 +663,7 @@ if (test "$?" != "0") then {
 
 if (test -f /usr/bin/addftinfo) then {
 	vac="$vac 4.8 a 4.9";	
-	echo "Aplicando actualizaciones de 4.8 a 4.9" >> /var/tmp/inst-adJ.bitacora;
+	echo "Aplicando actualizaciones de 4.8 a 4.9" >> /var/www/tmp/inst-adJ.bitacora;
 	(cd /usr/bin; rm -f addftinfo afmtodit eqn grodvi groff grog grohtml grolj4 grops grotty \
    hpftodit indxbib lkbib lookbib neqn nroff pfbtops pic psbb refer sectok soelim \
    tbl tfmtodit troff)
@@ -693,7 +693,7 @@ if (test -f /usr/bin/addftinfo) then {
    /usr/X11R6/include/X11/extensions/lbxbufstr.h \
    /usr/X11R6/include/X11/extensions/lbximage.h
 
-	echo "Verificando sintaxis para redes inalambricas WPA" >> /var/tmp/inst-adJ.bitacora; 
+	echo "Verificando sintaxis para redes inalambricas WPA" >> /var/www/tmp/inst-adJ.bitacora; 
 	for i in /etc/hostname.*; do
 		grep wpapsk $i
 		if (test "$?" == "0" -a ! -f $i.copia49) then {
@@ -706,7 +706,7 @@ if (test -f /usr/bin/addftinfo) then {
 
 if (test -f /etc/security) then {
 	vac="$vac 4.9 a 5.0";	
-	echo "Aplicando actualizaciones de 4.9 a 5.0" >> /var/tmp/inst-adJ.bitacora;
+	echo "Aplicando actualizaciones de 4.9 a 5.0" >> /var/www/tmp/inst-adJ.bitacora;
     sudo mv /etc/security /etc/security49.anterior
     sudo rm -rf /etc/X11/xkb /usr/lib/gcc-lib/$(arch -s)-unknown-openbsd4.? /usr/bin/perl5.10.1 /usr/libdata/perl5/$(arch -s)-openbsd/5.10.1 
     sudo cp /etc/pf.conf /etc/pf49.conf
@@ -727,7 +727,7 @@ if (test ! -f /var/named/standard/root.hint) then {
 } fi;
 if (test -d /usr/X11R6/share/X11/xkb/symbols/srvr_ctrl) then {
 	vac="$vac 5.0 a 5.1";	
-	echo "Aplicando actualizaciones de 5.0 a 5.1" >> /var/tmp/inst-adJ.bitacora;
+	echo "Aplicando actualizaciones de 5.0 a 5.1" >> /var/www/tmp/inst-adJ.bitacora;
     sudo rm -rf /usr/X11R6/share/X11/xkb/symbols/srvr_ctrl
     sudo rm -f /etc/rc.d/aucat
     sudo rm -f /etc/ccd.conf /sbin/ccdconfig /usr/share/man/man8/ccdconfig.8
@@ -739,7 +739,7 @@ if (test -d /usr/X11R6/share/X11/xkb/symbols/srvr_ctrl) then {
 } fi;
 if (test -f /usr/bin/lint) then {
 	vac="$vac 5.1 a 5.2";	
-	echo "Aplicando actualizaciones de 5.1 a 5.2 " >> /var/tmp/inst-adJ.bitacora;
+	echo "Aplicando actualizaciones de 5.1 a 5.2 " >> /var/www/tmp/inst-adJ.bitacora;
 	rm -rf /usr/bin/lint /usr/libexec/lint[12] /usr/share/man/man1/lint.1 \
 	       	/etc/rc.d/btd /usr/sbin/pkg /sbin/raidctl \
 	       	/usr/share/man/man4/raid.4 /usr/share/man/man8/raidctl.8
@@ -749,7 +749,7 @@ if (test -f /usr/bin/lint) then {
 } fi;
 if (test -f /usr/bin/pmdb) then {
 	vac="$vac 5.2 a 5.3";	
-	echo "Aplicando actualizaciones de 5.2 a 5.3 " >> /var/tmp/inst-adJ.bitacora;
+	echo "Aplicando actualizaciones de 5.2 a 5.3 " >> /var/www/tmp/inst-adJ.bitacora;
 	rm -f /usr/bin/pmdb /usr/share/man/man1/pmdb.1
 	rm -rf /usr/X11R6/lib/X11/config
 	rm -f /usr/X11R6/bin/{ccmakedep,cleanlinks,imake,makeg,mergelib,mkdirhier,mkhtmlindex,revpath,xmkmf}
@@ -759,7 +759,7 @@ if (test -f /usr/bin/pmdb) then {
 
 if (test -d /usr/share/locale/de_AT -o -f /usr/include/pcap-int.h) then {
 	vac="$vac 5.3 a 5.4";	
-	echo "Aplicando actualizaciones de 5.3 a 5.4 " >> /var/tmp/inst-adJ.bitacora;
+	echo "Aplicando actualizaciones de 5.3 a 5.4 " >> /var/www/tmp/inst-adJ.bitacora;
 	rm -rf /usr/share/locale/*_*.* /usr/share/locale/de_AT
 	rm -rf /usr/include/pcap-int.h
 	rm -rf /usr/libdata/perl5/site_perl/*/pcap-int.ph
@@ -794,7 +794,7 @@ if (test -d /usr/share/locale/de_AT -o -f /usr/include/pcap-int.h) then {
 
 if (test -f /usr/libexec/identd) then {
 	vac="$vac 5.4 a 5.5";	
-	echo "Aplicando actualizaciones de 5.4 a 5.5 " >> /var/tmp/inst-adJ.bitacora;
+	echo "Aplicando actualizaciones de 5.4 a 5.5 " >> /var/www/tmp/inst-adJ.bitacora;
 	rm -f /usr/libexec/identd
 	rm -f /usr/lib/libcompat.a /usr/lib/libcompat_p.a
 	rm -f /usr/include/{re_comp,regexp,sgtty,sys/timeb}.h
@@ -821,7 +821,7 @@ if (test -f /usr/libexec/identd) then {
 
 if (test -f /usr/sbin/spray) then {
 	vac="$vac 5.5 a 5.6";	
-	echo "Aplicando actualizaciones de 5.5 a 5.6 " >> /var/tmp/inst-adJ.bitacora;
+	echo "Aplicando actualizaciones de 5.5 a 5.6 " >> /var/www/tmp/inst-adJ.bitacora;
 	rm -f /usr/sbin/spray
 	rm -f /usr/libexec/rpc.sprayd
 	rm -f /usr/share/man/man8/{,rpc.}spray{,d}.8
@@ -974,7 +974,7 @@ if (test -f /usr/sbin/spray) then {
 	
 if (test -f /usr/include/ressl.h) then {
 	vac="$vac 5.6 a 5.7";	
-	echo "Aplicando actualizaciones de 5.6 a 5.7 " >> /var/tmp/inst-adJ.bitacora;
+	echo "Aplicando actualizaciones de 5.6 a 5.7 " >> /var/www/tmp/inst-adJ.bitacora;
 
 
 	cd /etc/X11/app-defaults
@@ -1055,7 +1055,7 @@ if  (test "$vac" != "") then {
 	dialog --title 'Actualizaciones aplicadas' --msgbox "\\nSe aplicaron actualizaciones: $vac\\n\\n$mac\\n" 15 60
 } fi;
 
-cd /etc && /usr/local/adJ/servicio-etc.sh >> /var/tmp/inst-adJ.bitacora 2>&1
+cd /etc && /usr/local/adJ/servicio-etc.sh >> /var/www/tmp/inst-adJ.bitacora 2>&1
 cap_mkdb /etc/login.conf
 cap_mkdb /etc/master.passwd
 
@@ -1070,10 +1070,10 @@ if (test ! -f /var/log/servicio) then {
 } fi;
 
 touch /etc/rc.local
-echo "* Preparar /etc/rc.local para que reinicie servicios faltantes" >> /var/tmp/inst-adJ.bitacora;
+echo "* Preparar /etc/rc.local para que reinicie servicios faltantes" >> /var/www/tmp/inst-adJ.bitacora;
 grep "\. /etc/rc.conf" /etc/rc.local > /dev/null 2> /dev/null
 if (test "$?" != "0") then {
-	ed /etc/rc.local >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+	ed /etc/rc.local >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 /securel
 a
 
@@ -1086,11 +1086,11 @@ w
 q
 EOF
 } else {
-	echo "   Saltando..." >>  /var/tmp/inst-adJ.bitacora;
+	echo "   Saltando..." >>  /var/www/tmp/inst-adJ.bitacora;
 } fi;
 grep "\. /etc/rc.conf.local" /etc/rc.local > /dev/null 2> /dev/null
 if (test "$?" != "0") then {
-	ed /etc/rc.local >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+	ed /etc/rc.local >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 /. .etc.rc.conf
 a
 if (test -f /etc/rc.conf.local) then {
@@ -1101,14 +1101,14 @@ w
 q
 EOF
 } else {
-	echo "   Saltando..." >>  /var/tmp/inst-adJ.bitacora;
+	echo "   Saltando..." >>  /var/www/tmp/inst-adJ.bitacora;
 } fi;
 
-echo "* Nueva forma de /etc/rc.local" >> /var/tmp/inst-adJ.bitacora;
+echo "* Nueva forma de /etc/rc.local" >> /var/www/tmp/inst-adJ.bitacora;
 grep "for _r in \${pkg_scripts}" /etc/rc.local> /dev/null 2>&1
 if (test "$?" != "0") then {
-	echo "Activando" >> /var/tmp/inst-adJ.bitacora;
-	ed /etc/rc.local >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+	echo "Activando" >> /var/www/tmp/inst-adJ.bitacora;
+	ed /etc/rc.local >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 /. \/etc\/rc.conf
 a
 
@@ -1134,7 +1134,7 @@ if (test -f /etc/rc.d/cron) then {
 	activarcs cron
 } fi;
 
-echo "* Crear scripts para montar imagenes cifradas como servicios" >> /var/tmp/inst-adJ.bitacora;
+echo "* Crear scripts para montar imagenes cifradas como servicios" >> /var/www/tmp/inst-adJ.bitacora;
 nuevomonta=0;
 
 creamontador /etc/rc.d/montaencres /var/www/resbase 2 $uadJ $uadJ /var/resbase.img
@@ -1143,7 +1143,7 @@ rm -f /usr/local/sbin/monta.sh
 
 grep "mount.*post" /etc/rc.local > /dev/null 2>&1
 if (test "$?" = "0") then {
-	ed /etc/rc.local >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+	ed /etc/rc.local >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 /mount.*post
 .,+4d
 w
@@ -1153,7 +1153,7 @@ EOF
 } fi;
 grep "mount.*resbase" /etc/rc.local > /dev/null 2>&1
 if (test "$?" = "0") then {
-	ed /etc/rc.local >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+	ed /etc/rc.local >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 /mount.*resbase
 .,+4d
 w
@@ -1191,9 +1191,9 @@ EOF
 	eval $cmd;
 } fi;
 echo $nv > /var/adJ/verinstadJ.txt
-sh /etc/rc.local >> /var/tmp/inst-adJ.bitacora 2>&1
+sh /etc/rc.local >> /var/www/tmp/inst-adJ.bitacora 2>&1
 
-echo "* Configurar script de inicio de root (root/.profile)" >> /var/tmp/inst-adJ.bitacora;
+echo "* Configurar script de inicio de root (root/.profile)" >> /var/www/tmp/inst-adJ.bitacora;
 grep "PKG_PATH" /root/.profile > /dev/null 2>&1
 if (test "$?" != "0") then {
 	cat >> /root/.profile <<EOF
@@ -1215,10 +1215,10 @@ export HISTSIZE=2048
 export LANG=es_CO.UTF-8
 EOF
 } else {
-	echo "   Saltando..." >> /var/tmp/inst-adJ.bitacora;
+	echo "   Saltando..." >> /var/www/tmp/inst-adJ.bitacora;
 } fi;
 
-echo "* Configurar LANG en script de inicio de root (root/.profile)" >> /var/tmp/inst-adJ.bitacora;
+echo "* Configurar LANG en script de inicio de root (root/.profile)" >> /var/www/tmp/inst-adJ.bitacora;
 grep "es_CO.UTF8" /root/.profile > /dev/null 2>&1
 if (test "$?" = "0") then {
 	ed /root/.profile <<EOF
@@ -1234,7 +1234,7 @@ export LANG=es_CO.UTF-8
 EOF
 } fi;
 	
-echo "* Configurar X-Window" >> /var/tmp/inst-adJ.bitacora
+echo "* Configurar X-Window" >> /var/www/tmp/inst-adJ.bitacora
 pgrep xdm > /dev/null 2>&1
 if (test "$?" != "0" -a ! -f /etc/X11/xorg.conf -a ! -f /etc/X11/xorg-automatico ) then {
 	dialog --title 'Configuración de X-Window' --msgbox "\nSe ejecutará 'X -configure' Si se congela su sistema reinicie, si logra ingresar a modo gráfico vuelva a la consola presionando [Ctrl]+[Alt]+[Backspace]\n
@@ -1332,7 +1332,7 @@ Section "Screen"
 EndSection
 EOF
 	Xorg -configure
-	cat /var/log/Xorg.0.log >> /var/tmp/inst-adJ.bitacora
+	cat /var/log/Xorg.0.log >> /var/www/tmp/inst-adJ.bitacora
 	if (test ! -f /root/xorg.conf.new) then {
 		dialog --title 'Configuración de X-Window' --msgbox "\nNo pudo configurarse automaticamente, se empleara un archivo de configuracion genérico que puede requerir su edicion.\n
 Vea la documentacion con man xorg.conf, editelo por ejemplo con mg /etc/X11/xorg.conf y pruebelo con Xorg.  \n" 15 60
@@ -1358,13 +1358,13 @@ Vea la documentacion con man xorg.conf, editelo por ejemplo con mg /etc/X11/xorg
 	} fi;
 } else {
 	rm -f /etc/X11/xorg-automatico
-	echo "   Saltando..."  >> /var/tmp/inst-adJ.bitacora;
+	echo "   Saltando..."  >> /var/www/tmp/inst-adJ.bitacora;
 } fi;
-echo "/etc/X11/xorg.conf" >> /var/tmp/inst-adJ.bitacora
-cat /etc/X11/xorg.conf >> /var/tmp/inst-adJ.bitacora 2> /dev/null
+echo "/etc/X11/xorg.conf" >> /var/www/tmp/inst-adJ.bitacora
+cat /etc/X11/xorg.conf >> /var/www/tmp/inst-adJ.bitacora 2> /dev/null
 
 
-echo "* Configurar scripts de cuenta inicial"  >> /var/tmp/inst-adJ.bitacora;
+echo "* Configurar scripts de cuenta inicial"  >> /var/www/tmp/inst-adJ.bitacora;
 grep "PKG_PATH" /home/$uadJ/.profile > /dev/null
 if (test "$?" != "0") then {
 	cat >> /home/$uadJ/.profile <<EOF
@@ -1397,15 +1397,15 @@ TAB: complete
 EOF
 	chown $uadJ:$uadJ /home/$uadJ/.inputrc
 } else {
-	ed /home/$uadJ/.profile >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+	ed /home/$uadJ/.profile >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/\(PKG_PATH=.*\)[0-9][.][0-9]/\1$ACVER/g
 w
 q
 EOF
-	echo "   Actualizando versión en PKG_PATH..." >> /var/tmp/inst-adJ.bitacora;
+	echo "   Actualizando versión en PKG_PATH..." >> /var/www/tmp/inst-adJ.bitacora;
 } fi;
 
-echo "* Configurar LANG en script de inicio de cuenta $uadJ" >> /var/tmp/inst-adJ.bitacora;
+echo "* Configurar LANG en script de inicio de cuenta $uadJ" >> /var/www/tmp/inst-adJ.bitacora;
 grep "es_CO.UTF8" /home/$uadJ/.profile > /dev/null 2>&1
 if (test "$?" = "0") then {
 	ed /home/$uadJ/.profile <<EOF
@@ -1423,8 +1423,8 @@ EOF
 } fi;
 
 if (test -f /$RUTAIMG/post.img) then {
-	echo "Existe imagen para datos cifrados de PostgreSQL /$RUTAIMG/post.img. " >> /var/tmp/inst-adJ.bitacora
-	echo "Suponiendo que la base PostgreSQL tendrá datos cifrados allí" >> /var/tmp/inst-adJ.bitacora
+	echo "Existe imagen para datos cifrados de PostgreSQL /$RUTAIMG/post.img. " >> /var/www/tmp/inst-adJ.bitacora
+	echo "Suponiendo que la base PostgreSQL tendrá datos cifrados allí" >> /var/www/tmp/inst-adJ.bitacora
 	postcifra="s";
 }
 else {
@@ -1445,7 +1445,7 @@ else {
 
 
 if (test "$postcifra" = "s") then {
-	echo "* Crear imagen cifrada para base de ${TAM}Kbytes (se espeicifica otra con var. TAM) en directorio $RUTAIMG (se especifica otra con var RUTAIMG)"  >> /var/tmp/inst-adJ.bitacora
+	echo "* Crear imagen cifrada para base de ${TAM}Kbytes (se espeicifica otra con var. TAM) en directorio $RUTAIMG (se especifica otra con var RUTAIMG)"  >> /var/www/tmp/inst-adJ.bitacora
 	clear;
 	cat <<EOF
 
@@ -1456,31 +1456,31 @@ recuerdelas porque debe digitarlas en cada arranque.
 EOF
 
 	if (test ! -f /$RUTAIMG/post.img ) then {
-		vnconfig -u vnd0 >> /var/tmp/inst-adJ.bitacora 2>&1 
-		dd of=/$RUTAIMG/post.img bs=1024 seek=$TAM count=0 >> /var/tmp/inst-adJ.bitacora 2>&1
+		vnconfig -u vnd0 >> /var/www/tmp/inst-adJ.bitacora 2>&1 
+		dd of=/$RUTAIMG/post.img bs=1024 seek=$TAM count=0 >> /var/www/tmp/inst-adJ.bitacora 2>&1
 		echo -n "Clave para PostgreSQL (/var/postgresql) "
 		vnconfig -ckv vnd0 /$RUTAIMG/post.img 
-		newfs /dev/rvnd0c >> /var/tmp/inst-adJ.bitacora 2>&1
-		vnconfig -u vnd0 >> /var/tmp/inst-adJ.bitacora 2>&1
+		newfs /dev/rvnd0c >> /var/www/tmp/inst-adJ.bitacora 2>&1
+		vnconfig -u vnd0 >> /var/www/tmp/inst-adJ.bitacora 2>&1
 	} else {
-		echo "   Saltando..." >> /var/tmp/inst-adJ.bitacora
+		echo "   Saltando..." >> /var/www/tmp/inst-adJ.bitacora
 	} fi;
 
-	echo "* Crear imagen cifrada para respaldo de ${TAM}Kbytes (se espeicifica otra con var. TAM) en directorio $RUTAIMG (se especifica otra con var RUTAIMG)"  >> /var/tmp/inst-adJ.bitacora
+	echo "* Crear imagen cifrada para respaldo de ${TAM}Kbytes (se espeicifica otra con var. TAM) en directorio $RUTAIMG (se especifica otra con var RUTAIMG)"  >> /var/www/tmp/inst-adJ.bitacora
 	if (test ! -f /$RUTAIMG/resbase.img -a ! -f /$RUTAIMG/bakbase.img) then {
-		vnconfig -u vnd0 >> /var/tmp/inst-adJ.bitacora 2>&1 
-		dd of=/$RUTAIMG/resbase.img bs=1024 seek=$TAM count=0 >> /var/tmp/inst-adJ.bitacora 2>&1
+		vnconfig -u vnd0 >> /var/www/tmp/inst-adJ.bitacora 2>&1 
+		dd of=/$RUTAIMG/resbase.img bs=1024 seek=$TAM count=0 >> /var/www/tmp/inst-adJ.bitacora 2>&1
 		echo -n "Clave para respaldos (/var/www/resbase)"
 		vnconfig -ckv vnd0 /$RUTAIMG/resbase.img 
-		newfs /dev/rvnd0c >> /var/tmp/inst-adJ.bitacora 2>&1
-		vnconfig -u vnd0 >> /var/tmp/inst-adJ.bitacora 2>&1
+		newfs /dev/rvnd0c >> /var/www/tmp/inst-adJ.bitacora 2>&1
+		vnconfig -u vnd0 >> /var/www/tmp/inst-adJ.bitacora 2>&1
 	} else {
-		echo "   Saltando..." >> /var/tmp/inst-adJ.bitacora;
+		echo "   Saltando..." >> /var/www/tmp/inst-adJ.bitacora;
 	} fi;
 
 } fi; #postcifra
 
-echo "* Preparando espacio para respaldos de bases de datos" >> /var/tmp/inst-adJ.bitacora;
+echo "* Preparando espacio para respaldos de bases de datos" >> /var/www/tmp/inst-adJ.bitacora;
 if (test ! -d /var/www/resbase) then {
 	mkdir /var/www/resbase
 	chown $uadJ:$uadJ /var/www/resbase
@@ -1495,7 +1495,7 @@ if (test ! -d /var/www/resbase) then {
 for i in /usr/local/sbin/*sh; do
 	grep "dev/svnd" $i > /dev/null 2>&1
 	if (test "$?" = "0") then {
-		echo "* Cambiando svnd por vnd en $i (copia en $i-pre50)" >> /var/tmp/inst-adJ.bitacora;
+		echo "* Cambiando svnd por vnd en $i (copia en $i-pre50)" >> /var/www/tmp/inst-adJ.bitacora;
 		cp $i $i-pre50
 		sed -e "s/svnd/vnd/g" $i-pre50 > $i;
 	} fi;
@@ -1504,10 +1504,10 @@ done
 clear;
 
 
-sh /etc/rc.local >> /var/tmp/inst-adJ.bitacora 2>&1; # En caso de que falte montar bien
+sh /etc/rc.local >> /var/www/tmp/inst-adJ.bitacora 2>&1; # En caso de que falte montar bien
 
 if (test "$postcifra" = "s") then {
-	echo "* Montar imagenes cifradas durante arranque" >> /var/tmp/inst-adJ.bitacora;
+	echo "* Montar imagenes cifradas durante arranque" >> /var/www/tmp/inst-adJ.bitacora;
 	activarcs montaencres
 	activarcs montaencpos
 
@@ -1526,7 +1526,7 @@ acuspos="-U$uspos"
 # Codificacion por defecto en versiones hasta 5.0
 dbenc="LATIN1";
 
-echo "* De requerirlo sacar respaldo de datos" >> /var/tmp/inst-adJ.bitacora
+echo "* De requerirlo sacar respaldo de datos" >> /var/www/tmp/inst-adJ.bitacora
 pgrep post > /dev/null 2>&1
 if (test "$?" = "0") then {
 	echo -n "psql -h /var/www/tmp $acuspos -c \"select usename from pg_user where usename='postgres';\"" > /tmp/cu.sh
@@ -1553,8 +1553,8 @@ if (test "$?" = "0") then {
 			rm -f /tmp/penc.txt
 			echo "psql -h/var/www/tmp $acuspos -c 'SHOW SERVER_ENCODING' > /tmp/penc.txt" > /tmp/cu.sh
 			chmod +x /tmp/cu.sh
-			cat /tmp/cu.sh >> /var/tmp/inst-adJ.bitacora
-			su - _postgresql /tmp/cu.sh >> /var/tmp/inst-adJ.bitacora;
+			cat /tmp/cu.sh >> /var/www/tmp/inst-adJ.bitacora
+			su - _postgresql /tmp/cu.sh >> /var/www/tmp/inst-adJ.bitacora;
 			if (test -f /tmp/penc.txt -a ! -z /tmp/penc.txt) then {
 				dbenc=`grep -v "(1 row)" /tmp/penc.txt | grep -v "server_encoding" | grep -v "[-]-----" | grep -v "^ *$" | sed -e "s/  *//g"`
 			} fi;
@@ -1564,22 +1564,22 @@ if (test "$?" = "0") then {
 			echo "  exit 1;" >> /tmp/cu.sh 
 			echo "} fi;" >> /tmp/cu.sh 
 			chmod +x /tmp/cu.sh
-			cat /tmp/cu.sh >> /var/tmp/inst-adJ.bitacora
-			su - _postgresql /tmp/cu.sh >> /var/tmp/inst-adJ.bitacora;
+			cat /tmp/cu.sh >> /var/www/tmp/inst-adJ.bitacora
+			su - _postgresql /tmp/cu.sh >> /var/www/tmp/inst-adJ.bitacora;
 			if (test "$?" != "0" -a -f /var/www/resbase/pga-conc.sql) then {
 				echo "* Copia incompleta dejada en /var/www/resbase/pga-par.sql"
 				mv /var/www/resbase/pga-conc.sql /var/www/resbase/pga-par.sql
 			} else {
 				grep "CREATE DATABASE" /var/www/resbase/pga-conc.sql | grep -v "ENCODING" > /tmp/cb.sed
 				sed -e "s/\(.*\);$/s\/\1;\/\1 ENCODING='$dbenc';\/g/g" /tmp/cb.sed  > /tmp/cb2.sed
-				cat /tmp/cb2.sed >> /var/tmp/inst-adJ.bitacora
+				cat /tmp/cb2.sed >> /var/www/tmp/inst-adJ.bitacora
 				grep -v "ALTER ROLE $uspos" /var/www/resbase/pga-conc.sql | sed -f /tmp/cb2.sed > /var/www/resbase/pga-$nb.sql
 			} fi;
 		} else {
-			echo "PostgreSQL no está corriendo, no fue posible sacar copia" >> /var/tmp/inst-adJ.bitacora;
+			echo "PostgreSQL no está corriendo, no fue posible sacar copia" >> /var/www/tmp/inst-adJ.bitacora;
 		} fi;
 		if (test ! -s /var/www/resbase/pga-$nb.sql) then {
-			echo "* No fue posible sacar copia, por favor saquela manualmente en un archivo de nombre /var/www/resbase/pga-$nb.sql o asegurarse de sacarlo con pg_dumpall o en último caso sacando una copia del directorio /var/postgresql/data" | tee -a /var/tmp/inst-adJ.bitacora;
+			echo "* No fue posible sacar copia, por favor saquela manualmente en un archivo de nombre /var/www/resbase/pga-$nb.sql o asegurarse de sacarlo con pg_dumpall o en último caso sacando una copia del directorio /var/postgresql/data" | tee -a /var/www/tmp/inst-adJ.bitacora;
 			echo "* Vuelva a este script con 'exit'" 
 			sh
 		} fi;
@@ -1595,10 +1595,10 @@ if (test "$?" = "0") then {
 	} fi;
 } fi;
 
-echo "* Deteniendo PostgreSQL" >> /var/tmp/inst-adJ.bitacora
+echo "* Deteniendo PostgreSQL" >> /var/www/tmp/inst-adJ.bitacora
 pgrep post > /dev/null 2>&1
 if (test "$?" = "0") then {
-	su -l _postgresql -c "/usr/local/bin/pg_ctl stop -m fast -D /var/postgresql/data" >> /var/tmp/inst-adJ.bitacora
+	su -l _postgresql -c "/usr/local/bin/pg_ctl stop -m fast -D /var/postgresql/data" >> /var/www/tmp/inst-adJ.bitacora
 	rm -f /var/postgresql/data/postmaster.pid
 } fi;
 
@@ -1606,60 +1606,60 @@ f=`ls /var/db/pkg/postgresql-server* 2> /dev/null > /dev/null`;
 if (test "$?" = "0") then {
 	dialog --title 'Eliminar PostgreSQL' --yesno "\\nDesea eliminar la actual versión de PostgreSQL y los datos asociados para actualizarla\\n" 15 60
 	if (test "$?" = "0") then {
-		echo "s" >> /var/tmp/inst-adJ.bitacora
-		pkg_delete -I -D dependencies postgresql-contrib >> /var/tmp/inst-adJ.bitacora 2>&1
-		pkg_delete -I -D dependencies postgresql-server >> /var/tmp/inst-adJ.bitacora 2>&1
-		pkg_delete -I -D dependencies postgresql-client >> /var/tmp/inst-adJ.bitacora 2>&1
-		pkg_delete -I -D dependencies postgresql-docs >> /var/tmp/inst-adJ.bitacora 2>&1
-		pkg_delete -I -D dependencies .libs-postgresql-client >> /var/tmp/inst-adJ.bitacora 2>&1
-		pkg_delete -I -D dependencies .libs1-postgresql-client >> /var/tmp/inst-adJ.bitacora 2>&1
-		pkg_delete -I -D dependencies .libs-postgresql-server >> /var/tmp/inst-adJ.bitacora 2>&1
+		echo "s" >> /var/www/tmp/inst-adJ.bitacora
+		pkg_delete -I -D dependencies postgresql-contrib >> /var/www/tmp/inst-adJ.bitacora 2>&1
+		pkg_delete -I -D dependencies postgresql-server >> /var/www/tmp/inst-adJ.bitacora 2>&1
+		pkg_delete -I -D dependencies postgresql-client >> /var/www/tmp/inst-adJ.bitacora 2>&1
+		pkg_delete -I -D dependencies postgresql-docs >> /var/www/tmp/inst-adJ.bitacora 2>&1
+		pkg_delete -I -D dependencies .libs-postgresql-client >> /var/www/tmp/inst-adJ.bitacora 2>&1
+		pkg_delete -I -D dependencies .libs1-postgresql-client >> /var/www/tmp/inst-adJ.bitacora 2>&1
+		pkg_delete -I -D dependencies .libs-postgresql-server >> /var/www/tmp/inst-adJ.bitacora 2>&1
 		d=`date +%Y%M%d`
 		nd="data-$o-$d"
 		while (test -f "${nd}.tar.gz" ) ; do
 			nd="${nd}y";
 		done;
-		tar cvfz /var/postgresql/${nd}.tar.gz /var/postgresql/data >> /var/tmp/inst-adJ.bitacora 2>&1
+		tar cvfz /var/postgresql/${nd}.tar.gz /var/postgresql/data >> /var/www/tmp/inst-adJ.bitacora 2>&1
 		rm -rf /var/postgresql/data
 	} fi;
 } fi;
 
-echo "* Desmontando particiones cifradas" >> /var/tmp/inst-adJ.bitacora;
-umount -f /var/bakbase 2>/dev/null >> /var/tmp/inst-adJ.bitacora;
-umount -f /var/www/bakbase 2>/dev/null >> /var/tmp/inst-adJ.bitacora;
-umount -f /var/www/resbase 2>/dev/null >> /var/tmp/inst-adJ.bitacora;
-umount -f /var/postgresql 2>/dev/null >> /var/tmp/inst-adJ.bitacora;
+echo "* Desmontando particiones cifradas" >> /var/www/tmp/inst-adJ.bitacora;
+umount -f /var/bakbase 2>/dev/null >> /var/www/tmp/inst-adJ.bitacora;
+umount -f /var/www/bakbase 2>/dev/null >> /var/www/tmp/inst-adJ.bitacora;
+umount -f /var/www/resbase 2>/dev/null >> /var/www/tmp/inst-adJ.bitacora;
+umount -f /var/postgresql 2>/dev/null >> /var/www/tmp/inst-adJ.bitacora;
 
-echo "* Renombrando de bakbase a resbase" >> /var/tmp/inst-adJ.bitacora;
+echo "* Renombrando de bakbase a resbase" >> /var/www/tmp/inst-adJ.bitacora;
 if (test ! -f /var/resbase.img -a -f /var/bakbase.img) then {
 	mv /var/bakbase.img /var/resbase.img;
 }
 else {
-	echo "   Saltando" >> /var/tmp/inst-adJ.bitacora;
+	echo "   Saltando" >> /var/www/tmp/inst-adJ.bitacora;
 } fi;
 
 
 grep "^ *pkg_scripts.*montaencres" /etc/rc.conf.local > /dev/null 2>&1
 if (test "$?" = "0") then {
-	echo "* Montando imagen cifrada para respaldos" >> /var/tmp/inst-adJ.bitacora;
+	echo "* Montando imagen cifrada para respaldos" >> /var/www/tmp/inst-adJ.bitacora;
 	clear;
 	/etc/rc.d/montaencres check
 	if (test "$?" != "0") then {
-		echo "No está montada imagen cifrada para respaldo" >> /var/tmp/inst-adJ.bitacora;
+		echo "No está montada imagen cifrada para respaldo" >> /var/www/tmp/inst-adJ.bitacora;
 		/etc/rc.d/montaencres start
 	} fi;
 } fi;
 if (test "$postcifra" = "s") then {
-	echo "* Montando imagen cifrada para PostgreSQL" >> /var/tmp/inst-adJ.bitacora;
+	echo "* Montando imagen cifrada para PostgreSQL" >> /var/www/tmp/inst-adJ.bitacora;
 	clear;
 	/etc/rc.d/montaencpos check
 	if (test "$?" != "0") then {
-		echo "No está montada imagen cifrada para PostgreSQL" >> /var/tmp/inst-adJ.bitacora;
+		echo "No está montada imagen cifrada para PostgreSQL" >> /var/www/tmp/inst-adJ.bitacora;
 		/etc/rc.d/montaencpos start
 	} fi;
 } fi; 
 
-echo "* Poniendo permisos de /var/www/resbase" >> /var/tmp/inst-adJ.bitacora;
+echo "* Poniendo permisos de /var/www/resbase" >> /var/www/tmp/inst-adJ.bitacora;
 chown $uadJ:$uadJ /var/www/resbase
 
 insacp apg
@@ -1667,12 +1667,12 @@ insacp xz
 insacp libxml
 insacp libiconv
 
-echo "* Instalar PostgreSQL y PostGIS"  >> /var/tmp/inst-adJ.bitacora
+echo "* Instalar PostgreSQL y PostGIS"  >> /var/www/tmp/inst-adJ.bitacora
 f=`ls /var/db/pkg/postgresql-server* 2> /dev/null > /dev/null`;
 if (test "$?" != "0") then {
 	insacp ossp-uuid
 	p=`ls $PKG_PATH/libxml-* $PKG_PATH/libiconv-* $PKG_PATH/postgresql-client-* $PKG_PATH/postgresql-server* $PKG_PATH/postgresql-contrib* $PKG_PATH/postgresql-doc*`
-	pkg_add -I -r -D update -D updatedepends $p >> /var/tmp/inst-adJ.bitacora 2>&1;
+	pkg_add -I -r -D update -D updatedepends $p >> /var/www/tmp/inst-adJ.bitacora 2>&1;
 	insacp jpeg
 	insacp tiff
 	insacp curl
@@ -1708,7 +1708,7 @@ postgresql:\
 " >> /etc/login.conf
 		cap_mkdb /etc/login.conf
 	} fi;
-	echo -n "La clave del administrador de 'postgres' quedará en /var/postresql/.pgpass " >> /var/tmp/inst-adJ.bitacora;
+	echo -n "La clave del administrador de 'postgres' quedará en /var/postresql/.pgpass " >> /var/www/tmp/inst-adJ.bitacora;
 	clpg=`apg | head -n 1`
 	mkdir -p /var/postgresql/data
 	echo "*:*:*:$uspos:$clpg" > /var/postgresql/.pgpass;
@@ -1718,37 +1718,37 @@ postgresql:\
 		echo "$clpg" > /tmp/clave.txt
 		chown _postgresql:_postgresql /tmp/clave.txt
 		echo ""
-		echo "* Activando claves md5"  >> /var/tmp/inst-adJ.bitacora
+		echo "* Activando claves md5"  >> /var/www/tmp/inst-adJ.bitacora
 		echo initdb --encoding=UTF8 -U $uspos --auth=md5 --pwfile=/tmp/clave.txt -D/var/postgresql/data > /tmp/cu.sh
 #		echo initdb --auth=trust --pwfile=/tmp/clave.txt -D/var/postgresql/data > /tmp/cu.sh
 		chmod +x /tmp/cu.sh
-		cat /tmp/cu.sh >> /var/tmp/inst-adJ.bitacora
-		echo "Preparado PostgreSQL" >> /var/tmp/inst-adJ.bitacora
+		cat /tmp/cu.sh >> /var/www/tmp/inst-adJ.bitacora
+		echo "Preparado PostgreSQL" >> /var/www/tmp/inst-adJ.bitacora
 		rm -rf /var/postgresql/data
-		su - _postgresql /tmp/cu.sh >> /var/tmp/inst-adJ.bitacora;
-		echo "---" >> /var/tmp/inst-adJ.bitacora;
+		su - _postgresql /tmp/cu.sh >> /var/www/tmp/inst-adJ.bitacora;
+		echo "---" >> /var/www/tmp/inst-adJ.bitacora;
 	} fi;
-	ed /var/postgresql/data/postgresql.conf >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+	ed /var/postgresql/data/postgresql.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/#unix_socket_directory *=.*/unix_socket_directory = '\/var\/www\/tmp'/g
 w
 q
 EOF
-	ed /var/postgresql/data/postgresql.conf >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+	ed /var/postgresql/data/postgresql.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/#unix_socket_directories *=.*/unix_socket_directories = '\/var\/www\/tmp'/g
 w
 q
 EOF
-	ed /var/postgresql/data/postgresql.conf >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+	ed /var/postgresql/data/postgresql.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/#listen_addresses *=.*/listen_addresses = '127.0.0.1'/g
 w
 q
 EOF
 } else {
-	echo "   Saltando..." >> /var/tmp/inst-adJ.bitacora;
+	echo "   Saltando..." >> /var/www/tmp/inst-adJ.bitacora;
 } fi;
 
 
-echo "* Configurando para que inicie PostgreSQL en cada arranque y cierre al apagar" >> /var/tmp/inst-adJ.bitacora;
+echo "* Configurando para que inicie PostgreSQL en cada arranque y cierre al apagar" >> /var/www/tmp/inst-adJ.bitacora;
 
 activarcs postgresql
 
@@ -1764,15 +1764,15 @@ EOF
 	sysctl -w kern.shminfo.shmmax=50331648 > /dev/null
 } fi;
 
-cat /etc/rc.local >> /var/tmp/inst-adJ.bitacora
-cat /etc/rc.conf.local >> /var/tmp/inst-adJ.bitacora
-cat /etc/sysctl.conf >> /var/tmp/inst-adJ.bitacora
+cat /etc/rc.local >> /var/www/tmp/inst-adJ.bitacora
+cat /etc/rc.conf.local >> /var/www/tmp/inst-adJ.bitacora
+cat /etc/sysctl.conf >> /var/www/tmp/inst-adJ.bitacora
 
-echo "* Iniciando PostgreSQL"  | tee -a /var/tmp/inst-adJ.bitacora
-/etc/rc.d/postgresql start >> /var/tmp/inst-adJ.bitacora
+echo "* Iniciando PostgreSQL"  | tee -a /var/www/tmp/inst-adJ.bitacora
+/etc/rc.d/postgresql start >> /var/www/tmp/inst-adJ.bitacora
 echo
 sleep 1
-/etc/rc.d/postgresql restart >> /var/tmp/inst-adJ.bitacora
+/etc/rc.d/postgresql restart >> /var/www/tmp/inst-adJ.bitacora
 echo
 sleep 1
 pgrep post > /dev/null 2>&1
@@ -1782,26 +1782,26 @@ if (test "$?" != "0") then {
 } fi;
 
 pb=`ls -t /var/www/resbase/pga*sql 2>/dev/null | head -n 1`;
-echo "pb=$pb" >> /var/tmp/inst-adJ.bitacora;
+echo "pb=$pb" >> /var/www/tmp/inst-adJ.bitacora;
 if (test -f "$pb") then {
-	echo -n " (s/n): " >> /var/tmp/inst-adJ.bitacora;
+	echo -n " (s/n): " >> /var/www/tmp/inst-adJ.bitacora;
 	dialog --title 'Restaurar' --yesno "\\nRestaurar la copia de respaldo $pb\\n" 15 60
 	if (test "$?" = "0") then {
-		echo "s" >> /var/tmp/inst-adJ.bitacora
+		echo "s" >> /var/www/tmp/inst-adJ.bitacora
         	echo "psql -U$uspos -h /var/www/tmp -f $pb template1" > /tmp/cu.sh
         	chmod +x /tmp/cu.sh
-        	su - _postgresql /tmp/cu.sh >> /var/tmp/inst-adJ.bitacora;
+        	su - _postgresql /tmp/cu.sh >> /var/www/tmp/inst-adJ.bitacora;
 	} fi;
 } fi;
 
 
-echo "* Agregar cotejaciones en español y facilidades de busqueda para PostgreSQL"  >> /var/tmp/inst-adJ.bitacora
+echo "* Agregar cotejaciones en español y facilidades de busqueda para PostgreSQL"  >> /var/www/tmp/inst-adJ.bitacora
 ES_COUNTRIES="AR BO CH CO CR CU DO EC ES GQ GT HN MX NI PA PE PR PY SV VE US UY"
 echo "psql -h /var/www/tmp -U postgres -c \"SELECT COUNT(*) FROM pg_collation WHERE collname = 'es_co_utf_8';\"" > /tmp/cu.sh
 echo "exit \$?" >> /tmp/cu.sh;
-chmod +x /tmp/cu.sh | tee -a /var/tmp/inst-adJ.bitacora
-cat /tmp/cu.sh >> /var/tmp/inst-adJ.bitacora
-su - _postgresql /tmp/cu.sh > /tmp/cu.out 2>> /var/tmp/inst-adJ.bitacora
+chmod +x /tmp/cu.sh | tee -a /var/www/tmp/inst-adJ.bitacora
+cat /tmp/cu.sh >> /var/www/tmp/inst-adJ.bitacora
+su - _postgresql /tmp/cu.sh > /tmp/cu.out 2>> /var/www/tmp/inst-adJ.bitacora
 echo "" > /tmp/cu.sh
 t=`head -n 3 /tmp/cu.out | tail -n 1 | sed -e "s/ *//g" 2>/dev/null`
 if (test "$t" != "1") then {
@@ -1813,31 +1813,31 @@ echo "psql -h /var/www/tmp -U postgres -c \"CREATE EXTENSION unaccent;\"" >> /tm
 echo "psql -h /var/www/tmp -U postgres -c \"ALTER TEXT SEARCH DICTIONARY unaccent (RULES='unaccent');\"" >> /tmp/cu.sh
 echo "psql -h /var/www/tmp -U postgres -c \"ALTER FUNCTION unaccent(text) IMMUTABLE;\"" >> /tmp/cu.sh
 echo "exit \$?" >> /tmp/cu.sh;
-chmod +x /tmp/cu.sh >> /var/tmp/inst-adJ.bitacora 2>&1
-cat /tmp/cu.sh >> /var/tmp/inst-adJ.bitacora
-su - _postgresql /tmp/cu.sh  >> /var/tmp/inst-adJ.bitacora 2>&1
+chmod +x /tmp/cu.sh >> /var/www/tmp/inst-adJ.bitacora 2>&1
+cat /tmp/cu.sh >> /var/www/tmp/inst-adJ.bitacora
+su - _postgresql /tmp/cu.sh  >> /var/www/tmp/inst-adJ.bitacora 2>&1
 				
 
 insacp libidn
 insacp curl 
 insacp libidn
 
-echo "* Instalando PHP" | tee -a /var/tmp/inst-adJ.bitacora;
+echo "* Instalando PHP" | tee -a /var/www/tmp/inst-adJ.bitacora;
 p=`ls /var/db/pkg | grep "^php"`
 if (test "$p" != "") then {
 	dialog --title 'Eliminar PHP' --yesno "\\nPaquete PHP ya instalado. ¿Eliminar para instalar el de esta versión de adJ?" 15 60
 	if (test "$?" = "0") then {
 		rm -f /var/www/conf/modules/php5.conf 
 		for i in php php-2 php5-core partial-php5-core partial-php5-pear partial-php; do
-			pkg_delete -I -D dependencies $i >> /var/tmp/inst-adJ.bitacora 2>&1
+			pkg_delete -I -D dependencies $i >> /var/www/tmp/inst-adJ.bitacora 2>&1
 		done;
 	} fi;
 } fi;
 
 
-echo "* Configurar servidor web" >> /var/tmp/inst-adJ.bitacora ;
+echo "* Configurar servidor web" >> /var/www/tmp/inst-adJ.bitacora ;
 if (test ! -f /etc/ssl/server.crt) then {
-	echo "* Configurando Certificado SSL" | tee -a /var/tmp/inst-adJ.bitacora;
+	echo "* Configurando Certificado SSL" | tee -a /var/www/tmp/inst-adJ.bitacora;
 	openssl genrsa -out /etc/ssl/private/server.key 2048
 	openssl req -new -key /etc/ssl/private/server.key \
        		-out /etc/ssl/private/server.csr
@@ -1860,7 +1860,7 @@ if (test "$?" = "0" -o "$CONAPACHE" != "") then {
 if (test "$conapache" = "1" -a -f /etc/rc.d/httpd) then {
 	grep "httpd_flags.*-DSSL" /etc/rc.conf.local > /dev/null 2>/dev/null
 	if (test "$?" != "0") then {
-		ed /etc/rc.conf.local >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+		ed /etc/rc.conf.local >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 /pkg_scripts
 i
 httpd_flags=-DSSL
@@ -1874,7 +1874,7 @@ EOF
 	connginx=1;
 	grep "nginx_flags" /etc/rc.conf.local > /dev/null 2>/dev/null
 	if (test "$?" != "0") then {
-		ed /etc/rc.conf.local >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+		ed /etc/rc.conf.local >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 /pkg_scripts
 i
 nginx_flags=""
@@ -1882,7 +1882,7 @@ nginx_flags=""
 w
 q
 EOF
-		ed /etc/nginx/nginx.conf >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+		ed /etc/nginx/nginx.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 1
 ?}
 i
@@ -1912,8 +1912,8 @@ EOF
 	
 grep "#ServerName" /var/www/conf/httpd.conf > /dev/null 2> /dev/null
 if (test "$?" = "0") then  {
-	echo "* Estableciendo nombre del servidor en configuración de Apache" >> /var/tmp/inst-adJ.bitacora;
-	cp /var/www/conf/httpd.conf /var/www/conf/httpd.conf-sinServerName >> /var/tmp/inst-adJ.bitacora 2>&1;
+	echo "* Estableciendo nombre del servidor en configuración de Apache" >> /var/www/tmp/inst-adJ.bitacora;
+	cp /var/www/conf/httpd.conf /var/www/conf/httpd.conf-sinServerName >> /var/www/tmp/inst-adJ.bitacora 2>&1;
 	sn=`hostname`;
 	sed -e "s/#ServerName.*/ServerName \"$sn\"/g" /var/www/conf/httpd.conf-sinServerName > /var/www/conf/httpd.conf
 } fi;
@@ -1922,18 +1922,18 @@ if (test "$?" = "0") then  {
 
 pgrep httpd > /dev/null 2>&1
 if (test "$?" = "0") then {
-	echo "* Deteniendo apache"  >> /var/tmp/inst-adJ.bitacora 2>&1
-	/etc/rc.d/httpd stop >> /var/tmp/inst-adJ.bitacora 2>&1
+	echo "* Deteniendo apache"  >> /var/www/tmp/inst-adJ.bitacora 2>&1
+	/etc/rc.d/httpd stop >> /var/www/tmp/inst-adJ.bitacora 2>&1
 } fi;
 
 pgrep nginx > /dev/null 2>&1
 if (test "$?" = "0") then {
-	echo "* Deteniendo nginx"  >> /var/tmp/inst-adJ.bitacora 2>&1
-	/etc/rc.d/nginx stop >> /var/tmp/inst-adJ.bitacora 2>&1
+	echo "* Deteniendo nginx"  >> /var/www/tmp/inst-adJ.bitacora 2>&1
+	/etc/rc.d/nginx stop >> /var/www/tmp/inst-adJ.bitacora 2>&1
 	connginx=1
 } fi;
 
-echo "* Instalando PHP" >> /var/tmp/inst-adJ.bitacora;
+echo "* Instalando PHP" >> /var/www/tmp/inst-adJ.bitacora;
 p=`ls /var/db/pkg | grep "^php"`
 if (test "$p" = "") then {
 	insacp libltdl
@@ -1941,10 +1941,10 @@ if (test "$p" = "") then {
 	insacp libgcrypt
 	insacp icu4c
 	p=`ls $PKG_PATH/png*` 
-	pkg_add -I -D libdepends -D update -D updatedepends -r $p >> /var/tmp/inst-adJ.bitacora 2>&1
+	pkg_add -I -D libdepends -D update -D updatedepends -r $p >> /var/www/tmp/inst-adJ.bitacora 2>&1
 	p=`ls $PKG_PATH/libxslt* $PKG_PATH/gettext* $PKG_PATH/libxml* $PKG_PATH/png* $PKG_PATH/jpeg* $PKG_PATH/t1lib* $PKG_PATH/libiconv* $PKG_PATH/php*` 
-	echo $p >> /var/tmp/inst-adJ.bitacora 2>&1;
-	pkg_add -I -D libdepends -D update -D updatedepends -r $p >> /var/tmp/inst-adJ.bitacora 2>&1
+	echo $p >> /var/www/tmp/inst-adJ.bitacora 2>&1;
+	pkg_add -I -D libdepends -D update -D updatedepends -r $p >> /var/www/tmp/inst-adJ.bitacora 2>&1
 	rm -f /var/www/conf/modules/php.conf /var/www/conf/php.ini /etc/php.ini
 	ln -s /var/www/conf/modules.sample/php-5.4.conf \
 		/var/www/conf/modules/php.conf
@@ -1954,7 +1954,7 @@ if (test "$p" = "") then {
 	done;
 	if (test "$conapache" = "1") then {
 		chmod +w /var/www/conf/httpd.conf
-		ed /var/www/conf/httpd.conf >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+		ed /var/www/conf/httpd.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/\#AddType application\/x-httpd-php .php/AddType application\/x-httpd-php .php/g
 ,s/DirectoryIndex index.html.*/DirectoryIndex index.html index.php/g
 ,s/UseCanonicalName *On/UseCanonicalName Off/g
@@ -1963,7 +1963,7 @@ q
 EOF
 	} else {
 		insacp php-fpm
-	ed /etc/php-fpm.conf >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+	ed /etc/php-fpm.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/; listen.owner = www/listen.owner = www/g
 w
 ,s/; listen.group = www/listen.group = www/g
@@ -1975,7 +1975,7 @@ EOF
 		if (test "$?" != "0") then {
 			grep "^ *ssl_prefer_server_ciphers" /etc/nginx/nginx.conf > /dev/null 2>&1
 			if (test "$?" = "0") then {
-				ed /etc/nginx/nginx.conf >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+				ed /etc/nginx/nginx.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 1
 ?ssl_prefer_server_ciphers
 a
@@ -1995,7 +1995,7 @@ EOF
 	} fi;
 # Antes ,s/session.auto_start = 0/session.auto_start = 1/g
 # Pero no es indispensable y si entra en conflicto con horde 3.1.4
-	ed /etc/php-5.4.ini >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+	ed /etc/php-5.4.ini >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/max_execution_time = 30/max_execution_time = 900/g
 w
 ,s/max_input_time = 60/max_input_time = 900/g
@@ -2013,16 +2013,16 @@ EOF
 	chmod -w /var/www/conf/httpd.conf
 
 } else {
-	echo "   Saltando..."  >> /var/tmp/inst-adJ.bitacora;
+	echo "   Saltando..."  >> /var/www/tmp/inst-adJ.bitacora;
 } fi;
 
 if (test "$connginx" = "1") then {
-	echo "* Corriendo nginx" >> /var/tmp/inst-adJ.bitacora
-	/etc/rc.d/php_fpm start >> /var/tmp/inst-adJ.bitacora 2>&1
-	/etc/rc.d/nginx start >> /var/tmp/inst-adJ.bitacora 2>&1
+	echo "* Corriendo nginx" >> /var/www/tmp/inst-adJ.bitacora
+	/etc/rc.d/php_fpm start >> /var/www/tmp/inst-adJ.bitacora 2>&1
+	/etc/rc.d/nginx start >> /var/www/tmp/inst-adJ.bitacora 2>&1
 } else {
-	echo "* Corriendo Apache" >> /var/tmp/inst-adJ.bitacora
-	/etc/rc.d/httpd start >> /var/tmp/inst-adJ.bitacora 2>&1
+	echo "* Corriendo Apache" >> /var/www/tmp/inst-adJ.bitacora
+	/etc/rc.d/httpd start >> /var/www/tmp/inst-adJ.bitacora 2>&1
 } fi;
 sleep 1
 
@@ -2037,8 +2037,8 @@ if (test "$rs" != "0") then {
 	dialog --title 'Fallo servidor web' --msgbox '\nFalló servidor web, revisar, asegurar que funciona y regresar con "exit"' 15 60
 	sh
 } fi;
-cat /var/www/conf/httpd.conf >> /var/tmp/inst-adJ.bitacora 
-cat /etc/nginx/nginx.conf >> /var/tmp/inst-adJ.bitacora 
+cat /var/www/conf/httpd.conf >> /var/www/tmp/inst-adJ.bitacora 
+cat /etc/nginx/nginx.conf >> /var/www/tmp/inst-adJ.bitacora 
 
 
 if (test "$conapache" = "1") then {
@@ -2127,9 +2127,9 @@ cr=`echo "$docroot" | sed -e "s/^\/var\/www\/.*/SIPI/g"`
 if (test "$cr" != "SIPI") then {
 	docroot="/var/www/$docroot"
 } fi;
-echo "docroot=$docroot" >>  /var/tmp/inst-adJ.bitacora;
+echo "docroot=$docroot" >>  /var/www/tmp/inst-adJ.bitacora;
 
-echo "* Probando PHP" >> /var/tmp/inst-adJ.bitacora;
+echo "* Probando PHP" >> /var/www/tmp/inst-adJ.bitacora;
 p=`ls /var/db/pkg | grep "^php"`
 if (test "no" = "probar" -a "$p" != "") then {
 	cat > $docroot/phpinfo-adJ.php <<EOF
@@ -2147,7 +2147,7 @@ EOF
 rm -f $docroot/phpinfo-adJ.php
 rm -f $docroot/phpinfo.php
 } else {
-	echo "* Saltando"; >> /var/tmp/inst-adJ.sh
+	echo "* Saltando"; >> /var/www/tmp/inst-adJ.sh
 } fi;
 
 inspear="s";
@@ -2160,20 +2160,20 @@ if (test -f "/var/www/pear/lib/DB/DataObject/FormBuilder.php") then {
 
 function pearfun {
 if (test "$inspear" = "s") then {
-	echo "* Actualizando paquetes de pear"  >> /var/tmp/inst-adJ.bitacora;
-	echo "* Eliminando paquetes y librerías" >> /var/tmp/inst-adJ.bitacora;
+	echo "* Actualizando paquetes de pear"  >> /var/www/tmp/inst-adJ.bitacora;
+	echo "* Eliminando paquetes y librerías" >> /var/www/tmp/inst-adJ.bitacora;
 	p=`ls /var/db/pkg/ | grep "pear-"`;
-	pkg_delete -I -D dependencies $p >> /var/tmp/inst-adJ.bitacora 2>&1
+	pkg_delete -I -D dependencies $p >> /var/www/tmp/inst-adJ.bitacora 2>&1
 	p=`ls /var/db/pkg/ | grep "pear-"`;
-	pkg_delete -I -D dependencies $p >> /var/tmp/inst-adJ.bitacora 2>&1;
+	pkg_delete -I -D dependencies $p >> /var/www/tmp/inst-adJ.bitacora 2>&1;
 	rm -rf /var/www/pear
-	echo "Antes de pkg_add" >> /var/tmp/inst-adJ.bitacora
+	echo "Antes de pkg_add" >> /var/www/tmp/inst-adJ.bitacora
 	p=`ls $PKG_PATH/pear-*`;
-	pkg_add -I -D update -D installed -D updatedepends -r $p >> /var/tmp/inst-adJ.bitacora 2>&1
-	echo "Antes de pkg_delete" >> /var/tmp/inst-adJ.bitacora
-	ls -l /var/www/pear/lib/DB/ >> /var/tmp/inst-adJ.bitacora
+	pkg_add -I -D update -D installed -D updatedepends -r $p >> /var/www/tmp/inst-adJ.bitacora 2>&1
+	echo "Antes de pkg_delete" >> /var/www/tmp/inst-adJ.bitacora
+	ls -l /var/www/pear/lib/DB/ >> /var/www/tmp/inst-adJ.bitacora
 	cd /var/db/pkg
-	pkg_delete -I -D dependencies partial-pear-*  >> /var/tmp/inst-adJ.bitacora 2>&1;
+	pkg_delete -I -D dependencies partial-pear-*  >> /var/www/tmp/inst-adJ.bitacora 2>&1;
 } fi;
 
 }
@@ -2181,30 +2181,30 @@ if (test "$inspear" = "s") then {
 pearfun
 
 insacp ispell ispell-sp
-ispell-config 3 >> /var/tmp/inst-adJ.bitacora
+ispell-config 3 >> /var/www/tmp/inst-adJ.bitacora
 
 
-echo "* Configurar sudo" >> /var/tmp/inst-adJ.bitacora;
+echo "* Configurar sudo" >> /var/www/tmp/inst-adJ.bitacora;
 grep "^%wheel.*ALL=(ALL).*NOPASSWD:.*ALL" /etc/sudoers > /dev/null
 if (test "$?" != "0") then {
 	chmod +w /etc/sudoers
-	ed /etc/sudoers >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+	ed /etc/sudoers >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/\# \%wheel.*ALL=(ALL).*NOPASSWD.*/%wheel  ALL=(ALL) NOPASSWD: SETENV: ALL/g
 w
 q
 EOF
 	chmod -w /etc/sudoers
 } else {
-	echo "   Saltando..." >> /var/tmp/inst-adJ.bitacora;
+	echo "   Saltando..." >> /var/www/tmp/inst-adJ.bitacora;
 } fi;
 
-echo "* Configurando escritorio de cuenta de administrador(a)" | tee -a /var/tmp/inst-adJ.bitacora;
+echo "* Configurando escritorio de cuenta de administrador(a)" | tee -a /var/www/tmp/inst-adJ.bitacora;
 f=`ls /var/db/pkg/fluxbox* 2> /dev/null > /dev/null`;
 if (test "$?" = "0") then {
 	dialog --title 'Eliminar Fluxbox' --yesno "\\nfluxbox instalado. ¿Eliminarlo para instalar uno más nuevo?" 15 60
 	if (test "$?" = "0") then {
-		pkg_delete -I -D dependencies fluxbox >> /var/tmp/inst-adJ.bitacora 2>&1
-		pkg_delete -I -D dependencies partial-fluxbox >> /var/tmp/inst-adJ.bitacora 2>&1
+		pkg_delete -I -D dependencies fluxbox >> /var/www/tmp/inst-adJ.bitacora 2>&1
+		pkg_delete -I -D dependencies partial-fluxbox >> /var/www/tmp/inst-adJ.bitacora 2>&1
 	} fi;
 } fi;
 
@@ -2212,12 +2212,12 @@ chown -R $uadJ:$uadJ /mnt/ 2> /dev/null
 
 f=`ls /var/db/pkg/fluxbox* 2> /dev/null > /dev/null`;
 if (test "$?" != "0") then {
-	echo "* Instalando escritorio fluxbox" >> /var/tmp/inst-adJ.bitacora;
+	echo "* Instalando escritorio fluxbox" >> /var/www/tmp/inst-adJ.bitacora;
 	p=`ls $PKG_PATH/tiff-*`
-        pkg_add -I -D update -D updatedepends -r $p >> /var/tmp/inst-adJ.bitacora 2>&1;
+        pkg_add -I -D update -D updatedepends -r $p >> /var/www/tmp/inst-adJ.bitacora 2>&1;
 	insacp fribidi
 	p=`ls $PKG_PATH/jpeg-* $PKG_PATH/libid3tag-* $PKG_PATH/png-* $PKG_PATH/bzip2-* $PKG_PATH/libungif-* $PKG_PATH/imlib2-* $PKG_PATH/libltdl-* $PKG_PATH/fluxbox-* $PKG_PATH/fluxter-* $PKG_PATH/fbdesk-* 2>/dev/null`
-        pkg_add -I -D update -D updatedepends -r $p >> /var/tmp/inst-adJ.bitacora 2>&1;
+        pkg_add -I -D update -D updatedepends -r $p >> /var/www/tmp/inst-adJ.bitacora 2>&1;
 	if (test ! -f /home/$uadJ/.xsession) then {
 		cat > /home/$uadJ/.xsession <<EOF
 		/usr/local/bin/startfluxbox
@@ -2345,7 +2345,7 @@ if (test ! -d /home/$uadJ/Documentos) then {
 if (test ! -f /home/$uadJ/.fluxbox/startup) then {
 	mkdir -p /home/$uadJ/.fluxbox/backgrounds/
 	imfondo=`ls -lat $ARCH/medios/*.jpg | head -n 1 | sed -e "s/.*medios\///g"`
-	echo "Imagen de fondo: $imfondo" >> /var/tmp/inst-adJ.bitacora
+	echo "Imagen de fondo: $imfondo" >> /var/www/tmp/inst-adJ.bitacora
 	cp $ARCH/medios/*.jpg /home/$uadJ/.fluxbox/backgrounds/
 	cp $ARCH/medios/$imfondo /home/$uadJ/.fluxbox/backgrounds/fondo.jpg
 	cat > /home/$uadJ/.fluxbox/startup <<EOF
@@ -2569,10 +2569,10 @@ for i in ruby19-railties-3.1.3 ruby19-actionmailer-3.1.3 \
     ruby19-thor-0.14.6p1 ruby19-activesupport-3.1.3 \
     ruby19-actionmailer-3.1.3 ruby19-sprockets-2.0.3 ruby19-rack-cache-1.1 \
     ruby19-actionpack-3.1.3 ; do
-	sudo pkg_delete -I -D dependencies $i >> /var/tmp/inst-adJ.bitacora 2>&1
+	sudo pkg_delete -I -D dependencies $i >> /var/www/tmp/inst-adJ.bitacora 2>&1
 done
 
-echo "* Configurar ruby-2.2" >> /var/tmp/inst-adJ.bitacora;
+echo "* Configurar ruby-2.2" >> /var/www/tmp/inst-adJ.bitacora;
 if (test ! -f "/usr/local/bin/ruby22") then {
 	insacp ruby
 	ln -sf /usr/local/bin/ruby22 /usr/local/bin/ruby
@@ -2603,10 +2603,10 @@ EOF
 } fi;
 
 
-echo "* Configurar tmux" >> /var/tmp/inst-adJ.bitacora;
+echo "* Configurar tmux" >> /var/www/tmp/inst-adJ.bitacora;
 f=`ls /var/db/pkg/tmux* 2> /dev/null`;
 if (test "$f" != "") then {
-	pkg_delete -I -D dependencies tmux >> /var/tmp/inst-adJ.bitacora 2>&1
+	pkg_delete -I -D dependencies tmux >> /var/www/tmp/inst-adJ.bitacora 2>&1
 } fi;
 
 if (test ! -f /home/$uadJ/.tmux.conf) then {
@@ -2623,7 +2623,7 @@ set -g default-terminal "screen"
 EOF
 } fi;
 
-echo "* Configurar elinks para que opere en xterm, consolas virtuales y tmux en xterm-color" >> /var/tmp/inst-adJ.bitacora;
+echo "* Configurar elinks para que opere en xterm, consolas virtuales y tmux en xterm-color" >> /var/www/tmp/inst-adJ.bitacora;
 if (test ! -f /home/$uadJ/.elinks/elinks.conf) then {
 	cat > /home/$uadJ/.elinks/elinks.conf << EOF
 set config.saving_style_w = 1
@@ -2652,7 +2652,7 @@ EOF
 	chown $uadJ:$uadJ /home/$uadJ/.tmux.conf
 } fi;
 
-echo "* Configurando sistema de impresión cups" | tee -a /var/tmp/inst-adJ.bitacora;
+echo "* Configurando sistema de impresión cups" | tee -a /var/www/tmp/inst-adJ.bitacora;
 rm -f /etc/rc.d/dbus_daemon
 insacp dbus	
 insacp libusb1
@@ -2662,17 +2662,17 @@ insacp cups
 if (test -f /etc/rc.d/cupsd) then {
 	activarcs cupsd
 } else {
-	echo "** No pudo instalarse cups" | tee -a /var/tmp/inst-adJ.bitacora;
+	echo "** No pudo instalarse cups" | tee -a /var/www/tmp/inst-adJ.bitacora;
 } fi;
 
 
-echo "* Instalando navegador chromium" | tee -a /var/tmp/inst-adJ.bitacora;
+echo "* Instalando navegador chromium" | tee -a /var/www/tmp/inst-adJ.bitacora;
 f=`ls /var/db/pkg/*chromum* 2> /dev/null > /dev/null`;
 if (test "$?" = "0") then {
 	dialog --title 'Eliminar chromium' --yesno "\\nChrome instalado. ¿Eliminarlo para instalar uno más nuevo?" 15 60
 	if (test "$?" = "0") then {
-		pkg_delete -I -D dependencies chromium >> /var/tmp/inst-adJ.bitacora 2>&1
-		pkg_delete -I -D dependencies chromium >> /var/tmp/inst-adJ.bitacora 2>&1
+		pkg_delete -I -D dependencies chromium >> /var/www/tmp/inst-adJ.bitacora 2>&1
+		pkg_delete -I -D dependencies chromium >> /var/www/tmp/inst-adJ.bitacora 2>&1
 	} fi;
 } fi;
 f=`ls /var/db/pkg/chromium* 2> /dev/null > /dev/null`;
@@ -2690,15 +2690,15 @@ if (test "$?" != "0") then {
 	insacp gtk+2
 
 	p=`ls $PKG_PATH/libxml-* $PKG_PATH/shared-mime-info-* $PKG_PATH/pcre-* $PKG_PATH/png-* $PKG_PATH/jpeg-* $PKG_PATH/glib2-* $PKG_PATH/tiff-* $PKG_PATH/libiconv-* $PKG_PATH/esound-* $PKG_PATH/atk-* $PKG_PATH/desktop-file-utils-* $PKG_PATH/gettext-* $PKG_PATH/libaudiofile-* $PKG_PATH/gtk+2-* $PKG_PATH/cairo-* $PKG_PATH/pango-* $PKG_PATH/nss-* $PKG_PATH/nspr-* $PKG_PATH/jasper-* $PKG_PATH/hicolor-icon-theme-* $PKG_PATH/chromium-*`
-        pkg_add -I -D update -D updatedepends -r $p >> /var/tmp/inst-adJ.bitacora 2>&1;
-	#echo "Sugerencias: " >> /var/tmp/inst-adJ.bitacora;
+        pkg_add -I -D update -D updatedepends -r $p >> /var/www/tmp/inst-adJ.bitacora 2>&1;
+	#echo "Sugerencias: " >> /var/www/tmp/inst-adJ.bitacora;
 	#echo "  * Configure localización en español desde about:config general.useragent.local es-AR"
 	#echo "  * Como página de inicio use https://127.0.0.1/";
 } else {
-	echo "   Saltando..." >> /var/tmp/inst-adJ.bitacora;
+	echo "   Saltando..." >> /var/www/tmp/inst-adJ.bitacora;
 } fi;
 
-echo "* Permisos para aplicaciones" >> /var/tmp/inst-adJ.bitacora;
+echo "* Permisos para aplicaciones" >> /var/www/tmp/inst-adJ.bitacora;
 
 if (test -d /home/$uadJ/.config/chromium) then {
 	sudo chown -R $uadJ:$uadJ /home/$uadJ/.config/chromium
@@ -2708,36 +2708,36 @@ if (test -d /home/$uadJ/.openoffice.org2) then {
 	sudo chown -R $uadJ:$uadJ /home/$uadJ/.openoffice.org2
 } fi;
 
-echo "* Agregar usuario a grupo wheel" >> /var/tmp/inst-adJ.bitacora;
+echo "* Agregar usuario a grupo wheel" >> /var/www/tmp/inst-adJ.bitacora;
 grep wheel /etc/group | grep $uadJ > /dev/null
 if (test "$?" != "0") then {
-	sudo usermod -G wheel $uadJ >> /var/tmp/inst-adJ.bitacora
+	sudo usermod -G wheel $uadJ >> /var/www/tmp/inst-adJ.bitacora
 } else {
-	echo "   Saltando..." >> /var/tmp/inst-adJ.bitacora;
+	echo "   Saltando..." >> /var/www/tmp/inst-adJ.bitacora;
 } fi;
 
 
-echo "* Instalando adminstrador de archivos xfe" | tee -a /var/tmp/inst-adJ.bitacora;
+echo "* Instalando adminstrador de archivos xfe" | tee -a /var/www/tmp/inst-adJ.bitacora;
 f=`ls /var/db/pkg/xfe* 2> /dev/null > /dev/null`;
 if (test "$?" = "0") then {
 	dialog --title 'Eliminar xfe' --yesno "\\nxfe instalado. ¿Eliminarlo para instalar uno más nuevo?" 15 60
 	if (test "$?" = "0") then {
-		pkg_delete -I -D dependencies xfe >> /var/tmp/inst-adJ.bitacora 2>&1
+		pkg_delete -I -D dependencies xfe >> /var/www/tmp/inst-adJ.bitacora 2>&1
 		rm /home/$uadJ/.config/xfe/xf*
 	} fi;
 } fi;
 f=`ls /var/db/pkg/xfe* 2> /dev/null > /dev/null`;
 if (test "$?" != "0") then {
 	p=`ls $PKG_PATH/libiconv-* $PKG_PATH/fox-* $PKG_PATH/gettext-* $PKG_PATH/xfe-*`
-        pkg_add -I -D update -D updatedepends -r $p >> /var/tmp/inst-adJ.bitacora 2>&1;
+        pkg_add -I -D update -D updatedepends -r $p >> /var/www/tmp/inst-adJ.bitacora 2>&1;
 	# Archivo de configuración se creará en primera ejecución de xfe
 	mkdir -p /home/$uadJ/.config/xfe/
 	chown -R $uadJ:$uadJ /home/$uadJ/.config
 } else {
-	echo "   Saltando..." >> /var/tmp/inst-adJ.bitacora;
+	echo "   Saltando..." >> /var/www/tmp/inst-adJ.bitacora;
 } fi;
 
-echo "* Configurar xfe" >> /var/tmp/inst-adJ.bitacora;
+echo "* Configurar xfe" >> /var/www/tmp/inst-adJ.bitacora;
 if (test ! -f "/home/$uadJ/.config/xfe/xferc") then {
 	cat > /home/$uadJ/.config/xfe/xferc <<EOF
 [OPTIONS]
@@ -2748,13 +2748,13 @@ EOF
 	for m in uso_sudo sudo_passwd; do
 		grep "^ *$m" /home/$uadJ/.config/xfe/xferc > /dev/null 2>&1
 		if (test "$?" = "0") then {
-			ed /home/$uadJ/.config/xfe/xferc >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+			ed /home/$uadJ/.config/xfe/xferc >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/\($m\).*/\1=1/g
 w
 q
 EOF
 		} else {
-			ed /home/$uadJ/.config/xfe/xferc >> /var/tmp/inst-adJ.bitacora 2>&1 <<EOF
+			ed /home/$uadJ/.config/xfe/xferc >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 /[OPTIONS]
 a
 $m=1
@@ -2779,48 +2779,48 @@ dialog --title 'Componentes básicos instalados' --msgbox "\\nInstalación y con
 #echo "Si hay inconvenientes puede examinar log de Apache en /var/www/logs/error y ayudar en el desarrollo de SIVeL suscribiendose y enviando sus mejoras a adJ-soporte@lists.sourceforge.net";
 
 clear
-echo "Eliminando parciales" >> /var/tmp/inst-adJ.bitacora 
+echo "Eliminando parciales" >> /var/www/tmp/inst-adJ.bitacora 
 cd /var/db/pkg
 for i in partial-*; do 
-	echo $i >> /var/tmp/inst-adJ.bitacora ; 
-	sudo pkg_delete -I-D dependencies  $i >> /var/tmp/inst-adJ.bitacora 2>&1
+	echo $i >> /var/www/tmp/inst-adJ.bitacora ; 
+	sudo pkg_delete -I-D dependencies  $i >> /var/www/tmp/inst-adJ.bitacora 2>&1
 done
 
-echo "Eliminando problemáticos" >> /var/tmp/inst-adJ.bitacora 
-sudo pkg_delete -I -D dependencies libstdc++ >> /var/tmp/inst-adJ.bitacora  2>&1
-sudo pkg_delete -I -D dependencies lua >> /var/tmp/inst-adJ.bitacora  2>&1
-sudo pkg_delete -I -D dependencies gtk+2 >> /var/tmp/inst-adJ.bitacora  2>&1
+echo "Eliminando problemáticos" >> /var/www/tmp/inst-adJ.bitacora 
+sudo pkg_delete -I -D dependencies libstdc++ >> /var/www/tmp/inst-adJ.bitacora  2>&1
+sudo pkg_delete -I -D dependencies lua >> /var/www/tmp/inst-adJ.bitacora  2>&1
+sudo pkg_delete -I -D dependencies gtk+2 >> /var/www/tmp/inst-adJ.bitacora  2>&1
 
-echo "Instalando algunos comunes" >> /var/tmp/inst-adJ.bitacora 
-pkg_add -I -D updatedepends -D update -D libdepends -r $PKG_PATH/sdl*tgz $PKG_PATH/libxml*tgz $PKG_PATH/libgpg-error*tgz $PKG_PATH/libart-*.tgz  >> /var/tmp/inst-adJ.bitacora 2>&1;
-pkg_add -I -D updatedepends -D update -D libdepends -r $PKG_PATH/gtk+2*tgz >> /var/tmp/inst-adJ.bitacora 2>&1;
+echo "Instalando algunos comunes" >> /var/www/tmp/inst-adJ.bitacora 
+pkg_add -I -D updatedepends -D update -D libdepends -r $PKG_PATH/sdl*tgz $PKG_PATH/libxml*tgz $PKG_PATH/libgpg-error*tgz $PKG_PATH/libart-*.tgz  >> /var/www/tmp/inst-adJ.bitacora 2>&1;
+pkg_add -I -D updatedepends -D update -D libdepends -r $PKG_PATH/gtk+2*tgz >> /var/www/tmp/inst-adJ.bitacora 2>&1;
 
-echo "Instalando todos los disponibles en PKG_PATH" >> /var/tmp/inst-adJ.bitacora 
+echo "Instalando todos los disponibles en PKG_PATH" >> /var/www/tmp/inst-adJ.bitacora 
 pkg_add -I -D update -u 
 cd /var/db/pkg/
 for i in $PKG_PATH/*tgz; do
-	echo $i | tee -a /var/tmp/inst-adJ.bitacora
-	pkg_add -I -D updatedepends -D update -D libdepends -r $i >> /var/tmp/inst-adJ.bitacora 2>&1;
+	echo $i | tee -a /var/www/tmp/inst-adJ.bitacora
+	pkg_add -I -D updatedepends -D update -D libdepends -r $i >> /var/www/tmp/inst-adJ.bitacora 2>&1;
 done;
 
-echo "Eliminando librerías innecesarias" >> /var/tmp/inst-adJ.bitacora 
+echo "Eliminando librerías innecesarias" >> /var/www/tmp/inst-adJ.bitacora 
 cd /var/db/pkg
 for i in .libs*; do 
-	echo $i >> /var/tmp/inst-adJ.bitacora ; 
-	sudo pkg_delete -I $i >> /var/tmp/inst-adJ.bitacora 2>&1
+	echo $i >> /var/www/tmp/inst-adJ.bitacora ; 
+	sudo pkg_delete -I $i >> /var/www/tmp/inst-adJ.bitacora 2>&1
 done
 sudo rm -rf *core
 
 for i in $PKG_PATH/*tgz; do
-	echo $i | tee -a /var/tmp/inst-adJ.bitacora
-	pkg_add -I -D updatedepends -D update -D libdepends -r $i >> /var/tmp/inst-adJ.bitacora 2>&1
+	echo $i | tee -a /var/www/tmp/inst-adJ.bitacora
+	pkg_add -I -D updatedepends -D update -D libdepends -r $i >> /var/www/tmp/inst-adJ.bitacora 2>&1
 done;
 
-pkg_add -I -D update -u 2>&1 | tee -a /var/tmp/inst-adJ.bitacora 
+pkg_add -I -D update -u 2>&1 | tee -a /var/www/tmp/inst-adJ.bitacora 
 
 # Configuraciones típicas
 
-echo "* Configurar vim con UTF-8" >> /var/tmp/inst-adJ.bitacora;
+echo "* Configurar vim con UTF-8" >> /var/www/tmp/inst-adJ.bitacora;
 if (test ! -d /home/$uadJ/.vim) then {
 	mkdir -p /home/$uadJ/.vim
 	cp -rf /usr/local/share/vim/vim*/* /home/$uadJ/.vim/
@@ -2853,7 +2853,7 @@ if (test -f $ARCH/util/es_CO.oxt -a -f /usr/local/lib/libreoffice/program/unopkg
 	sudo /usr/local/lib/libreoffice/program/unopkg add --shared $ARCH/util/es_CO.oxt
 } fi;
 
-echo "* Configurar pidgin con SILC y canales en www.nocheyniebla.org" >> /var/tmp/inst-adJ.bitacora;
+echo "* Configurar pidgin con SILC y canales en www.nocheyniebla.org" >> /var/www/tmp/inst-adJ.bitacora;
 if (test ! -f /home/$uadJ/.purple/blist.xml) then {
 
 	cat	/home/$uadJ/.purple/blist.xml <<EOF
@@ -2905,7 +2905,7 @@ if (test ! -h /usr/local/bin/python) then {
  ln -sf /usr/local/bin/pydoc2.7  /usr/local/bin/pydoc
 } fi;
 
-echo "* Volviendo a cambiar en por servicio en etc" >> /var/tmp/inst-adJ.bitacora;
-cd /etc && /usr/local/adJ/servicio-etc.sh >> /var/tmp/inst-adJ.bitacora 2>&1
+echo "* Volviendo a cambiar en por servicio en etc" >> /var/www/tmp/inst-adJ.bitacora;
+cd /etc && /usr/local/adJ/servicio-etc.sh >> /var/www/tmp/inst-adJ.bitacora 2>&1
 dialog --title 'Componentes básicos instalados' --msgbox "\\nFELICITACIONES!  La instalación/actualización de la distribución Aprendiendo de Jesús $VER se completó satisfactoriamente\\n\\n Para instalar SIVeL ejecute sudo /usr/local/adJ/inst-sivel.sh" 15 60
 
