@@ -1,4 +1,4 @@
-Actualización a Aprendiendo De Jesús 5.7
+Actualización a Aprendiendo De Jesús 5.7b1
 ========================================
 
 La actualización consta de 3 partes:
@@ -16,7 +16,7 @@ La actualización consta de 3 partes:
 	```
 	mkdir -p ~/comp/adJ;
 	cd ~/comp/adJ;
-	rsync-adJ 5.7
+	rsync-adJ 5.7b1
 	```
 
   Si ocurre alguna falla durante la transmisión podrá continuar donde
@@ -29,7 +29,7 @@ La actualización consta de 3 partes:
   Si descargó fuentes con el procedimiento anterior ejecutelo con:
 
 	```
-       	~/comp/adJ/5.7-amd64/util/preact-adJ.sh
+       	sudo ~/comp/adJ/5.7b1-amd64/util/preact-adJ.sh
 	```
 
 2. Actualizar el sistema base:
@@ -40,7 +40,7 @@ La actualización consta de 3 partes:
 
 		```
 		cd ~/comp/adJ; 
-		5.7-amd64/util/actbase.sh 5.7
+		sudo 5.7b1-amd64/util/actbase.sh 5.7b1
 		```
 
 3. Actualizar aplicaciones:
@@ -52,7 +52,7 @@ La actualización consta de 3 partes:
   puede usar:
 
 	```
-	sudo ARCH=~/comp/adJ/5.7-amd64 /inst-adJ.sh
+	sudo ARCH=~/comp/adJ/5.7b1-amd64 /inst-adJ.sh
 	```
 
   Este archivo de comandos asiste actualizaciones que puedan hacer 

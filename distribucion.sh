@@ -688,7 +688,6 @@ if (test "$sn" = "s") then {
 	} fi;
 	rm tmp/disponibles*
 
-	###
 	# Modificados de 5.7 para posibilitar compilación
 	# Deben estar en mystuff
 	
@@ -697,16 +696,22 @@ if (test "$sn" = "s") then {
 	# Para que operen bien basta actualizar CVS de /usr/ports 
 	# Los siguientes no deben estar en arboldes/usr/ports/mystuff
 	paquete cups paquetes "cups cups-libs"
+	paquete cups-filters
 	paquete curl
+	paquete gdk-pixbuf
+	paquete ghostscript
 	paquete gnutls
 	paquete icu4c
+	paquete libksba
 	paquete libtasn1
 	paquete libwmf
+	paquete libxml
 	paquete net-snmp
+	paquete netpbm
 	paquete p5-Mail-SpamAssassin
+	paquete polkit
 	paquete qemu
 	paquete rrdtool
-	#paquete samba
 	#paquete webkit paquetes "webkit webkit-gtk3"
 	# FLAVOR=gtk3 make paquete webkit-gtk3
 
@@ -721,7 +726,6 @@ if (test "$sn" = "s") then {
 	paquete libidn
 	paquete libxslt
 	paquete llvm
-	paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs" 
 	#paquete qt4
 	paquete scribus
 	paquete vlc
@@ -741,10 +745,11 @@ if (test "$sn" = "s") then {
 	paquete chromium
 
 	###
-        # Actualizados.  Está pero desactualizado en OpenBSD 5.7 y en current
+        # Actualizados.  Está pero desactualizado en OpenBSD 5.7 y en current al momento
 	paquete php paquetes "php php-fpm php-gd php-intl php-ldap php-mcrypt php-pdo_pgsql php-pgsql php-zip" 5.5
 	paquete pear-Auth
 	paquete pear-HTML-QuickForm
+	paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs" 
        		
 	####
 	# Unicos en adJ 
@@ -769,9 +774,9 @@ if (test "$sn" = "s") then {
 	# Unicos en adJ liderados por pdJ
 	# Deben estar en arboldes/usr/ports/mystuff 
 	paquete books/evangelios_dp
-	paquete books/basico_OpenBSD
-	paquete books/usuario_OpenBSD
-	paquete books/servidor_OpenBSD
+	paquete books/basico_adJ
+	paquete books/usuario_adJ
+	paquete books/servidor_adJ
 	paquete education/AnimalesI
 	paquete education/AprestamientoI
 	paquete education/PlantasCursiva

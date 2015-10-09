@@ -1,0 +1,33 @@
+$OpenBSD: patch-src_include_storage_s_lock_h,v 1.2 2015/01/16 20:43:48 landry Exp $
+--- src/include/storage/s_lock.h.orig	Mon Dec 15 18:07:34 2014
++++ src/include/storage/s_lock.h	Fri Jan 16 06:16:48 2015
+@@ -745,6 +745,29 @@ typedef unsigned char slock_t;
+ #endif
+ 
+ 
++#if defined(__m88k__)		/* Motorola 88k */
++#define HAS_TEST_AND_SET
++
++typedef unsigned int slock_t;
++
++#define TAS(lock) tas(lock)
++
++static __inline__ int
++tas(volatile slock_t *lock)
++{
++	register slock_t _res = 1;
++
++	__asm__ __volatile__(
++		"	xmem	%0, %2, %%r0\n"
++:		"=r"(_res)
++:		"0" (_res), "r"(lock)
++:		"memory");
++	return (int) _res;
++}
++
++#endif	 /* __m88k__ */
++
++
+ #endif	/* defined(__GNUC__) || defined(__INTEL_COMPILER) */
+ 
+ 
