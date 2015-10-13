@@ -37,6 +37,7 @@ if (test "$?" != "0") then {
 	exit 1;
 } fi;
 
+mkdir -p /var/www/tmp/
 echo "-+-+-+-+-+-+" >> /var/www/tmp/inst-adJ.bitacora
 echo "Bitácora de instalación " >> /var/www/tmp/inst-adJ.bitacora
 date >> /var/www/tmp/inst-adJ.bitacora
@@ -1049,6 +1050,9 @@ if (test -f /usr/include/ressl.h) then {
 	userdel smmsp
 	groupdel smmsp
 
+	pkg_delete basico_OpenBSD
+	pkg_delete usuario_OpenBSD
+	pkg_delete servidor_OpenBSD
 } fi;
 
 if  (test "$vac" != "") then {
@@ -2292,9 +2296,9 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 	[exec] (Pidgin) {pidgin}
 [end]
 [submenu] (Documentos)
-	[exec] (OpenBSD basico) {/usr/local/bin/chrome /usr/local/share/doc/basico_OpenBSD/index.html}
-	[exec] (OpenBSD usuario) {/usr/local/bin/chrome /usr/local/share/doc/usuario_OpenBSD/index.html}
-	[exec] (OpenBSD servidor) {/usr/local/bin/chrome /usr/local/share/doc/servidor_OpenBSD/index.html}
+	[exec] (adJ basico) {/usr/local/bin/chrome /usr/local/share/doc/basico_adJ/index.html}
+	[exec] (adJ usuario) {/usr/local/bin/chrome /usr/local/share/doc/usuario_adJ/index.html}
+	[exec] (adJ servidor) {/usr/local/bin/chrome /usr/local/share/doc/servidor_adJ/index.html}
 [end]
 [submenu] (Otros)
 [exec] (gvim) {gvim}

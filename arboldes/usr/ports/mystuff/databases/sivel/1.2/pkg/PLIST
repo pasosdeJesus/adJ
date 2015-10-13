@@ -1,8 +1,51 @@
-@comment $OpenBSD$
-@option no-default-conflict
 @comment $adJ$
+@conflict sivel-1.1*
 @group servicio
 ${SIVEL_RAIZ}/
+${SIVEL_RAIZ}/.git/
+${SIVEL_RAIZ}/.git/HEAD
+${SIVEL_RAIZ}/.git/branches/
+${SIVEL_RAIZ}/.git/config
+${SIVEL_RAIZ}/.git/description
+${SIVEL_RAIZ}/.git/hooks/
+${SIVEL_RAIZ}/.git/hooks/applypatch-msg.sample
+${SIVEL_RAIZ}/.git/hooks/commit-msg.sample
+${SIVEL_RAIZ}/.git/hooks/multimail/
+${SIVEL_RAIZ}/.git/hooks/multimail/git_multimail.py
+${SIVEL_RAIZ}/.git/hooks/multimail/migrate-mailhook-config
+${SIVEL_RAIZ}/.git/hooks/multimail/post-receive
+${SIVEL_RAIZ}/.git/hooks/post-receive-email.sample
+${SIVEL_RAIZ}/.git/hooks/post-update.sample
+${SIVEL_RAIZ}/.git/hooks/pre-applypatch.sample
+${SIVEL_RAIZ}/.git/hooks/pre-commit.sample
+${SIVEL_RAIZ}/.git/hooks/pre-push.sample
+${SIVEL_RAIZ}/.git/hooks/pre-rebase.sample
+${SIVEL_RAIZ}/.git/hooks/prepare-commit-msg.sample
+${SIVEL_RAIZ}/.git/hooks/update.sample
+${SIVEL_RAIZ}/.git/index
+${SIVEL_RAIZ}/.git/info/
+${SIVEL_RAIZ}/.git/info/exclude
+${SIVEL_RAIZ}/.git/logs/
+${SIVEL_RAIZ}/.git/logs/HEAD
+${SIVEL_RAIZ}/.git/logs/refs/
+${SIVEL_RAIZ}/.git/logs/refs/heads/
+${SIVEL_RAIZ}/.git/logs/refs/heads/master
+${SIVEL_RAIZ}/.git/logs/refs/remotes/
+${SIVEL_RAIZ}/.git/logs/refs/remotes/origin/
+${SIVEL_RAIZ}/.git/logs/refs/remotes/origin/HEAD
+${SIVEL_RAIZ}/.git/objects/
+${SIVEL_RAIZ}/.git/objects/info/
+${SIVEL_RAIZ}/.git/objects/pack/
+${SIVEL_RAIZ}/.git/objects/pack/pack-1c1f4f6113cb6b9a2278caab9ce9dcde8216fdee.idx
+${SIVEL_RAIZ}/.git/objects/pack/pack-1c1f4f6113cb6b9a2278caab9ce9dcde8216fdee.pack
+${SIVEL_RAIZ}/.git/packed-refs
+${SIVEL_RAIZ}/.git/refs/
+${SIVEL_RAIZ}/.git/refs/heads/
+${SIVEL_RAIZ}/.git/refs/heads/master
+${SIVEL_RAIZ}/.git/refs/remotes/
+${SIVEL_RAIZ}/.git/refs/remotes/origin/
+${SIVEL_RAIZ}/.git/refs/remotes/origin/HEAD
+${SIVEL_RAIZ}/.git/refs/tags/
 ${SIVEL_RAIZ}/.gitignore
 ${SIVEL_RAIZ}/.htaccess
 ${SIVEL_RAIZ}/Creditos.txt
@@ -105,8 +148,8 @@ ${SIVEL_RAIZ}/bcrypt.php
 ${SIVEL_RAIZ}/bin/
 ${SIVEL_RAIZ}/bin/.htaccess
 ${SIVEL_RAIZ}/bin/actweb.grep
-${SIVEL_RAIZ}/bin/actweb.sh
 ${SIVEL_RAIZ}/bin/agus.sh
+${SIVEL_RAIZ}/bin/borratodo-publica-web.sh
 ${SIVEL_RAIZ}/bin/copiacd.sh
 ${SIVEL_RAIZ}/bin/copiadvd.sh
 ${SIVEL_RAIZ}/bin/creaesquema.sh
@@ -117,12 +160,12 @@ ${SIVEL_RAIZ}/bin/elim-rango.sh
 ${SIVEL_RAIZ}/bin/elimcaso.sh
 ${SIVEL_RAIZ}/bin/elimcomun.sh
 ${SIVEL_RAIZ}/bin/elimus.sh
+${SIVEL_RAIZ}/bin/exporta-web.sh
 ${SIVEL_RAIZ}/bin/importacd.sh
 ${SIVEL_RAIZ}/bin/mueve.sh
 ${SIVEL_RAIZ}/bin/pgdump.sh
 ${SIVEL_RAIZ}/bin/prep-chroot.sh
 ${SIVEL_RAIZ}/bin/psql.sh
-${SIVEL_RAIZ}/bin/pubweb.sh
 ${SIVEL_RAIZ}/bin/respaldo.sh
 ${SIVEL_RAIZ}/bin/resptodositio.sh
 ${SIVEL_RAIZ}/bin/restaura.sh
@@ -367,6 +410,16 @@ ${SIVEL_RAIZ}/modulos/anexos/doc/img/
 ${SIVEL_RAIZ}/modulos/anexos/doc/img/pfichaanexos.png
 ${SIVEL_RAIZ}/modulos/anexos/estructura.sql
 ${SIVEL_RAIZ}/modulos/anexos/prepara_indices.sql
+${SIVEL_RAIZ}/modulos/bdcinep/
+${SIVEL_RAIZ}/modulos/bdcinep/Creditos.txt
+${SIVEL_RAIZ}/modulos/bdcinep/DataObjects/
+${SIVEL_RAIZ}/modulos/bdcinep/DataObjects/estructura-dataobject.ini
+${SIVEL_RAIZ}/modulos/bdcinep/DataObjects/estructura-dataobject.links.ini
+${SIVEL_RAIZ}/modulos/bdcinep/Instala.txt
+${SIVEL_RAIZ}/modulos/bdcinep/actualiza.php
+${SIVEL_RAIZ}/modulos/bdcinep/conf.php
+${SIVEL_RAIZ}/modulos/bdcinep/filtrocons.php
+${SIVEL_RAIZ}/modulos/bdcinep/tablasnyn.php
 ${SIVEL_RAIZ}/modulos/belicas/
 ${SIVEL_RAIZ}/modulos/belicas/DataObjects/
 ${SIVEL_RAIZ}/modulos/belicas/DataObjects/Antecedente_combatiente.php
@@ -495,6 +548,7 @@ ${SIVEL_RAIZ}/prepara_indices.sql
 ${SIVEL_RAIZ}/pruebasinterfaz/
 ${SIVEL_RAIZ}/pruebasinterfaz/basicas.selenio
 ${SIVEL_RAIZ}/pruebasinterfaz/nuevocaso.selenio
+${SIVEL_RAIZ}/recGeneral.php
 ${SIVEL_RAIZ}/referencia/
 ${SIVEL_RAIZ}/referencia/interf.txt
 ${SIVEL_RAIZ}/referencia/nyn1998_2000.sql

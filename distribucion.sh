@@ -786,7 +786,9 @@ if (test "$sn" = "s") then {
 	paquete textproc/markup
 	paquete education/repasa
 	paquete education/sigue
+	paquete textproc/Mt77
 
+	paquete databases/sivel sivel sivel 1.1
 	paquete databases/sivel sivel sivel 1.2
 	paquete databases/sivel sivel sivel 2.0
 
