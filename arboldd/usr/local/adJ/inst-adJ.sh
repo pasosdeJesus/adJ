@@ -107,43 +107,7 @@ function ltf {
 
 function activarcs {
 	ns=$1;
-	if (test "$ns" = "") then {
-		echo "Falta nombre de servicio como primer parametro en activarcs";
-		exit 1;
-	} fi;
-	if (test ! -f "/etc/rc.d/$ns") then {
-		echo "En /etc/rc.d falta servicio de nombre $ns" 
-		exit 1;
-	} fi;
-	echo "activando $ns" >> /var/www/tmp/inst-adJ.bitacora 2>&1
-	touch /etc/rc.conf.local
-	grep "^ *pkg_scripts.*[^a-zA-Z0-9_]$ns[^a-zA-Z0-9_]" /etc/rc.conf.local >> /var/www/tmp/inst-adJ.bitacora 2>&1
-	if (test "$?" != "0") then {
-		echo "No  hay pkg_scripts con $ns"  >> /var/www/tmp/inst-adJ.bitacora 2>&1
-		grep "^ *pkg_script" /etc/rc.conf.local >> /var/www/tmp/inst-adJ.bitacora 2>&1
-		if (test "$?" != "0") then {
-			echo "No hay pkg_script" >> /var/www/tmp/inst-adJ.bitacora 2>&1
-			echo "pkg_scripts=\"$ns\"" >> /etc/rc.conf.local 2>/var/www/tmp/inst-adJ.bitacora 
-		} else {
-			cs=`grep "^ *pkg_scripts *=" /etc/rc.conf.local | sed -e "s/pkg_scripts *= *\"\([^\"]*\)\".*/\1/g"`
-			if (test "$cs" != "") then {
-				cs="$cs $ns";
-			} else {
-				cs=$ns;
-			} fi;
-			echo "cs=$cs" >> /var/www/tmp/inst-adJ.bitacora 2>&1
-			ed /etc/rc.conf.local >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
-/^ *pkg_scripts *=
-.c
-pkg_scripts="$cs"
-.
-w
-q
-EOF
-		} fi;
-	} else  {
-		echo "Activo" >> /var/www/tmp/inst-adJ.bitacora 2>&1
-	} fi;
+	rcctl enable $ns
 } 
 
 function creamontador {
@@ -1849,44 +1813,40 @@ if (test ! -f /etc/ssl/server.crt) then {
       		-signkey /etc/ssl/private/server.key -out /etc/ssl/server.crt
 } fi;
 
-# Ponemos ngingx si es nueva instacion, si ya lo tenía 
-# Apache si ya lo tenia o si CONAPACHE esta definido
+# Ponemos OpenBSD httpd si es nueva instalacion
+# Si ya había nginx o apache procuramos dejarlos.
 conapache=0
 connginx=0
-grep "^ *pkg_scripts=.*[ \"]httpd[ \"]." /etc/rc.conf.local > /dev/null 2>/dev/null
-if (test "$?" = "0" -o "$CONAPACHE" != "") then {
-	conapache=1;  
-} else {
+conhttpd=0
+grep "^ *pkg_scripts=.*[ \"]nginx[ \"]." /etc/rc.conf.local > /dev/null 2>/dev/null
+if (test "$?" = "0") then {
 	connginx=1;
+} elif (test "$CONAPACHE" != "") then {
+	conapache=1;  
+} fi;
+if (test "$connginx" = "0" -a "$conapache" = "0") then {
+	conhttpd=1;
 } fi;
 
-
-if (test "$conapache" = "1" -a -f /etc/rc.d/httpd) then {
-	grep "httpd_flags.*-DSSL" /etc/rc.conf.local > /dev/null 2>/dev/null
+if (test "$conapache" = "1") then {
+	insacp apache-httpd-openbsd
+	activarcs apache
+	# El anterior puede quitar apache_flags las ponemos:
+	grep "apache_flags" /etc/rc.conf.local > /dev/null 2>/dev/null
 	if (test "$?" != "0") then {
-		ed /etc/rc.conf.local >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
-/pkg_scripts
-i
-httpd_flags=-DSSL
-.
-w
-q
-EOF
+		echo "apache_flags=\"-DSSL\"" >> /etc/rc.conf.local
 	} fi;
-	activarcs httpd
-} else {
-	connginx=1;
+} fi;
+
+if (test "$connginx" = "1") then {
+	insacp nginx
+	activarcs nginx
+	# El anterior puede quitar nginx_flags las ponemos:
 	grep "nginx_flags" /etc/rc.conf.local > /dev/null 2>/dev/null
 	if (test "$?" != "0") then {
-		ed /etc/rc.conf.local >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
-/pkg_scripts
-i
-nginx_flags=""
-.
-w
-q
-EOF
-		ed /etc/nginx/nginx.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
+		echo "nginx_flags=" >> /etc/rc.conf.local
+	} fi;
+	ed /etc/nginx/nginx.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 1
 ?}
 i
@@ -1909,11 +1869,35 @@ i
 w
 q
 EOF
-		activarcs nginx
 	} fi;
+
 } fi;
 
-	
+if (test "$conhttpd" = "1") then {
+	# No se requiere por ser servicio del sistema pero para que
+	# arranque con rc.local se hace:
+	activarcs httpd
+	# El anterior puede quitar httpd_flags las ponemos:
+	grep "httpd_flags" /etc/rc.conf.local > /dev/null 2>/dev/null
+	if (test "$?" != "0") then {
+		echo "httpd_flags=" >> /etc/rc.conf.local
+	} fi;
+
+	if (test ! -f /etc/httpd.conf) then {
+		nomm=`cat /etc/myname`
+		cat <<EOF > /etc/httpd.conf
+server "127.0.0.1" {
+	listen on egress ssl port 443
+
+	location "*.php" {
+		fastcgi socket "/run/php-fpm.sock"
+	}
+	root "/htdocs/sivel/"
+}
+include "/etc/nginx/mime.types"
+EOF
+} fi;
+
 grep "#ServerName" /var/www/conf/httpd.conf > /dev/null 2> /dev/null
 if (test "$?" = "0") then  {
 	echo "* Estableciendo nombre del servidor en configuración de Apache" >> /var/www/tmp/inst-adJ.bitacora;
@@ -1924,9 +1908,9 @@ if (test "$?" = "0") then  {
 
 
 
-pgrep httpd > /dev/null 2>&1
+pgrep http > /dev/null 2>&1
 if (test "$?" = "0") then {
-	echo "* Deteniendo apache"  >> /var/www/tmp/inst-adJ.bitacora 2>&1
+	echo "* Deteniendo httpd"  >> /var/www/tmp/inst-adJ.bitacora 2>&1
 	/etc/rc.d/httpd stop >> /var/www/tmp/inst-adJ.bitacora 2>&1
 } fi;
 
@@ -2024,8 +2008,11 @@ if (test "$connginx" = "1") then {
 	echo "* Corriendo nginx" >> /var/www/tmp/inst-adJ.bitacora
 	/etc/rc.d/php_fpm start >> /var/www/tmp/inst-adJ.bitacora 2>&1
 	/etc/rc.d/nginx start >> /var/www/tmp/inst-adJ.bitacora 2>&1
-} else {
+} elif (test "$conapache" = "1") then {
 	echo "* Corriendo Apache" >> /var/www/tmp/inst-adJ.bitacora
+	/etc/rc.d/apache start >> /var/www/tmp/inst-adJ.bitacora 2>&1
+} else {
+	echo "* Corriendo OpenBSD httpd" >> /var/www/tmp/inst-adJ.bitacora
 	/etc/rc.d/httpd start >> /var/www/tmp/inst-adJ.bitacora 2>&1
 } fi;
 sleep 1
@@ -2041,9 +2028,15 @@ if (test "$rs" != "0") then {
 	dialog --title 'Fallo servidor web' --msgbox '\nFalló servidor web, revisar, asegurar que funciona y regresar con "exit"' 15 60
 	sh
 } fi;
-cat /var/www/conf/httpd.conf >> /var/www/tmp/inst-adJ.bitacora 
-cat /etc/nginx/nginx.conf >> /var/www/tmp/inst-adJ.bitacora 
-
+if (test -f /var/www/conf/httpd.conf) then {
+	cat /var/www/conf/httpd.conf >> /var/www/tmp/inst-adJ.bitacora 
+} fi;
+if (test -f /etc/nginx/nginx.conf) then {
+	cat /etc/nginx/nginx.conf >> /var/www/tmp/inst-adJ.bitacora 
+} fi;
+if (test -f /etc/httpd.conf) then {
+	cat /etc/httpd.conf >> /var/www/tmp/inst-adJ.bitacora 
+} fi;
 
 if (test "$conapache" = "1") then {
 	docroot=`awk '
