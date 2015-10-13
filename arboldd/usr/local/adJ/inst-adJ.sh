@@ -1894,8 +1894,8 @@ server "127.0.0.1" {
 	}
 	root "/htdocs/sivel/"
 }
-include "/etc/nginx/mime.types"
 EOF
+	} fi;
 } fi;
 
 grep "#ServerName" /var/www/conf/httpd.conf > /dev/null 2> /dev/null
