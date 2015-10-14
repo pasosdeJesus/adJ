@@ -400,9 +400,10 @@ EOF
 	echo "   Saltando quitar nodev..." >> /var/www/tmp/inst-adJ.bitacora;
 } fi;
 
-echo "/var/www/dev/random" >> /var/www/tmp/inst-adJ.bitacora
-if (test ! -f "/var/www/dev/random") then {
+echo "Creando /var/www/dev/random" >> /var/www/tmp/inst-adJ.bitacora
+if (test ! -c "/var/www/dev/random") then {
 	mkdir -p /var/www/dev/
+	rm -f /var/www/dev/random
 	sudo mknod -m 644 /var/www/dev/random c 45 0 2>> /var/www/tmp/inst-adJ.bitacora
 } else {
 	echo "   Saltando /var/www/dev/random..." >> /var/www/tmp/inst-adJ.bitacora;
@@ -527,7 +528,7 @@ if (test "$?" != "0") then {
 #  :%s/\(VirtualHost.* \)\([0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\) /\1\2:80 /g
 } fi;
 
-a=`ls /var/db/pkg/p5-Archive-Tar 2> /var/www/tmp/inst-adJ.bitacora`
+a=`ls /var/db/pkg/p5-Archive-Tar 2> /dev/null`
 if (test "$a" != "") then {
 # http://www.openbsd.org/faq/upgrade45.html
 	vac="$vac 4.4 a 4.5";	
@@ -1799,6 +1800,7 @@ if (test "$p" != "") then {
 		for i in php php-2 php5-core partial-php5-core partial-php5-pear partial-php; do
 			pkg_delete -I -D dependencies $i >> /var/www/tmp/inst-adJ.bitacora 2>&1
 		done;
+		rm -rf /etc/php-5.3* /etc/php-5.4*
 	} fi;
 } fi;
 
@@ -1815,20 +1817,21 @@ if (test ! -f /etc/ssl/server.crt) then {
 
 # Ponemos OpenBSD httpd si es nueva instalacion
 # Si ya había nginx o apache procuramos dejarlos.
-conapache=0
-connginx=0
-conhttpd=0
+sweb=""
 grep "^ *pkg_scripts=.*[ \"]nginx[ \"]." /etc/rc.conf.local > /dev/null 2>/dev/null
 if (test "$?" = "0") then {
-	connginx=1;
+	sweb="nginx"
 } elif (test "$CONAPACHE" != "") then {
-	conapache=1;  
+	sweb="apache"
 } fi;
-if (test "$connginx" = "0" -a "$conapache" = "0") then {
-	conhttpd=1;
+if (test "$sweb" != "nginx" -a "$sweb" != "apache") then {
+	sweb="httpd"
 } fi;
 
-if (test "$conapache" = "1") then {
+echo "* Por configurar $sweb" >> /var/www/tmp/inst-adJ.bitacora ;
+
+if (test "$sweb" = "apache") then {
+	echo "* Inicio de Apache" >> /var/www/tmp/inst-adJ.bitacora ;
 	insacp apache-httpd-openbsd
 	activarcs apache
 	# El anterior puede quitar apache_flags las ponemos:
@@ -1838,7 +1841,9 @@ if (test "$conapache" = "1") then {
 	} fi;
 } fi;
 
-if (test "$connginx" = "1") then {
+echo "* Paquete nginx" >> /var/www/tmp/inst-adJ.bitacora ;
+if (test "$sweb" = "nginx") then {
+	echo "* Inicio de nginx" >> /var/www/tmp/inst-adJ.bitacora ;
 	insacp nginx
 	activarcs nginx
 	# El anterior puede quitar nginx_flags las ponemos:
@@ -1869,11 +1874,12 @@ i
 w
 q
 EOF
-	} fi;
 
 } fi;
 
-if (test "$conhttpd" = "1") then {
+echo "* Nuevo httpd" >> /var/www/tmp/inst-adJ.bitacora ;
+if (test "$sweb" = "httpd") then {
+	echo "* Inicio de httpd" >> /var/www/tmp/inst-adJ.bitacora ;
 	# No se requiere por ser servicio del sistema pero para que
 	# arranque con rc.local se hace:
 	activarcs httpd
@@ -1885,7 +1891,7 @@ if (test "$conhttpd" = "1") then {
 
 	if (test ! -f /etc/httpd.conf) then {
 		nomm=`cat /etc/myname`
-		cat <<EOF > /etc/httpd.conf
+		cat > /etc/httpd.conf << EOF
 server "127.0.0.1" {
 	listen on egress ssl port 443
 
@@ -1898,6 +1904,7 @@ EOF
 	} fi;
 } fi;
 
+echo "* Inicio de $sweb configurado" >> /var/www/tmp/inst-adJ.bitacora ;
 grep "#ServerName" /var/www/conf/httpd.conf > /dev/null 2> /dev/null
 if (test "$?" = "0") then  {
 	echo "* Estableciendo nombre del servidor en configuración de Apache" >> /var/www/tmp/inst-adJ.bitacora;
@@ -1918,7 +1925,7 @@ pgrep nginx > /dev/null 2>&1
 if (test "$?" = "0") then {
 	echo "* Deteniendo nginx"  >> /var/www/tmp/inst-adJ.bitacora 2>&1
 	/etc/rc.d/nginx stop >> /var/www/tmp/inst-adJ.bitacora 2>&1
-	connginx=1
+	sweb=nginx
 } fi;
 
 echo "* Instalando PHP" >> /var/www/tmp/inst-adJ.bitacora;
@@ -1940,7 +1947,7 @@ if (test "$p" = "") then {
 		rm -f /etc/php-5.4/$sp
 		ln -fs /etc/php-5.4.sample/$sp.ini /etc/php-5.4/
 	done;
-	if (test "$conapache" = "1") then {
+	if (test "$sweb" = "apache") then {
 		chmod +w /var/www/conf/httpd.conf
 		ed /var/www/conf/httpd.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/\#AddType application\/x-httpd-php .php/AddType application\/x-httpd-php .php/g
@@ -1983,7 +1990,9 @@ EOF
 	} fi;
 # Antes ,s/session.auto_start = 0/session.auto_start = 1/g
 # Pero no es indispensable y si entra en conflicto con horde 3.1.4
-	ed /etc/php-5.4.ini >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
+	for i in /etc/php-5.*.ini; do
+		echo "Cambiando $i" >> /var/www/tmp/inst-adJ.bitacora 
+		ed $i >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/max_execution_time = 30/max_execution_time = 900/g
 w
 ,s/max_input_time = 60/max_input_time = 900/g
@@ -1998,17 +2007,18 @@ w
 w
 q
 EOF
+	done;
 	chmod -w /var/www/conf/httpd.conf
 
 } else {
 	echo "   Saltando..."  >> /var/www/tmp/inst-adJ.bitacora;
 } fi;
 
-if (test "$connginx" = "1") then {
+if (test "$sweb" = "nginx") then {
 	echo "* Corriendo nginx" >> /var/www/tmp/inst-adJ.bitacora
 	/etc/rc.d/php_fpm start >> /var/www/tmp/inst-adJ.bitacora 2>&1
 	/etc/rc.d/nginx start >> /var/www/tmp/inst-adJ.bitacora 2>&1
-} elif (test "$conapache" = "1") then {
+} elif (test "$sweb" = "apache") then {
 	echo "* Corriendo Apache" >> /var/www/tmp/inst-adJ.bitacora
 	/etc/rc.d/apache start >> /var/www/tmp/inst-adJ.bitacora 2>&1
 } else {
@@ -2017,7 +2027,7 @@ if (test "$connginx" = "1") then {
 } fi;
 sleep 1
 
-if (test "$connginx" = "1") then {
+if (test "$sweb" = "nginx") then {
 	pgrep nginx > /dev/null 2>&1
 	rs=$?
 } else {
@@ -2038,7 +2048,7 @@ if (test -f /etc/httpd.conf) then {
 	cat /etc/httpd.conf >> /var/www/tmp/inst-adJ.bitacora 
 } fi;
 
-if (test "$conapache" = "1") then {
+if (test "$sweb" = "apache") then {
 	docroot=`awk '
 /DocumentRoot  */ {
 	if (paso==3) {

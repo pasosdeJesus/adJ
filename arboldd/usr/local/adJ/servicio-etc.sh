@@ -3,6 +3,7 @@
 # Dominio público de acuerdo a legislación colombiana. 2012. vtamara@pasosdeJesus.org
 
 
+echo "servicio-etc renombra daemon por servicio en directorio estilo /etc" >> /var/www/tmp/inst-adJ.bitacora
 dirac=`pwd`
 b=`basename $dirac`
 if (test "$b" != "etc") then {
@@ -19,7 +20,7 @@ q
 EOF
 } fi;
 
-echo "Renombra bitacoras, suponemos que sistema base fue compilado con facilidad servicio"  >> /var/www/tmp/inst-adJ.bitacora
+echo "Renombra bitácoras, suponemos que sistema base fue compilado con facilidad servicio"  >> /var/www/tmp/inst-adJ.bitacora
 # syslog
 grep ".var.log.daemon" syslog.conf > /dev/null 2>&1
 if (test "$?" = "0") then {
