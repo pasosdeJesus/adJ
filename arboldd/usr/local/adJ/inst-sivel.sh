@@ -321,7 +321,6 @@ echo "* Enlaces y directorios para web y SIVeL" | tee -a /var/www/tmp/inst-sivel
 if (test ! -d /var/www/htdocs/sivel -o ! -d /home/$usivel/public_html/sivel -o ! -d /home/$usivel/sivel) then {
 	mkdir -p /var/www/htdocs/sivel/
 	mkdir -p /home/$usivel/public_html/
-	chown $usivel:$usivel /var/www/htdocs/sivel
 	ln -s /var/www/htdocs/sivel /home/$usivel/public_html/
 	ln -s /home/$usivel/public_html/sivel /home/$usivel/sivel
 }
@@ -329,6 +328,7 @@ else {
 		echo "   Saltando..."| tee -a /var/www/tmp/inst-sivel.log;
 } fi;
 
+chown -R $usivel /var/www/htdocs/sivel
 
 pgrep nginx
 if (test "$?" = "0") then {
@@ -495,6 +495,9 @@ cd /var/www/htdocs/sivel/
 pwd
 echo -n "pwd=" >> /var/www/tmp/inst-sivel.log
 pwd >> /var/www/tmp/inst-sivel.log
+touch /var/www/htdocs/sivel/confv.sh
+chown $usivel:$usivel  /var/www/htdocs/sivel/confv.sh
+chmod +w   /var/www/htdocs/sivel/confv.sh
 su $usivel ./conf.sh -i | tee -a /var/www/tmp/inst-sivel.log
 
 echo "* Nuevo sitio" | tee -a /var/www/tmp/inst-sivel.log;
@@ -525,6 +528,7 @@ cd /var/www/htdocs/sivel/sitios/sivel
 sudo chown $usivel:www conf*.php
 chmod o-rwx conf*.php
 chmod g=r conf*.php
+chmod u+rw conf*.php
 ../../bin/creaesquema.sh
 
 cd /

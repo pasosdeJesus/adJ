@@ -1893,7 +1893,7 @@ if (test "$sweb" = "httpd") then {
 		nomm=`cat /etc/myname`
 		cat > /etc/httpd.conf << EOF
 server "127.0.0.1" {
-	listen on egress ssl port 443
+	listen on * tls port 443
 
 	location "*.php" {
 		fastcgi socket "/run/php-fpm.sock"
@@ -2911,6 +2911,8 @@ if (test ! -h /usr/local/bin/python) then {
  ln -sf /usr/local/bin/python2.7-config /usr/local/bin/python-config
  ln -sf /usr/local/bin/pydoc2.7  /usr/local/bin/pydoc
 } fi;
+
+sudo chmod a+xrw /var/www/tmp
 
 echo "* Volviendo a cambiar en por servicio en etc" >> /var/www/tmp/inst-adJ.bitacora;
 cd /etc && /usr/local/adJ/servicio-etc.sh >> /var/www/tmp/inst-adJ.bitacora 2>&1
