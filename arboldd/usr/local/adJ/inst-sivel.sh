@@ -523,6 +523,10 @@ sed -e "s/\$dbclave *=.*/\$dbclave = \"$CLSIVELPG\";/g" /var/www/htdocs/sivel/si
 | sed -e "s/\$GLOBALS\['derechos'\] *=.*/\$GLOBALS['derechos'] = \"$derechos\";/g" \
 | sed -e "s/\$GLOBALS\['PREF_RELATOS'\] *=.*/\$GLOBALS['PREF_RELATOS'] = '$aborg';/g" \
 > /var/www/htdocs/sivel/sitios/sivel/conf.php
+echo "conf.php" >> /var/www/tmp/inst-sivel.log;
+cat /var/www/htdocs/sivel/sitios/sivel/conf.php >> /var/www/tmp/inst-sivel.log;
+echo "vardb.sh" >> /var/www/tmp/inst-sivel.log;
+cat /var/www/htdocs/sivel/sitios/sivel/vardb.sh >> /var/www/tmp/inst-sivel.log;
 sudo chmod a-wrx /var/www/htdocs/sivel/sitios/sivel/conf-copia$VER.php
 cd /var/www/htdocs/sivel/sitios/sivel
 sudo chown $usivel:www conf*.php
