@@ -40,7 +40,7 @@ La actualización consta de 3 partes:
 
 		```
 		cd ~/comp/adJ; 
-		sudo 5.7-amd64/util/actbase.sh 5.7b1
+		sudo 5.7-amd64/util/actbase.sh 5.7
 		```
 
 3. Actualizar aplicaciones:
