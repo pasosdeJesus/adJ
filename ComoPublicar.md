@@ -86,23 +86,23 @@ Pasos importantes para publicar versión mayor
 
 	Tema: Publicado adJ 5.7 para amd64
 
-	Para instalar por primera vez descargue imagen para DVD de:
+	Para instalar por primera vez descarga la imagen para DVD de:
 	  http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/
-	O solicite un CD por correo postal.
+	O solicita un CD por correo postal.
 
-	Si planea actualizar de una version anterior de adJ a adJ 5.7
+	Si planeas actualizar de una version anterior a 5.7
 	hay un procedimiento mas rápido con ```rsync``` (ver
 	https://github.com/pasosdeJesus/adJ/blob/master/Actualiza.md ).
 
-	Si no tiene experiencia con esta distribución de OpenBSD para 
+	Si no tienes experiencia con esta distribución de OpenBSD para 
 	servidores y cortafuegos, que es segura, usable en español y amigable 
-	para cristian@s, puede aprender a instalar o actualizar con:
+	para cristian@s, puedes aprender a instalar o actualizar con:
 	  1. El curso/reto que da una medalla a quienes completen:
 	  https://p2pu.org/es/groups/openbsd-adj-como-sistema-de-escritorio/
 	  2. La guía de instalación:
-	  http://structio.sourceforge.net/guias/usuario_OpenBSD/sobre-la-instalacion.html
+	  http://pasosdeJesus.github.io//usuario_adJ/sobre-la-instalacion.html
 
-	Vea las novedades completas de la versión 5.7 en:
+	Mira las novedades completas de la versión 5.7 en:
 	  http://aprendiendo.pasosdejesus.org/?id=AdJ+5.7+-+Aprendiendo+de+Jesus+5.7
 
 	De estas destacamos:
@@ -118,4 +118,5 @@ Pasos importantes para publicar versión mayor
 	seguro, amigable para cristian@s y en español, ver 
 	http://aprendiendo.pasosdejesus.org/
 
+10. Actualiza artículos de Wikipedia
 
