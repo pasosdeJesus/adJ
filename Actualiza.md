@@ -1,4 +1,4 @@
-Actualización a Aprendiendo De Jesús 5.7b1
+Actualización a Aprendiendo De Jesús 5.7
 ========================================
 
 La actualización consta de 3 partes:
@@ -16,7 +16,7 @@ La actualización consta de 3 partes:
 	```
 	mkdir -p ~/comp/adJ;
 	cd ~/comp/adJ;
-	rsync-adJ 5.7b1
+	rsync-adJ 5.7
 	```
 
   Si ocurre alguna falla durante la transmisión podrá continuar donde
@@ -29,7 +29,7 @@ La actualización consta de 3 partes:
   Si descargó fuentes con el procedimiento anterior ejecutelo con:
 
 	```
-       	sudo ~/comp/adJ/5.7b1-amd64/util/preact-adJ.sh
+       	sudo ~/comp/adJ/5.7-amd64/util/preact-adJ.sh
 	```
 
 2. Actualizar el sistema base:
@@ -40,7 +40,7 @@ La actualización consta de 3 partes:
 
 		```
 		cd ~/comp/adJ; 
-		sudo 5.7b1-amd64/util/actbase.sh 5.7b1
+		sudo 5.7-amd64/util/actbase.sh 5.7b1
 		```
 
 3. Actualizar aplicaciones:
@@ -52,7 +52,7 @@ La actualización consta de 3 partes:
   puede usar:
 
 	```
-	sudo ARCH=~/comp/adJ/5.7b1-amd64 /inst-adJ.sh
+	sudo ARCH=~/comp/adJ/5.7-amd64 /inst-adJ.sh
 	```
 
   Este archivo de comandos asiste actualizaciones que puedan hacer 
@@ -119,6 +119,6 @@ La actualización consta de 3 partes:
 * Si tras instalar el sistema base al intentar ingresar a un usuario, antes de pedir la clave aparece ```Unkown user``` seguramente falta convertir la base de datos de usuarios a un formato más nuevo, lo que puede hacer es: (1) reiniciar en modo single (```boot -s``` cuando arranque y aparezca ```boot>```), (2) una vez ingrese a una terminal reparar discos con ```fsck -y```, (3) poner un tipo de terminal usable ```export TERM=vt220```, (4) regenerar algunos archivos con ```cap_mkdbd /etc/master.passwd``` y (5) verificar y completar regeneración de archivos, suando ```vipw``` haciendo un cambio mínimo como insertar un espacio en la descripción de un usuario y saliendo.
 * Si el actualizador  ```inst-adJ.sh``` no ejecuta sysmerge, puede ejecutarlo manualmente (suponiendo que deja los juegos de instalación en ~/comp/adJ/5.7-amd64): 
 ```cd ~/comp/adJ/
-   sudo sysmerge -s 5.7-amd64/etc56.tgz -x 5.7-amd64/xetc56.tgz
+   sudo sysmerge -s 5.7-amd64/etc57.tgz -x 5.7-amd64/xetc57.tgz
 ```
    
