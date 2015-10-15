@@ -2292,6 +2292,7 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 	[exec] (fontforge) {fontforge}
 	[exec] (xcdplayer) {xcdplayer}
 	[exec] (xmix) {xmix}
+	[exec] (xsane) {xsane}
 	[exec] (vlc) {vlc}
 [end]
 [submenu] (Internet)
