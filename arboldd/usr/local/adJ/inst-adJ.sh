@@ -684,12 +684,12 @@ EOF
 } fi;
 
 if (test ! -f /var/named/standard/root.hint) then {
-	cp /var/named/etc/root.hint /var/named/standard/
+	cp /var/named/etc/root.hint /var/named/standard/ > /dev/null 2>&1
 } fi;
 	
 
 if (test ! -f /var/named/standard/root.hint) then {
-	cp /var/named/etc/root.hint /var/named/standard/
+	cp /var/named/etc/root.hint /var/named/standard/ > /dev/null 2>&1
 } fi;
 if (test -d /usr/X11R6/share/X11/xkb/symbols/srvr_ctrl) then {
 	vac="$vac 5.0 a 5.1";	
