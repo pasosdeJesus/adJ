@@ -602,21 +602,24 @@ function paquete {
 	if (test "$PAQ_LIMPIA_PRIMERO" != "") then {
 		(cd "$dir" ; make clean; rm /usr/ports/packages/$ARQ/all/$nom-[0-9][0-9a-z.]*.tgz)
 	} fi;
+	echo "*> Compila" | tee -a /var/www/tmp/distrib-adJ.bitacora;
 	(cd "$dir" ; make -j4 package)
 	if (test ! -f /etc/signify/adJ-$VP-pkg.sec) then {
 		echo "No hay llave privada /etc/signify/adJ-$VP-pkg.sec";
 		echo "Si no lo ha hecho con signify -G -c \"Firma adJ $V para paquetes\" -n -s /etc/signify/adJ-$VP-pkg.sec -p /etc/signify/adJ-$VP-pkg.pub"
 		exit 1;
 	} fi;
+	echo "*> Copia" | tee -a /var/www/tmp/distrib-adJ.bitacora;
 	if (test "$copiar" = "") then {
-		f1=`ls /usr/ports/packages/$ARQ/all/$nom-[0-9][0-9a-z.]*.tgz | head -n 1`
-		f2=`ls $dini/$V$VESP-$ARQ/$dest/$nom-[0-9][0-9a-z.]*.tgz | head -n 1`
+		f1=`ls /usr/ports/packages/$ARQ/all/$nom[-0-9][0-9a-z.]*.tgz | head -n 1`
+		f2=`ls $dini/$V$VESP-$ARQ/$dest/$nom[-0-9][0-9a-z.]*.tgz | head -n 1`
+		echo "*> simple f1=$f1, f2=$f2 " | tee -a /var/www/tmp/distrib-adJ.bitacora;
 		if (test ! -f "$f2" -o "$f2" -ot "$f1") then {
 			echo "*> Firmando y copiando /usr/ports/packages/$ARQ/all/$nom-*.tgz" | tee -a /var/www/tmp/distrib-adJ.bitacora
 			cmd="rm -f $dini/$V$VESP-$ARQ/$dest/$nom-[0-9][0-9a-z.]*.tgz"
 			echo "cmd=$cmd";
 			eval "$cmd";
-			cmd="pkg_sign -v -o $dini/$V$VESP-$ARQ/$dest/ -s signify -s /etc/signify/adJ-$VP-pkg.sec /usr/ports/packages/$ARQ/all/$nom-[0-9][0-9a-z.]*.tgz"
+			cmd="pkg_sign -v -o $dini/$V$VESP-$ARQ/$dest/ -s signify -s /etc/signify/adJ-$VP-pkg.sec /usr/ports/packages/$ARQ/all/$nom*.tgz"
 			echo "cmd=$cmd";
 			eval "$cmd";
 		} fi;
@@ -627,13 +630,14 @@ function paquete {
 		} fi;
 	} else {
 		for i in $copiar; do
-			f1=`ls /usr/ports/packages/$ARQ/all/$i-[0-9][0-9a-z.]*.tgz | head -n 1`
-			f2=`ls $dini/$V$VESP-$ARQ/$dest/$i-[0-9][0-9a-z.]*.tgz | head -n 1`
+			f1=`ls /usr/ports/packages/$ARQ/all/$i*.tgz | head -n 1`
+			f2=`ls $dini/$V$VESP-$ARQ/$dest/$i*.tgz | head -n 1`
+			echo "*> varios copiar=$copiar, i=$i f1=$f1, f2=$f2 " | tee -a /var/www/tmp/distrib-adJ.bitacora;
 			if (test ! -f "$f2" -o "$f2" -ot "$f1") then {
 				cmd="rm -f $f2"
 				echo "cmd=$cmd";
 				eval "$cmd";
-				cmd="pkg_sign -v -o $dini/$V$VESP-$ARQ/$dest/ -s signify -s /etc/signify/adJ-$VP-pkg.sec /usr/ports/packages/$ARQ/all/$i-[0-9][0-9a-z.]*.tgz"
+				cmd="pkg_sign -v -o $dini/$V$VESP-$ARQ/$dest/ -s signify -s /etc/signify/adJ-$VP-pkg.sec /usr/ports/packages/$ARQ/all/$i*.tgz"
 				echo $cmd;
 				eval $cmd
 			} fi;
