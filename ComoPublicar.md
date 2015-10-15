@@ -65,8 +65,10 @@ Pasos importantes para publicar versión mayor
 1. Usar la rama ADJ_5_6
 	git checkout ADJ_5_6
 2. Actualizar SIVeL, evangelios y paquetes propios de adJ.
-3. Actualizar documentación, publicar en Structio, actualizar portes de esta,
-   generar y probar paquetes
+3. Actualizar documentación, publicar en Internet, actualizar portes de esta,
+   generar y probar: instalación de sistema base, ejecución de inst-adJ.sh
+   en nuevo y actualización, ejecución de inst-sivel.sh, que toda entrada 
+   del menú opere.
 4. Generar distribución y pasar a adJ.pasosdeJesus.org y github.com 
    análogo a pasos 4-7 de versión beta
 5. Actualiza version en reto de P2PU (las 4 primeras tareas) 
