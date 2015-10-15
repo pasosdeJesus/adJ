@@ -2371,7 +2371,7 @@ if (test -x /usr/local/bin/fbdesk) then {
 if (test -x /usr/local/bin/pidgin) then {
 	LANG=es_CO.UTF-8 /usr/local/bin/pidgin &
 } fi;
-
+xterm &
 # /usr/local/bin/bsetroot -solid black
 # fbsetbg -C /usr/local/share/fluxbox/splash.jpg
 # xset -b
