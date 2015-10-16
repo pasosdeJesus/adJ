@@ -20,7 +20,7 @@ if (test -f "ver.sh") then {
 		echo "actbase.sh 5.8"
 		exit 1;
 	} fi;
-	VP=`echo $V | sed -e "s/[.]//g;s/[^0-9].*"`
+	VP=`echo $V | sed -e "s/[.]//g"`
 } fi;
 
 if (test "$V" = "5.1") then {
