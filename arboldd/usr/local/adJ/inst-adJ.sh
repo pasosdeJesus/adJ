@@ -944,13 +944,13 @@ if (test -f /usr/include/ressl.h) then {
 
 
 	cd /etc/X11/app-defaults
-	rm Beforelight Bitmap Bitmap-color Bitmap-nocase Chooser Clock-color 
-	rm Editres Editres-color KOI8RXTerm SshAskpass UXTerm Viewres
-	rm Viewres-color XCalc XCalc-color XClipboard XClock
-	rm XClock-color XConsole XFontSel XLoad XLock XLogo
-	rm XLogo-color XMore XSm XTerm XTerm-color Xedit
-	rm Xedit-color Xfd Xgc Xgc-color Xmag Xman Xmessage
-	rm Xmessage-color Xsystrace Xvidtune
+	rm -f Beforelight Bitmap Bitmap-color Bitmap-nocase Chooser Clock-color 
+	rm -f Editres Editres-color KOI8RXTerm SshAskpass UXTerm Viewres
+	rm -f Viewres-color XCalc XCalc-color XClipboard XClock
+	rm -f XClock-color XConsole XFontSel XLoad XLock XLogo
+	rm -f XLogo-color XMore XSm XTerm XTerm-color Xedit
+	rm -f Xedit-color Xfd Xgc Xgc-color Xmag Xman Xmessage
+	rm -f Xmessage-color Xsystrace Xvidtune
 
 	rm -f /etc/rc.d/named
 	rm -f /usr/sbin/dnssec-keygen
@@ -1002,18 +1002,18 @@ if (test -f /usr/include/ressl.h) then {
 	rm -f /usr/include/ressl.h
 	rm -f /usr/lib/libressl.* /usr/lib/libressl_*
 	rm -f /usr/share/man/man3/ressl_*
-	rm /usr/mdec/installboot /usr/share/man/man8/sparc64/installboot.8
-	rm /etc/rc.d/rtsold /sbin/rtsol /usr/sbin/rtsold
-	rm /usr/share/man/man8/rtsol.8 /usr/share/man/man8/rtsold.8
+	rm -f /usr/mdec/installboot /usr/share/man/man8/sparc64/installboot.8
+	rm -f /etc/rc.d/rtsold /sbin/rtsol /usr/sbin/rtsold
+	rm -f /usr/share/man/man8/rtsol.8 /usr/share/man/man8/rtsold.8
 	rm -f /usr/X11R6/include/GL/glcorearb.h
 	rm -f /usr/X11R6/include/EGL/eglextchromium.h
 
 	rm -r /var/tmp
 	ln -s /tmp /var/tmp
 
-	groupdel _lkm
-	userdel smmsp
-	groupdel smmsp
+	groupdel _lkm > /dev/null 2>&1
+	userdel smmsp > /dev/null 2>&1
+	groupdel smmsp > /dev/null 2>&1
 
 	pkg_delete basico_OpenBSD
 	pkg_delete usuario_OpenBSD
@@ -1941,11 +1941,11 @@ if (test "$p" = "") then {
 	echo $p >> /var/www/tmp/inst-adJ.bitacora 2>&1;
 	pkg_add -I -D libdepends -D update -D updatedepends -r $p >> /var/www/tmp/inst-adJ.bitacora 2>&1
 	rm -f /var/www/conf/modules/php.conf /var/www/conf/php.ini /etc/php.ini
-	ln -s /var/www/conf/modules.sample/php-5.4.conf \
+	ln -s /var/www/conf/modules.sample/php-5.5.conf \
 		/var/www/conf/modules/php.conf
 	for sp in gd intl ldap mcrypt pdo_pgsql pgsql zip; do
-		rm -f /etc/php-5.4/$sp
-		ln -fs /etc/php-5.4.sample/$sp.ini /etc/php-5.4/
+		rm -f /etc/php-5.5/$sp
+		ln -fs /etc/php-5.5.sample/$sp.ini /etc/php-5.5/
 	done;
 	if (test "$sweb" = "apache") then {
 		chmod +w /var/www/conf/httpd.conf
