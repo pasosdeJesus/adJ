@@ -944,13 +944,13 @@ if (test -f /usr/include/ressl.h) then {
 
 
 	cd /etc/X11/app-defaults
-	rm Beforelight Bitmap Bitmap-color Bitmap-nocase Chooser Clock-color 
-	rm Editres Editres-color KOI8RXTerm SshAskpass UXTerm Viewres
-	rm Viewres-color XCalc XCalc-color XClipboard XClock
-	rm XClock-color XConsole XFontSel XLoad XLock XLogo
-	rm XLogo-color XMore XSm XTerm XTerm-color Xedit
-	rm Xedit-color Xfd Xgc Xgc-color Xmag Xman Xmessage
-	rm Xmessage-color Xsystrace Xvidtune
+	rm -f Beforelight Bitmap Bitmap-color Bitmap-nocase Chooser Clock-color 
+	rm -f Editres Editres-color KOI8RXTerm SshAskpass UXTerm Viewres
+	rm -f Viewres-color XCalc XCalc-color XClipboard XClock
+	rm -f XClock-color XConsole XFontSel XLoad XLock XLogo
+	rm -f XLogo-color XMore XSm XTerm XTerm-color Xedit
+	rm -f Xedit-color Xfd Xgc Xgc-color Xmag Xman Xmessage
+	rm -f Xmessage-color Xsystrace Xvidtune
 
 	rm -f /etc/rc.d/named
 	rm -f /usr/sbin/dnssec-keygen
@@ -1002,9 +1002,9 @@ if (test -f /usr/include/ressl.h) then {
 	rm -f /usr/include/ressl.h
 	rm -f /usr/lib/libressl.* /usr/lib/libressl_*
 	rm -f /usr/share/man/man3/ressl_*
-	rm /usr/mdec/installboot /usr/share/man/man8/sparc64/installboot.8
-	rm /etc/rc.d/rtsold /sbin/rtsol /usr/sbin/rtsold
-	rm /usr/share/man/man8/rtsol.8 /usr/share/man/man8/rtsold.8
+	rm -f /usr/mdec/installboot /usr/share/man/man8/sparc64/installboot.8
+	rm -f /etc/rc.d/rtsold /sbin/rtsol /usr/sbin/rtsold
+	rm -f /usr/share/man/man8/rtsol.8 /usr/share/man/man8/rtsold.8
 	rm -f /usr/X11R6/include/GL/glcorearb.h
 	rm -f /usr/X11R6/include/EGL/eglextchromium.h
 

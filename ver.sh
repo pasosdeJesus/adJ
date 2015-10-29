@@ -89,7 +89,7 @@ export autoTextos=s
 # Generar textos Novedades.txt y demás
 
 
-qemuboot=d
+qemuboot=c
 # Unidad por la cual arrancar por defecto con hdes/qemu.sh
 
 if (test -f "ver-local.sh") then {
