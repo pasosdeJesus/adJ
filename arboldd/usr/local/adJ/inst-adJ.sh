@@ -1011,9 +1011,9 @@ if (test -f /usr/include/ressl.h) then {
 	rm -r /var/tmp
 	ln -s /tmp /var/tmp
 
-	groupdel _lkm
-	userdel smmsp
-	groupdel smmsp
+	groupdel _lkm > /dev/null 2>&1
+	userdel smmsp > /dev/null 2>&1
+	groupdel smmsp > /dev/null 2>&1
 
 	pkg_delete basico_OpenBSD
 	pkg_delete usuario_OpenBSD
