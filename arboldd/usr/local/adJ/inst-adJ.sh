@@ -2824,6 +2824,7 @@ for i in $PKG_PATH/*tgz; do
 	pkg_add -I -D updatedepends -D update -D libdepends -r $i >> /var/www/tmp/inst-adJ.bitacora 2>&1
 done;
 
+pkg_add -I -D installed sword-* 2>&1 | tee -a /var/www/tmp/inst-adJ.bitacora 
 pkg_add -I -D update -u 2>&1 | tee -a /var/www/tmp/inst-adJ.bitacora 
 
 # Configuraciones típicas
