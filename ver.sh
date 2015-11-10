@@ -2,8 +2,8 @@
 # Variables de configuración para generar distribución Aprendiendo de Jesús
 # Dominio público. 2013. vtamara@pasosdeJesus.org
 
-V=5.8
-VESP="a1"
+V=5.7
+VESP="p1"
 # Versión que se está desarrollando
 
 VPKGPATH=$V
@@ -89,7 +89,7 @@ export autoTextos=s
 # Generar textos Novedades.txt y demás
 
 
-qemuboot=d
+qemuboot=c
 # Unidad por la cual arrancar por defecto con hdes/qemu.sh
 
 if (test -f "ver-local.sh") then {
