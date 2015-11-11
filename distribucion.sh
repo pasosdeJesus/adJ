@@ -743,8 +743,9 @@ if (test "$sn" = "s") then {
 	paquete pear-Validate
 
 	####
-	# Retroportados de current para cerrar fallas o actualizar
+	# Retroportados de versión ste o current para cerrar fallas o actualizar
 	# Deben estar en arboldes/usr/ports/mystuff y en /usr/ports de current
+	paquete node 
 	paquete ruby paquetes "ruby ruby22-ri_docs" 2.2
 	paquete chromium
 

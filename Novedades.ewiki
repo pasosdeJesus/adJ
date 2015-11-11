@@ -14,7 +14,7 @@ Con respecto a OpenBSD 5.7 para amd64 y a la edición anterior de este DVD
 
 * Utilidad ==localedef== especificada en el estándar POSIX para convertir formatos de fechas y horas en un formato estándar POSIX al formato de OpenBSD.  Configuraciones regionales de países tomadas del CLDR de Unicode.
 * Soporte en la librería de C para presentar fechas, horas, cantidades monetarias, números y ordenamientos alfabéticos (cotejación) con las convenciones de cada país de latinoamérica (y de otros locales soportados por OpenBSD) de acuerdo al estándar POSIX. Opera bien en codificaciones de 8 bits o para español en codificación UTF-8. Buena parte de este soporte, así como el de xlocale se basaron en FreeBSD.  Estas mejoras fueron aportadas a OpenBSD (cotejación desde adJ 5.2, cantidades monetarias y números desde 5.4 y fechas y horas desde 5.5) y se anhela su integración en futuras versiones.    Así en adJ por ejemplo los ordenamientos alfabéticos en !LibreOffice y otros programas son correctos en español (que no ocurre en OpenBSD).
-* Parches de seguridad del sistema base hasta 27.Oct.2015, que cierran las 10 fallas de seguridad y las 8 de robustez resueltas para fuentes de OpenBSD en http://www.openbsd.org/errata57.html. Los binarios distribuidos de OpenBSD 5.7 no resuelven estas fallas.
+* Parches de seguridad del sistema base hasta 11.Nov.2015, que cierran las 10 fallas de seguridad y las 9 de robustez resueltas para fuentes de OpenBSD en http://www.openbsd.org/errata57.html. Los binarios distribuidos de OpenBSD 5.7 no resuelven estas fallas.
 * Retroportados, recompilados o mejorados más de 25 paquetes de OpenBSD para cerrar fallas de seguridad o emplear xlocale,  ver detalles en sección PAQUETES EXCLUSIVOS DE ADJ.
 * Hemos remplazando `daemon' por `servicio' en buena parte del sistema base (ver por ejemplo ==vmstat -s== o ==less /var/log/servicio== o ==man servicio==).  
 
@@ -68,7 +68,7 @@ Puede ver el listado completo en https://github.com/pasosdeJesus/adJ/blob/master
 * ruby 2.2.3 retroportado de OpenBSD-current y probado con aplicaciones Rails 4.2.4 Ver http://dhobsd.pasosdeJesus.org/Ruby_on_Rails_en_OpenBSD.html 
 * Para activar soporte de xlocale se ha recompilado los siguientes paquetes que están en portes de OpenBSD 5.7: boost, djvulibre, ggrep, glib2, gtar, libidn, libxslt, llvm, scribus, vlc, wget, wxWidgets-gtk2
 * Para cerrar fallas se han recompilado los siguientes paquetes a partir de portes actualizados de OpenBSD 5.7 (pero no incluidos en binarios de ese sistema):  cups, cups-libs, cups-filters, curl, gdk-pixbuf, ghostscript, gnutls, icu4c, libksba, libtasn1, libwmf, libxml, net-snmp, netpbm, p5-Mail-SpamAssassin, polkit, php-5.5.30, qemu, rrdtool
-* Se han retroportado otros paquetes de OpenBSD-Current: chromium-43 (más estable)
+* Se han retroportado otros paquetes de OpenBSD-5.8: chromium-43 (más estable), node.js 0.10.40
 * Se incluye el navegador modo texto w3m para remplazar a lynx que salió del sistema base. w3m soporta UTF-8, colores y descargas grandes (no operaba en 5.6).
 * Nuevo porte ocaml-labltk
 * Paquetes con documentación renombrados ahora son: basico_adJ, usuario_adJ y servidor_adJ que se instalan (con el nuevo nombre) en /usr/local/share/doc/.  Las fuentes se migraron a github y puede ubicarlas en https://github.io/pasosdeJesus y los HTML puede verlos en Internet en http://pasosdeJesus.github.io/basico_adJ/, http://pasosdeJesus.github.io/usuario_adJ/ y http://pasosdeJesus.github.io/servidor_adJ/ 
