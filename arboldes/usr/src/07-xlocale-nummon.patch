@@ -570,7 +570,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/wcrtom
  .Sh NAME
 -.Nm wcrtomb
 -.Nd converts a wide character to a multibyte character (restartable)
-+.Nm wcrtomb ,
++.Nm wcrtomb,
 +.Nm wcrtomb_l
 +.Nd convert a wide character to a multibyte character (restartable)
  .\" ----------------------------------------------------------------------
@@ -589,12 +589,12 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/wcrtom
 +.Fn wcrtomb_l
 +convert the wide character given by
  .Fa wc
--to the corresponding multibyte character, and stores it in the array
-+to the corresponding multibyte character, and store it in the array
- pointed to by
+-to the corresponding multibyte character, and stores up to
++to the corresponding multibyte character, and store up to
+ .Dv MB_CUR_MAX
+ bytes in the array pointed to by
  .Fa s
- unless
-@@ -57,7 +63,9 @@
+@@ -54,7 +60,9 @@
  .Fn wcrtomb
  is affected by the
  .Dv LC_CTYPE
@@ -605,7 +605,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/wcrtom
  .Pp
  These are the special cases:
  .Bl -tag -width 012345678901
-@@ -129,7 +137,8 @@
+@@ -126,7 +134,8 @@
  .\" ----------------------------------------------------------------------
  .Sh SEE ALSO
  .Xr setlocale 3 ,
@@ -615,7 +615,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/wcrtom
  .\" ----------------------------------------------------------------------
  .Sh STANDARDS
  The
-@@ -142,3 +151,6 @@
+@@ -139,3 +148,6 @@
  .\" .St -isoC99 .
  ISO/IEC 9899/1999
  .Pq Dq ISO C99 .

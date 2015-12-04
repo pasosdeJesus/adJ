@@ -856,13 +856,13 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mb
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mbstowcs.3 src/lib/libc/locale/mbstowcs.3
 --- src53collation/lib/libc/locale/mbstowcs.3	Mon Mar 25 18:28:42 2013
 +++ src/lib/libc/locale/mbstowcs.3	Wed Apr  3 11:15:27 2013
-@@ -30,23 +30,30 @@
+@@ -30,19 +30,22 @@
  .Os
  .\" ----------------------------------------------------------------------
  .Sh NAME
 -.Nm mbstowcs
 -.Nd converts a multibyte character string to a wide-character string
-+.Nm mbstowcs ,
++.Nm mbstowcs,
 +.Nm mbstowcs_l
 +.Nd convert a multibyte character string to a wide-character string
  .\" ----------------------------------------------------------------------
@@ -871,29 +871,19 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mb
  .Ft size_t
  .Fn mbstowcs "wchar_t * restrict pwcs" "const char * restrict s" "size_t n"
 +.In xlocale.h
-+.Ft size_t
-+.Fn mbstowcs_l "wchar_t * restrict pwcs" "const char * restrict s" "size_t n" "locale_t l"
-+.\" ----------------------------------------------------------------------
++.Fn mbstowcs_l "wchar_t * restrict pwcs" "const char * restrict s" "size_t n" "locale_t l" 
  .\" ----------------------------------------------------------------------
  .Sh DESCRIPTION
--The
-+The functions
  .Fn mbstowcs
 -converts a null-terminated multibyte character string pointed to by
-+and
-+.Fn mbstowcs_l
 +convert a null-terminated multibyte character string pointed to by
  .Fa s
--to the corresponding wide-character string and stores it in the array
-+to the corresponding wide-character string and store it in the array
- pointed to by
- .Fa pwcs .
--This function may modify the first at most
-+These functions may modify the first at most
+-to the corresponding wide-character string and stores up to
++to the corresponding wide-character string and store up to
  .Fa n
- elements of the array pointed to by
+ wide characters in the array pointed to by
  .Fa pwcs .
-@@ -56,6 +63,13 @@
+@@ -52,6 +55,13 @@
  .Xr mbtowc 3
  will not be affected.
  .Pp
@@ -907,7 +897,27 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mb
  For state-dependent encoding,
  .Fn mbstowcs
  implies the multibyte character string pointed to by
-@@ -117,7 +131,8 @@
+@@ -74,7 +84,9 @@
+ .\" ----------------------------------------------------------------------
+ .Sh RETURN VALUES
+ .Fn mbstowcs
+-returns:
++and
++.Fn mbstowcs_l
++return:
+ .Bl -tag -width 012345678901
+ .It 0 or positive
+ The value returned is the number of elements stored in the array pointed to by
+@@ -104,6 +116,8 @@
+ .\" ----------------------------------------------------------------------
+ .Sh ERRORS
+ .Fn mbstowcs
++and
++.Fn mbstowcs_l
+ may cause an error in the following cases:
+ .Bl -tag -width Er
+ .It Bq Er EILSEQ
+@@ -113,7 +127,8 @@
  .\" ----------------------------------------------------------------------
  .Sh SEE ALSO
  .Xr mbtowc 3 ,
@@ -1625,15 +1635,15 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src55-orig/lib/libc/locale/setloc
  /*
   * Category names for getenv()
   */
-@@ -80,7 +81,7 @@
+@@ -75,7 +76,7 @@
  static void revert_to_default(int);
- static int load_locale_sub(int, const char *, int);
- static char	*loadlocale(int);
+ static int load_locale_sub(int, const char *);
+ static char	*loadlocale(int, const char *);
 -static const char *__get_locale_env(int);
 +const char *__get_locale_env(int);
  
- char *
- setlocale(int category, const char *locale)
+ extern int __time_load_locale(const char *name);
+ extern int __monetary_load_locale(const char *name);
 @@ -199,12 +200,18 @@
  	case LC_CTYPE:
  		(void)_xpg4_setrunelocale("C");
@@ -1653,7 +1663,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src55-orig/lib/libc/locale/setloc
  		break;
  	case LC_MONETARY:
  		if (__monetary_load_locale("C")) 
-@@ -269,6 +276,9 @@
+@@ -268,6 +275,9 @@
  		if (_xpg4_setrunelocale(locname))
  			return -1;
  		__install_currentrunelocale_ctype();
@@ -1663,7 +1673,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src55-orig/lib/libc/locale/setloc
  		break;
  
  	case LC_MESSAGES:
-@@ -277,6 +287,9 @@
+@@ -276,6 +286,9 @@
  	case LC_COLLATE:
  		if (__collate_load_tables(locname))
  			return -1;
@@ -1673,16 +1683,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src55-orig/lib/libc/locale/setloc
  		break;
  		
  	case LC_MONETARY:
-@@ -304,7 +317,7 @@
- 	    current_categories[category]) == 0)
- 		return (current_categories[category]);
- 
--	if (!load_locale_sub(category, new_categories[category], 0)) {
-+	if (load_locale_sub(category, new_categories[category], 0) == 0) {
- 		(void)strlcpy(current_categories[category],
- 		    new_categories[category], sizeof(current_categories[category]));
- 		return current_categories[category];
-@@ -313,7 +326,7 @@
+@@ -311,7 +324,7 @@
  	}
  }
  
@@ -1988,13 +1989,13 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/wc
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/wcstombs.3 src/lib/libc/locale/wcstombs.3
 --- src53collation/lib/libc/locale/wcstombs.3	Mon Mar 25 18:28:42 2013
 +++ src/lib/libc/locale/wcstombs.3	Wed Apr  3 11:15:27 2013
-@@ -30,22 +30,29 @@
+@@ -30,20 +30,26 @@
  .Os
  .\" ----------------------------------------------------------------------
  .Sh NAME
 -.Nm wcstombs
 -.Nd converts a wide-character string to a multibyte character string
-+.Nm wcstombs ,
++.Nm wcstombs,
 +.Nm wcstombs_l
 +.Nd convert a wide-character string to a multibyte character string
  .\" ----------------------------------------------------------------------
@@ -2007,7 +2008,6 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/wc
 +.Fn wcstombs_l "char * restrict s" "const wchar_t * restrict pwcs" "size_t n" "locale_t l"
  .\" ----------------------------------------------------------------------
  .Sh DESCRIPTION
-+The functions
  .Fn wcstombs
 -converts the null-terminated wide-character string pointed to by
 +and
@@ -2015,15 +2015,12 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/wc
 +convert the null-terminated wide-character string pointed to by
  .Fa pwcs
  to the corresponding multibyte character string,
--and stores it in the array pointed to by
-+and store it in the array pointed to by
- .Fa s .
--This function may modify the first at most
-+These functions may modify the first at most
+-and stores up to
++and store up to
  .Fa n
- bytes of the array pointed to by
+ bytes in the array pointed to by
  .Fa s .
-@@ -57,6 +64,8 @@
+@@ -55,6 +61,8 @@
  .Pp
  For state-dependent encoding, the
  .Fn wcstombs
@@ -2032,7 +2029,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/wc
  implies the result multibyte character string pointed to by
  .Fa s
  always to begin with an initial state.
-@@ -65,7 +74,10 @@
+@@ -63,7 +71,10 @@
  .Fn wcstombs
  is affected by the
  .Dv LC_CTYPE
@@ -2044,7 +2041,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/wc
  .Pp
  There are special cases:
  .Bl -tag -width 012345678901
-@@ -119,7 +131,8 @@
+@@ -117,7 +128,8 @@
  .\" ----------------------------------------------------------------------
  .Sh SEE ALSO
  .Xr setlocale 3 ,
@@ -3552,10 +3549,10 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/regress/lib/libc/l
 diff -ruN -x CVS -x obj src55-orig/include/Makefile src/include/Makefile
 --- src55-orig/include/Makefile	Wed Apr  2 23:43:56 2014
 +++ src/include/Makefile	Thu Apr  3 11:28:07 2014
-@@ -20,7 +20,7 @@
- 	resolv.h rmd160.h search.h setjmp.h sha1.h sha2.h signal.h sndio.h \
+@@ -21,7 +21,7 @@
+ 	sndio.h \
  	spawn.h stdbool.h stddef.h stdio.h stdlib.h string.h strings.h struct.h \
- 	sysexits.h tar.h tgmath.h time.h ttyent.h tzfile.h unistd.h utime.h \
+ 	sysexits.h tar.h tgmath.h time.h ttyent.h unistd.h utime.h \
 -	utmp.h uuid.h vis.h wchar.h wctype.h
 +	utmp.h uuid.h vis.h wchar.h wctype.h xlocale.h
  

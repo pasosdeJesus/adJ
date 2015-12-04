@@ -1569,9 +1569,10 @@ diff -u src-ant/lib/libc/stdlib/strtol.3 src/lib/libc/stdlib/strtol.3
  .Nm strtoll ,
 +.Nm strtoll_l ,
  .Nm strtoimax ,
+-.Nm strtoq
 +.Nm strtoimax_l ,
- .Nm strtoq ,
-+.Nm strtoq_l ,
++.Nm strtoq,
++.Nm strtoq_l
  .Nd convert string value to a long, long long or intmax_t integer
  .Sh SYNOPSIS
  .In limits.h
