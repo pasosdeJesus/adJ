@@ -1,4 +1,4 @@
-# $OpenBSD: Makefile,v 1.5 2014/11/15 13:43:01 robert Exp $
+# $OpenBSD: Makefile,v 1.6 2015/03/21 22:33:21 sthen Exp $
 
 SUBDIR =
 SUBDIR += 5.5

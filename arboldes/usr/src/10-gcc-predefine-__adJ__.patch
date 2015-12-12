@@ -1,0 +1,18 @@
+--- src58-orig/gnu/gcc/gcc/config/openbsd.h	Thu Oct 15 18:36:38 2015
++++ src/gnu/gcc/gcc/config/openbsd.h	Wed Dec  9 09:56:18 2015
+@@ -86,6 +86,7 @@
+   do						\
+     {						\
+       builtin_define ("__OpenBSD__");		\
++      builtin_define ("__adJ__");		\
+       builtin_define ("__unix__");		\
+       builtin_define ("__ANSI_COMPAT");		\
+       builtin_assert ("system=unix");		\
+@@ -117,6 +118,7 @@
+   do						\
+     {						\
+       builtin_define ("__OpenBSD__");		\
++      builtin_define ("__adJ__");		\
+       builtin_define ("__unix__");		\
+       builtin_define ("__ANSI_COMPAT");		\
+       builtin_assert ("system=unix");		\

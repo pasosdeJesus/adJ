@@ -438,7 +438,7 @@ if (test "$sn" = "s") then {
 	#clean:
 	# mv  $(_SRCDIR)/config.status $(_SRCDIR)/config.status-copia
 	mkdir -p ${DESTDIR}
-	make -j4 build
+	(unset DESTDIR; AUTOCONF_VERSION=2.69 make -j4 build)
 	# Despues de este toco
 	#cp /usr/xenocara/xserver/config.status-copia /usr/xenocara/xserver/config.status 
 	#rm -rf /usr/xobj/*
@@ -692,45 +692,43 @@ if (test "$sn" = "s") then {
 	} fi;
 	rm tmp/disponibles*
 
-	# Modificados de 5.7 para posibilitar compilación
+	# Modificados para posibilitar compilación
 	# Deben estar en mystuff
 	
 	####
-	# Recompilados para cerrar fallas, portes actualizados de OpenBSD 5.7
+	# Recompilados para cerrar fallas, portes actualizados de OpenBSD estable
 	# Para que operen bien basta actualizar CVS de /usr/ports 
 	# Los siguientes no deben estar en arboldes/usr/ports/mystuff
-	paquete cups paquetes "cups cups-libs"
-	paquete cups-filters
-	paquete curl
-	paquete gdk-pixbuf
-	paquete ghostscript
+	paquete a2ps
+	paquete cups-filter
 	paquete gnutls
-	paquete icu4c
-	paquete libksba
-	paquete libtasn1
-	paquete libwmf
+	paquete jasper
 	paquete libxml
 	paquete net-snmp
-	paquete netpbm
+	paquete owncloud
 	paquete p5-Mail-SpamAssassin
-	paquete polkit
+	paquete png
+	paquete postgis
+	paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs" 
 	paquete qemu
-	paquete rrdtool
+
 	#paquete webkit paquetes "webkit webkit-gtk3"
 	# FLAVOR=gtk3 make paquete webkit-gtk3
 
 	####
-	# Recompilados de 5.7 para usar xlocale (y eventualmente cerrar fallas)
+	# Recompilados de estable que usan xlocale (y pueden cerrar fallas)
 	# No deben estar en mystuff
 	paquete boost
 	paquete djvulibre
+	paquete gettext-tools
 	paquete ggrep
+	paquete gdk-pixbuf
 	paquete glib2
 	paquete gtar
 	paquete libidn
+	paquete libunistring
 	paquete libxslt
 	paquete llvm
-	#paquete qt4
 	paquete scribus
 	paquete vlc
 	paquete wget
@@ -740,7 +738,6 @@ if (test "$sn" = "s") then {
 	# Tomados de portes de OpenBSD 5.7 pero mejorados para adJ
 	# Deben estar en arboldes/usr/ports/mystuff 
 	paquete xfe
-	paquete pear-Validate
 
 	####
 	# Retroportados de current para cerrar fallas o actualizar
@@ -749,25 +746,26 @@ if (test "$sn" = "s") then {
 	paquete chromium
 
 	###
-        # Actualizados.  Está pero desactualizado en OpenBSD 5.7 y en current al momento
+        # Actualizados.  Están desactualizado en OpenBSD estable y current
 	paquete php paquetes "php php-fpm php-gd php-intl php-ldap php-mcrypt php-pdo_pgsql php-pgsql php-zip" 5.5
 	paquete pear-Auth
-	paquete pear-HTML-QuickForm
-	paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs" 
+	paquete pear-DB_DataObject
        		
 	####
 	# Unicos en adJ 
 	# Deben estar en arboldes/usr/ports/mystuff pero no en /usr/ports
-	paquete databases/pear-DB_DataObject
+	paquete editors/hexedit # Soporta tamaños de archivos más grandes
 	paquete emulators/realboy
 	paquete lang/ocaml-labltk
 	paquete sysutils/ganglia
 	paquete textproc/sword
 	paquete textproc/xiphos
 	paquete www/pear-HTML-Common
+	paquete www/pear-HTML-Common2
 	paquete www/pear-HTML-CSS
 	paquete www/pear-HTML-Javascript
 	paquete www/pear-HTML-Menu
+	paquete www/pear-HTML-QuickForm
 	paquete www/pear-HTML-Table
 	paquete www/pear-DB-DataObject-FormBuilder
 	paquete www/pear-HTML-QuickForm-Controller
@@ -792,7 +790,6 @@ if (test "$sn" = "s") then {
 	paquete education/sigue
 	paquete textproc/Mt77
 
-	paquete databases/sivel sivel sivel 1.1
 	paquete databases/sivel sivel sivel 1.2
 	paquete databases/sivel sivel sivel 2.0
 

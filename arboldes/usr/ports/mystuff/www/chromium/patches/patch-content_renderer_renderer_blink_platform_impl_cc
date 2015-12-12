@@ -1,7 +1,7 @@
-$OpenBSD: patch-content_renderer_renderer_blink_platform_impl_cc,v 1.4 2015/05/24 15:51:53 robert Exp $
---- content/renderer/renderer_blink_platform_impl.cc.orig.port	Wed May 20 10:13:28 2015
-+++ content/renderer/renderer_blink_platform_impl.cc	Wed May 20 10:14:11 2015
-@@ -99,7 +99,7 @@
+$OpenBSD: patch-content_renderer_renderer_blink_platform_impl_cc,v 1.7 2015/10/14 16:42:07 robert Exp $
+--- content/renderer/renderer_blink_platform_impl.cc.orig.port	Tue Oct 13 21:04:32 2015
++++ content/renderer/renderer_blink_platform_impl.cc	Wed Oct 14 07:41:13 2015
+@@ -102,7 +102,7 @@
  
  #if defined(OS_POSIX)
  #include "base/file_descriptor_posix.h"
@@ -10,7 +10,7 @@ $OpenBSD: patch-content_renderer_renderer_blink_platform_impl_cc,v 1.4 2015/05/2
  #include <map>
  #include <string>
  
-@@ -189,7 +189,7 @@ class RendererBlinkPlatformImpl::FileUtilities : publi
+@@ -192,7 +192,7 @@ class RendererBlinkPlatformImpl::FileUtilities : publi
    scoped_refptr<ThreadSafeSender> thread_safe_sender_;
  };
  
@@ -19,7 +19,7 @@ $OpenBSD: patch-content_renderer_renderer_blink_platform_impl_cc,v 1.4 2015/05/2
  class RendererBlinkPlatformImpl::SandboxSupport
      : public blink::WebSandboxSupport {
   public:
-@@ -232,7 +232,7 @@ RendererBlinkPlatformImpl::RendererBlinkPlatformImpl(
+@@ -235,7 +235,7 @@ RendererBlinkPlatformImpl::RendererBlinkPlatformImpl(
        plugin_refresh_allowed_(true),
        default_task_runner_(renderer_scheduler->DefaultTaskRunner()),
        web_scrollbar_behavior_(new WebScrollbarBehaviorImpl) {
@@ -28,7 +28,7 @@ $OpenBSD: patch-content_renderer_renderer_blink_platform_impl_cc,v 1.4 2015/05/2
    if (g_sandbox_enabled && sandboxEnabled()) {
      sandbox_support_.reset(new RendererBlinkPlatformImpl::SandboxSupport);
    } else {
-@@ -289,7 +289,7 @@ blink::WebFileUtilities* RendererBlinkPlatformImpl::fi
+@@ -288,7 +288,7 @@ blink::WebFileUtilities* RendererBlinkPlatformImpl::fi
  }
  
  blink::WebSandboxSupport* RendererBlinkPlatformImpl::sandboxSupport() {

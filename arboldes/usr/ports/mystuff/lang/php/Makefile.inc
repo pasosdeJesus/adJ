@@ -1,4 +1,7 @@
-# $OpenBSD: Makefile.inc,v 1.63 2014/11/19 09:41:05 brad Exp $
+# $OpenBSD: Makefile.inc,v 1.68 2015/11/06 18:31:45 sthen Exp $
+#
+
+BROKEN-hppa=	no __sync_bool_compare_and_swap support nor asm fallback
 
 # This port currently only works with archs supporting dynamic loading
 # and has Apache that supports DSO's.
@@ -18,17 +21,11 @@ CATEGORIES=		lang www
 MAINTAINER=		Robert Nagy <robert@openbsd.org>
 HOMEPAGE=		http://www.php.net/
 
-SUHOSIN_V=		0.9.33
-SUHOSIN_PHPV?=		${V}
-
 MASTER_SITES=		http://se.php.net/distributions/ \
 			http://us.php.net/distributions/ \
 			http://no.php.net/distributions/ \
 			http://uk.php.net/distributions/
-MASTER_SITES0=		http://spacehopper.org/mirrors/ \
-			http://download.suhosin.org/ \
-			http://blade2k.humppa.hu/ \
-			${_MASTER_SITE_FREEBSD}
+MASTER_SITES0=		https://download.suhosin.org/
 
 # UPGRADERS: please read BOTH the PHP and Zend licenses
 # and make sure they are safe before an upgrade
@@ -47,13 +44,15 @@ CHROOT_DIR?=		/var/www
 MODULES_SUBDIR=		lib/php-${PV}/modules
 MODULES_DIR=		${LOCALBASE}/${MODULES_SUBDIR}
 
-FLAVORS=		ap2
-.if ${PV} == "5.3"
-FLAVORS+=		no_suhosin
-.endif
+INI_TEMPLATES?=		development production
+
+# XXX use the bundled libtool because it needs some specific options we
+# don't have.
+USE_LIBTOOL?=		No
+
+FLAVORS=		ap2 no_suhosin
 FLAVOR?=
 
-USE_GROFF=		Yes
 PATCHORIG=		.orig.port
 CONFIGURE_STYLE=	autoconf
 AUTOCONF_VERSION?=	2.69
@@ -61,7 +60,7 @@ CONFIGURE_ENV=          CFLAGS="${CFLAGS} -I${LOCALBASE}/include -pthread" \
                         LDFLAGS="-L${LOCALBASE}/lib -pthread" \
 			EXTENSION_DIR=${MODULES_DIR} \
 			lt_cv_path_SED=/usr/bin/sed
-# configure detects us as having decimal fp support but it's not built in 
+# configure detects us as having decimal fp support but it's not built in
 # in libgcc. https://bugs.php.net/bug.php?id=68114
 CONFIGURE_ENV+=		ac_cv_decimal_fp_supported=no
 MAKE_ENV=               ${CONFIGURE_ENV}
@@ -148,7 +147,7 @@ MULTI_PACKAGES+=	-curl
 COMMENT-curl=		curl URL library extensions for php5
 CONFIGURE_ARGS+=	--with-curl=shared,${LOCALBASE}
 LIB_DEPENDS-curl=	net/curl
-WANTLIB-curl=		pthread crypto idn ssl z curl>=2
+WANTLIB-curl=		pthread crypto idn ssl z curl>=2 #nghttp2 
 
 # dba
 MULTI_PACKAGES+=	-dba
@@ -289,6 +288,13 @@ CONFIGURE_ARGS+=	--with-snmp=shared,${LOCALBASE} --enable-ucd-snmp-hack
 LIB_DEPENDS-snmp=	net/net-snmp
 WANTLIB-snmp=		crypto m netsnmp>=6.2 pthread
 
+# sybase-ct
+MULTI_PACKAGES+=	-sybase_ct
+COMMENT-sybase_ct=	sybase database access extensions for php5
+CONFIGURE_ARGS+=	--with-sybase-ct=shared,${LOCALBASE}
+LIB_DEPENDS-sybase_ct=	databases/freetds
+WANTLIB-sybase_ct=	ct pthread
+
 # pdo-dblib
 MULTI_PACKAGES+=	-pdo_dblib
 COMMENT-pdo_dblib=	PDO DB-LIB support for php5
@@ -332,8 +338,9 @@ LIB_DEPENDS-zip=
 WANTLIB-zip=		z pthread
 
 # some variables to substitute
-SUBST_VARS=	MODPHP_CONFIG_PATH PV ^MODULE_NAME
+SUBST_VARS=	MODPHP_CONFIG_PATH SV PV ^MODULE_NAME
 PHP_VERSION=	${V}
+SV=		${PV:S/.//}
 
 .for i in TRUEPREFIX MODULES_DIR PHP_VERSION APACHE_MODULE_DIR
 PHPXS_SUBST+= -e 's,${i},${${i}},'
@@ -354,19 +361,15 @@ RUN_DEPENDS-main=	${MODGETTEXT_RUN_DEPENDS} \
 			mail/femail,-chroot
 LIB_DEPENDS-fastcgi=	${LIB_DEPENDS-main}
 
-.if ${PV} == "5.3"
-.  if ${FLAVOR:Mno_suhosin}
-SUPDISTFILES=		suhosin-${SUHOSIN_V}.tgz:0 \
-			suhosin-patch-${SUHOSIN_PHPV}-${SUHOSIN_P_V}.patch.gz:0
-.  else
-DISTFILES+=		suhosin-${SUHOSIN_V}.tgz:0
-PATCHFILES=		suhosin-patch-${SUHOSIN_PHPV}-${SUHOSIN_P_V}.patch.gz:0
-PATCH_DIST_STRIP=	-p1
+SUHOSIN_V=		0.9.38
+.if ${FLAVOR:Mno_suhosin}
+SUPDISTFILES=		suhosin-${SUHOSIN_V}.tar.gz:0
+.else
+DISTFILES+=		suhosin-${SUHOSIN_V}.tar.gz:0
 CONFIGURE_ARGS+=	--enable-suhosin
 
 pre-patch:
 	@mv ${WRKDIR}/suhosin-${SUHOSIN_V} ${WRKSRC}/ext/suhosin
-.  endif
 .endif
 
 pre-fake:

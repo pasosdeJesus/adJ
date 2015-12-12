@@ -1,21 +1,21 @@
-$OpenBSD: patch-chrome_browser_about_flags_cc,v 1.18 2015/05/24 15:51:52 robert Exp $
---- chrome/browser/about_flags.cc.orig.port	Thu May 14 00:35:45 2015
-+++ chrome/browser/about_flags.cc	Sat May 23 01:01:26 2015
-@@ -674,7 +674,7 @@ const Experiment kExperiments[] = {
-     kOsLinux,
-     SINGLE_VALUE_TYPE(switches::kEnableSmoothScrolling)
-   },
+$OpenBSD: patch-chrome_browser_about_flags_cc,v 1.21 2015/10/14 16:42:07 robert Exp $
+--- chrome/browser/about_flags.cc.orig.port	Tue Oct 13 21:04:31 2015
++++ chrome/browser/about_flags.cc	Wed Oct 14 07:41:13 2015
+@@ -745,7 +745,7 @@ const Experiment kExperiments[] = {
+      // On by default for the Mac (different implementation in WebKit).
+      kOsLinux | kOsWin,
+      SINGLE_VALUE_TYPE(switches::kEnableSmoothScrolling)},
 -#if defined(USE_AURA) || defined(OS_LINUX)
 +#if defined(USE_AURA) || defined(OS_LINUX) || defined(OS_BSD)
-   {
-     "overlay-scrollbars",
-     IDS_FLAGS_ENABLE_OVERLAY_SCROLLBARS_NAME,
-@@ -1538,7 +1538,7 @@ const Experiment kExperiments[] = {
-     SINGLE_VALUE_TYPE(switches::kResetAppListInstallState)
-   },
- #if defined(ENABLE_APP_LIST)
--#if defined(OS_LINUX)
-+#if defined(OS_LINUX) || defined(OS_BSD)
-   {
-     // This is compiled out on non-Linux platforms because otherwise it would be
-     // visible on Win/Mac/CrOS but not on Linux GTK, which would be confusing.
+     {"overlay-scrollbars",
+      IDS_FLAGS_ENABLE_OVERLAY_SCROLLBARS_NAME,
+      IDS_FLAGS_ENABLE_OVERLAY_SCROLLBARS_DESCRIPTION,
+@@ -865,7 +865,7 @@ const Experiment kExperiments[] = {
+      SINGLE_VALUE_TYPE(switches::kEnableSpellingAutoCorrect)},
+ #endif
+ #if defined(ENABLE_SPELLCHECK) && \
+-    (defined(OS_LINUX) || defined(OS_WIN) || defined(OS_CHROMEOS))
++    (defined(OS_LINUX) || defined(OS_WIN) || defined(OS_CHROMEOS) || defined(OS_BSD))
+     {"enable-multilingual-spellchecker",
+      IDS_FLAGS_ENABLE_MULTILINGUAL_SPELLCHECKER_NAME,
+      IDS_FLAGS_ENABLE_MULTILINGUAL_SPELLCHECKER_DESCRIPTION,

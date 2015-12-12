@@ -1,0 +1,12 @@
+$OpenBSD$
+--- gettext-runtime/intl/localename.c.orig	Thu Jul  9 20:36:30 2015
++++ gettext-runtime/intl/localename.c	Sat Dec  5 23:58:54 2015
+@@ -35,7 +35,7 @@
+ 
+ #if HAVE_USELOCALE
+ /* Mac OS X 10.5 defines the locale_t type in <xlocale.h>.  */
+-# if defined __APPLE__ && defined __MACH__
++# if (defined __APPLE__ && defined __MACH__) || defined(__OpenBSD__)
+ #  include <xlocale.h>
+ # endif
+ # include <langinfo.h>
