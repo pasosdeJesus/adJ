@@ -381,6 +381,8 @@ EOF
 	#compilabase
 	echo "DESTDIR=$DESTDIR" | tee -a /var/www/tmp/distrib-adJ.bitacora;
 	cd /usr/src/etc && DESTDIR=/destdir nice make release | tee -a /var/www/tmp/distrib-adJ.bitacora;
+	sudo find $DESTDIR  -exec touch {} ';'
+	sudo find $RELEASEIR  -exec touch {} ';'
 } fi;
 
 
@@ -481,6 +483,7 @@ if (test "$sn" = "s") then {
 	} fi;
         mkdir -p ${DESTDIR} ${RELEASEDIR}
 	(cd $XSRCDIR; nice make release)
+	sudo find $DESTDIR  -exec touch {} ';'
 
 } fi;
 
@@ -550,7 +553,9 @@ if (test "$sn" = "s") then {
 
 	cp /usr/src/sys/arch/$ARQ/compile/APRENDIENDODEJESUS/bsd ${RELEASEDIR}/bsd
 	cp /usr/src/sys/arch/$ARQ/compile/APRENDIENDODEJESUS.MP/bsd ${RELEASEDIR}/bsd.mp
+	sudo find $DESTDIR -exec touch {} ';'
 	cd /usr/src/distrib/sets && sh checkflist
+	sudo find $RELEASEDIR  -exec touch {} ';'
 	cp $RELEASEDIR/* $dini/$V$VESP-$ARQ
 	rm -f $dini/$V$VESP-$ARQ/{MD5,CKSUM,index.txt,cd??.iso,}
 } fi;
@@ -750,7 +755,7 @@ if (test "$sn" = "s") then {
 
 	###
         # Actualizados.  Está pero desactualizado en OpenBSD 5.7 y en current al momento
-	paquete php paquetes "php php-fpm php-gd php-intl php-ldap php-mcrypt php-pdo_pgsql php-pgsql php-zip" 5.5
+	paquete php paquetes "php php-curl php-fpm php-gd php-intl php-ldap php-mcrypt php-pdo_pgsql php-pgsql php-zip" 5.5
 	paquete pear-Auth
 	paquete pear-HTML-QuickForm
 	paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs" 
