@@ -695,8 +695,6 @@ if (test "$sn" = "s") then {
 	# Modificados para posibilitar compilación
 	# Deben estar en mystuff
 	
-	paquete php paquetes "php php-fpm php-gd php-intl php-ldap php-mcrypt php-pdo_pgsql php-pgsql php-zip" 5.6
-	exit 1;
 	####
 	# Recompilados para cerrar fallas, portes actualizados de OpenBSD estable
 	# Para que operen bien basta actualizar CVS de /usr/ports 
