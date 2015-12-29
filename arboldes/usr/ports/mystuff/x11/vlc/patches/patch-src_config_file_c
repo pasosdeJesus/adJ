@@ -1,0 +1,11 @@
+$OpenBSD$
+--- src/config/file.c.orig	Sun Dec 27 22:41:36 2015
++++ src/config/file.c	Sun Dec 27 22:42:05 2015
+@@ -34,6 +34,7 @@
+ #   include <xlocale.h>
+ #elif defined(HAVE_USELOCALE)
+ #include <locale.h>
++#include <xlocale.h>
+ #endif
+ #include <unistd.h>
+ 

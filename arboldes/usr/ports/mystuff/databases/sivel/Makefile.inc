@@ -12,11 +12,9 @@ MAINTAINER=	Vladimir Támara Patiño <vtamara@pasosdeJesus.org>
 # Public Domain  & BSD License
 PERMIT_PACKAGE_CDROM=	Yes
 PERMIT_PACKAGE_FTP=	Yes
-PERMIT_DISTFILES_CDROM=	Yes
 PERMIT_DISTFILES_FTP=	Yes
 
 NO_BUILD=	Yes
-NO_REGRESS=	Yes
 
 PREFIX ?=       /var/www
 SIVEL_RAIZ ?=	htdocs/sivel
@@ -24,7 +22,7 @@ INSTDIR ?=	${PREFIX}/${SIVEL_RAIZ}
 SUBST_VARS=	INSTDIR SIVEL_RAIZ
 
 
-RUN_DEPENDS= lang/php/5.3 \
+RUN_DEPENDS= lang/php/5.5 \
 	www/pear \
 	security/pear-Auth \
 	databases/pear-DB \

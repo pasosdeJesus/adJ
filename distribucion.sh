@@ -695,12 +695,14 @@ if (test "$sn" = "s") then {
 	# Modificados para posibilitar compilación
 	# Deben estar en mystuff
 	
+	paquete php paquetes "php php-fpm php-gd php-intl php-ldap php-mcrypt php-pdo_pgsql php-pgsql php-zip" 5.6
+	exit 1;
 	####
 	# Recompilados para cerrar fallas, portes actualizados de OpenBSD estable
 	# Para que operen bien basta actualizar CVS de /usr/ports 
 	# Los siguientes no deben estar en arboldes/usr/ports/mystuff
 	paquete a2ps
-	paquete cups-filter
+	paquete cups-filters
 	paquete gnutls
 	paquete jasper
 	paquete libxml
@@ -742,12 +744,13 @@ if (test "$sn" = "s") then {
 	####
 	# Retroportados de current para cerrar fallas o actualizar
 	# Deben estar en arboldes/usr/ports/mystuff y en /usr/ports de current
-	paquete ruby paquetes "ruby ruby22-ri_docs" 2.2
 	paquete chromium
+	paquete node 
+	paquete ruby paquetes "ruby ruby22-ri_docs" 2.2
 
 	###
         # Actualizados.  Están desactualizado en OpenBSD estable y current
-	paquete php paquetes "php php-fpm php-gd php-intl php-ldap php-mcrypt php-pdo_pgsql php-pgsql php-zip" 5.5
+	paquete php paquetes "php php-fpm php-gd php-intl php-ldap php-mcrypt php-pdo_pgsql php-pgsql php-zip" 5.6
 	paquete pear-Auth
 	paquete pear-DB_DataObject
        		
@@ -793,7 +796,7 @@ if (test "$sn" = "s") then {
 	paquete databases/sivel sivel sivel 1.2
 	paquete databases/sivel sivel sivel 2.0
 
-	rm $dini/$V$VESP-$ARQ/$dest/php5-gd-*-no_x11.tgz
+	rm $dini/$V$VESP-$ARQ/$dest/php5-gd-*-no_x11.tgz > /dev/null 2>&1
 
 } fi;	
 
