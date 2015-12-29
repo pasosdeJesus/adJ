@@ -1,6 +1,15 @@
 $OpenBSD$
---- configure.orig	Sun Jun 14 06:14:13 2015
-+++ configure	Sun Jun 14 06:16:12 2015
+--- configure.orig	Wed Sep 17 22:08:33 2014
++++ configure	Mon Dec 21 12:41:40 2015
+@@ -18,7 +18,7 @@ where=''
+ installbindir=''
+ installdir=''
+ tk_defs=''
+-tk_libs=''
++tk_libs='-lpthread -ltk86 -ltcl86 -L/usr/local/lib'
+ tk_x11=yes
+ use_findlib=no
+ verbose=no
 @@ -154,7 +154,7 @@ if test $tk_x11 = no; then
    has_tk=true
  else
