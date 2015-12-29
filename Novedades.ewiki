@@ -61,11 +61,11 @@ Desde 5.7 el instalador no incluye etc ni xetc pues hacen parte de base y xbase
 !PAQUETES EXCLUSIVOS DE ADJ
 
 Puede ver el listado completo en https://github.com/pasosdeJesus/adJ/blob/master/Contenido.txt a continuación se describen sólo novedades respecto a la versión anterior de adJ y OpenBSD 5.7:
-* SIVeL 1.2.  Si no lo hahecho se recomienda migrar a esta versión estable (también se incluye SIVeL 1.1.7 para facilitar el proceso a quienes usen SIVeL 1.1.x) ver http://sivel.sourceforge.net/1.2/actualizacion-sivel.html#actualizaciondeunounoaunodos
+* SIVeL 1.2 con facilidades para instalar.  Si no lo hahecho se recomienda migrar a esta versión estable (también se incluye SIVeL 1.1.7 para facilitar el proceso a quienes usen SIVeL 1.1.x) ver http://sivel.sourceforge.net/1.2/actualizacion-sivel.html#actualizaciondeunounoaunodos
 * SIVeL 2.0a7. Versión alfa de SIVeL 2. Escrita sobre Ruby on Rails.
 * Mt77 1.0a1. Buscador rápido y preciso para español, versión alfa.
-* PostgreSQL 9.4.5 retroportado y recompilado para cerrar fallas, pero además con soporte UTF-8 y ordenamientos alfabéticos en español. En adJ la información queda cifrada cuando así se elije al instalar o actualizar adJ.  Ver detalles de como usar cotejación en http://aprendiendo.pasosdeJesus.org/?id=i18n
-* ruby 2.2.3 retroportado de OpenBSD-current y probado con aplicaciones Rails 4.2.4 Ver http://dhobsd.pasosdeJesus.org/Ruby_on_Rails_en_OpenBSD.html 
+* PostgreSQL 9.4.5 retroportado y recompilado para cerrar fallas, pero además con soporte UTF-8 y ordenamientos alfabéticos en español. En adJ la información queda cifrada cuando así se elije al instalar o actualizar adJ.  Ver detalles de como usar cotejación en http://aprendiendo.pasosdeJesus.org/?id=i18n y del cifrado en http://aprendiendo.pasosdejesus.org/?id=particiones+cifradas
+* ruby 2.2.4 retroportado de OpenBSD-current y probado con aplicaciones Rails 4.2.5 Ver http://dhobsd.pasosdeJesus.org/Ruby_on_Rails_en_OpenBSD.html 
 * Para activar soporte de xlocale se ha recompilado los siguientes paquetes que están en portes de OpenBSD 5.7: boost, djvulibre, ggrep, glib2, gtar, libidn, libxslt, llvm, scribus, vlc, wget, wxWidgets-gtk2
 * Para cerrar fallas se han recompilado los siguientes paquetes a partir de portes actualizados de OpenBSD 5.7 (pero no incluidos en binarios de ese sistema):  cups, cups-libs, cups-filters, curl, gdk-pixbuf, ghostscript, gnutls, icu4c, libksba, libtasn1, libwmf, libxml, net-snmp, netpbm, p5-Mail-SpamAssassin, polkit, php-5.5.30 (incluyendo ahora php-curl), qemu, rrdtool
 * Se han retroportado otros paquetes de OpenBSD-Current: chromium-43 (más estable)

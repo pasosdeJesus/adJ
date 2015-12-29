@@ -765,8 +765,8 @@ if (test "$sn" = "s") then {
 	####
 	# Retroportados de current para cerrar fallas o actualizar
 	# Deben estar en arboldes/usr/ports/mystuff y en /usr/ports de current
-	paquete ruby paquetes "ruby ruby22-ri_docs" 2.2
 	#paquete chromium
+	paquete ruby paquetes "ruby ruby22-ri_docs" 2.2
 
 	###
         # Actualizados.  Está pero desactualizado en OpenBSD 5.7 y en current al momento

@@ -31,12 +31,6 @@ if (test "$RUTAIMG" = "") then {
 	RUTAIMG=/var/
 } fi;
 
-mkdir -p /var/tmp
-if (test "$?" != "0") then {
-	echo "No pudo crearse directorio /var/tmp para la bitácora";
-	exit 1;
-} fi;
-
 mkdir -p /var/www/tmp/
 echo "-+-+-+-+-+-+" >> /var/www/tmp/inst-adJ.bitacora
 echo "Bitácora de instalación " >> /var/www/tmp/inst-adJ.bitacora
