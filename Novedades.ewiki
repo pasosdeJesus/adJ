@@ -23,7 +23,7 @@ Entre las novedades reportadas en las `Notas de publicación de OpenBSD 5.7' des
 * Controladores ampliados o mejorados para amd64
 ** Vídeo: Mejorado ==radeondrm== en su soporte para Radeon RS* IGP
 ** Audio: Mejorado ==azalia== para soportar codecs Realtek ALC885  y dipositivos Bay Trail HD Audio.
-** Red: Fibra:   Ethernet:  Nuevo ==nep== que soporta Sun Neptune 10GB, mejorado ==myx== que soporta yricom Myri-10G PCI Express, mejorado ==msk== para soporta Yukon Prime, Yukon Optima 2, Yukon 88E8079,  y varios EC U y chipsets Supreme; mejorado ==bge== para soportar frames jumbo; mejorado ==sk== que soporta XMAC II y Marvell Yukon 10/100G.  Inalámbrico:  Nuevo ==iwm== que soporta dispositivos Intel 7200 IEEE 802.11a/ac/b/g/n; mejorado ==athn== para soprotar Atheros UB94; mejorado ==win==. Inalámbrico USB: . Modem USB: Mejorado ==umsm== para soportar MEDION S4222, mejorado ==umodem== para soportar dispositivos Arduino Leonardo.
+** Red: Ethernet:  Nuevo ==nep== que soporta Sun Neptune 10GB, mejorado ==myx== que soporta yricom Myri-10G PCI Express, mejorado ==msk== para soporta Yukon Prime, Yukon Optima 2, Yukon 88E8079,  y varios EC U y chipsets Supreme; mejorado ==bge== para soportar frames jumbo; mejorado ==sk== que soporta XMAC II y Marvell Yukon 10/100G.  Inalámbrico:  Nuevo ==iwm== que soporta dispositivos Intel 7200 IEEE 802.11a/ac/b/g/n; mejorado ==athn== para soprotar Atheros UB94; mejorado ==win==. Modem USB: Mejorado ==umsm== para soportar MEDION S4222, mejorado ==umodem== para soportar dispositivos Arduino Leonardo.
 ** Discos: Mejorado ==ciss== para soportar Arreglos RAIS HP Gen9 Smart, mejorados ==mpi== y ==mfi==, ==mfii== que soportan arreglos RAID. Mejorado ==pciide== para soportar chipsets Intel C610.
 ** Temperatura, sensores y otros: USB 3.0 soportado en ==xhci==, varios adaptadores seriales a usb soportados con nuevos ==umcs== y ==uslhcom==; mejorado ==umass== para soportar ARchos 24y Vision. gpio: controlador ==skgpio== para Soekris net6501. Lectores de tarjetas: mejorado ==rtsx== para soportar RTS5227 y RTL8411B. Puentes y Buses PCI: mejorados ==ppb==, ==puc==. Memoria:mejorado ==sdmmc== para soportar memorias SD/MMC de mas de 2G y más tarjetas reconocidas por ==sdhc==. UPS: Mejorado ==upd== para soportar más UPS. Mejorado ==ums== para soportar tabletas emuladas por Qemu. Teclado: Mejorado ==ukbd== para soportar Apple "wellspring". touchpads: Mejorado ==pms== para soportar Elantech v4.
 
@@ -42,13 +42,13 @@ Entre las novedades reportadas en las `Notas de publicación de OpenBSD 5.7' des
 ** OpenSSH 6.8
 
 * Otros
-** mandoc ahora soporta UTF-8 especificado con -K y a salida por defecto ahora es -Tlocale en lugar -Tascii
-** syslogd puede enviar mensajes por TLS
-** Nueva rcctl para controlar servicios
+** mandoc ahora soporta UTF-8 especificado con -K y la salida por defecto ahora es -Tlocale en lugar -Tascii
+** ==syslogd== puede enviar mensajes por TLS
+** Nueva herramienta ==rcctl== para controlar servicios
 ** Diversos programas pasados de base a portes: Sendmail, nginx.  Estos están disponibles como paquetes.
 
 
-* El sistema base incluye mejoras a componentes auditados y mejorados como ==Xenocara== (Xorg 7.7), ==gcc== 4.2.1, ==perl== 5.18.2, LibreSSL 2.0 con parches posteriores, OpenSMTP 5.4.3, nsd 4.0.3
+* El sistema base incluye mejoras a componentes auditados y mejorados como ==Xenocara== (Xorg 7.7), ==gcc== 4.2.1, ==perl== 5.18.2, LibreSSL 2.0 con parches posteriores, OpenSMTP 5.4.4, nsd 4.0.3
 
 
 !PROCESO DE INSTALACIÓN
@@ -61,18 +61,18 @@ Desde 5.7 el instalador no incluye etc ni xetc pues hacen parte de base y xbase
 !PAQUETES EXCLUSIVOS DE ADJ
 
 Puede ver el listado completo en https://github.com/pasosdeJesus/adJ/blob/master/Contenido.txt a continuación se describen sólo novedades respecto a la versión anterior de adJ y OpenBSD 5.7:
-* SIVeL 1.2 con facilidades para instalar.  Si no lo hahecho se recomienda migrar a esta versión estable (también se incluye SIVeL 1.1.7 para facilitar el proceso a quienes usen SIVeL 1.1.x) ver http://sivel.sourceforge.net/1.2/actualizacion-sivel.html#actualizaciondeunounoaunodos
+* SIVeL 1.2 con facilidades para instalar.  Si no lo ha hecho se recomienda migrar a esta versión estable (también se incluye SIVeL 1.1.7 para facilitar el proceso a quienes usen SIVeL 1.1.x) ver http://sivel.sourceforge.net/1.2/actualizacion-sivel.html#actualizaciondeunounoaunodos
 * SIVeL 2.0a7. Versión alfa de SIVeL 2. Escrita sobre Ruby on Rails.
 * Mt77 1.0a1. Buscador rápido y preciso para español, versión alfa.
 * PostgreSQL 9.4.5 retroportado y recompilado para cerrar fallas, pero además con soporte UTF-8 y ordenamientos alfabéticos en español. En adJ la información queda cifrada cuando así se elije al instalar o actualizar adJ.  Ver detalles de como usar cotejación en http://aprendiendo.pasosdeJesus.org/?id=i18n y del cifrado en http://aprendiendo.pasosdejesus.org/?id=particiones+cifradas
 * ruby 2.2.4 retroportado de OpenBSD-current y probado con aplicaciones Rails 4.2.5 Ver http://dhobsd.pasosdeJesus.org/Ruby_on_Rails_en_OpenBSD.html 
 * Para activar soporte de xlocale se ha recompilado los siguientes paquetes que están en portes de OpenBSD 5.7: boost, djvulibre, ggrep, glib2, gtar, libidn, libxslt, llvm, scribus, vlc, wget, wxWidgets-gtk2
-* Para cerrar fallas se han recompilado los siguientes paquetes a partir de portes actualizados de OpenBSD 5.7 (pero no incluidos en binarios de ese sistema):  cups, cups-libs, cups-filters, curl, gdk-pixbuf, ghostscript, gnutls, icu4c, libksba, libtasn1, libwmf, libxml, net-snmp, netpbm, p5-Mail-SpamAssassin, polkit, php-5.5.30 (incluyendo ahora php-curl), qemu, rrdtool
+* Para cerrar fallas se han recompilado los siguientes paquetes a partir de portes actualizados de OpenBSD 5.7 (pero no incluidos en binarios de ese sistema):  cups, cups-libs, cups-filters, curl, gdk-pixbuf, ghostscript, gnutls, icu4c, libksba, libtasn1, libwmf, libxml, net-snmp, netpbm, p5-Mail-!SpamAssassin, polkit, php-5.5.30 (incluyendo ahora php-curl), qemu, rrdtool
 * Se han retroportado otros paquetes de OpenBSD-5.8: chromium-43 (más estable)
 * Se incluye el navegador modo texto w3m para remplazar a lynx que salió del sistema base. w3m soporta UTF-8, colores y descargas grandes (no operaba en 5.6).
 * Nuevo porte ocaml-labltk
 * Paquetes con documentación renombrados ahora son: basico_adJ, usuario_adJ y servidor_adJ que se instalan (con el nuevo nombre) en /usr/local/share/doc/.  Las fuentes se migraron a github y puede ubicarlas en https://github.io/pasosdeJesus y los HTML puede verlos en Internet en http://pasosdeJesus.github.io/basico_adJ/, http://pasosdeJesus.github.io/usuario_adJ/ y http://pasosdeJesus.github.io/servidor_adJ/ 
-* Los paquetes exclusivos los encuentra en [http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/5.7-amd64/paquetes] y otras extensiones de PostgreSQL y PHP que no hacen parte de la distribución en [http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/5.7-amd64-paquetes-extra] 
+* Los paquetes exclusivos los encuentra en [http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/5.7-amd64/paquetes] y otras extensiones de PostgreSQL, ruby y PHP que no hacen parte de la distribución (y sin firma digital) en [http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/5.7-amd64-paquetes-extra] 
 
 !PAQUETES DE OPENBSD
 
@@ -87,7 +87,7 @@ Los paquetes para OpenBSD 5.7 también funcionan sin cambios, resaltamos:
 !ESCRITORIO
 
 ==ksh== con ==xterm== no soportan del todo UTF-8, por ejemplo al borrar una vocal con tilde o ñ debe presionarse 2 veces espacio atrás.  Si requiere una terminal con codificación ASCII ejecute:
-<lpre>
+<pre>
     xterm -en ascii
 </pre>
 y ponga la variable LANG en otro valor por ejemplo:
@@ -99,7 +99,7 @@ y ponga la variable LANG en otro valor por ejemplo:
 
 * Se han hecho diversas pruebas del uso de adJ sobre IPv6. Se ha comprobado que la pila de red de OpenBSD puede conectarse tanto con túneles como directamente a conexiones IPv6 solas y doble pila. Respecto a servicios se ha comprobado que operan bien al menos Xorg, cupsd, nginx, smtpd, sshd, named, ftpd, rsync, dovecot.  También se ha comprobado la operación correcta sobre IPv6 de la pila Ruby on Rails incluida en adJ. Para facilitar la adopción de IPv6 --extremadamente retrasada en Colombia-- hemos iniciado ejercicios y enlaces a material público de un curso de IPv6 de LACNIC en: 
 	http://dhobsd.pasosdejesus.org/ipv6-basico-lacnic-2015.html
-* Por otra parte se han hecho pruebas del uso de adJ sobre conexiones ethernet 10G con cableado categoria 6A, con tarjetas de red de 10G y switches de 10G. También se han hecho pruebas exitosas de cortafuegos redundantes para brindar alta disponibilidad con costos moderados. Estaremos documentando de acuerdo al interés de los lectores.
+* Se han hecho pruebas del uso de adJ sobre conexiones ethernet 10G con cableado categoria 6A, con tarjetas de red de 10G y switches de 10G. También se han hecho pruebas exitosas de cortafuegos redundantes para brindar alta disponibilidad con costos moderados. Estaremos documentando.
 
 !!!DESCARGAS
 
