@@ -5,6 +5,7 @@
 VERSION=1.2
 DISTNAME=v${VERSION}
 PKGNAME=sivel-v${VERSION}
+REVISION=1
 
 HOMEPAGE=http://pasosdeJesus.github.io/SIVeL/
 PKGSPEC = sivel->=1.2,<1.3
@@ -14,6 +15,9 @@ EXTRACT_SUFX=.tar.gz
 DISTFILES=xv${VERSION}${EXTRACT_SUFX}
 DCOMP=SIVeL-${VERSION}
 SIVEL_RAIZ ?= htdocs/sivel
+
+pre-patch:
+	ln -s ${WRKDIR}/SIVeL-1.2 ${WRKDIR}/v1.2
 
 do-install:
 	echo @mkdir -p ${PREFIX}/${SIVEL_RAIZ}

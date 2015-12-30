@@ -1,5 +1,5 @@
-     SUBDIR += Animales1
-     SUBDIR += Aprestamiento1
+     SUBDIR += AnimalesI
+     SUBDIR += AprestamientoI
      SUBDIR += NombresCursiva
      SUBDIR += PlantasCursiva
      SUBDIR += asigna

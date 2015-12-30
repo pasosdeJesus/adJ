@@ -498,7 +498,7 @@ pwd >> /var/www/tmp/inst-sivel.log
 touch /var/www/htdocs/sivel/confv.sh
 chown $usivel:$usivel  /var/www/htdocs/sivel/confv.sh
 chmod +w   /var/www/htdocs/sivel/confv.sh
-su $usivel ./conf.sh -i | tee -a /var/www/tmp/inst-sivel.log
+su $usivel ./conf.sh | tee -a /var/www/tmp/inst-sivel.log
 
 echo "* Nuevo sitio" | tee -a /var/www/tmp/inst-sivel.log;
 if (test ! -d /var/www/htdocs/sivel/sitios/sivel) then {

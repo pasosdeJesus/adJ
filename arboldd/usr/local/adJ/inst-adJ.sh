@@ -31,12 +31,6 @@ if (test "$RUTAIMG" = "") then {
 	RUTAIMG=/var/
 } fi;
 
-mkdir -p /var/tmp
-if (test "$?" != "0") then {
-	echo "No pudo crearse directorio /var/tmp para la bitácora";
-	exit 1;
-} fi;
-
 mkdir -p /var/www/tmp/
 echo "-+-+-+-+-+-+" >> /var/www/tmp/inst-adJ.bitacora
 echo "Bitácora de instalación " >> /var/www/tmp/inst-adJ.bitacora
@@ -1011,9 +1005,9 @@ if (test -f /usr/include/ressl.h) then {
 	rm -r /var/tmp
 	ln -s /tmp /var/tmp
 
-	groupdel _lkm
-	userdel smmsp
-	groupdel smmsp
+	groupdel _lkm > /dev/null 2>&1
+	userdel smmsp > /dev/null 2>&1
+	groupdel smmsp > /dev/null 2>&1
 
 	pkg_delete basico_OpenBSD
 	pkg_delete usuario_OpenBSD
@@ -2824,6 +2818,7 @@ for i in $PKG_PATH/*tgz; do
 	pkg_add -I -D updatedepends -D update -D libdepends -r $i >> /var/www/tmp/inst-adJ.bitacora 2>&1
 done;
 
+pkg_add -I -D installed sword-* 2>&1 | tee -a /var/www/tmp/inst-adJ.bitacora 
 pkg_add -I -D update -u 2>&1 | tee -a /var/www/tmp/inst-adJ.bitacora 
 
 # Configuraciones típicas

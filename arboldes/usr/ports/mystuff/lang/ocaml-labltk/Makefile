@@ -30,8 +30,8 @@ USE_GMAKE=	Yes
 
 BUILD_DEPENDS +=        lang/ocaml
 RUN_DEPENDS-graphics += lang/ocaml
-LIB_DEPENDS-tk=		tk->=8.5,<8.6:x11/tk/8.5
-WANTLIB-main =          c tk85
+LIB_DEPENDS-tk=		tk->=8.6:x11/tk/8.6
+WANTLIB-main =          c tk86
 
 ALL_TARGET=     all ${MODOCAML_NATIVE:S,Yes,opt,:S,No,,}
 
