@@ -106,7 +106,7 @@ read
 sudo cp /sbin/reboot /sbin/oreboot
 for i in xserv xfont xshare xbase game comp man site base; do
 	echo $i;
-	sudo tar -C / -xzphf $V$VESP-$ARQ/$i$VP.tgz
+	sudo tar -C / -xzphf $V$VESP-$ARQ/$i$VCORSP.tgz
 done
 echo "Tras el reinicio recuerde ejecutar:"
 echo "  cd /dev && ./MAKEDEV all"
