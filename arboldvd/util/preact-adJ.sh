@@ -16,16 +16,16 @@ if (test "$USER" != "root") then {
 	exit 1;
 } fi;
 
-mkdir -p /var/tmp
+mkdir -p /var/www/tmp
 if (test "$?" != "0") then {
-	echo "No pudo crearse directorio /var/tmp para la bitácora";
+	echo "No pudo crearse directorio /var/www/tmp para la bitácora";
 	exit 1;
 } fi;
 
-echo "-+-+-+-+-+-+" >> /var/tmp/preact-adJ.bitacora
-echo "Script de preactualización de adJ $VER ($ARCVER, $ARQ)" >> /var/tmp/preact-adJ.bitacora
-echo "---------------------------- " >> /var/tmp/preact-adJ.bitacora
-echo "Se recomienda ejecutarlo desde una terminal en X-Window" >> /var/tmp/preact-adJ.bitacora
+echo "-+-+-+-+-+-+" >> /var/www/tmp/preact-adJ.bitacora
+echo "Script de preactualización de adJ $VER ($ARCVER, $ARQ)" >> /var/www/tmp/preact-adJ.bitacora
+echo "---------------------------- " >> /var/www/tmp/preact-adJ.bitacora
+echo "Se recomienda ejecutarlo desde una terminal en X-Window" >> /var/www/tmp/preact-adJ.bitacora
 
 l=`ls /var/db/pkg/ | grep "^dialog-"`
 if (test "$l" = "") then {
@@ -38,17 +38,17 @@ vac="";
 mac="";
 
 if (test -f /$RUTAIMG/post.img) then {
-	echo "Existe imagen para datos encriptados de PostgreSQL /$RUTAIMG/post.img. " >> /var/tmp/preact-adJ.bitacora
-	echo "Suponiendo que la base PostgreSQL tendrá datos encriptados allí" >> /var/tmp/preact-adJ.bitacora
+	echo "Existe imagen para datos encriptados de PostgreSQL /$RUTAIMG/post.img. " >> /var/www/tmp/preact-adJ.bitacora
+	echo "Suponiendo que la base PostgreSQL tendrá datos encriptados allí" >> /var/www/tmp/preact-adJ.bitacora
 	postencripta="s";
 } fi
 clear;
 
 
-sh /etc/rc.local >> /var/tmp/preact-adJ.bitacora 2>&1; # En caso de que falte montar bien
+sh /etc/rc.local >> /var/www/tmp/preact-adJ.bitacora 2>&1; # En caso de que falte montar bien
 
 if (test "$postencripta" = "s") then {
-	echo "* Montar imagenes encriptadas durante arranque" >> /var/tmp/preact-adJ.bitacora;
+	echo "* Montar imagenes encriptadas durante arranque" >> /var/www/tmp/preact-adJ.bitacora;
 	activarcs montaencres
 	activarcs montaencpos
 
@@ -61,7 +61,7 @@ acuspos="-U$uspos"
 # Codificacion por defecto en versiones hasta 5.0
 dbenc="LATIN1";
 
-echo "* De requerirlo sacar respaldo de datos" >> /var/tmp/preact-adJ.bitacora
+echo "* De requerirlo sacar respaldo de datos" >> /var/www/tmp/preact-adJ.bitacora
 pgrep post > /dev/null 2>&1
 if (test "$?" = "0") then {
 	echo -n "psql -h /var/www/tmp $acuspos -c \"select usename from pg_user where usename='postgres';\"" > /tmp/cu.sh
@@ -88,24 +88,24 @@ if (test "$?" = "0") then {
 			rm -f /tmp/penc.txt
 			echo "psql -h/var/www/tmp $acuspos -c 'SHOW SERVER_ENCODING' > /tmp/penc.txt" > /tmp/cu.sh
 			chmod +x /tmp/cu.sh
-			cat /tmp/cu.sh >> /var/tmp/preact-adJ.bitacora
-			su - _postgresql /tmp/cu.sh >> /var/tmp/preact-adJ.bitacora;
+			cat /tmp/cu.sh >> /var/www/tmp/preact-adJ.bitacora
+			su - _postgresql /tmp/cu.sh >> /var/www/tmp/preact-adJ.bitacora;
 			if (test -f /tmp/penc.txt -a ! -z /tmp/penc.txt) then {
 				dbenc=`grep -v "(1 row)" /tmp/penc.txt | grep -v "server_encoding" | grep -v "[-]-----" | grep -v "^ *$" | sed -e "s/  *//g"`
 			} fi;
 			echo -n "pg_dumpall $acuspos --inserts --column-inserts --host=/var/www/tmp > /var/www/resbase/pga-conc.sql" > /tmp/cu.sh
 			chmod +x /tmp/cu.sh
-			cat /tmp/cu.sh >> /var/tmp/preact-adJ.bitacora
-			su - _postgresql /tmp/cu.sh >> /var/tmp/preact-adJ.bitacora;
+			cat /tmp/cu.sh >> /var/www/tmp/preact-adJ.bitacora
+			su - _postgresql /tmp/cu.sh >> /var/www/tmp/preact-adJ.bitacora;
 			grep "CREATE DATABASE" /var/www/resbase/pga-conc.sql | grep -v "ENCODING" > /tmp/cb.sed
 			sed -e "s/\(.*\);$/s\/\1;\/\1 ENCODING='$dbenc';\/g/g" /tmp/cb.sed  > /tmp/cb2.sed
-			cat /tmp/cb2.sed >> /var/tmp/preact-adJ.bitacora
+			cat /tmp/cb2.sed >> /var/www/tmp/preact-adJ.bitacora
 			grep -v "ALTER ROLE $uspos" /var/www/resbase/pga-conc.sql | sed -f /tmp/cb2.sed > /var/www/resbase/pga-$nb.sql
 		} else {
-			echo "PostgreSQL no está corriendo, no fue posible sacar copia" >> /var/tmp/preact-adJ.bitacora;
+			echo "PostgreSQL no está corriendo, no fue posible sacar copia" >> /var/www/tmp/preact-adJ.bitacora;
 		} fi;
 		if (test ! -s /var/www/resbase/pga-$nb.sql) then {
-			echo "* No fue posible sacar copia, por favor saquela manualmente en un archivo de nombre /var/www/resbase/pga-$nb.sql o asegurarse de sacarlo con pg_dumpall o en último caso sacando una copia del directorio /var/postgresql/data" | tee -a /var/tmp/preact-adJ.bitacora;
+			echo "* No fue posible sacar copia, por favor saquela manualmente en un archivo de nombre /var/www/resbase/pga-$nb.sql o asegurarse de sacarlo con pg_dumpall o en último caso sacando una copia del directorio /var/postgresql/data" | tee -a /var/www/tmp/preact-adJ.bitacora;
 			echo "* Vuelva a este script con 'exit'" 
 			sh
 		} fi;

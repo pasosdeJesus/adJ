@@ -1,17 +1,18 @@
-# $OpenBSD: Makefile,v 1.6 2015/08/22 15:14:14 jeremy Exp $
+# $OpenBSD: Makefile,v 1.8 2015/12/18 17:40:07 jeremy Exp $
 
 BROKEN-mips64 =		miniruby spins on rbconfig.rb
+BROKEN-hppa =		OOM when building ext/ripper/ripper.c
 
 COMMENT-main =		object oriented script language with threads
 COMMENT-gdbm =		gdbm interface for ruby
 COMMENT-tk =		tk interface for ruby
 COMMENT-ri_docs =	ri documentation files for ruby
 
-VERSION =		2.2.3
+VERSION =		2.2.4
 RUBYLIBREV =		2.2
 DISTNAME =		ruby-${VERSION}
 
-SHARED_LIBS =		ruby22	1.0
+SHARED_LIBS =		ruby22	1.1
 PKGNAME-main =		ruby-${VERSION}
 PKGNAME-gdbm =		ruby22-gdbm-${VERSION}
 PKGNAME-tk =		ruby22-tk-${VERSION}

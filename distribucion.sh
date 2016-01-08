@@ -381,6 +381,8 @@ EOF
 	#compilabase
 	echo "DESTDIR=$DESTDIR" | tee -a /var/www/tmp/distrib-adJ.bitacora;
 	cd /usr/src/etc && DESTDIR=/destdir nice make release | tee -a /var/www/tmp/distrib-adJ.bitacora;
+	sudo find $DESTDIR  -exec touch {} ';'
+	sudo find $RELEASEIR  -exec touch {} ';'
 } fi;
 
 
@@ -481,6 +483,7 @@ if (test "$sn" = "s") then {
 	} fi;
         mkdir -p ${DESTDIR} ${RELEASEDIR}
 	(cd $XSRCDIR; nice make release)
+	sudo find $DESTDIR  -exec touch {} ';'
 
 } fi;
 
@@ -550,7 +553,9 @@ if (test "$sn" = "s") then {
 
 	cp /usr/src/sys/arch/$ARQ/compile/APRENDIENDODEJESUS/bsd ${RELEASEDIR}/bsd
 	cp /usr/src/sys/arch/$ARQ/compile/APRENDIENDODEJESUS.MP/bsd ${RELEASEDIR}/bsd.mp
+	sudo find $DESTDIR -exec touch {} ';'
 	cd /usr/src/distrib/sets && sh checkflist
+	sudo find $RELEASEDIR  -exec touch {} ';'
 	cp $RELEASEDIR/* $dini/$V$VESP-$ARQ
 	rm -f $dini/$V$VESP-$ARQ/{MD5,CKSUM,index.txt,cd??.iso,}
 } fi;
@@ -574,6 +579,9 @@ function paquete {
 		# categoria va con nombre para paquetes en mystuff
 		cat=`echo $nom | sed -e "s/\/.*//g"`
 		d1="$nom"
+		if (test "$subd" != "") then {
+			d1="$d1/$subd"
+		} fi;
 		nom=`echo $nom | sed -e "s/.*\///g"`
 	} else {
 		l=`grep "^$nom-[0-9]" /usr/ports/INDEX | head -n 1`
@@ -598,7 +606,7 @@ function paquete {
 		echo "No es directorio $dir";
 		exit 1;
 	} fi;
-	echo "*> Creando paquete $nom:$cat" | tee -a /var/www/tmp/distrib-adJ.bitacora;
+	echo "*> Creando paquete $nom:$cat pasando a $dir" | tee -a /var/www/tmp/distrib-adJ.bitacora;
 	if (test "$PAQ_LIMPIA_PRIMERO" != "") then {
 		(cd "$dir" ; make clean; rm /usr/ports/packages/$ARQ/all/$nom-[0-9][0-9a-z.]*.tgz)
 	} fi;
@@ -609,11 +617,16 @@ function paquete {
 		echo "Si no lo ha hecho con signify -G -c \"Firma adJ $V para paquetes\" -n -s /etc/signify/adJ-$VP-pkg.sec -p /etc/signify/adJ-$VP-pkg.pub"
 		exit 1;
 	} fi;
-	echo "*> Copia" | tee -a /var/www/tmp/distrib-adJ.bitacora;
+	echo "*> Copia $copiar" | tee -a /var/www/tmp/distrib-adJ.bitacora;
 	if (test "$copiar" = "") then {
-		f1=`ls /usr/ports/packages/$ARQ/all/$nom[-0-9][0-9a-z.]*.tgz | head -n 1`
-		f2=`ls $dini/$V$VESP-$ARQ/$dest/$nom[-0-9][0-9a-z.]*.tgz | head -n 1`
-		echo "*> simple f1=$f1, f2=$f2 " | tee -a /var/www/tmp/distrib-adJ.bitacora;
+#		if (test "$subd" != "") {
+			f1=`ls /usr/ports/packages/$ARQ/all/$nom-$subd[-0-9][0-9a-z.]*.tgz | head -n 1`
+			f2=`ls $dini/$V$VESP-$ARQ/$dest/$nom-$subd[-0-9][0-9a-z.]*.tgz | head -n 1`
+#		} else {
+#			f1=`ls /usr/ports/packages/$ARQ/all/$nom[-0-9][0-9a-z.]*.tgz | head -n 1`
+#			f2=`ls $dini/$V$VESP-$ARQ/$dest/$nom[-0-9][0-9a-z.]*.tgz | head -n 1`
+#		} fi;
+		echo "*> simple f1=$f1, f2=$f2, subd=$subd " | tee -a /var/www/tmp/distrib-adJ.bitacora;
 		if (test ! -f "$f2" -o "$f2" -ot "$f1") then {
 			echo "*> Firmando y copiando /usr/ports/packages/$ARQ/all/$nom-*.tgz" | tee -a /var/www/tmp/distrib-adJ.bitacora
 			cmd="rm -f $dini/$V$VESP-$ARQ/$dest/$nom-[0-9][0-9a-z.]*.tgz"
@@ -630,9 +643,16 @@ function paquete {
 		} fi;
 	} else {
 		for i in $copiar; do
-			f1=`ls /usr/ports/packages/$ARQ/all/$i*.tgz | head -n 1`
-			f2=`ls $dini/$V$VESP-$ARQ/$dest/$i*.tgz | head -n 1`
-			echo "*> varios copiar=$copiar, i=$i f1=$f1, f2=$f2 " | tee -a /var/www/tmp/distrib-adJ.bitacora;
+			if (test "$subd" != "") then {
+				echo "OJO subd no vacio: /usr/ports/packages/$ARQ/all/$i-$subd*.tgz " >> /var/www/tmp/distrib-adJ.bitacora
+				f1=`ls /usr/ports/packages/$ARQ/all/$i-$subd*.tgz | head -n 1`
+				f2=`ls $dini/$V$VESP-$ARQ/$dest/$i-$subd*.tgz | head -n 1`
+			} else {
+				echo "OJO subd vacio"  >> /var/www/tmp/distrib-adJ.bitacora
+				f1=`ls /usr/ports/packages/$ARQ/all/$i*.tgz | head -n 1`
+				f2=`ls $dini/$V$VESP-$ARQ/$dest/$i*.tgz | head -n 1`
+			} fi;
+			echo "*> varios copiar=$copiar, d1=$d1, nom=$nom, i=$i f1=$f1, f2=$f2 " | tee -a /var/www/tmp/distrib-adJ.bitacora;
 			if (test ! -f "$f2" -o "$f2" -ot "$f1") then {
 				cmd="rm -f $f2"
 				echo "cmd=$cmd";
@@ -740,15 +760,15 @@ if (test "$sn" = "s") then {
 	paquete xfe
 
 	####
-	# Retroportados de current para cerrar fallas o actualizar
+	# Retroportados de versión ste o current para cerrar fallas o actualizar
 	# Deben estar en arboldes/usr/ports/mystuff y en /usr/ports de current
 	paquete chromium
 	paquete node 
-	paquete ruby paquetes "ruby ruby22-ri_docs" 2.2
+	paquete ruby paquetes "ruby ruby22-ri_docs" 2.3
 
 	###
         # Actualizados.  Están desactualizado en OpenBSD estable y current
-	paquete php paquetes "php php-fpm php-gd php-intl php-ldap php-mcrypt php-pdo_pgsql php-pgsql php-zip" 5.6
+	paquete php paquetes "php php-curl php-fpm php-gd php-intl php-ldap php-mcrypt php-pdo_pgsql php-pgsql php-zip" 5.6
 	paquete pear-Auth
 	paquete pear-DB_DataObject
        		

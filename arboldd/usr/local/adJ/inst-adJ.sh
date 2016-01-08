@@ -31,12 +31,6 @@ if (test "$RUTAIMG" = "") then {
 	RUTAIMG=/var/
 } fi;
 
-mkdir -p /var/tmp
-if (test "$?" != "0") then {
-	echo "No pudo crearse directorio /var/tmp para la bitácora";
-	exit 1;
-} fi;
-
 mkdir -p /var/www/tmp/
 echo "-+-+-+-+-+-+" >> /var/www/tmp/inst-adJ.bitacora
 echo "Bitácora de instalación " >> /var/www/tmp/inst-adJ.bitacora
@@ -1941,11 +1935,11 @@ if (test "$p" = "") then {
 	echo $p >> /var/www/tmp/inst-adJ.bitacora 2>&1;
 	pkg_add -I -D libdepends -D update -D updatedepends -r $p >> /var/www/tmp/inst-adJ.bitacora 2>&1
 	rm -f /var/www/conf/modules/php.conf /var/www/conf/php.ini /etc/php.ini
-	ln -s /var/www/conf/modules.sample/php-5.5.conf \
+	ln -s /var/www/conf/modules.sample/php-5.6.conf \
 		/var/www/conf/modules/php.conf
 	for sp in gd intl ldap mcrypt pdo_pgsql pgsql zip; do
-		rm -f /etc/php-5.5/$sp
-		ln -fs /etc/php-5.5.sample/$sp.ini /etc/php-5.5/
+		rm -f /etc/php-5.6/$sp
+		ln -fs /etc/php-5.6.sample/$sp.ini /etc/php-5.6/
 	done;
 	if (test "$sweb" = "apache") then {
 		chmod +w /var/www/conf/httpd.conf

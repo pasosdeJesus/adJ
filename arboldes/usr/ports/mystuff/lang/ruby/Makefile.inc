@@ -28,7 +28,9 @@ SUB ?=			${MACHINE_ARCH:S/amd64/x86_64/}-openbsd
 SUBST_VARS +=		SUB REV
 FILESDIR ?=		${.CURDIR}/../files
 
+FIX_RBCONFIG = sed 's/INSTALL_ARGS/-c -o ${BINOWN} -g ${BINGRP}/' < \
+	${FILESDIR}/rbconfig_fix.rb >> \
+	${PREFIX}/lib/ruby/${RUBYLIBREV}/${SUB}/rbconfig.rb
+
 post-install:
-	sed 's/INSTALL_ARGS/-c -o ${BINOWN} -g ${BINGRP}/' < \
-		${FILESDIR}/rbconfig_fix.rb >> \
-		${PREFIX}/lib/ruby/${RUBYLIBREV}/${SUB}/rbconfig.rb
+	${FIX_RBCONFIG}
