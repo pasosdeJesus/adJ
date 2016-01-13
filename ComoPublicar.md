@@ -22,37 +22,38 @@ Pasos importantes para publicar versión beta
 
 1. Recompilar paquetes con actualizaciones de seguridad o mejoras
 2. Retroportar paquetes
-3. Retocar fecha de publicacion en ```Novedades.ewiki``` y publicar escondido en
+3. Cambiar versión en ver.sh, arboldd/usr/local/adJ/inst-adJ.sh, Actualiza.md
+4. Retocar fecha de publicacion en ```Novedades.ewiki``` y publicar escondido en
   http://aprendiendo.pasosdeJesus.org
-4. Retocar ```Dedicatoria.txt``` y archivos *.txt y regenar en distribución (sin
+5. Retocar ```Dedicatoria.txt``` y archivos *.txt y regenar en distribución (sin
   paquetes ni otras compilaciones) con:
 	```
 	sudo ./distribucion.sh
 	```
-5. En computador de desarrollo tras configurar ```var-local.sh``` enviar a
+6. En computador de desarrollo tras configurar ```var-local.sh``` enviar a
 adJ.pasosdeJesus.org:
 	```
 	hdes/rsync-aotro.sh
 	```
-6. En adJ.pasosdeJesus.org
+7. En adJ.pasosdeJesus.org
 	```
 	hdes/creaiso.sh
 	cp -rf AprendiendoDeJesus-5.7-amd64.iso 5.7-amd64 /dirftp
 	mkdir /dirftp/5.7-amd64-extra
 	rsync compdes:/usr/ports/packages/amd64/all/* /dirftp/5.7-amd64-extra
 	```
-7. Enviar CD también a github.com como release
-8. Verificar operación de:
-  * http://structio.sf.net/guias/
-  * http://sivel.sf.net/guias/
+8. Enviar CD también a github.com como release
+9. Verificar operación de:
+  * http://pasosdeJesus.github.io/basico_adJ http://pasosdeJesus.github.io/usuario_adJ http://pasosdeJesus.github.io/servidor_adJ
+  * http://sivel.sf.net/
   * http://aprendiendo.pasosdeJesus.org
   * http://www.pasosdeJesus.org
   * http://adJ.pasosdeJesus.org
   * rsync://adJ.pasosdeJesus.org
-9. Poner Tag en github e iniciar rama
+10. Poner Tag en github e iniciar rama
 	```
-	git tag -a v5.7b1 -m "Version 5.7 beta 1"
-	git push origin v5.7b1
+	git tag -a v5.7p2 -m "Version 5.7p2"
+	git push origin v5.7p2
 	...
 	git checkout -b ADJ_5_7
 	git push origin ADJ_5_7
