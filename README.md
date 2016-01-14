@@ -1,6 +1,8 @@
 adJ
 ===
 
+[![Join the chat at https://gitter.im/pasosdeJesus/adJ](https://badges.gitter.im/pasosdeJesus/adJ.svg)](https://gitter.im/pasosdeJesus/adJ?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos 
 y Educativas y que anhelamos que Jesús use durante el Milenio.
 
