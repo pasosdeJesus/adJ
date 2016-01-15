@@ -25,8 +25,8 @@ Pasos importantes para publicar versión beta
 3. Cambiar versión en ver.sh, arboldd/usr/local/adJ/inst-adJ.sh, Actualiza.md
 4. Retocar fecha de publicacion en ```Novedades.ewiki``` y publicar escondido en
   http://aprendiendo.pasosdeJesus.org
-5. Retocar ```Dedicatoria.txt``` y archivos *.txt y regenar en distribución (sin
-  paquetes ni otras compilaciones) con:
+5. Retocar ```Dedicatoria.md``` y archivos *.md (por lo menos versión),
+   regenar en distribución (sin paquetes ni otras compilaciones) con:
 	```
 	sudo ./distribucion.sh
 	```
@@ -58,7 +58,7 @@ adJ.pasosdeJesus.org:
 	git checkout -b ADJ_5_7
 	git push origin ADJ_5_7
 	```
-10. Publicar en lista de desarrollo
+11. Publicar en lista de desarrollo
 
 Pasos importantes para publicar versión mayor
 --------------------------------------------

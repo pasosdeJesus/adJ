@@ -40,12 +40,12 @@ export autoElimXDist=n
 # Elimina distribución de Xenocara
 export autoJuegosInstalacion=n
 # Crear juegos de instalación en subdirectorio de este
-export autoTodosPaquetes=s
+export autoTodosPaquetes=n
 # Compilar todos los paquetes (util en Octubre y Abril)
 export autoPaquetes=n
 # Compilar paquetes especiales que hacen parte de la distribución
 
-export autoMasPaquetes=s
+export autoMasPaquetes=n
 # Descargar resto de paquetes de repositorio PKG_PATH
 export autoMasPaquetesInv=n
 # Descargar resto de paquetes en orden alfabético inverso
