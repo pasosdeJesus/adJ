@@ -1087,3 +1087,6 @@ l=`(cd $V$VESP-$ARQ; ls *tgz INSTALL.amd64 bsd* cd*)`;
 cmd="(cd $V$VESP-$ARQ; cksum -a sha256 $l >  SHA256; signify -S -e -s /etc/signify/adJ-$VP-base.sec -x SHA256.sig -m SHA256)";
 echo $cmd;
 eval $cmd;
+cmd="find $V$VESP-$ARQ  -exec touch {} ';'"
+echo $cmd;
+eval $cmd;
