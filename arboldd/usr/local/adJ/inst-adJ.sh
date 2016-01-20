@@ -5,7 +5,7 @@
 
 VER=5.8
 REV=0
-VESP=""
+VESP="a1"
 VERP=58
 
 # Falta /standard/root.hint
@@ -1074,7 +1074,7 @@ if (test "$?" != "0") then {
 	ed /etc/rc.local >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 /. \/etc\/rc.conf
 a
-
+pkg_scripts=`rcctl order`
 if (test " \$TERM" != "") then {
 	for _r in \${pkg_scripts}; do
 		echo -n " \${_r}";

@@ -1,5 +1,5 @@
 Actualización a Aprendiendo De Jesús 5.8a1
-========================================
+==========================================
 
 La actualización consta de 3 partes:
 
@@ -29,7 +29,7 @@ La actualización consta de 3 partes:
   Si descargó fuentes con el procedimiento anterior ejecutelo con:
 
 	```
-       	sudo ~/comp/adJ/5.8p1-amd64/util/preact-adJ.sh
+       	sudo ~/comp/adJ/5.8a1-amd64/util/preact-adJ.sh
 	```
 
 2. Actualizar el sistema base:
