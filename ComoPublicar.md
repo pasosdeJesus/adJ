@@ -42,15 +42,14 @@ adJ.pasosdeJesus.org:
 	mkdir /dirftp/5.7-amd64-extra
 	rsync compdes:/usr/ports/packages/amd64/all/* /dirftp/5.7-amd64-extra
 	```
-8. Enviar CD también a github.com como release
-9. Verificar operación de:
+8. Verificar operación de:
   * http://pasosdeJesus.github.io/basico_adJ http://pasosdeJesus.github.io/usuario_adJ http://pasosdeJesus.github.io/servidor_adJ
   * http://sivel.sf.net/
   * http://aprendiendo.pasosdeJesus.org
   * http://www.pasosdeJesus.org
   * http://adJ.pasosdeJesus.org
   * rsync://adJ.pasosdeJesus.org
-10. Poner Tag en github e iniciar rama
+9. Poner Tag en github e iniciar rama
 	```
 	git tag -a v5.7p2 -m "Version 5.7p2"
 	git push origin v5.7p2
@@ -58,7 +57,7 @@ adJ.pasosdeJesus.org:
 	git checkout -b ADJ_5_7
 	git push origin ADJ_5_7
 	```
-11. Publicar en lista de desarrollo
+10. Publicar en lista de desarrollo
 
 Pasos importantes para publicar versión mayor
 --------------------------------------------
