@@ -5,8 +5,13 @@
 
 VER=5.8
 REV=0
+<<<<<<< HEAD
 VESP=""
 VERP=58
+=======
+VESP="p3"
+VERP=57
+>>>>>>> cc3a7826ad1ba8b4a37a120fc9884a01f11abfd1
 
 # Falta /standard/root.hint
 
@@ -1074,7 +1079,7 @@ if (test "$?" != "0") then {
 	ed /etc/rc.local >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 /. \/etc\/rc.conf
 a
-
+pkg_scripts=`rcctl order`
 if (test " \$TERM" != "") then {
 	for _r in \${pkg_scripts}; do
 		echo -n " \${_r}";
@@ -1692,12 +1697,12 @@ postgresql:\
 		echo "---" >> /var/www/tmp/inst-adJ.bitacora;
 	} fi;
 	ed /var/postgresql/data/postgresql.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
-,s/#unix_socket_directory *=.*/unix_socket_directory = '\/var\/www\/tmp'/g
+,s/#unix_socket_directory *=.*/unix_socket_directory = '\/var\/www\/var\/run\/postgresql'/g
 w
 q
 EOF
 	ed /var/postgresql/data/postgresql.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
-,s/#unix_socket_directories *=.*/unix_socket_directories = '\/var\/www\/tmp'/g
+,s/#unix_socket_directories *=.*/unix_socket_directories = '\/var\/www\/var\/run\/postgresql'/g
 w
 q
 EOF

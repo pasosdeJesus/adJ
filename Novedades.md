@@ -2,8 +2,8 @@
 Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y que esperamos será la elegida por Jesús durante el Milenio.
 
-##Versión: 5.8a1%%%
-Fecha de publicación: 29/Dic/2015
+##Versión: 5.8b1%%%
+Fecha de publicación: 15/Feb/2015
 
 ###NOVEDADES
 
@@ -13,6 +13,7 @@ Con respecto a OpenBSD 5.8 para amd64 y a la edición anterior de este DVD
 ###KERNEL Y SISTEMA BASE
 
 * Símbolo __adJ__ predefinido en gcc.  Facilita uso de xlocale y características únicas de adJ respecto a OpenBSD en algunos portes --como libunistring.
+* Parches de seguridad del sistema base hasta 10.Feb.2015, que cierran las 11 fallas de seguridad y las 10 de robustez resueltas para fuentes de OpenBSD descritas en [http://www.openbsd.org/errata57.html]. Igualmente recompilados binarios que dependían de librería con falla (libcrypto): isakmpd, iked y  ftp y que serían susceptibles a denegación de servicio.  Los binarios distribuidos de OpenBSD 5.7 no resuelven estas fallas.
 * Utilidad ==localedef== especificada en el estándar POSIX para convertir formatos de fechas y horas en un formato estándar POSIX al formato de OpenBSD.  Configuraciones regionales de países tomadas del CLDR de Unicode.
 * Soporte en la librería de C para presentar fechas, horas, cantidades monetarias, números y ordenamientos alfabéticos (cotejación) con las convenciones de cada país de latinoamérica (y de otros locales soportados por OpenBSD) de acuerdo al estándar POSIX. Opera bien en codificaciones de 8 bits o para español en codificación UTF-8. Buena parte de este soporte, así como el de xlocale se basaron en FreeBSD.  Estas mejoras fueron aportadas a OpenBSD (cotejación desde adJ 5.2, cantidades monetarias y números desde 5.4 y fechas y horas desde 5.5) y se anhela su integración en futuras versiones.    Así en adJ por ejemplo los ordenamientos alfabéticos en !LibreOffice y otros programas son correctos en español (que no ocurre en OpenBSD).
 * Parches de seguridad del sistema base hasta 27.Oct.2015, que cierran las 10 fallas de seguridad y las 8 de robustez resueltas para fuentes de OpenBSD en http://www.openbsd.org/errata58.html. Los binarios distribuidos de OpenBSD 5.8 no resuelven estas fallas.
@@ -56,9 +57,6 @@ Entre las novedades reportadas en las `Notas de publicación de OpenBSD 5.8' des
 
 En adJ es en español, consta de: (a) preparación, (b) instalación/actualización del sistema base y (c) instalación de aplicaciones y entorno.  Por favor vea más detalles en [ Actualiza.md | https://github.com/pasosdeJesus/adJ/blob/ADJ_5_8/Actualiza.md ]
 
-Desde 5.7 el instalador no incluye etc ni xetc pues hacen parte de base y xbase
-Desde 5.7 la bitácora de instalación ya no se ubica en /var/tmp sino en /var/www/tmp 
-
 
 !PAQUETES EXCLUSIVOS DE ADJ
 
@@ -66,7 +64,7 @@ Puede ver el listado completo en https://github.com/pasosdeJesus/adJ/blob/master
 * SIVeL 1.2.  Si no lo hahecho se recomienda migrar a esta versión estable (también se incluye SIVeL 1.1.7 para facilitar el proceso a quienes usen SIVeL 1.1.x) ver http://sivel.sourceforge.net/1.2/actualizacion-sivel.html#actualizaciondeunounoaunodos
 * SIVeL 2.0a7. Versión alfa de SIVeL 2. Escrita sobre Ruby on Rails.
 * Mt77 1.0a1. Buscador rápido y preciso para español, versión alfa.
-* PostgreSQL 9.4.5 retroportado y recompilado para cerrar fallas, pero además con soporte UTF-8 y ordenamientos alfabéticos en español. En adJ la información queda cifrada cuando así se elije al instalar o actualizar adJ.  Ver detalles de como usar cotejación en http://aprendiendo.pasosdeJesus.org/?id=i18n
+* PostgreSQL 9.4.5 retroportado y recompilado para cerrar fallas, pero además con soporte UTF-8 y ordenamientos alfabéticos en español.  Desde adJ 5.8 socket reubicado de ```/var/www/tmp``` a ```/var/www/var/run/postgresql```. En adJ la información queda cifrada cuando así se elije al instalar o actualizar adJ.  Ver detalles de como usar cotejación en http://aprendiendo.pasosdeJesus.org/?id=i18n
 * ruby 2.2.4 retroportado de OpenBSD-current y probado con aplicaciones Rails 4.2.4 Ver http://dhobsd.pasosdeJesus.org/Ruby_on_Rails_en_OpenBSD.html 
 * Para activar soporte de xlocale se ha recompilado los siguientes paquetes que están en portes de OpenBSD 5.8: boost, djvulibre, ggrep, glib2, gtar, libidn, libxslt, llvm, scribus, vlc, wget, wxWidgets-gtk2
 * Para cerrar fallas se han recompilado los siguientes paquetes a partir de portes actualizados de OpenBSD 5.8 (pero no incluidos en binarios de ese sistema):  cups, cups-libs, cups-filters, curl, gdk-pixbuf, ghostscript, gnutls, icu4c, libksba, libtasn1, libwmf, libxml, net-snmp, netpbm, p5-Mail-SpamAssassin, polkit, php-5.5.30, qemu, rrdtool
@@ -78,12 +76,12 @@ Puede ver el listado completo en https://github.com/pasosdeJesus/adJ/blob/master
 
 !PAQUETES DE OPENBSD
 
-Los paquetes para OpenBSD 5.8 también funcionan sin cambios, resaltamos:
+Los paquetes para OpenBSD 5.8 también funcionan sin cambios. Resaltamos:
 * nginx 1.7.1 que puede ser util mientras migra a OpenBSD httpd, ver http://pasosdeJesus.github.io/servidor_adJ/sevidorweb.html#openbsd-httpd
 * !LibreOffice actualizado a 4.1.6.2, gimp a 2.8.10
 * LLVM/Clang a 3.5.2040228p8 asi como los demás lenguajes de programación
 * No hay paquete para mysql, ha sido remplazado por mariadb, ver http://pasosdeJesus.github.io/servidor_adJ/mariadb.html
-* Se incluyen en total 517 paquetes, en los repositorios de paquetes para OpenBSD 5.8 hay 8588 disponibles para amd64
+* Se incluyen en total 518 paquetes, en los repositorios de paquetes para OpenBSD 5.7 hay 8588 disponibles para amd64
 
 
 !ESCRITORIO
@@ -100,14 +98,14 @@ y ponga la variable LANG en otro valor por ejemplo:
 !DOCUMENTACIÓN
 
 * Se han hecho diversas pruebas del uso de adJ sobre IPv6. Se ha comprobado que la pila de red de OpenBSD puede conectarse tanto con túneles como directamente a conexiones IPv6 solas y doble pila. Respecto a servicios se ha comprobado que operan bien al menos Xorg, cupsd, nginx, smtpd, sshd, named, ftpd, rsync, dovecot.  También se ha comprobado la operación correcta sobre IPv6 de la pila Ruby on Rails incluida en adJ. Para facilitar la adopción de IPv6 --extremadamente retrasada en Colombia-- hemos iniciado ejercicios y enlaces a material público de un curso de IPv6 de LACNIC en: 
-	http://dhobsd.pasosdejesus.org/ipv6-basico-lacnic-2015.html
+	[http://dhobsd.pasosdejesus.org/ipv6-basico-lacnic-2015.html]
 * Se han hecho pruebas del uso de adJ sobre conexiones ethernet 10G con cableado categoria 6A, con tarjetas de red de 10G y switches de 10G. También se han hecho pruebas exitosas de cortafuegos redundantes para brindar alta disponibilidad con costos moderados. Estaremos documentando.
 
 !!!DESCARGAS
 
 Puede descargar imagenes ISO para amd64:
 
-* Protocolo HTTP: http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus
+* Protocolo HTTP: [http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus]
 * Protocolo RSYNC: ==rsync !rsync://rsync.pasosdeJesus.org/AprendiendoDeJesus==
 * Ya no se soporta el protocolo FTP
 
@@ -130,9 +128,9 @@ Si no tiene experiencia con esta distribución de OpenBSD para servidores
 y cortafuegos, que es segura, usable en español y amigable para cristian@s,
 puede aprender a instalar o actualizar con:
 # El curso/⁠reto que da una medalla a quienes completen:
-  https://p2pu.org/es/groups/openbsd-adj-como-sistema-de-escritorio/
+  [https://p2pu.org/es/groups/openbsd-adj-como-sistema-de-escritorio/]
 # La guía de instalación:
-  http://pasosdeJesus.github.io/guias/usuario_adJ/sobre-la-instalacion.html
+  [http://pasosdeJesus.github.io/guias/usuario_adJ/sobre-la-instalacion.html]
 
 
 !!! SOPORTE
@@ -144,7 +142,7 @@ Si su organización necesita un soporte retribuido lo invitamos a escribirnos al
 
 !!!DESARROLLO
 
-Lo invitamos a consultar https://github.com/pasosdeJesus/adJ y a enviar sus mejoras.
+Lo invitamos a consultar [https://github.com/pasosdeJesus/adJ] y a enviar sus mejoras.
 
 
 !!! FE DE ERRATAS
