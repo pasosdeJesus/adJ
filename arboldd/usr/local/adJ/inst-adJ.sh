@@ -5,13 +5,8 @@
 
 VER=5.8
 REV=0
-<<<<<<< HEAD
-VESP=""
+VESP="b1"
 VERP=58
-=======
-VESP="p3"
-VERP=57
->>>>>>> cc3a7826ad1ba8b4a37a120fc9884a01f11abfd1
 
 # Falta /standard/root.hint
 
