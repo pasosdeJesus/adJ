@@ -90,6 +90,9 @@ if (test "$sn" = "s") then {
 	} fi;
 	cvs -z3 update -Pd -r$R
 	if (test -d /usr/src$VP-orig/) then {
+		rsync -ravzp --delete /usr/src$VP-orig/* /usr/src/
+	} fi;
+	if (test -d /usr/src$VP-orig/) then {
 		cd /usr/src$VP-orig/sys
 	} else {
 		cd /usr/src/sys
@@ -101,6 +104,9 @@ if (test "$sn" = "s") then {
 		done;
 	} fi;
 	cvs -z3 update -Pd -r$R
+	if (test -d /usr/src$VP-orig/) then {
+		rsync -ravzp --delete /usr/src$VP-orig/sys/* /usr/src/sys/
+	} fi;
 	if (test -d /usr/xenocara$VP-orig/) then {
 		cd /usr/xenocara$VP-orig/sys
 	} else {
@@ -113,7 +119,14 @@ if (test "$sn" = "s") then {
 		done;
 	} fi;
 	cvs -z3 update -Pd -r$R
-	cd /usr/ports/
+	if (test -d /usr/xenocara$VP-orig/) then {
+		rsync -ravzp --delete /usr/xenocara$VP-orig/* $XSRCDIR
+	} fi;
+	if (test -d /usr/ports$VP-orig/) then {
+		cd /usr/ports$VP-orig/sys
+	} else {
+		cd /usr/ports/
+	} fi;
 	if (test ! -f CVS/Root) then {
 		for i in `find . -name CVS`; do 
 			echo $i;
@@ -124,6 +137,9 @@ if (test "$sn" = "s") then {
 		done;
 	} fi;
 	cvs -z3 update -Pd -r$R
+	if (test -d /usr/ports$VP-orig/) then {
+		rsync -ravzp /usr/ports$VP-orig/* $XSRCDIR
+	} fi;
 } fi;
 
 echo " *> Transformar y compilar kernel APRENDIENDODEJESUS" | tee -a /var/www/tmp/distrib-adJ.bitacora

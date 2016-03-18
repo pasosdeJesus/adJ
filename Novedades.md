@@ -13,10 +13,9 @@ Con respecto a OpenBSD 5.8 para amd64 y a la edición anterior de este DVD
 ###KERNEL Y SISTEMA BASE
 
 * Símbolo __adJ__ predefinido en gcc.  Facilita uso de xlocale y características únicas de adJ respecto a OpenBSD en algunos portes --como libunistring.
-* Parches de seguridad del sistema base hasta 10.Feb.2015, que cierran las 11 fallas de seguridad y las 10 de robustez resueltas para fuentes de OpenBSD descritas en [http://www.openbsd.org/errata57.html]. Igualmente recompilados binarios que dependían de librería con falla (libcrypto): isakmpd, iked y  ftp y que serían susceptibles a denegación de servicio.  Los binarios distribuidos de OpenBSD 5.7 no resuelven estas fallas.
+* Parches de seguridad del sistema base hasta 10.Feb.2015, que cierran las 3 fallas de seguridad y las 7 de robustez resueltas para fuentes de OpenBSD descritas en [http://www.openbsd.org/errata58.html]. Igualmente recompilados binarios que dependían de librería con falla (libcrypto): isakmpd, iked y  ftp y que serían susceptibles a denegación de servicio.  Los binarios distribuidos de OpenBSD 5.8 no resuelven estas fallas.
 * Utilidad ==localedef== especificada en el estándar POSIX para convertir formatos de fechas y horas en un formato estándar POSIX al formato de OpenBSD.  Configuraciones regionales de países tomadas del CLDR de Unicode.
 * Soporte en la librería de C para presentar fechas, horas, cantidades monetarias, números y ordenamientos alfabéticos (cotejación) con las convenciones de cada país de latinoamérica (y de otros locales soportados por OpenBSD) de acuerdo al estándar POSIX. Opera bien en codificaciones de 8 bits o para español en codificación UTF-8. Buena parte de este soporte, así como el de xlocale se basaron en FreeBSD.  Estas mejoras fueron aportadas a OpenBSD (cotejación desde adJ 5.2, cantidades monetarias y números desde 5.4 y fechas y horas desde 5.5) y se anhela su integración en futuras versiones.    Así en adJ por ejemplo los ordenamientos alfabéticos en !LibreOffice y otros programas son correctos en español (que no ocurre en OpenBSD).
-* Parches de seguridad del sistema base hasta 27.Oct.2015, que cierran las 10 fallas de seguridad y las 8 de robustez resueltas para fuentes de OpenBSD en http://www.openbsd.org/errata58.html. Los binarios distribuidos de OpenBSD 5.8 no resuelven estas fallas.
 * Retroportados, recompilados o mejorados más de 25 paquetes de OpenBSD para cerrar fallas de seguridad o emplear xlocale,  ver detalles en sección PAQUETES EXCLUSIVOS DE ADJ.
 * Hemos remplazando `daemon' por `servicio' en buena parte del sistema base (ver por ejemplo ==vmstat -s== o ==less /var/log/servicio== o ==man servicio==).  
 
@@ -61,7 +60,7 @@ En adJ es en español, consta de: (a) preparación, (b) instalación/actualizaci
 !PAQUETES EXCLUSIVOS DE ADJ
 
 Puede ver el listado completo en https://github.com/pasosdeJesus/adJ/blob/master/Contenido.txt a continuación se describen sólo novedades respecto a la versión anterior de adJ y OpenBSD 5.8:
-* SIVeL 1.2.  Si no lo hahecho se recomienda migrar a esta versión estable (también se incluye SIVeL 1.1.7 para facilitar el proceso a quienes usen SIVeL 1.1.x) ver http://sivel.sourceforge.net/1.2/actualizacion-sivel.html#actualizaciondeunounoaunodos
+* SIVeL 1.2.  Ver http://sivel.sourceforge.net/1.2/actualizacion-sivel.html#actualizaciondeunounoaunodos
 * SIVeL 2.0a7. Versión alfa de SIVeL 2. Escrita sobre Ruby on Rails.
 * Mt77 1.0a1. Buscador rápido y preciso para español, versión alfa.
 * PostgreSQL 9.4.5 retroportado y recompilado para cerrar fallas, pero además con soporte UTF-8 y ordenamientos alfabéticos en español.  Desde adJ 5.8 socket reubicado de ```/var/www/tmp``` a ```/var/www/var/run/postgresql```. En adJ la información queda cifrada cuando así se elije al instalar o actualizar adJ.  Ver detalles de como usar cotejación en http://aprendiendo.pasosdeJesus.org/?id=i18n
