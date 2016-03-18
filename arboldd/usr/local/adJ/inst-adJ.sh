@@ -1486,13 +1486,32 @@ else {
 
 acuspos="-U$uspos"
 
+# Localizacion del socket hasta 5.7 era /var/www/tmp a partir de 5.8 /var/www/var/run/postgresql
+if (test "$SOCKPSQL" != "") then {
+  sockpsql="$SOCKPSQL";
+} else {
+  sockpsql="/var/www/var/run/postgresql"
+} fi;
+echo "* Detectando socket de PostgreSQL en $sockpsql" >> /var/www/tmp/inst-adJ.bitacora;
+# Detectar socket de PostgreSQL
+if (test ! -S "$sockpsql/.s.PGSQL.5432") then {
+  echo "* No se encontró socket de PostgreSQL en $sockpsql";
+  sockpsql="/var/www/tmp"
+  echo "* Detectando socket de PostgreSQL en $sockpsql" >> /var/www/tmp/inst-adJ.bitacora;
+  if (test ! -S "$sockpsql/.s.PGSQL.5432") then {
+    echo "* Tampoco se encontró socket de PostgreSQL en $sockpsql";
+    echo "* Puede ejecutar especificando la ruta del socket de PostgreSQL en variable SOCKPSQL";
+    exit 1;
+  } fi;
+} fi;
+
 # Codificacion por defecto en versiones hasta 5.0
 dbenc="LATIN1";
 
 echo "* De requerirlo sacar respaldo de datos" >> /var/www/tmp/inst-adJ.bitacora
 pgrep post > /dev/null 2>&1
 if (test "$?" = "0") then {
-	echo -n "psql -h /var/www/tmp $acuspos -c \"select usename from pg_user where usename='postgres';\"" > /tmp/cu.sh
+	echo -n "psql -h $sockpsql $acuspos -c \"select usename from pg_user where usename='postgres';\"" > /tmp/cu.sh
        	su - _postgresql /tmp/cu.sh
 	if (test "$?" != "0") then {
 		us='_postgresql';
@@ -1514,14 +1533,14 @@ if (test "$?" = "0") then {
 			chmod +x /var/www/resbase/
 			chown _postgresql:_postgresql /var/www/resbase/pga-conc.sql
 			rm -f /tmp/penc.txt
-			echo "psql -h/var/www/tmp $acuspos -c 'SHOW SERVER_ENCODING' > /tmp/penc.txt" > /tmp/cu.sh
+			echo "psql -h$sockpsql $acuspos -c 'SHOW SERVER_ENCODING' > /tmp/penc.txt" > /tmp/cu.sh
 			chmod +x /tmp/cu.sh
 			cat /tmp/cu.sh >> /var/www/tmp/inst-adJ.bitacora
 			su - _postgresql /tmp/cu.sh >> /var/www/tmp/inst-adJ.bitacora;
 			if (test -f /tmp/penc.txt -a ! -z /tmp/penc.txt) then {
 				dbenc=`grep -v "(1 row)" /tmp/penc.txt | grep -v "server_encoding" | grep -v "[-]-----" | grep -v "^ *$" | sed -e "s/  *//g"`
 			} fi;
-			echo "pg_dumpall $acuspos --inserts --column-inserts --host=/var/www/tmp > /var/www/resbase/pga-conc.sql" > /tmp/cu.sh
+			echo "pg_dumpall $acuspos --inserts --column-inserts --host=$sockpsql > /var/www/resbase/pga-conc.sql" > /tmp/cu.sh
 			echo "if (test \"\$?\" != \"0\") then {" >> /tmp/cu.sh 
 			echo "  echo \"No pudo completarse la copia\";" >> /tmp/cu.sh 
 			echo "  exit 1;" >> /tmp/cu.sh 
@@ -1751,7 +1770,7 @@ if (test -f "$pb") then {
 	dialog --title 'Restaurar' --yesno "\\nRestaurar la copia de respaldo $pb\\n" 15 60
 	if (test "$?" = "0") then {
 		echo "s" >> /var/www/tmp/inst-adJ.bitacora
-        	echo "psql -U$uspos -h /var/www/tmp -f $pb template1" > /tmp/cu.sh
+        	echo "psql -U$uspos -h $sockpsql -f $pb template1" > /tmp/cu.sh
         	chmod +x /tmp/cu.sh
         	su - _postgresql /tmp/cu.sh >> /var/www/tmp/inst-adJ.bitacora;
 	} fi;
@@ -1760,7 +1779,7 @@ if (test -f "$pb") then {
 
 echo "* Agregar cotejaciones en español y facilidades de busqueda para PostgreSQL"  >> /var/www/tmp/inst-adJ.bitacora
 ES_COUNTRIES="AR BO CH CO CR CU DO EC ES GQ GT HN MX NI PA PE PR PY SV VE US UY"
-echo "psql -h /var/www/tmp -U postgres -c \"SELECT COUNT(*) FROM pg_collation WHERE collname = 'es_co_utf_8';\"" > /tmp/cu.sh
+echo "psql -h $sockpsql -U postgres -c \"SELECT COUNT(*) FROM pg_collation WHERE collname = 'es_co_utf_8';\"" > /tmp/cu.sh
 echo "exit \$?" >> /tmp/cu.sh;
 chmod +x /tmp/cu.sh | tee -a /var/www/tmp/inst-adJ.bitacora
 cat /tmp/cu.sh >> /var/www/tmp/inst-adJ.bitacora
@@ -1769,12 +1788,12 @@ echo "" > /tmp/cu.sh
 t=`head -n 3 /tmp/cu.out | tail -n 1 | sed -e "s/ *//g" 2>/dev/null`
 if (test "$t" != "1") then {
 	for i in $ES_COUNTRIES; do
-		echo "psql -h /var/www/tmp -U postgres -c \"CREATE COLLATION es_${i}_UTF_8 (LOCALE='es_${i}.UTF-8');\"" >> /tmp/cu.sh
+		echo "psql -h $sockpsql -U postgres -c \"CREATE COLLATION es_${i}_UTF_8 (LOCALE='es_${i}.UTF-8');\"" >> /tmp/cu.sh
 	done;
 } fi;
-echo "psql -h /var/www/tmp -U postgres -c \"CREATE EXTENSION unaccent;\"" >> /tmp/cu.sh
-echo "psql -h /var/www/tmp -U postgres -c \"ALTER TEXT SEARCH DICTIONARY unaccent (RULES='unaccent');\"" >> /tmp/cu.sh
-echo "psql -h /var/www/tmp -U postgres -c \"ALTER FUNCTION unaccent(text) IMMUTABLE;\"" >> /tmp/cu.sh
+echo "psql -h $sockpsql -U postgres -c \"CREATE EXTENSION unaccent;\"" >> /tmp/cu.sh
+echo "psql -h $sockpsql -U postgres -c \"ALTER TEXT SEARCH DICTIONARY unaccent (RULES='unaccent');\"" >> /tmp/cu.sh
+echo "psql -h $sockpsql -U postgres -c \"ALTER FUNCTION unaccent(text) IMMUTABLE;\"" >> /tmp/cu.sh
 echo "exit \$?" >> /tmp/cu.sh;
 chmod +x /tmp/cu.sh >> /var/www/tmp/inst-adJ.bitacora 2>&1
 cat /tmp/cu.sh >> /var/www/tmp/inst-adJ.bitacora
