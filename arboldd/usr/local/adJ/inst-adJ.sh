@@ -1014,6 +1014,15 @@ if (test -f /usr/include/ressl.h) then {
 	pkg_delete servidor_OpenBSD
 } fi;
 
+if (test -f /usr/bin/sudo) then {
+	vac="$vac 5.7 a 5.8";	
+	echo "Aplicando actualizaciones de 5.7 a 5.8 " >> /var/www/tmp/inst-adJ.bitacora;
+  rm -f /usr/bin/sudo /usr/bin/sudoedit /usr/sbin/visudo
+  rm -f /usr/share/man/man8/sudo.8 /usr/share/man/man8/sudoedit.8
+  rm -f /usr/share/man/man8/visudo.8 /usr/share/man/man5/sudoers.5
+  rm -f /usr/libexec/sudo_noexec.so
+} fi;
+
 if  (test "$vac" != "") then {
 	dialog --title 'Actualizaciones aplicadas' --msgbox "\\nSe aplicaron actualizaciones: $vac\\n\\n$mac\\n" 15 60
 } fi;
@@ -2593,17 +2602,17 @@ for i in ruby19-railties-3.1.3 ruby19-actionmailer-3.1.3 \
 	sudo pkg_delete -I -D dependencies $i >> /var/www/tmp/inst-adJ.bitacora 2>&1
 done
 
-echo "* Configurar ruby-2.2" >> /var/www/tmp/inst-adJ.bitacora;
-if (test ! -f "/usr/local/bin/ruby22") then {
+echo "* Configurar ruby-2.3" >> /var/www/tmp/inst-adJ.bitacora;
+if (test ! -f "/usr/local/bin/ruby23") then {
 	insacp ruby
-	ln -sf /usr/local/bin/ruby22 /usr/local/bin/ruby
-	ln -sf /usr/local/bin/erb22 /usr/local/bin/erb
-	ln -sf /usr/local/bin/irb22 /usr/local/bin/irb
-	ln -sf /usr/local/bin/rdoc22 /usr/local/bin/rdoc
-	ln -sf /usr/local/bin/ri22 /usr/local/bin/ri
-	ln -sf /usr/local/bin/rake22 /usr/local/bin/rake
-	ln -sf /usr/local/bin/gem22 /usr/local/bin/gem
-	ln -sf /usr/local/bin/testrb22 /usr/local/bin/testrb
+	ln -sf /usr/local/bin/ruby23 /usr/local/bin/ruby
+	ln -sf /usr/local/bin/erb23 /usr/local/bin/erb
+	ln -sf /usr/local/bin/irb23 /usr/local/bin/irb
+	ln -sf /usr/local/bin/rdoc23 /usr/local/bin/rdoc
+	ln -sf /usr/local/bin/ri23 /usr/local/bin/ri
+	ln -sf /usr/local/bin/rake23 /usr/local/bin/rake
+	ln -sf /usr/local/bin/gem23 /usr/local/bin/gem
+	ln -sf /usr/local/bin/testrb23 /usr/local/bin/testrb
 	ln -sf /usr/local/bin/bundle22 /usr/local/bin/bundle
 } fi;
 

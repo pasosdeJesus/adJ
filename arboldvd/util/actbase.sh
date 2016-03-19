@@ -52,6 +52,7 @@ if (test "$?" = "0" -a ! -f /etc/X11/xorg.conf) then {
 	touch /etc/X11/xorg-automatico
 } fi;
 echo "(cd /dev; ./MAKEDEV all)" >/etc/rc.firsttime
+echo "fw_update" >> /etc/rc.firsttime
 if (test "$VCORSP" -lt "55" ) then {
 	eusr=`df -kP /usr | awk '{ print $2; }' | tail -n 1`
 	if (test "$eusr" -lt "200000") then {
@@ -92,7 +93,9 @@ q
 EOF
 	(cd /usr/mdec; cp boot /boot; ./installboot -v /boot ./biosboot $dd)
 } fi;
-echo "/inst-adJ.sh" >>/etc/rc.firsttime    
+ARCH=`pwd`
+ARCH="$ARCH/$V$VESP-$ARQ/"
+echo "ARCH=$ARCH /inst-adJ.sh" >>/etc/rc.firsttime    
 echo "Presione [ENTER] para instalar kernel $nk"
 read
 rm /obsd ; ln /bsd /obsd 
