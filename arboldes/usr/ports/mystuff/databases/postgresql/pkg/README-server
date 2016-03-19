@@ -1,0 +1,149 @@
+$OpenBSD: README-server,v 1.19 2015/08/03 07:42:30 kirby Exp $
+
++-----------------------------------------------------------------------
+| Running ${FULLPKGNAME} on OpenBSD
++-----------------------------------------------------------------------
+
+At least two different accounts are involved when working with PostgreSQL:
+One is an OpenBSD userid, '_postgresql', which is used as the userid of files
+that are part of PostgreSQL.  The other, usually named 'postgres', is not an
+OpenBSD userid, i.e. you will not find it in /etc/passwd, but an account
+internal to the database system.  The 'postgres' account is called the dba
+account (database administrator) and is created when a new database is
+initialized using the initdb command.
+
+If you are installing PostgreSQL for the first time, you have to create
+a default database first.  In the following example we install a database
+in /var/postgresql/data with a dba account 'postgres' and md5 authentication.
+We will be prompted for a password to protect the dba account:
+
+       # su - _postgresql
+       $ mkdir /var/postgresql/data
+       $ initdb -D /var/postgresql/data -U postgres -A md5 -W
+
+Please note that by default the cluster's encoding will be SQL_ASCII. If
+you want to have another default encoding, use the option -E with initdb:
+
+       $ initdb -D /var/postgresql/data -U postgres -E UTF8 -A md5 -W
+
+If your cluster is already created, you can specify another encoding when
+you create a new database with this command:
+	CREATE DATABASE xxx TEMPLATE template0 ENCODING 'xxx' ;
+
+It is strongly advised that you do not work with the postgres dba account
+other than creating more users and/or databases or for administrative tasks.
+Use the PostgreSQL permission system to make sure that a database is only
+accessed by programs/users that have the right to do so.
+
+Please consult the PostgreSQL website for more information, especially when
+you are upgrading an existing database installation.
+
+
+Network Connections
+===================
+To allow connections over TCP (and other options) edit the file:
+
+	/var/postgresql/data/postgresql.conf
+
+and also edit the pg_hba.conf (in the same directory) making the
+appropriate changes to allow connection from your network.
+
+To allow SSL connections, edit postgresql.conf and enable the
+'ssl' keyword, and create keys and certificates:
+
+       # su - _postgresql
+       $ cd /var/postgresql/data
+       $ umask 077
+       $ openssl genrsa -out server.key 2048
+       $ openssl req -new -key server.key -out server.csr
+
+Either take the CSR to a Certifying Authority (CA) to sign your
+certificate, or self-sign it:
+
+       $ openssl x509 -req -days 365 -in server.csr \
+         -signkey server.key -out server.crt
+
+Restart PostgreSQL to allow these changes to take effect.
+
+Tuning for busy servers
+=======================
+The default sizes in the GENERIC kernel for SysV semaphores are only
+just large enough for a database with the default configuration
+(max_connections 40) if no other running processes use semaphores.
+In other cases you will need to increase the limits. Adding the
+following in /etc/sysctl.conf will be reasonable for many systems:
+
+	kern.seminfo.semmni=60
+	kern.seminfo.semmns=1024
+
+To serve a large number of connections (>250), you may need higher
+values for the above.
+
+You may also want to tune the max_connect value in the
+postgresql.conf file to increase the number of connections to the
+backend.
+
+By default, the _postgresql user, and so the postmaster and backend
+processes run in the login(1) class of "daemon". On a busy server,
+it may be advisable to put the _postgresql user and processes in
+their own login(1) class with tuned resources, such as more open
+file descriptors (used for network connections as well as files),
+possibly more memory, etc.
+
+For example, add this to the login.conf(5) file:
+
+	postgresql:\
+		:openfiles=768:\
+		:tc=daemon:
+
+Rebuild the login.conf.db file if necessary:
+
+	# [ -f /etc/login.conf.db ] && cap_mkdb /etc/login.conf
+
+For more than about 250 connections, these numbers should be
+increased. Please report any changes and experiences to the package
+maintainers so that we can update this file for future versions.
+
+Upgrade Howto (for a major upgrade)
+===================================
+If you didn't install PostgreSQL by following this README,
+you must adapt these instructions to your setup.
+
+1) Backup all your data:
+# su _postgresql -c "pg_dumpall -U postgres > /var/postgresql/full.sqldump"
+
+2) Shutdown the server:
+# ${RCDIR}/postgresql stop
+
+3) Upgrade your PostgreSQL package with pkg_add.
+# pkg_add -ui postgresql-server
+
+4) Backup your old data directory:
+# mv /var/postgresql/data /var/postgresql/data.old
+
+5) Create a new data directory (using -E UTF8 if appropriate):
+# su _postgresql -c "mkdir /var/postgresql/data"
+# su _postgresql -c "initdb -D /var/postgresql/data -U postgres -A md5 -W"
+
+6) Restore your old pg_hba.conf and (if used) SSL certificates
+# su _postgresql -c \
+    "cp /var/postgresql/data.old/pg_hba.conf /var/postgresql/data/"
+# su _postgresql -c \
+    "cp /var/postgresql/data.old/server.{crt,key} /var/postgresql/data/"
+
+Some postgresql.conf settings changed or disappeared in this version.
+Examine your old file for local changes and apply them to the new version.
+
+7) Start PostgreSQL:
+# ${RCDIR}/postgresql start
+
+8) Restore your data:
+# su _postgresql -c "psql -U postgres < /var/postgresql/full.sqldump"
+
+Clients/Frontends
+=================
+Many applications can use the PostgreSQL database right away.  To facilitate
+administration of a PostgreSQL database, two clients are notable:
+
+www/phppgadmin		A web based user interface that uses PHP5
+databases/pgadmin3	A graphical user interface that uses wxWidgets

@@ -15,8 +15,9 @@ ARQ=`uname -m`
 
 export PATH=$PATH:/usr/local/bin
 
-if (test "$USER" != "root") then {
-	echo "Este script debe ser ejecutado por root o con sudo";
+w=`whoami`
+if (test "$w" != "root") then {
+	echo "Este script debe ser ejecutado por root o con doas";
 	exit 1;
 } fi;
 
@@ -186,8 +187,9 @@ echo "Se recomienda ejecutarlo desde una terminal en X-Window" >> /var/www/tmp/i
 mount > /dev/null 2> /dev/null
 if (test "$?" != "0") then {
 echo 'No puede ejecutarse mount vuelva a ejecutar este script así:
+su -
 export PATH="$PATH:/bin/:/usr/bin:/usr/local/bin:/sbin:/usr/sbin:/usr/local/sbin"
-sudo /inst-adJ.sh'
+/inst-adJ.sh'
 exit 1;
 } fi;
 
@@ -239,8 +241,8 @@ user mod -G operator $uadJ
 
 # Preparando en casos de actualización grande
 
-sudo chown $uadJ:$uadJ /home/$uadJ/.Xauthority > /dev/null 2>&1
-sudo rm -rf /home/$uadJ/.font*
+chown $uadJ:$uadJ /home/$uadJ/.Xauthority > /dev/null 2>&1
+rm -rf /home/$uadJ/.font*
 
 usermod -G operator $uadJ
 echo "* Dispositivos montables por usuarios" >> /var/www/tmp/inst-adJ.bitacora;
@@ -257,7 +259,7 @@ echo "   Saltando..."  >> /var/www/tmp/inst-adJ.bitacora;
 echo "* Permisos de /mnt" >> /var/www/tmp/inst-adJ.bitacora;
 ls -l /mnt/ | grep "root  wheel" > /dev/null 2> /dev/null
 if (test "$?" = "0") then {
-sudo chown $uadJ:$uadJ /mnt/*	2> /dev/null > /dev/null
+	chown $uadJ:$uadJ /mnt/*	2> /dev/null > /dev/null
 } fi;
 
 
@@ -270,7 +272,7 @@ mkdir -p /mnt/cdrom
 } else {
 echo "   Saltando cd0a..." >> /var/www/tmp/inst-adJ.bitacora;
 } fi;
-sudo chown $uadJ:$uadJ /mnt/cdrom
+chown $uadJ:$uadJ /mnt/cdrom
 
 chmod g+rw /dev/sd?i /dev/sd?c /dev/cd?c /dev/cd?a
 
@@ -377,8 +379,8 @@ if (test "$?" != "0") then {
 } else {
 	echo "   Saltando USB..." >> /var/www/tmp/inst-adJ.bitacora;
 } fi;
-sudo chown $uadJ:$uadJ /mnt/usb 
-sudo chown $uadJ:$uadJ /mnt/usbc
+chown $uadJ:$uadJ /mnt/usb 
+chown $uadJ:$uadJ /mnt/usbc
 
 echo "/var sin nodev en /etc/fstab (para tener /var/www/dev/random)" >> /var/www/tmp/inst-adJ.bitacora
 grep " /var.*nodev," /etc/fstab > /dev/null
@@ -398,7 +400,7 @@ echo "Creando /var/www/dev/random" >> /var/www/tmp/inst-adJ.bitacora
 if (test ! -c "/var/www/dev/random") then {
 	mkdir -p /var/www/dev/
 	rm -f /var/www/dev/random
-	sudo mknod -m 644 /var/www/dev/random c 45 0 2>> /var/www/tmp/inst-adJ.bitacora
+	mknod -m 644 /var/www/dev/random c 45 0 2>> /var/www/tmp/inst-adJ.bitacora
 } else {
 	echo "   Saltando /var/www/dev/random..." >> /var/www/tmp/inst-adJ.bitacora;
 } fi;
@@ -549,7 +551,7 @@ w
 q
 EOF
 
-	find /usr/X11R6/lib/modules ! -newer libscanpci.la | xargs sudo rm -f >> /var/www/tmp/inst-adJ.bitacora 2>&1
+	find /usr/X11R6/lib/modules ! -newer libscanpci.la | xargs rm -f >> /var/www/tmp/inst-adJ.bitacora 2>&1
 
 } fi;
 
@@ -563,7 +565,7 @@ if (test "$?" != "0") then {
 	useradd -u 97 -g =uid -c "NSD Service" -d /var/empty -s /sbin/nologin _nsd
 	useradd -u 98 -g =uid -c "LDP Service" -d /var/empty -s /sbin/nologin _ldpd
 
-	sudo cp /etc/pf.conf /etc/pf46.conf
+	cp /etc/pf.conf /etc/pf46.conf
 	cat > /tmp/z.sed << EOF
 s/^ *nat  *on  *\(.*\) *->  *\(.*\)/match out on \1 nat-to \2/g
 /^ *rdr  *pass  *on  *.* *->  *.*/ {
@@ -667,9 +669,9 @@ if (test -f /usr/bin/addftinfo) then {
 if (test -f /etc/security) then {
 	vac="$vac 4.9 a 5.0";	
 	echo "Aplicando actualizaciones de 4.9 a 5.0" >> /var/www/tmp/inst-adJ.bitacora;
-    sudo mv /etc/security /etc/security49.anterior
-    sudo rm -rf /etc/X11/xkb /usr/lib/gcc-lib/$(arch -s)-unknown-openbsd4.? /usr/bin/perl5.10.1 /usr/libdata/perl5/$(arch -s)-openbsd/5.10.1 
-    sudo cp /etc/pf.conf /etc/pf49.conf
+	mv /etc/security /etc/security49.anterior
+	rm -rf /etc/X11/xkb /usr/lib/gcc-lib/$(arch -s)-unknown-openbsd4.? /usr/bin/perl5.10.1 /usr/libdata/perl5/$(arch -s)-openbsd/5.10.1 
+	cp /etc/pf.conf /etc/pf49.conf
 	cat > /tmp/z.sed << EOF
 s/pass  *in  *quick  *proto  *tcp  *to  *port  *ftp  *rdr-to  *127.0.0.1  *port  *8021/pass in quick inet proto tcp to port ftp divert-to 127.0.0.1 port 8021/g
 s/pass  *in  *quick  *on  *internal  *proto  *udp  *to  *port  *tftp  *rdr-to  *127.0.0.1  *port  *6969/pass in quick on internal inet proto udp to port tftp divert-to 127.0.0.1 port 6969/g
@@ -688,14 +690,14 @@ if (test ! -f /var/named/standard/root.hint) then {
 if (test -d /usr/X11R6/share/X11/xkb/symbols/srvr_ctrl) then {
 	vac="$vac 5.0 a 5.1";	
 	echo "Aplicando actualizaciones de 5.0 a 5.1" >> /var/www/tmp/inst-adJ.bitacora;
-    sudo rm -rf /usr/X11R6/share/X11/xkb/symbols/srvr_ctrl
-    sudo rm -f /etc/rc.d/aucat
-    sudo rm -f /etc/ccd.conf /sbin/ccdconfig /usr/share/man/man8/ccdconfig.8
-    sudo rm -f /usr/sbin/pkg_merge
-    sudo rm -f /usr/libexec/getNAME /usr/share/man/man8/getNAME.8
-    sudo rm -rf /usr/lib/gcc-lib/amd64-unknown-openbsd5.0
-    sudo rm -f /usr/bin/midicat /usr/share/man/man1/midicat.1
-    sudo rm -f /usr/bin/makewhatis /usr/bin/mandocdb /usr/share/man/man8/mandocdb.8
+	rm -rf /usr/X11R6/share/X11/xkb/symbols/srvr_ctrl
+	rm -f /etc/rc.d/aucat
+	rm -f /etc/ccd.conf /sbin/ccdconfig /usr/share/man/man8/ccdconfig.8
+	rm -f /usr/sbin/pkg_merge
+	rm -f /usr/libexec/getNAME /usr/share/man/man8/getNAME.8
+	rm -rf /usr/lib/gcc-lib/amd64-unknown-openbsd5.0
+	rm -f /usr/bin/midicat /usr/share/man/man1/midicat.1
+	rm -f /usr/bin/makewhatis /usr/bin/mandocdb /usr/share/man/man8/mandocdb.8
 } fi;
 if (test -f /usr/bin/lint) then {
 	vac="$vac 5.1 a 5.2";	
@@ -1310,7 +1312,7 @@ Vea la documentacion con man xorg.conf, editelo por ejemplo con mg /etc/X11/xorg
 	echo "Si no opera examine errores, causas y soluciones al final de la bitacora:"
 	echo "    less /var/log/Xorg.log.0"
 	echo "De requerirlo ajuste la configuración con:"
-	echo "     sudo mg /root/xorg.conf.new"
+	echo "     mg /root/xorg.conf.new"
 	echo "Vea la documentacion con:"
 	echo "     man xorg.conf"
 	echo "Regrese a este script con 'exit'";
@@ -1729,6 +1731,8 @@ EOF
 	echo "   Saltando..." >> /var/www/tmp/inst-adJ.bitacora;
 } fi;
 
+mkdir -p /var/www/var/run/postgresql
+chown _postgresql:_postgresql /var/www/var/run/postgresql
 
 echo "* Configurando para que inicie PostgreSQL en cada arranque y cierre al apagar" >> /var/www/tmp/inst-adJ.bitacora;
 
@@ -2204,16 +2208,13 @@ insacp ispell ispell-sp
 ispell-config 3 >> /var/www/tmp/inst-adJ.bitacora
 
 
-echo "* Configurar sudo" >> /var/www/tmp/inst-adJ.bitacora;
-grep "^%wheel.*ALL=(ALL).*NOPASSWD:.*ALL" /etc/sudoers > /dev/null
+echo "* Configurar doas" >> /var/www/tmp/inst-adJ.bitacora;
+grep "^permit *nopass.*:wheel" /etc/doas.conf> /dev/null
 if (test "$?" != "0") then {
-	chmod +w /etc/sudoers
-	ed /etc/sudoers >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
-,s/\# \%wheel.*ALL=(ALL).*NOPASSWD.*/%wheel  ALL=(ALL) NOPASSWD: SETENV: ALL/g
-w
-q
-EOF
-	chmod -w /etc/sudoers
+	touch /etc/doas.conf
+	chmod +w /etc/doas.conf
+	echo "permit nopass keepenv :wheel" >> /etc/doas.conf
+	chmod -w /etc/doas.conf
 } else {
 	echo "   Saltando..." >> /var/www/tmp/inst-adJ.bitacora;
 } fi;
@@ -2266,8 +2267,8 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 	[exec] (Evangelios de dominio publico) {/usr/local/bin/chrome /usr/local/share/doc/evangelios_dp/}
 [end]
 [submenu] (Dispositivos)
-	[exec] (Apagar) {sudo /sbin/halt -p}
-	[exec] (Iniciar servicios faltantes) {xterm -en utf8 -e "/usr/bin/sudo /bin/sh /etc/rc.local espera"}
+	[exec] (Apagar) {doas /sbin/halt -p}
+	[exec] (Iniciar servicios faltantes) {xterm -en utf8 -e "/usr/bin/doas /bin/sh /etc/rc.local espera"}
 	[exec] (Montar CD) {/sbin/mount /mnt/cdrom ; xfe /mnt/cdrom/ }
 	[exec] (Desmontar CD) {/sbin/umount -f /mnt/cdrom}
 	[exec] (Montar USB) {/sbin/mount /mnt/usb ; xfe /mnt/usb/}
@@ -2276,14 +2277,14 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 	[exec] (Desmontar USBC) {/sbin/umount -f /mnt/usbc}
 	[exec] (Montar Floppy) {/sbin/mount /mnt/floppy ; xfe /mnt/floppy}
 	[exec] (Desmontar Floppy) {/sbin/umount -f /mnt/floppy}
-	[exec] (Configurar Impresora con CUPS) {echo y | sudo cups-enable; sudo chmod a+rw /dev/ulpt* /dev/lpt*; /usr/local/bin/chrome http://127.0.0.1:631}
+	[exec] (Configurar Impresora con CUPS) {echo y | doas cups-enable; doas chmod a+rw /dev/ulpt* /dev/lpt*; /usr/local/bin/chrome http://127.0.0.1:631}
 	[submenu] (Red)
                 [exec] (Examinar red) {xterm -en utf8 -e '/sbin/ifconfig; echo -n "\n[RETORNO] para examinar enrutamiento (podrá salir con q)"; read; /sbin/route -n show | less'}
-                [exec] (Examinar configuracion cortafuegos) {xterm  -en utf8 -e 'sudo /sbin/pfctl -s all | less '}
-                [exec] (Configurar interfaces de red) {xterm -en utf8 -e 'li=\`/sbin/ifconfig | grep "^[a-z]*[0-9]:" | sed -e "s/:.*//g" | grep -v "lo0" | grep -v "enc0" | grep -v "pflog0" | grep -v "tun[0-9]"\`;  echo "Por configurar \$li"; for i in \$li; do echo "Configurando \$i"; /sbin/ifconfig \$i; echo -n "\n[RETORNO] para editar /etc/hostname.\$i"; read;  sudo touch /etc/hostname.\$i; sudo xfw /etc/hostname.\$i; done'}
-                [exec] (Configurar puerta de enlace) {sudo touch /etc/mygate; sudo xfw /etc/mygate}
-                [exec] (Configurar cortafuegos) {sudo xfw /etc/pf.conf}
-                [exec] (Reiniciar red) {xterm -en utf8 -e '/usr/bin/sudo PATH=/sbin:/usr/sbin:/bin:/usr/bin/ /bin/sh /etc/netstart && sudo /sbin/pfctl -f /etc/pf.conf; echo "[RETORNO] para continuar"; read'}
+                [exec] (Examinar configuracion cortafuegos) {xterm  -en utf8 -e 'doas  /sbin/pfctl -s all | less '}
+                [exec] (Configurar interfaces de red) {xterm -en utf8 -e 'li=\`/sbin/ifconfig | grep "^[a-z]*[0-9]:" | sed -e "s/:.*//g" | grep -v "lo0" | grep -v "enc0" | grep -v "pflog0" | grep -v "tun[0-9]"\`;  echo "Por configurar \$li"; for i in \$li; do echo "Configurando \$i"; /sbin/ifconfig \$i; echo -n "\n[RETORNO] para editar /etc/hostname.\$i"; read;  doas touch /etc/hostname.\$i; doas xfw /etc/hostname.\$i; done'}
+                [exec] (Configurar puerta de enlace) {doas touch /etc/mygate; doas xfw /etc/mygate}
+                [exec] (Configurar cortafuegos) {doas xfw /etc/pf.conf}
+                [exec] (Reiniciar red) {xterm -en utf8 -e '/usr/bin/doas PATH=/sbin:/usr/sbin:/bin:/usr/bin/ /bin/sh /etc/netstart && doas /sbin/pfctl -f /etc/pf.conf; echo "[RETORNO] para continuar"; read'}
                 [exec] (ping a Internet) {xterm -en utf8 -e '/sbin/ping 157.253.1.13'}
         [end]
 [end]
@@ -2352,8 +2353,8 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 [separator]
 [exit] (Exit)
 [end]
-[exec] (Reiniciar) {sudo /sbin/reboot}
-[exec] (Apagar) {sudo /sbin/halt -p}
+[exec] (Reiniciar) {doas /sbin/reboot}
+[exec] (Apagar) {doas /sbin/halt -p}
 [end]
 EOF
 } fi;
@@ -2590,7 +2591,7 @@ for i in ruby19-railties-3.1.3 ruby19-actionmailer-3.1.3 \
     ruby19-thor-0.14.6p1 ruby19-activesupport-3.1.3 \
     ruby19-actionmailer-3.1.3 ruby19-sprockets-2.0.3 ruby19-rack-cache-1.1 \
     ruby19-actionpack-3.1.3 ; do
-	sudo pkg_delete -I -D dependencies $i >> /var/www/tmp/inst-adJ.bitacora 2>&1
+	pkg_delete -I -D dependencies $i >> /var/www/tmp/inst-adJ.bitacora 2>&1
 done
 
 echo "* Configurar ruby-2.2" >> /var/www/tmp/inst-adJ.bitacora;
@@ -2722,17 +2723,17 @@ if (test "$?" != "0") then {
 echo "* Permisos para aplicaciones" >> /var/www/tmp/inst-adJ.bitacora;
 
 if (test -d /home/$uadJ/.config/chromium) then {
-	sudo chown -R $uadJ:$uadJ /home/$uadJ/.config/chromium
+	chown -R $uadJ:$uadJ /home/$uadJ/.config/chromium
 } fi;
 
 if (test -d /home/$uadJ/.openoffice.org2) then {
-	sudo chown -R $uadJ:$uadJ /home/$uadJ/.openoffice.org2
+	chown -R $uadJ:$uadJ /home/$uadJ/.openoffice.org2
 } fi;
 
 echo "* Agregar usuario a grupo wheel" >> /var/www/tmp/inst-adJ.bitacora;
 grep wheel /etc/group | grep $uadJ > /dev/null
 if (test "$?" != "0") then {
-	sudo usermod -G wheel $uadJ >> /var/www/tmp/inst-adJ.bitacora
+	usermod -G wheel $uadJ >> /var/www/tmp/inst-adJ.bitacora
 } else {
 	echo "   Saltando..." >> /var/www/tmp/inst-adJ.bitacora;
 } fi;
@@ -2804,13 +2805,13 @@ echo "Eliminando parciales" >> /var/www/tmp/inst-adJ.bitacora
 cd /var/db/pkg
 for i in partial-*; do 
 	echo $i >> /var/www/tmp/inst-adJ.bitacora ; 
-	sudo pkg_delete -I-D dependencies  $i >> /var/www/tmp/inst-adJ.bitacora 2>&1
+	pkg_delete -I-D dependencies  $i >> /var/www/tmp/inst-adJ.bitacora 2>&1
 done
 
 echo "Eliminando problemáticos" >> /var/www/tmp/inst-adJ.bitacora 
-sudo pkg_delete -I -D dependencies libstdc++ >> /var/www/tmp/inst-adJ.bitacora  2>&1
-sudo pkg_delete -I -D dependencies lua >> /var/www/tmp/inst-adJ.bitacora  2>&1
-sudo pkg_delete -I -D dependencies gtk+2 >> /var/www/tmp/inst-adJ.bitacora  2>&1
+pkg_delete -I -D dependencies libstdc++ >> /var/www/tmp/inst-adJ.bitacora  2>&1
+pkg_delete -I -D dependencies lua >> /var/www/tmp/inst-adJ.bitacora  2>&1
+pkg_delete -I -D dependencies gtk+2 >> /var/www/tmp/inst-adJ.bitacora  2>&1
 
 echo "Instalando algunos comunes" >> /var/www/tmp/inst-adJ.bitacora 
 pkg_add -I -D updatedepends -D update -D libdepends -r $PKG_PATH/sdl*tgz $PKG_PATH/libxml*tgz $PKG_PATH/libgpg-error*tgz $PKG_PATH/libart-*.tgz  >> /var/www/tmp/inst-adJ.bitacora 2>&1;
@@ -2828,9 +2829,9 @@ echo "Eliminando librerías innecesarias" >> /var/www/tmp/inst-adJ.bitacora
 cd /var/db/pkg
 for i in .libs*; do 
 	echo $i >> /var/www/tmp/inst-adJ.bitacora ; 
-	sudo pkg_delete -I $i >> /var/www/tmp/inst-adJ.bitacora 2>&1
+	pkg_delete -I $i >> /var/www/tmp/inst-adJ.bitacora 2>&1
 done
-sudo rm -rf *core
+rm -rf *core
 
 for i in $PKG_PATH/*tgz; do
 	echo $i | tee -a /var/www/tmp/inst-adJ.bitacora
@@ -2872,7 +2873,7 @@ EOF
 # Diccionario español de LibreOffice
 # http://es.openoffice.org/programa/diccionario.html
 if (test -f $ARCH/util/es_CO.oxt -a -f /usr/local/lib/libreoffice/program/unopkg) then {
-	sudo /usr/local/lib/libreoffice/program/unopkg add --shared $ARCH/util/es_CO.oxt
+	/usr/local/lib/libreoffice/program/unopkg add --shared $ARCH/util/es_CO.oxt
 } fi;
 
 echo "* Configurar pidgin con SILC y canales en www.nocheyniebla.org" >> /var/www/tmp/inst-adJ.bitacora;
@@ -2927,9 +2928,9 @@ if (test ! -h /usr/local/bin/python) then {
  ln -sf /usr/local/bin/pydoc2.7  /usr/local/bin/pydoc
 } fi;
 
-sudo chmod a+xrw /var/www/tmp
+chmod a+xrw /var/www/tmp
 
 echo "* Volviendo a cambiar en por servicio en etc" >> /var/www/tmp/inst-adJ.bitacora;
 cd /etc && /usr/local/adJ/servicio-etc.sh >> /var/www/tmp/inst-adJ.bitacora 2>&1
-dialog --title 'Componentes básicos instalados' --msgbox "\\nFELICITACIONES!  La instalación/actualización de la distribución Aprendiendo de Jesús $VER se completó satisfactoriamente\\n\\n Para instalar SIVeL ejecute sudo /usr/local/adJ/inst-sivel.sh" 15 60
+dialog --title 'Componentes básicos instalados' --msgbox "\\nFELICITACIONES!  La instalación/actualización de la distribución Aprendiendo de Jesús $VER se completó satisfactoriamente\\n\\n Para instalar SIVeL ejecute \"doas /usr/local/adJ/inst-sivel.sh\"" 15 60
 
