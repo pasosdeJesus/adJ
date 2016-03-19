@@ -1,6 +1,8 @@
-# $OpenBSD: Makefile,v 1.6 2015/08/22 15:14:14 jeremy Exp $
+# $OpenBSD: Makefile,v 1.2 2016/02/15 12:09:03 tobiasu Exp $
 
+BROKEN-hppa =		OOM when building ext/ripper/ripper.c
 BROKEN-mips64 =		miniruby spins on rbconfig.rb
+BROKEN-sparc=		exceeds MAXDSIZ
 
 COMMENT-main =		object oriented script language with threads
 COMMENT-gdbm =		gdbm interface for ruby
@@ -96,8 +98,10 @@ pre-install:
 	${INSTALL_DATA_DIR} ${PREFIX}/share/doc/ruby
 
 post-install:
+	${FIX_RBCONFIG}
 	chmod 444 ${PREFIX}/lib/ruby/gems/*/{cache,specifications}/*.gem*
 
+# 16021 tests, 2256593 assertions, 3 failures, 5 errors, 127 skips
 do-test:
 	-cd ${WRKSRC} && make test-sample
 	-cd ${WRKSRC} && make btest-ruby

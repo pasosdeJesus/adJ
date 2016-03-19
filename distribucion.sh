@@ -780,7 +780,7 @@ if (test "$sn" = "s") then {
 	# Deben estar en arboldes/usr/ports/mystuff y en /usr/ports de current
 	paquete chromium
 	paquete node 
-	paquete ruby paquetes "ruby ruby22-ri_docs" 2.3
+	paquete ruby paquetes "ruby ruby23-ri_docs" 2.3
 
 	###
         # Actualizados.  Están desactualizado en OpenBSD estable y current
