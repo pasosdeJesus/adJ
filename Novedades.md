@@ -29,24 +29,25 @@ Entre las novedades reportadas en las `Notas de publicación de OpenBSD 5.8' des
 	* Temperatura, sensores y otros: USB 3.0 soportado en ```xhci```, varios adaptadores seriales a usb soportados con nuevos ```umcs``` y ```uslhcom```; mejorado ```umass``` para soportar ARchos 24y Vision. gpio: controlador ```skgpio``` para Soekris net6501. Lectores de tarjetas: mejorado ```rtsx``` para soportar RTS5227 y RTL8411B. Puentes y Buses PCI: mejorados ```ppb```, ```puc```. Memoria:mejorado ```sdmmc``` para soportar memorias SD/MMC de mas de 2G y más tarjetas reconocidas por ```sdhc```. UPS: Mejorado ```upd``` para soportar más UPS. Mejorado ```ums``` para soportar tabletas emuladas por Qemu. Teclado: Mejorado ```ukbd``` para soportar Apple "wellspring". touchpads: Mejorado ```pms``` para soportar Elantech v4.
 
 * Mejoras a herramientas de Red
-	** OpenBSD httpd: No soporta SSLv3, mejora soporte para virtualhosts, autenticación básica, redirección en URLs específicos, mejoras a FastCGI
-	** OpenSMTP 5.4.4:  No soporta SSLv3, mejoras a reconocedor de encabezados
-	** tcpdump presenta tráfico destinadoa a direcciones IPv6 de Enlace-local (FE80::/65)
-	** Las solicitudes de IPv6 ahora las hace el kernel ("inet6 autoconf") no se requieren rtsol y rtsold que se han eliminado.
+	* OpenBSD httpd: No soporta SSLv3, mejora soporte para virtualhosts, autenticación básica, redirección en URLs específicos, mejoras a FastCGI
+	* OpenSMTP 5.4.4:  No soporta SSLv3, mejoras a reconocedor de encabezados
+	* tcpdump presenta tráfico destinadoa a direcciones IPv6 de Enlace-local (FE80::/65)
+	* Las solicitudes de IPv6 ahora las hace el kernel ("inet6 autoconf") no se requieren rtsol y rtsold que se han eliminado.
 
 * Seguridad
-	** Chequeo más estricto W^X en kernel
-	** /var/tmp es enlace a /tmp
-	** Las funciones rand, random, drand48, lrand48, mrand48, srand48 ahora son no-deterministicas.
-	** passwd ahora sólo soporta cifrado blowfish
-	** Mejoras LibreSSL que es una pila para TLS que remplaza OpenSSL con fuentes más legibles y auditadas.
-	** OpenSSH 6.8
+	* ```sudo``` sacado de sistema base (ahora es porte). En sistema base es remplazado ahora por ```doas``` con configuración más simple.  Por ejemplo en ```/etc/doas.conf``` puede dejar ```permit nopass keepenv :wheel``` para permitir su uso sin clave a todos los del grupo ```wheel```
+	* Chequeo más estricto W^X en kernel
+	* ```/var/tmp``` es enlace a ```/tmp```
+	* Las funciones ```rand```, ```random```, ```drand48```, ```lrand48```, ```mrand48```, ```srand48``` ahora son no-deterministicas.
+	* ```passwd``` ahora sólo soporta cifrado blowfish
+	* Mejoras LibreSSL que es una pila para TLS que remplaza OpenSSL con fuentes más legibles y auditadas.
+	* OpenSSH 6.8
 
 * Otros
-	** mandoc ahora soporta UTF-8 especificado con -K y la salida por defecto ahora es -Tlocale en lugar -Tascii
-	** ```syslogd``` puede enviar mensajes por TLS
-	** Nueva herramienta ```rcctl``` para controlar servicios
-	** Diversos programas pasados de base a portes: Sendmail, nginx.  Estos están disponibles como paquetes.
+	* ```mandoc``` ahora soporta UTF-8 especificado con ```-K``` y la salida por defecto ahora es ```-Tlocale``` en lugar ```-Tascii```
+	* ```syslogd``` puede enviar mensajes por TLS
+	* Nueva herramienta ```rcctl``` para controlar servicios
+	* Diversos programas pasados de base a portes: Sendmail, nginx.  Estos están disponibles como paquetes.
 
 * El sistema base incluye mejoras a componentes auditados y mejorados como ```Xenocara``` (Xorg 7.7), ```gcc``` 4.2.1, ```perl``` 5.18.2, LibreSSL 2.0 con parches posteriores, OpenSMTP 5.4.4, nsd 4.0.3
 
