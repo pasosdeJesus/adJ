@@ -2,10 +2,10 @@
 Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y que esperamos será la elegida por Jesús durante el Milenio.
 
-##Versión: 5.8b1
+###Versión: 5.8b1
 Fecha de publicación: 20/Mar/2015
 
-###NOVEDADES
+##NOVEDADES
 
 Con respecto a OpenBSD 5.8 para amd64 y a la edición anterior de este DVD
 
@@ -32,19 +32,19 @@ Entre las novedades reportadas en las `Notas de publicación de OpenBSD 5.8' des
 	* Temperatura, sensores y otros: USB 3.0 soportado en ```xhci```, varios adaptadores seriales a usb soportados con nuevos ```umcs``` y ```uslhcom```; mejorado ```umass``` para soportar ARchos 24y Vision. gpio: controlador ```skgpio``` para Soekris net6501. Lectores de tarjetas: mejorado ```rtsx``` para soportar RTS5227 y RTL8411B. Puentes y Buses PCI: mejorados ```ppb```, ```puc```. Memoria:mejorado ```sdmmc``` para soportar memorias SD/MMC de mas de 2G y más tarjetas reconocidas por ```sdhc```. UPS: Mejorado ```upd``` para soportar más UPS. Mejorado ```ums``` para soportar tabletas emuladas por Qemu. Teclado: Mejorado ```ukbd``` para soportar Apple "wellspring". touchpads: Mejorado ```pms``` para soportar Elantech v4.
 
 * Mejoras a herramientas de Red
-	* OpenBSD httpd: No soporta SSLv3, mejora soporte para virtualhosts, autenticación básica, redirección en URLs específicos, mejoras a FastCGI
-	* OpenSMTP 5.4.4:  No soporta SSLv3, mejoras a reconocedor de encabezados
-	* tcpdump presenta tráfico destinadoa a direcciones IPv6 de Enlace-local (FE80::/65)
+	* OpenBSD httpd: Retirado soporte SSLv3, mejora soporte para virtualhosts, autenticación básica, redirección en URLs específicos, mejoras a FastCGI
+	* OpenSMTP 5.4.4:  Retirado soporte SSLv3, mejoras a reconocedor de encabezados
+	* tcpdump presenta tráfico destinado a direcciones IPv6 de Enlace-local (FE80::/65)
 	* Las solicitudes de IPv6 ahora las hace el kernel ("inet6 autoconf") no se requieren rtsol y rtsold que se han eliminado.
 
 * Seguridad
-	* ```sudo``` sacado de sistema base (ahora es porte). En sistema base es remplazado ahora por ```doas``` con configuración más simple.  Por ejemplo en ```/etc/doas.conf``` puede dejar ```permit nopass keepenv :wheel``` para permitir su uso sin clave a todos los del grupo ```wheel```
+	* ```sudo``` sacado de sistema base (paso a porte). En sistema base es remplazado por ```doas``` con configuración más simple.  Por ejemplo en ```/etc/doas.conf``` puede dejar ```permit nopass keepenv :wheel``` para permitir su uso sin clave a todos los del grupo ```wheel```
 	* Chequeo más estricto W^X en kernel
 	* ```/var/tmp``` es enlace a ```/tmp```
 	* Las funciones ```rand```, ```random```, ```drand48```, ```lrand48```, ```mrand48```, ```srand48``` ahora son no-deterministicas.
 	* ```passwd``` ahora sólo soporta cifrado blowfish
-	* Mejoras LibreSSL que es una pila para TLS que remplaza OpenSSL con fuentes más legibles y auditadas.
-	* OpenSSH 6.8
+	* Mejoras ```LibreSSL``` que es una pila para TLS que remplaza ```OpenSSL``` con fuentes más legibles y auditadas.
+	* ```OpenSSH``` 6.8
 
 * Otros
 	* ```mandoc``` ahora soporta UTF-8 especificado con ```-K``` y la salida por defecto ahora es ```-Tlocale``` en lugar ```-Tascii```
@@ -52,15 +52,15 @@ Entre las novedades reportadas en las `Notas de publicación de OpenBSD 5.8' des
 	* Nueva herramienta ```rcctl``` para controlar servicios
 	* Diversos programas pasados de base a portes: Sendmail, nginx.  Estos están disponibles como paquetes.
 
-* El sistema base incluye mejoras a componentes auditados y mejorados como ```Xenocara``` (Xorg 7.7), ```gcc``` 4.2.1, ```perl``` 5.18.2, LibreSSL 2.0 con parches posteriores, OpenSMTP 5.4.4, nsd 4.0.3
+* El sistema base incluye mejoras a componentes auditados y mejorados como ```Xenocara``` (```Xorg 7.7```), ```gcc``` 4.2.1, ```perl``` 5.18.2, ```LibreSSL``` 2.0 con parches posteriores, ```OpenSMTP``` 5.4.4, ```nsd``` 4.0.3
 
 
-!PROCESO DE INSTALACIÓN
+### PROCESO DE INSTALACIÓN
 
 En adJ es en español, consta de: (a) preparación, (b) instalación/actualización del sistema base y (c) instalación de aplicaciones y entorno.  Por favor vea más detalles en [ Actualiza.md | https://github.com/pasosdeJesus/adJ/blob/ADJ_5_8/Actualiza.md ]
 
 
-!PAQUETES EXCLUSIVOS DE ADJ
+### PAQUETES EXCLUSIVOS DE ADJ
 
 Puede ver el listado completo en https://github.com/pasosdeJesus/adJ/blob/master/Contenido.txt a continuación se describen sólo novedades respecto a la versión anterior de adJ y OpenBSD 5.8:
 * SIVeL 1.2.  Ver http://sivel.sourceforge.net/1.2/actualizacion-sivel.html#actualizaciondeunounoaunodos
@@ -76,7 +76,7 @@ Puede ver el listado completo en https://github.com/pasosdeJesus/adJ/blob/master
 * Paquetes con documentación renombrados ahora son: basico_adJ, usuario_adJ y servidor_adJ que se instalan (con el nuevo nombre) en /usr/local/share/doc/.  Las fuentes se migraron a github y puede ubicarlas en https://github.io/pasosdeJesus y los HTML puede verlos en Internet en http://pasosdeJesus.github.io/basico_adJ/, http://pasosdeJesus.github.io/usuario_adJ/ y http://pasosdeJesus.github.io/servidor_adJ/ 
 * Los paquetes exclusivos los encuentra en [http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/5.8-amd64/paquetes] y otras extensiones de PostgreSQL y PHP que no hacen parte de la distribución en [http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/5.8-amd64-paquetes-extra] 
 
-!PAQUETES DE OPENBSD
+### PAQUETES DE OPENBSD
 
 Los paquetes para OpenBSD 5.8 también funcionan sin cambios. Resaltamos:
 * nginx 1.7.1 que puede ser util mientras migra a OpenBSD httpd, ver http://pasosdeJesus.github.io/servidor_adJ/sevidorweb.html#openbsd-httpd
@@ -86,7 +86,7 @@ Los paquetes para OpenBSD 5.8 también funcionan sin cambios. Resaltamos:
 * Se incluyen en total 518 paquetes, en los repositorios de paquetes para OpenBSD 5.7 hay 8588 disponibles para amd64
 
 
-!ESCRITORIO
+### ESCRITORIO
 
 ```ksh``` con ```xterm``` no soportan del todo UTF-8, por ejemplo al borrar una vocal con tilde o ñ debe presionarse 2 veces espacio atrás.  Si requiere una terminal con codificación ASCII ejecute:
 <pre>
@@ -97,13 +97,13 @@ y ponga la variable LANG en otro valor por ejemplo:
     export LANG=C
 </pre>
 
-!DOCUMENTACIÓN
+## DOCUMENTACIÓN
 
 * Se han hecho diversas pruebas del uso de adJ sobre IPv6. Se ha comprobado que la pila de red de OpenBSD puede conectarse tanto con túneles como directamente a conexiones IPv6 solas y doble pila. Respecto a servicios se ha comprobado que operan bien al menos Xorg, cupsd, nginx, smtpd, sshd, named, ftpd, rsync, dovecot.  También se ha comprobado la operación correcta sobre IPv6 de la pila Ruby on Rails incluida en adJ. Para facilitar la adopción de IPv6 --extremadamente retrasada en Colombia-- hemos iniciado ejercicios y enlaces a material público de un curso de IPv6 de LACNIC en: 
 	[http://dhobsd.pasosdejesus.org/ipv6-basico-lacnic-2015.html]
 * Se han hecho pruebas del uso de adJ sobre conexiones ethernet 10G con cableado categoria 6A, con tarjetas de red de 10G y switches de 10G. También se han hecho pruebas exitosas de cortafuegos redundantes para brindar alta disponibilidad con costos moderados. Estaremos documentando.
 
-!!!DESCARGAS
+## DESCARGAS
 
 Puede descargar imagenes ISO para amd64:
 
@@ -117,7 +117,7 @@ Las claves públicas empleadas para firmar digitalmente el CD de instalación y 
 * adJ-58-base.pub: ![RWSHIU7tODYAqTiwkmrJclJb1WZXWrP7GcAmxueSChfaZ35o18ckZzUO]
 * adJ-58-pkg.pub: ![RWRJU9sVRyykCZtxkoXZfKfFYxboSbotEpLjGErsJ7XikPM+Qm+k6zcC]
 
-!!!ACTUALIZACIÓN E INSTALACIÓN
+## ACTUALIZACIÓN E INSTALACIÓN
 
 Si planea actualizar de una versión anterior de adJ a adJ 5.8
 hay un procedimiento mas rápido con rsync (ver
@@ -135,19 +135,27 @@ puede aprender a instalar o actualizar con:
   [http://pasosdeJesus.github.io/guias/usuario_adJ/sobre-la-instalacion.html]
 
 
-!!! SOPORTE
+## SOPORTE
 
-Eventualmente podrá contar con ayuda voluntaria para utilizar los programas disponibles en este DVD en la lista pública ```openbsd-colombia``` a la cual puede suscribirse enviando un correo a openbsd-colombia-subscribe@googlegroups.com (Agradecemos amabilidad del moderador Fernando Quintero).
+Emplee el canal de gitter: https://gitter.im/pasosdeJesus/adJ
 
-Si su organización necesita un soporte retribuido lo invitamos a escribirnos al [correo de contacto|mailto:info@pasosdeJesus.org].
+Eventualmente podrá contar con ayuda voluntaria para utilizar los programas 
+disponibles en este DVD en la lista pública ```openbsd-colombia``` a la cual 
+puede suscribirse enviando un correo a 
+openbsd-colombia-subscribe@googlegroups.com (Agradecemos amabilidad del 
+moderador Fernando Quintero).
+
+Si su organización necesita un soporte retribuido lo invitamos a escribirnos 
+al [correo de contacto|mailto:info@pasosdeJesus.org].
 
 
-!!!DESARROLLO
+## DESARROLLO
 
-Lo invitamos a consultar [https://github.com/pasosdeJesus/adJ] y a enviar sus mejoras.
+Lo invitamos a consultar [https://github.com/pasosdeJesus/adJ] y a enviar sus 
+mejoras.
 
 
-!!! FE DE ERRATAS
+## FE DE ERRATAS
 
 Tanto en OpenBSD como en adJ cuando se usa locale (por ejemplo con 
 codificación de caracteres UTF-8) ```abiword``` presenta problemas para 
@@ -157,9 +165,12 @@ LC_MESSAGES=C abiword
 </pre>
 
 
-!!! DONACIONES 
+## DONACIONES 
 
-Para mejorar el financiamiento de OpenBSD, donamos y aportamos trabajo voluntario a ese proyecto.  Por lo mismo publicamos adJ varios meses después de la respectiva versión de OpenBSD.
+Para mejorar el financiamiento de OpenBSD, donamos y aportamos trabajo 
+voluntario a ese proyecto.  Por lo mismo publicamos adJ varios meses después 
+de la respectiva versión de OpenBSD.
 
-'''Agradecemos sus oraciones y si le resulta posible sus [donaciones | Donaciones]'''.
+'''Agradecemos sus oraciones y si le resulta posible sus 
+[donaciones | Donaciones]'''.
 
