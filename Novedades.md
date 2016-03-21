@@ -3,7 +3,7 @@ Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y que esperamos será la elegida por Jesús durante el Milenio.
 
 ###Versión: 5.8b1
-Fecha de publicación: 20/Mar/2015
+Fecha de publicación: 21/Mar/2015
 
 ##NOVEDADES
 
@@ -50,7 +50,6 @@ Entre las novedades reportadas en las `Notas de publicación de OpenBSD 5.8' des
 	* ```mandoc``` ahora soporta UTF-8 especificado con ```-K``` y la salida por defecto ahora es ```-Tlocale``` en lugar ```-Tascii```
 	* ```syslogd``` puede enviar mensajes por TLS
 	* Nueva herramienta ```rcctl``` para controlar servicios
-	* Diversos programas pasados de base a portes: Sendmail, nginx.  Estos están disponibles como paquetes.
 
 * El sistema base incluye mejoras a componentes auditados y mejorados como ```Xenocara``` (```Xorg 7.7```), ```gcc``` 4.2.1, ```perl``` 5.18.2, ```LibreSSL``` 2.0 con parches posteriores, ```OpenSMTP``` 5.4.4, ```nsd``` 4.0.3
 
@@ -68,7 +67,7 @@ Puede ver el listado completo en https://github.com/pasosdeJesus/adJ/blob/ADJ_5_
 * ```Mt77 1.0a1```. Buscador rápido y preciso para español, versión alfa.
 * ```PostgreSQL 9.4.6``` retroportado y recompilado para cerrar fallas, pero además con soporte UTF-8 y ordenamientos alfabéticos en español.  Desde adJ 5.8 socket reubicado de ```/var/www/tmp``` a ```/var/www/var/run/postgresql```. En adJ la información queda cifrada cuando así se elije al instalar o actualizar adJ.  Ver detalles de como usar cotejación en http://aprendiendo.pasosdeJesus.org/?id=i18n
 * ```Ruby 2.3.0``` retroportado de OpenBSD-current y probado con aplicaciones Rails 4.2.4 Ver http://dhobsd.pasosdeJesus.org/Ruby_on_Rails_en_OpenBSD.html 
-* ```node 4.2.1``` retroportado de OpenBSD-current y probado con aplicaciones como FreeCodeCamp --requiere y por eso se incluyen gcc-4.9.3 y g++-4.9.3 Ver http://dhobsd.pasosdejesus.org/freecodecamp.html
+* ```node 4.2.1``` retroportado de OpenBSD-current y probado con aplicaciones como FreeCodeCamp --requiere y por eso se incluyen gcc-4.9.3 y g++-4.9.3 -- ver http://dhobsd.pasosdejesus.org/freecodecamp.html
 * Para activar soporte de xlocale se han recompilado los siguientes paquetes que están en portes de OpenBSD 5.8: ```boost```, ```djvulibre```, ```ggrep```, ```glib2```, ```gtar```, ```libidn```, ```libxslt```, ```llvm```, ```scribus```, ```vlc```, ```wget```, ```wxWidgets-gtk2```
 * Para cerrar fallas se han recompilado los siguientes paquetes a partir de portes actualizados de OpenBSD 5.8 (pero no incluidos en binarios de ese sistema):  ```cups```, ```cups-libs```, ```cups-filters```, ```curl```, ```gdk-pixbuf```, ```ghostscript```, ```gnutls```, ```icu4c```, ```libksba```, ```libtasn1```, ```libwmf```, ```libxml```, ```net-snmp```, ```netpbm```, ```p5-Mail-SpamAssassin```, ```polkit```, ```php-5.5.30```, ```py-Pillow```, ```qemu```, ```rrdtool```
 * Se han retroportado otros paquetes de OpenBSD-Current: ```chromium 46``` (más estable)
@@ -79,7 +78,7 @@ Puede ver el listado completo en https://github.com/pasosdeJesus/adJ/blob/ADJ_5_
 
 Los paquetes para OpenBSD 5.8 también funcionan sin cambios. Resaltamos:
 * nginx 1.9.3 que puede ser util mientras migra a OpenBSD httpd, ver http://pasosdeJesus.github.io/servidor_adJ/sevidorweb.html#openbsd-httpd
-* !LibreOffice actualizado a 4.4.5.3, gimp a 2.8.14
+* LibreOffice actualizado a 4.4.5.3, gimp a 2.8.14
 * LLVM/Clang a 3.5.201402288 asi como los demás lenguajes de programación
 * No hay paquete para mysql, ha sido remplazado por mariadb, ver http://pasosdeJesus.github.io/servidor_adJ/mariadb.html
 * Se incluyen en total 568 paquetes, en los repositorios de paquetes para OpenBSD 5.7 hay 8588 disponibles para amd64
@@ -107,14 +106,14 @@ y ponga la variable LANG en otro valor por ejemplo:
 Puede descargar imagenes ISO para amd64:
 
 * Protocolo HTTP: [http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus]
-* Protocolo RSYNC: ```rsync !rsync://rsync.pasosdeJesus.org/AprendiendoDeJesus```
+* Protocolo RSYNC: ```rsync rsync://rsync.pasosdeJesus.org/AprendiendoDeJesus```
 * Ya no se soporta el protocolo FTP
 
 Si prefiere asumir gastos de manufactura, envío y eventualmente una donación con gusto le enviamos un DVD ([correo de contacto|mailto:info@pasosdeJesus.org]).
 
 Las claves públicas empleadas para firmar digitalmente el CD de instalación y los paquetes se ubican en /etc/signify y deben coincidir con estas:
-* adJ-58-base.pub: ![RWSHIU7tODYAqTiwkmrJclJb1WZXWrP7GcAmxueSChfaZ35o18ckZzUO]
-* adJ-58-pkg.pub: ![RWRJU9sVRyykCZtxkoXZfKfFYxboSbotEpLjGErsJ7XikPM+Qm+k6zcC]
+* adJ-58-base.pub: RWSHIU7tODYAqTiwkmrJclJb1WZXWrP7GcAmxueSChfaZ35o18ckZzUO
+* adJ-58-pkg.pub: RWRJU9sVRyykCZtxkoXZfKfFYxboSbotEpLjGErsJ7XikPM+Qm+k6zcC
 
 ## ACTUALIZACIÓN E INSTALACIÓN
 
@@ -128,10 +127,10 @@ Allí mismo se documentan algunos problemas comunes al actualizar y su solución
 Si no tiene experiencia con esta distribución de OpenBSD para servidores
 y cortafuegos, que es segura, usable en español y amigable para cristian@s,
 puede aprender a instalar o actualizar con:
-# El curso/⁠reto que da una medalla a quienes completen:
-  [https://p2pu.org/es/groups/openbsd-adj-como-sistema-de-escritorio/]
-# La guía de instalación:
-  [http://pasosdeJesus.github.io/guias/usuario_adJ/sobre-la-instalacion.html]
+1 El curso/⁠reto que da una medalla a quienes completen:
+  https://p2pu.org/es/groups/openbsd-adj-como-sistema-de-escritorio/
+2 La guía de instalación:
+  http://pasosdeJesus.github.io/guias/usuario_adJ/sobre-la-instalacion.html
 
 
 ## SOPORTE
@@ -145,12 +144,12 @@ openbsd-colombia-subscribe@googlegroups.com (Agradecemos amabilidad del
 moderador Fernando Quintero).
 
 Si su organización necesita un soporte retribuido lo invitamos a escribirnos 
-al [correo de contacto|mailto:info@pasosdeJesus.org].
+al (correo de contacto)[mailto:info@pasosdeJesus.org]
 
 
 ## DESARROLLO
 
-Lo invitamos a consultar [https://github.com/pasosdeJesus/adJ] y a enviar sus 
+Lo invitamos a consultar https://github.com/pasosdeJesus/adJ y a enviar sus 
 mejoras.
 
 
