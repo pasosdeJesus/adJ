@@ -57,33 +57,32 @@ Entre las novedades reportadas en las `Notas de publicación de OpenBSD 5.8' des
 
 ### PROCESO DE INSTALACIÓN
 
-En adJ es en español, consta de: (a) preparación, (b) instalación/actualización del sistema base y (c) instalación de aplicaciones y entorno.  Por favor vea más detalles en [ Actualiza.md | https://github.com/pasosdeJesus/adJ/blob/ADJ_5_8/Actualiza.md ]
+En adJ es en español, consta de: (a) preparación, (b) instalación/actualización del sistema base y (c) instalación de aplicaciones y entorno.  Por favor vea más detalles en (Actualiza.md)[https://github.com/pasosdeJesus/adJ/blob/ADJ_5_8/Actualiza.md]
 
 
 ### PAQUETES EXCLUSIVOS DE ADJ
 
-Puede ver el listado completo en https://github.com/pasosdeJesus/adJ/blob/master/Contenido.txt a continuación se describen sólo novedades respecto a la versión anterior de adJ y OpenBSD 5.8:
-* SIVeL 1.2.  Ver http://sivel.sourceforge.net/1.2/actualizacion-sivel.html#actualizaciondeunounoaunodos
-* SIVeL 2.0a7. Versión alfa de SIVeL 2. Escrita sobre Ruby on Rails.
-* Mt77 1.0a1. Buscador rápido y preciso para español, versión alfa.
-* PostgreSQL 9.4.6 retroportado y recompilado para cerrar fallas, pero además con soporte UTF-8 y ordenamientos alfabéticos en español.  Desde adJ 5.8 socket reubicado de ```/var/www/tmp``` a ```/var/www/var/run/postgresql```. En adJ la información queda cifrada cuando así se elije al instalar o actualizar adJ.  Ver detalles de como usar cotejación en http://aprendiendo.pasosdeJesus.org/?id=i18n
-* ruby 2.2.4 retroportado de OpenBSD-current y probado con aplicaciones Rails 4.2.4 Ver http://dhobsd.pasosdeJesus.org/Ruby_on_Rails_en_OpenBSD.html 
-* Para activar soporte de xlocale se ha recompilado los siguientes paquetes que están en portes de OpenBSD 5.8: boost, djvulibre, ggrep, glib2, gtar, libidn, libxslt, llvm, scribus, vlc, wget, wxWidgets-gtk2
-* Para cerrar fallas se han recompilado los siguientes paquetes a partir de portes actualizados de OpenBSD 5.8 (pero no incluidos en binarios de ese sistema):  cups, cups-libs, cups-filters, curl, gdk-pixbuf, ghostscript, gnutls, icu4c, libksba, libtasn1, libwmf, libxml, net-snmp, netpbm, p5-Mail-SpamAssassin, polkit, php-5.5.30, qemu, rrdtool
-* Se han retroportado otros paquetes de OpenBSD-Current: chromium-43 (más estable)
-* Se incluye el navegador modo texto w3m para remplazar a lynx que salió del sistema base. w3m soporta UTF-8, colores y descargas grandes (no operaba en 5.6).
-* Nuevo porte ocaml-labltk
+Puede ver el listado completo en https://github.com/pasosdeJesus/adJ/blob/ADJ_5_8/Contenido.txt a continuación se describen sólo novedades respecto a la versión anterior de adJ y OpenBSD 5.8:
+* ```SIVeL 1.2.1```  Ver http://sivel.sourceforge.net/1.2/actualizacion-sivel.html#actualizaciondeunounoaunodos
+* ```SIVeL 2.0a7``` Versión alfa de SIVeL 2. Escrita sobre Ruby on Rails.
+* ```Mt77 1.0a1```. Buscador rápido y preciso para español, versión alfa.
+* ```PostgreSQL 9.4.6``` retroportado y recompilado para cerrar fallas, pero además con soporte UTF-8 y ordenamientos alfabéticos en español.  Desde adJ 5.8 socket reubicado de ```/var/www/tmp``` a ```/var/www/var/run/postgresql```. En adJ la información queda cifrada cuando así se elije al instalar o actualizar adJ.  Ver detalles de como usar cotejación en http://aprendiendo.pasosdeJesus.org/?id=i18n
+* ```Ruby 2.3.0``` retroportado de OpenBSD-current y probado con aplicaciones Rails 4.2.4 Ver http://dhobsd.pasosdeJesus.org/Ruby_on_Rails_en_OpenBSD.html 
+* ```node 4.2.1``` retroportado de OpenBSD-current y probado con aplicaciones como FreeCodeCamp --requiere y por eso se incluyen gcc-4.9.3 y g++-4.9.3 Ver http://dhobsd.pasosdejesus.org/freecodecamp.html
+* Para activar soporte de xlocale se han recompilado los siguientes paquetes que están en portes de OpenBSD 5.8: ```boost```, ```djvulibre```, ```ggrep```, ```glib2```, ```gtar```, ```libidn```, ```libxslt```, ```llvm```, ```scribus```, ```vlc```, ```wget```, ```wxWidgets-gtk2```
+* Para cerrar fallas se han recompilado los siguientes paquetes a partir de portes actualizados de OpenBSD 5.8 (pero no incluidos en binarios de ese sistema):  ```cups```, ```cups-libs```, ```cups-filters```, ```curl```, ```gdk-pixbuf```, ```ghostscript```, ```gnutls```, ```icu4c```, ```libksba```, ```libtasn1```, ```libwmf```, ```libxml```, ```net-snmp```, ```netpbm```, ```p5-Mail-SpamAssassin```, ```polkit```, ```php-5.5.30```, ```py-Pillow```, ```qemu```, ```rrdtool```
+* Se han retroportado otros paquetes de OpenBSD-Current: ```chromium 46``` (más estable)
 * Paquetes con documentación renombrados ahora son: basico_adJ, usuario_adJ y servidor_adJ que se instalan (con el nuevo nombre) en /usr/local/share/doc/.  Las fuentes se migraron a github y puede ubicarlas en https://github.io/pasosdeJesus y los HTML puede verlos en Internet en http://pasosdeJesus.github.io/basico_adJ/, http://pasosdeJesus.github.io/usuario_adJ/ y http://pasosdeJesus.github.io/servidor_adJ/ 
 * Los paquetes exclusivos los encuentra en [http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/5.8-amd64/paquetes] y otras extensiones de PostgreSQL y PHP que no hacen parte de la distribución en [http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/5.8-amd64-paquetes-extra] 
 
 ### PAQUETES DE OPENBSD
 
 Los paquetes para OpenBSD 5.8 también funcionan sin cambios. Resaltamos:
-* nginx 1.7.1 que puede ser util mientras migra a OpenBSD httpd, ver http://pasosdeJesus.github.io/servidor_adJ/sevidorweb.html#openbsd-httpd
-* !LibreOffice actualizado a 4.1.6.2, gimp a 2.8.10
-* LLVM/Clang a 3.5.2040228p8 asi como los demás lenguajes de programación
+* nginx 1.9.3 que puede ser util mientras migra a OpenBSD httpd, ver http://pasosdeJesus.github.io/servidor_adJ/sevidorweb.html#openbsd-httpd
+* !LibreOffice actualizado a 4.4.5.3, gimp a 2.8.14
+* LLVM/Clang a 3.5.201402288 asi como los demás lenguajes de programación
 * No hay paquete para mysql, ha sido remplazado por mariadb, ver http://pasosdeJesus.github.io/servidor_adJ/mariadb.html
-* Se incluyen en total 518 paquetes, en los repositorios de paquetes para OpenBSD 5.7 hay 8588 disponibles para amd64
+* Se incluyen en total 568 paquetes, en los repositorios de paquetes para OpenBSD 5.7 hay 8588 disponibles para amd64
 
 
 ### ESCRITORIO
