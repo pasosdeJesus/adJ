@@ -17,37 +17,36 @@ Con respecto a OpenBSD 5.8 para amd64 y a la edición anterior de este DVD
 * Utilidad ```localedef``` especificada en el estándar POSIX para convertir formatos de fechas y horas en un formato estándar POSIX al formato de OpenBSD.  Configuraciones regionales de países tomadas del CLDR de Unicode.
 * Soporte en la librería de C para presentar fechas, horas, cantidades monetarias, números y ordenamientos alfabéticos (cotejación) con las convenciones de cada país de latinoamérica (y de otros locales soportados por OpenBSD) de acuerdo al estándar POSIX. Opera bien en codificaciones de 8 bits o para español en codificación UTF-8. Buena parte de este soporte, así como el de xlocale se basaron en FreeBSD.  Estas mejoras fueron aportadas a OpenBSD (cotejación desde adJ 5.2, cantidades monetarias y números desde 5.4 y fechas y horas desde 5.5) y se anhela su integración en futuras versiones.    Así en adJ por ejemplo los ordenamientos alfabéticos en PostgreSQL, LibreOffice y otros programas son correctos en español (que no ocurre en OpenBSD).
 * Retroportados, recompilados o mejorados más de 25 paquetes de OpenBSD para cerrar fallas de seguridad o emplear xlocale,  ver detalles en sección PAQUETES EXCLUSIVOS DE ADJ.
-* Hemos remplazando `daemon' por `servicio' en buena parte del sistema base (ver por ejemplo ```vmstat -s``` o ```less /var/log/servicio``` o ```man servicio```).  
+* Hemos remplazando ```daemon``` por ```servicio``` en buena parte del sistema base (ver por ejemplo ```vmstat -s``` o ```less /var/log/servicio``` o ```man servicio```).  
 
 Entre las novedades reportadas en las `Notas de publicación de OpenBSD 5.8' destacamos las siguientes relacionadas con amd64:
 
 * Controladores ampliados o mejorados para amd64
-** Vídeo: Mejorado ```radeondrm``` en su soporte para Radeon RS* IGP
-** Audio: Mejorado ```azalia``` para soportar codecs Realtek ALC885  y dipositivos Bay Trail HD Audio.
-** Red: Ethernet:  Nuevo ```nep``` que soporta Sun Neptune 10GB, mejorado ```myx``` que soporta yricom Myri-10G PCI Express, mejorado ```msk``` para soporta Yukon Prime, Yukon Optima 2, Yukon 88E8079,  y varios EC U y chipsets Supreme; mejorado ```bge``` para soportar frames jumbo; mejorado ```sk``` que soporta XMAC II y Marvell Yukon 10/100G.  Inalámbrico:  Nuevo ```iwm``` que soporta dispositivos Intel 7200 IEEE 802.11a/ac/b/g/n; mejorado ```athn``` para soprotar Atheros UB94; mejorado ```win```. Modem USB: Mejorado ```umsm``` para soportar MEDION S4222, mejorado ```umodem``` para soportar dispositivos Arduino Leonardo.
-** Discos: Mejorado ```ciss``` para soportar Arreglos RAIS HP Gen9 Smart, mejorados ```mpi``` y ```mfi```, ```mfii``` que soportan arreglos RAID. Mejorado ```pciide``` para soportar chipsets Intel C610.
-** Temperatura, sensores y otros: USB 3.0 soportado en ```xhci```, varios adaptadores seriales a usb soportados con nuevos ```umcs``` y ```uslhcom```; mejorado ```umass``` para soportar ARchos 24y Vision. gpio: controlador ```skgpio``` para Soekris net6501. Lectores de tarjetas: mejorado ```rtsx``` para soportar RTS5227 y RTL8411B. Puentes y Buses PCI: mejorados ```ppb```, ```puc```. Memoria:mejorado ```sdmmc``` para soportar memorias SD/MMC de mas de 2G y más tarjetas reconocidas por ```sdhc```. UPS: Mejorado ```upd``` para soportar más UPS. Mejorado ```ums``` para soportar tabletas emuladas por Qemu. Teclado: Mejorado ```ukbd``` para soportar Apple "wellspring". touchpads: Mejorado ```pms``` para soportar Elantech v4.
-
+	** Vídeo: Mejorado ```radeondrm``` en su soporte para Radeon RS* IGP
+	** Audio: Mejorado ```azalia``` para soportar codecs Realtek ALC885  y dipositivos Bay Trail HD Audio.
+	** Red: Ethernet:  Nuevo ```nep``` que soporta Sun Neptune 10GB, mejorado ```myx``` que soporta yricom Myri-10G PCI Express, mejorado ```msk``` para soporta Yukon Prime, Yukon Optima 2, Yukon 88E8079,  y varios EC U y chipsets Supreme; mejorado ```bge``` para soportar frames jumbo; mejorado ```sk``` que soporta XMAC II y Marvell Yukon 10/100G.  Inalámbrico:  Nuevo ```iwm``` que soporta dispositivos Intel 7200 IEEE 802.11a/ac/b/g/n; mejorado ```athn``` para soprotar Atheros UB94; mejorado ```win```. Modem USB: Mejorado ```umsm``` para soportar MEDION S4222, mejorado ```umodem``` para soportar dispositivos Arduino Leonardo.
+	** Discos: Mejorado ```ciss``` para soportar Arreglos RAIS HP Gen9 Smart, mejorados ```mpi``` y ```mfi```, ```mfii``` que soportan arreglos RAID. Mejorado ```pciide``` para soportar chipsets Intel C610.
+	** Temperatura, sensores y otros: USB 3.0 soportado en ```xhci```, varios adaptadores seriales a usb soportados con nuevos ```umcs``` y ```uslhcom```; mejorado ```umass``` para soportar ARchos 24y Vision. gpio: controlador ```skgpio``` para Soekris net6501. Lectores de tarjetas: mejorado ```rtsx``` para soportar RTS5227 y RTL8411B. Puentes y Buses PCI: mejorados ```ppb```, ```puc```. Memoria:mejorado ```sdmmc``` para soportar memorias SD/MMC de mas de 2G y más tarjetas reconocidas por ```sdhc```. UPS: Mejorado ```upd``` para soportar más UPS. Mejorado ```ums``` para soportar tabletas emuladas por Qemu. Teclado: Mejorado ```ukbd``` para soportar Apple "wellspring". touchpads: Mejorado ```pms``` para soportar Elantech v4.
+	
 * Mejoras a herramientas de Red
-** OpenBSD httpd: No soporta SSLv3, mejora soporte para virtualhosts, autenticación básica, redirección en URLs específicos, mejoras a FastCGI
-** OpenSMTP 5.4.4:  No soporta SSLv3, mejoras a reconocedor de encabezados
-** tcpdump presenta tráfico destinadoa a direcciones IPv6 de Enlace-local (FE80::/65)
-** Las solicitudes de IPv6 ahora las hace el kernel ("inet6 autoconf") no se requieren rtsol y rtsold que se han eliminado.
+	** OpenBSD httpd: No soporta SSLv3, mejora soporte para virtualhosts, autenticación básica, redirección en URLs específicos, mejoras a FastCGI
+	** OpenSMTP 5.4.4:  No soporta SSLv3, mejoras a reconocedor de encabezados
+	** tcpdump presenta tráfico destinadoa a direcciones IPv6 de Enlace-local (FE80::/65)
+	** Las solicitudes de IPv6 ahora las hace el kernel ("inet6 autoconf") no se requieren rtsol y rtsold que se han eliminado.
 
 * Seguridad
-** Chequeo más estricto W^X en kernel
-** /var/tmp es enlace a /tmp
-** Las funciones rand, random, drand48, lrand48, mrand48, srand48 ahora son no-deterministicas.
-** passwd ahora sólo soporta cifrado blowfish
-** Mejoras LibreSSL que es una pila para TLS que remplaza OpenSSL con fuentes más legibles y auditadas.
-** OpenSSH 6.8
+	** Chequeo más estricto W^X en kernel
+	** /var/tmp es enlace a /tmp
+	** Las funciones rand, random, drand48, lrand48, mrand48, srand48 ahora son no-deterministicas.
+	** passwd ahora sólo soporta cifrado blowfish
+	** Mejoras LibreSSL que es una pila para TLS que remplaza OpenSSL con fuentes más legibles y auditadas.
+	** OpenSSH 6.8
 
 * Otros
-** mandoc ahora soporta UTF-8 especificado con -K y la salida por defecto ahora es -Tlocale en lugar -Tascii
-** ```syslogd``` puede enviar mensajes por TLS
-** Nueva herramienta ```rcctl``` para controlar servicios
-** Diversos programas pasados de base a portes: Sendmail, nginx.  Estos están disponibles como paquetes.
-
+	** mandoc ahora soporta UTF-8 especificado con -K y la salida por defecto ahora es -Tlocale en lugar -Tascii
+	** ```syslogd``` puede enviar mensajes por TLS
+	** Nueva herramienta ```rcctl``` para controlar servicios
+	** Diversos programas pasados de base a portes: Sendmail, nginx.  Estos están disponibles como paquetes.
 
 * El sistema base incluye mejoras a componentes auditados y mejorados como ```Xenocara``` (Xorg 7.7), ```gcc``` 4.2.1, ```perl``` 5.18.2, LibreSSL 2.0 con parches posteriores, OpenSMTP 5.4.4, nsd 4.0.3
 
