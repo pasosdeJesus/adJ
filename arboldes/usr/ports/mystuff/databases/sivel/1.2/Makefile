@@ -2,7 +2,7 @@
 
 # Port in the public domain.
 
-VERSION=1.2
+VERSION=1.2.1
 DISTNAME=v${VERSION}
 PKGNAME=sivel-v${VERSION}
 REVISION=1
@@ -17,7 +17,7 @@ DCOMP=SIVeL-${VERSION}
 SIVEL_RAIZ ?= htdocs/sivel
 
 pre-patch:
-	ln -s ${WRKDIR}/SIVeL-1.2 ${WRKDIR}/v1.2
+	ln -s ${WRKDIR}/SIVeL-${VERSION} ${WRKDIR}/v${VERSION}
 
 do-install:
 	echo @mkdir -p ${PREFIX}/${SIVEL_RAIZ}

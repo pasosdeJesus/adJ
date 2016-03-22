@@ -15,9 +15,10 @@ ACVER=`uname -r`
 
 export PATH=$PATH:/usr/local/bin
 
-if (test "$USER" != "root") then {
-	echo "Este script debe ser ejecutado por root";
-	exit 1;
+u=`whoami`
+if (test "$u" != "root") then {
+  echo "Este script debe ser ejecutado por root";
+  exit 1;
 } fi;
 
 # Cantidad de paquetes instalados al comenzar
@@ -178,14 +179,14 @@ if (test ! -f /$RUTAIMG/resbase.img) then {
 mount | grep "postgresql" > /dev/null
 if (test "$?" != "0" ) then {
 	echo "No está montada imagen cifrada para PostgreSQL" | tee -a /var/www/tmp/inst-sivel.log;
-	echo ' Intente ejecutando "sudo /etc/rc.local"';
+	echo ' Intente ejecutando "doas /etc/rc.local"';
 	exit 1;
 } fi;
 
 mount | grep "resbase" > /dev/null
 if (test "$?" != "0") then {
 	echo "No está montada imagen cifrada para Archivo Digital" | tee -a /var/www/tmp/inst-sivel.log;
-	echo ' Intente ejecutando "sudo /etc/rc.local"';
+	echo ' Intente ejecutando "doas /etc/rc.local"';
 	exit 1;
 } fi;
 
@@ -213,7 +214,7 @@ if (test -d "/var/www/htdocs/sivel") then {
 	cd /tmp
 	pgrep post > /dev/null
 	if (test "$?" = "0") then {
-		echo -n "psql -h /var/www/tmp $acuspos -c \"SELECT usename FROM pg_user WHERE usename='postgres';\"" > /tmp/cu.sh
+		echo -n "psql -h /var/www/var/run/postgresql $acuspos -c \"SELECT usename FROM pg_user WHERE usename='postgres';\"" > /tmp/cu.sh
         	su - _postgresql /tmp/cu.sh
 		if (test "$?" != "0") then {
 			us='_postgresql';
@@ -221,7 +222,7 @@ if (test -d "/var/www/htdocs/sivel") then {
 		} fi;
 	} fi;
 	echo "Sacando copia de respaldo de base SIVeL por defecto" | tee -a /var/www/tmp/inst-sivel.log;
-	echo -n "pg_dump  -h /var/www/tmp --inserts --clean --no-owner $acuspos sivel > /var/www/resbase/up$o.sql" > /tmp/cu.sh
+	echo -n "pg_dump  -h /var/www/var/run/postgresql --inserts --clean --no-owner $acuspos sivel > /var/www/resbase/up$o.sql" > /tmp/cu.sh
 	touch /var/www/resbase/up$o.sql
 	chown _postgresql:_postgresql /var/www/resbase/up$o.sql
         chmod a+x /tmp/cu.sh
@@ -259,7 +260,7 @@ if (test -d /var/www/sincodh-publico/relatos) then {
 } fi;
 
 echo "* Verificando usuario postgres" | tee -a /var/www/tmp/inst-sivel.log
-echo "psql -h /var/www/tmp/ -Upostgres template1 -c \"select * from pg_user where usename='postgres';\" | grep postgres > /tmp/sivel" > /tmp/cu.sh
+echo "psql -h /var/www/var/run/postgresql/ -Upostgres template1 -c \"select * from pg_user where usename='postgres';\" | grep postgres > /tmp/sivel" > /tmp/cu.sh
 chmod +x /tmp/cu.sh
 cat /tmp/cu.sh >> /var/www/tmp/inst-sivel.log
 su - _postgresql /tmp/cu.sh | tee -a /var/www/tmp/inst-sivel.log
@@ -289,12 +290,12 @@ if (test "$CLSIVELPG" = "") then {
 
 
 echo "* Crear usuario sivel para PostgreSQL" | tee -a /var/www/tmp/inst-sivel.log
-echo "/usr/local/bin/psql -h /var/www/tmp -U$uspos template1 -c \"select * from pg_catalog.pg_user where usename='sivel';\" | grep \"sivel\" > /tmp/sivel" > /tmp/cu.sh
+echo "/usr/local/bin/psql -h /var/www/var/run/postgresql -U$uspos template1 -c \"select * from pg_catalog.pg_user where usename='sivel';\" | grep \"sivel\" > /tmp/sivel" > /tmp/cu.sh
 chmod +x /tmp/cu.sh
 cat /tmp/cu.sh >> /var/www/tmp/inst-sivel.log
 su - _postgresql /tmp/cu.sh | tee -a /var/www/tmp/inst-sivel.log
 if (test "`cat /tmp/sivel`" = "") then {
-	echo /usr/local/bin/createuser -U $uspos -h /var/www/tmp/ -s sivel > /tmp/cu.sh
+	echo /usr/local/bin/createuser -U $uspos -h /var/www/var/run/postgresql/ -s sivel > /tmp/cu.sh
 	chmod +x /tmp/cu.sh
 cat /tmp/cu.sh >> /var/www/tmp/inst-sivel.log
 	su - _postgresql /tmp/cu.sh | tee -a /var/www/tmp/inst-sivel.log
@@ -303,13 +304,13 @@ cat /tmp/cu.sh >> /var/www/tmp/inst-sivel.log
 } fi;
 #alter ROLE sivel superuser
 echo "* Poniendo usuario sivel como superusuario" | tee -a /var/www/tmp/inst-sivel.log
-echo "/usr/local/bin/psql -h /var/www/tmp -U$uspos template1 -c \"ALTER USER sivel WITH SUPERUSER;\"  > /tmp/sivel" > /tmp/cu.sh
+echo "/usr/local/bin/psql -h /var/www/var/run/postgresql/ -U$uspos template1 -c \"ALTER USER sivel WITH SUPERUSER;\"  > /tmp/sivel" > /tmp/cu.sh
 chmod +x /tmp/cu.sh
 cat /tmp/cu.sh >> /var/www/tmp/inst-sivel.log
 su - _postgresql /tmp/cu.sh | tee -a /var/www/tmp/inst-sivel.log
 
 echo "* Clave para usuario sivel de PostgreSQL ($CLSIVELPG)" | tee -a /var/www/tmp/inst-sivel.log;
-echo "psql -h /var/www/tmp -U $uspos template1 -c \"ALTER USER sivel WITH PASSWORD '${CLSIVELPG}'\"" > /tmp/cu.sh
+echo "psql -h /var/www/var/run/postgresql/ -U $uspos template1 -c \"ALTER USER sivel WITH PASSWORD '${CLSIVELPG}'\"" > /tmp/cu.sh
 chmod +x /tmp/cu.sh
 cat /tmp/cu.sh >> /var/www/tmp/inst-sivel.log
 su - _postgresql /tmp/cu.sh | tee -a /var/www/tmp/inst-sivel.log
@@ -370,7 +371,7 @@ if (test "$?" = "0") then {
         		paso=0;
         	}' /tmp/nginx.conf > /etc/nginx/nginx.conf
         	chmod -w /etc/nginx/nginx.conf
-		sudo sh /etc/rc.d/nginx restart
+		    sh /etc/rc.d/nginx restart
 	} else {
         	echo "   Saltando..."| tee -a /var/www/tmp/inst-sivel.log;
         } fi;
@@ -425,7 +426,7 @@ if (test -f "/var/www/htdocs/sivel/aut/conf.php.plantilla" -o -f "/var/www/htdoc
 		tar cvfz /var/www/resbase/sivelant-$d.tar.gz /var/www/htdocs/sivel
 		f=`ls /var/db/pkg/sivel-* 2> /dev/null > /dev/null`;
 		if (test "$?" = "0") then {
-			sudo pkg_delete sivel | tee -a /var/www/tmp/inst-sivel.log;
+      pkg_delete sivel | tee -a /var/www/tmp/inst-sivel.log;
 		} else {
 			rm -rf /var/www/htdocs/sivel | tee -a /var/www/tmp/inst-sivel.log;
 			tar xvfz -C / /var/www/resbase/sivelant-$d.tar.gz /var/www/htdocs/sivel/{aut/conf.php,vardb.sh} | tee -a /var/www/tmp/inst-sivel.log;
@@ -437,7 +438,7 @@ if (test -f "/var/www/htdocs/sivel/aut/conf.php.plantilla" -o -f "/var/www/htdoc
 echo "* Instalar SIVeL" | tee -a /var/www/tmp/inst-sivel.log;
 f=`ls /var/db/pkg/sivel-1.2* 2> /dev/null > /dev/null`;
 if (test "$?" != "0") then {
-	sudo pkg_add $ARCHSIVEL/sivel-1.2*.tgz 2>&1 | tee -a /var/www/tmp/inst-sivel.log
+  pkg_add $ARCHSIVEL/sivel-1.2*.tgz 2>&1 | tee -a /var/www/tmp/inst-sivel.log
 	if (test "$?" != "0") then {
 		echo "No pudo instalar $ARCHSIVEL/sivel-1.2*.tgz" | tee -a /var/www/tmp/inst-sivel.log
 		exit 1;
@@ -454,7 +455,7 @@ if (test "$?" = "0") then {
 	echo -n "¿Desinstalar ispell y openssl de entorno chroot para instalarlos de nuevo? "  | tee -a /var/www/tmp/inst-sivel.log;
 	read sn;
 	if (test "$sn" = "s") then {
-		sudo rm /var/www/usr/local/bin/ispell /var/www/usr/sbin/openssl  | tee -a /var/www/tmp/inst-sivel.log;
+		rm -f /var/www/usr/local/bin/ispell /var/www/usr/bin/openssl  | tee -a /var/www/tmp/inst-sivel.log;
 	} fi;
 } fi;
 
@@ -475,7 +476,7 @@ if (test -f /var/www/htdocs/sivel/sitios/sivel/vardb.sh) then {
 } fi;
 rm -f /var/www/htdocs/sivel/{confv.sh,confaux.tmp} | tee -a /var/www/tmp/inst-sivel.log;	
 cd /var/www/htdocs/sivel
-sudo touch /var/www/pear/lib/.lock  | tee -a /var/www/tmp/inst-sivel.log;
+touch /var/www/pear/lib/.lock  | tee -a /var/www/tmp/inst-sivel.log;
 
 echo "* Información para Relatos" | tee -a /var/www/tmp/inst-sivel.log;
 echo "Organización:" | tee -a /var/www/tmp/inst-sivel.log;
@@ -506,7 +507,7 @@ if (test ! -d /var/www/htdocs/sivel/sitios/sivel) then {
 	# ahora nuevo.sh saca clave de .pgpass
 	pwd
 	SIN_CREAR=1 ./nuevo.sh sivel
-	sudo chown www:www sivel/ultimoenvio.txt
+	chown www:www sivel/ultimoenvio.txt
 	ln -s sivel 127.0.0.1
 	cd ..
 } else {
@@ -527,9 +528,9 @@ echo "conf.php" >> /var/www/tmp/inst-sivel.log;
 cat /var/www/htdocs/sivel/sitios/sivel/conf.php >> /var/www/tmp/inst-sivel.log;
 echo "vardb.sh" >> /var/www/tmp/inst-sivel.log;
 cat /var/www/htdocs/sivel/sitios/sivel/vardb.sh >> /var/www/tmp/inst-sivel.log;
-sudo chmod a-wrx /var/www/htdocs/sivel/sitios/sivel/conf-copia$VER.php
+chmod a-wrx /var/www/htdocs/sivel/sitios/sivel/conf-copia$VER.php
 cd /var/www/htdocs/sivel/sitios/sivel
-sudo chown $usivel:www conf*.php
+chown $usivel:www conf*.php
 chmod o-rwx conf*.php
 chmod g=r conf*.php
 chmod u+rw conf*.php
@@ -539,7 +540,7 @@ cd /
 
 echo "* Instalar datos y usuarios" | tee -a /var/www/tmp/inst-sivel.log;
 cd /var/www/htdocs/sivel/sitios/sivel
-echo "psql -h /var/www/tmp -U sivel sivel -c \"SELECT COUNT(*) FROM departamento;\"" > /tmp/cu.sh
+echo "psql -h /var/www/var/run/postgresql/ -U sivel sivel -c \"SELECT COUNT(*) FROM departamento;\"" > /tmp/cu.sh
 echo "exit \$?" >> /tmp/cu.sh;
 chmod +x /tmp/cu.sh
 cat /tmp/cu.sh
@@ -560,7 +561,7 @@ su - $usivel -c "crontab -l 2>/dev/null" > /tmp/crontab.sivel
 grep "sivel.*respaldo.sh" /tmp/crontab.sivel 2> /dev/null
 if (test "$?" != "0") then {
 	echo "* Programando cron para sacar copia de respaldo diaria al mediodia" | tee -a /var/www/tmp/inst-sivel.log;
-	echo "0 12 * * * cd /var/www/htdocs/sivel/; sudo rm /tmp/respaldo-*; bin/resptodositio.sh > /tmp/respaldo-stdout 2> /tmp/respaldo-stderr" >> /tmp/crontab.sivel
+	echo "0 12 * * * cd /var/www/htdocs/sivel/; doas rm /tmp/respaldo-*; bin/resptodositio.sh > /tmp/respaldo-stdout 2> /tmp/respaldo-stderr" >> /tmp/crontab.sivel
 	su - $usivel -c "crontab /tmp/crontab.sivel 2> /dev/null" | tee -a /var/www/tmp/inst-sivel.log;
 } fi;
 cat /tmp/crontab.sivel >> /var/www/tmp/inst-sivel.log;
