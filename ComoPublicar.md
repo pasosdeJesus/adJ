@@ -1,14 +1,14 @@
 COMO PUBLICAR
 =============
 
-Anhelamos publicar versión mayor (e.g 5.7) 4 meses después de OpenBSD:
+Anhelamos publicar versión mayor (e.g 5.8) 4 meses después de OpenBSD:
 
 	1.Sep
 	1.Mar
 
-Publicamos revisiones (e.g 5.7) si la seguridad o calidad lo ameritan.
+Publicamos revisiones (e.g 5.8) si la seguridad o calidad lo ameritan.
 
-Anhelamos publicar al menos una versión beta (e.g 5.7 en directorio
+Anhelamos publicar al menos una versión beta (e.g 5.8 en directorio
 ```desarrollo``` del sitio de distribución) 20 días antes de la versión mayor:
 
 	10.Ago
@@ -38,9 +38,9 @@ adJ.pasosdeJesus.org:
 7. En adJ.pasosdeJesus.org
 	```
 	hdes/creaiso.sh
-	cp -rf AprendiendoDeJesus-5.7-amd64.iso 5.7-amd64 /dirftp
-	mkdir /dirftp/5.7-amd64-extra
-	rsync compdes:/usr/ports/packages/amd64/all/* /dirftp/5.7-amd64-extra
+	cp -rf AprendiendoDeJesus-5.8-amd64.iso 5.8-amd64 /dirftp
+	mkdir /dirftp/5.8-amd64-extra
+	rsync compdes:/usr/ports/packages/amd64/all/* /dirftp/5.8-amd64-extra
 	```
 8. Verificar operación de:
   * http://pasosdeJesus.github.io/basico_adJ http://pasosdeJesus.github.io/usuario_adJ http://pasosdeJesus.github.io/servidor_adJ
@@ -51,19 +51,19 @@ adJ.pasosdeJesus.org:
   * rsync://adJ.pasosdeJesus.org
 9. Poner Tag en github e iniciar rama
 	```
-	git tag -a v5.7p2 -m "Version 5.7p2"
-	git push origin v5.7p2
+	git tag -a v5.8b1 -m "Version 5.8b1"
+	git push origin v5.8b1
 	...
-	git checkout -b ADJ_5_7
-	git push origin ADJ_5_7
+	git checkout -b ADJ_5.8
+	git push origin ADJ_5.8
 	```
 10. Publicar en lista de desarrollo
 
 Pasos importantes para publicar versión mayor
 --------------------------------------------
 
-1. Usar la rama ADJ_5_7
-	git checkout ADJ_5_7
+1. Usar la rama ADJ_5.8
+	git checkout ADJ_5.8
 2. Actualizar SIVeL, evangelios y paquetes propios de adJ.
 3. Actualizar documentación, publicar en Internet, actualizar portes de esta,
    generar y probar: instalación de sistema base, ejecución de inst-adJ.sh
@@ -77,20 +77,20 @@ Pasos importantes para publicar versión mayor
 7. Poner Tag en github
 
 	```
-	git tag -a v5.7 -m "Version 5.7"
-	git push origin v5.7
+	git tag -a v5.8 -m "Version 5.8"
+	git push origin v5.8
 	```
 8. Correo a listas: 
     openbsd-colombia@googlegroups.com, colibri@listas.el-directorio.org, 
     openbsd-mexico@googlegroups.com, sivel-soporte@lists.sourceforge.net
 
-	Tema: Publicado adJ 5.7 para amd64
+	Tema: Publicado adJ 5.8 para amd64
 
 	Para instalar por primera vez descarga la imagen para DVD de:
 	  http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/
 	O solicita un CD por correo postal.
 
-	Si planeas actualizar de una version anterior a 5.7
+	Si planeas actualizar de una version anterior a 5.8
 	hay un procedimiento mas rápido con ```rsync``` (ver
 	https://github.com/pasosdeJesus/adJ/blob/master/Actualiza.md ).
 
@@ -102,8 +102,8 @@ Pasos importantes para publicar versión mayor
 	  2. La guía de instalación:
 	  http://pasosdeJesus.github.io//usuario_adJ/sobre-la-instalacion.html
 
-	Mira las novedades completas de la versión 5.7 en:
-	  http://aprendiendo.pasosdejesus.org/?id=AdJ+5.7+-+Aprendiendo+de+Jesus+5.7
+	Mira las novedades completas de la versión 5.8 en:
+	  http://aprendiendo.pasosdejesus.org/?id=AdJ+5.8+-+Aprendiendo+de+Jesus+5.8
 
 	De estas destacamos:
 	...
@@ -114,7 +114,7 @@ Pasos importantes para publicar versión mayor
 9. Publicar en Twitter que retrasnmite a cuenta y página en Facebook. 
    Si es tambien publicacion de SIVeL en sitio de noticias de SIVeL y Structio.
 
-	Publicado adJ 5.7 sistema operativo para servidores y cortafuegos, 
+	Publicado adJ 5.8 sistema operativo para servidores y cortafuegos, 
 	seguro, amigable para cristian@s y en español, ver 
 	http://aprendiendo.pasosdejesus.org/
 
