@@ -3,8 +3,8 @@
 PV=		5.6
 V=		${PV}.19
 
-REVISION-main=	1
-REVISION-curl=	0
+#REVISION-main=	1
+#REVISION-curl=	0
 
 WANTLIB-main+=		stdc++ ncurses readline
 

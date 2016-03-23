@@ -5,7 +5,7 @@
 VERSION=1.2.1
 DISTNAME=v${VERSION}
 PKGNAME=sivel-v${VERSION}
-REVISION=1
+#REVISION=1
 
 HOMEPAGE=http://pasosdeJesus.github.io/SIVeL/
 PKGSPEC = sivel->=1.2,<1.3
@@ -24,7 +24,11 @@ do-install:
 	@mkdir -p ${PREFIX}/${SIVEL_RAIZ}
 	echo @cp ${PREFIX}/../../../${DCOMP}/conf.sh ${PREFIX}/${SIVEL_RAIZ}
 	@cp -rf ${PREFIX}/../../../${DCOMP}/* ${PREFIX}/${SIVEL_RAIZ}
-	@find ${PREFIX}/../../../${DCOMP}/ -name ".*" -exec cp -rf {} ${PREFIX}/${SIVEL_RAIZ} ';'
+	@cp -rf ${PREFIX}/../../../${DCOMP}/.* ${PREFIX}/${SIVEL_RAIZ} 
+	@cp -rf ${PREFIX}/../../../${DCOMP}/bin/.* ${PREFIX}/${SIVEL_RAIZ}/bin/
+	@cp -rf ${PREFIX}/../../../${DCOMP}/herram/.* ${PREFIX}/${SIVEL_RAIZ}/herram/
+	@cp -rf ${PREFIX}/../../../${DCOMP}/sitios/pruebas/.* ${PREFIX}/${SIVEL_RAIZ}/sitios/pruebas/
+	@cp -rf ${PREFIX}/../../../${DCOMP}/valida/.* ${PREFIX}/${SIVEL_RAIZ}/valida/
 	@find ${PREFIX}/${SIVEL_RAIZ} -name "*.orig" -exec rm {} ';'
 
 .include <bsd.port.mk>
