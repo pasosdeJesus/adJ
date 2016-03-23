@@ -1,3 +1,4 @@
 
-__Esta recopilación se dedica a Jehova, Dios Padre, a quien debemos temer 
-y quien otorga sabiduria__ (Proverbios 1:7)
+__Esta recopilación se dedica al Espíritu Santo por su fruto de amor, gozo, 
+paz, paciencia, beningnidad, bondad, fe, mansedumbre y templanza__ 
+(ver Galatas 5:22-23)
