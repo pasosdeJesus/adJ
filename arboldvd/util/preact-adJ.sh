@@ -69,11 +69,11 @@ if (test "$SOCKPSQL" != "") then {
 echo "* Detectando socket de PostgreSQL en $sockpsql" >> /var/tmp/preact-adJ.bitacora
 # Detectar socket de PostgreSQL
 if (test ! -S "$sockpsql/.s.PGSQL.5432") then {
-  echo "* No se encontró socket de PostgreSQL en $sockpsql";
+  echo "* No se encontró socket de PostgreSQL en $sockpsql">> /var/tmp/preact-adJ.bitacora;
   sockpsql="/var/www/tmp"
   echo "* Detectando socket de PostgreSQL en $sockpsql" >> /var/tmp/preact-adJ.bitacora
   if (test ! -S "$sockpsql/.s.PGSQL.5432") then {
-    echo "* Tampoco se encontró socket de PostgreSQL en $sockpsql";
+    echo "* Tampoco se encontró socket de PostgreSQL en $sockpsql" | tee -a /var/tmp/preact-adJ.bitacora;
     echo "* Puede ejecutar especificando la ruta del socket de PostgreSQL en variable SOCKPSQL";
     exit 1;
   } fi;

@@ -10,6 +10,7 @@ if (test "$USER" != "root") then {
 	exit 1;
 } fi;
 VCORSP=`echo $VCOR | sed -e "s/\.//g"`
+VSP=58
 
 if (test -f "ver.sh") then {
 	. ./ver.sh
@@ -30,7 +31,7 @@ if (test "$V" = "5.1") then {
 
 ARQ=amd64
 rutak=$V$VESP-$ARQ
-if (test ! -f $rutak/bsd -o ! -f $rutak/base$VCORSP.tgz) then {
+if (test ! -f $rutak/bsd -o ! -f $rutak/base$VSP.tgz) then {
 	echo "No se encontró kernel e instaladores en $rutak";
 	exit 1;
 } fi;
@@ -109,7 +110,7 @@ read
 sudo cp /sbin/reboot /sbin/oreboot
 for i in xserv xfont xshare xbase game comp man site base; do
 	echo $i;
-	sudo tar -C / -xzphf $V$VESP-$ARQ/$i$VCORSP.tgz
+	sudo tar -C / -xzphf $V$VESP-$ARQ/$i$VSP.tgz
 done
 echo "Tras el reinicio recuerde ejecutar:"
 echo "  cd /dev && ./MAKEDEV all"
