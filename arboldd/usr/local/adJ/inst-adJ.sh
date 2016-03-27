@@ -1016,6 +1016,18 @@ if (test -f /usr/include/ressl.h) then {
 	pkg_delete servidor_OpenBSD
 } fi;
 
+echo "* Configurar doas" >> /var/www/tmp/inst-adJ.bitacora;
+grep "^permit *nopass.*:wheel" /etc/doas.conf> /dev/null
+if (test "$?" != "0") then {
+	touch /etc/doas.conf
+	chmod +w /etc/doas.conf
+	echo "permit nopass keepenv :wheel" >> /etc/doas.conf
+	chmod -w /etc/doas.conf
+} else {
+	echo "   Saltando..." >> /var/www/tmp/inst-adJ.bitacora;
+} fi;
+
+
 if (test -f /usr/bin/sudo) then {
 	vac="$vac 5.7 a 5.8";	
 	echo "Aplicando actualizaciones de 5.7 a 5.8 " >> /var/www/tmp/inst-adJ.bitacora;
@@ -2216,17 +2228,6 @@ pearfun
 insacp ispell ispell-sp
 ispell-config 3 >> /var/www/tmp/inst-adJ.bitacora
 
-
-echo "* Configurar doas" >> /var/www/tmp/inst-adJ.bitacora;
-grep "^permit *nopass.*:wheel" /etc/doas.conf> /dev/null
-if (test "$?" != "0") then {
-	touch /etc/doas.conf
-	chmod +w /etc/doas.conf
-	echo "permit nopass keepenv :wheel" >> /etc/doas.conf
-	chmod -w /etc/doas.conf
-} else {
-	echo "   Saltando..." >> /var/www/tmp/inst-adJ.bitacora;
-} fi;
 
 echo "* Configurando escritorio de cuenta de administrador(a)" | tee -a /var/www/tmp/inst-adJ.bitacora;
 f=`ls /var/db/pkg/fluxbox* 2> /dev/null > /dev/null`;
