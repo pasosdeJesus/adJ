@@ -9,7 +9,7 @@
 # base sivel10, sivel11
 # Versiones futuras o en desarrollo /var/www/htdocs/sivel2 usa base sivel2
 
-VER=5.7
+VER=5.8
 VESP=
 ACVER=`uname -r`
 
@@ -142,6 +142,8 @@ usivel="";
 psivel="$USER";
 if (test -f /var/www/htdocs/sivel12/confv.php) then {
 	psivel=`stat -f "%Su" /var/www/htdocs/sivel12/confv.php 2> /dev/null`
+} elif (test -f /var/www/htdocs/sivel12/confv.php) then {
+	psivel=`stat -f "%Su" /var/www/htdocs/sivel12/confv.php 2> /dev/null`
 } elif (test -f /var/www/users/sivel/confv.sh) then {
 	psivel=`stat -f "%Su" /var/www/users/sivel/confv.sh 2> /dev/null`
 } elif (test -f /var/www/htdocs/sivel/confv.copia) then {
@@ -270,7 +272,13 @@ if (test "`cat /tmp/sivel`" = "") then {
 } fi;
 
 CLSIVELPG="";
-if (test -f /var/www/htdocs/sivel12/sitios/sivel/conf.php) then {
+if (test -f /var/www/htdocs/sivel/sitios/sivel/conf.php) then {
+	CLSIVELPG=`grep "dbclave *=" /var/www/htdocs/sivel12/sitios/sivel/conf.php | sed -e 's/.*=.*"\([^"]*\)".*$/\1/g' 2> /dev/null`
+}
+elif (test -f /var/www/htdocs/sivel/sitios/sivel12/conf.php) then {
+	CLSIVELPG=`grep "dbclave *=" /var/www/htdocs/sivel12/sitios/sivel/conf.php | sed -e 's/.*=.*"\([^"]*\)".*$/\1/g' 2> /dev/null`
+}
+elif (test -f /var/www/htdocs/sivel12/sitios/sivel/conf.php) then {
 	CLSIVELPG=`grep "dbclave *=" /var/www/htdocs/sivel12/sitios/sivel/conf.php | sed -e 's/.*=.*"\([^"]*\)".*$/\1/g' 2> /dev/null`
 }
 elif (test -f /var/www/htdocs/sivel12/sitios/sivel12/conf.php) then {
@@ -526,6 +534,17 @@ sed -e "s/\$dbclave *=.*/\$dbclave = \"$CLSIVELPG\";/g" /var/www/htdocs/sivel/si
 > /var/www/htdocs/sivel/sitios/sivel/conf.php
 echo "conf.php" >> /var/www/tmp/inst-sivel.log;
 cat /var/www/htdocs/sivel/sitios/sivel/conf.php >> /var/www/tmp/inst-sivel.log;
+if (test ! -f "/var/www/htdocs/sivel/sitios/sivel/conf-local-copia$VER.php") then {
+	cp -f /var/www/htdocs/sivel/sitios/sivel/conf-local.php /var/www/htdocs/sivel/sitios/sivel/conf-local-copia$VER.php
+} fi;
+sed -e "s/\$dbclave *=.*/\$dbclave = \"$CLSIVELPG\";/g" /var/www/htdocs/sivel/sitios/sivel/conf-local-copia$VER.php \
+| sed -e "s/\$GLOBALS\['organizacion_responsable'\] *=.*/\$GLOBALS['organizacion_responsable'] = \"$nomorg\";/g" \
+| sed -e "s/\$GLOBALS\['derechos'\] *=.*/\$GLOBALS['derechos'] = \"$derechos\";/g" \
+| sed -e "s/\$GLOBALS\['PREF_RELATOS'\] *=.*/\$GLOBALS['PREF_RELATOS'] = '$aborg';/g" \
+> /var/www/htdocs/sivel/sitios/sivel/conf-local.php
+echo "conf-local.php" >> /var/www/tmp/inst-sivel.log;
+cat /var/www/htdocs/sivel/sitios/sivel/conf-local.php >> /var/www/tmp/inst-sivel.log;
+
 echo "vardb.sh" >> /var/www/tmp/inst-sivel.log;
 cat /var/www/htdocs/sivel/sitios/sivel/vardb.sh >> /var/www/tmp/inst-sivel.log;
 chmod a-wrx /var/www/htdocs/sivel/sitios/sivel/conf-copia$VER.php
