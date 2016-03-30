@@ -1788,6 +1788,25 @@ if (test "$?" != "0") then {
 	sh
 } fi;
 
+if (test "$SOCKPSQL" != "") then {
+  sockpsql="$SOCKPSQL";
+} else {
+  sockpsql="/var/www/var/run/postgresql"
+} fi;
+echo "* Nuevamente detectando socket de PostgreSQL en $sockpsql" >> /var/www/tmp/inst-adJ.bitacora;
+# Detectar socket de PostgreSQL
+if (test ! -S "$sockpsql/.s.PGSQL.5432") then {
+  echo "* No se encontró socket de PostgreSQL en $sockpsql";
+  sockpsql="/var/www/tmp"
+  echo "* Detectando socket de PostgreSQL en $sockpsql" >> /var/www/tmp/inst-adJ.bitacora;
+  if (test ! -S "$sockpsql/.s.PGSQL.5432") then {
+    echo "* Tampoco se encontró socket de PostgreSQL en $sockpsql";
+    echo "* Puede ejecutar especificando la ruta del socket de PostgreSQL en variable SOCKPSQL";
+    exit 1;
+  } fi;
+} fi;
+
+
 pb=`ls -t /var/www/resbase/pga*sql 2>/dev/null | head -n 1`;
 echo "pb=$pb" >> /var/www/tmp/inst-adJ.bitacora;
 if (test -f "$pb") then {
