@@ -2633,8 +2633,6 @@ if (test ! -f "/usr/local/bin/ruby23") then {
 	ln -sf /usr/local/bin/ri23 /usr/local/bin/ri
 	ln -sf /usr/local/bin/rake23 /usr/local/bin/rake
 	ln -sf /usr/local/bin/gem23 /usr/local/bin/gem
-	ln -sf /usr/local/bin/testrb23 /usr/local/bin/testrb
-	ln -sf /usr/local/bin/bundle22 /usr/local/bin/bundle
 } fi;
 
 if (test ! -f /home/$uadJ/.irbrc) then {
