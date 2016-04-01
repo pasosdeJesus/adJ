@@ -22,34 +22,38 @@ Pasos importantes para publicar versión beta
 
 1. Recompilar paquetes con actualizaciones de seguridad o mejoras
 2. Retroportar paquetes
-3. Cambiar versión en ver.sh, arboldd/usr/local/adJ/inst-adJ.sh, Actualiza.md
-4. Retocar fecha de publicacion en ```Novedades.ewiki``` y publicar escondido en
-  http://aprendiendo.pasosdeJesus.org
-5. Retocar ```Dedicatoria.md``` y archivos *.md (por lo menos versión),
+3. Cambiar versión en ver.sh, arboldd/usr/local/adJ/inst-adJ.sh, Actualiza.md,
+	ComoPublicar.md
+4. Retocar ```Dedicatoria.md``` y archivos *.md (por lo menos versión),
    regenar en distribución (sin paquetes ni otras compilaciones) con:
 	```
 	sudo ./distribucion.sh
 	```
-6. En computador de desarrollo tras configurar ```var-local.sh``` enviar a
-adJ.pasosdeJesus.org:
+5. Retocar fecha de publicacion en ```Novedades.ewiki``` y publicar escondido en
+   http://aprendiendo.pasosdeJesus.org
+6. Generar distribución y probar: instalación de sistema base, ejecución de inst-adJ.sh
+   en nuevo y actualización, ejecución de inst-sivel.sh, que toda entrada 
+   del menú opere.  Reiterar 4 hasta que no haya errores.
+7. En computador de desarrollo tras configurar ```var-local.sh``` enviar a
+   adJ.pasosdeJesus.org:
 	```
 	hdes/rsync-aotro.sh
 	```
-7. En adJ.pasosdeJesus.org
+8. En adJ.pasosdeJesus.org
 	```
 	hdes/creaiso.sh
-	cp -rf AprendiendoDeJesus-5.8-amd64.iso 5.8-amd64 /dirftp
+	cp -rf AprendiendoDeJesus-5.8b1-amd64.iso 5.8b1-amd64 /dirftp
 	mkdir /dirftp/5.8-amd64-extra
 	rsync compdes:/usr/ports/packages/amd64/all/* /dirftp/5.8-amd64-extra
 	```
-8. Verificar operación de:
+9. Verificar operación de:
   * http://pasosdeJesus.github.io/basico_adJ http://pasosdeJesus.github.io/usuario_adJ http://pasosdeJesus.github.io/servidor_adJ
   * http://sivel.sf.net/
   * http://aprendiendo.pasosdeJesus.org
   * http://www.pasosdeJesus.org
   * http://adJ.pasosdeJesus.org
   * rsync://adJ.pasosdeJesus.org
-9. Poner Tag en github e iniciar rama
+10. Poner Tag en github e iniciar rama
 	```
 	git tag -a v5.8b1 -m "Version 5.8b1"
 	git push origin v5.8b1
@@ -62,18 +66,15 @@ adJ.pasosdeJesus.org:
 Pasos importantes para publicar versión mayor
 --------------------------------------------
 
-1. Usar la rama ADJ_5.8
-	git checkout ADJ_5.8
-2. Actualizar SIVeL, evangelios y paquetes propios de adJ.
-3. Actualizar documentación, publicar en Internet, actualizar portes de esta,
-   generar y probar: instalación de sistema base, ejecución de inst-adJ.sh
-   en nuevo y actualización, ejecución de inst-sivel.sh, que toda entrada 
-   del menú opere.
-4. Generar distribución y pasar a adJ.pasosdeJesus.org y github.com 
-   análogo a pasos 4-7 de versión beta
+1. Usar la rama ADJ_5_8
+	git checkout ADJ_5_8
+2. Actualizar SIVeL, evangelios, Mt77, cor1440, sal7711 y paquetes propios de adJ.
+3. Actualizar documentación, publicar en Internet
+4. Análogo a pasos 5-9 de versión beta
 5. Actualiza version en reto de P2PU (las 4 primeras tareas) 
    https://p2pu.org/es/groups/openbsd-adj-como-sistema-de-escritorio/
-6. Actualizar Artículo como Noticia en http://aprendiendo.pasosdeJesus.org
+6. Actualizar Artículo como Noticia en http://aprendiendo.pasosdeJesus.org y 
+  https://en.wikipedia.org/wiki/AdJ y https://es.wikipedia.org/wiki/AdJ 
 7. Poner Tag en github
 
 	```

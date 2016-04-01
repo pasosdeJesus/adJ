@@ -2,8 +2,8 @@
 Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y que esperamos será la elegida por Jesús durante el Milenio.
 
-###Versión: 5.8b1
-Fecha de publicación: 23/Mar/2015
+###Versión: 5.8
+Fecha de publicación: 1/Abr/2016
 
 ##NOVEDADES
 
@@ -13,7 +13,7 @@ Con respecto a OpenBSD 5.8 para amd64 y a la edición anterior de este DVD
 ###KERNEL Y SISTEMA BASE
 
 * Símbolo ```__adJ__``` predefinido en gcc.  Facilita uso de xlocale y características únicas de adJ respecto a OpenBSD en algunos portes --como ```libunistring```.
-* Parches de seguridad del sistema base hasta 9.Mar.2015, que cierran las 3 fallas de seguridad y las 7 de robustez resueltas para fuentes de OpenBSD descritas en [http://www.openbsd.org/errata58.html]. Igualmente recompilados binarios que dependían de librería con falla (```libcrypto```): ```isakmpd```, ```iked``` y  ```ftp``` y que serían susceptibles a denegación de servicio.  Los binarios distribuidos de OpenBSD 5.8 no resuelven estas fallas.
+* Parches al sistema base hasta el 30.Mar.2015, que cierran las 5 fallas de seguridad y las 7 de robustez resueltas para fuentes de OpenBSD descritas en [http://www.openbsd.org/errata58.html]. Igualmente recompilados binarios que dependían de librería con falla (```libcrypto```): ```isakmpd```, ```iked``` y  ```ftp``` y que serían susceptibles a denegación de servicio.  Los binarios distribuidos de OpenBSD 5.8 no resuelven estas fallas. Resuelto problema de robustez en bgpd http://cvsweb.openbsd.org/cgi-bin/cvsweb/src/usr.sbin/bgpd/kroute.c?rev=1.204.4.1&content-type=text/x-cvsweb-markup y en ssh http://cvsweb.openbsd.org/cgi-bin/cvsweb/src/usr.bin/ssh/session.c?rev=1.278.2.1&content-type=text/x-cvsweb-markup problemas que junto con el de seguridad en Inet6 también afectan OpenBSD 5.9, los binarios de esa distribución no los resuelven.
 * Utilidad ```localedef``` especificada en el estándar POSIX para convertir formatos de fechas y horas en un formato estándar POSIX al formato de OpenBSD.  Configuraciones regionales de países tomadas del CLDR de Unicode.
 * Soporte en la librería de C para presentar fechas, horas, cantidades monetarias, números y ordenamientos alfabéticos (cotejación) con las convenciones de cada país de latinoamérica (y de otros locales soportados por OpenBSD) de acuerdo al estándar POSIX. Opera bien en codificaciones de 8 bits o para español en codificación UTF-8. Buena parte de este soporte, así como el de xlocale se basaron en FreeBSD.  Estas mejoras fueron aportadas a OpenBSD (cotejación desde adJ 5.2, cantidades monetarias y números desde 5.4 y fechas y horas desde 5.5) y se anhela su integración en futuras versiones.    Así en adJ por ejemplo los ordenamientos alfabéticos en PostgreSQL, LibreOffice y otros programas son correctos en español (que no ocurre en OpenBSD).
 * Retroportados, recompilados o mejorados más de 25 paquetes de OpenBSD para cerrar fallas de seguridad o emplear xlocale,  ver detalles en sección PAQUETES EXCLUSIVOS DE ADJ.
