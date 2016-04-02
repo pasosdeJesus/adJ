@@ -1057,64 +1057,49 @@ if (test ! -f /var/log/servicio) then {
 
 touch /etc/rc.local
 echo "* Preparar /etc/rc.local para que reinicie servicios faltantes" >> /var/www/tmp/inst-adJ.bitacora;
-grep "\. /etc/rc.conf" /etc/rc.local > /dev/null 2> /dev/null
-if (test "$?" != "0") then {
-	ed /etc/rc.local >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
-/securel
-a
-
-# Este script podría ser ejecutado desde una tarea cron para reparar
-# servicios que pudieran haberse caido.  Verifique que cada servicio 
-# está efectivamente abajo antes de iniciarlo.
-. /etc/rc.conf
-.
-w
-q
-EOF
-} else {
-	echo "   Saltando..." >>  /var/www/tmp/inst-adJ.bitacora;
-} fi;
-grep "\. /etc/rc.conf.local" /etc/rc.local > /dev/null 2> /dev/null
-if (test "$?" != "0") then {
-	ed /etc/rc.local >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
-/. .etc.rc.conf
-a
-if (test -f /etc/rc.conf.local) then {
-	. /etc/rc.conf.local
-} fi;
-.
-w
-q
-EOF
-} else {
-	echo "   Saltando..." >>  /var/www/tmp/inst-adJ.bitacora;
-} fi;
-
 echo "* Nueva forma de /etc/rc.local" >> /var/www/tmp/inst-adJ.bitacora;
 grep "for _r in \${pkg_scripts}" /etc/rc.local> /dev/null 2>&1
 if (test "$?" != "0") then {
 	echo "Activando" >> /var/www/tmp/inst-adJ.bitacora;
 	ed /etc/rc.local >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
-/. \/etc\/rc.conf
+/securel
 a
-pkg_scripts=`rcctl order`
+
+# Este script podría ser ejecutado desde una tarea cron para reparar
+# servicios que pudieran haberse caido.  Verifica que cada servicio 
+# está efectivamente abajo antes de iniciarlo.
+
 if (test " \$TERM" != "") then {
+	pkg_scripts=\`rcctl order\`
 	for _r in \${pkg_scripts}; do
-		echo -n " \${_r}";
+		echo -n " \${_r} ";
 		if (test -x /etc/rc.d/\${_r}) then {
 			/etc/rc.d/\${_r} check
 			if (test "\$?" != "0") then {
+				echo -n "Iniciando "
 				/etc/rc.d/\${_r} start
 			} fi;
 		} fi;
 	done
 } fi;
-
 .
 w
 q
 EOF
+} else {
+	grep "rcctl order" /etc/rc.local > /dev/null 2> /dev/null
+	if (test "$?" != "0") then {
+		ed /etc/rc.local >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
+/for _r in
+i
+	pkg_scripts=\`rcctl order\`
+.
+w
+q
+EOF
+	} fi;
 } fi;
+
 
 if (test -f /etc/rc.d/cron) then {
 	activarcs cron
