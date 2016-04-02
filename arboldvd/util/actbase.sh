@@ -5,7 +5,8 @@
 # 2011. vtamara@pasosdeJesus.org
 
 VCOR=`uname -r`
-if (test "$USER" != "root") then {
+u=`whoami`
+if (test "$u" != "root") then {
 	echo "Ejecutar como usuario root"
 	exit 1;
 } fi;
@@ -107,10 +108,10 @@ cp $rutak/bsd.rd $rutak/bsd.mp /
 
 echo -n "[ENTER] para continuar con juegos de instalacion: "
 read
-sudo cp /sbin/reboot /sbin/oreboot
+cp /sbin/reboot /sbin/oreboot
 for i in xserv xfont xshare xbase game comp man site base; do
 	echo $i;
-	sudo tar -C / -xzphf $V$VESP-$ARQ/$i$VSP.tgz
+	tar -C / -xzphf $V$VESP-$ARQ/$i$VSP.tgz
 done
 echo "Tras el reinicio recuerde ejecutar:"
 echo "  cd /dev && ./MAKEDEV all"
