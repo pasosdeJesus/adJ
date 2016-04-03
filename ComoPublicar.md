@@ -31,9 +31,13 @@ Pasos importantes para publicar versión beta
 	```
 5. Retocar fecha de publicacion en ```Novedades.ewiki``` y publicar escondido en
    http://aprendiendo.pasosdeJesus.org
-6. Generar distribución y probar: instalación de sistema base, ejecución de inst-adJ.sh
-   en nuevo y actualización, ejecución de inst-sivel.sh, que toda entrada 
-   del menú opere.  Reiterar 4 hasta que no haya errores.
+6. Generar distribución, imagen iso (```hdes/creaiso.sh```) y probar por 
+  ejemplo en ```qemu``` (```hdes/qemu.sh``` o remotamente 
+  ```TEXTO=1 hdes/qemu.sh```): instalación de sistema base, 
+   ejecución de inst-adJ.sh en nuevo y actualización, 
+   ejecución de inst-sivel.sh, que opere SIVeL2,
+   que toda entrada del menú opere.  
+   Arreglar y repetir hasta que no haya errores.
 7. En computador de desarrollo tras configurar ```var-local.sh``` enviar a
    adJ.pasosdeJesus.org:
 	```
