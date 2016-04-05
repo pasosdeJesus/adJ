@@ -733,8 +733,7 @@ if (test "$sn" = "s") then {
 	
 	####
 	# Recompilados para cerrar fallas, portes actualizados de OpenBSD estable
-	paquete databases/sivel sivel sivel 1.2
-	exit 0;
+	
 	# Para que operen bien basta actualizar CVS de /usr/ports 
 	# Los siguientes no deben estar en arboldes/usr/ports/mystuff
 	paquete a2ps

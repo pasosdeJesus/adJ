@@ -1938,7 +1938,7 @@ server "127.0.0.1" {
 	listen on * tls port 443
 
 	location "*.php" {
-		fastcgi socket "/run/php-fpm.sock"
+		fastcgi socket "/var/run/php-fpm.sock"
 	}
 	root "/htdocs/sivel/"
 }
@@ -2005,6 +2005,8 @@ EOF
 w
 ,s/; listen.group = www/listen.group = www/g
 w
+,s/; listen.*/listen = \/var\/www\/var\/run\/php-fpm.sock/g
+w
 q
 EOF
 		activarcs php_fpm
@@ -2018,7 +2020,7 @@ EOF
 a
 
         location ~ \.php\$ {
-            fastcgi_pass   unix:run/php-fpm.sock;
+            fastcgi_pass   unix:var/run/php-fpm.sock;
             fastcgi_index  index.php;
             fastcgi_param  SCRIPT_FILENAME  \$document_root\$fastcgi_script_name;
             include        fastcgi_params;
