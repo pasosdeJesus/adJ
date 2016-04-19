@@ -123,11 +123,9 @@ adJ y OpenBSD 5.8:
   ```llvm```, ```scribus```, ```vlc```, ```wget```, ```wxWidgets-gtk2```
 * Para cerrar fallas se han recompilado los siguientes paquetes a partir de 
   portes actualizados de OpenBSD 5.8 (pero no incluidos en binarios de ese 
-  sistema):  ```cups```, ```cups-libs```, ```cups-filters```, ```curl```, 
-  ```gdk-pixbuf```, ```ghostscript```, ```gnutls```, ```icu4c```, ```libksba```,
-  ```libtasn1```, ```libwmf```, ```libxml```, ```net-snmp```, ```netpbm```, 
-  ```p5-Mail-SpamAssassin```, ```polkit```, ```py-Pillow```, ```qemu```, 
-  ```rrdtool```.
+  sistema):  ```cups, cups-libs, cups-filters, curl, gdk-pixbuf, ghostscript, 
+  gnutls, icu4c, libksba, libtasn1, libwmf, libxml, net-snmp, netpbm, 
+  p5-Mail-SpamAssassin, polkit, py-Pillow, qemu, rrdtool```.
 * Se han retroportado otros paquetes de OpenBSD-Current: ```chromium 46``` 
   (más estable)
 * Fuentes de la documentación basico_adJ convertida a Markdown, ver 
