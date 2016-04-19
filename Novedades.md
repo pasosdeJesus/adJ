@@ -17,13 +17,14 @@ Con respecto a OpenBSD 5.8 para amd64 y a la edición anterior de este DVD
   --como ```libunistring```.
 * Parches al sistema base hasta el 30.Mar.2015, que cierran las 5 fallas de 
   seguridad y las 7 de robustez resueltas para fuentes de OpenBSD descritas 
-  en [http://www.openbsd.org/errata58.html]. Igualmente recompilados binarios 
+  en <http://www.openbsd.org/errata58.html>. Igualmente recompilados binarios 
   que dependían de librería con falla (```libcrypto```): ```isakmpd```, 
   ```iked``` y  ```ftp``` y que serían susceptibles a denegación de servicio.  
   Los binarios distribuidos de OpenBSD 5.8 no resuelven estas fallas. 
-  Resuelto problema de robustez en bgpd ver <http://cvsweb.openbsd.org/cgi-bin/cvsweb/src/usr.sbin/bgpd/kroute.c?rev=1.204.4.1&content-type=text/x-cvsweb-markup y en ssh http://cvsweb.openbsd.org/cgi-bin/cvsweb/src/usr.bin/ssh/session.c?rev=1.278.2.1&content-type=text/x-cvsweb-markup> problemas que junto con el de 
-  seguridad en Inet6 también afectan OpenBSD 5.9, los binarios de esa 
-  distribución no los resuelven.
+  Resuelto problema de robustez en bgpd, ver <http://cvsweb.openbsd.org/cgi-bin/cvsweb/src/usr.sbin/bgpd/kroute.c?rev=1.204.4.1&content-type=text/x-cvsweb-markup>,
+   y en ssh, ver <http://cvsweb.openbsd.org/cgi-bin/cvsweb/src/usr.bin/ssh/session.c?rev=1.278.2.1&content-type=text/x-cvsweb-markup>, 
+  problemas que junto con el de seguridad en Inet6 también afectan 
+  OpenBSD 5.9, los binarios de esa distribución no los resuelven.
 * Utilidad ```localedef``` especificada en el estándar POSIX para convertir 
   formatos de fechas y horas en un formato estándar POSIX al formato de OpenBSD.
   Configuraciones regionales de países tomadas del CLDR de Unicode.
@@ -218,7 +219,7 @@ puede aprender a instalar o actualizar con:
 
 ## SOPORTE
 
-Emplee el canal de gitter: https://gitter.im/pasosdeJesus/adJ
+Emplee el canal de gitter: <https://gitter.im/pasosdeJesus/adJ>
 
 Eventualmente podrá contar con ayuda voluntaria para utilizar los programas 
 disponibles en este DVD en la lista pública ```openbsd-colombia``` a la cual 
@@ -232,7 +233,7 @@ al (correo de contacto)[mailto:info@pasosdeJesus.org]
 
 ## DESARROLLO
 
-Lo invitamos a consultar https://github.com/pasosdeJesus/adJ y a enviar sus 
+Lo invitamos a consultar <https://github.com/pasosdeJesus/adJ> y a enviar sus 
 mejoras.
 
 
