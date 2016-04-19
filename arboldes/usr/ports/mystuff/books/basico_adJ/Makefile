@@ -7,3 +7,5 @@ PNAME=basico_adJ
 
 include Make.inc
 
+BUILD_DEPENDS+=  lang/ghc lang/cabal-install #pandoc local
+

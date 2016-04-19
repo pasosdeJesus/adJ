@@ -11,7 +11,8 @@ VERP=58
 ACVERC=`uname -r`
 ACVER=`echo $ACVERC | sed -e "s/\.//g"`
 ARQ=`uname -m`
-if (test "$USER" != "root") then {
+u=`whoami`
+if (test "$u" != "root") then {
 	echo "Este script debe ser ejecutado por root o con sudo";
 	exit 1;
 } fi;

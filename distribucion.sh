@@ -730,10 +730,13 @@ if (test "$sn" = "s") then {
 
 	# Modificados para posibilitar compilación
 	# Deben estar en mystuff
-	
+
 	####
 	# Recompilados para cerrar fallas, portes actualizados de OpenBSD estable
 	
+	paquete books/usuario_adJ
+	paquete books/servidor_adJ
+	exit 1;
 	# Para que operen bien basta actualizar CVS de /usr/ports 
 	# Los siguientes no deben estar en arboldes/usr/ports/mystuff
 	paquete a2ps

@@ -8,7 +8,8 @@ if (test "$1" = "") then {
 } fi;
 
 nd="$1"
-if (test "$USER" != "root") then {
+u=`whoami`
+if (test "$u" != "root") then {
 	echo "Debe ser ejecutado por root"
 	exit 1;
 } fi;
