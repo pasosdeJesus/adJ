@@ -92,8 +92,7 @@ más detalles en
 
 ### PAQUETES EXCLUSIVOS DE ADJ
 
-Puede ver el listado completo en 
-<https://github.com/pasosdeJesus/adJ/blob/ADJ_5_8/Contenido.txt> 
+Puede ver el listado completo en [Contenido.txt](https://github.com/pasosdeJesus/adJ/blob/ADJ_5_8/Contenido.txt)
 a continuación se describen sólo novedades respecto a la versión anterior de 
 adJ y OpenBSD 5.8:
 
@@ -128,11 +127,12 @@ adJ y OpenBSD 5.8:
   ```gdk-pixbuf```, ```ghostscript```, ```gnutls```, ```icu4c```, ```libksba```,
   ```libtasn1```, ```libwmf```, ```libxml```, ```net-snmp```, ```netpbm```, 
   ```p5-Mail-SpamAssassin```, ```polkit```, ```py-Pillow```, ```qemu```, 
-  ```rrdtool```
+  ```rrdtool```.
 * Se han retroportado otros paquetes de OpenBSD-Current: ```chromium 46``` 
   (más estable)
 * Fuentes de la documentación basico_adJ convertida a Markdown, ver 
-  <http://pasosdeJesus.github.io/basico_adJ/>
+  <http://pasosdeJesus.github.io/basico_adJ/> y sobre la herramienta pandoc en
+  <http://dhobsd.pasosdejesus.org/pandoc.html>
 * Los paquetes exclusivos los encuentra en 
   <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/5.8-amd64/paquetes> y 
   otras extensiones de PostgreSQL y PHP que no hacen parte de la distribución en 
