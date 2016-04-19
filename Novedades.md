@@ -15,7 +15,7 @@ Con respecto a OpenBSD 5.8 para amd64 y a la edición anterior de este DVD
 * Símbolo ```__adJ__``` predefinido en gcc.  Facilita uso de xlocale 
   y características únicas de adJ respecto a OpenBSD en algunos portes 
   --como ```libunistring```.
-* Parches al sistema base hasta el 30.Mar.2015, que cierran las 5 fallas de 
+* Parches al sistema base hasta el 30.Mar.2016, que cierran las 5 fallas de 
   seguridad y las 7 de robustez resueltas para fuentes de OpenBSD descritas 
   en <http://www.openbsd.org/errata58.html>. Igualmente recompilados binarios 
   que dependían de librería con falla (```libcrypto```): ```isakmpd```, 
@@ -37,8 +37,7 @@ Con respecto a OpenBSD 5.8 para amd64 y a la edición anterior de este DVD
   a OpenBSD (cotejación desde adJ 5.2, cantidades monetarias y números desde 
   5.4 y fechas y horas desde 5.5) y se anhela su integración en futuras 
   versiones.    Así en adJ por ejemplo los ordenamientos alfabéticos en 
-  PostgreSQL, LibreOffice y otros programas son correctos en español (que no 
-  ocurre en OpenBSD).
+  PostgreSQL, LibreOffice y otros programas son correctos en español.
 * Retroportados, recompilados o mejorados más de 25 paquetes de OpenBSD para 
   cerrar fallas de seguridad o emplear xlocale,  ver detalles en sección 
   PAQUETES EXCLUSIVOS DE ADJ.
@@ -50,16 +49,11 @@ Entre las novedades reportadas en las `Notas de publicación de OpenBSD 5.8'
 destacamos las siguientes relacionadas con amd64:
 
 * Controladores ampliados o mejorados para amd64
-	* Vídeo: 
-	* Audio: 
 	* Red: 
-		* Ethernet:  Nuevo ```nep```
-		  ; mejorado ```re``` para soportar frames Jumbo en 
+		* Ethernet:  Mejorado ```re``` para soportar tramas Jumbo en 
 		  RTL8168C/D/E/F/G y RTL8411 y operar con RTL8111GU
 		* Inalámbrico:  Nuevo ```rtwn``` que soporta Realtek RTL8188CE 
 		  ; mejorado ```urtwn``` para soportar RTL8188EU 
-		* Modem USB: Mejorado ```umsm``` 
-	* Discos: Mejorado ```ciss``` 
 	* Temperatura, sensores y otros: Mejorado ```ugold``` para soportar
 	  sensores de temperatura y humedad TEMPerHUMV1.x;  mejorado
 	  ```upd``` para UPS conectadas por USB; mejorado ```acpicpu``` para
@@ -93,7 +87,7 @@ como ```Xenocara``` (```Xorg 7.7```), ```gcc``` 4.2.1, ```perl``` 5.20.2,
 En adJ es en español, consta de: (a) preparación, (b) instalación/actualización 
 del sistema base y (c) instalación de aplicaciones y entorno.  Por favor vea 
 más detalles en 
-(Actualiza.md)[https://github.com/pasosdeJesus/adJ/blob/ADJ_5_8/Actualiza.md]
+[Actualiza.md](https://github.com/pasosdeJesus/adJ/blob/ADJ_5_8/Actualiza.md)
 
 
 ### PAQUETES EXCLUSIVOS DE ADJ
