@@ -77,8 +77,9 @@ Pasos importantes para publicar versión mayor
 4. Análogo a pasos 5-9 de versión beta
 5. Actualiza version en reto de P2PU (las 4 primeras tareas) 
    https://p2pu.org/es/groups/openbsd-adj-como-sistema-de-escritorio/
-6. Actualizar Artículo como Noticia en http://aprendiendo.pasosdeJesus.org y 
-  https://en.wikipedia.org/wiki/AdJ y https://es.wikipedia.org/wiki/AdJ 
+6. Actualizar Artículo como Noticia en http://aprendiendo.pasosdeJesus.org,
+   http://aprendiendo.pasosdejesus.org/?id=MainMenu,  
+   https://en.wikipedia.org/wiki/AdJ y https://es.wikipedia.org/wiki/AdJ 
 7. Poner Tag en github
 
 	```
