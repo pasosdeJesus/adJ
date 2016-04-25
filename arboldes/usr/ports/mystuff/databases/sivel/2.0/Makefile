@@ -2,7 +2,7 @@
 
 # Port in the public domain.
 
-VERSION=2.0a7
+VERSION=2.0a9
 DISTNAME=v${VERSION}
 PKGNAME=sivel-v${VERSION}
 
@@ -23,7 +23,7 @@ do-install:
 	@find ${PREFIX}/../../../${DCOMP}/ -name ".*" -exec cp -rf {} ${PREFIX}/${SIVEL_RAIZ} ';'
 	@find ${PREFIX}/${SIVEL_RAIZ} -name "*.orig" -exec rm {} ';'
 	( cd ${PREFIX}/${SIVEL_RAIZ}; \
-	bundle config build.nokogiri --use-system-libraries; \
+	bundle config build.nokogiri --use-system-libraries --with-xml2-include=/usr/local/include/libxml2/; \
 	bundle install --deployment )
 
 .include <bsd.port.mk>
