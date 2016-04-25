@@ -182,10 +182,10 @@ y ponga la variable LANG en otro valor por ejemplo:
 
 Puede descargar imagenes ISO para amd64:
 
-* Protocolo HTTP: [http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus]
+* Protocolo HTTP: <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus>
 * Protocolo RSYNC: ```rsync rsync://rsync.pasosdeJesus.org/AprendiendoDeJesus```
 
-Si prefiere asumir gastos de manufactura, envío y eventualmente una donación con gusto le enviamos un DVD ([correo de contacto|mailto:info@pasosdeJesus.org]).
+Si prefiere asumir gastos de manufactura, envío y eventualmente una donación con gusto le enviamos un DVD ([correo de contacto](mailto:info@pasosdeJesus.org)).
 
 Las claves públicas empleadas para firmar digitalmente el CD de instalación y los paquetes se ubican en /etc/signify y deben coincidir con estas:
 * adJ-58-base.pub: RWSHIU7tODYAqTiwkmrJclJb1WZXWrP7GcAmxueSChfaZ35o18ckZzUO
@@ -220,7 +220,7 @@ openbsd-colombia-subscribe@googlegroups.com (Agradecemos amabilidad del
 moderador Fernando Quintero).
 
 Si su organización necesita un soporte retribuido lo invitamos a escribirnos 
-al (correo de contacto)[mailto:info@pasosdeJesus.org]
+al [correo de contacto](mailto:info@pasosdeJesus.org)
 
 
 ## DESARROLLO
@@ -245,6 +245,7 @@ Para mejorar el financiamiento de OpenBSD, donamos y aportamos trabajo
 voluntario a ese proyecto.  Por lo mismo publicamos adJ varios meses después 
 de la respectiva versión de OpenBSD.
 
-'''Agradecemos sus oraciones y si le resulta posible sus 
-[donaciones | Donaciones]'''.
+Agradecemos que ore por quienes desarrollan esta distribución.
+
+Si le resulta posible también agradecemos su [donación](Donaciones).
 
