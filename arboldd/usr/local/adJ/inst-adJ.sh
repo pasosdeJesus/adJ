@@ -1937,9 +1937,14 @@ if (test "$sweb" = "httpd") then {
 		cat > /etc/httpd.conf << EOF
 server "127.0.0.1" {
 	listen on * tls port 443
+	connection max request body 250000000
+        directory {
+		no auto index
+		index "index.php"
+	}
 
 	location "*.php" {
-		fastcgi socket "/var/run/php-fpm.sock"
+		fastcgi socket "/var/www/run/php-fpm.sock"
 	}
 	root "/htdocs/sivel/"
 }

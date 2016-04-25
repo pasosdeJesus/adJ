@@ -3,7 +3,7 @@ Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y que esperamos será la elegida por Jesús durante el Milenio.
 
 ###Versión: 5.8
-Fecha de publicación: 24/Abr/2016
+Fecha de publicación: 25/Abr/2016
 
 ##NOVEDADES
 
