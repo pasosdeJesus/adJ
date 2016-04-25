@@ -27,7 +27,7 @@ Pasos importantes para publicar versión beta
 4. Retocar ```Dedicatoria.md``` y archivos *.md (por lo menos versión),
    regenar en distribución (sin paquetes ni otras compilaciones) con:
 	```
-	sudo ./distribucion.sh
+	doas ./distribucion.sh
 	```
 5. Retocar fecha de publicacion en ```Novedades.ewiki``` y publicar escondido en
    http://aprendiendo.pasosdeJesus.org

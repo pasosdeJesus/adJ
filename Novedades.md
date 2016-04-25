@@ -3,7 +3,7 @@ Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y que esperamos será la elegida por Jesús durante el Milenio.
 
 ###Versión: 5.8
-Fecha de publicación: 20/Abr/2016
+Fecha de publicación: 24/Abr/2016
 
 ##NOVEDADES
 
@@ -98,7 +98,7 @@ adJ y OpenBSD 5.8:
 
 * ```SIVeL 1.2.2```  Ver 
   <http://sivel.sourceforge.net/1.2/actualizacion-sivel.html#actualizaciondeunounoaunodos>
-* ```SIVeL 2.0a7``` Versión alfa de SIVeL 2. Escrita sobre Ruby on Rails.
+* ```SIVeL 2.0a9``` Versión alfa de SIVeL 2. Escrita sobre Ruby on Rails.
 * ```PostgreSQL 9.4.6``` retroportado y recompilado para cerrar fallas, pero 
   además con soporte UTF-8 y ordenamientos alfabéticos en español.  Desde adJ 
   5.8 socket reubicado de ```/var/www/tmp``` a ```/var/www/var/run/postgresql```.

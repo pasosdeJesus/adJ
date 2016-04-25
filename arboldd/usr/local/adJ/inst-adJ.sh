@@ -1502,7 +1502,8 @@ if (test "$SOCKPSQL" != "") then {
 } fi;
 echo "* Detectando socket de PostgreSQL en $sockpsql" >> /var/www/tmp/inst-adJ.bitacora;
 # Detectar socket de PostgreSQL
-if (test ! -S "$sockpsql/.s.PGSQL.5432") then {
+vpi=`ls /var/db/pkg/postgresql-server-*` 
+if (test ! -S "$sockpsql/.s.PGSQL.5432" -a "$vpi" != "") then {
   echo "* No se encontró socket de PostgreSQL en $sockpsql";
   sockpsql="/var/www/tmp"
   echo "* Detectando socket de PostgreSQL en $sockpsql" >> /var/www/tmp/inst-adJ.bitacora;
