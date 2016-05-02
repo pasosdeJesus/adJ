@@ -1894,7 +1894,9 @@ if (test "$sweb" = "nginx") then {
 	if (test "$?" != "0") then {
 		echo "nginx_flags=" >> /etc/rc.conf.local
 	} fi;
-	ed /etc/nginx/nginx.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
+	grep "^[^#]*listen.*443" /etc/nginx/nginx.conf > /dev/null 2>/dev/null
+	if (test "$?" != "0") then {
+		ed /etc/nginx/nginx.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 1
 ?}
 i
@@ -1917,7 +1919,7 @@ i
 w
 q
 EOF
-
+	} fi;
 } fi;
 
 echo "* Nuevo httpd" >> /var/www/tmp/inst-adJ.bitacora ;
