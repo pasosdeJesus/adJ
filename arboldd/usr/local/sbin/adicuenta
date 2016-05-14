@@ -148,6 +148,7 @@ EOF
 grep procmail /home/$us/.forward > /dev/null 2> /dev/null
 if (test "$?" != "0") then {
 	echo '"| exec /usr/local/bin/procmail"' > /home/$us/.forward
+	chown $us:$us /home/$us/.forward
 } fi;
 
 function subc {
