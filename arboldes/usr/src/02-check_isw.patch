@@ -1,15 +1,13 @@
 diff -ruN src55-p1/regress/lib/libc/locale/check_isw/check_isw.c src/regress/lib/libc/locale/check_isw/check_isw.c
 --- src55-p1/regress/lib/libc/locale/check_isw/check_isw.c.orig	Sun Nov 10 07:31:25 2013
 +++ src/regress/lib/libc/locale/check_isw/check_isw.c	Sun Nov 10 07:32:21 2013
-@@ -20,6 +20,7 @@
-  */
- 
- #include <ctype.h>
-+#include <locale.h>
+@@ -22,11 +22,20 @@
  #include <stdio.h>
  #include <stdlib.h>
- #include <string.h>
-@@ -28,6 +29,14 @@
+ #include <ctype.h>
++#include <locale.h>
+ #include <wchar.h>
+ #include <wctype.h>
  
  int bad = 0;
  
@@ -24,7 +22,7 @@ diff -ruN src55-p1/regress/lib/libc/locale/check_isw/check_isw.c src/regress/lib
  void
  check_bool(int v1, int v2, char msg)
  {
-@@ -136,11 +145,87 @@
+@@ -137,11 +146,30 @@
  	free(buf);
  }
  
@@ -32,68 +30,11 @@ diff -ruN src55-p1/regress/lib/libc/locale/check_isw/check_isw.c src/regress/lib
 +test3()
 +{
 +	/** toupper, tolower single byte encoding */
-+	char *nl = setlocale(LC_ALL, "es_CO.ISO8859-1");
-+	printf("locale %s\n", nl);
-+	/* À -> 0xc0, à -> 0xe0 */
-+	int c;
-+	for(c = 0xc0; c < 0xde; c++) {
-+		if (c != 0xd7) { // 0xd7 -> ×, 0xF7 -> ÷
-+			printf("c=%x ", c);
-+			p(tolower(c) == c+0x20); 
-+			p(toupper(c+0x20) == c); 
-+		}
-+	}
-+	/* http://en.wikipedia.org/w/index.php?title=ISO/IEC_8859-1 */
-+	for (c = 0x21; c < 0x2F; c++) {
-+		printf("c=%x ", c);
-+		p(ispunct(c));
-+	}
-+	for (c = 0x30; c < 0x39; c++) {
-+		printf("c=%x ", c);
-+		p(isdigit(c));
-+	}
-+	for (c = 0x3A; c < 0x40; c++) {
-+		printf("c=%x ", c);
-+		p(ispunct(c));
-+	}
-+	for (c = 0x41; c < 0x5A; c++) {
-+		printf("c=%x ", c);
-+		p(isalpha(c));
-+		p(isalpha(c+0x20));
-+	}
-+	for (c = 0x5B; c < 0x60; c++) {
-+		printf("c=%x ", c);
-+		p(ispunct(c));
-+	}
-+	p(ispunct(0x7B));
-+	p(ispunct(0x7C));
-+	p(ispunct(0x7D));
-+	p(ispunct(0x7E));
-+	for (c = 0xA1; c < 0xBF; c++) {
-+		printf("c=%x ", c);
-+		p(ispunct(c));
-+	}
-+	for (c = 0xC0; c < 0xFF; c++) {
-+		if (c != 0xD7 && c != 0xF7) {
-+			printf("c=%x ", c);
-+			p(isalpha(c));
-+		}
-+	}
-+	
-+	nl = setlocale(LC_ALL, "ru_RU.KOI8-R");
-+	printf("locale %s\n", nl);
-+	/* a -> 0xc0, A -> 0xe0 */
-+	for(c = 0xc0; c < 0xdf; c++) {
-+		printf("c=%x ", c);
-+		p(islower(c));
-+		p(isupper(c+0x20));
-+		p(toupper(c) == c+0x20); 
-+		p(tolower(c+0x20) == c); 
-+	}
 +	
 +	/** multi-byte encoding */
-+	nl = setlocale(LC_ALL, "es_CO.UTF-8");
++	char *nl = setlocale(LC_ALL, "es_CO.UTF-8");
 +	printf("locale %s\n", nl);
++	int c;
 +	for(c = 0x41; c < 0x5A; c++) {
 +		printf("c=%x ", c);
 +		p(tolower(c) == c+0x20); 

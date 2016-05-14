@@ -11,7 +11,7 @@ if (test "$u" != "root") then {
 	exit 1;
 } fi;
 VCORSP=`echo $VCOR | sed -e "s/\.//g"`
-VSP=58
+VSP=59
 
 if (test -f "ver.sh") then {
 	. ./ver.sh
@@ -19,7 +19,7 @@ if (test -f "ver.sh") then {
 	V=$1
 	if (test "$V" = "") then {
 		echo "Primer parámetro debería ser versión, e.g"
-		echo "actbase.sh 5.9"
+		echo "actbase.sh 6.0"
 		exit 1;
 	} fi;
 	VP=`echo $V | sed -e "s/[.]//g"`

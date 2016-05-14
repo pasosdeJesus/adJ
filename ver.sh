@@ -2,8 +2,8 @@
 # Variables de configuración para generar distribución Aprendiendo de Jesús
 # Dominio público. 2013. vtamara@pasosdeJesus.org
 
-V=5.8
-VESP=""
+V=5.9
+VESP="a1"
 # Versión que se está desarrollando
 
 VPKGPATH=$V
@@ -21,14 +21,11 @@ export R="OPENBSD_$VU"
 export RADJ="ADJ_$VU"
 # Ramas
 
-PKG_PATH=ftp://ftp.openbsd.org/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
-PKG_PATH=ftp://ftp3.usa.openbsd.org/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
-PKG_PATH=ftp://filedump.se.rit.edu/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
-PKG_PATH=ftp://openbsd.mirrors.pair.com/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
-PKG_PATH=ftp://mirror.planetunix.net/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
-PKG_PATH=ftp://mirror.esc7.net/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
-PKG_PATH=ftp://mirrors.nycbug.org/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
-PKG_PATH=ftp://mirror.esc7.net/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
+PKG_PATH=http://ftp.openbsd.org/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
+PKG_PATH=http://ftp3.usa.openbsd.org/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
+PKG_PATH=http://openbsd.mirrors.pair.com/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
+PKG_PATH=http://mirror.esc7.net/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
+PKG_PATH=http://mirrors.nycbug.org/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
 PKG_PATH=http://adJ.pasosdeJesus.org/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
 
 #Repositorio de paquetes usado --el último es el usado

@@ -25,7 +25,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/locale/_def
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/strftime.c src/lib/libc/time/strftime.c
 --- src56-orig/lib/libc/time/strftime.c	Thu Sep 13 06:14:20 2012
 +++ src/lib/libc/time/strftime.c	Fri Apr 25 10:16:20 2014
-@@ -28,81 +28,14 @@
+@@ -28,6 +28,8 @@
  ** SUCH DAMAGE.
  */
  
@@ -33,7 +33,8 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/strfti
 +
  #include <fcntl.h>
  #include <locale.h>
- 
+ #include <stdio.h>
+@@ -35,75 +37,6 @@
  #include "private.h"
  #include "tzfile.h"
  
@@ -109,7 +110,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/strfti
  static char *	_add(const char *, char *, const char *);
  static char *	_conv(int, const char *, char *, const char *);
  static char *	_fmt(const char *, const struct tm *, char *, const char *,
-@@ -123,9 +56,6 @@
+@@ -124,9 +57,6 @@
  	int	warn;
  
  	tzset();
@@ -119,7 +120,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/strfti
  	warn = IN_NONE;
  	p = _fmt(((format == NULL) ? "%c" : format), t, s, s + maxsize, &warn);
  	if (p == s + maxsize) {
-@@ -150,26 +80,26 @@
+@@ -152,26 +82,26 @@
  			case 'A':
  				pt = _add((t->tm_wday < 0 ||
  					t->tm_wday >= DAYSPERWEEK) ?
@@ -150,7 +151,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/strfti
  					pt, ptlim);
  				continue;
  			case 'C':
-@@ -187,7 +117,7 @@
+@@ -189,7 +119,7 @@
  				{
  				int warn2 = IN_SOME;
  
@@ -159,7 +160,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/strfti
  				if (warn2 == IN_ALL)
  					warn2 = IN_THIS;
  				if (warn2 > *warnp)
-@@ -275,15 +205,15 @@
+@@ -277,15 +207,15 @@
  				continue;
  			case 'p':
  				pt = _add((t->tm_hour >= (HOURSPERDAY / 2)) ?
@@ -178,7 +179,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/strfti
  				continue;
  			case 'S':
  				pt = _conv(t->tm_sec, "%02d", pt, ptlim);
-@@ -431,13 +361,13 @@
+@@ -433,13 +363,13 @@
  				pt = _conv(t->tm_wday, "%d", pt, ptlim);
  				continue;
  			case 'X':
@@ -194,7 +195,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/strfti
  				if (warn2 == IN_ALL)
  					warn2 = IN_THIS;
  				if (warn2 > *warnp)
-@@ -522,7 +452,7 @@
+@@ -524,7 +454,7 @@
  				}
  				continue;
  			case '+':
@@ -203,7 +204,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/strfti
  					warnp);
  				continue;
  			case '%':
-@@ -594,135 +524,4 @@
+@@ -596,134 +526,3 @@
  	return pt;
  }
  
@@ -214,7 +215,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/strfti
 -	static const char	locale_home[] = LOCALE_HOME;
 -	static const char	lc_time[] = "LC_TIME";
 -	static char *		locale_buf;
- 
+-
 -	int			fd;
 -	int			oldsun;	/* "...ain't got nothin' to do..." */
 -	int			len;
@@ -224,7 +225,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/strfti
 -	char *			p;
 -	const char **		ap;
 -	const char *		plim;
--	char			filename[FILENAME_MAX];
+-	char			filename[PATH_MAX];
 -	struct stat		st;
 -	size_t			namesize;
 -	size_t			bufsize;
@@ -281,10 +282,9 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/strfti
 -		goto bad_locale;
 -	bufsize = namesize + st.st_size;
 -	locale_buf = NULL;
--	nlbuf = (lbuf == NULL) ? malloc(bufsize) : realloc(lbuf, bufsize);
+-	nlbuf = realloc(lbuf, bufsize);
 -	if (nlbuf == NULL) {
--		if (lbuf)
--			free(lbuf);
+-		free(lbuf);
 -		lbuf = NULL;
 -		goto bad_locale;
 -	}
@@ -342,16 +342,18 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/strfti
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/wcsftime.c src/lib/libc/time/wcsftime.c
 --- src56-orig/lib/libc/time/wcsftime.c	Sun Jan 20 15:29:02 2013
 +++ src/lib/libc/time/wcsftime.c	Sun Apr 27 17:43:58 2014
-@@ -31,6 +31,8 @@
+@@ -31,75 +31,17 @@
  ** SUCH DAMAGE.
  */
  
 +#include <sys/localedef.h>
 +
++#include <errno.h>
  #include <fcntl.h>
  #include <locale.h>
++#include <stdlib.h>
  #include <wchar.h>
-@@ -38,68 +40,6 @@
+ 
  #include "private.h"
  #include "tzfile.h"
  
@@ -420,7 +422,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/wcsfti
  #define UNKNOWN L"?"
  static wchar_t *	_add(const wchar_t *, wchar_t *, const wchar_t *);
  static wchar_t *	_sadd(const char *, wchar_t *, const wchar_t *);
-@@ -134,10 +74,29 @@
+@@ -134,10 +76,29 @@
  	return p - s;
  }
  
@@ -450,7 +452,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/wcsfti
  	for ( ; *format; ++format) {
  		if (*format != L'%') {
  			if (pt == ptlim)
-@@ -153,26 +112,26 @@
+@@ -153,26 +114,26 @@
  		case 'A':
  			pt = _add((t->tm_wday < 0 ||
  				t->tm_wday >= DAYSPERWEEK) ?
@@ -481,7 +483,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/wcsfti
  				pt, ptlim);
  			continue;
  		case 'C':
-@@ -190,7 +149,7 @@
+@@ -190,7 +151,7 @@
  			{
  			int warn2 = IN_SOME;
  
@@ -490,7 +492,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/wcsfti
  			if (warn2 == IN_ALL)
  				warn2 = IN_THIS;
  			if (warn2 > *warnp)
-@@ -270,8 +229,8 @@
+@@ -270,8 +231,8 @@
  			continue;
  		case 'p':
  			pt = _add((t->tm_hour >= (HOURSPERDAY / 2)) ?
@@ -501,7 +503,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/wcsfti
  				pt, ptlim);
  			continue;
  		case 'R':
-@@ -417,13 +376,13 @@
+@@ -417,13 +378,13 @@
  			pt = _conv(t->tm_wday, L"%d", pt, ptlim);
  			continue;
  		case 'X':
@@ -517,7 +519,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/wcsfti
  			if (warn2 == IN_ALL)
  				warn2 = IN_THIS;
  			if (warn2 > *warnp)
-@@ -471,7 +430,7 @@
+@@ -471,7 +432,7 @@
  			}
  			continue;
  		case '+':
@@ -526,8 +528,34 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/wcsfti
  			continue;
  		case '%':
  		/*
-@@ -547,4 +506,3 @@
+@@ -547,4 +508,3 @@
  		pt = _conv(((trail < 0) ? -trail : trail), L"%02d", pt, ptlim);
  	return pt;
  }
 -
+diff -ruN src59-orig/lib/libc/hidden/stdlib.h src/lib/libc/hidden/stdlib.h
+--- src59-orig/lib/libc/hidden/stdlib.h	Mon Nov  9 23:14:03 2015
++++ src/lib/libc/hidden/stdlib.h	Sun May  8 23:13:15 2016
+@@ -100,9 +100,9 @@
+ PROTO_STD_DEPRECATED(lldiv);
+ PROTO_DEPRECATED(lrand48);
+ /*PROTO_NORMAL(malloc);			not yet, breaks emacs */
+-PROTO_STD_DEPRECATED(mblen);
+-PROTO_STD_DEPRECATED(mbstowcs);
+-PROTO_STD_DEPRECATED(mbtowc);
++/*PROTO_STD_DEPRECATED(mblen);		not deprecated in adJ */
++/*PROTO_STD_DEPRECATED(mbstowcs);	not deprecated in adJ */
++/*PROTO_STD_DEPRECATED(mbtowc);		not deprecated in adJ */
+ PROTO_DEPRECATED(mergesort);
+ PROTO_DEPRECATED(mkdtemp);
+ PROTO_NORMAL(mkostemp);
+@@ -155,7 +155,7 @@
+ PROTO_DEPRECATED(unlockpt);
+ PROTO_NORMAL(unsetenv);
+ PROTO_STD_DEPRECATED(valloc);
+-PROTO_STD_DEPRECATED(wcstombs);
+-PROTO_STD_DEPRECATED(wctomb);
++/*PROTO_STD_DEPRECATED(wcstombs);   	not deprecated in adJ */
++/*PROTO_STD_DEPRECATED(wctomb); 	not deprecated in adJ */
+ 
+ #endif /* _LIBC_STDLIB_H_ */

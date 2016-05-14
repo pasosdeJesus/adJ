@@ -2,29 +2,22 @@
 Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y que esperamos será la elegida por Jesús durante el Milenio.
 
-###Versión: 5.8
-Fecha de publicación: 25/Abr/2016
+###Versión: 5.9a1
+Fecha de publicación: 1/Ago/2016
 
 ##NOVEDADES
 
-Con respecto a OpenBSD 5.8 para amd64 y a la edición anterior de este DVD
+Con respecto a OpenBSD 5.9 para amd64 y a la edición anterior de este DVD
 
 
 ###KERNEL Y SISTEMA BASE
 
-* Símbolo ```__adJ__``` predefinido en gcc.  Facilita uso de xlocale 
-  y características únicas de adJ respecto a OpenBSD en algunos portes 
-  --como ```libunistring```.
-* Parches al sistema base hasta el 30.Mar.2016, que cierran las 5 fallas de 
-  seguridad y las 7 de robustez resueltas para fuentes de OpenBSD descritas 
-  en <http://www.openbsd.org/errata58.html>. Igualmente recompilados binarios 
-  que dependían de librería con falla (```libcrypto```): ```isakmpd```, 
-  ```iked``` y  ```ftp``` y que serían susceptibles a denegación de servicio.  
-  Los binarios distribuidos de OpenBSD 5.8 no resuelven estas fallas. 
-  Resuelto problema de robustez en bgpd, ver <http://cvsweb.openbsd.org/cgi-bin/cvsweb/src/usr.sbin/bgpd/kroute.c?rev=1.204.4.1&content-type=text/x-cvsweb-markup>,
-   y en ssh, ver <http://cvsweb.openbsd.org/cgi-bin/cvsweb/src/usr.bin/ssh/session.c?rev=1.278.2.1&content-type=text/x-cvsweb-markup>, 
-  problemas que junto con el de seguridad en Inet6 también afectan 
-  OpenBSD 5.9, los binarios de esa distribución no los resuelven.
+* Parches al sistema base hasta el 1.Ago.2016, que cierran las x fallas de 
+  seguridad y las y de robustez resueltas para fuentes de OpenBSD descritas 
+  en <http://www.openbsd.org/errata59.html>. 
+  Los binarios distribuidos de OpenBSD 5.9 no resuelven estas fallas. 
+  .. también afectan OpenBSD 6.0, los binarios de esa distribución no los 
+  resuelven.
 * Utilidad ```localedef``` especificada en el estándar POSIX para convertir 
   formatos de fechas y horas en un formato estándar POSIX al formato de OpenBSD.
   Configuraciones regionales de países tomadas del CLDR de Unicode.
@@ -38,44 +31,47 @@ Con respecto a OpenBSD 5.8 para amd64 y a la edición anterior de este DVD
   5.4 y fechas y horas desde 5.5) y se anhela su integración en futuras 
   versiones.    Así en adJ por ejemplo los ordenamientos alfabéticos en 
   PostgreSQL, LibreOffice y otros programas son correctos en español.
-* Retroportados, recompilados o mejorados más de 25 paquetes de OpenBSD para 
+* La librería de C de adJ incluye la función strfmon (que es estándar POSIX 2008
+  pero no incluida en OpenBSD) y aprueba el uso de mblen, mbstowcs, mbtowc, 
+  wcstombs, wctomb (estandarizadas por ISO C pero desaprobadas por OpenBSD
+  desde 5.9) así como de wcsxfrm y wcscoll (estandarizadas en POSIX pero
+  desaprobadas en OpenBSD a partir de 5.9).
+* Símbolo ```__adJ__``` predefinido en gcc.  Facilita uso de xlocale 
+  y características únicas de adJ respecto a OpenBSD en algunos portes 
+  --como ```libunistring```.
+* Retroportados, recompilados o mejorados más de xx paquetes de OpenBSD para 
   cerrar fallas de seguridad o emplear xlocale,  ver detalles en sección 
   PAQUETES EXCLUSIVOS DE ADJ.
 * Hemos remplazando ```daemon``` por ```servicio``` en buena parte del sistema 
   base (ver por ejemplo ```vmstat -s``` o ```less /var/log/servicio``` o 
   ```man servicio```).  
 
-Entre las novedades reportadas en las `Notas de publicación de OpenBSD 5.8' 
+Entre las novedades reportadas en las `Notas de publicación de OpenBSD 5.9' 
 destacamos las siguientes relacionadas con amd64:
 
 * Controladores ampliados o mejorados para amd64
 	* Red: 
-		* Ethernet:  Mejorado ```re``` para soportar tramas Jumbo en 
-		  RTL8168C/D/E/F/G y RTL8411 y operar con RTL8111GU
-		* Inalámbrico:  Nuevo ```rtwn``` que soporta Realtek RTL8188CE 
-		  ; mejorado ```urtwn``` para soportar RTL8188EU 
-	* Temperatura, sensores y otros: Mejorado ```ugold``` para soportar
-	  sensores de temperatura y humedad TEMPerHUMV1.x;  mejorado
-	  ```upd``` para UPS conectadas por USB; mejorado ```acpicpu``` para
-	  reducir consumo de energía. 
+		* Ethernet:  Nuevo ..; mejorado ```zz``` para ...
+		* Inalámbrico:  
+	* Temperatura, sensores y otros: Nuevo ```pchtemp``` para sensores
+	  térmicos el Intel X99, C610, 9 y 100 PCH. Nuevo ```uonerng``` que
+	  soporta generador de números aleatorios Moonbase Otago OneRNG.
 
 * Mejoras a herramientas de Red
-	* Nuevo servicio ```radiusd``` que maneja servicio *Remote 
-	  Authentication Dial In User*
-	* OpenBSD httpd: soporta patrones lua, soporta HSTS, junto con relayd
-	  ahora por defecto usa TLS1.2-only
-
+	* Nuevo
+	* OpenBSD httpd:
+	* OpenBSD SMTPD:
 
 * Seguridad
-	* ```sudo``` sacado de sistema base (paso a porte). En sistema base es 
-	  remplazado por ```doas``` con configuración más simple.  Por ejemplo 
-	  en ```/etc/doas.conf``` puede dejar ```permit nopass keepenv :wheel```
-	  para permitir su uso sin clave a todos los del grupo ```wheel```
-	* Más seguras utilidades ```file```, ```tar```,  ```cpio``` y ```pax```
-	* OpenSSH actualizado a 7.0 que desecha cifrados inseguros
+	* pledge.  Permite a un programa comprometerse a hacer sólo ciertos
+	  tipos de llamadas al sistema.  Se produce un fallo si el programa
+	  no cumple su promesa.  Así se obliga la separación de privilegios.
+	  Ver http://www.openbsd.org/papers/dot2016.pdf
+	* 
+	* 
 
 * Otros
-	* ```syslogd```  puede recibir mensajes por TCP y UDP
+	*
 
 * El sistema base incluye mejoras a componentes auditados y mejorados 
 como ```Xenocara``` (```Xorg 7.7```), ```gcc``` 4.2.1, ```perl``` 5.20.2, 
@@ -87,66 +83,60 @@ como ```Xenocara``` (```Xorg 7.7```), ```gcc``` 4.2.1, ```perl``` 5.20.2,
 En adJ es en español, consta de: (a) preparación, (b) instalación/actualización 
 del sistema base y (c) instalación de aplicaciones y entorno.  Por favor vea 
 más detalles en 
-[Actualiza.md](https://github.com/pasosdeJesus/adJ/blob/ADJ_5_8/Actualiza.md)
+[Actualiza.md](https://github.com/pasosdeJesus/adJ/blob/ADJ_5_9/Actualiza.md)
 
 
 ### PAQUETES EXCLUSIVOS DE ADJ
 
-Puede ver el listado completo en [Contenido.txt](https://github.com/pasosdeJesus/adJ/blob/ADJ_5_8/Contenido.txt)
+Puede ver el listado completo en [Contenido.txt](https://github.com/pasosdeJesus/adJ/blob/ADJ_5_9/Contenido.txt)
 a continuación se describen sólo novedades respecto a la versión anterior de 
-adJ y OpenBSD 5.8:
+adJ y OpenBSD 5.9:
+
 
 * ```SIVeL 1.2.2```  Ver 
   <http://sivel.sourceforge.net/1.2/actualizacion-sivel.html#actualizaciondeunounoaunodos>
 * ```SIVeL 2.0a9``` Versión alfa de SIVeL 2. Escrita sobre Ruby on Rails.
-* ```PostgreSQL 9.4.6``` retroportado y recompilado para cerrar fallas, pero 
+* ```PostgreSQL xx``` retroportado y recompilado para cerrar fallas, pero 
   además con soporte UTF-8 y ordenamientos alfabéticos en español.  Desde adJ 
-  5.8 socket reubicado de ```/var/www/tmp``` a ```/var/www/var/run/postgresql```.
+  5.9 socket reubicado de ```/var/www/tmp``` a ```/var/www/var/run/postgresql```.
   En adJ la información queda cifrada cuando así se elije al instalar o 
   actualizar adJ.  Ver detalles de como usar cotejación en 
   <http://aprendiendo.pasosdeJesus.org/?id=i18n>
-* ```Ruby 2.3.0``` retroportado de OpenBSD-current y probado con aplicaciones 
-  Rails 4.2.6. Desde adJ 5.8 como no hay ```sudo``` sino ```doas``` debe 
-  cambiarse la forma de utilizar ```bundler```, ver 
-  <http://dhobsd.pasosdejesus.org/bundler-doas.html>.  Puede ver más sobre Ruby 
-  on Rails sobre adJ en 
+* ```Ruby rr``` retroportado de OpenBSD-current y probado con aplicaciones 
+  Rails rr.   Puede ver más sobre Ruby on Rails sobre adJ en 
   <http://dhobsd.pasosdeJesus.org/Ruby_on_Rails_en_OpenBSD.html>
-* ```node 4.2.1``` retroportado de OpenBSD-current y probado con aplicaciones 
+* ```node 4.3.0``` probado con aplicaciones 
   como FreeCodeCamp --requiere y por eso se incluyen gcc-4.9.3 y g++-4.9.3 -- 
   ver <http://dhobsd.pasosdejesus.org/freecodecamp.html>
-* ```PHP-5.6.20```.  Se recomienda reubicar socket de php-fpm a 
-  ```/var/www/var/run/php-fpm.sock``` y en lo posible preferir OpenBSD httpd 
-  sobre nginx.
+* ```PHP-ppp```.  
 * Para activar soporte de xlocale se han recompilado los siguientes paquetes 
-  que están en portes de OpenBSD 5.8: ```boost```, ```djvulibre```, 
+  que están en portes de OpenBSD 5.9: ```boost```, ```djvulibre```, 
   ```ggrep```, ```glib2```, ```gtar```, ```libidn```, ```libxslt```, 
   ```llvm```, ```scribus```, ```vlc```, ```wget```, ```wxWidgets-gtk2```
 * Para cerrar fallas se han recompilado los siguientes paquetes a partir de 
-  portes actualizados de OpenBSD 5.8 (pero no incluidos en binarios de ese 
-  sistema):  ```cups, cups-libs, cups-filters, curl, gdk-pixbuf, ghostscript, 
-  gnutls, icu4c, libksba, libtasn1, libwmf, libxml, net-snmp, netpbm, 
-  p5-Mail-SpamAssassin, polkit, py-Pillow, qemu, rrdtool```.
+  portes actualizados de OpenBSD 5.9 (pero no incluidos en binarios de ese 
+  sistema):  ```...```.
 * Se han retroportado otros paquetes de OpenBSD-Current: ```chromium 46``` 
   (más estable)
 * Fuentes de la documentación basico_adJ convertida a Markdown, ver 
   <http://pasosdeJesus.github.io/basico_adJ/> y sobre la herramienta pandoc en
   <http://dhobsd.pasosdejesus.org/pandoc.html>
 * Los paquetes exclusivos los encuentra en 
-  <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/5.8-amd64/paquetes> y 
+  <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/5.9-amd64/paquetes> y 
   otras extensiones de PostgreSQL y PHP que no hacen parte de la distribución en 
-  <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/5.8-amd64-paquetes-extra>
+  <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/5.9-amd64-paquetes-extra>
 
 ### PAQUETES DE OPENBSD
 
-Los paquetes para OpenBSD 5.8 también funcionan sin cambios. Resaltamos:
-* nginx 1.9.3 que puede ser util mientras migra a OpenBSD httpd, 
+Los paquetes para OpenBSD 5.9 también funcionan sin cambios. Resaltamos:
+* nginx 1.9.10 que puede ser util mientras migra a OpenBSD httpd, 
   ver <http://pasosdeJesus.github.io/servidor_adJ/sevidorweb.html#openbsd-httpd>
-* LibreOffice actualizado a 4.4.4.3, gimp a 2.8.14
+* LibreOffice actualizado a 5.0.4.2, gimp a 2.8.16
 * LLVM/Clang a 3.5.201402288 asi como los demás lenguajes de programación
 * No hay paquete para mysql, ha sido remplazado por mariadb, ver 
   <http://pasosdeJesus.github.io/servidor_adJ/mariadb.html>
 * Se incluyen en total 568 paquetes, en los repositorios de paquetes para 
-  OpenBSD 5.8 hay 8866 disponibles para amd64
+  OpenBSD 5.9 hay 8866 disponibles para amd64
 
 
 ### ESCRITORIO
@@ -193,9 +183,9 @@ Las claves públicas empleadas para firmar digitalmente el CD de instalación y 
 
 ## ACTUALIZACIÓN E INSTALACIÓN
 
-Si planea actualizar de una versión anterior de adJ a adJ 5.8
+Si planea actualizar de una versión anterior de adJ a adJ 5.9
 hay un procedimiento mas rápido con rsync (ver
-https://github.com/pasosdeJesus/adJ/blob/ADJ_5_8/Actualiza.md ).
+https://github.com/pasosdeJesus/adJ/blob/ADJ_5_9/Actualiza.md ).
 
 Allí mismo se documentan algunos problemas comunes al actualizar y su solución.
 

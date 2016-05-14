@@ -961,7 +961,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mb
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mbtowc.3 src/lib/libc/locale/mbtowc.3
 --- src53collation/lib/libc/locale/mbtowc.3	Mon Mar 25 18:28:42 2013
 +++ src/lib/libc/locale/mbtowc.3	Wed Apr  3 11:15:27 2013
-@@ -30,26 +30,33 @@
+@@ -30,21 +30,27 @@
  .Os
  .\" ----------------------------------------------------------------------
  .Sh NAME
@@ -980,28 +980,31 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mb
 +.Fn mbtowc_l "wchar_t * restrict pwc" "const char * restrict s" "size_t n" "locale_t l"
  .Sh DESCRIPTION
 -The
-+.Sh DESCRIPTION
 +The functions
  .Fn mbtowc
--usually converts the multibyte character pointed to by
-+and 
+-function converts the multibyte character pointed to by
++and
 +.Fn mbtowc_l
-+usually convert the multibyte character pointed to by
++convert the multibyte character pointed to by
  .Fa s
 -to a wide character, and stores it in the wchar_t object pointed to by
 +to a wide character, and store it in the wchar_t object pointed to by
- .Fa pwc
- if
- .Fa pwc
- is non-null and
- .Fa s
- points to a valid character.
--This function may inspect at most n bytes of the array beginning from
-+These functions may inspect at most n bytes of the array beginning from
+ .Fa pwc .
+-This function may inspect at most
++These functions may inspect at most
+ .Fa n
+ bytes of the array pointed to by
  .Fa s .
+@@ -56,7 +62,7 @@
+ bytes pointed to by
+ .Fa s
+ need to form an entire multibyte character.
+-Otherwise, this function returns an error and the internal state will
++Otherwise, these functions return an error and the internal state will
+ be undefined.
  .Pp
- In state-dependent encodings,
-@@ -88,7 +95,10 @@
+ If a call to
+@@ -73,7 +79,10 @@
  .Fn mbtowc
  is affected by the
  .Dv LC_CTYPE
@@ -1010,10 +1013,10 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mb
 +.Fn mbtowc_l
 +uses the locale provided as parameter, see
 +.Xr xlocale 3
- .Pp
- These are the special cases:
- .Bl -tag -width 012345678901
-@@ -166,7 +176,8 @@
+ Calling any other functions in
+ .Em libc
+ never changes the internal
+@@ -178,7 +187,8 @@
  .Sh SEE ALSO
  .Xr mblen 3 ,
  .Xr mbrtowc 3 ,
@@ -1058,11 +1061,11 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mb
 +	return mbtowc_l(pwc, s, n, __get_locale());
  }
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/multibyte_citrus.c src/lib/libc/locale/multibyte_citrus.c
---- src53collation/lib/libc/locale/multibyte_citrus.c	Mon Mar 25 18:28:42 2013
-+++ src/lib/libc/locale/multibyte_citrus.c	Wed Apr  3 11:35:50 2013
+--- src53collation/lib/libc/locale/multibyte_citrus.c	Sat Sep 12 11:23:14 2015
++++ src/lib/libc/locale/multibyte_citrus.c	Sun May  8 05:36:41 2016
 @@ -31,13 +31,18 @@
  #include <errno.h>
- #include <limits.h>
+ #include <stdint.h>
  #include <wchar.h>
 +#include <xlocale.h>
 +#include "runetype.h"
@@ -1080,7 +1083,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mu
  {
  	struct _citrus_ctype_rec *cc;
  	_RuneLocale *rl;
-@@ -46,80 +51,140 @@
+@@ -46,87 +51,143 @@
  		return 1;
  
  	rl = _ps_to_runelocale(ps);
@@ -1093,16 +1096,17 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mu
  	cc = rl->rl_citrus_ctype;
  	return (*cc->cc_ops->co_mbsinit)(ps);
  }
- 
++
 +int
 +mbsinit(const mbstate_t *ps)
 +{
-+       return mbsinit_l(ps, __get_locale());
++	return mbsinit_l(ps, __get_locale());
 +}
-+
+ DEF_STRONG(mbsinit);
+ 
  size_t
 -mbrtowc(wchar_t *pwc, const char *s, size_t n, mbstate_t *ps)
-+mbrtowc_l(wchar_t *pwc, const char *s, size_t n, mbstate_t *ps, locale_t l)
++mbrtowc_l(wchar_t *pwc, const char *s, size_t n, mbstate_t *ps, locale_t loc)
  {
  	static mbstate_t mbs;
  	struct _citrus_ctype_rec *cc;
@@ -1110,121 +1114,123 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mu
  	if (ps == NULL)
  		ps = &mbs;
 -	cc = _CurrentRuneLocale->rl_citrus_ctype;
-+	FIX_LOCALE(l);
-+	_RuneLocale *rl = XLOCALE_CTYPE(l)->runes;
++	FIX_LOCALE(loc);
++	_RuneLocale *rl = XLOCALE_CTYPE(loc)->runes;
 +	cc = rl->rl_citrus_ctype;
  	return (*cc->cc_ops->co_mbrtowc)(pwc, s, n, _ps_to_private(ps));
  }
- 
- size_t
++
++size_t
 +mbrtowc(wchar_t *pwc, const char *s, size_t n, mbstate_t *ps)
 +{
 +	return mbrtowc_l(pwc, s, n, ps, __get_locale());
 +}
-+
-+size_t
- mbsrtowcs(wchar_t *dst, const char **src, size_t len, mbstate_t *ps)
+ DEF_STRONG(mbrtowc);
+ 
+ size_t
+-mbsrtowcs(wchar_t *dst, const char **src, size_t len, mbstate_t *ps)
++mbsrtowcs_l(wchar_t *dst, const char **src, size_t len, mbstate_t *ps,
++    locale_t loc)
  {
  	static mbstate_t mbs;
  
  	if (ps == NULL)
  		ps = &mbs;
 -	return (mbsnrtowcs(dst, src, SIZE_MAX, len, ps));
-+	return (mbsnrtowcs_l(dst, src, SIZE_MAX, len, ps, __get_locale()));
++	return (mbsnrtowcs_l(dst, src, SIZE_MAX, len, ps, loc));
  }
++
++size_t
++mbsrtowcs(wchar_t *dst, const char **src, size_t len, mbstate_t *ps)
++{
++	return mbsrtowcs_l(dst, src, len, ps, __get_locale());
++}
+ DEF_STRONG(mbsrtowcs);
  
  size_t
 -mbsnrtowcs(wchar_t *dst, const char **src, size_t nmc, size_t len,
 -    mbstate_t *ps)
-+mbsrtowcs_l(wchar_t *dst, const char **src, size_t len, mbstate_t *ps,
-+    locale_t l)
++mbsnrtowcs_l(wchar_t *dst, const char **src, size_t nmc, size_t len,
++    mbstate_t *ps, locale_t loc)
  {
  	static mbstate_t mbs;
-+
-+	if (ps == NULL)
-+		ps = &mbs;
-+	return (mbsnrtowcs_l(dst, src, SIZE_MAX, len, ps, l));
-+}
-+
-+size_t
-+mbsnrtowcs_l(wchar_t *dst, const char **src, size_t nmc, size_t len,
-+    mbstate_t *ps, locale_t l)
-+{
-+	static mbstate_t mbs;
  	struct _citrus_ctype_rec *cc;
  
  	if (ps == NULL)
  		ps = &mbs;
 -	cc = _CurrentRuneLocale->rl_citrus_ctype;
-+	FIX_LOCALE(l);
-+	_RuneLocale *rl = XLOCALE_CTYPE(l)->runes;
++	FIX_LOCALE(loc);
++	_RuneLocale *rl = XLOCALE_CTYPE(loc)->runes;
 +	cc = rl->rl_citrus_ctype;
  	return (*cc->cc_ops->co_mbsnrtowcs)(dst, src, nmc, len,
  	    _ps_to_private(ps));
  }
++
++size_t
++mbsnrtowcs(wchar_t *dst, const char **src, size_t nmc, size_t len,
++    mbstate_t *ps)
++{
++	return mbsnrtowcs_l(dst, src, nmc, len, ps, __get_locale());
++}
+ DEF_WEAK(mbsnrtowcs);
  
  size_t
 -wcrtomb(char *s, wchar_t wc, mbstate_t *ps)
-+mbsnrtowcs(wchar_t *dst, const char **src, size_t nmc, size_t len,
-+    mbstate_t *ps)
++wcrtomb_l(char *s, wchar_t wc, mbstate_t *ps, locale_t loc)
  {
-+	return mbsnrtowcs_l(dst, src, nmc, len, ps, __get_locale());
-+}
-+
-+size_t
-+wcrtomb_l(char *s, wchar_t wc, mbstate_t *ps, locale_t l)
-+{
  	static mbstate_t mbs;
  	struct _citrus_ctype_rec *cc;
  
  	if (ps == NULL)
  		ps = &mbs;
 -	cc = _CurrentRuneLocale->rl_citrus_ctype;
-+	FIX_LOCALE(l);
-+	_RuneLocale *rl = XLOCALE_CTYPE(l)->runes;
++	FIX_LOCALE(loc);
++	_RuneLocale *rl = XLOCALE_CTYPE(loc)->runes;
 +	cc = rl->rl_citrus_ctype;
  	return (*cc->cc_ops->co_wcrtomb)(s, wc, _ps_to_private(ps));
  }
++
++size_t
++wcrtomb(char *s, wchar_t wc, mbstate_t *ps)
++{
++	return wcrtomb_l(s, wc, ps, __get_locale());
++}
+ DEF_STRONG(wcrtomb);
  
  size_t
 -wcsrtombs(char *dst, const wchar_t **src, size_t len, mbstate_t *ps)
-+wcrtomb(char *s, wchar_t wc, mbstate_t *ps)
- {
-+	return wcrtomb_l(s, wc, ps, __get_locale());
-+}
-+
-+size_t
 +wcsrtombs_l(char *dst, const wchar_t **src, size_t len, mbstate_t *ps,
-+    locale_t l)
-+{
++    locale_t loc)
+ {
  	static mbstate_t mbs;
  
  	if (ps == NULL)
  		ps = &mbs;
 -	return (wcsnrtombs(dst, src, SIZE_MAX, len, ps));
-+	return (wcsnrtombs_l(dst, src, SIZE_MAX, len, ps, l));
++	return (wcsnrtombs_l(dst, src, SIZE_MAX, len, ps, loc));
  }
++
++size_t
++wcsrtombs(char *dst, const wchar_t **src, size_t len, mbstate_t *ps)
++{
++	return wcsrtombs_l(dst, src, len, ps, __get_locale());
++}
+ DEF_STRONG(wcsrtombs);
  
  size_t
 -wcsnrtombs(char *dst, const wchar_t **src, size_t nwc, size_t len,
 -    mbstate_t *ps)
-+wcsrtombs(char *dst, const wchar_t **src, size_t len, mbstate_t *ps)
- {
-+	return wcsrtombs_l(dst, src, len, ps, __get_locale());
-+}
-+
-+size_t
 +wcsnrtombs_l(char *dst, const wchar_t **src, size_t nwc, size_t len,
-+    mbstate_t *ps, locale_t l)
-+{
++    mbstate_t *ps, locale_t loc)
+ {
  	static mbstate_t mbs;
  	struct _citrus_ctype_rec *cc;
  
  	if (ps == NULL)
  		ps = &mbs;
 -	cc = _CurrentRuneLocale->rl_citrus_ctype;
-+	FIX_LOCALE(l);
-+	_RuneLocale *rl = XLOCALE_CTYPE(l)->runes;
++	FIX_LOCALE(loc);
++	_RuneLocale *rl = XLOCALE_CTYPE(loc)->runes;
 +	cc = rl->rl_citrus_ctype;
  	return (*cc->cc_ops->co_wcsnrtombs)(dst, src, nwc, len,
  	    _ps_to_private(ps));
@@ -1236,6 +1242,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mu
 +{
 +	return wcsnrtombs_l(dst, src, nwc, len, ps, __get_locale());
  }
+ DEF_WEAK(wcsnrtombs);
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/newlocale.3 src/lib/libc/locale/newlocale.3
 --- src53collation/lib/libc/locale/newlocale.3	Wed Dec 31 19:00:00 1969
 +++ src/lib/libc/locale/newlocale.3	Tue Apr  2 06:11:30 2013
@@ -4000,11 +4007,11 @@ diff -ruN -x *.o -x *~ src56-orig/lib/libc/citrus/citrus_ctype.c src/lib/libc/ci
 +	256				/* cc_mb_sb_limit */
  };
  
- struct _citrus_ctype_rec _citrus_ctype_utf8 = {
+ static struct _citrus_ctype_rec _citrus_ctype_utf8 = {
  	&_citrus_utf8_ctype_ops,	/* cc_ops */
 -	_CITRUS_UTF8_MB_CUR_MAX		/* cc_mb_cur_max */
 +	_CITRUS_UTF8_MB_CUR_MAX,	/* cc_mb_cur_max */
-+	_CITRUS_UTF8_MB_SB_LIMIT	/* cc_mb_sb_limit */
++	_CITRUS_UTF8_MB_SB_LIMIT        /* cc_mb_sb_limit */
  };
  
  int
@@ -4029,4 +4036,3 @@ diff -ruN -x *.o -x *~ src56-orig/lib/libc/citrus/citrus_utf8.h src/lib/libc/cit
 +#define _CITRUS_UTF8_MB_SB_LIMIT	128
  
  _CITRUS_CTYPE_DECLS(utf8);
- 
