@@ -35,7 +35,9 @@ Con respecto a OpenBSD 5.9 para amd64 y a la edición anterior de este DVD
   pero no incluida en OpenBSD) y aprueba el uso de mblen, mbstowcs, mbtowc, 
   wcstombs, wctomb (estandarizadas por ISO C pero desaprobadas por OpenBSD
   desde 5.9) así como de wcsxfrm y wcscoll (estandarizadas en POSIX pero
-  desaprobadas en OpenBSD a partir de 5.9).
+  desaprobadas en OpenBSD a partir de 5.9).  A partir de OpenBSD 5.9 la librería
+  de C marca las funciones con DEF_STRONG o DEF_WEAK dependiendo si son
+  o no estándar.
 * Símbolo ```__adJ__``` predefinido en gcc.  Facilita uso de xlocale 
   y características únicas de adJ respecto a OpenBSD en algunos portes 
   --como ```libunistring```.
@@ -71,7 +73,7 @@ destacamos las siguientes relacionadas con amd64:
 	* 
 
 * Otros
-	*
+	* OpenBSD a partir de 5.9 sólo soporta el locale C y locales con codificación UTF-8
 
 * El sistema base incluye mejoras a componentes auditados y mejorados 
 como ```Xenocara``` (```Xorg 7.7```), ```gcc``` 4.2.1, ```perl``` 5.20.2, 

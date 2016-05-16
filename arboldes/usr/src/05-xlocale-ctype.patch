@@ -726,9 +726,10 @@ diff -ruN -x obj -x CVS -x *~ -x *orig -x *rej src53xlocale1/lib/libc/locale/isw
 +which are
 +.Fx
 +extensions.
---- src53xlocale1/lib/libc/locale/iswctype.c	Mon Mar 25 18:28:42 2013
-+++ src/lib/libc/locale/iswctype.c	Mon Apr  8 21:03:28 2013AAA
-@@ -34,22 +34,35 @@
+diff -ruN src59-orig/lib/libc/locale/iswctype.c src/lib/libc/locale/iswctype.c
+--- src59-orig/lib/libc/locale/iswctype.c	Sun Sep 13 06:38:08 2015
++++ src/lib/libc/locale/iswctype.c	Sat May 14 06:17:15 2016
+@@ -34,22 +34,34 @@
   * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
   * SUCH DAMAGE.
   */
@@ -740,7 +741,6 @@ diff -ruN -x obj -x CVS -x *~ -x *orig -x *rej src53xlocale1/lib/libc/locale/isw
 + * $adJ$
 + */
  
-+
  #include <wchar.h>
  #include <wctype.h>
  #include <ctype.h>
@@ -754,21 +754,22 @@ diff -ruN -x obj -x CVS -x *~ -x *orig -x *rej src53xlocale1/lib/libc/locale/isw
  #include "_wctrans_local.h"
 +#include "xlocale_private.h"
  
- static __inline _RuneType __runetype_w(wint_t);
- static __inline int __isctype_w(wint_t, _RuneType);
- static __inline wint_t __toupper_w(wint_t);
- static __inline wint_t __tolower_w(wint_t);
+ static inline _RuneType __runetype_w(wint_t);
+ static inline int __isctype_w(wint_t, _RuneType);
+ static inline wint_t __toupper_w(wint_t);
+ static inline wint_t __tolower_w(wint_t);
  
-+int iswspace_l(wint_t, locale_t);
++int iswspace_l(wint_t, locale_t); 
 +
- static __inline _RuneType
+ static inline _RuneType
  __runetype_w(wint_t c)
  {
-@@ -59,12 +72,28 @@
+@@ -59,12 +71,29 @@
  		rl->rl_runetype[c] : ___runetype_mb(c));
  }
  
-+__inline _RuneType
++
++static inline _RuneType
 +__runetype_w_l(wint_t c, locale_t l)
 +{
 +	FIX_LOCALE(l);
@@ -778,25 +779,25 @@ diff -ruN -x obj -x CVS -x *~ -x *orig -x *rej src53xlocale1/lib/libc/locale/isw
 +	    rl->rl_runetype[c] : ___runetype_mb_l(c, l));
 +}
 +
- static __inline int
+ static inline int
  __isctype_w(wint_t c, _RuneType f)
  {
  	return (!!(__runetype_w(c) & f));
  }
  
-+__inline int
++static inline int
 +__isctype_w_l(rune_t __c, unsigned long __f, locale_t __loc)
 +{
-+	        return (!!(__runetype_w_l(__c, __loc) & __f));
++	return (!!(__runetype_w_l(__c, __loc) & __f));
 +}
 +
- static __inline wint_t
+ static inline wint_t
  __toupper_w(wint_t c)
  {
-@@ -72,95 +101,233 @@
+@@ -72,23 +101,53 @@
  }
  
- static __inline wint_t
+ static inline wint_t
 +__toupper_w_l(wint_t c, locale_t l)
 +{
 +	FIX_LOCALE(l);
@@ -804,13 +805,14 @@ diff -ruN -x obj -x CVS -x *~ -x *orig -x *rej src53xlocale1/lib/libc/locale/isw
 +	return (_towctrans(c, _wctrans_upper(_runes)));
 +}
 +
-+static __inline wint_t
++static inline wint_t
  __tolower_w(wint_t c)
  {
  	return (_towctrans(c, _wctrans_lower(_CurrentRuneLocale)));
  }
  
-+static __inline wint_t
++
++static inline wint_t
 +__tolower_w_l(wint_t c, locale_t l)
 +{
 +	FIX_LOCALE(l);
@@ -824,7 +826,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig -x *rej src53xlocale1/lib/libc/locale/isw
  	return (__isctype_w((c), _CTYPE_A|_CTYPE_D));
  }
  
-+__inline int 
++int 
 +iswalnum_l(wint_t __c, locale_t __l)
 +{
 +	return __isctype_w_l(__c, _CTYPE_A|_CTYPE_D, __l);
@@ -836,38 +838,36 @@ diff -ruN -x obj -x CVS -x *~ -x *orig -x *rej src53xlocale1/lib/libc/locale/isw
  	return (__isctype_w((c), _CTYPE_A));
  }
  
-+__inline int 
++
++int 
 +iswalpha_l(wint_t __c, locale_t __l) 
 +{ 
 +	return __isctype_w_l(__c, _CTYPE_A, __l); 
 +}
 +
-+
  int
  iswblank(wint_t c)
  {
- 	return (__isctype_w((c), _CTYPE_B));
+@@ -96,41 +155,112 @@
  }
  
-+__inline int
+ int
 +iswblank_l(wint_t __c, locale_t __l) 
 +{ 
 +	return __isctype_w_l(__c, _CTYPE_B, __l); 
 +}
 +
-+
- int
++int
  iswcntrl(wint_t c)
  {
  	return (__isctype_w((c), _CTYPE_C));
  }
  
-+__inline int 
++int 
 +iswcntrl_l(wint_t __c, locale_t __l) 
 +{ 
 +	return __isctype_w_l(__c, _CTYPE_C, __l);
 +}
-+
 +
  int
  iswdigit(wint_t c)
@@ -875,7 +875,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig -x *rej src53xlocale1/lib/libc/locale/isw
  	return (__isctype_w((c), _CTYPE_D));
  }
  
-+__inline int 
++int 
 +iswdigit_l(wint_t __c, locale_t __l) 
 +{ 
 +	return __isctype_w_l(__c, _CTYPE_D, __l); 
@@ -887,19 +887,19 @@ diff -ruN -x obj -x CVS -x *~ -x *orig -x *rej src53xlocale1/lib/libc/locale/isw
  	return (__isctype_w((c), _CTYPE_G));
  }
  
-+__inline int 
++int 
 +iswgraph_l(wint_t __c, locale_t __l) 
 +{ 
 +	return __isctype_w_l(__c, _CTYPE_G, __l); 
 +}
 +
-+__inline int 
++int 
 +iswhexnumber_l(wint_t __c, locale_t __l) 
 +{ 
 +	return __isctype_w_l(__c, _CTYPE_X, __l); 
 +}
 +
-+__inline int 
++int 
 +iswideogram_l(wint_t __c, locale_t __l) 
 +{ 
 +	return __isctype_w_l(__c, _CTYPE_I, __l);
@@ -911,18 +911,23 @@ diff -ruN -x obj -x CVS -x *~ -x *orig -x *rej src53xlocale1/lib/libc/locale/isw
  	return (__isctype_w((c), _CTYPE_L));
  }
  
-+__inline int 
++int 
 +iswlower_l(wint_t __c, locale_t __l) 
 +{ 
 +	return __isctype_w_l(__c, _CTYPE_L, __l);
 +}
 +
-+__inline int 
++int 
 +iswnumber_l(wint_t __c, locale_t __l) 
 +{ 
 +	return __isctype_w_l(__c, _CTYPE_D, __l);
 +}
 +
++int 
++iswphonogram_l(wint_t __c, locale_t __l) 
++{ 
++	return __isctype_w_l(__c, _CTYPE_Q, __l);
++}
 +
  int
  iswprint(wint_t c)
@@ -930,13 +935,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig -x *rej src53xlocale1/lib/libc/locale/isw
  	return (__isctype_w((c), _CTYPE_R));
  }
  
-+__inline int 
-+iswphonogram_l(wint_t __c, locale_t __l) 
-+{ 
-+	return __isctype_w_l(__c, _CTYPE_Q, __l);
-+}
-+
-+__inline int 
++int 
 +iswprint_l(wint_t __c, locale_t __l) 
 +{ 
 +	return __isctype_w_l(__c, _CTYPE_R, __l);
@@ -947,12 +946,13 @@ diff -ruN -x obj -x CVS -x *~ -x *orig -x *rej src53xlocale1/lib/libc/locale/isw
  {
  	return (__isctype_w((c), _CTYPE_P));
  }
-+__inline int iswpunct_l(wint_t __c, locale_t __l)
+ 
++int iswpunct_l(wint_t __c, locale_t __l)
 +{ 
 +	return __isctype_w_l(__c, _CTYPE_P, __l);
 +}
- 
-+__inline int 
++ 
++int 
 +iswrune_l(wint_t __c, locale_t __l) 
 +{
 +	return __isctype_w_l(__c, 0xFFFFFF00L, __l);
@@ -961,16 +961,17 @@ diff -ruN -x obj -x CVS -x *~ -x *orig -x *rej src53xlocale1/lib/libc/locale/isw
  int
  iswspace(wint_t c)
  {
- 	return (__isctype_w((c), _CTYPE_S));
+@@ -138,6 +268,18 @@
  }
+ DEF_STRONG(iswspace);
  
-+__inline int 
++int 
 +iswspace_l(wint_t __c, locale_t __l) 
 +{ 
 +	return __isctype_w_l(__c, _CTYPE_S, __l);
 +}
 +
-+__inline int 
++int 
 +iswspecial_l(wint_t __c, locale_t __l) 
 +{ 
 +	return __isctype_w_l(__c, _CTYPE_T, __l);
@@ -979,10 +980,11 @@ diff -ruN -x obj -x CVS -x *~ -x *orig -x *rej src53xlocale1/lib/libc/locale/isw
  int
  iswupper(wint_t c)
  {
- 	return (__isctype_w((c), _CTYPE_U));
+@@ -145,18 +287,36 @@
  }
+ DEF_STRONG(iswupper);
  
-+__inline int 
++int 
 +iswupper_l(wint_t __c, locale_t __l) 
 +{ 
 +	return __isctype_w_l(__c, _CTYPE_U, __l);
@@ -994,7 +996,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig -x *rej src53xlocale1/lib/libc/locale/isw
  	return (__isctype_w((c), _CTYPE_X));
  }
  
-+__inline int 
++int 
 +iswxdigit_l(wint_t __c, locale_t __l) 
 +{ 
 +	return __isctype_w_l(__c, _CTYPE_X, __l); 
@@ -1015,10 +1017,11 @@ diff -ruN -x obj -x CVS -x *~ -x *orig -x *rej src53xlocale1/lib/libc/locale/isw
  wint_t
  towlower(wint_t c)
  {
- 	return (__tolower_w(c));
+@@ -164,6 +324,12 @@
  }
+ DEF_STRONG(towlower);
  
-+__inline wint_t
++wint_t
 +towlower_l(wint_t __c, locale_t __l)
 +{
 +	return (__tolower_w_l(__c, __l));
@@ -1027,9 +1030,9 @@ diff -ruN -x obj -x CVS -x *~ -x *orig -x *rej src53xlocale1/lib/libc/locale/isw
  int
  wcwidth(wchar_t c)
  {
-@@ -169,6 +336,15 @@
- 	return -1;
+@@ -173,6 +339,15 @@
  }
+ DEF_WEAK(wcwidth);
  
 +int wcwidth_l(wchar_t c, locale_t __l)
 +{
@@ -1043,7 +1046,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig -x *rej src53xlocale1/lib/libc/locale/isw
  wctrans_t
  wctrans(const char *charclass)
  {
-@@ -185,6 +361,23 @@
+@@ -189,6 +364,23 @@
  	return ((wctrans_t)NULL);
  }
  
@@ -1067,7 +1070,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig -x *rej src53xlocale1/lib/libc/locale/isw
  wint_t
  towctrans(wint_t c, wctrans_t desc)
  {
-@@ -195,6 +388,22 @@
+@@ -199,6 +391,22 @@
  	return (_towctrans(c, (_WCTransEntry *)desc));
  }
  
@@ -1090,7 +1093,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig -x *rej src53xlocale1/lib/libc/locale/isw
  wctype_t
  wctype(const char *property)
  {
-@@ -207,6 +416,20 @@
+@@ -211,6 +419,20 @@
  	return ((wctype_t)NULL);
  }
  
@@ -1111,7 +1114,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig -x *rej src53xlocale1/lib/libc/locale/isw
  int
  iswctype(wint_t c, wctype_t charclass)
  {
-@@ -220,3 +443,10 @@
+@@ -224,3 +446,10 @@
  
  	return (__isctype_w(c, ((_WCTypeEntry *)charclass)->te_mask));
  }
@@ -2732,10 +2735,10 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/_wc
  			memset(&st, 0, sizeof(st));
 -			size = mbsnrtowcs(NULL, &s, end - buf, 0, &st);
 +			size = mbsnrtowcs_l(NULL, &s, end - buf, 0, &st, loc);
- 
- 			/* LINTED bad interface */
  			*endptr = (wchar_t*)start + size;
-@@ -150,4 +163,10 @@
+ 		}
+ 
+@@ -147,5 +160,11 @@
  		*endptr = (wchar_t*)nptr;
  
  	return 0;
@@ -2746,6 +2749,7 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/_wc
 +{
 +	return FUNCNAMEL(nptr, endptr, __get_locale());
  }
+ DEF_STRONG(FUNCNAME);
 diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/wcstoumax.c src53xlocale2/lib/libc/locale/wcstoumax.c
 --- src53xlocale1/lib/libc/locale/wcstoumax.c	Mon Apr  8 21:20:25 2013
 +++ src53xlocale2/lib/libc/locale/wcstoumax.c	Fri Apr 12 12:07:57 2013

@@ -132,33 +132,36 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/lib/libc/string/strcasecmp.
  typedef unsigned char u_char;
  
  /*
-@@ -76,18 +84,17 @@
+@@ -76,20 +84,19 @@
  int
  strcasecmp(const char *s1, const char *s2)
  {
 -	const u_char *cm = charmap;
 -	const u_char *us1 = (const u_char *)s1;
 -	const u_char *us2 = (const u_char *)s2;
-+	return strncasecmp(s1, s2, strlen(s1) + 1);
-+}
- 
+-
 -	while (cm[*us1] == cm[*us2++])
 -		if (*us1++ == '\0')
 -			return (0);
 -	return (cm[*us1] - cm[*--us2]);
-+int
-+strcasecmp_l(const char *s1, const char *s2, locale_t loc)
-+{
-+	return strncasecmp_l(s1, s2, strlen(s1) + 1, loc);
++	return strncasecmp(s1, s2, strlen(s1) + 1);
  }
+ DEF_WEAK(strcasecmp);
  
  int
 -strncasecmp(const char *s1, const char *s2, size_t n)
-+sbstrncasecmp(const char *s1, const char *s2, size_t n)
++strcasecmp_l(const char *s1, const char *s2, locale_t loc)
  {
++	return strncasecmp_l(s1, s2, strlen(s1) + 1, loc);
++}
++ 
++int
++sbstrncasecmp(const char *s1, const char *s2, size_t n)
++{
  	if (n != 0) {
  		const u_char *cm = charmap;
-@@ -102,4 +109,52 @@
+ 		const u_char *us1 = (const u_char *)s1;
+@@ -103,5 +110,53 @@
  		} while (--n != 0);
  	}
  	return (0);
@@ -211,6 +214,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/lib/libc/string/strcasecmp.
 +{
 +	return strncasecmp_l(s1, s2, n, __get_locale());
  }
+ DEF_WEAK(strncasecmp);
 diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/lib/libc/string/strcasestr.c src/lib/libc/string/strcasestr.c
 --- src53xlocale2/lib/libc/string/strcasestr.c	Mon Mar 25 18:28:29 2013
 +++ src/lib/libc/string/strcasestr.c	Thu Apr 11 17:36:41 2013
@@ -363,9 +367,11 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/lib/libc/string/strxfrm.c s
 diff -ruN -x obj -x CVS -x *~ -x *orig src54-num/lib/libc/string/wcscasecmp.c src/lib/libc/string/wcscasecmp.c
 --- src54-num/lib/libc/string/wcscasecmp.c	Mon Dec 23 13:18:26 2013
 +++ src/lib/libc/string/wcscasecmp.c	Mon Dec 23 13:18:42 2013
-@@ -29,14 +29,17 @@
- #include <wctype.h>
+@@ -27,15 +27,19 @@
  
+ #include <wchar.h>
+ #include <wctype.h>
++
  #include "locale/runetype.h"
 +#include "locale/xlocale_private.h"
  
@@ -383,27 +389,28 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src54-num/lib/libc/string/wcscasecmp.c sr
  		if (l1 == 0)
  			return (0);
  	}
-@@ -44,27 +47,41 @@
+@@ -43,12 +47,18 @@
  	c1[1] = L'\0';
  	c2[0] = l2;
  	c2[1] = L'\0';
 -	return wcscoll(c1, c2);
 +	return wcscoll_l(c1, c2, loc);
  }
++
++int
++wcscasecmp(const wchar_t *s1, const wchar_t *s2)
++{
++	return wcscasecmp_l(s1, s2, __get_locale());
++}
+ DEF_WEAK(wcscasecmp);
  
  int
 -wcsncasecmp(const wchar_t *s1, const wchar_t *s2, size_t n)
-+wcscasecmp(const wchar_t *s1, const wchar_t *s2)
- {
-+	return wcscasecmp_l(s1, s2, __get_locale());
-+}
-+
-+int
 +wcsncasecmp_l(const wchar_t *s1, const wchar_t *s2, size_t n, locale_t loc)
-+{
+ {
  	wchar_t l1, l2;
  	wchar_t c1[2], c2[2];
- 
+@@ -56,16 +66,23 @@
  	if (n == 0)
  		return (0);
  	do {
@@ -423,12 +430,12 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src54-num/lib/libc/string/wcscasecmp.c sr
  	return (0);
 +}
 +
-+
 +int
 +wcsncasecmp(const wchar_t *s1, const wchar_t *s2, size_t n)
 +{
 +	return wcsncasecmp_l(s1, s2, n, __get_locale());
  }
+ DEF_WEAK(wcsncasecmp);
 diff -ruN -x obj -x CVS -x *~ -x *orig src54-x5/regress/lib/libc/locale/check_isw/check_isw.c src/regress/lib/libc/locale/check_isw/check_isw.c
 --- src54-x5/regress/lib/libc/locale/check_isw/check_isw.c	Tue Dec  3 13:48:26 2013
 +++ src/regress/lib/libc/locale/check_isw/check_isw.c	Tue Dec  3 15:35:06 2013

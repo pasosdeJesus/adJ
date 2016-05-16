@@ -447,12 +447,12 @@ diff -u src-ant/lib/libc/stdio/fgetws.c src/lib/libc/stdio/fgetws.c
  
  	wsp = ws;
  	while (n-- > 1) {
--		if ((wc = __fgetwc_unlock(fp)) == WEOF && errno == EILSEQ) {
-+		if ((wc = __fgetwc_unlock(fp, loc)) == WEOF && errno == EILSEQ) {
+-		if ((wc = __fgetwc_unlock(fp)) == WEOF &&
++		if ((wc = __fgetwc_unlock(fp, loc)) == WEOF &&
+ 		    ferror(fp) && errno == EILSEQ)
  			goto error;
- 		}
  		if (wc == WEOF) {
-@@ -77,3 +80,11 @@
+@@ -77,4 +80,12 @@
  	FUNLOCKFILE(fp);
  	return (NULL);
  }
@@ -464,15 +464,17 @@ diff -u src-ant/lib/libc/stdio/fgetws.c src/lib/libc/stdio/fgetws.c
 +	return fgetws_l(ws, n, fp, __get_locale());
 +}
 +
+ DEF_STRONG(fgetws);
 diff -u src-ant/lib/libc/stdio/fvwrite.h src/lib/libc/stdio/fvwrite.h
 --- src-ant/lib/libc/stdio/fvwrite.h	Thu May 15 05:35:00 2014
 +++ src/lib/libc/stdio/fvwrite.h	Thu May 15 05:35:39 2014
-@@ -46,4 +46,4 @@
- };
+@@ -47,5 +47,5 @@
  
+ __BEGIN_HIDDEN_DECLS
  extern int __sfvwrite(FILE *, struct __suio *);
 -wint_t __fputwc_unlock(wchar_t wc, FILE *fp);
 +wint_t __fputwc_unlock(wchar_t wc, FILE *fp, locale_t loc);
+ __END_HIDDEN_DECLS
 diff -u src-ant/lib/libc/stdio/local.h src/lib/libc/stdio/local.h
 --- src-ant/lib/libc/stdio/local.h	Thu May 15 05:35:00 2014
 +++ src/lib/libc/stdio/local.h	Thu May 15 05:35:39 2014
@@ -983,34 +985,34 @@ diff -u src-ant/lib/libc/stdio/vfwprintf.c src/lib/libc/stdio/vfwprintf.c
  
  	fmt = (wchar_t *)fmt0;
  	argtable = NULL;
-@@ -671,7 +677,7 @@
- 				free(convbuf);
- 				convbuf = NULL;
- 			}
+@@ -668,7 +674,7 @@
+ 			if (expt == INT_MAX)
+ 				ox[1] = '\0';
+ 			free(convbuf);
 -			cp = convbuf = __mbsconv(dtoaresult, -1);
 +			cp = convbuf = __mbsconv(dtoaresult, -1, loc);
  			if (cp == NULL)
  				goto error;
  			ndig = dtoaend - dtoaresult;
-@@ -723,7 +729,7 @@
- 				free(convbuf);
- 				convbuf = NULL;
- 			}
+@@ -717,7 +723,7 @@
+ 					expt = INT_MAX;
+  			}
+ 			free(convbuf);
 -			cp = convbuf = __mbsconv(dtoaresult, -1);
 +			cp = convbuf = __mbsconv(dtoaresult, -1, loc);
  			if (cp == NULL)
  				goto error;
  			ndig = dtoaend - dtoaresult;
-@@ -834,7 +840,7 @@
- 					free(convbuf);
- 					convbuf = NULL;
- 				}
+@@ -823,7 +829,7 @@
+ 				if ((mbsarg = GETARG(char *)) == NULL)
+ 					mbsarg = "(null)";
+ 				free(convbuf);
 -				convbuf = __mbsconv(mbsarg, prec);
 +				convbuf = __mbsconv(mbsarg, prec, loc);
  				if (convbuf == NULL) {
  					fp->_flags |= __SERR;
  					goto error;
-@@ -992,8 +998,11 @@
+@@ -981,8 +987,11 @@
  		if ((flags & FPT) == 0) {
  			PRINT(cp, size);
  		} else {	/* glue together f_p fragments */
@@ -1024,13 +1026,13 @@ diff -u src-ant/lib/libc/stdio/vfwprintf.c src/lib/libc/stdio/vfwprintf.c
  			if (!expchar) {	/* %[fF] or sufficiently short %[gG] */
  				if (expt <= 0) {
  					PRINT(zeroes, 1);
-@@ -1063,17 +1072,23 @@
+@@ -1051,15 +1060,22 @@
  }
  
  int
 -vfwprintf(FILE * __restrict fp, const wchar_t * __restrict fmt0, __va_list ap)
-+vfwprintf_l(FILE * __restrict fp, locale_t loc, 
-+		const wchar_t * __restrict fmt0, __va_list ap)
++vfwprintf_l(FILE * __restrict fp, locale_t loc, const wchar_t * __restrict fmt0,
++	       __va_list ap)
  {
  	int r;
  
@@ -1040,16 +1042,15 @@ diff -u src-ant/lib/libc/stdio/vfwprintf.c src/lib/libc/stdio/vfwprintf.c
  	FUNLOCKFILE(fp);
  
  	return (r);
- }
- 
++}
++
 +int
 +vfwprintf(FILE * __restrict fp, const wchar_t * __restrict fmt0, __va_list ap)
 +{
 +	return vfwprintf_l(fp, __get_locale(), fmt0, ap);
-+}
- /*
-  * Type ids for argument type table.
-  */
+ }
+ DEF_STRONG(vfwprintf);
+ 
 diff -u src-ant/lib/libc/stdio/vscanf.c src/lib/libc/stdio/vscanf.c
 --- src-ant/lib/libc/stdio/vscanf.c	Thu May 15 05:35:00 2014
 +++ src/lib/libc/stdio/vscanf.c	Thu May 15 05:35:39 2014
@@ -1222,17 +1223,15 @@ diff -u src-ant/lib/libc/stdlib/atoll.c src/lib/libc/stdlib/atoll.c
 diff -u src-ant/lib/libc/stdlib/atof.3 src/lib/libc/stdlib/atof.3
 --- src-ant/lib/libc/stdlib/atof.3	Thu May 15 06:48:04 2014
 +++ src/lib/libc/stdlib/atof.3	Thu May 15 06:49:51 2014
-@@ -35,7 +35,8 @@
+@@ -35,20 +35,30 @@
  .Dt ATOF 3
  .Os
  .Sh NAME
 -.Nm atof
 +.Nm atof ,
 +.Nm atof_l
- .Nd convert
- .Tn ASCII
- string to double
-@@ -43,14 +44,23 @@
+ .Nd convert ASCII string to double
+ .Sh SYNOPSIS
  .In stdlib.h
  .Ft double
  .Fn atof "const char *nptr"
@@ -1258,7 +1257,7 @@ diff -u src-ant/lib/libc/stdlib/atof.3 src/lib/libc/stdlib/atof.3
  .Pp
  It is equivalent to:
  .Bd -literal -offset indent
-@@ -62,11 +72,15 @@
+@@ -60,11 +70,15 @@
  .Xr strtod 3 ,
  .Xr strtol 3 ,
  .Xr strtoul 3
@@ -1388,17 +1387,15 @@ diff -u src-ant/lib/libc/stdlib/strtonum.c src/lib/libc/stdlib/strtonum.c
 diff -u src-ant/lib/libc/stdlib/atoll.3 src/lib/libc/stdlib/atoll.3
 --- src-ant/lib/libc/stdlib/atoll.3	Thu May 15 06:29:57 2014
 +++ src/lib/libc/stdlib/atoll.3	Thu May 15 06:31:17 2014
-@@ -35,7 +35,8 @@
+@@ -35,20 +35,30 @@
  .Dt ATOLL 3
  .Os
  .Sh NAME
 -.Nm atoll
 +.Nm atoll ,
 +.Nm atoll_l
- .Nd convert
- .Tn ASCII
- string to long long integer
-@@ -43,14 +44,23 @@
+ .Nd convert ASCII string to long long integer
+ .Sh SYNOPSIS
  .In stdlib.h
  .Ft long long
  .Fn atoll "const char *nptr"
@@ -1424,7 +1421,7 @@ diff -u src-ant/lib/libc/stdlib/atoll.3 src/lib/libc/stdlib/atoll.3
  .Pp
  It is equivalent to:
  .Bd -literal -offset indent
-@@ -63,8 +73,12 @@
+@@ -61,8 +71,12 @@
  .Xr strtod 3 ,
  .Xr strtol 3 ,
  .Xr strtoul 3
@@ -1433,24 +1430,22 @@ diff -u src-ant/lib/libc/stdlib/atoll.3 src/lib/libc/stdlib/atoll.3
  The
  .Fn atoll
  function conforms to
- .St -ansiC-99 .
+ .St -isoC-99 .
 +The
 +.Fn atoll_l
 +function is a Darwin extension.
 diff -u src-ant/lib/libc/stdlib/atol.3 src/lib/libc/stdlib/atol.3
 --- src-ant/lib/libc/stdlib/atol.3	Thu May 15 06:28:30 2014
 +++ src/lib/libc/stdlib/atol.3	Thu May 15 06:29:41 2014
-@@ -35,7 +35,8 @@
+@@ -35,20 +35,30 @@
  .Dt ATOL 3
  .Os
  .Sh NAME
 -.Nm atol
 +.Nm atol ,
 +.Nm atol_l
- .Nd convert
- .Tn ASCII
- string to long integer
-@@ -43,14 +44,23 @@
+ .Nd convert ASCII string to long integer
+ .Sh SYNOPSIS
  .In stdlib.h
  .Ft long
  .Fn atol "const char *nptr"
@@ -1476,7 +1471,7 @@ diff -u src-ant/lib/libc/stdlib/atol.3 src/lib/libc/stdlib/atol.3
  .Pp
  It is equivalent to:
  .Bd -literal -offset indent
-@@ -63,8 +73,12 @@
+@@ -61,8 +71,12 @@
  .Xr strtod 3 ,
  .Xr strtol 3 ,
  .Xr strtoul 3
@@ -1485,24 +1480,22 @@ diff -u src-ant/lib/libc/stdlib/atol.3 src/lib/libc/stdlib/atol.3
  The
  .Fn atol
  function conforms to
- .St -ansiC-99 .
+ .St -isoC-99 .
 +The
 +.Fn atol_l
 +function is a Darwin extension.
 diff -u src-ant/lib/libc/stdlib/atoi.3 src/lib/libc/stdlib/atoi.3
 --- src-ant/lib/libc/stdlib/atoi.3	Thu May 15 06:23:46 2014
 +++ src/lib/libc/stdlib/atoi.3	Thu May 15 06:26:45 2014
-@@ -35,7 +35,8 @@
+@@ -35,20 +35,31 @@
  .Dt ATOI 3
  .Os
  .Sh NAME
 -.Nm atoi
 +.Nm atoi ,
 +.Nm atoi_l
- .Nd convert
- .Tn ASCII
- string to integer
-@@ -43,14 +44,24 @@
+ .Nd convert ASCII string to integer
+ .Sh SYNOPSIS
  .In stdlib.h
  .Ft int
  .Fn atoi "const char *nptr"
@@ -1528,7 +1521,7 @@ diff -u src-ant/lib/libc/stdlib/atoi.3 src/lib/libc/stdlib/atoi.3
  .Pp
  It is equivalent to:
  .Bd -literal -offset indent
-@@ -63,11 +74,15 @@
+@@ -61,11 +72,15 @@
  .Xr strtol 3 ,
  .Xr strtonum 3 ,
  .Xr strtoul 3
@@ -1544,7 +1537,7 @@ diff -u src-ant/lib/libc/stdlib/atoi.3 src/lib/libc/stdlib/atoi.3
  .Sh HISTORY
  An
  .Fn atoi
-@@ -81,9 +96,11 @@
+@@ -79,9 +94,11 @@
  .Dq "123abc" )
  poorly.
  Careful use of
@@ -1991,16 +1984,35 @@ diff -u src-ant/lib/libc/stdio/scanf.3 src/lib/libc/stdio/scanf.3
 diff -u src-ant/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regress/lib/libc/locale/check_xlocale.c
 --- src-ant/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Thu May 15 05:35:00 2014
 +++ src/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Thu May 15 05:35:39 2014
-@@ -49,7 +49,7 @@
+@@ -31,25 +31,13 @@
+ 	}
+ 
+ 
+-void
+-__print_locale(void *l);
++#define dpl(__l) printf("%s ", #__l); 
+ 
+-locale_t
+-__get_locale(void);
+-
+-void __print_ctypetable();
+-
+-#define dpl(__l) printf("%s ", #__l); __print_locale(__l);
+-
+ void test_xlocale() {
+ 	static locale_t cl;
+-	cl = __get_locale();
+-	printf("%p\n", cl);
+-	dpl((void *)cl);
  	char *nl = setlocale(LC_ALL, "es_CO.UTF-8");
- 	dpl((void *)__get_locale());
+-	dpl((void *)__get_locale());
  	printf("locale %s\n", nl);
 -	locale_t es_CO_UTF_8 = uselocale(NULL);
 +	locale_t es_CO_UTF_8 = duplocale(uselocale(NULL));
  	dpl(es_CO_UTF_8);
  	char *r;
  	p(strcmp((r = (char *)querylocale(LC_CTYPE, es_CO_UTF_8)), "es_CO.UTF-8") == 0);
-@@ -76,6 +76,7 @@
+@@ -76,6 +64,7 @@
  	p(freelocale(esp4) == 0);
  	p(freelocale(esp5) == 0);
  	p(freelocale(esp6) == 0);
@@ -2008,7 +2020,7 @@ diff -u src-ant/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regres
  }
  
  void test_wchar() {
-@@ -92,32 +93,40 @@
+@@ -92,32 +81,40 @@
  	p((s = mblen(mbs, 10)) == 1);
  	printf("s=%i\n", s);
  	nl = setlocale(LC_ALL, "es_CO.ISO8859-1");
@@ -2055,7 +2067,7 @@ diff -u src-ant/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regres
  	mb3[s] = '\0';
  	snprintf(bp, 1000, "%s", mb3);
  	//printf("bp=%s, bp[0]=%i && bp[1]==%i && bp[2]==%i && bp[3]==%i && bp[4]==%i\n", bp, bp[0], bp[1], bp[2], bp[3], bp[4]);
-@@ -129,22 +138,46 @@
+@@ -129,22 +126,46 @@
  	p(btowc_l('a', l) == L'a');	
  	mbstate_t mbst;
          bzero(&mbst, sizeof(mbst));
@@ -2114,7 +2126,16 @@ diff -u src-ant/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regres
  }
  
  void test_ctype() {
-@@ -250,7 +283,7 @@
+@@ -232,7 +253,7 @@
+ 	p(iswhexnumber_l(L'a', es_CO_UTF_8));
+ 	p(!iswhexnumber_l(L' ', es_CO_UTF_8));
+ 	p(!isideogram_l(' ', es_CO_UTF_8));
+-	p(iswideogram_l(0x3006, es_CO_UTF_8));
++	//p(iswideogram_l(0x3006, es_CO_UTF_8));
+ 	p(!iswideogram_l(L' ', es_CO_UTF_8));
+ 	p(isnumber_l('1', es_CO_UTF_8));
+ 	p(!isnumber_l(' ', es_CO_UTF_8));
+@@ -250,7 +271,7 @@
  	p(!isspecial_l('a', es_CO_UTF_8));
  	p(iswspecial_l(0x00b2, es_CO_UTF_8));
  	p(!iswspecial_l(L'\0', es_CO_UTF_8));
@@ -2123,7 +2144,7 @@ diff -u src-ant/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regres
  	p(tolower_l('A', es_CO_UTF_8) == 'a');
  	p(tolower('A') == 'a');
  	p(_tolower('A') == 'a');
-@@ -280,6 +313,7 @@
+@@ -280,6 +301,7 @@
  		p(towctrans_l(lu[c][0], tu, es_CO_UTF_8) == lu[c][1]);
  		p(towupper_l(lu[c][0], es_CO_UTF_8) == lu[c][1]);
  	}
@@ -2131,7 +2152,7 @@ diff -u src-ant/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regres
  
  }
  
-@@ -294,7 +328,7 @@
+@@ -294,7 +316,7 @@
  	p(strcasecmp("n", "N") == 0);
  	p(strcasecmp("\0xf1", "\0xd1") == 0); // ñ Ñ
  	nl = setlocale(LC_ALL, "es_CO.UTF-8");
@@ -2140,7 +2161,16 @@ diff -u src-ant/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regres
  	printf("locale %s\n", nl);
  	printf("__mb_cur_max=%i\n", __mb_cur_max);
  	p(__mb_cur_max == 4); 
-@@ -422,6 +456,7 @@
+@@ -384,7 +406,7 @@
+ 	
+ 	char a[1000], b[1000], e[1000], f[1000];
+ 	size_t sr = 0;
+-	__collate_print_tables(NULL);
++	//__collate_print_tables(NULL);
+ 	p((sr = strxfrm_l(NULL, "equis", 0, es_CO_UTF_8)) > 5);
+ 	p(strxfrm_l(NULL, "", 1000, es_CO_UTF_8) == 0);
+ 	p(strxfrm_l(a, "", 1000, es_CO_UTF_8) == 0 && a[0] == '\0');
+@@ -422,6 +444,7 @@
  	p(wcscasecmp(L"á", L"Á") == 0);
  	p(wcscasecmp(L"a", L"á") <= 0);
  	p(wcsncasecmp_l(L"n", L"N", 1, es_CO_UTF_8) == 0);
@@ -2148,7 +2178,7 @@ diff -u src-ant/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regres
  }
  
  void test_monetary() 
-@@ -459,30 +494,48 @@
+@@ -459,30 +482,48 @@
  	p(p->n_sign_posn == 1);
  	strfmon_l(col, sizeof(col), es_CO_UTF_8, "%n", -3456.781); 
  	p(strcmp(col, "-$ 3.456,78") == 0);
@@ -2200,7 +2230,7 @@ diff -u src-ant/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regres
  	snprintf_l(col, sizeof(col), es_CO_UTF_8, "%f", 1000000.01);
  	p(strcmp(col, "1000000,010000") == 0);
  	snprintf_l(col, sizeof(col), es_CO_UTF_8, "%'d", 1000000);
-@@ -498,13 +551,71 @@
+@@ -498,13 +539,71 @@
  
  	fl = strtof_l(" -3,1", NULL, es_CO_UTF_8);
  	p(fabs(fl + 3.1) < FLT_EPSILON);
@@ -2272,7 +2302,7 @@ diff -u src-ant/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regres
  }
  
  void test_time() 
-@@ -529,8 +640,130 @@
+@@ -529,8 +628,130 @@
  	p(strcmp(col, "martes") == 0);
  	wcsftime_l(wcol, sizeof(wcol), L"%A", &tl, esc);
  	p(wcscmp(wcol, L"martes") == 0);
@@ -2403,7 +2433,7 @@ diff -u src-ant/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regres
  int main()
  {
  	test_xlocale();
-@@ -540,6 +773,7 @@
+@@ -540,6 +761,7 @@
  	test_monetary();
  	test_numeric();
  	test_time();
@@ -2792,18 +2822,19 @@ diff -u src-ant/lib/libc/stdlib/Makefile.inc src/lib/libc/stdlib/Makefile.inc
 diff -u src-ant/lib/libc/locale/wcstol.3 src/lib/libc/locale/wcstol.3
 --- src-ant/lib/libc/locale/wcstol.3	Thu May 15 06:15:56 2014
 +++ src/lib/libc/locale/wcstol.3	Thu May 15 07:57:33 2014
-@@ -34,6 +34,10 @@
+@@ -33,7 +33,10 @@
+ .Sh NAME
  .Nm wcstol , wcstoul ,
  .Nm wcstoll , wcstoull ,
- .Nm wcstoimax , wcstoumax
-+.Nm wcstol_l , wcstoul_l ,
+-.Nm wcstoimax , wcstoumax
++.Nm wcstoimax , wcstoumax ,
++.Nm wcstol_l, wcstoul_l ,
 +.Nm wcstoll_l , wcstoull_l ,
 +.Nm wcstoimax_l , wcstoumax_l
-+
- .Nd convert a wide-character string value to a long, unsigned long,
- long long, unsigned long long, intmax_t or uintmax_t integer
+ .Nd convert a wide-character string value to a long, unsigned long, \
+ long long, unsigned long long, intmax_t, or uintmax_t integer
  .Sh SYNOPSIS
-@@ -51,21 +55,47 @@
+@@ -51,21 +54,47 @@
  .Fn wcstoimax "const wchar_t * restrict nptr" "wchar_t ** restrict endptr" "int base"
  .Ft uintmax_t
  .Fn wcstoumax "const wchar_t * restrict nptr" "wchar_t ** restrict endptr" "int base"
@@ -2854,7 +2885,7 @@ diff -u src-ant/lib/libc/locale/wcstol.3 src/lib/libc/locale/wcstol.3
  and
  .Fn strtoumax
  functions, respectively.
-@@ -75,6 +105,7 @@
+@@ -75,6 +104,7 @@
  .Sh SEE ALSO
  .Xr strtol 3 ,
  .Xr strtoul 3
@@ -2862,7 +2893,7 @@ diff -u src-ant/lib/libc/locale/wcstol.3 src/lib/libc/locale/wcstol.3
  .Sh STANDARDS
  The
  .Fn wcstol ,
-@@ -86,3 +117,4 @@
+@@ -86,3 +116,4 @@
  .Fn wcstoumax
  functions conform to
  .St -isoC-99 .
