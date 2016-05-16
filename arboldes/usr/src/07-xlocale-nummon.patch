@@ -86,7 +86,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/arch/amd64/gd
 +long double
 +strtold(const char * __restrict s, char ** __restrict sp)
 +{
-+	return strtold(s, sp, __get_locale());
++	return strtold_l(s, sp, __get_locale());
  }
  DEF_STRONG(strtold);
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/arch/i386/gdtoa/strtold.c src/lib/libc/arch/i386/gdtoa/strtold.c
