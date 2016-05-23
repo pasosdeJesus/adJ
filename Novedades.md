@@ -2,12 +2,14 @@
 Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y que esperamos será la elegida por Jesús durante el Milenio.
 
-###Versión: 5.8
+###Versión: 5.8p1
 Fecha de publicación: 25/Abr/2016
 
 ##NOVEDADES
 
 Con respecto a OpenBSD 5.8 para amd64 y a la edición anterior de este DVD
+
+php recompilado, para que si opere SSL
 
 
 ###KERNEL Y SISTEMA BASE

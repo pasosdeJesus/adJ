@@ -734,6 +734,8 @@ if (test "$sn" = "s") then {
 	####
 	# Recompilados para cerrar fallas, portes actualizados de OpenBSD estable
 	
+	paquete php paquetes "php php-bz2 php-curl php-fpm php-gd php-intl php-ldap php-mcrypt php-pdo_pgsql php-pgsql php-zip" 5.6
+	exit 1;
 
 	# Para que operen bien basta actualizar CVS de /usr/ports 
 	# Los siguientes no deben estar en arboldes/usr/ports/mystuff
