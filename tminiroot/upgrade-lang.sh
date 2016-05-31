@@ -1,8 +1,10 @@
 #!/bin/ksh
-#	$OpenBSD: upgrade.sh,v 1.82 2015/01/30 17:11:00 sthen Exp $
+#	$OpenBSD: upgrade.sh,v 1.89 2015/12/23 17:51:08 rpe Exp $
 #	$NetBSD: upgrade.sh,v 1.2.4.5 1996/08/27 18:15:08 gwr Exp $
 #
-# Copyright (c) 1997-2009 Todd Miller, Theo de Raadt, Ken Westerback
+# Copyright (c) 1997-2015 Todd Miller, Theo de Raadt, Ken Westerback
+# Copyright (c) 2015, Robert Peichaer <rpe@openbsd.org>
+#
 # All rights reserved.
 #
 # Copyright (c) 1996 The NetBSD Foundation, Inc.
@@ -33,35 +35,35 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-#	OpenBSD installation script.
+#	OpenBSD upgrade script.
 
-# install.sub needs to know the MODE
+# install.sub needs to know the MODE.
 MODE=upgrade
 
-# include common subroutines and initialization code
+# include common subroutines and initialization code.
 . install.sub
 
 # Have the user confirm that $ROOTDEV is the root filesystem.
+get_rootinfo
 while :; do
 	ask "$_slrootfilesystem" $ROOTDEV
 	resp=${resp##*/}
 	[[ -b /dev/$resp ]] && break
-
 	echo "$resp $_slsorrynotblock2"
 done
 ROOTDEV=$resp
 
 echo -n "$_slcheckingroot (fsck -fp /dev/$ROOTDEV)..."
 fsck -fp /dev/$ROOTDEV >/dev/null 2>&1 || { echo "$_slfailed."; exit; }
-echo	"$_slok"
+echo "$_slok"
 
 echo -n "$_slmountingroot (mount -o ro /dev/$ROOTDEV /mnt)..."
 mount -o ro /dev/$ROOTDEV /mnt || { echo "FAILED."; exit; }
-echo	"OK."
+echo "$_slok"
 
-for _f in fstab hosts myname; do
-	[[ -f /mnt/etc/$_f ]] || { echo "No /mnt/etc/$_f!"; exit; }
-	cp /mnt/etc/$_f /tmp/$_f
+for _f in /mnt/etc/{fstab,hosts,myname}; do
+	[[ -f $_f ]] || { echo "No $_f!"; exit; }
+	cp $_f /tmp/${_f##*/}
 done
 hostname $(stripcom /tmp/myname)
 THESETS="$THESETS site$VERSION-$(hostname -s).tgz"
@@ -80,8 +82,5 @@ mount_fs
 feed_random
 
 install_sets
-
-rm -rf /mnt/usr/libexec/sendmail
-rm -f /mnt/usr/sbin/{named,rndc,nginx,openssl}
 
 finish_up

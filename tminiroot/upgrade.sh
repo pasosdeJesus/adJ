@@ -1,8 +1,10 @@
 #!/bin/ksh
-#	$OpenBSD: upgrade.sh,v 1.82 2015/01/30 17:11:00 sthen Exp $
+#	$OpenBSD: upgrade.sh,v 1.89 2015/12/23 17:51:08 rpe Exp $
 #	$NetBSD: upgrade.sh,v 1.2.4.5 1996/08/27 18:15:08 gwr Exp $
 #
-# Copyright (c) 1997-2009 Todd Miller, Theo de Raadt, Ken Westerback
+# Copyright (c) 1997-2015 Todd Miller, Theo de Raadt, Ken Westerback
+# Copyright (c) 2015, Robert Peichaer <rpe@openbsd.org>
+#
 # All rights reserved.
 #
 # Copyright (c) 1996 The NetBSD Foundation, Inc.
@@ -33,36 +35,36 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-#	OpenBSD installation script.
+#	OpenBSD upgrade script.
 
-# install.sub needs to know the MODE
+# install.sub needs to know the MODE.
 MODE=upgrade
 
-# include common subroutines and initialization code
+# Include common subroutines and initialization code.
 . install.sub
 
 # Have the user confirm that $ROOTDEV is the root filesystem.
+get_rootinfo
 while :; do
 	ask "Root filesystem?" $ROOTDEV
 	resp=${resp##*/}
 	[[ -b /dev/$resp ]] && break
-
 	echo "$resp is not a block device."
 done
 ROOTDEV=$resp
 
 echo -n "Checking root filesystem (fsck -fp /dev/$ROOTDEV)..."
 fsck -fp /dev/$ROOTDEV >/dev/null 2>&1 || { echo "FAILED."; exit; }
-echo	"OK."
+echo "OK."
 
 echo -n "Mounting root filesystem (mount -o ro /dev/$ROOTDEV /mnt)..."
 mount -o ro /dev/$ROOTDEV /mnt || { echo "FAILED."; exit; }
-echo	"OK."
+echo "OK."
 
 # The fstab, hosts and myname files are required.
-for _f in fstab hosts myname; do
-	[[ -f /mnt/etc/$_f ]] || { echo "No /mnt/etc/$_f!"; exit; }
-	cp /mnt/etc/$_f /tmp/$_f
+for _f in /mnt/etc/{fstab,hosts,myname}; do
+	[[ -f $_f ]] || { echo "No $_f!"; exit; }
+	cp $_f /tmp/${_f##*/}
 done
 hostname $(stripcom /tmp/myname)
 THESETS="$THESETS site$VERSION-$(hostname -s).tgz"
@@ -70,9 +72,10 @@ THESETS="$THESETS site$VERSION-$(hostname -s).tgz"
 # Configure the network.
 enable_network
 
+# Fetch the list of mirror servers and installer choices from previous runs.
 startcgiinfo
 
-# Create fstab for use during upgrade.
+# Create a skeletal /etc/fstab which is usable for the upgrade process.
 munge_fstab
 
 # fsck -p non-root filesystems in /etc/fstab.
@@ -82,14 +85,11 @@ check_fs
 umount /mnt || { echo "Can't umount $ROOTDEV!"; exit; }
 mount_fs
 
+# Feed the random pool some entropy before we read from it.
 feed_random
 
-# Install sets.
+# Ask the user for locations, and install whatever sets the user selected.
 install_sets
-
-# XXX To be removed after 5.8 is released.
-rm -rf /mnt/usr/libexec/sendmail
-rm -f /mnt/usr/sbin/{named,rndc,nginx,openssl}
 
 # Perform final steps common to both an install and an upgrade.
 finish_up

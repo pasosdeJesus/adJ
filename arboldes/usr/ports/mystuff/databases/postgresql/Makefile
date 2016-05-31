@@ -1,4 +1,4 @@
-# $OpenBSD: Makefile,v 1.207.4.2 2016/02/16 09:20:36 jasper Exp $
+# $OpenBSD: Makefile,v 1.214 2016/05/13 17:15:55 pea Exp $
 
 COMMENT-main=	PostgreSQL RDBMS (client)
 COMMENT-server=	PostgreSQL RDBMS (server)
@@ -11,7 +11,7 @@ BROKEN-sparc=	Requires v9|v9a|v9b; requested architecture is sparclite.
 # DO NOT FORGET to also change the @ask-update entry in pkg/PLIST-server
 # in case a dump before / restore after pkg_add -u is required!
 
-VERSION=	9.4.6
+VERSION=	9.5.3
 DISTNAME=	postgresql-${VERSION}
 PKGNAME-main=	postgresql-client-${VERSION}
 PKGNAME-server=	postgresql-server-${VERSION}
@@ -19,12 +19,11 @@ PKGNAME-docs=	postgresql-docs-${VERSION}
 PKGNAME-contrib=postgresql-contrib-${VERSION}
 PKGNAME-plpython=postgresql-plpython-${VERSION}
 
-
 CATEGORIES=	databases
-SHARED_LIBS=	ecpg		7.6 \
-		ecpg_compat	4.6 \
-		pgtypes		4.5 \
-		pq		5.7
+SHARED_LIBS=	ecpg		7.7 \
+		ecpg_compat	4.7 \
+		pgtypes		4.6 \
+		pq		6.8
 
 HOMEPAGE=	http://www.postgresql.org/
 
@@ -38,12 +37,6 @@ WANTLIB += c crypto m readline ssl termcap z pthread
 MASTER_SITES=	https://ftp.postgresql.org/pub/source/v${VERSION}/ \
 		ftp://ftp.postgresql.org/pub/source/v${VERSION}/
 MULTI_PACKAGES=	-docs -main -server -contrib -plpython
-
-# The -client SUBPACKAGE should build and run fine on static arches,
-# but the server requires loadable library support. Until we figure
-# out the correct incantation to not build the server on those systems,
-# simply don't build for them, yet.
-SHARED_ONLY=	Yes
 
 MAKE_FILE=	GNUmakefile
 
