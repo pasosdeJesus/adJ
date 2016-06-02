@@ -5,7 +5,7 @@
 
 VER=5.8
 REV=0
-VESP=""
+VESP="p1"
 VERP=58
 
 # Falta /standard/root.hint
@@ -1993,7 +1993,7 @@ if (test "$p" = "") then {
 	rm -f /var/www/conf/modules/php.conf /var/www/conf/php.ini /etc/php.ini
 	ln -s /var/www/conf/modules.sample/php-5.6.conf \
 		/var/www/conf/modules/php.conf
-	for sp in gd intl ldap mcrypt pdo_pgsql pgsql zip; do
+	for sp in gd intl ldap mcrypt mysql pod_mysql pdo_pgsql pgsql zip; do
 		rm -f /etc/php-5.6/$sp
 		ln -fs /etc/php-5.6.sample/$sp.ini /etc/php-5.6/
 	done;

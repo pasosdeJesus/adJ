@@ -77,6 +77,11 @@ else {
 	sn=$autoCvs;
 } fi;
 if (test "$sn" = "s") then {	
+	if [ -z "$SSH_AUTH_SOCK" ] ; then
+		eval `ssh-agent -s`
+		ssh-add
+	fi
+
 	if (test -d /usr/src$VP-orig/) then {
 		cd /usr/src$VP-orig
 	} else {
@@ -163,7 +168,7 @@ if (test "$sn" = "s") then {
     # http://aprendiendo.pasosdejesus.org/?id=Renombrando+Daemon+por+Service
 
 	# Para compilar vmstat
-	sudo cp /usr/src/sys/uvm/uvm_extern.h /usr/include/uvm/
+	cp /usr/src/sys/uvm/uvm_extern.h /usr/include/uvm/
 
 	cd /usr/src/sys/arch/$ARQ/conf
 	sed -e "s/^#\(option.*NTFS.*\)/\1/g" GENERIC > APRENDIENDODEJESUS
@@ -287,10 +292,10 @@ if (test "$sn" = "s") then {
 	# Aplicando parches sobre las fuentes de OpenBSD sin cambios para
 	# facilitar aportar  a OpenBSD con prioridad cambios que posiblemente
 	# serán aceptados más facilmente
-	(cd $dini/arboldes/usr/src; for i in *patch; do echo $i; if (test ! -f /usr/src/$i) then { sudo cp $i /usr/src; (cd /usr/src; echo "A mano"; sudo patch -p1 < $i;) } fi; done) |  tee -a  /var/www/tmp/distrib-adJ.bitacora
+	(cd $dini/arboldes/usr/src; for i in *patch; do echo $i; if (test ! -f /usr/src/$i) then { cp $i /usr/src; (cd /usr/src; echo "A mano"; patch -p1 < $i;) } fi; done) |  tee -a  /var/www/tmp/distrib-adJ.bitacora
 
 	echo "* Copiando archivos nuevos en /usr/src" | tee -a /var/www/tmp/distrib-adJ.bitacora
-	(cd $dini/arboldes/usr/src ; for i in `find . -type f | grep -v CVS | grep -v .patch`; do  if (test ! -f /usr/src/$i) then { echo $i; n=`dirname $i`; sudo mkdir -p /usr/src/$n; sudo cp $i /usr/src/$i; } fi; done )
+	(cd $dini/arboldes/usr/src ; for i in `find . -type f | grep -v CVS | grep -v .patch`; do  if (test ! -f /usr/src/$i) then { echo $i; n=`dirname $i`; mkdir -p /usr/src/$n; cp $i /usr/src/$i; } fi; done )
 	echo "* Cambiando /etc " | tee -a /var/www/tmp/distrib-adJ.bitacora
 	cd /etc
 	$dini/arboldd/usr/local/adJ/servicio-etc.sh	
@@ -327,7 +332,7 @@ if (test "$sn" = "s") then {
 	echo "* Completo compilabase" | tee -a /var/www/tmp/distrib-adJ.bitacora
 	echo "whoami 3" >> /var/www/tmp/distrib-adJ.bitacora
 	whoami >> /var/www/tmp/distrib-adJ.bitacora 2>&1
-	cd /usr/src && unset DESTDIR && LANG=POSIX nice make -j4 SUDO=sudo build | tee -a /var/www/tmp/distrib-adJ.bitacora
+	cd /usr/src && unset DESTDIR && LANG=POSIX nice make -j4 SUDO=doas build | tee -a /var/www/tmp/distrib-adJ.bitacora
 	echo "whoami 3" >> /var/www/tmp/distrib-adJ.bitacora
 	whoami >> /var/www/tmp/distrib-adJ.bitacora 2>&1
 	echo "* Completo make build" | tee -a /var/www/tmp/distrib-adJ.bitacora
@@ -397,8 +402,8 @@ EOF
 	#compilabase
 	echo "DESTDIR=$DESTDIR" | tee -a /var/www/tmp/distrib-adJ.bitacora;
 	cd /usr/src/etc && DESTDIR=/destdir nice make release | tee -a /var/www/tmp/distrib-adJ.bitacora;
-	sudo find $DESTDIR  -exec touch {} ';'
-	sudo find $RELEASEIR  -exec touch {} ';'
+	find $DESTDIR  -exec touch {} ';'
+	find $RELEASEIR  -exec touch {} ';'
 } fi;
 
 
@@ -428,9 +433,9 @@ if (test "$sn" = "s") then {
 	cd $XSRCDIR
 
 	echo "* Aplicando parches en /usr/xenocara/" | tee -a /var/www/tmp/distrib-adJ.bitacora
-	(cd $dini/arboldes/usr/xenocara/; for i in *patch; do echo $i; if (test ! -f /usr/xenocara/$i) then { sudo cp $i /usr/xenocara/; (cd /usr/xenocara/; echo "A mano"; sudo patch -p1 < $i;) } fi; done) |  tee -a  /var/www/tmp/distrib-adJ.bitacora
+	(cd $dini/arboldes/usr/xenocara/; for i in *patch; do echo $i; if (test ! -f /usr/xenocara/$i) then { cp $i /usr/xenocara/; (cd /usr/xenocara/; echo "A mano"; patch -p1 < $i;) } fi; done) |  tee -a  /var/www/tmp/distrib-adJ.bitacora
 	echo "* Copiando archivos nuevos en /usr/xenocara" | tee -a /var/www/tmp/distrib-adJ.bitacora
-	(cd $dini/arboldes/usr/xenocara; for i in `find . -type f | grep -v CVS | grep -v .patch`; do  if (test ! -f /usr/xenocara/$i) then { echo $i; n=`dirname $i`; sudo mkdir -p /usr/xenocara/$n; sudo cp $i /usr/xenocara/$i; } fi; done )
+	(cd $dini/arboldes/usr/xenocara; for i in `find . -type f | grep -v CVS | grep -v .patch`; do  if (test ! -f /usr/xenocara/$i) then { echo $i; n=`dirname $i`; mkdir -p /usr/xenocara/$n; cp $i /usr/xenocara/$i; } fi; done )
 	# Pequeños cambios (logo, bienvenida)
 	$dini/hdes/xenocaraadJ.sh	
 	mkdir -p ${DESTDIR}/usr/X11R6/bin
@@ -499,7 +504,7 @@ if (test "$sn" = "s") then {
 	} fi;
         mkdir -p ${DESTDIR} ${RELEASEDIR}
 	(cd $XSRCDIR; nice make release)
-	sudo find $DESTDIR  -exec touch {} ';'
+	find $DESTDIR  -exec touch {} ';'
 
 } fi;
 
@@ -569,9 +574,9 @@ if (test "$sn" = "s") then {
 
 	cp /usr/src/sys/arch/$ARQ/compile/APRENDIENDODEJESUS/bsd ${RELEASEDIR}/bsd
 	cp /usr/src/sys/arch/$ARQ/compile/APRENDIENDODEJESUS.MP/bsd ${RELEASEDIR}/bsd.mp
-	sudo find $DESTDIR -exec touch {} ';'
+	find $DESTDIR -exec touch {} ';'
 	cd /usr/src/distrib/sets && sh checkflist
-	sudo find $RELEASEDIR  -exec touch {} ';'
+	find $RELEASEDIR  -exec touch {} ';'
 	cp $RELEASEDIR/* $dini/$V$VESP-$ARQ
 	rm -f $dini/$V$VESP-$ARQ/{MD5,CKSUM,index.txt,cd??.iso,}
 } fi;
@@ -731,19 +736,19 @@ if (test "$sn" = "s") then {
 	# Modificados para posibilitar compilación
 	# Deben estar en mystuff
 
+
 	####
 	# Recompilados para cerrar fallas, portes actualizados de OpenBSD estable
 	
-	paquete php paquetes "php php-bz2 php-curl php-fpm php-gd php-intl php-ldap php-mcrypt php-pdo_pgsql php-pgsql php-zip" 5.6
-	exit 1;
-
 	# Para que operen bien basta actualizar CVS de /usr/ports 
 	# Los siguientes no deben estar en arboldes/usr/ports/mystuff
 	paquete a2ps
 	paquete cups-filters
+	paquete freetds
 	paquete gnutls
 	paquete jasper
 	paquete libxml
+	paquete mariadb-client paquetes "mariadb-client mariadb-server" 
 	paquete net-snmp
 	paquete owncloud
 	paquete p5-Mail-SpamAssassin
@@ -788,7 +793,7 @@ if (test "$sn" = "s") then {
 
 	###
         # Actualizados.  Están desactualizado en OpenBSD estable y current
-	paquete php paquetes "php php-curl php-fpm php-gd php-intl php-ldap php-mcrypt php-pdo_pgsql php-pgsql php-zip" 5.6
+	paquete php paquetes "php php-bz2 php-curl php-fpm php-gd php-intl php-ldap php-mcrypt php-mysqli- php-pdo_pgsql php-pgsql php-zip" 5.6
 	paquete pear-Auth
 	paquete pear-DB_DataObject
        		
