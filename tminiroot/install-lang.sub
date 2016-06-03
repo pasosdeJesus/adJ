@@ -74,9 +74,9 @@ waitcgiinfo() {
 
 	while IFS='=' read -r -- _key _val; do
 		case $_key=$_val in
-		method=+([a-z]))        CGI_METHOD=$_val;;
-		TIME=+([0-9]))          CGI_TIME=$_val;;
-		TZ=+([-_/+[:alnum:]]))  CGI_TZ=$_val;;
+		method=+([a-z]))	CGI_METHOD=$_val;;
+		TIME=+([0-9]))		CGI_TIME=$_val;;
+		TZ=+([-_/+[:alnum:]]))	CGI_TZ=$_val;;
 		esac
 	done <$CGI_INFO
 }
@@ -240,7 +240,7 @@ getdevname() {
 		${#_dev} == 16 && $_dev == +([0-9a-f]) ]]; then
 		# Lookup device name matching the disklabel UID.
 		sysctl -n hw.disknames |
-			sed -nE "s/^(.*,)*(.*):${_dev%.?}.*/\\2/p"
+			sed -nE "s/^(.*,)*(.*):${_dev%.?}.*/\\\\2/p"
 	else
 		_dev=${_dev#/dev/}
 		print -r -- "${_dev%[a-p]}"
@@ -271,20 +271,20 @@ disk_has() {
 	local _p_mbr_linux='^..: 83 '
 	local _p_sr='OPENBSD, SR'
 	local _p_sr_crypto='OPENBSD, SR CRYPTO'
-       "_cmd=\"\$_c_${_pttype}\""
-       eval "_p_pttype=\"\$_p_${_pttype}\""
-       eval "_p_part=\"\$_p_${_pttype}_${_part}\""
-       _cmd=${_cmd:-fdisk $_disk}
+	eval "_cmd=\"\$_c_${_pttype}\""
+	eval "_p_pttype=\"\$_p_${_pttype}\""
+	eval "_p_part=\"\$_p_${_pttype}_${_part}\""
+	_cmd=${_cmd:-fdisk $_disk}
 
-       [[ -z $_p_pttype ]] && exit
-       [[ -n $_part && -z $_p_part ]] && exit
+	[[ -z $_p_pttype ]] && exit
+	[[ -n $_part && -z $_p_part ]] && exit
 
-       if [[ -z $_p_part ]]; then
-               $_cmd 2>/dev/null | grep -Eq "$_p_pttype"
-       else
-               $_cmd 2>/dev/null | grep -Eq "$_p_pttype" &&
-                       $_cmd 2>/dev/null | grep -Eq "$_p_part"
-       fi
+	if [[ -z $_p_part ]]; then
+		$_cmd 2>/dev/null | grep -Eq "$_p_pttype"
+	else
+		$_cmd 2>/dev/null | grep -Eq "$_p_pttype" &&
+			$_cmd 2>/dev/null | grep -Eq "$_p_part"
+	fi
 }
 
 # Handle disklabel auto-layout during interactive installation and
@@ -321,10 +321,10 @@ disklabel_autolayout() {
 		disklabel -h -A $_disk | egrep "^#  |^  [a-p]:"
 		ask "Use (A)uto layout, (E)dit auto layout, or create (C)ustom layout?" a
 		case $resp in
-		[aA]*)  _op=-w;;
-		[eE]*)  _op=-E;;
-		[cC]*)  return 0;;
-		*)      continue;;
+		[aA]*)	_op=-w;;
+		[eE]*)	_op=-E;;
+		[cC]*)	return 0;;
+		*)	continue;;
 		esac
 		disklabel -F $_f $_op -A $_disk
 		return
@@ -367,33 +367,29 @@ configure_disk() {
 			fi
 		done <$_fstab
 
-	if [[ -z $_disk ]]; then
-		# Duplicate mountpoint.
-		# Allow disklabel(8) to read back mountpoint info
-		# if it is immediately run against the same disk.
-		cat /tmp/fstab.$_rest >/etc/fstab
-		rm /tmp/fstab.$_rest
-		set -- $(grep -h " $_mp " /tmp/fstab.*[0-9])
-		echo "$_pp and $1 can't both be mounted at $_mp."
-		return 1
-	fi
+		if [[ -z $_disk ]]; then
+			# Duplicate mountpoint.
+			# Allow disklabel(8) to read back mountpoint info
+			# if it is immediately run against the same disk.
+			cat /tmp/fstab.$_rest >/etc/fstab
+			rm /tmp/fstab.$_rest
+			set -- $(grep -h " $_mp " /tmp/fstab.*[0-9])
+			echo "$_pp and $1 can't both be mounted at $_mp."
+			return 1
+		fi
  
+		# Add ffs filesystems to list after newfs'ing them. Ignore
+		# other filesystems.
+		while read _pp _mp _fstype _rest; do
+			[[ $_fstype == ffs ]] || continue
+			_OPT=
+			[[ $_mp == / ]] && _OPT=$MDROOTFSOPT
+			newfs -q $_OPT ${_pp##/dev/}
+			FSENT="$FSENT $_mp!$_pp"
+		done <$_fstab
+	fi
 
-               # Add ffs filesystems to list after newfs'ing them. Ignore
-               # other filesystems.
-               while read _pp _mp _fstype _rest; do
-                       [[ $_fstype == ffs ]] || continue
-                       _OPT=
-                       [[ $_mp == / ]] && _OPT=$MDROOTFSOPT
-                       newfs -q $_OPT ${_pp##/dev/}
-                       # N.B.: '!' is lexically < '/'. That is
-                       #       required for correct sorting of
-                       #       mount points.
-                       FSENT="$FSENT $_mp!$_pp"
-               done <$_fstab
-       fi
-
-       return 0
+	return 0
 }
 
 lock() {
@@ -482,7 +478,7 @@ _autorespond() {
 	[[ -f $RESPFILE ]] || return
 
 	mv /ai.conf /ai.conf.tmp
-	while IFS='\t' read -r _l; do
+	while IFS=' 	' read -r _l; do
 		[[ $_l == [!#=]*=?* ]] || continue
 		_key=${_l%%*([[:blank:]])=*}
 		_val=${_l##*([!=])=*([[:blank:]])}
@@ -509,16 +505,12 @@ _ask() {
 		stty raw
 		stty -raw
 	else
-		ask "$_slfullusername $user?" $user
 		case $resp in
-			#echo "':', '&' $_slor ',' $_slarenotallowed.";;
-			#echo "$_sltoolong.";;
-
-		!)      echo "Type 'exit' to return to install."
+		!)	echo "Type 'exit' to return to install."
 			sh
 			_redo=1
 			;;
-		!*)     eval "${resp#?}"
+		!*)	eval "${resp#?}"
 			_redo=1
 			;;
 		esac
@@ -669,7 +661,7 @@ addhostent() {
 	[[ -z $_addr || -z $_name ]] && return
 
 	[[ $_addr == *:* ]] && _delim=":"
-	sed "/^[0-9a-fA-F]*[$_delim].*[         ]$_name\$/d" /tmp/hosts \
+	sed "/^[0-9a-fA-F]*[$_delim].*[ 	]$_name\$/d" /tmp/hosts \
 		>/tmp/hosts.new 2>/dev/null
 	mv /tmp/hosts.new /tmp/hosts
 
@@ -766,7 +758,7 @@ v6_config() {
 	case $resp in
 	$_slnone)	return
 		;;
-	rtsol)  ifconfig $_ifs inet6 >/dev/null 2>&1 || { echo "$_slnoinet6."; return; }
+	rtsol)	ifconfig $_ifs inet6 >/dev/null 2>&1 || { echo "$_slnoinet6."; return; }
 		ifconfig $_ifs up
 		ifconfig $_ifs inet6 autoconf && echo "up\nrtsol" >>$_hn
 		return
@@ -785,7 +777,7 @@ v6_config() {
 ieee80211_scan() {
 	[[ -f $WLANLIST ]] ||
 		ifconfig $1 scan |
-		sed -n 's/^             nwid \([^"]\)/\1/p' >$WLANLIST
+		sed -n 's/^		nwid \([^"]\)/\1/p' >$WLANLIST
 	cat $WLANLIST
 }
 
@@ -805,11 +797,11 @@ ieee80211_config() {
 			_nwid=$(ieee80211_scan $_ifs | sed -n "${resp}s/ .*//p")
 			[[ -z $_nwid ]] && echo "There is no line $resp."
 			;;
-		\?)     ieee80211_scan $_ifs |
-			sed -n 's/^\([^ ]*\) chan .* bssid \([^ ]*\) .*$/       \1 (\2)/p' |
-			cat -n | more -c
+		\?)	ieee80211_scan $_ifs |
+				sed -n 's/^\([^ ]*\) chan .* bssid \([^ ]*\) .*$/	\1 (\2)/p' |
+				cat -n | more -c
 			;;
-		*)      _nwid=$resp
+		*)	_nwid=$resp
 			;;
 		esac
 	done
@@ -824,23 +816,23 @@ ieee80211_config() {
 		while :; do
 			ask_until "$_prompt" "O"
 			case "$_haswpa-$resp" in
-			?-[Oo]) break
+			?-[Oo])	break
 				;;
-			?-[Ww]) ask_until "WEP key? (will echo)"
+			?-[Ww])	ask_until "WEP key? (will echo)"
 				if _err=$(ifconfig $_ifs nwkey "$resp" 2>&1) &&
 					[[ -z $_err ]]; then
 					quote nwkey "$resp" >>$_hn
-					break	
+					break
 				fi
 				echo "$_err"
 				;;
-			1-[Pp]) ask_until "WPA passphrase? (will echo)"
+			1-[Pp])	ask_until "WPA passphrase? (will echo)"
 				if ifconfig $_ifs wpakey "$resp"; then
 					quote wpakey "$resp" >>$_hn
 					break
 				fi
 				;;
-			*)      echo "'$resp' is not a valid choice."
+			*)	echo "'$resp' is not a valid choice."
 				;;
 			esac
 		done
@@ -863,89 +855,82 @@ configure_ifs() {
 	rm -f /tmp/mygate
 
 	while :; do
-	       # Create new vlan if possible.
-	       ifconfig vlan$_vl create >/dev/null 2>&1
+		ifconfig vlan$_vl create >/dev/null 2>&1
 
-	       ask_which "network interface" "do you wish to configure" \
-	               '$(get_ifdevs)' \
-	               ${_p:-'$( (get_ifdevs netboot; get_ifdevs) | sed q )'}
-	       [[ $resp == done ]] && break
+		ask_which "network interface" "do you wish to configure" \
+			'$(get_ifdevs)' \
+			${_p:-'$( (get_ifdevs netboot; get_ifdevs) | sed q )'}
+		[[ $resp == done ]] && break
 
-	       _ifs=$resp
-	       _hn=/tmp/hostname.$_ifs
-	       rm -f $_hn
+		_ifs=$resp
+		_hn=/tmp/hostname.$_ifs
+		rm -f $_hn
 
-	       # If the offered vlan is chosen, ask the relevant
-	       # questions and bring it up.
-	       if [[ $_ifs == vlan+([0-9]) ]]; then
-	               # Get existing tag for this vlan.
-	               _vi=$(ifconfig $_ifs 2>/dev/null |
-	                       sed -n 's/vlan: \([0-9]*\).*/\1/p')
-	               # Get list of all in-use tags.
-	               _tags=$(ifconfig vlan 2>/dev/null |
-	                       sed -n 's/vlan: \([0-9]*\).*/\1/p')
-	               # Current tag is a valid tag for this vlan.
-	               [[ -n $_tags ]] && _tags=$(rmel "$_vi" $_tags)
-	               if [[ -z $_vi ]]; then
-	                       _vi=0
-	                       while ((++_vi < 4096)); do
-	                               ! isin "$_vi" $_tags && break
-	                       done
-	               fi
-	               _ifdevs=$(get_ifdevs)
-	               set -- $_ifdevs
-	               while [[ $1 == vlan+([0-9]) ]]; do
-	                       shift
-	               done
-	               ask "Which interface:tag should $_ifs be on?" "${_vd:=$1}:$_vi"
-	               _vd=${resp%%:*}
-	               _vi=${resp##*:}
+		if [[ $_ifs == vlan+([0-9]) ]]; then
+			_vi=$(ifconfig $_ifs 2>/dev/null |
+				sed -n 's/vlan: \([0-9]*\).*/\1/p')
+			_tags=$(ifconfig vlan 2>/dev/null |
+				sed -n 's/vlan: \([0-9]*\).*/\1/p')
+			[[ -n $_tags ]] && _tags=$(rmel "$_vi" $_tags)
+			if [[ -z $_vi ]]; then
+				_vi=0
+				while ((++_vi < 4096)); do
+					! isin "$_vi" $_tags && break
+				done
+			fi
+			_ifdevs=$(get_ifdevs)
+			set -- $_ifdevs
+			while [[ $1 == vlan+([0-9]) ]]; do
+				shift
+			done
+			ask "Which interface:tag should $_ifs be on?" "${_vd:=$1}:$_vi"
+			_vd=${resp%%:*}
+			_vi=${resp##*:}
 
-	               # Validate that $_vd is a real interface.
-	               if ! (isin "$_vd" $_ifdevs && [[ $_vd != vlan+([0-9]) ]]); then
-	                       echo "Invalid interface choice '$_vd'"
-	                       _vd=
-	                       continue
-	               fi
+			if ! (isin "$_vd" $_ifdevs && [[ $_vd != vlan+([0-9]) ]]); then
+				echo "Invalid interface choice '$_vd'"
+				_vd=
+				continue
+			fi
 
-	               # Validate range of $_vi as 1-4095, and $_vi not in use.
-	               if ((_vi < 1 || _vi > 4095)) || isin "$_vi" $_tags; then
-	                       echo "Invalid or in-use vlan tag '$_vi'"
-	                       continue
-	               fi
+			# Validate range of $_vi as 1-4095, and $_vi not in use.
+			if ((_vi < 1 || _vi > 4095)) || isin "$_vi" $_tags; then
+				echo "Invalid or in-use vlan tag '$_vi'"
+				continue
+			fi
 
-	               # hostname.$_vd must say something, anything, to
-	               # make sure it is up.
-	               grep -qs "^up" /tmp/hostname.$_vd ||
-	                       echo "up" >>/tmp/hostname.$_vd
-	               chmod 640 /tmp/hostname.$_vd
-	               ifconfig $_vd up
+			# hostname.$_vd must say something, anything, to
+			# make sure it is up.
+			grep -qs "^up" /tmp/hostname.$_vd ||
+				echo "up" >>/tmp/hostname.$_vd
+			chmod 640 /tmp/hostname.$_vd
+			ifconfig $_vd up
 
-	               # Make sure a hostname.$_ifs is created with this info.
-	               ifconfig $_ifs destroy >/dev/null 2>&1
-	               ifconfig $_ifs vlan $_vi vlandev $_vd
-	               echo "vlan $_vi vlandev $_vd" >>$_hn
-	               # Create a new vlan if we just configured the highest.
-	               [[ ${_ifs##vlan} == $_vl ]] && ((_vl++))
-	       fi
+			# Make sure a hostname.$_ifs is created with this info.
+			ifconfig $_ifs destroy >/dev/null 2>&1
+			ifconfig $_ifs vlan $_vi vlandev $_vd
+			echo "vlan $_vi vlandev $_vd" >>$_hn
+			# Create a new vlan if we just configured the highest.
+			[[ ${_ifs##vlan} == $_vl ]] && ((_vl++))
+		fi
 
-	       # Test if it is an 802.11 interface.
-	       ifconfig $_ifs 2>/dev/null | grep -q "^[[:space:]]*ieee80211:" &&
-	               ieee80211_config $_ifs $_hn
+		# Test if it is an 802.11 interface.
+		ifconfig $_ifs 2>/dev/null | grep -q "^[[:space:]]*ieee80211:" &&
+			ieee80211_config $_ifs $_hn
 
-	       # First interface configured will use the hostname without
-	       # asking the user.
-	       resp=$(hostname -s)
-	       [[ -n $_first && $_first != $_ifs ]] &&
-	               ask "Symbolic (host) name for $_ifs?" $resp
-	       _name=$resp
+		# First interface configured will use the hostname without
+		# asking the user.
+		resp=$(hostname -s)
+		[[ -n $_first && $_first != $_ifs ]] &&
+			ask "Symbolic (host) name for $_ifs?" $resp
+		_name=$resp
 
-	       v4_config $_ifs $_name $_hn
-	       v6_config $_ifs $_name $_hn
+		v4_config $_ifs $_name $_hn
+		v6_config $_ifs $_name $_hn
 
-	       if [[ -f $_hn ]]; then
-	               chmod 640 $_hn
-	               : ${_first:=$_ifs}
+		if [[ -f $_hn ]]; then
+			chmod 640 $_hn
+			: ${_first:=$_ifs}
 		fi
 
 		NIFS=$(ls -1 /tmp/hostname.* 2>/dev/null | grep -c ^)
@@ -959,7 +944,7 @@ v4_defroute() {
 	local _dr
 
 	# Only configure a default route if an IPv4 address was configured.
-	[[ -n $(ifconfig | sed -n '/[   ]inet .* broadcast /p') ]] || return
+	[[ -n $(ifconfig | sed -n '/[ 	]inet .* broadcast /p') ]] || return
 
 	# Check routing table to see if a default route ($1) already exists
 	# and if it is handled by dhclient ($2).
@@ -970,12 +955,12 @@ v4_defroute() {
 	[[ -n $_dr && $2 == DHCLIENT && -f /tmp/dhclient.conf ]] && return
 
 	while :; do
-	       ask_until "Default IPv4 route? (IPv4 address or none)" "$_dr"
-	       [[ $resp == none ]] && break
-	       route delete -inet default >/dev/null 2>&1
-	       route -n add -inet -host default "$resp" && { echo "$resp" >>/tmp/mygate; break; }
-	       # Put the old default route back. The new one did not work.
-	       route -n add -inet -host default $_dr >/dev/null 2>&1
+		ask_until "Default IPv4 route? (IPv4 address or none)" "$_dr"
+		[[ $resp == none ]] && break
+		route delete -inet default >/dev/null 2>&1
+		route -n add -inet -host default "$resp" && { echo "$resp" >>/tmp/mygate; break; }
+		# Put the old default route back. The new one did not work.
+		route -n add -inet -host default $_dr >/dev/null 2>&1
 	done
 }
 
@@ -1002,12 +987,12 @@ sane_install() {
 	local _q=$1 _s
 
 	for _s in $SANESETS; do
-	       isin $_s $DEFAULTSETS || continue
-	       [[ -n $_q ]] && return 1
-	       # If sane_install has no argument, harass the user.
-	       if ! ask_yn "Are you *SURE* your $MODE is complete without '$_s'?"; then
-	               $AUTO && exit 1 || return 1
-	       fi
+		isin $_s $DEFAULTSETS || continue
+		[[ -n $_q ]] && return 1
+		# If sane_install has no argument, harass the user.
+		if ! ask_yn "Are you *SURE* your $MODE is complete without '$_s'?"; then
+			$AUTO && exit 1 || return 1
+		fi
 	done
 }
 
@@ -1032,26 +1017,26 @@ sets by prepending a '-' to the set name, file name pattern or 'all'. Selected
 sets are labelled '[X]'.
 __EOT
 	while :; do
-	       for _f in $_avail; do
-	               isin $_f $_selected && echo "[X] $_f" || echo "[ ] $_f"
-	       done | showcols | sed 's/^/    /'
-	       ask "Set name(s)? (or 'abort' or 'done')" done
+		for _f in $_avail; do
+			isin $_f $_selected && echo "[X] $_f" || echo "[ ] $_f"
+		done | showcols | sed 's/^/    /'
+		ask "Set name(s)? (or 'abort' or 'done')" done
 
-	       set -o noglob
-	       for resp in $resp; do
-	               case $resp in
-	               abort)  _selected=; break 2;;
-	               done)   break 2;;
-	               -*)     _action=rmel;;
-	               *)      _action=addel;;
-	               esac
-	               resp=${resp#[+-]}
-	               [[ $resp = all ]] && resp=*
+		set -o noglob
+		for resp in $resp; do
+			case $resp in
+			abort)	_selected=; break 2;;
+			done)	break 2;;
+			-*)	_action=rmel;;
+			*)	_action=addel;;
+			esac
+			resp=${resp#[+-]}
+			[[ $resp = all ]] && resp=*
 
-	               for _f in $_avail; do
-	                       [[ $_f = $resp ]] && _selected=$($_action $_f $_selected)
-	               done
-	       done
+			for _f in $_avail; do
+				[[ $_f = $resp ]] && _selected=$($_action $_f $_selected)
+			done
+		done
 	done
 
 	set +o noglob
@@ -1062,7 +1047,7 @@ __EOT
 
 install_files() {
 	local _src=$1 _files=$2 _f _sets _get_sets _n _col=$COLUMNS \
-		_tmpfs _tmpsrc _cfile _fsrc _unver _t _issue _srclocal 
+		_tmpfs _tmpsrc _cfile _fsrc _unver _t _issue _srclocal
 
 	for _f in $THESETS; do
 		isin $_f $_files || continue
@@ -1177,14 +1162,14 @@ install_files() {
 		_fsrc="$_src/$_f"
 		[[ -f $_tmpsrc/$_f ]] && _fsrc="file://$_tmpsrc/$_f"
 		case $_fsrc in
-		*.tgz)  ftp -D Installing -Vmo - "$_fsrc" | tar -zxphf - -C /mnt
+		*.tgz)	ftp -D Installing -Vmo - "$_fsrc" | tar -zxphf - -C /mnt
 			if [[ $_f == ?(x)base*.tgz && $MODE == install ]]; then
 				ftp -D Extracting -Vmo - \
 				file:///mnt/var/sysmerge/${_f%%base*}etc.tgz |
 				tar -zxphf - -C /mnt
 			fi
 			;;
-		*)      ftp -D Installing -Vmo "/mnt/$_f" "$_fsrc"
+		*)	ftp -D Installing -Vmo "/mnt/$_f" "$_fsrc"
 			;;
 		esac
 		if (($?)); then
@@ -1254,8 +1239,8 @@ install_http() {
 	HTTP_DIR=$resp
 	_url_base="http://$HTTP_SERVER/$HTTP_DIR"
 
-	_file_list=$(ftp -Vo - "$_url_base/index.txt" | sed 's/^.* //;s/^M//')
- 
+	_file_list=$(ftp -Vo - "$_url_base/index.txt" | sed 's/^.* //;s///')
+
 	install_files "$_url_base" "$_file_list"
 
 	INSTALL=$_url_base
@@ -1339,8 +1324,8 @@ mount_mnt2() {
 		# Display partitions with filesystems and ask which to use.
 		cat $_file
 		ask_which "$_dev partition" "has the $MODE sets" \
-		        '$(disklabel '$_dev' 2>/dev/null |
-		        sed -En '\''/swap|unused/d;/^  ([a-p]): .*/s//\1/p'\'')'
+			'$(disklabel '$_dev' 2>/dev/null |
+			sed -En '\''/swap|unused/d;/^  ([a-p]): .*/s//\1/p'\'')'
 		[[ $resp == done ]] && return 1
 	fi
 
@@ -1366,12 +1351,12 @@ set_term() {
 		[[ -x /sbin/kbd ]] || return
 		_layouts=$(bsort $(kbd -l | egrep -v "^(user|tables|encoding)"))
 		while :; do
-		        ask "Choose your keyboard layout ('?' or 'L' for list)" "default"
-		        case $resp in
-		        [lL\?]) echo "Available layouts: $_layouts";;
-		        default) return;;
-		        *)      kbd $resp && { echo $resp >/tmp/kbdtype; return; };;
-		        esac
+			ask "Choose your keyboard layout ('?' or 'L' for list)" "default"
+			case $resp in
+			[lL\?]) echo "Available layouts: $_layouts";;
+			default) return;;
+			*)	kbd $resp && { echo $resp >/tmp/kbdtype; return; };;
+			esac
 		done
 	fi
 }
@@ -1394,8 +1379,8 @@ donetconfig() {
 		# and the default fully qualified domain name from *first*
 		# domain given on *last* search or domain statement.
 		while read -r -- _f1 _f2 _f3; do
-		        [[ $_f1 == nameserver ]] && _ns="${_ns:+$_ns }$_f2"
-		        [[ $_f1 == @(domain|search) ]] && _dn=$_f2
+			[[ $_f1 == nameserver ]] && _ns="${_ns:+$_ns }$_f2"
+			[[ $_f1 == @(domain|search) ]] && _dn=$_f2
 		done </tmp/resolv.conf
 	fi
 
@@ -1424,7 +1409,7 @@ donetconfig() {
 	if [[ $resp != none ]]; then
 		echo "lookup file bind" >/tmp/resolv.conf
 		for _ns in $resp; do
-		        echo "nameserver $_ns" >>/tmp/resolv.conf
+			echo "nameserver $_ns" >>/tmp/resolv.conf
 		done
 		cp /tmp/resolv.conf /tmp/resolv.conf.shadow
 	fi
@@ -1443,12 +1428,12 @@ questions() {
 	xdm=
 	if [[ -n $DISPLAY ]]; then
 		if [[ -n $(scan_dmesg '/^[a-z]*[01]: aperture needed/p') ]]; then
-		        ask_yn "Do you expect to run the X Window System?" yes &&
-		                aperture=$MDXAPERTURE
+			ask_yn "Do you expect to run the X Window System?" yes &&
+				aperture=$MDXAPERTURE
 		fi
 		if [[ -n $MDXDM && $resp != n ]]; then
-		        ask_yn "Do you want the X Window System to be started by xdm(1)?"
-		        xdm=$resp
+			ask_yn "Do you want the X Window System to be started by xdm(1)?"
+			xdm=$resp
 		fi
 	fi
 
@@ -1458,12 +1443,12 @@ questions() {
 		ask_yn "Change the default console to $_d?" $_cdef
 		defcons=$resp
 		if [[ $resp == y ]]; then
-		        ask_which "speed" "should $_d use" \
-		                "9600 19200 38400 57600 115200" $CSPEED
-		        case $resp in
-		        done)   defcons=n;;
-		        *)      CSPEED=$resp;;
-		        esac
+			ask_which "speed" "should $_d use" \
+				"9600 19200 38400 57600 115200" $CSPEED
+			case $resp in
+			done)	defcons=n;;
+			*)	CSPEED=$resp;;
+			esac
 		fi
 	fi
 }
@@ -1475,32 +1460,32 @@ user_setup() {
 	while :; do
 		ask "$_q" no
 		case $resp in
-		n|no)   return
-		        ;;
-		y|yes)  _q="No really, what is the lower-case loginname, or 'no'?"
-		        continue
-		        ;;
+		n|no)	return
+			;;
+		y|yes)	_q="No really, what is the lower-case loginname, or 'no'?"
+			continue
+			;;
 		root|daemon|operator|bin|smmsp|popa3d)
-		        ;;
+			;;
 		sshd|uucp|www|named|proxy|nobody|ftp)
-		        ;;
+			;;
 		[a-z]*([a-z0-9_]))
-		        ((${#resp} <= 31)) && break
-		        ;;
+			((${#resp} <= 31)) && break
+			;;
 		esac
 		echo "$resp is not a useable loginname."
 	done
 	user=$resp
 	while :; do
-		ask "Full name for user $user?" $user
+		ask "$_slfullusername $user?" $user
 		case $resp in
 		*[:\&,]*)
-		        echo "':', '&' or ',' are not allowed."
-		        ;;
+			echo "':', '&' or ',' are not allowed."
+			;;
 		*)
-		        ((${#resp} <= 100)) && break
-		        echo "Too long."
-		        ;;
+			((${#resp} <= 100)) && break
+			echo "Too long."
+			;;
 		esac
 	done
 	username=$resp
@@ -1529,39 +1514,17 @@ ask_root_sshd() {
 		ask "Allow root ssh login? (yes, no, prohibit-password)" no
 		_resp=$resp
 		case $_resp in
-		y|yes)  sshd_enableroot=yes
-		        ;;
-		n|no)   sshd_enableroot=no
-		        ;;
+		y|yes)	sshd_enableroot=yes
+			;;
+		n|no)	sshd_enableroot=no
+			;;
 		w|p|without-password|prohibit-password)
-		        sshd_enableroot=prohibit-password
-		        ;;
-		*)      echo "'$resp' is not a valid choice."
-		        $AUTO && exit 1
-		        continue
-		        FS++))
-	while :; do
-	       if [ "$cmd2" ]; then
-			# we are carrying over from the 'read dt dtaddr'
-			# last time
-			set -- $cmd2
-			af=$1 name=$2 mask=$3 bcaddr=$4 ext1=$5 cmd2=
-			# make sure and get any remaining args in ext2,
-			# like the read below
-			i=1
-			while [ i -lt 6 -a -n "$1" ]; do shift; let i=i+1; done
-			ext2="$@"
-	       else
-			# read the next line or exit the while loop
-			read af name mask bcaddr ext1 ext2 || break
-	       fi
-	       # $af can be "dhcp", "rtsol", an address family,
-	       # commands, or a comment.
-	       case "$af" in
-	       "#"*|"!"*|"bridge"|"")
-			# skip comments, user commands, bridges,
-			# and empty lines
-;;
+			sshd_enableroot=prohibit-password
+			;;
+		*)	echo "'$resp' is not a valid choice."
+			$AUTO && exit 1
+			continue
+			;;
 		esac
 		break
 	done
@@ -1621,18 +1584,18 @@ set_timezone() {
 }
 
 get_rootinfo() {
-       while :; do
-	       echo "Available disks are: $(get_dkdevs | sed 's/^$/none/')."
-	       _ask "Which disk is the root disk? ('?' for details)" \
-		       $(get_dkdevs | sed 's/ .*//') || continue
-	       case $resp in
-	       "?")    diskinfo $(get_dkdevs)
-		       ;;
-	       '')     ;;
-	       *)      isin "$resp" $(get_dkdevs) && break
-		       echo "no such disk"
-		       ;;
-	       esac
+	while :; do
+		echo "Available disks are: $(get_dkdevs | sed 's/^$/none/')."
+		_ask "Which disk is the root disk? ('?' for details)" \
+			$(get_dkdevs | sed 's/ .*//') || continue
+		case $resp in
+		"?")	diskinfo $(get_dkdevs)
+			;;
+		'')	;;
+		*)	isin "$resp" $(get_dkdevs) && break
+			echo "no such disk"
+			;;
+		esac
 	done
 	makedev $resp || exit
 
@@ -1644,135 +1607,135 @@ get_rootinfo() {
 ifstart () {
 	local _hn=$1 if=${1#/mnt/etc/hostname.}
 
-       ((NIFS++))
-       while :; do
-	       if [ "$cmd2" ]; then
-		       # we are carrying over from the 'read dt dtaddr'
-		       # last time
-		       set -- $cmd2
-		       af=$1 name=$2 mask=$3 bcaddr=$4 ext1=$5 cmd2=
-		       # make sure and get any remaining args in ext2,
-		       # like the read below
-		       i=1
-		       while [ i -lt 6 -a -n "$1" ]; do shift; let i=i+1; done
-		       ext2="$@"
-	       else
-		       # read the next line or exit the while loop
-		       read af name mask bcaddr ext1 ext2 || break
-	       fi
-	       # $af can be "dhcp", "rtsol", an address family,
-	       # commands, or a comment.
-	       case "$af" in
-	       "#"*|"!"*|"bridge"|"")
-		       # skip comments, user commands, bridges,
-		       # and empty lines
-		       continue
-		       ;;
-	       "dhcp") [ "$name" = "NONE" ] && name=
-		       [ "$mask" = "NONE" ] && mask=
-		       [ "$bcaddr" = "NONE" ] && bcaddr=
-		       dhcpif="$dhcpif $if"
-		       cmd="ifconfig $if $name $mask $bcaddr $ext1 $ext2 down"
-		       if [[ -x /sbin/dhclient ]]; then
-			       cmd="$cmd; dhclient $if"
-		       else
-			       cmd="$cmd; echo /sbin/dhclient missing - skipping dhcp request."
-		       fi
-		       ;;
-	       "rtsol")
-		       if ifconfig $if inet6 >/dev/null 2>&1; then
-			       rtsolif="$rtsolif $if"
-			       cmd="ifconfig $if $name $mask $bcaddr $ext1 $ext2 up"
-		       else
-			       cmd="$cmd; echo no INET6 support - skipping rtsol request."
-		       fi
-		       ;;
-	       *)      read dt dtaddr
-		       if [ "$name" = "alias" ]; then
-			       # perform a 'shift' of sorts
-			       alias=$name
-			       name=$mask
-			       mask=$bcaddr
-			       bcaddr=$ext1
-			       ext1=$ext2
-			       ext2=
-		       else
-			       alias=
-		       fi
-		       cmd="ifconfig $if $af $alias $name"
-		       case "$dt" in
-		       dest)   cmd="$cmd $dtaddr"
-			       ;;
-		       *)
-			       cmd2="$dt $dtaddr"
-			       ;;
-		       esac
-		       case $af in
-		       inet)
-			       if [ ! -n "$name" ]; then
-				       echo "/etc/hostname.$if: inet alone is invalid"
-				       return
-			       fi
-			       [ "$mask" ] && cmd="$cmd netmask $mask"
-			       if [ "$bcaddr" -a X"$bcaddr" != "XNONE" ]; then
-				       cmd="$cmd broadcast $bcaddr"
-			       fi
-			       [ "$alias" ] && rtcmd=";route -qn add -host $name 127.0.0.1"
-			       ;;
-		       inet6)
-			       if [ ! -n "$name" ]; then
-				       echo "/etc/hostname.$if: inet6 alone is invalid"
-				       return
-			       fi
-			       [ "$mask" ] && cmd="$cmd prefixlen $mask"
-			       cmd="$cmd $bcaddr"
-			       ;;
-		       *)      cmd="$cmd $mask $bcaddr"
-			       ;;
-		       esac
-		       cmd="$cmd $ext1 $ext2$rtcmd" rtcmd=
-		       ;;
-	       esac
-	       eval "$cmd"
-       done <$_hn
+	((NIFS++))
+	while :; do
+		if [ "$cmd2" ]; then
+			# we are carrying over from the 'read dt dtaddr'
+			# last time
+			set -- $cmd2
+			af=$1 name=$2 mask=$3 bcaddr=$4 ext1=$5 cmd2=
+			# make sure and get any remaining args in ext2,
+			# like the read below
+			i=1
+			while [ i -lt 6 -a -n "$1" ]; do shift; let i=i+1; done
+			ext2="$@"
+		else
+			# read the next line or exit the while loop
+			read af name mask bcaddr ext1 ext2 || break
+		fi
+		# $af can be "dhcp", "rtsol", an address family,
+		# commands, or a comment.
+		case "$af" in
+		"#"*|"!"*|"bridge"|"")
+			# skip comments, user commands, bridges,
+			# and empty lines
+			continue
+			;;
+		"dhcp")	[ "$name" = "NONE" ] && name=
+			[ "$mask" = "NONE" ] && mask=
+			[ "$bcaddr" = "NONE" ] && bcaddr=
+			dhcpif="$dhcpif $if"
+			cmd="ifconfig $if $name $mask $bcaddr $ext1 $ext2 down"
+			if [[ -x /sbin/dhclient ]]; then
+				cmd="$cmd; dhclient $if"
+			else
+				cmd="$cmd; echo /sbin/dhclient missing - skipping dhcp request."
+			fi
+			;;
+		"rtsol")
+			if ifconfig $if inet6 >/dev/null 2>&1; then
+				rtsolif="$rtsolif $if"
+				cmd="ifconfig $if $name $mask $bcaddr $ext1 $ext2 up"
+			else
+				cmd="$cmd; echo no INET6 support - skipping rtsol request."
+			fi
+			;;
+		*)	read dt dtaddr
+			if [ "$name" = "alias" ]; then
+				# perform a 'shift' of sorts
+				alias=$name
+				name=$mask
+				mask=$bcaddr
+				bcaddr=$ext1
+				ext1=$ext2
+				ext2=
+			else
+				alias=
+			fi
+			cmd="ifconfig $if $af $alias $name"
+			case "$dt" in
+			dest)	cmd="$cmd $dtaddr"
+				;;
+			*)
+				cmd2="$dt $dtaddr"
+				;;
+			esac
+			case $af in
+			inet)
+				if [ ! -n "$name" ]; then
+					echo "/etc/hostname.$if: inet alone is invalid"
+					return
+				fi
+				[ "$mask" ] && cmd="$cmd netmask $mask"
+				if [ "$bcaddr" -a X"$bcaddr" != "XNONE" ]; then
+					cmd="$cmd broadcast $bcaddr"
+				fi
+				[ "$alias" ] && rtcmd=";route -qn add -host $name 127.0.0.1"
+				;;
+			inet6)
+				if [ ! -n "$name" ]; then
+					echo "/etc/hostname.$if: inet6 alone is invalid"
+					return
+				fi
+				[ "$mask" ] && cmd="$cmd prefixlen $mask"
+				cmd="$cmd $bcaddr"
+				;;
+			*)	cmd="$cmd $mask $bcaddr"
+				;;
+			esac
+			cmd="$cmd $ext1 $ext2$rtcmd" rtcmd=
+			;;
+		esac
+		eval "$cmd"
+	done <$_hn
 }
 
 # Configure the network during upgrade based on the on-disk configuration.
 enable_network() {
 	local _f _gw _trunks _svlans _vlans
 
-       # Copy any network configuration files. N.B.: hosts already copied.
-       for _f in dhclient.conf resolv.conf resolv.conf.tail; do
-	       if [[ -f /mnt/etc/$_f ]]; then
-		       cp /mnt/etc/$_f /etc/$_f
-	       fi
-       done
+	# Copy any network configuration files. N.B.: hosts already copied.
+	for _f in dhclient.conf resolv.conf resolv.conf.tail; do
+		if [[ -f /mnt/etc/$_f ]]; then
+			cp /mnt/etc/$_f /etc/$_f
+		fi
+	done
 
-       # Set the address for the loopback interface. Bringing the
-       # interface up, automatically invokes the IPv6 address ::1.
-       ifconfig lo0 inet 127.0.0.1/8
+	# Set the address for the loopback interface. Bringing the
+	# interface up, automatically invokes the IPv6 address ::1.
+	ifconfig lo0 inet 127.0.0.1/8
 
-       # Configure all of the non-loopback interfaces which we know about.
-       # Refer to hostname.if(5)
-       for hn in /mnt/etc/hostname.*; do
-	       # Strip off prefix to get interface name.
-	       if=${hn#/mnt/etc/hostname.}
-	       if isin ${if%%+([0-9])} $(ifconfig -C); then
-		       # Dynamic interfaces must be done later.
-		       case ${if%%+([0-9])} in
-		       trunk)  _trunks="$_trunks $hn";;
-		       svlan)  _svlans="$_svlans $hn";;
-		       vlan)   _vlans="$_vlans $hn";;
-		       esac
-	       else
-		       # 'Real' interfaces (if available) are done now.
-		       ifconfig $if >/dev/null 2>&1 && ifstart $hn
-	       fi
-       done
-       # Configure any dynamic interfaces now that 'real' ones are up.
-       # ORDER IS IMPORTANT! (see /etc/netstart).
+	# Configure all of the non-loopback interfaces which we know about.
+	# Refer to hostname.if(5)
+	for hn in /mnt/etc/hostname.*; do
+		# Strip off prefix to get interface name.
+		if=${hn#/mnt/etc/hostname.}
+		if isin ${if%%+([0-9])} $(ifconfig -C); then
+			# Dynamic interfaces must be done later.
+			case ${if%%+([0-9])} in
+			trunk)	_trunks="$_trunks $hn";;
+			svlan)	_svlans="$_svlans $hn";;
+			vlan)	_vlans="$_vlans $hn";;
+			esac
+		else
+			# 'Real' interfaces (if available) are done now.
+			ifconfig $if >/dev/null 2>&1 && ifstart $hn
+		fi
+	done
+	# Configure any dynamic interfaces now that 'real' ones are up.
+	# ORDER IS IMPORTANT! (see /etc/netstart).
 	for hn in $_trunks $_svlans $_vlans; do
-	       ifstart $hn
+		ifstart $hn
 	done
 
 	[[ -n $rtsolif ]] && ifconfig $rtsolif inet6 autoconf
@@ -1843,18 +1806,6 @@ munge_fstab() {
 	if [[ ! -s /etc/fstab ]]; then
 		echo "$_slnotfstab"
 		exit
-	fi
-}
-
-getdevname() {
-	local _dev=$1
-	if [[ ${#_dev} == 18 && $_dev == +([0-9a-f]).[a-p] ||
-		${#_dev} == 16 && $_dev == +([0-9a-f]) ]]; then
-		sysctl -n hw.disknames |
-			sed -nE "s/^(.*,)*(.*):${_dev%.?}.*/\\\\2/p"
-	else
-		_dev=${_dev#/dev/}
-		print -r -- "${_dev%[a-p]}"
 	fi
 }
 
@@ -1933,21 +1884,21 @@ install_sets() {
 
 		ask "Location of sets? (${_cddevs:+$_cddevs }$_locs or 'done')" "$_d"
 		case $resp in
-		done)   sane_install && return
+		done)	sane_install && return
 			;;
-		[cC]*)  if [[ -n $_cddevs ]]; then
+		[cC]*)	if [[ -n $_cddevs ]]; then
 				set -- $_cddevs
 				[[ $resp == [cC]?([dD]) ]] && resp=$1
 				install_cdrom $resp && METHOD=$resp
 			fi
 			;;
-		[dD]*)  install_disk && METHOD=disk
+		[dD]*)	install_disk && METHOD=disk
 			;;
-		[hH]*)  isin http $_locs && install_http && METHOD=http
+		[hH]*)	isin http $_locs && install_http && METHOD=http
 			;;
-		[nN]*)  isin nfs $_locs && install_nfs && METHOD=nfs
+		[nN]*)	isin nfs $_locs && install_nfs && METHOD=nfs
 			;;
-		*)      $AUTO && echo "'$resp' is not a valid choice." && exit 1
+		*)	$AUTO && echo "'$resp' is not a valid choice." && exit 1
 			;;
 		esac
 
@@ -1958,7 +1909,7 @@ install_sets() {
 }
 
 
-+apply() {
+apply() {
 	if [[ $sshd == n ]]; then
 		echo "sshd_flags=NO" >>/mnt/etc/rc.conf.local
 	elif [[ -n $sshd_enableroot ]]; then
@@ -1970,7 +1921,7 @@ install_sets() {
 		fi
 	fi
 
-	[[ -n $aperture ]] && 
+	[[ -n $aperture ]] &&
 		echo "machdep.allowaperture=$aperture # See xf86(4)" \
 			>>/mnt/etc/sysctl.conf
 
@@ -2003,7 +1954,7 @@ encr_pwd() {
 
 store_random() {
 	dd if=/dev/random of=/mnt/var/db/host.random bs=65536 count=1 \
-	    status=none
+		status=none
 	dd if=/dev/random of=/mnt/etc/random.seed bs=512 count=1 status=none
 	chmod 600 /mnt/var/db/host.random /mnt/etc/random.seed
 }
@@ -2020,7 +1971,7 @@ finish_up() {
 	fi
 
 	if [[ -n $PACKAGE_PATH ]]; then
-		grep -v '^[     ]*installpath[  ]*=' /mnt/etc/pkg.conf 2>/dev/null >/tmp/pkgconf
+		grep -v '^[ 	]*installpath[ 	]*=' /mnt/etc/pkg.conf 2>/dev/null >/tmp/pkgconf
 		print -r -- "installpath = $PACKAGE_PATH" >>/tmp/pkgconf
 		cp /tmp/pkgconf /mnt/etc/pkg.conf
 	fi
@@ -2068,9 +2019,9 @@ AUTO=false
 RESPFILE=
 while getopts "af:" opt; do
 	case $opt in
-	a)      AUTO=true;;
-	f)      RESPFILE=$OPTARG;;
-	*)      usage;;
+	a)	AUTO=true;;
+	f)	RESPFILE=$OPTARG;;
+	*)	usage;;
 	esac
 done
 shift $((OPTIND-1))

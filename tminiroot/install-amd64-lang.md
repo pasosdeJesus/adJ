@@ -69,7 +69,7 @@ md_prep_fdisk() {
 		fi
 		ask "$_q or (E)dit?" "$_d"
 		case $resp in
-		$_slw*|$_slW*)
+		[$_slw$_slW]*)
 			echo -n "$_slsettingopenbsd"
 			fdisk -iy $_disk >/dev/null
 			echo "$_sldone."
@@ -114,7 +114,7 @@ __EOT
 
 $_slyouwillnowcreate
 
-$(fdisk ${_disk})
+$(fdisk $_disk)
 __EOT
 				fdisk -e $_disk
 				disk_has $_disk mbr openbsd && return

@@ -76,17 +76,17 @@ donetconfig
 echo
 
 while :; do
-       askpassword "Password for root account?"
-       _rootpass="$_password"
-       [[ -n "$_password" ]] && break
-       echo "The root password must be set."
+	askpassword "Password for root account?"
+	_rootpass="$_password"
+	[[ -n "$_password" ]] && break
+	echo "The root password must be set."
 done
 
 # Ask for the root user public ssh key during autoinstall.
 rootkey=
 if $AUTO; then
-       ask "Public ssh key for root account?" none
-       [[ $resp != none ]] && rootkey=$resp
+	ask "Public ssh key for root account?" none
+	[[ $resp != none ]] && rootkey=$resp
 fi
 
 # Ask user about daemon startup on boot, X Window usage and console setup.
@@ -186,15 +186,15 @@ echo -n "$_slsaving"
 done)
 
 hostname >/tmp/myname
-echo "127.0.0.1\tlocalhost" >/mnt/etc/hosts
-echo "::1\t\tlocalhost" >>/mnt/etc/hosts
+echo "127.0.0.1\\tlocalhost" >/mnt/etc/hosts
+echo "::1\\t\\tlocalhost" >>/mnt/etc/hosts
 if [[ -f /tmp/hosts ]]; then
 	_dn=$(get_fqdn)
 	while read _addr _hn _aliases; do
 		if [[ -n $_aliases || $_hn != ${_hn%%.*} || -z $_dn ]]; then
-			echo "$_addr\t$_hn $_aliases"
+			echo "$_addr\\t$_hn $_aliases"
 		else
-			echo "$_addr\t$_hn.$_dn $_hn"
+			echo "$_addr\\t$_hn.$_dn $_hn"
 		fi
 	done </tmp/hosts >>/mnt/etc/hosts
 	rm /tmp/hosts
