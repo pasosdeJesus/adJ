@@ -27,7 +27,15 @@ if (test "$?" = "0") then {
 	echo "Cambiando daemon por servicio en syslog.conf"  >> /var/www/tmp/inst-adJ.bitacora
 	ed syslog.conf  >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/daemon.info\([^;].*\)\/var/daemon.info;servicio.info\1\/var/g
+w
+q
+EOF
+	ed syslog.conf  >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/\/var\/log\/daemon/\/var\/log\/servicio/g
+w
+q
+EOF
+	ed syslog.conf  >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/\/var\/log\/service/\/var\/log\/servicio/g
 w
 q
