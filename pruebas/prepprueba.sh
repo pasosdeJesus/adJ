@@ -3,9 +3,9 @@
 
 . ./ver.sh
 cd /usr
-cmd="sudo rsync --delete -ravz src${VP}-orig/ src/"
+cmd="doas rsync --delete -ravz src${VP}-orig/ src/"
 echo $cmd
 eval $cmd
-cmd="(cd /usr/src; sudo make obj)"
+cmd="(cd /usr/src; doas make obj)"
 echo $cmd
 eval $cmd
