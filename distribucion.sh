@@ -77,6 +77,11 @@ else {
 	sn=$autoCvs;
 } fi;
 if (test "$sn" = "s") then {	
+	if [ -z "$SSH_AUTH_SOCK" ] ; then
+		eval `ssh-agent -s`
+		ssh-add
+	fi
+
 	if (test -d /usr/src$VP-orig/) then {
 		cd /usr/src$VP-orig
 	} else {
@@ -732,6 +737,7 @@ if (test "$sn" = "s") then {
 	# Modificados para posibilitar compilación
 	# Deben estar en mystuff
 
+
 	####
 	# Retroportados de versión ste o current para cerrar fallas o actualizar
 	# Deben estar en arboldes/usr/ports/mystuff y en /usr/ports de current
@@ -753,11 +759,13 @@ if (test "$sn" = "s") then {
 	#paquete gnutls
 	#paquete jasper
 	#paquete libxml
+	#paquete mariadb-client paquetes "mariadb-client mariadb-server" 
 	#paquete net-snmp
 	#paquete owncloud
 	#paquete p5-Mail-SpamAssassin
 	#paquete png
 	#paquete postgis
+	#paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs" 
 	#paquete qemu
 
 	#paquete webkit paquetes "webkit webkit-gtk3"
@@ -789,7 +797,7 @@ if (test "$sn" = "s") then {
 
 	###
         # Actualizados.  Están desactualizado en OpenBSD estable y current
-	#paquete php paquetes "php php-curl php-fpm php-gd php-intl php-ldap php-mcrypt php-pdo_pgsql php-pgsql php-zip" 5.6
+	#paquete php paquetes "php php-bz2 php-curl php-fpm php-gd php-intl php-ldap php-mcrypt php-mysqli- php-pdo_pgsql php-pgsql php-zip" 5.6
 	paquete pear-Auth
 	paquete pear-DB_DataObject
        		

@@ -248,12 +248,12 @@ usermod -G operator $uadJ
 echo "* Dispositivos montables por usuarios" >> /var/www/tmp/inst-adJ.bitacora;
 grep "^ *kern.usermount *= *1" /etc/sysctl.conf > /dev/null 2> /dev/null
 if (test "$?" != "0") then {
-cat >> /etc/sysctl.conf <<EOF
+	cat >> /etc/sysctl.conf <<EOF
 kern.usermount=1
 EOF
-sysctl -w kern.usermount=1 > /dev/null
+	sysctl -w kern.usermount=1 > /dev/null
 } else {
-echo "   Saltando..."  >> /var/www/tmp/inst-adJ.bitacora;
+	echo "   Saltando..."  >> /var/www/tmp/inst-adJ.bitacora;
 } fi;
 
 echo "* Permisos de /mnt" >> /var/www/tmp/inst-adJ.bitacora;
@@ -1358,6 +1358,10 @@ export SWORD_PATH=/usr/local/share/sword
 export HISTFILE=/home/$uadJ/.pdksh_history
 export HISTSIZE=2048
 export LANG=es_CO.UTF-8
+if [ -z "\$SSH_AUTH_SOCK" ] ; then
+	eval \`ssh-agent -s\` 
+	ssh-add 
+fi
 EOF
 	cat >> /home/$uadJ/.inputrc <<EOF
 set input-meta on
@@ -1692,11 +1696,11 @@ if (test "$?" != "0") then {
 	insacp postgis
 	grep "^postgresql:" /etc/login.conf > /dev/null 2>&1
 	if (test "$?" = "1") then {
-		echo "
+		cat >> /etc/login.conf << EOF
 postgresql:\
 	:setenv=LD_PRELOAD=libpthread.so:\
 	:tc=servicio:
-" >> /etc/login.conf
+EOF
 		cap_mkdb /etc/login.conf
 	} fi;
 	echo -n "La clave del administrador de 'postgres' quedará en /var/postresql/.pgpass " >> /var/www/tmp/inst-adJ.bitacora;
@@ -1748,7 +1752,7 @@ activarcs postgresql
 grep "kern.seminfo.semmni" /etc/sysctl.conf > /dev/null 2> /dev/null
 if (test "$?" != "0") then {
 	cat >> /etc/sysctl.conf <<EOF
-kern.seminfo.semmni=1024
+kern.shminfo.shmmni=1024
 kern.seminfo.semmns=2048
 kern.shminfo.shmmax=50331648
 kern.shminfo.shmall=51200
@@ -1760,6 +1764,17 @@ EOF
 	sysctl -w kern.shminfo.shmall=51200 > /dev/null
 	sysctl -w kern.maxfiles=20000 > /dev/null
 } fi;
+
+#staff:\
+#	:datasize-cur=1536M:\
+#	:datasize-max=infinity:\
+#	:maxproc-max=4096:\
+#	:maxproc-cur=4096:\
+#	:openfiles-max=8090:\
+#	:openfiles-cur=8090:\
+#	:ignorenologin:\
+#	:requirehome@:\
+#	:tc=default:
 
 cat /etc/rc.local >> /var/www/tmp/inst-adJ.bitacora
 cat /etc/rc.conf.local >> /var/www/tmp/inst-adJ.bitacora
@@ -1997,7 +2012,7 @@ if (test "$p" = "") then {
 	rm -f /var/www/conf/modules/php.conf /var/www/conf/php.ini /etc/php.ini
 	ln -s /var/www/conf/modules.sample/php-5.6.conf \
 		/var/www/conf/modules/php.conf
-	for sp in gd intl ldap mcrypt pdo_pgsql pgsql zip; do
+	for sp in gd intl ldap mcrypt mysql pod_mysql pdo_pgsql pgsql zip; do
 		rm -f /etc/php-5.6/$sp
 		ln -fs /etc/php-5.6.sample/$sp.ini /etc/php-5.6/
 	done;

@@ -135,14 +135,7 @@ EOF
 
 grep servicio lib/libc/Symbols.list > /dev/null 2>&1
 if (test "$?" != "0") then {
-	ed lib/libc/Symbols.list <<EOF
-/daemon
-i
-servicio
-.
-w
-q
-EOF
+	replicaremplazauno lib/libc/Symbols.list
 } fi;
 
 echo "Buscando daemon en otras librerías";
@@ -197,7 +190,7 @@ for i in `cat /tmp/tc`; do
 done;
 
 echo "Remplazando por servicio en varios directorios excepto sbin y usr.sbin";
-find bin usr.sbin/cron usr.bin games gnu kerberosIV regress share libexec sbin/iked usr.sbin -exec grep -i -l -I "daemon" {} ';' | grep -v "CVS" | grep -v "web2" | grep -v "perl" | grep -v "sendmail" | grep -v "lpr.lpc.*Makefile" | grep -v "usr.sbin.unbound" > /tmp/tc 2> /dev/null
+find bin usr.sbin/cron usr.bin games gnu kerberosIV regress share libexec sbin/iked usr.sbin -exec grep -i -l -I "daemon" {} ';' | grep -v "CVS" | grep -v "web2" | grep -v "perl" | grep -v "sendmail" | grep -v "lpr.lp.*Makefile" | grep -v "usr.sbin.unbound" > /tmp/tc 2> /dev/null
 for i in `cat /tmp/tc`; do 
 	echo $i;
 	remplazad $i;

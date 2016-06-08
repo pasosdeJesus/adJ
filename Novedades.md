@@ -9,7 +9,6 @@ Fecha de publicación: 1/Ago/2016
 
 Con respecto a OpenBSD 5.9 para amd64 y a la edición anterior de este DVD
 
-
 ###KERNEL Y SISTEMA BASE
 
 * Parches al sistema base hasta el 1.Ago.2016, que cierran las x fallas de 
@@ -46,7 +45,8 @@ Con respecto a OpenBSD 5.9 para amd64 y a la edición anterior de este DVD
   PAQUETES EXCLUSIVOS DE ADJ.
 * Hemos remplazando ```daemon``` por ```servicio``` en buena parte del sistema 
   base (ver por ejemplo ```vmstat -s``` o ```less /var/log/servicio``` o 
-  ```man servicio```).  
+  ```man servicio```).   En 5.9 ampliamos este remplazo a programas de 
+  ```/usr/libexec``` y ```/usr/sbin```
 
 Entre las novedades reportadas en las `Notas de publicación de OpenBSD 5.9' 
 destacamos las siguientes relacionadas con amd64:
