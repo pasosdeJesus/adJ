@@ -293,17 +293,18 @@ if (test "$sn" = "s") then {
 	(cd $dini/arboldes/usr/src ; for i in `find . -type f | grep -v CVS | grep -v .patch`; do  if (test ! -f /usr/src/$i) then { echo $i; n=`dirname $i`; mkdir -p /usr/src/$n; cp $i /usr/src/$i; } fi; done )
 	echo "* Cambiando /etc " | tee -a /var/www/tmp/distrib-adJ.bitacora
 	cd /etc
-	$dini/arboldd/usr/local/adJ/servicio-etc.sh	
+	$dini/arboldd/usr/local/adJ/servicio-etc.sh | tee -a /var/www/tmp/distrib-adJ.bitacora
 	echo "* Cambiando /usr/src/etc" | tee -a /var/www/tmp/distrib-adJ.bitacora
 	cd /usr/src/etc
-	$dini/arboldd/usr/local/adJ/servicio-etc.sh	
+	$dini/arboldd/usr/local/adJ/servicio-etc.sh | tee -a /var/www/tmp/distrib-adJ.bitacora
 	echo "* Cambios iniciales a /usr/src" | tee -a /var/www/tmp/distrib-adJ.bitacora
 	cd /usr/src/
-	$dini/hdes/servicio-base.sh	
+	$dini/hdes/servicio-base.sh | tee -a /var/www/tmp/distrib-adJ.bitacora
 	grep LOG_SERVICE  /usr/include/syslog.h > /dev/null 2>&1
 	if (test "$?" != "0") then {
+		echo "* Cambiando /usr/src/sys" | tee -a /var/www/tmp/distrib-adJ.bitacora
 		cd /usr/src/sys
-		$dini/hdes/servicio-kernel.sh	
+		$dini/hdes/servicio-kernel.sh | tee -a /var/www/tmp/distrib-adJ.bitacora	
 	} fi;
 	# usar llaves de adJ en lugar de las de OpenBSD
 	grep "signfiy\/adJ" /usr/src/usr.sbin/sysmerge/sysmerge.sh > /dev/null 2>&1

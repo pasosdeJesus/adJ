@@ -61,6 +61,9 @@ function replicaremplazauno {
 .t-1
 .s/daemon/servicio/g
 w
+q
+EOF
+		ed $i <<EOF
 /DAEMON
 .t-1
 .s/DAEMON/SERVICIO/g
@@ -110,7 +113,7 @@ EOF
 } fi;
 
 find /usr/include -name stdlib.h -exec grep -l daemon {} ';' > /tmp/tc
-#find . -name stdlib.h -exec grep -l daemon {} ';' >> /tmp/tc
+find /usr/src/include -name stdlib.h -exec grep -l daemon {} ';' >> /tmp/tc
 for i in `cat /tmp/tc`; do
 	echo $i
 	replicaremplazauno $i
@@ -194,7 +197,7 @@ for i in `cat /tmp/tc`; do
 done;
 
 echo "Remplazando por servicio en varios directorios excepto sbin y usr.sbin";
-find bin usr.sbin/cron usr.bin games gnu kerberosIV regress share libexec sbin/iked usr.sbin -exec grep -i -l -I "daemon" {} ';' | grep -v "CVS" | grep -v "web2" | grep -v "perl" | grep -v "sendmail" | grep -v "lpr.lpc.*Makefile" | grep -v "usr.sbin.unbound > /tmp/tc 2> /dev/null
+find bin usr.sbin/cron usr.bin games gnu kerberosIV regress share libexec sbin/iked usr.sbin -exec grep -i -l -I "daemon" {} ';' | grep -v "CVS" | grep -v "web2" | grep -v "perl" | grep -v "sendmail" | grep -v "lpr.lpc.*Makefile" | grep -v "usr.sbin.unbound" > /tmp/tc 2> /dev/null
 for i in `cat /tmp/tc`; do 
 	echo $i;
 	remplazad $i;
