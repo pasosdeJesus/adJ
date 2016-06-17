@@ -1744,6 +1744,8 @@ EOF
 
 mkdir -p /var/www/var/run/postgresql
 chown _postgresql:_postgresql /var/www/var/run/postgresql
+chown -R _postgresql:_postgresql /var/postgresql/
+chmod o-rxw /var/postgresql/
 
 echo "* Configurando para que inicie PostgreSQL en cada arranque y cierre al apagar" >> /var/www/tmp/inst-adJ.bitacora;
 
@@ -2066,14 +2068,29 @@ EOF
 		ed $i >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/max_execution_time = 30/max_execution_time = 900/g
 w
+q
+EOF
+		ed $i >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/max_input_time = 60/max_input_time = 900/g
 w
+q
+EOF
+		ed $i >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/allow_url_fopen = Off/allow_url_fopen = On/g
 w
-,s/;date.timezone =.*/date.timezone = America\/Bogota/g
+q
+EOF
+		ed $i >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
+,s/[;]*date.timezone =.*/date.timezone = America\/Bogota/g
 w
+q
+EOF
+		ed $i >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/memory_limit = 128M/memory_limit = 1024M/g
 w
+q
+EOF
+		ed $i >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/upload_max_filesize = 2M/upload_max_filesize = 32M/g
 w
 q
