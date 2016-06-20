@@ -128,7 +128,7 @@ if (test "$sn" = "s") then {
 		rsync -ravzp --delete /usr/xenocara$VP-orig/* $XSRCDIR
 	} fi;
 	if (test -d /usr/ports$VP-orig/) then {
-		cd /usr/ports$VP-orig/sys
+		cd /usr/ports$VP-orig/
 	} else {
 		cd /usr/ports/
 	} fi;
@@ -143,7 +143,7 @@ if (test "$sn" = "s") then {
 	} fi;
 	cvs -z3 update -Pd -r$R
 	if (test -d /usr/ports$VP-orig/) then {
-		rsync -ravzp /usr/ports$VP-orig/* $XSRCDIR
+		rsync -ravzp /usr/ports$VP-orig/* /usr/ports
 	} fi;
 } fi;
 
