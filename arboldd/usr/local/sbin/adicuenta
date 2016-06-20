@@ -14,8 +14,8 @@ claveplana=$3;
 virtualuser=$4;
 gru=$5;
 
-echo "adicuenta($us, $nom, $claveplana, $virtualuser, $gru)"
 u=`whoami`
+echo "adicuenta($us, $nom, $claveplana, $virtualuser, $gru)"
 if (test "$u" != "root") then {
     echo "Este script debe ser ejecutado por root o con sudo";
     exit 1;
@@ -112,6 +112,7 @@ if (test "$?" != "0") then {
 set spoolfile=imaps://\$USER@127.0.0.1/INBOX
 set folder=imaps://\$USER@127.0.0.1/
 EOF
+	chown $us /home/$us/.muttrc
 } fi;
 
 grep "$Maildir" $dhome/.procmailrc > /dev/null 2>&1
@@ -142,13 +143,14 @@ $dhome/$Maildir/.Junk/
 $dhome/$Maildir/
 
 EOF
+	chown $us /home/$us/.procmail
 
 } fi;
 
 grep procmail /home/$us/.forward > /dev/null 2> /dev/null
 if (test "$?" != "0") then {
 	echo '"| exec /usr/local/bin/procmail"' > /home/$us/.forward
-	chown $us:$us /home/$us/.forward
+	chown $us /home/$us/.forward
 } fi;
 
 function subc {

@@ -237,7 +237,7 @@ Para mejorar el financiamiento de OpenBSD, donamos y aportamos trabajo
 voluntario a ese proyecto.  Por lo mismo publicamos adJ varios meses después 
 de la respectiva versión de OpenBSD.
 
-Agradecemos que ore por quienes desarrollan esta distribución.
+Favor ver más novedades de adJ 5.9 en 
+<https://github.com/pasosdeJesus/adJ/blob/v5.9/Novedades.md>
 
-Si le resulta posible también agradecemos su [donación](Donaciones).
 

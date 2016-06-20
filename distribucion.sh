@@ -423,6 +423,18 @@ if (test "$sn" = "s") then {
 		exit 1;
 	} fi;
 
+	echo -n "Eliminar /usr/xobj ";
+	if (test "$inter" = "-i") then {
+		echo -n "(s/n)? "
+		read sn
+	} 
+	else {
+		sn=$autoElimX
+	} fi;
+	if (test "$sn" = "s" ) then {
+		echo "Uyy, Eliminando"; 
+		rm -rf /usr/xobj/*
+	} fi;
 
 	mkdir -p ${DESTDIR}/usr/include
 	cp -rf /usr/include/* ${DESTDIR}/usr/include/
