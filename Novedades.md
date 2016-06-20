@@ -19,7 +19,7 @@ Con respecto a adJ 5.8
   también afectan OpenBSD 5.9, los binarios distribuidos de esa versión
   tampoco los resuelven.
 * Más paquetes retroportados y recompilados para cerrar fallas de seguridad: 
-	freetds, mariadb, php
+	freetds 0.95.18, mariadb 10.0.22, php 5.6.22
 
 Favor ver más novedades de adJ 5.8 en 
 <https://github.com/pasosdeJesus/adJ/blob/v5.8/Novedades.md>
