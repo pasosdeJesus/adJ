@@ -1966,8 +1966,8 @@ server "127.0.0.1" {
 		index "index.php"
 	}
 
-	location "*.php" {
-		fastcgi socket "/var/www/run/php-fpm.sock"
+	location "/*.php" {
+		fastcgi socket "/var/run/php-fpm.sock"
 	}
 	root "/htdocs/sivel/"
 }
@@ -2038,7 +2038,7 @@ w
 w
 q
 EOF
-		activarcs php_fpm
+		activarcs php56_fpm
 		grep "^ *location .*php" /etc/nginx/nginx.conf > /dev/null 2>&1
 		if (test "$?" != "0") then {
 			grep "^ *ssl_prefer_server_ciphers" /etc/nginx/nginx.conf > /dev/null 2>&1
