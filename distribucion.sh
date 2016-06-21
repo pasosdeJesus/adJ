@@ -479,7 +479,7 @@ if (test "$sn" = "s") then {
 	#rm -rf /usr/xobj/*
 	#mkdir -p /usr/xobj/app/fvwm/libs
 	#echo "** build 2";
-	#make build
+	make build
 	if (test "$?" != "0") then {
 		echo " *> build incompleto";
 		exit $?;
