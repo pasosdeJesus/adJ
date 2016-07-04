@@ -1,9 +1,9 @@
 #adJ - Aprendiendo de Jesús.
 Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
-y Educativas y que esperamos será la elegida por Jesús durante el Milenio.
+y Educativas y que anhelamos fuese usado por Jesús durante el Milenio.
 
 ###Versión: 5.8p1
-Fecha de publicación: 25/Jun/2016
+Fecha de publicación: 4/Jul/2016
 
 ##NOVEDADES
 
@@ -21,7 +21,10 @@ Con respecto a adJ 5.8
 * Más paquetes retroportados y recompilados para cerrar fallas de seguridad: 
 	freetds 0.95.18, mariadb 10.0.22, php 5.6.22
 
-Favor ver más novedades de adJ 5.8 en 
-<https://github.com/pasosdeJesus/adJ/blob/v5.8/Novedades.md>
+Puede ver más novedades de adJ 5.8 en 
+	<https://github.com/pasosdeJesus/adJ/blob/v5.8/Novedades.md>
+
+Y novedades de adJ con respecto a OpenBSD en:
+	<https://github.com/pasosdeJesus/adJ/blob/v5.8/Novedades_OpenBSD.md>
 
 

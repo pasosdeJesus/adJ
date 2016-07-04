@@ -2056,7 +2056,7 @@ w
 q
 EOF
 	ed /etc/php-fpm.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
-,s/; listen.*/listen = \/var\/www\/var\/run\/php-fpm.sock/g
+,s/; *listen.*/listen = \/var\/www\/var\/run\/php-fpm.sock/g
 w
 q
 EOF
@@ -2335,6 +2335,9 @@ if (test -f /home/$uadJ/.fluxbox/menu) then {
 	rm -f /home/$uadJ/.fluxbox/init
 } fi;
 
+# Por cambiar mas en paquetes
+ln -s /usr/local/bin/gnome-keyring-daemon /usr/local/bin/gnome-keyring-servicio
+
 if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 	mkdir -p /home/$uadJ/.fluxbox
 	cat > /home/$uadJ/.fluxbox/menu <<EOF
@@ -2343,7 +2346,7 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 	[exec] (xfe - Archivos) {PATH=\$PATH:/usr/sbin:/usr/local/sbin:/sbin /usr/local/bin/xfe}
 	[exec] (xterm) {xterm -en utf8 -e /bin/ksh -l}
 	[exec] (chromium) {/usr/local/bin/chrome -allow-file-access-from-files}
-	[exec] (midori) {/usr/local/bin/midori}
+	[exec] (midori) { export \`/usr/local/bin/gnome-keyring-servicio -s\`; /usr/local/bin/midori}
 [submenu] (Espiritualidad)
 	[exec] (xiphos) {/usr/local/bin/xiphos}
 	[exec] (Evangelios de dominio publico) {/usr/local/bin/chrome /usr/local/share/doc/evangelios_dp/}

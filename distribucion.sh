@@ -703,7 +703,7 @@ function paquete {
 	} fi;
 }
 
-echo " *> Compilar todos los paquetes de Conteniod.txt en $dini/$V$VESP-$ARQ/paquetes " | tee -a /var/www/tmp/distrib-adJ.bitacora;
+echo " *> Compilar todos los paquetes de Contenido.txt en $dini/$V$VESP-$ARQ/paquetes " | tee -a /var/www/tmp/distrib-adJ.bitacora;
 if (test "$inter" = "-i") then {
 	echo -n "(s/n)? "
 	read sn
@@ -792,7 +792,7 @@ if (test "$sn" = "s") then {
 	paquete wxWidgets-gtk2
 
 	####
-	# Tomados de portes de OpenBSD 5.7 pero mejorados para adJ
+	# Adaptados de portes estables pero mejorados para adJ
 	# Deben estar en arboldes/usr/ports/mystuff 
 	paquete xfe
 
