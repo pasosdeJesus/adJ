@@ -540,12 +540,20 @@ p5-Time-Piece p5-Module-Loaded xcompmgr; do
 	done;
 	ed /etc/mixerctl.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/headphones/hp/g
+w
+q
+EOF
+	ed /etc/mixerctl.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/speaker/spkr/g
 w
 q
 EOF
 	ed /etc/X11/xorg.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/i810/intel/g
+w
+q
+EOF
+	ed /etc/X11/xorg.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/.*RgbPath .*//g
 w
 q
@@ -2022,7 +2030,15 @@ if (test "$p" = "") then {
 		chmod +w /var/www/conf/httpd.conf
 		ed /var/www/conf/httpd.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/\#AddType application\/x-httpd-php .php/AddType application\/x-httpd-php .php/g
+w
+q
+EOF
+		ed /var/www/conf/httpd.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/DirectoryIndex index.html.*/DirectoryIndex index.html index.php/g
+w
+q
+EOF
+		ed /var/www/conf/httpd.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/UseCanonicalName *On/UseCanonicalName Off/g
 w
 q
@@ -2032,8 +2048,14 @@ EOF
 	ed /etc/php-fpm.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/; listen.owner = www/listen.owner = www/g
 w
+q
+EOF
+	ed /etc/php-fpm.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/; listen.group = www/listen.group = www/g
 w
+q
+EOF
+	ed /etc/php-fpm.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/; listen.*/listen = \/var\/www\/var\/run\/php-fpm.sock/g
 w
 q
