@@ -748,8 +748,6 @@ if (test "$sn" = "s") then {
 	# Modificados para posibilitar compilación
 	# Deben estar en mystuff
 
-	paquete openldap-client 
-	exit 1;
 	####
 	# Recompilados para cerrar fallas, portes actualizados de OpenBSD estable
 	# Para que operen bien basta actualizar CVS de /usr/ports 
@@ -771,6 +769,7 @@ if (test "$sn" = "s") then {
 
 	#paquete webkit paquetes "webkit webkit-gtk3"
 	# FLAVOR=gtk3 make paquete webkit-gtk3
+
 
 	####
 	# Recompilados de estable que usan xlocale (y pueden cerrar fallas)
@@ -812,8 +811,7 @@ if (test "$sn" = "s") then {
 
 	##
 	# Retroportados no existentes en adJ, sólo en mystuff
-	paquete security/acme-tiny
-	paquete security/letsencrypt paquetes "acme-tiny letsencrypt" 
+	paquete security/letsencrypt paquetes "acme-tiny letsencrypt py-acme" 
 	paquete devel/py-configargparse
 	paquete devel/py-parsedatetime
 	paquete devel/py-python2-pythondialog

@@ -18,9 +18,13 @@ Con respecto a adJ 5.8
   Las 6 fallas de seguridad posteriores al 10.Mar.2016 y varias de robustez
   también afectan OpenBSD 5.9, los binarios distribuidos de esa versión
   tampoco los resuelven.
-* Más paquetes retroportados y recompilados para cerrar fallas de seguridad: 
-	freetds 0.95.18, mariadb 10.0.22, php 5.6.22
-* Nuevos paquete letsencrypt y otros de los que depende retroportados
+* Más paquetes retroportados y recompilados para cerrar fallas de seguridad y
+  actualizar: 
+	freetds 0.95.18, mariadb 10.0.22, php 5.6.23, openldap-client-2.4.43
+* Paquetes actualizados para resolver fallas con certificados y protocolos 
+  ssl y tls en PHP y LDAP:
+	php 5.6.23, openldap-client-2.4.43
+* Nuevo paquete letsencrypt y otros de los que depende retroportados
   de OpenBSD 5.9 para facilitar uso de certificados SSL gratuitos de
   https://letsencrypt.org
 
