@@ -748,10 +748,10 @@ if (test "$sn" = "s") then {
 	# Modificados para posibilitar compilación
 	# Deben estar en mystuff
 
-
+	paquete openldap-client 
+	exit 1;
 	####
 	# Recompilados para cerrar fallas, portes actualizados de OpenBSD estable
-	
 	# Para que operen bien basta actualizar CVS de /usr/ports 
 	# Los siguientes no deben estar en arboldes/usr/ports/mystuff
 	paquete a2ps
@@ -801,6 +801,7 @@ if (test "$sn" = "s") then {
 	# Deben estar en arboldes/usr/ports/mystuff y en /usr/ports de current
 	paquete chromium
 	paquete node 
+	paquete openldap-client 
 	paquete ruby paquetes "ruby ruby23-ri_docs" 2.3
 
 	###
@@ -808,7 +809,21 @@ if (test "$sn" = "s") then {
 	paquete php paquetes "php php-bz2 php-curl php-fpm php-gd php-intl php-ldap php-mcrypt php-mysqli- php-pdo_pgsql php-pgsql php-zip" 5.6
 	paquete pear-Auth
 	paquete pear-DB_DataObject
-       		
+
+	##
+	# Retroportados no existentes en adJ, sólo en mystuff
+	paquete security/acme-tiny
+	paquete security/letsencrypt paquetes "acme-tiny letsencrypt" 
+	paquete devel/py-configargparse
+	paquete devel/py-parsedatetime
+	paquete devel/py-python2-pythondialog
+	paquete devel/py-zopecomponent
+	paquete devel/py-zopeevent
+	paquete devel/py-zopeinterface
+	paquete sysutils/py-psutil
+	paquete textproc/py-pyRFC3339/
+	paquete www/py-ndg-httpsclient
+
 	####
 	# Unicos en adJ 
 	# Deben estar en arboldes/usr/ports/mystuff pero no en /usr/ports
@@ -1080,23 +1095,18 @@ echo " *> Revisando faltantes con respecto a Contenido.txt" | tee -a /var/www/tm
 		} fi; 
 	done
 	echo " *> Copiando otros textos";
-	if (test -f Actualiza.txt) then {
-		cp Actualiza.txt $V$VESP-$ARQ/Actualiza.txt 
+	if (test -f Actualiza.md) then {
+		cp Actualiza.md $V$VESP-$ARQ/Actualiza.md 
 	} fi;
-	if (test -f Dedicatoria.txt) then {
-		cp Dedicatoria.txt $V$VESP-$ARQ/Dedicatoria.txt
+	if (test -f Dedicatoria.md) then {
+		cp Dedicatoria.md $V$VESP-$ARQ/Dedicatoria.md
 	} fi;
-	if (test -f Derechos.txt) then {
-		cp Derechos.txt $V$VESP-$ARQ/Derechos.txt
+	if (test -f Derechos.md) then {
+		cp Derechos.md $V$VESP-$ARQ/Derechos.md
 	} fi;
-	if (test -f Novedades.ewiki) then {
-		echo "*** De Ewiki a Texto" | tee -a /var/www/tmp/distrib-adJ.bitacora
-		awk -f hdes/ewikiAtexto.awk Novedades.ewiki > tmp/Novedades.txt
-		#recode latin1..utf8 tmp/Novedades.txt
-	} fi;
-	if (test -f tmp/Novedades.txt) then {
+	if (test -f tmp/Novedades.md) then {
 		echo "*** Novedades" | tee -a /var/www/tmp/distrib-adJ.bitacora;
-		cp tmp/Novedades.txt $V$VESP-$ARQ/Novedades.txt
+		cp tmp/Novedades.md $V$VESP-$ARQ/Novedades.md
 	} fi;
 } fi;
 

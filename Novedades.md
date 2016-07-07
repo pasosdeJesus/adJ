@@ -3,7 +3,7 @@ Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y que anhelamos fuese usado por Jesús durante el Milenio.
 
 ###Versión: 5.8p1
-Fecha de publicación: 4/Jul/2016
+Fecha de publicación: 7/Jul/2016
 
 ##NOVEDADES
 
@@ -20,6 +20,9 @@ Con respecto a adJ 5.8
   tampoco los resuelven.
 * Más paquetes retroportados y recompilados para cerrar fallas de seguridad: 
 	freetds 0.95.18, mariadb 10.0.22, php 5.6.22
+* Nuevos paquete letsencrypt y otros de los que depende retroportados
+  de OpenBSD 5.9 para facilitar uso de certificados SSL gratuitos de
+  https://letsencrypt.org
 
 Puede ver más novedades de adJ 5.8 en 
 	<https://github.com/pasosdeJesus/adJ/blob/v5.8/Novedades.md>
