@@ -1,8 +1,8 @@
 Con respecto a OpenBSD 5.8 las novedades son:
 
-Proceso de Instalación:
-	upgrade install install.sub 	En español
-	Organización del CD de instalacińo diferente
+* Proceso de Instalación:
+** upgrade install install.sub 	En español
+** Organización del CD de instalacińo diferente
 
 Kernel
 	Palabra daemon renombrada por service ver 
