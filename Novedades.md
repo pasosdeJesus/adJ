@@ -28,10 +28,10 @@ Con respecto a adJ 5.8
   de OpenBSD 5.9 para facilitar uso de certificados SSL gratuitos de
   https://letsencrypt.org
 
-Puede ver más novedades de adJ 5.8 en 
+Puede ver lás novedades de adJ 5.8 en 
 	<https://github.com/pasosdeJesus/adJ/blob/v5.8/Novedades.md>
 
 Y novedades de adJ con respecto a OpenBSD en:
-	<https://github.com/pasosdeJesus/adJ/blob/v5.8/Novedades_OpenBSD.md>
+	<https://github.com/pasosdeJesus/adJ/blob/ADJ_5_8/Novedades_OpenBSD.md>
 
 
