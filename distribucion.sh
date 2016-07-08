@@ -796,11 +796,14 @@ if (test "$sn" = "s") then {
 	paquete xfe
 
 	####
-	# Retroportados de versión ste o current para cerrar fallas o actualizar
-	# Deben estar en arboldes/usr/ports/mystuff y en /usr/ports de current
+	# Aunque existen en versión actual retroportados de versión siguiente 
+	# o current para cerrar fallas o actualizar
+	# Deben estar en arboldes/usr/ports/mystuff y en /usr/ports 
 	paquete chromium
 	paquete node 
 	paquete openldap-client 
+	paquete py-openssl
+	paquete py-zopeinterface
 	paquete ruby paquetes "ruby ruby23-ri_docs" 2.3
 
 	###
@@ -810,15 +813,13 @@ if (test "$sn" = "s") then {
 	paquete pear-DB_DataObject
 
 	##
-	# Retroportados no existentes en adJ, sólo en mystuff
+	# Retroportados no existentes en versión actual
 	paquete security/letsencrypt paquetes "acme-tiny letsencrypt py-acme" 
 	paquete devel/py-configargparse paquetes "py-ConfigArgParse"
-	paquete security/py-openssl
 	paquete devel/py-parsedatetime
 	paquete devel/py-python2-pythondialog
 	paquete devel/py-zopecomponent
 	paquete devel/py-zopeevent
-	paquete devel/py-zopeinterface
 	paquete sysutils/py-psutil
 	paquete textproc/py-pyRFC3339/
 	paquete www/py-ndg-httpsclient
@@ -1095,17 +1096,21 @@ echo " *> Revisando faltantes con respecto a Contenido.txt" | tee -a /var/www/tm
 	done
 	echo " *> Copiando otros textos";
 	if (test -f Actualiza.md) then {
-		cp Actualiza.md $V$VESP-$ARQ/Actualiza.md 
+		cp Actualiza.md $V$VESP-$ARQ/
 	} fi;
 	if (test -f Dedicatoria.md) then {
-		cp Dedicatoria.md $V$VESP-$ARQ/Dedicatoria.md
+		cp Dedicatoria.md $V$VESP-$ARQ/
 	} fi;
 	if (test -f Derechos.md) then {
-		cp Derechos.md $V$VESP-$ARQ/Derechos.md
+		cp Derechos.md $V$VESP-$ARQ/
 	} fi;
-	if (test -f tmp/Novedades.md) then {
+	if (test -f Novedades.md) then {
 		echo "*** Novedades" | tee -a /var/www/tmp/distrib-adJ.bitacora;
-		cp tmp/Novedades.md $V$VESP-$ARQ/Novedades.md
+		cp Novedades.md $V$VESP-$ARQ/
+	} fi;
+	if (test -f Novedades_OpenBSD.md) then {
+		echo "*** Novedades_OpenBSD" | tee -a /var/www/tmp/distrib-adJ.bitacora;
+		cp Novedades_OpenBSD.md $V$VESP-$ARQ/
 	} fi;
 } fi;
 
