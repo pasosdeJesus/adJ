@@ -99,7 +99,7 @@ Con respecto a OpenBSD 5.8 las novedades son:
 		devel/py-python2-pythondialog devel/py-zopecomponent devel/py-zopeevent
 		sysutils/py-psutil textproc/py-pyRFC3339/ www/py-ndg-httpsclient
 
-        * Actualizados, pues están desactualizado en OpenBSD estable y current
+	* Actualizados, pues están desactualizado en OpenBSD estable y current
 		* php php-bz2 php-curl php-fpm php-gd php-intl php-ldap 
 		php-mcrypt php-mysqli- php-pdo_pgsql php-pgsql php-zip
 		pear-Auth pear-DB_DataObject
