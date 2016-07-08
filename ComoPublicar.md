@@ -29,7 +29,7 @@ Pasos importantes para publicar versión beta
 	```
 	doas ./distribucion.sh
 	```
-5. Retocar fecha de publicacion en ```Novedades.ewiki``` y publicar escondido en
+5. Retocar fecha de publicacion en ```Novedades.md``` y publicar escondido en
    http://aprendiendo.pasosdeJesus.org
 6. Generar distribución, imagen iso (```hdes/creaiso.sh```) y probar por 
   ejemplo en ```qemu``` (```hdes/qemu.sh``` o remotamente 
