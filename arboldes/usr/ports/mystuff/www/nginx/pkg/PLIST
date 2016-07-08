@@ -1,0 +1,38 @@
+@comment $OpenBSD: PLIST,v 1.16 2014/10/23 12:13:12 sthen Exp $
+@pkgpath www/nginx/stable${FLAVOR_COMMA}
+@pkgpath www/nginx/devel${FLAVOR_COMMA}
+@man man/man8/nginx.8
+@bin sbin/nginx
+@mode 700
+@owner www
+@group www
+@sample ${NGINX_DIR}/tmp/
+@mode
+@owner
+@group
+share/doc/pkg-readmes/${FULLPKGNAME}
+share/nginx/
+@sample ${SYSCONFDIR}/nginx/
+share/nginx/fastcgi_params
+@sample ${SYSCONFDIR}/nginx/fastcgi_params
+share/nginx/html/
+@sample ${NGINX_DIR}/html/
+share/nginx/html/50x.html
+@sample ${NGINX_DIR}/html/50x.html
+share/nginx/html/index.html
+@sample ${NGINX_DIR}/html/index.html
+share/nginx/koi-utf
+@sample ${SYSCONFDIR}/nginx/koi-utf
+share/nginx/koi-win
+@sample ${SYSCONFDIR}/nginx/koi-win
+share/nginx/mime.types
+@sample ${SYSCONFDIR}/nginx/mime.types
+share/nginx/nginx.conf
+@sample ${SYSCONFDIR}/nginx/nginx.conf
+share/nginx/scgi_params
+@sample ${SYSCONFDIR}/nginx/scgi_params
+share/nginx/uwsgi_params
+@sample ${SYSCONFDIR}/nginx/uwsgi_params
+share/nginx/win-utf
+@sample ${SYSCONFDIR}/nginx/win-utf
+@rcscript ${RCDIR}/nginx
