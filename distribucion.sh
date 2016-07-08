@@ -813,6 +813,7 @@ if (test "$sn" = "s") then {
 	# Retroportados no existentes en adJ, sólo en mystuff
 	paquete security/letsencrypt paquetes "acme-tiny letsencrypt py-acme" 
 	paquete devel/py-configargparse paquetes "py-ConfigArgParse"
+	paquete security/py-openssl
 	paquete devel/py-parsedatetime
 	paquete devel/py-python2-pythondialog
 	paquete devel/py-zopecomponent

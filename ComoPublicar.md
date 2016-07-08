@@ -79,7 +79,6 @@ Pasos importantes para publicar versión mayor
    https://p2pu.org/es/groups/openbsd-adj-como-sistema-de-escritorio/
 6. Actualizar Artículo como Noticia en http://aprendiendo.pasosdeJesus.org,
    http://aprendiendo.pasosdejesus.org/?id=MainMenu,  
-   https://en.wikipedia.org/wiki/AdJ y https://es.wikipedia.org/wiki/AdJ 
 7. Poner Tag en github
 
 	```
@@ -124,5 +123,6 @@ Pasos importantes para publicar versión mayor
 	seguro, amigable para cristian@s y en español, ver 
 	http://aprendiendo.pasosdejesus.org/
 
-10. Actualiza artículos de Wikipedia
+10. Actualiza artículos de Wikipedia 
+   https://en.wikipedia.org/wiki/AdJ y https://es.wikipedia.org/wiki/AdJ 
 
