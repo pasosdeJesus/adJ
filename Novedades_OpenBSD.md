@@ -16,7 +16,8 @@ Con respecto a OpenBSD 5.8 las novedades son:
 		* rsync-adJ 	Para descargar versiones nuevas
 	* Archivos de órdenes nuevos en /usr/sbin/
 		* adicuenta 	Agrega cuenta de correo 
-		* auditabitacoras Audita bitacoras de /var/log
+		* auditabitaco
+		* ras Audita bitacoras de /var/log
 		* elimcuenta 	Elimina cuenta de correo
 		* monitorea 	Revisa conexión a otro servidor
 		* prepopensmtpd 	Prepara servidor de correo
@@ -76,30 +77,30 @@ Con respecto a OpenBSD 5.8 las novedades son:
 
 * Paquetes
 	* Recompilados de portes estables para cerrar fallas
-		a2ps cups-filters freetds gnutls jasper libxml
+		* a2ps cups-filters freetds gnutls jasper libxml
 		mariadb-client mariadb-server net-snmp owncloud 
 		p5-Mail-SpamAssassin png postgis qemu
 	
 	* Recompilados de portes estables para usar xlocale y cerrar fallas
-		postgresql-client postgresql-server postgresql-contrib 
+		* postgresql-client postgresql-server postgresql-contrib 
 		postgresql-docs boost djvulibre gettext-tools ggrep
 		gdk-pixbuf glib2 gtar libidn libunistring libxslt 
 		llvm scribus vlc wget wxWidgets-gtk2
 
 	* Adaptados de portes estables pero mejorados para adJ:
-		xfe		Soporta paquetes tgz
-		hexedit 	Soporta tamaños de archivos más grandes
+		* xfe		Soporta paquetes tgz
+		* hexedit 	Soporta tamaños de archivos más grandes
 
 	* Retroportados de versión posterior cerrar fallas o actualizar
-		chromium node ruby 
+		* chromium node ruby 
 
         * Actualizados, pues están desactualizado en OpenBSD estable y current
-		php php-bz2 php-curl php-fpm php-gd php-intl php-ldap 
+		* php php-bz2 php-curl php-fpm php-gd php-intl php-ldap 
 		php-mcrypt php-mysqli- php-pdo_pgsql php-pgsql php-zip
 		pear-Auth pear-DB_DataObject
        		
 	* Unicos en adJ 
-		emulators/realboy lang/ocaml-labltk sysutils/ganglia 
+		* emulators/realboy lang/ocaml-labltk sysutils/ganglia 
 		textproc/sword textproc/xiphos www/pear-HTML-Common
 		www/pear-HTML-Common2 www/pear-HTML-CSS www/pear-HTML-Javascript
 		www/pear-HTML-Menu www/pear-HTML-QuickForm www/pear-HTML-Table
