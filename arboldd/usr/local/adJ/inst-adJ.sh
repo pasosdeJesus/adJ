@@ -2020,7 +2020,8 @@ if (test "$p" = "") then {
 	echo $p >> /var/www/tmp/inst-adJ.bitacora 2>&1;
 	pkg_add -I -D libdepends -D update -D updatedepends -r $p >> /var/www/tmp/inst-adJ.bitacora 2>&1
 	rm -f /var/www/conf/modules/php.conf /var/www/conf/php.ini /etc/php.ini
-	ln -s /var/www/conf/modules.sample/php-5.6.conf \
+	mkdir -p /var/www/conf/modules/
+	ln -sf /var/www/conf/modules.sample/php-5.6.conf \
 		/var/www/conf/modules/php.conf
 	for sp in gd intl ldap mcrypt mysql pod_mysql pdo_pgsql pgsql zip; do
 		rm -f /etc/php-5.6/$sp
@@ -2118,7 +2119,6 @@ w
 q
 EOF
 	done;
-	chmod -w /var/www/conf/httpd.conf
 
 } else {
 	echo "   Saltando..."  >> /var/www/tmp/inst-adJ.bitacora;
@@ -2204,7 +2204,8 @@ END {
 	}
 }
 ' /var/www/conf/httpd.conf`
-} else {
+	chmod -w /var/www/conf/httpd.conf
+} elif (test "$sweb" = "apache") then {
 	docroot=`awk '
 /^ *root  */ {
 	if (paso==1) {
@@ -2728,34 +2729,6 @@ set -g default-terminal "screen"
 EOF
 } fi;
 
-echo "* Configurar elinks para que opere en xterm, consolas virtuales y tmux en xterm-color" >> /var/www/tmp/inst-adJ.bitacora;
-if (test ! -f /home/$uadJ/.elinks/elinks.conf) then {
-	cat > /home/$uadJ/.elinks/elinks.conf << EOF
-set config.saving_style_w = 1
-set terminal.xterm-color.utf_8_io = 1
-set terminal.xterm-color.colors = 2
-set terminal.xterm-color.charset = "utf-8"
-set terminal.xterm-color.type = 1
-set terminal.xterm-256color.utf_8_io = 1
-set terminal.xterm-256color.colors = 2
-set terminal.xterm-256color.charset = "utf-8"
-set terminal.xterm-256color.type = 1
-set terminal.screen.utf_8_io = 1
-set terminal.screen.colors = 2
-set terminal.screen.charset = "utf-8"
-set terminal.screen.type = 1
-set terminal.screen-256color.utf_8_io = 1
-set terminal.screen-256color.colors = 2
-set terminal.screen-256color.charset = "utf-8"
-set terminal.screen-256color.type = 1
-set terminal.wsvt25.utf_8_io = 0
-set terminal.wsvt25.colors = 1
-set terminal.wsvt25.charset = "ISO-8859-1"
-set terminal.wsvt25.type = 0
-set ui.language = "System"
-EOF
-	chown $uadJ:$uadJ /home/$uadJ/.tmux.conf
-} fi;
 
 echo "* Configurando sistema de impresión cups" | tee -a /var/www/tmp/inst-adJ.bitacora;
 rm -f /etc/rc.d/dbus_daemon
