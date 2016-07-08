@@ -14,7 +14,8 @@ VNUMS=`expr $VNUM + 1`
 VS=`echo $VNUMS | sed -e "s/\([0-9]\)\([0-9]\)/\1.\2/g"`
 # Versión siguiente
 
-ARQ=`uname -m`
+ARQ=amd64
+#`uname -m`
 # Arquitectura
 
 export R="OPENBSD_$VU"
