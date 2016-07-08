@@ -91,8 +91,13 @@ Con respecto a OpenBSD 5.8 las novedades son:
 		* xfe		Soporta paquetes tgz
 		* hexedit 	Soporta tamaños de archivos más grandes
 
-	* Retroportados de versión posterior cerrar fallas o actualizar
-		* chromium node ruby 
+	* Retroportados de versión posterior cerrar fallas o actualizar (aunque existen en actual)
+		* chromium node openldap-client py-openssl py-zopeinterface ruby 
+
+	* Retroportados de versión posterior que no existen en actual
+		* security/letsencrypt devel/py-configargparse devel/py-parsedatetime 
+		devel/py-python2-pythondialog devel/py-zopecomponent devel/py-zopeevent
+		sysutils/py-psutil textproc/py-pyRFC3339/ www/py-ndg-httpsclient
 
         * Actualizados, pues están desactualizado en OpenBSD estable y current
 		* php php-bz2 php-curl php-fpm php-gd php-intl php-ldap 
