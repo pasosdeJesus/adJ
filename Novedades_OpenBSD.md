@@ -91,7 +91,7 @@ Con respecto a OpenBSD 5.8 las novedades son:
 		* xfe		Soporta paquetes tgz
 		* hexedit 	Soporta tamaños de archivos más grandes
 
-	* Retroportados de versión posterior cerrar fallas o actualizar (aunque existen en actual)
+	* Retroportados de versión posterior para cerrar fallas o actualizar (aunque existen en actual)
 		* chromium node openldap-client py-openssl py-zopeinterface ruby 
 
 	* Retroportados de versión posterior que no existen en actual
