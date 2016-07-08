@@ -8,7 +8,6 @@ Con respecto a OpenBSD 5.8 las novedades son:
 	* Palabra daemon renombrada por service ver 
 	<http://aprendiendo.pasosdejesus.org/?id=Renombrando+Daemon+por+Service>
 	* Nombre de compilación del kernel reportado por uname APRENDIENDODEJESUS
-	* Símbolo __adJ__ predefinido en gcc. Facilita uso de xlocale y características únicas de adJ respecto a OpenBSD en algunos portes --como libunistring.
 
 * Sistema Base
 	* Binarios nuevos en /usr/bin/
