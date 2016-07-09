@@ -30,7 +30,7 @@ Pasos importantes para publicar versión beta
 	```
 	doas ./distribucion.sh
 	```
-5. Retocar fecha de publicacion en ```Novedades.ewiki``` y publicar escondido en
+5. Retocar fecha de publicacion en ```Novedades.md``` y publicar escondido en
    http://aprendiendo.pasosdeJesus.org
 6. Generar distribución, imagen iso (```hdes/creaiso.sh```) y probar por 
   ejemplo en ```qemu``` (```hdes/qemu.sh``` o remotamente 
@@ -80,7 +80,6 @@ Pasos importantes para publicar versión mayor
    https://p2pu.org/es/groups/openbsd-adj-como-sistema-de-escritorio/
 6. Actualizar Artículo como Noticia en http://aprendiendo.pasosdeJesus.org,
    http://aprendiendo.pasosdejesus.org/?id=MainMenu,  
-   https://en.wikipedia.org/wiki/AdJ y https://es.wikipedia.org/wiki/AdJ 
 7. Poner Tag en github
 
 	```
@@ -125,5 +124,6 @@ Pasos importantes para publicar versión mayor
 	seguro, amigable para cristian@s y en español, ver 
 	http://aprendiendo.pasosdejesus.org/
 
-10. Actualiza artículos de Wikipedia
+10. Actualiza artículos de Wikipedia 
+   https://en.wikipedia.org/wiki/AdJ y https://es.wikipedia.org/wiki/AdJ 
 

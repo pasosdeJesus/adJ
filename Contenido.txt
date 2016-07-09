@@ -148,24 +148,14 @@ zip-[v]			Comprime en formato ZIP
 * Servidor / Plataforma de comunicaciones:
 dovecot-[v]	Servidor compacto de IMAP/POP3
 ldapvi-[v]		Actualiza entradas LDAP con un editor de texto
+letsencrypt-[v]	Gestiona certificados SSL gratuitos 
 mariadb-client-[v]	Cliente de base de datos SQL de multiples hilos
 mariadb-server-[v] 	Servidor de base de datos SQL de multiples hilos
 nginx-[v]		Servidor web
 openpoppassd-[v]	Serivicio para cambio de claves
-owncloud-[v]	Acceso universal y sencillo a archivos personales compartidos
+owncloud-[v]		Acceso universal a archivos personales compartidos
 p5-Mail-SpamAssassin-[v]	Filtro de correo para identificar y marcar spam
 php-[v]		Lenguaje script empotrado en HTML que opera en servidor
-php-bz2-[v]   	Extensión de compresión bzip2 para php5
-php-curl-[v]		Extensiones para php5 de la libreria de URLs curl
-php-fpm-[v]		Versión independiente de PHP-FPM
-php-gd-[v]		Uso de gd (librería gráfica) desde PHP
-php-intl-[v]		Extensión de internacionalización con librería ICU
-php-ldap-[v]		Extensión a PHP para protocolo LDAP
-php-mcrypt-[v]	Extensión para encripción/desencripción para PHP5
-php-mysqli-[v]	Extensión para acceder a bases de datos mysql para PHP5
-php-pdo_pgsql-[v]	Extensiones PDO para acceso a bases PostgreSQL en PHP5
-php-pgsql-[v]	Uso de PostgreSQL desde PHP
-php-zip-[v]		Funciones zip para php5
 postgis-[v]	        Soporte para objetos geográficos en PostgreSQL
 postgresql-client-[v]	Cliente para motor de bases de datos PostgreSQL
 postgresql-server-[v]	Servidor de bases de datos PostgreSQL
@@ -196,6 +186,7 @@ w3m-[v]		Navegador modo texto que soporta UTF-8 y descargas
 * Soporte, librerías y desarrollo
 a2ps-[v]		Para imprimir en impresoras PostScript
 aalib-[v]		Librería de arte ASCII
+acme-tiny-[v]	Pequeño cliente para letsencrypt de terceros
 adwaita-icon-theme-[v]  Tema de íconos para GNOME
 aspell-[v]	Chequeador de ortografía
 aspell-es-[v]	Diccionario en español para aspell
@@ -233,7 +224,7 @@ djvulibre-[v]	Ver, Decodificar y codificar archivos DjVu
 docbook-[v]		Definiciones XML/SGML de documentación técnica
 docbook-xsl-[v]	Hojas de estilo XSL para DocBook
 docbook-dsssl-[v]	Hojas de estilo DSSSL para DocBook
-droid-fonts-[v]		Fuentes agradables de dispositivos Android
+droid-fonts-[v]	Fuentes agradables de dispositivos Android
 dtc-[v]		Compilador de árboles de dispostivos
 dvi2tty-[v]		Convierte archivos dvi a texto plano
 e2fsprogs-[v]	Utilidades para manejar sistemas de archivos ext2
@@ -265,7 +256,7 @@ gdbm-[v]		Versión de dbm
 gdk-pixbuf-[v]	Librería gráfica para GTK+2
 gegl-[v]		Entorno para procesamiento de imágenes basado en grafos
 GeoIP-[v]		Base de datos de paises de IPs
-gettex ettext-[v]	Internacionalización
+gettext-[v]	Internacionalización
 gettext-tools-[v]	Herramientas para desarrollo y traducciones
 ggrep-[v]		Versión del programa de reconocimiento de patrones grep
 geoclue-[v]	Servicio modular de geoinformación sobre D-Bus
@@ -278,7 +269,7 @@ ghostscript-fonts-[v]	Fuentes para GhostScript
 glew-[v]		Librería GL Extension Wrangler
 glib2-[v]		Más rutinas
 glib2-networking-[v]	Más rutinas
-glib2mm-[v]	Interfaz en C++ para glib2
+glib2mm-[v]		Interfaz en C++ para glib2
 gmake-[v]		Herramienta para construir programas a partir de fuentes
 gmp-[v]		Librería de aritmética de precisión arbitraría
 gnome-doc-utils-[v]	Utilidades para documentación del proyecto GNOME
@@ -508,7 +499,7 @@ p5-LWP-MediaTypes-[v]	Adivina tipo de medio de un url
 p5-Mail-SPF-[v]	Implementación OO de Sender Policy Framerwork
 p5-Mail-Tools-[v]	Módulo para manejar correo con Perl
 p5-Mail-DKIM-[v]	Implementación de firmas DKIM y DomainKeys
-p5-Math-Base-Convert-[v] Conversor rápido de una base a otra
+p5-Math-Base-Convert-[v] 	Conversor rápido de una base a otra
 p5-MLDBM-[v]		Almacena estrucutra de hash multi nivel en uno solo
 p5-Module-Runtime-[v] Manejo de módulos en tiempo de ejecución
 p5-Mozilla-CA-Fake-[v]	Accede a certificados SSL del sistema con Perl
@@ -526,7 +517,7 @@ p5-SQL-Statement-[v]	Procesamineto y reconocimiento SQL
 p5-Socket6-[v]	Definiciones relacionadas con sockets AF_INET6	
 p5-Term-ReadKey-[v]	Cambiar modo de terminal y lecturas que no bloquean
 p5-Time-TimeDate-[v]	Librería para fomatear y reconocer fechas y tiempo
-p5-Tk-[v]   Uniones para Tk 8.4 en Perl
+p5-Tk-[v]   	Uniones para Tk 8.4 en Perl
 p5-URI-[v]		Librería para reconocer URIs
 p5-XML-LibXML-[v]	Interfaz a librería libxml2
 p5-XML-NamespaceSupport-[v]	Interfaz a clase SAX2 NamespaceSupport
@@ -572,6 +563,17 @@ pear-XML-Tree-[v]	Clases para representar datos XML en PHP
 pear-XML-Util-[v]	Utilidad XML
 pecl-redis-[v]
 pecl-uploadprogress-[v]	Medida de progreso de archivos subidos para PHP
+php-bz2-[v]   	Extensión de compresión bzip2 para php5
+php-curl-[v]		Extensiones para php5 de la libreria de URLs curl
+php-fpm-[v]		Versión independiente de PHP-FPM
+php-gd-[v]		Uso de gd (librería gráfica) desde PHP
+php-intl-[v]		Extensión de internacionalización con librería ICU
+php-ldap-[v]		Extensión a PHP para protocolo LDAP
+php-mcrypt-[v]	Extensión para encripción/desencripción para PHP5
+php-mysqli-[v]	Extensión para acceder a bases de datos mysql para PHP5
+php-pdo_pgsql-[v]	Extensiones PDO para acceso a bases PostgreSQL en PHP5
+php-pgsql-[v]	Uso de PostgreSQL desde PHP
+php-zip-[v]		Funciones zip para php5
 pinentry-[v]	Dialogo (ncurses) para ingesar clave o PIN	
 pinentry-gnome3-[v]	
 png-[v]		Librería para manipular imágenes PNG
@@ -590,23 +592,47 @@ ps2eps-[v]		Convierte Postscript a Postscript Encapsulado
 psutils-[v]		Utilidades para manipular documentos Postscript
 pth-[v]		Threads portables GNU
 pulseaudio-[v]	Servidor de sonido en red y multi plataforma
+py-asn1-[v]	Librería de ASN.1 para Python
+py-acme-[v]		Implementción del protocolo ACME
 py-cairo-[v]	Conexión con Cairo para Python
-py-dbus-[v]	Uniones para dbus en Python
+py-cffi-[v]		Interfaz de funciones foraneas para llamar código C
+py-ConfigArgParse-[v]	Remplazo para librería argparse en Python
+py-configobj-[v]	Escribe y lee archivo de configuración
+py-cparser-[v]	Reconocedor de C en Python puro
+py-cryptography-[v]	Recetas y primitivas criptográficas en Python
+py-dbus-[v]		Uniones para dbus en Python
 py-dbus-common-[v]	Archivos comunes para py-dbus
 py-dnspython-[v]	
+py-enum34-[v]		Enum de Python 3.4 retroportado
 py-gdal-[v]		Interfaz con GDAL desde Python
 py-gobject-[v]	Conexión con gobject de glib2 en Python
 py-gtk2-[v]	Conexión con GTK+2 en Python
+py-idna-[v]		Librería de Python para soportar el protocolo IDNA
+py-ipaddress-[v]	ipaddress de Python 3.3 retroportado
 py-libxml-[v]	Uniones de Python con libxml
 py-libxslt-[v]	Uniones de Python con libxslt
 py-lxml-[v]		Uniones en Python para libxml2 y libxslt
+py-mock-[v]		Librearía para pruebas que simula y parcha
+py-ndg-httpsclient-[v]	Soporte HTTPS ampliado para httplib y urllib2
 py-numpy-[v]	Librearía numérica y de arreglos rápida en Python
+py-openssl-[v]	Interfaz para python a librería OpenSSL
+py-parsedatetime-[v]	Reconocer fechas y horas leibles por humanos
 py-Pillow-[v]	Librería en python para imágenes
+py-python2-pythondialog-[v]	Interfaz python a la utilidad dialog de UNIX
+py-psutil-[v]	Librería para obtener información del sistema y uso
 py-psycopg2-[v]	Adaptador a bases de datos PostgreSQL para Ptyhon
+py-pyRFC3339-[v]	Da formato a fechas de acuerdo al RFC3339
+py-requests-[v]	Librería Python para HTTP simple y elegante
 py-qt4-[v]		Uniones de Python con Qt4
 py-qscintilla-[v]	Uniones en python con editor de código fuente Scintilla
 py-setuptools-[v]	Sistema de empaquetamiento de módulos Python
 py-sip-[v]		Uniones entre python y C generadas automaticamente
+py-six-[v]		Librería de compatibilidad entre Python 2 y 3
+py-tz-[v]		API de Python para tratar con zonas horarias
+py-werkzeug-[v]	Colección de utilidades WSGI
+py-zopecomponent-[v]	Arquitectura de componentes de Zope
+py-zopeevent-[v]	Sistema de publicación básico de Zope
+py-zopeinterface-[v]	Interfaz a infraestructura de objetos de Zope
 python-tkinter-[v]	Interfaces gráficas Python
 qca-ossl-[v]    		
 qca2-[v]    		

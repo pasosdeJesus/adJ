@@ -1,0 +1,27 @@
+$OpenBSD: patch-man_nginx_8,v 1.4 2015/06/19 05:41:35 robert Exp $
+--- man/nginx.8.orig	Tue Jun 16 10:49:41 2015
++++ man/nginx.8	Tue Jun 16 19:38:14 2015
+@@ -91,6 +91,23 @@ referenced in the configuration file.
+ Same as
+ .Fl t ,
+ but additionally dump configuration files to standard output.
++.It Fl u
++By default
++.Nm
++will
++.Xr chroot 2
++to the home directory of the user running the daemon,
++typically
++.Dq www ,
++or to the home directory of
++.Ic user
++in
++.Pa nginx.conf .
++The
++.Fl u
++option disables this behaviour, and returns
++.Nm
++to the original "unsecure" behaviour.
+ .It Fl V
+ Print the
+ .Nm
