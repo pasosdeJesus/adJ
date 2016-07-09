@@ -749,7 +749,6 @@ if (test "$sn" = "s") then {
 	# Modificados para posibilitar compilación
 	# Deben estar en mystuff
 
-
 	####
 	# Retroportados de versión ste o current para cerrar fallas o actualizar
 	# Deben estar en arboldes/usr/ports/mystuff y en /usr/ports de current
@@ -758,8 +757,12 @@ if (test "$sn" = "s") then {
 	#paquete node 
 	#paquete ruby paquetes "ruby ruby23-ri_docs" 2.3
 
+	##
 	# Requeridos para operar con postgresql retroportado
-	paquete gdal	
+	paquete gdal
+	paquete libreoffice paquetes "libreoffice libreoffice-i18n-es"
+	paquete postgis
+	paquete py-psycopg2
 
 	####
 	# Recompilados para cerrar fallas, portes actualizados de OpenBSD estable
@@ -801,6 +804,7 @@ if (test "$sn" = "s") then {
 	#paquete vlc
 	#paquete wget
 	#paquete wxWidgets-gtk2
+
 
 	####
 	# Tomados de portes de OpenBSD 5.9 pero mejorados para adJ
