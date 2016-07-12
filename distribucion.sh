@@ -704,7 +704,7 @@ function paquete {
 	} fi;
 }
 
-echo " *> Compilar todos los paquetes de Conteniod.txt en $dini/$V$VESP-$ARQ/paquetes " | tee -a /var/www/tmp/distrib-adJ.bitacora;
+echo " *> Compilar todos los paquetes de Contenido.txt en $dini/$V$VESP-$ARQ/paquetes " | tee -a /var/www/tmp/distrib-adJ.bitacora;
 if (test "$inter" = "-i") then {
 	echo -n "(s/n)? "
 	read sn
@@ -749,7 +749,7 @@ if (test "$sn" = "s") then {
 	# Modificados para posibilitar compilación
 	# Deben estar en mystuff
 
-
+<<<<<<< HEAD
 	####
 	# Retroportados de versión ste o current para cerrar fallas o actualizar
 	# Deben estar en arboldes/usr/ports/mystuff y en /usr/ports de current
@@ -758,12 +758,17 @@ if (test "$sn" = "s") then {
 	#paquete node 
 	#paquete ruby paquetes "ruby ruby23-ri_docs" 2.3
 
+	##
 	# Requeridos para operar con postgresql retroportado
-	paquete gdal	
+	paquete gdal
+	paquete libreoffice paquetes "libreoffice libreoffice-i18n-es"
+	paquete postgis
+	paquete py-psycopg2
 
+=======
+>>>>>>> 0e12c529fd4bb7b7e2a9acf26d006454824ccbb1
 	####
 	# Recompilados para cerrar fallas, portes actualizados de OpenBSD estable
-	
 	# Para que operen bien basta actualizar CVS de /usr/ports 
 	# Los siguientes no deben estar en arboldes/usr/ports/mystuff
 	#paquete a2ps
@@ -782,6 +787,7 @@ if (test "$sn" = "s") then {
 
 	#paquete webkit paquetes "webkit webkit-gtk3"
 	# FLAVOR=gtk3 make paquete webkit-gtk3
+
 
 	####
 	# Recompilados de estable que usan xlocale (y pueden cerrar fallas)
@@ -802,17 +808,48 @@ if (test "$sn" = "s") then {
 	#paquete wget
 	#paquete wxWidgets-gtk2
 
+<<<<<<< HEAD
+
 	####
 	# Tomados de portes de OpenBSD 5.9 pero mejorados para adJ
 	# Deben estar en arboldes/usr/ports/mystuff 
 	#paquete xfe
+=======
+	####
+	# Adaptados de portes estables pero mejorados para adJ
+	# Deben estar en arboldes/usr/ports/mystuff 
+	paquete xfe
+
+	####
+	# Aunque existen en versión actual retroportados de versión siguiente 
+	# o current para cerrar fallas o actualizar
+	# Deben estar en arboldes/usr/ports/mystuff y en /usr/ports 
+	paquete chromium
+	paquete node 
+	paquete openldap-client 
+	paquete py-openssl
+	paquete py-zopeinterface
+	paquete ruby paquetes "ruby ruby23-ri_docs" 2.3
+>>>>>>> 0e12c529fd4bb7b7e2a9acf26d006454824ccbb1
 
 	###
         # Actualizados.  Están desactualizado en OpenBSD estable y current
 	#paquete php paquetes "php php-bz2 php-curl php-fpm php-gd php-intl php-ldap php-mcrypt php-mysqli- php-pdo_pgsql php-pgsql php-zip" 5.6
 	paquete pear-Auth
 	paquete pear-DB_DataObject
-       		
+
+	##
+	# Retroportados no existentes en versión actual
+	paquete security/letsencrypt paquetes "acme-tiny letsencrypt py-acme" 
+	paquete devel/py-configargparse paquetes "py-ConfigArgParse"
+	paquete devel/py-parsedatetime
+	paquete devel/py-python2-pythondialog
+	paquete devel/py-zopecomponent
+	paquete devel/py-zopeevent
+	paquete sysutils/py-psutil
+	paquete textproc/py-pyRFC3339/
+	paquete www/py-ndg-httpsclient
+
 	####
 	# Unicos en adJ 
 	# Deben estar en arboldes/usr/ports/mystuff pero no en /usr/ports
@@ -1084,23 +1121,22 @@ echo " *> Revisando faltantes con respecto a Contenido.txt" | tee -a /var/www/tm
 		} fi; 
 	done
 	echo " *> Copiando otros textos";
-	if (test -f Actualiza.txt) then {
-		cp Actualiza.txt $V$VESP-$ARQ/Actualiza.txt 
+	if (test -f Actualiza.md) then {
+		cp Actualiza.md $V$VESP-$ARQ/
 	} fi;
-	if (test -f Dedicatoria.txt) then {
-		cp Dedicatoria.txt $V$VESP-$ARQ/Dedicatoria.txt
+	if (test -f Dedicatoria.md) then {
+		cp Dedicatoria.md $V$VESP-$ARQ/
 	} fi;
-	if (test -f Derechos.txt) then {
-		cp Derechos.txt $V$VESP-$ARQ/Derechos.txt
+	if (test -f Derechos.md) then {
+		cp Derechos.md $V$VESP-$ARQ/
 	} fi;
-	if (test -f Novedades.ewiki) then {
-		echo "*** De Ewiki a Texto" | tee -a /var/www/tmp/distrib-adJ.bitacora
-		awk -f hdes/ewikiAtexto.awk Novedades.ewiki > tmp/Novedades.txt
-		#recode latin1..utf8 tmp/Novedades.txt
-	} fi;
-	if (test -f tmp/Novedades.txt) then {
+	if (test -f Novedades.md) then {
 		echo "*** Novedades" | tee -a /var/www/tmp/distrib-adJ.bitacora;
-		cp tmp/Novedades.txt $V$VESP-$ARQ/Novedades.txt
+		cp Novedades.md $V$VESP-$ARQ/
+	} fi;
+	if (test -f Novedades_OpenBSD.md) then {
+		echo "*** Novedades_OpenBSD" | tee -a /var/www/tmp/distrib-adJ.bitacora;
+		cp Novedades_OpenBSD.md $V$VESP-$ARQ/
 	} fi;
 } fi;
 

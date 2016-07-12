@@ -1,0 +1,20 @@
+#!/bin/sh
+#
+# $OpenBSD: slapd.rc,v 1.4 2012/05/05 14:41:30 sthen Exp $
+
+daemon="${TRUEPREFIX}/libexec/slapd"
+daemon_flags="-u _openldap"
+
+# To bind to multiple URLs, pass this to rc.d(8) via /etc/rc.conf.local:
+# slapd_flags="-u _openldap -h ldap:///\ ldaps:///"
+# Note the escaped space between URLs. ^^
+
+. /etc/rc.d/rc.subr
+
+rc_reload=NO
+
+rc_pre() {
+	/usr/bin/install -d -o _openldap /var/run/openldap
+}
+
+rc_cmd $1

@@ -540,12 +540,20 @@ p5-Time-Piece p5-Module-Loaded xcompmgr; do
 	done;
 	ed /etc/mixerctl.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/headphones/hp/g
+w
+q
+EOF
+	ed /etc/mixerctl.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/speaker/spkr/g
 w
 q
 EOF
 	ed /etc/X11/xorg.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/i810/intel/g
+w
+q
+EOF
+	ed /etc/X11/xorg.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/.*RgbPath .*//g
 w
 q
@@ -2048,7 +2056,8 @@ if (test "$p" = "") then {
 	echo $p >> /var/www/tmp/inst-adJ.bitacora 2>&1;
 	pkg_add -I -D libdepends -D update -D updatedepends -r $p >> /var/www/tmp/inst-adJ.bitacora 2>&1
 	rm -f /var/www/conf/modules/php.conf /var/www/conf/php.ini /etc/php.ini
-	ln -s /var/www/conf/modules.sample/php-5.6.conf \
+	mkdir -p /var/www/conf/modules/
+	ln -sf /var/www/conf/modules.sample/php-5.6.conf \
 		/var/www/conf/modules/php.conf
 	for sp in gd intl ldap mcrypt mysql pod_mysql pdo_pgsql pgsql zip; do
 		rm -f /etc/php-5.6/$sp
@@ -2058,7 +2067,15 @@ if (test "$p" = "") then {
 		chmod +w /var/www/conf/httpd.conf
 		ed /var/www/conf/httpd.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/\#AddType application\/x-httpd-php .php/AddType application\/x-httpd-php .php/g
+w
+q
+EOF
+		ed /var/www/conf/httpd.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/DirectoryIndex index.html.*/DirectoryIndex index.html index.php/g
+w
+q
+EOF
+		ed /var/www/conf/httpd.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/UseCanonicalName *On/UseCanonicalName Off/g
 w
 q
@@ -2068,9 +2085,15 @@ EOF
 	ed /etc/php-fpm.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/; listen.owner = www/listen.owner = www/g
 w
+q
+EOF
+	ed /etc/php-fpm.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/; listen.group = www/listen.group = www/g
 w
-,s/; listen.*/listen = \/var\/www\/var\/run\/php-fpm.sock/g
+q
+EOF
+	ed /etc/php-fpm.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
+,s/; *listen.*/listen = \/var\/www\/var\/run\/php-fpm.sock/g
 w
 q
 EOF
@@ -2132,7 +2155,6 @@ w
 q
 EOF
 	done;
-	chmod -w /var/www/conf/httpd.conf
 
 } else {
 	echo "   Saltando..."  >> /var/www/tmp/inst-adJ.bitacora;
@@ -2218,7 +2240,8 @@ END {
 	}
 }
 ' /var/www/conf/httpd.conf`
-} else {
+	chmod -w /var/www/conf/httpd.conf
+} elif (test "$sweb" = "apache") then {
 	docroot=`awk '
 /^ *root  */ {
 	if (paso==1) {
@@ -2349,6 +2372,9 @@ if (test -f /home/$uadJ/.fluxbox/menu) then {
 	rm -f /home/$uadJ/.fluxbox/init
 } fi;
 
+# Por cambiar mas en paquetes
+ln -s /usr/local/bin/gnome-keyring-daemon /usr/local/bin/gnome-keyring-servicio
+
 if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 	mkdir -p /home/$uadJ/.fluxbox
 	cat > /home/$uadJ/.fluxbox/menu <<EOF
@@ -2357,7 +2383,7 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 	[exec] (xfe - Archivos) {PATH=\$PATH:/usr/sbin:/usr/local/sbin:/sbin /usr/local/bin/xfe}
 	[exec] (xterm) {xterm -en utf8 -e /bin/ksh -l}
 	[exec] (chromium) {/usr/local/bin/chrome -allow-file-access-from-files}
-	[exec] (midori) {/usr/local/bin/midori}
+	[exec] (midori) { export \`/usr/local/bin/gnome-keyring-servicio -s\`; /usr/local/bin/midori}
 [submenu] (Espiritualidad)
 	[exec] (xiphos) {/usr/local/bin/xiphos}
 	[exec] (Evangelios de dominio publico) {/usr/local/bin/chrome /usr/local/share/doc/evangelios_dp/}
@@ -2739,34 +2765,6 @@ set -g default-terminal "screen"
 EOF
 } fi;
 
-echo "* Configurar elinks para que opere en xterm, consolas virtuales y tmux en xterm-color" >> /var/www/tmp/inst-adJ.bitacora;
-if (test ! -f /home/$uadJ/.elinks/elinks.conf) then {
-	cat > /home/$uadJ/.elinks/elinks.conf << EOF
-set config.saving_style_w = 1
-set terminal.xterm-color.utf_8_io = 1
-set terminal.xterm-color.colors = 2
-set terminal.xterm-color.charset = "utf-8"
-set terminal.xterm-color.type = 1
-set terminal.xterm-256color.utf_8_io = 1
-set terminal.xterm-256color.colors = 2
-set terminal.xterm-256color.charset = "utf-8"
-set terminal.xterm-256color.type = 1
-set terminal.screen.utf_8_io = 1
-set terminal.screen.colors = 2
-set terminal.screen.charset = "utf-8"
-set terminal.screen.type = 1
-set terminal.screen-256color.utf_8_io = 1
-set terminal.screen-256color.colors = 2
-set terminal.screen-256color.charset = "utf-8"
-set terminal.screen-256color.type = 1
-set terminal.wsvt25.utf_8_io = 0
-set terminal.wsvt25.colors = 1
-set terminal.wsvt25.charset = "ISO-8859-1"
-set terminal.wsvt25.type = 0
-set ui.language = "System"
-EOF
-	chown $uadJ:$uadJ /home/$uadJ/.tmux.conf
-} fi;
 
 echo "* Configurando sistema de impresión cups" | tee -a /var/www/tmp/inst-adJ.bitacora;
 rm -f /etc/rc.d/dbus_daemon
