@@ -12,6 +12,15 @@ DIROTRO="comp"
 
 RSYNCHOST="ftp.pasosdeJesus.org"
 
+# Datos del CVS del cual se actualizan fuentes de OpenBSD    
+export DESTDIR=/destdir; 
+export RELEASEDIR=/releasedir
+export XSRCDIR=/usr/xenocara;
+
+# Datos del CVS del cual se actualizan fuentes de OpenBSD
+USUARIOCVS=""
+MAQCVS=""
+DIRCVS=""
 
 # Estas variables controlan operacion de distribucion.sh pueden ser s o n
 export autoCvs=n

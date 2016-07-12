@@ -40,6 +40,11 @@ excluye="chromium-.*-proprietary.* gnupg-2.* libstdc++-.* python-.* python-tkint
 RUTAKERNELREESPECIAL=""
 # Si debe usarse un kernel por ejemplo sin rlphy
 
+# Datos del CVS del cual se actualizan fuentes de OpenBSD
+USUARIOCVS=""
+MAQCVS=""
+DIRCVS=""
+
 export DESTDIR=/destdir; 
 export RELEASEDIR=/releasedir
 export XSRCDIR=/usr/xenocara;
