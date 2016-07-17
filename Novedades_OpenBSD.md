@@ -1,8 +1,8 @@
-Con respecto a OpenBSD 5.8 las novedades son:
+Con respecto a OpenBSD 5.9 las novedades son:
 
 * Proceso de Instalación:
 	* upgrade install install.sub 	En español
-	* Organización del CD de instalacińo diferente
+	* Organización del CD de instalación diferente
 
 * Kernel
 	* Palabra daemon renombrada por service ver 
@@ -33,12 +33,13 @@ Con respecto a OpenBSD 5.8 las novedades son:
 		* inst-adJ.sh	Instala adJ
 		* inst-sivel.sh	Instala SIVeL
 		* inst.sh		Inicia inst-adJ
-		* reflejazona.sh 	A partir de una zona dns maestra genera reflejo
+		* reflejazona.sh 	Genera zona reflejada para DNS
 		* repadicuenta.sh Ejecuta adicuenta para todo usuario
 		* revisaapachelog.pl Revisa bitácora de Apache
 		* revisaauthlog.pl Revisa bitácora authlog
 		* rutinas.sh	Diversas rutinas para archivos de ord.
 		* servicio-etc.sh	Cambia daemon por servicio en /etc
+		* vuelcamysql.sh Vuelca base de datos MySQL
 	* Páginas del manual nuevas en /usr/shar/man/man3
 		* gctype_l gdigittoint_l gduplocale gfreelocale gisalnum_l,
 		gisalpha_l gisascii_l gisblank_l giscntrl_l gisdigit_l
@@ -55,7 +56,10 @@ Con respecto a OpenBSD 5.8 las novedades son:
 		gtolower_l gtoupper_l gtowctrans_l gtowlower_l gtowupper_l
 		guselocale gwcscoll gwcsnrtombs_l gwcsrtombs_l gwcstombs_l
 		gwcsxfrm gwctob_l gwctomb_l gwctype_l gxlocale
-	* Encabezados de gcc modificados par definir símbolo \_\_adJ\_\_ que identifica compilaciones en el sistema operativo. Facilita uso de xlocale y características únicas de adJ respecto a OpenBSD en algunos portes --como libunistring.
+	* Encabezados de gcc modificados par definir símbolo \_\_adJ\_\_ que 
+	  identifica compilaciones en el sistema operativo. Facilita uso de 
+	  xlocale y características únicas de adJ respecto a OpenBSD en 
+	  algunos portes --como libunistring.
 	* Locales nuevos en /usr/share/locale/
 		* Entre otros de todos los paises de latinoamérica
 	* Zonas horarias nuevas en /usr/share/zoneinfo:
@@ -92,13 +96,15 @@ Con respecto a OpenBSD 5.8 las novedades son:
 		* xfe		Soporta paquetes tgz
 		* hexedit 	Soporta tamaños de archivos más grandes
 
-	* Retroportados de versión posterior para cerrar fallas o actualizar (aunque existen en actual)
+	* Retroportados de versión posterior para cerrar fallas o actualizar 
+	  (aunque existen en actual)
 		* chromium node openldap-client py-openssl py-zopeinterface ruby 
 
 	* Retroportados de versión posterior que no existen en actual
-		* security/letsencrypt devel/py-configargparse devel/py-parsedatetime 
-		devel/py-python2-pythondialog devel/py-zopecomponent devel/py-zopeevent
-		sysutils/py-psutil textproc/py-pyRFC3339/ www/py-ndg-httpsclient
+		* security/letsencrypt devel/py-configargparse 
+		  devel/py-parsedatetime devel/py-python2-pythondialog 
+		  devel/py-zopecomponent devel/py-zopeevent sysutils/py-psutil 
+		  textproc/py-pyRFC3339/ www/py-ndg-httpsclient
 
 	* Actualizados, pues están desactualizado en OpenBSD estable y current
 		* php php-bz2 php-curl php-fpm php-gd php-intl php-ldap 

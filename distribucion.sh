@@ -749,42 +749,46 @@ if (test "$sn" = "s") then {
 	# Modificados para posibilitar compilación
 	# Deben estar en mystuff
 
-<<<<<<< HEAD
 	####
-	# Retroportados de versión ste o current para cerrar fallas o actualizar
+	# Retroportados para cerrar fallas o actualizar
 	# Deben estar en arboldes/usr/ports/mystuff y en /usr/ports de current
 	paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs" 
 	#paquete chromium
 	#paquete node 
-	#paquete ruby paquetes "ruby ruby23-ri_docs" 2.3
+	paquete ruby paquetes "ruby ruby23-ri_docs" 2.3
 
 	##
-	# Requeridos para operar con postgresql retroportado
+	# Nueva revisión para operar con librerías retroportadas 
+	# Deben estar en arbodes/usr/ports/mystuff
 	paquete gdal
 	paquete libreoffice paquetes "libreoffice libreoffice-i18n-es"
 	paquete postgis
 	paquete py-psycopg2
+	paquete qgis
 
-=======
->>>>>>> 0e12c529fd4bb7b7e2a9acf26d006454824ccbb1
 	####
 	# Recompilados para cerrar fallas, portes actualizados de OpenBSD estable
 	# Para que operen bien basta actualizar CVS de /usr/ports 
 	# Los siguientes no deben estar en arboldes/usr/ports/mystuff
-	#paquete a2ps
-	#paquete cups-filters
-	#paquete gnutls
-	#paquete jasper
-	#paquete libxml
-	#paquete mariadb-client paquetes "mariadb-client mariadb-server" 
-	#paquete net-snmp
-	#paquete owncloud
-	#paquete p5-Mail-SpamAssassin
-	#paquete png
-	#paquete postgis
-	#paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs" 
-	#paquete qemu
-
+	paquete bzip2
+	paquete libtalloc
+	paquete gd
+	paquete git paquetes "git"
+	paquete imlib2
+	paquete ImageMagick
+	paquete libksba
+	paquete mariadb-client paquetes "mariadb-client mariadb-server" 
+	paquete mplayer
+	paquete nginx
+	paquete node
+	paquete p5-Mail-SpamAssassin
+	paquete p7zip paquetes "p7zip p7zip-rar"
+	paquete pidgin paquetes "libpurple pidgin"
+	paquete samba paquetes "ldb samba tevent"
+	paquete tdb
+	paquete tiff
+	paquete webkit
+	paquete webkitgtk4
 	#paquete webkit paquetes "webkit webkit-gtk3"
 	# FLAVOR=gtk3 make paquete webkit-gtk3
 
@@ -792,29 +796,22 @@ if (test "$sn" = "s") then {
 	####
 	# Recompilados de estable que usan xlocale (y pueden cerrar fallas)
 	# No deben estar en mystuff
-	#paquete boost
-	#paquete djvulibre
-	#paquete gettext-tools
-	#paquete ggrep
-	#paquete gdk-pixbuf
-	#paquete glib2
-	#paquete gtar
-	#paquete libidn
-	#paquete libunistring
-	#paquete libxslt
-	#paquete llvm
-	#paquete scribus
-	#paquete vlc
-	#paquete wget
-	#paquete wxWidgets-gtk2
+	paquete boost
+	paquete djvulibre
+	paquete gettext-tools
+	paquete ggrep
+	paquete gdk-pixbuf
+	paquete glib2
+	paquete gtar
+	paquete libidn
+	paquete libunistring
+	paquete libxslt
+	paquete llvm
+	paquete scribus
+	paquete vlc
+	paquete wget
+	paquete wxWidgets-gtk2
 
-<<<<<<< HEAD
-
-	####
-	# Tomados de portes de OpenBSD 5.9 pero mejorados para adJ
-	# Deben estar en arboldes/usr/ports/mystuff 
-	#paquete xfe
-=======
 	####
 	# Adaptados de portes estables pero mejorados para adJ
 	# Deben estar en arboldes/usr/ports/mystuff 
@@ -824,17 +821,16 @@ if (test "$sn" = "s") then {
 	# Aunque existen en versión actual retroportados de versión siguiente 
 	# o current para cerrar fallas o actualizar
 	# Deben estar en arboldes/usr/ports/mystuff y en /usr/ports 
-	paquete chromium
+	#paquete chromium
 	paquete node 
 	paquete openldap-client 
 	paquete py-openssl
 	paquete py-zopeinterface
-	paquete ruby paquetes "ruby ruby23-ri_docs" 2.3
->>>>>>> 0e12c529fd4bb7b7e2a9acf26d006454824ccbb1
+	#paquete ruby paquetes "ruby ruby23-ri_docs" 2.3
 
 	###
         # Actualizados.  Están desactualizado en OpenBSD estable y current
-	#paquete php paquetes "php php-bz2 php-curl php-fpm php-gd php-intl php-ldap php-mcrypt php-mysqli- php-pdo_pgsql php-pgsql php-zip" 5.6
+	paquete php paquetes "php php-bz2 php-curl php-fpm php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 5.6
 	paquete pear-Auth
 	paquete pear-DB_DataObject
 
@@ -857,6 +853,7 @@ if (test "$sn" = "s") then {
 	paquete emulators/realboy
 	paquete lang/ocaml-labltk
 	paquete sysutils/ganglia
+	paquete sysutils/htop
 	paquete textproc/sword
 	paquete textproc/xiphos
 	paquete www/pear-HTML-Common

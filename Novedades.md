@@ -3,54 +3,25 @@ Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y que anhelamos fuese usada por Jesús durante el Milenio.
 
 ###Versión: 5.9a1
-Fecha de publicación: 1/Ago/2016
-
+Fecha de publicación: 20/Jul/2016
 
 Puede ver novedades respecto a OpenBSD en:
 	<https://github.com/pasosdeJesus/adJ/blob/ADJ_5_9/Novedades_OpenBSD.md>
 
-
 ##NOVEDADES RESPECTO A adJ 5.8p1
-
 
 ###KERNEL Y SISTEMA BASE
 
-* Parches al sistema base hasta el 1.Ago.2016, que cierran las x fallas de 
+-- sys/net/netisr.{c,h} cambiados libssl
+* Parches al sistema base hasta el 20.Jun.2016, que cierran las x fallas de 
   seguridad y las y de robustez resueltas para fuentes de OpenBSD descritas 
   en <http://www.openbsd.org/errata59.html>. 
   Los binarios distribuidos de OpenBSD 5.9 no resuelven estas fallas. 
   .. también afectan OpenBSD 6.0, los binarios de esa distribución no los 
   resuelven.
-* Utilidad ```localedef``` especificada en el estándar POSIX para convertir 
-  formatos de fechas y horas en un formato estándar POSIX al formato de OpenBSD.
-  Configuraciones regionales de países tomadas del CLDR de Unicode.
-* Soporte en la librería de C para presentar fechas, horas, cantidades 
-  monetarias, números y ordenamientos alfabéticos (cotejación) con las 
-  convenciones de cada país de latinoamérica (y de otros locales soportados por 
-  OpenBSD) de acuerdo al estándar POSIX. Opera bien en codificaciones de 
-  8 bits o para español en codificación UTF-8. Buena parte de este soporte, 
-  así como el de xlocale se basaron en FreeBSD.  Estas mejoras fueron aportadas 
-  a OpenBSD (cotejación desde adJ 5.2, cantidades monetarias y números desde 
-  5.4 y fechas y horas desde 5.5) y se anhela su integración en futuras 
-  versiones.    Así en adJ por ejemplo los ordenamientos alfabéticos en 
-  PostgreSQL, LibreOffice y otros programas son correctos en español.
-* La librería de C de adJ incluye la función strfmon (que es estándar POSIX 2008
-  pero no incluida en OpenBSD) y aprueba el uso de mblen, mbstowcs, mbtowc, 
-  wcstombs, wctomb (estandarizadas por ISO C pero desaprobadas por OpenBSD
-  desde 5.9) así como de wcsxfrm y wcscoll (estandarizadas en POSIX pero
-  desaprobadas en OpenBSD a partir de 5.9).  A partir de OpenBSD 5.9 la librería
-  de C marca las funciones con DEF_STRONG o DEF_WEAK dependiendo si son
-  o no estándar.
-* Símbolo ```__adJ__``` predefinido en gcc.  Facilita uso de xlocale 
-  y características únicas de adJ respecto a OpenBSD en algunos portes 
-  --como ```libunistring```.
 * Retroportados, recompilados o mejorados más de xx paquetes de OpenBSD para 
   cerrar fallas de seguridad o emplear xlocale,  ver detalles en sección 
   PAQUETES EXCLUSIVOS DE ADJ.
-* Hemos remplazando ```daemon``` por ```servicio``` en buena parte del sistema 
-  base (ver por ejemplo ```vmstat -s``` o ```less /var/log/servicio``` o 
-  ```man servicio```).   En 5.9 ampliamos este remplazo a programas de 
-  ```/usr/libexec``` y ```/usr/sbin```
 
 Entre las novedades reportadas en las `Notas de publicación de OpenBSD 5.9' 
 destacamos las siguientes relacionadas con amd64:
@@ -102,19 +73,19 @@ adJ y OpenBSD 5.9:
 * ```SIVeL 1.2.2```  Ver 
   <http://sivel.sourceforge.net/1.2/actualizacion-sivel.html#actualizaciondeunounoaunodos>
 * ```SIVeL 2.0a9``` Versión alfa de SIVeL 2. Escrita sobre Ruby on Rails.
-* ```PostgreSQL xx``` retroportado y recompilado para cerrar fallas, pero 
+* ```PostgreSQL 9.5.3``` retroportado y recompilado para cerrar fallas, pero 
   además con soporte UTF-8 y ordenamientos alfabéticos en español.  Desde adJ 
-  5.9 socket reubicado de ```/var/www/tmp``` a ```/var/www/var/run/postgresql```.
+  5.8 socket reubicado de ```/var/www/tmp``` a ```/var/www/var/run/postgresql```.
   En adJ la información queda cifrada cuando así se elije al instalar o 
   actualizar adJ.  Ver detalles de como usar cotejación en 
   <http://aprendiendo.pasosdeJesus.org/?id=i18n>
-* ```Ruby rr``` retroportado de OpenBSD-current y probado con aplicaciones 
-  Rails rr.   Puede ver más sobre Ruby on Rails sobre adJ en 
+* ```Ruby 2.3.1``` retroportado de OpenBSD-current y probado con aplicaciones 
+  Rails 5.   Puede ver más sobre Ruby on Rails sobre adJ en 
   <http://dhobsd.pasosdeJesus.org/Ruby_on_Rails_en_OpenBSD.html>
-* ```node 4.3.0``` probado con aplicaciones 
+* ```node 4.2.1``` probado con aplicaciones 
   como FreeCodeCamp --requiere y por eso se incluyen gcc-4.9.3 y g++-4.9.3 -- 
   ver <http://dhobsd.pasosdejesus.org/freecodecamp.html>
-* ```PHP-ppp```.  
+* ```PHP-.5.6.23```.  
 * Para activar soporte de xlocale se han recompilado los siguientes paquetes 
   que están en portes de OpenBSD 5.9: ```boost```, ```djvulibre```, 
   ```ggrep```, ```glib2```, ```gtar```, ```libidn```, ```libxslt```, 
@@ -122,8 +93,14 @@ adJ y OpenBSD 5.9:
 * Para cerrar fallas se han recompilado los siguientes paquetes a partir de 
   portes actualizados de OpenBSD 5.9 (pero no incluidos en binarios de ese 
   sistema):  ```...```.
-* Se han retroportado otros paquetes de OpenBSD-Current: ```chromium 46``` 
-  (más estable)
+* chromium 48.0.2564.116 recompilado con llaves de API de adJ
+  (más estable). Chromium 48.0.2564.116 liberado el 18.Feb.2016 viene en
+  OpenBSD 5.9 y no hay actualización para OpenBSD 5.9 (ver 
+http://googlechromereleases.blogspot.com.co/2016/02/stable-channel-update_18.html ), terminó serie 48.  La serie 49 tuvo 5 publicaciones de versión estable 
+  la última es de 7.Abr.2016 49.0.2623.112 . La serie 50 usa atomic de C++11
+  no soportado en OpenBSD por libstdc++ (y dado que no hay libc++) como 
+  se explica en https://bugzilla.mozilla.org/show_bug.cgi?id=876156
+
 * Fuentes de la documentación basico_adJ convertida a Markdown, ver 
   <http://pasosdeJesus.github.io/basico_adJ/> y sobre la herramienta pandoc en
   <http://dhobsd.pasosdejesus.org/pandoc.html>
@@ -135,6 +112,10 @@ adJ y OpenBSD 5.9:
 ### PAQUETES DE OPENBSD
 
 Los paquetes para OpenBSD 5.9 también funcionan sin cambios. Resaltamos:
+* ruby 2.3.1 retroportado, opera bien con Rails 5
+* PostgreSQL 9.5.3 retroportado y se recompilaron otros paquetes que 
+  dependen de este (libreoffice, gdal, postgis, py-psycopg2)
+
 * nginx 1.9.10 que puede ser util mientras migra a OpenBSD httpd, 
   ver <http://pasosdeJesus.github.io/servidor_adJ/sevidorweb.html#openbsd-httpd>
 * LibreOffice actualizado a 5.0.4.2, gimp a 2.8.16
