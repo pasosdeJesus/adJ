@@ -9,7 +9,7 @@ COMMENT-gdbm =		gdbm interface for ruby
 COMMENT-tk =		tk interface for ruby
 COMMENT-ri_docs =	ri documentation files for ruby
 
-VERSION =		2.3.0
+VERSION =		2.3.1
 RUBYLIBREV =		2.3
 DISTNAME =		ruby-${VERSION}
 

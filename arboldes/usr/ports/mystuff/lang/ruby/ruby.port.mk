@@ -1,8 +1,4 @@
-<<<<<<< ruby.port.mk
-# $OpenBSD: ruby.port.mk,v 1.84 2015/08/27 14:36:14 jeremy Exp $
-=======
 # $OpenBSD: ruby.port.mk,v 1.86 2016/01/17 19:39:05 jasper Exp $
->>>>>>> 1.86
 
 # ruby module
 
@@ -247,16 +243,6 @@ MODRUBY_ADJ_REPLACE=	for pat in ${MODRUBY_ADJ_FILES:QL}; do \
 MODRUBY_pre-configure += ${MODRUBY_ADJ_REPLACE}
 .endif
 
-<<<<<<< ruby.port.mk
-MODRUBY_WANTLIB+=	c m
-.if ${MODRUBY_REV} != 1.8
-MODRUBY_WANTLIB+=	pthread
-.endif
-.if ${MODRUBY_REV} == 2.1 || ${MODRUBY_REV} == 2.2
-MODRUBY_WANTLIB+=	gmp
-.endif
-
-=======
 MODRUBY_WANTLIB+=	c m
 .if ${MODRUBY_REV} != 1.8
 MODRUBY_WANTLIB+=	pthread
@@ -265,7 +251,6 @@ MODRUBY_WANTLIB+=	pthread
 MODRUBY_WANTLIB+=	gmp
 .endif
 
->>>>>>> 1.86
 .if ${CONFIGURE_STYLE:L:Mext} || ${CONFIGURE_STYLE:L:Mextconf}
 # Ruby C exensions are specific to an arch and are loaded as
 # shared libraries (not compiled into ruby), so set SHARED_ONLY
