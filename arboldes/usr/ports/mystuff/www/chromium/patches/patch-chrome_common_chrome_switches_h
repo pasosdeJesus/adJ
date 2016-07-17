@@ -1,12 +1,12 @@
-$OpenBSD: patch-chrome_common_chrome_switches_h,v 1.21 2015/10/14 16:42:07 robert Exp $
---- chrome/common/chrome_switches.h.orig.port	Tue Oct 13 21:04:32 2015
-+++ chrome/common/chrome_switches.h	Wed Oct 14 07:41:13 2015
-@@ -347,7 +347,7 @@ extern const char kHelpShort[];
- extern const char kPasswordStore[];
+$OpenBSD: patch-chrome_common_chrome_switches_h,v 1.27 2016/05/27 06:28:20 robert Exp $
+--- chrome/common/chrome_switches.h.orig.port	Thu May 26 08:25:25 2016
++++ chrome/common/chrome_switches.h	Thu May 26 08:25:33 2016
+@@ -387,7 +387,7 @@ extern const char kDisableNewTaskManager[];
+ extern const char kEnableWaylandServer[];
  #endif
  
--#if defined(OS_LINUX) && !defined(OS_CHROMEOS)
-+#if (defined(OS_BSD) || defined(OS_LINUX)) && !defined(OS_CHROMEOS)
- extern const char kMigrateDataDirForSxS[];
+-#if defined(OS_WIN) || defined(OS_LINUX)
++#if defined(OS_WIN) || defined(OS_LINUX) || defined(OS_BSD)
+ extern const char kEnableInputImeAPI[];
+ extern const char kDisableInputImeAPI[];
  #endif
- 

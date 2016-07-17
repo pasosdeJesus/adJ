@@ -1,8 +1,8 @@
-$OpenBSD: patch-third_party_WebKit_Source_platform_heap_ThreadState_cpp,v 1.9 2015/10/14 16:42:07 robert Exp $
---- third_party/WebKit/Source/platform/heap/ThreadState.cpp.orig.port	Tue Oct 13 21:04:35 2015
-+++ third_party/WebKit/Source/platform/heap/ThreadState.cpp	Wed Oct 14 07:41:14 2015
-@@ -68,7 +68,7 @@ extern "C" void* __libc_stack_end;  // NOLINT
- #include <limits>
+$OpenBSD: patch-third_party_WebKit_Source_platform_heap_ThreadState_cpp,v 1.13 2016/04/16 19:08:46 robert Exp $
+--- third_party/WebKit/Source/platform/heap/ThreadState.cpp.orig.port	Wed Apr 13 23:00:02 2016
++++ third_party/WebKit/Source/platform/heap/ThreadState.cpp	Thu Apr 14 08:25:14 2016
+@@ -60,7 +60,7 @@
+ #include <sanitizer/msan_interface.h>
  #endif
  
 -#if OS(FREEBSD)

@@ -1,9 +1,18 @@
-$OpenBSD: patch-chrome_chrome_common_gypi,v 1.4 2015/10/14 16:42:07 robert Exp $
---- chrome/chrome_common.gypi.orig.port	Tue Oct 13 21:04:32 2015
-+++ chrome/chrome_common.gypi	Wed Oct 14 10:33:10 2015
-@@ -401,6 +401,11 @@
-           'sources': [ '<@(chrome_common_mac_sources)' ],
-           'dependencies': [ 'app_mode_app_support' ],
+$OpenBSD: patch-chrome_chrome_common_gypi,v 1.9 2016/05/27 06:28:20 robert Exp $
+--- chrome/chrome_common.gypi.orig.port	Wed May 25 21:00:58 2016
++++ chrome/chrome_common.gypi	Thu May 26 08:09:42 2016
+@@ -382,7 +382,7 @@
+             ['chromeos==1', {
+               'sources': [ '<@(chrome_common_extensions_chromeos_sources)' ],
+             }],
+-            ['OS=="win" or OS=="linux"', {
++            ['OS=="win" or OS=="linux" or os_bsd==1', {
+               'sources': [
+                 'common/extensions/api/input_ime/input_components_handler.cc',
+                 'common/extensions/api/input_ime/input_components_handler.h',
+@@ -402,6 +402,11 @@
+             '../third_party/boringssl/boringssl.gyp:boringssl',
+           ],
          }],
 +        ['OS=="openbsd"', {
 +          'sources/': [
@@ -13,7 +22,7 @@ $OpenBSD: patch-chrome_chrome_common_gypi,v 1.4 2015/10/14 16:42:07 robert Exp $
          ['OS != "ios"', {
            'dependencies': [
              'common_mojo_bindings',
-@@ -545,6 +550,7 @@
+@@ -538,6 +543,7 @@
          }],
          ['safe_browsing==1', {
            'sources': [ '<@(chrome_common_full_safe_browsing_sources)', ],

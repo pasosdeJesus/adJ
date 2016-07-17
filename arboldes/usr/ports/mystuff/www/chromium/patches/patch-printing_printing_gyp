@@ -1,6 +1,6 @@
-$OpenBSD: patch-printing_printing_gyp,v 1.31 2015/09/05 16:06:50 robert Exp $
---- printing/printing.gyp.orig.port	Wed Sep  2 07:49:47 2015
-+++ printing/printing.gyp	Wed Sep  2 07:50:44 2015
+$OpenBSD: patch-printing_printing_gyp,v 1.33 2016/04/16 19:08:46 robert Exp $
+--- printing/printing.gyp.orig.port	Fri Apr  8 18:02:10 2016
++++ printing/printing.gyp	Thu Apr 14 08:25:13 2016
 @@ -187,7 +187,7 @@
              'backend/print_backend_chromeos.cc',
            ],
@@ -10,7 +10,7 @@ $OpenBSD: patch-printing_printing_gyp,v 1.31 2015/09/05 16:06:50 robert Exp $
            'sources': [
              'printing_context_linux.cc',
              'printing_context_linux.h',
-@@ -280,6 +280,12 @@
+@@ -279,6 +279,12 @@
                ['os_bsd==1', {
                  'cflags': [
                    '<!@(python cups_config_helper.py --cflags <(sysroot))',

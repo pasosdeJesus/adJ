@@ -1,33 +1,30 @@
-$OpenBSD: patch-third_party_WebKit_Source_platform_fonts_skia_FontCacheSkia_cpp,v 1.3 2015/04/27 16:38:25 robert Exp $
---- third_party/WebKit/Source/platform/fonts/skia/FontCacheSkia.cpp.orig.port	Wed Apr 15 09:39:48 2015
-+++ third_party/WebKit/Source/platform/fonts/skia/FontCacheSkia.cpp	Wed Apr 15 09:40:36 2015
-@@ -30,7 +30,7 @@
+$OpenBSD: patch-third_party_WebKit_Source_platform_fonts_skia_FontCacheSkia_cpp,v 1.6 2016/05/27 06:28:21 robert Exp $
+--- third_party/WebKit/Source/platform/fonts/skia/FontCacheSkia.cpp.orig.port	Thu May 26 08:30:51 2016
++++ third_party/WebKit/Source/platform/fonts/skia/FontCacheSkia.cpp	Thu May 26 08:31:15 2016
+@@ -60,7 +60,7 @@ static PassRefPtr<SkTypeface> typefaceForFontconfigInt
  
- #include "config.h"
+ namespace blink {
  
--#if !OS(WIN) && !OS(ANDROID)
-+#if !OS(WIN) && !OS(ANDROID) && !OS(OPENBSD)
- #include "SkFontConfigInterface.h"
- #endif
- #include "SkFontMgr.h"
-@@ -48,7 +48,7 @@
- #include "wtf/text/CString.h"
- #include <unicode/locid.h>
+-#if OS(ANDROID) || OS(LINUX)
++#if OS(ANDROID) || OS(LINUX) || OS(OPENBSD)
+ // Android special locale for retrieving the color emoji font
+ // based on the proposed changes in UTR #51 for introducing
+ // an Emoji script code:
+@@ -171,7 +171,7 @@ PassRefPtr<SimpleFontData> FontCache::getLastResortFal
+     return fontDataFromFontPlatformData(fontPlatformData, shouldRetain);
+ }
  
--#if !OS(WIN) && !OS(ANDROID)
-+#if !OS(WIN) && !OS(ANDROID) && !OS(OPENBSD)
- static SkStreamAsset* streamForFontconfigInterfaceId(int fontconfigInterfaceId)
+-#if OS(WIN) || OS(LINUX)
++#if OS(WIN) || OS(LINUX) || OS(OPENBSD)
+ static inline SkFontStyle fontStyle(const FontDescription& fontDescription)
  {
-     SkAutoTUnref<SkFontConfigInterface> fci(SkFontConfigInterface::RefGlobal());
-@@ -187,9 +187,11 @@ PassRefPtr<SkTypeface> FontCache::createTypeface(const
- #if !OS(WIN) && !OS(ANDROID)
-     if (creationParams.creationType() == CreateFontByFciIdAndTtcIndex) {
-         SkTypeface* typeface = nullptr;
-+#if !OS(OPENBSD)
-         if (Platform::current()->sandboxSupport())
-             typeface = SkTypeface::CreateFromStream(streamForFontconfigInterfaceId(creationParams.fontconfigInterfaceId()), creationParams.ttcIndex());
-         else
-+#endif
-             typeface = SkTypeface::CreateFromFile(creationParams.filename().data(), creationParams.ttcIndex());
+     int width = static_cast<int>(fontDescription.stretch());
+@@ -232,7 +232,7 @@ PassRefPtr<SkTypeface> FontCache::createTypeface(const
+     }
+ #endif
  
-         if (typeface)
+-#if OS(LINUX)
++#if OS(LINUX) || OS(OPENBSD)
+     // On linux if the fontManager has been overridden then we should be calling the embedder
+     // provided font Manager rather than calling SkTypeface::CreateFromName which may redirect the
+     // call to the default font Manager.

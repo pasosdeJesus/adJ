@@ -1,12 +1,12 @@
-$OpenBSD: patch-chrome_common_chrome_switches_cc,v 1.15 2015/10/14 16:42:07 robert Exp $
---- chrome/common/chrome_switches.cc.orig.port	Tue Oct 13 21:04:32 2015
-+++ chrome/common/chrome_switches.cc	Wed Oct 14 07:41:13 2015
-@@ -1224,7 +1224,7 @@ const char kHelpShort[]                     = "h";
- const char kPasswordStore[]                 = "password-store";
- #endif
+$OpenBSD: patch-chrome_common_chrome_switches_cc,v 1.21 2016/05/27 06:28:20 robert Exp $
+--- chrome/common/chrome_switches.cc.orig.port	Thu May 26 08:25:11 2016
++++ chrome/common/chrome_switches.cc	Thu May 26 08:25:20 2016
+@@ -1298,7 +1298,7 @@ const char kTabManagementExperimentTypeElderberry[] =
+     "tab-management-experiment-type-elderberry";
+ #endif  // defined(OS_ANDROID)
  
--#if defined(OS_LINUX) && !defined(OS_CHROMEOS)
-+#if (defined(OS_LINUX) || defined(OS_BSD)) && !defined(OS_CHROMEOS)
- // Triggers migration of user data directory to another directory
- // specified as a parameter. The migration is done under singleton lock,
- // and sanity checks are made to avoid corrupting the profile.
+-#if defined(OS_WIN) || defined(OS_LINUX)
++#if defined(OS_WIN) || defined(OS_LINUX) || defined(OS_BSD)
+ extern const char kEnableInputImeAPI[] = "enable-input-ime-api";
+ extern const char kDisableInputImeAPI[] = "disable-input-ime-api";
+ #endif
