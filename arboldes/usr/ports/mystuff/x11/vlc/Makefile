@@ -1,4 +1,4 @@
-# $OpenBSD: Makefile,v 1.191.4.1 2015/10/28 08:47:46 jasper Exp $
+# $OpenBSD: Makefile,v 1.201 2016/01/23 08:09:50 ajacoutot Exp $
 
 SHARED_ONLY=	Yes
 
@@ -9,11 +9,10 @@ V=		2.2.1
 DISTNAME=	vlc-${V}
 PKGNAME-main=	${DISTNAME}
 PKGNAME-jack=	vlc-jack-${V}
+REVISION-main=	7
 CATEGORIES=	x11
 MASTER_SITES=	https://download.videolan.org/pub/videolan/vlc/${V}/
 EXTRACT_SUFX=	.tar.xz
-
-REVISION-main=	0
 
 SHARED_LIBS=	vlc	3.0 \
 		vlccore	3.0
@@ -27,20 +26,22 @@ PERMIT_PACKAGE_CDROM=	patents
 PERMIT_PACKAGE_FTP=	Yes
 
 WANTLIB-common=	c dbus-1 idn m pthread ${MODGETTEXT_WANTLIB}
+# v4l2 is dlopen'd
 WANTLIB-main=	EGL GL ICE lib/qt4/QtGui QtCore SM SDL SDL_image X11 \
 		Xcomposite Xcursor Xdamage Xext Xfixes Xi Xinerama Xpm \
 		Xrender Xrandr ass atk-1.0 avcodec avformat avutil bluray \
-		cairo cddb croco-0.6 dvbpsi dvdnav dvdread ebml enca \
-		expat ffi fontconfig freetype fribidi gcrypt gdk-x11-2.0 \
+		cairo cddb croco-0.6 dvbpsi dvdnav dvdread ebml expat \
+		ffi fontconfig freetype fribidi gcrypt gdk-x11-2.0 \
 		gdk_pixbuf-2.0 gio-2.0 glib-2.0 gmodule-2.0 gmp gnutls \
 		gobject-2.0 gpg-error graphite2 gthread-2.0 gtk-x11-2.0 \
 		harfbuzz hogweed jpeg lzma matroska nettle notify opus \
 		ogg p11-kit pango-1.0 pangocairo-1.0 pangoft2-1.0 pcre \
 		pixman-1 png postproc pthread-stubs rsvg-2 samplerate sndio \
 		speex speexdsp stdc++ swscale tag tar tasn1 tiff usbhid \
-		vorbis vorbisenc webp x264 xcb-composite xcb-keysyms \
+		v4l2 vorbis vorbisenc webp x264 x265 xcb-composite xcb-keysyms \
 		xcb-randr xcb-render xcb-shape xcb-shm xcb-xfixes xcb-xv \
-		xcb xml2 z ${WANTLIB-common}
+		xcb xml2 z X11-xcb Xxf86vm drm gbm glapi xcb-dri2 xcb-glx \
+		${WANTLIB-common}
 WANTLIB-jack=	db jack vlccore ${WANTLIB-common}
 
 AUTOCONF_VERSION= 2.69
@@ -63,6 +64,7 @@ LIB_DEPENDS-main= ${MODQT4_LIB_DEPENDS} \
 		audio/taglib \
 		devel/fribidi \
 		devel/libdvdread \
+		devel/libidn \
 		devel/libnotify \
 		devel/sdl \
 		devel/sdl-image \
@@ -73,7 +75,9 @@ LIB_DEPENDS-main= ${MODQT4_LIB_DEPENDS} \
 		multimedia/libbluray>=0.8.0 \
 		multimedia/libdvdnav \
 		multimedia/libmatroska \
+		multimedia/libv4l \
 		multimedia/x264 \
+		multimedia/x265 \
 		security/gnutls \
 		security/libgcrypt \
 		textproc/libebml \
@@ -145,12 +149,10 @@ CONFIGURE_ARGS+=--disable-a52 \
 		--disable-twolame \
 		--disable-udev \
 		--disable-upnp \
-		--disable-v4l2 \
 		--disable-vdpau \
 		--disable-vnc \
 		--disable-vpx \
 		--disable-vsxu \
-		--disable-x265 \
 		--disable-zvbi \
 		--enable-realrtsp \
 		--without-contrib \

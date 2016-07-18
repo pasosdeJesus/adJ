@@ -1,4 +1,4 @@
-@comment $OpenBSD: PLIST-main,v 1.37 2015/05/24 07:16:31 ajacoutot Exp $
+@comment $OpenBSD: PLIST-main,v 1.39 2016/01/23 08:09:50 ajacoutot Exp $
 @pkgpath x11/vlc
 %%amd64%%
 %%i386%%
@@ -128,6 +128,7 @@ lib/vlc/plugins/access/libshm_plugin.so
 lib/vlc/plugins/access/libtcp_plugin.so
 lib/vlc/plugins/access/libtimecode_plugin.so
 lib/vlc/plugins/access/libudp_plugin.so
+lib/vlc/plugins/access/libv4l2_plugin.so
 lib/vlc/plugins/access/libvcd_plugin.so
 lib/vlc/plugins/access/libvdr_plugin.so
 lib/vlc/plugins/access/libxcb_screen_plugin.so
@@ -206,6 +207,7 @@ lib/vlc/plugins/codec/libtelx_plugin.so
 lib/vlc/plugins/codec/libuleaddvaudio_plugin.so
 lib/vlc/plugins/codec/libvorbis_plugin.so
 lib/vlc/plugins/codec/libx264_plugin.so
+lib/vlc/plugins/codec/libx265_plugin.so
 lib/vlc/plugins/codec/libxwd_plugin.so
 lib/vlc/plugins/control/
 lib/vlc/plugins/control/libdbus_plugin.so

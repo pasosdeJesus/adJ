@@ -56,7 +56,7 @@ Con respecto a OpenBSD 5.9 las novedades son:
 		gtolower_l gtoupper_l gtowctrans_l gtowlower_l gtowupper_l
 		guselocale gwcscoll gwcsnrtombs_l gwcsrtombs_l gwcstombs_l
 		gwcsxfrm gwctob_l gwctomb_l gwctype_l gxlocale
-	* Encabezados de gcc modificados par definir símbolo \_\_adJ\_\_ que 
+	* Encabezados de gcc modificados para definir símbolo \_\_adJ\_\_ que 
 	  identifica compilaciones en el sistema operativo. Facilita uso de 
 	  xlocale y características únicas de adJ respecto a OpenBSD en 
 	  algunos portes --como libunistring.

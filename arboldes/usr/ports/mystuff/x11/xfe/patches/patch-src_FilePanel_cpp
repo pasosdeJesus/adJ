@@ -1,6 +1,6 @@
 $adJ$
---- src/FilePanel.cpp.orig	Mon Jan  5 03:28:52 2015
-+++ src/FilePanel.cpp	Thu Jun 18 04:27:01 2015
+--- src/FilePanel.cpp.orig	Mon Aug 10 06:11:32 2015
++++ src/FilePanel.cpp	Mon Jul 18 08:25:57 2016
 @@ -61,12 +61,11 @@ extern char OpenHistory[OPEN_HIST_SIZE][MAX_COMMAND_SI
  extern int OpenNum;
  extern char FilterHistory[FILTER_HIST_SIZE][MAX_PATTERN_SIZE];
@@ -24,7 +24,7 @@ $adJ$
  	FXMAPFUNC(SEL_COMMAND,FilePanel::ID_MOUNT,FilePanel::onCmdMount),
  	FXMAPFUNC(SEL_COMMAND,FilePanel::ID_UMOUNT,FilePanel::onCmdMount),
  	FXMAPFUNC(SEL_UPDATE,FilePanel::ID_MOUNT,FilePanel::onUpdMount),
-@@ -3998,9 +3997,9 @@ long FilePanel::onCmdPopupMenu(FXObject* o,FXSelector 
+@@ -4048,9 +4047,9 @@ long FilePanel::onCmdPopupMenu(FXObject* o,FXSelector 
  		new FXMenuCascade(menu,_("Pane&l"),NULL,submenu);
          new FXMenuSeparator(menu);
  		
@@ -36,7 +36,7 @@ $adJ$
  		{
  			new FXMenuCommand(menu,_("&Mount"),maphosticon,current,FilePanel::ID_MOUNT);
  			new FXMenuCommand(menu,_("Unmount"),unmaphosticon,current,FilePanel::ID_UMOUNT);
-@@ -4043,6 +4042,18 @@ long FilePanel::onCmdPopupMenu(FXObject* o,FXSelector 
+@@ -4089,6 +4088,18 @@ long FilePanel::onCmdPopupMenu(FXObject* o,FXSelector 
  				ar=true;
  				new FXMenuCommand(menu,_("&Extract here"),archexticon,current,FilePanel::ID_EXTRACT_HERE);
  			}
@@ -55,7 +55,7 @@ $adJ$
  			else if ((num==1) && (ext1=="tar" || ext1=="tgz" || ext1=="tbz2" || ext1=="tbz"|| ext1=="taz" || ext1=="txz" || ext1=="zip" || ext1=="7z" || ext1=="lzh" || ext1=="rar" || ext1=="ace" || ext1=="arj"))
  			{
  				ar=true;
-@@ -4050,7 +4061,7 @@ long FilePanel::onCmdPopupMenu(FXObject* o,FXSelector 
+@@ -4096,7 +4107,7 @@ long FilePanel::onCmdPopupMenu(FXObject* o,FXSelector 
  				new FXMenuCommand(menu,extract_to_folder,archexticon,current,FilePanel::ID_EXTRACT_TO_FOLDER);
  				new FXMenuCommand(menu,_("E&xtract to..."),archexticon,current,FilePanel::ID_EXTRACT);
  			}
@@ -64,7 +64,7 @@ $adJ$
  			else if (num==1 && (ext1=="rpm" || ext1=="deb"))
  			{
  				ar=true;
-@@ -4072,7 +4083,7 @@ long FilePanel::onCmdPopupMenu(FXObject* o,FXSelector 
+@@ -4118,7 +4129,7 @@ long FilePanel::onCmdPopupMenu(FXObject* o,FXSelector 
          }
          if (!ar)
              new FXMenuCommand(menu,_("&Add to archive..."),archaddicon,current,FilePanel::ID_ADD_TO_ARCH);
@@ -73,7 +73,7 @@ $adJ$
          if (num==1 && !ar)
  			new FXMenuCommand(menu,_("Packages &query "),packageicon,current,FilePanel::ID_PKG_QUERY);
  #endif
-@@ -4685,7 +4696,7 @@ long FilePanel::onCmdExtractHere(FXObject*,FXSelector,
+@@ -4723,7 +4734,7 @@ long FilePanel::onCmdExtractHere(FXObject*,FXSelector,
      return 1;
  }
  
@@ -82,7 +82,7 @@ $adJ$
  // Install/Upgrade package
  long FilePanel::onCmdPkgInstall(FXObject*,FXSelector,void*)
  {
-@@ -4704,11 +4715,15 @@ long FilePanel::onCmdPkgInstall(FXObject*,FXSelector,v
+@@ -4742,11 +4753,15 @@ long FilePanel::onCmdPkgInstall(FXObject*,FXSelector,v
  
  		// Command to perform
  		FXString ext=FXPath::extension(name);
@@ -99,7 +99,7 @@ $adJ$
  		// Wait cursor
  		getApp()->beginWaitCursor();
  		
-@@ -4746,6 +4761,7 @@ long FilePanel::onCmdPkgUninstall(FXObject*,FXSelector
+@@ -4784,6 +4799,7 @@ long FilePanel::onCmdPkgUninstall(FXObject*,FXSelector
  
  		// Command to perform
  		FXString ext=FXPath::extension(name);
@@ -107,7 +107,7 @@ $adJ$
  		if (comparecase(ext,"rpm")==0)
  		{
  			name=name.section('-',0);
-@@ -4756,7 +4772,13 @@ long FilePanel::onCmdPkgUninstall(FXObject*,FXSelector
+@@ -4794,7 +4810,13 @@ long FilePanel::onCmdPkgUninstall(FXObject*,FXSelector
  			name=name.section('_',0);
  			cmd="dpkg -r "+ name;
  		}
@@ -122,7 +122,7 @@ $adJ$
  		// Wait cursor
  		getApp()->beginWaitCursor();
  
-@@ -5002,7 +5024,7 @@ long FilePanel::onCmdGoScriptDir(FXObject* o, FXSelect
+@@ -5040,7 +5062,7 @@ long FilePanel::onCmdGoScriptDir(FXObject* o, FXSelect
  }
  
  
@@ -131,7 +131,7 @@ $adJ$
  // Mount/Unmount file systems
  long FilePanel::onCmdMount(FXObject*,FXSelector sel,void*)
  {
-@@ -5171,9 +5193,11 @@ long FilePanel::onCmdPkgQuery(FXObject* o,FXSelector s
+@@ -5209,9 +5231,11 @@ long FilePanel::onCmdPkgQuery(FXObject* o,FXSelector s
  		cmd="dpkg -S " + ::quote(file);
  	else if (pkg_format == RPM_PKG)
  		cmd="rpm -qf " + ::quote(file);
@@ -144,7 +144,7 @@ $adJ$
  		return 0;
  	}
  
-@@ -5222,6 +5246,11 @@ long FilePanel::onCmdPkgQuery(FXObject* o,FXSelector s
+@@ -5260,6 +5284,11 @@ long FilePanel::onCmdPkgQuery(FXObject* o,FXSelector s
  	{
  		if (str.find(' ') != -1) // Space character exists in the string
  			str="";

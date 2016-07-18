@@ -5,7 +5,7 @@
 
 COMMENT=	"Interface to the Tcl/Tk GUI framework"
 VERSION=	8.06.0
-REVISION=
+REVISION=	1
 
 PKGNAME=	ocaml-labltk-${VERSION}
 DISTNAME=	labltk-${VERSION}
@@ -30,8 +30,8 @@ USE_GMAKE=	Yes
 
 BUILD_DEPENDS +=        lang/ocaml
 RUN_DEPENDS-graphics += lang/ocaml
-LIB_DEPENDS-tk=		tk->=8.6:x11/tk/8.6
-WANTLIB-main =          c tk86
+LIB_DEPENDS-tk=		tk->=8.5:x11/tk/8.5
+WANTLIB-main =          c tk85
 
 ALL_TARGET=     all ${MODOCAML_NATIVE:S,Yes,opt,:S,No,,}
 

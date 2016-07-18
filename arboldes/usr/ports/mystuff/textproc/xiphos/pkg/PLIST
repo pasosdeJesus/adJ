@@ -1,7 +1,9 @@
-@comment $OpenBSD$
+@comment $adJ$
 %%SHARED%%
 @bin bin/xiphos
 @bin bin/xiphos-nav
+share/appdata/
+share/appdata/xiphos.appdata.xml
 share/applications/xiphos.desktop
 share/doc/xiphos/
 share/doc/xiphos/AUTHORS
@@ -147,6 +149,10 @@ share/locale/fr/LC_MESSAGES/xiphos.mo
 share/locale/he/LC_MESSAGES/xiphos.mo
 share/locale/hu/LC_MESSAGES/xiphos.mo
 share/locale/ja/LC_MESSAGES/xiphos.mo
+share/locale/ko_KR/
+share/locale/ko_KR/LC_MESSAGES/
+share/locale/ko_KR/LC_MESSAGES/xiphos.mo
+share/locale/lt/LC_MESSAGES/xiphos.mo
 share/locale/lv/LC_MESSAGES/xiphos.mo
 share/locale/nb/LC_MESSAGES/xiphos.mo
 share/locale/nl/LC_MESSAGES/xiphos.mo
@@ -180,6 +186,7 @@ share/xiphos/book_open.png
 share/xiphos/book_open_rtol.png
 share/xiphos/bookmarks.glade
 share/xiphos/bookmarks.gtkbuilder
+share/xiphos/bookmarks_old.gtkbuilder
 share/xiphos/chat_icon-16.png
 share/xiphos/dlg-un-16.png
 share/xiphos/dlg-un.png
@@ -192,6 +199,7 @@ share/xiphos/epiphany-secure.png
 share/xiphos/epiphany-unsecure.png
 share/xiphos/export-dialog.glade
 share/xiphos/export-dialog.gtkbuilder
+share/xiphos/export-dialog_old.gtkbuilder
 share/xiphos/gnome-session.png
 share/xiphos/gnome-sound-properties.png
 share/xiphos/gnome-window-manager.png
@@ -211,16 +219,24 @@ share/xiphos/logo.png
 share/xiphos/mailing_list_icon-16.png
 share/xiphos/markverse.glade
 share/xiphos/markverse.gtkbuilder
+share/xiphos/markverse_old.gtkbuilder
 share/xiphos/module-manager.glade
 share/xiphos/module-manager.gtkbuilder
+share/xiphos/module-manager_old.gtkbuilder
 share/xiphos/mozilla-icon.png
 share/xiphos/navbar_versekey.glade
 share/xiphos/navbar_versekey.gtkbuilder
+share/xiphos/navbar_versekey_old.gtkbuilder
 share/xiphos/new_tab_button.png
 share/xiphos/prefs.glade
 share/xiphos/prefs.gtkbuilder
+share/xiphos/prefs_old.gtkbuilder
 share/xiphos/search-dialog.glade
 share/xiphos/search-dialog.gtkbuilder
+share/xiphos/search-dialog_old.gtkbuilder
+share/xiphos/selector-prefs.glade
+share/xiphos/selector-prefs.gtkbuilder
+share/xiphos/selector-prefs_old.gtkbuilder
 share/xiphos/silk-edit-bookmarks.png
 share/xiphos/splash.png
 share/xiphos/sword-big.png
@@ -232,8 +248,10 @@ share/xiphos/tt.png
 share/xiphos/window-close.png
 share/xiphos/xi-export-bookmarks.glade
 share/xiphos/xi-menus-popup.gtkbuilder
+share/xiphos/xi-menus-popup_old.gtkbuilder
 share/xiphos/xi-menus.glade
 share/xiphos/xi-menus.gtkbuilder
+share/xiphos/xi-menus_old.gtkbuilder
 share/xiphos/xi-splash.ui
 share/xiphos/xiphos-button-125.png
 share/xiphos/xiphos-x-16.png

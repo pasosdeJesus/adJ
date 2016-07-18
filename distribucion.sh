@@ -293,6 +293,7 @@ if (test "$sn" = "s") then {
 	# facilitar aportar  a OpenBSD con prioridad cambios que posiblemente
 	# serán aceptados más facilmente
 	(cd $dini/arboldes/usr/src; for i in *patch; do echo $i; if (test ! -f /usr/src/$i) then { cp $i /usr/src; (cd /usr/src; echo "A mano"; patch -p1 < $i;) } fi; done) |  tee -a  /var/www/tmp/distrib-adJ.bitacora
+	(cd $dini/arboldes/usr/ports; for i in *patch; do echo $i; if (test ! -f /usr/ports/$i) then { cp $i /usr/ports; (cd /usr/ports; echo "A mano"; patch -p1 < $i;) } fi; done) |  tee -a  /var/www/tmp/distrib-adJ.bitacora
 
 	echo "* Copiando archivos nuevos en /usr/src" | tee -a /var/www/tmp/distrib-adJ.bitacora
 	(cd $dini/arboldes/usr/src ; for i in `find . -type f | grep -v CVS | grep -v .patch`; do  if (test ! -f /usr/src/$i) then { echo $i; n=`dirname $i`; mkdir -p /usr/src/$n; cp $i /usr/src/$i; } fi; done )
@@ -616,7 +617,7 @@ function paquete {
 		if (test "$subd" != "") then {
 			d1="$d1/$subd"
 		} fi;
-		nom=`echo $nom | sed -e "s/.*\///g"`
+		nom=`echo $nom | sed -e "s/^.*\///g"`
 	} else {
 		l=`grep "^$nom-[0-9]" /usr/ports/INDEX | head -n 1`
 		if (test "$l" = "") then {
@@ -640,6 +641,10 @@ function paquete {
 		echo "No es directorio $dir";
 		exit 1;
 	} fi;
+	if (test "$nom" = "") then {
+		echo "Falla en funcion paquete nom es vacio"
+		exit 1;
+	} fi;
 	echo "*> Creando paquete $nom:$cat pasando a $dir" | tee -a /var/www/tmp/distrib-adJ.bitacora;
 	if (test "$PAQ_LIMPIA_PRIMERO" != "") then {
 		(cd "$dir" ; make clean; rm /usr/ports/packages/$ARQ/all/$nom-[0-9][0-9a-z.]*.tgz)
@@ -653,13 +658,8 @@ function paquete {
 	} fi;
 	echo "*> Copia $copiar" | tee -a /var/www/tmp/distrib-adJ.bitacora;
 	if (test "$copiar" = "") then {
-#		if (test "$subd" != "") {
-			f1=`ls /usr/ports/packages/$ARQ/all/$nom-$subd[-0-9][0-9a-z.]*.tgz | head -n 1`
-			f2=`ls $dini/$V$VESP-$ARQ/$dest/$nom-$subd[-0-9][0-9a-z.]*.tgz | head -n 1`
-#		} else {
-#			f1=`ls /usr/ports/packages/$ARQ/all/$nom[-0-9][0-9a-z.]*.tgz | head -n 1`
-#			f2=`ls $dini/$V$VESP-$ARQ/$dest/$nom[-0-9][0-9a-z.]*.tgz | head -n 1`
-#		} fi;
+		f1=`ls /usr/ports/packages/$ARQ/all/$nom-$subd[-0-9][0-9a-z.]*.tgz | head -n 1`
+		f2=`ls $dini/$V$VESP-$ARQ/$dest/$nom-$subd[-0-9][0-9a-z.]*.tgz | head -n 1`
 		echo "*> simple f1=$f1, f2=$f2, subd=$subd " | tee -a /var/www/tmp/distrib-adJ.bitacora;
 		if (test ! -f "$f2" -o "$f2" -ot "$f1") then {
 			echo "*> Firmando y copiando /usr/ports/packages/$ARQ/all/$nom-*.tgz" | tee -a /var/www/tmp/distrib-adJ.bitacora
@@ -753,8 +753,6 @@ if (test "$sn" = "s") then {
 	# Retroportados para cerrar fallas o actualizar
 	# Deben estar en arboldes/usr/ports/mystuff y en /usr/ports de current
 	paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs" 
-	#paquete chromium
-	#paquete node 
 	paquete ruby paquetes "ruby ruby23-ri_docs" 2.3
 
 	##
@@ -766,8 +764,11 @@ if (test "$sn" = "s") then {
 	paquete py-psycopg2
 	paquete qgis
 
+	# Recompilado con llave de adJ en API de Google
+	paquete chromium
+
 	####
-	# Recompilados para cerrar fallas, portes actualizados de OpenBSD estable
+	# Recompilados para cerrar fallas de portes actualizados (estable)
 	# Para que operen bien basta actualizar CVS de /usr/ports 
 	# Los siguientes no deben estar en arboldes/usr/ports/mystuff
 	paquete bzip2
@@ -781,6 +782,7 @@ if (test "$sn" = "s") then {
 	paquete mplayer
 	paquete nginx
 	paquete node
+	paquete openldap-client 
 	paquete p5-Mail-SpamAssassin
 	paquete p7zip paquetes "p7zip p7zip-rar"
 	paquete pidgin paquetes "libpurple pidgin"
@@ -792,6 +794,11 @@ if (test "$sn" = "s") then {
 	#paquete webkit paquetes "webkit webkit-gtk3"
 	# FLAVOR=gtk3 make paquete webkit-gtk3
 
+	####
+	# Modificados para que usen xlocale (y pueden cerrar fallas)
+	# Estan en mystuff
+	paquete libunistring
+	paquete vlc
 
 	####
 	# Recompilados de estable que usan xlocale (y pueden cerrar fallas)
@@ -804,11 +811,9 @@ if (test "$sn" = "s") then {
 	paquete glib2
 	paquete gtar
 	paquete libidn
-	paquete libunistring
 	paquete libxslt
 	paquete llvm
 	paquete scribus
-	paquete vlc
 	paquete wget
 	paquete wxWidgets-gtk2
 
@@ -817,34 +822,12 @@ if (test "$sn" = "s") then {
 	# Deben estar en arboldes/usr/ports/mystuff 
 	paquete xfe
 
-	####
-	# Aunque existen en versión actual retroportados de versión siguiente 
-	# o current para cerrar fallas o actualizar
-	# Deben estar en arboldes/usr/ports/mystuff y en /usr/ports 
-	#paquete chromium
-	paquete node 
-	paquete openldap-client 
-	paquete py-openssl
-	paquete py-zopeinterface
-	#paquete ruby paquetes "ruby ruby23-ri_docs" 2.3
-
 	###
         # Actualizados.  Están desactualizado en OpenBSD estable y current
 	paquete php paquetes "php php-bz2 php-curl php-fpm php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 5.6
-	paquete pear-Auth
-	paquete pear-DB_DataObject
 
 	##
 	# Retroportados no existentes en versión actual
-	paquete security/letsencrypt paquetes "acme-tiny letsencrypt py-acme" 
-	paquete devel/py-configargparse paquetes "py-ConfigArgParse"
-	paquete devel/py-parsedatetime
-	paquete devel/py-python2-pythondialog
-	paquete devel/py-zopecomponent
-	paquete devel/py-zopeevent
-	paquete sysutils/py-psutil
-	paquete textproc/py-pyRFC3339/
-	paquete www/py-ndg-httpsclient
 
 	####
 	# Unicos en adJ 
@@ -854,6 +837,7 @@ if (test "$sn" = "s") then {
 	paquete lang/ocaml-labltk
 	paquete sysutils/ganglia
 	paquete sysutils/htop
+	paquete textproc/biblesync
 	paquete textproc/sword
 	paquete textproc/xiphos
 	paquete www/pear-HTML-Common

@@ -2,7 +2,7 @@
 
 COMMENT=	"design of HTML tables easy, flexible, reusable and efficient"
 
-DISTNAME=	HTML_Table-1.8.3
+DISTNAME=	HTML_Table-1.8.4
 PKGNAME=	pear-${DISTNAME:S/_/-/}
 CATEGORIES=	www devel pear
 

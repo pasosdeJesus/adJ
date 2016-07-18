@@ -6,7 +6,8 @@ COMMENT=	"to track progress of students and generate reports"
 V=		1.2
 DISTNAME=	sigue-${V}
 CATEGORIES=    	education
-PKGNAME=	${DISTNAME}p1
+PKGNAME=	${DISTNAME}p2
+#REVISION=	2	
 
 
 HOMEPAGE=	http://structio.sourceforge.net/sigue

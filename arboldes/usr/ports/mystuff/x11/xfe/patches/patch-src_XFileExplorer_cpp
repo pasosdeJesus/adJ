@@ -1,7 +1,7 @@
 $adJ$
---- src/XFileExplorer.cpp.orig	Tue Dec 16 07:22:52 2014
-+++ src/XFileExplorer.cpp	Thu Jun 18 04:42:46 2015
-@@ -3189,6 +3189,12 @@ long XFileExplorer::onCmdRun(FXObject*,FXSelector,void
+--- src/XFileExplorer.cpp.orig	Thu Aug  6 10:45:19 2015
++++ src/XFileExplorer.cpp	Mon Jul 18 08:25:57 2016
+@@ -3211,6 +3211,12 @@ long XFileExplorer::onCmdRun(FXObject*,FXSelector,void
  long XFileExplorer::onCmdSu(FXObject*,FXSelector,void*)
  {
  	int ret;
@@ -14,7 +14,7 @@ $adJ$
  	
  	// Wait cursor
  	getApp()->beginWaitCursor();
-@@ -3200,7 +3206,7 @@ long XFileExplorer::onCmdSu(FXObject*,FXSelector,void*
+@@ -3222,7 +3228,7 @@ long XFileExplorer::onCmdSu(FXObject*,FXSelector,void*
  	ret=chdir(lpanel->getCurrent()->getDirectory().text());
  	if (ret < 0)
  	{
@@ -23,7 +23,7 @@ $adJ$
  		if (errcode)
  			MessageBox::error(this,BOX_OK,_("Error"),_("Can't enter folder %s: %s"),lpanel->getCurrent()->getDirectory().text(),strerror(errcode));
  		else
-@@ -3220,45 +3226,43 @@ long XFileExplorer::onCmdSu(FXObject*,FXSelector,void*
+@@ -3242,45 +3248,43 @@ long XFileExplorer::onCmdSu(FXObject*,FXSelector,void*
  		title = _("Enter the root password:");
  		sucmd = SUCMD;
  	}

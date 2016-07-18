@@ -1,6 +1,20 @@
 $OpenBSD$
---- src/xfedefs.h.orig	Mon Dec 22 11:57:44 2014
-+++ src/xfedefs.h	Thu Jun 18 04:31:49 2015
+--- src/xfedefs.h.orig	Mon Jan 12 04:30:43 2015
++++ src/xfedefs.h	Mon Jul 18 08:43:34 2016
+@@ -162,11 +162,11 @@
+ 
+ // Command to launch Xfe as root with sudo or su, using Xvt as a terminal
+ #ifndef SUDOCMD
+-#define SUDOCMD "-fn 7x14 -geometry 60x4 -e sudo su -c 'nohup xfe >& /dev/null & sleep 1'"
++#define SUDOCMD "-fn 7x14 -geometry 60x4 -e sudo su root -c 'nohup xfe >& /dev/null & sleep 1'"
+ #endif
+ 
+ #ifndef SUCMD
+-#define SUCMD "-fn 7x14 -geometry 60x4 -e su -c 'nohup xfe >& /dev/null & sleep 1'"
++#define SUCMD "-fn 7x14 -geometry 60x4 -e su root -c 'nohup xfe >& /dev/null & sleep 1'"
+ #endif
+ 
+ // Tooltips setup time and duration
 @@ -261,19 +261,24 @@
  
  #if defined(linux)

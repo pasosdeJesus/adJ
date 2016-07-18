@@ -1,12 +1,14 @@
 $OpenBSD$
---- configure.orig	Wed Sep 17 22:08:33 2014
-+++ configure	Mon Dec 21 12:41:40 2015
-@@ -18,7 +18,7 @@ where=''
+--- configure.orig	Wed Sep 17 23:08:33 2014
++++ configure	Mon Jul 18 05:37:53 2016
+@@ -17,8 +17,8 @@ configure_options="$*"
+ where=''
  installbindir=''
  installdir=''
- tk_defs=''
+-tk_defs=''
 -tk_libs=''
-+tk_libs='-lpthread -ltk86 -ltcl86 -L/usr/local/lib'
++tk_defs='-I/usr/local/include/tk8.5/ -I/usr/local/include/tcl8.5'
++tk_libs='-lpthread -ltk85 -ltcl85 -L/usr/local/lib'
  tk_x11=yes
  use_findlib=no
  verbose=no
