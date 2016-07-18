@@ -1,0 +1,19 @@
+diff -ruN src59-orig/include/locale.h src/include/locale.h
+--- src59-orig/include/locale.h	Thu Jun  9 23:21:40 2016
++++ src/include/locale.h	Mon Jul 18 09:19:41 2016
+@@ -35,6 +35,15 @@
+ #ifndef _LOCALE_H_
+ #define _LOCALE_H_
+ 
++/* 
++ * The <locale.h> header shall define the locale_t type, representing a 
++ * locale object. 
++ * http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/locale.h.html
++ */
++#ifndef _XLOCALE_H_
++#include <xlocale.h>
++#endif
++
+ struct lconv {
+ 	char	*decimal_point;
+ 	char	*thousands_sep;

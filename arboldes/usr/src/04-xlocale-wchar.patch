@@ -3565,10 +3565,10 @@ diff -ruN -x CVS -x obj src55-orig/include/Makefile src/include/Makefile
  
  FILES+=	link.h link_elf.h
  
-diff -ruN -x CVS -x obj src53collation/include/xlocale.h src/include/xlocale.h
---- src53collation/include/xlocale.h	Wed Dec 31 19:00:00 1969
-+++ src/include/xlocale.h	Tue Apr 16 14:28:06 2013
-@@ -0,0 +1,426 @@
+diff -ruN src59-orig/include/xlocale.h src/include/xlocale.h
+--- src59-orig/include/xlocale.h	Wed Dec 31 19:00:00 1969
++++ src/include/xlocale.h	Mon Jul 18 09:19:45 2016
+@@ -0,0 +1,434 @@
 +/*-
 + * Copyright (c) 2011, 2012 The FreeBSD Foundation
 + * All rights reserved.
@@ -3612,7 +3612,15 @@ diff -ruN -x CVS -x obj src53collation/include/xlocale.h src/include/xlocale.h
 +#ifndef _XLOCALE_H_
 +#define _XLOCALE_H_
 +
++/* Conveniente  para verificar si sistema tiene xlocale.h */
++#ifndef HAVE_XLOCALE_H
++#define HAVE_XLOCALE_H
++#endif
++
++/* xlocale.h ya es incluido por locale.h */
++#ifndef _LOCALE_H_
 +#include <locale.h>
++#endif
 +
 +#define LC_COLLATE_MASK  (1<<0)
 +#define LC_CTYPE_MASK    (1<<1)
