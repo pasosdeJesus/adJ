@@ -3568,7 +3568,7 @@ diff -ruN -x CVS -x obj src55-orig/include/Makefile src/include/Makefile
 diff -ruN src59-orig/include/xlocale.h src/include/xlocale.h
 --- src59-orig/include/xlocale.h	Wed Dec 31 19:00:00 1969
 +++ src/include/xlocale.h	Mon Jul 18 09:19:45 2016
-@@ -0,0 +1,434 @@
+@@ -0,0 +1,462 @@
 +/*-
 + * Copyright (c) 2011, 2012 The FreeBSD Foundation
 + * All rights reserved.
@@ -3612,6 +3612,8 @@ diff -ruN src59-orig/include/xlocale.h src/include/xlocale.h
 +#ifndef _XLOCALE_H_
 +#define _XLOCALE_H_
 +
++#include <sys/cdefs.h>
++
 +/* Conveniente  para verificar si sistema tiene xlocale.h */
 +#ifndef HAVE_XLOCALE_H
 +#define HAVE_XLOCALE_H
@@ -3621,6 +3623,7 @@ diff -ruN src59-orig/include/xlocale.h src/include/xlocale.h
 +#ifndef _LOCALE_H_
 +#include <locale.h>
 +#endif
++
 +
 +#define LC_COLLATE_MASK  (1<<0)
 +#define LC_CTYPE_MASK    (1<<1)
@@ -3641,16 +3644,28 @@ diff -ruN src59-orig/include/xlocale.h src/include/xlocale.h
 +#include <wchar.h>
 +#endif
 +
++__BEGIN_DECLS
 +
-+locale_t	 duplocale(locale_t base);
++locale_t	 duplocale(locale_t base); 
 +int		 freelocale(locale_t loc);
 +locale_t	 newlocale(int mask, const char *locale, locale_t base);
 +const char	*querylocale(int mask, locale_t loc);
 +locale_t	 uselocale(locale_t loc);
 +
 +
-+#ifdef _STRING_H_
++struct lconv	*localeconv_l(locale_t);
 +
++__END_DECLS
++#endif /* _XLOCALE_H */
++
++
++
++#if defined(_STRING_H_)
++/*
++ * Include <string.h> before <xlocale.h> to expose the following.
++ */
++
++__BEGIN_DECLS
 +/* POSIX2008 functions */
 +int	 strcoll_l(const char *, const char *, locale_t);
 +int	 wcscoll_l(const wchar_t *, const wchar_t *, locale_t);
@@ -3661,15 +3676,15 @@ diff -ruN src59-orig/include/xlocale.h src/include/xlocale.h
 +char	*strcasestr_l(const char *, const char *, locale_t);
 +int	 strncasecmp_l(const char *, const char *, size_t, locale_t);
 +
-+#endif /* _STRING_H_ */
++__END_DECLS
++#endif /* _STRING_H */
 +
 +
-+#ifdef _INTTYPES_H_
-+
++#if defined(_INTTYPES_H_) 
 +/*
-+ * Extended locale versions of the locale-aware functions from inttypes.h.
-+ * Include <inttypes.h> before <xlocale.h> to expose these.
++ * Include <inttypes.h> before <xlocale.h> to expose the following.
 + */
++__BEGIN_DECLS
 +intmax_t	strtoimax_l(const char * __restrict, char ** __restrict,
 +		    int, locale_t);
 +uintmax_t	strtoumax_l(const char * __restrict, char ** __restrict, int,
@@ -3678,21 +3693,25 @@ diff -ruN src59-orig/include/xlocale.h src/include/xlocale.h
 +		    int , locale_t);
 +uintmax_t	wcstoumax_l(const wchar_t * __restrict, wchar_t ** __restrict,
 +		    int, locale_t);
++__END_DECLS
 +#endif /* _INTTYPES_H_ */
 +
 +
 +#ifdef _MONETARY_H_
 +
-+#ifndef _XLOCALE_MONETARY_H
-+#define _XLOCALE_MONETARY_H
++#ifndef _XLOCALE_MONETARY_H_
++#define _XLOCALE_MONETARY_H_
 +
++__BEGIN_DECLS
 +ssize_t strfmon_l(char *, size_t, locale_t, const char *, ...);
 +/*    __strfmonlike(4, 5); */
++__END_DECLS
 +
 +#endif /* _XLOCALE_MONETARY_H */
 +#endif /* _MONETARY_H_ */
 +
-+#ifdef _STDLIB_H_
++
++#if defined(_STDLIB_H_) 
 +
 +#include <inttypes.h>
 +/*
@@ -3700,6 +3719,7 @@ diff -ruN src59-orig/include/xlocale.h src/include/xlocale.h
 + *
 + * Include <stdlib.h> before <xlocale.h> to expose these.
 + */
++__BEGIN_DECLS
 +double			 atof_l(const char *, locale_t);
 +int			 atoi_l(const char *, locale_t);
 +long			 atol_l(const char *, locale_t);
@@ -3724,12 +3744,15 @@ diff -ruN src59-orig/include/xlocale.h src/include/xlocale.h
 +int			 wctomb_l(char *, wchar_t, locale_t);
 +
 +int			 ___mb_cur_max_l(locale_t);
++__END_DECLS
++
 +#define MB_CUR_MAX_L(x) (___mb_cur_max_l(x))
 +
 +#endif /* _STDLIB_H_ */
 +
-+#ifdef _TIME_H_
++#if defined(_TIME_H_) 
 +
++__BEGIN_DECLS
 +/* POSIX2008 */
 +size_t	 strftime_l(char * __restrict, size_t, const char * __restrict,
 +	    const struct tm * __restrict, locale_t); /* __strftimelike(3, 0); */
@@ -3737,16 +3760,21 @@ diff -ruN src59-orig/include/xlocale.h src/include/xlocale.h
 +/* XLOCALE */
 +char	*strptime_l(const char * __restrict, const char * __restrict,
 +           struct tm * __restrict, locale_t);
++__END_DECLS
 +
 +#endif /* _TIME_H_ */
 +
-+#ifdef _LANGINFO_H_
++#if defined(_LANGINFO_H_) && !defined(_NL_LANGINFO_L_DEFINED_)
++#define _NL_LANGINFO_L_DEFINED_
 +
++__BEGIN_DECLS
 +char	*nl_langinfo_l(nl_item, locale_t);
++__END_DECLS
 +
 +#endif /* _LANGINFO_H */
 +
-+#if defined(_CTYPE_H_) || defined(_WCTYPE_H_)
++
++#if (defined(_CTYPE_H_) || defined(_WCTYPE_H_)) 
 +
 +#include <sys/types.h>
 +
@@ -3771,6 +3799,7 @@ diff -ruN src59-orig/include/xlocale.h src/include/xlocale.h
 +#endif
 +
 +
++__BEGIN_DECLS
 +inline int iswctype_l(wint_t, wctype_t, locale_t);
 +
 +inline int isalnum_l(int, locale_t);
@@ -3865,11 +3894,13 @@ diff -ruN src59-orig/include/xlocale.h src/include/xlocale.h
 +
 +inline int toupper_l(int, locale_t);
 +
++__END_DECLS
 +#endif /* defined(_CTYPE_H_) || defined(_WCTYPE_H) */
 +
 +
 +#ifdef _STDIO_H_
 +
++__BEGIN_DECLS
 +int	 asprintf_l(char **, locale_t, const char *, ...); /* __printflike(3, 4); */
 +int	 dprintf_l(int, locale_t, const char * __restrict, ...);
 +	    /* __printflike(3, 4); */
@@ -3905,12 +3936,14 @@ diff -ruN src59-orig/include/xlocale.h src/include/xlocale.h
 +	    /* __printflike(3, 0); */
 +int	 vasprintf_l(char **, locale_t, const char *, __va_list);
 +	    /* __printflike(3, 0); */
++__END_DECLS
 +#endif
 +
 +
 +#ifdef _WCHAR_H_
 +
 +/* POSIX2008 */
++__BEGIN_DECLS
 +int			 wcscasecmp_l(const wchar_t *, const wchar_t *,
 +			   locale_t);
 +int			 wcsncasecmp_l(const wchar_t *, const wchar_t *, size_t,
@@ -3993,16 +4026,11 @@ diff -ruN src59-orig/include/xlocale.h src/include/xlocale.h
 +size_t			 wcsnrtombs_l(char * __restrict,
 +			    const wchar_t ** __restrict, size_t, size_t,
 +			    mbstate_t * __restrict, locale_t);
++__END_DECLS
 +
 +#endif /* _WCHAR_H */
 +
 +
-+
-+__BEGIN_DECLS
-+struct lconv	*localeconv_l(locale_t);
-+__END_DECLS
-+
-+#endif
 diff -ruN -x *.o -x *~ src56-orig/lib/libc/citrus/citrus_ctype.c src/lib/libc/citrus/citrus_ctype.c
 --- src56-orig/lib/libc/citrus/citrus_ctype.c	Fri May  3 08:53:49 2013
 +++ src/lib/libc/citrus/citrus_ctype.c	Sun May 18 19:06:58 2014
