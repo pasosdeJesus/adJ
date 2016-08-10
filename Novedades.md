@@ -1,12 +1,12 @@
 #adJ - Aprendiendo de Jesús.
 Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
-y Educativas y que anhelamos fuese usada por Jesús durante el Milenio.
+y Educativas y que anhelamos sea usada por Jesús durante el Milenio.
 
-###Versión: 5.9a1
-Fecha de publicación: 20/Jul/2016
+###Versión: 5.9b1
+Fecha de publicación: 15/Ago/2016
 
 Puede ver novedades respecto a OpenBSD en:
-	<https://github.com/pasosdeJesus/adJ/blob/ADJ_5_9/Novedades_OpenBSD.md>
+  <https://github.com/pasosdeJesus/adJ/blob/ADJ_5_9/Novedades_OpenBSD.md>
 
 ##NOVEDADES RESPECTO A adJ 5.8p1
 
