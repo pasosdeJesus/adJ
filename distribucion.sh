@@ -755,29 +755,18 @@ if (test "$sn" = "s") then {
 	paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs" 
 	paquete ruby paquetes "ruby ruby23-ri_docs" 2.3
 
-	##
-	# Nueva revisión para operar con librerías retroportadas 
-	# Deben estar en arbodes/usr/ports/mystuff
-	paquete gdal
-	paquete libreoffice paquetes "libreoffice libreoffice-i18n-es"
-	paquete postgis
-	paquete py-psycopg2
-	paquete qgis
-
-	# Recompilado con llave de adJ en API de Google
-	paquete chromium
-
 	####
 	# Recompilados para cerrar fallas de portes actualizados (estable)
 	# Para que operen bien basta actualizar CVS de /usr/ports 
 	# Los siguientes no deben estar en arboldes/usr/ports/mystuff
 	paquete bzip2
-	paquete libtalloc
+	paquete curl 
 	paquete gd
 	paquete git paquetes "git"
 	paquete imlib2
 	paquete ImageMagick
 	paquete libksba
+	paquete libtalloc
 	paquete mariadb-client paquetes "mariadb-client mariadb-server" 
 	paquete mplayer
 	paquete nginx
@@ -794,11 +783,37 @@ if (test "$sn" = "s") then {
 	#paquete webkit paquetes "webkit webkit-gtk3"
 	# FLAVOR=gtk3 make paquete webkit-gtk3
 
+	##
+	# Nueva revisión para operar con librerías retroportadas o actualizadas
+	# Deben estar en arbodes/usr/ports/mystuff
+	paquete gdal
+	paquete inkscape 
+	paquete libreoffice paquetes "libreoffice libreoffice-i18n-es"
+	paquete postgis
+	paquete py-psycopg2
+	paquete qgis
+
+	# Recompilado con llave de adJ en API de Google
+	paquete chromium
+
+
 	####
 	# Modificados para que usen xlocale (y pueden cerrar fallas)
 	# Estan en mystuff
 	paquete libunistring
 	paquete vlc
+	##
+	# Nueva revisión para operar con librerías retroportadas o actualizadas
+	# Deben estar en arbodes/usr/ports/mystuff
+	paquete gdal
+	paquete libreoffice paquetes "libreoffice libreoffice-i18n-es"
+	paquete postgis
+	paquete py-psycopg2
+	paquete qgis
+
+	# Recompilado con llave de adJ en API de Google
+	paquete chromium
+
 
 	####
 	# Recompilados de estable que usan xlocale (y pueden cerrar fallas)
@@ -944,7 +959,7 @@ if (test "$sn" = "s") then {
 	if (test "$autoMasPaquetesInv" = "s") then {
 		inv="-r"
 	} fi;
-	grep ".-\[v\]" Contenido.txt | sed -e "s/-\[v\]\([-a-zA-Z_0-9]*\).*/-[0-9][0-9alphabetcdgprvSTABLERC._]*\1.tgz/g" | sort $inv > tmp/esperados.txt
+	grep ".-\[v\]" Contenido.txt | sed -e "s/-\[v\]\([-a-zA-Z_0-9]*\).*/-[0-9][0-9alphabetcdfgprvSTABLERC._]*\1.tgz/g" | sort $inv > tmp/esperados.txt
 	ne=`(ls $V$VESP-$ARQ/paquetes/ ; ls $V$VESP-$ARQ/sivel/*tgz) | grep -v -f tmp/esperados.txt`;
 	if (test "$ne" != "") then {
 		echo "Los siguientes paquetes presentes en el directorio $V$VESP-$ARQ/paquetes no están entre los esperados:" | tee -a /var/www/tmp/distrib-adJ.bitacora;
@@ -1083,7 +1098,7 @@ else {
 if (test "$sn" = "s") then {
 	echo "s/\[V\]/$V/g"  > tmp/rempCont.sed
 	for i in `grep ".-\[v\]" Contenido.txt | sed -e "s/-\[v\]\([-a-zA-Z_0-9]*\).*/-[v]\1/g"`; do
-		n=`echo $i | sed -e "s/-\[v\]\([-a-zA-Z_0-9]*\).*/-[0-9][0-9alphabetcdgrv._]*\1.tgz/g"`
+		n=`echo $i | sed -e "s/-\[v\]\([-a-zA-Z_0-9]*\).*/-[0-9][0-9alphabetcdfgrvSTABLERC._]*\1.tgz/g"`
 		d=`(cd $V$VESP-$ARQ/paquetes; ls | grep "^$n"; cd ../sivel; ls | grep "^$n" 2>/dev/null | tail -n 1)`
 		e=`echo $d | sed -e 's/.tgz//g'`;
 		ic=`echo $i | sed -e 's/\[v\]/\\\\[v\\\\]/g'`;
