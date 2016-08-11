@@ -172,7 +172,7 @@ _slsecurityprotocol="Security protocol? (O)pen, (W)EP"
 _slaccesspoint="Access point? (ESSID, 'any', list# or '?')"
 _slany="any"
 _slthereisnoline="There is no line"
-_slwebkey="WEP key? (will echo)"
+_slwepkey="WEP key? (will echo)"
 _slwpapassphrase="WPA passphrase? (will echo)"
 _slisnotvalidchoice="is not a valid choice."
 _slinvalidnetworkconfiguration="invalid network configuration file"
@@ -255,7 +255,7 @@ _sland="and"
 _slcantbothbemountedat="can't both be mounted at"
 _slchooseyourkeyboardlayout="Choose your keyboard layout ('?' or 'L' for list)"
 _slavailablelayouts="Available layouts"
-_slpasswordfor="Password for"
+_slpasswordfor="Password for user"
 _slpasswordforroot="Password for root account?"
 _slaccount="account"
 _slwillnotecho="will not echo"
@@ -311,10 +311,8 @@ _slbackedup="IS YOUR DATA BACKED UP? As with anything that modifies disk content
 program can cause SIGNIFICANT data loss.";
 _slnodiskfound="No disks found"
 _slmulti="Multiprocessor machine; using bsd.mp instead of bsd."
-_slopenbsdarea="use the (O)penBSD area,"
 
 _slmbrhasinvalid="MBR has invalid signature; not showing it."
-_slusewhole="Use (W)hole disk\$_q or (E)dit the MBR?"
 _sledit="edit"
 _slw=w
 _slW=W
@@ -323,7 +321,6 @@ _slyouwillnowcreate="You will now create a single MBR partition to contain your 
 partition must have an id of 'A6'; must *NOT* overlap other partitions; and
 must be marked as the only active partition.  Inside the fdisk command, the
 'manual' command describes all the fdisk commands in detail."
-_slnoopenbsdpartition="No OpenBSD partition in MBR, try again." 
 _slautoallocated="The auto-allocated layout for \$_disk is:"
 _sluseautolayout="Use (A)uto layout, (E)dit auto layout, or create (C)ustom layout?" 
 _slnowdisklabel="You will now create an OpenBSD disklabel inside the OpenBSD MBR
@@ -368,7 +365,7 @@ _slcanotdetermine="Cannot determine prefetch area"
 _slcannotcreate="Cannot create prefetch area"
 _sldirectorydoesnot="Directory does not contain"
 _slaresponseisrequired="A response is required."
-_slisnotvalidchoice="is not a valid choice."
+_slisnotvalidchoice="is not a valid choice"
 _slquestionhasnoanswer="Question has no answer in response file."
 _slusage="usage"
 _sluser="user"
@@ -377,3 +374,30 @@ _slresponsefileloc="Response file location?"
 _slfetching="Fetching"
 _slnoinet6="No INET6 support"
 _slskippingrtsol="skipping rtsol request."
+
+_slusewhole="Use (W)hole disk MBR, whole disk (G)PT"
+_slopenbsdarea="(O)penBSD area"
+
+_slallowrootssh="Allow root ssh login? (yes, no, prohibit-password)"
+_slprohibitpassword="prohibit-password"
+_slroottargeted="WARNING: root is targeted by password guessing attacks, pubkeys are safer." 
+_slnousersetup="Since no user was setup, root logins via sshd(8) might be useful."
+_slnoautopartitioning="No autopartitioning template found."
+_slautopartitioningfailed="Autopartitioning failed"
+_slurltoautopartitioning="URL to autopartitioning template for disklabel?"
+_slanefigpt="An EFI/GPT disk may not boot. Proceed?"
+_slsettingopenbsdgpt="Setting OpenBSD GPT partition to whole"
+_slyouwillnowreatetwogpt="You will now create two GPT partitions. The first must have an id
+of 'EF' and be large enough to contain the OpenBSD boot programs,
+at least 960 blocks. The second must have an id of 'A6' and will
+contain your OpenBSD data. Neither may overlap other partitions.
+Inside the fdisk command, the 'manual' command describes the fdisk
+commands in detail."
+_slnoopenbsdpartitioningpt="No OpenBSD partition in GPT,"
+_slnoefisyspartitioningpt="No EFI Sys partition in GPT,"
+_slnoopenbsdpartitioninmbr="No OpenBSD partition in MBR,"
+_sltryagain="try again." 
+_slnoefitryagain="No EFI Sys partition in GPT, try again."
+_slnovalidmbrorgpt="No valid MBR or GPT."
+_slpepdit="(E)dit"
+_sln="n"
