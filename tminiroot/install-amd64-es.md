@@ -55,19 +55,19 @@ md_prep_fdisk() {
 
 	while :; do
 		_d=editar
-		_q="¿Usar (T)odo el disco $_q o (E)ditar RMA?"
+		_q="¿Usar (T)odo el disco MBR, todo el disco (G)PT"
 
 		[[ $MDEFI == y ]] && _d=gpt
 
 		if disk_has $_disk mbr openbsd || disk_has $_disk gpt openbsd; then
-			_q="$_q, usar el área de (O)penBSD,"
+			_q="$_q, área de (O)penBSD,"
 			_d=OpenBSD
 
 			fdisk $_disk
 		else
-			echo ""
+			echo "No hay un RAM o un GPT válido."
 		fi
-		ask "$_q o ?" "$_d"
+		ask "$_q o (E)ditar?" "$_d"
 		case $resp in
 		[tT]*)
 			echo -n "Estableciendo partición de OpenBSD en RMA como el disco $_disk completo..."
@@ -76,11 +76,11 @@ md_prep_fdisk() {
 			return ;;
 		[gG]*)
 			if [[ $MDEFI != y ]]; then
-				ask_yn ""
+				ask_yn "Un disco EFI/GPT podría no arrancar. ¿Proceder?"
 				[[ $resp == n ]] && continue
 			fi
 
-			echo -n " $_disk..."
+			echo -n "Estableceendo la partición OpenBSD GPT para el disco completo $_disk..."
 			fdisk -iy -g -b 960 $_disk >/dev/null
 			echo "listo."
 			return ;;
@@ -89,16 +89,21 @@ md_prep_fdisk() {
 				# Manually configure the GPT.
 				cat <<__EOT
 
-
+Ahora creará dos particiones GPT. La primera debe tener una identificación
+'EF' y ser suficientemente grande para los programas de arranque de OpenBSD,
+al menos 960 bloques. La segunda debe tener identificación 'A6' y
+contendrá sus datos de OpenBSD. Una partición no puede traslaparse con la otra.
+Dentro del comando fdisk , el comando 'manual' describe los comandos
+de fdisk en detalle.
 
 $(fdisk $_disk)
 __EOT
 				fdisk -e $_disk
 
 				if ! disk_has $_disk gpt openbsd; then
-					echo -n ""
+					echo -n "No hay partición OpenBSD en GPT,"
 				elif ! disk_has $_disk gpt efisys; then
-					echo -n ""
+					echo -n "No hay partición EFI Sys en GPT,"
 				else
 					return
 				fi
@@ -116,14 +121,14 @@ $(fdisk $_disk)
 __EOT
 				fdisk -e $_disk
 				disk_has $_disk mbr openbsd && return
-				echo -n ""
+				echo -n "No hay partición OpenBSD en el RMA (MBR),"
 			fi
-			echo "" ;;
+			echo "intente nuevamente." ;;
 		[oO]*)
 			[[ $_d == OpenBSD ]] || continue
 			if [[ $_disk == $ROOTDISK ]] && disk_has $_disk gpt &&
 				! disk_has $_disk gpt efisys; then
-				echo ""
+				echo "No hay partición EFI Sys en GPT, intente nuevament."
 				$AUTO && exit 1
 				continue
 			fi

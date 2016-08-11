@@ -303,15 +303,15 @@ disklabel_autolayout() {
 	[[ $_disk != $ROOTDISK ]] && return
 
 	while $AUTO; do
-		ask "" none
+		ask "URL de la plantilla de autoparticionado para disklabel?" none
 		[[ $resp == none ]] && break
 		echo "Recibiendo $resp"
 		if ftp -Vo $_dl "$resp" && [[ -s $_dl ]]; then
 			disklabel -T $_dl -F $_f -w -A $_disk && return
-			echo ""
+			echo "Autoparticionado falló"
 			exit 1
 		else
-			echo ""
+			echo "No se encontró plantilla de autoparticionado."
 			exit 1
 		fi
 	done
@@ -817,7 +817,7 @@ ieee80211_config() {
 			case "$_haswpa-$resp" in
 			?-[Oo])	break
 				;;
-			?-[Ww])	ask_until ""
+			?-[Ww])	ask_until "¿Llave WEP? (no se verá)"
 				if _err=$(ifconfig $_ifs nwkey "$resp" 2>&1) &&
 					[[ -z $_err ]]; then
 					quote nwkey "$resp" >>$_hn
@@ -1489,7 +1489,7 @@ user_setup() {
 	done
 	username=$resp
 
-	askpassword "Clave para cuenta  $user?"
+	askpassword "Clave para la cuenta  $user?"
 	userpass=$_password
 
 	userkey=
@@ -1506,18 +1506,18 @@ ask_root_sshd() {
 	[[ $sshd == y ]] || return
 
 	if [[ -z $user ]]; then
-		echo ""
+		echo "Como no se configuraron usuarios, los ingresos a root mediante sshd(8) pueden ser útiles."
 	fi
-	echo ""
+	echo "ADVERTENCIA: la cuenta root es blanco de ataques de fuerza bruta, las llaves públicas son más seguras."
 	while :; do
-		ask "" no
+		ask "Permitie ingreso de root por ssh? (si, no, prohibir-clave)" no
 		_resp=$resp
 		case $_resp in
 		s|si)	sshd_enableroot=yes
 			;;
-		|no)	sshd_enableroot=no
+		n|no)	sshd_enableroot=no
 			;;
-		w|p|without-password|)
+		w|p|without-password|prohibir-clave)
 			sshd_enableroot=prohibit-password
 			;;
 		*)	echo "'$resp' no es opción válida.."

@@ -597,12 +597,12 @@ askpassword() {
 		return
 	fi
 	while :; do
-		askpass "$_q (will not echo)"
+		askpass "$_q ($_slnotecho)"
 		_password=$resp
-		askpass "$_q (again)"
+		askpass "$_q ($_slagain)"
 		[[ $resp == "$_password" ]] && break
 
-		echo "Passwords do not match, try again."
+		echo "$_slnotmatch"
 	done
 }
 
