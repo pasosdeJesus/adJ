@@ -2098,6 +2098,7 @@ w
 q
 EOF
 		activarcs php56_fpm
+		/etc/rc.d/php56_fpm -d start >> /var/www/tmp/inst-adJ.bitacora 2>&1 
 		grep "^ *location .*php" /etc/nginx/nginx.conf > /dev/null 2>&1
 		if (test "$?" != "0") then {
 			grep "^ *ssl_prefer_server_ciphers" /etc/nginx/nginx.conf > /dev/null 2>&1
