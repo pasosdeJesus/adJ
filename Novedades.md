@@ -12,15 +12,15 @@ Puede ver novedades respecto a OpenBSD en:
 
 ###KERNEL Y SISTEMA BASE
 
--- sys/net/netisr.{c,h} cambiados libssl
-* Parches al sistema base hasta el 20.Jun.2016, que cierran las x fallas de 
-  seguridad y las y de robustez resueltas para fuentes de OpenBSD descritas 
-  en <http://www.openbsd.org/errata59.html>. 
+* Parches al sistema base hasta el 6.Ago.2016, que cierran las 9 fallas de 
+  seguridad y las 16 de robustez resueltas para fuentes de OpenBSD 5.9 
+  descritas en <http://www.openbsd.org/errata59.html>
   Los binarios distribuidos de OpenBSD 5.9 no resuelven estas fallas. 
-  .. también afectan OpenBSD 6.0, los binarios de esa distribución no los 
-  resuelven.
-* Retroportados, recompilados o mejorados más de xx paquetes de OpenBSD para 
-  cerrar fallas de seguridad o emplear xlocale,  ver detalles en sección 
+  3 fallas de robustez también afectan los binarios que saldrán de
+  OpenBSD 6.0.
+* Retroportados, recompilados o mejorados más de 50 paquetes de OpenBSD para 
+  cerrar fallas de seguridad o emplear xlocale.  Incluidos más de 30
+  paquetes que no son portes de OpenBSD. Ver detalles en sección 
   PAQUETES EXCLUSIVOS DE ADJ.
 
 Entre las novedades reportadas en las `Notas de publicación de OpenBSD 5.9' 
@@ -28,11 +28,24 @@ destacamos las siguientes relacionadas con amd64:
 
 * Controladores ampliados o mejorados para amd64
 	* Red: 
-		* Ethernet:  Nuevo ..; mejorado ```zz``` para ...
-		* Inalámbrico:  
+		* Ethernet: Controlador ```em``` ampliado para soportar
+			Intel 100 Series PCH Ethernet MAC con i219 PHY.
+		  Controlador ```re``` ampliado con soporte para 
+		  RTL8168H/RTL8111H. Controlador ```cnmac``` usado en algunas
+		  enrutadores D-Link, Portwell y Ubiquiti mejorado.
+		* Inalámbrico:  iwm e iwn ahora soportan IEEE802.11n que da
+		  velocidad de hasta 65MBit/s
+	* Interfaces usuario: Teclados, mouse y touchpads sobre i2c con 
+	  ```ikbd```, ```ims```, ```imt```.  ```pms``` ampliado para soportar 
+	  touchpadas en modo W y su soporte para touchpads ALPS mejorado
 	* Temperatura, sensores y otros: Nuevo ```pchtemp``` para sensores
-	  térmicos el Intel X99, C610, 9 y 100 PCH. Nuevo ```uonerng``` que
-	  soporta generador de números aleatorios Moonbase Otago OneRNG.
+	  térmicos en Intel X99, C610, 9 y 100 PCH. Nuevo ```uonerng``` que
+	  soporta generador de números aleatorios Moonbase Otago OneRNG.  
+	  Ampliado controlador ```sdmmc``` para incluir soporte para dispositivos
+	  
+	* Virtualización: xen, xspd, xnf permiten que sea cliente sobre Xen
+	  (e.g en AWS).  Iniciados controladores viocon y virtio que podrá a 
+   	  futuro ser usada por KVM, QEMU y otros.
 
 * Mejoras a herramientas de Red
 	* Nuevo
@@ -44,15 +57,14 @@ destacamos las siguientes relacionadas con amd64:
 	  tipos de llamadas al sistema.  Se produce un fallo si el programa
 	  no cumple su promesa.  Así se obliga la separación de privilegios.
 	  Ver http://www.openbsd.org/papers/dot2016.pdf
-	* 
-	* 
 
 * Otros
-	* OpenBSD a partir de 5.9 sólo soporta el locale C y locales con codificación UTF-8
+	* OpenBSD a partir de 5.9 sólo soporta el locale C y locales con 
+	  codificación UTF-8
 
 * El sistema base incluye mejoras a componentes auditados y mejorados 
-como ```Xenocara``` (```Xorg 7.7```), ```gcc``` 4.2.1, ```perl``` 5.20.2, 
-```OpenSMTP``` 5.4.4, ```nsd``` 4.0.3
+  como ```Xenocara``` (```Xorg 7.7```), ```gcc``` 4.2.1, ```perl``` 5.20.2, 
+  ```OpenSMTP``` 5.4.4, ```nsd``` 4.0.3
 
 
 ### PROCESO DE INSTALACIÓN
@@ -65,17 +77,19 @@ más detalles en
 
 ### PAQUETES EXCLUSIVOS DE ADJ
 
-Puede ver el listado completo en [Contenido.txt](https://github.com/pasosdeJesus/adJ/blob/ADJ_5_9/Contenido.txt)
+Puede ver el listado de paquetes incluidos en 
+[Contenido.txt](https://github.com/pasosdeJesus/adJ/blob/ADJ_5_9/Contenido.txt)
 a continuación se describen sólo novedades respecto a la versión anterior de 
 adJ y OpenBSD 5.9:
 
 
 * ```SIVeL 1.2.2```  Ver 
   <http://sivel.sourceforge.net/1.2/actualizacion-sivel.html#actualizaciondeunounoaunodos>
-* ```SIVeL 2.0a9``` Versión alfa de SIVeL 2. Escrita sobre Ruby on Rails.
+* ```SIVeL 2.0b1``` Versión beta 1 de SIVeL 2. Escrita sobre Ruby on Rails.
 * ```PostgreSQL 9.5.3``` retroportado y recompilado para cerrar fallas, pero 
   además con soporte UTF-8 y ordenamientos alfabéticos en español.  Desde adJ 
-  5.8 socket reubicado de ```/var/www/tmp``` a ```/var/www/var/run/postgresql```.
+  5.8 socket reubicado por omisión de ```/var/www/tmp``` a 
+  ```/var/www/var/run/postgresql```.
   En adJ la información queda cifrada cuando así se elije al instalar o 
   actualizar adJ.  Ver detalles de como usar cotejación en 
   <http://aprendiendo.pasosdeJesus.org/?id=i18n>
@@ -115,7 +129,6 @@ Los paquetes para OpenBSD 5.9 también funcionan sin cambios. Resaltamos:
 * ruby 2.3.1 retroportado, opera bien con Rails 5
 * PostgreSQL 9.5.3 retroportado y se recompilaron otros paquetes que 
   dependen de este (libreoffice, gdal, postgis, py-psycopg2)
-
 * nginx 1.9.10 que puede ser util mientras migra a OpenBSD httpd, 
   ver <http://pasosdeJesus.github.io/servidor_adJ/sevidorweb.html#openbsd-httpd>
 * LibreOffice actualizado a 5.0.4.2, gimp a 2.8.16
