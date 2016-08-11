@@ -62,8 +62,8 @@ Pasos importantes para publicar versión beta
 	git tag -a v5.8b1 -m "Version 5.8b1"
 	git push origin v5.8b1
 	...
-	git checkout -b ADJ_5.8
-	git push origin ADJ_5.8
+	git checkout -b ADJ_5_8
+	git push origin ADJ_5_8
 	```
 10. Publicar en lista de desarrollo
 
@@ -84,8 +84,15 @@ Pasos importantes para publicar versión mayor
 	```
 	git tag -a v5.8 -m "Version 5.8"
 	git push origin v5.8
-	```
-8. Correo a listas: 
+
+8. Publicar en Twitter que retrasnmite a cuenta y página en Facebook. 
+   Si es tambien publicacion de SIVeL en sitio de noticias de SIVeL y Structio.
+
+	Publicado adJ 5.8 sistema operativo para servidores y cortafuegos, 
+	seguro, amigable para cristian@s y en español, ver 
+	http://aprendiendo.pasosdejesus.org/
+
+9. Correo a listas: 
     openbsd-colombia@googlegroups.com, colibri@listas.el-directorio.org, 
     openbsd-mexico@googlegroups.com, sivel-soporte@lists.sourceforge.net
 
@@ -115,13 +122,6 @@ Pasos importantes para publicar versión mayor
 
 
 	Bendiciones
-
-9. Publicar en Twitter que retrasnmite a cuenta y página en Facebook. 
-   Si es tambien publicacion de SIVeL en sitio de noticias de SIVeL y Structio.
-
-	Publicado adJ 5.8 sistema operativo para servidores y cortafuegos, 
-	seguro, amigable para cristian@s y en español, ver 
-	http://aprendiendo.pasosdejesus.org/
 
 10. Actualiza artículos de Wikipedia 
    https://en.wikipedia.org/wiki/AdJ y https://es.wikipedia.org/wiki/AdJ 
