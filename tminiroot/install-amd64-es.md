@@ -55,19 +55,19 @@ md_prep_fdisk() {
 
 	while :; do
 		_d=editar
-		_q="Use (W)hole disk MBR, whole disk (G)PT"
+		_q="¿Usar (T)odo el disco $_q o (E)ditar RMA?"
 
 		[[ $MDEFI == y ]] && _d=gpt
 
 		if disk_has $_disk mbr openbsd || disk_has $_disk gpt openbsd; then
-			_q="$_q, (O)penBSD area"
+			_q="$_q, usar el área de (O)penBSD,"
 			_d=OpenBSD
 
 			fdisk $_disk
 		else
-			echo "No valid MBR or GPT."
+			echo ""
 		fi
-		ask "$_q or (E)dit?" "$_d"
+		ask "$_q o ?" "$_d"
 		case $resp in
 		[tT]*)
 			echo -n "Estableciendo partición de OpenBSD en RMA como el disco $_disk completo..."
@@ -76,34 +76,29 @@ md_prep_fdisk() {
 			return ;;
 		[gG]*)
 			if [[ $MDEFI != y ]]; then
-				ask_yn "An EFI/GPT disk may not boot. Proceed?"
+				ask_yn ""
 				[[ $resp == n ]] && continue
 			fi
 
-			echo -n "Setting OpenBSD GPT partition to whole $_disk..."
+			echo -n " $_disk..."
 			fdisk -iy -g -b 960 $_disk >/dev/null
-			echo "done."
+			echo "listo."
 			return ;;
 		[eE]*)
 			if disk_has $_disk gpt; then
 				# Manually configure the GPT.
 				cat <<__EOT
 
-You will now create two GPT partitions. The first must have an id
-of 'EF' and be large enough to contain the OpenBSD boot programs,
-at least 960 blocks. The second must have an id of 'A6' and will
-contain your OpenBSD data. Neither may overlap other partitions.
-Inside the fdisk command, the 'manual' command describes the fdisk
-commands in detail.
+
 
 $(fdisk $_disk)
 __EOT
 				fdisk -e $_disk
 
 				if ! disk_has $_disk gpt openbsd; then
-					echo -n "No OpenBSD partition in GPT,"
+					echo -n ""
 				elif ! disk_has $_disk gpt efisys; then
-					echo -n "No EFI Sys partition in GPT,"
+					echo -n ""
 				else
 					return
 				fi
@@ -121,14 +116,14 @@ $(fdisk $_disk)
 __EOT
 				fdisk -e $_disk
 				disk_has $_disk mbr openbsd && return
-				echo -n "No OpenBSD partition in MBR,"
+				echo -n ""
 			fi
-			echo "try again." ;;
+			echo "" ;;
 		[oO]*)
 			[[ $_d == OpenBSD ]] || continue
 			if [[ $_disk == $ROOTDISK ]] && disk_has $_disk gpt &&
 				! disk_has $_disk gpt efisys; then
-				echo "No EFI Sys partition in GPT, try again."
+				echo ""
 				$AUTO && exit 1
 				continue
 			fi

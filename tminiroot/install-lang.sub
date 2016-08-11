@@ -303,23 +303,23 @@ disklabel_autolayout() {
 	[[ $_disk != $ROOTDISK ]] && return
 
 	while $AUTO; do
-		ask "URL to autopartitioning template for disklabel?" none
+		ask "$_slurltoautopartitioning" none
 		[[ $resp == none ]] && break
-		echo "Fetching $resp"
+		echo "$_slfetching $resp"
 		if ftp -Vo $_dl "$resp" && [[ -s $_dl ]]; then
 			disklabel -T $_dl -F $_f -w -A $_disk && return
-			echo "Autopartitioning failed"
+			echo "$_slautopartitioningfailed"
 			exit 1
 		else
-			echo "No autopartitioning template found."
+			echo "$_slnoautopartitioning"
 			exit 1
 		fi
 	done
 
 	while :; do
-		echo "The auto-allocated layout for $_disk is:"
+		echo "$_slautoallocated"
 		disklabel -h -A $_disk | egrep "^#  |^  [a-p]:"
-		ask "Use (A)uto layout, (E)dit auto layout, or create (C)ustom layout?" a
+		ask "$_sluseautolayout" a
 		case $resp in
 		[aA]*)	_op=-w;;
 		[eE]*)	_op=-E;;
@@ -331,8 +331,6 @@ disklabel_autolayout() {
 	done
 }
 
-#		ask_which "$_dev $_slpartition" "$_slhassets" \
-		#[[ $resp == $_sldone ]] && return 1
 
 configure_disk() {
 	local _disk=$1 _fstab=/tmp/fstab.$1
@@ -536,7 +534,7 @@ ask_yn() {
 		$_sly|$_slyes)	resp=y; return 0;;
 		n|no)	resp=n; return 1;;
 		esac
-		echo "'$resp' $_slisnotvalidchoice"
+		echo "'$resp' $_slisnotvalidchoice."
 		$AUTO && exit 1
 	done
 }
@@ -560,7 +558,7 @@ ask_which() {
 		echo "$_slavailablenames ${_name}s $_slavailablenames2: $_dynlist."
 		_q="$_slwhich $_name $_query?"
 		echo -n "$_q ($_slordone) ${_dyndef:+[$_dyndef] }"
-		_autorespond "$_q" "${_dyndef-done}" && echo "$resp" \
+		_autorespond "$_q" "${_dyndef-$_sldone}" && echo "$resp" \
 			|| _ask || continue
 		[[ -z $resp ]] && resp="$_dyndef"
 
@@ -791,11 +789,11 @@ ieee80211_config() {
 	rm -f $WLANLIST
 
 	while [[ -z $_nwid ]]; do
-		ask_until "Access point? (ESSID, 'any', list# or '?')" "any"
+		ask_until "$_slaccesspoint" "$_slany"
 		case "$resp" in
 		+([0-9]))
 			_nwid=$(ieee80211_scan $_ifs | sed -n "${resp}s/ .*//p")
-			[[ -z $_nwid ]] && echo "There is no line $resp."
+			[[ -z $_nwid ]] && echo "$_slthereisnoline $resp."
 			;;
 		\?)	ieee80211_scan $_ifs |
 				sed -n 's/^\([^ ]*\) chan .* bssid \([^ ]*\) .*$/	\1 (\2)/p' |
@@ -811,14 +809,14 @@ ieee80211_config() {
 		ifconfig $_ifs nwid "$_nwid"
 		quote nwid "$_nwid" >>$_hn
 
-		_prompt="Security protocol? (O)pen, (W)EP"
+		_prompt="$_slsecurityprotocol"
 		((_haswpa == 1)) && _prompt="$_prompt, WPA-(P)SK"
 		while :; do
 			ask_until "$_prompt" "O"
 			case "$_haswpa-$resp" in
 			?-[Oo])	break
 				;;
-			?-[Ww])	ask_until "WEP key? (will echo)"
+			?-[Ww])	ask_until "$_slwepkey"
 				if _err=$(ifconfig $_ifs nwkey "$resp" 2>&1) &&
 					[[ -z $_err ]]; then
 					quote nwkey "$resp" >>$_hn
@@ -826,13 +824,13 @@ ieee80211_config() {
 				fi
 				echo "$_err"
 				;;
-			1-[Pp])	ask_until "WPA passphrase? (will echo)"
+			1-[Pp])	ask_until "$_slwpapassphrase"
 				if ifconfig $_ifs wpakey "$resp"; then
 					quote wpakey "$resp" >>$_hn
 					break
 				fi
 				;;
-			*)	echo "'$resp' is not a valid choice."
+			*)	echo "'$resp' $_slisnotvalidchoice."
 				;;
 			esac
 		done
@@ -857,10 +855,10 @@ configure_ifs() {
 	while :; do
 		ifconfig vlan$_vl create >/dev/null 2>&1
 
-		ask_which "network interface" "do you wish to configure" \
+		ask_which "$_slnetworkinterface" "$_sldoyouwishtoconfigure" \
 			'$(get_ifdevs)' \
 			${_p:-'$( (get_ifdevs netboot; get_ifdevs) | sed q )'}
-		[[ $resp == done ]] && break
+		[[ $resp == $_sldone ]] && break
 
 		_ifs=$resp
 		_hn=/tmp/hostname.$_ifs
@@ -1389,9 +1387,9 @@ donetconfig() {
 	# configured via dhclient too.
 	resp="${_dn:=$(get_fqdn)}"
 	if ifconfig dhcp >/dev/null 2>&1 && [[ $NIFS == 1 && -n $_dn ]]; then
-		echo "Using DNS domainname $resp"
+		echo "$_slusingdns $resp"
 	else
-		ask "DNS domain name? (e.g. 'bar.com')" "$resp"
+		ask "$_sldomain" "$resp"
 	fi
 	hostname "$(hostname -s).$resp"
 
@@ -1400,9 +1398,9 @@ donetconfig() {
 	# nameserver is configured via dhclient too.
 	resp="${_ns:=none}"
 	if ifconfig dhcp >/dev/null 2>&1 && [[ $NIFS == 1 && -n $_ns ]]; then
-		echo "Using DNS nameservers at $resp"
+		echo "$_slusingdnsname $resp"
 	else
-		ask "DNS nameservers? (IP address list or 'none')" "$resp"
+		ask "$_sldnsserver" "$resp"
 	fi
 
 	# Construct appropriate resolv.conf.
@@ -1420,7 +1418,7 @@ donetconfig() {
 questions() {
 	local _d _cdef=no
 
-	ask_yn "Start sshd(8) by default?" yes
+	ask_yn "$_slstartsshd" yes
 	sshd=$resp
 
 	aperture=
@@ -1428,11 +1426,11 @@ questions() {
 	xdm=
 	if [[ -n $DISPLAY ]]; then
 		if [[ -n $(scan_dmesg '/^[a-z]*[01]: aperture needed/p') ]]; then
-			ask_yn "Do you expect to run the X Window System?" yes &&
+			ask_yn "$_slexpectX" yes &&
 				aperture=$MDXAPERTURE
 		fi
 		if [[ -n $MDXDM && $resp != n ]]; then
-			ask_yn "Do you want the X Window System to be started by xdm(1)?"
+			ask_yn "$_slxdm"
 			xdm=$resp
 		fi
 	fi
@@ -1440,10 +1438,10 @@ questions() {
 	if [[ -n $CDEV ]]; then
 		_d=${CPROM:-$CDEV}
 		[[ -n $CONSOLE ]] && _cdef=yes
-		ask_yn "Change the default console to $_d?" $_cdef
+		ask_yn "$_slchangeconsole $_d?" $_cdef
 		defcons=$resp
 		if [[ $resp == y ]]; then
-			ask_which "speed" "should $_d use" \
+			ask_which "$_slspeed" "$_slshould $_d $_sluse" \
 				"9600 19200 38400 57600 115200" $CSPEED
 			case $resp in
 			done)	defcons=n;;
@@ -1455,14 +1453,14 @@ questions() {
 
 # Gather information for setting up the user later in apply().
 user_setup() {
-	local _q="Setup a user? (enter a lower-case loginname, or 'no')"
+	local _q="$_slsetupauser"
 
 	while :; do
 		ask "$_q" no
 		case $resp in
 		n|no)	return
 			;;
-		y|yes)	_q="No really, what is the lower-case loginname, or 'no'?"
+		y|yes)	_q="$_slnoreally"
 			continue
 			;;
 		root|daemon|operator|bin|smmsp|popa3d)
@@ -1473,28 +1471,28 @@ user_setup() {
 			((${#resp} <= 31)) && break
 			;;
 		esac
-		echo "$resp is not a useable loginname."
+		echo "$resp $_slisnotauseable."
 	done
 	user=$resp
 	while :; do
 		ask "$_slfullusername $user?" $user
 		case $resp in
 		*[:\&,]*)
-			echo "':', '&' or ',' are not allowed."
+			echo "':', '&' $_slor ',' $_slarenotallowed."
 			;;
 		*)
 			((${#resp} <= 100)) && break
-			echo "Too long."
+			echo "$_sltoolong."
 			;;
 		esac
 	done
 	username=$resp
 
-	askpassword "Password for user $user?"
+	askpassword "$_slpasswordfor $user?"
 	userpass=$_password
 
 	userkey=
-	$AUTO && ask "Public ssh key for user $user" none &&
+	$AUTO && ask "$_slpublicsshkeyuser $user" none &&
 		[[ $resp != none ]] && userkey=$resp
 }
 
@@ -1507,21 +1505,21 @@ ask_root_sshd() {
 	[[ $sshd == y ]] || return
 
 	if [[ -z $user ]]; then
-		echo "Since no user was setup, root logins via sshd(8) might be useful."
+		echo "$_slnousersetup"
 	fi
-	echo "WARNING: root is targeted by password guessing attacks, pubkeys are safer."
+	echo "$_slroottargeted"
 	while :; do
-		ask "Allow root ssh login? (yes, no, prohibit-password)" no
+		ask "$_slallowrootssh" no
 		_resp=$resp
 		case $_resp in
-		y|yes)	sshd_enableroot=yes
+		$_sly|$_slyes)	sshd_enableroot=yes
 			;;
-		n|no)	sshd_enableroot=no
+		$_sln|$_slno)	sshd_enableroot=no
 			;;
-		w|p|without-password|prohibit-password)
+		w|p|without-password|$_slprohibitpassword)
 			sshd_enableroot=prohibit-password
 			;;
-		*)	echo "'$resp' is not a valid choice."
+		*)	echo "'$resp' $_slisnotvalidchoice."
 			$AUTO && exit 1
 			continue
 			;;
@@ -1585,15 +1583,15 @@ set_timezone() {
 
 get_rootinfo() {
 	while :; do
-		echo "Available disks are: $(get_dkdevs | sed 's/^$/none/')."
-		_ask "Which disk is the root disk? ('?' for details)" \
+		echo "$_slavailabledisks: $(get_dkdevs | sed 's/^$/none/')."
+		_ask "$_slwhichroot" \
 			$(get_dkdevs | sed 's/ .*//') || continue
 		case $resp in
 		"?")	diskinfo $(get_dkdevs)
 			;;
 		'')	;;
 		*)	isin "$resp" $(get_dkdevs) && break
-			echo "no such disk"
+			echo "$_slnosuchdisk"
 			;;
 		esac
 	done
@@ -1848,8 +1846,8 @@ mount_fs() {
 
 	if [[ -n $_fail ]]; then
 		# One or more mounts failed. Continue or abort?
-		echo "\nWARNING! The following filesystems were not properly mounted:$_fail"
-		ask_yn "Continue anyway?" || exit
+		echo "\n$_slnotpropmounted:$_fail"
+		ask_yn "$_slcontinue" || exit
 	fi
 }
 

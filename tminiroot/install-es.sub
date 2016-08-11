@@ -303,23 +303,23 @@ disklabel_autolayout() {
 	[[ $_disk != $ROOTDISK ]] && return
 
 	while $AUTO; do
-		ask "URL to autopartitioning template for disklabel?" none
+		ask "" none
 		[[ $resp == none ]] && break
-		echo "Fetching $resp"
+		echo "Recibiendo $resp"
 		if ftp -Vo $_dl "$resp" && [[ -s $_dl ]]; then
 			disklabel -T $_dl -F $_f -w -A $_disk && return
-			echo "Autopartitioning failed"
+			echo ""
 			exit 1
 		else
-			echo "No autopartitioning template found."
+			echo ""
 			exit 1
 		fi
 	done
 
 	while :; do
-		echo "The auto-allocated layout for $_disk is:"
+		echo "La distribución autolocalizada para $_disk es:"
 		disklabel -h -A $_disk | egrep "^#  |^  [a-p]:"
-		ask "Use (A)uto layout, (E)dit auto layout, or create (C)ustom layout?" a
+		ask "Usar distribución (A)utolocalizada, (E)ditarla, o (C)rear una distribución?" a
 		case $resp in
 		[aA]*)	_op=-w;;
 		[eE]*)	_op=-E;;
@@ -331,8 +331,6 @@ disklabel_autolayout() {
 	done
 }
 
-#		ask_which "$_dev partición" "tiene componentes para $_SMODE" \
-		#[[ $resp == listo ]] && return 1
 
 configure_disk() {
 	local _disk=$1 _fstab=/tmp/fstab.$1
@@ -536,7 +534,7 @@ ask_yn() {
 		s|si)	resp=y; return 0;;
 		n|no)	resp=n; return 1;;
 		esac
-		echo "'$resp' no es opción válida."
+		echo "'$resp' no es opción válida.."
 		$AUTO && exit 1
 	done
 }
@@ -560,7 +558,7 @@ ask_which() {
 		echo " ${_name}s disponibles son: $_dynlist."
 		_q="Cual $_name $_query?"
 		echo -n "$_q (o 'listo') ${_dyndef:+[$_dyndef] }"
-		_autorespond "$_q" "${_dyndef-done}" && echo "$resp" \
+		_autorespond "$_q" "${_dyndef-listo}" && echo "$resp" \
 			|| _ask || continue
 		[[ -z $resp ]] && resp="$_dyndef"
 
@@ -791,11 +789,12 @@ ieee80211_config() {
 	rm -f $WLANLIST
 
 	while [[ -z $_nwid ]]; do
-		ask_until "Access point? (ESSID, 'any', list# or '?')" "any"
+		ask_until "¿Punto de Acceso Inalámbrico? (ESSID, 'cualquiera', #lista o '?'
+)" "cualquiera"
 		case "$resp" in
 		+([0-9]))
 			_nwid=$(ieee80211_scan $_ifs | sed -n "${resp}s/ .*//p")
-			[[ -z $_nwid ]] && echo "There is no line $resp."
+			[[ -z $_nwid ]] && echo "No hay línea $resp."
 			;;
 		\?)	ieee80211_scan $_ifs |
 				sed -n 's/^\([^ ]*\) chan .* bssid \([^ ]*\) .*$/	\1 (\2)/p' |
@@ -811,14 +810,14 @@ ieee80211_config() {
 		ifconfig $_ifs nwid "$_nwid"
 		quote nwid "$_nwid" >>$_hn
 
-		_prompt="Security protocol? (O)pen, (W)EP"
+		_prompt="¿Protocolo de Seguridad? (A)bierto, (W)EP, W(P)A"
 		((_haswpa == 1)) && _prompt="$_prompt, WPA-(P)SK"
 		while :; do
 			ask_until "$_prompt" "O"
 			case "$_haswpa-$resp" in
 			?-[Oo])	break
 				;;
-			?-[Ww])	ask_until "WEP key? (will echo)"
+			?-[Ww])	ask_until ""
 				if _err=$(ifconfig $_ifs nwkey "$resp" 2>&1) &&
 					[[ -z $_err ]]; then
 					quote nwkey "$resp" >>$_hn
@@ -826,13 +825,13 @@ ieee80211_config() {
 				fi
 				echo "$_err"
 				;;
-			1-[Pp])	ask_until "WPA passphrase? (will echo)"
+			1-[Pp])	ask_until "¿Palabra secreta WPA? (se verá)"
 				if ifconfig $_ifs wpakey "$resp"; then
 					quote wpakey "$resp" >>$_hn
 					break
 				fi
 				;;
-			*)	echo "'$resp' is not a valid choice."
+			*)	echo "'$resp' no es opción válida.."
 				;;
 			esac
 		done
@@ -857,10 +856,10 @@ configure_ifs() {
 	while :; do
 		ifconfig vlan$_vl create >/dev/null 2>&1
 
-		ask_which "network interface" "do you wish to configure" \
+		ask_which "Interfaces de red" "desea configurar" \
 			'$(get_ifdevs)' \
 			${_p:-'$( (get_ifdevs netboot; get_ifdevs) | sed q )'}
-		[[ $resp == done ]] && break
+		[[ $resp == listo ]] && break
 
 		_ifs=$resp
 		_hn=/tmp/hostname.$_ifs
@@ -1389,9 +1388,9 @@ donetconfig() {
 	# configured via dhclient too.
 	resp="${_dn:=$(get_fqdn)}"
 	if ifconfig dhcp >/dev/null 2>&1 && [[ $NIFS == 1 && -n $_dn ]]; then
-		echo "Using DNS domainname $resp"
+		echo "Usando nombre de dominio DNS $resp"
 	else
-		ask "DNS domain name? (e.g. 'bar.com')" "$resp"
+		ask "¿Dominio DNS? (e.g. 'bar.com')" "$resp"
 	fi
 	hostname "$(hostname -s).$resp"
 
@@ -1400,9 +1399,9 @@ donetconfig() {
 	# nameserver is configured via dhclient too.
 	resp="${_ns:=none}"
 	if ifconfig dhcp >/dev/null 2>&1 && [[ $NIFS == 1 && -n $_ns ]]; then
-		echo "Using DNS nameservers at $resp"
+		echo "Usando servidores de nombres DNS en $resp"
 	else
-		ask "DNS nameservers? (IP address list or 'none')" "$resp"
+		ask "¿Servidor DNS? (IP o 'nada')" "$resp"
 	fi
 
 	# Construct appropriate resolv.conf.
@@ -1420,7 +1419,7 @@ donetconfig() {
 questions() {
 	local _d _cdef=no
 
-	ask_yn "Start sshd(8) by default?" yes
+	ask_yn "¿Iniciar sshd(8) por defecto?" yes
 	sshd=$resp
 
 	aperture=
@@ -1428,11 +1427,11 @@ questions() {
 	xdm=
 	if [[ -n $DISPLAY ]]; then
 		if [[ -n $(scan_dmesg '/^[a-z]*[01]: aperture needed/p') ]]; then
-			ask_yn "Do you expect to run the X Window System?" yes &&
+			ask_yn "¿Usará X Window?" yes &&
 				aperture=$MDXAPERTURE
 		fi
 		if [[ -n $MDXDM && $resp != n ]]; then
-			ask_yn "Do you want the X Window System to be started by xdm(1)?"
+			ask_yn "¿Desea que el sistema X Window sea iniciado por xdm(1)?"
 			xdm=$resp
 		fi
 	fi
@@ -1440,10 +1439,10 @@ questions() {
 	if [[ -n $CDEV ]]; then
 		_d=${CPROM:-$CDEV}
 		[[ -n $CONSOLE ]] && _cdef=yes
-		ask_yn "Change the default console to $_d?" $_cdef
+		ask_yn "¿Cambiar consola a $_d?" $_cdef
 		defcons=$resp
 		if [[ $resp == y ]]; then
-			ask_which "speed" "should $_d use" \
+			ask_which "velocidad" "debería $_d usar" \
 				"9600 19200 38400 57600 115200" $CSPEED
 			case $resp in
 			done)	defcons=n;;
@@ -1455,14 +1454,14 @@ questions() {
 
 # Gather information for setting up the user later in apply().
 user_setup() {
-	local _q="Setup a user? (enter a lower-case loginname, or 'no')"
+	local _q="¿Crear cuenta de usuario? (nombre de cuenta en minúscula o 'no')"
 
 	while :; do
 		ask "$_q" no
 		case $resp in
 		n|no)	return
 			;;
-		y|yes)	_q="No really, what is the lower-case loginname, or 'no'?"
+		y|yes)	_q="No, de verdad, ¿cúal es el nombre de cuenta en minúscula o 'no'?"
 			continue
 			;;
 		root|daemon|operator|bin|smmsp|popa3d)
@@ -1473,28 +1472,28 @@ user_setup() {
 			((${#resp} <= 31)) && break
 			;;
 		esac
-		echo "$resp is not a useable loginname."
+		echo "$resp no es nombre de cuenta utilizable."
 	done
 	user=$resp
 	while :; do
 		ask "Nombre completo para usuario  $user?" $user
 		case $resp in
 		*[:\&,]*)
-			echo "':', '&' or ',' are not allowed."
+			echo "':', '&' o ',' no son permitidos."
 			;;
 		*)
 			((${#resp} <= 100)) && break
-			echo "Too long."
+			echo "Muy largo."
 			;;
 		esac
 	done
 	username=$resp
 
-	askpassword "Password for user $user?"
+	askpassword "Clave para cuenta  $user?"
 	userpass=$_password
 
 	userkey=
-	$AUTO && ask "Public ssh key for user $user" none &&
+	$AUTO && ask "Llave ssh pública para el usuario $user" none &&
 		[[ $resp != none ]] && userkey=$resp
 }
 
@@ -1507,21 +1506,21 @@ ask_root_sshd() {
 	[[ $sshd == y ]] || return
 
 	if [[ -z $user ]]; then
-		echo "Since no user was setup, root logins via sshd(8) might be useful."
+		echo ""
 	fi
-	echo "WARNING: root is targeted by password guessing attacks, pubkeys are safer."
+	echo ""
 	while :; do
-		ask "Allow root ssh login? (yes, no, prohibit-password)" no
+		ask "" no
 		_resp=$resp
 		case $_resp in
-		y|yes)	sshd_enableroot=yes
+		s|si)	sshd_enableroot=yes
 			;;
-		n|no)	sshd_enableroot=no
+		|no)	sshd_enableroot=no
 			;;
-		w|p|without-password|prohibit-password)
+		w|p|without-password|)
 			sshd_enableroot=prohibit-password
 			;;
-		*)	echo "'$resp' is not a valid choice."
+		*)	echo "'$resp' no es opción válida.."
 			$AUTO && exit 1
 			continue
 			;;
@@ -1585,15 +1584,15 @@ set_timezone() {
 
 get_rootinfo() {
 	while :; do
-		echo "Available disks are: $(get_dkdevs | sed 's/^$/none/')."
-		_ask "Which disk is the root disk? ('?' for details)" \
+		echo "Los discos disponibles son: $(get_dkdevs | sed 's/^$/none/')."
+		_ask "¿Cúal es el disco raíz? ('?' muestra detalles)" \
 			$(get_dkdevs | sed 's/ .*//') || continue
 		case $resp in
 		"?")	diskinfo $(get_dkdevs)
 			;;
 		'')	;;
 		*)	isin "$resp" $(get_dkdevs) && break
-			echo "no such disk"
+			echo "no hay tal disco"
 			;;
 		esac
 	done
@@ -1848,8 +1847,8 @@ mount_fs() {
 
 	if [[ -n $_fail ]]; then
 		# One or more mounts failed. Continue or abort?
-		echo "\nWARNING! The following filesystems were not properly mounted:$_fail"
-		ask_yn "Continue anyway?" || exit
+		echo "\n!ADVERTENCIA! Los siguientes sistemas de archivos no pudieron montarse apropiadamente:$_fail"
+		ask_yn "¿Continuar en todo caso?" || exit
 	fi
 }
 

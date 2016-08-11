@@ -331,8 +331,6 @@ disklabel_autolayout() {
 	done
 }
 
-#		ask_which "$_dev partition" "has the $_SMODE sets" \
-		#[[ $resp == done ]] && return 1
 
 configure_disk() {
 	local _disk=$1 _fstab=/tmp/fstab.$1
@@ -832,7 +830,7 @@ ieee80211_config() {
 					break
 				fi
 				;;
-			*)	echo "'$resp' is not a valid choice."
+			*)	echo "'$resp' is not a valid choice"
 				;;
 			esac
 		done

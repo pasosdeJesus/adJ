@@ -60,7 +60,7 @@ MODE=install
 . install.sub
 
 # Ask for/set the system hostname and add the hostname specific siteXX set.
-ask_until "System hostname? (short form, e.g. 'foo')" "$(hostname -s)"
+ask_until "¿Nombre de la máquina? (forma corta, e.g. 'foo')" "$(hostname -s)"
 [[ ${resp%%.*} != $(hostname -s) ]] && hostname "$resp"
 THESETS="$THESETS site$VERSION-$(hostname -s).tgz"
 
@@ -76,16 +76,16 @@ donetconfig
 echo
 
 while :; do
-	askpassword "Password for root account?"
+	askpassword "¿Clave para root?"
 	_rootpass="$_password"
 	[[ -n "$_password" ]] && break
-	echo "The root password must be set."
+	echo "Debe establecer una contraseña para root."
 done
 
 # Ask for the root user public ssh key during autoinstall.
 rootkey=
 if $AUTO; then
-	ask "Public ssh key for root account?" none
+	ask "¿Llave ssh pública para la cuenta root?" none
 	[[ $resp != none ]] && rootkey=$resp
 fi
 
