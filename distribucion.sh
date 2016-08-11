@@ -1152,6 +1152,9 @@ if (test ! -f $V$VESP-$ARQ/INSTALL.amd64) then {
 	echo "*** Falta $V$VESP-$ARQ/INSTALL.amd64 que será examinado al instalar";
 	exit 1;
 } fi;
+cmd="find $V$VESP-$ARQ  -name \"*~\" -exec rm {} ';'"
+echo $cmd;
+eval $cmd;
 rm $V$VESP-$ARQ/SHA256*
 l=`(cd $V$VESP-$ARQ; ls *tgz INSTALL.amd64 bsd* cd*)`;
 cmd="(cd $V$VESP-$ARQ; cksum -a sha256 $l >  SHA256; signify -S -e -s /etc/signify/adJ-$VP-base.sec -x SHA256.sig -m SHA256)";
