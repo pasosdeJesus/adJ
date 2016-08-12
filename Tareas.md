@@ -1,14 +1,16 @@
 
 5.9
 ===
-* Al instalar de 0 version alpha tras instalar base59.tgz da:
+* Al instalar de ceros en unas preguntas la opción por defecto
+  está en ingles (toca escribir en español listo o si):
+	Cual Interfaces de red desea configurar? (o 'listo') [done]
+* Falta traducir algunos mensajes en instalador:
+	Choose your keyboard layout ('?' or 'L' for list) [default]
+	Let's install the sets!
+	Location of sets? (cd0 disk http or 'done') [http] cd0
+	Select sets...
+	Set name(s)? (or 'abort' or 'done') [done]
 
-Installing base59.tgz   100% |**************************| 53273 KB    00:37
-ftp: Can't open file ///mnt/usr/share/sysmerge/etc.tgz: No such file or directory
-gzip: stdin: unrecognized file format
-tar: End of archive volume 1 reached
-tar: Sorry, unable to determine archive format.
-La instalacin de  base59.tgz fall. Continuar en todo caso? [no]
 
 Posible portar parche para colores en ls:
 https://github.com/bitrig/bitrig/commit/7850093a247d9c68ca57ffab0eea0d2a51164f78

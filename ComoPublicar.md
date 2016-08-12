@@ -34,11 +34,14 @@ Pasos importantes para publicar versión beta
    http://aprendiendo.pasosdeJesus.org
 6. Generar distribución, imagen iso (```hdes/creaiso.sh```) y probar por 
   ejemplo en ```qemu``` (```hdes/qemu.sh``` o remotamente 
-  ```TEXTO=1 hdes/qemu.sh```): instalación de sistema base, 
-   ejecución de inst-adJ.sh en nuevo y actualización, 
-   ejecución de inst-sivel.sh, que opere SIVeL2,
-   que toda entrada del menú opere.  
-   Arreglar y repetir hasta que no haya errores.
+  ```TEXTO=1 hdes/qemu.sh```): 
+	- instalación de sistema base, 
+   	- ejecución de /inst-adJ.sh en nuevo y actualización, 
+   	- ejecución de /usr/local/adJ/inst-sivel.sh, que opere SIVeL1.2,
+   	- que toda entrada del menú desde la interfaz gráfica opere.  
+	- que opere bien una aplicación Ruby on Rails
+	- 
+  Arreglar y repetir hasta que no haya errores.
 7. En computador de desarrollo tras configurar ```var-local.sh``` enviar a
    adJ.pasosdeJesus.org:
 	```
