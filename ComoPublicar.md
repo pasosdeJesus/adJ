@@ -1,20 +1,20 @@
 COMO PUBLICAR
 =============
 
-Anhelamos publicar versión mayor (e.g 5.9a1) 4 meses después de OpenBSD:
+Anhelamos publicar versión mayor (e.g 5.9) 4 meses después de OpenBSD:
 
-	1.Sep
-	1.Mar
+	25.Jun
+	25.Ene
 
-Publicamos revisiones (e.g 5.9a1) si la seguridad o calidad lo ameritan.
+Publicamos revisiones (e.g 5.9p1) si la seguridad o calidad lo ameritan.
 
-Anhelamos publicar al menos una versión beta (e.g 5.9a1 en directorio
-```desarrollo``` del sitio de distribución) 20 días antes de la versión mayor:
+Anhelamos publicar al menos una versión beta (e.g 5.9b1 en directorio
+```desarrollo``` del sitio de distribución) 15 días antes de la versión mayor:
 
-	10.Ago
-	10.Feb
+	10.Jun
+	10.Ene
 
-Sería ideal publicar una versión alfa mucho antes.
+Sería ideal publicar una versión alfa mucho antes (10.May y 10.Dic).
 
 
 Pasos importantes para publicar versión beta
@@ -50,9 +50,9 @@ Pasos importantes para publicar versión beta
 8. En adJ.pasosdeJesus.org
 	```
 	hdes/creaiso.sh
-	cp -rf AprendiendoDeJesus-5.9a1-amd64.iso 5.9a1-amd64 /dirftp
-	mkdir /dirftp/5.9a1-amd64-extra
-	rsync compdes:/usr/ports/packages/amd64/all/* /dirftp/5.9a1-amd64-extra
+	cp -rf AprendiendoDeJesus-5.9b1-amd64.iso 5.9b1-amd64 /dirftp
+	mkdir /dirftp/5.9b1-amd64-extra
+	rsync compdes:/usr/ports/packages/amd64/all/* /dirftp/5.9b1-amd64-extra
 	```
 9. Verificar operación de:
   * http://pasosdeJesus.github.io/basico_adJ http://pasosdeJesus.github.io/usuario_adJ http://pasosdeJesus.github.io/servidor_adJ
@@ -63,8 +63,8 @@ Pasos importantes para publicar versión beta
   * rsync://adJ.pasosdeJesus.org
 10. Poner Tag en github e iniciar rama
 	```
-	git tag -a v5.9a1 -m "Version 5.9a1"
-	git push origin v5.9a1
+	git tag -a v5.9b1 -m "Version 5.9b1"
+	git push origin v5.9b1
 	...
 	git checkout -b ADJ_5_9
 	git push origin ADJ_5_9
@@ -76,7 +76,8 @@ Pasos importantes para publicar versión mayor
 
 1. Usar la rama ADJ_5_9
 	git checkout ADJ_5_9
-2. Actualizar SIVeL, evangelios, Mt77, cor1440, sal7711 y paquetes propios de adJ.
+2. Actualizar SIVeL, evangelios, Mt77, cor1440, sal7711 y paquetes propios de 
+   adJ.
 3. Actualizar documentación, publicar en Internet
 4. Análogo a pasos 5-9 de versión beta
 5. Actualiza version en reto de P2PU (las 4 primeras tareas) 
@@ -84,12 +85,17 @@ Pasos importantes para publicar versión mayor
 6. Actualizar Artículo como Noticia en http://aprendiendo.pasosdeJesus.org,
    http://aprendiendo.pasosdejesus.org/?id=MainMenu,  
 7. Poner Tag en github
-
 	```
 	git tag -a v5.9 -m "Version 5.9"
 	git push origin v5.9
 	```
-8. Correo a listas: 
+8. Publicar en Twitter que retrasnmite a cuenta y página en Facebook. 
+   Si es tambien publicacion de SIVeL en sitio de noticias de SIVeL y Structio.
+
+	Publicado adJ 5.9 sistema operativo para servidores y cortafuegos, 
+	seguro, amigable para cristian@s y en español, ver 
+	http://aprendiendo.pasosdejesus.org/
+9. Correo a listas: 
     openbsd-colombia@googlegroups.com, colibri@listas.el-directorio.org, 
     openbsd-mexico@googlegroups.com, sivel-soporte@lists.sourceforge.net
 
@@ -111,21 +117,13 @@ Pasos importantes para publicar versión mayor
 	  2. La guía de instalación:
 	  http://pasosdeJesus.github.io//usuario_adJ/sobre-la-instalacion.html
 
-	Mira las novedades completas de la versión 5.9a1 en:
+	Mira las novedades completas de la versión 5.9 en:
 	  http://aprendiendo.pasosdejesus.org/?id=AdJ+5.9+-+Aprendiendo+de+Jesus+5.9
 
 	De estas destacamos:
 	...
 
-
 	Bendiciones
-
-9. Publicar en Twitter que retrasnmite a cuenta y página en Facebook. 
-   Si es tambien publicacion de SIVeL en sitio de noticias de SIVeL y Structio.
-
-	Publicado adJ 5.9 sistema operativo para servidores y cortafuegos, 
-	seguro, amigable para cristian@s y en español, ver 
-	http://aprendiendo.pasosdejesus.org/
 
 10. Actualiza artículos de Wikipedia 
    https://en.wikipedia.org/wiki/AdJ y https://es.wikipedia.org/wiki/AdJ 

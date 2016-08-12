@@ -1,4 +1,4 @@
 
-__Esta recopilación se dedica al Espíritu Santo por su fruto de amor, gozo, 
-paz, paciencia, beningnidad, bondad, fe, mansedumbre y templanza__ 
-(ver Galatas 5:22-23)
+__Esta recopilación se dedica a Jesús por amranos y querer que seamos
+uno en amor, por hacernos sus discípulos__
+(ver Juan 17:1-26)
