@@ -346,7 +346,7 @@ configure_disk() {
 
 	# Make sure there is a '/ mount point.
 	if ! grep -qs ' / ffs ' /tmp/fstab.$ROOTDISK; then
-		echo "'/' must be configured!"
+		echo "'/' debe ser configurado!"
 		return 1
 	fi
 	if [[ -f $_fstab ]]; then
@@ -417,8 +417,8 @@ get_responsefile() {
 		(($# == 0)) && set -- $(get_ifdevs)
 		(($# == 1)) && _ifdev=$1
 		while (($# > 1)); do
-			ask_which "network interface" \
-				"should be used for the initial DHCP request" "$*"
+			ask_which "Interfaces de red" \
+				"debería usarse para la petición inicial de DHCP" "$*"
 			isin "$resp" $* && _ifdev=$resp && break
 		done
 		[[ -n $_ifdev ]] && dhclient $_ifdev || break
@@ -445,11 +445,11 @@ get_responsefile() {
 			fi
 		done
 	else
-		[[ -z $AI_SERVER ]] && echo "Could not determine next-server."
-		[[ -z $_mode ]] && echo "Could not determine auto mode."
+		[[ -z $AI_SERVER ]] && echo "No pudo determinarse servidor siguente."
+		[[ -z $_mode ]] && echo "No pudo determinarse modo automático."
 	fi
 	while :; do
-		ask "Response file location?" \
+		ask "Localización del archivo de respuestas?" \
 			"${AI_SERVER:+http://$AI_SERVER/install.conf}"
 		[[ -n $resp ]] && _rf=$resp && break
 	done
@@ -457,12 +457,12 @@ get_responsefile() {
 	# Ask for the installer mode only if auto-detection failed.
 	_mode=$(echo "$_rf" | sed -En 's/^.*(install|upgrade).conf$/\1/p')
 	while [[ -z $_mode ]]; do
-		ask "(I)nstall or (U)pgrade?"
+		ask "(I)nstalar o (A)ctualizar?"
 		[[ $resp == [iI]* ]] && _mode=install
-		[[ $resp == [uU]* ]] && _mode=upgrade
+		[[ $resp == [aA]* ]] && _mode=upgrade
 	done
 
-	echo "Fetching $_rf"
+	echo "Recibiendo $_rf"
 	[[ -f $_rf ]] && _rf="file://$_rf"
 	ftp -Vo "/ai.$_mode.conf" "$_rf" 2>/dev/null && action=$_mode
 	ifconfig $_ifdev delete down 2>/dev/null
@@ -504,7 +504,7 @@ _ask() {
 		stty -raw
 	else
 		case $resp in
-		!)	echo "Type 'exit' to return to install."
+		!)	echo "'exit' para regresar."
 			sh
 			_redo=1
 			;;
@@ -574,7 +574,7 @@ function ask_until {
 	while true; do
 		ask "$1" "$2"
 		[[ -n $resp ]] && break
-		echo "A response is required."
+		echo "Se requiere una respuesta."
 		$AUTO && exit 1
 	done
 }
@@ -597,12 +597,12 @@ askpassword() {
 		return
 	fi
 	while :; do
-		askpass "$_q (will not echo)"
+		askpass "$_q (no se mostrará)"
 		_password=$resp
-		askpass "$_q (again)"
+		askpass "$_q (nuevamente)"
 		[[ $resp == "$_password" ]] && break
 
-		echo "Passwords do not match, try again."
+		echo "No coinciden, reintente."
 	done
 }
 
@@ -681,7 +681,7 @@ v4_config() {
 	fi
 
 	if [[ -x /sbin/dhclient ]]; then
-		_prompt="or 'dhcp' "
+		_prompt="o 'dhcp' "
 		ifconfig dhcp >/dev/null 2>&1 || _addr=dhcp
 	fi
 	_prompt="Dirección IPv4 para $_ifs? (${_prompt}o 'nada')"
@@ -725,7 +725,7 @@ v6_defroute() {
 		sed -n '/bytes from/{s/^.*from //;s/,.*$//;p;}' |
 		sed -n 'G;s/\n/&&/;/^\(.*\n\).*\n\1/d;h;P'))
 
-	_prompt="IPv6 default router?"
+	_prompt="¿Enrutador IPv6 por defecto?"
 
 	if $AUTO; then
 		_autorespond "$_prompt" && _resp=$resp && echo "$_prompt $_resp"
@@ -882,19 +882,19 @@ configure_ifs() {
 			while [[ $1 == vlan+([0-9]) ]]; do
 				shift
 			done
-			ask "Which interface:tag should $_ifs be on?" "${_vd:=$1}:$_vi"
+			ask "¿Sobre que interface:tag debe estar $_ifs?" "${_vd:=$1}:$_vi"
 			_vd=${resp%%:*}
 			_vi=${resp##*:}
 
 			if ! (isin "$_vd" $_ifdevs && [[ $_vd != vlan+([0-9]) ]]); then
-				echo "Invalid interface choice '$_vd'"
+				echo "Elección de interfaz invalida '$_vd'"
 				_vd=
 				continue
 			fi
 
 			# Validate range of $_vi as 1-4095, and $_vi not in use.
 			if ((_vi < 1 || _vi > 4095)) || isin "$_vi" $_tags; then
-				echo "Invalid or in-use vlan tag '$_vi'"
+				echo "Tag invalido o en uso '$_vi'"
 				continue
 			fi
 
@@ -954,7 +954,7 @@ v4_defroute() {
 	[[ -n $_dr && $2 == DHCLIENT && -f /tmp/dhclient.conf ]] && return
 
 	while :; do
-		ask_until "Default IPv4 route? (IPv4 address or none)" "$_dr"
+		ask_until "¿Ruta IPv4 por defecto? o nada)" "$_dr"
 		[[ $resp == none ]] && break
 		route delete -inet default >/dev/null 2>&1
 		route -n add -inet -host default "$resp" && { echo "$resp" >>/tmp/mygate; break; }
@@ -1011,15 +1011,15 @@ select_sets() {
 
 	cat <<__EOT
 
-Select sets by entering a set name, a file name pattern or 'all'. De-select
-sets by prepending a '-' to the set name, file name pattern or 'all'. Selected
-sets are labelled '[X]'.
+Selecccione componentes por instalar, un patrón o 'todos'.
+Deseleccione poniendo un '-' antes del nombre, del patrón o de 'todos'.  
+Los seleccionados se marcan con '[X]'.
 __EOT
 	while :; do
 		for _f in $_avail; do
 			isin $_f $_selected && echo "[X] $_f" || echo "[ ] $_f"
 		done | showcols | sed 's/^/    /'
-		ask "Set name(s)? (or 'abort' or 'done')" done
+		ask "Nombre(s) de juego(s)? (o 'cancelar' o 'listo')" done
 
 		set -o noglob
 		for resp in $resp; do
@@ -1149,7 +1149,7 @@ install_files() {
 		done
 	done
 
-	[[ -n $_unver ]] && : ${_issue:="Unverified sets:" ${_unver% }}
+	[[ -n $_unver ]] && : ${_issue:="" ${_unver% }}
 	if [[ -n $_issue ]] &&
 		! ask_yn "$_issue. ¿Continuar sin verificación?"; then
 		[[ -d $_tmpsrc ]] && rm -rf "$_tmpsrc"
@@ -1278,7 +1278,7 @@ install_cdrom() {
 
 install_disk() {
 	if ! ask_yn "¿Partición ya montada?"; then
-		ask_which "disk" "contains the $MODE media" \
+		ask_which "disco" "medio usará para $_SMODE" \
 			'$(bsort $(get_dkdevs))' \
 			'$(bsort $(rmel $ROOTDISK $(get_dkdevs)))'
 		[[ $resp == done ]] && return 1
@@ -1311,7 +1311,7 @@ mount_mnt2() {
 		sed -En '/swap|unused/d;/^  [a-p]: /p' >$_file
 	_parts=$(sed 's/^  \(.\): .*/\1/' $_file)
 	set -- $_parts
-	(($# == 0)) && { echo "No filesystems found on $_dev."; return 1; }
+	(($# == 0)) && { echo "No hay subparticiones. $_dev."; return 1; }
 
 	if isin "c" $_parts; then
 		# Don't ask questions if 'c' contains a filesystem.
@@ -1322,7 +1322,7 @@ mount_mnt2() {
 	else
 		# Display partitions with filesystems and ask which to use.
 		cat $_file
-		ask_which "$_dev partition" "has the $MODE sets" \
+		ask_which "$_dev partición" "tiene componentes para $_SMODE" \
 			'$(disklabel '$_dev' 2>/dev/null |
 			sed -En '\''/swap|unused/d;/^  ([a-p]): .*/s//\1/p'\'')'
 		[[ $resp == done ]] && return 1
@@ -1344,15 +1344,15 @@ set_term() {
 	export TERM=${TERM:-${MDTERM:-vt220}}
 
 	if [[ -n $CONSOLE ]]; then
-		ask "Terminal type?" $TERM
+		ask "¿Terminal?" $TERM
 		export TERM=$resp
 	else
 		[[ -x /sbin/kbd ]] || return
 		_layouts=$(bsort $(kbd -l | egrep -v "^(user|tables|encoding)"))
 		while :; do
-			ask "Choose your keyboard layout ('?' or 'L' for list)" "default"
+			ask "Elija distribución de teclado ('?' o 'L' para ver lista)" "default"
 			case $resp in
-			[lL\?]) echo "Available layouts: $_layouts";;
+			[lL\?]) echo "Distribuciones disponibles: $_layouts";;
 			default) return;;
 			*)	kbd $resp && { echo $resp >/tmp/kbdtype; return; };;
 			esac
@@ -1876,12 +1876,13 @@ install_sets() {
 		done
 	fi
 
-	echo "Let's $MODE the sets!"
+	echo "
+¡Por $_SMODE componentes básicos!"
 	while :; do
 		_cddevs=$(get_cddevs)
 		umount -f /mnt2 >/dev/null 2>&1
 
-		ask "Location of sets? (${_cddevs:+$_cddevs }$_locs or 'done')" "$_d"
+		ask "¿Localización? (${_cddevs:+$_cddevs }$_locs o 'listo')" "$_d"
 		case $resp in
 		done)	sane_install && return
 			;;

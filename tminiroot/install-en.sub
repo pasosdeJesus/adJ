@@ -830,7 +830,7 @@ ieee80211_config() {
 					break
 				fi
 				;;
-			*)	echo "'$resp' is not a valid choice"
+			*)	echo "'$resp' is not a valid choice."
 				;;
 			esac
 		done
@@ -1277,7 +1277,7 @@ install_cdrom() {
 
 install_disk() {
 	if ! ask_yn "Is the disk partition already mounted?"; then
-		ask_which "disk" "contains the $MODE media" \
+		ask_which "disk" "contains the $_SMODE media" \
 			'$(bsort $(get_dkdevs))' \
 			'$(bsort $(rmel $ROOTDISK $(get_dkdevs)))'
 		[[ $resp == done ]] && return 1
@@ -1321,7 +1321,7 @@ mount_mnt2() {
 	else
 		# Display partitions with filesystems and ask which to use.
 		cat $_file
-		ask_which "$_dev partition" "has the $MODE sets" \
+		ask_which "$_dev partition" "has the $_SMODE sets" \
 			'$(disklabel '$_dev' 2>/dev/null |
 			sed -En '\''/swap|unused/d;/^  ([a-p]): .*/s//\1/p'\'')'
 		[[ $resp == done ]] && return 1
@@ -1875,7 +1875,7 @@ install_sets() {
 		done
 	fi
 
-	echo "Let's $MODE the sets!"
+	echo "Let's $_SMODE the sets!"
 	while :; do
 		_cddevs=$(get_cddevs)
 		umount -f /mnt2 >/dev/null 2>&1
