@@ -100,7 +100,9 @@ adJ y OpenBSD 5.9:
 * ```node 4.2.1``` probado con aplicaciones 
   como FreeCodeCamp --requiere y por eso se incluyen gcc-4.9.3 y g++-4.9.3 -- 
   ver <http://dhobsd.pasosdejesus.org/freecodecamp.html>
-* ```PHP-.5.6.23```.  
+* ```PHP-.5.6.23```.  Recomendamos activar opcache que hace más veloz la 
+  operación con  ```doas ln -sf /etc/php-5.6.sample/opcache.ini /etc/php-5.6/```
+  y reiniciando el servicio php56_fpm.
 * Para activar soporte de xlocale se han recompilado los siguientes paquetes 
   que están en portes de OpenBSD 5.9: ```boost```, ```djvulibre```, 
   ```ggrep```, ```glib2```, ```gtar```, ```libidn```, ```libxslt```, 

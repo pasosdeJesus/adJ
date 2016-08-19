@@ -723,7 +723,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/locale/wcscoll
  /*-
   * Copyright (c)2003 Citrus Project,
   * All rights reserved.
-@@ -26,16 +25,100 @@
+@@ -26,16 +25,101 @@
   * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
   * SUCH DAMAGE.
   */
@@ -828,6 +828,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/locale/wcscoll
 +
 +	return ret;
  }
++DEF_STRONG(wcscoll);
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/locale/wcsxfrm.3 src/lib/libc/locale/wcsxfrm.3
 --- src54-s/lib/libc/locale/wcsxfrm.3	Wed Dec 31 19:00:00 1969
 +++ src/lib/libc/locale/wcsxfrm.3	Sat Oct 12 13:23:41 2013
@@ -934,7 +935,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/locale/wcsxfrm
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/locale/wcsxfrm.c src/lib/libc/locale/wcsxfrm.c
 --- src54-s/lib/libc/locale/wcsxfrm.c	Mon Oct  7 07:54:44 2013
 +++ src/lib/libc/locale/wcsxfrm.c	Sat Oct 12 13:23:41 2013
-@@ -30,13 +30,92 @@
+@@ -30,13 +30,91 @@
   * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
   * SUCH DAMAGE.
   */
@@ -1030,8 +1031,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/locale/wcsxfrm
 +
 +	return slen;
  }
-+
-+
++DEF_STRONG(wcsxfrm);
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/string/strcoll.3 src/lib/libc/string/strcoll.3
 --- src54-s/lib/libc/string/strcoll.3	Mon Oct  7 07:49:09 2013
 +++ src/lib/libc/string/strcoll.3	Sat Oct 12 13:23:41 2013
@@ -1222,7 +1222,7 @@ diff -ruN src59-orig/lib/libc/hidden/wchar.h src/lib/libc/hidden/wchar.h
  PROTO_NORMAL(wcschr);
  PROTO_NORMAL(wcscmp);
 -PROTO_STD_DEPRECATED(wcscoll);
-+/*PROTO_STD_DEPRECATED(wcscoll); 	Not in adJ */
++PROTO_NORMAL(wcscoll);
  PROTO_STD_DEPRECATED(wcscpy);
  PROTO_NORMAL(wcscspn);
  PROTO_NORMAL(wcsdup);
@@ -1231,7 +1231,7 @@ diff -ruN src59-orig/lib/libc/hidden/wchar.h src/lib/libc/hidden/wchar.h
  PROTO_DEPRECATED(wcswcs);
  PROTO_NORMAL(wcswidth);
 -PROTO_STD_DEPRECATED(wcsxfrm);
-+/*PROTO_STD_DEPRECATED(wcsxfrm); 	Not in adJ */
++PROTO_NORMAL(wcsxfrm);
  PROTO_NORMAL(wctob);
  PROTO_NORMAL(wcwidth);
  PROTO_NORMAL(wmemchr);

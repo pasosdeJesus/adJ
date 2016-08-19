@@ -536,26 +536,48 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/wcsfti
 diff -ruN src59-orig/lib/libc/hidden/stdlib.h src/lib/libc/hidden/stdlib.h
 --- src59-orig/lib/libc/hidden/stdlib.h	Mon Nov  9 23:14:03 2015
 +++ src/lib/libc/hidden/stdlib.h	Sun May  8 23:13:15 2016
-@@ -100,9 +100,9 @@
- PROTO_STD_DEPRECATED(lldiv);
+@@ -101,7 +101,7 @@
  PROTO_DEPRECATED(lrand48);
  /*PROTO_NORMAL(malloc);			not yet, breaks emacs */
--PROTO_STD_DEPRECATED(mblen);
+ PROTO_STD_DEPRECATED(mblen);
 -PROTO_STD_DEPRECATED(mbstowcs);
--PROTO_STD_DEPRECATED(mbtowc);
-+/*PROTO_STD_DEPRECATED(mblen);		not deprecated in adJ */
-+/*PROTO_STD_DEPRECATED(mbstowcs);	not deprecated in adJ */
-+/*PROTO_STD_DEPRECATED(mbtowc);		not deprecated in adJ */
++PROTO_NORMAL(mbstowcs);	
+ PROTO_STD_DEPRECATED(mbtowc);
  PROTO_DEPRECATED(mergesort);
  PROTO_DEPRECATED(mkdtemp);
- PROTO_NORMAL(mkostemp);
 @@ -155,7 +155,7 @@
  PROTO_DEPRECATED(unlockpt);
  PROTO_NORMAL(unsetenv);
  PROTO_STD_DEPRECATED(valloc);
 -PROTO_STD_DEPRECATED(wcstombs);
 -PROTO_STD_DEPRECATED(wctomb);
-+/*PROTO_STD_DEPRECATED(wcstombs);   	not deprecated in adJ */
-+/*PROTO_STD_DEPRECATED(wctomb); 	not deprecated in adJ */
++PROTO_NORMAL(wcstombs);
++PROTO_NORMAL(wctomb);
  
  #endif /* _LIBC_STDLIB_H_ */
+diff -ruN src59-orig/lib/libc/locale/mbstowcs.c src/lib/libc/locale/mbstowcs.c
+--- src59-orig/lib/libc/locale/mbstowcs.c	Thu Jun  9 23:21:43 2016
++++ src/lib/libc/locale/mbstowcs.c	Thu Aug 18 22:05:13 2016
+@@ -42,3 +42,4 @@
+ 	sp = s;
+ 	return (mbsrtowcs(pwcs, &sp, n, &mbs));
+ }
++DEF_STRONG(mbstowcs);
+diff -ruN src59-orig/lib/libc/locale/wcstombs.c src/lib/libc/locale/wcstombs.c
+--- src59-orig/lib/libc/locale/wcstombs.c	Thu Jun  9 23:21:43 2016
++++ src/lib/libc/locale/wcstombs.c	Thu Aug 18 22:06:14 2016
+@@ -41,3 +41,4 @@
+ 	pwcsp = pwcs;
+ 	return (wcsrtombs(s, &pwcsp, n, &mbs));
+ }
++DEF_STRONG(wcstombs);
+diff -ruN src59-orig/lib/libc/locale/wctomb.c src/lib/libc/locale/wctomb.c
+--- src59-orig/lib/libc/locale/wctomb.c	Thu Jun  9 23:21:43 2016
++++ src/lib/libc/locale/wctomb.c	Thu Aug 18 22:06:18 2016
+@@ -45,3 +45,6 @@
+ 		return (-1);
+ 	return ((int)rval);
+ }
++
++DEF_STRONG(wctomb);
++
