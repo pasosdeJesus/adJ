@@ -74,7 +74,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/bt
  {
  	mbstate_t mbs;
  	char cc;
-@@ -46,7 +48,14 @@
+@@ -46,8 +48,16 @@
  	 */
  	memset(&mbs, 0, sizeof(mbs));
  	cc = (char)c;
@@ -83,6 +83,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/bt
  		return (WEOF);
  	return (wc);
 +}
++DEF_STRONG(btowc_l);
 +
 +
 +wint_t
@@ -90,6 +91,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/bt
 +{
 +	return btowc_l(c, __get_locale());
  }
+ DEF_STRONG(btowc);
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/collate.c src/lib/libc/locale/collate.c
 --- src53collation/lib/libc/locale/collate.c	Mon Apr  1 08:25:36 2013
 +++ src/lib/libc/locale/collate.c	Wed Apr  3 06:29:38 2013
@@ -480,7 +482,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mb
  		return (-1);
  	return ((int)rval);
 +}
-+
++DEF_STRONG(mblen_l);
 +
 +int
 +mblen(const char *s, size_t n)
@@ -573,7 +575,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mb
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src54-num/lib/libc/locale/mbrlen.c src/lib/libc/locale/mbrlen.c
 --- src54-num/lib/libc/locale/mbrlen.c	Sat Feb  9 14:26:52 2013
 +++ src/lib/libc/locale/mbrlen.c	Tue Dec  3 15:52:34 2013
-@@ -26,14 +26,26 @@
+@@ -26,15 +26,28 @@
   * SUCH DAMAGE.
   */
  
@@ -596,12 +598,14 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src54-num/lib/libc/locale/mbrlen.
 -	return (mbrtowc(NULL, s, n, ps));
 +	return (mbrtowc_l(NULL, s, n, ps, loc));
 +}
++DEF_STRONG(mbrlen_l);
 +
 +size_t
 +mbrlen(const char * __restrict s, size_t n, mbstate_t * __restrict ps)
 +{
 +	return mbrlen_l(s, n, ps, __get_locale());
  }
+ DEF_STRONG(mbrlen);
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53/lib/libc/locale/mbrtowc.3 src/lib/libc/locale/mbrtowc.3
 --- src53/lib/libc/locale/mbrtowc.3	Mon Mar 25 18:28:42 2013
 +++ src/lib/libc/locale/mbrtowc.3	Tue Apr  9 09:45:12 2013
@@ -930,7 +934,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mb
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mbstowcs.c src/lib/libc/locale/mbstowcs.c
 --- src53collation/lib/libc/locale/mbstowcs.c	Mon Mar 25 18:28:42 2013
 +++ src/lib/libc/locale/mbstowcs.c	Wed Apr  3 11:15:27 2013
-@@ -31,14 +31,25 @@
+@@ -31,15 +31,27 @@
  #include <stdlib.h>
  #include <string.h>
  #include <wchar.h>
@@ -952,12 +956,14 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mb
 -	return (mbsrtowcs(pwcs, &sp, n, &mbs));
 +	return (mbsrtowcs_l(pwcs, &sp, n, &mbs, l));
 +}
++DEF_STRONG(mbstowcs_l);
 +
 +size_t
 +mbstowcs(wchar_t * __restrict pwcs, const char * __restrict s, size_t n)
 +{
 +	return mbstowcs_l(pwcs, s, n, __get_locale());
  }
+ DEF_STRONG(mbstowcs);
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mbtowc.3 src/lib/libc/locale/mbtowc.3
 --- src53collation/lib/libc/locale/mbtowc.3	Mon Mar 25 18:28:42 2013
 +++ src/lib/libc/locale/mbtowc.3	Wed Apr  3 11:15:27 2013
@@ -1053,7 +1059,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mb
  		return (-1);
  	return ((int)rval);
 +}
-+
++DEF_WEAK(mbtowc_l);
 +
 +int
 +mbtowc(wchar_t * __restrict pwc, const char * __restrict s, size_t n)
@@ -1083,7 +1089,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mu
  {
  	struct _citrus_ctype_rec *cc;
  	_RuneLocale *rl;
-@@ -46,87 +51,143 @@
+@@ -46,87 +51,150 @@
  		return 1;
  
  	rl = _ps_to_runelocale(ps);
@@ -1096,6 +1102,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mu
  	cc = rl->rl_citrus_ctype;
  	return (*cc->cc_ops->co_mbsinit)(ps);
  }
++DEF_STRONG(mbsinit_l);
 +
 +int
 +mbsinit(const mbstate_t *ps)
@@ -1119,6 +1126,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mu
 +	cc = rl->rl_citrus_ctype;
  	return (*cc->cc_ops->co_mbrtowc)(pwc, s, n, _ps_to_private(ps));
  }
++DEF_STRONG(mbrtowc_l);
 +
 +size_t
 +mbrtowc(wchar_t *pwc, const char *s, size_t n, mbstate_t *ps)
@@ -1139,6 +1147,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mu
 -	return (mbsnrtowcs(dst, src, SIZE_MAX, len, ps));
 +	return (mbsnrtowcs_l(dst, src, SIZE_MAX, len, ps, loc));
  }
++DEF_STRONG(mbsrtowcs_l);
 +
 +size_t
 +mbsrtowcs(wchar_t *dst, const char **src, size_t len, mbstate_t *ps)
@@ -1165,6 +1174,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mu
  	return (*cc->cc_ops->co_mbsnrtowcs)(dst, src, nmc, len,
  	    _ps_to_private(ps));
  }
++DEF_WEAK(mbsnrtowcs_l);
 +
 +size_t
 +mbsnrtowcs(wchar_t *dst, const char **src, size_t nmc, size_t len,
@@ -1189,6 +1199,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mu
 +	cc = rl->rl_citrus_ctype;
  	return (*cc->cc_ops->co_wcrtomb)(s, wc, _ps_to_private(ps));
  }
++DEF_STRONG(wcrtomb_l);
 +
 +size_t
 +wcrtomb(char *s, wchar_t wc, mbstate_t *ps)
@@ -1209,6 +1220,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mu
 -	return (wcsnrtombs(dst, src, SIZE_MAX, len, ps));
 +	return (wcsnrtombs_l(dst, src, SIZE_MAX, len, ps, loc));
  }
++DEF_STRONG(wcsrtombs_l);
 +
 +size_t
 +wcsrtombs(char *dst, const wchar_t **src, size_t len, mbstate_t *ps)
@@ -1235,6 +1247,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mu
  	return (*cc->cc_ops->co_wcsnrtombs)(dst, src, nwc, len,
  	    _ps_to_private(ps));
 +}
++DEF_WEAK(wcsnrtombs_l);
 +
 +size_t
 +wcsnrtombs(char *dst, const wchar_t **src, size_t nwc, size_t len,
@@ -2061,7 +2074,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/wc
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/wcstombs.c src/lib/libc/locale/wcstombs.c
 --- src53collation/lib/libc/locale/wcstombs.c	Mon Mar 25 18:28:42 2013
 +++ src/lib/libc/locale/wcstombs.c	Wed Apr  3 11:15:27 2013
-@@ -30,14 +30,23 @@
+@@ -30,15 +30,25 @@
  #include <stdlib.h>
  #include <string.h>
  #include <wchar.h>
@@ -2081,12 +2094,14 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/wc
 -	return (wcsrtombs(s, &pwcsp, n, &mbs));
 +	return (wcsrtombs_l(s, &pwcsp, n, &mbs, locale));
 +}
++DEF_STRONG(wcstombs_l);
 +
 +size_t
 +wcstombs(char * __restrict s, const wchar_t * __restrict pwcs, size_t n)
 +{
 +	return wcstombs_l(s, pwcs, n, __get_locale());
  }
+ DEF_STRONG(wcstombs);
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/wcsxfrm.c src/lib/libc/locale/wcsxfrm.c
 --- src53collation/lib/libc/locale/wcsxfrm.c	Mon Apr  1 08:25:36 2013
 +++ src/lib/libc/locale/wcsxfrm.c	Tue Apr  2 09:02:06 2013
@@ -2172,7 +2187,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/wc
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/wctob.c src/lib/libc/locale/wctob.c
 --- src53collation/lib/libc/locale/wctob.c	Mon Mar 25 18:28:42 2013
 +++ src/lib/libc/locale/wctob.c	Wed Apr  3 11:15:27 2013
-@@ -29,15 +29,23 @@
+@@ -29,16 +29,25 @@
  #include <stdio.h>
  #include <string.h>
  #include <wchar.h>
@@ -2192,12 +2207,14 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/wc
  		return (EOF);
  	return ((unsigned char)*buf);
 +}
++DEF_STRONG(wctob_l);
 +
 +int
 +wctob(wint_t c)
 +{
 +	return wctob_l(c, __get_locale());
  }
+ DEF_STRONG(wctob);
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/wctomb.3 src/lib/libc/locale/wctomb.3
 --- src53collation/lib/libc/locale/wctomb.3	Mon Mar 25 18:28:42 2013
 +++ src/lib/libc/locale/wctomb.3	Wed Apr  3 11:15:27 2013
@@ -2300,7 +2317,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/wc
  {
  	static mbstate_t mbs;
  	size_t rval;
-@@ -41,7 +43,13 @@
+@@ -41,10 +43,16 @@
  		memset(&mbs, 0, sizeof(mbs));
  		return (0);
  	}
@@ -2308,13 +2325,16 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/wc
 +	if ((rval = wcrtomb_l(s, wchar, &mbs, loc)) == (size_t)-1)
  		return (-1);
  	return ((int)rval);
-+}
-+
+ }
++DEF_STRONG(wctomb_l);
+ 
 +int
 +wctomb(char *s, wchar_t wchar)
 +{
 +	return wctomb_l(s, wchar, __get_locale());
- }
++}
+ DEF_STRONG(wctomb);
+ 
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/xlocale.3 src/lib/libc/locale/xlocale.3
 --- src53collation/lib/libc/locale/xlocale.3	Wed Dec 31 19:00:00 1969
 +++ src/lib/libc/locale/xlocale.3	Tue Apr  2 06:11:30 2013
@@ -3442,14 +3462,14 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/regress/lib/libc/l
 +
 +void test_xlocale() {
 +	static locale_t cl;
-+	cl = __get_locale();
++/*	cl = __get_locale();
 +	printf("%p\n", cl);
-+	dpl((void *)cl);
++	dpl((void *)cl); */
 +	char *nl = setlocale(LC_ALL, "es_CO.UTF-8");
-+	dpl((void *)__get_locale());
++//	dpl((void *)__get_locale());
 +	printf("locale %s\n", nl);
 +	locale_t es_CO_UTF_8 = uselocale(NULL);
-+	dpl(es_CO_UTF_8);
++//	dpl(es_CO_UTF_8);
 +	char *r;
 +	p(strcmp((r = (char *)querylocale(LC_CTYPE, es_CO_UTF_8)), "es_CO.UTF-8") == 0);
 +	printf("r=%s\n", r);
@@ -4076,68 +4096,15 @@ diff -ruN -x *.o -x *~ src56-orig/lib/libc/citrus/citrus_utf8.h src/lib/libc/cit
 diff -u src59-orig/lib/libc/Symbols.list src/lib/libc/Symbols.list
 --- src59-orig/lib/libc/Symbols.list	Wed Nov 18 11:50:08 2015
 +++ src/lib/libc/Symbols.list	Sun May 15 10:04:22 2016
-@@ -1676,6 +1676,134 @@
+@@ -1676,6 +1676,29 @@
  uuid_is_nil
  uuid_to_string
  
 +
 +/* xlocale */
-+asprintf_l
-+atof_l
-+atoi_l
-+atol_l
-+atoll_l
 +btowc_l
-+digittoint_l
-+dprintf_l
 +duplocale
-+fgetwc_l
-+fgetws_l
-+fprintf_l
-+fputwc_l
-+fputws_l
 +freelocale
-+fscanf_l
-+fwprintf_l
-+fwscanf_l
-+isalnum_l
-+isalpha_l
-+isblank_l
-+iscntrl_l
-+isdigit_l
-+isgraph_l
-+ishexnumber_l
-+isideogram_l
-+islower_l
-+isnumber_l
-+isphonogram_l
-+isprint_l
-+ispunct_l
-+isrune_l
-+isspace_l
-+isspecial_l
-+isupper_l
-+iswalnum_l
-+iswalpha_l
-+iswblank_l
-+iswcntrl_l
-+iswctype_l
-+iswdigit_l
-+iswgraph_l
-+iswhexnumber_l
-+iswideogram_l
-+iswlower_l
-+iswnumber_l
-+iswphonogram_l
-+iswprint_l
-+iswpunct_l
-+iswrune_l
-+iswspace_l
-+iswspecial_l
-+iswupper_l
-+iswxdigit_l
-+isxdigit_l
-+localeconv_l
 +mblen_l
 +mbrlen_l
 +mbrtowc_l
@@ -4147,68 +4114,130 @@ diff -u src59-orig/lib/libc/Symbols.list src/lib/libc/Symbols.list
 +mbstowcs_l
 +mbtowc_l
 +newlocale
-+nextwctype_l
-+nl_langinfo_l
-+printf_l
 +querylocale
-+snprintf_l
-+sprintf_l
-+sscanf_l
-+strcasecmp_l
-+strcasestr_l
-+strcoll_l
-+strfmon_l
-+strftime_l
-+strncasecmp_l
-+strptime_l
-+strtod_l
-+strtof_l
-+strtoimax_l
-+strtol_l
-+strtold_l
-+strtoll_l
-+strtonum_l
-+strtoq_l
-+strtoul_l
-+strtoull_l
-+strtoumax_l
-+strtouq_l
-+strxfrm_l
-+swprintf_l
-+swscanf_l
-+tolower_l
-+toupper_l
-+towctrans_l
-+towlower_l
-+towupper_l
 +uselocale
 +wcrtomb_l
-+wcscasecmp_l
-+wcscoll_l
-+wcsftime_l
-+wcsncasecmp_l
 +wcsnrtombs_l
 +wcsrtombs_l
-+wcstod_l
-+wcstof_l
-+wcstoimax_l
-+wcstol_l
-+wcstold_l
-+wcstoll_l
 +wcstombs_l
-+wcstoul_l
-+wcstoull_l
-+wcstoumax_l
-+wcswidth_l
-+wcsxfrm_l
 +wctob_l
 +wctomb_l
-+wctrans_l
-+wctype_l
-+wcwidth_l
-+wprintf_l
 +
  /* yp */
  yp_all
  yp_bind
 
+diff -ruN src/lib/libc/hidden/stdlib.h.orig src/lib/libc/hidden/stdlib.h
+--- src/lib/libc/hidden/stdlib.h.orig	Thu Jun  9 23:21:42 2016
++++ src/lib/libc/hidden/stdlib.h	Fri Aug 19 07:07:31 2016
+@@ -36,6 +36,7 @@
+ #define _LIBC_STDLIB_H_
+ 
+ #include_next <stdlib.h>
++#include_next <xlocale.h>
+ 
+ __BEGIN_HIDDEN_DECLS
+ char	*__findenv(const char *, int, int *);
+@@ -101,8 +102,11 @@
+ PROTO_DEPRECATED(lrand48);
+ /*PROTO_NORMAL(malloc);			not yet, breaks emacs */
+ PROTO_STD_DEPRECATED(mblen);
++PROTO_NORMAL(mblen_l);
+ PROTO_NORMAL(mbstowcs);	
++PROTO_NORMAL(mbstowcs_l);	
+ PROTO_STD_DEPRECATED(mbtowc);
++PROTO_NORMAL(mbtowc_l);	
+ PROTO_DEPRECATED(mergesort);
+ PROTO_DEPRECATED(mkdtemp);
+ PROTO_NORMAL(mkostemp);
+@@ -156,6 +160,8 @@
+ PROTO_NORMAL(unsetenv);
+ PROTO_STD_DEPRECATED(valloc);
+ PROTO_NORMAL(wcstombs);
++PROTO_NORMAL(wcstombs_l);
+ PROTO_NORMAL(wctomb);
++PROTO_NORMAL(wctomb_l);
+ 
+ #endif /* _LIBC_STDLIB_H_ */
+diff -ruN src/lib/libc/hidden/wchar.h.orig src/lib/libc/hidden/wchar.h
+--- src/lib/libc/hidden/wchar.h.orig	Thu Jun  9 23:21:42 2016
++++ src/lib/libc/hidden/wchar.h	Fri Aug 19 06:29:53 2016
+@@ -19,8 +19,10 @@
+ #define _LIBC_WCHAR_H_
+ 
+ #include_next <wchar.h>
++#include_next <xlocale.h>
+ 
+ PROTO_NORMAL(btowc);
++PROTO_NORMAL(btowc_l);
+ PROTO_NORMAL(fgetwc);
+ PROTO_NORMAL(fgetws);
+ PROTO_NORMAL(fputwc);
+@@ -31,10 +33,15 @@
+ PROTO_NORMAL(getwc);
+ PROTO_NORMAL(getwchar);
+ PROTO_NORMAL(mbrlen);
++PROTO_NORMAL(mbrlen_l);
+ PROTO_NORMAL(mbrtowc);
++PROTO_NORMAL(mbrtowc_l);
+ PROTO_NORMAL(mbsinit);
++PROTO_NORMAL(mbsinit_l);
+ PROTO_NORMAL(mbsnrtowcs);
++PROTO_NORMAL(mbsnrtowcs_l);
+ PROTO_NORMAL(mbsrtowcs);
++PROTO_NORMAL(mbsrtowcs_l);
+ PROTO_DEPRECATED(open_wmemstream);
+ PROTO_NORMAL(putwc);
+ PROTO_NORMAL(putwchar);
+@@ -48,6 +55,7 @@
+ PROTO_NORMAL(vwprintf);
+ PROTO_NORMAL(vwscanf);
+ PROTO_NORMAL(wcrtomb);
++PROTO_NORMAL(wcrtomb_l);
+ PROTO_NORMAL(wcscasecmp);
+ PROTO_NORMAL(wcscat);
+ PROTO_NORMAL(wcschr);
+@@ -65,9 +73,11 @@
+ PROTO_NORMAL(wcsncmp);
+ PROTO_NORMAL(wcsncpy);
+ PROTO_NORMAL(wcsnrtombs);
++PROTO_NORMAL(wcsnrtombs_l);
+ PROTO_NORMAL(wcspbrk);
+ PROTO_NORMAL(wcsrchr);
+ PROTO_NORMAL(wcsrtombs);
++PROTO_NORMAL(wcsrtombs_l);
+ PROTO_NORMAL(wcsspn);
+ PROTO_NORMAL(wcsstr);
+ PROTO_NORMAL(wcstod);
+@@ -82,6 +92,7 @@
+ PROTO_NORMAL(wcswidth);
+ PROTO_NORMAL(wcsxfrm);
+ PROTO_NORMAL(wctob);
++PROTO_NORMAL(wctob_l);
+ PROTO_NORMAL(wcwidth);
+ PROTO_NORMAL(wmemchr);
+ PROTO_NORMAL(wmemcmp);
+diff -ruN src59-orig/lib/libc/hidden/xlocale.h src/lib/libc/hidden/xlocale.h
+--- src59-orig/lib/libc/hidden/xlocale.h	Wed Dec 31 19:00:00 1969
++++ src/lib/libc/hidden/xlocale.h	Fri Aug 19 22:07:22 2016
+@@ -0,0 +1,20 @@
++/*
++ * Public domain according to Colombian Legislation.
++ * http://www.pasosdejesus.org/dominio_publico_colombia.html
++ * 2016. vtamara@pasosdeJesus.org 
++ *
++ * $adJ$
++ */
++
++#ifndef _LIBC_XLOCALE_H_
++#define _LIBC_XLOCALE_H_
++
++#include_next <xlocale.h>
++
++PROTO_STD_DEPRECATED(newlocale);
++PROTO_STD_DEPRECATED(duplocale);
++PROTO_STD_DEPRECATED(freelocale);
++PROTO_STD_DEPRECATED(querylocale);
++PROTO_STD_DEPRECATED(uselocale);
++
++#endif /* !_LIBC_MONETARY_H_ */
