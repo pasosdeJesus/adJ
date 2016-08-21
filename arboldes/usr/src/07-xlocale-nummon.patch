@@ -3170,3 +3170,155 @@ diff -ruN src54-x6/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/reg
  	
  	return bad != 0;
  }
+diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/wcstold.c src53xlocale2/lib/libc/locale/wcstold.c
+--- src53xlocale1/lib/libc/locale/wcstold.c	Mon Apr  8 21:20:25 2013
++++ src53xlocale2/lib/libc/locale/wcstold.c	Fri Apr 12 12:07:57 2013
+@@ -5,9 +5,13 @@
+ #include <string.h>
+ #include <wchar.h>
+ #include <wctype.h>
++#include <xlocale.h>
+ 
++#include "locale/xlocale_private.h"
++
+ #define FUNCNAME	wcstold
++#define FUNCNAMEL	wcstold_l
+ typedef long double	float_type;
+-#define STRTOD_FUNC	strtold
++#define STRTOD_FUNC	strtold_l
+ 
+ #include "_wcstod.h"
+diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/_wcstod.h src53xlocale2/lib/libc/locale/_wcstod.h
+--- src53xlocale1/lib/libc/locale/_wcstod.h	Mon Apr  8 21:20:25 2013
++++ src53xlocale2/lib/libc/locale/_wcstod.h	Fri Apr 12 12:07:57 2013
+@@ -34,17 +34,30 @@
+  *
+  * parameters:
+  *	FUNCNAME : function name
++ *	FUNCNAMEL : function name with postfix _l
+  *      float_type : return type
+- *      STRTOD_FUNC : conversion function
++ *      STRTOD_FUNC : conversion function with postfix _l
+  */
+ 
++#include <xlocale.h>
++
++int iswspace_l(wint_t, locale_t);
++
++
+ float_type
+-FUNCNAME(const wchar_t *nptr, wchar_t **endptr)
++FUNCNAMEL(const wchar_t *nptr, wchar_t **endptr, locale_t loc)
+ {
+ 	const wchar_t *src;
+ 	size_t size;
+ 	const wchar_t *start;
+ 	const wchar_t *aftersign;
++	char *cdp = localeconv_l(loc)->decimal_point;
++	wchar_t decimalpoint; 
++        if (strlen(cdp) != 1) {
++		decimalpoint = L'.';
++	} else {
++		decimalpoint = btowc_l(cdp[0], loc);
++	}
+ 
+ 	/*
+ 	 * check length of string and call strtod
+@@ -52,7 +65,7 @@
+ 	src = nptr;
+ 
+ 	/* skip space first */
+-	while (iswspace(*src)) {
++	while (iswspace_l(*src, loc)) {
+ 		src++;
+ 	}
+ 
+@@ -61,13 +74,13 @@
+ 	if (*src && wcschr(L"+-", *src))
+ 		src++;
+ 	aftersign = src;
+-	if (wcsncasecmp(src, L"inf", 3) == 0) {
++	if (wcsncasecmp_l(src, L"inf", 3, loc) == 0) {
+ 		src += 3;
+-		if (wcsncasecmp(src, L"inity", 5) == 0)
++		if (wcsncasecmp_l(src, L"inity", 5, loc) == 0)
+ 			src += 5;
+ 		goto match;
+ 	}
+-	if (wcsncasecmp(src, L"nan", 3) == 0) {
++	if (wcsncasecmp_l(src, L"nan", 3, loc) == 0) {
+ 		src += 3;
+ 		if (*src == L'(') {
+ 			size = 1;
+@@ -80,7 +93,7 @@
+ 	}
+ 	size = wcsspn(src, L"0123456789");
+ 	src += size;
+-	if (*src == L'.') {/* XXX use localeconv */
++	if (*src == decimalpoint) {/* XXX use localeconv */
+ 		src++;
+ 		size = wcsspn(src, L"0123456789");
+ 		src += size;
+@@ -109,7 +122,7 @@
+ 
+ 		s = start;
+ 		memset(&st, 0, sizeof(st));
+-		bufsize = wcsnrtombs(NULL, &s, size, 0, &st);
++		bufsize = wcsnrtombs_l(NULL, &s, size, 0, &st, loc);
+ 
+ 		buf = malloc(bufsize + 1);
+ 		if (!buf) {
+@@ -119,7 +132,7 @@
+ 
+ 		s = start;
+ 		memset(&st, 0, sizeof(st));
+-		size_converted = wcsnrtombs(buf, &s, size, bufsize, &st);
++		size_converted = wcsnrtombs_l(buf, &s, size, bufsize, &st, loc);
+ 		if (size_converted != bufsize) {
+ 			/* XXX should not happen */
+ 			free(buf);
+@@ -128,12 +141,12 @@
+ 		}
+ 
+ 		buf[bufsize] = 0;
+-		result = STRTOD_FUNC(buf, &end);
++		result = STRTOD_FUNC(buf, &end, loc);
+ 
+ 		if (endptr) {
+ 			const char *s = buf;
+ 			memset(&st, 0, sizeof(st));
+-			size = mbsnrtowcs(NULL, &s, end - buf, 0, &st);
++			size = mbsnrtowcs_l(NULL, &s, end - buf, 0, &st, loc);
+ 			*endptr = (wchar_t*)start + size;
+ 		}
+ 
+@@ -147,5 +160,11 @@
+ 		*endptr = (wchar_t*)nptr;
+ 
+ 	return 0;
++}
++
++float_type
++FUNCNAME(const wchar_t *nptr, wchar_t **endptr)
++{
++	return FUNCNAMEL(nptr, endptr, __get_locale());
+ }
+ DEF_STRONG(FUNCNAME);
+diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/wcstod.c src53xlocale2/lib/libc/locale/wcstod.c
+--- src53xlocale1/lib/libc/locale/wcstod.c	Mon Apr  8 21:20:25 2013
++++ src53xlocale2/lib/libc/locale/wcstod.c	Fri Apr 12 12:07:57 2013
+@@ -5,9 +5,13 @@
+ #include <string.h>
+ #include <wchar.h>
+ #include <wctype.h>
++#include <xlocale.h>
+ 
++#include "locale/xlocale_private.h"
++
+ #define FUNCNAME	wcstod
++#define FUNCNAMEL	wcstod_l
+ typedef double		float_type;
+-#define STRTOD_FUNC	strtod
++#define STRTOD_FUNC	strtod_l
+ 
+ #include "_wcstod.h"

@@ -639,3 +639,53 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/regress/lib/libc/locale/che
  	
  	return bad != 0;
  }
+diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/wcstof.c src53xlocale2/lib/libc/locale/wcstof.c
+--- src53xlocale1/lib/libc/locale/wcstof.c	Mon Apr  8 21:20:25 2013
++++ src53xlocale2/lib/libc/locale/wcstof.c	Fri Apr 12 12:07:57 2013
+@@ -5,9 +5,13 @@
+ #include <string.h>
+ #include <wchar.h>
+ #include <wctype.h>
++#include <xlocale.h>
+ 
++#include "locale/xlocale_private.h"
++
+ #define FUNCNAME	wcstof
++#define FUNCNAMEL	wcstof_l
+ typedef float		float_type;
+-#define STRTOD_FUNC	strtof
++#define STRTOD_FUNC	strtof_l
+ 
+ #include "_wcstod.h"
+diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/stdio/swscanf.c src53xlocale2/lib/libc/stdio/swscanf.c
+--- src53xlocale1/lib/libc/stdio/swscanf.c	Mon Apr  8 21:20:25 2013
++++ src53xlocale2/lib/libc/stdio/swscanf.c	Fri Apr 12 12:07:57 2013
+@@ -29,6 +29,7 @@
+ #include <stdarg.h>
+ #include <stdio.h>
+ #include <wchar.h>
++#include <xlocale.h>
+ 
+ int
+ swscanf(const wchar_t * __restrict str, const wchar_t * __restrict fmt, ...)
+@@ -38,6 +39,20 @@
+ 
+ 	va_start(ap, fmt);
+ 	r = vswscanf(str, fmt, ap);
++	va_end(ap);
++
++	return (r);
++}
++
++int
++swscanf_l(const wchar_t * __restrict str, locale_t loc,
++		const wchar_t * __restrict fmt, ...)
++{
++	va_list ap;
++	int r;
++
++	va_start(ap, fmt);
++	r = vswscanf_l(str, loc, fmt, ap);
+ 	va_end(ap);
+ 
+ 	return (r);

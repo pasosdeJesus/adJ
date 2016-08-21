@@ -2959,3 +2959,202 @@ diff -u src-ant/lib/libc/locale/wcstod.3 src/lib/libc/locale/wcstod.3
  functions conform to
  .St -isoC-99 .
 +The functions with postfix "_l" are Darwin extensions.
+diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/stdio/putwchar.c src53xlocale2/lib/libc/stdio/putwchar.c
+--- src53xlocale1/lib/libc/stdio/putwchar.c	Mon Apr  8 21:20:25 2013
++++ src53xlocale2/lib/libc/stdio/putwchar.c	Fri Apr 12 12:07:57 2013
+@@ -31,6 +31,7 @@
+ 
+ #include <stdio.h>
+ #include <wchar.h>
++#include <xlocale.h>
+ 
+ /*
+  * A subroutine version of the macro putwchar.
+@@ -40,6 +41,11 @@
+ wint_t
+ putwchar(wchar_t wc)
+ {
+-
+ 	return fputwc(wc, stdout);
++}
++
++wint_t
++putwchar_l(wchar_t wc, locale_t loc)
++{
++	return fputwc_l(wc, stdout, loc);
+ }
+diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/stdio/putwc.c src53xlocale2/lib/libc/stdio/putwc.c
+--- src53xlocale1/lib/libc/stdio/putwc.c	Mon Apr  8 21:20:25 2013
++++ src53xlocale2/lib/libc/stdio/putwc.c	Fri Apr 12 12:07:57 2013
+@@ -31,6 +31,7 @@
+ 
+ #include <stdio.h>
+ #include <wchar.h>
++#include <xlocale.h>
+ 
+ /*
+  * A subroutine version of the macro putwc.
+@@ -40,6 +41,11 @@
+ wint_t
+ putwc(wchar_t wc, FILE *fp)
+ {
+-
+ 	return fputwc(wc, fp);
++}
++
++wint_t
++putwc_l(wchar_t wc, FILE *fp, locale_t loc)
++{
++	return fputwc_l(wc, fp, loc);
+ }
+diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/stdio/getwchar.c src53xlocale2/lib/libc/stdio/getwchar.c
+--- src53xlocale1/lib/libc/stdio/getwchar.c	Mon Apr  8 21:20:25 2013
++++ src53xlocale2/lib/libc/stdio/getwchar.c	Fri Apr 12 12:07:57 2013
+@@ -31,6 +31,7 @@
+ 
+ #include <stdio.h>
+ #include <wchar.h>
++#include <xlocale.h>
+ 
+ /*
+  * A subroutine version of the macro getwchar.
+@@ -40,6 +41,11 @@
+ wint_t
+ getwchar()
+ {
+-
+ 	return fgetwc(stdin);
++}
++
++wint_t
++getwchar_l(locale_t loc)
++{
++	return fgetwc_l(stdin, loc);
+ }
+diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/stdio/getwc.c src53xlocale2/lib/libc/stdio/getwc.c
+--- src53xlocale1/lib/libc/stdio/getwc.c	Mon Apr  8 21:20:25 2013
++++ src53xlocale2/lib/libc/stdio/getwc.c	Fri Apr 12 12:07:57 2013
+@@ -31,6 +31,7 @@
+ 
+ #include <stdio.h>
+ #include <wchar.h>
++#include <xlocale.h>
+ 
+ /*
+  * A subroutine version of the macro getwc.
+@@ -42,4 +43,11 @@
+ {
+ 
+ 	return fgetwc(fp);
++}
++
++wint_t
++getwc_l(FILE *fp, locale_t l)
++{
++
++	return fgetwc_l(fp, l);
+ }
+diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/stdio/vwprintf.c src53xlocale2/lib/libc/stdio/vwprintf.c
+--- src53xlocale1/lib/libc/stdio/vwprintf.c	Mon Apr  8 21:20:25 2013
++++ src53xlocale2/lib/libc/stdio/vwprintf.c	Fri Apr 12 12:07:57 2013
+@@ -34,9 +34,16 @@
+ #include <stdarg.h>
+ #include <stdio.h>
+ #include <wchar.h>
++#include <xlocale.h>
+ 
+ int
+ vwprintf(const wchar_t * __restrict fmt, __va_list ap)
+ {
+ 	return (vfwprintf(stdout, fmt, ap));
++}
++
++int
++vwprintf_l(locale_t loc, const wchar_t * __restrict fmt, __va_list ap)
++{
++	return (vfwprintf_l(stdout, loc, fmt, ap));
+ }
+diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/stdio/wprintf.c src53xlocale2/lib/libc/stdio/wprintf.c
+--- src53xlocale1/lib/libc/stdio/wprintf.c	Mon Apr  8 21:20:25 2013
++++ src53xlocale2/lib/libc/stdio/wprintf.c	Fri Apr 12 12:07:57 2013
+@@ -34,6 +34,7 @@
+ #include <stdio.h>
+ #include <stdarg.h>
+ #include <wchar.h>
++#include <xlocale.h>
+ 
+ int
+ wprintf(const wchar_t * __restrict fmt, ...)
+@@ -43,6 +44,18 @@
+ 
+ 	va_start(ap, fmt);
+ 	ret = vfwprintf(stdout, fmt, ap);
++	va_end(ap);
++	return (ret);
++}
++
++int
++wprintf_l(locale_t loc, const wchar_t * __restrict fmt, ...)
++{
++	int ret;
++	va_list ap;
++
++	va_start(ap, fmt);
++	ret = vfwprintf_l(stdout, loc, fmt, ap);
+ 	va_end(ap);
+ 	return (ret);
+ }
+diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/stdio/swprintf.c src53xlocale2/lib/libc/stdio/swprintf.c
+--- src53xlocale1/lib/libc/stdio/swprintf.c	Mon Apr  8 21:20:25 2013
++++ src53xlocale2/lib/libc/stdio/swprintf.c	Fri Apr 12 12:07:57 2013
+@@ -30,6 +30,7 @@
+ #include <stdarg.h>
+ #include <stdio.h>
+ #include <wchar.h>
++#include <xlocale.h>
+ 
+ int
+ swprintf(wchar_t * __restrict s, size_t n, const wchar_t * __restrict fmt, ...)
+@@ -39,6 +40,20 @@
+ 
+ 	va_start(ap, fmt);
+ 	ret = vswprintf(s, n, fmt, ap);
++	va_end(ap);
++
++	return (ret);
++}
++
++int
++swprintf_l(wchar_t * __restrict s, size_t n, locale_t loc,
++		const wchar_t * __restrict fmt, ...)
++{
++	int ret;
++	va_list ap;
++
++	va_start(ap, fmt);
++	ret = vswprintf_l(s, n, loc, fmt, ap);
+ 	va_end(ap);
+ 
+ 	return (ret);
+diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/stdio/vwscanf.c src53xlocale2/lib/libc/stdio/vwscanf.c
+--- src53xlocale1/lib/libc/stdio/vwscanf.c	Mon Apr  8 21:20:25 2013
++++ src53xlocale2/lib/libc/stdio/vwscanf.c	Fri Apr 12 12:07:57 2013
+@@ -29,10 +29,18 @@
+ #include <stdarg.h>
+ #include <stdio.h>
+ #include <wchar.h>
++#include <xlocale.h>
+ 
+ int
+ vwscanf(const wchar_t * __restrict fmt, __va_list ap)
+ {
+ 
+ 	return (vfwscanf(stdin, fmt, ap));
++}
++
++int
++vwscanf_l(locale_t loc, const wchar_t * __restrict fmt, __va_list ap)
++{
++
++	return (vfwscanf_l(stdin, loc, fmt, ap));
+ }
