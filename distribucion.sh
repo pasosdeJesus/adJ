@@ -481,7 +481,7 @@ if (test "$sn" = "s") then {
 	#rm -rf /usr/xobj/*
 	#mkdir -p /usr/xobj/app/fvwm/libs
 	#echo "** build 2";
-	make build
+	#make build
 	if (test "$?" != "0") then {
 		echo " *> build incompleto";
 		exit $?;
@@ -749,6 +749,8 @@ if (test "$sn" = "s") then {
 	# Modificados para posibilitar compilación
 	# Deben estar en mystuff
 
+	paquete colorls
+	exit 1
 	####
 	# Retroportados para cerrar fallas o actualizar
 	# Deben estar en arboldes/usr/ports/mystuff y en /usr/ports de current
@@ -832,11 +834,6 @@ if (test "$sn" = "s") then {
 	paquete wget
 	paquete wxWidgets-gtk2
 
-	####
-	# Adaptados de portes estables pero mejorados para adJ
-	# Deben estar en arboldes/usr/ports/mystuff 
-	paquete xfe
-
 	###
         # Actualizados.  Están desactualizado en OpenBSD estable y current
 	paquete php paquetes "php php-bz2 php-curl php-fpm php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 5.6
@@ -845,9 +842,16 @@ if (test "$sn" = "s") then {
 	# Retroportados no existentes en versión actual
 
 	####
+	# Adaptados de portes estables pero mejorados para adJ, por 
+	# ejemplo ordenamientos en español deben ser correctos.
+	# Deben estar en arboldes/usr/ports/mystuff 
+	paquete xfe
+	paquete colorls
+	paquete editors/hexedit # Soporta tamaños de archivos más grandes
+
+	####
 	# Unicos en adJ 
 	# Deben estar en arboldes/usr/ports/mystuff pero no en /usr/ports
-	paquete editors/hexedit # Soporta tamaños de archivos más grandes
 	paquete emulators/realboy
 	paquete lang/ocaml-labltk
 	paquete sysutils/ganglia

@@ -86,8 +86,10 @@ adJ y OpenBSD 5.9:
 * ```SIVeL 1.2.2```  Ver 
   <http://sivel.sourceforge.net/1.2/actualizacion-sivel.html#actualizaciondeunounoaunodos>
 * ```SIVeL 2.0b1``` Versión beta 1 de SIVeL 2. Escrita sobre Ruby on Rails.
-* Incluid paquete ```htop```
-* ```PostgreSQL 9.5.3``` retroportado y recompilado para cerrar fallas, pero 
+* Nuevo porte y paquete ```htop```
+* Porte colorls mejorado para soportar locale en ordenamiento alfábetico,
+  funciona bien en español.
+* ```PostgreSQL 9.5.4``` retroportado y recompilado para cerrar fallas, pero 
   además con soporte UTF-8 y ordenamientos alfabéticos en español.  Desde adJ 
   5.8 socket reubicado por omisión de ```/var/www/tmp``` a 
   ```/var/www/var/run/postgresql```.

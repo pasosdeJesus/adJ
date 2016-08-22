@@ -5,7 +5,7 @@ Con respecto a OpenBSD 5.9 las novedades son:
 	* Organización del CD de instalación diferente
 
 * Kernel
-	* Palabra daemon renombrada por service ver 
+	* Palabra daemon renombrada por servicio ver 
 	<http://aprendiendo.pasosdejesus.org/?id=Renombrando+Daemon+por+Service>
 	* Nombre de compilación del kernel reportado por uname APRENDIENDODEJESUS
 
@@ -16,8 +16,7 @@ Con respecto a OpenBSD 5.9 las novedades son:
 		* rsync-adJ 	Para descargar versiones nuevas
 	* Archivos de órdenes nuevos en /usr/sbin/
 		* adicuenta 	Agrega cuenta de correo 
-		* auditabitaco
-		* ras Audita bitacoras de /var/log
+		* auditabitacoras Audita bitacoras de /var/log
 		* elimcuenta 	Elimina cuenta de correo
 		* monitorea 	Revisa conexión a otro servidor
 		* prepopensmtpd 	Prepara servidor de correo
@@ -93,13 +92,13 @@ Con respecto a OpenBSD 5.9 las novedades son:
 		llvm scribus vlc wget wxWidgets-gtk2
 
 	* Adaptados de portes estables pero mejorados para adJ:
-		* xfe		Soporta paquetes tgz
+		* colorls	Ordena alfabeticamente de acuerdo a locale
 		* hexedit 	Soporta tamaños de archivos más grandes
+		* xfe		Soporta paquetes tgz
 
 	* Retroportados de versión posterior para cerrar fallas o actualizar 
 	  (aunque existen en actual)
 		* chromium node openldap-client py-openssl py-zopeinterface ruby 
-
 	* Retroportados de versión posterior que no existen en actual
 		* security/letsencrypt devel/py-configargparse 
 		  devel/py-parsedatetime devel/py-python2-pythondialog 

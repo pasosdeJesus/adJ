@@ -1,0 +1,240 @@
+$OpenBSD: patch-colorls_1,v 1.15 2014/11/29 19:16:48 naddy Exp $
+--- colorls.1.orig	Sat Nov 29 19:57:03 2014
++++ colorls.1	Sat Nov 29 20:02:08 2014
+@@ -37,11 +37,11 @@
+ .Dt COLORLS 1
+ .Os
+ .Sh NAME
+-.Nm ls
++.Nm colorls
+ .Nd list directory contents
+ .Sh SYNOPSIS
+-.Nm ls
+-.Op Fl 1AaCcdFfgHhikLlmnopqRrSsTtux
++.Nm
++.Op Fl 1AaCcdFfGgHhikLlmnopqRrSsTtux
+ .Op Ar
+ .Sh DESCRIPTION
+ For each operand that names a
+@@ -123,6 +123,12 @@ after each that is a FIFO.
+ Output is not sorted.
+ This option implies
+ .Fl a .
++.It Fl G
++Enable colorized output.
++This option is equivalent to defining
++.Ev CLICOLOR
++in the environment.
++(See below.)
+ .It Fl g
+ List in long format as in
+ .Fl l ,
+@@ -425,7 +431,7 @@ user append-only
+ user immutable
+ .El
+ .Sh ENVIRONMENT
+-.Bl -tag -width BLOCKSIZE
++.Bl -tag -width CLICOLOR_FORCE
+ .It Ev BLOCKSIZE
+ If the environment variable
+ .Ev BLOCKSIZE
+@@ -435,11 +441,138 @@ option is not specified, the block counts
+ (see
+ .Fl s )
+ will be displayed in units of that size block.
++.It Ev CLICOLOR
++Use
++\*[Ai]
++color sequences to distinguish file types.
++See
++.Ev LSCOLORS
++below.
++In addition to the file types mentioned in the
++.Fl F
++option some extra attributes (setuid bit set, etc.) are also displayed.
++The colorization is dependent on a terminal type with the proper
++.Xr termcap 5
++capabilities.
++To display the colors on the
++.Xr wscons 4
++console, for example,
++the
++.Ev TERM
++variable must be set to
++.Dq wsvt25 .
++Other terminal types may require similar adjustments.
++Colorization is silently disabled if the output isn't directed to a terminal
++unless the
++.Ev CLICOLOR_FORCE
++variable is defined.
++.It Ev CLICOLOR_FORCE
++Color sequences are normally disabled if the output isn't directed to
++a terminal.
++This can be overridden by setting this flag.
++The
++.Ev TERM
++variable still needs to reference a color capable terminal however
++otherwise it is not possible to determine which color sequences to
++use.
+ .It COLUMNS
+ If this variable contains a string representing a
+ decimal integer, it is used as the
+ column position width for displaying
+ multiple-text-column output.
++.It Ev LSCOLORS
++The value of this variable describes what color to use for which
++attribute when colors are enabled with
++.Ev CLICOLOR .
++This string is a concatenation of pairs of the format
++.Ar f Ns Ar b ,
++where
++.Ar f
++is the foreground color and
++.Ar b
++is the background color.
++.Pp
++The color designators are as follows:
++.Pp
++.Bl -tag -width 4n -offset indent -compact
++.It Sy a
++black
++.It Sy b
++red
++.It Sy c
++green
++.It Sy d
++brown
++.It Sy e
++blue
++.It Sy f
++magenta
++.It Sy g
++cyan
++.It Sy h
++light grey
++.It Sy A
++bold black, usually shows up as dark grey
++.It Sy B
++bold red
++.It Sy C
++bold green
++.It Sy D
++bold brown, usually shows up as yellow
++.It Sy E
++bold blue
++.It Sy F
++bold magenta
++.It Sy G
++bold cyan
++.It Sy H
++bold light grey; looks like bright white
++.It Sy x
++default foreground or background
++.El
++.Pp
++Note that the above are standard
++\*[Ai]
++colors.
++The actual display may differ
++depending on the color capabilities of the terminal in use.
++.Pp
++The order of the attributes are as follows:
++.Pp
++.Bl -enum -offset indent -compact
++.It
++directory
++.It
++symbolic link
++.It
++socket
++.It
++pipe
++.It
++executable
++.It
++block special
++.It
++character special
++.It
++executable with setuid bit set
++.It
++executable with setgid bit set
++.It
++directory writable to others, with sticky bit
++.It
++directory writable to others, without sticky bit
++.El
++.Pp
++The default is
++.Qq exfxcxdxbxegedabagacad ,
++i.e., blue foreground and
++default background for regular directories, black foreground and red
++background for setuid executables, etc.
++.It Ev TERM
++The
++.Ev CLICOLOR
++functionality depends on a terminal type with color capabilities.
+ .It Ev TZ
+ The time zone to use when displaying dates.
+ See
+@@ -447,33 +580,34 @@ See
+ for more information.
+ .El
+ .Sh EXIT STATUS
+-.Ex -std ls
++.Ex -std colorls
+ .Sh EXAMPLES
+ List the contents of the current working directory in long format:
+ .Pp
+-.Dl $ ls -l
++.Dl $ colorls -l
+ .Pp
+ In addition to listing the contents of the current working directory in
+ long format, show inode numbers, file flags (see
+ .Xr chflags 1 ) ,
+ and suffix each filename with a symbol representing its file type:
+ .Pp
+-.Dl $ ls -lioF
++.Dl $ colorls -lioF
+ .Pp
+ List the files in
+ .Pa /var/log ,
+ sorting the output such that the mostly recently modified entries are
+ printed first:
+ .Pp
+-.Dl $ ls -lt /var/log
++.Dl $ colorls -lt /var/log
+ .Sh SEE ALSO
+ .Xr chflags 1 ,
+ .Xr chmod 1 ,
++.Xr termcap 5 ,
+ .Xr symlink 7 ,
+ .Xr sticky 8
+ .Sh STANDARDS
+ The
+-.Nm
++.Xr ls 1
+ utility is compliant with the
+ .St -p1003.1-2008
+ specification,
+@@ -482,10 +616,10 @@ except behaviour for the
+ flag differs.
+ .Pp
+ The flags
+-.Op Fl hT ,
++.Op Fl GhT ,
+ as well as the
+ .Ev BLOCKSIZE
+-environment variable,
++environment variable and colorls itself,
+ are extensions to that specification.
+ .Pp
+ The flags
+@@ -505,6 +639,6 @@ flag has been changed in order to be compatible with t
+ specification.
+ .Sh HISTORY
+ An
+-.Nm
++.Nm ls
+ utility appeared in
+ .At v3 .
