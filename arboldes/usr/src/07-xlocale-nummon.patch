@@ -63,7 +63,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-x6/lib/libc/gdtoa/gdtoa.h
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/arch/amd64/gdtoa/strtold.c src/lib/libc/arch/amd64/gdtoa/strtold.c
 --- src54-x6/lib/libc/arch/amd64/gdtoa/strtold.c	Sun Sep  7 15:36:07 2008
 +++ src/lib/libc/arch/amd64/gdtoa/strtold.c	Tue Dec  3 16:12:24 2013
-@@ -32,15 +32,23 @@
+@@ -32,15 +32,24 @@
   */
  
  #include <float.h>
@@ -82,6 +82,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/arch/amd64/gd
 +	strtorx_l(s, sp, FLT_ROUNDS, &result, locale);
  	return result;
 +}
++DEF_WEAK(strtold_l);
 +
 +long double
 +strtold(const char * __restrict s, char ** __restrict sp)
@@ -251,17 +252,20 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/gdtoa/strtod.
  			  case STRTOG_NoMemory:
  				goto ovfl;
  			  case STRTOG_NoNumber:
-@@ -1102,4 +1090,10 @@
+@@ -1101,5 +1089,12 @@
+ 	if (se)
  		*se = (char *)s;
  	return sign ? -dval(&rv) : dval(&rv);
- 	}
+-	}
++}
++DEF_WEAK(strtod_l);
 +
 +double
 +strtod(const char *s00, char **se)
 +{
 +	return strtod_l(s00, se, __get_locale());
 +}
- 
+ DEF_STRONG(strtod);
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/gdtoa/strtodg.c src/lib/libc/gdtoa/strtodg.c
 --- src54-x6/lib/libc/gdtoa/strtodg.c	Wed Jul 20 13:24:47 2011
 +++ src/lib/libc/gdtoa/strtodg.c	Wed Dec  4 03:41:55 2013
@@ -403,17 +407,20 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/gdtoa/strtof.
  	switch(k & STRTOG_Retmask) {
  	  case STRTOG_NoNumber:
  	  case STRTOG_Zero:
-@@ -79,3 +80,10 @@
+@@ -78,5 +79,12 @@
+ 	if (k & STRTOG_Neg)
  		u.L[0] |= 0x80000000L;
  	return u.f;
- 	}
+-	}
++}
++DEF_WEAK(strtof_l);
 +
 +float
 +strtof(const char *s, char **sp)
 +{
 +	return strtof_l(s, sp, __get_locale());
 +}
-+
+ DEF_STRONG(strtof);
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/gdtoa/strtorQ.c src/lib/libc/gdtoa/strtorQ.c
 --- src54-x6/lib/libc/gdtoa/strtorQ.c	Sat Oct 24 12:01:37 2009
 +++ src/lib/libc/gdtoa/strtorQ.c	Tue Dec  3 16:12:24 2013
@@ -803,7 +810,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/iswcty
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/localeconv.c src/lib/libc/locale/localeconv.c
 --- src54-x6/lib/libc/locale/localeconv.c	Thu Dec  5 19:11:37 2013
 +++ src/lib/libc/locale/localeconv.c	Fri Dec  6 07:02:12 2013
-@@ -3,67 +3,116 @@
+@@ -3,68 +3,117 @@
   * Written by J.T. Conklin <jtc@netbsd.org>.
   * Public domain.
   */
@@ -948,7 +955,8 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/locale
  
 -    return (&ret);
 +    return ret;
- }
++}
++DEF_WEAK(localeconv_l);
 +
 +/*
 + * Return the current locale conversion.
@@ -957,8 +965,8 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/locale
 +localeconv(void)
 +{
 +	return localeconv_l(__get_locale());
-+}
-+
+ }
+ DEF_STRONG(localeconv);
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/mbrlen.c src/lib/libc/locale/mbrlen.c
 --- src54-x6/lib/libc/locale/mbrlen.c	Tue Dec  3 16:05:32 2013
 +++ src/lib/libc/locale/mbrlen.c	Tue Dec  3 22:25:11 2013
@@ -1692,7 +1700,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/scanf.c
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/snprintf.c src/lib/libc/stdio/snprintf.c
 --- src54-x6/lib/libc/stdio/snprintf.c	Sat Jun 25 00:32:56 2011
 +++ src/lib/libc/stdio/snprintf.c	Tue Dec  3 16:12:41 2013
-@@ -35,34 +35,33 @@
+@@ -35,34 +35,34 @@
  #include <stdio.h>
  #include <string.h>
  #include <stdarg.h>
@@ -1713,6 +1721,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/snprint
 +
 +	return ret;
 +}
++DEF_STRONG(snprintf);
 +
 +int
 +snprintf_l(char *str, size_t n, locale_t loc, const char *fmt, ...)
@@ -1743,7 +1752,8 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/snprint
 -	*f._p = '\0';
  	return (ret);
  }
- DEF_STRONG(snprintf);
+-DEF_STRONG(snprintf);
++DEF_WEAK(snprintf_l);
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/sprintf.c src/lib/libc/stdio/sprintf.c
 --- src54-x6/lib/libc/stdio/sprintf.c	Sat Jun 25 00:32:56 2011
 +++ src/lib/libc/stdio/sprintf.c	Tue Dec  3 16:12:41 2013
@@ -1789,7 +1799,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/sprintf
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/sscanf.c src/lib/libc/stdio/sscanf.c
 --- src54-x6/lib/libc/stdio/sscanf.c	Mon Nov 14 23:11:36 2011
 +++ src/lib/libc/stdio/sscanf.c	Tue Dec  3 16:12:41 2013
-@@ -34,32 +34,34 @@
+@@ -34,32 +34,35 @@
  #include <stdio.h>
  #include <string.h>
  #include <stdarg.h>
@@ -1838,6 +1848,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/sscanf.
  	return (ret);
  }
 -DEF_STRONG(sscanf);
++DEF_WEAK(sscanf_l);
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vasprintf.c src/lib/libc/stdio/vasprintf.c
 --- src54-x6/lib/libc/stdio/vasprintf.c	Tue Nov 10 11:28:49 2009
 +++ src/lib/libc/stdio/vasprintf.c	Tue Dec  3 16:12:41 2013
@@ -3058,17 +3069,19 @@ diff -ruN src54-x6/lib/libc/locale/nl_langinfo.c src/lib/libc/locale/nl_langinfo
  		break;
  	case CODESET:
  		s = _CurrentRuneLocale->rl_codeset;
-@@ -128,4 +132,10 @@
- 	}
+@@ -129,4 +133,11 @@
  
  	return (char *) s;
-+}
+ }
+-DEF_WEAK(nl_langinfo);
++DEF_WEAK(nl_langinfo_l);
 +
 +char *
 +nl_langinfo(nl_item item)
 +{
 +	return nl_langinfo_l(item, __get_locale());
- }
++}
++DEF_STRONG(nl_langinfo);
 diff -ruN src54-x6/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regress/lib/libc/locale/check_xlocale/check_xlocale.c
 --- src54-x6/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Wed Dec 11 22:07:06 2013
 +++ src/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Fri Dec 13 15:25:23 2013
@@ -3340,3 +3353,73 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/wcs
 +#define STRTOD_FUNC	strtof_l
  
  #include "_wcstod.h"
+diff -ruN src/lib/libc/Symbols.list.orig src/lib/libc/Symbols.list
+--- src/lib/libc/Symbols.list.orig	Sun Aug 21 22:30:17 2016
++++ src/lib/libc/Symbols.list	Sun Aug 21 22:14:39 2016
+@@ -1719,6 +1719,7 @@
+ iswupper_l
+ iswxdigit_l
+ isxdigit_l
++localeconv_l
+ mblen_l
+ mbrlen_l
+ mbrtowc_l
+@@ -1730,11 +1731,18 @@
+ newlocale
+ nextwctype
+ nextwctype_l
++nl_langinfo_l
+ querylocale
++snprintf_l
++sscanf_l
+ strcasecmp_l
+ strcasestr_l
+ strcoll_l
++strfmon_l
+ strncasecmp_l
++strtod_l
++strtof_l
++strtold_l
+ strxfrm_l
+ tolower_l
+ toupper_l
+diff -ruN src/lib/libc/hidden/monetary.h.orig src/lib/libc/hidden/monentary.h
+--- src/lib/libc/hidden/monetary.h.orig	Sun Aug 21 23:03:32 2016
++++ src/lib/libc/hidden/monetary.h	Sun Aug 21 23:03:40 2016
+@@ -12,5 +12,6 @@
+ #include_next <monetary.h>
+ 
+ PROTO_STD_DEPRECATED(strfmon);
++PROTO_STD_DEPRECATED(strfmon_l);
+ 
+ #endif /* !_LIBC_MONETARY_H_ */
+diff -ruN src/lib/libc/hidden/xlocale.h.orig src/lib/libc/hidden/xlocale.h
+--- src/lib/libc/hidden/xlocale.h.orig	Sun Aug 21 23:07:28 2016
++++ src/lib/libc/hidden/xlocale.h	Sun Aug 21 23:06:30 2016
+@@ -17,4 +17,10 @@
+ PROTO_STD_DEPRECATED(querylocale);
+ PROTO_STD_DEPRECATED(uselocale);
+ 
++PROTO_NORMAL(localeconv_l);
++
++#if defined(_LIBC_STDIO_H_)
++PROTO_NORMAL(snprintf_l);
++PROTO_NORMAL(sscanf_l);
++#endif
+ #endif /* !_LIBC_XLOCALE_H_ */
+diff -ruN src/lib/libc/hidden/stdlib.h.orig  src/lib/libc/hidden/stdlib.h
+--- src/lib/libc/hidden/stdlib.h.orig	Sun Aug 21 23:26:56 2016
++++ src/lib/libc/hidden/stdlib.h	Sun Aug 21 23:27:02 2016
+@@ -145,9 +145,12 @@
+ PROTO_DEPRECATED(srandom_deterministic);
+ PROTO_DEPRECATED(srandomdev);
+ PROTO_NORMAL(strtod);
++PROTO_NORMAL(strtod_l);
+ PROTO_NORMAL(strtof);
++PROTO_NORMAL(strtof_l);
+ PROTO_NORMAL(strtol);
+ PROTO_NORMAL(strtold);
++PROTO_NORMAL(strtold_l);
+ PROTO_NORMAL(strtoll);
+ PROTO_NORMAL(strtonum);
+ /*PROTO_NORMAL(strtoq);		alias of strtoll */
