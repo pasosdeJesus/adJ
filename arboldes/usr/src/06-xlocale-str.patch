@@ -103,15 +103,19 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/lib/libc/locale/wcsxfrm.c s
  
  	if (*src == L'\0') {
  		if (len > 0 && dest != NULL)
-@@ -119,3 +122,8 @@
- }
+@@ -116,5 +119,12 @@
+ 	}
  
- 
+ 	return slen;
++}
++DEF_STRONG(wcsxfrm_l);
++
 +size_t
 +wcsxfrm(wchar_t * __restrict dest, const wchar_t * __restrict src, size_t len)
 +{
 +	return wcsxfrm_l(dest, src, len, __get_locale());
-+}
+ }
+ DEF_STRONG(wcsxfrm);
 diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/lib/libc/string/strcasecmp.c src/lib/libc/string/strcasecmp.c
 --- src53xlocale2/lib/libc/string/strcasecmp.c	Mon Mar 25 18:28:29 2013
 +++ src/lib/libc/string/strcasecmp.c	Wed Apr 10 07:53:41 2013
@@ -590,7 +594,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/regress/lib/libc/locale/che
 +	
 +	char a[1000], b[1000], e[1000], f[1000];
 +	size_t sr = 0;
-+	__collate_print_tables(NULL);
++	//__collate_print_tables(NULL);
 +	p((sr = strxfrm_l(NULL, "equis", 0, es_CO_UTF_8)) > 5);
 +	p(strxfrm_l(NULL, "", 1000, es_CO_UTF_8) == 0);
 +	p(strxfrm_l(a, "", 1000, es_CO_UTF_8) == 0 && a[0] == '\0');
@@ -639,53 +643,50 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/regress/lib/libc/locale/che
  	
  	return bad != 0;
  }
-diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/wcstof.c src53xlocale2/lib/libc/locale/wcstof.c
---- src53xlocale1/lib/libc/locale/wcstof.c	Mon Apr  8 21:20:25 2013
-+++ src53xlocale2/lib/libc/locale/wcstof.c	Fri Apr 12 12:07:57 2013
-@@ -5,9 +5,13 @@
- #include <string.h>
- #include <wchar.h>
- #include <wctype.h>
-+#include <xlocale.h>
+diff -ruN src/lib/libc/Symbols.list.orig src/lib/libc/Symbols.list
+--- src/lib/libc/Symbols.list.orig	Sun Aug 21 10:47:08 2016
++++ src/lib/libc/Symbols.list	Sun Aug 21 12:15:50 2016
+@@ -1731,6 +1731,11 @@
+ nextwctype
+ nextwctype_l
+ querylocale
++strcasecmp_l
++strcasestr_l
++strcoll_l
++strncasecmp_l
++strxfrm_l
+ tolower_l
+ toupper_l
+ towctrans_l
+@@ -1738,16 +1743,19 @@
+ towupper_l
+ uselocale
+ wcrtomb_l
++wcscasecmp_l
++wcscoll_l
++wcsncasecmp_l
+ wcsnrtombs_l
+ wcsrtombs_l
+ wcstombs_l
+ wcswidth_l
++wcsxfrm_l
+ wctob_l
+ wctomb_l
+ wctrans_l
+ wctype_l
+ wcwidth_l
+-
  
-+#include "locale/xlocale_private.h"
-+
- #define FUNCNAME	wcstof
-+#define FUNCNAMEL	wcstof_l
- typedef float		float_type;
--#define STRTOD_FUNC	strtof
-+#define STRTOD_FUNC	strtof_l
- 
- #include "_wcstod.h"
-diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/stdio/swscanf.c src53xlocale2/lib/libc/stdio/swscanf.c
---- src53xlocale1/lib/libc/stdio/swscanf.c	Mon Apr  8 21:20:25 2013
-+++ src53xlocale2/lib/libc/stdio/swscanf.c	Fri Apr 12 12:07:57 2013
-@@ -29,6 +29,7 @@
- #include <stdarg.h>
- #include <stdio.h>
- #include <wchar.h>
-+#include <xlocale.h>
- 
- int
- swscanf(const wchar_t * __restrict str, const wchar_t * __restrict fmt, ...)
-@@ -38,6 +39,20 @@
- 
- 	va_start(ap, fmt);
- 	r = vswscanf(str, fmt, ap);
-+	va_end(ap);
-+
-+	return (r);
-+}
-+
-+int
-+swscanf_l(const wchar_t * __restrict str, locale_t loc,
-+		const wchar_t * __restrict fmt, ...)
-+{
-+	va_list ap;
-+	int r;
-+
-+	va_start(ap, fmt);
-+	r = vswscanf_l(str, loc, fmt, ap);
- 	va_end(ap);
- 
- 	return (r);
+ /* yp */
+ yp_all
+diff -ruN src/lib/libc/hidden/wchar.h.orig src/lib/libc/hidden/wchar.h
+--- src/lib/libc/hidden/wchar.h.orig	Sun Aug 21 13:46:28 2016
++++ src/lib/libc/hidden/wchar.h	Sun Aug 21 20:58:12 2016
+@@ -92,6 +92,7 @@
+ PROTO_NORMAL(wcswidth);
+ PROTO_NORMAL(wcswidth_l);
+ PROTO_NORMAL(wcsxfrm);
++PROTO_NORMAL(wcsxfrm_l);
+ PROTO_NORMAL(wctob);
+ PROTO_NORMAL(wctob_l);
+ PROTO_NORMAL(wcwidth);

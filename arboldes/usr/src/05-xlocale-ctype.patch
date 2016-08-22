@@ -248,11 +248,10 @@ diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src53xlocale1/
  
  const short _C_tolower_[1 + CTYPE_NUM_CHARS] = {
  	EOF,
-@@ -54,4 +58,15 @@
- 	if ((unsigned int)c > 255)
- 		return(c);
+@@ -59,3 +63,15 @@
  	return((_tolower_tab_ + 1)[c]);
-+}
+ }
+ DEF_STRONG(tolower);
 +
 +
 +__inline int tolower_l(int __c, locale_t __l)
@@ -263,7 +262,8 @@ diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src53xlocale1/
 +
 +	return (__c < 0 || __c >= __ct->__mb_sb_limit) ? __c :
 +		__runes->rl_maplower[__c];
- }
++}
++DEF_STRONG(tolower_l);
 diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src53xlocale1/lib/libc/gen/toupper_.c src/lib/libc/gen/toupper_.c
 --- src53xlocale1/lib/libc/gen/toupper_.c	Tue Aug  9 03:36:48 2005
 +++ src/lib/libc/gen/toupper_.c	Thu Apr  4 10:46:39 2013
@@ -3502,7 +3502,7 @@ diff -ruN src59-orig/lib/libc/hidden/ctype.h src/lib/libc/hidden/ctype.h
  PROTO_NORMAL(isxdigit);
 +PROTO_STD_DEPRECATED(isxdigit_l);
  PROTO_NORMAL(tolower);
-+PROTO_STD_DEPRECATED(tolower_l);
++PROTO_NORMAL(tolower_l);
  PROTO_NORMAL(toupper);
 +PROTO_STD_DEPRECATED(toupper_l);
  PROTO_NORMAL(isblank);

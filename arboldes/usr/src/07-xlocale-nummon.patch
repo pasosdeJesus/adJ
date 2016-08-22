@@ -3322,3 +3322,21 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/wcs
 +#define STRTOD_FUNC	strtod_l
  
  #include "_wcstod.h"
+diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/wcstof.c src53xlocale2/lib/libc/locale/wcstof.c
+--- src53xlocale1/lib/libc/locale/wcstof.c	Mon Apr  8 21:20:25 2013
++++ src53xlocale2/lib/libc/locale/wcstof.c	Fri Apr 12 12:07:57 2013
+@@ -5,9 +5,13 @@
+ #include <string.h>
+ #include <wchar.h>
+ #include <wctype.h>
++#include <xlocale.h>
+ 
++#include "locale/xlocale_private.h"
++
+ #define FUNCNAME	wcstof
++#define FUNCNAMEL	wcstof_l
+ typedef float		float_type;
+-#define STRTOD_FUNC	strtof
++#define STRTOD_FUNC	strtof_l
+ 
+ #include "_wcstod.h"
