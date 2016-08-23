@@ -417,7 +417,7 @@ get_responsefile() {
 		(($# == 0)) && set -- $(get_ifdevs)
 		(($# == 1)) && _ifdev=$1
 		while (($# > 1)); do
-			ask_which "Interfaces de red" \
+			ask_which "interfaz de red" \
 				"debería usarse para la petición inicial de DHCP" "$*"
 			isin "$resp" $* && _ifdev=$resp && break
 		done
@@ -856,7 +856,7 @@ configure_ifs() {
 	while :; do
 		ifconfig vlan$_vl create >/dev/null 2>&1
 
-		ask_which "Interfaces de red" "desea configurar" \
+		ask_which "interfaz de red" "desea configurar" \
 			'$(get_ifdevs)' \
 			${_p:-'$( (get_ifdevs netboot; get_ifdevs) | sed q )'}
 		[[ $resp == listo ]] && break
@@ -933,7 +933,7 @@ configure_ifs() {
 		fi
 
 		NIFS=$(ls -1 /tmp/hostname.* 2>/dev/null | grep -c ^)
-		_p=done
+		_p=listo
 	done
 
 }
@@ -1024,8 +1024,8 @@ __EOT
 		set -o noglob
 		for resp in $resp; do
 			case $resp in
-			abort)	_selected=; break 2;;
-			done)	break 2;;
+			cancelar)	_selected=; break 2;;
+			listo)	break 2;;
 			-*)	_action=rmel;;
 			*)	_action=addel;;
 			esac
@@ -1205,7 +1205,7 @@ install_http() {
 	while :; do
 		ask_until "$_prompt" "$HTTP_SERVER"
 		case $resp in
-		done)	return
+		listo)	return
 			;;
 		"?")	[[ -s $HTTP_LIST ]] || continue
 			cat -n < $HTTP_LIST | more -c
@@ -1230,7 +1230,7 @@ install_http() {
 	[[ $resp == "$1" ]] && resp=
 	if (($# > 1)); then
 		resp=$resp/$HTTP_SETDIR
-		_mirror=yes
+		_mirror=si
 	fi
 
 	: ${HTTP_DIR:=pub/OpenBSD/$HTTP_SETDIR}
@@ -1281,7 +1281,7 @@ install_disk() {
 		ask_which "disco" "medio usará para $_SMODE" \
 			'$(bsort $(get_dkdevs))' \
 			'$(bsort $(rmel $ROOTDISK $(get_dkdevs)))'
-		[[ $resp == done ]] && return 1
+		[[ $resp == listo ]] && return 1
 		makedev $resp && mount_mnt2 $resp || return
 	fi
 
@@ -1325,7 +1325,7 @@ mount_mnt2() {
 		ask_which "$_dev partición" "tiene componentes para $_SMODE" \
 			'$(disklabel '$_dev' 2>/dev/null |
 			sed -En '\''/swap|unused/d;/^  ([a-p]): .*/s//\1/p'\'')'
-		[[ $resp == done ]] && return 1
+		[[ $resp == listo ]] && return 1
 	fi
 
 	# Always mount msdos partitions with -s to get lower case names.
@@ -1419,7 +1419,7 @@ donetconfig() {
 questions() {
 	local _d _cdef=no
 
-	ask_yn "¿Iniciar sshd(8) por defecto?" yes
+	ask_yn "¿Iniciar sshd(8) por defecto?" si
 	sshd=$resp
 
 	aperture=
@@ -1427,7 +1427,7 @@ questions() {
 	xdm=
 	if [[ -n $DISPLAY ]]; then
 		if [[ -n $(scan_dmesg '/^[a-z]*[01]: aperture needed/p') ]]; then
-			ask_yn "¿Usará X Window?" yes &&
+			ask_yn "¿Usará X Window?" si &&
 				aperture=$MDXAPERTURE
 		fi
 		if [[ -n $MDXDM && $resp != n ]]; then
@@ -1438,14 +1438,14 @@ questions() {
 
 	if [[ -n $CDEV ]]; then
 		_d=${CPROM:-$CDEV}
-		[[ -n $CONSOLE ]] && _cdef=yes
+		[[ -n $CONSOLE ]] && _cdef=si
 		ask_yn "¿Cambiar consola a $_d?" $_cdef
 		defcons=$resp
 		if [[ $resp == y ]]; then
 			ask_which "velocidad" "debería $_d usar" \
 				"9600 19200 38400 57600 115200" $CSPEED
 			case $resp in
-			done)	defcons=n;;
+			listo)	defcons=n;;
 			*)	CSPEED=$resp;;
 			esac
 		fi
@@ -1461,7 +1461,7 @@ user_setup() {
 		case $resp in
 		n|no)	return
 			;;
-		y|yes)	_q="No, de verdad, ¿cúal es el nombre de cuenta en minúscula o 'no'?"
+		s|si)	_q="No, de verdad, ¿cúal es el nombre de cuenta en minúscula o 'no'?"
 			continue
 			;;
 		root|daemon|operator|bin|smmsp|popa3d)
@@ -1884,7 +1884,7 @@ install_sets() {
 
 		ask "¿Localización? (${_cddevs:+$_cddevs }$_locs o 'listo')" "$_d"
 		case $resp in
-		done)	sane_install && return
+		listo)	sane_install && return
 			;;
 		[cC]*)	if [[ -n $_cddevs ]]; then
 				set -- $_cddevs
@@ -1903,7 +1903,7 @@ install_sets() {
 		esac
 
 		[[ -n $METHOD ]] && _d=$METHOD
-		sane_install quiet || $AUTO && _d=done
+		sane_install quiet || $AUTO && _d=listo
 	done
 
 }
