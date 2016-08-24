@@ -303,7 +303,7 @@ disklabel_autolayout() {
 	[[ $_disk != $ROOTDISK ]] && return
 
 	while $AUTO; do
-		ask "$_slurltoautopartitioning" none
+		ask "$_slurltoautopartitioning" $_slnone
 		[[ $resp == none ]] && break
 		echo "$_slfetching $resp"
 		if ftp -Vo $_dl "$resp" && [[ -s $_dl ]]; then
@@ -1016,7 +1016,7 @@ __EOT
 		for _f in $_avail; do
 			isin $_f $_selected && echo "[X] $_f" || echo "[ ] $_f"
 		done | showcols | sed 's/^/    /'
-		ask "$_slsetnames2? ($_slor '$_slabort' $_slor '$_sldone')" done
+		ask "$_slsetnames2? ($_slor '$_slabort' $_slor '$_sldone')" $_sldone
 
 		set -o noglob
 		for resp in $resp; do
@@ -1454,7 +1454,7 @@ user_setup() {
 	local _q="$_slsetupauser"
 
 	while :; do
-		ask "$_q" no
+		ask "$_q" $_slno
 		case $resp in
 		n|no)	return
 			;;
@@ -1490,7 +1490,7 @@ user_setup() {
 	userpass=$_password
 
 	userkey=
-	$AUTO && ask "$_slpublicsshkeyuser $user" none &&
+	$AUTO && ask "$_slpublicsshkeyuser $user" $_slnone &&
 		[[ $resp != none ]] && userkey=$resp
 }
 
@@ -1507,7 +1507,7 @@ ask_root_sshd() {
 	fi
 	echo "$_slroottargeted"
 	while :; do
-		ask "$_slallowrootssh" no
+		ask "$_slallowrootssh" $_slno
 		_resp=$resp
 		case $_resp in
 		$_sly|$_slyes)	sshd_enableroot=yes

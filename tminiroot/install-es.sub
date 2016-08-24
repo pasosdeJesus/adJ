@@ -303,7 +303,7 @@ disklabel_autolayout() {
 	[[ $_disk != $ROOTDISK ]] && return
 
 	while $AUTO; do
-		ask "URL de la plantilla de autoparticionado para disklabel?" none
+		ask "URL de la plantilla de autoparticionado para disklabel?" nada
 		[[ $resp == none ]] && break
 		echo "Recibiendo $resp"
 		if ftp -Vo $_dl "$resp" && [[ -s $_dl ]]; then
@@ -1019,7 +1019,7 @@ __EOT
 		for _f in $_avail; do
 			isin $_f $_selected && echo "[X] $_f" || echo "[ ] $_f"
 		done | showcols | sed 's/^/    /'
-		ask "Nombre(s) de juego(s)? (o 'cancelar' o 'listo')" done
+		ask "Nombre(s) de juego(s)? (o 'cancelar' o 'listo')" listo
 
 		set -o noglob
 		for resp in $resp; do
@@ -1493,7 +1493,7 @@ user_setup() {
 	userpass=$_password
 
 	userkey=
-	$AUTO && ask "Llave ssh pública para el usuario $user" none &&
+	$AUTO && ask "Llave ssh pública para el usuario $user" nada &&
 		[[ $resp != none ]] && userkey=$resp
 }
 
