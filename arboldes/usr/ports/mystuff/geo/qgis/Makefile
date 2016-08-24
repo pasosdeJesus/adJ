@@ -7,7 +7,7 @@ SHARED_ONLY =	Yes
 DISTNAME =	qgis-2.12.3
 EXTRACT_SUFX =	.tar.bz2
 CATEGORIES =	geo x11
-REVISION=	0
+REVISION =	0
 
 SHARED_LIBS =	qgis_core	10.0 \
 		qgis_app	0.0 \

@@ -139,7 +139,7 @@ if (test "$?" != "0") then {
 } fi;
 
 echo "Buscando daemon en otras librerías";
-find lib/ -exec grep -i -l -I "daemon" {} ';' | grep -v bn_exp.c | grep -v "gen.Makefile.inc" | grep -v "servicio.c" | grep -v "tcpd.h" | grep -v "CVS" | grep -v "stdlib.h" > /tmp/tc 2> /dev/null
+find lib/ -exec grep -i -l -I "daemon" {} ';' | grep -v bn_exp.c | grep -v "gen.Makefile.inc" | grep -v "servicio.c" | grep -v "tcpd.h" | grep -v "CVS" | grep -v "stdlib.h" | grep -v Symbols.list > /tmp/tc 2> /dev/null
 echo "Remplazando por servicio en otras librerías";
 for i in `cat /tmp/tc`; do 
 	echo $i;

@@ -3,7 +3,7 @@ Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y que anhelamos sea usada por Jesús durante el Milenio.
 
 ###Versión: 5.9b1
-Fecha de publicación: 15/Ago/2016
+Fecha de publicación: 24/Ago/2016
 
 Puede ver novedades respecto a OpenBSD en:
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_5_9/Novedades_OpenBSD.md>
@@ -12,7 +12,7 @@ Puede ver novedades respecto a OpenBSD en:
 
 ###KERNEL Y SISTEMA BASE
 
-* Parches al sistema base hasta el 6.Ago.2016, que cierran las 9 fallas de 
+* Parches al sistema base hasta el 22.Ago.2016, que cierran las 9 fallas de 
   seguridad y las 16 de robustez resueltas para fuentes de OpenBSD 5.9 
   descritas en <http://www.openbsd.org/errata59.html>
   Los binarios distribuidos de OpenBSD 5.9 no resuelven estas fallas. 
@@ -29,47 +29,68 @@ destacamos las siguientes relacionadas con amd64:
 * Controladores ampliados o mejorados para amd64
 	* Red: 
 		* Ethernet: Controlador ```em``` ampliado para soportar
-			Intel 100 Series PCH Ethernet MAC con i219 PHY.
+		  Intel 100 Series PCH Ethernet MAC con i219 PHY.
 		  Controlador ```re``` ampliado con soporte para 
 		  RTL8168H/RTL8111H. Controlador ```cnmac``` usado en algunas
 		  enrutadores D-Link, Portwell y Ubiquiti mejorado.
 		* Inalámbrico:  iwm e iwn ahora soportan IEEE802.11n que da
 		  velocidad de hasta 65MBit/s
-	* Interfaces usuario: Teclados, mouse y touchpads sobre i2c con 
+	* Interfaces con usuario: Teclados, mouse y touchpads sobre i2c con 
 	  ```ikbd```, ```ims```, ```imt```.  ```pms``` ampliado para soportar 
-	  touchpadas en modo W y su soporte para touchpads ALPS mejorado
+	  touchpadas en modo W y mejorado su soporte para touchpads ALPS
+	* Video: inteldrm actualizado para soportar Bay Trail y Broadwell
 	* Temperatura, sensores y otros: Nuevo ```pchtemp``` para sensores
 	  térmicos en Intel X99, C610, 9 y 100 PCH. Nuevo ```uonerng``` que
 	  soporta generador de números aleatorios Moonbase Otago OneRNG.  
-	  Ampliado controlador ```sdmmc``` para incluir soporte para dispositivos
-	  
-	* Virtualización: xen, xspd, xnf permiten que sea cliente sobre Xen
-	  (e.g en AWS).  Iniciados controladores viocon y virtio que podrá a 
-   	  futuro ser usada por KVM, QEMU y otros.
+	  Ampliado controlador ```sdmmc``` 
+	* Virtualización: ```xen```, ```xspd```, ```xnf``` permiten que sea 
+          cliente sobre Xen (e.g en AWS).  Iniciados controladores
+	  ```viocon```  y ```virtio``` que podrán a futuro ser usada por 
+	  KVM, QEMU y otros.
+	* Pede arrancar en modos EFI de 32 y 64 bits
 
 * Mejoras a herramientas de Red
-	* Nuevo
-	* OpenBSD httpd:
-	* OpenBSD SMTPD:
+	* Varias herramientas de red mejoradas para operar en paralelo con
+	  el kernel cuando hay más de un procesador. 
+	* Nuevos dispositivos etherip para hacer tuneles de Ethernet sobre IP,
+	  pair para crear interfaces virtuales por pares, tap separado de
+	  tun.  
+	* Mejorado pflow para incluir tráfico IPv6
+	* Mejorados dhcp y dhclient
+	* Nuevo servicio eigrpd para el protocolo de compuerta de
+	  enrutamiento  interior ampliada (Enhanced Interior Gateway 
+	  Routing Protocol)
+	* Mejorado iked e IPSec para interoperar con MacOS X.
 
 * Seguridad
 	* pledge.  Permite a un programa comprometerse a hacer sólo ciertos
 	  tipos de llamadas al sistema.  Se produce un fallo si el programa
 	  no cumple su promesa.  Así se obliga la separación de privilegios.
 	  Ver http://www.openbsd.org/papers/dot2016.pdf
+	  La mayoría de binarios del sistema base se modificaron para
+	  utilizar pledge.
+	* OpenSSH 7.2 incluido que cierra vulnerabilidades y fallas.
+	* LibreSSL 2.3.2 cierra vulnerabilidades CVE y otras, soporta 
+	  características recientes de TLS y es más estricto para iniciar 
+	  conexioens.  nc modificado para remplazar openssl s_client y
+	  openssl s_server
 
 * Otros
 	* OpenBSD a partir de 5.9 sólo soporta el locale C y locales con 
-	  codificación UTF-8
+	  codificación UTF-8. Retiró soporte NLS de libc.
+	* El instalador puede instalar en particiones GPT y deja el sistema
+	  EFI configurado. También fdisk soporta GPT 
+	* Soporte UTF-8 para calendar, colrm, cut, fmt, ls, ps, rs, ul, uniq
+	  y wc.
 
 * El sistema base incluye mejoras a componentes auditados y mejorados 
   como ```Xenocara``` (```Xorg 7.7```), ```gcc``` 4.2.1, ```perl``` 5.20.2, 
-  ```OpenSMTP``` 5.4.4, ```nsd``` 4.0.3
+  ```OpenSMTP``` 5.9.1, ```nsd``` 4.1.7
 
 
 ### PROCESO DE INSTALACIÓN
 
-En adJ es en español, consta de: (a) preparación, (b) instalación/actualización 
+Es en español, consta de: (a) preparación, (b) instalación/actualización 
 del sistema base y (c) instalación de aplicaciones y entorno.  Por favor vea 
 más detalles en 
 [Actualiza.md](https://github.com/pasosdeJesus/adJ/blob/ADJ_5_9/Actualiza.md)
@@ -87,61 +108,56 @@ adJ y OpenBSD 5.9:
   <http://sivel.sourceforge.net/1.2/actualizacion-sivel.html#actualizaciondeunounoaunodos>
 * ```SIVeL 2.0b1``` Versión beta 1 de SIVeL 2. Escrita sobre Ruby on Rails.
 * Nuevo porte y paquete ```htop```
-* Porte colorls mejorado para soportar locale en ordenamiento alfábetico,
+* Porte ```colorls``` mejorado para soportar locale en ordenamiento alfábetico,
   funciona bien en español.
-* ```PostgreSQL 9.5.4``` retroportado y recompilado para cerrar fallas, pero 
+* PostgreSQL 9.5.4 retroportado y recompilado para cerrar fallas, pero 
   además con soporte UTF-8 y ordenamientos alfabéticos en español.  Desde adJ 
   5.8 socket reubicado por omisión de ```/var/www/tmp``` a 
   ```/var/www/var/run/postgresql```.
   En adJ la información queda cifrada cuando así se elije al instalar o 
   actualizar adJ.  Ver detalles de como usar cotejación en 
-  <http://aprendiendo.pasosdeJesus.org/?id=i18n>
+  <http://aprendiendo.pasosdeJesus.org/?id=i18n>.  Se recompilaro otros 
+  paquetes que dependen de este: ```libreoffice```, 
+	```gdal```, postgis, py-psycopg2
 * ```Ruby 2.3.1``` retroportado de OpenBSD-current y probado con aplicaciones 
   Rails 5.   Puede ver más sobre Ruby on Rails sobre adJ en 
   <http://dhobsd.pasosdeJesus.org/Ruby_on_Rails_en_OpenBSD.html>
 * ```node 4.2.1``` probado con aplicaciones 
   como FreeCodeCamp --requiere y por eso se incluyen gcc-4.9.3 y g++-4.9.3 -- 
   ver <http://dhobsd.pasosdejesus.org/freecodecamp.html>
-* ```PHP-.5.6.23```.  Recomendamos activar opcache que hace más veloz la 
-  operación con  ```doas ln -sf /etc/php-5.6.sample/opcache.ini /etc/php-5.6/```
-  y reiniciando el servicio php56_fpm.
+* ```PHP-5.6.25```, se recomienda activar opcache que hace más veloz la 
+  operación con  
+  ```doas ln -sf /etc/php-5.6.sample/opcache.ini /etc/php-5.6/```
+  y reiniciar el servicio php56_fpm.
 * Para activar soporte de xlocale se han recompilado los siguientes paquetes 
   que están en portes de OpenBSD 5.9: ```boost```, ```djvulibre```, 
-  ```ggrep```, ```glib2```, ```gtar```, ```libidn```, ```libxslt```, 
-  ```llvm```, ```scribus```, ```vlc```, ```wget```, ```wxWidgets-gtk2```
+  ```gettext-tools```, ```ggrep```, ```gdk-pixbuf```, ```glib2```, 
+  ```gtar```, ```libidn```, ```libunistring```, ```libxslt```, ```llvm```, 
+  ```scribus```, ```vlc```, ```wget```, ```wxWidgets-gtk2```
 * Para cerrar fallas se han recompilado los siguientes paquetes a partir de 
-  portes actualizados de OpenBSD 5.9 (pero no incluidos en binarios de ese 
-  sistema):  ```...```.
-* chromium 48.0.2564.116 recompilado con llaves de API de adJ
-  (más estable). Chromium 48.0.2564.116 liberado el 18.Feb.2016 viene en
-  OpenBSD 5.9 y no hay actualización para OpenBSD 5.9 (ver 
-http://googlechromereleases.blogspot.com.co/2016/02/stable-channel-update_18.html ), terminó serie 48.  La serie 49 tuvo 5 publicaciones de versión estable 
-  la última es de 7.Abr.2016 49.0.2623.112 . La serie 50 usa atomic de C++11
-  no soportado en OpenBSD por libstdc++ (y dado que no hay libc++) como 
-  se explica en https://bugzilla.mozilla.org/show_bug.cgi?id=876156
-
-* Fuentes de la documentación basico_adJ convertida a Markdown, ver 
-  <http://pasosdeJesus.github.io/basico_adJ/> y sobre la herramienta pandoc en
-  <http://dhobsd.pasosdejesus.org/pandoc.html>
+  portes actualizados de OpenBSD 5.9:
+  ```bzip2```, ```curl```, ```gd```, ```git```, ```imlib2```, 
+  ```ImageMagick```, ```libksba```, ```libtalloc```, ```mariadb-client ```,
+  ```mplayer```, ```nginx```, ```node```, ```openldap-client ```,
+  ```p5-Mail-SpamAssassin```, ```p7zip```, ```pidgin```, ```samba```,
+  ```tdb```, ```tiff```, ```webkit```, ```webkitgtk4```.
 * Los paquetes exclusivos los encuentra en 
   <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/5.9-amd64/paquetes> y 
-  otras extensiones de PostgreSQL y PHP que no hacen parte de la distribución en 
+  otras extensiones de PostgreSQL y PHP que no hacen parte de la 
+  distribución en 
   <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/5.9-amd64-paquetes-extra>
 
 ### PAQUETES DE OPENBSD
 
 Los paquetes para OpenBSD 5.9 también funcionan sin cambios. Resaltamos:
-* ruby 2.3.1 retroportado, opera bien con Rails 5
-* PostgreSQL 9.5.3 retroportado y se recompilaron otros paquetes que 
-  dependen de este (libreoffice, gdal, postgis, py-psycopg2)
-* nginx 1.9.10 que puede ser util mientras migra a OpenBSD httpd, 
-  ver <http://pasosdeJesus.github.io/servidor_adJ/sevidorweb.html#openbsd-httpd>
+* chromium 48.0.2564.116 recompilado con llaves de API de adJ (más estable). 
+* nginx 1.9.10 <http://pasosdeJesus.github.io/servidor_adJ/sevidorweb.html#openbsd-httpd>
 * LibreOffice actualizado a 5.0.4.2, gimp a 2.8.16
 * LLVM/Clang a 3.5.201402288 asi como los demás lenguajes de programación
 * No hay paquete para mysql, ha sido remplazado por mariadb, ver 
   <http://pasosdeJesus.github.io/servidor_adJ/mariadb.html>
-* Se incluyen en total 568 paquetes, en los repositorios de paquetes para 
-  OpenBSD 5.9 hay 8866 disponibles para amd64
+* Se incluyen en total 621 paquetes, en los repositorios de paquetes para 
+  OpenBSD 5.9 hay 9295 disponibles para amd64
 
 
 ### ESCRITORIO
@@ -159,19 +175,13 @@ y ponga la variable LANG en otro valor por ejemplo:
 
 ## DOCUMENTACIÓN
 
-* Se han hecho diversas pruebas del uso de adJ sobre IPv6. Se ha comprobado que 
-  la pila de red de OpenBSD puede conectarse tanto con túneles como directamente 
-  a conexiones IPv6 solas y doble pila. Respecto a servicios se ha comprobado 
-  que operan bien al menos Xorg, cupsd, nginx, smtpd, sshd, named, ftpd, rsync, 
-  dovecot.  También se ha comprobado la operación correcta sobre IPv6 de la 
-  pila Ruby on Rails incluida en adJ. Para facilitar la adopción de IPv6 
-  --extremadamente retrasada en Colombia-- hemos iniciado ejercicios y enlaces 
-  a material público de un curso de IPv6 de LACNIC en: 
-	<http://dhobsd.pasosdejesus.org/ipv6-basico-lacnic-2015.html>
-* Se han hecho pruebas del uso de adJ sobre conexiones ethernet 10G con 
-  cableado categoria 6A, con tarjetas de red de 10G y switches de 10G. 
-  También se han hecho pruebas exitosas de cortafuegos redundantes para brindar 
-  alta disponibilidad con costos moderados. Estaremos documentando.
+* http://pasosdejesus.github.io/basico_adJ/
+* http://pasosdejesus.github.io/usuario_adJ/
+* http://pasosdejesus.github.io/servidor_adJ/
+* Se ha documentado como hacer conexiones remotas de PostgreSQL con 
+  certificados SSL en <http://dhobsd.pasosdejesus.org/postgresql-remoto.html>
+* Se está documentnado como correr aplicaciones Ruby on Rails en una jaula
+  chroot en <http://dhobsd.pasosdejesus.org/aplicacion-rails-en-chroot.html>
 
 ## DESCARGAS
 
@@ -180,11 +190,14 @@ Puede descargar imagenes ISO para amd64:
 * Protocolo HTTP: <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus>
 * Protocolo RSYNC: ```rsync rsync://rsync.pasosdeJesus.org/AprendiendoDeJesus```
 
-Si prefiere asumir gastos de manufactura, envío y eventualmente una donación con gusto le enviamos un DVD ([correo de contacto](mailto:info@pasosdeJesus.org)).
+Si prefiere asumir gastos de manufactura, envío y eventualmente una donación 
+con gusto le enviamos un DVD 
+([correo de contacto](mailto:info@pasosdeJesus.org)).
 
-Las claves públicas empleadas para firmar digitalmente el CD de instalación y los paquetes se ubican en /etc/signify y deben coincidir con estas:
-* adJ-58-base.pub: RWSHIU7tODYAqTiwkmrJclJb1WZXWrP7GcAmxueSChfaZ35o18ckZzUO
-* adJ-58-pkg.pub: RWRJU9sVRyykCZtxkoXZfKfFYxboSbotEpLjGErsJ7XikPM+Qm+k6zcC
+Las claves públicas empleadas para firmar digitalmente el DVD de instalación 
+y los paquetes se ubican en ```/etc/signify``` y deben coincidir con estas:
+* adJ-59-base.pub: RWT/X+D55OaOpJ7ZqIgpJh4soQqAu6ocXqvqlQE4uk7TM8cUkPa3LaGx
+* adJ-59-pkg.pub: RWQ6Y5bhgkHMqz1bsOhEfs4yojbGD6kv9vHGnCoadGGMcU1oF/+LH1G
 
 ## ACTUALIZACIÓN E INSTALACIÓN
 

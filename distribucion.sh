@@ -749,8 +749,6 @@ if (test "$sn" = "s") then {
 	# Modificados para posibilitar compilación
 	# Deben estar en mystuff
 
-	paquete colorls
-	exit 1
 	####
 	# Retroportados para cerrar fallas o actualizar
 	# Deben estar en arboldes/usr/ports/mystuff y en /usr/ports de current
@@ -798,24 +796,11 @@ if (test "$sn" = "s") then {
 	# Recompilado con llave de adJ en API de Google
 	paquete chromium
 
-
 	####
-	# Modificados para que usen xlocale (y pueden cerrar fallas)
+	# Modificados para que usen xlocale (pueden cerrar fallas)
 	# Estan en mystuff
 	paquete libunistring
 	paquete vlc
-	##
-	# Nueva revisión para operar con librerías retroportadas o actualizadas
-	# Deben estar en arbodes/usr/ports/mystuff
-	paquete gdal
-	paquete libreoffice paquetes "libreoffice libreoffice-i18n-es"
-	paquete postgis
-	paquete py-psycopg2
-	paquete qgis
-
-	# Recompilado con llave de adJ en API de Google
-	paquete chromium
-
 
 	####
 	# Recompilados de estable que usan xlocale (y pueden cerrar fallas)
