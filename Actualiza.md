@@ -29,7 +29,7 @@ La actualización consta de 3 partes:
   Si descargó fuentes con el procedimiento anterior ejecutelo con:
 
 	```
-       	sudo ~/comp/adJ/5.9b1-amd64/util/preact-adJ.sh
+       	doas ~/comp/adJ/5.9b1-amd64/util/preact-adJ.sh
 	```
 
 2. Actualizar el sistema base:
@@ -40,7 +40,7 @@ La actualización consta de 3 partes:
 
 		```
 		cd ~/comp/adJ; 
-		sudo 5.9b1-amd64/util/actbase.sh 5.9b1
+		doas 5.9b1-amd64/util/actbase.sh 5.9b1
 		```
 
 3. Actualizar aplicaciones:
