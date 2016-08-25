@@ -21,7 +21,8 @@ Pasos importantes para publicar versión beta
 --------------------------------------------
 
 1. Recompilar paquetes con actualizaciones de seguridad o mejoras
-2. Retroportar paquetes
+2. Retroportar paquetes, dejar resultados no incluidos en DVD pero
+   utils en extra-5.9
 3. Cambiar versión en ver.sh, arboldd/usr/local/adJ/inst-adJ.sh, Actualiza.md,
 	ComoPublicar.md, {$V-amd64,arboldvd}/util/preact-adJ.sh, 
 	{$V-amd64,arboldvd}/util/actbase.sh, 
@@ -51,8 +52,8 @@ Pasos importantes para publicar versión beta
 	```
 	hdes/creaiso.sh
 	cp -rf AprendiendoDeJesus-5.9b1-amd64.iso 5.9b1-amd64 /dirftp
-	mkdir /dirftp/5.9b1-amd64-extra
-	rsync compdes:/usr/ports/packages/amd64/all/* /dirftp/5.9b1-amd64-extra
+	mkdir /dirftp/5.9-amd64-extra
+	rsync compdes:comp/adJ/extra-5.9/* /dirftp/5.9-amd64-extra
 	```
 9. Verificar operación de:
   * http://pasosdeJesus.github.io/basico_adJ http://pasosdeJesus.github.io/usuario_adJ http://pasosdeJesus.github.io/servidor_adJ
