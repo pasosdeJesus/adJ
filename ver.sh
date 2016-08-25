@@ -91,7 +91,7 @@ export autoMasPaquetesInv=n
 export autoSite=s
 # Generar siteXX.tgz
 export autoTextos=s
-# Generar textos Novedades.txt y demás
+# Copiar/generar textos Novedades.md y demás
 
 
 qemuboot=c

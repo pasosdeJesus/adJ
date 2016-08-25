@@ -309,7 +309,7 @@ if (test "$p" != "/") then {
 } fi;
 } fi;
 
-if (test ! -f "$ARCH/Novedades.txt" -o ! -d "$ARCH/paquetes") then {
+if (test ! -f "$ARCH/Novedades.md" -o ! -d "$ARCH/paquetes") then {
 echo "En la ruta $ARCH no está el CD Aprendiendo de Jesús" | tee -a /var/www/tmp/inst-adJ.bitacora;
 exit 1;
 } fi;
