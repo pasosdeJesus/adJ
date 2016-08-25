@@ -80,40 +80,39 @@ Con respecto a OpenBSD 5.9 las novedades son:
 		* varmonitorea.sh	Usar por monitorea
 
 * Paquetes
+	* Retroportados para cerrar fallas o actualizar
+		* postgresql-server postgresql-client postgresql-contrib 
+			postgresql-docs ruby ruby23-ri_docs
 	* Recompilados de portes estables para cerrar fallas
-		* a2ps cups-filters freetds gnutls jasper libxml
-		mariadb-client mariadb-server net-snmp owncloud 
-		p5-Mail-SpamAssassin png postgis qemu
-	
+		*  bzip2, curl, gd, git", imlib2, ImageMagick
+		   libksba, libtalloc, mariadb-client mariadb-server, 
+		   mplayer, nginx, node, openldap-client, 
+		   p5-Mail-SpamAssassin, p7zip p7zip-rar, libpurple pidgin
+		   ldb, samba, tevent, tdb, tiff, webkit, webkitgtk4
+	* Nueva revisión para operar con librerías retroportadas o actualizadas
+		* gdal, inkscape, libreoffice, postgis, py-psycopg2, qgis
+	* Recompilado con llave de adJ
+		* chromium 
+	* Modificados para usar xlocale
+		* libunistring, vlc
 	* Recompilados de portes estables para usar xlocale y cerrar fallas
-		* postgresql-client postgresql-server postgresql-contrib 
-		postgresql-docs boost djvulibre gettext-tools ggrep
-		gdk-pixbuf glib2 gtar libidn libunistring libxslt 
-		llvm scribus vlc wget wxWidgets-gtk2
-
+		* boost, djvulibre, gettext-tools, ggrep, gdk-pixbuf
+			glib2, gtar, libidn, libxslt, llvm, scribus
+			wget, wxWidgets-gtk2
 	* Adaptados de portes estables pero mejorados para adJ:
 		* colorls	Ordena alfabeticamente de acuerdo a locale
 		* hexedit 	Soporta tamaños de archivos más grandes
 		* xfe		Soporta paquetes tgz
-
-	* Retroportados de versión posterior para cerrar fallas o actualizar 
-	  (aunque existen en actual)
-		* chromium node openldap-client py-openssl py-zopeinterface ruby 
-	* Retroportados de versión posterior que no existen en actual
-		* security/letsencrypt devel/py-configargparse 
-		  devel/py-parsedatetime devel/py-python2-pythondialog 
-		  devel/py-zopecomponent devel/py-zopeevent sysutils/py-psutil 
-		  textproc/py-pyRFC3339/ www/py-ndg-httpsclient
-
 	* Actualizados, pues están desactualizado en OpenBSD estable y current
 		* php php-bz2 php-curl php-fpm php-gd php-intl php-ldap 
 		php-mcrypt php-mysqli- php-pdo_pgsql php-pgsql php-zip
 		pear-Auth pear-DB_DataObject
-       		
 	* Unicos en adJ 
 		* emulators/realboy lang/ocaml-labltk sysutils/ganglia 
+		sysutils/htop textproc/biblesync
 		textproc/sword textproc/xiphos www/pear-HTML-Common
-		www/pear-HTML-Common2 www/pear-HTML-CSS www/pear-HTML-Javascript
+		www/pear-HTML-Common2 www/pear-HTML-CSS 
+		www/pear-HTML-Javascript
 		www/pear-HTML-Menu www/pear-HTML-QuickForm www/pear-HTML-Table
 		www/pear-DB-DataObject-FormBuilder 
 		www/pear-HTML-QuickForm-Controller x11/fbdesk

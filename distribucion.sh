@@ -793,7 +793,7 @@ if (test "$sn" = "s") then {
 	paquete py-psycopg2
 	paquete qgis
 
-	# Recompilado con llave de adJ en API de Google
+	# Recompilado con llave de adJ
 	paquete chromium
 
 	####
