@@ -40,7 +40,7 @@ La actualización consta de 3 partes:
 
 		```
 		cd ~/comp/adJ; 
-		doas 5.9b1-amd64/util/actbase.sh 5.9b1
+		ARCH=~/comp/adJ/5.9b1-amd64 doas 5.9b1-amd64/util/actbase.sh 5.9b1
 		```
 
 3. Actualizar aplicaciones:
@@ -57,7 +57,7 @@ La actualización consta de 3 partes:
 
   Este archivo de comandos asiste actualizaciones que puedan hacer 
   falta de una versión a otra del sistema base (descritas en
-  http://openbsd.org/faq/upgrade55.html ) y actualiza cuando es posible
+  http://openbsd.org/faq/upgrade59.html ) y actualiza cuando es posible
   archivos de configuración de diversos paquetes.
 * Puede ejecutar varias veces este archivo de órdenes, pero si el 
   proceso no concluye exitosamente por favor después de ejecutar
@@ -65,7 +65,7 @@ La actualización consta de 3 partes:
   ```/var/tmp/inst-adJ.bitacora``` a info@pasosdeJesus.org
 * Este archivo de ordenes utiliza ```sysmerge``` para actualizar algunos 
   archivos de configuración. Como se explica en 
-  http://www.openbsd.org/faq/upgrade48.html :
+  http://www.openbsd.org/faq/upgrade59.html :
 
   	```sysmerge(8)``` muestra el resultado del comando ```diff(1)``` 
 	unificado, pasando por un paginador (el que haya configurado en la 
@@ -82,20 +82,20 @@ La actualización consta de 3 partes:
 	Si desea retener su archivo actual, borre el temporal con la opción 
 	```d```, si dese remplazar su archivo existente con la nueva versión, 
 	instale el archivo temporal con ```i``` Si desea mezclar los dos, 
-	al alejir ```m``` ingresará al programa ```sdiff``` (1) donde podrá 
+	al alejir ```m``` ingresará al programa ```sdiff``` donde podrá 
 	mezclar manualmente el archivo.  Por defecto continuará y dejará el 
 	archivo sin modificar para manejarlo posteriormente de manera manual.
 	
 	Aunque puede funcionar, no se recomienda usar sysmerge para integrar
 	nuevos usuarios en el sistema, sino para esto usar useradd, que es 
-	menos proclive a errores (ayuda: no instale el archivo temporal 
+	menos proclive a errores (advertencia: ¡no instale el archivo temporal 
 	```master.passwd``` sobre su archivo existente!).
 	
-	```sysmerge(8)``` salva todos sus archivos remplazados en un directorio 
+	```sysmerge``` salva todos sus archivos remplazados en un directorio 
 	temporal, como ```/var/tmp/sysmerge.24959/backups```, así que si por 
 	accidente elimina algo que no era buena idea eliminar, tiene 
 	oportunidad de recuperarlo.  Advertencia: Note que la rutina 
-	```daily(8)``` limpia archivos antiguos de ese directorio.
+	```daily``` limpia cada día archivos antiguos de ese directorio.
 	
 	En general al usar sysmerge puede remplazar (opción ```i```) todos los 
 	archivos por sus versiones más recientes, pero dependiendo de los 
@@ -104,20 +104,36 @@ La actualización consta de 3 partes:
 	mejor mezclar si conoce la sintaxis (opción ```m```).
 
   * Evite remplazar ```/etc/rc.local``` y ```/etc/hosts```
-  * Si es cortafuegos evite remplazar ```/etc/pf.conf``` y ```/etc/sysctl.conf```
-  * Si es servidor DNS evite remplazar ```/var/named/etc/named.conf```
-  * Si es servidor de correo evite remplazar archivos del directorio 
-   ```/etc/mail``` (tras actualizar recuerde recompilar sendmail).
-  * Si es servidor web evite remplazar ```/var/www/conf/httpd.conf```
+  * Si es cortafuegos evite remplazar ```/etc/pf.conf``` 
+    y ```/etc/sysctl.conf```
+  * Si es servidor DNS evite remplazar ```/var/unbound/etc/unbound.conf``` 
+    y ```/var/nsd/etc/nsd.conf``` 
+  * Si es servidor de correo evite remplazar archivos del 
+    directorio ```/etc/mail``` 
+  * Si es servidor web evite remplazar ```/etc/httpd.conf```
 
 
 
 4. Soluciones comunes
 ---------------------
 
-* Si tras instalar sistema base, da el comando ```ls``` y obtiene ```Bad system call``` seguramente aún le falta actualizar el paquete ```colorls```, el actualizador ```inst-adJ.sh``` lo hará, pero mientras tanto puede ejecutar ```unalias ls```
-* Si tras instalar el sistema base al intentar ingresar a un usuario, antes de pedir la clave aparece ```Unkown user``` seguramente falta convertir la base de datos de usuarios a un formato más nuevo, lo que puede hacer es: (1) reiniciar en modo single (```boot -s``` cuando arranque y aparezca ```boot>```), (2) una vez ingrese a una terminal reparar discos con ```fsck -y```, (3) poner un tipo de terminal usable ```export TERM=vt220```, (4) regenerar algunos archivos con ```cap_mkdbd /etc/master.passwd``` y (5) verificar y completar regeneración de archivos, suando ```vipw``` haciendo un cambio mínimo como insertar un espacio en la descripción de un usuario y saliendo.
-* Si el actualizador  ```inst-adJ.sh``` no ejecuta sysmerge, puede ejecutarlo manualmente (suponiendo que deja los juegos de instalación en ~/comp/adJ/5.7-amd64): 
+* Si tras instalar sistema base, da el comando ```ls``` y obtiene 
+  ```Bad system call``` seguramente aún le falta actualizar el paquete 
+  ```colorls```, el actualizador ```inst-adJ.sh``` lo hará, pero mientras 
+  tanto puede ejecutar ```unalias ls```
+* Si tras instalar el sistema base al intentar ingresar a un usuario, antes 
+  de pedir la clave aparece ```Unkown user``` seguramente falta convertir 
+  la base de datos de usuarios a un formato más nuevo, lo que puede hacer es: 
+  (1) reiniciar en modo single (```boot -s``` cuando arranque y aparezca
+  ```boot>```), (2) una vez ingrese a una terminal reparar discos con 
+  ```fsck -y```, (3) poner un tipo de terminal usable ```export TERM=vt220```,
+  (4) Montar / en modo lectura escritura con ```mount -u -o rw /``` 
+  (5) regenerar algunos archivos con ```cap_mkdbd /etc/master.passwd``` y 
+  (6) verificar y completar regeneración de archivos, suando ```vipw``` 
+  haciendo un cambio mínimo como insertar un espacio en la descripción de 
+  un usuario y saliendo.
+* Si el actualizador  ```inst-adJ.sh``` no ejecuta ```sysmerge```, puede 
+  ejecutarlo manualmente:
 ```
    doas sysmerge 
 ```

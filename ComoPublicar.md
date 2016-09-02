@@ -22,7 +22,7 @@ Pasos importantes para publicar versión beta
 
 1. Recompilar paquetes con actualizaciones de seguridad o mejoras
 2. Retroportar paquetes, dejar resultados no incluidos en DVD pero
-   utils en extra-5.9
+   útiles en extra-5.9
 3. Cambiar versión en ver.sh, arboldd/usr/local/adJ/inst-adJ.sh, Actualiza.md,
 	ComoPublicar.md, {$V-amd64,arboldvd}/util/preact-adJ.sh, 
 	{$V-amd64,arboldvd}/util/actbase.sh, 
