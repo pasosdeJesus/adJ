@@ -2,8 +2,8 @@
 Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y que anhelamos sea usada por Jesús durante el Milenio.
 
-###Versión: 5.9b1
-Fecha de publicación: 24/Ago/2016
+###Versión: 5.9
+Fecha de publicación: 9/Sep/2016
 
 Puede ver novedades respecto a OpenBSD en:
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_5_9/Novedades_OpenBSD.md>
@@ -118,7 +118,7 @@ adJ y OpenBSD 5.9:
   actualizar adJ.  Ver detalles de como usar cotejación en 
   <http://aprendiendo.pasosdeJesus.org/?id=i18n>.  Se recompilaro otros 
   paquetes que dependen de este: ```libreoffice```, 
-	```gdal```, postgis, py-psycopg2
+	```gdal```, ```postgis```, ```py-psycopg2```
 * ```Ruby 2.3.1``` retroportado de OpenBSD-current y probado con aplicaciones 
   Rails 5.   Puede ver más sobre Ruby on Rails sobre adJ en 
   <http://dhobsd.pasosdeJesus.org/Ruby_on_Rails_en_OpenBSD.html>
@@ -128,16 +128,18 @@ adJ y OpenBSD 5.9:
 * ```PHP-5.6.25```, se recomienda activar opcache que hace más veloz la 
   operación con  
   ```doas ln -sf /etc/php-5.6.sample/opcache.ini /etc/php-5.6/```
-  y reiniciar el servicio php56_fpm.
+  y reiniciar el servicio ```php56_fpm```
 * Para activar soporte de xlocale se han recompilado los siguientes paquetes 
   que están en portes de OpenBSD 5.9: ```boost```, ```djvulibre```, 
   ```gettext-tools```, ```ggrep```, ```gdk-pixbuf```, ```glib2```, 
   ```gtar```, ```libidn```, ```libunistring```, ```libxslt```, ```llvm```, 
   ```scribus```, ```vlc```, ```wget```, ```wxWidgets-gtk2```
-* Para cerrar fallas se han recompilado los siguientes paquetes a partir de 
-  portes actualizados de OpenBSD 5.9:
-  ```bzip2```, ```curl```, ```gd```, ```git```, ```imlib2```, 
-  ```ImageMagick```, ```libksba```, ```libtalloc```, ```mariadb-client ```,
+* Para cerrar fallas o porque dependen de librerías actualizadas se han 
+  recompilado los siguientes paquetes a partir de portes actualizados de 
+  OpenBSD 5.9:
+  ```bzip2```, ```curl```, ```gd```, ```gimp```, ```git```, ```imlib2```, 
+  ```ImageMagick```, ```libksba```, ```libspectre```, ```libtalloc```, 
+  ```mariadb-client ```,
   ```mplayer```, ```nginx```, ```node```, ```openldap-client ```,
   ```p5-Mail-SpamAssassin```, ```p7zip```, ```pidgin```, ```samba```,
   ```tdb```, ```tiff```, ```webkit```, ```webkitgtk4```.
@@ -150,9 +152,9 @@ adJ y OpenBSD 5.9:
 ### PAQUETES DE OPENBSD
 
 Los paquetes para OpenBSD 5.9 también funcionan sin cambios. Resaltamos:
-* chromium 48.0.2564.116 recompilado con llaves de API de adJ (más estable). 
+* chromium 48.0.2564.116 recompilado con llaves de API de adJ 
 * nginx 1.9.10 <http://pasosdeJesus.github.io/servidor_adJ/sevidorweb.html#openbsd-httpd>
-* LibreOffice actualizado a 5.0.4.2, gimp a 2.8.16
+* LibreOffice actualizado a 5.0.4.2, gimp a 2.8.16p1
 * LLVM/Clang a 3.5.201402288 asi como los demás lenguajes de programación
 * No hay paquete para mysql, ha sido remplazado por mariadb, ver 
   <http://pasosdeJesus.github.io/servidor_adJ/mariadb.html>

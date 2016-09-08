@@ -749,6 +749,8 @@ if (test "$sn" = "s") then {
 	# Modificados para posibilitar compilación
 	# Deben estar en mystuff
 
+	paquete libspectre
+	exit 1;
 	####
 	# Retroportados para cerrar fallas o actualizar
 	# Deben estar en arboldes/usr/ports/mystuff y en /usr/ports de current
@@ -813,6 +815,7 @@ if (test "$sn" = "s") then {
 	paquete glib2
 	paquete gtar
 	paquete libidn
+	paquete libspectre
 	paquete libxslt
 	paquete llvm
 	paquete scribus
