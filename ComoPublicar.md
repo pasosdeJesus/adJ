@@ -41,7 +41,6 @@ Pasos importantes para publicar versión beta
    	- ejecución de /usr/local/adJ/inst-sivel.sh, que opere SIVeL1.2,
    	- que toda entrada del menú desde la interfaz gráfica opere.  
 	- que opere bien una aplicación Ruby on Rails
-	- 
   Arreglar y repetir hasta que no haya errores.
 7. En computador de desarrollo tras configurar ```var-local.sh``` enviar a
    adJ.pasosdeJesus.org:
@@ -51,7 +50,7 @@ Pasos importantes para publicar versión beta
 8. En adJ.pasosdeJesus.org
 	```
 	hdes/creaiso.sh
-	cp -rf AprendiendoDeJesus-5.9b1-amd64.iso 5.9b1-amd64 /dirftp
+	cp -rf AprendiendoDeJesus-5.9-amd64.iso 5.9-amd64 /dirftp
 	mkdir /dirftp/5.9-amd64-extra
 	rsync compdes:comp/adJ/extra-5.9/* /dirftp/5.9-amd64-extra
 	```
