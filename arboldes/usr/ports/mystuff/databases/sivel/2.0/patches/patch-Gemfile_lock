@@ -1,0 +1,47 @@
+$OpenBSD$
+--- Gemfile.lock.orig	Mon Sep 12 12:11:08 2016
++++ Gemfile.lock	Wed Sep 14 20:27:14 2016
+@@ -1,6 +1,6 @@
+ GIT
+-  remote: git://github.com/pasosdeJesus/sip.git
+-  revision: 838d79c5dd182210ac0ae1c045c48d6b270367c9
++  remote: https://github.com/pasosdeJesus/sip.git
++  revision: d95a7242675737d16262f35077863ed1c142657e
+   specs:
+     sip (2.0.b1)
+       bootstrap-datepicker-rails
+@@ -19,8 +19,8 @@ GIT
+       will_paginate
+ 
+ GIT
+-  remote: git://github.com/pasosdeJesus/sivel2_gen.git
+-  revision: aabd23e0019d177b7ac36fdcf08a14699514b29d
++  remote: https://github.com/pasosdeJesus/sivel2_gen.git
++  revision: bb01c63fae9f476ea43c13c102bd99e0e45629ad
+   specs:
+     sivel2_gen (2.0b1)
+       devise
+@@ -28,7 +28,7 @@ GIT
+       rails
+ 
+ GIT
+-  remote: git://github.com/vtamara/cocoon.git
++  remote: https://github.com/vtamara/cocoon.git
+   revision: 20f8f3bab2fee21309c57b586f5fab9921ac0894
+   specs:
+     cocoon (1.2.6)
+@@ -74,7 +74,7 @@ GEM
+       minitest (~> 5.1)
+       tzinfo (~> 1.1)
+     addressable (2.4.0)
+-    arel (7.1.1)
++    arel (7.1.2)
+     bcrypt (3.1.11)
+     binding_of_caller (0.7.2)
+       debug_inspector (>= 0.0.1)
+@@ -357,4 +357,4 @@ DEPENDENCIES
+   will_paginate
+ 
+ BUNDLED WITH
+-   1.12.5
++   1.13.0
