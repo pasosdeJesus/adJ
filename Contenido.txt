@@ -91,11 +91,11 @@ audacity-[v]	Editor de audio
 abiword-[v]		Procesador de texto que puede importar MS-Word
 chromium-[v]	Navegador web Chrome
 dia-[v]		Herramienta para dibujar diagramas técnicos
+evince-light-[v]		
 fbdesk-[v]		Permite poner iconos en escritorio fluxbox
 fluxbox-[v]		Escritorio extra liviano
 fluxter-[v]		Pagina espacios de trabajo en fluxbox        
 filezilla-[v]	Transmite archivos (soporta protocolo ssh)
-fontforge-[v]	Editor/conversor de tipos de letra vectoriales
 gimp-[v]		Editor gráfico por pixels
 gnumeric-[v]	Hoja de cálculo
 gv-[v]		Visualizador de PostScript y PDF
@@ -114,7 +114,6 @@ xcdplayer-[v]		Reproductor de CDs
 xarchiver-[v]	Manejador de archivos comprimidos
 xfe-[v]		Administrador de archivos
 xsane-[v]		Opera escaner con sane
-xpdf-[v]		Visualizador de archivos PDF
 
 * Escritorio consola:
 antiword-[v]		Convierte a texto plano archivos de MS-Word
@@ -154,7 +153,6 @@ mariadb-client-[v]	Cliente de base de datos SQL de multiples hilos
 mariadb-server-[v] 	Servidor de base de datos SQL de multiples hilos
 nginx-[v]		Servidor web
 openpoppassd-[v]	Serivicio para cambio de claves
-owncloud-[v]		Acceso universal a archivos personales compartidos
 p5-Mail-SpamAssassin-[v]	Filtro de correo para identificar y marcar spam
 php-[v]		Lenguaje script empotrado en HTML que opera en servidor
 postgis-[v]	        Soporte para objetos geográficos en PostgreSQL
@@ -170,8 +168,6 @@ sleuthkit-[v]	Herramienta para análisis forense
 
 
 * Desarrollo de programas, documentación y páginas web
-cppcheck-[v]		Verificador estático de C/C++
-cppunit-[v]	Infraestructura para probar programas en C++
 g++-[v]		Versión más reciente de g++
 gcc-[v]		Versión más reciente de gcc
 git-[v]		Almacenar historia de árbol de directorios
@@ -198,18 +194,15 @@ atk2mm-[v]		Interfaz en C++ para la librería ATK
 audacious-plugins-[v]	Plugins de entrada y salida de audacious
 avahi-[v]		Descubrimiento de servicio DNS multidistribución
 babl-[v]		Librería para conversión dinámica de formatos de puntos
-bash-[v]		Interprete de comandos
 biblesync-[v]		Protocolo biblesync
 blas-[v]		Subprogramas básicos de álgebra lineal
 boehm-gc-[v]	Recolector de basura y detector de fallas para C y C++
-boost-[v]	Librerías en C++  portable, libres y revisadas por pares
 cairo-[v]		Librería de gráficos vectoriales
 cairomm-[v]	Interfaz en C++ para cairo
 celt-[v]		Codec experimental de audio de espera muy baja
 clisp-[v]		Implementación de ANSI Common Lisp
 clucene-core-[v]	Librería para búsquedas de textos completos
 consolekit2-[v]	Entorno para definir y seguir usuarios
-colord-[v]		Servicio que maneja perfiles de color en dispositivos
 cups-libs-[v]   	Librearias y encabezados de CUPS
 cups-filters-[v]	Filtros para CUPS de OpenPrinting
 cvsps-[v]		Genera conjuntos de parches de repositorios CVS
@@ -226,7 +219,6 @@ djvulibre-[v]	Ver, Decodificar y codificar archivos DjVu
 docbook-[v]		Definiciones XML/SGML de documentación técnica
 docbook-xsl-[v]	Hojas de estilo XSL para DocBook
 docbook-dsssl-[v]	Hojas de estilo DSSSL para DocBook
-droid-fonts-[v]	Fuentes agradables de dispositivos Android
 dtc-[v]		Compilador de árboles de dispostivos
 dvi2tty-[v]		Convierte archivos dvi a texto plano
 e2fsprogs-[v]	Utilidades para manejar sistemas de archivos ext2
@@ -260,7 +252,6 @@ gegl-[v]		Entorno para procesamiento de imágenes basado en grafos
 GeoIP-[v]		Base de datos de paises de IPs
 gettext-[v]	Internacionalización
 gettext-tools-[v]	Herramientas para desarrollo y traducciones
-ggrep-[v]		Versión del programa de reconocimiento de patrones grep
 geoclue-[v]	Servicio modular de geoinformación sobre D-Bus
 geoclue2-[v]	Servicio modular de geoinformación sobre D-Bus
 geos-[v]		Motor de geometría y topología bidimensional
@@ -274,10 +265,8 @@ glib2-networking-[v]	Más rutinas
 glib2mm-[v]		Interfaz en C++ para glib2
 gmake-[v]	Herramienta para construir programas a partir de fuentes
 gmp-[v]		Librería de aritmética de precisión arbitraría
-gnome-doc-utils-[v]	Utilidades para documentación del proyecto GNOME
 gnome-icon-theme-[v]	Iconos para GNOME
 gnome-icon-theme-symbolic-[v]	Extensión al tema de iconos base
-gnome-keyring-[v]	Librería para integrar anillo de llaves GNOME
 gnome-mime-data-[v]	Base de datos MIME y de aplicaciones
 gnome-vfs2-[v]	Sistema de archivos virtual
 gnugetopt-[v]		Utilidad getopt(1) de GNU
@@ -291,10 +280,7 @@ gsettings-desktop-schemas-[v]	Esquemas compartidos GSettings
 gsl-[v]		Libería científica
 gsm-[v]		Conversor de audio u-law a gsm
 gstreamer-[v]	Ambiente para multimedia
-gstreamer-ffmpeg-[v]	Elemento ffmpeg para GStreamer
-gstreamer-plugins-bad-[v]	Elementos malos para GStreamer
 gstreamer-plugins-base-[v]	Elementos básicos para GStreamer
-gstreamer-plugins-good-[v]	Elementos buenos para GStreamer
 gstreamer1-[v]	Ambiente para emitir multimedios
 gstreamer1-plugins-base-[v]	Elementos base para Gstreamer
 gstreamer1-plugins-libav-[v]	Elementos ffmpeg para Gstreamer
@@ -304,10 +290,8 @@ gtk+2-[v]		Componentes gráficos GTK+2
 gtk+3-[v]		Componentes gráficos GTK+2
 gtk-update-icon-cache-[v]	Utilidad para almacenar temas de iconos
 gtk2mm-[v]		Interfaz en C++ paara gtk2+	
-gtkhtml4-[v]	Motor liviano para presentar HTML	
 gtkspell-[v]	Corrector ortográfico para gtk2
 gvfs-[v]		Sistema de archivos virtual de GNOME
-gyp-[v]		Genera SCons/Makefiles
 harfbuzz-[v]    	Librería para dar formas a texto OpenType
 harfbuzz-icu-[v]    	Soporte ICU para librería harfbuzz
 hevea-[v]		Traductor de LaTeX a HTML
@@ -317,7 +301,6 @@ hyphen-[v]	Librería de separación silábica
 icu4c-[v]		Componentes internacionales para Unicode
 ijs-[v]		Librería para transmisión de imágenes raster
 imlib2-[v]		Librería para manipulación de imágenes 2
-iniparser-[v]		Librería para reconocer archivos ini
 iodbc-[v]		Manejador ODBC 2
 iso-codes-[v]		Lista de códigos ISO de países, idiomas y monedas
 iso8879-[v]		Conjuntos de entidades de caracteres para ISO 8879:1986
@@ -446,6 +429,8 @@ net-snmp-[v]	Implementación de SNMP extensible
 net-snmp-tkmib-[v]  	Navegador gráfico para MIB de SNMP
 nghttp2-[v]		Librería de HTTP/2
 node-[v]		JavaScript V8 para clientes y servidores
+noto-emoji-[v]
+noto-fonts-[v]
 npth-[v]		Libreria portable de hilos de ejecución (threads)
 nspr-[v]		Herramientas para ejecución de netscape
 nss-[v]		Desarrollo de aplicaciones con protocolos seguros
@@ -525,6 +510,7 @@ p5-XML-LibXML-[v]	Interfaz a librería libxml2
 p5-XML-NamespaceSupport-[v]	Interfaz a clase SAX2 NamespaceSupport
 p5-XML-Parser-[v]	Módulo perl para reconocer documentos XML
 p5-XML-SAX-[v]	Interfaz al reconocedor SAX2 de XML
+p5-XML-SAX-Base-[v]
 p5-YAML-Syck-[v]	YAML y JSON para perl opmtimizado en C
 p5-WWW-RobotRules-[v]	Base de datos de permisos derivados de robots.txt
 p7zip-[v]		Archivador con alta rata de compresión
@@ -589,6 +575,7 @@ popt-[v]		Librería estilo getopt
 portaudio-svn-[v]	API de audio portable y multi-plataforma
 postgresql-contrib-[v]	Módulos extras para PostgreSQL
 postgresql-docs-[v]	Documentación de PostgreSQL
+potrace-[v]
 procmail-[v]		Agente para filtrado de correo local
 proj-[v]		Utilidades para proyección cartográfica
 ps2eps-[v]		Convierte Postscript a Postscript Encapsulado
@@ -641,6 +628,7 @@ py-zopeinterface-[v]	Interfaz a infraestructura de objetos de Zope
 python-tkinter-[v]	Interfaces gráficas Python
 qca-ossl-[v]    		Extnesión de SSL/TLS para QCA2
 qca2-[v]    		Arquitectura criptográfica de Qt
+qhull-[v]
 qpdf-[v]    		Utilidad para inspeccionar y transformar PDF
 qscintilla-[v]		Porte a qt4 del editor de código fuente Scintilla
 qt4-[v]		Juego de herramientas en C++ para GUI en X11 v4

@@ -170,3 +170,13 @@ ingreso si depende de paquetes para ingresar al sistema\\n
 	dialog --title 'Preparado' --msgbox "\\nSistema preparado para actualizar\\n" 15 60
 	clear
 } fi;
+
+if (test "$ACVER" -lt "60") then {
+	dialog --title 'Advertencia: por borrar /usr/share/man' --yesno "\\nDesde la versión 6.0 no se usan enlaces duros a páginas del manual.\\n
+Se eliminarán todas las páginas del manual para que se instalen las nuevas al actualizar.\\n\\n
+¿Continuar?" 17 60
+	if (test "$?" = "0") then {
+		rm -rf /usr/share/man
+	} fi;
+} fi;
+	
