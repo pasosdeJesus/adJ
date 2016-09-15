@@ -1,0 +1,16 @@
+servicio="SECRET_KEY_BASE=abcde DIRAP=/htdocs/sivel2 RAILS_RELATIVE_URL_ROOT=sivel2 chroot -g www -u www /var/www/ /htdocs/sivel2/bin/uc.sh"
+#servicio="HOME=/htdocs/sivel2 GEM_PATH=$GEM_PATH:/htdocs/sivel2/vendor/bundle/ruby/2.3/ SECRET_KEY_BASE=abcde chroot -g www -u www /var/www/ /htdocs/sivel2/bin/uc.sh"
+
+. /etc/rc.d/rc.subr
+
+rc_check() {
+        ps axw | grep "[r]uby.*unicorn_rails .*sivel2" > /dev/null
+}
+
+rc_stop() {
+        p=`ps axw | grep "[r]uby.*unicorn_rails.*master .*sivel2" | sed -e "s/^ *\([0-9]*\) .*/\1/g"`
+        kill $p
+}
+
+rc_cmd $1
+

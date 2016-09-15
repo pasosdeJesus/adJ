@@ -22,6 +22,7 @@ Puede ver novedades respecto a OpenBSD en:
   cerrar fallas de seguridad o emplear xlocale.  Incluidos más de 30
   paquetes que no son portes de OpenBSD. Ver detalles en sección 
   PAQUETES EXCLUSIVOS DE ADJ.
+* Nueva utilidad /usr/local
 
 Entre las novedades reportadas en las `Notas de publicación de OpenBSD 5.9' 
 destacamos las siguientes relacionadas con amd64:
