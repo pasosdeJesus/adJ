@@ -92,8 +92,8 @@ Pasos importantes para publicar versión mayor
 8. Publicar en Twitter que retrasnmite a cuenta y página en Facebook. 
    Si es tambien publicacion de SIVeL en sitio de noticias de SIVeL y Structio.
 
-	Publicado adJ 5.9 sistema operativo para servidores y cortafuegos, 
-	seguro, amigable para cristian@s y en español, ver 
+	Publicado adJ 5.9 distribución para servidores y cortafuegos, 
+	segura, amigable para cristian@s y en español, ver 
 	http://aprendiendo.pasosdejesus.org/
 9. Correo a listas: 
     openbsd-colombia@googlegroups.com, colibri@listas.el-directorio.org, 
@@ -128,3 +128,4 @@ Pasos importantes para publicar versión mayor
 10. Actualiza artículos de Wikipedia 
    https://en.wikipedia.org/wiki/AdJ y https://es.wikipedia.org/wiki/AdJ 
 
+11. Publicar en http://sivel.sf.net y en  http://structio.sf.net
