@@ -16,6 +16,10 @@ DISTFILES=v${VERSION}${EXTRACT_SUFX}
 #DCOMP=sivel2-${VERSION}
 SIVEL_RAIZ ?= htdocs/sivel2
 
+pre-patch:
+	pwd
+	ln -s `dirname ${WRKDIST}`/sivel2-2.0b1 ${WRKDIST}
+
 do-install:
 	echo @mkdir -p ${PREFIX}/${SIVEL_RAIZ}
 	@mkdir -p ${PREFIX}/${SIVEL_RAIZ}
