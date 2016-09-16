@@ -1,4 +1,5 @@
 #!/bin/sh
+# Dominio público de acuerdo a legislación colombiana. 2016. vtamara@pasosdeJesus.org
 
 chmod +x /var/www/htdocs/sivel2/bin/uc.sh
 cd /var/www/htdocs/sivel2/
