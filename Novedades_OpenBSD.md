@@ -40,21 +40,21 @@ Con respecto a OpenBSD 5.9 las novedades son:
 		* servicio-etc.sh	Cambia daemon por servicio en /etc
 		* vuelcamysql.sh Vuelca base de datos MySQL
 	* Páginas del manual nuevas en /usr/shar/man/man3
-		* gctype_l gdigittoint_l gduplocale gfreelocale gisalnum_l,
-		gisalpha_l gisascii_l gisblank_l giscntrl_l gisdigit_l
-		gisgraph_l gishexnumber_l gisideogram_l gislower_l gisnumber_l
-		gisphonogram_l gisprint_l gispunct_l gisrune_l gisspace_l
-		gisspecial_l gisupper_l giswalnum_l giswalpha_l giswblank_l
-		giswcntrl_l giswctype_l giswdigit_l giswgraph_l giswideogram_l
-		giswlower_l giswnumber_l giswphonogram_l giswprint_l 
-		giswpunct_l giswrune_l giswspace_l giswspecial_l giswupper_l
-		giswxdigit_l gisxdigit_l gmblen_l gmbrtowc_l gmbsinit_l
-		gmbsnrtowcs_l gmbsrtowcs_l gmbstowcs_l gmbtowc_l gnewlocale
-		gnextwctype gnextwctype_l gquerylocale gservicio gstrcasecmp_l
-		gstrcasestr_l gstrcoll_l gstrfmon_l gstrncasecmp_l gstrxfrm_l
-		gtolower_l gtoupper_l gtowctrans_l gtowlower_l gtowupper_l
-		guselocale gwcscoll gwcsnrtombs_l gwcsrtombs_l gwcstombs_l
-		gwcsxfrm gwctob_l gwctomb_l gwctype_l gxlocale
+		* ctype_l digittoint_l duplocale freelocale isalnum_l,
+		isalpha_l isascii_l isblank_l iscntrl_l isdigit_l
+		isgraph_l ishexnumber_l isideogram_l islower_l isnumber_l
+		isphonogram_l isprint_l ispunct_l isrune_l isspace_l
+		isspecial_l isupper_l iswalnum_l iswalpha_l iswblank_l
+		iswcntrl_l iswctype_l iswdigit_l iswgraph_l iswideogram_l
+		iswlower_l iswnumber_l iswphonogram_l iswprint_l 
+		iswpunct_l iswrune_l iswspace_l iswspecial_l iswupper_l
+		iswxdigit_l isxdigit_l mblen_l mbrtowc_l mbsinit_l
+		mbsnrtowcs_l mbsrtowcs_l mbstowcs_l mbtowc_l newlocale
+		nextwctype nextwctype_l querylocale servicio strcasecmp_l
+		strcasestr_l strcoll_l strfmon_l strncasecmp_l strxfrm_l
+		tolower_l toupper_l towctrans_l towlower_l towupper_l
+		uselocale wcscoll wcsnrtombs_l wcsrtombs_l wcstombs_l
+		wcsxfrm wctob_l wctomb_l wctype_l xlocale
 	* Encabezados de gcc modificados para definir símbolo \_\_adJ\_\_ que 
 	  identifica compilaciones en el sistema operativo. Facilita uso de 
 	  xlocale y características únicas de adJ respecto a OpenBSD en 

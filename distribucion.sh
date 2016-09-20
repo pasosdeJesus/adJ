@@ -813,6 +813,7 @@ if (test "$sn" = "s") then {
 	paquete glib2
 	paquete gtar
 	paquete libidn
+	paquete libspectre
 	paquete libxslt
 	paquete llvm
 	paquete scribus

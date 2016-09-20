@@ -2,8 +2,10 @@
 Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y que anhelamos sea usada por Jesús durante el Milenio.
 
-###Versión: 5.9b1
-Fecha de publicación: 24/Ago/2016
+###Versión: 5.9
+Fecha de publicación: 14/Sep/2016 
+Para lanzar en BSIDES-2016, gracias especiales a Fernando Quintero 
+y el equipo de csiete
 
 Puede ver novedades respecto a OpenBSD en:
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_5_9/Novedades_OpenBSD.md>
@@ -22,6 +24,13 @@ Puede ver novedades respecto a OpenBSD en:
   cerrar fallas de seguridad o emplear xlocale.  Incluidos más de 30
   paquetes que no son portes de OpenBSD. Ver detalles en sección 
   PAQUETES EXCLUSIVOS DE ADJ.
+* Nueva utilidad /usr/local/adJ/ruby-chroot-www.sh que prepara la
+  jaula /var/www para que corra una aplicación Ruby on Rails y
+  paquete sivel2-2.0b1p1 listo para correr en esa jaula.
+  Después de instalar el paquete ejecute
+	/usr/local/adJ/ruby-chroot-www.sh /var/www/htdocs/sivel2
+  Ver mas detalles en 
+	http://dhobsd.pasosdejesus.org/aplicacion-rails-en-chroot.html
 
 Entre las novedades reportadas en las `Notas de publicación de OpenBSD 5.9' 
 destacamos las siguientes relacionadas con amd64:
@@ -104,9 +113,10 @@ a continuación se describen sólo novedades respecto a la versión anterior de
 adJ y OpenBSD 5.9:
 
 
-* ```SIVeL 1.2.2```  Ver 
+* ```SIVeL 1.2.3```  Ver 
   <http://sivel.sourceforge.net/1.2/actualizacion-sivel.html#actualizaciondeunounoaunodos>
-* ```SIVeL 2.0b1``` Versión beta 1 de SIVeL 2. Escrita sobre Ruby on Rails.
+* ```SIVeL 2.0b1p1``` Versión beta 1 de SIVeL 2. Escrita sobre Ruby on Rails
+  puede correr en jaula chroot /var/www como usuario www:www
 * Nuevo porte y paquete ```htop```
 * Porte ```colorls``` mejorado para soportar locale en ordenamiento alfábetico,
   funciona bien en español.
@@ -117,8 +127,8 @@ adJ y OpenBSD 5.9:
   En adJ la información queda cifrada cuando así se elije al instalar o 
   actualizar adJ.  Ver detalles de como usar cotejación en 
   <http://aprendiendo.pasosdeJesus.org/?id=i18n>.  Se recompilaro otros 
-  paquetes que dependen de este: ```libreoffice```, 
-	```gdal```, postgis, py-psycopg2
+  paquetes que dependen de este: ```libreoffice```, ```gdal```, 
+  ```postgis```, ```py-psycopg2```
 * ```Ruby 2.3.1``` retroportado de OpenBSD-current y probado con aplicaciones 
   Rails 5.   Puede ver más sobre Ruby on Rails sobre adJ en 
   <http://dhobsd.pasosdeJesus.org/Ruby_on_Rails_en_OpenBSD.html>
@@ -128,16 +138,18 @@ adJ y OpenBSD 5.9:
 * ```PHP-5.6.25```, se recomienda activar opcache que hace más veloz la 
   operación con  
   ```doas ln -sf /etc/php-5.6.sample/opcache.ini /etc/php-5.6/```
-  y reiniciar el servicio php56_fpm.
+  y reiniciar el servicio ```php56_fpm```
 * Para activar soporte de xlocale se han recompilado los siguientes paquetes 
   que están en portes de OpenBSD 5.9: ```boost```, ```djvulibre```, 
   ```gettext-tools```, ```ggrep```, ```gdk-pixbuf```, ```glib2```, 
   ```gtar```, ```libidn```, ```libunistring```, ```libxslt```, ```llvm```, 
   ```scribus```, ```vlc```, ```wget```, ```wxWidgets-gtk2```
-* Para cerrar fallas se han recompilado los siguientes paquetes a partir de 
-  portes actualizados de OpenBSD 5.9:
-  ```bzip2```, ```curl```, ```gd```, ```git```, ```imlib2```, 
-  ```ImageMagick```, ```libksba```, ```libtalloc```, ```mariadb-client ```,
+* Para cerrar fallas o porque dependen de librerías actualizadas se han 
+  recompilado los siguientes paquetes a partir de portes actualizados de 
+  OpenBSD 5.9:
+  ```bzip2```, ```curl```, ```gd```, ```gimp```, ```git```, ```imlib2```, 
+  ```ImageMagick```, ```libksba```, ```libspectre```, ```libtalloc```, 
+  ```mariadb-client ```,
   ```mplayer```, ```nginx```, ```node```, ```openldap-client ```,
   ```p5-Mail-SpamAssassin```, ```p7zip```, ```pidgin```, ```samba```,
   ```tdb```, ```tiff```, ```webkit```, ```webkitgtk4```.
@@ -150,13 +162,14 @@ adJ y OpenBSD 5.9:
 ### PAQUETES DE OPENBSD
 
 Los paquetes para OpenBSD 5.9 también funcionan sin cambios. Resaltamos:
-* chromium 48.0.2564.116 recompilado con llaves de API de adJ (más estable). 
+* chromium 48.0.2564.116 recompilado con llaves de API de adJ 
 * nginx 1.9.10 <http://pasosdeJesus.github.io/servidor_adJ/sevidorweb.html#openbsd-httpd>
-* LibreOffice actualizado a 5.0.4.2, gimp a 2.8.16
+* LibreOffice actualizado a 5.0.4.2, gimp a 2.8.16p1
 * LLVM/Clang a 3.5.201402288 asi como los demás lenguajes de programación
 * No hay paquete para mysql, ha sido remplazado por mariadb, ver 
   <http://pasosdeJesus.github.io/servidor_adJ/mariadb.html>
-* Se incluyen en total 621 paquetes, en los repositorios de paquetes para 
+* Añadimos paquete jailkit que facilita operaciones en jaula chroot
+* Se incluyen en total 622 paquetes, en los repositorios de paquetes para 
   OpenBSD 5.9 hay 9295 disponibles para amd64
 
 
@@ -197,7 +210,7 @@ con gusto le enviamos un DVD
 Las claves públicas empleadas para firmar digitalmente el DVD de instalación 
 y los paquetes se ubican en ```/etc/signify``` y deben coincidir con estas:
 * adJ-59-base.pub: RWT/X+D55OaOpJ7ZqIgpJh4soQqAu6ocXqvqlQE4uk7TM8cUkPa3LaGx
-* adJ-59-pkg.pub: RWQ6Y5bhgkHMqz1bsOhEfs4yojbGD6kv9vHGnCoadGGMcU1oF/+LH1G
+* adJ-59-pkg.pub: RWQ6Y5bhgkHMqz1bsOhEfs4yojbGD6kv9vHGnCoadGGMcU1oF/+LH1GD
 
 ## ACTUALIZACIÓN E INSTALACIÓN
 
