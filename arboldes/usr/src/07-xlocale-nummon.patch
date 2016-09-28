@@ -153,36 +153,6 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/arch/sparc64/
 +	strtorQ_l(s, sp, FLT_ROUNDS, &result, locale);
  	return result;
  }
-diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/arch/vax/gdtoa/strtof.c src/lib/libc/arch/vax/gdtoa/strtof.c
---- src54-x6/lib/libc/arch/vax/gdtoa/strtof.c	Sat Jun 25 00:32:52 2011
-+++ src/lib/libc/arch/vax/gdtoa/strtof.c	Tue Dec  3 16:12:24 2013
-@@ -29,13 +29,15 @@
- /* Please send bug reports to David M. Gay (dmg at acm dot org,
-  * with " at " changed at "@" and " dot " changed to ".").	*/
- 
-+#include <xlocale.h>
-+
- #include "gdtoaimp.h"
- 
-  float
- #ifdef KR_headers
--strtof(s, sp) CONST char *s; char **sp;
-+strtof_l(s, sp, locale) CONST char *s; char **sp; locale_t locale;
- #else
--strtof(CONST char *s, char **sp)
-+strtof_l(CONST char *s, char **sp, locale_t locale)
- #endif
- {
- 	static FPI fpi0 = { 24, 1-128-1-24+1,  255-128-1-24+1, 1, SI };
-@@ -49,7 +51,7 @@
- #define fpi &fpi0
- #endif
- 
--	k = strtodg(s, sp, fpi, &exp, bits);
-+	k = strtodg_l(s, sp, fpi, &exp, bits, locale);
- 	switch(k & STRTOG_Retmask) {
- 	  case STRTOG_NoNumber:
- 	  case STRTOG_Zero:
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/gdtoa/strtod.c src/lib/libc/gdtoa/strtod.c
 --- src54-x6/lib/libc/gdtoa/strtod.c	Wed Jul 20 13:24:47 2011
 +++ src/lib/libc/gdtoa/strtod.c	Wed Dec  4 03:40:45 2013

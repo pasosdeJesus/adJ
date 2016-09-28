@@ -14,51 +14,49 @@ diff -u src54-coll/lib/libc/locale/Makefile.inc src54-mon/lib/libc/locale/Makefi
 diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/_def_monetary.c src/lib/libc/locale/_def_monetary.c
 --- src55-orig/lib/libc/locale/_def_monetary.c	Mon Aug  8 03:05:35 2005
 +++ src/lib/libc/locale/_def_monetary.c	Wed Dec 31 19:00:00 1969
-@@ -3,20 +3,57 @@
+@@ -3,20 +3,56 @@
   * Written by J.T. Conklin <jtc@netbsd.org>.
   * Public domain.
   */
--
 +/*
-+ * Copyright (c) 2000, 2001 Alexey Zelkin <phantom@FreeBSD.org>
-+ * All rights reserved.
-+ *
-+ * Copyright (c) 2011 The FreeBSD Foundation
-+ * All rights reserved.
-+ * Portions of this software were developed by David Chisnall
-+ * under sponsorship from the FreeBSD Foundation.
-+ *
-+ * Redistribution and use in source and binary forms, with or without
-+ * modification, are permitted provided that the following conditions
-+ * are met:
-+ * 1. Redistributions of source code must retain the above copyright
-+ *    notice, this list of conditions and the following disclaimer.
-+ * 2. Redistributions in binary form must reproduce the above copyright
-+ *    notice, this list of conditions and the following disclaimer in the
-+ *    documentation and/or other materials provided with the distribution.
-+ *
-+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
-+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
-+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-+ * SUCH DAMAGE.
-+ */
-+ 
- #include <sys/localedef.h>
-+
++* Copyright (c) 2000, 2001 Alexey Zelkin <phantom@FreeBSD.org>
++* All rights reserved.
++*
++* Copyright (c) 2011 The FreeBSD Foundation
++* All rights reserved.
++* Portions of this software were developed by David Chisnall
++* under sponsorship from the FreeBSD Foundation.
++*
++* Redistribution and use in source and binary forms, with or without
++* modification, are permitted provided that the following conditions
++* are met:
++* 1. Redistributions of source code must retain the above copyright
++*    notice, this list of conditions and the following disclaimer.
++* 2. Redistributions in binary form must reproduce the above copyright
++*    notice, this list of conditions and the following disclaimer in the
++*    documentation and/or other materials provided with the distribution.
++*
++* THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
++* ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++* ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
++* FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++* DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++* OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++* HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++* LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++* OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++* SUCH DAMAGE.
++*/
+ 
  #include <limits.h>
  #include <locale.h>
+ #include "localedef.h"
 +#include <stdlib.h>
 +#include <string.h>
- 
++ 
 +#include "locale/loadtextcat.h"
-+
+ 
 +static char    numempty[] = { CHAR_MAX, '\0'};
 +
  const _MonetaryLocale _DefaultMonetaryLocale =
@@ -67,14 +65,14 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/_def_monetary.
  	"",
  	"",
  	"",
-+	numempty,	/* mon_grouping */
++	numempty,       /* mon_grouping */  
  	"",
  	"",
 -	"",
  	CHAR_MAX,
  	CHAR_MAX,
  
-@@ -36,3 +73,152 @@
+@@ -36,3 +72,152 @@
  };
  
  const _MonetaryLocale *_CurrentMonetaryLocale = &_DefaultMonetaryLocale;
@@ -361,17 +359,17 @@ diff -ruN -x *~ -x *orig src54-orig/lib/libc/locale/nl_langinfo.3 src/lib/libc/l
 diff -ruN -x *~ -x *orig src54-orig/lib/libc/locale/nl_langinfo.c src/lib/libc/locale/nl_langinfo.c
 --- src54-orig/lib/libc/locale/nl_langinfo.c	Wed Nov 16 11:48:15 2005
 +++ src/lib/libc/locale/nl_langinfo.c	Wed Dec 11 08:11:54 2013
-@@ -5,12 +5,17 @@
+@@ -4,14 +4,18 @@
+  * Public domain.
   */
  
- #include <sys/localedef.h>
-+
 +#include <langinfo.h>
  #include <locale.h>
  #include <nl_types.h>
--#include <langinfo.h>
+ #include <langinfo.h>
 +#include <string.h>
-+
+ 
+ #include "localedef.h"
  #include "rune.h"
  #include "runetype.h"
  
@@ -380,7 +378,7 @@ diff -ruN -x *~ -x *orig src54-orig/lib/libc/locale/nl_langinfo.c src/lib/libc/l
  char *
  nl_langinfo(nl_item item)
  {
-@@ -97,8 +102,20 @@
+@@ -98,8 +102,20 @@
  	case NOEXPR:
  		s = _CurrentMessagesLocale->noexpr;
  		break;
@@ -449,23 +447,12 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/stdlib/Makefile.inc s
  	strtol.c strtoll.c strtonum.c strtoul.c strtoull.c strtoumax.c \
  	system.c tfind.c tsearch.c _rand48.c drand48.c erand48.c jrand48.c \
  	lcong48.c lrand48.c mrand48.c nrand48.c seed48.c srand48.c qabs.c \
-@@ -30,7 +30,7 @@
+@@ -28,4 +28,4 @@
  	getsubopt.3 hcreate.3 imaxabs.3 imaxdiv.3 insque.3 labs.3 ldiv.3 \
  	lldiv.3 lsearch.3 malloc.3 posix_memalign.3 posix_openpt.3 ptsname.3 \
  	qabs.3 qdiv.3 qsort.3 radixsort.3 rand48.3 rand.3 random.3 realpath.3 \
 -	strtod.3 strtonum.3 strtol.3 strtoul.3 system.3 tsearch.3
 +	strfmon.3 strtod.3 strtonum.3 strtol.3 strtoul.3 system.3 tsearch.3
- 
- MLINKS+=ecvt.3 fcvt.3 ecvt.3 gcvt.3
- MLINKS+=getenv.3 setenv.3 getenv.3 unsetenv.3 getenv.3 putenv.3
-@@ -52,6 +52,7 @@
- MLINKS+=rand48.3 seed48.3 rand48.3 seed48_deterministic.3
- MLINKS+=rand48.3 lcong48.3 rand48.3 lcong48_deterministic.3
- MLINKS+=ptsname.3 grantpt.3 ptsname.3 unlockpt.3
-+MLINKS+=strfmon.3 strfmon_l.3
- MLINKS+=strtod.3 strtof.3 strtod.3 strtold.3
- MLINKS+=strtol.3 strtoll.3 strtol.3 strtoq.3 strtol.3 strtoimax.3
- MLINKS+=strtoul.3 strtoull.3 strtoul.3 strtouq.3 strtoul.3 strtoumax.3
 diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/stdlib/strfmon.3 src/lib/libc/stdlib/strfmon.3
 --- src55-orig/lib/libc/stdlib/strfmon.3	Wed Dec 31 19:00:00 1969
 +++ src/lib/libc/stdlib/strfmon.3	Fri Nov 15 22:20:42 2013
@@ -1334,15 +1321,16 @@ diff -ruN src54-orig/include/monetary.h src/include/monetary.h
 diff -ruN src56-orig/include/Makefile src/include/Makefile
 --- src56-orig/include/Makefile	Wed Apr  2 23:43:56 2014
 +++ src/include/Makefile	Thu Apr  3 09:30:29 2014
-@@ -14,7 +14,7 @@
+@@ -14,7 +14,8 @@
  	dlfcn.h elf_abi.h err.h errno.h fenv.h float.h fnmatch.h fstab.h fts.h \
- 	ftw.h getopt.h glob.h grp.h icdb.h ifaddrs.h inttypes.h iso646.h kvm.h \
- 	langinfo.h libgen.h limits.h locale.h login_cap.h math.h \
--	md5.h memory.h ndbm.h netdb.h netgroup.h nlist.h nl_types.h \
-+	md5.h memory.h monetary.h ndbm.h netdb.h netgroup.h nlist.h nl_types.h \
- 	paths.h poll.h pwd.h ranlib.h readpassphrase.h regex.h \
- 	resolv.h rmd160.h search.h setjmp.h sha1.h sha2.h signal.h siphash.h \
- 	sndio.h \
+ 	ftw.h getopt.h glob.h grp.h icdb.h ieeefp.h ifaddrs.h inttypes.h \
+ 	iso646.h kvm.h langinfo.h libgen.h limits.h link.h link_elf.h \
+-	locale.h login_cap.h math.h md5.h memory.h ndbm.h netdb.h netgroup.h \
++	locale.h login_cap.h math.h md5.h memory.h \
++	monetary.h ndbm.h netdb.h netgroup.h \
+ 	nlist.h nl_types.h paths.h poll.h pwd.h ranlib.h readpassphrase.h \
+ 	regex.h resolv.h rmd160.h search.h setjmp.h sha1.h sha2.h signal.h \
+ 	siphash.h sndio.h spawn.h stdbool.h stddef.h stdio.h stdlib.h \
 diff -ruN src59-orig/lib/libc/Symbols.list src/lib/libc/Symbols.list
 --- src59-orig/lib/libc/Symbols.list	Wed Nov 18 11:50:08 2015
 +++ src/lib/libc/Symbols.list	Sat May 14 05:28:17 2016

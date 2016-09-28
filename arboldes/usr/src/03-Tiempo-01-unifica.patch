@@ -1,6 +1,6 @@
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/sys/sys/localedef.h src/sys/sys/localedef.h
---- src56-orig/sys/sys/localedef.h	Fri Sep 19 13:09:44 2014
-+++ src/sys/sys/localedef.h	Thu Oct  2 20:15:19 2014
+--- src56-orig/lib/libc/include/localedef.h	Fri Sep 19 13:09:44 2014
++++ src/lib/libc/include/localedef.h	Thu Oct  2 20:15:19 2014
 @@ -99,6 +99,7 @@
  	const char *d_fmt;
  	const char *t_fmt;
@@ -25,16 +25,16 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/locale/_def
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/strftime.c src/lib/libc/time/strftime.c
 --- src56-orig/lib/libc/time/strftime.c	Thu Sep 13 06:14:20 2012
 +++ src/lib/libc/time/strftime.c	Fri Apr 25 10:16:20 2014
-@@ -28,6 +28,8 @@
+@@ -28,82 +28,15 @@
  ** SUCH DAMAGE.
  */
  
-+#include <sys/localedef.h>
 +
  #include <fcntl.h>
  #include <locale.h>
  #include <stdio.h>
-@@ -35,75 +37,6 @@
+ 
++#include "localedef.h"
  #include "private.h"
  #include "tzfile.h"
  
@@ -342,18 +342,17 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/strfti
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/wcsftime.c src/lib/libc/time/wcsftime.c
 --- src56-orig/lib/libc/time/wcsftime.c	Sun Jan 20 15:29:02 2013
 +++ src/lib/libc/time/wcsftime.c	Sun Apr 27 17:43:58 2014
-@@ -31,75 +31,17 @@
+@@ -31,75 +31,16 @@
  ** SUCH DAMAGE.
  */
  
-+#include <sys/localedef.h>
-+
 +#include <errno.h>
  #include <fcntl.h>
  #include <locale.h>
 +#include <stdlib.h>
  #include <wchar.h>
  
++#include "localedef.h"
  #include "private.h"
  #include "tzfile.h"
  
@@ -422,7 +421,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/wcsfti
  #define UNKNOWN L"?"
  static wchar_t *	_add(const wchar_t *, wchar_t *, const wchar_t *);
  static wchar_t *	_sadd(const char *, wchar_t *, const wchar_t *);
-@@ -134,10 +76,29 @@
+@@ -134,10 +75,29 @@
  	return p - s;
  }
  
@@ -452,7 +451,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/wcsfti
  	for ( ; *format; ++format) {
  		if (*format != L'%') {
  			if (pt == ptlim)
-@@ -153,26 +114,26 @@
+@@ -153,26 +113,26 @@
  		case 'A':
  			pt = _add((t->tm_wday < 0 ||
  				t->tm_wday >= DAYSPERWEEK) ?
@@ -483,7 +482,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/wcsfti
  				pt, ptlim);
  			continue;
  		case 'C':
-@@ -190,7 +151,7 @@
+@@ -190,7 +150,7 @@
  			{
  			int warn2 = IN_SOME;
  
@@ -492,7 +491,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/wcsfti
  			if (warn2 == IN_ALL)
  				warn2 = IN_THIS;
  			if (warn2 > *warnp)
-@@ -270,8 +231,8 @@
+@@ -270,8 +230,8 @@
  			continue;
  		case 'p':
  			pt = _add((t->tm_hour >= (HOURSPERDAY / 2)) ?
@@ -503,7 +502,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/wcsfti
  				pt, ptlim);
  			continue;
  		case 'R':
-@@ -417,13 +378,13 @@
+@@ -417,13 +377,13 @@
  			pt = _conv(t->tm_wday, L"%d", pt, ptlim);
  			continue;
  		case 'X':
@@ -519,7 +518,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/wcsfti
  			if (warn2 == IN_ALL)
  				warn2 = IN_THIS;
  			if (warn2 > *warnp)
-@@ -471,7 +432,7 @@
+@@ -471,7 +431,7 @@
  			}
  			continue;
  		case '+':
@@ -528,7 +527,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/wcsfti
  			continue;
  		case '%':
  		/*
-@@ -547,4 +508,3 @@
+@@ -547,4 +507,3 @@
  		pt = _conv(((trail < 0) ? -trail : trail), L"%02d", pt, ptlim);
  	return pt;
  }
