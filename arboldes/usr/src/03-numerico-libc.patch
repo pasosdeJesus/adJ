@@ -1,10 +1,11 @@
 diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/_def_numeric.c src/lib/libc/locale/_def_numeric.c
 --- src55-orig/lib/libc/locale/_def_numeric.c	Mon Aug  8 03:05:35 2005
 +++ src/lib/libc/locale/_def_numeric.c	Wed Dec 31 19:00:00 1969
-@@ -3,15 +3,103 @@
+@@ -3,15 +3,102 @@
   * Written by J.T. Conklin <jtc@netbsd.org>.
   * Public domain.
   */
+-
 +/*
 + * Copyright (c) 2000, 2001 Alexey Zelkin <phantom@FreeBSD.org>
 + * All rights reserved.
@@ -36,16 +37,15 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/_def_numeric.c
 + * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 + * SUCH DAMAGE.
 + */
- 
- #include <sys/localedef.h>
-+
++ 
 +#include <limits.h>
  #include <locale.h>
 +#include <string.h>
- 
-+#include "locale/loadtextcat.h"
 +
-+static char	numempty[] = { CHAR_MAX, '\0' };
+ #include "localedef.h"
++#include "locale/loadtextcat.h"
+ 
++static char    numempty[] = { CHAR_MAX, '\0' };
 +
  const _NumericLocale _DefaultNumericLocale =
  {
@@ -201,21 +201,14 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/stdio/vfprintf.c src/
   * Redistribution and use in source and binary forms, with or without
   * modification, are permitted provided that the following conditions
   * are met:
-@@ -37,6 +42,7 @@
-  * This code is large and complicated...
-  */
- 
-+#include <sys/localedef.h>
- #include <sys/types.h>
- #include <sys/mman.h>
- 
-@@ -52,8 +58,8 @@
+@@ -52,8 +57,9 @@
  #include <unistd.h>
  #include <wchar.h>
  
 -#include "local.h"
  #include "fvwrite.h"
 +#include "local.h"
++#include "localedef.h"
  
  union arg {
  	int			intarg;
@@ -235,7 +228,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/stdio/vfprintf.c src/
  static int __find_arguments(const char *fmt0, va_list ap, union arg **argtable,
      size_t *argtablesiz);
  static int __grow_type_table(unsigned char **typetable, int *tablesize);
-@@ -257,6 +272,7 @@
+@@ -252,6 +267,7 @@
  #define SIZEINT		0x0400		/* (signed) size_t */
  #define CHARINT		0x0800		/* 8 bit integer */
  #define MAXINT		0x1000		/* largest integer size (intmax_t) */
@@ -243,9 +236,9 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/stdio/vfprintf.c src/
  
  int
  vfprintf(FILE *fp, const char *fmt0, __va_list ap)
-@@ -269,6 +285,76 @@
- 	return (ret);
+@@ -265,6 +281,76 @@
  }
+ DEF_STRONG(vfprintf);
  
 +
 +/*
@@ -320,7 +313,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/stdio/vfprintf.c src/
  int
  __vfprintf(FILE *fp, const char *fmt0, __va_list ap)
  {
-@@ -282,6 +368,7 @@
+@@ -278,6 +364,7 @@
  	int width;		/* width from format (%8d), or 0 */
  	int prec;		/* precision from format; <0 for N/A */
  	char sign;		/* sign prefix (' ', '+', '-', or \0) */
@@ -328,7 +321,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/stdio/vfprintf.c src/
  	wchar_t wc;
  	mbstate_t ps;
  #ifdef FLOATING_POINT
-@@ -299,7 +386,10 @@
+@@ -295,7 +382,10 @@
  	 * D:	expchar holds this character; '\0' if no exponent, e.g. %f
  	 * F:	at least two digits for decimal, at least one digit for hex
  	 */
@@ -340,7 +333,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/stdio/vfprintf.c src/
  	int signflag;		/* true if float is negative */
  	union {			/* floating point arguments %[aAeEfFgG] */
  		double dbl;
-@@ -353,7 +443,7 @@
+@@ -349,7 +439,7 @@
  	 * BEWARE, these `goto error' on error, and PAD uses `n'.
  	 */
  #define	PRINT(ptr, len) do { \
@@ -349,7 +342,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/stdio/vfprintf.c src/
  	iovp->iov_len = (len); \
  	uio.uio_resid += (len); \
  	iovp++; \
-@@ -386,7 +476,28 @@
+@@ -382,7 +472,28 @@
  	uio.uio_iovcnt = 0; \
  	iovp = iov; \
  } while (0)
@@ -378,7 +371,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/stdio/vfprintf.c src/
  	/*
  	 * To extend shorts properly, we need both signed and unsigned
  	 * argument extraction methods.
-@@ -508,6 +619,7 @@
+@@ -512,6 +623,7 @@
  		dprec = 0;
  		width = 0;
  		prec = -1;
@@ -386,7 +379,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/stdio/vfprintf.c src/
  		sign = '\0';
  		ox[1] = '\0';
  
-@@ -526,7 +638,7 @@
+@@ -530,7 +642,7 @@
  			flags |= ALT;
  			goto rflag;
  		case '\'':
@@ -395,7 +388,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/stdio/vfprintf.c src/
  			goto rflag;
  		case '*':
  			/*
-@@ -797,6 +909,8 @@
+@@ -805,6 +917,8 @@
  				/* space for decimal pt and following digits */
  				if (prec || flags & ALT)
  					size += prec + 1;
@@ -404,7 +397,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/stdio/vfprintf.c src/
  				lead = expt;
  			}
  			break;
-@@ -898,7 +1012,7 @@
+@@ -905,7 +1019,7 @@
  			/* leading 0x/X only if non-zero */
  			if (flags & ALT && _umax != 0)
  				ox[1] = ch;
@@ -413,7 +406,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/stdio/vfprintf.c src/
  			/* unsigned conversions */
  nosign:			sign = '\0';
  			/*
-@@ -933,12 +1047,8 @@
+@@ -940,12 +1054,8 @@
  					break;
  
  				case DEC:
@@ -428,7 +421,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/stdio/vfprintf.c src/
  					break;
  
  				case HEX:
-@@ -1012,10 +1122,12 @@
+@@ -1019,10 +1129,12 @@
  		/* the string or number proper */
  #ifdef FLOATING_POINT
  		if ((flags & FPT) == 0) {
@@ -444,7 +437,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/stdio/vfprintf.c src/
  			if (!expchar) {	/* %[fF] or sufficiently short %[gG] */
  				if (expt <= 0) {
  					PRINT(zeroes, 1);
-@@ -1025,8 +1137,14 @@
+@@ -1032,8 +1144,14 @@
  					/* already handled initial 0's */
  					prec += expt;
   				} else {
@@ -558,3 +551,15 @@ diff -ruN -x *~ -x *orig -x *rej src54-mon/lib/libc/stdlib/strtod.3 src/lib/libc
  An exponent consists of an
  .Sq E
  or
+diff -ruN -x obj -x CVS -x *~ -x *orig src56-orig/lib/libc/locale/localeconv.c src/lib/libc/locale/localeconv.c
+--- src56-orig/lib/libc/locale/localeconv.c	Fri Sep 19 13:07:17 2014
++++ src/lib/libc/locale/localeconv.c	Fri Sep 19 14:49:15 2014
+@@ -17,7 +17,7 @@
+  * locale has been changed.
+  */
+ int __mlocale_changed = 1;
+-static int __nlocale_changed = 1;
++int __nlocale_changed = 1;
+ 
+ /*
+  * Return the current locale conversion.
