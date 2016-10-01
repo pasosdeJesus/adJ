@@ -297,7 +297,7 @@ diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src53xlocale1/
 diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src54-x4/lib/libc/gen/toupper_.c src/lib/libc/gen/toupper_.c
 --- src54-x4/lib/libc/locale/Makefile.inc	Thu Dec  5 19:12:05 2013
 +++ src/lib/libc/locale/Makefile.inc	Thu Dec  5 19:17:22 2013
-@@ -13,7 +13,7 @@
+@@ -10,7 +10,7 @@
  	wcstoul.c wcstoll.c wcstoull.c wcstoimax.c wcstoumax.c \
  	setrunelocale.c runeglue.c rune.c runetable.c ___runetype_mb.c \
  	_wctrans.c wcsxfrm.c loadtextcat.c collate.c \
@@ -306,75 +306,6 @@ diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src54-x4/lib/l
  
  MAN+=	nl_langinfo.3 setlocale.3 iswalnum.3 towlower.3 \
  	btowc.3 mblen.3 mbrlen.3 mbrtowc.3 mbsinit.3 mbsrtowcs.3 \
-@@ -21,9 +21,32 @@
- 	wcstombs.3 wctob.3 wctomb.3 \
- 	wctype.3 iswctype.3 wctrans.3 towctrans.3 wcwidth.3 \
- 	duplocale.3  freelocale.3 newlocale.3 nextwctype.3 \
--	querylocale.3 uselocale.3 wcscoll.3 wcsxfrm.3 xlocale.3
-+	querylocale.3 uselocale.3 wcscoll.3 wcsxfrm.3 xlocale.3 \
-+	ctype_l.3 iswalnum_l.3
- 
--MLINKS+= iswalnum.3 iswalpha.3 \
-+MLINKS+= ctype_l.3 digittoint_l.3 \
-+	ctype_l.3 isalnum_l.3 \
-+	ctype_l.3 isalpha_l.3 \
-+	ctype_l.3 isascii_l.3 \
-+	ctype_l.3 isblank_l.3 \
-+	ctype_l.3 iscntrl_l.3 \
-+	ctype_l.3 isdigit_l.3 \
-+	ctype_l.3 isgraph_l.3 \
-+	ctype_l.3 ishexnumber_l.3 \
-+	ctype_l.3 isideogram_l.3 \
-+	ctype_l.3 islower_l.3 \
-+	ctype_l.3 isnumber_l.3 \
-+	ctype_l.3 isphonogram_l.3 \
-+	ctype_l.3 isprint_l.3 \
-+	ctype_l.3 ispunct_l.3 \
-+	ctype_l.3 isrune_l.3 \
-+	ctype_l.3 isspace_l.3 \
-+	ctype_l.3 isspecial_l.3 \
-+	ctype_l.3 isupper_l.3 \
-+	ctype_l.3 isxdigit_l.3 \
-+	ctype_l.3 tolower_l.3 \
-+	ctype_l.3 toupper_l.3 \
-+	iswalnum.3 iswalpha.3 \
- 	iswalnum.3 iswblank.3 \
- 	iswalnum.3 iswcntrl.3 \
- 	iswalnum.3 iswdigit.3 \
-@@ -34,6 +57,25 @@
- 	iswalnum.3 iswspace.3 \
- 	iswalnum.3 iswupper.3 \
- 	iswalnum.3 iswxdigit.3 \
-+	iswalnum_l.3 iswalpha_l.3 \
-+	iswalnum_l.3 iswblank_l.3 \
-+	iswalnum_l.3 iswcntrl_l.3 \
-+	iswalnum_l.3 iswctype_l.3 \
-+	iswalnum_l.3 iswdigit_l.3 \
-+	iswalnum_l.3 iswgraph_l.3 \
-+	iswalnum_l.3 iswideogram_l.3 \
-+	iswalnum_l.3 iswlower_l.3 \
-+	iswalnum_l.3 iswnumber_l.3 \
-+	iswalnum_l.3 iswphonogram_l.3 \
-+	iswalnum_l.3 iswprint_l.3 \
-+	iswalnum_l.3 iswpunct_l.3 \
-+	iswalnum_l.3 iswrune_l.3 \
-+	iswalnum_l.3 iswspace_l.3 \
-+	iswalnum_l.3 iswspecial_l.3 \
-+	iswalnum_l.3 iswupper_l.3 \
-+	iswalnum_l.3 iswxdigit_l.3 \
-+	iswalnum_l.3 towctrans_l.3 \
-+	iswalnum_l.3 wctype_l.3 \
- 	mblen.3 mblen_l.3\
- 	mbrtowc.3 mbrtowc_l.3\
- 	mbsinit.3 mbsinit_l.3\
-@@ -42,6 +84,7 @@
- 	mbsrtowcs.3 mbsnrtowcs_l.3 \
- 	mbsrtowcs.3 mbsrtowcs_l.3 \
- 	mbtowc.3 mbtowc_l.3\
-+	nextwctype.3 nextwctype_l.3 \
- 	setlocale.3 localeconv.3 \
- 	towlower.3 towlower_l.3 \
- 	towlower.3 towupper.3 \
 diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src53xlocale1/lib/libc/locale/___runetype_mb.c src/lib/libc/locale/___runetype_mb.c
 --- src53xlocale1/lib/libc/locale/___runetype_mb.c	Mon Mar 25 18:28:42 2013
 +++ src/lib/libc/locale/___runetype_mb.c	Thu Apr  4 09:52:18 2013
@@ -1421,7 +1352,7 @@ diff -ruN -x *.o -x obj -x CVS -x *~ src53xlocale2/regress/lib/libc/locale/check
 +	p(!iswxdigit_l(L'g', es_CO_UTF_8));
 +	p(isxdigit_l('f', es_CO_UTF_8));
 +	p(!isxdigit_l('g', es_CO_UTF_8));
-+	p(digittoint_l(L'1', es_CO_UTF_8) == 1);
++	//p(digittoint_l(L'1', es_CO_UTF_8) == 1);
 +	p(isblank_l(' ', es_CO_UTF_8));
 +	p(!isblank_l('a', es_CO_UTF_8));
 +	p(iswblank_l(L'\t', es_CO_UTF_8));
@@ -2203,25 +2134,33 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/string/str
 +.Nm strcasestr_l
  .Nd locate a substring in a string
  .Sh SYNOPSIS
- .Fd #include <string.h>
-@@ -55,8 +57,15 @@
+ .In string.h
+@@ -43,6 +45,9 @@
+ .Fn strstr "const char *big" "const char *little"
+ .Ft char *
+ .Fn strcasestr "const char *big" "const char *little"
++.In xlocale.h
++.Ft char *
++.Fn strcasestr_l "const char *big" "const char *little" "locale_t l"
+ .Sh DESCRIPTION
+ The
+ .Fn strstr
+@@ -55,7 +60,13 @@
  .Fn strcasestr
  function is similar to
  .Fn strstr
 -but ignores the case of both strings.
 +but ignores the case of both strings and uses the current locale.
- .Pp
-+The
++.Pp
 +.Fn strcasestr_l
-+funciont is similar to
++funcion is similar to
 +.Fn strcasestr
 +but uses the locale provided as parameter, see
 +.Xr xlocale 3
-+.Pp
+ .Sh RETURN VALUES
  If
  .Fa little
- is an empty string,
-@@ -80,7 +89,8 @@
+@@ -81,7 +92,8 @@
  .Xr strsep 3 ,
  .Xr strspn 3 ,
  .Xr strtok 3 ,
@@ -2747,29 +2686,6 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/wcs
  typedef long int_type;
  #define	MIN_VALUE	LONG_MIN
  #define	MAX_VALUE	LONG_MAX
-diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/string/Makefile.inc src53xlocale2/lib/libc/string/Makefile.inc
---- src53xlocale1/lib/libc/string/Makefile.inc	Mon Apr  8 21:20:25 2013
-+++ src53xlocale2/lib/libc/string/Makefile.inc	Fri Apr 12 12:07:57 2013
-@@ -164,7 +164,7 @@
- MLINKS+=strcasecmp.3 strcasecmp_l.3
- MLINKS+=strcasecmp.3 strncasecmp_l.3
- MLINKS+=strcmp.3 strncmp.3
--MLINKS+=strcoll.3 strncoll_l.3
-+MLINKS+=strcoll.3 strcoll_l.3
- MLINKS+=strdup.3 strndup.3
- MLINKS+=strlcpy.3 strlcat.3
- MLINKS+=strlen.3 strnlen.3
-@@ -175,7 +175,10 @@
- MLINKS+=strerror.3 strerror_r.3
- MLINKS+=timingsafe_bcmp.3 timingsafe_memcmp.3
- MLINKS+=wcscasecmp.3 wcsncasecmp.3
-+MLINKS+=wcscasecmp.3 wcscasecmp_l.3
-+MLINKS+=wcscasecmp.3 wcsncasecmp_l.3
- MLINKS+=wcscat.3 wcsncat.3
- MLINKS+=wcscmp.3 wcsncmp.3
- MLINKS+=wcscpy.3 wcsncpy.3
- MLINKS+=wcslcpy.3 wcslcat.3
-+MLINKS+=wcswidth.3 wcswidth_l.3
 diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/string/wcswidth.3 src53xlocale2/lib/libc/string/wcswidth.3
 --- src53xlocale1/lib/libc/string/wcswidth.3	Mon Apr  8 21:20:25 2013
 +++ src53xlocale2/lib/libc/string/wcswidth.3	Fri Apr 12 12:07:57 2013
@@ -2825,26 +2741,6 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/string/wcs
  .Sh STANDARDS
  The
  .Fn wcswidth
-diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/stdio/Makefile.inc src53xlocale2/lib/libc/stdio/Makefile.inc
---- src53xlocale1/lib/libc/stdio/Makefile.inc	Mon Apr  8 21:20:25 2013
-+++ src53xlocale2/lib/libc/stdio/Makefile.inc	Fri Apr 12 12:07:57 2013
-@@ -59,8 +59,16 @@
- MLINKS+=tmpnam.3 tempnam.3 tmpnam.3 tmpfile.3
- MLINKS+=wprintf.3 fwprintf.3 wprintf.3 swprintf.3 wprintf.3 vwprintf.3 \
- 	wprintf.3 vfwprintf.3 wprintf.3 vswprintf.3
-+MLINKS+=wprintf.3 wprintf_l.3 wprintf.3 fwprintf_l.3 wprintf.3 swprintf_l.3 \
-+	wprintf.3 vwprintf_l.3 wprintf.3 vfwprintf_l.3 wprintf.3 vswprintf_l.3
- MLINKS+=wscanf.3 fwscanf.3 wscanf.3 swscanf.3 wscanf.3 vfwscanf.3 wscanf.3 \
- 	vswscanf.3 wscanf.3 vwscanf.3
-+MLINKS+=wscanf.3 wscanf_l.3 wscanf.3 fwscanf_l.3 wscanf.3 swscanf_l.3 \
-+	wscanf.3 vfwscanf_l.3 wscanf.3 vswscanf_l.3 wscanf.3 vwscanf_l.3
- 
- MLINKS+=getwc.3 fgetwc.3 getwc.3 getwchar.3
-+MLINKS+=getwc.3 getwc_l.3 getwc.3 fgetwc_l.3 getwc.3 getwchar_l.3
- MLINKS+=putwc.3 fputwc.3 putwc.3 putwchar.3
-+MLINKS+=putwc.3 putwc_l.3 putwc.3 fputwc_l.3 putwc.3 putwchar_l.3
-+MLINKS+=fgetws.3 fgetws_l.3
-+MLINKS+=fputws.3 fputws_l.3
 diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/stdio/vdprintf.c src53xlocale2/lib/libc/stdio/vdprintf.c
 --- src53xlocale1/lib/libc/stdio/vdprintf.c	Mon Apr  8 21:20:25 2013
 +++ src53xlocale2/lib/libc/stdio/vdprintf.c	Fri Apr 12 12:07:57 2013

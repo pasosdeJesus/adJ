@@ -493,59 +493,6 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/gdtoa/strtorx
  	ULtox((UShort*)L, bits, exp, k);
  	return k;
  	}
-diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/Makefile.inc src/lib/libc/locale/Makefile.inc
---- src54-x6/lib/libc/locale/Makefile.inc	Tue Dec  3 16:08:11 2013
-+++ src/lib/libc/locale/Makefile.inc	Tue Dec  3 16:12:25 2013
-@@ -64,6 +64,7 @@
- 	iswalnum_l.3 iswdigit_l.3 \
- 	iswalnum_l.3 iswgraph_l.3 \
- 	iswalnum_l.3 iswideogram_l.3 \
-+	iswalnum_l.3 iswhexnumber_l.3 \
- 	iswalnum_l.3 iswlower_l.3 \
- 	iswalnum_l.3 iswnumber_l.3 \
- 	iswalnum_l.3 iswphonogram_l.3 \
-@@ -77,6 +78,7 @@
- 	iswalnum_l.3 towctrans_l.3 \
- 	iswalnum_l.3 wctype_l.3 \
- 	mblen.3 mblen_l.3\
-+	mbrlen.3 mbrlen_l.3\
- 	mbrtowc.3 mbrtowc_l.3\
- 	mbsinit.3 mbsinit_l.3\
- 	mbstowcs.3 mbstowcs_l.3\
-@@ -90,19 +92,32 @@
- 	towlower.3 towlower_l.3 \
- 	towlower.3 towupper.3 \
- 	towlower.3 towupper_l.3 \
-+	wcrtomb.3 wcrtomb_l.3 \
-+	wcscoll.3 wcscoll_l.3 \
-+	wcstod.3 wcstod_l.3 \
- 	wcstod.3 wcstof.3 \
-+	wcstod.3 wcstof_l.3 \
- 	wcstod.3 wcstold.3 \
-+	wcstod.3 wcstold_l.3 \
-+	wcstol.3 wcstol_l.3 \
- 	wcstol.3 wcstoul.3 \
-+	wcstol.3 wcstoul_l.3 \
- 	wcstol.3 wcstoll.3 \
-+	wcstol.3 wcstoll_l.3 \
- 	wcstol.3 wcstoull.3 \
-+	wcstol.3 wcstoull_l.3 \
- 	wcstol.3 wcstoimax.3 \
-+	wcstol.3 wcstoimax_l.3 \
- 	wcstol.3 wcstoumax.3 \
-+	wcstol.3 wcstoumax_l.3 \
- 	wcstombs.3 wcstombs_l.3 \
- 	wctob.3 wctob_l.3 \
- 	wctomb.3 wctomb_l.3 \
- 	wcsrtombs.3 wcsnrtombs.3 \
- 	wcsrtombs.3 wcsrtombs_l.3 \
--	wcsrtombs.3 wcsnrtombs_l.3
-+	wcsrtombs.3 wcsnrtombs_l.3 \
-+	wcwidth.3 wcwidth_l.3 \
-+	wcsxfrm.3 wcsxfrm_l.3
- 
- CFLAGS+=-I${.CURDIR} -I${LIBCSRCDIR}/citrus -DCOLLATE_DEBUG
- CFLAGS+=-D__NO_TLS 
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/wcrtomb.3 src/lib/libc/locale/wcrtomb.3
 --- src54-x6/lib/libc/locale/wcrtomb.3	Tue Dec  3 16:08:11 2013
 +++ src/lib/libc/locale/wcrtomb.3	Tue Dec  3 16:12:25 2013
@@ -780,11 +727,10 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/iswcty
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/localeconv.c src/lib/libc/locale/localeconv.c
 --- src54-x6/lib/libc/locale/localeconv.c	Thu Dec  5 19:11:37 2013
 +++ src/lib/libc/locale/localeconv.c	Fri Dec  6 07:02:12 2013
-@@ -3,68 +3,117 @@
+@@ -3,9 +3,46 @@
   * Written by J.T. Conklin <jtc@netbsd.org>.
   * Public domain.
   */
--
 +/*
 + * Copyright (c) 2001 Alexey Zelkin <phantom@FreeBSD.org>
 + * Copyright (c) 1991, 1993
@@ -819,23 +765,16 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/locale
 + * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 + * SUCH DAMAGE.
 + */
-+ 
- #include <sys/localedef.h>
-+
+ 
  #include <locale.h>
 +#include <xlocale.h>
- 
-+#include "xlocale_private.h"
 +
+ #include "localedef.h"
++#include "xlocale_private.h"
+ 
  /*
-- * The localeconv() function constructs a struct lconv from the current
-- * monetary and numeric locales.
-+ * The localeconv_l() function constructs a struct lconv from the 
-+ * monetary and numeric componentes of given locale.
-  *
-- * Because localeconv() may be called many times (especially by library
-+ * Because localeconv_l() may be called many times (especially by library
-  * routines like printf() & strtod()), the approprate members of the
+  * The localeconv() function constructs a struct lconv from the current
+@@ -16,55 +53,68 @@
   * lconv structure are computed only when the monetary or numeric
   * locale has been changed.
   */
@@ -843,19 +782,20 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/locale
 -int __nlocale_changed = 1;
  
  /*
-- * Return the current locale conversion.
-+ * Return the locale conversion for the given locale.
+  * Return the current locale conversion.
   */
  struct lconv *
 -localeconv(void)
 +localeconv_l(locale_t loc)
  {
 -    static struct lconv ret;
-+    FIX_LOCALE(loc);
-+    struct lconv *ret = &loc->lconv;
++	FIX_LOCALE(loc);
++	struct lconv *ret = &loc->lconv;
  
 -    if (__mlocale_changed) {
-+    if (loc->monetary_locale_changed) {
++
++	if (loc->monetary_locale_changed) {
++
  	/* LC_MONETARY */
 -	ret.int_curr_symbol	= _CurrentMonetaryLocale->int_curr_symbol;
 -	ret.currency_symbol	= _CurrentMonetaryLocale->currency_symbol;
@@ -917,9 +857,9 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/locale
 -	ret.grouping		= (char *) _CurrentNumericLocale->grouping;
 -	__nlocale_changed = 0;
 +	_NumericLocale *nptr = __get_current_numeric_locale(loc);
-+	ret->decimal_point	= (char *)nptr->decimal_point;
-+	ret->thousands_sep	= (char *)nptr->thousands_sep;
-+	ret->grouping		= (char *)nptr->grouping;
++	ret->decimal_point      = (char *)nptr->decimal_point;
++	ret->thousands_sep      = (char *)nptr->thousands_sep;
++	ret->grouping           = (char *)nptr->grouping;
 +	loc->numeric_locale_changed = 0;
      }
  
@@ -934,7 +874,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/locale
 +struct lconv *
 +localeconv(void)
 +{
-+	return localeconv_l(__get_locale());
++       return localeconv_l(__get_locale());
  }
  DEF_STRONG(localeconv);
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/mbrlen.c src/lib/libc/locale/mbrlen.c
@@ -1031,7 +971,6 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src55-orig/lib/libc/locale/xloc
  #define _XLOCALE_PRIVATE__H_
  
 +#include <machine/atomic.h>
-+#include <sys/localedef.h>
 +#include <sys/types.h>
 +
  #include <xlocale.h>
@@ -1041,6 +980,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src55-orig/lib/libc/locale/xloc
 -#include <sys/types.h>
 -#include <machine/atomic.h>
  
++#include "localedef.h"
  
  #define ENCODING_LEN 31
 +#define CATEGORY_LEN 11
@@ -1856,7 +1796,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vasprin
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfprintf.c src/lib/libc/stdio/vfprintf.c
 --- src54-x6/lib/libc/stdio/vfprintf.c	Wed Dec 11 21:53:32 2013
 +++ src/lib/libc/stdio/vfprintf.c	Fri Dec 13 15:24:15 2013
-@@ -57,9 +57,12 @@
+@@ -56,10 +56,13 @@
  #include <string.h>
  #include <unistd.h>
  #include <wchar.h>
@@ -1864,6 +1804,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfprint
  
  #include "fvwrite.h"
  #include "local.h"
+ #include "localedef.h"
 +#include "../locale/mblocal.h"
 +#include "../locale/xlocale_private.h"
  
@@ -2974,12 +2915,13 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src55-orig/lib/libc/stdlib/strt
 diff -ruN src54-x6/lib/libc/locale/nl_langinfo.c src/lib/libc/locale/nl_langinfo.c
 --- src54-x6/lib/libc/locale/nl_langinfo.c	Wed Dec 11 08:11:54 2013
 +++ src/lib/libc/locale/nl_langinfo.c	Fri Dec 13 15:42:55 2013
-@@ -10,17 +10,21 @@
- #include <locale.h>
+@@ -9,18 +9,23 @@
  #include <nl_types.h>
+ #include <langinfo.h>
  #include <string.h>
 +#include <xlocale.h>
  
+ #include "localedef.h"
  #include "rune.h"
  #include "runetype.h"
 +#include "xlocale_private.h"
@@ -2993,11 +2935,12 @@ diff -ruN src54-x6/lib/libc/locale/nl_langinfo.c src/lib/libc/locale/nl_langinfo
  	const char *s;
  
 +	FIX_LOCALE(locale); 
-+        struct lconv *lc = &locale->lconv;
++	struct lconv *lc = &locale->lconv;
++
  	switch (item) {
  	case D_T_FMT:
  		s = _CurrentTimeLocale->d_t_fmt;
-@@ -85,10 +89,10 @@
+@@ -85,10 +90,10 @@
  		s = _CurrentTimeLocale->abmon[item - ABMON_1];
  		break;
  	case RADIXCHAR:
@@ -3010,7 +2953,7 @@ diff -ruN src54-x6/lib/libc/locale/nl_langinfo.c src/lib/libc/locale/nl_langinfo
  		break;
  	case YESSTR:
  		s = _CurrentMessagesLocale->yesstr;
-@@ -103,19 +107,19 @@
+@@ -103,19 +108,19 @@
  		s = _CurrentMessagesLocale->noexpr;
  		break;
  	case CRNCYSTR:				
@@ -3039,7 +2982,7 @@ diff -ruN src54-x6/lib/libc/locale/nl_langinfo.c src/lib/libc/locale/nl_langinfo
  		break;
  	case CODESET:
  		s = _CurrentRuneLocale->rl_codeset;
-@@ -129,4 +133,11 @@
+@@ -129,4 +134,11 @@
  
  	return (char *) s;
  }
@@ -3366,12 +3309,14 @@ diff -ruN src/lib/libc/hidden/monetary.h.orig src/lib/libc/hidden/monentary.h
 diff -ruN src/lib/libc/hidden/xlocale.h.orig src/lib/libc/hidden/xlocale.h
 --- src/lib/libc/hidden/xlocale.h.orig	Sun Aug 21 23:07:28 2016
 +++ src/lib/libc/hidden/xlocale.h	Sun Aug 21 23:06:30 2016
-@@ -17,4 +17,10 @@
+@@ -17,4 +17,12 @@
  PROTO_STD_DEPRECATED(querylocale);
  PROTO_STD_DEPRECATED(uselocale);
  
 +PROTO_NORMAL(localeconv_l);
-+
++#if defined(_LIBC_LANGINFO_H_)
++PROTO_NORMAL(nl_langinfo_l);
++#endif
 +#if defined(_LIBC_STDIO_H_)
 +PROTO_NORMAL(snprintf_l);
 +PROTO_NORMAL(sscanf_l);

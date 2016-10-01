@@ -2,9 +2,9 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strftime
 --- src54-x6/lib/libc/time/strftime.c	Sat Feb  9 14:26:54 2013
 +++ src/lib/libc/time/strftime.c	Tue Dec  3 16:12:45 2013
 @@ -34,13 +34,14 @@
- #include <locale.h>
  #include <stdio.h>
  
+ #include "localedef.h"
 +#include "locale/xlocale_private.h"
  #include "private.h"
  #include "tzfile.h"
@@ -184,26 +184,25 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strftime
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime.c src/lib/libc/time/strptime.c
 --- src54-x6/lib/libc/time/strptime.c	Sat Feb  9 14:26:54 2013
 +++ src/lib/libc/time/strptime.c	Tue Dec  3 16:12:45 2013
-@@ -31,14 +31,17 @@
- #include <sys/localedef.h>
+@@ -30,14 +30,16 @@
+ 
  #include <ctype.h>
  #include <locale.h>
 +#include <stdlib.h>
  #include <string.h>
  #include <time.h>
  
+ #include "localedef.h"
++#include "locale/xlocale_private.h"
  #include "private.h"
  #include "tzfile.h"
  
 -#define	_ctloc(x)		(_CurrentTimeLocale->x)
-+#include "locale/xlocale_private.h"
- 
 +#define	_ctloc(x, loc)		(__get_current_time_locale(loc)->x)
-+
+ 
  /*
   * We do not implement alternate representations. However, we always
-  * check whether a given modifier is allowed for a certain conversion.
-@@ -73,20 +76,29 @@
+@@ -73,20 +75,29 @@
  
  static	int _conv_num(const unsigned char **, int *, int, int);
  static	int leaps_thru_end_of(const int y);
@@ -238,7 +237,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
  {
  	unsigned char c;
  	const unsigned char *bp, *ep;
-@@ -107,8 +119,8 @@
+@@ -107,8 +118,8 @@
  		alt_format = 0;
  
  		/* Eat up white-space. */
@@ -249,7 +248,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
  				bp++;
  
  			fmt++;
-@@ -146,49 +158,49 @@
+@@ -146,49 +157,49 @@
  		 */
  		case 'c':	/* Date and time, using the locale's format. */
  			_LEGAL_ALT(_ALT_E);
@@ -307,7 +306,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
  				return (NULL);
  			break;
  
-@@ -200,13 +212,13 @@
+@@ -200,13 +211,13 @@
  			_LEGAL_ALT(0);
  			for (i = 0; i < 7; i++) {
  				/* Full name. */
@@ -325,7 +324,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
  					break;
  			}
  
-@@ -225,13 +237,13 @@
+@@ -225,13 +236,13 @@
  			_LEGAL_ALT(0);
  			for (i = 0; i < 12; i++) {
  				/* Full name. */
@@ -343,7 +342,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
  					break;
  			}
  
-@@ -303,8 +315,8 @@
+@@ -303,8 +314,8 @@
  		case 'p':	/* The locale's equivalent of AM/PM. */
  			_LEGAL_ALT(0);
  			/* AM? */
@@ -354,7 +353,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
  				if (tm->tm_hour > 12)	/* i.e., 13:00 AM ?! */
  					return (NULL);
  				else if (tm->tm_hour == 12)
-@@ -314,8 +326,8 @@
+@@ -314,8 +325,8 @@
  				break;
  			}
  			/* PM? */
@@ -365,7 +364,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
  				if (tm->tm_hour > 12)	/* i.e., 13:00 PM ?! */
  					return (NULL);
  				else if (tm->tm_hour < 12)
-@@ -374,7 +386,7 @@
+@@ -374,7 +385,7 @@
  				 */
  			do
  				bp++;
@@ -374,7 +373,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
  			continue;
  
  		case 'V':	/* The ISO 8601:1988 week number as decimal */
-@@ -421,7 +433,7 @@
+@@ -421,7 +432,7 @@
  			} else {
  				ep = _find_string(bp, &i,
  					       	 (const char * const *)tzname,
@@ -383,7 +382,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
  				if (ep == NULL)
  					return (NULL);
  
-@@ -454,7 +466,7 @@
+@@ -454,7 +465,7 @@
  			 * [A-IL-M] = -1 ... -9 (J not used)
  			 * [N-Y]  = +1 ... +12
  			 */
@@ -392,7 +391,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
  				bp++;
  
  			switch (*bp++) {
-@@ -483,7 +495,7 @@
+@@ -483,7 +494,7 @@
  				break;
  			default:
  				--bp;
@@ -401,7 +400,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
  				if (ep != NULL) {
  #ifdef TM_GMTOFF
  					tm->TM_GMTOFF = -5 - i;
-@@ -494,7 +506,7 @@
+@@ -494,7 +505,7 @@
  					bp = ep;
  					continue;
  				}
@@ -410,7 +409,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
  				if (ep != NULL) {
  					tm->tm_isdst = 1;
  #ifdef TM_GMTOFF
-@@ -529,7 +541,7 @@
+@@ -529,7 +540,7 @@
  			}
  			offs = 0;
  			for (i = 0; i < 4; ) {
@@ -419,7 +418,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
  					offs = offs * 10 + (*bp++ - '0');
  					i++;
  					continue;
-@@ -571,7 +583,7 @@
+@@ -571,7 +582,7 @@
  		case 'n':	/* Any kind of white-space. */
  		case 't':
  			_LEGAL_ALT(0);
@@ -428,7 +427,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
  				bp++;
  			break;
  
-@@ -662,7 +674,7 @@
+@@ -662,7 +673,7 @@
  
  static const u_char *
  _find_string(const u_char *bp, int *tgt, const char * const *n1,
@@ -437,7 +436,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
  {
  	int i;
  	unsigned int len;
-@@ -671,7 +683,7 @@
+@@ -671,7 +682,7 @@
  	for (; n1 != NULL; n1 = n2, n2 = NULL) {
  		for (i = 0; i < c; i++, n1++) {
  			len = strlen(*n1);
@@ -791,20 +790,20 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/nl_lan
 --- src54-x6/lib/libc/locale/nl_langinfo.c	Sat Feb  9 14:26:54 2013
 +++ src/lib/libc/locale/nl_langinfo.c	Tue Dec  3 16:12:45 2013
 @@ -12,6 +12,7 @@
- #include <string.h>
  #include <xlocale.h>
  
+ #include "localedef.h"
 +#include "mblocal.h"
  #include "rune.h"
  #include "runetype.h"
  #include "xlocale_private.h"
-@@ -25,22 +26,25 @@
+@@ -25,23 +26,25 @@
  
  	FIX_LOCALE(locale); 
-         struct lconv *lc = &locale->lconv;
+ 	struct lconv *lc = &locale->lconv;
 +	_TimeLocale *tl = __get_current_time_locale(locale);
 +	_RuneLocale *rl = ((struct xlocale_ctype *)locale->components[XLC_CTYPE])->runes;
-+
+ 
  	switch (item) {
  	case D_T_FMT:
 -		s = _CurrentTimeLocale->d_t_fmt;
@@ -829,7 +828,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/nl_lan
  		break;
  	case DAY_1:
  	case DAY_2:
-@@ -49,7 +53,7 @@
+@@ -50,7 +53,7 @@
  	case DAY_5:
  	case DAY_6:
  	case DAY_7:
@@ -838,7 +837,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/nl_lan
  		break;
  	case ABDAY_1:
  	case ABDAY_2:
-@@ -58,7 +62,7 @@
+@@ -59,7 +62,7 @@
  	case ABDAY_5:
  	case ABDAY_6:
  	case ABDAY_7:
@@ -847,7 +846,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/nl_lan
  		break;
  	case MON_1:
  	case MON_2:
-@@ -72,7 +76,7 @@
+@@ -73,7 +76,7 @@
  	case MON_10:
  	case MON_11:
  	case MON_12:
@@ -856,7 +855,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/nl_lan
  		break;
  	case ABMON_1:
  	case ABMON_2:
-@@ -86,7 +90,7 @@
+@@ -87,7 +90,7 @@
  	case ABMON_10:
  	case ABMON_11:
  	case ABMON_12:
@@ -865,7 +864,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/nl_lan
  		break;
  	case RADIXCHAR:
  		s = lc->decimal_point;
-@@ -122,7 +126,7 @@
+@@ -123,7 +126,7 @@
  		s = locale->_bufcrncystr;
  		break;
  	case CODESET:
@@ -988,17 +987,6 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/regress/lib/libc/local
  	
  	return bad != 0;
  }
-diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/Makefile.inc src/lib/libc/locale/Makefile.inc
---- src54-x6/lib/libc/locale/Makefile.inc	Sat Feb  9 14:26:54 2013
-+++ src/lib/libc/locale/Makefile.inc	Tue Dec  3 16:12:45 2013
-@@ -85,6 +85,7 @@
- 	mbsrtowcs.3 mbsrtowcs_l.3 \
- 	mbtowc.3 mbtowc_l.3\
- 	nextwctype.3 nextwctype_l.3 \
-+	nl_langinfo.3 nl_langinfo_l.3 \
- 	setlocale.3 localeconv.3 \
- 	towlower.3 towlower_l.3 \
- 	towlower.3 towupper.3 \
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/nl_langinfo.3 src/lib/libc/locale/nl_langinfo.3
 --- src54-x6/lib/libc/locale/nl_langinfo.3	Sat Feb  9 14:26:54 2013
 +++ src/lib/libc/locale/nl_langinfo.3	Tue Dec  3 16:12:45 2013
@@ -1033,21 +1021,6 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/nl_lan
  .Sh SEE ALSO
  .Xr setlocale 3
 +.Xr xlocale 3
-diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/Makefile.inc src/lib/libc/time/Makefile.inc
---- src54-x6/lib/libc/time/Makefile.inc	Sat Feb  9 14:26:54 2013
-+++ src/lib/libc/time/Makefile.inc	Tue Dec  3 16:12:45 2013
-@@ -9,6 +9,10 @@
- MLINKS+=ctime.3 asctime.3 ctime.3 difftime.3 ctime.3 gmtime.3 \
- 	ctime.3 localtime.3 ctime.3 mktime.3 ctime.3 asctime_r.3 \
- 	ctime.3 ctime_r.3 ctime.3 gmtime_r.3 ctime.3 localtime_r.3 \
--	ctime.3 timelocal.3 ctime.3 timegm.3
-+	ctime.3 timelocal.3 ctime.3 timegm.3 
- MLINKS+=tzset.3 tzsetwall.3
- MLINKS+=time2posix.3 posix2time.3
-+MLINKS+=strftime.3 strftime_l.3 \
-+	strptime.3 strptime_l.3 \
-+	wcsftime.3 wcsftime_l.3 
-+
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime.3 src/lib/libc/time/strptime.3
 --- src54-x6/lib/libc/time/strptime.3	Sat Feb  9 14:26:54 2013
 +++ src/lib/libc/time/strptime.3	Tue Dec  3 16:12:45 2013
