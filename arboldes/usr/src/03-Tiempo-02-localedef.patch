@@ -16,7 +16,7 @@ diff -ruN -x *~ -x *orig -x obj* src56-orig/usr.bin/localedef/Makefile src/usr.b
 @@ -0,0 +1,19 @@
 +
 +PROG=   localedef
-+CFLAGS+= -std=c99 -g
++CFLAGS+= -std=c99 -g -I${.CURDIR}/../../lib/libc/include
 +LDFLAGS+= -g
 +
 +SRCS=   localedef.c lexer.l parser.y
@@ -1062,7 +1062,7 @@ diff -ruN -x *~ -x *orig -x obj* src56-orig/usr.bin/localedef/localedef.c src/us
 +  *  - https://github.com/illumos/illumos-gate/blob/master/usr/src/cmd/localedef/parser.y
 +  **/
 +
-+#include <sys/localedef.h>
++#include "localedef.h"
 +#include <sys/stat.h>
 +
 +#include <netinet/in.h>
@@ -1209,7 +1209,7 @@ diff -ruN -x *~ -x *orig -x obj* src56-orig/usr.bin/localedef/parser.y src/usr.b
 + */
 +%{
 +
-+#include <sys/localedef.h>
++#include "localedef.h"
 +#include <stdio.h>
 +#include <wchar.h>
 +

@@ -759,42 +759,42 @@ if (test "$sn" = "s") then {
 	# Recompilados para cerrar fallas de portes actualizados (estable)
 	# Para que operen bien basta actualizar CVS de /usr/ports 
 	# Los siguientes no deben estar en arboldes/usr/ports/mystuff
-	paquete bzip2
-	paquete curl 
-	paquete gd
-	paquete git paquetes "git"
-	paquete imlib2
-	paquete ImageMagick
-	paquete libksba
-	paquete libtalloc
-	paquete mariadb-client paquetes "mariadb-client mariadb-server" 
-	paquete mplayer
-	paquete nginx
-	paquete node
-	paquete openldap-client 
-	paquete p5-Mail-SpamAssassin
-	paquete p7zip paquetes "p7zip p7zip-rar"
-	paquete pidgin paquetes "libpurple pidgin"
-	paquete samba paquetes "ldb samba tevent"
-	paquete tdb
-	paquete tiff
-	paquete webkit
-	paquete webkitgtk4
+	#paquete bzip2
+	#paquete curl 
+	#paquete gd
+	#paquete git paquetes "git"
+	#paquete imlib2
+	#paquete ImageMagick
+	#paquete libksba
+	#paquete libtalloc
+	#paquete mariadb-client paquetes "mariadb-client mariadb-server" 
+	#paquete mplayer
+	#paquete nginx
+	#paquete node
+	#paquete openldap-client 
+	#paquete p5-Mail-SpamAssassin
+	#paquete p7zip paquetes "p7zip p7zip-rar"
+	#paquete pidgin paquetes "libpurple pidgin"
+	#paquete samba paquetes "ldb samba tevent"
+	#paquete tdb
+	#paquete tiff
+	#paquete webkit
+	#paquete webkitgtk4
 	#paquete webkit paquetes "webkit webkit-gtk3"
 	# FLAVOR=gtk3 make paquete webkit-gtk3
 
 	##
 	# Nueva revisión para operar con librerías retroportadas o actualizadas
 	# Deben estar en arbodes/usr/ports/mystuff
-	paquete gdal
-	paquete inkscape 
-	paquete libreoffice paquetes "libreoffice libreoffice-i18n-es"
-	paquete postgis
-	paquete py-psycopg2
-	paquete qgis
+	#paquete gdal
+	#paquete inkscape 
+	#paquete libreoffice paquetes "libreoffice libreoffice-i18n-es"
+	#paquete postgis
+	#paquete py-psycopg2
+	#paquete qgis
 
 	# Recompilado con llave de adJ
-	paquete chromium
+	#paquete chromium
 
 	####
 	# Modificados para que usen xlocale (pueden cerrar fallas)
