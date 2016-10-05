@@ -805,7 +805,6 @@ if (test "$sn" = "s") then {
 	####
 	# Recompilados de estable que usan xlocale (y pueden cerrar fallas)
 	# No deben estar en mystuff
-	paquete boost
 	paquete djvulibre
 	paquete gettext-tools
 	paquete ggrep
