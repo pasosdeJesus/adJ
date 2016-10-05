@@ -1,10 +1,7 @@
 @comment $adJ$
-%%SHARED%%
 include/biblesync/
 include/biblesync/biblesync-version.hh
 include/biblesync/biblesync.hh
-@lib lib/libbiblesync.so.${LIBbiblesync_VERSION}
-lib/pkgconfig/biblesync.pc
 share/man/
 share/man/man7/
 @man share/man/man7/biblesync.7

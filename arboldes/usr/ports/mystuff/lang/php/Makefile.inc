@@ -1,11 +1,7 @@
-# $OpenBSD: Makefile.inc,v 1.68 2015/11/06 18:31:45 sthen Exp $
+# $OpenBSD: Makefile.inc,v 1.86 2016/06/25 18:55:11 sthen Exp $
 #
 
 BROKEN-hppa=	no __sync_bool_compare_and_swap support nor asm fallback
-
-# This port currently only works with archs supporting dynamic loading
-# and has Apache that supports DSO's.
-NOT_FOR_ARCHS=		${NO_SHARED_ARCHS}
 
 COMMENT-main=		server-side HTML-embedded scripting language
 COMMENT-fastcgi=	stand-alone FastCGI version of PHP
@@ -31,8 +27,6 @@ MASTER_SITES0=		https://download.suhosin.org/
 # and make sure they are safe before an upgrade
 PERMIT_PACKAGE_CDROM=   Yes
 
-SHARED_ONLY=		Yes
-
 MODPHP_CONFIG_PATH=	/var/www/conf
 
 # where the main php module is stored (outside the chroot)
@@ -50,14 +44,16 @@ INI_TEMPLATES?=		development production
 # don't have.
 USE_LIBTOOL?=		No
 
-FLAVORS=		ap2 no_suhosin
+.if ${PV} != "7.0"
+FLAVORS=		no_suhosin
+.endif
 FLAVOR?=
 
 PATCHORIG=		.orig.port
 CONFIGURE_STYLE=	autoconf
 AUTOCONF_VERSION?=	2.69
-CONFIGURE_ENV=          CFLAGS="${CFLAGS} -I${LOCALBASE}/include -pthread" \
-                        LDFLAGS="-L${LOCALBASE}/lib -pthread" \
+CONFIGURE_ENV+=		CFLAGS="${CFLAGS} -I${LOCALBASE}/include -pthread" \
+			LDFLAGS="-L${LOCALBASE}/lib -pthread" \
 			EXTENSION_DIR=${MODULES_DIR} \
 			lt_cv_path_SED=/usr/bin/sed
 # configure detects us as having decimal fp support but it's not built in
@@ -83,14 +79,9 @@ CONFIGURE_ARGS+=	--enable-shared \
 CONFIGURE_ARGS +=	--with-readline
 .endif
 
-.if ${FLAVOR:Map2}
+# apache module
 CONFIGURE_ARGS+=	--with-apxs2=${LOCALBASE}/sbin/apxs2
-BUILD_DEPENDS=		www/apache-httpd
-.else
-# doesn't use apache-module.port.mk so MODAPACHE_APXS not available
-CONFIGURE_ARGS+=	--with-apxs=${LOCALBASE}/sbin/apxs
-BUILD_DEPENDS=		www/apache-httpd-openbsd
-.endif
+BUILD_DEPENDS+=		www/apache-httpd
 
 # default included extensions
 CONFIGURE_ARGS+= 	--with-openssl \
@@ -113,23 +104,15 @@ CONFIGURE_ARGS+= 	--with-openssl \
 			--enable-mbstring \
 			--enable-exif \
 			--enable-zend-multibyte \
-			--enable-fastcgi
+			--enable-fastcgi \
+			--enable-fpm \
+			--with-fpm-user=www \
+			--with-fpm-group=www
 
 TEST_TARGET=		test
 TEST_FLAGS=		NO_INTERACTION=1
 
-MULTI_PACKAGES+=	-main -fastcgi -fpm
-
-# fpm
-PKGNAME-fpm?=		php-fpm-${V}
-COMMENT-fpm=		stand-alone FPM version of PHP
-CONFIGURE_ARGS+=	--enable-fpm \
-			--with-fpm-user=www \
-			--with-fpm-group=www
-LIB_DEPENDS-fpm=	${LIB_DEPENDS-main}
-WANTLIB-fpm=		${WANTLIB-main}
-RUN_DEPENDS-fpm=	${RUN_DEPENDS-main} \
-			php-${V}:lang/php/${PV}
+MULTI_PACKAGES+=	-main -fastcgi
 
 #
 # Loadable php extensions by name that are included in all versions
@@ -147,7 +130,7 @@ MULTI_PACKAGES+=	-curl
 COMMENT-curl=		curl URL library extensions for php5
 CONFIGURE_ARGS+=	--with-curl=shared,${LOCALBASE}
 LIB_DEPENDS-curl=	net/curl
-WANTLIB-curl=		pthread crypto idn ssl z curl>=2 #nghttp2 
+WANTLIB-curl=		pthread crypto idn nghttp2 ssl z curl>=2
 
 # dba
 MULTI_PACKAGES+=	-dba
@@ -160,9 +143,12 @@ WANTLIB-dba=		gdbm>=2 pthread
 MULTI_PACKAGES+=	-gd
 COMMENT-gd=		image manipulation extensions for php5
 LIB_DEPENDS-gd=		graphics/jpeg \
-			graphics/png \
-			devel/t1lib
-WANTLIB-gd=		z jpeg>=62 png>=3 t1>=5 pthread X11 Xpm freetype
+			graphics/png
+.if ${PV} != "7.0"
+LIB_DEPENDS-gd+=	devel/t1lib
+WANTLIB-gd+=		t1>=5
+.endif
+WANTLIB-gd+=		z jpeg>=62 png>=3 pthread X11 Xpm freetype
 CONFIGURE_ARGS+=	--with-gd=shared \
 			--with-jpeg-dir=${LOCALBASE} \
 			--with-png-dir=${LOCALBASE} \
@@ -208,12 +194,14 @@ CONFIGURE_ARGS+=	--with-mcrypt=shared,${LOCALBASE}
 LIB_DEPENDS-mcrypt=	security/libmcrypt devel/libtool,-ltdl
 WANTLIB-mcrypt=		mcrypt ltdl>=1 pthread
 
+.if ${PV} != "7.0"
 # mysql
 MULTI_PACKAGES+=	-mysql
 COMMENT-mysql=		mysql database access extensions for php5
 CONFIGURE_ARGS+=	--with-mysql=shared,${LOCALBASE}
 LIB_DEPENDS-mysql=	databases/mariadb
 WANTLIB-mysql=		pthread lib/mysql/mysqlclient
+.endif
 
 # mysqli
 MULTI_PACKAGES+=	-mysqli
@@ -279,7 +267,7 @@ MULTI_PACKAGES+=	-soap
 COMMENT-soap=		SOAP functions for php5
 CONFIGURE_ARGS+=	--enable-soap=shared,${LOCALBASE}
 LIB_DEPENDS-soap=	textproc/libxml
-WANTLIB-soap=		${MODLIBICONV_WANTLIB} m pthread z xml2>=8
+WANTLIB-soap=		iconv m pthread z xml2>=8
 
 # snmp
 MULTI_PACKAGES+=	-snmp
@@ -288,12 +276,14 @@ CONFIGURE_ARGS+=	--with-snmp=shared,${LOCALBASE} --enable-ucd-snmp-hack
 LIB_DEPENDS-snmp=	net/net-snmp
 WANTLIB-snmp=		crypto m netsnmp>=6.2 pthread
 
+.if ${PV} != "7.0"
 # sybase-ct
 MULTI_PACKAGES+=	-sybase_ct
 COMMENT-sybase_ct=	sybase database access extensions for php5
 CONFIGURE_ARGS+=	--with-sybase-ct=shared,${LOCALBASE}
 LIB_DEPENDS-sybase_ct=	databases/freetds
 WANTLIB-sybase_ct=	ct pthread
+.endif
 
 # pdo-dblib
 MULTI_PACKAGES+=	-pdo_dblib
@@ -302,12 +292,14 @@ CONFIGURE_ARGS+=        --with-pdo-dblib=shared,${LOCALBASE}
 LIB_DEPENDS-pdo_dblib=	databases/freetds
 WANTLIB-pdo_dblib=	sybdb>=6 pthread
 
+.if ${PV} != "7.0"
 # mssql
 MULTI_PACKAGES+=	-mssql
 COMMENT-mssql=		microsoft sql access extensions for php5
 CONFIGURE_ARGS+=        --with-mssql=shared,${LOCALBASE}
 LIB_DEPENDS-mssql=	databases/freetds
 WANTLIB-mssql=		sybdb>=6 pthread
+.endif
 
 # tidy
 MULTI_PACKAGES+=	-tidy
@@ -321,14 +313,14 @@ MULTI_PACKAGES+=	-xmlrpc
 COMMENT-xmlrpc=		XML RPC functions for php5
 CONFIGURE_ARGS+=	--with-xmlrpc=shared
 LIB_DEPENDS-xmlrpc=	textproc/libxml
-WANTLIB-xmlrpc=		${MODLIBICONV_WANTLIB} m z xml2>=8 pthread
+WANTLIB-xmlrpc=		iconv m z xml2>=8 pthread
 
 # xsl
 MULTI_PACKAGES+=	-xsl
 COMMENT-xsl=		XSL functions for php5
 CONFIGURE_ARGS+=	--with-xsl=shared --enable-dom
 LIB_DEPENDS-xsl=	textproc/libxslt
-WANTLIB-xsl=		${MODLIBICONV_WANTLIB} m xml2 z xslt>=3 exslt pthread
+WANTLIB-xsl=		iconv m xml2 z xslt>=3 exslt pthread
 
 # zip
 MULTI_PACKAGES+=	-zip
@@ -346,26 +338,23 @@ SV=		${PV:S/.//}
 PHPXS_SUBST+= -e 's,${i},${${i}},'
 .endfor
 
-MODULES=		converters/libiconv devel/gettext
-
-WANTLIB-main+=		c crypto lzma m pthread ssl xml2>=8 z ${MODGETTEXT_WANTLIB}
-
-.if ${PV} != "5.3"
+WANTLIB-main+=		c crypto iconv intl lzma m pthread ssl xml2>=8 z
 WANTLIB-main+=		ncurses readline stdc++
-.endif
 
 # php 5.4/5.5 : WANTLIB-main += stdc++
 WANTLIB-fastcgi=	${WANTLIB-main}
-LIB_DEPENDS-main=	textproc/libxml
-RUN_DEPENDS-main=	${MODGETTEXT_RUN_DEPENDS} \
-			mail/femail,-chroot
+LIB_DEPENDS-main=	devel/gettext \
+			textproc/libxml
+RUN_DEPENDS-main=	mail/femail,-chroot
 LIB_DEPENDS-fastcgi=	${LIB_DEPENDS-main}
+RUN_DEPENDS-fastcgi=
 
 SUHOSIN_V=		0.9.38
-.if ${FLAVOR:Mno_suhosin}
+.if ${FLAVOR:Mno_suhosin} || ${PV} == "7.0"
 SUPDISTFILES=		suhosin-${SUHOSIN_V}.tar.gz:0
 .else
 DISTFILES+=		suhosin-${SUHOSIN_V}.tar.gz:0
+PATCH_LIST=		patch-* suhosin-*
 CONFIGURE_ARGS+=	--enable-suhosin
 
 pre-patch:
@@ -385,38 +374,29 @@ pre-configure:
 		${WRKSRC}/scripts/phpize.in \
 		${WRKSRC}/scripts/php-config.in
 
-.if ${FLAVOR:Map2}
-MULTI_PACKAGES :=       ${MULTI_PACKAGES:N-fpm:N-fastcgi}
-.endif
-
-.for i in ${MULTI_PACKAGES:N-main:N-fastcgi:N-fpm:S/-//g}
+.for i in ${MULTI_PACKAGES:N-main:N-fastcgi:S/-//g}
 MODULE_NAME-${i}=	${i}
 DESCR-${i}=		${.CURDIR}/../files/DESCR-${i}
-MESSAGE-${i}=		${.CURDIR}/../files/MESSAGE-ext
-UNMESSAGE-${i}=		${.CURDIR}/../files/UNMESSAGE-ext
 PKGNAME-${i}=		php-${i}-${V}
-# don't build separate plugins for -ap2
-FULLPKGNAME-${i}=	php-${i}-${V}${FLAVOR_EXT:S/-ap2//}
-FULLPKGPATH-${i}=	${PKGPATH},-${i}${FLAVOR_EXT:S/-ap2//:S/-/,/g}
-.if ${V:M5.3*}
-PKGSPEC-${i}=		php-${i}->=5.3,<5.4
-.elif ${V:M5.4*}
+.if ${V:M5.4*}
 PKGSPEC-${i}=		php-${i}->=5.4,<5.5
 .elif ${V:M5.5*}
 PKGSPEC-${i}=		php-${i}->=5.5,<5.6
 .elif ${V:M5.6*}
 PKGSPEC-${i}=		php-${i}->=5.6,<5.7
+.elif ${V:M7.0*}
+PKGSPEC-${i}=		php-${i}->=7.0,<7.1
 .endif
 RUN_DEPENDS-${i}+=	php-${V}:lang/php/${PV}
 .endfor
 
 DESCR-main=		${.CURDIR}/../files/DESCR-main
 DESCR-fastcgi=		${.CURDIR}/../files/DESCR-fastcgi
-MESSAGE-main=		${.CURDIR}/../files/MESSAGE-main
-UNMESSAGE-main=		${.CURDIR}/../files/UNMESSAGE-main
 
 post-install:
-	${INSTALL_DATA} ${WRKBUILD}/.libs/libphp5.so \
+	${SUBST_DATA} ${.CURDIR}/../files/README-main \
+		${PREFIX}/share/doc/pkg-readmes/${FULLPKGNAME-main}
+	${INSTALL_DATA} ${WRKBUILD}/.libs/libphp${PV:C/\.[0-9]$//}.so \
 		${PREFIX}/${APACHE_MODULE_SUBDIR}/
 	${INSTALL_DATA_DIR} ${WRKINST}/${CHROOT_DIR}/conf/php-${PV}.sample
 	${INSTALL_DATA_DIR} ${PREFIX}/share/examples/php-${PV}
@@ -426,13 +406,17 @@ post-install:
 	${INSTALL_MAN} ${WRKBUILD}/sapi/fpm/php-fpm.8 ${PREFIX}/man/man8/php-fpm-${PV}.8
 	${INSTALL_DATA} ${WRKBUILD}/sapi/fpm/php-fpm.conf \
 		${PREFIX}/share/examples/php-${PV}/php-fpm.conf
+.if ${PV} == "7.0"
+	cat ${WRKBUILD}/sapi/fpm/www.conf >> \
+		${PREFIX}/share/examples/php-${PV}/php-fpm.conf
+.endif
 
 	${INSTALL_DATA} ${.CURDIR}/../files/php.conf \
 		${PREFIX}/share/examples/php-${PV}/php.conf
-	@perl -pi -e "s,!!PREFIX!!,${TRUEPREFIX},g;s,!!PV!!,${PV},g" \
+	@perl -pi -e "s,!!PREFIX!!,${TRUEPREFIX},g;s,!!PV!!,${PV},g;s,!!MV!!,${PV:R},g" \
 		${PREFIX}/share/examples/php-${PV}/php.conf
 
-.for m in ${MULTI_PACKAGES:N-main:N-fastcgi:N-fpm:S/-//g}
+.for m in ${MULTI_PACKAGES:N-main:N-fastcgi:S/-//g}
 	${INSTALL_DATA} ${WRKBUILD}/modules/${m}.so \
 		${PREFIX}/${MODULES_SUBDIR}/${m}.so
 	echo "extension=${m}.so" > \

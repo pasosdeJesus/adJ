@@ -4,7 +4,7 @@
 # Ideas from https://www.freshports.org/x11-toolkits/ocaml-labltk/
 
 COMMENT=	"Interface to the Tcl/Tk GUI framework"
-VERSION=	8.06.0
+VERSION=	8.06.2
 REVISION=	1
 
 PKGNAME=	ocaml-labltk-${VERSION}
@@ -34,5 +34,10 @@ LIB_DEPENDS-tk=		tk->=8.5:x11/tk/8.5
 WANTLIB-main =          c tk85
 
 ALL_TARGET=     all ${MODOCAML_NATIVE:S,Yes,opt,:S,No,,}
+
+pre-patch:
+	echo ${WRKDIST}
+	ln -s `dirname ${WRKDIST}`/labltk-8.06.0 ${WRKDIST}
+	#ln -s ${WKRDIST} 
 
 .include <bsd.port.mk>

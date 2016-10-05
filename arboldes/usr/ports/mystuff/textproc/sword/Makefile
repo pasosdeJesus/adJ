@@ -19,7 +19,7 @@ MAINTAINER=	Vladimir Támara Patiño <vtamara@pasosdeJesus.org>
 PERMIT_PACKAGE_CDROM=	Yes
 
 BUILD_DEPENDS= archivers/unzip 
-LIB_DEPENDS= net/curl
+#LIB_DEPENDS= net/curl
 
 MASTER_SITES=	http://crosswire.org/ftpmirror/pub/sword/source/v1.7/
 MASTER_SITES0=	http://crosswire.org/ftpmirror/pub/sword/packages/rawzip/

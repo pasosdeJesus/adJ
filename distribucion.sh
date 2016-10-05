@@ -861,9 +861,9 @@ if (test "$sn" = "s") then {
 	# Unicos en adJ liderados por pdJ
 	# Deben estar en arboldes/usr/ports/mystuff 
 	paquete books/evangelios_dp
-	paquete books/basico_adJ
-	paquete books/usuario_adJ
-	paquete books/servidor_adJ
+	#paquete books/basico_adJ
+	#paquete books/usuario_adJ
+	#paquete books/servidor_adJ
 	paquete education/AnimalesI
 	paquete education/AprestamientoI
 	paquete education/PlantasCursiva

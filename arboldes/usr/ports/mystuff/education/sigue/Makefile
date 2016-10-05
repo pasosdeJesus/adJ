@@ -24,7 +24,7 @@ CONFIGURE_STYLE=	simple
 CONFIGURE_SCRIPT=	conf.sh
 CONFIGURE_ARGS+=-p ${PREFIX}
 
-BUILD_DEPENDS=	lang/ocaml textproc/markup education/repasa print/texlive/base
+BUILD_DEPENDS=	lang/ocaml textproc/markup education/repasa print/texlive/base lang/ocaml-camlp4 devel/ocaml-ocamlbuild
 RUN_DEPENDS=	textproc/markup education/repasa
 
 FAKE_TARGET=	instala-sin-catalogo-opt

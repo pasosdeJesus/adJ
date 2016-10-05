@@ -1,6 +1,4 @@
-# $OpenBSD: php.port.mk,v 1.13 2015/06/05 05:58:07 robert Exp $
-
-SHARED_ONLY=		Yes
+# $OpenBSD: php.port.mk,v 1.15 2016/03/19 23:59:15 naddy Exp $
 
 CATEGORIES+=		lang/php
 
@@ -65,8 +63,6 @@ MODPHP_DO_SAMPLE?=
 PV=		${MODPHP_VERSION}
 MODULE_NAME=	${MODPHP_DO_SAMPLE}
 SUBST_VARS+=	PV MODULE_NAME
-MESSAGE?=	${PORTSDIR}/lang/php/files/MESSAGE-ext
-UNMESSAGE?=	${PORTSDIR}/lang/php/files/UNMESSAGE-ext
 post-install:
 	${INSTALL_DATA_DIR} ${PREFIX}/share/examples/php-${MODPHP_VERSION}
 	@echo "extension=${MODPHP_DO_SAMPLE}.so" > \
