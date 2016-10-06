@@ -593,7 +593,7 @@ ask_which() {
 			|| _ask || continue
 		[[ -z $resp ]] && resp="$_dyndef"
 
-		if isin "$resp" $_dynlist done; then
+		if isin "$resp" $_dynlist $_sldone; then
 			log_answers "$_q" "$resp"
 			break
 		fi
