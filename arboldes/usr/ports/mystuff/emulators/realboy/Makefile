@@ -28,9 +28,9 @@ WANTLIB =       SDL c m pthread sndio
 LIB_DEPENDS =           devel/sdl
 
 CONFIGURE_STYLE=	gnu
-CONFIGURE_ENV =         CFLAGS="-g" \
+CONFIGURE_ENV =         CFLAGS="-g -fno-pie" \
 			CPPFLAGS="-I${LOCALBASE}/include" \
-                        LDFLAGS="-L${LOCALBASE}/lib"
+                        LDFLAGS="-L${LOCALBASE}/lib -nopie"
 
 do-install:
 	${INSTALL_PROGRAM} ${WRKSRC}/src/realboy ${PREFIX}/bin

@@ -1,0 +1,11 @@
+--- ports59-orig/infrastructure/bin/make-plist	Thu Jun  9 22:41:10 2016
++++ ports/infrastructure/bin/make-plist	Mon Jul 18 07:50:49 2016
+@@ -1061,7 +1061,7 @@
+ 		$orphans->clone_tags($plist);
+ 	}
+ 	if (!$plist->has('cvstags')) {
+-	    OpenBSD::PackingElement::CVSTag->add($plist, '$OpenBSD'.'$');
++	    OpenBSD::PackingElement::CVSTag->add($plist, '$adJ'.'$');
+ 	}
+ }
+ 

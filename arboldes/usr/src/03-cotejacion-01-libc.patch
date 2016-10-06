@@ -563,14 +563,14 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/locale/collate
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src55-orig/lib/libc/locale/setlocale.c src/lib/libc/locale/setlocale.c
 --- src55-orig/lib/libc/locale/setlocale.c	Fri Oct 18 09:22:17 2013
 +++ src/lib/libc/locale/setlocale.c	Thu Apr  3 09:15:33 2014
-@@ -40,6 +40,7 @@
+@@ -39,6 +39,7 @@
  #include <string.h>
  #include <unistd.h>
  
 +#include "collate.h"
+ #include "localedef.h"
  #include "rune.h"
  #include "rune_local.h"
- /*
 @@ -200,7 +201,11 @@
  		__install_currentrunelocale_ctype();
  		break;
@@ -582,8 +582,8 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src55-orig/lib/libc/locale/setl
 +		break;
  	case LC_MONETARY:
  	case LC_NUMERIC:
- 	case LC_TIME:
-@@ -262,6 +267,10 @@
+ 		break;
+@@ -249,6 +254,10 @@
  		return set_lc_messages_locale(locname);
  
  	case LC_COLLATE:
@@ -593,7 +593,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src55-orig/lib/libc/locale/setl
 +		
  	case LC_MONETARY:
  	case LC_NUMERIC:
- 	case LC_TIME:
+ 		return -1;
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/locale/wcscoll.3 src/lib/libc/locale/wcscoll.3
 --- src54-s/lib/libc/locale/wcscoll.3	Wed Dec 31 19:00:00 1969
 +++ src/lib/libc/locale/wcscoll.3	Sat Oct 12 13:23:41 2013
@@ -723,7 +723,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/locale/wcscoll
  /*-
   * Copyright (c)2003 Citrus Project,
   * All rights reserved.
-@@ -26,16 +25,100 @@
+@@ -26,16 +25,101 @@
   * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
   * SUCH DAMAGE.
   */
@@ -828,6 +828,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/locale/wcscoll
 +
 +	return ret;
  }
++DEF_STRONG(wcscoll);
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/locale/wcsxfrm.3 src/lib/libc/locale/wcsxfrm.3
 --- src54-s/lib/libc/locale/wcsxfrm.3	Wed Dec 31 19:00:00 1969
 +++ src/lib/libc/locale/wcsxfrm.3	Sat Oct 12 13:23:41 2013
@@ -934,7 +935,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/locale/wcsxfrm
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/locale/wcsxfrm.c src/lib/libc/locale/wcsxfrm.c
 --- src54-s/lib/libc/locale/wcsxfrm.c	Mon Oct  7 07:54:44 2013
 +++ src/lib/libc/locale/wcsxfrm.c	Sat Oct 12 13:23:41 2013
-@@ -30,13 +30,92 @@
+@@ -30,13 +30,91 @@
   * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
   * SUCH DAMAGE.
   */
@@ -1030,8 +1031,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/locale/wcsxfrm
 +
 +	return slen;
  }
-+
-+
++DEF_STRONG(wcsxfrm);
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/string/strcoll.3 src/lib/libc/string/strcoll.3
 --- src54-s/lib/libc/string/strcoll.3	Mon Oct  7 07:49:09 2013
 +++ src/lib/libc/string/strcoll.3	Sat Oct 12 13:23:41 2013
@@ -1129,7 +1129,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/string/strxfrm
  
  /*
   * Transform src, storing the result in dst, such that
-@@ -41,11 +52,34 @@
+@@ -41,11 +52,35 @@
  size_t
  strxfrm(char *dst, const char *src, size_t n)
  {
@@ -1145,21 +1145,22 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/string/strxfrm
 -	return (strlcpy(dst, src, n));
 +	ws = __dup_as_wcs_l(src);
 +	if (ws != NULL) {
-+		if (n > 0 && dst != NULL) {
-+			if (n > ULONG_MAX / sizeof(wchar_t)) { 
-+				errno = EINVAL;
-+				goto end;
-+			}
-+			wd = (wchar_t *)malloc(n * sizeof(wchar_t) );
-+			if (wd == NULL) {
-+				errno = ENOMEM;
-+				goto end;
-+			}
++		r = wcsxfrm(NULL, ws, 0);
++		if (r > ULONG_MAX / sizeof(wchar_t)) { 
++			errno = EINVAL;
++			goto end;
 +		}
-+		r = wcsxfrm(wd, ws, n);
-+		if (n > 0 && dst != NULL) {
-+			wcstombs(dst, wd, n);
++		wd = (wchar_t *)malloc((r + 1) * sizeof(wchar_t) );
++		if (wd == NULL) {
++			errno = ENOMEM;
++			goto end;
 +		}
++		wcsxfrm(wd, ws, r + 1);
++		r = wcstombs(NULL, wd, 0);
++		if (n > 0 && dst != NULL && r < n) {
++			r = wcstombs(dst, wd, n);
++		}
++		/* if r>=n contents of dst is unspecified */
 +	}
 +end:
 +	if (ws != NULL) {
@@ -1173,14 +1174,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/string/strxfrm
 diff -ruN -x *~ -x *orig -x *rej src54-orig/lib/libc/string/wcscasecmp.c src/lib/libc/string/wcscasecmp.c
 --- src54-orig/lib/libc/string/wcscasecmp.c	Sat Jun 25 00:32:57 2011
 +++ src/lib/libc/string/wcscasecmp.c	Mon Dec 23 12:04:47 2013
-@@ -27,32 +27,41 @@
- 
- #include <wchar.h>
- #include <wctype.h>
-+
- #include "locale/runetype.h"
- 
- int
+@@ -33,13 +33,17 @@
  wcscasecmp(const wchar_t *s1, const wchar_t *s2)
  {
  	wchar_t l1, l2;
@@ -1198,8 +1192,9 @@ diff -ruN -x *~ -x *orig -x *rej src54-orig/lib/libc/string/wcscasecmp.c src/lib
 +	c2[1] = L'\0';
 +	return wcscoll(c1, c2);
  }
+ DEF_WEAK(wcscasecmp);
  
- int
+@@ -47,13 +51,17 @@
  wcsncasecmp(const wchar_t *s1, const wchar_t *s2, size_t n)
  {
  	wchar_t l1, l2;
@@ -1219,3 +1214,24 @@ diff -ruN -x *~ -x *orig -x *rej src54-orig/lib/libc/string/wcscasecmp.c src/lib
  		}
  		if (l1 == 0)
  			break;
+diff -ruN src59-orig/lib/libc/hidden/wchar.h src/lib/libc/hidden/wchar.h
+--- src59-orig/lib/libc/hidden/wchar.h	Sat Sep 12 11:23:14 2015
++++ src/lib/libc/hidden/wchar.h	Fri May 13 15:01:26 2016
+@@ -52,7 +52,7 @@
+ PROTO_NORMAL(wcscat);
+ PROTO_NORMAL(wcschr);
+ PROTO_NORMAL(wcscmp);
+-PROTO_STD_DEPRECATED(wcscoll);
++PROTO_NORMAL(wcscoll);
+ PROTO_STD_DEPRECATED(wcscpy);
+ PROTO_NORMAL(wcscspn);
+ PROTO_NORMAL(wcsdup);
+@@ -80,7 +80,7 @@
+ PROTO_NORMAL(wcstoull);
+ PROTO_DEPRECATED(wcswcs);
+ PROTO_NORMAL(wcswidth);
+-PROTO_STD_DEPRECATED(wcsxfrm);
++PROTO_NORMAL(wcsxfrm);
+ PROTO_NORMAL(wctob);
+ PROTO_NORMAL(wcwidth);
+ PROTO_NORMAL(wmemchr);

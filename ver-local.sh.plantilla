@@ -12,6 +12,15 @@ DIROTRO="comp"
 
 RSYNCHOST="ftp.pasosdeJesus.org"
 
+# Directorios para distribución
+export DESTDIR=/destdir; 
+export RELEASEDIR=/releasedir
+export XSRCDIR=/usr/xenocara;
+
+# Datos del CVS del cual se actualizan fuentes de OpenBSD
+USUARIOCVS=""
+MAQCVS=""
+DIRCVS=""
 
 # Estas variables controlan operacion de distribucion.sh pueden ser s o n
 export autoCvs=n
@@ -36,16 +45,18 @@ export autoX=n
 # Transformar y compilar Xenocara
 export autoXDist=n
 # Distribución de Xenocara en /destdir y /releasedir
+export autoElimX=n
+# Elimina objeto tras autoX
 export autoElimXDist=n
 # Elimina distribución de Xenocara
 export autoJuegosInstalacion=n
 # Crear juegos de instalación en subdirectorio de este
-export autoTodosPaquetes=s
+export autoTodosPaquetes=n
 # Compilar todos los paquetes (util en Octubre y Abril)
 export autoPaquetes=n
 # Compilar paquetes especiales que hacen parte de la distribución
 
-export autoMasPaquetes=s
+export autoMasPaquetes=n
 # Descargar resto de paquetes de repositorio PKG_PATH
 export autoMasPaquetesInv=n
 # Descargar resto de paquetes en orden alfabético inverso

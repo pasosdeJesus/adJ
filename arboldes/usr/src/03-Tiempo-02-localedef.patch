@@ -7,8 +7,8 @@ diff -ruN -x *~ -x *orig -x obj* src56-orig/usr.bin/Makefile src/usr.bin/Makefil
  	libtool lndir \
 -	locale locate lock logger login logname look lorder \
 +	locale localedef locate lock logger login logname look lorder \
- 	m4 mail make man mandoc mesg mg \
- 	midiplay mixerctl mkdep mklocale mktemp modstat nc netstat \
+ 	m4 mail make mandoc mesg mg \
+ 	midiplay mixerctl mkdep mklocale mktemp nc netstat \
  	newsyslog \
 diff -ruN -x *~ -x *orig -x obj* src56-orig/usr.bin/localedef/Makefile src/usr.bin/localedef/Makefile
 --- src56-orig/usr.bin/localedef/Makefile	Wed Dec 31 19:00:00 1969
@@ -16,7 +16,7 @@ diff -ruN -x *~ -x *orig -x obj* src56-orig/usr.bin/localedef/Makefile src/usr.b
 @@ -0,0 +1,19 @@
 +
 +PROG=   localedef
-+CFLAGS+= -std=c99 -g
++CFLAGS+= -std=c99 -g -I${.CURDIR}/../../lib/libc/include
 +LDFLAGS+= -g
 +
 +SRCS=   localedef.c lexer.l parser.y
@@ -1062,7 +1062,7 @@ diff -ruN -x *~ -x *orig -x obj* src56-orig/usr.bin/localedef/localedef.c src/us
 +  *  - https://github.com/illumos/illumos-gate/blob/master/usr/src/cmd/localedef/parser.y
 +  **/
 +
-+#include <sys/localedef.h>
++#include "localedef.h"
 +#include <sys/stat.h>
 +
 +#include <netinet/in.h>
@@ -1209,7 +1209,7 @@ diff -ruN -x *~ -x *orig -x obj* src56-orig/usr.bin/localedef/parser.y src/usr.b
 + */
 +%{
 +
-+#include <sys/localedef.h>
++#include "localedef.h"
 +#include <stdio.h>
 +#include <wchar.h>
 +

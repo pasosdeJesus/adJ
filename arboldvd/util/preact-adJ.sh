@@ -3,15 +3,16 @@
 # Dominio público de acuerdo a legislación colombiana. http://www.pasosdejesus.org/dominio_publico_colombia.html. 
 # 2014. vtamara@pasosdeJesus.org
 
-VER=5.6
+VER=6.0
 REV=0
 VESP=""
-VERP=56
+VERP=60
 
-ACVER=`uname -r`
+ACVERC=`uname -r`
+ACVER=`echo $ACVERC | sed -e "s/\.//g"`
 ARQ=`uname -m`
-
-if (test "$USER" != "root") then {
+u=`whoami`
+if (test "$u" != "root") then {
 	echo "Este script debe ser ejecutado por root o con sudo";
 	exit 1;
 } fi;
@@ -33,6 +34,7 @@ if (test "$l" = "") then {
 	exit 1;
 } fi;
 
+dialog --title 'Prepara actualización' --msgbox "\\nPor preparar actualización de $ACVERC a $VER\\n" 15 60
 vac="";
 mac="";
 
@@ -60,10 +62,28 @@ acuspos="-U$uspos"
 # Codificacion por defecto en versiones hasta 5.0
 dbenc="LATIN1";
 
+if (test "$SOCKPSQL" != "") then {
+  sockpsql="$SOCKPSQL";
+} else {
+  sockpsql="/var/www/var/run/postgresql"
+} fi;
+echo "* Detectando socket de PostgreSQL en $sockpsql" >> /var/tmp/preact-adJ.bitacora
+# Detectar socket de PostgreSQL
+if (test ! -S "$sockpsql/.s.PGSQL.5432") then {
+  echo "* No se encontró socket de PostgreSQL en $sockpsql">> /var/tmp/preact-adJ.bitacora;
+  sockpsql="/var/www/tmp"
+  echo "* Detectando socket de PostgreSQL en $sockpsql" >> /var/tmp/preact-adJ.bitacora
+  if (test ! -S "$sockpsql/.s.PGSQL.5432") then {
+    echo "* Tampoco se encontró socket de PostgreSQL en $sockpsql" | tee -a /var/tmp/preact-adJ.bitacora;
+    echo "* Puede ejecutar especificando la ruta del socket de PostgreSQL en variable SOCKPSQL";
+    exit 1;
+  } fi;
+} fi;
+
 echo "* De requerirlo sacar respaldo de datos" >> /var/tmp/preact-adJ.bitacora
 pgrep post > /dev/null 2>&1
 if (test "$?" = "0") then {
-	echo -n "psql -h /var/www/tmp $acuspos -c \"select usename from pg_user where usename='postgres';\"" > /tmp/cu.sh
+	echo -n "psql -h $sockpsql $acuspos -c \"select usename from pg_user where usename='postgres';\"" > /tmp/cu.sh
        	su - _postgresql /tmp/cu.sh
 	if (test "$?" != "0") then {
 		us='_postgresql';
@@ -85,14 +105,14 @@ if (test "$?" = "0") then {
 			chmod +x /var/www/resbase/
 			chown _postgresql:_postgresql /var/www/resbase/pga-conc.sql
 			rm -f /tmp/penc.txt
-			echo "psql -h/var/www/tmp $acuspos -c 'SHOW SERVER_ENCODING' > /tmp/penc.txt" > /tmp/cu.sh
+			echo "psql -h$sockpsql $acuspos -c 'SHOW SERVER_ENCODING' > /tmp/penc.txt" > /tmp/cu.sh
 			chmod +x /tmp/cu.sh
 			cat /tmp/cu.sh >> /var/tmp/preact-adJ.bitacora
 			su - _postgresql /tmp/cu.sh >> /var/tmp/preact-adJ.bitacora;
 			if (test -f /tmp/penc.txt -a ! -z /tmp/penc.txt) then {
 				dbenc=`grep -v "(1 row)" /tmp/penc.txt | grep -v "server_encoding" | grep -v "[-]-----" | grep -v "^ *$" | sed -e "s/  *//g"`
 			} fi;
-			echo -n "pg_dumpall $acuspos --inserts --column-inserts --host=/var/www/tmp > /var/www/resbase/pga-conc.sql" > /tmp/cu.sh
+			echo -n "pg_dumpall $acuspos --inserts --column-inserts --host=$sockpsql > /var/www/resbase/pga-conc.sql" > /tmp/cu.sh
 			chmod +x /tmp/cu.sh
 			cat /tmp/cu.sh >> /var/tmp/preact-adJ.bitacora
 			su - _postgresql /tmp/cu.sh >> /var/tmp/preact-adJ.bitacora;
@@ -120,8 +140,8 @@ if (test "$?" = "0") then {
 	} fi;
 } fi;
 
-if (test "$VER" = "5.5") then {
-	dialog --title 'Advertencia: respaldar datos binarios' --yesno "\\nPara actualizar a 5.5 deben detenerse servicios y \\n
+if (test "$ACVER" -lt "55") then {
+	dialog --title 'Advertencia: respaldar datos binarios' --yesno "\\nPara actualizar de versiones anteriores a 5.5 deben detenerse servicios y \\n
 eliminar todos los paquetes del sistema.\\n
 Este archivo de comandos hará eso a continuación,\\n
 pero antes le recomendamos (1) sacar en un formato portable\\n
@@ -150,3 +170,13 @@ ingreso si depende de paquetes para ingresar al sistema\\n
 	dialog --title 'Preparado' --msgbox "\\nSistema preparado para actualizar\\n" 15 60
 	clear
 } fi;
+
+if (test "$ACVER" -lt "60") then {
+	dialog --title 'Advertencia: por borrar /usr/share/man' --yesno "\\nDesde la versión 6.0 no se usan enlaces duros a páginas del manual.\\n
+Se eliminarán todas las páginas del manual para que se instalen las nuevas al actualizar.\\n\\n
+¿Continuar?" 17 60
+	if (test "$?" = "0") then {
+		rm -rf /usr/share/man
+	} fi;
+} fi;
+	

@@ -1,119 +1,131 @@
 COMO PUBLICAR
 =============
 
-Anhelamos publicar versión mayor (e.g 5.6) 4 meses después de OpenBSD:
+Anhelamos publicar versión mayor (e.g 6.0) 4 meses después de OpenBSD:
 
-	1.Sep
-	1.Mar
+	11.Ene
+	1.Jul
 
-Publicamos revisiones (e.g 5.6p1) si la seguridad o calidad lo ameritan.
+También publicamos revisiones (e.g 6.0p1) si la seguridad o calidad lo ameritan.
 
-Anhelamos publicar al menos una versión beta (e.g 5.6b1 en directorio
-```desarrollo``` del sitio de distribución) 20 días antes de la versión mayor:
+Anhelamos publicar al menos una versión beta (e.g 6.0b1 en directorio
+```desarrollo``` del sitio de distribución) en:
 
-	10.Ago
-	10.Feb
+	10.Dic
+	10.Jun
 
-Sería ideal publicar una versión alfa mucho antes.
+Sería ideal publicar una versión alfa mucho antes (24.Sep y 24.Mar, e.g 6.0a1).
 
 
 Pasos importantes para publicar versión beta
 --------------------------------------------
 
 1. Recompilar paquetes con actualizaciones de seguridad o mejoras
-2. Retroportar paquetes
-3. Retocar fecha de publicacion en ```Novedades.ewiki``` y publicar escondido en
-  http://aprendiendo.pasosdeJesus.org
-4. Retocar ```Dedicatoria.txt``` y archivos *.txt y regenar en distribución (sin
-  paquetes ni otras compilaciones) con:
+2. Retroportar paquetes, dejar resultados no incluidos en DVD pero
+   útiles en extra-6.0
+3. Cambiar versión en ver.sh, arboldd/usr/local/adJ/inst-adJ.sh, Actualiza.md,
+	ComoPublicar.md, {$V-amd64,arboldvd}/util/preact-adJ.sh, 
+	{$V-amd64,arboldvd}/util/actbase.sh, 
+4. Retocar ```Dedicatoria.md``` y archivos *.md (por lo menos versión),
+   regenar en distribución (sin paquetes ni otras compilaciones) con:
 	```
-	sudo ./distribucion.sh
+	doas ./distribucion.sh
 	```
-5. En computador de desarrollo tras configurar ```var-local.sh``` enviar a
-adJ.pasosdeJesus.org:
+5. Retocar fecha de publicacion en ```Novedades.md``` y publicar escondido en
+   http://aprendiendo.pasosdeJesus.org
+6. Generar distribución, imagen iso (```hdes/creaiso.sh```) y probar por 
+  ejemplo en ```qemu``` (```hdes/qemu.sh``` o remotamente 
+  ```TEXTO=1 hdes/qemu.sh```): 
+	- instalación de sistema base, 
+   	- ejecución de /inst-adJ.sh en nuevo y actualización, 
+   	- ejecución de /usr/local/adJ/inst-sivel.sh, que opere SIVeL1.2,
+   	- que toda entrada del menú desde la interfaz gráfica opere.  
+	- que opere bien una aplicación Ruby on Rails
+  Arreglar y repetir hasta que no haya errores.
+7. En computador de desarrollo tras configurar ```var-local.sh``` enviar a
+   adJ.pasosdeJesus.org:
 	```
 	hdes/rsync-aotro.sh
 	```
-6. En adJ.pasosdeJesus.org
+8. En adJ.pasosdeJesus.org
 	```
 	hdes/creaiso.sh
-	cp -rf AprendiendoDeJesus-5.6-amd64.iso 5.6-amd64 /dirftp
-	mkdir /dirftp/5.6b1-amd64-extra
-	rsync compdes:/usr/ports/packages/amd64/all/* /dirftp/5.6b1-amd64-extra
+	cp -rf AprendiendoDeJesus-6.0a1-amd64.iso 6.0-amd64 /dirftp
+	mkdir /dirftp/6.0-amd64-extra
+	rsync compdes:comp/adJ/extra-6.0/* /dirftp/6.0-amd64-extra
 	```
-7. Enviar CD también a github.com como release
-8. Verificar operación de:
-  * http://structio.sf.net/guias/
-  * http://sivel.sf.net/guias/
+9. Verificar operación de:
+  * http://pasosdeJesus.github.io/basico_adJ http://pasosdeJesus.github.io/usuario_adJ http://pasosdeJesus.github.io/servidor_adJ
+  * http://sivel.sf.net/
   * http://aprendiendo.pasosdeJesus.org
   * http://www.pasosdeJesus.org
   * http://adJ.pasosdeJesus.org
   * rsync://adJ.pasosdeJesus.org
-9. Poner Tag en github e iniciar rama
+10. Poner Tag en github e iniciar rama
 	```
-	git tag -a v5.6b1 -m "Version 5.6 beta 1"
-	git push origin v5.6b1
+	git tag -a v6.0b1 -m "Version 6.0b1"
+	git push origin v6.0b1
 	...
-	git checkout -b ADJ_5_6
-	git push origin ADJ_5_6
+	git checkout -b ADJ_6_0
+	git push origin ADJ_6_0
 	```
 10. Publicar en lista de desarrollo
 
 Pasos importantes para publicar versión mayor
 --------------------------------------------
 
-1. Usar la rama ADJ_5_6
-	git checkout ADJ_5_6
-2. Actualizar SIVeL, evangelios y paquetes propios de adJ.
-3. Actualizar documentación, publicar en Structio, actualizar portes de esta,
-   generar y probar paquetes
-4. Generar distribución y pasar a adJ.pasosdeJesus.org y github.com 
-   análogo a pasos 4-7 de versión beta
+1. Usar la rama ADJ_6_0
+	git checkout ADJ_6_0
+2. Actualizar SIVeL, evangelios, Mt77, cor1440, sal7711 y paquetes propios de 
+   adJ.
+3. Actualizar documentación, publicar en Internet
+4. Análogo a pasos 6.0 de versión beta
 5. Actualiza version en reto de P2PU (las 4 primeras tareas) 
    https://p2pu.org/es/groups/openbsd-adj-como-sistema-de-escritorio/
-6. Actualizar Artículo como Noticia en http://aprendiendo.pasosdeJesus.org
+6. Actualizar Artículo como Noticia en http://aprendiendo.pasosdeJesus.org,
+   http://aprendiendo.pasosdejesus.org/?id=MainMenu,  
 7. Poner Tag en github
+	```
+	git tag -a v6.0 -m "Version 6.0"
+	git push origin v6.0
+	```
+8. Publicar en Twitter que retrasnmite a cuenta y página en Facebook. 
+   Si es tambien publicacion de SIVeL en sitio de noticias de SIVeL y Structio.
 
-	```
-	git tag -a v5.6 -m "Version 5.6"
-	git push origin v5.6
-	```
-8. Correo a listas: 
+	Publicado adJ 6.0 distribución para servidores y cortafuegos, 
+	segura, amigable para cristian@s y en español, ver 
+	http://aprendiendo.pasosdejesus.org/
+9. Correo a listas: 
     openbsd-colombia@googlegroups.com, colibri@listas.el-directorio.org, 
     openbsd-mexico@googlegroups.com, sivel-soporte@lists.sourceforge.net
 
-	Tema: Publicado adJ 5.6 para amd64
+	Tema: Publicado adJ 6.0 para amd64
 
-	Para instalar por primera vez descargue imagen para DVD de:
+	Para instalar por primera vez descarga la imagen para DVD de:
 	  http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/
-	O solicite un CD por correo postal.
+	O solicita un CD por correo postal.
 
-	Si planea actualizar de una version anterior de adJ a adJ 5.6
+	Si planeas actualizar de una version anterior a 6.0
 	hay un procedimiento mas rápido con ```rsync``` (ver
 	https://github.com/pasosdeJesus/adJ/blob/master/Actualiza.md ).
 
-	Si no tiene experiencia con esta distribución de OpenBSD para 
+	Si no tienes experiencia con esta distribución de OpenBSD para 
 	servidores y cortafuegos, que es segura, usable en español y amigable 
-	para cristian@s, puede aprender a instalar o actualizar con:
+	para cristian@s, puedes aprender a instalar o actualizar con:
 	  1. El curso/reto que da una medalla a quienes completen:
 	  https://p2pu.org/es/groups/openbsd-adj-como-sistema-de-escritorio/
 	  2. La guía de instalación:
-	  http://structio.sourceforge.net/guias/usuario_OpenBSD/sobre-la-instalacion.html
+	  http://pasosdeJesus.github.io//usuario_adJ/sobre-la-instalacion.html
 
-	Vea las novedades completas de la versión 5.6 en:
-	  http://aprendiendo.pasosdejesus.org/?id=AdJ+5.6+-+Aprendiendo+de+Jesus+5.6
+	Mira las novedades completas de la versión 6.0 en:
+	  http://aprendiendo.pasosdejesus.org/?id=AdJ+6.0+-+Aprendiendo+de+Jesus+6.0
 
 	De estas destacamos:
 	...
 
-
 	Bendiciones
 
-9. Publicar en Twitter que retrasnmite a cuenta y página en Facebook. 
-   Si es tambien publicacion de SIVeL en sitio de noticias de SIVeL y Structio.
+10. Actualiza artículos de Wikipedia 
+   https://en.wikipedia.org/wiki/AdJ y https://es.wikipedia.org/wiki/AdJ 
 
-	Publicado adJ 5.6 sistema operativo para servidores y cortafuegos, 
-	seguro, amigable para cristian@s y en español, ver 
-	http://aprendiendo.pasosdejesus.org/
-
-
+11. Publicar en http://sivel.sf.net y en  http://structio.sf.net

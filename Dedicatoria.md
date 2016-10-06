@@ -1,3 +1,5 @@
 
-__Esta recopilación se dedica a Jehova, Dios Padre, a quien debemos temer 
-y quien otorga sabiduria__ (Proverbios 1:7)
+__Esta recopilación se dedica a Jesús por la paz que ha regalado
+a sus hijos y a Colombia con negociaciones entre FARC-EP y Gobierno
+en Septiembre de 2016__
+(ver Mateo 5:9)

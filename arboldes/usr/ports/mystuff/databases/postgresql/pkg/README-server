@@ -1,4 +1,4 @@
-$OpenBSD: README-server,v 1.17 2014/09/23 08:41:10 sthen Exp $
+$OpenBSD: README-server,v 1.19 2015/08/03 07:42:30 kirby Exp $
 
 +-----------------------------------------------------------------------
 | Running ${FULLPKGNAME} on OpenBSD
@@ -21,12 +21,12 @@ We will be prompted for a password to protect the dba account:
        $ mkdir /var/postgresql/data
        $ initdb -D /var/postgresql/data -U postgres -A md5 -W
 
-Please note that by default the cluster's encoding will be SQL_ASCII. If 
+Please note that by default the cluster's encoding will be SQL_ASCII. If
 you want to have another default encoding, use the option -E with initdb:
 
        $ initdb -D /var/postgresql/data -U postgres -E UTF8 -A md5 -W
 
-If your cluster is already created, you can specify another encoding when 
+If your cluster is already created, you can specify another encoding when
 you create a new database with this command:
 	CREATE DATABASE xxx TEMPLATE template0 ENCODING 'xxx' ;
 
@@ -106,11 +106,11 @@ maintainers so that we can update this file for future versions.
 
 Upgrade Howto (for a major upgrade)
 ===================================
-If you didn't install PostgreSQL by following this README, 
+If you didn't install PostgreSQL by following this README,
 you must adapt these instructions to your setup.
 
 1) Backup all your data:
-# sudo -u _postgresql pg_dumpall -U postgres > /var/postgresql/full.sqldump
+# su _postgresql -c "pg_dumpall -U postgres > /var/postgresql/full.sqldump"
 
 2) Shutdown the server:
 # ${RCDIR}/postgresql stop
@@ -122,14 +122,14 @@ you must adapt these instructions to your setup.
 # mv /var/postgresql/data /var/postgresql/data.old
 
 5) Create a new data directory (using -E UTF8 if appropriate):
-# sudo -u _postgresql mkdir /var/postgresql/data
-# sudo -u _postgresql initdb -D /var/postgresql/data -U postgres -A md5 -W
+# su _postgresql -c "mkdir /var/postgresql/data"
+# su _postgresql -c "initdb -D /var/postgresql/data -U postgres -A md5 -W"
 
 6) Restore your old pg_hba.conf and (if used) SSL certificates
-# sudo -u _postgresql cp /var/postgresql/data.old/pg_hba.conf \
-    /var/postgresql/data/
-# sudo -u _postgresql cp /var/postgresql/data.old/server.{crt,key} \
-    /var/postgresql/data/
+# su _postgresql -c \
+    "cp /var/postgresql/data.old/pg_hba.conf /var/postgresql/data/"
+# su _postgresql -c \
+    "cp /var/postgresql/data.old/server.{crt,key} /var/postgresql/data/"
 
 Some postgresql.conf settings changed or disappeared in this version.
 Examine your old file for local changes and apply them to the new version.
@@ -138,7 +138,7 @@ Examine your old file for local changes and apply them to the new version.
 # ${RCDIR}/postgresql start
 
 8) Restore your data:
-# sudo -u _postgresql psql -U postgres < /var/postgresql/full.sqldump
+# su _postgresql -c "psql -U postgres < /var/postgresql/full.sqldump"
 
 Clients/Frontends
 =================

@@ -1,0 +1,18 @@
+$OpenBSD: patch-extern_h,v 1.5 2015/10/30 14:12:42 bentley Exp $
+--- extern.h.orig	Mon Jun  2 17:32:08 2003
++++ extern.h	Thu Oct 29 01:01:28 2015
+@@ -52,3 +52,14 @@ void	 printlong(DISPLAY *);
+ void	 printscol(DISPLAY *);
+ void	 printstream(DISPLAY *);
+ void	 usage(void);
++size_t	 strwidth(char *);
++#ifdef COLORLS
++void	 parsecolors(const char *cs);
++void	 colorquit(int);
++
++extern char *ansi_fgcol;
++extern char *ansi_bgcol;
++extern char *ansi_coloff;
++extern char *attrs_off;
++extern char *enter_bold;
++#endif

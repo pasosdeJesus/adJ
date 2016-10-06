@@ -2,7 +2,7 @@
 # Variables de configuración para generar distribución Aprendiendo de Jesús
 # Dominio público. 2013. vtamara@pasosdeJesus.org
 
-V=5.8
+V=6.1
 VESP="a1"
 # Versión que se está desarrollando
 
@@ -14,21 +14,19 @@ VNUMS=`expr $VNUM + 1`
 VS=`echo $VNUMS | sed -e "s/\([0-9]\)\([0-9]\)/\1.\2/g"`
 # Versión siguiente
 
-ARQ=`uname -m`
+ARQ=amd64
+#`uname -m`
 # Arquitectura
 
 export R="OPENBSD_$VU"
 export RADJ="ADJ_$VU"
 # Ramas
 
-PKG_PATH=ftp://ftp.openbsd.org/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
-PKG_PATH=ftp://ftp3.usa.openbsd.org/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
-PKG_PATH=ftp://filedump.se.rit.edu/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
-PKG_PATH=ftp://openbsd.mirrors.pair.com/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
-PKG_PATH=ftp://mirror.planetunix.net/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
-PKG_PATH=ftp://mirror.esc7.net/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
-PKG_PATH=ftp://mirrors.nycbug.org/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
-PKG_PATH=ftp://mirror.esc7.net/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
+PKG_PATH=http://ftp.openbsd.org/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
+PKG_PATH=http://ftp3.usa.openbsd.org/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
+PKG_PATH=http://openbsd.mirrors.pair.com/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
+PKG_PATH=http://mirror.esc7.net/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
+PKG_PATH=http://ftp4.usa.openbsd.org/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
 PKG_PATH=http://adJ.pasosdeJesus.org/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
 
 #Repositorio de paquetes usado --el último es el usado
@@ -41,6 +39,11 @@ excluye="chromium-.*-proprietary.* gnupg-2.* libstdc++-.* python-.* python-tkint
 
 RUTAKERNELREESPECIAL=""
 # Si debe usarse un kernel por ejemplo sin rlphy
+
+# Datos del CVS del cual se actualizan fuentes de OpenBSD
+USUARIOCVS=""
+MAQCVS=""
+DIRCVS=""
 
 export DESTDIR=/destdir; 
 export RELEASEDIR=/releasedir
@@ -70,6 +73,8 @@ export autoX=n
 # Transformar y compilar Xenocara
 export autoXDist=n
 # Distribución de Xenocara en /destdir y /releasedir
+export autoElimX=n
+# Elimina objeto tras autoX
 export autoElimXDist=n
 # Elimina distribución de Xenocara
 export autoJuegosInstalacion=n
@@ -86,10 +91,10 @@ export autoMasPaquetesInv=n
 export autoSite=s
 # Generar siteXX.tgz
 export autoTextos=s
-# Generar textos Novedades.txt y demás
+# Copiar/generar textos Novedades.md y demás
 
 
-qemuboot=d
+qemuboot=c
 # Unidad por la cual arrancar por defecto con hdes/qemu.sh
 
 if (test -f "ver-local.sh") then {

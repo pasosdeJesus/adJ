@@ -5,11 +5,13 @@
 # 2011. vtamara@pasosdeJesus.org
 
 VCOR=`uname -r`
-if (test "$USER" != "root") then {
+u=`whoami`
+if (test "$u" != "root") then {
 	echo "Ejecutar como usuario root"
 	exit 1;
 } fi;
 VCORSP=`echo $VCOR | sed -e "s/\.//g"`
+VSP=60
 
 if (test -f "ver.sh") then {
 	. ./ver.sh
@@ -17,7 +19,7 @@ if (test -f "ver.sh") then {
 	V=$1
 	if (test "$V" = "") then {
 		echo "Primer parámetro debería ser versión, e.g"
-		echo "actbase.sh 5.9"
+		echo "actbase.sh 6.2"
 		exit 1;
 	} fi;
 	VP=`echo $V | sed -e "s/[.]//g"`
@@ -30,7 +32,7 @@ if (test "$V" = "5.1") then {
 
 ARQ=amd64
 rutak=$V$VESP-$ARQ
-if (test ! -f $rutak/bsd -o ! -f $rutak/base$VP.tgz) then {
+if (test ! -f $rutak/bsd -o ! -f $rutak/base$VSP.tgz) then {
 	echo "No se encontró kernel e instaladores en $rutak";
 	exit 1;
 } fi;
@@ -47,7 +49,12 @@ nk=${rutak}/bsd${mp}
 echo "Antes de continuar, recomendamos que ejecute util/preact-adJ.sh"
 echo "Presione [ENTER] para preparar primer arranque tras actualizacion"
 read
+pgrep xdm > /dev/null  2>&1
+if (test "$?" = "0" -a ! -f /etc/X11/xorg.conf) then {
+	touch /etc/X11/xorg-automatico
+} fi;
 echo "(cd /dev; ./MAKEDEV all)" >/etc/rc.firsttime
+echo "fw_update" >> /etc/rc.firsttime
 if (test "$VCORSP" -lt "55" ) then {
 	eusr=`df -kP /usr | awk '{ print $2; }' | tail -n 1`
 	if (test "$eusr" -lt "200000") then {
@@ -88,7 +95,9 @@ q
 EOF
 	(cd /usr/mdec; cp boot /boot; ./installboot -v /boot ./biosboot $dd)
 } fi;
-echo "/inst-adJ.sh" >>/etc/rc.firsttime    
+ARCH=`pwd`
+ARCH="$ARCH/$V$VESP-$ARQ/"
+echo "ARCH=$ARCH /inst-adJ.sh" >>/etc/rc.firsttime    
 echo "Presione [ENTER] para instalar kernel $nk"
 read
 rm /obsd ; ln /bsd /obsd 
@@ -99,10 +108,10 @@ cp $rutak/bsd.rd $rutak/bsd.mp /
 
 echo -n "[ENTER] para continuar con juegos de instalacion: "
 read
-sudo cp /sbin/reboot /sbin/oreboot
+cp /sbin/reboot /sbin/oreboot
 for i in xserv xfont xshare xbase game comp man site base; do
 	echo $i;
-	sudo tar -C / -xzphf $V$VESP-$ARQ/$i$VP.tgz
+	tar -C / -xzphf $V$VESP-$ARQ/$i$VSP.tgz
 done
 echo "Tras el reinicio recuerde ejecutar:"
 echo "  cd /dev && ./MAKEDEV all"

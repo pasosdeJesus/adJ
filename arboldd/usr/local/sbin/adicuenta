@@ -14,8 +14,9 @@ claveplana=$3;
 virtualuser=$4;
 gru=$5;
 
+u=`whoami`
 echo "adicuenta($us, $nom, $claveplana, $virtualuser, $gru)"
-if (test "$USER" != "root") then {
+if (test "$u" != "root") then {
     echo "Este script debe ser ejecutado por root o con sudo";
     exit 1;
 } fi;
@@ -111,6 +112,7 @@ if (test "$?" != "0") then {
 set spoolfile=imaps://\$USER@127.0.0.1/INBOX
 set folder=imaps://\$USER@127.0.0.1/
 EOF
+	chown $us /home/$us/.muttrc
 } fi;
 
 grep "$Maildir" $dhome/.procmailrc > /dev/null 2>&1
@@ -141,12 +143,14 @@ $dhome/$Maildir/.Junk/
 $dhome/$Maildir/
 
 EOF
+	chown $us /home/$us/.procmail
 
 } fi;
 
 grep procmail /home/$us/.forward > /dev/null 2> /dev/null
 if (test "$?" != "0") then {
 	echo '"| exec /usr/local/bin/procmail"' > /home/$us/.forward
+	chown $us /home/$us/.forward
 } fi;
 
 function subc {
@@ -232,7 +236,7 @@ if (test -d /var/www/roundcubemail) then {
 	dsn=`grep db_dsnw /var/www/roundcubemail/config/db.inc.php | sed -e "s/.*pgsql:/pgsql:/g;s/['\"].*//g"`
 	echo "dsn=$dsn"
 	db=`echo $dsn | sed -e "s/.*pgsql:\/\/.*\/\([^'\"]*\).*/\1/g"`;
-	echo "psql -h /var/www/tmp/ -Upostgres ${db} -c \"SELECT user_id FROM users WHERE username='$us';\" > /tmp/resins.txt" > /tmp/cu.sh
+	echo "psql -h /var/www/var/run/postgresql/ -Upostgres ${db} -c \"SELECT user_id FROM users WHERE username='$us';\" > /tmp/resins.txt" > /tmp/cu.sh
 	chmod +x /tmp/cu.sh
 	cat /tmp/cu.sh
 	su - _postgresql /tmp/cu.sh >> /tmp/adicuenta.bitacora;
@@ -241,13 +245,13 @@ if (test -d /var/www/roundcubemail) then {
 		idu=-1
 		hoy=`date +"%Y-%m-%d"`
 		rm -f /tmp/resins.txt
-		echo "psql -h /var/www/tmp/ -Upostgres ${db} -c \"INSERT INTO users (username, mail_host, created, language) VALUES ('$us', '127.0.0.1','${hoy}','es_ES');SELECT last_value FROM user_ids;\" > /tmp/resins.txt" > /tmp/cu.sh
+		echo "psql -h /var/www/var/run/postgresql/ -Upostgres ${db} -c \"INSERT INTO users (username, mail_host, created, language) VALUES ('$us', '127.0.0.1','${hoy}','es_ES');SELECT last_value FROM user_ids;\" > /tmp/resins.txt" > /tmp/cu.sh
 		chmod +x /tmp/cu.sh
 		su - _postgresql /tmp/cu.sh >> /tmp/adicuenta.bitacora;
 		if (test -f /tmp/resins.txt -a ! -z /tmp/resins.txt) then {
 			idu=`grep -v "(1 row)" /tmp/resins.txt | grep -v "last_value" | grep -v "[-]-----" | grep -v "^ *$" | sed -e "s/  *//g"`
 		} fi;
-		echo "psql -h /var/www/tmp/ -Upostgres ${db} -c \"INSERT INTO identities (user_id, del, standard, name, organization, email, changed) VALUES ('$idu', '0', '1', '$nom', '$orgrespaldo', '$virtualuser', '${hoy}');\" > /tmp/resins.txt" > /tmp/cu.sh
+		echo "psql -h /var/www/var/run/postgresql/ -Upostgres ${db} -c \"INSERT INTO identities (user_id, del, standard, name, organization, email, changed) VALUES ('$idu', '0', '1', '$nom', '$orgrespaldo', '$virtualuser', '${hoy}');\" > /tmp/resins.txt" > /tmp/cu.sh
 		chmod +x /tmp/cu.sh
 		su - _postgresql /tmp/cu.sh >> /tmp/adicuenta.bitacora;
 	} fi;

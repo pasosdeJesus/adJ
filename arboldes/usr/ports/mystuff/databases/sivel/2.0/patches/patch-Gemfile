@@ -1,0 +1,26 @@
+$OpenBSD$
+--- Gemfile.orig	Mon Sep 12 12:11:08 2016
++++ Gemfile	Wed Sep 14 20:27:14 2016
+@@ -45,7 +45,7 @@ gem "bootstrap-datepicker-rails"
+ gem "simple_form"
+ 
+ # Formularios anidados (algunos con ajax)
+-gem "cocoon", github: "vtamara/cocoon"
++gem "cocoon", git: 'https://github.com/vtamara/cocoon.git'
+ 
+ # Autenticación y roles
+ gem "devise"
+@@ -67,11 +67,11 @@ gem "tzinfo"
+ gem "tzinfo-data"
+ 
+ # Motor de sip
+-gem 'sip', github: 'pasosdeJesus/sip'
++gem 'sip', git: 'https://github.com/pasosdeJesus/sip.git'
+ #gem 'sip', path: '../sip'
+ 
+ # Motor de SIVeL 2
+-gem 'sivel2_gen', github: 'pasosdeJesus/sivel2_gen'
++gem 'sivel2_gen', git: 'https://github.com/pasosdeJesus/sivel2_gen.git'
+ #gem 'sivel2_gen', path: '../sivel2_gen'
+ 
+ group :doc do

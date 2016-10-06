@@ -1,8 +1,8 @@
 
      SUBDIR += evangelios_dp
-     SUBDIR += usuario_OpenBSD
-     SUBDIR += basico_OpenBSD
-     SUBDIR += servidor_OpenBSD
+     SUBDIR += usuario_adJ
+     SUBDIR += basico_adJ
+     SUBDIR += servidor_adJ
 
 
 .include <bsd.port.subdir.mk>

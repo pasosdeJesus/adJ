@@ -1,4 +1,4 @@
-#	$OpenBSD: install.md,v 1.35 2014/07/20 20:12:41 deraadt Exp $
+#      $OpenBSD: install.md,v 1.51 2016/02/08 17:28:08 krw Exp $
 #
 #
 # Copyright (c) 1996 The NetBSD Foundation, Inc.
@@ -34,13 +34,16 @@
 
 MDXAPERTURE=2
 MDXDM=y
-MDLID=y
 NCPU=$(sysctl -n hw.ncpufound)
 
-((NCPU > 1)) && { DEFAULTSETS="bsd bsd.rd bsd.mp" ; SANESETS="bsd bsd.mp" ; }
+if dmesg | grep -q 'efifb0 at mainbus0'; then
+	MDEFI=y
+fi
+
+((NCPU > 1)) && { DEFAULTSETS="bsd bsd.rd bsd.mp"; SANESETS="bsd bsd.mp"; }
 
 md_installboot() {
-	if ! installboot -r /mnt ${1} ; then
+	if ! installboot -r /mnt ${1}; then
 		echo "\n$_slfailbootblocks"
 		echo "$_slnobootfrom ${1}."
 		exit
@@ -52,72 +55,89 @@ md_prep_fdisk() {
 
 	while :; do
 		_d=$_sledit
-		if [[ -n $(fdisk $_disk | grep 'Signature: 0xAA55') ]]; then
+		_q="$_slusewhole"
+
+		[[ $MDEFI == y ]] && _d=gpt
+
+		if disk_has $_disk mbr openbsd || disk_has $_disk gpt openbsd; then
+			_q="$_q, $_slopenbsdarea"
+			_d=OpenBSD
+
 			fdisk $_disk
-			if [[ -n $(fdisk $_disk | grep '^..: A6 ') ]]; then
-				_q=", $_slopenbsdarea"
-				_d=OpenBSD
-			fi
 		else
-			echo "$_slmbrhasinvalid"
+			echo "$_slnovalidmbrorgpt"
 		fi
-		ask "$_slusewhole" "$_d"
+		ask "$_q $_slor $_slpepdit?" "$_d"
 		case $resp in
-		$_slw*|$_slW*)
+		[$_slw$_slW]*)
 			echo -n "$_slsettingopenbsd"
-			fdisk -e ${_disk} <<__EOT >/dev/null
-reinit
-update
-write
-quit
-__EOT
+			fdisk -iy $_disk >/dev/null
 			echo "$_sldone."
 			return ;;
-		e*|E*)
-			# Manually configure the MBR.
-			cat <<__EOT
+		[gG]*)
+			if [[ $MDEFI != y ]]; then
+				ask_yn "$_slanefigpt"
+				[[ $resp == n ]] && continue
+			fi
+
+			echo -n "$_slsettingopenbsdgpt $_disk..."
+			fdisk -iy -g -b 960 $_disk >/dev/null
+			echo "$_sldone."
+			return ;;
+		[eE]*)
+			if disk_has $_disk gpt; then
+				# Manually configure the GPT.
+				cat <<__EOT
+
+$_slyouwillnowreatetwogpt
+
+$(fdisk $_disk)
+__EOT
+				fdisk -e $_disk
+
+				if ! disk_has $_disk gpt openbsd; then
+					echo -n "$_slnoopenbsdpartitioningpt"
+				elif ! disk_has $_disk gpt efisys; then
+					echo -n "$_slnoefisyspartitioningpt"
+				else
+					return
+				fi
+			else
+				# Manually configure the MBR.
+				cat <<__EOT
+
 
 $_slyouwillnowcreate
 
-$(fdisk ${_disk})
+$(fdisk $_disk)
 __EOT
-			fdisk -e ${_disk}
-			[[ -n $(fdisk $_disk | grep ' A6 ') ]] && return
-			echo "$_slnoopenbsdpartition" ;;
-		o*|O*)	return ;;
+				fdisk -e $_disk
+				disk_has $_disk mbr openbsd && return
+				echo -n "$_slnoopenbsdpartitioninmbr"
+			fi
+			echo "$_sltryagain" ;;
+		[oO]*)
+			[[ $_d == OpenBSD ]] || continue
+			if [[ $_disk == $ROOTDISK ]] && disk_has $_disk gpt &&
+				! disk_has $_disk gpt efisys; then
+				echo "$_slnoefitryagain"
+				$AUTO && exit 1
+				continue
+			fi
+			return ;;
 		esac
 	done
 }
 
 md_prep_disklabel() {
-	local _disk=$1 _f _op
+	local _disk=$1 _f=/tmp/fstab.$1
 
 	md_prep_fdisk $_disk
 
-	_f=/tmp/fstab.$_disk
-	if [[ $_disk == $ROOTDISK ]]; then
-		while :; do
-			echo "$_slautoallocated"
-			disklabel -h -A $_disk | egrep "^#  |^  [a-p]:"
-			ask "$_sluseautolayout" a
-			case $resp in
-			a*|A*)	_op=-w ;;
-			e*|E*)	_op=-E ;;
-			c*|C*)	break ;;
-			*)	continue ;;
-			esac
-			disklabel $FSTABFLAG $_f $_op -A $_disk
-			return
-		done
-	fi
+	disklabel_autolayout $_disk $_f || return
+	[[ -s $_f ]] && return
 
-	cat <<__EOT
-
-$_slnowdisklabel
-
-__EOT
-
-	disklabel $FSTABFLAG $_f -E $_disk
+	disklabel -F $_f -E $_disk
 }
 
 md_congrats() {

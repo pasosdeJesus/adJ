@@ -1,39 +1,41 @@
 $adJ$
---- src/main.cpp.orig	Fri Sep  6 07:30:55 2013
-+++ src/main.cpp	Sun Dec 22 09:06:53 2013
-@@ -195,10 +195,9 @@ bool FXApp::runOneEvent(bool blocking)
- 
- // Global variables
+--- src/main.cpp.orig	Thu Aug  6 08:28:20 2015
++++ src/main.cpp	Mon Jul 18 08:39:18 2016
+@@ -197,7 +197,7 @@ bool FXApp::runOneEvent(bool blocking)
  char **args;
--#if defined(linux)
- FXbool deb_based=FALSE;
- FXbool rpm_based=FALSE;
--#endif
-+FXbool tgz_based=FALSE;
+ FXbool xim_used=false;
  
- // Base directories (according to the Freedesktop specification version 0.7)
- FXString homedir;
-@@ -294,12 +293,12 @@ int main(int argc,char *argv[])
+-#if defined(linux)
++#if defined(linux) || defined(__OpenBSD__)
+ FXuint pkg_format;
+ #endif
+ 
+@@ -307,6 +307,7 @@ int main(int argc,char *argv[])
    	textdomain(PACKAGE);
  #endif
  
--#if defined(linux)
-+    FXString cmd="dpkg --version 2>&1";
++	FXString cmd, str;
+ #if defined(linux)
  
-+#if defined(linux)
-     // Test the existence of dpkg to see if the Linux distro is Debian based
- 	// This is done by checking the existence of the string 'Debian'
- 	// in the response to the command 'dpkg' (with --version argument)
--	FXString cmd="dpkg --version 2>&1";
-     FILE *debcmd=popen(cmd.text(),"r");
-     if(!debcmd)
-     {
-@@ -336,6 +335,8 @@ int main(int argc,char *argv[])
- 			rpm_based=TRUE;
- 		pclose(rpmcmd);
+     // For package query on Linux systems, try to guess if the default package format is deb or rpm:
+@@ -314,8 +315,8 @@ int main(int argc,char *argv[])
+     //   - else if rpm exists, then the system uses rpm packages
+ 	//   - else another (unsupported) package manager is used
+ 
+-	FXString cmd="dpkg --version";
+-	FXString str=getCommandOutput(cmd);
++	cmd="dpkg --version";
++	str=getCommandOutput(cmd);
+ 
+ 	if (str.find("Debian") != -1)
+ 		pkg_format=DEB_PKG; // deb based system
+@@ -331,7 +332,8 @@ int main(int argc,char *argv[])
+ 		else
+ 			pkg_format=OTHER_PKG; // other (unsupported) package system
  	}
+-
 +#elif defined(__OpenBSD__)
-+	tgz_based=TRUE;
++	pkg_format = OPENBSD_PKG;
  #endif
  
  	// Parse basic arguments

@@ -81,7 +81,7 @@ _slnetmask="Máscara de red para "
 _slipv61="Dirección IPv6 para"
 _slipv6prefix="Long. de prefijo IPv6 para";
 _slipv4route="¿Ruta IPv4 por defecto?"
-_slipv6route="¿Ruta IPv6 por defecto? (\${_routers:+list #, }, dir. o '$_slnone'):"
+_slipv6route="¿Enrutador IPv6 por defecto?"
 _slinvalidnetfile="configuración de red invalida"
 _slnetintconf="Configurar interfaz de red:"
 _slresolverenabled="Resolvedor habilitado."
@@ -170,7 +170,7 @@ _slaccesspoint="¿Punto de Acceso Inalámbrico? (ESSID, 'cualquiera', #lista o '?'
 )"
 _slany="cualquiera"
 _slthereisnoline="No hay línea"
-_slwebkey="¿Llave WEP? (no se verá)"
+_slwepkey="¿Llave WEP? (no se verá)"
 _slwpapassphrase="¿Palabra secreta WPA? (se verá)"
 _slisnotvalidchoice="no es una opción válida."
 _slinvalidnetworkconfiguration="archivo de configuración de red inválido"
@@ -247,7 +247,7 @@ _sland="y"
 _slcantbothbemountedat="no puede montarse en"
 _slchooseyourkeyboardlayout="Elija distribución de teclado ('?' o 'L' para ver lista)"
 _slavailablelayouts="Distribuciones disponibles"
-_slpasswordfor="Clave para cuenta "
+_slpasswordfor="Clave para la cuenta "
 _slpasswordforroot="¿Clave para la cuenta root?"
 _slpublicsshkey="¿Llave ssh pública para la cuenta root?"
 _slaccount=""
@@ -266,9 +266,9 @@ _slwichone="Cual"
 _sly="s"
 _slsetnames2="Nombre(s) de juego(s)"
 _slabort="cancelar"
-_slnetworkinterface="Interfaces de red"
+_slnetworkinterface="interfaz de red"
 _sldoyouwishtoconfigure="desea configurar"
-_slwhichinterfacetag="¿Sobre que interface:tag debe estar \$_ifs?"
+_slwhichinterfacetag="¿Sobre que interface:tag debe estar \$_if?"
 _slinvalidinterfacechoice="Elección de interfaz invalida";
 _slinvalidorinusevlantag="Tag invalido o en uso";
 _sldhclientmissing="Falta /sbin/dhclient - saltando petición dhcp."
@@ -303,10 +303,8 @@ _slbackedup="ESTÁN RESPALDADOS SUS DATOS? Como con todo lo que modifica el conte
 
 _slnodiskfound="No se encontraron discos"
 _slmulti="Máquina multiprocesador; usando bsd.mp en lugar de bsd."
-_slopenbsdarea="usar el área de (O)penBSD,"
 
 _slmbrhasinvalid="El RMA (Registro maestro de arranque MBR) tiene firma invalida; no se muestra."
-_slusewhole="¿Usar (T)odo el disco \$_q o (E)ditar RMA?"
 _slwhole="todo"
 _sledit="editar"
 _slw=t
@@ -317,7 +315,6 @@ _slyouwillnowcreate="Ahora creará una sola partición en el RMA que con todos sus
 Esta partición debe tener identificación 'A6'; *NO* debe traslaparse con otras
 particiones y debe marcarse como la única partición activa.  En el programa
 fdisk, el comando 'manual' describe todos los comandos de fdisk en detalle."
-_slnoopenbsdpartition="No hay partición para OpenBSD en el RMA, intente de nuevo." 
 _slautoallocated="La distribución autolocalizada para \$_disk es:"
 _sluseautolayout="Usar distribución (A)utolocalizada, (E)ditarla, o (C)rear una distribución?" 
 _slnowdisklabel="Ahora creará subparticiones para OpenBSD en la partición del RMA para OpenBSD.
@@ -367,3 +364,42 @@ _slquestionhasnoanswer="La pregunta no tiene repuesta en el archivo de respuesta
 _slusage="uso"
 _sluser="usuario"
 _slthexbasesetrequires="El juego xbase requiere el juego comp, agregandolo de nuevo."
+_slresponsefileloc="Localización del archivo de respuestas?"
+_slfetching="Recibiendo"
+_slnoinet6="Sin soporte INET6"
+_slskippingrtsol="saltando requerimiento rtsol."
+
+
+_slopenbsdarea="área de (O)penBSD,"
+_slusewhole="¿Usar (T)odo el disco MBR, todo el disco (G)PT"
+_slnoopenbsdpartition="No hay partición para OpenBSD en el RMA, intente de nuevo." 
+
+
+_slallowrootssh="Permitie ingreso de root por ssh? (si, no, prohibir-clave)"
+_slprohibitpassword="prohibir-clave"
+_slroottargeted="ADVERTENCIA: la cuenta root es blanco de ataques de fuerza bruta, las llaves públicas son más seguras." 
+_slnousersetup="Como no se configuraron usuarios, los ingresos a root mediante sshd(8) pueden ser útiles."
+_slnoautopartitioning="No se encontró plantilla de autoparticionado."
+_slautopartitioningfailed="Autoparticionado falló"
+_slurltoautopartitioning="URL de la plantilla de autoparticionado para disklabel?"
+_slanefigpt="Un disco EFI/GPT podría no arrancar. ¿Proceder?"
+_slsettingopenbsdgpt="Estableceendo la partición OpenBSD GPT para el disco completo"
+_slyouwillnowreatetwogpt="Ahora creará dos particiones GPT. La primera debe tener una identificación
+'EF' y ser suficientemente grande para los programas de arranque de OpenBSD,
+al menos 960 bloques. La segunda debe tener identificación 'A6' y
+contendrá sus datos de OpenBSD. Una partición no puede traslaparse con la otra.
+Dentro del comando fdisk , el comando 'manual' describe los comandos
+de fdisk en detalle."
+_slnoopenbsdpartitioningpt="No hay partición OpenBSD en GPT,"
+_slnoefisyspartitioningpt="No hay partición EFI Sys en GPT,"
+_slnoopenbsdpartitioninmbr="No hay partición OpenBSD en el RMA (MBR),"
+_sltryagain="intente nuevamente." 
+_slnoefitryagain="No hay partición EFI Sys en GPT, intente nuevament."
+_slnovalidmbrorgpt="No hay un RAM o un GPT válido."
+_slpepdit="(E)ditar"
+_sln="n"
+_slinstallp="(I)nstalar"
+_slupgradep="(A)ctualizar"
+_slinsl="iI"
+_slupl="aA"
+

@@ -1,28 +1,20 @@
 $adJ$
---- src/XFileExplorer.cpp.orig	Mon Sep 23 02:04:04 2013
-+++ src/XFileExplorer.cpp	Sun Dec 22 09:06:53 2013
-@@ -2914,30 +2914,51 @@ long XFileExplorer::onCmdRun(FXObject*,FXSelector,void
- // Run an Xfe as root
+--- src/XFileExplorer.cpp.orig	Thu Aug  6 10:45:19 2015
++++ src/XFileExplorer.cpp	Mon Jul 18 08:25:57 2016
+@@ -3211,6 +3211,12 @@ long XFileExplorer::onCmdRun(FXObject*,FXSelector,void
  long XFileExplorer::onCmdSu(FXObject*,FXSelector,void*)
  {
--	int ret;
--	
-+	int ret = 0;
-+    int errcode = 0, status = 0;
-+	FXString title, sucmd;
+ 	int ret;
 +	char color[64];
 +	FXString bg=" -bg ";
-+	FXString fg=" -fg ";
++	FXString fg=" -fg ";	 
 +	FXString command;
-+
++	int status;
++	int errcode;
+ 	
  	// Wait cursor
  	getApp()->beginWaitCursor();
- 
- 	// Obtain preferred root mode
- 	FXbool use_sudo=getApp()->reg().readUnsignedEntry("OPTIONS","use_sudo",FALSE);
-+	FXbool sudo_nopasswd=getApp()->reg().readUnsignedEntry("OPTIONS","sudo_nopasswd",FALSE);
- 
- 	// Select sudo or su to launch xfe as root
+@@ -3222,7 +3228,7 @@ long XFileExplorer::onCmdSu(FXObject*,FXSelector,void*
  	ret=chdir(lpanel->getCurrent()->getDirectory().text());
  	if (ret < 0)
  	{
@@ -31,36 +23,7 @@ $adJ$
  		if (errcode)
  			MessageBox::error(this,BOX_OK,_("Error"),_("Can't enter folder %s: %s"),lpanel->getCurrent()->getDirectory().text(),strerror(errcode));
  		else
- 			MessageBox::error(this,BOX_OK,_("Error"),_("Can't enter folder %s"),lpanel->getCurrent()->getDirectory().text());
- 		
--		return 0;
-+		ret = 0;
-+        goto end;
- 	}
- 
--	FXString title, sucmd;
--	if (use_sudo)
--	{
-+	if (use_sudo & sudo_nopasswd) 
-+    {
-+        sucmd="sudo xfe " + homedir + " &";
-+
-+        ret=system(sucmd.text());
-+        if (ret < 0)
-+        {
-+            MessageBox::error(this,BOX_OK,_("Error"),_("Can't execute command %s"),sucmd.text());
-+            ret = 0;
-+            goto end;
-+        }
-+        ret = 1;
-+        goto end;
-+    } 
-+    else if (use_sudo) 
-+    {
- 		title = _("Enter the user password:");
- 		sucmd = SUDOCMD;
- 	}
-@@ -2946,45 +2967,43 @@ long XFileExplorer::onCmdSu(FXObject*,FXSelector,void*
+@@ -3242,45 +3248,43 @@ long XFileExplorer::onCmdSu(FXObject*,FXSelector,void*
  		title = _("Enter the root password:");
  		sucmd = SUCMD;
  	}
@@ -95,7 +58,7 @@ $adJ$
  		
 -		return 0;
 +		ret = 0;
-+        goto end;
++        	goto end;
  	}
  
  	if (status<0)
@@ -104,7 +67,7 @@ $adJ$
 -		getApp()->endWaitCursor();
 -		return 0;
 +		ret = 0;
-+        goto end;
++        	goto end;
  	}	
 -	
 +
@@ -112,7 +75,7 @@ $adJ$
   	// Wait cursor
  	getApp()->endWaitCursor();
 -    return 1;
-+    return ret;
++	return ret;
  }
  
  

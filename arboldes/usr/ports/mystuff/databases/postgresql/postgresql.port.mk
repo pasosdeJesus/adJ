@@ -1,4 +1,4 @@
-# $OpenBSD: postgresql.port.mk,v 1.2 2015/01/21 21:12:28 zhuk Exp $ 
+# $OpenBSD: postgresql.port.mk,v 1.6 2015/09/24 20:35:31 zhuk Exp $
 #
 # Helps testing PostgreSQL-based software, no B/L/R-DEPS here.
 
@@ -6,7 +6,7 @@ MODPOSTGRESQL_TEST_CMD ?= \
 	${MAKE_PROGRAM} ${ALL_TEST_FLAGS} -f ${MAKE_FILE} ${TEST_TARGET}
 
 MODPOSTGRESQL_TEST_PGHOST ?=	${WRKDIR}
-_MODPOSTGRESQL_TEST_PGDATA =	${WRKDIR}/testdb
+_MODPOSTGRESQL_TEST_PGDATA =	${WRKDIR}/testdb-pg
 
 TEST_DEPENDS +=		databases/postgresql,-server
 TEST_ENV +=		PGDATA=${_MODPOSTGRESQL_TEST_PGDATA} \
@@ -19,7 +19,7 @@ MODPOSTGRESQL_TEST_TARGET = \
 	rm -Rf ${_MODPOSTGRESQL_TEST_PGDATA}; \
 	export ${ALL_TEST_ENV}; \
 	${LOCALBASE}/bin/initdb -D ${_MODPOSTGRESQL_TEST_PGDATA} \
-	    -A trust --locale=C --nosync; \
+	    -A trust --locale=C -E UTF8 --nosync; \
 	${LOCALBASE}/bin/pg_ctl start -w -D ${_MODPOSTGRESQL_TEST_PGDATA} \
 	    -l ${WRKDIR}/pg-test.log \
 	    -o "-F -h '' -k ${MODPOSTGRESQL_TEST_PGHOST}";
@@ -32,7 +32,7 @@ MODPOSTGRESQL_TEST_TARGET += \
 MODPOSTGRESQL_TEST_TARGET += \
 	set +e; \
 	cd ${WRKBUILD}; \
-	${MODPOSTGRESQL_TEST_CMD}; \
+	( ${MODPOSTGRESQL_TEST_CMD} ); \
 	Q=$$?; \
 	${LOCALBASE}/bin/pg_ctl stop -D ${_MODPOSTGRESQL_TEST_PGDATA} -m i; \
 	exit $$Q

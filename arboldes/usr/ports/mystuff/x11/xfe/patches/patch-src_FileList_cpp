@@ -1,7 +1,7 @@
-$adJ$
---- src/FileList.cpp.orig	Mon Dec 23 10:34:35 2013
-+++ src/FileList.cpp	Mon Dec 23 10:34:48 2013
-@@ -52,7 +52,7 @@
+$OpenBSD$
+--- src/FileList.cpp.orig	Mon Aug 10 04:52:18 2015
++++ src/FileList.cpp	Mon Jul 18 08:25:57 2016
+@@ -50,7 +50,7 @@
  #define HASH2(x,n) (1|(((FXuint)(x)*17)%((n)-1)))   // Probe Distance [1..n-1]
  
  

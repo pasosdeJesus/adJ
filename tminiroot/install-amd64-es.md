@@ -1,4 +1,4 @@
-#      $OpenBSD: install.md,v 1.34 2014/01/19 04:08:27 jsing Exp $
+#      $OpenBSD: install.md,v 1.51 2016/02/08 17:28:08 krw Exp $
 #
 #
 # Copyright (c) 1996 The NetBSD Foundation, Inc.
@@ -36,10 +36,14 @@ MDXAPERTURE=2
 MDXDM=y
 NCPU=$(sysctl -n hw.ncpufound)
 
-((NCPU > 1)) && { DEFAULTSETS="bsd bsd.rd bsd.mp" ; SANESETS="bsd bsd.mp" ; }
+if dmesg | grep -q 'efifb0 at mainbus0'; then
+	MDEFI=y
+fi
+
+((NCPU > 1)) && { DEFAULTSETS="bsd bsd.rd bsd.mp"; SANESETS="bsd bsd.mp"; }
 
 md_installboot() {
-	if ! installboot -r /mnt ${1} ; then
+	if ! installboot -r /mnt ${1}; then
 		echo "\nFalla al instalar bloques de arranque."
 		echo "No podra arrancar OpenBSD de ${1}."
 		exit
@@ -51,81 +55,97 @@ md_prep_fdisk() {
 
 	while :; do
 		_d=editar
-		if [[ -n $(fdisk $_disk | grep 'Signature: 0xAA55') ]]; then
+		_q="¿Usar (T)odo el disco MBR, todo el disco (G)PT"
+
+		[[ $MDEFI == y ]] && _d=gpt
+
+		if disk_has $_disk mbr openbsd || disk_has $_disk gpt openbsd; then
+			_q="$_q, área de (O)penBSD,"
+			_d=OpenBSD
+
 			fdisk $_disk
-			if [[ -n $(fdisk $_disk | grep '^..: A6 ') ]]; then
-				_q=", usar el área de (O)penBSD,"
-				_d=OpenBSD
-			fi
 		else
-			echo "El RMA (Registro maestro de arranque MBR) tiene firma invalida; no se muestra."
+			echo "No hay un RAM o un GPT válido."
 		fi
-		ask "¿Usar (T)odo el disco $_q o (E)ditar RMA?" "$_d"
+		ask "$_q o (E)ditar?" "$_d"
 		case $resp in
-		t*|T*)
+		[tT]*)
 			echo -n "Estableciendo partición de OpenBSD en RMA como el disco $_disk completo..."
-			fdisk -e ${_disk} <<__EOT >/dev/null
-reinit
-update
-write
-quit
-__EOT
+			fdisk -iy $_disk >/dev/null
 			echo "listo."
 			return ;;
-		e*|E*)
-			# Manually configure the MBR.
-			cat <<__EOT
+		[gG]*)
+			if [[ $MDEFI != y ]]; then
+				ask_yn "Un disco EFI/GPT podría no arrancar. ¿Proceder?"
+				[[ $resp == n ]] && continue
+			fi
+
+			echo -n "Estableceendo la partición OpenBSD GPT para el disco completo $_disk..."
+			fdisk -iy -g -b 960 $_disk >/dev/null
+			echo "listo."
+			return ;;
+		[eE]*)
+			if disk_has $_disk gpt; then
+				# Manually configure the GPT.
+				cat <<__EOT
+
+Ahora creará dos particiones GPT. La primera debe tener una identificación
+'EF' y ser suficientemente grande para los programas de arranque de OpenBSD,
+al menos 960 bloques. La segunda debe tener identificación 'A6' y
+contendrá sus datos de OpenBSD. Una partición no puede traslaparse con la otra.
+Dentro del comando fdisk , el comando 'manual' describe los comandos
+de fdisk en detalle.
+
+$(fdisk $_disk)
+__EOT
+				fdisk -e $_disk
+
+				if ! disk_has $_disk gpt openbsd; then
+					echo -n "No hay partición OpenBSD en GPT,"
+				elif ! disk_has $_disk gpt efisys; then
+					echo -n "No hay partición EFI Sys en GPT,"
+				else
+					return
+				fi
+			else
+				# Manually configure the MBR.
+				cat <<__EOT
+
 
 Ahora creará una sola partición en el RMA que con todos sus datos de OpenBSD
 Esta partición debe tener identificación 'A6'; *NO* debe traslaparse con otras
 particiones y debe marcarse como la única partición activa.  En el programa
 fdisk, el comando 'manual' describe todos los comandos de fdisk en detalle.
 
-$(fdisk ${_disk})
+$(fdisk $_disk)
 __EOT
-			fdisk -e ${_disk}
-			[[ -n $(fdisk $_disk | grep ' A6 ') ]] && return
-			echo "No hay partición para OpenBSD en el RMA, intente de nuevo." ;;
-		o*|O*)	return ;;
+				fdisk -e $_disk
+				disk_has $_disk mbr openbsd && return
+				echo -n "No hay partición OpenBSD en el RMA (MBR),"
+			fi
+			echo "intente nuevamente." ;;
+		[oO]*)
+			[[ $_d == OpenBSD ]] || continue
+			if [[ $_disk == $ROOTDISK ]] && disk_has $_disk gpt &&
+				! disk_has $_disk gpt efisys; then
+				echo "No hay partición EFI Sys en GPT, intente nuevament."
+				$AUTO && exit 1
+				continue
+			fi
+			return ;;
 		esac
 	done
 }
 
 md_prep_disklabel() {
-	local _disk=$1 _f _op
+	local _disk=$1 _f=/tmp/fstab.$1
 
 	md_prep_fdisk $_disk
 
-	_f=/tmp/fstab.$_disk
-	if [[ $_disk == $ROOTDISK ]]; then
-		while :; do
-			echo "La distribución autolocalizada para $_disk es:"
-			disklabel -h -A $_disk | egrep "^#  |^  [a-p]:"
-			ask "Usar distribución (A)utolocalizada, (E)ditarla, o (C)rear una distribución?" a
-			case $resp in
-			a*|A*)	_op=-w ;;
-			e*|E*)	_op=-E ;;
-			c*|C*)	break ;;
-			*)	continue ;;
-			esac
-			disklabel $FSTABFLAG $_f $_op -A $_disk
-			return
-		done
-	fi
+	disklabel_autolayout $_disk $_f || return
+	[[ -s $_f ]] && return
 
-	cat <<__EOT
-
-Ahora creará subparticiones para OpenBSD en la partición del RMA para OpenBSD.
-Las subparticiones definen como se divide la partición RMA en 
-espacios donde se crearán los sistemas de archivo y el area de intercambio.
-En este programa debe proveer para cada sistema de archivo un punto de montaje.
-
-Los desplazamientos usados para las subparticiones son ABSOLUTAS, i.e relativas
-al comienzo del disco, NO al comienzo de la partición para OpenBSD el RMA.
-
-__EOT
-
-	disklabel $FSTABFLAG $_f -E $_disk
+	disklabel -F $_f -E $_disk
 }
 
 md_congrats() {

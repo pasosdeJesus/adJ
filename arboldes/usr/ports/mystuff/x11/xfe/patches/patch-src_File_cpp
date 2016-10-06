@@ -1,6 +1,6 @@
 $adJ$
---- src/File.cpp.orig	Wed Sep  4 11:11:19 2013
-+++ src/File.cpp	Sun Dec 22 18:28:50 2013
+--- src/File.cpp.orig	Mon Aug 10 03:42:18 2015
++++ src/File.cpp	Mon Jul 18 08:25:57 2016
 @@ -7,6 +7,9 @@
  #include <utime.h>
  #if defined(linux)
@@ -11,7 +11,7 @@ $adJ$
  #endif
  
  // For Sun compatibility
-@@ -145,7 +148,6 @@ File::File(FXWindow *owner, FXString title, const FXui
+@@ -152,7 +155,6 @@ File::File(FXWindow *owner, FXString title, const FXui
  			getApp()->addTimeout(this,File::ID_TIMEOUT,SHOW_PROGRESSBAR_DELAY);
  			break;
  
@@ -19,15 +19,15 @@ $adJ$
      	case MOUNT:
  	    	// Labels
  			uplabel=new FXLabel(contents,_("Mount file system..."),NULL,JUSTIFY_LEFT|LAYOUT_FILL_X);
-@@ -157,7 +159,6 @@ File::File(FXWindow *owner, FXString title, const FXui
- 			uplabel=new FXLabel(contents,_("Unmount file system..."),NULL,JUSTIFY_LEFT|LAYOUT_FILL_X);
+@@ -166,7 +168,6 @@ File::File(FXWindow *owner, FXString title, const FXui
      		downlabel=new FXLabel(contents,_("Unmount the folder:"),NULL,JUSTIFY_LEFT|LAYOUT_FILL_X);
+ 			datalabel=NULL;
  			break;
 -#endif
  
  		default: // Other : RENAME, SYMLINK, ARCHIVE, EXTRACT, PKG_INSTALL, PKG_UNINSTALL
  			// Progress dialog not used
-@@ -1679,7 +1680,7 @@ int File::archive(const FXString name, const FXString 
+@@ -1742,7 +1743,7 @@ int File::archive(const FXString name, const FXString 
  }
  
  
@@ -35,8 +35,8 @@ $adJ$
 +#if defined(linux) || defined(__OpenBSD__)
  int File::mount(const FXString dir, const FXString msg, const FXString cmd, const FXuint op)
  {
- 	FXbool mount_messages=getApp()->reg().readUnsignedEntry("OPTIONS","mount_messages",TRUE);
-@@ -1770,7 +1771,6 @@ int File::pkgUninstall(const FXString name, const FXSt
+ 	FXbool mount_messages=getApp()->reg().readUnsignedEntry("OPTIONS","mount_messages",true);
+@@ -1833,7 +1834,6 @@ int File::pkgUninstall(const FXString name, const FXSt
      return 1;
  }
  #endif

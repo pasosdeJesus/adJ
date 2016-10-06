@@ -1,0 +1,14 @@
+$OpenBSD$
+--- config/database.yml.plantilla.orig	Mon Sep 12 12:11:08 2016
++++ config/database.yml.plantilla	Wed Sep 14 20:27:14 2016
+@@ -5,9 +5,9 @@ default: &default
+   # For details on connection pooling, see rails configuration guide
+   # http://guides.rubyonrails.org/configuring.html#database-pooling
+   pool: 5
++  host: /var/www/var/run/postgresql
+   username: sipdes
+   password: aquilaclave
+-  host: /var/www/var/run/postgresql
+ 
+ development:
+   <<: *default

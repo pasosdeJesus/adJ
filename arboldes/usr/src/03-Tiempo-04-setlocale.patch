@@ -1,20 +1,17 @@
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/locale/_def_time.c src/lib/libc/locale/_def_time.c
 --- src56-orig/lib/libc/locale/_def_time.c	Mon Apr 28 06:20:02 2014
 +++ /usr/src56-lctime/lib/libc/locale/_def_time.c	Thu Apr 24 21:20:12 2014
-@@ -5,8 +5,12 @@
+@@ -5,7 +5,9 @@
   */
  
- #include <sys/localedef.h>
-+
  #include <locale.h>
 +#include <string.h>
- 
+ #include "localedef.h"
 +#include "locale/loadtextcat.h"
-+
+ 
  const _TimeLocale _DefaultTimeLocale =
  {
- 	{
-@@ -35,3 +39,39 @@
+@@ -35,3 +37,39 @@
  };
  
  const _TimeLocale *_CurrentTimeLocale = &_DefaultTimeLocale;

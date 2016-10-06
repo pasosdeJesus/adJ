@@ -1,0 +1,35 @@
+diff -ruN xenocara58-orig/app/xdm/config/Xresources.cpp xenocara/app/xdm/config/Xresources.cpp
+--- xenocara58-orig/app/xdm/config/Xresources.cpp	Mon May 23 18:13:06 2016
++++ xenocara/app/xdm/config/Xresources.cpp	Tue Jun 21 10:35:00 2016
+@@ -21,8 +21,8 @@
+ 	<Key>Return: set-session-argument() finish-field()
+ 
+ xlogin*greeting: CLIENTHOST
+-xlogin*namePrompt: \040\040\040\040\040\040\040Login:
+-xlogin*fail: Login incorrect or forbidden
++xlogin*namePrompt: \040\040\040\040\040\040\040Usuario:
++xlogin*fail: Usuario errado o prohibido
+ 
+ XHASHif WIDTH > 800
+ xlogin*greetFont: -adobe-helvetica-bold-o-normal--24-240-75-75-p-138-iso8859-1
+@@ -109,16 +109,16 @@
+ *Background: black
+ XHASHendif
+ XHASHifdef bpp1
+-xlogin*logoFileName: BITMAPDIR/**//OpenBSD_1bpp.xpm
++xlogin*logoFileName: BITMAPDIR/**//adJ_1bpp.xpm
+ XHASHendif
+ XHASHifdef bpp4
+-xlogin*logoFileName: BITMAPDIR/**//OpenBSD_4bpp.xpm
++xlogin*logoFileName: BITMAPDIR/**//adJ_4bpp.xpm
+ XHASHendif
+ XHASHifdef bpp8
+-xlogin*logoFileName: BITMAPDIR/**//OpenBSD_8bpp.xpm
++xlogin*logoFileName: BITMAPDIR/**//adJ_8bpp.xpm
+ XHASHendif
+ XHASHifdef bpp15
+-xlogin*logoFileName: BITMAPDIR/**//OpenBSD_15bpp.xpm
++xlogin*logoFileName: BITMAPDIR/**//adJ_15bpp.xpm
+ XHASHendif
+ 
+ xlogin*useShape: true

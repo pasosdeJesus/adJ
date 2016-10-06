@@ -1,0 +1,82 @@
+En OpenBSD 5.9 se introdujeron convenciones para símbolos
+de libc que se explican en src/lib/libc/include/README y
+en src/lib/libc/include/namespace.h.
+
+Aqui traducimos parte de src/lib/libc/include/README
+
+
+
+- Hay símobolos internos de libc usados sólo dentro de libc y
+  otros públicos. 
+- Símbolos interos:
+	- Uno que se use en un sólo archivo con static
+	- Si se usa en varios ponerlo en un .h dentro de
+	  __BEGIN_HIDDEN_DECLS y __END_HIDDEN_DECLS.  si
+	  se usa desde un sólo directorio crear por ejemplo
+	  stdio/local.h, si se usa desde varios puede
+	  declararse en uno de los archivos de lib/hidden/
+	  e.g _mktemp() de hidden/stdio.h
+- Símbolos externos:
+	- Agregar a Symbols.list. Symbols que dependen de
+	  máquina en arch/*/Symbols.list
+	- Declarar función en encabezado apropiado (público
+	  en /usr/include). Las excepciones son símbolos
+    	  compartidos sólo entre libc y libpthread/csu/ld.so
+	  que se declaran sólo en libc/include/* o en cada
+	  .c
+	A) Objetos (variables). Listo
+
+	B) funciones en C planas (que no son syscallas)
+		1) Si no son llamadas desde libc
+		  Si está especificada en ISO C o su nombre
+	 	  comienza con _, entonces en la versión
+		  hidden/* del encabezado donde lo declare,
+		  agregar:
+			PROTO_STD_DEPRECATED(nombre_funcion); 
+		  De lo contrario, no es una función de ISO C
+	 	  y su nombre comienza con letra. En la
+		  versión del encabezado de hidden/*, agregar
+			PROTO_DEPRECATED(nombre_funcion);
+		2) Si son llamadas desde libc, en la versión
+	 	  del encabezado de hidden/* donde la declaró,
+		  agregar:
+			PROTO_NORMAL(nombre_funcion);
+		  En el .c donde se define:
+		  - Si la función se especifica en ISO C o
+	 	    su nombre comiena con  agregar:
+			DEF_STRONG(nombre_funcion);
+		  - En otro caso:
+			DEF_WEAK(nombre_funcion);
+		
+	C) syscalls que requieren cancelación u otras envolturas
+	   de libpthread. Nad en libc pero agregar envolutaeas
+	   en libpthread.
+
+	D) syscalls que requieren envolturas en libc por otras razones
+		1) Si no tiene convención de llamad de la interfaz
+		   C no debería exportarse. 
+		   Si puede llamarse desde C dar un nombre
+		   diferente al API de C. e.g gen/getlogin.c
+		2) 
+	E) syscalls que no requieren envoltura.  En la versión
+	   hidden/* del encabezado agregar
+		PROTO_NORMAL(nombre_funcion)
+	 	  
+
+libc/Symbols.list con lista de funciones públicas de libc
+Directorio libc/hidden donde se declarán visibilidad de funciones
+	de libc
+Macros para DEF_STRONG
+
+
+---
+
+mbstowcs Usada en libc
+wcstombs usada en libc
+wctomb Usada en libc
+
+Estandar no usuadas en libc
+
+mblen
+mbtowc
+

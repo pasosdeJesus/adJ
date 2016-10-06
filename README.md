@@ -1,6 +1,8 @@
 adJ
 ===
 
+[![Join the chat at https://gitter.im/pasosdeJesus/adJ](https://badges.gitter.im/pasosdeJesus/adJ.svg)](https://gitter.im/pasosdeJesus/adJ?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos 
 y Educativas y que anhelamos que Jesús use durante el Milenio.
 
@@ -50,11 +52,11 @@ en la variable asociada y lo desactiva poniendo ```n```.
 
 * Enlace ```arboldes/usr/ports/mystuff``` en ```/usr/ports/mystuff```:  
 	```
-	sudo ln -s ~/comp/adJ/usr/ports/mystuff /usr/ports
+	doas ln -s ~/comp/adJ/usr/ports/mystuff /usr/ports
 	```
 * Actualice fuentes de ```/usr/src``` (con periodicidad) para mezclar cambios de OpenBSD activando ```autoCVS``` en ```ver.sh``` y ejecutando:
 	```
-	sudo ./distribucion.sh
+	doas ./distribucion.sh
 	```
 * Implemente mejoras a ```/usr/src``` bien como archivos de comandos (por ubicar en ```hdes/``` o en ```arboldd/usr/local/adJ```) que son llamados por ```distribucion.sh``` y hacen cambios automáticos  o bien como parches (se ubican en ```arboldes/usr/src```)
 * Actualice/mejore portes o cree nuevos en ```arboldes/usr/ports/mystuff```.  Al agregar o retirar actualizar ```distribucion.sh```
@@ -63,7 +65,7 @@ en la variable asociada y lo desactiva poniendo ```n```.
 * Compile fuentes y portes siguiendo pasos de ```distribucion.sh``` cambiando paulatinamente variables ```auto*``` en ```ver.sh```: transforme y compile kernel (```autoKernel```), instalelo (```autoInsKernel```), transforme y compile base (```autoCompBase```), instale y genere ```.tgz``` del sistema base (```autoDist```), genere ```bsd.rd``` (```autoBsdrd```), transforme y compile Xenocara (```autoX```), instale y genere ```.tgz``` de Xenocara (```autoXDist```), copie juegos de instalación a subdirectorio de la forma ```5.x-amd64``` (```autoJuegosInst```), compile portes particulares (```autoPaquetes```), descargue otros paquetes de repositorio (```autoMasPaquetes```), genere el juego de instalación ```siteXX.tgz``` empleando ```arboldd``` y listado ```lista-site``` (```autoSite```), genere textos en el instalador (```autoContenido```)
 * Una vez con juegos de instalación, paquetes y textos listos en subdirectorio ```5.x-amd64``` genere imagen ISO con: 
 	```
-	sudo hdes/creaiso.sh
+	doas hdes/creaiso.sh
 	```
 * Pruebe ISO con QEMU, primero arrancando desde CD (en ```ver-local.sh``` ponga ```qemuboot=d```) con: 
 	```hdes/qemu.sh```

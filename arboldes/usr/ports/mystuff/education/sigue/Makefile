@@ -6,7 +6,8 @@ COMMENT=	"to track progress of students and generate reports"
 V=		1.2
 DISTNAME=	sigue-${V}
 CATEGORIES=    	education
-PKGNAME=	${DISTNAME}p1
+PKGNAME=	${DISTNAME}p2
+#REVISION=	2	
 
 
 HOMEPAGE=	http://structio.sourceforge.net/sigue
@@ -23,7 +24,7 @@ CONFIGURE_STYLE=	simple
 CONFIGURE_SCRIPT=	conf.sh
 CONFIGURE_ARGS+=-p ${PREFIX}
 
-BUILD_DEPENDS=	lang/ocaml textproc/markup education/repasa print/texlive/base
+BUILD_DEPENDS=	lang/ocaml textproc/markup education/repasa print/texlive/base lang/ocaml-camlp4 devel/ocaml-ocamlbuild
 RUN_DEPENDS=	textproc/markup education/repasa
 
 FAKE_TARGET=	instala-sin-catalogo-opt

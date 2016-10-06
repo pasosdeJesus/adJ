@@ -1,0 +1,12 @@
+$OpenBSD: patch-frmts_openjpeg_openjpegdataset_cpp,v 1.5 2015/06/27 06:55:38 landry Exp $
+--- frmts/openjpeg/openjpegdataset.cpp.orig	Sun Jun 14 21:06:32 2015
++++ frmts/openjpeg/openjpegdataset.cpp	Thu Jun 25 22:59:28 2015
+@@ -31,7 +31,7 @@
+ /* This file is to be used with openjpeg 2.0 */
+ 
+ #if defined(OPENJPEG_VERSION) && OPENJPEG_VERSION >= 20100
+-#include <openjpeg-2.1/openjpeg.h>
++#include <openjp2/openjpeg.h>
+ #else
+ #include <stdio.h> /* openjpeg.h needs FILE* */
+ #include <openjpeg-2.0/openjpeg.h>

@@ -1,0 +1,19 @@
+$OpenBSD$
+--- cmp.c.orig	Mon Aug 22 15:48:41 2016
++++ cmp.c	Mon Aug 22 15:48:51 2016
+@@ -45,13 +45,13 @@
+ int
+ namecmp(const FTSENT *a, const FTSENT *b)
+ {
+-	return (strcmp(a->fts_name, b->fts_name));
++	return (strcoll(a->fts_name, b->fts_name));
+ }
+ 
+ int
+ revnamecmp(const FTSENT *a, const FTSENT *b)
+ {
+-	return (strcmp(b->fts_name, a->fts_name));
++	return (strcoll(b->fts_name, a->fts_name));
+ }
+ 
+ int

@@ -1,0 +1,12 @@
+$OpenBSD$
+--- lib/localename.c.orig	Mon Feb 16 06:26:56 2015
++++ lib/localename.c	Wed Dec  9 10:04:12 2015
+@@ -35,7 +35,7 @@
+ 
+ #if HAVE_USELOCALE
+ /* Mac OS X 10.5 defines the locale_t type in <xlocale.h>.  */
+-# if defined __APPLE__ && defined __MACH__
++# if (defined __APPLE__ && defined __MACH__) || defined(__adJ__)
+ #  include <xlocale.h>
+ # endif
+ # include <langinfo.h>

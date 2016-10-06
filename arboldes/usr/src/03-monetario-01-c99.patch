@@ -1,6 +1,15 @@
 diff -ruN -x obj -x CVS -x *~ -x *orig src56-orig/lib/libc/locale/localeconv.c src/lib/libc/locale/localeconv.c
 --- src56-orig/lib/libc/locale/localeconv.c	Fri Sep 19 13:07:17 2014
 +++ src/lib/libc/locale/localeconv.c	Fri Sep 19 14:49:15 2014
+@@ -16,7 +16,7 @@
+  * lconv structure are computed only when the monetary or numeric
+  * locale has been changed.
+  */
+-static int __mlocale_changed = 1;
++int __mlocale_changed = 1;
+ static int __nlocale_changed = 1;
+ 
+ /*
 @@ -33,7 +33,11 @@
  	ret.currency_symbol	= _CurrentMonetaryLocale->currency_symbol;
  	ret.mon_decimal_point	= _CurrentMonetaryLocale->mon_decimal_point;

@@ -5,7 +5,8 @@
 COMMENT=	"library to read and validate XML files from Ocaml"
 
 DISTNAME=	markup-0.2.12
-PKGNAME=	${DISTNAME}p0
+PKGNAME=	${DISTNAME}
+REVISION=	1
 CATEGORIES=	textproc
 HOMEPAGE=	http://ocaml-programming.de/markup/
 

@@ -12,47 +12,21 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/share/locale/Makefile s
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/share/locale/colldef/Makefile src/share/locale/colldef/Makefile
 --- src54-s/share/locale/colldef/Makefile	Wed Dec 31 19:00:00 1969
 +++ src/share/locale/colldef/Makefile	Sat Oct 12 18:32:19 2013
-@@ -0,0 +1,114 @@
+@@ -0,0 +1,64 @@
 +.include <bsd.own.mk>
 +
 +
-+LOCALES = ISO8859-1
-+LOCALES += ISO8859-15
-+
-+LOCALES += de.ISO8859-1
-+LOCALES += de.ISO8859-15
 +LOCALES_UTF8 += de
 +
-+LOCALES += es.ISO8859-1
-+LOCALES += es.ISO8859-15
 +LOCALES_UTF8 += es
 +
-+LOCALES += is.ISO8859-1
-+LOCALES += is.ISO8859-15
 +LOCALES_UTF8 += is
 +
-+LOCALES += no.ISO8859-1
-+LOCALES += no.ISO8859-15
 +LOCALES_UTF8 += no
 +
-+LOCALES += sv.ISO8859-1
-+LOCALES += sv.ISO8859-15
 +LOCALES_UTF8 += sv
 +
-+LOCALES += ARMSCII-8
-+LOCALES += CP1251
-+LOCALES += CP866
-+LOCALES += ISO8859-4
-+LOCALES += ISO8859-5
-+LOCALES += ISO8859-7
-+LOCALES += ISO8859-13
-+LOCALES += KOI8-R
-+LOCALES += KOI8-U
-+LOCALES += ISO8859-2
-+LOCALES += pl.ISO8859-2
-+LOCALES += sl.ISO8859-2 
-+
-+LFILES += ${LOCALES:S/$/.out/g} UTF-8.out ${LOCALES_UTF8:S/$/.UTF-8.out/g}
++LFILES += UTF-8.out ${LOCALES_UTF8:S/$/.UTF-8.out/g}
 +
 +all: ${LFILES}
 +
@@ -65,11 +39,6 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/share/locale/colldef/Ma
 +
 +NOMAN=	# defined
 +
-+.for c in ${LOCALES}
-+${c}.out: ${c}.src
-+	colldef -I ${.CURDIR} -o ${c}.out ${.CURDIR}/${c}.src
-+.endfor
-+
 +UTF-8.out: ISO8859-1.src
 +	colldef -I ${.CURDIR} -o UTF-8.out ${.CURDIR}/ISO8859-1.src
 +
@@ -78,17 +47,9 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/share/locale/colldef/Ma
 +	colldef -I ${.CURDIR} -o ${c}.UTF-8.out ${.CURDIR}/${c}.ISO8859-1.src
 +.endfor
 +
-+
 +CLEANFILES += ${LFILES}
 +
-+
 +install:
-+.for locale in ${LOCALES}
-+	install -o ${LOCALEOWN} -g ${LOCALEGRP} -m ${DIRMODE} -d \
-+	    ${DESTDIR}${LOCALEDIR}/${locale}
-+	install -o ${LOCALEOWN} -g ${LOCALEGRP} -m ${LOCALEMODE} \
-+	    ${locale}.out ${DESTDIR}${LOCALEDIR}/${locale}/LC_COLLATE
-+.endfor
 +	install -o ${LOCALEOWN} -g ${LOCALEGRP} -m ${DIRMODE} -d \
 +	    ${DESTDIR}${LOCALEDIR}/UTF-8
 +	install -o ${LOCALEOWN} -g ${LOCALEGRP} -m ${LOCALEMODE} \
@@ -101,17 +62,6 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/share/locale/colldef/Ma
 +.endfor
 +
 +uninstall:
-+.for locale in ${LOCALES}
-+	if (test -f ${DESTDIR}${LOCALEDIR}/${locale}/LC_COLLATE) then { \
-+	rm -f ${DESTDIR}${LOCALEDIR}/${locale}/LC_COLLATE; \
-+	} fi; \
-+        if (test -d ${DESTDIR}${LOCALEDIR}/${locale}/) then { \
-+        r=`ls ${DESTDIR}${LOCALEDIR}/${locale}/`; \
-+        if (test "$$r" = "") then { \
-+        rm -rf ${DESTDIR}${LOCALEDIR}/${locale}/; \
-+        } fi; \
-+        } fi;
-+.endfor
 +	rm -f ${DESTDIR}${LOCALEDIR}/UTF-8/LC_COLLATE
 +.for locale in ${LOCALES_UTF8}
 +	if (test -f ${DESTDIR}${LOCALEDIR}/${locale}.UTF-8/LC_COLLATE) then { \

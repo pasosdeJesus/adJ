@@ -12,9 +12,8 @@ diff -uN src56-orig/regress/lib/libc/locale/Makefile src/regress/lib/libc/locale
 diff -ruN -x *~ -x *orig src56-orig/regress/lib/libc/locale/check_time/Makefile src/regress/lib/libc/locale/check_time/Makefile
 --- src56-orig/regress/lib/libc/locale/check_time/Makefile	Wed Dec 31 19:00:00 1969
 +++ src/regress/lib/libc/locale/check_time/Makefile	Wed Feb  4 05:17:12 2015
-@@ -0,0 +1,30 @@
+@@ -0,0 +1,29 @@
 +
-+.include "/usr/src/share/locale/ctype/Makefile.inc"
 +
 +NOMAN=
 +PROG=check_time

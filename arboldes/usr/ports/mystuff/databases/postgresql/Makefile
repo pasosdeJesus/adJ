@@ -1,4 +1,4 @@
-# $OpenBSD: Makefile,v 1.200 2015/02/18 17:49:56 jca Exp $
+# $OpenBSD: Makefile,v 1.214 2016/05/13 17:15:55 pea Exp $
 
 COMMENT-main=	PostgreSQL RDBMS (client)
 COMMENT-server=	PostgreSQL RDBMS (server)
@@ -6,11 +6,12 @@ COMMENT-docs=	PostgreSQL RDBMS documentation
 COMMENT-contrib=PostgreSQL RDBMS contributions
 COMMENT-plpython=Python procedural language for PostgreSQL
 
+BROKEN-sparc=	Requires v9|v9a|v9b; requested architecture is sparclite.
+
 # DO NOT FORGET to also change the @ask-update entry in pkg/PLIST-server
 # in case a dump before / restore after pkg_add -u is required!
 
-VERSION=	9.4.1
-REVISION-server= 1
+VERSION=	9.5.4
 DISTNAME=	postgresql-${VERSION}
 PKGNAME-main=	postgresql-client-${VERSION}
 PKGNAME-server=	postgresql-server-${VERSION}
@@ -19,10 +20,10 @@ PKGNAME-contrib=postgresql-contrib-${VERSION}
 PKGNAME-plpython=postgresql-plpython-${VERSION}
 
 CATEGORIES=	databases
-SHARED_LIBS=	ecpg		7.6 \
-		ecpg_compat	4.6 \
-		pgtypes		4.5 \
-		pq		5.7
+SHARED_LIBS=	ecpg		7.7 \
+		ecpg_compat	4.7 \
+		pgtypes		4.6 \
+		pq		6.8
 
 HOMEPAGE=	http://www.postgresql.org/
 
@@ -31,20 +32,11 @@ MAINTAINER=	Pierre-Emmanuel Andre <pea@openbsd.org>
 # BSD
 PERMIT_PACKAGE_CDROM=	Yes
 
-WANTLIB += c crypto m readline ssl termcap z
+WANTLIB += c crypto m readline ssl termcap z pthread
 
-MASTER_SITES=	http://ftp.postgresql.org/pub/source/v${VERSION}/ \
-	http://ftp5.es.postgresql.org/mirror/postgresql/source/v${VERSION}/ \
-	ftp://ftp.postgresql.org/pub/source/v${VERSION}/ \
-	ftp://ftp5.us.postgresql.org/pub/PostgreSQL/source/v${VERSION}/
-
+MASTER_SITES=	https://ftp.postgresql.org/pub/source/v${VERSION}/ \
+		ftp://ftp.postgresql.org/pub/source/v${VERSION}/
 MULTI_PACKAGES=	-docs -main -server -contrib -plpython
-
-# The -client SUBPACKAGE should build and run fine on static arches,
-# but the server requires loadable library support. Until we figure
-# out the correct incantation to not build the server on those systems,
-# simply don't build for them, yet.
-SHARED_ONLY=	Yes
 
 MAKE_FILE=	GNUmakefile
 
@@ -66,7 +58,7 @@ CONFIGURE_ARGS=	--disable-rpath --with-openssl=/usr \
 		--with-perl \
 		--with-python \
 		--with-pam=no \
-		--with-uuid=ossp \
+		--with-uuid=bsd \
 		--enable-integer-datetimes \
 		--includedir="${PREFIX}/include/postgresql" \
 		--datadir="${PREFIX}/share/postgresql" \

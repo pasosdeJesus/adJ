@@ -1,5 +1,4 @@
 @comment $OpenBSD$
-%%SHARED%%
 @bin bin/diatheke
 @bin bin/imp2gbs
 @bin bin/imp2ld
@@ -84,6 +83,7 @@ include/sword/osismorphsegmentation.h
 include/sword/osisosis.h
 include/sword/osisplain.h
 include/sword/osisredletterwords.h
+include/sword/osisreferencelinks.h
 include/sword/osisrtf.h
 include/sword/osisscripref.h
 include/sword/osisstrongs.h
@@ -186,10 +186,6 @@ include/sword/zld.h
 include/sword/zstr.h
 include/sword/ztext.h
 include/sword/zverse.h
-lib/libsword.a
-lib/libsword.la
-lib/pkgconfig/
-lib/pkgconfig/sword.pc
 share/sword/
 share/sword/locales.d/
 share/sword/locales.d/abbr.conf

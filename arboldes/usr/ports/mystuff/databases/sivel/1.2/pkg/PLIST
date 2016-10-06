@@ -1,6 +1,5 @@
-@comment $OpenBSD$
-@option no-default-conflict
 @comment $adJ$
+@conflict sivel-1.1*
 @group servicio
 ${SIVEL_RAIZ}/
 ${SIVEL_RAIZ}/.gitignore
@@ -105,8 +104,8 @@ ${SIVEL_RAIZ}/bcrypt.php
 ${SIVEL_RAIZ}/bin/
 ${SIVEL_RAIZ}/bin/.htaccess
 ${SIVEL_RAIZ}/bin/actweb.grep
-${SIVEL_RAIZ}/bin/actweb.sh
 ${SIVEL_RAIZ}/bin/agus.sh
+${SIVEL_RAIZ}/bin/borratodo-publica-web.sh
 ${SIVEL_RAIZ}/bin/copiacd.sh
 ${SIVEL_RAIZ}/bin/copiadvd.sh
 ${SIVEL_RAIZ}/bin/creaesquema.sh
@@ -117,12 +116,12 @@ ${SIVEL_RAIZ}/bin/elim-rango.sh
 ${SIVEL_RAIZ}/bin/elimcaso.sh
 ${SIVEL_RAIZ}/bin/elimcomun.sh
 ${SIVEL_RAIZ}/bin/elimus.sh
+${SIVEL_RAIZ}/bin/exporta-web.sh
 ${SIVEL_RAIZ}/bin/importacd.sh
 ${SIVEL_RAIZ}/bin/mueve.sh
 ${SIVEL_RAIZ}/bin/pgdump.sh
 ${SIVEL_RAIZ}/bin/prep-chroot.sh
 ${SIVEL_RAIZ}/bin/psql.sh
-${SIVEL_RAIZ}/bin/pubweb.sh
 ${SIVEL_RAIZ}/bin/respaldo.sh
 ${SIVEL_RAIZ}/bin/resptodositio.sh
 ${SIVEL_RAIZ}/bin/restaura.sh
@@ -367,6 +366,16 @@ ${SIVEL_RAIZ}/modulos/anexos/doc/img/
 ${SIVEL_RAIZ}/modulos/anexos/doc/img/pfichaanexos.png
 ${SIVEL_RAIZ}/modulos/anexos/estructura.sql
 ${SIVEL_RAIZ}/modulos/anexos/prepara_indices.sql
+${SIVEL_RAIZ}/modulos/bdcinep/
+${SIVEL_RAIZ}/modulos/bdcinep/Creditos.txt
+${SIVEL_RAIZ}/modulos/bdcinep/DataObjects/
+${SIVEL_RAIZ}/modulos/bdcinep/DataObjects/estructura-dataobject.ini
+${SIVEL_RAIZ}/modulos/bdcinep/DataObjects/estructura-dataobject.links.ini
+${SIVEL_RAIZ}/modulos/bdcinep/Instala.txt
+${SIVEL_RAIZ}/modulos/bdcinep/actualiza.php
+${SIVEL_RAIZ}/modulos/bdcinep/conf.php
+${SIVEL_RAIZ}/modulos/bdcinep/filtrocons.php
+${SIVEL_RAIZ}/modulos/bdcinep/tablasnyn.php
 ${SIVEL_RAIZ}/modulos/belicas/
 ${SIVEL_RAIZ}/modulos/belicas/DataObjects/
 ${SIVEL_RAIZ}/modulos/belicas/DataObjects/Antecedente_combatiente.php
@@ -464,6 +473,8 @@ ${SIVEL_RAIZ}/modulos/mapag/js/layout.js
 ${SIVEL_RAIZ}/modulos/mapag/js/mapa.js
 ${SIVEL_RAIZ}/modulos/mapag/js/municipios_autopopulate.js
 ${SIVEL_RAIZ}/modulos/mapag/mapag_misc.php
+${SIVEL_RAIZ}/modulos/mapag/vendor/
+${SIVEL_RAIZ}/modulos/mapag/vendor/.mantiene
 ${SIVEL_RAIZ}/modulos/mezcla/
 ${SIVEL_RAIZ}/modulos/mezcla/actualiza.php
 ${SIVEL_RAIZ}/modulos/mezcla/compara.php
@@ -495,6 +506,7 @@ ${SIVEL_RAIZ}/prepara_indices.sql
 ${SIVEL_RAIZ}/pruebasinterfaz/
 ${SIVEL_RAIZ}/pruebasinterfaz/basicas.selenio
 ${SIVEL_RAIZ}/pruebasinterfaz/nuevocaso.selenio
+${SIVEL_RAIZ}/recGeneral.php
 ${SIVEL_RAIZ}/referencia/
 ${SIVEL_RAIZ}/referencia/interf.txt
 ${SIVEL_RAIZ}/referencia/nyn1998_2000.sql

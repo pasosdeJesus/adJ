@@ -1,8 +1,7 @@
-# $OpenBSD: Makefile.inc,v 1.55.2.1 2014/10/22 12:23:08 robert Exp $
+# $OpenBSD: Makefile.inc,v 1.86 2016/06/25 18:55:11 sthen Exp $
+#
 
-# This port currently only works with archs supporting dynamic loading
-# and has Apache that supports DSO's.
-NOT_FOR_ARCHS=		${NO_SHARED_ARCHS}
+BROKEN-hppa=	no __sync_bool_compare_and_swap support nor asm fallback
 
 COMMENT-main=		server-side HTML-embedded scripting language
 COMMENT-fastcgi=	stand-alone FastCGI version of PHP
@@ -18,23 +17,15 @@ CATEGORIES=		lang www
 MAINTAINER=		Robert Nagy <robert@openbsd.org>
 HOMEPAGE=		http://www.php.net/
 
-SUHOSIN_V=		0.9.33
-SUHOSIN_PHPV?=		${V}
-
 MASTER_SITES=		http://se.php.net/distributions/ \
 			http://us.php.net/distributions/ \
 			http://no.php.net/distributions/ \
 			http://uk.php.net/distributions/
-MASTER_SITES0=		http://spacehopper.org/mirrors/ \
-			http://download.suhosin.org/ \
-			http://blade2k.humppa.hu/ \
-			${_MASTER_SITE_FREEBSD}
+MASTER_SITES0=		https://download.suhosin.org/
 
 # UPGRADERS: please read BOTH the PHP and Zend licenses
 # and make sure they are safe before an upgrade
 PERMIT_PACKAGE_CDROM=   Yes
-
-SHARED_ONLY=		Yes
 
 MODPHP_CONFIG_PATH=	/var/www/conf
 
@@ -47,18 +38,22 @@ CHROOT_DIR?=		/var/www
 MODULES_SUBDIR=		lib/php-${PV}/modules
 MODULES_DIR=		${LOCALBASE}/${MODULES_SUBDIR}
 
-FLAVORS=		ap2
-.if ${PV} != "5.4" && ${PV} != "5.5"
-FLAVORS+=		no_suhosin
+INI_TEMPLATES?=		development production
+
+# XXX use the bundled libtool because it needs some specific options we
+# don't have.
+USE_LIBTOOL?=		No
+
+.if ${PV} != "7.0"
+FLAVORS=		no_suhosin
 .endif
 FLAVOR?=
 
-USE_GROFF=		Yes
 PATCHORIG=		.orig.port
 CONFIGURE_STYLE=	autoconf
 AUTOCONF_VERSION?=	2.69
-CONFIGURE_ENV=          CFLAGS="${CFLAGS} -I${LOCALBASE}/include -pthread" \
-                        LDFLAGS="-L${LOCALBASE}/lib -pthread" \
+CONFIGURE_ENV+=		CFLAGS="${CFLAGS} -I${LOCALBASE}/include -pthread" \
+			LDFLAGS="-L${LOCALBASE}/lib -pthread" \
 			EXTENSION_DIR=${MODULES_DIR} \
 			lt_cv_path_SED=/usr/bin/sed
 # configure detects us as having decimal fp support but it's not built in
@@ -84,14 +79,9 @@ CONFIGURE_ARGS+=	--enable-shared \
 CONFIGURE_ARGS +=	--with-readline
 .endif
 
-.if ${FLAVOR:Map2}
+# apache module
 CONFIGURE_ARGS+=	--with-apxs2=${LOCALBASE}/sbin/apxs2
-BUILD_DEPENDS=		www/apache-httpd
-.else
-# doesn't use apache-module.port.mk so MODAPACHE_APXS not available
-CONFIGURE_ARGS+=	--with-apxs=${LOCALBASE}/sbin/apxs
-BUILD_DEPENDS=		www/apache-httpd-openbsd
-.endif
+BUILD_DEPENDS+=		www/apache-httpd
 
 # default included extensions
 CONFIGURE_ARGS+= 	--with-openssl \
@@ -114,7 +104,10 @@ CONFIGURE_ARGS+= 	--with-openssl \
 			--enable-mbstring \
 			--enable-exif \
 			--enable-zend-multibyte \
-			--enable-fastcgi
+			--enable-fastcgi \
+			--enable-fpm \
+			--with-fpm-user=www \
+			--with-fpm-group=www
 
 TEST_TARGET=		test
 TEST_FLAGS=		NO_INTERACTION=1
@@ -137,7 +130,7 @@ MULTI_PACKAGES+=	-curl
 COMMENT-curl=		curl URL library extensions for php5
 CONFIGURE_ARGS+=	--with-curl=shared,${LOCALBASE}
 LIB_DEPENDS-curl=	net/curl
-WANTLIB-curl=		pthread crypto idn ssl z curl>=2
+WANTLIB-curl=		pthread crypto idn nghttp2 ssl z curl>=2
 
 # dba
 MULTI_PACKAGES+=	-dba
@@ -150,9 +143,12 @@ WANTLIB-dba=		gdbm>=2 pthread
 MULTI_PACKAGES+=	-gd
 COMMENT-gd=		image manipulation extensions for php5
 LIB_DEPENDS-gd=		graphics/jpeg \
-			graphics/png \
-			devel/t1lib
-WANTLIB-gd=		z jpeg>=62 png>=3 t1>=5 pthread X11 Xpm freetype
+			graphics/png
+.if ${PV} != "7.0"
+LIB_DEPENDS-gd+=	devel/t1lib
+WANTLIB-gd+=		t1>=5
+.endif
+WANTLIB-gd+=		z jpeg>=62 png>=3 pthread X11 Xpm freetype
 CONFIGURE_ARGS+=	--with-gd=shared \
 			--with-jpeg-dir=${LOCALBASE} \
 			--with-png-dir=${LOCALBASE} \
@@ -174,7 +170,7 @@ COMMENT-intl=		intl library support for php5
 CONFIGURE_ARGS+=	--enable-intl=shared \
 			--with-icu-dir=${LOCALBASE}
 LIB_DEPENDS-intl=	textproc/icu4c
-WANTLIB-intl=		icudata icui18n icuio icuuc m pthread
+WANTLIB-intl=		icudata icui18n icuio icuuc pthread
 
 # imap
 MULTI_PACKAGES+=	-imap
@@ -198,33 +194,45 @@ CONFIGURE_ARGS+=	--with-mcrypt=shared,${LOCALBASE}
 LIB_DEPENDS-mcrypt=	security/libmcrypt devel/libtool,-ltdl
 WANTLIB-mcrypt=		mcrypt ltdl>=1 pthread
 
+.if ${PV} != "7.0"
 # mysql
 MULTI_PACKAGES+=	-mysql
 COMMENT-mysql=		mysql database access extensions for php5
 CONFIGURE_ARGS+=	--with-mysql=shared,${LOCALBASE}
-LIB_DEPENDS-mysql=	databases/mysql
-WANTLIB-mysql=		pthread lib/mysql/mysqlclient>=10
+LIB_DEPENDS-mysql=	databases/mariadb
+WANTLIB-mysql=		pthread lib/mysql/mysqlclient
+.endif
 
 # mysqli
 MULTI_PACKAGES+=	-mysqli
 COMMENT-mysqli=		mysql database access extensions for php5
 CONFIGURE_ARGS+=	--with-mysqli=shared,${LOCALBASE}/bin/mysql_config
-LIB_DEPENDS-mysqli=	databases/mysql
-WANTLIB-mysqli=		crypto m pthread ssl z lib/mysql/mysqlclient>=10
+LIB_DEPENDS-mysqli=	databases/mariadb
+WANTLIB-mysqli=		crypto m pthread ssl z lib/mysql/mysqlclient
 
 # odbc
 MULTI_PACKAGES+=	-odbc
 COMMENT-odbc=		odbc database access extensions for php5
 CONFIGURE_ARGS+=        --with-iodbc=shared,${LOCALBASE}
 LIB_DEPENDS-odbc=	databases/iodbc
-WANTLIB-odbc=		iodbcinst iodbc>=2 pthread
+WANTLIB-odbc=		iodbc>=2 pthread
+.if ${PV} != "5.3"
+WANTLIB-odbc+=		iodbcinst
+.endif
+
+# pcntl
+MULTI_PACKAGES+=	-pcntl
+COMMENT-pcntl=		PCNTL extensions for php5
+CONFIGURE_ARGS+=	--enable-pcntl=shared
+LIB_DEPENDS-pcntl=
+WANTLIB-pcntl=		pthread
 
 # pdo-mysql
 MULTI_PACKAGES+=	-pdo_mysql
 COMMENT-pdo_mysql=	PDO mysql database access extensions for php5
 CONFIGURE_ARGS+=	--with-pdo-mysql=shared,${LOCALBASE}
-LIB_DEPENDS-pdo_mysql=	databases/mysql
-WANTLIB-pdo_mysql=	crypto m pthread ssl z lib/mysql/mysqlclient>=10
+LIB_DEPENDS-pdo_mysql=	databases/mariadb
+WANTLIB-pdo_mysql=	crypto m pthread ssl z lib/mysql/mysqlclient
 
 # pdo-pgsql
 MULTI_PACKAGES+=	-pdo_pgsql
@@ -259,7 +267,7 @@ MULTI_PACKAGES+=	-soap
 COMMENT-soap=		SOAP functions for php5
 CONFIGURE_ARGS+=	--enable-soap=shared,${LOCALBASE}
 LIB_DEPENDS-soap=	textproc/libxml
-WANTLIB-soap=		${MODLIBICONV_WANTLIB} m pthread z xml2>=8
+WANTLIB-soap=		iconv m pthread z xml2>=8
 
 # snmp
 MULTI_PACKAGES+=	-snmp
@@ -268,6 +276,15 @@ CONFIGURE_ARGS+=	--with-snmp=shared,${LOCALBASE} --enable-ucd-snmp-hack
 LIB_DEPENDS-snmp=	net/net-snmp
 WANTLIB-snmp=		crypto m netsnmp>=6.2 pthread
 
+.if ${PV} != "7.0"
+# sybase-ct
+MULTI_PACKAGES+=	-sybase_ct
+COMMENT-sybase_ct=	sybase database access extensions for php5
+CONFIGURE_ARGS+=	--with-sybase-ct=shared,${LOCALBASE}
+LIB_DEPENDS-sybase_ct=	databases/freetds
+WANTLIB-sybase_ct=	ct pthread
+.endif
+
 # pdo-dblib
 MULTI_PACKAGES+=	-pdo_dblib
 COMMENT-pdo_dblib=	PDO DB-LIB support for php5
@@ -275,12 +292,14 @@ CONFIGURE_ARGS+=        --with-pdo-dblib=shared,${LOCALBASE}
 LIB_DEPENDS-pdo_dblib=	databases/freetds
 WANTLIB-pdo_dblib=	sybdb>=6 pthread
 
+.if ${PV} != "7.0"
 # mssql
 MULTI_PACKAGES+=	-mssql
 COMMENT-mssql=		microsoft sql access extensions for php5
 CONFIGURE_ARGS+=        --with-mssql=shared,${LOCALBASE}
 LIB_DEPENDS-mssql=	databases/freetds
 WANTLIB-mssql=		sybdb>=6 pthread
+.endif
 
 # tidy
 MULTI_PACKAGES+=	-tidy
@@ -294,14 +313,14 @@ MULTI_PACKAGES+=	-xmlrpc
 COMMENT-xmlrpc=		XML RPC functions for php5
 CONFIGURE_ARGS+=	--with-xmlrpc=shared
 LIB_DEPENDS-xmlrpc=	textproc/libxml
-WANTLIB-xmlrpc=		${MODLIBICONV_WANTLIB} m z xml2>=8 pthread
+WANTLIB-xmlrpc=		iconv m z xml2>=8 pthread
 
 # xsl
 MULTI_PACKAGES+=	-xsl
 COMMENT-xsl=		XSL functions for php5
 CONFIGURE_ARGS+=	--with-xsl=shared --enable-dom
 LIB_DEPENDS-xsl=	textproc/libxslt
-WANTLIB-xsl=		${MODLIBICONV_WANTLIB} m xml2 z xslt>=3 exslt pthread
+WANTLIB-xsl=		iconv m xml2 z xslt>=3 exslt pthread
 
 # zip
 MULTI_PACKAGES+=	-zip
@@ -311,36 +330,35 @@ LIB_DEPENDS-zip=
 WANTLIB-zip=		z pthread
 
 # some variables to substitute
-SUBST_VARS=	MODPHP_CONFIG_PATH PV ^MODULE_NAME
+SUBST_VARS=	MODPHP_CONFIG_PATH SV PV ^MODULE_NAME
 PHP_VERSION=	${V}
+SV=		${PV:S/.//}
 
 .for i in TRUEPREFIX MODULES_DIR PHP_VERSION APACHE_MODULE_DIR
 PHPXS_SUBST+= -e 's,${i},${${i}},'
 .endfor
 
-MODULES=		converters/libiconv devel/gettext
+WANTLIB-main+=		c crypto iconv intl lzma m pthread ssl xml2>=8 z
+WANTLIB-main+=		ncurses readline stdc++
 
-WANTLIB-main+=		c crypto m pthread ssl xml2>=8 z ${MODGETTEXT_WANTLIB}
 # php 5.4/5.5 : WANTLIB-main += stdc++
 WANTLIB-fastcgi=	${WANTLIB-main}
-LIB_DEPENDS-main=	textproc/libxml
-RUN_DEPENDS-main=	${MODGETTEXT_RUN_DEPENDS} \
-			mail/femail,-chroot
+LIB_DEPENDS-main=	devel/gettext \
+			textproc/libxml
+RUN_DEPENDS-main=	mail/femail,-chroot
 LIB_DEPENDS-fastcgi=	${LIB_DEPENDS-main}
+RUN_DEPENDS-fastcgi=
 
-.if ${PV} != "5.4" && ${PV} != "5.5"
-.  if ${FLAVOR:Mno_suhosin}
-SUPDISTFILES=		suhosin-${SUHOSIN_V}.tgz:0 \
-			suhosin-patch-${SUHOSIN_PHPV}-${SUHOSIN_P_V}.patch.gz:0
-.  else
-DISTFILES+=		suhosin-${SUHOSIN_V}.tgz:0
-PATCHFILES=		suhosin-patch-${SUHOSIN_PHPV}-${SUHOSIN_P_V}.patch.gz:0
-PATCH_DIST_STRIP=	-p1
+SUHOSIN_V=		0.9.38
+.if ${FLAVOR:Mno_suhosin} || ${PV} == "7.0"
+SUPDISTFILES=		suhosin-${SUHOSIN_V}.tar.gz:0
+.else
+DISTFILES+=		suhosin-${SUHOSIN_V}.tar.gz:0
+PATCH_LIST=		patch-* suhosin-*
 CONFIGURE_ARGS+=	--enable-suhosin
 
 pre-patch:
 	@mv ${WRKDIR}/suhosin-${SUHOSIN_V} ${WRKSRC}/ext/suhosin
-.  endif
 .endif
 
 pre-fake:
@@ -356,60 +374,59 @@ pre-configure:
 		${WRKSRC}/scripts/phpize.in \
 		${WRKSRC}/scripts/php-config.in
 
-.if ${FLAVOR:Map2}
-MULTI_PACKAGES :=       ${MULTI_PACKAGES:N-fpm:N-fastcgi}
-.endif
-
-.for i in ${MULTI_PACKAGES:N-main:N-fastcgi:N-fpm:N-pcntl:S/-//g}
+.for i in ${MULTI_PACKAGES:N-main:N-fastcgi:S/-//g}
 MODULE_NAME-${i}=	${i}
 DESCR-${i}=		${.CURDIR}/../files/DESCR-${i}
-MESSAGE-${i}=		${.CURDIR}/../files/MESSAGE-ext
-UNMESSAGE-${i}=		${.CURDIR}/../files/UNMESSAGE-ext
 PKGNAME-${i}=		php-${i}-${V}
-# don't build separate plugins for -ap2
-FULLPKGNAME-${i}=	php-${i}-${V}${FLAVOR_EXT:S/-ap2//}
-FULLPKGPATH-${i}=	${PKGPATH},-${i}${FLAVOR_EXT:S/-ap2//:S/-/,/g}
-.if ${V:M5.3*}
-PKGSPEC-${i}=		php-${i}->=5.3,<5.4
-.else if ${V:M5.4*}
+.if ${V:M5.4*}
 PKGSPEC-${i}=		php-${i}->=5.4,<5.5
-.else if ${V:M5.5*}
+.elif ${V:M5.5*}
 PKGSPEC-${i}=		php-${i}->=5.5,<5.6
+.elif ${V:M5.6*}
+PKGSPEC-${i}=		php-${i}->=5.6,<5.7
+.elif ${V:M7.0*}
+PKGSPEC-${i}=		php-${i}->=7.0,<7.1
 .endif
 RUN_DEPENDS-${i}+=	php-${V}:lang/php/${PV}
 .endfor
 
 DESCR-main=		${.CURDIR}/../files/DESCR-main
 DESCR-fastcgi=		${.CURDIR}/../files/DESCR-fastcgi
-MESSAGE-main=		${.CURDIR}/../files/MESSAGE-main
-UNMESSAGE-main=		${.CURDIR}/../files/UNMESSAGE-main
 
 post-install:
-	${INSTALL_DATA} ${WRKBUILD}/.libs/libphp5.so \
+	${SUBST_DATA} ${.CURDIR}/../files/README-main \
+		${PREFIX}/share/doc/pkg-readmes/${FULLPKGNAME-main}
+	${INSTALL_DATA} ${WRKBUILD}/.libs/libphp${PV:C/\.[0-9]$//}.so \
 		${PREFIX}/${APACHE_MODULE_SUBDIR}/
 	${INSTALL_DATA_DIR} ${WRKINST}/${CHROOT_DIR}/conf/php-${PV}.sample
 	${INSTALL_DATA_DIR} ${PREFIX}/share/examples/php-${PV}
 	${INSTALL_PROGRAM} ${WRKBUILD}/sapi/cli/php ${PREFIX}/bin/php-${PV}
 	${INSTALL_PROGRAM} ${WRKBUILD}/sapi/cgi/php-cgi ${PREFIX}/bin/php-fastcgi-${PV}
-
-.if ${V:M5.3*} || ${V:M5.4*} || ${V:M5.5*}
 	${INSTALL_PROGRAM} ${WRKBUILD}/sapi/fpm/php-fpm ${PREFIX}/sbin/php-fpm-${PV}
 	${INSTALL_MAN} ${WRKBUILD}/sapi/fpm/php-fpm.8 ${PREFIX}/man/man8/php-fpm-${PV}.8
 	${INSTALL_DATA} ${WRKBUILD}/sapi/fpm/php-fpm.conf \
+		${PREFIX}/share/examples/php-${PV}/php-fpm.conf
+.if ${PV} == "7.0"
+	cat ${WRKBUILD}/sapi/fpm/www.conf >> \
 		${PREFIX}/share/examples/php-${PV}/php-fpm.conf
 .endif
 
 	${INSTALL_DATA} ${.CURDIR}/../files/php.conf \
 		${PREFIX}/share/examples/php-${PV}/php.conf
-	@perl -pi -e "s,!!PREFIX!!,${TRUEPREFIX},g;s,!!PV!!,${PV},g" \
+	@perl -pi -e "s,!!PREFIX!!,${TRUEPREFIX},g;s,!!PV!!,${PV},g;s,!!MV!!,${PV:R},g" \
 		${PREFIX}/share/examples/php-${PV}/php.conf
 
-.for m in ${MULTI_PACKAGES:N-main:N-fastcgi:N-fpm:S/-//g}
+.for m in ${MULTI_PACKAGES:N-main:N-fastcgi:S/-//g}
 	${INSTALL_DATA} ${WRKBUILD}/modules/${m}.so \
 		${PREFIX}/${MODULES_SUBDIR}/${m}.so
 	echo "extension=${m}.so" > \
 		${PREFIX}/share/examples/php-${PV}/${m}.ini
 .endfor
+	if [ -f ${WRKBUILD}/modules/opcache.so ]; then \
+		${INSTALL_DATA} ${WRKBUILD}/modules/opcache.so \
+		    ${PREFIX}/${MODULES_SUBDIR}/opcache.so; \
+		echo "zend_extension=opcache.so" > \
+		    ${PREFIX}/share/examples/php-${PV}/opcache.ini; fi
 	${INSTALL_DATA_DIR} ${WRKINST}/${CHROOT_DIR}/etc
 	echo "www:*:67:67::0:0:dummy user to appease c-client:/nonexistent:/sbin/nologin" > \
 		${WRKINST}/${CHROOT_DIR}/etc/master.passwd.imap
