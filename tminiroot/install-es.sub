@@ -2033,7 +2033,7 @@ __EOT
 }
 do_install(){
 	# Ask for/set the system hostname and add the hostname specific siteXX set.
-	ask_until "System hostname? (short form, e.g. 'foo')" "$(hostname -s)"
+	ask_until "¿Nombre de la máquina? (forma corta, e.g. 'foo')" "$(hostname -s)"
 	[[ ${resp%%.*} != $(hostname -s) ]] && hostname "$resp"
 	THESETS="$THESETS site$VERSION-$(hostname -s).tgz"
 
@@ -2049,16 +2049,16 @@ do_install(){
 	echo
 
 	while :; do
-		askpassword "Password for root account?"
+		askpassword "¿Clave para root?"
 		_rootpass="$_password"
 		[[ -n "$_password" ]] && break
-		echo "The root password must be set."
+		echo "Debe establecer una contraseña para root."
 	done
 
 	# Ask for the root user public ssh key during autoinstall.
 	rootkey=
 	if $AUTO; then
-		ask "Public ssh key for root account?" none
+		ask "¿Llave ssh pública para la cuenta root?" none
 		[[ $resp != none ]] && rootkey=$resp
 	fi
 
@@ -2092,9 +2092,9 @@ do_install(){
 		else
 			# Force the user to think and type in a disk name by
 			# making 'done' the default choice.
-			ask_which "disk" "do you wish to initialize" \
-				'$(get_dkdevs_uninitialized)' done
-			[[ $resp == done ]] && break
+			ask_which "disco" "desea inicializar" \
+				'$(get_dkdevs_uninitialized)' listo
+			[[ $resp == listo ]] && break
 		fi
 		_disk=$resp
 		configure_disk $_disk || continue
@@ -2177,7 +2177,7 @@ do_install(){
 	if _time=$(http_time) && _now=$(date +%s) &&
 		(( _now - _time > 120 || _time - _now > 120 )); then
 		_tz=/mnt/usr/share/zoneinfo/$TZ
-		if ask_yn "Time appears wrong.  Set to '$(TZ=$_tz date -r "$(http_time)")'?" yes; then
+		if ask_yn "La hora parece errada. Establecerla como '$(TZ=$_tz date -r "$(http_time)")'?" si; then
 			# We do not need to specify TZ below since both date
 			# invocations use the same one.
 			date $(date -r "$(http_time)" "+%Y%m%d%H%M.%S") >/dev/null
@@ -2201,7 +2201,7 @@ do_install(){
 		/mnt/etc/ttys >/tmp/ttys
 	mv /tmp/ttys /mnt/etc/ttys
 
-	echo -n "Saving configuration files..."
+	echo -n "Guardando configuración..."
 	# Save any leases obtained during install.
 	(cd /var/db; for _f in dhclient.leases.*; do
 		[[ -f $_f ]] && mv $_f /mnt/var/db/.
@@ -2243,7 +2243,7 @@ do_install(){
 		[[ -f $_f && -s $_f ]] && mv $_f /mnt/etc/.
 	done)
 
-	echo "done."
+	echo "#_sldone"
 
 	# Apply configuration settings based on information from questions().
 	apply
@@ -2293,20 +2293,20 @@ do_upgrade(){
 	# Have the user confirm that $ROOTDEV is the root filesystem.
 	get_rootinfo
 	while :; do
-		ask "Root filesystem?" $ROOTDEV
+		ask "¿Subpartición raiz?" $ROOTDEV
 		resp=${resp##*/}
 		[[ -b /dev/$resp ]] && break
-		echo "$resp is not a block device."
+		echo "$resp no es dispositivo por bloques."
 	done
 	ROOTDEV=$resp
 
-	echo -n "Checking root filesystem (fsck -fp /dev/$ROOTDEV)..."
-	fsck -fp /dev/$ROOTDEV >/dev/null 2>&1 || { echo "FAILED."; exit; }
-	echo "OK."
+	echo -n "Revisando subpartición raíz (fsck -fp /dev/$ROOTDEV)..."
+	fsck -fp /dev/$ROOTDEV >/dev/null 2>&1 || { echo "FALLÓ."; exit; }
+	echo "Listo."
 
-	echo -n "Mounting root filesystem (mount -o ro /dev/$ROOTDEV /mnt)..."
-	mount -o ro /dev/$ROOTDEV /mnt || { echo "FAILED."; exit; }
-	echo "OK."
+	echo -n "Montando subpartición raiz... (mount -o ro /dev/$ROOTDEV /mnt)..."
+	mount -o ro /dev/$ROOTDEV /mnt || { echo "FALLÓ."; exit; }
+	echo "Listo."
 
 	# The fstab, hosts and myname files are required.
 	for _f in /mnt/etc/{fstab,hosts,myname}; do
@@ -2329,7 +2329,7 @@ do_upgrade(){
 	check_fs
 
 	# Mount filesystems in /etc/fstab.
-	umount /mnt || { echo "Can't umount $ROOTDEV!"; exit; }
+	umount /mnt || { echo "No puede montar $ROOTDEV!"; exit; }
 	mount_fs
 
 	# Feed the random pool some entropy before we read from it.

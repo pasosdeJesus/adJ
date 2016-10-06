@@ -2241,7 +2241,7 @@ do_install(){
 		[[ -f $_f && -s $_f ]] && mv $_f /mnt/etc/.
 	done)
 
-	echo "done."
+	echo "#_sldone"
 
 	# Apply configuration settings based on information from questions().
 	apply
