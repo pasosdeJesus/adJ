@@ -196,10 +196,9 @@ exit 1;
 umount /mnt/cdrom 2> /dev/null > /dev/null
 mount | grep "/mnt/cdrom" > /dev/null 2> /dev/null
 if (test "$?" = "0") then {
-echo "No puede desmontarse el CDROM" >> /var/www/tmp/inst-adJ.bitacora ;
-echo "Desmontelo y vuelva a ejecutar este archivo de comandos" | tee -a 
-/var/www/tmp/inst-adJ.bitacora;
-exit 1;
+	echo "No puede desmontarse el CDROM" | tee -a /var/www/tmp/inst-adJ.bitacora;
+	echo "Se recomienda detener (Ctrl-C) desmontar y volver a ejecutar este archivo de comandos" | tee -a /var/www/tmp/inst-adJ.bitacora;
+	read;
 } fi;
 
 padJ=`stat -f "%Su" /mnt/cdrom 2> /dev/null`
@@ -1557,8 +1556,8 @@ if (test ! -S "$sockpsql/.s.PGSQL.5432" -a "$vpi" != "") then {
   echo "* Detectando socket de PostgreSQL en $sockpsql" >> /var/www/tmp/inst-adJ.bitacora;
   if (test ! -S "$sockpsql/.s.PGSQL.5432") then {
     echo "* Tampoco se encontró socket de PostgreSQL en $sockpsql";
-    echo "* Puede ejecutar especificando la ruta del socket de PostgreSQL en variable SOCKPSQL";
-    exit 1;
+    echo "* Se recomienda detener (Ctrl-C) y ejecutar nuevamente especificando la ruta del socket de PostgreSQL en variable SOCKPSQL";
+    read;
   } fi;
 } fi;
 
@@ -2093,7 +2092,7 @@ w
 q
 EOF
 	ed /etc/php-fpm.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
-,s/; *listen.*/listen = \/var\/www\/var\/run\/php-fpm.sock/g
+,s/; *listen *=.*/listen = \/var\/www\/var\/run\/php-fpm.sock/g
 w
 q
 EOF
