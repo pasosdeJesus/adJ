@@ -2,8 +2,8 @@
 Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y que anhelamos sea usada por Jesús durante el Milenio.
 
-###Versión: 6.0a1
-Fecha de publicación: 4/Oct/2016 
+###Versión: 6.0b1
+Fecha de publicación: 12/Dic/2016 
 
 Puede ver novedades respecto a OpenBSD en:
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_0/Novedades_OpenBSD.md>
@@ -12,7 +12,7 @@ Puede ver novedades respecto a OpenBSD en:
 
 ###KERNEL Y SISTEMA BASE
 
-* Parches al sistema base hasta el 3.Oct.2016, que cierran la falla de 
+* Parches al sistema base hasta el 3.Dic.2016, que cierran la falla de 
   seguridad y las 9 de robustez resueltas para fuentes de OpenBSD 6.0 
   descritas en <http://www.openbsd.org/errata60.html>
   Los binarios distribuidos de OpenBSD 6.0 no resuelven estas fallas. 
@@ -21,31 +21,31 @@ Puede ver novedades respecto a OpenBSD en:
   paquetes que no son portes de OpenBSD. Ver detalles en sección 
   PAQUETES EXCLUSIVOS DE ADJ.
 
-Entre las novedades reportadas en las `Notas de publicación de OpenBSD 6.0' 
+Entre las novedades reportadas en las __Notas de publicación de OpenBSD 6.0__
 destacamos las siguientes relacionadas con amd64:
 
 * Controladores ampliados o mejorados para amd64
 	* Red: 
-		* Ethernet: 
-		* Inalámbrico: 
-	* Interfaces con usuario: 
+		* Ethernet: ure que soporta dispositivos USB Ethernet RealTek RTL8152 10/100. Mejoras a axen que soporta USB Ethernet AX88179 10/100/Gigabit. Mejoras a dc que soporta DEC/Intel 21140/21142/21143/21145
+		* Inalámbrico: iwm ahora soporta dispositivos con chip Intel Wireless 3165 y 8260. Mejoras a ral que soporta Ralink Technology/MediaTek
+		* Otros: umb que es interfaz usb a redes celulares, opera por ejemplo con Ericsson H5321gw y N5321gw, Medion Mobile S4222 (MediaTek OEM), Sierra Wireless EM7455, Sierra Wireless EM8805, Sierra Wireless MC8305. Mejoras a controladores de memorias SD.
+
+	* Interfaces con usuario: utvfu controla dispositivos para capturar audio y video USBTV007. Interfaz multi-touch para controlador wsmouse
 	* Video: 
-	* Temperatura, sensores y otros: 
-	* Virtualización:
-	* 
+	* Virtualización: Soporta MSI-X en dispositivo virtio. El controlador xen ahora soporta configuración domU bajo el sistema operativo Qubes.
+	* Temperatura, sensores y otros: ACPI de más SoCs:chvgipio, bytgpio. Reloj: maxrtc, pcfrtc. 
 
 * Mejoras a herramientas de Red
-	* 
+	* Mejorada pila inalámbrica
 
 * Seguridad
-	* 
-	* OpenSSH .... 
-	* LibreSSL ...
+	* Se ha ampliado la protección W^X a programas y sistemas de archivo, si un sistema de archivo debe permitir escritura y ejecución (por ejemplo /usr/local o la subpartición que lo contenga) debe marcarse en /etc/fstab con la opción wxallowed.  Se recomienda dejar /usr/local como subpartición separada.
+	* Protecciones y medidas para evitar ataques de inundación SYN 
+	* OpenSSH 7.3: no acepta claves de más de 1024 caracteres para evitar uso excesivo de la CPU. 
+	* LibreSSL 2.4.2 que soporta cifrado ChaCha20-Poly1305. Resuelve CVE-2016-2105 a CVE-2016-2109
 
 * Otros
-	* 
-	* 
-	*
+	* Nueva herramienta proot en árbol de portes para construir paquetes en una jaula chroot
 
 * El sistema base incluye mejoras a componentes auditados y mejorados 
   como ```Xenocara``` (```Xorg 7.7```), ```gcc``` 4.2.1, ```perl``` 5.20.3, 
@@ -72,9 +72,6 @@ adJ y OpenBSD 6.0:
   <http://sivel.sourceforge.net/1.2/actualizacion-sivel.html#actualizaciondeunounoaunodos>
 * ```SIVeL 2.0b1p1``` Versión beta 1 de SIVeL 2. Escrita sobre Ruby on Rails
   puede correr en jaula chroot /var/www como usuario www:www
-* Nuevo porte y paquete ```htop```
-* Porte ```colorls``` mejorado para soportar locale en ordenamiento alfábetico,
-  funciona bien en español.
 * PostgreSQL 9.5.4 recompilado para con soporte UTF-8 y ordenamientos 
   alfabéticos en español.  Desde adJ 5.8 socket reubicado por omisión 
   de ```/var/www/tmp``` a ```/var/www/var/run/postgresql```.
@@ -211,8 +208,8 @@ Para mejorar el financiamiento de OpenBSD, donamos y aportamos trabajo
 voluntario a ese proyecto.  Por lo mismo publicamos adJ varios meses después 
 de la respectiva versión de OpenBSD.
 
-Favor ver más novedades de adJ 6.0 en 
-<https://github.com/pasosdeJesus/adJ/blob/v6.0/Novedades.md>
+Favor ver novedades de adJ 6.0 respecto a OpenBSD en 
+<https://github.com/pasosdeJesus/adJ/blob/v6.0/Novedades_OpenBSD.md>
 
 
 
