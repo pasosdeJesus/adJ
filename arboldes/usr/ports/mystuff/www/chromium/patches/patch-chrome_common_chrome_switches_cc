@@ -1,12 +1,12 @@
-$OpenBSD: patch-chrome_common_chrome_switches_cc,v 1.18 2016/01/29 16:56:10 robert Exp $
---- chrome/common/chrome_switches.cc.orig.port	Wed Jan 27 18:00:46 2016
-+++ chrome/common/chrome_switches.cc	Thu Jan 28 07:31:23 2016
-@@ -1168,7 +1168,7 @@ const char kHelpShort[]                     = "h";
- const char kPasswordStore[]                 = "password-store";
+$OpenBSD: patch-chrome_common_chrome_switches_cc,v 1.24 2016/10/26 06:22:08 robert Exp $
+--- chrome/common/chrome_switches.cc.orig.port	Wed Oct 19 13:42:00 2016
++++ chrome/common/chrome_switches.cc	Wed Oct 19 13:42:17 2016
+@@ -1277,7 +1277,7 @@ const char kAllowNaClSocketAPI[]            = "allow-n
+ const char kEnableWaylandServer[] = "enable-wayland-server";
  #endif
  
--#if defined(OS_LINUX) && !defined(OS_CHROMEOS)
-+#if (defined(OS_LINUX) || defined(OS_BSD)) && !defined(OS_CHROMEOS)
- // Triggers migration of user data directory to another directory
- // specified as a parameter. The migration is done under singleton lock,
- // and sanity checks are made to avoid corrupting the profile.
+-#if defined(OS_WIN) || defined(OS_LINUX)
++#if defined(OS_WIN) || defined(OS_LINUX) || defined(OS_BSD)
+ extern const char kDisableInputImeAPI[] = "disable-input-ime-api";
+ extern const char kEnableInputImeAPI[] = "enable-input-ime-api";
+ #endif

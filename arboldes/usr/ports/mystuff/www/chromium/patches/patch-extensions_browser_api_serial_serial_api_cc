@@ -1,16 +1,16 @@
-$OpenBSD: patch-extensions_browser_api_serial_serial_api_cc,v 1.1 2014/10/13 06:49:19 robert Exp $
---- extensions/browser/api/serial/serial_api.cc.orig.port	Fri Oct 10 16:15:30 2014
-+++ extensions/browser/api/serial/serial_api.cc	Fri Oct 10 16:15:52 2014
-@@ -85,11 +85,13 @@ bool SerialGetDevicesFunction::Prepare() {
+$OpenBSD: patch-extensions_browser_api_serial_serial_api_cc,v 1.5 2016/07/31 13:11:44 robert Exp $
+--- extensions/browser/api/serial/serial_api.cc.orig.port	Thu Jul 21 10:39:40 2016
++++ extensions/browser/api/serial/serial_api.cc	Thu Jul 21 10:39:53 2016
+@@ -86,11 +86,13 @@ bool SerialGetDevicesFunction::Prepare() {
  void SerialGetDevicesFunction::Work() {
    DCHECK_CURRENTLY_ON(BrowserThread::FILE);
  
 +#if !defined(OS_BSD)
-   scoped_ptr<device::SerialDeviceEnumerator> enumerator =
+   std::unique_ptr<device::SerialDeviceEnumerator> enumerator =
        device::SerialDeviceEnumerator::Create();
    mojo::Array<device::serial::DeviceInfoPtr> devices = enumerator->GetDevices();
    results_ = serial::GetDevices::Results::Create(
-       devices.To<std::vector<linked_ptr<serial::DeviceInfo> > >());
+       devices.To<std::vector<serial::DeviceInfo>>());
 +#endif
  }
  

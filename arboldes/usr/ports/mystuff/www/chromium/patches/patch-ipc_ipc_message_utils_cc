@@ -1,0 +1,12 @@
+$OpenBSD: patch-ipc_ipc_message_utils_cc,v 1.4 2016/09/01 16:28:11 robert Exp $
+--- ipc/ipc_message_utils.cc.orig.port	Thu Sep  1 00:03:32 2016
++++ ipc/ipc_message_utils.cc	Thu Sep  1 11:12:23 2016
+@@ -423,7 +423,7 @@ void ParamTraits<unsigned int>::Log(const param_type& 
+   l->append(base::UintToString(p));
+ }
+ 
+-#if defined(OS_WIN) || defined(OS_LINUX) || \
++#if defined(OS_WIN) || defined(OS_LINUX) || defined(OS_BSD) || \
+     (defined(OS_ANDROID) && defined(ARCH_CPU_64_BITS))
+ void ParamTraits<long>::Log(const param_type& p, std::string* l) {
+   l->append(base::Int64ToString(static_cast<int64_t>(p)));

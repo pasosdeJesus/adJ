@@ -1,12 +1,12 @@
-$OpenBSD: patch-content_renderer_render_thread_impl_cc,v 1.8 2016/01/23 18:49:31 robert Exp $
---- content/renderer/render_thread_impl.cc.orig.port	Wed Jan 20 21:01:21 2016
-+++ content/renderer/render_thread_impl.cc	Fri Jan 22 19:58:58 2016
-@@ -788,7 +788,7 @@ void RenderThreadImpl::Init() {
-   are_image_decode_tasks_enabled_ = num_raster_threads > 1;
- 
-   base::SimpleThread::Options thread_options;
--#if defined(OS_ANDROID) || defined(OS_LINUX)
-+#if defined(OS_ANDROID) || defined(OS_LINUX) || defined(OS_BSD)
-   if (!command_line.HasSwitch(
-           switches::kUseNormalPriorityForTileTaskWorkerThreads)) {
-     thread_options.set_priority(base::ThreadPriority::BACKGROUND);
+$OpenBSD: patch-content_renderer_render_thread_impl_cc,v 1.14 2016/10/26 06:22:08 robert Exp $
+--- content/renderer/render_thread_impl.cc.orig.port	Wed Oct 12 21:02:59 2016
++++ content/renderer/render_thread_impl.cc	Wed Oct 19 12:56:05 2016
+@@ -1455,7 +1455,7 @@ media::GpuVideoAcceleratorFactories* RenderThreadImpl:
+   const bool enable_video_accelerator =
+       !cmd_line->HasSwitch(switches::kDisableAcceleratedVideoDecode);
+   const bool enable_gpu_memory_buffer_video_frames =
+-#if defined(OS_MACOSX) || defined(OS_LINUX)
++#if defined(OS_MACOSX) || defined(OS_LINUX) || defined(OS_BSD)
+       !cmd_line->HasSwitch(switches::kDisableGpuMemoryBufferVideoFrames) &&
+       !cmd_line->HasSwitch(switches::kDisableGpuCompositing) &&
+       !gpu_channel_host->gpu_info().software_rendering;

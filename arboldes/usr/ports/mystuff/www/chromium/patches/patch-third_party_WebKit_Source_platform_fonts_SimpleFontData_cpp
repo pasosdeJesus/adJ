@@ -1,7 +1,7 @@
-$OpenBSD: patch-third_party_WebKit_Source_platform_fonts_SimpleFontData_cpp,v 1.5 2016/01/23 18:49:31 robert Exp $
---- third_party/WebKit/Source/platform/fonts/SimpleFontData.cpp.orig.port	Wed Jan 20 21:01:25 2016
-+++ third_party/WebKit/Source/platform/fonts/SimpleFontData.cpp	Fri Jan 22 19:58:59 2016
-@@ -50,7 +50,7 @@ namespace blink {
+$OpenBSD: patch-third_party_WebKit_Source_platform_fonts_SimpleFontData_cpp,v 1.8 2016/09/01 16:28:11 robert Exp $
+--- third_party/WebKit/Source/platform/fonts/SimpleFontData.cpp.orig.port	Thu Sep  1 00:03:48 2016
++++ third_party/WebKit/Source/platform/fonts/SimpleFontData.cpp	Thu Sep  1 11:12:24 2016
+@@ -51,7 +51,7 @@ namespace blink {
  const float smallCapsFontSizeMultiplier = 0.7f;
  const float emphasisMarkFontSizeMultiplier = 0.5f;
  
@@ -10,16 +10,16 @@ $OpenBSD: patch-third_party_WebKit_Source_platform_fonts_SimpleFontData_cpp,v 1.
  // This is the largest VDMX table which we'll try to load and parse.
  static const size_t maxVDMXTableSize = 1024 * 1024; // 1 MB
  #endif
-@@ -103,7 +103,7 @@ void SimpleFontData::platformInit()
+@@ -102,7 +102,7 @@ void SimpleFontData::platformInit()
      int vdmxAscent = 0, vdmxDescent = 0;
      bool isVDMXValid = false;
  
 -#if OS(LINUX) || OS(ANDROID)
 +#if OS(LINUX) || OS(ANDROID) || OS(OPENBSD)
      // Manually digging up VDMX metrics is only applicable when bytecode hinting using FreeType.
-     // With GDI, the metrics will already have taken this into account (as needed).
      // With DirectWrite or CoreText, no bytecode hinting is ever done.
-@@ -137,7 +137,7 @@ void SimpleFontData::platformInit()
+     // This code should be pushed into FreeType (hinted font metrics).
+@@ -135,7 +135,7 @@ void SimpleFontData::platformInit()
      } else {
          ascent = SkScalarRoundToInt(-metrics.fAscent);
          descent = SkScalarRoundToInt(metrics.fDescent);

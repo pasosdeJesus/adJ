@@ -1,0 +1,12 @@
+$OpenBSD: patch-tools_perf_chrome_telemetry_build_BUILD_gn,v 1.2 2016/09/01 16:28:11 robert Exp $
+--- tools/perf/chrome_telemetry_build/BUILD.gn.orig.port	Thu Sep  1 00:03:52 2016
++++ tools/perf/chrome_telemetry_build/BUILD.gn	Thu Sep  1 11:12:25 2016
+@@ -52,7 +52,7 @@ group("telemetry_chrome_test") {
+     data_deps += [ "//chrome:reorder_imports" ]
+   }
+ 
+-  if (is_linux) {
++  if (is_linux && !is_openbsd) {
+     data_deps += [
+       "//tools/xdisplaycheck",
+       "//breakpad:dump_syms($host_toolchain)",

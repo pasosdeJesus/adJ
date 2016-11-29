@@ -3,7 +3,6 @@
 // found in the LICENSE file.
 
 #include "base/logging.h"
-#include "media/audio/audio_parameters.h"
 #include "media/audio/audio_manager_base.h"
 #include "media/audio/sndio/sndio_output.h"
 
@@ -148,7 +147,7 @@ void SndioAudioOutputStream::RealTimeThread(void) {
     pthread_mutex_unlock(&mutex);
 
     // Get data to play
-    count = source->OnMoreData(audio_bus.get(), hw_delay);
+    count = source->OnMoreData(audio_bus.get(), hw_delay, 0);
     audio_bus->ToInterleaved(count, params.bits_per_sample() / 8, buffer);
     if (count == 0) {
       // We have to submit something to the device

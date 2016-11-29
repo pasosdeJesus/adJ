@@ -1,7 +1,7 @@
-$OpenBSD: patch-base_process_process_metrics_openbsd_cc,v 1.5 2015/01/22 11:16:40 robert Exp $
---- base/process/process_metrics_openbsd.cc.orig.port	Wed Dec  3 03:13:19 2014
-+++ base/process/process_metrics_openbsd.cc	Sat Dec  6 12:13:17 2014
-@@ -4,8 +4,19 @@
+$OpenBSD: patch-base_process_process_metrics_openbsd_cc,v 1.7 2016/10/26 06:22:07 robert Exp $
+--- base/process/process_metrics_openbsd.cc.orig.port	Wed Oct 12 21:02:53 2016
++++ base/process/process_metrics_openbsd.cc	Wed Oct 19 12:55:56 2016
+@@ -4,10 +4,21 @@
  
  #include "base/process/process_metrics.h"
  
@@ -15,13 +15,15 @@ $OpenBSD: patch-base_process_process_metrics_openbsd_cc,v 1.5 2015/01/22 11:16:4
 +#include "base/sys_info.h"
 +#include "base/threading/thread_restrictions.h"
 +
+ #include <stddef.h>
+ #include <stdint.h>
  #include <sys/param.h>
  #include <sys/sysctl.h>
 +#include <sys/vmmeter.h>
  
- namespace base {
- 
-@@ -15,20 +26,27 @@ ProcessMetrics* ProcessMetrics::CreateProcessMetrics(P
+ #include "base/macros.h"
+ #include "base/memory/ptr_util.h"
+@@ -22,20 +33,27 @@ std::unique_ptr<ProcessMetrics> ProcessMetrics::Create
  }
  
  size_t ProcessMetrics::GetPagefileUsage() const {
@@ -54,7 +56,7 @@ $OpenBSD: patch-base_process_process_metrics_openbsd_cc,v 1.5 2015/01/22 11:16:4
  }
  
  size_t ProcessMetrics::GetPeakPagefileUsage() const {
-@@ -36,20 +54,28 @@ size_t ProcessMetrics::GetPeakPagefileUsage() const {
+@@ -43,20 +61,28 @@ size_t ProcessMetrics::GetPeakPagefileUsage() const {
  }
  
  size_t ProcessMetrics::GetWorkingSetSize() const {
@@ -88,7 +90,7 @@ $OpenBSD: patch-base_process_process_metrics_openbsd_cc,v 1.5 2015/01/22 11:16:4
  }
  
  size_t ProcessMetrics::GetPeakWorkingSetSize() const {
-@@ -89,20 +115,27 @@ bool ProcessMetrics::GetIOCounters(IoCounters* io_coun
+@@ -96,20 +122,27 @@ bool ProcessMetrics::GetIOCounters(IoCounters* io_coun
  }
  
  static int GetProcessCPU(pid_t pid) {
@@ -120,10 +122,10 @@ $OpenBSD: patch-base_process_process_metrics_openbsd_cc,v 1.5 2015/01/22 11:16:4
  }
  
  double ProcessMetrics::GetCPUUsage() {
-@@ -116,7 +149,6 @@ double ProcessMetrics::GetCPUUsage() {
+@@ -123,7 +156,6 @@ double ProcessMetrics::GetCPUUsage() {
    }
  
-   int64 time_delta = (time - last_cpu_time_).InMicroseconds();
+   int64_t time_delta = (time - last_cpu_time_).InMicroseconds();
 -  DCHECK_NE(time_delta, 0);
  
    if (time_delta == 0)

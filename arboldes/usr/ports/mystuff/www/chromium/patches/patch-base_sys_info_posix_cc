@@ -1,21 +1,21 @@
-$OpenBSD: patch-base_sys_info_posix_cc,v 1.5 2014/11/19 21:27:32 robert Exp $
---- base/sys_info_posix.cc.orig.port	Wed Nov 19 05:52:58 2014
-+++ base/sys_info_posix.cc	Wed Nov 19 08:38:24 2014
-@@ -87,6 +87,17 @@ int64 SysInfo::AmountOfVirtualMemory() {
+$OpenBSD: patch-base_sys_info_posix_cc,v 1.8 2016/10/26 06:22:07 robert Exp $
+--- base/sys_info_posix.cc.orig.port	Wed Oct 12 21:02:53 2016
++++ base/sys_info_posix.cc	Wed Oct 19 12:55:56 2016
+@@ -140,6 +140,17 @@ int64_t SysInfo::AmountOfVirtualMemory() {
  }
  
  // static
-+int64 SysInfo::AmountOfAvailablePhysicalMemory() {
++int64_t SysInfo::AmountOfAvailablePhysicalMemory() {
 +  long available_pages = sysconf(_SC_AVPHYS_PAGES);
 +  long page_size = sysconf(_SC_PAGE_SIZE);
 +  if (available_pages == -1 || page_size == -1) {
 +    NOTREACHED();
 +    return 0;
 +  }
-+  return static_cast<int64>(available_pages) * page_size;
++  return static_cast<int64_t>(available_pages) * page_size;
 +}
 +
 +// static
- int64 SysInfo::AmountOfFreeDiskSpace(const FilePath& path) {
+ int64_t SysInfo::AmountOfFreeDiskSpace(const FilePath& path) {
    base::ThreadRestrictions::AssertIOAllowed();
  
