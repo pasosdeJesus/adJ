@@ -1,13 +1,14 @@
-# $OpenBSD: Makefile,v 1.273 2016/02/20 10:08:51 robert Exp $
+# $OpenBSD: Makefile,v 1.297 2016/07/12 06:05:32 robert Exp $
 
 ONLY_FOR_ARCHS=		i386 amd64
 DPB_PROPERTIES=		parallel
 
 COMMENT=		Chromium browser
 
-V=			48.0.2564.116
+V=			51.0.2704.106
 DISTNAME=		chromium-${V}
 DISTFILES=		${DISTNAME}${EXTRACT_SUFX}
+REVISION=		0
 
 CATEGORIES=		www
 
@@ -57,7 +58,7 @@ WANTLIB += atk-1.0 gmodule-2.0
 
 RUN_DEPENDS=	devel/xdg-utils \
 		devel/desktop-file-utils \
-		fonts/droid-fonts \
+		fonts/noto/fonts \
 		graphics/libexif \
 		x11/gnome/libgnome-keyring \
 		x11/gtk+3,-guic
@@ -92,7 +93,7 @@ TEST_TARGET=	base_unittests
 
 CONFIGURE_STYLE=none # prevent python MODULE from overriding do-build
 CONFIGURE_ENV=	CPPFLAGS="-idirafter ${LOCALBASE}/include -idirafter ${X11BASE}/include" \
-		LDFLAGS="-L${LOCALBASE}/lib -L${X11BASE}/lib" \
+		LDFLAGS="-L${LOCALBASE}/lib -L${X11BASE}/lib -Wl,-z,wxneeded" \
 		GYP_GENERATORS=ninja
 
 ALL_TARGET=	chrome
@@ -116,7 +117,7 @@ GYP_DEFS=	-Duse_system_bzip2=1 \
 		-Duse_allocator=none \
 		-Dlinux_strip_binary=0 \
 		-Dlinux_use_heapchecker=0 \
-		-Denable_webrtc=0 \
+		-Denable_webrtc=1 \
 		-Denable_one_click_signin=1 \
 		-Duse_kerberos=0 \
 		-Duse_sndio=1 \
@@ -132,9 +133,9 @@ GYP_DEFS=	-Duse_system_bzip2=1 \
 
 # Note: these keys are for OpenBSD use ONLY. For your own distribution,
 # please get your own set of keys. It's free!
-GYP_DEFS+=	-Dgoogle_api_key='AIzaSyC_3Uz69YR1Z2DRLUDf5ZxUJBClHuwrjLU' \
-		-Dgoogle_default_client_id='827346019416-hv5bkg8gdou5q4undk91dn3nv7ag2nm1.apps.googleusercontent.com' \
-		-Dgoogle_default_client_secret='F7ApGgPs3F_mRnRgDt6A80C0' \
+GYP_DEFS+=	-Dgoogle_api_key='AIzaSyA015yecfJyWi8UQpneQVrNzIKlxjv4MhI' \
+		-Dgoogle_default_client_id='451220141585.apps.googleusercontent.com' \
+		-Dgoogle_default_client_secret='nQcDyaBvDyCeDrsRqKIWSHJn' \
 		-Dffmpeg_branding=Chrome \
 		-Dproprietary_codecs=1
 
@@ -145,7 +146,6 @@ CARCH=		x86_64
 .endif
 
 REL!=		uname -r
-MAKE_ENV+=	CPATH=${LOCALBASE}/include/c++/${MODGCC4_VERSION}.3/bits/:${LOCALBASE}/include/c++/${MODGCC4_VERSION}.3/:${LOCALBASE}/include/c++/${MODGCC4_VERSION}.3/${CARCH}-unknown-openbsd${REL}/
 
 .if ${FLAVOR:Mdebug}
 GYP_DEFS+=	-Dremove_webcore_debug_symbols=1
@@ -161,7 +161,7 @@ pre-configure:
 		${WRKSRC}/third_party/ffmpeg/chromium/config/Chrome/openbsd/${_arch}/libavutil
 .endfor
 	@mkdir -p ${WRKSRC}/media/audio/sndio ${WRKSRC}/media/audio/openbsd
-	@cp ${FILESDIR}/sndio_output.{cc,h} ${WRKSRC}/media/audio/sndio
+	@cp ${FILESDIR}/sndio_{out,in}put.{cc,h} ${WRKSRC}/media/audio/sndio
 	@cp ${FILESDIR}/audio_manager_openbsd.{cc,h} ${WRKSRC}/media/audio/openbsd
 	# XXX Create a missing html file to avoid a build failure (unused in the actual package)
 	@touch ${WRKSRC}/chrome/test/data/webui/i18n_process_css_test.html
@@ -179,8 +179,10 @@ do-build:
 	@cd ${WRKSRC}/out/${BUILDTYPE} && \
 	for _r in generate_version_info cloud_policy_proto net_interfaces suggestions \
 	cacheinvalidation cacheinvalidation_proto_cpp gfx_vector_icons \
-	data_reduction_proxy_proto cloud_policy_code_generate \
-	$$(ninja -t targets | grep -E '(mojo_bindings|resources): phony' | grep -v test | cut -d ':' -f1); do \
+	data_reduction_proxy_proto cloud_policy_code_generate common_constants \
+	profile_reset_report_proto autofill_server_proto ipc_mojo \
+	$$(ninja -t targets | grep -E '(bindings_mojom|mojo_bindings|resources): phony' | \
+		grep -v test | cut -d ':' -f1); do \
 		cd ${WRKSRC} && env -i ${MAKE_ENV} ninja \
 			-j ${MAKE_JOBS} -C out/${BUILDTYPE} $${_r}; \
 	done
@@ -196,12 +198,14 @@ do-install:
 	${INSTALL_DATA} ${BUILDDIR}/*.pak ${PREFIX}/chrome
 
 	${INSTALL_DATA_DIR} ${PREFIX}/chrome/locales
+	${INSTALL_DATA_DIR} ${PREFIX}/chrome/pseudo_locales
 	${INSTALL_DATA} ${BUILDDIR}/locales/* ${PREFIX}/chrome/locales
+	${INSTALL_DATA} ${BUILDDIR}/pseudo_locales/* ${PREFIX}/chrome/pseudo_locales
 	${INSTALL_DATA} ${BUILDDIR}/*.png ${PREFIX}/chrome
 	${INSTALL_DATA_DIR} ${PREFIX}/chrome/resources
 	@cp -Rp ${BUILDDIR}/resources/* ${PREFIX}/chrome/resources
 	@chown -R ${SHAREOWN}:${SHAREGRP} ${PREFIX}/chrome/resources
-.for f in libexif.so protoc icudtl.dat mksnapshot
+.for f in protoc icudtl.dat mksnapshot
 	${INSTALL_DATA} ${BUILDDIR}/${f} ${PREFIX}/chrome
 .endfor
 .for s in 22 24 48 64 128 256
