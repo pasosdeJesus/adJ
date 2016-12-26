@@ -1,29 +1,31 @@
-# $OpenBSD: Makefile,v 1.214 2016/05/13 17:15:55 pea Exp $
+# $OpenBSD: Makefile,v 1.221 2016/12/26 13:56:04 jsg Exp $
 
 COMMENT-main=	PostgreSQL RDBMS (client)
 COMMENT-server=	PostgreSQL RDBMS (server)
 COMMENT-docs=	PostgreSQL RDBMS documentation
 COMMENT-contrib=PostgreSQL RDBMS contributions
 COMMENT-plpython=Python procedural language for PostgreSQL
-
-BROKEN-sparc=	Requires v9|v9a|v9b; requested architecture is sparclite.
+COMMENT-pg_upgrade=Support for upgrading PostgreSQL data from previous version
 
 # DO NOT FORGET to also change the @ask-update entry in pkg/PLIST-server
 # in case a dump before / restore after pkg_add -u is required!
 
-VERSION=	9.5.4
+VERSION=	9.6.1
+REVISION=	0
 DISTNAME=	postgresql-${VERSION}
 PKGNAME-main=	postgresql-client-${VERSION}
 PKGNAME-server=	postgresql-server-${VERSION}
 PKGNAME-docs=	postgresql-docs-${VERSION}
 PKGNAME-contrib=postgresql-contrib-${VERSION}
 PKGNAME-plpython=postgresql-plpython-${VERSION}
+PKGNAME-pg_upgrade=postgresql-pg_upgrade-${VERSION}
+
 
 CATEGORIES=	databases
-SHARED_LIBS=	ecpg		7.7 \
-		ecpg_compat	4.7 \
-		pgtypes		4.6 \
-		pq		6.8
+SHARED_LIBS=	ecpg		7.8 \
+		ecpg_compat	4.8 \
+		pgtypes		4.7 \
+		pq		6.9 
 
 HOMEPAGE=	http://www.postgresql.org/
 
@@ -32,11 +34,11 @@ MAINTAINER=	Pierre-Emmanuel Andre <pea@openbsd.org>
 # BSD
 PERMIT_PACKAGE_CDROM=	Yes
 
-WANTLIB += c crypto m readline ssl termcap z pthread
+WANTLIB += c crypto m readline ssl termcap z
 
 MASTER_SITES=	https://ftp.postgresql.org/pub/source/v${VERSION}/ \
 		ftp://ftp.postgresql.org/pub/source/v${VERSION}/
-MULTI_PACKAGES=	-docs -main -server -contrib -plpython
+MULTI_PACKAGES=	-docs -main -server -contrib -pg_upgrade -plpython
 
 MAKE_FILE=	GNUmakefile
 
@@ -47,14 +49,18 @@ USE_GROFF=	Yes
 
 CONFIGURE_STYLE=gnu
 
-MODULES=	lang/python
+MODULES=	lang/python gcc4
 MODPY_RUNDEP=	No
+
+# for __sync_lock_test_and_set
+MODGCC4_ARCHS=	arm
 
 CONFIGURE_ENV=	ac_cv_path_PYTHON=${MODPY_BIN} \
 		CPPFLAGS="-I${LOCALBASE}/include" \
 		LDFLAGS="-L${LOCALBASE}/lib"
 
 CONFIGURE_ARGS=	--disable-rpath --with-openssl=/usr \
+		--with-bsd-auth \
 		--with-perl \
 		--with-python \
 		--with-pam=no \
@@ -70,11 +76,11 @@ CONFIGURE_ARGS=	--disable-rpath --with-openssl=/usr \
 		--with-libxml \
 		--disable-thread-safety
 
-# There is no spinlock support for hppa yet. Until we have access to
+# There is no spinlock support for hppa and alpha yet. Until we have access to
 # a system to get this working, disable them for now. There is
 # (apparently) a serious performance hit doing this.
 
-.if ${MACHINE_ARCH} == "hppa"
+.if ${MACHINE_ARCH} == "hppa" || ${MACHINE_ARCH} == "alpha"
 CONFIGURE_ARGS+=--disable-spinlocks
 .endif
 
@@ -90,11 +96,17 @@ WANTLIB-main =	${WANTLIB} xml2
 LIB_DEPENDS-server= databases/postgresql=${VERSION} \
 		    ${LIB_DEPENDS-main}
 WANTLIB-server=	${WANTLIB-main} perl pq>=4
-RUN_DEPENDS-contrib= databases/postgresql,-server=${VERSION}
 
+RUN_DEPENDS-contrib= databases/postgresql,-server=${VERSION}
 LIB_DEPENDS-contrib= databases/postgresql=${VERSION} \
 		     ${LIB_DEPENDS-main}
 WANTLIB-contrib=	${WANTLIB-main} pq>=4
+
+RUN_DEPENDS-pg_upgrade=	databases/postgresql,-server=${VERSION} \
+			databases/postgresql-previous
+LIB_DEPENDS-pg_upgrade= databases/postgresql=${VERSION} \
+		     ${LIB_DEPENDS-main}
+WANTLIB-pg_upgrade=	${WANTLIB-main} pq>=4
 
 LIB_DEPENDS-plpython=	${MODPY_LIB_DEPENDS}
 WANTLIB-plpython =	c m pthread util \
@@ -104,7 +116,6 @@ RUN_DEPENDS-plpython=	databases/postgresql,-server=${VERSION}
 WANTLIB-docs=
 PKG_ARCH-docs=	*
 
-WANTLIB-server+=	util
 
 MAKE_ENV=	LIBpq_MAJOR=${LIBpq_VERSION:R} \
 		LIBpq_MINOR=${LIBpq_VERSION:E} \
