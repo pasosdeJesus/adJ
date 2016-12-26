@@ -133,9 +133,9 @@ GYP_DEFS=	-Duse_system_bzip2=1 \
 
 # Note: these keys are for OpenBSD use ONLY. For your own distribution,
 # please get your own set of keys. It's free!
-GYP_DEFS+=	-Dgoogle_api_key='AIzaSyA015yecfJyWi8UQpneQVrNzIKlxjv4MhI' \
-		-Dgoogle_default_client_id='451220141585.apps.googleusercontent.com' \
-		-Dgoogle_default_client_secret='nQcDyaBvDyCeDrsRqKIWSHJn' \
+GYP_DEFS+=	-Dgoogle_api_key='AIzaSyC_3Uz69YR1Z2DRLUDf5ZxUJBClHuwrjLU' \
+		-Dgoogle_default_client_id='827346019416-hv5bkg8gdou5q4undk91dn3nv7ag2nm1.apps.googleusercontent.com' \
+		-Dgoogle_default_client_secret='F7ApGgPs3F_mRnRgDt6A80C0' \
 		-Dffmpeg_branding=Chrome \
 		-Dproprietary_codecs=1
 
