@@ -1,7 +1,7 @@
-$OpenBSD: patch-ui_app_list_app_list_constants_cc,v 1.11 2016/01/23 18:49:31 robert Exp $
---- ui/app_list/app_list_constants.cc.orig.port	Wed Jan 20 21:01:25 2016
-+++ ui/app_list/app_list_constants.cc	Fri Jan 22 19:58:59 2016
-@@ -143,7 +143,7 @@ const char kSearchQueryLength[] = "Apps.AppListSearchQ
+$OpenBSD: patch-ui_app_list_app_list_constants_cc,v 1.13 2016/05/27 06:28:21 robert Exp $
+--- ui/app_list/app_list_constants.cc.orig.port	Wed May 25 21:01:13 2016
++++ ui/app_list/app_list_constants.cc	Thu May 26 08:09:49 2016
+@@ -148,7 +148,7 @@ const char kSearchQueryLength[] = "Apps.AppListSearchQ
  const char kSearchResultDistanceFromOrigin[] =
      "Apps.AppListSearchResultDistanceFromOrigin";
  
