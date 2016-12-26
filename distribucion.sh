@@ -753,7 +753,7 @@ if (test "$sn" = "s") then {
 	# Retroportados para cerrar fallas o actualizar
 	# Deben estar en arboldes/usr/ports/mystuff y en /usr/ports de current
 	paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs" 
-	paquete ruby paquetes "ruby ruby23-ri_docs" 2.3
+	#paquete ruby paquetes "ruby ruby23-ri_docs" 2.3
 
 	####
 	# Recompilados para cerrar fallas de portes actualizados (estable)

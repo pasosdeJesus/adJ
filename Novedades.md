@@ -3,7 +3,7 @@ Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y que anhelamos sea usada por Jesús durante el Milenio.
 
 ###Versión: 6.0b1
-Fecha de publicación: 12/Dic/2016 
+Fecha de publicación: 28/Dic/2016 
 
 Puede ver novedades respecto a OpenBSD en:
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_0/Novedades_OpenBSD.md>
@@ -12,8 +12,8 @@ Puede ver novedades respecto a OpenBSD en:
 
 ###KERNEL Y SISTEMA BASE
 
-* Parches al sistema base hasta el 3.Dic.2016, que cierran la falla de 
-  seguridad y las 9 de robustez resueltas para fuentes de OpenBSD 6.0 
+* Parches al sistema base hasta el 26.Dic.2016, que cierran 2 fallas de 
+  seguridad y 13 de robustez resueltas para fuentes de OpenBSD 6.0 
   descritas en <http://www.openbsd.org/errata60.html>
   Los binarios distribuidos de OpenBSD 6.0 no resuelven estas fallas. 
 * Retroportados, recompilados o mejorados más de 25 paquetes de OpenBSD para 
@@ -26,12 +26,10 @@ destacamos las siguientes relacionadas con amd64:
 
 * Controladores ampliados o mejorados para amd64
 	* Red: 
-		* Ethernet: ure que soporta dispositivos USB Ethernet RealTek RTL8152 10/100. Mejoras a axen que soporta USB Ethernet AX88179 10/100/Gigabit. Mejoras a dc que soporta DEC/Intel 21140/21142/21143/21145
+		* Ethernet: Nevo controlador ure que soporta dispositivos USB Ethernet RealTek RTL8152 10/100. Mejoras a axen que soporta USB Ethernet AX88179 10/100/Gigabit. Mejoras a dc que soporta DEC/Intel 21140/21142/21143/21145
 		* Inalámbrico: iwm ahora soporta dispositivos con chip Intel Wireless 3165 y 8260. Mejoras a ral que soporta Ralink Technology/MediaTek
 		* Otros: umb que es interfaz usb a redes celulares, opera por ejemplo con Ericsson H5321gw y N5321gw, Medion Mobile S4222 (MediaTek OEM), Sierra Wireless EM7455, Sierra Wireless EM8805, Sierra Wireless MC8305. Mejoras a controladores de memorias SD.
-
 	* Interfaces con usuario: utvfu controla dispositivos para capturar audio y video USBTV007. Interfaz multi-touch para controlador wsmouse
-	* Video: 
 	* Virtualización: Soporta MSI-X en dispositivo virtio. El controlador xen ahora soporta configuración domU bajo el sistema operativo Qubes.
 	* Temperatura, sensores y otros: ACPI de más SoCs:chvgipio, bytgpio. Reloj: maxrtc, pcfrtc. 
 
@@ -72,10 +70,10 @@ adJ y OpenBSD 6.0:
   <http://sivel.sourceforge.net/1.2/actualizacion-sivel.html#actualizaciondeunounoaunodos>
 * ```SIVeL 2.0b1p1``` Versión beta 1 de SIVeL 2. Escrita sobre Ruby on Rails
   puede correr en jaula chroot /var/www como usuario www:www
-* PostgreSQL 9.5.4 recompilado para con soporte UTF-8 y ordenamientos 
+* PostgreSQL 9.6.1 retroportado con soporte UTF-8 y ordenamientos 
   alfabéticos en español.  Desde adJ 5.8 socket reubicado por omisión 
   de ```/var/www/tmp``` a ```/var/www/var/run/postgresql```.
-  En adJ la información queda cifrada cuando así se elije al instalar o 
+  En adJ las base de datos quedan cifrada cuando así se elije al instalar o 
   actualizar adJ.  Ver detalles de como usar cotejación en 
   <http://aprendiendo.pasosdeJesus.org/?id=i18n>.  
 * ```Ruby 2.3.1``` recompilado y probado con aplicaciones Rails 5.   
@@ -84,7 +82,7 @@ adJ y OpenBSD 6.0:
 * ```node 4.4.5``` *OJO* probado con aplicaciones 
   como FreeCodeCamp --requiere y por eso se incluyen gcc-4.9.3 y g++-4.9.3 -- 
   ver <http://dhobsd.pasosdejesus.org/freecodecamp.html>
-* ```PHP-5.6.26```, se recomienda activar opcache que hace más veloz la 
+* ```php-5.6.29```, se recomienda activar opcache que hace más veloz la 
   operación con  
   ```doas ln -sf /etc/php-5.6.sample/opcache.ini /etc/php-5.6/```
   y reiniciar el servicio ```php56_fpm```
@@ -93,7 +91,7 @@ adJ y OpenBSD 6.0:
   ```gettext-tools```, ```ggrep```, ```gdk-pixbuf```, ```glib2```, 
   ```gtar```, ```libidn```, ```libunistring```, ```libxslt```, ```llvm```, 
   ```scribus```, ```vlc```, ```wget```, ```wxWidgets-gtk2```
-* chromium 51.0.2704.106p0 *OJO* recompilado con llaves de API de adJ 
+* chromium 51.0.2704.106p0 recompilado con llaves de API de adJ 
 * Para cerrar fallas o porque dependen de librerías actualizadas se han 
   recompilado los siguientes paquetes a partir de portes actualizados de 
   OpenBSD 6.0: *OJO*
