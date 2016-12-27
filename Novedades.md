@@ -76,7 +76,7 @@ adJ y OpenBSD 6.0:
   En adJ las base de datos quedan cifrada cuando así se elije al instalar o 
   actualizar adJ.  Ver detalles de como usar cotejación en 
   <http://aprendiendo.pasosdeJesus.org/?id=i18n>.  
-* ```Ruby 2.3.1``` recompilado y probado con aplicaciones Rails 5.   
+* ```Ruby 2.4.0``` retroportado y probado con aplicaciones Rails 5.   
   Puede ver más sobre Ruby on Rails sobre adJ en 
   <http://dhobsd.pasosdeJesus.org/Ruby_on_Rails_en_OpenBSD.html>
 * ```node 4.4.5``` *OJO* probado con aplicaciones 
