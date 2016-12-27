@@ -753,7 +753,7 @@ if (test "$sn" = "s") then {
 	# Retroportados para cerrar fallas o actualizar
 	# Deben estar en arboldes/usr/ports/mystuff y en /usr/ports de current
 	paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs" 
-	#paquete ruby paquetes "ruby ruby23-ri_docs" 2.3
+	paquete ruby paquetes "ruby ruby24-ri_docs" 2.4
 
 	####
 	# Recompilados para cerrar fallas de portes actualizados (estable)
@@ -777,7 +777,7 @@ if (test "$sn" = "s") then {
 	#paquete node
 	#paquete openldap-client 
 	#paquete p5-Mail-SpamAssassin
-	paquete p5-DBD-mysqlp5-DBD-mysql
+	paquete p5-DBD-mysql
 	paquete p7zip paquetes "p7zip p7zip-rar"
 	#paquete pidgin paquetes "libpurple pidgin"
 	paquete samba paquetes "ldb samba tevent"
