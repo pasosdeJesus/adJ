@@ -172,6 +172,7 @@ ingreso si depende de paquetes para ingresar al sistema\\n
 } fi;
 
 if (test "$ACVER" -lt "60") then {
+	dialog --title 'Escribir o Ejecutar pero no ambas' --msgbox 'A partir de OpenBSD 6.0 se exige la característica de seguridad W^X en todo programa que se ejecute (es decir que toda página de memoria que use el programa si tiene permiso de escritura no pueda ejecutarse y si tiene permiso de ejecución que no pueda escribirse).  \n\nMuchos ejecutables de paquetes (e.g node) no cumplen esta característica de seguridad y terminarán abruptamente al ejecutarse.  Para evitarlo el sistema de archivos donde se instalan -- el que contenga /usr/local/bin/ -- debe tener en /etc/fstab la opción wxallowed' 17 60
 	dialog --title 'Advertencia: por borrar /usr/share/man' --yesno "\\nDesde la versión 6.0 no se usan enlaces duros a páginas del manual.\\n
 Se eliminarán todas las páginas del manual para que se instalen las nuevas al actualizar.\\n\\n
 ¿Continuar?" 17 60

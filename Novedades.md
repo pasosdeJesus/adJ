@@ -37,7 +37,7 @@ destacamos las siguientes relacionadas con amd64:
 	* Mejorada pila inalámbrica
 
 * Seguridad
-	* Se ha ampliado la protección W^X a programas y sistemas de archivo, si un sistema de archivo debe permitir escritura y ejecución (por ejemplo /usr/local o la subpartición que lo contenga) debe marcarse en /etc/fstab con la opción wxallowed.  Se recomienda dejar /usr/local como subpartición separada.
+	* Se ha ampliado la protección W^X a todo programa que se ejecute. Todos los programas del sistema base se comportan bien en este sentido (localizar memoria bien de escritura o bien de ejecución pero no ambas), pero algunos portes no (e.g chromium, node).   Para que esos programas puedan operar (de lo contrario se detendrán abruptamente) marque la partición en la que están ubicados (i.e la que tenga /usr/local/bin) en /etc/fstab con  la opción wxallowed.  Por esto mismo se recomienda dejar /usr/local como subpartición separada.
 	* Protecciones y medidas para evitar ataques de inundación SYN 
 	* OpenSSH 7.3: no acepta claves de más de 1024 caracteres para evitar uso excesivo de la CPU. 
 	* LibreSSL 2.4.2 que soporta cifrado ChaCha20-Poly1305. Resuelve CVE-2016-2105 a CVE-2016-2109
