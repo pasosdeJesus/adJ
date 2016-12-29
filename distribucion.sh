@@ -749,12 +749,11 @@ if (test "$sn" = "s") then {
 	# Modificados para posibilitar compilación
 	# Deben estar en mystuff
 
-	paquete chromium
-exit 1
 	####
 	# Retroportados para cerrar fallas o actualizar
 	# Deben estar en arboldes/usr/ports/mystuff y en /usr/ports de current
 	paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs" 
+	paquete node
 	paquete ruby paquetes "ruby ruby24-ri_docs" 2.4
 
 	####
@@ -776,7 +775,6 @@ exit 1
 	paquete mariadb-client paquetes "mariadb-client mariadb-server" 
 	#paquete mplayer
 	#paquete nginx
-	#paquete node
 	#paquete openldap-client 
 	#paquete p5-Mail-SpamAssassin
 	paquete p5-DBD-mysql

@@ -79,22 +79,26 @@ adJ y OpenBSD 6.0:
 * ```Ruby 2.4.0``` retroportado y probado con aplicaciones Rails 5.   
   Puede ver más sobre Ruby on Rails sobre adJ en 
   <http://dhobsd.pasosdeJesus.org/Ruby_on_Rails_en_OpenBSD.html>
-* ```node 4.4.5``` *OJO* probado con aplicaciones 
-  como FreeCodeCamp --requiere y por eso se incluyen gcc-4.9.3 y g++-4.9.3 -- 
-  ver <http://dhobsd.pasosdejesus.org/freecodecamp.html>
-* ```php-5.6.29```, se recomienda activar opcache que hace más veloz la 
-  operación con  
+* ```node 4.4.7``` retroportado, ver 
+  <http://dhobsd.pasosdejesus.org/freecodecamp.html>
+* ```php-5.6.29``` se recomienda activar opcache que hace más veloz 
+  la operación con  
   ```doas ln -sf /etc/php-5.6.sample/opcache.ini /etc/php-5.6/```
   y reiniciar el servicio ```php56_fpm```
-* Para activar soporte de xlocale se han recompilado los siguientes paquetes 
-  que están en portes de OpenBSD 6.0: ```djvulibre```, 
+* Para activar soporte de xlocale se han recompilado los siguientes 
+  paquetes que están en portes de OpenBSD 6.0: ```djvulibre```, 
   ```gettext-tools```, ```ggrep```, ```gdk-pixbuf```, ```glib2```, 
-  ```gtar```, ```libidn```, ```libunistring```, ```libxslt```, ```llvm```, 
-  ```scribus```, ```vlc```, ```wget```, ```wxWidgets-gtk2```
+  ```gtar```, ```libidn```, ```libunistring```, ```libxslt```, 
+  ```llvm```, ```scribus```, ```vlc```, ```wget```, 
+  ```wxWidgets-gtk2```
 * chromium 51.0.2704.106p0 recompilado con llaves de API de adJ 
-* Para cerrar fallas o porque dependen de librerías actualizadas se han 
-  recompilado los siguientes paquetes a partir de portes actualizados de 
-  OpenBSD 6.0: *OJO*
+* Para cerrar fallas o porque dependen de librerías actualizadas se 
+  han recompilado los siguientes paquetes a partir de portes 
+  actualizados de OpenBSD 6.0: ```curl```, ```flac```, 
+  ```gstreamer```, ```libarchive```, ```mpg123```, 
+  ```mariadb```, ```p5-DBD-mysql```, ```p7zip```, 
+  ```samba```, ```tiff```, ```vim```, ```xz```, 
+  ```zip```, 
 * Los paquetes exclusivos los encuentra en 
   <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/6.0-amd64/paquetes> y 
   otras extensiones de PostgreSQL y PHP que no hacen parte de la 
