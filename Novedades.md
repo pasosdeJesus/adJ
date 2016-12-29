@@ -3,7 +3,7 @@ Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y que anhelamos sea usada por Jesús durante el Milenio.
 
 ###Versión: 6.0b1
-Fecha de publicación: 28/Dic/2016 
+Fecha de publicación: 29/Dic/2016 
 
 Puede ver novedades respecto a OpenBSD en:
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_0/Novedades_OpenBSD.md>
