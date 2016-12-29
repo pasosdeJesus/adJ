@@ -1,9 +1,9 @@
-# $OpenBSD: Makefile,v 1.13 2013/03/11 11:44:47 espie Exp $
+# $adJ$
 
 COMMENT=	base package for HTML handling in PHP5
 
-DISTNAME=	HTML_Common2-0.1.0
-REVISION=	4
+DISTNAME=	HTML_Common2-2.1.1
+REVISION=	
 CATEGORIES=	www devel
 
 MODULES=	www/pear
