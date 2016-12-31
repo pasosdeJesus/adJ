@@ -1,12 +1,12 @@
 $OpenBSD$
---- src/FileList.cpp.orig	Mon Aug 10 04:52:18 2015
-+++ src/FileList.cpp	Mon Jul 18 08:25:57 2016
-@@ -50,7 +50,7 @@
- #define HASH2(x,n) (1|(((FXuint)(x)*17)%((n)-1)))   // Probe Distance [1..n-1]
- 
- 
--#if defined(linux)
+--- src/FileList.cpp.orig	Tue Nov 24 10:30:26 2015
++++ src/FileList.cpp	Sat Dec 31 07:57:32 2016
+@@ -53,6 +53,8 @@
+ #if defined(linux)
+ FXStringDict* fsdevices = NULL; // Devices from fstab
+ FXStringDict* mtdevices = NULL; // Mounted devices
++#endif
 +#if defined(linux) || defined(__OpenBSD__)
- FXStringDict* fsdevices=NULL; // Devices from fstab
- FXStringDict* mtdevices=NULL; // Mounted devices
- FXStringDict* updevices=NULL; // Responding devices
+ FXStringDict* updevices = NULL; // Responding devices
+ #endif
+ 
