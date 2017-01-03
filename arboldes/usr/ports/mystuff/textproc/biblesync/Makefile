@@ -6,6 +6,7 @@ COMMENT=	"Biblesync protocol"
 V=		1.1.2
 DISTNAME=	biblesync-${V}
 CATEGORIES=	textproc misc
+REVISION=	1
 PKGNAME=	${DISTNAME}
 HOMEPAGE=	https://github.com/karlkleinpaste/biblesync
 MAINTAINER=	Vladimir Támara Patiño <vtamara@pasosdejesus.org>

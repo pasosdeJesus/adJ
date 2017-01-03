@@ -81,10 +81,15 @@ adJ y OpenBSD 6.0:
   <http://dhobsd.pasosdeJesus.org/Ruby_on_Rails_en_OpenBSD.html>
 * ```node 4.4.7``` retroportado, ver 
   <http://dhobsd.pasosdejesus.org/freecodecamp.html>
-* ```php-5.6.29``` se recomienda activar opcache que hace más veloz 
-  la operación con  
+* ```php-5.6.29``` actualizado (más que OpenBSD-current) se 
+  recomienda activar opcache que hace más veloz la operación con  
   ```doas ln -sf /etc/php-5.6.sample/opcache.ini /etc/php-5.6/```
   y reiniciar el servicio ```php56_fpm```
+* ```ocaml-4.04.0``` actualziado (más que OpenBSD-current) junto con
+  ocaml-ocamlbuild, ocaml-camlp4 para permitir compilación de 
+  ocaml-labltk
+* El porte de ```xfe``` con soporte para manejar paquetes de OpenBSD 
+  se ha actualizado
 * Para activar soporte de xlocale se han recompilado los siguientes 
   paquetes que están en portes de OpenBSD 6.0: ```djvulibre```, 
   ```gettext-tools```, ```ggrep```, ```gdk-pixbuf```, ```glib2```, 

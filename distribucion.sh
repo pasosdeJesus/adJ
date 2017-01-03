@@ -756,6 +756,12 @@ if (test "$sn" = "s") then {
 	paquete node
 	paquete ruby paquetes "ruby ruby24-ri_docs" 2.4
 
+:	###
+        # Actualizados.  Están desactualizado en OpenBSD estable y current
+	paquete php paquetes "php php-bz2 php-curl php-fpm php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 5.6
+	paquete ocaml 
+
+
 	####
 	# Recompilados para cerrar fallas de portes actualizados (estable)
 	# Para que operen bien basta actualizar CVS de /usr/ports 
@@ -800,6 +806,7 @@ if (test "$sn" = "s") then {
 	#paquete postgis
 	#paquete py-psycopg2
 	#paquete qgis
+	paquete hevea
 
 	# Recompilado con llave de adJ
 	paquete chromium
@@ -826,10 +833,6 @@ if (test "$sn" = "s") then {
 	paquete scribus
 	paquete wget
 	paquete wxWidgets-gtk2
-
-	###
-        # Actualizados.  Están desactualizado en OpenBSD estable y current
-	paquete php paquetes "php php-bz2 php-curl php-fpm php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 5.6
 
 	##
 	# Retroportados no existentes en versión actual
