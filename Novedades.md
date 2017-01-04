@@ -3,7 +3,7 @@ Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y que anhelamos sea usada por Jesús durante el Milenio.
 
 ###Versión: 6.0b1
-Fecha de publicación: 29/Dic/2016 
+Fecha de publicación: 4/Ene/2017
 
 Puede ver novedades respecto a OpenBSD en:
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_0/Novedades_OpenBSD.md>
@@ -114,11 +114,28 @@ adJ y OpenBSD 6.0:
 
 Los paquetes para OpenBSD 6.0 también funcionan sin cambios. Resaltamos:
 * nginx 1.10.1 <http://pasosdeJesus.github.io/servidor_adJ/sevidorweb.html#openbsd-httpd>
-* LibreOffice actualizado a 5.1.4.2, gimp a 2.8.16
+* LibreOffice actualizado a 5.1.4.2 y gimp a 2.8.16
 * LLVM/Clang a 3.8.0p2 asi como los demás lenguajes de programación
 * No hay paquete para mysql, ha sido remplazado por mariadb, ver 
   <http://pasosdeJesus.github.io/servidor_adJ/mariadb.html>
-* letsencrypt se ha cambiado y completado con certbot
+* letsencrypt y acme-tiny se han cambiado y completado con certbot
+* xpdf se ha remplazado con evince-light
+* Ahora incluimos unrar
+* php-fpm ahora va incluido en php
+* Cambiadas droid-fonts por noto-emoji y noto-fonts
+* Para simplificar ya no incluimos los paquetes fontforge, owncloud, 
+  cppcheck, cppunit, a2ps, bash, boost, colord, droid-fonts, freetype,
+  ggrep, gnome-doc-utils, gnome-keyring, gstreamer-ffmpeg, 
+  gstreamer-plugins-bad, gstreamer-plugins-good, gtkhtml4, gyp,
+  iniparser, libaudiofile, libgnome, libgnomecanvas, libmp4v2,
+  libstdc++, libunique, libv4l, mowgli, net-snmp-tkmib, opencdk,
+  openmotif, ossp-uuid, p5-Crypt-SSLeay, p5-Digest-SHA1, 
+  p5-IO-Socket-INET6, p5-IP-Country, p5-Socket6, p5-XML-LibXML,
+  p5-XML-SAX, p5-YAML-Syck, pear-Services-Weather, pear-XML-RSS,
+  pear-XML-Tree, pear-XML-Util, pecl-redis, pth, py-libxslt,
+  py-werkzeug, tango-icon-theme, transfig, vlc-jack,
+  webkit-gtk3, zsh
+  
 * Añadimos paquete jailkit que facilita operaciones en jaula chroot
 * Se incluyen en total 571 paquetes, en los repositorios de paquetes para 
   OpenBSD 6.0 hay 9433 disponibles para amd64
