@@ -68,7 +68,7 @@ adJ y OpenBSD 6.0:
 
 * ```SIVeL 1.2.3```  Ver 
   <http://sivel.sourceforge.net/1.2/actualizacion-sivel.html#actualizaciondeunounoaunodos>
-* ```SIVeL 2.0b1p1``` Versión beta 1 de SIVeL 2. Escrita sobre Ruby on Rails
+* ```SIVeL 2.0b2``` Versión beta 2 de SIVeL 2. Escrita sobre Ruby on Rails
   puede correr en jaula chroot /var/www como usuario www:www
 * PostgreSQL 9.6.1 retroportado con soporte UTF-8 y ordenamientos 
   alfabéticos en español.  Desde adJ 5.8 socket reubicado por omisión 
@@ -103,7 +103,7 @@ adJ y OpenBSD 6.0:
   ```gstreamer```, ```libarchive```, ```mpg123```, 
   ```mariadb```, ```p5-DBD-mysql```, ```p7zip```, 
   ```samba```, ```tiff```, ```vim```, ```xz```, 
-  ```zip```, 
+  ```zip``` 
 * Los paquetes exclusivos los encuentra en 
   <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/6.0-amd64/paquetes> y 
   otras extensiones de PostgreSQL y PHP que no hacen parte de la 
@@ -118,8 +118,9 @@ Los paquetes para OpenBSD 6.0 también funcionan sin cambios. Resaltamos:
 * LLVM/Clang a 3.8.0p2 asi como los demás lenguajes de programación
 * No hay paquete para mysql, ha sido remplazado por mariadb, ver 
   <http://pasosdeJesus.github.io/servidor_adJ/mariadb.html>
+* letsencrypt se ha cambiado y completado con certbot
 * Añadimos paquete jailkit que facilita operaciones en jaula chroot
-* Se incluyen en total 622 paquetes, en los repositorios de paquetes para 
+* Se incluyen en total 571 paquetes, en los repositorios de paquetes para 
   OpenBSD 6.0 hay 9433 disponibles para amd64
 
 
