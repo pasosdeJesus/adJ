@@ -1794,7 +1794,7 @@ echo "* Configurando para que inicie PostgreSQL en cada arranque y cierre al apa
 
 activarcs postgresql
 
-grep "kern.seminfo.semmni" /etc/sysctl.conf > /dev/null 2> /dev/null
+grep "kern.seminfo.semmns" /etc/sysctl.conf > /dev/null 2> /dev/null
 if (test "$?" != "0") then {
 	cat >> /etc/sysctl.conf <<EOF
 kern.shminfo.shmmni=1024
