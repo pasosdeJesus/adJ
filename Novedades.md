@@ -16,7 +16,7 @@ Puede ver novedades respecto a OpenBSD en:
   seguridad y 13 de robustez resueltas para fuentes de OpenBSD 6.0 
   descritas en <http://www.openbsd.org/errata60.html>
   Los binarios distribuidos de OpenBSD 6.0 no resuelven estas fallas. 
-* Retroportados, recompilados o mejorados más de 25 paquetes de OpenBSD para 
+* Retroportados, recompilados o mejorados más de 26 paquetes de OpenBSD para 
   cerrar fallas de seguridad o emplear xlocale.  Incluidos más de 10
   paquetes que no son portes de OpenBSD. Ver detalles en sección 
   PAQUETES EXCLUSIVOS DE ADJ.
@@ -85,14 +85,16 @@ adJ y OpenBSD 6.0:
   recomienda activar opcache que hace más veloz la operación con  
   ```doas ln -sf /etc/php-5.6.sample/opcache.ini /etc/php-5.6/```
   y reiniciar el servicio ```php56_fpm```
-* ```ocaml-4.04.0``` actualziado (más que OpenBSD-current) junto con
-  ocaml-ocamlbuild, ocaml-camlp4 para permitir compilación de 
-  ocaml-labltk
+* ```ocaml-4.04.0``` actualizado (más que OpenBSD-current) junto con
+  ```ocaml-ocamlbuild```, ```ocaml-camlp4``` para permitir compilación de 
+  ```ocaml-labltk```.  Paquete ```hevea``` también actualizado.
 * El porte de ```xfe``` con soporte para manejar paquetes de OpenBSD 
   se ha actualizado
+* El porte de ```p5-Mail-SpamAssassin``` se ha modificado para usar un
+  gnupg más reciente
 * Para activar soporte de xlocale se han recompilado los siguientes 
   paquetes que están en portes de OpenBSD 6.0: ```djvulibre```, 
-  ```gettext-tools```, ```ggrep```, ```gdk-pixbuf```, ```glib2```, 
+  ```gettext-tools```, ```gdk-pixbuf```, ```glib2```, 
   ```gtar```, ```libidn```, ```libunistring```, ```libxslt```, 
   ```llvm```, ```scribus```, ```vlc```, ```wget```, 
   ```wxWidgets-gtk2```
@@ -100,7 +102,7 @@ adJ y OpenBSD 6.0:
 * Para cerrar fallas o porque dependen de librerías actualizadas se 
   han recompilado los siguientes paquetes a partir de portes 
   actualizados de OpenBSD 6.0: ```curl```, ```flac```, 
-  ```gstreamer```, ```libarchive```, ```mpg123```, 
+  ```gstreamer```, ```gstreamer1```, ```libarchive```, ```mpg123```, 
   ```mariadb```, ```p5-DBD-mysql```, ```p7zip```, 
   ```samba```, ```tiff```, ```vim```, ```xz```, 
   ```zip``` 
@@ -133,8 +135,7 @@ Los paquetes para OpenBSD 6.0 también funcionan sin cambios. Resaltamos:
   p5-IO-Socket-INET6, p5-IP-Country, p5-Socket6, p5-XML-LibXML,
   p5-XML-SAX, p5-YAML-Syck, pear-Services-Weather, pear-XML-RSS,
   pear-XML-Tree, pear-XML-Util, pecl-redis, pth, py-libxslt,
-  py-werkzeug, tango-icon-theme, transfig, vlc-jack,
-  webkit-gtk3, zsh
+  tango-icon-theme, transfig, vlc-jack, webkit-gtk3, zsh
   
 * Añadimos paquete jailkit que facilita operaciones en jaula chroot
 * Se incluyen en total 571 paquetes, en los repositorios de paquetes para 
