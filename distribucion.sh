@@ -782,7 +782,7 @@ if (test "$sn" = "s") then {
 	#paquete mplayer
 	#paquete nginx
 	#paquete openldap-client 
-	#paquete p5-Mail-SpamAssassin
+	paquete p5-Mail-SpamAssassin
 	paquete p5-DBD-mysql
 	paquete p7zip paquetes "p7zip p7zip-rar"
 	#paquete pidgin paquetes "libpurple pidgin"
@@ -822,7 +822,7 @@ if (test "$sn" = "s") then {
 	# No deben estar en mystuff
 	paquete djvulibre
 	paquete gettext-tools
-	paquete ggrep
+	#paquete ggrep
 	paquete gdk-pixbuf
 	paquete glib2
 	paquete gtar

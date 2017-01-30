@@ -1,0 +1,12 @@
+$OpenBSD: patch-Makefile_PL,v 1.13 2015/04/30 14:41:53 sthen Exp $
+--- Makefile.PL.orig	Tue Apr 28 20:57:01 2015
++++ Makefile.PL	Thu Apr 30 14:25:54 2015
+@@ -832,7 +832,7 @@ sub MY::install {
+ 
+   foreach (@code) {
+     # Add our install targets as a dependency to all top-level install targets
+-    s/^(install(?:_[a-z]+)?\s*::?\s*.*)$/$1 conf__install data__install/;
++    s/^(install(?:_[a-z]+)?\s*::?\s*.*)$/$1 data__install/;
+   }
+ 
+   clean_MY_globals($self);
