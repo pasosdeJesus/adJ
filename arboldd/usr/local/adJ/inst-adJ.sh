@@ -2383,7 +2383,7 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 	[exec] (xfe - Archivos) {PATH=\$PATH:/usr/sbin:/usr/local/sbin:/sbin /usr/local/bin/xfe}
 	[exec] (xterm+tmux) { xterm -geometry 160x48 -en utf8 -e /usr/bin/tmux -l }
 	[exec] (xterm) { xterm -geometry 160x48 -en utf8 -e /bin/ksh -l }
-	[exec] (chromium) {/usr/local/bin/chrome -allow-file-access-from-files}
+	[exec] (chromium) {/usr/local/bin/chrome --disable-gpu --allow-file-access-from-files}
 	[exec] (midori) { export \`/usr/local/bin/gnome-keyring-servicio -s\`; /usr/local/bin/midori}
 [submenu] (Espiritualidad)
 	[exec] (xiphos) {/usr/local/bin/xiphos}
