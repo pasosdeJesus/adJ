@@ -4,7 +4,7 @@ COMMENT=	Scalable distributed monitoring system
 
 VERSION=	3.6.0
 DISTNAME=	ganglia-${VERSION}
-REVISION=	1
+REVISION=	2
 
 CATEGORIES=	sysutils
 HOMEPAGE=	http://ganglia.sourceforge.net/
@@ -16,7 +16,7 @@ MASTER_SITES=	${MASTER_SITE_SOURCEFORGE:=ganglia/}
 DISTFILES=	${DISTNAME}.tar.gz
 
 BUILD_DEPENDS= 	devel/apr devel/libconfuse net/rrdtool
-RUN_DEPENDS=	net/rrdtool
+RUN_DEPENDS=	devel/libconfuse net/rrdtool
 WANTLIB =       c kvm z expat pthread
 
 SHARED_LIBS +=  ganglia-3.6.0             0.0 # 0.0
