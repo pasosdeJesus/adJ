@@ -97,7 +97,7 @@ EOF
 } fi;
 ARCH=`pwd`
 ARCH="$ARCH/$V$VESP-$ARQ/"
-echo "ARCH=$ARCH /inst-adJ.sh" >>/etc/rc.firsttime    
+echo "TERM=vt220 ARCH=$ARCH /inst-adJ.sh" >>/etc/rc.firsttime    
 echo "Presione [ENTER] para instalar kernel $nk"
 read
 rm /obsd ; ln /bsd /obsd 
