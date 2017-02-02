@@ -361,7 +361,7 @@ if (test "$?" != "0") then {
 		} fi;
 	done;
 	dmesg > /tmp/dmesg1
-	dialog --title 'Configurando USB (2)' --msgbox '\nPonga una memoria USB\n' 15 60
+	dialog --title 'Configurando USB (2)' --msgbox '\nPonga una memoria USB.  No se escribirá en ella.\n' 15 60
 	dmesg > /tmp/dmesg2
 	diff /tmp/dmesg1 /tmp/dmesg2 > /tmp/dmesgdiff
 	nusb=0;
