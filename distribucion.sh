@@ -404,8 +404,8 @@ EOF
 	#compilabase
 	echo "DESTDIR=$DESTDIR" | tee -a /var/www/tmp/distrib-adJ.bitacora;
 	cd /usr/src/etc && DESTDIR=/destdir nice make release | tee -a /var/www/tmp/distrib-adJ.bitacora;
-	find $DESTDIR  -exec touch {} ';'
-	find $RELEASEIR  -exec touch {} ';'
+	find "$DESTDIR"  -exec touch {} ';'
+	find "$RELEASEDIR"  -exec touch {} ';'
 } fi;
 
 
