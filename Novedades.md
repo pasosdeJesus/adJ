@@ -70,6 +70,9 @@ adJ y OpenBSD 6.0:
   <http://sivel.sourceforge.net/1.2/actualizacion-sivel.html#actualizaciondeunounoaunodos>
 * ```SIVeL 2.0b2``` Versión beta 2 de SIVeL 2. Escrita sobre Ruby on Rails
   puede correr en jaula chroot /var/www como usuario www:www
+* Se han renovado especialmente guías de usuario y servidor convirtiendo
+  sus fuentes a markdown, ver <https://github.com/pasosdeJesus/usuario_adJ>
+  y <https://github.com/pasosdeJesus/servidor_adJ>
 * PostgreSQL 9.6.1 retroportado con soporte UTF-8 y ordenamientos 
   alfabéticos en español.  Desde adJ 5.8 socket reubicado por omisión 
   de ```/var/www/tmp``` a ```/var/www/var/run/postgresql```.
