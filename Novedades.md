@@ -2,7 +2,7 @@
 Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y que anhelamos sea usada por Jesús durante el Milenio.
 
-###Versión: 6.0b1
+###Versión: 6.0
 Fecha de publicación: 14/Feb/2017
 
 Puede ver novedades respecto a OpenBSD en:
@@ -12,7 +12,7 @@ Puede ver novedades respecto a OpenBSD en:
 
 ###KERNEL Y SISTEMA BASE
 
-* Parches al sistema base hasta el 26.Dic.2016, que cierran 2 fallas de 
+* Parches al sistema base hasta el 3.Feb.2017, que cierran 2 fallas de 
   seguridad y 13 de robustez resueltas para fuentes de OpenBSD 6.0 
   descritas en <http://www.openbsd.org/errata60.html>
   Los binarios distribuidos de OpenBSD 6.0 no resuelven estas fallas. 
@@ -163,10 +163,6 @@ y ponga la variable LANG en otro valor por ejemplo:
 * http://pasosdejesus.github.io/basico_adJ/
 * http://pasosdejesus.github.io/usuario_adJ/
 * http://pasosdejesus.github.io/servidor_adJ/
-* Se ha documentado como hacer conexiones remotas de PostgreSQL con 
-  certificados SSL en <http://dhobsd.pasosdejesus.org/postgresql-remoto.html>
-* Se está documentnado como correr aplicaciones Ruby on Rails en una jaula
-  chroot en <http://dhobsd.pasosdejesus.org/aplicacion-rails-en-chroot.html>
 
 ## DESCARGAS
 
