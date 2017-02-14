@@ -1,7 +1,14 @@
+<<<<<<< HEAD
 $OpenBSD: patch-chrome_browser_about_flags_cc,v 1.30 2016/10/26 06:22:07 robert Exp $
 --- chrome/browser/about_flags.cc.orig.port	Fri Oct 21 00:02:00 2016
 +++ chrome/browser/about_flags.cc	Tue Oct 25 22:00:03 2016
 @@ -785,7 +785,7 @@ const FeatureEntry kFeatureEntries[] = {
+=======
+$OpenBSD: patch-chrome_browser_about_flags_cc,v 1.26 2016/05/27 06:28:20 robert Exp $
+--- chrome/browser/about_flags.cc.orig.port	Wed May 25 21:00:57 2016
++++ chrome/browser/about_flags.cc	Thu May 26 08:09:40 2016
+@@ -651,7 +651,7 @@ const FeatureEntry kFeatureEntries[] = {
+>>>>>>> 7e8581aadfac3773e05d83a662dae23a33c44e10
       kOsLinux | kOsCrOS | kOsWin | kOsAndroid,
       ENABLE_DISABLE_VALUE_TYPE(switches::kEnableSmoothScrolling,
                                 switches::kDisableSmoothScrolling)},
@@ -10,6 +17,7 @@ $OpenBSD: patch-chrome_browser_about_flags_cc,v 1.30 2016/10/26 06:22:07 robert 
      {"overlay-scrollbars", IDS_FLAGS_OVERLAY_SCROLLBARS_NAME,
       IDS_FLAGS_OVERLAY_SCROLLBARS_DESCRIPTION,
       // Uses the system preference on Mac (a different implementation).
+<<<<<<< HEAD
 @@ -1336,7 +1336,7 @@ const FeatureEntry kFeatureEntries[] = {
       ENABLE_DISABLE_VALUE_TYPE(switches::kEnableTranslateNewUX,
                                 switches::kDisableTranslateNewUX)},
@@ -23,6 +31,12 @@ $OpenBSD: patch-chrome_browser_about_flags_cc,v 1.30 2016/10/26 06:22:07 robert 
       IDS_FLAGS_ENABLE_MATERIAL_DESIGN_EXTENSIONS_DESCRIPTION, kOsDesktop,
       FEATURE_VALUE_TYPE(features::kMaterialDesignExtensions)},
  #endif
+=======
+@@ -1691,7 +1691,7 @@ const FeatureEntry kFeatureEntries[] = {
+      IDS_FLAGS_ENABLE_MATERIAL_DESIGN_EXTENSIONS_DESCRIPTION, kOsDesktop,
+      SINGLE_VALUE_TYPE(switches::kEnableMaterialDesignExtensions)},
+ #endif
+>>>>>>> 7e8581aadfac3773e05d83a662dae23a33c44e10
 -#if defined(OS_WIN) || defined(OS_LINUX)
 +#if defined(OS_WIN) || defined(OS_LINUX) || defined(OS_BSD)
      {"enable-input-ime-api", IDS_FLAGS_ENABLE_INPUT_IME_API_NAME,

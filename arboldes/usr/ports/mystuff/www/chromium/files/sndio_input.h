@@ -11,12 +11,20 @@
 
 #include "base/compiler_specific.h"
 #include "base/macros.h"
+<<<<<<< HEAD
+=======
+#include "base/memory/scoped_ptr.h"
+>>>>>>> 7e8581aadfac3773e05d83a662dae23a33c44e10
 #include "base/memory/weak_ptr.h"
 #include "base/time/time.h"
 #include "media/audio/agc_audio_stream.h"
 #include "media/audio/audio_io.h"
+<<<<<<< HEAD
 #include "media/audio/audio_device_description.h"
 #include "media/base/audio_parameters.h"
+=======
+#include "media/audio/audio_parameters.h"
+>>>>>>> 7e8581aadfac3773e05d83a662dae23a33c44e10
 
 namespace media {
 
@@ -89,9 +97,15 @@ class SndioAudioInputStream : public AgcAudioStream<AudioInputStream> {
   AudioInputCallback* callback_;  // Valid during a recording session.
   base::TimeTicks next_read_time_;  // Scheduled time for next read callback.
   struct sio_hdl* device_handle_;  // Handle to the SNDIO PCM recording device.
+<<<<<<< HEAD
   std::unique_ptr<uint8_t[]> audio_buffer_;  // Buffer used for reading audio data.
   bool read_callback_behind_schedule_;
   std::unique_ptr<AudioBus> audio_bus_;
+=======
+  scoped_ptr<uint8_t[]> audio_buffer_;  // Buffer used for reading audio data.
+  bool read_callback_behind_schedule_;
+  scoped_ptr<AudioBus> audio_bus_;
+>>>>>>> 7e8581aadfac3773e05d83a662dae23a33c44e10
 
   int hw_delay_;
   int sndio_rec_bufsize_;

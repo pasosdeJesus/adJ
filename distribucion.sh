@@ -758,35 +758,49 @@ if (test "$sn" = "s") then {
 	# Retroportados para cerrar fallas o actualizar
 	# Deben estar en arboldes/usr/ports/mystuff y en /usr/ports de current
 	paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs" 
-	paquete ruby paquetes "ruby ruby23-ri_docs" 2.3
+	paquete node
+	paquete ruby paquetes "ruby ruby24-ri_docs" 2.4
+
+:	###
+        # Actualizados.  Están desactualizado en OpenBSD estable y current
+	paquete php paquetes "php php-bz2 php-curl php-fpm php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 5.6
+	paquete ocaml 
+
 
 	####
 	# Recompilados para cerrar fallas de portes actualizados (estable)
 	# Para que operen bien basta actualizar CVS de /usr/ports 
 	# Los siguientes no deben estar en arboldes/usr/ports/mystuff
-	#paquete bzip2
-	#paquete curl 
+	paquete curl 
+	paquete flac
 	#paquete gd
 	#paquete git paquetes "git"
+	paquete gstreamer
+	paquete gstreamer1
 	#paquete imlib2
 	#paquete ImageMagick
+	paquete libarchive
 	#paquete libksba
 	#paquete libtalloc
-	#paquete mariadb-client paquetes "mariadb-client mariadb-server" 
+	paquete mpg123
+	paquete mariadb-client paquetes "mariadb-client mariadb-server" 
 	#paquete mplayer
 	#paquete nginx
-	#paquete node
 	#paquete openldap-client 
-	#paquete p5-Mail-SpamAssassin
-	#paquete p7zip paquetes "p7zip p7zip-rar"
+	paquete p5-Mail-SpamAssassin
+	paquete p5-DBD-mysql
+	paquete p7zip paquetes "p7zip p7zip-rar"
 	#paquete pidgin paquetes "libpurple pidgin"
-	#paquete samba paquetes "ldb samba tevent"
+	paquete samba paquetes "ldb samba tevent"
 	#paquete tdb
-	#paquete tiff
+	paquete tiff
+	paquete vim
 	#paquete webkit
 	#paquete webkitgtk4
 	#paquete webkit paquetes "webkit webkit-gtk3"
+	paquete xz
 	# FLAVOR=gtk3 make paquete webkit-gtk3
+	paquete zip
 
 	##
 	# Nueva revisión para operar con librerías retroportadas o actualizadas
@@ -797,9 +811,10 @@ if (test "$sn" = "s") then {
 	#paquete postgis
 	#paquete py-psycopg2
 	#paquete qgis
+	paquete hevea
 
 	# Recompilado con llave de adJ
-	#paquete chromium
+	paquete chromium
 
 	####
 	# Modificados para que usen xlocale (pueden cerrar fallas)
@@ -812,7 +827,7 @@ if (test "$sn" = "s") then {
 	# No deben estar en mystuff
 	paquete djvulibre
 	paquete gettext-tools
-	paquete ggrep
+	#paquete ggrep
 	paquete gdk-pixbuf
 	paquete glib2
 	paquete gtar
@@ -823,10 +838,6 @@ if (test "$sn" = "s") then {
 	paquete scribus
 	paquete wget
 	paquete wxWidgets-gtk2
-
-	###
-        # Actualizados.  Están desactualizado en OpenBSD estable y current
-	paquete php paquetes "php php-bz2 php-curl php-fpm php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 5.6
 
 	##
 	# Retroportados no existentes en versión actual

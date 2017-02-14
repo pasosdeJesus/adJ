@@ -1,41 +1,21 @@
 $adJ$
---- src/main.cpp.orig	Thu Aug  6 08:28:20 2015
-+++ src/main.cpp	Mon Jul 18 08:39:18 2016
-@@ -197,7 +197,7 @@ bool FXApp::runOneEvent(bool blocking)
- char **args;
- FXbool xim_used=false;
+--- src/main.cpp.orig	Tue Dec 15 08:55:15 2015
++++ src/main.cpp	Fri Dec 30 07:03:59 2016
+@@ -205,7 +205,7 @@ bool FXApp::runOneEvent(bool blocking)
+ char** args;
+ FXbool xim_used = false;
  
 -#if defined(linux)
 +#if defined(linux) || defined(__OpenBSD__)
  FXuint pkg_format;
  #endif
  
-@@ -307,6 +307,7 @@ int main(int argc,char *argv[])
-   	textdomain(PACKAGE);
- #endif
- 
-+	FXString cmd, str;
- #if defined(linux)
- 
-     // For package query on Linux systems, try to guess if the default package format is deb or rpm:
-@@ -314,8 +315,8 @@ int main(int argc,char *argv[])
-     //   - else if rpm exists, then the system uses rpm packages
- 	//   - else another (unsupported) package manager is used
- 
--	FXString cmd="dpkg --version";
--	FXString str=getCommandOutput(cmd);
-+	cmd="dpkg --version";
-+	str=getCommandOutput(cmd);
- 
- 	if (str.find("Debian") != -1)
- 		pkg_format=DEB_PKG; // deb based system
-@@ -331,7 +332,8 @@ int main(int argc,char *argv[])
- 		else
- 			pkg_format=OTHER_PKG; // other (unsupported) package system
- 	}
--
+@@ -356,6 +356,8 @@ int main(int argc, char* argv[])
+             pkg_format = OTHER_PKG; // other (unsupported) package system
+         }
+     }
 +#elif defined(__OpenBSD__)
-+	pkg_format = OPENBSD_PKG;
++    pkg_format = OPENBSD_PKG;
  #endif
  
- 	// Parse basic arguments
+     // Parse basic arguments

@@ -1,0 +1,15 @@
+$OpenBSD$
+
+Skip hanging test.
+
+--- test/openssl/test_ssl_session.rb.orig	Sun Dec 18 13:33:13 2016
++++ test/openssl/test_ssl_session.rb	Sun Dec 18 13:33:18 2016
+@@ -267,7 +267,7 @@ __EOS__
+         ssl.close
+       end
+     end
+-  end
++  end if false
+ 
+   def test_ctx_client_session_cb
+     called = {}

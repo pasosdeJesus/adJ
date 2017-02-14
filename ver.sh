@@ -41,9 +41,9 @@ RUTAKERNELREESPECIAL=""
 # Si debe usarse un kernel por ejemplo sin rlphy
 
 # Datos del CVS del cual se actualizan fuentes de OpenBSD
-USUARIOCVS=""
-MAQCVS=""
-DIRCVS=""
+USUARIOCVS="anoncvs"
+MAQCVS="anoncvs4.usa.openbsd.org"
+DIRCVS="/cvs"
 
 export DESTDIR=/destdir; 
 export RELEASEDIR=/releasedir

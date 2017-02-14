@@ -21,7 +21,12 @@ static const int kDefaultSampleRate = 48000;
 
 void AddDefaultDevice(AudioDeviceNames* device_names) {
   DCHECK(device_names->empty());
+<<<<<<< HEAD
   device_names->push_front(AudioDeviceName::CreateDefault());
+=======
+  device_names->push_front(AudioDeviceName(AudioManager::GetDefaultDeviceName(),
+                                           AudioManagerBase::kDefaultDeviceId));
+>>>>>>> 7e8581aadfac3773e05d83a662dae23a33c44e10
 }
 
 bool AudioManagerOpenBSD::HasAudioOutputDevices() {
@@ -138,7 +143,11 @@ AudioInputStream* AudioManagerOpenBSD::MakeInputStream(
     const AudioParameters& params) {
   DLOG(WARNING) << "MakeInputStream";
   return new SndioAudioInputStream(this,
+<<<<<<< HEAD
              AudioDeviceDescription::kDefaultDeviceId, params);
+=======
+             AudioManagerBase::kDefaultDeviceId, params);
+>>>>>>> 7e8581aadfac3773e05d83a662dae23a33c44e10
 }
 
 AudioOutputStream* AudioManagerOpenBSD::MakeOutputStream(

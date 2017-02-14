@@ -2,25 +2,29 @@ $OpenBSD: patch-src_SearchWindow_cpp,v 1.2 2015/01/21 02:26:00 bcallah Exp $
 
 Remove gnuisms. The Find Hidden checkbox does nothing now.
 
---- src/SearchWindow.cpp.orig	Tue Dec 16 07:26:10 2014
-+++ src/SearchWindow.cpp	Mon Jan 12 00:16:23 2015
-@@ -533,7 +533,7 @@ long SearchWindow::onCmdStart(FXObject*,FXSelector,voi
- 	if (linkbtn->getCheck())
- 		searchcommand="find -L " + ::quote(wheredir->getText());
- 	else
--		searchcommand="find -P " + ::quote(wheredir->getText());
-+		searchcommand="find " + ::quote(wheredir->getText());
+--- src/SearchWindow.cpp.orig	Tue Dec 15 08:54:20 2015
++++ src/SearchWindow.cpp	Fri Dec 30 07:09:52 2016
+@@ -639,7 +639,11 @@ long SearchWindow::onCmdStart(FXObject*, FXSelector, v
+     }
+     else
+     {
++#if defined(__OpenBSD__)
++        searchcommand = "find " + ::quote(wheredir->getText());
++#else
+         searchcommand = "find -P " + ::quote(wheredir->getText());
++#endif
+     }
  
- 	// Ignore case
- 	FXString nameoption;
-@@ -602,8 +602,8 @@ long SearchWindow::onCmdStart(FXObject*,FXSelector,voi
- 		searchcommand += " -empty"; 
+     // Ignore case
+@@ -745,7 +749,11 @@ long SearchWindow::onCmdStart(FXObject*, FXSelector, v
+     // Hidden files
+     if (!findhidden->getCheck())
+     {
++#if defined(__OpenBSD__)
++        searchcommand += " \\( ! '.*/\\..*' \\)"; // 2016/07/01 08:46:52 landry
++#else
+         searchcommand += " \\( ! -regex '.*/\\..*' \\)";
++#endif
+     }
  
- 	// Hidden files
--	if (!findhidden->getCheck())
--		searchcommand += " \\( ! -regex '.*/\\..*' \\)"; 
-+	// if (!findhidden->getCheck())
-+	//	searchcommand += " \\( ! '.*/\\..*' \\)"; 
- 
- 	// Without grep command
- 	if (greptext->getText()=="")
+     // Without grep command

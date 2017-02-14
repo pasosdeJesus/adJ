@@ -31,10 +31,10 @@ echo "Acceso de usuarios entre $fini y $ffin" | tee -a $rep
 /usr/local/adJ/revisaauthlog.pl $d/authlog* >>  $rep
 
 echo "Correos enviados" | tee -a $rep
-(cd $d; doas grep "Sent" maillog* | grep -v " to=\"" | sed -e "s/.* to=\([^=]*\), [a-z]*=.*/\1/g"  | sort -u) >> $rep
+(cd $d; grep "Sent" maillog* | grep -v " to=\"" | sed -e "s/.* to=\([^=]*\), [a-z]*=.*/\1/g"  | sort -u) >> $rep
 
-echo "Examinando bitacoras de Apache" | tee -a $rep
-for i in /var/www/logs/*access_log; do 
+echo "Examinando bitacoras de servidor web" | tee -a $rep
+for i in /var/www/logs/*access*log*; do 
 	echo "** Bitacora $i" | tee -a $rep;
 	/usr/local/adJ/revisaapachelog.pl $i* >> $rep
 done

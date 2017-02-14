@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 $OpenBSD: patch-third_party_webrtc_base_network_cc,v 1.13 2016/09/01 16:28:11 robert Exp $
 --- third_party/webrtc/base/network.cc.orig.port	Thu Sep  1 00:05:08 2016
 +++ third_party/webrtc/base/network.cc	Thu Sep  1 11:12:25 2016
+=======
+$OpenBSD: patch-third_party_webrtc_base_network_cc,v 1.11 2016/05/27 06:28:21 robert Exp $
+--- third_party/webrtc/base/network.cc.orig.port	Wed May 25 21:02:41 2016
++++ third_party/webrtc/base/network.cc	Thu May 26 08:09:49 2016
+>>>>>>> 7e8581aadfac3773e05d83a662dae23a33c44e10
 @@ -14,7 +14,7 @@
  // linux/if.h can't be included at the same time as the posix sys/if.h, and
  // it's transitively required by linux/route.h, so include that version on
@@ -10,7 +16,11 @@ $OpenBSD: patch-third_party_webrtc_base_network_cc,v 1.13 2016/09/01 16:28:11 ro
  #include <linux/if.h>
  #include <linux/route.h>
  #elif !defined(__native_client__)
+<<<<<<< HEAD
 @@ -656,7 +656,7 @@ bool BasicNetworkManager::CreateNetworks(bool include_
+=======
+@@ -631,7 +631,7 @@ bool BasicNetworkManager::CreateNetworks(bool include_
+>>>>>>> 7e8581aadfac3773e05d83a662dae23a33c44e10
  }
  #endif  // WEBRTC_WIN
  
@@ -19,7 +29,11 @@ $OpenBSD: patch-third_party_webrtc_base_network_cc,v 1.13 2016/09/01 16:28:11 ro
  bool IsDefaultRoute(const std::string& network_name) {
    FileStream fs;
    if (!fs.Open("/proc/net/route", "r", NULL)) {
+<<<<<<< HEAD
 @@ -699,7 +699,7 @@ bool BasicNetworkManager::IsIgnoredNetwork(const Netwo
+=======
+@@ -674,7 +674,7 @@ bool BasicNetworkManager::IsIgnoredNetwork(const Netwo
+>>>>>>> 7e8581aadfac3773e05d83a662dae23a33c44e10
        strncmp(network.name().c_str(), "vboxnet", 7) == 0) {
      return true;
    }

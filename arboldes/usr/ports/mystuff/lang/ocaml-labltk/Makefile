@@ -5,13 +5,13 @@
 
 COMMENT=	"Interface to the Tcl/Tk GUI framework"
 VERSION=	8.06.2
-REVISION=	1
+REVISION=	2
 
 PKGNAME=	ocaml-labltk-${VERSION}
 DISTNAME=	labltk-${VERSION}
 CATEGORIES=	lang
 
-MASTER_SITES=	http://forge.ocamlcore.org/frs/download.php/1455/
+MASTER_SITES=	http://forge.ocamlcore.org/frs/download.php/1628/
 EXTRACT_SUFX=	.tar.gz
 
 HOMEPAGE=	https://forge.ocamlcore.org/projects/labltk/

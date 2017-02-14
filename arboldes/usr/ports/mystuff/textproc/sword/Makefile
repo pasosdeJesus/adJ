@@ -5,7 +5,7 @@ COMMENT=	"Bible study platform with KJV module"
 V=              1.7.4
 DISTNAME=	sword-${V}
 PKGNAME=        sword-${V}
-#REVISION=	1
+REVISION=	0
 # KJV cambio, detectado 2016-07-18
 CATEGORIES=    	textproc books
 SHARED_LIBS=	sword 7.4 

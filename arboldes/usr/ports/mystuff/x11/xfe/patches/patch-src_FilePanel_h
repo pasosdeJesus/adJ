@@ -1,33 +1,21 @@
 $adJ$
---- src/FilePanel.h.orig	Thu Aug  6 10:33:18 2015
-+++ src/FilePanel.h	Mon Jul 18 08:25:57 2016
-@@ -148,13 +148,11 @@ FilePanel(FXWindow *owner, const char*,FXComposite*, D
+--- src/FilePanel.h.orig	Wed Jul 27 04:09:17 2016
++++ src/FilePanel.h	Fri Dec 30 06:45:43 2016
+@@ -152,7 +152,7 @@ class FilePanel : public FXVerticalFrame (public)
          ID_SHOW_DETAILS,
          ID_TOGGLE_HIDDEN,
          ID_TOGGLE_THUMBNAILS,
 -#if defined(linux)
++#if defined(linux) || defined(__OpenBSD__)
          ID_MOUNT,
          ID_UMOUNT,
- 		ID_PKG_QUERY,
- 		ID_PKG_INSTALL,
- 		ID_PKG_UNINSTALL,
--#endif
-         ID_LAST,
-     };
- public:
-@@ -215,7 +213,6 @@ FilePanel(FXWindow *owner, const char*,FXComposite*, D
- 	long onUpdRunScript(FXObject*,FXSelector,void*);
- 	long onCmdGoScriptDir(FXObject*, FXSelector, void*);
+         ID_PKG_QUERY,
+@@ -223,7 +223,7 @@ class FilePanel : public FXVerticalFrame (public)
+     long onUpdRunScript(FXObject*, FXSelector, void*);
+     long onCmdGoScriptDir(FXObject*, FXSelector, void*);
  
 -#if defined(linux)
-     long onCmdMount(FXObject*,FXSelector,void*);
-     long onUpdMount(FXObject*,FXSelector,void*);
-     long onUpdUnmount(FXObject*,FXSelector,void*);
-@@ -223,7 +220,6 @@ FilePanel(FXWindow *owner, const char*,FXComposite*, D
-     long onUpdPkgQuery(FXObject*,FXSelector,void*);
-     long onCmdPkgInstall(FXObject*,FXSelector,void*);
-     long onCmdPkgUninstall(FXObject*,FXSelector,void*);
--#endif
- public:
- 
- 	// Change path text
++#if defined(linux) || defined(__OpenBSD__)
+     long onCmdMount(FXObject*, FXSelector, void*);
+     long onUpdMount(FXObject*, FXSelector, void*);
+     long onUpdUnmount(FXObject*, FXSelector, void*);

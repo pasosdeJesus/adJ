@@ -1,47 +1,41 @@
 $OpenBSD$
---- src/xfedefs.h.orig	Mon Jan 12 04:30:43 2015
-+++ src/xfedefs.h	Mon Jul 18 08:43:34 2016
-@@ -162,11 +162,11 @@
+--- src/xfedefs.h.orig	Wed Jul 27 06:27:41 2016
++++ src/xfedefs.h	Sat Dec 31 07:40:19 2016
+@@ -172,11 +172,19 @@
  
- // Command to launch Xfe as root with sudo or su, using Xvt as a terminal
+ // Command to launch Xfe as root with sudo or su, using st as a terminal
  #ifndef SUDOCMD
--#define SUDOCMD "-fn 7x14 -geometry 60x4 -e sudo su -c 'nohup xfe >& /dev/null & sleep 1'"
-+#define SUDOCMD "-fn 7x14 -geometry 60x4 -e sudo su root -c 'nohup xfe >& /dev/null & sleep 1'"
+-#define SUDOCMD    " -g 60x4 -e sudo su -c 'nohup xfe >& /dev/null & sleep 1'"
++#  if defined(__OpenBSD__)
++#    define SUDOCMD    " -g 60x4 -e doas su root -c 'nohup xfe >& /dev/null & sleep 1'"
++#  else
++#    define SUDOCMD    " -g 60x4 -e sudo su -c 'nohup xfe >& /dev/null & sleep 1'"
++#  endif
  #endif
  
  #ifndef SUCMD
--#define SUCMD "-fn 7x14 -geometry 60x4 -e su -c 'nohup xfe >& /dev/null & sleep 1'"
-+#define SUCMD "-fn 7x14 -geometry 60x4 -e su root -c 'nohup xfe >& /dev/null & sleep 1'"
+-#define SUCMD    " -g 60x4 -e su -c 'nohup xfe >& /dev/null & sleep 1'"
++#  if defined(__OpenBSD__)
++#    define SUCMD    " -g 60x4 -e su root -c 'nohup xfe >& /dev/null & sleep 1'"
++#  else
++#    define SUCMD    " -g 60x4 -e su -c 'nohup xfe >& /dev/null & sleep 1'"
++#  endif
  #endif
  
  // Tooltips setup time and duration
-@@ -261,19 +261,24 @@
+@@ -279,7 +287,7 @@
  
- #if defined(linux)
+ // Linux specials
  
--// fstab path
--#ifndef FSTAB_PATH
--#define FSTAB_PATH "/etc/fstab"
--#endif
--
- // mtab path
- #ifndef MTAB_PATH
- #define MTAB_PATH "/proc/mounts"
- #endif
- 
-+#endif
-+
+-#if defined(linux)
 +#if defined(linux) || defined(__OpenBSD__)
-+
-+// fstab path
-+#ifndef FSTAB_PATH
-+#define FSTAB_PATH "/etc/fstab"
-+#endif
-+
- // Package format
- #define DEB_PKG 0
- #define RPM_PKG 1
- #define OTHER_PKG 2
-+#define OPENBSD_PKG 3
+ 
+ // fstab path
+ #ifndef FSTAB_PATH
+@@ -295,5 +303,6 @@
+ #define DEB_PKG      0
+ #define RPM_PKG      1
+ #define OTHER_PKG    2
++#define OPENBSD_PKG    3
  
  #endif

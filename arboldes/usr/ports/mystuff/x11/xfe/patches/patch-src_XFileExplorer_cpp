@@ -1,81 +1,12 @@
-$adJ$
---- src/XFileExplorer.cpp.orig	Thu Aug  6 10:45:19 2015
-+++ src/XFileExplorer.cpp	Mon Jul 18 08:25:57 2016
-@@ -3211,6 +3211,12 @@ long XFileExplorer::onCmdRun(FXObject*,FXSelector,void
- long XFileExplorer::onCmdSu(FXObject*,FXSelector,void*)
- {
- 	int ret;
-+	char color[64];
-+	FXString bg=" -bg ";
-+	FXString fg=" -fg ";	 
-+	FXString command;
-+	int status;
-+	int errcode;
- 	
- 	// Wait cursor
- 	getApp()->beginWaitCursor();
-@@ -3222,7 +3228,7 @@ long XFileExplorer::onCmdSu(FXObject*,FXSelector,void*
- 	ret=chdir(lpanel->getCurrent()->getDirectory().text());
- 	if (ret < 0)
- 	{
--		int errcode=errno;	
-+		errcode=errno;	
- 		if (errcode)
- 			MessageBox::error(this,BOX_OK,_("Error"),_("Can't enter folder %s: %s"),lpanel->getCurrent()->getDirectory().text(),strerror(errcode));
- 		else
-@@ -3242,45 +3248,43 @@ long XFileExplorer::onCmdSu(FXObject*,FXSelector,void*
- 		title = _("Enter the root password:");
- 		sucmd = SUCMD;
- 	}
--	
- 	// Use appropriate background and foreground colors for Xvt
--	char color[64];
- 	fxnamefromcolor(color,getApp()->getBackColor());
--	FXString bg=" -bg ";
- 	bg = bg + color;
- 	fxnamefromcolor(color,getApp()->getForeColor());
--	FXString fg=" -fg ";
- 	fg = fg + color + " ";
- 	
- 	// Command string
--	FXString command = "xvt -title " + ::quote(title) + bg + fg + sucmd;
-+	command = "xvt -title " + ::quote(title) + bg + fg + sucmd;
- 	
- 	// Execute su or sudo command in an internal Xvt terminal
--	int status=runinxvt(command);
-+	status=runinxvt(command);
- 	
- 	// If error
- 	ret=chdir(startlocation.text());
- 	if (ret < 0)
- 	{
--		int errcode=errno;	
-+		errcode=errno;	
- 		if (errcode)
- 			MessageBox::error(this,BOX_OK,_("Error"),_("Can't enter folder %s: %s"),startlocation.text(),strerror(errcode));
- 		else
- 			MessageBox::error(this,BOX_OK,_("Error"),_("Can't enter folder %s"),startlocation.text());
- 		
--		return 0;
-+		ret = 0;
-+        	goto end;
- 	}
+$OpenBSD: patch-src_XFileExplorer_cpp,v 1.1 2010/10/24 19:55:46 stephan Exp $
+--- src/XFileExplorer.cpp.orig	Wed Jul 27 04:47:49 2016
++++ src/XFileExplorer.cpp	Fri Dec 30 07:18:53 2016
+@@ -12,6 +12,8 @@
+ #include <fxkeys.h>
+ #include <FXPNGIcon.h>
  
- 	if (status<0)
- 	{
- 		MessageBox::error(getApp(),BOX_OK,_("Error"),_("An error has occurred!"));
--		getApp()->endWaitCursor();
--		return 0;
-+		ret = 0;
-+        	goto end;
- 	}	
--	
++#include <X11/Xlib.h>
 +
-+end:    
-  	// Wait cursor
- 	getApp()->endWaitCursor();
--    return 1;
-+	return ret;
- }
- 
- 
+ #include "xfedefs.h"
+ #include "icons.h"
+ #include "xfeutils.h"

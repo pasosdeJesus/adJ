@@ -1,0 +1,24 @@
+SpamAssassin is a mail filter to identify spam.
+
+Using its rule base and optional network sources (DNS-based lists and
+collaborative spam-tracking databases), it carries out a wide range of
+heuristic tests on mail headers and body text to identify "spam", also
+known as unsolicited commercial email.
+
+Once identified, the mail can then be optionally tagged as spam for
+later filtering using the user's own mail user-agent application.
+
+SpamAssassin requires very little configuration; you do not need
+to continually update it with details of your mail accounts, mailing
+list memberships, etc.  It accomplishes filtering without this
+knowledge, as much as possible.
+
+Read ${PREFIX}/share/doc/SpamAssassin/README
+for further installation instructions.
+
+Or if you are in a hurry you can read:
+${PREFIX}/share/doc/SpamAssassin/OpenBSD-SpamAssassin-mini-howto.html
+
+The SpamAssassin Wiki is available at <http://wiki.apache.org/spamassassin>
+and contains up-to-date information on configuring SpamAssassin, and using
+some of the more advanced features of it.

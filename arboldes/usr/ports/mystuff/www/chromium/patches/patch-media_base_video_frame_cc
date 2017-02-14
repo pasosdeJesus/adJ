@@ -1,7 +1,14 @@
+<<<<<<< HEAD
 $OpenBSD: patch-media_base_video_frame_cc,v 1.5 2016/10/26 06:22:08 robert Exp $
 --- media/base/video_frame.cc.orig.port	Wed Oct 12 21:03:00 2016
 +++ media/base/video_frame.cc	Wed Oct 19 12:56:06 2016
 @@ -53,7 +53,7 @@ static std::string StorageTypeToString(
+=======
+$OpenBSD: patch-media_base_video_frame_cc,v 1.2 2016/05/27 06:28:21 robert Exp $
+--- media/base/video_frame.cc.orig.port	Wed May 25 21:01:03 2016
++++ media/base/video_frame.cc	Thu May 26 08:09:47 2016
+@@ -49,7 +49,7 @@ static std::string StorageTypeToString(
+>>>>>>> 7e8581aadfac3773e05d83a662dae23a33c44e10
        return "OWNED_MEMORY";
      case VideoFrame::STORAGE_SHMEM:
        return "SHMEM";
@@ -10,7 +17,11 @@ $OpenBSD: patch-media_base_video_frame_cc,v 1.5 2016/10/26 06:22:08 robert Exp $
      case VideoFrame::STORAGE_DMABUFS:
        return "DMABUFS";
  #endif
+<<<<<<< HEAD
 @@ -75,7 +75,7 @@ static std::string StorageTypeToString(
+=======
+@@ -71,7 +71,7 @@ static std::string StorageTypeToString(
+>>>>>>> 7e8581aadfac3773e05d83a662dae23a33c44e10
  // static
  static bool IsStorageTypeMappable(VideoFrame::StorageType storage_type) {
    return
@@ -19,7 +30,11 @@ $OpenBSD: patch-media_base_video_frame_cc,v 1.5 2016/10/26 06:22:08 robert Exp $
        // This is not strictly needed but makes explicit that, at VideoFrame
        // level, DmaBufs are not mappable from userspace.
        storage_type != VideoFrame::STORAGE_DMABUFS &&
+<<<<<<< HEAD
 @@ -329,7 +329,7 @@ scoped_refptr<VideoFrame> VideoFrame::WrapExternalYuva
+=======
+@@ -311,7 +311,7 @@ scoped_refptr<VideoFrame> VideoFrame::WrapExternalYuvG
+>>>>>>> 7e8581aadfac3773e05d83a662dae23a33c44e10
    return frame;
  }
  
@@ -28,7 +43,11 @@ $OpenBSD: patch-media_base_video_frame_cc,v 1.5 2016/10/26 06:22:08 robert Exp $
  // static
  scoped_refptr<VideoFrame> VideoFrame::WrapExternalDmabufs(
      VideoPixelFormat format,
+<<<<<<< HEAD
 @@ -441,7 +441,7 @@ scoped_refptr<VideoFrame> VideoFrame::WrapVideoFrame(
+=======
+@@ -427,7 +427,7 @@ scoped_refptr<VideoFrame> VideoFrame::WrapVideoFrame(
+>>>>>>> 7e8581aadfac3773e05d83a662dae23a33c44e10
      wrapping_frame->data_[i] = frame->data(i);
    }
  
@@ -37,7 +56,11 @@ $OpenBSD: patch-media_base_video_frame_cc,v 1.5 2016/10/26 06:22:08 robert Exp $
    // If there are any |dmabuf_fds_| plugged in, we should duplicate them.
    if (frame->storage_type() == STORAGE_DMABUFS) {
      std::vector<int> original_fds;
+<<<<<<< HEAD
 @@ -750,7 +750,7 @@ VideoFrame::gpu_memory_buffer_handles() const {
+=======
+@@ -712,7 +712,7 @@ VideoFrame::gpu_memory_buffer_handles() const {
+>>>>>>> 7e8581aadfac3773e05d83a662dae23a33c44e10
    return gpu_memory_buffer_handles_;
  }
  

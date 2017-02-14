@@ -1,4 +1,4 @@
-Con respecto a OpenBSD 5.9 las novedades son:
+Con respecto a OpenBSD 6.0 las novedades son:
 
 * Proceso de Instalación:
 	* upgrade install install.sub 	En español
@@ -7,7 +7,8 @@ Con respecto a OpenBSD 5.9 las novedades son:
 * Kernel
 	* Palabra daemon renombrada por servicio ver 
 	<http://aprendiendo.pasosdejesus.org/?id=Renombrando+Daemon+por+Service>
-	* Nombre de compilación del kernel reportado por uname APRENDIENDODEJESUS
+	* Nombre de compilación del kernel reportado por uname 
+	  APRENDIENDODEJESUS
 
 * Sistema Base
 	* Binarios nuevos en /usr/bin/

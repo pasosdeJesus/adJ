@@ -1,7 +1,14 @@
+<<<<<<< HEAD
 $OpenBSD: patch-chrome_browser_ui_views_frame_browser_frame_cc,v 1.10 2016/10/26 06:22:08 robert Exp $
 --- chrome/browser/ui/views/frame/browser_frame.cc.orig.port	Fri Oct 21 00:02:01 2016
 +++ chrome/browser/ui/views/frame/browser_frame.cc	Tue Oct 25 22:05:02 2016
 @@ -38,11 +38,11 @@
+=======
+$OpenBSD: patch-chrome_browser_ui_views_frame_browser_frame_cc,v 1.8 2016/04/16 19:08:46 robert Exp $
+--- chrome/browser/ui/views/frame/browser_frame.cc.orig.port	Wed Apr 13 22:59:41 2016
++++ chrome/browser/ui/views/frame/browser_frame.cc	Thu Apr 14 08:25:10 2016
+@@ -36,7 +36,7 @@
+>>>>>>> 7e8581aadfac3773e05d83a662dae23a33c44e10
  #include "ui/native_theme/native_theme_dark_aura.h"
  #endif
  
@@ -10,12 +17,16 @@ $OpenBSD: patch-chrome_browser_ui_views_frame_browser_frame_cc,v 1.10 2016/10/26
  #include "chrome/browser/ui/views/frame/browser_command_handler_linux.h"
  #endif
  
+<<<<<<< HEAD
 -#if defined(OS_LINUX) && !defined(OS_CHROMEOS)
 +#if (defined(OS_BSD) || defined(OS_LINUX)) && !defined(OS_CHROMEOS)
  #include "ui/views/widget/desktop_aura/x11_desktop_handler.h"
  #endif
  
 @@ -104,7 +104,7 @@ void BrowserFrame::InitBrowserFrame() {
+=======
+@@ -88,7 +88,7 @@ void BrowserFrame::InitBrowserFrame() {
+>>>>>>> 7e8581aadfac3773e05d83a662dae23a33c44e10
      non_client_view()->set_context_menu_controller(this);
    }
  
