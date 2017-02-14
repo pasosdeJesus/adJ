@@ -1077,7 +1077,7 @@ a
 # servicios que pudieran haberse caido.  Verifica que cada servicio 
 # está efectivamente abajo antes de iniciarlo.
 
-if (test " \$TERM" != "") then {
+if (test "\$TERM" != "") then {
 	pkg_scripts=\`rcctl order\`
 	for _r in \${pkg_scripts}; do
 		echo -n " \${_r} ";
