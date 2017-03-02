@@ -2,7 +2,7 @@ La organización de este DVD y este archivo se ceden al dominio público de
 acuerdo a la legislación colombiana (detalles en 
 http://www.pasosdejesus.org/dominio_publico_colombia.html )
 
-Sin garantías. 2015. vtamara@pasosdeJesus.org
+Sin garantías. 2017. vtamara@pasosdeJesus.org
 
 Nota: 
 

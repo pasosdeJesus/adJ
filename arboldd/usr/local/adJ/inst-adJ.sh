@@ -5,7 +5,7 @@
 
 VER=6.0
 REV=0
-VESP="b1"
+VESP=""
 VERP=60
 
 # Falta /standard/root.hint
@@ -361,7 +361,7 @@ if (test "$?" != "0") then {
 		} fi;
 	done;
 	dmesg > /tmp/dmesg1
-	dialog --title 'Configurando USB (2)' --msgbox '\nPonga una memoria USB\n' 15 60
+	dialog --title 'Configurando USB (2)' --msgbox '\nPonga una memoria USB.  No se escribirá en ella.\n' 15 60
 	dmesg > /tmp/dmesg2
 	diff /tmp/dmesg1 /tmp/dmesg2 > /tmp/dmesgdiff
 	nusb=0;
@@ -2341,11 +2341,8 @@ ispell-config 3 >> /var/www/tmp/inst-adJ.bitacora
 echo "* Configurando escritorio de cuenta de administrador(a)" | tee -a /var/www/tmp/inst-adJ.bitacora;
 f=`ls /var/db/pkg/fluxbox* 2> /dev/null > /dev/null`;
 if (test "$?" = "0") then {
-	dialog --title 'Eliminar Fluxbox' --yesno "\\nfluxbox instalado. ¿Eliminarlo para instalar uno más nuevo?" 15 60
-	if (test "$?" = "0") then {
-		pkg_delete -I -D dependencies fluxbox >> /var/www/tmp/inst-adJ.bitacora 2>&1
-		pkg_delete -I -D dependencies partial-fluxbox >> /var/www/tmp/inst-adJ.bitacora 2>&1
-	} fi;
+	pkg_delete -I -D dependencies fluxbox >> /var/www/tmp/inst-adJ.bitacora 2>&1
+	pkg_delete -I -D dependencies partial-fluxbox >> /var/www/tmp/inst-adJ.bitacora 2>&1
 } fi;
 
 chown -R $uadJ:$uadJ /mnt/ 2> /dev/null
@@ -2407,7 +2404,7 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
                 [exec] (Configurar interfaces de red) {xterm -en utf8 -e 'li=\`/sbin/ifconfig | grep "^[a-z]*[0-9]:" | sed -e "s/:.*//g" | grep -v "lo0" | grep -v "enc0" | grep -v "pflog0" | grep -v "tun[0-9]"\`;  echo "Por configurar \$li"; for i in \$li; do echo "Configurando \$i"; /sbin/ifconfig \$i; echo -n "\n[RETORNO] para editar /etc/hostname.\$i"; read;  doas touch /etc/hostname.\$i; doas xfw /etc/hostname.\$i; done'}
                 [exec] (Configurar puerta de enlace) {doas touch /etc/mygate; doas xfw /etc/mygate}
                 [exec] (Configurar cortafuegos) {doas xfw /etc/pf.conf}
-                [exec] (Reiniciar red) {xterm -en utf8 -e '/usr/bin/doas PATH=/sbin:/usr/sbin:/bin:/usr/bin/ /bin/sh /etc/netstart && doas /sbin/pfctl -f /etc/pf.conf; echo "[RETORNO] para continuar"; read'}
+                [exec] (Reiniciar red) {xterm -en utf8 -e 'PATH=/sbin:/usr/sbin:/bin:/usr/bin/ /usr/bin/doas /bin/sh /etc/netstart && /usr/bin/doas /sbin/pfctl -f /etc/pf.conf; echo "[RETORNO] para continuar"; read'}
                 [exec] (ping a Internet) {xterm -en utf8 -e '/sbin/ping 157.253.1.13'}
         [end]
 [end]
@@ -2713,20 +2710,20 @@ for i in ruby19-railties-3.1.3 ruby19-actionmailer-3.1.3 \
     ruby19-hike-1.2.1 ruby19-arel-2.2.1 ruby19-rack-mount-0.8.3 \
     ruby19-thor-0.14.6p1 ruby19-activesupport-3.1.3 \
     ruby19-actionmailer-3.1.3 ruby19-sprockets-2.0.3 ruby19-rack-cache-1.1 \
-    ruby19-actionpack-3.1.3 ; do
+    ruby19-actionpack-3.1.3 ruby-2.3.1 ruby23-ri-docs; do
 	pkg_delete -I -D dependencies $i >> /var/www/tmp/inst-adJ.bitacora 2>&1
 done
 
-echo "* Configurar ruby-2.3" >> /var/www/tmp/inst-adJ.bitacora;
-if (test ! -f "/usr/local/bin/ruby23") then {
+echo "* Configurar ruby-2.4" >> /var/www/tmp/inst-adJ.bitacora;
+if (test ! -f "/usr/local/bin/ruby24") then {
 	insacp ruby
-	ln -sf /usr/local/bin/ruby23 /usr/local/bin/ruby
-	ln -sf /usr/local/bin/erb23 /usr/local/bin/erb
-	ln -sf /usr/local/bin/irb23 /usr/local/bin/irb
-	ln -sf /usr/local/bin/rdoc23 /usr/local/bin/rdoc
-	ln -sf /usr/local/bin/ri23 /usr/local/bin/ri
-	ln -sf /usr/local/bin/rake23 /usr/local/bin/rake
-	ln -sf /usr/local/bin/gem23 /usr/local/bin/gem
+	ln -sf /usr/local/bin/ruby24 /usr/local/bin/ruby
+	ln -sf /usr/local/bin/erb24 /usr/local/bin/erb
+	ln -sf /usr/local/bin/irb24 /usr/local/bin/irb
+	ln -sf /usr/local/bin/rdoc24 /usr/local/bin/rdoc
+	ln -sf /usr/local/bin/ri24 /usr/local/bin/ri
+	ln -sf /usr/local/bin/rake24 /usr/local/bin/rake
+	ln -sf /usr/local/bin/gem24 /usr/local/bin/gem
 } fi;
 
 if (test ! -f /home/$uadJ/.irbrc) then {
@@ -2835,11 +2832,8 @@ if (test "$?" != "0") then {
 echo "* Instalando adminstrador de archivos xfe" | tee -a /var/www/tmp/inst-adJ.bitacora;
 f=`ls /var/db/pkg/xfe* 2> /dev/null > /dev/null`;
 if (test "$?" = "0") then {
-	dialog --title 'Eliminar xfe' --yesno "\\nxfe instalado. ¿Eliminarlo para instalar uno más nuevo?" 15 60
-	if (test "$?" = "0") then {
-		pkg_delete -I -D dependencies xfe >> /var/www/tmp/inst-adJ.bitacora 2>&1
-		rm /home/$uadJ/.config/xfe/xf*
-	} fi;
+	pkg_delete -I -D dependencies xfe >> /var/www/tmp/inst-adJ.bitacora 2>&1
+	rm /home/$uadJ/.config/xfe/xf*
 } fi;
 f=`ls /var/db/pkg/xfe* 2> /dev/null > /dev/null`;
 if (test "$?" != "0") then {

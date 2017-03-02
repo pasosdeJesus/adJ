@@ -2,8 +2,8 @@
 Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y que anhelamos sea usada por Jesús durante el Milenio.
 
-###Versión: 6.0b1
-Fecha de publicación: 4/Ene/2017
+###Versión: 6.0
+Fecha de publicación: 14/Feb/2017
 
 Puede ver novedades respecto a OpenBSD en:
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_0/Novedades_OpenBSD.md>
@@ -12,7 +12,7 @@ Puede ver novedades respecto a OpenBSD en:
 
 ###KERNEL Y SISTEMA BASE
 
-* Parches al sistema base hasta el 26.Dic.2016, que cierran 2 fallas de 
+* Parches al sistema base hasta el 3.Feb.2017, que cierran 2 fallas de 
   seguridad y 13 de robustez resueltas para fuentes de OpenBSD 6.0 
   descritas en <http://www.openbsd.org/errata60.html>
   Los binarios distribuidos de OpenBSD 6.0 no resuelven estas fallas. 
@@ -70,6 +70,9 @@ adJ y OpenBSD 6.0:
   <http://sivel.sourceforge.net/1.2/actualizacion-sivel.html#actualizaciondeunounoaunodos>
 * ```SIVeL 2.0b2``` Versión beta 2 de SIVeL 2. Escrita sobre Ruby on Rails
   puede correr en jaula chroot /var/www como usuario www:www
+* Se han renovado especialmente guías de usuario y servidor convirtiendo
+  sus fuentes a markdown, ver <https://github.com/pasosdeJesus/usuario_adJ>
+  y <https://github.com/pasosdeJesus/servidor_adJ>
 * PostgreSQL 9.6.1 retroportado con soporte UTF-8 y ordenamientos 
   alfabéticos en español.  Desde adJ 5.8 socket reubicado por omisión 
   de ```/var/www/tmp``` a ```/var/www/var/run/postgresql```.
@@ -160,10 +163,6 @@ y ponga la variable LANG en otro valor por ejemplo:
 * http://pasosdejesus.github.io/basico_adJ/
 * http://pasosdejesus.github.io/usuario_adJ/
 * http://pasosdejesus.github.io/servidor_adJ/
-* Se ha documentado como hacer conexiones remotas de PostgreSQL con 
-  certificados SSL en <http://dhobsd.pasosdejesus.org/postgresql-remoto.html>
-* Se está documentnado como correr aplicaciones Ruby on Rails en una jaula
-  chroot en <http://dhobsd.pasosdejesus.org/aplicacion-rails-en-chroot.html>
 
 ## DESCARGAS
 

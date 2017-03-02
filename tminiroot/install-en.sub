@@ -2241,7 +2241,7 @@ do_install(){
 		[[ -f $_f && -s $_f ]] && mv $_f /mnt/etc/.
 	done)
 
-	echo "#_sldone"
+	echo "done"
 
 	# Apply configuration settings based on information from questions().
 	apply
@@ -2456,9 +2456,9 @@ md_consoleinfo
 # Selected sets will be installed in the order they are listed in $THESETS.
 # Ensure that siteXX.tgz is the *last* set listed so its contents overwrite
 # the contents of the other sets, not the other way around.
-SETS=$(echo {base,comp,man,game,xbase,xshare,xfont,xserv}$VERSION.tgz)
+SETS=$(echo {base,comp,man,game,xbase,xshare,xfont,xserv,site}$VERSION.tgz)
 DEFAULTSETS="${DEFAULTSETS:-bsd bsd.rd} $SETS"
-THESETS="bsd bsd.rd bsd.mp $MDSETS $SETS site$VERSION.tgz"
+THESETS="bsd bsd.rd bsd.mp $MDSETS $SETS"
 
 # Since etc${VERSION}.tgz is not in DEFAULTSETS for upgrades, it can always be
 # in SANESETS.

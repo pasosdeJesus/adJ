@@ -81,33 +81,30 @@ Con respecto a OpenBSD 6.0 las novedades son:
 		* varmonitorea.sh	Usar por monitorea
 
 * Paquetes
-	* Retroportados para cerrar fallas o actualizar
+	* Retroportados para cerrar fallas o actualizar y usar xlocale
 		* postgresql-server postgresql-client postgresql-contrib 
-			postgresql-docs ruby ruby23-ri_docs
+			postgresql-docs ruby ruby24-ri_docs node
 	* Recompilados de portes estables para cerrar fallas
-		*  bzip2, curl, gd, git", imlib2, ImageMagick
-		   libksba, libtalloc, mariadb-client mariadb-server, 
-		   mplayer, nginx, node, openldap-client, 
-		   p5-Mail-SpamAssassin, p7zip p7zip-rar, libpurple pidgin
-		   ldb, samba, tevent, tdb, tiff, webkit, webkitgtk4
-	* Nueva revisión para operar con librerías retroportadas o actualizadas
-		* gdal, inkscape, libreoffice, postgis, py-psycopg2, qgis
+		*  curl, flac, gstreamer, gstreamer1, libarchive, mpg123,
+		  mariadb, p5-DBD-mysql, p7zip, samba, tiff, vim, xz,
+		  zip                         
 	* Recompilado con llave de adJ
 		* chromium 
 	* Modificados para usar xlocale
 		* libunistring, vlc
 	* Recompilados de portes estables para usar xlocale y cerrar fallas
-		* boost, djvulibre, gettext-tools, ggrep, gdk-pixbuf
-			glib2, gtar, libidn, libxslt, llvm, scribus
-			wget, wxWidgets-gtk2
+		* gettext-tools, gdk-pixbuf, glib2, gtar, libidn, 
+		  libunistring, libxslt, llvm, scribus, vlc, wget,
+		  wxWidgets-gtk2  
 	* Adaptados de portes estables pero mejorados para adJ:
 		* colorls	Ordena alfabeticamente de acuerdo a locale
 		* hexedit 	Soporta tamaños de archivos más grandes
 		* xfe		Soporta paquetes tgz
+		* p5-Mail_SpamAssassin usa gnupg reciente
 	* Actualizados, pues están desactualizado en OpenBSD estable y current
 		* php php-bz2 php-curl php-fpm php-gd php-intl php-ldap 
 		php-mcrypt php-mysqli- php-pdo_pgsql php-pgsql php-zip
-		pear-Auth pear-DB_DataObject
+		pear-Auth pear-DB_DataObject ocaml ocaml-ocamlbuild 
 	* Unicos en adJ 
 		* emulators/realboy lang/ocaml-labltk sysutils/ganglia 
 		sysutils/htop textproc/biblesync
