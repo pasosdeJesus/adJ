@@ -1,0 +1,21 @@
+$OpenBSD$
+--- core/DjVuFile/libdjvu/GString.h.orig	Tue Feb 28 08:16:12 2017
++++ core/DjVuFile/libdjvu/GString.h	Tue Feb 28 08:19:22 2017
+@@ -65,6 +65,8 @@
+ # pragma interface
+ #endif
+ 
++#include <wchar.h>
++
+ /** @name GString.h
+ 
+     Files #"GString.h"# and #"GString.cpp"# implement a general
+@@ -136,7 +138,7 @@ namespace DJVU {
+ 
+ #if !HAS_MBSTATE
+ # ifndef HAVE_MBSTATE_T
+-typedef int mbstate_t;
++//typedef int mbstate_t;
+ # endif
+ #endif
+ 

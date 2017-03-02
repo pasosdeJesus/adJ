@@ -1,0 +1,12 @@
+$OpenBSD$
+--- core/DesktopEditor/cximage/CxImage/ximainfo.cpp.orig	Thu Feb 23 14:33:48 2017
++++ core/DesktopEditor/cximage/CxImage/ximainfo.cpp	Thu Feb 23 14:36:36 2017
+@@ -5,7 +5,7 @@
+ 
+ #include "ximage.h"
+ 
+-#if defined(_LINUX) || defined(__APPLE__)
++#if defined(__unix__) || defined(__APPLE__)
+     #ifdef UNICODE
+         #define _tcsnicmp(a,b,c) wcscasecmp(a,b)
+     #else

@@ -1,0 +1,12 @@
+$OpenBSD$
+--- core/PdfWriter/PdfWriter.pro.orig	Tue Dec  6 06:52:20 2016
++++ core/PdfWriter/PdfWriter.pro	Sat Feb 18 06:39:07 2017
+@@ -4,6 +4,8 @@ VERSION = 1.0.0.4
+ TARGET = PdfWriter
+ TEMPLATE = lib
+ 
++QMAKE_CXX = eg++
++
+ CONFIG += shared
+ CONFIG += plugin
+ 

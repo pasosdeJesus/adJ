@@ -1,0 +1,15 @@
+$OpenBSD$
+--- core/DjVuFile/libdjvu/GString.cpp.orig	Wed Mar  1 11:13:04 2017
++++ core/DjVuFile/libdjvu/GString.cpp	Wed Mar  1 11:15:31 2017
+@@ -68,6 +68,11 @@
+ #ifdef HAVE_CONFIG_H
+ # include "config.h"
+ #endif
++
++#define HAS_WCHAR 1
++#define HAVE_WCHAR_H 1
++#define HAS_WCTYPE 1
++
+ #if NEED_GNUG_PRAGMAS
+ # pragma implementation
+ #endif

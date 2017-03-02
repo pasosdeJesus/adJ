@@ -1,0 +1,19 @@
+$OpenBSD$
+--- core/DesktopEditor/raster/Jp2/Utils.h.orig	Thu Feb 23 11:09:23 2017
++++ core/DesktopEditor/raster/Jp2/Utils.h	Thu Feb 23 11:09:32 2017
+@@ -18,7 +18,7 @@ namespace Jpeg2000
+ 
+ 	static __inline int FixedMult(int nA, int nB)
+ 	{
+-		__int64 nTemp = (__int64)nA * (__int64)nB >> 12;
++		int64_t nTemp = (int64_t)nA * (int64_t)nB >> 12;
+ 		return (int)((nTemp >> 1) + (nTemp & 1));
+ 	}
+ 	static __inline int Clamp(int nValue, int nMin, int nMax)
+@@ -150,4 +150,4 @@ namespace Jpeg2000
+ 	{
+ 		return c_adNormICT[nComponentIndex];
+ 	}
+-}
+\ No newline at end of file
++}

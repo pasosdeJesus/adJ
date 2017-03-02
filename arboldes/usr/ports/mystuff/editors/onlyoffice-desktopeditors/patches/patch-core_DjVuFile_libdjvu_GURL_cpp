@@ -1,0 +1,124 @@
+$OpenBSD$
+--- core/DjVuFile/libdjvu/GURL.cpp.orig	Tue Feb 28 10:07:59 2017
++++ core/DjVuFile/libdjvu/GURL.cpp	Tue Feb 28 10:08:16 2017
+@@ -101,7 +101,7 @@
+ # endif
+ #endif
+ 
+-#if defined(UNIX) || defined(OS2)
++#if defined(__unix__) || defined(OS2)
+ # include <unistd.h>
+ # include <sys/types.h>
+ # include <sys/stat.h>
+@@ -153,7 +153,7 @@
+ #   define NAMLEN(dirent) strlen((dirent)->d_name)
+ #  endif 
+ # endif /* !AUTOCONF */
+-#endif /* UNIX */
++#endif /* __unix__ */
+ 
+ #ifdef macintosh
+ #include <unix.h>
+@@ -182,7 +182,7 @@ static const char percent='%';
+ static const char localhostspec1[] = "//localhost/";
+ static const char localhostspec2[] = "///";
+ static const char nillchar=0;
+-#if defined(UNIX)
++#if defined(__unix__)
+   static const char tilde='~';
+   static const char root[] = "/";
+ #elif defined(WIN32) || defined(OS2)
+@@ -1082,7 +1082,7 @@ GURL::encode_reserved(const GUTF8String &gs)
+ #ifdef macintosh
+     if (*s == colon )
+ #else
+-#ifdef UNIX
++#ifdef __unix__
+     if (*s == slash )
+ #else
+ #error "Define something here for your operating system"
+@@ -1380,7 +1380,7 @@ GURL::NativeFilename(void) const
+   return UTF8Filename().getUTF82Native();
+ }
+ 
+-#if defined(UNIX) || defined(macintosh) || defined(OS2)
++#if defined(__unix__) || defined(macintosh) || defined(OS2)
+ static int
+ urlstat(const GURL &url,struct stat &buf)
+ {
+@@ -1396,7 +1396,7 @@ GURL::is_file(void) const
+   bool retval=false;
+   if(is_local_file_url())
+   {
+-#if defined(UNIX) || defined(macintosh) || defined(OS2)
++#if defined(__unix__) || defined(macintosh) || defined(OS2)
+     struct stat buf;
+     if (!urlstat(*this,buf))
+     {
+@@ -1433,7 +1433,7 @@ GURL::is_local_path(void) const
+   bool retval=false;
+   if(is_local_file_url())
+   {
+-#if defined(UNIX) || defined(macintosh) || defined(OS2)
++#if defined(__unix__) || defined(macintosh) || defined(OS2)
+     struct stat buf;
+     retval=!urlstat(*this,buf);
+ #else
+@@ -1467,8 +1467,8 @@ GURL::is_dir(void) const
+   bool retval=false;
+   if(is_local_file_url())
+   {
+-    // UNIX implementation
+-#if defined(UNIX) || defined(macintosh) || defined(OS2)
++    // __unix__ implementation
++#if defined(__unix__) || defined(macintosh) || defined(OS2)
+     struct stat buf;
+     if (!urlstat(*this,buf))
+     {
+@@ -1505,7 +1505,7 @@ GURL::follow_symlinks(void) const
+ {
+   GURL ret = *this;
+ #if defined(S_IFLNK)
+-#if defined(UNIX) || defined(macintosh)
++#if defined(__unix__) || defined(macintosh)
+   int lnklen;
+   char lnkbuf[MAXPATHLEN+1];
+   struct stat buf;
+@@ -1533,7 +1533,7 @@ GURL::mkdir() const
+     retval = baseURL.mkdir();
+   if(!retval)
+     {
+-#if defined(UNIX)
++#if defined(__unix__)
+       if (is_dir())
+         retval = 0;
+       else 
+@@ -1559,7 +1559,7 @@ GURL::deletefile(void) const
+   int retval = -1;
+   if(is_local_file_url())
+     {
+-#if defined(UNIX)
++#if defined(__unix__)
+       if (is_dir())
+         retval = ::rmdir(NativeFilename());
+       else
+@@ -1585,7 +1585,7 @@ GURL::listdir(void) const
+   GList<GURL> retval;
+   if(is_dir())
+   {
+-#if defined(UNIX) || defined(OS2)
++#if defined(__unix__) || defined(OS2)
+     DIR * dir=opendir(NativeFilename());//MBCS cvt
+     for(dirent *de=readdir(dir);de;de=readdir(dir))
+     {
+@@ -1676,8 +1676,8 @@ GURL::expand_name(const GUTF8String &xfname, const cha
+   GUTF8String retval;
+   const size_t maxlen=xfname.length()*9+MAXPATHLEN+10;
+   char * const string_buffer = retval.getbuf(maxlen);
+-  // UNIX implementation
+-#if defined(UNIX)
++  // __unix__ implementation
++#if defined(__unix__)
+   // Perform tilde expansion
+   GUTF8String senv;
+   if (fname && fname[0]==tilde)

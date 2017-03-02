@@ -1,0 +1,12 @@
+$OpenBSD$
+--- core/DesktopEditor/common/String.h.orig	Tue Feb 28 07:56:49 2017
++++ core/DesktopEditor/common/String.h	Tue Feb 28 07:59:46 2017
+@@ -38,7 +38,7 @@
+ #include <algorithm>
+ 
+ 
+-#ifdef __linux__
++#ifdef __unix__
+     #include <string.h>
+ #endif
+ 

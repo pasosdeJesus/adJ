@@ -1,0 +1,12 @@
+$OpenBSD$
+--- core/PdfWriter/Src/Types.h.orig	Thu Feb 23 14:54:53 2017
++++ core/PdfWriter/Src/Types.h	Thu Feb 23 14:55:11 2017
+@@ -46,7 +46,7 @@
+ #include <algorithm>
+ #include <math.h>
+ 
+-#ifdef __linux__
++#if defined(__unix__)
+ #include <string.h>
+ #endif
+ 

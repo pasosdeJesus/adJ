@@ -1,0 +1,24 @@
+$OpenBSD$
+--- core/ASCOfficePPTXFile/Editor/Drawing/Structures.h.orig	Wed Mar  1 15:40:35 2017
++++ core/ASCOfficePPTXFile/Editor/Drawing/Structures.h	Wed Mar  1 19:49:34 2017
+@@ -240,11 +240,11 @@ namespace NSPresentationEditor
+ 			return dwVal;
+ 		}
+ 
+-		void FromValue(BYTE _R, BYTE _G, BYTE _B)
++		void FromValue(BYTE _R, BYTE _G, BYTE _BP)
+ 		{
+ 			R = _R;
+ 			G = _G;
+-			B = _B;
++			B = _BP;
+ 			Index = -1;
+ 		}
+ 
+@@ -350,4 +350,4 @@ namespace NSPresentationEditor
+ 			return *this;
+ 		}
+ 	};
+-}
+\ No newline at end of file
++}
