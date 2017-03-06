@@ -1645,6 +1645,7 @@ if (test "$?" = "0") then {
 	dialog --title 'Eliminar PostgreSQL' --yesno "\\nDesea eliminar la actual versión de PostgreSQL y los datos asociados para actualizarla\\n" 15 60
 	if (test "$?" = "0") then {
 		echo "s" >> /var/www/tmp/inst-adJ.bitacora
+		pkg_delete -I -D dependencies GeoIP >> /var/www/tmp/inst-adJ.bitacora 2>&1
 		pkg_delete -I -D dependencies postgresql-contrib >> /var/www/tmp/inst-adJ.bitacora 2>&1
 		pkg_delete -I -D dependencies postgresql-server >> /var/www/tmp/inst-adJ.bitacora 2>&1
 		pkg_delete -I -D dependencies postgresql-client >> /var/www/tmp/inst-adJ.bitacora 2>&1
