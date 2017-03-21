@@ -2,13 +2,15 @@
 Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y que anhelamos sea usada por Jesús durante el Milenio.
 
-###Versión: 6.0
+###Versión: 6.0p1
 Fecha de publicación: 14/Feb/2017
 
 Puede ver novedades respecto a OpenBSD en:
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_0/Novedades_OpenBSD.md>
 
-##NOVEDADES RESPECTO A adJ 5.9
+##NOVEDADES RESPECTO A adJ 6.0
+
+Archivo de ordenes /usr/local/adJ/resto-altroot.sh para copiar resto de particiones altroot ver <http://dhobsd.pasosdejesus.org/Respaldo_altroot.html>
 
 ###KERNEL Y SISTEMA BASE
 

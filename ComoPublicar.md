@@ -1,7 +1,7 @@
 COMO PUBLICAR
 =============
 
-Anhelamos publicar versión mayor (e.g 6.0) 4 meses después de OpenBSD:
+Anhelamos publicar versión mayor (e.g 6.0) 3 meses después de OpenBSD:
 
 	11.Ene
 	1.Jul

@@ -3,7 +3,7 @@
 # Dominio público. 2013. vtamara@pasosdeJesus.org
 
 V=6.0
-VESP=""
+VESP="p1"
 # Versión que se está desarrollando
 
 VPKGPATH=$V
