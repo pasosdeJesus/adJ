@@ -11,6 +11,13 @@ Puede ver novedades respecto a OpenBSD en:
 ##NOVEDADES RESPECTO A adJ 6.0
 
 Archivo de ordenes /usr/local/adJ/resto-altroot.sh para copiar resto de particiones altroot ver <http://dhobsd.pasosdejesus.org/Respaldo_altroot.html>
+- Paquetes más actualizados: ruby 2.4.1 retroportado
+samba
+curl
+- Parches al sistema basta hasta el 28.Mar.2017 cierran 5 fallas de seguridad y 
+  15 de robustez.
+
+
 
 ###KERNEL Y SISTEMA BASE
 
