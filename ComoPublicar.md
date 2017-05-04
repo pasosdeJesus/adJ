@@ -96,14 +96,14 @@ Pasos importantes para publicar versión mayor
 	segura, amigable para cristian@s y en español, ver 
 	http://aprendiendo.pasosdejesus.org/
 9. Correo a listas: 
-    openbsd-colombia@googlegroups.com, colibri@listas.el-directorio.org, 
+    openbsd-colombia@googlegroups.com, 
     openbsd-mexico@googlegroups.com, sivel-soporte@lists.sourceforge.net
 
 	Tema: Publicado adJ 6.0 para amd64
 
 	Para instalar por primera vez descarga la imagen para DVD de:
 	  http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/
-	O solicita un CD por correo postal.
+	O solicita un DVD o una USB de instalacion por correo postal.
 
 	Si planeas actualizar de una version anterior a 6.0
 	hay un procedimiento mas rápido con ```rsync``` (ver
