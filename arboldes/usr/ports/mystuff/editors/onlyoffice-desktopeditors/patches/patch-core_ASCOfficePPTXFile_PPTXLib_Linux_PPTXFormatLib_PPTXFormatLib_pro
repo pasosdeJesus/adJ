@@ -1,0 +1,12 @@
+$OpenBSD$
+--- core/ASCOfficePPTXFile/PPTXLib/Linux/PPTXFormatLib/PPTXFormatLib.pro.orig	Wed Mar  1 15:47:42 2017
++++ core/ASCOfficePPTXFile/PPTXLib/Linux/PPTXFormatLib/PPTXFormatLib.pro	Wed Mar  1 15:48:22 2017
+@@ -6,6 +6,8 @@
+ 
+ QT       -= core gui
+ 
++QMAKE_CC=egcc
++QMAKE_CXX=eg++
+ TARGET = PPTXFormatLib
+ TEMPLATE = lib
+ CONFIG += staticlib

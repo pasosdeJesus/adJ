@@ -1,0 +1,11 @@
+$OpenBSD$
+--- core/DesktopEditor/doctrenderer/memorystream.h.orig	Tue Feb 28 06:11:43 2017
++++ core/DesktopEditor/doctrenderer/memorystream.h	Tue Feb 28 06:14:25 2017
+@@ -38,6 +38,7 @@
+ 
+ #include "v8.h"
+ #include "libplatform/libplatform.h"
++#include "src/v8.h"
+ 
+ class CMemoryStream
+ {

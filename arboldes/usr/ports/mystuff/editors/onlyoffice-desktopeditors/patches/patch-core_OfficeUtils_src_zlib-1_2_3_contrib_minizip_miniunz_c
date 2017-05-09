@@ -1,0 +1,12 @@
+$OpenBSD$
+--- core/OfficeUtils/src/zlib-1.2.3/contrib/minizip/miniunz.c.orig	Tue Dec  6 06:52:20 2016
++++ core/OfficeUtils/src/zlib-1.2.3/contrib/minizip/miniunz.c	Wed Mar  1 08:39:35 2017
+@@ -13,7 +13,7 @@
+ #include <errno.h>
+ #include <fcntl.h>
+ 
+-#if defined(unix) || defined(_LINUX) 
++#if defined(__unix__) || defined(_LINUX)
+ # include <unistd.h>
+ # include <utime.h>
+ #else

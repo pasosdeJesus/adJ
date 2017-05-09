@@ -1,0 +1,12 @@
+$OpenBSD$
+--- core/DesktopEditor/common/File.h.orig	Sat Feb 18 06:44:32 2017
++++ core/DesktopEditor/common/File.h	Sat Feb 18 06:43:54 2017
+@@ -48,7 +48,7 @@
+ 
+ #define U_TO_UTF8(val) NSFile::CUtf8Converter::GetUtf8StringFromUnicode2(val.c_str(), val.length())
+ 
+-#if defined(__linux__) || defined(_MAC) && !defined(_IOS)
++#if defined(__unix__) || defined(_MAC) && !defined(_IOS)
+ #include <unistd.h>
+ #endif
+ 

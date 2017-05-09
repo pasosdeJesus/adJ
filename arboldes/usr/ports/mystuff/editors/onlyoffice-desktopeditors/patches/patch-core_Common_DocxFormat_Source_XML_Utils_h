@@ -1,0 +1,15 @@
+$OpenBSD$
+--- core/Common/DocxFormat/Source/XML/Utils.h.orig	Tue Feb 28 16:33:28 2017
++++ core/Common/DocxFormat/Source/XML/Utils.h	Tue Feb 28 16:33:57 2017
+@@ -67,9 +67,9 @@ namespace XmlUtils
+ 			return true;
+ 		return false;
+ 	}
+-	AVSINLINE static __int64 GetHex     (const CString& string)
++	AVSINLINE static int64_t GetHex     (const CString& string)
+ 	{
+-		__int64 nResult = 0;
++		int64_t nResult = 0;
+ 		int nLen = string.GetLength();
+ 		for ( int nIndex = 0; nIndex < nLen; ++nIndex )
+ 		{

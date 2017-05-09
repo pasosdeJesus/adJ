@@ -1,7 +1,7 @@
 COMO PUBLICAR
 =============
 
-Anhelamos publicar versión mayor (e.g 6.0) 4 meses después de OpenBSD:
+Anhelamos publicar versión mayor (e.g 6.0) 3 meses después de OpenBSD:
 
 	11.Ene
 	1.Jul
@@ -24,10 +24,10 @@ Pasos importantes para publicar versión beta
 2. Retroportar paquetes, dejar resultados no incluidos en DVD pero
    útiles en extra-6.0
 3. Cambiar versión en ver.sh, arboldd/usr/local/adJ/inst-adJ.sh, Actualiza.md,
-	ComoPublicar.md, {$V-amd64,arboldvd}/util/preact-adJ.sh, 
+	ComoPublicar.md, {$V-amd64,arboldvd}/util/preact-adJ.sh, Novedades.md,
 	{$V-amd64,arboldvd}/util/actbase.sh, 
 4. Retocar ```Dedicatoria.md``` y archivos *.md (por lo menos versión),
-   regenar en distribución (sin paquetes ni otras compilaciones) con:
+   regenerar en distribución (sin paquetes ni otras compilaciones) con:
 	```
 	doas ./distribucion.sh
 	```
@@ -96,14 +96,14 @@ Pasos importantes para publicar versión mayor
 	segura, amigable para cristian@s y en español, ver 
 	http://aprendiendo.pasosdejesus.org/
 9. Correo a listas: 
-    openbsd-colombia@googlegroups.com, colibri@listas.el-directorio.org, 
+    openbsd-colombia@googlegroups.com, 
     openbsd-mexico@googlegroups.com, sivel-soporte@lists.sourceforge.net
 
 	Tema: Publicado adJ 6.0 para amd64
 
 	Para instalar por primera vez descarga la imagen para DVD de:
 	  http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/
-	O solicita un CD por correo postal.
+	O solicita un DVD o una USB de instalacion por correo postal.
 
 	Si planeas actualizar de una version anterior a 6.0
 	hay un procedimiento mas rápido con ```rsync``` (ver

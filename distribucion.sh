@@ -409,8 +409,8 @@ EOF
 	#compilabase
 	echo "DESTDIR=$DESTDIR" | tee -a /var/www/tmp/distrib-adJ.bitacora;
 	cd /usr/src/etc && DESTDIR=/destdir nice make release | tee -a /var/www/tmp/distrib-adJ.bitacora;
-	find $DESTDIR  -exec touch {} ';'
-	find $RELEASEIR  -exec touch {} ';'
+	find "$DESTDIR"  -exec touch {} ';'
+	find "$RELEASEDIR"  -exec touch {} ';'
 } fi;
 
 
@@ -754,6 +754,7 @@ if (test "$sn" = "s") then {
 	# Modificados para posibilitar compilación
 	# Deben estar en mystuff
 
+
 	####
 	# Retroportados para cerrar fallas o actualizar
 	# Deben estar en arboldes/usr/ports/mystuff y en /usr/ports de current
@@ -876,9 +877,9 @@ if (test "$sn" = "s") then {
 	# Unicos en adJ liderados por pdJ
 	# Deben estar en arboldes/usr/ports/mystuff 
 	paquete books/evangelios_dp
-	#paquete books/basico_adJ
-	#paquete books/usuario_adJ
-	#paquete books/servidor_adJ
+	paquete books/basico_adJ
+	paquete books/usuario_adJ
+	paquete books/servidor_adJ
 	paquete education/AnimalesI
 	paquete education/AprestamientoI
 	paquete education/PlantasCursiva

@@ -1,0 +1,18 @@
+$OpenBSD$
+--- core/DesktopEditor/raster/Metafile/MetaFile.cpp.orig	Thu Feb 23 11:10:44 2017
++++ core/DesktopEditor/raster/Metafile/MetaFile.cpp	Thu Feb 23 11:11:06 2017
+@@ -226,12 +226,12 @@ namespace MetaFile
+ 		if (!pBgraData)
+ 			return;
+ 
+-        _UINT32 alfa = 0xffffff;
++        uint32_t alfa = 0xffffff;
+ 		//дефолтный тон должен быть прозрачным, а не белым 
+ 		//memset(pBgraData, 0xff, nWidth * nHeight * 4);
+ 		for (int i = 0; i < nWidth * nHeight; i++)
+ 		{
+-            ((_UINT32*)pBgraData)[i] = alfa;
++            ((uint32_t*)pBgraData)[i] = alfa;
+ 		}
+ 		CBgraFrame oFrame;
+ 		oFrame.put_Data(pBgraData);

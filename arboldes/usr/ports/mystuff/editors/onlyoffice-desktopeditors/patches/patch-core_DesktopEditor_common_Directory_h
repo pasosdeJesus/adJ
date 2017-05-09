@@ -1,0 +1,12 @@
+$OpenBSD$
+--- core/DesktopEditor/common/Directory.h.orig	Sat Feb 18 06:47:03 2017
++++ core/DesktopEditor/common/Directory.h	Sat Feb 18 06:46:03 2017
+@@ -41,7 +41,7 @@
+     #include "windows.h"
+     #include "windef.h"
+     #include <shlobj.h>
+-#elif __linux__
++#elif defined(__unix__)
+     #include <sys/types.h>
+     #include <sys/stat.h>
+     #include <unistd.h>

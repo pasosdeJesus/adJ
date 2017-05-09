@@ -1,0 +1,11 @@
+$OpenBSD$
+--- core/Common/3dParty/cryptopp/cpu.h.orig	Wed Mar  1 13:24:56 2017
++++ core/Common/3dParty/cryptopp/cpu.h	Thu Mar  2 05:36:58 2017
+@@ -8,6 +8,7 @@
+ #define CRYPTOPP_CPU_H
+ 
+ #include "config.h"
++#define CRYPTOPP_BOOL_AESNI_INTRINSICS_AVAILABLE 0
+ 
+ #ifdef CRYPTOPP_GENERATE_X64_MASM
+ 

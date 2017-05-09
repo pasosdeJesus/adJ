@@ -1,0 +1,6 @@
+$OpenBSD$
+--- Makefile.orig	Mon Feb 27 04:40:42 2017
++++ Makefile	Mon Feb 27 04:40:14 2017
+@@ -0,0 +1,2 @@
++all:
++	cd core && gmake

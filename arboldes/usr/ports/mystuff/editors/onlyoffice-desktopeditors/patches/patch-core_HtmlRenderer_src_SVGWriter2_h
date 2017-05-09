@@ -1,0 +1,21 @@
+$OpenBSD$
+--- core/HtmlRenderer/src/SVGWriter2.h.orig	Tue Feb 28 07:46:46 2017
++++ core/HtmlRenderer/src/SVGWriter2.h	Tue Feb 28 07:47:37 2017
+@@ -788,7 +788,7 @@ namespace NSHtmlRenderer
+ 				}
+ 				else if (bIsLine)
+ 				{
+-					LONG _C = m_pPen->Color;
++					LONG _Col = m_pPen->Color;
+ 					LONG _A = m_pPen->Alpha;
+ 					double _W = m_pPen->Size;
+ 
+@@ -812,7 +812,7 @@ namespace NSHtmlRenderer
+ 						m_oVectors.WriteDouble((double)nPenW / m_dCoordsScaleX);
+ 					}
+ 					
+-					m_pPen->Color = _C;
++					m_pPen->Color = _Col;
+ 					m_pPen->Alpha = _A;
+ 					m_pPen->Size = _W;
+ 				}

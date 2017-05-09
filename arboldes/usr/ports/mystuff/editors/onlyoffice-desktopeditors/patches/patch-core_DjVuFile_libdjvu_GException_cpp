@@ -1,0 +1,13 @@
+$OpenBSD$
+--- core/DjVuFile/libdjvu/GException.cpp.orig	Wed Mar  1 11:00:48 2017
++++ core/DjVuFile/libdjvu/GException.cpp	Wed Mar  1 11:12:47 2017
+@@ -59,6 +59,9 @@
+ #ifdef HAVE_CONFIG_H
+ # include "config.h"
+ #endif
++
++#define HAVE_STDINCLUDES
++
+ #if NEED_GNUG_PRAGMAS
+ # pragma implementation
+ #endif

@@ -1,0 +1,12 @@
+$OpenBSD$
+--- core/DesktopEditor/cximage/tiff/tif_unix.c.orig	Thu Feb 23 14:27:39 2017
++++ core/DesktopEditor/cximage/tiff/tif_unix.c	Thu Feb 23 14:32:03 2017
+@@ -46,7 +46,7 @@
+ # include <fcntl.h>
+ #endif
+ 
+-#ifdef HAVE_IO_H
++#if defined(HAVE_IO_H) && !defined(__OpenBSD__)
+ # include <io.h>
+ #endif
+ 

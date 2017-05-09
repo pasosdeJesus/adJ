@@ -1,5 +1,5 @@
 @comment $OpenBSD$
-bin/ganglia-config
+@bin bin/ganglia-config
 @bin bin/gmetric
 @bin bin/gstat
 include/ganglia.h
@@ -14,6 +14,15 @@ lib/ganglia/
 @lib lib/libganglia-3.6.0.so.${LIBganglia-3.6.0_VERSION}
 lib/libganglia.a
 lib/libganglia.la
+lib/ganglia/modcpu.so
+lib/ganglia/moddisk.so
+lib/ganglia/modload.so
+lib/ganglia/modmem.so
+lib/ganglia/modmulticpu.so
+lib/ganglia/modnet.so
+lib/ganglia/modproc.so
+lib/ganglia/modpython.so
+lib/ganglia/modsys.so
 @lib lib/libganglia.so.${LIBganglia_VERSION}
 @man man/man1/gmetad.1
 @man man/man1/gmetad.py.1

@@ -1,0 +1,12 @@
+$OpenBSD$
+--- core/DjVuFile/libdjvu/DjVuDocument.cpp.orig	Tue Feb 28 08:43:49 2017
++++ core/DjVuFile/libdjvu/DjVuDocument.cpp	Tue Feb 28 08:44:22 2017
+@@ -78,7 +78,7 @@
+ 
+ #include "debug.h"
+ 
+-#if defined(__linux__) || defined(LINUX)
++#if defined(__unix__) || defined(LINUX)
+ typedef unsigned int	UINT;
+ #endif
+ 

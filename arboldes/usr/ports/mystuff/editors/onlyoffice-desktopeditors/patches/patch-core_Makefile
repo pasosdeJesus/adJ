@@ -1,0 +1,33 @@
+$OpenBSD$
+--- core/Makefile.orig	Tue Dec  6 06:52:20 2016
++++ core/Makefile	Wed Mar  1 12:45:12 2017
+@@ -13,6 +13,12 @@ ifeq ($(OS),Windows_NT)
+ 	endif
+ else
+ 	UNAME_S := $(shell uname -s)
++	PLATFORM := openbsd
++	SHARED_EXT := .so*
++	SHELL_EXT := .sh
++	LIB_EXT := .a
++	MAKE := gmake -j 2
++
+ 	ifeq ($(UNAME_S),Linux)
+ 		PLATFORM := linux
+ 		SHARED_EXT := .so*
+@@ -33,6 +39,7 @@ TARGET := $(PLATFORM)_$(ARCHITECTURE)
+ 
+ LIBDIR := build/lib/$(TARGET)
+ 
++QMAKE?= qmake
+ ALLFONTSGEN := build/bin/AllFontsGen/$(TARGET)$(EXEC_EXT)
+ X2T := build/bin/$(TARGET)/x2t$(EXEC_EXT)
+ HTMLFILEINTERNAL := $(LIBDIR)/HtmlFileInternal$(EXEC_EXT)
+@@ -257,7 +264,7 @@ $(ASCDOCUMENTSCORE): $(ASCDOCUMENTSCORE_DEP)
+ $(PDFREADER): $(PDFREADER_DEP)
+ 
+ %.build/Makefile: %.pro
+-	mkdir -p $(dir $@) && cd $(dir $@) && qmake -r $<
++	mkdir -p $(dir $@) && cd $(dir $@) && $(QMAKE) -r $<
+ 
+ clean:
+ 	rm -rf $(TARGETS)

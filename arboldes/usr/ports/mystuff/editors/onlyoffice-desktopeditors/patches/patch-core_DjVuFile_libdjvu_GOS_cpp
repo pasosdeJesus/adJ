@@ -1,0 +1,68 @@
+$OpenBSD$
+--- core/DjVuFile/libdjvu/GOS.cpp.orig	Wed Mar  1 10:59:35 2017
++++ core/DjVuFile/libdjvu/GOS.cpp	Wed Mar  1 10:59:54 2017
+@@ -75,10 +75,10 @@
+ #include <string.h>
+ 
+ #if defined(__CYGWIN32__)
+-# define UNIX 1
++# define __unix__ 1
+ #endif
+ 
+-#if defined(WIN32) && !defined(UNIX)
++#if defined(WIN32) && !defined(__unix__)
+ # include <windows.h>
+ # include <direct.h>
+ # define getcwd _getcwd
+@@ -89,13 +89,13 @@
+ # include <os2.h>
+ #endif
+ 
+-#if defined(macintosh) && !defined(UNIX)
++#if defined(macintosh) && !defined(__unix__)
+ # include <unix.h>
+ # include <errno.h>
+ # include <unistd.h>
+ #endif
+ 
+-#if defined(UNIX) || defined(OS2)
++#if defined(__unix__) || defined(OS2)
+ # include <errno.h>
+ # include <sys/types.h>
+ # include <sys/stat.h>
+@@ -172,7 +172,7 @@ finddirsep(const GUTF8String &fname)
+ {
+ #if defined(WIN32)
+   return fname.rcontains("\\/",0);
+-#elif defined(UNIX)
++#elif defined(__unix__)
+   return fname.rsearch('/',0);
+ #elif defined(macintosh)
+   return fname.rcontains(":/",0);
+@@ -267,7 +267,7 @@ errmsg()
+ unsigned long 
+ GOS::ticks()
+ {
+-#if defined(UNIX)
++#if defined(__unix__)
+   struct timeval tv;
+   if (gettimeofday(&tv, NULL) < 0)
+     G_THROW(errmsg());
+@@ -292,7 +292,7 @@ GOS::ticks()
+ void 
+ GOS::sleep(int milliseconds)
+ {
+-#if defined(UNIX)
++#if defined(__unix__)
+   struct timeval tv;
+   tv.tv_sec = milliseconds / 1000;
+   tv.tv_usec = (milliseconds - (tv.tv_sec * 1000)) * 1000;
+@@ -327,7 +327,7 @@ GOS::sleep(int milliseconds)
+ GUTF8String 
+ GOS::cwd(const GUTF8String &dirname)
+ {
+-#if defined(UNIX) || defined(macintosh) || defined(OS2)
++#if defined(__unix__) || defined(macintosh) || defined(OS2)
+   if (dirname.length() && chdir(dirname.getUTF82Native())==-1)//MBCS cvt
+     G_THROW(errmsg());
+   char *string_buffer;
