@@ -292,7 +292,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/strfti
 -	(void) strlcpy(lbuf, name, bufsize);
 -	p = lbuf + namesize;
 -	plim = p + st.st_size;
--	if (read(fd, p, (size_t) st.st_size) != st.st_size)
+-	if (read(fd, p, st.st_size) != st.st_size)
 -		goto bad_lbuf;
 -	if (close(fd) != 0)
 -		goto bad_lbuf;

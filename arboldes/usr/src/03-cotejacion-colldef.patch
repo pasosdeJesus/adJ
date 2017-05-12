@@ -7,8 +7,8 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/usr.bin/Makefile src/us
  	basename bc bgplg \
 -	biff cal calendar cap_mkdb cdio chpass cmp col colrm \
 +	biff cal calendar cap_mkdb cdio chpass cmp col colldef colrm \
- 	column comm compress cpp crontab csplit ctags cu cut \
- 	dc deroff diff diff3 dirname du encrypt env expand false file \
+ 	column comm compress cpp crontab csplit ctags cu cut cvs \
+ 	dc deroff diff diff3 dirname doas du encrypt env expand false file \
  	find fgen finger fmt fold from fstat ftp gencat getcap \
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/usr.bin/colldef/Makefile src/usr.bin/colldef/Makefile
 --- src54-s/usr.bin/colldef/Makefile	Wed Dec 31 19:00:00 1969

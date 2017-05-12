@@ -1031,38 +1031,25 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mb
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/multibyte_citrus.c src/lib/libc/locale/multibyte_citrus.c
 --- src53collation/lib/libc/locale/multibyte_citrus.c	Sat Sep 12 11:23:14 2015
 +++ src/lib/libc/locale/multibyte_citrus.c	Sun May  8 05:36:41 2016
-@@ -31,13 +31,18 @@
- #include <errno.h>
+@@ -31,20 +31,32 @@
  #include <stdint.h>
+ #include <stdlib.h>
  #include <wchar.h>
 +#include <xlocale.h>
 +#include "runetype.h"
  
  #include "citrus_ctype.h"
- #include "rune.h"
- #include "multibyte.h"
-+#include "mblocal.h"
++#include "mblocal.h" 
 +#include "xlocale_private.h"
  
-+
  int
 -mbsinit(const mbstate_t *ps)
 +mbsinit_l(const mbstate_t *ps, locale_t loc)
  {
- 	struct _citrus_ctype_rec *cc;
- 	_RuneLocale *rl;
-@@ -46,87 +51,150 @@
+ 	if (ps == NULL || __mb_cur_max == 1)
  		return 1;
- 
- 	rl = _ps_to_runelocale(ps);
--	if (rl == NULL)
--		rl = _CurrentRuneLocale;
-+	if (rl == NULL) {
-+		FIX_LOCALE(loc);
-+		rl = XLOCALE_CTYPE(loc)->runes;
-+	}
- 	cc = rl->rl_citrus_ctype;
- 	return (*cc->cc_ops->co_mbsinit)(ps);
++
+ 	return _citrus_utf8_ctype_mbsinit(ps);
  }
 +DEF_STRONG(mbsinit_l);
 +
@@ -1078,29 +1065,25 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mu
 +mbrtowc_l(wchar_t *pwc, const char *s, size_t n, mbstate_t *ps, locale_t loc)
  {
  	static mbstate_t mbs;
- 	struct _citrus_ctype_rec *cc;
  
- 	if (ps == NULL)
- 		ps = &mbs;
--	cc = _CurrentRuneLocale->rl_citrus_ctype;
-+	FIX_LOCALE(loc);
-+	_RuneLocale *rl = XLOCALE_CTYPE(loc)->runes;
-+	cc = rl->rl_citrus_ctype;
- 	return (*cc->cc_ops->co_mbrtowc)(pwc, s, n, _ps_to_private(ps));
+@@ -54,22 +66,37 @@
+ 		return _citrus_none_ctype_mbrtowc(pwc, s, n);
+ 	return _citrus_utf8_ctype_mbrtowc(pwc, s, n, ps);
  }
+-DEF_STRONG(mbrtowc);
 +DEF_STRONG(mbrtowc_l);
-+
-+size_t
-+mbrtowc(wchar_t *pwc, const char *s, size_t n, mbstate_t *ps)
-+{
-+	return mbrtowc_l(pwc, s, n, ps, __get_locale());
-+}
- DEF_STRONG(mbrtowc);
  
++size_t 
++mbrtowc(wchar_t *pwc, const char *s, size_t n, mbstate_t *ps) 
++{
++	return mbrtowc_l(pwc, s, n, ps, __get_locale()); 
++}
++DEF_STRONG(mbrtowc); 
++
  size_t
 -mbsrtowcs(wchar_t *dst, const char **src, size_t len, mbstate_t *ps)
-+mbsrtowcs_l(wchar_t *dst, const char **src, size_t len, mbstate_t *ps,
-+    locale_t loc)
++mbsrtowcs_l(wchar_t *dst, const char **src, size_t len, mbstate_t *ps, 
++		locale_t loc)
  {
  	static mbstate_t mbs;
  
@@ -1125,16 +1108,10 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mu
 +    mbstate_t *ps, locale_t loc)
  {
  	static mbstate_t mbs;
- 	struct _citrus_ctype_rec *cc;
  
- 	if (ps == NULL)
- 		ps = &mbs;
--	cc = _CurrentRuneLocale->rl_citrus_ctype;
-+	FIX_LOCALE(loc);
-+	_RuneLocale *rl = XLOCALE_CTYPE(loc)->runes;
-+	cc = rl->rl_citrus_ctype;
- 	return (*cc->cc_ops->co_mbsnrtowcs)(dst, src, nmc, len,
- 	    _ps_to_private(ps));
+@@ -79,10 +106,18 @@
+ 		return _citrus_none_ctype_mbsnrtowcs(dst, src, nmc, len);
+ 	return _citrus_utf8_ctype_mbsnrtowcs(dst, src, nmc, len, ps);
  }
 +DEF_WEAK(mbsnrtowcs_l);
 +
@@ -1142,7 +1119,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mu
 +mbsnrtowcs(wchar_t *dst, const char **src, size_t nmc, size_t len,
 +    mbstate_t *ps)
 +{
-+	return mbsnrtowcs_l(dst, src, nmc, len, ps, __get_locale());
++	return mbsnrtowcs_l(dst, src, nmc, len, ps, __get_locale()); 
 +}
  DEF_WEAK(mbsnrtowcs);
  
@@ -1151,43 +1128,37 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mu
 +wcrtomb_l(char *s, wchar_t wc, mbstate_t *ps, locale_t loc)
  {
  	static mbstate_t mbs;
- 	struct _citrus_ctype_rec *cc;
  
- 	if (ps == NULL)
- 		ps = &mbs;
--	cc = _CurrentRuneLocale->rl_citrus_ctype;
-+	FIX_LOCALE(loc);
-+	_RuneLocale *rl = XLOCALE_CTYPE(loc)->runes;
-+	cc = rl->rl_citrus_ctype;
- 	return (*cc->cc_ops->co_wcrtomb)(s, wc, _ps_to_private(ps));
+@@ -92,10 +127,18 @@
+ 		return _citrus_none_ctype_wcrtomb(s, wc);
+ 	return _citrus_utf8_ctype_wcrtomb(s, wc, ps);
  }
 +DEF_STRONG(wcrtomb_l);
 +
 +size_t
 +wcrtomb(char *s, wchar_t wc, mbstate_t *ps)
 +{
-+	return wcrtomb_l(s, wc, ps, __get_locale());
++	return wcrtomb_l(s, wc, ps, __get_locale()); 
 +}
  DEF_STRONG(wcrtomb);
  
  size_t
 -wcsrtombs(char *dst, const wchar_t **src, size_t len, mbstate_t *ps)
 +wcsrtombs_l(char *dst, const wchar_t **src, size_t len, mbstate_t *ps,
-+    locale_t loc)
++		locale_t loc)
  {
  	static mbstate_t mbs;
  
- 	if (ps == NULL)
+@@ -103,11 +146,18 @@
  		ps = &mbs;
--	return (wcsnrtombs(dst, src, SIZE_MAX, len, ps));
-+	return (wcsnrtombs_l(dst, src, SIZE_MAX, len, ps, loc));
+ 	return (wcsnrtombs(dst, src, SIZE_MAX, len, ps));
  }
 +DEF_STRONG(wcsrtombs_l);
 +
 +size_t
 +wcsrtombs(char *dst, const wchar_t **src, size_t len, mbstate_t *ps)
 +{
-+	return wcsrtombs_l(dst, src, len, ps, __get_locale());
++	return wcsrtombs_l(dst, src, len, ps, __get_locale()); 
 +}
  DEF_STRONG(wcsrtombs);
  
@@ -1198,16 +1169,11 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mu
 +    mbstate_t *ps, locale_t loc)
  {
  	static mbstate_t mbs;
- 	struct _citrus_ctype_rec *cc;
  
- 	if (ps == NULL)
- 		ps = &mbs;
--	cc = _CurrentRuneLocale->rl_citrus_ctype;
-+	FIX_LOCALE(loc);
-+	_RuneLocale *rl = XLOCALE_CTYPE(loc)->runes;
-+	cc = rl->rl_citrus_ctype;
- 	return (*cc->cc_ops->co_wcsnrtombs)(dst, src, nwc, len,
- 	    _ps_to_private(ps));
+@@ -116,5 +166,13 @@
+ 	if (__mb_cur_max == 1)
+ 		return _citrus_none_ctype_wcsnrtombs(dst, src, nwc, len);
+ 	return _citrus_utf8_ctype_wcsnrtombs(dst, src, nwc, len, ps);
 +}
 +DEF_WEAK(wcsnrtombs_l);
 +
@@ -1677,10 +1643,10 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src55-orig/lib/libc/locale/setloc
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src54-num/lib/libc/locale/setrunelocale.c src/lib/libc/locale/setrunelocale.c
 --- src54-num/lib/libc/locale/setrunelocale.c	Sun Jun  2 15:10:49 2013
 +++ src/lib/libc/locale/setrunelocale.c	Fri Dec  6 07:48:31 2013
-@@ -98,10 +98,13 @@
- #include <stddef.h>
+@@ -95,10 +95,13 @@
+ #include <stdlib.h>
  #include <string.h>
- #include <unistd.h>
+ #include <wchar.h>
 +#include <xlocale.h>
  
  #include "citrus_ctype.h"
@@ -1689,9 +1655,9 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src54-num/lib/libc/locale/setrune
  #include "rune_local.h"
 +#include "xlocale_private.h"
  
- struct localetable {
- 	char path[PATH_MAX];
-@@ -171,13 +174,18 @@
+ static _RuneLocale *_Utf8RuneLocale;
+ 
+@@ -123,25 +126,29 @@
  }
  
  int
@@ -1699,7 +1665,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src54-num/lib/libc/locale/setrune
 +xlocale_setrunelocale(struct xlocale_ctype *xc, const char *locname)
  {
  	char path[PATH_MAX];
- 	_RuneLocale *rl;
++	_RuneLocale *rl;
  	int error, len;
  	const char *dot, *encoding;
  
@@ -1709,27 +1675,53 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src54-num/lib/libc/locale/setrune
 +	}
 +
  	if (!strcmp(locname, "C") || !strcmp(locname, "POSIX")) {
- 		rl = &_DefaultRuneLocale;
- 		goto found;
-@@ -205,8 +213,55 @@
+-		_CurrentRuneLocale = &_DefaultRuneLocale;
+-		__mb_cur_max = 1;
+-		return 0;
++		rl = &_DefaultRuneLocale;
++		goto found;
+ 	}
+ 
+ 	/* Assumes "language[_territory][.codeset]" locale name. */
+ 	dot = strrchr(locname, '.');
+ 	if (dot == NULL) {
+ 		/* No encoding specified. Fall back to ASCII. */
+-		_CurrentRuneLocale = &_DefaultRuneLocale;
+-		__mb_cur_max = 1;
+-		return 0;
++		rl = &_DefaultRuneLocale;
++		goto found;
+ 	}
+ 
+ 	encoding = dot + 1;
+@@ -158,7 +165,65 @@
+ 		return error;
+ 	if (_Utf8RuneLocale == NULL)
  		return ENOENT;
- 
- found:
--	_CurrentRuneLocale = rl;
-+	_CurrentRuneLocale = (_RuneLocale *)rl;
-+	xc->runes = (_RuneLocale *)rl;
-+	xc->__mbrtowc = (void *)(rl->rl_citrus_ctype->cc_ops->co_mbrtowc);
-+	xc->__mbsinit = (void *)(rl->rl_citrus_ctype->cc_ops->co_mbsinit);
-+	xc->__mbsnrtowcs = (void *)rl->rl_citrus_ctype->cc_ops->co_mbsnrtowcs;
-+	xc->__wcrtomb = (void *)rl->rl_citrus_ctype->cc_ops->co_wcrtomb;
-+	xc->__wcsnrtombs = (void *)rl->rl_citrus_ctype->cc_ops->co_wcsnrtombs;
-+	xc->__mb_cur_max = rl->rl_citrus_ctype->cc_mb_cur_max;
-+	xc->__mb_sb_limit = rl->rl_citrus_ctype->cc_mb_sb_limit;
+-	_CurrentRuneLocale = _Utf8RuneLocale;
+-	__mb_cur_max = _CITRUS_UTF8_MB_CUR_MAX;
++	rl = _Utf8RuneLocale;
 +
- 	__mb_cur_max = rl->rl_citrus_ctype->cc_mb_cur_max;
- 
++found:
++	_CurrentRuneLocale = (_RuneLocale *)rl;
++	if (rl == &_DefaultRuneLocale) {
++		_none_init(xc, rl);
++		__mb_cur_max = 1;
++	} else {
++		xc->__mbrtowc = _citrus_utf8_ctype_mbrtowc;
++		xc->__mbsinit = _citrus_utf8_ctype_mbsinit;
++		xc->__mbsnrtowcs = _citrus_utf8_ctype_mbsnrtowcs;
++		xc->__wcrtomb = _citrus_utf8_ctype_wcrtomb;
++		xc->__wcsnrtombs = _citrus_utf8_ctype_wcsnrtombs;
++		xc->runes = rl;
++		xc->__mb_cur_max = __mb_cur_max = _CITRUS_UTF8_MB_CUR_MAX;
++	
++		xc->__mb_sb_limit = 256; /* Fix */
++	}
++ 
  	return 0;
  }
++
 +
 +int
 +_xpg4_setrunelocale(const char *locname)
@@ -1738,9 +1730,11 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src54-num/lib/libc/locale/setrune
 +	int rv = xlocale_setrunelocale(&__xlocale_global_ctype, locname);
 +	if (rv == 0) {
 +		_CurrentRuneLocale = __xlocale_global_ctype.runes;
++ 		__mb_cur_max = __xlocale_global_ctype.__mb_cur_max;
 +	}
 +	return rv;
 +}
++
 +
 +void
 +destruct_ctype(void *t)
@@ -1751,6 +1745,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src54-num/lib/libc/locale/setrune
 +		free(t);
 +	}
 +}
++
 +
 +/** Based on __collate_load */
 +void *
@@ -1766,7 +1761,6 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src54-num/lib/libc/locale/setrune
 +	}
 +	return l;
 +}
-+
 +
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/uselocale.3 src/lib/libc/locale/uselocale.3
 --- src53collation/lib/libc/locale/uselocale.3	Wed Dec 31 19:00:00 1969
@@ -3520,7 +3514,7 @@ diff -ruN -x CVS -x obj src55-orig/include/Makefile src/include/Makefile
 @@ -20,7 +20,8 @@
  	regex.h resolv.h rmd160.h search.h setjmp.h sha1.h sha2.h signal.h \
  	siphash.h sndio.h spawn.h stdbool.h stddef.h stdio.h stdlib.h \
- 	string.h strings.h struct.h sysexits.h tar.h tgmath.h tib.h time.h \
+ 	string.h strings.h sysexits.h tar.h tgmath.h tib.h time.h \
 -	ttyent.h unistd.h utime.h utmp.h uuid.h vis.h wchar.h wctype.h
 +	ttyent.h unistd.h utime.h utmp.h uuid.h vis.h wchar.h wctype.h \
 +	xlocale.h
@@ -3993,48 +3987,6 @@ diff -ruN src59-orig/include/xlocale.h src/include/xlocale.h
 +#endif /* _WCHAR_H */
 +
 +
-diff -ruN -x *.o -x *~ src56-orig/lib/libc/citrus/citrus_ctype.c src/lib/libc/citrus/citrus_ctype.c
---- src56-orig/lib/libc/citrus/citrus_ctype.c	Fri May  3 08:53:49 2013
-+++ src/lib/libc/citrus/citrus_ctype.c	Sun May 18 19:06:58 2014
-@@ -38,12 +38,14 @@
- 
- struct _citrus_ctype_rec _citrus_ctype_none = {
- 	&_citrus_none_ctype_ops,	/* cc_ops */
--	1				/* cc_mb_cur_max */
-+	1,				/* cc_mb_cur_max */
-+	256				/* cc_mb_sb_limit */
- };
- 
- static struct _citrus_ctype_rec _citrus_ctype_utf8 = {
- 	&_citrus_utf8_ctype_ops,	/* cc_ops */
--	_CITRUS_UTF8_MB_CUR_MAX		/* cc_mb_cur_max */
-+	_CITRUS_UTF8_MB_CUR_MAX,	/* cc_mb_cur_max */
-+	_CITRUS_UTF8_MB_SB_LIMIT        /* cc_mb_sb_limit */
- };
- 
- int
-diff -ruN -x *.o -x *~ src56-orig/lib/libc/citrus/citrus_ctype_local.h src/lib/libc/citrus/citrus_ctype_local.h
---- src56-orig/lib/libc/citrus/citrus_ctype_local.h	Fri May  3 08:53:49 2013
-+++ src/lib/libc/citrus/citrus_ctype_local.h	Sun May 18 19:04:54 2014
-@@ -82,6 +82,7 @@
- struct _citrus_ctype_rec {
- 	struct _citrus_ctype_ops_rec	*cc_ops;
- 	size_t				cc_mb_cur_max;
-+	size_t				cc_mb_sb_limit;
- };
- 
- #endif
-diff -ruN -x *.o -x *~ src56-orig/lib/libc/citrus/citrus_utf8.h src/lib/libc/citrus/citrus_utf8.h
---- src56-orig/lib/libc/citrus/citrus_utf8.h	Wed Jul 28 19:50:10 2010
-+++ src/lib/libc/citrus/citrus_utf8.h	Sun May 18 19:30:21 2014
-@@ -33,6 +33,7 @@
- extern struct _citrus_ctype_ops_rec	_citrus_utf8_ctype_ops;
- 
- #define _CITRUS_UTF8_MB_CUR_MAX	4
-+#define _CITRUS_UTF8_MB_SB_LIMIT	128
- 
- _CITRUS_CTYPE_DECLS(utf8);
-
 diff -u src59-orig/lib/libc/Symbols.list src/lib/libc/Symbols.list
 --- src59-orig/lib/libc/Symbols.list	Wed Nov 18 11:50:08 2015
 +++ src/lib/libc/Symbols.list	Sun May 15 10:04:22 2016

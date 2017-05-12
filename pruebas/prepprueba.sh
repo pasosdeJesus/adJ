@@ -9,9 +9,9 @@ eval $cmd
 cmd="(cd /usr/src; doas make obj)"
 echo $cmd
 eval $cmd
-cmd="sudo rsync --delete -ravz xenocara${VP}-orig/ xenocara/"
+cmd="doas rsync --delete -ravz xenocara${VP}-orig/ xenocara/"
 echo $cmd
 eval $cmd
-cmd="(cd /usr/xenocara; sudo make obj)"
+cmd="(cd /usr/xenocara; doas make obj)"
 echo $cmd
 

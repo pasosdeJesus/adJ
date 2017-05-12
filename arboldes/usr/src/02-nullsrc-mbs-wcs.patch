@@ -1,9 +1,21 @@
 diff -u src56-orig/lib/libc/citrus/citrus_none.c src/lib/libc/citrus/citrus_none.c
 --- src56-orig/lib/libc/citrus/citrus_none.c	Thu Mar  7 13:12:31 2013
 +++ src/lib/libc/citrus/citrus_none.c	Wed Oct  1 12:45:17 2014
-@@ -93,6 +93,10 @@
- 	/* dst may be NULL */
- 	/* pspriv appears to be unused */
+@@ -64,12 +64,22 @@
+ 	return *s != '\0';
+ }
+ 
++int
++_citrus_none_ctype_mbsinit(const void * __restrict pspriv)
++{
++	        return (1);  /* always initial state */
++}
++
+ size_t
+ _citrus_none_ctype_mbsnrtowcs(wchar_t * __restrict dst,
+     const char ** __restrict src, size_t nmc, size_t len)
+ {
+ 	size_t i;
  
 +	if (src == NULL || *src == NULL) {
 +		errno = EINVAL;
@@ -12,9 +24,9 @@ diff -u src56-orig/lib/libc/citrus/citrus_none.c src/lib/libc/citrus/citrus_none
  	if (dst == NULL)
  		return strnlen(*src, nmc);
  
-@@ -138,6 +142,10 @@
- 	/* dst may be NULL */
- 	/* pspriv appears to be unused */
+@@ -104,6 +114,10 @@
+ {
+ 	size_t i;
  
 +	if (src == NULL || *src == NULL) {
 +		errno = EINVAL;
