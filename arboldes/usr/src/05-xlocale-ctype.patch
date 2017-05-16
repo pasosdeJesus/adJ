@@ -43,7 +43,7 @@
  #undef isalnum
  int
  isalnum(int c)
-@@ -45,6 +76,11 @@
+@@ -45,6 +76,12 @@
  }
  DEF_STRONG(isalnum);
  
@@ -51,11 +51,12 @@
 +{
 +	return __sbistype_l(__c, _CTYPE_A|_CTYPE_D, __l);
 +}
++DEF_STRONG(isalnum_l);
 +
  #undef isalpha
  int
  isalpha(int c)
-@@ -53,6 +89,11 @@
+@@ -53,6 +90,12 @@
  }
  DEF_STRONG(isalpha);
  
@@ -63,11 +64,12 @@
 +{ 
 +	return __sbistype_l(__c, _CTYPE_A, __l); 
 +}
++DEF_STRONG(isalpha_l);
 +
  #undef isblank
  int
  isblank(int c)
-@@ -61,6 +102,10 @@
+@@ -61,6 +104,12 @@
  }
  DEF_STRONG(isblank);
  
@@ -75,10 +77,12 @@
 +{ 
 +	return __sbistype_l(__c, _CTYPE_B, __l); 
 +}
++DEF_STRONG(isblank_l);
++
  #undef iscntrl
  int
  iscntrl(int c)
-@@ -69,6 +114,12 @@
+@@ -69,6 +118,13 @@
  }
  DEF_STRONG(iscntrl);
  
@@ -86,12 +90,13 @@
 +{ 
 +	return __sbistype_l(__c, _CTYPE_C, __l);
 +}
++DEF_STRONG(iscntrl_l);
 +
 +
  #undef isdigit
  int
  isdigit(int c)
-@@ -77,6 +128,12 @@
+@@ -77,6 +133,12 @@
  }
  DEF_STRONG(isdigit);
  
@@ -104,7 +109,7 @@
  #undef isgraph
  int
  isgraph(int c)
-@@ -85,6 +142,22 @@
+@@ -85,6 +147,25 @@
  }
  DEF_STRONG(isgraph);
  
@@ -112,22 +117,25 @@
 +{ 
 +	return __sbistype_l(__c, _CTYPE_G, __l); 
 +}
++DEF_STRONG(isgraph_l);
 +
 +__inline int ishexnumber_l(int __c, locale_t __l) 
 +{ 
 +	return __sbistype_l(__c, _CTYPE_X, __l); 
 +}
++DEF_WEAK(isgraph_l);
 +
 +__inline int isideogram_l(int __c, locale_t __l) 
 +{ 
 +	return __sbistype_l(__c, _CTYPE_I, __l);
 +}
++DEF_WEAK(isideogram_l);
 +
 +
  #undef islower
  int
  islower(int c)
-@@ -93,6 +166,21 @@
+@@ -93,6 +174,24 @@
  }
  DEF_STRONG(islower);
  
@@ -135,21 +143,24 @@
 +{ 
 +	return __sbistype_l(__c, _CTYPE_L, __l);
 +}
++DEF_STRONG(islower_l);
 +
 +__inline int isnumber_l(int __c, locale_t __l) 
 +{ 
 +	return __sbistype_l(__c, _CTYPE_D, __l);
 +}
++DEF_STRONG(isnumber_l);
 +
 +__inline int isphonogram_l(int __c, locale_t __l) 
 +{ 
 +	return __sbistype_l(__c, _CTYPE_Q, __l);
 +}
++DEF_WEAK(isphonogram_l);
 +
  #undef isprint
  int
  isprint(int c)
-@@ -101,6 +189,12 @@
+@@ -101,6 +200,13 @@
  }
  DEF_STRONG(isprint);
  
@@ -157,12 +168,13 @@
 +{ 
 +	return __sbistype_l(__c, _CTYPE_R, __l);
 +}
++DEF_STRONG(isprint_l);
 +
 +
  #undef ispunct
  int
  ispunct(int c)
-@@ -109,6 +203,17 @@
+@@ -109,6 +215,19 @@
  }
  DEF_STRONG(ispunct);
  
@@ -170,17 +182,19 @@
 +{ 
 +	return __sbistype_l(__c, _CTYPE_P, __l);
 +}
++DEF_STRONG(ispunct_l);
 +
 +__inline int isrune_l(int __c, locale_t __l) 
 +{
 +	return __sbistype_l(__c, 0xFFFFFF00L, __l);
 +}
++DEF_WEAK(isrune_l);
 +
 +
  #undef isspace
  int
  isspace(int c)
-@@ -117,6 +222,17 @@
+@@ -117,6 +236,18 @@
  }
  DEF_STRONG(isspace);
  
@@ -194,11 +208,12 @@
 +{ 
 +	return __sbistype_l(__c, _CTYPE_T, __l);
 +}
++DEF_STRONG(isspecial_l);
 +
  #undef isupper
  int
  isupper(int c)
-@@ -125,6 +241,11 @@
+@@ -125,6 +256,12 @@
  }
  DEF_STRONG(isupper);
  
@@ -206,11 +221,12 @@
 +{ 
 +	return __sbistype_l(__c, _CTYPE_U, __l);
 +}
++DEF_STRONG(isupper_l);
 +
  #undef isxdigit
  int
  isxdigit(int c)
-@@ -133,7 +254,11 @@
+@@ -133,7 +270,12 @@
  }
  DEF_STRONG(isxdigit);
  
@@ -219,20 +235,21 @@
 +{ 
 +	return __sbistype_l(__c, _CTYPE_X, __l); 
 +}
++DEF_STRONG(isxdigit_l);
 +
  int
  isascii(int c)
  {
-@@ -160,4 +285,9 @@
- _tolower(int c)
+@@ -161,3 +303,9 @@
  {
  	return (c - 'A' + 'a');
-+}
+ }
 +
 +__inline int digittoint_l(int __c, locale_t __l)
 +{ 
 +	return __sbmaskrune_l((__c), 0xFF, __l); 
- }
++}
++DEF_STRONG(digittoint_l);
 diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src53xlocale1/lib/libc/gen/tolower_.c src/lib/libc/gen/tolower_.c
 --- src53xlocale1/lib/libc/gen/tolower_.c	Mon Aug  8 03:05:34 2005
 +++ src/lib/libc/gen/tolower_.c	Thu Apr  4 10:46:17 2013
@@ -279,11 +296,10 @@ diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src53xlocale1/
  const short _C_toupper_[1 + CTYPE_NUM_CHARS] = {
  	EOF,
  	0x00,	0x01,	0x02,	0x03,	0x04,	0x05,	0x06,	0x07,
-@@ -55,4 +59,14 @@
- 	if ((unsigned int)c > 255)
- 		return(c);
+@@ -60,3 +64,14 @@
  	return((_toupper_tab_ + 1)[c]);
-+}
+ }
+ DEF_STRONG(toupper);
 +
 +__inline int toupper_l(int __c, locale_t __l)
 +{
@@ -293,7 +309,8 @@ diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src53xlocale1/
 +
 +	return (__c < 0 || __c >= __ct->__mb_sb_limit) ? __c :
 +		__runes->rl_mapupper[__c];
- }
++}
++DEF_STRONG(toupper_l);
 diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src54-x4/lib/libc/gen/toupper_.c src/lib/libc/gen/toupper_.c
 --- src54-x4/lib/libc/locale/Makefile.inc	Thu Dec  5 19:12:05 2013
 +++ src/lib/libc/locale/Makefile.inc	Thu Dec  5 19:17:22 2013
@@ -2448,7 +2465,7 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/stdio/getw
 diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/wcwidth.3 src53xlocale2/lib/libc/locale/wcwidth.3
 --- src53xlocale1/lib/libc/locale/wcwidth.3	Mon Apr  8 21:20:25 2013
 +++ src53xlocale2/lib/libc/locale/wcwidth.3	Fri Apr 12 12:07:57 2013
-@@ -28,34 +28,49 @@
+@@ -28,32 +28,48 @@
  .Dt WCWIDTH 3
  .Os
  .Sh NAME
@@ -2460,7 +2477,7 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/wcw
  .In wchar.h
  .Ft int
  .Fn wcwidth "wchar_t wc"
-+.In xlocale.h
++.In xlocale.h 
 +.Ft int
 +.Fn wcwidth_l "wchar_t wc" "locale_t loc"
  .Sh DESCRIPTION
@@ -2471,12 +2488,12 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/wcw
 +.Fn wcwidth_l
 +functions determine the number of column positions required to
  display the wide character
--.Fa wc .
 +.Fa wc . The
 +.Fn wcwidth_l
 +function uses the locale provided as parameter, while
 +.Fn wcwidth_l
 +uses the current locale.
+ .Fa wc .
  .Sh RETURN VALUES
  The
  .Fn wcwidth
@@ -2485,13 +2502,11 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/wcw
 +.Fn wcwidth_l
 +functions return 0 if the
  .Fa wc
- argument is a null wide character (L'\e0'),
- \-1 if
+ argument is the NUL wide character (L'\e0'), \-1 if
  .Fa wc
- is not printable,
--otherwise it returns the number of column positions the
-+otherwise they return the number of column positions the
- character occupies.
+-is not printable, or otherwise it returns the number of column
++is not printable, or otherwise they return the number of column
+ positions the character occupies, which may be 0, 1, or 2.
  .Sh SEE ALSO
  .Xr iswprint 3 ,
  .Xr wcswidth 3
@@ -3366,59 +3381,72 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src56xlocale1/lib/libc/locale/run
 diff -ruN src59-orig/lib/libc/hidden/ctype.h src/lib/libc/hidden/ctype.h
 --- src59-orig/lib/libc/hidden/ctype.h	Thu Jun  9 23:21:42 2016
 +++ src/lib/libc/hidden/ctype.h	Sat Aug 20 22:41:28 2016
-@@ -19,6 +19,7 @@
+@@ -18,6 +18,14 @@
+ #ifndef _LIBC_CTYPE_H_
  #define _LIBC_CTYPE_H_
  
- #include_next <ctype.h>
++#include_next <ctype.h>
 +#include_next <xlocale.h>
- 
- #if 0
- extern PROTO_NORMAL(_ctype_);
-@@ -26,23 +27,46 @@
- extern PROTO_NORMAL(_toupper_tab_);
- #endif
- 
 +
++#if 0
++extern PROTO_NORMAL(_ctype_);
++extern PROTO_NORMAL(_tolower_tab_);
++extern PROTO_NORMAL(_toupper_tab_);
++#endif
+ /* sigh: predeclare and rename the functions which we'll declare inline */
+ __only_inline int	isalnum(int _c);
+ __only_inline int	isalpha(int _c);
+@@ -38,30 +46,46 @@
+ __only_inline int	_tolower(int _c);
+ __only_inline int	_toupper(int _c);
  PROTO_NORMAL(isalnum);
-+PROTO_STD_DEPRECATED(isalnum_l);
++PROTO_NORMAL(isalnum_l);
  PROTO_NORMAL(isalpha);
-+PROTO_STD_DEPRECATED(isalpha_l);
++PROTO_NORMAL(isalpha_l);
  PROTO_NORMAL(iscntrl);
-+PROTO_STD_DEPRECATED(iscntrl_l);
++PROTO_NORMAL(iscntrl_l);
  PROTO_NORMAL(isdigit);
  PROTO_NORMAL(isgraph);
-+PROTO_STD_DEPRECATED(isgraph_l);
++PROTO_NORMAL(isgraph_l);
  PROTO_NORMAL(islower);
-+PROTO_STD_DEPRECATED(islower_l);
++PROTO_NORMAL(islower_l);
  PROTO_NORMAL(isprint);
-+PROTO_STD_DEPRECATED(isprint_l);
++PROTO_NORMAL(isprint_l);
  PROTO_NORMAL(ispunct);
-+PROTO_STD_DEPRECATED(ispunct_l);
++PROTO_NORMAL(ispunct_l);
  PROTO_NORMAL(isspace);
 +PROTO_NORMAL(isspace_l);
  PROTO_NORMAL(isupper);
-+PROTO_DEPRECATED(isupper_l);
++PROTO_NORMAL(isupper_l);
  PROTO_NORMAL(isxdigit);
-+PROTO_STD_DEPRECATED(isxdigit_l);
++PROTO_NORMAL(isxdigit_l);
  PROTO_NORMAL(tolower);
 +PROTO_NORMAL(tolower_l);
  PROTO_NORMAL(toupper);
-+PROTO_STD_DEPRECATED(toupper_l);
++PROTO_NORMAL(toupper_l);
  PROTO_NORMAL(isblank);
-+PROTO_STD_DEPRECATED(isblank_l);
++PROTO_NORMAL(isblank_l);
  PROTO_NORMAL(isascii);
-+
  PROTO_DEPRECATED(toascii);
  PROTO_STD_DEPRECATED(_tolower);
  PROTO_STD_DEPRECATED(_toupper);
-+
-+PROTO_DEPRECATED(digittoint_l);
+ 
+-#include_next <ctype.h>
++PROTO_NORMAL(digittoint_l);
 +PROTO_NORMAL(isdigit_l);
-+PROTO_DEPRECATED(ishexnumber_l);
-+PROTO_DEPRECATED(isnumber_l);
-+PROTO_DEPRECATED(isphonogram_l);
-+PROTO_DEPRECATED(isrune_l);
-+PROTO_DEPRECATED(isspecial_l);
++PROTO_STD_DEPRECATED(ishexnumber_l);
++PROTO_NORMAL(isideogram_l);
++PROTO_NORMAL(isnumber_l);
++PROTO_NORMAL(isphonogram_l);
++PROTO_NORMAL(isrune_l);
++PROTO_NORMAL(isspecial_l);
++ 
+ 
+-#if 0
+-extern PROTO_NORMAL(_ctype_);
+-extern PROTO_NORMAL(_tolower_tab_);
+-extern PROTO_NORMAL(_toupper_tab_);
+-#endif
  
  #endif /* !_LIBC_CTYPE_H_ */
 diff -ruN src/lib/libc/hidden/wchar.h.orig src/lib/libc/hidden/wchar.h

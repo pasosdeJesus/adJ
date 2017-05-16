@@ -1193,3 +1193,28 @@ diff -ruN src/lib/libc/hidden/xlocale.h.orig src/lib/libc/hidden/xlocale.h
 +#endif
 +
  #endif /* !_LIBC_XLOCALE_H_ */
+diff -ruN src61-orig/lib/libc/hidden/time.h src/lib/libc/hidden/time.h
+--- src61-orig/lib/libc/hidden/time.h	Sat May  7 14:05:22 2016
++++ src/lib/libc/hidden/time.h	Tue May 16 08:11:18 2017
+@@ -24,6 +24,13 @@
+ extern PROTO_NORMAL(tzname);
+ #endif
+ 
++
++__BEGIN_HIDDEN_DECLS
++typedef struct  _xlocale *locale_t;
++size_t	 strftime_l(char * __restrict, size_t, const char * __restrict,
++	    const struct tm * __restrict, locale_t); 
++__END_HIDDEN_DECLS
++
+ PROTO_NORMAL(asctime);
+ PROTO_NORMAL(asctime_r);
+ PROTO_STD_DEPRECATED(clock);
+@@ -41,6 +48,7 @@
+ PROTO_NORMAL(mktime);
+ PROTO_CANCEL(nanosleep);
+ PROTO_NORMAL(strftime);
++PROTO_NORMAL(strftime_l);
+ PROTO_NORMAL(strptime);
+ PROTO_NORMAL(time);
+ PROTO_DEPRECATED(timegm);

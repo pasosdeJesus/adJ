@@ -1031,7 +1031,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mb
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/multibyte_citrus.c src/lib/libc/locale/multibyte_citrus.c
 --- src53collation/lib/libc/locale/multibyte_citrus.c	Sat Sep 12 11:23:14 2015
 +++ src/lib/libc/locale/multibyte_citrus.c	Sun May  8 05:36:41 2016
-@@ -31,20 +31,32 @@
+@@ -31,71 +31,115 @@
  #include <stdint.h>
  #include <stdlib.h>
  #include <wchar.h>
@@ -1046,7 +1046,9 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mu
 -mbsinit(const mbstate_t *ps)
 +mbsinit_l(const mbstate_t *ps, locale_t loc)
  {
- 	if (ps == NULL || __mb_cur_max == 1)
+-	if (ps == NULL || __mb_cur_max == 1)
++
++	if (ps == NULL || XLOCALE_CTYPE(loc)->__mb_cur_max == 1)
  		return 1;
 +
  	return _citrus_utf8_ctype_mbsinit(ps);
@@ -1066,7 +1068,10 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mu
  {
  	static mbstate_t mbs;
  
-@@ -54,22 +66,37 @@
+ 	if (ps == NULL)
+ 		ps = &mbs;
+-	if (__mb_cur_max == 1)
++	if (XLOCALE_CTYPE(loc)->__mb_cur_max == 1)
  		return _citrus_none_ctype_mbrtowc(pwc, s, n);
  	return _citrus_utf8_ctype_mbrtowc(pwc, s, n, ps);
  }
@@ -1109,7 +1114,10 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mu
  {
  	static mbstate_t mbs;
  
-@@ -79,10 +106,18 @@
+ 	if (ps == NULL)
+ 		ps = &mbs;
+-	if (__mb_cur_max == 1)
++	if (XLOCALE_CTYPE(loc)->__mb_cur_max == 1)
  		return _citrus_none_ctype_mbsnrtowcs(dst, src, nmc, len);
  	return _citrus_utf8_ctype_mbsnrtowcs(dst, src, nmc, len, ps);
  }
@@ -1129,7 +1137,10 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mu
  {
  	static mbstate_t mbs;
  
-@@ -92,10 +127,18 @@
+ 	if (ps == NULL)
+ 		ps = &mbs;
+-	if (__mb_cur_max == 1)
++	if (XLOCALE_CTYPE(loc)->__mb_cur_max == 1)
  		return _citrus_none_ctype_wcrtomb(s, wc);
  	return _citrus_utf8_ctype_wcrtomb(s, wc, ps);
  }
@@ -1149,7 +1160,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mu
  {
  	static mbstate_t mbs;
  
-@@ -103,11 +146,18 @@
+@@ -103,18 +147,33 @@
  		ps = &mbs;
  	return (wcsnrtombs(dst, src, SIZE_MAX, len, ps));
  }
@@ -1170,8 +1181,10 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mu
  {
  	static mbstate_t mbs;
  
-@@ -116,5 +166,13 @@
- 	if (__mb_cur_max == 1)
+ 	if (ps == NULL)
+ 		ps = &mbs;
+-	if (__mb_cur_max == 1)
++	if (XLOCALE_CTYPE(loc)->__mb_cur_max == 1)
  		return _citrus_none_ctype_wcsnrtombs(dst, src, nwc, len);
  	return _citrus_utf8_ctype_wcsnrtombs(dst, src, nwc, len, ps);
 +}

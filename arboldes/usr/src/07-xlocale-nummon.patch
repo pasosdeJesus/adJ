@@ -1469,50 +1469,30 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-x6/lib/libc/stdio/vdprint
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/asprintf.c src/lib/libc/stdio/asprintf.c
 --- src54-x6/lib/libc/stdio/asprintf.c	Sat Jun 25 00:32:56 2011
 +++ src/lib/libc/stdio/asprintf.c	Tue Dec  3 16:12:41 2013
-@@ -21,6 +21,7 @@
- #include <string.h>
+@@ -22,7 +22,9 @@
  #include <errno.h>
  #include <stdarg.h>
+ #include <unistd.h>
 +#include <xlocale.h>
  #include "local.h"
++#include "../locale/xlocale_private.h"
  
- int
-@@ -28,34 +29,22 @@
- {
- 	int ret;
- 	va_list ap;
--	FILE f;
--	struct __sfileext fext;
--	unsigned char *_base;
+ #define	INITIAL_SIZE	128
  
--	_FILEEXT_SETUP(&f, &fext);
--	f._file = -1;
--	f._flags = __SWR | __SSTR | __SALC;
--	f._bf._base = f._p = malloc(128);
--	if (f._bf._base == NULL)
--		goto err;
--	f._bf._size = f._w = 127;		/* Leave room for the NUL */
+@@ -43,7 +45,7 @@
+ 		goto err;
+ 	f._bf._size = f._w = INITIAL_SIZE - 1;	/* leave room for the NUL */
  	va_start(ap, fmt);
 -	ret = __vfprintf(&f, fmt, ap);
-+	ret = vasprintf(str, fmt, ap);
++	ret = __vfprintf(&f, __get_locale(), fmt, ap);
  	va_end(ap);
--	if (ret == -1)
--		goto err;
--	*f._p = '\0';
--	_base = realloc(f._bf._base, ret + 1);
--	if (_base == NULL)
--		goto err;
--	*str = (char *)_base;
- 	return (ret);
--
--err:
--	free(f._bf._base);
--	f._bf._base = NULL;
--	*str = NULL;
--	errno = ENOMEM;
--	return (-1);
+ 	if (ret == -1)
+ 		goto err;
+@@ -68,3 +70,17 @@
+ 	return (-1);
  }
  DEF_WEAK(asprintf);
++
 +
 +int
 +asprintf_l(char **str, locale_t loc, const char *fmt, ...)
@@ -1525,6 +1505,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/asprint
 +	va_end(ap);
 +	return (ret);
 +}
++DEF_WEAK(asprintf_l);
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/fscanf.c src/lib/libc/stdio/fscanf.c
 --- src54-x6/lib/libc/stdio/fscanf.c	Sat Jun 25 00:32:56 2011
 +++ src/lib/libc/stdio/fscanf.c	Tue Dec  3 16:12:41 2013
@@ -1762,11 +1743,13 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/sscanf.
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vasprintf.c src/lib/libc/stdio/vasprintf.c
 --- src54-x6/lib/libc/stdio/vasprintf.c	Tue Nov 10 11:28:49 2009
 +++ src/lib/libc/stdio/vasprintf.c	Tue Dec  3 16:12:41 2013
-@@ -21,9 +21,10 @@
- #include <string.h>
+@@ -22,11 +22,12 @@
  #include <errno.h>
+ #include <unistd.h>
  #include "local.h"
-+#include "../locale/xlocale_private.h"
++#include "../locale/xlocale_private.h" 
+ 
+ #define	INITIAL_SIZE	128
  
  int
 -vasprintf(char **str, const char *fmt, __va_list ap)
@@ -1774,31 +1757,33 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vasprin
  {
  	int ret;
  	FILE f;
-@@ -37,7 +38,7 @@
+@@ -40,7 +41,7 @@
  	if (f._bf._base == NULL)
  		goto err;
- 	f._bf._size = f._w = 127;		/* Leave room for the NUL */
+ 	f._bf._size = f._w = INITIAL_SIZE - 1;	/* leave room for the NUL */
 -	ret = __vfprintf(&f, fmt, ap);
 +	ret = __vfprintf(&f, locale, fmt, ap);
  	if (ret == -1)
  		goto err;
  	*f._p = '\0';
-@@ -56,3 +57,9 @@
+@@ -63,4 +64,11 @@
  	errno = ENOMEM;
  	return (-1);
  }
++
 +int
 +vasprintf(char **str, const char *fmt, __va_list ap)
 +{
 +	return vasprintf_l(str, __get_locale(), fmt, ap);
 +}
 +
+ DEF_WEAK(vasprintf);
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfprintf.c src/lib/libc/stdio/vfprintf.c
 --- src54-x6/lib/libc/stdio/vfprintf.c	Wed Dec 11 21:53:32 2013
 +++ src/lib/libc/stdio/vfprintf.c	Fri Dec 13 15:24:15 2013
-@@ -56,10 +56,13 @@
- #include <string.h>
+@@ -57,10 +57,13 @@
  #include <unistd.h>
+ #include <syslog.h>
  #include <wchar.h>
 +#include <xlocale.h>
  
@@ -1810,7 +1795,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfprint
  
  union arg {
  	int			intarg;
-@@ -103,7 +106,7 @@
+@@ -104,7 +107,7 @@
  };
  
  static int __find_arguments(const char *fmt0, va_list ap, union arg **argtable,
@@ -1819,7 +1804,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfprint
  static int __grow_type_table(unsigned char **typetable, int *tablesize);
  
  /*
-@@ -111,7 +114,7 @@
+@@ -112,7 +115,7 @@
   * then reset it so that it can be reused.
   */
  static int
@@ -1828,7 +1813,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfprint
  {
  	int err;
  
-@@ -131,7 +134,7 @@
+@@ -132,7 +135,7 @@
   * worries about ungetc buffers and so forth.
   */
  static int
@@ -1837,7 +1822,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfprint
  {
  	int ret;
  	FILE fake;
-@@ -151,7 +154,7 @@
+@@ -152,7 +155,7 @@
  	fake._lbfsize = 0;	/* not actually used, but Just In Case */
  
  	/* do the work, then copy any error status */
@@ -1846,7 +1831,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfprint
  	if (ret >= 0 && __sflush(&fake))
  		ret = EOF;
  	if (fake._flags & __SERR)
-@@ -275,26 +278,43 @@
+@@ -276,26 +279,43 @@
  	int ret;
  
  	FLOCKFILE(fp);
@@ -1896,7 +1881,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfprint
  	gs->thousep_len = strlen(gs->thousands_sep);
  
  	gs->nseps = gs->nrepeats = 0;
-@@ -313,18 +333,16 @@
+@@ -314,18 +334,16 @@
  }
  
  
@@ -1917,7 +1902,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfprint
  		grp = gs.grouping;
  	} 
  	ndig = 0;
-@@ -352,7 +370,7 @@
+@@ -353,7 +371,7 @@
  }
  
  int
@@ -1926,7 +1911,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfprint
  {
  	char *fmt;		/* format string */
  	int ch;			/* character from fmt */
-@@ -382,7 +400,7 @@
+@@ -383,7 +401,7 @@
  	 * D:	expchar holds this character; '\0' if no exponent, e.g. %f
  	 * F:	at least two digits for decimal, at least one digit for hex
  	 */
@@ -1935,7 +1920,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfprint
  	if (strlen(decimal_point) > 1) {
  		decimal_point = "."; // POSIX
  	}
-@@ -444,7 +462,7 @@
+@@ -445,7 +463,7 @@
  	uio.uio_resid += (len); \
  	iovp++; \
  	if (++uio.uio_iovcnt >= NIOV) { \
@@ -1944,7 +1929,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfprint
  			goto error; \
  		iovp = iov; \
  	} \
-@@ -467,7 +485,7 @@
+@@ -468,7 +486,7 @@
  	PAD((len) - (n2 > 0 ? n2 : 0), (with));	\
  } while(0)
  #define	FLUSH() do { \
@@ -1953,7 +1938,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfprint
  		goto error; \
  	uio.uio_iovcnt = 0; \
  	iovp = iov; \
-@@ -545,7 +563,7 @@
+@@ -546,7 +564,7 @@
  		if (argtable == NULL) { \
  			argtable = statargtable; \
  			if (__find_arguments(fmt0, orgap, &argtable, \
@@ -1962,7 +1947,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfprint
  				ret = -1; \
  				goto error; \
  			} \
-@@ -574,11 +592,6 @@
+@@ -575,11 +593,6 @@
  		return (EOF);
  	}
  
@@ -1974,18 +1959,18 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfprint
  	fmt = (char *)fmt0;
  	argtable = NULL;
  	nextarg = 1;
-@@ -597,7 +610,9 @@
- 	 */
- 	for (;;) {
+@@ -600,7 +613,9 @@
+ 		size_t len;
+ 
  		cp = fmt;
--		while ((n = mbrtowc(&wc, fmt, MB_CUR_MAX, &ps)) > 0) {
-+		while ((n = mbrtowc_l(&wc, fmt, 
-+			XLOCALE_CTYPE(locale)->__mb_cur_max, 
-+			&ps, locale)) > 0) {
- 			fmt += n;
- 			if (wc == '%') {
- 				fmt--;
-@@ -680,7 +695,7 @@
+-		while ((len = mbrtowc(&wc, fmt, MB_CUR_MAX, &ps)) != 0) {
++		while ((len = mbrtowc_l(&wc, fmt, 
++			XLOCALE_CTYPE(locale)->__mb_cur_max,
++			&ps, locale)) != 0) {
+ 			if (len == (size_t)-1 || len == (size_t)-2) {
+ 				ret = -1;
+ 				goto error;
+@@ -683,7 +698,7 @@
  				if (argtable == NULL) {
  					argtable = statargtable;
  					if (__find_arguments(fmt0, orgap,
@@ -1994,7 +1979,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfprint
  						ret = -1;
  						goto error;
  					}
-@@ -709,7 +724,7 @@
+@@ -712,7 +727,7 @@
  				if (argtable == NULL) {
  					argtable = statargtable;
  					if (__find_arguments(fmt0, orgap,
@@ -2003,7 +1988,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfprint
  						ret = -1;
  						goto error;
  					}
-@@ -758,8 +773,8 @@
+@@ -761,8 +776,8 @@
  				size_t mbseqlen;
  
  				memset(&mbs, 0, sizeof(mbs));
@@ -2014,7 +1999,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfprint
  				if (mbseqlen == (size_t)-1) {
  					ret = -1;
  					goto error;
-@@ -918,7 +933,7 @@
+@@ -921,7 +936,7 @@
  				if (prec || flags & ALT)
  					size += prec + 1;
  				if ((flags & GROUPING) && expt > 0) 
@@ -2023,7 +2008,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfprint
  				lead = expt;
  			}
  			break;
-@@ -1055,7 +1070,7 @@
+@@ -1061,7 +1076,7 @@
  
  				case DEC:
  					cp = __print_intdec(flags, _umax, 
@@ -2032,7 +2017,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfprint
  					break;
  
  				case HEX:
-@@ -1255,7 +1270,7 @@
+@@ -1261,7 +1276,7 @@
   */
  static int
  __find_arguments(const char *fmt0, va_list ap, union arg **argtable,
@@ -2041,23 +2026,26 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfprint
  {
  	char *fmt;		/* format string */
  	int ch;			/* character from fmt */
-@@ -1325,12 +1340,15 @@
+@@ -1331,6 +1346,8 @@
  	memset(typetable, T_UNUSED, STATIC_ARG_TBL_SIZE);
  	memset(&ps, 0, sizeof(ps));
  
 +	FIX_LOCALE(locale);
++
  	/*
  	 * Scan the format for conversions (`%' character).
  	 */
- 	for (;;) {
+@@ -1338,7 +1355,9 @@
+ 		size_t len;
+ 
  		cp = fmt;
--		while ((n = mbrtowc(&wc, fmt, MB_CUR_MAX, &ps)) > 0) {
-+		while ((n = mbrtowc_l(&wc, fmt, 
-+			XLOCALE_CTYPE(locale)->__mb_cur_max, 
-+			&ps, locale)) > 0) {
- 			fmt += n;
- 			if (wc == '%') {
- 				fmt--;
+-		while ((len = mbrtowc(&wc, fmt, MB_CUR_MAX, &ps)) != 0) {
++		while ((len = mbrtowc_l(&wc, fmt, 
++			XLOCALE_CTYPE(locale)->__mb_cur_max,
++			&ps, locale)) != 0) {
+ 			if (len == (size_t)-1 || len == (size_t)-2)
+ 				return (-1);
+ 			fmt += len;
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfscanf.c src/lib/libc/stdio/vfscanf.c
 --- src54-x6/lib/libc/stdio/vfscanf.c	Wed Dec 11 21:53:32 2013
 +++ src/lib/libc/stdio/vfscanf.c	Fri Dec 13 15:26:11 2013
@@ -2744,7 +2732,7 @@ diff -ruN src54-x6/lib/libc/stdlib/strfmon.c src/lib/libc/stdlib/strfmon.c
  
  		/*
  		 * Description of some LC_MONETARY's values:
-@@ -402,23 +406,35 @@
+@@ -402,23 +406,37 @@
  	errno = sverrno;
  	return (-1);
  }
@@ -2760,6 +2748,8 @@ diff -ruN src54-x6/lib/libc/stdlib/strfmon.c src/lib/libc/stdlib/strfmon.c
 +	va_end(ap);
 +	return ret;
 +}
++DEF_STRONG(strfmon_l);
++
 +ssize_t
  strfmon(char * __restrict s, size_t maxsize, const char * __restrict format,
      ...)
@@ -2784,7 +2774,7 @@ diff -ruN src54-x6/lib/libc/stdlib/strfmon.c src/lib/libc/stdlib/strfmon.c
  
  	if ((flags & IS_NEGATIVE) && (flags & USE_INTL_CURRENCY)) {
  		*cs_precedes = lc->int_n_cs_precedes;
-@@ -454,12 +470,13 @@
+@@ -454,12 +472,13 @@
  }
  
  static int
@@ -2800,7 +2790,7 @@ diff -ruN src54-x6/lib/libc/stdlib/strfmon.c src/lib/libc/stdlib/strfmon.c
  
  	if (cs_precedes != 0) {
  		left_chars += strlen(cur_symb);
-@@ -504,8 +521,9 @@
+@@ -504,8 +523,9 @@
  
  /* convert double to ASCII */
  static char *
@@ -2812,7 +2802,7 @@ diff -ruN src54-x6/lib/libc/stdlib/strfmon.c src/lib/libc/stdlib/strfmon.c
  
  	char		*rslt;
  	char		*avalue;
-@@ -517,7 +535,7 @@
+@@ -517,7 +537,7 @@
  
  	int		padded;
  
@@ -2821,7 +2811,7 @@ diff -ruN src54-x6/lib/libc/stdlib/strfmon.c src/lib/libc/stdlib/strfmon.c
  	char		*grouping;
  	char		decimal_point;
  	char		thousands_sep;
-@@ -553,7 +571,7 @@
+@@ -553,7 +573,7 @@
  	/* convert to string */
  	snprintf(fmt, sizeof(fmt), "%%%d.%df", left_prec + right_prec + 1,
  	    right_prec);
@@ -3303,7 +3293,7 @@ diff -ruN src/lib/libc/hidden/monetary.h.orig src/lib/libc/hidden/monentary.h
  #include_next <monetary.h>
  
  PROTO_STD_DEPRECATED(strfmon);
-+PROTO_STD_DEPRECATED(strfmon_l);
++PROTO_NORMAL(strfmon_l);
  
  #endif /* !_LIBC_MONETARY_H_ */
 diff -ruN src/lib/libc/hidden/xlocale.h.orig src/lib/libc/hidden/xlocale.h
@@ -3338,3 +3328,23 @@ diff -ruN src/lib/libc/hidden/stdlib.h.orig  src/lib/libc/hidden/stdlib.h
  PROTO_NORMAL(strtoll);
  PROTO_NORMAL(strtonum);
  /*PROTO_NORMAL(strtoq);		alias of strtoll */
+diff -ruN src61-orig/lib/libc/hidden/stdio.h src/lib/libc/hidden/stdio.h
+--- src61-orig/lib/libc/hidden/stdio.h	Tue Sep  6 14:56:36 2016
++++ src/lib/libc/hidden/stdio.h	Tue May 16 07:28:33 2017
+@@ -29,6 +29,8 @@
+ #include_next <stdio.h>
+ 
+ __BEGIN_HIDDEN_DECLS
++typedef struct  _xlocale *locale_t;
++int      asprintf_l(char **, locale_t, const char *, ...);
+ char	*_mktemp(char *);
+ __END_HIDDEN_DECLS
+ 
+@@ -42,6 +44,7 @@
+ 
+ PROTO_NORMAL(__srget);
+ PROTO_NORMAL(asprintf);
++PROTO_NORMAL(asprintf_l);
+ PROTO_NORMAL(clearerr);
+ PROTO_NORMAL(ctermid);
+ PROTO_NORMAL(dprintf);
