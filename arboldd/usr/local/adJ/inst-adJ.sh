@@ -5,7 +5,7 @@
 
 VER=6.0
 REV=0
-VESP="p1"
+VESP="p2"
 VERP=60
 
 # Falta /standard/root.hint
@@ -2385,7 +2385,7 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 	[exec] (midori) { export \`/usr/local/bin/gnome-keyring-servicio -s\`; /usr/local/bin/midori}
 [submenu] (Espiritualidad)
 	[exec] (xiphos) {/usr/local/bin/xiphos}
-	[exec] (Evangelios de dominio publico) {/usr/local/bin/chrome /usr/local/share/doc/evangelios_dp/}
+	[exec] (Evangelios de dominio publico) {/usr/local/bin/chrome --disable-gpu /usr/local/share/doc/evangelios_dp/}
 [end]
 [submenu] (Dispositivos)
 	[exec] (Apagar) {doas /sbin/halt -p}
@@ -2398,7 +2398,7 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 	[exec] (Desmontar USBC) {/sbin/umount -f /mnt/usbc}
 	[exec] (Montar Floppy) {/sbin/mount /mnt/floppy ; xfe /mnt/floppy}
 	[exec] (Desmontar Floppy) {/sbin/umount -f /mnt/floppy}
-	[exec] (Configurar Impresora con CUPS) {echo y | doas cups-enable; doas chmod a+rw /dev/ulpt* /dev/lpt*; /usr/local/bin/chrome http://127.0.0.1:631}
+	[exec] (Configurar Impresora con CUPS) {echo y | doas cups-enable; doas chmod a+rw /dev/ulpt* /dev/lpt*; /usr/local/bin/chrome --disable-gpu http://127.0.0.1:631}
 	[submenu] (Red)
                 [exec] (Examinar red) {xterm -en utf8 -e '/sbin/ifconfig; echo -n "\n[RETORNO] para examinar enrutamiento (podrá salir con q)"; read; /sbin/route -n show | less'}
                 [exec] (Examinar configuracion cortafuegos) {xterm  -en utf8 -e 'doas  /sbin/pfctl -s all | less '}
@@ -2435,9 +2435,9 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 	[exec] (Pidgin) {pidgin}
 [end]
 [submenu] (Documentos)
-	[exec] (adJ basico) {/usr/local/bin/chrome /usr/local/share/doc/basico_adJ/index.html}
-	[exec] (adJ usuario) {/usr/local/bin/chrome /usr/local/share/doc/usuario_adJ/index.html}
-	[exec] (adJ servidor) {/usr/local/bin/chrome /usr/local/share/doc/servidor_adJ/index.html}
+	[exec] (adJ basico) {/usr/local/bin/chrome --disable-gpu /usr/local/share/doc/basico_adJ/index.html}
+	[exec] (adJ usuario) {/usr/local/bin/chrome --disable-gpu /usr/local/share/doc/usuario_adJ/index.html}
+	[exec] (adJ servidor) {/usr/local/bin/chrome --disable-gpu /usr/local/share/doc/servidor_adJ/index.html}
 [end]
 [submenu] (Otros)
 [exec] (gvim) {gvim}
@@ -2557,7 +2557,7 @@ Pos= 23 5
 
 [Desktop Entry]
 Name=chromium
-Exec=chrome
+Exec=chrome --disable-gpu
 Icon=/usr/local/share/icons/hicolor/48x48/apps/applications-internet.png
 Pos= 27 86
 [end]
