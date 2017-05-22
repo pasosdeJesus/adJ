@@ -1031,7 +1031,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mb
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/multibyte_citrus.c src/lib/libc/locale/multibyte_citrus.c
 --- src53collation/lib/libc/locale/multibyte_citrus.c	Sat Sep 12 11:23:14 2015
 +++ src/lib/libc/locale/multibyte_citrus.c	Sun May  8 05:36:41 2016
-@@ -31,71 +31,115 @@
+@@ -31,90 +31,149 @@
  #include <stdint.h>
  #include <stdlib.h>
  #include <wchar.h>
@@ -1160,9 +1160,10 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mu
  {
  	static mbstate_t mbs;
  
-@@ -103,18 +147,33 @@
+ 	if (ps == NULL)
  		ps = &mbs;
- 	return (wcsnrtombs(dst, src, SIZE_MAX, len, ps));
+-	return (wcsnrtombs(dst, src, SIZE_MAX, len, ps));
++	return (wcsnrtombs_l(dst, src, SIZE_MAX, len, ps, loc));
  }
 +DEF_STRONG(wcsrtombs_l);
 +
