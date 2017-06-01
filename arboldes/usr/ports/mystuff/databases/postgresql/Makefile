@@ -10,8 +10,8 @@ COMMENT-pg_upgrade=Support for upgrading PostgreSQL data from previous version
 # DO NOT FORGET to also change the @ask-update entry in pkg/PLIST-server
 # in case a dump before / restore after pkg_add -u is required!
 
-VERSION=	9.6.1
-REVISION=	0
+VERSION=	9.6.3
+#REVISION=	0
 DISTNAME=	postgresql-${VERSION}
 PKGNAME-main=	postgresql-client-${VERSION}
 PKGNAME-server=	postgresql-server-${VERSION}

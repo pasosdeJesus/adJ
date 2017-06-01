@@ -53,8 +53,8 @@ cdir=`pwd`
 if (test ! -d /usr/src) then {
 	echo "Se requieren fuentes de sistema base en /usr/src";
 } fi;
-if (test ! -d /usr/src/sys) then {
-	echo "Se requieren fuentes del kernel en /usr/src/sys";
+if (test ! -d /sys) then {
+	echo "Se requieren fuentes del kernel en /sys";
 } fi;
 if (test ! -d $XSRCDIR) then {
 	echo "Se requieren fuentes de Xorg 4 en $XSRCDIR";
@@ -105,7 +105,7 @@ if (test "$sn" = "s") then {
 	if (test -d /usr/src$VP-orig/) then {
 		cd /usr/src$VP-orig/sys
 	} else {
-		cd /usr/src/sys
+		cd /sys
 	} fi;
 	if (test ! -f CVS/Root) then {
 		for i in `find . -name CVS`; do 
@@ -115,7 +115,7 @@ if (test "$sn" = "s") then {
 	} fi;
 	cvs -z3 update -Pd -r$R
 	if (test -d /usr/src$VP-orig/) then {
-		rsync -ravzp --delete /usr/src$VP-orig/sys/* /usr/src/sys/
+		rsync -ravzp --delete /usr/src$VP-orig/sys/* /sys/
 	} fi;
 	if (test -d /usr/xenocara$VP-orig/) then {
 		cd /usr/xenocara$VP-orig/sys
@@ -166,33 +166,37 @@ if (test "$sn" = "s") then {
 		exit 1;
 	} fi;
 
-	cd /usr/src/sys
+	cd /sys
 	$dini/hdes/servicio-kernel.sh	
 	# Esta en general se cambiaron comentarios a lo largo de todas
     # las fuentes.  Ver documentación en 
     # http://aprendiendo.pasosdejesus.org/?id=Renombrando+Daemon+por+Service
 
 	# Para compilar vmstat
-	cp /usr/src/sys/uvm/uvm_extern.h /usr/include/uvm/
+	cp /sys/uvm/uvm_extern.h /usr/include/uvm/
 
-	cd /usr/src/sys/arch/$ARQ/conf
+	cd /sys/arch/$ARQ/conf
 	sed -e "s/^#\(option.*NTFS.*\)/\1/g" GENERIC > APRENDIENDODEJESUS
-	rm -rf /usr/src/sys/arch/$ARQ/compile/APRENDIENDODEJESUS/*
+	rm -rf /sys/arch/$ARQ/compile/APRENDIENDODEJESUS/obj/*
 	config APRENDIENDODEJESUS
 	cd ../compile/APRENDIENDODEJESUS
-	rm .depend
+	rm -f .depend
 	make clean 
+	make obj
+	make config
 	make -j4
-	cp /usr/src/sys/arch/$ARQ/compile/APRENDIENDODEJESUS/bsd $dini/$V$VESP-$ARQ/bsd
-	cd /usr/src/sys/arch/$ARQ/conf
+	cp /sys/arch/$ARQ/compile/APRENDIENDODEJESUS/obj/bsd $dini/$V$VESP-$ARQ/bsd
+	cd /sys/arch/$ARQ/conf
 	sed -e "s/GENERIC/APRENDIENDODEJESUS/g" GENERIC.MP > APRENDIENDODEJESUS.MP
-	rm -rf /usr/src/sys/arch/$ARQ/compile/APRENDIENDODEJESUS.MP/*
+	rm -rf /sys/arch/$ARQ/compile/APRENDIENDODEJESUS.MP/obj/*
 	config APRENDIENDODEJESUS.MP
 	cd ../compile/APRENDIENDODEJESUS.MP
 	rm .depend
 	make clean 
+	make obj
+	make config
 	make -j4
-	cp /usr/src/sys/arch/$ARQ/compile/APRENDIENDODEJESUS.MP/bsd $dini/$V$VESP-$ARQ/bsd.mp
+	cp /sys/arch/$ARQ/compile/APRENDIENDODEJESUS.MP/obj/bsd $dini/$V$VESP-$ARQ/bsd.mp
 
 } fi;
 
@@ -209,7 +213,7 @@ if (test "$sn" = "s") then {
 		echo "Esta operación requiere que ARQ en ver.sh sea $narq";
 		exit 1;
 	} fi;
-	cd /usr/src/sys/arch/$ARQ/compile/APRENDIENDODEJESUS.MP
+	cd /sys/arch/$ARQ/compile/APRENDIENDODEJESUS.MP
 	make install
 	echo "Debe reiniciar sistema para iniciar kernel mp (si prefiere el que es para un procesador simple instalelo manualmente)..." | tee -a /var/www/tmp/distrib-adJ.bitacora
 #/	exit 0;
@@ -313,8 +317,8 @@ if (test "$sn" = "s") then {
 	$dini/hdes/servicio-base.sh | tee -a /var/www/tmp/distrib-adJ.bitacora
 	grep LOG_SERVICE  /usr/include/syslog.h > /dev/null 2>&1
 	if (test "$?" != "0") then {
-		echo "* Cambiando /usr/src/sys" | tee -a /var/www/tmp/distrib-adJ.bitacora
-		cd /usr/src/sys
+		echo "* Cambiando /sys" | tee -a /var/www/tmp/distrib-adJ.bitacora
+		cd /sys
 		$dini/hdes/servicio-kernel.sh | tee -a /var/www/tmp/distrib-adJ.bitacora	
 	} fi;
 	# usar llaves de adJ en lugar de las de OpenBSD
@@ -563,7 +567,7 @@ if (test "$sn" = "s") then {
 
 	cd /usr/src/distrib/special/libstubs
 	make
-	cd /usr/src/sys/arch/$ARQ/stand/cdbr
+	cd /sys/arch/$ARQ/stand/cdbr
 	make clean
 	cd ..
 	make
@@ -591,8 +595,8 @@ if (test "$sn" = "s") then {
 	} fi;
 
 
-	cp /usr/src/sys/arch/$ARQ/compile/APRENDIENDODEJESUS/bsd ${RELEASEDIR}/bsd
-	cp /usr/src/sys/arch/$ARQ/compile/APRENDIENDODEJESUS.MP/bsd ${RELEASEDIR}/bsd.mp
+	cp /sys/arch/$ARQ/compile/APRENDIENDODEJESUS/bsd ${RELEASEDIR}/bsd
+	cp /sys/arch/$ARQ/compile/APRENDIENDODEJESUS.MP/bsd ${RELEASEDIR}/bsd.mp
 	find $DESTDIR -exec touch {} ';'
 	cd /usr/src/distrib/sets && sh checkflist
 	find $RELEASEDIR  -exec touch {} ';'
@@ -671,7 +675,7 @@ function paquete {
 			cmd="rm -f $dini/$V$VESP-$ARQ/$dest/$nom-[0-9][0-9a-z.]*.tgz"
 			echo "cmd=$cmd";
 			eval "$cmd";
-			cmd="pkg_sign -v -o $dini/$V$VESP-$ARQ/$dest/ -s signify -s /etc/signify/adJ-$VP-pkg.sec /usr/ports/packages/$ARQ/all/$nom*.tgz"
+			cmd="pkg_sign -v -o $dini/$V$VESP-$ARQ/$dest/ -s signify2 -s /etc/signify/adJ-$VP-pkg.sec /usr/ports/packages/$ARQ/all/$nom*.tgz"
 			echo "cmd=$cmd";
 			eval "$cmd";
 		} fi;
@@ -696,7 +700,7 @@ function paquete {
 				cmd="rm -f $f2"
 				echo "cmd=$cmd";
 				eval "$cmd";
-				cmd="pkg_sign -v -o $dini/$V$VESP-$ARQ/$dest/ -s signify -s /etc/signify/adJ-$VP-pkg.sec /usr/ports/packages/$ARQ/all/$i*.tgz"
+				cmd="pkg_sign -v -o $dini/$V$VESP-$ARQ/$dest/ -s signify2 -s /etc/signify/adJ-$VP-pkg.sec /usr/ports/packages/$ARQ/all/$i*.tgz"
 				echo $cmd;
 				eval $cmd
 			} fi;
@@ -755,6 +759,8 @@ if (test "$sn" = "s") then {
 	# Deben estar en mystuff
 
 
+	paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs" 
+	exit 1
 	####
 	# Retroportados para cerrar fallas o actualizar
 	# Deben estar en arboldes/usr/ports/mystuff y en /usr/ports de current
