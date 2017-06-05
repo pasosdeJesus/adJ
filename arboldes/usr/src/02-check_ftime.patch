@@ -26,7 +26,7 @@ diff -ruN src56-orig/regress/lib/libc/time/ftime/Makefile src/regress/lib/libc/t
 diff -ruN src56-orig/regress/lib/libc/time/ftime/check_ftime.c src/regress/lib/libc/time/ftime/check_ftime.c
 --- src56-orig/regress/lib/libc/time/ftime/check_ftime.c	Wed Dec 31 19:00:00 1969
 +++ src/regress/lib/libc/time/ftime/check_ftime.c	Thu Apr 17 11:46:19 2014
-@@ -0,0 +1,268 @@
+@@ -0,0 +1,269 @@
 +/**
 + * Public domain according to Colombian Legislation. 
 + * http://www.pasosdejesus.org/dominio_publico_colombia.html
@@ -38,6 +38,7 @@ diff -ruN src56-orig/regress/lib/libc/time/ftime/check_ftime.c src/regress/lib/l
 +#include <locale.h>
 +#include <stdio.h>
 +#include <stdlib.h>
++#include <time.h>
 +
 +int bad = 0;
 +

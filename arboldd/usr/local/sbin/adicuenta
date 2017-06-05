@@ -117,7 +117,7 @@ EOF
 
 grep "$Maildir" $dhome/.procmailrc > /dev/null 2>&1
 if (test "$?" != "0") then {
-	echo "Creando .procmail";
+	echo "Creando .procmailrc";
 cat > $dhome/.procmailrc <<EOF
 LINEBUF=4096
 VERBOSE=on
@@ -143,7 +143,7 @@ $dhome/$Maildir/.Junk/
 $dhome/$Maildir/
 
 EOF
-	chown $us /home/$us/.procmail
+	chown $us /home/$us/.procmailrc
 
 } fi;
 
@@ -153,9 +153,16 @@ if (test "$?" != "0") then {
 	chown $us /home/$us/.forward
 } fi;
 
+
+function mdmake {
+    mkdir -p $1/new
+    mkdir $1/cur
+    mkdir $1/tmp
+}
+
 function subc {
 	s=$1;
-	maildirmake -f $s $partenc/$us/$Maildir 2> /dev/null
+	mdmake $partenc/$us/$Maildir/$s
 	grep $s $partenc/$us/$Maildir/courierimapsubscribed > /dev/null 2> /dev/null
 	if (test "$?" != "0") then {
 		echo "INBOX.$s" >> $partenc/$us/$Maildir/courierimapsubscribed
@@ -164,7 +171,7 @@ function subc {
 
 mkdir -p $partenc/$us/
 chown  $us:$gru $partenc/$us/
-maildirmake $partenc/$us/$Maildir 2> /dev/null
+mdmake $partenc/$us/$Maildir 2> /dev/null
 subc Junk 
 subc Trash
 subc Drafts

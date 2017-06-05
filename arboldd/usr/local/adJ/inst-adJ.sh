@@ -3,9 +3,9 @@
 # Dominio público de acuerdo a legislación colombiana. http://www.pasosdejesus.org/dominio_publico_colombia.html. 
 # 2015. vtamara@pasosdeJesus.org
 
-VER=6.0
+VER=6.1
 REV=0
-VESP="p1"
+VESP="a1"
 VERP=60
 
 # Falta /standard/root.hint
@@ -1079,6 +1079,63 @@ if (test -f /usr/share/misc/termcap.db) then {
 
 } fi;
 	
+if (test -f /usr/bin/sqlite3) then {
+	vac="$vac 6.0 a 6.1";	
+	echo "Aplicando actualizaciones de 6.0 a 6.1 " >> /var/www/tmp/inst-adJ.bitacora;
+	rm -rf /usr/share/man
+	makewhatis
+	rm /usr/bin/sqlite3
+	rm /usr/include/sqlite3*.h
+	rm /usr/lib/pkgconfig/sqlite3.pc
+	rm /usr/libdata/perl5/site_perl/*-openbsd/sqlite3*.ph
+	rm /usr/lib/libsqlite3*
+	userdel uucp
+	groupdel news
+	rm -rf /var/spool/uucp*
+	cd /usr/X11R6
+	rm bin/koi8rxterm bin/uxterm
+	rm share/X11/app-defaults/KOI8RXTerm share/X11/app-defaults/UXTerm
+	rm man/man1/koi8rxterm.1 man/man1/uxterm.1
+	grep "xdm_flags *= *$" /etc/rc.conf.local > /dev/null 2>&1
+	if (test "$?" = "0") then {
+		rcctl disable xdm
+		rcctl enable xenodm
+	} fi;
+	rm -rf /etc/X11/xdm
+	rm /usr/X11R6/bin/xdm /usr/X11R6/man/man1/xdm.1 /etc/rc.d/xdm
+
+	rm /etc{,/examples}/pkg.conf
+
+	rm -rf /usr/libdata/perl5/site_perl \
+		/usr/bin/perl5* \
+		/usr/lib/libperl.so.17.* \
+		/usr/libdata/perl5/*-openbsd/5.*/ \
+		/usr/bin/a2p \
+		/usr/bin/config_data \
+		/usr/bin/find2perl \
+		/usr/bin/psed \
+		/usr/bin/s2p \
+		/usr/libdata/perl5/CGI* \
+		/usr/libdata/perl5/Locale/Codes/Constants.pod \
+		/usr/libdata/perl5/Module/Build* \
+		/usr/libdata/perl5/Package \
+		/usr/libdata/perl5/inc \
+		/usr/libdata/perl5/pod/a2p.pod \
+		/usr/libdata/perl5/unicore/lib/Gc/Lt.pl \
+		/usr/libdata/perl5/unicore/lib/Hyphen/Y.pl \
+		/usr/libdata/perl5/unicore/lib/LOE \
+		/usr/libdata/perl5/unicore/lib/NChar \
+		/usr/libdata/perl5/unicore/lib/PatWS \
+		/usr/libdata/perl5/unicore/lib/Perl/_XExtend.pl \
+		/usr/libdata/perl5/unicore/lib/Perl/_XRegula.pl \
+		/usr/libdata/perl5/unicore/lib/Perl/_XSpecia.pl \
+		/usr/libdata/perl5/unicore/lib/Space \
+		/usr/libdata/perl5/version/vpp.pm
+
+	rm -f /dev/sound*
+
+} fi;
+
 
 if  (test "$vac" != "") then {
 	dialog --title 'Actualizaciones aplicadas' --msgbox "\\nSe aplicaron actualizaciones: $vac\\n\\n$mac\\n" 15 60
@@ -2385,7 +2442,7 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 	[exec] (midori) { export \`/usr/local/bin/gnome-keyring-servicio -s\`; /usr/local/bin/midori}
 [submenu] (Espiritualidad)
 	[exec] (xiphos) {/usr/local/bin/xiphos}
-	[exec] (Evangelios de dominio publico) {/usr/local/bin/chrome /usr/local/share/doc/evangelios_dp/}
+	[exec] (Evangelios de dominio publico) {/usr/local/bin/chrome --disable-gpu /usr/local/share/doc/evangelios_dp/}
 [end]
 [submenu] (Dispositivos)
 	[exec] (Apagar) {doas /sbin/halt -p}
@@ -2398,7 +2455,7 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 	[exec] (Desmontar USBC) {/sbin/umount -f /mnt/usbc}
 	[exec] (Montar Floppy) {/sbin/mount /mnt/floppy ; xfe /mnt/floppy}
 	[exec] (Desmontar Floppy) {/sbin/umount -f /mnt/floppy}
-	[exec] (Configurar Impresora con CUPS) {echo y | doas cups-enable; doas chmod a+rw /dev/ulpt* /dev/lpt*; /usr/local/bin/chrome http://127.0.0.1:631}
+	[exec] (Configurar Impresora con CUPS) {echo y | doas cups-enable; doas chmod a+rw /dev/ulpt* /dev/lpt*; /usr/local/bin/chrome --disable-gpu http://127.0.0.1:631}
 	[submenu] (Red)
                 [exec] (Examinar red) {xterm -en utf8 -e '/sbin/ifconfig; echo -n "\n[RETORNO] para examinar enrutamiento (podrá salir con q)"; read; /sbin/route -n show | less'}
                 [exec] (Examinar configuracion cortafuegos) {xterm  -en utf8 -e 'doas  /sbin/pfctl -s all | less '}
@@ -2435,9 +2492,9 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 	[exec] (Pidgin) {pidgin}
 [end]
 [submenu] (Documentos)
-	[exec] (adJ basico) {/usr/local/bin/chrome /usr/local/share/doc/basico_adJ/index.html}
-	[exec] (adJ usuario) {/usr/local/bin/chrome /usr/local/share/doc/usuario_adJ/index.html}
-	[exec] (adJ servidor) {/usr/local/bin/chrome /usr/local/share/doc/servidor_adJ/index.html}
+	[exec] (adJ basico) {/usr/local/bin/chrome --disable-gpu /usr/local/share/doc/basico_adJ/index.html}
+	[exec] (adJ usuario) {/usr/local/bin/chrome --disable-gpu /usr/local/share/doc/usuario_adJ/index.html}
+	[exec] (adJ servidor) {/usr/local/bin/chrome --disable-gpu /usr/local/share/doc/servidor_adJ/index.html}
 [end]
 [submenu] (Otros)
 [exec] (gvim) {gvim}
@@ -2557,7 +2614,7 @@ Pos= 23 5
 
 [Desktop Entry]
 Name=chromium
-Exec=chrome
+Exec=chrome --disable-gpu
 Icon=/usr/local/share/icons/hicolor/48x48/apps/applications-internet.png
 Pos= 27 86
 [end]
