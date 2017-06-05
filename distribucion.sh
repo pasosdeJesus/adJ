@@ -39,7 +39,9 @@ function vardef {
 }
 
 vardef DESTDIR $DESTDIR
+D_DESTDIR=$DESTDIR
 vardef RELEASEDIR $RELEASEDIR
+D_RELEASEDIR=$RELEASEDIR
 vardef XSRCDIR ${XSRCDIR}
 echo "Genera distribución de adJ" | tee -a /var/www/tmp/distrib-adJ.bitacora
 date | tee -a /var/www/tmp/distrib-adJ.bitacora
@@ -408,7 +410,7 @@ q
 EOF
 	#compilabase
 	echo "DESTDIR=$DESTDIR" | tee -a /var/www/tmp/distrib-adJ.bitacora;
-	cd /usr/src/etc && DESTDIR=/destdir nice make release | tee -a /var/www/tmp/distrib-adJ.bitacora;
+	cd /usr/src/etc && DESTDIR=/$D_DESTDIR nice make release | tee -a /var/www/tmp/distrib-adJ.bitacora;
 	find "$DESTDIR"  -exec touch {} ';'
 	find "$RELEASEDIR"  -exec touch {} ';'
 } fi;
@@ -555,7 +557,7 @@ if (test "$sn" = "s") then {
 	verleng /usr/src/distrib/amd64/common/list 
 	verleng /usr/src/distrib/i386/common/list 
 
-	cp /etc/signify/adJ-*pub /destdir/etc/signify/
+	cp /etc/signify/adJ-*pub /$D_DESTDIR/etc/signify/
 	cp /usr/src/distrib/ramdisk/list /tmp/ramdisk_list
 	cp /usr/src/distrib/amd64/common/list /tmp/common_list
 	sed -e 's/signify\/openbsd/signify\/adJ/g' /tmp/ramdisk_list > /usr/src/distrib/ramdisk/list 
@@ -567,7 +569,7 @@ if (test "$sn" = "s") then {
 	make clean
 	cd ..
 	make
-	DESTDIR=/destdir make install
+	DESTDIR=/$D_DESTDIR make install
 	cd /usr/src/distrib/$ARQ/ramdisk_cd
 	DLENG=es RELEASEDIR=${RELEASEDIR} make
 	cp obj/bsd.rd ${RELEASEDIR}
@@ -1074,14 +1076,14 @@ EOF
 	mkdir -p /tmp/i/usr/src/etc/
 	cp /usr/src/etc/Makefile  /tmp/i/usr/src/etc/
 	for i in `cat $dini/lista-site`; do 
-		if (test -d "/destdir/$i" -o -d "$i") then {
+		if (test -d "/$D_DESTDIR/$i" -o -d "$i") then {
 			mkdir -p /tmp/i/$i
-		} elif (test -f "/destdir/$i") then {
+		} elif (test -f "/$D_DESTDIR/$i") then {
 			d=`dirname $i`
 			mkdir -p /tmp/i/$d
-			cp /destdir/$i /tmp/i/$i
+			cp /$D_DESTDIR/$i /tmp/i/$i
 		} else {
-			echo "lista-site errada, falta $i en /destdir, intentando de /";
+			echo "lista-site errada, falta $i en /$D_DESTDIR, intentando de /";
 			mkdir -p /tmp/i/`dirname $i`; 
 			cp -f /$i /tmp/i/$i	
 		} fi;
