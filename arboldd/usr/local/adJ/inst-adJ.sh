@@ -938,6 +938,11 @@ if (test -f /usr/sbin/spray) then {
 
 	useradd -u53 -g=uid -c"Servicio Unbound" -d/var/unbound -s/sbin/nologin _unbound
 	
+
+	# No consigandos en upgrade FAQ pero sin en changelog web
+	rm -f /usr/bin/asa
+	rm -f /usr/bin/bdes
+
 } fi;
 
 	
@@ -1021,6 +1026,9 @@ if (test -f /usr/include/ressl.h) then {
 	pkg_delete basico_OpenBSD
 	pkg_delete usuario_OpenBSD
 	pkg_delete servidor_OpenBSD
+	
+	# No consigandos en upgrade FAQ pero sin en changelog web
+	rm -f /usr/bin/gzsig
 } fi;
 
 echo "* Configurar doas" >> /var/www/tmp/inst-adJ.bitacora;
@@ -1038,10 +1046,15 @@ if (test "$?" != "0") then {
 if (test -f /usr/bin/sudo) then {
 	vac="$vac 5.7 a 5.8";	
 	echo "Aplicando actualizaciones de 5.7 a 5.8 " >> /var/www/tmp/inst-adJ.bitacora;
-  rm -f /usr/bin/sudo /usr/bin/sudoedit /usr/sbin/visudo
-  rm -f /usr/share/man/man8/sudo.8 /usr/share/man/man8/sudoedit.8
-  rm -f /usr/share/man/man8/visudo.8 /usr/share/man/man5/sudoers.5
-  rm -f /usr/libexec/sudo_noexec.so
+	rm -f /usr/bin/sudo /usr/bin/sudoedit /usr/sbin/visudo
+	rm -f /usr/share/man/man8/sudo.8 /usr/share/man/man8/sudoedit.8
+	rm -f /usr/share/man/man8/visudo.8 /usr/share/man/man5/sudoers.5
+	rm -f /usr/libexec/sudo_noexec.so
+	# No consigandos en upgrade FAQ pero sin en changelog web
+	rm -f /sbin/lmccontrol
+	rm -f /sbin/slattach
+	rm -f /usr/bin/tcopy
+	rm -f /usr/bin/tip
 } fi;
 
 if (test -f /usr/share/misc/termcap.db) then {
@@ -1077,6 +1090,8 @@ if (test -f /usr/share/misc/termcap.db) then {
           ftsystem.h fttrigon.h fttypes.h ftwinfnt.h t1tables.h \
           ttnameid.h tttables.h tttags.h ttunpat.h
 
+	# No consigandos en upgrade FAQ pero sin en changelog web
+	rm -f /usr/sbin/lptest
 } fi;
 	
 if (test -f /usr/bin/sqlite3) then {
