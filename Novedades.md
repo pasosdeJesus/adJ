@@ -26,3 +26,10 @@ Esta versión actualiza algunos pocos binarios respecto a la versión
 <http://aprendiendo.pasosdejesus.org/?id=AdJ+6.0+-+Aprendiendo+de+Jesus+6.0>
 
 
+##FE DE ERRATAS
+
+La configuración del teclado que haga para las consolas tipo texto ya no se aplica para X-Window. Para establecer una configuracion de teclado agregue al archivo ```/etc/X11/xdm/Xsetup_0```
+```
+setxkbmap -layout latam 
+```
+cambiando ```latam``` por ```es``` o por la distribución de su teclado (ve las posibles con man ```xkeyboard-config```)
