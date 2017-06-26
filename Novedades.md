@@ -1,14 +1,14 @@
-#adJ - Aprendiendo de Jesús.
+# adJ - Aprendiendo de Jesús.
 Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y que anhelamos sea usada por Jesús durante el Milenio.
 
-###Versión: 6.0p2
+### Versión: 6.0p2
 Fecha de publicación: 16/May/2017
 
 Puede ver novedades respecto a OpenBSD en:
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_0/Novedades_OpenBSD.md>
 
-##NOVEDADES RESPECTO A adJ 6.0
+## NOVEDADES RESPECTO A adJ 6.0
 
 - Parches al sistema basta hasta el 16.May.2017 que cierran 7 fallas 
   de seguridad y 16 de robustez.
@@ -26,10 +26,10 @@ Esta versión actualiza algunos pocos binarios respecto a la versión
 <http://aprendiendo.pasosdejesus.org/?id=AdJ+6.0+-+Aprendiendo+de+Jesus+6.0>
 
 
-##FE DE ERRATAS
+## FE DE ERRATAS
 
 La configuración del teclado que haga para las consolas tipo texto ya no se aplica para X-Window. Para establecer una configuracion de teclado agregue al archivo ```/etc/X11/xdm/Xsetup_0```
 ```
 setxkbmap -layout latam 
 ```
-cambiando ```latam``` por ```es``` o por la distribución de su teclado (ve las posibles con man ```xkeyboard-config```)
+cambiando ```latam``` por ```es``` o por la distribución de su teclado (ver las posibles con man ```xkeyboard-config```)
