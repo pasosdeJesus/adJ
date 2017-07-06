@@ -414,7 +414,9 @@ q
 EOF
 	#compilabase
 	echo "DESTDIR=$DESTDIR" | tee -a /var/www/tmp/distrib-adJ.bitacora;
+	chown build /usr/src/etc/master.passwd
 	cd /usr/src/etc && DESTDIR=/$D_DESTDIR nice make release | tee -a /var/www/tmp/distrib-adJ.bitacora;
+	echo "* Completo make release"
 	find "$DESTDIR"  -exec touch {} ';'
 	find "$RELEASEDIR"  -exec touch {} ';'
 } fi;
