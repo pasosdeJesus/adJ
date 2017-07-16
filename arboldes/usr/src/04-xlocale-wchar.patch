@@ -3538,7 +3538,7 @@ diff -ruN -x CVS -x obj src55-orig/include/Makefile src/include/Makefile
 diff -ruN src59-orig/include/xlocale.h src/include/xlocale.h
 --- src59-orig/include/xlocale.h	Wed Dec 31 19:00:00 1969
 +++ src/include/xlocale.h	Mon Jul 18 09:19:45 2016
-@@ -0,0 +1,462 @@
+@@ -0,0 +1,463 @@
 +/*-
 + * Copyright (c) 2011, 2012 The FreeBSD Foundation
 + * All rights reserved.
@@ -3705,6 +3705,7 @@ diff -ruN src59-orig/include/xlocale.h src/include/xlocale.h
 +long double		 strtold_l(const char *, char **, locale_t);
 +long long		 strtoll_l(const char *, char **, int, locale_t);
 +long long		 strtonum_l(const char *, long long, long long, const char **, locale_t);
++#include <sys/types.h> 
 +quad_t                   strtoq_l(const char *, char **, int, locale_t);
 +u_quad_t          	 strtouq_l(const char *, char **, int, locale_t);
 +unsigned long		 strtoul_l(const char *, char **, int, locale_t);
