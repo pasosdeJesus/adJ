@@ -4,14 +4,14 @@
 # Ideas from https://www.freshports.org/x11-toolkits/ocaml-labltk/
 
 COMMENT=	"Interface to the Tcl/Tk GUI framework"
-VERSION=	8.06.2
-REVISION=	2
+VERSION=	8.06.3
+REVISION=	
 
 PKGNAME=	ocaml-labltk-${VERSION}
 DISTNAME=	labltk-${VERSION}
 CATEGORIES=	lang
 
-MASTER_SITES=	http://forge.ocamlcore.org/frs/download.php/1628/
+MASTER_SITES=	https://forge.ocamlcore.org/frs/download.php/1701/labltk-8.06.3.tar.gz
 EXTRACT_SUFX=	.tar.gz
 
 HOMEPAGE=	https://forge.ocamlcore.org/projects/labltk/

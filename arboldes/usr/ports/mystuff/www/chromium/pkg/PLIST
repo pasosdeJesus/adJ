@@ -1,14 +1,12 @@
-<<<<<<< HEAD
-@comment $OpenBSD: PLIST,v 1.64 2016/10/26 06:22:08 robert Exp $
-=======
-@comment $OpenBSD: PLIST,v 1.60 2016/06/10 05:15:55 robert Exp $
->>>>>>> 7e8581aadfac3773e05d83a662dae23a33c44e10
+@comment $OpenBSD: PLIST,v 1.67 2017/03/14 12:18:54 robert Exp $
 @pkgpath www/chromium,proprietary
 bin/chrome
 chrome/
 @bin chrome/chrome
 chrome/chrome_100_percent.pak
 chrome/chrome_200_percent.pak
+chrome/font_service.service
+chrome/headless_lib.pak
 chrome/icudtl.dat
 chrome/keyboard_resources.pak
 chrome/locales/
@@ -27,7 +25,6 @@ chrome/locales/es-419.pak
 chrome/locales/es.pak
 chrome/locales/et.pak
 chrome/locales/fa.pak
-chrome/locales/fake-bidi.pak
 chrome/locales/fi.pak
 chrome/locales/fil.pak
 chrome/locales/fr.pak
@@ -73,8 +70,6 @@ chrome/mus_app_resources_strings.pak
 chrome/natives_blob.bin
 chrome/product_logo_48.png
 chrome/protoc
-chrome/pseudo_locales/
-chrome/pseudo_locales/fake-bidi.pak
 chrome/resources/
 chrome/resources.pak
 chrome/resources/inspector/
@@ -105,17 +100,8 @@ chrome/resources/inspector/Images/errorWave_2x.png
 chrome/resources/inspector/Images/fileSystem.png
 chrome/resources/inspector/Images/forward.png
 chrome/resources/inspector/Images/frame.png
-chrome/resources/inspector/Images/graphLabelCalloutLeft.png
-chrome/resources/inspector/Images/graphLabelCalloutRight.png
 chrome/resources/inspector/Images/ic_info_black_18dp.svg
 chrome/resources/inspector/Images/ic_warning_black_18dp.svg
-<<<<<<< HEAD
-=======
-chrome/resources/inspector/Images/indexedDB.png
-chrome/resources/inspector/Images/indexedDBIndex.png
-chrome/resources/inspector/Images/indexedDBObjectStore.png
-chrome/resources/inspector/Images/localStorage.png
->>>>>>> 7e8581aadfac3773e05d83a662dae23a33c44e10
 chrome/resources/inspector/Images/navigationControls.png
 chrome/resources/inspector/Images/navigationControls_2x.png
 chrome/resources/inspector/Images/paneAddButtons.png
@@ -160,31 +146,31 @@ chrome/resources/inspector/Images/touchCursor_2x.png
 chrome/resources/inspector/InspectorBackendCommands.js
 chrome/resources/inspector/SupportedCSSProperties.js
 chrome/resources/inspector/Tests.js
-<<<<<<< HEAD
 chrome/resources/inspector/accessibility/
 chrome/resources/inspector/accessibility/accessibility_module.js
 chrome/resources/inspector/animation/
 chrome/resources/inspector/animation/animation_module.js
 chrome/resources/inspector/audits/
 chrome/resources/inspector/audits/audits_module.js
+chrome/resources/inspector/audits2/
+chrome/resources/inspector/audits2/audits2_module.js
+chrome/resources/inspector/cm/
+chrome/resources/inspector/cm/cm_module.js
 chrome/resources/inspector/cm_modes/
 chrome/resources/inspector/cm_modes/cm_modes_module.js
-chrome/resources/inspector/components_lazy/
-chrome/resources/inspector/components_lazy/components_lazy_module.js
+chrome/resources/inspector/color_picker/
+chrome/resources/inspector/color_picker/color_picker_module.js
 chrome/resources/inspector/console/
 chrome/resources/inspector/console/console_module.js
+chrome/resources/inspector/cookie_table/
+chrome/resources/inspector/cookie_table/cookie_table_module.js
+chrome/resources/inspector/css_tracker/
+chrome/resources/inspector/css_tracker/css_tracker_module.js
+chrome/resources/inspector/data_grid/
+chrome/resources/inspector/data_grid/data_grid_module.js
 chrome/resources/inspector/devices/
 chrome/resources/inspector/devices/devices_module.js
-=======
-chrome/resources/inspector/accessibility_module.js
-chrome/resources/inspector/animation_module.js
-chrome/resources/inspector/audits_module.js
-chrome/resources/inspector/cm_modes_module.js
-chrome/resources/inspector/components_lazy_module.js
-chrome/resources/inspector/console_module.js
-chrome/resources/inspector/devices_module.js
->>>>>>> 7e8581aadfac3773e05d83a662dae23a33c44e10
-chrome/resources/inspector/devtools.js
+chrome/resources/inspector/devtools_compatibility.js
 chrome/resources/inspector/devtools_extension_api.js
 chrome/resources/inspector/diff/
 chrome/resources/inspector/diff/diff_module.js
@@ -220,7 +206,6 @@ chrome/resources/inspector/emulated_devices/google-nexus-5x-vertical-keyboard-1x
 chrome/resources/inspector/emulated_devices/google-nexus-5x-vertical-keyboard-2x.png
 chrome/resources/inspector/emulated_devices/google-nexus-5x-vertical-navigation-1x.png
 chrome/resources/inspector/emulated_devices/google-nexus-5x-vertical-navigation-2x.png
-<<<<<<< HEAD
 chrome/resources/inspector/emulated_devices/iPad-landscape.svg
 chrome/resources/inspector/emulated_devices/iPad-portrait.svg
 chrome/resources/inspector/emulated_devices/iPhone5-landscape.svg
@@ -229,20 +214,28 @@ chrome/resources/inspector/emulated_devices/iPhone6-landscape.svg
 chrome/resources/inspector/emulated_devices/iPhone6-portrait.svg
 chrome/resources/inspector/emulated_devices/iPhone6Plus-landscape.svg
 chrome/resources/inspector/emulated_devices/iPhone6Plus-portrait.svg
-chrome/resources/inspector/es_tree/
-chrome/resources/inspector/es_tree/es_tree_module.js
 chrome/resources/inspector/formatter_worker.js
 chrome/resources/inspector/gonzales/
 chrome/resources/inspector/gonzales/gonzales_module.js
+chrome/resources/inspector/heap_snapshot_model/
+chrome/resources/inspector/heap_snapshot_model/heap_snapshot_model_module.js
 chrome/resources/inspector/heap_snapshot_worker.js
+chrome/resources/inspector/inline_editor/
+chrome/resources/inspector/inline_editor/inline_editor_module.js
 chrome/resources/inspector/inspector.html
 chrome/resources/inspector/inspector.js
+chrome/resources/inspector/layer_viewer/
+chrome/resources/inspector/layer_viewer/layer_viewer_module.js
 chrome/resources/inspector/layers/
 chrome/resources/inspector/layers/layers_module.js
 chrome/resources/inspector/network/
 chrome/resources/inspector/network/network_module.js
+chrome/resources/inspector/perf_ui/
+chrome/resources/inspector/perf_ui/perf_ui_module.js
 chrome/resources/inspector/profiler/
 chrome/resources/inspector/profiler/profiler_module.js
+chrome/resources/inspector/quick_open/
+chrome/resources/inspector/quick_open/quick_open_module.js
 chrome/resources/inspector/resources/
 chrome/resources/inspector/resources/resources_module.js
 chrome/resources/inspector/sass/
@@ -259,37 +252,22 @@ chrome/resources/inspector/source_frame/
 chrome/resources/inspector/source_frame/source_frame_module.js
 chrome/resources/inspector/sources/
 chrome/resources/inspector/sources/sources_module.js
-chrome/resources/inspector/temp_storage_shared_worker.js
+chrome/resources/inspector/terminal/
+chrome/resources/inspector/terminal/terminal_module.js
+chrome/resources/inspector/text_editor/
+chrome/resources/inspector/text_editor/text_editor_module.js
 chrome/resources/inspector/timeline/
 chrome/resources/inspector/timeline/timeline_module.js
 chrome/resources/inspector/timeline_model/
 chrome/resources/inspector/timeline_model/timeline_model_module.js
-=======
-chrome/resources/inspector/emulated_devices_module.js
-chrome/resources/inspector/es_tree_module.js
-chrome/resources/inspector/formatter_worker_module.js
-chrome/resources/inspector/heap_snapshot_worker_module.js
-chrome/resources/inspector/inspector.html
-chrome/resources/inspector/inspector.js
-chrome/resources/inspector/layers_module.js
-chrome/resources/inspector/network_module.js
-chrome/resources/inspector/profiler_module.js
-chrome/resources/inspector/resources_module.js
-chrome/resources/inspector/sass_module.js
-chrome/resources/inspector/screencast_module.js
-chrome/resources/inspector/security_module.js
-chrome/resources/inspector/settings_module.js
-chrome/resources/inspector/snippets_module.js
-chrome/resources/inspector/source_frame_module.js
-chrome/resources/inspector/sources_module.js
-chrome/resources/inspector/temp_storage_shared_worker_module.js
-chrome/resources/inspector/timeline_module.js
->>>>>>> 7e8581aadfac3773e05d83a662dae23a33c44e10
 chrome/resources/inspector/toolbox.html
 chrome/resources/inspector/toolbox.js
-chrome/resources/inspector/ui_lazy/
-chrome/resources/inspector/ui_lazy/ui_lazy_module.js
+chrome/resources/inspector/unit_test_runner.html
+chrome/resources/inspector/unit_test_runner.js
+chrome/resources/inspector/utility_shared_worker.js
 chrome/snapshot_blob.bin
+chrome/test_ime_driver.service
+chrome/ui.service
 chrome/views_mus_resources.pak
 @man man/man1/chrome.1
 share/applications/chromium-browser.desktop

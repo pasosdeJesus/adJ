@@ -16,8 +16,8 @@ Aqui traducimos parte de src/lib/libc/include/README
 	  stdio/local.h, si se usa desde varios puede
 	  declararse en uno de los archivos de lib/hidden/
 	  e.g _mktemp() de hidden/stdio.h
-- Símbolos externos:
-	- Agregar a Symbols.list. Symbols que dependen de
+- Símbolos públicos:
+	- Agregar a Symbols.list. Los que dependen de
 	  máquina en arch/*/Symbols.list
 	- Declarar función en encabezado apropiado (público
 	  en /usr/include). Las excepciones son símbolos

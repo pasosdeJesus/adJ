@@ -1,27 +1,15 @@
-<<<<<<< HEAD
-$OpenBSD: patch-content_renderer_renderer_main_cc,v 1.10 2016/10/26 06:22:08 robert Exp $
---- content/renderer/renderer_main.cc.orig.port	Wed Oct 12 21:02:59 2016
-+++ content/renderer/renderer_main.cc	Wed Oct 19 12:56:05 2016
-@@ -32,6 +32,7 @@
-=======
-$OpenBSD: patch-content_renderer_renderer_main_cc,v 1.8 2016/05/27 06:28:21 robert Exp $
---- content/renderer/renderer_main.cc.orig.port	Wed May 25 21:01:02 2016
-+++ content/renderer/renderer_main.cc	Thu May 26 08:09:46 2016
-@@ -31,6 +31,7 @@
- #include "content/renderer/render_thread_impl.h"
->>>>>>> 7e8581aadfac3773e05d83a662dae23a33c44e10
- #include "content/renderer/renderer_main_platform_delegate.h"
+$OpenBSD: patch-content_renderer_renderer_main_cc,v 1.11 2017/03/14 12:18:54 robert Exp $
+--- content/renderer/renderer_main.cc.orig.port	Thu Mar  9 21:04:32 2017
++++ content/renderer/renderer_main.cc	Fri Mar 10 07:46:23 2017
+@@ -34,6 +34,7 @@
+ #include "ppapi/features/features.h"
  #include "third_party/WebKit/public/platform/scheduler/renderer/renderer_scheduler.h"
  #include "third_party/skia/include/core/SkGraphics.h"
 +#include "third_party/skia/include/ports/SkFontConfigInterface.h"
  #include "ui/base/ui_base_switches.h"
  
  #if defined(OS_ANDROID)
-<<<<<<< HEAD
-@@ -60,6 +61,11 @@
-=======
-@@ -59,6 +60,11 @@
->>>>>>> 7e8581aadfac3773e05d83a662dae23a33c44e10
+@@ -62,6 +63,11 @@
  #include "ui/ozone/public/client_native_pixmap_factory.h"
  #endif
  
@@ -33,11 +21,7 @@ $OpenBSD: patch-content_renderer_renderer_main_cc,v 1.8 2016/05/27 06:28:21 robe
  namespace content {
  namespace {
  // This function provides some ways to test crash and assertion handling
-<<<<<<< HEAD
-@@ -169,9 +175,13 @@ int RendererMain(const MainFunctionParams& parameters)
-=======
-@@ -170,9 +176,13 @@ int RendererMain(const MainFunctionParams& parameters)
->>>>>>> 7e8581aadfac3773e05d83a662dae23a33c44e10
+@@ -171,9 +177,13 @@ int RendererMain(const MainFunctionParams& parameters)
    // is OK.
    InitializeWebRtcModule();
  #endif
@@ -52,11 +36,7 @@ $OpenBSD: patch-content_renderer_renderer_main_cc,v 1.8 2016/05/27 06:28:21 robe
      // TODO(markus): Check if it is OK to unconditionally move this
      // instruction down.
      RenderProcessImpl render_process;
-<<<<<<< HEAD
-@@ -181,7 +191,7 @@ int RendererMain(const MainFunctionParams& parameters)
-=======
-@@ -182,7 +192,7 @@ int RendererMain(const MainFunctionParams& parameters)
->>>>>>> 7e8581aadfac3773e05d83a662dae23a33c44e10
+@@ -183,7 +193,7 @@ int RendererMain(const MainFunctionParams& parameters)
      bool run_loop = true;
      if (!no_sandbox)
        run_loop = platform.EnableSandbox();

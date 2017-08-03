@@ -1,14 +1,7 @@
-<<<<<<< HEAD:arboldes/usr/ports/mystuff/www/chromium/patches/patch-ui_views_bubble_bubble_dialog_delegate_cc
-$OpenBSD: patch-ui_views_bubble_bubble_dialog_delegate_cc,v 1.1 2016/07/31 13:11:44 robert Exp $
---- ui/views/bubble/bubble_dialog_delegate.cc.orig.port	Thu Jul 21 10:44:52 2016
-+++ ui/views/bubble/bubble_dialog_delegate.cc	Thu Jul 21 10:45:02 2016
-@@ -72,7 +72,7 @@ Widget* BubbleDialogDelegateView::CreateBubble(
-=======
-$OpenBSD: patch-ui_views_bubble_bubble_delegate_cc,v 1.8 2016/04/16 19:08:46 robert Exp $
---- ui/views/bubble/bubble_delegate.cc.orig.port	Wed Apr 13 23:00:05 2016
-+++ ui/views/bubble/bubble_delegate.cc	Thu Apr 14 08:25:16 2016
-@@ -96,7 +96,7 @@ Widget* BubbleDelegateView::CreateBubble(BubbleDelegat
->>>>>>> 7e8581aadfac3773e05d83a662dae23a33c44e10:arboldes/usr/ports/mystuff/www/chromium/patches/patch-ui_views_bubble_bubble_delegate_cc
+$OpenBSD: patch-ui_views_bubble_bubble_dialog_delegate_cc,v 1.3 2017/03/14 12:18:54 robert Exp $
+--- ui/views/bubble/bubble_dialog_delegate.cc.orig.port	Thu Mar  9 21:04:49 2017
++++ ui/views/bubble/bubble_dialog_delegate.cc	Fri Mar 10 07:46:26 2017
+@@ -76,7 +76,7 @@ Widget* BubbleDialogDelegateView::CreateBubble(
    // the parent frame and let DWM handle compositing.  If not, then we don't
    // want to allow the bubble to extend the frame because it will be clipped.
    bubble_delegate->set_adjust_if_offscreen(ui::win::IsAeroGlassEnabled());

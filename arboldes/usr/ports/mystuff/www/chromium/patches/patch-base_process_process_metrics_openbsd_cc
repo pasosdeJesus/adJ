@@ -1,16 +1,8 @@
-<<<<<<< HEAD
 $OpenBSD: patch-base_process_process_metrics_openbsd_cc,v 1.7 2016/10/26 06:22:07 robert Exp $
 --- base/process/process_metrics_openbsd.cc.orig.port	Wed Oct 12 21:02:53 2016
 +++ base/process/process_metrics_openbsd.cc	Wed Oct 19 12:55:56 2016
 @@ -4,10 +4,21 @@
  
-=======
-$OpenBSD: patch-base_process_process_metrics_openbsd_cc,v 1.6 2016/03/06 10:51:13 robert Exp $
---- base/process/process_metrics_openbsd.cc.orig.port	Thu Mar  3 09:50:00 2016
-+++ base/process/process_metrics_openbsd.cc	Thu Mar  3 09:52:22 2016
-@@ -5,10 +5,21 @@
- #include "base/macros.h"
->>>>>>> 7e8581aadfac3773e05d83a662dae23a33c44e10
  #include "base/process/process_metrics.h"
  
 +#include "base/files/file_util.h"
@@ -29,15 +21,9 @@ $OpenBSD: patch-base_process_process_metrics_openbsd_cc,v 1.6 2016/03/06 10:51:1
  #include <sys/sysctl.h>
 +#include <sys/vmmeter.h>
  
-<<<<<<< HEAD
  #include "base/macros.h"
  #include "base/memory/ptr_util.h"
 @@ -22,20 +33,27 @@ std::unique_ptr<ProcessMetrics> ProcessMetrics::Create
-=======
- namespace base {
- 
-@@ -18,20 +29,27 @@ ProcessMetrics* ProcessMetrics::CreateProcessMetrics(P
->>>>>>> 7e8581aadfac3773e05d83a662dae23a33c44e10
  }
  
  size_t ProcessMetrics::GetPagefileUsage() const {
@@ -70,11 +56,7 @@ $OpenBSD: patch-base_process_process_metrics_openbsd_cc,v 1.6 2016/03/06 10:51:1
  }
  
  size_t ProcessMetrics::GetPeakPagefileUsage() const {
-<<<<<<< HEAD
 @@ -43,20 +61,28 @@ size_t ProcessMetrics::GetPeakPagefileUsage() const {
-=======
-@@ -39,20 +57,28 @@ size_t ProcessMetrics::GetPeakPagefileUsage() const {
->>>>>>> 7e8581aadfac3773e05d83a662dae23a33c44e10
  }
  
  size_t ProcessMetrics::GetWorkingSetSize() const {
@@ -108,11 +90,7 @@ $OpenBSD: patch-base_process_process_metrics_openbsd_cc,v 1.6 2016/03/06 10:51:1
  }
  
  size_t ProcessMetrics::GetPeakWorkingSetSize() const {
-<<<<<<< HEAD
 @@ -96,20 +122,27 @@ bool ProcessMetrics::GetIOCounters(IoCounters* io_coun
-=======
-@@ -92,20 +118,27 @@ bool ProcessMetrics::GetIOCounters(IoCounters* io_coun
->>>>>>> 7e8581aadfac3773e05d83a662dae23a33c44e10
  }
  
  static int GetProcessCPU(pid_t pid) {
@@ -144,11 +122,7 @@ $OpenBSD: patch-base_process_process_metrics_openbsd_cc,v 1.6 2016/03/06 10:51:1
  }
  
  double ProcessMetrics::GetCPUUsage() {
-<<<<<<< HEAD
 @@ -123,7 +156,6 @@ double ProcessMetrics::GetCPUUsage() {
-=======
-@@ -119,7 +152,6 @@ double ProcessMetrics::GetCPUUsage() {
->>>>>>> 7e8581aadfac3773e05d83a662dae23a33c44e10
    }
  
    int64_t time_delta = (time - last_cpu_time_).InMicroseconds();

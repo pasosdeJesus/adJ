@@ -762,56 +762,118 @@ if (test "$sn" = "s") then {
 	# Modificados para posibilitar compilación
 	# Deben estar en mystuff
 
+	#Quitar
+	paquete wget
+	paquete x264
+	paquete x265
 
-	paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs" 
-	exit 1
 	####
 	# Retroportados para cerrar fallas o actualizar
 	# Deben estar en arboldes/usr/ports/mystuff y en /usr/ports de current
-	paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs" 
-	paquete node
-	paquete ruby paquetes "ruby ruby24-ri_docs" 2.4
+	#paquete ruby paquetes "ruby ruby24-ri_docs" 2.4
 
 :	###
         # Actualizados.  Están desactualizado en OpenBSD estable y current
-	paquete php paquetes "php php-bz2 php-curl php-fpm php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 5.6
-	paquete ocaml 
+	#paquete php paquetes "php php-bz2 php-curl php-fpm php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 5.6
+	#paquete ocaml 
 
 
 	####
 	# Recompilados para cerrar fallas de portes actualizados (estable)
 	# Para que operen bien basta actualizar CVS de /usr/ports 
 	# Los siguientes no deben estar en arboldes/usr/ports/mystuff
+	paquete GeoIP
+	paquete at-spi2-core
+	paquete abiword
+	paquete chromium
 	paquete curl 
-	paquete flac
+	paquete cups
+	paquete cups-filters
+	paquete dbus
+	paquete dovecot
+	paquete evince
+	#paquete flac
+	paquete ffmpeg
+	paquete foomatic-db
+	paquete freetds
+	paquete gcc paquetes "gcc" 4.9
 	#paquete gd
-	#paquete git paquetes "git"
-	paquete gstreamer
+	paquete gdal
+	paquete ghostscript
+	paquete gimp 
+	paquete git paquetes "git"
+	paquete glib2
+	paquete gnumeric
+	paquete gnutls
+	#paquete gstreamer
 	paquete gstreamer1
-	#paquete imlib2
-	#paquete ImageMagick
-	paquete libarchive
+	paquete gtk+2
+	paquete gtk+3
+	paquete gvfs
+	paquete harfbuzz
+	paquete icu4c
+	paquete inkscape
+	paquete imlib2
+	paquete ImageMagick
+	#paquete libarchive
+	paquete libcroco
+	paquete libgcrypt
+	paquete libgpg-error
 	#paquete libksba
+	paquete libmatroska
+	paquete libspectre
 	#paquete libtalloc
-	paquete mpg123
+	paquete libv4l
+	paquete libvpx
+	paquete libxml
+	#paquete mpg123
 	paquete mariadb-client paquetes "mariadb-client mariadb-server" 
+	paquete mupdf
+	paquete mutt
+	paquete nghttp2
+	paquete node
+	paquete nss
 	#paquete mplayer
 	#paquete nginx
+	paquete ocaml 
+	paquete openssl
 	#paquete openldap-client 
-	paquete p5-Mail-SpamAssassin
-	paquete p5-DBD-mysql
-	paquete p7zip paquetes "p7zip p7zip-rar"
+	#paquete p5-DBD-mysql
+	paquete p5-IO-Socket-SSL
+	#paquete p5-Mail-SpamAssassin
+	paquete p5-Net-DNS
+	paquete p5-XML-Parser
+	#paquete p7zip paquetes "p7zip p7zip-rar"
+	paquete pango
+	paquete pear-Net-SMTP
+	paquete phantomjs
+	paquete pidgin
+	paquete podofo
+	paquete poppler
+	paquete postgis
+	paquete python paquetes "pyton" 2.7
+	paquete python paquetes "pyton" 3.6
+	paquete py-idna
+	paquete py-werkzeug
 	#paquete pidgin paquetes "libpurple pidgin"
+	paquete qemu
+	paquete qgis
+	paquete rrdtool
+	paquete ruby paquetes "ruby ruby24-ri_docs" 2.4
 	paquete samba paquetes "ldb samba tevent"
 	#paquete tdb
 	paquete tiff
 	paquete vim
-	#paquete webkit
-	#paquete webkitgtk4
+	#paquete webkitgtk4 --si va en 6.1
+	paquete wget
 	#paquete webkit paquetes "webkit webkit-gtk3"
-	paquete xz
+	paquete x264
+	paquete x265
+	#paquete xz
 	# FLAVOR=gtk3 make paquete webkit-gtk3
-	paquete zip
+	#paquete zip
+
+	#Por reubicar
 
 	##
 	# Nueva revisión para operar con librerías retroportadas o actualizadas
@@ -822,7 +884,7 @@ if (test "$sn" = "s") then {
 	#paquete postgis
 	#paquete py-psycopg2
 	#paquete qgis
-	paquete hevea
+	#paquete hevea
 
 	# Recompilado con llave de adJ
 	paquete chromium
@@ -836,6 +898,7 @@ if (test "$sn" = "s") then {
 	####
 	# Recompilados de estable que usan xlocale (y pueden cerrar fallas)
 	# No deben estar en mystuff
+	paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs" 
 	paquete djvulibre
 	paquete gettext-tools
 	#paquete ggrep

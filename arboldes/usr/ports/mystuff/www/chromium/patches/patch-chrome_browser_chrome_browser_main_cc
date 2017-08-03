@@ -1,15 +1,8 @@
-<<<<<<< HEAD
-$OpenBSD: patch-chrome_browser_chrome_browser_main_cc,v 1.10 2016/10/26 06:22:07 robert Exp $
---- chrome/browser/chrome_browser_main.cc.orig.port	Fri Oct 21 00:02:00 2016
-+++ chrome/browser/chrome_browser_main.cc	Tue Oct 25 22:01:10 2016
-@@ -188,7 +188,7 @@
-=======
-$OpenBSD: patch-chrome_browser_chrome_browser_main_cc,v 1.7 2016/05/27 06:28:20 robert Exp $
---- chrome/browser/chrome_browser_main.cc.orig.port	Thu May 26 08:18:19 2016
-+++ chrome/browser/chrome_browser_main.cc	Thu May 26 08:19:37 2016
-@@ -173,7 +173,7 @@
->>>>>>> 7e8581aadfac3773e05d83a662dae23a33c44e10
- #include "chrome/browser/feedback/feedback_profile_observer.h"
+$OpenBSD: patch-chrome_browser_chrome_browser_main_cc,v 1.14 2017/03/30 17:54:24 robert Exp $
+--- chrome/browser/chrome_browser_main.cc.orig.port	Thu Mar 30 01:40:32 2017
++++ chrome/browser/chrome_browser_main.cc	Thu Mar 30 07:50:31 2017
+@@ -180,7 +180,7 @@
+ #include "chrome/browser/lifetime/application_lifetime.h"
  #endif  // defined(OS_ANDROID)
  
 -#if defined(OS_LINUX) && !defined(OS_CHROMEOS)
@@ -17,29 +10,25 @@ $OpenBSD: patch-chrome_browser_chrome_browser_main_cc,v 1.7 2016/05/27 06:28:20 
  #include "chrome/browser/first_run/upgrade_util_linux.h"
  #endif  // defined(OS_LINUX) && !defined(OS_CHROMEOS)
  
-<<<<<<< HEAD
-@@ -282,7 +282,7 @@
+@@ -272,7 +272,7 @@
  #endif
  
  #if defined(OS_WIN) || defined(OS_MACOSX) || \
 -    (defined(OS_LINUX) && !defined(OS_CHROMEOS))
-+    (defined(OS_LINUX) && !defined(OS_CHROMEOS)) || defined(OS_BSD)
- #include "chrome/browser/metrics/desktop_engagement/desktop_engagement_service.h"
++    (defined(OS_LINUX) && !defined(OS_CHROMEOS) || defined(OS_BSD))
+ #include "chrome/browser/metrics/desktop_session_duration/desktop_session_duration_tracker.h"
  #endif
  
-@@ -955,7 +955,7 @@ void ChromeBrowserMainParts::SetupMetricsAndFieldTrial
-   sampling_profiler_config_.RegisterSyntheticFieldTrial();
+@@ -758,7 +758,7 @@ void ChromeBrowserMainParts::SetupFieldTrials() {
+   field_trial_synchronizer_ = new FieldTrialSynchronizer();
  
  #if defined(OS_WIN) || defined(OS_MACOSX) || \
 -    (defined(OS_LINUX) && !defined(OS_CHROMEOS))
-+    (defined(OS_LINUX) && !defined(OS_CHROMEOS)) || defined(OS_BSD)
-   metrics::DesktopEngagementService::Initialize();
++    (defined(OS_LINUX) && !defined(OS_CHROMEOS) || defined(OS_BSD))
+   metrics::DesktopSessionDurationTracker::Initialize();
  #endif
  
-@@ -1325,7 +1325,7 @@ int ChromeBrowserMainParts::PreCreateThreadsImpl() {
-=======
-@@ -1109,7 +1109,7 @@ int ChromeBrowserMainParts::PreCreateThreadsImpl() {
->>>>>>> 7e8581aadfac3773e05d83a662dae23a33c44e10
+@@ -1172,7 +1172,7 @@ int ChromeBrowserMainParts::PreCreateThreadsImpl() {
    }
  #endif  // !defined(OS_ANDROID) && !defined(OS_CHROMEOS)
  
@@ -48,8 +37,7 @@ $OpenBSD: patch-chrome_browser_chrome_browser_main_cc,v 1.7 2016/05/27 06:28:20 
    // Set the product channel for crash reports.
    base::debug::SetCrashKeyValue(crash_keys::kChannel,
                                  chrome::GetChannelString());
-<<<<<<< HEAD
-@@ -1516,7 +1516,7 @@ void ChromeBrowserMainParts::PreBrowserStart() {
+@@ -1355,7 +1355,7 @@ void ChromeBrowserMainParts::PreBrowserStart() {
  
  // Start the tab manager here so that we give the most amount of time for the
  // other services to start up before we start adjusting the oom priority.
@@ -58,5 +46,3 @@ $OpenBSD: patch-chrome_browser_chrome_browser_main_cc,v 1.7 2016/05/27 06:28:20 
    g_browser_process->GetTabManager()->Start();
  #endif
  
-=======
->>>>>>> 7e8581aadfac3773e05d83a662dae23a33c44e10
