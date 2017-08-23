@@ -3,18 +3,21 @@
 #
 COMMENT=	"Bible study tool with modules from Sword project"
 
-#V=		3.2.1
-V=		4.0.4
-DISTNAME=	xiphos-${V}
+GH_ACCOUNT = crosswire
+GH_PROJECT = xiphos
+GH_TAGNAME = 4.0.5
+SUBST_VAR += GH_TAGNAME
+
+#V=		4.0.5
+#DISTNAME=	xiphos-${V}
 CATEGORIES=	textproc misc
-PKGNAME=	${DISTNAME}
+#PKGNAME=	${DISTNAME}
 HOMEPAGE=	http://xiphos.org
 MAINTAINER=	Vladimir Támara Patiño <vtamara@pasosdejesus.org>
 
-MASTER_SITES=	${MASTER_SITE_SOURCEFORGE:=gnomesword/Xiphos/${V}/}
+#MASTER_SITES=	${MASTER_SITE_SOURCEFORGE:=gnomesword/Xiphos/${V}/}
 	
-DISTFILES=	${DISTNAME}-20150830.tar.gz
-
+#DISTFILES=	${DISTNAME}-20170423.tar.gz
 
 #GPL
 PERMIT_PACKAGE_CDROM=	Yes

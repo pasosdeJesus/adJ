@@ -100,14 +100,14 @@ if (test "$sn" = "s") then {
 			echo "$ANONCVS" > $i/Root;
 		done;
 	} fi;
-	cvs -z3 update -Pd -r$R
+	cvs -z3 update -Pd -r$R 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
 	if (test -d /usr/src$VP-orig/) then {
-		rsync -ravzp --delete /usr/src$VP-orig/* /usr/src/
+		rsync -ravzp --delete /usr/src$VP-orig/* /usr/src/ 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
 	} fi;
 	if (test -d /usr/src$VP-orig/) then {
-		cd /usr/src$VP-orig/sys
+		cd /usr/src$VP-orig/sys 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
 	} else {
-		cd /sys
+		cd /sys 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
 	} fi;
 	if (test ! -f CVS/Root) then {
 		for i in `find . -name CVS`; do 
@@ -115,14 +115,14 @@ if (test "$sn" = "s") then {
 			echo "$ANONCVS" > $i/Root;
 		done;
 	} fi;
-	cvs -z3 update -Pd -r$R
+	cvs -z3 update -Pd -r$R 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
 	if (test -d /usr/src$VP-orig/) then {
-		rsync -ravzp --delete /usr/src$VP-orig/sys/* /sys/
+		rsync -ravzp --delete /usr/src$VP-orig/sys/* /sys/ 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
 	} fi;
 	if (test -d /usr/xenocara$VP-orig/) then {
-		cd /usr/xenocara$VP-orig/sys
+		cd /usr/xenocara$VP-orig/sys 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
 	} else {
-		cd $XSRCDIR
+		cd $XSRCDIR 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
 	} fi;
 	if (test ! -f CVS/Root) then {
 		for i in `find . -name CVS`; do 
@@ -130,14 +130,14 @@ if (test "$sn" = "s") then {
 			echo "$ANONCVS" > $i/Root;
 		done;
 	} fi;
-	cvs -z3 update -Pd -r$R
+	cvs -z3 update -Pd -r$R 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
 	if (test -d /usr/xenocara$VP-orig/) then {
-		rsync -ravzp --delete /usr/xenocara$VP-orig/* $XSRCDIR
+		rsync -ravzp --delete /usr/xenocara$VP-orig/* $XSRCDIR 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
 	} fi;
 	if (test -d /usr/ports$VP-orig/) then {
-		cd /usr/ports$VP-orig/
+		cd /usr/ports$VP-orig/ 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
 	} else {
-		cd /usr/ports/
+		cd /usr/ports/ 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
 	} fi;
 	if (test ! -f CVS/Root) then {
 		for i in `find . -name CVS`; do 
@@ -148,9 +148,9 @@ if (test "$sn" = "s") then {
 			} fi;
 		done;
 	} fi;
-	cvs -z3 update -Pd -r$R
+	cvs -z3 update -Pd -r$R 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
 	if (test -d /usr/ports$VP-orig/) then {
-		rsync -ravzp /usr/ports$VP-orig/* /usr/ports
+		rsync -ravzp /usr/ports$VP-orig/* /usr/ports 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
 	} fi;
 } fi;
 
@@ -169,36 +169,36 @@ if (test "$sn" = "s") then {
 	} fi;
 
 	cd /sys
-	$dini/hdes/servicio-kernel.sh	
+	$dini/hdes/servicio-kernel.sh 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora	
 	# Esta en general se cambiaron comentarios a lo largo de todas
     # las fuentes.  Ver documentación en 
     # http://aprendiendo.pasosdejesus.org/?id=Renombrando+Daemon+por+Service
 
 	# Para compilar vmstat
-	cp /sys/uvm/uvm_extern.h /usr/include/uvm/
+	cp /sys/uvm/uvm_extern.h /usr/include/uvm/ 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
 
 	cd /sys/arch/$ARQ/conf
 	sed -e "s/^#\(option.*NTFS.*\)/\1/g" GENERIC > APRENDIENDODEJESUS
-	rm -rf /sys/arch/$ARQ/compile/APRENDIENDODEJESUS/obj/*
-	config APRENDIENDODEJESUS
-	cd ../compile/APRENDIENDODEJESUS
-	rm -f .depend
-	make clean 
-	make obj
-	make config
-	make -j4
-	cp /sys/arch/$ARQ/compile/APRENDIENDODEJESUS/obj/bsd $dini/$V$VESP-$ARQ/bsd
-	cd /sys/arch/$ARQ/conf
+	rm -rf /sys/arch/$ARQ/compile/APRENDIENDODEJESUS/obj/* 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
+	config APRENDIENDODEJESUS 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
+	cd ../compile/APRENDIENDODEJESUS 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
+	rm -f .depend 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
+	make clean  2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
+	make obj 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
+	make config 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
+	make -j4 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
+	cp /sys/arch/$ARQ/compile/APRENDIENDODEJESUS/obj/bsd $dini/$V$VESP-$ARQ/bsd 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
+	cd /sys/arch/$ARQ/conf 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
 	sed -e "s/GENERIC/APRENDIENDODEJESUS/g" GENERIC.MP > APRENDIENDODEJESUS.MP
-	rm -rf /sys/arch/$ARQ/compile/APRENDIENDODEJESUS.MP/obj/*
-	config APRENDIENDODEJESUS.MP
-	cd ../compile/APRENDIENDODEJESUS.MP
-	rm .depend
-	make clean 
-	make obj
-	make config
-	make -j4
-	cp /sys/arch/$ARQ/compile/APRENDIENDODEJESUS.MP/obj/bsd $dini/$V$VESP-$ARQ/bsd.mp
+	rm -rf /sys/arch/$ARQ/compile/APRENDIENDODEJESUS.MP/obj/* 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
+	config APRENDIENDODEJESUS.MP 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
+	cd ../compile/APRENDIENDODEJESUS.MP 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
+	rm .depend 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
+	make clean  2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
+	make obj 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
+	make config 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
+	make -j4 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
+	cp /sys/arch/$ARQ/compile/APRENDIENDODEJESUS.MP/obj/bsd $dini/$V$VESP-$ARQ/bsd.mp 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
 
 } fi;
 
@@ -215,36 +215,36 @@ if (test "$sn" = "s") then {
 		echo "Esta operación requiere que ARQ en ver.sh sea $narq";
 		exit 1;
 	} fi;
-	cd /sys/arch/$ARQ/compile/APRENDIENDODEJESUS.MP
-	make install
+	cd /sys/arch/$ARQ/compile/APRENDIENDODEJESUS.MP 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
+	make install 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
 	echo "Debe reiniciar sistema para iniciar kernel mp (si prefiere el que es para un procesador simple instalelo manualmente)..." | tee -a /var/www/tmp/distrib-adJ.bitacora
 #/	exit 0;
 } fi;
 
 
 function compilabase 	{
-	cd /usr/src/sbin/wsconsctl && if (test ! -f obj/keysym.h) then { make keysym.h; } fi && make | tee -a /var/www/tmp/distrib-adJ.bitacora
-	cd /usr/src/usr.bin/compile_et && if (test ! -f obj/error_table.h) then { make error_table.h; } fi && make | tee -a /var/www/tmp/distrib-adJ.bitacora
-	cd /usr/src/usr.bin/tic && if (test ! -f obj/termsort.c) then { make termsort.c; } fi && make  | tee -a /var/www/tmp/distrib-adJ.bitacora
-	cd /usr/src/usr.bin/infocmp && if (test ! -f obj/termsort.c) then { make termsort.c; } fi && make  | tee -a /var/www/tmp/distrib-adJ.bitacora
-	cd /usr/src/usr.bin/sudo/lib && if (test ! -f obj/gram.c) then { make gram.h; } fi && cd .. && make | tee -a /var/www/tmp/distrib-adJ.bitacora
-	cd /usr/src/usr.bin/tset && if (test ! -f obj/termsort.c) then { make termsort.c; } fi && make | tee -a /var/www/tmp/distrib-adJ.bitacora
-	cd /usr/src/usr.sbin/rpc.statd && if (test ! -f obj/sm_inter.h) then { make sm_inter.h; } fi && make | tee -a /var/www/tmp/distrib-adJ.bitacora
-	cd /usr/src/usr.sbin/afs/usr.sbin/ydr && make | tee -a /var/www/tmp/distrib-adJ.bitacora
-	cd /usr/src/usr.sbin/afs/lib/libarla && if (test ! -f obj/fs.h) then { make fs.h; } fi && make | tee -a /var/www/tmp/distrib-adJ.bitacora
-	cd /usr/src/gnu/usr.bin/cc/libcpp && if (test ! -f obj/localedir.h) then { make localedir.h; } fi && make | tee -a /var/www/tmp/distrib-adJ.bitacora
-	cd /usr/src/lib/libiberty/ && make depend -f Makefile.bsd-wrapper depend && make -f Makefile.bsd-wrapper | tee -a /var/www/tmp/distrib-adJ.bitacora
-	cd /usr/src/gnu/usr.bin/cc/libobjc && make depend | tee -a /var/www/tmp/distrib-adJ.bitacora
-	cd /usr/src/gnu/lib/libiberty/ && make -f Makefile.bsd-wrapper config.status | tee -a /var/www/tmp/distrib-adJ.bitacora
-	cd /usr/src/kerberosV/usr.sbin/kadmin/ && make kadmin-commands.h | tee -a /var/www/tmp/distrib-adJ.bitacora
-	cd /usr/src/kerberosV/usr.sbin/ktutil/ && make ktutil-commands.h | tee -a /var/www/tmp/distrib-adJ.bitacora
-	cd /usr/src/kerberosV/lib/libasn1 && make rfc2459_asn1.h && make rfc2459_asn1-priv.h && make cms_asn1.h && make cms_asn1-priv.h && make krb5_asn1-priv.h && make  digest_asn1-priv.h | tee -a /var/www/tmp/distrib-adJ.bitacora
+	cd /usr/src/sbin/wsconsctl && if (test ! -f obj/keysym.h) then { make keysym.h; } fi && make 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
+	cd /usr/src/usr.bin/compile_et && if (test ! -f obj/error_table.h) then { make error_table.h; } fi && make 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
+	cd /usr/src/usr.bin/tic && if (test ! -f obj/termsort.c) then { make termsort.c; } fi && make  2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
+	cd /usr/src/usr.bin/infocmp && if (test ! -f obj/termsort.c) then { make termsort.c; } fi && make  2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
+	cd /usr/src/usr.bin/sudo/lib && if (test ! -f obj/gram.c) then { make gram.h; } fi && cd .. && make 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
+	cd /usr/src/usr.bin/tset && if (test ! -f obj/termsort.c) then { make termsort.c; } fi && make 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
+	cd /usr/src/usr.sbin/rpc.statd && if (test ! -f obj/sm_inter.h) then { make sm_inter.h; } fi && make 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
+	cd /usr/src/usr.sbin/afs/usr.sbin/ydr && make 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
+	cd /usr/src/usr.sbin/afs/lib/libarla && if (test ! -f obj/fs.h) then { make fs.h; } fi && make 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
+	cd /usr/src/gnu/usr.bin/cc/libcpp && if (test ! -f obj/localedir.h) then { make localedir.h; } fi && make 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
+	cd /usr/src/lib/libiberty/ && make depend -f Makefile.bsd-wrapper depend && make -f Makefile.bsd-wrapper 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
+	cd /usr/src/gnu/usr.bin/cc/libobjc && make depend 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
+	cd /usr/src/gnu/lib/libiberty/ && make -f Makefile.bsd-wrapper config.status 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
+	cd /usr/src/kerberosV/usr.sbin/kadmin/ && make kadmin-commands.h 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
+	cd /usr/src/kerberosV/usr.sbin/ktutil/ && make ktutil-commands.h 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
+	cd /usr/src/kerberosV/lib/libasn1 && make rfc2459_asn1.h && make rfc2459_asn1-priv.h && make cms_asn1.h && make cms_asn1-priv.h && make krb5_asn1-priv.h && make  digest_asn1-priv.h 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
 	#find /usr/obj -name ".depend" -exec rm {} ';'
 	DT=$DESTDIR
 	unset DESTDIR 
 	echo "whoami 1" >> /var/www/tmp/distrib-adJ.bitacora
 	whoami >> /var/www/tmp/distrib-adJ.bitacora 2>&1
-	cd /usr/src && make -j4 | tee -a /var/www/tmp/distrib-adJ.bitacora
+	cd /usr/src && make -j4 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
 	echo "whoami 1" >> /var/www/tmp/distrib-adJ.bitacora
 	whoami >> /var/www/tmp/distrib-adJ.bitacora 2>&1
 	export DESTDIR=$DT;
@@ -259,14 +259,14 @@ else {
 	sn=$autoActZonasHorarias
 } fi;
 if (test "$sn" = "s") then {
-	mkdir -p /tmp/tz
-	rm -rf /tmp/tz/*
-	cd /tmp/tz
-	ftp ftp://ftp.iana.org/tz/tzdata-latest.tar.gz
-	mkdir datfiles
-	cd datfiles
-	tar xvfz ../tzdata-latest.tar.gz
-	cp -rf * /usr/src/share/zoneinfo/datfiles/
+	mkdir -p /tmp/tz 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
+	rm -rf /tmp/tz/* 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
+	cd /tmp/tz 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
+	ftp ftp://ftp.iana.org/tz/tzdata-latest.tar.gz 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
+	mkdir datfiles 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
+	cd datfiles 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
+	tar xvfz ../tzdata-latest.tar.gz 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
+	cp -rf * /usr/src/share/zoneinfo/datfiles/ 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
 } fi;	
 
 echo " *> Transformar y compilar resto del sistema base" | tee -a /var/www/tmp/distrib-adJ.bitacora
@@ -294,42 +294,42 @@ if (test "$sn" = "s") then {
 	} fi;
 	if (test "$sn" = "s" ) then {
 		echo "Uyy, Eliminando"; 
-		rm -rf /usr/obj/*
+		rm -rf /usr/obj/* 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
 	} fi;
-	echo "Esta operacion modificar tanto las fuentes en /usr como archivos en /etc e /include del sistema donde se emplea para hacer posible la compilación;"
-	rm -f ${DESTDIR}/usr/include/g++ 
-	mkdir -p ${DESTDIR}/usr/include/g++
+	echo "Esta operacion modificará tanto las fuentes en /usr como archivos en /etc e /include del sistema donde se emplea para hacer posible la compilación;"
+	rm -f ${DESTDIR}/usr/include/g++  2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
+	mkdir -p ${DESTDIR}/usr/include/g++ 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
 	#export CFLAGS=-I/usr/include/g++/${ARQ}-unknown-openbsd${V}/
 	# Aplicando parches sobre las fuentes de OpenBSD sin cambios para
 	# facilitar aportar  a OpenBSD con prioridad cambios que posiblemente
 	# serán aceptados más facilmente
-	(cd $dini/arboldes/usr/src; for i in *patch; do echo $i; if (test ! -f /usr/src/$i) then { cp $i /usr/src; (cd /usr/src; echo "A mano"; patch -p1 < $i;) } fi; done) |  tee -a  /var/www/tmp/distrib-adJ.bitacora
-	(cd $dini/arboldes/usr/ports; for i in *patch; do echo $i; if (test ! -f /usr/ports/$i) then { cp $i /usr/ports; (cd /usr/ports; echo "A mano"; patch -p1 < $i;) } fi; done) |  tee -a  /var/www/tmp/distrib-adJ.bitacora
+	(cd $dini/arboldes/usr/src; for i in *patch; do echo $i; if (test ! -f /usr/src/$i) then { cp $i /usr/src; (cd /usr/src; echo "A mano"; patch -p1 < $i;) } fi; done) 2>&1 |  tee -a  /var/www/tmp/distrib-adJ.bitacora
+	(cd $dini/arboldes/usr/ports; for i in *patch; do echo $i; if (test ! -f /usr/ports/$i) then { cp $i /usr/ports; (cd /usr/ports; echo "A mano"; patch -p1 < $i;) } fi; done) 2>&1 |  tee -a  /var/www/tmp/distrib-adJ.bitacora
 
 	echo "* Copiando archivos nuevos en /usr/src" | tee -a /var/www/tmp/distrib-adJ.bitacora
-	(cd $dini/arboldes/usr/src ; for i in `find . -type f | grep -v CVS | grep -v .patch`; do  if (test ! -f /usr/src/$i) then { echo $i; n=`dirname $i`; mkdir -p /usr/src/$n; cp $i /usr/src/$i; } fi; done )
+	(cd $dini/arboldes/usr/src ; for i in `find . -type f | grep -v CVS | grep -v .patch`; do  if (test ! -f /usr/src/$i) then { echo $i; n=`dirname $i`; mkdir -p /usr/src/$n; cp $i /usr/src/$i; } fi; done ) 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
 	echo "* Cambiando /etc " | tee -a /var/www/tmp/distrib-adJ.bitacora
-	cd /etc
-	$dini/arboldd/usr/local/adJ/servicio-etc.sh | tee -a /var/www/tmp/distrib-adJ.bitacora
+	cd /etc 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
+	$dini/arboldd/usr/local/adJ/servicio-etc.sh 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
 	echo "* Cambiando /usr/src/etc" | tee -a /var/www/tmp/distrib-adJ.bitacora
-	cd /usr/src/etc
-	$dini/arboldd/usr/local/adJ/servicio-etc.sh | tee -a /var/www/tmp/distrib-adJ.bitacora
+	cd /usr/src/etc 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
+	$dini/arboldd/usr/local/adJ/servicio-etc.sh 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
 	echo "* Cambios iniciales a /usr/src" | tee -a /var/www/tmp/distrib-adJ.bitacora
-	cd /usr/src/
-	$dini/hdes/servicio-base.sh | tee -a /var/www/tmp/distrib-adJ.bitacora
+	cd /usr/src/ 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
+	$dini/hdes/servicio-base.sh 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
 	grep LOG_SERVICE  /usr/include/syslog.h > /dev/null 2>&1
 	if (test "$?" != "0") then {
 		echo "* Cambiando /sys" | tee -a /var/www/tmp/distrib-adJ.bitacora
-		cd /sys
-		$dini/hdes/servicio-kernel.sh | tee -a /var/www/tmp/distrib-adJ.bitacora	
+		cd /sys 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
+		$dini/hdes/servicio-kernel.sh 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora	
 	} fi;
 	# usar llaves de adJ en lugar de las de OpenBSD
 	grep "signfiy\/adJ" /usr/src/usr.sbin/sysmerge/sysmerge.sh > /dev/null 2>&1
 	if (test "$?" != "0") then {
-		cp /usr/src/usr.sbin/sysmerge/sysmerge.sh /usr/src/usr.sbin/sysmerge/sysmerge.sh.orig
-		sed -e 's/signify\/openbsd/signify\/adJ/g' /usr/src/usr.sbin/sysmerge/sysmerge.sh.orig > /usr/src/usr.sbin/sysmerge/sysmerge.sh
+		cp /usr/src/usr.sbin/sysmerge/sysmerge.sh /usr/src/usr.sbin/sysmerge/sysmerge.sh.orig 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
+		sed -e 's/signify\/openbsd/signify\/adJ/g' /usr/src/usr.sbin/sysmerge/sysmerge.sh.orig > /usr/src/usr.sbin/sysmerge/sysmerge.sh 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
 	} fi;
-	cd /usr/src && make obj
+	cd /usr/src && make obj 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
 	echo "* Completo make obj" | tee -a /var/www/tmp/distrib-adJ.bitacora
 	echo "whoami 2" >>  /var/www/tmp/distrib-adJ.bitacora
 	whoami >> /var/www/tmp/distrib-adJ.bitacora 2>&1
@@ -339,13 +339,13 @@ if (test "$sn" = "s") then {
 	echo "* Completo make distrib-dirs" | tee -a /var/www/tmp/distrib-adJ.bitacora
 	#cd /usr/src/etc && env DESTDIR=$DESTDIR make distrib-dirs
 	# Algunos necesarios para que make lo logre
-	cd /usr/src/include
-	make includes
+	cd /usr/src/include 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
+	make includes 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
 	compilabase
 	echo "* Completo compilabase" | tee -a /var/www/tmp/distrib-adJ.bitacora
 	echo "whoami 3" >> /var/www/tmp/distrib-adJ.bitacora
 	whoami >> /var/www/tmp/distrib-adJ.bitacora 2>&1
-	cd /usr/src && unset DESTDIR && LANG=POSIX nice make -j4 SUDO=doas build | tee -a /var/www/tmp/distrib-adJ.bitacora
+	cd /usr/src && unset DESTDIR && LANG=POSIX nice make -j4 SUDO=doas build 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
 	echo "whoami 3" >> /var/www/tmp/distrib-adJ.bitacora
 	whoami >> /var/www/tmp/distrib-adJ.bitacora 2>&1
 	echo "* Completo make build" | tee -a /var/www/tmp/distrib-adJ.bitacora
@@ -368,7 +368,7 @@ SCRIPT  \${CURDIR}/upgrade-\${DLENG}.sh                   upgrade
 SCRIPT  \${CURDIR}/install-\${DLENG}.sh                   install
 SCRIPT  \${CURDIR}/install-\${DLENG}.sub                  install.sub"
 		echo "en $a";
-		cp $a $a.antestrad
+		cp $a $a.antestrad 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
 		sed -e "s/upgrade.sh/upgrade-\${DLENG}.sh/g;s/install.sh/install-\${DLENG}.sh/g;s/\/install.sub/\/install-\${DLENG}.sub/g;s/\/install.md/\/install-\${DLENG}.md/g" $a.antestrad > $a
 	} fi;
 }
@@ -405,7 +405,7 @@ if (test "$sn" = "s") then {
                    rm -rf ${DESTDIR}d- &
 		test -d ${DESTDIR} && mv ${DESTDIR} ${DESTDIR}- 
 	} fi;
-	mkdir -p ${DESTDIR} ${RELEASEDIR}
+	mkdir -p ${DESTDIR} ${RELEASEDIR} 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
 	ed /usr/src/etc/Makefile << EOF
 /^LOCALTIME=
 s/Canada\/Mountain/America\/Bogota/g
@@ -414,11 +414,12 @@ q
 EOF
 	#compilabase
 	echo "DESTDIR=$DESTDIR" | tee -a /var/www/tmp/distrib-adJ.bitacora;
-	chown build /usr/src/etc/master.passwd
-	cd /usr/src/etc && DESTDIR=/$D_DESTDIR nice make release | tee -a /var/www/tmp/distrib-adJ.bitacora;
+	chown build /usr/src/etc/master.passwd 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
+	cd /usr/src/etc && DESTDIR=/$D_DESTDIR nice make release 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora;
 	echo "* Completo make release"
-	find "$DESTDIR"  -exec touch {} ';'
-	find "$RELEASEDIR"  -exec touch {} ';'
+	echo "* Parece que sobreescribe /releasedir/bsd y /releasedir/bsd.mp con GENERIC tocaria recuperar los compilador antes"
+	find "$DESTDIR"  -exec touch {} ';' 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
+	find "$RELEASEDIR"  -exec touch {} ';' 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
 } fi;
 
 
@@ -450,17 +451,17 @@ if (test "$sn" = "s") then {
 		rm -rf /usr/xobj/*
 	} fi;
 
-	mkdir -p ${DESTDIR}/usr/include
-	cp -rf /usr/include/* ${DESTDIR}/usr/include/
-	mkdir -p ${DESTDIR}/usr/lib
-	cp -rf /usr/lib/crt* ${DESTDIR}/usr/lib/
+	mkdir -p ${DESTDIR}/usr/include 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
+	cp -rf /usr/include/* ${DESTDIR}/usr/include/ 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
+	mkdir -p ${DESTDIR}/usr/lib 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
+	cp -rf /usr/lib/crt* ${DESTDIR}/usr/lib/ 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
 	if (test "$XSRCDIR" != "/usr/xenocara") then {
-		ln -s $XSRCDIR /usr/xenocara;
+		ln -s $XSRCDIR /usr/xenocara 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora;
 	} fi;
 	cd $XSRCDIR
 
 	echo "* Aplicando parches en /usr/xenocara/" | tee -a /var/www/tmp/distrib-adJ.bitacora
-	(cd $dini/arboldes/usr/xenocara/; for i in *patch; do echo $i; if (test ! -f /usr/xenocara/$i) then { cp $i /usr/xenocara/; (cd /usr/xenocara/; echo "A mano"; patch -p1 < $i;) } fi; done) |  tee -a  /var/www/tmp/distrib-adJ.bitacora
+	(cd $dini/arboldes/usr/xenocara/; for i in *patch; do echo $i; if (test ! -f /usr/xenocara/$i) then { cp $i /usr/xenocara/; (cd /usr/xenocara/; echo "A mano"; patch -p1 < $i;) } fi; done) 2>&1 |  tee -a  /var/www/tmp/distrib-adJ.bitacora
 	echo "* Copiando archivos nuevos en /usr/xenocara" | tee -a /var/www/tmp/distrib-adJ.bitacora
 	(cd $dini/arboldes/usr/xenocara; for i in `find . -type f | grep -v CVS | grep -v .patch`; do  if (test ! -f /usr/xenocara/$i) then { echo $i; n=`dirname $i`; mkdir -p /usr/xenocara/$n; cp $i /usr/xenocara/$i; } fi; done )
 	# Pequeños cambios (logo, bienvenida)
@@ -599,8 +600,12 @@ if (test "$sn" = "s") then {
 	} fi;
 
 
-	cp /sys/arch/$ARQ/compile/APRENDIENDODEJESUS/bsd ${RELEASEDIR}/bsd
-	cp /sys/arch/$ARQ/compile/APRENDIENDODEJESUS.MP/bsd ${RELEASEDIR}/bsd.mp
+	if (test -f /sys/arch/$ARQ/compile/APRENDIENDODEJESUS/obj/bsd) then {
+		cp /sys/arch/$ARQ/compile/APRENDIENDODEJESUS/obj/bsd ${RELEASEDIR}/bsd
+	} fi;
+	if (test -f /sys/arch/$ARQ/compile/APRENDIENDODEJESUS.MP/obj/bsd) then {
+		cp /sys/arch/$ARQ/compile/APRENDIENDODEJESUS.MP/obj/bsd ${RELEASEDIR}/bsd.mp
+	} fi;
 	find $DESTDIR -exec touch {} ';'
 	cd /usr/src/distrib/sets && sh checkflist
 	find $RELEASEDIR  -exec touch {} ';'
@@ -791,7 +796,7 @@ if (test "$sn" = "s") then {
 	paquete cups-filters
 	paquete dbus
 	paquete dovecot
-	paquete evince
+	FLAVOR=light paquete evince paquete evince-light
 	#paquete flac
 	paquete ffmpeg
 	paquete foomatic-db
@@ -836,6 +841,7 @@ if (test "$sn" = "s") then {
 	#paquete mplayer
 	#paquete nginx
 	paquete ocaml 
+	paquete ocamlbuild 
 	paquete openssl
 	#paquete openldap-client 
 	#paquete p5-DBD-mysql
@@ -1219,7 +1225,7 @@ echo "** Generando semilla de aleatoreidad" | tee -a /var/www/tmp/distrib-adJ.bi
 # https://github.com/yellowman/flashrd/issues/17
 touch $V$VESP-$ARQ/etc/random.seed
 chmod 600 $V$VESP-$ARQ/etc/random.seed
-dd if=/dev/random of=$V$VESP-$ARQ/etc/random.seed bs=512 count=1 | tee -a /var/www/tmp/distrib-adJ.bitacora
+dd if=/dev/random of=$V$VESP-$ARQ/etc/random.seed bs=512 count=1 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
 
 
 echo "** Generando suma sha256" | tee -a /var/www/tmp/distrib-adJ.bitacora
@@ -1240,5 +1246,8 @@ cmd="(cd $V$VESP-$ARQ; cksum -a sha256 $l >  SHA256; signify -S -e -s /etc/signi
 echo $cmd;
 eval $cmd;
 cmd="find $V$VESP-$ARQ  -exec touch {} ';'"
+echo $cmd;
+eval $cmd;
+cmd="(cd $V$VESP-$ARQ; ls -l | grep -v index.txt > index.txt)"
 echo $cmd;
 eval $cmd;
