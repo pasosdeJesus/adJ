@@ -9,7 +9,7 @@ PERMIT_PACKAGE_CDROM=	Yes
 WANTLIB=		c m
 
 DISTNAME =	hevea-2.23
-REVISION = 	1
+REVISION = 	2
 MASTER_SITES =	http://para.inria.fr/~maranget/hevea/distri/
 
 DISTFILES=	${DISTNAME}${EXTRACT_SUFX} ${DISTNAME}-manual${EXTRACT_SUFX}

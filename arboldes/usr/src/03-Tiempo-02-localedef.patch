@@ -13,7 +13,7 @@ diff -ruN -x *~ -x *orig -x obj* src56-orig/usr.bin/Makefile src/usr.bin/Makefil
 diff -ruN -x *~ -x *orig -x obj* src56-orig/usr.bin/localedef/Makefile src/usr.bin/localedef/Makefile
 --- src56-orig/usr.bin/localedef/Makefile	Wed Dec 31 19:00:00 1969
 +++ src/usr.bin/localedef/Makefile	Sat Mar  7 07:31:33 2015
-@@ -0,0 +1,19 @@
+@@ -0,0 +1,21 @@
 +
 +PROG=   localedef
 +CFLAGS+= -std=c99 -g -I${.CURDIR}/../../lib/libc/include
@@ -21,6 +21,8 @@ diff -ruN -x *~ -x *orig -x obj* src56-orig/usr.bin/localedef/Makefile src/usr.b
 +
 +SRCS=   localedef.c lexer.l parser.y
 +MAN=    localedef.1
++
++depend: parser.c
 +
 +parser.c parser.h: parser.y
 +	${YACC} -t -v -d ${.ALLSRC}

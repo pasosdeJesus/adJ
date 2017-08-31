@@ -223,29 +223,33 @@ if (test "$sn" = "s") then {
 
 
 function compilabase 	{
-	cd /usr/src/sbin/wsconsctl && if (test ! -f obj/keysym.h) then { make keysym.h; } fi && make 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
-	cd /usr/src/usr.bin/compile_et && if (test ! -f obj/error_table.h) then { make error_table.h; } fi && make 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
-	cd /usr/src/usr.bin/tic && if (test ! -f obj/termsort.c) then { make termsort.c; } fi && make  2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
-	cd /usr/src/usr.bin/infocmp && if (test ! -f obj/termsort.c) then { make termsort.c; } fi && make  2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
-	cd /usr/src/usr.bin/sudo/lib && if (test ! -f obj/gram.c) then { make gram.h; } fi && cd .. && make 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
-	cd /usr/src/usr.bin/tset && if (test ! -f obj/termsort.c) then { make termsort.c; } fi && make 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
-	cd /usr/src/usr.sbin/rpc.statd && if (test ! -f obj/sm_inter.h) then { make sm_inter.h; } fi && make 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
-	cd /usr/src/usr.sbin/afs/usr.sbin/ydr && make 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
-	cd /usr/src/usr.sbin/afs/lib/libarla && if (test ! -f obj/fs.h) then { make fs.h; } fi && make 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
-	cd /usr/src/gnu/usr.bin/cc/libcpp && if (test ! -f obj/localedir.h) then { make localedir.h; } fi && make 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
-	cd /usr/src/lib/libiberty/ && make depend -f Makefile.bsd-wrapper depend && make -f Makefile.bsd-wrapper 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
-	cd /usr/src/gnu/usr.bin/cc/libobjc && make depend 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
-	cd /usr/src/gnu/lib/libiberty/ && make -f Makefile.bsd-wrapper config.status 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
-	cd /usr/src/kerberosV/usr.sbin/kadmin/ && make kadmin-commands.h 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
-	cd /usr/src/kerberosV/usr.sbin/ktutil/ && make ktutil-commands.h 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
-	cd /usr/src/kerberosV/lib/libasn1 && make rfc2459_asn1.h && make rfc2459_asn1-priv.h && make cms_asn1.h && make cms_asn1-priv.h && make krb5_asn1-priv.h && make  digest_asn1-priv.h 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
+	echo 'Inicia compilabase' | tee -a /var/www/tmp/distrib-adJ.bitacora
+	echo 'cd /usr/src/ && LANG=POSIX make depend' | tee -a /var/www/tmp/distrib-adJ.bitacora
+#	cd /usr/src/ && make depend 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
+#	cd /usr/src/sbin/wsconsctl && if (test ! -f obj/keysym.h) then { make keysym.h; } fi && make 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
+#	cd /usr/src/usr.bin/compile_et && if (test ! -f obj/error_table.h) then { make error_table.h; } fi && make 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
+#	cd /usr/src/usr.bin/tic && if (test ! -f obj/termsort.c) then { make termsort.c; } fi && make  2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
+#	cd /usr/src/usr.bin/infocmp && if (test ! -f obj/termsort.c) then { make termsort.c; } fi && make  2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
+#	cd /usr/src/usr.bin/sudo/lib && if (test ! -f obj/gram.c) then { make gram.h; } fi && cd .. && make 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
+#	cd /usr/src/usr.bin/tset && if (test ! -f obj/termsort.c) then { make termsort.c; } fi && make 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
+#	cd /usr/src/usr.sbin/rpc.statd && if (test ! -f obj/sm_inter.h) then { make sm_inter.h; } fi && make 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
+#	cd /usr/src/usr.sbin/afs/usr.sbin/ydr && make 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
+#	cd /usr/src/usr.sbin/afs/lib/libarla && if (test ! -f obj/fs.h) then { make fs.h; } fi && make 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
+#	cd /usr/src/gnu/usr.bin/cc/libcpp && if (test ! -f obj/localedir.h) then { make localedir.h; } fi && make 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
+#	cd /usr/src/lib/libiberty/ && make depend -f Makefile.bsd-wrapper depend && make -f Makefile.bsd-wrapper 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
+#	cd /usr/src/gnu/usr.bin/cc/libobjc && make depend 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
+#	cd /usr/src/gnu/lib/libiberty/ && make -f Makefile.bsd-wrapper config.status 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
+#	cd /usr/src/kerberosV/usr.sbin/kadmin/ && make kadmin-commands.h 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
+#	cd /usr/src/kerberosV/usr.sbin/ktutil/ && make ktutil-commands.h 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
+#	cd /usr/src/kerberosV/lib/libasn1 && make rfc2459_asn1.h && make rfc2459_asn1-priv.h && make cms_asn1.h && make cms_asn1-priv.h && make krb5_asn1-priv.h && make  digest_asn1-priv.h 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
+#	cd /usr/src/gnu/usr.bin/perl && make -f Makefile.bsd-wrapper depend 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
 	#find /usr/obj -name ".depend" -exec rm {} ';'
 	DT=$DESTDIR
 	unset DESTDIR 
-	echo "whoami 1" >> /var/www/tmp/distrib-adJ.bitacora
+	echo "whoami 2" >> /var/www/tmp/distrib-adJ.bitacora
 	whoami >> /var/www/tmp/distrib-adJ.bitacora 2>&1
-	cd /usr/src && make -j4 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
-	echo "whoami 1" >> /var/www/tmp/distrib-adJ.bitacora
+	cd /usr/src && LANG=C make -j4 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
+	echo "whoami 2.5" >> /var/www/tmp/distrib-adJ.bitacora
 	whoami >> /var/www/tmp/distrib-adJ.bitacora 2>&1
 	export DESTDIR=$DT;
 }
@@ -331,10 +335,10 @@ if (test "$sn" = "s") then {
 	} fi;
 	cd /usr/src && make obj 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
 	echo "* Completo make obj" | tee -a /var/www/tmp/distrib-adJ.bitacora
-	echo "whoami 2" >>  /var/www/tmp/distrib-adJ.bitacora
+	echo "whoami 0" >>  /var/www/tmp/distrib-adJ.bitacora
 	whoami >> /var/www/tmp/distrib-adJ.bitacora 2>&1
 	cd /usr/src/etc && env DESTDIR=/ make distrib-dirs
-	echo "whoami 2" >> /var/www/tmp/distrib-adJ.bitacora
+	echo "whoami 1" >> /var/www/tmp/distrib-adJ.bitacora
 	whoami >> /var/www/tmp/distrib-adJ.bitacora 2>&1
 	echo "* Completo make distrib-dirs" | tee -a /var/www/tmp/distrib-adJ.bitacora
 	#cd /usr/src/etc && env DESTDIR=$DESTDIR make distrib-dirs
@@ -345,8 +349,10 @@ if (test "$sn" = "s") then {
 	echo "* Completo compilabase" | tee -a /var/www/tmp/distrib-adJ.bitacora
 	echo "whoami 3" >> /var/www/tmp/distrib-adJ.bitacora
 	whoami >> /var/www/tmp/distrib-adJ.bitacora 2>&1
+	# build borrará código objeto construido con compilabase, 
+	# reconstruira dependencias, compilará e instalará
 	cd /usr/src && unset DESTDIR && LANG=POSIX nice make -j4 SUDO=doas build 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
-	echo "whoami 3" >> /var/www/tmp/distrib-adJ.bitacora
+	echo "whoami 4" >> /var/www/tmp/distrib-adJ.bitacora
 	whoami >> /var/www/tmp/distrib-adJ.bitacora 2>&1
 	echo "* Completo make build" | tee -a /var/www/tmp/distrib-adJ.bitacora
 } fi;
@@ -816,6 +822,7 @@ if (test "$sn" = "s") then {
 	paquete gtk+3
 	paquete gvfs
 	paquete harfbuzz
+	paquete hevea
 	paquete icu4c
 	paquete inkscape
 	paquete imlib2
@@ -890,7 +897,6 @@ if (test "$sn" = "s") then {
 	#paquete postgis
 	#paquete py-psycopg2
 	#paquete qgis
-	#paquete hevea
 
 	# Recompilado con llave de adJ
 	paquete chromium
