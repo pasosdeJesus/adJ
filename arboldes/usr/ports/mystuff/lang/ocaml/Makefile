@@ -8,8 +8,8 @@ COMMENT-graphics = OCaml Graphics library providing basic drawing primitives
 # XXX Don't even think of updating ocaml alone.
 # Do check that the ports that depend on it still work, or repair them. 
 # Don't forget to bump version in ocaml.port.mk, too!
-VERSION=4.04.0
-REVISION=		0
+VERSION=4.05.0
+#REVISION=		0
 
 PKGNAME-main =		ocaml-${VERSION}
 PKGNAME-graphics =	ocaml-graphics-${VERSION}

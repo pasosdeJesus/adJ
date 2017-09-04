@@ -90,7 +90,7 @@ BUILDTYPE=	Debug
 BUILDTYPE=	Release
 .endif
 
-ALL_TARGET=	chrome
+ALL_TARGET=	chrome chromedriver 
 TEST_TARGET=	base_unittests
 
 CONFIGURE_STYLE=none # prevent python MODULE from overriding do-build
@@ -106,6 +106,7 @@ GN_SYSTEM_LIBS=	libevent \
 		yasm
 
 GN_ARGS=	enable_nacl=false \
+		enable_chromedriver=true \
 		is_debug=false \
 		enable_webrtc=false \
 		enable_one_click_signin=true \

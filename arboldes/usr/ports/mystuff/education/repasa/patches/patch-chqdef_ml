@@ -1,0 +1,15 @@
+$OpenBSD$
+--- chqdef.ml.orig	Mon Sep  4 14:07:16 2017
++++ chqdef.ml	Mon Sep  4 14:07:28 2017
+@@ -258,9 +258,9 @@ let check_def name full_name d=
+ 	bib:=0;
+ 	authors:=0;
+         let format=if (!pformat<>"") then
+-                String.lowercase !pformat
++                String.lowercase_ascii !pformat
+         else if (has_attr d#root "formato") then
+-		String.lowercase (attr d#root "formato")
++		String.lowercase_ascii (attr d#root "formato")
+ 	else
+ 		"texto"
+         in

@@ -5,7 +5,7 @@ COMMENT=	"creation and study of contents for schools"
 
 V=		1.4
 DISTNAME=	repasa-${V}
-REVISION=	5
+REVISION=	6
 CATEGORIES=    	education
 
 HOMEPAGE=	http://structio.sourceforge.net/repasa
@@ -31,7 +31,7 @@ FAKE_FLAGS=	PREFIX=${WRKINST}${PREFIX}
 ALL_TARGET=	opt usrdoc
 REGRESS_TARGET=	regr
 
-WANTLIB=	X11 c m tk85
+WANTLIB=	X11 c m tk85 tcl85
 
 post-install:
 	${INSTALL_DATA_DIR} ${PREFIX}/share/doc/repasa

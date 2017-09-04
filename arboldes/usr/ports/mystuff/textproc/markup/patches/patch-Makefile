@@ -1,7 +1,23 @@
 $OpenBSD$
 --- Makefile.orig	Sun Nov 23 10:18:10 2003
-+++ Makefile	Thu Jul 29 09:35:38 2004
-@@ -30,11 +30,16 @@ INS_FILES=markup.cma markup_aux.cmi mark
++++ Makefile	Mon Sep  4 14:19:50 2017
+@@ -23,18 +23,28 @@ opt: confv.empty
+ 	$(MAKE) -f Makefile.code depend
+ 	$(MAKE) -f Makefile.code opt
+ 
+-INS_FILES=markup.cma markup_aux.cmi markup_entity.cmi markup_types.cmi \
+-	markup_codewriter.cmi markup_lexers.cmi markup_yacc.cmi\
+-	markup_document.cmi markup_lexer_types.cmi markup_dtd.cmi \
+-	markup_reader.cmi markup_misc.cmi markup_conf.cmi
++INS_FILES=markup.cma \
++	markup_aux.cmi markup_codewriter.cmi markup_conf.cmi \
++	markup_document.cmi markup_dtd.cmi markup_entity.cmi \
++	markup_lexer_types.cmi markup_lexers.cmi markup_misc.cmi \
++	markup_reader.cmi markup_types.cmi markup_yacc.cmi \
++	markup_aux.cmx markup_codewriter.cmx markup_conf.cmx \
++	markup_document.cmx markup_dtd.cmx markup_entity.cmx \
++	markup_lexer_types.cmx markup_lexers.cmx markup_misc.cmx  \
++	markup_reader.cmx markup_types.cmx markup_yacc.cmx
  
  OPT_FILES=markup.cmxa markup.a 
  
@@ -20,7 +36,7 @@ $OpenBSD$
  
  .PHONY: uninstall
  uninstall:
-@@ -187,3 +192,6 @@ doc/INSTALL.html: doc/INSTALL.xml
+@@ -187,3 +197,6 @@ doc/INSTALL.html: doc/INSTALL.xml
  
  index.html: index.html.in
  	sed -e "s|\&PRY-VERSION;|$(PRY_VERSION)|g;s|\&URLSITE;|$(URLSITE)|g;s|\&FECHA-ACT;|$(FECHA_ACT)|g" index.html.in > index.html

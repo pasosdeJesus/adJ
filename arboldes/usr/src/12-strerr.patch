@@ -1,0 +1,106 @@
+diff -ruN src61-orig/lib/libc/string/strerror.c src/lib/libc/string/strerror.c
+--- src61-orig/lib/libc/string/strerror.c	Sun Aug 30 21:53:57 2015
++++ src/lib/libc/string/strerror.c	Sat Jul 22 20:12:16 2017
+@@ -30,7 +30,10 @@
+ 
+ #include <string.h>
+ #include <limits.h>
++#include <xlocale.h>
+ 
++extern int __strerror_rl(int, char *, size_t, locale_t);
++
+ char *
+ strerror(int num)
+ {
+@@ -40,3 +43,13 @@
+ 	return (buf);
+ }
+ DEF_STRONG(strerror);
++
++char *
++strerror_l(int num, locale_t loc)
++{
++	static char buf[NL_TEXTMAX];
++
++	(void)__strerror_rl(num, buf, sizeof(buf), loc);
++	return (buf);
++}
++DEF_STRONG(strerror_l);
+diff -ruN src61-orig/lib/libc/string/strerror_r.c src/lib/libc/string/strerror_r.c
+--- src61-orig/lib/libc/string/strerror_r.c	Wed Oct 19 11:26:16 2016
++++ src/lib/libc/string/strerror_r.c	Sat Jul 22 20:24:13 2017
+@@ -5,6 +5,8 @@
+ #include <limits.h>
+ #include <signal.h>
+ #include <string.h>
++#include <xlocale.h>
++#include "locale/xlocale_private.h"
+ 
+ static size_t
+ __digits10(unsigned int num)
+@@ -83,7 +85,7 @@
+ #define	UPREFIX	"Unknown error: "
+ 
+ int
+-strerror_r(int errnum, char *strerrbuf, size_t buflen)
++__strerror_rl(int errnum, char *strerrbuf, size_t buflen, locale_t loc)
+ {
+ 	int ret_errno;
+ 
+@@ -94,7 +96,14 @@
+ 		errno = ret_errno;
+ 	return (ret_errno);
+ }
++
++int
++strerror_r(int errnum, char *strerrbuf, size_t buflen)
++{
++	return __strerror_rl(errnum, strerrbuf, buflen, __get_locale());
++}
+ DEF_WEAK(strerror_r);
++
+ 
+ #define USIGPREFIX "Unknown signal: "
+ 
+diff -ruN src/lib/libc/hidden/string.h.orig src/lib/libc/hidden/string.h
+--- src/lib/libc/hidden/string.h.orig	Sat Jul 22 20:57:24 2017
++++ src/lib/libc/hidden/string.h	Sat Jul 22 21:54:57 2017
+@@ -19,6 +19,7 @@
+ #define	_LIBC_STRING_H_
+ 
+ #include_next <string.h>
++#include_next <xlocale.h>
+ 
+ __BEGIN_HIDDEN_DECLS
+ char	*__strsignal(int , char *);
+@@ -51,6 +52,7 @@
+ PROTO_NORMAL(strcspn);
+ PROTO_NORMAL(strdup);
+ PROTO_NORMAL(strerror);
++PROTO_NORMAL(strerror_l);
+ PROTO_NORMAL(strerror_r);
+ PROTO_NORMAL(strlcat);
+ PROTO_NORMAL(strlcpy);
+diff -ruN src/include/xlocale.h.orig src/include/xlocale.h
+--- src/include/xlocale.h.orig	Wed Jul 26 21:47:12 2017
++++ src/include/xlocale.h	Sun Jul 23 07:55:46 2017
+@@ -100,6 +100,8 @@
+ int	 wcscoll_l(const wchar_t *, const wchar_t *, locale_t);
+ size_t	 strxfrm_l(char *, const char *, size_t, locale_t);
+ 
++char    *strerror_l(int, locale_t);
++
+ /* XLOCALE */ 
+ int	 strcasecmp_l(const char *, const char *, locale_t);
+ char	*strcasestr_l(const char *, const char *, locale_t);
+diff -ruN src/lib/libc/Symbols.list.orig src/lib/libc/Symbols.list
+--- src/lib/libc/Symbols.list.orig	Wed Jul 26 21:45:44 2017
++++ src/lib/libc/Symbols.list	Sat Jul 22 20:49:13 2017
+@@ -1526,6 +1526,7 @@
+ strcspn
+ strdup
+ strerror
++strerror_l
+ strerror_r
+ strlcat
+ strlcpy

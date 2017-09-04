@@ -1,0 +1,75 @@
+$OpenBSD$
+--- defprog.ml.orig	Mon Sep  4 13:54:46 2017
++++ defprog.ml	Mon Sep  4 13:58:40 2017
+@@ -273,7 +273,7 @@ let rec srefword_from_sclassif defname maxw fname 
+ 			else 
+ 			begin
+ 				let format=if (has_attr cl#root "formato") then
+-					String.lowercase (attr cl#root "formato")
++					String.lowercase_ascii (attr cl#root "formato")
+ 				else
+ 					"texto"
+ 				in 
+@@ -329,7 +329,7 @@ let rec update_meaning fname fordef fdef hw sw=
+ 			else 
+ 			begin
+ 				let format=if (has_attr de#root "formato") then
+-					String.lowercase (attr de#root "formato")
++					String.lowercase_ascii (attr de#root "formato")
+ 				else
+ 					"texto"
+ 				in 
+@@ -508,7 +508,7 @@ let read_sec (ss:'ext Markup_document.node list) fname
+ 	        else
+         	begin
+         		if (has_attr dclassif#root "formato") then
+-        			String.lowercase (attr dclassif#root "formato")
++        			String.lowercase_ascii (attr dclassif#root "formato")
+         		else
+         			"texto"
+         	end
+@@ -528,7 +528,7 @@ let read_sec (ss:'ext Markup_document.node list) fname
+ 	else
+ 	begin
+ 		if (has_attr ddef#root "formato") then
+-			String.lowercase (attr ddef#root "formato")
++			String.lowercase_ascii (attr ddef#root "formato")
+ 		else
+ 			"texto"
+ 	end
+@@ -553,7 +553,7 @@ let read_cla hw hsw lsw maxw (classifname,idefname)=
+ 	        else
+         	begin
+         		if (has_attr dclassif#root "formato") then
+-        			String.lowercase (attr dclassif#root "formato")
++        			String.lowercase_ascii (attr dclassif#root "formato")
+         		else
+         			"texto"
+         	end
+@@ -573,7 +573,7 @@ let read_cla hw hsw lsw maxw (classifname,idefname)=
+ 	else
+ 	begin
+ 		if (has_attr ddef#root "formato") then
+-			String.lowercase (attr ddef#root "formato")
++			String.lowercase_ascii (attr ddef#root "formato")
+ 		else
+ 			"texto"
+ 	end
+@@ -597,7 +597,7 @@ let read_def hw hsw lsw maxw defname=
+ 	else
+ 	begin
+ 		if (has_attr ddef#root "formato") then
+-			String.lowercase (attr ddef#root "formato")
++			String.lowercase_ascii (attr ddef#root "formato")
+ 		else
+ 			"texto"
+ 	end
+@@ -1362,7 +1362,7 @@ let prep_to_open interf format name =
+                 | T_element "secuencia" ->
+                         fname:=f;
+ 		        format:=if (has_attr tc#root "formato") then
+-		        	String.lowercase (attr tc#root "formato")
++		        	String.lowercase_ascii (attr tc#root "formato")
+         		else
+         			"texto";
+         		add_arch_ref true ((file_basename name)^".cla") 

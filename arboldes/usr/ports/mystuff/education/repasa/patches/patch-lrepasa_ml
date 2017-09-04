@@ -1,0 +1,32 @@
+$OpenBSD$
+--- lrepasa.ml.orig	Mon Sep  4 13:43:35 2017
++++ lrepasa.ml	Mon Sep  4 13:44:11 2017
+@@ -89,8 +89,8 @@ let cmp_esp_char case s1 s2 =
+         in 
+         let (c1,v1)=valc s1 in
+         let (c2,v2)=valc s2 in
+-        let cs1=if (not case) then Char.lowercase c1 else c1 in
+-        let cs2=if (not case) then Char.lowercase c2 else c2 in
++        let cs1=if (not case) then Char.lowercase_ascii c1 else c1 in
++        let cs2=if (not case) then Char.lowercase_ascii c2 else c2 in
+         if (cs1<cs2 || (cs1=cs2 && v1<v2)) then
+                 -1
+         else if (cs1>cs2 || (cs1=cs2 && v1>v2)) then
+@@ -1512,7 +1512,7 @@ type heuresp=HCaseSensitive | HCaseInsensitive ;;
+         the word [w] by using the heuristics [heur].  *)
+ let rec test_equal_answer heur w ans = match heur with
+ 	| HCaseInsensitive -> 
+-                (String.lowercase w)=(String.lowercase ans)
++                (String.lowercase_ascii w)=(String.lowercase_ascii ans)
+         | HCaseSensitive ->
+         	w=ans
+ ;;
+@@ -2231,7 +2231,7 @@ let rec parse_format retval pos_file f le=
+                                         ^le^"' no es un entero");
+                                 None
+         in
+-	let lf=String.lowercase f in
++	let lf=String.lowercase_ascii f in
+ 	if (lf="") then
+ 		(ForText,leo)
+ 	else if (str_isprefix lf "texto") then

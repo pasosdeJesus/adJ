@@ -337,21 +337,9 @@ if (test "$sn" = "s") then {
 	echo "* Completo make obj" | tee -a /var/www/tmp/distrib-adJ.bitacora
 	echo "whoami 0" >>  /var/www/tmp/distrib-adJ.bitacora
 	whoami >> /var/www/tmp/distrib-adJ.bitacora 2>&1
-	cd /usr/src/etc && env DESTDIR=/ make distrib-dirs
-	echo "whoami 1" >> /var/www/tmp/distrib-adJ.bitacora
-	whoami >> /var/www/tmp/distrib-adJ.bitacora 2>&1
-	echo "* Completo make distrib-dirs" | tee -a /var/www/tmp/distrib-adJ.bitacora
-	#cd /usr/src/etc && env DESTDIR=$DESTDIR make distrib-dirs
-	# Algunos necesarios para que make lo logre
-	cd /usr/src/include 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
-	make includes 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
-	compilabase
-	echo "* Completo compilabase" | tee -a /var/www/tmp/distrib-adJ.bitacora
-	echo "whoami 3" >> /var/www/tmp/distrib-adJ.bitacora
-	whoami >> /var/www/tmp/distrib-adJ.bitacora 2>&1
-	# build borrará código objeto construido con compilabase, 
+	# build borrará código objeto 
 	# reconstruira dependencias, compilará e instalará
-	cd /usr/src && unset DESTDIR && LANG=POSIX nice make -j4 SUDO=doas build 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
+	cd /usr/src && unset DESTDIR && LANG=POSIX nice make -j4 build 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
 	echo "whoami 4" >> /var/www/tmp/distrib-adJ.bitacora
 	whoami >> /var/www/tmp/distrib-adJ.bitacora 2>&1
 	echo "* Completo make build" | tee -a /var/www/tmp/distrib-adJ.bitacora
@@ -774,9 +762,15 @@ if (test "$sn" = "s") then {
 	# Deben estar en mystuff
 
 	#Quitar
-	paquete wget
-	paquete x264
-	paquete x265
+	paquete ocaml 
+	paquete ocamlbuild 
+	paquete ocaml-camlp4
+	paquete lang/ocaml-labltk
+	paquete textproc/markup
+	paquete education/repasa
+	paquete education/sigue
+
+	exit 1
 
 	####
 	# Retroportados para cerrar fallas o actualizar
@@ -786,7 +780,7 @@ if (test "$sn" = "s") then {
 :	###
         # Actualizados.  Están desactualizado en OpenBSD estable y current
 	#paquete php paquetes "php php-bz2 php-curl php-fpm php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 5.6
-	#paquete ocaml 
+	paquete ocaml 
 
 
 	####
@@ -847,7 +841,6 @@ if (test "$sn" = "s") then {
 	paquete nss
 	#paquete mplayer
 	#paquete nginx
-	paquete ocaml 
 	paquete ocamlbuild 
 	paquete openssl
 	#paquete openldap-client 
