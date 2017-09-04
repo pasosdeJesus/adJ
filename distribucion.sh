@@ -761,17 +761,6 @@ if (test "$sn" = "s") then {
 	# Modificados para posibilitar compilación
 	# Deben estar en mystuff
 
-	#Quitar
-	paquete ocaml 
-	paquete ocamlbuild 
-	paquete ocaml-camlp4
-	paquete lang/ocaml-labltk
-	paquete textproc/markup
-	paquete education/repasa
-	paquete education/sigue
-
-	exit 1
-
 	####
 	# Retroportados para cerrar fallas o actualizar
 	# Deben estar en arboldes/usr/ports/mystuff y en /usr/ports de current
@@ -796,7 +785,7 @@ if (test "$sn" = "s") then {
 	paquete cups-filters
 	paquete dbus
 	paquete dovecot
-	FLAVOR=light paquete evince paquete evince-light
+	FLAVOR=light paquete evince paquetes evince-light
 	#paquete flac
 	paquete ffmpeg
 	paquete foomatic-db

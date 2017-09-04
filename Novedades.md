@@ -2,8 +2,8 @@
 Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y que anhelamos sea usada por Jesús durante el Milenio.
 
-### Versión: 6.1b1
-Fecha de publicación: 26/Jul/2017
+### Versión: 6.1b2
+Fecha de publicación: 6/Sep/2017
 
 Puede ver novedades respecto a OpenBSD en:
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_1/Novedades_OpenBSD.md>
@@ -12,9 +12,10 @@ Puede ver novedades respecto a OpenBSD en:
 
 # Kernel y Sistema Base
 
-* Parches al sistema basta hasta el 1.Jul.2017 que cierran 7 fallas 
-  de seguridad y 16 de robustez.
-* syspatch ahora puede actualizar binarios de sistema base para cerrar fallas de robustez y de seguridad.
+* Parches al sistema basta hasta el 30.Ago.2017 que cierran 16 fallas 
+  de seguridad y 11 de robustez.
+* syspatch ahora puede actualizar binarios de sistema base para cerrar 
+  fallas de robustez y de seguridad.
 * Controladores ampliados o mejorados para amd64
 	* Red:
 		* Ethernet: Nuevo ```dwge``` para Designware GMAC 10/100/Gigabit.   Soporte en ```em``` para MACs Kaby Lake y Lewisburg PCH con PHYs I219. Soport en ```ure``` para dispositivos USB 3.0 Gigabit RTL8153.  Soporte en ```ix``` para la familia X550 de dispositivos 10 Gigabits.
@@ -49,6 +50,7 @@ Puede ver novedades respecto a OpenBSD en:
 - Paquetes más actualizados: 
 	- ruby 2.4.1 retroportado
 	- php-5.6.30
+	- ocaml 4.0.5 junto con ocamlbuild y ocaml-camlp4
 	- samba-4.4.5p3 actualizado en fuentes de OpenBSD 6.1
 	- curl-7.53.1p0 actualizado en fuentes de OpenBSD 6.1
 - Archivo de ordenes /usr/local/adJ/resto-altroot.sh para copiar 
