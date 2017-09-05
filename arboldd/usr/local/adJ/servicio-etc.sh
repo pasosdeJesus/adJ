@@ -12,8 +12,8 @@ if (test "$b" != "etc") then {
 } fi;
 
 echo "Cambia logo" >> /var/www/tmp/inst-adJ.bitacora
-if (test -f "X11/xdm/pixmaps/adJ_1bpp.xpm") then {
-	ed X11/xdm/Xresources >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
+if (test -f "X11/xenodm/pixmaps/adJ_1bpp.xpm") then {
+	ed X11/xenodm/Xresources >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/OpenBSD_/adJ_/g
 w
 q

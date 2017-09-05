@@ -2,7 +2,7 @@
 
 # Port in the public domain.
 
-VERSION=2.0b2
+VERSION=2.0b3
 REVISION=
 DISTNAME=v${VERSION}
 PKGNAME=sivel-v${VERSION}
@@ -21,7 +21,7 @@ BUILD_DEPENDS += www/phantomjs
 
 pre-patch:
 	pwd
-	ln -s `dirname ${WRKDIST}`/sivel2-2.0b2 ${WRKDIST}
+	ln -s `dirname ${WRKDIST}`/sivel2-${VERSION} ${WRKDIST}
 
 do-install:
 	echo @mkdir -p ${PREFIX}/${SIVEL_RAIZ}
