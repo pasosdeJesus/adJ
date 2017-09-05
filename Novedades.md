@@ -8,7 +8,7 @@ Fecha de publicación: 6/Sep/2017
 Puede ver novedades respecto a OpenBSD en:
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_1/Novedades_OpenBSD.md>
 
-## NOVEDADES RESPECTO A adJ 6.0 provenientes de OpenBSD 6.1
+## NOVEDADES RESPECTO A adJ 6.0 PROVENIENTES DE OpenBSD 
 
 # Kernel y Sistema Base
 
@@ -40,25 +40,69 @@ Puede ver novedades respecto a OpenBSD en:
 	* LibreSSL 2.5.3 que soporta ALPN  y SNI
 
 * Otros
-	* mandoc -mdoc -T markdown
+	* Facil producir páginas del manual en markdown: `mandoc -mdoc -T markdown`
 
 * El sistema base incluye mejoras a componentes auditados y mejorados 
   como ```Xenocara``` (```Xorg 7.7```), ```gcc``` 4.2.1, ```perl``` 5.24.1, 
   ```nsd``` 4.1.15
 
 
+
+# Novedades respecto a paquetes 
+
+ruby 2.4.1 retroportado de Current
+
+Se han actualizado más los binarios de los siguientes paquetes para
+cerrar fallas de seguridad (a partir de portes más recientes para 
+OpenBSD 6.1 --no incluidos en distribución inicial de binarios):
+
+GeoIP-1.6.5p5.tgz, ImageMagick-6.9.8.3.tgz, abiword-3.0.1p7.tgz, 
+at-spi2-core-2.22.1.tgz, chromium-57.0.2987.133, colorls-5.7p2.tgz, 
+cups-2.2.3.tgz, cups-filters-1.13.4p0.tgz, curl-7.53.1p0.tgz, 
+dbus-1.10.16v0.tgz, djvulibre-3.5.27p0.tgz, dovecot-2.2.28p0.tgz, 
+ffmpeg-20170208.tgz, foomatic-db-4.0.20161003p0.tgz, freetds-0.95.95p2.tgz, 
+gdal-2.1.3.tgz, gdk-pixbuf-2.34.0.tgz, gettext-tools-0.19.7p1.tgz, 
+ghostscript-9.07p4.tgz, gimp-2.8.18p4.tgz, glib2-2.48.1.tgz, 
+gnumeric-1.12.34.tgz, gnutls-3.5.10p0.tgz, gstreamer1-1.10.4.tgz, 
+gtar-1.29.tgz, gtk+2-2.24.31p0.tgz, gtk+3-3.22.11.tgz, 
+gvfs-1.30.4.tgz, harfbuzz-1.4.5.tgz, 
+hexedit-1.2.12p0.tgz, htop-2.0.1.tgz, icu4c-58.2p1.tgz, 
+imlib2-1.4.9p0.tgz, inkscape-0.92.1.tgz, libcroco-0.6.11.tgz, 
+libgcrypt-1.7.8.tgz, libgpg-error-1.27.tgz, libidn-1.32p1.tgz, 
+libmatroska-1.4.6.tgz, libspectre-0.2.7p7.tgz, libspectre-0.2.7p7.tgz, 
+libunistring-0.9.6.tgz, libv4l-1.12.3.tgz, libvpx-1.6.1.tgz, 
+libxml-2.9.4p1.tgz, libxslt-1.1.28p5.tgz, llvm-3.8.0p2.tgz, 
+mupdf-1.10ap0.tgz, mutt-1.8.0v3.tgz, nghttp2-1.21.0.tgz, 
+node-6.10.1.tgz, nss-3.29.3.tgz, openssl-1.0.2k.tgz, 
+p5-IO-Socket-SSL-2.047.tgz, p5-Net-DNS-1.09.tgz, p5-XML-Parser-2.44.tgz, 
+pango-1.40.4.tgz, pear-DB-DataObject-FormBuilder-1.0.2p2.tgz, 
+pear-HTML-CSS-1.5.4.tgz, pear-HTML-Common-1.2.5.tgz, 
+pear-HTML-Common2-0.1.0p4.tgz, pear-HTML-Javascript-1.1.2.tgz, 
+pear-HTML-Menu-2.1.4.tgz, pear-HTML-QuickForm-3.2.14p1.tgz, 
+pear-HTML-QuickForm-Controller-1.0.10p1.tgz, pear-HTML-Table-1.8.4.tgz, 
+pear-Net-SMTP-1.7.3.tgz, phantomjs-1.9.8p3.tgz, 
+pidgin-2.11.0.tgz, podofo-0.9.5.tgz, poppler-0.52.0.tgz, 
+postgis-2.3.2.tgz, py-idna-2.4.tgz, py-werkzeug-0.11.15.tgz, 
+qemu-2.8.0p0.tgz, qgis-2.18.3.tgz, rrdtool-1.6.0p2.tgz, 
+scribus-1.4.5.tgz, tiff-4.0.8.tgz, vim-8.0.0388-gtk2.tgz, 
+wget-1.18.tgz, wxWidgets-gtk2-2.8.12p12.tgz, x264-20170125p0.tgz, 
+x265-2.3p0.tgz, xfe-1.40.1p0.tgz
+
+## NOVEDADES RESPECTO A adJ 6.0 PROVENIENTES DE PASOS DE JESÚS
+
 - Paquetes más actualizados: 
-	- ruby 2.4.1 retroportado
 	- php-5.6.30
-	- ocaml 4.0.5 junto con ocamlbuild y ocaml-camlp4
-	- samba-4.4.5p3 actualizado en fuentes de OpenBSD 6.1
-	- curl-7.53.1p0 actualizado en fuentes de OpenBSD 6.1
+	- Ocaml 4.0.5 junto con ocamlbuild, ocaml-labltk, ocaml-camlp4 y hevea
+
+- Documentación actualizada:
+	- basico_adJ, usuario_adJ y servidor_adJ
+
+- Se parchan y compilan portes más recientes de:
+	- biblesync, sword y xiphos
+	- markup, repasa y sigue con Ocaml 4.0.5
+
 - Archivo de ordenes /usr/local/adJ/resto-altroot.sh para copiar 
   resto de particiones altroot ver 
   <http://dhobsd.pasosdejesus.org/Respaldo_altroot.html>
 
-
-# Novedades respecto a paquetes 
-Se han actualizado más los binarios de los siguientes (a partir de portes recientes para OpenBSD 6.1):
-nss-3.29.3, nghttp2-1.4.0, mutt-1.8.0, mupdf-1.10ap0, mariadb-{server,client}-10.0.30v1, libxml-2.9.4p1, libvpx-1.6.1, libv4l-1.12.3, libmatorksa-1.4.6, evince-3.22.1p2, dbus-1-10.16v0, ImageMagick-6.9.8.3, imlib2-1.4.9p0, gtk+3, gimp-2.8.18p4, ghostscript-9.07p4, cups-filters-1.313.4p0, p5-XML-Parser-2.44, gvf-1.30.4, gstraemer1-1.10.4, abiword-3.0.1p7, libcroco-0.6.11,harfbuzz-1.4.5, harfbuzz-icu-1.4.5, ocaml-4.04.0p0, vim-8.0.0388, tiff-4.0.8, tevent-0.9.29, samba-util-4.5.8, samba-4.5.8p0, ldb-1.1.27, ruby-2.4.1, rrdtool, pear-Net-SMTP-1.7.3, pango-1.40.4, p5-Net-DNS, openssl-1.0.2k, 
 
