@@ -1781,7 +1781,6 @@ insacp libiconv
 echo "* Instalar PostgreSQL y PostGIS"  >> /var/www/tmp/inst-adJ.bitacora
 f=`ls /var/db/pkg/postgresql-server* 2> /dev/null > /dev/null`;
 if (test "$?" != "0") then {
-	insacp ossp-uuid
 	p=`ls $PKG_PATH/libxml-* $PKG_PATH/libiconv-* $PKG_PATH/postgresql-client-* $PKG_PATH/postgresql-server* $PKG_PATH/postgresql-contrib* $PKG_PATH/postgresql-doc*`
 	pkg_add -I -r -D update -D updatedepends $p >> /var/www/tmp/inst-adJ.bitacora 2>&1;
 	insacp jpeg
