@@ -8,7 +8,7 @@ Anhelamos publicar versión mayor (e.g 6.2) 3 meses después de OpenBSD:
 
 También publicamos revisiones (e.g 6.2p1) si la seguridad o calidad lo ameritan.
 
-Anhelamos publicar al menos una versión beta (e.g 6.2b1 en directorio
+Anhelamos publicar al menos una versión beta (e.g 6.2b2 en directorio
 ```desarrollo``` del sitio de distribución) en:
 
 	10.Dic
@@ -50,8 +50,8 @@ Pasos importantes para publicar versión beta
 8. En adJ.pasosdeJesus.org
 	```
 	hdes/creaiso.sh
-	cp -rf AprendiendoDeJesus-6.1b1-amd64.iso 6.1b1-amd64 /dirftp
-	mkdir /dirftp/6.1b1-amd64-extra
+	cp -rf AprendiendoDeJesus-6.1b2-amd64.iso 6.1b2-amd64 /dirftp
+	mkdir /dirftp/6.1-amd64-extra
 	rsync compdes:comp/adJ/extra-6.1/* /dirftp/6.1-amd64-extra
 	```
 9. Verificar operación de:
@@ -63,8 +63,8 @@ Pasos importantes para publicar versión beta
   * rsync://adJ.pasosdeJesus.org
 10. Poner Tag en github e iniciar rama al publicar version beta (antes en master)
 	```
-	git tag -a v6.1b1 -m "Version 6.1b1"
-	git push origin v6.1b1
+	git tag -a v6.1b2 -m "Version 6.1b2"
+	git push origin v6.1b2
 	...
 	git checkout -b ADJ_6_1
 	git push origin ADJ_6_1
