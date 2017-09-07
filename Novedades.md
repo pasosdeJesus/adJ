@@ -104,10 +104,25 @@ x265-2.3p0.tgz, xfe-1.40.1p0.tgz
 
 - Se incluye beta 3 de sivel2 que tiene entres sus novedades:
 	- Salva formulario de caso cada 60 segundos
-	- Actualiza marco conceptual al más reciente del Banco de Datos del CINEP, que incluye más categorias del Derecho Internacional Humanitario Consetudinario
+	- Actualiza marco conceptual al más reciente del Banco de Datos del 
+	  CINEP, que incluye más categorias del Derecho Internacional 
+	  Humanitario Consetudinario
 	- Nuevo menú para respaldo cifrado;
-	- Formulario de caso ampliado con actos colectivos, título, contexto, actor social para poder capturar toda la información que se captura con 1.2
-	- Rediseñado llenado de plantillas en hoja de cálculo desde el listado de casos para ser más veloz así como el listado de casos
+	- Formulario de caso ampliado con actos colectivos, título, contexto, 
+	  actor social para poder capturar toda la información que se captura 
+	  con 1.2
+	- Rediseñado llenado de plantillas en hoja de cálculo desde el 
+	  listado de casos para ser más veloz así como el listado de casos
+
+- Se incluye sivel1.2.4 cuyas novedades son:
+	- Se actualiza consolidado general de víctima (módulo bdcinep) de 
+	  acuerdo a nuevo marco conceptual
+	- Actualiza marco conceptual para adoptar más categorias y 
+	  nomenclatura del Derecho Internacional Humanitario Consuetudinario
+	- Permite descargar anexos desde reporte general
+	- Vuelve a operar exportación a CSV y se evita posible ataque XSS
+	  descrito en https://stackoverflow.com/questions/43894241/birt-possible-xss-in-xls-format
+	- Opera con PHP 5.6 que es más estricto en chequeo de tipos
 
 - Archivo de ordenes /usr/local/adJ/resto-altroot.sh para copiar 
   resto de particiones altroot ver 
