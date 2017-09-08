@@ -181,3 +181,9 @@ Se eliminarán todas las páginas del manual para que se instalen las nuevas al 
 	} fi;
 } fi;
 	
+dialog --title 'Advertencia: por borrar paquete p5-Term-ReadKey' --yesno "\\nPara evitar problemas con perl y pkg_add, pkg_delete (si persisten problemas se recomienda borrar todos los paquetes de perl (p5-*) y volver a instalar los distribuidos con adJ\\n
+¿Continuar?" 17 60
+if (test "$?" = "0") then {
+	pkg_delete p5-Term-ReadKey > /dev/null 2>/dev/null
+} fi;
+

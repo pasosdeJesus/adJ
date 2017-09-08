@@ -50,9 +50,8 @@ Puede ver novedades respecto a OpenBSD en:
 
 # Novedades respecto a paquetes 
 
-ruby 2.4.1 retroportado de Current
-
-Se han actualizado más los binarios de los siguientes paquetes para
+* ruby 2.4.1 retroportado de Current
+* Se han actualizado más los binarios de los siguientes paquetes para
 cerrar fallas de seguridad (a partir de portes más recientes para 
 OpenBSD 6.1 --no incluidos en distribución inicial de binarios):
 
@@ -74,7 +73,6 @@ libunistring-0.9.6.tgz, libv4l-1.12.3.tgz, libvpx-1.6.1.tgz,
 libxml-2.9.4p1.tgz, libxslt-1.1.28p5.tgz, llvm-3.8.0p2.tgz, 
 mupdf-1.10ap0.tgz, mutt-1.8.0v3.tgz, nghttp2-1.21.0.tgz, 
 node-6.10.1.tgz, nss-3.29.3.tgz, openssl-1.0.2k.tgz, 
-p5-IO-Socket-SSL-2.047.tgz, p5-Net-DNS-1.09.tgz, p5-XML-Parser-2.44.tgz, 
 pango-1.40.4.tgz, pear-DB-DataObject-FormBuilder-1.0.2p2.tgz, 
 pear-HTML-CSS-1.5.4.tgz, pear-HTML-Common-1.2.5.tgz, 
 pear-HTML-Common2-0.1.0p4.tgz, pear-HTML-Javascript-1.1.2.tgz, 
@@ -90,19 +88,24 @@ x265-2.3p0.tgz, xfe-1.40.1p0.tgz
 
 ## NOVEDADES RESPECTO A adJ 6.0 PROVENIENTES DE PASOS DE JESÚS
 
-- Paquetes más actualizados: 
+* Paquetes más actualizados: 
 	- php-5.6.31 --no es posible actualizar a 7 porque pear no opera y
 		sivel 1.2 depende de pear
 	- Ocaml 4.0.5 junto con ocamlbuild, ocaml-labltk, ocaml-camlp4 y hevea
 
-- Documentación actualizada:
+* Se recompilaron todos los paquetes de perl (sin cambiar de versión) con
+  el perl de adJ que soporta LC_NUMERIC.  Antes de actualizar a 6.1
+  es recomendable desintalar p5-Term-ReadKey si lo tiene.
+
+
+* Documentación actualizada:
 	- basico_adJ, usuario_adJ y servidor_adJ
 
-- Se parchan y compilan portes más recientes de:
+* Se parchan y compilan portes más recientes de:
 	- biblesync, sword y xiphos
 	- markup, repasa y sigue con Ocaml 4.0.5
 
-- Se incluye beta 3 de sivel2 que tiene entres sus novedades:
+* Se incluye beta 3 de sivel2 que tiene entres sus novedades:
 	- Salva formulario de caso cada 60 segundos
 	- Actualiza marco conceptual al más reciente del Banco de Datos del 
 	  CINEP, que incluye más categorias del Derecho Internacional 
@@ -114,7 +117,7 @@ x265-2.3p0.tgz, xfe-1.40.1p0.tgz
 	- Rediseñado llenado de plantillas en hoja de cálculo desde el 
 	  listado de casos para ser más veloz así como el listado de casos
 
-- Se incluye sivel1.2.4 cuyas novedades son:
+* Se incluye sivel1.2.4 cuyas novedades son:
 	- Se actualiza consolidado general de víctima (módulo bdcinep) de 
 	  acuerdo a nuevo marco conceptual
 	- Actualiza marco conceptual para adoptar más categorias y 
@@ -124,7 +127,7 @@ x265-2.3p0.tgz, xfe-1.40.1p0.tgz
 	  descrito en https://stackoverflow.com/questions/43894241/birt-possible-xss-in-xls-format
 	- Opera con PHP 5.6 que es más estricto en chequeo de tipos
 
-- Archivo de ordenes /usr/local/adJ/resto-altroot.sh para copiar 
+* Archivo de ordenes /usr/local/adJ/resto-altroot.sh para copiar 
   resto de particiones altroot ver 
   <http://dhobsd.pasosdejesus.org/Respaldo_altroot.html>
 

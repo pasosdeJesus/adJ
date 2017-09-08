@@ -36,7 +36,7 @@ Pasos importantes para publicar versión beta
 6. Generar distribución, imagen iso (```hdes/creaiso.sh```) y probar por 
   ejemplo en ```qemu``` (```hdes/qemu.sh``` o remotamente 
   ```TEXTO=1 hdes/qemu.sh```): 
-	- instalación de sistema base, 
+	- instalación de sistema base, uname debe reportar APRENDIENDODEJESUS
    	- ejecución de /inst-adJ.sh en nuevo y actualización, 
    	- ejecución de /usr/local/adJ/inst-sivel.sh, que opere SIVeL1.2,
    	- que toda entrada del menú desde la interfaz gráfica opere.  
