@@ -768,6 +768,67 @@ if (test "$sn" = "s") then {
 	# Modificados para posibilitar compilación
 	# Deben estar en mystuff
 
+
+	# Todo lo de perl tuvo que recompilarse
+	paquete p5-Clone
+	paquete p5-Crypt-OpenSSL-Bignum
+	paquete p5-Crypt-OpenSSL-RSA
+	paquete p5-Crypt-OpenSSL-Random
+	paquete p5-DBD-mysql
+	paquete p5-DateManip
+	paquete p5-Digest-HMAC
+	paquete p5-Encode-Detect
+	paquete p5-Encode-Locale
+	paquete p5-Error
+	paquete p5-File-Listing
+	paquete p5-FreezeThaw
+	paquete p5-Geo-IP
+	paquete p5-Geography-Countries
+	paquete p5-HTML-Parser
+	paquete p5-HTML-Tagset
+	paquete p5-HTTP-Cookies
+	paquete p5-HTTP-Daemon
+	paquete p5-HTTP-Date
+	paquete p5-HTTP-Message
+	paquete p5-HTTP-Negotiate
+	paquete p5-IO-HTML
+	paquete p5-IO-Socket-SSL
+	paquete p5-LWP-MediaTypes
+	paquete p5-LWP-Protocol-https
+	paquete p5-MLDBM
+	paquete p5-Mail-DKIM
+	paquete p5-Mail-SPF
+	paquete p5-Mail-SpamAssassin
+	paquete p5-Mail-Tools
+	paquete p5-Math-Base-Convert
+	paquete p5-Module-Runtime
+	paquete p5-Mozilla-CA-Fake
+	paquete p5-Net-CIDR-Lite
+	paquete p5-Net-DNS
+	paquete p5-Net-DNS-Resolver-Programmable
+	paquete p5-Net-Daemon
+	paquete p5-Net-HTTP
+	paquete p5-Net-Patricia
+	paquete p5-Net-SSLeay
+	paquete p5-NetAddr-IP
+	paquete p5-Params-Util
+	paquete p5-PlRPC
+	paquete p5-SQL-Statement
+	paquete p5-Socket6
+	paquete p5-Time-TimeDate
+	paquete p5-Tk
+	paquete p5-URI
+	paquete p5-WWW-RobotRules
+	paquete p5-XML-Parser
+	paquete p5-libwww
+	paquete p5-Net-Patricia
+	paquete p5-HTML-Parser
+	paquete p5-Params-Util
+	paquete p5-NetAddr-IP
+	paquete p5-DBI
+	paquete p5-Mail-SpamAssassin
+	exit 1
+
 	####
 	# Retroportados para cerrar fallas o actualizar
 	# Deben estar en arboldes/usr/ports/mystuff y en /usr/ports de current
@@ -841,8 +902,9 @@ if (test "$sn" = "s") then {
 	paquete openssl
 	#paquete openldap-client 
 	#paquete p5-DBD-mysql
+	paquete p5-HTML-Parser
 	paquete p5-IO-Socket-SSL
-	#paquete p5-Mail-SpamAssassin
+	paquete p5-Mail-SpamAssassin
 	paquete p5-Net-DNS
 	paquete p5-XML-Parser
 	#paquete p7zip paquetes "p7zip p7zip-rar"
