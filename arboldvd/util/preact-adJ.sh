@@ -166,9 +166,6 @@ ingreso si depende de paquetes para ingresar al sistema\\n
 	cd /var/db/pkg
 	pkg_delete *
 	echo "\\nSistema preparado para actualizar\\n"
-} else {
-	dialog --title 'Preparado' --msgbox "\\nSistema preparado para actualizar\\n" 15 60
-	clear
 } fi;
 
 if (test "$ACVER" -lt "60") then {
@@ -186,4 +183,8 @@ dialog --title 'Advertencia: por borrar paquete p5-Term-ReadKey' --yesno "\\nPar
 if (test "$?" = "0") then {
 	pkg_delete p5-Term-ReadKey > /dev/null 2>/dev/null
 } fi;
+
+dialog --title 'Otras bases binarias' --msgbox "\\nRecuerde sacar copia de otras bases binarias, pues este archivo de ordenes solo saco de PostgreSQL\\n" 15 60
+
+clear
 
