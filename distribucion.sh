@@ -827,7 +827,6 @@ if (test "$sn" = "s") then {
 	paquete p5-NetAddr-IP
 	paquete p5-DBI
 	paquete p5-Mail-SpamAssassin
-	exit 1
 
 	####
 	# Retroportados para cerrar fallas o actualizar
