@@ -84,7 +84,7 @@ postgis-2.3.2.tgz, py-idna-2.4.tgz, py-werkzeug-0.11.15.tgz,
 qemu-2.8.0p0.tgz, qgis-2.18.3.tgz, rrdtool-1.6.0p2.tgz, 
 scribus-1.4.5.tgz, tiff-4.0.8.tgz, vim-8.0.0388-gtk2.tgz, 
 wget-1.18.tgz, wxWidgets-gtk2-2.8.12p12.tgz, x264-20170125p0.tgz, 
-x265-2.3p0.tgz, xfe-1.40.1p0.tgz
+w3m, x265-2.3p0.tgz, xfe-1.40.1p0.tgz
 
 ## NOVEDADES RESPECTO A ADJ 6.0 PROVENIENTES DE PASOS DE JESÚS
 

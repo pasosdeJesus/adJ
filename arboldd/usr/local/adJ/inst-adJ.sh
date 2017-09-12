@@ -2168,6 +2168,11 @@ EOF
 w
 q
 EOF
+	ed /etc/php-fpm.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
+,s/^listen = .var.www.run.php-fpm.sock/listen = \/var\/www\/var\/run\/php-fpm.sock/g
+w
+q
+EOF
 		activarcs php56_fpm
 		/etc/rc.d/php56_fpm -d start >> /var/www/tmp/inst-adJ.bitacora 2>&1 
 		grep "^ *location .*php" /etc/nginx/nginx.conf > /dev/null 2>&1
