@@ -3,12 +3,12 @@ Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y que anhelamos sea usada por Jesús durante el Milenio.
 
 ### Versión: 6.1
-Fecha de publicación: 10/Sep/2017
+Fecha de publicación: 11/Sep/2017
 
 Puede ver novedades respecto a OpenBSD en:
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_1/Novedades_OpenBSD.md>
 
-## NOVEDADES RESPECTO A adJ 6.0 PROVENIENTES DE OpenBSD 
+## NOVEDADES RESPECTO A ADJ 6.0 PROVENIENTES DE OPENBSD
 
 # Kernel y Sistema Base
 
@@ -25,7 +25,7 @@ Puede ver novedades respecto a OpenBSD en:
 	* Interfaces con usuario: Nuevo ```iatp``` para pantaillas y padas tactiles Atmel maXTouch.  Nuevo ```simplefb```  para buffer de frames simple en sistemas que usan árbol de dispositivos. Nuevo ```uwacom``` para tabletas USB Wacom.
 	* Virtualización: Nuevo ```acpihve`` que alimenta piscina de entropia del kenerl a partir de Hyper-V. Nuevo ` `hvn``` para interfaces de red Hyper-V.  Nuevo ```hyperv```para dispositivo huesped nexus Hyper-V.  Nuevo interfaz de control ```vmmci```. Nuevo xbf(4) para discos virtuales Xen Blkfront.
 	* Sensores y otros: Nuevo ```acpials``` sensor de luz ACPI.  Nuevo ```acpisbs``` para dispositivod de bateria inteligente ACPI. Nuevo ```htb``` para puentes PCI Loongson 3A.   Nuevo ```imxtemp```sensor de temperatura Freescale i.MX6.  Nuevo ```leioc``` para controladores ES Loongson 3A.  Nuevo ```tpm```para dispositivos con Modulos de Plataforma Confiable.
-* Virtualización: Operacionales ```vmm```, ```vmd```. Soporta máquinas virtuales invitadas Linux 
+* Virtualización: Operacionales ```vmm```, ```vmd```. Soporta máquinas virtuales invitadas OpenBSD, ver http://dhobsd.pasosdejesus.org/maquinas-virtuales.html
 * Mejoras a herramientas de Red
 	* Nuevo dispositivo ```switch```junto con los programas ```switchd```  y ```switchctl``` que permiten manejar switch lógico con estandar OpenFlow.
 	* Mejoras a pf especialmente para el caso IPv6 por ejemplo de acuerdo a RFC 5722 y RFC 8021
@@ -53,7 +53,7 @@ Puede ver novedades respecto a OpenBSD en:
 * ruby 2.4.1 retroportado de Current
 * Se han actualizado más los binarios de los siguientes paquetes para
 cerrar fallas de seguridad (a partir de portes más recientes para 
-OpenBSD 6.1 --no incluidos en distribución inicial de binarios):
+OpenBSD 6.1):
 
 GeoIP-1.6.5p5.tgz, ImageMagick-6.9.8.3.tgz, abiword-3.0.1p7.tgz, 
 at-spi2-core-2.22.1.tgz, chromium-57.0.2987.133, colorls-5.7p2.tgz, 
@@ -86,7 +86,7 @@ scribus-1.4.5.tgz, tiff-4.0.8.tgz, vim-8.0.0388-gtk2.tgz,
 wget-1.18.tgz, wxWidgets-gtk2-2.8.12p12.tgz, x264-20170125p0.tgz, 
 x265-2.3p0.tgz, xfe-1.40.1p0.tgz
 
-## NOVEDADES RESPECTO A adJ 6.0 PROVENIENTES DE PASOS DE JESÚS
+## NOVEDADES RESPECTO A ADJ 6.0 PROVENIENTES DE PASOS DE JESÚS
 
 * Paquetes más actualizados: 
 	- php-5.6.31 --no es posible actualizar a 7 porque pear no opera y
@@ -95,7 +95,8 @@ x265-2.3p0.tgz, xfe-1.40.1p0.tgz
 
 * Se recompilaron todos los paquetes de perl (sin cambiar de versión) con
   el perl de adJ que soporta LC_NUMERIC.  Antes de actualizar a 6.1
-  es recomendable desintalar p5-Term-ReadKey si lo tiene.
+  es recomendable desintalar p5-Term-ReadKey si lo tiene (esto lo 
+  hace preact-adJ.sh de 6.1).
 
 
 * Documentación actualizada:
