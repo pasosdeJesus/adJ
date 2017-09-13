@@ -130,6 +130,6 @@ w3m, x265-2.3p0.tgz, xfe-1.40.1p0.tgz
 
 * Archivo de ordenes /usr/local/adJ/resto-altroot.sh para copiar 
   resto de particiones altroot ver 
-  <http://dhobsd.pasosdejesus.org/Respaldo_altroot.html>
+  <https://github.com/vtamara/dhobsd-m/blob/master/source/2014-08-13-Respaldo_altroot.html.markdown>
 
 
