@@ -260,6 +260,7 @@ giflib-[v]		Librería y herramientas para operar gráficos GIF
 ghostscript-[v]	Genera PostScript
 ghostscript-fonts-[v]	Fuentes para GhostScript
 glew-[v]		Librería GL Extension Wrangler
+glfw-[v]		
 glib2-[v]		Más rutinas
 glib2-networking-[v]	Más rutinas
 glib2mm-[v]		Interfaz en C++ para glib2
@@ -303,6 +304,7 @@ hicolor-icon-theme-[v]	Tema de iconos con colores altos
 hunspell-[v]	Análisis ortográfico, de raices y morfológico	
 hyphen-[v]		Librería de separación silábica
 icu4c-[v]		Componentes internacionales para Unicode
+icu4c-wwwdata-[v]		
 ijs-[v]		Librería para transmisión de imágenes raster
 imlib2-[v]		Librería para manipulación de imágenes 2
 iodbc-[v]		Manejador ODBC 2
@@ -383,6 +385,7 @@ libpaper-[v]	Librería para manejar tipos de papel
 libproxy-[v]	Librería para manejar detalles de un proxy
 libpsl-[v]  		Librería con lista de sufijos pública
 libpurple-[v]	Librería multiprotocolo de mensajería instantánea
+libraw-[v]
 librsvg-[v]		Librería para reconocer archivos SVG basada en SAX
 libsamplerate-[v]	Librería de conversión de rata de audios
 libsecret-[v]   	Librería para almacenar y recuperar claves y secretos
@@ -504,6 +507,7 @@ p7zip-rar-[v]	Módulos de rar para p7zip
 pango-[v]		Organización y presentación de texto
 pangomm-[v]		Interfaz en C++ para pango
 pcre-[v]		Librería de expresiones regulares a la Perl
+pcre2-[v]		
 pear-[v]		Clases base para tareas comunes en PHP
 pear-Auth-[v]		Sistema de autenticación para PHP5
 pear-Auth-SASL-[v]	Abstracción mecanismos de respuesta SASL
@@ -604,6 +608,7 @@ py-zopecomponent-[v]	Arquitectura por componentes de Zope
 py-zopeevent-[v]	Sistema de publicación básico de Zope
 py-zopeinterface-[v]	Interfaz a infraestructura de objetos de Zope
 python-tkinter-[v]	Interfaces gráficas Python
+qca-[v]	
 qca-ossl-[v]	Extensión de SSL/TLS para QCA2
 qca2-[v]    	Arquitectura criptográfica de Qt
 qhull-[v]		Calcular caso convexo
@@ -611,31 +616,41 @@ qdbm-[v]		Librería, base de datos de alto desempeño
 qjson-[v]		Librería Qt para asociar datos JSON a objectos QVariant
 qpdf-[v]    		Utilidad para inspeccionar y transformar PDF
 qscintilla-[v]		Porte del editor de código fuente Scintilla
+qt3d-[v]	Componentes de Qt5 para gráficas 3D
 qt4-[v]		Juego de herramientas en C++ para GUI en X11 v4
 qt5-[v]		Herramientas en C++ para GUI en X11 v5 (nokogiri)
+qt5-declarative-xmllistmodel-[v]		
 qtbase-[v]		Herramientas de propósito general en C++
+qtcanvas3d-[v]	Tipos QML para el API Qt5 del lienzo 3D
+qtcharts-[v]
+qtdatavis3d-[v]		
+qtdeclarative-[v]	Componentes Qt5 Quick y QML
+qtenginio-[v]	Motor para almacenamiento de datos en nube
+qtgraphicaleffects-[v]	Librería de efectos de la IU de Qt
+qtgamepad-[v]	Librería de efectos de la IU de Qt
+qtimageformats-[v]	Soporte para formatos de imagenes adicionales de Qt
+qtlocation-[v]	APIs Qt5 para geo posicionamiento
+qtmultimedia-[v]	Componentes multimedia de Qt5
+qtnetworkauth-[v]	Componentes multimedia de Qt5
+qtpurchasing-[v]
+qtquickcontrols-[v]	Controles de interaz basados en Qt Quick
+qtquickcontrols2-[v]	Controles de interfaz para Qt5 Quick de Qt Labs
+qtremoteobjects-[v]
+qtscript-[v]		Lenguaje ECMAScript para Qt5
+qtscxml-[v]		
 qtserialbus-[v]	API de Qt5 para acceder al bus serial
 qtsensors-[v]		Soporte en Qt5 para sensores de hardware
-qtlocation-[v]	APIs Qt5 para geo posicionamiento
+qtserialport-[v]	Componentes Qt5 de acceso al puertos seriales
+qtspeech-[v]
+qtsvg-[v]	Soporte SVG para Qt5
+qttools-[v]	Herramientas de desarrollo de Qt
 qttranslations-[v]	Traducción no oficiales de Qt5
-qtgraphicaleffects-[v]	Librería de efectos de la IU de Qt
+qtvirtualkeyboard-[v]
+qtwebchannel-[v]	Integración Qt5 HTML/Javascript
+qtwebkit-[v]	Antiguo marco de ingtegración entre Qt y Webkit
+qtwebsockets-[v]	Implementación para Qt5 del protocolo WebSocket
 qtxmlpatterns-[v]	Soporte Qt5 para XPath, XQuery, XLST y esquemas XML
 qtx11extras-[v]	Partes espécificas de Qt para X11
-qtscript-[v]		Lenguaje ECMAScript para Qt5
-qtquickcontrols-[v]	Controles de interaz basados en Qt Quick
-qtimageformats-[v]	Soporte para formatos de imagenes adicionales de Qt
-qtserialport-[v]	Componentes Qt5 de acceso al puertos seriales
-qtsvg-[v]	Soporte SVG para Qt5
-qtcanvas3d-[v]	Tipos QML para el API Qt5 del lienzo 3D
-qtwebchannel-[v]	Integración Qt5 HTML/Javascript
-qttools-[v]	Herramientas de desarrollo de Qt
-qt3d-[v]	Componentes de Qt5 para gráficas 3D
-qtenginio-[v]	Motor para almacenamiento de datos en nube
-qtdeclarative-[v]	Componentes Qt5 Quick y QML
-qtmultimedia-[v]	Componentes multimedia de Qt5
-qtwebsockets-[v]	Implementación para Qt5 del protocolo WebSocket
-qtquickcontrols2-[v]	Controles de interfaz para Qt5 Quick de Qt Labs
-qtwebkit-[v]	Antiguo marco de ingtegración entre Qt y Webkit
 qwt-[v]		Widgets Qt para aplicaciones técnicas
 raptor-[v]		Herramientas para reconocer RDF usadas por redland
 rarian-[v]		Librería para metadatos de documentación
@@ -652,6 +667,7 @@ samba-util-[v]	Librerías comunes para Samba
 sane-backends-[v]	API para acceder a scanners
 shared-mime-info-[v]	Base de datos mime compartida para escritorios
 sdl-[v]		Librería multimedia
+sdl2-[v]		
 sdl-image-[v]	Librería de imágenes de SDL
 silc-toolkit-[v]	Herramientas para desarrollo de aplicaciones SILC
 sound-theme-freedesktop-[v] 	Tema de sonido XDG
@@ -659,6 +675,7 @@ soundtouch-[v]	Librería para procesamiento de tempo/tono
 spandsp-[v]		Librería de PDS (DPS) para telefonía
 spatialindex-[v]	Librería para indexado y consultas espaciales
 speex-[v]		Codec para voz libre de patentes
+speexdsp-[v]		Codec para voz libre de patentes
 t1lib-[v]		Libreria para fuentes de letra tipo 1 rasterizer
 t1utils-[v]		Utilidades para fuentes PostScript tipo 1
 taglib-[v]		Para manejar meta-datos de formatos de audio
@@ -669,7 +686,7 @@ tremor-[v]	Decodificador OGG con aritmética entera
 twolame-[v]	Codificaodr de MPEG Audio Capa 2 (MP2) optimizado
 vamp-plugin-sdk-[v]	API para plugins de audio
 vim-lang-[v]	Soporte de idiomas para vim
-vte-[v]		Librería para emulación de terminal
+vte3-[v]		Librería para emulación de terminal
 wavpack-[v]		Codificador de audio para compresión con y sin perdida
 webkit-gtk3-[v]	Motor de navegador de fuentes abiertas  para Gtk+
 webkitgtk4-[v]	Interfaz para GTK+3
