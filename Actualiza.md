@@ -30,6 +30,7 @@ La actualización consta de 3 partes:
 
 	```
        	doas ~/comp/adJ/6.1-amd64/util/preact-adJ.sh
+
 	```
 
 2. Actualizar el sistema base:
@@ -52,8 +53,9 @@ La actualización consta de 3 partes:
   puede usar:
 
 	```
-	ARCH=~/comp/adJ/6.1-amd64 /inst-adJ.sh
+	ARCH=~/comp/adJ/6.1-amd64 doas /inst-adJ.sh
 	```
+	
 
   Este archivo de comandos asiste actualizaciones que puedan hacer 
   falta de una versión a otra del sistema base (descritas en
