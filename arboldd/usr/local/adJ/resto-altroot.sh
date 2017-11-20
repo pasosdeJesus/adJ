@@ -27,6 +27,6 @@ for i in `grep "altroot\/[^ \t]" /etc/fstab | sed -e "s/^\([^ ]*\) \([^ ]*\) .*/
 done
 
 for i in `grep "altroot\/[^ \t]" /etc/fstab | sed -e "s/^\([^ ]*\) \([^ ]*\) .*/\1|\2/g"`; do
-	ord="/usr/local/bin/rsync -ravzp $o/* /altroot$o/"
+	ord="/usr/local/bin/rsync --delete -ravzp $o/* /altroot$o/"
 	ejord
 done
