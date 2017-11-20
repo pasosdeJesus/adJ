@@ -1,0 +1,14 @@
+$OpenBSD$
+
+Index: src/modules/lexdict/zld/zld.cpp
+--- src/modules/lexdict/zld/zld.cpp.orig
++++ src/modules/lexdict/zld/zld.cpp
+@@ -166,7 +166,7 @@ void zLD::deleteEntry() {
+ 
+ long zLD::getEntryCount() const
+ {
+-	if (idxfd < 0) return 0;
++	if ((long)idxfd <= 0) return 0;
+ 	return idxfd->seek(0, SEEK_END) / IDXENTRYSIZE;
+ }
+ 
