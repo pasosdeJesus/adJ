@@ -1,4 +1,4 @@
-Con respecto a OpenBSD 6.0 las novedades son:
+Con respecto a OpenBSD 6.1 las novedades son:
 
 * Proceso de Instalación:
 	* upgrade install install.sub 	En español
@@ -28,7 +28,11 @@ Con respecto a OpenBSD 6.0 las novedades son:
 		* sysmerge	Usa llaves de adJ
 		* Muchos otros cambiando daemon por servicio
 	* Archivos de órdenes nuevos en /usr/local/adJ/
-		* amplia-vnd.sh 	Amplia tamaño de imagen cifrada para vnd
+
+		* resto-altroot.sh     para copiar resto de particiones altroot
+		  ver <http://dhobsd.pasosdejesus.org/Respaldo_altroot.html>
+		* amplia-vnd.sh 	Amplia tamaño de imagen cifrada para 
+		  vnd
 		* cuentaips.sh 	Cuenta frecuencia de IPs en bitácora
 		* inst-adJ.sh	Instala adJ
 		* inst-sivel.sh	Instala SIVeL
@@ -40,7 +44,7 @@ Con respecto a OpenBSD 6.0 las novedades son:
 		* rutinas.sh	Diversas rutinas para archivos de ord.
 		* servicio-etc.sh	Cambia daemon por servicio en /etc
 		* vuelcamysql.sh Vuelca base de datos MySQL
-	* Páginas del manual nuevas en /usr/shar/man/man3
+	* Páginas del manual nuevas:
 		* ctype_l digittoint_l duplocale freelocale isalnum_l,
 		isalpha_l isascii_l isblank_l iscntrl_l isdigit_l
 		isgraph_l ishexnumber_l isideogram_l islower_l isnumber_l
@@ -73,7 +77,7 @@ Con respecto a OpenBSD 6.0 las novedades son:
 	* Librerías modificadas
 		* libc 		Con soporte para localizaciones y xlocale
 	* Archivos de configuración en /etc
-		* X11/xdm/pixmas/adJ_*.xpm	Logo
+		* X11/xenodm/pixmas/adJ_*.xpm	Logo
 		* signify/adJ-*.pub	Llaves criptográficas
 		* En la mayoría de casos daemon remplazado por servicio
 	* Archivos de configuración de ejemplo en /usr/local/shar/examples/adJ
@@ -83,28 +87,27 @@ Con respecto a OpenBSD 6.0 las novedades son:
 * Paquetes
 	* Retroportados para cerrar fallas o actualizar y usar xlocale
 		* postgresql-server postgresql-client postgresql-contrib 
-			postgresql-docs ruby ruby24-ri_docs node
-	* Recompilados de portes estables para cerrar fallas
-		*  curl, flac, gstreamer, gstreamer1, libarchive, mpg123,
-		  mariadb, p5-DBD-mysql, p7zip, samba, tiff, vim, xz,
-		  zip                         
+			postgresql-docs ruby ruby24-ri_docs 
+	* Se recompilaron bastantes paquetes de portes estables para cerrar 
+	  fallas (ver Novedades.md)
+	* Paquetes más actualizados: 
+		* php-5.6.31 --no es posible actualizar a 7 porque pear no 
+		  opera y sivel 1.2 depende de pear
+		* Ocaml 4.0.5 junto con ocamlbuild, ocaml-labltk, 
+		  ocaml-camlp4 y hevea
+	* Recompilados todos los paquetes de perl
 	* Recompilado con llave de adJ
 		* chromium 
 	* Modificados para usar xlocale
 		* libunistring, vlc
 	* Recompilados de portes estables para usar xlocale y cerrar fallas
 		* gettext-tools, gdk-pixbuf, glib2, gtar, libidn, 
-		  libunistring, libxslt, llvm, scribus, vlc, wget,
+		  libunistring, libxslt, llvm, scribus, wget,
 		  wxWidgets-gtk2  
 	* Adaptados de portes estables pero mejorados para adJ:
 		* colorls	Ordena alfabeticamente de acuerdo a locale
 		* hexedit 	Soporta tamaños de archivos más grandes
 		* xfe		Soporta paquetes tgz
-		* p5-Mail_SpamAssassin usa gnupg reciente
-	* Actualizados, pues están desactualizado en OpenBSD estable y current
-		* php php-bz2 php-curl php-fpm php-gd php-intl php-ldap 
-		php-mcrypt php-mysqli- php-pdo_pgsql php-pgsql php-zip
-		pear-Auth pear-DB_DataObject ocaml ocaml-ocamlbuild 
 	* Unicos en adJ 
 		* emulators/realboy lang/ocaml-labltk sysutils/ganglia 
 		sysutils/htop textproc/biblesync

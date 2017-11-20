@@ -1979,7 +1979,7 @@ if (test "$p" != "") then {
 		for i in php php-2 php5-core partial-php5-core partial-php5-pear partial-php; do
 			pkg_delete -I -D dependencies $i >> /var/www/tmp/inst-adJ.bitacora 2>&1
 		done;
-		rm -rf /etc/php-5.3* /etc/php-5.4*
+		rm -rf /etc/php-*
 	} fi;
 } fi;
 
@@ -2165,6 +2165,11 @@ q
 EOF
 	ed /etc/php-fpm.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/; *listen *=.*/listen = \/var\/www\/var\/run\/php-fpm.sock/g
+w
+q
+EOF
+	ed /etc/php-fpm.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
+,s/^listen = .var.www.run.php-fpm.sock/listen = \/var\/www\/var\/run\/php-fpm.sock/g
 w
 q
 EOF

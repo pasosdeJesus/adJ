@@ -74,9 +74,11 @@ if (test ! -S "$sockpsql/.s.PGSQL.5432") then {
   sockpsql="/var/www/tmp"
   echo "* Detectando socket de PostgreSQL en $sockpsql" >> /var/tmp/preact-adJ.bitacora
   if (test ! -S "$sockpsql/.s.PGSQL.5432") then {
-    echo "* Tampoco se encontró socket de PostgreSQL en $sockpsql" | tee -a /var/tmp/preact-adJ.bitacora;
-    echo "* Puede ejecutar especificando la ruta del socket de PostgreSQL en variable SOCKPSQL";
-    exit 1;
+
+	  dialog --title 'No se respaldará PostgreSQL' --msgbox "\\nNo se encontro socket de PostgreSQL (en $sockpsql).\\n
+	  \\n¡No se hará respaldo de PostgreSQL!
+	  \\n\\nSi prefiere detenga (con Control-C) y ejecute nuevamente especificando la ruta del socket de PostgreSQL en la variable SOCKPSQL\\n" 15 60
+    ignorpost=1
   } fi;
 } fi;
 
@@ -166,9 +168,6 @@ ingreso si depende de paquetes para ingresar al sistema\\n
 	cd /var/db/pkg
 	pkg_delete *
 	echo "\\nSistema preparado para actualizar\\n"
-} else {
-	dialog --title 'Preparado' --msgbox "\\nSistema preparado para actualizar\\n" 15 60
-	clear
 } fi;
 
 if (test "$ACVER" -lt "60") then {
@@ -181,3 +180,14 @@ Se eliminarán todas las páginas del manual para que se instalen las nuevas al 
 	} fi;
 } fi;
 	
+dialog --title 'Advertencia: por borrar paquete p5-Term-ReadKey' --yesno "\\nSe liminará paquete p5-Term-ReadKey (si existe) para evitar problemas con perl, pkg_add y pkg_delete.
+\\n\\nSi llega a tener problemas con esos programas se recomienda borrar todos los paquetes de perl (p5-*) y volver a instalar los distribuidos con adJ\\n
+¿Continuar?" 17 60
+if (test "$?" = "0") then {
+	pkg_delete p5-Term-ReadKey > /dev/null 2>/dev/null
+} fi;
+
+dialog --title 'Otras bases binarias' --msgbox "\\nRecuerde sacar copia de otras bases binarias, pues este archivo de ordenes solo saco de PostgreSQL\\n" 15 60
+
+clear
+

@@ -768,7 +768,6 @@ if (test "$sn" = "s") then {
 	# Modificados para posibilitar compilación
 	# Deben estar en mystuff
 
-
 	# Todo lo de perl tuvo que recompilarse
 	paquete p5-Clone
 	paquete p5-Crypt-OpenSSL-Bignum
@@ -827,18 +826,15 @@ if (test "$sn" = "s") then {
 	paquete p5-NetAddr-IP
 	paquete p5-DBI
 	paquete p5-Mail-SpamAssassin
-	exit 1
 
 	####
 	# Retroportados para cerrar fallas o actualizar
 	# Deben estar en arboldes/usr/ports/mystuff y en /usr/ports de current
-	#paquete ruby paquetes "ruby ruby24-ri_docs" 2.4
 
 :	###
         # Actualizados.  Están desactualizado en OpenBSD estable y current
-	paquete php paquetes "php php-bz2 php-curl php-fpm php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 5.6
+	paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 5.6
 	paquete ocaml 
-
 
 	####
 	# Recompilados para cerrar fallas de portes actualizados (estable)
@@ -948,6 +944,7 @@ if (test "$sn" = "s") then {
 	#paquete postgis
 	#paquete py-psycopg2
 	#paquete qgis
+	paquete w3m
 
 	# Recompilado con llave de adJ
 	paquete chromium
