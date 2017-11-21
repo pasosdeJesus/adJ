@@ -1,22 +1,21 @@
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/locale/Makefile.inc src/lib/libc/locale/Makefile.inc
 --- src54-s/lib/libc/locale/Makefile.inc	Mon Oct  7 07:54:44 2013
 +++ src/lib/libc/locale/Makefile.inc	Sat Oct 12 13:23:41 2013
-@@ -12,7 +12,7 @@
- 	wcstombs.c wctob.c wctomb.c wcstof.c wcstod.c wcstold.c wcstol.c \
- 	wcstoul.c wcstoll.c wcstoull.c wcstoimax.c wcstoumax.c \
- 	setrunelocale.c runeglue.c rune.c runetable.c ___runetype_mb.c \
--	_wctrans.c wcsxfrm.c loadtextcat.c 
-+	_wctrans.c wcsxfrm.c loadtextcat.c collate.c
- 
- MAN+=	nl_langinfo.3 setlocale.3 iswalnum.3 towlower.3 \
- 	btowc.3 mblen.3 mbrlen.3 mbrtowc.3 mbsinit.3 mbsrtowcs.3 \
-@@ -42,5 +42,5 @@
- 	mbsrtowcs.3 mbsnrtowcs.3 \
- 	wcsrtombs.3 wcsnrtombs.3
+@@ -6,7 +6,7 @@
+ SRCS+=	btowc.c _def_messages.c _def_monetary.c _def_numeric.c _def_time.c \
+ 	localeconv.c nl_langinfo.c nl_langinfo_l.c setlocale.c \
+ 	duplocale.c freelocale.c newlocale.c uselocale.c \
+-	__mb_cur_max.c _CurrentRuneLocale.c _get_locname.c \
++	__mb_cur_max.c collate.c _CurrentRuneLocale.c _get_locname.c \
+ 	isctype_l.c iswctype.c iswctype_l.c \
+ 	loadtextcat.c \
+ 	mblen.c mbrlen.c mbstowcs.c mbtowc.c multibyte_citrus.c wcscoll.c \
+@@ -23,4 +23,4 @@
+ 	wcstol.3 wcstombs.3 wcsxfrm.3 wctob.3 wctomb.3 \
+ 	wctype.3 iswctype.3 wctrans.3 towctrans.3 wcwidth.3
  
 -CFLAGS+=-I${.CURDIR} -I${LIBCSRCDIR}/citrus
 +CFLAGS+=-I${.CURDIR} -I${LIBCSRCDIR}/citrus -DCOLLATE_DEBUG
- CFLAGS+=-DLOCALE_CHARSETS="\"${LOCALECHARSETS}\""
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/locale/collate.c src/lib/libc/locale/collate.c
 --- src54-s/lib/libc/locale/collate.c	Wed Dec 31 19:00:00 1969
 +++ src/lib/libc/locale/collate.c	Sat Oct 12 18:43:30 2013
@@ -563,37 +562,26 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/locale/collate
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src55-orig/lib/libc/locale/setlocale.c src/lib/libc/locale/setlocale.c
 --- src55-orig/lib/libc/locale/setlocale.c	Fri Oct 18 09:22:17 2013
 +++ src/lib/libc/locale/setlocale.c	Thu Apr  3 09:15:33 2014
-@@ -39,6 +39,7 @@
+@@ -19,6 +19,7 @@
+ #include <stdlib.h>
  #include <string.h>
- #include <unistd.h>
  
 +#include "collate.h"
- #include "localedef.h"
  #include "rune.h"
- #include "rune_local.h"
-@@ -200,7 +201,11 @@
- 		__install_currentrunelocale_ctype();
- 		break;
- 	case LC_MESSAGES:
-+		break;
- 	case LC_COLLATE:
-+ 		if (__collate_load_tables("C"))
-+			return;
-+		break;
- 	case LC_MONETARY:
- 	case LC_NUMERIC:
- 		break;
-@@ -249,6 +254,10 @@
- 		return set_lc_messages_locale(locname);
  
- 	case LC_COLLATE:
-+		if (__collate_load_tables(locname))
-+			return -1;
-+		break;
-+		
- 	case LC_MONETARY:
- 	case LC_NUMERIC:
- 		return -1;
+ static void
+@@ -73,6 +74,11 @@
+ 			case LC_MESSAGES:
+ 				break;
+ 			case LC_COLLATE:
++				if (__collate_load_tables(locname) != 0) {
++					free(cp);
++					return -1;
++				}
++				break;
+ 			case LC_MONETARY:
+ 			case LC_NUMERIC:
+ 				break;
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/locale/wcscoll.3 src/lib/libc/locale/wcscoll.3
 --- src54-s/lib/libc/locale/wcscoll.3	Wed Dec 31 19:00:00 1969
 +++ src/lib/libc/locale/wcscoll.3	Sat Oct 12 13:23:41 2013
@@ -1094,18 +1082,34 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/string/strcoll
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/string/strxfrm.3 src/lib/libc/string/strxfrm.3
 --- src54-s/lib/libc/string/strxfrm.3	Mon Oct  7 07:49:09 2013
 +++ src/lib/libc/string/strxfrm.3	Sat Oct 12 13:23:41 2013
-@@ -72,8 +72,7 @@
- .Fn strxfrm
- function first appeared in
- .Bx 4.3 Reno .
-+.\" ----------------------------------------------------------------------
- .Sh BUGS
--Since locales are not fully implemented on
+@@ -62,17 +62,12 @@
+ .Xr strcoll 3
+ on the original untransformed strings would return.
+ .Pp
+-On
 -.Ox ,
--.Fn strxfrm
--just returns a copy of the original string.
-+The current implementation is enough only for single byte encodings and UTF-8
-+translatable to ISO8859-1.
+-both have the same effect as
+-.Xr strlcpy 3 ,
+-and the global locale, the thread-specific locale, and the
+-.Fa locale
+-argument are ignored.
++On adJ the implementation is enough for the portion of UTF-8 translatable
++to ISO8859-1.
+ .Sh ENVIRONMENT
+-On other operating systems, the behaviour of
++The behaviour of
+ .Fn strxfrm
+-may depend on the
++depends on the
+ .Dv LC_CTYPE
+ .Xr locale 1 .
+ .Sh SEE ALSO
+@@ -99,4 +94,4 @@
+ and
+ .Fn strxfrm_l
+ since
+-.Ox 6.2 .
++.Ox 6.2 and since adJ 5.6.
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/string/strxfrm.c src/lib/libc/string/strxfrm.c
 --- src54-s/lib/libc/string/strxfrm.c	Mon Oct  7 07:49:09 2013
 +++ src/lib/libc/string/strxfrm.c	Sat Oct 12 13:23:41 2013
@@ -1223,15 +1227,6 @@ diff -ruN src59-orig/lib/libc/hidden/wchar.h src/lib/libc/hidden/wchar.h
  PROTO_NORMAL(wcscmp);
 -PROTO_STD_DEPRECATED(wcscoll);
 +PROTO_NORMAL(wcscoll);
+ PROTO_DEPRECATED(wcscoll_l);
  PROTO_STD_DEPRECATED(wcscpy);
  PROTO_NORMAL(wcscspn);
- PROTO_NORMAL(wcsdup);
-@@ -80,7 +80,7 @@
- PROTO_NORMAL(wcstoull);
- PROTO_DEPRECATED(wcswcs);
- PROTO_NORMAL(wcswidth);
--PROTO_STD_DEPRECATED(wcsxfrm);
-+PROTO_NORMAL(wcsxfrm);
- PROTO_NORMAL(wctob);
- PROTO_NORMAL(wcwidth);
- PROTO_NORMAL(wmemchr);

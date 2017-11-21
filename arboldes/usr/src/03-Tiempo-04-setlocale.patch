@@ -52,17 +52,16 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/locale/_def
 +	return ret;
 +}
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/locale/Makefile.inc src/lib/libc/locale/Makefile.inc
---- src56-orig/lib/libc/locale/Makefile.inc	Wed Aug 28 11:53:34 2013
-+++ src/lib/libc/locale/Makefile.inc	Fri Apr 25 10:11:05 2014
-@@ -12,7 +12,7 @@
+--- src62-orig/lib/libc/locale/Makefile.inc	Mon Sep  4 22:16:13 2017
++++ src/lib/libc/locale/Makefile.inc	Sun Nov 19 05:55:44 2017
+@@ -8,6 +8,7 @@
+ 	duplocale.c freelocale.c newlocale.c uselocale.c \
+ 	__mb_cur_max.c _CurrentRuneLocale.c _get_locname.c \
+ 	isctype_l.c iswctype.c iswctype_l.c \
++	loadtextcat.c \
+ 	mblen.c mbrlen.c mbstowcs.c mbtowc.c multibyte_citrus.c wcscoll.c \
+ 	wcscoll_l.c \
  	wcstombs.c wctob.c wctomb.c wcstof.c wcstod.c wcstold.c wcstol.c \
- 	wcstoul.c wcstoll.c wcstoull.c wcstoimax.c wcstoumax.c \
- 	setrunelocale.c runeglue.c rune.c runetable.c ___runetype_mb.c \
--	_wctrans.c wcsxfrm.c
-+	_wctrans.c wcsxfrm.c loadtextcat.c 
- 
- MAN+=	nl_langinfo.3 setlocale.3 iswalnum.3 towlower.3 \
- 	btowc.3 mblen.3 mbrlen.3 mbrtowc.3 mbsinit.3 mbsrtowcs.3 \
 diff -ruN src56-orig/lib/libc/locale/loadtextcat.h src/lib/libc/locale/loadtextcat.h
 --- src56-orig/lib/libc/locale/loadtextcat.h	Wed Dec 31 19:00:00 1969
 +++ src/lib/libc/locale/loadtextcat.h	Mon Apr 28 22:16:18 2014
@@ -310,7 +309,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/locale/load
 +	}
 +	if ((dst_locale_buf_size / sizeof(char *)) < locale_buf_lines) {
 +		snprintf(error_buf, error_buf_size, 
-+				"Wrong size of dst_locale_buf %i", 
++				"Wrong size of dst_locale_buf %li", 
 +				sizeof(dst_locale_buf));
 +		goto no_locale;
 +	}
@@ -344,7 +343,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/locale/load
 +	}
 +	if (st.st_size <= 0) {
 +		snprintf(error_buf, error_buf_size, 
-+				"Wrong file size %i", st.st_size);
++				"Wrong file size %lli", st.st_size);
 +		goto bad_locale;
 +	}
 +	bufsize = namesize + st.st_size;
@@ -358,7 +357,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/locale/load
 +	plim = p + st.st_size;
 +	if (read(fd, p, (size_t) st.st_size) != st.st_size) {
 +		snprintf(error_buf, error_buf_size, 
-+				"Couldn't read %i bytes", st.st_size);
++				"Couldn't read %lli bytes", st.st_size);
 +		goto bad_lbuf;
 +	}
 +	if (close(fd) != 0) {
@@ -419,37 +418,33 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/locale/load
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/locale/setlocale.c src/lib/libc/locale/setlocale.c
 --- src56-orig/lib/libc/locale/setlocale.c	Wed Aug 28 11:53:34 2013
 +++ src/lib/libc/locale/setlocale.c	Thu Apr 24 13:57:31 2014
-@@ -81,6 +81,9 @@
- static char	*loadlocale(int);
- static const char *__get_locale_env(int);
+@@ -51,6 +51,8 @@
+ 	return newgl;
+ }
  
 +extern int __time_load_locale(const char *name);
 +
-+
- char *
- setlocale(int category, const char *locale)
+ static int
+ changegl(int category, const char *locname, char **gl, char **oldgl)
  {
-@@ -203,7 +206,10 @@
- 	case LC_COLLATE:
- 	case LC_MONETARY:
- 	case LC_NUMERIC:
-+		break;
- 	case LC_TIME:
-+		if (__time_load_locale("C"))
-+			return;
- 		break;
+@@ -67,13 +69,18 @@
+ 					strchr(locname, '.') == NULL ?
+ 					&_DefaultRuneLocale : _Utf8RuneLocale;
+ 				break;
+-
++			
+ 			case LC_MESSAGES:
+ 				break;
+ 			case LC_COLLATE:
+ 			case LC_MONETARY:
+ 			case LC_NUMERIC:
++				break;
+ 			case LC_TIME:
++				if (__time_load_locale(locname) != 0) {
++					free(cp);
++					return -1;
++				}
+ 				break;
+ 		}
  	}
- }
-@@ -264,8 +270,11 @@
- 	case LC_COLLATE:
- 	case LC_MONETARY:
- 	case LC_NUMERIC:
--	case LC_TIME:
- 		return -1;
-+	case LC_TIME:
-+		if (__time_load_locale(locname)) 
-+			return -1;
-+		break;
- 	}
- 
- 	return 0;
+

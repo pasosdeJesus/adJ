@@ -1,0 +1,88 @@
+diff -ruN src62-orig/lib/libc/locale/setlocale.c src/lib/libc/locale/setlocale.c
+--- src62-orig/lib/libc/locale/setlocale.c	Mon Sep  4 22:16:13 2017
++++ src/lib/libc/locale/setlocale.c	Mon Nov 20 11:02:54 2017
+@@ -52,7 +52,7 @@
+ }
+ 
+ static int
+-changegl(int category, const char *locname, char **gl)
++changegl(int category, const char *locname, char **gl, char **oldgl)
+ {
+ 	char *cp;
+ 
+@@ -60,6 +60,24 @@
+ 	    (cp = strdup(locname)) == NULL)
+ 		return -1;
+ 
++	if (oldgl == NULL || strcmp(oldgl[category], locname) != 0) {
++		switch (category) {
++			case LC_CTYPE:
++				_GlobalRuneLocale =
++					strchr(locname, '.') == NULL ?
++					&_DefaultRuneLocale : _Utf8RuneLocale;
++				break;
++
++			case LC_MESSAGES:
++				break;
++			case LC_COLLATE:
++			case LC_MONETARY:
++			case LC_NUMERIC:
++			case LC_TIME:
++				break;
++		}
++	}
++
+ 	free(gl[category]);
+ 	gl[category] = cp;
+ 	return 0;
+@@ -97,7 +115,7 @@
+ 			nextname = firstname;
+ 			for (ic = 1; ic < _LC_LAST; ic++)
+ 				if (nextname == NULL || changegl(ic,
+-				    strsep(&nextname, "/"), newgl) == -1)
++				    strsep(&nextname, "/"), newgl, global_locale) == -1)
+ 					break;
+ 			free(firstname);
+ 			if (ic < _LC_LAST || nextname != NULL) {
+@@ -107,7 +125,7 @@
+ 		} else {
+ 
+ 			/* One value only. */
+-			if (changegl(category, locname, newgl) == -1) {
++			if (changegl(category, locname, newgl, global_locale) == -1) {
+ 				freegl(newgl);
+ 				return NULL;
+ 			}
+@@ -116,7 +134,7 @@
+ 			if (category == LC_ALL) {
+ 				for (ic = 1; ic < _LC_LAST; ic++) {
+ 					if (changegl(ic, locname,
+-					    newgl) == -1) {
++					    newgl, global_locale) == -1) {
+ 						freegl(newgl);
+ 						return NULL;
+ 					}
+@@ -174,18 +192,14 @@
+ 
+ done:
+ 	if (locname != NULL) {
+-		/*
+-		 * We can't replace the global locale earlier
+-		 * because we first have to make sure that we
+-		 * also have the memory required to report success.
+-		 */
+ 		if (global_locname[0] != '\0') {
++			/*
++		 	* We can't replace the global locale earlier
++		 	* because we first have to make sure that we
++		 	* also have the memory required to report success.
++		 	*/
+ 			freegl(global_locale);
+ 			global_locale = newgl;
+-			if (category == LC_ALL || category == LC_CTYPE)
+-				_GlobalRuneLocale =
+-				    strchr(global_locname, '.') == NULL ?
+-				    &_DefaultRuneLocale : _Utf8RuneLocale;
+ 		} else {
+ 			freegl(newgl);
+ 			return NULL;

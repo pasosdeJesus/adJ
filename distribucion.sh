@@ -91,8 +91,10 @@ if (test "$sn" = "s") then {
 
 	if (test -d /usr/src$VP-orig/) then {
 		cd /usr/src$VP-orig
+		echo "/usr/src$VP-orig"
 	} else {
 		cd /usr/src
+		echo "/usr/src"
 	} fi;
 	if (test ! -f CVS/Root) then {
 		for i in `find . -name CVS`; do 
@@ -169,7 +171,6 @@ if (test "$sn" = "s") then {
 	} fi;
 
 	cd /sys
-	function saltatemp {
 	$dini/hdes/servicio-kernel.sh 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora	
 	# Esta en general se cambiaron comentarios a lo largo de todas
     # las fuentes.  Ver documentación en 
@@ -177,12 +178,12 @@ if (test "$sn" = "s") then {
 
 	# Para compilar vmstat
 	cp /sys/uvm/uvm_extern.h /usr/include/uvm/ 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
-}
 
 	cd /sys/arch/$ARQ/conf 2>&1 >> /var/www/tmp/distrib-adJ.bitacora
 	echo "pwd=" `pwd` 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
 	sed -e "s/^#\(option.*NTFS.*\)/\1/g" GENERIC > APRENDIENDODEJESUS
 	rm -rf /sys/arch/$ARQ/compile/APRENDIENDODEJESUS/obj/* 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
+	chown -R build:wsrc /usr/obj
 	config APRENDIENDODEJESUS 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
 	cd ../compile/APRENDIENDODEJESUS 2>&1 >> /var/www/tmp/distrib-adJ.bitacora
 	echo "pwd=" `pwd` 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora

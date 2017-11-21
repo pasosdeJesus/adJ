@@ -12,7 +12,7 @@ diff -ruN -x *~ -x *orig src56-orig/share/locale/Makefile src/share/locale/Makef
 diff -ruN -x *~ -x *orig src56-orig/share/locale/cldr/Makefile src/share/locale/cldr/Makefile
 --- src56-orig/share/locale/cldr/Makefile	Wed Dec 31 19:00:00 1969
 +++ src/share/locale/cldr/Makefile	Wed Mar  4 11:40:56 2015
-@@ -0,0 +1,205 @@
+@@ -0,0 +1,137 @@
 +# Remotely based on FreeBSD
 +
 +TIME_SIZE=	45
@@ -69,56 +69,6 @@ diff -ruN -x *~ -x *orig src56-orig/share/locale/cldr/Makefile src/share/locale/
 +		zh.UTF-8 \
 +		zh_TW.UTF-8
 +
-+TRANSF= 	be.CP1251 \
-+		be.ISO8859-5 \
-+		bg.CP1251 \
-+		ca.ISO8859-1 \
-+		cs.ISO8859-2 \
-+		da.ISO8859-1 \
-+		de_AT.ISO8859-1 \
-+		de.ISO8859-1 \
-+		el.ISO8859-7 \
-+		en.ISO8859-1 \
-+		es.ISO8859-1 \
-+		es_CL.ISO8859-1 \
-+		es_CO.ISO8859-1 \
-+		es_GT.ISO8859-1 \
-+		es_HN.ISO8859-1 \
-+		es_PA.ISO8859-1 \
-+		es_PE.ISO8859-1 \
-+		es_PR.ISO8859-1 \
-+		es_US.ISO8859-1 \
-+		et.ISO8859-15 \
-+		eu.ISO8859-1 \
-+		fi.ISO8859-1 \
-+		fr.ISO8859-1 \
-+		hr.ISO8859-2 \
-+		hu.ISO8859-2 \
-+		is.ISO8859-1 \
-+		it.ISO8859-1 \
-+		lt.ISO8859-4 \
-+		lt.ISO8859-13 \
-+		lv.ISO8859-13 \
-+		nb.ISO8859-1 \
-+		nl.ISO8859-1 \
-+		nn.ISO8859-1 \
-+		pl.ISO8859-2 \
-+		pt_BR.ISO8859-1 \
-+		pt.ISO8859-1 \
-+		ro.ISO8859-2 \
-+		ru.CP1251 \
-+		ru.CP866 \
-+		ru.ISO8859-5 \
-+		ru.KOI8-R \
-+		sk.ISO8859-2 \
-+		sl.ISO8859-2 \
-+		tr.ISO8859-9 \
-+		sv.ISO8859-1 \
-+		sr.ISO8859-2 \
-+		sr.ISO8859-5 
-+
-+# Coulnd't translate from UTF-8: hy.ARMSCII-8  uk.CP1251  uk.ISO8859-5 uk.KOI8-U
-+
 +LOCALEDIR=      /usr/share/locale
 +
 +.SUFFIXES: .src .out
@@ -132,40 +82,22 @@ diff -ruN -x *~ -x *orig src56-orig/share/locale/cldr/Makefile src/share/locale/
 +		exit 1; \
 +	} fi;
 +
-+.for t in ${TRANSF}
-+${t}.out: ${t:C/\.[-A-Z0-9]*//}.UTF-8.out
-+	cp ${t:C/\.[-A-Z0-9]*//}.UTF-8.out ${t}.out
-+	recode UTF8..${t:C/^.*\.//} ${t}.out
-+.endfor
-+
-+
-+FILES=		${LOCALES:S/$/.out/} ${TRANSF:S/$/.out/}
++FILES=		${LOCALES:S/$/.out/}
 +FILESNAME=	LC_TIME
 +
 +all: ${FILES}
 +
-+.for locale in ${LOCALES} ${TRANSF}
++.for locale in ${LOCALES}
 +FILESDIR_${locale}.out= ${LOCALEDIR}/${locale}
 +.endfor
 +
 +CLEANFILES=	${FILES}
 +
-+ENCODINGS=	ISO8859-1 ISO8859-2 ISO8859-4 ISO8859-15 \
-+		US-ASCII UTF-8
++ENCODINGS=	US-ASCII UTF-8
 +
 +NO_LINKS=	nb:no_NO
 +
-+eucKR_CP949=	ko
-+GB2312_GBK=	zh
-+ISO8859-1_ISO8859-1= ${ES_LINKS} ${NO_LINKS} en_US:af_ZA
-+ISO8859-1_ISO8859-15= ca da de de en \
-+		es es_CL es_CO es_GT es_HN es_PA es_PE es_PR es_US eu \
-+		fi fr is it la nb nn pt pt_BR \
-+		sv ${ES_LINKS} 
-+ISO8859-1_US-ASCII= en
-+ISO8859-1_UTF-8= en eu nl
-+UTF-8_Big5HKSCS= zh_TW:zh_HK
-+UTF-8_UTF-8=	${ES_LINKS} ${NO_LINKS} zh_TW:zh_HK
++UTF-8_UTF-8=	${NO_LINKS} zh_TW:zh_HK
 +
 +SYMLINKS=
 +.for enc1 in ${ENCODINGS}
@@ -178,7 +110,7 @@ diff -ruN -x *~ -x *orig src56-orig/share/locale/cldr/Makefile src/share/locale/
 +.endfor
 +
 +install:
-+.for locale in ${LOCALES} ${TRANSF}
++.for locale in ${LOCALES}
 +	install -o ${LOCALEOWN} -g ${LOCALEGRP} -m ${DIRMODE} -d \
 +	    ${DESTDIR}${FILESDIR_${locale}.out}
 +	install -o ${LOCALEOWN} -g ${LOCALEGRP} -m ${LOCALEMODE} \
@@ -192,7 +124,7 @@ diff -ruN -x *~ -x *orig src56-orig/share/locale/cldr/Makefile src/share/locale/
 +.endfor
 +
 +uninstall:
-+.for locale in ${LOCALES} ${TRANSF}
++.for locale in ${LOCALES}
 +	if (test -f ${DESTDIR}${FILESDIR_${locale}.out}/${FILESNAME}) then { \
 +	rm -f ${DESTDIR}${FILESDIR_${locale}.out}/${FILESNAME}; \
 +	} fi; \

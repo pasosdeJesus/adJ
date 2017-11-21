@@ -45,7 +45,7 @@ USUARIOCVS="anoncvs"
 MAQCVS="anoncvs4.usa.openbsd.org"
 DIRCVS="/cvs"
 
-export DESTDIR=/destdir; 
+export DESTDIR=/build/destdir; 
 export RELEASEDIR=/releasedir
 export XSRCDIR=/usr/xenocara;
 # Directorios para compilación 
