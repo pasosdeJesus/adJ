@@ -12,12 +12,13 @@ diff -ruN -x *~ -x *orig src56-orig/share/locale/Makefile src/share/locale/Makef
 diff -ruN -x *~ -x *orig src56-orig/share/locale/cldr/Makefile src/share/locale/cldr/Makefile
 --- src56-orig/share/locale/cldr/Makefile	Wed Dec 31 19:00:00 1969
 +++ src/share/locale/cldr/Makefile	Wed Mar  4 11:40:56 2015
-@@ -0,0 +1,137 @@
+@@ -0,0 +1,138 @@
 +# Remotely based on FreeBSD
 +
 +TIME_SIZE=	45
 +
-+LOCALES=	am.UTF-8 \
++LOCALES=	UTF-8 \
++		am.UTF-8 \
 +		be.UTF-8 \
 +		bg.UTF-8 \
 +		ca.UTF-8 \
@@ -4965,4 +4966,60 @@ diff -ruN -x *~ -x *orig src56-orig/share/locale/cldr/zh_TW.UTF-8.src src/share/
 +t_fmt_ampm  "%p%I:%M:%S"
 +
 +END LC_TIME
-
+diff -ruN -x *~ -x *orig src62-orig/share/locale/cldr/UTF-8.src src/share/locale/cldr/UTF-8.src
+--- src62-orig/share/locale/cldr/UTF-8.src.orig	Wed Nov 22 08:44:51 2017
++++ src/share/locale/cldr/UTF-8.src	Wed Nov 22 08:44:10 2017
+@@ -0,0 +1,53 @@
++comment_char #
++escape_char /
++
++# Taken from
++# http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap07.html
++
++LC_TIME
++# This is the POSIX locale definition for
++# the LC_TIME category.
++#
++# Full weekday names (%A)
++day        "<S><u><n><d><a><y>";"<M><o><n><d><a><y>";\
++           "<T><u><e><s><d><a><y>";"<W><e><d><n><e><s><d><a><y>";\
++           "<T><h><u><r><s><d><a><y>";"<F><r><i><d><a><y>";\
++           "<S><a><t><u><r><d><a><y>"
++#
++# Abbreviated month names (%b)
++abmon      "<J><a><n>";"<F><e><b>";"<M><a><r>";\
++           "<A><p><r>";"<M><a><y>";"<J><u><n>";\
++           "<J><u><l>";"<A><u><g>";"<S><e><p>";\
++           "<O><c><t>";"<N><o><v>";"<D><e><c>"
++#
++# Full month names (%B)
++mon        "<J><a><n><u><a><r><y>";"<F><e><b><r><u><a><r><y>";\
++           "<M><a><r><c><h>";"<A><p><r><i><l>";\
++           "<M><a><y>";"<J><u><n><e>";\
++           "<J><u><l><y>";"<A><u><g><u><s><t>";\
++           "<S><e><p><t><e><m><b><e><r>";"<O><c><t><o><b><e><r>";\
++           "<N><o><v><e><m><b><e><r>";"<D><e><c><e><m><b><e><r>"
++#
++# Equivalent of AM/PM (%p)      "AM";"PM"
++am_pm      "<A><M>";"<P><M>"
++#
++# Appropriate date and time representation (%c)
++#    "%a %b %e %H:%M:%S %Y"
++d_t_fmt    "<percent-sign><a><space><percent-sign><b>\
++<space><percent-sign><e><space><percent-sign><H>\
++<colon><percent-sign><M><colon><percent-sign><S>\
++<space><percent-sign><Y>"
++#
++# Appropriate date representation (%x)   "%m/%d/%y"
++d_fmt      "<percent-sign><m><slash><percent-sign><d>\
++<slash><percent-sign><y>"
++#
++# Appropriate time representation (%X)   "%H:%M:%S"
++t_fmt      "<percent-sign><H><colon><percent-sign><M>\
++<colon><percent-sign><S>"
++#
++# Appropriate 12-hour time representation (%r) "%I:%M:%S %p"
++t_fmt_ampm "<percent-sign><I><colon><percent-sign><M><colon>\
++<percent-sign><S><space><percent-sign><p>"
++#
++END LC_TIME

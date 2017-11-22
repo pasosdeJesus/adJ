@@ -19,7 +19,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/locale/Makefil
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/locale/collate.c src/lib/libc/locale/collate.c
 --- src54-s/lib/libc/locale/collate.c	Wed Dec 31 19:00:00 1969
 +++ src/lib/libc/locale/collate.c	Sat Oct 12 18:43:30 2013
-@@ -0,0 +1,432 @@
+@@ -0,0 +1,413 @@
 +/*-
 + * Copyright (c) 1995 Alex Tatmanjants <alex@elvisti.kiev.ua>
 + *		at Electronni Visti IA, Kiev, Ukraine.
@@ -72,6 +72,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/locale/collate
 +#include <wchar.h>
 +
 +#include "collate.h"
++#include "locale/loadtextcat.h"
 +#include "rune.h"
 +#include "runetype.h"
 +
@@ -161,14 +162,14 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/locale/collate
 +__collate_load_tables_l(const char *locname, struct __collate *table)
 +{
 +	FILE *fp = NULL;
-+	int i, saverr, chains, len;
++	int i, saverr, chains;
 +	uint32_t u32;
-+	char strbuf[COLLATE_MAX_STR_LEN], buf[PATH_MAX];
++	char strbuf[COLLATE_MAX_STR_LEN];
++	char filename[PATH_MAX];
++	char error_buf[PATH_MAX];
 +	void *tmp_substitute_table = NULL, 
 +	     *tmp_char_pri_table = NULL, 
 +	     *tmp_chain_pri_table = NULL;
-+	char *dot = NULL, 
-+	     *und = NULL;
 +
 +	/* 'locname' must be already checked. */
 +	if (strcmp(locname, "C") == 0 || strcmp(locname, "POSIX") == 0) {
@@ -176,37 +177,17 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/locale/collate
 +		return (_LDP_CACHE);
 +	}
 +
-+	/* '_PATH_LOCALE' must be already set & checked. */
-+	len = snprintf(buf, sizeof(buf), "%s/%s/LC_COLLATE", 
-+		_PATH_LOCALE, locname);
-+	if (len < 0 || len >= sizeof(buf)) {
-+		errno = ENAMETOOLONG;
++	if (__category_filename(locname, "LC_COLLATE", 
++				filename, sizeof(filename), 
++				error_buf, sizeof(error_buf)) == NULL) {
 +		goto err;
 +	}
-+	if ((fp = fopen(buf, "r")) == NULL) {
-+		und = strchr(locname, '_');
-+		dot = strchr(locname, '.'); 
-+		if (und == NULL || dot == NULL) {
-+			goto err;
-+		}
-+		// If locname is lang_territory.enc try with lang.enc
-+		len = snprintf(buf, sizeof(buf), "%s/", _PATH_LOCALE);
-+		len += (und - locname) + 1;
-+		if (sizeof(buf) < len) {
-+			len = sizeof(buf);
-+		}
-+		strlcat(buf, locname, len);
-+		len = snprintf(buf, sizeof(buf), "%s.%s/LC_COLLATE", 
-+				buf, dot + 1);
-+		if ((fp = fopen(buf, "r")) == NULL) {
-+			// Then try with enc
-+			len = snprintf(buf, sizeof(buf), "%s/%s/LC_COLLATE", 
-+					_PATH_LOCALE, dot + 1);
-+			if ((fp = fopen(buf, "r")) == NULL) {
-+				goto err;
-+			}
-+		}
++
++	fp = fopen(filename, "r");
++	if (fp == NULL) {
++		goto err;
 +	}
++
 +	if (fread(strbuf, sizeof(strbuf), 1, fp) != 1) 
 +		goto err;
 +	strbuf[sizeof(strbuf) - 1] = '\0';

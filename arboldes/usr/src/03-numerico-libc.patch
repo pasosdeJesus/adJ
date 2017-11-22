@@ -133,34 +133,25 @@ diff -ruN -x *~ -x *orig src55-orig/lib/libc/locale/loadtextcat.c src/lib/libc/l
 diff -ruN -x obj -x CVS -x *~ -x *orig src54-mon/lib/libc/locale/setlocale.c src/lib/libc/locale/setlocale.c
 --- src54-mon/lib/libc/locale/setlocale.c	Tue Dec  3 12:26:37 2013
 +++ src/lib/libc/locale/setlocale.c	Tue Dec  3 12:51:12 2013
-@@ -84,6 +84,7 @@
+@@ -54,6 +54,7 @@
  
  extern int __time_load_locale(const char *name);
  extern int __monetary_load_locale(const char *name);
 +extern int __numeric_load_locale(const char *name);
  
- char *
- setlocale(int category, const char *locale)
-@@ -214,6 +215,8 @@
- 			return;
- 		break;
- 	case LC_NUMERIC:
-+		if (__numeric_load_locale("C")) 
-+			return;
- 		break;
- 	case LC_TIME:
- 		if (__time_load_locale("C"))
-@@ -286,7 +289,9 @@
- 		break;
- 
- 	case LC_NUMERIC:
--		return -1;
-+		if (__numeric_load_locale(locname)) 
-+			return -1;
-+		break;
- 	case LC_TIME:
- 		if (__time_load_locale(locname)) 
- 			return -1;
+ static int
+ changegl(int category, const char *locname, char **gl, char **oldgl)
+@@ -87,6 +88,10 @@
+ 					return -1;
+ 				}
+ 			case LC_NUMERIC:
++				if (__numeric_load_locale(locname) != 0) {
++					free(cp);
++					return -1;
++				}
+ 				break;
+ 			case LC_TIME:
+ 				if (__time_load_locale(locname) != 0) {
 diff -ruN src55-orig/lib/libc/stdio/printf.3 src/lib/libc/stdio/printf.3
 --- src55-orig/lib/libc/stdio/printf.3	Sun Oct  6 20:04:49 2013
 +++ src/lib/libc/stdio/printf.3	Mon Nov 11 21:11:57 2013

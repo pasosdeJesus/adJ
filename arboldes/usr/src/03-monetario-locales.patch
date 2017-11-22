@@ -12,12 +12,13 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/Makefile src/share/local
 diff -ruN src56-orig/share/locale/monetdef/Makefile src/share/locale/monetdef/Makefile
 --- src56-orig/share/locale/monetdef/Makefile	Thu Jan  1 03:00:00 1970
 +++ src/share/locale/monetdef/Makefile	Tue May  6 09:30:30 2014
-@@ -0,0 +1,238 @@
+@@ -0,0 +1,240 @@
 +# From FreeBSD
 +
 +LC_MONETARY_LINES=21
 +
-+LOCALES=	be_BY.UTF-8 \
++LOCALES=	UTF-8 \
++		be_BY.UTF-8 \
 +		bg_BG.UTF-8 \
 +		cs_CZ.UTF-8 \
 +		en_GB.UTF-8 \
@@ -39,7 +40,8 @@ diff -ruN src56-orig/share/locale/monetdef/Makefile src/share/locale/monetdef/Ma
 +		zh_HK.UTF-8 
 +
 +
-+LOCALESORIG=	af_ZA.ISO8859-1 \
++LOCALESORIG=	UTF-8 \
++		af_ZA.ISO8859-1 \
 +		be_BY.CP1131 \
 +		be_BY.CP1251 \
 +		be_BY.ISO8859-5 \
@@ -5469,3 +5471,51 @@ diff -ruN src56-orig/share/locale/monetdef/zh_TW.Big5.src src/share/locale/monet
 +1
 +# int_n_sign_posn
 +4
+diff -ruN src62-orig/share/locale/monetdef/UTF-8.src src/share/locale/monetdef/UTF-8.src
+--- src62-orig/share/locale/monetdef/UTF-8.src.orig	Wed Nov 22 07:42:28 2017
++++ src/share/locale/monetdef/UTF-8.src	Wed Nov 22 07:39:27 2017
+--- 
++++ 
+@@ -0,0 +1,42 @@
++# int_curr_symbol (last character always SPACE) -- POSIX
++ 
++# currency_symbol
++
++# mon_decimal_point
++
++# mon_thousands_sep
++
++# mon_grouping, separated by ;
++-1
++# positive_sign
++
++# negative_sign
++
++# int_frac_digits
++-1
++# frac_digits
++-1
++# p_cs_precedes
++-1
++# p_sep_by_space
++-1
++# n_cs_precedes
++-1
++# n_sep_by_space
++-1
++# p_sign_posn
++-1
++# n_sign_posn
++-1
++# int_p_cs_precedes
++-1
++# int_n_cs_precedes
++-1
++# int_p_sep_by_space
++-1
++# int_n_sep_by_space
++-1
++# int_p_sign_posn
++-1
++# int_n_sign_posn
++-1

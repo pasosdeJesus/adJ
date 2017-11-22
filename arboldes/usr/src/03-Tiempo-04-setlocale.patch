@@ -200,10 +200,17 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/locale/load
 +				return NULL;
 +			}
 +			if ((fd = open(filename, O_RDONLY | O_CLOEXEC)) < 0)  {
-+				snprintf(error_buf, error_buf_size, 
-+						"Can't open %s (1)",
-+					       	filename);
-+				return NULL;
++				// And finally with enc 
++				len = snprintf(filename, sfilename, 
++					"%s/%s/%s", 
++					_PATH_LOCALE,
++					dot + 1, category_filename);
++				if ((fd = open(filename, O_RDONLY | O_CLOEXEC)) < 0) {
++					snprintf(error_buf, error_buf_size, 
++							"Can't open %s (2)",
++							filename);
++					return NULL;
++				}
 +			}
 +		} else {
 +			// If locname is lang_territory.enc try with lang.enc

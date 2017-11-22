@@ -12,10 +12,11 @@ diff -ruN -x *out -x *orig -x obj -x *~ src54-mon/share/locale/Makefile src/shar
 diff -ruN -x *out -x *orig -x obj -x *~ src54-orig/share/locale/numericdef/Makefile src/share/locale/numericdef/Makefile
 --- src54-orig/share/locale/numericdef/Makefile	Wed Dec 31 19:00:00 1969
 +++ src/share/locale/numericdef/Makefile	Tue Mar 25 05:48:27 2014
-@@ -0,0 +1,151 @@
+@@ -0,0 +1,171 @@
 +# Adapted from FreeBSD
 +
-+LOCALES=	af.ISO8859-1 \
++LOCALESORIG=	UTF-8 \
++		af.ISO8859-1 \
 +		am.UTF-8 \
 +		be.CP1251 \
 +		bg.CP1251 \
@@ -56,6 +57,11 @@ diff -ruN -x *out -x *orig -x obj -x *~ src54-orig/share/locale/numericdef/Makef
 +		tr.ISO8859-9 \
 +		uk.KOI8-U
 +
++LOCALES=	UTF-8 \
++		am.UTF-8 \
++		mn.UTF-8 \
++		uk.KOI8-U
++
 +LOCALEDIR=	/usr/share/locale
 +
 +.SUFFIXES: .src .out
@@ -63,7 +69,7 @@ diff -ruN -x *out -x *orig -x obj -x *~ src54-orig/share/locale/numericdef/Makef
 +.src.out:
 +	grep -v '^#' < ${.IMPSRC} > ${.TARGET}
 +
-+FILES=		${LOCALES:S/$/.out/}
++FILES=		${LOCALESORIG:S/$/.out/}
 +FILESNAME=	LC_NUMERIC
 +
 +all: ${FILES}
@@ -82,42 +88,37 @@ diff -ruN -x *out -x *orig -x obj -x *~ src54-orig/share/locale/numericdef/Makef
 +
 +BE_LINKS=	fr_BE:nl_BE
 +NO_LINKS=	no:nb_NO no:nn_NO
-+ES_LINKS=	es_PR:es_CR es_PR:es_MX es_PR:es_SV es_PR:es_US es_PR:es_HN
++ES_LINKS=	es:es_AR es:es_BO es:es_CL es:es_CO es_PR:es_CR es:es_DO es:es_EC es:es_ES es:es_GQ es:es_GT es_PR:es_HN es_PR:es_MX es:es_NI es:es_PA es:es_PE es:es_PY es_PR:es_SV es_PR:es_US es:es_UY es:es_VE
 +
 +ARMSCII-8_UTF-8= hy
-+CP1251_ISO8859-5= be
 +CP1251_UTF-8=	be bg
-+CP866_UTF-8=	ru
-+ISO8859-1_ISO8859-15= af ca da de_CH de en es es_PR es_CU eu \
-+	fi fr_BE fr is it nl no pt_BR pt sv \
-+	${BE_LINKS} ${NO_LINKS} ${ES_LINKS}
-+ISO8859-1_ISO8859-1= ${BE_LINKS} ${CA_LINKS} \
-+	${NO_LINKS} ${ES_LINKS}
++KOI8-R_UTF-8=	ru
++KOI8-U_UTF-8=	uk
 +ISO8859-1_UTF-8= af ca da de_CH de en es es_PR es_CU eu fi fr \
 +	fr_BE fr is it nl no pt_BR pt sv
 +ISO8859-2_UTF-8= cs hr hu pl ro sk sl
-+ISO8859-5_UTF-8= sr uk
-+ISO8859-5_CP1251= uk
++ISO8859-5_UTF-8= sr
 +ISO8859-7_UTF-8= el
 +ISO8859-9_UTF-8= tr
-+ISO8859-13_ISO8859-4= lt
-+ISO8859-13_ISO8859-13= lt:lv
-+ISO8859-13_UTF-8= lt lt:lv
++ISO8859-13_UTF-8= lt 
 +ISO8859-15_UTF-8= et
-+KOI8-R_CP1251=	ru
-+KOI8-R_CP866=	ru
-+KOI8-R_ISO8859-5= ru
-+KOI8-U_ISO8859-5= uk
 +US-ASCII_UTF-8=	
-+UTF-8_UTF-8=	${BE_LINKS} ${CA_LINKS} \
++LINKS=		lt:lv ${BE_LINKS} ${CA_LINKS} \
 +		${NO_LINKS} ${ES_LINKS}
 +
 +SYMLINKS=
++.for lang_terr in ${LINKS}
++SYMLINKS+=	${LOCALEDIR}/${lang_terr:C/:.*$//}.UTF-8/${FILESNAME} \
++		${LOCALEDIR}/${lang_terr:C/^.*://}.UTF-8
++.endfor
++
++
++TRANSL=
 +.for enc1 in ${ENCODINGS}
 +.for enc2 in ${ENCODINGS}
 +.for lang_terr in ${${enc1}_${enc2}}
-+SYMLINKS+=	${LOCALEDIR}/${lang_terr:C/:.*$//}.${enc1}/${FILESNAME} \
-+		${LOCALEDIR}/${lang_terr:C/^.*://}.${enc2}
++TRANSL+=	./${lang_terr:C/:.*$//}.${enc1}.out \
++		${LOCALEDIR}/${lang_terr:C/^.*://}.${enc2}/
 +.endfor
 +.endfor
 +.endfor
@@ -128,6 +129,15 @@ diff -ruN -x *out -x *orig -x obj -x *~ src54-orig/share/locale/numericdef/Makef
 +	    ${DESTDIR}${FILESDIR_${locale}.out}
 +	install -o ${LOCALEOWN} -g ${LOCALEGRP} -m ${LOCALEMODE} \
 +	    ${locale}.out ${DESTDIR}/${FILESDIR_${locale}.out}/${FILESNAME}
++.endfor
++.for src dstd in ${TRANSL}
++	@s=${src}; \
++	 t=${DESTDIR}${dstd}; \
++	 echo cp $$s $$t/${FILESNAME}; \
++	 rm -f $$t/${FILESNAME}; \
++	 install -o ${LOCALEOWN} -g ${LOCALEGRP} -m ${DIRMODE} -d $$t; \
++	 install -o ${LOCALEOWN} -g ${LOCALEGRP} -m ${LOCALEMODE} \
++		$$s $$t/${FILESNAME}
 +.endfor
 +.for lnk file in ${SYMLINKS}
 +	@l=${DESTDIR}${lnk}; \
@@ -148,6 +158,18 @@ diff -ruN -x *out -x *orig -x obj -x *~ src54-orig/share/locale/numericdef/Makef
 +	} fi; \
 +	} fi;
 +.endfor
++.for src dst in ${TRANSL}
++	@l=${DESTDIR}${src}; \
++	t=${DESTDIR}${dst}; \
++	echo rm $$t/${FILESNAME}; \
++	rm -f $$t/${FILESNAME}; \
++	if (test -d $$t) then { \
++	r=`ls $$t/`; \
++	if (test "$$r" = "") then { \
++	rm -rf $$t; \
++	} fi; \
++	} fi;
++.endfor
 +.for lnk file in ${SYMLINKS}
 +	@l=${DESTDIR}${lnk}; \
 +	t=${DESTDIR}${file}; \
@@ -160,8 +182,6 @@ diff -ruN -x *out -x *orig -x obj -x *~ src54-orig/share/locale/numericdef/Makef
 +	} fi; \
 +	} fi;
 +.endfor
-+
-+
 +
 +.include <bsd.prog.mk>
 diff -ruN -x *out -x *orig -x obj -x *~ src55-orig/share/locale/numericdef/af.ISO8859-1.src src/share/locale/numericdef/af.ISO8859-1.src
@@ -811,4 +831,20 @@ diff -ruN -x *out -x *orig -x obj -x *~ src55-orig/share/locale/numericdef/uk.KO
 + 
 +# grouping, separated by ;
 +3;3
++# EOF
+diff -ruN -x *out -x *orig -x obj -x *~ src62-orig/share/locale/numericdef/UTF-8.src src/share/locale/numericdef/UTF-8.src
+--- src62-orig/share/locale/numericdef/UTF-8.src.orig	Wed Nov 22 09:03:48 2017
++++ src/share/locale/numericdef/UTF-8.src	Wed Nov 22 09:02:16 2017
+@@ -0,0 +1,12 @@
++# From http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap07.html
++#
++# WARNING: spaces may be essential at the end of lines
++# WARNING: empty lines are essential too
++#
++# decimal_point
++.
++# thousands_sep
++
++# grouping, separated by ;
++-1
 +# EOF
