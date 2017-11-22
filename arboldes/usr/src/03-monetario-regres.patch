@@ -26,7 +26,7 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/regress/lib/libc/locale/check_monetar
 diff -ruN -x *~ -x *orig src54-orig/regress/lib/libc/locale/check_monetary/check_monetary.c src/regress/lib/libc/locale/check_monetary/check_monetary.c
 --- src54-orig/regress/lib/libc/locale/check_monetary/check_monetary.c	Wed Dec 31 19:00:00 1969
 +++ src/regress/lib/libc/locale/check_monetary/check_monetary.c	Wed Dec 11 08:08:48 2013
-@@ -0,0 +1,627 @@
+@@ -0,0 +1,651 @@
 +/**
 + * Public domain according to Colombian Legislation. 
 + * http://www.pasosdejesus.org/dominio_publico_colombia.html
@@ -633,6 +633,30 @@ diff -ruN -x *~ -x *orig src54-orig/regress/lib/libc/locale/check_monetary/check
 +	printf("locale %s\n", nl);
 +	p = localeconv();
 +	p(strcmp(p->mon_decimal_point, ",") == 0);
++
++	// Deberia llamar POSIX en UTF-8
++	nl = setlocale(LC_MONETARY, "algo_loco.UTF-8");
++	printf("locale %s\n", nl);
++	p = localeconv();
++	p(strcmp(p->int_curr_symbol, "") == 0);
++	p(strcmp(p->currency_symbol, "") == 0);
++	p(strcmp(p->mon_decimal_point, "") == 0);
++	p(strcmp(p->mon_thousands_sep, "") == 0);
++
++	nl = setlocale(LC_ALL, "es_CO.UTF-8");
++	printf("locale %s\n", nl);
++	p = localeconv();
++	p(strcmp(p->mon_decimal_point, ",") == 0);
++
++	// Carga POSIX en UTF-8 en algunas categorias pero no en todas
++	// en todo caso debería dejar en las que pudo cargar
++	//nl = setlocale(LC_ALL, "algo_loco.UTF-8");
++	//printf("locale %s\n", nl);
++	//p = localeconv();
++	//p(strcmp(p->int_curr_symbol, "") == 0);
++	//p(strcmp(p->currency_symbol, "") == 0);
++	//p(strcmp(p->mon_decimal_point, "") == 0);
++	//p(strcmp(p->mon_thousands_sep, "") == 0);
 +
 +	nl = setlocale(LC_ALL, "en_US.UTF-8");
 +	printf("locale %s\n", nl);

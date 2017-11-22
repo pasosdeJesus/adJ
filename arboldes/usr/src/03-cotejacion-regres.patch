@@ -26,7 +26,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/regress/lib/libc/locale
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/regress/lib/libc/locale/check_collate/check_collate.c src/regress/lib/libc/locale/check_collate/check_collate.c
 --- src54-orig/regress/lib/libc/locale/check_collate/check_collate.c	Wed Dec 31 19:00:00 1969
 +++ src/regress/lib/libc/locale/check_collate/check_collate.c	Mon Dec 23 12:02:59 2013
-@@ -0,0 +1,188 @@
+@@ -0,0 +1,222 @@
 +/**
 + * Public domain according to Colombian Legislation. 
 + * http://www.pasosdejesus.org/dominio_publico_colombia.html
@@ -62,7 +62,17 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/regress/lib/libc/locale
 +	p(strcoll("", "\xe9") < 0);
 +	p(strcoll("a", "") > 0);
 +	p(strcoll("", "") == 0);
++
++	nl = setlocale(LC_COLLATE, "POSIX");
++	printf("locale %s\n", nl);
++	p(strcoll("\xe9", "f") > 0); 
++	p(strcoll("b", "\xe9") < 0);
++	p(strcoll("", "\xe9") < 0);
++	p(strcoll("a", "") > 0);
++	p(strcoll("", "") == 0);
++
 +}
++
 +
 +void test_esCOUTF8() 
 +{
@@ -208,11 +218,34 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/regress/lib/libc/locale
 +
 +}
 +
++void test_switch() 
++{
++	char *nl = setlocale(LC_ALL, "es.UTF-8");
++	printf("locale %s\n", nl);
++	p(strcoll("é", "f") < 0); 
++	p(strcoll("b", "é") < 0);
++
++	// should default to UTF-8 that is POSIX but in UTF-8
++	nl = setlocale(LC_COLLATE, "algo_loco.UTF-8");
++	printf("locale %s\n", nl);
++	p(strcoll("é", "f") > 0); 
++	p(strcoll("b", "é") < 0);
++	p(strcoll("", "é") < 0);
++	p(strcoll("a", "") > 0);
++	p(strcoll("", "") == 0);
++
++	nl = setlocale(LC_ALL, "es_CO.UTF-8");
++	printf("locale %s\n", nl);
++	p(strcoll("é", "f") < 0); 
++	p(strcoll("b", "é") < 0);
++}
++
++
 +int main()
 +{
 +	test_posix();
 +	test_esCOUTF8();
++	test_switch();
 +	
 +	return bad != 0;
 +}
-

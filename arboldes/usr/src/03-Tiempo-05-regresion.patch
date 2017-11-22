@@ -44,7 +44,7 @@ diff -ruN -x *~ -x *orig src56-orig/regress/lib/libc/locale/check_time/Makefile 
 diff -ruN -x *~ -x *orig src56-orig/regress/lib/libc/locale/check_time/check_time.c src/regress/lib/libc/locale/check_time/check_time.c
 --- src56-orig/regress/lib/libc/locale/check_time/check_time.c	Wed Dec 31 19:00:00 1969
 +++ src/regress/lib/libc/locale/check_time/check_time.c	Sat Mar  7 07:02:13 2015
-@@ -0,0 +1,612 @@
+@@ -0,0 +1,661 @@
 +/**
 + * Public domain according to Colombian Legislation. 
 + * http://www.pasosdejesus.org/dominio_publico_colombia.html
@@ -190,6 +190,55 @@ diff -ruN -x *~ -x *orig src56-orig/regress/lib/libc/locale/check_time/check_tim
 +	p(strcmp(nl_langinfo(ABMON_10), "Oct") == 0);
 +	p(strcmp(nl_langinfo(ABMON_11), "Nov") == 0);
 +	p(strcmp(nl_langinfo(ABMON_12), "Dec") == 0);
++
++	// algo_loco.UTF-8 should default to UTF-8 that is POSIX
++	nl = setlocale(LC_ALL, "algo_loco.UTF-8"); 
++	printf("locale: %s\n", nl);
++	p(strcmp(nl_langinfo(D_T_FMT), "%a %b %e %H:%M:%S %Y") == 0);
++	p(strcmp(nl_langinfo(D_FMT), "%m/%d/%y") == 0);
++	p(strcmp(nl_langinfo(T_FMT), "%H:%M:%S") == 0);
++	p(strcmp(nl_langinfo(T_FMT_AMPM), "%I:%M:%S %p") == 0);
++	p(strcmp(nl_langinfo(AM_STR), "AM") == 0);
++	p(strcmp(nl_langinfo(PM_STR), "PM") == 0);
++	p(strcmp(nl_langinfo(DAY_1), "Sunday") == 0);
++	p(strcmp(nl_langinfo(DAY_2), "Monday") == 0);
++	p(strcmp(nl_langinfo(DAY_3), "Tuesday") == 0);
++	p(strcmp(nl_langinfo(DAY_4), "Wednesday") == 0);
++	p(strcmp(nl_langinfo(DAY_5), "Thursday") == 0);
++	p(strcmp(nl_langinfo(DAY_6), "Friday") == 0);
++	p(strcmp(nl_langinfo(DAY_7), "Saturday") == 0);
++	p(strcmp(nl_langinfo(ABDAY_1), "Sun") == 0);
++	p(strcmp(nl_langinfo(ABDAY_2), "Mon") == 0);
++	p(strcmp(nl_langinfo(ABDAY_3), "Tue") == 0);
++	p(strcmp(nl_langinfo(ABDAY_4), "Wed") == 0);
++	p(strcmp(nl_langinfo(ABDAY_5), "Thu") == 0);
++	p(strcmp(nl_langinfo(ABDAY_6), "Fri") == 0);
++	p(strcmp(nl_langinfo(ABDAY_7), "Sat") == 0);
++	p(strcmp(nl_langinfo(MON_1), "January") == 0);
++	p(strcmp(nl_langinfo(MON_2), "February") == 0);
++	p(strcmp(nl_langinfo(MON_3), "March") == 0);
++	p(strcmp(nl_langinfo(MON_4), "April") == 0);
++	p(strcmp(nl_langinfo(MON_5), "May") == 0);
++	p(strcmp(nl_langinfo(MON_6), "June") == 0);
++	p(strcmp(nl_langinfo(MON_7), "July") == 0);
++	p(strcmp(nl_langinfo(MON_8), "August") == 0);
++	p(strcmp(nl_langinfo(MON_9), "September") == 0);
++	p(strcmp(nl_langinfo(MON_10), "October") == 0);
++	p(strcmp(nl_langinfo(MON_11), "November") == 0);
++	p(strcmp(nl_langinfo(MON_12), "December") == 0);
++	p(strcmp(nl_langinfo(ABMON_1), "Jan") == 0);
++	p(strcmp(nl_langinfo(ABMON_2), "Feb") == 0);
++	p(strcmp(nl_langinfo(ABMON_3), "Mar") == 0);
++	p(strcmp(nl_langinfo(ABMON_4), "Apr") == 0);
++	p(strcmp(nl_langinfo(ABMON_5), "May") == 0);
++	p(strcmp(nl_langinfo(ABMON_6), "Jun") == 0);
++	p(strcmp(nl_langinfo(ABMON_7), "Jul") == 0);
++	p(strcmp(nl_langinfo(ABMON_8), "Aug") == 0);
++	p(strcmp(nl_langinfo(ABMON_9), "Sep") == 0);
++	p(strcmp(nl_langinfo(ABMON_10), "Oct") == 0);
++	p(strcmp(nl_langinfo(ABMON_11), "Nov") == 0);
++	p(strcmp(nl_langinfo(ABMON_12), "Dec") == 0);
++
 +
 +	for(i = 0; i < sizeof(enc) / sizeof(char *) ; i++) {
 +		for(j = 0; j < sizeof(es) / sizeof(char *) ; j++) {

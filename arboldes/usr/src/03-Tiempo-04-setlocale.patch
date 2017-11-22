@@ -113,7 +113,7 @@ diff -ruN src56-orig/lib/libc/locale/loadtextcat.h src/lib/libc/locale/loadtextc
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/locale/loadtextcat.c src/lib/libc/locale/loadtextcat.c
 --- src56-orig/lib/libc/locale/loadtextcat.c	Thu Jan  1 03:00:00 1970
 +++ src/lib/libc/locale/loadtextcat.c	Wed May  7 09:09:20 2014
-@@ -0,0 +1,301 @@
+@@ -0,0 +1,308 @@
 +/*
 +** Copyright (c) 1989, 1993
 +**	The Regents of the University of California.  All rights reserved.
@@ -200,17 +200,10 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/locale/load
 +				return NULL;
 +			}
 +			if ((fd = open(filename, O_RDONLY | O_CLOEXEC)) < 0)  {
-+				// And finally with enc 
-+				len = snprintf(filename, sfilename, 
-+					"%s/%s/%s", 
-+					_PATH_LOCALE,
-+					dot + 1, category_filename);
-+				if ((fd = open(filename, O_RDONLY | O_CLOEXEC)) < 0) {
-+					snprintf(error_buf, error_buf_size, 
-+							"Can't open %s (2)",
-+							filename);
-+					return NULL;
-+				}
++				snprintf(error_buf, error_buf_size, 
++						"Can't open %s (1)",
++						filename);
++				return NULL;
 +			}
 +		} else {
 +			// If locname is lang_territory.enc try with lang.enc
@@ -234,10 +227,17 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/locale/load
 +				return NULL;
 +			}
 +			if ((fd = open(filename, O_RDONLY | O_CLOEXEC)) < 0) {
-+				snprintf(error_buf, error_buf_size, 
-+						"Can't open %s (2)",
-+						filename);
-+				return NULL;
++				// And finally with enc 
++				len = snprintf(filename, sfilename, 
++					"%s/%s/%s", 
++					_PATH_LOCALE,
++					dot + 1, category_filename);
++				if ((fd = open(filename, O_RDONLY | O_CLOEXEC)) < 0) {
++					snprintf(error_buf, error_buf_size, 
++							"Can't open %s (2)",
++							filename);
++					return NULL;
++				}
 +			}
 +		}
 +	}

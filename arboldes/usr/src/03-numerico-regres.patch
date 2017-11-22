@@ -1,14 +1,13 @@
 diff -u src54-mon/regress/lib/libc/locale/Makefile src/regress/lib/libc/locale/Makefile
 --- src54-mon/regress/lib/libc/locale/Makefile	Tue Dec  3 12:26:53 2013
 +++ src/regress/lib/libc/locale/Makefile	Tue Dec  3 12:58:34 2013
-@@ -1,6 +1,6 @@
- # $OpenBSD: Makefile,v 1.4 2015/07/07 17:39:19 semarie Exp $
+@@ -1,5 +1,5 @@
+ # $OpenBSD: Makefile,v 1.6 2017/07/27 15:08:37 bluhm Exp $
  
--SUBDIR+= check_isw check_time check_collate check_monetary
-+SUBDIR+= check_time check_collate check_monetary check_numeric
+-SUBDIR =	check_isw mbrtowc setlocale wcrtomb check_time check_collate check_monetary
++SUBDIR =	check_isw mbrtowc setlocale wcrtomb check_time check_collate check_monetary check_numeric
  
- .if defined(REGRESS_FULL) || make(clean) || make(cleandir) || make(obj)
- SUBDIR+= check_isw
+ .include <bsd.subdir.mk>
 diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/regress/lib/libc/locale/check_numeric/Makefile src/regress/lib/libc/locale/check_numeric/Makefile
 --- src55-orig/regress/lib/libc/locale/check_numeric/Makefile	Wed Dec 31 19:00:00 1969
 +++ src/regress/lib/libc/locale/check_numeric/Makefile	Mon Nov 11 12:01:52 2013
@@ -27,7 +26,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/regress/lib/libc/locale/check_
 diff -ruN -x obj -x CVS -x *~ -x *orig src54-mon/regress/lib/libc/locale/check_numeric/check_numeric.c src/regress/lib/libc/locale/check_numeric/check_numeric.c
 --- src54-mon/regress/lib/libc/locale/check_numeric/check_numeric.c	Wed Dec 31 19:00:00 1969
 +++ src/regress/lib/libc/locale/check_numeric/check_numeric.c	Tue Dec 10 21:46:25 2013
-@@ -0,0 +1,211 @@
+@@ -0,0 +1,238 @@
 +/**
 + * Public domain according to Colombian Legislation. 
 + * http://www.pasosdejesus.org/dominio_publico_colombia.html
@@ -71,7 +70,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src54-mon/regress/lib/libc/locale/check_n
 +	char nom[256];
 +	char col[512];
 +	char *nl;
-+	char *enc[]= { "ISO8859-1", "ISO8859-15", "UTF-8" };
++	char *enc[]= { "UTF-8" };
 +	struct lconv *p;
 +	int i;
 +	for(i = 0; i < sizeof(enc) / sizeof(char *) ; i++) {
@@ -110,7 +109,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src54-mon/regress/lib/libc/locale/check_n
 +		"es_ES", "es_GT", "es_NI", "es_PA", "es_PE", 
 +		"es_PY", "es_UY", "es_VE", "pt_BR"
 +	};
-+	char *enc[]= { "ISO8859-1", "ISO8859-15", "UTF-8" };
++	char *enc[]= { "UTF-8" };
 +	struct lconv *p;
 +	char nom[256];
 +	char col[512];
@@ -148,7 +147,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src54-mon/regress/lib/libc/locale/check_n
 +			dl = strtod("3,1", NULL);
 +			p(fabs(dl - 3.1) < DBL_EPSILON);
 +			ldl = strtold("3,1", NULL);
-+			p(fabs(ldl - 3.1) < DBL_EPSILON);
++			p(fabsl(ldl - 3.1) < DBL_EPSILON);
 +			sscanf("3,1", "%f", &fl);
 +			p(fabs(fl - 3.1) < FLT_EPSILON);
 +		}
@@ -160,7 +159,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src54-mon/regress/lib/libc/locale/check_n
 +	char *c[] = { 
 +		"en", "es_CR", "es_HN", "es_MX", "es_PR", "es_SV", "es_US"
 +	};
-+	char *enc[]= { "ISO8859-1", "ISO8859-15", "UTF-8" };
++	char *enc[]= { "UTF-8" };
 +	struct lconv *p;
 +	char nom[256];
 +	char col[512];
@@ -224,6 +223,33 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src54-mon/regress/lib/libc/locale/check_n
 +	p = localeconv();
 +	p(strcmp(p->decimal_point, ",") == 0);
 +
++	nl = setlocale(LC_NUMERIC, "algo_loco.UTF-8");
++	printf("locale %s\n", nl);
++	p = localeconv();
++	p(strcmp(p->decimal_point, ".") == 0);
++
++	nl = setlocale(LC_ALL, "es_CO.UTF-8");
++	printf("locale %s\n", nl);
++	p = localeconv();
++	p(strcmp(p->decimal_point, ",") == 0);
++
++
++	nl = setlocale(LC_ALL, "algo_loco.UTF-8");
++	printf("locale %s\n", nl);
++	p = localeconv();
++	p(strcmp(p->decimal_point, ".") == 0);
++
++	//nl = setlocale(LC_ALL, "es_CO.UTF-8");
++	//printf("locale %s\n", nl);
++	//p = localeconv();
++	//p(strcmp(p->decimal_point, ",") == 0);
++
++	// twice to same locale
++	//nl = setlocale(LC_ALL, "es_CO.UTF-8");
++	//printf("locale %s\n", nl);
++	//p = localeconv();
++	//p(strcmp(p->decimal_point, ",") == 0);
++
 +	nl = setlocale(LC_ALL, "C");
 +	printf("locale %s\n", nl);
 +	p = localeconv();
@@ -239,4 +265,3 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src54-mon/regress/lib/libc/locale/check_n
 +	
 +	return bad != 0;
 +}
-
