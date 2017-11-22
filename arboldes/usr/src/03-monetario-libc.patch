@@ -1,16 +1,16 @@
 diff -u src54-coll/lib/libc/locale/Makefile.inc src54-mon/lib/libc/locale/Makefile.inc
 --- src54-coll/lib/libc/locale/Makefile.inc	Tue Dec  3 10:55:22 2013
 +++ src54-mon/lib/libc/locale/Makefile.inc	Thu Dec  5 15:39:51 2013
-@@ -12,7 +12,8 @@
- 	wcstombs.c wctob.c wctomb.c wcstof.c wcstod.c wcstold.c wcstol.c \
- 	wcstoul.c wcstoll.c wcstoull.c wcstoimax.c wcstoumax.c \
- 	setrunelocale.c runeglue.c rune.c runetable.c ___runetype_mb.c \
--	_wctrans.c wcsxfrm.c loadtextcat.c collate.c
-+	_wctrans.c wcsxfrm.c loadtextcat.c collate.c \
-+	fix_grouping.c 
- 
- MAN+=	nl_langinfo.3 setlocale.3 iswalnum.3 towlower.3 \
- 	btowc.3 mblen.3 mbrlen.3 mbrtowc.3 mbsinit.3 mbsrtowcs.3 \
+@@ -6,7 +6,8 @@
+ SRCS+=	btowc.c _def_messages.c _def_monetary.c _def_numeric.c _def_time.c \
+ 	localeconv.c nl_langinfo.c nl_langinfo_l.c setlocale.c \
+ 	duplocale.c freelocale.c newlocale.c uselocale.c \
+-	__mb_cur_max.c collate.c _CurrentRuneLocale.c _get_locname.c \
++	__mb_cur_max.c collate.c _CurrentRuneLocale.c \
++	fix_grouping.c _get_locname.c \
+ 	isctype_l.c iswctype.c iswctype_l.c \
+ 	loadtextcat.c \
+ 	mblen.c mbrlen.c mbstowcs.c mbtowc.c multibyte_citrus.c wcscoll.c \
 diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/_def_monetary.c src/lib/libc/locale/_def_monetary.c
 --- src55-orig/lib/libc/locale/_def_monetary.c	Mon Aug  8 03:05:35 2005
 +++ src/lib/libc/locale/_def_monetary.c	Wed Dec 31 19:00:00 1969
@@ -341,10 +341,10 @@ diff -ruN -x *~ -x *orig src55-orig/lib/libc/locale/loadtextcat.c src/lib/libc/l
 diff -ruN -x *~ -x *orig src54-orig/lib/libc/locale/nl_langinfo.3 src/lib/libc/locale/nl_langinfo.3
 --- src54-orig/lib/libc/locale/nl_langinfo.3	Sun Oct  6 20:04:49 2013
 +++ src/lib/libc/locale/nl_langinfo.3	Wed Dec 11 08:16:55 2013
-@@ -28,5 +28,14 @@
- returns a pointer to an empty string if
+@@ -57,6 +57,15 @@
+ If
  .Fa item
- is invalid.
+ is invalid, a pointer to an empty string is returned.
 +.Sh ERRORS
 +Regarding CRNCYSTR from
 +http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/langinfo.h.html
@@ -355,7 +355,8 @@ diff -ruN -x *~ -x *orig src54-orig/lib/libc/locale/nl_langinfo.3 src/lib/libc/l
 +FreeBSD implements p_cs_precedes == CHAR_MAX to mean that currency symbol
 +replaces radix char.
  .Sh SEE ALSO
- .Xr setlocale 3
+ .Xr setlocale 3 ,
+ .Xr uselocale 3
 diff -ruN -x *~ -x *orig src54-orig/lib/libc/locale/nl_langinfo.c src/lib/libc/locale/nl_langinfo.c
 --- src54-orig/lib/libc/locale/nl_langinfo.c	Wed Nov 16 11:48:15 2005
 +++ src/lib/libc/locale/nl_langinfo.c	Wed Dec 11 08:11:54 2013
@@ -404,37 +405,25 @@ diff -ruN -x *~ -x *orig src54-orig/lib/libc/locale/nl_langinfo.c src/lib/libc/l
 diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/setlocale.c src/lib/libc/locale/setlocale.c
 --- src55-orig/lib/libc/locale/setlocale.c	Tue Dec  3 10:55:22 2013
 +++ src/lib/libc/locale/setlocale.c	Tue Dec  3 11:54:07 2013
-@@ -83,8 +83,8 @@
- static const char *__get_locale_env(int);
+@@ -53,6 +53,7 @@
+ }
  
  extern int __time_load_locale(const char *name);
 +extern int __monetary_load_locale(const char *name);
  
--
- char *
- setlocale(int category, const char *locale)
- {
-@@ -210,6 +210,9 @@
- 			return;
- 		break;
- 	case LC_MONETARY:
-+		if (__monetary_load_locale("C")) 
-+			return;
-+		break;
- 	case LC_NUMERIC:
- 		break;
- 	case LC_TIME:
-@@ -278,6 +281,10 @@
- 		break;
- 		
- 	case LC_MONETARY:
-+		if (__monetary_load_locale(locname)) 
-+			return -1;
-+		break;
-+
- 	case LC_NUMERIC:
- 		return -1;
- 	case LC_TIME:
+ static int
+ changegl(int category, const char *locname, char **gl, char **oldgl)
+@@ -80,6 +81,10 @@
+ 				}
+ 				break;
+ 			case LC_MONETARY:
++				if (__monetary_load_locale(locname) != 0) {
++					free(cp);
++					return -1;
++				}
+ 			case LC_NUMERIC:
+ 				break;
+ 			case LC_TIME:
 diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/stdlib/Makefile.inc src/lib/libc/stdlib/Makefile.inc
 --- src55-orig/lib/libc/stdlib/Makefile.inc	Sun Oct  6 20:04:50 2013
 +++ src/lib/libc/stdlib/Makefile.inc	Wed Nov 13 00:05:15 2013

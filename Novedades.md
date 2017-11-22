@@ -2,7 +2,7 @@
 Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y que anhelamos sea usada por Jesús durante el Milenio.
 
-### Versión: 6.2
+### Versión: 6.2b1
 Fecha de publicación: 12/Dic/2017
 
 Puede ver novedades respecto a OpenBSD en:
@@ -43,6 +43,9 @@ cerrar fallas de seguridad (a partir de portes más recientes para
 OpenBSD 6.2):
 
 ## NOVEDADES RESPECTO A ADJ 6.1 PROVENIENTES DE PASOS DE JESÚS
+
+* En locale se quito soporte a codificaciones diferentes a UTF-8 y ASCII,
+  que son las únicas soportadas por OpenBSD.
 
 * Paquetes más actualizados: 
 	- php-5.6.31 --no es posible actualizar a 7 porque pear no opera y

@@ -12,12 +12,34 @@ diff -ruN -x *~ -x obj -x *orig src55-orig/share/locale/Makefile src/share/local
 diff -ruN src56-orig/share/locale/monetdef/Makefile src/share/locale/monetdef/Makefile
 --- src56-orig/share/locale/monetdef/Makefile	Thu Jan  1 03:00:00 1970
 +++ src/share/locale/monetdef/Makefile	Tue May  6 09:30:30 2014
-@@ -0,0 +1,226 @@
+@@ -0,0 +1,238 @@
 +# From FreeBSD
 +
 +LC_MONETARY_LINES=21
 +
-+LOCALES=	af_ZA.ISO8859-1 \
++LOCALES=	be_BY.UTF-8 \
++		bg_BG.UTF-8 \
++		cs_CZ.UTF-8 \
++		en_GB.UTF-8 \
++		en_IE.UTF-8 \
++		es_CR.UTF-8 \
++		es_ES.UTF-8 \
++		he_IL.UTF-8 \
++		hy_AM.UTF-8 \
++		ja_JP.UTF-8 \
++		kk_KZ.UTF-8 \
++		ko_KR.UTF-8 \
++		mn_MN.UTF-8 \
++		pl_PL.UTF-8 \
++		pt_PT.UTF-8 \
++		ru_RU.UTF-8 \
++		sr_YU.UTF-8 \
++		uk_UA.UTF-8 \
++		zh_CN.UTF-8 \
++		zh_HK.UTF-8 
++
++
++LOCALESORIG=	af_ZA.ISO8859-1 \
 +		be_BY.CP1131 \
 +		be_BY.CP1251 \
 +		be_BY.ISO8859-5 \
@@ -131,7 +153,7 @@ diff -ruN src56-orig/share/locale/monetdef/Makefile src/share/locale/monetdef/Ma
 +	} fi;
 +
 +
-+FILES=		${LOCALES:S/$/.out/}
++FILES=		${LOCALESORIG:S/$/.out/}
 +FILESNAME=	LC_MONETARY
 +
 +all: ${FILES}
@@ -146,44 +168,29 @@ diff -ruN src56-orig/share/locale/monetdef/Makefile src/share/locale/monetdef/Ma
 +		ISO8859-1 ISO8859-2 ISO8859-4 ISO8859-7 ISO8859-9 \
 +		ISO8859-13 ISO8859-15 SJIS US-ASCII UTF-8
 +
-+Big5_UTF-8=	zh_TW
-+eucJP_SJIS=	ja_JP
-+eucKR_CP949=	ko_KR
-+GB2312_GBK=	zh_CN
-+ISO8859-1_ISO8859-1= ca_ES:ca_AD ca_ES:ca_FR ca_ES:ca_IT es_ES:eu_ES \
-+		de_CH:fr_CH de_CH:it_CH no_NO:nb_NO no_NO:nn_NO
-+ISO8859-1_ISO8859-15= af_ZA ca_AD ca_ES ca_FR ca_IT da_DK de_AT de_CH de_DE \
-+		en_AU en_CA en_GB en_NZ en_US \
-+		es_AR es_BO es_CL es_CO es_CR es_CU es_DO es_EC \
-+		es_ES es_GT es_GQ es_HN es_MX es_NI es_PA es_PE \
-+		es_PR es_PY es_SV es_US es_UY es_VE \
-+		fi_FI fr_BE fr_CA fr_CH fr_FR \
-+		is_IS it_IT it_CH nl_BE nl_NL nb_NO nn_NO no_NO sv_SE
 +ISO8859-1_US-ASCII= en_AU en_CA en_GB en_NZ en_US
-+ISO8859-1_UTF-8= af_ZA ca_AD ca_ES ca_FR ca_IT da_DK de_AT de_CH de_DE \
++ISO8859-1_UTF-8= af_ZA ca_ES da_DK de_AT de_CH de_DE \
 +		en_AU en_CA en_NZ en_US \
 +		es_AR es_BO es_CL es_CO es_CU es_DO es_EC \
 +		es_GT es_GQ es_HN es_MX es_NI es_PA es_PE \
 +		es_PR es_PY es_SV es_US es_UY es_VE \
 +		fi_FI fr_BE fr_CA fr_FR is_IS it_IT nl_BE \
-+		nl_NL nb_NO nn_NO no_NO pt_BR sv_SE
++		nl_NL no_NO pt_BR sv_SE
 +ISO8859-2_UTF-8= hr_HR hu_HU ro_RO sk_SK sl_SI sr_YU
 +ISO8859-7_UTF-8= el_GR
 +ISO8859-9_UTF-8= tr_TR
-+ISO8859-13_ISO8859-4= lt_LT
 +ISO8859-13_UTF-8= lt_LT lv_LV
-+ISO8859-15_ISO8859-15= es_ES:eu_ES
 +ISO8859-15_UTF-8= et_EE
-+UTF-8_Big5HKSCS= zh_HK
-+UTF-8_UTF-8=	ca_ES:ca_AD ca_ES:ca_FR ca_ES:ca_IT es_ES:eu_ES \
-+	de_CH:fr_CH de_CH:it_CH
++UTF-8_UTF-8=	es_ES:es 
++#UTF-8_UTF-8=	ca_ES:ca_AD ca_ES:ca_FR ca_ES:ca_IT es_ES:eu_ES \
++#	de_CH:fr_CH de_CH:it_CH
 +
-+SYMLINKS=
++COPIES=
 +.for enc1 in ${ENCODINGS}
 +.for enc2 in ${ENCODINGS}
 +.for lang_terr in ${${enc1}_${enc2}}
-+SYMLINKS+=	${LOCALEDIR}/${lang_terr:C/:.*$//}.${enc1}/${FILESNAME} \
-+		${LOCALEDIR}/${lang_terr:C/^.*://}.${enc2}
++COPIES+=	./${lang_terr:C/:.*$//}.${enc1}.out \
++		${LOCALEDIR}/${lang_terr:C/^.*://}.${enc2}/
 +.endfor
 +.endfor
 +.endfor
@@ -195,11 +202,16 @@ diff -ruN src56-orig/share/locale/monetdef/Makefile src/share/locale/monetdef/Ma
 +	install -o ${LOCALEOWN} -g ${LOCALEGRP} -m ${LOCALEMODE} \
 +	    ${locale}.out ${DESTDIR}${FILESDIR_${locale}.out}/${FILESNAME}
 +.endfor
-+.for lnk file in ${SYMLINKS}
-+	@l=${DESTDIR}${lnk}; \
-+	 t=${DESTDIR}${file}; \
-+	 echo $$t -\> $$l; \
-+	 rm -f $$t/${FILESNAME}; mkdir -p $$t; ln -s $$l $$t
++.for src dstd in ${COPIES}
++	@s=${src}; \
++	 t=${DESTDIR}${dstd}; \
++	 echo $$s -\> $$t/${FILESNAME}; \
++	 rm -f $$t/${FILESNAME}; \
++	 echo "install -o ${LOCALEOWN} -g ${LOCALEGRP} -m ${DIRMODE} -d $$t"; \
++	 install -o ${LOCALEOWN} -g ${LOCALEGRP} -m ${DIRMODE} -d $$t; \
++	 echo "install -o ${LOCALEOWN} -g ${LOCALEGRP} -m ${LOCALEMODE} $$s $$t/${FILESNAME}"; \
++	 install -o ${LOCALEOWN} -g ${LOCALEGRP} -m ${LOCALEMODE} \
++		$$s $$t/${FILESNAME}
 +.endfor
 +
 +uninstall:
@@ -214,10 +226,10 @@ diff -ruN src56-orig/share/locale/monetdef/Makefile src/share/locale/monetdef/Ma
 +	} fi; \
 +	} fi;
 +.endfor
-+.for lnk file in ${SYMLINKS}
++.for lnk file in ${COPIES}
 +	@l=${DESTDIR}${lnk}; \
 +	t=${DESTDIR}${file}; \
-+	echo $$t -\> $$l; \
++	echo $$l -\> $$t; \
 +	rm -f $$t/${FILESNAME}; \
 +	if (test -d $$t) then { \
 +	r=`ls $$t/`; \
