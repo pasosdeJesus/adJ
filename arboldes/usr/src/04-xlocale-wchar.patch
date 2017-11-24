@@ -1,16 +1,29 @@
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src54-num/lib/libc/locale/Makefile.inc src/lib/libc/locale/Makefile.inc
 --- src54-num/lib/libc/locale/Makefile.inc	Thu Dec  5 18:53:15 2013
 +++ src/lib/libc/locale/Makefile.inc	Thu Dec  5 19:03:47 2013
-@@ -10,7 +10,7 @@
- 	wcstoul.c wcstoll.c wcstoull.c wcstoimax.c wcstoumax.c \
- 	setrunelocale.c runeglue.c rune.c runetable.c ___runetype_mb.c \
- 	_wctrans.c wcsxfrm.c loadtextcat.c collate.c \
--	fix_grouping.c 
-+	fix_grouping.c none.c xlocale.c
+@@ -5,17 +5,17 @@
  
- MAN+=	nl_langinfo.3 setlocale.3 iswalnum.3 towlower.3 \
- 	btowc.3 mblen.3 mbrlen.3 mbrtowc.3 mbsinit.3 mbsrtowcs.3 \
-@@ -19,3 +19,5 @@
+ SRCS+=	btowc.c _def_messages.c _def_monetary.c _def_numeric.c _def_time.c \
+ 	localeconv.c nl_langinfo.c nl_langinfo_l.c setlocale.c \
+-	duplocale.c freelocale.c newlocale.c uselocale.c \
+ 	__mb_cur_max.c collate.c _CurrentRuneLocale.c \
+ 	fix_grouping.c _get_locname.c \
+ 	isctype_l.c iswctype.c iswctype_l.c \
+ 	loadtextcat.c \
+-	mblen.c mbrlen.c mbstowcs.c mbtowc.c multibyte_citrus.c wcscoll.c \
+-	wcscoll_l.c \
++	mblen.c mbrlen.c mbstowcs.c mbtowc.c multibyte_citrus.c none.c \
++	setrunelocale.c \
++	wcscoll.c wcscoll_l.c \
+ 	wcstombs.c wctob.c wctomb.c wcstof.c wcstod.c wcstold.c wcstol.c \
+ 	wcstoul.c wcstoll.c wcstoull.c wcstoimax.c wcstoumax.c \
+ 	runeglue.c rune.c runetable.c ___runetype_mb.c \
+-	_wctrans.c wcsxfrm.c wcsxfrm_l.c
++	_wctrans.c wcsxfrm.c wcsxfrm_l.c xlocale.c
+ 
+ MAN+=	nl_langinfo.3 setlocale.3 newlocale.3 uselocale.3 \
+ 	iswalnum.3 towlower.3 \
+@@ -25,3 +25,5 @@
  	wctype.3 iswctype.3 wctrans.3 towctrans.3 wcwidth.3
  
  CFLAGS+=-I${.CURDIR} -I${LIBCSRCDIR}/citrus -DCOLLATE_DEBUG
@@ -53,7 +66,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/bt
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/collate.c src/lib/libc/locale/collate.c
 --- src53collation/lib/libc/locale/collate.c	Mon Apr  1 08:25:36 2013
 +++ src/lib/libc/locale/collate.c	Wed Apr  3 06:29:38 2013
-@@ -66,32 +66,44 @@
+@@ -59,32 +59,44 @@
  int __collate_load_error;
  
  
@@ -108,19 +121,26 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/co
  		return NULL;
  	}
  
-@@ -104,9 +116,9 @@
- int
- __collate_load_tables(const char *encoding)
- {
--	int ret = __collate_load_tables_l(encoding, &__global_collate);
-+	int ret = __collate_load_tables_l(encoding, &__xlocale_global_collate);
+@@ -100,14 +112,14 @@
+ 	int ret = 0;
+ 	if (strcasecmp(encoding, "C") == 0 || 
+ 			strcasecmp(encoding, "POSIX") == 0) {
+-		memcpy(&__global_collate, &__C_collate, 
+-				sizeof(__global_collate));
++		memcpy(&__xlocale_global_collate, &__xlocale_C_collate, 
++				sizeof(__xlocale_global_collate));
+ 		ret = _LDP_CACHE;
+ 	} else {
+-		ret = __collate_load_tables_l(encoding, &__global_collate);
++		ret = __collate_load_tables_l(encoding, &__xlocale_global_collate);
+ 	}
  
 -	__collate_load_error = __global_collate.__collate_load_error;
 +	__collate_load_error = __xlocale_global_collate.__collate_load_error;
  	return ret;
  }
  
-@@ -136,7 +148,7 @@
+@@ -137,7 +149,7 @@
   * 		before the 4 bytes of the integer prim.
   */
  int
@@ -128,8 +148,8 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/co
 +__collate_load_tables_l(const char *locname, struct xlocale_collate *table)
  {
  	FILE *fp = NULL;
- 	int i, saverr, chains, len;
-@@ -294,7 +306,7 @@
+ 	int i, saverr, chains;
+@@ -275,7 +287,7 @@
   * table applied to the wide string s.
   */
  wchar_t *
@@ -138,7 +158,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/co
  {
  	int dest_len, len, nlen;
  	size_t delta = wcslen(wcs);
-@@ -362,7 +374,7 @@
+@@ -343,7 +355,7 @@
   * beginning in t. In len returns the amount of characters of t processed.
   */
  void
@@ -147,7 +167,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/co
  		int *prim, int *sec)
  {
  	struct __collate_st_chain_pri *p2;
-@@ -385,13 +397,13 @@
+@@ -366,13 +378,13 @@
  
  #ifdef COLLATE_DEBUG
  void
@@ -450,7 +470,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mb
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mblocal.h src/lib/libc/locale/mblocal.h
 --- src53collation/lib/libc/locale/mblocal.h	Wed Dec 31 19:00:00 1969
 +++ src/lib/libc/locale/mblocal.h	Tue Apr  2 13:42:13 2013
-@@ -0,0 +1,79 @@
+@@ -0,0 +1,81 @@
 +/*-
 + * Copyright (c) 2004 Tim J. Robbins.
 + * All rights reserved.
@@ -486,6 +506,8 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mb
 +
 +#ifndef _MBLOCAL_H_
 +#define	_MBLOCAL_H_
++
++#include <stddef.h>
 +
 +#include "runetype.h"
 +#include "xlocale_private.h"
@@ -1031,26 +1053,20 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mb
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/multibyte_citrus.c src/lib/libc/locale/multibyte_citrus.c
 --- src53collation/lib/libc/locale/multibyte_citrus.c	Sat Sep 12 11:23:14 2015
 +++ src/lib/libc/locale/multibyte_citrus.c	Sun May  8 05:36:41 2016
-@@ -31,90 +31,149 @@
- #include <stdint.h>
- #include <stdlib.h>
+@@ -33,88 +33,144 @@
  #include <wchar.h>
-+#include <xlocale.h>
-+#include "runetype.h"
  
  #include "citrus_ctype.h"
-+#include "mblocal.h" 
++#include "mblocal.h"
 +#include "xlocale_private.h"
  
  int
 -mbsinit(const mbstate_t *ps)
 +mbsinit_l(const mbstate_t *ps, locale_t loc)
  {
--	if (ps == NULL || __mb_cur_max == 1)
-+
+-	if (ps == NULL || __mb_cur_max() == 1)
 +	if (ps == NULL || XLOCALE_CTYPE(loc)->__mb_cur_max == 1)
  		return 1;
-+
  	return _citrus_utf8_ctype_mbsinit(ps);
  }
 +DEF_STRONG(mbsinit_l);
@@ -1058,7 +1074,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mu
 +int
 +mbsinit(const mbstate_t *ps)
 +{
-+	return mbsinit_l(ps, __get_locale());
++	return  mbsinit_l(ps, __get_locale());
 +}
  DEF_STRONG(mbsinit);
  
@@ -1070,25 +1086,24 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mu
  
  	if (ps == NULL)
  		ps = &mbs;
--	if (__mb_cur_max == 1)
+-	if (__mb_cur_max() == 1)
 +	if (XLOCALE_CTYPE(loc)->__mb_cur_max == 1)
  		return _citrus_none_ctype_mbrtowc(pwc, s, n);
  	return _citrus_utf8_ctype_mbrtowc(pwc, s, n, ps);
  }
--DEF_STRONG(mbrtowc);
 +DEF_STRONG(mbrtowc_l);
- 
-+size_t 
-+mbrtowc(wchar_t *pwc, const char *s, size_t n, mbstate_t *ps) 
-+{
-+	return mbrtowc_l(pwc, s, n, ps, __get_locale()); 
-+}
-+DEF_STRONG(mbrtowc); 
 +
++size_t
++mbrtowc(wchar_t *pwc, const char *s, size_t n, mbstate_t *ps)
++{
++	return mbrtowc_l(pwc, s, n, ps, __get_locale());
++}
+ DEF_STRONG(mbrtowc);
+ 
  size_t
 -mbsrtowcs(wchar_t *dst, const char **src, size_t len, mbstate_t *ps)
-+mbsrtowcs_l(wchar_t *dst, const char **src, size_t len, mbstate_t *ps, 
-+		locale_t loc)
++mbsrtowcs_l(wchar_t *dst, const char **src, size_t len, mbstate_t *ps,
++    locale_t loc)
  {
  	static mbstate_t mbs;
  
@@ -1116,7 +1131,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mu
  
  	if (ps == NULL)
  		ps = &mbs;
--	if (__mb_cur_max == 1)
+-	if (__mb_cur_max() == 1)
 +	if (XLOCALE_CTYPE(loc)->__mb_cur_max == 1)
  		return _citrus_none_ctype_mbsnrtowcs(dst, src, nmc, len);
  	return _citrus_utf8_ctype_mbsnrtowcs(dst, src, nmc, len, ps);
@@ -1127,7 +1142,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mu
 +mbsnrtowcs(wchar_t *dst, const char **src, size_t nmc, size_t len,
 +    mbstate_t *ps)
 +{
-+	return mbsnrtowcs_l(dst, src, nmc, len, ps, __get_locale()); 
++	return mbsnrtowcs_l(dst, src, nmc, len, ps, __get_locale());
 +}
  DEF_WEAK(mbsnrtowcs);
  
@@ -1139,7 +1154,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mu
  
  	if (ps == NULL)
  		ps = &mbs;
--	if (__mb_cur_max == 1)
+-	if (__mb_cur_max() == 1)
 +	if (XLOCALE_CTYPE(loc)->__mb_cur_max == 1)
  		return _citrus_none_ctype_wcrtomb(s, wc);
  	return _citrus_utf8_ctype_wcrtomb(s, wc, ps);
@@ -1156,7 +1171,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mu
  size_t
 -wcsrtombs(char *dst, const wchar_t **src, size_t len, mbstate_t *ps)
 +wcsrtombs_l(char *dst, const wchar_t **src, size_t len, mbstate_t *ps,
-+		locale_t loc)
++    locale_t loc)
  {
  	static mbstate_t mbs;
  
@@ -1170,7 +1185,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mu
 +size_t
 +wcsrtombs(char *dst, const wchar_t **src, size_t len, mbstate_t *ps)
 +{
-+	return wcsrtombs_l(dst, src, len, ps, __get_locale()); 
++	 return wcsrtombs_l(dst, src, len, ps, __get_locale());
 +}
  DEF_STRONG(wcsrtombs);
  
@@ -1184,11 +1199,11 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mu
  
  	if (ps == NULL)
  		ps = &mbs;
--	if (__mb_cur_max == 1)
+-	if (__mb_cur_max() == 1)
 +	if (XLOCALE_CTYPE(loc)->__mb_cur_max == 1)
  		return _citrus_none_ctype_wcsnrtombs(dst, src, nwc, len);
  	return _citrus_utf8_ctype_wcsnrtombs(dst, src, nwc, len, ps);
-+}
+ }
 +DEF_WEAK(wcsnrtombs_l);
 +
 +size_t
@@ -1196,8 +1211,9 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mu
 +    mbstate_t *ps)
 +{
 +	return wcsnrtombs_l(dst, src, nwc, len, ps, __get_locale());
- }
++}
  DEF_WEAK(wcsnrtombs);
++
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/newlocale.3 src/lib/libc/locale/newlocale.3
 --- src53collation/lib/libc/locale/newlocale.3	Wed Dec 31 19:00:00 1969
 +++ src/lib/libc/locale/newlocale.3	Tue Apr  2 06:11:30 2013
@@ -1589,166 +1605,247 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/ru
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src55-orig/lib/libc/locale/setlocale.c src/lib/libc/locale/setlocale.c
 --- src55-orig/lib/libc/locale/setlocale.c	Mon Apr  1 08:25:36 2013
 +++ src/lib/libc/locale/setlocale.c	Wed Apr  3 06:41:58 2013
-@@ -43,6 +43,7 @@
+@@ -1,6 +1,5 @@
+ /*	$OpenBSD: setlocale.c,v 1.27 2017/09/05 03:16:13 schwarze Exp $	*/
+-/*
+- * Copyright (c) 2017 Ingo Schwarze <schwarze@openbsd.org>
++/* * Copyright (c) 2017 Ingo Schwarze <schwarze@openbsd.org>
+  *
+  * Permission to use, copy, modify, and distribute this software for any
+  * purpose with or without fee is hereby granted, provided that the above
+@@ -20,7 +19,9 @@
+ #include <string.h>
+ 
  #include "collate.h"
++#include "mblocal.h"
  #include "rune.h"
- #include "rune_local.h"
 +#include "xlocale_private.h"
- /*
-  * Category names for getenv()
-  */
-@@ -75,7 +76,7 @@
- static void revert_to_default(int);
- static int load_locale_sub(int, const char *);
- static char	*loadlocale(int, const char *);
--static const char *__get_locale_env(int);
-+const char *__get_locale_env(int);
  
- extern int __time_load_locale(const char *name);
- extern int __monetary_load_locale(const char *name);
-@@ -199,12 +200,18 @@
- 	case LC_CTYPE:
- 		(void)_xpg4_setrunelocale("C");
- 		__install_currentrunelocale_ctype();
-+		(void)strlcpy(__xlocale_global_locale.components[category-1]->locale, 
-+				"C", 
-+				sizeof(__xlocale_global_locale.components[category-1]->locale) );
- 		break;
- 	case LC_MESSAGES:
- 		break;
- 	case LC_COLLATE:
-  		if (__collate_load_tables("C"))
- 			return;
-+		(void)strlcpy(__xlocale_global_locale.components[category-1]->locale, 
-+				"C", 
-+				sizeof(__xlocale_global_locale.components[category-1]->locale) );
- 		break;
- 	case LC_MONETARY:
- 		if (__monetary_load_locale("C")) 
-@@ -268,6 +275,9 @@
- 		if (_xpg4_setrunelocale(locname))
- 			return -1;
- 		__install_currentrunelocale_ctype();
-+		(void)strlcpy(__xlocale_global_locale.components[category-1]->locale, 
-+				locname, 
-+				sizeof(__xlocale_global_locale.components[category-1]->locale) );
- 		break;
- 
- 	case LC_MESSAGES:
-@@ -276,6 +286,9 @@
- 	case LC_COLLATE:
- 		if (__collate_load_tables(locname))
- 			return -1;
-+		(void)strlcpy(__xlocale_global_locale.components[category-1]->locale, 
-+				locname, 
-+				sizeof(__xlocale_global_locale.components[category-1]->locale) );
- 		break;
- 		
- 	case LC_MONETARY:
-@@ -311,7 +324,7 @@
- 	}
+ static void
+ freegl(char **oldgl)
+@@ -52,6 +53,8 @@
+ 	return newgl;
  }
  
--static const char *
-+const char *
- __get_locale_env(int category)
- {
- 	const char *env;
++extern int __xlocale_setrunelocale(struct xlocale_ctype *xc, 
++		const char *locname);
+ extern int __time_load_locale(const char *name);
+ extern int __monetary_load_locale(const char *name);
+ extern int __numeric_load_locale(const char *name);
+@@ -64,41 +67,55 @@
+ 	if ((locname = _get_locname(category, locname)) == NULL ||
+ 	    (cp = strdup(locname)) == NULL)
+ 		return -1;
++	
++	if (oldgl != NULL && strcmp(oldgl[category], locname) == 0) {
++		free(gl[category]);
++		gl[category] = cp;
++		return 0;
++	}
+ 
+-	if (oldgl == NULL || strcmp(oldgl[category], locname) != 0) {
+-		switch (category) {
+-			case LC_CTYPE:
+-				_GlobalRuneLocale =
+-					strchr(locname, '.') == NULL ?
+-					&_DefaultRuneLocale : _Utf8RuneLocale;
+-				break;
+-			
+-			case LC_MESSAGES:
+-				break;
+-			case LC_COLLATE:
+-				if (__collate_load_tables(locname) == _LDP_ERROR) {
+-					free(cp);
+-					return -1;
+-				}
+-				break;
+-			case LC_MONETARY:
+-				if (__monetary_load_locale(locname) != 0) {
+-					free(cp);
+-					return -1;
+-				}
+-			case LC_NUMERIC:
+-				if (__numeric_load_locale(locname) != 0) {
+-					free(cp);
+-					return -1;
+-				}
+-				break;
+-			case LC_TIME:
+-				if (__time_load_locale(locname) != 0) {
+-					free(cp);
+-					return -1;
+-				}
+-				break;
+-		}
++	switch (category) {
++		case LC_CTYPE:
++			if (__xlocale_setrunelocale(&__xlocale_global_ctype, 
++			    locname) != 0) {
++				free(cp);
++				return -1;
++			}
++			_GlobalRuneLocale = __xlocale_global_ctype.runes;
++			(void)strlcpy(__xlocale_global_locale.components[category-1]->locale, 
++			    locname,
++			    sizeof(__xlocale_global_locale.components[category-1]->locale));
++			break;
++
++		case LC_MESSAGES:
++			break;
++		case LC_COLLATE:
++			if (__collate_load_tables(locname) == _LDP_ERROR) {
++				free(cp);
++				return -1;
++			}
++			(void)strlcpy(__xlocale_global_locale.components[category-1]->locale, 
++					locname,
++					sizeof(__xlocale_global_locale.components[category-1]->locale));
++
++			break;
++		case LC_MONETARY:
++			if (__monetary_load_locale(locname) != 0) {
++				free(cp);
++				return -1;
++			}
++		case LC_NUMERIC:
++			if (__numeric_load_locale(locname) != 0) {
++				free(cp);
++				return -1;
++			}
++			break;
++		case LC_TIME:
++			if (__time_load_locale(locname) != 0) {
++				free(cp);
++				return -1;
++			}
++			break;
+ 	}
+ 
+ 	free(gl[category]);
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src54-num/lib/libc/locale/setrunelocale.c src/lib/libc/locale/setrunelocale.c
 --- src54-num/lib/libc/locale/setrunelocale.c	Sun Jun  2 15:10:49 2013
 +++ src/lib/libc/locale/setrunelocale.c	Fri Dec  6 07:48:31 2013
-@@ -95,10 +95,13 @@
- #include <stdlib.h>
- #include <string.h>
- #include <wchar.h>
+@@ -0,0 +1,147 @@
++/*	$OpenBSD: setrunelocale.c,v 1.15 2016/09/05 09:47:03 schwarze Exp $ */
++/*	$NetBSD: setrunelocale.c,v 1.14 2003/08/07 16:43:07 agc Exp $	*/
++
++/*-
++ * Copyright (c)1999 Citrus Project,
++ * All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
++ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
++ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++ * SUCH DAMAGE.
++ *
++ * From locale/setrunelocale.c
++ */
++
++/*-
++ * Copyright (c) 1998 The NetBSD Foundation, Inc.
++ * All rights reserved.
++ *
++ * This code is derived from software contributed to The NetBSD Foundation
++ * by Paul Kranenburg.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE NETBSD FOUNDATION, INC. AND CONTRIBUTORS
++ * ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
++ * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
++ * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR CONTRIBUTORS
++ * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
++ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
++ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
++ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
++ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
++ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
++ * POSSIBILITY OF SUCH DAMAGE.
++ */
++
++/*-
++ * Copyright (c) 1993
++ *	The Regents of the University of California.  All rights reserved.
++ *
++ * This code is derived from software contributed to Berkeley by
++ * Paul Borman at Krystal Technologies.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ * 3. Neither the name of the University nor the names of its contributors
++ *    may be used to endorse or promote products derived from this software
++ *    without specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
++ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
++ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++ * SUCH DAMAGE.
++ */
++
++#include <stdlib.h>
++#include <string.h>
++#include <wchar.h>
 +#include <xlocale.h>
- 
- #include "citrus_ctype.h"
++ 
++#include "citrus_ctype.h"
 +#include "mblocal.h"
- #include "rune.h"
- #include "rune_local.h"
++#include "rune.h"
++#include "rune_local.h"
 +#include "xlocale_private.h"
- 
- static _RuneLocale *_Utf8RuneLocale;
- 
-@@ -123,25 +126,29 @@
- }
- 
- int
--_xpg4_setrunelocale(const char *locname)
-+xlocale_setrunelocale(struct xlocale_ctype *xc, const char *locname)
- {
- 	char path[PATH_MAX];
-+	_RuneLocale *rl;
- 	int error, len;
- 	const char *dot, *encoding;
- 
-+	if (xc == NULL || locname == NULL) {
-+		rl = &_DefaultRuneLocale;
-+		goto found;
-+	}
 +
- 	if (!strcmp(locname, "C") || !strcmp(locname, "POSIX")) {
--		_CurrentRuneLocale = &_DefaultRuneLocale;
--		__mb_cur_max = 1;
--		return 0;
-+		rl = &_DefaultRuneLocale;
-+		goto found;
- 	}
- 
- 	/* Assumes "language[_territory][.codeset]" locale name. */
- 	dot = strrchr(locname, '.');
- 	if (dot == NULL) {
- 		/* No encoding specified. Fall back to ASCII. */
--		_CurrentRuneLocale = &_DefaultRuneLocale;
--		__mb_cur_max = 1;
--		return 0;
-+		rl = &_DefaultRuneLocale;
-+		goto found;
- 	}
- 
- 	encoding = dot + 1;
-@@ -158,7 +165,65 @@
- 		return error;
- 	if (_Utf8RuneLocale == NULL)
- 		return ENOENT;
--	_CurrentRuneLocale = _Utf8RuneLocale;
--	__mb_cur_max = _CITRUS_UTF8_MB_CUR_MAX;
-+	rl = _Utf8RuneLocale;
-+
-+found:
-+	_CurrentRuneLocale = (_RuneLocale *)rl;
-+	if (rl == &_DefaultRuneLocale) {
-+		_none_init(xc, rl);
-+		__mb_cur_max = 1;
++int
++__xlocale_setrunelocale(struct xlocale_ctype *xc, const char *locname) {
++	if (strchr(locname, '.') == NULL) {
++		_none_init(xc, &_DefaultRuneLocale);
 +	} else {
 +		xc->__mbrtowc = _citrus_utf8_ctype_mbrtowc;
 +		xc->__mbsinit = _citrus_utf8_ctype_mbsinit;
 +		xc->__mbsnrtowcs = _citrus_utf8_ctype_mbsnrtowcs;
 +		xc->__wcrtomb = _citrus_utf8_ctype_wcrtomb;
 +		xc->__wcsnrtombs = _citrus_utf8_ctype_wcsnrtombs;
-+		xc->runes = rl;
-+		xc->__mb_cur_max = __mb_cur_max = _CITRUS_UTF8_MB_CUR_MAX;
-+	
++		xc->runes = _Utf8RuneLocale;
++		xc->__mb_cur_max = _CITRUS_UTF8_MB_CUR_MAX;
++
 +		xc->__mb_sb_limit = 256; /* Fix */
 +	}
-+ 
- 	return 0;
- }
-+
-+
-+int
-+_xpg4_setrunelocale(const char *locname)
-+{
-+
-+	int rv = xlocale_setrunelocale(&__xlocale_global_ctype, locname);
-+	if (rv == 0) {
-+		_CurrentRuneLocale = __xlocale_global_ctype.runes;
-+ 		__mb_cur_max = __xlocale_global_ctype.__mb_cur_max;
-+	}
-+	return rv;
++	return 0;
 +}
-+
 +
 +void
 +destruct_ctype(void *t)
@@ -1768,7 +1865,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src54-num/lib/libc/locale/setrune
 +	struct xlocale_ctype *l = calloc(sizeof(struct xlocale_ctype), 1);
 +
 +	l->header.header.destructor = destruct_ctype;
-+	if (xlocale_setrunelocale(l, locname))
++	if (__xlocale_setrunelocale(l, locname))
 +	{
 +		xlocale_release(l);
 +		return NULL;
@@ -2752,7 +2849,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src55-orig/lib/libc/locale/xlocal
 + * Private functions in setlocale.c.
 + */
 +const char *
-+__get_locale_env(int category);
++_get_locname(int category, const char *locname);
 +
 +struct _xlocale __xlocale_global_locale = {
 +	{0},
@@ -2871,7 +2968,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src55-orig/lib/libc/locale/xlocal
 +		pthread_getspecific(locale_info_key)); */
 +}
 +
-+inline locale_t __get_locale(void)
++locale_t __get_locale(void)
 +{
 +#ifndef __NO_TLS
 +	if (!__has_thread_locale) {
@@ -2993,7 +3090,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src55-orig/lib/libc/locale/xlocal
 +	for (type=0 ; type<XLC_LAST ; type++) {
 +		if (mask & 1) {
 +			if (useenv) {
-+				realLocale = __get_locale_env(type);
++				realLocale = _get_locname(type, "");
 +			}
 +			new->components[type] =
 +			     constructors[type](realLocale, new);
@@ -3045,20 +3142,20 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src55-orig/lib/libc/locale/xlocal
 + * Free a locale_t.  This is quite a poorly named function.  It actually
 + * disclaims a reference to a locale_t, rather than freeing it.  
 + */
-+int
++void
 +freelocale(locale_t loc)
 +{
 +	/* Fail if we're passed something that isn't a locale. */
 +	if ((NULL == loc) || (LC_GLOBAL_LOCALE == loc)) {
-+		return (-1);
++		return ;
 +	}
 +	/* If we're passed the global locale, pretend that we freed it but don't
 +	 * actually do anything. */
 +	if (&__xlocale_global_locale == loc) {
-+		return (0);
++		return ;
 +	}
 +	xlocale_release(loc);
-+	return (0);
++	return ;
 +}
 +
 +/*
@@ -3102,9 +3199,9 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src55-orig/lib/libc/locale/xlocal
 +	printf("using_messages_locale=%i ", loc->using_messages_locale);
 +	printf("monetary_locale_changed=%i", loc->monetary_locale_changed);
 +	printf("numeric_locale_changed=%i\n", loc->numeric_locale_changed);
-+	printf("header.retain_count=%i ", loc->header.retain_count);
++	printf("header.retain_count=%li ", loc->header.retain_count);
 +	printf("header.destructor=%p ", loc->header.destructor);
-+	printf("mblen=%p\n", loc->mblen);
++	//printf("mblen=%p\n", loc->mblen);
 +
 +	for (type=0 ; type<XLC_LAST ; type++) {
 +		printf("t=%i, %p", type, loc->components[type]);
@@ -3153,12 +3250,12 @@ diff -ruN src54-num/lib/libc/locale/xlocale_private.h src/lib/libc/locale/xlocal
 +#ifndef _XLOCALE_PRIVATE__H_
 +#define _XLOCALE_PRIVATE__H_
 +
-+#include <xlocale.h>
 +#include <locale.h>
 +#include <stdlib.h>
 +#include <stdint.h>
 +#include <sys/types.h>
 +#include <machine/atomic.h>
++#include <xlocale.h>
 +
 +
 +#define ENCODING_LEN 31
@@ -3309,7 +3406,7 @@ diff -ruN src54-num/lib/libc/locale/xlocale_private.h src/lib/libc/locale/xlocal
 + */
 +extern int __has_thread_locale;
 +
-+inline locale_t __get_locale(void);
++locale_t __get_locale(void);
 +
 +/**
 + * Two magic values are allowed for locale_t objects.  NULL and -1.  This
@@ -3365,7 +3462,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/regress/lib/libc/l
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regress/lib/libc/locale/check_xlocale/check_xlocale.c
 --- src53collation/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Wed Dec 31 19:00:00 1969
 +++ src/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Wed Apr  3 12:47:22 2013
-@@ -0,0 +1,156 @@
+@@ -0,0 +1,164 @@
 +/**
 + * Public domain according to Colombian Legislation. 
 + * http://www.pasosdejesus.org/dominio_publico_colombia.html
@@ -3438,12 +3535,12 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/regress/lib/libc/l
 +	locale_t esp6 = duplocale(esp3);
 +	//__collate_print_tables(NULL);
 +	p(es_CO_UTF_8 != esp2);
-+	p(freelocale(esp) == 0);
-+	p(freelocale(esp2) == 0);
-+	p(freelocale(esp3) == 0);
-+	p(freelocale(esp4) == 0);
-+	p(freelocale(esp5) == 0);
-+	p(freelocale(esp6) == 0);
++	freelocale(esp);
++	freelocale(esp2);
++	freelocale(esp3);
++	freelocale(esp4);
++	freelocale(esp5);
++	freelocale(esp6);
 +}
 +
 +void test_wchar() {
@@ -3454,18 +3551,25 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/regress/lib/libc/l
 +	printf("locale %s\n", nl);
 +	p(sizeof(mb) == 8);
 +	p((s = mblen(mb, 10)) == 1); 
-+	printf("s=%i\n", s);
++	printf("s=%zu\n", s);
 +	p((s = mbrlen(mb, 10, NULL)) == 1);
-+	printf("s=%i\n", s);
++	printf("s=%zu\n", s);
 +	p((s = mblen(mbs, 10)) == 1);
-+	printf("s=%i\n", s);
-+	nl = setlocale(LC_ALL, "es_CO.ISO8859-1");
-+	locale_t l = uselocale(NULL);
++	printf("s=%zu\n", s);
++	nl = setlocale(LC_ALL, "es_CO.UTF-8");
++	locale_t l1 = uselocale(NULL);
++	locale_t l = duplocale(l1);
 +	printf("locale %s\n", nl);
-+	p(mblen_l(mb, 3, l) == 1);
-+	p(mbrlen_l(mb, 3, NULL, l) == 1);
-+	p(mblen_l(mbs, 10, l) == 1);
-+	p(mbrlen_l(mbs, 10, NULL, l) == 1);
++	p(mblen(mb, 3) == 2);
++	p(mbrlen(mb, 3, NULL) == 2);
++	p(mblen(mbs, 10) == 2);
++
++	nl = setlocale(LC_ALL, "C");
++	printf("locale %s\n", nl);
++	p(mblen_l(mb, 3, l) == 2);
++	p(mbrlen_l(mb, 3, NULL, l) == 2);
++	p(mblen_l(mbs, 10, l) == 2);
++	p(mbrlen_l(mbs, 10, NULL, l) == 2);
 +	nl = setlocale(LC_ALL, "es_CO.UTF-8");
 +	printf("locale %s\n", nl);
 +	p(mblen(mb, 3) == 2);
@@ -3489,7 +3593,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/regress/lib/libc/l
 +	mb3[s] = '\0';
 +	snprintf(bp, 1000, "%s", mb3);
 +	//printf("bp=%s, bp[0]=%i && bp[1]==%i && bp[2]==%i && bp[3]==%i && bp[4]==%i\n", bp, bp[0], bp[1], bp[2], bp[3], bp[4]);
-+	p(bp[0]=117 && bp[1]==195 && bp[2]==177 && bp[3]==97);
++	p(bp[0]==117 && bp[1]==195 && bp[2]==177 && bp[3]==97);
 +
 +//	printf("ws(s)=%s\n", ws);
 +//	printf("ws(ls)=%ls \n", ws);
@@ -3512,6 +3616,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/regress/lib/libc/l
 +	p((s = wcsrtombs_l(mb3, (const wchar_t **)&ws, 10, &mbst, l)) > 0);
 +	p((s = wcsnrtombs_l(bp, (const wchar_t **)&ws, 10, 10, &mbst, l)) > 0);
 +	p(wctob_l(L'a', l) == 'a');
++	freelocale(l);
 +
 +}
 +
@@ -3535,10 +3640,10 @@ diff -ruN -x CVS -x obj src55-orig/include/Makefile src/include/Makefile
  
  MFILES=	frame.h
  LFILES=	endian.h fcntl.h syslog.h termios.h stdarg.h stdint.h varargs.h
-diff -ruN src59-orig/include/xlocale.h src/include/xlocale.h
---- src59-orig/include/xlocale.h	Wed Dec 31 19:00:00 1969
-+++ src/include/xlocale.h	Mon Jul 18 09:19:45 2016
-@@ -0,0 +1,463 @@
+diff -ruN src62-orig/include/xlocale.h src/include/xlocale.h
+--- src62-orig/include/xlocale.h	Wed Dec 31 19:00:00 1969
++++ src/include/xlocale.h	Thu Nov 23 13:06:33 2017
+@@ -0,0 +1,462 @@
 +/*-
 + * Copyright (c) 2011, 2012 The FreeBSD Foundation
 + * All rights reserved.
@@ -3584,12 +3689,12 @@ diff -ruN src59-orig/include/xlocale.h src/include/xlocale.h
 +
 +#include <sys/cdefs.h>
 +
-+/* Conveniente  para verificar si sistema tiene xlocale.h */
++/* Convinient to verify if system has xlocale.h */
 +#ifndef HAVE_XLOCALE_H
 +#define HAVE_XLOCALE_H
 +#endif
 +
-+/* xlocale.h ya es incluido por locale.h */
++/* xlocale.h already included by locale.h */
 +#ifndef _LOCALE_H_
 +#include <locale.h>
 +#endif
@@ -3616,12 +3721,7 @@ diff -ruN src59-orig/include/xlocale.h src/include/xlocale.h
 +
 +__BEGIN_DECLS
 +
-+locale_t	 duplocale(locale_t base); 
-+int		 freelocale(locale_t loc);
-+locale_t	 newlocale(int mask, const char *locale, locale_t base);
 +const char	*querylocale(int mask, locale_t loc);
-+locale_t	 uselocale(locale_t loc);
-+
 +
 +struct lconv	*localeconv_l(locale_t);
 +
@@ -3640,6 +3740,8 @@ diff -ruN src59-orig/include/xlocale.h src/include/xlocale.h
 +int	 strcoll_l(const char *, const char *, locale_t);
 +int	 wcscoll_l(const wchar_t *, const wchar_t *, locale_t);
 +size_t	 strxfrm_l(char *, const char *, size_t, locale_t);
++
++char    *strerror_l(int, locale_t);
 +
 +/* XLOCALE */ 
 +int	 strcasecmp_l(const char *, const char *, locale_t);
@@ -3856,6 +3958,8 @@ diff -ruN src59-orig/include/xlocale.h src/include/xlocale.h
 +wint_t towctrans_l(wint_t, wctrans_t, locale_t);
 +
 +wint_t nextwctype_l(wint_t, wctype_t, locale_t);
++
++wint_t nextwctype(wint_t, wctype_t);
 +
 +wctrans_t wctrans_l(const char *, locale_t);
 +
@@ -4150,3 +4254,121 @@ diff -ruN src59-orig/lib/libc/hidden/xlocale.h src/lib/libc/hidden/xlocale.h
 +PROTO_STD_DEPRECATED(uselocale);
 +
 +#endif /* !_LIBC_XLOCALE_H_ */
+diff -ruN src62-orig/regress/lib/libc/locale/Makefile src/regress/lib/libc/locale/Makefile
+--- src62-orig/regress/lib/libc/locale/Makefile	Wed Nov 22 16:22:10 2017
++++ src/regress/lib/libc/locale/Makefile	Wed Nov 22 23:45:50 2017
+@@ -1,5 +1,5 @@
+ # $OpenBSD: Makefile,v 1.6 2017/07/27 15:08:37 bluhm Exp $
+ 
+-SUBDIR =	check_isw mbrtowc setlocale wcrtomb check_time check_collate check_monetary check_numeric
++SUBDIR =	check_isw mbrtowc setlocale wcrtomb check_time check_collate check_monetary check_numeric check_xlocale
+ 
+ .include <bsd.subdir.mk>
+diff -ruN src62-orig/include/ctype.h src/include/ctype.h
+--- src62-orig/include/ctype.h	Mon Sep  4 22:16:13 2017
++++ src/include/ctype.h	Thu Nov 23 13:03:47 2017
+@@ -54,7 +54,7 @@
+ #if __POSIX_VISIBLE >= 200809
+ #ifndef	_LOCALE_T_DEFINED_
+ #define	_LOCALE_T_DEFINED_
+-typedef void	*locale_t;
++typedef struct _xlocale *locale_t;
+ #endif
+ #endif
+ 
+diff -ruN src62-orig/include/langinfo.h src/include/langinfo.h
+--- src62-orig/include/langinfo.h	Mon Sep  4 22:16:13 2017
++++ src/include/langinfo.h	Thu Nov 23 13:04:21 2017
+@@ -73,7 +73,7 @@
+ #if __POSIX_VISIBLE >= 200809
+ #ifndef	_LOCALE_T_DEFINED_
+ #define	_LOCALE_T_DEFINED_
+-typedef void	*locale_t;
++typedef struct _xlocale *locale_t;
+ #endif
+ #endif
+ 
+diff -ruN src62-orig/include/locale.h src/include/locale.h
+--- src62-orig/include/locale.h	Mon Sep  4 22:16:13 2017
++++ src/include/locale.h	Thu Nov 23 13:06:47 2017
+@@ -80,7 +80,7 @@
+ 
+ #ifndef	_LOCALE_T_DEFINED_
+ #define	_LOCALE_T_DEFINED_
+-typedef void	*locale_t;
++typedef struct	_xlocale *locale_t;
+ #endif
+ 
+ #define	LC_COLLATE_MASK		(1 << LC_COLLATE)
+diff -ruN src62-orig/include/string.h src/include/string.h
+--- src62-orig/include/string.h	Mon Sep  4 22:16:13 2017
++++ src/include/string.h	Thu Nov 23 13:05:01 2017
+@@ -55,7 +55,7 @@
+ #if __POSIX_VISIBLE >= 200809
+ #ifndef _LOCALE_T_DEFINED_
+ #define _LOCALE_T_DEFINED_
+-typedef void	*locale_t;
++typedef struct	_xlocale *locale_t;
+ #endif
+ #endif
+ 
+diff -ruN src62-orig/include/strings.h src/include/strings.h
+--- src62-orig/include/strings.h	Sun Sep 10 16:50:36 2017
++++ src/include/strings.h	Thu Nov 23 13:04:53 2017
+@@ -50,7 +50,7 @@
+ #if __POSIX_VISIBLE >= 200809
+ #ifndef	_LOCALE_T_DEFINED_
+ #define	_LOCALE_T_DEFINED_
+-typedef void	*locale_t;
++typedef struct	_xlocale *locale_t;
+ #endif
+ #endif
+ 
+diff -ruN src62-orig/include/time.h src/include/time.h
+--- src62-orig/include/time.h	Mon Sep  4 22:16:13 2017
++++ src/include/time.h	Thu Nov 23 13:05:16 2017
+@@ -102,7 +102,7 @@
+ #if __POSIX_VISIBLE >= 200809
+ #ifndef	_LOCALE_T_DEFINED_
+ #define	_LOCALE_T_DEFINED_
+-typedef void	*locale_t;
++typedef struct	_xlocale *locale_t;
+ #endif
+ #endif
+ 
+diff -ruN src62-orig/include/wchar.h src/include/wchar.h
+--- src62-orig/include/wchar.h	Mon Sep  4 22:16:13 2017
++++ src/include/wchar.h	Thu Nov 23 13:04:09 2017
+@@ -99,7 +99,7 @@
+ #if __POSIX_VISIBLE >= 200809
+ #ifndef	_LOCALE_T_DEFINED_
+ #define	_LOCALE_T_DEFINED_
+-typedef void	*locale_t;
++typedef struct _xlocale *locale_t;
+ #endif
+ #endif
+ 
+diff -ruN src62-orig/include/wctype.h src/include/wctype.h
+--- src62-orig/include/wctype.h	Mon Sep  4 22:16:13 2017
++++ src/include/wctype.h	Thu Nov 23 13:03:55 2017
+@@ -57,7 +57,7 @@
+ #if __POSIX_VISIBLE >= 200809
+ #ifndef	_LOCALE_T_DEFINED_
+ #define	_LOCALE_T_DEFINED_
+-typedef void	*locale_t;
++typedef struct _xlocale *locale_t;
+ #endif
+ #endif
+
+diff -ruN src62-orig/lib/libc/hidden/ctype.h src/lib/libc/hidden/ctype.h
+--- src62-orig/lib/libc/hidden/ctype.h 	Sep  4 22:16:13 2017
++++ src/lib/libc/hidden/ctype.h		Nov 23 13:03:55 2017
+@@ -40,7 +40,7 @@
+ 
+ #ifndef	_LOCALE_T_DEFINED_
+ #define	_LOCALE_T_DEFINED_
+-typedef void	*locale_t;
++typedef struct _xlocale *locale_t;
+ #endif
+ 
+ __only_inline int	isalnum_l(int _c, locale_t _l);

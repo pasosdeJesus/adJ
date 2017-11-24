@@ -35,7 +35,27 @@ diff -ruN src62-orig/lib/libc/locale/setlocale.c src/lib/libc/locale/setlocale.c
  	free(gl[category]);
  	gl[category] = cp;
  	return 0;
-@@ -97,7 +115,7 @@
+@@ -75,9 +93,9 @@
+ 	 * both via setlocale(3) and via locale(1).
+ 	 */
+ 	static char	  global_locname[256];
+-	static char	**global_locale;
++	static char	**global_locale = NULL;
+ 
+-	char **newgl, *firstname, *nextname;
++	char **newgl = NULL, *firstname, *nextname;
+ 	int ic;
+ 
+ 	if (category < LC_ALL || category >= _LC_LAST)
+@@ -92,22 +110,24 @@
+ 		if (category == LC_ALL && strchr(locname, '/') != NULL) {
+ 
+ 			/* One value for each category. */
+-			if ((firstname = strdup(locname)) == NULL)
++			if ((firstname = strdup(locname)) == NULL) {
++				freegl(newgl);
+ 				return NULL;
++			}
  			nextname = firstname;
  			for (ic = 1; ic < _LC_LAST; ic++)
  				if (nextname == NULL || changegl(ic,
@@ -44,7 +64,11 @@ diff -ruN src62-orig/lib/libc/locale/setlocale.c src/lib/libc/locale/setlocale.c
  					break;
  			free(firstname);
  			if (ic < _LC_LAST || nextname != NULL) {
-@@ -107,7 +125,7 @@
+-				freegl(newgl);
+-				return NULL;
++				global_locname[0] = '\0';
++				goto done;
+ 			}
  		} else {
  
  			/* One value only. */
@@ -53,36 +77,48 @@ diff -ruN src62-orig/lib/libc/locale/setlocale.c src/lib/libc/locale/setlocale.c
  				freegl(newgl);
  				return NULL;
  			}
-@@ -116,7 +134,7 @@
+@@ -116,9 +136,9 @@
  			if (category == LC_ALL) {
  				for (ic = 1; ic < _LC_LAST; ic++) {
  					if (changegl(ic, locname,
 -					    newgl) == -1) {
+-						freegl(newgl);
+-						return NULL;
 +					    newgl, global_locale) == -1) {
- 						freegl(newgl);
- 						return NULL;
++						global_locname[0] = '\0';
++						goto done;
  					}
-@@ -174,18 +192,14 @@
+ 				}
+ 			}
+@@ -173,24 +193,13 @@
+ 	}
  
  done:
- 	if (locname != NULL) {
+-	if (locname != NULL) {
 -		/*
 -		 * We can't replace the global locale earlier
 -		 * because we first have to make sure that we
 -		 * also have the memory required to report success.
 -		 */
- 		if (global_locname[0] != '\0') {
-+			/*
-+		 	* We can't replace the global locale earlier
-+		 	* because we first have to make sure that we
-+		 	* also have the memory required to report success.
-+		 	*/
- 			freegl(global_locale);
- 			global_locale = newgl;
+-		if (global_locname[0] != '\0') {
+-			freegl(global_locale);
+-			global_locale = newgl;
 -			if (category == LC_ALL || category == LC_CTYPE)
 -				_GlobalRuneLocale =
 -				    strchr(global_locname, '.') == NULL ?
 -				    &_DefaultRuneLocale : _Utf8RuneLocale;
- 		} else {
- 			freegl(newgl);
- 			return NULL;
+-		} else {
+-			freegl(newgl);
+-			return NULL;
+-		}
++	if (global_locale != NULL && global_locale != newgl) {
++		freegl(global_locale);
++		global_locale = NULL;
+ 	}
+-	return global_locname;
++	if (newgl != NULL) {
++		global_locale = newgl;
++	}
++	return global_locname[0] == '\0' ? NULL : global_locname;
+ }
+ DEF_STRONG(setlocale);

@@ -126,7 +126,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/_def_monetary.
 +int
 +__monetary_load_locale(const char *name)
 +{
-+	int ret;
++	int ret=0;
 +	char error_buf[2048];
 +	struct lc_monetary_T tmon;
 +	int changed;

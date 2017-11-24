@@ -70,7 +70,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/_def_numeric.c
 +int
 +__numeric_load_locale(const char *name)
 +{
-+	int ret;
++	int ret = 0;
 +	char error_buf[2048];
 +	int changed;
 +
@@ -192,8 +192,8 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/stdio/vfprintf.c src/
   * Redistribution and use in source and binary forms, with or without
   * modification, are permitted provided that the following conditions
   * are met:
-@@ -52,8 +57,9 @@
- #include <unistd.h>
+@@ -53,8 +58,9 @@
+ #include <syslog.h>
  #include <wchar.h>
  
 -#include "local.h"
@@ -203,7 +203,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/stdio/vfprintf.c src/
  
  union arg {
  	int			intarg;
-@@ -87,6 +93,15 @@
+@@ -88,6 +94,15 @@
  #endif
  };
  
@@ -219,7 +219,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/stdio/vfprintf.c src/
  static int __find_arguments(const char *fmt0, va_list ap, union arg **argtable,
      size_t *argtablesiz);
  static int __grow_type_table(unsigned char **typetable, int *tablesize);
-@@ -252,6 +267,7 @@
+@@ -253,6 +268,7 @@
  #define SIZEINT		0x0400		/* (signed) size_t */
  #define CHARINT		0x0800		/* 8 bit integer */
  #define MAXINT		0x1000		/* largest integer size (intmax_t) */
@@ -227,7 +227,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/stdio/vfprintf.c src/
  
  int
  vfprintf(FILE *fp, const char *fmt0, __va_list ap)
-@@ -265,6 +281,76 @@
+@@ -266,6 +282,76 @@
  }
  DEF_STRONG(vfprintf);
  
@@ -273,7 +273,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/stdio/vfprintf.c src/
 +	int ndig, i;
 +
 +	/* many numbers are 1 digit */
-+	if (flags && GROUPING) {
++	if (flags & GROUPING) {
 +		grouping_init(&gs, 0);
 +		grp = gs.grouping;
 +	} 
@@ -304,7 +304,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/stdio/vfprintf.c src/
  int
  __vfprintf(FILE *fp, const char *fmt0, __va_list ap)
  {
-@@ -278,6 +364,7 @@
+@@ -279,6 +365,7 @@
  	int width;		/* width from format (%8d), or 0 */
  	int prec;		/* precision from format; <0 for N/A */
  	char sign;		/* sign prefix (' ', '+', '-', or \0) */
@@ -312,7 +312,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/stdio/vfprintf.c src/
  	wchar_t wc;
  	mbstate_t ps;
  #ifdef FLOATING_POINT
-@@ -295,7 +382,10 @@
+@@ -296,7 +383,10 @@
  	 * D:	expchar holds this character; '\0' if no exponent, e.g. %f
  	 * F:	at least two digits for decimal, at least one digit for hex
  	 */
@@ -324,7 +324,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/stdio/vfprintf.c src/
  	int signflag;		/* true if float is negative */
  	union {			/* floating point arguments %[aAeEfFgG] */
  		double dbl;
-@@ -349,7 +439,7 @@
+@@ -350,7 +440,7 @@
  	 * BEWARE, these `goto error' on error, and PAD uses `n'.
  	 */
  #define	PRINT(ptr, len) do { \
@@ -333,7 +333,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/stdio/vfprintf.c src/
  	iovp->iov_len = (len); \
  	uio.uio_resid += (len); \
  	iovp++; \
-@@ -382,7 +472,28 @@
+@@ -383,7 +473,28 @@
  	uio.uio_iovcnt = 0; \
  	iovp = iov; \
  } while (0)
@@ -362,7 +362,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/stdio/vfprintf.c src/
  	/*
  	 * To extend shorts properly, we need both signed and unsigned
  	 * argument extraction methods.
-@@ -512,6 +623,7 @@
+@@ -515,6 +626,7 @@
  		dprec = 0;
  		width = 0;
  		prec = -1;
@@ -370,7 +370,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/stdio/vfprintf.c src/
  		sign = '\0';
  		ox[1] = '\0';
  
-@@ -530,7 +642,7 @@
+@@ -533,7 +645,7 @@
  			flags |= ALT;
  			goto rflag;
  		case '\'':
@@ -379,7 +379,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/stdio/vfprintf.c src/
  			goto rflag;
  		case '*':
  			/*
-@@ -805,6 +917,8 @@
+@@ -808,6 +920,8 @@
  				/* space for decimal pt and following digits */
  				if (prec || flags & ALT)
  					size += prec + 1;
@@ -388,7 +388,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/stdio/vfprintf.c src/
  				lead = expt;
  			}
  			break;
-@@ -905,7 +1019,7 @@
+@@ -911,7 +1025,7 @@
  			/* leading 0x/X only if non-zero */
  			if (flags & ALT && _umax != 0)
  				ox[1] = ch;
@@ -397,7 +397,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/stdio/vfprintf.c src/
  			/* unsigned conversions */
  nosign:			sign = '\0';
  			/*
-@@ -940,12 +1054,8 @@
+@@ -946,12 +1060,8 @@
  					break;
  
  				case DEC:
@@ -412,7 +412,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/stdio/vfprintf.c src/
  					break;
  
  				case HEX:
-@@ -1019,10 +1129,12 @@
+@@ -1025,10 +1135,12 @@
  		/* the string or number proper */
  #ifdef FLOATING_POINT
  		if ((flags & FPT) == 0) {
@@ -428,7 +428,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/stdio/vfprintf.c src/
  			if (!expchar) {	/* %[fF] or sufficiently short %[gG] */
  				if (expt <= 0) {
  					PRINT(zeroes, 1);
-@@ -1032,8 +1144,14 @@
+@@ -1038,8 +1150,14 @@
  					/* already handled initial 0's */
  					prec += expt;
   				} else {

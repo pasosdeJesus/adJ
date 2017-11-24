@@ -30,7 +30,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/locale/_def
 +int
 +__time_load_locale(const char *name)
 +{
-+	int ret;
++	int ret = 0;
 +	char error_buf[2048];
 +
 +	__tlocale_changed = 0;

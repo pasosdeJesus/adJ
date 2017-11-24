@@ -119,7 +119,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/locale/collate
 +int
 +__collate_load_tables(const char *encoding)
 +{
-+	int ret;
++	int ret = 0;
 +	if (strcasecmp(encoding, "C") == 0 || 
 +			strcasecmp(encoding, "POSIX") == 0) {
 +		memcpy(&__global_collate, &__C_collate, 
