@@ -678,6 +678,11 @@ diff -ruN -x obj -x CVS -x *~ -x *orig -x *rej src53xlocale1/lib/libc/locale/isw
 +which are
 +.Fx
 +extensions.
+diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src53xlocale1/lib/libc/locale/nextwctype.3 src/lib/libc/locale/nextwctype.3
+--- src53xlocale1/lib/libc/locale/nextwctype.3	Tue Apr  2 06:11:30 2013
++++ src/lib/libc/locale/nextwctype.3	Thu Apr  4 17:37:32 2013
+@@ -25,11 +25,12 @@
+ .\"
  .\" From FreeBSD
  .\"
 -.Dd July 21, 2005
@@ -1032,6 +1037,8 @@ diff -ruN -x *.o -x obj -x CVS -x *~ src53xlocale2/regress/lib/libc/locale/check
  	return bad != 0;
  }
 diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/gen/tolower.3 src53xlocale2/lib/libc/gen/tolower.3
+--- src53xlocale1/lib/libc/gen/tolower.3    Mon Sep  4 22:16:13 2017 
++++ src/lib/libc/gen/tolower.3    Mon Sep  4 22:16:13 2017 
 @@ -63,11 +63,14 @@
  .Fa c
  must be an upper-case letter.
@@ -1079,91 +1086,69 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/gen/tolowe
 diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/gen/toupper.3 src53xlocale2/lib/libc/gen/toupper.3
 --- src53xlocale1/lib/libc/gen/toupper.3	Fri Mar 22 08:37:38 2013
 +++ src53xlocale2/lib/libc/gen/toupper.3	Fri Apr 12 11:46:27 2013
-@@ -36,7 +36,9 @@
- .Os
- .Sh NAME
- .Nm toupper ,
--.Nm _toupper
-+.Nm toupper_l ,
-+.Nm _toupper ,
-+.Nm _toupper_l
- .Nd lower case to upper case letter conversion
- .Sh SYNOPSIS
- .In ctype.h
-@@ -44,27 +46,58 @@
+@@ -45,9 +45,10 @@
+ .Ft int
  .Fn toupper "int c"
  .Ft int
+-.Fn toupper_l "int c" "locale_t locale"
+-.Ft int
  .Fn _toupper "int c"
 +.In xlocale.h
 +.Ft int
-+.Fn toupper_l "int c" "locale_t l"
-+.Ft int
-+.Fn _toupper_l "int c" "locale_t l"
++.Fn toupper_l "int c" "locale_t locale"
  .Sh DESCRIPTION
--The
-+The functions
+ The
  .Fn toupper
--function converts a lower-case letter to the corresponding
-+and
-+.Fn toupper_l
-+convert a lower-case letter to the corresponding
- upper-case letter.
--The
-+The functions
- .Fn _toupper
--function is identical to
-+and
-+.Fn _toupper_l
-+are identical to
- .Fn toupper
-+and
-+.Fn toupper_l
- except that
- .Ar c
+@@ -63,9 +64,15 @@
+ .Fa c
  must be a lower-case letter.
- .Sh RETURN VALUES
- If the argument to the
- .Fn toupper
-+and
-+.Fn toupper_l
- function is a lower-case letter, the corresponding upper-case letter
- is returned if there is one; otherwise the argument is returned unchanged.
- If the argument to the
- .Fn _toupper
-+and
-+.Fn _toupper_l
- function is a lower-case letter, the corresponding upper-case letter
- is returned; otherwise the output is undefined.
-+.Pp
-+The behavior of the functions
+ .Pp
+-.Ox
+-always uses the C locale for these functions,
+-ignoring the global locale, the thread-specific locale, and the
 +.Fn toupper
 +and
 +.Fn _toupper
-+is affected by the
-+.Dv LC_CTYPE
-+category of the current locale, while
-+the behavior of the functions
++use the category
++.Ev LC_CTYPE
++of the global locale or of the thread locale.
++The function
 +.Fn toupper_l
-+and
-+.Fn _toupper_l
-+is affected by the
-+.Dv LC_CTYPE
-+category of the locale provided as parameter, see
-+.Xr xlocale 3 .
- .\" In the
- .\" .Em ``C''
- .\" locale,
-@@ -91,7 +124,9 @@
- .Xr stdio 3 ,
- .Xr toascii 3 ,
++uses the 
+ .Fa locale
+ argument.
+ .Sh RETURN VALUES
+@@ -80,14 +87,6 @@
+ function is a lower-case letter, the corresponding upper-case letter
+ is returned; otherwise the output is undefined.
+ .Sh ENVIRONMENT
+-On systems supporting non-ASCII single-byte character encodings,
+-the results of
+-.Fn toupper
+-and
+-.Fn _toupper
+-may depend on the
+-.Ev LC_CTYPE
+-.Xr locale 1 .
+ .Sh SEE ALSO
+ .Xr isalnum 3 ,
+ .Xr isalpha 3 ,
+@@ -107,6 +106,7 @@
  .Xr tolower 3 ,
--.Xr ascii 7
-+.Xr ascii 7 ,
-+.Xr setlocale 3 ,
-+.Xr xlocale 3
+ .Xr towupper 3 ,
+ .Xr ascii 7
++.Xr locale 1 .
  .Sh STANDARDS
  The
  .Fn toupper
+@@ -130,6 +130,7 @@
+ The
+ .Fn toupper_l
+ function has been available since
++adJ 5.6
+ .Ox 6.2 .
+ .Sh CAVEATS
+ The argument
 diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/ctype_l.3 src53xlocale2/lib/libc/locale/ctype_l.3
 --- src53xlocale1/lib/libc/locale/ctype_l.3	Mon Apr  8 21:21:23 2013
 +++ src53xlocale2/lib/libc/locale/ctype_l.3	Fri Apr 12 12:01:41 2013
@@ -3015,19 +3000,28 @@ diff -ruN src62-orig/lib/libc/locale/iswctype_l.c src/lib/libc/locale/iswctype_l
  }
  
 +
-+static inline _RuneType
-+__runetype_w_l(wint_t c, locale_t l)
-+{
-+	FIX_LOCALE(l);
-+	_RuneLocale *rl = XLOCALE_CTYPE(l)->runes;
 +
-+	return (_RUNE_ISCACHED(c) ?          
-+	    rl->rl_runetype[c] : ___runetype_mb_l(c, l));
++static inline _RuneType
++__runetype_wl(wint_t c, locale_t locale)
++{
++	_RuneLocale *rl = __runelocale(locale);
++
++	_RuneType	 rt = _RUNE_ISCACHED(c) ? rl->rl_runetype[c] : ___runetype_mb(c, rl);
++	return rt;
 +}
 +
  static int
  __isctype_wl(wint_t c, _RuneType f, locale_t locale)
  {
+@@ -75,7 +83,7 @@
+ 	_RuneType	 rt;
+ 
+ 	rl = __runelocale(locale);
+-	rt = _RUNE_ISCACHED(c) ? rl->rl_runetype[c] : ___runetype_mb(c, rl);
++	rt = __runetype_wl(c, locale);
+ 	return (rt & f) != 0;
+ }
+ 
 @@ -138,7 +146,50 @@
  {
  	return __isctype_wl(c, _CTYPE_S, locale);
@@ -3087,7 +3081,7 @@ diff -ruN src62-orig/lib/libc/locale/iswctype_l.c src/lib/libc/locale/iswctype_l
 +int wcwidth_l(wchar_t c, locale_t locale)
 +{
 +	if (__isctype_wl((c), _CTYPE_R, locale))
-+		return (((unsigned)__runetype_w_l(c, locale) & _CTYPE_SWM) 
++		return (((unsigned)__runetype_wl(c, locale) & _CTYPE_SWM) 
 +				>> _CTYPE_SWS);
 +	return -1;
 +}
