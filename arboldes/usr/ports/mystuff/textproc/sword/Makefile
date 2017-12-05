@@ -2,7 +2,7 @@
 
 COMMENT=	"Bible study platform with KJV module"
 
-V=              1.7.4
+V=              1.7.905
 DISTNAME=	sword-${V}
 PKGNAME=        sword-${V}
 REVISION=	1
