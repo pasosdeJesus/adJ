@@ -8,10 +8,12 @@ if (test ! -f "$p") then {
 	exit 1;
 } fi;
 
-r=`find $SRC/ -name "*rej"`
-if (test "$r" != "") then {
-	echo "Sin procesar porque hay estos rechazados $r";
-	exit 1;
+if (test $SR != "1") then {
+	r=`find $SRC/ -name "*rej"`
+	if (test "$r" != "") then {
+		echo "Sin procesar porque hay estos rechazados $r";
+		exit 1;
+	} fi;
 } fi;
 n=`basename $p`
 cp $p $SRC/

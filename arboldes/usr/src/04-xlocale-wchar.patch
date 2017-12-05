@@ -1623,7 +1623,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src55-orig/lib/libc/locale/setloc
  
  static void
  freegl(char **oldgl)
-@@ -52,6 +53,8 @@
+@@ -52,55 +53,70 @@
  	return newgl;
  }
  
@@ -1632,15 +1632,19 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src55-orig/lib/libc/locale/setloc
  extern int __time_load_locale(const char *name);
  extern int __monetary_load_locale(const char *name);
  extern int __numeric_load_locale(const char *name);
-@@ -64,41 +67,55 @@
+ 
+ static int
+-changegl(int category, const char *locname, char **gl, char **oldgl)
++changegl(int category, const char *locname, char **gl)
+ {
+ 	char *cp;
+ 
  	if ((locname = _get_locname(category, locname)) == NULL ||
  	    (cp = strdup(locname)) == NULL)
  		return -1;
 +	
-+	if (oldgl != NULL && strcmp(oldgl[category], locname) == 0) {
-+		free(gl[category]);
-+		gl[category] = cp;
-+		return 0;
++	if (gl != NULL && strcmp(gl[category], locname) == 0) {
++		goto end;
 +	}
  
 -	if (oldgl == NULL || strcmp(oldgl[category], locname) != 0) {
@@ -1686,8 +1690,8 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src55-orig/lib/libc/locale/setloc
 +			}
 +			_GlobalRuneLocale = __xlocale_global_ctype.runes;
 +			(void)strlcpy(__xlocale_global_locale.components[category-1]->locale, 
-+			    locname,
-+			    sizeof(__xlocale_global_locale.components[category-1]->locale));
++			    locname, sizeof(
++				__xlocale_global_locale.components[category-1]->locale));
 +			break;
 +
 +		case LC_MESSAGES:
@@ -1698,15 +1702,15 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src55-orig/lib/libc/locale/setloc
 +				return -1;
 +			}
 +			(void)strlcpy(__xlocale_global_locale.components[category-1]->locale, 
-+					locname,
-+					sizeof(__xlocale_global_locale.components[category-1]->locale));
-+
++			    locname, sizeof(
++				__xlocale_global_locale.components[category-1]->locale));
 +			break;
 +		case LC_MONETARY:
 +			if (__monetary_load_locale(locname) != 0) {
 +				free(cp);
 +				return -1;
 +			}
++			break;
 +		case LC_NUMERIC:
 +			if (__numeric_load_locale(locname) != 0) {
 +				free(cp);
@@ -1721,7 +1725,37 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src55-orig/lib/libc/locale/setloc
 +			break;
  	}
  
++end:
  	free(gl[category]);
+ 	gl[category] = cp;
+ 	return 0;
+@@ -140,7 +156,7 @@
+ 			nextname = firstname;
+ 			for (ic = 1; ic < _LC_LAST; ic++)
+ 				if (nextname == NULL || changegl(ic,
+-				    strsep(&nextname, "/"), newgl, global_locale) == -1)
++				    strsep(&nextname, "/"), newgl) == -1)
+ 					break;
+ 			free(firstname);
+ 			if (ic < _LC_LAST || nextname != NULL) {
+@@ -150,7 +166,7 @@
+ 		} else {
+ 
+ 			/* One value only. */
+-			if (changegl(category, locname, newgl, global_locale) == -1) {
++			if (changegl(category, locname, newgl) == -1) {
+ 				freegl(newgl);
+ 				return NULL;
+ 			}
+@@ -159,7 +175,7 @@
+ 			if (category == LC_ALL) {
+ 				for (ic = 1; ic < _LC_LAST; ic++) {
+ 					if (changegl(ic, locname,
+-					    newgl, global_locale) == -1) {
++					    newgl) == -1) {
+ 						global_locname[0] = '\0';
+ 						goto done;
+ 					}
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src54-num/lib/libc/locale/setrunelocale.c src/lib/libc/locale/setrunelocale.c
 --- src54-num/lib/libc/locale/setrunelocale.c	Sun Jun  2 15:10:49 2013
 +++ src/lib/libc/locale/setrunelocale.c	Fri Dec  6 07:48:31 2013

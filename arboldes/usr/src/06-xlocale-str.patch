@@ -35,108 +35,634 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/lib/libc/locale/collate.h s
  
  #define _LDP_LOADED 0
 }
+diff -ruN src62-orig/lib/libc/locale/wcscoll_l.c src/lib/libc/locale/wcscoll_l.c
+--- src62-orig/lib/libc/locale/wcscoll_l.c 	Mon Sep  4 22:16:13 2017
++++ src/lib/libc/locale/wcscoll_l.c	Sat Dec  2 06:08:58 2017
+@@ -3,15 +3,99 @@
+  * Written in 2017 by Ingo Schwarze <schwarze@openbsd.org>.
+  * Released into the public domain.
+  */
++/*-
++ * Copyright (c) 2002 Tim J. Robbins
++ * All rights reserved.
++ *
++ * Copyright (c) 2011 The FreeBSD Foundation
++ * All rights reserved.
++ * Portions of this software were developed by David Chisnall
++ * under sponsorship from the FreeBSD Foundation.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
++ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
++ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++ * SUCH DAMAGE.
++ *
++ * Adapted from lib/libc/string/wcscoll.c of FreeBSD
++ */
+ 
+ #include <wchar.h>
+ 
+-/*
+- * Locale-dependent collation is intentionally unsupported.
+- */
++#include "collate.h"
++#include "xlocale_private.h"
++
+ int
+-wcscoll_l(const wchar_t *s1, const wchar_t *s2,
+-    locale_t locale __attribute__((__unused__)))
++wcscoll_l(const wchar_t *s1, const wchar_t *s2, locale_t loc)
+ {
+-	return wcscmp(s1, s2);
++	int len1, len2, ret, ret2;
++	wint_t prim1, prim2, sec1, sec2;
++	const wchar_t *t1, *t2;
++	wchar_t *tt1, *tt2;
++	FIX_LOCALE(loc);
++	struct xlocale_collate *table =
++	    ((struct xlocale_collate *)(loc)->components[XLC_COLLATE]);
++
++	if (table->__collate_load_error)
++		return wcscmp(s1, s2);
++
++	len1 = len2 = 1;
++	ret = ret2 = 0;
++	if (table->__collate_substitute_nontrivial) {
++		t1 = tt1 = __collate_substitute_w(table, s1);
++		t2 = tt2 = __collate_substitute_w(table, s2);
++	} else {
++		tt1 = tt2 = NULL;
++		t1 = s1;
++		t2 = s2;
++	}
++	while (*t1 != L'\0' && *t2 != L'\0') {
++		prim1 = prim2 = 0;
++		while (*t1 != L'\0'  && prim1 == 0) {
++			__collate_lookup_w(table, t1, &len1, &prim1, &sec1);
++			t1 += len1;
++		}
++		while (*t2 != L'\0' && prim2 == 0) {
++			__collate_lookup_w(table, t2, &len2, &prim2, &sec2);
++			t2 += len2;
++		}
++		if (prim1 == 0 || prim2 == 0)
++			break;
++		if (prim1 != prim2) {
++			ret = prim1 - prim2;
++			goto end;
++		}
++		if (ret2 == 0)
++			ret2 = sec1 - sec2;
++	}
++	if (*t1 == L'\0' && *t2 != L'\0')
++		ret = -(int)((u_char)*t2);
++	else if (*t1 != L'\0' && *t2 == L'\0')
++		ret = (u_char)*t1;
++	else if (*t1 == L'\0' && *t2 == L'\0')
++		ret = ret2;
++  end:
++	if (tt1 != NULL)
++		free(tt1);
++	if (tt2 != NULL)
++		free(tt2);
++
++	return ret;
+ }
++DEF_STRONG(wcscoll_l);
 diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/lib/libc/locale/wcscoll.c src/lib/libc/locale/wcscoll.c
 --- src53xlocale2/lib/libc/locale/wcscoll.c	Mon Apr  8 21:20:56 2013
 +++ src/lib/libc/locale/wcscoll.c	Tue Apr  9 05:08:08 2013
-@@ -61,19 +61,18 @@
+@@ -25,43 +25,10 @@
+  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+  * SUCH DAMAGE.
+  */
+-/*-
+- * Copyright (c) 2002 Tim J. Robbins
+- * All rights reserved.
+- *
+- * Copyright (c) 2011 The FreeBSD Foundation
+- * All rights reserved.
+- * Portions of this software were developed by David Chisnall
+- * under sponsorship from the FreeBSD Foundation.
+- *
+- * Redistribution and use in source and binary forms, with or without
+- * modification, are permitted provided that the following conditions
+- * are met:
+- * 1. Redistributions of source code must retain the above copyright
+- *    notice, this list of conditions and the following disclaimer.
+- * 2. Redistributions in binary form must reproduce the above copyright
+- *    notice, this list of conditions and the following disclaimer in the
+- *    documentation and/or other materials provided with the distribution.
+- *
+- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+- * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+- * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+- * SUCH DAMAGE.
+- *
+- * Adapted from lib/libc/string/wcscoll.c of FreeBSD
+- */
+-
+ #include <stdlib.h>
  #include <wchar.h>
  
- #include "collate.h"
+-#include "collate.h"
 +#include "xlocale_private.h"
  
--/*
-- * Compare strings using collating information.
-- */
+ /*
+  * Compare strings using collating information.
+@@ -69,57 +36,6 @@
  int
--wcscoll(const wchar_t *s1, const wchar_t *s2)
-+wcscoll_l(const wchar_t *s1, const wchar_t *s2, locale_t loc)
+ wcscoll(const wchar_t *s1, const wchar_t *s2)
  {
- 	int len1, len2, ret, ret2;
- 	wint_t prim1, prim2, sec1, sec2;
- 	const wchar_t *t1, *t2;
- 	wchar_t *tt1, *tt2;
+-	int len1, len2, ret, ret2;
+-	wint_t prim1, prim2, sec1, sec2;
+-	const wchar_t *t1, *t2;
+-	wchar_t *tt1, *tt2;
 -	struct xlocale_collate *table;
 -	table = (struct xlocale_collate *)&__xlocale_global_collate;
-+	FIX_LOCALE(loc);
-+	struct xlocale_collate *table =
-+	    ((struct xlocale_collate *)(loc)->components[XLC_COLLATE]);
- 
- 	if (table->__collate_load_error)
- 		return wcscmp(s1, s2);
-@@ -120,4 +119,13 @@
- 		free(tt2);
- 
- 	return ret;
-+}
-+
-+/*
-+ * Compare strings using collating information.
-+ */
-+int
-+wcscoll(const wchar_t *s1, const wchar_t *s2)
-+{
+-
+-	if (table->__collate_load_error)
+-		return wcscmp(s1, s2);
+-
+-	len1 = len2 = 1;
+-	ret = ret2 = 0;
+-	if (table->__collate_substitute_nontrivial) {
+-		t1 = tt1 = __collate_substitute_w(table, s1);
+-		t2 = tt2 = __collate_substitute_w(table, s2);
+-	} else {
+-		tt1 = tt2 = NULL;
+-		t1 = s1;
+-		t2 = s2;
+-	}
+-	while (*t1 != L'\0' && *t2 != L'\0') {
+-		prim1 = prim2 = 0;
+-		while (*t1 != L'\0'  && prim1 == 0) {
+-			__collate_lookup_w(table, t1, &len1, &prim1, &sec1);
+-			t1 += len1;
+-		}
+-		while (*t2 != L'\0' && prim2 == 0) {
+-			__collate_lookup_w(table, t2, &len2, &prim2, &sec2);
+-			t2 += len2;
+-		}
+-		if (prim1 == 0 || prim2 == 0)
+-			break;
+-		if (prim1 != prim2) {
+-			ret = prim1 - prim2;
+-			goto end;
+-		}
+-		if (ret2 == 0)
+-			ret2 = sec1 - sec2;
+-	}
+-	if (*t1 == L'\0' && *t2 != L'\0')
+-		ret = -(int)((u_char)*t2);
+-	else if (*t1 != L'\0' && *t2 == L'\0')
+-		ret = (u_char)*t1;
+-	else if (*t1 == L'\0' && *t2 == L'\0')
+-		ret = ret2;
+-  end:
+-	if (tt1 != NULL)
+-		free(tt1);
+-	if (tt2 != NULL)
+-		free(tt2);
+-
+-	return ret;
 +	return wcscoll_l(s1, s2, __get_locale());
  }
-diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/lib/libc/locale/wcsxfrm.c src/lib/libc/locale/wcsxfrm.c
---- src53xlocale2/lib/libc/locale/wcsxfrm.c	Mon Apr  8 21:20:56 2013
-+++ src/lib/libc/locale/wcsxfrm.c	Tue Apr  9 05:08:02 2013
-@@ -71,16 +71,19 @@
+ DEF_STRONG(wcscoll);
+diff -ruN src62-orig/lib/libc/locale/wcsxfrm_l.c src/lib/libc/locale/wcsxfrm_l.c
+--- src62-orig/lib/libc/locale/wcsxfrm_l.c 	Mon Sep  4 22:16:13 2017
++++ src/lib/libc/locale/wcsxfrm_l.c	Sat Dec  2 06:08:58 2017
+@@ -3,12 +3,95 @@
+  * Written in 2017 by Ingo Schwarze <schwarze@openbsd.org>.
+  * Released into the public domain.
+  */
++/*-
++ * Copyright (c) 1995 Alex Tatmanjants <alex@elvisti.kiev.ua>
++ *		at Electronni Visti IA, Kiev, Ukraine.
++ *			All rights reserved.
++ *
++ * Copyright (c) 2011 The FreeBSD Foundation
++ * All rights reserved.
++ * Portions of this software were developed by David Chisnall
++ * under sponsorship from the FreeBSD Foundation.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND
++ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE LIABLE
++ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++ * SUCH DAMAGE.
+ 
++ * Adapted from lib/libc/string/wcsxfrm.c of FreeBSD 
++ */
++
++#include <sys/cdefs.h>
++
++#include <stdlib.h>
++#include <string.h>
  #include <wchar.h>
  
- #include "collate.h"
+-size_t 
+-wcsxfrm_l(wchar_t *dest, const wchar_t *src, size_t n,
+-    locale_t locale __attribute__((__unused__)))
++#include "collate.h"
 +#include "xlocale_private.h"
- 
- size_t
--wcsxfrm(wchar_t * __restrict dest, const wchar_t * __restrict src, size_t len)
++
++size_t
 +wcsxfrm_l(wchar_t * __restrict dest, const wchar_t * __restrict src, 
 +    size_t len, locale_t loc)
  {
- 	wint_t prim, sec;
- 	int l;
- 	size_t slen;
- 	wchar_t *s, *ss;
--	struct xlocale_collate *table;
--	table = (struct xlocale_collate *)&__xlocale_global_collate;
+-	return wcsxfrm(dest, src, n);
++	wint_t prim, sec;
++	int l;
++	size_t slen;
++	wchar_t *s, *ss;
 +	FIX_LOCALE(loc);
 +	struct xlocale_collate *table =
 +	    ((struct xlocale_collate *)(loc)->components[XLC_COLLATE]);
- 
- 	if (*src == L'\0') {
- 		if (len > 0 && dest != NULL)
-@@ -116,5 +119,12 @@
- 	}
- 
- 	return slen;
-+}
++
++	if (*src == L'\0') {
++		if (len > 0 && dest != NULL)
++			*dest = L'\0';
++		return 0;
++	}
++
++	if (table->__collate_load_error != 0)
++		return wcslcpy(dest, src, len);
++
++	slen = 0;
++	prim = sec = 0;
++	ss = s = __collate_substitute_w(table, src);
++	while (*s != L'\0') {
++		while (*s != L'\0' && prim == 0) {
++			__collate_lookup_w(table, s, &l, &prim, &sec);
++			s += l;
++		}
++		if (prim != 0) {
++			if (len > 1) {
++			       	if (dest != NULL) {
++					*dest++ = prim;
++				}
++				len--;
++			}
++			slen++;
++			prim = 0;
++		}
++	}
++	free(ss);
++	if (len > 0 && dest != NULL) {
++		*dest = '\0';
++	}
++
++	return slen;
+ }
 +DEF_STRONG(wcsxfrm_l);
 +
-+size_t
-+wcsxfrm(wchar_t * __restrict dest, const wchar_t * __restrict src, size_t len)
-+{
+diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/lib/libc/locale/wcsxfrm.c src/lib/libc/locale/wcsxfrm.c
+--- src53xlocale2/lib/libc/locale/wcsxfrm.c	Mon Apr  8 21:20:56 2013
++++ src/lib/libc/locale/wcsxfrm.c	Tue Apr  9 05:08:02 2013
+@@ -29,92 +29,13 @@
+  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+  * SUCH DAMAGE.
+  */
+-/*-
+- * Copyright (c) 1995 Alex Tatmanjants <alex@elvisti.kiev.ua>
+- *		at Electronni Visti IA, Kiev, Ukraine.
+- *			All rights reserved.
+- *
+- * Copyright (c) 2011 The FreeBSD Foundation
+- * All rights reserved.
+- * Portions of this software were developed by David Chisnall
+- * under sponsorship from the FreeBSD Foundation.
+- *
+- * Redistribution and use in source and binary forms, with or without
+- * modification, are permitted provided that the following conditions
+- * are met:
+- * 1. Redistributions of source code must retain the above copyright
+- *    notice, this list of conditions and the following disclaimer.
+- * 2. Redistributions in binary form must reproduce the above copyright
+- *    notice, this list of conditions and the following disclaimer in the
+- *    documentation and/or other materials provided with the distribution.
+- *
+- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND
+- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+- * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE LIABLE
+- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+- * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+- * SUCH DAMAGE.
+-
+- * Adapted from lib/libc/string/wcsxfrm.c of FreeBSD 
+- */
+-
+-#include <sys/cdefs.h>
+-
+-#include <stdlib.h>
+-#include <string.h>
+ #include <wchar.h>
+ 
+-#include "collate.h"
++#include "xlocale_private.h"
+ 
+ size_t
+ wcsxfrm(wchar_t * __restrict dest, const wchar_t * __restrict src, size_t len)
+ {
+-	wint_t prim, sec;
+-	int l;
+-	size_t slen;
+-	wchar_t *s, *ss;
+-	struct xlocale_collate *table;
+-	table = (struct xlocale_collate *)&__xlocale_global_collate;
+-
+-	if (*src == L'\0') {
+-		if (len > 0 && dest != NULL)
+-			*dest = L'\0';
+-		return 0;
+-	}
+-
+-	if (table->__collate_load_error != 0)
+-		return wcslcpy(dest, src, len);
+-
+-	slen = 0;
+-	prim = sec = 0;
+-	ss = s = __collate_substitute_w(table, src);
+-	while (*s != L'\0') {
+-		while (*s != L'\0' && prim == 0) {
+-			__collate_lookup_w(table, s, &l, &prim, &sec);
+-			s += l;
+-		}
+-		if (prim != 0) {
+-			if (len > 1) {
+-			       	if (dest != NULL) {
+-					*dest++ = prim;
+-				}
+-				len--;
+-			}
+-			slen++;
+-			prim = 0;
+-		}
+-	}
+-	free(ss);
+-	if (len > 0 && dest != NULL) {
+-		*dest = '\0';
+-	}
+-
+-	return slen;
 +	return wcsxfrm_l(dest, src, len, __get_locale());
  }
+-DEF_STRONG(wcsxfrm);
  DEF_STRONG(wcsxfrm);
+diff -ruN src62-orig/lib/libc/string/strcasecmp_l.c src/lib/libc/locale/string/strcasecmp_l.c
+--- src62-orig/lib/libc/string/strcasecmp_l.c 	Mon Sep  4 22:16:13 2017
++++ src/lib/libc/string/strcasecmp_l.c	Mon Dec  4 19:14:47 2017
+@@ -3,19 +3,150 @@
+  * Written in 2017 by Ingo Schwarze <schwarze@openbsd.org>.
+  * Released into the public domain.
+  */
++/*
++ * Copyright (c) 1987, 1993
++ *	The Regents of the University of California.  All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ * 3. Neither the name of the University nor the names of its contributors
++ *    may be used to endorse or promote products derived from this software
++ *    without specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
++ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
++ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++ * SUCH DAMAGE.
++ */
+ 
++
+ #include <string.h>
++#include <wctype.h>
++#include <xlocale.h>
+ 
++#include "locale/mblocal.h"
++#include "locale/xlocale_private.h"
++
++
++typedef unsigned char u_char;
++
++/*
++ * This array is designed for mapping upper and lower case letter
++ * together for a case independent comparison.  The mappings are
++ * based upon ascii character sequences.
++ */
++static const u_char charmap[] = {
++	'\000', '\001', '\002', '\003', '\004', '\005', '\006', '\007',
++	'\010', '\011', '\012', '\013', '\014', '\015', '\016', '\017',
++	'\020', '\021', '\022', '\023', '\024', '\025', '\026', '\027',
++	'\030', '\031', '\032', '\033', '\034', '\035', '\036', '\037',
++	'\040', '\041', '\042', '\043', '\044', '\045', '\046', '\047',
++	'\050', '\051', '\052', '\053', '\054', '\055', '\056', '\057',
++	'\060', '\061', '\062', '\063', '\064', '\065', '\066', '\067',
++	'\070', '\071', '\072', '\073', '\074', '\075', '\076', '\077',
++	'\100', '\141', '\142', '\143', '\144', '\145', '\146', '\147',
++	'\150', '\151', '\152', '\153', '\154', '\155', '\156', '\157',
++	'\160', '\161', '\162', '\163', '\164', '\165', '\166', '\167',
++	'\170', '\171', '\172', '\133', '\134', '\135', '\136', '\137',
++	'\140', '\141', '\142', '\143', '\144', '\145', '\146', '\147',
++	'\150', '\151', '\152', '\153', '\154', '\155', '\156', '\157',
++	'\160', '\161', '\162', '\163', '\164', '\165', '\166', '\167',
++	'\170', '\171', '\172', '\173', '\174', '\175', '\176', '\177',
++	'\200', '\201', '\202', '\203', '\204', '\205', '\206', '\207',
++	'\210', '\211', '\212', '\213', '\214', '\215', '\216', '\217',
++	'\220', '\221', '\222', '\223', '\224', '\225', '\226', '\227',
++	'\230', '\231', '\232', '\233', '\234', '\235', '\236', '\237',
++	'\240', '\241', '\242', '\243', '\244', '\245', '\246', '\247',
++	'\250', '\251', '\252', '\253', '\254', '\255', '\256', '\257',
++	'\260', '\261', '\262', '\263', '\264', '\265', '\266', '\267',
++	'\270', '\271', '\272', '\273', '\274', '\275', '\276', '\277',
++	'\300', '\301', '\302', '\303', '\304', '\305', '\306', '\307',
++	'\310', '\311', '\312', '\313', '\314', '\315', '\316', '\317',
++	'\320', '\321', '\322', '\323', '\324', '\325', '\326', '\327',
++	'\330', '\331', '\332', '\333', '\334', '\335', '\336', '\337',
++	'\340', '\341', '\342', '\343', '\344', '\345', '\346', '\347',
++	'\350', '\351', '\352', '\353', '\354', '\355', '\356', '\357',
++	'\360', '\361', '\362', '\363', '\364', '\365', '\366', '\367',
++	'\370', '\371', '\372', '\373', '\374', '\375', '\376', '\377',
++};
++
+ int
+-strcasecmp_l(const char *s1, const char *s2,
+-    locale_t locale __attribute__((__unused__)))
++strcasecmp_l(const char *s1, const char *s2, locale_t locale)
+ {
+-	return strcasecmp(s1, s2);
++	return strncasecmp_l(s1, s2, strlen(s1) + 1,locale);
+ }
++DEF_STRONG(strcasecmp_l);
+ 
++
++static int
++sbstrncasecmp(const char *s1, const char *s2, int n)
++{
++	if (n != 0) {
++		const u_char *cm = charmap;
++		const u_char *us1 = (const u_char *)s1;
++		const u_char *us2 = (const u_char *)s2;
++		do {
++			if (cm[*us1] != cm[*us2++])
++				return (cm[*us1] - cm[*--us2]);
++			if (*us1++ == '\0')
++				break;
++		} while (--n != 0);
++	}
++	return 0;
++
++}
++
+ int
+-strncasecmp_l(const char *s1, const char *s2, size_t n,
+-    locale_t locale __attribute__((__unused__)))
++strncasecmp_l(const char *s1, const char *s2, size_t n, locale_t locale)
+ {
+-	return strncasecmp(s1, s2, n);
++	FIX_LOCALE(locale);
++	struct xlocale_ctype *xc = XLOCALE_CTYPE(locale);
++	mbstate_t mb1, mb2;
++
++	bzero(&mb1, sizeof(mb1));
++	bzero(&mb2, sizeof(mb2));
++	mbsinit_l(&mb1, locale);
++	mbsinit_l(&mb2, locale);
++	if (n != 0) {
++		const u_char *us1 = (const u_char *)s1;
++		const u_char *us2 = (const u_char *)s2;
++		size_t d1, d2;
++
++		do {
++			wchar_t w1, w2, l1, l2;
++			size_t ml = n < xc->__mb_cur_max ? n : xc->__mb_cur_max;
++			d1 = mbrtowc_l(&w1, us1, ml, &mb1, locale);
++			if (d1 == (size_t)-1 || d1 == (size_t)-2) {
++				return sbstrncasecmp(s1, s2, n);
++			}
++			d2 = mbrtowc_l(&w2, us2, ml, &mb2, locale);
++			if (d2 == (size_t)-1 || d2 == (size_t)-2) {
++				return sbstrncasecmp(s1, s2, n);
++			}
++			if ((l1 = towlower_l(w1, locale)) != 
++					(l2 = towlower_l(w2, locale))) {
++				return l1 - l2;
++			}
++			if (*us1 == '\0')
++				break;
++			us2 += d2;
++			us1 += d1;
++			n -= d1;
++		} while (n != 0);
++	}
++	return (0);
+ }
++DEF_STRONG(strncasecmp_l);
 diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/lib/libc/string/strcasecmp.c src/lib/libc/string/strcasecmp.c
 --- src53xlocale2/lib/libc/string/strcasecmp.c	Mon Mar 25 18:28:29 2013
 +++ src/lib/libc/string/strcasecmp.c	Wed Apr 10 07:53:41 2013
-@@ -29,8 +29,16 @@
-  * SUCH DAMAGE.
+@@ -30,78 +30,19 @@
   */
  
-+#include <stdlib.h>
  #include <string.h>
-+#include <wchar.h>
-+#include <wctype.h>
++#include "locale/xlocale_private.h"
  
-+#include "../locale/mblocal.h"
-+#include "../locale/xlocale_private.h"
-+
-+inline wint_t towlower_l(wint_t, locale_t);
-+
- typedef unsigned char u_char;
+-typedef unsigned char u_char;
  
- /*
-@@ -76,20 +84,19 @@
+-/*
+- * This array is designed for mapping upper and lower case letter
+- * together for a case independent comparison.  The mappings are
+- * based upon ascii character sequences.
+- */
+-static const u_char charmap[] = {
+-	'\000', '\001', '\002', '\003', '\004', '\005', '\006', '\007',
+-	'\010', '\011', '\012', '\013', '\014', '\015', '\016', '\017',
+-	'\020', '\021', '\022', '\023', '\024', '\025', '\026', '\027',
+-	'\030', '\031', '\032', '\033', '\034', '\035', '\036', '\037',
+-	'\040', '\041', '\042', '\043', '\044', '\045', '\046', '\047',
+-	'\050', '\051', '\052', '\053', '\054', '\055', '\056', '\057',
+-	'\060', '\061', '\062', '\063', '\064', '\065', '\066', '\067',
+-	'\070', '\071', '\072', '\073', '\074', '\075', '\076', '\077',
+-	'\100', '\141', '\142', '\143', '\144', '\145', '\146', '\147',
+-	'\150', '\151', '\152', '\153', '\154', '\155', '\156', '\157',
+-	'\160', '\161', '\162', '\163', '\164', '\165', '\166', '\167',
+-	'\170', '\171', '\172', '\133', '\134', '\135', '\136', '\137',
+-	'\140', '\141', '\142', '\143', '\144', '\145', '\146', '\147',
+-	'\150', '\151', '\152', '\153', '\154', '\155', '\156', '\157',
+-	'\160', '\161', '\162', '\163', '\164', '\165', '\166', '\167',
+-	'\170', '\171', '\172', '\173', '\174', '\175', '\176', '\177',
+-	'\200', '\201', '\202', '\203', '\204', '\205', '\206', '\207',
+-	'\210', '\211', '\212', '\213', '\214', '\215', '\216', '\217',
+-	'\220', '\221', '\222', '\223', '\224', '\225', '\226', '\227',
+-	'\230', '\231', '\232', '\233', '\234', '\235', '\236', '\237',
+-	'\240', '\241', '\242', '\243', '\244', '\245', '\246', '\247',
+-	'\250', '\251', '\252', '\253', '\254', '\255', '\256', '\257',
+-	'\260', '\261', '\262', '\263', '\264', '\265', '\266', '\267',
+-	'\270', '\271', '\272', '\273', '\274', '\275', '\276', '\277',
+-	'\300', '\301', '\302', '\303', '\304', '\305', '\306', '\307',
+-	'\310', '\311', '\312', '\313', '\314', '\315', '\316', '\317',
+-	'\320', '\321', '\322', '\323', '\324', '\325', '\326', '\327',
+-	'\330', '\331', '\332', '\333', '\334', '\335', '\336', '\337',
+-	'\340', '\341', '\342', '\343', '\344', '\345', '\346', '\347',
+-	'\350', '\351', '\352', '\353', '\354', '\355', '\356', '\357',
+-	'\360', '\361', '\362', '\363', '\364', '\365', '\366', '\367',
+-	'\370', '\371', '\372', '\373', '\374', '\375', '\376', '\377',
+-};
+-
  int
  strcasecmp(const char *s1, const char *s2)
  {
@@ -153,69 +679,21 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/lib/libc/string/strcasecmp.
  DEF_WEAK(strcasecmp);
  
  int
--strncasecmp(const char *s1, const char *s2, size_t n)
-+strcasecmp_l(const char *s1, const char *s2, locale_t loc)
+ strncasecmp(const char *s1, const char *s2, size_t n)
  {
-+	return strncasecmp_l(s1, s2, strlen(s1) + 1, loc);
-+}
-+ 
-+int
-+sbstrncasecmp(const char *s1, const char *s2, size_t n)
-+{
- 	if (n != 0) {
- 		const u_char *cm = charmap;
- 		const u_char *us1 = (const u_char *)s1;
-@@ -103,5 +110,53 @@
- 		} while (--n != 0);
- 	}
- 	return (0);
-+}
-+
-+int
-+strncasecmp_l(const char *s1, const char *s2, size_t n, locale_t loc)
-+{
-+	FIX_LOCALE(loc);
-+	struct xlocale_ctype *xc = XLOCALE_CTYPE(loc);
-+	mbstate_t mb1, mb2;
-+
-+	bzero(&mb1, sizeof(mb1));
-+	bzero(&mb2, sizeof(mb2));
-+	mbsinit_l(&mb1, loc);
-+	mbsinit_l(&mb2, loc);
-+	if (n != 0) {
-+		const u_char *us1 = (const u_char *)s1;
-+		const u_char *us2 = (const u_char *)s2;
-+		size_t d1, d2;
-+
-+		do {
-+			wchar_t w1, w2, l1, l2;
-+			size_t ml = n < xc->__mb_cur_max ? n : xc->__mb_cur_max;
-+			d1 = mbrtowc_l(&w1, us1, ml, &mb1, loc);
-+			if (d1 == (size_t)-1 || d1 == (size_t)-2) {
-+				return sbstrncasecmp(s1, s2, n);
-+			}
-+			d2 = mbrtowc_l(&w2, us2, ml, &mb2, loc);
-+			if (d2 == (size_t)-1 || d2 == (size_t)-2) {
-+				return sbstrncasecmp(s1, s2, n);
-+			}
-+			if ((l1 = towlower_l(w1, loc)) != 
-+					(l2 = towlower_l(w2, loc))) {
-+				return l1 - l2;
-+			}
-+			if (*us1 == '\0')
-+				break;
-+			us2 += d2;
-+			us1 += d1;
-+			n -= d1;
-+		} while (n != 0);
-+	}
-+	return (0);
-+}
-+
-+
-+int
-+strncasecmp(const char *s1, const char *s2, size_t n)
-+{
+-	if (n != 0) {
+-		const u_char *cm = charmap;
+-		const u_char *us1 = (const u_char *)s1;
+-		const u_char *us2 = (const u_char *)s2;
+-
+-		do {
+-			if (cm[*us1] != cm[*us2++])
+-				return (cm[*us1] - cm[*--us2]);
+-			if (*us1++ == '\0')
+-				break;
+-		} while (--n != 0);
+-	}
+-	return (0);
 +	return strncasecmp_l(s1, s2, n, __get_locale());
  }
  DEF_WEAK(strncasecmp);
@@ -263,195 +741,318 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/lib/libc/string/strcasestr.
 +{
 +	return strcasestr_l(s, find, __get_locale());
  }
-diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/lib/libc/string/strcoll.c src/lib/libc/string/strcoll.c
---- src53xlocale2/lib/libc/string/strcoll.c	Mon Apr  8 21:20:25 2013
-+++ src/lib/libc/string/strcoll.c	Mon Apr  8 21:44:18 2013
-@@ -44,26 +44,36 @@
- #include <wchar.h>
- 
- #include "../locale/collate.h"
-+#include "../locale/xlocale_private.h"
- 
- 
- /*
-  * Compare strings according to LC_COLLATE category of current locale.
+diff -ruN src62-orig/lib/libc/string/strcoll_l.c src/lib/libc/string/strcoll_l.c
+--- src62-orig/lib/libc/string/strcoll_l.c	Mon Sep  4 22:16:13 2017
++++ src/lib/libc/string/strcoll_l.c	Mon Dec  4 19:19:22 2017
+@@ -3,12 +3,73 @@
+  * Written in 2017 by Ingo Schwarze <schwarze@openbsd.org>.
+  * Released into the public domain.
   */
- int
--strcoll(const char *s1, const char *s2)
-+strcoll_l(const char *s1, const char *s2, locale_t l)
- {
- 	int r = 0;
- 	wchar_t *ws1 = NULL;
- 	wchar_t *ws2 = NULL;
++/*-
++ * Copyright (c) 1990 The Regents of the University of California.
++ * All rights reserved.
++ *
++ * This code is derived from software contributed to Berkeley by
++ * Chris Torek.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ * 3. Neither the name of the University nor the names of its contributors
++ *    may be used to endorse or promote products derived from this software
++ *    without specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
++ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
++ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++ * SUCH DAMAGE.
++ */
++/**
++ * Public domain according to Colombian Legislation. 
++ * http://www.pasosdejesus.org/dominio_publico_colombia.html
++ * 2013. vtamara@pasosdeJesus.org
++ *
++ * $adJ$
++ */
  
--	ws1 = __dup_as_wcs_l(s1);
-+	ws1 = __dup_as_wcs_l(s1, l);
- 	if (ws1 != NULL) {
--		ws2 = __dup_as_wcs_l(s2);
-+		ws2 = __dup_as_wcs_l(s2, l);
- 		if (ws2 != NULL) {
--			r = wcscoll(ws1, ws2);
-+			r = wcscoll_l(ws1, ws2, l);
- 			free(ws2);
- 		}
- 		free(ws1);
- 	} 
- 	return r;
-+}
++#include <errno.h>
++#include <stdio.h>
++#include <stdlib.h>
+ #include <string.h>
++#include <wchar.h>
+ 
++#include "../locale/collate.h"
++
 +
 +/*
 + * Compare strings according to LC_COLLATE category of current locale.
 + */
-+int
-+strcoll(const char *s1, const char *s2)
-+{
+ int
+-strcoll_l(const char *s1, const char *s2,
+-    locale_t locale __attribute__((__unused__)))
++strcoll_l(const char *s1, const char *s2, locale_t locale)
+ {
+-	return strcmp(s1, s2);
++	int r = 0;
++	wchar_t *ws1 = NULL;
++	wchar_t *ws2 = NULL;
++
++	ws1 = __dup_as_wcs_l(s1, locale);
++	if (ws1 != NULL) {
++		ws2 = __dup_as_wcs_l(s2, locale);
++		if (ws2 != NULL) {
++			r = wcscoll_l(ws1, ws2, locale);
++			free(ws2);
++		}
++		free(ws1);
++	} 
++	return r;
+ }
++DEF_STRONG(strcoll_l);
+diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/lib/libc/string/strcoll.c src/lib/libc/string/strcoll.c
+--- src53xlocale2/lib/libc/string/strcoll.c	Mon Apr  8 21:20:25 2013
++++ src/lib/libc/string/strcoll.c	Mon Apr  8 21:44:18 2013
+@@ -30,43 +30,16 @@
+  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+  * SUCH DAMAGE.
+  */
+-/**
+- * Public domain according to Colombian Legislation. 
+- * http://www.pasosdejesus.org/dominio_publico_colombia.html
+- * 2013. vtamara@pasosdeJesus.org
+- *
+- * $adJ$
+- */
+ 
+-
+-#include <errno.h>
+-#include <stdio.h>
+-#include <stdlib.h>
+ #include <string.h>
+-#include <wchar.h>
++#include "locale/xlocale_private.h"
+ 
+-#include "../locale/collate.h"
+-
+-
+ /*
+  * Compare strings according to LC_COLLATE category of current locale.
+  */
+ int
+ strcoll(const char *s1, const char *s2)
+ {
+-	int r = 0;
+-	wchar_t *ws1 = NULL;
+-	wchar_t *ws2 = NULL;
+-
+-	ws1 = __dup_as_wcs_l(s1);
+-	if (ws1 != NULL) {
+-		ws2 = __dup_as_wcs_l(s2);
+-		if (ws2 != NULL) {
+-			r = wcscoll(ws1, ws2);
+-			free(ws2);
+-		}
+-		free(ws1);
+-	} 
+-	return r;
 +	return strcoll_l(s1, s2, __get_locale());
  }
-diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/lib/libc/string/strxfrm.c src/lib/libc/string/strxfrm.c
---- src53xlocale2/lib/libc/string/strxfrm.c	Mon Apr  8 21:20:25 2013
-+++ src/lib/libc/string/strxfrm.c	Tue Apr  9 05:35:29 2013
-@@ -42,7 +42,9 @@
- #include <stdio.h>
- #include <stdlib.h>
- #include <string.h>
-+
- #include "../locale/collate.h"
-+#include "../locale/xlocale_private.h"
- 
- /*
-  * Transform src, storing the result in dst, such that
-@@ -50,15 +52,15 @@
-  * on the original untransformed strings would return.
+ DEF_STRONG(strcoll);
+diff -ruN src62-orig/lib/libc/string/strxfrm_l.c src/lib/libc/string/strxfrm_l.c
+--- src62-orig/lib/libc/string/strxfrm_l.c	Mon Sep  4 22:16:14 2017
++++ src/lib/libc/string/strxfrm_l.c	Mon Dec  4 19:23:05 2017
+@@ -3,12 +3,92 @@
+  * Written in 2017 by Ingo Schwarze <schwarze@openbsd.org>.
+  * Released into the public domain.
   */
- size_t
--strxfrm(char *dst, const char *src, size_t n)
-+strxfrm_l(char *dst, const char *src, size_t n, locale_t l)
- {
- 	size_t r = 0;
- 	wchar_t *ws = NULL;
- 	wchar_t *wd = NULL;
++/*-
++ * Copyright (c) 1990 The Regents of the University of California.
++ * All rights reserved.
++ *
++ * This code is derived from software contributed to Berkeley by
++ * Chris Torek.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ * 3. Neither the name of the University nor the names of its contributors
++ *    may be used to endorse or promote products derived from this software
++ *    without specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
++ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
++ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++ * SUCH DAMAGE.
++ */
++/**
++ * Public domain according to Colombian Legislation. 
++ * http://www.pasosdejesus.org/dominio_publico_colombia.html
++ * 2013. vtamara@pasosdeJesus.org
++ *
++ * $adJ$
++ */
  
--	ws = __dup_as_wcs_l(src);
-+	ws = __dup_as_wcs_l(src, l);
- 	if (ws != NULL) {
--		r = wcsxfrm(NULL, ws, 0);
-+		r = wcsxfrm_l(NULL, ws, 0, l);
- 		if (r > ULONG_MAX / sizeof(wchar_t)) { 
- 			errno = EINVAL;
- 			goto end;
-@@ -68,10 +70,10 @@
- 			errno = ENOMEM;
- 			goto end;
- 		}
--		wcsxfrm(wd, ws, r + 1);
--		r = wcstombs(NULL, wd, 0);
-+		wcsxfrm_l(wd, ws, r + 1, l);
-+		r = wcstombs_l(NULL, wd, 0, l);
- 		if (n > 0 && dst != NULL && r < n) {
--			r = wcstombs(dst, wd, n);
-+			r = wcstombs_l(dst, wd, n, l);
- 		}
- 		/* if r>=n contents of dst is unspecified */
- 	}
-@@ -84,3 +86,14 @@
- 	}
- 	return r; 
- }
++
++#include <errno.h>
++#include <stdio.h>
++#include <stdlib.h>
+ #include <string.h>
++#include <xlocale.h>
+ 
++#include "../locale/collate.h"
 +
 +/*
 + * Transform src, storing the result in dst, such that
 + * strcmp() on transformed strings returns what strcoll()
 + * on the original untransformed strings would return.
 + */
-+size_t
-+strxfrm(char *dst, const char *src, size_t n)
-+{
+ size_t
+-strxfrm_l(char *dst, const char *src, size_t n,
+-    locale_t locale __attribute__((__unused__)))
++strxfrm_l(char *dst, const char *src, size_t n, locale_t locale)
+ {
+-	return strxfrm(dst, src, n);
++	size_t r = 0;
++	wchar_t *ws = NULL;
++	wchar_t *wd = NULL;
++
++	ws = __dup_as_wcs_l(src, locale);
++	if (ws != NULL) {
++		r = wcsxfrm_l(NULL, ws, 0, locale);
++		if (r > ULONG_MAX / sizeof(wchar_t)) { 
++			errno = EINVAL;
++			goto end;
++		}
++		wd = (wchar_t *)malloc((r + 1) * sizeof(wchar_t) );
++		if (wd == NULL) {
++			errno = ENOMEM;
++			goto end;
++		}
++		wcsxfrm_l(wd, ws, r + 1, locale);
++		r = wcstombs_l(NULL, wd, 0, locale);
++		if (n > 0 && dst != NULL && r < n) {
++			r = wcstombs_l(dst, wd, n, locale);
++		}
++		/* if r>=n contents of dst is unspecified */
++	}
++end:
++	if (ws != NULL) {
++		free(ws);
++	}
++	if (wd != NULL) {
++		free(wd);
++	}
++	return r; 
+ }
++DEF_STRONG(strxfrm_l);
+diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/lib/libc/string/strxfrm.c src/lib/libc/string/strxfrm.c
+--- src53xlocale2/lib/libc/string/strxfrm.c	Mon Apr  8 21:20:25 2013
++++ src/lib/libc/string/strxfrm.c	Tue Apr  9 05:35:29 2013
+@@ -30,20 +30,11 @@
+  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+  * SUCH DAMAGE.
+  */
+-/**
+- * Public domain according to Colombian Legislation. 
+- * http://www.pasosdejesus.org/dominio_publico_colombia.html
+- * 2013. vtamara@pasosdeJesus.org
+- *
+- * $adJ$
+- */
+ 
+-#include <errno.h>
+-#include <stdio.h>
+-#include <stdlib.h>
+ #include <string.h>
+-#include "../locale/collate.h"
+ 
++#include "locale/xlocale_private.h"
++
+ /*
+  * Transform src, storing the result in dst, such that
+  * strcmp() on transformed strings returns what strcoll()
+@@ -52,36 +43,6 @@
+ size_t
+ strxfrm(char *dst, const char *src, size_t n)
+ {
+-	size_t r = 0;
+-	wchar_t *ws = NULL;
+-	wchar_t *wd = NULL;
+-
+-	ws = __dup_as_wcs_l(src);
+-	if (ws != NULL) {
+-		r = wcsxfrm(NULL, ws, 0);
+-		if (r > ULONG_MAX / sizeof(wchar_t)) { 
+-			errno = EINVAL;
+-			goto end;
+-		}
+-		wd = (wchar_t *)malloc((r + 1) * sizeof(wchar_t) );
+-		if (wd == NULL) {
+-			errno = ENOMEM;
+-			goto end;
+-		}
+-		wcsxfrm(wd, ws, r + 1);
+-		r = wcstombs(NULL, wd, 0);
+-		if (n > 0 && dst != NULL && r < n) {
+-			r = wcstombs(dst, wd, n);
+-		}
+-		/* if r>=n contents of dst is unspecified */
+-	}
+-end:
+-	if (ws != NULL) {
+-		free(ws);
+-	}
+-	if (wd != NULL) {
+-		free(wd);
+-	}
+-	return r; 
+-}
 +	return strxfrm_l(dst, src, n, __get_locale());
 +}	
-diff -ruN -x obj -x CVS -x *~ -x *orig src54-num/lib/libc/string/wcscasecmp.c src/lib/libc/string/wcscasecmp.c
---- src54-num/lib/libc/string/wcscasecmp.c	Mon Dec 23 13:18:26 2013
-+++ src/lib/libc/string/wcscasecmp.c	Mon Dec 23 13:18:42 2013
-@@ -27,15 +27,19 @@
- 
- #include <wchar.h>
- #include <wctype.h>
-+
- #include "locale/runetype.h"
-+#include "locale/xlocale_private.h"
- 
-+inline wint_t towlower_l(wint_t, locale_t);
-+
- int
--wcscasecmp(const wchar_t *s1, const wchar_t *s2)
-+wcscasecmp_l(const wchar_t *s1, const wchar_t *s2, locale_t loc)
- {
- 	wchar_t l1, l2;
- 	wchar_t c1[2], c2[2];
- 
--	while ((l1 = towlower(*s1++)) == (l2 = towlower(*s2++))) {
-+	while ((l1 = towlower_l(*s1++, loc)) == (l2 = towlower_l(*s2++, loc))) {
- 		if (l1 == 0)
- 			return (0);
- 	}
-@@ -43,12 +47,18 @@
- 	c1[1] = L'\0';
- 	c2[0] = l2;
- 	c2[1] = L'\0';
--	return wcscoll(c1, c2);
-+	return wcscoll_l(c1, c2, loc);
- }
-+
-+int
-+wcscasecmp(const wchar_t *s1, const wchar_t *s2)
-+{
-+	return wcscasecmp_l(s1, s2, __get_locale());
-+}
- DEF_WEAK(wcscasecmp);
- 
- int
--wcsncasecmp(const wchar_t *s1, const wchar_t *s2, size_t n)
-+wcsncasecmp_l(const wchar_t *s1, const wchar_t *s2, size_t n, locale_t loc)
- {
- 	wchar_t l1, l2;
- 	wchar_t c1[2], c2[2];
-@@ -56,16 +66,23 @@
- 	if (n == 0)
- 		return (0);
- 	do {
--		if (((l1 = towlower(*s1++))) != (l2 = towlower(*s2++))) {
-+		if (((l1 = towlower_l(*s1++, loc))) != 
-+				(l2 = towlower_l(*s2++, loc))) {
- 			c1[0] = l1;
- 			c1[1] = L'\0';
- 			c2[0] = l2;
- 			c2[1] = L'\0';
--			return wcscoll(c1, c2);
-+			return wcscoll_l(c1, c2, loc);
- 		}
- 		if (l1 == 0)
- 			break;
- 	} while (--n != 0);
- 	return (0);
-+}
-+
-+int
-+wcsncasecmp(const wchar_t *s1, const wchar_t *s2, size_t n)
-+{
-+	return wcsncasecmp_l(s1, s2, n, __get_locale());
- }
- DEF_WEAK(wcsncasecmp);
+ DEF_STRONG(strxfrm);
 diff -ruN -x obj -x CVS -x *~ -x *orig src54-x5/regress/lib/libc/locale/check_isw/check_isw.c src/regress/lib/libc/locale/check_isw/check_isw.c
 --- src54-x5/regress/lib/libc/locale/check_isw/check_isw.c	Tue Dec  3 13:48:26 2013
 +++ src/regress/lib/libc/locale/check_isw/check_isw.c	Tue Dec  3 15:35:06 2013
-@@ -20,6 +20,7 @@
+@@ -19,10 +19,12 @@
+  * functions.
   */
  
+-#include <stdio.h>
+-#include <stdlib.h>
  #include <ctype.h>
 +#include <errno.h>
  #include <locale.h>
- #include <stdio.h>
- #include <stdlib.h>
-@@ -224,11 +225,34 @@
++#include <stdio.h>
++#include <stdlib.h>
++#include <strings.h>
+ #include <wchar.h>
+ #include <wctype.h>
+ 
+@@ -165,11 +167,34 @@
  
  }
  
@@ -486,207 +1087,35 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src54-x5/regress/lib/libc/locale/check_is
 +	test4();
  	return bad !=0;
  }
-diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regress/lib/libc/locale/check_xlocale/check_xlocale.c
---- src53xlocale2/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Tue Apr 16 09:47:00 2013
-+++ src/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Tue Apr 16 09:52:42 2013
-@@ -283,11 +283,153 @@
+
+diff -ruN src62-orig/lib/libc/hidden/string.h src/lib/libc/hidden/string.h
+--- src62-orig/lib/libc/hidden/string.h	Sun Dec  3 21:40:11 2017
++++ src/lib/libc/hidden/string.h	Sun Dec  3 21:40:22 2017
+@@ -48,7 +48,7 @@
+ PROTO_NORMAL(strchr);
+ PROTO_NORMAL(strcmp);
+ PROTO_NORMAL(strcoll);
+-PROTO_DEPRECATED(strcoll_l);
++PROTO_NORMAL(strcoll_l);
+ PROTO_STD_DEPRECATED(strcpy);
+ PROTO_NORMAL(strcspn);
+ PROTO_NORMAL(strdup);
+@@ -60,7 +60,7 @@
+ PROTO_NORMAL(strlen);
+ PROTO_NORMAL(strmode);
+ PROTO_NORMAL(strncasecmp);
+-PROTO_DEPRECATED(strncasecmp_l);
++PROTO_NORMAL(strncasecmp_l);
+ PROTO_NORMAL(strncat);
+ PROTO_NORMAL(strncmp);
+ PROTO_NORMAL(strncpy);
+@@ -75,7 +75,7 @@
+ PROTO_NORMAL(strtok);
+ PROTO_NORMAL(strtok_r);
+ PROTO_NORMAL(strxfrm);
+-PROTO_DEPRECATED(strxfrm_l);
++PROTO_NORMAL(strxfrm_l);
+ PROTO_NORMAL(timingsafe_bcmp);
+ PROTO_NORMAL(timingsafe_memcmp);
  
- }
- 
-+void test_string() 
-+{
-+	char *nl;
-+	nl = setlocale(LC_ALL, "es_CO.ISO8859-1");
-+	printf("locale %s\n", nl);
-+	printf("__mb_cur_max=%i\n", __mb_cur_max);
-+	p(__mb_cur_max == 1);
-+
-+	p(strcasecmp("n", "N") == 0);
-+	p(strcasecmp("\0xf1", "\0xd1") == 0); // ñ Ñ
-+	nl = setlocale(LC_ALL, "es_CO.UTF-8");
-+	locale_t es_CO_UTF_8 = uselocale(NULL);
-+	printf("locale %s\n", nl);
-+	printf("__mb_cur_max=%i\n", __mb_cur_max);
-+	p(__mb_cur_max == 4); 
-+
-+	p(strcasecmp("n", "N") == 0);
-+	p(strcasecmp("ñ", "Ñ") == 0); 
-+	p(strcasecmp("á", "Á") == 0); 
-+
-+	p(strcoll_l("b", "é", es_CO_UTF_8) < 0);
-+	wchar_t wcsb[1000];
-+	mbstowcs(wcsb, "b", 1000);
-+	wchar_t wcse[1000];
-+	mbstowcs(wcse, "é", 1000);
-+	p(wcscoll_l(wcsb, wcse, es_CO_UTF_8) < 0);
-+	
-+	mbstowcs(wcsb, "b", 1000);
-+	mbstowcs(wcse, "é", 1000);
-+	p(wcscoll_l(wcsb, wcse, es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"b", L"é", es_CO_UTF_8) < 0);
-+	p(strcoll("á", "e") < 0);
-+	p(strcoll("ama", "ana") < 0);
-+	p(strcoll_l("á", "e", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"b", L"é", es_CO_UTF_8) < 0);
-+	p(wcscoll(L"á", L"e") < 0);
-+	p(wcscoll_l(L"á", L"e", es_CO_UTF_8) < 0);
-+	/* Order in spanish*/
-+	p(wcscoll_l(L" ", L"á", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"á", L"b", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"d", L"é", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"é", L"f", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"h", L"í", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"í", L"j", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"n", L"ñ", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"ñ", L"o", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"ñ", L"ó", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"ó", L"p", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"t", L"ú", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"t", L"ü", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"ú", L"v", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"ü", L"v", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"Á", L"B", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"D", L"É", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"É", L"F", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"H", L"Í", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"Í", L"J", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"N", L"Ñ", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"Ñ", L"O", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"Ñ", L"Ó", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"Ó", L"P", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"T", L"Ú", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"T", L"Ü", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"Ú", L"V", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"Ü", L"V", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"", L"Á", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"á", L"", es_CO_UTF_8) > 0);
-+	p(wcscoll_l(L"áá", L"á", es_CO_UTF_8) > 0);
-+	
-+	wchar_t wa[10], wb[10], we[10], wf[10], wn[10], wegne[10],
-+		wo[10];
-+
-+	p(wcsxfrm_l(wo, L"oro", 1000, es_CO_UTF_8) > 0);
-+	printf("oro wo='%ls'\n", wo);
-+	p(wcsxfrm_l(wa, L"", 1000, es_CO_UTF_8) >= 0);
-+	printf("wa='%ls'\n", wa);
-+	p(wcsxfrm_l(wa, L"á", 1000, es_CO_UTF_8) > 0);
-+	printf("wa='%ls'\n", wa);
-+	p(wcsxfrm_l(wb, L"b", 1000, es_CO_UTF_8) > 0);
-+	printf("wb='%ls'\n", wb);
-+	p(wcscmp(wa, wb) < 0);
-+	p(wcsxfrm_l(we, L"é", 1000, es_CO_UTF_8) > 0);
-+	printf("we='%ls'\n", we);
-+	p(wcscmp(wb, we) < 0);
-+	p(wcsxfrm_l(wf, L"f", 1000, es_CO_UTF_8) > 0);
-+	printf("wf='%ls'\n", wf);
-+	p(wcscmp(wb, wf) < 0);
-+	p(wcscmp(we, wf) < 0);
-+	p(wcsxfrm_l(wn, L"n", 1000, es_CO_UTF_8) > 0);
-+	printf("wn='%ls'\n", wn);
-+	p(wcsxfrm_l(wegne, L"ñ", 1000, es_CO_UTF_8) > 0);
-+	printf("wegne='%ls'\n", wegne);
-+	p(wcsxfrm_l(wo, L"o", 1000, es_CO_UTF_8) > 0);
-+	printf("o wo='%ls'\n", wo);
-+	p(wcsxfrm_l(wo, L"oso", 1000, es_CO_UTF_8) > 0);
-+	printf("oso wo='%ls'\n", wo);
-+	p(wcscmp(wn, wegne) < 0);
-+	p(wcscmp(wegne, wo) < 0);
-+	
-+	char a[1000], b[1000], e[1000], f[1000];
-+	size_t sr = 0;
-+	//__collate_print_tables(NULL);
-+	p((sr = strxfrm_l(NULL, "equis", 0, es_CO_UTF_8)) > 5);
-+	p(strxfrm_l(NULL, "", 1000, es_CO_UTF_8) == 0);
-+	p(strxfrm_l(a, "", 1000, es_CO_UTF_8) == 0 && a[0] == '\0');
-+	p(strxfrm_l(a, "á", 1000, es_CO_UTF_8) > 0);
-+	p(strxfrm_l(b, "b", 1000, es_CO_UTF_8) > 0);
-+	p(strcmp(a, b) < 0);
-+	p(strxfrm_l(e, "é", 1000, es_CO_UTF_8) > 0);
-+	printf("é e=%s\n", e);
-+	p(strcmp(b, e) < 0);
-+	p(strxfrm_l(f, "f", 1000, es_CO_UTF_8) > 0);
-+	p(strcmp(b, f) < 0);
-+	p(strcmp(e, f) < 0);
-+	p(strxfrm_l(e, "éa", 1000, es_CO_UTF_8) > 0);
-+	printf("e=%s\n", e);
-+	p(strxfrm_l(f, "éb", 1000, es_CO_UTF_8) > 0);
-+	printf("f=%s\n", f);
-+	p(strcmp(e, f) < 0);
-+	p(strxfrm_l(f, "oso", 1000, es_CO_UTF_8) > 0);
-+	printf("oso f=%s\n", f);
-+	p(strcmp(e, f) < 0);
-+
-+	p(strcasecmp_l("n", "N", es_CO_UTF_8) == 0);
-+	p(strcasecmp_l("largo", "largote", es_CO_UTF_8) < 0);
-+	p(strcasecmp_l("cortote", "corto", es_CO_UTF_8) > 0);
-+	p(strncasecmp_l("n", "N", 1, es_CO_UTF_8) == 0);
-+	p(strcasestr_l("nino", "O", es_CO_UTF_8) != NULL);
-+	p(wcscasecmp_l(L"ñ", L"Ñ", es_CO_UTF_8) == 0);
-+	p(wcscasecmp_l(L"á", L"Á", es_CO_UTF_8) == 0);
-+	p(wcscasecmp_l(L"a", L"á", es_CO_UTF_8) <= 0);
-+	p(wcscasecmp_l(L"", L"á", es_CO_UTF_8) < 0);
-+	p(wcscasecmp_l(L"", L"a", es_CO_UTF_8) < 0);
-+	p(wcscasecmp_l(L"", L"a", es_CO_UTF_8) < 0);
-+	p(wcscasecmp_l(L"á", L"", es_CO_UTF_8) > 0);
-+	p(wcscasecmp_l(L"áá", L"á", es_CO_UTF_8) > 0);
-+	p(wcscasecmp(L"á", L"Á") == 0);
-+	p(wcscasecmp(L"a", L"á") <= 0);
-+	p(wcsncasecmp_l(L"n", L"N", 1, es_CO_UTF_8) == 0);
-+}
-+
- int main()
- {
- 	test_xlocale();
- 	test_wchar();
- 	test_ctype();
-+	test_string();
- 	
- 	return bad != 0;
- }
-diff -ruN src/lib/libc/Symbols.list.orig src/lib/libc/Symbols.list
---- src/lib/libc/Symbols.list.orig	Sun Aug 21 10:47:08 2016
-+++ src/lib/libc/Symbols.list	Sun Aug 21 12:15:50 2016
-@@ -1731,6 +1731,11 @@
- nextwctype
- nextwctype_l
- querylocale
-+strcasecmp_l
-+strcasestr_l
-+strcoll_l
-+strncasecmp_l
-+strxfrm_l
- tolower_l
- toupper_l
- towctrans_l
-@@ -1738,16 +1743,19 @@
- towupper_l
- uselocale
- wcrtomb_l
-+wcscasecmp_l
-+wcscoll_l
-+wcsncasecmp_l
- wcsnrtombs_l
- wcsrtombs_l
- wcstombs_l
- wcswidth_l
-+wcsxfrm_l
- wctob_l
- wctomb_l
- wctrans_l
- wctype_l
- wcwidth_l
--
- 
- /* yp */
- yp_all
-diff -ruN src/lib/libc/hidden/wchar.h.orig src/lib/libc/hidden/wchar.h
---- src/lib/libc/hidden/wchar.h.orig	Sun Aug 21 13:46:28 2016
-+++ src/lib/libc/hidden/wchar.h	Sun Aug 21 20:58:12 2016
-@@ -92,6 +92,7 @@
- PROTO_NORMAL(wcswidth);
- PROTO_NORMAL(wcswidth_l);
- PROTO_NORMAL(wcsxfrm);
-+PROTO_NORMAL(wcsxfrm_l);
- PROTO_NORMAL(wctob);
- PROTO_NORMAL(wctob_l);
- PROTO_NORMAL(wcwidth);
+

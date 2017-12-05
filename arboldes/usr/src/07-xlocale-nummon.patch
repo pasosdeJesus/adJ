@@ -265,7 +265,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/gdtoa/strtodg
  #endif
  {
  	int abe, abits, asub;
-@@ -354,23 +356,8 @@
+@@ -354,20 +356,8 @@
  	ULong *b, *be, y, z;
  	Bigint *ab, *bb, *bb1, *bd, *bd0, *bs, *delta, *rvb, *rvb0;
  #ifdef USE_LOCALE /*{{*/
@@ -279,10 +279,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/gdtoa/strtodg
 -	static int dplen;
 -	if (!(s0 = decimalpoint_cache)) {
 -		s0 = localeconv()->decimal_point;
--		if ((decimalpoint_cache = (char*)MALLOC(strlen(s0) + 1))) {
--			strlcpy(decimalpoint_cache, s0, strlen(s0) + 1);
--			s0 = decimalpoint_cache;
--			}
+-		decimalpoint_cache = strdup(s0);
 -		dplen = strlen(s0);
 -		}
 -	decimalpoint = (char*)s0;
@@ -290,7 +287,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/gdtoa/strtodg
  #else  /*USE_LOCALE}{*/
  #define dplen 1
  #endif /*USE_LOCALE}}*/
-@@ -409,7 +396,7 @@
+@@ -406,7 +396,7 @@
  		switch(s[1]) {
  		  case 'x':
  		  case 'X':
@@ -326,7 +323,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-x6/lib/libc/gdtoa/gethex.
  #endif
  {
  	Bigint *b;
-@@ -50,20 +52,7 @@
+@@ -50,17 +52,7 @@
  	Long e, e1;
  #ifdef USE_LOCALE
  	int i;
@@ -337,11 +334,8 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-x6/lib/libc/gdtoa/gethex.
 -	static unsigned char *decimalpoint_cache;
 -	if (!(s0 = decimalpoint_cache)) {
 -		s0 = (unsigned char*)localeconv()->decimal_point;
--		if ((decimalpoint_cache = (char*)MALLOC(strlen(s0) + 1))) {
--			strlcpy(decimalpoint_cache, s0, strlen(s0) + 1);
--			s0 = decimalpoint_cache;
--			}
--		}
+-		decimalpoint_cache = strdup(s0);
+-	}
 -	decimalpoint = s0;
 -#endif
 +	const unsigned char *decimalpoint = (unsigned char*)localeconv_l(loc)->decimal_point;
@@ -3289,8 +3283,11 @@ diff -ruN src/lib/libc/Symbols.list.orig src/lib/libc/Symbols.list
 diff -ruN src/lib/libc/hidden/monetary.h.orig src/lib/libc/hidden/monentary.h
 --- src/lib/libc/hidden/monetary.h.orig	Sun Aug 21 23:03:32 2016
 +++ src/lib/libc/hidden/monetary.h	Sun Aug 21 23:03:40 2016
-@@ -12,5 +12,6 @@
+@@ -10,7 +10,9 @@
+ #define _LIBC_MONETARY_H_
+ 
  #include_next <monetary.h>
++#include_next <xlocale.h>
  
  PROTO_STD_DEPRECATED(strfmon);
 +PROTO_NORMAL(strfmon_l);
@@ -3348,3 +3345,14 @@ diff -ruN src61-orig/lib/libc/hidden/stdio.h src/lib/libc/hidden/stdio.h
  PROTO_NORMAL(clearerr);
  PROTO_NORMAL(ctermid);
  PROTO_NORMAL(dprintf);
+diff -ruN src62-orig/lib/libc/hidden/langinfo.h src/lib/libc/hidden/langinfo.h
+--- src62-orig/lib/libc/hidden/langinfo.h	Mon Sep  4 22:16:13 2017
++++ src/lib/libc/hidden/langinfo.h	Sat Nov 25 22:36:57 2017
+@@ -21,6 +21,6 @@
+ #include_next <langinfo.h>
+ 
+ PROTO_NORMAL(nl_langinfo);
+-PROTO_DEPRECATED(nl_langinfo_l);
++PROTO_NORMAL(nl_langinfo_l);
+ 
+ #endif	/* _LIBC_LANGINFO_H_ */

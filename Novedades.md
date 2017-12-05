@@ -1,6 +1,6 @@
 # adJ - Aprendiendo de Jesús.
 Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
-y Educativas y que anhelamos sea usada por Jesús durante el Milenio.
+y Educativas y que esperamos el regreso del señor Jesucristo.
 
 ### Versión: 6.2b1
 Fecha de publicación: 12/Dic/2017

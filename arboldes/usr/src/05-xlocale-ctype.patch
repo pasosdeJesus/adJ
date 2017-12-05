@@ -1,317 +1,3 @@
-diff -ruN src53xlocale1/lib/libc/gen/isctype.c src/lib/libc/gen/isctype.c
---- src53xlocale1/lib/libc/gen/isctype.c	Mon Aug  8 03:05:34 2005
-+++ src/lib/libc/gen/isctype.c	Mon Apr  8 18:33:50 2013
-@@ -32,11 +32,42 @@
-  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-  * SUCH DAMAGE.
-  */
-+/**
-+ * Public domain according to Colombian Legislation. 
-+ * http://www.pasosdejesus.org/dominio_publico_colombia.html
-+ * 2013. vtamara@pasosdeJesus.org
-+ *
-+ * $adJ$
-+ */
- 
-+
- #define _ANSI_LIBRARY
- #include <ctype.h>
- #include <stdio.h>
-+#include <xlocale.h>
- 
-+#include "../locale/mblocal.h"
-+#include "../locale/rune.h"
-+#include "../locale/runetype.h"
-+#include "../locale/xlocale_private.h"
-+
-+static __inline int
-+__sbmaskrune_l(rune_t __c, unsigned long __f, locale_t __loc)
-+{
-+	int __limit;
-+	FIX_LOCALE(__loc);
-+	struct xlocale_ctype *ct = XLOCALE_CTYPE(__loc);
-+	_RuneLocale *runes = ct->runes;
-+	return (__c >= ct->__mb_sb_limit) ? 0 :
-+		runes->rl_runetype[__c] & __f;
-+}
-+
-+static __inline int
-+__sbistype_l(rune_t __c, unsigned long __f, locale_t __loc)
-+{
-+	return (!!__sbmaskrune_l(__c, __f, __loc));
-+}
-+
- #undef isalnum
- int
- isalnum(int c)
-@@ -45,6 +76,12 @@
- }
- DEF_STRONG(isalnum);
- 
-+__inline int isalnum_l(int __c, locale_t __l)
-+{
-+	return __sbistype_l(__c, _CTYPE_A|_CTYPE_D, __l);
-+}
-+DEF_STRONG(isalnum_l);
-+
- #undef isalpha
- int
- isalpha(int c)
-@@ -53,6 +90,12 @@
- }
- DEF_STRONG(isalpha);
- 
-+__inline int isalpha_l(int __c, locale_t __l) 
-+{ 
-+	return __sbistype_l(__c, _CTYPE_A, __l); 
-+}
-+DEF_STRONG(isalpha_l);
-+
- #undef isblank
- int
- isblank(int c)
-@@ -61,6 +104,12 @@
- }
- DEF_STRONG(isblank);
- 
-+__inline int isblank_l(int __c, locale_t __l) 
-+{ 
-+	return __sbistype_l(__c, _CTYPE_B, __l); 
-+}
-+DEF_STRONG(isblank_l);
-+
- #undef iscntrl
- int
- iscntrl(int c)
-@@ -69,6 +118,13 @@
- }
- DEF_STRONG(iscntrl);
- 
-+__inline int iscntrl_l(int __c, locale_t __l) 
-+{ 
-+	return __sbistype_l(__c, _CTYPE_C, __l);
-+}
-+DEF_STRONG(iscntrl_l);
-+
-+
- #undef isdigit
- int
- isdigit(int c)
-@@ -77,6 +133,12 @@
- }
- DEF_STRONG(isdigit);
- 
-+__inline int isdigit_l(int __c, locale_t __l) 
-+{ 
-+	return __sbistype_l(__c, _CTYPE_D, __l); 
-+}
-+DEF_STRONG(isdigit_l);
-+
- #undef isgraph
- int
- isgraph(int c)
-@@ -85,6 +147,25 @@
- }
- DEF_STRONG(isgraph);
- 
-+__inline int isgraph_l(int __c, locale_t __l) 
-+{ 
-+	return __sbistype_l(__c, _CTYPE_G, __l); 
-+}
-+DEF_STRONG(isgraph_l);
-+
-+__inline int ishexnumber_l(int __c, locale_t __l) 
-+{ 
-+	return __sbistype_l(__c, _CTYPE_X, __l); 
-+}
-+DEF_WEAK(isgraph_l);
-+
-+__inline int isideogram_l(int __c, locale_t __l) 
-+{ 
-+	return __sbistype_l(__c, _CTYPE_I, __l);
-+}
-+DEF_WEAK(isideogram_l);
-+
-+
- #undef islower
- int
- islower(int c)
-@@ -93,6 +174,24 @@
- }
- DEF_STRONG(islower);
- 
-+__inline int islower_l(int __c, locale_t __l) 
-+{ 
-+	return __sbistype_l(__c, _CTYPE_L, __l);
-+}
-+DEF_STRONG(islower_l);
-+
-+__inline int isnumber_l(int __c, locale_t __l) 
-+{ 
-+	return __sbistype_l(__c, _CTYPE_D, __l);
-+}
-+DEF_STRONG(isnumber_l);
-+
-+__inline int isphonogram_l(int __c, locale_t __l) 
-+{ 
-+	return __sbistype_l(__c, _CTYPE_Q, __l);
-+}
-+DEF_WEAK(isphonogram_l);
-+
- #undef isprint
- int
- isprint(int c)
-@@ -101,6 +200,13 @@
- }
- DEF_STRONG(isprint);
- 
-+__inline int isprint_l(int __c, locale_t __l) 
-+{ 
-+	return __sbistype_l(__c, _CTYPE_R, __l);
-+}
-+DEF_STRONG(isprint_l);
-+
-+
- #undef ispunct
- int
- ispunct(int c)
-@@ -109,6 +215,19 @@
- }
- DEF_STRONG(ispunct);
- 
-+__inline int ispunct_l(int __c, locale_t __l)
-+{ 
-+	return __sbistype_l(__c, _CTYPE_P, __l);
-+}
-+DEF_STRONG(ispunct_l);
-+
-+__inline int isrune_l(int __c, locale_t __l) 
-+{
-+	return __sbistype_l(__c, 0xFFFFFF00L, __l);
-+}
-+DEF_WEAK(isrune_l);
-+
-+
- #undef isspace
- int
- isspace(int c)
-@@ -117,6 +236,18 @@
- }
- DEF_STRONG(isspace);
- 
-+__inline int isspace_l(int __c, locale_t __l) 
-+{ 
-+	return __sbistype_l(__c, _CTYPE_S, __l);
-+}
-+DEF_STRONG(isspace_l);
-+
-+__inline int isspecial_l(int __c, locale_t __l) 
-+{ 
-+	return __sbistype_l(__c, _CTYPE_T, __l);
-+}
-+DEF_STRONG(isspecial_l);
-+
- #undef isupper
- int
- isupper(int c)
-@@ -125,6 +256,12 @@
- }
- DEF_STRONG(isupper);
- 
-+__inline int isupper_l(int __c, locale_t __l) 
-+{ 
-+	return __sbistype_l(__c, _CTYPE_U, __l);
-+}
-+DEF_STRONG(isupper_l);
-+
- #undef isxdigit
- int
- isxdigit(int c)
-@@ -133,7 +270,12 @@
- }
- DEF_STRONG(isxdigit);
- 
--#undef isascii
-+__inline int isxdigit_l(int __c, locale_t __l) 
-+{ 
-+	return __sbistype_l(__c, _CTYPE_X, __l); 
-+}
-+DEF_STRONG(isxdigit_l);
-+
- int
- isascii(int c)
- {
-@@ -161,3 +303,9 @@
- {
- 	return (c - 'A' + 'a');
- }
-+
-+__inline int digittoint_l(int __c, locale_t __l)
-+{ 
-+	return __sbmaskrune_l((__c), 0xFF, __l); 
-+}
-+DEF_STRONG(digittoint_l);
-diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src53xlocale1/lib/libc/gen/tolower_.c src/lib/libc/gen/tolower_.c
---- src53xlocale1/lib/libc/gen/tolower_.c	Mon Aug  8 03:05:34 2005
-+++ src/lib/libc/gen/tolower_.c	Thu Apr  4 10:46:17 2013
-@@ -7,7 +7,11 @@
- #define _ANSI_LIBRARY
- #include <ctype.h>
- #include <stdio.h>
-+
- #include "ctype_private.h"
-+#include "../locale/mblocal.h"
-+#include "../locale/runetype.h"
-+#include "../locale/xlocale_private.h"
- 
- const short _C_tolower_[1 + CTYPE_NUM_CHARS] = {
- 	EOF,
-@@ -59,3 +63,15 @@
- 	return((_tolower_tab_ + 1)[c]);
- }
- DEF_STRONG(tolower);
-+
-+
-+__inline int tolower_l(int __c, locale_t __l)
-+{
-+	FIX_LOCALE(__l);
-+	struct xlocale_ctype *__ct = XLOCALE_CTYPE(__l);
-+	_RuneLocale *__runes = __ct->runes;
-+
-+	return (__c < 0 || __c >= __ct->__mb_sb_limit) ? __c :
-+		__runes->rl_maplower[__c];
-+}
-+DEF_STRONG(tolower_l);
-diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src53xlocale1/lib/libc/gen/toupper_.c src/lib/libc/gen/toupper_.c
---- src53xlocale1/lib/libc/gen/toupper_.c	Tue Aug  9 03:36:48 2005
-+++ src/lib/libc/gen/toupper_.c	Thu Apr  4 10:46:39 2013
-@@ -9,7 +9,11 @@
- #include <stdio.h>
- 
- #include "ctype_private.h"
-+#include "../locale/mblocal.h"
-+#include "../locale/runetype.h"
-+#include "../locale/xlocale_private.h"
- 
-+
- const short _C_toupper_[1 + CTYPE_NUM_CHARS] = {
- 	EOF,
- 	0x00,	0x01,	0x02,	0x03,	0x04,	0x05,	0x06,	0x07,
-@@ -60,3 +64,14 @@
- 	return((_toupper_tab_ + 1)[c]);
- }
- DEF_STRONG(toupper);
-+
-+__inline int toupper_l(int __c, locale_t __l)
-+{
-+	FIX_LOCALE(__l);
-+	struct xlocale_ctype *__ct = XLOCALE_CTYPE(__l);
-+	_RuneLocale *__runes = __ct->runes;
-+
-+	return (__c < 0 || __c >= __ct->__mb_sb_limit) ? __c :
-+		__runes->rl_mapupper[__c];
-+}
-+DEF_STRONG(toupper_l);
 diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src54-x4/lib/libc/locale/Makefile.inc src/lib/libc/locale/Makefile.inc
 --- src54-x4/lib/libc/locale/Makefile.inc	Thu Dec  5 19:12:05 2013
 +++ src/lib/libc/locale/Makefile.inc	Thu Dec  5 19:17:22 2013
@@ -2814,7 +2500,22 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src56xlocale1/lib/libc/locale/run
 diff -ruN src59-orig/lib/libc/hidden/ctype.h src/lib/libc/hidden/ctype.h
 --- src59-orig/lib/libc/hidden/ctype.h	Thu Jun  9 23:21:42 2016
 +++ src/lib/libc/hidden/ctype.h	Sat Aug 20 22:41:28 2016
-@@ -91,6 +91,24 @@
+@@ -78,19 +78,37 @@
+ PROTO_NORMAL(ispunct);
+ PROTO_DEPRECATED(ispunct_l);
+ PROTO_NORMAL(isspace);
+-PROTO_DEPRECATED(isspace_l);
++PROTO_NORMAL(isspace_l);
+ PROTO_NORMAL(isupper);
+ PROTO_DEPRECATED(isupper_l);
+ PROTO_NORMAL(isxdigit);
+ PROTO_DEPRECATED(isxdigit_l);
+ PROTO_DEPRECATED(toascii);
+ PROTO_NORMAL(tolower);
+-PROTO_DEPRECATED(tolower_l);
++PROTO_NORMAL(tolower_l);
+ PROTO_NORMAL(toupper);
+ PROTO_DEPRECATED(toupper_l);
  PROTO_STD_DEPRECATED(_tolower);
  PROTO_STD_DEPRECATED(_toupper);
  
@@ -2842,13 +2543,23 @@ diff -ruN src59-orig/lib/libc/hidden/ctype.h src/lib/libc/hidden/ctype.h
 diff -ruN src/lib/libc/hidden/wchar.h.orig src/lib/libc/hidden/wchar.h
 --- src/lib/libc/hidden/wchar.h.orig	Sat Aug 20 19:49:11 2016
 +++ src/lib/libc/hidden/wchar.h	Sat Aug 20 22:50:10 2016
+@@ -61,7 +61,7 @@
+ PROTO_NORMAL(wcschr);
+ PROTO_NORMAL(wcscmp);
+ PROTO_NORMAL(wcscoll);
+-PROTO_DEPRECATED(wcscoll_l);
++PROTO_NORMAL(wcscoll_l);
+ PROTO_STD_DEPRECATED(wcscpy);
+ PROTO_NORMAL(wcscspn);
+ PROTO_NORMAL(wcsdup);
 @@ -91,11 +91,13 @@
  PROTO_NORMAL(wcstoull);
  PROTO_DEPRECATED(wcswcs);
  PROTO_NORMAL(wcswidth);
 +PROTO_NORMAL(wcswidth_l);
  PROTO_NORMAL(wcsxfrm);
- PROTO_DEPRECATED(wcsxfrm_l);
+-PROTO_DEPRECATED(wcsxfrm_l);
++PROTO_NORMAL(wcsxfrm_l);
  PROTO_NORMAL(wctob);
  PROTO_NORMAL(wctob_l);
  PROTO_NORMAL(wcwidth);
@@ -3088,3 +2799,329 @@ diff -ruN src62-orig/lib/libc/locale/iswctype_l.c src/lib/libc/locale/iswctype_l
 +DEF_WEAK(wcwidth_l);
 +
 +
+diff -ruN src62-orig/include/ctype.h src/include/ctype.h
+--- src62-orig/include/ctype.h 	Fri Nov 24 13:53:58 2017
++++ src/include/ctype.h		Fri Nov 24 15:32:27 2017
+@@ -211,92 +211,6 @@
+ }
+ #endif /* __BSD_VISIBLE || __XPG_VISIBLE */
+ 
+-#if __POSIX_VISIBLE >= 200809
+-__only_inline int
+-isalnum_l(int _c, locale_t _l __attribute__((__unused__)))
+-{
+-	return isalnum(_c);
+-}
+-
+-__only_inline int
+-isalpha_l(int _c, locale_t _l __attribute__((__unused__)))
+-{
+-	return isalpha(_c);
+-}
+-
+-__only_inline int
+-isblank_l(int _c, locale_t _l __attribute__((__unused__)))
+-{
+-	return isblank(_c);
+-}
+-
+-__only_inline int
+-iscntrl_l(int _c, locale_t _l __attribute__((__unused__)))
+-{
+-	return iscntrl(_c);
+-}
+-
+-__only_inline int
+-isdigit_l(int _c, locale_t _l __attribute__((__unused__)))
+-{
+-	return isdigit(_c);
+-}
+-
+-__only_inline int
+-isgraph_l(int _c, locale_t _l __attribute__((__unused__)))
+-{
+-	return isgraph(_c);
+-}
+-
+-__only_inline int
+-islower_l(int _c, locale_t _l __attribute__((__unused__)))
+-{
+-	return islower(_c);
+-}
+-
+-__only_inline int
+-isprint_l(int _c, locale_t _l __attribute__((__unused__)))
+-{
+-	return isprint(_c);
+-}
+-
+-__only_inline int
+-ispunct_l(int _c, locale_t _l __attribute__((__unused__)))
+-{
+-	return ispunct(_c);
+-}
+-
+-__only_inline int
+-isspace_l(int _c, locale_t _l __attribute__((__unused__)))
+-{
+-	return isspace(_c);
+-}
+-
+-__only_inline int
+-isupper_l(int _c, locale_t _l __attribute__((__unused__)))
+-{
+-	return isupper(_c);
+-}
+-
+-__only_inline int
+-isxdigit_l(int _c, locale_t _l __attribute__((__unused__)))
+-{
+-	return isxdigit(_c);
+-}
+-
+-__only_inline int
+-tolower_l(int _c, locale_t _l __attribute__((__unused__)))
+-{
+-	return tolower(_c);
+-}
+-
+-__only_inline int
+-toupper_l(int _c, locale_t _l __attribute__((__unused__)))
+-{
+-	return toupper(_c);
+-}
+-#endif /* __POSIX_VISIBLE >= 200809 */
+-
+ #endif /* !_ANSI_LIBRARY */
+ 
+ __END_DECLS
+diff -ruN src62-orig/lib/libc/locale/isctype_l.c src/lib/libc/locale/isctype_l.c
+--- src62-orig/lib/libc/locale/isctype_l.c	Fri Nov 24 14:24:59 2017
++++ src/lib/libc/locale/isctype_l.c	Fri Nov 24 15:47:17 2017
+@@ -22,101 +22,173 @@
+ 
+ #define	_ANSI_LIBRARY
+ #include <ctype.h>
++#include <xlocale.h>
+ 
++#include "../locale/mblocal.h"
++#include "../locale/rune.h"
++#include "../locale/runetype.h"
++#include "../locale/xlocale_private.h"
++
++static __inline int
++__sbmaskrune_l(rune_t __c, unsigned long __f, locale_t __loc)
++{
++	int __limit;
++	FIX_LOCALE(__loc);
++	struct xlocale_ctype *ct = XLOCALE_CTYPE(__loc);
++	_RuneLocale *runes = ct->runes;
++	return (__c >= ct->__mb_sb_limit) ? 0 :
++		runes->rl_runetype[__c] & __f;
++}
++
++static __inline int
++__sbistype_l(rune_t __c, unsigned long __f, locale_t __loc)
++{
++	return (!!__sbmaskrune_l(__c, __f, __loc));
++}
++
++
+ #undef isalnum_l
+-int
+-isalnum_l(int c, locale_t locale __attribute__((__unused__)))
++__inline int isalnum_l(int __c, locale_t __l)
+ {
+-	return isalnum(c);
++	return __sbistype_l(__c, _CTYPE_A|_CTYPE_D, __l);
+ }
+ 
+ #undef isalpha_l
+-int
+-isalpha_l(int c, locale_t locale __attribute__((__unused__)))
+-{
+-	return isalpha(c);
++__inline int isalpha_l(int __c, locale_t __l) 
++{ 
++	return __sbistype_l(__c, _CTYPE_A, __l); 
+ }
+ 
+ #undef isblank_l
+-int
+-isblank_l(int c, locale_t locale __attribute__((__unused__)))
+-{
+-	return isblank(c);
++__inline int isblank_l(int __c, locale_t __l) 
++{ 
++	return __sbistype_l(__c, _CTYPE_B, __l); 
+ }
+ 
+ #undef iscntrl_l
+-int
+-iscntrl_l(int c, locale_t locale __attribute__((__unused__)))
+-{
+-	return iscntrl(c);
++__inline int iscntrl_l(int __c, locale_t __l) 
++{ 
++	return __sbistype_l(__c, _CTYPE_C, __l);
+ }
+ 
+ #undef isdigit_l
+-int
+-isdigit_l(int c, locale_t locale __attribute__((__unused__)))
+-{
+-	return isdigit(c);
++__inline int isdigit_l(int __c, locale_t __l) 
++{ 
++	return __sbistype_l(__c, _CTYPE_D, __l); 
+ }
++DEF_STRONG(isdigit_l);
+ 
+ #undef isgraph_l
+-int
+-isgraph_l(int c, locale_t locale __attribute__((__unused__)))
+-{
+-	return isgraph(c);
++__inline int isgraph_l(int __c, locale_t __l) 
++{ 
++	return __sbistype_l(__c, _CTYPE_G, __l); 
+ }
+ 
+ #undef islower_l
+-int
+-islower_l(int c, locale_t locale __attribute__((__unused__)))
+-{
+-	return islower(c);
++__inline int islower_l(int __c, locale_t __l) 
++{ 
++	return __sbistype_l(__c, _CTYPE_L, __l);
+ }
+ 
+ #undef isprint_l
+-int
+-isprint_l(int c, locale_t locale __attribute__((__unused__)))
+-{
+-	return isprint(c);
++__inline int isprint_l(int __c, locale_t __l) 
++{ 
++	return __sbistype_l(__c, _CTYPE_R, __l);
+ }
+ 
+ #undef ispunct_l
+-int
+-ispunct_l(int c, locale_t locale __attribute__((__unused__)))
+-{
+-	return ispunct(c);
++__inline int ispunct_l(int __c, locale_t __l)
++{ 
++	return __sbistype_l(__c, _CTYPE_P, __l);
+ }
+ 
+ #undef isspace_l
+-int
+-isspace_l(int c, locale_t locale __attribute__((__unused__)))
+-{
+-	return isspace(c);
++__inline int isspace_l(int __c, locale_t __l) 
++{ 
++	return __sbistype_l(__c, _CTYPE_S, __l);
+ }
++DEF_STRONG(isspace_l);
+ 
+ #undef isupper_l
+-int
+-isupper_l(int c, locale_t locale __attribute__((__unused__)))
+-{
+-	return isupper(c);
++__inline int isupper_l(int __c, locale_t __l) 
++{ 
++	return __sbistype_l(__c, _CTYPE_U, __l);
+ }
+ 
+ #undef isxdigit_l
+-int
+-isxdigit_l(int c, locale_t locale __attribute__((__unused__)))
+-{
+-	return isxdigit(c);
++__inline int isxdigit_l(int __c, locale_t __l) 
++{ 
++	return __sbistype_l(__c, _CTYPE_X, __l); 
+ }
+ 
+ #undef tolower_l
+-int
+-tolower_l(int c, locale_t locale __attribute__((__unused__)))
++__inline int tolower_l(int __c, locale_t __l)
+ {
+-	return tolower(c);
++	FIX_LOCALE(__l);
++	struct xlocale_ctype *__ct = XLOCALE_CTYPE(__l);
++	_RuneLocale *__runes = __ct->runes;
++
++	return (__c < 0 || __c >= __ct->__mb_sb_limit) ? __c :
++		__runes->rl_maplower[__c];
+ }
++DEF_STRONG(tolower_l);
+ 
+ #undef toupper_l
+-int
+-toupper_l(int c, locale_t locale __attribute__((__unused__)))
++__inline int toupper_l(int __c, locale_t __l)
+ {
+-	return toupper(c);
++	FIX_LOCALE(__l);
++	struct xlocale_ctype *__ct = XLOCALE_CTYPE(__l);
++	_RuneLocale *__runes = __ct->runes;
++
++	return (__c < 0 || __c >= __ct->__mb_sb_limit) ? __c :
++		__runes->rl_mapupper[__c];
+ }
++DEF_STRONG(toupper_l);
++
++#undef ishexnumber_l
++__inline int ishexnumber_l(int __c, locale_t __l) 
++{ 
++	return __sbistype_l(__c, _CTYPE_X, __l); 
++}
++
++#undef isideogram_l
++__inline int isideogram_l(int __c, locale_t __l) 
++{ 
++	return __sbistype_l(__c, _CTYPE_I, __l);
++}
++DEF_STRONG(isideogram_l);
++
++#undef isnumber_l
++__inline int isnumber_l(int __c, locale_t __l) 
++{ 
++	return __sbistype_l(__c, _CTYPE_D, __l);
++}
++DEF_STRONG(isnumber_l);
++
++#undef isphonogram_l
++__inline int isphonogram_l(int __c, locale_t __l) 
++{ 
++	return __sbistype_l(__c, _CTYPE_Q, __l);
++}
++DEF_STRONG(isphonogram_l);
++
++#undef isrune_l
++__inline int isrune_l(int __c, locale_t __l) 
++{
++	return __sbistype_l(__c, 0xFFFFFF00L, __l);
++}
++DEF_STRONG(isrune_l);
++
++#undef isspecial_l
++__inline int isspecial_l(int __c, locale_t __l) 
++{ 
++	return __sbistype_l(__c, _CTYPE_T, __l);
++}
++DEF_STRONG(isspecial_l);
++
++#undef digittoint_l
++__inline int digittoint_l(int __c, locale_t __l)
++{ 
++	return __sbmaskrune_l((__c), 0xFF, __l); 
++}
++DEF_STRONG(digittoint_l);
