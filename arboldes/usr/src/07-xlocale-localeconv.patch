@@ -1,0 +1,911 @@
+diff -ruN src62-orig/lib/libc/locale/_def_numeric.c src/lib/libc/locale/_def_numeric.c
+--- src62-orig/lib/libc/locale/_def_numeric.c	Sun Nov 26 20:50:15 2017
++++ src/lib/libc/locale/_def_numeric.c	Sun Nov 26 23:45:02 2017
+@@ -41,6 +41,7 @@
+ 
+ #include "localedef.h"
+ #include "locale/loadtextcat.h"
++#include "locale/xlocale_private.h"
+ 
+ static char    numempty[] = { CHAR_MAX, '\0' };
+ 
+@@ -53,52 +54,110 @@
+ 
+ const _NumericLocale *_CurrentNumericLocale = &_DefaultNumericLocale;
+ 
+-extern const char *__fix_locale_grouping_str(const char *);
++extern int __nlocale_changed;
+ 
+-static char *_numeric_buffer = NULL;
++struct xlocale_numeric __xlocale_global_numeric;
+ 
+-_NumericLocale _numeric_locale;
++extern const char *__fix_locale_grouping_str(const char *);
+ 
+-/* Used by localeconv, should be set to 0 only by that function */
+-extern int __nlocale_changed;
++static void
++destruct_numeric(void *v)
++{
++	struct xlocale_numeric *l = v;
++	if (l->buffer)
++		free(l->buffer);
++	free(l);
++}
++ 
+ 
+ /* Loads numeric locale from file in text format */
+ int
+-__numeric_load_locale(const char *name)
++__nload(const char *name, locale_t loc, struct xlocale_numeric *xnum)
+ {
+ 	int ret = 0;
+ 	char error_buf[2048];
+-	int changed;
++	_NumericLocale *l;
++	int changed = 0;
+ 
++	FIX_LOCALE(loc);
++	l = &xnum->locale;
++
+ 	if (strcmp(name, "C") == 0 || strcmp(name, "POSIX") == 0) {
+-		if (_CurrentNumericLocale != &_DefaultNumericLocale) {
+-			__nlocale_changed = 1;
+-			_CurrentNumericLocale = &_DefaultNumericLocale;
+-		}
++		xnum->header.header.retain_count = 0;
++		xnum->header.header.destructor = NULL;
++		xnum->header.locale[0] = 'C';
++		xnum->header.locale[1] = '\0';
++		xnum->buffer = NULL;
++		xnum->locale = _DefaultNumericLocale;
++		loc->using_numeric_locale = 0;
++		loc->numeric_locale_changed = 1;
+ 	} else {
++		xnum->header.header.destructor = destruct_numeric;
+ 		ret = __loadtextcat(name, LC_NUMERIC, &changed,
+-				&_numeric_buffer, 
+-				(const char**)&_numeric_locale, 
+-				sizeof(_numeric_locale), 
++				&xnum->buffer, 
++				(const char**)l,
++				sizeof(_NumericLocale), 
+ 				error_buf, sizeof(error_buf));
+-		if (ret == 0 && changed == 1) {
+-			(void)__fix_locale_grouping_str(_numeric_locale.grouping);
+-			__nlocale_changed = 1;
+-			_CurrentNumericLocale = &_numeric_locale;
++		if (ret == 0) {
++		       if (changed == 1) {
++			       (void)__fix_locale_grouping_str(xnum->locale.grouping);
++			       loc->using_numeric_locale = 1;
++			       loc->numeric_locale_changed = 1;
++		       }
++		} else {
++			return -1;
+ 		}
+ 	}
+ 	return ret;
+ }
+ 
++/* Loads numeric locale from file in text format */
++int
++__numeric_load_locale(const char *name)
++{
++	int ret = 0;
++
++	ret = __nload(name, &__xlocale_global_locale, &__xlocale_global_numeric);
++	_CurrentNumericLocale = &__xlocale_global_numeric.locale;
++	return ret;
++}
++
++void *
++__numeric_load(const char *name, locale_t loc)
++{
++	int ret;
++	struct xlocale_numeric *new;
++        
++	new = calloc(sizeof(struct xlocale_numeric), 1);
++	if (new == NULL) {
++		return NULL;
++	}
++	ret = __nload(name, loc, new);
++	if (ret != 0) {
++		xlocale_release(new);
++		return NULL;
++	}
++	return new;
++}
++
++_NumericLocale *
++__get_current_numeric_locale(locale_t loc)
++{
++	return (loc->using_numeric_locale
++			? &((struct xlocale_numeric *)loc->components[XLC_NUMERIC])->locale
++			: (_NumericLocale *)&_DefaultNumericLocale);
++}
++
++
+ #ifdef LOCALE_DEBUG
+ void
+-numericdebug(void) {
++numericdebug(_NumericLocale l) {
+ 	printf(	"decimal_point = %s\n"
+ 			"thousands_sep = %s\n"
+ 			"grouping = %s\n",
+-			_numeric_locale.decimal_point,
+-			_numeric_locale.thousands_sep,
+-			_numeric_locale.grouping
++			l.decimal_point,
++			l.thousands_sep,
++			l.grouping
+ 	      );
+ }
+ #endif /* LOCALE_DEBUG */
+diff -ruN src62-orig/lib/libc/locale/localeconv.c src/lib/libc/locale/localeconv.c
+--- src62-orig/lib/libc/locale/localeconv.c	Sun Nov 26 20:47:02 2017
++++ src/lib/libc/locale/localeconv.c	Sun Nov 26 23:05:31 2017
+@@ -3,9 +3,46 @@
+  * Written by J.T. Conklin <jtc@netbsd.org>.
+  * Public domain.
+  */
+-
++/*
++ * Copyright (c) 2001 Alexey Zelkin <phantom@FreeBSD.org>
++ * Copyright (c) 1991, 1993
++ *	The Regents of the University of California.  All rights reserved.
++ *
++ * Copyright (c) 2011 The FreeBSD Foundation
++ * All rights reserved.
++ * Portions of this software were developed by David Chisnall
++ * under sponsorship from the FreeBSD Foundation.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ * 4. Neither the name of the University nor the names of its contributors
++ *    may be used to endorse or promote products derived from this software
++ *    without specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
++ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
++ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++ * SUCH DAMAGE.
++ */
++ 
+ #include <locale.h>
++#include <xlocale.h>
++
+ #include "localedef.h"
++#include "xlocale_private.h"
+ 
+ /*
+  * The localeconv() function constructs a struct lconv from the current
+@@ -16,55 +53,66 @@
+  * lconv structure are computed only when the monetary or numeric
+  * locale has been changed.
+  */
+-int __mlocale_changed = 1;
+-int __nlocale_changed = 1;
+ 
+ /*
+  * Return the current locale conversion.
+  */
+ struct lconv *
+-localeconv(void)
++localeconv_l(locale_t loc)
+ {
+-    static struct lconv ret;
++	FIX_LOCALE(loc);
++	struct lconv *ret = &loc->lconv;
+ 
+-    if (__mlocale_changed) {
+-	/* LC_MONETARY */
+-	ret.int_curr_symbol	= _CurrentMonetaryLocale->int_curr_symbol;
+-	ret.currency_symbol	= _CurrentMonetaryLocale->currency_symbol;
+-	ret.mon_decimal_point	= _CurrentMonetaryLocale->mon_decimal_point;
+-	ret.mon_thousands_sep	= _CurrentMonetaryLocale->mon_thousands_sep;
+-	// Special case to return "" in POSIX locale as shown in column
+-	// localeconv() in table of section LC_MONETARY of
+-	// http://pubs.opengroup.org/onlinepubs/009695399/basedefs/xbd_chap07.html#tag_07_03
+-	ret.mon_grouping	= (_CurrentMonetaryLocale == &_DefaultMonetaryLocale) ?
+-		"" : (char *)_CurrentMonetaryLocale->mon_grouping;
+-	ret.positive_sign	= _CurrentMonetaryLocale->positive_sign;
+-	ret.negative_sign	= _CurrentMonetaryLocale->negative_sign;
+-	ret.int_frac_digits	= _CurrentMonetaryLocale->int_frac_digits;
+-	ret.frac_digits		= _CurrentMonetaryLocale->frac_digits;
+-	ret.p_cs_precedes	= _CurrentMonetaryLocale->p_cs_precedes;
+-	ret.p_sep_by_space	= _CurrentMonetaryLocale->p_sep_by_space;
+-	ret.n_cs_precedes	= _CurrentMonetaryLocale->n_cs_precedes;
+-	ret.n_sep_by_space	= _CurrentMonetaryLocale->n_sep_by_space;
+-	ret.p_sign_posn		= _CurrentMonetaryLocale->p_sign_posn;
+-	ret.n_sign_posn		= _CurrentMonetaryLocale->n_sign_posn;
+-	ret.int_p_cs_precedes	= _CurrentMonetaryLocale->int_p_cs_precedes;
+-	ret.int_p_sep_by_space	= _CurrentMonetaryLocale->int_p_sep_by_space;
+-	ret.int_n_cs_precedes	= _CurrentMonetaryLocale->int_n_cs_precedes;
+-	ret.int_n_sep_by_space	= _CurrentMonetaryLocale->int_n_sep_by_space;
+-	ret.int_p_sign_posn	= _CurrentMonetaryLocale->int_p_sign_posn;
+-	ret.int_n_sign_posn	= _CurrentMonetaryLocale->int_n_sign_posn;
+-	__mlocale_changed = 0;
+-    }
++	if (loc->monetary_locale_changed) {
++		/* LC_MONETARY */
+ 
+-    if (__nlocale_changed) {
+-	/* LC_NUMERIC */
+-	ret.decimal_point	= (char *) _CurrentNumericLocale->decimal_point;
+-	ret.thousands_sep	= (char *) _CurrentNumericLocale->thousands_sep;
+-	ret.grouping		= (char *) _CurrentNumericLocale->grouping;
+-	__nlocale_changed = 0;
+-    }
++		_MonetaryLocale *mptr = __get_current_monetary_locale(loc);
++		ret->int_curr_symbol	= mptr->int_curr_symbol;
++		ret->currency_symbol	= mptr->currency_symbol;
++		ret->mon_decimal_point	= mptr->mon_decimal_point;
++		ret->mon_thousands_sep	= mptr->mon_thousands_sep;
++		// Special case to return "" in POSIX locale as shown in column
++		// localeconv() in table of section LC_MONETARY of
++		// http://pubs.opengroup.org/onlinepubs/009695399/basedefs/xbd_chap07.html#tag_07_03
+ 
+-    return (&ret);
++		ret->mon_grouping	= (mptr == &_DefaultMonetaryLocale) ?
++			"" : mptr->mon_grouping;
++		ret->positive_sign	= mptr->positive_sign;
++		ret->negative_sign	= mptr->negative_sign;
++		ret->int_frac_digits	= mptr->int_frac_digits;
++		ret->frac_digits	= mptr->frac_digits;
++		ret->p_cs_precedes	= mptr->p_cs_precedes;
++		ret->p_sep_by_space	= mptr->p_sep_by_space;
++		ret->n_cs_precedes	= mptr->n_cs_precedes;
++		ret->n_sep_by_space	= mptr->n_sep_by_space;
++		ret->p_sign_posn	= mptr->p_sign_posn;
++		ret->n_sign_posn	= mptr->n_sign_posn;
++		ret->int_p_cs_precedes	= mptr->int_p_cs_precedes;
++		ret->int_p_sep_by_space	= mptr->int_p_sep_by_space;
++		ret->int_n_cs_precedes	= mptr->int_n_cs_precedes;
++		ret->int_n_sep_by_space	= mptr->int_n_sep_by_space;
++		ret->int_p_sign_posn	= mptr->int_p_sign_posn;
++		ret->int_n_sign_posn	= mptr->int_n_sign_posn;
++		loc->monetary_locale_changed = 0;
++	}
++
++	if (loc->numeric_locale_changed) {
++		/* LC_NUMERIC */
++		_NumericLocale *nptr = __get_current_numeric_locale(loc);
++		ret->decimal_point  = (char *)nptr->decimal_point;
++		ret->thousands_sep = (char *)nptr->thousands_sep;
++		ret->grouping = (char *)nptr->grouping;
++		loc->numeric_locale_changed = 0;
++	}
++
++	return (ret);
+ }
++DEF_STRONG(localeconv_l);
++
++
++struct lconv *
++localeconv() {
++	return localeconv_l(__get_locale());
++}
+ DEF_STRONG(localeconv);
++
+diff -ruN src-o/lib/libc/locale/setlocale.c src/lib/libc/locale/setlocale.c
+--- src-o/lib/libc/locale/setlocale.c	Sun Nov 26 20:50:16 2017
++++ src/lib/libc/locale/setlocale.c	Fri Dec  1 13:14:20 2017
+@@ -20,7 +20,9 @@
+ #include <string.h>
+ 
+ #include "collate.h"
++#include "mblocal.h"
+ #include "rune.h"
++#include "xlocale_private.h"
+ 
+ static void
+ freegl(char **oldgl)
+@@ -52,55 +54,76 @@
+ 	return newgl;
+ }
+ 
++extern int __xlocale_setrunelocale(struct xlocale_ctype *xc, 
++		const char *locname);
+ extern int __time_load_locale(const char *name);
+ extern int __monetary_load_locale(const char *name);
+ extern int __numeric_load_locale(const char *name);
+ 
+ static int
+-changegl(int category, const char *locname, char **gl, char **oldgl)
++changegl(int category, const char *locname, char **gl)
+ {
+ 	char *cp;
+ 
+ 	if ((locname = _get_locname(category, locname)) == NULL ||
+ 	    (cp = strdup(locname)) == NULL)
+ 		return -1;
++	
++	if (gl != NULL && strcmp(gl[category], locname) == 0) {
++		goto end;
++	}
+ 
+-	if (oldgl == NULL || strcmp(oldgl[category], locname) != 0) {
+-		switch (category) {
+-			case LC_CTYPE:
+-				_GlobalRuneLocale =
+-					strchr(locname, '.') == NULL ?
+-					&_DefaultRuneLocale : _Utf8RuneLocale;
+-				break;
+-			
+-			case LC_MESSAGES:
+-				break;
+-			case LC_COLLATE:
+-				if (__collate_load_tables(locname) == _LDP_ERROR) {
+-					free(cp);
+-					return -1;
+-				}
+-				break;
+-			case LC_MONETARY:
+-				if (__monetary_load_locale(locname) != 0) {
+-					free(cp);
+-					return -1;
+-				}
+-			case LC_NUMERIC:
+-				if (__numeric_load_locale(locname) != 0) {
+-					free(cp);
+-					return -1;
+-				}
+-				break;
+-			case LC_TIME:
+-				if (__time_load_locale(locname) != 0) {
+-					free(cp);
+-					return -1;
+-				}
+-				break;
+-		}
++	switch (category) {
++		case LC_CTYPE:
++			if (__xlocale_setrunelocale(&__xlocale_global_ctype, 
++			    locname) != 0) {
++				free(cp);
++				return -1;
++			}
++			_GlobalRuneLocale = __xlocale_global_ctype.runes;
++			(void)strlcpy(__xlocale_global_locale.components[category-1]->locale, 
++			    locname, sizeof(
++				__xlocale_global_locale.components[category-1]->locale));
++			break;
++
++		case LC_MESSAGES:
++			break;
++		case LC_COLLATE:
++			if (__collate_load_tables(locname) == _LDP_ERROR) {
++				free(cp);
++				return -1;
++			}
++			(void)strlcpy(__xlocale_global_locale.components[category-1]->locale, 
++			    locname, sizeof(
++				__xlocale_global_locale.components[category-1]->locale));
++			break;
++		case LC_MONETARY:
++			if (__monetary_load_locale(locname) != 0) {
++				free(cp);
++				return -1;
++			}
++			(void)strlcpy(__xlocale_global_locale.components[category-1]->locale, 
++			    locname, sizeof(
++				__xlocale_global_locale.components[category-1]->locale));
++			break;
++		case LC_NUMERIC:
++			if (__numeric_load_locale(locname) != 0) {
++				free(cp);
++				return -1;
++			}
++			(void)strlcpy(__xlocale_global_locale.components[category-1]->locale, 
++			    locname, sizeof(
++			    __xlocale_global_locale.components[category-1]->locale));
++			break;
++		case LC_TIME:
++			if (__time_load_locale(locname) != 0) {
++				free(cp);
++				return -1;
++			}
++			break;
+ 	}
+ 
++end:
+ 	free(gl[category]);
+ 	gl[category] = cp;
+ 	return 0;
+@@ -140,7 +163,7 @@
+ 			nextname = firstname;
+ 			for (ic = 1; ic < _LC_LAST; ic++)
+ 				if (nextname == NULL || changegl(ic,
+-				    strsep(&nextname, "/"), newgl, global_locale) == -1)
++				    strsep(&nextname, "/"), newgl) == -1)
+ 					break;
+ 			free(firstname);
+ 			if (ic < _LC_LAST || nextname != NULL) {
+@@ -150,7 +173,7 @@
+ 		} else {
+ 
+ 			/* One value only. */
+-			if (changegl(category, locname, newgl, global_locale) == -1) {
++			if (changegl(category, locname, newgl) == -1) {
+ 				freegl(newgl);
+ 				return NULL;
+ 			}
+@@ -159,7 +182,7 @@
+ 			if (category == LC_ALL) {
+ 				for (ic = 1; ic < _LC_LAST; ic++) {
+ 					if (changegl(ic, locname,
+-					    newgl, global_locale) == -1) {
++					    newgl) == -1) {
+ 						global_locname[0] = '\0';
+ 						goto done;
+ 					}
+diff -ruN src/lib/libc/locale/xlocale_private.h.orig src/lib/libc/locale/xlocale_private.h
+--- src/lib/libc/locale/xlocale_private.h.orig	Sun Nov 26 20:52:02 2017
++++ src/lib/libc/locale/xlocale_private.h	Sun Nov 26 21:38:33 2017
+@@ -39,8 +39,10 @@
+ #include <machine/atomic.h>
+ #include <xlocale.h>
+ 
++#include "localedef.h"
+ 
+ #define ENCODING_LEN 31
++#define CATEGORY_LEN 11
+ 
+ enum {
+ 	XLC_COLLATE = 0,
+@@ -209,8 +211,20 @@
+ #define FIX_LOCALE(l) (l = get_real_locale(l))
+ 
+ 
+-#define ENCODING_LEN 31
+-#define CATEGORY_LEN 11
++struct xlocale_numeric {
++	struct xlocale_component header;
++	char *buffer;
++	_NumericLocale locale;
++};
+ 
++_NumericLocale *__get_current_numeric_locale(locale_t loc);
++
++struct xlocale_monetary {
++	struct xlocale_component header;
++	char *buffer;
++	_MonetaryLocale locale;
++};
++
++_MonetaryLocale *__get_current_monetary_locale(locale_t loc);
+ 
+ #endif
+diff -ruN src-m/lib/libc/locale/xlocale.c src/lib/libc/locale/xlocale.c
+--- src-m/lib/libc/locale/xlocale.c	Fri Dec  1 13:22:30 2017
++++ src/lib/libc/locale/xlocale.c	Fri Dec  1 16:00:39 2017
+@@ -74,10 +74,11 @@
+ 	{0},
+ 	{
+ 		&__xlocale_global_collate,
+-		&__xlocale_global_ctype, 0, 0, 0, 0
+-		/* FIXME
++		&__xlocale_global_ctype, 
+ 		&__xlocale_global_monetary,
+ 		&__xlocale_global_numeric,
++		0, 0
++		/* FIXME
+ 		&__xlocale_global_time,
+ 		&__xlocale_global_messages */
+ 	},
+@@ -102,19 +103,6 @@
+ 
+ 
+ void *
+-__numeric_load(const char *locale, locale_t unused)
+-{
+-	return NULL;
+-}
+-
+-void *
+-__monetary_load(const char *locale, locale_t unused)
+-{
+-	return NULL;
+-}
+-	
+-
+-void *
+ __time_load(const char *locale, locale_t unused)
+ {
+ 	return NULL;
+@@ -429,5 +417,6 @@
+ 		}
+ 		printf("\n");
+ 	}
++	printf("_bufcrncystr=%p\n", loc->_bufcrncystr);
+ }
+
+
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/setlocale.3 src/lib/libc/locale/setlocale.3
+--- src54-x6/lib/libc/locale/setlocale.3	Tue Dec  3 16:08:11 2013
++++ src/lib/libc/locale/setlocale.3	Tue Dec  3 16:12:25 2013
+@@ -38,7 +38,8 @@
+ .Os
+ .Sh NAME
+ .Nm setlocale ,
+-.Nm localeconv
++.Nm localeconv ,
++.Nm localeconv_l
+ .Nd natural language formatting for C
+ .Sh SYNOPSIS
+ .In locale.h
+@@ -46,6 +47,9 @@
+ .Fn setlocale "int category" "const char *locale"
+ .Ft struct lconv *
+ .Fn localeconv "void"
++.In locale.h
++.Ft struct lconv *
++.Fn localeconv_l "void"
+ .Sh DESCRIPTION
+ The
+ .Fn setlocale
+@@ -58,7 +62,10 @@
+ The
+ .Fn localeconv
+ routine returns the current locale's parameters
+-for formatting numbers.
++for formatting numbers, while
++.Fn localeconv_l
++returns the parameters for formatting numbers of the 
++locale given as parameter.
+ .Pp
+ The
+ .Fn setlocale
+@@ -127,7 +134,9 @@
+ .Pp
+ The
+ .Fn localeconv
+-function returns a pointer to a structure
++and
++.Fn localeconv_l
++functions return a pointer to a structure
+ which provides parameters for formatting numbers,
+ especially currency values:
+ .Bd -literal -offset indent
+@@ -301,6 +310,10 @@
+ .Fn setlocale
+ or
+ .Fn localeconv .
++The
++.Fn localeconv_l
++function returns a pointer in the locale passed as parameter.
++.Fn 
+ .\" .Sh FILES							XXX
+ .\" .Bl -tag -width /usr/share/locale/locale/category -compact	XXX
+ .\" .It Pa $PATH_LOCALE/\fIlocale\fP/\fIcategory\fP		XXX
+@@ -312,6 +325,7 @@
+ .Xr mklocale 1 ,
+ .Xr strcoll 3 ,
+ .Xr strxfrm 3
++.Xr xlocale 3
+ .Sh STANDARDS
+ The
+ .Fn setlocale
+@@ -319,6 +333,9 @@
+ .Fn localeconv
+ functions conform to
+ .St -ansiC .
++The 
++.Fn localeconv_l
++function is a Darwin extension.
+ .Sh HISTORY
+ The
+ .Fn setlocale
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src55-orig/lib/libc/locale/_def_monetary.c src/lib/libc/locale/_def_monetary.c 
+--- src55-orig/lib/libc/locale/_def_monetary.c	Wed Dec 11 22:06:50 2013
++++ src/lib/libc/locale/_def_monetary.c	Fri Dec 13 15:43:35 2013
+@@ -41,6 +41,7 @@
+ #include <string.h>
+  
+ #include "locale/loadtextcat.h"
++#include "locale/xlocale_private.h"
+ 
+ static char    numempty[] = { CHAR_MAX, '\0'};
+ 
+@@ -73,42 +74,20 @@
+ 
+ const _MonetaryLocale *_CurrentMonetaryLocale = &_DefaultMonetaryLocale;
+ 
++struct xlocale_monetary __xlocale_global_monetary;
++
+ extern const char * __fix_locale_grouping_str(const char *);
+ 
+-/* Last loaded monetary locale different to _DefaultMonetaryLocale */
+-_MonetaryLocale _monetary_locale;
++static void
++destruct_monetary(void *v)
++{
++        struct xlocale_monetary *l = v;
++        if (l->buffer)
++                free(l->buffer);
++        free(l);
++}
+ 
+-static char *_monetary_buffer = NULL;
+ 
+-/* Used by localeconv, should be set to 0 only by that function */
+-extern int __mlocale_changed;
+-
+-/* This structure is used to load with __part_load_locale, after
+- * loading will be converted to _MonetaryLocale */
+-struct lc_monetary_T {
+-	const char	*int_curr_symbol;
+-	const char	*currency_symbol;
+-	const char	*mon_decimal_point;
+-	const char	*mon_thousands_sep;
+-	const char	*mon_grouping;
+-	const char	*positive_sign;
+-	const char	*negative_sign;
+-	const char	*int_frac_digits;
+-	const char	*frac_digits;
+-	const char	*p_cs_precedes;
+-	const char	*p_sep_by_space;
+-	const char	*n_cs_precedes;
+-	const char	*n_sep_by_space;
+-	const char	*p_sign_posn;
+-	const char	*n_sign_posn;
+-	const char	*int_p_cs_precedes;
+-	const char	*int_n_cs_precedes;
+-	const char	*int_p_sep_by_space;
+-	const char	*int_n_sep_by_space;
+-	const char	*int_p_sign_posn;
+-	const char	*int_n_sign_posn;
+-};
+-
+ static char
+ cnv(const char *str)
+ {
+@@ -120,62 +99,137 @@
+ }
+ 		
+ int
+-__monetary_load_locale(const char *name)
++__mload(const char *name, locale_t loc, struct xlocale_monetary *xmon)
+ {
+-	int ret=0;
++	int ret = 0;
+ 	char error_buf[2048];
++	/* This structure is used to load with __part_load_locale, after
++	 * loading will be converted to _MonetaryLocale */
++	struct lc_monetary_T {
++		const char      *int_curr_symbol;
++		const char      *currency_symbol;
++		const char      *mon_decimal_point;
++		const char      *mon_thousands_sep;
++		const char      *mon_grouping;
++		const char      *positive_sign;
++		const char      *negative_sign;
++		const char      *int_frac_digits;
++		const char      *frac_digits;
++		const char      *p_cs_precedes;
++		const char      *p_sep_by_space;
++		const char      *n_cs_precedes;
++		const char      *n_sep_by_space;
++		const char      *p_sign_posn;
++		const char      *n_sign_posn;
++		const char      *int_p_cs_precedes;
++		const char      *int_n_cs_precedes;
++		const char      *int_p_sep_by_space;
++		const char      *int_n_sep_by_space;
++		const char      *int_p_sign_posn;
++		const char      *int_n_sign_posn;
++	};
+ 	struct lc_monetary_T tmon;
+-	int changed;
++	_MonetaryLocale *l;
++	int changed = 0;
+ 
++	FIX_LOCALE(loc);
++	l = &xmon->locale;
++
+ 	if (strcmp(name, "C") == 0 || strcmp(name, "POSIX") == 0) {
+-		if (_CurrentMonetaryLocale != &_DefaultMonetaryLocale) {
+-			__mlocale_changed = 1;
+-			_CurrentMonetaryLocale = &_DefaultMonetaryLocale;
+-		}
++		xmon->header.header.retain_count = 0;
++		xmon->header.header.destructor = NULL;
++		xmon->header.locale[0] = 'C';
++		xmon->header.locale[1] = '\0';
++		xmon->buffer = NULL;
++		xmon->locale = _DefaultMonetaryLocale;
++		loc->using_monetary_locale = 0;
++		loc->monetary_locale_changed = 1;
+ 	} else {
++		xmon->header.header.destructor = destruct_monetary;
+ 		ret = __loadtextcat(name, LC_MONETARY, &changed,
+-				&_monetary_buffer, 
++				&xmon->buffer, 
+ 				(const char**)&tmon,
+ 				sizeof(tmon), 
+ 				error_buf, sizeof(error_buf));
+-		if (ret == 0 && changed == 1) {
+-			_monetary_locale.mon_grouping = 
+-				(char *)__fix_locale_grouping_str(
+-						tmon.mon_grouping);
+-#define M_ASSIGN_STR(NAME) (_monetary_locale.NAME = (char *)tmon.NAME)
+-			M_ASSIGN_STR(int_curr_symbol);
+-			M_ASSIGN_STR(currency_symbol);
+-			M_ASSIGN_STR(mon_decimal_point);
+-			M_ASSIGN_STR(mon_thousands_sep);
+-			M_ASSIGN_STR(positive_sign);
+-			M_ASSIGN_STR(negative_sign);
+-#define M_ASSIGN_CHAR(NAME) ((_monetary_locale.NAME) = cnv(tmon.NAME))
+-			M_ASSIGN_CHAR(int_frac_digits);
+-			M_ASSIGN_CHAR(frac_digits);
+-			M_ASSIGN_CHAR(p_cs_precedes);
+-			M_ASSIGN_CHAR(p_sep_by_space);
+-			M_ASSIGN_CHAR(n_cs_precedes);
+-			M_ASSIGN_CHAR(n_sep_by_space);
+-			M_ASSIGN_CHAR(p_sign_posn);
+-			M_ASSIGN_CHAR(n_sign_posn);
+-			M_ASSIGN_CHAR(int_p_cs_precedes);
+-			M_ASSIGN_CHAR(int_n_cs_precedes);
+-			M_ASSIGN_CHAR(int_p_sep_by_space);
+-			M_ASSIGN_CHAR(int_n_sep_by_space);
+-			M_ASSIGN_CHAR(int_p_sign_posn);
+-			M_ASSIGN_CHAR(int_n_sign_posn);
+-			__mlocale_changed = 1;
+-			_CurrentMonetaryLocale = &_monetary_locale;
++		if (ret == 0) {
++			if (changed == 1) {
++				xmon->locale.mon_grouping = 
++					(char *)__fix_locale_grouping_str(
++							tmon.mon_grouping);
++#define M_ASSIGN_STR(NAME) (xmon->locale.NAME = (char *)tmon.NAME)
++				M_ASSIGN_STR(int_curr_symbol);
++				M_ASSIGN_STR(currency_symbol);
++				M_ASSIGN_STR(mon_decimal_point);
++				M_ASSIGN_STR(mon_thousands_sep);
++				M_ASSIGN_STR(positive_sign);
++				M_ASSIGN_STR(negative_sign);
++#define M_ASSIGN_CHAR(NAME) ((xmon->locale.NAME) = cnv(tmon.NAME))
++				M_ASSIGN_CHAR(int_frac_digits);
++				M_ASSIGN_CHAR(frac_digits);
++				M_ASSIGN_CHAR(p_cs_precedes);
++				M_ASSIGN_CHAR(p_sep_by_space);
++				M_ASSIGN_CHAR(n_cs_precedes);
++				M_ASSIGN_CHAR(n_sep_by_space);
++				M_ASSIGN_CHAR(p_sign_posn);
++				M_ASSIGN_CHAR(n_sign_posn);
++				M_ASSIGN_CHAR(int_p_cs_precedes);
++				M_ASSIGN_CHAR(int_n_cs_precedes);
++				M_ASSIGN_CHAR(int_p_sep_by_space);
++				M_ASSIGN_CHAR(int_n_sep_by_space);
++				M_ASSIGN_CHAR(int_p_sign_posn);
++				M_ASSIGN_CHAR(int_n_sign_posn);
++				loc->using_monetary_locale = 1;
++				loc->monetary_locale_changed = 1;
++			}
++		} else {
++			return -1;
+ 		}
+ 	}
++	return ret;
++}
+ 
++int
++__monetary_load_locale(const char *name)
++{
++	int ret = 0;
++
++	ret = __mload(name, &__xlocale_global_locale, &__xlocale_global_monetary);
++	_CurrentMonetaryLocale = &__xlocale_global_monetary.locale;
+ 	return ret;
++}
+ 
++
++void *
++__monetary_load(const char *name, locale_t loc)
++{
++	int ret = 0;
++	struct xlocale_monetary *new;
++
++	new = calloc(sizeof(struct xlocale_monetary), 1);
++	if (new == NULL) {
++		return NULL;
++	}
++	ret = __mload(name, loc, new);
++	if (ret != 0) {
++		xlocale_release(new);
++		return NULL;
++	}
++	return new;
+ }
+ 
++
++_MonetaryLocale *
++__get_current_monetary_locale(locale_t loc)
++{
++	return (loc->using_monetary_locale
++			? &((struct xlocale_monetary *)loc->components[XLC_MONETARY])->locale
++			: (_MonetaryLocale *)&_DefaultMonetaryLocale);
++}
++
++
+ #ifdef LOCALE_DEBUG
+ void
+-monetdebug() {
++monetarydebug(_MonetaryLocale l) {
+ 	printf(	"int_curr_symbol = %s\n"
+ 			"currency_symbol = %s\n"
+ 			"mon_decimal_point = %s\n"
+@@ -197,27 +251,27 @@
+ 			"int_n_sep_by_space = %d\n"
+ 			"int_p_sign_posn = %d\n"
+ 			"int_n_sign_posn = %d\n",
+-			_monetary_locale.int_curr_symbol,
+-			_monetary_locale.currency_symbol,
+-			_monetary_locale.mon_decimal_point,
+-			_monetary_locale.mon_thousands_sep,
+-			_monetary_locale.mon_grouping,
+-			_monetary_locale.positive_sign,
+-			_monetary_locale.negative_sign,
+-			_monetary_locale.int_frac_digits[0],
+-			_monetary_locale.frac_digits[0],
+-			_monetary_locale.p_cs_precedes[0],
+-			_monetary_locale.p_sep_by_space[0],
+-			_monetary_locale.n_cs_precedes[0],
+-			_monetary_locale.n_sep_by_space[0],
+-			_monetary_locale.p_sign_posn[0],
+-			_monetary_locale.n_sign_posn[0],
+-			_monetary_locale.int_p_cs_precedes[0],
+-			_monetary_locale.int_p_sep_by_space[0],
+-			_monetary_locale.int_n_cs_precedes[0],
+-			_monetary_locale.int_n_sep_by_space[0],
+-			_monetary_locale.int_p_sign_posn[0],
+-			_monetary_locale.int_n_sign_posn[0]
++			l.int_curr_symbol,
++			l.currency_symbol,
++			l.mon_decimal_point,
++			l.mon_thousands_sep,
++			l.mon_grouping,
++			l.positive_sign,
++			l.negative_sign,
++			l.int_frac_digits[0],
++			l.frac_digits[0],
++			l.p_cs_precedes[0],
++			l.p_sep_by_space[0],
++			l.n_cs_precedes[0],
++			l.n_sep_by_space[0],
++			l.p_sign_posn[0],
++			l.n_sign_posn[0],
++			l.int_p_cs_precedes[0],
++			l.int_p_sep_by_space[0],
++			l.int_n_cs_precedes[0],
++			l.int_n_sep_by_space[0],
++			l.int_p_sign_posn[0],
++			l.int_n_sign_posn[0]
+ 				);
+ }
+ #endif /* LOCALE_DEBUG */
+diff -ruN src-m/lib/libc/Symbols.list.orig src/lib/libc/Symbols.list
+--- src-m/lib/libc/Symbols.list.orig	Sun Dec  3 05:58:25 2017
++++ src/lib/libc/Symbols.list	Sun Dec  3 05:58:34 2017
+@@ -978,6 +978,7 @@
+ iswxdigit_l
+ isxdigit_l
+ localeconv
++localeconv_l
+ mblen
+ mbrlen
+ mbrtowc

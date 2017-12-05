@@ -1,7 +1,8 @@
 
-6.0
+6.3
 ===
-
+* Intentar usar TIB_GET para maneter locale del thread (como hace
+  implementación vacía de xlocale OpenBSD 6.2)
 
 Futuro
 ======

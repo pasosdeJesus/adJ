@@ -1088,6 +1088,163 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src54-x5/regress/lib/libc/locale/check_is
  	return bad !=0;
  }
 
+diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regress/lib/libc/locale/check_xlocale/check_xlocale.c
+--- src53xlocale2/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Tue Apr 16 09:47:00 2013
++++ src/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Tue Apr 16 09:52:42 2013
+@@ -283,11 +283,153 @@
+ 
+ }
+ 
++void test_string() 
++{
++	char *nl;
++	nl = setlocale(LC_ALL, "es_CO.ISO8859-1");
++	printf("locale %s\n", nl);
++	printf("__mb_cur_max=%i\n", __mb_cur_max);
++	p(__mb_cur_max == 1);
++
++	p(strcasecmp("n", "N") == 0);
++	p(strcasecmp("\0xf1", "\0xd1") == 0); // ñ Ñ
++	nl = setlocale(LC_ALL, "es_CO.UTF-8");
++	locale_t es_CO_UTF_8 = uselocale(NULL);
++	printf("locale %s\n", nl);
++	printf("__mb_cur_max=%i\n", __mb_cur_max);
++	p(__mb_cur_max == 4); 
++
++	p(strcasecmp("n", "N") == 0);
++	p(strcasecmp("ñ", "Ñ") == 0); 
++	p(strcasecmp("á", "Á") == 0); 
++
++	p(strcoll_l("b", "é", es_CO_UTF_8) < 0);
++	wchar_t wcsb[1000];
++	mbstowcs(wcsb, "b", 1000);
++	wchar_t wcse[1000];
++	mbstowcs(wcse, "é", 1000);
++	p(wcscoll_l(wcsb, wcse, es_CO_UTF_8) < 0);
++	
++	mbstowcs(wcsb, "b", 1000);
++	mbstowcs(wcse, "é", 1000);
++	p(wcscoll_l(wcsb, wcse, es_CO_UTF_8) < 0);
++	p(wcscoll_l(L"b", L"é", es_CO_UTF_8) < 0);
++	p(strcoll("á", "e") < 0);
++	p(strcoll("ama", "ana") < 0);
++	p(strcoll_l("á", "e", es_CO_UTF_8) < 0);
++	p(wcscoll_l(L"b", L"é", es_CO_UTF_8) < 0);
++	p(wcscoll(L"á", L"e") < 0);
++	p(wcscoll_l(L"á", L"e", es_CO_UTF_8) < 0);
++	/* Order in spanish*/
++	p(wcscoll_l(L" ", L"á", es_CO_UTF_8) < 0);
++	p(wcscoll_l(L"á", L"b", es_CO_UTF_8) < 0);
++	p(wcscoll_l(L"d", L"é", es_CO_UTF_8) < 0);
++	p(wcscoll_l(L"é", L"f", es_CO_UTF_8) < 0);
++	p(wcscoll_l(L"h", L"í", es_CO_UTF_8) < 0);
++	p(wcscoll_l(L"í", L"j", es_CO_UTF_8) < 0);
++	p(wcscoll_l(L"n", L"ñ", es_CO_UTF_8) < 0);
++	p(wcscoll_l(L"ñ", L"o", es_CO_UTF_8) < 0);
++	p(wcscoll_l(L"ñ", L"ó", es_CO_UTF_8) < 0);
++	p(wcscoll_l(L"ó", L"p", es_CO_UTF_8) < 0);
++	p(wcscoll_l(L"t", L"ú", es_CO_UTF_8) < 0);
++	p(wcscoll_l(L"t", L"ü", es_CO_UTF_8) < 0);
++	p(wcscoll_l(L"ú", L"v", es_CO_UTF_8) < 0);
++	p(wcscoll_l(L"ü", L"v", es_CO_UTF_8) < 0);
++	p(wcscoll_l(L"Á", L"B", es_CO_UTF_8) < 0);
++	p(wcscoll_l(L"D", L"É", es_CO_UTF_8) < 0);
++	p(wcscoll_l(L"É", L"F", es_CO_UTF_8) < 0);
++	p(wcscoll_l(L"H", L"Í", es_CO_UTF_8) < 0);
++	p(wcscoll_l(L"Í", L"J", es_CO_UTF_8) < 0);
++	p(wcscoll_l(L"N", L"Ñ", es_CO_UTF_8) < 0);
++	p(wcscoll_l(L"Ñ", L"O", es_CO_UTF_8) < 0);
++	p(wcscoll_l(L"Ñ", L"Ó", es_CO_UTF_8) < 0);
++	p(wcscoll_l(L"Ó", L"P", es_CO_UTF_8) < 0);
++	p(wcscoll_l(L"T", L"Ú", es_CO_UTF_8) < 0);
++	p(wcscoll_l(L"T", L"Ü", es_CO_UTF_8) < 0);
++	p(wcscoll_l(L"Ú", L"V", es_CO_UTF_8) < 0);
++	p(wcscoll_l(L"Ü", L"V", es_CO_UTF_8) < 0);
++	p(wcscoll_l(L"", L"Á", es_CO_UTF_8) < 0);
++	p(wcscoll_l(L"á", L"", es_CO_UTF_8) > 0);
++	p(wcscoll_l(L"áá", L"á", es_CO_UTF_8) > 0);
++	
++	wchar_t wa[10], wb[10], we[10], wf[10], wn[10], wegne[10],
++		wo[10];
++
++	p(wcsxfrm_l(wo, L"oro", 1000, es_CO_UTF_8) > 0);
++	printf("oro wo='%ls'\n", wo);
++	p(wcsxfrm_l(wa, L"", 1000, es_CO_UTF_8) >= 0);
++	printf("wa='%ls'\n", wa);
++	p(wcsxfrm_l(wa, L"á", 1000, es_CO_UTF_8) > 0);
++	printf("wa='%ls'\n", wa);
++	p(wcsxfrm_l(wb, L"b", 1000, es_CO_UTF_8) > 0);
++	printf("wb='%ls'\n", wb);
++	p(wcscmp(wa, wb) < 0);
++	p(wcsxfrm_l(we, L"é", 1000, es_CO_UTF_8) > 0);
++	printf("we='%ls'\n", we);
++	p(wcscmp(wb, we) < 0);
++	p(wcsxfrm_l(wf, L"f", 1000, es_CO_UTF_8) > 0);
++	printf("wf='%ls'\n", wf);
++	p(wcscmp(wb, wf) < 0);
++	p(wcscmp(we, wf) < 0);
++	p(wcsxfrm_l(wn, L"n", 1000, es_CO_UTF_8) > 0);
++	printf("wn='%ls'\n", wn);
++	p(wcsxfrm_l(wegne, L"ñ", 1000, es_CO_UTF_8) > 0);
++	printf("wegne='%ls'\n", wegne);
++	p(wcsxfrm_l(wo, L"o", 1000, es_CO_UTF_8) > 0);
++	printf("o wo='%ls'\n", wo);
++	p(wcsxfrm_l(wo, L"oso", 1000, es_CO_UTF_8) > 0);
++	printf("oso wo='%ls'\n", wo);
++	p(wcscmp(wn, wegne) < 0);
++	p(wcscmp(wegne, wo) < 0);
++	
++	char a[1000], b[1000], e[1000], f[1000];
++	size_t sr = 0;
++	//__collate_print_tables(NULL);
++	p((sr = strxfrm_l(NULL, "equis", 0, es_CO_UTF_8)) > 5);
++	p(strxfrm_l(NULL, "", 1000, es_CO_UTF_8) == 0);
++	p(strxfrm_l(a, "", 1000, es_CO_UTF_8) == 0 && a[0] == '\0');
++	p(strxfrm_l(a, "á", 1000, es_CO_UTF_8) > 0);
++	p(strxfrm_l(b, "b", 1000, es_CO_UTF_8) > 0);
++	p(strcmp(a, b) < 0);
++	p(strxfrm_l(e, "é", 1000, es_CO_UTF_8) > 0);
++	printf("é e=%s\n", e);
++	p(strcmp(b, e) < 0);
++	p(strxfrm_l(f, "f", 1000, es_CO_UTF_8) > 0);
++	p(strcmp(b, f) < 0);
++	p(strcmp(e, f) < 0);
++	p(strxfrm_l(e, "éa", 1000, es_CO_UTF_8) > 0);
++	printf("e=%s\n", e);
++	p(strxfrm_l(f, "éb", 1000, es_CO_UTF_8) > 0);
++	printf("f=%s\n", f);
++	p(strcmp(e, f) < 0);
++	p(strxfrm_l(f, "oso", 1000, es_CO_UTF_8) > 0);
++	printf("oso f=%s\n", f);
++	p(strcmp(e, f) < 0);
++
++	p(strcasecmp_l("n", "N", es_CO_UTF_8) == 0);
++	p(strcasecmp_l("largo", "largote", es_CO_UTF_8) < 0);
++	p(strcasecmp_l("cortote", "corto", es_CO_UTF_8) > 0);
++	p(strncasecmp_l("n", "N", 1, es_CO_UTF_8) == 0);
++	p(strcasestr_l("nino", "O", es_CO_UTF_8) != NULL);
++	p(wcscasecmp_l(L"ñ", L"Ñ", es_CO_UTF_8) == 0);
++	p(wcscasecmp_l(L"á", L"Á", es_CO_UTF_8) == 0);
++	p(wcscasecmp_l(L"a", L"á", es_CO_UTF_8) <= 0);
++	p(wcscasecmp_l(L"", L"á", es_CO_UTF_8) < 0);
++	p(wcscasecmp_l(L"", L"a", es_CO_UTF_8) < 0);
++	p(wcscasecmp_l(L"", L"a", es_CO_UTF_8) < 0);
++	p(wcscasecmp_l(L"á", L"", es_CO_UTF_8) > 0);
++	p(wcscasecmp_l(L"áá", L"á", es_CO_UTF_8) > 0);
++	p(wcscasecmp(L"á", L"Á") == 0);
++	p(wcscasecmp(L"a", L"á") <= 0);
++	p(wcsncasecmp_l(L"n", L"N", 1, es_CO_UTF_8) == 0);
++}
++
+ int main()
+ {
+ 	test_xlocale();
+ 	test_wchar();
+ 	test_ctype();
++	test_string();
+ 	
+ 	return bad != 0;
+ }
 diff -ruN src62-orig/lib/libc/hidden/string.h src/lib/libc/hidden/string.h
 --- src62-orig/lib/libc/hidden/string.h	Sun Dec  3 21:40:11 2017
 +++ src/lib/libc/hidden/string.h	Sun Dec  3 21:40:22 2017
