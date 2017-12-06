@@ -700,7 +700,8 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/lib/libc/string/strcasecmp.
 diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/lib/libc/string/strcasestr.c src/lib/libc/string/strcasestr.c
 --- src53xlocale2/lib/libc/string/strcasestr.c	Mon Mar 25 18:28:29 2013
 +++ src/lib/libc/string/strcasestr.c	Thu Apr 11 17:36:41 2013
-@@ -36,25 +36,33 @@
+diff -ruN src62-orig/lib/libc/string/strcoll_l.c src/lib/libc/string/strcoll_l.c
+@@ -36,26 +36,35 @@
  #include <ctype.h>
  #include <string.h>
  
@@ -732,6 +733,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/lib/libc/string/strcasestr.
  	}
  	return ((char *)s);
 +}
++DEF_STRONG(strcasestr_l);
 +
 +/*
 + * Find the first occurrence of find in s, ignore case.
@@ -741,7 +743,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/lib/libc/string/strcasestr.
 +{
 +	return strcasestr_l(s, find, __get_locale());
  }
-diff -ruN src62-orig/lib/libc/string/strcoll_l.c src/lib/libc/string/strcoll_l.c
+ DEF_WEAK(strcasestr);
 --- src62-orig/lib/libc/string/strcoll_l.c	Mon Sep  4 22:16:13 2017
 +++ src/lib/libc/string/strcoll_l.c	Mon Dec  4 19:19:22 2017
 @@ -3,12 +3,73 @@
@@ -1248,7 +1250,12 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/regress/lib/libc/locale/che
 diff -ruN src62-orig/lib/libc/hidden/string.h src/lib/libc/hidden/string.h
 --- src62-orig/lib/libc/hidden/string.h	Sun Dec  3 21:40:11 2017
 +++ src/lib/libc/hidden/string.h	Sun Dec  3 21:40:22 2017
-@@ -48,7 +48,7 @@
+@@ -44,11 +44,12 @@
+ PROTO_NORMAL(strcasecmp);
+ PROTO_DEPRECATED(strcasecmp_l);
+ PROTO_NORMAL(strcasestr);
++PROTO_NORMAL(strcasestr_l);
+ PROTO_STD_DEPRECATED(strcat);
  PROTO_NORMAL(strchr);
  PROTO_NORMAL(strcmp);
  PROTO_NORMAL(strcoll);
@@ -1257,7 +1264,7 @@ diff -ruN src62-orig/lib/libc/hidden/string.h src/lib/libc/hidden/string.h
  PROTO_STD_DEPRECATED(strcpy);
  PROTO_NORMAL(strcspn);
  PROTO_NORMAL(strdup);
-@@ -60,7 +60,7 @@
+@@ -60,7 +61,7 @@
  PROTO_NORMAL(strlen);
  PROTO_NORMAL(strmode);
  PROTO_NORMAL(strncasecmp);
@@ -1266,7 +1273,7 @@ diff -ruN src62-orig/lib/libc/hidden/string.h src/lib/libc/hidden/string.h
  PROTO_NORMAL(strncat);
  PROTO_NORMAL(strncmp);
  PROTO_NORMAL(strncpy);
-@@ -75,7 +75,7 @@
+@@ -75,7 +76,7 @@
  PROTO_NORMAL(strtok);
  PROTO_NORMAL(strtok_r);
  PROTO_NORMAL(strxfrm);
@@ -1274,5 +1281,14 @@ diff -ruN src62-orig/lib/libc/hidden/string.h src/lib/libc/hidden/string.h
 +PROTO_NORMAL(strxfrm_l);
  PROTO_NORMAL(timingsafe_bcmp);
  PROTO_NORMAL(timingsafe_memcmp);
- 
-
+diff -ruN src-m/lib/libc/Symbols.list src/lib/libc/Symbols.list
+--- src-m/lib/libc/Symbols.list 	Tue Dec  5 19:32:40 2017
++++ src/lib/libc/Symbols.list	Tue Dec  5 19:33:12 2017
+@@ -1577,6 +1577,7 @@
+ strcasecmp
+ strcasecmp_l
+ strcasestr
++strcasestr_l
+ strcat
+ strchr
+ strcmp
