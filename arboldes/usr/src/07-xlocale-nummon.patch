@@ -2208,7 +2208,7 @@ diff -ruN src62-orig/lib/libc/locale/nl_langinfo_l.c src/lib/lib/clocale/nl_lang
 +		s = locale->_bufcrncystr;
 +		break;
 +	case CODESET:
-+		s = _CurrentRuneLocale()->rl_codeset;
++		s = ((struct xlocale_ctype *)locale->components[XLC_CTYPE])->runes->rl_codeset
 +		if (!s)
 +			s = "";
 +		break;
