@@ -304,155 +304,25 @@ diff -ruN src62-orig/lib/libc/locale/localeconv.c src/lib/libc/locale/localeconv
 diff -ruN src-o/lib/libc/locale/setlocale.c src/lib/libc/locale/setlocale.c
 --- src-o/lib/libc/locale/setlocale.c	Sun Nov 26 20:50:16 2017
 +++ src/lib/libc/locale/setlocale.c	Fri Dec  1 13:14:20 2017
-@@ -20,7 +20,9 @@
- #include <string.h>
- 
- #include "collate.h"
-+#include "mblocal.h"
- #include "rune.h"
-+#include "xlocale_private.h"
- 
- static void
- freegl(char **oldgl)
-@@ -52,55 +54,76 @@
- 	return newgl;
- }
- 
-+extern int __xlocale_setrunelocale(struct xlocale_ctype *xc, 
-+		const char *locname);
- extern int __time_load_locale(const char *name);
- extern int __monetary_load_locale(const char *name);
- extern int __numeric_load_locale(const char *name);
- 
- static int
--changegl(int category, const char *locname, char **gl, char **oldgl)
-+changegl(int category, const char *locname, char **gl)
- {
- 	char *cp;
- 
- 	if ((locname = _get_locname(category, locname)) == NULL ||
- 	    (cp = strdup(locname)) == NULL)
- 		return -1;
-+	
-+	if (gl != NULL && strcmp(gl[category], locname) == 0) {
-+		goto end;
-+	}
- 
--	if (oldgl == NULL || strcmp(oldgl[category], locname) != 0) {
--		switch (category) {
--			case LC_CTYPE:
--				_GlobalRuneLocale =
--					strchr(locname, '.') == NULL ?
--					&_DefaultRuneLocale : _Utf8RuneLocale;
--				break;
--			
--			case LC_MESSAGES:
--				break;
--			case LC_COLLATE:
--				if (__collate_load_tables(locname) == _LDP_ERROR) {
--					free(cp);
--					return -1;
--				}
--				break;
--			case LC_MONETARY:
--				if (__monetary_load_locale(locname) != 0) {
--					free(cp);
--					return -1;
--				}
--			case LC_NUMERIC:
--				if (__numeric_load_locale(locname) != 0) {
--					free(cp);
--					return -1;
--				}
--				break;
--			case LC_TIME:
--				if (__time_load_locale(locname) != 0) {
--					free(cp);
--					return -1;
--				}
--				break;
--		}
-+	switch (category) {
-+		case LC_CTYPE:
-+			if (__xlocale_setrunelocale(&__xlocale_global_ctype, 
-+			    locname) != 0) {
-+				free(cp);
-+				return -1;
-+			}
-+			_GlobalRuneLocale = __xlocale_global_ctype.runes;
-+			(void)strlcpy(__xlocale_global_locale.components[category-1]->locale, 
-+			    locname, sizeof(
-+				__xlocale_global_locale.components[category-1]->locale));
-+			break;
-+
-+		case LC_MESSAGES:
-+			break;
-+		case LC_COLLATE:
-+			if (__collate_load_tables(locname) == _LDP_ERROR) {
-+				free(cp);
-+				return -1;
-+			}
-+			(void)strlcpy(__xlocale_global_locale.components[category-1]->locale, 
-+			    locname, sizeof(
-+				__xlocale_global_locale.components[category-1]->locale));
-+			break;
-+		case LC_MONETARY:
-+			if (__monetary_load_locale(locname) != 0) {
-+				free(cp);
-+				return -1;
-+			}
-+			(void)strlcpy(__xlocale_global_locale.components[category-1]->locale, 
-+			    locname, sizeof(
-+				__xlocale_global_locale.components[category-1]->locale));
-+			break;
-+		case LC_NUMERIC:
-+			if (__numeric_load_locale(locname) != 0) {
-+				free(cp);
-+				return -1;
-+			}
-+			(void)strlcpy(__xlocale_global_locale.components[category-1]->locale, 
-+			    locname, sizeof(
-+			    __xlocale_global_locale.components[category-1]->locale));
-+			break;
-+		case LC_TIME:
-+			if (__time_load_locale(locname) != 0) {
-+				free(cp);
-+				return -1;
-+			}
-+			break;
- 	}
- 
-+end:
- 	free(gl[category]);
- 	gl[category] = cp;
- 	return 0;
-@@ -140,7 +163,7 @@
- 			nextname = firstname;
- 			for (ic = 1; ic < _LC_LAST; ic++)
- 				if (nextname == NULL || changegl(ic,
--				    strsep(&nextname, "/"), newgl, global_locale) == -1)
-+				    strsep(&nextname, "/"), newgl) == -1)
- 					break;
- 			free(firstname);
- 			if (ic < _LC_LAST || nextname != NULL) {
-@@ -150,7 +173,7 @@
- 		} else {
- 
- 			/* One value only. */
--			if (changegl(category, locname, newgl, global_locale) == -1) {
-+			if (changegl(category, locname, newgl) == -1) {
- 				freegl(newgl);
- 				return NULL;
+@@ -101,12 +101,18 @@
+ 				free(cp);
+ 				return -1;
  			}
-@@ -159,7 +182,7 @@
- 			if (category == LC_ALL) {
- 				for (ic = 1; ic < _LC_LAST; ic++) {
- 					if (changegl(ic, locname,
--					    newgl, global_locale) == -1) {
-+					    newgl) == -1) {
- 						global_locname[0] = '\0';
- 						goto done;
- 					}
++			(void)strlcpy(__xlocale_global_locale.components[category-1]->locale, 
++			    locname, sizeof(
++				__xlocale_global_locale.components[category-1]->locale));
+ 			break;
+ 		case LC_NUMERIC:
+ 			if (__numeric_load_locale(locname) != 0) {
+ 				free(cp);
+ 				return -1;
+ 			}
++			(void)strlcpy(__xlocale_global_locale.components[category-1]->locale, 
++			    locname, sizeof(
++				__xlocale_global_locale.components[category-1]->locale));
+ 			break;
+ 		case LC_TIME:
+ 			if (__time_load_locale(locname) != 0) {
 diff -ruN src/lib/libc/locale/xlocale_private.h.orig src/lib/libc/locale/xlocale_private.h
 --- src/lib/libc/locale/xlocale_private.h.orig	Sun Nov 26 20:52:02 2017
 +++ src/lib/libc/locale/xlocale_private.h	Sun Nov 26 21:38:33 2017
@@ -909,3 +779,40 @@ diff -ruN src-m/lib/libc/Symbols.list.orig src/lib/libc/Symbols.list
  mblen
  mbrlen
  mbrtowc
+diff -ruN src62-orig/lib/libc/hidden/string.h src/lib/libc/hidden/string.h
+--- src62-orig/lib/libc/hidden/string.h	Mon Sep  4 22:16:13 2017
++++ src/lib/libc/hidden/string.h	Thu Dec  7 19:50:52 2017
+@@ -42,13 +42,13 @@
+ PROTO_DEPRECATED(stpcpy);
+ PROTO_NORMAL(stpncpy);
+ PROTO_NORMAL(strcasecmp);
+-PROTO_DEPRECATED(strcasecmp_l);
++PROTO_NORMAL(strcasecmp_l);
+ PROTO_NORMAL(strcasestr);
+ PROTO_STD_DEPRECATED(strcat);
+ PROTO_NORMAL(strchr);
+ PROTO_NORMAL(strcmp);
+ PROTO_NORMAL(strcoll);
+-PROTO_DEPRECATED(strcoll_l);
++PROTO_NORMAL(strcoll_l);
+ PROTO_STD_DEPRECATED(strcpy);
+ PROTO_NORMAL(strcspn);
+ PROTO_NORMAL(strdup);
+@@ -60,7 +60,7 @@
+ PROTO_NORMAL(strlen);
+ PROTO_NORMAL(strmode);
+ PROTO_NORMAL(strncasecmp);
+-PROTO_DEPRECATED(strncasecmp_l);
++PROTO_NORMAL(strncasecmp_l);
+ PROTO_NORMAL(strncat);
+ PROTO_NORMAL(strncmp);
+ PROTO_NORMAL(strncpy);
+@@ -75,7 +75,7 @@
+ PROTO_NORMAL(strtok);
+ PROTO_NORMAL(strtok_r);
+ PROTO_NORMAL(strxfrm);
+-PROTO_DEPRECATED(strxfrm_l);
++PROTO_NORMAL(strxfrm_l);
+ PROTO_NORMAL(timingsafe_bcmp);
+ PROTO_NORMAL(timingsafe_memcmp);
+ 
