@@ -2068,7 +2068,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src55-orig/lib/libc/stdlib/strt
 diff -ruN src62-orig/lib/libc/locale/nl_langinfo_l.c src/lib/lib/clocale/nl_langinfo_l.c
 --- src62-orig/lib/libc/locale/nl_langinfo_l.c Sep  4 22:16:13 2017
 +++ src/lib/lib/clocale/nl_langinfo_l.c	Tue Dec  5 04:22:50 2017
-@@ -14,30 +14,139 @@
+@@ -14,30 +14,142 @@
   * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
   * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
   */
@@ -2084,6 +2084,7 @@ diff -ruN src62-orig/lib/libc/locale/nl_langinfo_l.c src/lib/lib/clocale/nl_lang
 +#include <string.h>
 +#include <xlocale.h>
  
++#include "mblocal.h"
 +#include "localedef.h"
  #include "rune.h"
 +#include "runetype.h"
@@ -2102,13 +2103,14 @@ diff -ruN src62-orig/lib/libc/locale/nl_langinfo_l.c src/lib/lib/clocale/nl_lang
 -		return nl_langinfo(item);
 +	FIX_LOCALE(locale); 
 +	struct lconv *lc = &locale->lconv;
++	_RuneLocale *lr = XLOCALE_CTYPE(locale)->runes;
  
 -	rl = NULL;
 -	if (locale == _LOCALE_UTF8)
 -		rl = _Utf8RuneLocale;
 -	if (rl == NULL)
 -		rl = &_DefaultRuneLocale;
--
+ 
 -	s = rl->rl_codeset;
 -	if (s == NULL)
 +	switch (item) {
@@ -2208,7 +2210,7 @@ diff -ruN src62-orig/lib/libc/locale/nl_langinfo_l.c src/lib/lib/clocale/nl_lang
 +		s = locale->_bufcrncystr;
 +		break;
 +	case CODESET:
-+		s = ((struct xlocale_ctype *)locale->components[XLC_CTYPE])->runes->rl_codeset
++		s = lr->rl_codeset;
 +		if (!s)
 +			s = "";
 +		break;
@@ -2359,7 +2361,15 @@ diff -ruN src54-x6/lib/libc/locale/nl_langinfo.c src/lib/libc/locale/nl_langinfo
 diff -ruN src54-x6/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regress/lib/libc/locale/check_xlocale/check_xlocale.c
 --- src54-x6/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Wed Dec 11 22:07:06 2013
 +++ src/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Fri Dec 13 15:25:23 2013
-@@ -424,12 +424,97 @@
+@@ -12,6 +12,7 @@
+ #include <langinfo.h>
+ #include <locale.h>
+ #include <math.h>
++#include <monetary.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
+@@ -432,12 +433,97 @@
  	p(wcsncasecmp_l(L"n", L"N", 1, es_CO_UTF_8) == 0);
  }
  
@@ -2653,15 +2663,7 @@ diff -ruN src-m/lib/libc/Symbols.list src/lib/libc/Symbols.list
  swprintf
  swscanf
  tempnam
-@@ -1578,6 +1583,7 @@
- strcasecmp
- strcasecmp_l
- strcasestr
-+strcasestr_l
- strcat
- strchr
- strcmp
-@@ -1708,6 +1714,7 @@
+@@ -1709,6 +1714,7 @@
  offtime
  posix2time
  strfmon
@@ -2669,7 +2671,7 @@ diff -ruN src-m/lib/libc/Symbols.list src/lib/libc/Symbols.list
  strftime
  strftime_l
  strptime
-@@ -1777,6 +1784,7 @@
+@@ -1778,6 +1784,7 @@
  iswupper_l
  iswxdigit_l
  isxdigit_l

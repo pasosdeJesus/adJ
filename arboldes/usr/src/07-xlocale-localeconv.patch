@@ -779,40 +779,4 @@ diff -ruN src-m/lib/libc/Symbols.list.orig src/lib/libc/Symbols.list
  mblen
  mbrlen
  mbrtowc
-diff -ruN src62-orig/lib/libc/hidden/string.h src/lib/libc/hidden/string.h
---- src62-orig/lib/libc/hidden/string.h	Mon Sep  4 22:16:13 2017
-+++ src/lib/libc/hidden/string.h	Thu Dec  7 19:50:52 2017
-@@ -42,13 +42,13 @@
- PROTO_DEPRECATED(stpcpy);
- PROTO_NORMAL(stpncpy);
- PROTO_NORMAL(strcasecmp);
--PROTO_DEPRECATED(strcasecmp_l);
-+PROTO_NORMAL(strcasecmp_l);
- PROTO_NORMAL(strcasestr);
- PROTO_STD_DEPRECATED(strcat);
- PROTO_NORMAL(strchr);
- PROTO_NORMAL(strcmp);
- PROTO_NORMAL(strcoll);
--PROTO_DEPRECATED(strcoll_l);
-+PROTO_NORMAL(strcoll_l);
- PROTO_STD_DEPRECATED(strcpy);
- PROTO_NORMAL(strcspn);
- PROTO_NORMAL(strdup);
-@@ -60,7 +60,7 @@
- PROTO_NORMAL(strlen);
- PROTO_NORMAL(strmode);
- PROTO_NORMAL(strncasecmp);
--PROTO_DEPRECATED(strncasecmp_l);
-+PROTO_NORMAL(strncasecmp_l);
- PROTO_NORMAL(strncat);
- PROTO_NORMAL(strncmp);
- PROTO_NORMAL(strncpy);
-@@ -75,7 +75,7 @@
- PROTO_NORMAL(strtok);
- PROTO_NORMAL(strtok_r);
- PROTO_NORMAL(strxfrm);
--PROTO_DEPRECATED(strxfrm_l);
-+PROTO_NORMAL(strxfrm_l);
- PROTO_NORMAL(timingsafe_bcmp);
- PROTO_NORMAL(timingsafe_memcmp);
- 
+
