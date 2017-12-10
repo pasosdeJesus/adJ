@@ -1,31 +1,3 @@
-diff -ruN src61-orig/lib/libc/string/strerror.c src/lib/libc/string/strerror.c
---- src61-orig/lib/libc/string/strerror.c	Sun Aug 30 21:53:57 2015
-+++ src/lib/libc/string/strerror.c	Sat Jul 22 20:12:16 2017
-@@ -30,7 +30,10 @@
- 
- #include <string.h>
- #include <limits.h>
-+#include <xlocale.h>
- 
-+extern int __strerror_rl(int, char *, size_t, locale_t);
-+
- char *
- strerror(int num)
- {
-@@ -40,3 +43,13 @@
- 	return (buf);
- }
- DEF_STRONG(strerror);
-+
-+char *
-+strerror_l(int num, locale_t loc)
-+{
-+	static char buf[NL_TEXTMAX];
-+
-+	(void)__strerror_rl(num, buf, sizeof(buf), loc);
-+	return (buf);
-+}
-+DEF_STRONG(strerror_l);
 diff -ruN src61-orig/lib/libc/string/strerror_r.c src/lib/libc/string/strerror_r.c
 --- src61-orig/lib/libc/string/strerror_r.c	Wed Oct 19 11:26:16 2016
 +++ src/lib/libc/string/strerror_r.c	Sat Jul 22 20:24:13 2017
@@ -93,14 +65,28 @@ diff -ruN src/include/xlocale.h.orig src/include/xlocale.h
  /* XLOCALE */ 
  int	 strcasecmp_l(const char *, const char *, locale_t);
  char	*strcasestr_l(const char *, const char *, locale_t);
-diff -ruN src/lib/libc/Symbols.list.orig src/lib/libc/Symbols.list
---- src/lib/libc/Symbols.list.orig	Wed Jul 26 21:45:44 2017
-+++ src/lib/libc/Symbols.list	Sat Jul 22 20:49:13 2017
-@@ -1526,6 +1526,7 @@
- strcspn
- strdup
- strerror
-+strerror_l
- strerror_r
- strlcat
- strlcpy
+diff -ruN src62-orig/lib/libc/string/strerror_l.c src/lib/libc/string/strerror_l.c
+--- src62-orig/lib/libc/string/strerror_l.c	Mon Sep  4 22:16:13 2017
++++ src/lib/libc/string/strerror_l.c	Sun Dec 10 07:19:53 2017
+@@ -17,9 +17,12 @@
+ 
+ #include <limits.h>
+ #include <string.h>
++#include <xlocale.h>
+ 
+ #include "thread_private.h"
+ 
++extern int __strerror_rl(int, char *, size_t, locale_t);
++
+ char *
+ strerror_l(int errnum, locale_t locale)
+ {
+@@ -28,6 +31,6 @@
+ 	char *p = _THREAD_PRIVATE(strerror_l, sel_buf, NULL);
+ 
+ 	return p == NULL ? "no buffer available in strerror_l" :
+-	    strerror_r(errnum, p, sizeof(sel_buf)) ?
+-	    "strerror_r failure" : p;
++	    __strerror_rl(errnum, p, sizeof(sel_buf), locale) ?
++	    "strerror_rl failure" : p;
+ }

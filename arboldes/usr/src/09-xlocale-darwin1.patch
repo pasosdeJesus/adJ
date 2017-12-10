@@ -1942,7 +1942,7 @@ diff -u src-ant/lib/libc/stdio/scanf.3 src/lib/libc/stdio/scanf.3
 diff -u src-ant/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regress/lib/libc/locale/check_xlocale.c
 --- src-ant/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Thu May 15 05:35:00 2014
 +++ src/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Thu May 15 05:35:39 2014
-@@ -31,26 +31,14 @@
+@@ -32,26 +32,13 @@
  	}
  
  
@@ -1958,7 +1958,7 @@ diff -u src-ant/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regres
 -#define dpl(__l) printf("%s ", #__l); __print_locale(__l);
 -
  void test_xlocale() {
- 	static locale_t cl;
+-	static locale_t cl;
 -/*	cl = __get_locale();
 -	printf("%p\n", cl);
 -	dpl((void *)cl); */
@@ -1972,104 +1972,26 @@ diff -u src-ant/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regres
  	char *r;
  	p(strcmp((r = (char *)querylocale(LC_CTYPE, es_CO_UTF_8)), "es_CO.UTF-8") == 0);
  	printf("r=%s\n", r);
-@@ -68,7 +56,6 @@
+@@ -69,7 +56,6 @@
  	locale_t esp4 = duplocale(esp3);
  	locale_t esp5 = duplocale(esp3);
  	locale_t esp6 = duplocale(esp3);
 -	//__collate_print_tables(NULL);
  	p(es_CO_UTF_8 != esp2);
- 	p(freelocale(esp) == 0);
- 	p(freelocale(esp2) == 0);
-@@ -76,6 +63,7 @@
- 	p(freelocale(esp4) == 0);
- 	p(freelocale(esp5) == 0);
- 	p(freelocale(esp6) == 0);
-+	p(freelocale(es_CO_UTF_8) == 0);
+ 	freelocale(esp);
+ 	freelocale(esp2);
+@@ -77,6 +63,7 @@
+ 	freelocale(esp4);
+ 	freelocale(esp5);
+ 	freelocale(esp6);
++	freelocale(es_CO_UTF_8);
  }
  
  void test_wchar() {
-@@ -92,32 +80,40 @@
- 	p((s = mblen(mbs, 10)) == 1);
- 	printf("s=%i\n", s);
- 	nl = setlocale(LC_ALL, "es_CO.ISO8859-1");
--	locale_t l = uselocale(NULL);
-+	locale_t l = duplocale(uselocale(NULL));
- 	printf("locale %s\n", nl);
- 	p(mblen_l(mb, 3, l) == 1);
- 	p(mbrlen_l(mb, 3, NULL, l) == 1);
- 	p(mblen_l(mbs, 10, l) == 1);
- 	p(mbrlen_l(mbs, 10, NULL, l) == 1);
- 	nl = setlocale(LC_ALL, "es_CO.UTF-8");
-+	locale_t lu = duplocale(uselocale(NULL));
-+	p((s = mblen(mb, 10)) == 2); 
- 	printf("locale %s\n", nl);
- 	p(mblen(mb, 3) == 2);
- 	p(mbrlen(mb, 3, NULL) == 2);
- 	p(mblen(mbs, 10) == 2);
- 	p(mbrlen(mbs, 10, NULL) == 2);
- 	wchar_t ws[100];
--	p((s = mbtowc_l(ws, mb, 3, l)) == 2);
-+	p((s = mbtowc_l(ws, mb, 3, lu)) == 2);
-+	printf("s=%i\n", s);
- 	p((s = mbtowc(ws, mb, 3)) == 2);
--	p((s = mbtowc_l(ws, mbs, 5, l)) == 2);
-+	printf("s=%i\n", s);
-+	p((s = mbtowc_l(ws, mbs, 5, lu)) == 2);
-+	printf("s=%i\n", s);
- 	unsigned char bp[1000];
- 	snprintf(bp, 1000, "%lc", *ws);
- 	p(bp[0]==195 && bp[1]==177 && bp[2]==0)
+@@ -154,6 +141,27 @@
+ 	p(wctob_l(L'a', l) == 'a');
+ 	freelocale(l);
  
- 	wchar_t w = L'á';
- 	char mb3[10];
--	p((s = wctomb_l(mb3, w, l)) == 2);
-+	p((s = wctomb_l(mb3, w, lu)) == 2);
-+	printf("s=%i\n", s);
- 	mb3[s] = '\0';
--	p((s = mbstowcs_l(ws, mb3, 10, l)) == 1);
--	p((s = wcstombs_l(mb3, L"uña", 10, l)) == 4);
-+	p((s = mbstowcs_l(ws, mb3, 10, lu)) == 1);
-+	printf("s=%i\n", s);
-+	p((s = wcstombs_l(mb3, L"uña", 10, lu)) == 4);
-+	printf("s=%i\n", s);
- 	mb3[s] = '\0';
- 	snprintf(bp, 1000, "%s", mb3);
- 	//printf("bp=%s, bp[0]=%i && bp[1]==%i && bp[2]==%i && bp[3]==%i && bp[4]==%i\n", bp, bp[0], bp[1], bp[2], bp[3], bp[4]);
-@@ -129,22 +125,46 @@
- 	p(btowc_l('a', l) == L'a');	
- 	mbstate_t mbst;
-         bzero(&mbst, sizeof(mbst));
--	p(mbsinit_l(&mbst, l));
--	p((s = mbrtowc_l(&w, "ñ", 3, &mbst, l)) == 2);
--	p(mbsinit_l(&mbst, l));
-+	p(mbsinit_l(&mbst, lu));
-+	p((s = mbrtowc_l(&w, "ñ", 3, &mbst, lu)) == 2);
-+	p(mbsinit_l(&mbst, lu));
- 	bp[0] = 0xf8;
- 	bp[1] = 0x1a;
- 	bp[2] = 0;
--	p((s = mbrtowc_l(&w, "ñ", 1, &mbst, l)) == -2);
--	p((s = mbrtowc_l(&w, bp, 1, &mbst, l)) == -1);
--	p((s = mbsrtowcs_l(ws, (const char **)&mbs, 7, &mbst, l)) > 0);
--	p((s = mbsnrtowcs_l(ws, (const char **)&mbs, 7, 5, &mbst, l)) > 0);
--	p((s = wcrtomb_l(bp, L'ñ', &mbst, l)) > 0);
--	p((s = mbstowcs_l(ws, "niño", 10, l)) > 0 && wcsncmp(ws, L"niño", 10) == 0);
--	p((s = wcsrtombs_l(mb3, (const wchar_t **)&ws, 10, &mbst, l)) > 0);
--	p((s = wcsnrtombs_l(bp, (const wchar_t **)&ws, 10, 10, &mbst, l)) > 0);
--	p(wctob_l(L'a', l) == 'a');
-+	p((s = mbrtowc_l(&w, "ñ", 1, &mbst, lu)) == -2);
-+	p((s = mbrtowc_l(&w, bp, 1, &mbst, lu)) == -1);
-+	p((s = mbsrtowcs_l(ws, (const char **)&mbs, 7, &mbst, lu)) > 0);
-+	p((s = mbsnrtowcs_l(ws, (const char **)&mbs, 7, 5, &mbst, lu)) > 0);
-+	p((s = wcrtomb_l(bp, L'ñ', &mbst, lu)) > 0);
-+	p((s = mbstowcs_l(ws, "niño", 10, lu)) > 0 && wcsncmp(ws, L"niño", 10) == 0);
-+	p((s = wcsrtombs_l(mb3, (const wchar_t **)&ws, 10, &mbst, lu)) > 0);
-+	p((s = wcsnrtombs_l(bp, (const wchar_t **)&ws, 10, 10, &mbst, lu)) > 0);
-+	p(wctob_l(L'a', lu) == 'a');
- 
-+	freelocale(l);
-+	freelocale(lu);
-+
 +	// Bug in 5.5 fixed
 +	char *msrc = NULL;
 +	char mdst[100];
@@ -2094,7 +2016,7 @@ diff -u src-ant/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regres
  }
  
  void test_ctype() {
-@@ -250,7 +270,7 @@
+@@ -259,7 +267,7 @@
  	p(!isspecial_l('a', es_CO_UTF_8));
  	p(iswspecial_l(0x00b2, es_CO_UTF_8));
  	p(!iswspecial_l(L'\0', es_CO_UTF_8));
@@ -2103,36 +2025,52 @@ diff -u src-ant/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regres
  	p(tolower_l('A', es_CO_UTF_8) == 'a');
  	p(tolower('A') == 'a');
  	p(_tolower('A') == 'a');
-@@ -280,6 +300,7 @@
+@@ -289,13 +297,14 @@
  		p(towctrans_l(lu[c][0], tu, es_CO_UTF_8) == lu[c][1]);
  		p(towupper_l(lu[c][0], es_CO_UTF_8) == lu[c][1]);
  	}
-+	p(freelocale(es_CO_UTF_8) == 0);
++	freelocale(es_CO_UTF_8);
  
  }
  
-@@ -294,7 +315,7 @@
+ void test_string() 
+ {
+ 	char *nl;
+-	nl = setlocale(LC_ALL, "es_CO.ISO8859-1");
++	nl = setlocale(LC_ALL, "POSIX");
+ 	printf("locale %s\n", nl);
+ 	printf("__mb_cur_max=%zu\n", __mb_cur_max());
+ 	p(__mb_cur_max() == 1);
+@@ -303,7 +312,7 @@
  	p(strcasecmp("n", "N") == 0);
  	p(strcasecmp("\0xf1", "\0xd1") == 0); // ñ Ñ
  	nl = setlocale(LC_ALL, "es_CO.UTF-8");
 -	locale_t es_CO_UTF_8 = uselocale(NULL);
 +	locale_t es_CO_UTF_8 = duplocale(uselocale(NULL));
  	printf("locale %s\n", nl);
- 	printf("__mb_cur_max=%i\n", __mb_cur_max);
- 	p(__mb_cur_max == 4); 
-@@ -422,6 +443,7 @@
+ 	printf("__mb_cur_max()=%zu\n", __mb_cur_max());
+ 	p(__mb_cur_max() == 4); 
+@@ -431,6 +440,7 @@
  	p(wcscasecmp(L"á", L"Á") == 0);
  	p(wcscasecmp(L"a", L"á") <= 0);
  	p(wcsncasecmp_l(L"n", L"N", 1, es_CO_UTF_8) == 0);
-+	p(freelocale(es_CO_UTF_8) == 0);
++	freelocale(es_CO_UTF_8);
  }
  
  void test_monetary() 
-@@ -459,30 +481,48 @@
+@@ -438,6 +448,7 @@
+ 	struct lconv *p;
+ 	char col[256];
+ 	char *nl = setlocale(LC_ALL, "es_CO.UTF-8");
++	printf("nl=%s\n", nl);
+ 	locale_t tloc = uselocale(NULL);
+ 	locale_t es_CO_UTF_8 = duplocale(tloc);
+ 	setlocale(LC_ALL, "POSIX");
+@@ -468,30 +479,49 @@
  	p(p->n_sign_posn == 1);
  	strfmon_l(col, sizeof(col), es_CO_UTF_8, "%n", -3456.781); 
  	p(strcmp(col, "-$ 3.456,78") == 0);
-+	p(freelocale(es_CO_UTF_8) == 0);
++	freelocale(es_CO_UTF_8);
  }
  
 -
@@ -2144,6 +2082,7 @@ diff -u src-ant/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regres
  	char *nl = setlocale(LC_ALL, "es_CO.UTF-8");
 -	locale_t tloc = uselocale(NULL);
 -	locale_t es_CO_UTF_8 = duplocale(tloc);
++	printf("nl=%s\n", nl);
 +	locale_t tloc;
 +	locale_t es_CO_UTF_8 = duplocale(uselocale(NULL));
  	float fl;
@@ -2180,19 +2119,10 @@ diff -u src-ant/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regres
  	snprintf_l(col, sizeof(col), es_CO_UTF_8, "%f", 1000000.01);
  	p(strcmp(col, "1000000,010000") == 0);
  	snprintf_l(col, sizeof(col), es_CO_UTF_8, "%'d", 1000000);
-@@ -498,13 +538,71 @@
- 
- 	fl = strtof_l(" -3,1", NULL, es_CO_UTF_8);
- 	p(fabs(fl + 3.1) < FLT_EPSILON);
-+	p(fabs((fl = strtof_l(" -3.1", NULL, tloc)) + 3.1) < FLT_EPSILON);
-+	printf("OJO1 fl=%f\n", fl);
- 	dl = strtod_l(" -3,1", NULL, es_CO_UTF_8);
- 	p(fabs(dl + 3.1) < DBL_EPSILON);
- 	ldl = strtold_l(" -3,1", NULL, es_CO_UTF_8);
- 	p(fabs(ldl + 3.1) < DBL_EPSILON);
+@@ -514,6 +544,62 @@
  	sscanf_l(" -3,1", es_CO_UTF_8, "%f", &fl);
-+	printf("OJO2 fl=%f\n", fl);
-+	p(fabs(fl + 3.1) < FLT_EPSILON);
+ 	printf("fl=%f\n", fl);
+ 	p(fabs(fl + 3.1) < FLT_EPSILON);
 +
 +	fl = atof_l(" -3,1", es_CO_UTF_8);
 +	p(fabs(fl + 3.1) < FLT_EPSILON);
@@ -2238,25 +2168,33 @@ diff -u src-ant/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regres
 +	fl = wcstof_l(L" -3.1", NULL, tloc);
 +	p(fabs(fl + 3.1) < FLT_EPSILON);
 +	fl = wcstof_l(L" -3,1", NULL, es_CO_UTF_8);
- 	printf("fl=%f\n", fl);
- 	p(fabs(fl + 3.1) < FLT_EPSILON);
++ 	printf("fl=%f\n", fl);
++ 	p(fabs(fl + 3.1) < FLT_EPSILON);
 +	dl = wcstod_l(L" -3,1", NULL, es_CO_UTF_8);
 +	printf("dl=%lf\n", dl);
 +	p(fabs(dl + 3.1) < DBL_EPSILON);
 +	ldl = wcstold_l(L" -3,1", NULL, es_CO_UTF_8);
 +	printf("ldl=%Lf\n", ldl);
-+	p(fabs(ldl + 3.1) < DBL_EPSILON);
++	p(fabsl(ldl + 3.1) < DBL_EPSILON);
 +
-+	p(freelocale(es_CO_UTF_8) == 0);
-+	p(freelocale(tloc) == 0);
++	freelocale(es_CO_UTF_8);
++	freelocale(tloc);
  }
  
  void test_time() 
-@@ -529,8 +627,130 @@
+@@ -521,6 +607,7 @@
+ 	char col[256];
+ 	wchar_t wcol[256];
+ 	char *nl = setlocale(LC_ALL, "es_CO.UTF-8");
++	printf("nl=%s\n", nl);
+ 	locale_t tloc = uselocale(NULL);
+ 	locale_t esc = duplocale(tloc);
+ 	struct tm tl;
+@@ -538,8 +625,130 @@
  	p(strcmp(col, "martes") == 0);
  	wcsftime_l(wcol, sizeof(wcol), L"%A", &tl, esc);
  	p(wcscmp(wcol, L"martes") == 0);
-+	p(freelocale(esc) == 0);
++	freelocale(esc);
  }
  
 +void test_io() 
@@ -2367,7 +2305,7 @@ diff -u src-ant/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regres
 +	swscanf_l(wcol, esc, L"%i %ls", &i, wcol2);
 +	p(i == 10);
 +
-+	printf("swscanf_l wcslen(wcol2)=%i, wcol2=%ls\n", wcslen(wcol2), wcol2);
++	printf("swscanf_l wcslen(wcol2)=%lu, wcol2=%ls\n", wcslen(wcol2), wcol2);
 +	p(wcscmp(wcol2, L"niña") == 0);
 +	/* Implementation of fwprintf_l and fwscanf_l test vfwprintf_l and vfwscanf_l
 +	 * Implementation of swprintf_l and swscanf_l test vswprintf_l and vswscanf_l
@@ -2377,13 +2315,13 @@ diff -u src-ant/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regres
 +	 * Implementation of vwprintf_l, wprintf_l, vwscanf_l, wscanf_l are
 +	 * mostly tested with fwprintf_l and fwscanf_l
 +	 */
-+	p(freelocale(esc) == 0);
++	freelocale(esc);
 +}
 +
  int main()
  {
  	test_xlocale();
-@@ -540,6 +760,7 @@
+@@ -549,6 +758,7 @@
  	test_monetary();
  	test_numeric();
  	test_time();
@@ -3132,7 +3070,53 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/stdio/swsc
 diff -ruN src/lib/libc/Symbols.list.orig  src/lib/libc/Symbols.list
 --- src/lib/libc/Symbols.list.orig	Mon Aug 22 08:08:28 2016
 +++ src/lib/libc/Symbols.list	Mon Aug 22 08:12:10 2016
-@@ -1678,10 +1678,24 @@
+@@ -1395,6 +1395,7 @@
+ open_wmemstream
+ perror
+ printf
++printf_l
+ putc
+ putc_unlocked
+ putchar
+@@ -1413,10 +1414,13 @@
+ snprintf
+ snprintf_l
+ sprintf
++sprintf_l
+ sscanf
+ sscanf_l
+ swprintf
++swprintf_l
+ swscanf
++swscanf_l
+ tempnam
+ tmpfile
+ tmpnam
+@@ -1542,14 +1546,23 @@
+ setstate
+ sradixsort
+ strtoimax
++strtoimax_l
+ strtol
++strtol_l
+ strtoll
++strtoll_l
+ strtonum
++strtonum_l
+ strtoq
++strtoq_l
+ strtoul
++strtoul_l
+ strtoull
++strtoull_l
+ strtoumax
++strtoumax_l
+ strtouq
++strtouq_l
+ suboptarg
+ system
+ tdelete
+@@ -1745,10 +1758,24 @@
  
  
  /* xlocale */
@@ -3157,39 +3141,8 @@ diff -ruN src/lib/libc/Symbols.list.orig  src/lib/libc/Symbols.list
  isalnum_l
  isalpha_l
  isblank_l
-@@ -1732,8 +1746,10 @@
- nextwctype
- nextwctype_l
- nl_langinfo_l
-+printf_l
- querylocale
- snprintf_l
-+sprintf_l
- sscanf_l
- strcasecmp_l
- strcasestr_l
-@@ -1744,8 +1760,19 @@
- strftime_l
- strtod_l
- strtof_l
-+strtoimax_l
-+strtol_l
- strtold_l
-+strtoll_l
-+strtonum_l
-+strtoq_l
-+strtoul_l
-+strtoull_l
-+strtoumax_l
-+strtouq_l
- strxfrm_l
-+swprintf_l
-+swscanf_l
- tolower_l
- toupper_l
- towctrans_l
-@@ -1759,7 +1786,16 @@
- wcsncasecmp_l
+@@ -1808,13 +1835,23 @@
+ wcrtomb_l
  wcsnrtombs_l
  wcsrtombs_l
 +wcstod_l
@@ -3203,13 +3156,13 @@ diff -ruN src/lib/libc/Symbols.list.orig  src/lib/libc/Symbols.list
 +wcstoull_l
 +wcstoumax_l
  wcswidth_l
- wcsxfrm_l
  wctob_l
-@@ -1767,6 +1803,7 @@
+ wctomb_l
  wctrans_l
  wctype_l
  wcwidth_l
 +wprintf_l
  
+ 
  /* yp */
- yp_all
+

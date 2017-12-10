@@ -2733,7 +2733,70 @@ diff -ruN src62-orig/lib/libc/locale/iswctype_l.c src/lib/libc/locale/iswctype_l
  	return (rt & f) != 0;
  }
  
-@@ -138,7 +146,50 @@
+@@ -84,78 +92,133 @@
+ {
+ 	return __isctype_wl(c, _CTYPE_A|_CTYPE_D, locale);
+ }
++DEF_STRONG(iswalnum_l);
+ 
+ int
+ iswalpha_l(wint_t c, locale_t locale)
+ {
+ 	return __isctype_wl(c, _CTYPE_A, locale);
+ }
++DEF_STRONG(iswalpha_l);
+ 
+ int
+ iswblank_l(wint_t c, locale_t locale)
+ {
+ 	return __isctype_wl(c, _CTYPE_B, locale);
+ }
++DEF_STRONG(iswblank_l);
+ 
+ int
+ iswcntrl_l(wint_t c, locale_t locale)
+ {
+ 	return __isctype_wl(c, _CTYPE_C, locale);
+ }
++DEF_STRONG(iswcntrl_l);
+ 
+ int
+ iswdigit_l(wint_t c, locale_t locale)
+ {
+ 	return __isctype_wl(c, _CTYPE_D, locale);
+ }
++DEF_STRONG(iswdigit_l);
+ 
+ int
+ iswgraph_l(wint_t c, locale_t locale)
+ {
+ 	return __isctype_wl(c, _CTYPE_G, locale);
+ }
++DEF_STRONG(iswgraph_l);
+ 
+ int
+ iswlower_l(wint_t c, locale_t locale)
+ {
+ 	return __isctype_wl(c, _CTYPE_L, locale);
+ }
++DEF_STRONG(iswlower_l);
+ 
+ int
+ iswprint_l(wint_t c, locale_t locale)
+ {
+ 	return __isctype_wl(c, _CTYPE_R, locale);
+ }
++DEF_STRONG(iswprint_l);
+ 
+ int
+ iswpunct_l(wint_t c, locale_t locale)
+ {
+ 	return __isctype_wl(c, _CTYPE_P, locale);
+ }
++DEF_STRONG(iswpunct_l);
+ 
+ int
+ iswspace_l(wint_t c, locale_t locale)
  {
  	return __isctype_wl(c, _CTYPE_S, locale);
  }
@@ -2784,10 +2847,55 @@ diff -ruN src62-orig/lib/libc/locale/iswctype_l.c src/lib/libc/locale/iswctype_l
  int
  iswupper_l(wint_t c, locale_t locale)
  {
-@@ -215,3 +266,14 @@
+ 	return __isctype_wl(c, _CTYPE_U, locale);
+ }
++DEF_STRONG(iswupper_l);
+ 
+ int
+ iswxdigit_l(wint_t c, locale_t locale)
+ {
+ 	return __isctype_wl(c, _CTYPE_X, locale);
+ }
++DEF_STRONG(iswxdigit_l);
+ 
+ wint_t
+ towupper_l(wint_t c, locale_t locale)
+ {
+ 	return _towctrans(c, _wctrans_upper(__runelocale(locale)));
+ }
++DEF_STRONG(towupper_l);
+ 
+ wint_t
+ towlower_l(wint_t c, locale_t locale)
+@@ -180,6 +243,7 @@
+ 
+ 	return NULL;
+ }
++DEF_STRONG(wctrans_l);
+ 
+ /*
+  * POSIX says that the behaviour is unspecified if the LC_CTYPE in
+@@ -193,6 +257,7 @@
+ {
+ 	return towctrans(c, desc);
+ }
++DEF_STRONG(towctrans_l);
+ 
+ wctype_t
+ wctype_l(const char *property, locale_t locale)
+@@ -206,6 +271,7 @@
+ 			return &rl->rl_wctype[i];
+ 	return NULL;
+ }
++DEF_STRONG(wctype_l);
+ 
+ int
+ iswctype_l(wint_t c, wctype_t charclass, locale_t locale)
+@@ -215,3 +281,15 @@
  
  	return __isctype_wl(c, ((_WCTypeEntry *)charclass)->te_mask, locale);
  }
++DEF_STRONG(iswctype_l);
 +
 +int wcwidth_l(wchar_t c, locale_t locale)
 +{

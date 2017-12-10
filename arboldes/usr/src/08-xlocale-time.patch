@@ -1687,94 +1687,6 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/_def_t
 +	printf("t_fmt_ampm: %s\n", l.t_fmt_ampm);
 +}
 +#endif /* LOCALE_DEBUG */
-diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src-m/lib/libc/locale/nl_langinfo_l.c src/lib/libc/locale/nl_langinfo_l.c
---- src-m/lib/libc/locale/nl_langinfo.c	Wed Dec  6 06:11:42 2017
-+++ src/lib/libc/locale/nl_langinfo.c	Wed Dec  6 06:19:49 2017
-@@ -26,6 +26,7 @@
- #include <string.h>
- #include <xlocale.h>
- 
-+#include "mblocal.h"
- #include "localedef.h"
- #include "rune.h"
- #include "runetype.h"
-@@ -40,23 +41,26 @@
- 
- 	FIX_LOCALE(locale); 
- 	struct lconv *lc = &locale->lconv;
-+	_TimeLocale *tl = __get_current_time_locale(locale);
-+	_RuneLocale *rl = XLOCALE_CTYPE(locale)->runes;
- 
-+
- 	switch (item) {
- 	case D_T_FMT:
--		s = _CurrentTimeLocale->d_t_fmt;
-+		s = tl->d_t_fmt;
- 		break;
- 	case D_FMT:
--		s = _CurrentTimeLocale->d_fmt;
-+		s = tl->d_fmt;
- 		break;
- 	case T_FMT:
--		s = _CurrentTimeLocale->t_fmt;
-+		s = tl->t_fmt;
- 		break;
- 	case T_FMT_AMPM:
--		s = _CurrentTimeLocale->t_fmt_ampm;
-+		s = tl->t_fmt_ampm;
- 		break;
- 	case AM_STR:
- 	case PM_STR:
--		s = _CurrentTimeLocale->am_pm[item - AM_STR];
-+		s = tl->am_pm[item - AM_STR];
- 		break;
- 	case DAY_1:
- 	case DAY_2:
-@@ -65,7 +69,7 @@
- 	case DAY_5:
- 	case DAY_6:
- 	case DAY_7:
--		s = _CurrentTimeLocale->day[item - DAY_1];
-+		s = tl->day[item - DAY_1];
- 		break;
- 	case ABDAY_1:
- 	case ABDAY_2:
-@@ -74,7 +78,7 @@
- 	case ABDAY_5:
- 	case ABDAY_6:
- 	case ABDAY_7:
--		s = _CurrentTimeLocale->abday[item - ABDAY_1];
-+		s = tl->abday[item - ABDAY_1];
- 		break;
- 	case MON_1:
- 	case MON_2:
-@@ -88,7 +92,7 @@
- 	case MON_10:
- 	case MON_11:
- 	case MON_12:
--		s = _CurrentTimeLocale->mon[item - MON_1];
-+		s = tl->mon[item - MON_1];
- 		break;
- 	case ABMON_1:
- 	case ABMON_2:
-@@ -102,7 +106,7 @@
- 	case ABMON_10:
- 	case ABMON_11:
- 	case ABMON_12:
--		s = _CurrentTimeLocale->abmon[item - ABMON_1];
-+		s = tl->abmon[item - ABMON_1];
- 		break;
- 	case RADIXCHAR:
- 		s = lc->decimal_point;
-@@ -138,7 +142,7 @@
- 		s = locale->_bufcrncystr;
- 		break;
- 	case CODESET:
--		s = ((struct xlocale_ctype *)locale->components[XLC_CTYPE])->runes->rl_codeset
-+		s = rl->rl_codeset;
- 		if (!s)
- 			s = "";
- 		break;
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/xlocale.c src/lib/libc/locale/xlocale.c
 --- src54-x6/lib/libc/locale/xlocale.c	Sat Feb  9 14:26:54 2013
 +++ src/lib/libc/locale/xlocale.c	Tue Dec  3 16:12:45 2013
@@ -1806,7 +1718,23 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/xlocal
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/setlocale.c src/lib/libc/locale/setlocale.c
 --- src54-x6/lib/libc/locale/setlocale.c	Sat Feb  9 14:26:54 2013
 +++ src/lib/libc/locale/setlocale.c	Tue Dec  3 16:12:45 2013
-@@ -120,6 +120,10 @@
+@@ -1,5 +1,6 @@
+ /*	$OpenBSD: setlocale.c,v 1.27 2017/09/05 03:16:13 schwarze Exp $	*/
+-/* * Copyright (c) 2017 Ingo Schwarze <schwarze@openbsd.org>
++/*
++ * Copyright (c) 2017 Ingo Schwarze <schwarze@openbsd.org>
+  *
+  * Permission to use, copy, modify, and distribute this software for any
+  * purpose with or without fee is hereby granted, provided that the above
+@@ -112,13 +113,17 @@
+ 			}
+ 			(void)strlcpy(__xlocale_global_locale.components[category-1]->locale, 
+ 			    locname, sizeof(
+-				__xlocale_global_locale.components[category-1]->locale));
++			    __xlocale_global_locale.components[category-1]->locale));
+ 			break;
+ 		case LC_TIME:
+ 			if (__time_load_locale(locname) != 0) {
  				free(cp);
  				return -1;
  			}
@@ -1895,37 +1823,34 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/regress/lib/libc/local
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/nl_langinfo.3 src/lib/libc/locale/nl_langinfo.3
 --- src54-x6/lib/libc/locale/nl_langinfo.3	Sat Feb  9 14:26:54 2013
 +++ src/lib/libc/locale/nl_langinfo.3	Tue Dec  3 16:12:45 2013
-@@ -7,17 +7,24 @@
- .Dt NL_LANGINFO 3
- .Os
- .Sh NAME
-+.Nm nl_langinfo ,
- .Nm nl_langinfo
- .Nd get locale information
- .Sh SYNOPSIS
+@@ -25,8 +25,9 @@
  .In langinfo.h
  .Ft char *
  .Fn nl_langinfo "nl_item item"
 +.In xlocale.h
-+.Ft char *
-+.Fn nl_langinfo_l "nl_item item"
+ .Ft char *
+-.Fn nl_langinfo "nl_item item" "locale_t locale"
++.Fn nl_langinfo_l "nl_item item" "locale_t locale"
  .Sh DESCRIPTION
  The
  .Fn nl_langinfo
- function returns a pointer to a string containing information
--set by the program's locale.
-+set by the program's locale.  The function
-+.Fn nl_langinfo_l
-+does the same but uses the locale given as parameter, see
-+.Xr xlocale 3
- .Pp
- The names and values of
- .Fa item
-@@ -39,3 +46,4 @@
+@@ -68,6 +69,7 @@
  replaces radix char.
  .Sh SEE ALSO
- .Xr setlocale 3
+ .Xr setlocale 3 ,
 +.Xr xlocale 3
+ .Xr uselocale 3
+ .Sh STANDARDS
+ These functions conform to
+@@ -80,7 +82,7 @@
+ and
+ .Fn nl_langinfo_l
+ since
+-.Ox 6.2 .
++.Ox 6.2 and since adJ 5.4.
+ .Sh BUGS
+ The return values for
+ .Dv CODESET
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime.3 src/lib/libc/time/strptime.3
 --- src54-x6/lib/libc/time/strptime.3	Sat Feb  9 14:26:54 2013
 +++ src/lib/libc/time/strptime.3	Tue Dec  3 16:12:45 2013
@@ -1980,33 +1905,16 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strftime.3 src/lib/libc/time/strftime.3
 --- src54-x6/lib/libc/time/strftime.3	Sat Feb  9 14:26:54 2013
 +++ src/lib/libc/time/strftime.3	Tue Dec  3 16:12:45 2013
-@@ -36,16 +36,22 @@
- .Dt STRFTIME 3
- .Os
- .Sh NAME
--.Nm strftime
-+.Nm strftime ,
-+.Nm strftime_l
- .Nd format date and time
- .Sh SYNOPSIS
- .In time.h
+@@ -49,6 +49,7 @@
+ .Fa "const char *format"
+ .Fa "const struct tm *timeptr"
+ .Fc
++.In locale.h
  .Ft size_t
- .Fn strftime "char *buf" "size_t maxsize" "const char *format" "const struct tm *timeptr"
-+.In xlocale.h
-+.Ft size_t
-+.Fn strftime_l "char *buf" "size_t maxsize" "const char *format" "const struct tm *timeptr" "locale_t locale"
- .Sh DESCRIPTION
- The
- .Fn strftime
--function formats the information from
-+and
-+.Fn strftime_l
-+functions format the information from
- .Fa timeptr
- into the buffer
- .Fa buf
-@@ -73,7 +79,12 @@
- Otherwise, zero is returned.
+ .Fo strftime_l
+ .Fa "char *buf"
+@@ -81,7 +82,12 @@
+ characters will be placed into the array.
  .Pp
  Each conversion specification is replaced by the characters as
 -follows which are then copied into the buffer.
@@ -2019,7 +1927,21 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strftime
  .Bl -tag -width "xxxx"
  .It Cm \&%A
  is replaced by the locale's full weekday name.
-@@ -206,6 +217,7 @@
+@@ -204,13 +210,6 @@
+ .Xr date 1
+ format.
+ .El
+-.Pp
+-The
+-.Ox
+-implementation always uses the C locale and ignores
+-the global locale, the thread-specific locale, and the
+-.Fa locale
+-argument.
+ .Sh RETURN VALUES
+ If the total number of resulting characters, including the terminating
+ NUL character, is not more than
+@@ -235,6 +234,7 @@
  .Xr time 3 ,
  .Xr tzset 3 ,
  .Xr tzfile 5
@@ -2124,3 +2046,74 @@ diff -ruN src61-orig/lib/libc/hidden/time.h src/lib/libc/hidden/time.h
  PROTO_NORMAL(time);
  PROTO_DEPRECATED(timegm);
 
+diff -ruN src-m/lib/libc/locale/nl_langinfo_l.c.orig src/lib/libc/locale/nl_langinfo_l.c
+--- src-m/lib/libc/locale/nl_langinfo_l.c.orig	Sun Dec 10 06:31:51 2017
++++ src/lib/libc/locale/nl_langinfo_l.c	Sun Dec 10 06:28:37 2017
+@@ -41,25 +41,26 @@
+ 
+ 	FIX_LOCALE(locale); 
+ 	struct lconv *lc = &locale->lconv;
++	_TimeLocale *lt = &((struct xlocale_time *)locale->components[XLC_TIME])->locale;
+ 	_RuneLocale *lr = XLOCALE_CTYPE(locale)->runes;
+ 
+ 
+ 	switch (item) {
+ 	case D_T_FMT:
+-		s = _CurrentTimeLocale->d_t_fmt;
++		s = lt->d_t_fmt;
+ 		break;
+ 	case D_FMT:
+-		s = _CurrentTimeLocale->d_fmt;
++		s = lt->d_fmt;
+ 		break;
+ 	case T_FMT:
+-		s = _CurrentTimeLocale->t_fmt;
++		s = lt->t_fmt;
+ 		break;
+ 	case T_FMT_AMPM:
+-		s = _CurrentTimeLocale->t_fmt_ampm;
++		s = lt->t_fmt_ampm;
+ 		break;
+ 	case AM_STR:
+ 	case PM_STR:
+-		s = _CurrentTimeLocale->am_pm[item - AM_STR];
++		s = lt->am_pm[item - AM_STR];
+ 		break;
+ 	case DAY_1:
+ 	case DAY_2:
+@@ -68,7 +69,7 @@
+ 	case DAY_5:
+ 	case DAY_6:
+ 	case DAY_7:
+-		s = _CurrentTimeLocale->day[item - DAY_1];
++		s = lt->day[item - DAY_1];
+ 		break;
+ 	case ABDAY_1:
+ 	case ABDAY_2:
+@@ -77,7 +78,7 @@
+ 	case ABDAY_5:
+ 	case ABDAY_6:
+ 	case ABDAY_7:
+-		s = _CurrentTimeLocale->abday[item - ABDAY_1];
++		s = lt->abday[item - ABDAY_1];
+ 		break;
+ 	case MON_1:
+ 	case MON_2:
+@@ -91,7 +92,7 @@
+ 	case MON_10:
+ 	case MON_11:
+ 	case MON_12:
+-		s = _CurrentTimeLocale->mon[item - MON_1];
++		s = lt->mon[item - MON_1];
+ 		break;
+ 	case ABMON_1:
+ 	case ABMON_2:
+@@ -105,7 +106,7 @@
+ 	case ABMON_10:
+ 	case ABMON_11:
+ 	case ABMON_12:
+-		s = _CurrentTimeLocale->abmon[item - ABMON_1];
++		s = lt->abmon[item - ABMON_1];
+ 		break;
+ 	case RADIXCHAR:
+ 		s = lc->decimal_point;

@@ -8,7 +8,7 @@ if (test ! -f "$p") then {
 	exit 1;
 } fi;
 
-if (test $SR != "1") then {
+if (test "$SR" != "1") then {
 	r=`find $SRC/ -name "*rej"`
 	if (test "$r" != "") then {
 		echo "Sin procesar porque hay estos rechazados $r";
