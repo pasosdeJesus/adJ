@@ -8,7 +8,7 @@ Fecha de publicación: 12/Dic/2017
 Puede ver novedades respecto a OpenBSD en:
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_2/Novedades_OpenBSD.md>
 
-## NOVEDADES RESPECTO A ADJ 6.0 PROVENIENTES DE OPENBSD
+## NOVEDADES RESPECTO A ADJ 6.1 PROVENIENTES DE OPENBSD
 
 # Kernel y Sistema Base
 
@@ -17,12 +17,20 @@ Puede ver novedades respecto a OpenBSD en:
 * Controladores ampliados o mejorados para amd64
 	* Red:
 		* Ethernet: 
-		* Inalámbrica: 
+		* Inalámbrica: `iwm` ahora soporta Intel 8265 y 3168, 
+		  `rtwn` ahora soporta RTL8192CE,  `ral` ahora soporta
+		  RT5360, 
 		* Otros: 
 	* Almacenamiento: 
-	* Interfaces con usuario: 
-	* Virtualización: 
-	* Sensores y otros: 
+	* Interfaces con usuario: `inteldrm` actualizado.
+	* Virtualización: Nuevo `hvs` para almacenamiento Hyper-V. Mejor
+ 	  soporte para Xen y en particular `xbf`. Muchas mejoras a 
+	  `vmd` y `vmctl`.
+	* Sensores y otros: Nuevo `urng` para dispositivos USB generadores de
+	  números aleatorios. `rtsx` ahora soporta lectores de tarjetas 
+	  RTS525A. El control de batería `acpibat`  ahora soporta algo de 
+	  ACPI 4.0. Soporte de hibernación ACPI añadido a `nvme`. Mejorado 
+	  desempeño de hibernación de `ahci`
 * Mejoras a herramientas de Red
 	* x
 * Seguridad

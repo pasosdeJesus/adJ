@@ -2500,6 +2500,15 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src56xlocale1/lib/libc/locale/run
 diff -ruN src59-orig/lib/libc/hidden/ctype.h src/lib/libc/hidden/ctype.h
 --- src59-orig/lib/libc/hidden/ctype.h	Thu Jun  9 23:21:42 2016
 +++ src/lib/libc/hidden/ctype.h	Sat Aug 20 22:41:28 2016
+@@ -68,7 +68,7 @@
+ PROTO_NORMAL(iscntrl);
+ PROTO_DEPRECATED(iscntrl_l);
+ PROTO_NORMAL(isdigit);
+-PROTO_DEPRECATED(isdigit_l);
++PROTO_NORMAL(isdigit_l);
+ PROTO_NORMAL(isgraph);
+ PROTO_DEPRECATED(isgraph_l);
+ PROTO_NORMAL(islower);
 @@ -78,19 +78,37 @@
  PROTO_NORMAL(ispunct);
  PROTO_DEPRECATED(ispunct_l);
@@ -2578,15 +2587,18 @@ diff -ruN src59-orig/lib/libc/hidden/wctype.h src/lib/libc/hidden/wctype.h
  
  PROTO_STD_DEPRECATED(iswalnum);
  PROTO_DEPRECATED(iswalnum_l);
-@@ -41,7 +42,7 @@
+@@ -41,9 +42,9 @@
  PROTO_STD_DEPRECATED(iswpunct);
  PROTO_DEPRECATED(iswpunct_l);
  PROTO_NORMAL(iswspace);
 -PROTO_DEPRECATED(iswspace_l);
 +PROTO_NORMAL(iswspace_l);
  PROTO_NORMAL(iswupper);
- PROTO_DEPRECATED(iswupper_l);
+-PROTO_DEPRECATED(iswupper_l);
++PROTO_NORMAL(iswupper_l);
  PROTO_STD_DEPRECATED(iswxdigit);
+ PROTO_DEPRECATED(iswxdigit_l);
+ PROTO_NORMAL(towctrans);
 @@ -57,4 +58,13 @@
  PROTO_STD_DEPRECATED(wctype);
  PROTO_DEPRECATED(wctype_l);

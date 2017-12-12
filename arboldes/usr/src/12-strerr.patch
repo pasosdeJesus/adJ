@@ -53,18 +53,6 @@ diff -ruN src/lib/libc/hidden/string.h.orig src/lib/libc/hidden/string.h
  PROTO_NORMAL(strerror_r);
  PROTO_NORMAL(strlcat);
  PROTO_NORMAL(strlcpy);
-diff -ruN src/include/xlocale.h.orig src/include/xlocale.h
---- src/include/xlocale.h.orig	Wed Jul 26 21:47:12 2017
-+++ src/include/xlocale.h	Sun Jul 23 07:55:46 2017
-@@ -100,6 +100,8 @@
- int	 wcscoll_l(const wchar_t *, const wchar_t *, locale_t);
- size_t	 strxfrm_l(char *, const char *, size_t, locale_t);
- 
-+char    *strerror_l(int, locale_t);
-+
- /* XLOCALE */ 
- int	 strcasecmp_l(const char *, const char *, locale_t);
- char	*strcasestr_l(const char *, const char *, locale_t);
 diff -ruN src62-orig/lib/libc/string/strerror_l.c src/lib/libc/string/strerror_l.c
 --- src62-orig/lib/libc/string/strerror_l.c	Mon Sep  4 22:16:13 2017
 +++ src/lib/libc/string/strerror_l.c	Sun Dec 10 07:19:53 2017
