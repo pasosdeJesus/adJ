@@ -823,7 +823,7 @@ diff -ruN -x *~ -x *orig -x obj* src56-orig/usr.bin/localedef/lexer.l src/usr.bi
 +hexchar \\x[0-9a-f][0-9a-f]
 +char [-a-zA-Z%:.,]
 +alpha [a-zA-Z]
-+cont [/][\n]
++cont \\[\n]
 +commentchar comment_char{esp}+[^ ]
 +escapechar escape_char{esp}+[^ ]
 +

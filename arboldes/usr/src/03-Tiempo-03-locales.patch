@@ -4969,7 +4969,7 @@ diff -ruN -x *~ -x *orig src56-orig/share/locale/cldr/zh_TW.UTF-8.src src/share/
 diff -ruN -x *~ -x *orig src62-orig/share/locale/cldr/UTF-8.src src/share/locale/cldr/UTF-8.src
 --- src62-orig/share/locale/cldr/UTF-8.src.orig	Wed Nov 22 08:44:51 2017
 +++ src/share/locale/cldr/UTF-8.src	Wed Nov 22 08:44:10 2017
-@@ -0,0 +1,53 @@
+@@ -0,0 +1,57 @@
 +comment_char #
 +escape_char /
 +
@@ -4979,6 +4979,10 @@ diff -ruN -x *~ -x *orig src62-orig/share/locale/cldr/UTF-8.src src/share/locale
 +LC_TIME
 +# This is the POSIX locale definition for
 +# the LC_TIME category.
++#
++# Abbreviated weekday names (%a)
++abday      "<S><u><n>";"<M><o><n>";"<T><u><e>";"<W><e><d>";\
++           "<T><h><u>";"<F><r><i>";"<S><a><t>"
 +#
 +# Full weekday names (%A)
 +day        "<S><u><n><d><a><y>";"<M><o><n><d><a><y>";\
