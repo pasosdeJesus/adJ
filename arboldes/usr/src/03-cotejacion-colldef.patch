@@ -6,7 +6,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/usr.bin/Makefile src/us
  SUBDIR= apply arch at aucat audioctl awk banner \
  	basename bc bgplg \
 -	biff cal calendar cap_mkdb cdio chpass cmp col colrm \
-+	biff cal calendar cap_mkdb cdio chpass cmp col coldeff colrm \
++	biff cal calendar cap_mkdb cdio chpass cmp col colldef colrm \
  	column comm compress cpp crontab csplit ctags ctfconv ctfdump \
  	cu cut cvs \
  	dc deroff diff diff3 dirname doas du encrypt env expand false file \

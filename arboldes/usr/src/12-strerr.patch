@@ -34,25 +34,6 @@ diff -ruN src61-orig/lib/libc/string/strerror_r.c src/lib/libc/string/strerror_r
  
  #define USIGPREFIX "Unknown signal: "
  
-diff -ruN src/lib/libc/hidden/string.h.orig src/lib/libc/hidden/string.h
---- src/lib/libc/hidden/string.h.orig	Sat Jul 22 20:57:24 2017
-+++ src/lib/libc/hidden/string.h	Sat Jul 22 21:54:57 2017
-@@ -19,6 +19,7 @@
- #define	_LIBC_STRING_H_
- 
- #include_next <string.h>
-+#include_next <xlocale.h>
- 
- __BEGIN_HIDDEN_DECLS
- char	*__strsignal(int , char *);
-@@ -51,6 +52,7 @@
- PROTO_NORMAL(strcspn);
- PROTO_NORMAL(strdup);
- PROTO_NORMAL(strerror);
-+PROTO_NORMAL(strerror_l);
- PROTO_NORMAL(strerror_r);
- PROTO_NORMAL(strlcat);
- PROTO_NORMAL(strlcpy);
 diff -ruN src62-orig/lib/libc/string/strerror_l.c src/lib/libc/string/strerror_l.c
 --- src62-orig/lib/libc/string/strerror_l.c	Mon Sep  4 22:16:13 2017
 +++ src/lib/libc/string/strerror_l.c	Sun Dec 10 07:19:53 2017
