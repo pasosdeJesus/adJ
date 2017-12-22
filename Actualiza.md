@@ -69,11 +69,11 @@ La actualización consta de 3 partes:
   http://www.openbsd.org/faq/upgrade59.html, de donde se traduce y mejora a 
   continuación:
 
-          ```sysmerge(8)``` muestra el resultado del comando ```diff(1)``` 
-        unificado, pasando por un paginador (el que haya configurado en la 
-        variable de ambiente ```$PAGER```) y para la mayoría de archivos 
-        presenta un mensaje como el siguiente (en el ejemplo presentado se 
-        revisan novedades para el archivo `/var/www/htdocs/index.htm`:
+  ```sysmerge(8)``` muestra el resultado del comando ```diff(1)``` 
+  unificado, pasando por un paginador (el que haya configurado en la 
+  variable de ambiente ```$PAGER```) y para la mayoría de archivos 
+  presenta un mensaje como el siguiente (en el ejemplo presentado se 
+  revisan novedades para el archivo `/var/www/htdocs/index.htm`:
 
                 Use 'd' to delete the temporary ./var/www/htdocs/index.html
                 Use 'i' to install the temporary ./var/www/htdocs/index.html
