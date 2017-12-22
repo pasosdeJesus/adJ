@@ -105,9 +105,9 @@ La actualización consta de 3 partes:
   configuración que es mejor no remplazar (opción `d`) o que es      
   mejor mezclar si conoce la sintaxis (opción ```m```).
 
-  * Al mezclar `/etc/login.conf` procure dejar los límites más amplios y
-    no elimine clases de login.
-  * Evite remplazar ```/etc/rc.local``` y ```/etc/hosts```
+  * Al mezclar `/etc/login.conf` procure dejar los límites más amplios y
+    no elimine clases de login
+  * Evite remplazar ```/etc/rc.local``` y ```/etc/hosts```
   * Si es cortafuegos evite remplazar ```/etc/pf.conf``` 
     y ```/etc/sysctl.conf```
   * Si es servidor DNS evite remplazar ```/var/unbound/etc/unbound.conf``` 
