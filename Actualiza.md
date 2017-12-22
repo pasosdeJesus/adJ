@@ -75,36 +75,36 @@ La actualización consta de 3 partes:
   presenta un mensaje como el siguiente (en el ejemplo presentado se 
   revisan novedades para el archivo `/var/www/htdocs/index.htm`:
 
-                Use 'd' to delete the temporary ./var/www/htdocs/index.html
-                Use 'i' to install the temporary ./var/www/htdocs/index.html
-                Use 'm' to merge the temporary and installed versions
-                Use 'v' to view the diff results again
+      Use 'd' to delete the temporary ./var/www/htdocs/index.html
+      Use 'i' to install the temporary ./var/www/htdocs/index.html
+      Use 'm' to merge the temporary and installed versions
+      Use 'v' to view the diff results again
         
-                Default is to leave the temporary file to deal with by hand
+      Default is to leave the temporary file to deal with by hand
 
-        Si desea retener su archivo actual, borre el temporal con la opción 
-        ```d```, si dese remplazar su archivo existente con la nueva versión, 
-        instale el archivo temporal con ```i``` Si desea mezclar los dos, 
-        al alejir ```m``` ingresará al programa ```sdiff``` donde podrá 
-        mezclar manualmente el archivo.  Por defecto continuará y dejará el 
-        archivo sin modificar para manejarlo posteriormente de manera manual.
+  Si desea retener su archivo actual, borre el temporal con la opción 
+  ```d```, si dese remplazar su archivo existente con la nueva versión, 
+  instale el archivo temporal con ```i``` Si desea mezclar los dos, 
+  al alejir ```m``` ingresará al programa ```sdiff``` donde podrá 
+  mezclar manualmente el archivo.  Por defecto continuará y dejará el 
+  archivo sin modificar para manejarlo posteriormente de manera manual.
         
-        Aunque puede funcionar, no se recomienda usar sysmerge para integrar
-        nuevos usuarios en el sistema, sino para esto usar useradd, que es 
-        menos proclive a errores (advertencia: ¡no instale el archivo temporal 
-        ```master.passwd``` sobre su archivo existente!).
+  Aunque puede funcionar, no se recomienda usar sysmerge para integrar
+  nuevos usuarios en el sistema, sino para esto usar useradd, que es 
+  menos proclive a errores (advertencia: ¡no instale el archivo temporal 
+  ```master.passwd``` sobre su archivo existente!).
         
-        ```sysmerge``` salva todos sus archivos remplazados en un directorio 
-        temporal, como ```/var/tmp/sysmerge.24959/backups```, así que si por 
-        accidente elimina algo que no era buena idea eliminar, tiene 
-        oportunidad de recuperarlo.  Advertencia: Note que la rutina 
-        ```daily``` limpia cada día archivos antiguos de ese directorio.
+  ```sysmerge``` salva todos sus archivos remplazados en un directorio 
+  temporal, como ```/var/tmp/sysmerge.24959/backups```, así que si por 
+  accidente elimina algo que no era buena idea eliminar, tiene 
+  oportunidad de recuperarlo.  Advertencia: Note que la rutina 
+  ```daily``` limpia cada día archivos antiguos de ese directorio.
         
-        En general al usar sysmerge puede remplazar (opción ```i```) todos los 
-        archivos por sus versiones más recientes, pero dependiendo de los 
-        servicios que preste el servidor, hay algunos archivos de 
-        configuración que es mejor no remplazar (opción ```d```) o que es      
-        mejor mezclar si conoce la sintaxis (opción ```m```).
+  En general al usar sysmerge puede remplazar (opción ```i```) todos los 
+  archivos por sus versiones más recientes, pero dependiendo de los 
+  servicios que preste el servidor, hay algunos archivos de 
+  configuración que es mejor no remplazar (opción ```d```) o que es      
+  mejor mezclar si conoce la sintaxis (opción ```m```).
 
   * Evite remplazar ```/etc/rc.local``` y ```/etc/hosts```
   * Si es cortafuegos evite remplazar ```/etc/pf.conf``` 
