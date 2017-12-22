@@ -65,9 +65,8 @@ La actualización consta de 3 partes:
   el instalador varias veces y avanzar tanto como pueda envíe el archivo
   ```/var/tmp/inst-adJ.bitacora``` a info@pasosdeJesus.org
 * Este archivo de ordenes utiliza ```sysmerge``` para actualizar algunos 
-  archivos de configuración. Como se explica en 
-  http://www.openbsd.org/faq/upgrade59.html, de donde se traduce y mejora a 
-  continuación:
+  archivos de configuración. A continuación traducimos y ampliamos las
+  instrucciones de <http://www.openbsd.org/faq/upgrade59.html>
 
   ```sysmerge(8)``` muestra el resultado del comando ```diff(1)``` 
   unificado, pasando por un paginador (el que haya configurado en la 
@@ -83,7 +82,7 @@ La actualización consta de 3 partes:
       Default is to leave the temporary file to deal with by hand
 
   Si desea retener su archivo actual, borre el temporal con la opción 
-  ```d```, si dese remplazar su archivo existente con la nueva versión, 
+  `d`, si dese remplazar su archivo existente con la nueva versión, 
   instale el archivo temporal con ```i``` Si desea mezclar los dos, 
   al alejir ```m``` ingresará al programa ```sdiff``` donde podrá 
   mezclar manualmente el archivo.  Por defecto continuará y dejará el 
@@ -100,13 +99,15 @@ La actualización consta de 3 partes:
   oportunidad de recuperarlo.  Advertencia: Note que la rutina 
   ```daily``` limpia cada día archivos antiguos de ese directorio.
         
-  En general al usar sysmerge puede remplazar (opción ```i```) todos los 
+  En general al usar `sysmerge puede` remplazar (opción `i`) todos los 
   archivos por sus versiones más recientes, pero dependiendo de los 
   servicios que preste el servidor, hay algunos archivos de 
-  configuración que es mejor no remplazar (opción ```d```) o que es      
+  configuración que es mejor no remplazar (opción `d`) o que es      
   mejor mezclar si conoce la sintaxis (opción ```m```).
 
-  * Evite remplazar ```/etc/rc.local``` y ```/etc/hosts```
+  * Al mezclar `/etc/login.conf` procure dejar los límites más amplios y
+    no elimine clases de login.
+  * Evite remplazar ```/etc/rc.local``` y ```/etc/hosts```
   * Si es cortafuegos evite remplazar ```/etc/pf.conf``` 
     y ```/etc/sysctl.conf```
   * Si es servidor DNS evite remplazar ```/var/unbound/etc/unbound.conf``` 
