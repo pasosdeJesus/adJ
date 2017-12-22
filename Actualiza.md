@@ -1,4 +1,4 @@
-#Actualización a Aprendiendo De Jesús 6.2a1
+# Actualización a Aprendiendo De Jesús 6.2a1
 
 La actualización consta de 3 partes:
 
@@ -7,7 +7,7 @@ La actualización consta de 3 partes:
 3. Actualizar Aplicaciones
 
 
-##1. Preparar su sistema
+## 1. Preparar su sistema
 
 * Aunque puede descargar el DVD de instalación, es más breve y robusto ante 
   fallas que descargue los directorios y archivos del instalador con rsync
@@ -30,7 +30,7 @@ La actualización consta de 3 partes:
        	doas ~/comp/adJ/6.2a1-amd64/util/preact-adJ.sh
 	```
 
-##2. Actualizar el sistema base:
+## 2. Actualizar el sistema base:
 
 * Copie kernel y descomprima los archivos comprimidos con el sistema base en 
   su directorio raiz y reinicie, esto lo puede hacer con el 
@@ -41,7 +41,7 @@ La actualización consta de 3 partes:
 		ARCH=~/comp/adJ/6.2a1-amd64 doas 6.2a1-amd64/util/actbase.sh 6.2a1
 		```
 
-##3. Actualizar aplicaciones:
+## 3. Actualizar aplicaciones:
 
 * Después de reinicar debe ejecutar  el archivo de ordenes ```/inst-adJ.sh```
   Este archivo de comandos emplea codificación UTF8, por lo que para 
@@ -116,7 +116,7 @@ La actualización consta de 3 partes:
 
 
 
-##4. Soluciones comunes
+## 4. Soluciones comunes
 
 
 * Si tras instalar sistema base, da el comando ```ls``` y obtiene 
