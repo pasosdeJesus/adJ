@@ -1,5 +1,4 @@
-Actualización a Aprendiendo De Jesús 6.2a1
-==========================================
+#Actualización a Aprendiendo De Jesús 6.2a1
 
 La actualización consta de 3 partes:
 
