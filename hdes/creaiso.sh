@@ -11,7 +11,9 @@ if (test ! -d $V$VESP-$ARQ) then {
 } fi;
 if (test -f $V$VESP-$ARQ/cdemu$VP.iso) then {
 	# crear cdrom42.fs 
-	./hdes/geteltorito.pl $V$VESP-$ARQ/cdemu$VP.iso  > $V$VESP-$ARQ/cdrom$VP.fs
+	cmd="./hdes/geteltorito.pl $V$VESP-$ARQ/cdemu$VP.iso  > $V$VESP-$ARQ/cdrom$VP.fs"
+	echo "$cmd"
+	eval "$cmd"
 	im=cdrom$VP.fs;
 }
 else {
