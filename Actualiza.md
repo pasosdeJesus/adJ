@@ -1,5 +1,4 @@
-Actualización a Aprendiendo De Jesús 6.2a1
-==========================================
+# Actualización a Aprendiendo De Jesús 6.2a1
 
 La actualización consta de 3 partes:
 
@@ -8,8 +7,7 @@ La actualización consta de 3 partes:
 3. Actualizar Aplicaciones
 
 
-1. Preparar su sistema
-----------------------
+## 1. Preparar su sistema
 
 * Aunque puede descargar el DVD de instalación, es más breve y robusto ante 
   fallas que descargue los directorios y archivos del instalador con rsync
@@ -32,8 +30,8 @@ La actualización consta de 3 partes:
        	doas ~/comp/adJ/6.2a1-amd64/util/preact-adJ.sh
 	```
 
-2. Actualizar el sistema base:
-------------------------------
+## 2. Actualizar el sistema base:
+
 * Copie kernel y descomprima los archivos comprimidos con el sistema base en 
   su directorio raiz y reinicie, esto lo puede hacer con el 
   archivo de órdenes ```actbase.sh```:
@@ -43,8 +41,8 @@ La actualización consta de 3 partes:
 		ARCH=~/comp/adJ/6.2a1-amd64 doas 6.2a1-amd64/util/actbase.sh 6.2a1
 		```
 
-3. Actualizar aplicaciones:
----------------------------------------------
+## 3. Actualizar aplicaciones:
+
 * Después de reinicar debe ejecutar  el archivo de ordenes ```/inst-adJ.sh```
   Este archivo de comandos emplea codificación UTF8, por lo que para 
   iniciarlo se recomienda desde una terminal gráfica.  
@@ -65,45 +63,48 @@ La actualización consta de 3 partes:
   el instalador varias veces y avanzar tanto como pueda envíe el archivo
   ```/var/tmp/inst-adJ.bitacora``` a info@pasosdeJesus.org
 * Este archivo de ordenes utiliza ```sysmerge``` para actualizar algunos 
-  archivos de configuración. Como se explica en 
-  http://www.openbsd.org/faq/upgrade59.html :
+  archivos de configuración. A continuación traducimos y ampliamos las
+  instrucciones de <http://www.openbsd.org/faq/upgrade59.html>
 
-          ```sysmerge(8)``` muestra el resultado del comando ```diff(1)``` 
-        unificado, pasando por un paginador (el que haya configurado en la 
-        variable de ambiente ```$PAGER```) y para la mayoría de archivos 
-        presenta un mensaje como el siguiente:
+  ```sysmerge(8)``` muestra el resultado del comando ```diff(1)``` 
+  unificado, pasando por un paginador (el que haya configurado en la 
+  variable de ambiente ```$PAGER```) y para la mayoría de archivos 
+  presenta un mensaje como el siguiente (en el ejemplo presentado se 
+  revisan novedades para el archivo `/var/www/htdocs/index.htm`:
 
-                Use 'd' to delete the temporary ./var/www/htdocs/index.html
-                Use 'i' to install the temporary ./var/www/htdocs/index.html
-                Use 'm' to merge the temporary and installed versions
-                Use 'v' to view the diff results again
+      Use 'd' to delete the temporary ./var/www/htdocs/index.html
+      Use 'i' to install the temporary ./var/www/htdocs/index.html
+      Use 'm' to merge the temporary and installed versions
+      Use 'v' to view the diff results again
         
-                Default is to leave the temporary file to deal with by hand
+      Default is to leave the temporary file to deal with by hand
 
-        Si desea retener su archivo actual, borre el temporal con la opción 
-        ```d```, si dese remplazar su archivo existente con la nueva versión, 
-        instale el archivo temporal con ```i``` Si desea mezclar los dos, 
-        al alejir ```m``` ingresará al programa ```sdiff``` donde podrá 
-        mezclar manualmente el archivo.  Por defecto continuará y dejará el 
-        archivo sin modificar para manejarlo posteriormente de manera manual.
+  Si desea retener su archivo actual, borre el temporal con la opción 
+  `d`, si dese remplazar su archivo existente con la nueva versión, 
+  instale el archivo temporal con ```i``` Si desea mezclar los dos, 
+  al alejir ```m``` ingresará al programa ```sdiff``` donde podrá 
+  mezclar manualmente el archivo.  Por defecto continuará y dejará el 
+  archivo sin modificar para manejarlo posteriormente de manera manual.
         
-        Aunque puede funcionar, no se recomienda usar sysmerge para integrar
-        nuevos usuarios en el sistema, sino para esto usar useradd, que es 
-        menos proclive a errores (advertencia: ¡no instale el archivo temporal 
-        ```master.passwd``` sobre su archivo existente!).
+  Aunque puede funcionar, no se recomienda usar sysmerge para integrar
+  nuevos usuarios en el sistema, sino para esto usar useradd, que es 
+  menos proclive a errores (advertencia: ¡no instale el archivo temporal 
+  ```master.passwd``` sobre su archivo existente!).
         
-        ```sysmerge``` salva todos sus archivos remplazados en un directorio 
-        temporal, como ```/var/tmp/sysmerge.24959/backups```, así que si por 
-        accidente elimina algo que no era buena idea eliminar, tiene 
-        oportunidad de recuperarlo.  Advertencia: Note que la rutina 
-        ```daily``` limpia cada día archivos antiguos de ese directorio.
+  ```sysmerge``` salva todos sus archivos remplazados en un directorio 
+  temporal, como ```/var/tmp/sysmerge.24959/backups```, así que si por 
+  accidente elimina algo que no era buena idea eliminar, tiene 
+  oportunidad de recuperarlo.  Advertencia: Note que la rutina 
+  ```daily``` limpia cada día archivos antiguos de ese directorio.
         
-        En general al usar sysmerge puede remplazar (opción ```i```) todos los 
-        archivos por sus versiones más recientes, pero dependiendo de los 
-        servicios que preste el servidor, hay algunos archivos de 
-        configuración que es mejor no remplazar (opción ```d```) o que es      
-        mejor mezclar si conoce la sintaxis (opción ```m```).
+  En general al usar `sysmerge puede` remplazar (opción `i`) todos los 
+  archivos por sus versiones más recientes, pero dependiendo de los 
+  servicios que preste el servidor, hay algunos archivos de 
+  configuración que es mejor no remplazar (opción `d`) o que es      
+  mejor mezclar si conoce la sintaxis (opción ```m```).
 
+  * Al mezclar `/etc/login.conf` procure dejar los límites más amplios y
+    no elimine clases de login
   * Evite remplazar ```/etc/rc.local``` y ```/etc/hosts```
   * Si es cortafuegos evite remplazar ```/etc/pf.conf``` 
     y ```/etc/sysctl.conf```
@@ -115,8 +116,8 @@ La actualización consta de 3 partes:
 
 
 
-4. Soluciones comunes
----------------------
+## 4. Soluciones comunes
+
 
 * Si tras instalar sistema base, da el comando ```ls``` y obtiene 
   ```Bad system call``` seguramente aún le falta actualizar el paquete 
