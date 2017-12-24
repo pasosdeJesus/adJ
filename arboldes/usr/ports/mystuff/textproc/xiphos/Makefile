@@ -12,6 +12,7 @@ SUBST_VAR += GH_TAGNAME
 #DISTNAME=	xiphos-${V}
 CATEGORIES=	textproc misc
 #PKGNAME=	${DISTNAME}
+REVISION=	1
 HOMEPAGE=	http://xiphos.org
 MAINTAINER=	Vladimir Támara Patiño <vtamara@pasosdejesus.org>
 
