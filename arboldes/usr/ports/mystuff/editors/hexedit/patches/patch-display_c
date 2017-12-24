@@ -1,7 +1,8 @@
 $OpenBSD$
---- display.c.orig	Tue Nov  8 11:16:47 2005
-+++ display.c	Fri Nov 22 06:04:22 2013
-@@ -162,7 +162,7 @@ void display(void)
+Index: display.c
+--- display.c.orig
++++ display.c
+@@ -168,7 +168,7 @@ void display(void)
      move(i / lineLength, 0);
      for (j = 0; j < colsUsed; j++) printw(" "); /* cleanup the line */
      move(i / lineLength, 0);
@@ -10,16 +11,16 @@ $OpenBSD$
    }
  
    attrset(NORMAL);
-@@ -183,7 +183,7 @@ void displayLine(int offset, int max)
- {
-   int i;
- 
+@@ -191,7 +191,7 @@ void displayLine(int offset, int max)
+ #ifdef HAVE_COLORS
+   mark_color = COLOR_PAIR(4) | A_BOLD;
+ #endif
 -  PRINTW(("%08lX   ", (int) (base + offset)));
-+  PRINTW(("%09lX  ", (unsigned long) (base + offset)));
++  PRINTW(("%09lX  ", (int) (base + offset)));
    for (i = offset; i < offset + lineLength; i++) {
      if (i > offset) MAXATTRPRINTW(bufferAttr[i] & MARKED, (((i - offset) % blocSize) ? " " : "  "));
      if (i < max) {
-@@ -248,7 +248,7 @@ int displayMessageAndGetString(char *msg, char **last,
+@@ -258,7 +258,7 @@ int displayMessageAndGetString(char *msg, char **last,
    getnstr(p, p_size - 1);
    noecho();
    if (*p == '\0') {

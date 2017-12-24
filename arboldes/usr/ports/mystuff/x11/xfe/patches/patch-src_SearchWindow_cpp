@@ -21,7 +21,7 @@ Remove gnuisms. The Find Hidden checkbox does nothing now.
      if (!findhidden->getCheck())
      {
 +#if defined(__OpenBSD__)
-+        searchcommand += " \\( ! '.*/\\..*' \\)"; // 2016/07/01 08:46:52 landry
++        searchcommand += " ! -path ."; 
 +#else
          searchcommand += " \\( ! -regex '.*/\\..*' \\)";
 +#endif

@@ -1,6 +1,6 @@
-$OpenBSD$
---- hexedit.h.orig	Tue Nov  8 11:16:47 2005
-+++ hexedit.h	Fri Nov 22 06:05:01 2013
+$OpenBSD: patch-hexedit_h,v 1.2 2012/09/17 12:50:09 gonzalo Exp $
+--- hexedit.h.orig	Tue Nov  8 13:16:47 2005
++++ hexedit.h	Mon Sep  3 13:56:59 2012
 @@ -5,6 +5,7 @@
  #include <stdio.h>
  #include <stdlib.h>
@@ -9,14 +9,3 @@ $OpenBSD$
  #include <sys/types.h>
  #include <sys/stat.h>
  #if HAVE_FCNTL_H
-@@ -224,6 +225,10 @@ char *basename(const char *file);
- 
- #ifndef HAVE_STRERROR
- char *strerror(int errnum);
-+#endif
-+
-+#ifndef HAVE_STRLCPY
-+#define strlcpy(dst, src, dstsize) snprintf(dst, dstsize, "%s", src)
- #endif
- 
- #ifndef HAVE_STRDUP

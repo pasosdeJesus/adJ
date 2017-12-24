@@ -841,7 +841,6 @@ if (test "$sn" = "s") then {
 	# Los siguientes no deben estar en arboldes/usr/ports/mystuff
 	paquete png # Fuera de orden alfabetico porque es muy usado por actualizados
 
-	#paquete chromium
 	#FLAVOR=light paquete evince paquetes evince-light
 	#paquete flac
 	#paquete gcc paquetes "gcc" 4.9
@@ -872,7 +871,7 @@ if (test "$sn" = "s") then {
 	#paquete w3m
 
 	# Recompilado con llave de adJ
-	#paquete chromium
+	paquete chromium
 
 	####
 	# Modificados para que usen xlocale (pueden cerrar fallas)
@@ -915,7 +914,6 @@ if (test "$sn" = "s") then {
 	paquete emulators/realboy
 	paquete lang/ocaml-labltk
 	paquete sysutils/ganglia
-	paquete sysutils/htop
 	paquete textproc/biblesync
 	paquete textproc/sword
 	paquete textproc/xiphos
@@ -951,8 +949,6 @@ if (test "$sn" = "s") then {
 	paquete databases/sivel sivel sivel 1.2
 	paquete databases/sivel sivel sivel 2.0
 
-	# por demorado toca reubicar donde era
-	paquete chromium
 	rm $dini/$V$VESP-$ARQ/$dest/php5-gd-*-no_x11.tgz > /dev/null 2>&1
 
 } fi;	
