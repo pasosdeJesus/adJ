@@ -733,9 +733,6 @@ else {
 } fi;
 echo $sn
 if (test "$sn" = "s") then {
-  #PAQ_LIMPIA_PRIMERO=1
-  #paquete webkit-gtk3
-  #exit 1;
   for i in `grep "^.*-\\[v\\]" Contenido.txt | sed -e "s/^\(.*\)-\[v\].*/\1/g"`; do 
 		paquete $i $s
   done
@@ -770,6 +767,7 @@ if (test "$sn" = "s") then {
 	# Deben estar en mystuff
 
 	# Todo lo de perl tuvo que recompilarse
+	# evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
 	paquete p5-Clone
 	paquete p5-Crypt-OpenSSL-Bignum
 	paquete p5-Crypt-OpenSSL-RSA
@@ -841,98 +839,23 @@ if (test "$sn" = "s") then {
 	# Recompilados para cerrar fallas de portes actualizados (estable)
 	# Para que operen bien basta actualizar CVS de /usr/ports 
 	# Los siguientes no deben estar en arboldes/usr/ports/mystuff
-	paquete GeoIP
-	paquete at-spi2-core
-	paquete abiword
-	paquete chromium
-	paquete curl 
-	paquete cups
-	paquete cups-filters
-	paquete dbus
-	paquete dovecot
-	FLAVOR=light paquete evince paquetes evince-light
+	paquete png # Fuera de orden alfabetico porque es muy usado por actualizados
+
+	#paquete chromium
+	#FLAVOR=light paquete evince paquetes evince-light
 	#paquete flac
-	paquete ffmpeg
-	paquete foomatic-db
-	paquete freetds
-	paquete gcc paquetes "gcc" 4.9
-	#paquete gd
-	paquete gdal
-	paquete ghostscript
-	paquete gimp 
-	paquete git paquetes "git"
-	paquete glib2
-	paquete gnumeric
-	paquete gnutls
-	#paquete gstreamer
-	paquete gstreamer1
-	paquete gtk+2
-	paquete gtk+3
-	paquete gvfs
-	paquete harfbuzz
-	paquete hevea
-	paquete icu4c
-	paquete inkscape
-	paquete imlib2
-	paquete ImageMagick
-	#paquete libarchive
-	paquete libcroco
-	paquete libgcrypt
-	paquete libgpg-error
-	#paquete libksba
-	paquete libmatroska
-	paquete libspectre
-	#paquete libtalloc
-	paquete libv4l
-	paquete libvpx
-	paquete libxml
-	#paquete mpg123
-	paquete mariadb-client paquetes "mariadb-client mariadb-server" 
-	paquete mupdf
-	paquete mutt
-	paquete nghttp2
-	paquete node
-	paquete nss
-	#paquete mplayer
-	#paquete nginx
+	#paquete gcc paquetes "gcc" 4.9
+	#paquete git paquetes "git"
+	#paquete mariadb-client paquetes "mariadb-client mariadb-server" 
 	paquete ocamlbuild 
-	paquete openssl
-	#paquete openldap-client 
-	#paquete p5-DBD-mysql
-	paquete p5-HTML-Parser
-	paquete p5-IO-Socket-SSL
-	paquete p5-Mail-SpamAssassin
-	paquete p5-Net-DNS
-	paquete p5-XML-Parser
 	#paquete p7zip paquetes "p7zip p7zip-rar"
-	paquete pango
-	paquete pear-Net-SMTP
-	paquete phantomjs
-	paquete pidgin
-	paquete podofo
-	paquete poppler
-	paquete postgis
-	paquete python paquetes "pyton" 2.7
-	paquete python paquetes "pyton" 3.6
-	paquete py-idna
-	paquete py-werkzeug
 	#paquete pidgin paquetes "libpurple pidgin"
-	paquete qemu
-	paquete qgis
-	paquete rrdtool
+	paquete rsync
 	paquete ruby paquetes "ruby ruby24-ri_docs" 2.4
-	paquete samba paquetes "ldb samba tevent"
-	#paquete tdb
-	paquete tiff
-	paquete vim
-	#paquete webkitgtk4 --si va en 6.1
-	paquete wget
+	#paquete samba paquetes "ldb samba tevent"
+	#paquete webkitgtk4 
 	#paquete webkit paquetes "webkit webkit-gtk3"
-	paquete x264
-	paquete x265
-	#paquete xz
 	# FLAVOR=gtk3 make paquete webkit-gtk3
-	#paquete zip
 
 	#Por reubicar
 
@@ -940,15 +863,16 @@ if (test "$sn" = "s") then {
 	# Nueva revisión para operar con librerías retroportadas o actualizadas
 	# Deben estar en arbodes/usr/ports/mystuff
 	#paquete gdal
+	paquete hevea
 	#paquete inkscape 
 	#paquete libreoffice paquetes "libreoffice libreoffice-i18n-es"
 	#paquete postgis
 	#paquete py-psycopg2
 	#paquete qgis
-	paquete w3m
+	#paquete w3m
 
 	# Recompilado con llave de adJ
-	paquete chromium
+	#paquete chromium
 
 	####
 	# Modificados para que usen xlocale (pueden cerrar fallas)
@@ -1005,7 +929,6 @@ if (test "$sn" = "s") then {
 	paquete www/pear-DB-DataObject-FormBuilder
 	paquete www/pear-HTML-QuickForm-Controller
 	paquete x11/fbdesk
-	#paquete devel/ruby-apacheconf_parser paquetes "ruby21-apacheconf-parser"
 
 	####
 	# Unicos en adJ liderados por pdJ
@@ -1028,6 +951,8 @@ if (test "$sn" = "s") then {
 	paquete databases/sivel sivel sivel 1.2
 	paquete databases/sivel sivel sivel 2.0
 
+	# por demorado toca reubicar donde era
+	paquete chromium
 	rm $dini/$V$VESP-$ARQ/$dest/php5-gd-*-no_x11.tgz > /dev/null 2>&1
 
 } fi;	

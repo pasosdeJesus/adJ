@@ -1,12 +1,13 @@
-$OpenBSD: patch-chrome_app_chrome_main_delegate_h,v 1.8 2016/12/10 15:35:25 robert Exp $
---- chrome/app/chrome_main_delegate.h.orig.port	Fri Dec  2 00:02:06 2016
-+++ chrome/app/chrome_main_delegate.h	Fri Dec  2 17:44:51 2016
-@@ -44,7 +44,7 @@ class ChromeMainDelegate : public content::ContentMain
+$OpenBSD: patch-chrome_app_chrome_main_delegate_h,v 1.10 2017/09/09 19:16:43 robert Exp $
+Index: chrome/app/chrome_main_delegate.h
+--- chrome/app/chrome_main_delegate.h.orig
++++ chrome/app/chrome_main_delegate.h
+@@ -46,7 +46,7 @@ class ChromeMainDelegate : public content::ContentMain
        const std::string& process_type) override;
    bool ShouldSendMachPort(const std::string& process_type) override;
    bool DelaySandboxInitialization(const std::string& process_type) override;
 -#elif defined(OS_POSIX) && !defined(OS_ANDROID)
 +#elif defined(OS_POSIX) && !defined(OS_ANDROID) && !defined(OS_BSD)
-   void ZygoteStarting(
-       ScopedVector<content::ZygoteForkDelegate>* delegates) override;
+   void ZygoteStarting(std::vector<std::unique_ptr<content::ZygoteForkDelegate>>*
+                           delegates) override;
    void ZygoteForked() override;

@@ -1,15 +1,17 @@
-# $OpenBSD: Makefile,v 1.206 2016/06/06 08:34:38 ajacoutot Exp $
+# $OpenBSD: Makefile,v 1.214 2017/08/22 10:27:33 espie Exp $
 
 COMMENT-main=	VideoLAN client; multimedia player
 COMMENT-jack=	JACK audio output module for VLC
 
-V=		2.2.4
+V=		2.2.8
 DISTNAME=	vlc-${V}
 PKGNAME-main=	${DISTNAME}
 PKGNAME-jack=	vlc-jack-${V}
 CATEGORIES=	x11
 MASTER_SITES=	https://download.videolan.org/pub/videolan/vlc/${V}/
 EXTRACT_SUFX=	.tar.xz
+REVISION-jack=	0
+REVISION-main=	0
 
 SHARED_LIBS=	vlc	3.0 \
 		vlccore	3.0
@@ -23,7 +25,6 @@ PERMIT_PACKAGE_CDROM=	patents
 PERMIT_PACKAGE_FTP=	Yes
 
 WANTLIB-common=	c dbus-1 idn m pthread ${MODGETTEXT_WANTLIB}
-# v4l2 is dlopen'd
 WANTLIB-main=	EGL GL ICE lib/qt4/QtGui QtCore SM SDL SDL_image X11 \
 		Xcomposite Xcursor Xdamage Xext Xfixes Xi Xinerama Xpm \
 		Xrender Xrandr ass atk-1.0 avcodec avformat avutil bluray \
@@ -31,24 +32,28 @@ WANTLIB-main=	EGL GL ICE lib/qt4/QtGui QtCore SM SDL SDL_image X11 \
 		ffi fontconfig freetype fribidi gcrypt gdk-x11-2.0 \
 		gdk_pixbuf-2.0 gio-2.0 glib-2.0 gmodule-2.0 gmp gnutls \
 		gobject-2.0 gpg-error graphite2 gthread-2.0 gtk-x11-2.0 \
-		harfbuzz hogweed jpeg lzma matroska nettle notify opus \
+		harfbuzz hogweed idn2 jpeg lzma matroska nettle notify opus \
 		ogg p11-kit pango-1.0 pangocairo-1.0 pangoft2-1.0 pcre \
 		pixman-1 png postproc pthread-stubs rsvg-2 samplerate sndio \
-		speex speexdsp stdc++ swscale tag tar tasn1 tiff usbhid \
-		v4l2 vorbis vorbisenc webp x264 x265 xcb-composite xcb-keysyms \
-		xcb-randr xcb-render xcb-shape xcb-shm xcb-xfixes xcb-xv \
-		xcb xml2 z X11-xcb Xxf86vm drm gbm glapi xcb-dri2 xcb-glx \
+		speex speexdsp swscale tag tar tasn1 tiff unistring usbhid \
+		vorbis vorbisenc webp x264 x265 xcb-composite xcb-keysyms \
+		xcb-randr xcb-render xcb-shm xcb-xfixes xcb-xv xcb xml2 z \
+		X11-xcb Xxf86vm drm gbm glapi xcb-dri2 xcb-glx \
 		${WANTLIB-common}
+# v4l2 is dlopen'd
+WANTLIB-main +=	v4l2
+
 WANTLIB-jack=	db jack vlccore ${WANTLIB-common}
 
 AUTOCONF_VERSION= 2.69
 AUTOMAKE_VERSION= 1.15
 
 MODULES=	devel/gettext \
-		lang/clang \
 		x11/qt4
-MODCLANG_ARCHS=	amd64 i386
-MODCLANG_LANGS=	c++
+
+COMPILER =	base-clang base-gcc
+
+WANTLIB-main += ${COMPILER_LIBCXX}
 
 LIB_DEPENDS-main= ${MODQT4_LIB_DEPENDS} \
 		${MODGETTEXT_LIB_DEPENDS} \
@@ -199,3 +204,6 @@ post-install:
 	@find ${PREFIX}/lib/vlc -name '*.la' -print | xargs rm
 
 .include <bsd.port.mk>
+.if ${CHOSEN_COMPILER} == "base-clang"
+CXXFLAGS += -std=c++11 -DXXX_CLANG_WORKAROUND=1
+.endif

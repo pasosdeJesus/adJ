@@ -1,13 +1,32 @@
-$OpenBSD: patch-base_BUILD_gn,v 1.6 2017/03/14 12:18:53 robert Exp $
---- base/BUILD.gn.orig.port	Thu Mar  9 21:04:26 2017
-+++ base/BUILD.gn	Fri Mar 10 07:46:16 2017
-@@ -1457,6 +1457,28 @@ component("base") {
+$OpenBSD: patch-base_BUILD_gn,v 1.11 2017/09/09 19:16:43 robert Exp $
+
+Index: base/BUILD.gn
+--- base/BUILD.gn.orig
++++ base/BUILD.gn
+@@ -1137,7 +1137,7 @@ component("base") {
+   # Needed for <atomic> if using newer C++ library than sysroot, except if
+   # building inside the cros_sdk environment - use host_toolchain as a
+   # more robust check for this.
+-  if (!use_sysroot && (is_android || (is_linux && !is_chromecast)) &&
++  if (!use_sysroot && (is_android || (is_linux && !is_chromecast) && !is_clang) &&
+       host_toolchain != "//build/toolchain/cros:host") {
+     libs = [ "atomic" ]
+   }
+@@ -1163,7 +1163,7 @@ component("base") {
+         "allocator/allocator_shim_override_glibc_weak_symbols.h",
+       ]
+       deps += [ "//base/allocator:tcmalloc" ]
+-    } else if (is_linux && use_allocator == "none") {
++    } else if ((is_linux && !is_openbsd) && use_allocator == "none") {
+       sources += [ "allocator/allocator_shim_default_dispatch_to_glibc.cc" ]
+     } else if (is_android && use_allocator == "none") {
+       sources += [
+@@ -1568,6 +1568,27 @@ component("base") {
      }
    }
  
 +  if (is_openbsd) {
 +    sources -= [
-+      "debug/proc_maps_linux.cc",
 +      "files/file_path_watcher_linux.cc",
 +      "files/file_util_linux.cc",
 +      "process/memory_linux.cc",
@@ -30,3 +49,12 @@ $OpenBSD: patch-base_BUILD_gn,v 1.6 2017/03/14 12:18:53 robert Exp $
    # iOS
    if (is_ios) {
      set_sources_assignment_filter([])
+@@ -2433,6 +2454,8 @@ test("base_unittests") {
+     # TODO(krasin): remove CFI_CAST_CHECK, see https://crbug.com/626794.
+     defines += [ "CFI_CAST_CHECK" ]
+   }
++
++  libs = [ "execinfo" ]
+ }
+ 
+ action("build_date") {

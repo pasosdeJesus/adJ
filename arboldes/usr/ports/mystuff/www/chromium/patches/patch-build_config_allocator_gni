@@ -1,12 +1,23 @@
-$OpenBSD: patch-build_config_allocator_gni,v 1.4 2016/12/10 15:35:25 robert Exp $
---- build/config/allocator.gni.orig.port	Fri Dec  2 17:55:10 2016
-+++ build/config/allocator.gni	Sat Dec  3 14:29:11 2016
-@@ -17,7 +17,7 @@ if (is_android || current_cpu == "mipsel" || is_mac ||
- # the shim. NaCl in particular does seem to link some binaries statically
- # against the debug CRT with "is_nacl=false".
- if ((is_linux || is_android || (is_win && !is_component_build && !is_debug)) &&
--     !is_asan && !is_lsan && !is_tsan && !is_msan) {
-+     !is_asan && !is_lsan && !is_tsan && !is_msan && !is_openbsd) {
-   _default_use_experimental_allocator_shim = true
+$OpenBSD: patch-build_config_allocator_gni,v 1.6 2017/07/27 14:23:46 robert Exp $
+
+Index: build/config/allocator.gni
+--- build/config/allocator.gni.orig
++++ build/config/allocator.gni
+@@ -7,7 +7,7 @@ import("//build/config/sanitizers/sanitizers.gni")
+ # Temporarily disable tcmalloc on arm64 linux to get rid of compilation errors.
+ if (is_android || current_cpu == "mipsel" || is_mac || is_ios || is_asan ||
+     is_lsan || is_tsan || is_msan || is_win || is_syzyasan || is_fuchsia ||
+-    (is_linux && target_cpu == "arm64")) {
++    (is_linux && target_cpu == "arm64") || is_openbsd) {
+   _default_allocator = "none"
  } else {
-   _default_use_experimental_allocator_shim = false
+   _default_allocator = "tcmalloc"
+@@ -18,7 +18,7 @@ if (is_android || current_cpu == "mipsel" || is_mac ||
+ # against the debug CRT with "is_nacl=false".
+ if ((is_linux || is_android || is_mac ||
+      (is_win && !is_component_build && !is_debug)) && !is_asan && !is_lsan &&
+-    !is_tsan && !is_msan) {
++    !is_tsan && !is_msan && !is_openbsd) {
+   _default_use_allocator_shim = true
+ } else {
+   _default_use_allocator_shim = false

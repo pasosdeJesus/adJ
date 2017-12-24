@@ -1,4 +1,6 @@
-# $OpenBSD: Makefile,v 1.319 2017/03/30 17:54:24 robert Exp $
+# $OpenBSD: Makefile,v 1.341 2017/09/22 12:31:03 robert Exp $
+
+.include <bsd.port.arch.mk>
 
 USE_WXNEEDED=		Yes
 
@@ -7,10 +9,9 @@ DPB_PROPERTIES=		parallel
 
 COMMENT=		Chromium browser
 
-V=			57.0.2987.133
+V=			61.0.3163.100
 
 DISTNAME=		chromium-${V}
-DISTFILES=		${DISTNAME}${EXTRACT_SUFX}
 
 CATEGORIES=		www
 
@@ -27,34 +28,40 @@ FLAVOR?=
 PERMIT_PACKAGE_CDROM=	patents
 PERMIT_PACKAGE_FTP =	Yes
 
-MASTER_SITES=	https://commondatastorage.googleapis.com/chromium-browser-official/
-MASTER_SITES0=	http://nerd.hu/distfiles/
+MASTER_SITES=	https://commondatastorage.googleapis.com/chromium-browser-official/ \
+		http://nerd.hu/distfiles/
 
-MODULES=	lang/clang lang/python gcc4
+MODULES=	lang/python
 
-MODCLANG_ARCHS=	*
-MODCLANG_LANGS=	c++
+COMPILER =	clang gcc
 
 MODPY_RUNDEP=	No
+
+.if ${PROPERTIES:Mclang}    
+PATCH_LIST=	patch-* clang-*                            
+.endif                      
 
 PATCHORIG=	.orig.port
 
 # uses pledge()
-WANTLIB += X11 Xext Xfixes Xrender Xss c cairo cups dbus-1 event
-WANTLIB += execinfo expat fontconfig freetype gconf-2 gdk-x11-2.0
-WANTLIB += gdk_pixbuf-2.0 glib-2.0 gobject-2.0 gtk-x11-2.0
-WANTLIB += m pango-1.0 pangocairo-1.0
-WANTLIB += png pthread
-WANTLIB += xml2 xslt
+WANTLIB += X11 Xext Xfixes Xrender Xss c cups dbus-1 event
+WANTLIB += execinfo fontconfig gconf-2
+WANTLIB += gdk_pixbuf-2.0 glib-2.0 gobject-2.0
+WANTLIB += m
+WANTLIB += pthread pthread-stubs
+WANTLIB += xslt
 WANTLIB += sndio
 WANTLIB += Xcomposite
-WANTLIB += estdc++>=17
+WANTLIB += ${COMPILER_LIBCXX}
 WANTLIB += Xi Xtst
 WANTLIB += Xdamage
 WANTLIB += Xcursor Xrandr gio-2.0
 WANTLIB += nspr4 nss3 nssutil3 smime3
-WANTLIB += atk-1.0 gmodule-2.0
+WANTLIB += gmodule-2.0
 WANTLIB += X11-xcb xcb
+WANTLIB += GL expat
+WANTLIB += atk-1.0 cairo gdk-3 gtk-3 pango-1.0
+WANTLIB += pangocairo-1.0
 
 RUN_DEPENDS=	devel/xdg-utils \
 		devel/desktop-file-utils \
@@ -65,6 +72,7 @@ RUN_DEPENDS=	devel/xdg-utils \
 BUILD_DEPENDS=	archivers/bzip2 \
 		devel/gperf \
 		devel/bison \
+		lang/node \
 		devel/yasm \
 		shells/bash \
 		sysutils/flock \
@@ -72,14 +80,14 @@ BUILD_DEPENDS=	archivers/bzip2 \
 		x11/gnome/libgnome-keyring \
 		devel/ninja \
 		x11/gtk+3 \
-		lang/gcc/4.9,-c++>=4.9,<4.10
+		${MODGCC4_CPPDEP}
 LIB_DEPENDS=	devel/libexecinfo \
 		security/nss \
 		devel/gconf2 \
 		textproc/libxslt \
-		x11/gtk+2 \
+		x11/gtk+3 \
 		print/cups,-libs \
-		lang/gcc/4.9,-libs>=4.9,<4.10
+		${MODGCC4_CPPLIBDEP}
 
 .include <bsd.own.mk>
 
@@ -90,7 +98,7 @@ BUILDTYPE=	Debug
 BUILDTYPE=	Release
 .endif
 
-ALL_TARGET=	chrome chromedriver 
+ALL_TARGET=	chrome
 TEST_TARGET=	base_unittests
 
 CONFIGURE_STYLE=none # prevent python MODULE from overriding do-build
@@ -101,27 +109,32 @@ BUILDDIR=	${WRKSRC}/out/${BUILDTYPE}
 # removes them from the bundled third_party directory and replaces them
 # with hooks to use them from the system.
 GN_SYSTEM_LIBS=	libevent \
-		libxml \
 		libxslt \
 		yasm
 
 GN_ARGS=	enable_nacl=false \
-		enable_chromedriver=true \
 		is_debug=false \
 		enable_webrtc=false \
 		enable_one_click_signin=true \
+		enable_remoting=false \
 		use_kerberos=false \
 		use_sndio=true \
 		use_cups=true \
+		use_gtk3=true \
 		is_clang=true \
 		use_sysroot=false \
 		treat_warnings_as_errors=false \
 		clang_use_chrome_plugins=false \
 		use_allocator=\"none\" \
-		is_official_build=false \
+		is_official_build=true \
 		fieldtrial_testing_like_official_build=true \
-		extra_cppflags=\"-idirafter ${LOCALBASE}/include -idirafter ${X11BASE}/include\" \
-		extra_ldflags=\"-L${LOCALBASE}/lib -L${X11BASE}/lib\"
+		extra_cppflags=\"-idirafter ${LOCALBASE}/include -idirafter ${X11BASE}/include\"
+
+.if ${MACHINE_ARCH} == i386
+GN_ARGS+=	extra_ldflags=\"-L${LOCALBASE}/lib -L${X11BASE}/lib -Wl,--no-keep-memory\"
+.else
+GN_ARGS+=	extra_ldflags=\"-L${LOCALBASE}/lib -L${X11BASE}/lib\"
+.endif
 
 # Nota: se han dejado llaves para el uso sólo de adJ ---como el porte inicial
 # para OpenBSD sugiere. Para su propia distribución use sus propias
@@ -148,6 +161,8 @@ pre-configure:
 	@mkdir -p ${WRKSRC}/media/audio/sndio ${WRKSRC}/media/audio/openbsd
 	@cp ${FILESDIR}/sndio_{out,in}put.{cc,h} ${WRKSRC}/media/audio/sndio
 	@cp ${FILESDIR}/audio_manager_openbsd.{cc,h} ${WRKSRC}/media/audio/openbsd
+	@mkdir -p ${WRKSRC}/third_party/node/openbsd/node-openbsd/bin
+	@ln -sf ${TRUEPREFIX}/bin/node ${WRKSRC}/third_party/node/openbsd/node-openbsd/bin/node
 
 # Configuration consists of three steps:
 # 1. replace the specified bundled libraries with hooks to use the system libs
@@ -156,7 +171,7 @@ pre-configure:
 do-configure:
 	@cd ${WRKSRC} && env -i ${MAKE_ENV} build/linux/unbundle/replace_gn_files.py \
 		--system-libraries ${GN_SYSTEM_LIBS}
-	@cd ${WRKSRC}/tools/gn && env -i ${MAKE_ENV} ${MODPY_BIN} bootstrap/bootstrap.py \
+	@cd ${WRKSRC}/tools/gn && env -i ${MAKE_ENV} LDFLAGS=-L${LOCALBASE}/lib ${MODPY_BIN} bootstrap/bootstrap.py \
 		--no-clean -s --gn-gen-args "${GN_ARGS}"
 	@cd ${WRKSRC} && env -i ${CONFIGURE_ENV} ${WRKSRC}/out/${BUILDTYPE}/gn \
 		gen --args="${GN_ARGS}" out/Release

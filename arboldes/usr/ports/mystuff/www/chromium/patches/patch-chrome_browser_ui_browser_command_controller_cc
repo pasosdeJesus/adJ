@@ -1,7 +1,8 @@
-$OpenBSD: patch-chrome_browser_ui_browser_command_controller_cc,v 1.20 2017/03/14 12:18:53 robert Exp $
---- chrome/browser/ui/browser_command_controller.cc.orig.port	Thu Mar  9 21:04:29 2017
-+++ chrome/browser/ui/browser_command_controller.cc	Fri Mar 10 07:46:20 2017
-@@ -80,7 +80,7 @@
+$OpenBSD: patch-chrome_browser_ui_browser_command_controller_cc,v 1.24 2017/09/09 19:16:43 robert Exp $
+Index: chrome/browser/ui/browser_command_controller.cc
+--- chrome/browser/ui/browser_command_controller.cc.orig
++++ chrome/browser/ui/browser_command_controller.cc
+@@ -78,7 +78,7 @@
  #include "chrome/browser/ui/browser_commands_chromeos.h"
  #endif
  
@@ -10,9 +11,9 @@ $OpenBSD: patch-chrome_browser_ui_browser_command_controller_cc,v 1.20 2017/03/1
  #include "ui/base/ime/linux/text_edit_key_bindings_delegate_auralinux.h"
  #endif
  
-@@ -202,7 +202,7 @@ bool BrowserCommandController::IsReservedCommandOrKey(
-   if (window()->IsFullscreen() && command_id == IDC_FULLSCREEN)
-     return true;
+@@ -207,7 +207,7 @@ bool BrowserCommandController::IsReservedCommandOrKey(
+ #endif
+   }
  
 -#if defined(OS_LINUX) && !defined(OS_CHROMEOS)
 +#if (defined(OS_LINUX) || defined(OS_BSD)) && !defined(OS_CHROMEOS)
@@ -26,9 +27,9 @@ $OpenBSD: patch-chrome_browser_ui_browser_command_controller_cc,v 1.20 2017/03/1
 -#if defined(OS_LINUX) && !defined(OS_CHROMEOS)
 +#if (defined(OS_LINUX) || defined(OS_BSD)) && !defined(OS_CHROMEOS)
      case IDC_USE_SYSTEM_TITLE_BAR: {
-       PrefService* prefs = browser_->profile()->GetPrefs();
+       PrefService* prefs = profile()->GetPrefs();
        prefs->SetBoolean(prefs::kUseCustomChromeFrame,
-@@ -765,7 +765,7 @@ void BrowserCommandController::InitCommandState() {
+@@ -767,7 +767,7 @@ void BrowserCommandController::InitCommandState() {
    command_updater_.UpdateCommandEnabled(IDC_VISIT_DESKTOP_OF_LRU_USER_2, true);
    command_updater_.UpdateCommandEnabled(IDC_VISIT_DESKTOP_OF_LRU_USER_3, true);
  #endif

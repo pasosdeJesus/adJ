@@ -20,20 +20,24 @@ Sería ideal publicar una versión alfa mucho antes (24.Sep y 24.Mar, e.g 6.2a1)
 Pasos importantes para publicar versión beta
 --------------------------------------------
 
-1. Recompilar paquetes con actualizaciones de seguridad o mejoras
-2. Retroportar paquetes, dejar resultados no incluidos en DVD pero
+1. Actulizar parches de locale y xlocale de forma que puedan aplicarse
+   sobre la nueva versión de OpenBSD.
+2. Recompilar kernel, sistema base y asegurar que puede crearse una 
+   distribución inicial
+3. Recompilar paquetes con actualizaciones de seguridad o mejoras
+4. Retroportar paquetes, dejar resultados no incluidos en DVD pero
    útiles en 6.2-amd64-extra
-3. Cambiar versión en ver.sh, arboldd/usr/local/adJ/inst-adJ.sh, Actualiza.md,
+5. Cambiar versión en ver.sh, arboldd/usr/local/adJ/inst-adJ.sh, Actualiza.md,
 	ComoPublicar.md, {$V-amd64,arboldvd}/util/preact-adJ.sh, Novedades.md,
 	{$V-amd64,arboldvd}/util/actbase.sh, 
-4. Retocar ```Dedicatoria.md``` y archivos *.md (por lo menos versión),
+6. Retocar ```Dedicatoria.md``` y archivos *.md (por lo menos versión),
    regenerar en distribución (sin paquetes ni otras compilaciones) con:
 	```
 	doas ./distribucion.sh
 	```
-5. Retocar fecha de publicacion en ```Novedades.md``` y publicar escondido en
+7. Retocar fecha de publicacion en ```Novedades.md``` y publicar escondido en
    http://aprendiendo.pasosdeJesus.org
-6. Generar distribución, imagen iso (```hdes/creaiso.sh```) y probar por 
+8. Generar distribución, imagen iso (```hdes/creaiso.sh```) y probar por 
   ejemplo en ```qemu``` (```hdes/qemu.sh``` o remotamente 
   ```TEXTO=1 hdes/qemu.sh```): 
 	- instalación de sistema base, uname debe reportar APRENDIENDODEJESUS
@@ -42,26 +46,27 @@ Pasos importantes para publicar versión beta
    	- que toda entrada del menú desde la interfaz gráfica opere.  
 	- que opere bien una aplicación Ruby on Rails
   Arreglar y repetir hasta que no haya errores.
-7. En computador de desarrollo tras configurar ```var-local.sh``` enviar a
+9. En computador de desarrollo tras configurar ```var-local.sh``` enviar a
    adJ.pasosdeJesus.org:
 	```
 	hdes/rsync-aotro.sh
 	```
-8. En adJ.pasosdeJesus.org
+10. En adJ.pasosdeJesus.org
 	```
 	hdes/creaiso.sh
 	cp -rf AprendiendoDeJesus-6.2b1-amd64.iso 6.2b1-amd64 /dirftp
 	mkdir /dirftp/6.2-amd64-extra
 	rsync compdes:comp/adJ/extra-6.2/* /dirftp/6.2-amd64-extra
 	```
-9. Verificar operación de:
+11. Verificar operación de:
   * http://pasosdeJesus.github.io/basico_adJ http://pasosdeJesus.github.io/usuario_adJ http://pasosdeJesus.github.io/servidor_adJ
   * http://sivel.sf.net/
   * http://aprendiendo.pasosdeJesus.org
   * http://www.pasosdeJesus.org
   * http://adJ.pasosdeJesus.org
   * rsync://adJ.pasosdeJesus.org
-10. Poner Tag en github e iniciar rama al publicar version beta (antes en master)
+
+12. Poner Tag en github e iniciar rama al publicar version beta (antes en master)
 	```
 	git tag -a v6.2a1 -m "Version 6.2a1"
 	git push origin v6.2a1
@@ -69,7 +74,7 @@ Pasos importantes para publicar versión beta
 	git checkout -b ADJ_6_2
 	git push origin ADJ_6_2
 	```
-10. Publicar en lista de desarrollo
+13. Publicar en lista de desarrollo
 
 Pasos importantes para publicar versión mayor
 --------------------------------------------
@@ -78,9 +83,10 @@ Pasos importantes para publicar versión mayor
 	git checkout ADJ_6_2
 2. Actualizar SIVeL, evangelios, Mt77, cor1440, sal7711 y paquetes propios de 
    adJ.
-3. Actualizar documentación, publicar en Internet
-4. Análogo a pasos 6.2 de versión beta
-5. Actualiza version en reto de P2PU (las 4 primeras tareas) 
+3. Actualizar documentación (basico_adJ, usuario_adJ y servidor_adJ), publicar en 
+   Internet
+4. Análogo a pasos de versión beta
+5. Actualizar version en reto de P2PU (las 4 primeras tareas) 
    https://p2pu.org/es/groups/openbsd-adj-como-sistema-de-escritorio/
 6. Actualizar Artículo como Noticia en http://aprendiendo.pasosdeJesus.org,
    http://aprendiendo.pasosdejesus.org/?id=MainMenu,  
@@ -128,4 +134,5 @@ Pasos importantes para publicar versión mayor
 10. Actualiza artículos de Wikipedia 
    https://en.wikipedia.org/wiki/AdJ y https://es.wikipedia.org/wiki/AdJ 
 
-11. Publicar en http://sivel.sf.net y en  http://structio.sf.net
+11. Publicar noticia en http://sivel.sf.net y en  http://structio.sf.net
+

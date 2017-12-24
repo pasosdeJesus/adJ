@@ -1,6 +1,7 @@
-$OpenBSD: patch-chrome_browser_profiles_profile_impl_io_data_cc,v 1.2 2016/12/10 15:35:25 robert Exp $
---- chrome/browser/profiles/profile_impl_io_data.cc.orig.port	Fri Dec  2 00:02:07 2016
-+++ chrome/browser/profiles/profile_impl_io_data.cc	Fri Dec  2 17:44:52 2016
+$OpenBSD: patch-chrome_browser_profiles_profile_impl_io_data_cc,v 1.6 2017/09/09 19:16:43 robert Exp $
+Index: chrome/browser/profiles/profile_impl_io_data.cc
+--- chrome/browser/profiles/profile_impl_io_data.cc.orig
++++ chrome/browser/profiles/profile_impl_io_data.cc
 @@ -104,7 +104,7 @@ net::BackendType ChooseCacheBackendType() {
    }
  #endif  // #if !defined(OS_ANDROID)

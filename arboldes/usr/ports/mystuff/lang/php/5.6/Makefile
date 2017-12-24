@@ -3,7 +3,7 @@
 BROKEN-alpha=	pcre_jit_compile.c:65:2: error: #error Unsupported architecture
 
 PV=		5.6
-V=		${PV}.31
+V=		${PV}.32
 
 WANTLIB-main+=		stdc++ ncurses readline
 
