@@ -244,16 +244,6 @@ chown $uadJ:$uadJ /home/$uadJ/.Xauthority > /dev/null 2>&1
 rm -rf /home/$uadJ/.font*
 
 usermod -G operator $uadJ
-echo "* Dispositivos montables por usuarios" >> /var/www/tmp/inst-adJ.bitacora;
-grep "^ *kern.usermount *= *1" /etc/sysctl.conf > /dev/null 2> /dev/null
-if (test "$?" != "0") then {
-	cat >> /etc/sysctl.conf <<EOF
-kern.usermount=1
-EOF
-	sysctl -w kern.usermount=1 > /dev/null
-} else {
-	echo "   Saltando..."  >> /var/www/tmp/inst-adJ.bitacora;
-} fi;
 
 echo "* Permisos de /mnt" >> /var/www/tmp/inst-adJ.bitacora;
 ls -l /mnt/ | grep "root  wheel" > /dev/null 2> /dev/null
@@ -1785,6 +1775,7 @@ if (test "$?" != "0") then {
 	pkg_add -I -r -D update -D updatedepends $p >> /var/www/tmp/inst-adJ.bitacora 2>&1;
 	insacp jpeg
 	insacp tiff
+	insacp nghttp2
 	insacp curl
 	insacp png
 	insacp opus
@@ -1795,6 +1786,7 @@ if (test "$?" != "0") then {
 	insacp imlib2
 	insacp geos
 	insacp proj
+	insacp sqlite3
 	insacp libspatialite
 	insacp libgeotiff
 	insacp jasper
@@ -2843,6 +2835,7 @@ EOF
 
 echo "* Configurando sistema de impresión cups" | tee -a /var/www/tmp/inst-adJ.bitacora;
 rm -f /etc/rc.d/dbus_daemon
+insacp glib2
 insacp dbus	
 insacp libusb1
 insacp lcms2
