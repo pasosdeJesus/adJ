@@ -1,0 +1,15 @@
+servicio="/usr/local/bin/xmr-stak-cpu /usr/local/share/examples/xmr-stak-cpu/xmr-stak-cpu.conf"
+
+. /etc/rc.d/rc.subr
+
+rc_check() {
+        ps axw | grep "[x]mr-stak-cpu" > /dev/null
+}
+
+rc_stop() {
+        p=`ps axw | grep "[x]mr-stak-cpu" | sed -e "s/^ *\([0-9]*\) .*/\1/g"`
+        kill $p
+}
+
+rc_cmd $1
+
