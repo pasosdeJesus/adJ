@@ -1,16 +1,16 @@
-# $OpenBSD: Makefile,v 1.1.1.1 2016/12/18 18:13:25 jeremy Exp $
+# $OpenBSD: Makefile,v 1.4 2017/11/30 16:21:25 jeremy Exp $
 
 COMMENT=	PostgreSQL RDBMS (previous version, for pg_upgrade)
 
-VERSION=	9.5.5
+VERSION=	9.6.6
 DISTNAME=	postgresql-${VERSION}
 PKGNAME=	postgresql-previous-${VERSION}
 
 CATEGORIES=	databases
-SHARED_LIBS=	ecpg		7.7 \
-		ecpg_compat	4.7 \
-		pgtypes		4.6 \
-		pq		6.8
+SHARED_LIBS=	ecpg		7.8 \
+		ecpg_compat	4.8 \
+		pgtypes		4.7 \
+		pq		6.9 
 
 HOMEPAGE=	http://www.postgresql.org/
 
@@ -27,13 +27,15 @@ MAKE_FILE=	GNUmakefile
 SUBST_VARS=	VERSION
 
 USE_GMAKE=	Yes
-USE_GROFF=	Yes
 
 CONFIGURE_STYLE=gnu
 
-MODULES=	lang/python
+MODULES=	lang/python gcc4
 MODPY_RUNDEP=	No
 POSTGRESQL_DIR=	postgresql-${VERSION:C/.[0-9]+$//}
+
+# for __sync_lock_test_and_set                   
+MODGCC4_ARCHS= arm                         
 
 CONFIGURE_ENV=	ac_cv_path_PYTHON=${MODPY_BIN} \
 		CPPFLAGS="-I${LOCALBASE}/include" \
@@ -70,7 +72,7 @@ ALL_TARGET=	all
 INSTALL_TARGET=	install
 
 LIB_DEPENDS = textproc/libxml
-WANTLIB += c crypto m readline ssl termcap z xml2 perl util
+WANTLIB += c crypto m readline ssl termcap z xml2 perl
 
 MAKE_ENV=	LIBpq_MAJOR=${LIBpq_VERSION:R} \
 		LIBpq_MINOR=${LIBpq_VERSION:E} \

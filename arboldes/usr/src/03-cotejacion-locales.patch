@@ -39,8 +39,8 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/share/locale/colldef/Ma
 +
 +NOMAN=	# defined
 +
-+UTF-8.out: ISO8859-1.src
-+	colldef -I ${.CURDIR} -o UTF-8.out ${.CURDIR}/ISO8859-1.src
++UTF-8.out: ASCII.src
++	colldef -I ${.CURDIR} -o UTF-8.out ${.CURDIR}/ASCII.src
 +
 +.for c in ${LOCALES_UTF8}
 +${c}.UTF-8.out: ${c}.ISO8859-1.src
@@ -515,3 +515,13 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/share/locale/colldef/sv
 +	\{;<NO>;|;<BB>;\};~;<.M>;<DG>;<My>;<DT>;\
 +# remains
 +	<-a>;<ss>;<-o>
+diff -ruN src62-s/share/locale/colldef/ASCII.src src/share/locale/colldef/ASCII.src
+--- src62-s/share/locale/colldef/ASCII.src	Wed Jan  3 12:20:22 2018
++++ src/share/locale/colldef/ASCII.src	Wed Jan  3 12:15:29 2018
+@@ -0,0 +1,6 @@
++# ASCII
++#
++charmap map.ISO8859-1
++
++order \
++	<NU>;...;<y:>
