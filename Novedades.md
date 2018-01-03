@@ -68,7 +68,7 @@ Puede ver novedades respecto a OpenBSD en:
 
 # Novedades respecto a paquetes 
 
-* retroportado de Current
+* Retroportados de Current: ruby 2.5
 * Se han actualizado más los binarios de los siguientes paquetes para
 cerrar fallas de seguridad (a partir de portes más recientes para 
 OpenBSD 6.2):
