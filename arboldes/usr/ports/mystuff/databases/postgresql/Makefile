@@ -1,4 +1,4 @@
-# $OpenBSD: Makefile,v 1.231 2017/11/30 16:13:12 pea Exp $
+# $OpenBSD: Makefile,v 1.229.2.1 2017/11/16 12:53:58 pea Exp $
 
 COMMENT-main=	PostgreSQL RDBMS (client)
 COMMENT-server=	PostgreSQL RDBMS (server)
@@ -7,8 +7,8 @@ COMMENT-contrib=PostgreSQL RDBMS contributions
 COMMENT-plpython=Python procedural language for PostgreSQL
 COMMENT-pg_upgrade=Support for upgrading PostgreSQL data from previous version
 
-VERSION=	10.1
-PREV_MAJOR=	9.6
+VERSION=	9.6.6
+PREV_MAJOR=	9.5
 DISTNAME=	postgresql-${VERSION}
 PKGNAME-main=	postgresql-client-${VERSION}
 PKGNAME-server=	postgresql-server-${VERSION}
@@ -18,10 +18,10 @@ PKGNAME-plpython=postgresql-plpython-${VERSION}
 PKGNAME-pg_upgrade=postgresql-pg_upgrade-${VERSION}
 
 CATEGORIES=	databases
-SHARED_LIBS=	ecpg		7.9 \
-		ecpg_compat	4.9 \
-		pgtypes		4.8 \
-		pq		6.10 
+SHARED_LIBS=	ecpg		7.8 \
+		ecpg_compat	4.8 \
+		pgtypes		4.7 \
+		pq		6.9 
 
 HOMEPAGE=	http://www.postgresql.org/
 
@@ -70,7 +70,10 @@ CONFIGURE_ARGS=	--disable-rpath --with-openssl=/usr \
 		--with-system-tzdata="/usr/share/zoneinfo" \
 		--with-openssl \
 		--with-libxml \
-		--disable-thread-safety
+		--disable-thread-safety \
+		--enable-cassert \
+	       	--enable-debug \
+		CFLAGS="-ggdb -O0 -g3 -fno-omit-frame-pointer"
 
 # There is no spinlock support for hppa and alpha yet. Until we have access to
 # a system to get this working, disable them for now. There is
@@ -96,10 +99,10 @@ WANTLIB-server=	${WANTLIB-main} perl pq>=4
 RUN_DEPENDS-contrib= databases/postgresql,-server=${VERSION}
 LIB_DEPENDS-contrib= databases/postgresql=${VERSION} \
 		     ${LIB_DEPENDS-main}
-WANTLIB-contrib=	${WANTLIB-main} pq>=4 perl
+WANTLIB-contrib=	${WANTLIB-main} pq>=4
 
 RUN_DEPENDS-pg_upgrade=	databases/postgresql,-server=${VERSION} \
-			databases/postgresql-previous>=${PREV_MAJOR}
+			databases/postgresql-previous
 LIB_DEPENDS-pg_upgrade= databases/postgresql=${VERSION} \
 		     ${LIB_DEPENDS-main}
 WANTLIB-pg_upgrade=	${WANTLIB-main} pq>=4
