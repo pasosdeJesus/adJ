@@ -2001,39 +2001,6 @@ diff -ruN src/lib/libc/Symbols.list.orig  src/lib/libc/Symbols.list
  
  /* uuid */
  uuid_compare
-diff -ruN src/lib/libc/hidden/xlocale.h.orig src/lib/libc/hidden/xlocale.h
---- src/lib/libc/hidden/xlocale.h.orig	Mon Aug 22 05:21:58 2016
-+++ src/lib/libc/hidden/xlocale.h	Mon Aug 22 05:22:45 2016
-@@ -9,13 +9,10 @@
- #ifndef _LIBC_XLOCALE_H_
- #define _LIBC_XLOCALE_H_
- 
-+#include_next <locale.h>
- #include_next <xlocale.h>
- 
--PROTO_STD_DEPRECATED(newlocale);
--PROTO_STD_DEPRECATED(duplocale);
--PROTO_STD_DEPRECATED(freelocale);
- PROTO_STD_DEPRECATED(querylocale);
--PROTO_STD_DEPRECATED(uselocale);
- 
- PROTO_NORMAL(localeconv_l);
- #if defined(_LIBC_LANGINFO_H_)
-@@ -25,4 +22,14 @@
- PROTO_NORMAL(snprintf_l);
- PROTO_NORMAL(sscanf_l);
- #endif
-+
-+#if defined(_LIBC_TIME_H_)
-+PROTO_NORMAL(strptime_l);
-+PROTO_NORMAL(strftime_l);
-+#endif
-+
-+#if defined(_LIBC_LANGINFO_H_)
-+PROTO_NORMAL(nl_langinfo_l);
-+#endif
-+
- #endif /* !_LIBC_XLOCALE_H_ */
 diff -ruN src61-orig/lib/libc/hidden/time.h src/lib/libc/hidden/time.h
 --- src61-orig/lib/libc/hidden/time.h	Sat May  7 14:05:22 2016
 +++ src/lib/libc/hidden/time.h	Tue May 16 08:11:18 2017
