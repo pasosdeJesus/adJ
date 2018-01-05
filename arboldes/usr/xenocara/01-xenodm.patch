@@ -1,0 +1,24 @@
+diff -ruN xenocara/app/xenodm/config/Xresources.in.orig xenocara/app/xenodm/config/Xresources.in
+--- xenocara/app/xenodm/config/Xresources.in.orig	Fri Jan  5 15:20:31 2018
++++ xenocara/app/xenodm/config/Xresources.in	Fri Jan  5 15:20:53 2018
+@@ -109,16 +109,16 @@
+ *Background: black
+ #endif
+ #ifdef bpp1
+-xlogin*logoFileName: @XENODM_PIXMAPDIR@/OpenBSD_1bpp.xpm
++xlogin*logoFileName: @XENODM_PIXMAPDIR@/adJ_1bpp.xpm
+ #endif
+ #ifdef bpp4
+-xlogin*logoFileName: @XENODM_PIXMAPDIR@/OpenBSD_4bpp.xpm
++xlogin*logoFileName: @XENODM_PIXMAPDIR@/adJ_4bpp.xpm
+ #endif
+ #ifdef bpp8
+-xlogin*logoFileName: @XENODM_PIXMAPDIR@/OpenBSD_8bpp.xpm
++xlogin*logoFileName: @XENODM_PIXMAPDIR@/adJ_8bpp.xpm
+ #endif
+ #ifdef bpp15
+-xlogin*logoFileName: @XENODM_PIXMAPDIR@/OpenBSD_15bpp.xpm
++xlogin*logoFileName: @XENODM_PIXMAPDIR@/adJ_15bpp.xpm
+ #endif
+ 
+ xlogin*useShape: true
