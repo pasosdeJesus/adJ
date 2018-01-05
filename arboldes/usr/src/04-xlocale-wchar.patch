@@ -2812,7 +2812,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/xl
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src55-orig/lib/libc/locale/xlocale.c src/lib/libc/locale/xlocale.c
 --- src55-orig/lib/libc/locale/xlocale.c	Wed Dec 31 19:00:00 1969
 +++ src/lib/libc/locale/xlocale.c	Wed Apr  3 11:04:42 2013
-@@ -0,0 +1,433 @@
+@@ -0,0 +1,434 @@
 +/*-
 + * Copyright (c) 2011 The FreeBSD Foundation
 + * All rights reserved.
@@ -3120,7 +3120,8 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src55-orig/lib/libc/locale/xlocal
 +		useenv = 1;
 +	}
 +
-+	
++	/* In FreeBSD mask start in bit 1, in OpenBSD in bit 2, see locale.h */
++        mask >>= 1;
 +	for (type=0 ; type<XLC_LAST ; type++) {
 +		if (mask & 1) {
 +			if (useenv) {
@@ -3495,7 +3496,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/regress/lib/libc/l
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regress/lib/libc/locale/check_xlocale/check_xlocale.c
 --- src53collation/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Wed Dec 31 19:00:00 1969
 +++ src/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Wed Apr  3 12:47:22 2013
-@@ -0,0 +1,164 @@
+@@ -0,0 +1,178 @@
 +/**
 + * Public domain according to Colombian Legislation. 
 + * http://www.pasosdejesus.org/dominio_publico_colombia.html
@@ -3541,24 +3542,38 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/regress/lib/libc/l
 +
 +void test_xlocale() {
 +	static locale_t cl;
-+/*	cl = __get_locale();
-+	printf("%p\n", cl);
-+	dpl((void *)cl); */
 +	char *nl = setlocale(LC_ALL, "es_CO.UTF-8");
-+//	dpl((void *)__get_locale());
 +	printf("locale %s\n", nl);
 +	locale_t es_CO_UTF_8 = uselocale(NULL);
-+//	dpl(es_CO_UTF_8);
++	//dpl(es_CO_UTF_8);
 +	char *r;
 +	p(strcmp((r = (char *)querylocale(LC_CTYPE, es_CO_UTF_8)), "es_CO.UTF-8") == 0);
 +	printf("r=%s\n", r);
 +	p(strcmp((r = (char *)querylocale(LC_COLLATE, es_CO_UTF_8)), "es_CO.UTF-8") == 0);
++	printf("r=%s\n", r);
 +
 +	p(es_CO_UTF_8 != NULL);
 +	locale_t esp = newlocale(LC_CTYPE_MASK | LC_COLLATE_MASK, "es_CO.UTF-8", NULL);
 +	p(es_CO_UTF_8 != esp);
-+//	p(iswlower_l(L'ñ', esp));
-+//	p(!iswlower_l(L'Ñ', esp));
++	p(strcmp((r = (char *)querylocale(LC_CTYPE, esp)), "es_CO.UTF-8") == 0);
++	printf("r=%s\n", r);
++	p(strcmp((r = (char *)querylocale(LC_COLLATE, esp)), "es_CO.UTF-8") == 0);
++	printf("r=%s\n", r);
++
++	p(iswlower_l(L'ñ', esp));
++	p(!iswlower_l(L'Ñ', esp));
++	p(strcoll_l("á", "e", esp) < 0);
++
++	nl = setlocale(LC_ALL, "C");
++	printf("locale %s\n", nl);
++	locale_t esp15 = newlocale(LC_CTYPE_MASK | LC_COLLATE_MASK, "es_CO.UTF-8", NULL);
++	p(strcmp((r = (char *)querylocale(LC_CTYPE, esp15)), "es_CO.UTF-8") == 0);
++	printf("r=%s\n", r);
++	p(strcmp((r = (char *)querylocale(LC_COLLATE, esp15)), "es_CO.UTF-8") == 0);
++	printf("r=%s\n", r);
++	p(iswlower_l(L'ñ', esp15));
++	p(!iswlower_l(L'Ñ', esp15));
++	p(strcoll_l("á", "e", esp15) < 0);
 +
 +	//__print_ctypetable();
 +	locale_t esp2 = duplocale(es_CO_UTF_8);
@@ -3676,7 +3691,7 @@ diff -ruN -x CVS -x obj src55-orig/include/Makefile src/include/Makefile
 diff -ruN src62-orig/include/xlocale.h src/include/xlocale.h
 --- src62-orig/include/xlocale.h	Wed Dec 31 19:00:00 1969
 +++ src/include/xlocale.h	Thu Nov 23 13:06:33 2017
-@@ -0,0 +1,462 @@
+@@ -0,0 +1,457 @@
 +/*-
 + * Copyright (c) 2011, 2012 The FreeBSD Foundation
 + * All rights reserved.
@@ -3732,16 +3747,11 @@ diff -ruN src62-orig/include/xlocale.h src/include/xlocale.h
 +#include <locale.h>
 +#endif
 +
-+
-+#define LC_COLLATE_MASK  (1<<0)
-+#define LC_CTYPE_MASK    (1<<1)
-+#define LC_MESSAGES_MASK (1<<2)
-+#define LC_MONETARY_MASK (1<<3)
-+#define LC_NUMERIC_MASK  (1<<4)
-+#define LC_TIME_MASK     (1<<5)
-+#define LC_ALL_MASK      (LC_COLLATE_MASK | LC_CTYPE_MASK | LC_MESSAGES_MASK | \
-+			  LC_MONETARY_MASK | LC_NUMERIC_MASK | LC_TIME_MASK)
-+#define LC_GLOBAL_LOCALE ((locale_t)-1)
++/* LC_COLLATE_MASK and other masks defined in
++ * locale.h in a different way to FreeBSD where
++ * they start at 1, but in OpenBSD they start at
++ * 2
++ */
 +
 +#ifndef _LOCALE_T_DEFINED
 +#define _LOCALE_T_DEFINED
