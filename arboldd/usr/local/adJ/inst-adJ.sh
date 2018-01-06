@@ -2787,16 +2787,16 @@ for i in ruby19-railties-3.1.3 ruby19-actionmailer-3.1.3 \
 	pkg_delete -I -D dependencies $i >> /var/www/tmp/inst-adJ.bitacora 2>&1
 done
 
-echo "* Configurar ruby-2.4" >> /var/www/tmp/inst-adJ.bitacora;
-if (test ! -f "/usr/local/bin/ruby24") then {
+echo "* Configurar ruby-2.5" >> /var/www/tmp/inst-adJ.bitacora;
+if (test ! -f "/usr/local/bin/ruby25") then {
 	insacp ruby
-	ln -sf /usr/local/bin/ruby24 /usr/local/bin/ruby
-	ln -sf /usr/local/bin/erb24 /usr/local/bin/erb
-	ln -sf /usr/local/bin/irb24 /usr/local/bin/irb
-	ln -sf /usr/local/bin/rdoc24 /usr/local/bin/rdoc
-	ln -sf /usr/local/bin/ri24 /usr/local/bin/ri
-	ln -sf /usr/local/bin/rake24 /usr/local/bin/rake
-	ln -sf /usr/local/bin/gem24 /usr/local/bin/gem
+	ln -sf /usr/local/bin/ruby25 /usr/local/bin/ruby
+	ln -sf /usr/local/bin/erb25 /usr/local/bin/erb
+	ln -sf /usr/local/bin/irb25 /usr/local/bin/irb
+	ln -sf /usr/local/bin/rdoc25 /usr/local/bin/rdoc
+	ln -sf /usr/local/bin/ri25 /usr/local/bin/ri
+	ln -sf /usr/local/bin/rake25 /usr/local/bin/rake
+	ln -sf /usr/local/bin/gem25 /usr/local/bin/gem
 } fi;
 
 if (test ! -f /home/$uadJ/.irbrc) then {
