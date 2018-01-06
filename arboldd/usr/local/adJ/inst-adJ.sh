@@ -1871,7 +1871,7 @@ kern.shminfo.shmmax=50331648
 kern.shminfo.shmall=51200
 kern.maxfiles=20000
 EOF
-	sysctl -w kern.seminfo.semmni=1024> /dev/null
+	sysctl -w kern.shminfo.shmmni=1024> /dev/null
 	sysctl -w kern.seminfo.semmns=2048 >/dev/null
 	sysctl -w kern.shminfo.shmmax=50331648 > /dev/null
 	sysctl -w kern.shminfo.shmall=51200 > /dev/null
