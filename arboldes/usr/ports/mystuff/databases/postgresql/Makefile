@@ -70,10 +70,7 @@ CONFIGURE_ARGS=	--disable-rpath --with-openssl=/usr \
 		--with-system-tzdata="/usr/share/zoneinfo" \
 		--with-openssl \
 		--with-libxml \
-		--disable-thread-safety \
-		--enable-cassert \
-	       	--enable-debug \
-		CFLAGS="-ggdb -O0 -g3 -fno-omit-frame-pointer"
+		--disable-thread-safety 
 
 # There is no spinlock support for hppa and alpha yet. Until we have access to
 # a system to get this working, disable them for now. There is

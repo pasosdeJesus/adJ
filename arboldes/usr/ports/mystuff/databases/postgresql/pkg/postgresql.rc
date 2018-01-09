@@ -4,30 +4,30 @@
 
 datadir="/var/postgresql/data"
 
-daemon="${TRUEPREFIX}/bin/pg_ctl"
-daemon_flags="-w -l /var/postgresql/logfile"
-daemon_user="_postgresql"
+servicio="${TRUEPREFIX}/bin/pg_ctl"
+servicio_flags="-w -l /var/postgresql/logfile"
+servicio_user="_postgresql"
 
 . /etc/rc.d/rc.subr
 
 rc_usercheck=NO
 
 rc_check() {
-	${rcexec} "${daemon} -D ${datadir} status"
+	${rcexec} "${servicio} -D ${datadir} status"
 }
 
 rc_reload() {
-	${rcexec} "${daemon} -D ${datadir} reload"
+	${rcexec} "${servicio} -D ${datadir} reload"
 }
 
 rc_start() {
 	rm -f ${datadir}/postmaster.pid
-	${rcexec} "${daemon} -D ${datadir} start ${daemon_flags}"
+	${rcexec} "${servicio} -D ${datadir} start ${servicio_flags}"
 }
 
 rc_stop() {
-	${rcexec} "${daemon} -D ${datadir} stop -m fast" || \
-		${rcexec} "${daemon} -D ${datadir} stop -m immediate"
+	${rcexec} "${servicio} -D ${datadir} stop -m fast" || \
+		${rcexec} "${servicio} -D ${datadir} stop -m immediate"
 }
 
 rc_cmd $1
