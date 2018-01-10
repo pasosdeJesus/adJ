@@ -2692,22 +2692,6 @@ diff -ruN src/lib/libc/hidden/monetary.h.orig src/lib/libc/hidden/monentary.h
 +PROTO_NORMAL(strfmon_l);
  
  #endif /* !_LIBC_MONETARY_H_ */
-diff -ruN src/lib/libc/hidden/xlocale.h.orig src/lib/libc/hidden/xlocale.h
---- src/lib/libc/hidden/xlocale.h.orig	Sun Aug 21 23:07:28 2016
-+++ src/lib/libc/hidden/xlocale.h	Sun Aug 21 23:06:30 2016
-@@ -17,4 +17,12 @@
- PROTO_STD_DEPRECATED(querylocale);
- PROTO_STD_DEPRECATED(uselocale);
- 
-+PROTO_NORMAL(localeconv_l);
-+#if defined(_LIBC_LANGINFO_H_)
-+PROTO_NORMAL(nl_langinfo_l);
-+#endif
-+#if defined(_LIBC_STDIO_H_)
-+PROTO_NORMAL(snprintf_l);
-+PROTO_NORMAL(sscanf_l);
-+#endif
- #endif /* !_LIBC_XLOCALE_H_ */
 diff -ruN src/lib/libc/hidden/stdlib.h.orig  src/lib/libc/hidden/stdlib.h
 --- src/lib/libc/hidden/stdlib.h.orig	Sun Aug 21 23:26:56 2016
 +++ src/lib/libc/hidden/stdlib.h	Sun Aug 21 23:27:02 2016
@@ -2755,4 +2739,3 @@ diff -ruN src62-orig/lib/libc/hidden/langinfo.h src/lib/libc/hidden/langinfo.h
 +PROTO_NORMAL(nl_langinfo_l);
  
  #endif	/* _LIBC_LANGINFO_H_ */
-

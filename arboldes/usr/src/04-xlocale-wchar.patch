@@ -2812,7 +2812,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/xl
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src55-orig/lib/libc/locale/xlocale.c src/lib/libc/locale/xlocale.c
 --- src55-orig/lib/libc/locale/xlocale.c	Wed Dec 31 19:00:00 1969
 +++ src/lib/libc/locale/xlocale.c	Wed Apr  3 11:04:42 2013
-@@ -0,0 +1,433 @@
+@@ -0,0 +1,447 @@
 +/*-
 + * Copyright (c) 2011 The FreeBSD Foundation
 + * All rights reserved.
@@ -2844,9 +2844,13 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src55-orig/lib/libc/locale/xlocal
 + * $FreeBSD: src/lib/libc/locale/xlocale.c,v 1.6 2012/11/17 01:49:31 svnexp Exp $
 + */
 +
++#include <errno.h>
++#include <locale.h>
 +#include <pthread.h>
 +#include <stdio.h>
 +#include <string.h>
++
++#include "rune.h"
 +#include "runetype.h"
 +#include "xlocale_private.h"
 +
@@ -3106,6 +3110,15 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src55-orig/lib/libc/locale/xlocal
 +
 +	_once(&once_control, init_key);
 +
++	/* From newlocale of OpenBSD, 
++	 * the following may initialize UTF-8 for later use. 
++	 */
++	if ((locale = _get_locname(LC_CTYPE, locale)) == NULL) {
++		errno = ENOENT;
++		return _LOCALE_NONE;
++	}
++
++
 +	locale_t new = alloc_locale();
 +	if (NULL == new) {
 +		return (NULL);
@@ -3120,7 +3133,8 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src55-orig/lib/libc/locale/xlocal
 +		useenv = 1;
 +	}
 +
-+	
++	/* In FreeBSD mask start in bit 1, in OpenBSD in bit 2, see locale.h */
++        mask >>= 1;
 +	for (type=0 ; type<XLC_LAST ; type++) {
 +		if (mask & 1) {
 +			if (useenv) {
@@ -3495,7 +3509,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/regress/lib/libc/l
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regress/lib/libc/locale/check_xlocale/check_xlocale.c
 --- src53collation/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Wed Dec 31 19:00:00 1969
 +++ src/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Wed Apr  3 12:47:22 2013
-@@ -0,0 +1,164 @@
+@@ -0,0 +1,171 @@
 +/**
 + * Public domain according to Colombian Legislation. 
 + * http://www.pasosdejesus.org/dominio_publico_colombia.html
@@ -3541,24 +3555,31 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/regress/lib/libc/l
 +
 +void test_xlocale() {
 +	static locale_t cl;
-+/*	cl = __get_locale();
-+	printf("%p\n", cl);
-+	dpl((void *)cl); */
 +	char *nl = setlocale(LC_ALL, "es_CO.UTF-8");
-+//	dpl((void *)__get_locale());
 +	printf("locale %s\n", nl);
 +	locale_t es_CO_UTF_8 = uselocale(NULL);
-+//	dpl(es_CO_UTF_8);
++	//dpl(es_CO_UTF_8);
 +	char *r;
 +	p(strcmp((r = (char *)querylocale(LC_CTYPE, es_CO_UTF_8)), "es_CO.UTF-8") == 0);
 +	printf("r=%s\n", r);
 +	p(strcmp((r = (char *)querylocale(LC_COLLATE, es_CO_UTF_8)), "es_CO.UTF-8") == 0);
++	printf("r=%s\n", r);
 +
 +	p(es_CO_UTF_8 != NULL);
 +	locale_t esp = newlocale(LC_CTYPE_MASK | LC_COLLATE_MASK, "es_CO.UTF-8", NULL);
 +	p(es_CO_UTF_8 != esp);
-+//	p(iswlower_l(L'ñ', esp));
-+//	p(!iswlower_l(L'Ñ', esp));
++	p(strcmp((r = (char *)querylocale(LC_CTYPE, esp)), "es_CO.UTF-8") == 0);
++	printf("r=%s\n", r);
++	p(strcmp((r = (char *)querylocale(LC_COLLATE, esp)), "es_CO.UTF-8") == 0);
++	printf("r=%s\n", r);
++
++	nl = setlocale(LC_ALL, "C");
++	printf("locale %s\n", nl);
++	locale_t esp15 = newlocale(LC_CTYPE_MASK | LC_COLLATE_MASK, "es_CO.UTF-8", NULL);
++	p(strcmp((r = (char *)querylocale(LC_CTYPE, esp15)), "es_CO.UTF-8") == 0);
++	printf("r=%s\n", r);
++	p(strcmp((r = (char *)querylocale(LC_COLLATE, esp15)), "es_CO.UTF-8") == 0);
++	printf("r=%s\n", r);
 +
 +	//__print_ctypetable();
 +	locale_t esp2 = duplocale(es_CO_UTF_8);
@@ -3676,7 +3697,7 @@ diff -ruN -x CVS -x obj src55-orig/include/Makefile src/include/Makefile
 diff -ruN src62-orig/include/xlocale.h src/include/xlocale.h
 --- src62-orig/include/xlocale.h	Wed Dec 31 19:00:00 1969
 +++ src/include/xlocale.h	Thu Nov 23 13:06:33 2017
-@@ -0,0 +1,462 @@
+@@ -0,0 +1,390 @@
 +/*-
 + * Copyright (c) 2011, 2012 The FreeBSD Foundation
 + * All rights reserved.
@@ -3732,16 +3753,11 @@ diff -ruN src62-orig/include/xlocale.h src/include/xlocale.h
 +#include <locale.h>
 +#endif
 +
-+
-+#define LC_COLLATE_MASK  (1<<0)
-+#define LC_CTYPE_MASK    (1<<1)
-+#define LC_MESSAGES_MASK (1<<2)
-+#define LC_MONETARY_MASK (1<<3)
-+#define LC_NUMERIC_MASK  (1<<4)
-+#define LC_TIME_MASK     (1<<5)
-+#define LC_ALL_MASK      (LC_COLLATE_MASK | LC_CTYPE_MASK | LC_MESSAGES_MASK | \
-+			  LC_MONETARY_MASK | LC_NUMERIC_MASK | LC_TIME_MASK)
-+#define LC_GLOBAL_LOCALE ((locale_t)-1)
++/* LC_COLLATE_MASK and other masks defined in
++ * locale.h in a different way to FreeBSD where
++ * they start at 1, but in OpenBSD they start at
++ * 2
++ */
 +
 +#ifndef _LOCALE_T_DEFINED
 +#define _LOCALE_T_DEFINED
@@ -3906,101 +3922,34 @@ diff -ruN src62-orig/include/xlocale.h src/include/xlocale.h
 +
 +
 +__BEGIN_DECLS
-+inline int iswctype_l(wint_t, wctype_t, locale_t);
-+
-+inline int isalnum_l(int, locale_t);
-+
-+inline int isalpha_l(int, locale_t);
-+
-+inline int isblank_l(int, locale_t);
-+
-+inline int iscntrl_l(int, locale_t);
-+
-+inline int isdigit_l(int, locale_t);
-+
-+inline int isgraph_l(int, locale_t);
 +
 +inline int ishexnumber_l(int, locale_t);
 +
 +inline int isideogram_l(int, locale_t);
 +
-+inline int islower_l(int, locale_t);
-+
 +inline int isnumber_l(int, locale_t);
 +
 +inline int isphonogram_l(int, locale_t);
 +
-+inline int isprint_l(int, locale_t);
-+
-+inline int ispunct_l(int, locale_t);
-+
 +inline int isrune_l(int, locale_t);
 +
-+inline int isspace_l(int, locale_t);
-+
 +inline int isspecial_l(int, locale_t);
-+
-+inline int isupper_l(int, locale_t);
-+
-+inline int isxdigit_l(int, locale_t);
-+
-+inline int iswalnum_l(wint_t, locale_t);
-+
-+inline int iswalpha_l(wint_t, locale_t);
-+
-+inline int iswblank_l(wint_t, locale_t);
-+
-+inline int iswcntrl_l(wint_t, locale_t);
-+
-+inline int iswdigit_l(wint_t, locale_t);
-+
-+inline int iswgraph_l(wint_t, locale_t);
 +
 +inline int iswhexnumber_l(wint_t, locale_t);
 +
 +inline int iswideogram_l(wint_t, locale_t);
 +
-+inline int iswlower_l(wint_t, locale_t);
-+
 +inline int iswnumber_l(wint_t, locale_t);
 +
 +inline int iswphonogram_l(wint_t, locale_t);
 +
-+inline int iswprint_l(wint_t, locale_t);
-+
-+inline int iswpunct_l(wint_t, locale_t);
-+
 +inline int iswrune_l(wint_t, locale_t);
-+
-+inline int iswspace_l(wint_t, locale_t);
 +
 +inline int iswspecial_l(wint_t, locale_t);
 +
-+inline int iswupper_l(wint_t, locale_t);
-+
-+inline int iswxdigit_l(wint_t, locale_t);
-+
-+inline wint_t towlower_l(wint_t, locale_t);
-+
-+inline wint_t towupper_l(wint_t, locale_t);
-+
-+int iswctype_l(wint_t, wctype_t, locale_t);
-+
-+wctype_t wctype_l(const char *, locale_t);
-+
-+wint_t towctrans_l(wint_t, wctrans_t, locale_t);
-+
-+wint_t nextwctype_l(wint_t, wctype_t, locale_t);
-+
 +wint_t nextwctype(wint_t, wctype_t);
 +
-+wctrans_t wctrans_l(const char *, locale_t);
-+
-+inline int digittoint_l(int, locale_t);
-+
-+inline int tolower_l(int, locale_t);
-+
-+inline int toupper_l(int, locale_t);
++wint_t nextwctype_l(wint_t, wctype_t, locale_t);
 +
 +__END_DECLS
 +#endif /* defined(_CTYPE_H_) || defined(_WCTYPE_H) */
@@ -4266,7 +4215,7 @@ diff -ruN src/lib/libc/hidden/wchar.h.orig src/lib/libc/hidden/wchar.h
 diff -ruN src59-orig/lib/libc/hidden/xlocale.h src/lib/libc/hidden/xlocale.h
 --- src59-orig/lib/libc/hidden/xlocale.h	Wed Dec 31 19:00:00 1969
 +++ src/lib/libc/hidden/xlocale.h	Fri Aug 19 22:07:22 2016
-@@ -0,0 +1,20 @@
+@@ -0,0 +1,22 @@
 +/*
 + * Public domain according to Colombian Legislation.
 + * http://www.pasosdejesus.org/dominio_publico_colombia.html
@@ -4278,13 +4227,15 @@ diff -ruN src59-orig/lib/libc/hidden/xlocale.h src/lib/libc/hidden/xlocale.h
 +#ifndef _LIBC_XLOCALE_H_
 +#define _LIBC_XLOCALE_H_
 +
++#include_next <locale.h>
 +#include_next <xlocale.h>
 +
-+PROTO_STD_DEPRECATED(newlocale);
-+PROTO_STD_DEPRECATED(duplocale);
-+PROTO_STD_DEPRECATED(freelocale);
 +PROTO_STD_DEPRECATED(querylocale);
-+PROTO_STD_DEPRECATED(uselocale);
++
++#if defined(_LIBC_TIME_H_)
++PROTO_NORMAL(strptime_l);
++PROTO_NORMAL(strftime_l);
++#endif
 +
 +#endif /* !_LIBC_XLOCALE_H_ */
 diff -ruN src62-orig/include/ctype.h src/include/ctype.h

@@ -2,8 +2,8 @@
 Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y que esperamos el regreso del señor Jesucristo.
 
-### Versión: 6.2b1
-Fecha de publicación: 24/Dic/2017
+### Versión: 6.2b2
+Fecha de publicación: 9/Ene/2018
 
 Puede ver novedades respecto a OpenBSD en:
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_2/Novedades_OpenBSD.md>
@@ -68,7 +68,7 @@ Puede ver novedades respecto a OpenBSD en:
 
 # Novedades respecto a paquetes 
 
-* retroportado de Current
+* Retroportados de Current: ruby 2.5
 * Se han actualizado más los binarios de los siguientes paquetes para
 cerrar fallas de seguridad (a partir de portes más recientes para 
 OpenBSD 6.2):

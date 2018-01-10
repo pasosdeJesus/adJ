@@ -5,7 +5,7 @@
 
 VER=6.2
 REV=0
-VESP="a1"
+VESP="b2"
 VERP=61
 
 ACVERC=`uname -r`

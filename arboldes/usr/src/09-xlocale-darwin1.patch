@@ -1942,7 +1942,7 @@ diff -u src-ant/lib/libc/stdio/scanf.3 src/lib/libc/stdio/scanf.3
 diff -u src-ant/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regress/lib/libc/locale/check_xlocale.c
 --- src-ant/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Thu May 15 05:35:00 2014
 +++ src/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Thu May 15 05:35:39 2014
-@@ -32,26 +32,13 @@
+@@ -32,22 +32,14 @@
  	}
  
  
@@ -1958,21 +1958,17 @@ diff -u src-ant/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regres
 -#define dpl(__l) printf("%s ", #__l); __print_locale(__l);
 -
  void test_xlocale() {
--	static locale_t cl;
--/*	cl = __get_locale();
--	printf("%p\n", cl);
--	dpl((void *)cl); */
+ 	static locale_t cl;
  	char *nl = setlocale(LC_ALL, "es_CO.UTF-8");
--//	dpl((void *)__get_locale());
  	printf("locale %s\n", nl);
 -	locale_t es_CO_UTF_8 = uselocale(NULL);
--//	dpl(es_CO_UTF_8);
+-	//dpl(es_CO_UTF_8);
 +	locale_t es_CO_UTF_8 = duplocale(uselocale(NULL));
 +	dpl(es_CO_UTF_8);
  	char *r;
  	p(strcmp((r = (char *)querylocale(LC_CTYPE, es_CO_UTF_8)), "es_CO.UTF-8") == 0);
  	printf("r=%s\n", r);
-@@ -69,7 +56,6 @@
+@@ -83,7 +75,6 @@
  	locale_t esp4 = duplocale(esp3);
  	locale_t esp5 = duplocale(esp3);
  	locale_t esp6 = duplocale(esp3);
@@ -1980,7 +1976,7 @@ diff -u src-ant/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regres
  	p(es_CO_UTF_8 != esp2);
  	freelocale(esp);
  	freelocale(esp2);
-@@ -77,6 +63,7 @@
+@@ -91,6 +82,7 @@
  	freelocale(esp4);
  	freelocale(esp5);
  	freelocale(esp6);
@@ -1988,7 +1984,7 @@ diff -u src-ant/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regres
  }
  
  void test_wchar() {
-@@ -154,6 +141,27 @@
+@@ -168,6 +160,27 @@
  	p(wctob_l(L'a', l) == 'a');
  	freelocale(l);
  
@@ -2016,7 +2012,7 @@ diff -u src-ant/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regres
  }
  
  void test_ctype() {
-@@ -259,7 +267,7 @@
+@@ -273,7 +286,7 @@
  	p(!isspecial_l('a', es_CO_UTF_8));
  	p(iswspecial_l(0x00b2, es_CO_UTF_8));
  	p(!iswspecial_l(L'\0', es_CO_UTF_8));
@@ -2025,7 +2021,7 @@ diff -u src-ant/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regres
  	p(tolower_l('A', es_CO_UTF_8) == 'a');
  	p(tolower('A') == 'a');
  	p(_tolower('A') == 'a');
-@@ -289,13 +297,14 @@
+@@ -303,13 +316,14 @@
  		p(towctrans_l(lu[c][0], tu, es_CO_UTF_8) == lu[c][1]);
  		p(towupper_l(lu[c][0], es_CO_UTF_8) == lu[c][1]);
  	}
@@ -2041,7 +2037,7 @@ diff -u src-ant/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regres
  	printf("locale %s\n", nl);
  	printf("__mb_cur_max=%zu\n", __mb_cur_max());
  	p(__mb_cur_max() == 1);
-@@ -303,7 +312,7 @@
+@@ -317,7 +331,7 @@
  	p(strcasecmp("n", "N") == 0);
  	p(strcasecmp("\0xf1", "\0xd1") == 0); // ñ Ñ
  	nl = setlocale(LC_ALL, "es_CO.UTF-8");
@@ -2050,7 +2046,7 @@ diff -u src-ant/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regres
  	printf("locale %s\n", nl);
  	printf("__mb_cur_max()=%zu\n", __mb_cur_max());
  	p(__mb_cur_max() == 4); 
-@@ -431,6 +440,7 @@
+@@ -445,6 +459,7 @@
  	p(wcscasecmp(L"á", L"Á") == 0);
  	p(wcscasecmp(L"a", L"á") <= 0);
  	p(wcsncasecmp_l(L"n", L"N", 1, es_CO_UTF_8) == 0);
@@ -2058,7 +2054,7 @@ diff -u src-ant/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regres
  }
  
  void test_monetary() 
-@@ -438,6 +448,7 @@
+@@ -452,6 +467,7 @@
  	struct lconv *p;
  	char col[256];
  	char *nl = setlocale(LC_ALL, "es_CO.UTF-8");
@@ -2066,7 +2062,7 @@ diff -u src-ant/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regres
  	locale_t tloc = uselocale(NULL);
  	locale_t es_CO_UTF_8 = duplocale(tloc);
  	setlocale(LC_ALL, "POSIX");
-@@ -468,30 +479,49 @@
+@@ -482,30 +498,49 @@
  	p(p->n_sign_posn == 1);
  	strfmon_l(col, sizeof(col), es_CO_UTF_8, "%n", -3456.781); 
  	p(strcmp(col, "-$ 3.456,78") == 0);
@@ -2119,7 +2115,7 @@ diff -u src-ant/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regres
  	snprintf_l(col, sizeof(col), es_CO_UTF_8, "%f", 1000000.01);
  	p(strcmp(col, "1000000,010000") == 0);
  	snprintf_l(col, sizeof(col), es_CO_UTF_8, "%'d", 1000000);
-@@ -514,6 +544,62 @@
+@@ -528,6 +563,62 @@
  	sscanf_l(" -3,1", es_CO_UTF_8, "%f", &fl);
  	printf("fl=%f\n", fl);
  	p(fabs(fl + 3.1) < FLT_EPSILON);
@@ -2182,7 +2178,7 @@ diff -u src-ant/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regres
  }
  
  void test_time() 
-@@ -521,6 +607,7 @@
+@@ -535,6 +626,7 @@
  	char col[256];
  	wchar_t wcol[256];
  	char *nl = setlocale(LC_ALL, "es_CO.UTF-8");
@@ -2190,7 +2186,7 @@ diff -u src-ant/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regres
  	locale_t tloc = uselocale(NULL);
  	locale_t esc = duplocale(tloc);
  	struct tm tl;
-@@ -538,8 +625,130 @@
+@@ -552,8 +644,130 @@
  	p(strcmp(col, "martes") == 0);
  	wcsftime_l(wcol, sizeof(wcol), L"%A", &tl, esc);
  	p(wcscmp(wcol, L"martes") == 0);
@@ -2321,7 +2317,7 @@ diff -u src-ant/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regres
  int main()
  {
  	test_xlocale();
-@@ -549,6 +758,7 @@
+@@ -563,6 +777,7 @@
  	test_monetary();
  	test_numeric();
  	test_time();

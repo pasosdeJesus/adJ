@@ -850,7 +850,7 @@ if (test "$sn" = "s") then {
 	#paquete p7zip paquetes "p7zip p7zip-rar"
 	#paquete pidgin paquetes "libpurple pidgin"
 	paquete rsync
-	paquete ruby paquetes "ruby ruby24-ri_docs" 2.4
+	paquete ruby paquetes "ruby ruby25-ri_docs" 2.5
 	#paquete samba paquetes "ldb samba tevent"
 	#paquete webkitgtk4 
 	#paquete webkit paquetes "webkit webkit-gtk3"

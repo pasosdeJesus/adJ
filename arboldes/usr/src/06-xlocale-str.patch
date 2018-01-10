@@ -1093,7 +1093,25 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src54-x5/regress/lib/libc/locale/check_is
 diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regress/lib/libc/locale/check_xlocale/check_xlocale.c
 --- src53xlocale2/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Tue Apr 16 09:47:00 2013
 +++ src/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Tue Apr 16 09:52:42 2013
-@@ -291,11 +291,153 @@
+@@ -65,6 +65,8 @@
+ 	wchar_t am;
+ 	p((am = towlower_l(L'Á', esp)) == L'á');
+ 	printf("am=%lc\n", am);
++	p(iswlower_l(L'ñ', esp));
++	p(!iswlower_l(L'Ñ', esp));
+ 
+ 	nl = setlocale(LC_ALL, "C");
+ 	printf("locale %s\n", nl);
+@@ -77,6 +79,8 @@
+ 	p(!iswlower_l(L'Ñ', esp15));
+ 	p((am = towlower_l(L'Á', esp15)) == L'á');
+ 	printf("am=%lc\n", am);
++	p(iswlower_l(L'ñ', esp15));
++	p(!iswlower_l(L'Ñ', esp15));
+ 
+ 
+ 	//__print_ctypetable();
+@@ -308,11 +312,153 @@
  
  }
  
