@@ -7,9 +7,41 @@
 
 " Se basa en modo DocBook para vim
 
-" Agregar a ~/.vim/filetype.vim
+" CONFIGURACIÓN:
+"
+" 1. Agregar a ~/.vim/filetype.vim
 " au! BufRead,BufNewFile *.gbfxml       setfiletype gbfxml
-" y poner este archivo en ~/.vim/ftplugin con nombre gbfxml.vim
+" 2. Copiar este archivo en ~/.vim/ftplugin con nombre gbfxml.vim
+" 3. Copiar el archivo herram/vim/syntax/gbfxml.vim en ~/.vim/syntax/
+"
+" MODO DE USO
+"
+" Edite un archivo con extensión gbfxml
+" - <b inserta una nueva referencia bibliografica es decir: 
+"     <bib id="">
+"       <tt></tt>
+"       <author></author>
+"       <editor></editor>
+"       <otherbib></otherbib>
+"     </bib>
+" - <ci inserta una cita a una referencia bibliografica es decir:
+"     <citebib id=""/>
+" - <rb inserta una nota al pie de página es decir:
+"     <rb xml:lang="es"><rf></rf></rb>
+" - <t  inserta un traducción a español es decir:
+"     <t xml:lang="es"></t>
+" - <w3 inserta referencia strong a un articulo pero sin palabra en
+"   español es decir:
+"     <wi type="G" value="3588,,"/>
+" - <w2 inserta referencia strong a la conjunción Y pero sin palabra en
+"   español, es decir:
+"     <wi type="G" value="2532,,"/>
+" - <w1 inserta referencia strong a otra conjunión Y pero sin palabra en
+"   español
+"     <wi type="G" value="1161,,"/>
+" - <wi pone la palabra siguiente entre marcado para agregar referencia
+"   strong, es decir:
+"     <wi type="G" value=",">laPalabraQueSigue</wi>
 
 
 " Sólo carga plugin si el usuario lo desea y no se ha hecho antes
