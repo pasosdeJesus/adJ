@@ -3,7 +3,7 @@ Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y que esperamos el regreso del señor Jesucristo.
 
 ### Versión: 6.2
-Fecha de publicación: 29/Ene/2018
+Fecha de publicación: 22/Feb/2018
 
 Puede ver novedades respecto a OpenBSD en:
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_2/Novedades_OpenBSD.md>
@@ -12,8 +12,8 @@ Puede ver novedades respecto a OpenBSD en:
 
 # Kernel y Sistema Base
 
-* Parches al sistema basta hasta el 12.Dic.2017 que cierran 1 falla
-  de seguridad y 2 de robustez.
+* Parches al sistema basta hasta el 20.Feb.2017 que cierran 3 fallas
+  de seguridad y 5 de robustez.
 * Controladores ampliados o mejorados para amd64
 	* Red:
 		* Inalámbrica: `iwm` ahora soporta Intel 8265 y 3168, 
@@ -45,10 +45,10 @@ Puede ver novedades respecto a OpenBSD en:
 	* Modelo fork+exec usado ahora por pflogd y  tcpdumpd.
 * Otros
 	* Ahora el sistema base utiliza clang como compilador base.
-	* La edición de línea UTF-8 ha mejorado en ksh.
+	* La edición con codificación UTF-8 ha mejorado en ksh.
 	* Hibernación y suspención automática cuando la bateria es baja
 	* Herramientas para mejorar depuración ctfdump y ctfconv, nueva
- 	  sección .SUNW_ctf en kernel genérico con datos CTF y uso
+ 	  sección `.SUNW_ctf` en kernel genérico con datos CTF y uso
 	  de información CTF por parte de ddb
 	* Mejoras a syslogd y newsyslog
 	* Mejor implementación de Thread Control Block y funciones pasadas
@@ -58,7 +58,6 @@ Puede ver novedades respecto a OpenBSD en:
 	* Incluye OpenSMTP 6.0 (con solución a fallas), OpenSSH 7.6 (que 
 	  entre otras añade funcionalidad de reenviador dinámico inverso,
 	  LibreSSL 2.6.3 y  mandoc 1.14.3 
-	* 
 
 * El sistema base incluye mejoras a componentes auditados y mejorados 
   como ```Xenocara``` (```Xorg 7.7```), ```gcc``` 4.2.1, ```perl``` 5.24.1, 
@@ -103,10 +102,6 @@ Puede ver novedades respecto a OpenBSD en:
 	- biblesync, sword y xiphos
 	- markup, repasa y sigue con Ocaml 4.0.5
 
-* Se incluye beta 3 de sivel2 que tiene entres sus novedades:
-
-* Se incluye sivel1.2.4 cuyas novedades son:
-
-* Archivo de ordenes 
-
+* Se incluye beta 3 de sivel2
+* Se incluye sivel-1.2.4
 

@@ -852,6 +852,8 @@ if (test "$sn" = "s") then {
 	#paquete gcc paquetes "gcc" 4.9
 	#paquete git paquetes "git"
 	#paquete mariadb-client paquetes "mariadb-client mariadb-server" 
+	paquete curl
+	paquete libtorrent
 	paquete ocamlbuild 
 	#paquete p7zip paquetes "p7zip p7zip-rar"
 	#paquete pidgin paquetes "libpurple pidgin"
