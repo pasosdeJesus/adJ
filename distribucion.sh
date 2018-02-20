@@ -765,7 +765,13 @@ if (test "$sn" = "s") then {
 
 	# Modificados para posibilitar compilación
 	# Deben estar en mystuff
+	paquete books/basico_adJ
+	paquete books/usuario_adJ
+	paquete books/servidor_adJ
 
+	paquete curl
+	paquete libtorrent
+	exit 1
 	# Todo lo de perl tuvo que recompilarse
 	# evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
 	paquete p5-Clone
@@ -913,6 +919,7 @@ if (test "$sn" = "s") then {
 	# Deben estar en arboldes/usr/ports/mystuff pero no en /usr/ports
 	paquete emulators/realboy
 	paquete lang/ocaml-labltk
+	paquete net/xmr-stak-cpu
 	paquete sysutils/ganglia
 	paquete textproc/biblesync
 	paquete textproc/sword

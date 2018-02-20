@@ -2,8 +2,8 @@
 Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y que esperamos el regreso del señor Jesucristo.
 
-### Versión: 6.2b2
-Fecha de publicación: 9/Ene/2018
+### Versión: 6.2
+Fecha de publicación: 29/Ene/2018
 
 Puede ver novedades respecto a OpenBSD en:
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_2/Novedades_OpenBSD.md>
@@ -31,9 +31,9 @@ Puede ver novedades respecto a OpenBSD en:
 * Mejoras a herramientas de Red
 	* Mejorado pf para ser más eficiente en IPv6.
 	* Desempeño y más consistencia entre IPv4 e IPv6
-	* Nuevo servicio slaacd que maneja autoconfiguración de direcciones IPv6
-	  sin estado (RFC 4862)
-	* Reorganización a fuentes de dhclient
+	* Nuevo servicio `slaacd` que maneja autoconfiguración de direcciones 
+          IPv6 sin estado (RFC 4862)
+	* Reorganización a fuentes de `dhclient`
 * Seguridad
 	* Durante arranque se vuelven a enlazar kernel, libcrytpo y ld.so 
 	  en orden aleatorio para producir cada vez un binario diferente 
@@ -68,10 +68,17 @@ Puede ver novedades respecto a OpenBSD en:
 
 # Novedades respecto a paquetes 
 
-* Retroportados de Current: ruby 2.5
+* Nuevo paquete: xmr-stak-cpu para minar criptomoneda monero
+* Retroportados de current: ruby 2.5, postgresql 10.1
 * Se han actualizado más los binarios de los siguientes paquetes para
-cerrar fallas de seguridad (a partir de portes más recientes para 
-OpenBSD 6.2):
+  actualizar o cerrar fallas de seguridad (a partir de portes más recientes 
+  para OpenBSD 6.2): p5-*, png, curl, libtorrent, ocamlbuild, 
+  rsync, hevea, chromium, 
+* Se han recompilado los siguientes para aprovechar xlocale: libunistring, 
+  vlc, postgresql-client, postgresql-server, djvulibre, gettext-tools, 
+  gdk-pixbuf, glib2, gtar, libidn, libspectre, libxslt, llvm, scribus,
+  wget, wxWidgets-gtk2
+
 
 ## NOVEDADES RESPECTO A ADJ 6.1 PROVENIENTES DE PASOS DE JESÚS
 
