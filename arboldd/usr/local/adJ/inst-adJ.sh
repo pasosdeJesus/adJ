@@ -1143,7 +1143,7 @@ if (test -f /usr/bin/sqlite3) then {
 if (test -d /var/db/pkg/ispell-spanish-*) then {
 	vac="$vac 6.1 a 6.2";	
 	echo "Aplicando actualizaciones de 6.1 a 6.2 " >> /var/www/tmp/inst-adJ.bitacora;
-        pkg_delete ispell
+        pkg_delete -D dependencies ispell
 } fi;
 	
 if  (test "$vac" != "") then {
