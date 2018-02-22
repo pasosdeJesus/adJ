@@ -71,8 +71,8 @@ Puede ver novedades respecto a OpenBSD en:
 * Retroportados de current: ruby 2.5, postgresql 10.1
 * Se han actualizado más los binarios de los siguientes paquetes para
   actualizar o cerrar fallas de seguridad (a partir de portes más recientes 
-  para OpenBSD 6.2): p5-*, png, curl, libtorrent, ocamlbuild, 
-  rsync, hevea, chromium, 
+  para OpenBSD 6.2):  chromium, curl, hevea, libtorrent, mariadb,
+  ocamlbuild, p5-*, png, rsync,  
 * Se han recompilado los siguientes para aprovechar xlocale: libunistring, 
   vlc, postgresql-client, postgresql-server, djvulibre, gettext-tools, 
   gdk-pixbuf, glib2, gtar, libidn, libspectre, libxslt, llvm, scribus,

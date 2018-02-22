@@ -41,6 +41,19 @@ Pasos importantes para publicar versión beta
   ejemplo en ```qemu``` (```hdes/qemu.sh``` o remotamente 
   ```TEXTO=1 hdes/qemu.sh```): 
 	- instalación de sistema base, uname debe reportar APRENDIENDODEJESUS
+	- verifique que libc incluye funciones de locale por ejemplo editando
+          un archivo l.c con el siguiente contenido:
+```
+#include "locale.h"  
+int main() {  
+  setlocale(LC_ALL, "es_CO.UTF-8");
+  printf("%'f", 1000000.2);
+
+  return 0;
+}
+```
+          compile con `cc -o l l.c` y ejecut con `./l` el resulado debería
+          ser `1.000.000,200000' 
    	- ejecución de /inst-adJ.sh en nuevo y actualización, 
    	- ejecución de /usr/local/adJ/inst-sivel.sh, que opere SIVeL1.2,
    	- que toda entrada del menú desde la interfaz gráfica opere.  
