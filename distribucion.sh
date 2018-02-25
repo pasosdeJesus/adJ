@@ -628,6 +628,7 @@ function paquete {
 		echo "En llamado a funcion paquete falta nombre del paquete";
 		exit 1;
 	} fi;
+	echo $nom
 	echo $nom | grep "\/" > /dev/null 2>&1
 	if (test "$?" = "0") then {
 		# categoria va con nombre para paquetes en mystuff

@@ -102,6 +102,28 @@ Puede ver novedades respecto a OpenBSD en:
 	- biblesync, sword y xiphos
 	- markup, repasa y sigue con Ocaml 4.0.5
 
-* Se incluye beta 3 de sivel2
-* Se incluye sivel-1.2.4
+* Se incluye beta 3 de sivel2 cuyas novedades son:
+	- Conteos reorganizados para diferenciar filtro de criterios 
+	  de desagregación
+	- En formulario de caso, en pestaña presuntos responsables, 
+	  en cada presunto responsable permite especificar otras 
+	  agresiones que no son contra individuos, ni contra 
+	  colectividades.
+	- Siguiendo marco conceptual del Banco de Datos del CINEP/PPP
+	  cambiadas a singular categorías individuales 716 y 717. 
+	  Creadas categorias análogas para víctimas colectivas 916 y 
+	  917.
+* Se incluye sivel-1.2.4 cuyas novedades son:
+	- Nombre de categorías individuales 716 y 717 ahora en 
+	  singular y agregadas categorías análogas para víctimas 
+	  colectivas 916 y 917.
+	- En reporte de actos ahora se incluye código de víctima 
+	  para facilitar hacer conteos por víctima, así como 
+	  organización, filiación, vínculo con el estado y etnia.
+	- Corrección: Consulta web presentada como tabla, vuelve a 
+	  presentar todas las víctimas colectivas.
+	- Corrección: Consulta detallada en reporte de actos ya no 
+	  duplica actos cuando se especifica rango de la fecha de 
+	  ingreso.
+	- Documentación: Configuración para usar base remota
 
