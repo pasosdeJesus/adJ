@@ -18,9 +18,9 @@ export RELEASEDIR=/releasedir
 export XSRCDIR=/usr/xenocara;
 
 # Datos del CVS del cual se actualizan fuentes de OpenBSD
-USUARIOCVS=""
-MAQCVS=""
-DIRCVS=""
+USUARIOCVS="anoncvs"
+MAQCVS="anoncvs4.usa.openbsd.org"
+DIRCVS="/cvs"
 
 # Estas variables controlan operacion de distribucion.sh pueden ser s o n
 export autoCvs=n
