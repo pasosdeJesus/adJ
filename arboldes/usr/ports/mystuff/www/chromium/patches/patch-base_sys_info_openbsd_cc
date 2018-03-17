@@ -1,28 +1,34 @@
-$OpenBSD: patch-base_sys_info_openbsd_cc,v 1.11 2017/06/25 21:53:56 robert Exp $
+$OpenBSD: patch-base_sys_info_openbsd_cc,v 1.13 2017/10/29 14:36:53 robert Exp $
 
 Index: base/sys_info_openbsd.cc
 --- base/sys_info_openbsd.cc.orig
 +++ base/sys_info_openbsd.cc
-@@ -29,6 +29,8 @@ int64_t AmountOfMemory(int pages_name) {
+@@ -29,6 +29,10 @@ int64_t AmountOfMemory(int pages_name) {
  
  namespace base {
  
++// pledge(2)
 +int64_t aofpmem = 0;
++int64_t aofapmem = 0;
 +
  // static
  int SysInfo::NumberOfProcessors() {
    int mib[] = { CTL_HW, HW_NCPU };
-@@ -43,26 +45,10 @@ int SysInfo::NumberOfProcessors() {
+@@ -43,26 +47,20 @@ int SysInfo::NumberOfProcessors() {
  
  // static
- int64_t SysInfo::AmountOfPhysicalMemory() {
+ int64_t SysInfo::AmountOfPhysicalMemoryImpl() {
 -  return AmountOfMemory(_SC_PHYS_PAGES);
--}
--
--// static
--int64_t SysInfo::AmountOfAvailablePhysicalMemory() {
--  // We should add inactive file-backed memory also but there is no such
--  // information from OpenBSD unfortunately.
++  // pledge(2)
++  if (!aofpmem)
++    aofpmem = AmountOfMemory(_SC_PHYS_PAGES);
++  return aofpmem;
+ }
+ 
+ // static
+ int64_t SysInfo::AmountOfAvailablePhysicalMemoryImpl() {
+   // We should add inactive file-backed memory also but there is no such
+   // information from OpenBSD unfortunately.
 -  return AmountOfMemory(_SC_AVPHYS_PAGES);
 -}
 -
@@ -37,9 +43,9 @@ Index: base/sys_info_openbsd.cc
 -  }
 -  return static_cast<uint64_t>(limit);
 +  // pledge(2)
-+  if (!aofpmem)
-+    aofpmem = AmountOfMemory(_SC_PHYS_PAGES);
-+  return aofpmem;
++  if (!aofapmem)
++    aofapmem = AmountOfMemory(_SC_AVPHYS_PAGES);
++  return aofapmem;
  }
  
  // static

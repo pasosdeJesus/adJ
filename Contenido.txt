@@ -83,8 +83,8 @@ PAQUETES ESTÁNDAR PARA OPENBSD [V]
 http://www.openbsd.org/[V]_packages/amd64.html
 
 En el directorio paquetes encuentra los siguientes paquetes con sus 
-dependencias (en algunos casos, chromium, se han incluido versiones 
-más recientemente que las oficiales de OpenBSD [V]):
+dependencias (en algunos casos se han incluido versiones más recientes
+que las oficiales de OpenBSD [V]):
 
 * Escritorio gráfico:
 audacious-[v]	Reproductor multimedia 
@@ -97,6 +97,8 @@ fbdesk-[v]		Permite poner iconos en escritorio fluxbox
 fluxbox-[v]		Escritorio extra liviano
 fluxter-[v]		Pagina espacios de trabajo en fluxbox        
 filezilla-[v]	Transmite archivos (soporta protocolo ssh)
+firefox-[v]		Navegador web Firefox
+firefox-i18n-es-AR-[v]		Navegador web Firefox
 gimp-[v]		Editor gráfico por pixels
 gnumeric-[v]	Hoja de cálculo
 gv-[v]		Visualizador de PostScript y PDF
@@ -203,6 +205,7 @@ cairomm-[v]		Interfaz en C++ para cairo
 celt-[v]		Codec experimental de audio de espera muy baja
 clisp-[v]		Implementación de ANSI Common Lisp
 clucene-core-[v]	Librería para búsquedas de textos completos
+colord-[v]		Maneja perfiles de colores de dispositivos
 consolekit2-[v]	Entorno para definir y seguir usuarios
 cups-libs-[v]   	Librearias y encabezados de CUPS
 cups-filters-[v]	Filtros para CUPS de OpenPrinting
@@ -293,6 +296,7 @@ gtar-[v]	 	Otra versión del archivador tar
 gtest-[v]	 	Ambiente de pruebas para C++
 gtk+2-[v]		Componentes gráficos GTK+2
 gtk+3-[v]		Componentes gráficos GTK+2
+gtk+3-cups-[v]		Servidor de CUPS y gtk+3  para impresión
 gtk-update-icon-cache-[v]	Utilidad para almacenar temas de iconos
 gtk2mm-[v]		Interfaz en C++ paara gtk2+	
 gtkhtml4-[v]		Motor liviano para presentar/imprimir/editar HTML

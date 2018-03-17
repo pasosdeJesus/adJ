@@ -4,7 +4,7 @@ COMMENT=		fluxbox-util application that creates and manage icons
 
 V=              1.4.1
 DISTNAME=       fbdesk-${V}
-REVISION=	3
+REVISION=	4
 #PKGNAME=        ${DISTNAME}p3
 
 CATEGORIES=		x11
