@@ -1,10 +1,10 @@
-$OpenBSD: patch-content_browser_BUILD_gn,v 1.10 2017/09/09 19:16:43 robert Exp $
+$OpenBSD: patch-content_browser_BUILD_gn,v 1.14 2018/03/12 13:48:34 robert Exp $
 Index: content/browser/BUILD.gn
 --- content/browser/BUILD.gn.orig
 +++ content/browser/BUILD.gn
-@@ -1599,11 +1599,6 @@ source_set("browser") {
-       "memory/memory_monitor_chromeos.cc",
-       "memory/memory_monitor_chromeos.h",
+@@ -1711,11 +1711,6 @@ jumbo_source_set("browser") {
+       "tracing/cros_tracing_agent.cc",
+       "tracing/cros_tracing_agent.h",
      ]
 -  } else {
 -    sources += [
@@ -13,4 +13,4 @@ Index: content/browser/BUILD.gn
 -    ]
    }
  
-   if (!is_win) {
+   if (is_chromecast && is_linux) {

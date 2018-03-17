@@ -1,9 +1,9 @@
-$OpenBSD: patch-build_config_BUILDCONFIG_gn,v 1.6 2017/09/09 19:16:43 robert Exp $
+$OpenBSD: patch-build_config_BUILDCONFIG_gn,v 1.8 2018/03/12 13:48:34 robert Exp $
 
 Index: build/config/BUILDCONFIG.gn
 --- build/config/BUILDCONFIG.gn.orig
 +++ build/config/BUILDCONFIG.gn
-@@ -131,13 +131,13 @@ declare_args() {
+@@ -131,14 +131,14 @@ declare_args() {
    is_official_build = false
  
    # Whether we're a traditional desktop unix.
@@ -14,12 +14,13 @@ Index: build/config/BUILDCONFIG.gn
    # to configure warnings.
    is_clang =
        current_os == "mac" || current_os == "ios" || current_os == "chromeos" ||
--      current_os == "fuchsia" || current_os == "android" ||
-+      current_os == "fuchsia" || current_os == "android" || current_os == "openbsd" ||
+       current_os == "fuchsia" || current_os == "android" ||
+-      current_os == "win" ||
++      current_os == "win" || current_os == "openbsd" ||
        (current_os == "linux" && current_cpu != "s390x" &&
         current_cpu != "s390" && current_cpu != "ppc64" &&
         current_cpu != "ppc" && current_cpu != "mips" && current_cpu != "mips64")
-@@ -214,6 +214,8 @@ if (host_toolchain == "") {
+@@ -215,6 +215,8 @@ if (host_toolchain == "") {
      }
    } else if (host_os == "aix") {
      host_toolchain = "//build/toolchain/aix:$host_cpu"

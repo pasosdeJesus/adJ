@@ -1,0 +1,16 @@
+$OpenBSD$
+
+Index: src/FbTk/TextBox.cc
+--- src/FbTk/TextBox.cc.orig
++++ src/FbTk/TextBox.cc
+@@ -199,8 +199,8 @@ void TextBox::buttonPressEvent(XButtonEvent &event) {
+         int delta = width();
+         int tmp = 0;
+         for(i = m_start_pos; i <= m_end_pos; i++) {
+-            tmp = abs(event.x - font().textWidth(m_text.c_str() + m_start_pos, i - m_start_pos));
+-
++            int tdif = event.x - font().textWidth(m_text.c_str() + m_start_pos, i - m_start_pos);
++            tmp = (int)abs(tdif);
+             if (tmp < delta) {
+                 delta = tmp;
+                 click_pos = i;

@@ -1,15 +1,14 @@
-# $OpenBSD: Makefile,v 1.341 2017/09/22 12:31:03 robert Exp $
+# $OpenBSD: Makefile,v 1.363 2018/03/12 13:48:34 robert Exp $
 
 .include <bsd.port.arch.mk>
 
 USE_WXNEEDED=		Yes
 
-ONLY_FOR_ARCHS=		i386 amd64
 DPB_PROPERTIES=		parallel
 
 COMMENT=		Chromium browser
 
-V=			61.0.3163.100
+V=			65.0.3325.146
 
 DISTNAME=		chromium-${V}
 
@@ -33,7 +32,7 @@ MASTER_SITES=	https://commondatastorage.googleapis.com/chromium-browser-official
 
 MODULES=	lang/python
 
-COMPILER =	clang gcc
+COMPILER =	base-clang ports-clang ports-gcc
 
 MODPY_RUNDEP=	No
 
@@ -45,30 +44,30 @@ PATCHORIG=	.orig.port
 
 # uses pledge()
 WANTLIB += X11 Xext Xfixes Xrender Xss c cups dbus-1 event
-WANTLIB += execinfo fontconfig gconf-2
+WANTLIB += execinfo
 WANTLIB += gdk_pixbuf-2.0 glib-2.0 gobject-2.0
 WANTLIB += m
-WANTLIB += pthread pthread-stubs
+WANTLIB += pthread
 WANTLIB += xslt
 WANTLIB += sndio
-WANTLIB += Xcomposite
 WANTLIB += ${COMPILER_LIBCXX}
 WANTLIB += Xi Xtst
-WANTLIB += Xdamage
 WANTLIB += Xcursor Xrandr gio-2.0
 WANTLIB += nspr4 nss3 nssutil3 smime3
-WANTLIB += gmodule-2.0
+WANTLIB += atk-bridge-2.0
 WANTLIB += X11-xcb xcb
 WANTLIB += GL expat
 WANTLIB += atk-1.0 cairo gdk-3 gtk-3 pango-1.0
 WANTLIB += pangocairo-1.0
+WANTLIB += Xcomposite Xdamage
 
 RUN_DEPENDS=	devel/xdg-utils \
 		devel/desktop-file-utils \
 		fonts/noto/fonts \
 		graphics/libexif \
 		x11/gnome/libgnome-keyring \
-		x11/gtk+3,-guic
+		x11/gtk+3,-guic \
+		x11/gtk+3,-cups
 BUILD_DEPENDS=	archivers/bzip2 \
 		devel/gperf \
 		devel/bison \
@@ -83,7 +82,6 @@ BUILD_DEPENDS=	archivers/bzip2 \
 		${MODGCC4_CPPDEP}
 LIB_DEPENDS=	devel/libexecinfo \
 		security/nss \
-		devel/gconf2 \
 		textproc/libxslt \
 		x11/gtk+3 \
 		print/cups,-libs \
@@ -98,7 +96,9 @@ BUILDTYPE=	Debug
 BUILDTYPE=	Release
 .endif
 
-ALL_TARGET=	chrome
+SUBST_VARS+=	WRKSRC
+
+ALL_TARGET=	chrome chromedriver
 TEST_TARGET=	base_unittests
 
 CONFIGURE_STYLE=none # prevent python MODULE from overriding do-build
@@ -114,7 +114,7 @@ GN_SYSTEM_LIBS=	libevent \
 
 GN_ARGS=	enable_nacl=false \
 		is_debug=false \
-		enable_webrtc=false \
+		enable_webrtc=true \
 		enable_one_click_signin=true \
 		enable_remoting=false \
 		use_kerberos=false \
@@ -136,12 +136,11 @@ GN_ARGS+=	extra_ldflags=\"-L${LOCALBASE}/lib -L${X11BASE}/lib -Wl,--no-keep-memo
 GN_ARGS+=	extra_ldflags=\"-L${LOCALBASE}/lib -L${X11BASE}/lib\"
 .endif
 
-# Nota: se han dejado llaves para el uso sólo de adJ ---como el porte inicial
-# para OpenBSD sugiere. Para su propia distribución use sus propias
-# llaves.  Es gratuito.
-GN_ARGS+=	google_api_key=\"AIzaSyC_3Uz69YR1Z2DRLUDf5ZxUJBClHuwrjL\" \
-		google_default_client_id=\"827346019416-hv5bkg8gdou5q4undk91dn3nv7ag2nm1.apps.googleusercontent.com\" \
-		google_default_client_secret=\"F7ApGgPs3F_mRnRgDt6A80C0\" \
+# Note: these keys are for OpenBSD use ONLY. For your own distribution,
+# please get your own set of keys. It's free!
+GN_ARGS+=	google_api_key=\"AIzaSyA015yecfJyWi8UQpneQVrNzIKlxjv4MhI\" \
+		google_default_client_id=\"451220141585.apps.googleusercontent.com\" \
+		google_default_client_secret=\"nQcDyaBvDyCeDrsRqKIWSHJn\" \
 		ffmpeg_branding=\"Chrome\" \
 		proprietary_codecs=true
 
@@ -173,9 +172,12 @@ do-configure:
 		--system-libraries ${GN_SYSTEM_LIBS}
 	@cd ${WRKSRC}/tools/gn && env -i ${MAKE_ENV} LDFLAGS=-L${LOCALBASE}/lib ${MODPY_BIN} bootstrap/bootstrap.py \
 		--no-clean -s --gn-gen-args "${GN_ARGS}"
-	@cd ${WRKSRC} && env -i ${CONFIGURE_ENV} ${WRKSRC}/out/${BUILDTYPE}/gn \
-		gen --args="${GN_ARGS}" out/Release
+	@cd ${WRKSRC} && env -i ${CONFIGURE_ENV} ${WRKSRC}/out/Release/gn \
+		gen --args="${GN_ARGS}" out/${BUILDTYPE}
 
+pre-build:
+	${SUBST_CMD} ${WRKSRC}/build/gn_run_binary.py
+	
 do-build:
 	@cd ${WRKSRC} && env -i ${MAKE_ENV} ninja \
 		-j ${MAKE_JOBS} -C out/${BUILDTYPE} ${ALL_TARGET}
@@ -184,8 +186,10 @@ do-install:
 	${INSTALL_DATA_DIR} ${PREFIX}/chrome
 	${INSTALL_PROGRAM} ${BUILDDIR}/chrome ${PREFIX}/chrome
 	${SUBST_PROGRAM} ${FILESDIR}/chrome ${PREFIX}/bin/chrome
-	${INSTALL_MAN} ${BUILDDIR}/chrome.1 ${PREFIX}/man/man1
-
+	${INSTALL_PROGRAM} ${BUILDDIR}/chromedriver ${PREFIX}/bin/chromedriver
+	${INSTALL_MAN} ${WRKSRC}/chrome/app/resources/manpage.1.in ${PREFIX}/man/man1/chrome.1
+	@perl -pi -e "s,\@\@PACKAGE\@\@,chromium,g;s,\@\@MENUNAME\@\@,Chromium Web Browser,g" \
+		${PREFIX}/man/man1/chrome.1
 	${INSTALL_DATA} ${BUILDDIR}/*.pak ${PREFIX}/chrome
 
 	${INSTALL_DATA_DIR} ${PREFIX}/chrome/locales
@@ -195,9 +199,21 @@ do-install:
 	${INSTALL_DATA_DIR} ${PREFIX}/chrome/resources
 	@cp -Rp ${BUILDDIR}/resources/* ${PREFIX}/chrome/resources
 	@chown -R ${SHAREOWN}:${SHAREGRP} ${PREFIX}/chrome/resources
-.for f in protoc icudtl.dat mksnapshot natives_blob.bin snapshot_blob.bin
+.for f in protoc icudtl.dat mksnapshot natives_blob.bin snapshot_blob.bin v8_context_snapshot.bin
 	${INSTALL_DATA} ${BUILDDIR}/${f} ${PREFIX}/chrome
 .endfor
+
+	# ANGLE
+.for f in libEGL.so libGLESv2.so
+	${INSTALL_DATA} ${BUILDDIR}/${f} ${PREFIX}/chrome
+.endfor
+
+	# SwiftShader
+	${INSTALL_DATA_DIR} ${PREFIX}/chrome/swiftshader
+.for f in libEGL.so libGLESv2.so
+	${INSTALL_DATA} ${BUILDDIR}/swiftshader/${f} ${PREFIX}/chrome/swiftshader
+.endfor
+
 .for s in 22 24 48 64 128 256
 	${INSTALL_DATA_DIR} ${PREFIX}/share/icons/hicolor/${s}x${s}/apps
 	${INSTALL_DATA} ${WRKSRC}/chrome/app/theme/chromium/product_logo_${s}.png \
