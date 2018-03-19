@@ -138,9 +138,9 @@ GN_ARGS+=	extra_ldflags=\"-L${LOCALBASE}/lib -L${X11BASE}/lib\"
 
 # Note: these keys are for OpenBSD use ONLY. For your own distribution,
 # please get your own set of keys. It's free!
-GN_ARGS+=	google_api_key=\"AIzaSyA015yecfJyWi8UQpneQVrNzIKlxjv4MhI\" \
-		google_default_client_id=\"451220141585.apps.googleusercontent.com\" \
-		google_default_client_secret=\"nQcDyaBvDyCeDrsRqKIWSHJn\" \
+GN_ARGS+=	google_api_key=\"AIzaSyC_3Uz69YR1Z2DRLUDf5ZxUJBClHuwrjL\" \
+		google_default_client_id=\"827346019416-hv5bkg8gdou5q4undk91dn3nv7ag2nm1.apps.googleusercontent.com\" \
+		google_default_client_secret=\"7ApGgPs3F_mRnRgDt6A80C0\" \
 		ffmpeg_branding=\"Chrome\" \
 		proprietary_codecs=true
 

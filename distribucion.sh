@@ -767,6 +767,7 @@ if (test "$sn" = "s") then {
 	# Modificados para posibilitar compilación
 	# Deben estar en mystuff
 
+	paquete gtar
 	paquete ocaml 
 	paquete ocamlbuild 
 	paquete ocaml-camlp4
