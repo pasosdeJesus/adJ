@@ -15,6 +15,9 @@ Aquí sólo documentamos novedades respecto a al versión 6.2
 - Actualizados paquetes con librerías obsoletas: ImageMagick, Mt77,
   audacity, djvulibre-3.5.27p2.tgz, fbdesk, ganglia, libidn, gtar, 
   Mt77, gettext-tools, realboy, scribus, wget, wxWidgets-gtk2, xiphos
-- Actualizado chromium de current buscando más estabilidad
+- Actualizado chromium de current buscando más estabilidad, sin embargo
+  por lo visto es un problema más amplio de Chromium posiblemente relacionado
+  con https://bugs.chromium.org/p/chromium/issues/detail?id=792711
+  por lo cual también se agrega firefox
 
 
