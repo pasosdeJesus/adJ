@@ -50,7 +50,7 @@ La actualización consta de 3 partes:
   puede usar:
 
 	```
-	ARCH=~/comp/adJ/6.2-amd64 /inst-adJ.sh
+	ARCH=~/comp/adJ/6.2-amd64 doas /inst-adJ.sh
 	```
 	
 
