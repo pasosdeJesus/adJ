@@ -240,7 +240,7 @@ if (test ! -h $dhome/$Maildir ) then {
 if (test -d /var/www/roundcubemail) then {
 	echo "Configurando roundcubemail";
 	rm -f /tmp/resins.txt
-	dsn=`grep db_dsnw /var/www/roundcubemail/config/db.inc.php | sed -e "s/.*pgsql:/pgsql:/g;s/['\"].*//g"`
+	dsn=`grep db_dsnw /var/www/roundcubemail/config/config.inc.php | sed -e "s/.*pgsql:/pgsql:/g;s/['\"].*//g"`
 	echo "dsn=$dsn"
 	db=`echo $dsn | sed -e "s/.*pgsql:\/\/.*\/\([^'\"]*\).*/\1/g"`;
 	echo "psql -h /var/www/var/run/postgresql/ -Upostgres ${db} -c \"SELECT user_id FROM users WHERE username='$us';\" > /tmp/resins.txt" > /tmp/cu.sh
@@ -252,7 +252,7 @@ if (test -d /var/www/roundcubemail) then {
 		idu=-1
 		hoy=`date +"%Y-%m-%d"`
 		rm -f /tmp/resins.txt
-		echo "psql -h /var/www/var/run/postgresql/ -Upostgres ${db} -c \"INSERT INTO users (username, mail_host, created, language) VALUES ('$us', '127.0.0.1','${hoy}','es_ES');SELECT last_value FROM user_ids;\" > /tmp/resins.txt" > /tmp/cu.sh
+		echo "psql -h /var/www/var/run/postgresql/ -Upostgres ${db} -c \"INSERT INTO users (username, mail_host, created, language) VALUES ('$us', '127.0.0.1','${hoy}','es_ES');SELECT last_value FROM users_seq;\" > /tmp/resins.txt" > /tmp/cu.sh
 		chmod +x /tmp/cu.sh
 		su - _postgresql /tmp/cu.sh >> /tmp/adicuenta.bitacora;
 		if (test -f /tmp/resins.txt -a ! -z /tmp/resins.txt) then {

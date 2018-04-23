@@ -4,8 +4,8 @@
 # 2014. vtamara@pasosdeJesus.org
 
 VER=6.2
-REV=0
-VESP="a1"
+REV=1
+VESP=""
 VERP=61
 
 ACVERC=`uname -r`

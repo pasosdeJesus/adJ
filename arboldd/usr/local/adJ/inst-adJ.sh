@@ -3,10 +3,10 @@
 # Dominio público de acuerdo a legislación colombiana. http://www.pasosdejesus.org/dominio_publico_colombia.html. 
 # 2015. vtamara@pasosdeJesus.org
 
-VER=6.1
+VER=6.2
 REV=0
-VESP="a1"
-VERP=61
+VESP=""
+VERP=62
 
 # Falta /standard/root.hint
 
@@ -98,7 +98,6 @@ function ltf {
 		return 1;
 	} fi;
 }
-
 
 function activarcs {
 	ns=$1;
@@ -1141,7 +1140,12 @@ if (test -f /usr/bin/sqlite3) then {
 
 } fi;
 
-
+if (test -d /var/db/pkg/ispell-spanish-*) then {
+	vac="$vac 6.1 a 6.2";	
+	echo "Aplicando actualizaciones de 6.1 a 6.2 " >> /var/www/tmp/inst-adJ.bitacora;
+        pkg_delete -D dependencies ispell
+} fi;
+	
 if  (test "$vac" != "") then {
 	dialog --title 'Actualizaciones aplicadas' --msgbox "\\nSe aplicaron actualizaciones: $vac\\n\\n$mac\\n" 15 60
 } fi;
@@ -1867,7 +1871,7 @@ kern.shminfo.shmmax=50331648
 kern.shminfo.shmall=51200
 kern.maxfiles=20000
 EOF
-	sysctl -w kern.seminfo.semmni=1024> /dev/null
+	sysctl -w kern.shminfo.shmmni=1024> /dev/null
 	sysctl -w kern.seminfo.semmns=2048 >/dev/null
 	sysctl -w kern.shminfo.shmmax=50331648 > /dev/null
 	sysctl -w kern.shminfo.shmall=51200 > /dev/null
@@ -2783,16 +2787,16 @@ for i in ruby19-railties-3.1.3 ruby19-actionmailer-3.1.3 \
 	pkg_delete -I -D dependencies $i >> /var/www/tmp/inst-adJ.bitacora 2>&1
 done
 
-echo "* Configurar ruby-2.4" >> /var/www/tmp/inst-adJ.bitacora;
-if (test ! -f "/usr/local/bin/ruby24") then {
+echo "* Configurar ruby-2.5" >> /var/www/tmp/inst-adJ.bitacora;
+if (test ! -f "/usr/local/bin/ruby25") then {
 	insacp ruby
-	ln -sf /usr/local/bin/ruby24 /usr/local/bin/ruby
-	ln -sf /usr/local/bin/erb24 /usr/local/bin/erb
-	ln -sf /usr/local/bin/irb24 /usr/local/bin/irb
-	ln -sf /usr/local/bin/rdoc24 /usr/local/bin/rdoc
-	ln -sf /usr/local/bin/ri24 /usr/local/bin/ri
-	ln -sf /usr/local/bin/rake24 /usr/local/bin/rake
-	ln -sf /usr/local/bin/gem24 /usr/local/bin/gem
+	ln -sf /usr/local/bin/ruby25 /usr/local/bin/ruby
+	ln -sf /usr/local/bin/erb25 /usr/local/bin/erb
+	ln -sf /usr/local/bin/irb25 /usr/local/bin/irb
+	ln -sf /usr/local/bin/rdoc25 /usr/local/bin/rdoc
+	ln -sf /usr/local/bin/ri25 /usr/local/bin/ri
+	ln -sf /usr/local/bin/rake25 /usr/local/bin/rake
+	ln -sf /usr/local/bin/gem25 /usr/local/bin/gem
 } fi;
 
 if (test ! -f /home/$uadJ/.irbrc) then {

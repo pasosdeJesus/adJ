@@ -1,9 +1,16 @@
 #!/bin/sh
 
-if (test "$CVSROOT" = "") then {
-	CVSROOT=
-}
+. ./ver.sh
 
-for i in `find . -name CVS `; do 
-	echo $i; 
+d=$1
+if (test ! -d "$d") then {
+	echo "Primer parametro debe ser directorio donde se actualizar CVSRoot"
+	exit 1;
+} fi;
+if (test "$CVSROOT" = "") then {
+	CVSROOT=${USUARIOCVS}@${MAQCVS}:${DIRCVS}
+} fi;
+
+for i in `find $d -name CVS `; do 
+	echo ${CVSROOT}  > $i/Root; 
 done 

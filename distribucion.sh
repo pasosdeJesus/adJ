@@ -628,6 +628,7 @@ function paquete {
 		echo "En llamado a funcion paquete falta nombre del paquete";
 		exit 1;
 	} fi;
+	echo $nom
 	echo $nom | grep "\/" > /dev/null 2>&1
 	if (test "$?" = "0") then {
 		# categoria va con nombre para paquetes en mystuff
@@ -766,6 +767,33 @@ if (test "$sn" = "s") then {
 	# Modificados para posibilitar compilación
 	# Deben estar en mystuff
 
+	paquete gtar
+	paquete ocaml 
+	paquete ocamlbuild 
+	paquete ocaml-camlp4
+	paquete lang/ocaml-labltk
+	paquete chromium
+	paquete audacity
+	paquete djvulibre
+	paquete ImageMagick
+	paquete gtar
+	paquete libidn
+	paquete scribus
+	paquete wget
+	paquete gettext-tools
+	paquete wxWidgets-gtk2
+	paquete education/asigna
+	paquete textproc/markup
+	paquete education/repasa
+	paquete education/sigue
+	paquete textproc/Mt77
+	paquete x11/fbdesk
+	paquete sysutils/ganglia
+	paquete emulators/realboy
+	paquete textproc/xiphos
+	exit 1
+
+
 	# Todo lo de perl tuvo que recompilarse
 	# evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
 	paquete p5-Clone
@@ -846,11 +874,13 @@ if (test "$sn" = "s") then {
 	#paquete gcc paquetes "gcc" 4.9
 	#paquete git paquetes "git"
 	#paquete mariadb-client paquetes "mariadb-client mariadb-server" 
+	paquete curl
+	paquete libtorrent
 	paquete ocamlbuild 
 	#paquete p7zip paquetes "p7zip p7zip-rar"
 	#paquete pidgin paquetes "libpurple pidgin"
 	paquete rsync
-	paquete ruby paquetes "ruby ruby24-ri_docs" 2.4
+	paquete ruby paquetes "ruby ruby25-ri_docs" 2.5
 	#paquete samba paquetes "ldb samba tevent"
 	#paquete webkitgtk4 
 	#paquete webkit paquetes "webkit webkit-gtk3"
@@ -913,6 +943,7 @@ if (test "$sn" = "s") then {
 	# Deben estar en arboldes/usr/ports/mystuff pero no en /usr/ports
 	paquete emulators/realboy
 	paquete lang/ocaml-labltk
+	paquete net/xmr-stak-cpu
 	paquete sysutils/ganglia
 	paquete textproc/biblesync
 	paquete textproc/sword

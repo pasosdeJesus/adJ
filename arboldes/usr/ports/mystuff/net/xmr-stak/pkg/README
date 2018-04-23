@@ -1,0 +1,12 @@
+After installing 
+<<<<<<< HEAD
+
+=======
+>>>>>>> 1f854edfe4ed9bae554fe563d3f421eb458dd455
+1. Prepare configuration file by changing pool and wallet address:
+cp /usr/local/share/examples/xmr-stak-cpu/xmr-stak-cpu.conf /etc/
+vi /etc/xmr-stak-cpu.conf
+
+2. Run with:
+xmr-stak-cpu /etc/xmr-stak-cpu.conf
+

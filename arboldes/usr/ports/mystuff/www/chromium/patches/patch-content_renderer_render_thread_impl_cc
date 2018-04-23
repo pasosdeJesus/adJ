@@ -1,9 +1,9 @@
-$OpenBSD: patch-content_renderer_render_thread_impl_cc,v 1.21 2017/09/09 19:16:43 robert Exp $
+$OpenBSD: patch-content_renderer_render_thread_impl_cc,v 1.25 2018/03/12 13:48:34 robert Exp $
 
 Index: content/renderer/render_thread_impl.cc
 --- content/renderer/render_thread_impl.cc.orig
 +++ content/renderer/render_thread_impl.cc
-@@ -220,12 +220,21 @@
+@@ -215,12 +215,21 @@
  #include "content/common/external_ipc_dumper.h"
  #endif
  
@@ -18,37 +18,37 @@ Index: content/renderer/render_thread_impl.cc
 +#if defined(OS_BSD)
 +#include <stddef.h>
 +#include <stdint.h>
-+#include <sys/param.h>
++#include <sys/param.h> 
 +#include <sys/sysctl.h>
 +#endif
 +
  using base::ThreadRestrictions;
  using blink::WebDocument;
  using blink::WebFrame;
-@@ -926,7 +935,7 @@ void RenderThreadImpl::Init(
+@@ -968,7 +977,7 @@ void RenderThreadImpl::Init(
    GetConnector()->BindInterface(mojom::kBrowserServiceName,
                                  mojo::MakeRequest(&storage_partition_service_));
  
 -#if defined(OS_LINUX)
 +#if defined(OS_LINUX) || defined(OS_BSD)
-   ChildProcess::current()->SetIOThreadPriority(base::ThreadPriority::DISPLAY);
-   ChildThreadImpl::current()->SetThreadPriority(
-       categorized_worker_pool_->background_worker_thread_id(),
-@@ -1149,7 +1158,7 @@ void RenderThreadImpl::InitializeCompositorThread() {
-   compositor_task_runner_->PostTask(
+   render_message_filter()->SetThreadPriority(
+       ChildProcess::current()->io_thread_id(), base::ThreadPriority::DISPLAY);
+   render_message_filter()->SetThreadPriority(
+@@ -1181,7 +1190,7 @@ void RenderThreadImpl::InitializeCompositorThread() {
        FROM_HERE,
-       base::Bind(base::IgnoreResult(&ThreadRestrictions::SetIOAllowed), false));
+       base::BindOnce(base::IgnoreResult(&ThreadRestrictions::SetIOAllowed),
+                      false));
 -#if defined(OS_LINUX)
 +#if defined(OS_LINUX) || defined(OS_BSD)
-   ChildThreadImpl::current()->SetThreadPriority(compositor_thread_->ThreadId(),
-                                                 base::ThreadPriority::DISPLAY);
+   render_message_filter()->SetThreadPriority(compositor_thread_->ThreadId(),
+                                              base::ThreadPriority::DISPLAY);
  #endif
-@@ -1446,7 +1455,7 @@ media::GpuVideoAcceleratorFactories* RenderThreadImpl:
-   const bool enable_video_accelerator =
-       !cmd_line->HasSwitch(switches::kDisableAcceleratedVideoDecode);
+@@ -1491,7 +1500,7 @@ media::GpuVideoAcceleratorFactories* RenderThreadImpl:
+        gpu::kGpuFeatureStatusEnabled);
    const bool enable_gpu_memory_buffer_video_frames =
+       !is_gpu_compositing_disabled_ &&
 -#if defined(OS_MACOSX) || defined(OS_LINUX)
 +#if defined(OS_MACOSX) || defined(OS_LINUX) || defined(OS_BSD)
+       !cmd_line->HasSwitch(switches::kDisableGpuMemoryBufferVideoFrames);
+ #elif defined(OS_WIN)
        !cmd_line->HasSwitch(switches::kDisableGpuMemoryBufferVideoFrames) &&
-       !cmd_line->HasSwitch(switches::kDisableGpuCompositing) &&
-       !gpu_channel_host->gpu_info().software_rendering;

@@ -574,7 +574,32 @@ diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src53xlocale1/
 diff -ruN -x *.o -x obj -x CVS -x *~ src53xlocale2/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regress/lib/libc/locale/check_xlocale/check_xlocale.c
 --- src53xlocale2/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Mon Apr  8 21:20:56 2013
 +++ src/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Tue Apr  9 05:20:20 2013
-@@ -155,10 +155,147 @@
+@@ -60,6 +60,11 @@
+ 	printf("r=%s\n", r);
+ 	p(strcmp((r = (char *)querylocale(LC_COLLATE, esp)), "es_CO.UTF-8") == 0);
+ 	printf("r=%s\n", r);
++	p(iswlower_l(L'ñ', esp));
++	p(!iswlower_l(L'Ñ', esp));
++	wchar_t am;
++	p((am = towlower_l(L'Á', esp)) == L'á');
++	printf("am=%lc\n", am);
+ 
+ 	nl = setlocale(LC_ALL, "C");
+ 	printf("locale %s\n", nl);
+@@ -68,7 +73,12 @@
+ 	printf("r=%s\n", r);
+ 	p(strcmp((r = (char *)querylocale(LC_COLLATE, esp15)), "es_CO.UTF-8") == 0);
+ 	printf("r=%s\n", r);
++	p(iswlower_l(L'ñ', esp15));
++	p(!iswlower_l(L'Ñ', esp15));
++	p((am = towlower_l(L'Á', esp15)) == L'á');
++	printf("am=%lc\n", am);
+ 
++
+ 	//__print_ctypetable();
+ 	locale_t esp2 = duplocale(es_CO_UTF_8);
+ 	locale_t esp3 = duplocale(esp2);
+@@ -162,10 +172,147 @@
  
  }
  
