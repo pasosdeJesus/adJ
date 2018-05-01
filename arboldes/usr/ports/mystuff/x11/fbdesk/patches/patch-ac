@@ -2,7 +2,8 @@ $NetBSD: patch-ac,v 1.1 2011/01/29 11:24:43 wiz Exp $
 
 Fix build with png-1.5.
 From ftp://ftp.ee.freebsd.org/pub/pkgsrc/current/pkgsrc/x11/fbdesk/patches/patch-ac
---- src/FbTk/ImagePNG.cc.orig	2004-09-20 14:04:11.000000000 +0000
+Index: src/FbTk/ImagePNG.cc
+--- src/FbTk/ImagePNG.cc.orig
 +++ src/FbTk/ImagePNG.cc
 @@ -76,6 +76,8 @@ ImagePNG::~ImagePNG() {
  }
@@ -13,7 +14,7 @@ From ftp://ftp.ee.freebsd.org/pub/pkgsrc/current/pkgsrc/x11/fbdesk/patches/patch
      if (filename.empty())
          return 0;
  #ifdef DEBUG
-@@ -102,7 +104,7 @@ PixmapWithMask *ImagePNG::load(const std
+@@ -102,7 +104,7 @@ PixmapWithMask *ImagePNG::load(const std::string &file
          return 0;
      }
  
@@ -22,7 +23,7 @@ From ftp://ftp.ee.freebsd.org/pub/pkgsrc/current/pkgsrc/x11/fbdesk/patches/patch
          fclose(fp);
          return 0;
      }
-@@ -115,12 +117,14 @@ PixmapWithMask *ImagePNG::load(const std
+@@ -115,12 +117,14 @@ PixmapWithMask *ImagePNG::load(const std::string &file
      png_get_IHDR(png.png(), png.info(), &w, &h,
                   &bit_depth, &color_type,
                   &interlace_type, 0, 0);
@@ -42,7 +43,7 @@ From ftp://ftp.ee.freebsd.org/pub/pkgsrc/current/pkgsrc/x11/fbdesk/patches/patch
      cerr<<"Color type = ";
      switch (color_type) {
      case PNG_COLOR_TYPE_GRAY:
-@@ -146,7 +150,7 @@ PixmapWithMask *ImagePNG::load(const std
+@@ -146,7 +150,7 @@ PixmapWithMask *ImagePNG::load(const std::string &file
      // convert to rgb
      if (color_type == PNG_COLOR_TYPE_PALETTE && bit_depth <= 8) {
          png_set_expand(png.png());
@@ -51,7 +52,7 @@ From ftp://ftp.ee.freebsd.org/pub/pkgsrc/current/pkgsrc/x11/fbdesk/patches/patch
      }
      // convert to rgb
      if (color_type == PNG_COLOR_TYPE_GRAY && bit_depth < 8) {
-@@ -158,7 +162,7 @@ PixmapWithMask *ImagePNG::load(const std
+@@ -158,7 +162,7 @@ PixmapWithMask *ImagePNG::load(const std::string &file
      if (color_type == PNG_COLOR_TYPE_GRAY ||
          color_type == PNG_COLOR_TYPE_GRAY_ALPHA) {
          png_set_gray_to_rgb(png.png());
@@ -60,7 +61,7 @@ From ftp://ftp.ee.freebsd.org/pub/pkgsrc/current/pkgsrc/x11/fbdesk/patches/patch
          color_type = PNG_COLOR_TYPE_RGB;
      }
  
-@@ -170,23 +174,23 @@ PixmapWithMask *ImagePNG::load(const std
+@@ -170,23 +174,23 @@ PixmapWithMask *ImagePNG::load(const std::string &file
      // expand to 4 bytes
      if (bit_depth == 8 && color_type == PNG_COLOR_TYPE_RGB) {
          png_set_filler(png.png(), 0, PNG_FILLER_AFTER);
@@ -91,7 +92,7 @@ From ftp://ftp.ee.freebsd.org/pub/pkgsrc/current/pkgsrc/x11/fbdesk/patches/patch
      }
  
      // get transparent pixel
-@@ -214,31 +218,31 @@ PixmapWithMask *ImagePNG::load(const std
+@@ -214,31 +218,31 @@ PixmapWithMask *ImagePNG::load(const std::string &file
      fclose(fp);
  
      // clear linear memory
@@ -131,7 +132,7 @@ From ftp://ftp.ee.freebsd.org/pub/pkgsrc/current/pkgsrc/x11/fbdesk/patches/patch
          break;
      }
      
-@@ -264,9 +268,9 @@ PixmapWithMask *ImagePNG::load(const std
+@@ -264,9 +268,9 @@ PixmapWithMask *ImagePNG::load(const std::string &file
          long i = 0x44332211;
          unsigned char* a = (unsigned char*) &i;
          bool big_endian = (*a != 0x11);

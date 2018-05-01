@@ -767,6 +767,33 @@ if (test "$sn" = "s") then {
 	# Modificados para posibilitar compilación
 	# Deben estar en mystuff
 
+	paquete gtar
+	paquete ocaml 
+	paquete ocamlbuild 
+	paquete ocaml-camlp4
+	paquete lang/ocaml-labltk
+	paquete chromium
+	paquete audacity
+	paquete djvulibre
+	paquete ImageMagick
+	paquete gtar
+	paquete libidn
+	paquete scribus
+	paquete wget
+	paquete gettext-tools
+	paquete wxWidgets-gtk2
+	paquete education/asigna
+	paquete textproc/markup
+	paquete education/repasa
+	paquete education/sigue
+	paquete textproc/Mt77
+	paquete x11/fbdesk
+	paquete sysutils/ganglia
+	paquete emulators/realboy
+	paquete textproc/xiphos
+	exit 1
+
+
 	# Todo lo de perl tuvo que recompilarse
 	# evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
 	paquete p5-Clone

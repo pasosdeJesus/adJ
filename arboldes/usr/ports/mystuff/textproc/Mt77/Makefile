@@ -5,6 +5,7 @@
 COMMENT=	"Search engine, fast and precise"
 
 VERSION=1.0a1
+REVISION=1
 DISTNAME=v${VERSION}
 CATEGORIES=     textproc
 PKGNAME=Mt77-${VERSION}
