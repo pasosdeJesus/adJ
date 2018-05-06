@@ -1,20 +1,20 @@
 COMO PUBLICAR
 =============
 
-Anhelamos publicar versión mayor (e.g 6.2) 3 meses después de OpenBSD:
+Anhelamos publicar versión mayor (e.g 6.3) 3 meses después de OpenBSD:
 
 	11.Ene
 	1.Jul
 
-También publicamos revisiones (e.g 6.2p1) si la seguridad o calidad lo ameritan.
+También publicamos revisiones (e.g 6.3p1) si la seguridad o calidad lo ameritan.
 
-Anhelamos publicar al menos una versión beta (e.g 6.2b2 en directorio
+Anhelamos publicar al menos una versión beta (e.g 6.3b2 en directorio
 ```desarrollo``` del sitio de distribución) en:
 
 	10.Dic
 	10.Jun
 
-Sería ideal publicar una versión alfa mucho antes (24.Sep y 24.Mar, e.g 6.2a1).
+Sería ideal publicar una versión alfa mucho antes (24.Sep y 24.Mar, e.g 6.3a1).
 
 
 Pasos importantes para publicar versión beta
@@ -26,7 +26,7 @@ Pasos importantes para publicar versión beta
    distribución inicial
 3. Recompilar paquetes con actualizaciones de seguridad o mejoras
 4. Retroportar paquetes, dejar resultados no incluidos en DVD pero
-   útiles en 6.2-amd64-extra
+   útiles en 6.3-amd64-extra
 5. Cambiar versión en ver.sh, arboldd/usr/local/adJ/inst-adJ.sh, Actualiza.md,
 	ComoPublicar.md, {$V-amd64,arboldvd}/util/preact-adJ.sh, Novedades.md,
 	{$V-amd64,arboldvd}/util/actbase.sh, 
@@ -67,9 +67,9 @@ int main() {
 10. En adJ.pasosdeJesus.org
 	```
 	hdes/creaiso.sh
-	cp -rf AprendiendoDeJesus-6.2b1-amd64.iso 6.2b1-amd64 /dirftp
-	mkdir /dirftp/6.2-amd64-extra
-	rsync compdes:comp/adJ/extra-6.2/* /dirftp/6.2-amd64-extra
+	cp -rf AprendiendoDeJesus-6.3b1-amd64.iso 6.3b1-amd64 /dirftp
+	mkdir /dirftp/6.3-amd64-extra
+	rsync compdes:comp/adJ/extra-6.3/* /dirftp/6.3-amd64-extra
 	```
 11. Verificar operación de:
   * http://pasosdeJesus.github.io/basico_adJ http://pasosdeJesus.github.io/usuario_adJ http://pasosdeJesus.github.io/servidor_adJ
@@ -81,8 +81,8 @@ int main() {
 
 12. Poner Tag en github e iniciar rama al publicar version beta (antes en master)
 	```
-	git tag -a v6.2a1 -m "Version 6.2a1"
-	git push origin v6.2a1
+	git tag -a v6.3a1 -m "Version 6.3a1"
+	git push origin v6.3a1
 	...
 	git checkout -b ADJ_6_2
 	git push origin ADJ_6_2
@@ -105,26 +105,26 @@ Pasos importantes para publicar versión mayor
    http://aprendiendo.pasosdejesus.org/?id=MainMenu,  
 7. Poner Tag en github
 	```
-	git tag -a v6.2 -m "Version 6.2"
-	git push origin v6.2
+	git tag -a v6.3 -m "Version 6.3"
+	git push origin v6.3
 	```
 8. Publicar en Twitter que retrasnmite a cuenta y página en Facebook. 
    Si es tambien publicacion de SIVeL en sitio de noticias de SIVeL y Structio.
 
-	Publicado adJ 6.2 distribución para servidores y cortafuegos, 
+	Publicado adJ 6.3 distribución para servidores y cortafuegos, 
 	segura, amigable para cristian@s y en español, ver 
 	http://aprendiendo.pasosdejesus.org/
 9. Correo a listas: 
     openbsd-colombia@googlegroups.com, 
     openbsd-mexico@googlegroups.com, sivel-soporte@lists.sourceforge.net
 
-	Tema: Publicado adJ 6.2 para amd64
+	Tema: Publicado adJ 6.3 para amd64
 
 	Para instalar por primera vez descarga la imagen para DVD de:
 	  http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/
 	O solicita un DVD o una USB de instalacion por correo postal.
 
-	Si planeas actualizar de una version anterior a 6.2
+	Si planeas actualizar de una version anterior a 6.3
 	hay un procedimiento mas rápido con ```rsync``` (ver
 	https://github.com/pasosdeJesus/adJ/blob/master/Actualiza.md ).
 
@@ -136,8 +136,8 @@ Pasos importantes para publicar versión mayor
 	  2. La guía de instalación:
 	  http://pasosdeJesus.github.io//usuario_adJ/sobre-la-instalacion.html
 
-	Mira las novedades completas de la versión 6.2 en:
-	  http://aprendiendo.pasosdejesus.org/?id=AdJ+6.2+-+Aprendiendo+de+Jesus+6.2
+	Mira las novedades completas de la versión 6.3 en:
+	  http://aprendiendo.pasosdejesus.org/?id=AdJ+6.3+-+Aprendiendo+de+Jesus+6.3
 
 	De estas destacamos:
 	...

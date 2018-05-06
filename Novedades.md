@@ -2,13 +2,13 @@
 Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y que esperamos el regreso del señor Jesucristo.
 
-### Versión: 6.2p1
-Fecha de publicación: 22/Mar/2018
+### Versión: 6.3
+Fecha de publicación: 15/May/2018
 
-Vea las novedades completas de la versión 6.2 en 
-  <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_2/Novedades.md>
+Vea las novedades completas de la versión 6.3 en 
+  <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_3/Novedades.md>
 
-Aquí sólo documentamos novedades respecto a al versión 6.2
+Aquí sólo documentamos novedades respecto a al versión 6.3
 
 - Aplicados parches de seguridad posteriores al 20.Feb.2018 provenientes de 
   OpenBSD que incluyen mitigación a vulnerabilidad Meltdown
