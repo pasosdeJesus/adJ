@@ -1310,16 +1310,15 @@ diff -ruN src54-orig/include/monetary.h src/include/monetary.h
 diff -ruN src56-orig/include/Makefile src/include/Makefile
 --- src56-orig/include/Makefile	Wed Apr  2 23:43:56 2014
 +++ src/include/Makefile	Thu Apr  3 09:30:29 2014
-@@ -14,7 +14,8 @@
- 	dlfcn.h elf_abi.h err.h errno.h fenv.h float.h fnmatch.h fstab.h fts.h \
- 	ftw.h getopt.h glob.h grp.h icdb.h ieeefp.h ifaddrs.h inttypes.h \
- 	iso646.h kvm.h langinfo.h libgen.h limits.h link.h link_elf.h \
--	locale.h login_cap.h math.h md5.h memory.h ndbm.h netdb.h netgroup.h \
-+	locale.h login_cap.h math.h md5.h memory.h \
-+	monetary.h ndbm.h netdb.h netgroup.h \
- 	nlist.h nl_types.h paths.h poll.h pwd.h ranlib.h readpassphrase.h \
- 	regex.h resolv.h rmd160.h search.h setjmp.h sha1.h sha2.h signal.h \
- 	siphash.h sndio.h spawn.h stdbool.h stddef.h stdio.h stdlib.h \
+@@ -19,7 +19,7 @@
+ 	icdb.h ieeefp.h ifaddrs.h inttypes.h iso646.h \
+ 	kvm.h \
+ 	langinfo.h libgen.h limits.h link.h link_elf.h locale.h login_cap.h \
+-	math.h md5.h memory.h \
++	math.h md5.h memory.h monetary.h \
+ 	ndbm.h netdb.h netgroup.h nlist.h nl_types.h \
+ 	paths.h poll.h pthread.h pthread_np.h pwd.h \
+ 	ranlib.h readpassphrase.h regex.h resolv.h rmd160.h \
 diff -ruN src59-orig/lib/libc/Symbols.list src/lib/libc/Symbols.list
 --- src59-orig/lib/libc/Symbols.list	Wed Nov 18 11:50:08 2015
 +++ src/lib/libc/Symbols.list	Sat May 14 05:28:17 2016

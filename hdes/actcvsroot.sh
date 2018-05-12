@@ -11,6 +11,10 @@ if (test "$CVSROOT" = "") then {
 	CVSROOT=${USUARIOCVS}@${MAQCVS}:${DIRCVS}
 } fi;
 
-for i in `find $d -name CVS `; do 
-	echo ${CVSROOT}  > $i/Root; 
-done 
+echo "CVSROOT=${CVSROOT}" > /tmp/actcvsroot_tmp.sh
+find $d -name CVS | sed -e "s/^/echo \${CVSROOT}  > \"/g;s/$/\/Root\"/g" >> /tmp/actcvsroot_tmp.sh
+chmod +x /tmp/actcvsroot_tmp.sh
+/tmp/actcvsroot_tmp.sh
+#for i in `find $d -name CVS `; do 
+#	echo ${CVSROOT}  > $i/Root; 
+#done 
