@@ -1921,17 +1921,17 @@ diff -u src-ant/lib/libc/stdio/scanf.3 src/lib/libc/stdio/scanf.3
  .Xr setlocale(3) ;
  the next pointer must be a pointer to
  .Vt float .
-@@ -436,7 +477,8 @@
- .Xr printf 3 ,
+@@ -437,7 +478,8 @@
  .Xr strtod 3 ,
  .Xr strtol 3 ,
--.Xr strtoul 3
-+.Xr strtoul 3 ,
+ .Xr strtoul 3 ,
+-.Xr wscanf 3
++.Xr wscanf 3 ,
 +.Xr xlocale 3
  .Sh STANDARDS
  The functions
  .Fn fscanf ,
-@@ -445,6 +487,7 @@
+@@ -446,6 +488,7 @@
  .Fn sscanf
  conform to
  .St -ansiC .

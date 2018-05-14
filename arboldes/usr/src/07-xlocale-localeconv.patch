@@ -415,7 +415,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/setloc
 -.Nm localeconv
 +.Nm localeconv ,
 +.Nm localeconv_l
- .Nd natural language formatting for C
+ .Nd select character encoding
  .Sh SYNOPSIS
  .In locale.h
 @@ -46,6 +47,9 @@
@@ -428,49 +428,57 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/setloc
  .Sh DESCRIPTION
  The
  .Fn setlocale
-@@ -58,7 +62,10 @@
+@@ -59,26 +63,23 @@
+ .Xr locale 1
+ manual page.
+ .Pp
+-On
+-.Ox ,
+-the only useful value for the
++The possible values for
+ .Fa category
+-is
+-.Dv LC_CTYPE .
+-It sets the locale used for character encoding, character classification,
+-and case conversion.
+-For compatibility with natural language support in
+-.Xr packages 7 ,
+-all other categories \(em
++are
++.Dv LC_CTYPE ,
++to set character encoding, character classification,
++and case conversion;
+ .Dv LC_COLLATE ,
+-.Dv LC_MESSAGES ,
++sets ordering rules;
++.Dv LC_MESSAGES 
++sets language prefered;
+ .Dv LC_MONETARY ,
++sets conventions for monetary quantities;
+ .Dv LC_NUMERIC ,
++sets conventions for numeric quantities
+ and
+ .Dv LC_TIME
+-\(em can be set and retrieved, too, but their values are ignored by the
+-.Ox
+-C library.
++sets conventions for date and time.
+ A category of
+ .Dv LC_ALL
+ sets the entire locale generically.
+@@ -133,7 +134,10 @@
  The
  .Fn localeconv
- routine returns the current locale's parameters
--for formatting numbers.
-+for formatting numbers, while
+ function returns a pointer to a static structure
+-which provides parameters for formatting numbers.
++which provides parameters for formatting numbers, while
 +.Fn localeconv_l
-+returns the parameters for formatting numbers of the 
-+locale given as parameter.
- .Pp
- The
- .Fn setlocale
-@@ -127,7 +134,9 @@
- .Pp
- The
- .Fn localeconv
--function returns a pointer to a structure
-+and
-+.Fn localeconv_l
-+functions return a pointer to a structure
- which provides parameters for formatting numbers,
- especially currency values:
- .Bd -literal -offset indent
-@@ -301,6 +310,10 @@
- .Fn setlocale
- or
- .Fn localeconv .
-+The
-+.Fn localeconv_l
-+function returns a pointer in the locale passed as parameter.
-+.Fn 
- .\" .Sh FILES							XXX
- .\" .Bl -tag -width /usr/share/locale/locale/category -compact	XXX
- .\" .It Pa $PATH_LOCALE/\fIlocale\fP/\fIcategory\fP		XXX
-@@ -312,6 +325,7 @@
- .Xr mklocale 1 ,
- .Xr strcoll 3 ,
- .Xr strxfrm 3
-+.Xr xlocale 3
- .Sh STANDARDS
- The
- .Fn setlocale
-@@ -319,6 +333,9 @@
++points to parameters for formatting number in the given locale.
++.
+ On
+ .Ox ,
+ nothing in the returned structure ever changes.
+@@ -331,6 +335,9 @@
  .Fn localeconv
  functions conform to
  .St -ansiC .

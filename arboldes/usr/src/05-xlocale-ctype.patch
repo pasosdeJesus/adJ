@@ -2132,27 +2132,80 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/stdio/fput
 diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/stdio/wprintf.3 src53xlocale2/lib/libc/stdio/wprintf.3
 --- src53xlocale1/lib/libc/stdio/wprintf.3	Mon Apr  8 21:20:25 2013
 +++ src53xlocale2/lib/libc/stdio/wprintf.3	Fri Apr 12 12:07:57 2013
-@@ -56,6 +56,19 @@
- .Fn vswprintf "wchar_t * restrict ws" "size_t n" "const wchar_t *restrict format" "va_list ap"
- .Ft int
- .Fn vwprintf "const wchar_t * restrict format" "va_list ap"
+@@ -37,8 +37,12 @@
+ .Dt WPRINTF 3
+ .Os
+ .Sh NAME
+-.Nm wprintf , fwprintf , swprintf ,
+-.Nm vwprintf , vfwprintf , vswprintf
++.Nm wprintf , wprintf_l ,
++.Nm fwprintf , fwprintf_l ,
++.Nm swprintf , swprintf_l ,
++.Nm vwprintf , vwprintf_l , 
++.Nm vfwprintf , vfwprintf_l , 
++.Nm vswprintf , vswprintf_l ,
+ .Nd formatted wide character output conversion
+ .Sh SYNOPSIS
+ .In stdio.h
+@@ -61,6 +65,28 @@
+ .Fa "const wchar_t * restrict format"
+ .Fa ...
+ .Fc
 +.In xlocale.h
 +.Ft int
-+.Fn fwprintf_l "FILE * restrict stream" "locale_l loc" "const wchar_t * restrict format" ...
++.Fo fwprintf_l
++.Fa "FILE * restrict stream"
++.Fa "locale_l loc"
++.Fa "const wchar_t * restrict format"
++.Fa ...
++.Fc
 +.Ft int
-+.Fn swprintf_l "wchar_t * restrict ws" "size_t n" "locale_l loc" "const wchar_t * restrict format" ...
++.Fo swprintf_l
++.Fa "locale_l loc"
++.Fa "wchar_t * restrict ws"
++.Fa "size_t n"
++.Fa "const wchar_t * restrict format"
++.Fa ...
++.Fc
 +.Ft int
-+.Fn wprintf_l "locale_l loc" "const wchar_t * restrict format" ...
++.Fo wprintf_l
++.Fa "locale_l loc"
++.Fa "const wchar_t * restrict format"
++.Fa ...
++.Fc
+ .In stdarg.h
+ .Ft int
+ .Fo vfwprintf
+@@ -80,6 +106,28 @@
+ .Fa "const wchar_t * restrict format"
+ .Fa "va_list ap"
+ .Fc
++.In xlocale.h
 +.Ft int
-+.Fn vfwprintf_l "FILE * restrict stream" "locale_l loc" "const wchar_t * restrict" "va_list ap"
++.Fo vfwprintf_l
++.Fa "FILE * restrict stream"
++.Fa "locale_l loc"
++.Fa "const wchar_t * restrict format"
++.Fa "va_list ap"
++.Fc
 +.Ft int
-+.Fn vswprintf_l "wchar_t * restrict ws" "size_t n" "locale_l loc" "const wchar_t *restrict format" "va_list ap"
++.Fo vswprintf_l
++.Fa "locale_l loc"
++.Fa "wchar_t * restrict ws"
++.Fa "size_t n"
++.Fa "const wchar_t * restrict format"
++.Fa "va_list ap"
++.Fc
 +.Ft int
-+.Fn vwprintf_l "locale_l loc" "const wchar_t * restrict format" "va_list ap"
++.Fo vwprintf_l
++.Fa "locale_l loc"
++.Fa "const wchar_t * restrict format"
++.Fa "va_list ap"
++.Fc
  .Sh DESCRIPTION
  The
  .Fn wprintf
-@@ -63,24 +76,33 @@
+@@ -87,24 +135,33 @@
  .Fa format
  as described below.
  The
@@ -2190,7 +2243,7 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/stdio/wpri
  These functions write the output under the control of a
  .Fa format
  string that specifies how subsequent arguments
-@@ -94,9 +116,11 @@
+@@ -118,9 +175,11 @@
  used to end output to strings).
  .Pp
  The
@@ -2204,7 +2257,7 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/stdio/wpri
  functions will fail if
  .Fa n
  or more wide characters were requested to be written,
-@@ -210,8 +234,13 @@
+@@ -234,8 +293,13 @@
  or
  .Cm F )
  should be grouped and separated by thousands using
@@ -2220,7 +2273,7 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/stdio/wpri
  .El
  .It
  An optional decimal digit string specifying a minimum field width.
-@@ -555,8 +584,11 @@
+@@ -579,8 +643,11 @@
  .El
  .Pp
  The decimal point
@@ -2234,7 +2287,7 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/stdio/wpri
  .Pp
  In no case does a non-existent or small field width cause truncation of
  a numeric field; if the result of a conversion is wider than the field
-@@ -569,6 +601,7 @@
+@@ -593,6 +660,7 @@
  .Xr putwc 3 ,
  .Xr setlocale 3 ,
  .Xr wcsrtombs 3
@@ -2242,7 +2295,7 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/stdio/wpri
  .Sh STANDARDS
  The
  .Fn wprintf ,
-@@ -581,3 +614,13 @@
+@@ -605,3 +673,13 @@
  functions
  conform to
  .St -isoC-99 .

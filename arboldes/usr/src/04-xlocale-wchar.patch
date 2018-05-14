@@ -3684,12 +3684,12 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/regress/lib/libc/l
 diff -ruN -x CVS -x obj src55-orig/include/Makefile src/include/Makefile
 --- src55-orig/include/Makefile	Wed Apr  2 23:43:56 2014
 +++ src/include/Makefile	Thu Apr  3 11:28:07 2014
-@@ -20,7 +20,8 @@
- 	regex.h resolv.h rmd160.h search.h setjmp.h sha1.h sha2.h signal.h \
- 	siphash.h sndio.h spawn.h stdbool.h stddef.h stdio.h stdlib.h \
- 	string.h strings.h sysexits.h tar.h tgmath.h tib.h time.h \
--	ttyent.h unistd.h utime.h utmp.h uuid.h vis.h wchar.h wctype.h
-+	ttyent.h unistd.h utime.h utmp.h uuid.h vis.h wchar.h wctype.h \
+@@ -29,7 +29,8 @@
+ 	tar.h tgmath.h tib.h time.h ttyent.h \
+ 	unistd.h utime.h utmp.h uuid.h \
+ 	vis.h  \
+-	wchar.h wctype.h
++	wchar.h wctype.h \
 +	xlocale.h
  
  MFILES=	frame.h

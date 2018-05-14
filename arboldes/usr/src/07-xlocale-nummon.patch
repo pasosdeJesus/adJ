@@ -1074,7 +1074,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfprint
  {
  	char *fmt;		/* format string */
  	int ch;			/* character from fmt */
-@@ -383,7 +403,7 @@
+@@ -381,7 +401,7 @@
  	 * D:	expchar holds this character; '\0' if no exponent, e.g. %f
  	 * F:	at least two digits for decimal, at least one digit for hex
  	 */
@@ -1083,7 +1083,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfprint
  	if (strlen(decimal_point) > 1) {
  		decimal_point = "."; // POSIX
  	}
-@@ -445,7 +465,7 @@
+@@ -443,7 +463,7 @@
  	uio.uio_resid += (len); \
  	iovp++; \
  	if (++uio.uio_iovcnt >= NIOV) { \
@@ -1092,7 +1092,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfprint
  			goto error; \
  		iovp = iov; \
  	} \
-@@ -468,7 +488,7 @@
+@@ -466,7 +486,7 @@
  	PAD((len) - (n2 > 0 ? n2 : 0), (with));	\
  } while(0)
  #define	FLUSH() do { \
@@ -1101,7 +1101,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfprint
  		goto error; \
  	uio.uio_iovcnt = 0; \
  	iovp = iov; \
-@@ -546,7 +566,7 @@
+@@ -544,7 +564,7 @@
  		if (argtable == NULL) { \
  			argtable = statargtable; \
  			if (__find_arguments(fmt0, orgap, &argtable, \
@@ -1110,7 +1110,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfprint
  				ret = -1; \
  				goto error; \
  			} \
-@@ -575,11 +595,6 @@
+@@ -573,11 +593,6 @@
  		return (EOF);
  	}
  
@@ -1122,18 +1122,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfprint
  	fmt = (char *)fmt0;
  	argtable = NULL;
  	nextarg = 1;
-@@ -600,7 +615,9 @@
- 		size_t len;
- 
- 		cp = fmt;
--		while ((len = mbrtowc(&wc, fmt, MB_CUR_MAX, &ps)) != 0) {
-+		while ((len = mbrtowc_l(&wc, fmt, 
-+			XLOCALE_CTYPE(locale)->__mb_cur_max,
-+			&ps, locale)) != 0) {
- 			if (len == (size_t)-1 || len == (size_t)-2) {
- 				ret = -1;
- 				goto error;
-@@ -683,7 +700,7 @@
+@@ -669,7 +684,7 @@
  				if (argtable == NULL) {
  					argtable = statargtable;
  					if (__find_arguments(fmt0, orgap,
@@ -1142,7 +1131,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfprint
  						ret = -1;
  						goto error;
  					}
-@@ -712,7 +729,7 @@
+@@ -698,7 +713,7 @@
  				if (argtable == NULL) {
  					argtable = statargtable;
  					if (__find_arguments(fmt0, orgap,
@@ -1151,7 +1140,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfprint
  						ret = -1;
  						goto error;
  					}
-@@ -761,8 +778,8 @@
+@@ -747,8 +762,8 @@
  				size_t mbseqlen;
  
  				memset(&mbs, 0, sizeof(mbs));
@@ -1162,7 +1151,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfprint
  				if (mbseqlen == (size_t)-1) {
  					ret = -1;
  					goto error;
-@@ -921,7 +938,7 @@
+@@ -907,7 +922,7 @@
  				if (prec || flags & ALT)
  					size += prec + 1;
  				if ((flags & GROUPING) && expt > 0) 
@@ -1171,7 +1160,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfprint
  				lead = expt;
  			}
  			break;
-@@ -1061,7 +1078,7 @@
+@@ -1051,7 +1066,7 @@
  
  				case DEC:
  					cp = __print_intdec(flags, _umax, 
@@ -1180,7 +1169,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfprint
  					break;
  
  				case HEX:
-@@ -1261,7 +1278,7 @@
+@@ -1251,7 +1266,7 @@
   */
  static int
  __find_arguments(const char *fmt0, va_list ap, union arg **argtable,
@@ -1189,26 +1178,15 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfprint
  {
  	char *fmt;		/* format string */
  	int ch;			/* character from fmt */
-@@ -1331,6 +1348,8 @@
+@@ -1317,6 +1332,8 @@
+ 	tablemax = 0;
+ 	nextarg = 1;
  	memset(typetable, T_UNUSED, STATIC_ARG_TBL_SIZE);
- 	memset(&ps, 0, sizeof(ps));
- 
-+	FIX_LOCALE(locale);
 +
++	FIX_LOCALE(locale);
+ 
  	/*
  	 * Scan the format for conversions (`%' character).
- 	 */
-@@ -1338,7 +1357,9 @@
- 		size_t len;
- 
- 		cp = fmt;
--		while ((len = mbrtowc(&wc, fmt, MB_CUR_MAX, &ps)) != 0) {
-+		while ((len = mbrtowc_l(&wc, fmt, 
-+			XLOCALE_CTYPE(locale)->__mb_cur_max,
-+			&ps, locale)) != 0) {
- 			if (len == (size_t)-1 || len == (size_t)-2)
- 				return (-1);
- 			fmt += len;
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vfscanf.c src/lib/libc/stdio/vfscanf.c
 --- src54-x6/lib/libc/stdio/vfscanf.c	Wed Dec 11 21:53:32 2013
 +++ src/lib/libc/stdio/vfscanf.c	Fri Dec 13 15:26:11 2013
