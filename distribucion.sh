@@ -888,7 +888,7 @@ if (test "$sn" = "s") then {
 	paquete wxWidgets-gtk2
 
 	
-	paquete chromium
+	#paquete chromium
 	##
 	# Retroportados no existentes en versión actual
 

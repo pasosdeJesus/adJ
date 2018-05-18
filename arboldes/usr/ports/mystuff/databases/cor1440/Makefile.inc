@@ -7,7 +7,7 @@ COMMENT=	"Information system of political violence"
 PKGNAME=	sivel-${VERSION}
 CATEGORIES=    	databases www
 
-MAINTAINER=	Vladimir Támara Patiño <vtamara@pasosdeJesus.org>
+MAINTAINER=	Vladimir TÃ¡mara PatiÃ±o <vtamara@pasosdeJesus.org>
 
 # Public Domain  & BSD License
 PERMIT_PACKAGE_CDROM=	Yes

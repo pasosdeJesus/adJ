@@ -6,10 +6,11 @@ COMMENT=	"timetabling for a school"
 V=		1.1
 DISTNAME=	asigna-${V}
 CATEGORIES=    	education
-PKGNAME= 	${DISTNAME}p0
+REVISION=	1
+PKGNAME= 	${DISTNAME}
 
 HOMEPAGE=	http://structio.sourceforge.net/asigna
-MAINTAINER=	Vladimir T�mara <vtamara@pasosdeJesus.org>
+MAINTAINER=	Vladimir Támara Patiño <vtamara@pasosdeJesus.org>
 
 MASTER_SITES=	${MASTER_SITE_SOURCEFORGE:=structio/}
 DISTFILES=	${DISTNAME}.tar.gz

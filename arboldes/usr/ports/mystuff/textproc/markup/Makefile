@@ -13,7 +13,7 @@ HOMEPAGE=	http://ocaml-programming.de/markup/
 MASTER_SITES=	http://ocaml-programming.de/markup/
 DISTFILES=	${DISTNAME}.tar.gz
 
-MAINTAINER=	Vladimir T�mara <vtamara@pasosdeJesus.org>
+MAINTAINER=	Vladimir Támara Patiño <vtamara@pasosdeJesus.org>
 
 MODULES	= lang/ocaml
 

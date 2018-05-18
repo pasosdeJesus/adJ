@@ -4,12 +4,12 @@
 COMMENT=	"worksheets for learning to write with cursive font"
 
 V=		1.0
-REVISION=	0
+REVISION=	1
 DISTNAME=	PlantasCursiva-${V}
 CATEGORIES=    	education
 
 HOMEPAGE=	http://structio.sourceforge.net/escritura
-MAINTAINER=	Vladimir T�mara <vtamara@pasosdeJesus.org>
+MAINTAINER=	Vladimir Támara Patiño <vtamara@pasosdeJesus.org>
 
 MASTER_SITES=	${MASTER_SITE_SOURCEFORGE:=structio/}
 DISTFILES=	plantas_cursiva-${V}.tar.gz

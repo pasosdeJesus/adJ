@@ -5,7 +5,7 @@
 VERSION=1.2.5
 DISTNAME=v${VERSION}
 PKGNAME=sivel-v${VERSION}
-#REVISION=1
+REVISION=1
 
 HOMEPAGE=http://pasosdeJesus.github.io/SIVeL/
 PKGSPEC = sivel->=1.2,<1.3
@@ -16,7 +16,7 @@ DISTFILES=xv${VERSION}${EXTRACT_SUFX}
 DCOMP=SIVeL-${VERSION}
 SIVEL_RAIZ ?= htdocs/sivel
 
-RUN_DEPENDS+= lang/php/5.5 \
+RUN_DEPENDS+= lang/php/5.6 \
 	www/pear \
 	security/pear-Auth \
 	databases/pear-DB \

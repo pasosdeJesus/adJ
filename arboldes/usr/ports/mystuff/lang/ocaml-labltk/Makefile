@@ -5,7 +5,7 @@
 
 COMMENT=	"Interface to the Tcl/Tk GUI framework"
 VERSION=	8.06.3
-REVISION=	
+REVISION=	1
 
 PKGNAME=	ocaml-labltk-${VERSION}
 DISTNAME=	labltk-${VERSION}

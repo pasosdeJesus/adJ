@@ -6,12 +6,12 @@ COMMENT=	"to track progress of students and generate reports"
 V=		1.2
 DISTNAME=	sigue-${V}
 CATEGORIES=    	education
-PKGNAME=	${DISTNAME}p3
-#REVISION=	2	
+REVISION=	4
+PKGNAME=	${DISTNAME}
 
 
 HOMEPAGE=	http://structio.sourceforge.net/sigue
-MAINTAINER=	Vladimir T�mara <vtamara@pasosdeJesus.org>
+MAINTAINER=	Vladimir Támara Patiño <vtamara@pasosdeJesus.org>
 
 MASTER_SITES=	${MASTER_SITE_SOURCEFORGE:=structio/}
 MASTER_SITES0=	${HOMEPAGE}/

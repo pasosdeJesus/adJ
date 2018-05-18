@@ -5,11 +5,11 @@ COMMENT=	"creation and study of contents for schools"
 
 V=		1.4
 DISTNAME=	repasa-${V}
-REVISION=	6
+REVISION=	7
 CATEGORIES=    	education
 
 HOMEPAGE=	http://structio.sourceforge.net/repasa
-MAINTAINER=	Vladimir Támara Patiño <vtamara@pasosdejesus.org>
+MAINTAINER=	Vladimir TÃ¡mara PatiÃ±o <vtamara@pasosdejesus.org>
 
 MASTER_SITES=	${MASTER_SITE_SOURCEFORGE:=structio/}
 MASTER_SITES0=	${HOMEPAGE}/
