@@ -1,4 +1,4 @@
-# $OpenBSD: Makefile,v 1.231 2017/11/30 16:13:12 pea Exp $
+# $OpenBSD: Makefile,v 1.237 2018/05/17 18:42:42 pea Exp $
 
 COMMENT-main=	PostgreSQL RDBMS (client)
 COMMENT-server=	PostgreSQL RDBMS (server)
@@ -7,7 +7,7 @@ COMMENT-contrib=PostgreSQL RDBMS contributions
 COMMENT-plpython=Python procedural language for PostgreSQL
 COMMENT-pg_upgrade=Support for upgrading PostgreSQL data from previous version
 
-VERSION=	10.1
+VERSION=	10.4
 PREV_MAJOR=	9.6
 DISTNAME=	postgresql-${VERSION}
 PKGNAME-main=	postgresql-client-${VERSION}
@@ -45,11 +45,8 @@ USE_GMAKE=	Yes
 
 CONFIGURE_STYLE=gnu
 
-MODULES=	lang/python gcc4
+MODULES=	lang/python
 MODPY_RUNDEP=	No
-
-# for __sync_lock_test_and_set
-MODGCC4_ARCHS=	arm
 
 CONFIGURE_ENV=	ac_cv_path_PYTHON=${MODPY_BIN} \
 		CPPFLAGS="-I${LOCALBASE}/include" \
@@ -76,7 +73,8 @@ CONFIGURE_ARGS=	--disable-rpath --with-openssl=/usr \
 # a system to get this working, disable them for now. There is
 # (apparently) a serious performance hit doing this.
 
-.if ${MACHINE_ARCH} == "hppa" || ${MACHINE_ARCH} == "alpha"
+.if ${MACHINE_ARCH} == "hppa" || ${MACHINE_ARCH} == "alpha" || \
+    ${MACHINE_ARCH} == "arm"
 CONFIGURE_ARGS+=--disable-spinlocks
 .endif
 

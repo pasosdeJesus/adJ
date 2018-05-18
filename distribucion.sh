@@ -767,33 +767,6 @@ if (test "$sn" = "s") then {
 	# Modificados para posibilitar compilación
 	# Deben estar en mystuff
 
-	paquete gtar
-	paquete ocaml 
-	paquete ocamlbuild 
-	paquete ocaml-camlp4
-	paquete lang/ocaml-labltk
-	paquete chromium
-	paquete audacity
-	paquete djvulibre
-	paquete ImageMagick
-	paquete gtar
-	paquete libidn
-	paquete scribus
-	paquete wget
-	paquete gettext-tools
-	paquete wxWidgets-gtk2
-	paquete education/asigna
-	paquete textproc/markup
-	paquete education/repasa
-	paquete education/sigue
-	paquete textproc/Mt77
-	paquete x11/fbdesk
-	paquete sysutils/ganglia
-	paquete emulators/realboy
-	paquete textproc/xiphos
-	exit 1
-
-
 	# Todo lo de perl tuvo que recompilarse
 	# evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
 	paquete p5-Clone
@@ -862,27 +835,22 @@ if (test "$sn" = "s") then {
         # Actualizados.  Están desactualizado en OpenBSD estable y current
 	paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 5.6
 	paquete ocaml 
+	paquete ocamlbuild 
+	paquete ocaml-camlp4
 
 	####
 	# Recompilados para cerrar fallas de portes actualizados (estable)
 	# Para que operen bien basta actualizar CVS de /usr/ports 
 	# Los siguientes no deben estar en arboldes/usr/ports/mystuff
-	paquete png # Fuera de orden alfabetico porque es muy usado por actualizados
 
 	#FLAVOR=light paquete evince paquetes evince-light
-	#paquete flac
 	#paquete gcc paquetes "gcc" 4.9
 	#paquete git paquetes "git"
 	#paquete mariadb-client paquetes "mariadb-client mariadb-server" 
-	paquete curl
-	paquete libtorrent
-	paquete ocamlbuild 
 	#paquete p7zip paquetes "p7zip p7zip-rar"
 	#paquete pidgin paquetes "libpurple pidgin"
-	paquete rsync
-	paquete ruby paquetes "ruby ruby25-ri_docs" 2.5
+	#paquete ruby paquetes "ruby ruby25-ri_docs" 2.5
 	#paquete samba paquetes "ldb samba tevent"
-	#paquete webkitgtk4 
 	#paquete webkit paquetes "webkit webkit-gtk3"
 	# FLAVOR=gtk3 make paquete webkit-gtk3
 
@@ -891,17 +859,11 @@ if (test "$sn" = "s") then {
 	##
 	# Nueva revisión para operar con librerías retroportadas o actualizadas
 	# Deben estar en arbodes/usr/ports/mystuff
-	#paquete gdal
 	paquete hevea
-	#paquete inkscape 
 	#paquete libreoffice paquetes "libreoffice libreoffice-i18n-es"
-	#paquete postgis
-	#paquete py-psycopg2
-	#paquete qgis
-	#paquete w3m
 
 	# Recompilado con llave de adJ
-	paquete chromium
+	#paquete chromium
 
 	####
 	# Modificados para que usen xlocale (pueden cerrar fallas)
@@ -915,18 +877,18 @@ if (test "$sn" = "s") then {
 	paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs" 
 	paquete djvulibre
 	paquete gettext-tools
-	#paquete ggrep
 	paquete gdk-pixbuf
 	paquete glib2
 	paquete gtar
 	paquete libidn
 	paquete libspectre
 	paquete libxslt
-	paquete llvm
 	paquete scribus
 	paquete wget
 	paquete wxWidgets-gtk2
 
+	
+	paquete chromium
 	##
 	# Retroportados no existentes en versión actual
 

@@ -1,4 +1,4 @@
-# $OpenBSD: Makefile,v 1.363 2018/03/12 13:48:34 robert Exp $
+# $OpenBSD: Makefile,v 1.372 2018/05/16 17:48:07 robert Exp $
 
 .include <bsd.port.arch.mk>
 
@@ -8,7 +8,7 @@ DPB_PROPERTIES=		parallel
 
 COMMENT=		Chromium browser
 
-V=			65.0.3325.146
+V=			66.0.3359.181
 
 DISTNAME=		chromium-${V}
 
@@ -20,15 +20,15 @@ MAINTAINER=		Robert Nagy <robert@openbsd.org>
 
 EXTRACT_SUFX=		.tar.xz
 
-FLAVORS=		debug
+FLAVORS=		debug component
 FLAVOR?=
 
 # BSD-like
 PERMIT_PACKAGE_CDROM=	patents
 PERMIT_PACKAGE_FTP =	Yes
 
-MASTER_SITES=	https://commondatastorage.googleapis.com/chromium-browser-official/ \
-		http://nerd.hu/distfiles/
+MASTER_SITES=	https://commondatastorage.googleapis.com/chromium-browser-official/
+MASTER_SITES0=	http://nerd.hu/distfiles/
 
 MODULES=	lang/python
 
@@ -39,6 +39,10 @@ MODPY_RUNDEP=	No
 .if ${PROPERTIES:Mclang}    
 PATCH_LIST=	patch-* clang-*                            
 .endif                      
+
+# XXX Missing directory from distfile
+#PATCHFILES+=		add-missing-blink-tools.patch:0	
+#PATCH_DIST_STRIP=	-p1
 
 PATCHORIG=	.orig.port
 
@@ -126,7 +130,6 @@ GN_ARGS=	enable_nacl=false \
 		treat_warnings_as_errors=false \
 		clang_use_chrome_plugins=false \
 		use_allocator=\"none\" \
-		is_official_build=true \
 		fieldtrial_testing_like_official_build=true \
 		extra_cppflags=\"-idirafter ${LOCALBASE}/include -idirafter ${X11BASE}/include\"
 
@@ -147,6 +150,14 @@ GN_ARGS+=	google_api_key=\"AIzaSyC_3Uz69YR1Z2DRLUDf5ZxUJBClHuwrjL\" \
 .if ${FLAVOR:Mdebug}
 GN_ARGS+=	remove_webcore_debug_symbols=true
 MAKE_ENV+=	V=1
+.endif
+
+.if ${FLAVOR:Mcomponent}
+GN_ARGS+=	is_official_build=false \
+		is_component_build=true
+.else
+GN_ARGS+=	is_official_build=true \
+		is_component_build=false
 .endif
 
 pre-configure:
@@ -176,7 +187,7 @@ do-configure:
 		gen --args="${GN_ARGS}" out/${BUILDTYPE}
 
 pre-build:
-	${SUBST_CMD} ${WRKSRC}/build/gn_run_binary.py
+	${SUBST_CMD} ${WRKSRC}/build/gn_run_binary.py ${WRKSRC}/v8/tools/run.py
 	
 do-build:
 	@cd ${WRKSRC} && env -i ${MAKE_ENV} ninja \
@@ -213,6 +224,10 @@ do-install:
 .for f in libEGL.so libGLESv2.so
 	${INSTALL_DATA} ${BUILDDIR}/swiftshader/${f} ${PREFIX}/chrome/swiftshader
 .endfor
+
+.if ${FLAVOR:Mcomponent}
+	cp -Rp ${BUILDDIR}/*.so ${PREFIX}/chrome/
+.endif
 
 .for s in 22 24 48 64 128 256
 	${INSTALL_DATA_DIR} ${PREFIX}/share/icons/hicolor/${s}x${s}/apps
