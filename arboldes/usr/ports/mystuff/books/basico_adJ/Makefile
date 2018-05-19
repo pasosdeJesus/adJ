@@ -2,7 +2,7 @@
 # Porte de dominio publico de acuerdo a legislacion colombiana 
 #
 
-COMMENT=	"DocumentaciÛn b·sica de adJ"
+COMMENT=	"Documentaci√≥n b√°sica de adJ"
 PNAME=basico_adJ
 
 include Make.inc

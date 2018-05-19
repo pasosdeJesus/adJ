@@ -19,14 +19,14 @@ PERMIT_DISTFILES_FTP=	Yes
 
 DISTFILES=      ${DISTNAME}${EXTRACT_SUFX} 
 
-GH_TAGNAME=v${VERSION}
+GH_TAGNAME=${VERSION}
 GH_PROJECT=xmr-stak
 HOMEPAGE=https://github.com/fireice-uk/xmr-stak
 #PKGSPEC = xmr-stak->=2.0,<2.1
 
 MASTER_SITES=https://github.com/fireice-uk/xmr-stak/archive/
 EXTRACT_SUFX=.tar.gz
-DISTFILES=v${VERSION}${EXTRACT_SUFX}
+DISTFILES=${VERSION}${EXTRACT_SUFX}
 
 BUILD_DEPENDS += devel/cmake
 

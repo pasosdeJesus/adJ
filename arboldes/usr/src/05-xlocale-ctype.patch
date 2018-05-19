@@ -11,6 +11,16 @@ diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src54-x4/lib/l
  	setrunelocale.c \
  	wcscoll.c wcscoll_l.c \
  	wcstombs.c wctob.c wctomb.c wcstof.c wcstod.c wcstold.c wcstol.c \
+@@ -22,7 +23,8 @@
+ 	btowc.3 mblen.3 mbrlen.3 mbrtowc.3 mbsinit.3 mbsrtowcs.3 \
+ 	mbstowcs.3 mbtowc.3 wcrtomb.3 wcscoll.3 wcsrtombs.3 wcstod.3 \
+ 	wcstol.3 wcstombs.3 wcsxfrm.3 wctob.3 wctomb.3 \
+-	wctype.3 iswctype.3 wctrans.3 towctrans.3 wcwidth.3
++	wctype.3 iswctype.3 wctrans.3 towctrans.3 wcwidth.3 \
++	ctype_l.3 nextwctype.3 querylocale.3 xlocale.3
+ 
+ CFLAGS+=-I${.CURDIR} -I${LIBCSRCDIR}/citrus -DCOLLATE_DEBUG
+ CFLAGS+=-D__NO_TLS
 diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src53xlocale1/lib/libc/locale/___runetype_mb.c src/lib/libc/locale/___runetype_mb.c
 --- src53xlocale1/lib/libc/locale/___runetype_mb.c	Mon Mar 25 18:28:42 2013
 +++ src/lib/libc/locale/___runetype_mb.c	Thu Apr  4 09:52:18 2013

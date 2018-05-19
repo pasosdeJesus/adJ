@@ -2,7 +2,7 @@
 # Porte de dominio publico de acuerdo a legislacion colombiana 
 #
 
-COMMENT=	"Documentación de adJ como Servidor y Cortafuegos"
+COMMENT=	"DocumentaciÃ³n de adJ como Servidor y Cortafuegos"
 PNAME=servidor_adJ
 
 include ../basico_adJ/Make.inc

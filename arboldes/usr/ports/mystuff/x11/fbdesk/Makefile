@@ -1,15 +1,15 @@
-# adJ. Dominio Público de acuerdo a legislación colombiana. 2013. vtamara@pasosdeJesus.or
+# adJ. Dominio PÃºblico de acuerdo a legislaciÃ³n colombiana. 2013. vtamara@pasosdeJesus.or
 
 COMMENT=		fluxbox-util application that creates and manage icons
 
 V=              1.4.1
 DISTNAME=       fbdesk-${V}
-REVISION=	4
+REVISION=	5
 #PKGNAME=        ${DISTNAME}p3
 
 CATEGORIES=		x11
 
-MAINTAINER=		Vladimir Támara Patiño <vtamara@pasosdeJesus.org>
+MAINTAINER=		Vladimir TÃ¡mara PatiÃ±o <vtamara@pasosdeJesus.org>
 
 HOMEPAGE=		http://fluxbox.sourceforge.net/fbdesk/
 

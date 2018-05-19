@@ -5,14 +5,14 @@ COMMENT=	"Bible study tool with modules from Sword project"
 
 GH_ACCOUNT = crosswire
 GH_PROJECT = xiphos
-GH_TAGNAME = 4.0.5
+GH_TAGNAME = 4.1.0
 SUBST_VAR += GH_TAGNAME
 
 #V=		4.0.5
 #DISTNAME=	xiphos-${V}
 CATEGORIES=	textproc misc
 #PKGNAME=	${DISTNAME}
-REVISION=	1
+REVISION=
 HOMEPAGE=	http://xiphos.org
 MAINTAINER=	Vladimir Támara Patiño <vtamara@pasosdejesus.org>
 
@@ -28,14 +28,15 @@ PERMIT_PACKAGE_CDROM=	Yes
 #CONFIGURE_ARGS += --enable-gtkhtml
 
 CFLAGS += -I/usr/local/include/ossp/ -I/usr/local/include/webkitgtk-3.0/
+CPPFLAGS += -I/usr/local/include/ossp/ -I/usr/local/include/webkitgtk-3.0/
 LDFLAGS += -I/usr/local/include/ossp/ -L/usr/local/lib
 
 CONFIGURE_ENV+= CPPFLAGS="-I${LOCALBASE}/include -I/usr/local/include/ossp/ -L/usr/local/lib" 
 MAKE_ENV += LD_PRELOAD=/usr/local/lib/python2.7/site-packages/libxml2mod.so
 
-BUILD_DEPENDS=	textproc/intltool converters/libiconv textproc/sword www/gtkhtml4 textproc/clucene devel/libglade2 x11/gnome/doc-utils textproc/libxml devel/glib2 x11/gtk+2  x11/dbus-glib devel/libgsf devel/pango devel/atk graphics/cairo  graphics/png textproc/enchant devel/gconf2 devel/ORBit2 devel/pcre archivers/bzip2 net/curl devel/libidn www/webkit,gtk3 sysutils/e2fsprogs textproc/icu4c textproc/biblesync
+BUILD_DEPENDS=	textproc/intltool converters/libiconv textproc/sword www/gtkhtml4 textproc/clucene devel/libglade2 x11/gnome/doc-utils textproc/libxml devel/glib2 x11/gtk+2  x11/dbus-glib devel/libgsf devel/pango devel/atk graphics/cairo  graphics/png textproc/enchant devel/gconf2 devel/ORBit2 devel/pcre archivers/bzip2 net/curl devel/libidn www/webkit-gtk3 sysutils/e2fsprogs textproc/icu4c textproc/biblesync
 
-RUN_DEPENDS+= 	converters/libiconv textproc/sword www/gtkhtml4 textproc/clucene devel/libglade2 x11/gnome/doc-utils textproc/libxml devel/glib2 x11/gtk+2  x11/dbus-glib devel/libgsf devel/pango devel/atk graphics/cairo  graphics/png textproc/enchant devel/gconf2 devel/ORBit2 devel/pcre archivers/bzip2 net/curl devel/libidn www/webkit,gtk3 sysutils/e2fsprogs textproc/icu4c textproc/biblesync
+RUN_DEPENDS+= 	converters/libiconv textproc/sword www/gtkhtml4 textproc/clucene devel/libglade2 x11/gnome/doc-utils textproc/libxml devel/glib2 x11/gtk+2  x11/dbus-glib devel/libgsf devel/pango devel/atk graphics/cairo  graphics/png textproc/enchant devel/gconf2 devel/ORBit2 devel/pcre archivers/bzip2 net/curl devel/libidn www/webkit-gtk3 sysutils/e2fsprogs textproc/icu4c textproc/biblesync
 
 WANTLIB=	X11 c m stdc++ ssl
 

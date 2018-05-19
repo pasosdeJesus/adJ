@@ -2,6 +2,7 @@
 
 COMMENT=	"Provides an interface for creating simple JS scripts"
 
+REVISION=	1
 DISTNAME=	HTML_Javascript-1.1.2
 PKGNAME=	pear-${DISTNAME:S/_/-/}
 CATEGORIES=	www devel pear
@@ -9,7 +10,7 @@ CATEGORIES=	www devel pear
 MASTER_SITES=	http://pear.php.net/get/
 EXTRACT_SUFX=	.tgz
 
-MAINTAINER=	Vladimir Támara Patiño <vtamara@pasosdeJesus.org>
+MAINTAINER=	Vladimir TÃ¡mara PatiÃ±o <vtamara@pasosdeJesus.org>
 MODULES=	www/pear
 
 # PHP License

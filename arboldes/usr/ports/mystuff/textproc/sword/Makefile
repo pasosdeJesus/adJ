@@ -5,13 +5,13 @@ COMMENT=	"Bible study platform with KJV module"
 V=              1.8.0
 DISTNAME=	sword-${V}
 PKGNAME=        sword-${V}
-REVISION=	
+REVISION=	1
 # KJV cambia continuamente
 CATEGORIES=    	textproc books
 SHARED_LIBS=	sword 7.5 
 
 HOMEPAGE=	http://crosswire.org/sword/software/swordapi.jsp
-MAINTAINER=	Vladimir Támara Patiño <vtamara@pasosdeJesus.org>
+MAINTAINER=	Vladimir TÃ¡mara PatiÃ±o <vtamara@pasosdeJesus.org>
 
 # sword: GPL  kjv: free for any purpose
 PERMIT_PACKAGE_CDROM=	Yes

@@ -1,14 +1,15 @@
 
 COMMENT=	"Generates HTML menus from multidimensional hashes"
 
-DISTNAME=	HTML_Menu-2.1.4
+REVISION=	
+DISTNAME=	HTML_Menu-2.2.0
 PKGNAME=	pear-${DISTNAME:S/_/-/}
 CATEGORIES=	www devel pear
 
 MASTER_SITES=	http://pear.php.net/get/
 EXTRACT_SUFX=	.tgz
 
-MAINTAINER=	Vladimir Támara Patiño <vtamara@pasosdeJesus.org>
+MAINTAINER=	Vladimir TÃ¡mara PatiÃ±o <vtamara@pasosdeJesus.org>
 MODULES=	www/pear
 
 # PHP License

@@ -4,6 +4,7 @@
 
 include Make.inc
 
+REVISION=	0
 DISTNAME=	${PNAME}-${V}
 PKGNAME=   	${DISTNAME}
 CATEGORIES=    	books

@@ -3,22 +3,24 @@
 
 COMMENT=	"Biblesync protocol"
 
-V=		1.1.2
+V=		1.2.0
 DISTNAME=	biblesync-${V}
 CATEGORIES=	textproc misc
-REVISION=	1
+REVISION=	
 PKGNAME=	${DISTNAME}
 HOMEPAGE=	https://github.com/karlkleinpaste/biblesync
-MAINTAINER=	Vladimir Támara Patiño <vtamara@pasosdejesus.org>
-
-MASTER_SITES=	${MASTER_SITE_SOURCEFORGE:=gnomesword/BibleSync/${V}/}
+MAINTAINER=	Vladimir TÃ¡mara PatiÃ±o <vtamara@pasosdejesus.org>
+GH_PROJECT=	biblesync
+GH_ACCOUNT=	karlkleinpaste
+GH_TAGNAME=	${V}
+#MASTER_SITES=	${MASTER_SITE_SOURCEFORGE:=gnomesword/BibleSync/${V}/}
 	
 DISTFILES=	${DISTNAME}.tar.gz
 
 #Public Domain
 PERMIT_PACKAGE_CDROM=	Yes
 
-SHARED_LIBS +=  biblesync                 1.1
+SHARED_LIBS +=  biblesync                 1.2
 
 WANTLIB=	c m stdc++ 
 

@@ -54,6 +54,29 @@ int main() {
 ```
           compile con `cc -o l l.c` y ejecut con `./l` el resulado debería
           ser `1.000.000,200000' 
+	- Verifique que las cotejaciones en español operan en PostgreSQL con:
+```sh
+cat > /tmp/cot.sql <<EOF
+SELECT 'Á' < 'B' COLLATE "es_co_utf_8";
+EOF
+psql -h /var/www/var/run/postgresql/ -Upostgres -f /tmp/cot.sql
+```
+que debe responder con
+```
+ ?column?
+----------
+ t
+(1 row)
+```
+	- Operación de locale numeric en perl. El siguiente programa en perl debe dar respuesta 1987,23:
+```perl
+# Basado en http://perldoc.perl.org/perllocale.html
+use locale;
+use POSIX qw(locale_h);
+setlocale(LC_NUMERIC, "es_CO.UTF-8") or die "No pone locale LC_NUMERIC en es_CO.UTF-8";                                                        
+my $a = 1987.23;
+printf "%g\n", $a;
+```
    	- ejecución de /inst-adJ.sh en nuevo y actualización, 
    	- ejecución de /usr/local/adJ/inst-sivel.sh, que opere SIVeL1.2,
    	- que toda entrada del menú desde la interfaz gráfica opere.  

@@ -2,6 +2,7 @@
 
 COMMENT=	"class for generating CSS declarations"
 
+REVISION=	1
 DISTNAME=	HTML_CSS-1.5.4
 PKGNAME=	pear-${DISTNAME:S/_/-/}
 CATEGORIES=	www devel pear
@@ -9,7 +10,7 @@ CATEGORIES=	www devel pear
 MASTER_SITES=	http://pear.php.net/get/
 EXTRACT_SUFX=	.tgz
 
-MAINTAINER=	Vladimir Támara Patiño <vtamara@pasosdeJesus.org>
+MAINTAINER=	Vladimir TÃ¡mara PatiÃ±o <vtamara@pasosdeJesus.org>
 MODULES=	www/pear
 
 # PHP License

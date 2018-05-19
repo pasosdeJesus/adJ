@@ -633,11 +633,14 @@ function paquete {
 	if (test "$?" = "0") then {
 		# categoria va con nombre para paquetes en mystuff
 		cat=`echo $nom | sed -e "s/\/.*//g"`
+		echo "OJO cat=$cat"
 		d1="$nom"
+		echo "OJO d1=$d1"
 		if (test "$subd" != "") then {
 			d1="$d1/$subd"
 		} fi;
 		nom=`echo $nom | sed -e "s/^.*\///g"`
+		echo "OJO nom=$nom"
 	} else {
 		l=`grep "^$nom-[0-9]" /usr/ports/INDEX | head -n 1`
 		if (test "$l" = "") then {
@@ -652,14 +655,18 @@ function paquete {
 		cat=`echo $d1 | sed -e 's/\/[^\/]*$//g'`
 	} fi;
 	mys="mystuff";
-	if (test -d "/usr/ports/mystuff/$d1/") then {
-		dir="/usr/ports/mystuff/$d1/"
-	} else {
+	dir="/usr/ports/mystuff/$d1/"
+	echo "OJO dir=$dir"
+	test -d "$dir"
+	r=$?
+	echo "r=$r"
+	if (test "$r" != "0") then {
+		echo "OJO no es dir $dir"
 		dir="/usr/ports/$d1/"
-	} fi;
-	if (test ! -d "$dir") then {
-		echo "No es directorio $dir";
-		exit 1;
+		if (test ! -d "$dir") then {
+			echo "No es directorio $dir";
+			exit 1;
+		} fi;
 	} fi;
 	if (test "$nom" = "") then {
 		echo "Falla en funcion paquete nom es vacio"
@@ -863,7 +870,7 @@ if (test "$sn" = "s") then {
 	#paquete libreoffice paquetes "libreoffice libreoffice-i18n-es"
 
 	# Recompilado con llave de adJ
-	#paquete chromium
+	paquete chromium
 
 	####
 	# Modificados para que usen xlocale (pueden cerrar fallas)
@@ -888,7 +895,6 @@ if (test "$sn" = "s") then {
 	paquete wxWidgets-gtk2
 
 	
-	#paquete chromium
 	##
 	# Retroportados no existentes en versión actual
 
@@ -905,10 +911,12 @@ if (test "$sn" = "s") then {
 	# Deben estar en arboldes/usr/ports/mystuff pero no en /usr/ports
 	paquete emulators/realboy
 	paquete lang/ocaml-labltk
-	paquete net/xmr-stak-cpu
+	paquete net/xmr-stak
 	paquete sysutils/ganglia
 	paquete textproc/biblesync
 	paquete textproc/sword
+	paquete www/gtkhtml4
+	paquete www/webkit-gtk3
 	paquete textproc/xiphos
 	paquete www/pear-HTML-Common
 	paquete www/pear-HTML-Common2
@@ -1013,7 +1021,7 @@ if (test "$sn" = "s") then {
 	if (test "$autoMasPaquetesInv" = "s") then {
 		inv="-r"
 	} fi;
-	grep ".-\[v\]" Contenido.txt | sed -e "s/-\[v\]\([-a-zA-Z_0-9]*\).*/-[0-9][0-9alphabetcdfgprvSTABLERC._]*\1.tgz/g" | sort $inv > tmp/esperados.txt
+	grep ".-\[v\]" Contenido.txt | sed -e "s/-\[v\]\([-a-zA-Z_0-9]*\).*/-[0-9][0-9alphabetcdfgprvSTABLERC._+]*\1.tgz/g" | sort $inv > tmp/esperados.txt
 	ne=`(ls $V$VESP-$ARQ/paquetes/ ; ls $V$VESP-$ARQ/sivel/*tgz) | grep -v -f tmp/esperados.txt`;
 	if (test "$ne" != "") then {
 		echo "Los siguientes paquetes presentes en el directorio $V$VESP-$ARQ/paquetes no están entre los esperados:" | tee -a /var/www/tmp/distrib-adJ.bitacora;
@@ -1152,7 +1160,7 @@ else {
 if (test "$sn" = "s") then {
 	echo "s/\[V\]/$V/g"  > tmp/rempCont.sed
 	for i in `grep ".-\[v\]" Contenido.txt | sed -e "s/-\[v\]\([-a-zA-Z_0-9]*\).*/-[v]\1/g"`; do
-		n=`echo $i | sed -e "s/-\[v\]\([-a-zA-Z_0-9]*\).*/-[0-9][0-9alphabetcdfgrvSTABLERC._]*\1.tgz/g"`
+		n=`echo $i | sed -e "s/-\[v\]\([-a-zA-Z_0-9]*\).*/-[0-9][0-9alphabetcdfgrvSTABLERC._+]*\1.tgz/g"`
 		d=`(cd $V$VESP-$ARQ/paquetes; ls | grep "^$n"; cd ../sivel; ls | grep "^$n" 2>/dev/null | tail -n 1)`
 		e=`echo $d | sed -e 's/.tgz//g'`;
 		ic=`echo $i | sed -e 's/\[v\]/\\\\[v\\\\]/g'`;
