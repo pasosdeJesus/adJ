@@ -52,9 +52,9 @@ int main() {
   return 0;
 }
 ```
-  y compilando con `cc -o l l.c` y ejecutando con `./l` el resulado debería
-  ser `1.000.000,200000' 
-	- Verifique que las cotejaciones en español operan en PostgreSQL con:
+   y compilando con `cc -o l l.c` y ejecutando con `./l` el resulado debería
+   ser `1.000.000,200000`
+   - Verificar que las cotejaciones en español operan en PostgreSQL con:
 ```sh
 cat > /tmp/cot.sql <<EOF
 SELECT 'Á' < 'B' COLLATE "es_co_utf_8";
