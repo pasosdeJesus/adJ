@@ -42,7 +42,8 @@ Pasos importantes para publicar versión beta
   ```TEXTO=1 hdes/qemu.sh```): 
 	- instalación de sistema base, `uname` debe reportar APRENDIENDODEJESUS
 	- verificar que libc incluye funciones de locale por ejemplo editando
-          un archivo `l.c` con el siguiente contenido:
+          un archivo `l.c` con el siguiente contenido, tras compilar con `cc -o l l.c`
+	  y ejecutar con `./l` el resulado debería ser `1.000.000,200000`:
 ```
 #include "locale.h"  
 int main() {  
@@ -52,9 +53,7 @@ int main() {
   return 0;
 }
 ```
-   y compilando con `cc -o l l.c` y ejecutando con `./l` el resulado debería
-   ser `1.000.000,200000`
-   - Verificar que las cotejaciones en español operan en PostgreSQL con:
+	- Verificar que las cotejaciones en español operan en PostgreSQL con:
 ```sh
 cat > /tmp/cot.sql <<EOF
 SELECT 'Á' < 'B' COLLATE "es_co_utf_8";
