@@ -40,8 +40,8 @@ Pasos importantes para publicar versión beta
 8. Generar distribución, imagen iso (```hdes/creaiso.sh```)
 9. Probar por ejemplo en ```qemu``` (```hdes/qemu.sh``` o remotamente 
   ```TEXTO=1 hdes/qemu.sh```): 
-- instalación de sistema base, `uname` debe reportar APRENDIENDODEJESUS
-- verificar que libc incluye funciones de locale por ejemplo editando
+- Instalación de sistema base, `uname` debe reportar APRENDIENDODEJESUS
+- Verificar que libc incluye funciones de locale por ejemplo editando
   un archivo `l.c` con el siguiente contenido, tras compilar con `cc -o l l.c`
   y ejecutar con `./l` el resulado debería ser `1.000.000,200000`:
 ```
@@ -53,21 +53,21 @@ int main() {
   return 0;
 }
 ```
-	- Verificar que las cotejaciones en español operan en PostgreSQL con:
+- Verificar que las cotejaciones en español operan en PostgreSQL con:
 ```sh
 cat > /tmp/cot.sql <<EOF
 SELECT 'Á' < 'B' COLLATE "es_co_utf_8";
 EOF
 psql -h /var/www/var/run/postgresql/ -Upostgres -f /tmp/cot.sql
 ```
-que debe responder con
+  que debe responder con
 ```
  ?column?
 ----------
  t
 (1 row)
 ```
-	- Operación de locale numeric en perl. El siguiente programa en perl debe dar respuesta 1987,23:
+- Operación de locale numeric en perl. El siguiente programa en perl debe dar respuesta 1987,23:
 ```perl
 # Basado en http://perldoc.perl.org/perllocale.html
 use locale;
@@ -76,24 +76,24 @@ setlocale(LC_NUMERIC, "es_CO.UTF-8") or die "No pone locale LC_NUMERIC en es_CO.
 my $a = 1987.23;
 printf "%g\n", $a;
 ```
-   	- ejecución de /inst-adJ.sh en nuevo y actualización, 
-   	- ejecución de /usr/local/adJ/inst-sivel.sh, que opere SIVeL1.2,
-   	- que toda entrada del menú desde la interfaz gráfica opere.  
-	- que opere bien una aplicación Ruby on Rails
+- ejecución de /inst-adJ.sh en nuevo y actualización, 
+- ejecución de /usr/local/adJ/inst-sivel.sh, que opere SIVeL1.2,
+- que toda entrada del menú desde la interfaz gráfica opere.  
+- que opere bien una aplicación Ruby on Rails
   Arreglar y repetir hasta que no haya errores.
-9. En computador de desarrollo tras configurar ```var-local.sh``` enviar a
+10. En computador de desarrollo tras configurar ```var-local.sh``` enviar a
    adJ.pasosdeJesus.org:
 	```
 	hdes/rsync-aotro.sh
 	```
-10. En adJ.pasosdeJesus.org
+11. En adJ.pasosdeJesus.org
 	```
 	hdes/creaiso.sh
 	cp -rf AprendiendoDeJesus-6.3b1-amd64.iso 6.3b1-amd64 /dirftp
 	mkdir /dirftp/6.3-amd64-extra
 	rsync compdes:comp/adJ/extra-6.3/* /dirftp/6.3-amd64-extra
 	```
-11. Verificar operación de:
+12. Verificar operación de:
   * http://pasosdeJesus.github.io/basico_adJ http://pasosdeJesus.github.io/usuario_adJ http://pasosdeJesus.github.io/servidor_adJ
   * http://sivel.sf.net/
   * http://aprendiendo.pasosdeJesus.org
@@ -101,7 +101,7 @@ printf "%g\n", $a;
   * http://adJ.pasosdeJesus.org
   * rsync://adJ.pasosdeJesus.org
 
-12. Poner Tag en github e iniciar rama al publicar version beta (antes en master)
+13. Poner Tag en github e iniciar rama al publicar version beta (antes en master)
 	```
 	git tag -a v6.3a1 -m "Version 6.3a1"
 	git push origin v6.3a1
@@ -109,7 +109,7 @@ printf "%g\n", $a;
 	git checkout -b ADJ_6_2
 	git push origin ADJ_6_2
 	```
-13. Publicar en lista de desarrollo
+14. Publicar en lista de desarrollo
 
 Pasos importantes para publicar versión mayor
 --------------------------------------------
