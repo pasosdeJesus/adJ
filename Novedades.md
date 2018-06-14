@@ -74,8 +74,8 @@ Puede ver novedades respecto a OpenBSD en:
 # Novedades respecto a paquetes 
 
 * Nuevo paquete: 
-* Retroportados de current: ruby 2.5.1, postgresql 10.4, OJO chromium (con
-  llaves para compilación de adJ y no de OpenBSD).
+* Retroportados de current: ruby 2.5.1, postgresql 10.4, chromium 66.0.3359 
+  (con llaves para compilación de adJ).
 * Se han actualizado más los binarios de los siguientes paquetes para
   actualizar o cerrar fallas de seguridad (a partir de portes más recientes 
   para OpenBSD 6.3):  
@@ -89,9 +89,15 @@ Puede ver novedades respecto a OpenBSD en:
 
 * Paquetes más actualizados que OpenBSD-Current 
 	- php-5.6.36 --no es posible actualizar a 7 porque pear no opera y
-		sivel 1.2 depende de pear
+		sivel 1.2 depende de pear.  Además de la extensión mysqli
+	        (util para GLPI por ejemplo) se incluye la extensión mysql
+		(requerida por ejemplo por Wordpress).  Otras extensioens
+		no incluidas como de costumbre se dejan en el sitio de 
+		distribución directorio extra-6.3
 	- Ocaml 4.0.5 junto con ocamlbuild, ocaml-labltk, ocaml-camlp4 y hevea
 
+* Modificación al sistema de paquetes para permitir descripciones de 
+  paquetes en UTF-8 con caracteres en español.
 * Se recompilaron todos los paquetes de perl (sin cambiar de versión) con
   el perl de adJ que soporta LC_NUMERIC.  
 
@@ -107,4 +113,9 @@ Puede ver novedades respecto a OpenBSD en:
 * Se incluye sivel-1.2.x cuyas novedades son:
   *
 
+
+## FE DE ERRATAS
+
+- Chromium sigue siendo inestable por ejemplo en drive.google.com
+  sigue incluyendose firefox que lo opera bien.
 

@@ -26,6 +26,7 @@ Con respecto a OpenBSD 6.1 las novedades son:
 		* Muchos otros cambiando daemon por servicio
 	* Binarios modificados en /usr/sbin
 		* sysmerge	Usa llaves de adJ
+		* pkg_*		Permiten caracteres en español en descripciones
 		* Muchos otros cambiando daemon por servicio
 	* Archivos de órdenes nuevos en /usr/local/adJ/
 
