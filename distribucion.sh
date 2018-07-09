@@ -767,6 +767,8 @@ if (test "$sn" = "s") then {
 	# Modificados para posibilitar compilación
 	# Deben estar en mystuff
 
+	paquete postgresql-previous 
+	paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs" 
 	paquete gtar
 	paquete ocaml 
 	paquete ocamlbuild 
