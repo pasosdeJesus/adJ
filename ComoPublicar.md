@@ -106,16 +106,16 @@ printf "%g\n", $a;
 	git tag -a v6.3a1 -m "Version 6.3a1"
 	git push origin v6.3a1
 	...
-	git checkout -b ADJ_6_2
-	git push origin ADJ_6_2
+	git checkout -b ADJ_6_3
+	git push origin ADJ_6_3
 	```
 14. Publicar en lista de desarrollo
 
 Pasos importantes para publicar versión mayor
 --------------------------------------------
 
-1. Usar la rama ADJ_6_2
-	git checkout ADJ_6_2
+1. Usar la rama ADJ_6_3
+	git checkout ADJ_6_3
 2. Actualizar SIVeL, evangelios, Mt77, cor1440, sal7711 y paquetes propios de 
    adJ.
 3. Actualizar documentación (basico_adJ, usuario_adJ y servidor_adJ), publicar en 

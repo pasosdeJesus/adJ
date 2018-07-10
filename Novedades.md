@@ -2,30 +2,31 @@
 Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y que esperamos el regreso del señor Jesucristo.
 
-### Versión: 6.3
-Fecha de publicación: 20/May/2018
+### Versión: 6.3b1
+Fecha de publicación: 15/Jul/2018
 
 Puede ver novedades respecto a OpenBSD en:
-  <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_2/Novedades_OpenBSD.md>
+  <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_3/Novedades_OpenBSD.md>
 
 ## NOVEDADES RESPECTO A ADJ 6.2 PROVENIENTES DE OPENBSD
 
 # Kernel y Sistema Base
 
-- Aplicados parches de seguridad posteriores al 10.May.2018 provenientes de 
+- Aplicados parches de seguridad previos al 10.Jul.2018 provenientes de 
   OpenBSD que incluyen mitigación a vulnerabilidad Meltdown
 * Controladores ampliados o mejorados para amd64
 	* Red:
 		* Inalámbrica: Mejoras a `iwm` y `iwn` en redes roam y con SSID 
 	          escondido.
-		* Ethernet: Añadido a `em` soporte para Intel Ice Lake y Cannon Lake.
+		* Ethernet: Añadido a `em` soporte para Intel Ice Lake y 
+		  Cannon Lake.
 	* Interfaces con usuario:
 	* Virtualización: Soporta ISOs CD-ROM/DVD en `vmd` y `vioscsi`. `vmd`
 	  ahora recibe información de switch (rdomain, etc) de la interfaz
 	  de switch que subyace en conjunto con configuraciòn de
-	  `vm.conf`, ahora soporta hasta 4 interfaces de red por máquina virtual.
-	  Se añadió migraciones y snapshots para anfitriones AMD SVM/RVI.
-	
+	  `vm.conf`, ahora soporta hasta 4 interfaces de red por máquina 
+	  virtual.  Se añadió migraciones y snapshots para anfitriones 
+	  AMD SVM/RVI.
 	* Seguridad: Nuevo `bcmrng`` que soporta generador de números 
 	  aleatorios Broadcom BCM2835/CM2836/BCM2837.  Nuevo contolador `efi` 
 	  para servicios en tiempo de ejecución EFI. El microcódigo de las
@@ -39,9 +40,6 @@ Puede ver novedades respecto a OpenBSD en:
 	  hibernaciòn a los medios de almacenamiento SD/MMC pegados
  	  a controladores `sdhc`
 	
-	
-	
-
 * Mejoras a herramientas de Red
 	* Soporta GRE sobre IPv6
 	* mejoras a dhclient
@@ -50,7 +48,7 @@ Puede ver novedades respecto a OpenBSD en:
 	* Nuevo `execpromises` en pldege
 	* Porción del kernel KARL en el piscina de entropia de generador
 	  de números aleatorios al arranque
-	* Pequeño hueco aleaotrio al comienzo de las pilas de hilos, para
+	* Pequeño hueco aleatrio al comienzo de las pilas de hilos, para
 	  obligar a un atacante a hacer más trabajo.
 	* Mitiga vulnerabilidad Meltdown
 	* Incluye OpenSSH 7.7 que soporta criterio rdomain para permitir
@@ -63,8 +61,8 @@ Puede ver novedades respecto a OpenBSD en:
 * Otros
 	* Redireccionador cdn.openbsd.org y soporte para el mismo en 
 	  diversos programas como pkg_add
-	* Muchas otros arreglos e innovaciones en kernel, utilidades, librería de C
-	  y páginas del manual
+	* Muchas otros arreglos e innovaciones en kernel, utilidades, librería 
+	  de C y páginas del manual
 
 * El sistema base incluye mejoras a componentes auditados y mejorados 
   como, ```llvm``` 5.0.1,  ```Xenocara``` (```Xorg```) 7.7, ```perl``` 5.24.3, 
@@ -93,7 +91,7 @@ Puede ver novedades respecto a OpenBSD en:
 	        (util para GLPI por ejemplo) se incluye la extensión mysql
 		(requerida por ejemplo por Wordpress).  Otras extensioens
 		no incluidas como de costumbre se dejan en el sitio de 
-		distribución directorio extra-6.3
+		distribución en el directorio extra-6.3
 	- Ocaml 4.0.5 junto con ocamlbuild, ocaml-labltk, ocaml-camlp4 y hevea
 
 * Modificación al sistema de paquetes para permitir descripciones de 
@@ -106,7 +104,7 @@ Puede ver novedades respecto a OpenBSD en:
 
 * Se parchan y compilan portes más recientes de:
 	- OJO biblesync, sword y xiphos
-	- OJO markup, repasa y sigue con Ocaml 4.0.5
+	- markup, repasa y sigue con Ocaml 4.0.5
 
 * Se incluye beta 6 de sivel2 cuyas novedades son:
   *

@@ -1,3 +1,3 @@
 
-__19 Y les dijo: Venid en pos de mí, y os haré pescadores de hombres.__
-(ver Mateo 4:19)
+__También les refirió Jesús una parábola sobre la necesidad de orar siempre, y no desmayar__
+(ver Lucas 18:1)

@@ -1,4 +1,4 @@
-# Actualización a Aprendiendo De Jesús 6.3a1
+# Actualización a Aprendiendo De Jesús 6.3b1
 
 La actualización consta de 3 partes:
 
@@ -27,7 +27,7 @@ La actualización consta de 3 partes:
   Si descargó fuentes con el procedimiento anterior ejecutelo con:
 
 	```
-       	doas ~/comp/adJ/6.3a1-amd64/util/preact-adJ.sh
+       	doas ~/comp/adJ/6.3b1-amd64/util/preact-adJ.sh
 	```
 
 ## 2. Actualizar el sistema base:
@@ -38,7 +38,7 @@ La actualización consta de 3 partes:
 
 		```
 		cd ~/comp/adJ; 
-		ARCH=~/comp/adJ/6.3a1-amd64 doas 6.3a1-amd64/util/actbase.sh 6.3
+		ARCH=~/comp/adJ/6.3b1-amd64 doas 6.3b1-amd64/util/actbase.sh 6.3
 		```
 
 ## 3. Actualizar aplicaciones:
@@ -50,7 +50,7 @@ La actualización consta de 3 partes:
   puede usar:
 
 	```
-	ARCH=~/comp/adJ/6.3a1-amd64 doas /inst-adJ.sh
+	ARCH=~/comp/adJ/6.3b1-amd64 doas /inst-adJ.sh
 	```
 	
 
