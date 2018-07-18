@@ -12,7 +12,7 @@ ACVER=`echo $ACVERC | sed -e "s/\.//g"`
 ARQ=`uname -m`
 u=`whoami`
 if (test "$u" != "root") then {
-	echo "Este script debe ser ejecutado por root o con sudo";
+	echo "Este script debe ser ejecutado por root o con doas";
 	exit 1;
 } fi;
 
