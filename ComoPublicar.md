@@ -46,6 +46,7 @@ Pasos importantes para publicar versión beta
   y ejecutar con `./l` el resulado debería ser `1.000.000,200000`:
 ```
 #include "locale.h"  
+#include "stdio.h"
 int main() {  
   setlocale(LC_ALL, "es_CO.UTF-8");
   printf("%'f", 1000000.2);
@@ -54,6 +55,7 @@ int main() {
 }
 ```
 - Verificar que las cotejaciones en español operan en PostgreSQL con:
+doas su - _postgresql
 ```sh
 cat > /tmp/cot.sql <<EOF
 SELECT 'Á' < 'B' COLLATE "es_co_utf_8";
@@ -103,8 +105,8 @@ printf "%g\n", $a;
 
 13. Poner Tag en github e iniciar rama al publicar version beta (antes en master)
 	```
-	git tag -a v6.3a1 -m "Version 6.3a1"
-	git push origin v6.3a1
+	git tag -a v6.3b1 -m "Version 6.3b1"
+	git push origin v6.3b1
 	...
 	git checkout -b ADJ_6_3
 	git push origin ADJ_6_3

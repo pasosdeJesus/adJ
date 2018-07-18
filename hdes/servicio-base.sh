@@ -190,7 +190,7 @@ for i in `cat /tmp/tc`; do
 done;
 
 echo "Remplazando por servicio en varios directorios excepto sbin y usr.sbin";
-find bin usr.sbin/cron usr.bin games gnu kerberosIV regress share libexec sbin/iked usr.sbin -exec grep -i -l -I "daemon" {} ';' | grep -v "CVS" | grep -v "web2" | grep -v "perl" | grep -v "sendmail" | grep -v "lpr.lp.*Makefile" | grep -v "usr.sbin.unbound" > /tmp/tc 2> /dev/null
+find bin usr.sbin/cron usr.bin games gnu regress share libexec sbin/iked usr.sbin -exec grep -i -l -I "daemon" {} ';' | grep -v "CVS" | grep -v "web2" | grep -v "perl" | grep -v "sendmail" | grep -v "lpr.lp.*Makefile" | grep -v "usr.sbin.unbound" > /tmp/tc 2> /dev/null
 for i in `cat /tmp/tc`; do 
 	echo $i;
 	remplazad $i;

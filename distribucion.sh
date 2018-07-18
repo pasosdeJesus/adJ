@@ -306,7 +306,7 @@ if (test "$sn" = "s") then {
 		rm -rf /usr/obj/* 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
 	} fi;
 	echo "Esta operacion modificará tanto las fuentes en /usr como archivos en /etc e /include del sistema donde se emplea para hacer posible la compilación;"
-	rm -f ${DESTDIR}/usr/include/g++  2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
+	rm -rf ${DESTDIR}/usr/include/g++  2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
 	mkdir -p ${DESTDIR}/usr/include/g++ 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
 	#export CFLAGS=-I/usr/include/g++/${ARQ}-unknown-openbsd${V}/
 	# Aplicando parches sobre las fuentes de OpenBSD sin cambios para
@@ -332,16 +332,22 @@ if (test "$sn" = "s") then {
 		cd /sys 2>&1 >> /var/www/tmp/distrib-adJ.bitacora
 		$dini/hdes/servicio-kernel.sh 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora	
 	} fi;
-	# usar llaves de adJ en lugar de las de OpenBSD
-	grep "signfiy\/adJ" /usr/src/usr.sbin/sysmerge/sysmerge.sh > /dev/null 2>&1
-	if (test "$?" != "0") then {
-		cp /usr/src/usr.sbin/sysmerge/sysmerge.sh /usr/src/usr.sbin/sysmerge/sysmerge.sh.orig 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
-		sed -e 's/signify\/openbsd/signify\/adJ/g' /usr/src/usr.sbin/sysmerge/sysmerge.sh.orig > /usr/src/usr.sbin/sysmerge/sysmerge.sh 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
-	} fi;
+	#echo "* Usar llaves de adJ en lugar de las de OpenBSD" | tee -a /var/www/tmp/distrib-adJ.bitacora
+	#grep "signfiy\/adJ" /usr/src/usr.sbin/sysmerge/sysmerge.sh > /dev/null 2>&1
+	#if (test "$?" != "0") then {
+	#	cp /usr/src/usr.sbin/sysmerge/sysmerge.sh /usr/src/usr.sbin/sysmerge/sysmerge.sh.orig 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
+	#	sed -e 's/signify\/openbsd/signify\/adJ/g' /usr/src/usr.sbin/sysmerge/sysmerge.sh.orig > /usr/src/usr.sbin/sysmerge/sysmerge.sh 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
+	#} fi;
 	cd /usr/src && make obj 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
 	echo "* Completo make obj" | tee -a /var/www/tmp/distrib-adJ.bitacora
 	echo "whoami 0" >>  /var/www/tmp/distrib-adJ.bitacora
 	whoami >> /var/www/tmp/distrib-adJ.bitacora 2>&1
+	# Antes de compilar todo /usr/src, compilar perl porque pkg_add
+	# depende de ese
+	cd /usr/src/gnu/usr.bin/perl && make -f Makefile.bsd-wrapper depend 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
+	cd /usr/src/gnu/usr.bin/perl && make 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
+	cd /usr/src/gnu/usr.bin/perl && unset DESTDIR && make install 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
+
 	# build borrará código objeto 
 	# reconstruira dependencias, compilará e instalará
 	cd /usr/src && unset DESTDIR && LANG=POSIX nice make -j4 build 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora

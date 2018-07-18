@@ -13,7 +13,9 @@ Puede ver novedades respecto a OpenBSD en:
 # Kernel y Sistema Base
 
 - Aplicados parches de seguridad previos al 10.Jul.2018 provenientes de 
-  OpenBSD que incluyen mitigación a vulnerabilidad Meltdown
+  OpenBSD que incluyen mitigación a vulnerabilidad en CPU (acceso
+  a registros FPU que podría permitir acceder a información de
+  contextos anteriores).
 * Controladores ampliados o mejorados para amd64
 	* Red:
 		* Inalámbrica: Mejoras a `iwm` y `iwn` en redes roam y con SSID 
@@ -94,8 +96,6 @@ Puede ver novedades respecto a OpenBSD en:
 		distribución en el directorio extra-6.3
 	- Ocaml 4.0.5 junto con ocamlbuild, ocaml-labltk, ocaml-camlp4 y hevea
 
-* Modificación al sistema de paquetes para permitir descripciones de 
-  paquetes en UTF-8 con caracteres en español.
 * Se recompilaron todos los paquetes de perl (sin cambiar de versión) con
   el perl de adJ que soporta LC_NUMERIC.  
 
