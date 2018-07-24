@@ -87,6 +87,8 @@ Puede ver novedades respecto a OpenBSD en:
 
 ## NOVEDADES RESPECTO A ADJ 6.2 PROVENIENTES DE PASOS DE JESÚS
 
+* El instalador/actualizador inst-adJ.sh ahora actualiza ambiente
+  de desarrollo de Ruby de acuerdo a http://pasosdejesus.github.io//usuario_adJ/conf-programas.html#ruby
 * Paquetes más actualizados que OpenBSD-Current 
 	- php-5.6.36 --no es posible actualizar a 7 porque pear no opera y
 		sivel 1.2 depende de pear.  Además de la extensión mysqli
