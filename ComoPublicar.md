@@ -41,6 +41,12 @@ Pasos importantes para publicar versión beta
 9. Probar por ejemplo en ```qemu``` (```hdes/qemu.sh``` o remotamente 
   ```TEXTO=1 hdes/qemu.sh```): 
 - Instalación de sistema base, `uname -a` debe reportar APRENDIENDODEJESUS
+- Verificar que colorls y libc cotejan en español:
+  touch a
+  touch í
+  touch o
+  ls -l
+  Debe mostrar los directorios en orden alfabético correcto (í entre a y o).
 - Verificar que libc incluye funciones de locale por ejemplo editando
   un archivo `l.c` con el siguiente contenido, tras compilar con `cc -o l l.c`
   y ejecutar con `./l` el resulado debería ser `1.000.000,200000`:

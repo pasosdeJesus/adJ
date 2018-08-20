@@ -11,6 +11,7 @@ API_VERSION=		4.0
 SUBST_VARS=		API_VERSION
 
 PKGNAME=		gtkhtml4-${VERSION}
+REVISION=		1
 
 SHARED_LIBS +=  gtkhtml-4.0               0.0 # 0.0
 SHARED_LIBS +=  gtkhtml-editor-4.0        0.0 # 0.0
@@ -29,14 +30,19 @@ WANTLIB += cairo-gobject dbus-1 enchant epoxy expat ffi fontconfig
 WANTLIB += freetype gailutil-3 gdk-3 gdk_pixbuf-2.0 gio-2.0 glib-2.0
 WANTLIB += gmodule-2.0 gobject-2.0 graphite2 gthread-2.0 gtk-3 harfbuzz
 WANTLIB += m pango-1.0 pangocairo-1.0 pangoft2-1.0 pcre pixman-1 png
-WANTLIB += pthread pthread-stubs stdc++ xcb xcb-render xcb-shm z
+WANTLIB += pthread stdc++ xcb xcb-render xcb-shm z
 
 #MODULES=		devel/gettext \
 MODULES=			x11/gnome
 
+MODULES+= gcc4
+
+
 LIB_DEPENDS=		textproc/enchant \
 			x11/gtk+3
 
+CC=gcc
+CXX=g++
 BUILD_DEPENDS=		${RUN_DEPENDS}
 # libsoup is only used by testgtkhtml, but since libsoup may be around during
 # configure, and can have disappeared afterwards, the build can fail. so

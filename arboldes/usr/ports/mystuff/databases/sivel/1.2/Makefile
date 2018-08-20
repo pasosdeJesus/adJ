@@ -2,10 +2,10 @@
 
 # Port in the public domain.
 
-VERSION=1.2.5
+VERSION=1.2.6
 DISTNAME=v${VERSION}
 PKGNAME=sivel-v${VERSION}
-REVISION=1
+#REVISION=1
 
 HOMEPAGE=http://pasosdeJesus.github.io/SIVeL/
 PKGSPEC = sivel->=1.2,<1.3
