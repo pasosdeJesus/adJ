@@ -3,7 +3,7 @@
 BROKEN-alpha=	pcre_jit_compile.c:65:2: error: #error Unsupported architecture
 
 PV=		5.6
-V=		${PV}.36
+V=		${PV}.37
 
 MASTER_SITES0=	https://download.suhosin.org/
 

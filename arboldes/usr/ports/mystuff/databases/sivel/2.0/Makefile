@@ -2,8 +2,8 @@
 
 # Port in the public domain.
 
-VERSION=2.0b5
-REVISION=1
+VERSION=2.0b7
+#REVISION=1
 DISTNAME=v${VERSION}
 PKGNAME=sivel-v${VERSION}
 
@@ -19,6 +19,7 @@ SIVEL_RAIZ ?= htdocs/sivel2
 RUN_DEPENDS += lang/ruby/2.5
 BUILD_DEPENDS += www/phantomjs
 
+
 pre-patch:
 	pwd
 	ln -s `dirname ${WRKDIST}`/sivel2-${VERSION} ${WRKDIST}
@@ -32,6 +33,6 @@ do-install:
 	@find ${PREFIX}/${SIVEL_RAIZ} -name "*.orig" -exec rm {} ';'
 	( cd ${PREFIX}/${SIVEL_RAIZ}; \
 	bundle config build.nokogiri --use-system-libraries --with-xml2-include=/usr/local/include/libxml2/; \
-	bundle install --deployment )
+	CC=clang CXX=clang++ bundle install --deployment )
 
 .include <bsd.port.mk>

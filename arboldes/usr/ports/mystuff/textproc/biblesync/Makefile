@@ -3,7 +3,8 @@
 
 COMMENT=	"Biblesync protocol"
 
-V=		1.2.0
+V=		2.0.1
+#V=		1.2.0
 DISTNAME=	biblesync-${V}
 CATEGORIES=	textproc misc
 REVISION=	
@@ -20,16 +21,19 @@ DISTFILES=	${DISTNAME}.tar.gz
 #Public Domain
 PERMIT_PACKAGE_CDROM=	Yes
 
-SHARED_LIBS +=  biblesync                 1.2
+SHARED_LIBS +=  biblesync                 2.0
 
 WANTLIB=	c m stdc++ 
 
 BUILD_DEPENDS = sysutils/e2fsprogs
 
+MODULES +=	gcc4
+CXX=g++
+
 do-configure:
 	cd ${WRKSRC} && \
 	mkdir -p build/adJ && cd build/adJ && \
-	cmake -DBUILD_SHARED_LIBS=TRUE -DCMAKE_INSTALL_PREFIX=/usr/local -DLIBDIR=/usr/local/lib/ ../..
+	CXX=${CXX} cmake -DBUILD_SHARED_LIBS=TRUE -DCMAKE_INSTALL_PREFIX=/usr/local -DLIBDIR=/usr/local/lib/ ../..
 
 do-build:
 	cd ${WRKSRC}/build/adJ && make

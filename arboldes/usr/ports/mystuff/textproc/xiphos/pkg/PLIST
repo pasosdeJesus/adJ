@@ -1,4 +1,3 @@
-@comment $OpenBSD$
 @comment $adJ$
 @bin bin/xiphos
 @bin bin/xiphos-nav
@@ -148,6 +147,7 @@ share/locale/fi/LC_MESSAGES/xiphos.mo
 share/locale/fr/LC_MESSAGES/xiphos.mo
 share/locale/he/LC_MESSAGES/xiphos.mo
 share/locale/hu/LC_MESSAGES/xiphos.mo
+share/locale/it/LC_MESSAGES/xiphos.mo
 share/locale/ja/LC_MESSAGES/xiphos.mo
 share/locale/ko_KR/
 share/locale/ko_KR/LC_MESSAGES/
@@ -190,7 +190,8 @@ share/xiphos/bookmarks_old.gtkbuilder
 share/xiphos/chat_icon-16.png
 share/xiphos/dlg-un-16.png
 share/xiphos/dlg-un.png
-share/xiphos/editor_link_dialog.xml
+share/xiphos/editor_link_dialog.gtkbuilder
+share/xiphos/editor_link_dialog_old.gtkbuilder
 share/xiphos/editor_note.xml
 share/xiphos/editor_studypad.xml
 share/xiphos/epiphany-bookmark-page.png
@@ -252,7 +253,8 @@ share/xiphos/xi-menus-popup_old.gtkbuilder
 share/xiphos/xi-menus.glade
 share/xiphos/xi-menus.gtkbuilder
 share/xiphos/xi-menus_old.gtkbuilder
-share/xiphos/xi-splash.ui
+share/xiphos/xi-splash.gtkbuilder
+share/xiphos/xi-splash_old.gtkbuilder
 share/xiphos/xiphos-button-125.png
 share/xiphos/xiphos-x-16.png
 share/xiphos/xiphos.xpm

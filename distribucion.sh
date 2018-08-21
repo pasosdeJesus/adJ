@@ -12,7 +12,7 @@ if (test ! -f "ver.sh") then {
 	if (test "ver.sh.plantilla") then {
 		echo "Copiando configuración por defecto de ver.sh.plantilla";
 		cp ver.sh.plantilla ver.sh
-		echo "Este archivo de comandos es controlado por ver.sh, por favor editelo y vuelva a ejecutar"
+		echo "Este archivo de ordenes es controlado por ver.sh, por favor editelo y vuelva a ejecutar"
 		exit 0;
 	} fi;
 } fi;
@@ -775,7 +775,6 @@ if (test "$sn" = "s") then {
 		ln -s $dini/arboldes/usr/ports/mystuff /usr/ports/mystuff
 	} fi;
 	rm tmp/disponibles*
-
 
 	# Modificados para posibilitar compilación
 	# Deben estar en mystuff

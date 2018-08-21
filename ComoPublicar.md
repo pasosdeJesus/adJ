@@ -41,6 +41,12 @@ Pasos importantes para publicar versión beta
 9. Probar por ejemplo en ```qemu``` (```hdes/qemu.sh``` o remotamente 
   ```TEXTO=1 hdes/qemu.sh```): 
 - Instalación de sistema base, `uname -a` debe reportar APRENDIENDODEJESUS
+- Verificar que colorls y libc cotejan en español:
+  touch a
+  touch í
+  touch o
+  ls -l
+  Debe mostrar los directorios en orden alfabético correcto (í entre a y o).
 - Verificar que libc incluye funciones de locale por ejemplo editando
   un archivo `l.c` con el siguiente contenido, tras compilar con `cc -o l l.c`
   y ejecutar con `./l` el resulado debería ser `1.000.000,200000`:
@@ -120,25 +126,26 @@ Pasos importantes para publicar versión mayor
 	git checkout ADJ_6_3
 2. Actualizar SIVeL, evangelios, Mt77, cor1440, sal7711 y paquetes propios de 
    adJ.
-3. Actualizar documentación (basico_adJ, usuario_adJ y servidor_adJ), publicar en 
-   Internet
-4. Análogo a pasos de versión beta
-5. Actualizar version en reto de P2PU (las 4 primeras tareas) 
+3. Actualizar documentación (basico_adJ, usuario_adJ y servidor_adJ), 
+   publicar en Internet
+4. Actualizar versión en logo que presenta xenodm
+5. Análogo a pasos de versión beta
+6. Actualizar version en reto de P2PU (las 4 primeras tareas) 
    https://p2pu.org/es/groups/openbsd-adj-como-sistema-de-escritorio/
-6. Actualizar Artículo como Noticia en http://aprendiendo.pasosdeJesus.org,
+7. Actualizar Artículo como Noticia en http://aprendiendo.pasosdeJesus.org,
    http://aprendiendo.pasosdejesus.org/?id=MainMenu,  
-7. Poner Tag en github
+8. Poner Tag en github
 	```
 	git tag -a v6.3 -m "Version 6.3"
 	git push origin v6.3
 	```
-8. Publicar en Twitter que retrasnmite a cuenta y página en Facebook. 
+9. Publicar en Twitter que retrasnmite a cuenta y página en Facebook. 
    Si es tambien publicacion de SIVeL en sitio de noticias de SIVeL y Structio.
 
 	Publicado adJ 6.3 distribución para servidores y cortafuegos, 
 	segura, amigable para cristian@s y en español, ver 
 	http://aprendiendo.pasosdejesus.org/
-9. Correo a listas: 
+10. Correo a listas: 
     openbsd-colombia@googlegroups.com, 
     openbsd-mexico@googlegroups.com, sivel-soporte@lists.sourceforge.net
 
@@ -168,8 +175,8 @@ Pasos importantes para publicar versión mayor
 
 	Bendiciones
 
-10. Actualiza artículos de Wikipedia 
+11. Actualiza artículos de Wikipedia 
    https://en.wikipedia.org/wiki/AdJ y https://es.wikipedia.org/wiki/AdJ 
 
-11. Publicar noticia en http://sivel.sf.net y en  http://structio.sf.net
+12. Publicar noticia en http://sivel.sf.net y en  http://structio.sf.net
 

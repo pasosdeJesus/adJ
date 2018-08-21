@@ -5,7 +5,7 @@
 
 VER=6.3
 REV=0
-VESP="b1"
+VESP=""
 VERP=63
 
 # Falta /standard/root.hint
@@ -1167,7 +1167,7 @@ if (test ! -f /var/log/servicio) then {
 touch /etc/rc.local
 echo "* Preparar /etc/rc.local para que reinicie servicios faltantes" >> /var/www/tmp/inst-adJ.bitacora;
 echo "* Nueva forma de /etc/rc.local" >> /var/www/tmp/inst-adJ.bitacora;
-grep "for _r in \${pkg_scripts}" /etc/rc.local> /dev/null 2>&1
+grep "for _r in \${pkg_scripts}" /etc/rc.local > /dev/null 2>&1
 if (test "$?" != "0") then {
 	echo "Activando" >> /var/www/tmp/inst-adJ.bitacora;
 	ed /etc/rc.local >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
@@ -1195,6 +1195,29 @@ if (test " \$TERM" != "") then {
 w
 q
 EOF
+	if (test ! -f /etc/rc.local -o ! -s /etc/rc.local) then {
+		echo "Creando" >> /var/www/tmp/inst-adJ.bitacora;
+		cat > /etc/rc.local <<EOF
+# Este script podría ser ejecutado desde una tarea cron para reparar
+# servicios que pudieran haberse caido.  Verifica que cada servicio 
+# está efectivamente abajo antes de iniciarlo.
+
+if (test " \$TERM" != "") then {
+	pkg_scripts=\`rcctl order\`
+	for _r in \${pkg_scripts}; do
+		echo -n " \${_r} ";
+		if (test -x /etc/rc.d/\${_r}) then {
+			/etc/rc.d/\${_r} check
+			if (test "\$?" != "0") then {
+				echo -n "Iniciando "
+				/etc/rc.d/\${_r} start
+			} fi;
+		} fi;
+	done
+} fi;
+EOF
+	} fi;
+	chmod +x /etc/rc.local
 } else {
 	grep "rcctl order" /etc/rc.local > /dev/null 2> /dev/null
 	if (test "$?" != "0") then {
@@ -2409,8 +2432,7 @@ if (test "$inspear" = "s") then {
 
 pearfun
 
-insacp ispell ispell-sp
-ispell-config 3 >> /var/www/tmp/inst-adJ.bitacora
+insacp ispell
 
 
 echo "* Configurando escritorio de cuenta de administrador(a)" | tee -a /var/www/tmp/inst-adJ.bitacora;
@@ -2789,18 +2811,6 @@ for i in ruby19-railties-3.1.3 ruby19-actionmailer-3.1.3 \
 	pkg_delete -I -D dependencies $i >> /var/www/tmp/inst-adJ.bitacora 2>&1
 done
 
-echo "* Configurar ruby-2.5" >> /var/www/tmp/inst-adJ.bitacora;
-if (test ! -f "/usr/local/bin/ruby25") then {
-	insacp ruby
-	ln -sf /usr/local/bin/ruby25 /usr/local/bin/ruby
-	ln -sf /usr/local/bin/erb25 /usr/local/bin/erb
-	ln -sf /usr/local/bin/irb25 /usr/local/bin/irb
-	ln -sf /usr/local/bin/rdoc25 /usr/local/bin/rdoc
-	ln -sf /usr/local/bin/ri25 /usr/local/bin/ri
-	ln -sf /usr/local/bin/rake25 /usr/local/bin/rake
-	ln -sf /usr/local/bin/gem25 /usr/local/bin/gem
-} fi;
-
 if (test ! -f /home/$uadJ/.irbrc) then {
 	cat > /home/$uadJ/.irbrc << EOF
 # Configuración de irb
@@ -2817,6 +2827,113 @@ EOF
 	chown $uadJ:$uadJ /home/$uadJ/.irbrc
 } fi;
 
+echo "* Configurar ruby-2.5" >> /var/www/tmp/inst-adJ.bitacora;
+uruby=$uadJ
+v=`(cd /var/db/pkg/; ls) | grep ruby-2.3`
+if (test -d /var/www/bundler/ruby/2.3/gems/ -o -d /usr/local/lib/ruby/2.3 -o "$v" != "") then {
+  if (test -d /var/www/bundler/ruby/2.3) then {
+    uruby=`stat -f "%u" /var/www/bundler/ruby/2.3`
+    echo "uruby=$uruby" >> /var/www/tmp/inst-adJ.bitacora;
+  } fi;
+  dialog --title 'Eliminar ruby 2.3 y sus librerías' --yesno "\\nSe encontró algo de ruby 2.3 ¿Eliminar para evitar conflictos con la versión 2.5?" 15 60
+  if (test "$v" != "") then {
+    pkg_delete -I -D dependencies $v >> /var/www/tmp/inst-adJ.bitacora 2>&1
+  } fi;
+  echo "* Eliminando directorios de 2.3" >> /var/www/tmp/inst-adJ.bitacora;
+  rm -rf /var/www/bundler/ruby/2.3/gems
+  rm -rf /usr/local/lib/ruby/2.3
+} fi;
+v=`(cd /var/db/pkg/; ls) | grep ruby-2.4`
+if (test -d /var/www/bundler/ruby/2.4/gems/ -o -d /usr/local/lib/ruby/2.4 -o "$v" != "") then {
+  if (test -d /var/www/bundler/ruby/2.4) then {
+    uruby=`stat -f "%u" /var/www/bundler/ruby/2.4`
+    echo "uruby=$uruby" >> /var/www/tmp/inst-adJ.bitacora;
+  } fi;
+
+  dialog --title 'Eliminar ruby 2.4 y sus librerías' --yesno "\\nSe encontró algo de ruby 2.4 ¿Eliminar para evitar conflictos con la versión 2.5?" 15 60
+  if (test "$v" != "") then {
+    pkg_delete -I -D dependencies $v >> /var/www/tmp/inst-adJ.bitacora 2>&1
+  } fi;
+  echo "* Eliminando directorios de 2.4" >> /var/www/tmp/inst-adJ.bitacora;
+  rm -rf /var/www/bundler/ruby/2.4/gems
+  rm -rf /usr/local/lib/ruby/2.4
+} fi;
+
+	
+if (test ! -f "/usr/local/bin/ruby25") then {
+	insacp ruby
+        echo "* Creando enlaces para ruby 2.5" >> /var/www/tmp/inst-adJ.bitacora;
+	ln -sf /usr/local/bin/ruby25 /usr/local/bin/ruby
+	ln -sf /usr/local/bin/erb25 /usr/local/bin/erb
+	ln -sf /usr/local/bin/irb25 /usr/local/bin/irb
+	ln -sf /usr/local/bin/rdoc25 /usr/local/bin/rdoc
+	ln -sf /usr/local/bin/ri25 /usr/local/bin/ri
+	ln -sf /usr/local/bin/rake25 /usr/local/bin/rake
+	ln -sf /usr/local/bin/gem25 /usr/local/bin/gem
+} fi;
+
+
+echo "* Verificando limites sysctl buenos para ruby" >> /var/www/tmp/inst-adJ.bitacora;
+if (test `sysctl -n kern.shminfo.shmmni` -lt "1024") then {
+	echo "Aumentar valor de kern.shminfo.shmmni en /etc/sysctl.conf" | tee -a /var/www/tmp/inst-adJ.bitacora;
+} fi;
+if (test `sysctl -n kern.shminfo.shmmax` -lt "50331648") then {
+	echo "Aumentar valor de kern.shminfo.shmmax en /etc/sysctl.conf" | tee -a /var/www/tmp/inst-adJ.bitacora;
+} fi;
+if (test `sysctl -n kern.seminfo.semmns` -lt "2048") then {
+	echo "Aumentar valor de kern.seminfo.semmns /etc/sysctl.conf" | tee -a /var/www/tmp/inst-adJ.bitacora;
+} fi;
+if (test `sysctl -n kern.shminfo.shmall` -lt "51200") then {
+	echo "Aumentar valor de kern.shminfo.shmmall en /etc/sysctl.conf" | tee -a /var/www/tmp/inst-adJ.bitacora;
+} fi;
+if (test `sysctl -n kern.maxfiles` -lt "20000") then {
+	echo "Aumentar valor de kern.maxfiles en /etc/sysctl.conf" | tee -a /var/www/tmp/inst-adJ.bitacora;
+} fi;
+if (test ! -d /var/www/bundler/ruby/2.5) then {
+  echo "Creando /var/www/bundler/2.5" >> /var/www/tmp/inst-adJ.bitacora;
+  doas mkdir -p /var/www/bundler/ruby/2.5/
+  doas chown -R $uruby:www /var/www/bundler/ruby/2.5/
+} fi;
+
+echo "Eliminando gemas generales repetidas" >> /var/www/tmp/inst-adJ.bitacora;
+for i in `gem list | grep "(.*," | sed -e "s/ *([^,]*,/,/g;s/, default: [^,]*//g;s/, /,/g;s/)$//g;s/  */ /g" `; do 
+  echo $i; 
+  n=`echo $i | sed "s/,.*//g"`
+  v=`echo $i | sed "s/.*,//g"`
+  cmd="doas gem uninstall --executables --ignore-dependencies $n -v $v"
+  echo $cmd
+  eval $cmd 2>&1 >> /var/www/tmp/inst-adJ.bitacora;
+done
+
+# Seria bueno eliminar gemas repetidas de /var/www/bundler/ruby/gems/2.5
+# gem uninstall no ha operado con --install-dir (aunque la documentacion dice que si).
+
+echo "Actualizando gemas del sistema" >> /var/www/tmp/inst-adJ.bitacora;
+gem update --system 2>&1 >> /var/www/tmp/inst-adJ.bitacora;
+
+echo "Reinstalando gemas generales" >> /var/www/tmp/inst-adJ.bitacora;
+QMAKE=qmake-qt5 make=gmake MAKE=gmake doas gem pristine --all 2>&1 >> /var/www/tmp/inst-adJ.bitacora;
+
+echo "Reinstalando versiones mas actualizadas de gemas de /var/www/bundler/ruby/2.5 con extensiones cuando se cambia version menor" >> /var/www/tmp/inst-adJ.bitacora
+for i in `ls /var/www/bundler/ruby/2.5/extensions/x86_64-openbsd/2.5/ | sed -e "s/-[0-9.]*$//g" | sort -u`; do
+  uj=""
+  for j in /var/www/bundler/ruby/2.5/gems/$i-*; do
+    uj=$j
+  done
+  v=`echo $uj | sed -e 's/.*-\([0-9.]*\)/\1/g'` ; 
+  n=`echo $uj | sed -e 's/.*\/\(.*\)-[0-9.]*/\1/g'` ; 
+  cmd="doas gem install --install-dir /var/www/bundler/ruby/2.5/ $n -v $v" 
+  echo "$cmd"
+  eval "$cmd" 2>&1 >> /var/www/tmp/inst-adJ.bitacora;
+done
+
+echo "Instalando gemas importantes " >> /var/www/tmp/inst-adJ.bitacora
+gem install pkg-config 2>&1 >> /var/www/tmp/inst-adJ.bitacora;
+gem install bundler 2>&1 >> /var/www/tmp/inst-adJ.bitacora;
+if (test -x /usr/lcoal/bin/bundle25) then { 
+       doas ln -sf /usr/local/bin/bundle25 /usr/local/bin/bundle; 
+} fi
+bundle config path /var/www/bundler/ruby/2.5
 
 echo "* Configurar tmux" >> /var/www/tmp/inst-adJ.bitacora;
 f=`ls /var/db/pkg/tmux* 2> /dev/null`;

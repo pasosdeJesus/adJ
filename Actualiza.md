@@ -1,4 +1,4 @@
-# Actualización a Aprendiendo De Jesús 6.3b1
+# Actualización a Aprendiendo De Jesús 6.3
 
 La actualización consta de 3 partes:
 
@@ -27,7 +27,7 @@ La actualización consta de 3 partes:
   Si descargó fuentes con el procedimiento anterior ejecutelo con:
 
 	```
-       	doas ~/comp/adJ/6.3b1-amd64/util/preact-adJ.sh
+       	doas ~/comp/adJ/6.3-amd64/util/preact-adJ.sh
 	```
 
 ## 2. Actualizar el sistema base:
@@ -38,23 +38,23 @@ La actualización consta de 3 partes:
 
 		```
 		cd ~/comp/adJ; 
-		ARCH=~/comp/adJ/6.3b1-amd64 doas 6.3b1-amd64/util/actbase.sh 6.3
+		ARCH=~/comp/adJ/6.3-amd64 doas 6.3-amd64/util/actbase.sh 6.3
 		```
 
 ## 3. Actualizar aplicaciones:
 
 * Después de reinicar debe ejecutar  el archivo de ordenes ```/inst-adJ.sh```
-  Este archivo de comandos emplea codificación UTF8, por lo que para 
+  Este archivo de ordenes emplea codificación UTF8, por lo que para 
   iniciarlo se recomienda desde una terminal gráfica.  
   Si descargo la distribución con las instrucciones dadas en la primer parte
   puede usar:
 
 	```
-	ARCH=~/comp/adJ/6.3b1-amd64 doas /inst-adJ.sh
+	ARCH=~/comp/adJ/6.3-amd64 doas /inst-adJ.sh
 	```
 	
 
-  Este archivo de comandos asiste actualizaciones que puedan hacer 
+  Este archivo de ordenes asiste actualizaciones que puedan hacer 
   falta de una versión a otra del sistema base (descritas en
   http://openbsd.org/faq/upgrade60.html ) y actualiza cuando es posible
   archivos de configuración de diversos paquetes.
@@ -66,7 +66,7 @@ La actualización consta de 3 partes:
   archivos de configuración. A continuación traducimos y ampliamos las
   instrucciones de <http://www.openbsd.org/faq/upgrade59.html>
 
-  ```sysmerge(8)``` muestra el resultado del comando ```diff(1)``` 
+  ```sysmerge(8)``` muestra el resultado de la omando ```diff(1)``` 
   unificado, pasando por un paginador (el que haya configurado en la 
   variable de ambiente ```$PAGER```) y para la mayoría de archivos 
   presenta un mensaje como el siguiente (en el ejemplo presentado se 
@@ -119,7 +119,7 @@ La actualización consta de 3 partes:
 ## 4. Soluciones comunes
 
 
-* Si tras instalar sistema base, da el comando ```ls``` y obtiene 
+* Si tras instalar sistema base, da la orden ```ls``` y obtiene 
   ```Bad system call``` seguramente aún le falta actualizar el paquete 
   ```colorls```, el actualizador ```inst-adJ.sh``` lo hará, pero mientras 
   tanto puede ejecutar ```unalias ls```

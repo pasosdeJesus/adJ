@@ -14,7 +14,7 @@ CATEGORIES=	textproc misc
 #PKGNAME=	${DISTNAME}
 REVISION=
 HOMEPAGE=	http://xiphos.org
-MAINTAINER=	Vladimir Támara Patiño <vtamara@pasosdejesus.org>
+MAINTAINER=	Vladimir Tamara Patino <vtamara@pasosdejesus.org>
 
 #MASTER_SITES=	${MASTER_SITE_SOURCEFORGE:=gnomesword/Xiphos/${V}/}
 	
@@ -29,7 +29,7 @@ PERMIT_PACKAGE_CDROM=	Yes
 
 CFLAGS += -I/usr/local/include/ossp/ -I/usr/local/include/webkitgtk-3.0/
 CPPFLAGS += -I/usr/local/include/ossp/ -I/usr/local/include/webkitgtk-3.0/
-LDFLAGS += -I/usr/local/include/ossp/ -L/usr/local/lib
+LDFLAGS += -I/usr/local/include/ossp/ -L/usr/local/lib -lbiblesync
 
 CONFIGURE_ENV+= CPPFLAGS="-I${LOCALBASE}/include -I/usr/local/include/ossp/ -L/usr/local/lib" 
 MAKE_ENV += LD_PRELOAD=/usr/local/lib/python2.7/site-packages/libxml2mod.so

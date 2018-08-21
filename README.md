@@ -32,7 +32,7 @@ Organización de fuentes
 - ```arboldvd```   Directorios y archivos de un DVD instalador
 - ```arboldd```    Directorios y archivos de un adJ instalado
 - ```arboldes```   Directorios, archivos y parches para desarrollar adJ
-- ```distribucion.sh```	Archivo de comandos para generar distribución
+- ```distribucion.sh```	Archivo de ordenes para generar distribución
 - ```hdes```       Herramientas de desarrollo
 - ```pruebas```    Scripts que ayudan a hacer pruebas
 - ```tminiroot```  Transforma instalador que va en DVD a español
@@ -45,7 +45,7 @@ Pasos típicos para desarrollar
 ------------------------------
 
 Muchas de las operaciones típicas se controlan activando o desactivando pasos 
-que el archivo de comandos ```distribucion.sh``` hará.  Los pasos se 
+que el archivo de ordens ```distribucion.sh``` hará.  Los pasos se 
 activan/desactivan en el archivo ```ver-local.sh``` (si no tiene uno ejecute 
 ```cp ver-local.sh.plantilla ver-local.sh```), activa un paso poniendo ```s``` 
 en la variable asociada y lo desactiva poniendo ```n```.
@@ -58,7 +58,7 @@ en la variable asociada y lo desactiva poniendo ```n```.
 	```
 	doas ./distribucion.sh
 	```
-* Implemente mejoras a ```/usr/src``` bien como archivos de comandos (por ubicar en ```hdes/``` o en ```arboldd/usr/local/adJ```) que son llamados por ```distribucion.sh``` y hacen cambios automáticos  o bien como parches (se ubican en ```arboldes/usr/src```)
+* Implemente mejoras a ```/usr/src``` bien como archivos de ordenes (por ubicar en ```hdes/``` o en ```arboldd/usr/local/adJ```) que son llamados por ```distribucion.sh``` y hacen cambios automáticos  o bien como parches (se ubican en ```arboldes/usr/src```)
 * Actualice/mejore portes o cree nuevos en ```arboldes/usr/ports/mystuff```.  Al agregar o retirar actualizar ```distribucion.sh```
 * Mejore programas especiales distribuidos en adJ y los portes asociados
 * Actualice manuales básico, escritorio y cortafuegos/servidor, así como los portes asociados
