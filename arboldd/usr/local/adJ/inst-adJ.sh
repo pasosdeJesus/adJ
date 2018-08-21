@@ -1167,7 +1167,7 @@ if (test ! -f /var/log/servicio) then {
 touch /etc/rc.local
 echo "* Preparar /etc/rc.local para que reinicie servicios faltantes" >> /var/www/tmp/inst-adJ.bitacora;
 echo "* Nueva forma de /etc/rc.local" >> /var/www/tmp/inst-adJ.bitacora;
-grep "for _r in \${pkg_scripts}" /etc/rc.local> /dev/null 2>&1
+grep "for _r in \${pkg_scripts}" /etc/rc.local > /dev/null 2>&1
 if (test "$?" != "0") then {
 	echo "Activando" >> /var/www/tmp/inst-adJ.bitacora;
 	ed /etc/rc.local >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
@@ -1195,6 +1195,29 @@ if (test " \$TERM" != "") then {
 w
 q
 EOF
+	if (test ! -f /etc/rc.local -o ! -s /etc/rc.local) then {
+		echo "Creando" >> /var/www/tmp/inst-adJ.bitacora;
+		cat > /etc/rc.local <<EOF
+# Este script podría ser ejecutado desde una tarea cron para reparar
+# servicios que pudieran haberse caido.  Verifica que cada servicio 
+# está efectivamente abajo antes de iniciarlo.
+
+if (test " \$TERM" != "") then {
+	pkg_scripts=\`rcctl order\`
+	for _r in \${pkg_scripts}; do
+		echo -n " \${_r} ";
+		if (test -x /etc/rc.d/\${_r}) then {
+			/etc/rc.d/\${_r} check
+			if (test "\$?" != "0") then {
+				echo -n "Iniciando "
+				/etc/rc.d/\${_r} start
+			} fi;
+		} fi;
+	done
+} fi;
+EOF
+	} fi;
+	chmod +x /etc/rc.local
 } else {
 	grep "rcctl order" /etc/rc.local > /dev/null 2> /dev/null
 	if (test "$?" != "0") then {
@@ -2407,8 +2430,7 @@ if (test "$inspear" = "s") then {
 
 pearfun
 
-insacp ispell ispell-sp
-ispell-config 3 >> /var/www/tmp/inst-adJ.bitacora
+insacp ispell
 
 
 echo "* Configurando escritorio de cuenta de administrador(a)" | tee -a /var/www/tmp/inst-adJ.bitacora;
