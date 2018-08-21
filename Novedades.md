@@ -77,15 +77,14 @@ Puede ver novedades respecto a OpenBSD en:
   libshout, libusb-compat, musepack, netpbm, net-snmp, opencore-amr, openjpeg,
   p5-Geography-Countries, p5-LWP-Protocolo-https, p5-Tk, p5-XML-Parser,
   py-python2-pythondialog, py-psutil, samba-docs, spandsp
-* Retroportados de current: ruby 2.5.1, postgresql 10.4, chromium 66.0.3359 
-  (con llaves para compilación de adJ).
+* Retroportados y adaptados de current: ruby 2.5.1, postgresql 10.5, 
+	chromium 66.0.3359 (con llaves para compilación de adJ).
 * Se han actualizado más los binarios de los siguientes paquetes para
   actualizar o cerrar fallas de seguridad (a partir de portes más recientes 
   para OpenBSD 6.3): polkit, py-cryptography, curl
 * Se han recompilado los siguientes para aprovechar xlocale: libunistring, 
-  vlc, postgresql-client, postgresql-server, djvulibre, gettext-tools, 
-  gdk-pixbuf, glib2, gtar, libidn, libspectre, libxslt, scribus,
-  wget, wxWidgets-gtk2
+  vlc, djvulibre, gettext-tools, gdk-pixbuf, glib2, gtar, libidn, 
+  libspectre, libxslt, scribus, wget, wxWidgets-gtk2
 
 
 ## NOVEDADES RESPECTO A ADJ 6.2 PROVENIENTES DE PASOS DE JESÚS
