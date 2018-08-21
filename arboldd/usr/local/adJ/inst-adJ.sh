@@ -318,7 +318,7 @@ function insacp {
 	f=`ls /var/db/pkg/$n-* 2> /dev/null > /dev/null`;
 	if (test "$?" = "0") then {
 		echo "$n instalado. Intentando remplazar " >> /var/www/tmp/inst-adJ.bitacora
-		opbor="-I -r -D update -D updatedepends"
+		opbor="-I -r -D repair -D update -D updatedepends"
 	} fi;
 
 	pkg_add $opbor $PKG_PATH/$n-*.tgz >> /var/www/tmp/inst-adJ.bitacora 2>&1
@@ -1776,7 +1776,7 @@ echo "* Instalar PostgreSQL y PostGIS"  >> /var/www/tmp/inst-adJ.bitacora
 f=`ls /var/db/pkg/postgresql-server* 2> /dev/null > /dev/null`;
 if (test "$?" != "0") then {
 	p=`ls $PKG_PATH/libxml-* $PKG_PATH/libiconv-* $PKG_PATH/postgresql-client-* $PKG_PATH/postgresql-server* $PKG_PATH/postgresql-contrib* $PKG_PATH/postgresql-doc*`
-	pkg_add -I -r -D update -D updatedepends $p >> /var/www/tmp/inst-adJ.bitacora 2>&1;
+	pkg_add -I -r -D repair -D update -D updatedepends $p >> /var/www/tmp/inst-adJ.bitacora 2>&1;
 	insacp jpeg
 	insacp tiff
 	insacp nghttp2
@@ -2118,17 +2118,19 @@ if (test "$p" = "") then {
 	insacp libgcrypt
 	insacp icu4c
 	p=`ls $PKG_PATH/png*` 
-	pkg_add -I -D libdepends -D update -D updatedepends -r $p >> /var/www/tmp/inst-adJ.bitacora 2>&1
+	pkg_add -I -D repair -D libdepends -D update -D updatedepends -r $p >> /var/www/tmp/inst-adJ.bitacora 2>&1
 	p=`ls $PKG_PATH/libxslt* $PKG_PATH/gettext* $PKG_PATH/libxml* $PKG_PATH/png* $PKG_PATH/jpeg* $PKG_PATH/t1lib* $PKG_PATH/libiconv* $PKG_PATH/php*` 
 	echo $p >> /var/www/tmp/inst-adJ.bitacora 2>&1;
-	pkg_add -I -D libdepends -D update -D updatedepends -r $p >> /var/www/tmp/inst-adJ.bitacora 2>&1
+	pkg_add -I -D repair -D libdepends -D update -D updatedepends -r $p >> /var/www/tmp/inst-adJ.bitacora 2>&1
 	rm -f /var/www/conf/modules/php.conf /var/www/conf/php.ini /etc/php.ini
 	mkdir -p /var/www/conf/modules/
 	ln -sf /var/www/conf/modules.sample/php-5.6.conf \
 		/var/www/conf/modules/php.conf
 	for sp in gd intl ldap mcrypt mysql pod_mysql pdo_pgsql pgsql zip; do
 		rm -f /etc/php-5.6/$sp
-		ln -fs /etc/php-5.6.sample/$sp.ini /etc/php-5.6/
+		if (test -f /etc/php-5.6.sample/$sp.ini) then {
+			ln -fs /etc/php-5.6.sample/$sp.ini /etc/php-5.6/
+		} fi;
 	done;
 	if (test "$sweb" = "apache") then {
 		chmod +w /var/www/conf/httpd.conf
@@ -2396,7 +2398,7 @@ if (test "$inspear" = "s") then {
 	rm -rf /var/www/pear
 	echo "Antes de pkg_add" >> /var/www/tmp/inst-adJ.bitacora
 	p=`ls $PKG_PATH/pear-*`;
-	pkg_add -I -D update -D installed -D updatedepends -r $p >> /var/www/tmp/inst-adJ.bitacora 2>&1
+	pkg_add -I -D repair -D update -D installed -D updatedepends -r $p >> /var/www/tmp/inst-adJ.bitacora 2>&1
 	echo "Antes de pkg_delete" >> /var/www/tmp/inst-adJ.bitacora
 	ls -l /var/www/pear/lib/DB/ >> /var/www/tmp/inst-adJ.bitacora
 	cd /var/db/pkg
@@ -2424,10 +2426,10 @@ f=`ls /var/db/pkg/fluxbox* 2> /dev/null > /dev/null`;
 if (test "$?" != "0") then {
 	echo "* Instalando escritorio fluxbox" >> /var/www/tmp/inst-adJ.bitacora;
 	p=`ls $PKG_PATH/tiff-*`
-        pkg_add -I -D update -D updatedepends -r $p >> /var/www/tmp/inst-adJ.bitacora 2>&1;
+        pkg_add -I -D repair -D update -D updatedepends -r $p >> /var/www/tmp/inst-adJ.bitacora 2>&1;
 	insacp fribidi
 	p=`ls $PKG_PATH/jpeg-* $PKG_PATH/libid3tag-* $PKG_PATH/png-* $PKG_PATH/bzip2-* $PKG_PATH/libungif-* $PKG_PATH/imlib2-* $PKG_PATH/libltdl-* $PKG_PATH/fluxbox-* $PKG_PATH/fluxter-* $PKG_PATH/fbdesk-* 2>/dev/null`
-        pkg_add -I -D update -D updatedepends -r $p >> /var/www/tmp/inst-adJ.bitacora 2>&1;
+        pkg_add -I -D repair -D update -D updatedepends -r $p >> /var/www/tmp/inst-adJ.bitacora 2>&1;
 	if (test ! -f /home/$uadJ/.xsession) then {
 		cat > /home/$uadJ/.xsession <<EOF
 		/usr/local/bin/startfluxbox
@@ -2876,7 +2878,7 @@ if (test "$?" != "0") then {
 	insacp gtk+2
 
 	p=`ls $PKG_PATH/libxml-* $PKG_PATH/shared-mime-info-* $PKG_PATH/pcre-* $PKG_PATH/png-* $PKG_PATH/jpeg-* $PKG_PATH/glib2-* $PKG_PATH/tiff-* $PKG_PATH/libiconv-* $PKG_PATH/esound-* $PKG_PATH/atk-* $PKG_PATH/desktop-file-utils-* $PKG_PATH/gettext-* $PKG_PATH/libaudiofile-* $PKG_PATH/gtk+2-* $PKG_PATH/cairo-* $PKG_PATH/pango-* $PKG_PATH/nss-* $PKG_PATH/nspr-* $PKG_PATH/jasper-* $PKG_PATH/hicolor-icon-theme-* $PKG_PATH/chromium-*`
-        pkg_add -I -D update -D updatedepends -r $p >> /var/www/tmp/inst-adJ.bitacora 2>&1;
+        pkg_add -I -D repair -D update -D updatedepends -r $p >> /var/www/tmp/inst-adJ.bitacora 2>&1;
 	#echo "Sugerencias: " >> /var/www/tmp/inst-adJ.bitacora;
 	#echo "  * Configure localización en español desde about:config general.useragent.local es-AR"
 	#echo "  * Como página de inicio use https://127.0.0.1/";
@@ -2912,7 +2914,7 @@ if (test "$?" = "0") then {
 f=`ls /var/db/pkg/xfe* 2> /dev/null > /dev/null`;
 if (test "$?" != "0") then {
 	p=`ls $PKG_PATH/libiconv-* $PKG_PATH/fox-* $PKG_PATH/gettext-* $PKG_PATH/xfe-*`
-        pkg_add -I -D update -D updatedepends -r $p >> /var/www/tmp/inst-adJ.bitacora 2>&1;
+        pkg_add -I -D repair -D update -D updatedepends -r $p >> /var/www/tmp/inst-adJ.bitacora 2>&1;
 	# Archivo de configuración se creará en primera ejecución de xfe
 	mkdir -p /home/$uadJ/.config/xfe/
 	chown -R $uadJ:$uadJ /home/$uadJ/.config
@@ -2975,15 +2977,15 @@ pkg_delete -I -D dependencies lua >> /var/www/tmp/inst-adJ.bitacora  2>&1
 pkg_delete -I -D dependencies gtk+2 >> /var/www/tmp/inst-adJ.bitacora  2>&1
 
 echo "Instalando algunos comunes" >> /var/www/tmp/inst-adJ.bitacora 
-pkg_add -I -D updatedepends -D update -D libdepends -r $PKG_PATH/sdl*tgz $PKG_PATH/libxml*tgz $PKG_PATH/libgpg-error*tgz $PKG_PATH/libart-*.tgz  >> /var/www/tmp/inst-adJ.bitacora 2>&1;
-pkg_add -I -D updatedepends -D update -D libdepends -r $PKG_PATH/gtk+2*tgz >> /var/www/tmp/inst-adJ.bitacora 2>&1;
+pkg_add -I -D repair -D updatedepends -D update -D libdepends -r $PKG_PATH/sdl*tgz $PKG_PATH/libxml*tgz $PKG_PATH/libgpg-error*tgz $PKG_PATH/libart-*.tgz  >> /var/www/tmp/inst-adJ.bitacora 2>&1;
+pkg_add -I -D repair -D updatedepends -D update -D libdepends -r $PKG_PATH/gtk+2*tgz >> /var/www/tmp/inst-adJ.bitacora 2>&1;
 
 echo "Instalando todos los disponibles en PKG_PATH" >> /var/www/tmp/inst-adJ.bitacora 
-pkg_add -I -D update -u 
+pkg_add -I -D repair -D update -u 
 cd /var/db/pkg/
 for i in $PKG_PATH/*tgz; do
 	echo $i | tee -a /var/www/tmp/inst-adJ.bitacora
-	pkg_add -I -D updatedepends -D update -D libdepends -r $i >> /var/www/tmp/inst-adJ.bitacora 2>&1;
+	pkg_add -I -D repair -D updatedepends -D update -D libdepends -r $i >> /var/www/tmp/inst-adJ.bitacora 2>&1;
 done;
 
 echo "Eliminando librerías innecesarias" >> /var/www/tmp/inst-adJ.bitacora 
@@ -2996,11 +2998,11 @@ rm -rf *core
 
 for i in $PKG_PATH/*tgz; do
 	echo $i | tee -a /var/www/tmp/inst-adJ.bitacora
-	pkg_add -I -D updatedepends -D update -D libdepends -r $i >> /var/www/tmp/inst-adJ.bitacora 2>&1
+	pkg_add -I -D repair -D updatedepends -D update -D libdepends -r $i >> /var/www/tmp/inst-adJ.bitacora 2>&1
 done;
 
-pkg_add -I -D installed sword-* 2>&1 | tee -a /var/www/tmp/inst-adJ.bitacora 
-pkg_add -I -D update -u 2>&1 | tee -a /var/www/tmp/inst-adJ.bitacora 
+pkg_add -I -D repair -D installed sword-* 2>&1 | tee -a /var/www/tmp/inst-adJ.bitacora 
+pkg_add -I -D repair -D update -u 2>&1 | tee -a /var/www/tmp/inst-adJ.bitacora 
 
 # Configuraciones típicas
 
@@ -3024,6 +3026,7 @@ set fileencoding&   " auto-sensed charset of current buffer
 EOF
 } fi;
 if (test ! -f "/home/$uadJ/.vim/after/ftplugin/ruby.vim") then {
+	mkdir -p /home/$uadJ/.vim/after/ftplugin/
 	cat > /home/$uadJ/.vim/after/ftplugin/ruby.vim <<EOF
 set expandtab
 setlocal shiftwidth=2
