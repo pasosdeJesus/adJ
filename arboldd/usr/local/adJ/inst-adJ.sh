@@ -1457,7 +1457,7 @@ Vea la documentacion con man xorg.conf, editelo por ejemplo con mg /etc/X11/xorg
 	/bin/sh
 	dialog --title 'Configuración de X-Window' --yesno '\n¿Logró configurar X-Window?' 15 60 
 	if (test "$?" = "0") then {
-		echo "xdm_flags=\"\"" >> /etc/rc.conf.local
+		echo "xenodm_flags=\"\"" >> /etc/rc.conf.local
 	} fi;
 } else {
 	rm -f /etc/X11/xorg-automatico
