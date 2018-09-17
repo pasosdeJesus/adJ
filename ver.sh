@@ -2,7 +2,7 @@
 # Variables de configuración para generar distribución Aprendiendo de Jesús
 # Dominio público. 2013. vtamara@pasosdeJesus.org
 
-V=6.3
+V=6.4
 VESP=""
 # Versión que se está desarrollando
 
