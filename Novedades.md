@@ -135,3 +135,14 @@ Puede ver novedades respecto a OpenBSD en:
 - Chromium sigue siendo inestable por ejemplo en drive.google.com
   por esto sigue incluyendose firefox que en casos como ese puede operar.
 
+- El instalador no configura bien el gestor de ingreso xenodm, para 
+  configurarlo bien, editar como administrador el archivo 
+  `/etc/rc.conf.local` y cambiar `xdm_flags` por `xenodm_flags`.
+
+- El paquete `djvulibre-3.5.27p2.tgz` es el de adJ 6.2 y espera librerías 
+  no existentes en adJ 6.3 --esto puede afectar binarios de otros paquetes 
+  que dependen de ese como `convert` de `ImageMagicak`. 
+  Descargue el paquete más reciente de algún repositorio de OpenBSD, por ejemplo:
+
+	$ export PKG_PATH=https://cdn.openbsd.org/pub/OpenBSD/6.3/packages/amd64
+	$ doas pkg_add -D installed -r djvulibre

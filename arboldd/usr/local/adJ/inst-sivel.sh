@@ -589,7 +589,7 @@ cat /tmp/crontab.sivel >> /var/www/tmp/inst-sivel.log;
 echo "* Personalizando menú de fluxbox" | tee -a /var/www/tmp/inst-sivel.log;
 grep "SIVeL" /home/$usivel/.fluxbox/menu > /dev/null 2> /dev/null
 if (test "$?" != "0") then {
-	echo -n "¿Nombre de usuario para conectarse a www.nocheyniebla.org? ";
+	echo -n "¿Nombre de usuario para conectarse a rbd.nocheyniebla.org? ";
 	read usnyn
 	ed /home/$usivel/.fluxbox/menu <<EOF
 /(Dispositivos)
@@ -599,8 +599,8 @@ i
 	[exec] (Editar sitios/sivel/conf.php) {LANG=es xfw /var/www/htdocs/sivel/sitios/sivel/conf.php}
         [exec] (Sacar copia de base en /var/www/resbase) {cd /var/www/htdocs/sivel/ && bin/pgdump.sh}
 	[exec] (Quemar /var/resbase.img en CD-R) {xterm -e "cd /var/www/htdocs/sivel && bin/copiacd.sh"}
-	[exec] (Conectar a ${usnyn}www.nocheyniebla.org) {xterm -e "ssh -p10022 -R 1234:localhost:22 ${usnyn}@www.nocheyniebla.org"}
-	[exec] (Enviar volcado de la base a ${usnyn}@www.nocheyniebla.org) {cd /var/www/htdocs/sivel/sitios/sivel && ../../bin/pgdump.sh && dm=`date "+%d"` scp -P10022 /var/www/resbase/sivel-dump-$dm.sql.gz ${usnyn}@www.nocheyniebla.org:"}
+	[exec] (Conectar a ${usnyn}@rbd.nocheyniebla.org) {xterm -e "ssh -p10022 -R 1234:localhost:22 ${usnyn}@rbd.nocheyniebla.org"}
+	[exec] (Enviar volcado de la base a ${usnyn}@rbd.nocheyniebla.org) {cd /var/www/htdocs/sivel/sitios/sivel && ../../bin/pgdump.sh && dm=`date "+%d"` scp -P10022 /var/www/resbase/sivel-dump-$dm.sql.gz ${usnyn}@rbd.nocheyniebla.org:"}
 [end]
 .
 w
