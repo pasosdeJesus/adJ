@@ -2,11 +2,11 @@
 Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y que esperamos el regreso del señor Jesucristo.
 
-### Versión: 6.3
+### Versión: 6.4
 Fecha de publicación: 21/Ago/2018
 
 Puede ver novedades respecto a OpenBSD en:
-  <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_3/Novedades_OpenBSD.md>
+  <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_4/Novedades_OpenBSD.md>
 
 ## NOVEDADES RESPECTO A ADJ 6.2 PROVENIENTES DE OPENBSD
 
@@ -81,7 +81,7 @@ Puede ver novedades respecto a OpenBSD en:
 	chromium 66.0.3359 (con llaves para compilación de adJ).
 * Se han actualizado más los binarios de los siguientes paquetes para
   actualizar o cerrar fallas de seguridad (a partir de portes más recientes 
-  para OpenBSD 6.3): polkit, py-cryptography, curl
+  para OpenBSD 6.4): polkit, py-cryptography, curl
 * Se han recompilado los siguientes para aprovechar xlocale: libunistring, 
   vlc, djvulibre, gettext-tools, gdk-pixbuf, glib2, gtar, libidn, 
   libspectre, libxslt, scribus, wget, wxWidgets-gtk2
@@ -98,7 +98,7 @@ Puede ver novedades respecto a OpenBSD en:
 	        (util para GLPI por ejemplo) se incluye la extensión mysql
 		(requerida por ejemplo por Wordpress).  Otras extensioens
 		no incluidas como de costumbre se dejan en el sitio de 
-		distribución en el directorio extra-6.3
+		distribución en el directorio extra-6.4
 	- Ocaml 4.0.5 junto con ocamlbuild, ocaml-labltk, ocaml-camlp4 y hevea
 
 * Se recompilaron todos los paquetes de perl (sin cambiar de versión) con
@@ -140,9 +140,9 @@ Puede ver novedades respecto a OpenBSD en:
   `/etc/rc.conf.local` y cambiar `xdm_flags` por `xenodm_flags`.
 
 - El paquete `djvulibre-3.5.27p2.tgz` es el de adJ 6.2 y espera librerías 
-  no existentes en adJ 6.3 --esto puede afectar binarios de otros paquetes 
+  no existentes en adJ 6.4 --esto puede afectar binarios de otros paquetes 
   que dependen de ese como `convert` de `ImageMagicak`. 
   Descargue el paquete más reciente de algún repositorio de OpenBSD, por ejemplo:
 
-	$ export PKG_PATH=https://cdn.openbsd.org/pub/OpenBSD/6.3/packages/amd64
+	$ export PKG_PATH=https://cdn.openbsd.org/pub/OpenBSD/6.4/packages/amd64
 	$ doas pkg_add -D installed -r djvulibre

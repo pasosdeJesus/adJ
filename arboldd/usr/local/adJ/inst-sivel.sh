@@ -9,8 +9,8 @@
 # base sivel10, sivel11
 # Versiones futuras o en desarrollo /var/www/htdocs/sivel2 usa base sivel2
 
-VER=5.8
-VESP=
+VER=6.4
+VESP=a1
 ACVER=`uname -r`
 
 export PATH=$PATH:/usr/local/bin
