@@ -1,12 +1,21 @@
-# $OpenBSD: php.port.mk,v 1.17 2017/11/14 11:57:25 sthen Exp $
+# $OpenBSD: php.port.mk,v 1.22 2018/09/28 21:27:25 sthen Exp $
 
 CATEGORIES+=		lang/php
 
 MODPHP_VERSION?=	5.6
+
 .if ${MODPHP_VERSION} == 5.6
-MODPHP_VSPEC = >=${MODPHP_VERSION},<5.7
+MODPHP_FLAVOR = ,php56
+MODPHP_VSPEC = >=5.6,<5.7
 .elif ${MODPHP_VERSION} == 7.0
-MODPHP_VSPEC = >=${MODPHP_VERSION},<7.1
+MODPHP_FLAVOR = ,php70
+MODPHP_VSPEC = >=7.0,<7.1
+.elif ${MODPHP_VERSION} == 7.1
+MODPHP_FLAVOR = ,php71
+MODPHP_VSPEC = >=7.1,<7.2
+.elif ${MODPHP_VERSION} == 7.2
+MODPHP_FLAVOR = ,php72
+MODPHP_VSPEC = >=7.2,<7.3
 .endif
 MODPHPSPEC = php-${MODPHP_VSPEC}
 
@@ -33,6 +42,17 @@ MODPHP_LIBDIR=		${LOCALBASE}/lib/php-${MODPHP_VERSION}
 
 MODPHP_CONFIGURE_ARGS=	--with-php-config=${LOCALBASE}/bin/php-config-${MODPHP_VERSION}
 SUBST_VARS+=		MODPHP_VERSION
+
+# build a string that can be included in RUN_DEPENDS to match suitable PDO types
+MODPHP_PDO_ALLOWED?=	mysql pgsql sqlite
+MODPHP_PDO_PREF?=	sqlite
+MODPHP_PDO_DEPENDS=
+.for i in $(MODPHP_PDO_PREF) ${MODPHP_PDO_ALLOWED}
+.  if !${MODPHP_PDO_DEPENDS:M*pdo_$i*}
+MODPHP_PDO_DEPENDS:=	${MODPHP_PDO_DEPENDS}php-pdo_$i-${MODPHP_VSPEC}|
+.  endif
+.endfor
+MODPHP_PDO_DEPENDS:=	${MODPHP_PDO_DEPENDS:S/|$//}:lang/php/${MODPHP_VERSION},-pdo_${MODPHP_PDO_PREF}
 
 MODPHP_DO_PHPIZE?=
 .if !empty(MODPHP_DO_PHPIZE)

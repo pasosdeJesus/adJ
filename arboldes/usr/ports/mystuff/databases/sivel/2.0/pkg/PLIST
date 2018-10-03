@@ -1,4 +1,5 @@
-@comment $adJ$
+@comment $OpenBSD: PLIST,v$
+@rcscript ${RCDIR}/sivel2
 @group servicio
 ${SIVEL_RAIZ}/
 ${SIVEL_RAIZ}/.bundle/
@@ -294,8 +295,10 @@ ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/cocoon-9d29a8abcc5b/.git/logs/
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/cocoon-9d29a8abcc5b/.git/objects/
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/cocoon-9d29a8abcc5b/.git/objects/info/
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/cocoon-9d29a8abcc5b/.git/objects/pack/
-${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/cocoon-9d29a8abcc5b/.git/objects/pack/pack-d687a8723c02b7ea8a724698104e09770a21df08.idx
-${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/cocoon-9d29a8abcc5b/.git/objects/pack/pack-d687a8723c02b7ea8a724698104e09770a21df08.pack
+@group
+${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/cocoon-9d29a8abcc5b/.git/objects/pack/pack-de6a5930955412fefd1238930acca04a6ca359d7.idx
+${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/cocoon-9d29a8abcc5b/.git/objects/pack/pack-de6a5930955412fefd1238930acca04a6ca359d7.pack
+@group servicio
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/cocoon-9d29a8abcc5b/.git/packed-refs
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/cocoon-9d29a8abcc5b/.git/refs/
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/cocoon-9d29a8abcc5b/.git/refs/heads/
@@ -438,8 +441,10 @@ ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/heb412_gen-69d0e7ae853f/.git/l
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/heb412_gen-69d0e7ae853f/.git/objects/
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/heb412_gen-69d0e7ae853f/.git/objects/info/
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/heb412_gen-69d0e7ae853f/.git/objects/pack/
-${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/heb412_gen-69d0e7ae853f/.git/objects/pack/pack-2cd6c92f311bbb8231b3528716c3daef326be39c.idx
-${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/heb412_gen-69d0e7ae853f/.git/objects/pack/pack-2cd6c92f311bbb8231b3528716c3daef326be39c.pack
+@group
+${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/heb412_gen-69d0e7ae853f/.git/objects/pack/pack-2b7c25ddb2f5cdec22fed539a2bf89647c6ddbd7.idx
+${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/heb412_gen-69d0e7ae853f/.git/objects/pack/pack-2b7c25ddb2f5cdec22fed539a2bf89647c6ddbd7.pack
+@group servicio
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/heb412_gen-69d0e7ae853f/.git/packed-refs
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/heb412_gen-69d0e7ae853f/.git/refs/
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/heb412_gen-69d0e7ae853f/.git/refs/heads/
@@ -739,8 +744,10 @@ ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/rails-4887f97bd8a8/.git/logs/r
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/rails-4887f97bd8a8/.git/objects/
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/rails-4887f97bd8a8/.git/objects/info/
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/rails-4887f97bd8a8/.git/objects/pack/
-${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/rails-4887f97bd8a8/.git/objects/pack/pack-d6ebab852a0165b0f276b360e8fc5c6d30a4f4dc.idx
-${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/rails-4887f97bd8a8/.git/objects/pack/pack-d6ebab852a0165b0f276b360e8fc5c6d30a4f4dc.pack
+@group
+${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/rails-4887f97bd8a8/.git/objects/pack/pack-7bad833efc73aaaba3b34262b18e70587d0015c7.idx
+${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/rails-4887f97bd8a8/.git/objects/pack/pack-7bad833efc73aaaba3b34262b18e70587d0015c7.pack
+@group servicio
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/rails-4887f97bd8a8/.git/packed-refs
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/rails-4887f97bd8a8/.git/refs/
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/rails-4887f97bd8a8/.git/refs/heads/
@@ -5089,8 +5096,10 @@ ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/sip-dd37fa991bd7/.git/logs/ref
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/sip-dd37fa991bd7/.git/objects/
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/sip-dd37fa991bd7/.git/objects/info/
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/sip-dd37fa991bd7/.git/objects/pack/
-${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/sip-dd37fa991bd7/.git/objects/pack/pack-bca463c13c74f858c24e9968f3a94680f2835ab9.idx
-${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/sip-dd37fa991bd7/.git/objects/pack/pack-bca463c13c74f858c24e9968f3a94680f2835ab9.pack
+@group
+${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/sip-dd37fa991bd7/.git/objects/pack/pack-d255c563c9d9e2e7ec2858b53caf3f561bca298c.idx
+${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/sip-dd37fa991bd7/.git/objects/pack/pack-d255c563c9d9e2e7ec2858b53caf3f561bca298c.pack
+@group servicio
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/sip-dd37fa991bd7/.git/packed-refs
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/sip-dd37fa991bd7/.git/refs/
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/sip-dd37fa991bd7/.git/refs/heads/
@@ -5578,8 +5587,10 @@ ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/sivel2_gen-f911aa1df610/.git/l
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/sivel2_gen-f911aa1df610/.git/objects/
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/sivel2_gen-f911aa1df610/.git/objects/info/
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/sivel2_gen-f911aa1df610/.git/objects/pack/
-${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/sivel2_gen-f911aa1df610/.git/objects/pack/pack-5e31a08b2178c01e2f8ac5597d7ea8ad080286fa.idx
-${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/sivel2_gen-f911aa1df610/.git/objects/pack/pack-5e31a08b2178c01e2f8ac5597d7ea8ad080286fa.pack
+@group
+${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/sivel2_gen-f911aa1df610/.git/objects/pack/pack-e86fda342cf81123f2cf9afd2fb667296eb90230.idx
+${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/sivel2_gen-f911aa1df610/.git/objects/pack/pack-e86fda342cf81123f2cf9afd2fb667296eb90230.pack
+@group servicio
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/sivel2_gen-f911aa1df610/.git/packed-refs
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/sivel2_gen-f911aa1df610/.git/refs/
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/bundler/gems/sivel2_gen-f911aa1df610/.git/refs/heads/
@@ -6151,8 +6162,10 @@ ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/cocoon-03962f0e1bc41df82a
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/cocoon-03962f0e1bc41df82a3262fca023ed79e953e9cc/objects/
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/cocoon-03962f0e1bc41df82a3262fca023ed79e953e9cc/objects/info/
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/cocoon-03962f0e1bc41df82a3262fca023ed79e953e9cc/objects/pack/
-${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/cocoon-03962f0e1bc41df82a3262fca023ed79e953e9cc/objects/pack/pack-d687a8723c02b7ea8a724698104e09770a21df08.idx
-${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/cocoon-03962f0e1bc41df82a3262fca023ed79e953e9cc/objects/pack/pack-d687a8723c02b7ea8a724698104e09770a21df08.pack
+@group
+${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/cocoon-03962f0e1bc41df82a3262fca023ed79e953e9cc/objects/pack/pack-de6a5930955412fefd1238930acca04a6ca359d7.idx
+${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/cocoon-03962f0e1bc41df82a3262fca023ed79e953e9cc/objects/pack/pack-de6a5930955412fefd1238930acca04a6ca359d7.pack
+@group servicio
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/cocoon-03962f0e1bc41df82a3262fca023ed79e953e9cc/packed-refs
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/cocoon-03962f0e1bc41df82a3262fca023ed79e953e9cc/refs/
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/cocoon-03962f0e1bc41df82a3262fca023ed79e953e9cc/refs/heads/
@@ -6185,8 +6198,10 @@ ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/heb412_gen-239c26b374f784
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/heb412_gen-239c26b374f784fcccb029122ee36c08b73b617f/objects/
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/heb412_gen-239c26b374f784fcccb029122ee36c08b73b617f/objects/info/
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/heb412_gen-239c26b374f784fcccb029122ee36c08b73b617f/objects/pack/
-${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/heb412_gen-239c26b374f784fcccb029122ee36c08b73b617f/objects/pack/pack-2cd6c92f311bbb8231b3528716c3daef326be39c.idx
-${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/heb412_gen-239c26b374f784fcccb029122ee36c08b73b617f/objects/pack/pack-2cd6c92f311bbb8231b3528716c3daef326be39c.pack
+@group
+${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/heb412_gen-239c26b374f784fcccb029122ee36c08b73b617f/objects/pack/pack-2b7c25ddb2f5cdec22fed539a2bf89647c6ddbd7.idx
+${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/heb412_gen-239c26b374f784fcccb029122ee36c08b73b617f/objects/pack/pack-2b7c25ddb2f5cdec22fed539a2bf89647c6ddbd7.pack
+@group servicio
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/heb412_gen-239c26b374f784fcccb029122ee36c08b73b617f/packed-refs
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/heb412_gen-239c26b374f784fcccb029122ee36c08b73b617f/refs/
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/heb412_gen-239c26b374f784fcccb029122ee36c08b73b617f/refs/heads/
@@ -6219,8 +6234,10 @@ ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/rails-fcf0202857b07db1a0f
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/rails-fcf0202857b07db1a0f6220dae5ca99319ca0f32/objects/
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/rails-fcf0202857b07db1a0f6220dae5ca99319ca0f32/objects/info/
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/rails-fcf0202857b07db1a0f6220dae5ca99319ca0f32/objects/pack/
-${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/rails-fcf0202857b07db1a0f6220dae5ca99319ca0f32/objects/pack/pack-d6ebab852a0165b0f276b360e8fc5c6d30a4f4dc.idx
-${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/rails-fcf0202857b07db1a0f6220dae5ca99319ca0f32/objects/pack/pack-d6ebab852a0165b0f276b360e8fc5c6d30a4f4dc.pack
+@group
+${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/rails-fcf0202857b07db1a0f6220dae5ca99319ca0f32/objects/pack/pack-7bad833efc73aaaba3b34262b18e70587d0015c7.idx
+${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/rails-fcf0202857b07db1a0f6220dae5ca99319ca0f32/objects/pack/pack-7bad833efc73aaaba3b34262b18e70587d0015c7.pack
+@group servicio
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/rails-fcf0202857b07db1a0f6220dae5ca99319ca0f32/packed-refs
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/rails-fcf0202857b07db1a0f6220dae5ca99319ca0f32/refs/
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/rails-fcf0202857b07db1a0f6220dae5ca99319ca0f32/refs/heads/
@@ -6253,8 +6270,10 @@ ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/sip-783e1dbf91079588a3184
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/sip-783e1dbf91079588a31847aaba09b85fab46cd53/objects/
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/sip-783e1dbf91079588a31847aaba09b85fab46cd53/objects/info/
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/sip-783e1dbf91079588a31847aaba09b85fab46cd53/objects/pack/
-${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/sip-783e1dbf91079588a31847aaba09b85fab46cd53/objects/pack/pack-bca463c13c74f858c24e9968f3a94680f2835ab9.idx
-${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/sip-783e1dbf91079588a31847aaba09b85fab46cd53/objects/pack/pack-bca463c13c74f858c24e9968f3a94680f2835ab9.pack
+@group
+${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/sip-783e1dbf91079588a31847aaba09b85fab46cd53/objects/pack/pack-d255c563c9d9e2e7ec2858b53caf3f561bca298c.idx
+${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/sip-783e1dbf91079588a31847aaba09b85fab46cd53/objects/pack/pack-d255c563c9d9e2e7ec2858b53caf3f561bca298c.pack
+@group servicio
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/sip-783e1dbf91079588a31847aaba09b85fab46cd53/packed-refs
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/sip-783e1dbf91079588a31847aaba09b85fab46cd53/refs/
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/sip-783e1dbf91079588a31847aaba09b85fab46cd53/refs/heads/
@@ -6287,8 +6306,10 @@ ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/sivel2_gen-7b93815e32be7f
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/sivel2_gen-7b93815e32be7fbf6ae1b2cf5f48c5ea66b950ce/objects/
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/sivel2_gen-7b93815e32be7fbf6ae1b2cf5f48c5ea66b950ce/objects/info/
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/sivel2_gen-7b93815e32be7fbf6ae1b2cf5f48c5ea66b950ce/objects/pack/
-${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/sivel2_gen-7b93815e32be7fbf6ae1b2cf5f48c5ea66b950ce/objects/pack/pack-5e31a08b2178c01e2f8ac5597d7ea8ad080286fa.idx
-${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/sivel2_gen-7b93815e32be7fbf6ae1b2cf5f48c5ea66b950ce/objects/pack/pack-5e31a08b2178c01e2f8ac5597d7ea8ad080286fa.pack
+@group
+${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/sivel2_gen-7b93815e32be7fbf6ae1b2cf5f48c5ea66b950ce/objects/pack/pack-e86fda342cf81123f2cf9afd2fb667296eb90230.idx
+${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/sivel2_gen-7b93815e32be7fbf6ae1b2cf5f48c5ea66b950ce/objects/pack/pack-e86fda342cf81123f2cf9afd2fb667296eb90230.pack
+@group servicio
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/sivel2_gen-7b93815e32be7fbf6ae1b2cf5f48c5ea66b950ce/packed-refs
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/sivel2_gen-7b93815e32be7fbf6ae1b2cf5f48c5ea66b950ce/refs/
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/cache/bundler/git/sivel2_gen-7b93815e32be7fbf6ae1b2cf5f48c5ea66b950ce/refs/heads/
@@ -13486,9 +13507,9 @@ ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/gems/puma-3.12.0/tools/jungle/init.d/README
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/gems/puma-3.12.0/tools/jungle/init.d/puma
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/gems/puma-3.12.0/tools/jungle/init.d/run-puma
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/gems/puma-3.12.0/tools/jungle/rc.d/
-${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/gems/puma-3.12.0/tools/jungle/rc.d/README.md
-${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/gems/puma-3.12.0/tools/jungle/rc.d/puma
-${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/gems/puma-3.12.0/tools/jungle/rc.d/puma.conf
+@rcscript ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/gems/puma-3.12.0/tools/jungle/rc.d/README.md
+@rcscript ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/gems/puma-3.12.0/tools/jungle/rc.d/puma
+@rcscript ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/gems/puma-3.12.0/tools/jungle/rc.d/puma.conf
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/gems/puma-3.12.0/tools/jungle/upstart/
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/gems/puma-3.12.0/tools/jungle/upstart/README.md
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/gems/puma-3.12.0/tools/jungle/upstart/puma-manager.conf
@@ -21021,7 +21042,7 @@ ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/gems/unicorn-5.4.1/lib/unicorn/util.rb
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/gems/unicorn-5.4.1/lib/unicorn/version.rb
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/gems/unicorn-5.4.1/lib/unicorn/worker.rb
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/gems/unicorn-5.4.1/lib/unicorn_http.so
-${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/gems/unicorn-5.4.1/man/
+@mandir ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/gems/unicorn-5.4.1/man/
 ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/gems/unicorn-5.4.1/man/man1/
 @man ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/gems/unicorn-5.4.1/man/man1/unicorn.1
 @man ${SIVEL_RAIZ}/vendor/bundle/ruby/2.5/gems/unicorn-5.4.1/man/man1/unicorn_rails.1

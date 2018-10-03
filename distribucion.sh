@@ -781,6 +781,8 @@ if (test "$sn" = "s") then {
 
 	# Todo lo de perl tuvo que recompilarse
 	# evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
+	paquete p5-DBI
+	paquete p5-Net-LibIDN
 	paquete p5-Clone
 	paquete p5-Crypt-OpenSSL-Bignum
 	paquete p5-Crypt-OpenSSL-RSA
@@ -794,7 +796,7 @@ if (test "$sn" = "s") then {
 	paquete p5-File-Listing
 	paquete p5-FreezeThaw
 	paquete p5-Geo-IP
-	paquete p5-Geography-Countries
+	#paquete p5-Geography-Countries
 	paquete p5-HTML-Parser
 	paquete p5-HTML-Tagset
 	paquete p5-HTTP-Cookies
@@ -805,7 +807,7 @@ if (test "$sn" = "s") then {
 	paquete p5-IO-HTML
 	paquete p5-IO-Socket-SSL
 	paquete p5-LWP-MediaTypes
-	paquete p5-LWP-Protocol-https
+	#paquete p5-LWP-Protocol-https
 	paquete p5-MLDBM
 	paquete p5-Mail-DKIM
 	paquete p5-Mail-SPF
@@ -827,16 +829,15 @@ if (test "$sn" = "s") then {
 	paquete p5-SQL-Statement
 	paquete p5-Socket6
 	paquete p5-Time-TimeDate
-	paquete p5-Tk
+	#paquete p5-Tk
 	paquete p5-URI
 	paquete p5-WWW-RobotRules
-	paquete p5-XML-Parser
+	#paquete p5-XML-Parser
 	paquete p5-libwww
 	paquete p5-Net-Patricia
 	paquete p5-HTML-Parser
 	paquete p5-Params-Util
 	paquete p5-NetAddr-IP
-	paquete p5-DBI
 	paquete p5-Mail-SpamAssassin
 
 	####
@@ -846,7 +847,7 @@ if (test "$sn" = "s") then {
 :	###
         # Actualizados.  Están desactualizado en OpenBSD estable y current
 	paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 5.6
-	paquete ocaml 
+	paquete ocaml paquetes "ocaml"
 	paquete ocamlbuild 
 	paquete ocaml-camlp4
 

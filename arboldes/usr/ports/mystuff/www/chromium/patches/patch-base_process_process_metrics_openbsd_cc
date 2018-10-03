@@ -1,4 +1,5 @@
-$OpenBSD: patch-base_process_process_metrics_openbsd_cc,v 1.12 2018/04/23 15:00:15 robert Exp $
+$OpenBSD: patch-base_process_process_metrics_openbsd_cc,v 1.15 2018/08/10 14:57:53 robert Exp $
+
 Index: base/process/process_metrics_openbsd.cc
 --- base/process/process_metrics_openbsd.cc.orig
 +++ base/process/process_metrics_openbsd.cc
@@ -24,175 +25,114 @@ Index: base/process/process_metrics_openbsd.cc
  
  #include "base/macros.h"
  #include "base/memory/ptr_util.h"
-@@ -21,21 +32,33 @@ std::unique_ptr<ProcessMetrics> ProcessMetrics::Create
-   return WrapUnique(new ProcessMetrics(process));
+@@ -25,48 +36,13 @@ bool ProcessMetrics::GetIOCounters(IoCounters* io_coun
+   return false;
  }
  
-+bool GetVmStatInfo(VmStatInfo* vmstat) {
-+  NOTIMPLEMENTED();
-+  return false;
-+}
-+
- size_t ProcessMetrics::GetPagefileUsage() const {
+-static int GetProcessCPU(pid_t pid) {
 -  struct kinfo_proc info;
 -  size_t length;
-+  struct kinfo_proc *info;
-+  size_t length, pfu;
-   int mib[] = { CTL_KERN, KERN_PROC, KERN_PROC_PID, process_,
-                 sizeof(struct kinfo_proc), 0 };
- 
-   if (sysctl(mib, arraysize(mib), NULL, &length, NULL, 0) < 0)
-     return -1;
- 
-+  info = (struct kinfo_proc *)malloc(length);
-+
-   mib[5] = (length / sizeof(struct kinfo_proc));
- 
--  if (sysctl(mib, arraysize(mib), &info, &length, NULL, 0) < 0)
+-  int mib[] = { CTL_KERN, KERN_PROC, KERN_PROC_PID, pid,
+-                sizeof(struct kinfo_proc), 0 };
+-
+-  if (sysctl(mib, arraysize(mib), NULL, &length, NULL, 0) < 0)
 -    return -1;
-+  if (sysctl(mib, arraysize(mib), info, &length, NULL, 0) < 0) {
-+    pfu = -1;
-+    goto out;
-+  }
-+  pfu = (info->p_vm_tsize + info->p_vm_dsize + info->p_vm_ssize);
- 
--  return (info.p_vm_tsize + info.p_vm_dsize + info.p_vm_ssize);
-+out:
-+  free(info);
-+  return pfu;
- }
- 
- size_t ProcessMetrics::GetPeakPagefileUsage() const {
-@@ -43,20 +66,28 @@ size_t ProcessMetrics::GetPeakPagefileUsage() const {
- }
- 
- size_t ProcessMetrics::GetWorkingSetSize() const {
--  struct kinfo_proc info;
--  size_t length;
-+  struct kinfo_proc *info;
-+  size_t length, wss;
-   int mib[] = { CTL_KERN, KERN_PROC, KERN_PROC_PID, process_,
-                 sizeof(struct kinfo_proc), 0 };
- 
-   if (sysctl(mib, arraysize(mib), NULL, &length, NULL, 0) < 0)
-     return -1;
- 
-+  info = (struct kinfo_proc *)malloc(length);
-+
-   mib[5] = (length / sizeof(struct kinfo_proc));
- 
--  if (sysctl(mib, arraysize(mib), &info, &length, NULL, 0) < 0)
--    return -1;
-+  if (sysctl(mib, arraysize(mib), info, &length, NULL, 0) < 0) {
-+    wss = -1;
-+    goto out;
-+  }
- 
--  return info.p_vm_rssize * getpagesize();
-+  wss = (info->p_vm_rssize * getpagesize());
-+
-+out:
-+  free(info);
-+  return wss;
- }
- 
- size_t ProcessMetrics::GetPeakWorkingSetSize() const {
-@@ -96,20 +127,27 @@ bool ProcessMetrics::GetIOCounters(IoCounters* io_coun
- }
- 
- static int GetProcessCPU(pid_t pid) {
--  struct kinfo_proc info;
-+  struct kinfo_proc *info;
-   size_t length;
-+  int pctcpu = 0;
-   int mib[] = { CTL_KERN, KERN_PROC, KERN_PROC_PID, pid,
-                 sizeof(struct kinfo_proc), 0 };
- 
-   if (sysctl(mib, arraysize(mib), NULL, &length, NULL, 0) < 0)
-     return -1;
- 
-+  info = (struct kinfo_proc *)malloc(length);
-+
-   mib[5] = (length / sizeof(struct kinfo_proc));
- 
+-
+-  mib[5] = (length / sizeof(struct kinfo_proc));
+-
 -  if (sysctl(mib, arraysize(mib), &info, &length, NULL, 0) < 0)
 -    return 0;
-+  if (sysctl(mib, arraysize(mib), info, &length, NULL, 0) < 0)
-+    goto out;
- 
+-
 -  return info.p_pctcpu;
-+  pctcpu = info->p_pctcpu;
-+
-+out:
-+  free(info);
-+  return pctcpu;
+-}
+-
+-double ProcessMetrics::GetPlatformIndependentCPUUsage() {
+-  TimeTicks time = TimeTicks::Now();
+-
+-  if (last_cpu_time_.is_zero()) {
+-    // First call, just set the last values.
+-    last_cpu_time_ = time;
+-    return 0;
+-  }
+-
+-  int cpu = GetProcessCPU(process_);
+-
+-  last_cpu_time_ = time;
+-  double percentage = static_cast<double>((cpu * 100.0) / FSCALE);
+-
+-  return percentage;
+-}
+-
+ TimeDelta ProcessMetrics::GetCumulativeCPUUsage() {
+   NOTREACHED();
+   return TimeDelta();
  }
  
- double ProcessMetrics::GetPlatformIndependentCPUUsage() {
-@@ -123,7 +161,6 @@ double ProcessMetrics::GetPlatformIndependentCPUUsage(
-   }
+ ProcessMetrics::ProcessMetrics(ProcessHandle process)
+-    : process_(process),
+-      last_cpu_(0) {}
++    : process_(process) {}
  
-   int64_t time_delta = (time - last_cpu_time_).InMicroseconds();
--  DCHECK_NE(time_delta, 0);
+ size_t GetSystemCommitCharge() {
+   int mib[] = { CTL_VM, VM_METER };
+@@ -85,6 +61,70 @@ size_t GetSystemCommitCharge() {
+   pagesize = getpagesize();
  
-   if (time_delta == 0)
-     return 0;
-@@ -162,4 +199,67 @@ size_t GetSystemCommitCharge() {
    return mem_total - (mem_free*pagesize) - (mem_inactive*pagesize);
- }
- 
-+int ProcessMetrics::GetOpenFdCount() const {        
++}
++
++int ProcessMetrics::GetOpenFdCount() const {
 +  struct kinfo_proc *info;
 +  size_t length;
 +  int total_count = 0;
 +
-+  int mib[] = { CTL_KERN, KERN_PROC, KERN_PROC_PID, process_,                                            
++  int mib[] = { CTL_KERN, KERN_PROC, KERN_PROC_PID, process_,
 +                sizeof(struct kinfo_proc), 0 };
 +
-+  if (sysctl(mib, arraysize(mib), NULL, &length, NULL, 0) < 0)                                           
++  if (sysctl(mib, arraysize(mib), NULL, &length, NULL, 0) < 0)
 +    return -1;
 +
 +  info = (struct kinfo_proc *)malloc(length);
 +
-+  mib[5] = (length / sizeof(struct kinfo_proc));    
++  mib[5] = (length / sizeof(struct kinfo_proc));
 +
-+  if (sysctl(mib, arraysize(mib), info, &length, NULL, 0) < 0) {                                         
++  if (sysctl(mib, arraysize(mib), info, &length, NULL, 0) < 0) {
 +    total_count = -1;
 +    goto out;
-+  }                                                 
++  }
 +  //total_count = info->p_fd->fd_openfd;
 +  total_count = info->p_fd;
 +
 +out:
 +  free(info);
 +  return total_count;
-+}                                                   
++}
 +
-+int ProcessMetrics::GetOpenFdSoftLimit() const {    
-+  struct kinfo_proc *info;                          
-+  size_t length;                                    
-+  int total_count = 0;                              
++int ProcessMetrics::GetOpenFdSoftLimit() const {
++  struct kinfo_proc *info;
++  size_t length;
++  int total_count = 0;
 +
-+  int mib[] = { CTL_KERN, KERN_PROC, KERN_PROC_PID, process_,                                            
-+                sizeof(struct kinfo_proc), 0 };     
++  int mib[] = { CTL_KERN, KERN_PROC, KERN_PROC_PID, process_,
++                sizeof(struct kinfo_proc), 0 };
 +
-+  if (sysctl(mib, arraysize(mib), NULL, &length, NULL, 0) < 0)                                           
-+    return -1;                                      
++  if (sysctl(mib, arraysize(mib), NULL, &length, NULL, 0) < 0)
++    return -1;
 +
-+  info = (struct kinfo_proc *)malloc(length);       
++  info = (struct kinfo_proc *)malloc(length);
 +
-+  mib[5] = (length / sizeof(struct kinfo_proc));    
++  mib[5] = (length / sizeof(struct kinfo_proc));
 +
-+  if (sysctl(mib, arraysize(mib), info, &length, NULL, 0) < 0) {                                         
-+    total_count = -1;                               
-+    goto out;                                       
-+  }                                                 
-+  //total_count = info->p_fd->fd_openfd;            
++  if (sysctl(mib, arraysize(mib), info, &length, NULL, 0) < 0) {
++    total_count = -1;
++    goto out;
++  }
++  //total_count = info->p_fd->fd_openfd;
 +  total_count = info->p_limit;
 +
-+out:                                                
-+  free(info);                                       
-+  return total_count;                               
++out:
++  free(info);
++  return total_count;
 +}
 +
 +uint64_t ProcessMetrics::GetVmSwapBytes() const {
@@ -203,5 +143,6 @@ Index: base/process/process_metrics_openbsd.cc
 +bool GetSystemMemoryInfo(SystemMemoryInfoKB* meminfo) {
 +  NOTIMPLEMENTED();
 +  return false;
-+}
+ }
+ 
  }  // namespace base

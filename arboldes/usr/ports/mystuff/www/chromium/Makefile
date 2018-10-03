@@ -1,14 +1,18 @@
-# $OpenBSD: Makefile,v 1.372 2018/05/16 17:48:07 robert Exp $
+# $OpenBSD: Makefile,v 1.393 2018/09/27 06:36:18 robert Exp $
 
 .include <bsd.port.arch.mk>
 
 USE_WXNEEDED=		Yes
+.if ${ARCH} != i386
+USE_LLD=		Yes
+.endif
 
-DPB_PROPERTIES=		parallel
+DPB_PROPERTIES=		parallel parallel2
 
 COMMENT=		Chromium browser
 
-V=			66.0.3359.181
+V=			69.0.3497.100
+REVISION=		0
 
 DISTNAME=		chromium-${V}
 
@@ -36,14 +40,6 @@ COMPILER =	base-clang ports-clang ports-gcc
 
 MODPY_RUNDEP=	No
 
-.if ${PROPERTIES:Mclang}    
-PATCH_LIST=	patch-* clang-*                            
-.endif                      
-
-# XXX Missing directory from distfile
-#PATCHFILES+=		add-missing-blink-tools.patch:0	
-#PATCH_DIST_STRIP=	-p1
-
 PATCHORIG=	.orig.port
 
 # uses pledge()
@@ -64,8 +60,15 @@ WANTLIB += GL expat
 WANTLIB += atk-1.0 cairo gdk-3 gtk-3 pango-1.0
 WANTLIB += pangocairo-1.0
 WANTLIB += Xcomposite Xdamage
+WANTLIB += EGL Xau Xdmcp Xinerama Xxf86vm atspi cairo-gobject
+WANTLIB += drm epoxy fontconfig freetype fribidi gmodule-2.0 graphite2
+WANTLIB += gthread-2.0 harfbuzz intl pangoft2-1.0 pcre pixman-1
+WANTLIB += plc4 plds4 png util xcb-dri2 xcb-glx xcb-render xcb-shm
+WANTLIB += xml2 z
+WANTLIB += uuid
 
 RUN_DEPENDS=	devel/xdg-utils \
+		devel/fribidi \
 		devel/desktop-file-utils \
 		fonts/noto/fonts \
 		graphics/libexif \
@@ -86,6 +89,7 @@ BUILD_DEPENDS=	archivers/bzip2 \
 		${MODGCC4_CPPDEP}
 LIB_DEPENDS=	devel/libexecinfo \
 		security/nss \
+		sysutils/e2fsprogs \
 		textproc/libxslt \
 		x11/gtk+3 \
 		print/cups,-libs \
@@ -118,13 +122,14 @@ GN_SYSTEM_LIBS=	libevent \
 
 GN_ARGS=	enable_nacl=false \
 		is_debug=false \
-		enable_webrtc=true \
 		enable_one_click_signin=true \
 		enable_remoting=false \
 		use_kerberos=false \
 		use_sndio=true \
 		use_cups=true \
 		use_gtk3=true \
+		use_system_libdrm=true \
+		use_jumbo_build=true \
 		is_clang=true \
 		use_sysroot=false \
 		treat_warnings_as_errors=false \
@@ -139,6 +144,12 @@ GN_ARGS+=	extra_ldflags=\"-L${LOCALBASE}/lib -L${X11BASE}/lib -Wl,--no-keep-memo
 GN_ARGS+=	extra_ldflags=\"-L${LOCALBASE}/lib -L${X11BASE}/lib\"
 .endif
 
+.if ${MACHINE_ARCH} == "aarch64"
+PKG_ARGS+=	-Dswiftshader=0
+.else
+PKG_ARGS+=	-Dswiftshader=1
+.endif
+
 # Note: these keys are for OpenBSD use ONLY. For your own distribution,
 # please get your own set of keys. It's free!
 GN_ARGS+=	google_api_key=\"AIzaSyC_3Uz69YR1Z2DRLUDf5ZxUJBClHuwrjL\" \
@@ -146,6 +157,7 @@ GN_ARGS+=	google_api_key=\"AIzaSyC_3Uz69YR1Z2DRLUDf5ZxUJBClHuwrjL\" \
 		google_default_client_secret=\"7ApGgPs3F_mRnRgDt6A80C0\" \
 		ffmpeg_branding=\"Chrome\" \
 		proprietary_codecs=true
+
 
 .if ${FLAVOR:Mdebug}
 GN_ARGS+=	remove_webcore_debug_symbols=true
@@ -162,7 +174,7 @@ GN_ARGS+=	is_official_build=true \
 
 pre-configure:
 	@ln -sf ${MODPY_BIN} ${WRKDIR}/bin/python
-.for _arch in x64 ia32
+.for _arch in x64 ia32 arm64
 .  for _dir in avcodec avformat avutil
 	@cp -pR ${WRKSRC}/third_party/ffmpeg/chromium/config/Chrome/linux/${_arch}/lib${_dir} \
 		${WRKSRC}/third_party/ffmpeg/chromium/config/Chrome/openbsd/${_arch}/lib${_dir}
@@ -206,7 +218,6 @@ do-install:
 	${INSTALL_DATA_DIR} ${PREFIX}/chrome/locales
 	${INSTALL_DATA} ${BUILDDIR}/locales/* ${PREFIX}/chrome/locales
 	${INSTALL_DATA} ${BUILDDIR}/*.png ${PREFIX}/chrome
-	${INSTALL_DATA} ${BUILDDIR}/*.service ${PREFIX}/chrome
 	${INSTALL_DATA_DIR} ${PREFIX}/chrome/resources
 	@cp -Rp ${BUILDDIR}/resources/* ${PREFIX}/chrome/resources
 	@chown -R ${SHAREOWN}:${SHAREGRP} ${PREFIX}/chrome/resources
@@ -219,11 +230,13 @@ do-install:
 	${INSTALL_DATA} ${BUILDDIR}/${f} ${PREFIX}/chrome
 .endfor
 
+.if ${MACHINE_ARCH} != "aarch64"
 	# SwiftShader
 	${INSTALL_DATA_DIR} ${PREFIX}/chrome/swiftshader
 .for f in libEGL.so libGLESv2.so
 	${INSTALL_DATA} ${BUILDDIR}/swiftshader/${f} ${PREFIX}/chrome/swiftshader
 .endfor
+.endif
 
 .if ${FLAVOR:Mcomponent}
 	cp -Rp ${BUILDDIR}/*.so ${PREFIX}/chrome/
@@ -237,5 +250,10 @@ do-install:
 	${INSTALL_DATA_DIR} ${PREFIX}/share/applications
 	${INSTALL_DATA} ${FILESDIR}/chromium-browser.desktop \
 		${PREFIX}/share/applications/chromium-browser.desktop
+
+	${INSTALL_DATA_DIR} ${PREFIX}/share/examples/chromium
+.for f in pledge.main unveil.gpu unveil.main unveil.plugin unveil.renderer unveil.utility
+	${INSTALL_DATA} ${FILESDIR}/${f} ${PREFIX}/share/examples/chromium
+.endfor
 
 .include <bsd.port.mk>

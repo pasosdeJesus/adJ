@@ -1,13 +1,11 @@
-@comment $OpenBSD: PLIST-main,v 1.10 2016/06/29 16:14:42 espie Exp $
+@comment $OpenBSD: PLIST-main,v 1.22 2018/09/04 12:46:14 espie Exp $
 @option no-default-conflict
 @option is-branch
 @conflict php->=5.6,<5.7
 @conflict php-fpm->=5.6,<5.7
 @conflict php5-core->=5.2
 @conflict php5-core-fastcgi->=5.2
-@conflict php5-pdo_sqlite->=5.2
 @pkgpath lang/php/5.4
-@pkgpath lang/php/5.4,-pdo_sqlite
 @pkgpath lang/php/5.6,-fpm
 @pkgpath lang/php/5.6,-main,ap2
 @extraunexec rm -f ${SYSCONFDIR}/php-${PV}/php-${PV}.sample/*
@@ -18,31 +16,30 @@
 @mode
 @owner
 @group
+@rcscript ${RCDIR}/php${SV}_fpm
+bin/phar-${PV}
 @bin bin/php-${PV}
 bin/php-config-${PV}
 bin/phpize-${PV}
 lib/php-${PV}/
-lib/php-${PV}/libphp5.so
 lib/php-${PV}/modules/
 lib/php-${PV}/modules/opcache.so
+@man man/man1/phar-${PV}.1
 @man man/man1/php-${PV}.1
 @man man/man1/php-config-${PV}.1
 @man man/man1/phpize-${PV}.1
 @man man/man8/php-fpm-${PV}.8
 @bin sbin/php-fpm-${PV}
-share/doc/pkg-readmes/${FULLPKGNAME}
+share/doc/pkg-readmes/${PKGSTEM}
 share/examples/php-${PV}/
-@sample /var/www/conf/modules.sample/
 @sample ${SYSCONFDIR}/php-${PV}.sample/
 share/examples/php-${PV}/opcache.ini
 @sample ${SYSCONFDIR}/php-${PV}.sample/opcache.ini
-share/examples/php-${PV}/php.conf
-@sample /var/www/conf/modules.sample/php-${PV}.conf
+share/examples/php-${PV}/php-fpm.conf
+@sample ${SYSCONFDIR}/php-fpm.conf
 share/examples/php-${PV}/php.ini-development
 share/examples/php-${PV}/php.ini-production
 @sample ${SYSCONFDIR}/php-${PV}.ini
-share/examples/php-${PV}/php-fpm.conf
-@sample ${SYSCONFDIR}/php-fpm.conf
 share/php-${PV}/
 share/php-${PV}/build/
 share/php-${PV}/build/Makefile.global
@@ -148,24 +145,6 @@ share/php-${PV}/include/ext/ereg/regex/regex2.h
 share/php-${PV}/include/ext/ereg/regex/utils.h
 share/php-${PV}/include/ext/filter/
 share/php-${PV}/include/ext/filter/php_filter.h
-share/php-${PV}/include/ext/gd/
-share/php-${PV}/include/ext/gd/gd_compat.h
-share/php-${PV}/include/ext/gd/gdcache.h
-share/php-${PV}/include/ext/gd/libgd/
-share/php-${PV}/include/ext/gd/libgd/gd.h
-share/php-${PV}/include/ext/gd/libgd/gd_intern.h
-share/php-${PV}/include/ext/gd/libgd/gd_io.h
-share/php-${PV}/include/ext/gd/libgd/gdcache.h
-share/php-${PV}/include/ext/gd/libgd/gdfontg.h
-share/php-${PV}/include/ext/gd/libgd/gdfontl.h
-share/php-${PV}/include/ext/gd/libgd/gdfontmb.h
-share/php-${PV}/include/ext/gd/libgd/gdfonts.h
-share/php-${PV}/include/ext/gd/libgd/gdfontt.h
-share/php-${PV}/include/ext/gd/libgd/gdhelpers.h
-share/php-${PV}/include/ext/gd/libgd/jisx0208.h
-share/php-${PV}/include/ext/gd/libgd/wbmp.h
-share/php-${PV}/include/ext/gd/libgd/webpimg.h
-share/php-${PV}/include/ext/gd/php_gd.h
 share/php-${PV}/include/ext/hash/
 share/php-${PV}/include/ext/hash/php_hash.h
 share/php-${PV}/include/ext/hash/php_hash_adler32.h
@@ -216,12 +195,10 @@ share/php-${PV}/include/ext/mbstring/libmbfl/mbfl/mbfl_language.h
 share/php-${PV}/include/ext/mbstring/libmbfl/mbfl/mbfl_memory_device.h
 share/php-${PV}/include/ext/mbstring/libmbfl/mbfl/mbfl_string.h
 share/php-${PV}/include/ext/mbstring/mbstring.h
-share/php-${PV}/include/ext/mbstring/oniguruma/
-share/php-${PV}/include/ext/mbstring/oniguruma/oniguruma.h
 share/php-${PV}/include/ext/mbstring/php_mbregex.h
 share/php-${PV}/include/ext/mbstring/php_onig_compat.h
 share/php-${PV}/include/ext/mysqli/
-share/php-${PV}/include/ext/mysqli/mysqli_libmysql.h
+share/php-${PV}/include/ext/mysqli/mysqli_mysqlnd.h
 share/php-${PV}/include/ext/mysqli/php_mysqli_structs.h
 share/php-${PV}/include/ext/mysqlnd/
 share/php-${PV}/include/ext/mysqlnd/config-win.h
@@ -279,9 +256,6 @@ share/php-${PV}/include/ext/spl/spl_functions.h
 share/php-${PV}/include/ext/spl/spl_heap.h
 share/php-${PV}/include/ext/spl/spl_iterators.h
 share/php-${PV}/include/ext/spl/spl_observer.h
-share/php-${PV}/include/ext/sqlite3/
-share/php-${PV}/include/ext/sqlite3/libsqlite/
-share/php-${PV}/include/ext/sqlite3/libsqlite/sqlite3.h
 share/php-${PV}/include/ext/standard/
 share/php-${PV}/include/ext/standard/base64.h
 share/php-${PV}/include/ext/standard/basic_functions.h
@@ -392,4 +366,3 @@ share/php-${PV}/include/sapi/
 share/php-${PV}/include/sapi/cli/
 share/php-${PV}/include/sapi/cli/cli.h
 @sample ${SYSCONFDIR}/php-${PV}/
-@rcscript ${RCDIR}/php${SV}_fpm

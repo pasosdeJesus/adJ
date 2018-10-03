@@ -1,16 +1,47 @@
-# $OpenBSD: pecl.port.mk,v 1.6 2016/03/19 21:18:38 naddy Exp $
+# $OpenBSD: pecl.port.mk,v 1.10 2018/09/28 21:27:25 sthen Exp $
 # PHP PECL module
 
 MODULES +=	lang/php
 
+.if defined(MODPECL_V)
+.  if ${MODPECL_V} == 5.6
+FLAVORS = php56
+FLAVOR = php56
+.  elif ${MODPECL_V} == 7
+FLAVORS = php70 php71 php72
+FLAVOR ?= php70
+.  endif
+.else
+FLAVORS ?= php56 php70 php71 php72
+FLAVOR ?= php70
+.endif
+
+.if ${FLAVOR} == php56
+MODPHP_VERSION = 5.6
+MODPECL_56ONLY =
+.elif ${FLAVOR} == php70
+MODPHP_VERSION = 7.0
+MODPECL_56ONLY = "@comment "
+.elif ${FLAVOR} == php71
+MODPHP_VERSION = 7.1
+MODPECL_56ONLY = "@comment "
+.elif ${FLAVOR} == php72
+MODPHP_VERSION = 7.2
+MODPECL_56ONLY = "@comment "
+.endif
+
 CATEGORIES +=	www
 
-PKGNAME ?=	pecl-${DISTNAME:S/pecl-//:S/_/-/:L}
+_PECL_PREFIX =	pecl${MODPHP_VERSION:S/.//}
+PKGNAME ?=	${_PECL_PREFIX}-${DISTNAME:S/pecl-//:L}
+FULLPKGNAME ?=	${PKGNAME}
 _PECLMOD ?=	${DISTNAME:S/pecl-//:C/-[0-9].*//:L}
 
+SUBST_VARS +=	MODPECL_56ONLY
+
 .if !defined(MASTER_SITES)
-MASTER_SITES ?=	http://pecl.php.net/get/
-HOMEPAGE ?=	http://pecl.php.net/package/${_PECLMOD}
+MASTER_SITES ?=	https://pecl.php.net/get/
+HOMEPAGE ?=	https://pecl.php.net/package/${_PECLMOD}
 EXTRACT_SUFX ?=	.tgz
 .endif
 

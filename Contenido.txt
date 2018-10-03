@@ -140,6 +140,7 @@ scrot-[v]		Captura imágenes de pantallas
 silc-client-[v]	Cliente para conferencia segura
 sox-[v]		Conversión, grabación, reproducción de sonido
 texlive_base-[v]	Binarios para distribución TeXLive
+texlive_mktexlsr-[v]	
 texlive_texmf-buildset-[v]	Pequeño texmf de texlive para crear portes
 texlive_texmf-minimal-[v]	texmf con funcionalidad básica
 texlive_texmf-full-[v]	texmf con macros extras
@@ -230,6 +231,7 @@ dvi2tty-[v]		Convierte archivos dvi a texto plano
 e2fsprogs-[v]	Utilidades para manejar sistemas de archivos ext2
 enca-[v]		Detecta codificación de caracteres de textos planos
 enchant-[v]		Librería genérica para corrección ortográfica
+enchant2-[v]		
 faad-[v]		Decodificar AAC MPEG-2 y MPEG-4	
 fcgi-[v]		Herramientas de Desarrollo FastCGI
 femail-[v]		Cliente simple de SMTP
@@ -242,6 +244,7 @@ flock-[v]	Administrador de flock para archivos de ordenes
 foomatic-db-engine-[v]	Generador de PPDs de Foomatic
 foomatic-db-[v]	Datos PPD de Foomatic
 fox-[v]		Juego de herramientas para interfaces en C++
+freeglut-[v]	
 freetds-[v]	Controladores de bases Sybase/Microsoft SQL Server
 freexl-[v]		Extrae datos válidos de una hoja de cálculo Excel
 fribidi-[v]		Librería Unicode
@@ -282,6 +285,7 @@ gnupg-[v]	Remplazo de PGP
 gnutls-[v]		Librearía segura para la capa de transporte
 goffice-[v]		Utilidades y objetos centrados en documentos
 gpsd-[v]		Servicio que monitorea uno o más GPSes
+graphene-[v] 	
 graphite2-[v] 	Presentación de sistemas de escritura complejos
 gsettings-desktop-schemas-[v]	Esquemas compartidos GSettings
 gsl-[v]		Libería científica
@@ -411,6 +415,7 @@ libxml-[v]		Librería para reconocimiento de XML
 libxslt-[v]		Librería para transformaciones XSL en C
 libyaml-[v]		Reconocedor y emisor de YAML 1.1 escrito en C
 libyajl-[v]		Pequeña librería JSON escrita en ANSI C
+libzip-[v]		
 lockfile-[v]  	Maneja archivos semaforos en archivos de órdenes
 lz4-[v]		Compresión de datos rápida con licencia BSD
 lzo2-[v]		Libería de compresión portable
@@ -439,8 +444,10 @@ opusfile-[v]		API de alto nivel para decodificar en archivos Opus
 ORBit2-[v]	CORBA ORB de alto desempeño
 ocaml-camlp4-[v]	Sintaxis camlp4 para Ocaml
 ocamlbuild-[v]	Para construir proyectos en OCaml
+oniguruma-[v]
 orc-[v]		Librerìa y herraminetas para operar arreglos de datos
 p11-kit-[v]	Librería para enumerar módulos PKCS#11
+p5-BSD-Resource-[v]		
 p5-Clone-[v]		Copia tipos de datos perl recursivamente
 p5-Crypt-OpenSSL-Bignum-[v]	Aritmética multiprecisión de OpenSLL
 p5-Crypt-OpenSSL-Random-[v]	Rutinas para acceder al prng de OpenSLL
@@ -592,6 +599,7 @@ py-psutil-[v]		Librería para recupera información del sistema y su uso
 py-psycopg2-[v]	Adaptador a bases de datos PostgreSQL para Ptyhon
 py-pyRFC3339-[v]	Da formato a fechas de acuerdo al RFC3339
 py-requests-[v]	Librería Python para HTTP simple y elegante
+py-requests-toolbelt-[v]	
 py-qt4-[v]		Uniones de Python con Qt4
 py-qscintilla-[v]	Uniones en python con editor de código fuente Scintilla
 py-setuptools-[v]	Sistema de empaquetamiento de módulos Python
@@ -603,26 +611,72 @@ py-werkzeug-[v]	Colección de utilidades WSGI
 py-zopecomponent-[v]	Arquitectura por componentes de Zope
 py-zopeevent-[v]	Sistema de publicación básico de Zope
 py-zopeinterface-[v]	Interfaz a infraestructura de objetos de Zope
+py3-acme-[v]
+py3-asn1-[v]
+py3-asn1crypto-[v]
+py3-certifi-[v]
+py3-cffi-[v]
+py3-chardet-[v]
+py3-ConfigArgParse-[v]
+py3-configobj-[v]
+py3-cparser-[v]
+py3-cryptography-[v]
+py3-dateutil-[v]
+py3-dbus-[v]
+py3-gdal-[v]
+py3-jinja2-[v]
+py3-josepy-[v]
+py3-idna-[v]
+py3-MarkupSafe-[v]
+py3-mock-[v]
+py3-ndg-httpsclient-[v]
+py3-numpy-[v]
+py3-openssl-[v]
+py3-owslib-[v]
+py3-parsedatetime-[v]
+py3-pbr-[v]
+py3-proj-[v]
+py3-psycopg2-[v]
+py3-pygments-[v]
+py3-pyRFC3339-[v]
+py3-qt5-[v]
+py3-qscintilla-qt5-[v]
+py3-requests-[v]
+py3-requests-toolbelt-[v]
+py3-setuptools-[v]
+py3-sip-[v]
+py3-six-[v]
+py3-tz-[v]
+py3-urllib3-[v]
+py3-yaml-[v]
+py3-werkzeug-[v]
+py3-zopecomponent-[v]
+py3-zopeevent-[v]
+py3-zopeinterface-[v]
 python-tkinter-[v]	Interfaces gráficas Python
 qca-[v]		Arquitectura de cifrado para Qt4
 qca-ossl-[v]	Extensión de SSL/TLS para QCA2
+qca-qt5-[v]	
 qhull-[v]		Calcular caso convexo
 qdbm-[v]		Librería, base de datos de alto desempeño
 qjson-[v]		Librería Qt para asociar datos JSON a objectos QVariant
 qpdf-[v]    	Utilidad para inspeccionar y transformar PDF
 qscintilla-[v]	Porte del editor de código fuente Scintilla
+qscintilla-qt5-[v]	
 qt3d-[v]		Componentes de Qt5 para gráficas 3D
 qt4-[v]		Juego de herramientas en C++ para GUI en X11 v4
 qt5-[v]		Herramientas en C++ para GUI en X11 v5 (nokogiri)
 qt5-declarative-xmllistmodel-[v]	Crea modelos QML de XML
 qtbase-[v]		Herramientas de propósito general en C++
 qtcanvas3d-[v]	Tipos QML para el API Qt5 del lienzo 3D
+qtconnectivity-[v]
 qtcharts-[v]		Componentes de Qt5 apara dibujar gráficaso estadísticos 2D
 qtdatavis3d-[v]	Componentes de Qt5 para visualización de datos 3D
 qtdeclarative-[v]	Componentes Qt5 Quick y QML
 qtgraphicaleffects-[v]	Librería de efectos de la IU de Qt
 qtgamepad-[v]	Componentes Qt5 para manejo de eventos de gamepad 
 qtimageformats-[v]	Soporte para formatos de imagenes adicionales de Qt
+qtkeychain-qt5-[v]
 qtlocation-[v]	APIs Qt5 para geo posicionamiento
 qtmultimedia-[v]	Componentes multimedia de Qt5
 qtnetworkauth-[v]	Componentes multimedia de Qt5
@@ -647,6 +701,8 @@ qtxmlpatterns-[v]	Soporte Qt5 para XPath, XQuery, XLST y esquemas XML
 qtx11extras-[v]	Partes espécificas de Qt para X11
 quirks-[v]	
 qwt-[v]		Widgets Qt para aplicaciones técnicas
+qwt-[v]-qt5		
+qwt-common-[v]		
 raptor-[v]		Herramientas para reconocer RDF usadas por redland
 rarian-[v]		Librería para metadatos de documentación
 rasqal-[v]		Librería de consultas RDF para Redland
@@ -669,6 +725,7 @@ soundtouch-[v]	Librería para procesamiento de tempo/tono
 spatialindex-[v]	Librería para indexado y consultas espaciales
 speex-[v]		Codec para voz libre de patentes
 speexdsp-[v]		Codec para voz libre de patentes
+spidermonkey-[v]
 t1lib-[v]		Libreria para fuentes de letra tipo 1 rasterizer
 t1utils-[v]		Utilidades para fuentes PostScript tipo 1
 taglib-[v]		Para manejar meta-datos de formatos de audio
@@ -695,5 +752,6 @@ xvidcore-[v]		Codificador y decodificador de MPEG-4
 xz-[v]		Herramientas para compresión y decompresión LZMA
 yelp-[v]		Sistema de ayuda de GNOME
 yelp-xsl-[v]		Hojas de estilo XSLT para yelp
+zstd-[v]	
 zziplib-[v]	Librería liviana para extraer datos de archivos zip
 

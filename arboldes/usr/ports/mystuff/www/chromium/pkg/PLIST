@@ -1,4 +1,4 @@
-@comment $OpenBSD: PLIST,v 1.78 2018/04/26 19:41:38 robert Exp $
+@comment $OpenBSD: PLIST,v 1.85 2018/09/12 19:10:34 robert Exp $
 @pkgpath www/chromium,proprietary
 bin/chrome
 @bin bin/chromedriver
@@ -6,10 +6,8 @@ chrome/
 @bin chrome/chrome
 chrome/chrome_100_percent.pak
 chrome/chrome_200_percent.pak
-chrome/font_service.service
 chrome/headless_lib.pak
 chrome/icudtl.dat
-chrome/keyboard_resources.pak
 chrome/libEGL.so
 chrome/libGLESv2.so
 %%component%%
@@ -194,6 +192,7 @@ chrome/resources/inspector/InspectorBackendCommands.js
 chrome/resources/inspector/SupportedCSSProperties.js
 chrome/resources/inspector/Tests.js
 chrome/resources/inspector/accessibility/
+chrome/resources/inspector/accessibility/ARIAProperties.js
 chrome/resources/inspector/accessibility/accessibility_module.js
 chrome/resources/inspector/accessibility_test_runner/
 chrome/resources/inspector/accessibility_test_runner/accessibility_test_runner_module.js
@@ -314,6 +313,8 @@ chrome/resources/inspector/inspector.html
 chrome/resources/inspector/inspector.js
 chrome/resources/inspector/integration_test_runner.html
 chrome/resources/inspector/integration_test_runner.js
+chrome/resources/inspector/javascript_metadata/
+chrome/resources/inspector/javascript_metadata/javascript_metadata_module.js
 chrome/resources/inspector/js_app.html
 chrome/resources/inspector/js_app.js
 chrome/resources/inspector/js_profiler/
@@ -332,22 +333,26 @@ chrome/resources/inspector/network_test_runner/
 chrome/resources/inspector/network_test_runner/network_test_runner_module.js
 chrome/resources/inspector/node_app.html
 chrome/resources/inspector/node_app.js
+chrome/resources/inspector/node_debugger/
+chrome/resources/inspector/node_debugger/node_debugger_module.js
 chrome/resources/inspector/object_ui/
 chrome/resources/inspector/object_ui/object_ui_module.js
 chrome/resources/inspector/perf_ui/
 chrome/resources/inspector/perf_ui/perf_ui_module.js
+chrome/resources/inspector/performance_monitor/
+chrome/resources/inspector/performance_monitor/performance_monitor_module.js
 chrome/resources/inspector/performance_test_runner/
 chrome/resources/inspector/performance_test_runner/performance_test_runner_module.js
 chrome/resources/inspector/product_registry_impl/
 chrome/resources/inspector/product_registry_impl/product_registry_impl_module.js
 chrome/resources/inspector/profiler/
 chrome/resources/inspector/profiler/profiler_module.js
+chrome/resources/inspector/protocol_monitor/
+chrome/resources/inspector/protocol_monitor/protocol_monitor_module.js
 chrome/resources/inspector/quick_open/
 chrome/resources/inspector/quick_open/quick_open_module.js
 chrome/resources/inspector/resources/
 chrome/resources/inspector/resources/resources_module.js
-chrome/resources/inspector/screencast/
-chrome/resources/inspector/screencast/screencast_module.js
 chrome/resources/inspector/sdk_test_runner/
 chrome/resources/inspector/sdk_test_runner/sdk_test_runner_module.js
 chrome/resources/inspector/search/
@@ -382,20 +387,30 @@ chrome/resources/inspector/worker_app.js
 chrome/resources/inspector/workspace_diff/
 chrome/resources/inspector/workspace_diff/workspace_diff_module.js
 chrome/snapshot_blob.bin
-chrome/swiftshader/
-chrome/swiftshader/libEGL.so
-chrome/swiftshader/libGLESv2.so
+%%swiftshader%%
 chrome/v8_context_snapshot.bin
 chrome/views_mus_resources.pak
 @man man/man1/chrome.1
 share/applications/chromium-browser.desktop
+share/examples/chromium/
+@sample ${SYSCONFDIR}/chromium/
+share/examples/chromium/pledge.main
+@sample ${SYSCONFDIR}/chromium/pledge.main
+share/examples/chromium/unveil.gpu
+@sample ${SYSCONFDIR}/chromium/unveil.gpu
+share/examples/chromium/unveil.main
+@sample ${SYSCONFDIR}/chromium/unveil.main
+share/examples/chromium/unveil.plugin
+@sample ${SYSCONFDIR}/chromium/unveil.plugin
+share/examples/chromium/unveil.renderer
+@sample ${SYSCONFDIR}/chromium/unveil.renderer
+share/examples/chromium/unveil.utility
+@sample ${SYSCONFDIR}/chromium/unveil.utility
 share/icons/hicolor/128x128/apps/chrome.png
 share/icons/hicolor/22x22/apps/chrome.png
 share/icons/hicolor/24x24/apps/chrome.png
 share/icons/hicolor/256x256/apps/chrome.png
 share/icons/hicolor/48x48/apps/chrome.png
 share/icons/hicolor/64x64/apps/chrome.png
-@exec %D/bin/update-desktop-database
-@unexec-delete %D/bin/update-desktop-database
-@exec %D/bin/gtk-update-icon-cache -q -t %D/share/icons/hicolor
-@unexec-delete %D/bin/gtk-update-icon-cache -q -t %D/share/icons/hicolor
+@tag update-desktop-database
+@tag gtk-update-icon-cache %D/share/icons/hicolor

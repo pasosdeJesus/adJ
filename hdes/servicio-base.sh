@@ -196,6 +196,9 @@ for i in `cat /tmp/tc`; do
 	remplazad $i;
 done;
 
+echo "fuse_servicioize"
+mv lib/libfuse/fuse_daemonize.3 lib/libfuse/fuse_servicioize.3
+
 echo "Buscando /var/log/daemon";
 find . -exec grep -i -l -I "/var/log/daemon" {} ';' > /tmp/tc 2> /dev/null
 echo "Remplazando por /var/log/servicio";

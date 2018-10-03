@@ -1,3 +1,3 @@
 
-__También les refirió Jesús una parábola sobre la necesidad de orar siempre, y no desmayar__
-(ver Lucas 18:1)
+__Airaos, pero no pequéis; no se ponga el sol sobre vuestro enojo__
+(ver Efesios 4:26)

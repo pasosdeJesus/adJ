@@ -652,12 +652,12 @@ share/doc/postgresql/html/release-1-0.html
 share/doc/postgresql/html/release-1-01.html
 share/doc/postgresql/html/release-1-02.html
 share/doc/postgresql/html/release-1-09.html
-share/doc/postgresql/html/release-10-1.html
-share/doc/postgresql/html/release-10-2.html
-share/doc/postgresql/html/release-10-3.html
-share/doc/postgresql/html/release-10-4.html
-share/doc/postgresql/html/release-10-5.html
-share/doc/postgresql/html/release-10.html
+share/doc/postgresql/html/release-${V_MAJOR}-1.html
+share/doc/postgresql/html/release-${V_MAJOR}-2.html
+share/doc/postgresql/html/release-${V_MAJOR}-3.html
+share/doc/postgresql/html/release-${V_MAJOR}-4.html
+share/doc/postgresql/html/release-${V_MAJOR}-5.html
+share/doc/postgresql/html/release-${V_MAJOR}.html
 share/doc/postgresql/html/release-6-0.html
 share/doc/postgresql/html/release-6-1-1.html
 share/doc/postgresql/html/release-6-1.html
@@ -691,7 +691,7 @@ share/doc/postgresql/html/release-7-2-7.html
 share/doc/postgresql/html/release-7-2-8.html
 share/doc/postgresql/html/release-7-2.html
 share/doc/postgresql/html/release-7-3-1.html
-share/doc/postgresql/html/release-7-3-10.html
+share/doc/postgresql/html/release-7-3-${V_MAJOR}.html
 share/doc/postgresql/html/release-7-3-11.html
 share/doc/postgresql/html/release-7-3-12.html
 share/doc/postgresql/html/release-7-3-13.html
@@ -713,7 +713,7 @@ share/doc/postgresql/html/release-7-3-8.html
 share/doc/postgresql/html/release-7-3-9.html
 share/doc/postgresql/html/release-7-3.html
 share/doc/postgresql/html/release-7-4-1.html
-share/doc/postgresql/html/release-7-4-10.html
+share/doc/postgresql/html/release-7-4-${V_MAJOR}.html
 share/doc/postgresql/html/release-7-4-11.html
 share/doc/postgresql/html/release-7-4-12.html
 share/doc/postgresql/html/release-7-4-13.html
@@ -744,7 +744,7 @@ share/doc/postgresql/html/release-7-4-8.html
 share/doc/postgresql/html/release-7-4-9.html
 share/doc/postgresql/html/release-7-4.html
 share/doc/postgresql/html/release-8-0-1.html
-share/doc/postgresql/html/release-8-0-10.html
+share/doc/postgresql/html/release-8-0-${V_MAJOR}.html
 share/doc/postgresql/html/release-8-0-11.html
 share/doc/postgresql/html/release-8-0-12.html
 share/doc/postgresql/html/release-8-0-13.html
@@ -771,7 +771,7 @@ share/doc/postgresql/html/release-8-0-8.html
 share/doc/postgresql/html/release-8-0-9.html
 share/doc/postgresql/html/release-8-0.html
 share/doc/postgresql/html/release-8-1-1.html
-share/doc/postgresql/html/release-8-1-10.html
+share/doc/postgresql/html/release-8-1-${V_MAJOR}.html
 share/doc/postgresql/html/release-8-1-11.html
 share/doc/postgresql/html/release-8-1-12.html
 share/doc/postgresql/html/release-8-1-13.html
@@ -795,7 +795,7 @@ share/doc/postgresql/html/release-8-1-8.html
 share/doc/postgresql/html/release-8-1-9.html
 share/doc/postgresql/html/release-8-1.html
 share/doc/postgresql/html/release-8-2-1.html
-share/doc/postgresql/html/release-8-2-10.html
+share/doc/postgresql/html/release-8-2-${V_MAJOR}.html
 share/doc/postgresql/html/release-8-2-11.html
 share/doc/postgresql/html/release-8-2-12.html
 share/doc/postgresql/html/release-8-2-13.html
@@ -819,7 +819,7 @@ share/doc/postgresql/html/release-8-2-8.html
 share/doc/postgresql/html/release-8-2-9.html
 share/doc/postgresql/html/release-8-2.html
 share/doc/postgresql/html/release-8-3-1.html
-share/doc/postgresql/html/release-8-3-10.html
+share/doc/postgresql/html/release-8-3-${V_MAJOR}.html
 share/doc/postgresql/html/release-8-3-11.html
 share/doc/postgresql/html/release-8-3-12.html
 share/doc/postgresql/html/release-8-3-13.html
@@ -843,7 +843,7 @@ share/doc/postgresql/html/release-8-3-8.html
 share/doc/postgresql/html/release-8-3-9.html
 share/doc/postgresql/html/release-8-3.html
 share/doc/postgresql/html/release-8-4-1.html
-share/doc/postgresql/html/release-8-4-10.html
+share/doc/postgresql/html/release-8-4-${V_MAJOR}.html
 share/doc/postgresql/html/release-8-4-11.html
 share/doc/postgresql/html/release-8-4-12.html
 share/doc/postgresql/html/release-8-4-13.html
@@ -866,7 +866,7 @@ share/doc/postgresql/html/release-8-4-8.html
 share/doc/postgresql/html/release-8-4-9.html
 share/doc/postgresql/html/release-8-4.html
 share/doc/postgresql/html/release-9-0-1.html
-share/doc/postgresql/html/release-9-0-10.html
+share/doc/postgresql/html/release-9-0-${V_MAJOR}.html
 share/doc/postgresql/html/release-9-0-11.html
 share/doc/postgresql/html/release-9-0-12.html
 share/doc/postgresql/html/release-9-0-13.html
@@ -890,7 +890,7 @@ share/doc/postgresql/html/release-9-0-8.html
 share/doc/postgresql/html/release-9-0-9.html
 share/doc/postgresql/html/release-9-0.html
 share/doc/postgresql/html/release-9-1-1.html
-share/doc/postgresql/html/release-9-1-10.html
+share/doc/postgresql/html/release-9-1-${V_MAJOR}.html
 share/doc/postgresql/html/release-9-1-11.html
 share/doc/postgresql/html/release-9-1-12.html
 share/doc/postgresql/html/release-9-1-13.html
@@ -915,7 +915,7 @@ share/doc/postgresql/html/release-9-1-8.html
 share/doc/postgresql/html/release-9-1-9.html
 share/doc/postgresql/html/release-9-1.html
 share/doc/postgresql/html/release-9-2-1.html
-share/doc/postgresql/html/release-9-2-10.html
+share/doc/postgresql/html/release-9-2-${V_MAJOR}.html
 share/doc/postgresql/html/release-9-2-11.html
 share/doc/postgresql/html/release-9-2-12.html
 share/doc/postgresql/html/release-9-2-13.html
@@ -940,7 +940,7 @@ share/doc/postgresql/html/release-9-2-8.html
 share/doc/postgresql/html/release-9-2-9.html
 share/doc/postgresql/html/release-9-2.html
 share/doc/postgresql/html/release-9-3-1.html
-share/doc/postgresql/html/release-9-3-10.html
+share/doc/postgresql/html/release-9-3-${V_MAJOR}.html
 share/doc/postgresql/html/release-9-3-11.html
 share/doc/postgresql/html/release-9-3-12.html
 share/doc/postgresql/html/release-9-3-13.html
@@ -965,7 +965,7 @@ share/doc/postgresql/html/release-9-3-8.html
 share/doc/postgresql/html/release-9-3-9.html
 share/doc/postgresql/html/release-9-3.html
 share/doc/postgresql/html/release-9-4-1.html
-share/doc/postgresql/html/release-9-4-10.html
+share/doc/postgresql/html/release-9-4-${V_MAJOR}.html
 share/doc/postgresql/html/release-9-4-11.html
 share/doc/postgresql/html/release-9-4-12.html
 share/doc/postgresql/html/release-9-4-13.html
@@ -985,7 +985,7 @@ share/doc/postgresql/html/release-9-4-8.html
 share/doc/postgresql/html/release-9-4-9.html
 share/doc/postgresql/html/release-9-4.html
 share/doc/postgresql/html/release-9-5-1.html
-share/doc/postgresql/html/release-9-5-10.html
+share/doc/postgresql/html/release-9-5-${V_MAJOR}.html
 share/doc/postgresql/html/release-9-5-11.html
 share/doc/postgresql/html/release-9-5-12.html
 share/doc/postgresql/html/release-9-5-13.html
@@ -1000,7 +1000,7 @@ share/doc/postgresql/html/release-9-5-8.html
 share/doc/postgresql/html/release-9-5-9.html
 share/doc/postgresql/html/release-9-5.html
 share/doc/postgresql/html/release-9-6-1.html
-share/doc/postgresql/html/release-9-6-10.html
+share/doc/postgresql/html/release-9-6-${V_MAJOR}.html
 share/doc/postgresql/html/release-9-6-2.html
 share/doc/postgresql/html/release-9-6-3.html
 share/doc/postgresql/html/release-9-6-4.html

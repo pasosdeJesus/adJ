@@ -7,6 +7,11 @@
 @ask-update postgresql-server-<${V_MAJOR} Make sure your existing database is backed up
 @newgroup _postgresql:503
 @newuser _postgresql:503:_postgresql:daemon:PostgreSQL Manager:/var/postgresql:/bin/sh
+@rcscript ${RCDIR}/postgresql
+@mode 755
+@owner _postgresql
+@group _postgresql
+@sample /var/postgresql/
 @bin bin/initdb
 @bin bin/pg_basebackup
 @bin bin/pg_controldata
@@ -762,7 +767,7 @@ lib/postgresql/utf8_and_win.so
 @man man/man1/pg_waldump.1
 @man man/man1/postgres.1
 @man man/man1/postmaster.1
-share/doc/pkg-readmes/${FULLPKGNAME}
+share/doc/pkg-readmes/${PKGSTEM}
 share/postgresql/extension/
 share/postgresql/extension/plperl--1.0.sql
 share/postgresql/extension/plperl--unpackaged--1.0.sql
@@ -805,8 +810,3 @@ share/postgresql/tsearch_data/thesaurus_sample.ths
 share/postgresql/tsearch_data/turkish.stop
 share/postgresql/tsearch_data/unaccent.rules
 share/postgresql/tsearch_data/xsyn_sample.rules
-@rcscript ${RCDIR}/postgresql
-@mode 755
-@owner _postgresql
-@group _postgresql
-@sample /var/postgresql/

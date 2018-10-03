@@ -22,8 +22,8 @@ Pasos importantes para publicar versión beta
 
 1. Actulizar parches de locale y xlocale de forma que puedan aplicarse
    sobre la nueva versión de OpenBSD.
-2. Recompilar kernel, sistema base y asegurar que puede crearse una 
-   distribución inicial
+2. Recompilar kernel, perl, sistema base y asegurar que puede crearse una 
+   distribución inicial 
 3. Recompilar paquetes con actualizaciones de seguridad o mejoras
 4. Retroportar paquetes, dejar resultados no incluidos en DVD pero
    útiles en 6.4-amd64-extra
@@ -41,12 +41,19 @@ Pasos importantes para publicar versión beta
 9. Probar por ejemplo en ```qemu``` (```hdes/qemu.sh``` o remotamente 
   ```TEXTO=1 hdes/qemu.sh```): 
 - Instalación de sistema base, `uname -a` debe reportar APRENDIENDODEJESUS
-- Verificar que colorls y libc cotejan en español:
-  touch a
-  touch í
-  touch o
-  ls -l
-  Debe mostrar los directorios en orden alfabético correcto (í entre a y o).
+- Verificar que kernel tiene renombramiento de daemon por servicio con:
+	$  vmstat -s | grep servicio
+          	4 pages reserved for pageservicio
+          	0 number of times the pageservicio woke up
+          	0 pages freed by pageservicio
+          	0 pages scanned by pageservicio
+          	0 pages reactivated by pageservicio
+          	0 busy pages found by pageservicio
+
+- Verificar que se usa la bitácora /var/log/servicio:
+	$ ls -lat /var/log/servicio  
+		-rw-r-----  1 root  wheel  149983 Sep 19 18:48 /var/log/servicio
+
 - Verificar que libc incluye funciones de locale por ejemplo editando
   un archivo `l.c` con el siguiente contenido, tras compilar con `cc -o l l.c`
   y ejecutar con `./l` el resulado debería ser `1.000.000,200000`:
@@ -60,7 +67,24 @@ int main() {
   return 0;
 }
 ```
-- Verificar que las cotejaciones en español operan en PostgreSQL con:
+- Operación de locale numeric en perl. El siguiente programa en perl debe 
+  dar respuesta 1987,23:
+```perl
+# Basado en http://perldoc.perl.org/perllocale.html
+use locale;
+use POSIX qw(locale_h);
+setlocale(LC_NUMERIC, "es_CO.UTF-8") or die "No pone locale LC_NUMERIC en es_CO.UTF-8";                                                        
+my $a = 1987.23;
+printf "%g\n", $a;
+```
+- Con paquete colorls modificado y actualizad, verificar cotejacion en español:
+  touch a
+  touch í
+  touch o
+  ls -l
+  Debe mostrar los directorios en orden alfabético correcto (í entre a y o).
+- Con paquete postgresql modificado y actualizado, verificar que coteja
+  en español con:
 doas su - _postgresql
 ```sh
 cat > /tmp/cot.sql <<EOF
@@ -74,15 +98,6 @@ psql -h /var/www/var/run/postgresql/ -Upostgres -f /tmp/cot.sql
 ----------
  t
 (1 row)
-```
-- Operación de locale numeric en perl. El siguiente programa en perl debe dar respuesta 1987,23:
-```perl
-# Basado en http://perldoc.perl.org/perllocale.html
-use locale;
-use POSIX qw(locale_h);
-setlocale(LC_NUMERIC, "es_CO.UTF-8") or die "No pone locale LC_NUMERIC en es_CO.UTF-8";                                                        
-my $a = 1987.23;
-printf "%g\n", $a;
 ```
 - ejecución de /inst-adJ.sh en nuevo y actualización, 
 - ejecución de /usr/local/adJ/inst-sivel.sh, que opere SIVeL1.2,
