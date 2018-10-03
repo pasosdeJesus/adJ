@@ -112,7 +112,7 @@ psql -h /var/www/var/run/postgresql/ -Upostgres -f /tmp/cot.sql
 11. En adJ.pasosdeJesus.org
 	```
 	hdes/creaiso.sh
-	cp -rf AprendiendoDeJesus-6.4a1-amd64.iso 6.4a1-amd64 /dirftp
+	cp -rf AprendiendoDeJesus-6.4-amd64.iso 6.4-amd64 /dirftp
 	mkdir /dirftp/6.4-amd64-extra
 	rsync compdes:comp/adJ/extra-6.4/* /dirftp/6.4-amd64-extra
 	```

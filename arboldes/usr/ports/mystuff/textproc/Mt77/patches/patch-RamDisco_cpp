@@ -1,0 +1,14 @@
+$OpenBSD$
+
+Index: RamDisco.cpp
+--- RamDisco.cpp.orig
++++ RamDisco.cpp
+@@ -172,7 +172,7 @@ escribePlano(NodoTrieS &t, vector<Doc> &docs, const ch
+ 
+         fstream os(na, ios_base::out);
+         os << MARCAIND << endl;
+-        escribePlanoStream(&t, os);
++        escribePlanoStream(&t, os, 0);
+         os.close();
+ 
+         escribeRelacion(nrel, docs, NULL);

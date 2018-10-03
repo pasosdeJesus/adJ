@@ -80,6 +80,6 @@ Puede ver novedades respecto a OpenBSD en:
 
 ## FE DE ERRATAS
 
-- Chromium sigue siendo inestable por ejemplo en drive.google.com
+- Chromium sigue siendo inestable por ejemplo en www.davivienda.com
   por esto sigue incluyendose firefox que en casos como ese puede operar.
 

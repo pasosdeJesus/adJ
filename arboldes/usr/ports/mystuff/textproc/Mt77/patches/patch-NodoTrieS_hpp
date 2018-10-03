@@ -1,0 +1,14 @@
+$OpenBSD$
+
+Index: NodoTrieS.hpp
+--- NodoTrieS.hpp.orig
++++ NodoTrieS.hpp
+@@ -48,7 +48,7 @@ class NodoTrieS
+                 friend uint32_t precalcula_escribe(NodoTrieS *n);
+                 friend void escribePlanoStream (NodoTrieS *n,
+                                                 iostream &os, 
+-						uint32_t desp = 0);
++						uint32_t desp);
+                 friend class TrieSDiscoCasoPrueba;
+                 friend uint32_t escribeCopiaNodoRam(iostream &os, NodoTrieS *a,
+                                                 NodoTrieS **phijo,
