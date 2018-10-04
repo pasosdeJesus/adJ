@@ -12,9 +12,6 @@
 @owner _postgresql
 @group _postgresql
 @sample /var/postgresql/
-@mode
-@owner
-@group
 @bin bin/initdb
 @bin bin/pg_basebackup
 @bin bin/pg_controldata
