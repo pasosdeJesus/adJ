@@ -1,4 +1,4 @@
-@comment $OpenBSD: PLIST-server,v 1.35 2018/03/08 13:24:25 pea Exp $
+@comment $OpenBSD: PLIST-server,v 1.36 2018/09/04 12:46:10 espie Exp $
 @conflict pgsql-*
 @conflict pgsql-clients-*
 @conflict postgresql-clients-*
@@ -12,6 +12,9 @@
 @owner _postgresql
 @group _postgresql
 @sample /var/postgresql/
+@mode
+@owner
+@group
 @bin bin/initdb
 @bin bin/pg_basebackup
 @bin bin/pg_controldata

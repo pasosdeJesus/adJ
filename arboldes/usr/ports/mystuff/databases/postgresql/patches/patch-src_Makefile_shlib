@@ -1,8 +1,7 @@
 $OpenBSD: patch-src_Makefile_shlib,v 1.10 2015/01/08 15:01:11 pea Exp $
-Index: src/Makefile.shlib
---- src/Makefile.shlib.orig
-+++ src/Makefile.shlib
-@@ -146,7 +146,7 @@ ifeq ($(PORTNAME), openbsd)
+--- src/Makefile.shlib.orig	Sun May 11 14:16:48 2014
++++ src/Makefile.shlib	Thu May 15 21:52:50 2014
+@@ -140,7 +140,7 @@ ifeq ($(PORTNAME), openbsd)
    ifdef ELF_SYSTEM
      LINK.shared		= $(COMPILER) -shared
      ifdef soname

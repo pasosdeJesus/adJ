@@ -1,4 +1,4 @@
-# $OpenBSD: Makefile,v 1.237 2018/05/17 18:42:42 pea Exp $
+# $OpenBSD: Makefile,v 1.242 2018/09/22 13:17:22 sthen Exp $
 
 COMMENT-main=	PostgreSQL RDBMS (client)
 COMMENT-server=	PostgreSQL RDBMS (server)
@@ -16,6 +16,8 @@ PKGNAME-docs=	postgresql-docs-${VERSION}
 PKGNAME-contrib=postgresql-contrib-${VERSION}
 PKGNAME-plpython=postgresql-plpython-${VERSION}
 PKGNAME-pg_upgrade=postgresql-pg_upgrade-${VERSION}
+REVISION-main=	1
+REVISION-server=4
 
 CATEGORIES=	databases
 SHARED_LIBS=	ecpg		7.9 \
@@ -67,14 +69,13 @@ CONFIGURE_ARGS=	--disable-rpath --with-openssl=/usr \
 		--with-system-tzdata="/usr/share/zoneinfo" \
 		--with-openssl \
 		--with-libxml \
-		--disable-thread-safety 
+		--disable-thread-safety
 
-# There is no spinlock support for hppa and alpha yet. Until we have access to
+# There is no spinlock support for alpha or hppa yet. Until we have access to
 # a system to get this working, disable them for now. There is
 # (apparently) a serious performance hit doing this.
 
-.if ${MACHINE_ARCH} == "hppa" || ${MACHINE_ARCH} == "alpha" || \
-    ${MACHINE_ARCH} == "arm"
+.if ${MACHINE_ARCH} == "alpha" || ${MACHINE_ARCH} == "hppa"
 CONFIGURE_ARGS+=--disable-spinlocks
 .endif
 
