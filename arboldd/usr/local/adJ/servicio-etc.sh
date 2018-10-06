@@ -178,6 +178,12 @@ EOF
 w
 q
 EOF
+	ed rc.d/$i >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
+,s/daemon_flags/servicio_flags/g
+w
+q
+EOF
+
 
 done;
 
