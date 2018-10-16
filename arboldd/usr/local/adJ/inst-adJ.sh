@@ -2149,10 +2149,11 @@ if (test "$p" = "") then {
 	mkdir -p /var/www/conf/modules/
 	ln -sf /var/www/conf/modules.sample/php-5.6.conf \
 		/var/www/conf/modules/php.conf
-	for sp in gd intl ldap mcrypt mysql pod_mysql pdo_pgsql pgsql zip; do
+	lsp=`(cd /etc/php-5.6.sample; ls)`
+	for sp in $lsp ; do
 		rm -f /etc/php-5.6/$sp
-		if (test -f /etc/php-5.6.sample/$sp.ini) then {
-			ln -fs /etc/php-5.6.sample/$sp.ini /etc/php-5.6/
+		if (test -f /etc/php-5.6.sample/$sp) then {
+			ln -fs /etc/php-5.6.sample/$sp /etc/php-5.6/
 		} fi;
 	done;
 	if (test "$sweb" = "apache") then {
