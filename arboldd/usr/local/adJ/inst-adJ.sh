@@ -2149,13 +2149,7 @@ if (test "$p" = "") then {
 	mkdir -p /var/www/conf/modules/
 	ln -sf /var/www/conf/modules.sample/php-5.6.conf \
 		/var/www/conf/modules/php.conf
-	lsp=`(cd /etc/php-5.6.sample; ls)`
-	for sp in $lsp ; do
-		rm -f /etc/php-5.6/$sp
-		if (test -f /etc/php-5.6.sample/$sp) then {
-			ln -fs /etc/php-5.6.sample/$sp /etc/php-5.6/
-		} fi;
-	done;
+	ln -sf /etc/php-5.6.sample/* /etc/php-5.6/
 	if (test "$sweb" = "apache") then {
 		chmod +w /var/www/conf/httpd.conf
 		ed /var/www/conf/httpd.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
