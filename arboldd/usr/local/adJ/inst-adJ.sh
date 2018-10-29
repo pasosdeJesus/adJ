@@ -2481,23 +2481,21 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 [submenu] (Dispositivos)
 	[exec] (Apagar) {doas /sbin/halt -p}
 	[exec] (Iniciar servicios faltantes) {xterm -en utf8 -e "/usr/bin/doas /bin/sh /etc/rc.local espera"}
-	[exec] (Montar CD) {/sbin/mount /mnt/cdrom ; xfe /mnt/cdrom/ }
-	[exec] (Desmontar CD) {/sbin/umount -f /mnt/cdrom}
-	[exec] (Montar USB) {/sbin/mount /mnt/usb ; xfe /mnt/usb/}
-	[exec] (Desmontar USB) {/sbin/umount -f /mnt/usb}
-	[exec] (Montar USBC) {/sbin/mount /mnt/usbc ; xfe /mnt/usbc/}
-	[exec] (Desmontar USBC) {/sbin/umount -f /mnt/usbc}
-	[exec] (Montar Floppy) {/sbin/mount /mnt/floppy ; xfe /mnt/floppy}
-	[exec] (Desmontar Floppy) {/sbin/umount -f /mnt/floppy}
+	[exec] (Montar CD) {doas /sbin/mount /mnt/cdrom ; doas xfe /mnt/cdrom/ }
+	[exec] (Desmontar CD) {doas /sbin/umount -f /mnt/cdrom}
+	[exec] (Montar USB) {doas /sbin/mount /mnt/usb ; doas xfe /mnt/usb/}
+	[exec] (Desmontar USB) {doas /sbin/umount -f /mnt/usb}
+	[exec] (Montar USBC) {doas /sbin/mount /mnt/usbc ; doas xfe /mnt/usbc/}
+	[exec] (Desmontar USBC) {doas /sbin/umount -f /mnt/usbc}
 	[exec] (Configurar Impresora con CUPS) {echo y | doas cups-enable; doas chmod a+rw /dev/ulpt* /dev/lpt*; /usr/local/bin/chrome --disable-gpu http://127.0.0.1:631}
 	[submenu] (Red)
-                [exec] (Examinar red) {xterm -en utf8 -e '/sbin/ifconfig; echo -n "\n[RETORNO] para examinar enrutamiento (podrá salir con q)"; read; /sbin/route -n show | less'}
-                [exec] (Examinar configuracion cortafuegos) {xterm  -en utf8 -e 'doas  /sbin/pfctl -s all | less '}
-                [exec] (Configurar interfaces de red) {xterm -en utf8 -e 'li=\`/sbin/ifconfig | grep "^[a-z]*[0-9]:" | sed -e "s/:.*//g" | grep -v "lo0" | grep -v "enc0" | grep -v "pflog0" | grep -v "tun[0-9]"\`;  echo "Por configurar \$li"; for i in \$li; do echo "Configurando \$i"; /sbin/ifconfig \$i; echo -n "\n[RETORNO] para editar /etc/hostname.\$i"; read;  doas touch /etc/hostname.\$i; doas xfw /etc/hostname.\$i; done'}
-                [exec] (Configurar puerta de enlace) {doas touch /etc/mygate; doas xfw /etc/mygate}
-                [exec] (Configurar cortafuegos) {doas xfw /etc/pf.conf}
-                [exec] (Reiniciar red) {xterm -en utf8 -e 'PATH=/sbin:/usr/sbin:/bin:/usr/bin/ /usr/bin/doas /bin/sh /etc/netstart && /usr/bin/doas /sbin/pfctl -f /etc/pf.conf; echo "[RETORNO] para continuar"; read'}
-                [exec] (ping a Internet) {xterm -en utf8 -e '/sbin/ping 157.253.1.13'}
+		[exec] (Examinar red) {xterm -en utf8 -e '/sbin/ifconfig; echo -n "\n[RETORNO] para examinar enrutamiento (podrá salir con q)"; read; /sbin/route -n show | less'}
+		[exec] (Examinar configuracion cortafuegos) {xterm  -en utf8 -e 'doas  /sbin/pfctl -s all | less '}
+		[exec] (Configurar interfaces de red) {xterm -en utf8 -e 'li=\`/sbin/ifconfig | grep "^[a-z]*[0-9]:" | sed -e "s/:.*//g" | grep -v "lo0" | grep -v "enc0" | grep -v "pflog0" | grep -v "tun[0-9]"\`;  echo "Por configurar \$li"; for i in \$li; do echo "Configurando \$i"; /sbin/ifconfig \$i; echo -n "\n[RETORNO] para editar /etc/hostname.\$i"; read;  doas touch /etc/hostname.\$i; doas xfw /etc/hostname.\$i; done'}
+		[exec] (Configurar puerta de enlace) {doas touch /etc/mygate; doas xfw /etc/mygate}
+		[exec] (Configurar cortafuegos) {doas xfw /etc/pf.conf}
+		[exec] (Reiniciar red) {xterm -en utf8 -e 'PATH=/sbin:/usr/sbin:/bin:/usr/bin/ /usr/bin/doas /bin/sh /etc/netstart && /usr/bin/doas /sbin/pfctl -f /etc/pf.conf; echo "[RETORNO] para continuar"; read'}
+		[exec] (ping a Internet) {xterm -en utf8 -e '/sbin/ping 157.253.1.13'}
         [end]
 [end]
 [submenu] (Oficina)

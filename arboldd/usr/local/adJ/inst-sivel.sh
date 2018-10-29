@@ -595,12 +595,12 @@ if (test "$?" != "0") then {
 /(Dispositivos)
 i
 [submenu] (SIVeL)
-	[exec] (SIVeL) {/usr/local/bin/firefox -UILocale es-AR https://127.0.0.1}
-	[exec] (Editar sitios/sivel/conf.php) {LANG=es xfw /var/www/htdocs/sivel/sitios/sivel/conf.php}
-        [exec] (Sacar copia de base en /var/www/resbase) {cd /var/www/htdocs/sivel/ && bin/pgdump.sh}
-	[exec] (Quemar /var/resbase.img en CD-R) {xterm -e "cd /var/www/htdocs/sivel && bin/copiacd.sh"}
-	[exec] (Conectar a ${usnyn}@rbd.nocheyniebla.org) {xterm -e "ssh -p10022 -R 1234:localhost:22 ${usnyn}@rbd.nocheyniebla.org"}
-	[exec] (Enviar volcado de la base a ${usnyn}@rbd.nocheyniebla.org) {cd /var/www/htdocs/sivel/sitios/sivel && ../../bin/pgdump.sh && dm=`date "+%d"` scp -P10022 /var/www/resbase/sivel-dump-$dm.sql.gz ${usnyn}@rbd.nocheyniebla.org:"}
+        [exec] (SIVeL) {/usr/local/bin/chrome https://127.0.0.1}
+        [exec] (Editar sitios/sivel/conf.php) {LANG=es doas xfw /var/www/htdocs/sivel/sitios/sivel/conf.php}
+        [exec] (Sacar copia de base en /var/www/resbase) {xterm -en utf8 -e "cd /var/www/htdocs/sivel/sitios/sivel/ && ../../bin/pgdump.sh && echo \"Presione [ENTER] para cerrar\" && read"}
+        [exec] (Copiar contenedor con respaldos a USB) {xterm -en utf8 -e "/usr/local/adJ/copia_contresp_usb.sh"}
+        [exec] (Conectar a bdcauca@rbd.nocheyniebla.org) {xterm -e "ssh -p10022 -R 1234:localhost:22 bdcauca@rbd.nocheyniebla.org"}
+        [exec] (Enviar volcado de la base a bdcauca@rbd.nocheyniebla.org) {xterm -e "cd /var/www/htdocs/sivel/sitios/sivel && ../../bin/pgdump.sh && dm=`date \"+%d\"` && scp -P10022 /var/www/resbase/sivel-dump-\\$dm.sql.gz vtamara@rbd.nocheyniebla.org:; echo \"Presione [ENTER] para cerrar\"; read"}
 [end]
 .
 w
