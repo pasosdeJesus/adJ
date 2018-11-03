@@ -11,7 +11,7 @@
 "
 " 1. Agregar a ~/.vim/filetype.vim
 " au! BufRead,BufNewFile *.gbfxml       setfiletype gbfxml
-" 2. Copiar este archivo en ~/.vim/ftplugin con nombre gbfxml.vim
+" 2. Copiar este archivo en ~/.vim/ftplugin/ con nombre gbfxml.vim
 " 3. Copiar el archivo herram/vim/syntax/gbfxml.vim en ~/.vim/syntax/
 "
 " MODO DE USO
