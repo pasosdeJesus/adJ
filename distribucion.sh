@@ -862,7 +862,7 @@ if (test "$sn" = "s") then {
 	#paquete mariadb-client paquetes "mariadb-client mariadb-server" 
 	#paquete p7zip paquetes "p7zip p7zip-rar"
 	#paquete pidgin paquetes "libpurple pidgin"
-	#paquete ruby paquetes "ruby ruby25-ri_docs" 2.5
+	paquete ruby paquetes "ruby ruby26-ri_docs" 2.6
 	#paquete samba paquetes "ldb samba tevent"
 	#paquete webkit paquetes "webkit webkit-gtk3"
 	# FLAVOR=gtk3 make paquete webkit-gtk3
