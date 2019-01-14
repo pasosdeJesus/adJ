@@ -10,6 +10,4 @@ comp() {
 }
 
 comp install-amd64.md install-amd64-en.md 
-comp install.sh install-en.sh 
 comp install.sub install-en.sub 
-#comp upgrade.sub upgrade-en.sub 

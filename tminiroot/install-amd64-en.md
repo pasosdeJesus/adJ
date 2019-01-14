@@ -1,4 +1,4 @@
-#      $OpenBSD: install.md,v 1.51 2016/02/08 17:28:08 krw Exp $
+#     $OpenBSD: install.md,v 1.55 2017/07/28 18:15:44 rpe Exp $
 #
 #
 # Copyright (c) 1996 The NetBSD Foundation, Inc.
@@ -40,8 +40,6 @@ if dmesg | grep -q 'efifb0 at mainbus0'; then
 	MDEFI=y
 fi
 
-((NCPU > 1)) && { DEFAULTSETS="bsd bsd.rd bsd.mp"; SANESETS="bsd bsd.mp"; }
-
 md_installboot() {
 	if ! installboot -r /mnt ${1}; then
 		echo "\nFailed to install bootblocks."
@@ -59,14 +57,17 @@ md_prep_fdisk() {
 
 		[[ $MDEFI == y ]] && _d=gpt
 
-		if disk_has $_disk mbr openbsd || disk_has $_disk gpt openbsd; then
-			_q="$_q, (O)penBSD area"
-			_d=OpenBSD
-
+		if disk_has $_disk mbr || disk_has $_disk gpt; then
 			fdisk $_disk
+			if disk_has $_disk mbr openbsd ||
+				disk_has $_disk gpt openbsd; then
+				_q="$_q, (O)penBSD area"
+				_d=OpenBSD
+			fi
 		else
 			echo "No valid MBR or GPT."
 		fi
+
 		ask "$_q or (E)dit?" "$_d"
 		case $resp in
 		[wW]*)
@@ -138,13 +139,15 @@ __EOT
 }
 
 md_prep_disklabel() {
-	local _disk=$1 _f=/tmp/fstab.$1
+	local _disk=$1 _f=/tmp/i/fstab.$1
 
 	md_prep_fdisk $_disk
 
 	disklabel_autolayout $_disk $_f || return
 	[[ -s $_f ]] && return
 
+	# Edit disklabel manually.
+	# Abandon all hope, ye who enter here.
 	disklabel -F $_f -E $_disk
 }
 
