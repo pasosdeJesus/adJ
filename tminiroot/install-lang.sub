@@ -793,7 +793,7 @@ ask_which() {
 		set -- $_dyndef; _dyndef="$1"
 		set -- $_dynlist; _dynlist="$*"
 		set +o noglob
-		(($# < 1)) && resp=done && return
+		(($# < 1)) && resp=$_sldone && return
 		: ${_dyndef:=$1}
 
 		echo "$_slavailablenames ${_name}s $_slavailablenames2: $_dynlist."
@@ -1114,13 +1114,13 @@ v6_config() {
 	set -- $(v6_info $_if)
 	[[ -n $2 ]] && { _addr=$2; _prefixlen=$3; }
 
-	ifconfig $_if inet6 >/dev/null 2>&1 && _prompt="or 'autoconf' "
-	_prompt="IPv6 address for $_if? (${_prompt}or 'none')"
+	ifconfig $_if inet6 >/dev/null 2>&1 && _prompt="$_slor 'autoconf' "
+	_prompt="$_slipv61 $_if? (${_prompt}$_slor '$_slnone')"
 
 	while :; do
-		ask_until "$_prompt" "${_addr:-none}"
+		ask_until "$_prompt" "${_addr:-$_slnone}"
 		case $resp in
-		none)	return
+		$_slnone)	return
 			;;
 		autoconf)
 			if ! ifconfig $_if inet6 >/dev/null 2>&1; then
@@ -1284,7 +1284,7 @@ configure_ifs() {
 		fi
 
 		NIFS=$(ls -1 /tmp/i/hostname.* 2>/dev/null | grep -c ^)
-		_p=done
+		_p=$_sldone
 	done
 }
 
@@ -1385,7 +1385,7 @@ __EOT
 		for _f in $_avail; do
 			isin "$_f" $_selected && echo "[X] $_f" || echo "[ ] $_f"
 		done | show_cols | sed 's/^/    /'
-		ask "$_slasksetname ($_slor '$_slabort' $_slor '$_sldone')" done
+		ask "$_slasksetname ($_slor '$_slabort' $_slor '$_sldone')" $_sldone
 
 		set -o noglob
 		for resp in $resp; do
@@ -1585,7 +1585,7 @@ install_files() {
 		# The bsd.rd only download/verify/install assumes that the sets
 		# location of the next release. So use the right signature file.
 		$UPGRADE_BSDRD &&
-			PUB_KEY=/mnt/etc/signify/openbsd-$((VERSION + 1))-base.pub
+			PUB_KEY=/mnt/etc/signify/adJ-$((VERSION + 1))-base.pub
 
 		# Verify signature file with public keys.
 		! unpriv -f "$_cfile" \
@@ -1647,10 +1647,10 @@ install_files() {
 
 		# Extract the set files and put the kernel files in place.
 		case $_fsrc in
-		*.tgz)	$_unpriv ftp -D Installing -Vmo - "$_fsrc" |
+		*.tgz)	$_unpriv ftp -D $_slinstalling -Vmo - "$_fsrc" |
 				tar -zxphf - -C /mnt &&
 			if [[ $_f == ?(x)base*.tgz && $MODE == install ]]; then
-				ftp -D Extracting -Vmo - \
+				ftp -D $_slextracting -Vmo - \
 				file:///mnt/var/sysmerge/${_f%%base*}etc.tgz |
 				tar -zxphf - -C /mnt
 			fi
@@ -1659,7 +1659,7 @@ install_files() {
 			# bsd.rd only download/verify/install case.
 			$UPGRADE_BSDRD && [[ $_f == bsd.rd* ]] &&
 				cp /mnt/$_f /mnt/$_f.old.$VERSION
-			$_unpriv ftp -D Installing -Vmo - "$_fsrc" >"/mnt/$_f"
+			$_unpriv ftp -D $_slinstalling -Vmo - "$_fsrc" >"/mnt/$_f"
 			;;
 		esac
 		if (($?)); then
@@ -1970,11 +1970,11 @@ set_term() {
 		[[ -x /sbin/kbd ]] || return
 		_layouts=$(bsort $(kbd -l | egrep -v "^(user|tables|encoding)"))
 		while :; do
-			ask "$_slchooseyourkeyboardlayout" default
+			ask "$_slchooseyourkeyboardlayout" $_sldefault
 			case $resp in
 			[lL\?]) 	echo "$_slavailablelayouts: $_layouts"
 					;;
-			default) 	break
+			$_sldefault) 	break
 					;;
 			*)		if kbd -q "$resp"; then
 			       			echo $resp >/tmp/i/kbdtype
@@ -2063,7 +2063,7 @@ questions() {
 				APERTURE=$MDXAPERTURE
 		fi
 		if [[ -n $MDXDM && $resp != n ]]; then
-			ask_yn "$_slxenodm"
+			ask_yn "$_slxenodm" $_slyes
 			START_XDM=$resp
 		fi
 	fi
@@ -2721,7 +2721,7 @@ finish_up() {
 			>/mnt/etc/installurl
 	fi
 
-	echo -n "Making all device nodes..."
+	echo -n "$_slmaking"
 	(cd /mnt/dev; sh MAKEDEV all
 		# Make sure any devices we found during probe are created in the
 		# installed system.
@@ -2729,7 +2729,7 @@ finish_up() {
 			sh MAKEDEV $_dev
 		done
 	)
-	echo " done."
+	echo " $_sldone."
 
 	# We may run some programs in chroot, and some of them might be
 	# dynamic.  That is highly discouraged, but let us play it safe.
@@ -3264,7 +3264,7 @@ HTTP_SEC=/tmp/i/httpsec
 INSTALL_METHOD=
 NIFS=0
 export PS1="$MODE# "
-PUB_KEY=/etc/signify/openbsd-${VERSION}-base.pub
+PUB_KEY=/etc/signify/adJ-${VERSION}-base.pub
 ROOTDEV=
 ROOTDISK=
 SETDIR="$VNAME/$ARCH"
@@ -3303,13 +3303,13 @@ md_consoleinfo
 # Selected sets will be installed in the order they are listed in $ALLSETS.
 # Ensure that siteXX.tgz is the *last* set listed so its contents overwrite
 # the contents of the other sets, not the other way around.
-SETS=$(echo {base,comp,man,game,xbase,xshare,xfont,xserv}$VERSION.tgz)
+SETS=$(echo {base,comp,man,game,xbase,xshare,xfont,xserv,site}$VERSION.tgz)
 DEFAULTSETS="${MDSETS:-bsd bsd.rd} $SETS"
-ALLSETS="${MDSETS:-bsd bsd.rd} $SETS site$VERSION.tgz"
+ALLSETS="${MDSETS:-bsd bsd.rd} $SETS"
 SANESETS="${MDSANESETS:-bsd} base${VERSION}.tgz"
 if ((NCPU > 1)); then
 	DEFAULTSETS="${MDSETS:-bsd bsd.mp bsd.rd} $SETS"
-	ALLSETS="${MDSETS:-bsd bsd.mp bsd.rd} $SETS site$VERSION.tgz"
+	ALLSETS="${MDSETS:-bsd bsd.mp bsd.rd} $SETS"
 	SANESETS="${MDSANESETS:-bsd bsd.mp} base${VERSION}.tgz"
 fi
 
@@ -3352,11 +3352,11 @@ esac
 # automatic reboot in do_autoinstall().
 $AI && exit
 
-_d=reboot
+_d=$_slreboot
 [[ $MODE == install && $MDHALT == y ]] && _d=halt
 
 while :; do
-	ask "$_slextitoshell" "$_d"
+	ask "$_slexittoshell" "$_d"
 	case $resp in
 	[$_slhaltl]*)	exec halt;;
 	[$_slrebootl]*)	exec reboot;;

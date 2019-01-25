@@ -1586,7 +1586,7 @@ install_files() {
 		# The bsd.rd only download/verify/install assumes that the sets
 		# location of the next release. So use the right signature file.
 		$UPGRADE_BSDRD &&
-			PUB_KEY=/mnt/etc/signify/openbsd-$((VERSION + 1))-base.pub
+			PUB_KEY=/mnt/etc/signify/adJ-$((VERSION + 1))-base.pub
 
 		# Verify signature file with public keys.
 		! unpriv -f "$_cfile" \
@@ -2064,7 +2064,7 @@ questions() {
 				APERTURE=$MDXAPERTURE
 		fi
 		if [[ -n $MDXDM && $resp != n ]]; then
-			ask_yn "Do you want the X Window System to be started by xenodm(1)?"
+			ask_yn "Do you want the X Window System to be started by xenodm(1)?" yes
 			START_XDM=$resp
 		fi
 	fi
@@ -3266,7 +3266,7 @@ HTTP_SEC=/tmp/i/httpsec
 INSTALL_METHOD=
 NIFS=0
 export PS1="$MODE# "
-PUB_KEY=/etc/signify/openbsd-${VERSION}-base.pub
+PUB_KEY=/etc/signify/adJ-${VERSION}-base.pub
 ROOTDEV=
 ROOTDISK=
 SETDIR="$VNAME/$ARCH"
@@ -3305,13 +3305,13 @@ md_consoleinfo
 # Selected sets will be installed in the order they are listed in $ALLSETS.
 # Ensure that siteXX.tgz is the *last* set listed so its contents overwrite
 # the contents of the other sets, not the other way around.
-SETS=$(echo {base,comp,man,game,xbase,xshare,xfont,xserv}$VERSION.tgz)
+SETS=$(echo {base,comp,man,game,xbase,xshare,xfont,xserv,site}$VERSION.tgz)
 DEFAULTSETS="${MDSETS:-bsd bsd.rd} $SETS"
-ALLSETS="${MDSETS:-bsd bsd.rd} $SETS site$VERSION.tgz"
+ALLSETS="${MDSETS:-bsd bsd.rd} $SETS"
 SANESETS="${MDSANESETS:-bsd} base${VERSION}.tgz"
 if ((NCPU > 1)); then
 	DEFAULTSETS="${MDSETS:-bsd bsd.mp bsd.rd} $SETS"
-	ALLSETS="${MDSETS:-bsd bsd.mp bsd.rd} $SETS site$VERSION.tgz"
+	ALLSETS="${MDSETS:-bsd bsd.mp bsd.rd} $SETS"
 	SANESETS="${MDSANESETS:-bsd bsd.mp} base${VERSION}.tgz"
 fi
 
