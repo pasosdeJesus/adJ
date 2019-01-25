@@ -1,11 +1,11 @@
-$OpenBSD: patch-lib_mkmf_rb,v 1.1.1.1 2018/01/15 23:57:42 jeremy Exp $
+$OpenBSD: patch-lib_mkmf_rb,v 1.1.1.1 2019/01/14 16:13:05 jeremy Exp $
 
 Ignore linker warnings when compiling native extensions.
 
 Index: lib/mkmf.rb
 --- lib/mkmf.rb.orig
 +++ lib/mkmf.rb
-@@ -387,7 +387,7 @@ module MakeMakefile
+@@ -398,7 +398,7 @@ MESSAGE
          result = nil
          Logging.postpone do |log|
            output = IO.popen(libpath_env, command, &:read)

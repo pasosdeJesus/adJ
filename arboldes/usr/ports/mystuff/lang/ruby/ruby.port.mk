@@ -1,4 +1,4 @@
-# $OpenBSD: ruby.port.mk,v 1.92 2018/01/15 23:59:33 jeremy Exp $
+# $OpenBSD: ruby.port.mk,v 1.96 2019/01/16 17:11:57 jeremy Exp $
 
 # ruby module
 
@@ -24,7 +24,7 @@ MODRUBY_HANDLE_FLAVORS ?= No
 # If ruby.pork.mk should handle FLAVORs, define a separate FLAVOR
 # for each ruby interpreter
 .    if !defined(FLAVORS)
-FLAVORS=	ruby23 ruby24 ruby25
+FLAVORS=	ruby24 ruby25 ruby26
 .      if !${CONFIGURE_STYLE:L:Mext}
 FLAVORS+=	jruby
 .      endif
@@ -52,12 +52,12 @@ FLAVOR =		ruby25
 
 # Check for conflicting FLAVORs and set MODRUBY_REV appropriately based
 # on the FLAVOR.
-.    for i in ruby23 ruby24 ruby25 jruby
+.    for i in ruby24 ruby25 ruby26 jruby
 .      if ${FLAVOR:M$i}
 MODRUBY_REV = ${i:C/ruby([0-9])/\1./}
-.        if ${FLAVOR:N$i:Mruby23} || \
-            ${FLAVOR:N$i:Mruby24} || \ 
+.        if ${FLAVOR:N$i:Mruby24} || \ 
             ${FLAVOR:N$i:Mruby25} || \ 
+            ${FLAVOR:N$i:Mruby26} || \ 
 	    ${FLAVOR:N$i:Mjruby}
 ERRORS += "Fatal: Conflicting flavors used: ${FLAVOR}"
 .        endif
@@ -67,8 +67,13 @@ ERRORS += "Fatal: Conflicting flavors used: ${FLAVOR}"
 .endif
 
 # The default ruby version to use for non-gem ports.  Defaults to ruby
+<<<<<<< ruby.port.mk
 # 2.4 for consistency with the default ruby24 FLAVOR for gem ports.
 MODRUBY_REV?=		2.5
+=======
+# 2.5 for consistency with the default ruby25 FLAVOR for gem ports.
+MODRUBY_REV?=		2.5
+>>>>>>> 1.96
 
 # Because the jruby FLAVORs use same binary names but in
 # different directories, GEM_MAN_SUFFIX is used for the man pages to avoid
@@ -87,9 +92,9 @@ MODRUBY_BIN_RSPEC =	${RUBY} -S rspec
 MODRUBY_BIN_TESTRB =	${RUBY} -S testrb
 MODRUBY_FLAVOR =	jruby
 MODRUBY_LIBDIR=		${LOCALBASE}/jruby/lib/ruby
-MODRUBY_LIBREV =	2.3.0
+MODRUBY_LIBREV =	2.5
 MODRUBY_SITEARCHDIR =	${MODRUBY_SITEDIR}/java
-MODRUBY_SITEDIR =	jruby/lib/ruby/site_ruby/${MODRUBY_LIBREV}
+MODRUBY_SITEDIR =	jruby/lib/ruby/${MODRUBY_LIBREV}/site_ruby
 RAKE=			${RUBY} -S rake
 RSPEC=			${RUBY} -S spec
 RUBY=			${LOCALBASE}/jruby/bin/jruby
@@ -146,7 +151,8 @@ MODRUBY_RELDOCDIR=	share/doc/${MODRUBY_PKG_PREFIX}
 MODRUBY_RELEXAMPLEDIR=	share/examples/${MODRUBY_PKG_PREFIX}
 MODRUBY_DOCDIR=		${PREFIX}/${MODRUBY_RELDOCDIR}
 MODRUBY_EXAMPLEDIR=	${PREFIX}/${MODRUBY_RELEXAMPLEDIR}
-SUBST_VARS +=		^MODRUBY_RELDOCDIR ^MODRUBY_RELEXAMPLEDIR
+SUBST_VARS +=		MODRUBY_RELDOCDIR MODRUBY_RELEXAMPLEDIR
+UPDATE_PLIST_ARGS += -s MODRUBY_RELDOCDIR -s MODRUBY_RELEXAMPLEDIR
 
 # Assume that we want to automatically add ruby to BUILD_DEPENDS
 # and RUN_DEPENDS unless the port specifically requests not to.
@@ -215,7 +221,8 @@ PKG_ARCH=	*
 
 # PLIST magic.  Set variables so that the same PLIST will work for
 # all ruby versions and implementations.
-SUBST_VARS+=	^GEM_LIB ^GEM_BIN DISTNAME
+SUBST_VARS+=	GEM_LIB GEM_BIN DISTNAME
+UPDATE_PLIST_ARGS += -s GEM_LIB -s GEM_BIN
 
 .  if ${MODRUBY_REV} == jruby
 GEM=		${RUBY} -S gem
@@ -299,8 +306,9 @@ do-install:
 .endif
 
 # These are mostly used by the non-gem ports.
-SUBST_VARS+=	^MODRUBY_SITEARCHDIR ^MODRUBY_SITEDIR MODRUBY_LIBREV \
+SUBST_VARS+=	MODRUBY_SITEARCHDIR MODRUBY_SITEDIR MODRUBY_LIBREV \
 		MODRUBY_ARCH
+UPDATE_PLIST_ARGS += -s MODRUBY_SITEARCHDIR -s MODRUBY_SITEDIR
 
 # test stuff
 

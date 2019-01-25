@@ -1,8 +1,8 @@
-$OpenBSD: patch-lib_rubygems_dependency_installer_rb,v 1.1.1.1 2018/01/15 23:57:42 jeremy Exp $
+$OpenBSD: patch-lib_rubygems_dependency_installer_rb,v 1.1.1.1 2019/01/14 16:13:05 jeremy Exp $
 Index: lib/rubygems/dependency_installer.rb
 --- lib/rubygems/dependency_installer.rb.orig
 +++ lib/rubygems/dependency_installer.rb
-@@ -21,7 +21,7 @@ class Gem::DependencyInstaller
+@@ -22,7 +22,7 @@ class Gem::DependencyInstaller
      :document            => %w[ri],
      :domain              => :both, # HACK dup
      :force               => false,

@@ -1,11 +1,11 @@
-$OpenBSD: patch-ext_extmk_rb,v 1.1.1.1 2018/01/15 23:57:42 jeremy Exp $
+$OpenBSD: patch-ext_extmk_rb,v 1.1.1.1 2019/01/14 16:13:05 jeremy Exp $
 
 Build extensions in verbose mode by default.
 
 Index: ext/extmk.rb
 --- ext/extmk.rb.orig
 +++ ext/extmk.rb
-@@ -638,7 +638,7 @@ exts.map! {|d| "#{ext_prefix}/#{d}/."}
+@@ -642,7 +642,7 @@ exts.map! {|d| "#{ext_prefix}/#{d}/."}
  FileUtils.makedirs(File.dirname($command_output))
  begin
    atomic_write_open($command_output) do |mf|
