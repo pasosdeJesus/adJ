@@ -557,19 +557,12 @@ if (test "$sn" = "s") then {
 		exit 1;
 	} fi;
 	
-	rm -f /usr/src/distrib/miniroot/install-es.sh
-	ln -s $dini/tminiroot/install-es.sh /usr/src/distrib/miniroot/install-es.sh
 	rm -f /usr/src/distrib/miniroot/install-es.sub
 	ln -s $dini/tminiroot/install-es.sub /usr/src/distrib/miniroot/install-es.sub
-	rm -f /usr/src/distrib/miniroot/upgrade-es.sh
-	ln -s $dini/tminiroot/upgrade-es.sh /usr/src/distrib/miniroot/upgrade-es.sh
 	rm -f /usr/src/distrib/amd64/common/install-es.md
 	ln -s $dini/tminiroot/install-amd64-es.md /usr/src/distrib/amd64/common/install-es.md
-	rm -f /usr/src/distrib/i386/common/install-es.md
-	ln -s $dini/tminiroot/install-i386-es.md /usr/src/distrib/i386/common/install-es.md
 	verleng /usr/src/distrib/miniroot/list 
 	verleng /usr/src/distrib/amd64/common/list 
-	verleng /usr/src/distrib/i386/common/list 
 
 	cp /etc/signify/adJ-*pub /$D_DESTDIR/etc/signify/
 	cp /usr/src/distrib/ramdisk/list /tmp/ramdisk_list
@@ -779,6 +772,8 @@ if (test "$sn" = "s") then {
 	# Modificados para posibilitar compilación
 	# Deben estar en mystuff
 
+	paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs" 
+	exit 1
 	# Todo lo de perl tuvo que recompilarse
 	# evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
 	paquete p5-DBI

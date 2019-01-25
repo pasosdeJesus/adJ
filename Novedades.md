@@ -3,7 +3,7 @@ Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y que esperamos el regreso del señor Jesucristo.
 
 ### Versión: 6.4b1
-Fecha de publicación: 30/Dic/2018
+Fecha de publicación: 15/Ene/2019
 
 Puede ver novedades respecto a OpenBSD en:
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_4/Novedades_OpenBSD.md>
@@ -61,8 +61,10 @@ Puede ver novedades respecto a OpenBSD en:
 # Novedades respecto a paquetes 
 
 * Se retiraron paquetes ...
-* Retroportados y adaptados de current: ruby 2.6, postgresql y,
-	chromium z (con llaves para compilación de adJ).
+* Retroportados y adaptados de current: 
+	* ruby 2.6: es más veloz en tareas que requieren CPU e incluye
+		nuevo compilador JIT usabel con opción --jit
+	*  chromium (con llaves para compilación de adJ).   
 * Se han actualizado más los binarios de los siguientes paquetes para
   actualizar o cerrar fallas de seguridad (a partir de portes más recientes 
   para OpenBSD 6.4): ...
@@ -114,4 +116,8 @@ Puede ver novedades respecto a OpenBSD en:
 
 - Chromium sigue siendo inestable por ejemplo en www.davivienda.com
   por esto sigue incluyendose firefox que en casos como ese puede operar.
+
+- xenodm no logra utilizar un teclado latinoamericano.  Para usarlo
+  agregue en /etc/X11/xenodm/Xsetup_0:
+  setxkbmap latam
 

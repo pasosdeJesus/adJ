@@ -103,6 +103,8 @@ read
 rm /obsd ; ln /bsd /obsd 
 cp $nk /nbsd 
 mv /nbsd /bsd
+# Habilita KARL
+sha256 -h /var/db/kernel.SHA256 /bsd
 cp $rutak/bsd /bsd.sp
 cp $rutak/bsd.rd $rutak/bsd.mp /
 

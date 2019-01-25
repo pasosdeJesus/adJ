@@ -255,11 +255,11 @@ if (test "$?" = "0") then {
 echo "Sistemas de archivos de CDROM en /etc/fstab" >> /var/www/tmp/inst-adJ.bitacora
 grep "/mnt/cdrom" /etc/fstab > /dev/null
 if (test "$?" != "0") then {
-echo "/dev/cd0a /mnt/cdrom cd9660 noauto,ro 0 0" >> /etc/fstab
-mkdir -p /mnt/cdrom
+	echo "/dev/cd0a /mnt/cdrom cd9660 noauto,ro 0 0" >> /etc/fstab
 } else {
-echo "   Saltando cd0a..." >> /var/www/tmp/inst-adJ.bitacora;
+	echo "   Saltando cd0a..." >> /var/www/tmp/inst-adJ.bitacora;
 } fi;
+mkdir -p /mnt/cdrom
 chown $uadJ:$uadJ /mnt/cdrom
 
 chmod g+rw /dev/sd?i /dev/sd?c /dev/cd?c /dev/cd?a
@@ -499,11 +499,11 @@ EOF
 	} fi;
 } fi;
 
-userinfo _rtadvd >/dev/null
+userinfo _ypldap >/dev/null
 if (test "$?" != "0") then {
 	vac="$vac 4.3 a 4.4";	
 	echo "Aplicando actualizaciones de 4.3 a 4.4" >> /var/www/tmp/inst-adJ.bitacora;
-	useradd -u92 -g=uid -c"IPv6 Router Advertisement Service" -d/var/empty -s/sbin/nologin _rtadvd
+	#useradd -u92 -g=uid -c"IPv6 Router Advertisement Service" -d/var/empty -s/sbin/nologin _rtadvd 
 	useradd -u93 -g=uid -c"YP to LDAP Service" -d/var/empty -s/sbin/nologin _ypldap
 	rm -f /etc/dhcpd.interfaces
 
@@ -1145,7 +1145,22 @@ if (test -d /var/db/pkg/ispell-spanish-*) then {
 	echo "Aplicando actualizaciones de 6.1 a 6.2 " >> /var/www/tmp/inst-adJ.bitacora;
         pkg_delete -D dependencies ispell
 } fi;
-	
+
+if (test -f /etc/rc.d/rtadvd) then {
+	vac="$vac 6.3 a 6.4";	
+	echo "Aplicando actualizaciones de 6.3 a 6.4" >> /var/www/tmp/inst-adJ.bitacora;
+
+	rm /dev/audio /dev/audioctl
+	rm /etc/rc.d/rtadvd /usr/sbin/rtadvd /usr/share/man/man5/rtadvd.conf.5 /usr/share/man/man8/rtadvd.8
+	userdel _rtadvd
+	groupdel _rtadvd
+	rm /usr/X11R6/lib/libxcb-xevie.*
+	rm /usr/X11R6/lib/libxcb-xprint.*
+	rm /usr/X11R6/lib/pkgconfig/xcb-xevie.pc
+	rm /usr/X11R6/lib/pkgconfig/xcb-xprint.pc
+} fi;
+
+
 if  (test "$vac" != "") then {
 	dialog --title 'Actualizaciones aplicadas' --msgbox "\\nSe aplicaron actualizaciones: $vac\\n\\n$mac\\n" 15 60
 } fi;
