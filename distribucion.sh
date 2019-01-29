@@ -772,7 +772,8 @@ if (test "$sn" = "s") then {
 	# Modificados para posibilitar compilación
 	# Deben estar en mystuff
 
-	paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs" 
+	paquete chromium
+	paquete colorls
 	exit 1
 	# Todo lo de perl tuvo que recompilarse
 	# evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
@@ -898,6 +899,12 @@ if (test "$sn" = "s") then {
 	
 	##
 	# Retroportados no existentes en versión actual
+	paquete curl
+	paquete py3-requests
+	paquete py-requests
+	paquete qemu
+	paquete tiff
+	paquete geo/spatialite/libspatialite
 
 	####
 	# Adaptados de portes estables pero mejorados para adJ, por 

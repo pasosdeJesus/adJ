@@ -2188,23 +2188,22 @@ w
 q
 EOF
 	} else {
-		insacp php-fpm
-	ed /etc/php-fpm.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
+		ed /etc/php-fpm.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/; listen.owner = www/listen.owner = www/g
 w
 q
 EOF
-	ed /etc/php-fpm.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
+		ed /etc/php-fpm.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/; listen.group = www/listen.group = www/g
 w
 q
 EOF
-	ed /etc/php-fpm.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
+		ed /etc/php-fpm.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/; *listen *=.*/listen = \/var\/www\/var\/run\/php-fpm.sock/g
 w
 q
 EOF
-	ed /etc/php-fpm.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
+		ed /etc/php-fpm.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/^listen = .var.www.run.php-fpm.sock/listen = \/var\/www\/var\/run\/php-fpm.sock/g
 w
 q

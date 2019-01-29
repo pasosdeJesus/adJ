@@ -1,18 +1,16 @@
-# $OpenBSD: Makefile,v 1.393 2018/09/27 06:36:18 robert Exp $
+# $OpenBSD: Makefile,v 1.404 2019/01/06 19:49:53 robert Exp $
 
 .include <bsd.port.arch.mk>
 
 USE_WXNEEDED=		Yes
-.if ${ARCH} != i386
-USE_LLD=		Yes
-.endif
 
 DPB_PROPERTIES=		parallel parallel2
 
 COMMENT=		Chromium browser
 
-V=			69.0.3497.100
-REVISION=		0
+V=			71.0.3578.98
+
+REVISION=		2
 
 DISTNAME=		chromium-${V}
 
@@ -62,13 +60,13 @@ WANTLIB += pangocairo-1.0
 WANTLIB += Xcomposite Xdamage
 WANTLIB += EGL Xau Xdmcp Xinerama Xxf86vm atspi cairo-gobject
 WANTLIB += drm epoxy fontconfig freetype fribidi gmodule-2.0 graphite2
-WANTLIB += gthread-2.0 harfbuzz intl pangoft2-1.0 pcre pixman-1
+WANTLIB += gthread-2.0 intl pangoft2-1.0 pcre pixman-1
 WANTLIB += plc4 plds4 png util xcb-dri2 xcb-glx xcb-render xcb-shm
 WANTLIB += xml2 z
 WANTLIB += uuid
+WANTLIB += harfbuzz 
 
 RUN_DEPENDS=	devel/xdg-utils \
-		devel/fribidi \
 		devel/desktop-file-utils \
 		fonts/noto/fonts \
 		graphics/libexif \
@@ -87,7 +85,8 @@ BUILD_DEPENDS=	archivers/bzip2 \
 		devel/ninja \
 		x11/gtk+3 \
 		${MODGCC4_CPPDEP}
-LIB_DEPENDS=	devel/libexecinfo \
+LIB_DEPENDS=	devel/harfbuzz \
+		devel/libexecinfo \
 		security/nss \
 		sysutils/e2fsprogs \
 		textproc/libxslt \
@@ -127,7 +126,6 @@ GN_ARGS=	enable_nacl=false \
 		use_kerberos=false \
 		use_sndio=true \
 		use_cups=true \
-		use_gtk3=true \
 		use_system_libdrm=true \
 		use_jumbo_build=true \
 		is_clang=true \
@@ -157,7 +155,6 @@ GN_ARGS+=	google_api_key=\"AIzaSyC_3Uz69YR1Z2DRLUDf5ZxUJBClHuwrjL\" \
 		google_default_client_secret=\"7ApGgPs3F_mRnRgDt6A80C0\" \
 		ffmpeg_branding=\"Chrome\" \
 		proprietary_codecs=true
-
 
 .if ${FLAVOR:Mdebug}
 GN_ARGS+=	remove_webcore_debug_symbols=true

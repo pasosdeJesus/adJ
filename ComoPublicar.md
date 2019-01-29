@@ -77,7 +77,7 @@ setlocale(LC_NUMERIC, "es_CO.UTF-8") or die "No pone locale LC_NUMERIC en es_CO.
 my $a = 1987.23;
 printf "%g\n", $a;
 ```
-- Con paquete colorls modificado y actualizad, verificar cotejacion en español:
+- Con paquete colorls modificado y actualizado, verificar cotejacion en español:
   touch a
   touch í
   touch o

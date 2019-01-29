@@ -54,7 +54,7 @@ Puede ver novedades respecto a OpenBSD en:
 	* ...
 
 * El sistema base incluye mejoras a componentes auditados y mejorados 
-  como, ```llvm``` 5.0.1,  ```Xenocara``` (```Xorg```) 7.7, ```perl``` 5.24.3, 
+  como, ```llvm``` 6.0.0,  ```Xenocara``` (```Xorg```) 7.7, ```perl``` 5.24.3, 
 * El repositorio de paquetes de OpenBSD cuenta con 9918 para amd64
 
 
@@ -64,7 +64,9 @@ Puede ver novedades respecto a OpenBSD en:
 * Retroportados y adaptados de current: 
 	* ruby 2.6: es más veloz en tareas que requieren CPU e incluye
 		nuevo compilador JIT usabel con opción --jit
-	*  chromium (con llaves para compilación de adJ).   
+	*  chromium 71 (con llaves para compilación de adJ).
+	* curl, djvulibre, libspatialite, py-requests, py3-requests,
+	  qemu, tiff por versiones mas recientes
 * Se han actualizado más los binarios de los siguientes paquetes para
   actualizar o cerrar fallas de seguridad (a partir de portes más recientes 
   para OpenBSD 6.4): ...

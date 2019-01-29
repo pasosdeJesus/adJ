@@ -1,0 +1,14 @@
+$OpenBSD: patch-components_autofill_core_common_autofill_features_cc,v 1.2 2018/12/07 11:07:35 robert Exp $
+
+Index: components/autofill/core/common/autofill_features.cc
+--- components/autofill/core/common/autofill_features.cc.orig
++++ components/autofill/core/common/autofill_features.cc
+@@ -357,7 +357,7 @@ bool IsAutofillManualFallbackEnabled() {
+ }
+ 
+ bool ShouldUseNativeViews() {
+-#if defined(OS_WIN) || defined(OS_MACOSX) || defined(OS_LINUX)
++#if defined(OS_WIN) || defined(OS_MACOSX) || defined(OS_LINUX) || defined(OS_BSD)
+   return base::FeatureList::IsEnabled(kAutofillExpandedPopupViews) ||
+          base::FeatureList::IsEnabled(::features::kExperimentalUi);
+ #else

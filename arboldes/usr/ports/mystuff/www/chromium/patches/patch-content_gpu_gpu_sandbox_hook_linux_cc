@@ -1,11 +1,11 @@
-$OpenBSD: patch-content_gpu_gpu_sandbox_hook_linux_cc,v 1.6 2018/08/10 14:57:53 robert Exp $
+$OpenBSD: patch-content_gpu_gpu_sandbox_hook_linux_cc,v 1.8 2018/12/07 11:07:35 robert Exp $
 
 Index: content/gpu/gpu_sandbox_hook_linux.cc
 --- content/gpu/gpu_sandbox_hook_linux.cc.orig
 +++ content/gpu/gpu_sandbox_hook_linux.cc
-@@ -68,8 +68,9 @@ inline bool UseLibV4L2() {
+@@ -95,8 +95,9 @@ static const char kLibV4lEncPluginPath[] =
+     "/usr/lib/libv4l/plugins/libv4l-encplugin.so";
  #endif
- }
  
 -constexpr int dlopen_flag = RTLD_NOW | RTLD_GLOBAL | RTLD_NODELETE;
 +constexpr int dlopen_flag = RTLD_NOW | RTLD_GLOBAL;
@@ -14,15 +14,26 @@ Index: content/gpu/gpu_sandbox_hook_linux.cc
  void AddV4L2GpuWhitelist(
      std::vector<BrokerFilePermission>* permissions,
      const service_manager::SandboxSeccompBPF::Options& options) {
-@@ -200,6 +201,7 @@ std::vector<BrokerFilePermission> FilePermissionsForGp
+@@ -265,8 +266,10 @@ std::vector<BrokerFilePermission> FilePermissionsForGp
    AddStandardGpuWhiteList(&permissions);
    return permissions;
  }
 +#endif
  
  void LoadArmGpuLibraries() {
++#if !defined(OS_BSD)
    // Preload the Mali library.
-@@ -260,6 +262,7 @@ bool LoadLibrariesForGpu(
+   if (UseChromecastSandboxWhitelist()) {
+     for (const char* path : kWhitelistedChromecastPaths) {
+@@ -281,6 +284,7 @@ void LoadArmGpuLibraries() {
+     // Preload the Tegra V4L2 (video decode acceleration) library.
+     dlopen(kLibTegraPath, dlopen_flag);
+   }
++#endif
+ }
+ 
+ bool LoadAmdGpuLibraries() {
+@@ -336,6 +340,7 @@ bool LoadLibrariesForGpu(
    return true;
  }
  
@@ -30,7 +41,7 @@ Index: content/gpu/gpu_sandbox_hook_linux.cc
  sandbox::syscall_broker::BrokerCommandSet CommandSetForGPU(
      const service_manager::SandboxLinux::Options& options) {
    sandbox::syscall_broker::BrokerCommandSet command_set;
-@@ -280,13 +283,18 @@ bool BrokerProcessPreSandboxHook(
+@@ -356,13 +361,18 @@ bool BrokerProcessPreSandboxHook(
    service_manager::SetProcessTitleFromCommandLine(nullptr);
    return true;
  }
