@@ -32,6 +32,7 @@
 # machine dependent section of installation/upgrade script.
 #
 
+MDKERNEL=APRENDIENDODEJESUS
 MDXAPERTURE=2
 MDXDM=y
 NCPU=$(sysctl -n hw.ncpufound)

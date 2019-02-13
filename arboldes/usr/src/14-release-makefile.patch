@@ -1,0 +1,50 @@
+diff -ruN src64-orig/etc/Makefile src/etc/Makefile
+--- src64-orig/etc/Makefile	Wed Sep 19 20:03:57 2018
++++ src/etc/Makefile	Mon Feb  4 04:13:17 2019
+@@ -3,12 +3,12 @@
+ .include <bsd.own.mk>
+ 
+ TZDIR=		/usr/share/zoneinfo
+-LOCALTIME=	Canada/Mountain
++LOCALTIME=	America/Bogota
+ MTREEDIR=	/etc/mtree
+ 
+ NOOBJ=
+ 
+-KERNELS = GENERIC bsd
++KERNELS = APRENDIENDODEJESUS bsd
+ 
+ .if exists(etc.${MACHINE}/Makefile.inc)
+ .include "etc.${MACHINE}/Makefile.inc"
+@@ -31,8 +31,8 @@
+ .endfor
+ 	cd ${.CURDIR}/../sys/arch/${MACHINE}/compile/ && \
+ 		tar -chzf ${DESTDIR}/usr/share/relink/kernel.tgz -s ',/obj/,/,' \
+-		GENERIC*/obj/*.o GENERIC*/obj/Makefile \
+-		GENERIC*/obj/ld.script GENERIC*/obj/makegap.sh
++		APRENDIENDODEJESUS*/obj/*.o APRENDIENDODEJESUS*/obj/Makefile \
++		APRENDIENDODEJESUS*/obj/ld.script APRENDIENDODEJESUS*/obj/makegap.sh
+ 	chown root:wheel ${DESTDIR}/usr/share/relink/kernel.tgz
+ 	chmod 644 ${DESTDIR}/usr/share/relink/kernel.tgz
+ 
+@@ -181,7 +181,7 @@
+ 	${INSTALL} -c -o ${BINOWN} -g wheel -m 640 /dev/null \
+ 	    ${DESTDIR}/var/log/authlog
+ 	${INSTALL} -c -o ${BINOWN} -g wheel -m 640 /dev/null \
+-	    ${DESTDIR}/var/log/daemon
++	    ${DESTDIR}/var/log/servicio
+ 	${INSTALL} -c -o ${BINOWN} -g wheel -m 600 /dev/null \
+ 	    ${DESTDIR}/var/log/failedlogin
+ 	${INSTALL} -c -o ${BINOWN} -g wheel -m 640 /dev/null \
+diff -ruN src64-orig/etc/etc.amd64/Makefile.inc src/etc/etc.amd64/Makefile.inc
+--- src64-orig/etc/etc.amd64/Makefile.inc	Thu May 10 14:56:49 2018
++++ src/etc/etc.amd64/Makefile.inc	Mon Feb  4 05:15:24 2019
+@@ -1,6 +1,6 @@
+ #	$OpenBSD: Makefile.inc,v 1.18 2017/04/04 00:03:12 deraadt Exp $
+ 
+-KERNELS += GENERIC.MP bsd.mp
++KERNELS += APRENDIENDODEJESUS.MP bsd.mp
+ 
+ bootblocks:
+ 	cp -p ${DESTDIR}/usr/mdec/pxeboot ${RELEASEDIR}
+

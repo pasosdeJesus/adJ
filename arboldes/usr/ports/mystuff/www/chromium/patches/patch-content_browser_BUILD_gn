@@ -1,12 +1,11 @@
-$OpenBSD: patch-content_browser_BUILD_gn,v 1.21 2019/02/06 16:41:55 robert Exp $
-
+$OpenBSD: patch-content_browser_BUILD_gn,v 1.18 2018/09/12 17:08:22 robert Exp $
 Index: content/browser/BUILD.gn
 --- content/browser/BUILD.gn.orig
 +++ content/browser/BUILD.gn
-@@ -1902,11 +1902,6 @@ jumbo_source_set("browser") {
+@@ -1817,11 +1817,6 @@ jumbo_source_set("browser") {
+       "tracing/cros_tracing_agent.cc",
        "tracing/cros_tracing_agent.h",
      ]
-     deps += [ "//chromeos/resources" ]
 -  } else {
 -    sources += [
 -      "memory/memory_monitor_linux.cc",

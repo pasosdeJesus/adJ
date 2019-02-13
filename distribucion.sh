@@ -421,6 +421,8 @@ EOF
 	#compilabase
 	echo "DESTDIR=$DESTDIR" | tee -a /var/www/tmp/distrib-adJ.bitacora;
 	chown build /usr/src/etc/master.passwd 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
+	chown build /usr/src/sys/arch/amd64/compile/APRENDIENDODEJESUS/obj/version 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
+	chown build /usr/src/sys/arch/amd64/compile/APRENDIENDODEJESUS.MP/obj/version 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
 	cd /usr/src/etc && DESTDIR=/$D_DESTDIR nice make release 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora;
 	echo "* Completo make release"
 	cd $D_DESTDIR/etc && $dini/arboldd/usr/local/adJ/servicio-etc.sh 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
@@ -428,6 +430,22 @@ EOF
 	find "$DESTDIR"  -exec touch {} ';' 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
 	find "$RELEASEDIR"  -exec touch {} ';' 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
 } fi;
+
+echo " *> Suponiendo que ya se completo un build en /, instalar en $DESTDIR y de este dejar comprimidos en $RELEASEDIR" | tee -a /var/www/tmp/distrib-adJ.bitacora;
+if (test "$inter" = "-i") then {
+	echo -n "(s/n)? "
+	read sn
+}
+else {
+	sn=$autoGenTGZ
+} fi;
+if (test "$sn" = "s") then {
+	cd $D_DESTDIR/etc && $dini/arboldd/usr/local/adJ/servicio-etc.sh 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
+	cd /usr/src/etc && DESTDIR=/$D_DESTDIR nice make release-sets 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora;
+	echo "* Completo make release-sets"
+
+} fi;
+
 
 
 echo " *> Recompilar e instalar X-Window con fuentes de $XSRCDIR" | tee -a /var/www/tmp/distrib-adJ.bitacora;
@@ -772,9 +790,6 @@ if (test "$sn" = "s") then {
 	# Modificados para posibilitar compilación
 	# Deben estar en mystuff
 
-	paquete chromium
-	paquete colorls
-	exit 1
 	# Todo lo de perl tuvo que recompilarse
 	# evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
 	paquete p5-DBI
@@ -862,6 +877,9 @@ if (test "$sn" = "s") then {
 	#paquete samba paquetes "ldb samba tevent"
 	#paquete webkit paquetes "webkit webkit-gtk3"
 	# FLAVOR=gtk3 make paquete webkit-gtk3
+	#FLAVOR=python3 paquete py-gobject3 paquetes py3-gobject3
+	#paquete py-gobject3 paquetes py-gobject3
+
 
 	#Por reubicar
 

@@ -1,4 +1,4 @@
-$OpenBSD: patch-base_process_process_posix_cc,v 1.19 2019/02/06 16:41:55 robert Exp $
+$OpenBSD: patch-base_process_process_posix_cc,v 1.17 2018/09/12 17:08:22 robert Exp $
 
 Index: base/process/process_posix.cc
 --- base/process/process_posix.cc.orig
@@ -11,7 +11,7 @@ Index: base/process/process_posix.cc
  
  #include "base/debug/activity_tracker.h"
  #include "base/files/scoped_file.h"
-@@ -25,6 +26,9 @@
+@@ -24,6 +25,9 @@
  
  namespace {
  
@@ -21,7 +21,7 @@ Index: base/process/process_posix.cc
  #if !defined(OS_NACL_NONSFI)
  
  bool WaitpidWithTimeout(base::ProcessHandle handle,
-@@ -263,12 +267,10 @@ Process Process::DeprecatedGetProcessFromHandle(Proces
+@@ -262,12 +266,10 @@ Process Process::DeprecatedGetProcessFromHandle(Proces
    return Process(handle);
  }
  
@@ -35,7 +35,7 @@ Index: base/process/process_posix.cc
  
  // static
  void Process::TerminateCurrentProcessImmediately(int exit_code) {
-@@ -358,25 +360,33 @@ bool Process::WaitForExitWithTimeout(TimeDelta timeout
+@@ -351,21 +353,23 @@ bool Process::WaitForExitWithTimeout(TimeDelta timeout
  
  void Process::Exited(int exit_code) const {}
  
@@ -68,13 +68,3 @@ Index: base/process/process_posix.cc
  
  int Process::GetPriority() const {
    DCHECK(IsValid());
-   return getpriority(PRIO_PROCESS, process_);
-+}
-+
-+Time Process::CreationTime() const {
-+  // TODO(https://crbug.com/726484): There is no syscall providing this data.
-+  NOTIMPLEMENTED();
-+  return Time();
- }
- 
- }  // namespace base

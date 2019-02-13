@@ -1,9 +1,9 @@
-$OpenBSD: patch-chrome_browser_metrics_chrome_metrics_service_client_cc,v 1.4 2019/02/06 16:41:55 robert Exp $
+$OpenBSD: patch-chrome_browser_metrics_chrome_metrics_service_client_cc,v 1.1 2018/09/27 06:36:18 robert Exp $
 
 Index: chrome/browser/metrics/chrome_metrics_service_client.cc
 --- chrome/browser/metrics/chrome_metrics_service_client.cc.orig
 +++ chrome/browser/metrics/chrome_metrics_service_client.cc
-@@ -907,7 +907,7 @@ bool ChromeMetricsServiceClient::RegisterForProfileEve
+@@ -903,7 +903,7 @@ bool ChromeMetricsServiceClient::RegisterForProfileEve
    }
  #endif
  #if defined(OS_WIN) || defined(OS_MACOSX) || \

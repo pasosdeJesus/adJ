@@ -1,9 +1,8 @@
-$OpenBSD: patch-chrome_browser_after_startup_task_utils_cc,v 1.13 2019/02/06 16:41:55 robert Exp $
-
+$OpenBSD: patch-chrome_browser_after_startup_task_utils_cc,v 1.11 2018/09/27 06:36:18 robert Exp $
 Index: chrome/browser/after_startup_task_utils.cc
 --- chrome/browser/after_startup_task_utils.cc.orig
 +++ chrome/browser/after_startup_task_utils.cc
-@@ -29,7 +29,7 @@
+@@ -27,7 +27,7 @@
  #include "content/public/browser/web_contents_observer.h"
  #include "third_party/blink/public/mojom/page/page_visibility_state.mojom.h"
  
@@ -12,25 +11,16 @@ Index: chrome/browser/after_startup_task_utils.cc
  #include "ui/views/linux_ui/linux_ui.h"
  #endif
  
-@@ -110,7 +110,7 @@ void QueueTask(std::unique_ptr<AfterStartupTask> queue
+@@ -105,7 +105,7 @@ void QueueTask(std::unique_ptr<AfterStartupTask> queue
  
  void SetBrowserStartupIsComplete() {
    DCHECK_CURRENTLY_ON(BrowserThread::UI);
 -#if defined(OS_MACOSX) || defined(OS_WIN) || defined(OS_LINUX)
 +#if defined(OS_MACOSX) || defined(OS_WIN) || defined(OS_LINUX) || defined(OS_BSD)
-   // Process::Current().CreationTime() is not available on all platforms.
+   // CurrentProcessInfo::CreationTime() is not available on all platforms.
    const base::Time process_creation_time =
-       base::Process::Current().CreationTime();
-@@ -118,7 +118,7 @@ void SetBrowserStartupIsComplete() {
-     UMA_HISTOGRAM_LONG_TIMES("Startup.AfterStartupTaskDelayedUntilTime",
-                              base::Time::Now() - process_creation_time);
-   }
--#endif  // defined(OS_MACOSX) || defined(OS_WIN) || defined(OS_LINUX)
-+#endif  // defined(OS_MACOSX) || defined(OS_WIN) || defined(OS_LINUX) || defined(OS_BSD)
-   UMA_HISTOGRAM_COUNTS_10000("Startup.AfterStartupTaskCount",
-                              g_after_startup_tasks.Get().size());
-   g_startup_complete_flag.Get().Set();
-@@ -130,7 +130,7 @@ void SetBrowserStartupIsComplete() {
+       base::CurrentProcessInfo::CreationTime();
+@@ -125,7 +125,7 @@ void SetBrowserStartupIsComplete() {
    base::circular_deque<AfterStartupTask*>(g_after_startup_tasks.Get())
        .swap(g_after_startup_tasks.Get());
  

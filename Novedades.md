@@ -3,7 +3,7 @@ Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y que esperamos el regreso del señor Jesucristo.
 
 ### Versión: 6.4b1
-Fecha de publicación: 15/Ene/2019
+Fecha de publicación: 15/Feb/2019
 
 Puede ver novedades respecto a OpenBSD en:
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_4/Novedades_OpenBSD.md>
@@ -18,7 +18,9 @@ Puede ver novedades respecto a OpenBSD en:
 	* Red:
 		* Inalámbrica: Nuevo ..., Mejorado `rtwn` para soportar 
 	          RTL8188EE y RTL8723AE. Mejorado `ral` para soportar
-		  RT3290
+		  RT3290. En toda la pila wireless nueva característica
+		  'join' que permite al kernel manejar automáticamente cambio
+		  entre diversas redes inalámbricas.
 		* Ethernet: Nuevo controlador 'bnxt' para adaptaores PCI 
 		  Express Broadcom NetXtreme-C/E basados en los chipsets 
 		  Broadcom BCM573xx y BCM574xx.
@@ -33,8 +35,7 @@ Puede ver novedades respecto a OpenBSD en:
 		* Touchpad: Nuevo *umt* que soporta USB Windows Precision 
 		  Touchpad. Controlador `pms` ahora soporta Elantech 
 		  trackpoints
-	* Virtualización: ...
-	* Seguridad: ...
+	* Virtualización: Soporta imágenes de disco qcow2 y snapshots.
 	* Sensores y otros: Mejorado `acpithinkpad`. Controlador `nmea` ahora 
 	  soporta redes GNSS fuera de GPS. Soporte para monitor de hardware con
 	  chipset VIA VX900  en `viapm`. Nuevo controlador `islrtc` para 
@@ -48,6 +49,13 @@ Puede ver novedades respecto a OpenBSD en:
 	* ...
 	* Incluye OpenSSH ... que
 	* LibreSSL ...
+	* Seguridad: Nueva llamada al sistema unveil para restringir acceso 
+	  al sistema de archivos del proceso sólo a ciertos archivos 
+	  y directorios. 
+	* Más mitigaciones para SpectreRSB, L1 Terminal Fault, 
+	  información colada del estado del FPU.  
+	* Grabación de audio deshabilitado por omisión, se habilita con la 
+	  variable sysctl kern.audio.record
 
 * Otros
 	* ...
@@ -60,24 +68,30 @@ Puede ver novedades respecto a OpenBSD en:
 
 # Novedades respecto a paquetes 
 
-* Se retiraron paquetes ...
+* Se retiraron paquetes mozjs17, pecl-uploadprogress, phantomjs, php-mysql 
+  (que ya no está en PHP 7), py-acme, py-ConfigArgParse, py-gdal, py-josepy, 
+  py-mock, py-parsedatetime, py-psutil, py-psycopg2, py-qscintilla, 
+  python-tkinter, tremor 
 * Retroportados y adaptados de current: 
-	* ruby 2.6: es más veloz en tareas que requieren CPU e incluye
-		nuevo compilador JIT usabel con opción --jit
-	*  chromium 71 (con llaves para compilación de adJ).
+	* ruby 2.6.1: es más veloz en tareas que requieren CPU e incluye
+		nuevo compilador JIT usable con opción --jit
+	*  Se deja chromium 69 (con llaves para compilación de adJ) porque 
+	   en pruebas con chromium 71 (retroportado) no permitia adjuntar 
+	   archivos, ni ingresar a {drive,calendar}.google.com y 
+ 	   chromium 72 requiere bastante memoria para su ejecución
+	   (y JDK para su compilación).
 	* curl, djvulibre, libspatialite, py-requests, py3-requests,
 	  qemu, tiff por versiones mas recientes
-* Se han actualizado más los binarios de los siguientes paquetes para
-  actualizar o cerrar fallas de seguridad (a partir de portes más recientes 
-  para OpenBSD 6.4): ...
 * Se han recompilado los siguientes para aprovechar xlocale: libunistring, 
   vlc, djvulibre, gettext-tools, gdk-pixbuf, glib2, gtar, libidn, 
   libspectre, libxslt, scribus, wget, wxWidgets-gtk2
 
 
-## NOVEDADES RESPECTO A ADJ 6.2 PROVENIENTES DE PASOS DE JESÚS
+## NOVEDADES RESPECTO A ADJ 6.3 PROVENIENTES DE PASOS DE JESÚS
 
-* ...
+* Instalador prepara características de seguridad KARL con kernel 
+  APRENDIENDODEJESUS en lugar de GENERIC
+
 * Paquetes actualizados:
 	- php-x ...
 		Otras extensioens

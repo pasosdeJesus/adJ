@@ -3311,11 +3311,11 @@ md_consoleinfo
 # the contents of the other sets, not the other way around.
 SETS=$(echo {base,comp,man,game,xbase,xshare,xfont,xserv,site}$VERSION.tgz)
 DEFAULTSETS="${MDSETS:-bsd bsd.rd} $SETS"
-ALLSETS="${MDSETS:-bsd bsd.rd} $SETS
+ALLSETS="${MDSETS:-bsd bsd.rd} $SETS"
 SANESETS="${MDSANESETS:-bsd} base${VERSION}.tgz"
 if ((NCPU > 1)); then
 	DEFAULTSETS="${MDSETS:-bsd bsd.mp bsd.rd} $SETS"
-	ALLSETS="${MDSETS:-bsd bsd.mp bsd.rd} $SETS
+	ALLSETS="${MDSETS:-bsd bsd.mp bsd.rd} $SETS"
 	SANESETS="${MDSANESETS:-bsd bsd.mp} base${VERSION}.tgz"
 fi
 
