@@ -2841,49 +2841,39 @@ EOF
 	chown $uadJ:$uadJ /home/$uadJ/.irbrc
 } fi;
 
-echo "* Configurar ruby-2.5" >> /var/www/tmp/inst-adJ.bitacora;
+VRUBY=2.6
+VRUBYSP=`echo $VRUBY | sed -e "s/\.//g"`
+echo "* Configurar ruby-$VRUBY" >> /var/www/tmp/inst-adJ.bitacora;
 uruby=$uadJ
-v=`(cd /var/db/pkg/; ls) | grep ruby-2.3`
-if (test -d /var/www/bundler/ruby/2.3/gems/ -o -d /usr/local/lib/ruby/2.3 -o "$v" != "") then {
-  if (test -d /var/www/bundler/ruby/2.3) then {
-    uruby=`stat -f "%u" /var/www/bundler/ruby/2.3`
-    echo "uruby=$uruby" >> /var/www/tmp/inst-adJ.bitacora;
-  } fi;
-  dialog --title 'Eliminar ruby 2.3 y sus librerías' --yesno "\\nSe encontró algo de ruby 2.3 ¿Eliminar para evitar conflictos con la versión 2.5?" 15 60
-  if (test "$v" != "") then {
-    pkg_delete -I -D dependencies $v >> /var/www/tmp/inst-adJ.bitacora 2>&1
-  } fi;
-  echo "* Eliminando directorios de 2.3" >> /var/www/tmp/inst-adJ.bitacora;
-  rm -rf /var/www/bundler/ruby/2.3/gems
-  rm -rf /usr/local/lib/ruby/2.3
-} fi;
-v=`(cd /var/db/pkg/; ls) | grep ruby-2.4`
-if (test -d /var/www/bundler/ruby/2.4/gems/ -o -d /usr/local/lib/ruby/2.4 -o "$v" != "") then {
-  if (test -d /var/www/bundler/ruby/2.4) then {
-    uruby=`stat -f "%u" /var/www/bundler/ruby/2.4`
-    echo "uruby=$uruby" >> /var/www/tmp/inst-adJ.bitacora;
-  } fi;
-
-  dialog --title 'Eliminar ruby 2.4 y sus librerías' --yesno "\\nSe encontró algo de ruby 2.4 ¿Eliminar para evitar conflictos con la versión 2.5?" 15 60
-  if (test "$v" != "") then {
-    pkg_delete -I -D dependencies $v >> /var/www/tmp/inst-adJ.bitacora 2>&1
-  } fi;
-  echo "* Eliminando directorios de 2.4" >> /var/www/tmp/inst-adJ.bitacora;
-  rm -rf /var/www/bundler/ruby/2.4/gems
-  rm -rf /usr/local/lib/ruby/2.4
-} fi;
-
+for vrelim in 2.3 2.4 2.5; do
+	v=`(cd /var/db/pkg/; ls) | grep ruby-$vrelim`
+	if (test -d /var/www/bundler/ruby/$vrelim/gems/ -o -d /usr/local/lib/ruby/$vrelim -o "$v" != "") then {
+		if (test -d /var/www/bundler/ruby/$vrelim) then {
+			uruby=`stat -f "%u" /var/www/bundler/ruby/$vrelim`
+			echo "uruby=$uruby" >> /var/www/tmp/inst-adJ.bitacora;
+		} fi;
+		dialog --title "Eliminar ruby $vrelim y sus librerías" --yesno "\\nSe encontró algo de ruby $vrelim ¿Eliminar para evitar conflictos con la versión $VRUBY?" 15 60
+		if (test "$v" != "") then {
+			pkg_delete -I -D dependencies $v >> /var/www/tmp/inst-adJ.bitacora 2>&1
+		} fi;
+		echo "* Eliminando directorios de $vrelim" >> /var/www/tmp/inst-adJ.bitacora;
+		rm -rf /var/www/bundler/ruby/$vrelim/gems
+		rm -rf /usr/local/lib/ruby/$vrelim
+	} fi;
+done
 	
-if (test ! -f "/usr/local/bin/ruby25") then {
+if (test ! -f "/usr/local/bin/ruby$VRUBYSP") then {
 	insacp ruby
-        echo "* Creando enlaces para ruby 2.5" >> /var/www/tmp/inst-adJ.bitacora;
-	ln -sf /usr/local/bin/ruby25 /usr/local/bin/ruby
-	ln -sf /usr/local/bin/erb25 /usr/local/bin/erb
-	ln -sf /usr/local/bin/irb25 /usr/local/bin/irb
-	ln -sf /usr/local/bin/rdoc25 /usr/local/bin/rdoc
-	ln -sf /usr/local/bin/ri25 /usr/local/bin/ri
-	ln -sf /usr/local/bin/rake25 /usr/local/bin/rake
-	ln -sf /usr/local/bin/gem25 /usr/local/bin/gem
+        echo "* Creando enlaces para ruby $VRUBY" >> /var/www/tmp/inst-adJ.bitacora;
+	ln -sf /usr/local/bin/ruby$VRUBY /usr/local/bin/ruby
+	ln -sf /usr/local/bin/erb$VRUBYSP /usr/local/bin/erb
+	ln -sf /usr/local/bin/irb$VRUBYSP /usr/local/bin/irb
+	ln -sf /usr/local/bin/rdoc$VRUBYSP /usr/local/bin/rdoc
+	ln -sf /usr/local/bin/ri$VRUBYSP /usr/local/bin/ri
+	ln -sf /usr/local/bin/rake$VRUBYSP /usr/local/bin/rake
+	ln -sf /usr/local/bin/gem$VRUBYSP /usr/local/bin/gem
+	ln -sf /usr/local/bin/bundle$VRUBYSP /usr/local/bin/bundle
+	ln -sf /usr/local/bin/bundler$VRUBYSP /usr/local/bin/bundler
 } fi;
 
 
@@ -2903,10 +2893,10 @@ if (test `sysctl -n kern.shminfo.shmall` -lt "51200") then {
 if (test `sysctl -n kern.maxfiles` -lt "20000") then {
 	echo "Aumentar valor de kern.maxfiles en /etc/sysctl.conf" | tee -a /var/www/tmp/inst-adJ.bitacora;
 } fi;
-if (test ! -d /var/www/bundler/ruby/2.5) then {
-  echo "Creando /var/www/bundler/2.5" >> /var/www/tmp/inst-adJ.bitacora;
-  doas mkdir -p /var/www/bundler/ruby/2.5/
-  doas chown -R $uruby:www /var/www/bundler/ruby/2.5/
+if (test ! -d /var/www/bundler/ruby/$VRUBY) then {
+  echo "Creando /var/www/bundler/$VRUBY" >> /var/www/tmp/inst-adJ.bitacora;
+  doas mkdir -p /var/www/bundler/ruby/$VRUBY/
+  doas chown -R $uruby:www /var/www/bundler/ruby/$VRUBY/
 } fi;
 
 echo "Eliminando gemas generales repetidas" >> /var/www/tmp/inst-adJ.bitacora;
@@ -2919,7 +2909,7 @@ for i in `gem list | grep "(.*," | sed -e "s/ *([^,]*,/,/g;s/, default: [^,]*//g
   eval $cmd 2>&1 >> /var/www/tmp/inst-adJ.bitacora;
 done
 
-# Seria bueno eliminar gemas repetidas de /var/www/bundler/ruby/gems/2.5
+# Seria bueno eliminar gemas repetidas de /var/www/bundler/ruby/gems/$VRUBY
 # gem uninstall no ha operado con --install-dir (aunque la documentacion dice que si).
 
 echo "Actualizando gemas del sistema" >> /var/www/tmp/inst-adJ.bitacora;
@@ -2928,15 +2918,15 @@ gem update --system 2>&1 >> /var/www/tmp/inst-adJ.bitacora;
 echo "Reinstalando gemas generales" >> /var/www/tmp/inst-adJ.bitacora;
 QMAKE=qmake-qt5 make=gmake MAKE=gmake doas gem pristine --all 2>&1 >> /var/www/tmp/inst-adJ.bitacora;
 
-echo "Reinstalando versiones mas actualizadas de gemas de /var/www/bundler/ruby/2.5 con extensiones cuando se cambia version menor" >> /var/www/tmp/inst-adJ.bitacora
-for i in `ls /var/www/bundler/ruby/2.5/extensions/x86_64-openbsd/2.5/ | sed -e "s/-[0-9.]*$//g" | sort -u`; do
+echo "Reinstalando versiones mas actualizadas de gemas de /var/www/bundler/ruby/$VRUBY con extensiones cuando se cambia version menor" >> /var/www/tmp/inst-adJ.bitacora
+for i in `ls /var/www/bundler/ruby/$VRUBY/extensions/x86_64-openbsd/$VRUBY/ | sed -e "s/-[0-9.]*$//g" | sort -u`; do
   uj=""
-  for j in /var/www/bundler/ruby/2.5/gems/$i-*; do
+  for j in /var/www/bundler/ruby/$VRUBY/gems/$i-*; do
     uj=$j
   done
   v=`echo $uj | sed -e 's/.*-\([0-9.]*\)/\1/g'` ; 
   n=`echo $uj | sed -e 's/.*\/\(.*\)-[0-9.]*/\1/g'` ; 
-  cmd="doas gem install --install-dir /var/www/bundler/ruby/2.5/ $n -v $v" 
+  cmd="doas gem install --install-dir /var/www/bundler/ruby/$VRUBY/ $n -v $v" 
   echo "$cmd"
   eval "$cmd" 2>&1 >> /var/www/tmp/inst-adJ.bitacora;
 done
@@ -2947,7 +2937,7 @@ gem install bundler 2>&1 >> /var/www/tmp/inst-adJ.bitacora;
 if (test -x /usr/lcoal/bin/bundle25) then { 
        doas ln -sf /usr/local/bin/bundle25 /usr/local/bin/bundle; 
 } fi
-bundle config path /var/www/bundler/ruby/2.5
+bundle config path /var/www/bundler/ruby/$VRUBY
 
 echo "* Configurar tmux" >> /var/www/tmp/inst-adJ.bitacora;
 f=`ls /var/db/pkg/tmux* 2> /dev/null`;
@@ -3164,7 +3154,7 @@ setlocal shiftwidth=2
 setlocal tabstop=2
 EOF
 } fi;
-	
+
 # Diccionario español de LibreOffice
 # http://es.openoffice.org/programa/diccionario.html
 if (test -f $ARCH/util/es_CO.oxt -a -f /usr/local/lib/libreoffice/program/unopkg) then {
@@ -3217,10 +3207,10 @@ if (test -d /home/$uadJ/.libreoffice) then {
 } fi;
 
 if (test ! -h /usr/local/bin/python) then {
- ln -sf /usr/local/bin/python2.7 /usr/local/bin/python
- ln -sf /usr/local/bin/python2.7-2to3 /usr/local/bin/2to3
- ln -sf /usr/local/bin/python2.7-config /usr/local/bin/python-config
- ln -sf /usr/local/bin/pydoc2.7  /usr/local/bin/pydoc
+	ln -sf /usr/local/bin/python2.7 /usr/local/bin/python
+	ln -sf /usr/local/bin/python2.7-2to3 /usr/local/bin/2to3
+	ln -sf /usr/local/bin/python2.7-config /usr/local/bin/python-config
+	ln -sf /usr/local/bin/pydoc2.7  /usr/local/bin/pydoc
 } fi;
 
 chmod a+xrw /var/www/tmp
