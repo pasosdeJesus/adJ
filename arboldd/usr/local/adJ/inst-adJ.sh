@@ -2208,8 +2208,8 @@ EOF
 w
 q
 EOF
-		activarcs php56_fpm
-		/etc/rc.d/php56_fpm -d start >> /var/www/tmp/inst-adJ.bitacora 2>&1 
+		activarcs php70_fpm
+		/etc/rc.d/php70_fpm -d start >> /var/www/tmp/inst-adJ.bitacora 2>&1 
 		grep "^ *location .*php" /etc/nginx/nginx.conf > /dev/null 2>&1
 		if (test "$?" != "0") then {
 			grep "^ *ssl_prefer_server_ciphers" /etc/nginx/nginx.conf > /dev/null 2>&1
@@ -2274,7 +2274,7 @@ EOF
 
 if (test "$sweb" = "nginx") then {
 	echo "* Corriendo nginx" >> /var/www/tmp/inst-adJ.bitacora
-	/etc/rc.d/php_fpm start >> /var/www/tmp/inst-adJ.bitacora 2>&1
+	/etc/rc.d/php70_fpm start >> /var/www/tmp/inst-adJ.bitacora 2>&1
 	/etc/rc.d/nginx start >> /var/www/tmp/inst-adJ.bitacora 2>&1
 } elif (test "$sweb" = "apache") then {
 	echo "* Corriendo Apache" >> /var/www/tmp/inst-adJ.bitacora
