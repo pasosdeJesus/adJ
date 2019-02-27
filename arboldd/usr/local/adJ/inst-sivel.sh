@@ -256,11 +256,6 @@ chown -R $usivel:www /var/www/resbase/anexos/
 chmod -R g+wr /var/www/resbase/anexos
 #chmod g-x /var/www/resbase/anexos/
 
-if (test -d /var/www/sincodh-publico/relatos) then {
-	chgrp -R www /var/www/sincodh-publico/relatos
-	chmod -R g+w /var/www/sincodh-publico/relatos
-} fi;
-
 echo "* Verificando usuario postgres" | tee -a /var/www/tmp/inst-sivel.log
 echo "psql -h /var/www/var/run/postgresql/ -Upostgres template1 -c \"select * from pg_user where usename='postgres';\" | grep postgres > /tmp/sivel" > /tmp/cu.sh
 chmod +x /tmp/cu.sh
@@ -322,7 +317,7 @@ echo "psql -h /var/www/var/run/postgresql/ -U $uspos template1 -c \"ALTER USER s
 chmod +x /tmp/cu.sh
 cat /tmp/cu.sh >> /var/www/tmp/inst-sivel.log
 su - _postgresql /tmp/cu.sh | tee -a /var/www/tmp/inst-sivel.log
-echo "*:*:*:sivel:$CLSIVELPG" > /home/$usivel/.pgpass;
+echo "*:*:*:sivel:$CLSIVELPG" >> /home/$usivel/.pgpass;
 chmod 0600 /home/$usivel/.pgpass;
 chown $usivel:$usivel /home/$usivel/.pgpass
 
@@ -392,7 +387,7 @@ if (test "$?" = "0") then {
         	awk '
         	/^[ \t]*root .*/ {
         		if (paso==1) {
-        			$0="       root /var/www/htdocs/sivel;";
+        			$0="       root /htdocs/sivel;";
 				paso = 2;
 			}
 		}
