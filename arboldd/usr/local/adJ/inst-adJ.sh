@@ -2376,6 +2376,8 @@ if (test "$p" != "") then {
 	dialog --title 'Eliminar PHP' --yesno "\\nPaquete PHP ya instalado. ¿Eliminar para instalar el de esta versión de adJ?" 15 60
 	if (test "$?" = "0") then {
 		rm -f /var/www/conf/modules/php5.conf 
+		rcctl stop php56_fpm
+		rcctl disable php56_fpm
 		for i in php php-2 php5-core partial-php5-core partial-php5-pear partial-php; do
 			pkg_delete -I -D dependencies $i >> /var/www/tmp/inst-adJ.bitacora 2>&1
 		done;
@@ -2574,8 +2576,8 @@ EOF
 w
 q
 EOF
-		activarcs php56_fpm
-		/etc/rc.d/php56_fpm -d start >> /var/www/tmp/inst-adJ.bitacora 2>&1 
+		activarcs php70_fpm
+		/etc/rc.d/php70_fpm -d start >> /var/www/tmp/inst-adJ.bitacora 2>&1 
 		grep "^ *location .*php" /etc/nginx/nginx.conf > /dev/null 2>&1
 		if (test "$?" != "0") then {
 			grep "^ *ssl_prefer_server_ciphers" /etc/nginx/nginx.conf > /dev/null 2>&1
@@ -2640,7 +2642,7 @@ EOF
 
 if (test "$sweb" = "nginx") then {
 	echo "* Corriendo nginx" >> /var/www/tmp/inst-adJ.bitacora
-	/etc/rc.d/php_fpm start >> /var/www/tmp/inst-adJ.bitacora 2>&1
+	/etc/rc.d/php70_fpm start >> /var/www/tmp/inst-adJ.bitacora 2>&1
 	/etc/rc.d/nginx start >> /var/www/tmp/inst-adJ.bitacora 2>&1
 } elif (test "$sweb" = "apache") then {
 	echo "* Corriendo Apache" >> /var/www/tmp/inst-adJ.bitacora
@@ -2920,6 +2922,7 @@ echo "Reinstalando gemas generales" >> /var/www/tmp/inst-adJ.bitacora;
 QMAKE=qmake-qt5 make=gmake MAKE=gmake doas gem pristine --all 2>&1 >> /var/www/tmp/inst-adJ.bitacora;
 
 echo "Reinstalando versiones mas actualizadas de gemas de /var/www/bundler/ruby/$VRUBY con extensiones cuando se cambia version menor" >> /var/www/tmp/inst-adJ.bitacora
+rm -f /usr/local/bin/bundle
 for i in `ls /var/www/bundler/ruby/$VRUBY/extensions/x86_64-openbsd/$VRUBY/ | sed -e "s/-[0-9.]*$//g" | sort -u`; do
   uj=""
   for j in /var/www/bundler/ruby/$VRUBY/gems/$i-*; do
@@ -2967,6 +2970,7 @@ insacp glib2
 insacp dbus	
 insacp libusb1
 insacp lcms2
+insacp cairo
 insacp poppler
 insacp cups
 if (test -f /etc/rc.d/cupsd) then {
