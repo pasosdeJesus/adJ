@@ -93,10 +93,27 @@ Puede ver novedades respecto a OpenBSD en:
   APRENDIENDODEJESUS en lugar de GENERIC
 
 * Paquetes actualizados:
-	- php-x ...
-		Otras extensioens
-		no incluidas como de costumbre se dejan en el sitio de 
-		distribución en el directorio extra-6.4
+	- php-5.6.40 y php-7.0.33
+		Aunque según http://php.net/archive/2019.php#id2019-01-10-4
+		php-5.6.40 será última versión de la serie 5.6,
+		tuvo que inclurse porque buena parte e la librería pear 
+		aún requiere php-5.6 (incluyendo partes requeridas por 
+		SIVeL 1.2 como HTML_QuickForm) aunque al parecer otras 
+		partes requieren php-7.
+		Urge el transito en SIVeL 2 porque futuras fallas encontradas
+		en PHP-5.6 no será resueltas.
+		En esta versión inst-adJ configurará por omisión php-5.6.40 
+		que es el requerido por Pear y SIVeL 1.2, usando
+		el script php56_fpm, la configuración /etc/php-fpm.conf y
+		el socket /var/www/var/run/php-fpm.sock.
+		Si en un servidor necesita correr SIVeL con PHP 5 y otra
+		aplicación con PHP 7, la sugerencia es modificar 
+		/etc/rc.d/php70_fpm para que emplee un segundo
+		archivo /etc/php70-fpm.conf que ubique el socket para
+		php 7 por ejemplo 
+		de configuración php-fpm
+		Otras extensioens no incluidas como de costumbre se dejan 
+		en el sitio de distribución en el directorio extra-6.4
 	- Ocaml 4.0.5 junto con ocamlbuild, ocaml-labltk, ocaml-camlp4 y hevea
 
 * Se recompilaron todos los paquetes de perl (sin cambiar de versión) con
