@@ -1,6 +1,10 @@
 
 6.4
 ===
+
+* Actualizar documentacion
+
+
 * Recompilar paquetes más actualizados en current como vlc:
 
 cd /usr/ports/pobj/vlc-2.2.8/vlc-2.2.8
@@ -9,6 +13,7 @@ vlc-cache-gen:vlc-cache-gen:93: libtool wrapper (GNU libtool) 2.4.2
 vlc-cache-gen:vlc-cache-gen:114: newargv[0]: /usr/ports/pobj/vlc-2.2.8/vlc-2.2.8/bin/.libs/vlc-cache-gen                                                       
 vlc-cache-gen:vlc-cache-gen:104: newargv[1]: modules/                                                                                                          
 Segmentation fault (core dumped)  
+...
 $ doas gdb bin/.libs/vlc-cache-gen vlc-cache-gen.core
 ...
 #0  newlocale (mask=32, locale=Variable "locale" is not available.

@@ -857,7 +857,6 @@ if (test "$sn" = "s") then {
 
 :	###
         # Actualizados.  Están desactualizado en OpenBSD estable y current
-	paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 5.6
 	paquete ocaml paquetes "ocaml"
 	paquete ocamlbuild 
 	paquete ocaml-camlp4
@@ -867,6 +866,8 @@ if (test "$sn" = "s") then {
 	# Para que operen bien basta actualizar CVS de /usr/ports 
 	# Los siguientes no deben estar en arboldes/usr/ports/mystuff
 
+	paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 5.6
+	paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 7.0
 	#FLAVOR=light paquete evince paquetes evince-light
 	#paquete gcc paquetes "gcc" 4.9
 	#paquete git paquetes "git"
