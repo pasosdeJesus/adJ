@@ -790,6 +790,11 @@ if (test "$sn" = "s") then {
 	# Modificados para posibilitar compilación
 	# Deben estar en mystuff
 
+	paquete www/webkitgtk4
+	paquete net/curl
+	paquete mail/dovecot
+	paquete mariadb-client paquetes "mariadb-client mariadb-server" 
+	exit 1
 	# Todo lo de perl tuvo que recompilarse
 	# evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
 	paquete p5-DBI

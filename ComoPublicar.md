@@ -20,7 +20,7 @@ Sería ideal publicar una versión alfa mucho antes (24.Sep y 24.Mar, e.g 6.4a1)
 Pasos importantes para publicar versión beta
 --------------------------------------------
 
-1. Actulizar parches de locale y xlocale de forma que puedan aplicarse
+1. Actualizar parches de locale y xlocale de forma que puedan aplicarse
    sobre la nueva versión de OpenBSD.
 2. Recompilar kernel, perl, sistema base y asegurar que puede crearse una 
    distribución inicial 
