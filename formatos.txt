@@ -14,15 +14,21 @@ Formatos y extensiones:
 
 Conversiones y herramientas:
                                                         docbookrep_html.xsl
-							estilohtml.xsl
+                                                        estilohtml.xsl
     gbf2xml.awk           gbfxml2db.xsl   (XML) /--------------> HTML
 GBF -----------> GBF XML -----------------> DocBook 
-			                      | (SGML)
-			                      -----> TeX -------> DVI  ---> PS
-                                      docbookrep_tex.dsl  jadetex     dvips |
-                                             estilo.dsl                     |
-                                                                     ps2pdf V
-                                                                           PDF
+                    |                        | (SGML)
+                    |                         -----> TeX -------> DVI  ---> PS
+                    |                 docbookrep_tex.dsl  jadetex     dvips |
+                    |                        estilo.dsl                     |
+                    |                                                ps2pdf V
+                    |                                                      PDF
+                    |   gbfxml2html.xls
+                    -----------------------> HTML (una página)
+                    |
+                    |  gbfxml2vhtml.xls
+                    -----------------------> HTML (una página por libro)
+
 
 Parte de los scripts para conversión (a partir de DocBook), así como los 
 scripts de configuración y publicación se basan en los de repasa 

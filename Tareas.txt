@@ -2,15 +2,7 @@
 Hechos
 12:19 griego entre matar, hacer pagar ? que dice thayer?
 
-
-- en Mat 5-18 no muestra en html multiple 'pequeño trazo' y su nota al pie
-  (numeración salta de 57 a 59).
-
-- Evaluar con tooltips para strong.
-
-- Completar comparasión con Biblia Latinoamericana
-
-- Agregar números Strong a Marcos
+- Agregar números Strong a Juan
 
 - Comparar versión griega disponible con TR de otras fuentes
 
@@ -39,7 +31,7 @@ No procesa bien tildes
 	(Gideons ya hace esto http://www.gideons.org pero la versión
 	que distribuyen no es de dominio público).
 	* Más distinción entre notas de pie de página y versiculos
-	* guerrimo me dijo que hiciera un machote, me dijo un método
+	* Guerrimo me dijo que hiciera un machote, me dijo un método
 	  facil de empastar (todas las hojas listas para el libro se
 	  les hace cortes con un cuchillo de forma transversal sobre
 	  el lomo, el lomo se pega a una malla con pegante y a la
@@ -50,27 +42,4 @@ No procesa bien tildes
 * Mejorar versión HTML.  
 
 * Publicar hechos y romanos en Gutenberg
-
-gbfxml2html
-	* Completarlo para no requerir traducción a DocBook (dificil usar
-	  DocBook con un documento tan grande).
-
-gbfxml2tex
-	* Hacerla para evitar traducción a DocBook
-
-gbfxml2gbfdb
-	* Agregar tag para cambio de línea a gbfdb.
-
-   Tomado de TDG :
-
-Line-specific environments
-
-These environments preserve whitespace and line breaks in the source text.
-DocBook does not provide the equivalent of HTML's BR tag, so there's no way to
-interject a line break into normal running text.
-
-HTML:
-	En traducción a HTML usar clase para palabras de Jesús y hoja CSS
-	(inicialmente rojo).
-
 
