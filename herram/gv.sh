@@ -1,5 +1,5 @@
 #!/bin/sh
 # Edita
 
-gvim lucas.gbfxml &
+gvim juan.gbfxml &
 
