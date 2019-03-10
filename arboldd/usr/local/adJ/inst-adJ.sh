@@ -2850,7 +2850,7 @@ echo "* Configurar ruby-$VRUBY" >> /var/www/tmp/inst-adJ.bitacora;
 uruby=$uadJ
 for vrelim in 2.3 2.4 2.5; do
 	v=`(cd /var/db/pkg/; ls) | grep ruby-$vrelim`
-	if (test -d /var/www/bundler/ruby/$vrelim/gems/ -o -d /usr/local/lib/ruby/$vrelim -o "$v" != "") then {
+	if (test -d /var/www/bundler/ruby/$vrelim/bundler/gems/ -o -d /usr/local/lib/ruby/$vrelim -o "$v" != "") then {
 		if (test -d /var/www/bundler/ruby/$vrelim) then {
 			uruby=`stat -f "%u" /var/www/bundler/ruby/$vrelim`
 			echo "uruby=$uruby" >> /var/www/tmp/inst-adJ.bitacora;
@@ -2860,7 +2860,7 @@ for vrelim in 2.3 2.4 2.5; do
 			pkg_delete -I -D dependencies $v >> /var/www/tmp/inst-adJ.bitacora 2>&1
 		} fi;
 		echo "* Eliminando directorios de $vrelim" >> /var/www/tmp/inst-adJ.bitacora;
-		rm -rf /var/www/bundler/ruby/$vrelim/gems
+		rm -rf /var/www/bundler/ruby/$vrelim
 		rm -rf /usr/local/lib/ruby/$vrelim
 	} fi;
 done
@@ -2868,7 +2868,7 @@ done
 if (test ! -f "/usr/local/bin/ruby$VRUBYSP") then {
 	insacp ruby
         echo "* Creando enlaces para ruby $VRUBY" >> /var/www/tmp/inst-adJ.bitacora;
-	ln -sf /usr/local/bin/ruby$VRUBY /usr/local/bin/ruby
+	ln -sf /usr/local/bin/ruby$VRUBYSP /usr/local/bin/ruby
 	ln -sf /usr/local/bin/erb$VRUBYSP /usr/local/bin/erb
 	ln -sf /usr/local/bin/irb$VRUBYSP /usr/local/bin/irb
 	ln -sf /usr/local/bin/rdoc$VRUBYSP /usr/local/bin/rdoc
