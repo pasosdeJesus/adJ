@@ -1,9 +1,9 @@
 # adJ - Aprendiendo de Jesús.
 Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
-y Educativas y que esperamos el regreso del señor Jesucristo.
+y Educativas y para quienes esperamos el regreso del señor Jesucristo.
 
 ### Versión: 6.4
-Fecha de publicación: 8/Mar/2019
+Fecha de publicación: 11/Mar/2019
 
 Puede ver novedades respecto a OpenBSD en:
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_4/Novedades_OpenBSD.md>
@@ -24,7 +24,8 @@ Puede ver novedades respecto a OpenBSD en:
 		* Ethernet: Nuevo controlador 'bnxt' para adaptaores PCI 
 		  Express Broadcom NetXtreme-C/E basados en los chipsets 
 		  Broadcom BCM573xx y BCM574xx.
-		* USB y modems: Nuevo controlador `mue` para Gigabit sobre 			  USB 2.0 Microchip LAN7500/LAN7505/LAN7515/LAN7850 USB 2.0 y 
+		* USB y modems: Nuevo controlador `mue` para Gigabit sobre
+		  USB 2.0 Microchip LAN7500/LAN7505/LAN7515/LAN7850 USB 2.0 y 
 		  sobre USB 3.0 LAN7800/LAN7801. Controlador `umsm` ahora
 	 	  soporta Huawei k3772. `com`  soporta mejor UARTs Synopsys 
 		  Designware 
@@ -117,9 +118,9 @@ Puede ver novedades respecto a OpenBSD en:
   APRENDIENDODEJESUS en lugar de GENERIC
 
 * Paquetes actualizados:
-	- evangelios_dp 0.9.4.  Incluye concordancia Strong del evangelio de 
-	  Lucas (que se añade a la que ya existía para Mateo, Marcos y Hechos).
-	- php-5.6.40 y php-7.0.33
+	* evangelios_dp 0.9.4.  Incluye concordancia Strong del evangelio de 
+	  Lucas (que se añade a las que ya existían para Mateo, Marcos y Hechos).
+	* php-5.6.40 y php-7.0.33
 		Aunque según http://php.net/archive/2019.php#id2019-01-10-4
 		php-5.6.40 será última versión de la serie 5.6,
 		tuvo que inclurse porque buena parte e la librería pear 
@@ -136,11 +137,11 @@ Puede ver novedades respecto a OpenBSD en:
 		aplicación con PHP 7, la sugerencia es modificar 
 		/etc/rc.d/php70_fpm para que emplee un segundo
 		archivo /etc/php70-fpm.conf que ubique el socket para
-		php 7 (el paquete de php-7.0 se ha modificado para
+		php 7 en otra ubicación (el paquete de php-7.0 se ha modificado para
 	 	facilitarlo).
-		Otras extensioens no incluidas como de costumbre se dejan 
+		Otras extensiones no incluidas como de costumbre se dejan 
 		en el sitio de distribución en el directorio extra-6.4
-	- Ocaml 4.0.5 junto con ocamlbuild, ocaml-labltk, ocaml-camlp4 y hevea
+	* Ocaml 4.0.5 junto con ocamlbuild, ocaml-labltk, ocaml-camlp4 y hevea
 
 * Se recompilaron todos los paquetes de perl (sin cambiar de versión) con
   el perl de adJ que soporta LC_NUMERIC.  
