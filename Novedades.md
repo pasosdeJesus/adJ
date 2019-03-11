@@ -83,16 +83,27 @@ Puede ver novedades respecto a OpenBSD en:
   (que ya no está en PHP 7), py-acme, py-ConfigArgParse, py-gdal, py-josepy, 
   py-mock, py-parsedatetime, py-psutil, py-psycopg2, py-qscintilla, 
   python-tkinter, tremor 
-* Recompilados de portes más recientes estables: curl, dovecot, mariadb,
-	webkitgtk4.
+* Recompilados de portes más recientes para evitar fallas de seguridad: 
+	dovecot, mariadb, webkitgtk4.
 * Retroportados y adaptados de current: 
 	* ruby 2.6.1: es más veloz en tareas que requieren CPU e incluye
-		nuevo compilador JIT usable con opción --jit
-	*  Se deja chromium 69.0.3497 (con llaves para compilación de adJ) 
-	   porque en pruebas con chromium 71 (retroportado) no permitia 
-	   adjuntar archivos, ni ingresar a {drive,calendar}.google.com y 
- 	   chromium 72 requiere bastante memoria para su ejecución
-	   (y JDK para su compilación).
+	  nuevo compilador JIT usable con opción --jit
+	* Se deja chromium 69.0.3497 (con llaves para compilación de adJ) 
+	  porque en pruebas con chromium 71 (retroportado) no permitia 
+	  adjuntar archivos, ni ingresar a {drive,calendar}.google.com y 
+ 	  chromium 72 requiere bastante memoria para su ejecución
+	  (y JDK para su compilación).
+	* PostgreSQL actualizado a la version 11.2. Algunas noveades de 
+	  la serie 11 tomadas de 
+	  <https://www.postgresql.org/docs/11/release-11.html> son: 
+	  mejoras en particionado (i.e una tabla en varias partes),
+	  mejoras en paralelismo, compilación JIT opcional de algun 
+	  código SQL que acelera evaluación de expresiones, soporte
+	  a todas las funciones de ventanas de SQL:2011 incluyendo
+	  RANGE distancia PRECEDING/FOLLOWING, modo GROUPS y exclusión
+	  de marcos, ahora pueden crearse indices de cobertura con 
+	  la clausula INCLUDE de CREATE INDEX, mejoras en 
+	  desempeño.
 	* curl, djvulibre, libspatialite, py-requests, py3-requests,
 	  qemu, tiff por versiones mas recientes
 * Se han recompilado los siguientes para aprovechar xlocale: libunistring, 
@@ -155,6 +166,11 @@ Puede ver novedades respecto a OpenBSD en:
     opciones Si, No y Todos.
   * Listados de departamento, municipio y centro poblado permiten filtar 
     por pais 
+* Incluye SIVeL 1.2.7 que seguramente será última versión de la serie 1.2,
+  sus novedades son:
+  * Exportación de datos públicos ahora incluye fecha de ingreso de los casos.
+  * Falla corregida, en conteo de víctimas individuales vuelve a verse municipio. Gracias a Elizabeth Florez por reportar.
+  * Menú vuele a operar correctamente en chromium y chrome. Gracias a Fabiana Carvajala por reporte y ayuda
 
 
 ## FE DE ERRATAS

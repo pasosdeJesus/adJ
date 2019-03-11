@@ -790,10 +790,7 @@ if (test "$sn" = "s") then {
 	# Modificados para posibilitar compilación
 	# Deben estar en mystuff
 
-	paquete www/webkitgtk4
-	paquete net/curl
-	paquete mail/dovecot
-	paquete mariadb-client paquetes "mariadb-client mariadb-server" 
+	paquete curl
 	exit 1
 	# Todo lo de perl tuvo que recompilarse
 	# evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
@@ -882,6 +879,7 @@ if (test "$sn" = "s") then {
 	paquete ruby paquetes "ruby ruby26-ri_docs" 2.6
 	#paquete samba paquetes "ldb samba tevent"
 	#paquete webkit paquetes "webkit webkit-gtk3"
+	paquete webkitgtk4
 	# FLAVOR=gtk3 make paquete webkit-gtk3
 	#FLAVOR=python3 paquete py-gobject3 paquetes py3-gobject3
 	#paquete py-gobject3 paquetes py-gobject3
