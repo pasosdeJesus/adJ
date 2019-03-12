@@ -89,11 +89,11 @@ Con respecto a OpenBSD 6.4 las novedades son:
 
 * Paquetes
 	* Retroportados para cerrar fallas y/o actualizar y/o usar xlocale:
-	  postgresql-server, postgresql-client, postgresql-contrib, 
-	 postgresql-docs, ruby, ruby26-ri_docs, py3-requests, py-requests, 
- 	 qemu, tiff, geo/spatialite/libspatialite.
+	  curl, djvulibre, libspatialite, postgresql-server, 
+	  postgresql-client, postgresql-contrib, postgresql-docs, 
+	  py3-requests, py-requests, qemu, ruby, ruby26-ri_docs, tiff.
 	* Se recompilaron de portes estables recientes para cerrar 
-	  fallas: curl, djvulibre, gettext-tools, gdk-pixbuf, glib2,
+	  fallas: gettext-tools, gdk-pixbuf, glib2,
 	  gtar, libidn, libspectre, libxslt, php, scribus, wget, 
   	  wxWidgets-gtk2, webkitgtk4, php, djvu
 	* Paquetes más actualizados: 
@@ -103,7 +103,7 @@ Con respecto a OpenBSD 6.4 las novedades son:
 	* Recompilado con llave de adJ
 		* chromium 
 	* Modificados para usar xlocale
-		* libunistring, vlc
+		* libunistring
 	* Recompilados de portes estables para usar xlocale y cerrar fallas
 		* gettext-tools, gdk-pixbuf, glib2, gtar, libidn, 
 		  libunistring, libxslt, llvm, scribus, wget,
