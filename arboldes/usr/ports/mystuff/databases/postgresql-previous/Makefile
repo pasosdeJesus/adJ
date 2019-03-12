@@ -1,16 +1,16 @@
-# $OpenBSD: Makefile,v 1.3 2017/06/13 12:31:44 schwarze Exp $
+# $OpenBSD: Makefile,v 1.8 2019/02/21 13:08:25 sthen Exp $
 
 COMMENT=	PostgreSQL RDBMS (previous version, for pg_upgrade)
 
-VERSION=	9.5.5
+VERSION=	10.6
 DISTNAME=	postgresql-${VERSION}
 PKGNAME=	postgresql-previous-${VERSION}
 
 CATEGORIES=	databases
-SHARED_LIBS=	ecpg		7.7 \
-		ecpg_compat	4.7 \
-		pgtypes		4.6 \
-		pq		6.8
+SHARED_LIBS=	ecpg		7.8 \
+		ecpg_compat	4.8 \
+		pgtypes		4.7 \
+		pq		6.9 
 
 HOMEPAGE=	http://www.postgresql.org/
 
@@ -30,12 +30,9 @@ USE_GMAKE=	Yes
 
 CONFIGURE_STYLE=gnu
 
-MODULES=	lang/python gcc4
+MODULES=	lang/python
 MODPY_RUNDEP=	No
 POSTGRESQL_DIR=	postgresql-${VERSION:C/.[0-9]+$//}
-
-# for __sync_lock_test_and_set                   
-MODGCC4_ARCHS= arm                         
 
 CONFIGURE_ENV=	ac_cv_path_PYTHON=${MODPY_BIN} \
 		CPPFLAGS="-I${LOCALBASE}/include" \
@@ -66,13 +63,21 @@ CONFIGURE_ARGS=	--with-openssl=/usr \
 CONFIGURE_ARGS+=--disable-spinlocks
 .endif
 
+# To avoid problems with missed floating point overflow checks.
+# pgsql 10.6+ refuses to build on i386 clang unless -msse2 is set.
+# If clang gains "-fexcess-precision=standard" support then this
+# should be removed.
+MODULES+=	gcc4
+MODGCC4_ARCHS=	i386
+MODGCC4_LANGS=	c
+
 MODGNU_CONFIG_GUESS_DIRS=	${WRKSRC}/config
 
 ALL_TARGET=	all
 INSTALL_TARGET=	install
 
 LIB_DEPENDS = textproc/libxml
-WANTLIB += c crypto m readline ssl termcap z xml2 perl util
+WANTLIB += c crypto m readline ssl termcap z xml2 perl
 
 MAKE_ENV=	LIBpq_MAJOR=${LIBpq_VERSION:R} \
 		LIBpq_MINOR=${LIBpq_VERSION:E} \

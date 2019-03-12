@@ -855,9 +855,17 @@ if (test "$sn" = "s") then {
 	# Retroportados para cerrar fallas o actualizar
 	# Deben estar en arboldes/usr/ports/mystuff y en /usr/ports de current
 
+	paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs" 
+	paquete ruby paquetes "ruby ruby26-ri_docs" 2.6
+	paquete py3-requests
+	paquete py-requests
+	paquete qemu
+	paquete tiff
+	paquete geo/spatialite/libspatialite
+
+
 :	###
         # Actualizados.  Están desactualizado en OpenBSD estable y current
-	paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 5.6
 	paquete ocaml paquetes "ocaml"
 	paquete ocamlbuild 
 	paquete ocaml-camlp4
@@ -867,15 +875,17 @@ if (test "$sn" = "s") then {
 	# Para que operen bien basta actualizar CVS de /usr/ports 
 	# Los siguientes no deben estar en arboldes/usr/ports/mystuff
 
+	paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 5.6
+	paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 7.0
 	#FLAVOR=light paquete evince paquetes evince-light
 	#paquete gcc paquetes "gcc" 4.9
 	#paquete git paquetes "git"
 	#paquete mariadb-client paquetes "mariadb-client mariadb-server" 
 	#paquete p7zip paquetes "p7zip p7zip-rar"
 	#paquete pidgin paquetes "libpurple pidgin"
-	paquete ruby paquetes "ruby ruby26-ri_docs" 2.6
 	#paquete samba paquetes "ldb samba tevent"
 	#paquete webkit paquetes "webkit webkit-gtk3"
+	paquete webkitgtk4
 	# FLAVOR=gtk3 make paquete webkit-gtk3
 	#FLAVOR=python3 paquete py-gobject3 paquetes py3-gobject3
 	#paquete py-gobject3 paquetes py-gobject3
@@ -901,7 +911,7 @@ if (test "$sn" = "s") then {
 	####
 	# Recompilados de estable que usan xlocale (y pueden cerrar fallas)
 	# No deben estar en mystuff
-	paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs" 
+	paquete curl
 	paquete djvulibre
 	paquete gettext-tools
 	paquete gdk-pixbuf
@@ -914,15 +924,8 @@ if (test "$sn" = "s") then {
 	paquete wget
 	paquete wxWidgets-gtk2
 
-	
 	##
 	# Retroportados no existentes en versión actual
-	paquete curl
-	paquete py3-requests
-	paquete py-requests
-	paquete qemu
-	paquete tiff
-	paquete geo/spatialite/libspatialite
 
 	####
 	# Adaptados de portes estables pero mejorados para adJ, por 

@@ -2,5 +2,8 @@
 
 SUBDIR =
 SUBDIR += 5.6
+SUBDIR += 7.0
+SUBDIR += 7.1
+SUBDIR += 7.2
 
 .include <bsd.port.subdir.mk>
