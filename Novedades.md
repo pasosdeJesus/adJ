@@ -1,16 +1,26 @@
 # adJ - Aprendiendo de Jesús.
 Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
-y Educativas y para quienes esperamos el regreso del señor Jesucristo.
+y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
 
 ### Versión: 6.4
-Fecha de publicación: 11/Mar/2019
+Fecha de publicación: 12/Mar/2019
 
 Puede ver novedades respecto a OpenBSD en:
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_4/Novedades_OpenBSD.md>
 
-## NOVEDADES RESPECTO A ADJ 6.3 PROVENIENTES DE OPENBSD
+## 1. DESCARGAS
 
-# Kernel y Sistema Base
+Puede ver las diversas versiones publicadas en: 
+  <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/>
+
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-6.4-amd64.iso> es imagen en formato ISO para quemar en DVD e instalar por primera vez.
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/6.4-amd64/> es directorio con el contenido del DVD instalador apropiado para descargar con rsync y actualizar un adJ ya instalado (ver  <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_4/Actualiza.md> )
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/6.4-extra/> es directorio con versiones recientes de paquetes no incluidos en distribución oficial (pueden no estar firmados y requerir instalación con `pkg_add -D unsigned _paquete_`).
+
+
+## 2. NOVEDADES RESPECTO A ADJ 6.3 PROVENIENTES DE OPENBSD
+
+### 2.1 Kernel y Sistema Base
 
 * Aplicados parches de seguridad previos al 8.Mar.2019 provenientes de 
   OpenBSD que incluyen mitigación a vulnerabilidad en CPU.
@@ -78,7 +88,7 @@ Puede ver novedades respecto a OpenBSD en:
 * El repositorio de paquetes de OpenBSD cuenta con 10304 para amd64
 
 
-# Novedades respecto a paquetes 
+### 2.2 Paquetes 
 
 * Se retiraron paquetes mozjs17, pecl-uploadprogress, phantomjs, php-mysql 
   (que ya no está en PHP 7), py-acme, py-ConfigArgParse, py-gdal, py-josepy, 
@@ -112,7 +122,7 @@ Puede ver novedades respecto a OpenBSD en:
   libspectre, libxslt, scribus, wget, wxWidgets-gtk2
 
 
-## NOVEDADES RESPECTO A ADJ 6.3 PROVENIENTES DE PASOS DE JESÚS
+## 3. NOVEDADES RESPECTO A ADJ 6.3 PROVENIENTES DE PASOS DE JESÚS
 
 * Instalador prepara características de seguridad KARL con kernel 
   APRENDIENDODEJESUS en lugar de GENERIC
@@ -174,7 +184,7 @@ Puede ver novedades respecto a OpenBSD en:
   * Menú vuele a operar correctamente en chromium y chrome. Gracias a Fabiana Carvajala por reporte y ayuda
 
 
-## FE DE ERRATAS
+## 4. FE DE ERRATAS
 
 - Chromium sigue siendo inestable por ejemplo en ocasiones en facebook.com
   por esto sigue incluyendose firefox que en casos como ese puede operar.
