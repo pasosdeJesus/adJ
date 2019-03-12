@@ -88,7 +88,7 @@ Puede ver las diversas versiones publicadas en:
 * El repositorio de paquetes de OpenBSD cuenta con 10304 para amd64
 
 
-# Novedades respecto a paquetes 
+### Paquetes 
 
 * Se retiraron paquetes mozjs17, pecl-uploadprogress, phantomjs, php-mysql 
   (que ya no está en PHP 7), py-acme, py-ConfigArgParse, py-gdal, py-josepy, 
