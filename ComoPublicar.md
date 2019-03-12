@@ -29,7 +29,7 @@ Pasos importantes para publicar versión beta
    útiles en 6.4-amd64-extra
 5. Cambiar versión en ver.sh, arboldd/usr/local/adJ/inst-adJ.sh, Actualiza.md,
 	ComoPublicar.md, {$V-amd64,arboldvd}/util/preact-adJ.sh, Novedades.md,
-	{$V-amd64,arboldvd}/util/actbase.sh, 
+	Novedades_OpenBSD.md, {$V-amd64,arboldvd}/util/actbase.sh, 
 6. Retocar ```Dedicatoria.md``` y archivos *.md (por lo menos versión),
    regenerar en distribución (sin paquetes ni otras compilaciones) con:
 	```

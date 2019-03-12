@@ -1,4 +1,4 @@
-Con respecto a OpenBSD 6.1 las novedades son:
+Con respecto a OpenBSD 6.4 las novedades son:
 
 * Proceso de Instalación:
 	* upgrade install install.sub 	En español
@@ -9,6 +9,10 @@ Con respecto a OpenBSD 6.1 las novedades son:
 	<http://aprendiendo.pasosdejesus.org/?id=Renombrando+Daemon+por+Service>
 	* Nombre de compilación del kernel reportado por uname 
 	  APRENDIENDODEJESUS
+
+* Modificaciones a librería fundamental `libc`:
+	* Con soporte para localizaciones (fecha y hora, cantidades,
+	  cantidades monetarias, cotejación y ordenamiento) y xlocale
 
 * Sistema Base
 	* Binarios nuevos en /usr/bin/
@@ -75,8 +79,6 @@ Con respecto a OpenBSD 6.1 las novedades son:
 		* monetary.h 	Soporte a componente monetario del locale
 		* xlocale.h  	Soporte para xlocale
 	* Nuevo /usr/libdata/perl5/site_perl/amd64-openbsd/xlocale.ph
-	* Librerías modificadas
-		* libc 		Con soporte para localizaciones y xlocale
 	* Archivos de configuración en /etc
 		* X11/xenodm/pixmas/adJ_*.xpm	Logo
 		* signify/adJ-*.pub	Llaves criptográficas
@@ -86,14 +88,15 @@ Con respecto a OpenBSD 6.1 las novedades son:
 		* varmonitorea.sh	Usar por monitorea
 
 * Paquetes
-	* Retroportados para cerrar fallas o actualizar y usar xlocale
-		* postgresql-server postgresql-client postgresql-contrib 
-			postgresql-docs ruby ruby24-ri_docs 
-	* Se recompilaron bastantes paquetes de portes estables para cerrar 
-	  fallas (ver Novedades.md)
+	* Retroportados para cerrar fallas y/o actualizar y/o usar xlocale:
+	  postgresql-server, postgresql-client, postgresql-contrib, 
+	 postgresql-docs, ruby, ruby26-ri_docs, py3-requests, py-requests, 
+ 	 qemu, tiff, geo/spatialite/libspatialite.
+	* Se recompilaron de portes estables recientes para cerrar 
+	  fallas: curl, djvulibre, gettext-tools, gdk-pixbuf, glib2,
+	  gtar, libidn, libspectre, libxslt, php, scribus, wget, 
+  	  wxWidgets-gtk2, webkitgtk4, php, djvu
 	* Paquetes más actualizados: 
-		* php-5.6.31 --no es posible actualizar a 7 porque pear no 
-		  opera y sivel 1.2 depende de pear
 		* Ocaml 4.0.5 junto con ocamlbuild, ocaml-labltk, 
 		  ocaml-camlp4 y hevea
 	* Recompilados todos los paquetes de perl

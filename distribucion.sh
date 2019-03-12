@@ -857,6 +857,12 @@ if (test "$sn" = "s") then {
 
 	paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs" 
 	paquete ruby paquetes "ruby ruby26-ri_docs" 2.6
+	paquete py3-requests
+	paquete py-requests
+	paquete qemu
+	paquete tiff
+	paquete geo/spatialite/libspatialite
+
 
 :	###
         # Actualizados.  Están desactualizado en OpenBSD estable y current
@@ -917,11 +923,6 @@ if (test "$sn" = "s") then {
 	paquete scribus
 	paquete wget
 	paquete wxWidgets-gtk2
-	paquete py3-requests
-	paquete py-requests
-	paquete qemu
-	paquete tiff
-	paquete geo/spatialite/libspatialite
 
 	##
 	# Retroportados no existentes en versión actual
