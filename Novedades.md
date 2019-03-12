@@ -20,7 +20,7 @@ Puede ver las diversas versiones publicadas en:
 
 ## NOVEDADES RESPECTO A ADJ 6.3 PROVENIENTES DE OPENBSD
 
-# Kernel y Sistema Base
+### Kernel y Sistema Base
 
 * Aplicados parches de seguridad previos al 8.Mar.2019 provenientes de 
   OpenBSD que incluyen mitigación a vulnerabilidad en CPU.
