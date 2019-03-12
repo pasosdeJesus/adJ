@@ -855,6 +855,9 @@ if (test "$sn" = "s") then {
 	# Retroportados para cerrar fallas o actualizar
 	# Deben estar en arboldes/usr/ports/mystuff y en /usr/ports de current
 
+	paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs" 
+	paquete ruby paquetes "ruby ruby26-ri_docs" 2.6
+
 :	###
         # Actualizados.  Están desactualizado en OpenBSD estable y current
 	paquete ocaml paquetes "ocaml"
@@ -874,7 +877,6 @@ if (test "$sn" = "s") then {
 	#paquete mariadb-client paquetes "mariadb-client mariadb-server" 
 	#paquete p7zip paquetes "p7zip p7zip-rar"
 	#paquete pidgin paquetes "libpurple pidgin"
-	paquete ruby paquetes "ruby ruby26-ri_docs" 2.6
 	#paquete samba paquetes "ldb samba tevent"
 	#paquete webkit paquetes "webkit webkit-gtk3"
 	paquete webkitgtk4
@@ -903,7 +905,7 @@ if (test "$sn" = "s") then {
 	####
 	# Recompilados de estable que usan xlocale (y pueden cerrar fallas)
 	# No deben estar en mystuff
-	paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs" 
+	paquete curl
 	paquete djvulibre
 	paquete gettext-tools
 	paquete gdk-pixbuf
@@ -915,16 +917,14 @@ if (test "$sn" = "s") then {
 	paquete scribus
 	paquete wget
 	paquete wxWidgets-gtk2
-
-	
-	##
-	# Retroportados no existentes en versión actual
-	paquete curl
 	paquete py3-requests
 	paquete py-requests
 	paquete qemu
 	paquete tiff
 	paquete geo/spatialite/libspatialite
+
+	##
+	# Retroportados no existentes en versión actual
 
 	####
 	# Adaptados de portes estables pero mejorados para adJ, por 
