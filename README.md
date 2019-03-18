@@ -1,4 +1,4 @@
 biblia_dp
 =========
 
-Biblia de Dominio Público
+Evangelios de Dominio Público
