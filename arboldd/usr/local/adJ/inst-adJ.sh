@@ -1291,10 +1291,11 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 	cat > /home/$uadJ/.fluxbox/menu <<EOF
 
 [begin] (Fluxbox)
-	[exec] (xfe - Archivos) {PATH=\$PATH:/usr/sbin:/usr/local/sbin:/sbin /usr/local/bin/xfe}
+	[exec] (xfe - Archivos) {PATH=\$PATH:/usr/sbin:/usr/local/sbin:/sbin doas /usr/local/bin/xfe}
 	[exec] (xterm+tmux) { xterm -geometry 160x48 -en utf8 -e /usr/bin/tmux -l }
 	[exec] (xterm) { xterm -geometry 160x48 -en utf8 -e /bin/ksh -l }
 	[exec] (chromium) {/usr/local/bin/chrome --disable-gpu --allow-file-access-from-files}
+	[exec] (firefox) {/usr/local/bin/firefox}
 	[exec] (midori) { export \`/usr/local/bin/gnome-keyring-servicio -s\`; /usr/local/bin/midori}
 [submenu] (Espiritualidad)
 	[exec] (xiphos) {/usr/local/bin/xiphos}
@@ -1323,7 +1324,7 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
         [end]
 [end]
 [submenu] (Oficina)
-	[exec] (abiword) {LC_MESSAGES=C /usr/local/bin/abiword}
+	[exec] (evince) {evince}
 	[exec] (dia) {/usr/local/bin/dia}
 	[exec] (gnumeric) {LC_CTYPE=C /usr/local/bin/gnumeric}
 	[exec] (gv) {gv}
@@ -1331,15 +1332,13 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 	[exec] (inkscape) {inkscape}
 	[exec] (LibreOffice) {/usr/local/bin/soffice}
 	[exec] (scribus) {scribus}
-	[exec] (xpdf) {xpdf}
 [end]
 [submenu] (Multimedia)
 	[exec] (audacios) {audacious}
 	[exec] (audacity) {audacity}
 	[exec] (cdio cdplay) {xterm -en utf8 -e "cdio cdplay"}
-	[exec] (fontforge) {fontforge}
+	[exec] (musescore) {musescore}
 	[exec] (xcdplayer) {xcdplayer}
-	[exec] (xmix) {xmix}
 	[exec] (xsane) {xsane}
 	[exec] (vlc) {vlc}
 [end]
@@ -1354,7 +1353,7 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 [end]
 [submenu] (Otros)
 [exec] (gvim) {gvim}
-[exec] (plan) {plan}
+[exec] (qemu) {qemu}
 [exec] (qgis) {qgis}
 [exec] (xarchiver) {xarchiver}
 [exec] (xfw) {xfw}
@@ -1852,6 +1851,7 @@ echo "* Configurar scripts de cuenta inicial"  >> /var/www/tmp/inst-adJ.bitacora
 grep "PKG_PATH" /home/$uadJ/.profile > /dev/null
 if (test "$?" != "0") then {
 	cat >> /home/$uadJ/.profile <<EOF
+export PATH=$PATH:.
 export PKG_PATH=http://adJ.pasosdeJesus.org/pub/OpenBSD/$VER/packages/$ARQ/
 if (test "\$TERM" = "xterm") then {
 	        export TERM=xterm-color
