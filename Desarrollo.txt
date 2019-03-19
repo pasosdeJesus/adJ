@@ -38,6 +38,7 @@ para colorear de acuerdo a sintaxis (herram/vim/ftplugin/gbfxml.vim) que
 puede usar así:
  1. Agregue a ~/.vim/filetype.vim
 
+	" Formato Biblia en XML GBFXML
 	au! BufRead,BufNewFile *.gbfxml       setfiletype gbfxml
 
  2. 
