@@ -8,7 +8,7 @@ if (test ! -d $V$VESP-$ARQ) then {
 	echo "No existe el directorio $V$VESP-$ARQ";
 	exit 1;
 } fi;
-im=/usr/src/distrib/amd64/iso/install${VP}.fs
+im=/usr/src/distrib/amd64/iso/obj/install${VP}.fs
 if (test ! -f $im ) then {
 	echo "No existe la imagen $im";
 	exit 1;
