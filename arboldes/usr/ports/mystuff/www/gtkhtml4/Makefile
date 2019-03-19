@@ -11,7 +11,7 @@ API_VERSION=		4.0
 SUBST_VARS=		API_VERSION
 
 PKGNAME=		gtkhtml4-${VERSION}
-REVISION=		1
+REVISION=		2
 
 SHARED_LIBS +=  gtkhtml-4.0               0.0 # 0.0
 SHARED_LIBS +=  gtkhtml-editor-4.0        0.0 # 0.0

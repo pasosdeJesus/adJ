@@ -22,10 +22,10 @@ include/libgtkhtml-${API_VERSION}/gtkhtml/htmltokenizer.h
 include/libgtkhtml-${API_VERSION}/gtkhtml/htmltypes.h
 lib/libgtkhtml-${API_VERSION}.a
 lib/libgtkhtml-${API_VERSION}.la
-@lib lib/libgtkhtml-${API_VERSION}.so.${LIBgtkhtml-4.0_VERSION}
+@lib lib/libgtkhtml-${API_VERSION}.so.${LIBgtkhtml-${API_VERSION}_VERSION}
 lib/libgtkhtml-editor-${API_VERSION}.a
 lib/libgtkhtml-editor-${API_VERSION}.la
-@lib lib/libgtkhtml-editor-${API_VERSION}.so.${LIBgtkhtml-editor-4.0_VERSION}
+@lib lib/libgtkhtml-editor-${API_VERSION}.so.${LIBgtkhtml-editor-${API_VERSION}_VERSION}
 lib/pkgconfig/gtkhtml-editor-${API_VERSION}.pc
 lib/pkgconfig/libgtkhtml-${API_VERSION}.pc
 share/gtkhtml-${API_VERSION}/

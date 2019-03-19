@@ -90,10 +90,10 @@ Puede ver las diversas versiones publicadas en:
 
 ### 2.2 Paquetes 
 
-* Se retiraron paquetes mozjs17, pecl-uploadprogress, phantomjs, php-mysql 
-  (que ya no está en PHP 7), py-acme, py-ConfigArgParse, py-gdal, py-josepy, 
-  py-mock, py-parsedatetime, py-psutil, py-psycopg2, py-qscintilla, 
-  python-tkinter, tremor 
+* Se retiraron paquetes abiword, mozjs17, pecl-uploadprogress, phantomjs, 
+  php-mysql (que ya no está en PHP 7), py-acme, py-ConfigArgParse, 
+  py-gdal, py-josepy, py-mock, py-parsedatetime, py-psutil, py-psycopg2, 
+  py-qscintilla, python-tkinter, tremor, wv
 * Recompilados de portes más recientes para evitar fallas de seguridad: 
 	dovecot, mariadb, webkitgtk4.
 * Retroportados y adaptados de current: 
@@ -159,7 +159,7 @@ Puede ver las diversas versiones publicadas en:
 * Documentación actualizada: basico_adJ, usuario_adJ y servidor_adJ
 
 * Se parchan y compilan portes más recientes de:
-	- biblesync, sword y xiphos
+	- biblesync, sword y xiphos 
 	- markup, repasa y sigue con Ocaml 4.0.5
 
 * Se incluye beta 8 de sivel2 cuyas novedades respecto al beta 7 son:
