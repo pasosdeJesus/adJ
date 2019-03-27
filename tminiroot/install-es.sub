@@ -419,15 +419,15 @@ disklabel_autolayout() {
 		echo "Descargando $resp"
 		if unpriv ftp -Vo - "$resp" >$_dl && [[ -s $_dl ]]; then
 			disklabel -T $_dl -F $_f -w -A $_disk && return
-			err_exit "Autoparticionado fallÃ³."
+			err_exit "Autoparticionado falló."
 		else
-			err_exit "No se encontrÃ³ plantilla de autoparticionado."
+			err_exit "No se encontró plantilla de autoparticionado."
 		fi
 	done
 
-	_qst="Usar distribuciÃ³n (A)utolocalizada, (E)ditarla, o (C)rear una distribuciÃ³n?"
+	_qst="Usar distribución (A)utolocalizada, (E)ditarla, o (C)rear una distribución?"
 	while :; do
-		echo "La distribuciÃ³n autolocalizada para $_disk es:"
+		echo "La distribución autolocalizada para $_disk es:"
 		disklabel -h -A $_disk | egrep "^#  |^  [a-p]:"
 		ask "$_qst" a
 		case $resp in
@@ -600,7 +600,7 @@ get_responsefile() {
 		# Ask if multiple were found and system was not netbooted.
 		while (($# > 1)); do
 			ask_which "interfaz de red" \
-				"deberÃ­a usarse para la peticiÃ³n inicial de DHCP" \
+				"debería usarse para la petición inicial de DHCP" \
 				"$*"
 			isin "$resp" $* && _if=$resp && break
 		done
@@ -642,14 +642,14 @@ get_responsefile() {
 			fi
 		done
 	else
-		[[ -z $AI_SERVER ]] && echo "No pudo determinarse servidor automÃ¡tico."
-		[[ -z $AI_MODE ]] && echo "No pudo determinarse modo automÃ¡tico."
+		[[ -z $AI_SERVER ]] && echo "No pudo determinarse servidor automático."
+		[[ -z $AI_MODE ]] && echo "No pudo determinarse modo automático."
 	fi
 
 	# Ask for url or local path to response file. Provide a default url if
 	# server was found in lease file.
 	while :; do
-		ask "LocalizaciÃ³n del archivo de respuestas?" \
+		ask "Localización del archivo de respuestas?" \
 			"${AI_SERVER:+http://$AI_SERVER/install.conf}"
 		[[ -n $resp ]] && _rf=$resp && break
 	done
@@ -763,7 +763,7 @@ ask_yn() {
 		s|si)	resp=y; return 0;;
 		n|no)	resp=n; return 1;;
 		esac
-		echo "'$resp' no es opciÃ³n vÃ¡lida.."
+		echo "'$resp' no es opción válida.."
 		$AI && exit 1
 	done
 }
@@ -809,7 +809,7 @@ ask_which() {
 			log_answers "$_q" "$resp"
 			break
 		fi
-		echo "'$resp' no es opciÃ³n."
+		echo "'$resp' no es opción."
 		$AI && [[ -n $AI_RESPFILE ]] && exit 1
 	done
 }
@@ -855,7 +855,7 @@ ask_password() {
 	fi
 
 	while :; do
-		ask_pass "$_q (no se mostrarÃ¡)"
+		ask_pass "$_q (no se mostrará)"
 		_password=$resp
 
 		ask_pass "$_q (nuevamente)"
@@ -947,13 +947,13 @@ vlan_config() {
 		_vd=$(get_ifs | sed '/^vlan/d' | sed q)
 	fi
 
-	ask "Â¿Sobre que interface:etiquetavlan debe estar $_if?" "$_vd:$_vi"
+	ask "¿Sobre que interface:etiquetavlan debe estar $_if?" "$_vd:$_vi"
 	_vd=${resp%%:*}
 	_vi=${resp##*:}
 
 	# Ensure that the given parent is an existing (non vlan) interface.
 	if ! isin "$_vd" $(get_ifs | sed '/^vlan/d'); then
-		echo "ElecciÃ³n de interfaz papÃ¡ invalida '$_vd'."
+		echo "Elección de interfaz papá invalida '$_vd'."
 		return 1
 	fi
 
@@ -964,7 +964,7 @@ vlan_config() {
 	# parent interface.
 	for _vdvi in $_vdvi_used; do
 		if [[ $_vdvi == $_vd:* && ${_vdvi##*:} == $_vi ]]; then
-			echo "etiqueta vlan '$_vi' ya estÃ¡ en uso por parte de papÃ¡ '$_vd'"
+			echo "etiqueta vlan '$_vi' ya está en uso por parte de papá '$_vd'"
 			return 1
 		fi
 	done
@@ -975,7 +975,7 @@ vlan_config() {
 	elif (($_vi > 0 && $_vi < 4096)); then
 		_vi="vnetid $_vi"
 	else
-		echo "etiqueta vlan invÃ¡lida '$_vi'."
+		echo "etiqueta vlan inválida '$_vi'."
 		return 1
 	fi
 
@@ -1015,7 +1015,7 @@ v4_config() {
 		# Don't make 'dhcp' the default if dhcp was already used.
 		ifconfig dhcp >/dev/null 2>&1 || _addr=dhcp
 	fi
-	_prompt="DirecciÃ³n IPv4 para $_if? (${_prompt}o 'nada')"
+	_prompt="Dirección IPv4 para $_if? (${_prompt}o 'nada')"
 
 	while :; do
 		ask_until "$_prompt" "$_addr"
@@ -1040,7 +1040,7 @@ v4_config() {
 		if [[ $_addr == */* ]]; then
 			_mask=
 		else
-			ask_until "MÃ¡scara de red para  $_if?" "${_mask:=255.255.255.0}"
+			ask_until "Máscara de red para  $_if?" "${_mask:=255.255.255.0}"
 			_mask=$resp
 		fi
 
@@ -1084,12 +1084,12 @@ v6_defroute() {
 	_routers=$(bsort $(ping6 -n -c 2 ff02::2%$_if 2>/dev/null |
 		sed -En '/^[0-9]+ bytes from /{s///;s/: .*$//p;}'))
 
-	_prompt="Â¿Enrutador IPv6 por defecto?"
+	_prompt="¿Enrutador IPv6 por defecto?"
 
 	if $AI; then
 		_autorespond "$_prompt" && _resp=$resp && echo "$_prompt $_resp"
 	else
-		PS3="$_prompt (${_routers:+list #, }DirecciÃ³n IPv6 o 'nada'): "
+		PS3="$_prompt (${_routers:+list #, }Dirección IPv6 o 'nada'): "
 		select _resp in $_routers; do
 			[[ ${_resp:=$REPLY} == *:* ]] && break
 			[[ $_resp == none ]] && return
@@ -1115,7 +1115,7 @@ v6_config() {
 	[[ -n $2 ]] && { _addr=$2; _prefixlen=$3; }
 
 	ifconfig $_if inet6 >/dev/null 2>&1 && _prompt="o 'autoconf' "
-	_prompt="DirecciÃ³n IPv6 para $_if? (${_prompt}o 'nada')"
+	_prompt="Dirección IPv6 para $_if? (${_prompt}o 'nada')"
 
 	while :; do
 		ask_until "$_prompt" "${_addr:-nada}"
@@ -1131,7 +1131,7 @@ v6_config() {
 				echo "inet6 autoconf" >>$_hn
 				return
 			else
-				echo "fallo autoconfiguraciÃ³n inet6."
+				echo "fallo autoconfiguración inet6."
 				$AI && exit 1 || return
 			fi
 			;;
@@ -1183,12 +1183,12 @@ ieee80211_config() {
 	rm -f $WLANLIST
 
 	while [[ -z $_nwid ]]; do
-		ask_until "Â¿Punto de Acceso InalÃ¡mbrico? (ESSID, 'cualquiera', #lista o '?'
+		ask_until "¿Punto de Acceso Inalámbrico? (ESSID, 'cualquiera', #lista o '?'
 )" "cualquiera"
 		case "$resp" in
 		+([0-9]))
 			_nwid=$(ieee80211_scan $_if | sed -n "${resp}s/ .*//p")
-			[[ -z $_nwid ]] && echo "No hay lÃ­nea $resp."
+			[[ -z $_nwid ]] && echo "No hay línea $resp."
 			;;
 		\?)	ieee80211_scan $_if |
 				sed -n 's/^\([^ ]*\) chan .* bssid \([^ ]*\) .*$/	\1 (\2)/p' |
@@ -1204,14 +1204,14 @@ ieee80211_config() {
 		ifconfig $_if nwid "$_nwid"
 		quote nwid "$_nwid" >>$_hn
 
-		_prompt="Â¿Protocolo de Seguridad? (A)bierto, (W)EP, W(P)A"
+		_prompt="¿Protocolo de Seguridad? (A)bierto, (W)EP, W(P)A"
 		((_haswpa == 1)) && _prompt="$_prompt, WPA-(P)SK"
 		while :; do
 			ask_until "$_prompt" "O"
 			case "$_haswpa-$resp" in
 			?-[Oo])	break
 				;;
-			?-[Ww])	ask_until "Â¿Llave WEP? (no se verÃ¡)"
+			?-[Ww])	ask_until "¿Llave WEP? (no se verá)"
 				# Make sure ifconfig accepts the key.
 				if _err=$(ifconfig $_if nwkey "$resp" 2>&1) &&
 					[[ -z $_err ]]; then
@@ -1220,14 +1220,14 @@ ieee80211_config() {
 				fi
 				echo "$_err"
 				;;
-			1-[Pp])	ask_until "Â¿Palabra secreta WPA? (se verÃ¡)"
+			1-[Pp])	ask_until "¿Palabra secreta WPA? (se verá)"
 				# Make sure ifconfig accepts the key.
 				if ifconfig $_if wpakey "$resp"; then
 					quote wpakey "$resp" >>$_hn
 					break
 				fi
 				;;
-			*)	echo "'$resp' no es opciÃ³n vÃ¡lida.."
+			*)	echo "'$resp' no es opción válida.."
 				;;
 			esac
 		done
@@ -1273,7 +1273,7 @@ configure_ifs() {
 		# asking the user.
 		resp=$(hostname -s)
 		[[ -n $_first && $_first != $_if ]] &&
-			ask "Â¿Nombre para $_if?" "$resp"
+			ask "¿Nombre para $_if?" "$resp"
 		_name=$resp
 
 		v4_config $_if $_name $_hn
@@ -1308,7 +1308,7 @@ v4_defroute() {
 	[[ -n $_dr ]] && isin "$_dr_if" $(get_ifs dhcp) && return
 
 	while :; do
-		ask_until "Â¿Ruta IPv4 por defecto? o nada)" "$_dr"
+		ask_until "¿Ruta IPv4 por defecto? o nada)" "$_dr"
 		[[ $resp == nada ]] && break
 		route delete -inet default >/dev/null 2>&1
 		if route -n add -inet -host default "$resp"; then
@@ -1349,7 +1349,7 @@ sane_install() {
 		isin "$_s" $DEFAULTSETS || continue
 		[[ -n $_q ]] && return 1
 		if ! ask_yn "no fue instalado.
-*SEGURO* se completÃ³ el proceso sin '$_s'?"; then
+*SEGURO* se completó el proceso sin '$_s'?"; then
 			$AI && exit 1 || return 1
 		fi
 	done
@@ -1389,7 +1389,7 @@ __EOT
 		for _f in $_avail; do
 			isin "$_f" $_selected && echo "[X] $_f" || echo "[ ] $_f"
 		done | show_cols | sed 's/^/    /'
-		ask "Â¿Nombre(s) de componente(s)? (o 'cancelar' o 'listo')" listo
+		ask "¿Nombre(s) de componente(s)? (o 'cancelar' o 'listo')" listo
 
 		set -o noglob
 		for resp in $resp; do
@@ -1528,7 +1528,7 @@ install_files() {
 	fi
 
 	isin "INSTALL.$ARCH" $_files ||
-		ask_yn "INSTALL.$ARCH no encontrado. Â¿Usar componentes?" ||
+		ask_yn "INSTALL.$ARCH no encontrado. ¿Usar componentes?" ||
 		return
 
 	select_sets "$_sets" "$_get_sets"
@@ -1550,7 +1550,7 @@ install_files() {
 
 		if ! $_srclocal; then
 			! _tmpfs_list=$(prefetcharea_fs_list) &&
-				_issue="No se pudo determinar Ã¡rea de descarga" && break
+				_issue="No se pudo determinar área de descarga" && break
 
 			for _tmpfs in $_tmpfs_list; do
 				# Try to clean up from previous runs, assuming
@@ -1573,7 +1573,7 @@ install_files() {
 			done
 
 			[[ ! -d $_tmpsrc ]] &&
-				_issue="No se pudo crear Ã¡rea de descarga" && break
+				_issue="No se pudo crear área de descarga" && break
 		fi
 
 		# Cleanup from previous runs.
@@ -1594,7 +1594,7 @@ install_files() {
 		# Verify signature file with public keys.
 		! unpriv -f "$_cfile" \
 			signify -Vep $PUB_KEY -x "$_cfile.sig" -m "$_cfile" &&
-			_issue="RevisiÃ³n de firma de SHA256.sig fallÃ³" && break
+			_issue="Revisión de firma de SHA256.sig falló" && break
 
 		# Fetch and verify the set files.
 		for _f in $_get_sets; do
@@ -1611,7 +1611,7 @@ install_files() {
 			# Handle failed transfer.
 			if [[ -f /tmp/fail ]]; then
 				rm -f "$_tmpsrc/$_f"
-				if ! ask_yn "Descarga de $_f fallÃ³. Â¿Continuar en todo caso?"; then
+				if ! ask_yn "Descarga de $_f falló. ¿Continuar en todo caso?"; then
 					[[ -d $_tmpsrc ]] && rm -rf "$_tmpsrc"
 					$AI && exit 1
 					return
@@ -1625,7 +1625,7 @@ install_files() {
 			if fgrep -qx "SHA256 ($_f) = $(</tmp/h)" "$_cfile"; then
 				_unver=$(rmel $_f $_unver)
 			else
-				if ! ask_yn "Suma de verificaciÃ³n de $_f fallÃ³. Â¿Continuar en todo caso?"; then
+				if ! ask_yn "Suma de verificación de $_f falló. ¿Continuar en todo caso?"; then
 					[[ -d $_tmpsrc ]] && rm -rf "$_tmpsrc"
 					$AI && exit 1
 					return
@@ -1636,7 +1636,7 @@ install_files() {
 
 	[[ -n $_unver ]] && : ${_issue:="Unverified sets:" ${_unver% }}
 	if [[ -n $_issue ]] &&
-		! ask_yn "$_issue. Â¿Continuar sin verificaciÃ³n?"; then
+		! ask_yn "$_issue. ¿Continuar sin verificación?"; then
 		[[ -d $_tmpsrc ]] && rm -rf "$_tmpsrc"
 		$AI && exit 1
 		return
@@ -1667,7 +1667,7 @@ install_files() {
 			;;
 		esac
 		if (($?)); then
-			if ! ask_yn "La instalaciÃ³n de  $_f fallÃ³. Â¿Continuar en todo caso?"; then
+			if ! ask_yn "La instalación de  $_f falló. ¿Continuar en todo caso?"; then
 				[[ -d $_tmpsrc ]] && rm -rf "$_tmpsrc"
 				$AI && exit 1
 				return
@@ -1700,7 +1700,7 @@ install_http() {
 
 	# N.B.: 'http_proxy' is an environment variable used by ftp(1).
 	# DON'T change the name or case!
-	ask "Â¿Proxy HTTP? (e.g. 'http://proxy:8080', o 'nada')" \
+	ask "¿Proxy HTTP? (e.g. 'http://proxy:8080', o 'nada')" \
 		"${http_proxy:-nada}"
 	unset http_proxy
 	[[ $resp == nada ]] || export http_proxy=$resp
@@ -1708,10 +1708,10 @@ install_http() {
 	# If the mirror server listfile download failed, inform the user and
 	# show a reduced prompt.
 	if [[ -s $HTTP_LIST ]]; then
-		_prompt="Â¿Servidor HTTP? (nombre, # en lista, 'listo' or '?')"
+		_prompt="¿Servidor HTTP? (nombre, # en lista, 'listo' or '?')"
 	else
-		echo "(No pudo obtener lista ftp de ftp.openbsd.org, pero estÃ¡ bien)"
-		_prompt="Â¿Servidor HTTP? (nombre o 'listo')"
+		echo "(No pudo obtener lista ftp de ftp.openbsd.org, pero está bien)"
+		_prompt="¿Servidor HTTP? (nombre o 'listo')"
 	fi
 
 	# Use information from /etc/installurl as defaults for upgrades.
@@ -1741,7 +1741,7 @@ install_http() {
 			# Extract the URL from the mirror server listfile.
 			set -- $(sed -n "${resp}p" $HTTP_LIST)
 			if (($# < 1)); then
-				echo "No hay lÃ­nea $resp."
+				echo "No hay línea $resp."
 				continue
 			fi
 			HTTP_SERVER=${1%%/*}
@@ -1760,7 +1760,7 @@ install_http() {
 			HTTP_SERVER=${resp#*://}
 			break
 			;;
-		*)	echo "'$resp' no es nombre de mÃ¡quina valido."
+		*)	echo "'$resp' no es nombre de máquina valido."
 			;;
 		esac
 	done
@@ -1827,7 +1827,7 @@ install_http() {
 		_file_list="$(sed -n 's/^SHA256 (\(.*\)).*$/\1/p' $_sha)"
 		_file_list="SHA256.sig $_file_list"
 	else
-		echo "No pudo obtenerse una lista verificada de juegos de instalaciÃ³n."
+		echo "No pudo obtenerse una lista verificada de juegos de instalación."
 		# Deny this server, if it's a mirror without a valid SHA256.sig.
 		if [[ ${_rurl_base%/$HTTP_SETDIR} == "$_http_proto://$INSTALL_MIRROR" ]]; then
 			$AI && exit 1 || return
@@ -1866,7 +1866,7 @@ install_mounted_fs() {
 	local _dir
 
 	while :; do
-		ask_until "Â¿Ruta a componentes? (o 'listo')" "$SETDIR"
+		ask_until "¿Ruta a componentes? (o 'listo')" "$SETDIR"
 		[[ $resp == listo ]] && return
 		# Accept a valid /mnt2 or /mnt relative path.
 		[[ -d /mnt2/$resp ]] && { _dir=/mnt2/$resp; break; }
@@ -1892,8 +1892,8 @@ install_cdrom() {
 # Install sets from disk.
 # Ask for the disk device containing the set files.
 install_disk() {
-	if ! ask_yn "Â¿ParticiÃ³n ya montada?" si; then
-		ask_which "disco" "medio usarÃ¡ para $_SMODE" \
+	if ! ask_yn "¿Partición ya montada?" si; then
+		ask_which "disco" "medio usará para $_SMODE" \
 			'$(bsort $(get_dkdevs))' \
 			'$(bsort $(rmel $ROOTDISK $(get_dkdevs)))'
 		[[ $resp == listo ]] && return 1
@@ -1910,15 +1910,15 @@ install_nfs() {
 	local _tcp
 
 	# Get the IP address of the server.
-	ask_until "Â¿IP del servidor o nombre?" "$NFS_ADDR"
+	ask_until "¿IP del servidor o nombre?" "$NFS_ADDR"
 	NFS_ADDR=$resp
 
 	# Get the server path to mount.
-	ask_until "Â¿Sist. de arch. por montar?" "$NFS_PATH"
+	ask_until "¿Sist. de arch. por montar?" "$NFS_PATH"
 	NFS_PATH=$resp
 
 	# Determine use of TCP.
-	ask_yn "Â¿Transporte TCP? (requiere servidor NFS capaz)" && _tcp=-T
+	ask_yn "¿Transporte TCP? (requiere servidor NFS capaz)" && _tcp=-T
 
 	# Mount the server.
 	mount_nfs $_tcp -o ro -R 5 $NFS_ADDR:$NFS_PATH /mnt2 || return
@@ -1946,7 +1946,7 @@ mount_mnt2() {
 	else
 		# Display partitions with filesystems and ask which to use.
 		cat $_file
-		ask_which "$_dev particiÃ³n" "tiene componentes para $_SMODE" \
+		ask_which "$_dev partición" "tiene componentes para $_SMODE" \
 			'$(disklabel '$_dev' 2>/dev/null |
 			sed -En '\''/swap|unused/d;/^  ([a-p]): .*/s//\1/p'\'')'
 		[[ $resp == listo ]] && return 1
@@ -1968,13 +1968,13 @@ set_term() {
 	export TERM=${TERM:-${MDTERM:-vt220}}
 
 	if [[ -n $CONSOLE ]]; then
-		ask "Â¿Terminal?" "$TERM"
+		ask "¿Terminal?" "$TERM"
 		TERM=$resp
 	else
 		[[ -x /sbin/kbd ]] || return
 		_layouts=$(bsort $(kbd -l | egrep -v "^(user|tables|encoding)"))
 		while :; do
-			ask "Elija distribuciÃ³n de teclado ('?' o 'L' para ver lista)" predefinida
+			ask "Elija distribución de teclado ('?' o 'L' para ver lista)" predefinida
 			case $resp in
 			[lL\?]) 	echo "Distribuciones disponibles: $_layouts"
 					;;
@@ -2026,7 +2026,7 @@ donetconfig() {
 		[[ -n $1 ]] && resp=$1
 		echo "Usando nombre de dominio DNS $resp"
 	else
-		ask "Â¿Dominio DNS? (e.g. 'ejemplo.com')" "$resp"
+		ask "¿Dominio DNS? (e.g. 'ejemplo.com')" "$resp"
 	fi
 	hostname "$(hostname -s).$resp"
 
@@ -2037,7 +2037,7 @@ donetconfig() {
 	if ifconfig dhcp >/dev/null 2>&1 && [[ $NIFS == 1 && -n $_ns ]]; then
 		echo "Usando servidores de nombres DNS en $resp"
 	else
-		ask "Â¿Servidor DNS? (IP o 'nada')" "$resp"
+		ask "¿Servidor DNS? (IP o 'nada')" "$resp"
 	fi
 
 	# Construct appropriate resolv.conf.
@@ -2055,7 +2055,7 @@ donetconfig() {
 questions() {
 	local _d _cdef=no
 
-	ask_yn "Â¿Iniciar sshd(8) por defecto?" si
+	ask_yn "¿Iniciar sshd(8) por defecto?" si
 	START_SSHD=$resp
 
 	APERTURE=
@@ -2063,11 +2063,11 @@ questions() {
 	START_XDM=
 	if [[ -n $(scan_dmesg '/^wsdisplay[0-9]* /s/ .*//p') ]]; then
 		if [[ -n $(scan_dmesg '/^[a-z]*[01]: aperture needed/p') ]]; then
-			ask_yn "Â¿UsarÃ¡ X Window?" si &&
+			ask_yn "¿Usará X Window?" si &&
 				APERTURE=$MDXAPERTURE
 		fi
 		if [[ -n $MDXDM && $resp != n ]]; then
-			ask_yn "Â¿Desea que el sistema X Window sea iniciado por xenodm(1)?" si
+			ask_yn "¿Desea que el sistema X Window sea iniciado por xenodm(1)?" si
 			START_XDM=$resp
 		fi
 	fi
@@ -2075,10 +2075,10 @@ questions() {
 	if [[ -n $CDEV ]]; then
 		_d=${CPROM:-$CDEV}
 		[[ -n $CONSOLE ]] && _cdef=si
-		ask_yn "Â¿Cambiar consola a $_d?" $_cdef
+		ask_yn "¿Cambiar consola a $_d?" $_cdef
 		DEFCONS=$resp
 		if [[ $resp == y ]]; then
-			ask_which "velocidad" "deberÃ­a $_d usar" \
+			ask_which "velocidad" "debería $_d usar" \
 				"9600 19200 38400 57600 115200" $CSPEED
 			case $resp in
 			listo)	DEFCONS=n;;
@@ -2090,14 +2090,14 @@ questions() {
 
 # Gather information for setting up the user later in do_install().
 user_setup() {
-	local _q="Â¿Crear cuenta de usuario? (nombre de cuenta en minÃºscula o 'no')"
+	local _q="¿Crear cuenta de usuario? (nombre de cuenta en minúscula o 'no')"
 
 	while :; do
 		ask "$_q" no
 		case $resp in
 		n|no)	return
 			;;
-		s|si)	_q="No, de verdad, Â¿cÃºal es el nombre de cuenta en minÃºscula o 'no'?"
+		s|si)	_q="No, de verdad, ¿cúal es el nombre de cuenta en minúscula o 'no'?"
 			continue
 			;;
 		root|daemon|servicio|operator|bin|build|sshd|www|nobody|ftp)
@@ -2127,7 +2127,7 @@ user_setup() {
 	ADMIN_PASS=$_password
 
 	ADMIN_KEY=
-	$AI && ask "Llave ssh pÃºblica para el usuario $ADMIN" nada &&
+	$AI && ask "Llave ssh pública para el usuario $ADMIN" nada &&
 		[[ $resp != none ]] && ADMIN_KEY=$resp
 }
 
@@ -2140,9 +2140,9 @@ ask_root_sshd() {
 	[[ $START_SSHD == y ]] || return
 
 	if [[ -z $ADMIN ]]; then
-		echo "Como no se configuraron usuarios, los ingresos a root mediante sshd(8) pueden ser Ãºtiles."
+		echo "Como no se configuraron usuarios, los ingresos a root mediante sshd(8) pueden ser útiles."
 	fi
-	echo "ADVERTENCIA: la cuenta root es blanco de ataques de fuerza bruta, las llaves pÃºblicas son mÃ¡s seguras."
+	echo "ADVERTENCIA: la cuenta root es blanco de ataques de fuerza bruta, las llaves públicas son más seguras."
 	while :; do
 		ask "Permitie ingreso de root por ssh? (si, no, prohibir-clave)" no
 		_resp=$resp
@@ -2154,7 +2154,7 @@ ask_root_sshd() {
 		w|p|without-password|prohibir-clave)
 			SSHD_ENABLEROOT=prohibit-password
 			;;
-		*)	echo "'$resp' no es opciÃ³n vÃ¡lida.."
+		*)	echo "'$resp' no es opción válida.."
 			$AI && exit 1
 			continue
 			;;
@@ -2187,7 +2187,7 @@ set_timezone() {
 	[[ $_zonefile == /var/tzlist && -z $TZ ]] && return
 
 	while :; do
-		ask "Â¿Zona horaria? ('?' muestra lista)" "$TZ"
+		ask "¿Zona horaria? ('?' muestra lista)" "$TZ"
 		_zonepath=${resp%%*(/)}
 		case $_zonepath in
 		"")	continue
@@ -2198,7 +2198,7 @@ set_timezone() {
 		esac
 
 		while isin "$_zonepath/" $(<$_zonefile); do
-			ask "Â¿En que sub-zona de '$_zonepath' estÃ¡? ('?' muestra lista)"
+			ask "¿En que sub-zona de '$_zonepath' está? ('?' muestra lista)"
 			_zsed=$(echo $_zonepath/ | sed 's,/,\\/,g')
 			resp=${resp%%*(/)}
 			case $resp in
@@ -2214,7 +2214,7 @@ set_timezone() {
 		fi
 
 		echo -n "'${_zonepath}'"
-		echo " no es zona vÃ¡lida"
+		echo " no es zona válida"
 	done
 }
 
@@ -2240,7 +2240,7 @@ is_rootdisk() {
 # Get global root information. ie. ROOTDISK, ROOTDEV and SWAPDEV.
 get_rootinfo() {
 	local _default=$(get_dkdevs) _dkdev
-	local _q="Â¿CÃºal es el disco raÃ­z? ('?' muestra detalles)"
+	local _q="¿Cúal es el disco raíz? ('?' muestra detalles)"
 
 	while :; do
 		echo "Los discos disponibles son: $(get_dkdevs | sed 's/^$/none/')."
@@ -2254,7 +2254,7 @@ get_rootinfo() {
 			if isin "$_dkdev" $(get_dkdevs); then
 				[[ $MODE == install ]] && break
 				is_rootdisk "$_dkdev" && break
-				echo "$resp no es disco raiz vÃ¡lido."
+				echo "$resp no es disco raiz válido."
 				_default="$(rmel "$_dkdev" $_default) $_dkdev"
 			else
 				echo "no hay tal disco"
@@ -2514,7 +2514,7 @@ munge_fstab() {
 check_fs() {
 	local _dev _dn _mp _fstype _rest _fail _f _passno
 
-	ask_yn "Â¿Chequear otras subparticiones limpias?" && _f=f
+	ask_yn "¿Chequear otras subparticiones limpias?" && _f=f
 
 	while read _dev _mp _fstype _rest _rest _passno _rest; do
 		_dn=$(get_dkdev_name "$_dev")
@@ -2525,7 +2525,7 @@ check_fs() {
 		((_passno > 0)) || continue
 		echo -n "fsck -${_f}p $_dev..."
 		if ! fsck -${_f}p $_dev >/dev/null 2>&1; then
-			echo " FALLÃ“. Ejecute fsck $_dev ."
+			echo " FALLÓ. Ejecute fsck $_dev ."
 			_fail=y
 		else
 			echo " Listo."
@@ -2554,7 +2554,7 @@ mount_fs() {
 	if [[ -n $_fail ]]; then
 		# One or more mounts failed. Continue or abort?
 		echo "\n!ADVERTENCIA! Los siguientes sistemas de archivos no pudieron montarse apropiadamente:$_fail"
-		ask_yn "Â¿Continuar en todo caso?" || exit
+		ask_yn "¿Continuar en todo caso?" || exit
 	fi
 }
 
@@ -2603,13 +2603,13 @@ install_sets() {
 	fi
 
 	echo "
-Â¡Por $_SMODE componentes bÃ¡sicos!"
+¡Por $_SMODE componentes básicos!"
 	while :; do
 		# Get list of cdroms again in case one just got plugged in.
 		_cddevs=$(get_cddevs)
 		umount -f /mnt2 >/dev/null 2>&1
 
-		ask "Â¿LocalizaciÃ³n? (${_cddevs:+$_cddevs }$_locs o 'listo')" "$_d"
+		ask "¿Localización? (${_cddevs:+$_cddevs }$_locs o 'listo')" "$_d"
 		case $resp in
 		listo)	sane_install && return
 			;;
@@ -2626,7 +2626,7 @@ install_sets() {
 			;;
 		[nN]*)	isin nfs $_locs && install_nfs && INSTALL_METHOD=nfs
 			;;
-		*)	$AI && err_exit "'$resp' no es opciÃ³n vÃ¡lida.."
+		*)	$AI && err_exit "'$resp' no es opción válida.."
 			;;
 		esac
 
@@ -2760,7 +2760,7 @@ finish_up() {
 	chmod og-rwx /mnt/bsd{,.mp,.rd} 2>/dev/null
 	if [[ -f /mnt/bsd.mp ]] && ((NCPU > 1)); then
 		_kernel=$_kernel.MP
-		echo "MÃ¡quina multiprocesador; usando bsd.mp en lugar de bsd."
+		echo "Máquina multiprocesador; usando bsd.mp en lugar de bsd."
 		mv /mnt/bsd /mnt/bsd.sp 2>/dev/null
 		mv /mnt/bsd.mp /mnt/bsd
 	fi
@@ -2770,7 +2770,7 @@ finish_up() {
 	sha256 /mnt/bsd | (umask 077; sed 's,/mnt,,' >/mnt/var/db/kernel.SHA256)
 
 	if [[ -f $_kernel_dir.tgz ]]; then
-		echo -n "Re-encadenando para crear un kernel Ãºnico..."
+		echo -n "Re-encadenando para crear un kernel único..."
 		(
 		set -e
 		rm -rf $_kernel_dir
@@ -2779,7 +2779,7 @@ finish_up() {
 		rm -f $_kernel_dir.tgz
 		chroot /mnt /bin/ksh -e -c "cd ${_kernel_dir#/mnt}/$_kernel; \
 			make newbsd; make newinstall"
-		) >/dev/null 2>&1 && echo " listo." || echo " fallÃ³."
+		) >/dev/null 2>&1 && echo " listo." || echo " falló."
 	fi
 
 	# Ensure that sysmerge in batch mode is run on reboot.
@@ -2801,7 +2801,7 @@ set -A _KERNV -- \$(sysctl -n kern.version |
 	sed 's/^OpenBSD \([0-9]\.[0-9]\)\([^ ]*\).*/\1 \2/;q')
 if ((\${#_KERNV[*]} == 1)) && [[ -s /etc/installurl ]] &&
 	_CKPATCH=\$(mktemp /tmp/_ckpatch.XXXXXXXXXX); then
-	echo -n "BÃºscando parches binarios disponsibles..."
+	echo -n "Búscando parches binarios disponsibles..."
 	syspatch -c > \$_CKPATCH && echo -n " listo."
 	echo
 	if [[ -s \$_CKPATCH ]]; then
@@ -2818,7 +2818,7 @@ __EOT
 	if [[ -x /mnt/$MODE.site ]]; then
 		if ! chroot /mnt /$MODE.site; then
 			store_random
-			err_exit "$MODE.site fallÃ³"
+			err_exit "$MODE.site falló"
 		fi
 	fi
 
@@ -2828,7 +2828,7 @@ __EOT
 	# Pat on the back.
 	cat <<__EOT
 
-Â¡FELICITACIONES! Â¡Procedimiento completado!
+¡FELICITACIONES! ¡Procedimiento completado!
 
 __EOT
 	[[ $MODE == install ]] && cat <<__EOT
@@ -2862,10 +2862,10 @@ do_install() {
 	# Ask for and set the system hostname and add the hostname specific
 	# siteXX set.
 	while :; do
-		ask_until "Â¿Nombre de la mÃ¡quina? (forma corta, e.g. 'foo')" \
+		ask_until "¿Nombre de la máquina? (forma corta, e.g. 'foo')" \
 			"$(hostname -s)"
 		[[ $resp != *+([[:cntrl:]]|[[:space:]])* ]] && break
-		echo "Nombre de computador no vÃ¡lido."
+		echo "Nombre de computador no válido."
 		$AI && exit 1
 	done
 	[[ ${resp%%.*} != $(hostname -s) ]] && hostname "$resp"
@@ -2884,16 +2884,16 @@ do_install() {
 	echo
 
 	while :; do
-		ask_password "Â¿Clave para root?"
+		ask_password "¿Clave para root?"
 		_rootpass="$_password"
 		[[ -n "$_password" ]] && break
-		echo "Debe establecer una contraseÃ±a para root."
+		echo "Debe establecer una contraseña para root."
 	done
 
 	# Ask for the root user public ssh key during autoinstall.
 	_rootkey=
 	if $AI; then
-		ask "Â¿Llave ssh pÃºblica para la cuenta root?" none
+		ask "¿Llave ssh pública para la cuenta root?" none
 		[[ $resp != none ]] && _rootkey=$resp
 	fi
 
@@ -3040,7 +3040,7 @@ do_install() {
 		/mnt/etc/ttys >/tmp/i/ttys
 	mv /tmp/i/ttys /mnt/etc/ttys
 
-	echo -n "Guardando configuraciÃ³n..."
+	echo -n "Guardando configuración..."
 
 	# Save any leases obtained during install.
 	(cd /var/db; for _f in dhclient.leases.*; do
@@ -3135,12 +3135,12 @@ do_upgrade() {
 	# Get $ROOTDISK and $ROOTDEV
 	get_rootinfo
 
-	echo -n "Revisando subparticiÃ³n raÃ­z (fsck -fp /dev/$ROOTDEV)..."
-	fsck -fp /dev/$ROOTDEV >/dev/null 2>&1 || { echo "FALLÃ“."; exit; }
+	echo -n "Revisando subpartición raíz (fsck -fp /dev/$ROOTDEV)..."
+	fsck -fp /dev/$ROOTDEV >/dev/null 2>&1 || { echo "FALLÓ."; exit; }
 	echo " Listo."
 
-	echo -n "Montando subparticiÃ³n raiz... (mount -o ro /dev/$ROOTDEV /mnt)..."
-	mount -o ro /dev/$ROOTDEV /mnt || { echo "FALLÃ“."; exit; }
+	echo -n "Montando subpartición raiz... (mount -o ro /dev/$ROOTDEV /mnt)..."
+	mount -o ro /dev/$ROOTDEV /mnt || { echo "FALLÓ."; exit; }
 	echo " Listo."
 
 	# The fstab and myname files are required.
@@ -3335,7 +3335,7 @@ Control-C, pero esto puede dejar su sistema en un estado inconsistente.
 __EOT
 elif [[ -z $AI_RESPFILE ]]; then
 	get_responsefile ||
-		err_exit "No se encontrÃ³ archivo de respuesta; saliendo de modo no-interactivo."
+		err_exit "No se encontró archivo de respuesta; saliendo de modo no-interactivo."
 
 	do_autoinstall
 else
@@ -3384,4 +3384,4 @@ while :; do
 done
 
 # Fall through to .profile which leaves us at the command prompt.
-echo "Para reiniciar el nuevo sistema, teclee 'reboot' en la lÃ­nea de ordenes."
+echo "Para reiniciar el nuevo sistema, teclee 'reboot' en la línea de ordenes."
