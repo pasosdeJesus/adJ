@@ -22,8 +22,8 @@ Puede ver las diversas versiones publicadas en:
 
 ### 2.1 Kernel y Sistema Base
 
-* Aplicados parches de seguridad previos al 8.Mar.2019 provenientes de 
-  OpenBSD que incluyen mitigación a vulnerabilidad en CPU.
+* Aplicados parches de seguridad previos al 27.Mar.2019 provenientes de 
+  OpenBSD que incluyen mitigación a vulnerabilidades en CPU.
 * Controladores ampliados o mejorados para amd64
 	* Red:
 		* Inalámbrica: Mejorado `rtwn` para soportar 
@@ -97,7 +97,7 @@ Puede ver las diversas versiones publicadas en:
 * Recompilados de portes más recientes para evitar fallas de seguridad: 
 	dovecot, mariadb, webkitgtk4.
 * Retroportados y adaptados de current: 
-	* ruby 2.6.1: es más veloz en tareas que requieren CPU e incluye
+	* ruby 2.6.2: es más veloz en tareas que requieren CPU e incluye
 	  nuevo compilador JIT usable con opción --jit
 	* Se deja chromium 69.0.3497 (con llaves para compilación de adJ) 
 	  porque en pruebas con chromium 71 (retroportado) no permitia 
