@@ -54,7 +54,7 @@ md_prep_fdisk() {
 
 	while :; do
 		_d=editar
-		_q="¿Usar (T)odo el disco MBR, todo el disco (G)PT"
+		_q="Usar (T)odo el disco MBR, todo el disco (G)PT"
 
 		[[ $MDEFI == y ]] && _d=gpt
 
@@ -78,7 +78,7 @@ md_prep_fdisk() {
 			return ;;
 		[gG]*)
 			if [[ $MDEFI != y ]]; then
-				ask_yn "Un disco EFI/GPT podria no arrancar. ¿Proceder?"
+				ask_yn "Un disco EFI/GPT podria no arrancar. Proceder?"
 				[[ $resp == n ]] && continue
 			fi
 
