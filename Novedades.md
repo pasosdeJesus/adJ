@@ -125,7 +125,10 @@ Puede ver las diversas versiones publicadas en:
 ## 3. NOVEDADES RESPECTO A ADJ 6.3 PROVENIENTES DE PASOS DE JESÚS
 
 * Instalador prepara características de seguridad KARL con kernel 
-  APRENDIENDODEJESUS en lugar de GENERIC
+  APRENDIENDODEJESUS en lugar de GENERIC. Archivos con ordenes se pasan
+  a codificación ASCII básica dado que instalador no soporta UTF-8
+  (aunque el sistema base instalado si lo soporta bien).
+
 
 * Paquetes actualizados:
 	* evangelios_dp 0.9.4.  Incluye concordancia Strong del evangelio de 
