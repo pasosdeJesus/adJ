@@ -9,10 +9,12 @@ y Educativas y que anhelamos que Jesús use durante el Milenio.
 Documentación
 -------------
 
+
 * Básica http://pasosdejesus.github.io/basico_adJ/
 * Usuario http://pasosdejesus.github.io/usuario_adJ/
 * Servidor http://pasosdejesus.github.io/servidor_adJ/
 * Anuncios de nuevas versiones: http://aprendiendo.pasosdejesus.org/ y en la lista https://groups.google.com/forum/#!forum/openbsd-colombia
+* Curso de instalación: https://courses.p2pu.org/es/groups/openbsd-adj-como-sistema-de-escritorio/
 
 Concepto de estas fuentes
 -------------------------
