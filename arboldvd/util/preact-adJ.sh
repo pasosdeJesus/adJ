@@ -3,9 +3,9 @@
 # Dominio público de acuerdo a legislación colombiana. http://www.pasosdejesus.org/dominio_publico_colombia.html. 
 # 2014. vtamara@pasosdeJesus.org
 
-VER=6.3
+VER=6.4
 REV=
-VESP="b1"
+VESP=""
 
 ACVERC=`uname -r`
 ACVER=`echo $ACVERC | sed -e "s/\.//g"`
@@ -182,7 +182,7 @@ Se eliminarán todas las páginas del manual para que se instalen las nuevas al 
 	} fi;
 } fi;
 	
-dialog --title 'Advertencia: por borrar paquete p5-Term-ReadKey' --yesno "\\nSe liminará paquete p5-Term-ReadKey (si existe) para evitar problemas con perl, pkg_add y pkg_delete.
+dialog --title 'Advertencia: por borrar paquete p5-Term-ReadKey' --yesno "\\nSe eliminará paquete p5-Term-ReadKey (si existe) para evitar problemas con perl, pkg_add y pkg_delete.
 \\n\\nSi llega a tener problemas con esos programas se recomienda borrar todos los paquetes de perl (p5-*) y volver a instalar los distribuidos con adJ\\n
 ¿Continuar?" 17 60
 if (test "$?" = "0") then {

@@ -1,4 +1,4 @@
-# $OpenBSD: Makefile,v 1.242 2018/09/22 13:17:22 sthen Exp $
+# $OpenBSD: Makefile,v 1.250 2019/03/08 11:48:00 sthen Exp $
 
 COMMENT-main=	PostgreSQL RDBMS (client)
 COMMENT-server=	PostgreSQL RDBMS (server)
@@ -7,8 +7,9 @@ COMMENT-contrib=PostgreSQL RDBMS contributions
 COMMENT-plpython=Python procedural language for PostgreSQL
 COMMENT-pg_upgrade=Support for upgrading PostgreSQL data from previous version
 
-VERSION=	10.5
-PREV_MAJOR=	9.6
+VERSION=	11.2
+PREV_MAJOR=	10
+REVISION-server=0
 DISTNAME=	postgresql-${VERSION}
 PKGNAME-main=	postgresql-client-${VERSION}
 PKGNAME-server=	postgresql-server-${VERSION}
@@ -16,14 +17,13 @@ PKGNAME-docs=	postgresql-docs-${VERSION}
 PKGNAME-contrib=postgresql-contrib-${VERSION}
 PKGNAME-plpython=postgresql-plpython-${VERSION}
 PKGNAME-pg_upgrade=postgresql-pg_upgrade-${VERSION}
-REVISION-main=	1
-REVISION-server=4
+
 
 CATEGORIES=	databases
 SHARED_LIBS=	ecpg		7.9 \
 		ecpg_compat	4.9 \
 		pgtypes		4.8 \
-		pq		6.10 
+		pq		6.10
 
 HOMEPAGE=	http://www.postgresql.org/
 
@@ -32,7 +32,7 @@ MAINTAINER=	Pierre-Emmanuel Andre <pea@openbsd.org>
 # BSD
 PERMIT_PACKAGE_CDROM=	Yes
 
-WANTLIB += c crypto m readline ssl termcap z
+WANTLIB += c curses crypto m readline ssl z
 
 MASTER_SITES=	https://ftp.postgresql.org/pub/source/v${VERSION}/ \
 		ftp://ftp.postgresql.org/pub/source/v${VERSION}/
@@ -79,6 +79,18 @@ CONFIGURE_ARGS=	--disable-rpath --with-openssl=/usr \
 CONFIGURE_ARGS+=--disable-spinlocks
 .endif
 
+# To avoid problems with missed floating point overflow checks.
+# pgsql 10.6+ refuses to build on i386 clang unless -msse2 is set.
+# If clang gains "-fexcess-precision=standard" support then this
+# should be removed.
+MODULES+=	gcc4
+MODGCC4_ARCHS=	i386
+MODGCC4_LANGS=	c
+# An alternative workaround:
+# .if ${MACHINE_ARCH} == "i386"
+# CFLAGS +=	-msse2
+# .endif
+
 MODGNU_CONFIG_GUESS_DIRS=	${WRKSRC}/config
 
 ALL_TARGET=	world
@@ -90,18 +102,19 @@ WANTLIB-main =	${WANTLIB} xml2
 
 LIB_DEPENDS-server= databases/postgresql=${VERSION} \
 		    ${LIB_DEPENDS-main}
-WANTLIB-server=	${WANTLIB-main} perl pq>=4
+WANTLIB-server=	${WANTLIB-main} perl pq
 
 RUN_DEPENDS-contrib= databases/postgresql,-server=${VERSION}
 LIB_DEPENDS-contrib= databases/postgresql=${VERSION} \
 		     ${LIB_DEPENDS-main}
-WANTLIB-contrib=	${WANTLIB-main} pq>=4 perl
+WANTLIB-contrib=	${WANTLIB-main} perl pq
 
 RUN_DEPENDS-pg_upgrade=	databases/postgresql,-server=${VERSION} \
 			databases/postgresql-previous>=${PREV_MAJOR}
 LIB_DEPENDS-pg_upgrade= databases/postgresql=${VERSION} \
 		     ${LIB_DEPENDS-main}
-WANTLIB-pg_upgrade=	${WANTLIB-main} pq>=4
+
+WANTLIB-pg_upgrade =	${WANTLIB-main} pq
 
 LIB_DEPENDS-plpython=	${MODPY_LIB_DEPENDS}
 WANTLIB-plpython =	c m pthread util \

@@ -56,10 +56,10 @@ LIB_DEPENDS-main +=	devel/gmp \
 			devel/libyaml \
 			devel/libffi
 
-WANTLIB-gdbm +=		c m gdbm gmp pthread ruby${BINREV}
+WANTLIB-gdbm +=		c m gdbm gmp pthread #ruby${BINREV}
 LIB_DEPENDS-gdbm +=	databases/gdbm \
-			devel/gmp \
-			lang/ruby/${REV},-main>=${VERSION},<${NEXTVER}
+			devel/gmp #\
+			#lang/ruby/${REV},-main>=${VERSION},<${NEXTVER}
 RUN_DEPENDS-gdbm ?=
 
 ALL_TARGET =		V=1 main

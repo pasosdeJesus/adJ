@@ -421,6 +421,8 @@ EOF
 	#compilabase
 	echo "DESTDIR=$DESTDIR" | tee -a /var/www/tmp/distrib-adJ.bitacora;
 	chown build /usr/src/etc/master.passwd 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
+	chown build /usr/src/sys/arch/amd64/compile/APRENDIENDODEJESUS/obj/version 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
+	chown build /usr/src/sys/arch/amd64/compile/APRENDIENDODEJESUS.MP/obj/version 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
 	cd /usr/src/etc && DESTDIR=/$D_DESTDIR nice make release 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora;
 	echo "* Completo make release"
 	cd $D_DESTDIR/etc && $dini/arboldd/usr/local/adJ/servicio-etc.sh 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
@@ -428,6 +430,22 @@ EOF
 	find "$DESTDIR"  -exec touch {} ';' 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
 	find "$RELEASEDIR"  -exec touch {} ';' 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
 } fi;
+
+echo " *> Suponiendo que ya se completo un build en /, instalar en $DESTDIR y de este dejar comprimidos en $RELEASEDIR" | tee -a /var/www/tmp/distrib-adJ.bitacora;
+if (test "$inter" = "-i") then {
+	echo -n "(s/n)? "
+	read sn
+}
+else {
+	sn=$autoGenTGZ
+} fi;
+if (test "$sn" = "s") then {
+	cd $D_DESTDIR/etc && $dini/arboldd/usr/local/adJ/servicio-etc.sh 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
+	cd /usr/src/etc && DESTDIR=/$D_DESTDIR nice make release-sets 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora;
+	echo "* Completo make release-sets"
+
+} fi;
+
 
 
 echo " *> Recompilar e instalar X-Window con fuentes de $XSRCDIR" | tee -a /var/www/tmp/distrib-adJ.bitacora;
@@ -557,19 +575,12 @@ if (test "$sn" = "s") then {
 		exit 1;
 	} fi;
 	
-	rm -f /usr/src/distrib/miniroot/install-es.sh
-	ln -s $dini/tminiroot/install-es.sh /usr/src/distrib/miniroot/install-es.sh
 	rm -f /usr/src/distrib/miniroot/install-es.sub
 	ln -s $dini/tminiroot/install-es.sub /usr/src/distrib/miniroot/install-es.sub
-	rm -f /usr/src/distrib/miniroot/upgrade-es.sh
-	ln -s $dini/tminiroot/upgrade-es.sh /usr/src/distrib/miniroot/upgrade-es.sh
 	rm -f /usr/src/distrib/amd64/common/install-es.md
 	ln -s $dini/tminiroot/install-amd64-es.md /usr/src/distrib/amd64/common/install-es.md
-	rm -f /usr/src/distrib/i386/common/install-es.md
-	ln -s $dini/tminiroot/install-i386-es.md /usr/src/distrib/i386/common/install-es.md
 	verleng /usr/src/distrib/miniroot/list 
 	verleng /usr/src/distrib/amd64/common/list 
-	verleng /usr/src/distrib/i386/common/list 
 
 	cp /etc/signify/adJ-*pub /$D_DESTDIR/etc/signify/
 	cp /usr/src/distrib/ramdisk/list /tmp/ramdisk_list
@@ -844,9 +855,17 @@ if (test "$sn" = "s") then {
 	# Retroportados para cerrar fallas o actualizar
 	# Deben estar en arboldes/usr/ports/mystuff y en /usr/ports de current
 
+	paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs" 
+	paquete ruby paquetes "ruby ruby26-ri_docs" 2.6
+	paquete py3-requests
+	paquete py-requests
+	paquete qemu
+	paquete tiff
+	paquete geo/spatialite/libspatialite
+
+
 :	###
         # Actualizados.  Están desactualizado en OpenBSD estable y current
-	paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 5.6
 	paquete ocaml paquetes "ocaml"
 	paquete ocamlbuild 
 	paquete ocaml-camlp4
@@ -856,16 +875,21 @@ if (test "$sn" = "s") then {
 	# Para que operen bien basta actualizar CVS de /usr/ports 
 	# Los siguientes no deben estar en arboldes/usr/ports/mystuff
 
+	paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 5.6
+	paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 7.0
 	#FLAVOR=light paquete evince paquetes evince-light
 	#paquete gcc paquetes "gcc" 4.9
 	#paquete git paquetes "git"
 	#paquete mariadb-client paquetes "mariadb-client mariadb-server" 
 	#paquete p7zip paquetes "p7zip p7zip-rar"
 	#paquete pidgin paquetes "libpurple pidgin"
-	#paquete ruby paquetes "ruby ruby25-ri_docs" 2.5
 	#paquete samba paquetes "ldb samba tevent"
 	#paquete webkit paquetes "webkit webkit-gtk3"
+	paquete webkitgtk4
 	# FLAVOR=gtk3 make paquete webkit-gtk3
+	#FLAVOR=python3 paquete py-gobject3 paquetes py3-gobject3
+	#paquete py-gobject3 paquetes py-gobject3
+
 
 	#Por reubicar
 
@@ -887,7 +911,7 @@ if (test "$sn" = "s") then {
 	####
 	# Recompilados de estable que usan xlocale (y pueden cerrar fallas)
 	# No deben estar en mystuff
-	paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs" 
+	paquete curl
 	paquete djvulibre
 	paquete gettext-tools
 	paquete gdk-pixbuf
@@ -900,7 +924,6 @@ if (test "$sn" = "s") then {
 	paquete wget
 	paquete wxWidgets-gtk2
 
-	
 	##
 	# Retroportados no existentes en versión actual
 

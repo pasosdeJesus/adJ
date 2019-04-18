@@ -1,8 +1,7 @@
-# Strings in spanish to install/update OpenBSD
-# Dominio público. 2009.
-
-# si tiene una sola una unidad de CD que no pregunte por la que
-# debe escogerse.
+# Cadenas en espaÃ±ol para instalar/actualizar adJ
+# Este archivo debe estar en codificacion ISO8859-1 dado que el instalador
+# no incluye soporte para UTF-8 (aunque si el sistema instalado).
+# vtamara@pasosdeJesus.org. Dominio pÃºblico. 2009.
 
 _slinilang="SETDIR=/
 LANG=es
@@ -21,245 +20,251 @@ _sldone="listo";
 _slyes="si";
 _slno="no";
 _slall="todos";
-_slterminaltype="¿Terminal?";
-_slkbdmapping="¿Teclado kbd(8)? ('L' muestra listado)";
+_slterminaltype="Â¿Terminal?";
+_slkbdmapping="Â¿Teclado kbd(8)? ('L' muestra listado)";
 _slkbdefault="es";
 _slmajortables="Distribuciones";
+_slatanyprompt="En preguntas, excepto en claves, usted puede escapar
+al interprete de ordenes con '!'.  Las respuestas por omisiÃ³n aparecen 
+entre [] y se seleccionan con RETORNO.  Puede salir en cualquier momento 
+presionando Control-C, pero esto puede dejar su sistema 
+en un estado inconsistente.";
 _slwelcome="Bienvenido al programa para \$_SMODE OpenBSD \$ARCH.
 
 En preguntas, excepto en claves, escape al interprete de comandos con '!'. 
 Las respuestas por defecto aparecen entre [], se seleccionan con RETORNO.  
 Puede salir con Control-C, pero esto puede dejar su sistema inconsistente.";
-_slbackedup="¿RESPALDÓ SUS DATOS? Este programa puede causar perdida SIGNIFICATIVA.";
+_slbackedup="RESPALDO SUS DATOS? Este programa puede causar perdida SIGNIFICATIVA.";
 _slnoteetc="NOTA: Tras actualizar, mezcle todo cambio a archivos del componente de 
-instalación 'etc' en los archivos de sus sistema.  sysmerge(8) puede ayudar.";
+instalaciÃ³n 'etc' en los archivos de sus sistema.  sysmerge(8) puede ayudar.";
 
-_slproceedupgrade="¿Proceder a actualizar?";
-_slinstallationnotes="Útil tener a mano notas de instalación. 
-También manuales del disco y calculadora para configuraciones complejas.";
-_slrestartinterrupted="!Reiniciando instalación interrumpida! 
-Puede saltar los pasos de preparación, o puede reiniciar.";
-_slskipdisk="¿Saltar inicialización del disco?";
-_slproceedinstall="¿Proceder con la instalación?";
+_slproceedupgrade="Â¿Proceder a actualizar?";
+_slinstallationnotes="Ãštil tener a mano notas de instalaciÃ³n. 
+TambiÃ©n manuales del disco y calculadora para configuraciones complejas.";
+_slrestartinterrupted="!Reiniciando instalaciÃ³n interrumpida! 
+Puede saltar los pasos de preparaciÃ³n, o puede reiniciar.";
+_slskipdisk="Â¿Saltar inicializaciÃ³n del disco?";
+_slproceedinstall="Â¿Proceder con la instalaciÃ³n?";
 _slenterhalt="Salga con 'halt' e inicie su sistema operativo original."
-_slcool="¡Bien! Manos a la obra."
-_slnonamefound="No se encontro(aron) más";
+_slcool="Â¡Bien! Manos a la obra."
+_slnonamefound="No se encontro(aron) mas";
 _slnonamefound2="";
 _slavailablenames="";
 _slavailablenames2="disponibles son";
-_slavailablenames3="¿Cual";
+_slavailablenames3="Â¿Cual";
 _slordone="o '$_sldone'";
-_slnotvalidchoice="no es opción"
-_slmedia="medio usará para \$_SMODE";
-_slpartition="partición";
+_slnotvalidchoice="no es opciÃ³n"
+_slmedia="medio usara para \$_SMODE";
+_slpartition="particiÃ³n";
 _slhassets="tiene componentes para \$_SMODE"
 _slnofs="No hay subparticiones.";
 _slexittoreturn="'exit' para regresar."
 _sledit="Editar";
 _slwith="con";
-_slmanualnet="¿Configurar manualmente la red?"
+_slmanualnet="Â¿Configurar manualmente la red?"
 _slexit="'exit' regresa";
 _slmakedevnf="MAKEDEV no hallado.  No se crean nodos de dispositivos.";
-_slselectsets="Selecccione componentes por instalar, un patrón o 'todos'.
-Deseleccione poniendo un '-' antes del nombre, del patrón o de 'todos'.  
+_slselectsets="Selecccione componentes por instalar, un patrn o 'todos'.
+Deseleccione poniendo un '-' antes del nombre, del patrn o de 'todos'.  
 Los seleccionados se marcan con '[X]'.";
 _slthexbasesetrequires="El juego xbase requiere a comp, asi que poniendo comp de nuevo."
 _slinterface="interfaz"
 _slinit="desea inicializar"
-_slnomoreint="No hay más interfaces por inicializar"
-_slsymbolic="¿Nombre para";
+_slnomoreint="No hay mas interfaces por inicializar"
+_slsymbolic="Â¿Nombre para";
 _slmediaoptions1="Opciones para ";
 _slmediaoptions2=" son ";
-_slchangemedia="¿Cambiar opciones?"
+_slchangemedia="Â¿Cambiar opciones?"
 _slsupportedmedia1="Posibles opciones para";
 _slsupportedmedia2="son:"
 _slaskmediaoptions="Opciones para"
-_slipv41="Dirección IPv4 para"
+_slipv41="DirecciÃ³n IPv4 para"
 _slornone="o '$_slnone'"
 _sldhcpnot="Sin DHCP - falta /sbin/dhclient."
-_slnetmask="Máscara de red para "
-_slipv61="Dirección IPv6 para"
+_slnetmask="Mascara de red para "
+_slipv61="DirecciÃ³n IPv6 para"
+_slipv6address="DirecciÃ³n IPv6"
 _slipv6prefix="Long. de prefijo IPv6 para";
-_slipv4route="¿Ruta IPv4 por defecto?"
-_slipv6route="¿Enrutador IPv6 por defecto?"
-_slinvalidnetfile="configuración de red invalida"
+_slipv4route="Â¿Ruta IPv4 por defecto?"
+_slipv6route="Â¿Enrutador IPv6 por defecto?"
+_slinvalidnetfile="configuraciÃ³n de red invalida"
 _slnetintconf="Configurar interfaz de red:"
 _slresolverenabled="Resolvedor habilitado."
 _slresolvernotenabled="Resolvedor deshabilitado."
 _slnosets="No hay componentes en"
 _slsetnames="Juegos "
-_slasksetname="¿Nombre del componente? (o '$_sldone')"
-_slarchnotfound="INSTALL.\$ARCH no encontrado. ¿Usar componentes?"
-_slreadysets1="¿Listo(a) para"
+_slasksetname="Â¿Nombre(s) de componente(s)?"
+_slarchnotfound="INSTALL.\$ARCH no encontrado. Â¿Usar componentes?"
+_slreadysets1="Â¿Listo(a) para"
 _slreadysets2="?"
 _slgetting="Procesando";
-_slnotinstall="no instaló correctamente.";
-_slproxy="¿Proxy HTTP? (e.g. 'http://proxy:8080', o '$_slnone')";
+_slnotinstall="no instalÃ³ correctamente.";
+_slproxy="Â¿Proxy HTTP? (e.g. 'http://proxy:8080', o '$_slnone')";
 _sllist="Mostrar servidores";
 _sllist2="conocidos";
 _slgettinglist="Tomando de 129.128.5.191 (ftp.openbsd.org)...";
 _slserver="Servidor? (IP, nombre, # en lista, '$_sldone' o '?')";
-_slfailed="FALLÓ";
-_slserver2="¿Servidor? (IP, nombre o '$_sldone')";
-_slnoline="No hay línea";
+_slfailed="FALLÃ“";
+_slserver2="Â¿Servidor? (IP, nombre o '$_sldone')";
+_slnoline="No hay lÃ­nea";
 _slusing="Usando";
-_slpassivesupport="¿Soporta ftp pasivo?"
+_slpassivesupport="Â¿Soporta ftp pasivo?"
 _slserverdirectory="Directorio"
-_sllogin="¿Usuario?"
-_slpassftp="¿Contraseña? (no se mostrará)"
-_slloginfailed="Falló el ingreso."
+_sllogin="Â¿Usuario?"
+_slpassftp="Â¿ContraseÃ±a? (no se mostrara)"
+_slloginfailed="FallÃ³ el ingreso."
 _slnosuchfile="No hay tal archivo."
-_slpathname="¿Ruta a componentes? (o '$_sldone')"
+_slpathname="Â¿Ruta a componentes? (o '$_sldone')"
 _sldir1="El directorio";
 _slnotexist="no existe"
-_slpartitionmounted="¿Partición ya montada?"
-_slserverip="¿IP del servidor o nombre?"
-_slserverdir="¿Sist. de arch. por montar?"
-_sltcptransport="¿Transporte TCP? (requiere servidor NFS capaz)"
+_slpartitionmounted="Â¿ParticiÃ³n ya montada?"
+_slserverip="Â¿IP del servidor o nombre?"
+_slserverdir="Â¿Sist. de arch. por montar?"
+_sltcptransport="Â¿Transporte TCP? (requiere servidor NFS capaz)"
 _sltapedrive="unidad de cinta";
 _sltapechar="no es archivo de caracteres."
 _slrewind1="Devolviendo";
 _slrewind2="(mt devuelto)..."
-_slskip="¿Saltar cuantos? (o '$_sldone')"
+_slskip="Â¿Saltar cuantos? (o '$_sldone')"
 _slskipping="Saltando"
 _slfiles="archivo(s)"
-_slgzipped="¿Comprimido con gzip?"
-_slblocksize="¿Tamaño de bloque?"
-_sltimezone="¿Zona horaria? ('?' muestra lista)"
-_slsubtimezone1="¿En que sub-zona de"
-_slsubtimezone2="está? ('?' muestra lista)"
+_slgzipped="Â¿Comprimido con gzip?"
+_slblocksize="Â¿TamaÃ±o de bloque?"
+_sltimezone="Â¿Zona horaria? ('?' muestra lista)"
+_slsubtimezone1="Â¿En que sub-zona de"
+_slsubtimezone2="esta? ('?' muestra lista)"
 _slsettinglocal="Estableciendo zona "
-_slnotvalidzone="no es zona válida"
-_slnotinstalled="no fue instalado.\n*SEGURO* se completó el proceso sin"
-_sllets="\n¡Por \$_SMODE componentes básicos!"
-_sllocsets="¿Localización"
+_slnotvalidzone="no es zona valida"
+_slnotinstalled="no fue instalado.\n*SEGURO* se completÃ³ el proceso sin"
+_sllets="\nÂ¡Por \$_SMODE componentes basicos!"
+_sllocsets="Â¿LocalizaciÃ³n"
 _slor="o"
 _slnotfstab="No se pudo crear /etc/fstab valido."
-_slforcenr="¿Chequear otras subparticiones limpias?"
-_slfailedfsck="FALLÓ. Ejecute fsck"
+_slforcenr="Â¿Chequear otras subparticiones limpias?"
+_slfailedfsck="FALLÃ“. Ejecute fsck"
 _slmanually=""
 _slok="Listo."
-_sldomain="¿Dominio DNS? (e.g. 'bar.com')"
-_sldnsserver="¿Servidor DNS? (IP o '$_slnone')"
-_slusedns="¿Usar servidor DNS?"
-_slstartsshd="¿Iniciar sshd(8) por defecto?"
-_slstartntpd="¿Iniciar ntpd(8) por defecto?"
-_slntpstartntpd="¿Iniciar ntpd(8) por defecto?" 
-_slntpserver="¿Servidor NTP? (nombre o '$_sldefault')"
-_slexpectX="¿Usará X Window?"
-_slchangeconsole="¿Cambiar consola a";
+_sldomain="Â¿Dominio DNS? (e.g. 'ejemplo.com')"
+_sldnsserver="Â¿Servidor DNS? (IP o '$_slnone')"
+_slusedns="Â¿Usar servidor DNS?"
+_slstartsshd="Â¿Iniciar sshd(8) por defecto?"
+_slstartntpd="Â¿Iniciar ntpd(8) por defecto?"
+_slntpstartntpd="Â¿Iniciar ntpd(8) por defecto?" 
+_slntpserver="Â¿Servidor NTP? (nombre o '$_sldefault')"
+_slexpectX="Â¿Usara X Window?"
+_slchangeconsole="Â¿Cambiar consola a";
 _slspeed="velocidad"
-_slshould="debería"
+_slshould="deberÃ­a"
 _slmaking="Creando nodos de dispositivos ..."
-_slcongratulations="¡FELICITACIONES! ¡Procedimiento completado!
-'halt' en la línea de comandos, espere y arranque desde el disco duro."
-_slinitialize="Inicializará el disco para OpenBSD. Se sugiere que
+_sltobootthenew="Para reiniciar el nuevo sistema, teclee 'reboot' en la lÃ­nea de ordenes."
+_slcongratulations="Â¡FELICITACIONES! Â¡Procedimiento completado!"
+_slinitialize="Inicializara el disco para OpenBSD. Se sugiere que
 configure subparticiones para /, /tmp, /var, /usr y /home.";
 _sldisk="disco";
 _slavailabledisks="Los discos disponibles son"
-_slwhichroot="¿Cúal es el disco raíz? ('?' muestra detalles)"
+_slwhichroot="Â¿CÃºal es el disco raÃ­z? ('?' muestra detalles)"
 _slnosuchdisk="no hay tal disco"
 _slDisks="Discos";
-_slnomoredisks="No hay más discos por inicializar"
-_slerrornoroot="ERROR: No hay partición raíz"
+_slnomoredisks="No hay mas discos por inicializar"
+_slerrornoroot="ERROR: No hay particiÃ³n raÃ­z"
 _sluse="usar"
 _slusec="Usar"
-_slrootpassword="Debe establecer una contraseña para root."
-_slsecurityprotocol="¿Protocolo de Seguridad? (A)bierto, (W)EP, W(P)A"
-_slaccesspoint="¿Punto de Acceso Inalámbrico? (ESSID, 'cualquiera', #lista o '?'
+_slrootpassword="Debe establecer una contraseÃ±a para root."
+_slsecurityprotocol="Â¿Protocolo de Seguridad? (A)bierto, (W)EP, W(P)A"
+_slaccesspoint="Â¿Punto de Acceso Inalambrico? (ESSID, 'cualquiera', #lista o '?'
 )"
 _slany="cualquiera"
-_slthereisnoline="No hay línea"
-_slwepkey="¿Llave WEP? (no se verá)"
-_slwpapassphrase="¿Palabra secreta WPA? (se verá)"
-_slisnotvalidchoice="no es una opción válida."
-_slinvalidnetworkconfiguration="archivo de configuración de red inválido"
+_slthereisnoline="No hay lÃ­nea"
+_slwepkey="Â¿Llave WEP? (no se vera)"
+_slwpapassphrase="Â¿Palabra secreta WPA? (se vera)"
+_slisnotvalidchoice="no es una opciÃ³n valida."
+_slinvalidnetworkconfiguration="archivo de configuraciÃ³n de red invalido"
 _slandfoundnoobsdsets="y no se encontraron juegos de \$OBSD. Los juegos buscados eran"
 
 
 
 _slmountpointfor1="Punto de montaje para"
-_slsize="tamaño"
+_slsize="tamaÃ±o"
 _slmountpointfor2="o '$_slnone' o '$_sldone'"
 _slinvalidresponse="Respuesta invalida"
-_slalreadymounted="ya está montado en"
-_slabsolutepath="¡Punto de montaje debe ser ruta absoluta!"
+_slalreadymounted="ya esta montado en"
+_slabsolutepath="Â¡Punto de montaje debe ser ruta absoluta!"
 _slopenbsdfilesystems="Sistemas de archivos OpenBSD"
-_sldestroys="¡El siguiente paso *DESTRUIRÁ* los datos en estas particiones!"
-_slsureproceed="¿Procede?"
-_sltrylater="Bien, intente después."
-_slhostname="¿Nombre de la máquina? (forma corta, e.g. 'foo')"
-_slconfigurenet="¿Configurar red?"
-_slpassroot="¿Clave para root?"
-_slnotecho="no se mostrará"
+_sldestroys="Â¡El siguiente paso *DESTRUIRÃ* los datos en estas particiones!"
+_slsureproceed="Â¿Procede?"
+_sltrylater="Bien, intente despuÃ©s."
+_slhostname="Â¿Nombre de la maquina? (forma corta, e.g. 'foo')"
+_slconfigurenet="Â¿Configurar red?"
+_slpassroot="Â¿Clave para root?"
+_slnotecho="no se mostrara"
 _slagain="nuevamente"
-_slpublicsshkeyuser="Llave ssh pública para el usuario"
+_slpublicsshkeyuser="Llave ssh pÃºblica para el usuario"
 _slnotmatch="No coinciden, reintente."
-_slsaving="Guardando configuración..."
+_slsaving="Guardando configuraciÃ³n..."
 _slgeneratingrandom="Generando host.random ..."
 _sltimeappears="La hora parece errada. Establecerla como"
 
 # install.md
 _slinstallingboot="Instalando bloque de arranque..."
-_sluseall="¿Usar todo"
+_sluseall="Â¿Usar todo"
 _sluseall2="para OpenBSD?"
 _slputtingall="Estableciendo todo"
-_slputtingall2="como partición OpenBSD en el RMA (tipo 'A6')..."
-_slmbr="Creará sólo una partición en el RMA que contendrá los datos de OpenBSD
-Esta partición debe tener identificación 'A6'; *NO* debe traslaparse sobre
-otras particiones; y debe estar marcada como la única partición activa.
+_slputtingall2="como particiÃ³n OpenBSD en el RMA (tipo 'A6')..."
+_slmbr="Creara sÃ³lo una particiÃ³n en el RMA que contendra los datos de OpenBSD
+Esta particiÃ³n debe tener identificaciÃ³n 'A6'; *NO* debe traslaparse sobre
+otras particiones; y debe estar marcada como la Ãºnica particiÃ³n activa.
 
 El comando 'manual' describe en detalle los comandos."
 
-_slpartinfo="Información de particiones:"
+_slpartinfo="InformaciÃ³n de particiones:"
 
-_slcreatedisklabel="Ahora cree etiquetas de discos OpenBSD dentro de la partición de OpenBSD
-en el Registro Maestro de Arranque (RMA).  Las etiquetas definen como dividirá
-la partición del RMA en particiones de OpenBSD en las que se crean las
+_slcreatedisklabel="Ahora cree etiquetas de discos OpenBSD dentro de la particiÃ³n de OpenBSD
+en el Registro Maestro de Arranque (RMA).  Las etiquetas definen como dividira
+la particiÃ³n del RMA en particiones de OpenBSD en las que se crean las
 subparticiones y espacio de intercambio.
 
 Los desplazamientos usados en las etiquetas son ABSOLUTOS, i.e. relativos al
-comienzo del disco, NO al comienzo de la partición en el RMA de OpenBSD."
+comienzo del disco, NO al comienzo de la particiÃ³n en el RMA de OpenBSD."
 _slwarninglabelcorrupted="ADVERTENCIA: Etiqueta del disco"
-_slwarninglabelcorrupted2="dañada. Repararla."
+_slwarninglabelcorrupted2="daÃ±ada. Repararla."
 # upgrade.sh
-_slrootfilesystem="¿Subpartición raiz?"
+_slrootfilesystem="Â¿SubparticiÃ³n raiz?"
 _slsorrynotblock=""
 _slsorrynotblock2="no es dispositivo por bloques."
-_slcheckingroot="Revisando subpartición raíz"
+_slcheckingroot="Revisando subparticiÃ³n raÃ­z"
 _slfsckmanually="Ejecutar fsck"
 _slfsckmanually2="manualmente."
-_slmountingroot="Montando subpartición raiz..."
-_slerrorcantmount="ERROR: ¡no puede montar subpartición raíz!"
+_slmountingroot="Montando subparticiÃ³n raiz..."
+_slerrorcantmount="ERROR: Â¡no puede montar subparticiÃ³n raÃ­z!"
 _slerrorno="ERROR: sin"
-_slenablenet="¿Activar red usando configuración de la subpartición raíz?"
-_slfstabas="fstab está configurado así:"
-_slfstabnoauto="Al \$_SMODE, se montarán subparticioens de fstab sin 'noauto'.
-Las que no sean ffs se montarán como sólo lectura.
+_slenablenet="Â¿Activar red usando configuraciÃ³n de la subparticiÃ³n raÃ­z?"
+_slfstabas="fstab esta configurado asÃ­:"
+_slfstabnoauto="Al \$_SMODE, se montaran subparticioens de fstab sin 'noauto'.
+Las que no sean ffs se montaran como sÃ³lo lectura.
 
 Puede editar temporalmente el archivo /etc/fstab."
-_slerrorunmount="ERROR: ¡no puede desmontar la raíz!"
+_slerrorunmount="ERROR: Â¡no puede desmontar la raÃ­z!"
 
 # 4.6
 
 _slmustbeconfigured="debe ser configurado"
 _sland="y"
 _slcantbothbemountedat="no puede montarse en"
-_slchooseyourkeyboardlayout="Elija distribución de teclado ('?' o 'L' para ver lista)"
+_slchooseyourkeyboardlayout="Elija distribuciÃ³n de teclado ('?' o 'L' para ver lista)"
 _slavailablelayouts="Distribuciones disponibles"
 _slpasswordfor="Clave para la cuenta "
-_slpasswordforroot="¿Clave para la cuenta root?"
-_slpublicsshkey="¿Llave ssh pública para la cuenta root?"
+_slpasswordforroot="Â¿Clave para la cuenta root?"
+_slpublicsshkey="Â¿Llave ssh pÃºblica para la cuenta root?"
 _slaccount=""
-_slwillnotecho="no se verá"
+_slwillnotecho="no se vera"
 _slagain="nuevamente"
-_slsetupauser="¿Crear cuenta de usuario? (nombre de cuenta en minúscula o 'no')"
-_slnoreally="No, de verdad, ¿cúal es el nombre de cuenta en minúscula o 'no'?"
+_slsetupauser="Â¿Crear cuenta de usuario? (nombre de cuenta en minÃºscula o 'no')"
+_slnoreally="No, de verdad, Â¿cÃºal es el nombre de cuenta en minÃºscula o 'no'?"
 _slisnotauseable="no es nombre de cuenta utilizable"
 _slfullusername="Nombre completo para usuario "
 _slarenotallowed="no son permitidos"
 _sltoolong="Muy largo"
-_slsinceyousetupauser="Como creó una cuenta de usuario, deshabilitar ingresos por sshd(8) a root?" 
+_slsinceyousetupauser="Como creÃ³ una cuenta de usuario, deshabilitar ingresos por sshd(8) a root?" 
 _slavailable="Disponible"
 _slare="son"
 _slwichone="Cual"
@@ -268,30 +273,32 @@ _slsetnames2="Nombre(s) de juego(s)"
 _slabort="cancelar"
 _slnetworkinterface="interfaz de red"
 _sldoyouwishtoconfigure="desea configurar"
-_slwhichinterfacetag="¿Sobre que interface:tag debe estar \$_if?"
-_slinvalidinterfacechoice="Elección de interfaz invalida";
-_slinvalidorinusevlantag="Tag invalido o en uso";
-_sldhclientmissing="Falta /sbin/dhclient - saltando petición dhcp."
-_sllookedat="Se buscó"
+_slwhichinterfacetag="Â¿Sobre que interface:etiquetavlan debe estar \$_if?"
+_slinvalidparentinterfacechoice="ElecciÃ³n de interfaz papa invalida";
+_slvlantagused="etiqueta vlan '\$_vi' ya esta en uso por parte de papa '\$_vd'"
+_slinvalidvlan="etiqueta vlan invalida"
+
+_sldhclientmissing="Falta /sbin/dhclient - saltando peticiÃ³n dhcp."
+_sllookedat="Se buscÃ³"
 _slandfoundno="y no se encontraron juegos de \$OBSD.  Los nombres de juegos buscados fueron:"
 _slthesha256="El condensado SHA256"
 _slforfdidnotmatch="para \$_f no corresponde a lo que este bsd.rd esperaba."
-_slwasnotable="No pudo obtener lista ftp de ftp.openbsd.org, pero está bien"
-_slserver3="¿Servidor HTTP? (nombre, # en lista, 'listo' or '?')";
-_slserver4="¿Servidor HTTP? (nombre o 'listo')";
-_slisnotavalidhostname="no es nombre de máquina valido"
+_slwasnotable="No pudo obtener lista ftp de ftp.openbsd.org, pero esta bien"
+_slserver3="Â¿Servidor HTTP? (nombre, # en lista, 'listo' or '?')";
+_slserver4="Â¿Servidor HTTP? (nombre o 'listo')";
+_slisnotavalidhostname="no es nombre de maquina valido"
 _slnotpropmounted="!ADVERTENCIA! Los siguientes sistemas de archivos no pudieron montarse apropiadamente"
-_slcontinue="¿Continuar en todo caso?"
+_slcontinue="Â¿Continuar en todo caso?"
 _slusingdns="Usando nombre de dominio DNS"
 _slusingdnsname="Usando servidores de nombres DNS en"
 
 _slenabled="habilitado"
 _sldisabled="deshabilitado"
-_slduringinstall="durante instalación" 
-_slxdm="¿Desea que el sistema X Window sea iniciado por xdm(1)?"
+_slduringinstall="durante instalaciÃ³n" 
+_slxenodm="Â¿Desea que el sistema X Window sea iniciado por xenodm(1)?"
 
-_slcongrat2="FELICITACIONES! El proceso para \$_SMODE ha sido completado con éxito!
- Para iniciar el nuevo sistema, ingrese 'reboot' en la línea de comandos."
+_slcongrat2="FELICITACIONES! El proceso para \$_SMODE ha sido completado con Ã©xito!
+ Para iniciar el nuevo sistema, ingrese 'reboot' en la lÃ­nea de comandos."
 
 _slnewmail="Cuando ingrese por primera vez, por favor lea correo usando 
 el comando 'mail'."
@@ -299,10 +306,10 @@ _slatanyprompt="En cualquier pregunta, excepto claves puede escapar al interpret
 tecleando '!'. Las respuestas por defecto se presentan entre [] y se seleccionan
 presionando RETORNO.  Puede salir de este programa presionando
 Control-C, pero esto puede dejar su sistema en un estado inconsistente."
-_slbackedup="ESTÁN RESPALDADOS SUS DATOS? Como con todo lo que modifica el contenido del     disco, este programa puede causar perdida de datos SIGNIFICATIVA.";
+_slbackedup="ESTÃN RESPALDADOS SUS DATOS? Como con todo lo que modifica el contenido del     disco, este programa puede causar perdida de datos SIGNIFICATIVA.";
 
 _slnodiskfound="No se encontraron discos"
-_slmulti="Máquina multiprocesador; usando bsd.mp en lugar de bsd."
+_slmulti="Maquina multiprocesador; usando bsd.mp en lugar de bsd."
 
 _slmbrhasinvalid="El RMA (Registro maestro de arranque MBR) tiene firma invalida; no se muestra."
 _slwhole="todo"
@@ -310,20 +317,21 @@ _sledit="editar"
 _slw=t
 _slW=T
 
-_slsettingopenbsd="Estableciendo partición de OpenBSD en RMA como el disco \$_disk completo..."
-_slyouwillnowcreate="Ahora creará una sola partición en el RMA que con todos sus datos de OpenBSD
-Esta partición debe tener identificación 'A6'; *NO* debe traslaparse con otras
-particiones y debe marcarse como la única partición activa.  En el programa
+_slsettingopenbsd="Estableciendo particiÃ³n de OpenBSD en RMA como el disco \$_disk completo..."
+_slyouwillnowcreate="Ahora creara una sola particiÃ³n en el RMA que con todos sus datos de OpenBSD
+Esta particiÃ³n debe tener identificaciÃ³n 'A6'; *NO* debe traslaparse con otras
+particiones y debe marcarse como la Ãºnica particiÃ³n activa.  En el programa
 fdisk, el comando 'manual' describe todos los comandos de fdisk en detalle."
-_slautoallocated="La distribución autolocalizada para \$_disk es:"
-_sluseautolayout="Usar distribución (A)utolocalizada, (E)ditarla, o (C)rear una distribución?" 
-_slnowdisklabel="Ahora creará subparticiones para OpenBSD en la partición del RMA para OpenBSD.
-Las subparticiones definen como se divide la partición RMA en 
-espacios donde se crearán los sistemas de archivo y el area de intercambio.
+_slautoallocated="La distribuciÃ³n autolocalizada para \$_disk es:"
+_sluseautolayout="Usar distribuciÃ³n (A)utolocalizada, (E)ditarla, o (C)rear una distribuciÃ³n?" 
+_slcantbemountedat="No pueden montarse \$_pp y \$1 en \$_mp."
+_slnowdisklabel="Ahora creara subparticiones para OpenBSD en la particiÃ³n del RMA para OpenBSD.
+Las subparticiones definen como se divide la particiÃ³n RMA en 
+espacios donde se crearan los sistemas de archivo y el area de intercambio.
 En este programa debe proveer para cada sistema de archivo un punto de montaje.
 
 Los desplazamientos usados para las subparticiones son ABSOLUTAS, i.e relativas
-al comienzo del disco, NO al comienzo de la partición para OpenBSD el RMA.";
+al comienzo del disco, NO al comienzo de la particiÃ³n para OpenBSD el RMA.";
 
 _slwhichone="Cual"
 _slwhich="Cual"
@@ -340,66 +348,85 @@ _slUpdate="Actualizar"
 _slnonfreefirmware="archivos de firmware no-libre en primer arranque?" 
 
 #5.5
-_slfailedcheckai="falló; revisar /ai.log"
-_slperformingnoninteractive="Realizando acción no-interactiva:"
-_slnoresponsefile="No se encontró archivo de respuesta; saliendo de modo no-interactivo."
-_slnotautomode="No pudo determinarse modo automático."
+_slfailedcheckai="fallÃ³; revisar /ai.log"
+_slperformingnoninteractive="Realizando acciÃ³n no-interactiva:"
+_slnoresponsefile="No se encontrÃ³ archivo de respuesta; saliendo de modo no-interactivo."
+_slnotautoserver="No pudo determinarse servidor automatico."
+_slnotautomode="No pudo determinarse modo automatico."
 _slnotnextserver="No pudo determinarse servidor siguente."
-_slshouldbeuseddhcp="debería usarse para la petición inicial de DHCP"
-_slafterrebootingsysmerge="Tras reiniciar, ejecute sysmerge(8) para actualizar configuración de su sistema."
-_slhttpftpproxy="¿URL del proxy HTTP/FTP?"
-_slfailedl="falló"
-_slinstallationof="La instalación de "
-_slcontinuenoverif="¿Continuar sin verificación?"
-_slchecksumtest="Suma de verificación de"
+_slshouldbeuseddhcp="deberÃ­a usarse para la peticiÃ³n inicial de DHCP"
+_slafterrebootingsysmerge="Tras reiniciar, ejecute sysmerge(8) para actualizar configuraciÃ³n de su sistema."
+_slhttpftpproxy="Â¿URL del proxy HTTP/FTP?"
+_slfailedl="fallÃ³"
+_slinstallationof="La instalaciÃ³n de "
+_slcontinuenoverif="Â¿Continuar sin verificaciÃ³n?"
+_slchecksumtest="Suma de verificaciÃ³n de"
 _slfetchingof="Descarga de"
-_slsignaturecheck="Revisión de firma de"
+_slsignaturecheck="RevisiÃ³n de firma de"
 _slcannotfetch="No se pudo descargar"
-_slcanotdetermine="No se pudo determinar área de descarga"
-_slcannotcreate="No se pudo crear área de descarga"
+_slcanotdetermine="No se pudo determinar area de descarga"
+_slcannotcreate="No se pudo crear area de descarga"
+_slverifying="Verificando"
 _sldirectorydoesnot="El directorio no contiene"
 _slaresponseisrequired="Se requiere una respuesta."
-_slisnotvalidchoice="no es opción válida."
+_slisnotvalidchoice="no es opciÃ³n valida."
 _slquestionhasnoanswer="La pregunta no tiene repuesta en el archivo de respuestas."
 _slusage="uso"
 _sluser="usuario"
 _slthexbasesetrequires="El juego xbase requiere el juego comp, agregandolo de nuevo."
-_slresponsefileloc="Localización del archivo de respuestas?"
-_slfetching="Recibiendo"
+_slresponsefileloc="LocalizaciÃ³n del archivo de respuestas?"
+_slfetching="Descargando"
 _slnoinet6="Sin soporte INET6"
+_slinet6autoconffailed="fallo autoconfiguraciÃ³n inet6"
 _slskippingrtsol="saltando requerimiento rtsol."
 
 
-_slopenbsdarea="área de (O)penBSD,"
-_slusewhole="¿Usar (T)odo el disco MBR, todo el disco (G)PT"
-_slnoopenbsdpartition="No hay partición para OpenBSD en el RMA, intente de nuevo." 
+_slopenbsdarea="area de (O)penBSD,"
+_slusewhole="Â¿Usar (T)odo el disco MBR, todo el disco (G)PT"
+_slnoopenbsdpartition="No hay particiÃ³n para OpenBSD en el RMA, intente de nuevo." 
 
 
 _slallowrootssh="Permitie ingreso de root por ssh? (si, no, prohibir-clave)"
 _slprohibitpassword="prohibir-clave"
-_slroottargeted="ADVERTENCIA: la cuenta root es blanco de ataques de fuerza bruta, las llaves públicas son más seguras." 
-_slnousersetup="Como no se configuraron usuarios, los ingresos a root mediante sshd(8) pueden ser útiles."
-_slnoautopartitioning="No se encontró plantilla de autoparticionado."
-_slautopartitioningfailed="Autoparticionado falló"
+_slroottargeted="ADVERTENCIA: la cuenta root es blanco de ataques de fuerza bruta, las llaves pÃºblicas son mas seguras." 
+_slnousersetup="Como no se configuraron usuarios, los ingresos a root mediante sshd(8) pueden ser Ãºtiles."
+_slnoautopartitioning="No se encontrÃ³ plantilla de autoparticionado."
+_slhttpsnotsupported="Esta plataforma no soporta https"
+_slautopartitioningfailed="Autoparticionado fallÃ³"
 _slurltoautopartitioning="URL de la plantilla de autoparticionado para disklabel?"
-_slanefigpt="Un disco EFI/GPT podría no arrancar. ¿Proceder?"
-_slsettingopenbsdgpt="Estableceendo la partición OpenBSD GPT para el disco completo"
-_slyouwillnowreatetwogpt="Ahora creará dos particiones GPT. La primera debe tener una identificación
+_slanefigpt="Un disco EFI/GPT podrÃ­a no arrancar. Â¿Proceder?"
+_slsettingopenbsdgpt="Estableceendo la particiÃ³n OpenBSD GPT para el disco completo"
+_slyouwillnowreatetwogpt="Ahora creara dos particiones GPT. La primera debe tener una identificaciÃ³n
 'EF' y ser suficientemente grande para los programas de arranque de OpenBSD,
-al menos 960 bloques. La segunda debe tener identificación 'A6' y
-contendrá sus datos de OpenBSD. Una partición no puede traslaparse con la otra.
+al menos 960 bloques. La segunda debe tener identificaciÃ³n 'A6' y
+contendra sus datos de OpenBSD. Una particiÃ³n no puede traslaparse con la otra.
 Dentro del comando fdisk , el comando 'manual' describe los comandos
 de fdisk en detalle."
-_slnoopenbsdpartitioningpt="No hay partición OpenBSD en GPT,"
-_slnoefisyspartitioningpt="No hay partición EFI Sys en GPT,"
-_slnoopenbsdpartitioninmbr="No hay partición OpenBSD en el RMA (MBR),"
+_slnoopenbsdpartitioningpt="No hay particiÃ³n OpenBSD en GPT,"
+_slnoefisyspartitioningpt="No hay particiÃ³n EFI Sys en GPT,"
+_slnoopenbsdpartitioninmbr="No hay particiÃ³n OpenBSD en el RMA (MBR),"
 _sltryagain="intente nuevamente." 
-_slnoefitryagain="No hay partición EFI Sys en GPT, intente nuevament."
-_slnovalidmbrorgpt="No hay un RAM o un GPT válido."
+_slnoefitryagain="No hay particiÃ³n EFI Sys en GPT, intente nuevament."
+_slnovalidmbrorgpt="No hay un RAM o un GPT valido."
 _slpepdit="(E)ditar"
 _sln="n"
 _slinstallp="(I)nstalar"
 _slupgradep="(A)ctualizar"
 _slinsl="iI"
 _slupl="aA"
-
+_slprocessessstil="Procesos aun corriendo para el usuario \$_user tras: \$@"
+_sllookedat="Observando "
+_slexittoshell="Salir al interprete de (O)rdenes, (A)pagar or (R)einiciar?"
+_slshelll="oO"
+_slrebootl="rR"
+_slreboot="reiniciar"
+_slhaltl="aA"
+_slinvalidhostname="Nombre de computador no valido."
+_slrelinkingtocreate="Re-encadenando para crear un kernel Ãºnico..."
+_slcheckingforavailable="BÃºscando parches binarios disponsibles..."
+_slrunsyspatch="Ejecute syspatch(8) para instalar:"
+_slnotvalidroot="no es disco raiz valido."
+_slunabletoconnect="No pudo conectarse usando https. En lugar de esto usar http?" 
+_slunabletogetaverified="No pudo obtenerse una lista verificada de juegos de instalaciÃ³n."
+_slinstalling="Instalando"
+_slextracting="Extrayendo"

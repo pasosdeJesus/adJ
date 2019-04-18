@@ -11,7 +11,7 @@ if (test "$u" != "root") then {
 	exit 1;
 } fi;
 VCORSP=`echo $VCOR | sed -e "s/\.//g"`
-VSP=63
+VSP=64
 
 if (test -f "ver.sh") then {
 	. ./ver.sh
@@ -103,6 +103,8 @@ read
 rm /obsd ; ln /bsd /obsd 
 cp $nk /nbsd 
 mv /nbsd /bsd
+# Habilita KARL
+sha256 -h /var/db/kernel.SHA256 /bsd
 cp $rutak/bsd /bsd.sp
 cp $rutak/bsd.rd $rutak/bsd.mp /
 

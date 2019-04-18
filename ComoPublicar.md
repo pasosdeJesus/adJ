@@ -29,7 +29,7 @@ Pasos importantes para publicar versión beta
    útiles en 6.4-amd64-extra
 5. Cambiar versión en ver.sh, arboldd/usr/local/adJ/inst-adJ.sh, Actualiza.md,
 	ComoPublicar.md, {$V-amd64,arboldvd}/util/preact-adJ.sh, Novedades.md,
-	{$V-amd64,arboldvd}/util/actbase.sh, 
+	Novedades_OpenBSD.md, {$V-amd64,arboldvd}/util/actbase.sh, 
 6. Retocar ```Dedicatoria.md``` y archivos *.md (por lo menos versión),
    regenerar en distribución (sin paquetes ni otras compilaciones) con:
 	```
@@ -77,7 +77,7 @@ setlocale(LC_NUMERIC, "es_CO.UTF-8") or die "No pone locale LC_NUMERIC en es_CO.
 my $a = 1987.23;
 printf "%g\n", $a;
 ```
-- Con paquete colorls modificado y actualizad, verificar cotejacion en español:
+- Con paquete colorls modificado y actualizado, verificar cotejacion en español:
   touch a
   touch í
   touch o
@@ -100,9 +100,9 @@ psql -h /var/www/var/run/postgresql/ -Upostgres -f /tmp/cot.sql
 (1 row)
 ```
 - ejecución de /inst-adJ.sh en nuevo y actualización, 
-- ejecución de /usr/local/adJ/inst-sivel.sh, que opere SIVeL1.2,
-- que toda entrada del menú desde la interfaz gráfica opere.  
 - que opere bien una aplicación Ruby on Rails
+- que toda entrada del menú desde la interfaz gráfica opere.  
+- ejecución de /usr/local/adJ/inst-sivel.sh, que opere SIVeL1.2,
   Arreglar y repetir hasta que no haya errores.
 10. En computador de desarrollo tras configurar ```var-local.sh``` enviar a
    adJ.pasosdeJesus.org:
@@ -126,8 +126,8 @@ psql -h /var/www/var/run/postgresql/ -Upostgres -f /tmp/cot.sql
 
 13. Poner Tag en github e iniciar rama al publicar version beta (antes en master)
 	```
-	git tag -a v6.4a1 -m "Version 6.4b1"
-	git push origin v6.4b1
+	git tag -a v6.4a1 -m "Version 6.4a1"
+	git push origin v6.4a1
 	...
 	git checkout -b ADJ_6_4
 	git push origin ADJ_6_4
@@ -154,7 +154,7 @@ Pasos importantes para publicar versión mayor
 	git tag -a v6.4 -m "Version 6.4"
 	git push origin v6.4
 	```
-9. Publicar en Twitter que retrasnmite a cuenta y página en Facebook. 
+9. Publicar en Twitter y Facebook. 
    Si es tambien publicacion de SIVeL en sitio de noticias de SIVeL y Structio.
 
 	Publicado adJ 6.4 distribución para servidores y cortafuegos, 

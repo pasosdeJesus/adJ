@@ -68,7 +68,6 @@ WANTLIB += xml2 z
 WANTLIB += uuid
 
 RUN_DEPENDS=	devel/xdg-utils \
-		devel/fribidi \
 		devel/desktop-file-utils \
 		fonts/noto/fonts \
 		graphics/libexif \
@@ -157,7 +156,6 @@ GN_ARGS+=	google_api_key=\"AIzaSyC_3Uz69YR1Z2DRLUDf5ZxUJBClHuwrjL\" \
 		google_default_client_secret=\"7ApGgPs3F_mRnRgDt6A80C0\" \
 		ffmpeg_branding=\"Chrome\" \
 		proprietary_codecs=true
-
 
 .if ${FLAVOR:Mdebug}
 GN_ARGS+=	remove_webcore_debug_symbols=true

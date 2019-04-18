@@ -5,7 +5,7 @@
 
 VER=6.4
 REV=0
-VESP="a1"
+VESP="p1"
 VERP=64
 
 # Falta /standard/root.hint
@@ -255,11 +255,11 @@ if (test "$?" = "0") then {
 echo "Sistemas de archivos de CDROM en /etc/fstab" >> /var/www/tmp/inst-adJ.bitacora
 grep "/mnt/cdrom" /etc/fstab > /dev/null
 if (test "$?" != "0") then {
-echo "/dev/cd0a /mnt/cdrom cd9660 noauto,ro 0 0" >> /etc/fstab
-mkdir -p /mnt/cdrom
+	echo "/dev/cd0a /mnt/cdrom cd9660 noauto,ro 0 0" >> /etc/fstab
 } else {
-echo "   Saltando cd0a..." >> /var/www/tmp/inst-adJ.bitacora;
+	echo "   Saltando cd0a..." >> /var/www/tmp/inst-adJ.bitacora;
 } fi;
+mkdir -p /mnt/cdrom
 chown $uadJ:$uadJ /mnt/cdrom
 
 chmod g+rw /dev/sd?i /dev/sd?c /dev/cd?c /dev/cd?a
@@ -499,11 +499,11 @@ EOF
 	} fi;
 } fi;
 
-userinfo _rtadvd >/dev/null
+userinfo _ypldap >/dev/null
 if (test "$?" != "0") then {
 	vac="$vac 4.3 a 4.4";	
 	echo "Aplicando actualizaciones de 4.3 a 4.4" >> /var/www/tmp/inst-adJ.bitacora;
-	useradd -u92 -g=uid -c"IPv6 Router Advertisement Service" -d/var/empty -s/sbin/nologin _rtadvd
+	#useradd -u92 -g=uid -c"IPv6 Router Advertisement Service" -d/var/empty -s/sbin/nologin _rtadvd 
 	useradd -u93 -g=uid -c"YP to LDAP Service" -d/var/empty -s/sbin/nologin _ypldap
 	rm -f /etc/dhcpd.interfaces
 
@@ -1145,7 +1145,22 @@ if (test -d /var/db/pkg/ispell-spanish-*) then {
 	echo "Aplicando actualizaciones de 6.1 a 6.2 " >> /var/www/tmp/inst-adJ.bitacora;
         pkg_delete -D dependencies ispell
 } fi;
-	
+
+if (test -f /etc/rc.d/rtadvd) then {
+	vac="$vac 6.3 a 6.4";	
+	echo "Aplicando actualizaciones de 6.3 a 6.4" >> /var/www/tmp/inst-adJ.bitacora;
+
+	rm /dev/audio /dev/audioctl
+	rm /etc/rc.d/rtadvd /usr/sbin/rtadvd /usr/share/man/man5/rtadvd.conf.5 /usr/share/man/man8/rtadvd.8
+	userdel _rtadvd
+	groupdel _rtadvd
+	rm /usr/X11R6/lib/libxcb-xevie.*
+	rm /usr/X11R6/lib/libxcb-xprint.*
+	rm /usr/X11R6/lib/pkgconfig/xcb-xevie.pc
+	rm /usr/X11R6/lib/pkgconfig/xcb-xprint.pc
+} fi;
+
+
 if  (test "$vac" != "") then {
 	dialog --title 'Actualizaciones aplicadas' --msgbox "\\nSe aplicaron actualizaciones: $vac\\n\\n$mac\\n" 15 60
 } fi;
@@ -1236,6 +1251,371 @@ EOF
 if (test -f /etc/rc.d/cron) then {
 	activarcs cron
 } fi;
+
+echo "* Configurando escritorio de cuenta de administrador(a)" | tee -a /var/www/tmp/inst-adJ.bitacora;
+f=`ls /var/db/pkg/fluxbox* 2> /dev/null > /dev/null`;
+if (test "$?" = "0") then {
+	pkg_delete -I -D dependencies fluxbox >> /var/www/tmp/inst-adJ.bitacora 2>&1
+	pkg_delete -I -D dependencies partial-fluxbox >> /var/www/tmp/inst-adJ.bitacora 2>&1
+} fi;
+
+chown -R $uadJ:$uadJ /mnt/ 2> /dev/null
+
+f=`ls /var/db/pkg/fluxbox* 2> /dev/null > /dev/null`;
+if (test "$?" != "0") then {
+	echo "* Instalando escritorio fluxbox" >> /var/www/tmp/inst-adJ.bitacora;
+	p=`ls $PKG_PATH/tiff-*`
+        pkg_add -I -D repair -D update -D updatedepends -r $p >> /var/www/tmp/inst-adJ.bitacora 2>&1;
+	insacp fribidi
+	p=`ls $PKG_PATH/jpeg-* $PKG_PATH/libid3tag-* $PKG_PATH/png-* $PKG_PATH/bzip2-* $PKG_PATH/libungif-* $PKG_PATH/imlib2-* $PKG_PATH/libltdl-* $PKG_PATH/fluxbox-* $PKG_PATH/fluxter-* $PKG_PATH/fbdesk-* 2>/dev/null`
+        pkg_add -I -D repair -D update -D updatedepends -r $p >> /var/www/tmp/inst-adJ.bitacora 2>&1;
+	if (test ! -f /home/$uadJ/.xsession) then {
+		cat > /home/$uadJ/.xsession <<EOF
+		/usr/local/bin/startfluxbox
+EOF
+		chown $uadJ:$uadJ /home/$uadJ/.xsession > /dev/null 2>&1
+	} fi;
+} fi;
+
+if (test -f /home/$uadJ/.fluxbox/menu) then {
+	rm -f /home/$uadJ/.fluxbox/menu
+	rm -f /home/$uadJ/.fluxbox/startup
+	rm -f /home/$uadJ/.fluxbox/init
+} fi;
+
+# Por cambiar mas en paquetes
+ln -s /usr/local/bin/gnome-keyring-daemon /usr/local/bin/gnome-keyring-servicio
+
+if (test ! -f /home/$uadJ/.fluxbox/menu) then {
+	mkdir -p /home/$uadJ/.fluxbox
+	cat > /home/$uadJ/.fluxbox/menu <<EOF
+
+[begin] (Fluxbox)
+	[exec] (xfe - Archivos) {PATH=\$PATH:/usr/sbin:/usr/local/sbin:/sbin doas /usr/local/bin/xfe}
+	[exec] (xterm+tmux) { xterm -geometry 160x48 -en utf8 -e /usr/bin/tmux -l }
+	[exec] (xterm) { xterm -geometry 160x48 -en utf8 -e /bin/ksh -l }
+	[exec] (chromium) {/usr/local/bin/chrome --disable-gpu --allow-file-access-from-files}
+	[exec] (firefox) {/usr/local/bin/firefox}
+	[exec] (midori) { export \`/usr/local/bin/gnome-keyring-servicio -s\`; /usr/local/bin/midori}
+[submenu] (Espiritualidad)
+	[exec] (xiphos) {/usr/local/bin/xiphos}
+	[exec] (Evangelios de dominio publico) {/usr/local/bin/chrome --disable-gpu /usr/local/share/doc/evangelios_dp/}
+[end]
+[submenu] (Dispositivos)
+	[exec] (Apagar) {doas /sbin/halt -p}
+	[exec] (Iniciar servicios faltantes) {xterm -en utf8 -e "/usr/bin/doas /bin/sh /etc/rc.local espera"}
+	[exec] (Montar CD) {/sbin/mount /mnt/cdrom ; xfe /mnt/cdrom/ }
+	[exec] (Desmontar CD) {/sbin/umount -f /mnt/cdrom}
+	[exec] (Montar USB) {/sbin/mount /mnt/usb ; xfe /mnt/usb/}
+	[exec] (Desmontar USB) {/sbin/umount -f /mnt/usb}
+	[exec] (Montar USBC) {/sbin/mount /mnt/usbc ; xfe /mnt/usbc/}
+	[exec] (Desmontar USBC) {/sbin/umount -f /mnt/usbc}
+	[exec] (Montar Floppy) {/sbin/mount /mnt/floppy ; xfe /mnt/floppy}
+	[exec] (Desmontar Floppy) {/sbin/umount -f /mnt/floppy}
+	[exec] (Configurar Impresora con CUPS) {echo y | doas cups-enable; doas chmod a+rw /dev/ulpt* /dev/lpt*; /usr/local/bin/chrome --disable-gpu http://127.0.0.1:631}
+	[submenu] (Red)
+                [exec] (Examinar red) {xterm -en utf8 -e '/sbin/ifconfig; echo -n "\n[RETORNO] para examinar enrutamiento (podrá salir con q)"; read; /sbin/route -n show | less'}
+                [exec] (Examinar configuracion cortafuegos) {xterm  -en utf8 -e 'doas  /sbin/pfctl -s all | less '}
+                [exec] (Configurar interfaces de red) {xterm -en utf8 -e 'li=\`/sbin/ifconfig | grep "^[a-z]*[0-9]:" | sed -e "s/:.*//g" | grep -v "lo0" | grep -v "enc0" | grep -v "pflog0" | grep -v "tun[0-9]"\`;  echo "Por configurar \$li"; for i in \$li; do echo "Configurando \$i"; /sbin/ifconfig \$i; echo -n "\n[RETORNO] para editar /etc/hostname.\$i"; read;  doas touch /etc/hostname.\$i; doas xfw /etc/hostname.\$i; done'}
+                [exec] (Configurar puerta de enlace) {doas touch /etc/mygate; doas xfw /etc/mygate}
+                [exec] (Configurar cortafuegos) {doas xfw /etc/pf.conf}
+                [exec] (Reiniciar red) {xterm -en utf8 -e 'PATH=/sbin:/usr/sbin:/bin:/usr/bin/ /usr/bin/doas /bin/sh /etc/netstart && /usr/bin/doas /sbin/pfctl -f /etc/pf.conf; echo "[RETORNO] para continuar"; read'}
+                [exec] (ping a Internet) {xterm -en utf8 -e '/sbin/ping 157.253.1.13'}
+        [end]
+[end]
+[submenu] (Oficina)
+	[exec] (evince) {evince}
+	[exec] (dia) {/usr/local/bin/dia}
+	[exec] (gnumeric) {LC_CTYPE=C /usr/local/bin/gnumeric}
+	[exec] (gv) {gv}
+	[exec] (gimp) {LC_CTYPE=C /usr/local/bin/gimp}
+	[exec] (inkscape) {inkscape}
+	[exec] (LibreOffice) {/usr/local/bin/soffice}
+	[exec] (scribus) {scribus}
+[end]
+[submenu] (Multimedia)
+	[exec] (audacios) {audacious}
+	[exec] (audacity) {audacity}
+	[exec] (cdio cdplay) {xterm -en utf8 -e "cdio cdplay"}
+	[exec] (musescore) {musescore}
+	[exec] (xcdplayer) {xcdplayer}
+	[exec] (xsane) {xsane}
+	[exec] (vlc) {vlc}
+[end]
+[submenu] (Internet)
+	[exec] (FileZilla) {filezilla}
+	[exec] (Pidgin) {pidgin}
+[end]
+[submenu] (Documentos)
+	[exec] (adJ basico) {/usr/local/bin/chrome --disable-gpu /usr/local/share/doc/basico_adJ/index.html}
+	[exec] (adJ usuario) {/usr/local/bin/chrome --disable-gpu /usr/local/share/doc/usuario_adJ/index.html}
+	[exec] (adJ servidor) {/usr/local/bin/chrome --disable-gpu /usr/local/share/doc/servidor_adJ/index.html}
+[end]
+[submenu] (Otros)
+[exec] (gvim) {gvim}
+[exec] (qemu) {qemu}
+[exec] (qgis) {qgis}
+[exec] (xarchiver) {xarchiver}
+[exec] (xfw) {xfw}
+[end]
+[submenu] (Menu de fluxbox)
+[config] (Configurar)
+[submenu] (Estilos del sistema) {Elija un estilo ...}
+[stylesdir] (/usr/local/share/fluxbox/styles)
+[end]
+[submenu] (Estilos de usuario) {Elija un estilo...}
+[stylesdir] (~/.fluxbox/styles)
+[end]
+[workspaces] (Lista de espacios de trabajo)
+[submenu] (Herramientas)
+[exec] (Nombre de ventana) {xprop WM_CLASS|cut -d " -f 2|xmessage -file - -center}
+[exec] (Foto de la pantalla - JPG) {import screenshot.jpg && display -resize 50% screenshot.jpg}
+[exec] (Foto de la pantalla - PNG) {import screenshot.png && display -resize 50% screenshot.png}
+[end]
+[submenu] (Administrador de Ventanas)
+[restart] (cwm) {cwm}
+[restart] (fvwm) {fvwm}
+[restart] (twm) {twm}
+[restart] (mwm) {mwm}
+[end]
+[exec] (Bloquear pantalla) {xlock}
+[commanddialog] (Comando de Fluxbox)
+[reconfig] (Cargar nuevamente la configuracion)
+[restart] (Volver a iniciar)
+[exec] (Acerca de) {(fluxbox -v; fluxbox -info | sed 1d) 2> /dev/null | xmessage -file - -center}
+[separator]
+[exit] (Exit)
+[end]
+[exec] (Reiniciar) {doas /sbin/reboot}
+[exec] (Apagar) {doas /sbin/halt -p}
+[end]
+EOF
+} fi;
+
+if (test ! -d /home/$uadJ/Documentos) then {
+	mkdir -p /home/$uadJ/Documentos
+	chown $uadJ:$uadJ /home/$uadJ/Documentos 
+} fi;
+
+if (test ! -f /home/$uadJ/.fluxbox/startup) then {
+	mkdir -p /home/$uadJ/.fluxbox/backgrounds/
+	imfondo=`ls -lat $ARCH/medios/*.jpg | head -n 1 | sed -e "s/.*medios\///g"`
+	echo "Imagen de fondo: $imfondo" >> /var/www/tmp/inst-adJ.bitacora
+	cp $ARCH/medios/*.jpg /home/$uadJ/.fluxbox/backgrounds/
+	cp $ARCH/medios/$imfondo /home/$uadJ/.fluxbox/backgrounds/fondo.jpg
+	cat > /home/$uadJ/.fluxbox/startup <<EOF
+#fbsetroot -to blue -solid lightblue
+export LANG=es_CO.UTF-8
+if (test -x /usr/local/bin/fluxter) then {
+	/usr/local/bin/fluxter &
+} fi;
+im=fondo.jpg
+if (test -x /usr/local/bin/fbsetbg -a -x /usr/local/bin/display -a -f /home/$uadJ/.fluxbox/backgrounds/\$im) then {
+	display -backdrop -window root /home/$uadJ/.fluxbox/backgrounds/\$im
+} fi;
+if (test -x /usr/local/bin/fbdesk) then {
+	/usr/local/bin/fbdesk &
+} fi;
+if (test -x /usr/local/bin/pidgin) then {
+	LANG=es_CO.UTF-8 /usr/local/bin/pidgin &
+} fi;
+xterm -geometry 160x48 -en utf8 -e /usr/bin/tmux -l &
+# /usr/local/bin/bsetroot -solid black
+# fbsetbg -C /usr/local/share/fluxbox/splash.jpg
+# xset -b
+# xset r rate 195 35
+# xset +fp /home/$uadJ/.font
+# xsetroot -cursor_name right_ptr
+# xmodmap ~/.Xmodmap
+# unclutter -idle 2 &
+# wmnd &
+# wmsmixer -w &
+# idesk &
+if (test -x /usr/X11R6/bin/xcompmgr) then {
+#        /usr/X11R6/bin/xcompmgr -CcfF -I-.015 -O-.03 -D2 -t-1 -l-3 -r4.2 -o.5 &
+} fi;
+
+exec /usr/local/bin/fluxbox -log ~/.fluxbox/log
+EOF
+grep -v "display -backdrop -window .*\$im"  /home/$uadJ/.fluxbox/apps > /tmp/a 2>/dev/null
+cat /tmp/a - > /home/$uadJ/.fluxbox/apps <<EOF
+	[startup] {display -backdrop -window root /home/$uadJ/.fluxbox/backgrounds/fondo.jpg}
+EOF
+} fi;
+
+if (test ! -f /home/$uadJ/.fluxbox/fbdesk) then {
+	mkdir -p /home/$uadJ/.fluxbox/
+	cat > /home/$uadJ/.fluxbox/fbdesk <<EOF
+session.styleFile:      /usr/local/share/fluxbox/styles/Operation
+fbdesk.snapY:   5
+fbdesk.lockPositions:   false
+fbdesk.textPlacement:   Bottom
+fbdesk.snapX:   5
+fbdesk.textColor:       black
+fbdesk.doubleClickInterval:     200
+fbdesk.iconFile:        ~/.fluxbox/fbdesk.icons
+fbdesk.textBackground:  white
+fbdesk.textAlpha:       0
+fbdesk.font:    fixed
+fbdesk.iconAlpha:       255
+EOF
+	cat > /home/$uadJ/.fluxbox/fbdesk.icons <<EOF
+[Desktop Entry]
+Name=xterm
+Exec=xterm -en utf8 -e /bin/ksh -l
+Icon=/usr/local/share/icons/hicolor/48x48/apps/applications-other.png
+Pos= 23 5
+[end]
+
+[Desktop Entry]
+Name=chromium
+Exec=chrome --disable-gpu
+Icon=/usr/local/share/icons/hicolor/48x48/apps/applications-internet.png
+Pos= 27 86
+[end]
+EOF
+
+} fi;
+
+if (test ! -f /home/$uadJ/.fluxbox/init) then {
+	mkdir -p /home/$uadJ/.fluxbox/
+	cat > /home/$uadJ/.fluxbox/init <<EOF
+session.screen0.overlay.lineWidth:	1
+session.screen0.overlay.lineStyle:	LineSolid
+session.screen0.overlay.joinStyle:	JoinMiter
+session.screen0.overlay.capStyle:	CapNotLast
+session.screen0.tab.alignment:	Left
+session.screen0.tab.width:	64
+session.screen0.tab.rotatevertical:	True
+session.screen0.tab.height:	16
+session.screen0.tab.placement:	Top
+session.screen0.titlebar.left:	Stick 
+session.screen0.titlebar.right:	Minimize Maximize Close 
+session.screen0.toolbar.layer:	Desktop
+session.screen0.toolbar.widthPercent:	66
+session.screen0.toolbar.onhead:	0
+session.screen0.toolbar.height:	0
+session.screen0.toolbar.alpha:	250
+session.screen0.toolbar.onTop:	False
+session.screen0.toolbar.autoHide:	false
+session.screen0.toolbar.tools:	workspacename, prevworkspace, nextworkspace, iconbar, systemtray, prevwindow, nextwindow, clock
+session.screen0.toolbar.visible:	true
+session.screen0.toolbar.maxOver:	false
+session.screen0.toolbar.placement:	BottomCenter
+session.screen0.menu.alpha:	255
+session.screen0.iconbar.mode:	Workspace
+session.screen0.iconbar.alignment:	Relative
+session.screen0.iconbar.deiconifyMode:	Follow
+session.screen0.iconbar.usePixmap:	true
+session.screen0.iconbar.wheelMode:	Screen
+session.screen0.iconbar.iconTextPadding:	10l
+session.screen0.iconbar.iconWidth:	70
+session.screen0.slit.onTop:	False
+session.screen0.slit.onhead:	0
+session.screen0.slit.autoHide:	false
+session.screen0.slit.layer:	Dock
+session.screen0.slit.maxOver:	false
+session.screen0.slit.direction:	Vertical
+session.screen0.slit.alpha:	255
+session.screen0.slit.placement:	BottomRight
+session.screen0.window.focus.alpha:	255
+session.screen0.window.unfocus.alpha:	128
+session.screen0.fullMaximization:	false
+session.screen0.edgeSnapThreshold:	0
+session.screen0.windowScrollReverse:	false
+session.screen0.showwindowposition:	true
+session.screen0.resizeMode:	Bottom
+session.screen0.antialias:	false
+session.screen0.desktopwheeling:	true
+session.screen0.followModel:	Ignore
+session.screen0.menuDelay:	0
+session.screen0.workspaceNames:	one,two,three,four,
+session.screen0.menuMode:	Delay
+session.screen0.focusLastWindow:	true
+session.screen0.windowPlacement:	RowSmartPlacement
+session.screen0.windowMenu:	
+session.screen0.strftimeFormat:	%k:%M
+session.screen0.workspacewarping:	true
+session.screen0.workspaces:	4
+session.screen0.menuDelayClose:	0
+session.screen0.tabFocusModel:	ClickToTabFocus
+session.screen0.rowPlacementDirection:	LeftToRight
+session.screen0.autoRaise:	false
+session.screen0.sloppywindowgrouping:	true
+session.screen0.decorateTransient:	false
+session.screen0.opaqueMove:	false
+session.screen0.focusModel:	ClickFocus
+session.screen0.rootCommand:	
+session.screen0.windowScrollAction:	
+session.screen0.focusNewWindows:	true
+session.screen0.imageDither:	true
+session.screen0.clickRaises:	true
+session.screen0.colPlacementDirection:	TopToBottom
+session.slitlistFile:	~/.fluxbox/slitlist
+session.cacheMax:	200l
+session.cacheLife:	5l
+session.forcePseudoTransparency:	false
+session.keyFile:	~/.fluxbox/keys
+session.tabs:	true
+session.focusTabMinWidth:	0
+session.doubleClickInterval:	250
+session.groupFile:	~/.fluxbox/groups
+session.autoRaiseDelay:	250
+session.styleFile:	/usr/local/share/fluxbox/styles/BlueNight
+session.tabPadding:	0
+session.styleOverlay:	~/.fluxbox/overlay
+session.useMod1:	true
+session.opaqueMove:	False
+session.ignoreBorder:	false
+session.colorsPerChannel:	4
+session.numLayers:	13
+session.tabsAttachArea:	Window
+session.appsFile:	~/.fluxbox/apps
+session.imageDither:	True
+session.menuFile:	~/.fluxbox/menu
+EOF
+
+} fi;
+
+
+chown -R $uadJ:$uadJ /home/$uadJ/.fluxbox/
+
+if (test ! -f /home/$uadJ/.Xdefaults) then {
+		cat > /home/$uadJ/.Xdefaults <<EOF
+// Con base en http://dentarg.starkast.net/files/configs/dot.zshrc
+
+XTerm*color0:                   #000000
+XTerm*color1:                   #bf7276
+XTerm*color2:                   #86af80
+XTerm*color3:                   #968a38
+XTerm*color4:                   #3673b5
+XTerm*color5:                   #9a70b2
+XTerm*color6:                   #7abecc
+XTerm*color7:                   #dbdbdb
+XTerm*color8:                   #6692af
+XTerm*color9:                   #e5505f
+XTerm*color10:                  #87bc87
+XTerm*color11:                  #e0d95c
+XTerm*color12:                  #1b85d6
+XTerm*color13:                  #ad73ba
+XTerm*color14:                  #338eaa
+XTerm*color15:                  #f4f4f4
+XTerm*colorBD:                  #ffffff
+XTerm*foreground:               #000000
+XTerm*background:               #ffffff
+XTerm*font:                     shine2.se
+XTerm*boldMode:                 false
+XTerm*scrollBar:                false
+XTerm*colorMode:                on
+XTerm*dynamicColors:            on
+XTerm*highlightSelection:       true
+XTerm*eightBitInput:            false
+XTerm*metaSendsEscape:          false
+XTerm*oldXtermFKeys:            true
+EOF
+		chown -R $uadJ:$uadJ /home/$uadJ/.Xdefaults
+} fi;
+
 
 echo "* Crear scripts para montar imagenes cifradas como servicios" >> /var/www/tmp/inst-adJ.bitacora;
 nuevomonta=0;
@@ -1471,6 +1851,7 @@ echo "* Configurar scripts de cuenta inicial"  >> /var/www/tmp/inst-adJ.bitacora
 grep "PKG_PATH" /home/$uadJ/.profile > /dev/null
 if (test "$?" != "0") then {
 	cat >> /home/$uadJ/.profile <<EOF
+export PATH=$PATH:.
 export PKG_PATH=http://adJ.pasosdeJesus.org/pub/OpenBSD/$VER/packages/$ARQ/
 if (test "\$TERM" = "xterm") then {
 	        export TERM=xterm-color
@@ -1995,6 +2376,8 @@ if (test "$p" != "") then {
 	dialog --title 'Eliminar PHP' --yesno "\\nPaquete PHP ya instalado. ¿Eliminar para instalar el de esta versión de adJ?" 15 60
 	if (test "$?" = "0") then {
 		rm -f /var/www/conf/modules/php5.conf 
+		rcctl stop php56_fpm
+		rcctl disable php56_fpm
 		for i in php php-2 php5-core partial-php5-core partial-php5-pear partial-php; do
 			pkg_delete -I -D dependencies $i >> /var/www/tmp/inst-adJ.bitacora 2>&1
 		done;
@@ -2173,23 +2556,22 @@ w
 q
 EOF
 	} else {
-		insacp php-fpm
-	ed /etc/php-fpm.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
+		ed /etc/php-fpm.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/; listen.owner = www/listen.owner = www/g
 w
 q
 EOF
-	ed /etc/php-fpm.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
+		ed /etc/php-fpm.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/; listen.group = www/listen.group = www/g
 w
 q
 EOF
-	ed /etc/php-fpm.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
+		ed /etc/php-fpm.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/; *listen *=.*/listen = \/var\/www\/var\/run\/php-fpm.sock/g
 w
 q
 EOF
-	ed /etc/php-fpm.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
+		ed /etc/php-fpm.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/^listen = .var.www.run.php-fpm.sock/listen = \/var\/www\/var\/run\/php-fpm.sock/g
 w
 q
@@ -2260,7 +2642,7 @@ EOF
 
 if (test "$sweb" = "nginx") then {
 	echo "* Corriendo nginx" >> /var/www/tmp/inst-adJ.bitacora
-	/etc/rc.d/php_fpm start >> /var/www/tmp/inst-adJ.bitacora 2>&1
+	/etc/rc.d/php56_fpm start >> /var/www/tmp/inst-adJ.bitacora 2>&1
 	/etc/rc.d/nginx start >> /var/www/tmp/inst-adJ.bitacora 2>&1
 } elif (test "$sweb" = "apache") then {
 	echo "* Corriendo Apache" >> /var/www/tmp/inst-adJ.bitacora
@@ -2435,371 +2817,6 @@ pearfun
 insacp ispell
 
 
-echo "* Configurando escritorio de cuenta de administrador(a)" | tee -a /var/www/tmp/inst-adJ.bitacora;
-f=`ls /var/db/pkg/fluxbox* 2> /dev/null > /dev/null`;
-if (test "$?" = "0") then {
-	pkg_delete -I -D dependencies fluxbox >> /var/www/tmp/inst-adJ.bitacora 2>&1
-	pkg_delete -I -D dependencies partial-fluxbox >> /var/www/tmp/inst-adJ.bitacora 2>&1
-} fi;
-
-chown -R $uadJ:$uadJ /mnt/ 2> /dev/null
-
-f=`ls /var/db/pkg/fluxbox* 2> /dev/null > /dev/null`;
-if (test "$?" != "0") then {
-	echo "* Instalando escritorio fluxbox" >> /var/www/tmp/inst-adJ.bitacora;
-	p=`ls $PKG_PATH/tiff-*`
-        pkg_add -I -D repair -D update -D updatedepends -r $p >> /var/www/tmp/inst-adJ.bitacora 2>&1;
-	insacp fribidi
-	p=`ls $PKG_PATH/jpeg-* $PKG_PATH/libid3tag-* $PKG_PATH/png-* $PKG_PATH/bzip2-* $PKG_PATH/libungif-* $PKG_PATH/imlib2-* $PKG_PATH/libltdl-* $PKG_PATH/fluxbox-* $PKG_PATH/fluxter-* $PKG_PATH/fbdesk-* 2>/dev/null`
-        pkg_add -I -D repair -D update -D updatedepends -r $p >> /var/www/tmp/inst-adJ.bitacora 2>&1;
-	if (test ! -f /home/$uadJ/.xsession) then {
-		cat > /home/$uadJ/.xsession <<EOF
-		/usr/local/bin/startfluxbox
-EOF
-		chown $uadJ:$uadJ /home/$uadJ/.xsession > /dev/null 2>&1
-	} fi;
-} fi;
-
-if (test -f /home/$uadJ/.fluxbox/menu) then {
-	rm -f /home/$uadJ/.fluxbox/menu
-	rm -f /home/$uadJ/.fluxbox/startup
-	rm -f /home/$uadJ/.fluxbox/init
-} fi;
-
-# Por cambiar mas en paquetes
-ln -s /usr/local/bin/gnome-keyring-daemon /usr/local/bin/gnome-keyring-servicio
-
-if (test ! -f /home/$uadJ/.fluxbox/menu) then {
-	mkdir -p /home/$uadJ/.fluxbox
-	cat > /home/$uadJ/.fluxbox/menu <<EOF
-
-[begin] (Fluxbox)
-	[exec] (xfe - Archivos) {PATH=\$PATH:/usr/sbin:/usr/local/sbin:/sbin /usr/local/bin/xfe}
-	[exec] (xterm+tmux) { xterm -geometry 160x48 -en utf8 -e /usr/bin/tmux -l }
-	[exec] (xterm) { xterm -geometry 160x48 -en utf8 -e /bin/ksh -l }
-	[exec] (chromium) {/usr/local/bin/chrome --disable-gpu --allow-file-access-from-files}
-	[exec] (midori) { export \`/usr/local/bin/gnome-keyring-servicio -s\`; /usr/local/bin/midori}
-[submenu] (Espiritualidad)
-	[exec] (xiphos) {/usr/local/bin/xiphos}
-	[exec] (Evangelios de dominio publico) {/usr/local/bin/chrome --disable-gpu /usr/local/share/doc/evangelios_dp/}
-[end]
-[submenu] (Dispositivos)
-	[exec] (Apagar) {doas /sbin/halt -p}
-	[exec] (Iniciar servicios faltantes) {xterm -en utf8 -e "/usr/bin/doas /bin/sh /etc/rc.local espera"}
-	[exec] (Montar CD) {/sbin/mount /mnt/cdrom ; xfe /mnt/cdrom/ }
-	[exec] (Desmontar CD) {/sbin/umount -f /mnt/cdrom}
-	[exec] (Montar USB) {/sbin/mount /mnt/usb ; xfe /mnt/usb/}
-	[exec] (Desmontar USB) {/sbin/umount -f /mnt/usb}
-	[exec] (Montar USBC) {/sbin/mount /mnt/usbc ; xfe /mnt/usbc/}
-	[exec] (Desmontar USBC) {/sbin/umount -f /mnt/usbc}
-	[exec] (Montar Floppy) {/sbin/mount /mnt/floppy ; xfe /mnt/floppy}
-	[exec] (Desmontar Floppy) {/sbin/umount -f /mnt/floppy}
-	[exec] (Configurar Impresora con CUPS) {echo y | doas cups-enable; doas chmod a+rw /dev/ulpt* /dev/lpt*; /usr/local/bin/chrome --disable-gpu http://127.0.0.1:631}
-	[submenu] (Red)
-                [exec] (Examinar red) {xterm -en utf8 -e '/sbin/ifconfig; echo -n "\n[RETORNO] para examinar enrutamiento (podrá salir con q)"; read; /sbin/route -n show | less'}
-                [exec] (Examinar configuracion cortafuegos) {xterm  -en utf8 -e 'doas  /sbin/pfctl -s all | less '}
-                [exec] (Configurar interfaces de red) {xterm -en utf8 -e 'li=\`/sbin/ifconfig | grep "^[a-z]*[0-9]:" | sed -e "s/:.*//g" | grep -v "lo0" | grep -v "enc0" | grep -v "pflog0" | grep -v "tun[0-9]"\`;  echo "Por configurar \$li"; for i in \$li; do echo "Configurando \$i"; /sbin/ifconfig \$i; echo -n "\n[RETORNO] para editar /etc/hostname.\$i"; read;  doas touch /etc/hostname.\$i; doas xfw /etc/hostname.\$i; done'}
-                [exec] (Configurar puerta de enlace) {doas touch /etc/mygate; doas xfw /etc/mygate}
-                [exec] (Configurar cortafuegos) {doas xfw /etc/pf.conf}
-                [exec] (Reiniciar red) {xterm -en utf8 -e 'PATH=/sbin:/usr/sbin:/bin:/usr/bin/ /usr/bin/doas /bin/sh /etc/netstart && /usr/bin/doas /sbin/pfctl -f /etc/pf.conf; echo "[RETORNO] para continuar"; read'}
-                [exec] (ping a Internet) {xterm -en utf8 -e '/sbin/ping 157.253.1.13'}
-        [end]
-[end]
-[submenu] (Oficina)
-	[exec] (abiword) {LC_MESSAGES=C /usr/local/bin/abiword}
-	[exec] (dia) {/usr/local/bin/dia}
-	[exec] (gnumeric) {LC_CTYPE=C /usr/local/bin/gnumeric}
-	[exec] (gv) {gv}
-	[exec] (gimp) {LC_CTYPE=C /usr/local/bin/gimp}
-	[exec] (inkscape) {inkscape}
-	[exec] (LibreOffice) {/usr/local/bin/soffice}
-	[exec] (scribus) {scribus}
-	[exec] (xpdf) {xpdf}
-[end]
-[submenu] (Multimedia)
-	[exec] (audacios) {audacious}
-	[exec] (audacity) {audacity}
-	[exec] (cdio cdplay) {xterm -en utf8 -e "cdio cdplay"}
-	[exec] (fontforge) {fontforge}
-	[exec] (xcdplayer) {xcdplayer}
-	[exec] (xmix) {xmix}
-	[exec] (xsane) {xsane}
-	[exec] (vlc) {vlc}
-[end]
-[submenu] (Internet)
-	[exec] (FileZilla) {filezilla}
-	[exec] (Pidgin) {pidgin}
-[end]
-[submenu] (Documentos)
-	[exec] (adJ basico) {/usr/local/bin/chrome --disable-gpu /usr/local/share/doc/basico_adJ/index.html}
-	[exec] (adJ usuario) {/usr/local/bin/chrome --disable-gpu /usr/local/share/doc/usuario_adJ/index.html}
-	[exec] (adJ servidor) {/usr/local/bin/chrome --disable-gpu /usr/local/share/doc/servidor_adJ/index.html}
-[end]
-[submenu] (Otros)
-[exec] (gvim) {gvim}
-[exec] (plan) {plan}
-[exec] (qgis) {qgis}
-[exec] (xarchiver) {xarchiver}
-[exec] (xfw) {xfw}
-[end]
-[submenu] (Menu de fluxbox)
-[config] (Configurar)
-[submenu] (Estilos del sistema) {Elija un estilo ...}
-[stylesdir] (/usr/local/share/fluxbox/styles)
-[end]
-[submenu] (Estilos de usuario) {Elija un estilo...}
-[stylesdir] (~/.fluxbox/styles)
-[end]
-[workspaces] (Lista de espacios de trabajo)
-[submenu] (Herramientas)
-[exec] (Nombre de ventana) {xprop WM_CLASS|cut -d " -f 2|xmessage -file - -center}
-[exec] (Foto de la pantalla - JPG) {import screenshot.jpg && display -resize 50% screenshot.jpg}
-[exec] (Foto de la pantalla - PNG) {import screenshot.png && display -resize 50% screenshot.png}
-[end]
-[submenu] (Administrador de Ventanas)
-[restart] (cwm) {cwm}
-[restart] (fvwm) {fvwm}
-[restart] (twm) {twm}
-[restart] (mwm) {mwm}
-[end]
-[exec] (Bloquear pantalla) {xlock}
-[commanddialog] (Comando de Fluxbox)
-[reconfig] (Cargar nuevamente la configuracion)
-[restart] (Volver a iniciar)
-[exec] (Acerca de) {(fluxbox -v; fluxbox -info | sed 1d) 2> /dev/null | xmessage -file - -center}
-[separator]
-[exit] (Exit)
-[end]
-[exec] (Reiniciar) {doas /sbin/reboot}
-[exec] (Apagar) {doas /sbin/halt -p}
-[end]
-EOF
-} fi;
-
-if (test ! -d /home/$uadJ/Documentos) then {
-	mkdir -p /home/$uadJ/Documentos
-	chown $uadJ:$uadJ /home/$uadJ/Documentos 
-} fi;
-
-if (test ! -f /home/$uadJ/.fluxbox/startup) then {
-	mkdir -p /home/$uadJ/.fluxbox/backgrounds/
-	imfondo=`ls -lat $ARCH/medios/*.jpg | head -n 1 | sed -e "s/.*medios\///g"`
-	echo "Imagen de fondo: $imfondo" >> /var/www/tmp/inst-adJ.bitacora
-	cp $ARCH/medios/*.jpg /home/$uadJ/.fluxbox/backgrounds/
-	cp $ARCH/medios/$imfondo /home/$uadJ/.fluxbox/backgrounds/fondo.jpg
-	cat > /home/$uadJ/.fluxbox/startup <<EOF
-#fbsetroot -to blue -solid lightblue
-export LANG=es_CO.UTF-8
-if (test -x /usr/local/bin/fluxter) then {
-	/usr/local/bin/fluxter &
-} fi;
-im=fondo.jpg
-if (test -x /usr/local/bin/fbsetbg -a -x /usr/local/bin/display -a -f /home/$uadJ/.fluxbox/backgrounds/\$im) then {
-	display -backdrop -window root /home/$uadJ/.fluxbox/backgrounds/\$im
-} fi;
-if (test -x /usr/local/bin/fbdesk) then {
-	/usr/local/bin/fbdesk &
-} fi;
-if (test -x /usr/local/bin/pidgin) then {
-	LANG=es_CO.UTF-8 /usr/local/bin/pidgin &
-} fi;
-xterm -geometry 160x48 -en utf8 -e /usr/bin/tmux -l &
-# /usr/local/bin/bsetroot -solid black
-# fbsetbg -C /usr/local/share/fluxbox/splash.jpg
-# xset -b
-# xset r rate 195 35
-# xset +fp /home/$uadJ/.font
-# xsetroot -cursor_name right_ptr
-# xmodmap ~/.Xmodmap
-# unclutter -idle 2 &
-# wmnd &
-# wmsmixer -w &
-# idesk &
-if (test -x /usr/X11R6/bin/xcompmgr) then {
-#        /usr/X11R6/bin/xcompmgr -CcfF -I-.015 -O-.03 -D2 -t-1 -l-3 -r4.2 -o.5 &
-} fi;
-
-exec /usr/local/bin/fluxbox -log ~/.fluxbox/log
-EOF
-grep -v "display -backdrop -window .*\$im"  /home/$uadJ/.fluxbox/apps > /tmp/a 2>/dev/null
-cat /tmp/a - > /home/$uadJ/.fluxbox/apps <<EOF
-	[startup] {display -backdrop -window root /home/$uadJ/.fluxbox/backgrounds/fondo.jpg}
-EOF
-} fi;
-
-if (test ! -f /home/$uadJ/.fluxbox/fbdesk) then {
-	mkdir -p /home/$uadJ/.fluxbox/
-	cat > /home/$uadJ/.fluxbox/fbdesk <<EOF
-session.styleFile:      /usr/local/share/fluxbox/styles/Operation
-fbdesk.snapY:   5
-fbdesk.lockPositions:   false
-fbdesk.textPlacement:   Bottom
-fbdesk.snapX:   5
-fbdesk.textColor:       black
-fbdesk.doubleClickInterval:     200
-fbdesk.iconFile:        ~/.fluxbox/fbdesk.icons
-fbdesk.textBackground:  white
-fbdesk.textAlpha:       0
-fbdesk.font:    fixed
-fbdesk.iconAlpha:       255
-EOF
-	cat > /home/$uadJ/.fluxbox/fbdesk.icons <<EOF
-[Desktop Entry]
-Name=xterm
-Exec=xterm -en utf8 -e /bin/ksh -l
-Icon=/usr/local/share/icons/hicolor/48x48/apps/applications-other.png
-Pos= 23 5
-[end]
-
-[Desktop Entry]
-Name=chromium
-Exec=chrome --disable-gpu
-Icon=/usr/local/share/icons/hicolor/48x48/apps/applications-internet.png
-Pos= 27 86
-[end]
-EOF
-
-} fi;
-
-if (test ! -f /home/$uadJ/.fluxbox/init) then {
-	mkdir -p /home/$uadJ/.fluxbox/
-	cat > /home/$uadJ/.fluxbox/init <<EOF
-session.screen0.overlay.lineWidth:	1
-session.screen0.overlay.lineStyle:	LineSolid
-session.screen0.overlay.joinStyle:	JoinMiter
-session.screen0.overlay.capStyle:	CapNotLast
-session.screen0.tab.alignment:	Left
-session.screen0.tab.width:	64
-session.screen0.tab.rotatevertical:	True
-session.screen0.tab.height:	16
-session.screen0.tab.placement:	Top
-session.screen0.titlebar.left:	Stick 
-session.screen0.titlebar.right:	Minimize Maximize Close 
-session.screen0.toolbar.layer:	Desktop
-session.screen0.toolbar.widthPercent:	66
-session.screen0.toolbar.onhead:	0
-session.screen0.toolbar.height:	0
-session.screen0.toolbar.alpha:	250
-session.screen0.toolbar.onTop:	False
-session.screen0.toolbar.autoHide:	false
-session.screen0.toolbar.tools:	workspacename, prevworkspace, nextworkspace, iconbar, systemtray, prevwindow, nextwindow, clock
-session.screen0.toolbar.visible:	true
-session.screen0.toolbar.maxOver:	false
-session.screen0.toolbar.placement:	BottomCenter
-session.screen0.menu.alpha:	255
-session.screen0.iconbar.mode:	Workspace
-session.screen0.iconbar.alignment:	Relative
-session.screen0.iconbar.deiconifyMode:	Follow
-session.screen0.iconbar.usePixmap:	true
-session.screen0.iconbar.wheelMode:	Screen
-session.screen0.iconbar.iconTextPadding:	10l
-session.screen0.iconbar.iconWidth:	70
-session.screen0.slit.onTop:	False
-session.screen0.slit.onhead:	0
-session.screen0.slit.autoHide:	false
-session.screen0.slit.layer:	Dock
-session.screen0.slit.maxOver:	false
-session.screen0.slit.direction:	Vertical
-session.screen0.slit.alpha:	255
-session.screen0.slit.placement:	BottomRight
-session.screen0.window.focus.alpha:	255
-session.screen0.window.unfocus.alpha:	128
-session.screen0.fullMaximization:	false
-session.screen0.edgeSnapThreshold:	0
-session.screen0.windowScrollReverse:	false
-session.screen0.showwindowposition:	true
-session.screen0.resizeMode:	Bottom
-session.screen0.antialias:	false
-session.screen0.desktopwheeling:	true
-session.screen0.followModel:	Ignore
-session.screen0.menuDelay:	0
-session.screen0.workspaceNames:	one,two,three,four,
-session.screen0.menuMode:	Delay
-session.screen0.focusLastWindow:	true
-session.screen0.windowPlacement:	RowSmartPlacement
-session.screen0.windowMenu:	
-session.screen0.strftimeFormat:	%k:%M
-session.screen0.workspacewarping:	true
-session.screen0.workspaces:	4
-session.screen0.menuDelayClose:	0
-session.screen0.tabFocusModel:	ClickToTabFocus
-session.screen0.rowPlacementDirection:	LeftToRight
-session.screen0.autoRaise:	false
-session.screen0.sloppywindowgrouping:	true
-session.screen0.decorateTransient:	false
-session.screen0.opaqueMove:	false
-session.screen0.focusModel:	ClickFocus
-session.screen0.rootCommand:	
-session.screen0.windowScrollAction:	
-session.screen0.focusNewWindows:	true
-session.screen0.imageDither:	true
-session.screen0.clickRaises:	true
-session.screen0.colPlacementDirection:	TopToBottom
-session.slitlistFile:	~/.fluxbox/slitlist
-session.cacheMax:	200l
-session.cacheLife:	5l
-session.forcePseudoTransparency:	false
-session.keyFile:	~/.fluxbox/keys
-session.tabs:	true
-session.focusTabMinWidth:	0
-session.doubleClickInterval:	250
-session.groupFile:	~/.fluxbox/groups
-session.autoRaiseDelay:	250
-session.styleFile:	/usr/local/share/fluxbox/styles/BlueNight
-session.tabPadding:	0
-session.styleOverlay:	~/.fluxbox/overlay
-session.useMod1:	true
-session.opaqueMove:	False
-session.ignoreBorder:	false
-session.colorsPerChannel:	4
-session.numLayers:	13
-session.tabsAttachArea:	Window
-session.appsFile:	~/.fluxbox/apps
-session.imageDither:	True
-session.menuFile:	~/.fluxbox/menu
-EOF
-
-} fi;
-
-
-chown -R $uadJ:$uadJ /home/$uadJ/.fluxbox/
-
-if (test ! -f /home/$uadJ/.Xdefaults) then {
-		cat > /home/$uadJ/.Xdefaults <<EOF
-// Con base en http://dentarg.starkast.net/files/configs/dot.zshrc
-
-XTerm*color0:                   #000000
-XTerm*color1:                   #bf7276
-XTerm*color2:                   #86af80
-XTerm*color3:                   #968a38
-XTerm*color4:                   #3673b5
-XTerm*color5:                   #9a70b2
-XTerm*color6:                   #7abecc
-XTerm*color7:                   #dbdbdb
-XTerm*color8:                   #6692af
-XTerm*color9:                   #e5505f
-XTerm*color10:                  #87bc87
-XTerm*color11:                  #e0d95c
-XTerm*color12:                  #1b85d6
-XTerm*color13:                  #ad73ba
-XTerm*color14:                  #338eaa
-XTerm*color15:                  #f4f4f4
-XTerm*colorBD:                  #ffffff
-XTerm*foreground:               #000000
-XTerm*background:               #ffffff
-XTerm*font:                     shine2.se
-XTerm*boldMode:                 false
-XTerm*scrollBar:                false
-XTerm*colorMode:                on
-XTerm*dynamicColors:            on
-XTerm*highlightSelection:       true
-XTerm*eightBitInput:            false
-XTerm*metaSendsEscape:          false
-XTerm*oldXtermFKeys:            true
-EOF
-		chown -R $uadJ:$uadJ /home/$uadJ/.Xdefaults
-} fi;
-
 for i in ruby19-railties-3.1.3 ruby19-actionmailer-3.1.3 \
     ruby19-actionpack-3.1.3 ruby19-erubis-2.7.0 ruby19-tzinfo-0.3.29 \
     ruby19-activeresource-3.1.3 ruby19-rack-ssl-1.3.2 \
@@ -2827,49 +2844,39 @@ EOF
 	chown $uadJ:$uadJ /home/$uadJ/.irbrc
 } fi;
 
-echo "* Configurar ruby-2.5" >> /var/www/tmp/inst-adJ.bitacora;
+VRUBY=2.6
+VRUBYSP=`echo $VRUBY | sed -e "s/\.//g"`
+echo "* Configurar ruby-$VRUBY" >> /var/www/tmp/inst-adJ.bitacora;
 uruby=$uadJ
-v=`(cd /var/db/pkg/; ls) | grep ruby-2.3`
-if (test -d /var/www/bundler/ruby/2.3/gems/ -o -d /usr/local/lib/ruby/2.3 -o "$v" != "") then {
-  if (test -d /var/www/bundler/ruby/2.3) then {
-    uruby=`stat -f "%u" /var/www/bundler/ruby/2.3`
-    echo "uruby=$uruby" >> /var/www/tmp/inst-adJ.bitacora;
-  } fi;
-  dialog --title 'Eliminar ruby 2.3 y sus librerías' --yesno "\\nSe encontró algo de ruby 2.3 ¿Eliminar para evitar conflictos con la versión 2.5?" 15 60
-  if (test "$v" != "") then {
-    pkg_delete -I -D dependencies $v >> /var/www/tmp/inst-adJ.bitacora 2>&1
-  } fi;
-  echo "* Eliminando directorios de 2.3" >> /var/www/tmp/inst-adJ.bitacora;
-  rm -rf /var/www/bundler/ruby/2.3/gems
-  rm -rf /usr/local/lib/ruby/2.3
-} fi;
-v=`(cd /var/db/pkg/; ls) | grep ruby-2.4`
-if (test -d /var/www/bundler/ruby/2.4/gems/ -o -d /usr/local/lib/ruby/2.4 -o "$v" != "") then {
-  if (test -d /var/www/bundler/ruby/2.4) then {
-    uruby=`stat -f "%u" /var/www/bundler/ruby/2.4`
-    echo "uruby=$uruby" >> /var/www/tmp/inst-adJ.bitacora;
-  } fi;
-
-  dialog --title 'Eliminar ruby 2.4 y sus librerías' --yesno "\\nSe encontró algo de ruby 2.4 ¿Eliminar para evitar conflictos con la versión 2.5?" 15 60
-  if (test "$v" != "") then {
-    pkg_delete -I -D dependencies $v >> /var/www/tmp/inst-adJ.bitacora 2>&1
-  } fi;
-  echo "* Eliminando directorios de 2.4" >> /var/www/tmp/inst-adJ.bitacora;
-  rm -rf /var/www/bundler/ruby/2.4/gems
-  rm -rf /usr/local/lib/ruby/2.4
-} fi;
-
+for vrelim in 2.3 2.4 2.5; do
+	v=`(cd /var/db/pkg/; ls) | grep ruby-$vrelim`
+	if (test -d /var/www/bundler/ruby/$vrelim/bundler/gems/ -o -d /usr/local/lib/ruby/$vrelim -o "$v" != "") then {
+		if (test -d /var/www/bundler/ruby/$vrelim) then {
+			uruby=`stat -f "%u" /var/www/bundler/ruby/$vrelim`
+			echo "uruby=$uruby" >> /var/www/tmp/inst-adJ.bitacora;
+		} fi;
+		dialog --title "Eliminar ruby $vrelim y sus librerías" --yesno "\\nSe encontró algo de ruby $vrelim ¿Eliminar para evitar conflictos con la versión $VRUBY?" 15 60
+		if (test "$v" != "") then {
+			pkg_delete -I -D dependencies $v >> /var/www/tmp/inst-adJ.bitacora 2>&1
+		} fi;
+		echo "* Eliminando directorios de $vrelim" >> /var/www/tmp/inst-adJ.bitacora;
+		rm -rf /var/www/bundler/ruby/$vrelim
+		rm -rf /usr/local/lib/ruby/$vrelim
+	} fi;
+done
 	
-if (test ! -f "/usr/local/bin/ruby25") then {
+if (test ! -f "/usr/local/bin/ruby$VRUBYSP") then {
 	insacp ruby
-        echo "* Creando enlaces para ruby 2.5" >> /var/www/tmp/inst-adJ.bitacora;
-	ln -sf /usr/local/bin/ruby25 /usr/local/bin/ruby
-	ln -sf /usr/local/bin/erb25 /usr/local/bin/erb
-	ln -sf /usr/local/bin/irb25 /usr/local/bin/irb
-	ln -sf /usr/local/bin/rdoc25 /usr/local/bin/rdoc
-	ln -sf /usr/local/bin/ri25 /usr/local/bin/ri
-	ln -sf /usr/local/bin/rake25 /usr/local/bin/rake
-	ln -sf /usr/local/bin/gem25 /usr/local/bin/gem
+        echo "* Creando enlaces para ruby $VRUBY" >> /var/www/tmp/inst-adJ.bitacora;
+	ln -sf /usr/local/bin/ruby$VRUBYSP /usr/local/bin/ruby
+	ln -sf /usr/local/bin/erb$VRUBYSP /usr/local/bin/erb
+	ln -sf /usr/local/bin/irb$VRUBYSP /usr/local/bin/irb
+	ln -sf /usr/local/bin/rdoc$VRUBYSP /usr/local/bin/rdoc
+	ln -sf /usr/local/bin/ri$VRUBYSP /usr/local/bin/ri
+	ln -sf /usr/local/bin/rake$VRUBYSP /usr/local/bin/rake
+	ln -sf /usr/local/bin/gem$VRUBYSP /usr/local/bin/gem
+	ln -sf /usr/local/bin/bundle$VRUBYSP /usr/local/bin/bundle
+	ln -sf /usr/local/bin/bundler$VRUBYSP /usr/local/bin/bundler
 } fi;
 
 
@@ -2889,10 +2896,10 @@ if (test `sysctl -n kern.shminfo.shmall` -lt "51200") then {
 if (test `sysctl -n kern.maxfiles` -lt "20000") then {
 	echo "Aumentar valor de kern.maxfiles en /etc/sysctl.conf" | tee -a /var/www/tmp/inst-adJ.bitacora;
 } fi;
-if (test ! -d /var/www/bundler/ruby/2.5) then {
-  echo "Creando /var/www/bundler/2.5" >> /var/www/tmp/inst-adJ.bitacora;
-  doas mkdir -p /var/www/bundler/ruby/2.5/
-  doas chown -R $uruby:www /var/www/bundler/ruby/2.5/
+if (test ! -d /var/www/bundler/ruby/$VRUBY) then {
+  echo "Creando /var/www/bundler/$VRUBY" >> /var/www/tmp/inst-adJ.bitacora;
+  doas mkdir -p /var/www/bundler/ruby/$VRUBY/
+  doas chown -R $uruby:www /var/www/bundler/ruby/$VRUBY/
 } fi;
 
 echo "Eliminando gemas generales repetidas" >> /var/www/tmp/inst-adJ.bitacora;
@@ -2905,7 +2912,7 @@ for i in `gem list | grep "(.*," | sed -e "s/ *([^,]*,/,/g;s/, default: [^,]*//g
   eval $cmd 2>&1 >> /var/www/tmp/inst-adJ.bitacora;
 done
 
-# Seria bueno eliminar gemas repetidas de /var/www/bundler/ruby/gems/2.5
+# Seria bueno eliminar gemas repetidas de /var/www/bundler/ruby/gems/$VRUBY
 # gem uninstall no ha operado con --install-dir (aunque la documentacion dice que si).
 
 echo "Actualizando gemas del sistema" >> /var/www/tmp/inst-adJ.bitacora;
@@ -2914,15 +2921,16 @@ gem update --system 2>&1 >> /var/www/tmp/inst-adJ.bitacora;
 echo "Reinstalando gemas generales" >> /var/www/tmp/inst-adJ.bitacora;
 QMAKE=qmake-qt5 make=gmake MAKE=gmake doas gem pristine --all 2>&1 >> /var/www/tmp/inst-adJ.bitacora;
 
-echo "Reinstalando versiones mas actualizadas de gemas de /var/www/bundler/ruby/2.5 con extensiones cuando se cambia version menor" >> /var/www/tmp/inst-adJ.bitacora
-for i in `ls /var/www/bundler/ruby/2.5/extensions/x86_64-openbsd/2.5/ | sed -e "s/-[0-9.]*$//g" | sort -u`; do
+echo "Reinstalando versiones mas actualizadas de gemas de /var/www/bundler/ruby/$VRUBY con extensiones cuando se cambia version menor" >> /var/www/tmp/inst-adJ.bitacora
+rm -f /usr/local/bin/bundle
+for i in `ls /var/www/bundler/ruby/$VRUBY/extensions/x86_64-openbsd/$VRUBY/ | sed -e "s/-[0-9.]*$//g" | sort -u`; do
   uj=""
-  for j in /var/www/bundler/ruby/2.5/gems/$i-*; do
+  for j in /var/www/bundler/ruby/$VRUBY/gems/$i-*; do
     uj=$j
   done
   v=`echo $uj | sed -e 's/.*-\([0-9.]*\)/\1/g'` ; 
   n=`echo $uj | sed -e 's/.*\/\(.*\)-[0-9.]*/\1/g'` ; 
-  cmd="doas gem install --install-dir /var/www/bundler/ruby/2.5/ $n -v $v" 
+  cmd="doas gem install --install-dir /var/www/bundler/ruby/$VRUBY/ $n -v $v" 
   echo "$cmd"
   eval "$cmd" 2>&1 >> /var/www/tmp/inst-adJ.bitacora;
 done
@@ -2933,7 +2941,7 @@ gem install bundler 2>&1 >> /var/www/tmp/inst-adJ.bitacora;
 if (test -x /usr/lcoal/bin/bundle25) then { 
        doas ln -sf /usr/local/bin/bundle25 /usr/local/bin/bundle; 
 } fi
-bundle config path /var/www/bundler/ruby/2.5
+bundle config path /var/www/bundler/ruby/$VRUBY
 
 echo "* Configurar tmux" >> /var/www/tmp/inst-adJ.bitacora;
 f=`ls /var/db/pkg/tmux* 2> /dev/null`;
@@ -2962,6 +2970,7 @@ insacp glib2
 insacp dbus	
 insacp libusb1
 insacp lcms2
+insacp cairo
 insacp poppler
 insacp cups
 if (test -f /etc/rc.d/cupsd) then {
@@ -3150,7 +3159,7 @@ setlocal shiftwidth=2
 setlocal tabstop=2
 EOF
 } fi;
-	
+
 # Diccionario español de LibreOffice
 # http://es.openoffice.org/programa/diccionario.html
 if (test -f $ARCH/util/es_CO.oxt -a -f /usr/local/lib/libreoffice/program/unopkg) then {
@@ -3203,10 +3212,10 @@ if (test -d /home/$uadJ/.libreoffice) then {
 } fi;
 
 if (test ! -h /usr/local/bin/python) then {
- ln -sf /usr/local/bin/python2.7 /usr/local/bin/python
- ln -sf /usr/local/bin/python2.7-2to3 /usr/local/bin/2to3
- ln -sf /usr/local/bin/python2.7-config /usr/local/bin/python-config
- ln -sf /usr/local/bin/pydoc2.7  /usr/local/bin/pydoc
+	ln -sf /usr/local/bin/python2.7 /usr/local/bin/python
+	ln -sf /usr/local/bin/python2.7-2to3 /usr/local/bin/2to3
+	ln -sf /usr/local/bin/python2.7-config /usr/local/bin/python-config
+	ln -sf /usr/local/bin/pydoc2.7  /usr/local/bin/pydoc
 } fi;
 
 chmod a+xrw /var/www/tmp

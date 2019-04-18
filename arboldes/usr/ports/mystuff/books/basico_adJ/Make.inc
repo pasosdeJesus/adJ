@@ -1,17 +1,18 @@
-V=		6.3
+V=		6.4
 
 DISTNAME=	${PNAME}-${V}
 CATEGORIES=	books
 MAINTAINER=     Vladimir Támara Patiño <vtamara@pasosdeJesus.org>
 
-VHERRAM=	c0028126b14ba788aa5d5cd60073446673d497d2
+VHERRAM=	12bd78159ea2413bded6f40052fa22779fe67009
+VHERRAMCORTA=	12bd781
 
 HOMEPAGE=       http://pasosdeJesus.github.io/${PNAME}/
 MASTER_SITES=	https://github.com/pasosdeJesus/${PNAME}/archive/
-MASTER_SITES1=	https://gitlab.com/pasosdeJesus/herram_confsh/-/archive/c002812/
+MASTER_SITES1=	https://gitlab.com/pasosdeJesus/herram_confsh/-/archive/${VHERRAMCORTA}/
 EXTRACT_SUFX=.tar.gz
 DISTFILES=	${PNAME}-${V}${EXTRACT_SUFX}
-DISTFILES+=	herram_confsh-c002812-${VHERRAM}${EXTRACT_SUFX}:1
+DISTFILES+=	herram_confsh-${VHERRAMCORTA}-${VHERRAM}${EXTRACT_SUFX}:1
 DCOMP=${PNAME}-${V}
 
 #Public domain
@@ -26,7 +27,7 @@ BUILD_DEPENDS=  textproc/docbook-xsl textproc/docbook-dsssl textproc/docbook tex
 INSTALL_TARGET = instala
 
 pre-patch:
-	mv -f ${WRKDIR}/herram_confsh-c002812-${VHERRAM}/* ${WRKDIST}/herram_confsh/
+	mv -f ${WRKDIR}/herram_confsh-${VHERRAMCORTA}-${VHERRAM}/* ${WRKDIST}/herram_confsh/
 
 post-extract:
 	mv `dirname ${WRKBUILD}`/${PNAME}-${PNAME}-${V} ${WRKBUILD}

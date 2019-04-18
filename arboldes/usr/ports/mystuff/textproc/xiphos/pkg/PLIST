@@ -1,4 +1,4 @@
-@comment $adJ$
+@comment $adJ: PLIST,v$
 @bin bin/xiphos
 @bin bin/xiphos-nav
 share/appdata/
@@ -258,3 +258,5 @@ share/xiphos/xi-splash_old.gtkbuilder
 share/xiphos/xiphos-button-125.png
 share/xiphos/xiphos-x-16.png
 share/xiphos/xiphos.xpm
+@tag update-desktop-database
+@tag gtk-update-icon-cache %D/share/icons/hicolor

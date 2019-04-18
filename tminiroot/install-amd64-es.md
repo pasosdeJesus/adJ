@@ -1,4 +1,4 @@
-#      $OpenBSD: install.md,v 1.51 2016/02/08 17:28:08 krw Exp $
+#     $OpenBSD: install.md,v 1.55 2017/07/28 18:15:44 rpe Exp $
 #
 #
 # Copyright (c) 1996 The NetBSD Foundation, Inc.
@@ -32,6 +32,7 @@
 # machine dependent section of installation/upgrade script.
 #
 
+MDKERNEL=APRENDIENDODEJESUS
 MDXAPERTURE=2
 MDXDM=y
 NCPU=$(sysctl -n hw.ncpufound)
@@ -39,8 +40,6 @@ NCPU=$(sysctl -n hw.ncpufound)
 if dmesg | grep -q 'efifb0 at mainbus0'; then
 	MDEFI=y
 fi
-
-((NCPU > 1)) && { DEFAULTSETS="bsd bsd.rd bsd.mp"; SANESETS="bsd bsd.mp"; }
 
 md_installboot() {
 	if ! installboot -r /mnt ${1}; then
@@ -55,32 +54,35 @@ md_prep_fdisk() {
 
 	while :; do
 		_d=editar
-		_q="¿Usar (T)odo el disco MBR, todo el disco (G)PT"
+		_q="Usar (T)odo el disco MBR, todo el disco (G)PT"
 
 		[[ $MDEFI == y ]] && _d=gpt
 
-		if disk_has $_disk mbr openbsd || disk_has $_disk gpt openbsd; then
-			_q="$_q, área de (O)penBSD,"
-			_d=OpenBSD
-
+		if disk_has $_disk mbr || disk_has $_disk gpt; then
 			fdisk $_disk
+			if disk_has $_disk mbr openbsd ||
+				disk_has $_disk gpt openbsd; then
+				_q="$_q, area de (O)penBSD,"
+				_d=OpenBSD
+			fi
 		else
-			echo "No hay un RAM o un GPT válido."
+			echo "No hay un RAM o un GPT valido."
 		fi
+
 		ask "$_q o (E)ditar?" "$_d"
 		case $resp in
 		[tT]*)
-			echo -n "Estableciendo partición de OpenBSD en RMA como el disco $_disk completo..."
+			echo -n "Estableciendo particion de OpenBSD en RMA como el disco $_disk completo..."
 			fdisk -iy $_disk >/dev/null
 			echo "listo."
 			return ;;
 		[gG]*)
 			if [[ $MDEFI != y ]]; then
-				ask_yn "Un disco EFI/GPT podría no arrancar. ¿Proceder?"
+				ask_yn "Un disco EFI/GPT podria no arrancar. Proceder?"
 				[[ $resp == n ]] && continue
 			fi
 
-			echo -n "Estableceendo la partición OpenBSD GPT para el disco completo $_disk..."
+			echo -n "Estableceendo la particion OpenBSD GPT para el disco completo $_disk..."
 			fdisk -iy -g -b 960 $_disk >/dev/null
 			echo "listo."
 			return ;;
@@ -89,10 +91,10 @@ md_prep_fdisk() {
 				# Manually configure the GPT.
 				cat <<__EOT
 
-Ahora creará dos particiones GPT. La primera debe tener una identificación
+Ahora creara dos particiones GPT. La primera debe tener una identificacion
 'EF' y ser suficientemente grande para los programas de arranque de OpenBSD,
-al menos 960 bloques. La segunda debe tener identificación 'A6' y
-contendrá sus datos de OpenBSD. Una partición no puede traslaparse con la otra.
+al menos 960 bloques. La segunda debe tener identificacion 'A6' y
+contendra sus datos de OpenBSD. Una particion no puede traslaparse con la otra.
 Dentro del comando fdisk , el comando 'manual' describe los comandos
 de fdisk en detalle.
 
@@ -101,9 +103,9 @@ __EOT
 				fdisk -e $_disk
 
 				if ! disk_has $_disk gpt openbsd; then
-					echo -n "No hay partición OpenBSD en GPT,"
+					echo -n "No hay particion OpenBSD en GPT,"
 				elif ! disk_has $_disk gpt efisys; then
-					echo -n "No hay partición EFI Sys en GPT,"
+					echo -n "No hay particion EFI Sys en GPT,"
 				else
 					return
 				fi
@@ -112,23 +114,23 @@ __EOT
 				cat <<__EOT
 
 
-Ahora creará una sola partición en el RMA que con todos sus datos de OpenBSD
-Esta partición debe tener identificación 'A6'; *NO* debe traslaparse con otras
-particiones y debe marcarse como la única partición activa.  En el programa
+Ahora creara una sola particion en el RMA que con todos sus datos de OpenBSD
+Esta particion debe tener identificacion 'A6'; *NO* debe traslaparse con otras
+particiones y debe marcarse como la unica particion activa.  En el programa
 fdisk, el comando 'manual' describe todos los comandos de fdisk en detalle.
 
 $(fdisk $_disk)
 __EOT
 				fdisk -e $_disk
 				disk_has $_disk mbr openbsd && return
-				echo -n "No hay partición OpenBSD en el RMA (MBR),"
+				echo -n "No hay particion OpenBSD en el RMA (MBR),"
 			fi
 			echo "intente nuevamente." ;;
 		[oO]*)
 			[[ $_d == OpenBSD ]] || continue
 			if [[ $_disk == $ROOTDISK ]] && disk_has $_disk gpt &&
 				! disk_has $_disk gpt efisys; then
-				echo "No hay partición EFI Sys en GPT, intente nuevament."
+				echo "No hay particion EFI Sys en GPT, intente nuevament."
 				$AUTO && exit 1
 				continue
 			fi
@@ -138,13 +140,15 @@ __EOT
 }
 
 md_prep_disklabel() {
-	local _disk=$1 _f=/tmp/fstab.$1
+	local _disk=$1 _f=/tmp/i/fstab.$1
 
 	md_prep_fdisk $_disk
 
 	disklabel_autolayout $_disk $_f || return
 	[[ -s $_f ]] && return
 
+	# Edit disklabel manually.
+	# Abandon all hope, ye who enter here.
 	disklabel -F $_f -E $_disk
 }
 

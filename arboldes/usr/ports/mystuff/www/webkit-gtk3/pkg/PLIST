@@ -1,4 +1,4 @@
-@comment $OpenBSD$
+@comment $OpenBSD: PLIST,v$
 @bin bin/GtkLauncher-3
 @bin bin/jsc-3
 include/webkitgtk-${WEBKIT_API_VERSION}/
@@ -260,9 +260,9 @@ include/webkitgtk-${WEBKIT_API_VERSION}/webkitdom/webkitdomdefines.h
 lib/girepository-1.0/JavaScriptCore-${WEBKIT_API_VERSION}.typelib
 lib/girepository-1.0/WebKit-${WEBKIT_API_VERSION}.typelib
 lib/libjavascriptcoregtk-${WEBKIT_API_VERSION}.la
-@lib lib/libjavascriptcoregtk-${WEBKIT_API_VERSION}.so.${LIBjavascriptcoregtk-3.0_VERSION}
+@lib lib/libjavascriptcoregtk-${WEBKIT_API_VERSION}.so.${LIBjavascriptcoregtk-${WEBKIT_API_VERSION}_VERSION}
 lib/libwebkitgtk-${WEBKIT_API_VERSION}.la
-@lib lib/libwebkitgtk-${WEBKIT_API_VERSION}.so.${LIBwebkitgtk-3.0_VERSION}
+@lib lib/libwebkitgtk-${WEBKIT_API_VERSION}.so.${LIBwebkitgtk-${WEBKIT_API_VERSION}_VERSION}
 lib/pkgconfig/javascriptcoregtk-${WEBKIT_API_VERSION}.pc
 lib/pkgconfig/webkitgtk-${WEBKIT_API_VERSION}.pc
 share/gir-1.0/JavaScriptCore-${WEBKIT_API_VERSION}.gir

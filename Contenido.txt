@@ -23,7 +23,7 @@ Mt77-[v]		Buscar rápido y preciso
 basico_adJ-[v]		Manual de uso básico de adJ
 servidor_adJ-[v]	Documentación de adJ como servidor
 usuario_adJ-[v]		Documentación para usuarios de adJ
-xmr-stak-[v]	Para minar criptomoneda monero
+xmrrig-[v]	Para minar criptomoneda monero
 
 
 ** Del proyecto Structio (dominio público) útil para educación:
@@ -89,7 +89,6 @@ que las oficiales de OpenBSD [V]):
 * Escritorio gráfico:
 audacious-[v]		Reproductor multimedia 
 audacity-[v]	Editor de audio
-abiword-[v]		Procesador de texto que puede importar MS-Word
 chromium-[v]	Navegador web Chrome
 dia-[v]		Herramienta para dibujar diagramas técnicos
 evince-[v]-light	Visor de documentos (proyecto GNOME)
@@ -143,7 +142,6 @@ texlive_base-[v]	Binarios para distribución TeXLive
 texlive_mktexlsr-[v]	mktexlsr para la dsitrubción TeXLive
 texlive_texmf-buildset-[v]	Pequeño texmf de texlive para crear portes
 texlive_texmf-minimal-[v]	texmf con funcionalidad básica
-texlive_texmf-full-[v]	texmf con macros extras
 unrar-[v]		Extrae, lista y prueba archivos RAR
 unzip-[v]		Descompresión formato ZIP
 vorbis-tools-[v]	Reproduce, codifica y maneja OGG
@@ -275,6 +273,7 @@ glib2mm-[v]	Interfaz en C++ para glib2
 glm-[v]		Encabezados de matematicas de OpenGL
 gmake-[v]		Construir programas a partir de fuentes
 gmp-[v]		Librería de aritmética de precisión arbitraría
+gnome-doc-utils-[v]	Utilidades para documentacion del proyecto GNOME
 gnome-icon-theme-[v]	Iconos para GNOME
 gnome-icon-theme-symbolic-[v]	Extensión al tema de iconos base
 gnugetopt-[v]	Utilidad getopt(1) de GNU
@@ -360,6 +359,7 @@ libglade2-[v]	Carga interfaces Glade
 libgnome-keyring-[v]	Librería para integrar anillo de llaves GNOME
 libgpg-error-[v]	Códigos de error de GnuPG
 libgsf-[v]		Archivos estructurados de Gnome
+libgxps-[v]		Librería GObject para presentar documentos XPS
 libiconv-[v]		Conversión entre codificaciones de caracteres
 libid3tag-[v]	Lector de marcas ID3
 libidn-[v]		Manejo de cadenas de internacionalización
@@ -535,7 +535,6 @@ php-intl-[v]		Extensión de internacionalización con librería ICU
 php-ldap-[v]		Extensión a PHP para protocolo LDAP
 php-mcrypt-[v]	Extensión para encripción/desencripción para PHP5
 php-mysqli-[v]	Extensión para acceder a bases de datos mysql para PHP5 
-php-mysql-[v]	Extensión para acceder a bases de datos mysql para PHP5
 php-pdo_pgsql-[v]	Extensiones PDO para acceso a bases PostgreSQL en PHP5
 php-pgsql-[v]	Uso de PostgreSQL desde PHP
 php-zip-[v]	Funciones zip para php5
@@ -553,6 +552,8 @@ postgresql-docs-[v]	Documentación de PostgreSQL
 potrace-[v]		Transforma mapas de bits a gráficos vectoriales
 procmail-[v]		Agente para filtrado de correo local
 proj-[v]		Utilidades para proyección cartográfica
+protobuf-[v]		Protocolos de colchones para C++
+protobuf-c-[v]		Protocolos de colchones para C
 ps2eps-[v]		Convierte Postscript a Postscript Encapsulado
 psutils-[v]		Utilidades para manipular documentos Postscript
 pulseaudio-[v]		Servidor de sonido en red y multi plataforma
@@ -607,8 +608,8 @@ py3-configobj-[v]	Escribe y lee archivo de configuración
 py3-cparser-[v]		Reconocedor de C en Python puro
 py3-cryptography-[v]	Recetas y primitivas criptográficas en Python
 py3-dateutil-[v]	API en python avanzado para cálculos con fechas
-py3-dbus-[v]		Uniones para dbus en Python
-py3-gdal-[v]		Interfaz con GDAL desde Python
+py3-dbus-[v]		Uniones para dbus en Python 3
+py3-gdal-[v]		Interfaz con GDAL desde Python 3
 py3-jinja2-[v]		Motor de plantilla para Python, rápido y en arenera
 py3-josepy-[v]	Cifrado y firma de objets en Javascript
 py3-idna-[v]		Librería de Python para soportar el protocolo IDNA
@@ -625,7 +626,7 @@ py3-psycopg2-[v]	Adaptador a bases de datos PostgreSQL para Ptyhon
 py3-pygments-[v]	Resaltador de sintaxis para python
 py3-pyRFC3339-[v]	Da formato a fechas de acuerdo al RFC3339
 py3-qt5-[v]		Uniones de Python con Qt5
-py3-qscintilla-[v]	Uniones en python con editor de código fuente Scintilla
+py3-qscintilla-qt5-[v]	Uniones en python con editor de código fuente Scintilla
 py3-requests-[v]	Librería Python para HTTP simple y elegante
 py3-requests-toolbelt-[v]	Cinturon de utilidades para py-requests
 py3-setuptools-[v]	Sistema de empaquetamiento de módulos Python
@@ -638,6 +639,7 @@ py3-werkzeug-[v]	Colección de utilidades WSGI
 py3-zopecomponent-[v]	Arquitectura por componentes de Zope
 py3-zopeevent-[v]	Sistema de publicación básico de Zope
 py3-zopeinterface-[v]	Interfaz a infraestructura de objetos de Zope
+python-tkinter-[v]	tk GUI module for Python
 qca-[v]		Arquitectura de cifrado para Qt4
 qca-qt5-[v]	Arquitectura de cifrado para Qt5
 qhull-[v]		Calcular caso convexo
@@ -692,7 +694,7 @@ recode-[v]		Convertir archivos entre juegos de caracters y usos
 redland-[v]	Interfaz de alto nivel para RDF 
 rrdtool-[v]		Sistema para almacenar y presentar series de tiempo
 rrdupdate-[v]	Herramienta liviana de sólo-actualiación para rrdtool
-ruby25-ri_docs-[v]	Documentación de nucleo y librería estándar de Ruby
+ruby26-ri_docs-[v]	Documentación de nucleo y librería estándar de Ruby
 samba-[v]		Interconexión con Windows con protocolos SMB/CIFS
 samba-util-[v]	Librerías comunes para Samba
 sane-backends-[v]	API para acceder a scanners
@@ -716,11 +718,11 @@ tiff-[v]		Manipula formato gráfico TIFF
 twolame-[v]	Codificaodr de MPEG Audio Capa 2 (MP2) optimizado
 vamp-plugin-sdk-[v]	API para plugins de audio
 vim-lang-[v]	Soporte de idiomas para vim
+vim-spell-es-[v]	Soporte de idiomas para vim
 vte3-[v]		Librería para emulación de terminal
 wavpack-[v]		Codificador de audio para compresión con y sin perdida
 webkit-gtk3-[v]	Motor de navegador de fuentes abiertas  para Gtk+
 webkitgtk4-[v]	Interfaz para GTK+3
-wv-[v]		Convierte de varios formatos Microsoft a HTML
 woff2-[v]		Librería para el formato Web Open Font 2.0
 wxWidgets-gtk2-[v]	Herramientas para GUIs multi-plataforma
 Xaw3d-[v]		Componentes gráficos 3D Athena similares a Motif
