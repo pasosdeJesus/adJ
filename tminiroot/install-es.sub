@@ -2603,7 +2603,7 @@ install_sets() {
 	fi
 
 	echo "
-¡Por $_SMODE componentes basicos!"
+Por $_SMODE componentes basicos!"
 	while :; do
 		# Get list of cdroms again in case one just got plugged in.
 		_cddevs=$(get_cddevs)
@@ -2828,7 +2828,7 @@ __EOT
 	# Pat on the back.
 	cat <<__EOT
 
-¡FELICITACIONES! ¡Procedimiento completado!
+FELICITACIONES! Procedimiento completado!
 
 __EOT
 	[[ $MODE == install ]] && cat <<__EOT
