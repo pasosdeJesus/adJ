@@ -1,4 +1,4 @@
-Con respecto a OpenBSD 6.4 las novedades son:
+Con respecto a OpenBSD 6.5 las novedades son:
 
 * Proceso de Instalación:
 	* upgrade install install.sub 	En español
