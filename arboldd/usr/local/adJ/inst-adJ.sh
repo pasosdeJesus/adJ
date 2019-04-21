@@ -1353,7 +1353,7 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 [end]
 [submenu] (Otros)
 [exec] (gvim) {gvim}
-[exec] (qemu) {qemu}
+[exec] (qemu) {qemu-system-x86_64}
 [exec] (qgis) {qgis}
 [exec] (xarchiver) {xarchiver}
 [exec] (xfw) {xfw}
