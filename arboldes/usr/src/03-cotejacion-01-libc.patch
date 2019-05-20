@@ -1071,7 +1071,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/string/strcoll
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/string/strxfrm.3 src/lib/libc/string/strxfrm.3
 --- src54-s/lib/libc/string/strxfrm.3	Mon Oct  7 07:49:09 2013
 +++ src/lib/libc/string/strxfrm.3	Sat Oct 12 13:23:41 2013
-@@ -62,17 +62,12 @@
+@@ -62,22 +62,8 @@
  .Xr strcoll 3
  on the original untransformed strings would return.
  .Pp
@@ -1082,18 +1082,21 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/string/strxfrm
 -and the global locale, the thread-specific locale, and the
 -.Fa locale
 -argument are ignored.
+-On other operating systems, the behaviour may depend on the
+-.Dv LC_CTYPE
+-and
+-.Dv LC_COLLATE
+-locale categories set with
+-.Xr setlocale 3 ,
+-.Xr uselocale 3 ,
+-or
+-.Xr newlocale 3 .
 +On adJ the implementation is enough for the portion of UTF-8 translatable
 +to ISO8859-1.
- .Sh ENVIRONMENT
--On other operating systems, the behaviour of
-+The behaviour of
- .Fn strxfrm
--may depend on the
-+depends on the
- .Dv LC_CTYPE
- .Xr locale 1 .
  .Sh SEE ALSO
-@@ -99,4 +94,4 @@
+ .Xr newlocale 3 ,
+ .Xr setlocale 3 ,
+@@ -102,4 +88,4 @@
  and
  .Fn strxfrm_l
  since

@@ -1,43 +1,44 @@
 COMO PUBLICAR
 =============
 
-Anhelamos publicar versión mayor (e.g 6.4) 3 meses después de OpenBSD:
+Anhelamos publicar versión mayor (e.g 6.5) 3 meses después de OpenBSD:
 
 	11.Ene
 	1.Jul
 
-También publicamos revisiones (e.g 6.4p1) si la seguridad o calidad lo ameritan.
+También publicamos revisiones (e.g 6.5p1) si la seguridad o calidad lo ameritan.
 
-Anhelamos publicar al menos una versión beta (e.g 6.4b1 en directorio
+Anhelamos publicar al menos una versión beta (e.g 6.5b1 en directorio
 ```desarrollo``` del sitio de distribución) en:
 
 	10.Dic
 	10.Jun
 
-Sería ideal publicar una versión alfa mucho antes (24.Sep y 24.Mar, e.g 6.4a1).
+Sería ideal publicar una versión alfa mucho antes (24.Sep y 24.Mar, e.g 6.5a1).
 
 
 Pasos importantes para publicar versión beta
 --------------------------------------------
-
-1. Actulizar parches de locale y xlocale de forma que puedan aplicarse
-   sobre la nueva versión de OpenBSD.
-2. Recompilar kernel, perl, sistema base y asegurar que puede crearse una 
-   distribución inicial 
-3. Recompilar paquetes con actualizaciones de seguridad o mejoras
-4. Retroportar paquetes, dejar resultados no incluidos en DVD pero
-   útiles en 6.4-amd64-extra
-5. Cambiar versión en ver.sh, arboldd/usr/local/adJ/inst-adJ.sh, Actualiza.md,
+1. Cambiar versión en ver.sh, arboldd/usr/local/adJ/inst-adJ.sh, Actualiza.md,
 	ComoPublicar.md, {$V-amd64,arboldvd}/util/preact-adJ.sh, Novedades.md,
-	Novedades_OpenBSD.md, {$V-amd64,arboldvd}/util/actbase.sh, 
-6. Retocar ```Dedicatoria.md``` y archivos *.md (por lo menos versión),
-   regenerar en distribución (sin paquetes ni otras compilaciones) con:
+	Novedades_OpenBSD.md, {$V-amd64,arboldvd}/util/actbase.sh y
+   cambiar `Dedicatoria.md`
+2. Instalar o bien la versión alfa de adJ misma versión o bien la
+   versión estable de OpenBSD
+3. Actualizar parches de locale y xlocale de forma que puedan aplicarse
+   sobre la nueva versión de OpenBSD.
+4. Recompilar kernel, perl, sistema base y asegurar que puede crearse una 
+   distribución inicial 
+5. Recompilar paquetes con actualizaciones de seguridad o mejoras
+6. Retroportar paquetes, dejar resultados no incluidos en DVD pero
+   útiles en 6.5-amd64-extra
+7. Regenerar en distribución (sin paquetes ni otras compilaciones) con:
 	```
 	doas ./distribucion.sh
 	```
-7. Retocar fecha de publicacion en ```Novedades.md``` y publicar escondido en
+8. Retocar fecha de publicacion en ```Novedades.md``` y publicar escondido en
    http://aprendiendo.pasosdeJesus.org
-8. Generar distribución, imagen iso (```hdes/creaiso.sh```)
+9. Generar distribución, imagen iso (```hdes/creaiso.sh```)
 9. Probar por ejemplo en ```qemu``` (```hdes/qemu.sh``` o remotamente 
   ```TEXTO=1 hdes/qemu.sh```): 
 - Instalación de sistema base, `uname -a` debe reportar APRENDIENDODEJESUS
@@ -112,9 +113,9 @@ psql -h /var/www/var/run/postgresql/ -Upostgres -f /tmp/cot.sql
 11. En adJ.pasosdeJesus.org
 	```
 	hdes/creaiso.sh
-	cp -rf AprendiendoDeJesus-6.4-amd64.iso 6.4-amd64 /dirftp
-	mkdir /dirftp/6.4-amd64-extra
-	rsync compdes:comp/adJ/extra-6.4/* /dirftp/6.4-amd64-extra
+	cp -rf AprendiendoDeJesus-6.5-amd64.iso 6.5-amd64 /dirftp
+	mkdir /dirftp/6.5-amd64-extra
+	rsync compdes:comp/adJ/extra-6.5/* /dirftp/6.5-amd64-extra
 	```
 12. Verificar operación de:
   * http://pasosdeJesus.github.io/basico_adJ http://pasosdeJesus.github.io/usuario_adJ http://pasosdeJesus.github.io/servidor_adJ
@@ -126,19 +127,19 @@ psql -h /var/www/var/run/postgresql/ -Upostgres -f /tmp/cot.sql
 
 13. Poner Tag en github e iniciar rama al publicar version beta (antes en master)
 	```
-	git tag -a v6.4a1 -m "Version 6.4a1"
-	git push origin v6.4a1
+	git tag -a v6.5a1 -m "Version 6.5a1"
+	git push origin v6.5a1
 	...
-	git checkout -b ADJ_6_4
-	git push origin ADJ_6_4
+	git checkout -b ADJ_6_5
+	git push origin ADJ_6_5
 	```
 14. Publicar en lista de desarrollo
 
 Pasos importantes para publicar versión mayor
 --------------------------------------------
 
-1. Usar la rama ADJ_6_4
-	git checkout ADJ_6_4
+1. Usar la rama ADJ_6_5
+	git checkout ADJ_6_5
 2. Actualizar SIVeL, evangelios, Mt77, cor1440, sal7711 y paquetes propios de 
    adJ.
 3. Actualizar documentación (basico_adJ, usuario_adJ y servidor_adJ), 
@@ -151,26 +152,26 @@ Pasos importantes para publicar versión mayor
    http://aprendiendo.pasosdejesus.org/?id=MainMenu,  
 8. Poner Tag en github
 	```
-	git tag -a v6.4 -m "Version 6.4"
-	git push origin v6.4
+	git tag -a v6.5 -m "Version 6.5"
+	git push origin v6.5
 	```
 9. Publicar en Twitter y Facebook. 
    Si es tambien publicacion de SIVeL en sitio de noticias de SIVeL y Structio.
 
-	Publicado adJ 6.4 distribución para servidores y cortafuegos, 
+	Publicado adJ 6.5 distribución para servidores y cortafuegos, 
 	segura, amigable para cristian@s y en español, ver 
 	http://aprendiendo.pasosdejesus.org/
 10. Correo a listas: 
     openbsd-colombia@googlegroups.com, 
     openbsd-mexico@googlegroups.com, sivel-soporte@lists.sourceforge.net
 
-	Tema: Publicado adJ 6.4 para amd64
+	Tema: Publicado adJ 6.5 para amd64
 
 	Para instalar por primera vez descarga la imagen para DVD de:
 	  http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/
 	O solicita un DVD o una USB de instalacion por correo postal.
 
-	Si planeas actualizar de una version anterior a 6.4
+	Si planeas actualizar de una version anterior a 6.5
 	hay un procedimiento mas rápido con ```rsync``` (ver
 	https://github.com/pasosdeJesus/adJ/blob/master/Actualiza.md ).
 
@@ -182,8 +183,8 @@ Pasos importantes para publicar versión mayor
 	  2. La guía de instalación:
 	  http://pasosdeJesus.github.io//usuario_adJ/sobre-la-instalacion.html
 
-	Mira las novedades completas de la versión 6.4 en:
-	  http://aprendiendo.pasosdejesus.org/?id=AdJ+6.4+-+Aprendiendo+de+Jesus+6.4
+	Mira las novedades completas de la versión 6.5 en:
+	  http://aprendiendo.pasosdejesus.org/?id=AdJ+6.5+-+Aprendiendo+de+Jesus+6.5
 
 	De estas destacamos:
 	...

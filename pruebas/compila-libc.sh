@@ -1,3 +1,4 @@
+#!/bin/sh
 # Compila libc
 # Dominio Público. 2013. vtamara@pasosdeJesus.org
 

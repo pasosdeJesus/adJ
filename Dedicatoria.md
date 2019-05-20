@@ -1,3 +1,3 @@
 
-__Airaos, pero no pequéis; no se ponga el sol sobre vuestro enojo__
-(ver Efesios 4:26)
+Dedicamos esta versión a Jesús quien es __luz__ para que no caminemos en
+tinieblas (ver Juan 12:46)

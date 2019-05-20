@@ -47,15 +47,7 @@ diff -ruN src62-orig/lib/libc/locale/setlocale.c src/lib/libc/locale/setlocale.c
  	int ic;
  
  	if (category < LC_ALL || category >= _LC_LAST)
-@@ -92,22 +110,24 @@
- 		if (category == LC_ALL && strchr(locname, '/') != NULL) {
- 
- 			/* One value for each category. */
--			if ((firstname = strdup(locname)) == NULL)
-+			if ((firstname = strdup(locname)) == NULL) {
-+				freegl(newgl);
- 				return NULL;
-+			}
+@@ -99,17 +117,17 @@
  			nextname = firstname;
  			for (ic = 1; ic < _LC_LAST; ic++)
  				if (nextname == NULL || changegl(ic,
@@ -77,7 +69,7 @@ diff -ruN src62-orig/lib/libc/locale/setlocale.c src/lib/libc/locale/setlocale.c
  				freegl(newgl);
  				return NULL;
  			}
-@@ -116,9 +136,9 @@
+@@ -118,9 +136,9 @@
  			if (category == LC_ALL) {
  				for (ic = 1; ic < _LC_LAST; ic++) {
  					if (changegl(ic, locname,
@@ -90,7 +82,7 @@ diff -ruN src62-orig/lib/libc/locale/setlocale.c src/lib/libc/locale/setlocale.c
  					}
  				}
  			}
-@@ -173,24 +193,13 @@
+@@ -167,24 +185,13 @@
  	}
  
  done:
@@ -105,15 +97,15 @@ diff -ruN src62-orig/lib/libc/locale/setlocale.c src/lib/libc/locale/setlocale.c
 -			global_locale = newgl;
 -			if (category == LC_ALL || category == LC_CTYPE)
 -				_GlobalRuneLocale =
--				    strchr(global_locname, '.') == NULL ?
+-				    strchr(newgl[LC_CTYPE], '.') == NULL ?
 -				    &_DefaultRuneLocale : _Utf8RuneLocale;
 -		} else {
 -			freegl(newgl);
 -			return NULL;
 -		}
 +	if (global_locale != NULL && global_locale != newgl) {
-+		freegl(global_locale);
-+		global_locale = NULL;
++		 freegl(global_locale);
++		 global_locale = NULL;
  	}
 -	return global_locname;
 +	if (newgl != NULL) {

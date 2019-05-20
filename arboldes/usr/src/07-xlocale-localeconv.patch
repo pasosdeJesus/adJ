@@ -408,27 +408,14 @@ diff -ruN src-m/lib/libc/locale/xlocale.c src/lib/libc/locale/xlocale.c
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/setlocale.3 src/lib/libc/locale/setlocale.3
 --- src54-x6/lib/libc/locale/setlocale.3	Tue Dec  3 16:08:11 2013
 +++ src/lib/libc/locale/setlocale.3	Tue Dec  3 16:12:25 2013
-@@ -38,7 +38,8 @@
- .Os
- .Sh NAME
- .Nm setlocale ,
--.Nm localeconv
-+.Nm localeconv ,
-+.Nm localeconv_l
- .Nd select character encoding
- .Sh SYNOPSIS
- .In locale.h
-@@ -46,6 +47,9 @@
- .Fn setlocale "int category" "const char *locale"
- .Ft struct lconv *
- .Fn localeconv "void"
-+.In locale.h
-+.Ft struct lconv *
-+.Fn localeconv_l "void"
- .Sh DESCRIPTION
- The
- .Fn setlocale
-@@ -59,26 +63,23 @@
+@@ -50,41 +50,34 @@
+ .Fa locale
+ for the current process.
+ The locale modifies the behaviour of some functions in the C library
+-with respect to the character encoding, and on other operating systems
+-also with respect to some language and cultural conventions.
++with respect to the character encoding and some language and cultural conventions.
+ For more information about locales in general, see the
  .Xr locale 1
  manual page.
  .Pp
@@ -465,29 +452,133 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/setloc
 +sets conventions for date and time.
  A category of
  .Dv LC_ALL
- sets the entire locale generically.
-@@ -133,7 +134,10 @@
- The
- .Fn localeconv
- function returns a pointer to a static structure
--which provides parameters for formatting numbers.
-+which provides parameters for formatting numbers, while
-+.Fn localeconv_l
-+points to parameters for formatting number in the given locale.
-+.
- On
+ sets the entire locale generically, which is strongly discouraged for
+ security reasons in portable programs.
+ .Pp
+-The syntax and semantics of the
+-.Fa locale
+-argument are not standardized and vary among operating systems.
+-On
++In
  .Ox ,
- nothing in the returned structure ever changes.
-@@ -331,6 +335,9 @@
- .Fn localeconv
- functions conform to
- .St -ansiC .
-+The 
-+.Fn localeconv_l
-+function is a Darwin extension.
- .Sh HISTORY
- The
+ if the
+ .Fa locale
+@@ -128,7 +121,7 @@
+ .Fn setlocale ;
+ the locale is never changed as a side effect of some other routine.
+ .Pp
+-The
++For example the
+ .Dv LC_CTYPE
+ category modifies the behaviour of at least the following functions:
+ .Xr iswctype 3 ,
+@@ -216,6 +209,7 @@
+ .Qq C/en_US.UTF-8/C/C/C/C .
+ .Sh SEE ALSO
+ .Xr locale 1 ,
++.Xr localeconv 3 ,
+ .Xr newlocale 3 ,
+ .Xr nl_langinfo 3 ,
+ .Xr uselocale 3
+@@ -229,98 +223,3 @@
  .Fn setlocale
+ function first appeared in
+ .Bx 4.4 .
+-.Sh CAVEATS
+-On systems other than
+-.Ox ,
+-calling
+-.Fn setlocale
+-or
+-.Xr uselocale 3
+-with a
+-.Fa category
+-other than
+-.Dv LC_CTYPE
+-can cause erratic behaviour of many library functions.
+-For security reasons, make sure that portable programs only use
+-.Dv LC_CTYPE .
+-.Pp
+-For example, the following functions may be affected.
+-The list is probably incomplete.
+-For example, additional library functions may be impacted
+-if they directly or indirectly call affected functions,
+-or if they attempt to imitate aspects of their behaviour.
+-Functions that are not standardized may be affected too.
+-.Bl -tag -width Ds
+-.It Dv LC_COLLATE
+-.Xr glob 3 ,
+-.Xr strcoll 3 ,
+-.Xr strxfrm 3 ,
+-.Xr wcscoll 3 ,
+-.Xr wcsxfrm 3 ,
+-and the functions documented in
+-.Xr regexec 3
+-.It Dv LC_MESSAGES
+-.Xr catgets 3 ,
+-.Xr catopen 3 ,
+-.Xr nl_langinfo 3 ,
+-.Xr perror 3 ,
+-.Xr psignal 3 ,
+-.Xr strerror 3 ,
+-.Xr strsignal 3 ,
+-and the functions documented in
+-.Xr err 3
+-.It Dv LC_MONETARY
+-.Xr localeconv 3 ,
+-.Xr nl_langinfo 3 ,
+-.Fn strfmon
+-.It Dv LC_NUMERIC
+-.Xr atof 3 ,
+-.Xr localeconv 3 ,
+-.Xr nl_langinfo 3 ,
+-.Fn strfmon ,
+-and the functions documented in
+-.Xr printf 3 ,
+-.Xr scanf 3 ,
+-.Xr strtod 3 ,
+-.Xr wcstod 3 ,
+-.Xr wprintf 3 ,
+-.Xr wscanf 3 .
+-This category is particularly dangerous because it can cause bugs
+-in the parsing and formatting of numbers, for example failures to
+-recognize or properly write decimal points.
+-.It Dv LC_TIME
+-.Fn getdate ,
+-.Xr nl_langinfo 3 ,
+-.Xr strftime 3 ,
+-.Xr strptime 3 .
+-Similarly, this is prone to causing bugs in the parsing and formatting
+-of date strings.
+-.It Dv LC_CTYPE
+-On systems other than
+-.Ox ,
+-this category may affect the behaviour of additional functions,
+-for example:
+-.Xr btowc 3 ,
+-.Xr isalnum 3 ,
+-.Xr isalpha 3 ,
+-.Xr isblank 3 ,
+-.Xr iscntrl 3 ,
+-.Xr isdigit 3 ,
+-.Xr isgraph 3 ,
+-.Xr islower 3 ,
+-.Xr isprint 3 ,
+-.Xr ispunct 3 ,
+-.Xr isspace 3 ,
+-.Xr isupper 3 ,
+-.Xr isxdigit 3 ,
+-.Xr mbsinit 3 ,
+-.Xr strcasecmp 3 ,
+-.Xr strcoll 3 ,
+-.Xr strxfrm 3 ,
+-.Xr tolower 3 ,
+-.Xr toupper 3 ,
+-.Xr vis 3 ,
+-.Xr wcscoll 3 ,
+-.Xr wcsxfrm 3 ,
+-.Xr wctob 3
+-.El
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src55-orig/lib/libc/locale/_def_monetary.c src/lib/libc/locale/_def_monetary.c 
 --- src55-orig/lib/libc/locale/_def_monetary.c	Wed Dec 11 22:06:50 2013
 +++ src/lib/libc/locale/_def_monetary.c	Fri Dec 13 15:43:35 2013
@@ -787,4 +878,38 @@ diff -ruN src-m/lib/libc/Symbols.list.orig src/lib/libc/Symbols.list
  mblen
  mbrlen
  mbrtowc
-
+diff -ruN src65-orig/lib/libc/locale/localeconv.3 src/lib/libc/locale/localeconv.3
+--- src65-orig/lib/libc/locale/localeconv.3	Wed Apr  4 10:04:37 2018
++++ src/lib/libc/locale/localeconv.3	Sun May 19 09:26:46 2019
+@@ -38,11 +38,14 @@
+ .Os
+ .Sh NAME
+ .Nm localeconv
++.Nm localeconv_l
+ .Nd retrieve parameters for locale-dependent formatting of numbers
+ .Sh SYNOPSIS
+ .In locale.h
+ .Ft struct lconv *
+ .Fn localeconv "void"
++.Ft struct lconv *
++.Fn localeconv_l "locale_t locale"
+ .Sh DESCRIPTION
+ The
+ .Fn localeconv
+@@ -50,11 +53,11 @@
+ which provides parameters for
+ .Xr locale 1 Ns -dependent
+ formatting of numbers.
+-On
+-.Ox ,
+-nothing in the returned structure ever changes.
+-On other operating systems, the contents of the structure may vary
+-according to the
++.Fn localeconv_l
++function returns a pointer to a static structure which provides parameters
++for formatting numbers in the given locale.
++.Pp
++The contents of the structure may vary according to the
+ .Dv LC_NUMERIC
+ and
+ .Dv LC_MONETARY

@@ -1302,7 +1302,7 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/string/str
  .Ft int
  .Fn strcoll_l "const char *s1" "const char *s2" "locale_t locale"
  .Sh DESCRIPTION
-@@ -53,25 +54,21 @@
+@@ -53,24 +54,21 @@
  functions lexicographically compare the NUL-terminated strings
  .Fa s1
  and
@@ -1313,7 +1313,7 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/string/str
 +
 +.Fn strcoll
 +uses the current locale collation
-+while 
++while
 +.Fn strcoll_l
 +uses the provided
 +.Ar locale
@@ -1331,13 +1331,12 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/string/str
 -and the global locale, the thread-specific locale, and the
 -.Fa locale
 -argument are ignored.
--.Sh ENVIRONMENT
--On other operating systems, the behaviour of
--.Fn strcoll
--.\" ----------------------------------------------------------------------
+-On other operating systems, results may depend on the
+-.Dv LC_CTYPE
+-and
+ .\" ----------------------------------------------------------------------
  .Sh BUGS
  The current implementation is enough only for single byte encodings and UTF-8
- translatable to ISO8859-1.
 diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/string/strstr.3 src53xlocale2/lib/libc/string/strstr.3
 --- src53xlocale1/lib/libc/string/strstr.3	Mon Mar 25 18:28:29 2013
 +++ src53xlocale2/lib/libc/string/strstr.3	Fri Apr 12 11:57:50 2013
@@ -1398,20 +1397,18 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/string/str
  .Ft size_t
  .Fn strxfrm_l "char *dst" "const char *src" "size_t n" "locale_t locale"
  .Sh DESCRIPTION
-@@ -62,20 +63,42 @@
+@@ -61,11 +62,41 @@
+ on transformed strings returns what
  .Xr strcoll 3
  on the original untransformed strings would return.
- .Pp
--On adJ the implementation is enough for the portion of UTF-8 translatable
--to ISO8859-1.
 +.Ar n
 +is the maximal amount of bytes that can be written to
 +.Ar dst
 +, however if
 +.Ar n
-+is 0 this function returns the amount of bytes that the transformed string
-+would require --usefull to allocate space before calling  again.
-+.Pp
++is 0 this function returns the amount of bytes that the transformed
++string would require --usefull to allocate space before calling  again.
+ .Pp
 +The function
 +.Fn strcoll
 +uses the current locale collation, while
@@ -1419,32 +1416,30 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/string/str
 +uses the given locale, see
 +.Xr xlocale 3
 +.Sh RETURN VALUE
-+Length of the string transformed (not counting NUL).  If such lenght is grather
-+than
-+.Ar n
++Length of the string transformed (not counting NUL).  If such lenght is
++greather than 
++.AR n
 +the contents of
 +.Ar dst
 +is unspecified.
- .Sh ENVIRONMENT
- The behaviour of
- .Fn strxfrm
- depends on the
- .Dv LC_CTYPE
--.Xr locale 1 .
-+.Pp
-+On adJ the implementation is enough for the portion of UTF-8 translatable
-+to ISO8859-1.
++.Sh ENVIRONMENT
++The behaviour of
++.Fn strxfrm
++depends on the
++.Dv LC_CTYPE
++and 
++.Dv LC_COLLATE
++.Xr locale 1 .
++.Sh CAVEATS
+ On adJ the implementation is enough for the portion of UTF-8 translatable
+ to ISO8859-1.
  .Sh SEE ALSO
  .Xr newlocale 3 ,
++.Xr locale 1 ,
  .Xr setlocale 3 ,
  .Xr strcmp 3 ,
  .Xr strcoll 3 ,
- .Xr strlcpy 3 ,
-+.Xr locale 1 .
- .Xr wcsxfrm 3
- .Sh STANDARDS
- The
-@@ -94,4 +117,4 @@
+@@ -88,4 +119,4 @@
  and
  .Fn strxfrm_l
  since
@@ -2267,37 +2262,31 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/stdio/wpri
  functions will fail if
  .Fa n
  or more wide characters were requested to be written,
-@@ -234,8 +293,13 @@
- or
- .Cm F )
- should be grouped and separated by thousands using
--the non-monetary separator returned by
--.Xr localeconv 3 .
-+the non-monetary separator of the locale provided as
-+parameter in the case of functions with postfix _l, or of
-+the current locale (returned by
-+.Xr localeconv_l 3
-+and
-+.Xr localeconv 3
-+respectively).
- .El
- .It
- An optional decimal digit string specifying a minimum field width.
-@@ -579,8 +643,11 @@
+@@ -225,10 +284,7 @@
+ .Cm +
+ overrides a space if both are used.
+ .It Sq Cm '
+-On
+-.Ox ,
+-this flag has no effect.
+-On other systems, it may cause the insertion of
++Insertion of
+ .Xr locale 1 Ns -dependent
+ thousands separator characters into the integral parts of arguments
+ of the
+@@ -578,6 +634,11 @@
+ .Ql %% .
  .El
  .Pp
- The decimal point
--character is defined in the program's locale (category
--.Dv LC_NUMERIC ) .
-+character is defined in the locale given as parameter
-+(category
++The decimal point character is defined in the  locale given as parameter (category
 +.Dv LC_NUMERIC ),
-+in the case of functions with "_l", and in the program's locale in
++in the case of functions ending in "_l", and in the program's locale in
 +the case of the other functions.
- .Pp
++.Pp
  In no case does a non-existent or small field width cause truncation of
  a numeric field; if the result of a conversion is wider than the field
-@@ -593,6 +660,7 @@
+ width, the
+@@ -589,6 +650,7 @@
  .Xr putwc 3 ,
  .Xr setlocale 3 ,
  .Xr wcsrtombs 3
@@ -2305,10 +2294,19 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/stdio/wpri
  .Sh STANDARDS
  The
  .Fn wprintf ,
-@@ -605,3 +673,13 @@
+@@ -601,12 +663,13 @@
  functions
  conform to
  .St -isoC-99 .
+-.Sh CAVEATS
+-On systems other than
+-.Ox ,
+-the
+-.Dv LC_NUMERIC
+-.Xr locale 1
+-category can cause erratic output; see CAVEATS in
+-.Xr setlocale 3
+-for details.
 +.Pp
 +The
 +.Fn wprintf_l ,
@@ -2420,21 +2418,19 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/stdio/wsca
  functions, respectively.
  .Pp
  Each successive
-@@ -390,8 +431,11 @@
+@@ -389,6 +430,11 @@
+ flag.
  .El
  .Pp
- The decimal point
--character is defined in the program's locale (category
--.Dv LC_NUMERIC ) .
-+character is defined by the locale given as parameter
-+(category
++The decimal point character is defined by the locale given as parameter (category
 +.Dv LC_NUMERIC )
 +in the case of functions with postfix "_l", and by the program's locale
 +for other functions.
- .Pp
++.Pp
  For backwards compatibility, a
  .Dq conversion
-@@ -421,6 +465,8 @@
+ of
+@@ -417,6 +463,8 @@
  .Xr wcstol 3 ,
  .Xr wcstoul 3 ,
  .Xr wprintf 3
@@ -2443,11 +2439,19 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/stdio/wsca
  .Sh STANDARDS
  The functions
  .Fn wscanf ,
-@@ -432,6 +478,16 @@
+@@ -428,15 +476,15 @@
  .Fn vswscanf
  conform to
  .St -isoC-99 .
-+.Pp
+-.Sh CAVEATS
+-On systems other than
+-.Ox ,
+-the
+-.Dv LC_NUMERIC
+-.Xr locale 1
+-category can cause parsing failures; see CAVEATS in
+-.Xr setlocale 3
+-for details.
 +The functions
 +.Fn wscanf_l ,
 +.Fn fwscanf_l ,
