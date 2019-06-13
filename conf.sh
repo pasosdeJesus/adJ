@@ -1,22 +1,22 @@
-#!/bin/sh
+#!/usr/bin/env ksh
 
-# Script genÈrico para preparar herramientas de DocBook y configurar.
-# Esta fuente se cede al dominio p˙blico 2003. No se ofrecen garantÌas.
+# Script gen√©rico para preparar herramientas de DocBook y configurar.
+# Esta fuente se cede al dominio p√∫blico 2003. No se ofrecen garant√≠as.
 # Puede enviar reportes de fallas a structio-info@lists.sourceforge.net
 
-# CrÈditos
-# Manejo de variables de configuraciÛn: Miembros de Structio.  
+# Cr√©ditos
+# Manejo de variables de configuraci√≥n: Miembros de Structio.  
 #	http://structio.sourceforge.net/
-# LÌnea de comandos: WWWeb Tide Team 
+# L√≠nea de comandos: WWWeb Tide Team 
 #	http://www.ebbtide.com/Util/ksh_parse.html 
-# que tambiÈn es de dominio p˙blico de acuerdo a http://www.ebbtide.com/Util/
+# que tambi√©n es de dominio p√∫blico de acuerdo a http://www.ebbtide.com/Util/
 # "The following utilities have been written by the members of WWWeb Tide 
 # Team. We considered them to be infinitely useful in every day systems and 
 # web site administration. So much so, in fact, we have decided to put the 
 # sources in the public domain." 
 
 
-# Leyendo variables de configuraciÛn
+# Leyendo variables de configuraci√≥n
 if (test ! -f confv.sh) then {
         cp confv.empty confv.sh
 } fi;
@@ -24,11 +24,11 @@ if (test ! -f confv.sh) then {
 . ./confv.sh
 
 
-# Leyendo funciones para ayudar en configuraciÛn
+# Leyendo funciones para ayudar en configuraci√≥n
 . herram/confaux.sh
 . herram/misc.sh
 
-# Reconociendo lÌnea de comandos
+# Reconociendo l√≠nea de comandos
 
 BASENAME=$(basename $0)
 USAGE="$BASENAME [-v] [-h] [-M] [-p prefijo]"
@@ -61,7 +61,7 @@ do
 	    vbs="$vbs -v"
 	    ;;
       h)    HELP_FLAG=1;;		# display on-line help
-      \?)   echo "OpciÛn no reconocida: $OPTARG" >&2	# flag illegal switch 
+      \?)   echo "Opci√≥n no reconocida: $OPTARG" >&2	# flag illegal switch 
 	    OPT_FLAG=1;;
    esac
 done
@@ -69,10 +69,10 @@ OPT_COUNT=$(($OPTIND-1))
 shift $OPT_COUNT
 
 options_help="
-   -p prefijo	Prefijo de la ruta de instalaciÛn (por defecto /usr/local)
+   -p prefijo	Prefijo de la ruta de instalaci√≥n (por defecto /usr/local)
    -h           Presenta ayuda corta
-   -M           Presenta ayuda m·s completa
-   -v           Presenta informaciÛn de depuraciÛn durante ejecuciÛn"
+   -M           Presenta ayuda m√°s completa
+   -v           Presenta informaci√≥n de depuraci√≥n durante ejecuci√≥n"
  
 # check for man page request
 if (test "$MAN_FLAG" = "1" ) then {
@@ -92,35 +92,35 @@ NOMBRE
 	$USAGE
 
 
-DESCRIPCI”N
+DESCRIPCI√ìN
 
-	Establece el valor de las variables de configuraciÛn y genera
+	Establece el valor de las variables de configuraci√≥n y genera
 	archivos en diversos formatos empleados por las fuentes DocBook
 	con ayudas de 'repasa' del proyecto $PROYECTO:
 	* $PRY_DESC
 	* $URLSITE
 
-	Las variables de configuraciÛn y sus valores por defecto est·n
+	Las variables de configuraci√≥n y sus valores por defecto est√°n
 	en confv.empty (debajo de cada variable hay un comentario con la 
-	descripciÛn).
+	descripci√≥n).
 	Este script modifica el archivo confv.sh (o de no existir lo crea
         a partir de confv.empty) y genera los archivos Make.inc y confv.ent 
-	con las variables de configuraciÛn instanciadas.  
-	Para la instanciaciÛn este tiene en cuenta:
+	con las variables de configuraci√≥n instanciadas.  
+	Para la instanciaci√≥n este tiene en cuenta:
 	* Detecta procesadores para hojas de estilo  DocBook, hojas de estilo 
 	  y de requerirse verifica sus versiones (Jade, OpenJade, xsltproc)
-	* Adapta mÈtodos de generaciÛn (por defecto prefiere emplear xsltproc
+	* Adapta m√©todos de generaci√≥n (por defecto prefiere emplear xsltproc
 	  para generar HTML, OpenJade para generar PostScript y ps2pdf para
 	  generar PDF).
-	* Detecta herramientas auxiliares empleadas para la generaciÛn y
-	  operaciÛn (e.g collateindex, dvips, convert, ps2pdf, awk, sed)
+	* Detecta herramientas auxiliares empleadas para la generaci√≥n y
+	  operaci√≥n (e.g collateindex, dvips, convert, ps2pdf, awk, sed)
 	* Detecta herraminetas opcionales que pueden servir para la
-	  actualizaciÛn del proyecto en Internet  (ncftpput o scp)
-	* Actualiza fecha del proyecto de alg˙n programa).
+	  actualizaci√≥n del proyecto en Internet  (ncftpput o scp)
+	* Actualiza fecha del proyecto de alg√∫n programa).
 	
-	Si este script no logra completar alguna detecciÛn, indicar· el 
+	Si este script no logra completar alguna detecci√≥n, indicar√° el 
 	problema, junto con la posible ayuda que se haya configurado en
-	confv.empty y permitir· ingresar directamente la informaciÛn o
+	confv.empty y permitir√° ingresar directamente la informaci√≥n o
 	cancelar para reanudar posteriormente.
 
 	De requerirlo sumerce puede cambiar directamente los valores detectados
@@ -134,37 +134,37 @@ $options_help
 EJEMPLOS
 
 	./conf.sh
-	Configura fuentes y deja como prefijo para la ruta de instalaciÛn 
+	Configura fuentes y deja como prefijo para la ruta de instalaci√≥n 
 	"/usr/local"
 
 	./conf.sh -p /usr/
-	Configura fuentes y deja como prefijo para la ruta de instalaciÛn
+	Configura fuentes y deja como prefijo para la ruta de instalaci√≥n
 	"/usr"
 
 
-EST¡NDARES
+EST√ÅNDARES
 	Este script pretende ser portable. Debe cumplir POSIX.
 
 
 FALLAS
 	
 
-VER TAMBI…N
+VER TAMBI√âN
 	Para mejorar este script o hacer uno similar ver fuentes de 
 	herram/confaux.sh
 
 
-CR…DITOS Y DERECHOS DE REPRODUCCI”N 
+CR√âDITOS Y DERECHOS DE REPRODUCCI√ìN 
 
- 	Script de dominio p˙blico.  Sin garantÌas.
+ 	Script de dominio p√∫blico.  Sin garant√≠as.
 	Fuentes disponibles en: http://structio.sourceforge.net/repasa
 	Puede enviar reportes de problemas a 
 		structio-info@lists.sourceforge.net
 
-	Incluye porciones de cÛdigo dominio p˙blico escritas por:
+	Incluye porciones de c√≥digo dominio p√∫blico escritas por:
 	  Miembros de Structio http://structio.sourceforge.net
 	  WWWeb Tide Team http://www.ebbtide.com/Util/
-	Puede ver m·s detalles sobre los derechos y crÈditos de este script en
+	Puede ver m√°s detalles sobre los derechos y cr√©ditos de este script en
 	las fuentes.
 MANPAGE_HEREDOC
    exit 0;
@@ -172,7 +172,7 @@ MANPAGE_HEREDOC
 
 # check for help
 if (test "$HELP_FLAG" = "1" ) then {
-   echo " UtilizaciÛn: $USAGE"
+   echo " Utilizaci√≥n: $USAGE"
    cat << HLP_OP
 $options_help
 HLP_OP
@@ -181,13 +181,13 @@ HLP_OP
 
 # check for illegal switches
 if (test "$OPT_FLAG" = "1") then {
-   echo "$BASENAME: Se encontrÛ alguna opciÛn invalida" >&2
-   echo "UtilizaciÛn: $USAGE" >&2
+   echo "$BASENAME: Se encontr√≥ alguna opci√≥n invalida" >&2
+   echo "Utilizaci√≥n: $USAGE" >&2
    exit 1
 }
 elif (test "$#" != "$ARG_COUNT" ) then {
    echo "$BASENAME: se encontraron $# argumentos, pero se esperaban $ARG_COUNT." >&2
-   echo "UtilizaciÛn: $USAGE" >&2
+   echo "Utilizaci√≥n: $USAGE" >&2
    exit 1;
 } fi;
 
@@ -204,7 +204,7 @@ if (test "$prefix" != "") then {
 
 
 if (test "$VERBOSE_FLAG" -gt "0") then {
-	echo "Chequeando y detectando valor de variables de configuraciÛn";
+	echo "Chequeando y detectando valor de variables de configuraci√≥n";
 } fi;
 check "JADE" "" "test -x \$JADE" `which jade 2> /dev/null` `which openjade 2> /dev/null`
 check "JADETEX" "" "test -x \$JADETEX" `which jadetex 2> /dev/null`
@@ -215,7 +215,7 @@ if (test -x $XSLTPROC) then {
 	verxsltproc=`xsltproc -V | head -n 1 | sed -e "s/.*libxslt \([0-9]*\) .*/\1/g"`
 	if (test "$verxsltproc" -lt "10019") then {
 		echo "Se requiere xsltproc 1.0.19 o superior (versiones anteriores presentan errores con imagenes de DocBook XML 4.1.2)";
-		echo "Empleando jade como segunda opciÛn";
+		echo "Empleando jade como segunda opci√≥n";
 		HTML_PROC=dbrep_html_jade;
         	changeVar HTML_PROC 1;
 	} fi;
@@ -226,12 +226,13 @@ if (test -x $XSLTPROC) then {
 check "DVIPS" "" "test -x \$DVIPS" `which dvips 2> /dev/null`
 check "PS2PDF" "" "test -x \$PS2PDF" `which ps2pdf 2> /dev/null`
 
-check "DOCBOOK_XML_DIR" "" "test -f \$DOCBOOK_XML_DIR/docbookx.dtd" "/usr/local/share/xml/docbook/4.2" "/usr/local/share/xml/docbook/4.1.2" "/usr/share/sgml/docbook/dtd/xml/4.1.2"
-check "DOCBOOK_DSSSL" "" "test -f \$DOCBOOK_DSSSL/html/docbook.dsl" "/usr/local/share/sgml/docbook/dsssl/modular/" "/usr/share/sgml/docbook/stylesheet/dsssl/modular/"
+check "DOCBOOK_XML_DIR" "" "test -f \$DOCBOOK_XML_DIR/docbookx.dtd" "/usr/local/share/xml/docbook/4.2" "/usr/local/share/xml/docbook/4.1.2" "/usr/share/sgml/docbook/dtd/xml/4.1.2" "/usr/share/sgml/docbook/dtd/4.2/"
+check "DOCBOOK_DSSSL" "optional" "test -f \$DOCBOOK_DSSSL/html/docbook.dsl" "/usr/local/share/sgml/docbook/dsssl/modular/" "/usr/share/sgml/docbook/stylesheet/dsssl/modular/"
 check "CATALOG_DSSSL" "" "test -f \$CATALOG_DSSSL" "/usr/local/share/sgml/catalog" "/etc/sgml/catalog"
 check "SGML_XML" "" "test -f \$SGML_XML" "$DOCBOOK_DSSSL/dtds/decls/xml.dcl" "/usr/share/sgml/declaration/xml.dcl"
 check "DOCBOOK_XSL" "optional" "test -f \$DOCBOOK_XSL/html/docbook.xsl" "/usr/local/share/xml/docbook-xsl" "/usr/share/sgml/docbook/stylesheet/xsl/nwalsh" "/usr/local/share/xsl/docbook/"
 if (test "$HTML_PROC" = "dbrep_html_jade" -o "$HTML_PROC" = "dbrep_html_jade_single") then {
+	echo "jade"
 }
 elif (test -f $DOCBOOK_XSL/html/docbook.xsl) then {
         isfm=`grep "<fm:project>" $DOCBOOK_XSL/VERSION`;
@@ -245,18 +246,18 @@ elif (test -f $DOCBOOK_XSL/html/docbook.xsl) then {
 		exit 1;
 	} 
 	elif (test ! -f $DOCBOOK_XSL/manpages/docbook.xsl) then {
-		echo "** La distribuciÛn de las hojas de estilo para DocBook que est· empleando no incluye soporte para generar p·ginas man. Instale una versiÛn reciente (http://docbook.sourceforge.net) y configure la ruta en la variable DOCBOOK_XSL del archivo confv.sh";
+		echo "** La distribuci√≥n de las hojas de estilo para DocBook que est√° empleando no incluye soporte para generar p√°ginas man. Instale una versi√≥n reciente (http://docbook.sourceforge.net) y configure la ruta en la variable DOCBOOK_XSL del archivo confv.sh";
 		exit 1;
 	} 
 	elif (ltf "$v" "1.56" -a "$HTML_PROC" = "dbrep_html_xsltproc") then {
-		echo "Se requieren hojas de estilo XSL versiÛn 1.56 o posterior";
-		echo "Empleando jade como segunda opciÛn"
+		echo "Se requieren hojas de estilo XSL versi√≥n 1.56 o posterior";
+		echo "Empleando jade como segunda opci√≥n"
 		HTML_PROC=dbrep_html_jade;
 		changeVar HTML_PROC 1;
 	} fi;
 } 
 elif (test "$HTML_PROC" = "dbrep_html_xsltproc") then {
-	echo "No se encontraron hojas XSL de DocBook, empleando jade como segunda opciÛn"
+	echo "No se encontraron hojas XSL de DocBook, empleando jade como segunda opci√≥n"
 	HTML_PROC=dbrep_html_jade;
 	changeVar HTML_PROC 1;
 } fi;
@@ -266,7 +267,7 @@ check "PAPEL" "" "test x\$PAPEL != x" 'letter' 'legal' 'a4'
 check "PS_PROC" "" "test x\$PS_PROC != x" 'dbrep_ps_jade'
 check "PDF_PROC" "" "test x\$PDF_PROC != x" 'dbrep_pdf_ps'
 
-check "COLLATEINDEX" "" "test -f \$COLLATEINDEX" "/usr/local/share/sgml/docbook/dsssl/modular/bin/collateindex.pl" "/usr/share/sgml/docbook/dsssl/nwalsh-modular/bin/collateindex.pl" "/usr/bin/collateindex.pl" `which collateindex.pl`
+check "COLLATEINDEX" "optional" "test -f \$COLLATEINDEX" "/usr/local/share/sgml/docbook/dsssl/modular/bin/collateindex.pl" "/usr/share/sgml/docbook/dsssl/nwalsh-modular/bin/collateindex.pl" "/usr/bin/collateindex.pl" `which collateindex.pl`
 
 if (test "$ACT_PROC" = "act-ncftpput") then {
 	check "NCFTPPUT" "optional" "test -x \$NCFTPPUT" `which ncftpput 2> /dev/null`
@@ -299,7 +300,7 @@ check "TAR" "" "test -x \$TAR" `which tar 2> /dev/null`
 check "TIDY" "optional" "test -x \$TIDY" `which tidy 2> /dev/null`
 check "TOUCH" "" "test -x \$TOUCH" `which touch 2> /dev/null`
 
-# CorrecciÛn ortografica
+# Correcci√≥n ortografica
 check "W3M" "optional" "test -x \$W3M" `which w3m 2> /dev/null` `which lynx 2> /dev/null`
 l=`echo $W3M | sed -e "s|.*lynx.*|si|g"`
 W3M_OPT=""; 
@@ -333,7 +334,7 @@ else {
 } fi;
 
 if (test "$VERBOSE_FLAG" -gt "0") then {
-	echo "Guardando variables de configuraciÛn";
+	echo "Guardando variables de configuraci√≥n";
 } fi;
 changeConfv;
 
@@ -342,7 +343,7 @@ if (test "$VERBOSE_FLAG" -gt "0") then {
 } fi;
 
 echo "# Algunas variables para el Makefile" > Make.inc;
-echo "# Este archivo es generado autom·ticamente por conf.sh. No editar" >> Make.inc;
+echo "# Este archivo es generado autom√°ticamente por conf.sh. No editar" >> Make.inc;
 echo "" >> Make.inc
 
 # Adding configuration variables to Make.inc
@@ -353,8 +354,8 @@ if (test "$VERBOSE_FLAG" -gt "0") then {
 	echo "Generando confv.ent"
 } fi;
 echo "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" > confv.ent
-echo "<!-- Variables de configuraciÛn  -->" >> confv.ent
-echo "<!-- Este archivo es generado autom·ticamente por conf.sh. No editar -->" >> confv.ent
+echo "<!-- Variables de configuraci√≥n  -->" >> confv.ent
+echo "<!-- Este archivo es generado autom√°ticamente por conf.sh. No editar -->" >> confv.ent
 echo "<!ENTITY DOCBOOK-XSL-HTML \"$db_html\">" >> confv.ent
 
 addXMLConfv confv.ent;
@@ -377,5 +378,5 @@ if (test ! -f personaliza.ent -a -f personaliza.ent.plantilla) then {
 	cp personaliza.ent.plantilla personaliza.ent
 } fi;
 
-echo "ConfiguraciÛn completada";
+echo "Configuraci√≥n completada";
 

@@ -52,10 +52,10 @@ ret_checkPred=0;
 # Returns value 0 if the initial value of the variable made true the predicate 
 # or 1 if it had to try provided values.
 function checkPred  {
-	local hint=$1;
-	local var=$2;
-	local opt=$3;
-	local pred=$4;
+	hint=$1;
+	var=$2;
+	opt=$3;
+	pred=$4;
 	
 	if (test "x$debug" = "x1") then { echo "var=$var, opt=$opt, pred=$pre3, hint=$hint, 5=$4"; } fi;
 	if (test "x$var" = "x") then {
@@ -189,7 +189,7 @@ function addMacsedConfv  {
 # Adds configuration variables to a file for make
 function addMakeConfv  {
 	echo "# Configuration variables" >> $1;
-	grep "^[A-Za-z_0-9]*[ ]*=.*" < $confvar_file | sed -e 's|[ ]*\([A-Za-z_0-9]*\)[ ]*=[ ]*["]*\([^"]*\)["]*|\1=\2|g' | sed -e 's|\$\([A-Za-z_0-9]*\)|\$(\1)|g' >> $1;
+	grep "^[A-Za-z_0-9]*[ ]*=.*" $confvar_file | sed -e 's|[ ]*\([A-Za-z_0-9]*\)[ ]*=[ ]*["]*\([^"]*\)["]*|\1=\2|g' | sed -e 's|\$\([A-Za-z_0-9]*\)|\$(\1)|g' >> $1;
 }
 
 # Adds configuration variables to a file for Ocaml
