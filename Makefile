@@ -211,7 +211,8 @@ Desarrollo.txt: herram/vim/ftplugin/gbfxml.vim
 	cp Desarrollo.txt Desarrollo.txt.bak
 	INICIO="Las completaciones disponibles" CMD="$(AWK) -f herram/exdocvimgbfxml.awk herram/vim/ftplugin/gbfxml.vim" $(AWK) -f herram/rempbloquearch.awk Desarrollo.txt.bak > Desarrollo.txt
 
-KJV.imp: /usr/local/share/sword/mods.d/kjv.conf 
+KJV.imp: 
+	-if (test ! -f /usr/local/share/sword/mods.d/kjv.conf  -o ! -f /usr/share/sword/mods.d/kjv.conf) then { echo "Parece que le falta instalar modulo KJV"; } fi;
 	mod2imp KJV > KJV.imp
 
 $(VS_SWORDBOOK)-KJV.tmp: KJV.imp
