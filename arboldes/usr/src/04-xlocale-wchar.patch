@@ -3078,7 +3078,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src55-orig/lib/libc/locale/xlocal
 +	 */
 +	struct xlocale_component *src = base->components[type];
 +
-+	if (&__xlocale_global_locale == base && src != NULL) {
++	if ((&__xlocale_global_locale == base || &__xlocale_C_locale == base) && src != NULL) {
 +		new->components[type] = constructors[type](src->locale, new);
 +		if (new->components[type]) {
 +			strncpy(new->components[type]->locale, src->locale,
@@ -3211,9 +3211,9 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src55-orig/lib/libc/locale/xlocal
 + */
 +const char *querylocale(int mask, locale_t loc)
 +{
-+	int type = ffs(mask) - 1;
++	int type = ffs(mask) - 2;
 +	FIX_LOCALE(loc);
-+	if (type >= XLC_LAST)
++	if (type >= XLC_LAST || type < 0)
 +		return (NULL);
 +	if (loc->components[type])
 +		return (loc->components[type]->locale);
@@ -3560,25 +3560,25 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/regress/lib/libc/l
 +	locale_t es_CO_UTF_8 = uselocale(NULL);
 +	//dpl(es_CO_UTF_8);
 +	char *r;
-+	p(strcmp((r = (char *)querylocale(LC_CTYPE, es_CO_UTF_8)), "es_CO.UTF-8") == 0);
++	p(strcmp((r = (char *)querylocale(LC_CTYPE_MASK, es_CO_UTF_8)), "es_CO.UTF-8") == 0);
 +	printf("r=%s\n", r);
-+	p(strcmp((r = (char *)querylocale(LC_COLLATE, es_CO_UTF_8)), "es_CO.UTF-8") == 0);
++	p(strcmp((r = (char *)querylocale(LC_COLLATE_MASK, es_CO_UTF_8)), "es_CO.UTF-8") == 0);
 +	printf("r=%s\n", r);
 +
 +	p(es_CO_UTF_8 != NULL);
 +	locale_t esp = newlocale(LC_CTYPE_MASK | LC_COLLATE_MASK, "es_CO.UTF-8", NULL);
 +	p(es_CO_UTF_8 != esp);
-+	p(strcmp((r = (char *)querylocale(LC_CTYPE, esp)), "es_CO.UTF-8") == 0);
++	p(strcmp((r = (char *)querylocale(LC_CTYPE_MASK, esp)), "es_CO.UTF-8") == 0);
 +	printf("r=%s\n", r);
-+	p(strcmp((r = (char *)querylocale(LC_COLLATE, esp)), "es_CO.UTF-8") == 0);
++	p(strcmp((r = (char *)querylocale(LC_COLLATE_MASK, esp)), "es_CO.UTF-8") == 0);
 +	printf("r=%s\n", r);
 +
 +	nl = setlocale(LC_ALL, "C");
 +	printf("locale %s\n", nl);
 +	locale_t esp15 = newlocale(LC_CTYPE_MASK | LC_COLLATE_MASK, "es_CO.UTF-8", NULL);
-+	p(strcmp((r = (char *)querylocale(LC_CTYPE, esp15)), "es_CO.UTF-8") == 0);
++	p(strcmp((r = (char *)querylocale(LC_CTYPE_MASK, esp15)), "es_CO.UTF-8") == 0);
 +	printf("r=%s\n", r);
-+	p(strcmp((r = (char *)querylocale(LC_COLLATE, esp15)), "es_CO.UTF-8") == 0);
++	p(strcmp((r = (char *)querylocale(LC_COLLATE_MASK, esp15)), "es_CO.UTF-8") == 0);
 +	printf("r=%s\n", r);
 +
 +	//__print_ctypetable();
