@@ -24,6 +24,6 @@ eval $cmd;
 if (test "$?" != "0") then {
 	cruta="endesarrollo/"
 } fi;
-cmd="rsync --delete -ravz rsync://adJ.pasosdeJesus.org/AprendiendoDeJesus/$cruta$V$VESP-amd64/* $V$VESP-amd64/"
+cmd="rsync --delete -ravPz rsync://adJ.pasosdeJesus.org/AprendiendoDeJesus/$cruta$V$VESP-amd64/* $V$VESP-amd64/"
 echo $cmd;
 eval $cmd;
