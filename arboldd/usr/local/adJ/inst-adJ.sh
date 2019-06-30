@@ -183,13 +183,23 @@ echo "Script de instalación de adJ $VER" >> /var/www/tmp/inst-adJ.bitacora
 echo "---------------------------- " >> /var/www/tmp/inst-adJ.bitacora
 echo "Se recomienda ejecutarlo desde una terminal en X-Window" >> /var/www/tmp/inst-adJ.bitacora
 
+if (test ! -f /etc/signify/adJ-$VERP-pkg.pub) then {
+	echo 'No se encuentra /etc/signify/adJ-$VERP-pkg.pub'
+	exit 1;
+} fi;
+
+if (test ! -f /etc/signify/adJ-$VERP-base.pub) then {
+	echo 'No se encuentra /etc/signify/adJ-$VERP-base.pub'
+	exit 1;
+} fi;
+
 mount > /dev/null 2> /dev/null
 if (test "$?" != "0") then {
-echo 'No puede ejecutarse mount vuelva a ejecutar este script así:
-su -
-export PATH="$PATH:/bin/:/usr/bin:/usr/local/bin:/sbin:/usr/sbin:/usr/local/sbin"
-/inst-adJ.sh'
-exit 1;
+	echo 'No puede ejecutarse mount vuelva a ejecutar este script así:
+	su -
+	export PATH="$PATH:/bin/:/usr/bin:/usr/local/bin:/sbin:/usr/sbin:/usr/local/sbin"
+	/inst-adJ.sh'
+	exit 1;
 } fi;
 
 umount /mnt/cdrom 2> /dev/null > /dev/null
@@ -321,6 +331,11 @@ function insacp {
 		opbor="-I -r -D repair -D update -D updatedepends"
 	} fi;
 
+	pe=`ls $PKG_PATH/$n-*.tgz 2> /dev/null`;
+	if (test "$pe" = "") then {
+		echo "No se encuentra paquete $n. Presione ENTER para continuar o Control-C para cancelar"
+		read
+	} fi;
 	pkg_add $opbor $PKG_PATH/$n-*.tgz >> /var/www/tmp/inst-adJ.bitacora 2>&1
 	if (test "$popc" != "") then {
 		pkg_add $opbor $PKG_PATH/${popc}*.tgz >> /var/www/tmp/inst-adJ.bitacora 2>&1
@@ -1264,7 +1279,11 @@ chown -R $uadJ:$uadJ /mnt/ 2> /dev/null
 f=`ls /var/db/pkg/fluxbox* 2> /dev/null > /dev/null`;
 if (test "$?" != "0") then {
 	echo "* Instalando escritorio fluxbox" >> /var/www/tmp/inst-adJ.bitacora;
-	p=`ls $PKG_PATH/tiff-*`
+	p=`ls $PKG_PATH/tiff-* 2> /dev/null`
+	if (test "$p" = "") then {
+		echo 'No se encuentra paquete tiff'
+		exit 1;
+	} fi;
         pkg_add -I -D repair -D update -D updatedepends -r $p >> /var/www/tmp/inst-adJ.bitacora 2>&1;
 	insacp fribidi
 	p=`ls $PKG_PATH/jpeg-* $PKG_PATH/libid3tag-* $PKG_PATH/png-* $PKG_PATH/bzip2-* $PKG_PATH/libungif-* $PKG_PATH/imlib2-* $PKG_PATH/libltdl-* $PKG_PATH/fluxbox-* $PKG_PATH/fluxter-* $PKG_PATH/fbdesk-* 2>/dev/null`
@@ -1284,7 +1303,7 @@ if (test -f /home/$uadJ/.fluxbox/menu) then {
 } fi;
 
 # Por cambiar mas en paquetes
-ln -s /usr/local/bin/gnome-keyring-daemon /usr/local/bin/gnome-keyring-servicio
+ln -sf /usr/local/bin/gnome-keyring-daemon /usr/local/bin/gnome-keyring-servicio
 
 if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 	mkdir -p /home/$uadJ/.fluxbox
@@ -1846,6 +1865,15 @@ Vea la documentacion con man xorg.conf, editelo por ejemplo con mg /etc/X11/xorg
 echo "/etc/X11/xorg.conf" >> /var/www/tmp/inst-adJ.bitacora
 cat /etc/X11/xorg.conf >> /var/www/tmp/inst-adJ.bitacora 2> /dev/null
 
+
+echo "* Configurar teclado latinoamericano en Xorg si es el caso y si hace falta"  >> /var/www/tmp/inst-adJ.bitacora;
+kb=`cat /etc/kbdtype 2>/dev/null`
+if (test "$kb" = "la") then {
+	grep "setxkbmap latam" /etc/X11/xenodm/Xsetup_0 > /dev/null 2>&1
+	if (test "$?" != "0") then {
+		echo "setxkbmap latam" >> /etc/X11/xenodm/Xsetup_0
+	} fi;
+} fi;
 
 echo "* Configurar scripts de cuenta inicial"  >> /var/www/tmp/inst-adJ.bitacora;
 grep "PKG_PATH" /home/$uadJ/.profile > /dev/null
@@ -2923,7 +2951,7 @@ QMAKE=qmake-qt5 make=gmake MAKE=gmake doas gem pristine --all 2>&1 >> /var/www/t
 
 echo "Reinstalando versiones mas actualizadas de gemas de /var/www/bundler/ruby/$VRUBY con extensiones cuando se cambia version menor" >> /var/www/tmp/inst-adJ.bitacora
 rm -f /usr/local/bin/bundle
-for i in `ls /var/www/bundler/ruby/$VRUBY/extensions/x86_64-openbsd/$VRUBY/ | sed -e "s/-[0-9.]*$//g" | sort -u`; do
+for i in `ls /var/www/bundler/ruby/$VRUBY/extensions/x86_64-openbsd/$VRUBY/ 2> /dev/null | sed -e "s/-[0-9.]*$//g" | sort -u`; do
   uj=""
   for j in /var/www/bundler/ruby/$VRUBY/gems/$i-*; do
     uj=$j
