@@ -1,13 +1,14 @@
-$OpenBSD: patch-third_party_swiftshader_BUILD_gn,v 1.6 2018/04/23 15:00:16 robert Exp $
+$OpenBSD: patch-third_party_swiftshader_BUILD_gn,v 1.8 2019/03/24 12:24:45 robert Exp $
 
 Index: third_party/swiftshader/BUILD.gn
 --- third_party/swiftshader/BUILD.gn.orig
 +++ third_party/swiftshader/BUILD.gn
-@@ -100,7 +100,6 @@ config("swiftshader_config") {
+@@ -143,8 +143,6 @@ config("swiftshader_config") {
+           "-Wl,--hash-style=sysv",
+           "-mips64r2",
+         ]
+-      } else {
+-        ldflags += [ "-Wl,--hash-style=both" ]
+       }
  
-     if (is_linux) {
-       ldflags = [
--        "-Wl,--hash-style=both",
-         "-Wl,--gc-sections",
-       ]
- 
+       # A bug in the gold linker prevents using ICF on 32-bit (crbug.com/729532)

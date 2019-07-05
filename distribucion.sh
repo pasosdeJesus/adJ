@@ -659,9 +659,9 @@ function paquete {
 		nom=`echo $nom | sed -e "s/^.*\///g"`
 		echo "OJO nom=$nom"
 	} else {
-		l=`grep "^$nom-[0-9]" /usr/ports/INDEX | head -n 1`
+		l=`grep "^$nom-[0-9]" /usr/local/share/ports-INDEX | head -n 1`
 		if (test "$l" = "") then {
-			echo "Desconocido $nom en /usr/ports/INDEX"
+			echo "Desconocido $nom en /usr/local/share/ports-INDEX"
 			exit 1;
 		} fi;
 		d1=`echo "$l" | sed -e 's/^[^|]*|\([^,|]*\)[,|].*/\1/g'`
@@ -792,22 +792,51 @@ if (test "$sn" = "s") then {
 
 	# Todo lo de perl tuvo que recompilarse
 	# evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
+	# Si por ejemplo es:
+	#Name.c: loadable library and perl binaries are mismatched (got handshake key 0xb700000, needed 0xbb00000)
+	# Buscar módulo de Perl con pkg_locate Name.so, recompilarlo e instalarlo 
 	paquete p5-DBI
-	paquete p5-Net-LibIDN
+	paquete p5-Sub-Name
+	paquete p5-BSD-Resource
+
+	paquete p5-B-Hooks-EndOfScope
+	paquete p5-BSD-Resource
+	paquete p5-Class-Load
+	paquete p5-Class-Load-XS
+	paquete p5-Class-Method-Modifiers
+	paquete p5-Class-Singleton
 	paquete p5-Clone
+	paquete p5-Clone-PP
+	paquete p5-Cpanel-JSON-XS
 	paquete p5-Crypt-OpenSSL-Bignum
 	paquete p5-Crypt-OpenSSL-RSA
 	paquete p5-Crypt-OpenSSL-Random
 	paquete p5-DBD-mysql
+	paquete p5-DBI
+	paquete p5-Data-Dumper-Concise
+	paquete p5-Data-IEEE754
+	paquete p5-Data-OptList
+	paquete p5-Data-Printer
+	paquete p5-Data-Validate-IP
 	paquete p5-DateManip
+	paquete p5-DateTime
+	paquete p5-DateTime-Locale
+	paquete p5-DateTime-TimeZone
+	paquete p5-Devel-GlobalDestruction
+	paquete p5-Devel-StackTrace
 	paquete p5-Digest-HMAC
+	paquete p5-Dist-CheckConflicts
 	paquete p5-Encode-Detect
 	paquete p5-Encode-Locale
 	paquete p5-Error
+	paquete p5-Eval-Closure
+	paquete p5-Exporter-Tiny
+	paquete p5-File-HomeDir
 	paquete p5-File-Listing
+	paquete p5-File-Which
 	paquete p5-FreezeThaw
 	paquete p5-Geo-IP
-	#paquete p5-Geography-Countries
+	paquete p5-GeoIP2
 	paquete p5-HTML-Parser
 	paquete p5-HTML-Tagset
 	paquete p5-HTTP-Cookies
@@ -817,38 +846,68 @@ if (test "$sn" = "s") then {
 	paquete p5-HTTP-Negotiate
 	paquete p5-IO-HTML
 	paquete p5-IO-Socket-SSL
+	paquete p5-JSON-MaybeXS
 	paquete p5-LWP-MediaTypes
-	#paquete p5-LWP-Protocol-https
+	paquete p5-LWP-Protocol-https
+	paquete p5-List-AllUtils
+	paquete p5-List-MoreUtils
+	paquete p5-List-MoreUtils-XS
+	paquete p5-List-SomeUtils
+	paquete p5-List-SomeUtils-XS
+	paquete p5-List-UtilsBy
 	paquete p5-MLDBM
+	paquete p5-MRO-Compat
 	paquete p5-Mail-DKIM
 	paquete p5-Mail-SPF
-	paquete p5-Mail-SpamAssassin
 	paquete p5-Mail-Tools
 	paquete p5-Math-Base-Convert
+	paquete p5-Math-Int128
+	paquete p5-Math-Int64
+	paquete p5-MaxMind-DB-Common
+	paquete p5-MaxMind-DB-Reader
+	paquete p5-MaxMind-DB-Reader-XS
+	paquete p5-Module-Implementation
 	paquete p5-Module-Runtime
+	paquete p5-Moo
+	paquete p5-MooX-StrictConstructor
+	paquete p5-Moose
 	paquete p5-Mozilla-CA-Fake
 	paquete p5-Net-CIDR-Lite
 	paquete p5-Net-DNS
 	paquete p5-Net-DNS-Resolver-Programmable
 	paquete p5-Net-Daemon
 	paquete p5-Net-HTTP
+	paquete p5-Net-LibIDN
 	paquete p5-Net-Patricia
 	paquete p5-Net-SSLeay
 	paquete p5-NetAddr-IP
+	paquete p5-Package-DeprecationManager
+	paquete p5-Package-Stash
+	paquete p5-Package-Stash-XS
 	paquete p5-Params-Util
+	paquete p5-Params-Validate
 	paquete p5-PlRPC
+	paquete p5-Role-Tiny
 	paquete p5-SQL-Statement
 	paquete p5-Socket6
+	paquete p5-Sort-Naturally
+	paquete p5-Sub-Exporter
+	paquete p5-Sub-Exporter-Progressive
+	paquete p5-Sub-Identify
+	paquete p5-Sub-Install
+	paquete p5-Sub-Name
+	paquete p5-Sub-Quote
+	paquete p5-Throwable
 	paquete p5-Time-TimeDate
-	#paquete p5-Tk
+	paquete p5-Try-Tiny
 	paquete p5-URI
+	paquete p5-Variable-Magic
 	paquete p5-WWW-RobotRules
-	#paquete p5-XML-Parser
 	paquete p5-libwww
-	paquete p5-Net-Patricia
-	paquete p5-HTML-Parser
-	paquete p5-Params-Util
-	paquete p5-NetAddr-IP
+	paquete p5-namespace-autoclean
+	paquete p5-namespace-clean
+	paquete p5-strictures
+
 	paquete p5-Mail-SpamAssassin
 
 	####
@@ -857,18 +916,20 @@ if (test "$sn" = "s") then {
 
 	paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs" 
 	paquete ruby paquetes "ruby ruby26-ri_docs" 2.6
-	paquete py3-requests
-	paquete py-requests
-	paquete qemu
-	paquete tiff
-	paquete geo/spatialite/libspatialite
+	#paquete tiff
+	#paquete geo/spatialite/libspatialite
+
+	# Recompilado con llave de adJ
+	paquete chromium
+
+	exit 1
 
 
 :	###
         # Actualizados.  Están desactualizado en OpenBSD estable y current
-	paquete ocaml paquetes "ocaml"
-	paquete ocamlbuild 
-	paquete ocaml-camlp4
+	#paquete ocaml paquetes "ocaml"
+	#paquete ocamlbuild 
+	#paquete ocaml-camlp4
 
 	####
 	# Recompilados para cerrar fallas de portes actualizados (estable)
@@ -876,7 +937,7 @@ if (test "$sn" = "s") then {
 	# Los siguientes no deben estar en arboldes/usr/ports/mystuff
 
 	paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 5.6
-	paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 7.0
+	paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 7.1
 	#FLAVOR=light paquete evince paquetes evince-light
 	#paquete gcc paquetes "gcc" 4.9
 	#paquete git paquetes "git"
@@ -899,8 +960,6 @@ if (test "$sn" = "s") then {
 	paquete hevea
 	#paquete libreoffice paquetes "libreoffice libreoffice-i18n-es"
 
-	# Recompilado con llave de adJ
-	paquete chromium
 
 	####
 	# Modificados para que usen xlocale (pueden cerrar fallas)

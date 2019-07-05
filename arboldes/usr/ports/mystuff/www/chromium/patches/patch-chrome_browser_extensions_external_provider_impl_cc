@@ -1,23 +1,23 @@
-$OpenBSD: patch-chrome_browser_extensions_external_provider_impl_cc,v 1.10 2018/03/12 13:48:34 robert Exp $
+$OpenBSD: patch-chrome_browser_extensions_external_provider_impl_cc,v 1.13 2019/03/24 12:24:45 robert Exp $
 
 Index: chrome/browser/extensions/external_provider_impl.cc
 --- chrome/browser/extensions/external_provider_impl.cc.orig
 +++ chrome/browser/extensions/external_provider_impl.cc
-@@ -689,7 +689,7 @@ void ExternalProviderImpl::CreateExternalProviders(
-         Manifest::EXTERNAL_PREF, Manifest::EXTERNAL_PREF_DOWNLOAD,
-         oem_extension_creation_flags));
+@@ -747,7 +747,7 @@ void ExternalProviderImpl::CreateExternalProviders(
+     chromeos::DemoSession::Get()->SetExtensionsExternalLoader(loader);
+     provider_list->push_back(std::move(demo_apps_provider));
    }
 -#elif defined(OS_LINUX)
 +#elif defined(OS_LINUX) || defined(OS_BSD)
-   if (!profile->IsLegacySupervised()) {
-     provider_list->push_back(std::make_unique<ExternalProviderImpl>(
-         service,
-@@ -717,7 +717,7 @@ void ExternalProviderImpl::CreateExternalProviders(
+   provider_list->push_back(std::make_unique<ExternalProviderImpl>(
+       service,
+       new ExternalPrefLoader(chrome::DIR_STANDALONE_EXTERNAL_EXTENSIONS,
+@@ -774,7 +774,7 @@ void ExternalProviderImpl::CreateExternalProviders(
          bundled_extension_creation_flags));
  
      // Define a per-user source of external extensions.
 -#if defined(OS_MACOSX) || (defined(OS_LINUX) && defined(CHROMIUM_BUILD))
-+#if defined(OS_MACOSX) || ((defined(OS_LINUX) || defined(OS_BSD)) && defined(CHROMIUM_BUILD))
++#if defined(OS_MACOSX) || ((defined(OS_BSD) || defined(OS_LINUX)) && defined(CHROMIUM_BUILD))
      provider_list->push_back(std::make_unique<ExternalProviderImpl>(
          service,
          new ExternalPrefLoader(chrome::DIR_USER_EXTERNAL_EXTENSIONS,

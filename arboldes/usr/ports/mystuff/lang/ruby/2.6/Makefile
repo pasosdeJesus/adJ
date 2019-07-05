@@ -1,9 +1,14 @@
-# $OpenBSD: Makefile,v 1.3 2019/03/15 16:44:49 jeremy Exp $
+# $OpenBSD: Makefile,v 1.6 2019/06/25 20:25:21 sthen Exp $
 
-VERSION =		2.6.2
+VERSION =		2.6.3
 DISTNAME =		ruby-${VERSION}
 SHARED_LIBS =		ruby26	0.0
 NEXTVER =		2.7
+
+REVISION-main =		1
+MASTER_SITES0 =		https://github.com/ruby/ruby/commit/
+PATCHFILES =		1ef39d8d099f145222b9352423af16a2bab6e05b.patch:0
+PATCH_DIST_STRIP =	-p1
 
 PSEUDO_FLAVORS=		no_ri_docs bootstrap
 # Do not build the RI docs on slow arches

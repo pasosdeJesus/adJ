@@ -1,10 +1,10 @@
-$OpenBSD: patch-content_renderer_renderer_blink_platform_impl_h,v 1.7 2018/09/12 17:08:22 robert Exp $
+$OpenBSD: patch-content_renderer_renderer_blink_platform_impl_h,v 1.11 2019/03/24 12:24:45 robert Exp $
 
 Index: content/renderer/renderer_blink_platform_impl.h
 --- content/renderer/renderer_blink_platform_impl.h.orig
 +++ content/renderer/renderer_blink_platform_impl.h
 @@ -29,7 +29,7 @@
- #include "third_party/blink/public/platform/modules/indexeddb/web_idb_factory.h"
+ #include "third_party/blink/public/mojom/loader/code_cache.mojom.h"
  #include "third_party/blink/public/platform/modules/webdatabase/web_database.mojom.h"
  
 -#if defined(OS_LINUX)
@@ -12,9 +12,18 @@ Index: content/renderer/renderer_blink_platform_impl.h
  #include "components/services/font/public/cpp/font_loader.h"  // nogncheck
  #include "third_party/skia/include/core/SkRefCnt.h"           // nogncheck
  #endif
-@@ -301,7 +301,7 @@ class CONTENT_EXPORT RendererBlinkPlatformImpl : publi
-   blink::mojom::WebDatabaseHostPtrInfo web_database_host_info_;
-   scoped_refptr<blink::mojom::ThreadSafeWebDatabaseHostPtr> web_database_host_;
+@@ -263,7 +263,7 @@ class CONTENT_EXPORT RendererBlinkPlatformImpl : publi
+   std::unique_ptr<service_manager::Connector> connector_;
+   scoped_refptr<base::SingleThreadTaskRunner> io_runner_;
+ 
+-#if defined(OS_LINUX) || defined(OS_MACOSX)
++#if defined(OS_LINUX) || defined(OS_MACOSX) || defined(OS_BSD)
+   std::unique_ptr<blink::WebSandboxSupport> sandbox_support_;
+ #endif
+ 
+@@ -298,7 +298,7 @@ class CONTENT_EXPORT RendererBlinkPlatformImpl : publi
+   blink::mojom::CodeCacheHostPtrInfo code_cache_host_info_;
+   scoped_refptr<blink::mojom::ThreadSafeCodeCacheHostPtr> code_cache_host_;
  
 -#if defined(OS_LINUX)
 +#if defined(OS_LINUX) || defined(OS_BSD)

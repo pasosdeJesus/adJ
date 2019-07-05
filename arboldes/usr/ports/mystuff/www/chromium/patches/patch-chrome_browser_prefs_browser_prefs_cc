@@ -1,23 +1,23 @@
-$OpenBSD: patch-chrome_browser_prefs_browser_prefs_cc,v 1.1 2018/09/27 06:36:18 robert Exp $
+$OpenBSD: patch-chrome_browser_prefs_browser_prefs_cc,v 1.5 2019/03/24 12:24:45 robert Exp $
 
 Index: chrome/browser/prefs/browser_prefs.cc
 --- chrome/browser/prefs/browser_prefs.cc.orig
 +++ chrome/browser/prefs/browser_prefs.cc
-@@ -284,7 +284,7 @@
- #include "chrome/browser/ui/cocoa/apps/quit_with_apps_controller_mac.h"
+@@ -319,7 +319,7 @@
+ #include "chrome/browser/safe_browsing/settings_reset_prompt/settings_reset_prompt_prefs_manager.h"
  #endif
  
--#if defined(OS_MACOSX) || defined(OS_WIN) || \
-+#if defined(OS_MACOSX) || defined(OS_WIN) || defined(OS_BSD) || \
+-#if defined(OS_WIN) || defined(OS_MACOSX) || \
++#if defined(OS_WIN) || defined(OS_MACOSX) || defined(OS_BSD) || \
      (defined(OS_LINUX) && !defined(OS_CHROMEOS))
- #include "chrome/browser/ui/confirm_quit.h"
+ #include "chrome/browser/browser_switcher/browser_switcher_prefs.h"
  #endif
-@@ -724,7 +724,7 @@ void RegisterProfilePrefs(user_prefs::PrefRegistrySync
-   NotificationChannelsProviderAndroid::RegisterProfilePrefs(registry);
- #endif
- 
--#if defined(OS_WIN) || (defined(OS_LINUX) && !defined(OS_CHROMEOS))
-+#if defined(OS_WIN) || (defined(OS_LINUX) && !defined(OS_CHROMEOS)) || defined(OS_BSD)
-   confirm_quit::RegisterLocalState(registry);
+@@ -771,7 +771,7 @@ void RegisterProfilePrefs(user_prefs::PrefRegistrySync
+   safe_browsing::PostCleanupSettingsResetter::RegisterProfilePrefs(registry);
  #endif
  
+-#if defined(OS_WIN) || defined(OS_MACOSX) || \
++#if defined(OS_WIN) || defined(OS_MACOSX) || defined(OS_BSD) || \
+     (defined(OS_LINUX) && !defined(OS_CHROMEOS))
+   browser_switcher::BrowserSwitcherPrefs::RegisterProfilePrefs(registry);
+ #endif
