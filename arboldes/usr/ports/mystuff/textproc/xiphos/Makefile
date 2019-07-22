@@ -12,7 +12,7 @@ SUBST_VAR += GH_TAGNAME
 #DISTNAME=	xiphos-${V}
 CATEGORIES=	textproc misc
 #PKGNAME=	${DISTNAME}
-REVISION=	1
+REVISION=	2
 HOMEPAGE=	http://xiphos.org
 MAINTAINER=	Vladimir Tamara Patino <vtamara@pasosdejesus.org>
 
@@ -38,9 +38,9 @@ BUILD_DEPENDS=	textproc/intltool converters/libiconv textproc/sword www/gtkhtml4
 
 RUN_DEPENDS+= 	converters/libiconv textproc/sword www/gtkhtml4 textproc/clucene devel/libglade2 x11/gnome/doc-utils textproc/libxml devel/glib2 x11/gtk+2  x11/dbus-glib devel/libgsf devel/pango devel/atk graphics/cairo  graphics/png textproc/enchant devel/gconf2 devel/ORBit2 devel/pcre archivers/bzip2 net/curl devel/libidn www/webkit-gtk3 sysutils/e2fsprogs textproc/icu4c textproc/biblesync
 
-WANTLIB=	X11 c m stdc++ ssl
+WANTLIB=	X11 c m ssl
 
-COMPILER = 	ports-gcc
+COMPILER = 	base-clang #ports-gcc
 CXXFLAGS += 	-std=c++11
 MODULES =	lang/clang
 
@@ -48,7 +48,7 @@ MODULES =	lang/clang
 do-configure:
 	cd ${WRKSRC} && env PYTHON=${MODPY_BIN} \
 		LDFLAGS="$$(python${MODPY_VERSION}-config --libs)" \
-		${MODPY_BIN} ./waf configure
+		CXX="${CXX}" CXXFLAGS="${CXXFLAGS}" ${MODPY_BIN} ./waf configure
 
 do-build:
 	cd ${WRKBUILD} && ${MODPY_BIN} ./waf build

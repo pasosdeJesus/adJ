@@ -94,7 +94,7 @@ Puede ver las diversas versiones publicadas en:
 
 * Paquetes actualizados:
 	* evangelios_dp 0.9...
-	* php
+	* php 
 		OpenBSD ya no incluye porte para php-5.6.40 hemos
 		empleado el que había en 6.4 pero es una versión
 		obsoleta, sin soporte que puede tener fallas de 
@@ -104,12 +104,15 @@ Puede ver las diversas versiones publicadas en:
 		Tuvo que inclurse porque buena parte e la librería pear 
 		aún requiere php-5.6 (incluyendo partes requeridas por 
 		SIVeL 1.2 como HTML_QuickForm) aunque al parecer otras 
-		partes de pear requieren php-7.
+		partes de pear requieren php-7. También se mantiene
+		versiones obsoletas de paquetes de pear que ya no están
+		en OpenBSD como pear-MDB2.
 		Es indispensable el transito a SIVeL 2 porque en
 		futuras versiones de adJ posiblemente no incluiremos
-		php-5.6
- 		Tuvo que parcharse para que opere con nuevao icu4c.
-		Para que opere SIVeL 1.2 en esta versión inst-adJ 
+		php-5.6 ni pear.
+ 		Además php-5.6 tuvo que parcharse para que opere con nuevo 
+		icu4c.
+		Para que opere SIVeL 1.2 en esta versión inst-adJ.sh
 		configurará por omisión php-5.6.40 
 		que es el requerido por HTML_QuickForm
 		usando el script php56_fpm, la configuración 
@@ -119,7 +122,7 @@ Puede ver las diversas versiones publicadas en:
 		aplicación con PHP 7, la sugerencia es modificar 
 		/etc/rc.d/php71_fpm para que emplee un segundo
 		archivo /etc/php71-fpm.conf que ubique el socket para
-		php 7 en otra ubicación (el paquete de php-7.1 se ha 
+		php 7 en otro directorio (el paquete de php-7.1 se ha 
 		modificado para facilitarlo).
 		Otras extensiones no incluidas como de costumbre se 
 		dejan en el sitio de distribución en el directorio 
@@ -132,7 +135,8 @@ Puede ver las diversas versiones publicadas en:
 * Documentación actualizada: basico_adJ, usuario_adJ y servidor_adJ
 
 * Se parchan y compilan portes más recientes de:
-	- biblesync, sword y xiphos 
+	- sword que ahora emplea clang e icu reciente
+	- biblesync y xiphos ahora se compilan con clang++
 	- markup, repasa y sigue fueron modificados para emplear las 
 	  nuevas convenciones de Ocaml 4.0.7
 

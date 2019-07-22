@@ -1012,6 +1012,8 @@ if (test "$sn" = "s") then {
 	paquete www/pear-HTML-Menu
 	paquete www/pear-HTML-QuickForm
 	paquete www/pear-HTML-Table
+	paquete databases/pear-MDB2
+	paquete databases/pear-DB_DataObject
 	paquete www/pear-DB-DataObject-FormBuilder
 	paquete www/pear-HTML-QuickForm-Controller
 	paquete x11/fbdesk

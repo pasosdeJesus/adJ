@@ -7,7 +7,7 @@ V=		2.0.1
 #V=		1.2.0
 DISTNAME=	biblesync-${V}
 CATEGORIES=	textproc misc
-REVISION=	
+REVISION=	1
 PKGNAME=	${DISTNAME}
 HOMEPAGE=	https://github.com/karlkleinpaste/biblesync
 MAINTAINER=	Vladimir Támara Patiño <vtamara@pasosdejesus.org>
@@ -23,12 +23,12 @@ PERMIT_PACKAGE_CDROM=	Yes
 
 SHARED_LIBS +=  biblesync                 2.0
 
-WANTLIB=	c m stdc++ 
+WANTLIB=	c m 
 
-BUILD_DEPENDS = sysutils/e2fsprogs
+BUILD_DEPENDS = sysutils/e2fsprogs devel/cmake
 
-MODULES +=	gcc4
-CXX=g++
+COMPILER=base-clang
+CXX=clang++
 
 do-configure:
 	cd ${WRKSRC} && \
