@@ -1,0 +1,41 @@
+$OpenBSD$
+
+Index: ext/intl/common/common_enum.cpp
+--- ext/intl/common/common_enum.cpp.orig
++++ ext/intl/common/common_enum.cpp
+@@ -88,7 +88,7 @@ static void string_enum_current_move_forward(zend_obje
+ 	INTLITERATOR_METHOD_FETCH_OBJECT_NO_CHECK;
+ 
+ 	int32_t result_length;
+-	const char *result = ((StringEnumeration*)iter->data)->next(
++	const char *result = ((icu::StringEnumeration*)iter->data)->next(
+ 		&result_length, INTLITERATOR_ERROR_CODE(ii));
+ 
+ 	intl_error_set_code(NULL, INTLITERATOR_ERROR_CODE(ii) TSRMLS_CC);
+@@ -113,7 +113,7 @@ static void string_enum_rewind(zend_object_iterator *i
+ 	object = zoi_iter->wrapping_obj;
+ 	INTLITERATOR_METHOD_FETCH_OBJECT_NO_CHECK;
+ 
+-	((StringEnumeration*)iter->data)->reset(INTLITERATOR_ERROR_CODE(ii));
++	((icu::StringEnumeration*)iter->data)->reset(INTLITERATOR_ERROR_CODE(ii));
+ 
+ 	intl_error_set_code(NULL, INTLITERATOR_ERROR_CODE(ii) TSRMLS_CC);
+ 	if (U_FAILURE(INTLITERATOR_ERROR_CODE(ii))) {
+@@ -126,7 +126,7 @@ static void string_enum_rewind(zend_object_iterator *i
+ 
+ static void string_enum_destroy_it(zend_object_iterator *iter TSRMLS_DC)
+ {
+-	delete (StringEnumeration*)iter->data;
++	delete (icu::StringEnumeration*)iter->data;
+ }
+ 
+ static zend_object_iterator_funcs string_enum_object_iterator_funcs = {
+@@ -139,7 +139,7 @@ static zend_object_iterator_funcs string_enum_object_i
+ 	zoi_with_current_invalidate_current
+ };
+ 
+-U_CFUNC void IntlIterator_from_StringEnumeration(StringEnumeration *se, zval *object TSRMLS_DC)
++U_CFUNC void IntlIterator_from_StringEnumeration(icu::StringEnumeration *se, zval *object TSRMLS_DC)
+ {
+ 	IntlIterator_object *ii;
+ 	object_init_ex(object, IntlIterator_ce_ptr);

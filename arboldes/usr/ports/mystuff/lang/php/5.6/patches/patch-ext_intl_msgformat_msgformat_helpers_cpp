@@ -1,0 +1,392 @@
+$OpenBSD$
+
+Index: ext/intl/msgformat/msgformat_helpers.cpp
+--- ext/intl/msgformat/msgformat_helpers.cpp.orig
++++ ext/intl/msgformat/msgformat_helpers.cpp
+@@ -55,22 +55,22 @@ U_NAMESPACE_BEGIN
+  */
+ class MessageFormatAdapter {
+ public:
+-    static const Formattable::Type* getArgTypeList(const MessageFormat& m,
++    static const icu::Formattable::Type* getArgTypeList(const icu::MessageFormat& m,
+                                                    int32_t& count);
+ #ifdef HAS_MESSAGE_PATTERN
+-    static const MessagePattern getMessagePattern(MessageFormat* m);
++    static const icu::MessagePattern getMessagePattern(icu::MessageFormat* m);
+ #endif
+ };
+ 
+-const Formattable::Type*
+-MessageFormatAdapter::getArgTypeList(const MessageFormat& m,
++const icu::Formattable::Type*
++icu::MessageFormatAdapter::getArgTypeList(const icu::MessageFormat& m,
+                                      int32_t& count) {
+     return m.getArgTypeList(count);
+ }
+ 
+ #ifdef HAS_MESSAGE_PATTERN
+-const MessagePattern
+-MessageFormatAdapter::getMessagePattern(MessageFormat* m) {
++const icu::MessagePattern
++icu::MessageFormatAdapter::getMessagePattern(icu::MessageFormat* m) {
+     return m->msgPattern;
+ }
+ #endif
+@@ -79,7 +79,7 @@ U_NAMESPACE_END
+ U_CFUNC int32_t umsg_format_arg_count(UMessageFormat *fmt)
+ {
+ 	int32_t fmt_count = 0;
+-	MessageFormatAdapter::getArgTypeList(*(const MessageFormat*)fmt, fmt_count);
++	icu::MessageFormatAdapter::getArgTypeList(*(const icu::MessageFormat*)fmt, fmt_count);
+ 	return fmt_count;
+ }
+ 
+@@ -98,8 +98,8 @@ static HashTable *umsg_get_numeric_types(MessageFormat
+ 		return mfo->mf_data.arg_types;
+ 	}
+ 
+-	const Formattable::Type *types = MessageFormatAdapter::getArgTypeList(
+-		*(MessageFormat*)mfo->mf_data.umsgf, parts_count);
++	const icu::Formattable::Type *types = icu::MessageFormatAdapter::getArgTypeList(
++		*(icu::MessageFormat*)mfo->mf_data.umsgf, parts_count);
+ 
+ 	/* Hash table will store Formattable::Type objects directly,
+ 	 * so no need for destructor */
+@@ -107,7 +107,7 @@ static HashTable *umsg_get_numeric_types(MessageFormat
+ 	zend_hash_init(ret, parts_count, NULL, NULL, 0);
+ 
+ 	for (int i = 0; i < parts_count; i++) {
+-		const Formattable::Type t = types[i];
++		const icu::Formattable::Type t = types[i];
+ 		if (zend_hash_index_update(ret, (ulong)i, (void*)&t, sizeof(t), NULL)
+ 				== FAILURE) {
+ 			intl_errors_set(&err, U_MEMORY_ALLOCATION_ERROR,
+@@ -130,7 +130,7 @@ static HashTable *umsg_get_numeric_types(MessageFormat
+ 
+ #ifdef HAS_MESSAGE_PATTERN
+ static HashTable *umsg_parse_format(MessageFormatter_object *mfo,
+-									const MessagePattern& mp,
++									const icu::MessagePattern& mp,
+ 									intl_error& err TSRMLS_DC)
+ {
+ 	HashTable *ret;
+@@ -140,7 +140,7 @@ static HashTable *umsg_parse_format(MessageFormatter_o
+ 		return NULL;
+ 	}
+ 
+-	if (!((MessageFormat *)mfo->mf_data.umsgf)->usesNamedArguments()) {
++	if (!((icu::MessageFormat *)mfo->mf_data.umsgf)->usesNamedArguments()) {
+ 		return umsg_get_numeric_types(mfo, err TSRMLS_CC);
+ 	}
+ 
+@@ -168,22 +168,22 @@ static HashTable *umsg_parse_format(MessageFormatter_o
+ 	/* The last two "parts" can at most be ARG_LIMIT and MSG_LIMIT
+ 	 * which we need not examine. */
+ 	for (int32_t i = 0; i < parts_count - 2 && U_SUCCESS(err.code); i++) {
+-		MessagePattern::Part p = mp.getPart(i);
++		icu::MessagePattern::Part p = mp.getPart(i);
+ 
+ 		if (p.getType() != UMSGPAT_PART_TYPE_ARG_START) {
+ 			continue;
+ 		}
+ 
+-		MessagePattern::Part name_part = mp.getPart(++i); /* Getting name, advancing i */
+-		Formattable::Type type,
++		icu::MessagePattern::Part name_part = mp.getPart(++i); /* Getting name, advancing i */
++		icu::Formattable::Type type,
+ 						  *storedType;
+ 
+ 		if (name_part.getType() == UMSGPAT_PART_TYPE_ARG_NAME) {
+-			UnicodeString argName = mp.getSubstring(name_part);
++			icu::UnicodeString argName = mp.getSubstring(name_part);
+ 			if (zend_hash_find(ret, (char*)argName.getBuffer(), argName.length(),
+ 					(void**)&storedType) == FAILURE) {
+ 				/* not found already; create new entry in HT */
+-				Formattable::Type bogusType = Formattable::kObject;
++				icu::Formattable::Type bogusType = icu::Formattable::kObject;
+ 				if (zend_hash_update(ret, (char*)argName.getBuffer(), argName.length(),
+ 						(void*)&bogusType, sizeof(bogusType), (void**)&storedType) == FAILURE) {
+ 					intl_errors_set(&err, U_MEMORY_ALLOCATION_ERROR,
+@@ -201,7 +201,7 @@ static HashTable *umsg_parse_format(MessageFormatter_o
+ 			if (zend_hash_index_find(ret, (ulong)argNumber, (void**)&storedType)
+ 					== FAILURE) {
+ 				/* not found already; create new entry in HT */
+-				Formattable::Type bogusType = Formattable::kObject;
++				icu::Formattable::Type bogusType = icu::Formattable::kObject;
+ 				if (zend_hash_index_update(ret, (ulong)argNumber, (void*)&bogusType,
+ 						sizeof(bogusType), (void**)&storedType) == FAILURE) {
+ 					intl_errors_set(&err, U_MEMORY_ALLOCATION_ERROR,
+@@ -217,37 +217,37 @@ static HashTable *umsg_parse_format(MessageFormatter_o
+ 		UMessagePatternArgType argType = p.getArgType();
+ 		/* No type specified, treat it as a string */
+ 		if (argType == UMSGPAT_ARG_TYPE_NONE) {
+-			type = Formattable::kString;
++			type = icu::Formattable::kString;
+ 		} else { /* Some type was specified, might be simple or complicated */
+ 			if (argType == UMSGPAT_ARG_TYPE_SIMPLE) {
+ 				/* For a SIMPLE arg, after the name part, there should be
+ 				 * an ARG_TYPE part whose string value tells us what to do */
+-				MessagePattern::Part type_part = mp.getPart(++i); /* Getting type, advancing i */
++				icu::MessagePattern::Part type_part = mp.getPart(++i); /* Getting type, advancing i */
+ 				if (type_part.getType() == UMSGPAT_PART_TYPE_ARG_TYPE) {
+-					UnicodeString typeString = mp.getSubstring(type_part);
++					icu::UnicodeString typeString = mp.getSubstring(type_part);
+ 					/* This is all based on the rules in the docs for MessageFormat
+ 					 * @see http://icu-project.org/apiref/icu4c/classMessageFormat.html */
+ 					if (typeString == "number") {
+-						MessagePattern::Part style_part = mp.getPart(i + 1); /* Not advancing i */
++						icu::MessagePattern::Part style_part = mp.getPart(i + 1); /* Not advancing i */
+ 						if (style_part.getType() == UMSGPAT_PART_TYPE_ARG_STYLE) {
+-							UnicodeString styleString = mp.getSubstring(style_part);
++							icu::UnicodeString styleString = mp.getSubstring(style_part);
+ 							if (styleString == "integer") {
+-								type = Formattable::kInt64;
++								type = icu::Formattable::kInt64;
+ 							} else if (styleString == "currency") {
+-								type = Formattable::kDouble;
++								type = icu::Formattable::kDouble;
+ 							} else if (styleString == "percent") {
+-								type = Formattable::kDouble;
++								type = icu::Formattable::kDouble;
+ 							} else { /* some style invalid/unknown to us */
+-								type = Formattable::kDouble;
++								type = icu::Formattable::kDouble;
+ 							}
+ 						} else { // if missing style, part, make it a double
+-							type = Formattable::kDouble;
++							type = icu::Formattable::kDouble;
+ 						}
+ 					} else if ((typeString == "date") || (typeString == "time")) {
+-						type = Formattable::kDate;
++						type = icu::Formattable::kDate;
+ 					} else if ((typeString == "spellout") || (typeString == "ordinal")
+ 							|| (typeString == "duration")) {
+-						type = Formattable::kDouble;
++						type = icu::Formattable::kDouble;
+ 					}
+ 				} else {
+ 					/* If there's no UMSGPAT_PART_TYPE_ARG_TYPE right after a
+@@ -259,22 +259,22 @@ static HashTable *umsg_parse_format(MessageFormatter_o
+ 					continue;
+ 				}
+ 			} else if (argType == UMSGPAT_ARG_TYPE_PLURAL) {
+-				type = Formattable::kDouble;
++				type = icu::Formattable::kDouble;
+ 			} else if (argType == UMSGPAT_ARG_TYPE_CHOICE) {
+-				type = Formattable::kDouble;
++				type = icu::Formattable::kDouble;
+ 			} else if (argType == UMSGPAT_ARG_TYPE_SELECT) {
+-				type = Formattable::kString;
++				type = icu::Formattable::kString;
+ #if U_ICU_VERSION_MAJOR_NUM >= 50
+ 			} else if (argType == UMSGPAT_ARG_TYPE_SELECTORDINAL) {
+-				type = Formattable::kDouble;
++				type = icu::Formattable::kDouble;
+ #endif
+ 			} else {
+-				type = Formattable::kString;
++				type = icu::Formattable::kString;
+ 			}
+ 		} /* was type specified? */
+ 
+ 		/* We found a different type for the same arg! */
+-		if (*storedType != Formattable::kObject && *storedType != type) {
++		if (*storedType != icu::Formattable::kObject && *storedType != type) {
+ 			intl_errors_set(&err, U_ARGUMENT_TYPE_MISMATCH,
+ 				"Inconsistent types declared for an argument", 0 TSRMLS_CC);
+ 			continue;
+@@ -299,10 +299,10 @@ static HashTable *umsg_parse_format(MessageFormatter_o
+ static HashTable *umsg_get_types(MessageFormatter_object *mfo,
+ 								 intl_error& err TSRMLS_DC)
+ {
+-	MessageFormat *mf = (MessageFormat *)mfo->mf_data.umsgf;
++	icu::MessageFormat *mf = (icu::MessageFormat *)mfo->mf_data.umsgf;
+ 
+ #ifdef HAS_MESSAGE_PATTERN
+-	const MessagePattern mp = MessageFormatAdapter::getMessagePattern(mf);
++	const icu::MessagePattern mp = icu::MessageFormatAdapter::getMessagePattern(mf);
+ 
+ 	return umsg_parse_format(mfo, mp, err TSRMLS_CC);
+ #else
+@@ -319,9 +319,9 @@ static HashTable *umsg_get_types(MessageFormatter_obje
+ static void umsg_set_timezone(MessageFormatter_object *mfo,
+ 							  intl_error& err TSRMLS_DC)
+ {
+-	MessageFormat *mf = (MessageFormat *)mfo->mf_data.umsgf;
+-	TimeZone	  *used_tz = NULL;
+-	const Format  **formats;
++	icu::MessageFormat *mf = (icu::MessageFormat *)mfo->mf_data.umsgf;
++	icu::TimeZone	  *used_tz = NULL;
++	const icu::Format  **formats;
+ 	int32_t		  count;
+ 
+ 	/* Unfortanely, this cannot change the time zone for arguments that
+@@ -341,8 +341,8 @@ static void umsg_set_timezone(MessageFormatter_object 
+ 	}
+ 
+ 	for (int i = 0; U_SUCCESS(err.code) && i < count; i++) {
+-		DateFormat* df = dynamic_cast<DateFormat*>(
+-			const_cast<Format *>(formats[i]));
++		icu::DateFormat* df = dynamic_cast<icu::DateFormat*>(
++			const_cast<icu::Format *>(formats[i]));
+ 		if (df == NULL) {
+ 			continue;
+ 		}
+@@ -371,9 +371,9 @@ U_CFUNC void umsg_format_helper(MessageFormatter_objec
+ 								int *formatted_len TSRMLS_DC)
+ {
+ 	int arg_count = zend_hash_num_elements(args);
+-	std::vector<Formattable> fargs;
+-	std::vector<UnicodeString> farg_names;
+-	MessageFormat *mf = (MessageFormat *)mfo->mf_data.umsgf;
++	std::vector<icu::Formattable> fargs;
++	std::vector<icu::UnicodeString> farg_names;
++	icu::MessageFormat *mf = (icu::MessageFormat *)mfo->mf_data.umsgf;
+ 	HashTable *types;
+ 	intl_error& err = INTL_DATA_ERROR(mfo);
+ 
+@@ -406,9 +406,9 @@ U_CFUNC void umsg_format_helper(MessageFormatter_objec
+ 			) == SUCCESS;
+ 		zend_hash_move_forward_ex(args, &pos), argNum++)
+ 	{
+-		Formattable& formattable = fargs[argNum];
+-		UnicodeString& key = farg_names[argNum];
+-		Formattable::Type argType = Formattable::kObject, //unknown
++		icu::Formattable& formattable = fargs[argNum];
++		icu::UnicodeString& key = farg_names[argNum];
++		icu::Formattable::Type argType = icu::Formattable::kObject, //unknown
+ 						  *storedArgType = NULL;
+ 
+ 		/* Process key and retrieve type */
+@@ -447,9 +447,9 @@ U_CFUNC void umsg_format_helper(MessageFormatter_objec
+ 
+ 		/* Convert zval to formattable according to message format type
+ 		 * or (as a fallback) the zval type */
+-		if (argType != Formattable::kObject) {
++		if (argType != icu::Formattable::kObject) {
+ 			switch (argType) {
+-			case Formattable::kString:
++			case icu::Formattable::kString:
+ 				{
+ 	string_arg:
+ 					/* This implicitly converts objects
+@@ -459,7 +459,7 @@ U_CFUNC void umsg_format_helper(MessageFormatter_objec
+ 					 */
+ 					convert_to_string_ex(elem);
+ 
+-					UnicodeString *text = new UnicodeString();
++					icu::UnicodeString *text = new icu::UnicodeString();
+ 					intl_stringFromChar(*text,
+ 						Z_STRVAL_PP(elem), Z_STRLEN_PP(elem), &err.code);
+ 
+@@ -475,7 +475,7 @@ U_CFUNC void umsg_format_helper(MessageFormatter_objec
+ 					formattable.adoptString(text);
+ 					break;
+ 				}
+-			case Formattable::kDouble:
++			case icu::Formattable::kDouble:
+ 				{
+ 					double d;
+ 					if (Z_TYPE_PP(elem) == IS_DOUBLE) {
+@@ -492,7 +492,7 @@ U_CFUNC void umsg_format_helper(MessageFormatter_objec
+ 					formattable.setDouble(d);
+ 					break;
+ 				}
+-			case Formattable::kLong:
++			case icu::Formattable::kLong:
+ 				{
+ 					int32_t tInt32 = 0;
+ retry_klong:
+@@ -522,7 +522,7 @@ retry_klong:
+ 					formattable.setLong(tInt32);
+ 					break;
+ 				}
+-			case Formattable::kInt64:
++			case icu::Formattable::kInt64:
+ 				{
+ 					int64_t tInt64 = 0;
+ retry_kint64:
+@@ -546,7 +546,7 @@ retry_kint64:
+ 					formattable.setInt64(tInt64);
+ 					break;
+ 				}
+-			case Formattable::kDate:
++			case icu::Formattable::kDate:
+ 				{
+ 					double dd = intl_zval_to_millis(*elem, &err, "msgfmt_format" TSRMLS_CC);
+ 					if (U_FAILURE(err.code)) {
+@@ -615,8 +615,8 @@ retry_kint64:
+ 		return;
+ 	}
+ 
+-	UnicodeString resultStr;
+-	FieldPosition fieldPosition(0);
++	icu::UnicodeString resultStr;
++	icu::FieldPosition fieldPosition(0);
+ 
+ 	/* format the message */
+ 	mf->format(farg_names.empty() ? NULL : &farg_names[0],
+@@ -642,8 +642,8 @@ retry_kint64:
+ 
+ U_CFUNC void umsg_parse_helper(UMessageFormat *fmt, int *count, zval ***args, UChar *source, int source_len, UErrorCode *status)
+ {
+-    UnicodeString srcString(source, source_len);
+-    Formattable *fargs = ((const MessageFormat*)fmt)->parse(srcString, *count, *status);
++    icu::UnicodeString srcString(source, source_len);
++    icu::Formattable *fargs = ((const icu::MessageFormat*)fmt)->parse(srcString, *count, *status);
+ 
+ 	if(U_FAILURE(*status)) {
+ 		return;
+@@ -655,27 +655,27 @@ U_CFUNC void umsg_parse_helper(UMessageFormat *fmt, in
+     for(int32_t i = 0; i < *count; i++) {
+ 	    int64_t aInt64;
+ 		double aDate;
+-		UnicodeString temp;
++		icu::UnicodeString temp;
+ 		char *stmp;
+ 		int stmp_len;
+ 
+ 		ALLOC_INIT_ZVAL((*args)[i]);
+ 
+ 		switch(fargs[i].getType()) {
+-        case Formattable::kDate:
++		case icu::Formattable::kDate:
+ 			aDate = ((double)fargs[i].getDate())/U_MILLIS_PER_SECOND;
+ 			ZVAL_DOUBLE((*args)[i], aDate);
+             break;
+ 
+-        case Formattable::kDouble:
++ 	    case icu::Formattable::kDouble:
+ 			ZVAL_DOUBLE((*args)[i], (double)fargs[i].getDouble());
+             break;
+ 
+-        case Formattable::kLong:
++        case icu::Formattable::kLong:
+ 			ZVAL_LONG((*args)[i], fargs[i].getLong());
+             break;
+ 
+-        case Formattable::kInt64:
++	case icu::Formattable::kInt64:
+             aInt64 = fargs[i].getInt64();
+ 			if(aInt64 > LONG_MAX || aInt64 < -LONG_MAX) {
+ 				ZVAL_DOUBLE((*args)[i], (double)aInt64);
+@@ -684,7 +684,7 @@ U_CFUNC void umsg_parse_helper(UMessageFormat *fmt, in
+ 			}
+             break;
+ 
+-        case Formattable::kString:
++	case icu::Formattable::kString:
+             fargs[i].getString(temp);
+ 			intl_convert_utf16_to_utf8(&stmp, &stmp_len, temp.getBuffer(), temp.length(), status);
+ 			if(U_FAILURE(*status)) {
+@@ -694,8 +694,8 @@ U_CFUNC void umsg_parse_helper(UMessageFormat *fmt, in
+ 			ZVAL_STRINGL((*args)[i], stmp, stmp_len, 0);
+             break;
+ 
+-        case Formattable::kObject:
+-        case Formattable::kArray:
++	case icu::Formattable::kObject:
++	case icu::Formattable::kArray:
+             *status = U_ILLEGAL_ARGUMENT_ERROR;
+ 			cleanup_zvals();
+             break;

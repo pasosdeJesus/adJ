@@ -1,0 +1,22 @@
+$OpenBSD: patch-lib_setopt_c,v 1.1.2.1 2019/05/25 19:39:26 naddy Exp $
+
+CVE-2019-5435: Integer overflows in curl_url_set
+https://curl.haxx.se/docs/CVE-2019-5435.html
+
+Index: lib/setopt.c
+--- lib/setopt.c.orig
++++ lib/setopt.c
+@@ -61,6 +61,13 @@ CURLcode Curl_setstropt(char **charp, const char *s)
+   if(s) {
+     char *str = strdup(s);
+ 
++    if(str) {
++      size_t len = strlen(str);
++      if(len > CURL_MAX_INPUT_LENGTH) {
++        free(str);
++        return CURLE_BAD_FUNCTION_ARGUMENT;
++      }
++    }
+     if(!str)
+       return CURLE_OUT_OF_MEMORY;
+ 

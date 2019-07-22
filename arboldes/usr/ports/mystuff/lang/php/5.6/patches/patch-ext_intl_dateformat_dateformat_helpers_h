@@ -1,0 +1,18 @@
+$OpenBSD$
+
+Index: ext/intl/dateformat/dateformat_helpers.h
+--- ext/intl/dateformat/dateformat_helpers.h.orig
++++ ext/intl/dateformat/dateformat_helpers.h
+@@ -28,10 +28,10 @@ extern "C" {
+ }
+ 
+ int datefmt_process_calendar_arg(zval* calendar_zv,
+-								 Locale const& locale,
++								 icu::Locale const& locale,
+ 								 const char *func_name,
+ 								 intl_error *err,
+-								 Calendar*& cal,
++								 icu::Calendar*& cal,
+ 								 long& cal_int_type,
+ 								 bool& calendar_owned TSRMLS_DC);
+ 

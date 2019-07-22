@@ -1,0 +1,28 @@
+$OpenBSD$
+
+Index: repasatk.ml
+--- repasatk.ml.orig
++++ repasatk.ml
+@@ -333,10 +333,10 @@ and respAhorcado r interf format d ld response usedcha
+ 	begin
+ 		let newusedchars = (usedchars ^ r) in
+ 		let respuesta = (ahorcadoArmar response newusedchars) in
+-		if response=respuesta then
++		if response=Bytes.to_string respuesta then
+                 begin
+                         drawHangman "light grey" 0;
+-		        receiveAnswer interf respuesta
++		        receiveAnswer interf (Bytes.to_string respuesta)
+                 end
+ 		else
+ 			ahorcadoQuestion_tk interf format d ld response 
+@@ -353,7 +353,8 @@ and respAhorcado r interf format d ld response usedcha
+                         ~command:(fun () -> 
+                         drawHangman "light grey" 0;
+                         destroy frcon;
+-			receiveAnswer interf (ahorcadoArmar response usedchars)
++                        let respuesta=ahorcadoArmar response usedchars in
++			receiveAnswer interf (Bytes.to_string respuesta)
+                         ) 
+                         in
+                         pack [coe but];

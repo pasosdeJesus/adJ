@@ -1,0 +1,56 @@
+$OpenBSD$
+
+Index: ext/intl/breakiterator/breakiterator_class.cpp
+--- ext/intl/breakiterator/breakiterator_class.cpp.orig
++++ ext/intl/breakiterator/breakiterator_class.cpp
+@@ -47,12 +47,12 @@ zend_object_handlers BreakIterator_handlers;
+ /* }}} */
+ 
+ U_CFUNC	void breakiterator_object_create(zval *object,
+-										 BreakIterator *biter TSRMLS_DC)
++										 icu::BreakIterator *biter TSRMLS_DC)
+ {
+ 	UClassID classId = biter->getDynamicClassID();
+ 	zend_class_entry *ce;
+ 
+-	if (classId == RuleBasedBreakIterator::getStaticClassID()) {
++	if (classId == icu::RuleBasedBreakIterator::getStaticClassID()) {
+ 		ce = RuleBasedBreakIterator_ce_ptr;
+ 	} else if (classId == CodePointBreakIterator::getStaticClassID()) {
+ 		ce = CodePointBreakIterator_ce_ptr;
+@@ -65,7 +65,7 @@ U_CFUNC	void breakiterator_object_create(zval *object,
+ }
+ 
+ U_CFUNC void breakiterator_object_construct(zval *object,
+-											BreakIterator *biter TSRMLS_DC)
++											icu::BreakIterator *biter TSRMLS_DC)
+ {
+ 	BreakIterator_object *bio;
+ 
+@@ -110,7 +110,7 @@ static zend_object_value BreakIterator_clone_obj(zval 
+ 		&bio_orig->zo, Z_OBJ_HANDLE_P(object) TSRMLS_CC);
+ 
+ 	if (bio_orig->biter != NULL) {
+-		BreakIterator *new_biter;
++		icu::BreakIterator *new_biter;
+ 
+ 		new_biter = bio_orig->biter->clone();
+ 		if (!new_biter) {
+@@ -142,7 +142,7 @@ static HashTable *BreakIterator_get_debug_info(zval *o
+ {
+ 	zval					zv = zval_used_for_init;
+ 	BreakIterator_object	*bio;
+-	const BreakIterator		*biter;
++	const icu::BreakIterator		*biter;
+ 
+ 	*is_temp = 1;
+ 
+@@ -351,7 +351,7 @@ U_CFUNC void breakiterator_register_BreakIterator_clas
+ 			zend_ce_traversable);
+ 
+ 	zend_declare_class_constant_long(BreakIterator_ce_ptr,
+-		"DONE", sizeof("DONE") - 1, BreakIterator::DONE TSRMLS_CC );
++		"DONE", sizeof("DONE") - 1, icu::BreakIterator::DONE TSRMLS_CC );
+ 
+ 	/* Declare constants that are defined in the C header */
+ #define BREAKITER_DECL_LONG_CONST(name) \

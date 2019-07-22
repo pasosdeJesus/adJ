@@ -1,0 +1,142 @@
+$OpenBSD$
+
+Index: ext/intl/breakiterator/breakiterator_methods.cpp
+--- ext/intl/breakiterator/breakiterator_methods.cpp.orig
++++ ext/intl/breakiterator/breakiterator_methods.cpp
+@@ -41,10 +41,10 @@ U_CFUNC PHP_METHOD(BreakIterator, __construct)
+ }
+ 
+ static void _breakiter_factory(const char *func_name,
+-							   BreakIterator *(*func)(const Locale&, UErrorCode&),
++							   icu::BreakIterator *(*func)(const icu::Locale&, UErrorCode&),
+ 							   INTERNAL_FUNCTION_PARAMETERS)
+ {
+-	BreakIterator	*biter;
++	icu::BreakIterator	*biter;
+ 	const char		*locale_str = NULL;
+ 	int				dummy;
+ 	char			*msg;
+@@ -63,7 +63,7 @@ static void _breakiter_factory(const char *func_name,
+ 		locale_str = intl_locale_get_default(TSRMLS_C);
+ 	}
+ 
+-	biter = func(Locale::createFromName(locale_str), status);
++	biter = func(icu::Locale::createFromName(locale_str), status);
+ 	intl_error_set_code(NULL, status TSRMLS_CC);
+ 	if (U_FAILURE(status)) {
+ 		spprintf(&msg, 0, "%s: error creating BreakIterator",
+@@ -79,35 +79,35 @@ static void _breakiter_factory(const char *func_name,
+ U_CFUNC PHP_FUNCTION(breakiter_create_word_instance)
+ {
+ 	_breakiter_factory("breakiter_create_word_instance",
+-			&BreakIterator::createWordInstance,
++			&icu::BreakIterator::createWordInstance,
+ 			INTERNAL_FUNCTION_PARAM_PASSTHRU);
+ }
+ 
+ U_CFUNC PHP_FUNCTION(breakiter_create_line_instance)
+ {
+ 	_breakiter_factory("breakiter_create_line_instance",
+-			&BreakIterator::createLineInstance,
++			&icu::BreakIterator::createLineInstance,
+ 			INTERNAL_FUNCTION_PARAM_PASSTHRU);
+ }
+ 
+ U_CFUNC PHP_FUNCTION(breakiter_create_character_instance)
+ {
+ 	_breakiter_factory("breakiter_create_character_instance",
+-			&BreakIterator::createCharacterInstance,
++			&icu::BreakIterator::createCharacterInstance,
+ 			INTERNAL_FUNCTION_PARAM_PASSTHRU);
+ }
+ 
+ U_CFUNC PHP_FUNCTION(breakiter_create_sentence_instance)
+ {
+ 	_breakiter_factory("breakiter_create_sentence_instance",
+-			&BreakIterator::createSentenceInstance,
++			&icu::BreakIterator::createSentenceInstance,
+ 			INTERNAL_FUNCTION_PARAM_PASSTHRU);
+ }
+ 
+ U_CFUNC PHP_FUNCTION(breakiter_create_title_instance)
+ {
+ 	_breakiter_factory("breakiter_create_title_instance",
+-			&BreakIterator::createTitleInstance,
++			&icu::BreakIterator::createTitleInstance,
+ 			INTERNAL_FUNCTION_PARAM_PASSTHRU);
+ }
+ 
+@@ -193,7 +193,7 @@ U_CFUNC PHP_FUNCTION(breakiter_set_text)
+ 
+ static void _breakiter_no_args_ret_int32(
+ 		const char *func_name,
+-		int32_t (BreakIterator::*func)(),
++		int32_t (icu::BreakIterator::*func)(),
+ 		INTERNAL_FUNCTION_PARAMETERS)
+ {
+ 	char	*msg;
+@@ -249,21 +249,21 @@ static void _breakiter_int32_ret_int32(
+ U_CFUNC PHP_FUNCTION(breakiter_first)
+ {
+ 	_breakiter_no_args_ret_int32("breakiter_first",
+-			&BreakIterator::first,
++			&icu::BreakIterator::first,
+ 			INTERNAL_FUNCTION_PARAM_PASSTHRU);
+ }
+ 
+ U_CFUNC PHP_FUNCTION(breakiter_last)
+ {
+ 	_breakiter_no_args_ret_int32("breakiter_last",
+-			&BreakIterator::last,
++			&icu::BreakIterator::last,
+ 			INTERNAL_FUNCTION_PARAM_PASSTHRU);
+ }
+ 
+ U_CFUNC PHP_FUNCTION(breakiter_previous)
+ {
+ 	_breakiter_no_args_ret_int32("breakiter_previous",
+-			&BreakIterator::previous,
++			&icu::BreakIterator::previous,
+ 			INTERNAL_FUNCTION_PARAM_PASSTHRU);
+ }
+ 
+@@ -287,11 +287,11 @@ U_CFUNC PHP_FUNCTION(breakiter_next)
+ 
+ 	if (no_arg_version) {
+ 		_breakiter_no_args_ret_int32("breakiter_next",
+-				&BreakIterator::next,
++				&icu::BreakIterator::next,
+ 				INTERNAL_FUNCTION_PARAM_PASSTHRU);
+ 	} else {
+ 		_breakiter_int32_ret_int32("breakiter_next",
+-				&BreakIterator::next,
++				&icu::BreakIterator::next,
+ 				INTERNAL_FUNCTION_PARAM_PASSTHRU);
+ 	}
+ }
+@@ -317,14 +317,14 @@ U_CFUNC PHP_FUNCTION(breakiter_current)
+ U_CFUNC PHP_FUNCTION(breakiter_following)
+ {
+ 	_breakiter_int32_ret_int32("breakiter_following",
+-			&BreakIterator::following,
++			&icu::BreakIterator::following,
+ 			INTERNAL_FUNCTION_PARAM_PASSTHRU);
+ }
+ 
+ U_CFUNC PHP_FUNCTION(breakiter_preceding)
+ {
+ 	_breakiter_int32_ret_int32("breakiter_preceding",
+-			&BreakIterator::preceding,
++			&icu::BreakIterator::preceding,
+ 			INTERNAL_FUNCTION_PARAM_PASSTHRU);
+ }
+ 
+@@ -375,7 +375,7 @@ U_CFUNC PHP_FUNCTION(breakiter_get_locale)
+ 
+ 	BREAKITER_METHOD_FETCH_OBJECT;
+ 
+-	Locale locale = bio->biter->getLocale((ULocDataLocaleType)locale_type,
++	icu::Locale locale = bio->biter->getLocale((ULocDataLocaleType)locale_type,
+ 		BREAKITER_ERROR_CODE(bio));
+ 	INTL_METHOD_CHECK_STATUS(bio,
+ 		"breakiter_get_locale: Call to ICU method has failed");

@@ -1,0 +1,127 @@
+$OpenBSD$
+
+Index: ext/intl/timezone/timezone_class.cpp
+--- ext/intl/timezone/timezone_class.cpp.orig
++++ ext/intl/timezone/timezone_class.cpp
+@@ -45,7 +45,7 @@ U_CDECL_END
+ /* }}} */
+ 
+ /* {{{ timezone_object_construct */
+-U_CFUNC void timezone_object_construct(const TimeZone *zone, zval *object, int owned TSRMLS_DC)
++U_CFUNC void timezone_object_construct(const icu::TimeZone *zone, zval *object, int owned TSRMLS_DC)
+ {
+ 	TimeZone_object	*to;
+ 
+@@ -58,12 +58,12 @@ U_CFUNC void timezone_object_construct(const TimeZone 
+ 
+ /* {{{ timezone_convert_to_datetimezone
+  *	   Convert from TimeZone to DateTimeZone object */
+-U_CFUNC zval *timezone_convert_to_datetimezone(const TimeZone *timeZone,
++U_CFUNC zval *timezone_convert_to_datetimezone(const icu::TimeZone *timeZone,
+ 											   intl_error *outside_error,
+ 											   const char *func TSRMLS_DC)
+ {
+ 	zval				*ret = NULL;
+-	UnicodeString		id;
++	icu::UnicodeString		id;
+ 	char				*message = NULL;
+ 	php_timezone_obj	*tzobj;
+ 	zval				arg = zval_used_for_init;
+@@ -80,7 +80,7 @@ U_CFUNC zval *timezone_convert_to_datetimezone(const T
+ 	object_init_ex(ret, php_date_get_timezone_ce());
+ 	tzobj = (php_timezone_obj *)zend_objects_get_address(ret TSRMLS_CC);
+ 
+-	if (id.compare(0, 3, UnicodeString("GMT", sizeof("GMT")-1, US_INV)) == 0) {
++	if (id.compare(0, 3, icu::UnicodeString("GMT", sizeof("GMT")-1, US_INV)) == 0) {
+ 		/* The DateTimeZone constructor doesn't support offset time zones,
+ 		 * so we must mess with DateTimeZone structure ourselves */
+ 		tzobj->initialized	  = 1;
+@@ -129,14 +129,14 @@ error:
+ 
+ /* {{{ timezone_process_timezone_argument
+  * TimeZone argument processor. outside_error may be NULL (for static functions/constructors) */
+-U_CFUNC TimeZone *timezone_process_timezone_argument(zval **zv_timezone,
++U_CFUNC icu::TimeZone *timezone_process_timezone_argument(zval **zv_timezone,
+ 													 intl_error *outside_error,
+ 													 const char *func TSRMLS_DC)
+ {
+ 	zval		local_zv_tz		= zval_used_for_init,
+ 				*local_zv_tz_p	= &local_zv_tz;
+ 	char		*message = NULL;
+-	TimeZone	*timeZone;
++	icu::TimeZone	*timeZone;
+ 
+ 	if (zv_timezone == NULL || Z_TYPE_PP(zv_timezone) == IS_NULL) {
+ 		timelib_tzinfo *tzinfo = get_timezone_info(TSRMLS_C);
+@@ -175,7 +175,7 @@ U_CFUNC TimeZone *timezone_process_timezone_argument(z
+ 		return timezone_convert_datetimezone(tzobj->type, tzobj, 0,
+ 			outside_error, func TSRMLS_CC);
+ 	} else {
+-		UnicodeString	id,
++		icu::UnicodeString	id,
+ 						gottenId;
+ 		UErrorCode		status = U_ZERO_ERROR; /* outside_error may be NULL */
+ 		convert_to_string_ex(zv_timezone);
+@@ -189,7 +189,7 @@ U_CFUNC TimeZone *timezone_process_timezone_argument(z
+ 			}
+ 			return NULL;
+ 		}
+-		timeZone = TimeZone::createTimeZone(id);
++		timeZone = icu::TimeZone::createTimeZone(id);
+ 		if (timeZone == NULL) {
+ 			spprintf(&message, 0, "%s: could not create time zone", func);
+ 			if (message) {
+@@ -233,7 +233,7 @@ static zend_object_value TimeZone_clone_obj(zval *obje
+ 		&to_orig->zo, Z_OBJ_HANDLE_P(object) TSRMLS_CC);
+ 
+ 	if (to_orig->utimezone != NULL) {
+-		TimeZone	*newTimeZone;
++		icu::TimeZone	*newTimeZone;
+ 
+ 		newTimeZone = to_orig->utimezone->clone();
+ 		to_new->should_delete = 1;
+@@ -285,8 +285,8 @@ static HashTable *TimeZone_get_debug_info(zval *object
+ {
+ 	zval			zv = zval_used_for_init;
+ 	TimeZone_object	*to;
+-	const TimeZone	*tz;
+-	UnicodeString	ustr;
++	const icu::TimeZone	*tz;
++	icu::UnicodeString	ustr;
+ 	char			*str;
+ 	int				str_len;
+ 	UErrorCode		uec = U_ZERO_ERROR;
+@@ -314,7 +314,7 @@ static HashTable *TimeZone_get_debug_info(zval *object
+ 	add_assoc_stringl_ex(&zv, "id", sizeof("id"), str, str_len, 0);
+ 
+ 	int32_t rawOffset, dstOffset;
+-	UDate now = Calendar::getNow();
++	UDate now = icu::Calendar::getNow();
+ 	tz->getOffset(now, FALSE, rawOffset, dstOffset, uec);
+ 	if (U_FAILURE(uec)) {
+ 		return Z_ARRVAL(zv);
+@@ -516,16 +516,16 @@ U_CFUNC void timezone_register_IntlTimeZone_class(TSRM
+ 	zend_declare_class_constant_long(TimeZone_ce_ptr, name, sizeof(name) - 1, \
+ 		val TSRMLS_CC)
+ 
+-	TIMEZONE_DECL_LONG_CONST("DISPLAY_SHORT", TimeZone::SHORT);
+-	TIMEZONE_DECL_LONG_CONST("DISPLAY_LONG", TimeZone::LONG);
++	TIMEZONE_DECL_LONG_CONST("DISPLAY_SHORT", icu::TimeZone::SHORT);
++	TIMEZONE_DECL_LONG_CONST("DISPLAY_LONG", icu::TimeZone::LONG);
+ 
+ #if U_ICU_VERSION_MAJOR_NUM * 10 + U_ICU_VERSION_MINOR_NUM >= 44
+-	TIMEZONE_DECL_LONG_CONST("DISPLAY_SHORT_GENERIC", TimeZone::SHORT_GENERIC);
+-	TIMEZONE_DECL_LONG_CONST("DISPLAY_LONG_GENERIC", TimeZone::LONG_GENERIC);
+-	TIMEZONE_DECL_LONG_CONST("DISPLAY_SHORT_GMT", TimeZone::SHORT_GMT);
+-	TIMEZONE_DECL_LONG_CONST("DISPLAY_LONG_GMT", TimeZone::LONG_GMT);
+-	TIMEZONE_DECL_LONG_CONST("DISPLAY_SHORT_COMMONLY_USED", TimeZone::SHORT_COMMONLY_USED);
+-	TIMEZONE_DECL_LONG_CONST("DISPLAY_GENERIC_LOCATION", TimeZone::GENERIC_LOCATION);
++	TIMEZONE_DECL_LONG_CONST("DISPLAY_SHORT_GENERIC", icu::TimeZone::SHORT_GENERIC);
++	TIMEZONE_DECL_LONG_CONST("DISPLAY_LONG_GENERIC", icu::TimeZone::LONG_GENERIC);
++	TIMEZONE_DECL_LONG_CONST("DISPLAY_SHORT_GMT", icu::TimeZone::SHORT_GMT);
++	TIMEZONE_DECL_LONG_CONST("DISPLAY_LONG_GMT", icu::TimeZone::LONG_GMT);
++	TIMEZONE_DECL_LONG_CONST("DISPLAY_SHORT_COMMONLY_USED", icu::TimeZone::SHORT_COMMONLY_USED);
++	TIMEZONE_DECL_LONG_CONST("DISPLAY_GENERIC_LOCATION", icu::TimeZone::GENERIC_LOCATION);
+ #endif
+ 
+ #if U_ICU_VERSION_MAJOR_NUM * 10 + U_ICU_VERSION_MINOR_NUM >= 48

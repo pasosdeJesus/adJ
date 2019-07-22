@@ -1,0 +1,14 @@
+$OpenBSD$
+
+Index: conf.sh
+--- conf.sh.orig
++++ conf.sh
+@@ -205,7 +205,7 @@ elif (test "$verocamlc" -lt 3) then {
+ check "OCAMLOPT" "optional" "test -x \$OCAMLOPT" `which ocamlopt 2> /dev/null`
+ check "OCAMLDEP" "" "test -x \$OCAMLDEP" `which ocamldep 2> /dev/null`
+ libloc=`$OCAMLC -where`;
+-check "OCAMLLIB" "" "test -f \$OCAMLLIB/pervasives.cmi" "$libloc";
++check "OCAMLLIB" "" "test -f \$OCAMLLIB/stdlib.cmi" "$libloc";
+ 
+ r=`echo "t" 2>/dev/null >$INSLIB/lrepasa_test.tmp`;
+ if (test "$?" != 0 -a "$prefix" != "") then {

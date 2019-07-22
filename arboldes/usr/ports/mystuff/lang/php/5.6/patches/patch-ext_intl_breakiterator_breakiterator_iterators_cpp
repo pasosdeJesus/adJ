@@ -1,0 +1,73 @@
+$OpenBSD$
+
+Index: ext/intl/breakiterator/breakiterator_iterators.cpp
+--- ext/intl/breakiterator/breakiterator_iterators.cpp.orig
++++ ext/intl/breakiterator/breakiterator_iterators.cpp
+@@ -36,7 +36,7 @@ static zend_object_handlers IntlPartsIterator_handlers
+ 
+ /* BreakIterator's iterator */
+ 
+-inline BreakIterator *_breakiter_prolog(zend_object_iterator *iter TSRMLS_DC)
++inline icu::BreakIterator *_breakiter_prolog(zend_object_iterator *iter TSRMLS_DC)
+ {
+ 	BreakIterator_object *bio;
+ 	bio = (BreakIterator_object*)zend_object_store_get_object(
+@@ -57,7 +57,7 @@ static void _breakiterator_destroy_it(zend_object_iter
+ 
+ static void _breakiterator_move_forward(zend_object_iterator *iter TSRMLS_DC)
+ {
+-	BreakIterator *biter = _breakiter_prolog(iter TSRMLS_CC);
++	icu::BreakIterator *biter = _breakiter_prolog(iter TSRMLS_CC);
+ 	zoi_with_current *zoi_iter = (zoi_with_current*)iter;
+ 
+ 	iter->funcs->invalidate_current(iter TSRMLS_CC);
+@@ -67,7 +67,7 @@ static void _breakiterator_move_forward(zend_object_it
+ 	}
+ 
+ 	int32_t pos = biter->next();
+-	if (pos != BreakIterator::DONE) {
++	if (pos != icu::BreakIterator::DONE) {
+ 		MAKE_STD_ZVAL(zoi_iter->current);
+ 		ZVAL_LONG(zoi_iter->current, (long)pos);
+ 	} //else we've reached the end of the enum, nothing more is required
+@@ -75,7 +75,7 @@ static void _breakiterator_move_forward(zend_object_it
+ 
+ static void _breakiterator_rewind(zend_object_iterator *iter TSRMLS_DC)
+ {
+-	BreakIterator *biter = _breakiter_prolog(iter TSRMLS_CC);
++	icu::BreakIterator *biter = _breakiter_prolog(iter TSRMLS_CC);
+ 	zoi_with_current *zoi_iter = (zoi_with_current*)iter;
+ 
+ 	int32_t pos = biter->first();
+@@ -104,7 +104,7 @@ U_CFUNC zend_object_iterator *_breakiterator_get_itera
+ 	}
+ 
+ 	bio = (BreakIterator_object*)zend_object_store_get_object(object TSRMLS_CC);
+-	BreakIterator *biter = bio->biter;
++	icu::BreakIterator *biter = bio->biter;
+ 
+ 	if (biter == NULL) {
+ 		zend_throw_exception(NULL,
+@@ -156,11 +156,11 @@ static void _breakiterator_parts_move_forward(zend_obj
+ 			next;
+ 
+ 	cur = bio->biter->current();
+-	if (cur == BreakIterator::DONE) {
++	if (cur == icu::BreakIterator::DONE) {
+ 		return;
+ 	}
+ 	next = bio->biter->next();
+-	if (next == BreakIterator::DONE) {
++	if (next == icu::BreakIterator::DONE) {
+ 		return;
+ 	}
+ 
+@@ -177,7 +177,7 @@ static void _breakiterator_parts_move_forward(zend_obj
+ 				len;
+ 	char		*res;
+ 
+-	if (next == BreakIterator::DONE) {
++	if (next == icu::BreakIterator::DONE) {
+ 		next = slen;
+ 	}
+ 	assert(next <= slen && next >= cur);

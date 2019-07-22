@@ -1,0 +1,26 @@
+$OpenBSD$
+
+Index: ext/intl/breakiterator/breakiterator_class.h
+--- ext/intl/breakiterator/breakiterator_class.h.orig
++++ ext/intl/breakiterator/breakiterator_class.h
+@@ -35,7 +35,7 @@ typedef struct {
+ 	intl_error  err;
+ 
+ 	// ICU break iterator
+-	BreakIterator*	biter;
++	icu::BreakIterator*	biter;
+ 
+ 	// current text
+ 	zval *text;
+@@ -57,9 +57,9 @@ typedef struct {
+ 		RETURN_FALSE; \
+ 	}
+ 
+-void breakiterator_object_create(zval *object, BreakIterator *break_iter TSRMLS_DC);
++void breakiterator_object_create(zval *object, icu::BreakIterator *break_iter TSRMLS_DC);
+ 
+-void breakiterator_object_construct(zval *object, BreakIterator *break_iter TSRMLS_DC);
++void breakiterator_object_construct(zval *object, icu::BreakIterator *break_iter TSRMLS_DC);
+ 
+ void breakiterator_register_BreakIterator_class(TSRMLS_D);
+ 

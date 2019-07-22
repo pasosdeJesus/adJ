@@ -1,0 +1,33 @@
+$OpenBSD$
+
+Index: ext/intl/breakiterator/codepointiterator_internal.h
+--- ext/intl/breakiterator/codepointiterator_internal.h.orig
++++ ext/intl/breakiterator/codepointiterator_internal.h
+@@ -42,15 +42,15 @@ namespace PHP {
+ 
+ 		virtual UClassID getDynamicClassID(void) const;
+ 
+-		virtual CharacterIterator& getText(void) const;
++		virtual icu::CharacterIterator& getText(void) const;
+ 
+ 		virtual UText *getUText(UText *fillIn, UErrorCode &status) const;
+ 
+-		virtual void setText(const UnicodeString &text);
++		virtual void setText(const icu::UnicodeString &text);
+ 
+ 		virtual void setText(UText *text, UErrorCode &status);
+ 
+-		virtual void adoptText(CharacterIterator* it);
++		virtual void adoptText(icu::CharacterIterator* it);
+ 
+ 		virtual int32_t first(void);
+ 
+@@ -84,7 +84,7 @@ namespace PHP {
+ 	private:
+ 		UText *fText;
+ 		UChar32 lastCodePoint;
+-		mutable CharacterIterator *fCharIter;
++		mutable icu::CharacterIterator *fCharIter;
+ 
+ 		inline void clearCurrentCharIter()
+ 		{

@@ -1,0 +1,19 @@
+$OpenBSD: patch-lib_urldata_h,v 1.1.16.1 2019/05/25 19:39:26 naddy Exp $
+
+CVE-2019-5435: Integer overflows in curl_url_set
+https://curl.haxx.se/docs/CVE-2019-5435.html
+
+Index: lib/urldata.h
+--- lib/urldata.h.orig
++++ lib/urldata.h
+@@ -79,6 +79,10 @@
+ */
+ #define RESP_TIMEOUT (120*1000)
+ 
++/* Max string intput length is a precaution against abuse and to detect junk
++   input easier and better. */
++#define CURL_MAX_INPUT_LENGTH 8000000
++
+ #include "cookie.h"
+ #include "psl.h"
+ #include "formdata.h"

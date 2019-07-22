@@ -1,0 +1,38 @@
+$OpenBSD$
+
+Index: ext/intl/breakiterator/codepointiterator_internal.cpp
+--- ext/intl/breakiterator/codepointiterator_internal.cpp.orig
++++ ext/intl/breakiterator/codepointiterator_internal.cpp
+@@ -93,12 +93,12 @@ CodePointBreakIterator* CodePointBreakIterator::clone(
+ 	return new CodePointBreakIterator(*this);
+ }
+ 
+-CharacterIterator& CodePointBreakIterator::getText(void) const
++icu::CharacterIterator& CodePointBreakIterator::getText(void) const
+ {
+ 	if (this->fCharIter == NULL) {
+ 		//this method is deprecated anyway; setup bogus iterator
+ 		static const UChar c = 0;
+-		this->fCharIter = new UCharCharacterIterator(&c, 0);
++		this->fCharIter = new icu::UCharCharacterIterator(&c, 0);
+ 	}
+ 
+ 	return *this->fCharIter;
+@@ -109,7 +109,7 @@ UText *CodePointBreakIterator::getUText(UText *fillIn,
+ 	return utext_clone(fillIn, this->fText, FALSE, TRUE, &status);
+ }
+ 
+-void CodePointBreakIterator::setText(const UnicodeString &text)
++void CodePointBreakIterator::setText(const icu::UnicodeString &text)
+ {
+ 	UErrorCode uec = UErrorCode();
+ 
+@@ -130,7 +130,7 @@ void CodePointBreakIterator::setText(UText *text, UErr
+ 	clearCurrentCharIter();
+ }
+ 
+-void CodePointBreakIterator::adoptText(CharacterIterator* it)
++void CodePointBreakIterator::adoptText(icu::CharacterIterator* it)
+ {
+ 	UErrorCode uec = UErrorCode();
+ 	clearCurrentCharIter();
