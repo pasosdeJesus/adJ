@@ -1,10 +1,11 @@
-# $OpenBSD: Makefile.inc,v 1.122 2018/10/08 10:38:46 sthen Exp $
+# $OpenBSD: Makefile.inc,v 1.134.2.1 2019/05/10 12:27:36 sthen Exp $
 
 BROKEN-hppa=	no __sync_bool_compare_and_swap support nor asm fallback
 
 COMMENT-main=		server-side HTML-embedded scripting language
 
 PKGNAME-main?=		php-${V}
+PKGSTEM-main=		php-${PV}
 
 DISTFILES+=		php-${V}.tar.bz2
 
@@ -12,7 +13,7 @@ DISTNAME?=		php-${V}
 CATEGORIES=		lang www
 
 MAINTAINER=		Stuart Henderson <sthen@openbsd.org>
-HOMEPAGE=		http://www.php.net/
+HOMEPAGE=		https://secure.php.net/
 
 MASTER_SITES=		http://se.php.net/distributions/ \
 			http://us.php.net/distributions/ \
@@ -39,6 +40,7 @@ INI_TEMPLATES?=		development production
 PATCHORIG=		.orig.port
 CONFIGURE_STYLE=	autoconf
 AUTOCONF_VERSION?=	2.69
+COMPILER=		base-clang ports-gcc base-gcc
 CONFIGURE_ENV+=		CFLAGS="${CFLAGS} -I${LOCALBASE}/include -pthread" \
 			LDFLAGS="-L${LOCALBASE}/lib -pthread" \
 			EXTENSION_DIR=${MODULES_DIR} \
@@ -54,15 +56,16 @@ CONFIGURE_ENV+=		ac_cv_lib_pam_pam_start=no
 
 MAKE_ENV=		${CONFIGURE_ENV}
 
-CONFIGURE_ARGS+=	--enable-shared \
+CONFIGURE_ARGS+=	--disable-rpath \
 			--disable-static \
-			--disable-rpath \
-			--with-config-file-path=${SYSCONFDIR} \
 			--enable-inline-optimization \
-			--with-pic \
-			--with-pear=${LOCALBASE}/share/php-${PV} \
-			--with-config-file-scan-dir=${SYSCONFDIR}/php-${PV} \
+			--enable-shared \
 			--program-suffix=-${PV} \
+			--with-config-file-path=${SYSCONFDIR} \
+			--with-config-file-scan-dir=${SYSCONFDIR}/php-${PV} \
+			--with-pcre-jit=no \
+			--with-pear=${LOCALBASE}/share/php-${PV} \
+			--with-pic \
 			--with-readline
 
 # override mysqlnd default of /tmp/mysql.sock (if using libmysql this
@@ -78,6 +81,7 @@ CONFIGURE_ARGS+=	--with-gettext=${LOCALBASE} \
 			--with-onig=${LOCALBASE} \
 			--with-openssl \
 			--with-pcre-regex \
+			--with-sodium=${LOCALBASE} \
 			--with-zlib \
 			--enable-bcmath \
 			--enable-calendar \
@@ -101,25 +105,29 @@ TEST_FLAGS=		NO_INTERACTION=1
 
 ZEND_EXTENSIONS+=	-opcache
 
+# new subpackages must be added to devel/quirks $cve tables
 PHP_EXTENSIONS+=	-bz2 -curl -dba -gd -gmp -intl -imap -ldap \
 			-mysqli -odbc -pcntl -pdo_mysql -pdo_odbc -pdo_pgsql \
 			-pdo_sqlite -pgsql -pspell -shmop -soap -snmp \
 			-sqlite3 -pdo_dblib -tidy -xmlrpc -xsl -zip
-.if ${PV} == "5.6"
-PHP_EXTENSIONS+=	-mysql -sybase_ct -mssql -mcrypt
-.elif ${PV} == "7.0" || ${PV} == "7.1"
+.if ${PV} == "7.1"
 PHP_EXTENSIONS+=	-mcrypt
 .endif
 
 SAPI+=			-main -apache -cgi -dbg
 MULTI_PACKAGES=		${SAPI} ${PHP_EXTENSIONS}
 
-# setup for no_* build options to disable extensions with extra dep's;
-# can't be used for version-specific extensions in 5.6/Makefile
+# setup for no_* build options to allow disabling extensions with
+# larger dependencies;
 PSEUDO_FLAVORS=		${PHP_EXTENSIONS:C/-(pdo_)?mysqli?//:C/-(pcntl|shmop|zip)//:C/-/no_/g}
 PSEUDO_FLAVORS+=	no_apache
 
 .include <bsd.port.arch.mk>
+
+# checking for Apache 2.0 handler-module support via DSO through APXS... Trace/BPT trap (core dumped)
+.if ${MACHINE_ARCH:Maarch64}
+BUILD_PACKAGES:=	${BUILD_PACKAGES:N-apache}
+.endif
 
 # sapi
 CONFIGURE_ARGS+=	--enable-cli \
@@ -133,8 +141,9 @@ CONFIGURE_ARGS+=	--enable-cgi
 
 # apache
 COMMENT-apache=		php module for Apache httpd
+RUN_DEPENDS-apache=	www/apache-httpd
 .if ${BUILD_PACKAGES:M-apache}
-CONFIGURE_ARGS+=	--with-apxs2=${LOCALBASE}/sbin/apxs2
+CONFIGURE_ARGS+=	--with-apxs2=${LOCALBASE}/sbin/apxs
 BUILD_DEPENDS+=		www/apache-httpd
 .endif
 
@@ -148,6 +157,10 @@ WANTLIB$i +=		pthread readline ssl xml2 z
 LIB_DEPENDS$i +=	devel/gettext \
 			textproc/libxml \
 			textproc/oniguruma
+.if ${PV} != "7.1"
+WANTLIB$i +=		sodium
+LIB_DEPENDS$i +=	security/libsodium
+.endif
 .endfor
 
 #
@@ -183,17 +196,12 @@ CONFIGURE_ARGS+=	--enable-dba=shared \
 COMMENT-gd=		image manipulation extensions for php
 LIB_DEPENDS-gd=		graphics/jpeg \
 			graphics/png
-.if ${PV} == "5.6"
-LIB_DEPENDS-gd+=	devel/t1lib
-WANTLIB-gd+=		t1
-.endif
-WANTLIB-gd+=		X11 Xpm freetype jpeg m png pthread xcb z
+WANTLIB-gd+=		X11 Xpm freetype jpeg m png16 pthread xcb z
 .if ${BUILD_PACKAGES:M-gd}
 CONFIGURE_ARGS+=	--with-gd=shared \
 			--with-jpeg-dir=${LOCALBASE} \
 			--with-png-dir=${LOCALBASE} \
 			--with-zlib-dir=/usr \
-			--with-t1lib=${LOCALBASE} \
 			--with-freetype-dir=${X11BASE} \
 			--with-xpm-dir=${X11BASE}
 .endif
@@ -345,8 +353,8 @@ CONFIGURE_ARGS+=	--with-sqlite3=no
 # pdo-dblib
 COMMENT-pdo_dblib=	PDO DB-LIB support for php
 LIB_DEPENDS-pdo_dblib=	databases/freetds
-WANTLIB-pdo_dblib=	ffi gcrypt gmp gnutls gpg-error hogweed iconv idn2 \
-			intl nettle p11-kit pthread sybdb tasn1 unistring z
+WANTLIB-pdo_dblib=	ffi gmp gnutls hogweed iconv idn2 intl \
+			nettle p11-kit pthread sybdb tasn1 unistring
 .if ${BUILD_PACKAGES:M-pdo_dblib}
 CONFIGURE_ARGS+=	--with-pdo-dblib=shared,${LOCALBASE}
 .endif
@@ -381,40 +389,17 @@ COMMENT-zip=		zip functions for php
 CONFIGURE_ARGS+=	--enable-zip=shared,${LOCALBASE}
 LIB_DEPENDS-zip=	# empty
 WANTLIB-zip=		pthread z
-
-#   the following extensions are 5.6-only:
-
-.if ${PV} == "5.6"
-# mysql
-COMMENT-mysql=		mysql database access extensions for php5
-LIB_DEPENDS-mysql=	# using mysqlnd
-WANTLIB-mysql=		pthread
-.if ${BUILD_PACKAGES:M-mysql}
-CONFIGURE_ARGS+=	--with-mysql=shared
-.endif
-
-# sybase-ct
-COMMENT-sybase_ct=	sybase database access extensions for php5
-LIB_DEPENDS-sybase_ct=	databases/freetds
-WANTLIB-sybase_ct=	ct ffi gcrypt gmp gnutls gpg-error hogweed iconv \
-			idn2 intl nettle p11-kit pthread tasn1 unistring z
-.if ${BUILD_PACKAGES:M-sybase_ct}
-CONFIGURE_ARGS+=	--with-sybase-ct=shared,${LOCALBASE}
-.endif
-
-# mssql
-COMMENT-mssql=		microsoft sql access extensions for php5
-LIB_DEPENDS-mssql=	databases/freetds
-WANTLIB-mssql=		ffi gcrypt gmp gnutls gpg-error hogweed iconv idn2 \
-			intl nettle p11-kit pthread sybdb tasn1 unistring z
-.if ${BUILD_PACKAGES:M-mssql}
-CONFIGURE_ARGS+=	--with-mssql=shared,${LOCALBASE}
-.endif
+.if ${PV} == "7.3"
+LIB_DEPENDS-zip+=	archivers/bzip2 \
+			archivers/libzip
+WANTLIB-zip+=		bz2 crypto ssl zip
 .endif
 
 # some variables to substitute
-SUBST_VARS+=	MODPHP_CONFIG_PATH SV PV
+SUBST_VARS+=	CHROOT_DIR MODPHP_CONFIG_PATH SV PV MV
+UPDATE_PLIST_ARGS+= -i MV
 PHP_VERSION=	${V}
+MV=		${PV:R}
 SV=		${PV:S/.//}
 
 .for i in TRUEPREFIX MODULES_DIR PHP_VERSION APACHE_MODULE_DIR
@@ -437,19 +422,22 @@ pre-configure:
 .for i in ${MULTI_PACKAGES:N-main:S/-//g}
 DESCR-${i}=		${.CURDIR}/../files/DESCR-${i}
 PKGNAME-${i}=		php-${i}-${V}
-.if ${V:M5.6*}
-PKGSPEC-${i}=		php-${i}->=5.6,<5.7
-.elif ${V:M7.0*}
-PKGSPEC-${i}=		php-${i}->=7.0,<7.1
-.elif ${V:M7.1*}
+.if ${V:M7.1*}
 PKGSPEC-${i}=		php-${i}->=7.1,<7.2
 .elif ${V:M7.2*}
 PKGSPEC-${i}=		php-${i}->=7.2,<7.3
+.elif ${V:M7.3*}
+PKGSPEC-${i}=		php-${i}->=7.3,<7.4
 .endif
 RUN_DEPENDS-${i}+=	php-${V}:lang/php/${PV}
 .endfor
 
 DESCR-main=		${.CURDIR}/../files/DESCR-main
+
+# shouldn't normally be needed, but sometimes file timestamps in the .tar.gz
+# have the generated file older than the source file for re2c, resulting in a
+# build failure if re2c was installed during autoconf but later junked.
+BUILD_DEPENDS+=		devel/re2c
 
 post-install:
 	${SUBST_DATA} ${.CURDIR}/../files/README-main \
@@ -471,16 +459,11 @@ post-install:
 	${INSTALL_PROGRAM} ${WRKBUILD}/sapi/fpm/php-fpm ${PREFIX}/sbin/php-fpm-${PV}
 	${INSTALL_MAN} ${WRKBUILD}/sapi/fpm/php-fpm.8 ${PREFIX}/man/man8/php-fpm-${PV}.8
 	${INSTALL_DATA} ${WRKBUILD}/sapi/fpm/php-fpm.conf \
-		${PREFIX}/share/examples/php-${PV}/php${SV}-fpm.conf
-.if ${PV} == "7.0"
-	cat ${WRKBUILD}/sapi/fpm/www.conf >> \
-		${PREFIX}/share/examples/php-${PV}/php${SV}-fpm.conf
-.endif
-
-	${INSTALL_DATA} ${.CURDIR}/../files/php.conf \
-		${PREFIX}/share/examples/php-${PV}/php.conf
-	@perl -pi -e "s,!!PREFIX!!,${TRUEPREFIX},g;s,!!PV!!,${PV},g;s,!!MV!!,${PV:R},g" \
-		${PREFIX}/share/examples/php-${PV}/php.conf
+		${PREFIX}/share/examples/php-${PV}/php-fpm.conf
+	cat ${WRKBUILD}/sapi/fpm/www.conf.in >> \
+		${PREFIX}/share/examples/php-${PV}/php-fpm.conf
+	${SUBST_CMD} -m 644 -c ${.CURDIR}/../files/php.conf \
+		${PREFIX}/share/examples/php-${PV}/modphp.conf
 
 .for m in ${PHP_EXTENSIONS:S/-//g}
 .if ${BUILD_PACKAGES:M-$m}

@@ -5,7 +5,7 @@ COMMENT=	"creation and study of contents for schools"
 
 V=		1.4
 DISTNAME=	repasa-${V}
-REVISION=	7
+REVISION=	8
 CATEGORIES=    	education
 
 HOMEPAGE=	http://structio.sourceforge.net/repasa

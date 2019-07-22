@@ -40,6 +40,10 @@ RUN_DEPENDS+= 	converters/libiconv textproc/sword www/gtkhtml4 textproc/clucene 
 
 WANTLIB=	X11 c m stdc++ ssl
 
+COMPILER = 	ports-gcc
+CXXFLAGS += 	-std=c++11
+MODULES =	lang/clang
+
 # compilacion con waf de py-cairo
 do-configure:
 	cd ${WRKSRC} && env PYTHON=${MODPY_BIN} \

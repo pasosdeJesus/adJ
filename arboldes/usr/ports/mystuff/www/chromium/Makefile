@@ -1,4 +1,4 @@
-# $OpenBSD: Makefile,v 1.417 2019/03/26 15:41:36 robert Exp $
+# $OpenBSD: Makefile,v 1.444 2019/06/26 17:22:41 robert Exp $
 
 .include <bsd.port.arch.mk>
 
@@ -11,10 +11,10 @@ DPB_PROPERTIES+=	lonesome
 
 COMMENT=		Chromium browser
 
-V=			73.0.3683.86
-REVISION=		0
+V=			75.0.3770.100
 
 DISTNAME=		chromium-${V}
+REVISION=		2
 
 CATEGORIES=		www
 
@@ -47,7 +47,7 @@ WANTLIB += X11 Xext Xfixes Xrender Xss c cups dbus-1 event
 WANTLIB += execinfo
 WANTLIB += gdk_pixbuf-2.0 glib-2.0 gobject-2.0
 WANTLIB += m
-WANTLIB += pthread
+WANTLIB += kvm pthread
 WANTLIB += xslt
 WANTLIB += sndio
 WANTLIB += ${COMPILER_LIBCXX}
@@ -67,7 +67,7 @@ WANTLIB += plc4 plds4 util xcb-dri2 xcb-glx xcb-render xcb-shm
 WANTLIB += xml2 z
 WANTLIB += uuid
 WANTLIB += harfbuzz 
-WANTLIB += ffi png16
+WANTLIB += ffi png
 
 RUN_DEPENDS=	devel/xdg-utils \
 		devel/desktop-file-utils \
@@ -111,7 +111,7 @@ BUILDTYPE=	Debug
 BUILDTYPE=	Release
 .endif
 
-SUBST_VARS+=	WRKSRC
+SUBST_VARS+=	WRKSRC WRKDIR
 
 ALL_TARGET=	chrome chromedriver
 TEST_TARGET=	base_unittests
@@ -192,6 +192,8 @@ pre-configure:
 	@cp ${FILESDIR}/audio_manager_openbsd.{cc,h} ${WRKSRC}/media/audio/openbsd
 	@mkdir -p ${WRKSRC}/third_party/node/openbsd/node-openbsd/bin
 	@ln -sf ${TRUEPREFIX}/bin/node ${WRKSRC}/third_party/node/openbsd/node-openbsd/bin/node
+	${SUBST_CMD} ${WRKSRC}/build/gn_run_binary.py ${WRKSRC}/v8/tools/run.py \
+		${WRKSRC}/tools/protoc_wrapper/protoc_wrapper.py
 
 # Configuration consists of three steps:
 # 1. replace the specified bundled libraries with hooks to use the system libs
@@ -205,9 +207,6 @@ do-configure:
 	@cd ${WRKSRC} && env -i ${CONFIGURE_ENV} ${WRKSRC}/out/Release/gn \
 		gen --args="${GN_ARGS}" out/${BUILDTYPE}
 
-pre-build:
-	${SUBST_CMD} ${WRKSRC}/build/gn_run_binary.py ${WRKSRC}/v8/tools/run.py
-	
 do-build:
 	@cd ${WRKSRC} && env -i ${MAKE_ENV} ninja \
 		-j ${MAKE_JOBS} -C out/${BUILDTYPE} ${ALL_TARGET}
@@ -246,7 +245,7 @@ do-install:
 .endif
 
 .if ${FLAVOR:Mcomponent}
-	cp -Rp ${BUILDDIR}/*.so ${PREFIX}/chrome/
+	cp -Rp ${BUILDDIR}/*.so ${BUILDDIR}/*.so.[0-9] ${PREFIX}/chrome/
 .endif
 
 .for s in 22 24 48 64 128 256

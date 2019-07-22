@@ -1,6 +1,7 @@
 $OpenBSD$
---- defprog.ml.orig	Mon Sep  4 13:54:46 2017
-+++ defprog.ml	Mon Sep  4 13:58:40 2017
+Index: defprog.ml
+--- defprog.ml.orig
++++ defprog.ml
 @@ -273,7 +273,7 @@ let rec srefword_from_sclassif defname maxw fname 
  			else 
  			begin
@@ -73,3 +74,17 @@ $OpenBSD$
          		else
          			"texto";
          		add_arch_ref true ((file_basename name)^".cla") 
+@@ -1779,10 +1779,10 @@ let prepareQuestions interf lis=
+ * los carácteres que no están en [usedchars] remplazados por espacios. 
+ * @author Ugo Enrico Albarello *)
+ let ahorcadoArmar response usedchars =
+-        let respuesta = (String.make (String.length response) ' ') in
+-        for i = 0 to ((String.length respuesta)-1) do
++        let respuesta = (Bytes.make (String.length response) ' ') in
++        for i = 0 to ((Bytes.length respuesta)-1) do
+                 if (String.contains usedchars (String.get response i)) then
+-                        String.set respuesta i (String.get response i)
++                        Bytes.set respuesta i (String.get response i)
+         done;
+         respuesta
+ ;;

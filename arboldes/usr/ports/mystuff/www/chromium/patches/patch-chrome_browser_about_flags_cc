@@ -1,18 +1,27 @@
-$OpenBSD: patch-chrome_browser_about_flags_cc,v 1.50 2019/03/24 12:24:44 robert Exp $
+$OpenBSD: patch-chrome_browser_about_flags_cc,v 1.54 2019/06/06 11:36:00 robert Exp $
 
 Index: chrome/browser/about_flags.cc
 --- chrome/browser/about_flags.cc.orig
 +++ chrome/browser/about_flags.cc
-@@ -749,7 +749,7 @@ const FeatureEntry::FeatureVariation kAutofillPreviewS
-     {"(Black on GoogleYellow050)", kAutofillPreviewStyleBlackOnYellow050,
-      base::size(kAutofillPreviewStyleBlackOnYellow050), nullptr}};
- 
--#if defined(OS_LINUX) || defined(OS_MACOSX) || defined(OS_WIN)
-+#if defined(OS_LINUX) || defined(OS_MACOSX) || defined(OS_WIN) || defined(OS_BSD)
- const FeatureEntry::FeatureParam kPedalSuggestionInSuggestion[] = {
-     {OmniboxFieldTrial::kPedalSuggestionModeParam, "in_suggestion"}};
- const FeatureEntry::FeatureParam kPedalSuggestionDedicated[] = {
-@@ -2362,7 +2362,7 @@ const FeatureEntry kFeatureEntries[] = {
+@@ -1533,7 +1533,7 @@ const FeatureEntry kFeatureEntries[] = {
+      flag_descriptions::kCloudPrintXpsDescription, kOsWin,
+      SINGLE_VALUE_TYPE(switches::kEnableCloudPrintXps)},
+ #endif  // OS_WIN
+-#if defined(OS_WIN) || defined(OS_LINUX) || defined(OS_CHROMEOS)
++#if defined(OS_WIN) || defined(OS_LINUX) || defined(OS_CHROMEOS) || defined(OS_BSD)
+     {"enable-webgl2-compute-context",
+      flag_descriptions::kWebGL2ComputeContextName,
+      flag_descriptions::kWebGL2ComputeContextDescription,
+@@ -1741,7 +1741,7 @@ const FeatureEntry kFeatureEntries[] = {
+      flag_descriptions::kEnableDataSaverLiteModeRebrandName,
+      flag_descriptions::kEnableDataSaverLiteModeRebrandDescription, kOsAll,
+      FEATURE_VALUE_TYPE(previews::features::kDataSaverLiteModeRebranding)},
+-#if defined(OS_CHROMEOS) || defined(OS_LINUX)
++#if defined(OS_CHROMEOS) || defined(OS_LINUX) || defined(OS_BSD)
+     {"enable-save-data", flag_descriptions::kEnableSaveDataName,
+      flag_descriptions::kEnableSaveDataDescription, kOsCrOS,
+      SINGLE_VALUE_TYPE(
+@@ -2007,7 +2007,7 @@ const FeatureEntry kFeatureEntries[] = {
      {"force-text-direction", flag_descriptions::kForceTextDirectionName,
       flag_descriptions::kForceTextDirectionDescription, kOsAll,
       MULTI_VALUE_TYPE(kForceTextDirectionChoices)},
@@ -21,7 +30,7 @@ Index: chrome/browser/about_flags.cc
      {"enable-input-ime-api", flag_descriptions::kEnableInputImeApiName,
       flag_descriptions::kEnableInputImeApiDescription, kOsWin | kOsLinux,
       ENABLE_DISABLE_VALUE_TYPE(switches::kEnableInputImeAPI,
-@@ -2562,7 +2562,7 @@ const FeatureEntry kFeatureEntries[] = {
+@@ -2132,7 +2132,7 @@ const FeatureEntry kFeatureEntries[] = {
       FEATURE_VALUE_TYPE(chrome::android::kAndroidNightMode)},
  #endif  // BUILDFLAG(ENABLE_ANDROID_NIGHT_MODE)
  #endif  // OS_ANDROID
@@ -30,16 +39,16 @@ Index: chrome/browser/about_flags.cc
      {"passwords-migrate-linux-to-login-db",
       flag_descriptions::kPasswordsMigrateLinuxToLoginDBName,
       flag_descriptions::kPasswordsMigrateLinuxToLoginDBDescription, kOsLinux,
-@@ -3001,7 +3001,7 @@ const FeatureEntry kFeatureEntries[] = {
-      FEATURE_VALUE_TYPE(omnibox::kOmniboxNewAnswerLayout)},
- #endif  // defined(OS_ANDROID)
+@@ -2520,7 +2520,7 @@ const FeatureEntry kFeatureEntries[] = {
+      flag_descriptions::kOmniboxLocalEntitySuggestionsDescription, kOsDesktop,
+      FEATURE_VALUE_TYPE(omnibox::kOmniboxLocalEntitySuggestions)},
  
 -#if defined(OS_LINUX) || defined(OS_MACOSX) || defined(OS_WIN)
 +#if defined(OS_LINUX) || defined(OS_MACOSX) || defined(OS_WIN) || defined(OS_BSD)
-     {"omnibox-reverse-answers", flag_descriptions::kOmniboxReverseAnswersName,
-      flag_descriptions::kOmniboxReverseAnswersDescription, kOsDesktop,
-      FEATURE_VALUE_TYPE(omnibox::kOmniboxReverseAnswers)},
-@@ -3342,7 +3342,7 @@ const FeatureEntry kFeatureEntries[] = {
+     {"omnibox-experimental-keyword-mode",
+      flag_descriptions::kOmniboxExperimentalKeywordModeName,
+      flag_descriptions::kOmniboxExperimentalKeywordModeDescription, kOsDesktop,
+@@ -2857,7 +2857,7 @@ const FeatureEntry kFeatureEntries[] = {
       flag_descriptions::kClickToOpenPDFDescription, kOsAll,
       FEATURE_VALUE_TYPE(features::kClickToOpenPDFPlaceholder)},
  
@@ -48,7 +57,7 @@ Index: chrome/browser/about_flags.cc
      {"direct-manipulation-stylus",
       flag_descriptions::kDirectManipulationStylusName,
       flag_descriptions::kDirectManipulationStylusDescription,
-@@ -4280,7 +4280,7 @@ const FeatureEntry kFeatureEntries[] = {
+@@ -3731,7 +3731,7 @@ const FeatureEntry kFeatureEntries[] = {
       FEATURE_VALUE_TYPE(features::kForceEnableSystemAec)},
  #endif  // defined(OS_MACOSX) || defined(OS_CHROMEOS)
  
@@ -57,7 +66,7 @@ Index: chrome/browser/about_flags.cc
      {"autofill-always-show-server-cards-in-sync-transport",
       flag_descriptions::kAutofillAlwaysShowServerCardsInSyncTransportName,
       flag_descriptions::
-@@ -4333,7 +4333,7 @@ const FeatureEntry kFeatureEntries[] = {
+@@ -3785,7 +3785,7 @@ const FeatureEntry kFeatureEntries[] = {
       FEATURE_VALUE_TYPE(features::kCrostiniAppSearch)},
  #endif  // OS_CHROMEOS
  

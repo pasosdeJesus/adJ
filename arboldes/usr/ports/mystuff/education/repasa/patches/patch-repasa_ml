@@ -1,6 +1,7 @@
 $OpenBSD$
---- repasa.ml.orig	Mon Sep  4 14:06:32 2017
-+++ repasa.ml	Mon Sep  4 14:07:08 2017
+Index: repasa.ml
+--- repasa.ml.orig
++++ repasa.ml
 @@ -142,7 +142,7 @@ let rec choiceQuestion_plain interf format d lop =
  		receiveAnswer interf ""
  	else
@@ -10,3 +11,24 @@ $OpenBSD$
                  if (c<'a' || c>(char_of_int (97+List.length lop))) then
  		begin
  			print_endline("Por favor digite la letra que corresponde a la respuesta y presione [ENTER]");
+@@ -215,8 +215,8 @@ let rec ahorcadoQuestion_plain interf format d ld resp
+ 	begin
+ 		let newusedchars = (usedchars ^ r) in
+ 		let respuesta = (ahorcadoArmar response newusedchars) in
+-		if response=respuesta then
+-		        receiveAnswer interf respuesta
++		if  response=Bytes.to_string respuesta then
++		        receiveAnswer interf (Bytes.to_string respuesta)
+ 		else
+ 			ahorcadoQuestion_plain interf format d ld response (usedchars ^ r) triesleft
+ 	end
+@@ -224,7 +224,8 @@ let rec ahorcadoQuestion_plain interf format d ld resp
+ 	(* el caracter ingresado NO existía en la respuesta *)
+ 	begin
+ 		if (triesleft<=1) then
+-			receiveAnswer interf (ahorcadoArmar response usedchars)
++                        let respuesta = ahorcadoArmar response usedchars in
++			receiveAnswer interf (Bytes.to_string respuesta)
+ 		else
+ 			ahorcadoQuestion_plain interf format d ld response (usedchars ^ r) (triesleft - 1)
+         end

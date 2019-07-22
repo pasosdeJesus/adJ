@@ -1,9 +1,9 @@
-$OpenBSD: patch-chrome_test_BUILD_gn,v 1.3 2019/03/24 12:24:45 robert Exp $
+$OpenBSD: patch-chrome_test_BUILD_gn,v 1.7 2019/06/01 18:03:30 robert Exp $
 
 Index: chrome/test/BUILD.gn
 --- chrome/test/BUILD.gn.orig
 +++ chrome/test/BUILD.gn
-@@ -5232,7 +5232,7 @@ test("chrome_app_unittests") {
+@@ -5399,7 +5399,7 @@ test("chrome_app_unittests") {
      "//components/crash/core/common",
      "//components/flags_ui:switches",
    ]

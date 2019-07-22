@@ -1,0 +1,209 @@
+$OpenBSD$
+
+Index: markup_reader.ml
+--- markup_reader.ml.orig
++++ markup_reader.ml
+@@ -55,11 +55,11 @@ class virtual resolve_general (the_warner : collect_wa
+        * "UTF-16-LE": UTF-16/UCS-2 encoding little endian
+        * "UTF-8":     UTF-8 encoding
+        *)
+-      if String.length s < 4 then
++      if Bytes.length s < 4 then
+ 	encoding <- "UTF-8"
+-      else if String.sub s 0 2 = "\254\255" then
++      else if Bytes.sub s 0 2 = Bytes.of_string "\254\255" then
+ 	encoding <- "UTF-16-BE"
+-      else if String.sub s 0 2 = "\255\254" then
++      else if Bytes.sub s 0 2 = Bytes.of_string "\255\254" then
+ 	encoding <- "UTF-16-LE"
+       else
+ 	encoding <- "UTF-8"
+@@ -71,22 +71,22 @@ class virtual resolve_general (the_warner : collect_wa
+       let u = s_out in
+       let rec recode j k =
+ 	if j < l & k < l_out_max then begin
+-	  match s.[j] with
++	  match Bytes.get s  j with
+ 	      ('\000'..'\127' as c) ->
+-		u.[k] <- c;
++		Bytes.set u k c;
+ 		recode (j+1) (k+1)
+ 	    | ('\128'..'\223' as c) ->
+ 		if j+1 >= l then
+ 		  k, j
+ 		else begin
+ 		  let n1 = Char.code c in
+-		  let n2 = Char.code (s.[j+1]) in
++		  let n2 = Char.code (Bytes.get s (j+1)) in
+ 		  if n2 < 128 or n2 > 191 then raise Bad_character_stream;
+ 		  let n = ((n1 land 0b11111) lsl 6) lor (n2 land 0b111111) in
+ 		  if n > 255 then
+ 		    self # warn_not_latin1 n
+ 		  else
+-		    u.[k] <- Char.chr n;
++		    Bytes.set u k (Char.chr n);
+ 		  recode (j+2) k
+ 		end
+ 	    | ('\224'..'\239' as c) ->
+@@ -94,8 +94,8 @@ class virtual resolve_general (the_warner : collect_wa
+ 		  k, j
+ 		else begin
+ 		  let n1 = Char.code c in
+-		  let n2 = Char.code (s.[j+1]) in
+-		  let n3 = Char.code (s.[j+2]) in
++		  let n2 = Char.code (Bytes.get s (j+1)) in
++		  let n3 = Char.code (Bytes.get s (j+2)) in
+ 		  if n2 < 128 or n2 > 191 then raise Bad_character_stream;
+ 		  if n3 < 128 or n3 > 191 then raise Bad_character_stream;
+ 		  let n = ((n1 land 0b1111) lsl 12) lor
+@@ -109,9 +109,9 @@ class virtual resolve_general (the_warner : collect_wa
+ 		  k, j
+ 		else begin
+ 		  let n1 = Char.code c in
+-		  let n2 = Char.code (s.[j+1]) in
+-		  let n3 = Char.code (s.[j+2]) in
+-		  let n4 = Char.code (s.[j+3]) in
++		  let n2 = Char.code (Bytes.get s (j+1)) in
++		  let n3 = Char.code (Bytes.get s (j+2)) in
++		  let n4 = Char.code (Bytes.get s (j+3)) in
+ 		  if n2 < 128 or n2 > 191 then raise Bad_character_stream;
+ 		  if n3 < 128 or n3 > 191 then raise Bad_character_stream;
+ 		  if n4 < 128 or n4 > 191 then raise Bad_character_stream;
+@@ -127,10 +127,10 @@ class virtual resolve_general (the_warner : collect_wa
+ 		  k, j
+ 		else begin
+ 		  let n1 = Char.code c in
+-		  let n2 = Char.code (s.[j+1]) in
+-		  let n3 = Char.code (s.[j+2]) in
+-		  let n4 = Char.code (s.[j+3]) in
+-		  let n5 = Char.code (s.[j+4]) in
++		  let n2 = Char.code (Bytes.get s (j+1)) in
++		  let n3 = Char.code (Bytes.get s (j+2)) in
++		  let n4 = Char.code (Bytes.get s (j+3)) in
++		  let n5 = Char.code (Bytes.get s (j+4)) in
+ 		  if n2 < 128 or n2 > 191 then raise Bad_character_stream;
+ 		  if n3 < 128 or n3 > 191 then raise Bad_character_stream;
+ 		  if n4 < 128 or n4 > 191 then raise Bad_character_stream;
+@@ -148,11 +148,11 @@ class virtual resolve_general (the_warner : collect_wa
+ 		  k, j
+ 		else begin
+ 		  let n1 = Char.code c in
+-		  let n2 = Char.code (s.[j+1]) in
+-		  let n3 = Char.code (s.[j+2]) in
+-		  let n4 = Char.code (s.[j+3]) in
+-		  let n5 = Char.code (s.[j+4]) in
+-		  let n6 = Char.code (s.[j+5]) in
++		  let n2 = Char.code (Bytes.get s (j+1)) in
++		  let n3 = Char.code (Bytes.get s (j+2)) in
++		  let n4 = Char.code (Bytes.get s (j+3)) in
++		  let n5 = Char.code (Bytes.get s (j+4)) in
++		  let n6 = Char.code (Bytes.get s (j+5)) in
+ 		  if n2 < 128 or n2 > 191 then raise Bad_character_stream;
+ 		  if n3 < 128 or n3 > 191 then raise Bad_character_stream;
+ 		  if n4 < 128 or n4 > 191 then raise Bad_character_stream;
+@@ -183,9 +183,9 @@ class virtual resolve_general (the_warner : collect_wa
+       let u = s_out in
+       let rec recode j k =
+ 	if j < l-1 & k < l_out_max then begin
+-	  let n = (Char.code(s.[j]) lsl 8) lor (Char.code(s.[j+1])) in
++	  let n = (Char.code(Bytes.get s (j)) lsl 8) lor (Char.code(Bytes.get s (j+1))) in
+ 	  if n < 256 then begin
+-	    u.[k] <- Char.chr n;
++	    Bytes.set u k (Char.chr n);
+ 	    recode (j+2) (k+1)
+ 	  end
+ 	  else begin
+@@ -197,13 +197,13 @@ class virtual resolve_general (the_warner : collect_wa
+ 	      | 0xfffe ->
+ 		  (* little endian byte order mark *)
+ 		  encoding <- "UTF-16-LE";
+-		  let s_in' = String.sub s j (l-j) in
++		  let s_in' = Bytes.sub s j (l-j) in
+ 		  let l_in' = l-j in
+ 		  let l_out_max' = l_out_max - k in
+-		  let s_out' = String.create l_out_max' in
++		  let s_out' = Bytes.create l_out_max' in
+ 		  let l_out, n_consumed =
+ 		    self # utf16le_to_latin1 s_in' l_in' s_out' l_out_max' in
+-		  String.blit s_out' 0 s_out k l_out;
++		  Bytes.blit s_out' 0 s_out k l_out;
+ 		  k+l_out, j+n_consumed
+ 	      | _ ->
+ 		  self # warn_not_latin1 n;
+@@ -223,9 +223,9 @@ class virtual resolve_general (the_warner : collect_wa
+       let u = s_out in
+       let rec recode j k =
+ 	if j < l-1 & k < l_out_max then begin
+-	  let n = (Char.code(s.[j+1]) lsl 8) lor (Char.code(s.[j])) in
++	  let n = (Char.code(Bytes.get s (j+1)) lsl 8) lor (Char.code(Bytes.get s (j))) in
+ 	  if n < 256 then begin
+-	    u.[k] <- Char.chr n;
++	    Bytes.set u k (Char.chr n);
+ 	    recode (j+2) (k+1)
+ 	  end
+ 	  else begin
+@@ -233,13 +233,13 @@ class virtual resolve_general (the_warner : collect_wa
+ 		0xfffe ->
+ 		  (* big endian byte order mark *)
+ 		  encoding <- "UTF-16-BE";
+-		  let s_in' = String.sub s j (l-j) in
++		  let s_in' = Bytes.sub s j (l-j) in
+ 		  let l_in' = l-j in
+ 		  let l_out_max' = l_out_max - k in
+-		  let s_out' = String.create l_out_max' in
++		  let s_out' = Bytes.create l_out_max' in
+ 		  let l_out, n_consumed =
+ 		    self # utf16be_to_latin1 s_in' l_in' s_out' l_out_max' in
+-		  String.blit s_out' 0 s_out k l_out;
++		  Bytes.blit s_out' 0 s_out k l_out;
+ 		  k+l_out, j+n_consumed
+ 	      | 0xfeff ->
+ 		  (* little endian byte order mark *)
+@@ -285,19 +285,19 @@ class virtual resolve_general (the_warner : collect_wa
+ 	| ("ISO-8859-1"|"ISO88591"|"ISO8859-1"|"ISO-88591"|"") ->
+ 	    encoding <- "ISO-8859-1";
+ 	    let n = min l_in l_out_max in
+-	    String.blit s_in 0 s_out 0 n;
++	    Bytes.blit s_in 0 s_out 0 n;
+ 	    n, n
+ 	| _ ->
+ 	    raise (WF_error "Unsupported character encoding")
+ 
+ 
+-    method private virtual next_string : string -> int -> int -> int
++    method private virtual next_string : bytes -> int -> int -> int
+     method private virtual init_in : ext_id -> unit
+     method virtual close_in : unit
+ 
+     method open_in xid =
+       let buffer_max = 512 in
+-      let buffer = String.make buffer_max ' ' in
++      let buffer = Bytes.make buffer_max ' ' in
+       let buffer_len = ref 0 in
+       let buffer_end = ref false in
+       let fillup () =
+@@ -313,7 +313,7 @@ class virtual resolve_general (the_warner : collect_wa
+       in
+       let consume n =
+ 	let l = !buffer_len - n in
+-	String.blit buffer n buffer 0 l;
++	Bytes.blit buffer n buffer 0 l;
+ 	buffer_len := l
+       in
+ 
+@@ -380,12 +380,12 @@ class resolve_read_string str =
+     inherit resolve_general (new collect_warnings)
+ 
+     (* This resolver takes the string str as character source. *)
+-    val str = (str : string)
++    val str = (str : bytes)
+     val mutable pos = 0
+     method private init_in (_:ext_id) = ()
+     method private next_string s ofs len =
+-      let l = min len (String.length str - pos) in
+-      String.blit str pos s ofs l;
++      let l = min len (Bytes.length str - pos) in
++      Bytes.blit str pos s ofs l;
+       pos <- pos + l;
+       l
+     method close_in = ()

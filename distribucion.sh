@@ -835,7 +835,6 @@ if (test "$sn" = "s") then {
 	paquete p5-File-Listing
 	paquete p5-File-Which
 	paquete p5-FreezeThaw
-	paquete p5-Geo-IP
 	paquete p5-GeoIP2
 	paquete p5-HTML-Parser
 	paquete p5-HTML-Tagset
@@ -903,6 +902,7 @@ if (test "$sn" = "s") then {
 	paquete p5-URI
 	paquete p5-Variable-Magic
 	paquete p5-WWW-RobotRules
+	paquete p5-XML-Parser
 	paquete p5-libwww
 	paquete p5-namespace-autoclean
 	paquete p5-namespace-clean
@@ -922,9 +922,6 @@ if (test "$sn" = "s") then {
 	# Recompilado con llave de adJ
 	paquete chromium
 
-	exit 1
-
-
 :	###
         # Actualizados.  Están desactualizado en OpenBSD estable y current
 	#paquete ocaml paquetes "ocaml"
@@ -936,6 +933,12 @@ if (test "$sn" = "s") then {
 	# Para que operen bien basta actualizar CVS de /usr/ports 
 	# Los siguientes no deben estar en arboldes/usr/ports/mystuff
 
+	###	
+	# Recompilados de estable que usan xlocale (y pueden cerrar fallas)
+	# No deben estar en mystuff
+	paquete curl
+
+	# En adJ 6.5 para iniciar compilar PHP 5.6 tuvo que modificarse el porte y tras iniciar compilación volver a deshacer algunos cambios de los parches para que continuara, dificultad con icu::
 	paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 5.6
 	paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 7.1
 	#FLAVOR=light paquete evince paquetes evince-light
@@ -957,7 +960,7 @@ if (test "$sn" = "s") then {
 	##
 	# Nueva revisión para operar con librerías retroportadas o actualizadas
 	# Deben estar en arbodes/usr/ports/mystuff
-	paquete hevea
+	#paquete hevea
 	#paquete libreoffice paquetes "libreoffice libreoffice-i18n-es"
 
 
@@ -967,10 +970,6 @@ if (test "$sn" = "s") then {
 	paquete libunistring
 	paquete vlc
 
-	####
-	# Recompilados de estable que usan xlocale (y pueden cerrar fallas)
-	# No deben estar en mystuff
-	paquete curl
 	paquete djvulibre
 	paquete gettext-tools
 	paquete gdk-pixbuf
@@ -981,7 +980,7 @@ if (test "$sn" = "s") then {
 	paquete libxslt
 	paquete scribus
 	paquete wget
-	paquete wxWidgets-gtk2
+	#paquete wxWidgets-gtk2
 
 	##
 	# Retroportados no existentes en versión actual
@@ -999,7 +998,7 @@ if (test "$sn" = "s") then {
 	# Deben estar en arboldes/usr/ports/mystuff pero no en /usr/ports
 	paquete emulators/realboy
 	paquete lang/ocaml-labltk
-	paquete net/xmr-stak
+	paquete net/xmrig
 	paquete sysutils/ganglia
 	paquete textproc/biblesync
 	paquete textproc/sword

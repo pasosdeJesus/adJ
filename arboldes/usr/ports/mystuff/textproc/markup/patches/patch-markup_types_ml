@@ -1,0 +1,14 @@
+$OpenBSD$
+
+Index: markup_types.ml
+--- markup_types.ml.orig
++++ markup_types.ml
+@@ -126,7 +126,7 @@ type output_stream =
+ let write os str pos len =
+   match os with
+       Out_buffer b -> Buffer.add_substring b str pos len
+-    | Out_channel ch -> output ch str pos len
++    | Out_channel ch -> output_substring ch str pos len
+     | Out_function f -> f str pos len
+ ;;
+ 

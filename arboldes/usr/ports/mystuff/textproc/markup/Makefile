@@ -6,7 +6,7 @@ COMMENT=	"library to read and validate XML files from Ocaml"
 
 DISTNAME=	markup-0.2.12
 PKGNAME=	${DISTNAME}
-REVISION=	4
+REVISION=	5
 CATEGORIES=	textproc
 HOMEPAGE=	http://ocaml-programming.de/markup/
 
@@ -27,7 +27,7 @@ CONFIGURE_ARGS+=	-p ${PREFIX}
 
 OCAML_LIBDIR=${PREFIX}/lib/ocaml
 FAKE_FLAGS=	INSLIB2=${WRKINST}${OCAML_LIBDIR}
-
+OCAML_FLAGS=-unsafe-string
 ALL_TARGET=     all ${MODOCAML_NATIVE:S,Yes,opt,:S,No,,}
 
 REGRESS_TARGET=	test

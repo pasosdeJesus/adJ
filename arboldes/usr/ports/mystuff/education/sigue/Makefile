@@ -6,7 +6,7 @@ COMMENT=	"to track progress of students and generate reports"
 V=		1.2
 DISTNAME=	sigue-${V}
 CATEGORIES=    	education
-REVISION=	4
+REVISION=	5
 PKGNAME=	${DISTNAME}
 
 

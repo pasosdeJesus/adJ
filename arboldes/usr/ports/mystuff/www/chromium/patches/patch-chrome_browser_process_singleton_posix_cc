@@ -1,9 +1,9 @@
-$OpenBSD: patch-chrome_browser_process_singleton_posix_cc,v 1.17 2019/03/24 12:24:45 robert Exp $
+$OpenBSD: patch-chrome_browser_process_singleton_posix_cc,v 1.19 2019/05/10 21:55:40 robert Exp $
 
 Index: chrome/browser/process_singleton_posix.cc
 --- chrome/browser/process_singleton_posix.cc.orig
 +++ chrome/browser/process_singleton_posix.cc
-@@ -93,11 +93,11 @@
+@@ -94,11 +94,11 @@
  #include "net/base/network_interfaces.h"
  #include "ui/base/l10n/l10n_util.h"
  
@@ -26,7 +26,7 @@ Index: chrome/browser/process_singleton_posix.cc
    base::string16 relaunch_button_text = l10n_util::GetStringUTF16(
        IDS_PROFILE_IN_USE_LINUX_RELAUNCH);
    return ShowProcessSingletonDialog(error, relaunch_button_text);
-@@ -904,7 +904,7 @@ ProcessSingleton::NotifyResult ProcessSingleton::Notif
+@@ -901,7 +901,7 @@ ProcessSingleton::NotifyResult ProcessSingleton::Notif
      SendRemoteProcessInteractionResultHistogram(REMOTE_PROCESS_SHUTTING_DOWN);
      return PROCESS_NONE;
    } else if (strncmp(buf, kACKToken, base::size(kACKToken) - 1) == 0) {

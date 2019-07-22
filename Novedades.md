@@ -42,17 +42,21 @@ Puede ver las diversas versiones publicadas en:
 	* Virtualización: 
 	
 * Mejoras a herramientas de Red
-	* Nuevos seudo-dispositivos `bpe` que soporta protocolo Backbone 
-	  Povider Edge, útil en vpns y `mpip` que soporta tuneles de capa 2 
-          MPLS IP.
+	* Nuevos seudo-dispositivo `bpe` que soporta protocolo Backbone 
+	  Povider Edge, útil en vpns y `mpip` que soporta tuneles de 
+          capa 2 MPLS IP.
 	* 
 * Seguridad
+	* Nuevo protector de pila RETGUARD que instrumetna todo retorno 
+	  de funciones con mejores propiedades de seguridad. 
 	* Incluye OpenSSH ?
 	* Incluye LibreSSL ?
 	* 
 * Otros
-	* Enlazador (linker) por omisión ahora es lld en lugar del basado en 
-		binutils bfd
+	* Enlazador (linker) por omisión ahora es lld en lugar del 
+	  basado en binutils bfd
+	* Incluye fuentes de OpenRsync, nueva implementación de rsync
+	  con licencia ISC
 
 * El sistema base incluye mejoras a componentes auditados y mejorados 
   como, ```llvm``` ? OJO,  ```Xenocara``` (```Xorg```) ? OJO, ```perl``` ? OJO
@@ -72,6 +76,15 @@ Puede ver las diversas versiones publicadas en:
 * Se han recompilado los siguientes para aprovechar xlocale: libunistring, 
   vlc, djvulibre, gettext-tools, gdk-pixbuf, glib2, gtar, libidn, 
   libspectre, libxslt, scribus, wget, wxWidgets-gtk2
+* Ocaml fue actualizado a la versión 4.0.7 que renombra la librería
+  pervasives por stdlib y que separa String de Bytes siendo mutable sólo 
+  el segundo. Bytes ofrece las funciones Bytes.to_string y 
+  Bytes.of_string que facilita portar fuentes existentes.
+* La librería icu4c fue actualizada a la versión 63.1. Esta versión 
+  es más exigente en espacio de nombre, ha resultado típico tener que
+  cambiar por ejemplo UnicodeString por icu::UnicodeString en portes que la 
+  usan 
+
 
 
 ## 3. NOVEDADES RESPECTO A ADJ 6.4 PROVENIENTES DE PASOS DE JESÚS
@@ -81,28 +94,37 @@ Puede ver las diversas versiones publicadas en:
 
 * Paquetes actualizados:
 	* evangelios_dp 0.9...
-	* php-...
-		Aunque según http://php.net/archive/2019.php#id2019-01-10-4
-		php-5.6.40 será última versión de la serie 5.6,
-		tuvo que inclurse porque buena parte e la librería pear 
+	* php
+		OpenBSD ya no incluye porte para php-5.6.40 hemos
+		empleado el que había en 6.4 pero es una versión
+		obsoleta, sin soporte que puede tener fallas de 
+		seguridad como se explica en 
+		http://php.net/archive/2019.php#id2019-01-10-4 y 
+		http://php.net/archive/2019.php#id2019-01-10
+		Tuvo que inclurse porque buena parte e la librería pear 
 		aún requiere php-5.6 (incluyendo partes requeridas por 
 		SIVeL 1.2 como HTML_QuickForm) aunque al parecer otras 
 		partes de pear requieren php-7.
-		Urge el transito a SIVeL 2 porque futuras fallas encontradas
-		en php-5.6 no será resueltas.
-		En esta versión inst-adJ configurará por omisión php-5.6.40 
-		que es el requerido por HTML_QuickForm y por tanto SIVeL 1.2, 
+		Es indispensable el transito a SIVeL 2 porque en
+		futuras versiones de adJ posiblemente no incluiremos
+		php-5.6
+ 		Tuvo que parcharse para que opere con nuevao icu4c.
+		Para que opere SIVeL 1.2 en esta versión inst-adJ 
+		configurará por omisión php-5.6.40 
+		que es el requerido por HTML_QuickForm
 		usando el script php56_fpm, la configuración 
-		/etc/php-fpm.conf y el socket /var/www/var/run/php-fpm.sock.
+		/etc/php-fpm.conf y el socket 
+		/var/www/var/run/php-fpm.sock.
 		Si en un servidor necesita correr SIVeL con PHP 5 y otra
 		aplicación con PHP 7, la sugerencia es modificar 
-		/etc/rc.d/php70_fpm para que emplee un segundo
-		archivo /etc/php70-fpm.conf que ubique el socket para
-		php 7 en otra ubicación (el paquete de php-7.0 se ha modificado para
-	 	facilitarlo).
-		Otras extensiones no incluidas como de costumbre se dejan 
-		en el sitio de distribución en el directorio extra-6.5
-	* Ocaml 4.0.5 junto con ocamlbuild, ocaml-labltk, ocaml-camlp4 y hevea
+		/etc/rc.d/php71_fpm para que emplee un segundo
+		archivo /etc/php71-fpm.conf que ubique el socket para
+		php 7 en otra ubicación (el paquete de php-7.1 se ha 
+		modificado para facilitarlo).
+		Otras extensiones no incluidas como de costumbre se 
+		dejan en el sitio de distribución en el directorio 
+		extra-6.5
+	- sword ha sido parchado para operar con la nueva icu4c
 
 * Se recompilaron todos los paquetes de perl (sin cambiar de versión) con
   el perl de adJ que soporta LC_NUMERIC.  
@@ -111,7 +133,8 @@ Puede ver las diversas versiones publicadas en:
 
 * Se parchan y compilan portes más recientes de:
 	- biblesync, sword y xiphos 
-	- markup, repasa y sigue con Ocaml 4.0.5
+	- markup, repasa y sigue fueron modificados para emplear las 
+	  nuevas convenciones de Ocaml 4.0.7
 
 * Se incluye beta 9 de sivel2 cuyas novedades respecto al beta 8 son:
   * ...

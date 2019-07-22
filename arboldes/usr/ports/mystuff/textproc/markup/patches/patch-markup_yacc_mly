@@ -1,0 +1,32 @@
+$OpenBSD$
+
+Index: markup_yacc.mly
+--- markup_yacc.mly.orig
++++ markup_yacc.mly
+@@ -1327,7 +1327,7 @@ let parse_dtd_entity cfg src =
+ 	              r,
+ 		      new external_entity r dtd "[toplevel dtd]" w (System fname)
+                                           false e
+-      | Latin1 str -> let r = new resolve_read_string str in
++      | Latin1 str -> let r = new resolve_read_string (Bytes.of_string str) in
+ 	              r,
+ 		      new external_entity r dtd "[toplevel dtd]" w (System "")
+                                           false e
+@@ -1379,7 +1379,7 @@ let parse_content_entity cfg src a_dtd dom_exempl =
+ 	              r,
+ 		      new external_entity r a_dtd "[toplevel element]" w
+ 			                  (System fname) false e
+-      | Latin1 str -> let r = new resolve_read_string str in
++      | Latin1 str -> let r = new resolve_read_string (Bytes.of_string str) in
+ 	              r,
+ 		      new external_entity r a_dtd "[toplevel element]" w
+ 			                  (System "") false e
+@@ -1441,7 +1441,7 @@ let iparse_document_entity cfg src dom_exempl p_wf =
+ 		      	new document_entity r a_dtd "[toplevel document]" w 
+ 				(System fname) e
+       | Latin1 str -> 	
+-      			let r = new resolve_read_string str in
++      			let r = new resolve_read_string (Bytes.of_string str) in
+ 	              	r,
+ 		      	new document_entity r a_dtd "[toplevel document]" w 
+ 				(System "") e

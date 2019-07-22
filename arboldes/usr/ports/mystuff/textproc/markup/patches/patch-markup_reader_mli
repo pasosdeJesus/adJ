@@ -1,0 +1,30 @@
+$OpenBSD$
+
+Index: markup_reader.mli
+--- markup_reader.mli.orig
++++ markup_reader.mli
+@@ -66,12 +66,12 @@ class virtual resolve_general :
+     method get_filename: string
+ 
+     method private warn_not_latin1 : int -> unit
+-    method private autodetect : string -> unit
++    method private autodetect : bytes -> unit
+ 
+-    method private to_latin1 : string -> int -> string -> int 
++    method private to_latin1 : bytes -> int -> bytes -> int 
+                                   -> (int * int)
+ 
+-    method private virtual next_string : string -> int -> int -> int
++    method private virtual next_string : bytes -> int -> int -> int
+     method private virtual init_in : ext_id -> unit
+     method virtual close_in : unit
+ 
+@@ -97,7 +97,7 @@ class resolve_read_channel : 
+ 
+ 
+ class resolve_read_string : 
+-  string -> resolver;;
++  bytes -> resolver;;
+ 
+   (* Reads from the passed string. As 'resolver_read_channel', this 
+    * resolver cannot handle file inclusions.
