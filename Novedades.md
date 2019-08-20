@@ -3,7 +3,7 @@ Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
 
 ### Versión: 6.5b2
-Fecha de publicación: 12/Jun/2019
+Fecha de publicación: 12/Ago/2019
 
 Puede ver novedades respecto a OpenBSD en:
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_5/Novedades_OpenBSD.md>
@@ -22,50 +22,49 @@ Puede ver las diversas versiones publicadas en:
 
 ### 2.1 Kernel y Sistema Base
 
-* Aplicados parches de seguridad previos al ? OJO provenientes de 
+* Aplicados parches de seguridad hasta el 9.Ago.2019 provenientes de 
   OpenBSD que incluyen mitigación a vulnerabilidades en CPU.
 * Controladores ampliados o mejorados para amd64
 	* Red:
-		* Inalámbrica: Mejoras a `iwm`, `athn`, `bwfm`, 
+		* Inalámbrica: Mejoras a `athn`, `bwfm`, 
 			`iwn` Lista autojoin debe incluir ahora ""
  		        explicito para conectar a red abierta desconocida
 		* Ethernet: Nuevo `ixl` para Intel Ethernet 700.
 		  `alc` ahora soporta QCA AR816x/AR817x 
 		* USB y modems: Nuevo `uxrcom` para adaptadores USB
 		  seriales Exar XR21V1410
-	* Interfaces con usuario:
-		* Vídeo: 
-		* Touchpad: 
 	* Sensores y otros: Nuevo `abcrtc` para relojes Abracon AB1805.
  	  Mejorad `nmea` para proveer velocidad  y altitud.
 	* Almacenamiento: Controlador `mpii` soporta SAS 3.5 (SAS34xx and 
-	* Virtualización: 
 	
 * Mejoras a herramientas de Red
 	* Nuevos seudo-dispositivo `bpe` que soporta protocolo Backbone 
 	  Povider Edge, útil en vpns y `mpip` que soporta tuneles de 
           capa 2 MPLS IP.
-	* 
 * Seguridad
 	* Nuevo protector de pila RETGUARD que instrumetna todo retorno 
 	  de funciones con mejores propiedades de seguridad. 
-	* Incluye OpenSSH ?
-	* Incluye LibreSSL ?
-	* 
+	* Incluye OpenSSH 8.0
+	* Incluye LibreSSL 2.9.3
 * Otros
-	* Enlazador (linker) por omisión ahora es lld en lugar del 
-	  basado en binutils bfd
+	* Enlazador (linker) por omisión ahora es lld (de LLVM) en 
+	  lugar del basado en binutils bfd (de GNU)
 	* Incluye fuentes de OpenRsync, nueva implementación de rsync
 	  con licencia ISC
 
 * El sistema base incluye mejoras a componentes auditados y mejorados 
-  como, ```llvm``` ? OJO,  ```Xenocara``` (```Xorg```) ? OJO, ```perl``` ? OJO
-* El repositorio de paquetes de OpenBSD cuenta con ? OJO para amd64
+  como, ```llvm``` 7.0.1,  ```Xenocara``` (```Xorg```) 1.19.7, 
+  ```perl``` 5.28
+* El repositorio de paquetes de OpenBSD cuenta con 10605 para amd64
 
 
 ### 2.2 Paquetes 
 
-* Se retiraron paquetes ...
+
+* Entre los paquetes retirados resaltamos abiword, 
+  texlive_texmf_minimal, gcc y GeoIP
+* Entre los paquete agregados resaltamos rdesktop y muchos paquetes
+  de Perl que ahora son requeridos por SpamAssassin 
 * Recompilados de portes más recientes para evitar fallas de seguridad: 
 	d...
 * Retroportados y adaptados de current: 
@@ -93,30 +92,28 @@ Puede ver las diversas versiones publicadas en:
 
 
 * Paquetes actualizados:
-	* evangelios_dp 0.9...
 	* php 
-		OpenBSD ya no incluye porte para php-5.6.40 hemos
-		empleado el que había en 6.4 pero es una versión
-		obsoleta, sin soporte que puede tener fallas de 
+		OpenBSD ya no incluye porte para php-5.6.40. 
+		Incluimos el que había en adJ 6.4 pero es una versión
+		obsoleta, sin soporte, que puede tener fallas de 
 		seguridad como se explica en 
 		http://php.net/archive/2019.php#id2019-01-10-4 y 
 		http://php.net/archive/2019.php#id2019-01-10
 		Tuvo que inclurse porque buena parte e la librería pear 
 		aún requiere php-5.6 (incluyendo partes requeridas por 
-		SIVeL 1.2 como HTML_QuickForm) aunque al parecer otras 
+		SIVeL 1.2 como `HTML_QuickForm`) aunque al parecer otras 
 		partes de pear requieren php-7. También se mantiene
 		versiones obsoletas de paquetes de pear que ya no están
-		en OpenBSD como pear-MDB2.
+		en OpenBSD como `pear-MDB2`.
 		Es indispensable el transito a SIVeL 2 porque en
-		futuras versiones de adJ posiblemente no incluiremos
-		php-5.6 ni pear.
- 		Además php-5.6 tuvo que parcharse para que opere con nuevo 
-		icu4c.
+		futuras versiones de adJ buscaremos no incluir
+		`php-5.6` ni `pear`.
+ 		Además `php-5.6` tuvo que parcharse masivamente para que 
+		operara con nuevo `icu4c`.
 		Para que opere SIVeL 1.2 en esta versión inst-adJ.sh
-		configurará por omisión php-5.6.40 
-		que es el requerido por HTML_QuickForm
-		usando el script php56_fpm, la configuración 
-		/etc/php-fpm.conf y el socket 
+		configurará por omisión php-5.6.40 que es el requerido 
+		por `HTML_QuickForm` usando el script `php56_fpm`, la 
+		configuración /etc/php-fpm.conf y el socket 
 		/var/www/var/run/php-fpm.sock.
 		Si en un servidor necesita correr SIVeL con PHP 5 y otra
 		aplicación con PHP 7, la sugerencia es modificar 
@@ -127,22 +124,20 @@ Puede ver las diversas versiones publicadas en:
 		Otras extensiones no incluidas como de costumbre se 
 		dejan en el sitio de distribución en el directorio 
 		extra-6.5
-	- sword ha sido parchado para operar con la nueva icu4c
+	- Para minar monero se remplaza `xmr-stak` por `xmrig` 	
+	- Se recompilaron todos los paquetes de perl (sin cambiar de 
+	  versión) con el perl de adJ que soporta `LC_NUMERIC`.  
+	- Se parchan y compilan portes más recientes de:
+	  `sword` (que ahora emplea `clang` e `icu` reciente),
+	  `biblesync` y `xiphos` (ahora se compilan con `clang++`),
+	  `markup`,  `repasa` y `sigue` (fueron modificados para emplear 
+	   las nuevas convenciones de Ocaml 4.0.7)
 
-* Se recompilaron todos los paquetes de perl (sin cambiar de versión) con
-  el perl de adJ que soporta LC_NUMERIC.  
+* Documentación actualizada: `basico_adJ`, `usuario_adJ` y `servidor_adJ`
 
-* Documentación actualizada: basico_adJ, usuario_adJ y servidor_adJ
-
-* Se parchan y compilan portes más recientes de:
-	- sword que ahora emplea clang e icu reciente
-	- biblesync y xiphos ahora se compilan con clang++
-	- markup, repasa y sigue fueron modificados para emplear las 
-	  nuevas convenciones de Ocaml 4.0.7
-
-* Se incluye beta 9 de sivel2 cuyas novedades respecto al beta 8 son:
+* Se incluye beta 9 de `sivel2` cuyas novedades respecto al beta 8 son:
   * ...
-* Incluye SIVeL 1.2.7 que es última versión de la serie 1.2
+* Incluye SIVeL 1.2.8 que es última versión de la serie 1.2
 
 
 ## 4. FE DE ERRATAS

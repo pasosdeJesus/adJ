@@ -932,6 +932,7 @@ if (test "$sn" = "s") then {
 	# Recompilados para cerrar fallas de portes actualizados (estable)
 	# Para que operen bien basta actualizar CVS de /usr/ports 
 	# Los siguientes no deben estar en arboldes/usr/ports/mystuff
+	paquete gvfs
 
 	###	
 	# Recompilados de estable que usan xlocale (y pueden cerrar fallas)
@@ -962,7 +963,6 @@ if (test "$sn" = "s") then {
 	# Deben estar en arbodes/usr/ports/mystuff
 	#paquete hevea
 	#paquete libreoffice paquetes "libreoffice libreoffice-i18n-es"
-
 
 	####
 	# Modificados para que usen xlocale (pueden cerrar fallas)

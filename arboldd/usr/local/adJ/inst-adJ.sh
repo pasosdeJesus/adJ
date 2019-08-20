@@ -2565,6 +2565,10 @@ if (test "$p" = "") then {
 		if (test -f /etc/php-5.6.sample/$sp.ini) then {
 			ln -fs /etc/php-5.6.sample/$sp.ini /etc/php-5.6/
 		} fi;
+		rm -f /etc/php-7.1/$sp
+		if (test -f /etc/php-7.1.sample/$sp.ini) then {
+			ln -fs /etc/php-7.1.sample/$sp.ini /etc/php-7.1/
+		} fi;
 	done;
 	if (test "$sweb" = "apache") then {
 		chmod +w /var/www/conf/httpd.conf
@@ -2630,7 +2634,7 @@ EOF
 	} fi;
 # Antes ,s/session.auto_start = 0/session.auto_start = 1/g
 # Pero no es indispensable y si entra en conflicto con horde 3.1.4
-	for i in /etc/php-5.*.ini; do
+	for i in /etc/php-*.ini; do
 		echo "Cambiando $i" >> /var/www/tmp/inst-adJ.bitacora 
 		ed $i >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
 ,s/max_execution_time = 30/max_execution_time = 900/g
