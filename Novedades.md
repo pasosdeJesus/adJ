@@ -88,7 +88,8 @@ Puede ver las diversas versiones publicadas en:
 
 ## 3. NOVEDADES RESPECTO A ADJ 6.4 PROVENIENTES DE PASOS DE JESÚS
 
-* Instalador ...
+* Instalador sigue en español pero ahora ASCII y no ISO8859-1 ni UTF-8 para
+  mantenerlo pequeño.
 
 
 * Paquetes actualizados:
@@ -147,6 +148,6 @@ Puede ver las diversas versiones publicadas en:
 
 - `xenodm` no logra utilizar un teclado latinoamericano.  Para usarlo
   agregue en `/etc/X11/xenodm/Xsetup_0`:
-
+```
 		setxkbmap latam
-
+```
