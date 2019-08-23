@@ -3,7 +3,7 @@ Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
 
 ### Versión: 6.5b2
-Fecha de publicación: 19/Ago/2019
+Fecha de publicación: 22/Ago/2019
 
 Puede ver novedades respecto a OpenBSD en:
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_5/Novedades_OpenBSD.md>
@@ -60,7 +60,6 @@ Puede ver las diversas versiones publicadas en:
 
 ### 2.2 Paquetes 
 
-
 * Entre los paquetes retirados resaltamos abiword, 
   texlive_texmf_minimal, gcc y GeoIP
 * Entre los paquete agregados resaltamos rdesktop y muchos paquetes
@@ -88,9 +87,8 @@ Puede ver las diversas versiones publicadas en:
 
 ## 3. NOVEDADES RESPECTO A ADJ 6.4 PROVENIENTES DE PASOS DE JESÚS
 
-* Instalador sigue en español pero ahora ASCII y no ISO8859-1 ni UTF-8 para
-  mantenerlo pequeño.
-
+* Instalador sigue en español pero ahora con codificación ASCII y no 
+  ISO8859-1 ni UTF-8 para mantenerlo pequeño.
 
 * Paquetes actualizados:
 	* php 
