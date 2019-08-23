@@ -1,6 +1,7 @@
 $OpenBSD: patch-ls_c,v 1.17 2016/08/05 19:52:19 naddy Exp $
---- ls.c.orig	Fri Aug  5 21:32:46 2016
-+++ ls.c	Fri Aug  5 21:41:30 2016
+Index: ls.c
+--- ls.c.orig
++++ ls.c
 @@ -50,6 +50,10 @@
  #include <limits.h>
  #include <locale.h>
@@ -28,7 +29,7 @@ $OpenBSD: patch-ls_c,v 1.17 2016/08/05 19:52:19 naddy Exp $
  
  int rval;
  
-@@ -103,6 +116,11 @@ ls_main(int argc, char *argv[])
+@@ -103,9 +116,15 @@ ls_main(int argc, char *argv[])
  	int ch, fts_options, notused;
  	int kflag = 0;
  	char *p;
@@ -40,7 +41,11 @@ $OpenBSD: patch-ls_c,v 1.17 2016/08/05 19:52:19 naddy Exp $
  
  #ifndef SMALL
  	setlocale(LC_CTYPE, "");
-@@ -124,7 +142,11 @@ ls_main(int argc, char *argv[])
++	setlocale(LC_COLLATE, "");
+ #endif
+ 
+ 	/* Terminal defaults to -Cq, non-terminal defaults to -1. */
+@@ -124,7 +143,11 @@ ls_main(int argc, char *argv[])
  	if (termwidth == 0)
  		termwidth = 80;
  
@@ -52,7 +57,7 @@ $OpenBSD: patch-ls_c,v 1.17 2016/08/05 19:52:19 naddy Exp $
  		err(1, "pledge");
  
  	/* Root is -A automatically. */
-@@ -132,7 +154,7 @@ ls_main(int argc, char *argv[])
+@@ -132,7 +155,7 @@ ls_main(int argc, char *argv[])
  		f_listdot = 1;
  
  	fts_options = FTS_PHYSICAL;
@@ -61,7 +66,7 @@ $OpenBSD: patch-ls_c,v 1.17 2016/08/05 19:52:19 naddy Exp $
  		switch (ch) {
  		/*
  		 * The -1, -C and -l, -m, -n and -x options all override each
-@@ -186,6 +208,9 @@ ls_main(int argc, char *argv[])
+@@ -186,6 +209,9 @@ ls_main(int argc, char *argv[])
  		case 'F':
  			f_type = 1;
  			break;
@@ -71,7 +76,7 @@ $OpenBSD: patch-ls_c,v 1.17 2016/08/05 19:52:19 naddy Exp $
  		case 'H':
  			fts_options |= FTS_COMFOLLOW;
  			break;
-@@ -258,19 +283,59 @@ ls_main(int argc, char *argv[])
+@@ -258,19 +284,59 @@ ls_main(int argc, char *argv[])
  	if (f_grouponly == -1)
  		f_grouponly = 0;
  
