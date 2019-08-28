@@ -939,7 +939,7 @@ if (test "$sn" = "s") then {
 	# No deben estar en mystuff
 	paquete curl
 
-	# En adJ 6.5 para iniciar compilar PHP 5.6 tuvo que modificarse el porte y tras iniciar compilación volver a deshacer algunos cambios de los parches para que continuara, dificultad con icu::
+	# En adJ 6.5 para compilar PHP 5.6 tuvo que modificarse el porte y tras iniciar compilación volver a deshacer algunos cambios de los parches para que continuara, dificultad con icu::
 	paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 5.6
 	paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 7.1
 	#FLAVOR=light paquete evince paquetes evince-light

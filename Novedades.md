@@ -60,20 +60,13 @@ Puede ver las diversas versiones publicadas en:
 
 ### 2.2 Paquetes 
 
-* Entre los paquetes retirados resaltamos abiword, 
-  texlive_texmf_minimal, gcc y GeoIP
-* Entre los paquete agregados resaltamos rdesktop y muchos paquetes
-  de Perl que ahora son requeridos por SpamAssassin 
-* Recompilados de portes más recientes para evitar fallas de seguridad: 
-	d...
-* Retroportados y adaptados de current: 
-	* ruby 2...
-	* chromium ...
-	* PostgreSQL actualizado a .. que tiene entres sus novedades:...
-	* curl...
-* Se han recompilado los siguientes para aprovechar xlocale: libunistring, 
-  vlc, djvulibre, gettext-tools, gdk-pixbuf, glib2, gtar, libidn, 
-  libspectre, libxslt, scribus, wget, wxWidgets-gtk2
+* Entre los paquetes retirados resaltamos abiword, texlive_texmf_minimal, gcc 
+    y GeoIP
+* Entre los paquete agregados resaltamos rdesktop
+* Recompilados de portes más recientes para evitar fallas de seguridad: gvfs, 
+   curl
+* Postgresql 11.5 retroportado de current
+* Ruby 2.6.3 retroportado de current 
 * Ocaml fue actualizado a la versión 4.0.7 que renombra la librería
   pervasives por stdlib y que separa String de Bytes siendo mutable sólo 
   el segundo. Bytes ofrece las funciones Bytes.to_string y 
@@ -87,55 +80,71 @@ Puede ver las diversas versiones publicadas en:
 
 ## 3. NOVEDADES RESPECTO A ADJ 6.4 PROVENIENTES DE PASOS DE JESÚS
 
+### 3.1 Instalador y documentación
+
 * Instalador sigue en español pero ahora con codificación ASCII y no 
   ISO8859-1 ni UTF-8 para mantenerlo pequeño.
-
-* Paquetes actualizados:
-	* php 
-		OpenBSD ya no incluye porte para php-5.6.40. 
-		Incluimos el que había en adJ 6.4 pero es una versión
-		obsoleta, sin soporte, que puede tener fallas de 
-		seguridad como se explica en 
-		http://php.net/archive/2019.php#id2019-01-10-4 y 
-		http://php.net/archive/2019.php#id2019-01-10
-		Tuvo que inclurse porque buena parte e la librería pear 
-		aún requiere php-5.6 (incluyendo partes requeridas por 
-		SIVeL 1.2 como `HTML_QuickForm`) aunque al parecer otras 
-		partes de pear requieren php-7. También se mantiene
-		versiones obsoletas de paquetes de pear que ya no están
-		en OpenBSD como `pear-MDB2`.
-		Es indispensable el transito a SIVeL 2 porque en
-		futuras versiones de adJ buscaremos no incluir
-		`php-5.6` ni `pear`.
- 		Además `php-5.6` tuvo que parcharse masivamente para que 
-		operara con nuevo `icu4c`.
-		Para que opere SIVeL 1.2 en esta versión inst-adJ.sh
-		configurará por omisión php-5.6.40 que es el requerido 
-		por `HTML_QuickForm` usando el script `php56_fpm`, la 
-		configuración /etc/php-fpm.conf y el socket 
-		/var/www/var/run/php-fpm.sock.
-		Si en un servidor necesita correr SIVeL con PHP 5 y otra
-		aplicación con PHP 7, la sugerencia es modificar 
-		/etc/rc.d/php71_fpm para que emplee un segundo
-		archivo /etc/php71-fpm.conf que ubique el socket para
-		php 7 en otro directorio (el paquete de php-7.1 se ha 
-		modificado para facilitarlo).
-		Otras extensiones no incluidas como de costumbre se 
-		dejan en el sitio de distribución en el directorio 
-		extra-6.5
-	- Para minar monero se remplaza `xmr-stak` por `xmrig` 	
-	- Se recompilaron todos los paquetes de perl (sin cambiar de 
-	  versión) con el perl de adJ que soporta `LC_NUMERIC`.  
-	- Se parchan y compilan portes más recientes de:
-	  `sword` (que ahora emplea `clang` e `icu` reciente),
-	  `biblesync` y `xiphos` (ahora se compilan con `clang++`),
-	  `markup`,  `repasa` y `sigue` (fueron modificados para emplear 
-	   las nuevas convenciones de Ocaml 4.0.7)
-
 * Documentación actualizada: `basico_adJ`, `usuario_adJ` y `servidor_adJ`
 
+### 3.2 Paquetes
+
+* Se han recompilado los siguientes para aprovechar xlocale: libunistring, 
+  vlc, djvulibre, gettext-tools, gdk-pixbuf, glib2, gtar, libidn, 
+  libspectre, libxslt, scribus, wget
+* Retroportados y adaptados de current: 
+  	* Muchos paquetes de Perl que ahora son requeridos por SpamAssassin y
+	  al igual que otros de perl se recompilaron (sin cambiar de 
+          versión) con el perl de adJ que soporta `LC_NUMERIC`.  
+	* chromium 75.0.3770 con llave de Pasos de Jesús
+	* PostgreSQL actualizado a 11.4
+* Paquete obsoleto PHP-5.6.40: OpenBSD ya no incluye porte para php-5.6.40. 
+  Incluimos el que había en adJ 6.4 pero es una versión obsoleta, sin 
+  soporte, que puede tener fallas de seguridad como se explica en 
+  http://php.net/archive/2019.php#id2019-01-10-4 y 
+  http://php.net/archive/2019.php#id2019-01-10
+  Tuvo que inclurse porque buena parte e la librería pear aún requiere php-5.6 
+  (incluyendo partes requeridas por SIVeL 1.2 como `HTML_QuickForm`) aunque 
+  al parecer otras partes de pear requieren php-7. También se mantienen
+  versiones obsoletas de paquetes de pear que ya no están en OpenBSD como 
+  `pear-MDB2`.
+  Es indispensable el transito a SIVeL 2 porque en futuras versiones de adJ 
+  buscaremos no incluir `php-5.6` ni `pear`.
+  Además `php-5.6` tuvo que parcharse masivamente para que operara con 
+  nuevo `icu4c`.
+  Para que opere SIVeL 1.2 en esta versión inst-adJ.sh configurará por omisión 
+  php-5.6.40 que es el requerido por `HTML_QuickForm` usando el script 
+  `php56_fpm`, la configuración `/etc/php-fpm.conf` y el socket 
+  `/var/www/var/run/php-fpm.sock`.
+  Si en un servidor necesita correr SIVeL con PHP 5 y otra aplicación con 
+  PHP 7, la sugerencia es modificar `/etc/rc.d/php71_fpm` para que emplee un 
+  segundo archivo `/etc/php71-fpm.conf` que ubique el socket para
+  php 7 en otro directorio (el paquete de php-7.1 se ha modificado para 
+  facilitarlo).
+  Otras extensiones no incluidas como de costumbre se dejan en el sitio de 
+  distribución en el directorio extra-6.5
+* Para minar monero se remplaza `xmr-stak` por `xmrig` 	
+* Se parchan y compilan portes más recientes de:
+	* `sword` (que ahora emplea `clang` e `icu` reciente),
+	*  `biblesync` y `xiphos` (ahora se compilan con `clang++`),
+	*  `markup`,  `repasa` y `sigue` (fueron modificados para emplear 
+	   las nuevas convenciones de Ocaml 4.0.7), pero estamos considerando
+	   retirarlos en un próxima versión de adJ por no conocer usuarios.
 * Se incluye beta 9 de `sivel2` cuyas novedades respecto al beta 8 son:
-  * ...
+	* Se implementó el Consolidado de Víctimas que ahora se llama Listado de víctimas y casos. 
+	* Inicio del reporte revista, se ve desde el listado de casos, presionando Búsqueda avanzada, en la parte inferior del filtro Generar plantilla elegir Reporte Revista HTML y presionar el botón Generar. 
+	* Se hizo actualización del DIVIPOLA a la versión oficial del 2018. Resumen ejecutivo en: https://github.com/pasosdeJesus/sivel2/wiki/Resumen-ejecutivo-de-la-actualizaci%C3%B3n-a-DIVIPOLA-2018
+	* Mejoras al manual de usuario y la documentación técnica (e particular en sip, ver https://github.com/pasosdeJesus/sip/blob/master/doc/README.md D-86)
+	* Ahora al elegir una ubicación se puede especificar si es la principal. Cada cada caso debe tener sólo una ubicación principal que debe corresponder al sitio donde ocurrieron los hechos, y en el inusual situación de haber varios sitios, uno emblemático debe marcarse como principal y será el usado en conteos de victimizaciones. Los datos existentes se actualizan poniendo por omisión la primera ubicación como la principal. Agradecimientos a Miguel Kanai por retroalimentación para este cambio. (R-87)
+	* Conteo de victimizaciones individuales desde el menú Reportes y Conteos. 
+	* Reporte general para un caso que se presenta tras guardar y validar caso. 
+	* Se han implementado 12 de las 21 validaciones de SIVeL 1.2. 
+	* Se implementó una nueva validación que no había en SIVeL 1.2: Nombres de víctimas colectivas muy cortos 
+	* Se implementó detector de casos repetidos desde el menú Casos→Buscar repetidos. 
+	* Se actualizaron las fuentes de SIVeL 2 y sus motores a Rails 6
+	* Se actualizaron y habilitaron las pruebas con minitest a módulos y controladores (88 aserciones en sivel2_gen) y del sistema (13 aserciones en sivel2).
+	* Se mejoró la suit de pruebas para sideex (Blanca). Consta de 115 casos de prueba.
+	* Se resolvieron diversas fallas (e.g F-13, F-90, F-89)
+
 * Incluye SIVeL 1.2.8 que es última versión de la serie 1.2
 
 

@@ -30,6 +30,7 @@ MAINTAINER=	Pierre-Emmanuel Andre <pea@openbsd.org>
 
 # BSD
 PERMIT_PACKAGE=	Yes
+PERMIT_PACKAGE_CDROM=	Yes
 
 WANTLIB += c curses crypto m readline ssl z
 
