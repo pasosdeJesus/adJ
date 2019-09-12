@@ -3,7 +3,7 @@ Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
 
 ### Versión: 6.5
-Fecha de publicación: 29/Ago/2019
+Fecha de publicación: 12/Sep/2019
 
 Puede ver novedades respecto a OpenBSD en:
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_5/Novedades_OpenBSD.md>
@@ -66,7 +66,7 @@ Puede ver las diversas versiones publicadas en:
 * Recompilados de portes más recientes para evitar fallas de seguridad: gvfs, 
    curl
 * Postgresql 11.5 retroportado de current
-* Ruby 2.6.3 retroportado de current 
+* Ruby 2.6.4 retroportado de current 
 * Ocaml fue actualizado a la versión 4.0.7 que renombra la librería
   pervasives por stdlib y que separa String de Bytes siendo mutable sólo 
   el segundo. Bytes ofrece las funciones Bytes.to_string y 
@@ -96,7 +96,7 @@ Puede ver las diversas versiones publicadas en:
 	  al igual que otros de perl se recompilaron (sin cambiar de 
           versión) con el perl de adJ que soporta `LC_NUMERIC`.  
 	* chromium 75.0.3770 con llave de Pasos de Jesús
-	* PostgreSQL actualizado a 11.4
+	* PostgreSQL con soporte para cotejaciones actualizado a 11.5
 * Paquete obsoleto PHP-5.6.40: OpenBSD ya no incluye porte para php-5.6.40. 
   Incluimos el que había en adJ 6.4 pero es una versión obsoleta, sin 
   soporte, que puede tener fallas de seguridad como se explica en 
@@ -145,7 +145,11 @@ Puede ver las diversas versiones publicadas en:
 	* Se mejoró la suit de pruebas para sideex (Blanca). Consta de 115 casos de prueba.
 	* Se resolvieron diversas fallas (e.g F-13, F-90, F-89)
 
-* Incluye SIVeL 1.2.8 que es última versión de la serie 1.2
+* Incluye SIVeL 1.2.8 que es última versión de la serie 1.2 y cuyas novedades son:
+	* Al validar incluye entre los casos vacios los que tengan memo de 
+	   menos de 30 caracteres.
+	* En consulta web los usuarios autenticados pueden buscar por 
+	  categorias deshabilitadas.
 
 
 ## 4. FE DE ERRATAS
