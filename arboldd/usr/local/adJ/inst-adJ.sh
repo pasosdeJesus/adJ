@@ -1036,7 +1036,7 @@ if (test -f /usr/include/ressl.h) then {
 } fi;
 
 echo "* Configurar doas" >> /var/www/tmp/inst-adJ.bitacora;
-grep "^permit *nopass.*:wheel" /etc/doas.conf> /dev/null
+grep "^permit *nopass.*:wheel" /etc/doas.conf > /dev/null 2>&1
 if (test "$?" != "0") then {
 	touch /etc/doas.conf
 	chmod +w /etc/doas.conf
@@ -1284,10 +1284,10 @@ if (test "$?" != "0") then {
 		echo 'No se encuentra paquete tiff'
 		exit 1;
 	} fi;
-        pkg_add -I -D repair -D update -D updatedepends -r $p >> /var/www/tmp/inst-adJ.bitacora 2>&1;
+        pkg_add -I -D repair -D update -D updatedepends -r $p >> /var/www/tmp/inst-adJ.bitacora 2>&1
 	insacp fribidi
 	p=`ls $PKG_PATH/jpeg-* $PKG_PATH/libid3tag-* $PKG_PATH/png-* $PKG_PATH/bzip2-* $PKG_PATH/libungif-* $PKG_PATH/imlib2-* $PKG_PATH/libltdl-* $PKG_PATH/fluxbox-* $PKG_PATH/fluxter-* $PKG_PATH/fbdesk-* 2>/dev/null`
-        pkg_add -I -D repair -D update -D updatedepends -r $p >> /var/www/tmp/inst-adJ.bitacora 2>&1;
+        pkg_add -I -D repair -D update -D updatedepends -r $p >> /var/www/tmp/inst-adJ.bitacora 2>&1
 	if (test ! -f /home/$uadJ/.xsession) then {
 		cat > /home/$uadJ/.xsession <<EOF
 		/usr/local/bin/startfluxbox
@@ -1972,7 +1972,7 @@ recuerdelas porque debe digitarlas en cada arranque.
 EOF
 
 	if (test ! -f /$RUTAIMG/post.img ) then {
-		vnconfig -u vnd0 >> /var/www/tmp/inst-adJ.bitacora 2>&1 
+		vnconfig -u vnd0 >> /var/www/tmp/inst-adJ.bitacora 2>&1
 		dd of=/$RUTAIMG/post.img bs=1024 seek=$TAM count=0 >> /var/www/tmp/inst-adJ.bitacora 2>&1
 		echo -n "Clave para PostgreSQL (/var/postgresql) "
 		vnconfig -ckv vnd0 /$RUTAIMG/post.img 
@@ -1984,7 +1984,7 @@ EOF
 
 	echo "* Crear imagen cifrada para respaldo de ${TAM}Kbytes (se espeicifica otra con var. TAM) en directorio $RUTAIMG (se especifica otra con var RUTAIMG)"  >> /var/www/tmp/inst-adJ.bitacora
 	if (test ! -f /$RUTAIMG/resbase.img -a ! -f /$RUTAIMG/bakbase.img) then {
-		vnconfig -u vnd0 >> /var/www/tmp/inst-adJ.bitacora 2>&1 
+		vnconfig -u vnd0 >> /var/www/tmp/inst-adJ.bitacora 2>&1
 		dd of=/$RUTAIMG/resbase.img bs=1024 seek=$TAM count=0 >> /var/www/tmp/inst-adJ.bitacora 2>&1
 		echo -n "Clave para respaldos (/var/www/resbase)"
 		vnconfig -ckv vnd0 /$RUTAIMG/resbase.img 
@@ -2020,7 +2020,7 @@ done
 clear;
 
 
-sh /etc/rc.local >> /var/www/tmp/inst-adJ.bitacora 2>&1; # En caso de que falte montar bien
+sh /etc/rc.local >> /var/www/tmp/inst-adJ.bitacora 2>&1 # En caso de que falte montar bien
 
 if (test "$postcifra" = "s") then {
 	echo "* Montar imagenes cifradas durante arranque" >> /var/www/tmp/inst-adJ.bitacora;
@@ -2208,7 +2208,7 @@ echo "* Instalar PostgreSQL y PostGIS"  >> /var/www/tmp/inst-adJ.bitacora
 f=`ls /var/db/pkg/postgresql-server* 2> /dev/null > /dev/null`;
 if (test "$?" != "0") then {
 	p=`ls $PKG_PATH/libxml-* $PKG_PATH/libiconv-* $PKG_PATH/postgresql-client-* $PKG_PATH/postgresql-server* $PKG_PATH/postgresql-contrib* $PKG_PATH/postgresql-doc*`
-	pkg_add -I -r -D repair -D update -D updatedepends $p >> /var/www/tmp/inst-adJ.bitacora 2>&1;
+	pkg_add -I -r -D repair -D update -D updatedepends $p >> /var/www/tmp/inst-adJ.bitacora 2>&1
 	insacp jpeg
 	insacp tiff
 	insacp nghttp2
@@ -2524,7 +2524,7 @@ echo "* Inicio de $sweb configurado" >> /var/www/tmp/inst-adJ.bitacora ;
 grep "#ServerName" /var/www/conf/httpd.conf > /dev/null 2> /dev/null
 if (test "$?" = "0") then  {
 	echo "* Estableciendo nombre del servidor en configuración de Apache" >> /var/www/tmp/inst-adJ.bitacora;
-	cp /var/www/conf/httpd.conf /var/www/conf/httpd.conf-sinServerName >> /var/www/tmp/inst-adJ.bitacora 2>&1;
+	cp /var/www/conf/httpd.conf /var/www/conf/httpd.conf-sinServerName >> /var/www/tmp/inst-adJ.bitacora 2>&1
 	sn=`hostname`;
 	sed -e "s/#ServerName.*/ServerName \"$sn\"/g" /var/www/conf/httpd.conf-sinServerName > /var/www/conf/httpd.conf
 } fi;
@@ -2554,7 +2554,7 @@ if (test "$p" = "") then {
 	p=`ls $PKG_PATH/png*` 
 	pkg_add -I -D repair -D libdepends -D update -D updatedepends -r $p >> /var/www/tmp/inst-adJ.bitacora 2>&1
 	p=`ls $PKG_PATH/libxslt* $PKG_PATH/gettext* $PKG_PATH/libxml* $PKG_PATH/png* $PKG_PATH/jpeg* $PKG_PATH/t1lib* $PKG_PATH/libiconv* $PKG_PATH/php*` 
-	echo $p >> /var/www/tmp/inst-adJ.bitacora 2>&1;
+	echo $p >> /var/www/tmp/inst-adJ.bitacora 2>&1
 	pkg_add -I -D repair -D libdepends -D update -D updatedepends -r $p >> /var/www/tmp/inst-adJ.bitacora 2>&1
 	rm -f /var/www/conf/modules/php.conf /var/www/conf/php.ini /etc/php.ini
 	mkdir -p /var/www/conf/modules/
@@ -2609,7 +2609,7 @@ w
 q
 EOF
 		activarcs php56_fpm
-		/etc/rc.d/php56_fpm -d start >> /var/www/tmp/inst-adJ.bitacora 2>&1 
+		/etc/rc.d/php56_fpm -d start >> /var/www/tmp/inst-adJ.bitacora 2>&1
 		grep "^ *location .*php" /etc/nginx/nginx.conf > /dev/null 2>&1
 		if (test "$?" != "0") then {
 			grep "^ *ssl_prefer_server_ciphers" /etc/nginx/nginx.conf > /dev/null 2>&1
@@ -2831,7 +2831,7 @@ if (test "$inspear" = "s") then {
 	p=`ls /var/db/pkg/ | grep "pear-"`;
 	pkg_delete -I -D dependencies $p >> /var/www/tmp/inst-adJ.bitacora 2>&1
 	p=`ls /var/db/pkg/ | grep "pear-"`;
-	pkg_delete -I -D dependencies $p >> /var/www/tmp/inst-adJ.bitacora 2>&1;
+	pkg_delete -I -D dependencies $p >> /var/www/tmp/inst-adJ.bitacora 2>&1
 	rm -rf /var/www/pear
 	echo "Antes de pkg_add" >> /var/www/tmp/inst-adJ.bitacora
 	p=`ls $PKG_PATH/pear-*`;
@@ -2839,7 +2839,7 @@ if (test "$inspear" = "s") then {
 	echo "Antes de pkg_delete" >> /var/www/tmp/inst-adJ.bitacora
 	ls -l /var/www/pear/lib/DB/ >> /var/www/tmp/inst-adJ.bitacora
 	cd /var/db/pkg
-	pkg_delete -I -D dependencies partial-pear-*  >> /var/www/tmp/inst-adJ.bitacora 2>&1;
+	pkg_delete -I -D dependencies partial-pear-*  >> /var/www/tmp/inst-adJ.bitacora 2>&1
 } fi;
 
 }
@@ -2941,17 +2941,17 @@ for i in `gem list | grep "(.*," | sed -e "s/ *([^,]*,/,/g;s/, default: [^,]*//g
   v=`echo $i | sed "s/.*,//g"`
   cmd="doas gem uninstall --executables --ignore-dependencies $n -v $v"
   echo $cmd
-  eval $cmd 2>&1 >> /var/www/tmp/inst-adJ.bitacora;
+  eval $cmd >> /var/www/tmp/inst-adJ.bitacora 2>&1
 done
 
 # Seria bueno eliminar gemas repetidas de /var/www/bundler/ruby/gems/$VRUBY
 # gem uninstall no ha operado con --install-dir (aunque la documentacion dice que si).
 
 echo "Actualizando gemas del sistema" >> /var/www/tmp/inst-adJ.bitacora;
-gem update --system 2>&1 >> /var/www/tmp/inst-adJ.bitacora;
+gem update --system >> /var/www/tmp/inst-adJ.bitacora 2>&1
 
 echo "Reinstalando gemas generales" >> /var/www/tmp/inst-adJ.bitacora;
-QMAKE=qmake-qt5 make=gmake MAKE=gmake doas gem pristine --all 2>&1 >> /var/www/tmp/inst-adJ.bitacora;
+QMAKE=qmake-qt5 make=gmake MAKE=gmake doas gem pristine --all >> /var/www/tmp/inst-adJ.bitacora 2>&1
 
 echo "Reinstalando versiones mas actualizadas de gemas de /var/www/bundler/ruby/$VRUBY con extensiones cuando se cambia version menor" >> /var/www/tmp/inst-adJ.bitacora
 rm -f /usr/local/bin/bundle
@@ -2964,12 +2964,12 @@ for i in `ls /var/www/bundler/ruby/$VRUBY/extensions/x86_64-openbsd/$VRUBY/ 2> /
   n=`echo $uj | sed -e 's/.*\/\(.*\)-[0-9.]*/\1/g'` ; 
   cmd="doas gem install --install-dir /var/www/bundler/ruby/$VRUBY/ $n -v $v" 
   echo "$cmd"
-  eval "$cmd" 2>&1 >> /var/www/tmp/inst-adJ.bitacora;
+  eval "$cmd" >> /var/www/tmp/inst-adJ.bitacora 2>&1
 done
 
 echo "Instalando gemas importantes " >> /var/www/tmp/inst-adJ.bitacora
-gem install pkg-config 2>&1 >> /var/www/tmp/inst-adJ.bitacora;
-gem install bundler 2>&1 >> /var/www/tmp/inst-adJ.bitacora;
+gem install pkg-config >> /var/www/tmp/inst-adJ.bitacora 2>&1
+gem install bundler >> /var/www/tmp/inst-adJ.bitacora 2>&1
 if (test -x /usr/lcoal/bin/bundle25) then { 
        doas ln -sf /usr/local/bin/bundle25 /usr/local/bin/bundle; 
 } fi
@@ -3036,7 +3036,7 @@ if (test "$?" != "0") then {
 	insacp gtk+2
 
 	p=`ls $PKG_PATH/libxml-* $PKG_PATH/shared-mime-info-* $PKG_PATH/pcre-* $PKG_PATH/png-* $PKG_PATH/jpeg-* $PKG_PATH/glib2-* $PKG_PATH/tiff-* $PKG_PATH/libiconv-* $PKG_PATH/esound-* $PKG_PATH/atk-* $PKG_PATH/desktop-file-utils-* $PKG_PATH/gettext-* $PKG_PATH/libaudiofile-* $PKG_PATH/gtk+2-* $PKG_PATH/cairo-* $PKG_PATH/pango-* $PKG_PATH/nss-* $PKG_PATH/nspr-* $PKG_PATH/jasper-* $PKG_PATH/hicolor-icon-theme-* $PKG_PATH/chromium-*`
-        pkg_add -I -D repair -D update -D updatedepends -r $p >> /var/www/tmp/inst-adJ.bitacora 2>&1;
+        pkg_add -I -D repair -D update -D updatedepends -r $p >> /var/www/tmp/inst-adJ.bitacora 2>&1
 	#echo "Sugerencias: " >> /var/www/tmp/inst-adJ.bitacora;
 	#echo "  * Configure localización en español desde about:config general.useragent.local es-AR"
 	#echo "  * Como página de inicio use https://127.0.0.1/";
@@ -3072,7 +3072,7 @@ if (test "$?" = "0") then {
 f=`ls /var/db/pkg/xfe* 2> /dev/null > /dev/null`;
 if (test "$?" != "0") then {
 	p=`ls $PKG_PATH/libiconv-* $PKG_PATH/fox-* $PKG_PATH/gettext-* $PKG_PATH/xfe-*`
-        pkg_add -I -D repair -D update -D updatedepends -r $p >> /var/www/tmp/inst-adJ.bitacora 2>&1;
+        pkg_add -I -D repair -D update -D updatedepends -r $p >> /var/www/tmp/inst-adJ.bitacora 2>&1
 	# Archivo de configuración se creará en primera ejecución de xfe
 	mkdir -p /home/$uadJ/.config/xfe/
 	chown -R $uadJ:$uadJ /home/$uadJ/.config
@@ -3135,15 +3135,15 @@ pkg_delete -I -D dependencies lua >> /var/www/tmp/inst-adJ.bitacora  2>&1
 pkg_delete -I -D dependencies gtk+2 >> /var/www/tmp/inst-adJ.bitacora  2>&1
 
 echo "Instalando algunos comunes" >> /var/www/tmp/inst-adJ.bitacora 
-pkg_add -I -D repair -D updatedepends -D update -D libdepends -r $PKG_PATH/sdl*tgz $PKG_PATH/libxml*tgz $PKG_PATH/libgpg-error*tgz $PKG_PATH/libart-*.tgz  >> /var/www/tmp/inst-adJ.bitacora 2>&1;
-pkg_add -I -D repair -D updatedepends -D update -D libdepends -r $PKG_PATH/gtk+2*tgz >> /var/www/tmp/inst-adJ.bitacora 2>&1;
+pkg_add -I -D repair -D updatedepends -D update -D libdepends -r $PKG_PATH/sdl*tgz $PKG_PATH/libxml*tgz $PKG_PATH/libgpg-error*tgz $PKG_PATH/libart-*.tgz  >> /var/www/tmp/inst-adJ.bitacora 2>&1
+pkg_add -I -D repair -D updatedepends -D update -D libdepends -r $PKG_PATH/gtk+2*tgz >> /var/www/tmp/inst-adJ.bitacora 2>&1
 
 echo "Instalando todos los disponibles en PKG_PATH" >> /var/www/tmp/inst-adJ.bitacora 
 pkg_add -I -D repair -D update -u 
 cd /var/db/pkg/
 for i in $PKG_PATH/*tgz; do
 	echo $i | tee -a /var/www/tmp/inst-adJ.bitacora
-	pkg_add -I -D repair -D updatedepends -D update -D libdepends -r $i >> /var/www/tmp/inst-adJ.bitacora 2>&1;
+	pkg_add -I -D repair -D updatedepends -D update -D libdepends -r $i >> /var/www/tmp/inst-adJ.bitacora 2>&1
 done;
 
 echo "Eliminando librerías innecesarias" >> /var/www/tmp/inst-adJ.bitacora 

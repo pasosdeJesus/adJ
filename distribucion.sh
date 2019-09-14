@@ -790,6 +790,7 @@ if (test "$sn" = "s") then {
 	# Modificados para posibilitar compilación
 	# Deben estar en mystuff
 
+
 	# Todo lo de perl tuvo que recompilarse
 	# evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
 	# Si por ejemplo es:
@@ -932,7 +933,12 @@ if (test "$sn" = "s") then {
 	# Recompilados para cerrar fallas de portes actualizados (estable)
 	# Para que operen bien basta actualizar CVS de /usr/ports 
 	# Los siguientes no deben estar en arboldes/usr/ports/mystuff
+	paquete cups
+	paquete dovecot
 	paquete gvfs
+	paquete libgcrypt
+	paquete mpg123
+	paquete webkitgtk4
 
 	###	
 	# Recompilados de estable que usan xlocale (y pueden cerrar fallas)

@@ -3,7 +3,7 @@ Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
 
 ### Versión: 6.5
-Fecha de publicación: 12/Sep/2019
+Fecha de publicación: 14/Sep/2019
 
 Puede ver novedades respecto a OpenBSD en:
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_5/Novedades_OpenBSD.md>
@@ -22,20 +22,20 @@ Puede ver las diversas versiones publicadas en:
 
 ### 2.1 Kernel y Sistema Base
 
-* Aplicados parches de seguridad hasta el 9.Ago.2019 provenientes de 
+* Aplicados parches de seguridad hasta el 12.Sep.2019 provenientes de 
   OpenBSD que incluyen mitigación a vulnerabilidades en CPU.
 * Controladores ampliados o mejorados para amd64
 	* Red:
 		* Inalámbrica: Mejoras a `athn`, `bwfm`, 
-			`iwn` Lista autojoin debe incluir ahora ""
- 		        explicito para conectar a red abierta desconocida
+			`iwn` ahora autojoin debe incluir ""
+ 		        explicitamente para conectar a red abierta desconocida
 		* Ethernet: Nuevo `ixl` para Intel Ethernet 700.
 		  `alc` ahora soporta QCA AR816x/AR817x 
 		* USB y modems: Nuevo `uxrcom` para adaptadores USB
 		  seriales Exar XR21V1410
 	* Sensores y otros: Nuevo `abcrtc` para relojes Abracon AB1805.
  	  Mejorad `nmea` para proveer velocidad  y altitud.
-	* Almacenamiento: Controlador `mpii` soporta SAS 3.5 (SAS34xx and 
+	* Almacenamiento: Controlador `mpii` soporta SAS 3.5 
 	
 * Mejoras a herramientas de Red
 	* Nuevos seudo-dispositivo `bpe` que soporta protocolo Backbone 
@@ -44,12 +44,17 @@ Puede ver las diversas versiones publicadas en:
 * Seguridad
 	* Nuevo protector de pila RETGUARD que instrumetna todo retorno 
 	  de funciones con mejores propiedades de seguridad. 
+	* Función `unveil` que permite hacer como un chroot pero mejor
+	  para cada programa mejorada y aplicada de forma sistemática a
+	  diversas utilidades y programas como: `ospfd`, `ospf6d`, `rebound`, 
+	  `getconf`, `kvm_mkdb`, `bdftopcf`, `Xserver`, `passwd`, `spamlogd`, 
+	  `spamd`, `sensorsd`, `snmpd`, `htpasswd`, `ifstated`. 
 	* Incluye OpenSSH 8.0
 	* Incluye LibreSSL 2.9.3
 * Otros
-	* Enlazador (linker) por omisión ahora es lld (de LLVM) en 
+	* Enlazador (linker) por omisión ahora es `lld` (de LLVM) en 
 	  lugar del basado en binutils bfd (de GNU)
-	* Incluye fuentes de OpenRsync, nueva implementación de rsync
+	* Incluye fuentes de OpenRsync, nueva implementación de `rsync`
 	  con licencia ISC
 
 * El sistema base incluye mejoras a componentes auditados y mejorados 
@@ -60,22 +65,26 @@ Puede ver las diversas versiones publicadas en:
 
 ### 2.2 Paquetes 
 
-* Entre los paquetes retirados resaltamos abiword, texlive_texmf_minimal, gcc 
-    y GeoIP
-* Entre los paquete agregados resaltamos rdesktop
-* Recompilados de portes más recientes para evitar fallas de seguridad: gvfs, 
-   curl
+* Entre los paquete agregados resaltamos `rdesktop`
+* Entre los paquetes retirados resaltamos `abiword`, `texlive_texmf_minimal`, 
+  `gcc` y `GeoIP`
+* Recompilados portes estables más recientes para evitar fallas de seguridad: 
+   `cups`, `curl`, `cups`, `dovecot`, `gvfs`, `libgcrypt`, `mpg123`, 
+   `webkitgtk4`
 * Postgresql 11.5 retroportado de current
-* Ruby 2.6.4 retroportado de current 
+* Ruby 2.6.4 retroportado de current  (incluye retroporte para Ruby 2.7 
+  de solución de Jeremy Evans a falla con `realpath` para permitir usar 
+  `unveil` y de hecho hay 2 gemas que lo usan: 
+  <https://github.com/jcs/ruby-unveil> y 
+  <https://github.com/jeremyevans/ruby-pledge>)
 * Ocaml fue actualizado a la versión 4.0.7 que renombra la librería
-  pervasives por stdlib y que separa String de Bytes siendo mutable sólo 
-  el segundo. Bytes ofrece las funciones Bytes.to_string y 
-  Bytes.of_string que facilita portar fuentes existentes.
-* La librería icu4c fue actualizada a la versión 63.1. Esta versión 
-  es más exigente en espacio de nombre, ha resultado típico tener que
-  cambiar por ejemplo UnicodeString por icu::UnicodeString en portes que la 
-  usan 
-
+  `pervasives` por `stdlib` y que separa `String` de `Bytes` siendo 
+   mutable sólo el segundo. `Bytes` ofrece las funciones `Bytes.to_string` y 
+  `Bytes.of_string` que facilitan portar fuentes existentes.
+* La librería `icu4c` fue actualizada a la versión 63.1. Esta versión 
+  y/o clang son más exigente en espacio de nombres. Ha resultado típico 
+  tener que cambiar por ejemplo `UnicodeString` por `icu::UnicodeString` 
+  en portes que la usan 
 
 
 ## 3. NOVEDADES RESPECTO A ADJ 6.4 PROVENIENTES DE PASOS DE JESÚS
@@ -83,34 +92,35 @@ Puede ver las diversas versiones publicadas en:
 ### 3.1 Instalador y documentación
 
 * Instalador sigue en español pero ahora con codificación ASCII y no 
-  ISO8859-1 ni UTF-8 para mantenerlo pequeño.
+  ISO8859-1 ni UTF-8, que no son soportadas en tiempo de instalación 
+  para mantener un instalador pequeño.
 * Documentación actualizada: `basico_adJ`, `usuario_adJ` y `servidor_adJ`
 
 ### 3.2 Paquetes
 
-* Se han recompilado los siguientes para aprovechar xlocale: libunistring, 
-  vlc, djvulibre, gettext-tools, gdk-pixbuf, glib2, gtar, libidn, 
-  libspectre, libxslt, scribus, wget
-* Retroportados y adaptados de current: 
-  	* Muchos paquetes de Perl que ahora son requeridos por SpamAssassin y
+* Se han recompilado los siguientes para aprovechar `xlocale`: `libunistring`, 
+  `vlc`, `djvulibre`, `gettext-tools`, `gdk-pixbuf`, `glib2`, `gtar`, 
+  `libidn`, `libspectre`, `libxslt`, `scribus`, `wget`
+* Retroportados y adaptados de OpenBSD-current: 
+  	* Muchos paquetes de Perl que ahora son requeridos por `SpamAssassin` y
 	  al igual que otros de perl se recompilaron (sin cambiar de 
-          versión) con el perl de adJ que soporta `LC_NUMERIC`.  
-	* chromium 75.0.3770 con llave de Pasos de Jesús
+          versión) con el perl de adJ que si soporta `LC_NUMERIC`.  
+	* `chromium` 75.0.3770 con llave de Pasos de Jesús
 	* PostgreSQL con soporte para cotejaciones actualizado a 11.5
-* Paquete obsoleto PHP-5.6.40: OpenBSD ya no incluye porte para php-5.6.40. 
+* Paquete obsoleto php-5.6.40: OpenBSD ya no incluye porte para php-5.6.40. 
   Incluimos el que había en adJ 6.4 pero es una versión obsoleta, sin 
   soporte, que puede tener fallas de seguridad como se explica en 
   http://php.net/archive/2019.php#id2019-01-10-4 y 
   http://php.net/archive/2019.php#id2019-01-10
-  Tuvo que inclurse porque buena parte e la librería pear aún requiere php-5.6 
-  (incluyendo partes requeridas por SIVeL 1.2 como `HTML_QuickForm`) aunque 
-  al parecer otras partes de pear requieren php-7. También se mantienen
-  versiones obsoletas de paquetes de pear que ya no están en OpenBSD como 
-  `pear-MDB2`.
+  Tuvo que inclurse porque buena parte e la librería `pear` aún lo requiere 
+  (particularmente librerías requeridas por SIVeL 1.2 como `HTML_QuickForm`) 
+  aunque por lo visto otras partes de `pear` requieren php-7. También se 
+  mantienen versiones obsoletas de paquetes de `pear` que ya no están en 
+  OpenBSD como `pear-MDB2` y `pear-DB`.
   Es indispensable el transito a SIVeL 2 porque en futuras versiones de adJ 
   buscaremos no incluir `php-5.6` ni `pear`.
   Además `php-5.6` tuvo que parcharse masivamente para que operara con 
-  nuevo `icu4c`.
+  el nuevo `icu4c`.
   Para que opere SIVeL 1.2 en esta versión inst-adJ.sh configurará por omisión 
   php-5.6.40 que es el requerido por `HTML_QuickForm` usando el script 
   `php56_fpm`, la configuración `/etc/php-fpm.conf` y el socket 
@@ -124,7 +134,7 @@ Puede ver las diversas versiones publicadas en:
   distribución en el directorio extra-6.5
 * Para minar monero se remplaza `xmr-stak` por `xmrig` 	
 * Se parchan y compilan portes más recientes de:
-	* `sword` (que ahora emplea `clang` e `icu` reciente),
+	* `sword` (que ahora emplea `clang` e `icu` recientes),
 	*  `biblesync` y `xiphos` (ahora se compilan con `clang++`),
 	*  `markup`,  `repasa` y `sigue` (fueron modificados para emplear 
 	   las nuevas convenciones de Ocaml 4.0.7), pero estamos considerando
@@ -154,10 +164,12 @@ Puede ver las diversas versiones publicadas en:
 
 ## 4. FE DE ERRATAS
 
-- Chromium sigue siendo inestable por ejemplo en ocasiones en facebook.com
-  por esto sigue incluyendose firefox que en casos como ese puede operar.
+- Chromium sigue siendo inestable por ejemplo en ocasiones en <facebook.com>
+  por esto sigue incluyendose firefox que en casos como ese puede operar,
+  pero no en otros.
 
-- `xenodm` no logra utilizar un teclado latinoamericano.  Para usarlo
+- `xenodm` no logra utilizar un teclado latinoamericano que se haya
+  configurado en `/etc/kbdtype`.  Para usarlo
   agregue en `/etc/X11/xenodm/Xsetup_0`:
 ```
 		setxkbmap latam
