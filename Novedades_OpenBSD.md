@@ -1,7 +1,7 @@
 Con respecto a OpenBSD 6.5 las novedades son:
 
 * Proceso de Instalación:
-	* upgrade install install.sub 	En español
+	* En español (upgrade install install.sub)
 	* Organización del CD de instalación diferente
 
 * Kernel
@@ -65,10 +65,10 @@ Con respecto a OpenBSD 6.5 las novedades son:
 		tolower_l toupper_l towctrans_l towlower_l towupper_l
 		uselocale wcscoll wcsnrtombs_l wcsrtombs_l wcstombs_l
 		wcsxfrm wctob_l wctomb_l wctype_l xlocale
-	* Encabezados de gcc modificados para definir símbolo \_\_adJ\_\_ que 
-	  identifica compilaciones en el sistema operativo. Facilita uso de 
-	  xlocale y características únicas de adJ respecto a OpenBSD en 
-	  algunos portes --como libunistring.
+	* Encabezados de gcc y clang modificados para definir 
+          símbolo \_\_adJ\_\_ que identifica compilaciones en el sistema 
+          operativo. Facilita uso de xlocale y características únicas de 
+          adJ respecto a OpenBSD en algunos portes --como libunistring.
 	* Locales nuevos en /usr/share/locale/
 		* Entre otros de todos los paises de latinoamérica
 	* Zonas horarias nuevas en /usr/share/zoneinfo:
@@ -89,16 +89,11 @@ Con respecto a OpenBSD 6.5 las novedades son:
 
 * Paquetes
 	* Retroportados para cerrar fallas y/o actualizar y/o usar xlocale:
-	  curl, djvulibre, libspatialite, postgresql-server, 
-	  postgresql-client, postgresql-contrib, postgresql-docs, 
-	  py3-requests, py-requests, qemu, ruby, ruby26-ri_docs, tiff.
+	  postgresql-server, postgresql-client, postgresql-contrib, 
+	  postgresql-docs, ruby, ruby26-ri_docs.
 	* Se recompilaron de portes estables recientes para cerrar 
-	  fallas: gettext-tools, gdk-pixbuf, glib2,
-	  gtar, libidn, libspectre, libxslt, php, scribus, wget, 
-  	  wxWidgets-gtk2, webkitgtk4, php, djvu
-	* Paquetes más actualizados: 
-		* Ocaml 4.0.5 junto con ocamlbuild, ocaml-labltk, 
-		  ocaml-camlp4 y hevea
+	  fallas: cups, curl, dovecot, gvfs, libgcrypt, mpg123, php,
+	  webkitgtk4
 	* Recompilados todos los paquetes de perl
 	* Recompilado con llave de adJ
 		* chromium 
@@ -106,23 +101,24 @@ Con respecto a OpenBSD 6.5 las novedades son:
 		* libunistring
 	* Recompilados de portes estables para usar xlocale y cerrar fallas
 		* gettext-tools, gdk-pixbuf, glib2, gtar, libidn, 
-		  libunistring, libxslt, llvm, scribus, wget,
-		  wxWidgets-gtk2  
+		  libunistring, libxslt, scribus, wget
 	* Adaptados de portes estables pero mejorados para adJ:
 		* colorls	Ordena alfabeticamente de acuerdo a locale
 		* hexedit 	Soporta tamaños de archivos más grandes
 		* xfe		Soporta paquetes tgz
 	* Unicos en adJ 
-		* emulators/realboy lang/ocaml-labltk sysutils/ganglia 
-		sysutils/htop textproc/biblesync
-		textproc/sword textproc/xiphos www/pear-HTML-Common
+		* emulators/realboy lang/ocaml-labltk net/xmrig
+ 		sysutils/ganglia textproc/biblesync
+		textproc/sword textproc/xiphos database/pear-DB
+		database/pear-MDB2 database/pear-DB_DataObject
+		www/pear-HTML-Common
 		www/pear-HTML-Common2 www/pear-HTML-CSS 
 		www/pear-HTML-Javascript
 		www/pear-HTML-Menu www/pear-HTML-QuickForm www/pear-HTML-Table
 		www/pear-DB-DataObject-FormBuilder 
 		www/pear-HTML-QuickForm-Controller x11/fbdesk
 
-	* Unicos en adJ liderados por Pasos de Jesús
+	* Únicos en adJ liderados por Pasos de Jesús
 		* evangelios_dp	Traducción en progreso de dominio público
 		* basico_adJ	Documentación de uso remoto y básico
 		* usuario_adJ	Docuemntación como sistema de escritorio
