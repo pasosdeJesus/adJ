@@ -13,8 +13,8 @@ Puede ver novedades respecto a OpenBSD en:
 Puede ver las diversas versiones publicadas en: 
   <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/>
 
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/AprendiendoDeJesus-6.5-amd64.iso> es imagen en formato ISO para quemar en DVD e instalar por primera vez.
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/6.5-amd64/> es directorio con el contenido del DVD instalador apropiado para descargar con rsync y actualizar un adJ ya instalado (ver  <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_5/Actualiza.md> )
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-6.5-amd64.iso> es imagen en formato ISO para quemar en DVD e instalar por primera vez.
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/6.5-amd64/> es directorio con el contenido del DVD instalador apropiado para descargar con rsync y actualizar un adJ ya instalado (ver  <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_5/Actualiza.md> )
 * <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/6.5-extra/> es directorio con versiones recientes de paquetes no incluidos en distribución oficial (pueden no estar firmados y requerir instalación con `pkg_add -D unsigned _paquete_`).
 
 
@@ -38,7 +38,7 @@ Puede ver las diversas versiones publicadas en:
 	* Almacenamiento: Controlador `mpii` soporta SAS 3.5 
 	
 * Mejoras a herramientas de Red
-	* Nuevos seudo-dispositivo `bpe` que soporta protocolo Backbone 
+	* Nuevos seudo-dispositivo `bpe` que soportan protocolo Backbone 
 	  Povider Edge, útil en vpns y `mpip` que soporta tuneles de 
           capa 2 MPLS IP.
 * Seguridad
@@ -71,7 +71,7 @@ Puede ver las diversas versiones publicadas en:
 * Recompilados portes estables más recientes para evitar fallas de seguridad: 
    `cups`, `curl`, `cups`, `dovecot`, `gvfs`, `libgcrypt`, `mpg123`, 
    `webkitgtk4`
-* Postgresql 11.5 retroportado de current
+* Postgresql 11.5 retroportado de current (en adJ soporta bien cotejaciones en español)
 * Ruby 2.6.4 retroportado de current  (incluye retroporte para Ruby 2.7 
   de solución de Jeremy Evans a falla con `realpath` para permitir usar 
   `unveil` y de hecho hay 2 gemas que lo usan: 
@@ -101,12 +101,11 @@ Puede ver las diversas versiones publicadas en:
 * Se han recompilado los siguientes para aprovechar `xlocale`: `libunistring`, 
   `vlc`, `djvulibre`, `gettext-tools`, `gdk-pixbuf`, `glib2`, `gtar`, 
   `libidn`, `libspectre`, `libxslt`, `scribus`, `wget`
+* Recompilados muchos paquetes de Perl que ahora son requeridos por 
+  `SpamAssassin` y al igual que otros de perl se recompilaron (sin cambiar 
+  de versión) con el perl de adJ que si soporta `LC_NUMERIC`.  
 * Retroportados y adaptados de OpenBSD-current: 
-  	* Muchos paquetes de Perl que ahora son requeridos por `SpamAssassin` y
-	  al igual que otros de perl se recompilaron (sin cambiar de 
-          versión) con el perl de adJ que si soporta `LC_NUMERIC`.  
-	* `chromium` 75.0.3770 con llave de Pasos de Jesús
-	* PostgreSQL con soporte para cotejaciones actualizado a 11.5
+* `chromium` 75.0.3770 con llave de Pasos de Jesús retroportado de OpenBSD-current.
 * Paquete obsoleto php-5.6.40: OpenBSD ya no incluye porte para php-5.6.40. 
   Incluimos el que había en adJ 6.4 pero es una versión obsoleta, sin 
   soporte, que puede tener fallas de seguridad como se explica en 
