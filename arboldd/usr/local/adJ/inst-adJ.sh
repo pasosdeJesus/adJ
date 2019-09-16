@@ -3025,7 +3025,6 @@ f=`ls /var/db/pkg/chromium* 2> /dev/null > /dev/null`;
 if (test "$?" != "0") then {
 
 	insacp png
-	insacp libelf
 	insacp glib2
 	insacp cairo
 	insacp libffi

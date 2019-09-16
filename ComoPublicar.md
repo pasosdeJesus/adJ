@@ -51,7 +51,7 @@ Pasos importantes para publicar versión beta
           	0 pages reactivated by pageservicio
           	0 busy pages found by pageservicio
 
-- Verificar que se usa la bitácora /var/log/servicio:
+- Verificar que se usa la bitácora /var/log/servicio y que no existe /var/log/daemon
 	$ ls -lat /var/log/servicio  
 		-rw-r-----  1 root  wheel  149983 Sep 19 18:48 /var/log/servicio
 
@@ -78,7 +78,7 @@ setlocale(LC_NUMERIC, "es_CO.UTF-8") or die "No pone locale LC_NUMERIC en es_CO.
 my $a = 1987.23;
 printf "%g\n", $a;
 ```
-- Con paquete colorls modificado y actualizado, verificar cotejacion en español:
+- Con paquete colorls modificado y actualizado, verificar cotejacion en español en terminal grafica:
   touch a
   touch í
   touch o
