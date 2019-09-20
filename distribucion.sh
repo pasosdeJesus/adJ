@@ -790,6 +790,9 @@ if (test "$sn" = "s") then {
 	# Modificados para posibilitar compilación
 	# Deben estar en mystuff
 
+	paquete gtk+3 paquetes "gtk+3-cups"
+	exit 1
+
 
 	# Todo lo de perl tuvo que recompilarse
 	# evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
@@ -935,6 +938,7 @@ if (test "$sn" = "s") then {
 	# Los siguientes no deben estar en arboldes/usr/ports/mystuff
 	paquete cups
 	paquete dovecot
+	paquete gtk+3 paquetes "gtk+3-cups"
 	paquete gvfs
 	paquete libgcrypt
 	paquete mpg123
@@ -975,7 +979,6 @@ if (test "$sn" = "s") then {
 	# Estan en mystuff
 	paquete libunistring
 	paquete vlc
-
 	paquete djvulibre
 	paquete gettext-tools
 	paquete gdk-pixbuf

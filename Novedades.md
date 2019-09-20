@@ -2,8 +2,8 @@
 Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
 
-### Versión: 6.5
-Fecha de publicación: 15/Sep/2019
+### Versión: 6.5p1
+Fecha de publicación: 15/Oct/2019
 
 Puede ver novedades respecto a OpenBSD en:
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_5/Novedades_OpenBSD.md>

@@ -31,7 +31,7 @@ Pasos importantes para publicar versión beta
    distribución inicial 
 5. Recompilar paquetes con actualizaciones de seguridad o mejoras
 6. Retroportar paquetes, dejar resultados no incluidos en DVD pero
-   útiles en 6.5-amd64-extra
+   útiles en 6.5-extra
 7. Regenerar en distribución (sin paquetes ni otras compilaciones) con:
 	```
 	doas ./distribucion.sh
@@ -114,8 +114,8 @@ psql -h /var/www/var/run/postgresql/ -Upostgres -f /tmp/cot.sql
 	```
 	hdes/creaiso.sh
 	cp -rf AprendiendoDeJesus-6.5-amd64.iso 6.5-amd64 /dirftp
-	mkdir /dirftp/6.5-amd64-extra
-	rsync compdes:comp/adJ/extra-6.5/* /dirftp/6.5-amd64-extra
+	mkdir /dirftp/6.5-extra
+	rsync compdes:comp/adJ/extra-6.5/* /dirftp/6.5-extra
 	```
 12. Verificar operación de:
   * http://pasosdeJesus.github.io/basico_adJ http://pasosdeJesus.github.io/usuario_adJ http://pasosdeJesus.github.io/servidor_adJ
