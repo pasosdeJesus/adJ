@@ -1,4 +1,4 @@
-# Actualización a Aprendiendo De Jesús 6.5b2
+# Actualización a Aprendiendo De Jesús 6.5
 
 La actualización consta de 3 partes:
 
@@ -14,7 +14,7 @@ La actualización consta de 3 partes:
 	```
 	mkdir -p ~/comp/adJ;
 	cd ~/comp/adJ;
-	rsync-adJ 6.5b2
+	rsync-adJ 6.5
 	```
 
   Si ocurre alguna falla durante la transmisión podrá continuar donde
@@ -27,7 +27,7 @@ La actualización consta de 3 partes:
   Si descargó fuentes con el procedimiento anterior ejecutelo con:
 
 	```
-       	doas ~/comp/adJ/6.5b2-amd64/util/preact-adJ.sh
+       	doas ~/comp/adJ/6.5-amd64/util/preact-adJ.sh
 	```
 
 ## 2. Actualizar el sistema base:
@@ -38,25 +38,25 @@ La actualización consta de 3 partes:
 
 		```
 		cd ~/comp/adJ; 
-		ARCH=~/comp/adJ/6.5b2-amd64 doas 6.5b2-amd64/util/actbase.sh 6.5b2
+		ARCH=~/comp/adJ/6.5-amd64 doas 6.5-amd64/util/actbase.sh 6.5
 		```
 
 ## 3. Actualizar aplicaciones:
 
 * Después de reinicar debe ejecutar  el archivo de ordenes ```/inst-adJ.sh```
-  Este archivo de ordenes emplea codificación UTF8, por lo que para 
-  iniciarlo se recomienda desde una terminal gráfica.  
-  Si descargo la distribución con las instrucciones dadas en la primer parte
+  Este archivo de ordenes emplea codificación UTF8, por lo que se recomienda
+  ejcutarlo desde una terminal gráfica.  
+  Si descargó la distribución con las instrucciones dadas en la primer parte
   puede usar:
 
 	```
-	ARCH=~/comp/adJ/6.5b2-amd64 doas /inst-adJ.sh
+	ARCH=~/comp/adJ/6.5-amd64 doas /inst-adJ.sh
 	```
 	
 
   Este archivo de ordenes asiste actualizaciones que puedan hacer 
   falta de una versión a otra del sistema base (descritas en
-  http://openbsd.org/faq/upgrade60.html ) y actualiza cuando es posible
+  http://openbsd.org/faq/upgrade65.html ) y actualiza cuando es posible
   archivos de configuración de diversos paquetes.
 * Puede ejecutar varias veces este archivo de órdenes, pero si el 
   proceso no concluye exitosamente por favor después de ejecutar
@@ -66,11 +66,11 @@ La actualización consta de 3 partes:
   archivos de configuración. A continuación traducimos y ampliamos las
   instrucciones de <http://www.openbsd.org/faq/upgrade59.html>
 
-  ```sysmerge(8)``` muestra el resultado de la omando ```diff(1)``` 
-  unificado, pasando por un paginador (el que haya configurado en la 
+  ```sysmerge(8)``` muestra el resultado de la orden ```diff(1)``` 
+  unificado y pasando por un paginador (el que haya configurado en la 
   variable de ambiente ```$PAGER```) y para la mayoría de archivos 
   presenta un mensaje como el siguiente (en el ejemplo presentado se 
-  revisan novedades para el archivo `/var/www/htdocs/index.htm`:
+  revisan novedades para el archivo `/var/www/htdocs/index.htm`):
 
       Use 'd' to delete the temporary ./var/www/htdocs/index.html
       Use 'i' to install the temporary ./var/www/htdocs/index.html
@@ -83,21 +83,21 @@ La actualización consta de 3 partes:
   `d`, si dese remplazar su archivo existente con la nueva versión, 
   instale el archivo temporal con ```i``` Si desea mezclar los dos, 
   al alejir ```m``` ingresará al programa ```sdiff``` donde podrá 
-  mezclar manualmente el archivo.  Por defecto continuará y dejará el 
+  mezclar manualmente el archivo.  Por omisión continuará y dejará el 
   archivo sin modificar para manejarlo posteriormente de manera manual.
         
-  Aunque puede funcionar, no se recomienda usar sysmerge para integrar
-  nuevos usuarios en el sistema, sino para esto usar useradd, que es 
+  Aunque puede funcionar, no se recomienda usar `sysmerge` para integrar
+  nuevos usuarios en el sistema, sino para esto usar `useradd`, que es 
   menos proclive a errores (advertencia: ¡no instale el archivo temporal 
-  ```master.passwd``` sobre su archivo existente!).
+  ```master.passwd``` sobre su archivo existente porque perderá sus usuarios!).
         
   ```sysmerge``` salva todos sus archivos remplazados en un directorio 
   temporal, como ```/var/tmp/sysmerge.24959/backups```, así que si por 
   accidente elimina algo que no era buena idea eliminar, tiene 
-  oportunidad de recuperarlo.  Advertencia: Note que la rutina 
+  oportunidad de recuperarlo.  *Advertencia*: Note que la rutina 
   ```daily``` limpia cada día archivos antiguos de ese directorio.
         
-  En general al usar `sysmerge puede` remplazar (opción `i`) todos los 
+  En general al usar `sysmerge` puede remplazar (opción `i`) todos los 
   archivos por sus versiones más recientes, pero dependiendo de los 
   servicios que preste el servidor, hay algunos archivos de 
   configuración que es mejor no remplazar (opción `d`) o que es      
@@ -105,24 +105,24 @@ La actualización consta de 3 partes:
 
   * Al mezclar `/etc/login.conf` procure dejar los límites más amplios y
     no elimine clases de login
-  * Evite remplazar ```/etc/rc.local``` y ```/etc/hosts```
-  * Si es cortafuegos evite remplazar ```/etc/pf.conf``` 
-    y ```/etc/sysctl.conf```
-  * Si es servidor DNS evite remplazar ```/var/unbound/etc/unbound.conf``` 
-    y ```/var/nsd/etc/nsd.conf``` 
+  * Evite remplazar `/etc/rc.local` y `/etc/hosts`
+  * Si es cortafuegos evite remplazar `/etc/pf.conf` 
+    y `/etc/sysctl.conf`
+  * Si es servidor DNS evite remplazar `/var/unbound/etc/unbound.conf` 
+    y `/var/nsd/etc/nsd.conf`
   * Si es servidor de correo evite remplazar archivos del 
-    directorio ```/etc/mail``` 
-  * Si es servidor web evite remplazar ```/etc/httpd.conf```
+    directorio `/etc/mail` 
+  * Si es servidor web evite remplazar `/etc/httpd.conf`
 
 
 
 ## 4. Soluciones comunes
 
 
-* Si tras instalar sistema base, da la orden ```ls``` y obtiene 
-  ```Bad system call``` seguramente aún le falta actualizar el paquete 
-  ```colorls```, el actualizador ```inst-adJ.sh``` lo hará, pero mientras 
-  tanto puede ejecutar ```unalias ls```
+* Si tras instalar sistema base, da la orden `ls` y obtiene 
+  `Bad system call` seguramente aún le falta actualizar el paquete 
+  `colorls`, el actualizador `inst-adJ.sh` lo hará, pero mientras 
+  tanto puede ejecutar `/bin/ls` o `unalias ls`
 * Si tras instalar el sistema base al intentar ingresar a un usuario, antes 
   de pedir la clave aparece ```Unkown user``` seguramente falta convertir 
   la base de datos de usuarios a un formato más nuevo, lo que puede hacer es: 
@@ -131,7 +131,7 @@ La actualización consta de 3 partes:
   ```fsck -y```, (3) poner un tipo de terminal usable ```export TERM=vt220```,
   (4) Montar / en modo lectura escritura con ```mount -u -o rw /``` 
   (5) regenerar algunos archivos con ```cap_mkdbd /etc/master.passwd``` y 
-  (6) verificar y completar regeneración de archivos, suando ```vipw``` 
+  (6) verificar y completar regeneración de archivos, usando ```vipw``` 
   haciendo un cambio mínimo como insertar un espacio en la descripción de 
   un usuario y saliendo.
 * Si el actualizador  ```inst-adJ.sh``` no ejecuta ```sysmerge```, puede 

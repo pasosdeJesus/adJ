@@ -8,8 +8,8 @@ Anhelamos publicar versión mayor (e.g 6.5) 3 meses después de OpenBSD:
 
 También publicamos revisiones (e.g 6.5p1) si la seguridad o calidad lo ameritan.
 
-Anhelamos publicar al menos una versión beta (e.g 6.5b2 en directorio
-```desarrollo``` del sitio de distribución) en:
+Anhelamos publicar al menos una versión beta (e.g 6.5 en directorio
+`desarrollo` del sitio de distribución) en:
 
 	10.Dic
 	10.Jun
@@ -31,16 +31,16 @@ Pasos importantes para publicar versión beta
    distribución inicial 
 5. Recompilar paquetes con actualizaciones de seguridad o mejoras
 6. Retroportar paquetes, dejar resultados no incluidos en DVD pero
-   útiles en 6.5-amd64-extra
+   útiles en 6.5-extra
 7. Regenerar en distribución (sin paquetes ni otras compilaciones) con:
 	```
 	doas ./distribucion.sh
 	```
-8. Retocar fecha de publicacion en ```Novedades.md``` y publicar escondido en
+8. Retocar fecha de publicacion en `Novedades.md` y publicar escondido en
    http://aprendiendo.pasosdeJesus.org
-9. Generar distribución, imagen iso (```hdes/creaiso.sh```)
-9. Probar por ejemplo en ```qemu``` (```hdes/qemu.sh``` o remotamente 
-  ```TEXTO=1 hdes/qemu.sh```): 
+9. Generar distribución, imagen iso (`hdes/creaiso.sh`)
+9. Probar por ejemplo en `qemu` (`hdes/qemu.sh` o remotamente 
+  `TEXTO=1 hdes/qemu.sh`): 
 - Instalación de sistema base, `uname -a` debe reportar APRENDIENDODEJESUS
 - Verificar que kernel tiene renombramiento de daemon por servicio con:
 	$  vmstat -s | grep servicio
@@ -51,7 +51,7 @@ Pasos importantes para publicar versión beta
           	0 pages reactivated by pageservicio
           	0 busy pages found by pageservicio
 
-- Verificar que se usa la bitácora /var/log/servicio:
+- Verificar que se usa la bitácora /var/log/servicio y que no existe /var/log/daemon
 	$ ls -lat /var/log/servicio  
 		-rw-r-----  1 root  wheel  149983 Sep 19 18:48 /var/log/servicio
 
@@ -78,7 +78,7 @@ setlocale(LC_NUMERIC, "es_CO.UTF-8") or die "No pone locale LC_NUMERIC en es_CO.
 my $a = 1987.23;
 printf "%g\n", $a;
 ```
-- Con paquete colorls modificado y actualizado, verificar cotejacion en español:
+- Con paquete colorls modificado y actualizado, verificar cotejacion en español en terminal grafica:
   touch a
   touch í
   touch o
@@ -105,7 +105,7 @@ psql -h /var/www/var/run/postgresql/ -Upostgres -f /tmp/cot.sql
 - que toda entrada del menú desde la interfaz gráfica opere.  
 - ejecución de /usr/local/adJ/inst-sivel.sh, que opere SIVeL1.2,
   Arreglar y repetir hasta que no haya errores.
-10. En computador de desarrollo tras configurar ```var-local.sh``` enviar a
+10. En computador de desarrollo tras configurar `var-local.sh` enviar a
    adJ.pasosdeJesus.org:
 	```
 	hdes/rsync-aotro.sh
@@ -114,8 +114,8 @@ psql -h /var/www/var/run/postgresql/ -Upostgres -f /tmp/cot.sql
 	```
 	hdes/creaiso.sh
 	cp -rf AprendiendoDeJesus-6.5-amd64.iso 6.5-amd64 /dirftp
-	mkdir /dirftp/6.5-amd64-extra
-	rsync compdes:comp/adJ/extra-6.5/* /dirftp/6.5-amd64-extra
+	mkdir /dirftp/6.5-extra
+	rsync compdes:comp/adJ/extra-6.5/* /dirftp/6.5-extra
 	```
 12. Verificar operación de:
   * http://pasosdeJesus.github.io/basico_adJ http://pasosdeJesus.github.io/usuario_adJ http://pasosdeJesus.github.io/servidor_adJ
@@ -125,7 +125,7 @@ psql -h /var/www/var/run/postgresql/ -Upostgres -f /tmp/cot.sql
   * http://adJ.pasosdeJesus.org
   * rsync://adJ.pasosdeJesus.org
 
-13. Poner Tag en github e iniciar rama al publicar version beta (antes en master)
+13. Poner Tag en github e iniciar rama al publicar version alfa o beta (antes en master)
 	```
 	git tag -a v6.5a1 -m "Version 6.5a1"
 	git push origin v6.5a1
@@ -144,7 +144,7 @@ Pasos importantes para publicar versión mayor
    adJ.
 3. Actualizar documentación (basico_adJ, usuario_adJ y servidor_adJ), 
    publicar en Internet
-4. Actualizar versión en logo que presenta xenodm
+4. Actualizar versión en logo que presenta xenodm en `arboldd/etc/X11/xenodm/pixmaps/`. Con gimp iniciar con el de resolución 15bpp, modificarlo el número de versión es tipo Sans tamaño 18. Par converitr a xpm en Imagen->Modo Indexado. 15bpp y 8bpp con paleta de 255 colores. 4bpp con paleta de 15 colores, 1bpp con paleta de 2 colores.
 5. Análogo a pasos de versión beta
 6. Actualizar version en reto de P2PU (las 4 primeras tareas) 
    https://p2pu.org/es/groups/openbsd-adj-como-sistema-de-escritorio/
@@ -172,7 +172,7 @@ Pasos importantes para publicar versión mayor
 	O solicita un DVD o una USB de instalacion por correo postal.
 
 	Si planeas actualizar de una version anterior a 6.5
-	hay un procedimiento mas rápido con ```rsync``` (ver
+	hay un procedimiento mas rápido con `rsync` (ver
 	https://github.com/pasosdeJesus/adJ/blob/master/Actualiza.md ).
 
 	Si no tienes experiencia con esta distribución de OpenBSD para 

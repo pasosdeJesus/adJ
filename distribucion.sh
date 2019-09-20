@@ -790,6 +790,10 @@ if (test "$sn" = "s") then {
 	# Modificados para posibilitar compilación
 	# Deben estar en mystuff
 
+	paquete gtk+3 paquetes "gtk+3-cups"
+	exit 1
+
+
 	# Todo lo de perl tuvo que recompilarse
 	# evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
 	# Si por ejemplo es:
@@ -932,13 +936,20 @@ if (test "$sn" = "s") then {
 	# Recompilados para cerrar fallas de portes actualizados (estable)
 	# Para que operen bien basta actualizar CVS de /usr/ports 
 	# Los siguientes no deben estar en arboldes/usr/ports/mystuff
+	paquete cups
+	paquete dovecot
+	paquete gtk+3 paquetes "gtk+3-cups"
+	paquete gvfs
+	paquete libgcrypt
+	paquete mpg123
+	paquete webkitgtk4
 
 	###	
 	# Recompilados de estable que usan xlocale (y pueden cerrar fallas)
 	# No deben estar en mystuff
 	paquete curl
 
-	# En adJ 6.5 para iniciar compilar PHP 5.6 tuvo que modificarse el porte y tras iniciar compilación volver a deshacer algunos cambios de los parches para que continuara, dificultad con icu::
+	# En adJ 6.5 para compilar PHP 5.6 tuvo que modificarse el porte y tras iniciar compilación volver a deshacer algunos cambios de los parches para que continuara, dificultad con icu::
 	paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 5.6
 	paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 7.1
 	#FLAVOR=light paquete evince paquetes evince-light
@@ -963,13 +974,11 @@ if (test "$sn" = "s") then {
 	#paquete hevea
 	#paquete libreoffice paquetes "libreoffice libreoffice-i18n-es"
 
-
 	####
 	# Modificados para que usen xlocale (pueden cerrar fallas)
 	# Estan en mystuff
 	paquete libunistring
 	paquete vlc
-
 	paquete djvulibre
 	paquete gettext-tools
 	paquete gdk-pixbuf
@@ -1012,6 +1021,7 @@ if (test "$sn" = "s") then {
 	paquete www/pear-HTML-Menu
 	paquete www/pear-HTML-QuickForm
 	paquete www/pear-HTML-Table
+	paquete databases/pear-DB
 	paquete databases/pear-MDB2
 	paquete databases/pear-DB_DataObject
 	paquete www/pear-DB-DataObject-FormBuilder

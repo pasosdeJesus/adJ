@@ -3,6 +3,7 @@
 COMMENT=	ls(1) that can use color to display file attributes
 
 VERSION=	6.3
+REVISION=	1
 DISTNAME=	ls-${VERSION}
 PKGNAME=	colorls-${VERSION}
 CATEGORIES=	sysutils
