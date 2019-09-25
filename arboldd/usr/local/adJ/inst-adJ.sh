@@ -1175,6 +1175,54 @@ if (test -f /etc/rc.d/rtadvd) then {
 	rm /usr/X11R6/lib/pkgconfig/xcb-xprint.pc
 } fi;
 
+if (test -f /usr/include/openssl/asn1_mac.h) then {
+	vac="$vac 6.4 a 6.5";	
+	echo "Aplicando actualizaciones de 6.4 a 6.5" >> /var/www/tmp/inst-adJ.bitacora;
+	rm -f /usr/include/openssl/asn1_mac.h
+	rm -f /usr/bin/c2ph \
+		/usr/bin/pstruct \
+		/usr/libdata/perl5/Locale/Codes/API.pod \
+		/usr/libdata/perl5/Module/CoreList/TieHashDelta.pm \
+		/usr/libdata/perl5/Unicode/Collate/Locale/bg.pl \
+		/usr/libdata/perl5/Unicode/Collate/Locale/fr.pl \
+		/usr/libdata/perl5/Unicode/Collate/Locale/ru.pl \
+		/usr/libdata/perl5/unicore/lib/Sc/Cham.pl \
+		/usr/libdata/perl5/unicore/lib/Sc/Ethi.pl \
+		/usr/libdata/perl5/unicore/lib/Sc/Hebr.pl \
+		/usr/libdata/perl5/unicore/lib/Sc/Hmng.pl \
+		/usr/libdata/perl5/unicore/lib/Sc/Khar.pl \
+		/usr/libdata/perl5/unicore/lib/Sc/Khmr.pl \
+		/usr/libdata/perl5/unicore/lib/Sc/Lana.pl \
+		/usr/libdata/perl5/unicore/lib/Sc/Lao.pl \
+		/usr/libdata/perl5/unicore/lib/Sc/Talu.pl \
+		/usr/libdata/perl5/unicore/lib/Sc/Tibt.pl \
+		/usr/libdata/perl5/unicore/lib/Sc/Xsux.pl \
+		/usr/libdata/perl5/unicore/lib/Sc/Zzzz.pl \
+		/usr/share/man/man1/c2ph.1 \
+		/usr/share/man/man1/pstruct.1 \
+		/usr/share/man/man3p/Locale::Codes::API.3prm /usr/bin/c2ph \
+		/usr/bin/pstruct \
+		/usr/libdata/perl5/Locale/Codes/API.pod \
+		/usr/libdata/perl5/Module/CoreList/TieHashDelta.pm \
+		/usr/libdata/perl5/Unicode/Collate/Locale/bg.pl \
+		/usr/libdata/perl5/Unicode/Collate/Locale/fr.pl \
+		/usr/libdata/perl5/Unicode/Collate/Locale/ru.pl \
+		/usr/libdata/perl5/unicore/lib/Sc/Cham.pl \
+		/usr/libdata/perl5/unicore/lib/Sc/Ethi.pl \
+		/usr/libdata/perl5/unicore/lib/Sc/Hebr.pl \
+		/usr/libdata/perl5/unicore/lib/Sc/Hmng.pl \
+		/usr/libdata/perl5/unicore/lib/Sc/Khar.pl \
+		/usr/libdata/perl5/unicore/lib/Sc/Khmr.pl \
+		/usr/libdata/perl5/unicore/lib/Sc/Lana.pl \
+		/usr/libdata/perl5/unicore/lib/Sc/Lao.pl \
+		/usr/libdata/perl5/unicore/lib/Sc/Talu.pl \
+		/usr/libdata/perl5/unicore/lib/Sc/Tibt.pl \
+		/usr/libdata/perl5/unicore/lib/Sc/Xsux.pl \
+		/usr/libdata/perl5/unicore/lib/Sc/Zzzz.pl \
+		/usr/share/man/man1/c2ph.1 \
+		/usr/share/man/man1/pstruct.1 \
+		/usr/share/man/man3p/Locale::Codes::API.3p
+} fi;
 
 if  (test "$vac" != "") then {
 	dialog --title 'Actualizaciones aplicadas' --msgbox "\\nSe aplicaron actualizaciones: $vac\\n\\n$mac\\n" 15 60
