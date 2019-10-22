@@ -1204,8 +1204,6 @@ if (test -f /usr/include/openssl/asn1_mac.h) then {
           /usr/share/man/man3p/Locale::Codes::API.3p
 } fi;
 
-
-
 if  (test "$vac" != "") then {
 	dialog --title 'Actualizaciones aplicadas' --msgbox "\\nSe aplicaron actualizaciones: $vac\\n\\n$mac\\n" 15 60
 } fi;
@@ -1353,14 +1351,14 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 [submenu] (Dispositivos)
 	[exec] (Apagar) {doas /sbin/halt -p}
 	[exec] (Iniciar servicios faltantes) {xterm -en utf8 -e "/usr/bin/doas /bin/sh /etc/rc.local espera"}
-	[exec] (Montar CD) {/sbin/mount /mnt/cdrom ; xfe /mnt/cdrom/ }
-	[exec] (Desmontar CD) {/sbin/umount -f /mnt/cdrom}
-	[exec] (Montar USB) {/sbin/mount /mnt/usb ; xfe /mnt/usb/}
-	[exec] (Desmontar USB) {/sbin/umount -f /mnt/usb}
-	[exec] (Montar USBC) {/sbin/mount /mnt/usbc ; xfe /mnt/usbc/}
-	[exec] (Desmontar USBC) {/sbin/umount -f /mnt/usbc}
-	[exec] (Montar Floppy) {/sbin/mount /mnt/floppy ; xfe /mnt/floppy}
-	[exec] (Desmontar Floppy) {/sbin/umount -f /mnt/floppy}
+	[exec] (Montar CD) {doas /sbin/mount /mnt/cdrom ; doas xfe /mnt/cdrom/ }
+	[exec] (Desmontar CD) {doas /sbin/umount -f /mnt/cdrom}
+	[exec] (Montar USB) {doas /sbin/mount /mnt/usb ; doas xfe /mnt/usb/}
+	[exec] (Desmontar USB) {doas /sbin/umount -f /mnt/usb}
+	[exec] (Montar USBC) {doas /sbin/mount /mnt/usbc ; doas xfe /mnt/usbc/}
+	[exec] (Desmontar USBC) {doas /sbin/umount -f /mnt/usbc}
+	[exec] (Montar Floppy) {doas /sbin/mount /mnt/floppy ; doas xfe /mnt/floppy}
+	[exec] (Desmontar Floppy) {doas /sbin/umount -f /mnt/floppy}
 	[exec] (Configurar Impresora con CUPS) {echo y | doas cups-enable; doas chmod a+rw /dev/ulpt* /dev/lpt*; /usr/local/bin/chrome --disable-gpu http://127.0.0.1:631}
 	[submenu] (Red)
                 [exec] (Examinar red) {xterm -en utf8 -e '/sbin/ifconfig; echo -n "\n[RETORNO] para examinar enrutamiento (podrá salir con q)"; read; /sbin/route -n show | less'}
