@@ -1927,7 +1927,7 @@ export SWORD_PATH=/usr/local/share/sword
 export HISTFILE=/home/$uadJ/.pdksh_history
 export HISTSIZE=2048
 export LANG=es_CO.UTF-8
-if [ -z "\$SSH_AUTH_SOCK" ] ; then
+if [ -z "\$SSH_AUTH_SOCK" -a "\$-" == "*i*" ] ; then
 	eval \`ssh-agent -s\` 
 	ssh-add 
 fi
