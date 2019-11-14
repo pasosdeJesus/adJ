@@ -2694,6 +2694,11 @@ EOF
 w
 q
 EOF
+		ed $i >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
+,s/post_max_size = 8M/post_max_size = 128M/g
+w
+q
+EOF
 	done;
 
 } else {

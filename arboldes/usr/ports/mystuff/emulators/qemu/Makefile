@@ -1,12 +1,10 @@
-# $OpenBSD: Makefile,v 1.183 2018/12/19 17:57:06 sthen Exp $
-
-USE_WXNEEDED=	Yes
+# $OpenBSD: Makefile,v 1.190 2019/08/18 06:56:07 ajacoutot Exp $
 
 ONLY_FOR_ARCHS=	aarch64 amd64 arm i386 powerpc sparc64
 
 COMMENT=	multi system emulator
 
-DISTNAME=	qemu-3.1.0
+DISTNAME=	qemu-4.1.0
 CATEGORIES=	emulators
 MASTER_SITES=	https://download.qemu.org/
 EXTRACT_SUFX=	.tar.xz
@@ -16,28 +14,28 @@ HOMEPAGE=	https://www.qemu.org/
 MAINTAINER=	Brad Smith <brad@comstyle.com>
 
 # GPLv2, LGPLv2 and BSD
-PERMIT_PACKAGE_CDROM=	Yes
+PERMIT_PACKAGE=	Yes
 
 WANTLIB=	SDL2 X11 atk-1.0 bz2 c cairo cairo-gobject capstone curl \
-		epoxy fdt gbm gdk-3 gdk_pixbuf-2.0 gio-2.0 glib-2.0 gnutls \
-		gobject-2.0 gthread-2.0 gtk-3 intl iscsi jpeg lzo2 m \
-		curses nettle nfs pango-1.0 pangocairo-1.0 pcre2-8 \
-		pixman-1 png ssh2 usb-1.0 util vte-2.91 xkbcommon xml2 z \
-		${COMPILER_LIBCXX}
+		curses epoxy fdt>=4.1 gbm gdk-3 gdk_pixbuf-2.0 gio-2.0 \
+		glib-2.0 gnutls gobject-2.0 gthread-2.0 gtk-3 iconv intl \
+		iscsi jpeg lzo2 m nettle nfs pango-1.0 pangocairo-1.0 \
+		pcre2-8 pixman-1 png sndio ssh usb-1.0 util vte-2.91 \
+		xkbcommon xml2 z ${COMPILER_LIBCXX}
 
 # Using TLS emulation layer
 COMPILER =	base-clang ports-gcc
 
 MODULES=	lang/python
 
-
 BUILD_DEPENDS=	devel/gettext-tools \
-		textproc/texi2html
+		textproc/py-sphinx
 LIB_DEPENDS=	archivers/bzip2 \
 		archivers/lzo2 \
+		converters/libiconv \
 		devel/capstone/main \
-		devel/dtc \
-		devel/gettext \
+		devel/dtc>=1.5.0p0 \
+		devel/gettext-run \
 		devel/glib2 \
 		devel/libiscsi \
 		devel/libnfs \
@@ -49,7 +47,7 @@ LIB_DEPENDS=	archivers/bzip2 \
 		net/curl \
 		security/gnutls \
 		security/libnettle \
-		security/libssh2 \
+		security/libssh \
 		textproc/libxml \
 		x11/gtk+3 \
 		x11/xkbcommon
@@ -61,6 +59,9 @@ FAKE_FLAGS=	qemu_confdir=${PREFIX}/share/examples/qemu
 
 EXTRA_CFLAGS=	-I${LOCALBASE}/include -I${X11BASE}/include
 EXTRA_LDFLAGS=	-L${LOCALBASE}/lib -L${X11BASE}/lib
+
+# fix build with ancient ncurses. ncurses needs to be updated to 5.9 or newer.
+EXTRA_CFLAGS+=	-D_XOPEN_SOURCE_EXTENDED
 
 # until the system headers are fixed properly.
 EXTRA_CFLAGS+=	-Wno-redundant-decls
@@ -80,7 +81,9 @@ CONFIGURE_ARGS=	--prefix=${PREFIX} \
 		--disable-bsd-user \
 		--enable-capstone=system \
 		--enable-curses \
+		--disable-auth-pam \
 		--disable-gcrypt \
+		--disable-sdl-image \
 		--disable-smartcard \
 		--disable-snappy \
 		--disable-spice \
