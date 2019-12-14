@@ -110,7 +110,7 @@ qemu-[v]		Emulador de varios sistemas
 qgis-[v]		Sistema de información geográfica de escritorio
 rdesktop-[v]	Cliente de fuentes abiertas de Escritorio Remoto Windows
 scribus-[v]		Publicación de escritorio
-vim-[v]-gtk2	Editor de texto eficiente que requiere estudio previo
+vim-[v]-gtk3	Editor de texto eficiente que requiere estudio previo
 vlc-[v]		Reproductor Multimedia
 xcdplayer-[v]		Reproductor de CDs
 xarchiver-[v]	Manejador de archivos comprimidos
@@ -125,6 +125,7 @@ cdparanoia-[v]	Utilidad para leer CDDA
 cdrtools-[v]		Quema CDs y sistemas de archivo ISO 9660
 colorls-[v]		Comando ls con color
 cups-[v]		Sistema de impresión
+cups-libs-[v]		
 curl-[v]		Descarga de servidores FTP, Gopher, HTTP y HTPPS
 dvd+rw-tools-[v]	Herramientas para escribir DVDs
 dfc-[v]		Muestra uso de disco con colores
@@ -183,6 +184,7 @@ w3m-[v]		Navegador modo texto que soporta UTF-8 y descargas
 
 * Soporte, librerías y desarrollo
 aalib-[v]		Librería de arte ASCII
+aom-[v]
 adwaita-icon-theme-[v]	Tema de íconos para GNOME
 aspell-[v]	Chequeador de ortografía
 aspell-es-[v]	Diccionario en español para aspell
@@ -255,6 +257,7 @@ gdbm-[v]		Versión de dbm
 gdk-pixbuf-[v]	Librería gráfica para GTK+2
 gegl-[v]		Entorno para procesamiento de imágenes basado en grafos
 gettext-[v]	Internacionalización
+gettext-runtime-[v]	Internacionalización
 gettext-tools-[v]	Herramientas para desarrollo y traducciones
 geoclue-[v]	Servicio modular de geoinformación sobre D-Bus
 geoclue2-[v]		Servicio modular de geoinformación sobre D-Bus
@@ -294,9 +297,8 @@ gstreamer1-plugins-libav-[v]	Elementos ffmpeg para Gstreamer
 gstreamer1mm-[v]	Uniones en C++ para Gstreamer
 gtar-[v]	 	Otra versión del archivador tar
 gtest-[v]	 	Ambiente de pruebas para C++
-gtk+2-[v]		Componentes gráficos GTK+2
 gtk+3-[v]		Componentes gráficos GTK+3
-gtk+3-cups-[v]		Componentes gráficos GTK+3
+gtk+3-cups-[v]
 gtk-update-icon-cache-[v]	Utilidad para almacenar temas de iconos
 gtk2mm-[v]		Interfaz en C++ para gtk2+	
 gtkhtml4-[v]		Motor liviano para presentar/imprimir/editar HTML
@@ -338,6 +340,7 @@ libbluray-[v]	Soporta reproducción de Blu-ray
 libbs2b-[v]		DSP Bauer estereofónico-a-binarual
 libcddb-[v]		Librería para acceder a un servidor CDDB
 libcdio-[v]		Librería para controlar CDs
+libcdio-paranoia-[v]		
 libcroco-[v]		Librería para reconocimiento genérico de CSS
 libcue-[v]		Librería para reconocimiento de páginas cue
 libdaemon-[v]	Librería en C que facilita escribir servicios
@@ -356,6 +359,7 @@ libgadu-[v]	Implementación del protocolo de Mensajería Gadu-Gadu
 libgcrypt-[v]	Criptografía basada en GnuPG
 libgeotiff-[v]	Librería pata intercambio TIFF en GIS
 libglade2-[v]	Carga interfaces Glade
+libgnome-keyring-[v]
 libgpg-error-[v]	Códigos de error de GnuPG
 libgsf-[v]		Archivos estructurados de Gnome
 libiconv-[v]		Conversión entre codificaciones de caracteres
@@ -477,6 +481,7 @@ p5-Error-[v]	Manejo de errores al estilo objetos
 p5-Eval-Closure-[v]	Crea closures con string eval de forma segura
 p5-Exporter-Tiny-[v]	Exportar con caracteristicas de Sub::Exporter
 p5-File-HomeDir-[v]	Recupera ubicación de directorio hogar
+p5-FCGI-[v]
 p5-File-Listing-[v]	Reconoce listados de directorios
 p5-File-Which-[v]	Implementación portable de 'which'
 p5-FreezeThaw-[v]	Convierte estructuras a cadena y viceversa
@@ -670,6 +675,7 @@ py3-cryptography-[v]	Recetas y primitivas criptográficas en Python
 py3-cryptodome-[v]	Librería criptográfica autocontenida para Python
 py3-dateutil-[v]	API en python avanzado para cálculos con fechas
 py3-dbus-[v]		Uniones para dbus en Python 3
+py3-distro-[v]		
 py3-gdal-[v]		Interfaz con GDAL desde Python 3
 py3-gobject3-[v]	Uniones Python para GLib y GObject
 py3-jinja2-[v]		Motor de plantilla para Python, rápido y en arenera
