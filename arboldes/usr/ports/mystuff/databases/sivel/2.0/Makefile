@@ -2,8 +2,8 @@
 
 # Port in the public domain.
 
-VERSION=2.0b9
-#REVISION=1
+VERSION=2.0b10
+#REVISION=0
 DISTNAME=v${VERSION}
 PKGNAME=sivel-v${VERSION}
 

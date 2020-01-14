@@ -3,7 +3,7 @@ Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
 
 ### Versión: 6.5p1
-Fecha de publicación: 15/Oct/2019
+Fecha de publicación: 10/Ene/2020
 
 Puede ver novedades respecto a OpenBSD en:
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_5/Novedades_OpenBSD.md>
@@ -13,8 +13,8 @@ Puede ver novedades respecto a OpenBSD en:
 Puede ver las diversas versiones publicadas en: 
   <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/>
 
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-6.5-amd64.iso> es imagen en formato ISO para quemar en DVD e instalar por primera vez.
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/6.5-amd64/> es directorio con el contenido del DVD instalador apropiado para descargar con rsync y actualizar un adJ ya instalado (ver  <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_5/Actualiza.md> )
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-6.5p1-amd64.iso> es imagen en formato ISO para quemar en DVD e instalar por primera vez.
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/6.5p1-amd64/> es directorio con el contenido del DVD instalador apropiado para descargar con rsync y actualizar un adJ ya instalado (ver  <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_5/Actualiza.md> )
 * <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/6.5-extra/> es directorio con versiones recientes de paquetes no incluidos en distribución oficial (pueden no estar firmados y requerir instalación con `pkg_add -D unsigned _paquete_`).
 
 
@@ -22,7 +22,7 @@ Puede ver las diversas versiones publicadas en:
 
 ### 2.1 Kernel y Sistema Base
 
-* Aplicados parches de seguridad hasta el 14.Sep.2019 provenientes de 
+* Aplicados parches de seguridad hasta el 3.Ene.2020 provenientes de 
   OpenBSD que incluyen mitigación a vulnerabilidades en CPU.
 * Controladores ampliados o mejorados para amd64
 	* Red:
@@ -69,14 +69,15 @@ Puede ver las diversas versiones publicadas en:
 * Entre los paquetes retirados resaltamos `abiword`, `texlive_texmf_minimal`, 
   `gcc` y `GeoIP`
 * Recompilados portes estables más recientes para evitar fallas de seguridad: 
-   `cups`, `curl`, `cups`, `dovecot`, `gvfs`, `libgcrypt`, `mpg123`, 
+   `cups`, `curl`, `cups`, `dovecot`, `gvfs`, `libgcrypt`, `mpg123`, `php-7.1`
    `webkitgtk4`
-* Postgresql 11.5 retroportado de current (en adJ soporta bien cotejaciones en español)
-* Ruby 2.6.4 retroportado de current  (incluye retroporte para Ruby 2.7 
+* Postgresql 11.6 retroportado de 6.6 (en adJ soporta bien cotejaciones en español)
+* nginx 1.16.1 retroportado de 6.6
+* Ruby 2.6.5 retroportado de 6.6. A su vez incluye retroporte para Ruby 2.7 
   de solución de Jeremy Evans a falla con `realpath` para permitir usar 
   `unveil` y de hecho hay 2 gemas que lo usan: 
   <https://github.com/jcs/ruby-unveil> y 
-  <https://github.com/jeremyevans/ruby-pledge>)
+  <https://github.com/jeremyevans/ruby-pledge>.
 * Ocaml fue actualizado a la versión 4.0.7 que renombra la librería
   `pervasives` por `stdlib` y que separa `String` de `Bytes` siendo 
    mutable sólo el segundo. `Bytes` ofrece las funciones `Bytes.to_string` y 
@@ -105,7 +106,8 @@ Puede ver las diversas versiones publicadas en:
   `SpamAssassin` y al igual que otros de perl se recompilaron (sin cambiar 
   de versión) con el perl de adJ que si soporta `LC_NUMERIC`.  
 * Retroportados y adaptados de OpenBSD-current: 
-* `chromium` 75.0.3770 con llave de Pasos de Jesús retroportado de OpenBSD-current.
+* `chromium` 75.0.3770 con llave de Pasos de Jesús retroportado de 
+  OpenBSD-6.6.
 * Paquete obsoleto php-5.6.40: OpenBSD ya no incluye porte para php-5.6.40. 
   Incluimos el que había en adJ 6.4 pero es una versión obsoleta, sin 
   soporte, que puede tener fallas de seguridad como se explica en 
@@ -117,7 +119,7 @@ Puede ver las diversas versiones publicadas en:
   mantienen versiones obsoletas de paquetes de `pear` que ya no están en 
   OpenBSD como `pear-MDB2` y `pear-DB`.
   Es indispensable el transito a SIVeL 2 porque en futuras versiones de adJ 
-  buscaremos no incluir `php-5.6` ni `pear`.
+  no incluiremos `php-5.6` ni `pear`.
   Además `php-5.6` tuvo que parcharse masivamente para que operara con 
   el nuevo `icu4c`.
   Para que opere SIVeL 1.2 en esta versión inst-adJ.sh configurará por omisión 
@@ -138,21 +140,25 @@ Puede ver las diversas versiones publicadas en:
 	*  `markup`,  `repasa` y `sigue` (fueron modificados para emplear 
 	   las nuevas convenciones de Ocaml 4.0.7), pero estamos considerando
 	   retirarlos en un próxima versión de adJ por no conocer usuarios.
-* Se incluye beta 9 de `sivel2` cuyas novedades respecto al beta 8 son:
-	* Se implementó el Consolidado de Víctimas que ahora se llama Listado de víctimas y casos. 
-	* Inicio del reporte revista, se ve desde el listado de casos, presionando Búsqueda avanzada, en la parte inferior del filtro Generar plantilla elegir Reporte Revista HTML y presionar el botón Generar. 
-	* Se hizo actualización del DIVIPOLA a la versión oficial del 2018. Resumen ejecutivo en: https://github.com/pasosdeJesus/sivel2/wiki/Resumen-ejecutivo-de-la-actualizaci%C3%B3n-a-DIVIPOLA-2018
-	* Mejoras al manual de usuario y la documentación técnica (e particular en sip, ver https://github.com/pasosdeJesus/sip/blob/master/doc/README.md D-86)
-	* Ahora al elegir una ubicación se puede especificar si es la principal. Cada cada caso debe tener sólo una ubicación principal que debe corresponder al sitio donde ocurrieron los hechos, y en el inusual situación de haber varios sitios, uno emblemático debe marcarse como principal y será el usado en conteos de victimizaciones. Los datos existentes se actualizan poniendo por omisión la primera ubicación como la principal. Agradecimientos a Miguel Kanai por retroalimentación para este cambio. (R-87)
-	* Conteo de victimizaciones individuales desde el menú Reportes y Conteos. 
-	* Reporte general para un caso que se presenta tras guardar y validar caso. 
-	* Se han implementado 12 de las 21 validaciones de SIVeL 1.2. 
-	* Se implementó una nueva validación que no había en SIVeL 1.2: Nombres de víctimas colectivas muy cortos 
-	* Se implementó detector de casos repetidos desde el menú Casos→Buscar repetidos. 
-	* Se actualizaron las fuentes de SIVeL 2 y sus motores a Rails 6
-	* Se actualizaron y habilitaron las pruebas con minitest a módulos y controladores (88 aserciones en sivel2_gen) y del sistema (13 aserciones en sivel2).
-	* Se mejoró la suit de pruebas para sideex (Blanca). Consta de 115 casos de prueba.
-	* Se resolvieron diversas fallas (e.g F-13, F-90, F-89)
+* Se incluye beta 10 de `sivel2` cuyas novedades principales respecto al beta 8 son:
+	* Más reportes y conteos: Listado de víctimas y casosi,  Reporte revista, Conteo de victimizaciones individuales, Reporte General.
+	* Actualización del DIVIPOLA a la versión oficial del 2018. Ver cambios buscando 2018 en campo Observaciones de Municipios y Centros Poblados. Resumen ejecutivo en: https://github.com/pasosdeJesus/sivel2/wiki/Resumen-ejecutivo-de-la-actualizaci%C3%B3n-a-DIVIPOLA-2018
+	* Ahora al elegir una ubicación se puede especificar si es la principal.
+	* Se han implementado 12 de las 21 validaciones de SIVeL 1.2 y otra nueva, así como detector de casos repetidos.
+	* Mapa de casos sobre OpenStretMap con filtro, acumulados de casos 
+	(clusters) y nuevas posibilidades con capas: elegir capa base, 
+	superponer una capa con transparencias, cargar pequeñas capas 
+	GeoJSON y de exportar la capa de casos en GeoJSON.  Ver pantallazos 
+	en <https://github.com/pasosdeJesus/sivel2_gen/blob/master/doc/mapas.md>
+	* Exportación  de casos a a JSON y XRLAT (XML)
+	* Se moderniza la interfaz de 3 formas: (1) haciendola más adaptable 
+	  a dispositivos móviles (siguiendo lineamientos de diseño visual de 
+	  twitter y su librería Bootstrap 4), (2) permitiendo personalizar el 
+	  color de más elementos visuales mediante temas y (3) posibilitando 
+	  el uso de librerías javascript más recientes. Ver 
+	  https://github.com/pasosdeJesus/sip/wiki/Actualizaci%C3%B3n-de-sip-2.0b6-a-sip-2.0b7 
+	* Temas con colores para bastantes elementos de la interfaz.
+	* Resueltas fallas y pruebas de regresión mejoradas y ampliadas.
 
 * Incluye SIVeL 1.2.8 que es última versión de la serie 1.2 y cuyas novedades son:
 	* Al validar incluye entre los casos vacios los que tengan memo de 

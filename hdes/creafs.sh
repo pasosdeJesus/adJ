@@ -9,17 +9,12 @@ if (test ! -d $V$VESP-$ARQ) then {
 	exit 1;
 } fi;
 im=/usr/src/distrib/amd64/iso/obj/install${VP}.fs
+imdest=AprendienDoJesus-{VP}${VESP}-amd64.usb 
 if (test ! -f $im ) then {
 	echo "Intentando crear $im"
-	doas rm -rf /home/rel-amd64 /home/relx-amd64
-	doas mkdir -p /home/rel-amd64 /home/relx-amd64
-	cmd="doas cp $V$VESP-$ARQ/{INSTALL.amd64,SHA256,base$VP.tgz,bsd,bsd.mp,bsd.rd,cdboot,cdbr,comp$VP.tgz,game$VP.tgz,man$VP.tgz} /home/rel-amd64/"
-	echo "$cmd"
-	eval "$cmd"
-	cmd="doas cp $V$VESP-$ARQ/{xbase$VP.tgz,xfont$VP.tgz,xshare$VP.tgz,xserv$VP.tgz} /home/relx-amd64/"
-	echo "$cmd"
-	eval "$cmd"
-	touch /home/relx-amd64/SHA256
+	export RELDIR=$RELEASEDIR
+	export RELXDIR=$RELEASEDIR
+	cp $V$VESP-amd64/SHA256 $RELEASEDIR
 	(cd /usr/src/distrib/amd64/iso; make)
 	if (test ! -f $im ) then {
 		echo "No pudo crearse $im";
@@ -38,22 +33,23 @@ function ej {
 	return $vr
 }
 
-if (test ! -f adJ${VP}${VESP}.fs) then {
-	if (test ! -f blanco) then {
-		ej "dd of=blanco bs=1M seek=4900 count=0"
-	} else {
-		echo 'Archivo blanco existente, saltando creacion'
-	} fi;
-	ej "cat $im blanco > adJ${VP}${VESP}.fs"
-} else {
-	echo "Archivo adJ${VP}${VESP}.fs existente, saltando creacion"
+if (test -f $imdest) then {
+	echo "Archivo $imdest ya existe, cancele con Control-C o continue con ENTER para sobreescribirlo"
+	read
 } fi;
+if (test ! -f blanco) then {
+	ej "dd of=blanco bs=1M seek=4900 count=0"
+} else {
+	echo 'Archivo blanco existente, saltando creacion'
+} fi;
+ej "cat $im blanco > $imdest
+
 ej "doas vnconfig -l | grep 'vnd0: not in use' > /dev/null 2>&1"
 if (test "$?" != "0") then {
 	echo "vnd0 ocupado, no se puede continuar";
 	exit 1;
 } fi;
-ej "doas vnconfig vnd0 adJ${VP}${VESP}.fs"
+ej "doas vnconfig vnd0 $imdest
 ej "doas fdisk -i -b 10000 -y /dev/rvnd0c"
 # adJ64  fdisk: 1> p
 #Disk: /dev/rvnd0c       geometry: 107734/1/100 [10773440 Sectors]
@@ -90,7 +86,7 @@ ej "doas disklabel /dev/vnd0c"
 #  i:            10000               64   MSDOS              
 
 # /dev/rvnd0c> p
-OpenBSD area: 1024-737280; size: 736256; free: 0
+# OpenBSD area: 1024-737280; size: 736256; free: 0
 # adJ64           size           offset  fstype [fsize bsize   cpg]
 # a:           736256             1024  4.2BSD   2048 16384 16142 
 # c:         10773440                0  unused                    
@@ -112,6 +108,7 @@ ej "doas cp -rf $V$VESP-$ARQ/* /mnt/tmp/"
 ej "doas mkdir -p /mnt/tmp/usr/mdec"
 ej "doas cp -f /usr/mdec/biosboot /mnt/tmp/usr/mdec"
 ej "doas cp -f /usr/mdec/boot /mnt/tmp/boot"
+ej "doas cp -f /usr/mdec/boot /mnt/tmp/usr/mdec/boot"
 ej "doas cp -f $V$VESP-$ARQ/BOOTIA32.EFI /mnt/tmp/usr/mdec"
 ej "doas cp -f $V$VESP-$ARQ/BOOTX64.EFI /mnt/tmp/usr/mdec"
 
