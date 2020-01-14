@@ -3,7 +3,7 @@ Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
 
 ### Versión: 6.5p1
-Fecha de publicación: 10/Ene/2020
+Fecha de publicación: 14/Ene/2020
 
 Puede ver novedades respecto a OpenBSD en:
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_5/Novedades_OpenBSD.md>
@@ -96,6 +96,19 @@ Puede ver las diversas versiones publicadas en:
   ISO8859-1 ni UTF-8, que no son soportadas en tiempo de instalación 
   para mantener un instalador pequeño.
 * Documentación actualizada: `basico_adJ`, `usuario_adJ` y `servidor_adJ`
+* Como medio de instalación además de la imagen para quemar en CD-ROM 
+  (`AprendiendoDeJesus-6.5p1-amd64.iso`) ahora se distribuye una
+  imagen que se puede escribir en una memoria USB y arrancar con
+  esta (`AprendiendoDeJesus-6.5p1-amd64.usb`). Una vez la descargue puede
+  escribirla en una USB ubicada en `/dev/sd2c` (remplace ese dispositivo
+  por el de su USB una vez lo verifique con `dmesg`):
+
+ 	doas dd if=adJ65p1.fs of=/dev/sd2c bs=1M
+
+ O si desea probarla con qemu para instalar en un disco virtual.raw:
+
+  	qemu-system-x86_64 -hda virtual.raw -hdb AprendiendoDeJesus-65p1-amd64.usb -boot menu=on
+
 
 ### 3.2 Paquetes
 
