@@ -2,20 +2,20 @@
 Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
 
-### Versión: 6.5p1
+### Versión: 6.6b1
 Fecha de publicación: 15/Oct/2019
 
 Puede ver novedades respecto a OpenBSD en:
-  <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_5/Novedades_OpenBSD.md>
+  <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_6/Novedades_OpenBSD.md>
 
 ## 1. DESCARGAS
 
 Puede ver las diversas versiones publicadas en: 
   <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/>
 
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-6.5-amd64.iso> es imagen en formato ISO para quemar en DVD e instalar por primera vez.
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/6.5-amd64/> es directorio con el contenido del DVD instalador apropiado para descargar con rsync y actualizar un adJ ya instalado (ver  <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_5/Actualiza.md> )
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/6.5-extra/> es directorio con versiones recientes de paquetes no incluidos en distribución oficial (pueden no estar firmados y requerir instalación con `pkg_add -D unsigned _paquete_`).
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-6.6b1-amd64.iso> es imagen en formato ISO para quemar en DVD e instalar por primera vez.
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/6.6b1-amd64/> es directorio con el contenido del DVD instalador apropiado para descargar con rsync y actualizar un adJ ya instalado (ver  <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_6/Actualiza.md> )
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/6.6-extra/> es directorio con versiones recientes de paquetes no incluidos en distribución oficial (pueden no estar firmados y requerir instalación con `pkg_add -D unsigned _paquete_`).
 
 
 ## 2. NOVEDADES RESPECTO A ADJ 6.4 PROVENIENTES DE OPENBSD
@@ -130,7 +130,7 @@ Puede ver las diversas versiones publicadas en:
   php 7 en otro directorio (el paquete de php-7.1 se ha modificado para 
   facilitarlo).
   Otras extensiones no incluidas como de costumbre se dejan en el sitio de 
-  distribución en el directorio extra-6.5
+  distribución en el directorio extra-6.6
 * Para minar monero se remplaza `xmr-stak` por `xmrig` 	
 * Se parchan y compilan portes más recientes de:
 	* `sword` (que ahora emplea `clang` e `icu` recientes),

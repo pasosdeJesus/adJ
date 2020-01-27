@@ -1,20 +1,20 @@
 COMO PUBLICAR
 =============
 
-Anhelamos publicar versión mayor (e.g 6.5) 3 meses después de OpenBSD:
+Anhelamos publicar versión mayor (e.g 6.6) 3 meses después de OpenBSD:
 
 	11.Ene
 	1.Jul
 
-También publicamos revisiones (e.g 6.5p1) si la seguridad o calidad lo ameritan.
+También publicamos revisiones (e.g 6.6p1) si la seguridad o calidad lo ameritan.
 
-Anhelamos publicar al menos una versión beta (e.g 6.5 en directorio
+Anhelamos publicar al menos una versión beta (e.g 6.6 en directorio
 `desarrollo` del sitio de distribución) en:
 
 	10.Dic
 	10.Jun
 
-Sería ideal publicar una versión alfa mucho antes (24.Sep y 24.Mar, e.g 6.5a1).
+Sería ideal publicar una versión alfa mucho antes (24.Sep y 24.Mar, e.g 6.6a1).
 
 
 Pasos importantes para publicar versión beta
