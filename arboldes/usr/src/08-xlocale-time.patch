@@ -1,7 +1,7 @@
 diff -ruN src62-orig/lib/libc/time/strftime_l.c src/lib/libc/time/strftime_l.c
 --- src62-orig/lib/libc/time/strftime_l.c 	Mon Sep  4 22:16:14 2017
 +++ src/lib/libc/time/strftime_l.c	Tue Dec  5 21:27:19 2017
-@@ -3,12 +3,536 @@
+@@ -3,12 +3,499 @@
   * Written in 2017 by Ingo Schwarze <schwarze@openbsd.org>.
   * Released into the public domain.
   */
@@ -402,12 +402,9 @@ diff -ruN src62-orig/lib/libc/time/strftime_l.c src/lib/libc/time/strftime_l.c
 +					pt, ptlim);
 +				continue;
 +			case 'Z':
-+#ifdef TM_ZONE
-+				if (t->TM_ZONE != NULL)
-+					pt = _add(t->TM_ZONE, pt, ptlim);
-+				else
-+#endif /* defined TM_ZONE */
-+				if (t->tm_isdst >= 0)
++				if (t->tm_zone != NULL)
++					pt = _add(t->tm_zone, pt, ptlim);
++				else if (t->tm_isdst >= 0)
 +					pt = _add(tzname[t->tm_isdst != 0],
 +						pt, ptlim);
 +				/*
@@ -423,41 +420,7 @@ diff -ruN src62-orig/lib/libc/time/strftime_l.c src/lib/libc/time/strftime_l.c
 +
 +				if (t->tm_isdst < 0)
 +					continue;
-+#ifdef TM_GMTOFF
-+				diff = t->TM_GMTOFF;
-+#else /* !defined TM_GMTOFF */
-+				/*
-+				** C99 says that the UTC offset must
-+				** be computed by looking only at
-+				** tm_isdst. This requirement is
-+				** incorrect, since it means the code
-+				** must rely on magic (in this case
-+				** altzone and timezone), and the
-+				** magic might not have the correct
-+				** offset. Doing things correctly is
-+				** tricky and requires disobeying C99;
-+				** see GNU C strftime for details.
-+				** For now, punt and conform to the
-+				** standard, even though it's incorrect.
-+				**
-+				** C99 says that %z must be replaced by the
-+				** empty string if the time zone is not
-+				** determinable, so output nothing if the
-+				** appropriate variables are not available.
-+				*/
-+				if (t->tm_isdst == 0)
-+#ifdef USG_COMPAT
-+					diff = -timezone;
-+#else /* !defined USG_COMPAT */
-+					continue;
-+#endif /* !defined USG_COMPAT */
-+				else
-+#ifdef ALTZONE
-+					diff = -altzone;
-+#else /* !defined ALTZONE */
-+					continue;
-+#endif /* !defined ALTZONE */
-+#endif /* !defined TM_GMTOFF */
++				diff = t->tm_gmtoff;
 +				if (diff < 0) {
 +					sign = "-";
 +					diff = -diff;
@@ -545,49 +508,21 @@ diff -ruN src62-orig/lib/libc/time/strftime_l.c src/lib/libc/time/strftime_l.c
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strftime.c src/lib/libc/time/strftime.c
 --- src54-x6/lib/libc/time/strftime.c	Sat Feb  9 14:26:54 2013
 +++ src/lib/libc/time/strftime.c	Tue Dec  3 16:12:45 2013
-@@ -1,528 +1,14 @@
- /*	$OpenBSD: strftime.c,v 1.30 2016/09/21 04:38:57 guenther Exp $ */
--/*
--** Copyright (c) 1989, 1993
--**	The Regents of the University of California.  All rights reserved.
--**
--** Redistribution and use in source and binary forms, with or without
--** modification, are permitted provided that the following conditions
--** are met:
--** 1. Redistributions of source code must retain the above copyright
--**    notice, this list of conditions and the following disclaimer.
--** 2. Redistributions in binary form must reproduce the above copyright
--**    notice, this list of conditions and the following disclaimer in the
--**    documentation and/or other materials provided with the distribution.
--** 3. Neither the name of the University nor the names of its contributors
--**    may be used to endorse or promote products derived from this software
--**    without specific prior written permission.
--**
--** THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
--** ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
--** IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
--** ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
--** FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
--** DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
--** OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
--** HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
--** LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
--** OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
--** SUCH DAMAGE.
--*/
+@@ -29,463 +29,15 @@
+ */
  
-+#include <time.h>
-+#include <xlocale.h>
  
 -#include <fcntl.h>
 -#include <locale.h>
 -#include <stdio.h>
-+#include "locale/xlocale_private.h"
++#include <time.h>
++#include <xlocale.h>
  
 -#include "localedef.h"
 -#include "private.h"
 -#include "tzfile.h"
--
++#include "locale/xlocale_private.h"
+ 
 -static char *	_add(const char *, char *, const char *);
 -static char *	_conv(int, const char *, char *, const char *);
 -static char *	_fmt(const char *, const struct tm *, char *, const char *,
@@ -940,12 +875,9 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strftime
 -					pt, ptlim);
 -				continue;
 -			case 'Z':
--#ifdef TM_ZONE
--				if (t->TM_ZONE != NULL)
--					pt = _add(t->TM_ZONE, pt, ptlim);
--				else
--#endif /* defined TM_ZONE */
--				if (t->tm_isdst >= 0)
+-				if (t->tm_zone != NULL)
+-					pt = _add(t->tm_zone, pt, ptlim);
+-				else if (t->tm_isdst >= 0)
 -					pt = _add(tzname[t->tm_isdst != 0],
 -						pt, ptlim);
 -				/*
@@ -961,41 +893,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strftime
 -
 -				if (t->tm_isdst < 0)
 -					continue;
--#ifdef TM_GMTOFF
--				diff = t->TM_GMTOFF;
--#else /* !defined TM_GMTOFF */
--				/*
--				** C99 says that the UTC offset must
--				** be computed by looking only at
--				** tm_isdst. This requirement is
--				** incorrect, since it means the code
--				** must rely on magic (in this case
--				** altzone and timezone), and the
--				** magic might not have the correct
--				** offset. Doing things correctly is
--				** tricky and requires disobeying C99;
--				** see GNU C strftime for details.
--				** For now, punt and conform to the
--				** standard, even though it's incorrect.
--				**
--				** C99 says that %z must be replaced by the
--				** empty string if the time zone is not
--				** determinable, so output nothing if the
--				** appropriate variables are not available.
--				*/
--				if (t->tm_isdst == 0)
--#ifdef USG_COMPAT
--					diff = -timezone;
--#else /* !defined USG_COMPAT */
--					continue;
--#endif /* !defined USG_COMPAT */
--				else
--#ifdef ALTZONE
--					diff = -altzone;
--#else /* !defined ALTZONE */
--					continue;
--#endif /* !defined ALTZONE */
--#endif /* !defined TM_GMTOFF */
+-				diff = t->tm_gmtoff;
 -				if (diff < 0) {
 -					sign = "-";
 -					diff = -diff;
@@ -1267,34 +1165,33 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
  			continue;
  
  		case 'V':	/* The ISO 8601:1988 week number as decimal */
-@@ -435,7 +445,7 @@
+@@ -427,7 +437,7 @@
  			} else {
  				ep = _find_string(bp, &i,
- 					       	 (const char * const *)tzname,
--					       	  NULL, 2);
-+					       	  NULL, 2, loc);
+ 						 (const char * const *)tzname,
+-						  NULL, 2);
++						  NULL, 2, loc);
  				if (ep == NULL)
  					return (NULL);
  
-@@ -468,7 +478,7 @@
- 			 * [A-IL-M] = -1 ... -9 (J not used)
- 			 * [N-Y]  = +1 ... +12
+@@ -453,7 +463,7 @@
+ 			 * M[DS]T = Mountain: -6 | -7
+ 			 * P[DS]T = Pacific : -7 | -8
  			 */
 -			while (isspace(*bp))
 +			while (isspace_l(*bp, loc))
  				bp++;
  
  			switch (*bp++) {
-@@ -497,7 +507,7 @@
+@@ -478,14 +488,14 @@
  				break;
  			default:
  				--bp;
 -				ep = _find_string(bp, &i, nast, NULL, 4);
 +				ep = _find_string(bp, &i, nast, NULL, 4, loc);
  				if (ep != NULL) {
- #ifdef TM_GMTOFF
- 					tm->TM_GMTOFF = -5 - i;
-@@ -508,7 +518,7 @@
+ 					tm->tm_gmtoff = (-5 - i) * SECSPERHOUR;
+ 					tm->tm_zone = (char *)nast[i];
  					bp = ep;
  					continue;
  				}
@@ -1302,17 +1199,27 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
 +				ep = _find_string(bp, &i, nadt, NULL, 4, loc);
  				if (ep != NULL) {
  					tm->tm_isdst = 1;
- #ifdef TM_GMTOFF
-@@ -543,7 +553,7 @@
+ 					tm->tm_gmtoff = (-4 - i) * SECSPERHOUR;
+@@ -495,15 +505,15 @@
+ 				}
+ 				return NULL;
  			}
- 			offs = 0;
- 			for (i = 0; i < 4; ) {
--				if (isdigit(*bp)) {
-+				if (isdigit_l(*bp, loc)) {
- 					offs = offs * 10 + (*bp++ - '0');
- 					i++;
- 					continue;
-@@ -585,7 +595,7 @@
+-			if (!isdigit(bp[0]) || !isdigit(bp[1]))
++			if (!isdigit_l(bp[0], loc) || !isdigit_l(bp[1], loc))
+ 				return NULL;
+ 			offs = ((bp[0]-'0') * 10 + (bp[1]-'0')) * SECSPERHOUR;
+ 			bp += 2;
+ 			if (*bp == ':')
+ 				bp++;
+-			if (isdigit(*bp)) {
++			if (isdigit_l(*bp, loc)) {
+ 				offs += (*bp++ - '0') * 10 * SECSPERMIN;
+-				if (!isdigit(*bp))
++				if (!isdigit_l(*bp, loc))
+ 					return NULL;
+ 				offs += (*bp++ - '0') * SECSPERMIN;
+ 			}
+@@ -520,7 +530,7 @@
  		case 'n':	/* Any kind of white-space. */
  		case 't':
  			_LEGAL_ALT(0);
@@ -1321,7 +1228,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
  				bp++;
  			break;
  
-@@ -699,7 +709,7 @@
+@@ -634,7 +644,7 @@
  
  static const u_char *
  _find_string(const u_char *bp, int *tgt, const char * const *n1,
@@ -1330,7 +1237,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
  {
  	int i;
  	unsigned int len;
-@@ -708,7 +718,7 @@
+@@ -643,7 +653,7 @@
  	for (; n1 != NULL; n1 = n2, n2 = NULL) {
  		for (i = 0; i < c; i++, n1++) {
  			len = strlen(*n1);
@@ -1871,14 +1778,15 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
  .Fa buf
  according to the specified
  .Fa format
-@@ -66,7 +72,13 @@
- The
- .Dv LC_TIME
- category defines the locale values for the conversion
--specifications.
-+specifications. The function
+@@ -65,6 +71,15 @@
+ There must be whitespace or other
+ non-alphanumeric characters between any two conversion specifications.
+ .Pp
++The function
 +.Fn strptime
-+uses the current locale, while
++uses the current locale and its cateogry 
++.Dv LC_TIME
++while 
 +.Fn strptime_l
 +uses the locale received as last parameter, see
 +.Xr xlocale 3
@@ -1886,7 +1794,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
  The following conversion specifications are supported:
  .Bl -tag -width "xxxx"
  .It Cm \&%a
-@@ -290,6 +302,7 @@
+@@ -289,6 +304,7 @@
  .Sh SEE ALSO
  .Xr mktime 3 ,
  .Xr strftime 3
