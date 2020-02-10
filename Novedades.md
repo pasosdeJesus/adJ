@@ -99,11 +99,13 @@ Puede ver las diversas versiones publicadas en:
 * Como medio de instalación además de la imagen para quemar en CD-ROM 
   (`AprendiendoDeJesus-6.5p1-amd64.iso`) ahora se distribuye una
   imagen que se puede escribir en una memoria USB y arrancar con
-  esta (`AprendiendoDeJesus-6.5p1-amd64.usb`). Una vez la descargue puede
-  escribirla en una USB ubicada en `/dev/sd2c` (remplace ese dispositivo
-  por el de su USB una vez lo verifique con `dmesg`):
+  esta 
+	<http://adj.pasosdejesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-6.5p1-amd64.usb> 
+  Una vez la descargue puede escribirla en una USB ubicada en `/dev/sd2c` 
+  (remplace ese dispositivo por el de su USB una vez lo verifique con 
+  `dmesg`):
 
- 	doas dd if=adJ65p1.fs of=/dev/sd2c bs=1M
+ 	doas dd if=AprendiendoDeJesus-6.5p1-amd64.usb of=/dev/sd2c bs=1M
 
  O si desea probarla con qemu para instalar en un disco virtual.raw:
 
