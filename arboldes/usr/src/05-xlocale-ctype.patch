@@ -2356,7 +2356,7 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/stdio/wsca
  .Sh DESCRIPTION
  The
  .Fn wscanf
-@@ -72,34 +92,55 @@
+@@ -72,34 +92,54 @@
  the results of such conversions, if any, are stored through a set of pointer
  arguments.
  .Pp
@@ -2368,20 +2368,23 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/stdio/wsca
 +.Pp
  The
  .Fn wscanf
+-function reads input from the standard input stream
 +and
 +.Fn wscanf_l
- function reads input from the standard input stream
++functions read input from the standard input stream
  .Em stdin ,
  .Fn fwscanf
+-reads input from the supplied stream pointer
 +and
 +.Fn fwscanf_l
- reads input from the supplied stream pointer
++read input from the supplied stream pointer
  .Fa stream ,
--and
+ and
  .Fn swscanf
+-reads its input from the wide character string pointed to by
 +and
 +.Fn swscanf_l
- reads its input from the wide character string pointed to by
++read their input from the wide character string pointed to by
  .Fa str .
  .Pp
  The
@@ -2392,18 +2395,16 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/stdio/wsca
 +functions are analogous to
  .Xr vfwprintf 3
 -and reads input from the stream pointer
-+and
-+.Xr vfwprintf_l 3
 +and read input from the stream pointer
  .Fa stream
  using a variable argument list of pointers (see
- .Xr stdarg 3 ) .
+ .Xr va_start 3 ) .
  The
  .Fn vwscanf
 -function scans a variable argument list from the standard input and the
 +and
 +.Fn vwscanf_l
-+functions scan a variable argument list from the standard input and the
++function scan a variable argument list from the standard input and the
  .Fn vswscanf
 -function scans it from a wide character string; these are analogous to the
 -.Fn vwprintf
@@ -2411,14 +2412,14 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/stdio/wsca
 +.Fn vswscanf_l
 +functions scan it from a wide character string; these are analogous to the
 +.Fn vwprintf ,
-+.Fn vwprintf_l ,
++.Fn vwprintf_l
  .Fn vswprintf
 +and
 +.Fn vswprintf_l
  functions, respectively.
  .Pp
  Each successive
-@@ -389,6 +430,11 @@
+@@ -389,6 +429,11 @@
  flag.
  .El
  .Pp
@@ -2430,7 +2431,7 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/stdio/wsca
  For backwards compatibility, a
  .Dq conversion
  of
-@@ -417,6 +463,8 @@
+@@ -417,6 +462,8 @@
  .Xr wcstol 3 ,
  .Xr wcstoul 3 ,
  .Xr wprintf 3
@@ -2439,7 +2440,7 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/stdio/wsca
  .Sh STANDARDS
  The functions
  .Fn wscanf ,
-@@ -428,15 +476,15 @@
+@@ -428,15 +475,15 @@
  .Fn vswscanf
  conform to
  .St -isoC-99 .

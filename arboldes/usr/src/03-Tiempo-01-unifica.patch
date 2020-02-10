@@ -22,9 +22,9 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/locale/_def
  };
  
  const _TimeLocale *_CurrentTimeLocale = &_DefaultTimeLocale;
-diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/strftime.c src/lib/libc/time/strftime.c
---- src56-orig/lib/libc/time/strftime.c	Thu Sep 13 06:14:20 2012
-+++ src/lib/libc/time/strftime.c	Fri Apr 25 10:16:20 2014
+diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src66-orig/lib/libc/time/strftime.c src/lib/libc/time/strftime.c
+--- src66-orig/lib/libc/time/strftime.c	Sun Dec 29 09:54:47 2019
++++ src/lib/libc/time/strftime.c	Sat Feb  1 05:13:14 2020
 @@ -28,82 +28,15 @@
  ** SUCH DAMAGE.
  */
@@ -195,7 +195,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/strfti
  				if (warn2 == IN_ALL)
  					warn2 = IN_THIS;
  				if (warn2 > *warnp)
-@@ -524,7 +454,7 @@
+@@ -487,7 +417,7 @@
  				}
  				continue;
  			case '+':
@@ -204,7 +204,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/strfti
  					warnp);
  				continue;
  			case '%':
-@@ -596,134 +526,3 @@
+@@ -559,134 +489,3 @@
  	return pt;
  }
  
@@ -263,7 +263,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/strfti
 -	if (len < 0 || len >= sizeof filename)
 -		goto no_locale;
 -	fd = open(filename, O_RDONLY);
--	if (fd < 0) {
+-	if (fd == -1) {
 -		/*
 -		** Old Sun systems have a different naming and data convention.
 -		*/
@@ -273,10 +273,10 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/strfti
 -		if (len < 0 || len >= sizeof filename)
 -			goto no_locale;
 -		fd = open(filename, O_RDONLY);
--		if (fd < 0)
+-		if (fd  == -1)
 -			goto no_locale;
 -	}
--	if (fstat(fd, &st) != 0)
+-	if (fstat(fd, &st) == -1)
 -		goto bad_locale;
 -	if (st.st_size <= 0)
 -		goto bad_locale;

@@ -3,7 +3,11 @@ Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
 
 ### Versión: 6.6b1
+<<<<<<< HEAD
+Fecha de publicación: 15/Oct/2019
+=======
 Fecha de publicación: 12/Jun/2019
+>>>>>>> 98406d62f1057081386684bb6d04368a20731d38
 
 Puede ver novedades respecto a OpenBSD en:
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_6/Novedades_OpenBSD.md>
@@ -13,8 +17,13 @@ Puede ver novedades respecto a OpenBSD en:
 Puede ver las diversas versiones publicadas en: 
   <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/>
 
+<<<<<<< HEAD
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-6.6b1-amd64.iso> es imagen en formato ISO para quemar en DVD e instalar por primera vez.
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/6.6b1-amd64/> es directorio con el contenido del DVD instalador apropiado para descargar con rsync y actualizar un adJ ya instalado (ver  <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_6/Actualiza.md> )
+=======
 * <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/AprendiendoDeJesus-6.6b1-amd64.iso> es imagen en formato ISO para quemar en DVD e instalar por primera vez.
 * <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/6.6b1-amd64/> es directorio con el contenido del DVD instalador apropiado para descargar con rsync y actualizar un adJ ya instalado (ver  <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_6/Actualiza.md> )
+>>>>>>> 98406d62f1057081386684bb6d04368a20731d38
 * <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/6.6-extra/> es directorio con versiones recientes de paquetes no incluidos en distribución oficial (pueden no estar firmados y requerir instalación con `pkg_add -D unsigned _paquete_`).
 
 
@@ -142,7 +151,7 @@ Puede ver las diversas versiones publicadas en:
   php 7 en otro directorio (el paquete de php-7.1 se ha modificado para 
   facilitarlo).
   Otras extensiones no incluidas como de costumbre se dejan en el sitio de 
-  distribución en el directorio extra-6.5
+  distribución en el directorio extra-6.6
 * Para minar monero se remplaza `xmr-stak` por `xmrig` 	
 * Se parchan y compilan portes más recientes de:
 	* `sword` (que ahora emplea `clang` e `icu` recientes),

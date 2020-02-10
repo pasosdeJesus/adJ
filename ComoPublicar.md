@@ -1,20 +1,20 @@
 COMO PUBLICAR
 =============
 
-Anhelamos publicar versión mayor (e.g 6.5) 3 meses después de OpenBSD:
+Anhelamos publicar versión mayor (e.g 6.6) 3 meses después de OpenBSD:
 
 	11.Ene
 	1.Jul
 
-También publicamos revisiones (e.g 6.5p1) si la seguridad o calidad lo ameritan.
+También publicamos revisiones (e.g 6.6p1) si la seguridad o calidad lo ameritan.
 
-Anhelamos publicar al menos una versión beta (e.g 6.5 en directorio
+Anhelamos publicar al menos una versión beta (e.g 6.6 en directorio
 `desarrollo` del sitio de distribución) en:
 
 	10.Dic
 	10.Jun
 
-Sería ideal publicar una versión alfa mucho antes (24.Sep y 24.Mar, e.g 6.5a1).
+Sería ideal publicar una versión alfa mucho antes (24.Sep y 24.Mar, e.g 6.6a1).
 
 
 Pasos importantes para publicar versión beta
@@ -25,8 +25,12 @@ Pasos importantes para publicar versión beta
    cambiar `Dedicatoria.md`
 2. Instalar o bien la versión alfa de adJ misma versión o bien la
    versión estable de OpenBSD
-3. Actualizar parches de locale y xlocale de forma que puedan aplicarse
-   sobre la nueva versión de OpenBSD.
+3. Actualizar parches de locale y xlocale en libc de forma que puedan aplicarse
+   sobre la nueva versión de OpenBSD. 
+	3.1 Prepara para probar con: `pruebas/preppruebas.sh` que restaura `/usr/src` a partir de `/usr/src$V-orig`
+	3.2 Tratar de aplicar todos los parches con `pruebas/aplicahasta.sh arboldes/usr/src/14..` o el último parche.
+	3.3 Compilar libc con `doas pruebas/compila-libc.sh` y correr pruebas de regresión con `cd /usr/src/lib/libc/regress; doas make`
+	3.4 Si falla compilación o alguna prueba de regresión hacer búsqueda binaria entre parches, iterando desde 3.1 pero en 3.2 ir bajando a parche del medio, y así sucesivamente hasta identificar el último que no produce fallas al correr pruebas de regresión. Puede aplicarse de a un parche con `pruebas/aplica.sh`.  Aplicar parche que falla y arreglar en libc hasta que pasen pruebas de regresión (y en lo posible mejorarlas).
 4. Recompilar kernel, perl, sistema base y asegurar que puede crearse una 
    distribución inicial 
 5. Recompilar paquetes con actualizaciones de seguridad o mejoras
@@ -37,12 +41,13 @@ Pasos importantes para publicar versión beta
 	doas ./distribucion.sh
 	```
 8. Retocar fecha de publicacion en `Novedades.md` y publicar escondido en
-   http://aprendiendo.pasosdeJesus.org
+   <http://aprendiendo.pasosdeJesus.org>
 9. Generar distribución, imagen iso (`hdes/creaiso.sh`)
 9. Probar por ejemplo en `qemu` (`hdes/qemu.sh` o remotamente 
   `TEXTO=1 hdes/qemu.sh`): 
-- Instalación de sistema base, `uname -a` debe reportar APRENDIENDODEJESUS
-- Verificar que kernel tiene renombramiento de daemon por servicio con:
+	- Instalación de sistema base, `uname -a` debe reportar 
+		`APRENDIENDODEJESUS`
+	- Verificar que kernel tiene renombramiento de daemon por servicio con:
 	$  vmstat -s | grep servicio
           	4 pages reserved for pageservicio
           	0 number of times the pageservicio woke up
@@ -51,13 +56,15 @@ Pasos importantes para publicar versión beta
           	0 pages reactivated by pageservicio
           	0 busy pages found by pageservicio
 
-- Verificar que se usa la bitácora /var/log/servicio y que no existe /var/log/daemon
+	- Verificar que se usa la bitácora `/var/log/servicio` y que no 
+	  existe `/var/log/daemon`
 	$ ls -lat /var/log/servicio  
 		-rw-r-----  1 root  wheel  149983 Sep 19 18:48 /var/log/servicio
 
-- Verificar que libc incluye funciones de locale por ejemplo editando
-  un archivo `l.c` con el siguiente contenido, tras compilar con `cc -o l l.c`
-  y ejecutar con `./l` el resulado debería ser `1.000.000,200000`:
+	- Verificar que libc incluye funciones de locale por ejemplo editando
+	  un archivo `l.c` con el siguiente contenido, tras compilar con 
+  	  `cc -o l l.c` y ejecutar con `./l` el resulado debería ser 
+	  `1.000.000,200000`:
 ```
 #include "locale.h"  
 #include "stdio.h"
@@ -68,8 +75,8 @@ int main() {
   return 0;
 }
 ```
-- Operación de locale numeric en perl. El siguiente programa en perl debe 
-  dar respuesta 1987,23:
+	- Operación de locale numeric en perl. El siguiente programa en perl 
+	debe dar respuesta 1987,23:
 ```perl
 # Basado en http://perldoc.perl.org/perllocale.html
 use locale;
@@ -78,33 +85,35 @@ setlocale(LC_NUMERIC, "es_CO.UTF-8") or die "No pone locale LC_NUMERIC en es_CO.
 my $a = 1987.23;
 printf "%g\n", $a;
 ```
-- Con paquete colorls modificado y actualizado, verificar cotejacion en español en terminal grafica:
+	- Con paquete colorls modificado y actualizado, verificar cotejacion 
+	  en español en terminal grafica:
   touch a
   touch í
   touch o
   ls -l
-  Debe mostrar los directorios en orden alfabético correcto (í entre a y o).
-- Con paquete postgresql modificado y actualizado, verificar que coteja
-  en español con:
-doas su - _postgresql
+  	  Debe mostrar los directorios en orden alfabético correcto (í 
+	  entre a y o).
+	- Con paquete postgresql modificado y actualizado, verificar que 
+	  coteja en español con:
+		doas su - _postgresql
 ```sh
 cat > /tmp/cot.sql <<EOF
 SELECT 'Á' < 'B' COLLATE "es_co_utf_8";
 EOF
 psql -h /var/www/var/run/postgresql/ -Upostgres -f /tmp/cot.sql
 ```
-  que debe responder con
+	  que debe responder con
 ```
  ?column?
 ----------
  t
 (1 row)
 ```
-- ejecución de /inst-adJ.sh en nuevo y actualización, 
-- que opere bien una aplicación Ruby on Rails
-- que toda entrada del menú desde la interfaz gráfica opere.  
-- ejecución de /usr/local/adJ/inst-sivel.sh, que opere SIVeL1.2,
-  Arreglar y repetir hasta que no haya errores.
+	- ejecución de /inst-adJ.sh en nuevo y actualización, 
+	- que opere bien una aplicación Ruby on Rails
+	- que toda entrada del menú desde la interfaz gráfica opere.  
+	- ejecución de /usr/local/adJ/inst-sivel.sh, que opere SIVeL1.2,
+	  Arreglar y repetir hasta que no haya errores.
 10. En computador de desarrollo tras configurar `var-local.sh` enviar a
    adJ.pasosdeJesus.org:
 	```

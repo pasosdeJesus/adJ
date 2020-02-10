@@ -44,7 +44,7 @@ diff -ruN -x *~ -x *orig src56-orig/regress/lib/libc/locale/check_time/Makefile 
 diff -ruN -x *~ -x *orig src56-orig/regress/lib/libc/locale/check_time/check_time.c src/regress/lib/libc/locale/check_time/check_time.c
 --- src56-orig/regress/lib/libc/locale/check_time/check_time.c	Wed Dec 31 19:00:00 1969
 +++ src/regress/lib/libc/locale/check_time/check_time.c	Sat Mar  7 07:02:13 2015
-@@ -0,0 +1,661 @@
+@@ -0,0 +1,669 @@
 +/**
 + * Public domain according to Colombian Legislation. 
 + * http://www.pasosdejesus.org/dominio_publico_colombia.html
@@ -140,6 +140,7 @@ diff -ruN -x *~ -x *orig src56-orig/regress/lib/libc/locale/check_time/check_tim
 +       	};
 +
 +	struct tm tl;
++	struct tm *ptl;
 +	int i, j;
 +	time_t ti;
 +	long ts;
@@ -683,6 +684,13 @@ diff -ruN -x *~ -x *orig src56-orig/regress/lib/libc/locale/check_time/check_tim
 +			p(strcmp(col, "GMT") == 0);
 +			wcsftime(wcol, sizeof(wcol), L"%Z", &tl);
 +			p(wcscmp(wcol, L"GMT") == 0);
++
++			ptl = localtime(&ti);
++
++			strftime(col, sizeof(col), "%Z", ptl);
++			p(strcmp(col, "-05") == 0);
++			wcsftime(wcol, sizeof(wcol), L"%Z", ptl);
++			p(wcscmp(wcol, L"-05") == 0);
 +
 +			strftime(col, sizeof(col), "%z", &tl);
 +			p(strcmp(col, "+0000") == 0);

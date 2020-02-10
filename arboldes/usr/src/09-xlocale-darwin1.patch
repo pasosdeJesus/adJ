@@ -122,20 +122,22 @@ diff -u src-ant/lib/libc/stdio/printf.3 src/lib/libc/stdio/printf.3
  write to a dynamically allocated string that is stored in
  .Fa ret .
  .Pp
-@@ -127,8 +178,10 @@
+@@ -126,9 +177,11 @@
+ .Xr va_start 3 )
  are converted for output.
  .Pp
- .Fn snprintf
+-.Fn snprintf
 -and
-+.Fn snprintf_l
++.Fn snprintf ,
++.Fn snprintf_l ,
  .Fn vsnprintf
 +and
 +.Fn vsnprintf_l
- will write at most
+ write at most
  .Fa size Ns \-1
- of the characters printed into the output string
-@@ -150,8 +203,10 @@
- byte, or \-1 on error, will be returned.
+ characters to
+@@ -145,8 +198,10 @@
+ pointer.
  .Pp
  .Fn sprintf
 -and
@@ -144,9 +146,9 @@ diff -u src-ant/lib/libc/stdio/printf.3 src/lib/libc/stdio/printf.3
 +and
 +.Fn vsprintf_l
  effectively assume an infinite
- .Fa size .
- .Pp
-@@ -188,7 +243,7 @@
+ .Fa size ;
+ their use is not recommended.
+@@ -184,7 +239,7 @@
  character
  specifying thousands' grouping of the integer part of a decimal conversion
  (%i, %d, %u, %f, %F, %g, %G).  The current locale is used to separate in
@@ -155,15 +157,15 @@ diff -u src-ant/lib/libc/stdio/printf.3 src/lib/libc/stdio/printf.3
  .It
  A hash
  .Sq Cm #
-@@ -753,6 +808,7 @@
- .Xr printf 1 ,
- .Xr scanf 3
+@@ -772,6 +827,7 @@
+ .Xr scanf 3 ,
+ .Xr wprintf 3 ,
  .Xr localeconv 3
 +.Xr xlocale 3
  .Sh STANDARDS
  The
  .Fn fprintf ,
-@@ -772,6 +828,7 @@
+@@ -791,6 +847,7 @@
  .Fn vdprintf
  functions conform to
  .St -p1003.1-2008 .
@@ -1848,22 +1850,26 @@ diff -u src-ant/lib/libc/stdio/scanf.3 src/lib/libc/stdio/scanf.3
  .Sh DESCRIPTION
  The
  .Fn scanf
-@@ -70,34 +89,53 @@
+@@ -68,36 +87,55 @@
+ the results of such conversions, if any, are stored through a set of pointer
+ arguments.
  .Pp
- The
+-The
++The functions
  .Fn scanf
 -function reads input from the standard input stream
 +and
 +.Fn scanf_l
-+functions read input from the standard input stream
++read input from the standard input stream
  .Em stdin ,
  .Fn fscanf
 -reads input from the supplied stream pointer
-+and
+-.Fa stream ,
+ and
 +.Fn fscanf_l
 +read input from the supplied stream pointer
- .Fa stream ,
- and
++.Fa stream ,
++and the functions
  .Fn sscanf
 -reads its input from the character string pointed to by
 +and
@@ -1871,31 +1877,34 @@ diff -u src-ant/lib/libc/stdio/scanf.3 src/lib/libc/stdio/scanf.3
 +read its input from the character string pointed to by
  .Fa str .
  .Pp
- The
+-The
++The functions
  .Fn vfscanf
 -function is analogous to
 +and
 +.Fn vfscanf_l
-+functions are analogous to
++are analogous to the functions
  .Xr vfprintf 3
+-and reads input from the stream pointer
 +and
 +.Xr vfprintf_l 3
- and reads input from the stream pointer
++and read input from the stream pointer
  .Fa stream
  using a variable argument list of pointers (see
- .Xr stdarg 3 ) .
- The
+ .Xr va_start 3 ) .
+-The
++The functions
  .Fn vscanf
 -function scans a variable argument list from the standard input and the
 +and
 +.Fn vscanf_l
-+functions scan a variable argument list from the standard input and the
++scan a variable argument list from the standard input and the functions
  .Fn vsscanf
 -function scans it from a string; these are analogous to the
 -.Fn vprintf
  and
 +.Fn vsscanf_l
-+functions scan it from a string; these are analogous to the
++scan it from a string; these are analogous to the
 +.Fn vprintf ,
 +.Fn vprintf_l ,
  .Fn vsprintf
