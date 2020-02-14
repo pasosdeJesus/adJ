@@ -14,7 +14,7 @@ MAINTAINER=		Vladimir Támara Patiño <vtamara@pasosdeJesus.org>
 HOMEPAGE=		http://fluxbox.sourceforge.net/fbdesk/
 
 # 
-PERMIT_PACKAGE_CDROM=	Yes
+PERMIT_PACKAGE=	Yes
 
 MASTER_SITES=		http://fluxbox.sourceforge.net/download/
 

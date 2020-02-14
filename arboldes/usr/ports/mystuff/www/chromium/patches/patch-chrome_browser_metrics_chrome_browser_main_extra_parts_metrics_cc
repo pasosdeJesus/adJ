@@ -1,8 +1,9 @@
-$OpenBSD: patch-chrome_browser_metrics_chrome_browser_main_extra_parts_metrics_cc,v 1.12 2019/04/26 09:38:20 robert Exp $
+$OpenBSD: patch-chrome_browser_metrics_chrome_browser_main_extra_parts_metrics_cc,v 1.16 2019/12/15 12:03:46 robert Exp $
+
 Index: chrome/browser/metrics/chrome_browser_main_extra_parts_metrics.cc
 --- chrome/browser/metrics/chrome_browser_main_extra_parts_metrics.cc.orig
 +++ chrome/browser/metrics/chrome_browser_main_extra_parts_metrics.cc
-@@ -42,8 +42,10 @@
+@@ -45,8 +45,10 @@
  #include <cpu-features.h>
  #endif  // defined(OS_ANDROID) && defined(__arm__)
  
@@ -14,12 +15,13 @@ Index: chrome/browser/metrics/chrome_browser_main_extra_parts_metrics.cc
  
  #include "base/linux_util.h"
  #include "base/strings/string_split.h"
-@@ -205,7 +207,7 @@ void RecordStartupMetrics() {
-   // because initializing the Bluetooth adapter causes too much jank.
-   // Re-enable when that is resolved.
-   // See https://crbug.com/929375.
--#if !defined(OS_WIN)
-+#if !defined(OS_WIN) && !defined(OS_BSD)
-   bluetooth_utility::ReportBluetoothAvailability();
- #endif
+@@ -233,7 +235,9 @@ void RecordStartupMetrics() {
+                         printing::XPSModule::IsOpenXpsCapable());
+ #endif  // defined(OS_WIN)
  
++#if !defined(OS_BSD)
+   bluetooth_utility::ReportBluetoothAvailability();
++#endif
+ 
+   // Record whether Chrome is the default browser or not.
+   shell_integration::DefaultWebClientState default_state =

@@ -1,8 +1,17 @@
-$OpenBSD: patch-third_party_libusb_BUILD_gn,v 1.4 2019/05/10 21:55:40 robert Exp $
+$OpenBSD: patch-third_party_libusb_BUILD_gn,v 1.6 2020/01/06 16:05:06 robert Exp $
 Index: third_party/libusb/BUILD.gn
 --- third_party/libusb/BUILD.gn.orig
 +++ third_party/libusb/BUILD.gn
-@@ -102,7 +102,7 @@ static_library("libusb") {
+@@ -3,7 +3,7 @@
+ # found in the LICENSE file.
+ 
+ # libusb is only used by //services/device/usb on Windows and macOS.
+-assert(is_win || is_mac)
++assert(is_win || is_mac || is_openbsd)
+ 
+ import("//build/config/features.gni")
+ 
+@@ -115,7 +115,7 @@ static_library("libusb") {
      ]
    }
  
@@ -11,7 +20,7 @@ Index: third_party/libusb/BUILD.gn
      sources += [
        "src/libusb/os/linux_usbfs.c",
        "src/libusb/os/linux_usbfs.h",
-@@ -113,6 +113,16 @@ static_library("libusb") {
+@@ -126,6 +126,16 @@ static_library("libusb") {
      ]
    }
  
@@ -28,7 +37,7 @@ Index: third_party/libusb/BUILD.gn
    if (is_chromeos) {
      defines += [ "USBI_TIMERFD_AVAILABLE" ]
    }
-@@ -126,7 +136,7 @@ static_library("libusb") {
+@@ -139,7 +149,7 @@ static_library("libusb") {
      deps += [ "//build/linux/libudev" ]
    }
  

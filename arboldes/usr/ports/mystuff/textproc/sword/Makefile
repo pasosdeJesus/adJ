@@ -14,7 +14,7 @@ HOMEPAGE=	http://crosswire.org/sword/software/swordapi.jsp
 MAINTAINER=	Vladimir Támara Patiño <vtamara@pasosdeJesus.org>
 
 # sword: GPL  kjv: free for any purpose
-PERMIT_PACKAGE_CDROM=	Yes
+PERMIT_PACKAGE=	Yes
 
 BUILD_DEPENDS= archivers/unzip 
 #LIB_DEPENDS= net/curl

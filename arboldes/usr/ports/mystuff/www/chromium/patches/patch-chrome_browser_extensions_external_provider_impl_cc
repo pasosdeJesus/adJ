@@ -1,23 +1,23 @@
-$OpenBSD: patch-chrome_browser_extensions_external_provider_impl_cc,v 1.14 2019/04/26 09:38:20 robert Exp $
+$OpenBSD: patch-chrome_browser_extensions_external_provider_impl_cc,v 1.18 2019/12/15 12:03:46 robert Exp $
 
 Index: chrome/browser/extensions/external_provider_impl.cc
 --- chrome/browser/extensions/external_provider_impl.cc.orig
 +++ chrome/browser/extensions/external_provider_impl.cc
-@@ -753,7 +753,7 @@ void ExternalProviderImpl::CreateExternalProviders(
-     chromeos::DemoSession::Get()->SetExtensionsExternalLoader(loader);
-     provider_list->push_back(std::move(demo_apps_provider));
+@@ -762,7 +762,7 @@ void ExternalProviderImpl::CreateExternalProviders(
    }
--#elif defined(OS_LINUX)
-+#elif defined(OS_LINUX) || defined(OS_BSD)
-   provider_list->push_back(std::make_unique<ExternalProviderImpl>(
-       service,
-       new ExternalPrefLoader(chrome::DIR_STANDALONE_EXTERNAL_EXTENSIONS,
-@@ -780,7 +780,7 @@ void ExternalProviderImpl::CreateExternalProviders(
-         bundled_extension_creation_flags));
- 
-     // Define a per-user source of external extensions.
--#if defined(OS_MACOSX) || (defined(OS_LINUX) && defined(CHROMIUM_BUILD))
-+#if defined(OS_MACOSX) || ((defined(OS_BSD) || defined(OS_LINUX)) && defined(CHROMIUM_BUILD))
+ #endif
+   if (!profile->GetPrefs()->GetBoolean(pref_names::kBlockExternalExtensions)) {
+-#if defined(OS_LINUX) && !defined(OS_CHROMEOS)
++#if (defined(OS_LINUX) || defined(OS_BSD)) && !defined(OS_CHROMEOS)
      provider_list->push_back(std::make_unique<ExternalProviderImpl>(
          service,
-         new ExternalPrefLoader(chrome::DIR_USER_EXTERNAL_EXTENSIONS,
+         base::MakeRefCounted<ExternalPrefLoader>(
+@@ -789,7 +789,7 @@ void ExternalProviderImpl::CreateExternalProviders(
+           bundled_extension_creation_flags));
+ 
+       // Define a per-user source of external extensions.
+-#if defined(OS_MACOSX) || (defined(OS_LINUX) && BUILDFLAG(CHROMIUM_BRANDING))
++#if defined(OS_MACOSX) || ((defined(OS_BSD) || defined(OS_LINUX)) && BUILDFLAG(CHROMIUM_BRANDING))
+       provider_list->push_back(std::make_unique<ExternalProviderImpl>(
+           service,
+           base::MakeRefCounted<ExternalPrefLoader>(

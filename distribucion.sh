@@ -856,6 +856,7 @@ if (test "$sn" = "s") then {
 	paquete p5-List-UtilsBy
 	paquete p5-MLDBM
 	paquete p5-MRO-Compat
+	paquete p5-Mail-AuthenticationResults
 	paquete p5-Mail-DKIM
 	paquete p5-Mail-SPF
 	paquete p5-Mail-Tools
@@ -915,7 +916,7 @@ if (test "$sn" = "s") then {
 	# Deben estar en arboldes/usr/ports/mystuff y en /usr/ports de current
 
 	paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs" 
-	paquete ruby paquetes "ruby ruby26-ri_docs" 2.6
+	paquete ruby paquetes "ruby ruby27-ri_docs" 2.7
 	#paquete tiff
 	#paquete geo/spatialite/libspatialite
 
@@ -932,13 +933,13 @@ if (test "$sn" = "s") then {
 	# Recompilados para cerrar fallas de portes actualizados (estable)
 	# Para que operen bien basta actualizar CVS de /usr/ports 
 	# Los siguientes no deben estar en arboldes/usr/ports/mystuff
-	paquete cups
-	paquete dovecot
-	paquete gtk+3 paquetes "gtk+3-cups"
-	paquete gvfs
-	paquete libgcrypt
-	paquete mpg123
-	paquete webkitgtk4
+	#paquete cups
+	#paquete dovecot
+	#paquete gtk+3 paquetes "gtk+3-cups"
+	#paquete gvfs
+	#paquete libgcrypt
+	#paquete mpg123
+	#paquete webkitgtk4
 
 	###	
 	# Recompilados de estable que usan xlocale (y pueden cerrar fallas)
@@ -947,7 +948,14 @@ if (test "$sn" = "s") then {
 
 	# En adJ 6.5 para compilar PHP 5.6 tuvo que modificarse el porte y tras iniciar compilación volver a deshacer algunos cambios de los parches para que continuara, dificultad con icu::
 	paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 5.6
-	paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 7.1
+	paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 7.3
+
+	###
+	# Recompilados para mejorar dependencias y actualizar
+
+	paquete gettext-tools
+	paquete libidn2
+
 	#FLAVOR=light paquete evince paquetes evince-light
 	#paquete gcc paquetes "gcc" 4.9
 	#paquete git paquetes "git"
@@ -956,7 +964,7 @@ if (test "$sn" = "s") then {
 	#paquete pidgin paquetes "libpurple pidgin"
 	#paquete samba paquetes "ldb samba tevent"
 	#paquete webkit paquetes "webkit webkit-gtk3"
-	paquete webkitgtk4
+	#paquete webkitgtk4
 	# FLAVOR=gtk3 make paquete webkit-gtk3
 	#FLAVOR=python3 paquete py-gobject3 paquetes py3-gobject3
 	#paquete py-gobject3 paquetes py-gobject3
@@ -975,17 +983,7 @@ if (test "$sn" = "s") then {
 	# Estan en mystuff
 	paquete libunistring
 	paquete vlc
-	paquete djvulibre
-	paquete gettext-tools
-	paquete gdk-pixbuf
 	paquete glib2
-	paquete gtar
-	paquete libidn
-	paquete libspectre
-	paquete libxslt
-	paquete scribus
-	paquete wget
-	#paquete wxWidgets-gtk2
 
 	##
 	# Retroportados no existentes en versión actual
@@ -1037,9 +1035,9 @@ if (test "$sn" = "s") then {
 	paquete education/NombresCursiva
 	paquete fonts/TiposLectoEscritura
 	paquete education/asigna
-	paquete textproc/markup
-	paquete education/repasa
-	paquete education/sigue
+	#paquete textproc/markup  --fuentes ya no existen
+	#paquete education/repasa -- dependia de markup
+	#paquete education/sigue -- dependía de repasa
 	paquete textproc/Mt77
 
 	paquete databases/sivel sivel sivel 1.2

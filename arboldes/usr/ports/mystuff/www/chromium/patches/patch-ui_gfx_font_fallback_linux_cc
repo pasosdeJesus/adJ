@@ -1,10 +1,10 @@
-$OpenBSD: patch-ui_gfx_font_fallback_linux_cc,v 1.2 2019/05/10 21:55:40 robert Exp $
+$OpenBSD: patch-ui_gfx_font_fallback_linux_cc,v 1.4 2019/12/15 12:03:47 robert Exp $
 Index: ui/gfx/font_fallback_linux.cc
 --- ui/gfx/font_fallback_linux.cc.orig
 +++ ui/gfx/font_fallback_linux.cc
-@@ -16,6 +16,8 @@
- #include "base/trace_event/trace_event.h"
- #include "ui/gfx/font.h"
+@@ -24,6 +24,8 @@
+ #include "ui/gfx/linux/fontconfig_util.h"
+ #include "ui/gfx/platform_font.h"
  
 +#include <unistd.h>
 +

@@ -11,7 +11,7 @@ MAINTAINER=	Kevin Lo <kevlo@openbsd.org>
 MODULES=	www/pear
 
 # PHP License
-PERMIT_PACKAGE_CDROM=	Yes
+PERMIT_PACKAGE=	Yes
 
 RUN_DEPENDS=	www/pear-HTML-Common2>=0.1.0
 

@@ -1,23 +1,25 @@
-# $OpenBSD: Makefile,v 1.8 2019/02/21 13:08:25 sthen Exp $
+# $OpenBSD: Makefile,v 1.11 2020/02/06 00:36:28 jeremy Exp $
 
 COMMENT=	PostgreSQL RDBMS (previous version, for pg_upgrade)
 
-VERSION=	10.6
+VERSION=	11.6
 DISTNAME=	postgresql-${VERSION}
 PKGNAME=	postgresql-previous-${VERSION}
 
 CATEGORIES=	databases
-SHARED_LIBS=	ecpg		7.8 \
-		ecpg_compat	4.8 \
-		pgtypes		4.7 \
-		pq		6.9 
+SHARED_LIBS=	ecpg		7.9 \
+		ecpg_compat	4.9 \
+		pgtypes		4.8 \
+		pq		6.10
 
 HOMEPAGE=	http://www.postgresql.org/
 
 MAINTAINER=	Pierre-Emmanuel Andre <pea@openbsd.org>
 
 # BSD
-PERMIT_PACKAGE_CDROM=	Yes
+PERMIT_PACKAGE=	Yes
+
+WANTLIB += c crypto curses m perl readline ssl xml2 z
 
 MASTER_SITES=	https://ftp.postgresql.org/pub/source/v${VERSION}/ \
 		ftp://ftp.postgresql.org/pub/source/v${VERSION}/
@@ -77,7 +79,6 @@ ALL_TARGET=	all
 INSTALL_TARGET=	install
 
 LIB_DEPENDS = textproc/libxml
-WANTLIB += c crypto m readline ssl termcap z xml2 perl
 
 MAKE_ENV=	LIBpq_MAJOR=${LIBpq_VERSION:R} \
 		LIBpq_MINOR=${LIBpq_VERSION:E} \

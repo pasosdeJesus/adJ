@@ -14,7 +14,7 @@ HOMEPAGE=	http://rigaux.org/hexedit.html
 MAINTAINER=	Frederic Cambus <fcambus@openbsd.org>
 
 # GPLv2+
-PERMIT_PACKAGE_CDROM=	Yes
+PERMIT_PACKAGE=	Yes
 
 WANTLIB=	c curses
 

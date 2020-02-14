@@ -1,27 +1,29 @@
-$OpenBSD: patch-content_public_common_content_features_cc,v 1.4 2019/05/10 21:55:40 robert Exp $
+$OpenBSD: patch-content_public_common_content_features_cc,v 1.8 2019/12/15 12:03:46 robert Exp $
+
+WebUSB is bad and it makes the chrome process spin the CPU anyway
 
 Index: content/public/common/content_features.cc
 --- content/public/common/content_features.cc.orig
 +++ content/public/common/content_features.cc
-@@ -559,7 +559,7 @@ const base::Feature kWebAssemblyThreads {
- };
- 
- // Enable WebAssembly trap handler.
--#if (defined(OS_LINUX) || defined(OS_WIN) || defined(OS_MACOSX)) && \
-+#if (defined(OS_BSD) || defined(OS_LINUX) || defined(OS_WIN) || defined(OS_MACOSX)) && \
-     defined(ARCH_CPU_X86_64)
- const base::Feature kWebAssemblyTrapHandler{"WebAssemblyTrapHandler",
-                                             base::FEATURE_ENABLED_BY_DEFAULT};
-@@ -594,7 +594,7 @@ const base::Feature kWebAuthBle{"WebAuthenticationBle"
+@@ -53,7 +53,7 @@ const base::Feature kAudioServiceLaunchOnStartup{
+ const base::Feature kAudioServiceOutOfProcess{
+   "AudioServiceOutOfProcess",
+ #if defined(OS_WIN) || defined(OS_MACOSX) || \
+-    (defined(OS_LINUX) && !defined(OS_CHROMEOS))
++    (defined(OS_LINUX) && !defined(OS_CHROMEOS)) || defined(OS_BSD)
+       base::FEATURE_ENABLED_BY_DEFAULT
+ #else
+       base::FEATURE_DISABLED_BY_DEFAULT
+@@ -663,7 +663,7 @@ const base::Feature kWebAuthBle{"WebAuthenticationBle"
  // https://w3c.github.io/webauthn
  const base::Feature kWebAuthCable {
    "WebAuthenticationCable",
 -#if !defined(OS_CHROMEOS) && defined(OS_LINUX)
-+#if !defined(OS_CHROMEOS) && (defined(OS_LINUX) || defined(OS_BSD))
++#if (!defined(OS_CHROMEOS) && defined(OS_LINUX)) || defined(OS_BSD)
        base::FEATURE_DISABLED_BY_DEFAULT
  #else
        base::FEATURE_ENABLED_BY_DEFAULT
-@@ -665,7 +665,7 @@ const base::Feature kWebRtcHideLocalIpsWithMdns{
+@@ -700,7 +700,7 @@ const base::Feature kWebRtcUseGpuMemoryBufferVideoFram
  
  // Controls whether the WebUSB API is enabled:
  // https://wicg.github.io/webusb
@@ -29,4 +31,4 @@ Index: content/public/common/content_features.cc
 +const base::Feature kWebUsb{"WebUSB", base::FEATURE_DISABLED_BY_DEFAULT};
  
  // Controls whether the WebXR Device API is enabled.
- const base::Feature kWebXr{"WebXR", base::FEATURE_DISABLED_BY_DEFAULT};
+ const base::Feature kWebXr{"WebXR", base::FEATURE_ENABLED_BY_DEFAULT};

@@ -1,9 +1,9 @@
-$OpenBSD: patch-third_party_swiftshader_BUILD_gn,v 1.8 2019/03/24 12:24:45 robert Exp $
+$OpenBSD: patch-third_party_swiftshader_BUILD_gn,v 1.10 2019/12/15 12:03:47 robert Exp $
 
 Index: third_party/swiftshader/BUILD.gn
 --- third_party/swiftshader/BUILD.gn.orig
 +++ third_party/swiftshader/BUILD.gn
-@@ -143,8 +143,6 @@ config("swiftshader_config") {
+@@ -159,8 +159,6 @@ config("swiftshader_config") {
            "-Wl,--hash-style=sysv",
            "-mips64r2",
          ]

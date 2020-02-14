@@ -1,16 +1,23 @@
-$OpenBSD: patch-gpu_ipc_service_gpu_watchdog_thread_h,v 1.4 2019/05/10 21:55:40 robert Exp $
+$OpenBSD: patch-gpu_ipc_service_gpu_watchdog_thread_h,v 1.8 2019/12/15 12:03:46 robert Exp $
 
 Index: gpu/ipc/service/gpu_watchdog_thread.h
 --- gpu/ipc/service/gpu_watchdog_thread.h.orig
 +++ gpu/ipc/service/gpu_watchdog_thread.h
-@@ -195,8 +195,10 @@ class GPU_IPC_SERVICE_EXPORT GpuWatchdogThread : publi
-   XDisplay* display_;
-   gfx::AcceleratedWidget window_;
-   XAtom atom_;
-+#if !defined(OS_BSD)
-   FILE* tty_file_;
-   int host_tty_;
-+#endif
+@@ -171,7 +171,7 @@ class GPU_IPC_SERVICE_EXPORT GpuWatchdogThreadImplV1
+   base::ThreadTicks GetWatchedThreadTime();
  #endif
  
-   base::RepeatingClosure alternative_terminate_for_testing_;
+-#if defined(USE_X11)
++#if defined(USE_X11) && !defined(OS_BSD)
+   int GetActiveTTY() const;
+ #endif
+ 
+@@ -219,7 +219,7 @@ class GPU_IPC_SERVICE_EXPORT GpuWatchdogThreadImplV1
+   base::Time check_time_;
+   base::TimeTicks check_timeticks_;
+ 
+-#if defined(USE_X11)
++#if defined(USE_X11) && !defined(OS_BSD)
+   FILE* tty_file_;
+   int host_tty_;
+ #endif

@@ -19,7 +19,7 @@ GH_TAGNAME=	${V}
 DISTFILES=	${DISTNAME}.tar.gz
 
 #Public Domain
-PERMIT_PACKAGE_CDROM=	Yes
+PERMIT_PACKAGE=	Yes
 
 SHARED_LIBS +=  biblesync                 2.0
 

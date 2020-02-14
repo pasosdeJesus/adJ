@@ -18,7 +18,7 @@ DISTFILES=	${DISTNAME}.tar.gz
 
 
 #Public domain
-PERMIT_PACKAGE_CDROM=	Yes
+PERMIT_PACKAGE=	Yes
 
 CONFIGURE_STYLE=        simple
 CONFIGURE_SCRIPT=       conf.sh

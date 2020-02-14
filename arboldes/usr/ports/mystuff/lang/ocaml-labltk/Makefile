@@ -4,22 +4,24 @@
 # Ideas from https://www.freshports.org/x11-toolkits/ocaml-labltk/
 
 COMMENT=	"Interface to the Tcl/Tk GUI framework"
-VERSION=	8.06.5
+VERSION=	8.06.7
 REVISION=	1
 
 PKGNAME=	ocaml-labltk-${VERSION}
 DISTNAME=	labltk-${VERSION}
 CATEGORIES=	lang
 
-MASTER_SITES=	https://forge.ocamlcore.org/frs/download.php/1764/labltk-8.06.5.tar.gz
+
+MASTER_SITES=	https://github.com/garrigue/labltk/archive/
+DISTFILES=	${VERSION}${EXTRACT_SUFX}
 EXTRACT_SUFX=	.tar.gz
 
-HOMEPAGE=	https://forge.ocamlcore.org/projects/labltk/
+HOMEPAGE=	https://garrigue.github.io/labltk/
 MAINTAINER=	Vladimir Támara Patiño <vtamara@pasosdeJesus.org>
 
 MODULES=	lang/ocaml
 
-PERMIT_PACKAGE_CDROM=   Yes
+PERMIT_PACKAGE=   Yes
 
 CONFIGURE_STYLE=        simple dest  
 CONFIGURE_ARGS+=-installdir ${DESTDIR}${TRUEPREFIX}/lib/ocaml/labltk

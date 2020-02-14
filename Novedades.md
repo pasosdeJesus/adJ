@@ -3,11 +3,7 @@ Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
 
 ### Versión: 6.6b1
-<<<<<<< HEAD
-Fecha de publicación: 15/Oct/2019
-=======
-Fecha de publicación: 12/Jun/2019
->>>>>>> 98406d62f1057081386684bb6d04368a20731d38
+Fecha de publicación: 20/Feb/2020
 
 Puede ver novedades respecto a OpenBSD en:
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_6/Novedades_OpenBSD.md>
@@ -17,21 +13,16 @@ Puede ver novedades respecto a OpenBSD en:
 Puede ver las diversas versiones publicadas en: 
   <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/>
 
-<<<<<<< HEAD
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-6.6b1-amd64.iso> es imagen en formato ISO para quemar en DVD e instalar por primera vez.
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/6.6b1-amd64/> es directorio con el contenido del DVD instalador apropiado para descargar con rsync y actualizar un adJ ya instalado (ver  <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_6/Actualiza.md> )
-=======
 * <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/AprendiendoDeJesus-6.6b1-amd64.iso> es imagen en formato ISO para quemar en DVD e instalar por primera vez.
 * <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/6.6b1-amd64/> es directorio con el contenido del DVD instalador apropiado para descargar con rsync y actualizar un adJ ya instalado (ver  <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_6/Actualiza.md> )
->>>>>>> 98406d62f1057081386684bb6d04368a20731d38
 * <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/6.6-extra/> es directorio con versiones recientes de paquetes no incluidos en distribución oficial (pueden no estar firmados y requerir instalación con `pkg_add -D unsigned _paquete_`).
 
 
-## 2. NOVEDADES RESPECTO A ADJ 6.4 PROVENIENTES DE OPENBSD
+## 2. NOVEDADES RESPECTO A ADJ 6.5 PROVENIENTES DE OPENBSD
 
 ### 2.1 Kernel y Sistema Base
 
-* Aplicados parches de seguridad hasta el 14.Sep.2019 provenientes de 
+* Aplicados parches de seguridad hasta el 14.Ene.2019 provenientes de 
   OpenBSD que incluyen mitigación a vulnerabilidades en CPU.
 * Controladores ampliados o mejorados para amd64
 	* Red:

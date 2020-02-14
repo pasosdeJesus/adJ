@@ -13,9 +13,7 @@ DISTNAME=v${VERSION}
 MAINTAINER=	Vladimir Támara Patiño <vtamara@pasosdeJesus.org>
 
 # Public Domain  & BSD License
-PERMIT_PACKAGE_CDROM=	Yes
-PERMIT_PACKAGE_FTP=	Yes
-PERMIT_DISTFILES_FTP=	Yes
+PERMIT_PACKAGE=	Yes
 
 DISTFILES=      ${DISTNAME}${EXTRACT_SUFX} 
 
