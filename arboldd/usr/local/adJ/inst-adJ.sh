@@ -2909,11 +2909,11 @@ EOF
 	chown $uadJ:$uadJ /home/$uadJ/.irbrc
 } fi;
 
-VRUBY=2.6
+VRUBY=2.7
 VRUBYSP=`echo $VRUBY | sed -e "s/\.//g"`
 echo "* Configurar ruby-$VRUBY" >> /var/www/tmp/inst-adJ.bitacora;
 uruby=$uadJ
-for vrelim in 2.3 2.4 2.5; do
+for vrelim in 2.3 2.4 2.5 2.6; do
 	v=`(cd /var/db/pkg/; ls) | grep ruby-$vrelim`
 	if (test -d /var/www/bundler/ruby/$vrelim/bundler/gems/ -o -d /usr/local/lib/ruby/$vrelim -o "$v" != "") then {
 		if (test -d /var/www/bundler/ruby/$vrelim) then {
