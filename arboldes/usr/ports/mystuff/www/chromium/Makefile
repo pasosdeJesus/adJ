@@ -1,4 +1,4 @@
-# $OpenBSD: Makefile,v 1.487 2020/01/24 15:35:16 robert Exp $
+# $OpenBSD: Makefile,v 1.469.2.2 2020/01/11 20:34:15 sthen Exp $
 
 .include <bsd.port.arch.mk>
 
@@ -12,8 +12,8 @@ DPB_PROPERTIES=		lonesome
 
 COMMENT=		Chromium browser
 
-V=			79.0.3945.130
-REVISION=		2
+V=			79.0.3945.117
+REVISION=		3
 ECV=			76.0.3809.132
 ELECTRON_V=		6.0.3
 
@@ -35,9 +35,7 @@ EXTRACT_SUFX=		.tar.xz
 FLAVORS=		debug component electron
 FLAVOR?=
 .if ${FLAVOR:Melectron}
-REVISION=		5
-.else
-REVISION=		0
+REVISION=		4
 .endif
 
 # BSD-like
@@ -80,7 +78,6 @@ WANTLIB += xml2 z
 WANTLIB += harfbuzz 
 WANTLIB += ffi png
 WANTLIB += iconv lzma
-WANTLIB += fido2 cbor usbhid crypto
 
 RUN_DEPENDS=	devel/xdg-utils \
 		devel/desktop-file-utils \
@@ -195,13 +192,12 @@ PKG_ARGS+=	-Dswiftshader=1
 
 # Note: these keys are for adJ use ONLY. For your own distribution,
 # please get your own set of keys. It's free!
-GN_ARGS+=	google_api_key=\"AIzaSyC_3Uz69YR1Z2DRLUDf5ZxUJBClHuwrjL\" \
-		google_default_client_id=\"827346019416-hv5bkg8gdou5q4undk91dn3nv7ag2nm1.apps.googleusercontent.com\" \
-		google_default_client_secret=\"7ApGgPs3F_mRnRgDt6A80C0\" \
+GN_ARGS+=	google_api_key=\"AIzaSyA015yecfJyWi8UQpneQVrNzIKlxjv4MhI\" \
+		google_default_client_id=\"451220141585.apps.googleusercontent.com\" \
+		google_default_client_secret=\"nQcDyaBvDyCeDrsRqKIWSHJn\" \
 		ffmpeg_branding=\"Chrome\" \
 		proprietary_codecs=true
-
-
+ 
 .if ${FLAVOR:Mdebug}
 MAKE_ENV+=	V=1
 .endif
@@ -254,7 +250,6 @@ pre-configure:
 .  endfor
 .endfor
 	@mkdir -p ${WRKSRC}/media/audio/sndio ${WRKSRC}/media/audio/openbsd
-	@cp ${FILESDIR}/hid_{service,connection}_fido.{cc,h} ${WRKSRC}/services/device/hid
 	@cp ${FILESDIR}/sndio_{out,in}put.{cc,h} ${WRKSRC}/media/audio/sndio
 	@cp ${FILESDIR}/audio_manager_openbsd.{cc,h} ${WRKSRC}/media/audio/openbsd
 	@mkdir -p ${WRKSRC}/third_party/node/openbsd/node-openbsd/bin
