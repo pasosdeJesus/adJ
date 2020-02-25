@@ -1,22 +1,23 @@
-$OpenBSD: patch-ui_views_controls_label_cc,v 1.16 2019/05/10 21:55:40 robert Exp $
+$OpenBSD: patch-ui_views_controls_label_cc,v 1.20 2019/12/15 12:03:47 robert Exp $
+
 Index: ui/views/controls/label.cc
 --- ui/views/controls/label.cc.orig
 +++ ui/views/controls/label.cc
-@@ -544,7 +544,7 @@ bool Label::OnMousePressed(const ui::MouseEvent& event
+@@ -689,7 +689,7 @@ bool Label::OnMousePressed(const ui::MouseEvent& event
      GetFocusManager()->SetFocusedView(this);
    }
  
 -#if defined(OS_LINUX) && !defined(OS_CHROMEOS)
-+#if (defined(OS_BSD) || defined(OS_LINUX)) && !defined(OS_CHROMEOS)
++#if (defined(OS_LINUX) && !defined(OS_CHROMEOS)) || defined(OS_BSD)
    if (event.IsOnlyMiddleMouseButton() && GetFocusManager() && !had_focus)
      GetFocusManager()->SetFocusedView(this);
  #endif
-@@ -729,7 +729,7 @@ bool Label::PasteSelectionClipboard() {
+@@ -874,7 +874,7 @@ bool Label::PasteSelectionClipboard() {
  }
  
  void Label::UpdateSelectionClipboard() {
 -#if defined(OS_LINUX) && !defined(OS_CHROMEOS)
-+#if (defined(OS_BSD) || defined(OS_LINUX)) && !defined(OS_CHROMEOS)
-   if (!obscured()) {
-     ui::ScopedClipboardWriter(ui::CLIPBOARD_TYPE_SELECTION)
++#if (defined(OS_LINUX) && !defined(OS_CHROMEOS)) || defined(OS_BSD)
+   if (!GetObscured()) {
+     ui::ScopedClipboardWriter(ui::ClipboardBuffer::kSelection)
          .WriteText(GetSelectedText());

@@ -14,6 +14,6 @@ MAINTAINER=	Vladimir T?mara Pati?o <vtamara@pasosdeJesus.org>
 MODULES=	www/pear
 
 # PHP License
-PERMIT_PACKAGE_CDROM=	Yes
+PERMIT_PACKAGE=	Yes
 
 .include <bsd.port.mk>

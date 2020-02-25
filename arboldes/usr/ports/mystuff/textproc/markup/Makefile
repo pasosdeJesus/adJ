@@ -18,7 +18,7 @@ MAINTAINER=	Vladimir Támara Patiño <vtamara@pasosdeJesus.org>
 MODULES	= lang/ocaml
 
 #MIT Style license
-PERMIT_PACKAGE_CDROM=	Yes
+PERMIT_PACKAGE=	Yes
 
 
 CONFIGURE_STYLE=	simple 

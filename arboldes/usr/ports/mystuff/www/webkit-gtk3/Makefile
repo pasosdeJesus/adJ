@@ -28,7 +28,7 @@ SHARED_LIBS += javascriptcoregtk-${WEBKIT_API_VERSION}	5.0 # 16.19
 SHARED_LIBS += webkitgtk-${WEBKIT_API_VERSION}		7.0 # 22.17
 
 # LGPLv2 and BSD
-PERMIT_PACKAGE_CDROM =	Yes
+PERMIT_PACKAGE=	Yes
 
 MODULES =	lang/python \
 		lang/ruby \

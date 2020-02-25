@@ -9,7 +9,7 @@ CATEGORIES=	www devel
 MODULES=	www/pear
 
 # PHP License
-PERMIT_PACKAGE_CDROM=	Yes
+PERMIT_PACKAGE=	Yes
 
 TEST_DEPENDS=        devel/pear-PHPUnit2
 

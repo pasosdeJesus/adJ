@@ -16,7 +16,7 @@ DISTFILES+=	herram_confsh-${VHERRAMCORTA}-${VHERRAM}${EXTRACT_SUFX}:1
 DCOMP=${PNAME}-${V}
 
 #Public domain
-PERMIT_PACKAGE_CDROM=	Yes
+PERMIT_PACKAGE=	Yes
 
 CONFIGURE_STYLE=        simple
 CONFIGURE_SCRIPT=       conf.sh

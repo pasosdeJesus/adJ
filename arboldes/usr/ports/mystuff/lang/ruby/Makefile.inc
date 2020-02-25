@@ -1,4 +1,4 @@
-# $OpenBSD: Makefile.inc,v 1.20 2018/03/31 21:12:45 jeremy Exp $
+# $OpenBSD: Makefile.inc,v 1.23 2019/11/19 17:20:12 jeremy Exp $
 
 COMMENT-main ?=		object oriented script language with threads
 COMMENT-gdbm ?=		gdbm interface for ruby
@@ -22,9 +22,7 @@ HOMEPAGE ?=	https://www.ruby-lang.org/
 MAINTAINER ?=	Jeremy Evans <jeremy@openbsd.org>
 
 # GPL/Artistic/BSD/Public Domain/Beer-Ware
-PERMIT_PACKAGE_CDROM ?= Yes
-PERMIT_PACKAGE_FTP ?= Yes
-PERMIT_DISTFILES_FTP ?= Yes
+PERMIT_PACKAGE?= Yes
 
 MASTER_SITES ?=		https://cache.ruby-lang.org/pub/ruby/${VERSION:R}/
 MASTER_SITES0 ?=	https://bugs.ruby-lang.org/attachments/download/
@@ -61,6 +59,8 @@ LIB_DEPENDS-gdbm +=	databases/gdbm \
 			devel/gmp #\
 			#lang/ruby/${REV},-main>=${VERSION},<${NEXTVER}
 RUN_DEPENDS-gdbm ?=
+
+DEBUG_PACKAGES ?=	-main
 
 ALL_TARGET =		V=1 main
 INSTALL_TARGET =	V=1 install-nodoc

@@ -10,7 +10,7 @@ HOMEPAGE=	http://roland65.free.fr/xfe/
 MAINTAINER=	Brian Callahan <bcallah@openbsd.org>
 
 # GPLv2+
-PERMIT_PACKAGE_CDROM=	Yes
+PERMIT_PACKAGE=	Yes
 
 WANTLIB += ${COMPILER_LIBCXX} FOX-1.6 X11 X11-xcb Xft Xrandr c
 WANTLIB += fontconfig freetype m png util xcb xcb-util z

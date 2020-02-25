@@ -1,9 +1,9 @@
-$OpenBSD: patch-ui_base_ui_base_features_cc,v 1.6 2019/05/10 21:55:40 robert Exp $
+$OpenBSD: patch-ui_base_ui_base_features_cc,v 1.8 2019/12/15 12:03:47 robert Exp $
 
 Index: ui/base/ui_base_features.cc
 --- ui/base/ui_base_features.cc.orig
 +++ ui/base/ui_base_features.cc
-@@ -108,7 +108,7 @@ const base::Feature kEnableAutomaticUiAdjustmentsForTo
+@@ -117,7 +117,7 @@ const base::Feature kEnableAutomaticUiAdjustmentsForTo
      "EnableAutomaticUiAdjustmentsForTouch", base::FEATURE_ENABLED_BY_DEFAULT};
  #endif  // defined(OS_WIN) || defined(OS_CHROMEOS)
  
@@ -12,3 +12,12 @@ Index: ui/base/ui_base_features.cc
  // Enables stylus appearing as touch when in contact with digitizer.
  const base::Feature kDirectManipulationStylus = {
      "DirectManipulationStylus",
+@@ -127,7 +127,7 @@ const base::Feature kDirectManipulationStylus = {
+     base::FEATURE_DISABLED_BY_DEFAULT
+ #endif
+ };
+-#endif  // defined(OS_WIN) || defined(OS_MACOSX) || defined(OS_LINUX)
++#endif  // defined(OS_WIN) || defined(OS_MACOSX) || defined(OS_LINUX) || defined(OS_BSD)
+ 
+ const base::Feature kFormControlsRefresh = {"FormControlsRefresh",
+                                             base::FEATURE_DISABLED_BY_DEFAULT};

@@ -21,7 +21,7 @@ MAINTAINER=	Vladimir Tamara Patino <vtamara@pasosdejesus.org>
 #DISTFILES=	${DISTNAME}-20170423.tar.gz
 
 #GPL
-PERMIT_PACKAGE_CDROM=	Yes
+PERMIT_PACKAGE=	Yes
 
 #MODULES =       devel/waf  
 

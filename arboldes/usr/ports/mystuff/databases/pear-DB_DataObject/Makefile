@@ -9,7 +9,7 @@ CATEGORIES=	databases
 MODULES=	www/pear
 
 # PHP License
-PERMIT_PACKAGE_CDROM=	Yes
+PERMIT_PACKAGE=	Yes
 
 RUN_DEPENDS =	databases/pear-MDB2 \
 		devel/pear-Date

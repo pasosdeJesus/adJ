@@ -22,7 +22,7 @@ MASTER_SITES=https://github.com/pasosdeJesus/Mt77/archive/
 #WRKSRC = ${PKGNAME}
 TEST_TARGET = regr
 #Public domain
-PERMIT_PACKAGE_CDROM=   	Yes
+PERMIT_PACKAGE=   	Yes
 
 CONFIGURE_STYLE=        simple
 CONFIGURE_SCRIPT=       conf.sh

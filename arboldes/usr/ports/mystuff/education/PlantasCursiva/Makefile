@@ -17,7 +17,7 @@ DISTFILES=	plantas_cursiva-${V}.tar.gz
 
 
 #Public domain
-PERMIT_PACKAGE_CDROM=	Yes
+PERMIT_PACKAGE=	Yes
 
 do-build:
 

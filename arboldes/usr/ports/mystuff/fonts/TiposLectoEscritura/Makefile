@@ -12,7 +12,7 @@ HOMEPAGE=	http://structio.sourceforge.net/
 MAINTAINER=	Vladimir Támara Patiño <vtamara@pasosdeJesus.org>
 
 # Public Domain  & BSD License
-PERMIT_PACKAGE_CDROM=	Yes
+PERMIT_PACKAGE=	Yes
 NO_BUILD=	Yes
 NO_TEST=	Yes
 

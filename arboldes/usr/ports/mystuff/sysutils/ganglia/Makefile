@@ -10,7 +10,7 @@ CATEGORIES=	sysutils
 HOMEPAGE=	http://ganglia.sourceforge.net/
 
 # BSD
-PERMIT_PACKAGE_CDROM=	Yes
+PERMIT_PACKAGE=	Yes
 
 MASTER_SITES=	${MASTER_SITE_SOURCEFORGE:=ganglia/}
 DISTFILES=	${DISTNAME}.tar.gz
