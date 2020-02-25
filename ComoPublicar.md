@@ -27,17 +27,26 @@ Pasos importantes para publicar versión beta
    versión estable de OpenBSD
 3. Actualizar parches de locale y xlocale en libc de forma que puedan aplicarse
    sobre la nueva versión de OpenBSD. 
-	3.1 Prepara para probar con: `pruebas/preppruebas.sh` que restaura `/usr/src` a partir de `/usr/src$V-orig`
-	3.2 Tratar de aplicar todos los parches con `pruebas/aplicahasta.sh arboldes/usr/src/14..` o el último parche.
-	3.3 Compilar libc con `doas pruebas/compila-libc.sh` y correr pruebas de regresión con `cd /usr/src/lib/libc/regress; doas make`
-	3.4 Si falla compilación o alguna prueba de regresión hacer búsqueda binaria entre parches, iterando desde 3.1 pero en 3.2 ir bajando a parche del medio, y así sucesivamente hasta identificar el último que no produce fallas al correr pruebas de regresión. Puede aplicarse de a un parche con `pruebas/aplica.sh`.  Aplicar parche que falla y arreglar en libc hasta que pasen pruebas de regresión (y en lo posible mejorarlas).
+	3.1 Prepara para probar con: `pruebas/preppruebas.sh` que restaura 
+ 	    `/usr/src` a partir de `/usr/src$V-orig`
+	3.2 Tratar de aplicar todos los parches con `pruebas/aplicahasta.sh`
+	    `arboldes/usr/src/14..` o el último parche.
+	3.3 Compilar libc con `doas pruebas/compila-libc.sh` y correr pruebas 
+	    de regresión con `cd /usr/src/lib/libc/regress; doas make`
+	3.4 Si falla compilación o alguna prueba de regresión hacer búsqueda 
+	    binaria entre parches, iterando desde 3.1 pero en 3.2 ir bajando a 
+	    parche del medio, y así sucesivamente hasta identificar el último 
+	    que no produce fallas al correr pruebas de regresión. Puede 
+	    aplicarse de a un parche con `pruebas/aplica.sh`.  Aplicar parche 
+	    que falla y arreglar en libc hasta que pasen pruebas de regresión 
+	    (y en lo posible mejorarlas).
 4. Recompilar kernel, perl, sistema base y asegurar que puede crearse una 
    distribución inicial.
-   Ver en distribucion.sh lo que hace cuando autoCompBase es 's'.
+   Ver en `distribucion.sh` lo que hace cuando `autoCompBase` es 's'.
    Para verificar que perl está más o menos bien ejecutar `pkg_add`.
 5. Recompilar paquetes con actualizaciones de seguridad o mejoras
 6. Retroportar paquetes, dejar resultados no incluidos en DVD pero
-   útiles en 6.5-extra
+   útiles en `6.7-extra`
 7. Regenerar en distribución (sin paquetes ni otras compilaciones) con:
 	```
 	doas ./distribucion.sh
