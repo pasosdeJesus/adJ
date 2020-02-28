@@ -18,7 +18,7 @@ DISTFILES=	v${V}.zip
 WRKDIST=        ${WRKDIR}/biblia_dp-${V}
 
 #Public domain
-PERMIT_PACKAGE_CDROM=	Yes
+PERMIT_PACKAGE=	Yes
 
 CONFIGURE_STYLE=        simple
 CONFIGURE_SCRIPT=       conf.sh

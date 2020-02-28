@@ -1,7 +1,8 @@
-$OpenBSD: patch-Makefile_in,v 1.14 2016/07/01 08:46:52 landry Exp $
---- Makefile.in.orig	Tue Dec 15 11:08:58 2015
-+++ Makefile.in	Fri Dec 30 06:40:29 2016
-@@ -586,17 +586,13 @@ uninstall-iconDATA:
+$OpenBSD: patch-Makefile_in,v 1.17 2019/06/13 21:50:36 bcallah Exp $
+Index: Makefile.in
+--- Makefile.in.orig
++++ Makefile.in
+@@ -594,17 +594,13 @@ uninstall-iconDATA:
  install-rcDATA: $(rc_DATA)
  	@$(NORMAL_INSTALL)
  	@list='$(rc_DATA)'; test -n "$(rcdir)" || list=; \

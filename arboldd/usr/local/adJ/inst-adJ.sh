@@ -1204,6 +1204,129 @@ if (test -f /usr/include/openssl/asn1_mac.h) then {
           /usr/share/man/man3p/Locale::Codes::API.3p
 } fi;
 
+if (test -f /usr/sbin/snmpctl) then {
+	vac="$vac 6.5 a 6.6";
+	echo "Aplicando actualizaciones de 6.5 a 6.6" >> /var/www/tmp/inst-adJ.bitacora;
+	rm -f /usr/share/man/man3p/carp.3p \
+		/usr/share/man/man3p/Tie::ExtraHash.3p \
+		/usr/share/man/man3p/Tie::StdHash.3p \
+		/usr/share/man/man3p/Tie::StdScalar.3p \
+		/usr/share/man/man3p/basename.3p \
+		/usr/share/man/man3p/cluck.3p \
+		/usr/share/man/man3p/confess.3p \
+		/usr/share/man/man3p/croak.3p \
+		/usr/share/man/man3p/dirname.3p \
+		/usr/share/man/man3p/fileparse.3p \
+		/usr/share/man/man3p/getopt.3p \
+		/usr/share/man/man3p/getopts.3p \
+		/usr/share/man/man3p/inet_aton.3p \
+		/usr/share/man/man3p/inet_ntoa.3p \
+		/usr/share/man/man3p/longmess.3p \
+		/usr/share/man/man3p/look.3p \
+		/usr/share/man/man3p/open2.3p \
+		/usr/share/man/man3p/open3.3p \
+		/usr/share/man/man3p/pod2usage.3p \
+		/usr/share/man/man3p/podchecker.3p \
+		/usr/share/man/man3p/podselect.3p \
+		/usr/share/man/man3p/shortmess.3p \
+		/usr/share/man/man3p/sockaddr_in.3p \
+		/usr/share/man/man3p/sockaddr_un.3p \
+		/usr/share/man/man3p/writemain.3p
+
+	rm -f /usr/sbin/snmpctl \
+		/usr/share/man/man8/snmpctl.8
+
+  	rm -f /usr/X11R6/lib/pkgconfig/libfs.pc \
+		/usr/X11R6/include/X11/fonts/FSlib.h
+	rm -rf  /usr/X11R6/share/doc/libFS
+
+  	rm -f /usr/X11R6/bin/xman \
+        	/usr/X11R6/lib/X11/xman.help \
+        	/usr/X11R6/man/man1/xman.1 \
+        	/usr/X11R6/share/X11/app-defaults/Xman
+
+  	rm -f /usr/X11R6/lib/pkgconfig/libfs.pc \
+        	/usr/X11R6/lib/modules/v10002d.uc \
+		/usr/X11R6/lib/modules/v20002d.uc \
+		/usr/X11R6/lib/modules/drivers/ark_drv.la \
+		/usr/X11R6/lib/modules/drivers/ark_drv.so \
+		/usr/X11R6/lib/modules/drivers/chips_drv.la \
+		/usr/X11R6/lib/modules/drivers/chips_drv.so \
+		/usr/X11R6/lib/modules/drivers/glint_drv.la \
+		/usr/X11R6/lib/modules/drivers/glint_drv.so \
+		/usr/X11R6/lib/modules/drivers/i128_drv.la \
+		/usr/X11R6/lib/modules/drivers/i128_drv.so \
+		/usr/X11R6/lib/modules/drivers/neomagic_drv.la \
+		/usr/X11R6/lib/modules/drivers/neomagic_drv.so \
+		/usr/X11R6/lib/modules/drivers/rendition_drv.la \
+		/usr/X11R6/lib/modules/drivers/rendition_drv.so \
+		/usr/X11R6/lib/modules/drivers/s3_drv.la \
+		/usr/X11R6/lib/modules/drivers/s3_drv.so \
+		/usr/X11R6/lib/modules/drivers/s3virge_drv.la \
+		/usr/X11R6/lib/modules/drivers/s3virge_drv.so \
+		/usr/X11R6/lib/modules/drivers/sis_drv.la \
+		/usr/X11R6/lib/modules/drivers/sis_drv.so \
+		/usr/X11R6/lib/modules/drivers/tdfx_drv.la \
+		/usr/X11R6/lib/modules/drivers/tdfx_drv.so \
+		/usr/X11R6/lib/modules/drivers/trident_drv.la \
+		/usr/X11R6/lib/modules/drivers/trident_drv.so \
+		/usr/X11R6/lib/modules/drivers/tseng_drv.la \
+		/usr/X11R6/lib/modules/drivers/tseng_drv.so \
+		/usr/X11R6/man/man4/chips.4 \
+		/usr/X11R6/man/man4/glint.4 \
+		/usr/X11R6/man/man4/i128.4 \
+		/usr/X11R6/man/man4/neomagic.4 \
+		/usr/X11R6/man/man4/rendition.4 \
+		/usr/X11R6/man/man4/s3.4 \
+		/usr/X11R6/man/man4/s3virge.4 \
+		/usr/X11R6/man/man4/sis.4 \
+		/usr/X11R6/man/man4/tdfx.4 \
+		/usr/X11R6/man/man4/trident.4 \
+		/usr/X11R6/man/man4/tseng.4 \
+		/usr/X11R6/man/man3/XkbAllocGeomOverlayKey.3
+
+  	rm -f /usr/X11R6/include/X11/fonts/FSlib.h \
+        	/usr/include/dev/ic/dwc_gmac_reg.h \
+		/usr/include/dev/ic/dwc_gmac_var.h \
+		/usr/include/llvm/Analysis/IndirectCallSiteVisitor.h \
+		/usr/include/llvm/CodeGen/GCs.h \
+		/usr/include/llvm/DebugInfo/PDB/Native/NativeBuiltinSymbol.h \
+		/usr/include/llvm/DebugInfo/PDB/Native/NativeEnumSymbol.h \
+		/usr/include/llvm/IR/TypeBuilder.h \
+		/usr/include/llvm/Transforms/Utils/OrderedInstructions.h
+
+  	rm -f /usr/share/man/man1/clang++.1 \
+		/usr/share/man/man1/clang-cpp.1 \
+		/usr/share/man/man1/diagnostics.1 \
+		/usr/share/man/man3/SipHash24.3 \
+		/usr/share/man/man3/bitstring.3 \
+		/usr/share/man/man3/byteorder.3 \
+		/usr/share/man/man3/directory.3 \
+		/usr/share/man/man3/ethers.3 \
+		/usr/share/man/man3/exec.3 \
+		/usr/share/man/man3/fts.3 \
+		/usr/share/man/man3/getcap.3 \
+		/usr/share/man/man3/inet_net.3 \
+		/usr/share/man/man3/md5.3 \
+		/usr/share/man/man3/pcap-filter.3 \
+		/usr/share/man/man3/pcap.3 \
+		/usr/share/man/man3/pwcache.3 \
+		/usr/share/man/man3/resolver.3 \
+		/usr/share/man/man3/rmd160.3 \
+		/usr/share/man/man3/sha1.3 \
+		/usr/share/man/man3/sha2.3 \
+		/usr/share/man/man3/stdarg.3 \
+		/usr/share/man/man3/uucplock.3 \
+		/usr/share/man/man3/uuid.3 \
+		/usr/share/man/man3/ypclnt.3 \
+		/usr/share/man/man4/i386/vmm.4 \
+		/usr/share/man/man4/macppc/openprom.4 \
+		/usr/share/man/man4/sparc64/openprom.4
+
+
+} fi;
+
+
 if  (test "$vac" != "") then {
 	dialog --title 'Actualizaciones aplicadas' --msgbox "\\nSe aplicaron actualizaciones: $vac\\n\\n$mac\\n" 15 60
 } fi;
