@@ -109,7 +109,7 @@ xfe-[v]		Administrador de archivos
 
 * Escritorio consola:
 antiword-[v]		Convierte a texto plano archivos de MS-Word
-rtorrent-[v]	Sistema de distribución de archivos cooperativo 
+bash-[v]		Interpete de orden requerido para instalar yarn
 bzip2-[v]		Descompresor de formato BZ2
 cdparanoia-[v]	Utilidad para leer CDDA
 cdrtools-[v]		Quema CDs y sistemas de archivo ISO 9660
@@ -125,6 +125,7 @@ ImageMagick-[v]	Conversión de formatos gráficos
 ispell-[v]-spanish	Diccionario en español 
 mutt-[v]		Cliente de correo
 rsync-[v]		Para sincronizar copias remotas
+rtorrent-[v]	Sistema de distribución de archivos cooperativo 
 scrot-[v]		Captura imágenes de pantallas
 silc-client-[v]	Cliente para conferencia segura
 sox-[v]		Conversión, grabación, reproducción de sonido
@@ -272,7 +273,6 @@ gstreamer-[v]	Ambiente para multimedia
 gstreamer-plugins-base-[v]	Elementos básicos para GStreamer
 gstreamer1-[v]	Ambiente para emitir multimedios
 gstreamer1-plugins-base-[v]	Elementos base para Gstreamer
-gstreamer1-plugins-bad-[v]     Elementos buenos para GStreamer
 gtar-[v]	 	Otra versión del archivador tar
 gtest-[v]	 	Ambiente de pruebas para C++
 gtk+2-[v]		Componentes gráficos GTK+2
@@ -343,7 +343,6 @@ libksba-[v]		Librería de X.509
 libltdl-[v]		Envoltura para dlopen de gnu libtool
 libmad-[v]	Decoficador de MPEG
 libmatroska-[v]	Contenedor estándar y abierto de audio y vídeo
-libmaxminddb-[v]	
 libmms-[v]		Librería para reconocer mms:// y mmsh://
 libmng-[v]		Librería de referencia del formato gráfico MNG
 libmspack-[v]	Librería para manejar formatos de compresión de MS
@@ -479,7 +478,6 @@ p5-Mail-SPF-[v]	Implementación OO de Sender Policy Framerwork
 p5-Mail-Tools-[v]	Módulo para manejar correo con Perl
 p5-Math-Base-Convert-[v] 	Conversor rápido de una base a otra
 p5-Math-Int64-[v]	Manipula enteros de 64 bits en Perl
-p5-Math-Int128-[v]	Manipula enteros de 128 bits en Perl
 p5-MaxMind-DB-Common-[v]	Compartido por modulos reader y writer
 p5-MaxMind-DB-Reader-[v]	Lee bases DB y busca direcciones IP
 p5-MLDBM-[v]		Almacena estrucutra de hash multi nivel en uno solo
@@ -560,26 +558,19 @@ protobuf-c-[v]		Protocolos de colchones para C
 ps2eps-[v]		Convierte Postscript a Postscript Encapsulado
 psutils-[v]		Utilidades para manipular documentos Postscript
 pugixml-[v]	reconocedor simple y rápido de XML para C++
-pulseaudio-[v]		Servidor de sonido en red y multi plataforma
-py-asn1crypto-[v]	Reconocedor y serializador rápido de ASN.1
 py-cairo-[v]		Conexión con Cairo para Python
 py-certifi-[v]	Paquete python para revisar certificados 
-py-cffi-[v]		Interfaz de funciones foraneas para llamar código C
 py-chardet-[v]	Autodetección de codificación en Python
 py-cparser-[v]		Reconocedor de C en Python puro
 py-dbus-[v]		Uniones para dbus en Python
 py-dbus-common-[v]	Archivos comunes para py-dbus
 py-dnspython-[v]	Juego de herramientas DNS para Python
-py-enum34-[v]		Enum de Python 3.4 retroportado
 py-gobject-[v]	
 py-gtk2-[v]	Conexión con GTK+2 en Python
 py-idna-[v]		Librería de Python para soportar el protocolo IDNA
 py-lxml-[v]		Uniones en Python para libxml2 y libxslt
 py-numpy-[v]	Librearía numérica y de arreglos rápida en Python
-py-requests-[v]	Librería Python para HTTP simple y elegante
 py-setuptools-[v]	Sistema de empaquetamiento de módulos Python
-py-six-[v]		Librería de compatibilidad entre Python 2 y 3
-py-tz-[v]		API de Python para tratar con zonas horarias
 py-urllib3-[v]		Librería HTTP para Python
 py3-acme-[v]	Implementción del protocolo ACME
 py3-asn1-[v]	Librería de ASN.1 para Python
@@ -593,8 +584,6 @@ py3-cparser-[v]		Reconocedor de C en Python puro
 py3-cryptography-[v]	Recetas y primitivas criptográficas en Python
 py3-cryptodome-[v]	Librería criptográfica autocontenida para Python
 py3-cython-[v]
-py3-dateutil-[v]	API en python avanzado para cálculos con fechas
-py3-dbus-[v]		Uniones para dbus en Python 3
 py3-distro-[v]		
 py3-josepy-[v]	Cifrado y firma de objets en Javascript
 py3-idna-[v]		Librería de Python para soportar el protocolo IDNA
@@ -604,12 +593,10 @@ py3-numpy-[v]	Librearía numérica y de arreglos rápida en Python
 py3-openssl-[v]	Interfaz para python a librería OpenSSL
 py3-parsedatetime-[v]	Reconocer fechas y horas leibles por humanos
 py3-pbr-[v]		Inyecta comportamientos por defecto a setuptools
-py3-proj-[v]	Interfaz generad Pyrex para PROJ.4
 py3-pyRFC3339-[v]	Da formato a fechas de acuerdo al RFC3339
 py3-requests-[v]	Librería Python para HTTP simple y elegante
 py3-requests-toolbelt-[v]	Cinturon de utilidades para py-requests
 py3-setuptools-[v]	Sistema de empaquetamiento de módulos Python
-py3-sip-[v]		Uniones entre python y C generadas automaticamente
 py3-six-[v]		Librería de compatibilidad entre Python 2 y 3
 py3-tz-[v]		API de Python para tratar con zonas horarias
 py3-urllib3-[v]		Librería HTTP para Python
@@ -617,7 +604,6 @@ py3-werkzeug-[v]	Colección de utilidades WSGI
 py3-zopecomponent-[v]	Arquitectura por componentes de Zope
 py3-zopeevent-[v]	Sistema de publicación básico de Zope
 py3-zopeinterface-[v]	Interfaz a infraestructura de objetos de Zope
-python-tkinter-[v]	tk GUI module for Python
 qhull-[v]		Calcular caso convexo
 qdbm-[v]		Librería, base de datos de alto desempeño
 qpdf-[v]    	Utilidad para inspeccionar y transformar PDF
