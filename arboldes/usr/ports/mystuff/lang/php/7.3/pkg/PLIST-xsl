@@ -5,6 +5,6 @@
 @pkgpath lang/php/5.6,-xsl
 @pkgpath lang/php/7.0,-xsl
 @pkgpath lang/php/7.1,-xsl
-@so lib/php-${PV}/modules/xsl.so
+lib/php-${PV}/modules/xsl.so
 share/examples/php-${PV}/xsl.ini
 @sample ${SYSCONFDIR}/php-${PV}.sample/xsl.ini

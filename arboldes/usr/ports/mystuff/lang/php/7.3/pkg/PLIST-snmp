@@ -5,6 +5,6 @@
 @pkgpath lang/php/5.6,-snmp
 @pkgpath lang/php/7.0,-snmp
 @pkgpath lang/php/7.1,-snmp
-@so lib/php-${PV}/modules/snmp.so
+lib/php-${PV}/modules/snmp.so
 share/examples/php-${PV}/snmp.ini
 @sample ${SYSCONFDIR}/php-${PV}.sample/snmp.ini

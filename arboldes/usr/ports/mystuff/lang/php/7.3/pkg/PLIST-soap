@@ -5,6 +5,6 @@
 @pkgpath lang/php/5.6,-soap
 @pkgpath lang/php/7.0,-soap
 @pkgpath lang/php/7.1,-soap
-@so lib/php-${PV}/modules/soap.so
+lib/php-${PV}/modules/soap.so
 share/examples/php-${PV}/soap.ini
 @sample ${SYSCONFDIR}/php-${PV}.sample/soap.ini

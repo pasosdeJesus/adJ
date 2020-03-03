@@ -5,6 +5,6 @@
 @pkgpath lang/php/5.6,-mysqli
 @pkgpath lang/php/7.0,-mysqli
 @pkgpath lang/php/7.1,-mysqli
-@so lib/php-${PV}/modules/mysqli.so
+lib/php-${PV}/modules/mysqli.so
 share/examples/php-${PV}/mysqli.ini
 @sample ${SYSCONFDIR}/php-${PV}.sample/mysqli.ini

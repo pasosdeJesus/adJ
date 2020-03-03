@@ -5,6 +5,6 @@
 @pkgpath lang/php/5.6,-zip
 @pkgpath lang/php/7.0,-zip
 @pkgpath lang/php/7.1,-zip
-@so lib/php-${PV}/modules/zip.so
+lib/php-${PV}/modules/zip.so
 share/examples/php-${PV}/zip.ini
 @sample ${SYSCONFDIR}/php-${PV}.sample/zip.ini

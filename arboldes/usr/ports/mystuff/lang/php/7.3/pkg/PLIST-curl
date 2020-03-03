@@ -5,6 +5,6 @@
 @pkgpath lang/php/5.6,-curl
 @pkgpath lang/php/7.0,-curl
 @pkgpath lang/php/7.1,-curl
-@so lib/php-${PV}/modules/curl.so
+lib/php-${PV}/modules/curl.so
 share/examples/php-${PV}/curl.ini
 @sample ${SYSCONFDIR}/php-${PV}.sample/curl.ini

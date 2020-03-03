@@ -1,9 +1,9 @@
-@comment $OpenBSD$
+@comment $OpenBSD: PLIST,v$
 include/biblesync/
 include/biblesync/biblesync-version.hh
 include/biblesync/biblesync.hh
-@lib lib/libbiblesync.so.${LIBbiblesync_VERSION}
+lib/libbiblesync.so.2.0.1
 lib/pkgconfig/biblesync.pc
-share/man/
+@mandir share/man/
 share/man/man7/
 @man share/man/man7/biblesync.7

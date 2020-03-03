@@ -5,6 +5,6 @@
 @pkgpath lang/php/5.6,-xmlrpc
 @pkgpath lang/php/7.0,-xmlrpc
 @pkgpath lang/php/7.1,-xmlrpc
-@so lib/php-${PV}/modules/xmlrpc.so
+lib/php-${PV}/modules/xmlrpc.so
 share/examples/php-${PV}/xmlrpc.ini
 @sample ${SYSCONFDIR}/php-${PV}.sample/xmlrpc.ini

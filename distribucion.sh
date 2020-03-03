@@ -818,7 +818,6 @@ if (test "$sn" = "s") then {
 	paquete p5-Data-OptList
 	paquete p5-Data-Printer
 	paquete p5-Data-Validate-IP
-	paquete p5-DateManip
 	paquete p5-DateTime
 	paquete p5-DateTime-Locale
 	paquete p5-DateTime-TimeZone
@@ -949,13 +948,13 @@ if (test "$sn" = "s") then {
 	paquete curl
 
 	# En adJ 6.5 para compilar PHP 5.6 tuvo que modificarse el porte y tras iniciar compilación volver a deshacer algunos cambios de los parches para que continuara, dificultad con icu::
-	paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 5.6
+#	paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 5.6
 	paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 7.3
 
 	###
 	# Recompilados para mejorar dependencias y actualizar
 
-	paquete gettext-tools
+	paquete gettext-tools paquetes 'gettext-tools gettext-runtime'
 	paquete libidn2
 
 	#FLAVOR=light paquete evince paquetes evince-light
@@ -1005,23 +1004,8 @@ if (test "$sn" = "s") then {
 	paquete lang/ocaml-labltk
 	paquete net/xmrig
 	#paquete sysutils/ganglia
-	paquete textproc/biblesync
 	paquete textproc/sword
-	paquete www/gtkhtml4
-	paquete www/webkit-gtk3
-	paquete textproc/xiphos
-	paquete www/pear-HTML-Common
-	paquete www/pear-HTML-Common2
-	paquete www/pear-HTML-CSS
-	paquete www/pear-HTML-Javascript
-	paquete www/pear-HTML-Menu
-	paquete www/pear-HTML-QuickForm
-	paquete www/pear-HTML-Table
-	paquete databases/pear-DB
-	paquete databases/pear-MDB2
-	paquete databases/pear-DB_DataObject
-	paquete www/pear-DB-DataObject-FormBuilder
-	paquete www/pear-HTML-QuickForm-Controller
+	paquete textproc/bibletime
 	paquete x11/fbdesk
 
 	####
@@ -1042,7 +1026,7 @@ if (test "$sn" = "s") then {
 	#paquete education/sigue -- dependía de repasa
 	paquete textproc/Mt77
 
-	paquete databases/sivel sivel sivel 1.2
+	#paquete databases/sivel sivel sivel 1.2
 	paquete databases/sivel sivel sivel 2.0
 
 	rm $dini/$V$VESP-$ARQ/$dest/php5-gd-*-no_x11.tgz > /dev/null 2>&1

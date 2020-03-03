@@ -5,6 +5,6 @@
 @pkgpath lang/php/5.6,-intl
 @pkgpath lang/php/7.0,-intl
 @pkgpath lang/php/7.1,-intl
-@so lib/php-${PV}/modules/intl.so
+lib/php-${PV}/modules/intl.so
 share/examples/php-${PV}/intl.ini
 @sample ${SYSCONFDIR}/php-${PV}.sample/intl.ini

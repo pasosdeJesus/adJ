@@ -3055,6 +3055,9 @@ done
 	
 if (test ! -f "/usr/local/bin/ruby$VRUBYSP") then {
 	insacp ruby
+} fi
+
+if (test -f "/usr/local/bin/ruby$VRUBYSP") then {
         echo "* Creando enlaces para ruby $VRUBY" >> /var/www/tmp/inst-adJ.bitacora;
 	ln -sf /usr/local/bin/ruby$VRUBYSP /usr/local/bin/ruby
 	ln -sf /usr/local/bin/erb$VRUBYSP /usr/local/bin/erb

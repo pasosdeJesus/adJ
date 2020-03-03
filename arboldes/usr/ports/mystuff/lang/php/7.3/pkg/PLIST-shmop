@@ -5,6 +5,6 @@
 @pkgpath lang/php/5.6,-shmop
 @pkgpath lang/php/7.0,-shmop
 @pkgpath lang/php/7.1,-shmop
-@so lib/php-${PV}/modules/shmop.so
+lib/php-${PV}/modules/shmop.so
 share/examples/php-${PV}/shmop.ini
 @sample ${SYSCONFDIR}/php-${PV}.sample/shmop.ini

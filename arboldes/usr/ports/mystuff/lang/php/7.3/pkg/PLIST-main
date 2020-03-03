@@ -27,7 +27,7 @@ bin/php-config-${PV}
 bin/phpize-${PV}
 lib/php-${PV}/
 lib/php-${PV}/modules/
-@so lib/php-${PV}/modules/opcache.so
+lib/php-${PV}/modules/opcache.so
 @man man/man1/phar-${PV}.1
 @man man/man1/php-${PV}.1
 @man man/man1/php-config-${PV}.1

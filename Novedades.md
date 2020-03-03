@@ -3,7 +3,7 @@ Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
 
 ### Versión: 6.6b1
-Fecha de publicación: 26/Feb/2020
+Fecha de publicación: 3/Mar/2020
 
 Puede ver novedades respecto a OpenBSD en:
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_6/Novedades_OpenBSD.md>
@@ -93,15 +93,16 @@ Puede ver las diversas versiones publicadas en:
 
 ### 2.2 Paquetes 
 
-* Entre los paquete agregados resaltamos ``
 * Recompilados portes estables más recientes para evitar fallas de seguridad: 
-   `dovecot`, `gettext-tools`, `libidn2`, `oniguruma`, `pcre2`, `webkitgtk4`
-* Postgresql 12.2 adaptado de retrporte de 12.1 de current (en adJ soporta 
-  bien cotejaciones en español)
+    `dovecot`, `gettext-tools`, `libidn2`, `oniguruma`, `pcre2`, 
+    `webkitgtk4`
 * Ruby 2.7.0 retroportado de current  (incluye solución de Jeremy Evans a 
   falla con `realpath` para permitir usar `unveil` y de hecho hay 2 gemas 
   que lo usan: <https://github.com/jcs/ruby-unveil> y 
   <https://github.com/jeremyevans/ruby-pledge>)
+* Algunos paquetes típicos y su versión: dovecot 2.3.7.2, chromium 79.0.3945,
+  firefox 69.9.2, libreoffice 6.3.2.2, nginx 1.16.1p0, mariadb 10.3.18,
+  node 10.16.3, python 3.7.4, vim 8.1.2061
 
 
 ## 3. NOVEDADES RESPECTO A ADJ 6.5 PROVENIENTES DE PASOS DE JESÚS
@@ -115,21 +116,55 @@ Puede ver las diversas versiones publicadas en:
 
 ### 3.2 Paquetes
 
+* El nuevo paquete `bibletime` remplaza `xiphos` y `biblesync`
 * Entre los paquetes retirados resaltamos `markup` que ya no está disponible
   en sitio de distribución y por lo mismo `sigue` y `repasa` que la requerían.
-  `SIVeL 1.2` y programas que lo requierían incluyendo `php-5.6.4`.
+  Se retiró `SIVeL 1.2` y programas que lo requierían incluyendo `php-5.6.4` y 
+  los diversos paquetes de `pear`. Además se retiraron varios programas
+  de soporte y la librerías ya no usados gstreamer1mm, gtkhtml4, hdf5, libao, 
+  openpam.
 * Se han recompilado los siguientes para aprovechar `xlocale`:
    `glib2`, `libunistring`, `vlc`
 * Recompilados muchos paquetes de Perl que ahora son requeridos por 
   `SpamAssassin` y al igual que otros de perl se recompilaron (sin cambiar 
   de versión) con el perl de adJ que si soporta `LC_NUMERIC`.  
-* Retroportados y adaptados de OpenBSD-current: 
-* `chromium` 79.0.3945-117 con llave de Pasos de Jesús retroportado de 
-  OpenBSD-current.
-* Se parchan y compilan portes más recientes de:
-	* `sword` (que ahora emplea `clang` e `icu` recientes),
-	*  `biblesync` y `xiphos` (ahora se compilan con `clang++`),
-* Se incluye beta 10 de `sivel2`
+* Retroportados y adaptados de OpenBSD-current 
+  * `chromium` 79.0.3945-117 con llave de Pasos de Jesús
+  * `curl`
+  * Postgresql 12.2 adaptado de retroporte de 12.1 (en adJ soporta 
+   bien cotejaciones en español)
+* Se incluye beta 10 de `sivel2` cuyas novedades son:
+    * Mapa de casos sobre OpenStretMap con filtro, acumulados de casos 
+      (clusters) y nuevas posibilidades con capas: elegir capa base, 
+      superponer una capa con transparencias, cargar pequeñas capas GeoJSON 
+      y de exportar la capa de casos en GeoJSON (implementado por Luis 
+      Alejandro Cruz)
+    * Posibilidad de visualizar casos sobre Google Maps (portado de SIVeL 1.2 
+      y mejorado) y sobre Mapbox, pero no se activan por omisión por requerir 
+      llave y eventualmente pagos. Ver pantallazos en 
+      https://github.com/pasosdeJesus/sivel2_gen/blob/master/doc/mapas.md 
+      (implementado por Luis Alejandro Cruz).
+    * Permite exportar detalles de un caso a JSON y a XRLAT (XML) mediante 
+      rutas de la forma casos/1.json y casos/1.xrlat, cambiando 1 por el 
+      número de caso (implementado por Luis Alejandro Cruz)
+    * Permite exportar varios casos a XRLAT y generalidades a JSON. Puede 
+      hacerse desde el listado de casos, Filtro Avanzado seleccionando el 
+      filtro por usar, después en Generar Plantilla elegir bien Exportar a 
+      XRLAT o bien Exportar a JSON y presionar el botón Generar. También 
+      pueden emplearse rutas de la forma `casos.xrlat?utf8=✓&filtro[departamento_id]=5...` y `casos.json?utf8=✓&filtro[departamento_id]=5....` 
+      Los parámetros para el filtro se documentan en: 
+      <https://github.com/pasosdeJesus/sivel2/blob/master/doc/API_casos.md>
+      (implementado por Luis Alejandro Cruz)
+    * Se moderniza la interfaz de 3 formas: (1) haciendola más adaptable a 
+      dispositivos móviles (siguiendo lineamientos de diseño visual de twitter 
+      y su librería Bootstrap 4), (2) permitiendo personalizar el color de más 
+      elementos visuales mediante temas y (3) posibilitando el uso de 
+      librerías javascript más recientes. Ver <https://github.com/pasosdeJesus/sip/wiki/Actualizaci%C3%B3n-de-sip-2.0b6-a-sip-2.0b7>   
+    * Tema con color en más elementos
+    * Se arreglaron fallas 
+    * Se ampliaron pruebas de regresión y del sistema con sideex (Implementado por Luis Alejandro y por Blanca Acosta).
+
+
 
 
 ## 4. FE DE ERRATAS

@@ -5,6 +5,6 @@
 @pkgpath lang/php/5.6,-sqlite3
 @pkgpath lang/php/7.0,-sqlite3
 @pkgpath lang/php/7.1,-sqlite3
-@so lib/php-${PV}/modules/sqlite3.so
+lib/php-${PV}/modules/sqlite3.so
 share/examples/php-${PV}/sqlite3.ini
 @sample ${SYSCONFDIR}/php-${PV}.sample/sqlite3.ini

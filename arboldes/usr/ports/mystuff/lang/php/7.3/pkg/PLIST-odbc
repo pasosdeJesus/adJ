@@ -5,6 +5,6 @@
 @pkgpath lang/php/5.6,-odbc
 @pkgpath lang/php/7.0,-odbc
 @pkgpath lang/php/7.1,-odbc
-@so lib/php-${PV}/modules/odbc.so
+lib/php-${PV}/modules/odbc.so
 share/examples/php-${PV}/odbc.ini
 @sample ${SYSCONFDIR}/php-${PV}.sample/odbc.ini

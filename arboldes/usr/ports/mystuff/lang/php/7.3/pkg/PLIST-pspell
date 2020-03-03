@@ -5,6 +5,6 @@
 @pkgpath lang/php/5.6,-pspell
 @pkgpath lang/php/7.0,-pspell
 @pkgpath lang/php/7.1,-pspell
-@so lib/php-${PV}/modules/pspell.so
+lib/php-${PV}/modules/pspell.so
 share/examples/php-${PV}/pspell.ini
 @sample ${SYSCONFDIR}/php-${PV}.sample/pspell.ini

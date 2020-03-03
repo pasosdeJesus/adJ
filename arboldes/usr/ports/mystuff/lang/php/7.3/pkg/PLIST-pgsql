@@ -5,6 +5,6 @@
 @pkgpath lang/php/5.6,-pgsql
 @pkgpath lang/php/7.0,-pgsql
 @pkgpath lang/php/7.1,-pgsql
-@so lib/php-${PV}/modules/pgsql.so
+lib/php-${PV}/modules/pgsql.so
 share/examples/php-${PV}/pgsql.ini
 @sample ${SYSCONFDIR}/php-${PV}.sample/pgsql.ini

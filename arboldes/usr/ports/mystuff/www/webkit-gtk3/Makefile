@@ -101,8 +101,9 @@ LIB_DEPENDS =	multimedia/gstreamer1/plugins-base \
 		x11/gnome/libsecret
 
 BUILD_DEPENDS =	devel/bison \
-		devel/gettext-tools \
 		devel/gperf \
+		devel/gettext,-tools \
+		textproc/intltool \
 		geo/geoclue2
 
 RUN_DEPENDS =	geo/geoclue2

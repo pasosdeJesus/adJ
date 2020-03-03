@@ -5,6 +5,6 @@
 @pkgpath lang/php/5.6,-ldap
 @pkgpath lang/php/7.0,-ldap
 @pkgpath lang/php/7.1,-ldap
-@so lib/php-${PV}/modules/ldap.so
+lib/php-${PV}/modules/ldap.so
 share/examples/php-${PV}/ldap.ini
 @sample ${SYSCONFDIR}/php-${PV}.sample/ldap.ini

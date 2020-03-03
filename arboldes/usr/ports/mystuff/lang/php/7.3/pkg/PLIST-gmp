@@ -5,6 +5,6 @@
 @pkgpath lang/php/5.6,-gmp
 @pkgpath lang/php/7.0,-gmp
 @pkgpath lang/php/7.1,-gmp
-@so lib/php-${PV}/modules/gmp.so
+lib/php-${PV}/modules/gmp.so
 share/examples/php-${PV}/gmp.ini
 @sample ${SYSCONFDIR}/php-${PV}.sample/gmp.ini

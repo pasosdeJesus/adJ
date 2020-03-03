@@ -5,7 +5,7 @@
 @pkgpath lang/php/5.6,-imap
 @pkgpath lang/php/7.0,-imap
 @pkgpath lang/php/7.1,-imap
-@so lib/php-${PV}/modules/imap.so
+lib/php-${PV}/modules/imap.so
 share/examples/php-${PV}/imap.ini
 @comment etc/master.passwd
 @comment etc/spwd.db

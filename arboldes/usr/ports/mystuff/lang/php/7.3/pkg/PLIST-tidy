@@ -5,6 +5,6 @@
 @pkgpath lang/php/5.6,-tidy
 @pkgpath lang/php/7.0,-tidy
 @pkgpath lang/php/7.1,-tidy
-@so lib/php-${PV}/modules/tidy.so
+lib/php-${PV}/modules/tidy.so
 share/examples/php-${PV}/tidy.ini
 @sample ${SYSCONFDIR}/php-${PV}.sample/tidy.ini
