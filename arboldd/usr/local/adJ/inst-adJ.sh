@@ -2972,36 +2972,6 @@ rm -f $docroot/phpinfo.php
 	echo "* Saltando"; >> /var/www/tmp/inst-adJ.sh
 } fi;
 
-inspear="s";
-if (test -f "/var/www/pear/lib/DB/DataObject/FormBuilder.php") then {
-	dialog --title 'Actualizar PEAR' --yesno "\\nLibrerías de pear ya instaladas. ¿Actualizarlas?" 15 60
-	if (test "$?" != "0") then {
-		inspear="n";
-	} fi;
-} fi;
-
-function pearfun {
-if (test "$inspear" = "s") then {
-	echo "* Actualizando paquetes de pear"  >> /var/www/tmp/inst-adJ.bitacora;
-	echo "* Eliminando paquetes y librerías" >> /var/www/tmp/inst-adJ.bitacora;
-	p=`ls /var/db/pkg/ | grep "pear-"`;
-	pkg_delete -I -D dependencies $p >> /var/www/tmp/inst-adJ.bitacora 2>&1
-	p=`ls /var/db/pkg/ | grep "pear-"`;
-	pkg_delete -I -D dependencies $p >> /var/www/tmp/inst-adJ.bitacora 2>&1
-	rm -rf /var/www/pear
-	echo "Antes de pkg_add" >> /var/www/tmp/inst-adJ.bitacora
-	p=`ls $PKG_PATH/pear-*`;
-	pkg_add -I -D repair -D update -D installed -D updatedepends -r $p >> /var/www/tmp/inst-adJ.bitacora 2>&1
-	echo "Antes de pkg_delete" >> /var/www/tmp/inst-adJ.bitacora
-	ls -l /var/www/pear/lib/DB/ >> /var/www/tmp/inst-adJ.bitacora
-	cd /var/db/pkg
-	pkg_delete -I -D dependencies partial-pear-*  >> /var/www/tmp/inst-adJ.bitacora 2>&1
-} fi;
-
-}
-
-pearfun
-
 insacp ispell
 
 

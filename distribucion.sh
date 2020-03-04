@@ -579,14 +579,15 @@ if (test "$sn" = "s") then {
 	ln -s $dini/tminiroot/install-es.sub /usr/src/distrib/miniroot/install-es.sub
 	rm -f /usr/src/distrib/amd64/common/install-es.md
 	ln -s $dini/tminiroot/install-amd64-es.md /usr/src/distrib/amd64/common/install-es.md
-	verleng /usr/src/distrib/miniroot/list 
-	verleng /usr/src/distrib/amd64/common/list 
+	#verleng /usr/src/distrib/miniroot/list 
+	#verleng /usr/src/distrib/amd64/common/list 
 
 	cp /etc/signify/adJ-*pub /$D_DESTDIR/etc/signify/
-	cp /usr/src/distrib/ramdisk/list /tmp/ramdisk_list
-	cp /usr/src/distrib/amd64/common/list /tmp/common_list
-	sed -e 's/signify\/openbsd/signify\/adJ/g' /tmp/ramdisk_list > /usr/src/distrib/ramdisk/list 
-	sed -e 's/signify\/openbsd/signify\/adJ/g' /tmp/common_list > /usr/src/distrib/amd64/common/list
+	cp /usr/src/distrib/amd64/ramdisk_cd/list /tmp/ramdisk_list
+	#cp /usr/src/distrib/amd64/common/list /tmp/common_list
+	sed -e 's/signify\/openbsd/signify\/adJ/g;s/install.sub/install-es.sub/g;s/install-adm64.md/install-amd64-es.md/g' /tmp/ramdisk_list > /usr/src/distrib/amd64/ramdisk_cd/list 
+	verleng /usr/src/distrib/amd64/ramdisk_cd/list 
+	#sed -e 's/signify\/openbsd/signify\/adJ/g' /tmp/common_list > /usr/src/distrib/amd64/common/list
 
 	cd /usr/src/distrib/special/libstubs
 	make
@@ -860,11 +861,9 @@ if (test "$sn" = "s") then {
 	paquete p5-Mail-SPF
 	paquete p5-Mail-Tools
 	paquete p5-Math-Base-Convert
-	paquete p5-Math-Int128
 	paquete p5-Math-Int64
 	paquete p5-MaxMind-DB-Common
 	paquete p5-MaxMind-DB-Reader
-	paquete p5-MaxMind-DB-Reader-XS
 	paquete p5-Module-Implementation
 	paquete p5-Module-Runtime
 	paquete p5-Moo
