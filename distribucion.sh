@@ -913,7 +913,8 @@ if (test "$sn" = "s") then {
 	# Retroportados para cerrar fallas o actualizar
 	# Deben estar en arboldes/usr/ports/mystuff y en /usr/ports de current
 
-	paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs" 
+	paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs postgresql-pg_upgrade" 
+	paquete postgresql-previous 
 	paquete ruby paquetes "ruby ruby27-ri_docs" 2.7
 	#paquete tiff
 	#paquete geo/spatialite/libspatialite
@@ -940,6 +941,9 @@ if (test "$sn" = "s") then {
 	paquete oniguruma 
 	paquete pcre2 
 	paquete webkitgtk4
+	paquete librsvg
+	paquete certbot paquetes "certbot py3-acme"
+	paquete unzip
 
 	###	
 	# Recompilados de estable que usan xlocale (y pueden cerrar fallas)
