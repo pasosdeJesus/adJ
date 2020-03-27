@@ -29,8 +29,8 @@ Pasos importantes para publicar versión beta
    sobre la nueva versión de OpenBSD. 
 	3.1 Prepara para probar con: `pruebas/preppruebas.sh` que restaura 
  	    `/usr/src` a partir de `/usr/src$V-orig`
-	3.2 Tratar de aplicar todos los parches con `pruebas/aplicahasta.sh`
-	    `arboldes/usr/src/14..` o el último parche.
+	3.2 Tratar de aplicar todos los parches con último parche:
+		 `pruebas/aplicahasta.sh arboldes/usr/src/14..` 
 	3.3 Compilar libc con `doas pruebas/compila-libc.sh` y correr pruebas 
 	    de regresión con `cd /usr/src/lib/libc/regress; doas make`
 	3.4 Si falla compilación o alguna prueba de regresión hacer búsqueda 
@@ -46,7 +46,7 @@ Pasos importantes para publicar versión beta
    Para verificar que perl está más o menos bien ejecutar `pkg_add`.
 5. Recompilar paquetes con actualizaciones de seguridad o mejoras
 6. Retroportar paquetes, dejar resultados no incluidos en DVD pero
-   útiles en `6.7-extra`
+   útiles en `6.6-extra`
 7. Regenerar en distribución (sin paquetes ni otras compilaciones) con:
 	```
 	doas ./distribucion.sh
@@ -59,6 +59,7 @@ Pasos importantes para publicar versión beta
 	- Instalación de sistema base, `uname -a` debe reportar 
 		`APRENDIENDODEJESUS`
 	- Verificar que kernel tiene renombramiento de daemon por servicio con:
+
 	$  vmstat -s | grep servicio
           	4 pages reserved for pageservicio
           	0 number of times the pageservicio woke up
@@ -96,7 +97,10 @@ setlocale(LC_NUMERIC, "es_CO.UTF-8") or die "No pone locale LC_NUMERIC en es_CO.
 my $a = 1987.23;
 printf "%g\n", $a;
 ```
-	- Con paquete colorls modificado y actualizado, verificar cotejacion 
+	- Ejecución de /inst-adJ.sh en nuevo y actualización, 
+	- Verificar que desde el directorio paquetes del medio de
+	  instalacion se ejecute sin fallas PKG_PATH=. doas pkg_add *
+	- Con paquete `colorls` modificado y actualizado, verificar cotejacion 
 	  en español en terminal grafica:
   touch a
   touch í
@@ -120,10 +124,8 @@ psql -h /var/www/var/run/postgresql/ -Upostgres -f /tmp/cot.sql
  t
 (1 row)
 ```
-	- ejecución de /inst-adJ.sh en nuevo y actualización, 
-	- que opere bien una aplicación Ruby on Rails
-	- que toda entrada del menú desde la interfaz gráfica opere.  
-	- ejecución de /usr/local/adJ/inst-sivel.sh, que opere SIVeL1.2,
+	- Que opere bien una aplicación Ruby on Rails
+	- Que toda entrada del menú desde la interfaz gráfica opere.  
 	  Arreglar y repetir hasta que no haya errores.
 10. En computador de desarrollo tras configurar `var-local.sh` enviar a
    adJ.pasosdeJesus.org:
@@ -133,9 +135,9 @@ psql -h /var/www/var/run/postgresql/ -Upostgres -f /tmp/cot.sql
 11. En adJ.pasosdeJesus.org
 	```
 	hdes/creaiso.sh
-	cp -rf AprendiendoDeJesus-6.5-amd64.iso 6.5-amd64 /dirftp
-	mkdir /dirftp/6.5-extra
-	rsync compdes:comp/adJ/extra-6.5/* /dirftp/6.5-extra
+	cp -rf AprendiendoDeJesus-6.6-amd64.iso 6.6-amd64 /dirftp
+	mkdir /dirftp/6.6-extra
+	rsync compdes:comp/adJ/extra-6.6/* /dirftp/6.6-extra
 	```
 12. Verificar operación de:
   * http://pasosdeJesus.github.io/basico_adJ http://pasosdeJesus.github.io/usuario_adJ http://pasosdeJesus.github.io/servidor_adJ
@@ -147,22 +149,22 @@ psql -h /var/www/var/run/postgresql/ -Upostgres -f /tmp/cot.sql
 
 13. Poner Tag en github e iniciar rama al publicar version alfa o beta (antes en master)
 	```
-	git tag -a v6.5a1 -m "Version 6.5a1"
-	git push origin v6.5a1
+	git tag -a v6.6a1 -m "Version 6.6a1"
+	git push origin v6.6a1
 	...
-	git checkout -b ADJ_6_5
-	git push origin ADJ_6_5
+	git checkout -b ADJ_6_6
+	git push origin ADJ_6_6
 	```
 14. Publicar en lista de desarrollo
 
 Pasos importantes para publicar versión mayor
 --------------------------------------------
 
-1. Usar la rama ADJ_6_5
-	git checkout ADJ_6_5
+1. Usar la rama ADJ_6_6
+	git checkout ADJ_6_6
 2. Actualizar SIVeL, evangelios, Mt77, cor1440, sal7711 y paquetes propios de 
    adJ.
-3. Actualizar documentación (basico_adJ, usuario_adJ y servidor_adJ), 
+3. Actualizar documentación (`basico_adJ`, `usuario_adJ` y `servidor_adJ`), 
    publicar en Internet
 4. Actualizar versión en logo que presenta xenodm en `arboldd/etc/X11/xenodm/pixmaps/`. Con gimp iniciar con el de resolución 15bpp, modificarlo el número de versión es tipo Sans tamaño 18. Par converitr a xpm en Imagen->Modo Indexado. 15bpp y 8bpp con paleta de 255 colores. 4bpp con paleta de 15 colores, 1bpp con paleta de 2 colores.
 5. Análogo a pasos de versión beta
@@ -172,26 +174,26 @@ Pasos importantes para publicar versión mayor
    http://aprendiendo.pasosdejesus.org/?id=MainMenu,  
 8. Poner Tag en github
 	```
-	git tag -a v6.5 -m "Version 6.5"
-	git push origin v6.5
+	git tag -a v6.6 -m "Version 6.6"
+	git push origin v6.6
 	```
 9. Publicar en Twitter y Facebook. 
    Si es tambien publicacion de SIVeL en sitio de noticias de SIVeL y Structio.
 
-	Publicado adJ 6.5 distribución para servidores y cortafuegos, 
+	Publicado adJ 6.6 distribución para servidores y cortafuegos, 
 	segura, amigable para cristian@s y en español, ver 
 	http://aprendiendo.pasosdejesus.org/
 10. Correo a listas: 
     openbsd-colombia@googlegroups.com, 
     openbsd-mexico@googlegroups.com, sivel-soporte@lists.sourceforge.net
 
-	Tema: Publicado adJ 6.5 para amd64
+	Tema: Publicado adJ 6.6 para amd64
 
 	Para instalar por primera vez descarga la imagen para DVD de:
 	  http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/
 	O solicita un DVD o una USB de instalacion por correo postal.
 
-	Si planeas actualizar de una version anterior a 6.5
+	Si planeas actualizar de una version anterior a 6.6
 	hay un procedimiento mas rápido con `rsync` (ver
 	https://github.com/pasosdeJesus/adJ/blob/master/Actualiza.md ).
 
@@ -203,8 +205,8 @@ Pasos importantes para publicar versión mayor
 	  2. La guía de instalación:
 	  http://pasosdeJesus.github.io//usuario_adJ/sobre-la-instalacion.html
 
-	Mira las novedades completas de la versión 6.5 en:
-	  http://aprendiendo.pasosdejesus.org/?id=AdJ+6.5+-+Aprendiendo+de+Jesus+6.5
+	Mira las novedades completas de la versión 6.6 en:
+	  http://aprendiendo.pasosdejesus.org/?id=AdJ+6.6+-+Aprendiendo+de+Jesus+6.6
 
 	De estas destacamos:
 	...
