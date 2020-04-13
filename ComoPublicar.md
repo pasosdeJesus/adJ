@@ -211,6 +211,11 @@ Pasos importantes para publicar versión mayor
 	De estas destacamos:
 	...
 
+	
+	Puedes patrocinar el desarrollo en github:
+  		https://github.com/sponsors/vtamara
+	
+
 	Bendiciones
 
 11. Actualiza artículos de Wikipedia 
