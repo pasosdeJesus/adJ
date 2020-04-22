@@ -15,6 +15,6 @@ if (test "$cla" = "") then {
 	exit 1;
 } fi;
 dm=`date "+%d"` # Dia del mes
-/usr/local/bin/mysqldump --force --xml -c -u $usu --password=$cla --all-databases > /var/www/resbase/mysql/mysql-$dm.xml
-/usr/local/bin/mysqldump --compatible=postgresql -c -u $usu --password=$cla --all-databases > /var/www/resbase/mysql/mysql-$dm.sql
+/usr/local/bin/mysqldump --socket=/var/www/var/run/mysql/mysql.sock --force --xml -c -u $usu --password=$cla --all-databases > /var/www/resbase/mysql/mysql-$dm.xml
+/usr/local/bin/mysqldump --socket=/var/www/var/run/mysql/mysql.sock --compatible=postgresql -c -u $usu --password=$cla --all-databases > /var/www/resbase/mysql/mysql-$dm.sql
 
