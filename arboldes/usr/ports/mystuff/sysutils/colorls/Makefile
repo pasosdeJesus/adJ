@@ -1,8 +1,8 @@
-# $OpenBSD: Makefile,v 1.36 2018/04/04 19:02:00 naddy Exp $
+# $OpenBSD: Makefile,v 1.38 2019/07/12 20:49:40 sthen Exp $
 
 COMMENT=	ls(1) that can use color to display file attributes
 
-VERSION=	6.3
+VERSION=	6.5
 REVISION=	1
 DISTNAME=	ls-${VERSION}
 PKGNAME=	colorls-${VERSION}

@@ -38,22 +38,22 @@ function ej {
 	return $vr
 }
 
-if (test ! -f adJ${VP}${VESP}.fs) then {
+if (test ! -f AprendiendoDeJesus-${VP}${VESP}-${ARQ}.usb) then {
 	if (test ! -f blanco) then {
 		ej "dd of=blanco bs=1M seek=4900 count=0"
 	} else {
 		echo 'Archivo blanco existente, saltando creacion'
 	} fi;
-	ej "cat $im blanco > adJ${VP}${VESP}.fs"
+	ej "cat $im blanco > AprendiendoDeJesus-${VP}${VESP}-${ARQ}.usb"
 } else {
-	echo "Archivo adJ${VP}${VESP}.fs existente, saltando creacion"
+	echo "Archivo AprendiendoDeJesus-${VP}${VESP}-${ARQ}.usb existente, saltando creacion"
 } fi;
 ej "doas vnconfig -l | grep 'vnd0: not in use' > /dev/null 2>&1"
 if (test "$?" != "0") then {
 	echo "vnd0 ocupado, no se puede continuar";
 	exit 1;
 } fi;
-ej "doas vnconfig vnd0 adJ${VP}${VESP}.fs"
+ej "doas vnconfig vnd0 AprendiendoDeJesus-${VP}${VESP}-${ARQ}.usb"
 ej "doas fdisk -i -b 10000 -y /dev/rvnd0c"
 # adJ64  fdisk: 1> p
 #Disk: /dev/rvnd0c       geometry: 107734/1/100 [10773440 Sectors]
@@ -128,7 +128,7 @@ echo "Duuid de vnd0 es $duid"
 ej "doas mknod r$duid.i c 41 8" # Como /dev/rvnd0i
 ej "doas mknod $duid.i b 14 8" # Como /dev/vnd0i
 
-ej "doas installboot -v -r /mnt/tmp/ vnd0c /mnt/tmp/usr/mdec/biosboot /mnt/tmp/usr/mdec/boot"
+ej "doas installboot -v -r /mnt/tmp/ vnd0c /mnt/tmp/usr/mdec/biosboot /mnt/tmp/boot"
 
 ej "doas umount /mnt/tmp"
 
