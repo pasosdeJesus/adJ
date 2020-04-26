@@ -1,9 +1,9 @@
 #!/bin/sh
 # Variables de configuración para generar distribución Aprendiendo de Jesús
-# Dominio público. 2013. vtamara@pasosdeJesus.org
+# Dominio público. 2020. vtamara@pasosdeJesus.org
 
-V=6.6
-VESP=""
+V=6.7
+VESP="a1"
 # Versión que se está desarrollando
 
 VPKGPATH=$V
