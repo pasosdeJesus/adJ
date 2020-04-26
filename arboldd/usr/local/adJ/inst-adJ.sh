@@ -3101,6 +3101,8 @@ gem install pkg-config >> /var/www/tmp/inst-adJ.bitacora 2>&1
 gem install bundler >> /var/www/tmp/inst-adJ.bitacora 2>&1
 if (test -x /usr/lcoal/bin/bundle$VRUBYSP) then { 
       ln -sf /usr/local/bin/bundle$VRUBYSP /usr/local/bin/bundle
+} fi
+if (test -x /usr/lcoal/bin/bundler$VRUBYSP) then { 
       ln -sf /usr/local/bin/bundler$VRUBYSP /usr/local/bin/bundler
 } fi
 bundle config path /var/www/bundler/ruby/$VRUBY
