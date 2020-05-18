@@ -8,7 +8,7 @@ VESP="a1"
 
 VPKGPATH=$V
 VP=`echo $V | sed -e "s/[.]//g"`
-VP=HEAD
+VP=67
 VU=`echo $V | sed -e "s/[.]/_/g"`
 VNUM=`echo $V | sed -e "s/\.//g"`
 VNUMS=`expr $VNUM + 1`

@@ -1326,6 +1326,31 @@ if (test -f /usr/sbin/snmpctl) then {
 
 } fi;
 
+if (test -f /usr/libdata/perl5/Math/BigInt/CalcEmu.pm) then {
+	vac="$vac 6.6 a 6.7";
+	echo "Aplicando actualizaciones de 6.6 a 6.7" >> /var/www/tmp/inst-adJ.bitacora;
+
+	rm -rf /usr/libdata/perl5/*/Storable \
+		/usr/libdata/perl5/*/arybase.pm \
+		/usr/libdata/perl5/*/auto/arybase \
+		/usr/libdata/perl5/B/Debug.pm \
+		/usr/libdata/perl5/Locale/{Codes,Country,Currency,Language,Script}* \
+		/usr/libdata/perl5/Math/BigInt/CalcEmu.pm \
+		/usr/libdata/perl5/unicore/To/_PerlWB.pl \
+		/usr/libdata/perl5/unicore/lib/GCB/EB.pl \
+		/usr/libdata/perl5/unicore/lib/GCB/GAZ.pl \
+		/usr/share/man/man3p/B::Debug.3p \
+		/usr/share/man/man3p/Locale::{Codes*,Country,Currency,Language,Script}.3p \
+		/usr/share/man/man3p/Math::BigInt::CalcEmu.3p \
+		/usr/share/man/man3p/arybase.3p
+
+
+	rm -f /usr/sbin/{dig,host,nslookup}
+
+	rm -f /dev/mixer*
+} fi;
+
+
 
 if  (test "$vac" != "") then {
 	dialog --title 'Actualizaciones aplicadas' --msgbox "\\nSe aplicaron actualizaciones: $vac\\n\\n$mac\\n" 15 60
