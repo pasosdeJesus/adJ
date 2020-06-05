@@ -19,20 +19,26 @@ Sería ideal publicar una versión alfa mucho antes (24.Sep y 24.Mar, e.g 6.6a1)
 
 Pasos importantes para publicar versión beta
 --------------------------------------------
-1. Cambiar versión en ver.sh, arboldd/usr/local/adJ/inst-adJ.sh, Actualiza.md,
-	ComoPublicar.md, {$V-amd64,arboldvd}/util/preact-adJ.sh, Novedades.md,
-	Novedades_OpenBSD.md, {$V-amd64,arboldvd}/util/actbase.sh y
+1. Cambiar versión en `ver.sh`, `arboldd/usr/local/adJ/inst-adJ.sh`, 
+   `Actualiza.md`, `ComoPublicar.md`, 
+   {$V-`amd64`,`arboldvd`}`/util/preact-adJ.sh`, `Novedades.md`,
+   `README.md`, `Novedades_OpenBSD.md`, 
+   {$V-`amd64`,`arboldvd`}`/util/actbase.sh` y
    cambiar `Dedicatoria.md`
 2. Instalar o bien la versión alfa de adJ misma versión o bien la
    versión estable de OpenBSD
 3. Actualizar parches de locale y xlocale en libc de forma que puedan aplicarse
    sobre la nueva versión de OpenBSD. 
+
 	3.1 Prepara para probar con: `pruebas/preppruebas.sh` que restaura 
  	    `/usr/src` a partir de `/usr/src$V-orig`
+
 	3.2 Tratar de aplicar todos los parches con último parche:
 		 `pruebas/aplicahasta.sh arboldes/usr/src/14..` 
+
 	3.3 Compilar libc con `doas pruebas/compila-libc.sh` y correr pruebas 
 	    de regresión con `cd /usr/src/lib/libc/regress; doas make`
+
 	3.4 Si falla compilación o alguna prueba de regresión hacer búsqueda 
 	    binaria entre parches, iterando desde 3.1 pero en 3.2 ir bajando a 
 	    parche del medio, y así sucesivamente hasta identificar el último 
@@ -59,71 +65,74 @@ Pasos importantes para publicar versión beta
 	- Instalación de sistema base, `uname -a` debe reportar 
 		`APRENDIENDODEJESUS`
 	- Verificar que kernel tiene renombramiento de daemon por servicio con:
-
+	```
 	$  vmstat -s | grep servicio
-          	4 pages reserved for pageservicio
-          	0 number of times the pageservicio woke up
-          	0 pages freed by pageservicio
-          	0 pages scanned by pageservicio
-          	0 pages reactivated by pageservicio
-          	0 busy pages found by pageservicio
-
+	4 pages reserved for pageservicio
+	0 number of times the pageservicio woke up
+	0 pages freed by pageservicio
+	0 pages scanned by pageservicio
+	0 pages reactivated by pageservicio
+	0 busy pages found by pageservicio
+	```
 	- Verificar que se usa la bitácora `/var/log/servicio` y que no 
 	  existe `/var/log/daemon`
+	```
 	$ ls -lat /var/log/servicio  
-		-rw-r-----  1 root  wheel  149983 Sep 19 18:48 /var/log/servicio
-
+	-rw-r-----  1 root  wheel  149983 Sep 19 18:48 /var/log/servicio
+	```
 	- Verificar que libc incluye funciones de locale por ejemplo editando
 	  un archivo `l.c` con el siguiente contenido, tras compilar con 
   	  `cc -o l l.c` y ejecutar con `./l` el resulado debería ser 
 	  `1.000.000,200000`:
-```
-#include "locale.h"  
-#include "stdio.h"
-int main() {  
-  setlocale(LC_ALL, "es_CO.UTF-8");
-  printf("%'f", 1000000.2);
-
-  return 0;
-}
-```
+	```c
+	#include "locale.h"  
+	#include "stdio.h"
+	int main() {  
+	  setlocale(LC_ALL, "es_CO.UTF-8");
+	  printf("%'f", 1000000.2);
+	
+	  return 0;
+	}
+	```
 	- Operación de locale numeric en perl. El siguiente programa en perl 
 	debe dar respuesta 1987,23:
-```perl
-# Basado en http://perldoc.perl.org/perllocale.html
-use locale;
-use POSIX qw(locale_h);
-setlocale(LC_NUMERIC, "es_CO.UTF-8") or die "No pone locale LC_NUMERIC en es_CO.UTF-8";                                                        
-my $a = 1987.23;
-printf "%g\n", $a;
-```
+	```perl
+	# Basado en http://perldoc.perl.org/perllocale.html
+	use locale;
+	use POSIX qw(locale_h);
+	setlocale(LC_NUMERIC, "es_CO.UTF-8") or die "No pone locale LC_NUMERIC en es_CO.UTF-8";                                                        
+	my $a = 1987.23;
+	printf "%g\n", $a;
+	```
 	- Ejecución de /inst-adJ.sh en nuevo y actualización, 
 	- Verificar que desde el directorio paquetes del medio de
 	  instalacion se ejecute sin fallas PKG_PATH=. doas pkg_add *
 	- Con paquete `colorls` modificado y actualizado, verificar cotejacion 
 	  en español en terminal grafica:
-  touch a
-  touch í
-  touch o
-  ls -l
+	```sh
+	touch a
+	touch í
+	touch o
+	ls -l
+	```
   	  Debe mostrar los directorios en orden alfabético correcto (í 
 	  entre a y o).
 	- Con paquete postgresql modificado y actualizado, verificar que 
 	  coteja en español con:
-		doas su - _postgresql
-```sh
-cat > /tmp/cot.sql <<EOF
-SELECT 'Á' < 'B' COLLATE "es_co_utf_8";
-EOF
-psql -h /var/www/var/run/postgresql/ -Upostgres -f /tmp/cot.sql
-```
+	```sh
+	doas su - _postgresql
+	cat > /tmp/cot.sql <<EOF
+	SELECT 'Á' < 'B' COLLATE "es_co_utf_8";
+	EOF
+	psql -h /var/www/var/run/postgresql/ -Upostgres -f /tmp/cot.sql
+	```
 	  que debe responder con
-```
- ?column?
-----------
- t
-(1 row)
-```
+	```
+	 ?column?
+	----------
+	 t
+	(1 row)
+	```
 	- Que opere bien una aplicación Ruby on Rails
 	- Que toda entrada del menú desde la interfaz gráfica opere.  
 	  Arreglar y repetir hasta que no haya errores.
@@ -161,7 +170,9 @@ Pasos importantes para publicar versión mayor
 --------------------------------------------
 
 1. Usar la rama ADJ_6_6
+	```
 	git checkout ADJ_6_6
+	```
 2. Actualizar SIVeL, evangelios, Mt77, cor1440, sal7711 y paquetes propios de 
    adJ.
 3. Actualizar documentación (`basico_adJ`, `usuario_adJ` y `servidor_adJ`), 
@@ -219,7 +230,7 @@ Pasos importantes para publicar versión mayor
 	Bendiciones
 
 11. Actualiza artículos de Wikipedia 
-   https://en.wikipedia.org/wiki/AdJ y https://es.wikipedia.org/wiki/AdJ 
+   <https://en.wikipedia.org/wiki/AdJ> y <https://es.wikipedia.org/wiki/AdJ>
 
-12. Publicar noticia en http://sivel.sf.net y en  http://structio.sf.net
+12. Publicar noticia en <http://sivel.sf.net> y en  <http://structio.sf.net>
 
