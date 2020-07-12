@@ -2799,15 +2799,15 @@ diff -ruN src62-orig/lib/libc/locale/iswctype_l.c src/lib/libc/locale/iswctype_l
  
  static _RuneLocale	*__runelocale(locale_t);
  static int		 __isctype_wl(wint_t, _RuneType, locale_t);
-@@ -58,16 +60,22 @@
+@@ -58,16 +60,20 @@
  static _RuneLocale *
  __runelocale(locale_t locale)
  {
 -	_RuneLocale	*rl;
 -
 -	rl = NULL;
--	if (locale == _LOCALE_UTF8)
--		rl = _Utf8RuneLocale;
+-	/*if (locale == _LOCALE_UTF8)
+-		rl = _Utf8RuneLocale;*/
 -	if (rl == NULL)
 -		rl = &_DefaultRuneLocale;
 +	FIX_LOCALE(locale);
@@ -2815,21 +2815,19 @@ diff -ruN src62-orig/lib/libc/locale/iswctype_l.c src/lib/libc/locale/iswctype_l
  	return rl;
  }
  
-+
-+
 +static inline _RuneType
 +__runetype_wl(wint_t c, locale_t locale)
 +{
 +	_RuneLocale *rl = __runelocale(locale);
 +
-+	_RuneType	 rt = _RUNE_ISCACHED(c) ? rl->rl_runetype[c] : ___runetype_mb(c, rl);
++	_RuneType        rt = _RUNE_ISCACHED(c) ? rl->rl_runetype[c] : ___runetype_mb(c, rl);
 +	return rt;
 +}
 +
  static int
  __isctype_wl(wint_t c, _RuneType f, locale_t locale)
  {
-@@ -75,7 +83,7 @@
+@@ -75,7 +81,7 @@
  	_RuneType	 rt;
  
  	rl = __runelocale(locale);
@@ -2838,7 +2836,7 @@ diff -ruN src62-orig/lib/libc/locale/iswctype_l.c src/lib/libc/locale/iswctype_l
  	return (rt & f) != 0;
  }
  
-@@ -84,78 +92,133 @@
+@@ -84,78 +90,133 @@
  {
  	return __isctype_wl(c, _CTYPE_A|_CTYPE_D, locale);
  }
@@ -2907,49 +2905,49 @@ diff -ruN src62-orig/lib/libc/locale/iswctype_l.c src/lib/libc/locale/iswctype_l
  }
 +DEF_STRONG(iswspace_l);
  
-+int 
-+iswhexnumber_l(wint_t __c, locale_t locale) 
-+{ 
-+	return __isctype_wl(__c, _CTYPE_X, locale); 
+ int
++iswhexnumber_l(wint_t __c, locale_t locale)
++{
++	return __isctype_wl(__c, _CTYPE_X, locale);
 +}
 +DEF_STRONG(iswhexnumber_l);
 +
-+int 
-+iswideogram_l(wint_t __c, locale_t locale) 
-+{ 
++int
++iswideogram_l(wint_t __c, locale_t locale)
++{
 +	return __isctype_wl(__c, _CTYPE_I, locale);
 +}
 +DEF_STRONG(iswideogram_l);
 +
-+int 
-+iswnumber_l(wint_t __c, locale_t locale) 
-+{ 
++int
++iswnumber_l(wint_t __c, locale_t locale)
++{
 +	return __isctype_wl(__c, _CTYPE_D, locale);
 +}
 +DEF_STRONG(iswnumber_l);
 +
-+int 
-+iswphonogram_l(wint_t __c, locale_t locale) 
-+{ 
++int
++iswphonogram_l(wint_t __c, locale_t locale)
++{
 +	return __isctype_wl(__c, _CTYPE_Q, locale);
 +}
 +DEF_STRONG(iswphonogram_l);
 +
-+int 
-+iswrune_l(wint_t __c, locale_t locale) 
++int
++iswrune_l(wint_t __c, locale_t locale)
 +{
 +	return __isctype_wl(__c, 0xFFFFFF00L, locale);
 +}
 +DEF_STRONG(iswrune_l);
 +
-+int 
-+iswspecial_l(wint_t __c, locale_t locale) 
-+{ 
++int
++iswspecial_l(wint_t __c, locale_t locale)
++{
 +	return __isctype_wl(__c, _CTYPE_T, locale);
 +}
 +DEF_STRONG(iswspecial_l);
 +
- int
++int
  iswupper_l(wint_t c, locale_t locale)
  {
  	return __isctype_wl(c, _CTYPE_U, locale);
@@ -2972,7 +2970,7 @@ diff -ruN src62-orig/lib/libc/locale/iswctype_l.c src/lib/libc/locale/iswctype_l
  
  wint_t
  towlower_l(wint_t c, locale_t locale)
-@@ -180,6 +243,7 @@
+@@ -180,6 +241,7 @@
  
  	return NULL;
  }
@@ -2980,7 +2978,7 @@ diff -ruN src62-orig/lib/libc/locale/iswctype_l.c src/lib/libc/locale/iswctype_l
  
  /*
   * POSIX says that the behaviour is unspecified if the LC_CTYPE in
-@@ -193,6 +257,7 @@
+@@ -193,6 +255,7 @@
  {
  	return towctrans(c, desc);
  }
@@ -2988,7 +2986,7 @@ diff -ruN src62-orig/lib/libc/locale/iswctype_l.c src/lib/libc/locale/iswctype_l
  
  wctype_t
  wctype_l(const char *property, locale_t locale)
-@@ -206,6 +271,7 @@
+@@ -206,6 +269,7 @@
  			return &rl->rl_wctype[i];
  	return NULL;
  }
@@ -2996,7 +2994,7 @@ diff -ruN src62-orig/lib/libc/locale/iswctype_l.c src/lib/libc/locale/iswctype_l
  
  int
  iswctype_l(wint_t c, wctype_t charclass, locale_t locale)
-@@ -215,3 +281,15 @@
+@@ -215,3 +279,15 @@
  
  	return __isctype_wl(c, ((_WCTypeEntry *)charclass)->te_mask, locale);
  }
@@ -3005,7 +3003,7 @@ diff -ruN src62-orig/lib/libc/locale/iswctype_l.c src/lib/libc/locale/iswctype_l
 +int wcwidth_l(wchar_t c, locale_t locale)
 +{
 +	if (__isctype_wl((c), _CTYPE_R, locale))
-+		return (((unsigned)__runetype_wl(c, locale) & _CTYPE_SWM) 
++		return (((unsigned)__runetype_wl(c, locale) & _CTYPE_SWM)
 +				>> _CTYPE_SWS);
 +	return -1;
 +}
@@ -3338,3 +3336,17 @@ diff -ruN src62-orig/lib/libc/locale/isctype_l.c src/lib/libc/locale/isctype_l.c
 +	return __sbmaskrune_l((__c), 0xFF, __l); 
 +}
 +DEF_STRONG(digittoint_l);
+diff -ruN -x obj src67-orig/regress/lib/libc/locale/uselocale/uselocale.c src/regress/lib/libc/locale/uselocale/uselocale.c
+--- src67-orig/regress/lib/libc/locale/uselocale/uselocale.c	Wed Aug 16 08:52:50 2017
++++ src/regress/lib/libc/locale/uselocale/uselocale.c	Sun Jun 21 07:26:09 2020
+@@ -286,8 +286,8 @@
+ 	TEST_R(nl_langinfo_l, "US-ASCII", CODESET, _LOCALE_C);
+ 	TEST_R(isalpha, _L, 0x65);  /* e */
+ 	/* TEST_R(isalpha_l, _L, 0x65, _LOCALE_UTF8); */
+-	TEST_R(isalpha_l, _L, 0x65, _LOCALE_C);
+-	TEST_R(isalpha_l, _L, 0x65, _LOCALE_C);
++	TEST_R(isalpha_l, 1, 0x65, _LOCALE_C);
++	TEST_R(isalpha_l, 1, 0x65, _LOCALE_C);
+ 	TEST_R(isalpha, 0, 0x30);  /* 0 */
+ 	/* TEST_R(isalpha_l, 0, 0x30, _LOCALE_UTF8); */
+ 	TEST_R(isalpha_l, 0, 0x30, _LOCALE_C);

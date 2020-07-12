@@ -2046,7 +2046,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src55-orig/lib/libc/stdlib/strt
 diff -ruN src62-orig/lib/libc/locale/nl_langinfo_l.c src/lib/lib/clocale/nl_langinfo_l.c
 --- src62-orig/lib/libc/locale/nl_langinfo_l.c Sep  4 22:16:13 2017
 +++ src/lib/lib/clocale/nl_langinfo_l.c	Tue Dec  5 04:22:50 2017
-@@ -14,30 +14,142 @@
+@@ -14,30 +14,140 @@
   * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
   * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
   */
@@ -2058,7 +2058,6 @@ diff -ruN src62-orig/lib/libc/locale/nl_langinfo_l.c src/lib/lib/clocale/nl_lang
  #include <langinfo.h>
  #include <locale.h>
 +#include <nl_types.h>
-+#include <langinfo.h>
 +#include <string.h>
 +#include <xlocale.h>
  
@@ -2068,7 +2067,6 @@ diff -ruN src62-orig/lib/libc/locale/nl_langinfo_l.c src/lib/lib/clocale/nl_lang
 +#include "runetype.h"
 +#include "xlocale_private.h"
  
-+
  char *
  nl_langinfo_l(nl_item item, locale_t locale)
  {
@@ -2084,8 +2082,8 @@ diff -ruN src62-orig/lib/libc/locale/nl_langinfo_l.c src/lib/lib/clocale/nl_lang
 +	_RuneLocale *lr = XLOCALE_CTYPE(locale)->runes;
  
 -	rl = NULL;
--	if (locale == _LOCALE_UTF8)
--		rl = _Utf8RuneLocale;
+-	/*if (locale == _LOCALE_UTF8)
+-		rl = _Utf8RuneLocale;*/
 -	if (rl == NULL)
 -		rl = &_DefaultRuneLocale;
  
@@ -2174,9 +2172,9 @@ diff -ruN src62-orig/lib/libc/locale/nl_langinfo_l.c src/lib/lib/clocale/nl_lang
 +		break;
 +	case CRNCYSTR:				
 +		locale->_bufcrncystr[0] = '\0';
-+		
++
 +		if (lc->currency_symbol[0] != '\0' 
-+			&& lc->p_cs_precedes == lc->n_cs_precedes) {
++				&& lc->p_cs_precedes == lc->n_cs_precedes) {
 +			if (lc->p_cs_precedes == 1) {
 +				strlcat(locale->_bufcrncystr, "-", sizeof(locale->_bufcrncystr));
 +			} else {
@@ -2197,8 +2195,7 @@ diff -ruN src62-orig/lib/libc/locale/nl_langinfo_l.c src/lib/lib/clocale/nl_lang
 +		break;
 +	}
  
--	return (char *)s;
-+	return (char *) s;
+ 	return (char *)s;
  }
 +DEF_WEAK(nl_langinfo_l);
 diff -ruN src54-x6/lib/libc/locale/nl_langinfo.c src/lib/libc/locale/nl_langinfo.c
