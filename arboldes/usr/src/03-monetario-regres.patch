@@ -2,10 +2,10 @@ diff -ruN -x *~ -x obj -x *orig src54-coll/regress/lib/libc/locale/Makefile src/
 --- src54-coll/regress/lib/libc/locale/Makefile	Tue Dec  3 10:55:37 2013
 +++ src/regress/lib/libc/locale/Makefile	Tue Dec  3 11:55:54 2013
 @@ -1,5 +1,5 @@
- # $OpenBSD: Makefile,v 1.6 2017/07/27 15:08:37 bluhm Exp $
+ # $OpenBSD: Makefile,v 1.7 2020/01/13 15:35:57 bluhm Exp $
  
--SUBDIR =	check_isw mbrtowc setlocale wcrtomb check_time check_collate
-+SUBDIR =	check_isw mbrtowc setlocale wcrtomb check_time check_collate check_monetary
+-SUBDIR =	check_isw mbrtowc setlocale uselocale wcrtomb check_time check_collate
++SUBDIR =	check_isw mbrtowc setlocale uselocale wcrtomb check_time check_collate check_monetary
  
  .include <bsd.subdir.mk>
 diff -ruN -x *~ -x obj -x *orig src55-orig/regress/lib/libc/locale/check_monetary/Makefile src55-mon/regress/lib/libc/locale/check_monetary/Makefile

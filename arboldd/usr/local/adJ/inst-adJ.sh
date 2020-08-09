@@ -3,10 +3,10 @@
 # Dominio público de acuerdo a legislación colombiana. http://www.pasosdejesus.org/dominio_publico_colombia.html. 
 # 2015. vtamara@pasosdeJesus.org
 
-VER=6.6
+VER=6.7
 REV=0
 VESP="b1"
-VERP=66
+VERP=67
 
 # Falta /standard/root.hint
 
@@ -1325,6 +1325,31 @@ if (test -f /usr/sbin/snmpctl) then {
 
 
 } fi;
+
+if (test -f /usr/libdata/perl5/Math/BigInt/CalcEmu.pm) then {
+	vac="$vac 6.6 a 6.7";
+	echo "Aplicando actualizaciones de 6.6 a 6.7" >> /var/www/tmp/inst-adJ.bitacora;
+
+	rm -rf /usr/libdata/perl5/*/Storable \
+		/usr/libdata/perl5/*/arybase.pm \
+		/usr/libdata/perl5/*/auto/arybase \
+		/usr/libdata/perl5/B/Debug.pm \
+		/usr/libdata/perl5/Locale/{Codes,Country,Currency,Language,Script}* \
+		/usr/libdata/perl5/Math/BigInt/CalcEmu.pm \
+		/usr/libdata/perl5/unicore/To/_PerlWB.pl \
+		/usr/libdata/perl5/unicore/lib/GCB/EB.pl \
+		/usr/libdata/perl5/unicore/lib/GCB/GAZ.pl \
+		/usr/share/man/man3p/B::Debug.3p \
+		/usr/share/man/man3p/Locale::{Codes*,Country,Currency,Language,Script}.3p \
+		/usr/share/man/man3p/Math::BigInt::CalcEmu.3p \
+		/usr/share/man/man3p/arybase.3p
+
+
+	rm -f /usr/sbin/{dig,host,nslookup}
+
+	rm -f /dev/mixer*
+} fi;
+
 
 
 if  (test "$vac" != "") then {
@@ -2972,36 +2997,6 @@ rm -f $docroot/phpinfo.php
 	echo "* Saltando"; >> /var/www/tmp/inst-adJ.sh
 } fi;
 
-inspear="s";
-if (test -f "/var/www/pear/lib/DB/DataObject/FormBuilder.php") then {
-	dialog --title 'Actualizar PEAR' --yesno "\\nLibrerías de pear ya instaladas. ¿Actualizarlas?" 15 60
-	if (test "$?" != "0") then {
-		inspear="n";
-	} fi;
-} fi;
-
-function pearfun {
-if (test "$inspear" = "s") then {
-	echo "* Actualizando paquetes de pear"  >> /var/www/tmp/inst-adJ.bitacora;
-	echo "* Eliminando paquetes y librerías" >> /var/www/tmp/inst-adJ.bitacora;
-	p=`ls /var/db/pkg/ | grep "pear-"`;
-	pkg_delete -I -D dependencies $p >> /var/www/tmp/inst-adJ.bitacora 2>&1
-	p=`ls /var/db/pkg/ | grep "pear-"`;
-	pkg_delete -I -D dependencies $p >> /var/www/tmp/inst-adJ.bitacora 2>&1
-	rm -rf /var/www/pear
-	echo "Antes de pkg_add" >> /var/www/tmp/inst-adJ.bitacora
-	p=`ls $PKG_PATH/pear-*`;
-	pkg_add -I -D repair -D update -D installed -D updatedepends -r $p >> /var/www/tmp/inst-adJ.bitacora 2>&1
-	echo "Antes de pkg_delete" >> /var/www/tmp/inst-adJ.bitacora
-	ls -l /var/www/pear/lib/DB/ >> /var/www/tmp/inst-adJ.bitacora
-	cd /var/db/pkg
-	pkg_delete -I -D dependencies partial-pear-*  >> /var/www/tmp/inst-adJ.bitacora 2>&1
-} fi;
-
-}
-
-pearfun
-
 insacp ispell
 
 
@@ -3129,8 +3124,11 @@ done
 echo "Instalando gemas importantes " >> /var/www/tmp/inst-adJ.bitacora
 gem install pkg-config >> /var/www/tmp/inst-adJ.bitacora 2>&1
 gem install bundler >> /var/www/tmp/inst-adJ.bitacora 2>&1
-if (test -x /usr/lcoal/bin/bundle25) then { 
-       doas ln -sf /usr/local/bin/bundle25 /usr/local/bin/bundle; 
+if (test -x /usr/lcoal/bin/bundle$VRUBYSP) then { 
+      ln -sf /usr/local/bin/bundle$VRUBYSP /usr/local/bin/bundle
+} fi
+if (test -x /usr/lcoal/bin/bundler$VRUBYSP) then { 
+      ln -sf /usr/local/bin/bundler$VRUBYSP /usr/local/bin/bundler
 } fi
 bundle config path /var/www/bundler/ruby/$VRUBY
 

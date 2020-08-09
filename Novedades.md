@@ -2,37 +2,37 @@
 Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
 
-### Versión: 6.6b1
-Fecha de publicación: 3/Mar/2020
+### Versión: 6.7b1
+Fecha de publicación: 26/Abr/2020
 
 Puede ver novedades respecto a OpenBSD en:
-  <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_6/Novedades_OpenBSD.md>
+  <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_7/Novedades_OpenBSD.md>
 
 ## 1. DESCARGAS
 
 Puede ver las diversas versiones publicadas en: 
   <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/>
 
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/AprendiendoDeJesus-6.6b1-amd64.iso> es imagen en formato ISO para quemar en DVD e instalar por primera vez.
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/6.6b1-amd64/> es directorio con el contenido del DVD instalador apropiado para descargar con rsync y actualizar un adJ ya instalado (ver  <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_6/Actualiza.md> )
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/6.6-extra/> es directorio con versiones recientes de paquetes no incluidos en distribución oficial (pueden no estar firmados y requerir instalación con `pkg_add -D unsigned _paquete_`).
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/AprendiendoDeJesus-6.6b1-amd64.usb> es imagen para escribir en una memoria USB y arrancar
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/AprendiendoDeJesus-6.7b1-amd64.iso> es imagen en formato ISO para quemar en DVD e instalar por primera vez.
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/6.7b1-amd64/> es directorio con el contenido del DVD instalador apropiado para descargar con rsync y actualizar un adJ ya instalado (ver  <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_7/Actualiza.md> )
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/6.7-extra/> es directorio con versiones recientes de paquetes no incluidos en distribución oficial (pueden no estar firmados y requerir instalación con `pkg_add -D unsigned _paquete_`).
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/AprendiendoDeJesus-6.7b1-amd64.usb> es imagen para escribir en una memoria USB y arrancar
   con esta. Una vez la descargue puede escribirla en una USB ubicada en 
   `/dev/sd2c` (verifiquer dispositivo con `dmesg` y remplace):
 
-	doas dd if=adJ66b1.fs of=/dev/sd2c bs=1M
+	doas dd if=AprendiendoDeJesus-6.7b1-amd64.usb of=/dev/sd2c bs=1M
 
  O si desea probarla con qemu para instalar en un disco `virtual.raw`:
 
- 	qemu-system-x86_64 -hda virtual.raw -hdb AprendiendoDeJesus-65p1-amd64.usb -boot menu=on
+ 	qemu-system-x86_64 -hda virtual.raw -hdb AprendiendoDeJesus-6.7b1-amd64.usb -boot menu=on
 
 
 ## 2. NOVEDADES RESPECTO A ADJ 6.5 PROVENIENTES DE OPENBSD
 
 ### 2.1 Kernel y Sistema Base
 
-* Aplicados parches de seguridad hasta el 25.Feb.2020 provenientes de 
-  OpenBSD que incluyen solución a fallas de OpenSMTPD
+* Aplicados parches de seguridad hasta el 16.Mar.2020 provenientes de 
+  OpenBSD que incluyen solución a fallas de OpenSMTPD y sysctl
 * Controladores ampliados o mejorados para amd64
 	* Red:
 		* Inalámbrica: Soporte para AR9271 en `athn` y arreglado
@@ -62,14 +62,14 @@ Puede ver las diversas versiones publicadas en:
 	   17 (Zen/Zen+/Zen2)
 	
 * Mejoras a herramientas de Red
-	* Mejoras a pila inalámbrica general y en particular en `ifconfig` 
+	* Mejoras a pila inalámbrica general y en particular a `ifconfig` 
 	  con `nwflag` y `mode`para poner modo 11a/b/g/n.
 	* Soporte para examinar y establecer rxprio via `ifconfig` según
 	  RFC 2983. Agregado a `vlan`, `gre`, `mpw`, `mpe`, `mpip`, 
 	 `etherip` y `bpe`.
 	* Nuevo cliente `snmp` compatible con netsnmp y eliminado `snmpctl`
 	* Diversas mejoras a `bgpd`
-	* Mejoras a `relayd` en particular ahora soporte SNI
+	* Mejoras a `relayd` en particular ahora soporta SNI
 	* `acme-client` ahora soporta API Let's Encrypt v02.
 	* Varias mejoras a OpenSMTPD 6.6.0 en particular posibilidad
 	  de configurar filtros y operar detras de proxy.
@@ -94,35 +94,42 @@ Puede ver las diversas versiones publicadas en:
 ### 2.2 Paquetes 
 
 * Recompilados portes estables más recientes para evitar fallas de seguridad: 
-    `dovecot`, `gettext-tools`, `libidn2`, `oniguruma`, `pcre2`, 
-    `webkitgtk4`
+    `certbot`, `dovecot`, `gettext-tools`, `libidn2`, `librsvg`,
+    `oniguruma`, `pcre2`, `unzip` y `webkitgtk4`
 * Ruby 2.7.0 retroportado de current  (incluye solución de Jeremy Evans a 
   falla con `realpath` para permitir usar `unveil` y de hecho hay 2 gemas 
-  que lo usan: <https://github.com/jcs/ruby-unveil> y 
+  que permiten usarlo desde ruby: <https://github.com/jcs/ruby-unveil> y 
   <https://github.com/jeremyevans/ruby-pledge>)
 * Algunos paquetes típicos y su versión: dovecot 2.3.7.2, chromium 79.0.3945,
   firefox 69.9.2, libreoffice 6.3.2.2, nginx 1.16.1p0, mariadb 10.3.18,
-  node 10.16.3, python 3.7.4, vim 8.1.2061
+  node 10.16.3, postgresql 12.2, python 3.7.4, ruby 2.7.0, vim 8.1.2061
 
 
 ## 3. NOVEDADES RESPECTO A ADJ 6.5 PROVENIENTES DE PASOS DE JESÚS
 
 ### 3.1 Instalador y documentación
 
-* Instalador sigue en español pero ahora con codificación ASCII y no 
-  ISO8859-1 ni UTF-8, que no son soportadas en tiempo de instalación 
-  para mantener un instalador pequeño.
-* Documentación actualizada: `basico_adJ`, `usuario_adJ` y `servidor_adJ`
+* Documentación actualizada: 
+	* `basico_adJ`: Nueva sección sobre `tmux`
+	* `usuario_adJ`: Ampliada sección sobre discos duros
+	* `servidor_adJ`: Reescrita sección sobre servidores web con bastantes casos de uso de nginx
 
 ### 3.2 Paquetes
 
 * El nuevo paquete `bibletime` remplaza `xiphos` y `biblesync`
+* Se agrega `postgresql-pg_upgrade` y `postgresql-previous` que facilitan
+  actualizar de la versión 11 a las versión 12 (ver <https://dhobsd.pasosdejesus.org/actualizacion-de-postgresql-con-pg_upgrade.html>). 
+  El porte `postgresql-previous` fue levemente modificado para no entrar en 
+  conflicto con `postgresql-docs`
+* Se compacta más el medio de instalación retirando algunos programas (que
+  siguen estando disponibles como paquetes en repositorios de OpenBSD): 
+  `dia`, `ganglia`, `midori`, `qgis`, `rdesktop`, `scribus`, `xsane`.  
+  Además se retiraron varios programas de soporte y librerías ya no usados 
+  como `aspell-es`, `db`, `celt`, `gstreamer1mm`, `gtkhtml4`, `hdf5`, `libao`, `openpam`.
 * Entre los paquetes retirados resaltamos `markup` que ya no está disponible
   en sitio de distribución y por lo mismo `sigue` y `repasa` que la requerían.
-  Se retiró `SIVeL 1.2` y programas que lo requierían incluyendo `php-5.6.4` y 
-  los diversos paquetes de `pear`. Además se retiraron varios programas
-  de soporte y la librerías ya no usados gstreamer1mm, gtkhtml4, hdf5, libao, 
-  openpam.
+  Se retiró `SIVeL 1.2` y programas que lo requerían incluyendo porte
+  obsoleto de `php-5.6.4` y los diversos paquetes de `pear`. 
 * Se han recompilado los siguientes para aprovechar `xlocale`:
    `glib2`, `libunistring`, `vlc`
 * Recompilados muchos paquetes de Perl que ahora son requeridos por 
