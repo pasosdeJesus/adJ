@@ -2114,6 +2114,14 @@ export LANG=es_CO.UTF-8
 EOF
 } fi;
 
+grep "fortune" /home/$uadJ/.profile > /dev/null
+if (test "$?" != "0") then {
+	cat >> /home/$uadJ/.profile <<EOF
+/usr/games/fortune /usr/local/share/adJ/fortune/versiculos
+EOF
+} fi;
+
+
 if (test -f /$RUTAIMG/post.img) then {
 	echo "Existe imagen para datos cifrados de PostgreSQL /$RUTAIMG/post.img. " >> /var/www/tmp/inst-adJ.bitacora
 	echo "Suponiendo que la base PostgreSQL tendrá datos cifrados allí" >> /var/www/tmp/inst-adJ.bitacora
