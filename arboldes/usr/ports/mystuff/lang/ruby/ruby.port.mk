@@ -1,4 +1,4 @@
-# $OpenBSD: ruby.port.mk,v 1.99 2020/01/02 21:21:56 jeremy Exp $
+# $OpenBSD: ruby.port.mk,v 1.100 2020/03/20 16:44:24 naddy Exp $
 
 # ruby module
 
@@ -47,7 +47,7 @@ SUBST_VARS+=		GEM_BIN_SUFFIX GEM_MAN_SUFFIX
 FLAVOR?=
 # Without a FLAVOR, assume the use of ruby 2.6.
 .    if empty(FLAVOR)
-FLAVOR =		ruby26
+FLAVOR =		ruby27
 .    endif
 
 # Check for conflicting FLAVORs and set MODRUBY_REV appropriately based
@@ -67,6 +67,7 @@ ERRORS += "Fatal: Conflicting flavors used: ${FLAVOR}"
 .endif
 
 # The default ruby version to use for non-gem ports.  Defaults to ruby
+# 2.7 for consistency with the default ruby27 FLAVOR for gem ports.
 MODRUBY_REV?=		2.7
 
 # Because the jruby FLAVORs use same binary names but in
@@ -174,8 +175,8 @@ MODRUBY_RUBY_ADJ =	perl -pi \
 MODRUBY_ADJ_FILES?=
 .if !empty(MODRUBY_ADJ_FILES)
 MODRUBY_ADJ_REPLACE=	for pat in ${MODRUBY_ADJ_FILES:QL}; do \
-			 find ${WRKSRC} -type f -name "$$pat" -print0 | \
-			  xargs -0r ${MODRUBY_RUBY_ADJ} ; \
+			 find ${WRKSRC} -type f -name "$$pat" \
+			  -exec ${MODRUBY_RUBY_ADJ} {} + ; \
 			done
 MODRUBY_pre-configure += ${MODRUBY_ADJ_REPLACE}
 .endif

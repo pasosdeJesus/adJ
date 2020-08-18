@@ -4,7 +4,7 @@
 
 COMMENT=	"Search engine, fast and precise"
 
-VERSION=1.0a2
+VERSION=1.0a5
 REVISION= 
 DISTNAME=v${VERSION}
 CATEGORIES=     textproc
