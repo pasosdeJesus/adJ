@@ -1,15 +1,15 @@
-$OpenBSD: patch-third_party_perfetto_src_tracing_core_tracing_service_impl_cc,v 1.9.2.1 2019/12/24 15:31:22 sthen Exp $
+$OpenBSD: patch-third_party_perfetto_src_tracing_core_tracing_service_impl_cc,v 1.12 2020/04/10 18:51:32 robert Exp $
 
 Index: third_party/perfetto/src/tracing/core/tracing_service_impl.cc
 --- third_party/perfetto/src/tracing/core/tracing_service_impl.cc.orig
 +++ third_party/perfetto/src/tracing/core/tracing_service_impl.cc
-@@ -2180,7 +2180,8 @@ void TracingServiceImpl::SnapshotClocks(std::vector<Tr
-   protos::ClockSnapshot* clock_snapshot = packet.mutable_clock_snapshot();
+@@ -2306,7 +2306,8 @@ void TracingServiceImpl::SnapshotClocks(std::vector<Tr
  
  #if !PERFETTO_BUILDFLAG(PERFETTO_OS_MACOSX) && \
--    !PERFETTO_BUILDFLAG(PERFETTO_OS_WIN)
-+    !PERFETTO_BUILDFLAG(PERFETTO_OS_WIN) && \
+     !PERFETTO_BUILDFLAG(PERFETTO_OS_WIN) &&    \
+-    !PERFETTO_BUILDFLAG(PERFETTO_OS_NACL)
++    !PERFETTO_BUILDFLAG(PERFETTO_OS_NACL) && \
 +    !PERFETTO_BUILDFLAG(PERFETTO_OS_OPENBSD)
    struct {
      clockid_t id;
-     protos::ClockSnapshot::Clock::BuiltinClocks type;
+     protos::pbzero::ClockSnapshot::Clock::BuiltinClocks type;
