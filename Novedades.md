@@ -108,7 +108,6 @@ Puede ver las diversas versiones publicadas en:
 ## 3. NOVEDADES RESPECTO A ADJ 6.5 PROVENIENTES DE PASOS DE JESÚS
 
 ### 3.1 Instalador y documentación
-
 * Documentación actualizada: 
 	* `basico_adJ`: Nueva sección sobre `tmux`
 	* `usuario_adJ`: Ampliada sección sobre discos duros
@@ -116,61 +115,26 @@ Puede ver las diversas versiones publicadas en:
 
 ### 3.2 Paquetes
 
-* El nuevo paquete `bibletime` remplaza `xiphos` y `biblesync`
-* Se agrega `postgresql-pg_upgrade` y `postgresql-previous` que facilitan
-  actualizar de la versión 11 a las versión 12 (ver <https://dhobsd.pasosdejesus.org/actualizacion-de-postgresql-con-pg_upgrade.html>). 
-  El porte `postgresql-previous` fue levemente modificado para no entrar en 
-  conflicto con `postgresql-docs`
-* Se compacta más el medio de instalación retirando algunos programas (que
-  siguen estando disponibles como paquetes en repositorios de OpenBSD): 
-  `dia`, `ganglia`, `midori`, `qgis`, `rdesktop`, `scribus`, `xsane`.  
-  Además se retiraron varios programas de soporte y librerías ya no usados 
-  como `aspell-es`, `db`, `celt`, `gstreamer1mm`, `gtkhtml4`, `hdf5`, `libao`, `openpam`.
-* Entre los paquetes retirados resaltamos `markup` que ya no está disponible
-  en sitio de distribución y por lo mismo `sigue` y `repasa` que la requerían.
-  Se retiró `SIVeL 1.2` y programas que lo requerían incluyendo porte
-  obsoleto de `php-5.6.4` y los diversos paquetes de `pear`. 
+* Nueva versión 1.0a5 del motor de búsqueda Mt77 que ahora emplea
+  la codificación UTF-8 internamente y como codificación por omisión
+  en las diversas herramientas. Mantiene soporte para codificación 
+  Latin1 con opción -l del indexador de textos planos y del buscador.
+  Agradecemos el trabajo de Daniel Hamilton-Smith.
 * Se han recompilado los siguientes para aprovechar `xlocale`:
    `glib2`, `libunistring`, `vlc`
-* Recompilados muchos paquetes de Perl que ahora son requeridos por 
-  `SpamAssassin` y al igual que otros de perl se recompilaron (sin cambiar 
-  de versión) con el perl de adJ que si soporta `LC_NUMERIC`.  
 * Retroportados y adaptados de OpenBSD-current 
-  * `chromium` 79.0.3945-117 con llave de Pasos de Jesús
-  * `curl`
-  * Postgresql 12.2 adaptado de retroporte de 12.1 (en adJ soporta 
-   bien cotejaciones en español)
-* Se incluye beta 10 de `sivel2` cuyas novedades son:
-    * Mapa de casos sobre OpenStretMap con filtro, acumulados de casos 
-      (clusters) y nuevas posibilidades con capas: elegir capa base, 
-      superponer una capa con transparencias, cargar pequeñas capas GeoJSON 
-      y de exportar la capa de casos en GeoJSON (implementado por Luis 
-      Alejandro Cruz)
-    * Posibilidad de visualizar casos sobre Google Maps (portado de SIVeL 1.2 
-      y mejorado) y sobre Mapbox, pero no se activan por omisión por requerir 
-      llave y eventualmente pagos. Ver pantallazos en 
-      https://github.com/pasosdeJesus/sivel2_gen/blob/master/doc/mapas.md 
-      (implementado por Luis Alejandro Cruz).
-    * Permite exportar detalles de un caso a JSON y a XRLAT (XML) mediante 
-      rutas de la forma casos/1.json y casos/1.xrlat, cambiando 1 por el 
-      número de caso (implementado por Luis Alejandro Cruz)
-    * Permite exportar varios casos a XRLAT y generalidades a JSON. Puede 
-      hacerse desde el listado de casos, Filtro Avanzado seleccionando el 
-      filtro por usar, después en Generar Plantilla elegir bien Exportar a 
-      XRLAT o bien Exportar a JSON y presionar el botón Generar. También 
-      pueden emplearse rutas de la forma `casos.xrlat?utf8=✓&filtro[departamento_id]=5...` y `casos.json?utf8=✓&filtro[departamento_id]=5....` 
-      Los parámetros para el filtro se documentan en: 
-      <https://github.com/pasosdeJesus/sivel2/blob/master/doc/API_casos.md>
-      (implementado por Luis Alejandro Cruz)
-    * Se moderniza la interfaz de 3 formas: (1) haciendola más adaptable a 
-      dispositivos móviles (siguiendo lineamientos de diseño visual de twitter 
-      y su librería Bootstrap 4), (2) permitiendo personalizar el color de más 
-      elementos visuales mediante temas y (3) posibilitando el uso de 
-      librerías javascript más recientes. Ver <https://github.com/pasosdeJesus/sip/wiki/Actualizaci%C3%B3n-de-sip-2.0b6-a-sip-2.0b7>   
-    * Tema con color en más elementos
-    * Se arreglaron fallas 
-    * Se ampliaron pruebas de regresión y del sistema con sideex (Implementado por Luis Alejandro y por Blanca Acosta).
-
+  * `chromium` 81.0.4044-138 con llave de Pasos de Jesús
+* Se incluye beta 12 de `sivel2` cuyas novedades con respecto al beta 10
+  includo en adJ 6.6 se describen a continuación. Agradecimiento por
+  varias de  las novedades a Luis Alejandro Cruz:
+    - Control de acceso mediante grupos. 
+    - Cada caso tiene una bitácora de cambios que puede verse desde el resumen del caso en una sección colapsable o por parte de administradores en `Administrar->Bitácora`
+    - Más posibilidades de sistematizar en formulario de caso: (1) Nueva tabla básica Contexto de una víctima (por ejemplo FALSO POSITIVO) y campo en la pestaña Víctima del formulario Casos que permite ponerle contexto a una víctima. (2)En pestaña víctima, puedan agregarse familiares, de forma similar a la de SIVeL 1.2, pero con autocompletación de nombre. (3) Posibilidad de añadir varios sectores sociales secundarios a una víctima individual. (4) En pestaña víctima colectiva ahora se pueden especificar las etnias, y se presentan en el resumen del caso.  
+    - Mejores listados y reportes: (1) En listado de casos, el filtro avanzado ahora presenta nuevos criterios a usuarios autenticados: filtro por profesión, sector social y organización. (2) - Posibilidad de presentar al público general hasta 2000 casos en el listado de casos y en el mapa cuando un administrador del servidor lo configura en fuentes (en config/application.rb con config.x.sivel2_consulta_web_publica = true). (3) En filtro avanzado ahora los usuarios autenticados puede buscar por contexto de caso y por contexto de víctima. (4) Desde el listado de casos, Filtro avanzado, nuevo reporte "Revista no bélicas HTML", que se comporta como reporte revista pero que excluye casos con categorías de tipo Bélicas. 
+    - Mejoras en usabilidad: (1) Al intentar eliminar un Presunto Responsable con actos asociados, aparece una alerta informando, que permite continuar con la eliminación o cancelarla. (2) Mejoras al conteo general de víctimas para generar una tabla como la de la revista Noche y Niebla más reciente.  (3) En ficha de caso, pestaña ubicación, en nuevas ubicaciones el país ahora comienza por omisión en Colombia.  (3) El listado de víctimas y casos, ahora tiene un filtro por cada categoria. (4)  Un administrador puede exportar el listado de usuarios a hoja de cálculo.
+     - Actualización del DIVIPOLA a su versión 2019. Hay un resumen ejecutivo en https://github.com/pasosdeJesus/sip/wiki/Resumen-ejecutivo-de-la-actualizaci%C3%B3n-a-DIVIPOLA-2019
+    - Soluciona diversas fallas incluyendo: (1) Mejorar velocidad al editar cuando un sistema tiene más de 10.000 casos, en tales casos tras editar debe elegirse del menú la opción Casos->Refrescar. (2) Conteo demografía de víctimas estaba replicando cuando la misma víctima estaba en 2 casos. 
+    - Características experimentales: (1) Prototipo de importación de casos desde un archivo XML con relatos (XRLAT) desde Casos->Importar de XRLAT. Nueva versión del DTD de Relatos XRLAT. (2) Prototipo de pestaña Desaparición para usuarios del grupo Desaparición
 
 
 
@@ -178,8 +142,7 @@ Puede ver las diversas versiones publicadas en:
 
 - Chromium sigue siendo inestable por ejemplo en ocasiones en 
 	<http://drive.google.com>
-  por esto sigue incluyendose firefox que en casos como ese puede operar,
-  pero no en otros.
+  por esto sigue incluyendose firefox que en casos como ese puede operar.
 
 - `xenodm` no logra utilizar un teclado latinoamericano que se haya
   configurado en `/etc/kbdtype`.  Para usarlo
