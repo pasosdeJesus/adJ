@@ -955,14 +955,15 @@ if (test -f /usr/include/ressl.h) then {
 	echo "Aplicando actualizaciones de 5.6 a 5.7 " >> /var/www/tmp/inst-adJ.bitacora;
 
 
-	cd /etc/X11/app-defaults
-	rm -f Beforelight Bitmap Bitmap-color Bitmap-nocase Chooser Clock-color 
-	rm -f Editres Editres-color KOI8RXTerm SshAskpass UXTerm Viewres
-	rm -f Viewres-color XCalc XCalc-color XClipboard XClock
-	rm -f XClock-color XConsole XFontSel XLoad XLock XLogo
-	rm -f XLogo-color XMore XSm XTerm XTerm-color Xedit
-	rm -f Xedit-color Xfd Xgc Xgc-color Xmag Xman Xmessage
-	rm -f Xmessage-color Xsystrace Xvidtune
+	(cd /etc/X11/app-defaults; \
+	rm -f Beforelight Bitmap Bitmap-color Bitmap-nocase Chooser Clock-color ; \
+	rm -f Editres Editres-color KOI8RXTerm SshAskpass UXTerm Viewres; \
+	rm -f Viewres-color XCalc XCalc-color XClipboard XClock; \
+	rm -f XClock-color XConsole XFontSel XLoad XLock XLogo; \
+	rm -f XLogo-color XMore XSm XTerm XTerm-color Xedit; \
+	rm -f Xedit-color Xfd Xgc Xgc-color Xmag Xman Xmessage; \
+	rm -f Xmessage-color Xsystrace Xvidtune; \
+	)
 
 	rm -f /etc/rc.d/named
 	rm -f /usr/sbin/dnssec-keygen
