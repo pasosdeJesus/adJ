@@ -20,11 +20,11 @@ Puede ver las diversas versiones publicadas en:
   con esta. Una vez la descargue puede escribirla en una USB ubicada en 
   `/dev/sd2c` (verifiquer dispositivo con `dmesg` y remplace):
 
-	doas dd if=AprendiendoDeJesus-6.7b1-amd64.usb of=/dev/sd2c bs=1M
+       doas dd if=AprendiendoDeJesus-6.7b1-amd64.usb of=/dev/sd2c bs=1M
 
  O si desea probarla con qemu para instalar en un disco `virtual.raw`:
 
- 	qemu-system-x86_64 -hda virtual.raw -hdb AprendiendoDeJesus-6.7b1-amd64.usb -boot menu=on
+       qemu-system-x86_64 -hda virtual.raw -hdb AprendiendoDeJesus-6.7b1-amd64.usb -boot menu=on
 
 
 ## 2. NOVEDADES RESPECTO A ADJ 6.5 PROVENIENTES DE OPENBSD
