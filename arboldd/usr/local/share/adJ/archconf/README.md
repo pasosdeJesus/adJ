@@ -1,74 +1,88 @@
 Archivos de configuración para adJ con base en los dotfiles de thoughtbot
-=========================
+=========================================================================
 
 Requerimientos
 --------------
 
-Instala [rcm](https://github.com/thoughtbot/rcm) para manejar archivos de
-configuración:
+* Usar zsh como interprete de ordenes. 
+  * Si hace falta instala con `doas pkg_add zsh`
+  * Ponlo como tu interprete de ordenes de inicio de sesión con:
+    `chsh -s $(which zsh)`.
+  * Tras esto sal y vuelve a ingresar a tu interprete de ordenes para
+  empezar a usar `zsh`.  
+  * Entre sus mejoras respecto a `ksh` está mayor autocompletación con TAB 
+    por ejemplo en las opciones de las ordenes.
+    Prueba `ls -` y presiona TAB para ver opciones de `ls` y autocompletar.
+* Usar `rcm` para manejar archivos de configuración. 
+  * Si hace falta instala con `doas pkg_add rcm`
+  * Crea el directorio `~/archconf-local` y allí deja copia de tus archivos
+    de configuración, quitandoles el punto inicial y añadiendoles el
+    posfijo `.local`, por ejemplo:
+    ```
+    mkdir ~/archconf-local/
+    cp ~/.gitconfig ~/archconf-local/gitconfig.local
+    ```
+  * En las secciones siguientes se verá como usarlo en detalle.
+* Usar `neovim` como editor 
+  * Si hace falta instala con `doas pkg_add neovim`
+  * Podrá leer la configuración de vim, pero manejará mejor ratón y 
+    portapapeles y a futuro posibilitará edición estilo IDE.
 
-    doas pkg_add rcm
-
-Establece `zsh` como tu interprete de ordenes de inicio de sesión:
-
-    chsh -s $(which zsh)
-
-Copia tus archivos de configuración agregando el posfijo `.local`,
-por ejemplo:
-    cp ~/.gitconfig ~/gitconfig.local
 
 Instalación
 -----------
 
-Copia los archivos de configuración en tu directorio personal
+Copia estos archivos de configuración en el directorio `archconf`
+de tu directorio personal
 
     cp -rf /usr/local/share/adJ/archconf ~/
 
-Instala los archivos de configuración:
+Instala estos archivos de configuración de `~/archconf`, así como 
+tus personalizaciones de `~/archconf-local` con:
 
     env RCRC=$HOME/archconf/rcrc rcup
 
-Después de la instalación inicial, puedes ejecutar `rcup` sin establecer la 
-variable `RCRC` (`rcup` establecerá un enlace simbólico de `rcrc` hacia 
-`~/.rcrc` para futuras ejecuciones de `rcup`). 
+Después de la instalación inicial, puedes ejecutar `rcup` sin establecer la
+variable `RCRC` (`rcup` creará `~/.rcrc` con la ubicación para futuras
+ejecuciones de `rcup`). 
 [Ver ejemplo](https://github.com/thoughtbot/archconf/blob/master/rcrc).
 
-Esta orden creará enlaces simbólicos para los archivos de configuración 
-en tu directorio principal.
+Esta orden copiará estos archivos de configuración en tu directorio
+personal, así como tus personalizaciones del directorio ~/archconf-local.
 
-Al establecer la variable de entorno le indicas a `rcup` que use 
-las opciones de configuración preestablecidas:
+Al establecer la variable de entorno le indicas a `rcup` que al hacer
+la copia use las opciones de configuración preestablecidas:
 
-* Excluye los archivos `README.md`, `README-ES.md` y `LICENSE`, que son parte
-  del repositorio `archconf`, pero no necesitan ser enlazadas.
-* Le da precedencia a las modificaciones personales que por defecto están en
+* Excluir los archivos `README.md` y `LICENSE`, que son parte
+  del repositorio `archconf`, pero no son archivos de configuración.
+* Dar precedencia a las modificaciones personales que por defecto están en
   `~/archconf-local`
 * Por favor configura el archivo `rcrc` en caso de que quieras hacer
   modificaciones personales en un directorio distinto.
 
 
-Actualizar
-----------
+Actualización
+-------------
 
 Con cada nueva versión de adJ se recomienda revisar las actualizaciones
-a estos archconf, copiarlas nuevamente y ejecutar:
+a estos archconf, copiarlos nuevamente a tu directorio `~/archconf`
+y volver a ejecutar:
 
     rcup
 
-para enlazar nuevos archivos e instalar nuevas extensiones vim. 
-**Nota** _Debes_ ejecutar `rcup` después de descargar para asegurarte 
-que todos los archivos de las extensiones estén instalados adecuadamente. 
+De esta manera se copiaran nuevos archivos y se instalarán nuevas
+extensiones neovim.
+**Nota** _Debes_ ejecutar `rcup` después de descargar para asegurar
+que todos los archivos de las extensiones queden instalados adecuadamente.
 Puedes ejecutar `rcup` muchas veces, así que !actualiza pronto y actualiza
 con frecuencia!
 
-Haz tus propias modificaciones
-------------------------------
 
-Crea un directorio para tus modificaciones personales:
+Haz tus personalizaciones
+-------------------------
 
-    mkdir ~/archconf-local
-
-Pon tus modificaciones en `~/archconf-local` añadiendo `.local`:
+Tus personalizaciones deben ubicarse en `~/archconf-local`
+deben terminar en `.local`, digamos:
 
 * `~/archconf-local/alias.local`
 * `~/archconf-local/gitconfig.local`
@@ -137,8 +151,9 @@ Tu `~/archconf-local/vimrc.bundles.local` tal vez se vea así:
     Plug 'Lokaltog/vim-powerline'
     Plug 'stephenmckinney/vim-solarized-powerline'
 
-Configuraciones de zsh
-----------------------
+
+Configuraciones para zsh
+------------------------
 
 Las configuraciones adicionales para zsh pueden ir en el directorio 
 `~/archconf-local/zsh/configs`. Este tiene dos subdirectorios especiales: 
@@ -173,25 +188,34 @@ El archivo `~/archconf-local/zshrc.local` se carga después de
 `~/archconf-local/zsh/configs`.
 
 
-Configuraciones de vim
-----------------------
+Configuraciones de vim y neovim
+-------------------------------
 
 De forma análoga al directorio de configuración para zsh antes descrito, vim
-carga automáticamente los archivos del directorio `~/archconf-local/vim/plugin`.
+carga automáticamente los archivos del directorio 
+`~/archconf-local/vim/plugin`.
 Sin embargo, este no tiene el mismo soporte para los subdirectorios `pre` 
 ni `post` que tiene nuestro `zshrc`.
 
 Este es un `~/archconf-local/vim/plugin/c.vim` de ejemplo. Se carga cada 
-vez que inicia vim, sin importar de nombre del archivo:
+vez que inicia vim, sin importar el nombre del archivo:
 
     # Indenta programas en C de acuerdo al estilo BSD sytle(9)
     set cinoptions=:0,t0,+4,(4
     autocmd BufNewFile,BufRead *.[ch] setlocal sw=0 ts=8 noet
 
-¿Qué viene incluido?
------------------
 
-Configuración de [vim](http://www.vim.org/):
+¿Qué viene incluido?
+--------------------
+
+Configuración de [tmux](http://robots.thoughtbot.com/a-tmux-crash-course):
+
+* Mejora la resolución del color.
+* Elimina restos administrativos (nombre de sesión, nombre de máquina, tiempo) 
+  de la barra de estado.
+* Suaviza el color de la barra de estatus de verde a gris claro.
+
+Configuración de [vim](http://www.vim.org/) y [neovim](http://neovim.io):
 
 * [fzf](https://github.com/junegunn/fzf.vim) para búsqueda difusa de
   archivos/colchones/etiquetas.
@@ -213,20 +237,13 @@ Configuración de [vim](http://www.vim.org/):
 * Usa [vim-plug](https://github.com/junegunn/vim-plug) para administrar 
   extensiones.
 
-Configuración de [tmux](http://robots.thoughtbot.com/a-tmux-crash-course):
-
-* Mejora la resolución del color.
-* Elimina restos administrativos (nombre de sesión, nombre de máquina, tiempo) 
-  de la barra de estatus.
-* Suaviza el color de la barra de estatus de verde a gris claro.
-
 Configuración de [git](http://git-scm.com/):
 
 * Agrega el alias `create-branch` para crear ramas.
 * Agrega el alias `delete-branch` para borrar ramas.
 * Agrega el alias `merge-branch` para fusionar las ramas en `master`.
-* Agrega el alias `up` para ejecutar `fetch` y `rebase` la rama
-  `origin/master` en una rama con una nueva característica.
+* Agrega el alias `up` para ejecutar `fetch` y `rebase` de la rama
+  `origin/master` en una rama de trabajo.
   Usa `git up -i` para que sea modo interactivo.
 * Agrega el gancho `post-{checkout,commit,merge}` para re-indexar tus ctags.
 * Agrega atajos `pre-commit` y `prepare-commit-msg` que delegan hacia tu
@@ -240,6 +257,17 @@ Configuración de [Ruby](https://www.ruby-lang.org/en/):
 Alias para el interprete de ordenes:
 
 * `b` es `bundle`.
+* `gemil` simplifica `doas gem install --install-dir ruta gema`, 
+  la ruta destino será indicada por el archivo de configuración 
+  `~/.bundle/config`. Por ejemplo si `~/.bundle/config` incluye 
+  `BUNDLE_PATH: "/var/www/bundler/"`, al ejecutar
+  ```
+  gemil puma
+  ```
+  en realidad se ejecutará
+  ```
+  doas gem install --install-path /var/www/bundler/ruby/2.7 puma
+  ```
 * `g` sin argumentos es `git status` y con argumentos funciona como `git`.
 * `migrate` es `rake db:migrate && rake db:rollback && rake db:migrate`.
 * `mcd` crea un directorio y va a él.
@@ -247,7 +275,7 @@ Alias para el interprete de ordenes:
    dada de archivos.
 * `tat` para adjuntar a una sesión de tmux llamada igual que el directorio 
    actual.
-* `v` para `$VISUAL`.
+* `v` para `nvim`.
 
 
 Gracias

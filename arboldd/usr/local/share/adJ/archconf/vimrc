@@ -149,9 +149,14 @@ nnoremap [r :ALEPreviousWrap<CR>
 " Mapea Ctrl + p para abrir buscar difuso (FZF)
 nnoremap <c-p> :Files<cr>
 
+" Correccion ortografica segun
+" https://apuntes-snicoper.readthedocs.io/es/latest/editors/vim/spell_vim_es.html
+set spell
+setlocal spell spelllang=es
+
 " Establece el archivo de ortografía en donde se garantiza que existe,
 " puede ser un enlace. 
-set spellfile=$HOME/.vim-spell-en.utf-8.add
+set spellfile=$HOME/.vim-spell-es.utf-8.add
 
 " Autocompletar con palabras de dicciones cuando se corrige ortografía
 set complete+=kspell
