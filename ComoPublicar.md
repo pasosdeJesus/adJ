@@ -177,7 +177,11 @@ Pasos importantes para publicar versión mayor
    adJ.
 3. Actualizar documentación (`basico_adJ`, `usuario_adJ` y `servidor_adJ`), 
    publicar en Internet
-4. Actualizar versión en logo que presenta xenodm en `arboldd/etc/X11/xenodm/pixmaps/`. Con gimp iniciar con el de resolución 15bpp, modificarlo el número de versión es tipo Sans tamaño 18. Par converitr a xpm en Imagen->Modo Indexado. 15bpp y 8bpp con paleta de 255 colores. 4bpp con paleta de 15 colores, 1bpp con paleta de 2 colores.
+4. Actualizar versión en logo que presenta xenodm en `arboldd/etc/X11/xenodm/pixmaps/`. 
+   Con gimp iniciar con el de resolución 15bpp, modificarlo el número de 
+   versión es tipo Sans tamaño 18. Par converitr a xpm en 
+   Imagen > Modo > Indexado. 15bpp y 8bpp con paleta de 255 colores. 
+   4bpp con paleta de 15 colores, 1bpp con paleta de 2 colores.
 5. Análogo a pasos de versión beta
 6. Actualizar version en reto de P2PU (las 4 primeras tareas) 
    https://p2pu.org/es/groups/openbsd-adj-como-sistema-de-escritorio/

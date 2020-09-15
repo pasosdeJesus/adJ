@@ -1,0 +1,22 @@
+# Unix
+alias ll="ls -lat"
+alias mkdir="mkdir -p"
+alias e="$EDITOR"
+alias v="$VISUAL"
+
+# Bundler
+alias b="bundle"
+
+# Yarn
+alias y="CXX=c++ yarn"
+
+# Rails
+alias migrate="rake db:migrate db:rollback && rake db:migrate db:test:prepare"
+
+# Presentar ruta bonita
+alias path='echo $PATH | tr -s ":" "\n"'
+
+# Incluir otros alias
+if [[ -f ~/.aliases.local ]]; then
+  source ~/.aliases.local
+fi
