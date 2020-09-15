@@ -1,32 +1,34 @@
-Archivos de configuración para adJ con base en los de thoughtbot
+Archivos de configuración para adJ con base en los dotfiles de thoughtbot
 =========================
-
-![prompt](http://images.thoughtbot.com/thoughtbot-archconf-prompt.png)
 
 Requerimientos
 --------------
-
-Establece zsh como tu interprete de ordenes de inicio de sesión:
-
-    chsh -s $(which zsh)
-
-Instalación
------------
-
-Asegura que los archivos de configuración están:
-
-    ls /usr/local/share/adJ/archconf
 
 Instala [rcm](https://github.com/thoughtbot/rcm) para manejar archivos de
 configuración:
 
     doas pkg_add rcm
 
+Establece `zsh` como tu interprete de ordenes de inicio de sesión:
+
+    chsh -s $(which zsh)
+
+Copia tus archivos de configuración agregando el posfijo `.local`,
+por ejemplo:
+    cp ~/.gitconfig ~/gitconfig.local
+
+Instalación
+-----------
+
+Copia los archivos de configuración en tu directorio personal
+
+    cp -rf /usr/local/share/adJ/archconf ~/
+
 Instala los archivos de configuración:
 
     env RCRC=$HOME/archconf/rcrc rcup
 
-Después de la instalación inicial, puedes ejecutarlo sin establecer la 
+Después de la instalación inicial, puedes ejecutar `rcup` sin establecer la 
 variable `RCRC` (`rcup` establecerá un enlace simbólico de `rcrc` hacia 
 `~/.rcrc` para futuras ejecuciones de `rcup`). 
 [Ver ejemplo](https://github.com/thoughtbot/archconf/blob/master/rcrc).
@@ -48,8 +50,8 @@ las opciones de configuración preestablecidas:
 Actualizar
 ----------
 
-De vez en cuando deberías descargar las actualizaciones de estos 
-archconf, y ejecutar
+Con cada nueva versión de adJ se recomienda revisar las actualizaciones
+a estos archconf, copiarlas nuevamente y ejecutar:
 
     rcup
 
