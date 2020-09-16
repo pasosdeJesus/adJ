@@ -6,7 +6,7 @@ gemil () {
     echo "Creela con algo como:";
     echo "cat > ~/.bundle/config <<EOF";
     echo "---";
-    echo "BUNDLE_PATH: \"/var/www/bundler/ruby/2.7/\"";
+    echo "BUNDLE_PATH: \"/var/www/bundler/\"";
     echo "EOF"
     exit 1;
   fi
