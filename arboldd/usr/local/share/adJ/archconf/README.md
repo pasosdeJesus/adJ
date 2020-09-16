@@ -301,15 +301,3 @@ configuraciones de Daniel Hamilton-Smith. Esperamos incluirlas proxiamemente
 por ejemplo <https://github.com/dhasane/nvim>
 
 
-Acerca de thoughtbot
---------------------
-
-![thoughtbot](http://presskit.thoughtbot.com/images/thoughtbot-logo-for-readmes.svg)
-
-dotfiles es mantenido y financiado por thoughtbot, inc.
-Los nombres y los logos de thoughtbot son marca registrada de thoughtbot, inc.
-
-Amamos el código de fuentes abiertas!
-Vea 
-Estamos [disponibles para ser contratados](https://thoughtbot.com/hire-us?utm_source=github).
-
