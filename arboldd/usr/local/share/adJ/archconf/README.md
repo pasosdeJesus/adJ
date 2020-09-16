@@ -297,7 +297,7 @@ a Corey Haines, Gary Bernhardt y otros por compartir sus
 dotfiles y otros archivos de ordenes.
 
 Las modificaciones para adJ son de Vladimir Támara, animado por las
-configuraciones de Daniel Hamilton-Smith. Esperamos incluirlas proxiamemente
-por ejemplo <https://github.com/dhasane/nvim>
+configuraciones de Daniel Hamilton-Smith. Esperamos próximamente la
+inclusión de <https://github.com/dhasane/nvim>
 
 
