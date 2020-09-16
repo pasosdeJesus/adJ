@@ -4,8 +4,8 @@ Archivos de configuración para adJ con base en los dotfiles de thoughtbot
 Requerimientos
 --------------
 
-* Usar zsh como interprete de ordenes (su licenciamiento es estilo MIT
-  que requiere crédito a diferencia de `pdksh`, el estándar de OpenBSD,
+* Usar `zsh` como interprete de ordenes (su licenciamiento es estilo MIT
+  a diferencia de `pdksh`, el estándar de OpenBSD,
   que es de dominio público).
   * Si hace falta instala con `doas pkg_add zsh`
   * Ponlo como tu interprete de ordenes de inicio de sesión con:
@@ -14,8 +14,8 @@ Requerimientos
     empezar a usar `zsh`.  
   * Entre sus mejoras respecto a `pdksh` está mayor autocompletación con TAB 
     por ejemplo en las opciones de las ordenes.
-    Prueba `ls -` y presiona TAB para ver opciones de `ls` y autocompletar.
-* Usar `rcm` para manejar archivos de configuración (licencia BSD de 3 
+    Prueba `ls -` y presiona TAB para ver opciones de `ls`.
+* Usar `rcm` para manejar archivos de configuración (usa licencia BSD de 3 
   clausulas)
   * Si hace falta instala con `doas pkg_add rcm`
   * Crea el directorio `~/archconf-local` y allí deja copia de tus archivos
@@ -27,9 +27,9 @@ Requerimientos
     ```
   * En las secciones siguientes verás como usarlo en detalle.
 * Usar `neovim` como editor (usa licencia Apache que es menos restrictiva
-  que la de vim)
+  que la de `vim`)
   * Si hace falta instala con `doas pkg_add neovim`
-  * Podrá leer la configuración de vim, pero manejará mejor ratón y 
+  * Puede leer la configuración de `vim`, pero maneja mejor ratón y 
     portapapeles y a futuro posibilitará edición estilo IDE.
 
 
@@ -49,17 +49,16 @@ tus personalizaciones de `~/archconf-local` con:
 Después de la instalación inicial, puedes ejecutar `rcup` sin establecer la
 variable `RCRC` (`rcup` creará `~/.rcrc` con la ubicación para futuras
 ejecuciones de `rcup`). 
-[Ver ejemplo](https://github.com/thoughtbot/archconf/blob/master/rcrc).
 
 Esta orden copiará estos archivos de configuración en tu directorio
-personal, así como tus personalizaciones del directorio ~/archconf-local.
+personal, así como tus personalizaciones del directorio `~/archconf-local`.
 
 Al establecer la variable de entorno le indicas a `rcup` que al hacer
 la copia use las opciones de configuración preestablecidas:
 
 * Excluir los archivos `README.md` y `LICENSE`, que son parte
   del repositorio `archconf`, pero no son archivos de configuración.
-* Dar precedencia a las modificaciones personales que por defecto están en
+* Dar precedencia a las modificaciones personales que por omisión están en
   `~/archconf-local`
 * Por favor configura el archivo `rcrc` en caso de que quieras hacer
   modificaciones personales en un directorio distinto.
@@ -69,14 +68,15 @@ Actualización
 -------------
 
 Con cada nueva versión de adJ se recomienda revisar las actualizaciones
-a estos archconf, copiarlos nuevamente a tu directorio `~/archconf`
-y volver a ejecutar:
+a estos archconf ubicados en `/usr/local/share/adJ/archconf`, copiarlos 
+nuevamente a tu directorio `~/archconf` y volver a ejecutar `rcup`:
 
+    cp -rf /usr/local/share/adJ/archconf/* ~/archconf
     rcup
 
-De esta manera se copiaran nuevos archivos y se instalarán nuevas
+De esta manera se copiaran los nuevos archivos y se instalarán nuevas
 extensiones neovim.
-**Nota** _Debes_ ejecutar `rcup` después de descargar para asegurar
+**Nota** _Debes_ ejecutar `rcup` después de copiar para asegurar
 que todos los archivos de las extensiones queden instalados adecuadamente.
 Puedes ejecutar `rcup` muchas veces, así que !actualiza pronto y actualiza
 con frecuencia!
@@ -86,7 +86,7 @@ Haz tus personalizaciones
 -------------------------
 
 Tus personalizaciones deben ubicarse en `~/archconf-local`
-deben terminar en `.local`, digamos:
+deben omitir el punto inicial y debe terminar en `.local`, digamos:
 
 * `~/archconf-local/alias.local`
 * `~/archconf-local/gitconfig.local`
@@ -184,7 +184,7 @@ Algunos cambios, como `chpwd`, deben ocurrir en
       ls
     }
 
-Este directorio es útil para combinar archconf de múltiples equipos de trabajo;
+Este directorio es útil para combinar `archconf` de múltiples equipos de trabajo;
 un equipo puede agregar el archivo `virtualenv`, otro el archivo 
 `keys` y un tercero el archivo `chpwd`. 
 
@@ -195,8 +195,8 @@ El archivo `~/archconf-local/zshrc.local` se carga después de
 Configuraciones de vim y neovim
 -------------------------------
 
-De forma análoga al directorio de configuración para zsh antes descrito, vim
-carga automáticamente los archivos del directorio 
+De forma análoga al directorio de configuración para `zsh` antes descrito, 
+`vim` carga automáticamente los archivos del directorio 
 `~/archconf-local/vim/plugin`.
 Sin embargo, este no tiene el mismo soporte para los subdirectorios `pre` 
 ni `post` que tiene nuestro `zshrc`.
@@ -208,6 +208,8 @@ vez que inicia vim, sin importar el nombre del archivo:
     set cinoptions=:0,t0,+4,(4
     autocmd BufNewFile,BufRead *.[ch] setlocal sw=0 ts=8 noet
 
+neovim empleará la configuración de `vim` más otra que pueda añadir 
+en `~/archconf-local/config/nvim/`
 
 ¿Qué viene incluido?
 --------------------
@@ -215,9 +217,7 @@ vez que inicia vim, sin importar el nombre del archivo:
 Configuración de [tmux](http://robots.thoughtbot.com/a-tmux-crash-course):
 
 * Mejora la resolución del color.
-* Elimina restos administrativos (nombre de sesión, nombre de máquina, tiempo) 
-  de la barra de estado.
-* Suaviza el color de la barra de estatus de verde a gris claro.
+* Suaviza el color de la barra de estatus a negro con fondo azul claro
 
 Configuración de [vim](http://www.vim.org/) y [neovim](http://neovim.io):
 
@@ -282,21 +282,24 @@ Alias para el interprete de ordenes:
 * `v` para `nvim`.
 
 
-Gracias
--------
 
-Gracias [Contribuyentes](https://github.com/thoughtbot/archconf/contributors)!
-Además, gracias a Corey Haines, Gary Bernhardt, y otros por compartir sus
-archconf y otros archivos de ordenes de los cuales obtuvimos inspiración
-para diversos elementos de este proyecto.
+Licencia y Créditos
+------------------
 
-Licencia
---------
+Estos archconf se basaron en los dotfiles de
+[thoughtbot](https://github.com/thoughtbot) 
+de septiembre de 2020 y mantienen la misma licencia que puede ver en 
+[LICENSE](https://github.com/pasosdeJesus/adJ/blob/ADJ_6_7/arboldd/usr/local/share/adJ/archconf/LICENSE).
 
-Los derechos de reproducción de dotfiles © 2009-2017 son de thoughtbot. 
-Es código de fuentes abiertas y puede redistribuirse 
-bajo los términos especificados en el archivo
-[LICENSE](https://github.com/thoughtbot/dotfiles/blob/master/LICENSE)
+Los dotfiles originales dan crédito a varios
+[Contribuyentes](https://github.com/thoughtbot/archconf/contributors),
+a Corey Haines, Gary Bernhardt y otros por compartir sus
+dotfiles y otros archivos de ordenes.
+
+Las modificaciones para adJ son de Vladimir Támara, animado por las
+configuraciones de Daniel Hamilton-Smith. Esperamos incluirlas proxiamemente
+por ejemplo <https://github.com/dhasane/nvim>
+
 
 Acerca de thoughtbot
 --------------------
@@ -307,6 +310,6 @@ dotfiles es mantenido y financiado por thoughtbot, inc.
 Los nombres y los logos de thoughtbot son marca registrada de thoughtbot, inc.
 
 Amamos el código de fuentes abiertas!
-Vea [nuestros otros proyectos](https://github.com/thoughtbot).
+Vea 
 Estamos [disponibles para ser contratados](https://thoughtbot.com/hire-us?utm_source=github).
 
