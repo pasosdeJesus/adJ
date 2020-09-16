@@ -164,6 +164,8 @@ set complete+=kspell
 " Siempre usar diffs verticales
 set diffopt+=vertical
 
+colorscheme pablo
+
 " Configuración local
 if filereadable($HOME . "/.vimrc.local")
   source ~/.vimrc.local
