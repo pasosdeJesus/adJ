@@ -4,16 +4,19 @@ Archivos de configuración para adJ con base en los dotfiles de thoughtbot
 Requerimientos
 --------------
 
-* Usar zsh como interprete de ordenes. 
+* Usar zsh como interprete de ordenes (su licenciamiento es estilo MIT
+  que requiere crédito a diferencia de `pdksh`, el estándar de OpenBSD,
+  que es de dominio público).
   * Si hace falta instala con `doas pkg_add zsh`
   * Ponlo como tu interprete de ordenes de inicio de sesión con:
     `chsh -s $(which zsh)`.
   * Tras esto sal y vuelve a ingresar a tu interprete de ordenes para
-  empezar a usar `zsh`.  
-  * Entre sus mejoras respecto a `ksh` está mayor autocompletación con TAB 
+    empezar a usar `zsh`.  
+  * Entre sus mejoras respecto a `pdksh` está mayor autocompletación con TAB 
     por ejemplo en las opciones de las ordenes.
     Prueba `ls -` y presiona TAB para ver opciones de `ls` y autocompletar.
-* Usar `rcm` para manejar archivos de configuración. 
+* Usar `rcm` para manejar archivos de configuración (licencia BSD de 3 
+  clausulas)
   * Si hace falta instala con `doas pkg_add rcm`
   * Crea el directorio `~/archconf-local` y allí deja copia de tus archivos
     de configuración, quitandoles el punto inicial y añadiendoles el
@@ -22,8 +25,9 @@ Requerimientos
     mkdir ~/archconf-local/
     cp ~/.gitconfig ~/archconf-local/gitconfig.local
     ```
-  * En las secciones siguientes se verá como usarlo en detalle.
-* Usar `neovim` como editor 
+  * En las secciones siguientes verás como usarlo en detalle.
+* Usar `neovim` como editor (usa licencia Apache que es menos restrictiva
+  que la de vim)
   * Si hace falta instala con `doas pkg_add neovim`
   * Podrá leer la configuración de vim, pero manejará mejor ratón y 
     portapapeles y a futuro posibilitará edición estilo IDE.

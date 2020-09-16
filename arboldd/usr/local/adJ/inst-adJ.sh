@@ -1488,8 +1488,8 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 
 [begin] (Fluxbox)
 	[exec] (xfe - Archivos) {PATH=\$PATH:/usr/sbin:/usr/local/sbin:/sbin doas /usr/local/bin/xfe}
-	[exec] (xterm+tmux) { xterm -geometry 160x48 -en utf8 -e /usr/bin/tmux -l }
-	[exec] (xterm) { xterm -geometry 160x48 -en utf8 -e /bin/ksh -l }
+	[exec] (xterm+tmux) { xterm -geometry 160x48 -en utf8 -e "TERM=xterm-color /usr/bin/tmux -2 -l" }
+	[exec] (xterm) { xterm -geometry 160x48 -en utf8 -ls }
 	[exec] (chromium) {/usr/local/bin/chrome --disable-gpu --allow-file-access-from-files}
 	[exec] (firefox) {/usr/local/bin/firefox}
 	[exec] (midori) { export \`/usr/local/bin/gnome-keyring-servicio -s\`; /usr/local/bin/midori}
