@@ -1813,34 +1813,6 @@ EOF
 } fi;
 
 
-echo "* Crear scripts para montar imagenes cifradas como servicios" >> /var/www/tmp/inst-adJ.bitacora;
-nuevomonta=0;
-
-creamontador /etc/rc.d/montaencres /var/www/resbase 2 $uadJ $uadJ /var/resbase.img
-creamontador /etc/rc.d/montaencpos /var/postgresql 1 _postgresql _postgresql /var/post.img
-rm -f /usr/local/sbin/monta.sh
-
-grep "mount.*post" /etc/rc.local > /dev/null 2>&1
-if (test "$?" = "0") then {
-	ed /etc/rc.local >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
-/mount.*post
-.,+4d
-w
-q
-EOF
-	activarcs montaencpos
-} fi;
-grep "mount.*resbase" /etc/rc.local > /dev/null 2>&1
-if (test "$?" = "0") then {
-	ed /etc/rc.local >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
-/mount.*resbase
-.,+4d
-w
-q
-EOF
-	activarcs montaencres
-} fi;
-
 actualiza=0
 nv="$VERP$REV"
 if (test "$vac" != "") then {
@@ -2207,13 +2179,6 @@ clear;
 
 sh /etc/rc.local >> /var/www/tmp/inst-adJ.bitacora 2>&1 # En caso de que falte montar bien
 
-if (test "$postcifra" = "s") then {
-	echo "* Montar imagenes cifradas durante arranque" >> /var/www/tmp/inst-adJ.bitacora;
-	activarcs montaencres
-	activarcs montaencpos
-
-} fi; #postcifra
-
 # Nuevo usuario PostgreSQL
 if (ltf $ACVER "4.1") then {
 	uspos='_postgresql';
@@ -2371,15 +2336,6 @@ if (test "$?" = "0") then {
 		/etc/rc.d/montaencres start
 	} fi;
 } fi;
-if (test "$postcifra" = "s") then {
-	echo "* Montando imagen cifrada para PostgreSQL" >> /var/www/tmp/inst-adJ.bitacora;
-	clear;
-	/etc/rc.d/montaencpos check
-	if (test "$?" != "0") then {
-		echo "No está montada imagen cifrada para PostgreSQL" >> /var/www/tmp/inst-adJ.bitacora;
-		/etc/rc.d/montaencpos start
-	} fi;
-} fi; 
 
 echo "* Poniendo permisos de /var/www/resbase" >> /var/www/tmp/inst-adJ.bitacora;
 chown $uadJ:$uadJ /var/www/resbase

@@ -55,6 +55,8 @@ _carga_conf() {
 }
 _carga_conf "$HOME/.zsh/conf"
 
+/usr/games/fortune /usr/local/share/adJ/fortune/versiculos
+
 # Configuración local
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
 
