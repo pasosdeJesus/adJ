@@ -13,12 +13,20 @@ Puede ver novedades respecto a OpenBSD en:
 Puede ver las diversas versiones publicadas en: 
   <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/>
 
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/AprendiendoDeJesus-6.7b1-amd64.iso> es imagen en formato ISO para quemar en DVD e instalar por primera vez.
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/6.7b1-amd64/> es directorio con el contenido del DVD instalador apropiado para descargar con rsync y actualizar un adJ ya instalado (ver  <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_7/Actualiza.md> )
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/6.7-extra/> es directorio con versiones recientes de paquetes no incluidos en distribución oficial (pueden no estar firmados y requerir instalación con `pkg_add -D unsigned _paquete_`).
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/AprendiendoDeJesus-6.7b1-amd64.usb> es imagen para escribir en una memoria USB y arrancar
-  con esta. Una vez la descargue puede escribirla en una USB ubicada en 
-  `/dev/sd2c` (verifiquer dispositivo con `dmesg` y remplace):
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/AprendiendoDeJesus-6.7b1-amd64.iso> 
+  es imagen en formato ISO para quemar en DVD e instalar por primera vez.
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/6.7b1-amd64/>
+  es directorio con el contenido del DVD instalador apropiado para descargar 
+  con rsync y actualizar un adJ ya instalado (ver  
+  <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_7/Actualiza.md> )
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/6.7-extra/> es 
+  directorio con versiones recientes de paquetes no incluidos en distribución 
+  oficial (pueden no estar firmados y requerir instalación con 
+  `pkg_add -D unsigned _paquete_`).
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/AprendiendoDeJesus-6.7b1-amd64.usb> 
+  es imagen para escribir en una memoria USB y arrancar con esta. Una vez 
+  la descargue puede escribirla en una USB ubicada en `/dev/sd2c` 
+  (verifique dispositivo con `dmesg` y remplace):
 
        doas dd if=AprendiendoDeJesus-6.7b1-amd64.usb of=/dev/sd2c bs=1M
 
@@ -27,7 +35,7 @@ Puede ver las diversas versiones publicadas en:
        qemu-system-x86_64 -hda virtual.raw -hdb AprendiendoDeJesus-6.7b1-amd64.usb -boot menu=on
 
 
-## 2. NOVEDADES RESPECTO A ADJ 6.5 PROVENIENTES DE OPENBSD
+## 2. NOVEDADES RESPECTO A ADJ 6.6 PROVENIENTES DE OPENBSD
 
 ### 2.1 Kernel y Sistema Base
 
@@ -42,7 +50,7 @@ Puede ver las diversas versiones publicadas en:
 		  MSI-X en `bnxt`
 		* USB y modems: Soporte para adaptador USB-Ethernet RTL8153B 
 	 	  en `ure`
-	* Video: Nuevo controlador `amdgpu` que soporta AMD Radeon GPU.
+	* Vídeo: Nuevo controlador `amdgpu` que soporta AMD Radeon GPU.
 	  Mejoras a `drm` que en conjunto con `amdgpu`, `inteldrm` y/o
 	  `radeon` dan acelaración de video por hardware usando la
 	   Infraestructra de Presentación Directa (Direct Rendering
@@ -64,7 +72,7 @@ Puede ver las diversas versiones publicadas en:
 * Mejoras a herramientas de Red
 	* Mejoras a pila inalámbrica general y en particular a `ifconfig` 
 	  con `nwflag` y `mode`para poner modo 11a/b/g/n.
-	* Soporte para examinar y establecer rxprio via `ifconfig` según
+	* Soporte para examinar y establecer rxprio vía `ifconfig` según
 	  RFC 2983. Agregado a `vlan`, `gre`, `mpw`, `mpe`, `mpip`, 
 	 `etherip` y `bpe`.
 	* Nuevo cliente `snmp` compatible con netsnmp y eliminado `snmpctl`
@@ -78,7 +86,7 @@ Puede ver las diversas versiones publicadas en:
 	* Función `unveil` usada en 77 programas en zona de usuarios para 
 	  restringir acceso a sistema de archivos (como `chroot` pero mejor).
 	  Y ahora `ps` puede mostrar que procesos usaron `unveil` y `pledge`
-	* Se añade soporte para el Protocolo Generador de Númerosa Aleatorios 
+	* Se añade soporte para el Protocolo Generador de Números Aleatorios 
 	  EFI
 	* Incluye OpenSSH 8.1
 	* Incluye LibreSSL 3.0.2
@@ -96,22 +104,19 @@ Puede ver las diversas versiones publicadas en:
 * Recompilados portes estables más recientes para evitar fallas de seguridad: 
     `certbot`, `dovecot`, `gettext-tools`, `libidn2`, `librsvg`,
     `oniguruma`, `pcre2`, `unzip` y `webkitgtk4`
-* Ruby 2.7.0 retroportado de current  (incluye solución de Jeremy Evans a 
-  falla con `realpath` para permitir usar `unveil` y de hecho hay 2 gemas 
-  que permiten usarlo desde ruby: <https://github.com/jcs/ruby-unveil> y 
-  <https://github.com/jeremyevans/ruby-pledge>)
-* Algunos paquetes típicos y su versión: dovecot 2.3.7.2, chromium 79.0.3945,
+* Ruby 2.7.1 retroportado de current  
+* Algunos paquetes típicos y su versión: dovecot 2.3.10, chromium 79.0.3945,
   firefox 69.9.2, libreoffice 6.3.2.2, nginx 1.16.1p0, mariadb 10.3.18,
   node 10.16.3, postgresql 12.2, python 3.7.4, ruby 2.7.0, vim 8.1.2061
 
 
-## 3. NOVEDADES RESPECTO A ADJ 6.5 PROVENIENTES DE PASOS DE JESÚS
+## 3. NOVEDADES RESPECTO A ADJ 6.6 PROVENIENTES DE PASOS DE JESÚS
 
 ### 3.1 Instalador y documentación
 * Documentación actualizada: 
-	* `basico_adJ`: Nueva sección sobre `tmux`
-	* `usuario_adJ`: Ampliada sección sobre discos duros
-	* `servidor_adJ`: Reescrita sección sobre servidores web con bastantes casos de uso de nginx
+	* `basico_adJ`: 
+	* `usuario_adJ`: Nueva sección sobre cifrados con softraid
+	* `servidor_adJ`: 
 
 ### 3.2 Paquetes
 
@@ -124,7 +129,7 @@ Puede ver las diversas versiones publicadas en:
    `glib2`, `libunistring`, `vlc`
 * Retroportados y adaptados de OpenBSD-current 
   * `chromium` 81.0.4044-138 con llave de Pasos de Jesús
-* Se incluye beta 12 de `sivel2` cuyas novedades con respecto al beta 10
+* Se incluye la versión beta 12 de `sivel2` cuyas novedades con respecto al beta 10
   includo en adJ 6.6 se describen a continuación. Agradecimiento por
   varias de  las novedades a Luis Alejandro Cruz:
     - Control de acceso mediante grupos. 
