@@ -2473,16 +2473,12 @@ insacp libidn
 echo "* Instalando PHP" | tee -a /var/www/tmp/inst-adJ.bitacora;
 p=`ls /var/db/pkg | grep "^php"`
 if (test "$p" != "") then {
-	dialog --title 'Eliminar PHP' --yesno "\\nPaquete PHP ya instalado. ¿Eliminar para instalar el de esta versión de adJ?" 15 60
-	if (test "$?" = "0") then {
-		rm -f /var/www/conf/modules/php5.conf 
-		rcctl stop php56_fpm
-		rcctl disable php56_fpm
-		for i in php php-2 php5-core partial-php5-core partial-php5-pear partial-php; do
-			pkg_delete -I -D dependencies $i >> /var/www/tmp/inst-adJ.bitacora 2>&1
-		done;
-		rm -rf /etc/php-*
-	} fi;
+	rm -f /var/www/conf/modules/php5.conf 
+	rcctl stop php56_fpm
+	rcctl disable php56_fpm
+	for i in php php-2 php5-core partial-php5-core partial-php5-pear partial-php; do
+		pkg_delete -I -D dependencies $i >> /var/www/tmp/inst-adJ.bitacora 2>&1
+	done;
 } fi;
 
 
