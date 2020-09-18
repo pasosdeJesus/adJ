@@ -2095,64 +2095,6 @@ EOF
 } fi;
 
 
-if (test -f /$RUTAIMG/post.img) then {
-	echo "Existe imagen para datos cifrados de PostgreSQL /$RUTAIMG/post.img. " >> /var/www/tmp/inst-adJ.bitacora
-	echo "Suponiendo que la base PostgreSQL tendrá datos cifrados allí" >> /var/www/tmp/inst-adJ.bitacora
-	postcifra="s";
-}
-else {
-	postcifra="h";
-	while (test "$postcifra" = "h") ; do
-		dialog --title 'Cifrado de datos de PostgreSQL' --help-button --yesno '\n¿Preparar imagenes cifradas para los datos de PostgreSQL?' 15 60 
-		postcifra="$?"
-		if (test "$postcifra" = "2") then {
-			postcifra="h";
-			dialog --title 'Ayuda cifrado de datos de PostgreSQL' --msgbox '\nEn adJ todas las bases de datos de PostgreSQL pueden mantenerse en una partición cifrada con una clave que debe darse durante el arranque (si la clave es errada no podrán usarse las bases de datos).\n' 15 60 
-		} fi;
-	done;
-	if (test "$postcifra" = "0") then {
-		postcifra="s";
-	} fi;
-
-} fi;
-
-
-if (test "$postcifra" = "s") then {
-	echo "* Crear imagen cifrada para base de ${TAM}Kbytes (se espeicifica otra con var. TAM) en directorio $RUTAIMG (se especifica otra con var RUTAIMG)"  >> /var/www/tmp/inst-adJ.bitacora
-	clear;
-	cat <<EOF
-
-A continuación por favor ingrese la clave de cifrado para cada una de las
-particiones cifradas, no las verá cuando las teclee --procure no equivocarse y 
-recuerdelas porque debe digitarlas en cada arranque.
-
-EOF
-
-	if (test ! -f /$RUTAIMG/post.img ) then {
-		vnconfig -u vnd0 >> /var/www/tmp/inst-adJ.bitacora 2>&1
-		dd of=/$RUTAIMG/post.img bs=1024 seek=$TAM count=0 >> /var/www/tmp/inst-adJ.bitacora 2>&1
-		echo -n "Clave para PostgreSQL (/var/postgresql) "
-		vnconfig -ckv vnd0 /$RUTAIMG/post.img 
-		newfs /dev/rvnd0c >> /var/www/tmp/inst-adJ.bitacora 2>&1
-		vnconfig -u vnd0 >> /var/www/tmp/inst-adJ.bitacora 2>&1
-	} else {
-		echo "   Saltando..." >> /var/www/tmp/inst-adJ.bitacora
-	} fi;
-
-	echo "* Crear imagen cifrada para respaldo de ${TAM}Kbytes (se espeicifica otra con var. TAM) en directorio $RUTAIMG (se especifica otra con var RUTAIMG)"  >> /var/www/tmp/inst-adJ.bitacora
-	if (test ! -f /$RUTAIMG/resbase.img -a ! -f /$RUTAIMG/bakbase.img) then {
-		vnconfig -u vnd0 >> /var/www/tmp/inst-adJ.bitacora 2>&1
-		dd of=/$RUTAIMG/resbase.img bs=1024 seek=$TAM count=0 >> /var/www/tmp/inst-adJ.bitacora 2>&1
-		echo -n "Clave para respaldos (/var/www/resbase)"
-		vnconfig -ckv vnd0 /$RUTAIMG/resbase.img 
-		newfs /dev/rvnd0c >> /var/www/tmp/inst-adJ.bitacora 2>&1
-		vnconfig -u vnd0 >> /var/www/tmp/inst-adJ.bitacora 2>&1
-	} else {
-		echo "   Saltando..." >> /var/www/tmp/inst-adJ.bitacora;
-	} fi;
-
-} fi; #postcifra
-
 echo "* Preparando espacio para respaldos de bases de datos" >> /var/www/tmp/inst-adJ.bitacora;
 if (test ! -d /var/www/resbase) then {
 	mkdir /var/www/resbase
@@ -2325,17 +2267,6 @@ else {
 	echo "   Saltando" >> /var/www/tmp/inst-adJ.bitacora;
 } fi;
 
-
-grep "^ *pkg_scripts.*montaencres" /etc/rc.conf.local > /dev/null 2>&1
-if (test "$?" = "0") then {
-	echo "* Montando imagen cifrada para respaldos" >> /var/www/tmp/inst-adJ.bitacora;
-	clear;
-	/etc/rc.d/montaencres check
-	if (test "$?" != "0") then {
-		echo "No está montada imagen cifrada para respaldo" >> /var/www/tmp/inst-adJ.bitacora;
-		/etc/rc.d/montaencres start
-	} fi;
-} fi;
 
 echo "* Poniendo permisos de /var/www/resbase" >> /var/www/tmp/inst-adJ.bitacora;
 chown $uadJ:$uadJ /var/www/resbase
