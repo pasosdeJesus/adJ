@@ -8,7 +8,7 @@ empleado por el editor de texto `vim` cada vez que se inicia.
 Aquí encuentra archivos de configuración para la pila de edición en
 terminal: `rcm`+`tmux`+`zsh`+neovim.  El siguiente pantallazo ilustra como
 puede lucir:
-[!https://raw.githubusercontent.com/pasosdeJesus/adJ/ADJ_6_7/arboldd/usr/local/share/adJ/archconf/archconf.png]
+![](archconf.png?raw=true)
 
 Note que:
 * En el panel superior izquierdo está editando un texto plano en
