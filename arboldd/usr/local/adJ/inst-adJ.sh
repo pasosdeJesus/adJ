@@ -2165,7 +2165,7 @@ if (test "$?" = "0") then {
 	} fi;
 
 	nb=1;
-	while (test -f /var/www/resbase/pga-$nb.sql) do
+	while (test -f /var/www/resbase/pga-$nb.sql -o -f /var/www/resbase/pga-$nb.sql.gz) do
 		nb=`expr $nb + 1`;
 	done;
 	dialog --title 'Respaldo de datos de PostgreSQL' --yesno "\\n¿Intentar sacar copia de respaldo de todas las bases PostgreSQL en /var/www/resbase/pga-$nb.sql ?\n" 15 60
