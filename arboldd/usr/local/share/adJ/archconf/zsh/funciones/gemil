@@ -22,7 +22,7 @@ gemil () {
     exit 1;
   fi
   if [[ $# -gt 0 ]]; then
-    doas gem install --install-dir "$rb/ruby/$vruby/" $@
+    doas gem install -N --install-dir "$rb/ruby/$vruby/" $@
   else
     echo "gemil gema o gemil gema -v 1.2.3"
   fi
