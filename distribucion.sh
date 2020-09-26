@@ -941,17 +941,15 @@ if (test "$sn" = "s") then {
 	paquete oniguruma 
 	paquete pcre2 
 	paquete webkitgtk4
-	paquete librsvg
 	paquete certbot paquetes "certbot py3-acme"
 	paquete unzip
+	paquete python paquetes "python" "3.7"
 
 	###	
 	# Recompilados de estable que usan xlocale (y pueden cerrar fallas)
 	# No deben estar en mystuff
 	paquete curl
 
-	# En adJ 6.5 para compilar PHP 5.6 tuvo que modificarse el porte y tras iniciar compilación volver a deshacer algunos cambios de los parches para que continuara, dificultad con icu::
-#	paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 5.6
 	paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 7.3
 
 	###

@@ -1,8 +1,8 @@
-$OpenBSD: patch-components_metrics_BUILD_gn,v 1.17.2.1 2019/12/24 15:31:22 sthen Exp $
+$OpenBSD: patch-components_metrics_BUILD_gn,v 1.21 2020/04/10 18:51:31 robert Exp $
 Index: components/metrics/BUILD.gn
 --- components/metrics/BUILD.gn.orig
 +++ components/metrics/BUILD.gn
-@@ -142,6 +142,10 @@ jumbo_static_library("metrics") {
+@@ -150,6 +150,10 @@ jumbo_static_library("metrics") {
      "//url",
    ]
  

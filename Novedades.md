@@ -3,7 +3,7 @@ Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
 
 ### Versión: 6.7b1
-Fecha de publicación: 26/Abr/2020
+Fecha de publicación: 4/Sep/2020
 
 Puede ver novedades respecto a OpenBSD en:
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_7/Novedades_OpenBSD.md>
@@ -13,21 +13,29 @@ Puede ver novedades respecto a OpenBSD en:
 Puede ver las diversas versiones publicadas en: 
   <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/>
 
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/AprendiendoDeJesus-6.7b1-amd64.iso> es imagen en formato ISO para quemar en DVD e instalar por primera vez.
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/6.7b1-amd64/> es directorio con el contenido del DVD instalador apropiado para descargar con rsync y actualizar un adJ ya instalado (ver  <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_7/Actualiza.md> )
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/6.7-extra/> es directorio con versiones recientes de paquetes no incluidos en distribución oficial (pueden no estar firmados y requerir instalación con `pkg_add -D unsigned _paquete_`).
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/AprendiendoDeJesus-6.7b1-amd64.usb> es imagen para escribir en una memoria USB y arrancar
-  con esta. Una vez la descargue puede escribirla en una USB ubicada en 
-  `/dev/sd2c` (verifiquer dispositivo con `dmesg` y remplace):
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/AprendiendoDeJesus-6.7b1-amd64.iso> 
+  es imagen en formato ISO para quemar en DVD e instalar por primera vez.
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/6.7b1-amd64/>
+  es directorio con el contenido del DVD instalador apropiado para descargar 
+  con rsync y actualizar un adJ ya instalado (ver  
+  <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_7/Actualiza.md> )
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/6.7-extra/> es 
+  directorio con versiones recientes de paquetes no incluidos en distribución 
+  oficial (pueden no estar firmados y requerir instalación con 
+  `pkg_add -D unsigned _paquete_`).
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/AprendiendoDeJesus-6.7b1-amd64.usb> 
+  es imagen para escribir en una memoria USB y arrancar con esta. Una vez 
+  la descargue puede escribirla en una USB ubicada en `/dev/sd2c` 
+  (verifique dispositivo con `dmesg` y remplace):
 
-	doas dd if=AprendiendoDeJesus-6.7b1-amd64.usb of=/dev/sd2c bs=1M
+       doas dd if=AprendiendoDeJesus-6.7b1-amd64.usb of=/dev/sd2c bs=1M
 
  O si desea probarla con qemu para instalar en un disco `virtual.raw`:
 
- 	qemu-system-x86_64 -hda virtual.raw -hdb AprendiendoDeJesus-6.7b1-amd64.usb -boot menu=on
+       qemu-system-x86_64 -hda virtual.raw -hdb AprendiendoDeJesus-6.7b1-amd64.usb -boot menu=on
 
 
-## 2. NOVEDADES RESPECTO A ADJ 6.5 PROVENIENTES DE OPENBSD
+## 2. NOVEDADES RESPECTO A ADJ 6.6 PROVENIENTES DE OPENBSD
 
 ### 2.1 Kernel y Sistema Base
 
@@ -42,7 +50,7 @@ Puede ver las diversas versiones publicadas en:
 		  MSI-X en `bnxt`
 		* USB y modems: Soporte para adaptador USB-Ethernet RTL8153B 
 	 	  en `ure`
-	* Video: Nuevo controlador `amdgpu` que soporta AMD Radeon GPU.
+	* Vídeo: Nuevo controlador `amdgpu` que soporta AMD Radeon GPU.
 	  Mejoras a `drm` que en conjunto con `amdgpu`, `inteldrm` y/o
 	  `radeon` dan acelaración de video por hardware usando la
 	   Infraestructra de Presentación Directa (Direct Rendering
@@ -64,7 +72,7 @@ Puede ver las diversas versiones publicadas en:
 * Mejoras a herramientas de Red
 	* Mejoras a pila inalámbrica general y en particular a `ifconfig` 
 	  con `nwflag` y `mode`para poner modo 11a/b/g/n.
-	* Soporte para examinar y establecer rxprio via `ifconfig` según
+	* Soporte para examinar y establecer rxprio vía `ifconfig` según
 	  RFC 2983. Agregado a `vlan`, `gre`, `mpw`, `mpe`, `mpip`, 
 	 `etherip` y `bpe`.
 	* Nuevo cliente `snmp` compatible con netsnmp y eliminado `snmpctl`
@@ -78,7 +86,7 @@ Puede ver las diversas versiones publicadas en:
 	* Función `unveil` usada en 77 programas en zona de usuarios para 
 	  restringir acceso a sistema de archivos (como `chroot` pero mejor).
 	  Y ahora `ps` puede mostrar que procesos usaron `unveil` y `pledge`
-	* Se añade soporte para el Protocolo Generador de Númerosa Aleatorios 
+	* Se añade soporte para el Protocolo Generador de Números Aleatorios 
 	  EFI
 	* Incluye OpenSSH 8.1
 	* Incluye LibreSSL 3.0.2
@@ -87,103 +95,114 @@ Puede ver las diversas versiones publicadas en:
 
 * El sistema base incluye mejoras a componentes auditados y mejorados 
   como, `llvm` 8.0.1,  `Xenocara` (basado en `Xorg` 7.7),
-  `perl` 5.28.2
-* El repositorio de paquetes de OpenBSD cuenta con 10736 para amd64
+  `perl` 5.30.2
+* El repositorio de paquetes de OpenBSD cuenta con 11268 para amd64
 
 
 ### 2.2 Paquetes 
 
 * Recompilados portes estables más recientes para evitar fallas de seguridad: 
-    `certbot`, `dovecot`, `gettext-tools`, `libidn2`, `librsvg`,
-    `oniguruma`, `pcre2`, `unzip` y `webkitgtk4`
-* Ruby 2.7.0 retroportado de current  (incluye solución de Jeremy Evans a 
-  falla con `realpath` para permitir usar `unveil` y de hecho hay 2 gemas 
-  que permiten usarlo desde ruby: <https://github.com/jcs/ruby-unveil> y 
-  <https://github.com/jeremyevans/ruby-pledge>)
-* Algunos paquetes típicos y su versión: dovecot 2.3.7.2, chromium 79.0.3945,
-  firefox 69.9.2, libreoffice 6.3.2.2, nginx 1.16.1p0, mariadb 10.3.18,
-  node 10.16.3, postgresql 12.2, python 3.7.4, ruby 2.7.0, vim 8.1.2061
+    `certbot`, `curl`, `dovecot`, `gettext-tools`, `libidn2`, `librsvg`,
+    `oniguruma`, `python`, `pcre2`, `unzip` y `webkitgtk4`
+* Ruby 2.7.1 retroportado de current
+* Algunos paquetes típicos y su versión: dovecot 2.3.10, chromium 81.0.4044
+  firefox 76.0 , libreoffice 6.4.3.2, nginx 1.16.1p1, mariadb 10.4.12v1,
+  node 12.16.1, postgresql 12.3, python 3.7.9, ruby 2.7.1p0, vim 8.2.534,
+  neovim 0.4.3, zsh 5.8
 
 
-## 3. NOVEDADES RESPECTO A ADJ 6.5 PROVENIENTES DE PASOS DE JESÚS
+## 3. NOVEDADES RESPECTO A ADJ 6.6 PROVENIENTES DE PASOS DE JESÚS
 
 ### 3.1 Instalador y documentación
-
+* Segunda etapa de instalador con `inst-adJ.sh` simplificada quitando 
+  preguntas sobre PHP y sobre cifrado.   Por lo visto el cifrado con 
+  `vnconfig` tiene problemas desde OpenBSD 6.6 y no serán solucionados.  
+  Ahora se recomienda cifrado con `softraid`.  No hay un procedimiento
+  automático para pasar de `vnconfig` a `softraid`, pero recomendamos 
+  enfáticamente realizar el cambio siguiendo instrucciones de:
+  <https://pasosdejesus.github.io/usuario_adJ/ar01s03.html#idm3197209600>
 * Documentación actualizada: 
-	* `basico_adJ`: Nueva sección sobre `tmux`
-	* `usuario_adJ`: Ampliada sección sobre discos duros
-	* `servidor_adJ`: Reescrita sección sobre servidores web con bastantes casos de uso de nginx
+	* `basico_adJ`: 
+	* `usuario_adJ`: Nueva sección sobre cifrados con softraid
+	* `servidor_adJ`: 
 
 ### 3.2 Paquetes
 
-* El nuevo paquete `bibletime` remplaza `xiphos` y `biblesync`
-* Se agrega `postgresql-pg_upgrade` y `postgresql-previous` que facilitan
-  actualizar de la versión 11 a las versión 12 (ver <https://dhobsd.pasosdejesus.org/actualizacion-de-postgresql-con-pg_upgrade.html>). 
-  El porte `postgresql-previous` fue levemente modificado para no entrar en 
-  conflicto con `postgresql-docs`
-* Se compacta más el medio de instalación retirando algunos programas (que
-  siguen estando disponibles como paquetes en repositorios de OpenBSD): 
-  `dia`, `ganglia`, `midori`, `qgis`, `rdesktop`, `scribus`, `xsane`.  
-  Además se retiraron varios programas de soporte y librerías ya no usados 
-  como `aspell-es`, `db`, `celt`, `gstreamer1mm`, `gtkhtml4`, `hdf5`, `libao`, `openpam`.
-* Entre los paquetes retirados resaltamos `markup` que ya no está disponible
-  en sitio de distribución y por lo mismo `sigue` y `repasa` que la requerían.
-  Se retiró `SIVeL 1.2` y programas que lo requerían incluyendo porte
-  obsoleto de `php-5.6.4` y los diversos paquetes de `pear`. 
+* Ahora se incluyen paquetes `zsh`, `neovim` y `rcm` así como unos
+  archivos de configuración para sustituir la pila de edición en consola:
+  `tmux`+`pdksh`+`vim` por `rcm`+`tmux`+`zsh`+`neovim`.  
+  Estos archivos de configuración se basan en los dotfiles de Thoughtbot 
+  (ver <https://github.com/thoughtbot/dotfiles>) y quedarán en el directorio 
+  `/usr/local/share/adJ/archconf`. Para adoptar esta nueva pila de edición
+  en consola siga las instrucciones disponibles en:
+  <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_7/arboldd/usr/local/share/adJ/archconf/README.md>
+* Nueva versión 1.0a5 del motor de búsqueda Mt77 que ahora emplea
+  la codificación UTF-8 internamente y como codificación por omisión
+  en las diversas herramientas. Mantiene soporte para codificación 
+  Latin1 con opción `-l` del indexador de textos planos y del buscador.
+  Agradecemos el trabajo de Daniel Hamilton-Smith.
 * Se han recompilado los siguientes para aprovechar `xlocale`:
    `glib2`, `libunistring`, `vlc`
-* Recompilados muchos paquetes de Perl que ahora son requeridos por 
-  `SpamAssassin` y al igual que otros de perl se recompilaron (sin cambiar 
-  de versión) con el perl de adJ que si soporta `LC_NUMERIC`.  
 * Retroportados y adaptados de OpenBSD-current 
-  * `chromium` 79.0.3945-117 con llave de Pasos de Jesús
-  * `curl`
-  * Postgresql 12.2 adaptado de retroporte de 12.1 (en adJ soporta 
-   bien cotejaciones en español)
-* Se incluye beta 10 de `sivel2` cuyas novedades son:
-    * Mapa de casos sobre OpenStretMap con filtro, acumulados de casos 
-      (clusters) y nuevas posibilidades con capas: elegir capa base, 
-      superponer una capa con transparencias, cargar pequeñas capas GeoJSON 
-      y de exportar la capa de casos en GeoJSON (implementado por Luis 
-      Alejandro Cruz)
-    * Posibilidad de visualizar casos sobre Google Maps (portado de SIVeL 1.2 
-      y mejorado) y sobre Mapbox, pero no se activan por omisión por requerir 
-      llave y eventualmente pagos. Ver pantallazos en 
-      https://github.com/pasosdeJesus/sivel2_gen/blob/master/doc/mapas.md 
-      (implementado por Luis Alejandro Cruz).
-    * Permite exportar detalles de un caso a JSON y a XRLAT (XML) mediante 
-      rutas de la forma casos/1.json y casos/1.xrlat, cambiando 1 por el 
-      número de caso (implementado por Luis Alejandro Cruz)
-    * Permite exportar varios casos a XRLAT y generalidades a JSON. Puede 
-      hacerse desde el listado de casos, Filtro Avanzado seleccionando el 
-      filtro por usar, después en Generar Plantilla elegir bien Exportar a 
-      XRLAT o bien Exportar a JSON y presionar el botón Generar. También 
-      pueden emplearse rutas de la forma `casos.xrlat?utf8=✓&filtro[departamento_id]=5...` y `casos.json?utf8=✓&filtro[departamento_id]=5....` 
-      Los parámetros para el filtro se documentan en: 
-      <https://github.com/pasosdeJesus/sivel2/blob/master/doc/API_casos.md>
-      (implementado por Luis Alejandro Cruz)
-    * Se moderniza la interfaz de 3 formas: (1) haciendola más adaptable a 
-      dispositivos móviles (siguiendo lineamientos de diseño visual de twitter 
-      y su librería Bootstrap 4), (2) permitiendo personalizar el color de más 
-      elementos visuales mediante temas y (3) posibilitando el uso de 
-      librerías javascript más recientes. Ver <https://github.com/pasosdeJesus/sip/wiki/Actualizaci%C3%B3n-de-sip-2.0b6-a-sip-2.0b7>   
-    * Tema con color en más elementos
-    * Se arreglaron fallas 
-    * Se ampliaron pruebas de regresión y del sistema con sideex (Implementado por Luis Alejandro y por Blanca Acosta).
-
+  * `chromium` 81.0.4044-138 con llave de Pasos de Jesús
+* Se incluye la versión beta 12 de `sivel2` cuyas novedades con respecto al 
+  beta 10 includo en adJ 6.6 se describen a continuación. Agradecimiento por
+  varias de  las novedades a Luis Alejandro Cruz:
+    - Control de acceso mediante grupos. 
+    - Cada caso tiene una bitácora de cambios que puede verse desde el 
+      resumen del caso en una sección colapsable o por parte de 
+      administradores en `Administrar->Bitácora`
+    - Más posibilidades de sistematizar en formulario de caso: (1) Nueva 
+      tabla básica Contexto de una víctima (por ejemplo FALSO POSITIVO) y 
+      campo en la pestaña Víctima del formulario Casos que permite ponerle 
+      contexto a una víctima. (2) En pestaña víctima, puedan agregarse 
+      familiares, de forma similar a la de SIVeL 1.2, pero con 
+      autocompletación de nombre. (3) Posibilidad de añadir varios sectores 
+      sociales secundarios a una víctima individual. (4) En pestaña víctima 
+      colectiva ahora se pueden especificar las etnias, y se presentan en 
+      el resumen del caso.  
+    - Mejores listados y reportes: (1) En listado de casos, el filtro 
+      avanzado ahora presenta nuevos criterios a usuarios autenticados: 
+      filtro por profesión, sector social y organización. (2) Posibilidad 
+      de presentar al público general hasta 2000 casos en el listado de casos 
+      y en el mapa cuando un administrador del servidor lo configura en 
+      fuentes (en `config/application.rb` con
+      `config.x.sivel2_consulta_web_publica = true`). (3) En filtro avanzado 
+      ahora los usuarios autenticados puede buscar por contexto de caso y 
+      por contexto de víctima. (4) Desde el listado de casos, Filtro avanzado, 
+      nuevo reporte "Revista no bélicas HTML", que se comporta como reporte 
+      revista pero que excluye casos con categorías de tipo Bélicas. 
+    - Mejoras en usabilidad: (1) Al intentar eliminar un Presunto Responsable 
+      con actos asociados, aparece una alerta informando, que permite 
+      continuar con la eliminación o cancelarla. (2) Mejoras al conteo 
+      general de víctimas para generar una tabla como la de la revista Noche 
+      y Niebla más reciente.  (3) En ficha de caso, pestaña ubicación, en 
+      nuevas ubicaciones el país ahora comienza por omisión en Colombia.  
+      (3) El listado de víctimas y casos, ahora tiene un filtro por cada 
+      categoria. (4)  Un administrador puede exportar el listado de usuarios 
+      a hoja de cálculo.
+     - Actualización del DIVIPOLA a su versión 2019. Hay un resumen ejecutivo en <https://github.com/pasosdeJesus/sip/wiki/Resumen-ejecutivo-de-la-actualizaci%C3%B3n-a-DIVIPOLA-2019>
+    - Soluciona diversas fallas incluyendo: (1) Mejorar velocidad al editar 
+      cuando un sistema tiene más de 10.000 casos, en tales casos tras editar 
+      debe elegirse del menú la opción `Casos`->`Refrescar`. (2) Conteo 
+      demografía de víctimas estaba replicando cuando la misma víctima estaba 
+      en 2 casos.
+    - Características experimentales: (1) Prototipo de importación de casos 
+      desde un archivo XML con relatos (XRLAT) desde Casos->Importar de XRLAT. 
+      Nueva versión del DTD de Relatos XRLAT. (2) Prototipo de pestaña 
+      Desaparición para usuarios del grupo Desaparición
 
 
 
 ## 4. FE DE ERRATAS
 
 - Chromium sigue siendo inestable por ejemplo en ocasiones en 
-	<http://drive.google.com>
-  por esto sigue incluyendose firefox que en casos como ese puede operar,
-  pero no en otros.
+  <http://drive.google.com>
+  por esto sigue incluyendose firefox que en casos como ese puede operar.
 
 - `xenodm` no logra utilizar un teclado latinoamericano que se haya
   configurado en `/etc/kbdtype`.  Para usarlo
   agregue en `/etc/X11/xenodm/Xsetup_0`:
 ```
-		setxkbmap latam
+  setxkbmap latam
 ```

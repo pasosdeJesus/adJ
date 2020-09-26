@@ -1,9 +1,9 @@
-$OpenBSD: patch-chrome_browser_ui_views_first_run_dialog_cc,v 1.19.2.1 2019/12/24 15:31:21 sthen Exp $
+$OpenBSD: patch-chrome_browser_ui_views_first_run_dialog_cc,v 1.22 2020/04/10 18:51:31 robert Exp $
 
 Index: chrome/browser/ui/views/first_run_dialog.cc
 --- chrome/browser/ui/views/first_run_dialog.cc.orig
 +++ chrome/browser/ui/views/first_run_dialog.cc
-@@ -115,8 +115,10 @@ std::unique_ptr<views::View> FirstRunDialog::CreateExt
+@@ -114,8 +114,10 @@ void FirstRunDialog::Done() {
  bool FirstRunDialog::Accept() {
    GetWidget()->Hide();
  
