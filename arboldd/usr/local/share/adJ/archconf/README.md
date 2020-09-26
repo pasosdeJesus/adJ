@@ -2,12 +2,12 @@ Archivos de configuración para adJ con base en los dotfiles de thoughtbot
 =========================================================================
 
 En entornos tipo Unix los archivos de configuración se caracterizan por
-comenzar con un punto.  Por ejemplo `~/.vimrc` es el archivo de configuración
-empleado por el editor de texto `vim` cada vez que se inicia.
+comenzar con un punto.  Por ejemplo `~/.zhrc` es el archivo de configuración
+empleado por el interprete de ordenes `zsh` cada vez que se inicia.
 
 Aquí encuentra archivos de configuración para la pila de edición en
-terminal: `rcm`+`tmux`+`zsh`+neovim.  El siguiente pantallazo ilustra como
-puede lucir:
+terminal de adJ: `rcm`+`tmux`+`zsh`+neovim.  El siguiente pantallazo 
+muestra como se ve (el juego de colores es configurable):
 ![](archconf.png?raw=true)
 
 Note que:
@@ -17,12 +17,13 @@ la palabra configuración.
 * En el panel superior derecho se ve el inicio de una sesión típica
   que por omisión presenta un versículo aleatorio (si prefiere puede
   deshabilitarlo en el archivo de configuración `.zshrc`)
-* En el panel inferior izquierdo se presenta instalación de una gema
-  en un directorio personal con la función `gemil` (que usa el directorio
-  personal configurado en `~/.bundle/config`)
+* En el panel inferior izquierdo se presenta instalación de la versión
+  más reciente de una gema en un directorio personal con la función `gemil` 
+  (que usa el directorio personal configurado en `~/.bundle/config`)
 * En el panel inferior derecho se presenta la edición de un código fuente
   en Ruby. Note que los comentarios están en español y se resaltan
-  palabras que no estén en el diccionario (se añaden con las teclas `zg`).
+  palabras que no estén en el diccionario (se añaden al diccionario
+  con las teclas `zg`).
 
 
 Aunque pueden emplearse en diversos sistemas operativos (por ejemplo en 
@@ -43,7 +44,7 @@ Requerimientos
 ```
       doas su root -c "echo /usr/local/bin/zsh >> /etc/shells"
 ```
-  * Ponlo como tu interprete de ordenes de inicio de sesión con:
+    * Ponlo como tu interprete de ordenes de inicio de sesión con:
 ```
       chsh -s /usr/local/bin/zsh
 ```
