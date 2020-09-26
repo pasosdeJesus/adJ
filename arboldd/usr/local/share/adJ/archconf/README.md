@@ -44,7 +44,7 @@ Requerimientos
 ```
       doas su root -c "echo /usr/local/bin/zsh >> /etc/shells"
 ```
-    * Ponlo como tu interprete de ordenes de inicio de sesión con:
+    ** Ponlo como tu interprete de ordenes de inicio de sesión con:
 ```
       chsh -s /usr/local/bin/zsh
 ```
