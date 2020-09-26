@@ -1,0 +1,64 @@
+# Configuración adaptada para adJ de <https://github.com/thoughtbot/dotfiles>
+
+# Lo típico de adJ
+
+export LANG=es_CO.UTF-8
+
+PATH=$HOME/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:/usr/games:/usr/local/jdk-1.8.0/bin:$HOME/.yarn/bin:.
+
+export PATH HOME TERM
+export PKG_PATH=http://ftp5.usa.openbsd.org/pub/OpenBSD/6.7/packages/amd64/
+export PKG_PATH=http://adJ.pasosdeJesus.org/pub/OpenBSD/6.7/packages/amd64/
+if (test "$TERM" = "xterm") then {
+  export TERM=xterm-color
+} fi;
+export SWORD_PATH=/usr/local/share/sword
+
+if [ -z "$SSH_AUTH_SOCK" ] ; then
+  eval `ssh-agent -s`
+  ssh-add
+fi
+
+# carga funciones ejecutables
+for f in ~/.zsh/funciones/*; do
+  source $f
+done
+
+# archivo extra en ~/.zsh/conf/pre , ~/.zsh/conf, and ~/.zsh/conf/post
+# se cargan primero, segundo y tercero respectivamente
+_carga_conf() {
+  _dir="$1"
+  if [ -d "$_dir" ]; then
+    if [ -d "$_dir/pre" ]; then
+      for config in "$_dir"/pre/**/*~*.zwc(N-.); do
+        . $config
+      done
+    fi
+
+    for config in "$_dir"/**/*(N-.); do
+      case "$config" in
+        "$_dir"/(pre|post)/*|*.zwc)
+          :
+          ;;
+        *)
+          . $config
+          ;;
+      esac
+    done
+
+    if [ -d "$_dir/post" ]; then
+      for config in "$_dir"/post/**/*~*.zwc(N-.); do
+        . $config
+      done
+    fi
+  fi
+}
+_carga_conf "$HOME/.zsh/conf"
+
+/usr/games/fortune /usr/local/share/adJ/fortune/versiculos
+
+# Configuración local
+[[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
+
+# alias
+[[ -f ~/.alias ]] && source ~/.alias

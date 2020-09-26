@@ -34,18 +34,17 @@ Prerequisitos
    en ```/usr/src```, ```/usr/src/sys```, ```/usr/ports``` y 
    ```/usr/xenocara```
 4. Desde github bifurque (fork) la rama de la versión que desea del 
-   repositorio <https://github.com/pasosdeJesus/adJ>.  La versión estable 
-   ya publicada 6.0 está en la rama ```ADJ_6_0``` y la versión en 
-   desarrollo --que sera 6.1-- esta en la rama ```master```. Para apoyar 
-   desarrollo de OpenBSD por un periodo de tiempo proponemos cambios a la 
-   rama ```current``` de OpenBSD desde la rama ```OBSD_CURRENT```.
-5. Clone su bifuración a su directorio preferido, (cambie en el siguiente 
-   ejemplo ```pasosdeJesus``` por su usuario en github y ```ADJ_6_6``` 
-   por ```master``` si prefier trabajar sobre la versión en desarrollo o 
-   por ```OBSD_CURRENT``` si prefiere trabajar sobre la versión para 
-   ```current``` de OpenBSD):
+   repositorio <https://github.com/pasosdeJesus/adJ>.  
+   La versión en desarrollo está en la rama
+   ```ADJ_6_7```.
+5. Clone su bifuración a su directorio preferido:
 ```
-mkdir ~/comp; cd ~/comp; git clone -b ADJ_6_6 git://github.com/pasosdeJesus/adJ.git
+mkdir ~/comp; cd ~/comp; git clone -b ADJ_6_7 git@github.com/pasosdeJesus/adJ.git
+```
+6. Copie el archivo local de variables y modifiquelo:
+```
+cp ver-local.sh.plantilla ver-local.sh
+$EDITOR ver-local.sh
 ```
 
 

@@ -1,27 +1,14 @@
-$OpenBSD: patch-chrome_common_chrome_features_h,v 1.18.2.1 2019/12/24 15:31:21 sthen Exp $
+$OpenBSD: patch-chrome_common_chrome_features_h,v 1.22 2020/04/10 18:51:31 robert Exp $
 
 Index: chrome/common/chrome_features.h
 --- chrome/common/chrome_features.h.orig
 +++ chrome/common/chrome_features.h
-@@ -67,10 +67,10 @@ COMPONENT_EXPORT(CHROME_FEATURES)
- extern const base::Feature kAutoFetchOnNetErrorPage;
- #endif
+@@ -68,7 +68,7 @@ extern const base::Feature kAppServiceShelf;
+ 
+ COMPONENT_EXPORT(CHROME_FEATURES) extern const base::Feature kAsyncDns;
  
 -#if defined(OS_WIN) || defined(OS_LINUX)
 +#if defined(OS_WIN) || defined(OS_LINUX) || defined(OS_BSD)
  COMPONENT_EXPORT(CHROME_FEATURES)
  extern const base::Feature kBackgroundModeAllowRestart;
--#endif  // defined(OS_WIN) || defined(OS_LINUX)
-+#endif  // defined(OS_WIN) || defined(OS_LINUX) || defined(OS_BSD)
- 
- COMPONENT_EXPORT(CHROME_FEATURES)
- extern const base::Feature kBlockPromptsIfDismissedOften;
-@@ -89,7 +89,7 @@ extern const base::Feature kBundledConnectionHelpFeatu
- COMPONENT_EXPORT(CHROME_FEATURES)
- extern const base::Feature kCaptionSettings;
- 
--#if (defined(OS_LINUX) && !defined(OS_CHROMEOS)) || defined(OS_MACOSX)
-+#if (defined(OS_LINUX) && !defined(OS_CHROMEOS)) || defined(OS_MACOSX) || defined(OS_BSD)
- COMPONENT_EXPORT(CHROME_FEATURES)
- extern const base::Feature kCertDualVerificationTrialFeature;
- #endif
+ #endif  // defined(OS_WIN) || defined(OS_LINUX)

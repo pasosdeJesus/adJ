@@ -1,6 +1,6 @@
 --- ports64-orig/infrastructure/bin/update-plist	Wed Sep 19 19:00:38 2018
 +++ ports/infrastructure/bin/update-plist	Fri Nov  2 03:53:49 2018
-@@ -1341,7 +1341,7 @@
+@@ -1453,7 +1453,7 @@
  	for my $name (keys %$filenames) {
  		next if $existing->{$name};
  		my $o = OpenBSD::PackingElement::CVSTag->add($list, 
@@ -9,4 +9,3 @@
  		$o->{file} = $name;
  	}
  }
-

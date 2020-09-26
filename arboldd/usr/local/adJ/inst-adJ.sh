@@ -955,14 +955,15 @@ if (test -f /usr/include/ressl.h) then {
 	echo "Aplicando actualizaciones de 5.6 a 5.7 " >> /var/www/tmp/inst-adJ.bitacora;
 
 
-	cd /etc/X11/app-defaults
-	rm -f Beforelight Bitmap Bitmap-color Bitmap-nocase Chooser Clock-color 
-	rm -f Editres Editres-color KOI8RXTerm SshAskpass UXTerm Viewres
-	rm -f Viewres-color XCalc XCalc-color XClipboard XClock
-	rm -f XClock-color XConsole XFontSel XLoad XLock XLogo
-	rm -f XLogo-color XMore XSm XTerm XTerm-color Xedit
-	rm -f Xedit-color Xfd Xgc Xgc-color Xmag Xman Xmessage
-	rm -f Xmessage-color Xsystrace Xvidtune
+	(cd /etc/X11/app-defaults; \
+	rm -f Beforelight Bitmap Bitmap-color Bitmap-nocase Chooser Clock-color ; \
+	rm -f Editres Editres-color KOI8RXTerm SshAskpass UXTerm Viewres; \
+	rm -f Viewres-color XCalc XCalc-color XClipboard XClock; \
+	rm -f XClock-color XConsole XFontSel XLoad XLock XLogo; \
+	rm -f XLogo-color XMore XSm XTerm XTerm-color Xedit; \
+	rm -f Xedit-color Xfd Xgc Xgc-color Xmag Xman Xmessage; \
+	rm -f Xmessage-color Xsystrace Xvidtune; \
+	)
 
 	rm -f /etc/rc.d/named
 	rm -f /usr/sbin/dnssec-keygen
@@ -1487,8 +1488,8 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 
 [begin] (Fluxbox)
 	[exec] (xfe - Archivos) {PATH=\$PATH:/usr/sbin:/usr/local/sbin:/sbin doas /usr/local/bin/xfe}
-	[exec] (xterm+tmux) { xterm -geometry 160x48 -en utf8 -e /usr/bin/tmux -l }
-	[exec] (xterm) { xterm -geometry 160x48 -en utf8 -e /bin/ksh -l }
+	[exec] (xterm+tmux) { xterm -geometry 160x48 -en utf8 -e "TERM=xterm-color /usr/bin/tmux -2 -l" }
+	[exec] (xterm) { xterm -geometry 160x48 -en utf8 -ls }
 	[exec] (chromium) {/usr/local/bin/chrome --disable-gpu --allow-file-access-from-files}
 	[exec] (firefox) {/usr/local/bin/firefox}
 	[exec] (midori) { export \`/usr/local/bin/gnome-keyring-servicio -s\`; /usr/local/bin/midori}
@@ -1812,34 +1813,6 @@ EOF
 } fi;
 
 
-echo "* Crear scripts para montar imagenes cifradas como servicios" >> /var/www/tmp/inst-adJ.bitacora;
-nuevomonta=0;
-
-creamontador /etc/rc.d/montaencres /var/www/resbase 2 $uadJ $uadJ /var/resbase.img
-creamontador /etc/rc.d/montaencpos /var/postgresql 1 _postgresql _postgresql /var/post.img
-rm -f /usr/local/sbin/monta.sh
-
-grep "mount.*post" /etc/rc.local > /dev/null 2>&1
-if (test "$?" = "0") then {
-	ed /etc/rc.local >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
-/mount.*post
-.,+4d
-w
-q
-EOF
-	activarcs montaencpos
-} fi;
-grep "mount.*resbase" /etc/rc.local > /dev/null 2>&1
-if (test "$?" = "0") then {
-	ed /etc/rc.local >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
-/mount.*resbase
-.,+4d
-w
-q
-EOF
-	activarcs montaencres
-} fi;
-
 actualiza=0
 nv="$VERP$REV"
 if (test "$vac" != "") then {
@@ -2114,63 +2087,13 @@ export LANG=es_CO.UTF-8
 EOF
 } fi;
 
-if (test -f /$RUTAIMG/post.img) then {
-	echo "Existe imagen para datos cifrados de PostgreSQL /$RUTAIMG/post.img. " >> /var/www/tmp/inst-adJ.bitacora
-	echo "Suponiendo que la base PostgreSQL tendrá datos cifrados allí" >> /var/www/tmp/inst-adJ.bitacora
-	postcifra="s";
-}
-else {
-	postcifra="h";
-	while (test "$postcifra" = "h") ; do
-		dialog --title 'Cifrado de datos de PostgreSQL' --help-button --yesno '\n¿Preparar imagenes cifradas para los datos de PostgreSQL?' 15 60 
-		postcifra="$?"
-		if (test "$postcifra" = "2") then {
-			postcifra="h";
-			dialog --title 'Ayuda cifrado de datos de PostgreSQL' --msgbox '\nEn adJ todas las bases de datos de PostgreSQL pueden mantenerse en una partición cifrada con una clave que debe darse durante el arranque (si la clave es errada no podrán usarse las bases de datos).\n' 15 60 
-		} fi;
-	done;
-	if (test "$postcifra" = "0") then {
-		postcifra="s";
-	} fi;
-
+grep "fortune" /home/$uadJ/.profile > /dev/null
+if (test "$?" != "0") then {
+	cat >> /home/$uadJ/.profile <<EOF
+/usr/games/fortune /usr/local/share/adJ/fortune/versiculos
+EOF
 } fi;
 
-
-if (test "$postcifra" = "s") then {
-	echo "* Crear imagen cifrada para base de ${TAM}Kbytes (se espeicifica otra con var. TAM) en directorio $RUTAIMG (se especifica otra con var RUTAIMG)"  >> /var/www/tmp/inst-adJ.bitacora
-	clear;
-	cat <<EOF
-
-A continuación por favor ingrese la clave de cifrado para cada una de las
-particiones cifradas, no las verá cuando las teclee --procure no equivocarse y 
-recuerdelas porque debe digitarlas en cada arranque.
-
-EOF
-
-	if (test ! -f /$RUTAIMG/post.img ) then {
-		vnconfig -u vnd0 >> /var/www/tmp/inst-adJ.bitacora 2>&1
-		dd of=/$RUTAIMG/post.img bs=1024 seek=$TAM count=0 >> /var/www/tmp/inst-adJ.bitacora 2>&1
-		echo -n "Clave para PostgreSQL (/var/postgresql) "
-		vnconfig -ckv vnd0 /$RUTAIMG/post.img 
-		newfs /dev/rvnd0c >> /var/www/tmp/inst-adJ.bitacora 2>&1
-		vnconfig -u vnd0 >> /var/www/tmp/inst-adJ.bitacora 2>&1
-	} else {
-		echo "   Saltando..." >> /var/www/tmp/inst-adJ.bitacora
-	} fi;
-
-	echo "* Crear imagen cifrada para respaldo de ${TAM}Kbytes (se espeicifica otra con var. TAM) en directorio $RUTAIMG (se especifica otra con var RUTAIMG)"  >> /var/www/tmp/inst-adJ.bitacora
-	if (test ! -f /$RUTAIMG/resbase.img -a ! -f /$RUTAIMG/bakbase.img) then {
-		vnconfig -u vnd0 >> /var/www/tmp/inst-adJ.bitacora 2>&1
-		dd of=/$RUTAIMG/resbase.img bs=1024 seek=$TAM count=0 >> /var/www/tmp/inst-adJ.bitacora 2>&1
-		echo -n "Clave para respaldos (/var/www/resbase)"
-		vnconfig -ckv vnd0 /$RUTAIMG/resbase.img 
-		newfs /dev/rvnd0c >> /var/www/tmp/inst-adJ.bitacora 2>&1
-		vnconfig -u vnd0 >> /var/www/tmp/inst-adJ.bitacora 2>&1
-	} else {
-		echo "   Saltando..." >> /var/www/tmp/inst-adJ.bitacora;
-	} fi;
-
-} fi; #postcifra
 
 echo "* Preparando espacio para respaldos de bases de datos" >> /var/www/tmp/inst-adJ.bitacora;
 if (test ! -d /var/www/resbase) then {
@@ -2197,13 +2120,6 @@ clear;
 
 
 sh /etc/rc.local >> /var/www/tmp/inst-adJ.bitacora 2>&1 # En caso de que falte montar bien
-
-if (test "$postcifra" = "s") then {
-	echo "* Montar imagenes cifradas durante arranque" >> /var/www/tmp/inst-adJ.bitacora;
-	activarcs montaencres
-	activarcs montaencpos
-
-} fi; #postcifra
 
 # Nuevo usuario PostgreSQL
 if (ltf $ACVER "4.1") then {
@@ -2249,7 +2165,7 @@ if (test "$?" = "0") then {
 	} fi;
 
 	nb=1;
-	while (test -f /var/www/resbase/pga-$nb.sql) do
+	while (test -f /var/www/resbase/pga-$nb.sql -o -f /var/www/resbase/pga-$nb.sql.gz) do
 		nb=`expr $nb + 1`;
 	done;
 	dialog --title 'Respaldo de datos de PostgreSQL' --yesno "\\n¿Intentar sacar copia de respaldo de todas las bases PostgreSQL en /var/www/resbase/pga-$nb.sql ?\n" 15 60
@@ -2351,26 +2267,6 @@ else {
 	echo "   Saltando" >> /var/www/tmp/inst-adJ.bitacora;
 } fi;
 
-
-grep "^ *pkg_scripts.*montaencres" /etc/rc.conf.local > /dev/null 2>&1
-if (test "$?" = "0") then {
-	echo "* Montando imagen cifrada para respaldos" >> /var/www/tmp/inst-adJ.bitacora;
-	clear;
-	/etc/rc.d/montaencres check
-	if (test "$?" != "0") then {
-		echo "No está montada imagen cifrada para respaldo" >> /var/www/tmp/inst-adJ.bitacora;
-		/etc/rc.d/montaencres start
-	} fi;
-} fi;
-if (test "$postcifra" = "s") then {
-	echo "* Montando imagen cifrada para PostgreSQL" >> /var/www/tmp/inst-adJ.bitacora;
-	clear;
-	/etc/rc.d/montaencpos check
-	if (test "$?" != "0") then {
-		echo "No está montada imagen cifrada para PostgreSQL" >> /var/www/tmp/inst-adJ.bitacora;
-		/etc/rc.d/montaencpos start
-	} fi;
-} fi; 
 
 echo "* Poniendo permisos de /var/www/resbase" >> /var/www/tmp/inst-adJ.bitacora;
 chown $uadJ:$uadJ /var/www/resbase
@@ -2577,16 +2473,12 @@ insacp libidn
 echo "* Instalando PHP" | tee -a /var/www/tmp/inst-adJ.bitacora;
 p=`ls /var/db/pkg | grep "^php"`
 if (test "$p" != "") then {
-	dialog --title 'Eliminar PHP' --yesno "\\nPaquete PHP ya instalado. ¿Eliminar para instalar el de esta versión de adJ?" 15 60
-	if (test "$?" = "0") then {
-		rm -f /var/www/conf/modules/php5.conf 
-		rcctl stop php56_fpm
-		rcctl disable php56_fpm
-		for i in php php-2 php5-core partial-php5-core partial-php5-pear partial-php; do
-			pkg_delete -I -D dependencies $i >> /var/www/tmp/inst-adJ.bitacora 2>&1
-		done;
-		rm -rf /etc/php-*
-	} fi;
+	rm -f /var/www/conf/modules/php5.conf 
+	rcctl stop php56_fpm
+	rcctl disable php56_fpm
+	for i in php php-2 php5-core partial-php5-core partial-php5-pear partial-php; do
+		pkg_delete -I -D dependencies $i >> /var/www/tmp/inst-adJ.bitacora 2>&1
+	done;
 } fi;
 
 

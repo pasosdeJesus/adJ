@@ -53,11 +53,10 @@ La actualización consta de 3 partes:
 	ARCH=~/comp/adJ/6.7b1-amd64 doas /inst-adJ.sh
 	```
 	
-
   Este archivo de ordenes asiste actualizaciones que puedan hacer 
-  falta de una versión a otra del sistema base (descritas en
-  http://openbsd.org/faq/upgrade65.html ) y actualiza cuando es posible
-  archivos de configuración de diversos paquetes.
+  falta de una versión a otra del sistema base (incluidas las d
+  escritas en http://openbsd.org/faq/upgrade67.html) y actualiza cuando es 
+  posible archivos de configuración de diversos paquetes.
 * Puede ejecutar varias veces este archivo de órdenes, pero si el 
   proceso no concluye exitosamente por favor después de ejecutar
   el instalador varias veces y avanzar tanto como pueda envíe el archivo

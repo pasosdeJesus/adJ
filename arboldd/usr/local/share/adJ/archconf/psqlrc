@@ -1,0 +1,27 @@
+-- Documentacion oficial: http://www.postgresql.org/docs/
+-- Documentación no oficial: http://robots.thoughtbot.com/improving-the-command-line-postgres-experience
+
+-- No presentar mensaje "util" al arranque
+\set QUIET 1
+\pset null '[NULL]'
+
+-- http://www.postgresql.org/docs/9.3/static/app-psql.html#APP-PSQL-PROMPTING
+\set PROMPT1 '%[%033[1m%]%M %n@%/%R%[%033[0m%]%# '
+-- PROMPT2 se presenta cuando se esperan mas daotos de entrada, como al teclear
+-- SELECT * FROM<enter>. %R muestra que tipo de entrada espera
+\set PROMPT2 '[more] %R > '
+
+-- Muestra cuanto tiempo tarda cada consulta en ejecutarse
+\timing
+
+-- Usa mejores formatos de salida disponibles
+\x auto
+\set VERBOSITY verbose
+\set HISTFILE ~/.psql_history- :DBNAME
+\set HISTCONTROL ignoredups
+\set COMP_KEYWORD_CASE upper
+\unset QUIET
+
+-- psql no puede detectar existencia de un archivo, debemos crear uno en blanco
+-- Ponga sus configuraciones personales en ~/.psqlrc.local
+\i ~/.psqlrc.local
