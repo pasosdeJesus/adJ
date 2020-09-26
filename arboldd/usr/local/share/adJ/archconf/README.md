@@ -42,12 +42,10 @@ Requerimientos
     adJ 6.7 ya se instala por omisión).
   * Si hace falta registra `zsh` como un intérprete de ordenes aceptable con:
   ```
-      doas su root -c "echo /usr/local/bin/zsh >> /etc/shells"
-  ```
+      doas su root -c "echo /usr/local/bin/zsh >> /etc/shells" ```
     ** Ponlo como tu interprete de ordenes de inicio de sesión con:
   ```
-      chsh -s /usr/local/bin/zsh
-  ```
+      chsh -s /usr/local/bin/zsh ```
   * Tras esto sal y vuelve a ingresar a tu interprete de ordenes para
     empezar a usar `zsh` o mientras configuras ejecutalo desde otro
     interprete de ordenes con `zsh` 
