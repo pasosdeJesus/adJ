@@ -1,0 +1,25 @@
+The goal of po4a (PO for anything) project is to ease translations 
+(and more interestingly, the maintenance of translations) using gettext 
+tools on areas where they were not expected like documentation.
+
+In po4a each documentation format is handled by a module. Presently, we 
+have a module for the following formats:
+
+    asciidoc: AsciiDoc format.
+    dia: uncompressed Dia diagrams.
+    docbook: DocBook XML.
+    guide: Gentoo Linux's XML documentation format.
+    ini: INI format.
+    kernelhelp: Help messages of each kernel compilation option.
+    latex: LaTeX format.
+    man: Good old manual page format.
+    pod: Perl Online Documentation format.
+    sgml: either DebianDoc or DocBook DTD.
+    texinfo: The info page format.
+    tex: generic TeX documents (see also latex).
+    text: simple text document.
+    wml: WML documents.
+    xhtml: XHTML documents.
+    xml: generic XML documents (see also docbook).
+    yaml: YAML documents.
+

@@ -1,0 +1,12 @@
+sgmls.pm is an extensible perl5 class library for parsing the output from 
+James Clark's popular sgmls and nsgmls parsers, available on the Internet 
+at ftp://jclark.com.
+This is not a complete system for translating documents written the the 
+Standard Generalised Markup Language (sgml) into other formats, but it can 
+easily form the basis of such a system (for a simple example, see the 
+sgmlspl program included in this package).
+ 
+The library recognises four basic types of sgml objects: the
+element, the attribute, the notation, and the entity; each
+of these is a fully-developed class with methods for accessing
+important information.
