@@ -1,0 +1,1674 @@
+# Traducción de pagina del manual zshtcpsys
+# Copyright (C) 2020 Vladimir Támara Patiño
+# Licencia ISC
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: vtamara@pasosdeJesus.org\n"
+"POT-Creation-Date: 2020-09-27 09:17-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. type: TH
+#: ../contracorriente/man1/zshtcpsys.1:1
+#, no-wrap
+msgid "ZSHTCPSYS"
+msgstr ""
+
+#. type: TH
+#: ../contracorriente/man1/zshtcpsys.1:1
+#, no-wrap
+msgid "February 14, 2020"
+msgstr ""
+
+#. type: TH
+#: ../contracorriente/man1/zshtcpsys.1:1
+#, no-wrap
+msgid "zsh 5\\&.8"
+msgstr ""
+
+#. type: SH
+#: ../contracorriente/man1/zshtcpsys.1:2
+#, no-wrap
+msgid "NAME"
+msgstr ""
+
+#.  Yodl file: Zsh/tcpsys.yo
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:5
+msgid "zshtcpsys - zsh tcp system"
+msgstr ""
+
+#. type: SH
+#: ../contracorriente/man1/zshtcpsys.1:5
+#, no-wrap
+msgid "DESCRIPTION"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:17
+msgid ""
+"A module B<zsh/net/tcp> is provided to provide network I/O over TCP/IP from "
+"within the shell; see its description in I<zshmodules>(1)\\&.  This manual "
+"page describes a function suite based on the module\\&.  If the module is "
+"installed, the functions are usually installed at the same time, in which "
+"case they will be available for autoloading in the default function search "
+"path\\&.  In addition to the B<zsh/net/tcp> module, the B<zsh/zselect> "
+"module is used to implement timeouts on read operations\\&.  For "
+"troubleshooting tips, consult the corresponding advice for the B<zftp> "
+"functions described in I<zshzftpsys>(1)\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:26
+msgid ""
+"There are functions corresponding to the basic I/O operations open, close, "
+"read and send, named B<tcp_open> etc\\&., as well as a function "
+"B<tcp_expect> for pattern match analysis of data read as input\\&.  The "
+"system makes it easy to receive data from and send data to multiple named "
+"sessions at once\\&.  In addition, it can be linked with the shell\\&'s line "
+"editor in such a way that input data is automatically shown at the "
+"terminal\\&.  Other facilities available including logging, filtering and "
+"configurable output prompts\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:31
+msgid ""
+"To use the system where it is available, it should be enough to `B<autoload "
+"-U tcp_open>\\&' and run B<tcp_open> as documented below to start a "
+"session\\&.  The B<tcp_open> function will autoload the remaining "
+"functions\\&."
+msgstr ""
+
+#. type: SH
+#: ../contracorriente/man1/zshtcpsys.1:33
+#, no-wrap
+msgid "TCP USER FUNCTIONS"
+msgstr ""
+
+#. type: SS
+#: ../contracorriente/man1/zshtcpsys.1:35
+#, no-wrap
+msgid "Basic I/O"
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:38
+#, no-wrap
+msgid "B<tcp_open> [ B<-qz> ] I<host port> [ I<sess> ]"
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:41
+#, no-wrap
+msgid ""
+"B<tcp_open> [ B<-qz> ] [ B<-s> I<sess> | B<-l> I<sess>[B<,>\\&.\\&.\\&.] ] "
+"\\&.\\&.\\&. "
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:44
+#, no-wrap
+msgid "B<tcp_open> [ B<-qz> ] [ B<-a> I<fd> | B<-f> I<fd> ] [ I<sess> ]"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:50
+msgid ""
+"Open a new session\\&.  In the first and simplest form, open a TCP "
+"connection to host I<host> at port I<port>; numeric and symbolic forms are "
+"understood for both\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:59
+msgid ""
+"If I<sess> is given, this becomes the name of the session which can be used "
+"to refer to multiple different TCP connections\\&.  If I<sess> is not given, "
+"the function will invent a numeric name value (note this is I<not> the same "
+"as the file descriptor to which the session is attached)\\&.  It is "
+"recommended that session names not include `funny\\&' characters, where "
+"funny characters are not well-defined but certainly do not include "
+"alphanumerics or underscores, and certainly do include whitespace\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:70
+msgid ""
+"In the second case, one or more sessions to be opened are given by name\\&.  "
+"A single session name is given after B<-s> and a comma-separated list after "
+"B<-l>; both options may be repeated as many times as necessary\\&.  A "
+"failure to open any session causes B<tcp_open> to abort\\&.  The host and "
+"port are read from the file B<\\&.ztcp_sessions> in the same directory as "
+"the user\\&'s zsh initialisation files, i\\&.e\\&. usually the home "
+"directory, but B<$ZDOTDIR> if that is set\\&.  The file consists of lines "
+"each giving a session name and the corresponding host and port, in that "
+"order (note the session name comes first, not last), separated by "
+"whitespace\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:81
+msgid ""
+"The third form allows passive and fake TCP connections\\&.  If the option "
+"B<-a> is used, its argument is a file descriptor open for listening for "
+"connections\\&.  No function front-end is provided to open such a file "
+"descriptor, but a call to `B<ztcp -l> I<port>\\&' will create one with the "
+"file descriptor stored in the parameter B<$REPLY>\\&.  The listening port "
+"can be closed with `B<ztcp -c> I<fd>\\&'\\&.  A call to `B<tcp_open -a> "
+"I<fd>' will block until a remote TCP connection is made to I<port> on the "
+"local machine\\&.  At this point, a session is created in the usual way and "
+"is largely indistinguishable from an active connection created with one of "
+"the first two forms\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:88
+msgid ""
+"If the option B<-f> is used, its argument is a file descriptor which is used "
+"directly as if it were a TCP session\\&.  How well the remainder of the TCP "
+"function system copes with this depends on what actually underlies this file "
+"descriptor\\&.  A regular file is likely to be unusable; a FIFO (pipe) of "
+"some sort will work better, but note that it is not a good idea for two "
+"different sessions to attempt to read from the same FIFO at once\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:92
+msgid ""
+"If the option B<-q> is given with any of the three forms, B<tcp_open> will "
+"not print informational messages, although it will in any case exit with an "
+"appropriate status\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:105
+msgid ""
+"If the line editor (zle) is in use, which is typically the case if the shell "
+"is interactive, B<tcp_open> installs a handler inside zle which will check "
+"for new data at the same time as it checks for keyboard input\\&.  This is "
+"convenient as the shell consumes no CPU time while waiting; the test is "
+"performed by the operating system\\&.  Giving the option B<-z> to any of the "
+"forms of B<tcp_open> prevents the handler from being installed, so data must "
+"be read explicitly\\&.  Note, however, this is not necessary for executing "
+"complete sets of send and read commands from a function, as zle is not "
+"active at this point\\&.  Generally speaking, the handler is only active "
+"when the shell is waiting for input at a command prompt or in the B<vared> "
+"builtin\\&.  The option has no effect if zle is not active; `B<[[ -o "
+"zle]]>\\&' will test for this\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:110
+msgid ""
+"The first session to be opened becomes the current session and subsequent "
+"calls to B<tcp_open> do not change it\\&.  The current session is stored in "
+"the parameter B<$TCP_SESS>; see below for more detail about the parameters "
+"used by the system\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:113
+msgid ""
+"The function B<tcp_on_open>, if defined, is called when a session is "
+"opened\\&.  See the description below\\&."
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:114
+#, no-wrap
+msgid ""
+"B<tcp_close> [ B<-qn> ] [ B<-a> | B<-l> I<sess>[B<,>\\&.\\&.\\&.] | I<sess> "
+"\\&.\\&.\\&. ]"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:120
+msgid ""
+"Close the named sessions, or the current session if none is given, or all "
+"open sessions if B<-a> is given\\&.  The options B<-l> and B<-s> are both "
+"handled for consistency with B<tcp_open>, although the latter is "
+"redundant\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:124
+msgid ""
+"If the session being closed is the current one, B<$TCP_SESS> is unset, "
+"leaving no current session, even if there are other sessions still open\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:131
+msgid ""
+"If the session was opened with B<tcp_open -f>, the file descriptor is closed "
+"so long as it is in the range 0 to 9 accessible directly from the command "
+"line\\&.  If the option B<-n> is given, no attempt will be made to close "
+"file descriptors in this case\\&.  The B<-n> option is not used for genuine "
+"B<ztcp> session; the file descriptors are always closed with the session\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:133
+msgid "If the option B<-q> is given, no informational messages will be printed\\&."
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:135
+#, no-wrap
+msgid "B<tcp_read >[ B<-bdq> ] [ B<-t> I<TO> ] [ B<-T> I<TO> ]"
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:138
+#, no-wrap
+msgid ""
+"         [ B<-a> | B<-u> I<fd>[B<,>\\&.\\&.\\&.] | B<-l> "
+"I<sess>[B<,>\\&.\\&.\\&.] | B<-s> I<sess> \\&.\\&.\\&. ]"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:148
+msgid ""
+"Perform a read operation on the current session, or on a list of sessions if "
+"any are given with B<-u>, B<-l> or B<-s>, or all open sessions if the option "
+"B<-a> is given\\&.  Any of the B<-u>, B<-l> or B<-s> options may be repeated "
+"or mixed together\\&.  The B<-u> option specifies a file descriptor directly "
+"(only those managed by this system are useful), the other two specify "
+"sessions as described for B<tcp_open> above\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:160
+msgid ""
+"The function checks for new data available on all the sessions listed\\&.  "
+"Unless the B<-b> option is given, it will not block waiting for new "
+"data\\&.  Any one line of data from any of the available sessions will be "
+"read, stored in the parameter B<$TCP_LINE>, and displayed to standard output "
+"unless B<$TCP_SILENT> contains a non-empty string\\&.  When printed to "
+"standard output the string B<$TCP_PROMPT> will be shown at the start of the "
+"line; the default form for this includes the name of the session being "
+"read\\&.  See below for more information on these parameters\\&.  In this "
+"mode, B<tcp_read> can be called repeatedly until it returns status 2 which "
+"indicates all pending input from all specified sessions has been handled\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:164
+msgid ""
+"With the option B<-b>, equivalent to an infinite timeout, the function will "
+"block until a line is available to read from one of the specified "
+"sessions\\&.  However, only a single line is returned\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:170
+msgid ""
+"The option B<-d> indicates that all pending input should be drained\\&.  In "
+"this case B<tcp_read> may process multiple lines in the manner given above; "
+"only the last is stored in B<$TCP_LINE>, but the complete set is stored in "
+"the array B<$tcp_lines>\\&.  This is cleared at the start of each call to "
+"B<tcp_read>\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:177
+msgid ""
+"The options B<-t> and B<-T> specify a timeout in seconds, which may be a "
+"floating point number for increased accuracy\\&.  With B<-t> the timeout is "
+"applied before each line read\\&.  With B<-T>, the timeout applies to the "
+"overall operation, possibly including multiple read operations if the option "
+"B<-d> is present; without this option, there is no distinction between B<-t> "
+"and B<-T>\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:180
+msgid ""
+"The function does not print informational messages, but if the option B<-q> "
+"is given, no error message is printed for a non-existent session\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:183
+msgid ""
+"A return status of 2 indicates a timeout or no data to read\\&.  Any other "
+"non-zero return status indicates some error condition\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:185
+msgid "See B<tcp_log> for how to control where data is sent by B<tcp_read>\\&."
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:186
+#, no-wrap
+msgid ""
+"B<tcp_send> [ B<-cnq> ] [ B<-s> I<sess> | B<-l> I<sess>[B<,>\\&.\\&.\\&.] ] "
+"I<data> \\&.\\&.\\&."
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:189
+#, no-wrap
+msgid "B<tcp_send> [ B<-cnq> ] B<-a> I<data> \\&.\\&.\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:196
+msgid ""
+"Send the supplied data strings to all the specified sessions in turn\\&.  "
+"The underlying operation differs little from a `B<print -r>\\&' to the "
+"session's file descriptor, although it attempts to prevent the shell from "
+"dying owing to a B<SIGPIPE> caused by an attempt to write to a defunct "
+"session\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:202
+msgid ""
+"The option B<-c> causes B<tcp_send> to behave like B<cat>\\&.  It reads "
+"lines from standard input until end of input and sends them in turn to the "
+"specified session(s) exactly as if they were given as I<data> arguments to "
+"individual B<tcp_send> commands\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:205
+msgid ""
+"The option B<-n> prevents B<tcp_send> from putting a newline at the end of "
+"the data strings\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:207
+msgid "The remaining options all behave as for B<tcp_read>\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:210
+msgid ""
+"The data arguments are not further processed once they have been passed to "
+"B<tcp_send>; they are simply passed down to B<print -r>\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:215
+msgid ""
+"If the parameter B<$TCP_OUTPUT> is a non-empty string and logging is enabled "
+"then the data sent to each session will be echoed to the log file(s) with "
+"B<$TCP_OUTPUT> in front where appropriate, much in the manner of "
+"B<$TCP_PROMPT>\\&."
+msgstr ""
+
+#. type: SS
+#: ../contracorriente/man1/zshtcpsys.1:217
+#, no-wrap
+msgid "Session Management"
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:220
+#, no-wrap
+msgid "B<tcp_alias> [ B<-q> ] I<alias>B<=>I<sess> \\&.\\&.\\&."
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:223
+#, no-wrap
+msgid "B<tcp_alias> [ B<-q> ] [ I<alias> \\&.\\&.\\&. ]"
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:226
+#, no-wrap
+msgid "B<tcp_alias> B<-d> [ B<-q> ] I<alias> \\&.\\&.\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:230
+msgid "This function is not particularly well tested\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:235
+msgid ""
+"The first form creates an alias for a session name; I<alias> can then be "
+"used to refer to the existing session I<sess>\\&.  As many aliases may be "
+"listed as required\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:237
+msgid "The second form lists any aliases specified, or all aliases if none\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:240
+msgid ""
+"The third form deletes all the aliases listed\\&.  The underlying sessions "
+"are not affected\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:243
+msgid ""
+"The option B<-q> suppresses an inconsistently chosen subset of error "
+"messages\\&."
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:244
+#, no-wrap
+msgid "B<tcp_log> [ B<-asc> ] [ B<-n> | B<-N> ] [ I<logfile> ]"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:250
+msgid ""
+"With an argument I<logfile>, all future input from B<tcp_read> will be "
+"logged to the named file\\&.  Unless B<-a> (append) is given, this file will "
+"first be truncated or created empty\\&.  With no arguments, show the current "
+"status of logging\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:258
+msgid ""
+"With the option B<-s>, per-session logging is enabled\\&.  Input from "
+"B<tcp_read> is output to the file I<logfile>B<\\&.>I<sess>\\&.  As the "
+"session is automatically discriminated by the filename, the contents are raw "
+"(no B<$TCP_PROMPT>)\\&.  The option B<-a> applies as above\\&.  Per-session "
+"logging and logging of all data in one file are not mutually exclusive\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:260
+msgid "The option B<-c> closes all logging, both complete and per-session logs\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:264
+msgid ""
+"The options B<-n> and B<-N> respectively turn off or restore output of data "
+"read by B<tcp_read> to standard output; hence `B<tcp_log -cn>\\&' turns off "
+"all output by B<tcp_read>\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:267
+msgid ""
+"The function is purely a convenient front end to setting the parameters "
+"B<$TCP_LOG>, B<$TCP_LOG_SESS>, B<$TCP_SILENT>, which are described below\\&."
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:268
+#, no-wrap
+msgid "B<tcp_rename> I<old> I<new>"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:271
+msgid ""
+"Rename session I<old> to session I<new>\\&.  The old name becomes "
+"invalid\\&."
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:271
+#, no-wrap
+msgid "B<tcp_sess> [ I<sess> [ I<command> [ I<arg> \\&.\\&.\\&. ] ] ]"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:277
+msgid ""
+"With no arguments, list all the open sessions and associated file "
+"descriptors\\&.  The current session is marked with a star\\&.  For use in "
+"functions, direct access to the parameters B<$tcp_by_name>, B<$tcp_by_fd> "
+"and B<$TCP_SESS> is probably more convenient; see below\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:281
+msgid ""
+"With a I<sess> argument, set the current session to I<sess>\\&.  This is "
+"equivalent to changing B<$TCP_SESS> directly\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:287
+msgid ""
+"With additional arguments, temporarily set the current session while "
+"executing `I<command> I<arg> \\&.\\&.\\&.\\&'\\&.  I<command> is "
+"re-evaluated so as to expand aliases etc\\&., but the remaining I<arg>s are "
+"passed through as that appear to B<tcp_sess>\\&.  The original session is "
+"restored when B<tcp_sess> exits\\&."
+msgstr ""
+
+#. type: SS
+#: ../contracorriente/man1/zshtcpsys.1:289
+#, no-wrap
+msgid "Advanced I/O"
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:292
+#, no-wrap
+msgid "B<tcp_command> I<send-option> \\&.\\&.\\&. I<send-argument> \\&.\\&.\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:300
+msgid ""
+"This is a convenient front-end to B<tcp_send>\\&.  All arguments are passed "
+"to B<tcp_send>, then the function pauses waiting for data\\&.  While data is "
+"arriving at least every B<$TCP_TIMEOUT> (default 0\\&.3) seconds, data is "
+"handled and printed out according to the current settings\\&.  Status 0 is "
+"always returned\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:306
+msgid ""
+"This is generally only useful for interactive use, to prevent the display "
+"becoming fragmented by output returned from the connection\\&.  Within a "
+"programme or function it is generally better to handle reading data by a "
+"more explicit method\\&."
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:308
+#, no-wrap
+msgid ""
+"B<tcp_expect >[ B<-q> ] [ B<-p> I<var> | B<-P> I<var> ] [ B<-t> I<TO> | "
+"B<-T> I<TO> ]"
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:311
+#, no-wrap
+msgid ""
+"           [ B<-a> | B<-s> I<sess> | B<-l> I<sess>[B<,>\\&.\\&.\\&.] ] "
+"I<pattern> \\&.\\&.\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:319
+msgid ""
+"Wait for input matching any of the given I<pattern>s from any of the "
+"specified sessions\\&.  Input is ignored until an input line matches one of "
+"the given patterns; at this point status zero is returned, the matching line "
+"is stored in B<$TCP_LINE>, and the full set of lines read during the call to "
+"B<tcp_expect> is stored in the array B<$tcp_expect_lines>\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:324
+msgid ""
+"Sessions are specified in the same way as B<tcp_read>: the default is to use "
+"the current session, otherwise the sessions specified by B<-a>, B<-s>, or "
+"B<-l> are used\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:333
+msgid ""
+"Each I<pattern> is a standard zsh extended-globbing pattern; note that it "
+"needs to be quoted to avoid it being expanded immediately by filename "
+"generation\\&.  It must match the full line, so to match a substring there "
+"must be a `B<*>\\&' at the start and end\\&.  The line matched against "
+"includes the B<$TCP_PROMPT> added by B<tcp_read>\\&.  It is possible to "
+"include the globbing flags `B<#b>\\&' or `B<#m>' in the patterns to make "
+"backreferences available in the parameters B<$MATCH>, B<$match>, etc\\&., as "
+"described in the base zsh documentation on pattern matching\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:340
+msgid ""
+"Unlike B<tcp_read>, the default behaviour of B<tcp_expect> is to block "
+"indefinitely until the required input is found\\&.  This can be modified by "
+"specifying a timeout with B<-t> or B<-T>; these function as in B<tcp_read>, "
+"specifying a per-read or overall timeout, respectively, in seconds, as an "
+"integer or floating-point number\\&.  As B<tcp_read>, the function returns "
+"status 2 if a timeout occurs\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:348
+msgid ""
+"The function returns as soon as any one of the patterns given match\\&.  If "
+"the caller needs to know which of the patterns matched, the option B<-p> "
+"I<var> can be used; on return, B<$var> is set to the number of the pattern "
+"using ordinary zsh indexing, i\\&.e\\&. the first is 1, and so on\\&.  Note "
+"the absence of a `B<$>\\&' in front of I<var>\\&.  To avoid clashes, the "
+"parameter cannot begin with `B<_expect>\\&'\\&.  The index -1 is used if "
+"there is a timeout and 0 if there is no match\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:356
+msgid ""
+"The option B<-P> I<var> works similarly to B<-p>, but instead of numerical "
+"indexes the regular arguments must begin with a prefix followed by a colon: "
+"that prefix is then used as a tag to which I<var> is set when the argument "
+"matches\\&.  The tag B<timeout> is used if there is a timeout and the empty "
+"string if there is no match\\&.  Note it is acceptable for different "
+"arguments to start with the same prefix if the matches do not need to be "
+"distinguished\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:358
+msgid "The option B<-q> is passed directly down to B<tcp_read>\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:364
+msgid ""
+"As all input is done via B<tcp_read>, all the usual rules about output of "
+"lines read apply\\&.  One exception is that the parameter B<$tcp_lines> will "
+"only reflect the line actually matched by B<tcp_expect>; use "
+"B<$tcp_expect_lines> for the full set of lines read during the function "
+"call\\&."
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:365
+#, no-wrap
+msgid "B<tcp_proxy>"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:371
+msgid ""
+"This is a simple-minded function to accept a TCP connection and execute a "
+"command with I/O redirected to the connection\\&.  Extreme caution should be "
+"taken as there is no security whatsoever and this can leave your computer "
+"open to the world\\&.  Ideally, it should only be used behind a firewall\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:374
+msgid "The first argument is a TCP port on which the function will listen\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:381
+msgid ""
+"The remaining arguments give a command and its arguments to execute with "
+"standard input, standard output and standard error redirected to the file "
+"descriptor on which the TCP session has been accepted\\&.  If no command is "
+"given, a new zsh is started\\&.  This gives everyone on your network direct "
+"access to your account, which in many cases will be a bad thing\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:384
+msgid ""
+"The command is run in the background, so B<tcp_proxy> can then accept new "
+"connections\\&.  It continues to accept new connections until "
+"interrupted\\&."
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:385
+#, no-wrap
+msgid ""
+"B<tcp_spam> [ B<-ertv> ] [ B<-a> | B<-s> I<sess> | B<-l> "
+"I<sess>[B<,>\\&.\\&.\\&.] ] I<cmd> [ I<arg> \\&.\\&.\\&. ]"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:390
+msgid ""
+"Execute `I<cmd> [ I<arg> \\&.\\&.\\&. ]\\&' for each session in turn\\&.  "
+"Note this executes the command and arguments; it does not send the command "
+"line as data unless the B<-t> (transmit) option is given\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:398
+msgid ""
+"The sessions may be selected explicitly with the standard B<-a>, B<-s> or "
+"B<-l> options, or may be chosen implicitly\\&.  If none of the three options "
+"is given the rules are: first, if the array B<$tcp_spam_list> is set, this "
+"is taken as the list of sessions, otherwise all sessions are taken\\&.  "
+"Second, any sessions given in the array B<$tcp_no_spam_list> are removed "
+"from the list of sessions\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:403
+msgid ""
+"Normally, any sessions added by the `B<-a>\\&' flag or when all sessions are "
+"chosen implicitly are spammed in alphabetic order; sessions given by the "
+"B<$tcp_spam_list> array or on the command line are spammed in the order "
+"given\\&.  The B<-r> flag reverses the order however it was arrived it\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:408
+msgid ""
+"The B<-v> flag specifies that a B<$TCP_PROMPT> will be output before each "
+"session\\&.  This is output after any modification to B<TCP_SESS> by the "
+"user-defined B<tcp_on_spam> function described below\\&.  (Obviously that "
+"function is able to generate its own output\\&.)"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:411
+msgid ""
+"If the option B<-e> is present, the line given as `I<cmd> [ I<arg> "
+"\\&.\\&.\\&. ]\\&' is executed using B<eval>, otherwise it is executed "
+"without any further processing\\&."
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:412
+#, no-wrap
+msgid "B<tcp_talk>"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:416
+msgid ""
+"This is a fairly simple-minded attempt to force input to the line editor to "
+"go straight to the default B<TCP_SESS>\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:424
+msgid ""
+"An escape string, B<$TCP_TALK_ESCAPE>, default `B<:>\\&', is used to allow "
+"access to normal shell operation\\&.  If it is on its own at the start of "
+"the line, or followed only by whitespace, the line editor returns to normal "
+"operation\\&.  Otherwise, the string and any following whitespace are "
+"skipped and the remainder of the line executed as shell input without any "
+"change of the line editor\\&'s operating mode\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:430
+msgid ""
+"The current implementation is somewhat deficient in terms of use of the "
+"command history\\&.  For this reason, many users will prefer to use some "
+"form of alternative approach for sending data easily to the current "
+"session\\&.  One simple approach is to alias some special character (such as "
+"`B<%>\\&') to `B<tcp_command ->B<->\\&'\\&."
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:431
+#, no-wrap
+msgid "B<tcp_wait>"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:438
+msgid ""
+"The sole argument is an integer or floating point number which gives the "
+"seconds to delay\\&.  The shell will do nothing for that period except wait "
+"for input on all TCP sessions by calling B<tcp_read -a>\\&.  This is similar "
+"to the interactive behaviour at the command prompt when zle handlers are "
+"installed\\&."
+msgstr ""
+
+#. type: SS
+#: ../contracorriente/man1/zshtcpsys.1:439
+#, no-wrap
+msgid "`One-shot\\&' file transfer"
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:441
+#, no-wrap
+msgid "B<tcp_point> I<port>"
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:444
+#, no-wrap
+msgid "B<tcp_shoot> I<host> I<port>"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:454
+msgid ""
+"This pair of functions provide a simple way to transfer a file between two "
+"hosts within the shell\\&.  Note, however, that bulk data transfer is "
+"currently done using B<cat>\\&.  B<tcp_point> reads any data arriving at "
+"I<port> and sends it to standard output; B<tcp_shoot> connects to I<port> on "
+"I<host> and sends its standard input\\&.  Any unused I<port> may be used; "
+"the standard mechanism for picking a port is to think of a random four-digit "
+"number above 1024 until one works\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:458
+msgid ""
+"To transfer a file from host B<woodcock> to host B<springes>, on "
+"B<springes>:"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:462
+#, no-wrap
+msgid "B<tcp_point 8091 E<gt>output_file>\n"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:466
+msgid "and on B<woodcock>:"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:470
+#, no-wrap
+msgid "B<tcp_shoot springes 8091 E<lt>input_file>\n"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:475
+msgid ""
+"As these two functions do not require B<tcp_open> to set up a TCP connection "
+"first, they may need to be autoloaded separately\\&."
+msgstr ""
+
+#. type: SH
+#: ../contracorriente/man1/zshtcpsys.1:477
+#, no-wrap
+msgid "TCP USER-DEFINED FUNCTIONS"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:484
+msgid ""
+"Certain functions, if defined by the user, will be called by the function "
+"system in certain contexts\\&.  This facility depends on the module "
+"B<zsh/parameter>, which is usually available in interactive shells as the "
+"completion system depends on it\\&.  None of the functions need be defined; "
+"they simply provide convenient hooks when necessary\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:487
+msgid ""
+"Typically, these are called after the requested action has been taken, so "
+"that the various parameters will reflect the new state\\&."
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:489
+#, no-wrap
+msgid "B<tcp_on_alias> I<alias> I<fd>"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:494
+msgid ""
+"When an alias is defined, this function will be called with two arguments: "
+"the name of the alias, and the file descriptor of the corresponding "
+"session\\&."
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:494
+#, no-wrap
+msgid "B<tcp_on_awol> I<sess> I<fd>"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:506
+msgid ""
+"If the function B<tcp_fd_handler> is handling input from the line editor and "
+"detects that the file descriptor is no longer reusable, by default it "
+"removes it from the list of file descriptors handled by this method and "
+"prints a message\\&.  If the function B<tcp_on_awol> is defined it is called "
+"immediately before this point\\&.  It may return status 100, which indicates "
+"that the normal handling should still be performed; any other return status "
+"indicates that no further action should be taken and the B<tcp_fd_handler> "
+"should return immediately with the given status\\&.  Typically the action of "
+"B<tcp_on_awol> will be to close the session\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:511
+msgid ""
+"The variable B<TCP_INVALIDATE_ZLE> will be a non-empty string if it is "
+"necessary to invalidate the line editor display using `B<zle -I>\\&' before "
+"printing output from the function\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:514
+msgid ""
+"(`AWOL\\&' is military jargon for `absent without leave' or some "
+"variation\\&.  It has no pre-existing technical meaning known to the "
+"author\\&.)"
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:515
+#, no-wrap
+msgid "B<tcp_on_close> I<sess> I<fd>"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:520
+msgid ""
+"This is called with the name of a session being closed and the file "
+"descriptor which corresponded to that session\\&.  Both will be invalid by "
+"the time the function is called\\&."
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:520
+#, no-wrap
+msgid "B<tcp_on_open> I<sess> I<fd>"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:527
+msgid ""
+"This is called after a new session has been defined with the session name "
+"and file descriptor as arguments\\&.  If it returns a non-zero status, "
+"opening the session is assumed to fail and the session is closed again; "
+"however, B<tcp_open> will continue to attempt to open any remaining sessions "
+"given on the command line\\&."
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:527
+#, no-wrap
+msgid "B<tcp_on_rename> I<oldsess> I<fd> I<newsess>"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:531
+msgid ""
+"This is called after a session has been renamed with the three arguments old "
+"session name, file descriptor, new session name\\&."
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:531
+#, no-wrap
+msgid "B<tcp_on_spam> I<sess> I<command \\&.\\&.\\&.>"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:537
+msgid ""
+"This is called once for each session spammed, just I<before> a command is "
+"executed for a session by B<tcp_spam>\\&.  The arguments are the session "
+"name followed by the command list to be executed\\&.  If B<tcp_spam> was "
+"called with the option B<-t>, the first command will be B<tcp_send>\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:544
+msgid ""
+"This function is called after B<$TCP_SESS> is set to reflect the session to "
+"be spammed, but before any use of it is made\\&.  Hence it is possible to "
+"alter the value of B<$TCP_SESS> within this function\\&.  For example, the "
+"session arguments to B<tcp_spam> could include extra information to be "
+"stripped off and processed in B<tcp_on_spam>\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:548
+msgid ""
+"If the function sets the parameter B<$REPLY> to `B<done>\\&', the command "
+"line is not executed; in addition, no prompt is printed for the B<-v> option "
+"to B<tcp_spam>\\&."
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:549
+#, no-wrap
+msgid "B<tcp_on_unalias> I<alias> I<fd>"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:553
+msgid ""
+"This is called with the name of an alias and the corresponding session\\&'s "
+"file descriptor after an alias has been deleted\\&."
+msgstr ""
+
+#. type: SH
+#: ../contracorriente/man1/zshtcpsys.1:554
+#, no-wrap
+msgid "TCP UTILITY FUNCTIONS"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:558
+msgid ""
+"The following functions are used by the TCP function system but will rarely "
+"if ever need to be called directly\\&."
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:560
+#, no-wrap
+msgid "B<tcp_fd_handler>"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:568
+msgid ""
+"This is the function installed by B<tcp_open> for handling input from within "
+"the line editor, if that is required\\&.  It is in the format documented for "
+"the builtin `B<zle -F>\\&' in I<zshzle>(1)  \\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:574
+msgid ""
+"While active, the function sets the parameter B<TCP_HANDLER_ACTIVE> to "
+"1\\&.  This allows shell code called internally (for example, by setting "
+"B<tcp_on_read>) to tell if is being called when the shell is otherwise idle "
+"at the editor prompt\\&."
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:575
+#, no-wrap
+msgid "B<tcp_output> [ B<-q> ] B<-P> I<prompt> B<-F> I<fd> B<-S> I<sess>"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:580
+msgid ""
+"This function is used for both logging and handling output to standard "
+"output, from within B<tcp_read> and (if B<$TCP_OUTPUT> is set)  "
+"B<tcp_send>\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:584
+msgid ""
+"The I<prompt> to use is specified by B<-P>; the default is the empty "
+"string\\&.  It can contain:"
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:585
+#, no-wrap
+msgid "B<%c>"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:591
+msgid ""
+"Expands to 1 if the session is the current session, otherwise 0\\&.  Used "
+"with ternary expressions such as `B<%(c\\&.-\\&.+)>\\&' to output `B<+>\\&' "
+"for the current session and `B<->' otherwise\\&."
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:591
+#, no-wrap
+msgid "B<%f>"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:594
+msgid "Replaced by the session\\&'s file descriptor\\&."
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:594
+#, no-wrap
+msgid "B<%s>"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:597
+msgid "Replaced by the session name\\&."
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:597
+#, no-wrap
+msgid "B<%%>"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:600
+msgid "Replaced by a single `B<%>\\&'\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:603
+msgid ""
+"The option B<-q> suppresses output to standard output, but not to any log "
+"files which are configured\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:606
+msgid ""
+"The B<-S> and B<-F> options are used to pass in the session name and file "
+"descriptor for possible replacement in the prompt\\&."
+msgstr ""
+
+#. type: SH
+#: ../contracorriente/man1/zshtcpsys.1:608
+#, no-wrap
+msgid "TCP USER PARAMETERS"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:616
+msgid ""
+"Parameters follow the usual convention that uppercase is used for scalars "
+"and integers, while lowercase is used for normal and associative array\\&.  "
+"It is always safe for user code to read these parameters\\&.  Some "
+"parameters may also be set; these are noted explicitly\\&.  Others are "
+"included in this group as they are set by the function system for the "
+"user\\&'s benefit, i\\&.e\\&. setting them is typically not useful but is "
+"benign\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:624
+msgid ""
+"It is often also useful to make settable parameters local to a function\\&.  "
+"For example, `B<local TCP_SILENT=1>\\&' specifies that data read during the "
+"function call will not be printed to standard output, regardless of the "
+"setting outside the function\\&.  Likewise, `B<local TCP_SESS=>I<sess>\\&' "
+"sets a session for the duration of a function, and `B<local TCP_PROMPT=>\\&' "
+"specifies that no prompt is used for input during the function\\&."
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:626
+#, no-wrap
+msgid "B<tcp_expect_lines>"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:631
+msgid ""
+"Array\\&.  The set of lines read during the last call to B<tcp_expect>, "
+"including the last (B<$TCP_LINE>)\\&."
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:631
+#, no-wrap
+msgid "B<tcp_filter>"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:637
+msgid ""
+"Array\\&. May be set directly\\&.  A set of extended globbing patterns "
+"which, if matched in B<tcp_output>, will cause the line not to be printed to "
+"standard output\\&.  The patterns should be defined as described for the "
+"arguments to B<tcp_expect>\\&.  Output of line to log files is not "
+"affected\\&."
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:637
+#, no-wrap
+msgid "B<TCP_HANDLER_ACTIVE>"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:642
+msgid ""
+"Scalar\\&.  Set to 1 within B<tcp_fd_handler> to indicate to functions "
+"called recursively that they have been called during an editor session\\&.  "
+"Otherwise unset\\&."
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:642
+#, no-wrap
+msgid "B<TCP_LINE>"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:645
+msgid "The last line read by B<tcp_read>, and hence also B<tcp_expect>\\&."
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:645
+#, no-wrap
+msgid "B<TCP_LINE_FD>"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:649
+msgid ""
+"The file descriptor from which B<$TCP_LINE> was read\\&.  "
+"B<${tcp_by_fd[$TCP_LINE_FD]}> will give the corresponding session name\\&."
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:649
+#, no-wrap
+msgid "B<tcp_lines>"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:653
+msgid ""
+"Array\\&. The set of lines read during the last call to B<tcp_read>, "
+"including the last (B<$TCP_LINE>)\\&."
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:653
+#, no-wrap
+msgid "B<TCP_LOG>"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:659
+msgid ""
+"May be set directly, although it is also controlled by B<tcp_log>\\&.  The "
+"name of a file to which output from all sessions will be sent\\&.  The "
+"output is proceeded by the usual B<$TCP_PROMPT>\\&.  If it is not an "
+"absolute path name, it will follow the user\\&'s current directory\\&."
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:659
+#, no-wrap
+msgid "B<TCP_LOG_SESS>"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:666
+msgid ""
+"May be set directly, although it is also controlled by B<tcp_log>\\&.  The "
+"prefix for a set of files to which output from each session separately will "
+"be sent; the full filename is B<${TCP_LOG_SESS}\\&.>I<sess>\\&.  Output to "
+"each file is raw; no prompt is added\\&.  If it is not an absolute path "
+"name, it will follow the user\\&'s current directory\\&."
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:666
+#, no-wrap
+msgid "B<tcp_no_spam_list>"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:669
+msgid "Array\\&.  May be set directly\\&.  See B<tcp_spam> for how this is used\\&."
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:669
+#, no-wrap
+msgid "B<TCP_OUTPUT>"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:676
+msgid ""
+"May be set directly\\&.  If a non-empty string, any data sent to a session "
+"by B<tcp_send> will be logged\\&.  This parameter gives the prompt to be "
+"used in a file specified by B<$TCP_LOG> but not in a file generated from "
+"B<$TCP_LOG_SESS>\\&.  The prompt string has the same format as B<TCP_PROMPT> "
+"and the same rules for its use apply\\&."
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:676
+#, no-wrap
+msgid "B<TCP_PROMPT>"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:687
+msgid ""
+"May be set directly\\&.  Used as the prefix for data read by B<tcp_read> "
+"which is printed to standard output or to the log file given by B<$TCP_LOG>, "
+"if any\\&.  Any `B<%s>\\&', `B<%f>' or `B<%%>' occurring in the string will "
+"be replaced by the name of the session, the session\\&'s underlying file "
+"descriptor, or a single `B<%>\\&', respectively\\&.  The expression "
+"`B<%c>\\&' expands to 1 if the session being read is the current session, "
+"else 0; this is most useful in ternary expressions such as "
+"`B<%(c\\&.-\\&.+)>\\&' which outputs `B<+>' if the session is the current "
+"one, else `B<->\\&'\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:692
+msgid ""
+"If the prompt starts with B<%P>, this is stripped and the complete result of "
+"the previous stage is passed through standard prompt B<%>-style formatting "
+"before being output\\&."
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:693
+#, no-wrap
+msgid "B<TCP_READ_DEBUG>"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:697
+msgid ""
+"May be set directly\\&.  If this has non-zero length, B<tcp_read> will give "
+"some limited diagnostics about data being read\\&."
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:697
+#, no-wrap
+msgid "B<TCP_SECONDS_START>"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:700
+msgid "This value is created and initialised to zero by tcp_open\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:711
+msgid ""
+"The functions B<tcp_read> and B<tcp_expect> use the shell\\&'s B<SECONDS> "
+"parameter for their own timing purposes\\&.  If that parameter is not of "
+"floating point type on entry to one of the functions, it will create a local "
+"parameter B<SECONDS> which is floating point and set the parameter "
+"B<TCP_SECONDS_START> to the previous value of B<$SECONDS>\\&.  If the "
+"parameter is already floating point, it is used without a local copy being "
+"created and B<TCP_SECONDS_START> is not set\\&.  As the global value is "
+"zero, the shell elapsed time is guaranteed to be the sum of B<$SECONDS> and "
+"B<$TCP_SECONDS_START>\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:715
+msgid ""
+"This can be avoided by setting B<SECONDS> globally to a floating point value "
+"using `B<typeset -F SECONDS>\\&'; then the TCP functions will never make a "
+"local copy and never set B<TCP_SECONDS_START> to a non-zero value\\&."
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:716
+#, no-wrap
+msgid "B<TCP_SESS>"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:720
+msgid ""
+"May be set directly\\&.  The current session; must refer to one of the "
+"sessions established by B<tcp_open>\\&."
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:720
+#, no-wrap
+msgid "B<TCP_SILENT>"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:725
+msgid ""
+"May be set directly, although it is also controlled by B<tcp_log>\\&.  If of "
+"non-zero length, data read by B<tcp_read> will not be written to standard "
+"output, though may still be written to a log file\\&."
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:725
+#, no-wrap
+msgid "B<tcp_spam_list>"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:729
+msgid ""
+"Array\\&.  May be set directly\\&.  See the description of the function "
+"B<tcp_spam> for how this is used\\&."
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:729
+#, no-wrap
+msgid "B<TCP_TALK_ESCAPE>"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:733
+msgid ""
+"May be set directly\\&.  See the description of the function B<tcp_talk> for "
+"how this is used\\&."
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:733
+#, no-wrap
+msgid "B<TCP_TIMEOUT>"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:737
+msgid ""
+"May be set directly\\&.  Currently this is only used by the function "
+"B<tcp_command>, see above\\&."
+msgstr ""
+
+#. type: SH
+#: ../contracorriente/man1/zshtcpsys.1:738
+#, no-wrap
+msgid "TCP USER-DEFINED PARAMETERS"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:742
+msgid ""
+"The following parameters are not set by the function system, but have a "
+"special effect if set by the user\\&."
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:744
+#, no-wrap
+msgid "B<tcp_on_read>"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:755
+msgid ""
+"This should be an associative array; if it is not, the behaviour is "
+"undefined\\&.  Each key is the name of a shell function or other command, "
+"and the corresponding value is a shell pattern (using B<EXTENDED_GLOB>)\\&.  "
+"Every line read from a TCP session directly or indirectly using B<tcp_read> "
+"(which includes lines read by B<tcp_expect>) is compared against the "
+"pattern\\&.  If the line matches, the command given in the key is called "
+"with two arguments: the name of the session from which the line was read, "
+"and the line itself\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:763
+msgid ""
+"If any function called to handle a line returns a non-zero status, the line "
+"is not output\\&.  Thus a B<tcp_on_read> handler containing only the "
+"instruction `B<return 1>\\&' can be used to suppress output of particular "
+"lines (see, however, B<tcp_filter> above)\\&.  However, the line is still "
+"stored in B<TCP_LINE> and B<tcp_lines>; this occurs after all B<tcp_on_read> "
+"processing\\&."
+msgstr ""
+
+#. type: SH
+#: ../contracorriente/man1/zshtcpsys.1:765
+#, no-wrap
+msgid "TCP UTILITY PARAMETERS"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:769
+msgid ""
+"These parameters are controlled by the function system; they may be read "
+"directly, but should not usually be set by user code\\&."
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:771
+#, no-wrap
+msgid "B<tcp_aliases>"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:777
+msgid ""
+"Associative array\\&.  The keys are the names of sessions established with "
+"B<tcp_open>; each value is a space-separated list of aliases which refer to "
+"that session\\&."
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:777
+#, no-wrap
+msgid "B<tcp_by_fd>"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:781
+msgid ""
+"Associative array\\&.  The keys are session file descriptors; each value is "
+"the name of that session\\&."
+msgstr ""
+
+#. type: TP
+#: ../contracorriente/man1/zshtcpsys.1:781
+#, no-wrap
+msgid "B<tcp_by_name>"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:785
+msgid ""
+"Associative array\\&.  The keys are the names of sessions; each value is the "
+"file descriptor associated with that session\\&."
+msgstr ""
+
+#. type: SH
+#: ../contracorriente/man1/zshtcpsys.1:786
+#, no-wrap
+msgid "TCP EXAMPLES"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:789
+msgid "Here is a trivial example using a remote calculator\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:792
+msgid ""
+"To create a calculator server on port 7337 (see the B<dc> manual page for "
+"quite how infuriating the underlying command is):"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:796
+#, no-wrap
+msgid "B<tcp_proxy 7337 dc>\n"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:800
+msgid "To connect to this from the same host with a session also named `B<dc>\\&':"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:804
+#, no-wrap
+msgid "B<tcp_open localhost 7337 dc>\n"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:809
+msgid ""
+"To send a command to the remote session and wait a short while for output "
+"(assuming B<dc> is the current session):"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:813
+#, no-wrap
+msgid "B<tcp_command 2 4 + p>\n"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:817
+msgid "To close the session:"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:821
+#, no-wrap
+msgid "B<tcp_close>\n"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:827
+msgid ""
+"The B<tcp_proxy> needs to be killed to be stopped\\&.  Note this will not "
+"usually kill any connections which have already been accepted, and also that "
+"the port is not immediately available for reuse\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:830
+msgid ""
+"The following chunk of code puts a list of sessions into an xterm header, "
+"with the current session followed by a star\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:834
+#, no-wrap
+msgid ""
+"B<print -n \"\\e033]2;TCP:\" ${(k)tcp_by_name:/$TCP_SESS/$TCP_SESS\\e*} "
+"\"\\ea\">\n"
+msgstr ""
+
+#. type: SH
+#: ../contracorriente/man1/zshtcpsys.1:837
+#, no-wrap
+msgid "TCP BUGS"
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:842
+msgid ""
+"The function B<tcp_read> uses the shell\\&'s normal B<read> builtin\\&.  As "
+"this reads a complete line at once, data arriving without a terminating "
+"newline can cause the function to block indefinitely\\&."
+msgstr ""
+
+#. type: Plain text
+#: ../contracorriente/man1/zshtcpsys.1:845
+msgid ""
+"Though the function suite works well for interactive use and for data "
+"arriving in small amounts, the performance when large amounts of data are "
+"being exchanged is likely to be extremely poor\\&."
+msgstr ""
