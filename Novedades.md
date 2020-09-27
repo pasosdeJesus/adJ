@@ -95,24 +95,32 @@ Puede ver las diversas versiones publicadas en:
 
 * El sistema base incluye mejoras a componentes auditados y mejorados 
   como, `llvm` 8.0.1,  `Xenocara` (basado en `Xorg` 7.7),
-  `perl` 5.28.2
-* El repositorio de paquetes de OpenBSD cuenta con 10736 para amd64
+  `perl` 5.30.2
+* El repositorio de paquetes de OpenBSD cuenta con 11268 para amd64
 
 
 ### 2.2 Paquetes 
 
 * Recompilados portes estables más recientes para evitar fallas de seguridad: 
-    `certbot`, `dovecot`, `gettext-tools`, `libidn2`, `librsvg`,
-    `oniguruma`, `pcre2`, `unzip` y `webkitgtk4`
-* Ruby 2.7.1 retroportado de current  
-* Algunos paquetes típicos y su versión: dovecot 2.3.10, chromium 79.0.3945,
-  firefox 69.9.2, libreoffice 6.3.2.2, nginx 1.16.1p0, mariadb 10.3.18,
-  node 10.16.3, postgresql 12.2, python 3.7.4, ruby 2.7.0, vim 8.1.2061
+    `certbot`, `curl`, `dovecot`, `gettext-tools`, `libidn2`, `librsvg`,
+    `oniguruma`, `python`, `pcre2`, `unzip` y `webkitgtk4`
+* Ruby 2.7.1 retroportado de current
+* Algunos paquetes típicos y su versión: dovecot 2.3.10, chromium 81.0.4044
+  firefox 76.0 , libreoffice 6.4.3.2, nginx 1.16.1p1, mariadb 10.4.12v1,
+  node 12.16.1, postgresql 12.3, python 3.7.9, ruby 2.7.1p0, vim 8.2.534,
+  neovim 0.4.3, zsh 5.8
 
 
 ## 3. NOVEDADES RESPECTO A ADJ 6.6 PROVENIENTES DE PASOS DE JESÚS
 
 ### 3.1 Instalador y documentación
+* Segunda etapa de instalador con `inst-adJ.sh` simplificada quitando 
+  preguntas sobre PHP y sobre cifrado.   Por lo visto el cifrado con 
+  `vnconfig` tiene problemas desde OpenBSD 6.6 y no serán solucionados.  
+  Ahora se recomienda cifrado con `softraid`.  No hay un procedimiento
+  automático para pasar de `vnconfig` a `softraid`, pero recomendamos 
+  enfáticamente realizar el cambio siguiendo instrucciones de:
+  <https://pasosdejesus.github.io/usuario_adJ/ar01s03.html#idm3197209600>
 * Documentación actualizada: 
 	* `basico_adJ`: 
 	* `usuario_adJ`: Nueva sección sobre cifrados con softraid
@@ -120,38 +128,81 @@ Puede ver las diversas versiones publicadas en:
 
 ### 3.2 Paquetes
 
+* Ahora se incluyen paquetes `zsh`, `neovim` y `rcm` así como unos
+  archivos de configuración para sustituir la pila de edición en consola:
+  `tmux`+`pdksh`+`vim` por `rcm`+`tmux`+`zsh`+`neovim`.  
+  Estos archivos de configuración se basan en los dotfiles de Thoughtbot 
+  (ver <https://github.com/thoughtbot/dotfiles>) y quedarán en el directorio 
+  `/usr/local/share/adJ/archconf`. Para adoptar esta nueva pila de edición
+  en consola siga las instrucciones disponibles en:
+  <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_7/arboldd/usr/local/share/adJ/archconf/README.md>
 * Nueva versión 1.0a5 del motor de búsqueda Mt77 que ahora emplea
   la codificación UTF-8 internamente y como codificación por omisión
   en las diversas herramientas. Mantiene soporte para codificación 
-  Latin1 con opción -l del indexador de textos planos y del buscador.
+  Latin1 con opción `-l` del indexador de textos planos y del buscador.
   Agradecemos el trabajo de Daniel Hamilton-Smith.
 * Se han recompilado los siguientes para aprovechar `xlocale`:
    `glib2`, `libunistring`, `vlc`
 * Retroportados y adaptados de OpenBSD-current 
   * `chromium` 81.0.4044-138 con llave de Pasos de Jesús
-* Se incluye la versión beta 12 de `sivel2` cuyas novedades con respecto al beta 10
-  includo en adJ 6.6 se describen a continuación. Agradecimiento por
+* Se incluye la versión beta 12 de `sivel2` cuyas novedades con respecto al 
+  beta 10 includo en adJ 6.6 se describen a continuación. Agradecimiento por
   varias de  las novedades a Luis Alejandro Cruz:
     - Control de acceso mediante grupos. 
-    - Cada caso tiene una bitácora de cambios que puede verse desde el resumen del caso en una sección colapsable o por parte de administradores en `Administrar->Bitácora`
-    - Más posibilidades de sistematizar en formulario de caso: (1) Nueva tabla básica Contexto de una víctima (por ejemplo FALSO POSITIVO) y campo en la pestaña Víctima del formulario Casos que permite ponerle contexto a una víctima. (2)En pestaña víctima, puedan agregarse familiares, de forma similar a la de SIVeL 1.2, pero con autocompletación de nombre. (3) Posibilidad de añadir varios sectores sociales secundarios a una víctima individual. (4) En pestaña víctima colectiva ahora se pueden especificar las etnias, y se presentan en el resumen del caso.  
-    - Mejores listados y reportes: (1) En listado de casos, el filtro avanzado ahora presenta nuevos criterios a usuarios autenticados: filtro por profesión, sector social y organización. (2) - Posibilidad de presentar al público general hasta 2000 casos en el listado de casos y en el mapa cuando un administrador del servidor lo configura en fuentes (en config/application.rb con config.x.sivel2_consulta_web_publica = true). (3) En filtro avanzado ahora los usuarios autenticados puede buscar por contexto de caso y por contexto de víctima. (4) Desde el listado de casos, Filtro avanzado, nuevo reporte "Revista no bélicas HTML", que se comporta como reporte revista pero que excluye casos con categorías de tipo Bélicas. 
-    - Mejoras en usabilidad: (1) Al intentar eliminar un Presunto Responsable con actos asociados, aparece una alerta informando, que permite continuar con la eliminación o cancelarla. (2) Mejoras al conteo general de víctimas para generar una tabla como la de la revista Noche y Niebla más reciente.  (3) En ficha de caso, pestaña ubicación, en nuevas ubicaciones el país ahora comienza por omisión en Colombia.  (3) El listado de víctimas y casos, ahora tiene un filtro por cada categoria. (4)  Un administrador puede exportar el listado de usuarios a hoja de cálculo.
-     - Actualización del DIVIPOLA a su versión 2019. Hay un resumen ejecutivo en https://github.com/pasosdeJesus/sip/wiki/Resumen-ejecutivo-de-la-actualizaci%C3%B3n-a-DIVIPOLA-2019
-    - Soluciona diversas fallas incluyendo: (1) Mejorar velocidad al editar cuando un sistema tiene más de 10.000 casos, en tales casos tras editar debe elegirse del menú la opción Casos->Refrescar. (2) Conteo demografía de víctimas estaba replicando cuando la misma víctima estaba en 2 casos. 
-    - Características experimentales: (1) Prototipo de importación de casos desde un archivo XML con relatos (XRLAT) desde Casos->Importar de XRLAT. Nueva versión del DTD de Relatos XRLAT. (2) Prototipo de pestaña Desaparición para usuarios del grupo Desaparición
+    - Cada caso tiene una bitácora de cambios que puede verse desde el 
+      resumen del caso en una sección colapsable o por parte de 
+      administradores en `Administrar->Bitácora`
+    - Más posibilidades de sistematizar en formulario de caso: (1) Nueva 
+      tabla básica Contexto de una víctima (por ejemplo FALSO POSITIVO) y 
+      campo en la pestaña Víctima del formulario Casos que permite ponerle 
+      contexto a una víctima. (2) En pestaña víctima, puedan agregarse 
+      familiares, de forma similar a la de SIVeL 1.2, pero con 
+      autocompletación de nombre. (3) Posibilidad de añadir varios sectores 
+      sociales secundarios a una víctima individual. (4) En pestaña víctima 
+      colectiva ahora se pueden especificar las etnias, y se presentan en 
+      el resumen del caso.  
+    - Mejores listados y reportes: (1) En listado de casos, el filtro 
+      avanzado ahora presenta nuevos criterios a usuarios autenticados: 
+      filtro por profesión, sector social y organización. (2) Posibilidad 
+      de presentar al público general hasta 2000 casos en el listado de casos 
+      y en el mapa cuando un administrador del servidor lo configura en 
+      fuentes (en `config/application.rb` con
+      `config.x.sivel2_consulta_web_publica = true`). (3) En filtro avanzado 
+      ahora los usuarios autenticados puede buscar por contexto de caso y 
+      por contexto de víctima. (4) Desde el listado de casos, Filtro avanzado, 
+      nuevo reporte "Revista no bélicas HTML", que se comporta como reporte 
+      revista pero que excluye casos con categorías de tipo Bélicas. 
+    - Mejoras en usabilidad: (1) Al intentar eliminar un Presunto Responsable 
+      con actos asociados, aparece una alerta informando, que permite 
+      continuar con la eliminación o cancelarla. (2) Mejoras al conteo 
+      general de víctimas para generar una tabla como la de la revista Noche 
+      y Niebla más reciente.  (3) En ficha de caso, pestaña ubicación, en 
+      nuevas ubicaciones el país ahora comienza por omisión en Colombia.  
+      (3) El listado de víctimas y casos, ahora tiene un filtro por cada 
+      categoria. (4)  Un administrador puede exportar el listado de usuarios 
+      a hoja de cálculo.
+     - Actualización del DIVIPOLA a su versión 2019. Hay un resumen ejecutivo en <https://github.com/pasosdeJesus/sip/wiki/Resumen-ejecutivo-de-la-actualizaci%C3%B3n-a-DIVIPOLA-2019>
+    - Soluciona diversas fallas incluyendo: (1) Mejorar velocidad al editar 
+      cuando un sistema tiene más de 10.000 casos, en tales casos tras editar 
+      debe elegirse del menú la opción `Casos`->`Refrescar`. (2) Conteo 
+      demografía de víctimas estaba replicando cuando la misma víctima estaba 
+      en 2 casos.
+    - Características experimentales: (1) Prototipo de importación de casos 
+      desde un archivo XML con relatos (XRLAT) desde Casos->Importar de XRLAT. 
+      Nueva versión del DTD de Relatos XRLAT. (2) Prototipo de pestaña 
+      Desaparición para usuarios del grupo Desaparición
 
 
 
 ## 4. FE DE ERRATAS
 
 - Chromium sigue siendo inestable por ejemplo en ocasiones en 
-	<http://drive.google.com>
+  <http://drive.google.com>
   por esto sigue incluyendose firefox que en casos como ese puede operar.
 
 - `xenodm` no logra utilizar un teclado latinoamericano que se haya
   configurado en `/etc/kbdtype`.  Para usarlo
   agregue en `/etc/X11/xenodm/Xsetup_0`:
 ```
-		setxkbmap latam
+  setxkbmap latam
 ```

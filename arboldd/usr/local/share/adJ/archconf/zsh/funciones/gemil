@@ -22,8 +22,18 @@ gemil () {
     exit 1;
   fi
   if [[ $# -gt 0 ]]; then
-    doas gem install --install-dir "$rb/ruby/$vruby/" $@
+    for i in $@; do
+      g=`echo $i | sed -e "s/@.*//g"`
+      v=`echo $i | sed -e "s/.*@//g"`
+      if [[ "$v" -eq "" ]]; then 
+        echo "Instalando versión más reciente de la gema $g"
+        doas gem install -N --install-dir "$rb/ruby/$vruby/" $g;
+      else
+        echo "Instalando gema $g version $v"
+        doas gem install -N --install-dir "$rb/ruby/$vruby/" $g -v $v;
+      fi
+    done
   else
-    echo "gemil gema o gemil gema -v 1.2.3"
+    echo "gemil gema[@version] [gema[@version] ...]"
   fi
 }

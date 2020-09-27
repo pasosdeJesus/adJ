@@ -1,36 +1,81 @@
 Archivos de configuración para adJ con base en los dotfiles de thoughtbot
 =========================================================================
 
+En entornos tipo Unix los archivos de configuración se caracterizan por
+comenzar con un punto.  Por ejemplo `~/.zhrc` es el archivo de configuración
+empleado por el interprete de ordenes `zsh` cada vez que se inicia.
+
+Aquí encuentra archivos de configuración para la pila de edición en
+terminal de adJ: `rcm`+`tmux`+`zsh`+neovim.  El siguiente pantallazo 
+muestra como se ve (el juego de colores es configurable):
+![](archconf.png?raw=true)
+
+Note que:
+* En el panel superior izquierdo está editando un texto plano en
+español, se marcan los errores de ortografía y se está auto-completando
+la palabra configuración.
+* En el panel superior derecho se ve el inicio de una sesión típica
+  que por omisión presenta un versículo aleatorio (si prefiere puede
+  deshabilitarlo en el archivo de configuración `.zshrc`)
+* En el panel inferior izquierdo se presenta instalación de la versión
+  más reciente de una gema en un directorio personal con la función `gemil` 
+  (que usa el directorio personal configurado en `~/.bundle/config`)
+* En el panel inferior derecho se presenta la edición de un código fuente
+  en Ruby. Note que los comentarios están en español y se resaltan
+  palabras que no estén en el diccionario (se añaden al diccionario
+  con las teclas `zg`).
+
+
+Aunque pueden emplearse en diversos sistemas operativos (por ejemplo en 
+Linux o en Mac OSX) centramos las instrucciones siguientes a la distribución
+adJ del sistema operativo OpenBSD.    Para otras plataformas puede que
+le basten estas instrucciones o puede referirse a los
+[dotfiles de Thoughtbot](https://github.com/thoughtbot/dotfiles)
+que fueron la base para estos archivos de configuración.
+
+
 Requerimientos
 --------------
 
-* Usar `zsh` como interprete de ordenes (su licenciamiento es estilo MIT
-  a diferencia de `pdksh`, el estándar de OpenBSD,
-  que es de dominio público).
-  * Si hace falta instala con `doas pkg_add zsh`
+* Usar `zsh` como interprete de ordenes 
+  * Si hace falta instala el paquete con `doas pkg_add zsh` (aunque en 
+    adJ 6.7 ya se instala por omisión).
+  * Si hace falta registra `zsh` como un intérprete de ordenes aceptable con:
+  ```
+      doas su root -c "echo /usr/local/bin/zsh >> /etc/shells" 
+  ```
   * Ponlo como tu interprete de ordenes de inicio de sesión con:
-    `chsh -s $(which zsh)`.
+  ```
+      chsh -s /usr/local/bin/zsh 
+  ```
   * Tras esto sal y vuelve a ingresar a tu interprete de ordenes para
-    empezar a usar `zsh`.  
-  * Entre sus mejoras respecto a `pdksh` está mayor autocompletación con TAB 
+    empezar a usar `zsh` o mientras configuras ejecutalo desde otro
+    interprete de ordenes con `zsh` 
+  * Entre sus mejoras respecto a `pdksh` está mayor auto-completación con TAB 
     por ejemplo en las opciones de las ordenes.
-    Prueba `ls -` y presiona TAB para ver opciones de `ls`.
-* Usar `rcm` para manejar archivos de configuración (usa licencia BSD de 3 
-  clausulas)
-  * Si hace falta instala con `doas pkg_add rcm`
+    Una vez configurado prueba `ls -` y presiona TAB para ver opciones de `ls`.
+  * `zsh` tiene licencia estilo MIT a diferencia de `pdksh`, el estándar de 
+    OpenBSD, que es de dominio público.
+* Usar `rcm` para manejar archivos de configuración 
+  * Si hace falta instala con `doas pkg_add rcm` (aunque ya viene por
+    omisión en adJ 6.7)
   * Crea el directorio `~/archconf-local` y allí deja copia de tus archivos
     de configuración, quitandoles el punto inicial y añadiendoles el
     posfijo `.local`, por ejemplo:
-    ```
-    mkdir ~/archconf-local/
-    cp ~/.gitconfig ~/archconf-local/gitconfig.local
-    ```
+```
+      mkdir ~/archconf-local/
+      cp ~/.gitconfig ~/archconf-local/gitconfig.local
+```
   * En las secciones siguientes verás como usarlo en detalle.
-* Usar `neovim` como editor (usa licencia Apache que es menos restrictiva
-  que la de `vim`)
-  * Si hace falta instala con `doas pkg_add neovim`
+  * rcm usa licencia BSD de 3 clausulas
+* Usar `neovim` como editor
+  * Si hace falta instala con `doas pkg_add neovim` (aunque ya viene por
+    omisión en adJ 6.7)
+  * Puedes iniciarlo con `nvim` o una vez instales los archivos de 
+    configuraicón con `v`
   * Puede leer la configuración de `vim`, pero maneja mejor ratón y 
     portapapeles y a futuro posibilitará edición estilo IDE.
+  * `neovim` emplea licencia Apache que es menos restrictiva que la de `vim`.
 
 
 Instalación
@@ -41,6 +86,12 @@ de tu directorio personal
 
     cp -rf /usr/local/share/adJ/archconf ~/
 
+O si planeas apoyar el desarrollo de estos archivos de configuración y de
+adJ puedes enlazarlos al directorio donde clonaste el repositorio adJ por 
+ejemplo `$HOME/comp/adJ`:
+
+    ln -s ~/comp/adJ/arboldd/usr/local/share/adJ/archconf ~/
+
 Instala estos archivos de configuración de `~/archconf`, así como 
 tus personalizaciones de `~/archconf-local` con:
 
@@ -50,14 +101,14 @@ Después de la instalación inicial, puedes ejecutar `rcup` sin establecer la
 variable `RCRC` (`rcup` creará `~/.rcrc` con la ubicación para futuras
 ejecuciones de `rcup`). 
 
-Esta orden copiará estos archivos de configuración en tu directorio
+Esta orden enlazará los archivos de configuración a tu directorio
 personal, así como tus personalizaciones del directorio `~/archconf-local`.
 
 Al establecer la variable de entorno le indicas a `rcup` que al hacer
 la copia use las opciones de configuración preestablecidas:
 
 * Excluir los archivos `README.md` y `LICENSE`, que son parte
-  del repositorio `archconf`, pero no son archivos de configuración.
+  del repositorio `archconf`, pero que no son archivos de configuración.
 * Dar precedencia a las modificaciones personales que por omisión están en
   `~/archconf-local`
 * Por favor configura el archivo `rcrc` en caso de que quieras hacer
