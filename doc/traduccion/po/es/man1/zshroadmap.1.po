@@ -2,18 +2,20 @@
 # Copyright (C) 2020 Vladimir Támara Patiño
 # Licencia ISC
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: 5.8\n"
 "Report-Msgid-Bugs-To: vtamara@pasosdeJesus.org\n"
 "POT-Creation-Date: 2020-09-27 10:31-0500\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Vladimir Támara Patiño <vtamara@pasosdeJesus.org>\n"
-"Language: Spanish\n"
+"PO-Revision-Date: 2020-09-27 16:30+0000\n"
+"Last-Translator: Vladimir Támara Patiño <vtamara@pasosdejesus.org>\n"
+"Language-Team: Spanish <https://hosted.weblate.org/projects/adj/zsh/es/>\n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.3-dev\n"
 
 #. type: TH
 #: contracorriente/man1/zsh.1:1 contracorriente/man1/zshall.1:1
@@ -145,6 +147,13 @@ msgid ""
 "`B<autoload -Uz zsh-newuser-install; zsh-newuser-install -f>\\&'\\&.  See "
 "also the section User Configuration Functions in I<zshcontrib>(1)\\&."
 msgstr ""
+"Si no existen archivos de inicialización personales para el usuario actual, "
+"se ejecuta una función para ayudarlo a cambiar algunas de las "
+"configuraciones más comunes\\&. No aparecerá si su administrador ha "
+"desactivado el módulo B<zsh/newuser>\\&. La función está diseñada para ser "
+"autoexplicativa\\&. Puede ejecutarlo manualmente con `B<autoload -Uz zsh-"
+"newuser-install; zsh-newuser-install -f>\\&'\\&. Consulte también la sección "
+"Funciones de Configuración de Usuario en I<zshcontrib>(1)\\&."
 
 #. type: SH
 #: contracorriente/man1/zshroadmap.1:24
@@ -169,6 +178,11 @@ msgid ""
 "editing mode is probably more natural for beginners and can be selected "
 "explicitly with the command B<bindkey -e>\\&."
 msgstr ""
+"La primera decisión que debe tomar un usuario es si usar el modo de edición "
+"Emacs o Vi, ya que las teclas para editar son sustancialmente diferentes\\&. "
+"El modo de edición de Emacs es probablemente más natural para los "
+"principiantes y se puede seleccionar explícitamente con el comando B<bindkey "
+"-e>\\&."
 
 #. type: Plain text
 #: contracorriente/man1/zshroadmap.1:43
@@ -183,6 +197,17 @@ msgid ""
 "to read and write files saving history when the shell is interactive, i\\&.e"
 "\\&. it does not work from scripts\\&."
 msgstr ""
+"Está disponible un mecanismo de historial para recuperar líneas escritas "
+"previamente (más simplemente con las teclas de flecha Arriba o Abajo); tenga "
+"en cuenta que, a diferencia de otros interpretes de ordenes, zsh no guardará "
+"estas líneas cuando el interprete de ordenes termine a menos que establezca "
+"las variables apropiadas, y el número de líneas de historial retenidas por "
+"defecto es bastante pequeño (30 líneas)\\&. Vea la descripción de las "
+"variables del interprete de ordenes (referidas en la documentación como "
+"parámetros) B<HISTFILE>, B<HISTSIZE> y B<SAVEHIST> en I<zshparam>(1)\\&. "
+"Tenga en cuenta que actualmente solo es posible leer y escribir el historial "
+"de guardado de archivos cuando el interprete de ordenes es interactivo, i\\&."
+"e\\&. no funciona con scripts\\&."
 
 #. type: Plain text
 #: contracorriente/man1/zshroadmap.1:60
@@ -202,6 +227,23 @@ msgid ""
 "B<ISO-8859-1> or B<ISO-8859-15>\\&.  See the description of B<LC_CTYPE> in "
 "I<zshparam>(1)\\&."
 msgstr ""
+"El interprete de ordenes ahora admite el juego de caracteres UTF-8 (y "
+"también otros si los admite el sistema operativo)\\&. Esto se maneja (en su "
+"mayoría) de forma transparente por el interprete de ordenes, pero el grado "
+"de soporte en los emuladores de terminal es variable\\&. Hay algo de "
+"discusión sobre esto en las preguntas frecuentes del interprete de ordenes, "
+"B<http://www\\&.zsh\\&.org/FAQ/>\\&. Tenga en cuenta en particular que para "
+"la combinación de caracteres que se van a manejar, la opción "
+"B<COMBINING_CHARS> debe establecerse\\&. Debido a que el interprete de "
+"ordenes ahora es más sensible a la definición del conjunto de caracteres, "
+"tenga en cuenta que si está actualizando desde una versión anterior del "
+"interprete de ordenes, debe asegurarse de que la variable apropiada, o "
+"B<LANG> (para afectar todos los aspectos del interprete de ordenes) o "
+"B<LC_CTYPE> (para afectar solo el manejo de juegos de caracteres) se "
+"establece en un valor apropiado\\&. Esto es cierto incluso si está "
+"utilizando un conjunto de caracteres de un solo byte que incluye extensiones "
+"de ASCII como B<ISO-8859-1> o B<ISO-8859-15>\\&. Vea la descripción de "
+"B<LC_CTYPE> en I<zshparam>(1)\\&."
 
 #. type: Plain text
 #: contracorriente/man1/zshroadmap.1:71
@@ -215,6 +257,16 @@ msgid ""
 "written in or glued together with zsh can be the source of what the line "
 "editor offers as possible completions\\&."
 msgstr ""
+"La finalización es una característica presente en muchos interpretes de "
+"ordenes\\&. Permite al usuario escribir solo una parte (generalmente el "
+"prefijo) de una palabra y hacer que el interprete de ordens complete el "
+"resto\\&. El sistema de finalización en zsh es programable\\&. Por ejemplo, "
+"el interprete de ordenes puede configurarse para completar direcciones de "
+"correo electrónico en argumentos para el comando de correo de su B<~/\\&."
+"Abook/addressbook>; nombres de usuario, nombres de computadores e incluso "
+"rutas remotas en argumentos para scp, etc.\\&. Todo lo que se pueda escribir "
+"o pegar junto con zsh puede ser la fuente de lo que ofrece el editor de "
+"líneas como posibles completaciones\\&."
 
 #. type: Plain text
 #: contracorriente/man1/zshroadmap.1:80
@@ -227,6 +279,13 @@ msgid ""
 "customizable and is supplied with completions for many commonly used "
 "commands; it is therefore to be preferred\\&."
 msgstr ""
+"Zsh tiene dos sistemas de completación, uno antiguo, denominado B<compctl> ("
+"llamado así por la orden incorporada que sirve como su única y completa "
+"interfaz de usuario), y uno nuevo, denominado B<compsys>, organizado como "
+"biblioteca de funciones integradas y definidas por el usuario\\&. Los dos "
+"sistemas difieren en su interfaz para especificar el comportamiento de "
+"completación\\&. El nuevo sistema es más personalizable y se suministra con "
+"complementos para muchas ordenes de uso común; por tanto, es preferible\\&."
 
 #. type: Plain text
 #: contracorriente/man1/zshroadmap.1:84
@@ -342,6 +401,12 @@ msgid ""
 "These are described in the section `Filename Generation\\&' in "
 "I<zshexpn>(1)\\&."
 msgstr ""
+"El interprete de ordenes tiene un rico conjunto de patrones que están "
+"disponibles para la concordancia de archivos (descritos en la documentación "
+"como `generación de nombre de archivo\\& 'y también conocidos por razones "
+"históricas como`globbing\\&') y para usar al programar\\&. Estos se "
+"describen en la sección `Generación de Nombre de Archivo\\&' en I<zshexpn>(1)"
+"\\&."
 
 #. type: Plain text
 #: contracorriente/man1/zshroadmap.1:128
@@ -391,7 +456,7 @@ msgid ""
 msgstr ""
 "calificadores glob, incluidos entre paréntesis al final del patrón, que "
 "seleccionan archivos por tipo (tales como directorios) o atributos (tales "
-"como el tamaño).\\&"
+"como el tamaño)\\&."
 
 #. type: SH
 #: contracorriente/man1/zshroadmap.1:147
@@ -408,6 +473,12 @@ msgid ""
 "shell syntax is introduced in the section `Shell Grammar\\&' in "
 "I<zshmisc>(1)\\&."
 msgstr ""
+"Aunque la sintaxis de zsh es similar a la del interprete de ordenes de Korn "
+"y, por lo tanto, de forma más remota al intreprete de ordenes original de "
+"UNIX, el interprete de ordenes de Bourne, su comportamiento predeterminado "
+"no corresponde completamente con esos interpretes de ordenes\\&. La sintaxis "
+"general del interprete de ordenes se introduce en la sección `Gramática del "
+"interprete de ordenes\\&'en I<zshmisc>(1)\\&."
 
 #. type: Plain text
 #: contracorriente/man1/zshroadmap.1:162
@@ -420,6 +491,13 @@ msgid ""
 "more than one word\\&.  See the section `Array Parameters\\&' in "
 "I<zshparam>(1)\\&."
 msgstr ""
+"Una diferencia que se encuentra comúnmente es que las variables sustituidas "
+"en la línea de ordenes no se dividen en palabras\\&. Consulte la descripción "
+"de la opción B<SH_WORD_SPLIT> en la sección `Expansión de parámetros\\&' en "
+"I<zshexpn>(1)\\&. En zsh, puede solicitar explícitamente la división (e\\&."
+"g\\&. B<$ {= foo}>) o usar una matriz cuando desee que una variable se "
+"expanda a más de una palabra\\&. Consulte la sección `Parámetros de matriz\\"
+"&' en I<zshparam>(1)\\&."
 
 #. type: SH
 #: contracorriente/man1/zshroadmap.1:163
@@ -437,6 +515,12 @@ msgid ""
 "are less used in zsh as they don\\&'t perform argument substitution, only "
 "simple text replacement\\&."
 msgstr ""
+"La forma más conveniente de agregar mejoras al interprete de ordenes es "
+"típicamente escribiendo una función y preparándola para que se cargue "
+"automáticamente\\&. Las funciones se describen en la sección `Funciones\\&' "
+"en I<zshmisc>(1)\\&. Los usuarios que se cambian desde el interprete de "
+"ordenes  C y sus parientes deben notar que los alias se usan menos en zsh ya "
+"que no realizan sustitución de argumentos, solo reemplazo de texto simple\\&."
 
 #. type: Plain text
 #: contracorriente/man1/zshroadmap.1:175
