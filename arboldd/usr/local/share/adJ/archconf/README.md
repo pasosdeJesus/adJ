@@ -44,15 +44,15 @@ Requerimientos
   ```
       doas su root -c "echo /usr/local/bin/zsh >> /etc/shells" 
   ```
-  * Ponlo como tu interprete de ordenes de inicio de sesión con:
+  * Establecelo como tu interprete de ordenes de inicio de sesión con:
   ```
       chsh -s /usr/local/bin/zsh 
   ```
   * Tras esto sal y vuelve a ingresar a tu interprete de ordenes para
     empezar a usar `zsh` o mientras configuras ejecutalo desde otro
     interprete de ordenes con `zsh` 
-  * Entre sus mejoras respecto a `pdksh` está mayor auto-completación con TAB 
-    por ejemplo en las opciones de las ordenes.
+  * Entre sus mejoras respecto a `pdksh` están: más popular, mejor 
+    auto-completación con TAB, por ejemplo en las opciones de las ordenes.
     Una vez configurado prueba `ls -` y presiona TAB para ver opciones de `ls`.
   * `zsh` tiene licencia estilo MIT a diferencia de `pdksh`, el estándar de 
     OpenBSD, que es de dominio público.
