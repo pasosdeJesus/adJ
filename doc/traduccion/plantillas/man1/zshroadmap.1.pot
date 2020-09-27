@@ -1,13 +1,13 @@
-# Traducción de pagina del manual zshroadmap
-# Copyright (C) 2020 Vladimir Támara Patiño
-# Licencia ISC
+# SOME DESCRIPTIVE TITLE
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: vtamara@pasosdeJesus.org\n"
-"POT-Creation-Date: 2020-09-27 09:17-0500\n"
+"POT-Creation-Date: 2020-09-27 10:31-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,32 +17,95 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #. type: TH
-#: ../contracorriente/man1/zshroadmap.1:1
-#, no-wrap
-msgid "ZSHROADMAP"
-msgstr ""
-
-#. type: TH
-#: ../contracorriente/man1/zshroadmap.1:1
+#: contracorriente/man1/zsh.1:1 contracorriente/man1/zshall.1:1
+#: contracorriente/man1/zshall.1:479 contracorriente/man1/zshbuiltins.1:1
+#: contracorriente/man1/zshcalsys.1:1 contracorriente/man1/zshcompctl.1:1
+#: contracorriente/man1/zshcompsys.1:1 contracorriente/man1/zshcompwid.1:1
+#: contracorriente/man1/zshcontrib.1:1 contracorriente/man1/zshexpn.1:1
+#: contracorriente/man1/zshmisc.1:1 contracorriente/man1/zshmodules.1:1
+#: contracorriente/man1/zshoptions.1:1 contracorriente/man1/zshparam.1:1
+#: contracorriente/man1/zshroadmap.1:1 contracorriente/man1/zshtcpsys.1:1
+#: contracorriente/man1/zshzftpsys.1:1 contracorriente/man1/zshzle.1:1
 #, no-wrap
 msgid "February 14, 2020"
 msgstr ""
 
 #. type: TH
-#: ../contracorriente/man1/zshroadmap.1:1
+#: contracorriente/man1/zsh.1:1 contracorriente/man1/zshall.1:1
+#: contracorriente/man1/zshall.1:479 contracorriente/man1/zshbuiltins.1:1
+#: contracorriente/man1/zshcalsys.1:1 contracorriente/man1/zshcompctl.1:1
+#: contracorriente/man1/zshcompsys.1:1 contracorriente/man1/zshcompwid.1:1
+#: contracorriente/man1/zshcontrib.1:1 contracorriente/man1/zshexpn.1:1
+#: contracorriente/man1/zshmisc.1:1 contracorriente/man1/zshmodules.1:1
+#: contracorriente/man1/zshoptions.1:1 contracorriente/man1/zshparam.1:1
+#: contracorriente/man1/zshroadmap.1:1 contracorriente/man1/zshtcpsys.1:1
+#: contracorriente/man1/zshzftpsys.1:1 contracorriente/man1/zshzle.1:1
 #, no-wrap
 msgid "zsh 5\\&.8"
 msgstr ""
 
 #. type: SH
-#: ../contracorriente/man1/zshroadmap.1:2
+#: contracorriente/man1/zsh.1:2 contracorriente/man1/zshall.1:2
+#: contracorriente/man1/zshbuiltins.1:2 contracorriente/man1/zshcalsys.1:2
+#: contracorriente/man1/zshcompctl.1:2 contracorriente/man1/zshcompsys.1:2
+#: contracorriente/man1/zshcompwid.1:2 contracorriente/man1/zshcontrib.1:2
+#: contracorriente/man1/zshexpn.1:2 contracorriente/man1/zshmisc.1:2
+#: contracorriente/man1/zshmodules.1:2 contracorriente/man1/zshoptions.1:2
+#: contracorriente/man1/zshparam.1:2 contracorriente/man1/zshroadmap.1:2
+#: contracorriente/man1/zshtcpsys.1:2 contracorriente/man1/zshzftpsys.1:2
+#: contracorriente/man1/zshzle.1:2
 #, no-wrap
 msgid "NAME"
 msgstr ""
 
+#. type: TP
+#: contracorriente/man1/zshcontrib.1:2850 contracorriente/man1/zshroadmap.1:106
+#, no-wrap
+msgid "B<edit-command-line>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshcontrib.1:2977 contracorriente/man1/zshroadmap.1:92
+#, no-wrap
+msgid "B<insert-composed-char>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshcontrib.1:3575 contracorriente/man1/zshroadmap.1:103
+#, no-wrap
+msgid "B<replace-string>, B<replace-pattern>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshmisc.1:1897 contracorriente/man1/zshmisc.1:1969
+#: contracorriente/man1/zshroadmap.1:134
+#, no-wrap
+msgid "B<|>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshmisc.1:1900 contracorriente/man1/zshmisc.1:1945
+#: contracorriente/man1/zshroadmap.1:130
+#, no-wrap
+msgid "B<**>"
+msgstr ""
+
+#. type: SS
+#: contracorriente/man1/zshoptions.1:133 contracorriente/man1/zshroadmap.1:61
+#: contracorriente/man1/zshzftpsys.1:655 contracorriente/man1/zshzle.1:2123
+#, no-wrap
+msgid "Completion"
+msgstr ""
+
+#. type: TH
+#: contracorriente/man1/zshroadmap.1:1
+#, no-wrap
+msgid "ZSHROADMAP"
+msgstr ""
+
 #.  Yodl file: Zsh/roadmap.yo
 #. type: Plain text
-#: ../contracorriente/man1/zshroadmap.1:9
+#: contracorriente/man1/zshroadmap.1:9
 msgid ""
 "zshroadmap - informal introduction to the zsh manual The Zsh Manual, like "
 "the shell itself, is large and often complicated\\&.  This section of the "
@@ -52,21 +115,21 @@ msgid ""
 msgstr ""
 
 #. type: SH
-#: ../contracorriente/man1/zshroadmap.1:10
+#: contracorriente/man1/zshroadmap.1:10
 #, no-wrap
 msgid "WHEN THE SHELL STARTS"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshroadmap.1:15
+#: contracorriente/man1/zshroadmap.1:15
 msgid ""
 "When it starts, the shell reads commands from various files\\&.  These can "
-"be created or edited to customize the shell\\&.  See the section "
-"Startup/Shutdown Files in I<zsh>(1)\\&."
+"be created or edited to customize the shell\\&.  See the section Startup/"
+"Shutdown Files in I<zsh>(1)\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshroadmap.1:23
+#: contracorriente/man1/zshroadmap.1:23
 msgid ""
 "If no personal initialization files exist for the current user, a function "
 "is run to help you change some of the most common settings\\&.  It won\\&'t "
@@ -77,20 +140,20 @@ msgid ""
 msgstr ""
 
 #. type: SH
-#: ../contracorriente/man1/zshroadmap.1:24
+#: contracorriente/man1/zshroadmap.1:24
 #, no-wrap
 msgid "INTERACTIVE USE"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshroadmap.1:28
+#: contracorriente/man1/zshroadmap.1:28
 msgid ""
 "Interaction with the shell uses the builtin Zsh Line Editor, ZLE\\&.  This "
 "is described in detail in I<zshzle>(1)\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshroadmap.1:33
+#: contracorriente/man1/zshroadmap.1:33
 msgid ""
 "The first decision a user must make is whether to use the Emacs or Vi "
 "editing mode as the keys for editing are substantially different\\&.  Emacs "
@@ -99,7 +162,7 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshroadmap.1:43
+#: contracorriente/man1/zshroadmap.1:43
 msgid ""
 "A history mechanism for retrieving previously typed lines (most simply with "
 "the Up or Down arrow keys) is available; note that, unlike other shells, zsh "
@@ -108,37 +171,31 @@ msgid ""
 "small (30 lines)\\&.  See the description of the shell variables (referred "
 "to in the documentation as parameters) B<HISTFILE>, B<HISTSIZE> and "
 "B<SAVEHIST> in I<zshparam>(1)\\&.  Note that it\\&'s currently only possible "
-"to read and write files saving history when the shell is interactive, "
-"i\\&.e\\&. it does not work from scripts\\&."
+"to read and write files saving history when the shell is interactive, i\\&.e"
+"\\&. it does not work from scripts\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshroadmap.1:60
+#: contracorriente/man1/zshroadmap.1:60
 msgid ""
 "The shell now supports the UTF-8 character set (and also others if supported "
 "by the operating system)\\&.  This is (mostly) handled transparently by the "
 "shell, but the degree of support in terminal emulators is variable\\&.  "
-"There is some discussion of this in the shell FAQ, "
-"B<http://www\\&.zsh\\&.org/FAQ/>\\&.  Note in particular that for combining "
-"characters to be handled the option B<COMBINING_CHARS> needs to be set\\&.  "
-"Because the shell is now more sensitive to the definition of the character "
-"set, note that if you are upgrading from an older version of the shell you "
-"should ensure that the appropriate variable, either B<LANG> (to affect all "
-"aspects of the shell\\&'s operation) or B<LC_CTYPE> (to affect only the "
-"handling of character sets) is set to an appropriate value\\&.  This is true "
-"even if you are using a single-byte character set including extensions of "
-"ASCII such as B<ISO-8859-1> or B<ISO-8859-15>\\&.  See the description of "
-"B<LC_CTYPE> in I<zshparam>(1)\\&."
-msgstr ""
-
-#. type: SS
-#: ../contracorriente/man1/zshroadmap.1:61
-#, no-wrap
-msgid "Completion"
+"There is some discussion of this in the shell FAQ, B<http://www\\&.zsh\\&."
+"org/FAQ/>\\&.  Note in particular that for combining characters to be "
+"handled the option B<COMBINING_CHARS> needs to be set\\&.  Because the shell "
+"is now more sensitive to the definition of the character set, note that if "
+"you are upgrading from an older version of the shell you should ensure that "
+"the appropriate variable, either B<LANG> (to affect all aspects of the shell"
+"\\&'s operation) or B<LC_CTYPE> (to affect only the handling of character "
+"sets) is set to an appropriate value\\&.  This is true even if you are using "
+"a single-byte character set including extensions of ASCII such as "
+"B<ISO-8859-1> or B<ISO-8859-15>\\&.  See the description of B<LC_CTYPE> in "
+"I<zshparam>(1)\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshroadmap.1:71
+#: contracorriente/man1/zshroadmap.1:71
 msgid ""
 "Completion is a feature present in many shells\\&. It allows the user to "
 "type only a part (usually the prefix) of a word and have the shell fill in "
@@ -151,7 +208,7 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshroadmap.1:80
+#: contracorriente/man1/zshroadmap.1:80
 msgid ""
 "Zsh has two completion systems, an old, so called B<compctl> completion "
 "(named after the builtin command that serves as its complete and only user "
@@ -163,98 +220,81 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshroadmap.1:84
+#: contracorriente/man1/zshroadmap.1:84
 msgid ""
 "The completion system must be enabled explicitly when the shell starts\\&.  "
 "For more information see I<zshcompsys>(1)\\&."
 msgstr ""
 
 #. type: SS
-#: ../contracorriente/man1/zshroadmap.1:85
+#: contracorriente/man1/zshroadmap.1:85
 #, no-wrap
 msgid "Extending the line editor"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshroadmap.1:90
+#: contracorriente/man1/zshroadmap.1:90
 msgid ""
 "Apart from completion, the line editor is highly extensible by means of "
 "shell functions\\&.  Some useful functions are provided with the shell; they "
 "provide facilities such as:"
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshroadmap.1:92
-#, no-wrap
-msgid "B<insert-composed-char>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshroadmap.1:96
+#: contracorriente/man1/zshroadmap.1:96
 msgid "composing characters not found on the keyboard"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshroadmap.1:96
+#: contracorriente/man1/zshroadmap.1:96
 #, no-wrap
 msgid "B<match-words-by-style>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshroadmap.1:100
+#: contracorriente/man1/zshroadmap.1:100
 msgid ""
 "configuring what the line editor considers a word when moving or deleting by "
 "word"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshroadmap.1:100
+#: contracorriente/man1/zshroadmap.1:100
 #, no-wrap
 msgid "B<history-beginning-search-backward-end>, etc\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshroadmap.1:103
+#: contracorriente/man1/zshroadmap.1:103
 msgid "alternative ways of searching the shell history"
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshroadmap.1:103
-#, no-wrap
-msgid "B<replace-string>, B<replace-pattern>"
+#. type: Plain text
+#: contracorriente/man1/zshroadmap.1:106
+msgid ""
+"functions for replacing strings or patterns globally in the command line"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshroadmap.1:106
-msgid "functions for replacing strings or patterns globally in the command line"
-msgstr ""
-
-#. type: TP
-#: ../contracorriente/man1/zshroadmap.1:106
-#, no-wrap
-msgid "B<edit-command-line>"
-msgstr ""
-
-#. type: Plain text
-#: ../contracorriente/man1/zshroadmap.1:109
+#: contracorriente/man1/zshroadmap.1:109
 msgid "edit the command line with an external editor\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshroadmap.1:111
+#: contracorriente/man1/zshroadmap.1:111
 msgid ""
 "See the section `ZLE Functions\\&' in I<zshcontrib>(1) for descriptions of "
 "these\\&."
 msgstr ""
 
 #. type: SH
-#: ../contracorriente/man1/zshroadmap.1:112
+#: contracorriente/man1/zshroadmap.1:112
 #, no-wrap
 msgid "OPTIONS"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshroadmap.1:118
+#: contracorriente/man1/zshroadmap.1:118
 msgid ""
 "The shell has a large number of options for changing its behaviour\\&.  "
 "These cover all aspects of the shell; browsing the full documentation is the "
@@ -263,13 +303,13 @@ msgid ""
 msgstr ""
 
 #. type: SH
-#: ../contracorriente/man1/zshroadmap.1:119
+#: contracorriente/man1/zshroadmap.1:119
 #, no-wrap
 msgid "PATTERN MATCHING"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshroadmap.1:125
+#: contracorriente/man1/zshroadmap.1:125
 msgid ""
 "The shell has a rich set of patterns which are available for file matching "
 "(described in the documentation as `filename generation\\&' and also known "
@@ -279,68 +319,56 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshroadmap.1:128
+#: contracorriente/man1/zshroadmap.1:128
 msgid ""
 "Of particular interest are the following patterns that are not commonly "
 "supported by other systems of pattern matching:"
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshroadmap.1:130
-#, no-wrap
-msgid "B<**>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshroadmap.1:134
+#: contracorriente/man1/zshroadmap.1:134
 msgid "for matching over multiple directories"
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshroadmap.1:134
-#, no-wrap
-msgid "B<|>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshroadmap.1:137
+#: contracorriente/man1/zshroadmap.1:137
 msgid "for matching either of two alternatives"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshroadmap.1:137
+#: contracorriente/man1/zshroadmap.1:137
 #, no-wrap
 msgid "B<~>, B<^>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshroadmap.1:141
+#: contracorriente/man1/zshroadmap.1:141
 msgid ""
 "the ability to exclude patterns from matching when the B<EXTENDED_GLOB> "
 "option is set"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshroadmap.1:141
+#: contracorriente/man1/zshroadmap.1:141
 #, no-wrap
 msgid "B<(>I<\\&.\\&.\\&.>B<)>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshroadmap.1:146
+#: contracorriente/man1/zshroadmap.1:146
 msgid ""
 "glob qualifiers, included in parentheses at the end of the pattern, which "
 "select files by type (such as directories) or attribute (such as size)\\&."
 msgstr ""
 
 #. type: SH
-#: ../contracorriente/man1/zshroadmap.1:147
+#: contracorriente/man1/zshroadmap.1:147
 #, no-wrap
 msgid "GENERAL COMMENTS ON SYNTAX"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshroadmap.1:154
+#: contracorriente/man1/zshroadmap.1:154
 msgid ""
 "Although the syntax of zsh is in ways similar to the Korn shell, and "
 "therefore more remotely to the original UNIX shell, the Bourne shell, its "
@@ -350,25 +378,25 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshroadmap.1:162
+#: contracorriente/man1/zshroadmap.1:162
 msgid ""
 "One commonly encountered difference is that variables substituted onto the "
 "command line are not split into words\\&.  See the description of the shell "
 "option B<SH_WORD_SPLIT> in the section `Parameter Expansion\\&' in "
-"I<zshexpn>(1)\\&.  In zsh, you can either explicitly request the splitting "
-"(e\\&.g\\&. B<${=foo}>)  or use an array when you want a variable to expand "
-"to more than one word\\&.  See the section `Array Parameters\\&' in "
+"I<zshexpn>(1)\\&.  In zsh, you can either explicitly request the splitting (e"
+"\\&.g\\&. B<${=foo}>)  or use an array when you want a variable to expand to "
+"more than one word\\&.  See the section `Array Parameters\\&' in "
 "I<zshparam>(1)\\&."
 msgstr ""
 
 #. type: SH
-#: ../contracorriente/man1/zshroadmap.1:163
+#: contracorriente/man1/zshroadmap.1:163
 #, no-wrap
 msgid "PROGRAMMING"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshroadmap.1:171
+#: contracorriente/man1/zshroadmap.1:171
 msgid ""
 "The most convenient way of adding enhancements to the shell is typically by "
 "writing a shell function and arranging for it to be autoloaded\\&.  "
@@ -379,7 +407,7 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshroadmap.1:175
+#: contracorriente/man1/zshroadmap.1:175
 msgid ""
 "A few general functions, other than those for the line editor described "
 "above, are provided with the shell and are described in "
@@ -387,60 +415,60 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshroadmap.1:177
+#: contracorriente/man1/zshroadmap.1:177
 #, no-wrap
 msgid "B<promptinit>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshroadmap.1:182
+#: contracorriente/man1/zshroadmap.1:182
 msgid ""
 "a prompt theme system for changing prompts easily, see the section `Prompt "
 "Themes\\&'"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshroadmap.1:183
+#: contracorriente/man1/zshroadmap.1:183
 #, no-wrap
 msgid "B<zsh-mime-setup>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshroadmap.1:187
+#: contracorriente/man1/zshroadmap.1:187
 msgid ""
 "a MIME-handling system which dispatches commands according to the suffix of "
 "a file as done by graphical file managers"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshroadmap.1:187
+#: contracorriente/man1/zshroadmap.1:187
 #, no-wrap
 msgid "B<zcalc>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshroadmap.1:190
+#: contracorriente/man1/zshroadmap.1:190
 msgid "a calculator"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshroadmap.1:190
+#: contracorriente/man1/zshroadmap.1:190
 #, no-wrap
 msgid "B<zargs>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshroadmap.1:193
+#: contracorriente/man1/zshroadmap.1:193
 msgid "a version of B<xargs> that makes the B<find> command redundant"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshroadmap.1:193
+#: contracorriente/man1/zshroadmap.1:193
 #, no-wrap
 msgid "B<zmv>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshroadmap.1:195
+#: contracorriente/man1/zshroadmap.1:195
 msgid "a command for renaming files by means of shell patterns\\&."
 msgstr ""

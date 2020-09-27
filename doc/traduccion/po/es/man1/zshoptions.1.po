@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: vtamara@pasosdeJesus.org\n"
-"POT-Creation-Date: 2020-09-27 09:17-0500\n"
+"POT-Creation-Date: 2020-09-27 10:31-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,43 +17,509 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #. type: TH
-#: ../contracorriente/man1/zshoptions.1:1
+#: contracorriente/man1/zsh.1:1 contracorriente/man1/zshall.1:1
+#: contracorriente/man1/zshall.1:479 contracorriente/man1/zshbuiltins.1:1
+#: contracorriente/man1/zshcalsys.1:1 contracorriente/man1/zshcompctl.1:1
+#: contracorriente/man1/zshcompsys.1:1 contracorriente/man1/zshcompwid.1:1
+#: contracorriente/man1/zshcontrib.1:1 contracorriente/man1/zshexpn.1:1
+#: contracorriente/man1/zshmisc.1:1 contracorriente/man1/zshmodules.1:1
+#: contracorriente/man1/zshoptions.1:1 contracorriente/man1/zshparam.1:1
+#: contracorriente/man1/zshroadmap.1:1 contracorriente/man1/zshtcpsys.1:1
+#: contracorriente/man1/zshzftpsys.1:1 contracorriente/man1/zshzle.1:1
+#, no-wrap
+msgid "February 14, 2020"
+msgstr "Febrero 14 de 2020"
+
+#. type: TH
+#: contracorriente/man1/zsh.1:1 contracorriente/man1/zshall.1:1
+#: contracorriente/man1/zshall.1:479 contracorriente/man1/zshbuiltins.1:1
+#: contracorriente/man1/zshcalsys.1:1 contracorriente/man1/zshcompctl.1:1
+#: contracorriente/man1/zshcompsys.1:1 contracorriente/man1/zshcompwid.1:1
+#: contracorriente/man1/zshcontrib.1:1 contracorriente/man1/zshexpn.1:1
+#: contracorriente/man1/zshmisc.1:1 contracorriente/man1/zshmodules.1:1
+#: contracorriente/man1/zshoptions.1:1 contracorriente/man1/zshparam.1:1
+#: contracorriente/man1/zshroadmap.1:1 contracorriente/man1/zshtcpsys.1:1
+#: contracorriente/man1/zshzftpsys.1:1 contracorriente/man1/zshzle.1:1
+#, no-wrap
+msgid "zsh 5\\&.8"
+msgstr "zsh 5\\&.8"
+
+#. type: SH
+#: contracorriente/man1/zsh.1:2 contracorriente/man1/zshall.1:2
+#: contracorriente/man1/zshbuiltins.1:2 contracorriente/man1/zshcalsys.1:2
+#: contracorriente/man1/zshcompctl.1:2 contracorriente/man1/zshcompsys.1:2
+#: contracorriente/man1/zshcompwid.1:2 contracorriente/man1/zshcontrib.1:2
+#: contracorriente/man1/zshexpn.1:2 contracorriente/man1/zshmisc.1:2
+#: contracorriente/man1/zshmodules.1:2 contracorriente/man1/zshoptions.1:2
+#: contracorriente/man1/zshparam.1:2 contracorriente/man1/zshroadmap.1:2
+#: contracorriente/man1/zshtcpsys.1:2 contracorriente/man1/zshzftpsys.1:2
+#: contracorriente/man1/zshzle.1:2
+#, no-wrap
+msgid "NAME"
+msgstr "NOMBRE"
+
+#. type: TP
+#: contracorriente/man1/zsh.1:151 contracorriente/man1/zshall.1:150
+#: contracorriente/man1/zshbuiltins.1:366
+#: contracorriente/man1/zshbuiltins.1:1375
+#: contracorriente/man1/zshbuiltins.1:1637
+#: contracorriente/man1/zshbuiltins.1:2445
+#: contracorriente/man1/zshbuiltins.1:2641
+#: contracorriente/man1/zshcompctl.1:181 contracorriente/man1/zshcompsys.1:4684
+#: contracorriente/man1/zshcontrib.1:2263
+#: contracorriente/man1/zshcontrib.1:2652
+#: contracorriente/man1/zshoptions.1:1991
+#, no-wrap
+msgid "B<-c>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zsh.1:158 contracorriente/man1/zshall.1:157
+#: contracorriente/man1/zshbuiltins.1:852
+#: contracorriente/man1/zshbuiltins.1:1387
+#: contracorriente/man1/zshbuiltins.1:2454
+#: contracorriente/man1/zshcontrib.1:5347
+#: contracorriente/man1/zshoptions.1:1883
+#: contracorriente/man1/zshoptions.1:1949
+#, no-wrap
+msgid "B<-i>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zsh.1:162 contracorriente/man1/zshall.1:161
+#: contracorriente/man1/zshbuiltins.1:1435
+#: contracorriente/man1/zshbuiltins.1:1595
+#: contracorriente/man1/zshbuiltins.1:2480
+#: contracorriente/man1/zshbuiltins.1:2673 contracorriente/man1/zshcalsys.1:439
+#: contracorriente/man1/zshcalsys.1:960 contracorriente/man1/zshcompsys.1:3724
+#: contracorriente/man1/zshcontrib.1:2277
+#: contracorriente/man1/zshcontrib.1:2649
+#: contracorriente/man1/zshcontrib.1:5363
+#: contracorriente/man1/zshmodules.1:2561
+#: contracorriente/man1/zshoptions.1:1904
+#: contracorriente/man1/zshoptions.1:1967
+#: contracorriente/man1/zshoptions.1:2000
+#, no-wrap
+msgid "B<-s>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:370
+#: contracorriente/man1/zshbuiltins.1:1391
+#: contracorriente/man1/zshbuiltins.1:1640
+#: contracorriente/man1/zshbuiltins.1:2369
+#: contracorriente/man1/zshbuiltins.1:2460
+#: contracorriente/man1/zshcompwid.1:541 contracorriente/man1/zshcontrib.1:479
+#: contracorriente/man1/zshcontrib.1:2266
+#: contracorriente/man1/zshmodules.1:2528
+#: contracorriente/man1/zshoptions.1:1889
+#: contracorriente/man1/zshoptions.1:1952 contracorriente/man1/zshzle.1:215
+#, no-wrap
+msgid "B<-l>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:373
+#: contracorriente/man1/zshbuiltins.1:1416
+#: contracorriente/man1/zshbuiltins.1:1659
+#: contracorriente/man1/zshbuiltins.1:2469
+#: contracorriente/man1/zshbuiltins.1:2659
+#: contracorriente/man1/zshcompctl.1:237 contracorriente/man1/zshcompsys.1:4531
+#: contracorriente/man1/zshcontrib.1:2269
+#: contracorriente/man1/zshoptions.1:1898
+#: contracorriente/man1/zshoptions.1:1961
+#, no-wrap
+msgid "B<-p>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:376
+#: contracorriente/man1/zshbuiltins.1:2492
+#: contracorriente/man1/zshbuiltins.1:2637 contracorriente/man1/zshcalsys.1:524
+#: contracorriente/man1/zshcompctl.1:222 contracorriente/man1/zshcontrib.1:5366
+#: contracorriente/man1/zshoptions.1:1913
+#: contracorriente/man1/zshoptions.1:1976 contracorriente/man1/zshzle.1:197
+#, no-wrap
+msgid "B<-v>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:806 contracorriente/man1/zshcompctl.1:231
+#: contracorriente/man1/zshoptions.1:1814 contracorriente/man1/zshzle.1:714
+#, no-wrap
+msgid "B<-I>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:809 contracorriente/man1/zshcompctl.1:108
+#: contracorriente/man1/zshcontrib.1:5379
+#: contracorriente/man1/zshmodules.1:2533
+#: contracorriente/man1/zshoptions.1:1823
+#, no-wrap
+msgid "B<-L>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:814
+#: contracorriente/man1/zshbuiltins.1:1397
+#: contracorriente/man1/zshbuiltins.1:2168
+#: contracorriente/man1/zshbuiltins.1:2463
+#: contracorriente/man1/zshbuiltins.1:2668 contracorriente/man1/zshcalsys.1:942
+#: contracorriente/man1/zshcompctl.1:191 contracorriente/man1/zshoptions.1:1892
+#: contracorriente/man1/zshoptions.1:1955
+#: contracorriente/man1/zshoptions.1:1994 contracorriente/man1/zshzle.1:268
+#, no-wrap
+msgid "B<-m>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:844
+#: contracorriente/man1/zshbuiltins.1:2307
+#: contracorriente/man1/zshbuiltins.1:2451
+#: contracorriente/man1/zshbuiltins.1:2654
+#: contracorriente/man1/zshcompctl.1:174 contracorriente/man1/zshcompsys.1:4961
+#: contracorriente/man1/zshcompwid.1:659 contracorriente/man1/zshcontrib.1:5342
+#: contracorriente/man1/zshoptions.1:1874
+#: contracorriente/man1/zshoptions.1:1946
+#, no-wrap
+msgid "B<-f>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:848
+#: contracorriente/man1/zshbuiltins.1:1628
+#: contracorriente/man1/zshcompctl.1:243 contracorriente/man1/zshmodules.1:4238
+#: contracorriente/man1/zshoptions.1:1802
+#, no-wrap
+msgid "B<-E>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:864
+#: contracorriente/man1/zshbuiltins.1:1383 contracorriente/man1/zshcalsys.1:427
+#: contracorriente/man1/zshcompctl.1:79 contracorriente/man1/zshmodules.1:4231
+#: contracorriente/man1/zshoptions.1:1799
+#, no-wrap
+msgid "B<-D>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:1365
+#: contracorriente/man1/zshbuiltins.1:2300
+#: contracorriente/man1/zshbuiltins.1:2439
+#: contracorriente/man1/zshbuiltins.1:2663 contracorriente/man1/zshcalsys.1:404
+#: contracorriente/man1/zshcalsys.1:930 contracorriente/man1/zshcompctl.1:197
+#: contracorriente/man1/zshcompwid.1:516 contracorriente/man1/zshcontrib.1:3185
+#: contracorriente/man1/zshoptions.1:1868
+#: contracorriente/man1/zshoptions.1:1937 contracorriente/man1/zshzle.1:202
+#, no-wrap
+msgid "B<-a>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:1370
+#: contracorriente/man1/zshbuiltins.1:2442 contracorriente/man1/zshcalsys.1:409
+#: contracorriente/man1/zshcompctl.1:249 contracorriente/man1/zshoptions.1:1940
+#: contracorriente/man1/zshoptions.1:1988
+#, no-wrap
+msgid "B<-b>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:1402
+#: contracorriente/man1/zshbuiltins.1:1649
+#: contracorriente/man1/zshbuiltins.1:2466
+#: contracorriente/man1/zshcompctl.1:246 contracorriente/man1/zshcompsys.1:3715
+#: contracorriente/man1/zshcompwid.1:703 contracorriente/man1/zshcontrib.1:5352
+#: contracorriente/man1/zshmodules.1:2541
+#: contracorriente/man1/zshoptions.1:1895
+#: contracorriente/man1/zshoptions.1:1958
+#, no-wrap
+msgid "B<-n>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:1405
+#: contracorriente/man1/zshcompctl.1:225 contracorriente/man1/zshcontrib.1:3212
+#: contracorriente/man1/zshmodules.1:2546
+#: contracorriente/man1/zshoptions.1:1829
+#, no-wrap
+msgid "B<-N>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:1410
+#: contracorriente/man1/zshcompctl.1:218 contracorriente/man1/zshcontrib.1:3200
+#: contracorriente/man1/zshmodules.1:2549
+#: contracorriente/man1/zshoptions.1:1997
+#, no-wrap
+msgid "B<-o>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:1413
+#: contracorriente/man1/zshcompctl.1:234 contracorriente/man1/zshoptions.1:1832
+#, no-wrap
+msgid "B<-O>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:1419
+#: contracorriente/man1/zshcompsys.1:4900
+#: contracorriente/man1/zshoptions.1:1835
+#, no-wrap
+msgid "B<-P>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:1426
+#: contracorriente/man1/zshbuiltins.1:1589
+#: contracorriente/man1/zshbuiltins.1:2373
+#: contracorriente/man1/zshbuiltins.1:2475 contracorriente/man1/zshcalsys.1:434
+#: contracorriente/man1/zshcalsys.1:946 contracorriente/man1/zshcompctl.1:256
+#: contracorriente/man1/zshcontrib.1:487 contracorriente/man1/zshcontrib.1:2658
+#: contracorriente/man1/zshmodules.1:1122
+#: contracorriente/man1/zshmodules.1:2556
+#: contracorriente/man1/zshoptions.1:1901
+#: contracorriente/man1/zshoptions.1:1964
+#, no-wrap
+msgid "B<-r>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:1429
+#: contracorriente/man1/zshbuiltins.1:2791
+#: contracorriente/man1/zshcompctl.1:200 contracorriente/man1/zshcompsys.1:3760
+#: contracorriente/man1/zshoptions.1:1841
+#, no-wrap
+msgid "B<-R>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:1440
+#: contracorriente/man1/zshbuiltins.1:2676
+#: contracorriente/man1/zshcompsys.1:3764
+#: contracorriente/man1/zshcompsys.1:4658
+#: contracorriente/man1/zshoptions.1:1844
+#, no-wrap
+msgid "B<-S>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:1625
+#: contracorriente/man1/zshcompctl.1:211 contracorriente/man1/zshcompwid.1:667
+#: contracorriente/man1/zshcontrib.1:491 contracorriente/man1/zshoptions.1:1871
+#: contracorriente/man1/zshoptions.1:1943 contracorriente/man1/zshzle.1:191
+#, no-wrap
+msgid "B<-e>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:1633
+#: contracorriente/man1/zshbuiltins.1:2244 contracorriente/man1/zshcalsys.1:935
+#: contracorriente/man1/zshcompctl.1:228 contracorriente/man1/zshoptions.1:1985
+#, no-wrap
+msgid "B<-A>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:2159
+#: contracorriente/man1/zshmodules.1:2524
+#: contracorriente/man1/zshoptions.1:1877
+#, no-wrap
+msgid "B<-g>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:2279
+#: contracorriente/man1/zshbuiltins.1:2787
+#: contracorriente/man1/zshcompctl.1:448 contracorriente/man1/zshcompwid.1:707
+#: contracorriente/man1/zshoptions.1:1850
+#, no-wrap
+msgid "B<-U>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:2326
+#: contracorriente/man1/zshcontrib.1:2273
+#: contracorriente/man1/zshoptions.1:1880
+#, no-wrap
+msgid "B<-h>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:2342
+#: contracorriente/man1/zshoptions.1:1811
+#, no-wrap
+msgid "B<-H>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:2395
+#: contracorriente/man1/zshbuiltins.1:2486 contracorriente/man1/zshcalsys.1:965
+#: contracorriente/man1/zshmodules.1:2566
+#: contracorriente/man1/zshoptions.1:1907
+#: contracorriente/man1/zshoptions.1:1970
+#, no-wrap
+msgid "B<-t>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:2399
+#: contracorriente/man1/zshbuiltins.1:2489
+#: contracorriente/man1/zshcompctl.1:262 contracorriente/man1/zshoptions.1:1910
+#: contracorriente/man1/zshoptions.1:1973
+#, no-wrap
+msgid "B<-u>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:2404
+#: contracorriente/man1/zshbuiltins.1:2499
+#: contracorriente/man1/zshoptions.1:1919
+#: contracorriente/man1/zshoptions.1:1979
+#, no-wrap
+msgid "B<-x>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:2457
+#: contracorriente/man1/zshbuiltins.1:2810
+#: contracorriente/man1/zshcompwid.1:522 contracorriente/man1/zshoptions.1:1886
+#, no-wrap
+msgid "B<-k>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:2483 contracorriente/man1/zshcompctl.1:84
+#: contracorriente/man1/zshmodules.1:2571
+#: contracorriente/man1/zshoptions.1:1847
+#: contracorriente/man1/zshoptions.1:1931 contracorriente/man1/zshzle.1:752
+#, no-wrap
+msgid "B<-T>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:2496
+#: contracorriente/man1/zshbuiltins.1:2645
+#: contracorriente/man1/zshcompctl.1:194 contracorriente/man1/zshcompsys.1:3739
+#: contracorriente/man1/zshcontrib.1:2646
+#: contracorriente/man1/zshcontrib.1:5369
+#: contracorriente/man1/zshoptions.1:1916
+#, no-wrap
+msgid "B<-w>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:2803
+#: contracorriente/man1/zshcontrib.1:3215
+#: contracorriente/man1/zshcontrib.1:5381
+#: contracorriente/man1/zshmodules.1:4268
+#: contracorriente/man1/zshoptions.1:1826
+#, no-wrap
+msgid "B<-M>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshcompctl.1:73 contracorriente/man1/zshcompsys.1:3756
+#: contracorriente/man1/zshcompwid.1:734 contracorriente/man1/zshcontrib.1:2655
+#: contracorriente/man1/zshcontrib.1:5377
+#: contracorriente/man1/zshoptions.1:1796
+#: contracorriente/man1/zshoptions.1:1928
+#, no-wrap
+msgid "B<-C>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshcompctl.1:185 contracorriente/man1/zshmodules.1:4247
+#: contracorriente/man1/zshoptions.1:1805
+#, no-wrap
+msgid "B<-F>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshcompctl.1:188 contracorriente/man1/zshoptions.1:1793
+#, no-wrap
+msgid "B<-B>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshcompctl.1:203 contracorriente/man1/zshoptions.1:1808
+#, no-wrap
+msgid "B<-G>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshcompctl.1:240 contracorriente/man1/zshoptions.1:1865
+#, no-wrap
+msgid "B<-Z>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshcompctl.1:355 contracorriente/man1/zshcompwid.1:691
+#: contracorriente/man1/zshcontrib.1:5359
+#: contracorriente/man1/zshoptions.1:1838
+#, no-wrap
+msgid "B<-Q>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshcompctl.1:563 contracorriente/man1/zshcompwid.1:583
+#: contracorriente/man1/zshcontrib.1:3209
+#: contracorriente/man1/zshoptions.1:1766
+#, no-wrap
+msgid "B<-1>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshcompctl.1:568 contracorriente/man1/zshcompwid.1:589
+#: contracorriente/man1/zshoptions.1:1769
+#, no-wrap
+msgid "B<-2>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshcompsys.1:3749
+#: contracorriente/man1/zshcontrib.1:5373
+#: contracorriente/man1/zshoptions.1:1856
+#, no-wrap
+msgid "B<-W>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshcontrib.1:3218
+#: contracorriente/man1/zshoptions.1:1772
+#, no-wrap
+msgid "B<-3>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshmodules.1:4260
+#: contracorriente/man1/zshoptions.1:1820
+#, no-wrap
+msgid "B<-K>"
+msgstr ""
+
+#. type: TH
+#: contracorriente/man1/zshoptions.1:1
 #, no-wrap
 msgid "ZSHOPTIONS"
 msgstr ""
 
-#. type: TH
-#: ../contracorriente/man1/zshoptions.1:1
-#, no-wrap
-msgid "February 14, 2020"
-msgstr ""
-
-#. type: TH
-#: ../contracorriente/man1/zshoptions.1:1
-#, no-wrap
-msgid "zsh 5\\&.8"
-msgstr ""
-
-#. type: SH
-#: ../contracorriente/man1/zshoptions.1:2
-#, no-wrap
-msgid "NAME"
-msgstr ""
-
 #.  Yodl file: Zsh/options.yo
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:5
+#: contracorriente/man1/zshoptions.1:5
 msgid "zshoptions - zsh options"
 msgstr ""
 
 #. type: SH
-#: ../contracorriente/man1/zshoptions.1:5
+#: contracorriente/man1/zshoptions.1:5
 #, no-wrap
 msgid "SPECIFYING OPTIONS"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:9
+#: contracorriente/man1/zshoptions.1:9
 msgid ""
 "Options are primarily referred to by name\\&.  These names are case "
 "insensitive and underscores are ignored\\&.  For example, `B<allexport>\\&' "
@@ -61,17 +527,17 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:15
+#: contracorriente/man1/zshoptions.1:15
 msgid ""
 "The sense of an option name may be inverted by preceding it with `B<no>\\&', "
 "so `B<setopt No_Beep>' is equivalent to `B<unsetopt beep>'\\&.  This "
 "inversion can only be done once, so `B<nonobeep>\\&' is I<not> a synonym for "
-"`B<beep>\\&'\\&.  Similarly, `B<tify>' is not a synonym for `B<nonotify>\\&' "
-"(the inversion of `B<notify>')\\&."
+"`B<beep>\\&'\\&.  Similarly, `B<tify>' is not a synonym for `B<nonotify>"
+"\\&' (the inversion of `B<notify>')\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:23
+#: contracorriente/man1/zshoptions.1:23
 msgid ""
 "Some options also have one or more single letter names\\&.  There are two "
 "sets of single letter options: one used by default, and another used to "
@@ -82,7 +548,7 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:30
+#: contracorriente/man1/zshoptions.1:30
 msgid ""
 "The sense of the single letter options may be inverted by using `B<+>\\&' "
 "instead of `B<->'\\&.  Some of the single letter option names refer to an "
@@ -92,7 +558,7 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:36
+#: contracorriente/man1/zshoptions.1:36
 msgid ""
 "In strings of single letter options supplied to the shell at startup, "
 "trailing whitespace will be ignored; for example the string `B<-f >\\&' will "
@@ -102,38 +568,37 @@ msgid ""
 msgstr ""
 
 #. type: SH
-#: ../contracorriente/man1/zshoptions.1:37
+#: contracorriente/man1/zshoptions.1:37
 #, no-wrap
 msgid "DESCRIPTION OF OPTIONS"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:45
+#: contracorriente/man1/zshoptions.1:45
 msgid ""
 "In the following list, options set by default in all emulations are marked "
 "E<lt>DE<gt>; those set by default only in csh, ksh, sh, or zsh emulations "
-"are marked E<lt>CE<gt>, E<lt>KE<gt>, E<lt>SE<gt>, E<lt>ZE<gt> as "
-"appropriate\\&.  When listing options (by `B<setopt>\\&', `B<unsetopt>\\&', "
-"`B<set -o>' or `B<set +o>'), those turned on by default appear in the list "
-"prefixed with `B<no>\\&'\\&.  Hence (unless B<KSH_OPTION_PRINT> is set), "
-"`B<setopt>\\&' shows all options whose settings are changed from the "
-"default\\&."
+"are marked E<lt>CE<gt>, E<lt>KE<gt>, E<lt>SE<gt>, E<lt>ZE<gt> as appropriate"
+"\\&.  When listing options (by `B<setopt>\\&', `B<unsetopt>\\&', `B<set -o>' "
+"or `B<set +o>'), those turned on by default appear in the list prefixed with "
+"`B<no>\\&'\\&.  Hence (unless B<KSH_OPTION_PRINT> is set), `B<setopt>\\&' "
+"shows all options whose settings are changed from the default\\&."
 msgstr ""
 
 #. type: SS
-#: ../contracorriente/man1/zshoptions.1:46
+#: contracorriente/man1/zshoptions.1:46
 #, no-wrap
 msgid "Changing Directories"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:48
+#: contracorriente/man1/zshoptions.1:48
 #, no-wrap
 msgid "B<AUTO_CD> (B<-J>)"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:58
+#: contracorriente/man1/zshoptions.1:58
 msgid ""
 "If a command is issued that can\\&'t be executed as a normal command, and "
 "the command is the name of a directory, perform the B<cd> command to that "
@@ -144,24 +609,24 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:58
+#: contracorriente/man1/zshoptions.1:58
 #, no-wrap
 msgid "B<AUTO_PUSHD> (B<-N>)"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:61
+#: contracorriente/man1/zshoptions.1:61
 msgid "Make B<cd> push the old directory onto the directory stack\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:61
+#: contracorriente/man1/zshoptions.1:61
 #, no-wrap
 msgid "B<CDABLE_VARS> (B<-T>)"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:67
+#: contracorriente/man1/zshoptions.1:67
 msgid ""
 "If the argument to a B<cd> command (or an implied B<cd> with the B<AUTO_CD> "
 "option set) is not a directory, and does not begin with a slash, try to "
@@ -170,13 +635,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:67
+#: contracorriente/man1/zshoptions.1:67
 #, no-wrap
 msgid "B<CD_SILENT>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:76
+#: contracorriente/man1/zshoptions.1:76
 msgid ""
 "Never print the working directory after a B<cd> (whether explicit or implied "
 "with the B<AUTO_CD> option set)\\&. B<cd> normally prints the working "
@@ -188,13 +653,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:76
+#: contracorriente/man1/zshoptions.1:76
 #, no-wrap
 msgid "B<CHASE_DOTS>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:84
+#: contracorriente/man1/zshoptions.1:84
 msgid ""
 "When changing to a directory containing a path segment `B<\\&.\\&.>\\&' "
 "which would otherwise be treated as canceling the previous segment in the "
@@ -205,7 +670,7 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:91
+#: contracorriente/man1/zshoptions.1:91
 msgid ""
 "For example, suppose B</foo/bar> is a link to the directory B</alt/rod>\\&.  "
 "Without this option set, `B<cd /foo/bar/\\&.\\&.>\\&' changes to B</foo>; "
@@ -215,13 +680,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:92
+#: contracorriente/man1/zshoptions.1:92
 #, no-wrap
 msgid "B<CHASE_LINKS> (B<-w>)"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:98
+#: contracorriente/man1/zshoptions.1:98
 msgid ""
 "Resolve symbolic links to their true values when changing directory\\&.  "
 "This also has the effect of B<CHASE_DOTS>, i\\&.e\\&. a `B<\\&.\\&.>\\&' "
@@ -230,13 +695,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:98
+#: contracorriente/man1/zshoptions.1:98
 #, no-wrap
 msgid "B<POSIX_CD> E<lt>KE<gt> E<lt>SE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:109
+#: contracorriente/man1/zshoptions.1:109
 msgid ""
 "Modifies the behaviour of B<cd>, B<chdir> and B<pushd> commands to make them "
 "more compatible with the POSIX standard\\&. The behaviour with the option "
@@ -249,7 +714,7 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:118
+#: contracorriente/man1/zshoptions.1:118
 msgid ""
 "Also, if the option is set, the conditions under which the shell prints the "
 "new directory after changing to it are modified\\&.  It is no longer "
@@ -261,67 +726,68 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:119
+#: contracorriente/man1/zshoptions.1:119
 #, no-wrap
 msgid "B<PUSHD_IGNORE_DUPS>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:122
+#: contracorriente/man1/zshoptions.1:122
 msgid ""
-"Don\\&'t push multiple copies of the same directory onto the directory "
-"stack\\&."
+"Don\\&'t push multiple copies of the same directory onto the directory stack"
+"\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:122
+#: contracorriente/man1/zshoptions.1:122
 #, no-wrap
 msgid "B<PUSHD_MINUS>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:126
+#: contracorriente/man1/zshoptions.1:126
 msgid ""
 "Exchanges the meanings of `B<+>\\&' and `B<->' when used with a number to "
 "specify a directory in the stack\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:126
+#: contracorriente/man1/zshoptions.1:126
 #, no-wrap
 msgid "B<PUSHD_SILENT> (B<-E>)"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:129
+#: contracorriente/man1/zshoptions.1:129
 msgid "Do not print the directory stack after B<pushd> or B<popd>\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:129
+#: contracorriente/man1/zshoptions.1:129
 #, no-wrap
 msgid "B<PUSHD_TO_HOME> (B<-D>)"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:132
+#: contracorriente/man1/zshoptions.1:132
 msgid "Have B<pushd> with no arguments act like `B<pushd $HOME>\\&'\\&."
 msgstr ""
 
 #. type: SS
-#: ../contracorriente/man1/zshoptions.1:133
+#: contracorriente/man1/zshoptions.1:133 contracorriente/man1/zshroadmap.1:61
+#: contracorriente/man1/zshzftpsys.1:655 contracorriente/man1/zshzle.1:2123
 #, no-wrap
 msgid "Completion"
-msgstr ""
+msgstr "Completación"
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:135
+#: contracorriente/man1/zshoptions.1:135
 #, no-wrap
 msgid "B<ALWAYS_LAST_PROMPT> E<lt>DE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:141
+#: contracorriente/man1/zshoptions.1:141
 msgid ""
 "If unset, key functions that list completions try to return to the last "
 "prompt if given a numeric argument\\&. If set these functions try to return "
@@ -329,13 +795,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:141
+#: contracorriente/man1/zshoptions.1:141
 #, no-wrap
 msgid "B<ALWAYS_TO_END>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:147
+#: contracorriente/man1/zshoptions.1:147
 msgid ""
 "If a completion is performed with the cursor within a word, and a full "
 "completion is inserted, the cursor is moved to the end of the word\\&.  That "
@@ -344,24 +810,24 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:147
+#: contracorriente/man1/zshoptions.1:147
 #, no-wrap
 msgid "B<AUTO_LIST> (B<-9>) E<lt>DE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:150
+#: contracorriente/man1/zshoptions.1:150
 msgid "Automatically list choices on an ambiguous completion\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:150
+#: contracorriente/man1/zshoptions.1:150
 #, no-wrap
 msgid "B<AUTO_MENU> E<lt>DE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:155
+#: contracorriente/man1/zshoptions.1:155
 msgid ""
 "Automatically use menu completion after the second consecutive request for "
 "completion, for example by pressing the tab key repeatedly\\&. This option "
@@ -369,13 +835,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:155
+#: contracorriente/man1/zshoptions.1:155
 #, no-wrap
 msgid "B<AUTO_NAME_DIRS>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:163
+#: contracorriente/man1/zshoptions.1:163
 msgid ""
 "Any parameter that is set to the absolute name of a directory immediately "
 "becomes a name for that directory, that will be used by the `B<%~>\\&' and "
@@ -385,13 +851,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:163
+#: contracorriente/man1/zshoptions.1:163
 #, no-wrap
 msgid "B<AUTO_PARAM_KEYS> E<lt>DE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:173
+#: contracorriente/man1/zshoptions.1:173
 msgid ""
 "If a parameter name was completed and a following character (normally a "
 "space) automatically inserted, and the next character typed is one of those "
@@ -403,26 +869,26 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:173
+#: contracorriente/man1/zshoptions.1:173
 #, no-wrap
 msgid "B<AUTO_PARAM_SLASH> E<lt>DE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:177
+#: contracorriente/man1/zshoptions.1:177
 msgid ""
 "If a parameter is completed whose content is the name of a directory, then "
 "add a trailing slash instead of a space\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:177
+#: contracorriente/man1/zshoptions.1:177
 #, no-wrap
 msgid "B<AUTO_REMOVE_SLASH> E<lt>DE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:182
+#: contracorriente/man1/zshoptions.1:182
 msgid ""
 "When the last character resulting from a completion is a slash and the next "
 "character typed is a word delimiter, a slash, or a character that ends a "
@@ -430,31 +896,30 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:182
+#: contracorriente/man1/zshoptions.1:182
 #, no-wrap
 msgid "B<BASH_AUTO_LIST>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:191
+#: contracorriente/man1/zshoptions.1:191
 msgid ""
 "On an ambiguous completion, automatically list choices when the completion "
 "function is called twice in succession\\&.  This takes precedence over "
 "B<AUTO_LIST>\\&.  The setting of B<LIST_AMBIGUOUS> is respected\\&.  If "
-"B<AUTO_MENU> is set, the menu behaviour will then start with the third "
-"press\\&.  Note that this will not work with B<MENU_COMPLETE>, since "
-"repeated completion calls immediately cycle through the list in that "
-"case\\&."
+"B<AUTO_MENU> is set, the menu behaviour will then start with the third press"
+"\\&.  Note that this will not work with B<MENU_COMPLETE>, since repeated "
+"completion calls immediately cycle through the list in that case\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:191
+#: contracorriente/man1/zshoptions.1:191
 #, no-wrap
 msgid "B<COMPLETE_ALIASES>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:196
+#: contracorriente/man1/zshoptions.1:196
 msgid ""
 "Prevents aliases on the command line from being internally substituted "
 "before completion is attempted\\&.  The effect is to make the alias a "
@@ -462,27 +927,26 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:196
+#: contracorriente/man1/zshoptions.1:196
 #, no-wrap
 msgid "B<COMPLETE_IN_WORD>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:200
+#: contracorriente/man1/zshoptions.1:200
 msgid ""
-"If unset, the cursor is set to the end of the word if completion is "
-"started\\&. Otherwise it stays there and completion is done from both "
-"ends\\&."
+"If unset, the cursor is set to the end of the word if completion is started"
+"\\&. Otherwise it stays there and completion is done from both ends\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:200
+#: contracorriente/man1/zshoptions.1:200
 #, no-wrap
 msgid "B<GLOB_COMPLETE>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:209
+#: contracorriente/man1/zshoptions.1:209
 msgid ""
 "When the current word has a glob pattern, do not insert all the words "
 "resulting from the expansion but generate matches as for completion and "
@@ -494,7 +958,7 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:215
+#: contracorriente/man1/zshoptions.1:215
 msgid ""
 "Note that when the pattern matcher is used, matching control (for example, "
 "case-insensitive or anchored matching) cannot be used\\&.  This limitation "
@@ -503,13 +967,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:216
+#: contracorriente/man1/zshoptions.1:216
 #, no-wrap
 msgid "B<HASH_LIST_ALL> E<lt>DE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:221
+#: contracorriente/man1/zshoptions.1:221
 msgid ""
 "Whenever a command completion or spelling correction is attempted, make sure "
 "the entire command path is hashed first\\&.  This makes the first completion "
@@ -517,13 +981,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:221
+#: contracorriente/man1/zshoptions.1:221
 #, no-wrap
 msgid "B<LIST_AMBIGUOUS> E<lt>DE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:229
+#: contracorriente/man1/zshoptions.1:229
 msgid ""
 "This option works when B<AUTO_LIST> or B<BASH_AUTO_LIST> is also set\\&.  If "
 "there is an unambiguous prefix to insert on the command line, that is done "
@@ -534,13 +998,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:229
+#: contracorriente/man1/zshoptions.1:229
 #, no-wrap
 msgid "B<LIST_BEEP> E<lt>DE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:235
+#: contracorriente/man1/zshoptions.1:235
 msgid ""
 "Beep on an ambiguous completion\\&.  More accurately, this forces the "
 "completion widgets to return status 1 on an ambiguous completion, which "
@@ -549,103 +1013,102 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:235
+#: contracorriente/man1/zshoptions.1:235
 #, no-wrap
 msgid "B<LIST_PACKED>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:239
+#: contracorriente/man1/zshoptions.1:239
 msgid ""
 "Try to make the completion list smaller (occupying less lines) by printing "
 "the matches in columns with different widths\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:239
+#: contracorriente/man1/zshoptions.1:239
 #, no-wrap
 msgid "B<LIST_ROWS_FIRST>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:244
+#: contracorriente/man1/zshoptions.1:244
 msgid ""
 "Lay out the matches in completion lists sorted horizontally, that is, the "
 "second match is to the right of the first one, not under it as usual\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:244
+#: contracorriente/man1/zshoptions.1:244
 #, no-wrap
 msgid "B<LIST_TYPES> (B<-X>) E<lt>DE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:248
+#: contracorriente/man1/zshoptions.1:248
 msgid ""
 "When listing files that are possible completions, show the type of each file "
 "with a trailing identifying mark\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:248
+#: contracorriente/man1/zshoptions.1:248
 #, no-wrap
 msgid "B<MENU_COMPLETE> (B<-Y>)"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:256
+#: contracorriente/man1/zshoptions.1:256
 msgid ""
 "On an ambiguous completion, instead of listing possibilities or beeping, "
 "insert the first match immediately\\&.  Then when completion is requested "
 "again, remove the first match and insert the second match, etc\\&.  When "
-"there are no more matches, go back to the first one again\\&.  "
-"B<reverse-menu-complete> may be used to loop through the list in the other "
-"direction\\&. This option overrides B<AUTO_MENU>\\&."
+"there are no more matches, go back to the first one again\\&.  B<reverse-"
+"menu-complete> may be used to loop through the list in the other direction"
+"\\&. This option overrides B<AUTO_MENU>\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:256
+#: contracorriente/man1/zshoptions.1:256
 #, no-wrap
 msgid "B<REC_EXACT> (B<-S>)"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:261
+#: contracorriente/man1/zshoptions.1:261
 msgid ""
 "If the string on the command line exactly matches one of the possible "
-"completions, it is accepted, even if there is another completion "
-"(i\\&.e\\&. that string with something else added) that also matches\\&."
+"completions, it is accepted, even if there is another completion (i\\&.e\\&. "
+"that string with something else added) that also matches\\&."
 msgstr ""
 
 #. type: SS
-#: ../contracorriente/man1/zshoptions.1:262
+#: contracorriente/man1/zshoptions.1:262
 #, no-wrap
 msgid "Expansion and Globbing"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:264
+#: contracorriente/man1/zshoptions.1:264
 #, no-wrap
 msgid "B<BAD_PATTERN> (B<+2>) E<lt>CE<gt> E<lt>ZE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:269
+#: contracorriente/man1/zshoptions.1:269
 msgid ""
-"If a pattern for filename generation is badly formed, print an error "
-"message\\&.  (If this option is unset, the pattern will be left "
-"unchanged\\&.)"
+"If a pattern for filename generation is badly formed, print an error message"
+"\\&.  (If this option is unset, the pattern will be left unchanged\\&.)"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:269
+#: contracorriente/man1/zshoptions.1:269
 #, no-wrap
 msgid "B<BARE_GLOB_QUAL> E<lt>ZE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:274
+#: contracorriente/man1/zshoptions.1:274
 msgid ""
 "In a glob pattern, treat a trailing set of parentheses as a qualifier list, "
 "if it contains no `B<|>\\&', `B<(>' or (if special) `B<~>' characters\\&.  "
@@ -653,13 +1116,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:274
+#: contracorriente/man1/zshoptions.1:274
 #, no-wrap
 msgid "B<BRACE_CCL>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:279
+#: contracorriente/man1/zshoptions.1:279
 msgid ""
 "Expand expressions in braces which would not otherwise undergo brace "
 "expansion to a lexically ordered list of all the characters\\&.  See the "
@@ -667,13 +1130,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:279
+#: contracorriente/man1/zshoptions.1:279
 #, no-wrap
 msgid "B<CASE_GLOB> E<lt>DE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:287
+#: contracorriente/man1/zshoptions.1:287
 msgid ""
 "Make globbing (filename generation) sensitive to case\\&.  Note that other "
 "uses of patterns are always sensitive to case\\&.  If the option is unset, "
@@ -684,26 +1147,26 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:287
+#: contracorriente/man1/zshoptions.1:287
 #, no-wrap
 msgid "B<CASE_MATCH> E<lt>DE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:291
+#: contracorriente/man1/zshoptions.1:291
 msgid ""
 "Make regular expressions using the B<zsh/regex> module (including matches "
 "with B<=~>) sensitive to case\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:291
+#: contracorriente/man1/zshoptions.1:291
 #, no-wrap
 msgid "B<CSH_NULL_GLOB> E<lt>CE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:298
+#: contracorriente/man1/zshoptions.1:298
 msgid ""
 "If a pattern for filename generation has no matches, delete the pattern from "
 "the argument list; do not report an error unless all the patterns in a "
@@ -711,26 +1174,26 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:298
+#: contracorriente/man1/zshoptions.1:298
 #, no-wrap
 msgid "B<EQUALS> E<lt>ZE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:302
+#: contracorriente/man1/zshoptions.1:302
 msgid ""
-"Perform B<=> filename expansion\\&.  (See the section `Filename "
-"Expansion\\&'\\&.)"
+"Perform B<=> filename expansion\\&.  (See the section `Filename Expansion"
+"\\&'\\&.)"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:302
+#: contracorriente/man1/zshoptions.1:302
 #, no-wrap
 msgid "B<EXTENDED_GLOB>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:307
+#: contracorriente/man1/zshoptions.1:307
 msgid ""
 "Treat the `B<#>\\&', `B<~>' and `B<^>' characters as part of patterns for "
 "filename generation, etc\\&.  (An initial unquoted `B<~>\\&' always produces "
@@ -738,13 +1201,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:307
+#: contracorriente/man1/zshoptions.1:307
 #, no-wrap
 msgid "B<FORCE_FLOAT>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:313
+#: contracorriente/man1/zshoptions.1:313
 msgid ""
 "Constants in arithmetic evaluation will be treated as floating point even "
 "without the use of a decimal point; the values of integer variables will be "
@@ -753,26 +1216,26 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:313
+#: contracorriente/man1/zshoptions.1:313
 #, no-wrap
 msgid "B<GLOB> (B<+F>, ksh: B<+f>) E<lt>DE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:317
+#: contracorriente/man1/zshoptions.1:317
 msgid ""
 "Perform filename generation (globbing)\\&.  (See the section `Filename "
 "Generation\\&'\\&.)"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:317
+#: contracorriente/man1/zshoptions.1:317
 #, no-wrap
 msgid "B<GLOB_ASSIGN> E<lt>CE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:329
+#: contracorriente/man1/zshoptions.1:329
 msgid ""
 "If this option is set, filename generation (globbing) is performed on the "
 "right hand side of scalar parameter assignments of the form "
@@ -786,44 +1249,44 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:329
+#: contracorriente/man1/zshoptions.1:329
 #, no-wrap
 msgid "B<GLOB_DOTS> (B<-4>)"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:332
+#: contracorriente/man1/zshoptions.1:332
 msgid ""
-"Do not require a leading `B<\\&.>\\&' in a filename to be matched "
-"explicitly\\&."
+"Do not require a leading `B<\\&.>\\&' in a filename to be matched explicitly"
+"\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:332
+#: contracorriente/man1/zshoptions.1:332
 #, no-wrap
 msgid "B<GLOB_STAR_SHORT>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:341
+#: contracorriente/man1/zshoptions.1:341
 msgid ""
 "When this option is set and the default zsh-style globbing is in effect, the "
-"pattern `B<**/*>\\&' can be abbreviated to `B<**>' and the pattern "
-"`B<***/*>\\&' can be abbreviated to B<***>\\&.  Hence `B<**\\&.c>' finds a "
-"file ending in B<\\&.c> in any subdirectory, and `B<***\\&.c>\\&' does the "
-"same while also following symbolic links\\&.  A B</> immediately after the "
-"`B<**>\\&' or `B<***>' forces the pattern to be treated as the unabbreviated "
-"form\\&."
+"pattern `B<**/*>\\&' can be abbreviated to `B<**>' and the pattern `B<***/*>"
+"\\&' can be abbreviated to B<***>\\&.  Hence `B<**\\&.c>' finds a file "
+"ending in B<\\&.c> in any subdirectory, and `B<***\\&.c>\\&' does the same "
+"while also following symbolic links\\&.  A B</> immediately after the `B<**>"
+"\\&' or `B<***>' forces the pattern to be treated as the unabbreviated form"
+"\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:341
+#: contracorriente/man1/zshoptions.1:341
 #, no-wrap
 msgid "B<GLOB_SUBST> E<lt>CE<gt> E<lt>KE<gt> E<lt>SE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:348
+#: contracorriente/man1/zshoptions.1:348
 msgid ""
 "Treat any characters resulting from parameter expansion as being eligible "
 "for filename expansion and filename generation, and any characters resulting "
@@ -832,13 +1295,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:348
+#: contracorriente/man1/zshoptions.1:348
 #, no-wrap
 msgid "B<HIST_SUBST_PATTERN>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:355
+#: contracorriente/man1/zshoptions.1:355
 msgid ""
 "Substitutions using the B<:s> and B<:&> history modifiers are performed with "
 "pattern matching instead of string matching\\&.  This occurs wherever "
@@ -847,26 +1310,26 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:355
+#: contracorriente/man1/zshoptions.1:355
 #, no-wrap
 msgid "B<IGNORE_BRACES> (B<-I>) E<lt>SE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:359
+#: contracorriente/man1/zshoptions.1:359
 msgid ""
 "Do not perform brace expansion\\&.  For historical reasons this also "
 "includes the effect of the B<IGNORE_CLOSE_BRACES> option\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:359
+#: contracorriente/man1/zshoptions.1:359
 #, no-wrap
 msgid "B<IGNORE_CLOSE_BRACES>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:368
+#: contracorriente/man1/zshoptions.1:368
 msgid ""
 "When neither this option nor B<IGNORE_BRACES> is set, a sole close brace "
 "character `B<}>\\&' is syntactically significant at any point on a command "
@@ -878,39 +1341,39 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:372
+#: contracorriente/man1/zshoptions.1:372
 msgid ""
 "For example, with both options unset a function may be defined in the "
 "following fashion:"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:376
+#: contracorriente/man1/zshoptions.1:376
 #, no-wrap
 msgid "B<args() { echo $# }>\n"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:381
+#: contracorriente/man1/zshoptions.1:381
 msgid ""
 "while if either option is set, this does not work and something equivalent "
 "to the following is required:"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:385
+#: contracorriente/man1/zshoptions.1:385
 #, no-wrap
 msgid "B<args() { echo $#; }>\n"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:389
+#: contracorriente/man1/zshoptions.1:389
 #, no-wrap
 msgid "B<KSH_GLOB> E<lt>KE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:394
+#: contracorriente/man1/zshoptions.1:394
 msgid ""
 "In pattern matching, the interpretation of parentheses is affected by a "
 "preceding `B<@>\\&', `B<*>', `B<+>', `B<?>' or `B<!>'\\&.  See the section "
@@ -918,26 +1381,26 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:394
+#: contracorriente/man1/zshoptions.1:394
 #, no-wrap
 msgid "B<MAGIC_EQUAL_SUBST>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:404
+#: contracorriente/man1/zshoptions.1:404
 msgid ""
 "All unquoted arguments of the form `I<anything>B<=>I<expression>\\&' "
 "appearing after the command name have filename expansion (that is, where "
 "I<expression> has a leading `B<~>\\&' or `B<=>') performed on I<expression> "
 "as if it were a parameter assignment\\&.  The argument is not otherwise "
 "treated specially; it is passed to the command as a single argument, and not "
-"used as an actual parameter assignment\\&.  For example, in B<echo "
-"foo=~/bar:~/rod>, both occurrences of B<~> would be replaced\\&.  Note that "
-"this happens anyway with B<typeset> and similar statements\\&."
+"used as an actual parameter assignment\\&.  For example, in B<echo foo=~/bar:"
+"~/rod>, both occurrences of B<~> would be replaced\\&.  Note that this "
+"happens anyway with B<typeset> and similar statements\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:409
+#: contracorriente/man1/zshoptions.1:409
 msgid ""
 "This option respects the setting of the B<KSH_TYPESET> option\\&.  In other "
 "words, if both options are in effect, arguments looking like assignments "
@@ -945,26 +1408,26 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:410
+#: contracorriente/man1/zshoptions.1:410
 #, no-wrap
 msgid "B<MARK_DIRS> (B<-8>, ksh: B<-X>)"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:414
+#: contracorriente/man1/zshoptions.1:414
 msgid ""
 "Append a trailing `B</>\\&' to all directory names resulting from filename "
 "generation (globbing)\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:414
+#: contracorriente/man1/zshoptions.1:414
 #, no-wrap
 msgid "B<MULTIBYTE> E<lt>DE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:421
+#: contracorriente/man1/zshoptions.1:421
 msgid ""
 "Respect multibyte characters when found in strings\\&.  When this option is "
 "set, strings are examined using the system library to determine how many "
@@ -974,7 +1437,7 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:426
+#: contracorriente/man1/zshoptions.1:426
 msgid ""
 "The option is on by default if the shell was compiled with "
 "B<MULTIBYTE_SUPPORT>; otherwise it is off by default and has no effect if "
@@ -982,18 +1445,17 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:433
+#: contracorriente/man1/zshoptions.1:433
 msgid ""
-"If the option is off a single byte is always treated as a single "
-"character\\&.  This setting is designed purely for examining strings known "
-"to contain raw bytes or other values that may not be characters in the "
-"current locale\\&.  It is not necessary to unset the option merely because "
-"the character set for the current locale does not contain multibyte "
-"characters\\&."
+"If the option is off a single byte is always treated as a single character"
+"\\&.  This setting is designed purely for examining strings known to contain "
+"raw bytes or other values that may not be characters in the current locale"
+"\\&.  It is not necessary to unset the option merely because the character "
+"set for the current locale does not contain multibyte characters\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:438
+#: contracorriente/man1/zshoptions.1:438
 msgid ""
 "The option does not affect the shell\\&'s editor, which always uses the "
 "locale to determine multibyte characters\\&.  This is because the character "
@@ -1001,13 +1463,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:439
+#: contracorriente/man1/zshoptions.1:439
 #, no-wrap
 msgid "B<NOMATCH> (B<+3>) E<lt>CE<gt> E<lt>ZE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:446
+#: contracorriente/man1/zshoptions.1:446
 msgid ""
 "If a pattern for filename generation has no matches, print an error, instead "
 "of leaving it unchanged in the argument list\\&.  This also applies to file "
@@ -1015,40 +1477,39 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:446
+#: contracorriente/man1/zshoptions.1:446
 #, no-wrap
 msgid "B<NULL_GLOB> (B<-G>)"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:451
+#: contracorriente/man1/zshoptions.1:451
 msgid ""
 "If a pattern for filename generation has no matches, delete the pattern from "
-"the argument list instead of reporting an error\\&.  Overrides "
-"B<NOMATCH>\\&."
+"the argument list instead of reporting an error\\&.  Overrides B<NOMATCH>\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:451
+#: contracorriente/man1/zshoptions.1:451
 #, no-wrap
 msgid "B<NUMERIC_GLOB_SORT>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:455
+#: contracorriente/man1/zshoptions.1:455
 msgid ""
 "If numeric filenames are matched by a filename generation pattern, sort the "
 "filenames numerically rather than lexicographically\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:455
+#: contracorriente/man1/zshoptions.1:455
 #, no-wrap
 msgid "B<RC_EXPAND_PARAM> (B<-P>)"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:463
+#: contracorriente/man1/zshoptions.1:463
 msgid ""
 "Array expansions of the form `I<foo>B<${>I<xx>B<}>I<bar>\\&', where the "
 "parameter I<xx> is set to B<(>I<a b c>B<)>, are substituted with `I<fooabar "
@@ -1057,28 +1518,28 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:463
+#: contracorriente/man1/zshoptions.1:463
 #, no-wrap
 msgid "B<REMATCH_PCRE>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:470
+#: contracorriente/man1/zshoptions.1:470
 msgid ""
-"If set, regular expression matching with the B<=~> operator will use "
-"Perl-Compatible Regular Expressions from the PCRE library\\&.  (The "
-"B<zsh/pcre> module must be available\\&.)  If not set, regular expressions "
-"will use the extended regexp syntax provided by the system libraries\\&."
+"If set, regular expression matching with the B<=~> operator will use Perl-"
+"Compatible Regular Expressions from the PCRE library\\&.  (The B<zsh/pcre> "
+"module must be available\\&.)  If not set, regular expressions will use the "
+"extended regexp syntax provided by the system libraries\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:470
+#: contracorriente/man1/zshoptions.1:470
 #, no-wrap
 msgid "B<SH_GLOB> E<lt>KE<gt> E<lt>SE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:481
+#: contracorriente/man1/zshoptions.1:481
 msgid ""
 "Disables the special meaning of `B<(>\\&', `B<|>', `B<)>' and \\&'B<E<lt>>' "
 "for globbing the result of parameter and command substitutions, and in some "
@@ -1091,13 +1552,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:481
+#: contracorriente/man1/zshoptions.1:481
 #, no-wrap
 msgid "B<UNSET> (B<+u>, ksh: B<+u>) E<lt>KE<gt> E<lt>SE<gt> E<lt>ZE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:487
+#: contracorriente/man1/zshoptions.1:487
 msgid ""
 "Treat unset parameters as if they were empty when substituting, and as if "
 "they were zero when reading their values in arithmetic expansion and "
@@ -1105,13 +1566,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:487
+#: contracorriente/man1/zshoptions.1:487
 #, no-wrap
 msgid "B<WARN_CREATE_GLOBAL>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:496
+#: contracorriente/man1/zshoptions.1:496
 msgid ""
 "Print a warning message when a global parameter is created in a function by "
 "an assignment or in math context\\&.  This often indicates that a parameter "
@@ -1122,19 +1583,19 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:496
+#: contracorriente/man1/zshoptions.1:496
 #, no-wrap
 msgid "B<WARN_NESTED_VAR>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:508
+#: contracorriente/man1/zshoptions.1:508
 msgid ""
 "Print a warning message when an existing parameter from an enclosing "
 "function scope, or global, is set in a function by an assignment or in math "
-"context\\&.  Assignment to shell special parameters does not cause a "
-"warning\\&.  This is the companion to B<WARN_CREATE_GLOBAL> as in this case "
-"the warning is only printed when a parameter is I<not> created\\&.  Where "
+"context\\&.  Assignment to shell special parameters does not cause a warning"
+"\\&.  This is the companion to B<WARN_CREATE_GLOBAL> as in this case the "
+"warning is only printed when a parameter is I<not> created\\&.  Where "
 "possible, use of B<typeset -g> to set the parameter suppresses the error, "
 "but note that this needs to be used every time the parameter is set\\&.  To "
 "restrict the effect of this option to a single function scope, use "
@@ -1142,14 +1603,14 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:513
+#: contracorriente/man1/zshoptions.1:513
 msgid ""
 "For example, the following code produces a warning for the assignment inside "
 "the function B<nested> as that overrides the value within B<toplevel>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:525
+#: contracorriente/man1/zshoptions.1:525
 #, no-wrap
 msgid ""
 "B<toplevel() {\n"
@@ -1164,49 +1625,49 @@ msgid ""
 msgstr ""
 
 #. type: SS
-#: ../contracorriente/man1/zshoptions.1:529
+#: contracorriente/man1/zshoptions.1:529
 #, no-wrap
 msgid "History"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:531
+#: contracorriente/man1/zshoptions.1:531
 #, no-wrap
 msgid "B<APPEND_HISTORY> E<lt>DE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:541
+#: contracorriente/man1/zshoptions.1:541
 msgid ""
 "If this is set, zsh sessions will append their history list to the history "
 "file, rather than replace it\\&. Thus, multiple parallel zsh sessions will "
 "all have the new entries from their history lists added to the history file, "
-"in the order that they exit\\&.  The file will still be periodically "
-"re-written to trim it when the number of lines grows 20% beyond the value "
+"in the order that they exit\\&.  The file will still be periodically re-"
+"written to trim it when the number of lines grows 20% beyond the value "
 "specified by B<$SAVEHIST> (see also the B<HIST_SAVE_BY_COPY> option)\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:541
+#: contracorriente/man1/zshoptions.1:541
 #, no-wrap
 msgid "B<BANG_HIST> (B<+K>) E<lt>CE<gt> E<lt>ZE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:545
+#: contracorriente/man1/zshoptions.1:545
 msgid ""
-"Perform textual history expansion, B<csh>-style, treating the character "
-"`B<!>\\&' specially\\&."
+"Perform textual history expansion, B<csh>-style, treating the character `B<!>"
+"\\&' specially\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:545
+#: contracorriente/man1/zshoptions.1:545
 #, no-wrap
 msgid "B<EXTENDED_HISTORY> E<lt>CE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:550
+#: contracorriente/man1/zshoptions.1:550
 msgid ""
 "Save each command\\&'s beginning timestamp (in seconds since the epoch)  and "
 "the duration (in seconds) to the history file\\&.  The format of this "
@@ -1214,46 +1675,46 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:553
+#: contracorriente/man1/zshoptions.1:553
 msgid ""
-"`B<: >I<E<lt>beginning timeE<gt>>B<:>I<E<lt>elapsed "
-"secondsE<gt>>B<;>I<E<lt>commandE<gt>>\\&'\\&."
+"`B<: >I<E<lt>beginning timeE<gt>>B<:>I<E<lt>elapsed secondsE<gt>>B<;"
+">I<E<lt>commandE<gt>>\\&'\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:554
+#: contracorriente/man1/zshoptions.1:554
 #, no-wrap
 msgid "B<HIST_ALLOW_CLOBBER>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:558
+#: contracorriente/man1/zshoptions.1:558
 msgid ""
 "Add `B<|>\\&' to output redirections in the history\\&.  This allows history "
 "references to clobber files even when B<CLOBBER> is unset\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:558
+#: contracorriente/man1/zshoptions.1:558
 #, no-wrap
 msgid "B<HIST_BEEP> E<lt>DE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:562
+#: contracorriente/man1/zshoptions.1:562
 msgid ""
 "Beep in ZLE when a widget attempts to access a history entry which isn\\&'t "
 "there\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:562
+#: contracorriente/man1/zshoptions.1:562
 #, no-wrap
 msgid "B<HIST_EXPIRE_DUPS_FIRST>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:571
+#: contracorriente/man1/zshoptions.1:571
 msgid ""
 "If the internal history needs to be trimmed to add the current command line, "
 "setting this option will cause the oldest history event that has a duplicate "
@@ -1265,13 +1726,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:571
+#: contracorriente/man1/zshoptions.1:571
 #, no-wrap
 msgid "B<HIST_FCNTL_LOCK>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:579
+#: contracorriente/man1/zshoptions.1:579
 msgid ""
 "When writing out the history file, by default zsh uses ad-hoc file locking "
 "to avoid known problems with locking on some operating systems\\&.  With "
@@ -1282,13 +1743,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:579
+#: contracorriente/man1/zshoptions.1:579
 #, no-wrap
 msgid "B<HIST_FIND_NO_DUPS>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:584
+#: contracorriente/man1/zshoptions.1:584
 msgid ""
 "When searching for history entries in the line editor, do not display "
 "duplicates of a line previously found, even if the duplicates are not "
@@ -1296,13 +1757,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:584
+#: contracorriente/man1/zshoptions.1:584
 #, no-wrap
 msgid "B<HIST_IGNORE_ALL_DUPS>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:589
+#: contracorriente/man1/zshoptions.1:589
 msgid ""
 "If a new command line being added to the history list duplicates an older "
 "one, the older command is removed from the list (even if it is not the "
@@ -1310,44 +1771,44 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:589
+#: contracorriente/man1/zshoptions.1:589
 #, no-wrap
 msgid "B<HIST_IGNORE_DUPS> (B<-h>)"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:593
+#: contracorriente/man1/zshoptions.1:593
 msgid ""
 "Do not enter command lines into the history list if they are duplicates of "
 "the previous event\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:593
+#: contracorriente/man1/zshoptions.1:593
 #, no-wrap
 msgid "B<HIST_IGNORE_SPACE> (B<-g>)"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:603
+#: contracorriente/man1/zshoptions.1:603
 msgid ""
 "Remove command lines from the history list when the first character on the "
-"line is a space, or when one of the expanded aliases contains a leading "
-"space\\&.  Only normal aliases (not global or suffix aliases)  have this "
-"behaviour\\&.  Note that the command lingers in the internal history until "
-"the next command is entered before it vanishes, allowing you to briefly "
-"reuse or edit the line\\&.  If you want to make it vanish right away without "
-"entering another command, type a space and press return\\&."
+"line is a space, or when one of the expanded aliases contains a leading space"
+"\\&.  Only normal aliases (not global or suffix aliases)  have this behaviour"
+"\\&.  Note that the command lingers in the internal history until the next "
+"command is entered before it vanishes, allowing you to briefly reuse or edit "
+"the line\\&.  If you want to make it vanish right away without entering "
+"another command, type a space and press return\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:603
+#: contracorriente/man1/zshoptions.1:603
 #, no-wrap
 msgid "B<HIST_LEX_WORDS>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:614
+#: contracorriente/man1/zshoptions.1:614
 msgid ""
 "By default, shell history that is read in from files is split into words on "
 "all white space\\&.  This means that arguments with quoted whitespace are "
@@ -1360,13 +1821,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:614
+#: contracorriente/man1/zshoptions.1:614
 #, no-wrap
 msgid "B<HIST_NO_FUNCTIONS>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:620
+#: contracorriente/man1/zshoptions.1:620
 msgid ""
 "Remove function definitions from the history list\\&.  Note that the "
 "function lingers in the internal history until the next command is entered "
@@ -1374,41 +1835,41 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:620
+#: contracorriente/man1/zshoptions.1:620
 #, no-wrap
 msgid "B<HIST_NO_STORE>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:627
+#: contracorriente/man1/zshoptions.1:627
 msgid ""
-"Remove the B<history> (B<fc -l>) command from the history list when "
-"invoked\\&.  Note that the command lingers in the internal history until the "
-"next command is entered before it vanishes, allowing you to briefly reuse or "
-"edit the line\\&."
+"Remove the B<history> (B<fc -l>) command from the history list when invoked"
+"\\&.  Note that the command lingers in the internal history until the next "
+"command is entered before it vanishes, allowing you to briefly reuse or edit "
+"the line\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:627
+#: contracorriente/man1/zshoptions.1:627
 #, no-wrap
 msgid "B<HIST_REDUCE_BLANKS>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:631
+#: contracorriente/man1/zshoptions.1:631
 msgid ""
 "Remove superfluous blanks from each command line being added to the history "
 "list\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:631
+#: contracorriente/man1/zshoptions.1:631
 #, no-wrap
 msgid "B<HIST_SAVE_BY_COPY> E<lt>DE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:642
+#: contracorriente/man1/zshoptions.1:642
 msgid ""
 "When the history file is re-written, we normally write out a copy of the "
 "file named B<$HISTFILE\\&.new> and then rename it over the old one\\&.  "
@@ -1421,7 +1882,7 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:647
+#: contracorriente/man1/zshoptions.1:647
 msgid ""
 "When writing out a copy of the history file, zsh preserves the old file\\&'s "
 "permissions and group information, but will refuse to write out a new file "
@@ -1429,26 +1890,26 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:648
+#: contracorriente/man1/zshoptions.1:648
 #, no-wrap
 msgid "B<HIST_SAVE_NO_DUPS>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:652
+#: contracorriente/man1/zshoptions.1:652
 msgid ""
 "When writing out the history file, older commands that duplicate newer ones "
 "are omitted\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:652
+#: contracorriente/man1/zshoptions.1:652
 #, no-wrap
 msgid "B<HIST_VERIFY>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:657
+#: contracorriente/man1/zshoptions.1:657
 msgid ""
 "Whenever the user enters a line with history expansion, don\\&'t execute the "
 "line directly; instead, perform history expansion and reload the line into "
@@ -1456,13 +1917,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:657
+#: contracorriente/man1/zshoptions.1:657
 #, no-wrap
 msgid "B<INC_APPEND_HISTORY>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:665
+#: contracorriente/man1/zshoptions.1:665
 msgid ""
 "This option works like B<APPEND_HISTORY> except that new history lines are "
 "added to the B<$HISTFILE> incrementally (as soon as they are entered), "
@@ -1473,13 +1934,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:665
+#: contracorriente/man1/zshoptions.1:665
 #, no-wrap
 msgid "B<INC_APPEND_HISTORY_TIME>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:673
+#: contracorriente/man1/zshoptions.1:673
 msgid ""
 "This option is a variant of B<INC_APPEND_HISTORY> in which, where possible, "
 "the history entry is written out to the file after the command is finished, "
@@ -1490,21 +1951,20 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:678
+#: contracorriente/man1/zshoptions.1:678
 msgid ""
 "This option is only useful if B<INC_APPEND_HISTORY> and B<SHARE_HISTORY> are "
-"turned off\\&.  The three options should be considered mutually "
-"exclusive\\&."
+"turned off\\&.  The three options should be considered mutually exclusive\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:679
+#: contracorriente/man1/zshoptions.1:679
 #, no-wrap
 msgid "B<SHARE_HISTORY> E<lt>KE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:689
+#: contracorriente/man1/zshoptions.1:689
 msgid ""
 "This option both imports new commands from the history file, and also causes "
 "your typed commands to be appended to the history file (the latter is like "
@@ -1515,17 +1975,16 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:695
+#: contracorriente/man1/zshoptions.1:695
 msgid ""
 "By default, history movement commands visit the imported lines as well as "
-"the local lines, but you can toggle this on and off with the "
-"set-local-history zle binding\\&.  It is also possible to create a zle "
-"widget that will make some commands ignore imported commands, and some "
-"include them\\&."
+"the local lines, but you can toggle this on and off with the set-local-"
+"history zle binding\\&.  It is also possible to create a zle widget that "
+"will make some commands ignore imported commands, and some include them\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:701
+#: contracorriente/man1/zshoptions.1:701
 msgid ""
 "If you find that you want more control over when commands get imported, you "
 "may wish to turn B<SHARE_HISTORY> off, B<INC_APPEND_HISTORY> or "
@@ -1534,42 +1993,41 @@ msgid ""
 msgstr ""
 
 #. type: SS
-#: ../contracorriente/man1/zshoptions.1:703
+#: contracorriente/man1/zshoptions.1:703
 #, no-wrap
 msgid "Initialisation"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:705
+#: contracorriente/man1/zshoptions.1:705
 #, no-wrap
 msgid "B<ALL_EXPORT> (B<-a>, ksh: B<-a>)"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:709
+#: contracorriente/man1/zshoptions.1:709
 msgid "All parameters subsequently defined are automatically exported\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:709
+#: contracorriente/man1/zshoptions.1:709
 #, no-wrap
 msgid "B<GLOBAL_EXPORT> E<lt>ZE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:718
+#: contracorriente/man1/zshoptions.1:718
 msgid ""
 "If this option is set, passing the B<-x> flag to the builtins B<declare>, "
 "B<float>, B<integer>, B<readonly> and B<typeset> (but not B<local>)  will "
 "also set the B<-g> flag; hence parameters exported to the environment will "
 "not be made local to the enclosing function, unless they were already or the "
 "flag B<+g> is given explicitly\\&.  If the option is unset, exported "
-"parameters will be made local in just the same way as any other "
-"parameter\\&."
+"parameters will be made local in just the same way as any other parameter\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:725
+#: contracorriente/man1/zshoptions.1:725
 msgid ""
 "This option is set by default for backward compatibility; it is not "
 "recommended that its behaviour be relied upon\\&.  Note that the builtin "
@@ -1579,70 +2037,70 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:726
+#: contracorriente/man1/zshoptions.1:726
 #, no-wrap
 msgid "B<GLOBAL_RCS> (B<-d>) E<lt>DE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:732
+#: contracorriente/man1/zshoptions.1:732
 msgid ""
 "If this option is unset, the startup files B</etc/zprofile>, B</etc/zshrc>, "
 "B</etc/zlogin> and B</etc/zlogout> will not be run\\&.  It can be disabled "
-"and re-enabled at any time, including inside local startup files "
-"(B<\\&.zshrc>, etc\\&.)\\&."
+"and re-enabled at any time, including inside local startup files (B<\\&."
+"zshrc>, etc\\&.)\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:732
+#: contracorriente/man1/zshoptions.1:732
 #, no-wrap
 msgid "B<RCS> (B<+f>) E<lt>DE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:742
+#: contracorriente/man1/zshoptions.1:742
 msgid ""
-"After B</etc/zshenv> is sourced on startup, source the B<\\&.zshenv>, "
-"B</etc/zprofile>, B<\\&.zprofile>, B</etc/zshrc>, B<\\&.zshrc>, "
-"B</etc/zlogin>, B<\\&.zlogin>, and B<\\&.zlogout> files, as described in the "
-"section `Files\\&'\\&.  If this option is unset, the B</etc/zshenv> file is "
-"still sourced, but any of the others will not be; it can be set at any time "
-"to prevent the remaining startup files after the currently executing one "
-"from being sourced\\&."
+"After B</etc/zshenv> is sourced on startup, source the B<\\&.zshenv>, B</etc/"
+"zprofile>, B<\\&.zprofile>, B</etc/zshrc>, B<\\&.zshrc>, B</etc/zlogin>, B<"
+"\\&.zlogin>, and B<\\&.zlogout> files, as described in the section `Files"
+"\\&'\\&.  If this option is unset, the B</etc/zshenv> file is still sourced, "
+"but any of the others will not be; it can be set at any time to prevent the "
+"remaining startup files after the currently executing one from being sourced"
+"\\&."
 msgstr ""
 
 #. type: SS
-#: ../contracorriente/man1/zshoptions.1:743
+#: contracorriente/man1/zshoptions.1:743
 #, no-wrap
 msgid "Input/Output"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:745
+#: contracorriente/man1/zshoptions.1:745
 #, no-wrap
 msgid "B<ALIASES> E<lt>DE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:749
+#: contracorriente/man1/zshoptions.1:749
 msgid "Expand aliases\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:749
+#: contracorriente/man1/zshoptions.1:749
 #, no-wrap
 msgid "B<CLOBBER> (B<+C>, ksh: B<+C>) E<lt>DE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:753
+#: contracorriente/man1/zshoptions.1:753
 msgid ""
 "Allows `B<E<gt>>\\&' redirection to truncate existing files\\&.  Otherwise "
 "`B<E<gt>!>\\&' or `B<E<gt>|>' must be used to truncate a file\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:758
+#: contracorriente/man1/zshoptions.1:758
 msgid ""
 "If the option is not set, and the option B<APPEND_CREATE> is also not set, "
 "`B<E<gt>E<gt>!>\\&' or `B<E<gt>E<gt>|>' must be used to create a file\\&.  "
@@ -1650,13 +2108,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:759
+#: contracorriente/man1/zshoptions.1:759
 #, no-wrap
 msgid "B<CORRECT> (B<-0>)"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:765
+#: contracorriente/man1/zshoptions.1:765
 msgid ""
 "Try to correct the spelling of commands\\&.  Note that, when the "
 "B<HASH_LIST_ALL> option is not set or when some directories in the path are "
@@ -1665,38 +2123,38 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:769
+#: contracorriente/man1/zshoptions.1:769
 msgid ""
 "The shell variable B<CORRECT_IGNORE> may be set to a pattern to match words "
 "that will never be offered as corrections\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:770
+#: contracorriente/man1/zshoptions.1:770
 #, no-wrap
 msgid "B<CORRECT_ALL> (B<-O>)"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:773
+#: contracorriente/man1/zshoptions.1:773
 msgid "Try to correct the spelling of all arguments in a line\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:777
+#: contracorriente/man1/zshoptions.1:777
 msgid ""
 "The shell variable B<CORRECT_IGNORE_FILE> may be set to a pattern to match "
 "file names that will never be offered as corrections\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:778
+#: contracorriente/man1/zshoptions.1:778
 #, no-wrap
 msgid "B<DVORAK>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:783
+#: contracorriente/man1/zshoptions.1:783
 msgid ""
 "Use the Dvorak keyboard instead of the standard qwerty keyboard as a basis "
 "for examining spelling mistakes for the B<CORRECT> and B<CORRECT_ALL> "
@@ -1704,26 +2162,26 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:783
+#: contracorriente/man1/zshoptions.1:783
 #, no-wrap
 msgid "B<FLOW_CONTROL> E<lt>DE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:788
+#: contracorriente/man1/zshoptions.1:788
 msgid ""
 "If this option is unset, output flow control via start/stop characters "
 "(usually assigned to ^S/^Q) is disabled in the shell\\&'s editor\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:788
+#: contracorriente/man1/zshoptions.1:788
 #, no-wrap
 msgid "B<IGNORE_EOF> (B<-7>)"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:794
+#: contracorriente/man1/zshoptions.1:794
 msgid ""
 "Do not exit on end-of-file\\&.  Require the use of B<exit> or B<logout> "
 "instead\\&.  However, ten consecutive EOFs will cause the shell to exit "
@@ -1731,7 +2189,7 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:800
+#: contracorriente/man1/zshoptions.1:800
 msgid ""
 "Also, if this option is set and the Zsh Line Editor is used, widgets "
 "implemented by shell functions can be bound to EOF (normally Control-D) "
@@ -1740,24 +2198,24 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:801
+#: contracorriente/man1/zshoptions.1:801
 #, no-wrap
 msgid "B<INTERACTIVE_COMMENTS> (B<-k>) E<lt>KE<gt> E<lt>SE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:804
+#: contracorriente/man1/zshoptions.1:804
 msgid "Allow comments even in interactive shells\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:804
+#: contracorriente/man1/zshoptions.1:804
 #, no-wrap
 msgid "B<HASH_CMDS> E<lt>DE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:813
+#: contracorriente/man1/zshoptions.1:813
 msgid ""
 "Note the location of each command the first time it is executed\\&.  "
 "Subsequent invocations of the same command will use the saved location, "
@@ -1768,13 +2226,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:813
+#: contracorriente/man1/zshoptions.1:813
 #, no-wrap
 msgid "B<HASH_DIRS> E<lt>DE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:818
+#: contracorriente/man1/zshoptions.1:818
 msgid ""
 "Whenever a command name is hashed, hash the directory containing it, as well "
 "as all directories that occur earlier in the path\\&.  Has no effect if "
@@ -1782,13 +2240,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:818
+#: contracorriente/man1/zshoptions.1:818
 #, no-wrap
 msgid "B<HASH_EXECUTABLES_ONLY>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:826
+#: contracorriente/man1/zshoptions.1:826
 msgid ""
 "When hashing commands because of B<HASH_CMDS>, check that the file to be "
 "hashed is actually an executable\\&.  This option is unset by default as if "
@@ -1798,37 +2256,37 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:826
+#: contracorriente/man1/zshoptions.1:826
 #, no-wrap
 msgid "B<MAIL_WARNING> (B<-U>)"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:830
+#: contracorriente/man1/zshoptions.1:830
 msgid ""
 "Print a warning message if a mail file has been accessed since the shell "
 "last checked\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:830
+#: contracorriente/man1/zshoptions.1:830
 #, no-wrap
 msgid "B<PATH_DIRS> (B<-Q>)"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:839
+#: contracorriente/man1/zshoptions.1:839
 msgid ""
 "Perform a path search even on command names with slashes in them\\&.  Thus "
-"if `B</usr/local/bin>\\&' is in the user's path, and he or she types "
-"`B<X11/xinit>\\&', the command `B</usr/local/bin/X11/xinit>' will be "
-"executed (assuming it exists)\\&.  Commands explicitly beginning with "
-"`B</>\\&', `B<\\&./>' or `B<\\&.\\&./>' are not subject to the path "
-"search\\&.  This also applies to the `B<\\&.>\\&' and B<source> builtins\\&."
+"if `B</usr/local/bin>\\&' is in the user's path, and he or she types `B<X11/"
+"xinit>\\&', the command `B</usr/local/bin/X11/xinit>' will be executed "
+"(assuming it exists)\\&.  Commands explicitly beginning with `B</>\\&', `B<"
+"\\&./>' or `B<\\&.\\&./>' are not subject to the path search\\&.  This also "
+"applies to the `B<\\&.>\\&' and B<source> builtins\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:845
+#: contracorriente/man1/zshoptions.1:845
 msgid ""
 "Note that subdirectories of the current directory are always searched for "
 "executables specified in this form\\&.  This takes place before any search "
@@ -1837,13 +2295,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:846
+#: contracorriente/man1/zshoptions.1:846
 #, no-wrap
 msgid "B<PATH_SCRIPT> E<lt>KE<gt> E<lt>SE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:854
+#: contracorriente/man1/zshoptions.1:854
 msgid ""
 "If this option is not set, a script passed as the first non-option argument "
 "to the shell must contain the name of the file to open\\&.  If this option "
@@ -1853,13 +2311,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:854
+#: contracorriente/man1/zshoptions.1:854
 #, no-wrap
 msgid "B<PRINT_EIGHT_BIT>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:859
+#: contracorriente/man1/zshoptions.1:859
 msgid ""
 "Print eight bit characters literally in completion lists, etc\\&.  This "
 "option is not necessary if your system correctly returns the printability of "
@@ -1867,26 +2325,26 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:859
+#: contracorriente/man1/zshoptions.1:859
 #, no-wrap
 msgid "B<PRINT_EXIT_VALUE> (B<-1>)"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:863
+#: contracorriente/man1/zshoptions.1:863
 msgid ""
 "Print the exit value of programs with non-zero exit status\\&.  This is only "
 "available at the command line in interactive shells\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:863
+#: contracorriente/man1/zshoptions.1:863
 #, no-wrap
 msgid "B<RC_QUOTES>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:869
+#: contracorriente/man1/zshoptions.1:869
 msgid ""
 "Allow the character sequence `B<\\&''>' to signify a single quote within "
 "singly quoted strings\\&.  Note this does not apply in quoted strings using "
@@ -1895,24 +2353,25 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:869
+#: contracorriente/man1/zshoptions.1:869
 #, no-wrap
 msgid "B<RM_STAR_SILENT> (B<-H>) E<lt>KE<gt> E<lt>SE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:872
-msgid "Do not query the user before executing `B<rm *>\\&' or `B<rm path/*>'\\&."
+#: contracorriente/man1/zshoptions.1:872
+msgid ""
+"Do not query the user before executing `B<rm *>\\&' or `B<rm path/*>'\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:872
+#: contracorriente/man1/zshoptions.1:872
 #, no-wrap
 msgid "B<RM_STAR_WAIT>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:879
+#: contracorriente/man1/zshoptions.1:879
 msgid ""
 "If querying the user before executing `B<rm *>\\&' or `B<rm path/*>', first "
 "wait ten seconds and ignore anything typed in that time\\&.  This avoids the "
@@ -1922,26 +2381,26 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:879
+#: contracorriente/man1/zshoptions.1:879
 #, no-wrap
 msgid "B<SHORT_LOOPS> E<lt>CE<gt> E<lt>ZE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:883
+#: contracorriente/man1/zshoptions.1:883
 msgid ""
 "Allow the short forms of B<for>, B<repeat>, B<select>, B<if>, and "
 "B<function> constructs\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:883
+#: contracorriente/man1/zshoptions.1:883
 #, no-wrap
 msgid "B<SUN_KEYBOARD_HACK> (B<-L>)"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:891
+#: contracorriente/man1/zshoptions.1:891
 msgid ""
 "If a line ends with a backquote, and there are an odd number of backquotes "
 "on the line, ignore the trailing backquote\\&.  This is useful on some "
@@ -1951,19 +2410,19 @@ msgid ""
 msgstr ""
 
 #. type: SS
-#: ../contracorriente/man1/zshoptions.1:892
+#: contracorriente/man1/zshoptions.1:892
 #, no-wrap
 msgid "Job Control"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:894
+#: contracorriente/man1/zshoptions.1:894
 #, no-wrap
 msgid "B<AUTO_CONTINUE>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:900
+#: contracorriente/man1/zshoptions.1:900
 msgid ""
 "With this option set, stopped jobs that are removed from the job table with "
 "the B<disown> builtin command are automatically sent a B<CONT> signal to "
@@ -1971,39 +2430,39 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:900
+#: contracorriente/man1/zshoptions.1:900
 #, no-wrap
 msgid "B<AUTO_RESUME> (B<-W>)"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:904
+#: contracorriente/man1/zshoptions.1:904
 msgid ""
 "Treat single word simple commands without redirection as candidates for "
 "resumption of an existing job\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:904
+#: contracorriente/man1/zshoptions.1:904
 #, no-wrap
 msgid "B<BG_NICE> (B<-6>) E<lt>CE<gt> E<lt>ZE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:908
+#: contracorriente/man1/zshoptions.1:908
 msgid ""
 "Run all background jobs at a lower priority\\&.  This option is set by "
 "default\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:908
+#: contracorriente/man1/zshoptions.1:908
 #, no-wrap
 msgid "B<CHECK_JOBS> E<lt>ZE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:914
+#: contracorriente/man1/zshoptions.1:914
 msgid ""
 "Report the status of background and suspended jobs before exiting a shell "
 "with job control; a second attempt to exit the shell will succeed\\&.  "
@@ -2012,7 +2471,7 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:922
+#: contracorriente/man1/zshoptions.1:922
 msgid ""
 "The check is omitted if the commands run from the previous command line "
 "included a `B<jobs>\\&' command, since it is assumed the user is aware that "
@@ -2022,13 +2481,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:923
+#: contracorriente/man1/zshoptions.1:923
 #, no-wrap
 msgid "B<CHECK_RUNNING_JOBS> E<lt>ZE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:928
+#: contracorriente/man1/zshoptions.1:928
 msgid ""
 "Check for both running and suspended jobs when B<CHECK_JOBS> is enabled\\&.  "
 "When this option is disabled, zsh checks only for suspended jobs, which "
@@ -2036,69 +2495,70 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:931
+#: contracorriente/man1/zshoptions.1:931
 msgid "This option has no effect unless B<CHECK_JOBS> is set\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:932
+#: contracorriente/man1/zshoptions.1:932
 #, no-wrap
 msgid "B<HUP> E<lt>ZE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:936
+#: contracorriente/man1/zshoptions.1:936
 msgid "Send the B<HUP> signal to running jobs when the shell exits\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:936
+#: contracorriente/man1/zshoptions.1:936
 #, no-wrap
 msgid "B<LONG_LIST_JOBS> (B<-R>)"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:939
+#: contracorriente/man1/zshoptions.1:939
 msgid "Print job notifications in the long format by default\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:939
+#: contracorriente/man1/zshoptions.1:939
 #, no-wrap
 msgid "B<MONITOR> (B<-m>, ksh: B<-m>)"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:942
+#: contracorriente/man1/zshoptions.1:942
 msgid "Allow job control\\&.  Set by default in interactive shells\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:942
+#: contracorriente/man1/zshoptions.1:942
 #, no-wrap
 msgid "B<NOTIFY> (B<-5>, ksh: B<-b>) E<lt>ZE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:946
+#: contracorriente/man1/zshoptions.1:946
 msgid ""
 "Report the status of background jobs immediately, rather than waiting until "
 "just before printing a prompt\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:946
+#: contracorriente/man1/zshoptions.1:946
 #, no-wrap
 msgid "B<POSIX_JOBS> E<lt>KE<gt> E<lt>SE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:949
-msgid "This option makes job control more compliant with the POSIX standard\\&."
+#: contracorriente/man1/zshoptions.1:949
+msgid ""
+"This option makes job control more compliant with the POSIX standard\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:956
+#: contracorriente/man1/zshoptions.1:956
 msgid ""
 "When the option is not set, the B<MONITOR> option is unset on entry to "
 "subshells, so that job control is no longer active\\&.  When the option is "
@@ -2107,17 +2567,16 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:961
+#: contracorriente/man1/zshoptions.1:961
 msgid ""
 "When the option is not set, jobs put in the background or foreground with "
 "B<bg> or B<fg> are displayed with the same information that would be "
-"reported by B<jobs>\\&.  When the option is set, only the text is "
-"printed\\&.  The output from B<jobs> itself is not affected by the "
-"option\\&."
+"reported by B<jobs>\\&.  When the option is set, only the text is printed"
+"\\&.  The output from B<jobs> itself is not affected by the option\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:966
+#: contracorriente/man1/zshoptions.1:966
 msgid ""
 "When the option is not set, job information from the parent shell is saved "
 "for output within a subshell (for example, within a pipeline)\\&.  When the "
@@ -2126,7 +2585,7 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:971
+#: contracorriente/man1/zshoptions.1:971
 msgid ""
 "In previous versions of the shell, it was necessary to enable B<POSIX_JOBS> "
 "in order for the builtin command B<wait> to return the status of background "
@@ -2134,46 +2593,46 @@ msgid ""
 msgstr ""
 
 #. type: SS
-#: ../contracorriente/man1/zshoptions.1:973
+#: contracorriente/man1/zshoptions.1:973
 #, no-wrap
 msgid "Prompting"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:975
+#: contracorriente/man1/zshoptions.1:975
 #, no-wrap
 msgid "B<PROMPT_BANG> E<lt>KE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:981
+#: contracorriente/man1/zshoptions.1:981
 msgid ""
 "If set, `B<!>\\&' is treated specially in prompt expansion\\&.  See "
 "EXPANSION OF PROMPT SEQUENCES in I<zshmisc>(1)\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:981
+#: contracorriente/man1/zshoptions.1:981
 #, no-wrap
 msgid "B<PROMPT_CR> (B<+V>) E<lt>DE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:986
+#: contracorriente/man1/zshoptions.1:986
 msgid ""
-"Print a carriage return just before printing a prompt in the line "
-"editor\\&.  This is on by default as multi-line editing is only possible if "
-"the editor knows where the start of the line appears\\&."
+"Print a carriage return just before printing a prompt in the line editor"
+"\\&.  This is on by default as multi-line editing is only possible if the "
+"editor knows where the start of the line appears\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:986
+#: contracorriente/man1/zshoptions.1:986
 #, no-wrap
 msgid "B<PROMPT_SP> E<lt>DE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:994
+#: contracorriente/man1/zshoptions.1:994
 msgid ""
 "Attempt to preserve a partial line (i\\&.e\\&. a line that did not end with "
 "a newline) that would otherwise be covered up by the command prompt due to "
@@ -2184,7 +2643,7 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1000
+#: contracorriente/man1/zshoptions.1:1000
 msgid ""
 "When a partial line is preserved, by default you will see an inverse+bold "
 "character at the end of the partial line: a `B<%>\\&' for a normal user or a "
@@ -2193,33 +2652,33 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1003
+#: contracorriente/man1/zshoptions.1:1003
 msgid ""
 "NOTE: if the B<PROMPT_CR> option is not set, enabling this option will have "
 "no effect\\&.  This option is on by default\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1004
+#: contracorriente/man1/zshoptions.1:1004
 #, no-wrap
 msgid "B<PROMPT_PERCENT> E<lt>CE<gt> E<lt>ZE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1009
+#: contracorriente/man1/zshoptions.1:1009
 msgid ""
 "If set, `B<%>\\&' is treated specially in prompt expansion\\&.  See "
 "EXPANSION OF PROMPT SEQUENCES in I<zshmisc>(1)\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1009
+#: contracorriente/man1/zshoptions.1:1009
 #, no-wrap
 msgid "B<PROMPT_SUBST> E<lt>KE<gt> E<lt>SE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1014
+#: contracorriente/man1/zshoptions.1:1014
 msgid ""
 "If set, I<parameter expansion>, I<command substitution> and I<arithmetic "
 "expansion> are performed in prompts\\&.  Substitutions within prompts do not "
@@ -2227,32 +2686,32 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1014
+#: contracorriente/man1/zshoptions.1:1014
 #, no-wrap
 msgid "B<TRANSIENT_RPROMPT>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1018
+#: contracorriente/man1/zshoptions.1:1018
 msgid ""
 "Remove any right prompt from display when accepting a command line\\&.  This "
 "may be useful with terminals with other cut/paste methods\\&."
 msgstr ""
 
 #. type: SS
-#: ../contracorriente/man1/zshoptions.1:1019
+#: contracorriente/man1/zshoptions.1:1019
 #, no-wrap
 msgid "Scripts and Functions"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1021
+#: contracorriente/man1/zshoptions.1:1021
 #, no-wrap
 msgid "B<ALIAS_FUNC_DEF> E<lt>SE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1029
+#: contracorriente/man1/zshoptions.1:1029
 msgid ""
 "By default, zsh does not allow the definition of functions using the "
 "`I<name> B<()>\\&' syntax if I<name> was expanded as an alias: this causes "
@@ -2262,19 +2721,19 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1032
+#: contracorriente/man1/zshoptions.1:1032
 msgid "When this option is set, aliases can be used for defining functions\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1035
+#: contracorriente/man1/zshoptions.1:1035
 msgid ""
 "For example, consider the following definitions as they might occur in a "
 "startup file\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1042
+#: contracorriente/man1/zshoptions.1:1042
 #, no-wrap
 msgid ""
 "B<alias foo=bar\n"
@@ -2284,7 +2743,7 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1051
+#: contracorriente/man1/zshoptions.1:1051
 msgid ""
 "Here, B<foo> is expanded as an alias to B<bar> before the B<()> is "
 "encountered, so the function defined would be named B<bar>\\&.  By default "
@@ -2294,32 +2753,31 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1052
+#: contracorriente/man1/zshoptions.1:1052
 #, no-wrap
 msgid "B<C_BASES>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1061
+#: contracorriente/man1/zshoptions.1:1061
 msgid ""
-"Output hexadecimal numbers in the standard C format, for example "
-"`B<0xFF>\\&' instead of the usual `B<16#FF>\\&'\\&.  If the option "
-"B<OCTAL_ZEROES> is also set (it is not by default), octal numbers will be "
-"treated similarly and hence appear as `B<077>\\&' instead of `B<8#77>'\\&.  "
-"This option has no effect on the choice of the output base, nor on the "
-"output of bases other than hexadecimal and octal\\&.  Note that these "
-"formats will be understood on input irrespective of the setting of "
-"B<C_BASES>\\&."
+"Output hexadecimal numbers in the standard C format, for example `B<0xFF>"
+"\\&' instead of the usual `B<16#FF>\\&'\\&.  If the option B<OCTAL_ZEROES> "
+"is also set (it is not by default), octal numbers will be treated similarly "
+"and hence appear as `B<077>\\&' instead of `B<8#77>'\\&.  This option has no "
+"effect on the choice of the output base, nor on the output of bases other "
+"than hexadecimal and octal\\&.  Note that these formats will be understood "
+"on input irrespective of the setting of B<C_BASES>\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1061
+#: contracorriente/man1/zshoptions.1:1061
 #, no-wrap
 msgid "B<C_PRECEDENCES>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1067
+#: contracorriente/man1/zshoptions.1:1067
 msgid ""
 "This alters the precedence of arithmetic operators to be more like C and "
 "other programming languages; the section ARITHMETIC EVALUATION in "
@@ -2327,13 +2785,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1067
+#: contracorriente/man1/zshoptions.1:1067
 #, no-wrap
 msgid "B<DEBUG_BEFORE_CMD> E<lt>DE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1072
+#: contracorriente/man1/zshoptions.1:1072
 msgid ""
 "Run the B<DEBUG> trap before each command; otherwise it is run after each "
 "command\\&.  Setting this option mimics the behaviour of ksh 93; with the "
@@ -2341,20 +2799,20 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1072
+#: contracorriente/man1/zshoptions.1:1072
 #, no-wrap
 msgid "B<ERR_EXIT> (B<-e>, ksh: B<-e>)"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1077
+#: contracorriente/man1/zshoptions.1:1077
 msgid ""
 "If a command has a non-zero exit status, execute the B<ZERR> trap, if set, "
 "and exit\\&.  This is disabled while running initialization scripts\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1085
+#: contracorriente/man1/zshoptions.1:1085
 msgid ""
 "The behaviour is also disabled inside B<DEBUG> traps\\&.  In this case the "
 "option is handled specially: it is unset on entry to the trap\\&.  If the "
@@ -2365,48 +2823,48 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1088
+#: contracorriente/man1/zshoptions.1:1088
 msgid ""
 "Non-zero status in a command list containing B<&&> or B<||> is ignored for "
 "commands not at the end of the list\\&.  Hence"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1092
+#: contracorriente/man1/zshoptions.1:1092
 #, no-wrap
 msgid "B<false && true>\n"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1096
+#: contracorriente/man1/zshoptions.1:1096
 msgid "does not trigger exit\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1100
+#: contracorriente/man1/zshoptions.1:1100
 msgid ""
 "Exiting due to B<ERR_EXIT> has certain interactions with asynchronous jobs "
 "noted in the section JOBS in I<zshmisc>(1)\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1101
+#: contracorriente/man1/zshoptions.1:1101
 #, no-wrap
 msgid "B<ERR_RETURN>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1108
+#: contracorriente/man1/zshoptions.1:1108
 msgid ""
 "If a command has a non-zero exit status, return immediately from the "
 "enclosing function\\&.  The logic is similar to that for B<ERR_EXIT>, except "
 "that an implicit B<return> statement is executed instead of an B<exit>\\&.  "
-"This will trigger an exit at the outermost level of a non-interactive "
-"script\\&."
+"This will trigger an exit at the outermost level of a non-interactive script"
+"\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1113
+#: contracorriente/man1/zshoptions.1:1113
 msgid ""
 "Normally this option inherits the behaviour of B<ERR_EXIT> that code "
 "followed by `B<&&>\\&' `B<||>' does not trigger a return\\&.  Hence in the "
@@ -2414,20 +2872,20 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1117
+#: contracorriente/man1/zshoptions.1:1117
 #, no-wrap
 msgid "B<summit || true>\n"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1122
+#: contracorriente/man1/zshoptions.1:1122
 msgid ""
-"no return is forced as the combined effect always has a zero return "
-"status\\&."
+"no return is forced as the combined effect always has a zero return status"
+"\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1128
+#: contracorriente/man1/zshoptions.1:1128
 msgid ""
 "Note\\&. however, that if B<summit> in the above example is itself a "
 "function, code inside it is considered separately: it may force a return "
@@ -2437,33 +2895,33 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1129
+#: contracorriente/man1/zshoptions.1:1129
 #, no-wrap
 msgid "B<EVAL_LINENO> E<lt>ZE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1140
+#: contracorriente/man1/zshoptions.1:1140
 msgid ""
 "If set, line numbers of expressions evaluated using the builtin B<eval> are "
 "tracked separately of the enclosing environment\\&.  This applies both to "
-"the parameter B<LINENO> and the line number output by the prompt escape "
-"B<%i>\\&.  If the option is set, the prompt escape B<%N> will output the "
-"string `B<(eval)>\\&' instead of the script or function name as an "
-"indication\\&.  (The two prompt escapes are typically used in the parameter "
-"B<PS4> to be output when the option B<XTRACE> is set\\&.)  If B<EVAL_LINENO> "
-"is unset, the line number of the surrounding script or function is retained "
-"during the evaluation\\&."
+"the parameter B<LINENO> and the line number output by the prompt escape B<%i>"
+"\\&.  If the option is set, the prompt escape B<%N> will output the string "
+"`B<(eval)>\\&' instead of the script or function name as an indication\\&.  "
+"(The two prompt escapes are typically used in the parameter B<PS4> to be "
+"output when the option B<XTRACE> is set\\&.)  If B<EVAL_LINENO> is unset, "
+"the line number of the surrounding script or function is retained during the "
+"evaluation\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1140
+#: contracorriente/man1/zshoptions.1:1140
 #, no-wrap
 msgid "B<EXEC> (B<+n>, ksh: B<+n>) E<lt>DE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1146
+#: contracorriente/man1/zshoptions.1:1146
 msgid ""
 "Do execute commands\\&.  Without this option, commands are read and checked "
 "for syntax errors, but not executed\\&.  This option cannot be turned off in "
@@ -2472,13 +2930,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1146
+#: contracorriente/man1/zshoptions.1:1146
 #, no-wrap
 msgid "B<FUNCTION_ARGZERO> E<lt>CE<gt> E<lt>ZE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1153
+#: contracorriente/man1/zshoptions.1:1153
 msgid ""
 "When executing a shell function or sourcing a script, set B<$0> temporarily "
 "to the name of the function/script\\&.  Note that toggling "
@@ -2488,30 +2946,30 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1153
+#: contracorriente/man1/zshoptions.1:1153
 #, no-wrap
 msgid "B<LOCAL_LOOPS>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1161
+#: contracorriente/man1/zshoptions.1:1161
 msgid ""
 "When this option is not set, the effect of B<break> and B<continue> commands "
-"may propagate outside function scope, affecting loops in calling "
-"functions\\&.  When the option is set in a calling function, a B<break> or a "
+"may propagate outside function scope, affecting loops in calling functions"
+"\\&.  When the option is set in a calling function, a B<break> or a "
 "B<continue> that is not caught within a called function (regardless of the "
 "setting of the option within that function)  produces a warning and the "
 "effect is cancelled\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1161
+#: contracorriente/man1/zshoptions.1:1161
 #, no-wrap
 msgid "B<LOCAL_OPTIONS> E<lt>KE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1173
+#: contracorriente/man1/zshoptions.1:1173
 msgid ""
 "If this option is set at the point of return from a shell function, most "
 "options (including this one) which were in force upon entry to the function "
@@ -2525,30 +2983,30 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1173
+#: contracorriente/man1/zshoptions.1:1173
 #, no-wrap
 msgid "B<LOCAL_PATTERNS>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1182
+#: contracorriente/man1/zshoptions.1:1182
 msgid ""
 "If this option is set at the point of return from a shell function, the "
-"state of pattern disables, as set with the builtin command `B<disable "
-"-p>\\&', is restored to what it was when the function was entered\\&.  The "
+"state of pattern disables, as set with the builtin command `B<disable -p>"
+"\\&', is restored to what it was when the function was entered\\&.  The "
 "behaviour of this option is similar to the effect of B<LOCAL_OPTIONS> on "
 "options; hence `B<emulate -L sh>\\&' (or indeed any other emulation with the "
 "B<-L> option) activates B<LOCAL_PATTERNS>\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1182
+#: contracorriente/man1/zshoptions.1:1182
 #, no-wrap
 msgid "B<LOCAL_TRAPS> E<lt>KE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1191
+#: contracorriente/man1/zshoptions.1:1191
 msgid ""
 "If this option is set when a signal trap is set inside a function, then the "
 "previous status of the trap for that signal will be restored when the "
@@ -2560,7 +3018,7 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1198
+#: contracorriente/man1/zshoptions.1:1198
 #, no-wrap
 msgid ""
 "B<unsetopt localtraps\n"
@@ -2569,47 +3027,47 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1202
+#: contracorriente/man1/zshoptions.1:1202
 msgid "will restore normal handling of B<SIGINT> after the function exits\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1203
+#: contracorriente/man1/zshoptions.1:1203
 #, no-wrap
 msgid "B<MULTI_FUNC_DEF> E<lt>ZE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1210
+#: contracorriente/man1/zshoptions.1:1210
 msgid ""
-"Allow definitions of multiple functions at once in the form `B<fn1 "
-"fn2>I<\\&.\\&.\\&.>B<()>\\&'; if the option is not set, this causes a parse "
-"error\\&.  Definition of multiple functions with the B<function> keyword is "
-"always allowed\\&.  Multiple function definitions are not often used and can "
-"cause obscure errors\\&."
+"Allow definitions of multiple functions at once in the form `B<fn1 fn2>I<\\&."
+"\\&.\\&.>B<()>\\&'; if the option is not set, this causes a parse error\\&.  "
+"Definition of multiple functions with the B<function> keyword is always "
+"allowed\\&.  Multiple function definitions are not often used and can cause "
+"obscure errors\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1210
+#: contracorriente/man1/zshoptions.1:1210
 #, no-wrap
 msgid "B<MULTIOS> E<lt>ZE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1214
+#: contracorriente/man1/zshoptions.1:1214
 msgid ""
 "Perform implicit B<tee>s or B<cat>s when multiple redirections are attempted "
 "(see the section `Redirection\\&')\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1214
+#: contracorriente/man1/zshoptions.1:1214
 #, no-wrap
 msgid "B<OCTAL_ZEROES> E<lt>SE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1220
+#: contracorriente/man1/zshoptions.1:1220
 msgid ""
 "Interpret any integer constant beginning with a 0 as octal, per IEEE Std "
 "1003\\&.2-1992 (ISO 9945-2:1993)\\&.  This is not enabled by default as it "
@@ -2618,7 +3076,7 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1225
+#: contracorriente/man1/zshoptions.1:1225
 msgid ""
 "Sequences of digits indicating a numeric base such as the `B<08>\\&' "
 "component in `B<08#77>\\&' are always interpreted as decimal, regardless of "
@@ -2626,13 +3084,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1226
+#: contracorriente/man1/zshoptions.1:1226
 #, no-wrap
 msgid "B<PIPE_FAIL>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1233
+#: contracorriente/man1/zshoptions.1:1233
 msgid ""
 "By default, when a pipeline exits the exit status recorded by the shell and "
 "returned by the shell variable B<$?> reflects that of the rightmost element "
@@ -2642,58 +3100,58 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1233
+#: contracorriente/man1/zshoptions.1:1233
 #, no-wrap
 msgid "B<SOURCE_TRACE>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1241
+#: contracorriente/man1/zshoptions.1:1241
 msgid ""
 "If set, zsh will print an informational message announcing the name of each "
 "file it loads\\&.  The format of the output is similar to that for the "
 "B<XTRACE> option, with the message B<E<lt>sourcetraceE<gt>>\\&.  A file may "
-"be loaded by the shell itself when it starts up and shuts down "
-"(B<Startup/Shutdown Files>) or by the use of the `B<source>\\&' and `B<dot>' "
-"builtin commands\\&."
+"be loaded by the shell itself when it starts up and shuts down (B<Startup/"
+"Shutdown Files>) or by the use of the `B<source>\\&' and `B<dot>' builtin "
+"commands\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1241
+#: contracorriente/man1/zshoptions.1:1241
 #, no-wrap
 msgid "B<TYPESET_SILENT>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1249
+#: contracorriente/man1/zshoptions.1:1249
 msgid ""
 "If this is unset, executing any of the `B<typeset>\\&' family of commands "
 "with no options and a list of parameters that have no values to be assigned "
 "but already exist will display the value of the parameter\\&.  If the option "
-"is set, they will only be shown when parameters are selected with the "
-"`B<-m>\\&' option\\&.  The option `B<-p>' is available whether or not the "
-"option is set\\&."
+"is set, they will only be shown when parameters are selected with the `B<-m>"
+"\\&' option\\&.  The option `B<-p>' is available whether or not the option "
+"is set\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1249
+#: contracorriente/man1/zshoptions.1:1249
 #, no-wrap
 msgid "B<VERBOSE> (B<-v>, ksh: B<-v>)"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1252
+#: contracorriente/man1/zshoptions.1:1252
 msgid "Print shell input lines as they are read\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1252
+#: contracorriente/man1/zshoptions.1:1252
 #, no-wrap
 msgid "B<XTRACE> (B<-x>, ksh: B<-x>)"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1258
+#: contracorriente/man1/zshoptions.1:1258
 msgid ""
 "Print commands and their arguments as they are executed\\&.  The output is "
 "preceded by the value of B<$PS4>, formatted as described in the section "
@@ -2701,24 +3159,24 @@ msgid ""
 msgstr ""
 
 #. type: SS
-#: ../contracorriente/man1/zshoptions.1:1259
+#: contracorriente/man1/zshoptions.1:1259
 #, no-wrap
 msgid "Shell Emulation"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1261
+#: contracorriente/man1/zshoptions.1:1261
 #, no-wrap
 msgid "B<APPEND_CREATE> E<lt>KE<gt> E<lt>SE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1265
+#: contracorriente/man1/zshoptions.1:1265
 msgid "This option only applies when B<NO_CLOBBER> (-B<C>) is in effect\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1271
+#: contracorriente/man1/zshoptions.1:1271
 msgid ""
 "If this option is not set, the shell will report an error when a append "
 "redirection (B<E<gt>E<gt>>) is used on a file that does not already exists "
@@ -2727,13 +3185,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1272
+#: contracorriente/man1/zshoptions.1:1272
 #, no-wrap
 msgid "B<BASH_REMATCH>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1283
+#: contracorriente/man1/zshoptions.1:1283
 msgid ""
 "When set, matches performed with the B<=~> operator will set the "
 "B<BASH_REMATCH> array variable, instead of the default B<MATCH> and B<match> "
@@ -2747,13 +3205,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1283
+#: contracorriente/man1/zshoptions.1:1283
 #, no-wrap
 msgid "B<BSD_ECHO> E<lt>SE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1288
+#: contracorriente/man1/zshoptions.1:1288
 msgid ""
 "Make the B<echo> builtin compatible with the BSD I<echo>(1) command\\&.  "
 "This disables backslashed escape sequences in echo strings unless the B<-e> "
@@ -2761,13 +3219,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1288
+#: contracorriente/man1/zshoptions.1:1288
 #, no-wrap
 msgid "B<CONTINUE_ON_ERROR>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1298
+#: contracorriente/man1/zshoptions.1:1298
 msgid ""
 "If a fatal error is encountered (see the section ERRORS in I<zshmisc>(1)), "
 "and the code is running in a script, the shell will resume execution at the "
@@ -2779,13 +3237,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1298
+#: contracorriente/man1/zshoptions.1:1298
 #, no-wrap
 msgid "B<CSH_JUNKIE_HISTORY> E<lt>CE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1304
+#: contracorriente/man1/zshoptions.1:1304
 msgid ""
 "A history reference without an event specifier will always refer to the "
 "previous command\\&.  Without this option, such a history reference refers "
@@ -2794,43 +3252,43 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1304
+#: contracorriente/man1/zshoptions.1:1304
 #, no-wrap
 msgid "B<CSH_JUNKIE_LOOPS> E<lt>CE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1308
+#: contracorriente/man1/zshoptions.1:1308
 msgid ""
 "Allow loop bodies to take the form `I<list>B<; end>\\&' instead of `B<do "
 ">I<list>B<; done>\\&'\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1308
+#: contracorriente/man1/zshoptions.1:1308
 #, no-wrap
 msgid "B<CSH_JUNKIE_QUOTES> E<lt>CE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1316
+#: contracorriente/man1/zshoptions.1:1316
 msgid ""
-"Changes the rules for single- and double-quoted text to match that of "
-"B<csh>\\&.  These require that embedded newlines be preceded by a backslash; "
+"Changes the rules for single- and double-quoted text to match that of B<csh>"
+"\\&.  These require that embedded newlines be preceded by a backslash; "
 "unescaped newlines will cause an error message\\&.  In double-quoted "
-"strings, it is made impossible to escape `B<$>\\&', `B<`>' or `B<\">\\&' "
-"(and `B<\\e>' itself no longer needs escaping)\\&.  Command substitutions "
-"are only expanded once, and cannot be nested\\&."
+"strings, it is made impossible to escape `B<$>\\&', `B<`>' or `B<\">"
+"\\&' (and `B<\\e>' itself no longer needs escaping)\\&.  Command "
+"substitutions are only expanded once, and cannot be nested\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1316
+#: contracorriente/man1/zshoptions.1:1316
 #, no-wrap
 msgid "B<CSH_NULLCMD> E<lt>CE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1321
+#: contracorriente/man1/zshoptions.1:1321
 msgid ""
 "Do not use the values of B<NULLCMD> and B<READNULLCMD> when running "
 "redirections with no command\\&.  This make such redirections fail (see the "
@@ -2838,30 +3296,30 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1321
+#: contracorriente/man1/zshoptions.1:1321
 #, no-wrap
 msgid "B<KSH_ARRAYS> E<lt>KE<gt> E<lt>SE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1329
+#: contracorriente/man1/zshoptions.1:1329
 msgid ""
 "Emulate B<ksh> array handling as closely as possible\\&.  If this option is "
 "set, array elements are numbered from zero, an array parameter without "
 "subscript refers to the first element instead of the whole array, and braces "
-"are required to delimit a subscript (`B<${path[2]}>\\&' rather than just "
-"`B<$path[2]>\\&') or to apply modifiers to any parameter (`B<${PWD:h}>\\&' "
+"are required to delimit a subscript (`B<${path[2]}>\\&' rather than just `B<"
+"$path[2]>\\&') or to apply modifiers to any parameter (`B<${PWD:h}>\\&' "
 "rather than `B<$PWD:h>')\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1329
+#: contracorriente/man1/zshoptions.1:1329
 #, no-wrap
 msgid "B<KSH_AUTOLOAD> E<lt>KE<gt> E<lt>SE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1337
+#: contracorriente/man1/zshoptions.1:1337
 msgid ""
 "Emulate B<ksh> function autoloading\\&.  This means that when a function is "
 "autoloaded, the corresponding file is merely executed, and must define the "
@@ -2872,13 +3330,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1337
+#: contracorriente/man1/zshoptions.1:1337
 #, no-wrap
 msgid "B<KSH_OPTION_PRINT> E<lt>KE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1342
+#: contracorriente/man1/zshoptions.1:1342
 msgid ""
 "Alters the way options settings are printed: instead of separate lists of "
 "set and unset options, all options are shown, marked `on\\&' if they are in "
@@ -2886,13 +3344,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1342
+#: contracorriente/man1/zshoptions.1:1342
 #, no-wrap
 msgid "B<KSH_TYPESET>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1349
+#: contracorriente/man1/zshoptions.1:1349
 msgid ""
 "This option is now obsolete: a better appropximation to the behaviour of "
 "other shells is obtained with the reserved word interface to B<declare>, "
@@ -2902,7 +3360,7 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1356
+#: contracorriente/man1/zshoptions.1:1356
 msgid ""
 "Alters the way arguments to the B<typeset> family of commands, including "
 "B<declare>, B<export>, B<float>, B<integer>, B<local> and B<readonly>, are "
@@ -2912,13 +3370,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1357
+#: contracorriente/man1/zshoptions.1:1357
 #, no-wrap
 msgid "B<KSH_ZERO_SUBSCRIPT>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1362
+#: contracorriente/man1/zshoptions.1:1362
 msgid ""
 "Treat use of a subscript of value zero in array or string expressions as a "
 "reference to the first element, i\\&.e\\&. the element that usually has the "
@@ -2926,7 +3384,7 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1370
+#: contracorriente/man1/zshoptions.1:1370
 msgid ""
 "If neither this option nor B<KSH_ARRAYS> is set, accesses to an element of "
 "an array or string with subscript zero return an empty element or string, "
@@ -2937,42 +3395,42 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1374
+#: contracorriente/man1/zshoptions.1:1374
 #, no-wrap
 msgid "B<array[0]=(element)>\n"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1378
+#: contracorriente/man1/zshoptions.1:1378
 msgid "is an error, while"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1382
+#: contracorriente/man1/zshoptions.1:1382
 #, no-wrap
 msgid "B<array[0,1]=(element)>\n"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1386
+#: contracorriente/man1/zshoptions.1:1386
 msgid "is not and will replace the first element of the array\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1389
+#: contracorriente/man1/zshoptions.1:1389
 msgid ""
 "This option is for compatibility with older versions of the shell and is not "
 "recommended in new code\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1390
+#: contracorriente/man1/zshoptions.1:1390
 #, no-wrap
 msgid "B<POSIX_ALIASES> E<lt>KE<gt> E<lt>SE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1396
+#: contracorriente/man1/zshoptions.1:1396
 msgid ""
 "When this option is set, reserved words are not candidates for alias "
 "expansion: it is still possible to declare any of them as an alias, but the "
@@ -2981,26 +3439,26 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1407
+#: contracorriente/man1/zshoptions.1:1407
 msgid ""
 "Alias expansion takes place while text is being read; hence when this option "
 "is set it does not take effect until the end of any function or other piece "
 "of shell code parsed as one unit\\&.  Note this may cause differences from "
 "other shells even when the option is in effect\\&.  For example, when "
-"running a command with `B<zsh -c>\\&', or even `B<zsh -o posixaliases "
-"-c>\\&', the entire command argument is parsed as one unit, so aliases "
-"defined within the argument are not available even in later lines\\&.  If in "
-"doubt, avoid use of aliases in non-interactive code\\&."
+"running a command with `B<zsh -c>\\&', or even `B<zsh -o posixaliases -c>"
+"\\&', the entire command argument is parsed as one unit, so aliases defined "
+"within the argument are not available even in later lines\\&.  If in doubt, "
+"avoid use of aliases in non-interactive code\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1408
+#: contracorriente/man1/zshoptions.1:1408
 #, no-wrap
 msgid "B<POSIX_ARGZERO>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1418
+#: contracorriente/man1/zshoptions.1:1418
 msgid ""
 "This option may be used to temporarily disable B<FUNCTION_ARGZERO> and "
 "thereby restore the value of B<$0> to the name used to invoke the shell (or "
@@ -3012,38 +3470,38 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1423
+#: contracorriente/man1/zshoptions.1:1423
 #, no-wrap
 msgid "B<emulate sh -o POSIX_ARGZERO>\n"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1428
+#: contracorriente/man1/zshoptions.1:1428
 msgid ""
 "Note that B<NO_POSIX_ARGZERO> has no effect unless B<FUNCTION_ARGZERO> was "
 "already enabled upon entry to the function or script\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1429
+#: contracorriente/man1/zshoptions.1:1429
 #, no-wrap
 msgid "B<POSIX_BUILTINS> E<lt>KE<gt> E<lt>SE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1454
+#: contracorriente/man1/zshoptions.1:1454
 msgid ""
 "When this option is set the B<command> builtin can be used to execute shell "
 "builtin commands\\&.  Parameter assignments specified before shell functions "
 "and special builtins are kept after the command completes unless the special "
-"builtin is prefixed with the B<command> builtin\\&.  Special builtins are "
-"B<\\&.>, B<:>, B<break>, B<continue>, B<declare>, B<eval>, B<exit>, "
-"B<export>, B<integer>, B<local>, B<readonly>, B<return>, B<set>, B<shift>, "
-"B<source>, B<times>, B<trap> and B<unset>\\&."
+"builtin is prefixed with the B<command> builtin\\&.  Special builtins are B<"
+"\\&.>, B<:>, B<break>, B<continue>, B<declare>, B<eval>, B<exit>, B<export>, "
+"B<integer>, B<local>, B<readonly>, B<return>, B<set>, B<shift>, B<source>, "
+"B<times>, B<trap> and B<unset>\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1459
+#: contracorriente/man1/zshoptions.1:1459
 msgid ""
 "In addition, various error conditions associated with the above builtins or "
 "B<exec> cause a non-interactive shell to exit and an interactive shell to "
@@ -3051,7 +3509,7 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1463
+#: contracorriente/man1/zshoptions.1:1463
 msgid ""
 "Furthermore, functions and shell builtins are not executed after an B<exec> "
 "prefix; the command to be executed must be an external command found in the "
@@ -3059,27 +3517,27 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1467
+#: contracorriente/man1/zshoptions.1:1467
 msgid ""
 "Furthermore, the B<getopts> builtin behaves in a POSIX-compatible fashion in "
 "that the associated variable B<OPTIND> is not made local to functions\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1470
+#: contracorriente/man1/zshoptions.1:1470
 msgid ""
 "Moreover, the warning and special exit code from B<[[ -o "
 ">I<non_existent_option>B< ]]> are suppressed\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1471
+#: contracorriente/man1/zshoptions.1:1471
 #, no-wrap
 msgid "B<POSIX_IDENTIFIERS> E<lt>KE<gt> E<lt>SE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1476
+#: contracorriente/man1/zshoptions.1:1476
 msgid ""
 "When this option is set, only the ASCII characters B<a> to B<z>, B<A> to "
 "B<Z>, B<0> to B<9> and B<_> may be used in identifiers (names of shell "
@@ -3087,31 +3545,31 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1484
+#: contracorriente/man1/zshoptions.1:1484
 msgid ""
 "In addition, setting this option limits the effect of parameter substitution "
-"with no braces, so that the expression B<$#> is treated as the parameter "
-"B<$#> even if followed by a valid parameter name\\&.  When it is unset, zsh "
-"allows expressions of the form B<$#>I<name> to refer to the length of "
-"B<$>I<name>, even for special variables, for example in expressions such as "
-"B<$#-> and B<$#*>\\&."
+"with no braces, so that the expression B<$#> is treated as the parameter B<"
+"$#> even if followed by a valid parameter name\\&.  When it is unset, zsh "
+"allows expressions of the form B<$#>I<name> to refer to the length of B<"
+"$>I<name>, even for special variables, for example in expressions such as B<"
+"$#-> and B<$#*>\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1490
+#: contracorriente/man1/zshoptions.1:1490
 msgid ""
 "Another difference is that with the option set assignment to an unset "
 "variable in arithmetic context causes the variable to be created as a scalar "
-"rather than a numeric type\\&.  So after `B<unset t; (( t = 3 "
-"))>\\&'\\&. without B<POSIX_IDENTIFIERS> set B<t> has integer type, while "
-"with it set it has scalar type\\&."
+"rather than a numeric type\\&.  So after `B<unset t; (( t = 3 ))>\\&'\\&. "
+"without B<POSIX_IDENTIFIERS> set B<t> has integer type, while with it set it "
+"has scalar type\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1499
+#: contracorriente/man1/zshoptions.1:1499
 msgid ""
-"When the option is unset and multibyte character support is enabled "
-"(i\\&.e\\&. it is compiled in and the option B<MULTIBYTE> is set), then "
+"When the option is unset and multibyte character support is enabled (i\\&.e"
+"\\&. it is compiled in and the option B<MULTIBYTE> is set), then "
 "additionally any alphanumeric characters in the local character set may be "
 "used in identifiers\\&.  Note that scripts and functions written with this "
 "feature are not portable, and also that both options must be set before the "
@@ -3121,7 +3579,7 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1503
+#: contracorriente/man1/zshoptions.1:1503
 msgid ""
 "If multibyte character support is not compiled into the shell this option is "
 "ignored; all octets with the top bit set may be used in identifiers\\&.  "
@@ -3129,13 +3587,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1504
+#: contracorriente/man1/zshoptions.1:1504
 #, no-wrap
 msgid "B<POSIX_STRINGS> E<lt>KE<gt> E<lt>SE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1509
+#: contracorriente/man1/zshoptions.1:1509
 msgid ""
 "This option affects processing of quoted strings\\&.  Currently it only "
 "affects the behaviour of null characters, i\\&.e\\&. character 0 in the "
@@ -3143,7 +3601,7 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1517
+#: contracorriente/man1/zshoptions.1:1517
 msgid ""
 "When this option is not set, null characters embedded within strings of the "
 "form B<$\\&'>I<\\&.\\&.\\&.>B<'> are treated as ordinary characters\\&. The "
@@ -3154,7 +3612,7 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1521
+#: contracorriente/man1/zshoptions.1:1521
 msgid ""
 "When this option is set, the B<$\\&'>I<\\&.\\&.\\&.>B<'> expression is "
 "truncated at the null character\\&.  Note that remaining parts of the same "
@@ -3162,7 +3620,7 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1525
+#: contracorriente/man1/zshoptions.1:1525
 msgid ""
 "For example, the command line argument B<a$\\&'b\\e0c'd> is treated with the "
 "option off as the characters B<a>, B<b>, null, B<c>, B<d>, and with the "
@@ -3170,13 +3628,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1526
+#: contracorriente/man1/zshoptions.1:1526
 #, no-wrap
 msgid "B<POSIX_TRAPS> E<lt>KE<gt> E<lt>SE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1536
+#: contracorriente/man1/zshoptions.1:1536
 msgid ""
 "When this option is set, the usual zsh behaviour of executing traps for "
 "B<EXIT> on exit from shell functions is suppressed\\&.  In that case, "
@@ -3188,42 +3646,41 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1536
+#: contracorriente/man1/zshoptions.1:1536
 #, no-wrap
 msgid "B<SH_FILE_EXPANSION> E<lt>KE<gt> E<lt>SE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1544
+#: contracorriente/man1/zshoptions.1:1544
 msgid ""
 "Perform filename expansion (e\\&.g\\&., B<~> expansion) I<before> parameter "
-"expansion, command substitution, arithmetic expansion and brace "
-"expansion\\&.  If this option is unset, it is performed I<after> brace "
-"expansion, so things like `B<~$USERNAME>\\&' and `B<~{pfalstad,rc}>\\&' will "
-"work\\&."
+"expansion, command substitution, arithmetic expansion and brace expansion"
+"\\&.  If this option is unset, it is performed I<after> brace expansion, so "
+"things like `B<~$USERNAME>\\&' and `B<~{pfalstad,rc}>\\&' will work\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1544
+#: contracorriente/man1/zshoptions.1:1544
 #, no-wrap
 msgid "B<SH_NULLCMD> E<lt>KE<gt> E<lt>SE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1548
+#: contracorriente/man1/zshoptions.1:1548
 msgid ""
 "Do not use the values of B<NULLCMD> and B<READNULLCMD> when doing "
 "redirections, use `B<:>\\&' instead (see the section `Redirection')\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1548
+#: contracorriente/man1/zshoptions.1:1548
 #, no-wrap
 msgid "B<SH_OPTION_LETTERS> E<lt>KE<gt> E<lt>SE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1553
+#: contracorriente/man1/zshoptions.1:1553
 msgid ""
 "If this option is set the shell tries to interpret single letter options "
 "(which are used with B<set> and B<setopt>) like B<ksh> does\\&.  This also "
@@ -3231,13 +3688,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1553
+#: contracorriente/man1/zshoptions.1:1553
 #, no-wrap
 msgid "B<SH_WORD_SPLIT> (B<-y>) E<lt>KE<gt> E<lt>SE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1559
+#: contracorriente/man1/zshoptions.1:1559
 msgid ""
 "Causes field splitting to be performed on unquoted parameter expansions\\&.  "
 "Note that this option has nothing to do with word splitting\\&.  (See "
@@ -3245,51 +3702,51 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1559
+#: contracorriente/man1/zshoptions.1:1559
 #, no-wrap
 msgid "B<TRAPS_ASYNC>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1565
+#: contracorriente/man1/zshoptions.1:1565
 msgid ""
-"While waiting for a program to exit, handle signals and run traps "
-"immediately\\&.  Otherwise the trap is run after a child process has "
-"exited\\&.  Note this does not affect the point at which traps are run for "
-"any case other than when the shell is waiting for a child process\\&."
+"While waiting for a program to exit, handle signals and run traps immediately"
+"\\&.  Otherwise the trap is run after a child process has exited\\&.  Note "
+"this does not affect the point at which traps are run for any case other "
+"than when the shell is waiting for a child process\\&."
 msgstr ""
 
 #. type: SS
-#: ../contracorriente/man1/zshoptions.1:1566
+#: contracorriente/man1/zshoptions.1:1566
 #, no-wrap
 msgid "Shell State"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1568
+#: contracorriente/man1/zshoptions.1:1568
 #, no-wrap
 msgid "B<INTERACTIVE> (B<-i>, ksh: B<-i>)"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1579
+#: contracorriente/man1/zshoptions.1:1579
 msgid ""
 "This is an interactive shell\\&.  This option is set upon initialisation if "
-"the standard input is a tty and commands are being read from standard "
-"input\\&.  (See the discussion of B<SHIN_STDIN>\\&.)  This heuristic may be "
+"the standard input is a tty and commands are being read from standard input"
+"\\&.  (See the discussion of B<SHIN_STDIN>\\&.)  This heuristic may be "
 "overridden by specifying a state for this option on the command line\\&.  "
 "The value of this option can only be changed via flags supplied at "
 "invocation of the shell\\&.  It cannot be changed once zsh is running\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1579
+#: contracorriente/man1/zshoptions.1:1579
 #, no-wrap
 msgid "B<LOGIN> (B<-l>, ksh: B<-l>)"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1584
+#: contracorriente/man1/zshoptions.1:1584
 msgid ""
 "This is a login shell\\&.  If this option is not explicitly set, the shell "
 "becomes a login shell if the first character of the B<argv[0]> passed to the "
@@ -3297,13 +3754,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1584
+#: contracorriente/man1/zshoptions.1:1584
 #, no-wrap
 msgid "B<PRIVILEGED> (B<-p>, ksh: B<-p>)"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1589
+#: contracorriente/man1/zshoptions.1:1589
 msgid ""
 "Turn on privileged mode\\&. Typically this is used when script is to be run "
 "with elevated privileges\\&. This should be done as follows directly with "
@@ -3311,13 +3768,13 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1594
+#: contracorriente/man1/zshoptions.1:1594
 #, no-wrap
 msgid "B<#!/bin/zsh -p>\n"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1603
+#: contracorriente/man1/zshoptions.1:1603
 msgid ""
 "The option is enabled automatically on startup if the effective user (group) "
 "ID is not equal to the real user (group) ID\\&. In this case, turning the "
@@ -3328,31 +3785,31 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1607
+#: contracorriente/man1/zshoptions.1:1607
 #, no-wrap
 msgid "B<unsetopt privileged || exit>\n"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1618
+#: contracorriente/man1/zshoptions.1:1618
 msgid ""
 "The B<PRIVILEGED> option disables sourcing user startup files\\&.  If zsh is "
 "invoked as `B<sh>\\&' or `B<ksh>' with this option set, B</etc/suid_profile> "
-"is sourced (after B</etc/profile> on interactive shells)\\&. Sourcing "
-"B<~/\\&.profile> is disabled and the contents of the B<ENV> variable is "
-"ignored\\&. This option cannot be changed using the B<-m> option of "
-"B<setopt> and B<unsetopt>, and changing it inside a function always changes "
-"it globally regardless of the B<LOCAL_OPTIONS> option\\&."
+"is sourced (after B</etc/profile> on interactive shells)\\&. Sourcing B<~/"
+"\\&.profile> is disabled and the contents of the B<ENV> variable is ignored"
+"\\&. This option cannot be changed using the B<-m> option of B<setopt> and "
+"B<unsetopt>, and changing it inside a function always changes it globally "
+"regardless of the B<LOCAL_OPTIONS> option\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1619
+#: contracorriente/man1/zshoptions.1:1619
 #, no-wrap
 msgid "B<RESTRICTED> (B<-r>)"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1625
+#: contracorriente/man1/zshoptions.1:1625
 msgid ""
 "Enables restricted mode\\&.  This option cannot be changed using "
 "B<unsetopt>, and setting it inside a function always changes it globally "
@@ -3361,13 +3818,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1625
+#: contracorriente/man1/zshoptions.1:1625
 #, no-wrap
 msgid "B<SHIN_STDIN> (B<-s>, ksh: B<-s>)"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1641
+#: contracorriente/man1/zshoptions.1:1641
 msgid ""
 "Commands are being read from the standard input\\&.  Commands are read from "
 "standard input if no command is specified with B<-c> and no file of commands "
@@ -3383,13 +3840,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1641
+#: contracorriente/man1/zshoptions.1:1641
 #, no-wrap
 msgid "B<SINGLE_COMMAND> (B<-t>, ksh: B<-t>)"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1649
+#: contracorriente/man1/zshoptions.1:1649
 msgid ""
 "If the shell is reading from standard input, it exits after a single command "
 "has been executed\\&.  This also makes the shell non-interactive, unless the "
@@ -3399,30 +3856,30 @@ msgid ""
 msgstr ""
 
 #. type: SS
-#: ../contracorriente/man1/zshoptions.1:1650
+#: contracorriente/man1/zshoptions.1:1650
 #, no-wrap
 msgid "Zle"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1652
+#: contracorriente/man1/zshoptions.1:1652
 #, no-wrap
 msgid "B<BEEP> (B<+B>) E<lt>DE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1656
+#: contracorriente/man1/zshoptions.1:1656
 msgid "Beep on error in ZLE\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1656
+#: contracorriente/man1/zshoptions.1:1656
 #, no-wrap
 msgid "B<COMBINING_CHARS>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1665
+#: contracorriente/man1/zshoptions.1:1665
 msgid ""
 "Assume that the terminal displays combining characters correctly\\&.  "
 "Specifically, if a base alphanumeric character is followed by one or more "
@@ -3433,7 +3890,7 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1671
+#: contracorriente/man1/zshoptions.1:1671
 msgid ""
 "If this option is set, the pattern test B<[[:WORD:]]> matches a zero-width "
 "punctuation character on the assumption that it will be used as part of a "
@@ -3442,13 +3899,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1672
+#: contracorriente/man1/zshoptions.1:1672
 #, no-wrap
 msgid "B<EMACS>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1679
+#: contracorriente/man1/zshoptions.1:1679
 msgid ""
 "If ZLE is loaded, turning on this option has the equivalent effect of "
 "`B<bindkey -e>\\&'\\&.  In addition, the VI option is unset\\&.  Turning it "
@@ -3458,29 +3915,29 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1679
+#: contracorriente/man1/zshoptions.1:1679
 #, no-wrap
 msgid "B<OVERSTRIKE>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1682
+#: contracorriente/man1/zshoptions.1:1682
 msgid "Start up the line editor in overstrike mode\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1682
+#: contracorriente/man1/zshoptions.1:1682
 #, no-wrap
 msgid "B<SINGLE_LINE_ZLE> (B<-M>) E<lt>KE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1685
+#: contracorriente/man1/zshoptions.1:1685
 msgid "Use single-line command line editing instead of multi-line\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1692
+#: contracorriente/man1/zshoptions.1:1692
 msgid ""
 "Note that although this is on by default in ksh emulation it only provides "
 "superficial compatibility with the ksh line editor and reduces the "
@@ -3490,13 +3947,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1693
+#: contracorriente/man1/zshoptions.1:1693
 #, no-wrap
 msgid "B<VI>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1700
+#: contracorriente/man1/zshoptions.1:1700
 msgid ""
 "If ZLE is loaded, turning on this option has the equivalent effect of "
 "`B<bindkey -v>\\&'\\&.  In addition, the EMACS option is unset\\&.  Turning "
@@ -3506,26 +3963,26 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1700
+#: contracorriente/man1/zshoptions.1:1700
 #, no-wrap
 msgid "B<ZLE> (B<-Z>)"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1704
+#: contracorriente/man1/zshoptions.1:1704
 msgid ""
 "Use the zsh line editor\\&.  Set by default in interactive shells connected "
 "to a terminal\\&."
 msgstr ""
 
 #. type: SH
-#: ../contracorriente/man1/zshoptions.1:1705
+#: contracorriente/man1/zshoptions.1:1705
 #, no-wrap
 msgid "OPTION ALIASES"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1709
+#: contracorriente/man1/zshoptions.1:1709
 msgid ""
 "Some options have alternative names\\&.  These aliases are never used for "
 "output, but can be used just like normal option names when specifying "
@@ -3533,847 +3990,552 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1711
+#: contracorriente/man1/zshoptions.1:1711
 #, no-wrap
 msgid "B<BRACE_EXPAND>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1716
+#: contracorriente/man1/zshoptions.1:1716
 msgid "I<NO_>B<IGNORE_BRACES> (ksh and bash compatibility)"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1716
+#: contracorriente/man1/zshoptions.1:1716
 #, no-wrap
 msgid "B<DOT_GLOB>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1720
+#: contracorriente/man1/zshoptions.1:1720
 msgid "B<GLOB_DOTS> (bash compatibility)"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1720
+#: contracorriente/man1/zshoptions.1:1720
 #, no-wrap
 msgid "B<HASH_ALL>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1724
+#: contracorriente/man1/zshoptions.1:1724
 msgid "B<HASH_CMDS> (bash compatibility)"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1724
+#: contracorriente/man1/zshoptions.1:1724
 #, no-wrap
 msgid "B<HIST_APPEND>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1728
+#: contracorriente/man1/zshoptions.1:1728
 msgid "B<APPEND_HISTORY> (bash compatibility)"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1728
+#: contracorriente/man1/zshoptions.1:1728
 #, no-wrap
 msgid "B<HIST_EXPAND>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1732
+#: contracorriente/man1/zshoptions.1:1732
 msgid "B<BANG_HIST> (bash compatibility)"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1732
+#: contracorriente/man1/zshoptions.1:1732
 #, no-wrap
 msgid "B<LOG>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1736
+#: contracorriente/man1/zshoptions.1:1736
 msgid "I<NO_>B<HIST_NO_FUNCTIONS> (ksh compatibility)"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1736
+#: contracorriente/man1/zshoptions.1:1736
 #, no-wrap
 msgid "B<MAIL_WARN>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1740
+#: contracorriente/man1/zshoptions.1:1740
 msgid "B<MAIL_WARNING> (bash compatibility)"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1740
+#: contracorriente/man1/zshoptions.1:1740
 #, no-wrap
 msgid "B<ONE_CMD>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1744
+#: contracorriente/man1/zshoptions.1:1744
 msgid "B<SINGLE_COMMAND> (bash compatibility)"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1744
+#: contracorriente/man1/zshoptions.1:1744
 #, no-wrap
 msgid "B<PHYSICAL>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1748
+#: contracorriente/man1/zshoptions.1:1748
 msgid "B<CHASE_LINKS> (ksh and bash compatibility)"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1748
+#: contracorriente/man1/zshoptions.1:1748
 #, no-wrap
 msgid "B<PROMPT_VARS>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1752
+#: contracorriente/man1/zshoptions.1:1752
 msgid "B<PROMPT_SUBST> (bash compatibility)"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1752
+#: contracorriente/man1/zshoptions.1:1752
 #, no-wrap
 msgid "B<STDIN>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1756
+#: contracorriente/man1/zshoptions.1:1756
 msgid "B<SHIN_STDIN> (ksh compatibility)"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1756
+#: contracorriente/man1/zshoptions.1:1756
 #, no-wrap
 msgid "B<TRACK_ALL>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1760
+#: contracorriente/man1/zshoptions.1:1760
 msgid "B<HASH_CMDS> (ksh compatibility)"
 msgstr ""
 
 #. type: SH
-#: ../contracorriente/man1/zshoptions.1:1760
+#: contracorriente/man1/zshoptions.1:1760
 #, no-wrap
 msgid "SINGLE LETTER OPTIONS"
 msgstr ""
 
 #. type: SS
-#: ../contracorriente/man1/zshoptions.1:1761
+#: contracorriente/man1/zshoptions.1:1761
 #, no-wrap
 msgid "Default set"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1763
+#: contracorriente/man1/zshoptions.1:1763
 #, no-wrap
 msgid "B<-0>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1766
+#: contracorriente/man1/zshoptions.1:1766
 msgid "CORRECT"
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshoptions.1:1766
-#, no-wrap
-msgid "B<-1>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1769
+#: contracorriente/man1/zshoptions.1:1769
 msgid "PRINT_EXIT_VALUE"
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshoptions.1:1769
-#, no-wrap
-msgid "B<-2>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1772
+#: contracorriente/man1/zshoptions.1:1772
 msgid "I<NO_>BAD_PATTERN"
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshoptions.1:1772
-#, no-wrap
-msgid "B<-3>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1775
+#: contracorriente/man1/zshoptions.1:1775
 msgid "I<NO_>NOMATCH"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1775
+#: contracorriente/man1/zshoptions.1:1775
 #, no-wrap
 msgid "B<-4>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1778
+#: contracorriente/man1/zshoptions.1:1778
 msgid "GLOB_DOTS"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1778
+#: contracorriente/man1/zshoptions.1:1778
 #, no-wrap
 msgid "B<-5>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1781
-#: ../contracorriente/man1/zshoptions.1:1943
+#: contracorriente/man1/zshoptions.1:1781
+#: contracorriente/man1/zshoptions.1:1943
 msgid "NOTIFY"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1781
+#: contracorriente/man1/zshoptions.1:1781
 #, no-wrap
 msgid "B<-6>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1784
+#: contracorriente/man1/zshoptions.1:1784
 msgid "BG_NICE"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1784
+#: contracorriente/man1/zshoptions.1:1784
 #, no-wrap
 msgid "B<-7>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1787
+#: contracorriente/man1/zshoptions.1:1787
 msgid "IGNORE_EOF"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1787
+#: contracorriente/man1/zshoptions.1:1787
 #, no-wrap
 msgid "B<-8>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1790
-#: ../contracorriente/man1/zshoptions.1:1937
+#: contracorriente/man1/zshoptions.1:1790
+#: contracorriente/man1/zshoptions.1:1937
 msgid "MARK_DIRS"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1790
+#: contracorriente/man1/zshoptions.1:1790
 #, no-wrap
 msgid "B<-9>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1793
+#: contracorriente/man1/zshoptions.1:1793
 msgid "AUTO_LIST"
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshoptions.1:1793
-#, no-wrap
-msgid "B<-B>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1796
+#: contracorriente/man1/zshoptions.1:1796
 msgid "I<NO_>BEEP"
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshoptions.1:1796
-#: ../contracorriente/man1/zshoptions.1:1928
-#, no-wrap
-msgid "B<-C>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1799
-#: ../contracorriente/man1/zshoptions.1:1931
+#: contracorriente/man1/zshoptions.1:1799
+#: contracorriente/man1/zshoptions.1:1931
 msgid "I<NO_>CLOBBER"
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshoptions.1:1799
-#, no-wrap
-msgid "B<-D>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1802
+#: contracorriente/man1/zshoptions.1:1802
 msgid "PUSHD_TO_HOME"
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshoptions.1:1802
-#, no-wrap
-msgid "B<-E>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1805
+#: contracorriente/man1/zshoptions.1:1805
 msgid "PUSHD_SILENT"
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshoptions.1:1805
-#, no-wrap
-msgid "B<-F>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1808
-#: ../contracorriente/man1/zshoptions.1:1949
+#: contracorriente/man1/zshoptions.1:1808
+#: contracorriente/man1/zshoptions.1:1949
 msgid "I<NO_>GLOB"
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshoptions.1:1808
-#, no-wrap
-msgid "B<-G>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1811
+#: contracorriente/man1/zshoptions.1:1811
 msgid "NULL_GLOB"
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshoptions.1:1811
-#, no-wrap
-msgid "B<-H>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1814
+#: contracorriente/man1/zshoptions.1:1814
 msgid "RM_STAR_SILENT"
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshoptions.1:1814
-#, no-wrap
-msgid "B<-I>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1817
+#: contracorriente/man1/zshoptions.1:1817
 msgid "IGNORE_BRACES"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1817
+#: contracorriente/man1/zshoptions.1:1817
 #, no-wrap
 msgid "B<-J>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1820
+#: contracorriente/man1/zshoptions.1:1820
 msgid "AUTO_CD"
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshoptions.1:1820
-#, no-wrap
-msgid "B<-K>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1823
+#: contracorriente/man1/zshoptions.1:1823
 msgid "I<NO_>BANG_HIST"
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshoptions.1:1823
-#, no-wrap
-msgid "B<-L>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1826
+#: contracorriente/man1/zshoptions.1:1826
 msgid "SUN_KEYBOARD_HACK"
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshoptions.1:1826
-#, no-wrap
-msgid "B<-M>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1829
+#: contracorriente/man1/zshoptions.1:1829
 msgid "SINGLE_LINE_ZLE"
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshoptions.1:1829
-#, no-wrap
-msgid "B<-N>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1832
+#: contracorriente/man1/zshoptions.1:1832
 msgid "AUTO_PUSHD"
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshoptions.1:1832
-#, no-wrap
-msgid "B<-O>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1835
+#: contracorriente/man1/zshoptions.1:1835
 msgid "CORRECT_ALL"
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshoptions.1:1835
-#, no-wrap
-msgid "B<-P>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1838
+#: contracorriente/man1/zshoptions.1:1838
 msgid "RC_EXPAND_PARAM"
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshoptions.1:1838
-#, no-wrap
-msgid "B<-Q>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1841
+#: contracorriente/man1/zshoptions.1:1841
 msgid "PATH_DIRS"
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshoptions.1:1841
-#, no-wrap
-msgid "B<-R>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1844
+#: contracorriente/man1/zshoptions.1:1844
 msgid "LONG_LIST_JOBS"
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshoptions.1:1844
-#, no-wrap
-msgid "B<-S>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1847
+#: contracorriente/man1/zshoptions.1:1847
 msgid "REC_EXACT"
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshoptions.1:1847
-#: ../contracorriente/man1/zshoptions.1:1931
-#, no-wrap
-msgid "B<-T>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1850
+#: contracorriente/man1/zshoptions.1:1850
 msgid "CDABLE_VARS"
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshoptions.1:1850
-#, no-wrap
-msgid "B<-U>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1853
+#: contracorriente/man1/zshoptions.1:1853
 msgid "MAIL_WARNING"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1853
+#: contracorriente/man1/zshoptions.1:1853
 #, no-wrap
 msgid "B<-V>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1856
+#: contracorriente/man1/zshoptions.1:1856
 msgid "I<NO_>PROMPT_CR"
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshoptions.1:1856
-#, no-wrap
-msgid "B<-W>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1859
+#: contracorriente/man1/zshoptions.1:1859
 msgid "AUTO_RESUME"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1859
-#: ../contracorriente/man1/zshoptions.1:1934
+#: contracorriente/man1/zshoptions.1:1859
+#: contracorriente/man1/zshoptions.1:1934
 #, no-wrap
 msgid "B<-X>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1862
+#: contracorriente/man1/zshoptions.1:1862
 msgid "LIST_TYPES"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1862
+#: contracorriente/man1/zshoptions.1:1862
 #, no-wrap
 msgid "B<-Y>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1865
+#: contracorriente/man1/zshoptions.1:1865
 msgid "MENU_COMPLETE"
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshoptions.1:1865
-#, no-wrap
-msgid "B<-Z>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1868
+#: contracorriente/man1/zshoptions.1:1868
 msgid "ZLE"
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshoptions.1:1868
-#: ../contracorriente/man1/zshoptions.1:1937
-#, no-wrap
-msgid "B<-a>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1871
-#: ../contracorriente/man1/zshoptions.1:1940
+#: contracorriente/man1/zshoptions.1:1871
+#: contracorriente/man1/zshoptions.1:1940
 msgid "ALL_EXPORT"
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshoptions.1:1871
-#: ../contracorriente/man1/zshoptions.1:1943
-#, no-wrap
-msgid "B<-e>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1874
-#: ../contracorriente/man1/zshoptions.1:1946
+#: contracorriente/man1/zshoptions.1:1874
+#: contracorriente/man1/zshoptions.1:1946
 msgid "ERR_EXIT"
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshoptions.1:1874
-#: ../contracorriente/man1/zshoptions.1:1946
-#, no-wrap
-msgid "B<-f>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1877
+#: contracorriente/man1/zshoptions.1:1877
 msgid "I<NO_>RCS"
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshoptions.1:1877
-#, no-wrap
-msgid "B<-g>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1880
+#: contracorriente/man1/zshoptions.1:1880
 msgid "HIST_IGNORE_SPACE"
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshoptions.1:1880
-#, no-wrap
-msgid "B<-h>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1883
+#: contracorriente/man1/zshoptions.1:1883
 msgid "HIST_IGNORE_DUPS"
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshoptions.1:1883
-#: ../contracorriente/man1/zshoptions.1:1949
-#, no-wrap
-msgid "B<-i>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1886
-#: ../contracorriente/man1/zshoptions.1:1952
+#: contracorriente/man1/zshoptions.1:1886
+#: contracorriente/man1/zshoptions.1:1952
 msgid "INTERACTIVE"
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshoptions.1:1886
-#, no-wrap
-msgid "B<-k>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1889
+#: contracorriente/man1/zshoptions.1:1889
 msgid "INTERACTIVE_COMMENTS"
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshoptions.1:1889
-#: ../contracorriente/man1/zshoptions.1:1952
-#, no-wrap
-msgid "B<-l>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1892
-#: ../contracorriente/man1/zshoptions.1:1955
+#: contracorriente/man1/zshoptions.1:1892
+#: contracorriente/man1/zshoptions.1:1955
 msgid "LOGIN"
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshoptions.1:1892
-#: ../contracorriente/man1/zshoptions.1:1955
-#: ../contracorriente/man1/zshoptions.1:1994
-#, no-wrap
-msgid "B<-m>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1895
-#: ../contracorriente/man1/zshoptions.1:1958
+#: contracorriente/man1/zshoptions.1:1895
+#: contracorriente/man1/zshoptions.1:1958
 msgid "MONITOR"
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshoptions.1:1895
-#: ../contracorriente/man1/zshoptions.1:1958
-#, no-wrap
-msgid "B<-n>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1898
-#: ../contracorriente/man1/zshoptions.1:1961
+#: contracorriente/man1/zshoptions.1:1898
+#: contracorriente/man1/zshoptions.1:1961
 msgid "I<NO_>EXEC"
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshoptions.1:1898
-#: ../contracorriente/man1/zshoptions.1:1961
-#, no-wrap
-msgid "B<-p>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1901
-#: ../contracorriente/man1/zshoptions.1:1964
+#: contracorriente/man1/zshoptions.1:1901
+#: contracorriente/man1/zshoptions.1:1964
 msgid "PRIVILEGED"
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshoptions.1:1901
-#: ../contracorriente/man1/zshoptions.1:1964
-#, no-wrap
-msgid "B<-r>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1904
-#: ../contracorriente/man1/zshoptions.1:1967
+#: contracorriente/man1/zshoptions.1:1904
+#: contracorriente/man1/zshoptions.1:1967
 msgid "RESTRICTED"
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshoptions.1:1904
-#: ../contracorriente/man1/zshoptions.1:1967
-#: ../contracorriente/man1/zshoptions.1:2000
-#, no-wrap
-msgid "B<-s>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1907
-#: ../contracorriente/man1/zshoptions.1:1970
+#: contracorriente/man1/zshoptions.1:1907
+#: contracorriente/man1/zshoptions.1:1970
 msgid "SHIN_STDIN"
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshoptions.1:1907
-#: ../contracorriente/man1/zshoptions.1:1970
-#, no-wrap
-msgid "B<-t>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1910
-#: ../contracorriente/man1/zshoptions.1:1973
+#: contracorriente/man1/zshoptions.1:1910
+#: contracorriente/man1/zshoptions.1:1973
 msgid "SINGLE_COMMAND"
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshoptions.1:1910
-#: ../contracorriente/man1/zshoptions.1:1973
-#, no-wrap
-msgid "B<-u>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1913
-#: ../contracorriente/man1/zshoptions.1:1976
+#: contracorriente/man1/zshoptions.1:1913
+#: contracorriente/man1/zshoptions.1:1976
 msgid "I<NO_>UNSET"
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshoptions.1:1913
-#: ../contracorriente/man1/zshoptions.1:1976
-#, no-wrap
-msgid "B<-v>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1916
-#: ../contracorriente/man1/zshoptions.1:1979
+#: contracorriente/man1/zshoptions.1:1916
+#: contracorriente/man1/zshoptions.1:1979
 msgid "VERBOSE"
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshoptions.1:1916
-#, no-wrap
-msgid "B<-w>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1919
+#: contracorriente/man1/zshoptions.1:1919
 msgid "CHASE_LINKS"
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshoptions.1:1919
-#: ../contracorriente/man1/zshoptions.1:1979
-#, no-wrap
-msgid "B<-x>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1922
-#: ../contracorriente/man1/zshoptions.1:1982
+#: contracorriente/man1/zshoptions.1:1922
+#: contracorriente/man1/zshoptions.1:1982
 msgid "XTRACE"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshoptions.1:1922
+#: contracorriente/man1/zshoptions.1:1922
 #, no-wrap
 msgid "B<-y>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1925
+#: contracorriente/man1/zshoptions.1:1925
 msgid "SH_WORD_SPLIT"
 msgstr ""
 
 #. type: SS
-#: ../contracorriente/man1/zshoptions.1:1926
+#: contracorriente/man1/zshoptions.1:1926
 #, no-wrap
 msgid "sh/ksh emulation set"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1934
+#: contracorriente/man1/zshoptions.1:1934
 msgid "TRAPS_ASYNC"
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshoptions.1:1940
-#: ../contracorriente/man1/zshoptions.1:1988
-#, no-wrap
-msgid "B<-b>"
-msgstr ""
-
 #. type: SS
-#: ../contracorriente/man1/zshoptions.1:1983
+#: contracorriente/man1/zshoptions.1:1983
 #, no-wrap
 msgid "Also note"
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshoptions.1:1985
-#, no-wrap
-msgid "B<-A>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1988
+#: contracorriente/man1/zshoptions.1:1988
 msgid "Used by B<set> for setting arrays"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1991
+#: contracorriente/man1/zshoptions.1:1991
 msgid "Used on the command line to specify end of option processing"
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshoptions.1:1991
-#, no-wrap
-msgid "B<-c>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1994
+#: contracorriente/man1/zshoptions.1:1994
 msgid "Used on the command line to specify a single command"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:1997
+#: contracorriente/man1/zshoptions.1:1997
 msgid "Used by B<setopt> for pattern-matching option setting"
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshoptions.1:1997
-#, no-wrap
-msgid "B<-o>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:2000
+#: contracorriente/man1/zshoptions.1:2000
 msgid "Used in all places to allow use of long option names"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshoptions.1:2003
+#: contracorriente/man1/zshoptions.1:2003
 msgid "Used by B<set> to sort positional parameters"
 msgstr ""

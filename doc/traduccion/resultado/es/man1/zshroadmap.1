@@ -1,0 +1,201 @@
+.\"*******************************************************************
+.\"
+.\" This file was generated with po4a. Translate the source file.
+.\"
+.\"*******************************************************************
+.TH ZSHROADMAP 1 "Febrero 14 de 2020" "zsh 5\&.8" 
+.SH NOMBRE
+.\" Yodl file: Zsh/roadmap.yo
+zshroadmap \- introducción informal al manual de zsh El manual de Zsh, comoel
+interprete de ordenes en sí es grande y a menudo complicado\&. Esta sección
+del manual proporciona algunos indicadores sobre las áreas del interprete de
+ordenes que probablemente sean de especial interés para los nuevos usuarios,
+e indica en qué parte del resto del manual se encuentra la documentación\ &.
+.PP
+.SH "CUANDO EL INTERPRETE DE ORDENES ARRANCA"
+.PP
+Cuando inicia, el interprete de ordenes lee ordenes de varios
+archivos\&. Estos pueden ser creado o editados para personalizar el
+interprete de ordenes\&.  Vea la sección Archivos/de Arranque y Terminación
+en \fIzsh\fP(1)\&.
+.PP
+If no personal initialization files exist for the current user, a function
+is run to help you change some of the most common settings\&.  It won\&'t
+appear if your administrator has disabled the \fBzsh/newuser\fP module\&.  The
+function is designed to be self\-explanatory\&.  You can run it by hand with
+`\fBautoload \-Uz zsh\-newuser\-install; zsh\-newuser\-install \-f\fP\&'\&.  See also
+the section User Configuration Functions in \fIzshcontrib\fP(1)\&.
+.PP
+.SH "USO INTERACTIVO"
+.PP
+Las interacciones con el interprete de ordenes usan el Editor de Líneas de
+Zsh, ZLE\&. Esteeste se describe en detalle en \fIzshzle\fP(1)\&.
+.PP
+The first decision a user must make is whether to use the Emacs or Vi
+editing mode as the keys for editing are substantially different\&.  Emacs
+editing mode is probably more natural for beginners and can be selected
+explicitly with the command \fBbindkey \-e\fP\&.
+.PP
+A history mechanism for retrieving previously typed lines (most simply with
+the Up or Down arrow keys) is available; note that, unlike other shells, zsh
+will not save these lines when the shell exits unless you set appropriate
+variables, and the number of history lines retained by default is quite
+small (30 lines)\&.  See the description of the shell variables (referred to
+in the documentation as parameters) \fBHISTFILE\fP, \fBHISTSIZE\fP and \fBSAVEHIST\fP
+in \fIzshparam\fP(1)\&.  Note that it\&'s currently only possible to read and
+write files saving history when the shell is interactive, i\&.e\&. it does
+not work from scripts\&.
+.PP
+The shell now supports the UTF\-8 character set (and also others if supported
+by the operating system)\&.  This is (mostly) handled transparently by the
+shell, but the degree of support in terminal emulators is variable\&.  There
+is some discussion of this in the shell FAQ,
+\fBhttp://www\&.zsh\&.org/FAQ/\fP\&.  Note in particular that for combining
+characters to be handled the option \fBCOMBINING_CHARS\fP needs to be set\&.
+Because the shell is now more sensitive to the definition of the character
+set, note that if you are upgrading from an older version of the shell you
+should ensure that the appropriate variable, either \fBLANG\fP (to affect all
+aspects of the shell\&'s operation) or \fBLC_CTYPE\fP (to affect only the
+handling of character sets) is set to an appropriate value\&.  This is true
+even if you are using a single\-byte character set including extensions of
+ASCII such as \fBISO\-8859\-1\fP or \fBISO\-8859\-15\fP\&.  See the description of
+\fBLC_CTYPE\fP in \fIzshparam\fP(1)\&.
+.PP
+.SS Completación
+.PP
+Completion is a feature present in many shells\&. It allows the user to type
+only a part (usually the prefix) of a word and have the shell fill in the
+rest\&.  The completion system in zsh is programmable\&.  For example, the
+shell can be set to complete email addresses in arguments to the mail
+command from your \fB~/\&.abook/addressbook\fP; usernames, hostnames, and even
+remote paths in arguments to scp, and so on\&.  Anything that can be written
+in or glued together with zsh can be the source of what the line editor
+offers as possible completions\&.
+.PP
+Zsh has two completion systems, an old, so called \fBcompctl\fP completion
+(named after the builtin command that serves as its complete and only user
+interface), and a new one, referred to as \fBcompsys\fP, organized as library
+of builtin and user\-defined functions\&.  The two systems differ in their
+interface for specifying the completion behavior\&.  The new system is more
+customizable and is supplied with completions for many commonly used
+commands; it is therefore to be preferred\&.
+.PP
+El sistema de completación debe habilitares explicitamente cuando el
+interprete de ordenes arranca\&.  Para obtener más información vea
+\fIzshcompsys\fP(1)\&.
+.PP
+.SS "Extendiendo el editor de líneas"
+.PP
+Fuera de la completación, el editoro de líneas es altamente extensible
+mediante funciones del interprete de ordenes\&. Algunas funciones útiles se
+suministran con el interprete de ordenes; da facilidades tales como:
+.PP
+.PD 0
+.TP 
+.PD
+\fBinsert\-composed\-char\fP
+componiendo caracteres no encontrados en el teclado
+.TP 
+\fBmatch\-words\-by\-style\fP
+configurando lo que el editor de líneas considera una palabra cuando se
+mueve o elimina de a palabra
+.TP 
+\fBhistory\-beginning\-search\-backward\-end\fP, etc\&.
+formas alternativas de buscar en la historia del interprete de ordenes
+.TP 
+\fBreplace\-string\fP, \fBreplace\-pattern\fP
+funciones para rempalzar cadenas o patrones globalmente en la línea de
+ordenes
+.TP 
+\fBedit\-command\-line\fP
+editar la línea de ordens con un editor externo\&.
+.PP
+Ver una descripción de estos en la sección `Funciones ZLE\&' en
+\fIzshcontrib\fP(1).
+.PP
+.SH OPCIONES
+.PP
+El interprete de ordenes tiene un amplio número de opciones para cambiar su
+comportamiento\&.  Estas cubren todos los aspectos del interprete de
+ordenes; hojear la documentación completa es la única forma buena de
+acostumbrarse a las muchas posibilidads\&. Ver \fIzshoptions\fP(1)\&.
+.PP
+.SH "RECONOCIMIENTO DE PATRONES"
+.PP
+The shell has a rich set of patterns which are available for file matching
+(described in the documentation as `filename generation\&' and also known
+for historical reasons as `globbing\&') and for use when programming\&.
+These are described in the section `Filename Generation\&' in
+\fIzshexpn\fP(1)\&.
+.PP
+De interes partícular son los siguientes patrones que no son soportados
+comunmente por otros sistemas de reconocimiento de patrones:
+.PP
+.PD 0
+.TP 
+.PD
+\fB**\fP
+para que coincidan sobre multiples directorios
+.TP 
+\fB|\fP
+para coincidir alguna de dos alternativas
+.TP 
+\fB~\fP, \fB^\fP
+la habilidad para excluir patrones de la coincidencia cuando se establece la
+opción \fBEXTENDED_GLOB\fP
+.TP 
+\fB(\fP\fI\&.\&.\&.\fP\fB)\fP
+calificadores glob, incluidos entre paréntesis al final del patrón, que
+seleccionan archivos por tipo (tales como directorios) o atributos (tales
+como el tamaño).\&
+.PP
+.SH "COMENTARIOS GENERALES SOBRE LA SINTAXIS"
+.PP
+Although the syntax of zsh is in ways similar to the Korn shell, and
+therefore more remotely to the original UNIX shell, the Bourne shell, its
+default behaviour does not entirely correspond to those shells\&.  General
+shell syntax is introduced in the section `Shell Grammar\&' in
+\fIzshmisc\fP(1)\&.
+.PP
+One commonly encountered difference is that variables substituted onto the
+command line are not split into words\&.  See the description of the shell
+option \fBSH_WORD_SPLIT\fP in the section `Parameter Expansion\&' in
+\fIzshexpn\fP(1)\&.  In zsh, you can either explicitly request the splitting
+(e\&.g\&. \fB${=foo}\fP)  or use an array when you want a variable to expand to
+more than one word\&.  See the section `Array Parameters\&' in
+\fIzshparam\fP(1)\&.
+.PP
+.SH PROGAMACIÓN
+.PP
+The most convenient way of adding enhancements to the shell is typically by
+writing a shell function and arranging for it to be autoloaded\&.  Functions
+are described in the section `Functions\&' in \fIzshmisc\fP(1)\&.  Users
+changing from the C shell and its relatives should notice that aliases are
+less used in zsh as they don\&'t perform argument substitution, only simple
+text replacement\&.
+.PP
+Unas pocas funciones generales, diferentes a las del editor de líneas antes
+descritas, se suministran con el interprete de ordenes y se describen  en
+\fIzshcontrib\fP(1)\&.  Las características incluyen:
+.PP
+.PD 0
+.TP 
+.PD
+\fBpromptinit\fP
+Un sistema de temas para el promto para cambiar fácilmente los prompts, ver
+la sección `Temas de Prompt\&'
+
+.TP 
+\fBzsh\-mime\-setup\fP
+Un sistema para manejar MIME que lanza ordenes acordes al sufijo de un
+archivo como lo hacen los administradores de archivos graficos
+.TP 
+\fBzcalc\fP
+una calculadora
+.TP 
+\fBzargs\fP
+una versión de \fBxargs\fP que haga la orden \fBfind\fP redundante
+.TP 
+\fBzmv\fP
+una orden para renombrar archivos mediante patrones del interprete de
+ordenes\&.

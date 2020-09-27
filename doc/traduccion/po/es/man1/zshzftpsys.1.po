@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: vtamara@pasosdeJesus.org\n"
-"POT-Creation-Date: 2020-09-27 09:17-0500\n"
+"POT-Creation-Date: 2020-09-27 10:31-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,85 +17,153 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #. type: TH
-#: ../contracorriente/man1/zshzftpsys.1:1
-#, no-wrap
-msgid "ZSHZFTPSYS"
-msgstr ""
-
-#. type: TH
-#: ../contracorriente/man1/zshzftpsys.1:1
+#: contracorriente/man1/zsh.1:1 contracorriente/man1/zshall.1:1
+#: contracorriente/man1/zshall.1:479 contracorriente/man1/zshbuiltins.1:1
+#: contracorriente/man1/zshcalsys.1:1 contracorriente/man1/zshcompctl.1:1
+#: contracorriente/man1/zshcompsys.1:1 contracorriente/man1/zshcompwid.1:1
+#: contracorriente/man1/zshcontrib.1:1 contracorriente/man1/zshexpn.1:1
+#: contracorriente/man1/zshmisc.1:1 contracorriente/man1/zshmodules.1:1
+#: contracorriente/man1/zshoptions.1:1 contracorriente/man1/zshparam.1:1
+#: contracorriente/man1/zshroadmap.1:1 contracorriente/man1/zshtcpsys.1:1
+#: contracorriente/man1/zshzftpsys.1:1 contracorriente/man1/zshzle.1:1
 #, no-wrap
 msgid "February 14, 2020"
-msgstr ""
+msgstr "Febrero 14 de 2020"
 
 #. type: TH
-#: ../contracorriente/man1/zshzftpsys.1:1
+#: contracorriente/man1/zsh.1:1 contracorriente/man1/zshall.1:1
+#: contracorriente/man1/zshall.1:479 contracorriente/man1/zshbuiltins.1:1
+#: contracorriente/man1/zshcalsys.1:1 contracorriente/man1/zshcompctl.1:1
+#: contracorriente/man1/zshcompsys.1:1 contracorriente/man1/zshcompwid.1:1
+#: contracorriente/man1/zshcontrib.1:1 contracorriente/man1/zshexpn.1:1
+#: contracorriente/man1/zshmisc.1:1 contracorriente/man1/zshmodules.1:1
+#: contracorriente/man1/zshoptions.1:1 contracorriente/man1/zshparam.1:1
+#: contracorriente/man1/zshroadmap.1:1 contracorriente/man1/zshtcpsys.1:1
+#: contracorriente/man1/zshzftpsys.1:1 contracorriente/man1/zshzle.1:1
 #, no-wrap
 msgid "zsh 5\\&.8"
-msgstr ""
+msgstr "zsh 5\\&.8"
 
 #. type: SH
-#: ../contracorriente/man1/zshzftpsys.1:2
+#: contracorriente/man1/zsh.1:2 contracorriente/man1/zshall.1:2
+#: contracorriente/man1/zshbuiltins.1:2 contracorriente/man1/zshcalsys.1:2
+#: contracorriente/man1/zshcompctl.1:2 contracorriente/man1/zshcompsys.1:2
+#: contracorriente/man1/zshcompwid.1:2 contracorriente/man1/zshcontrib.1:2
+#: contracorriente/man1/zshexpn.1:2 contracorriente/man1/zshmisc.1:2
+#: contracorriente/man1/zshmodules.1:2 contracorriente/man1/zshoptions.1:2
+#: contracorriente/man1/zshparam.1:2 contracorriente/man1/zshroadmap.1:2
+#: contracorriente/man1/zshtcpsys.1:2 contracorriente/man1/zshzftpsys.1:2
+#: contracorriente/man1/zshzle.1:2
 #, no-wrap
 msgid "NAME"
-msgstr ""
-
-#.  Yodl file: Zsh/zftpsys.yo
-#. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:5
-msgid "zshzftpsys - zftp function front-end"
-msgstr ""
+msgstr "NOMBRE"
 
 #. type: SH
-#: ../contracorriente/man1/zshzftpsys.1:5
+#: contracorriente/man1/zsh.1:45 contracorriente/man1/zshall.1:44
+#: contracorriente/man1/zshcalsys.1:5 contracorriente/man1/zshcompctl.1:5
+#: contracorriente/man1/zshcompsys.1:5 contracorriente/man1/zshcompwid.1:5
+#: contracorriente/man1/zshcontrib.1:5 contracorriente/man1/zshexpn.1:5
+#: contracorriente/man1/zshmodules.1:5 contracorriente/man1/zshparam.1:5
+#: contracorriente/man1/zshtcpsys.1:5 contracorriente/man1/zshzftpsys.1:5
+#: contracorriente/man1/zshzle.1:5
 #, no-wrap
 msgid "DESCRIPTION"
 msgstr ""
 
+#. type: SS
+#: contracorriente/man1/zshcontrib.1:514 contracorriente/man1/zshcontrib.1:762
+#: contracorriente/man1/zshcontrib.1:1053 contracorriente/man1/zshzftpsys.1:509
+#, no-wrap
+msgid "Configuration"
+msgstr ""
+
+#. type: SH
+#: contracorriente/man1/zshmisc.1:1195 contracorriente/man1/zshzftpsys.1:60
+#, no-wrap
+msgid "FUNCTIONS"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshmisc.1:1430 contracorriente/man1/zshzftpsys.1:570
+#, no-wrap
+msgid "B<chpwd>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshmodules.1:3557 contracorriente/man1/zshzftpsys.1:468
+#, no-wrap
+msgid "B<zftp_chpwd>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshmodules.1:3564 contracorriente/man1/zshzftpsys.1:492
+#, no-wrap
+msgid "B<zftp_progress>"
+msgstr ""
+
+#. type: SS
+#: contracorriente/man1/zshoptions.1:133 contracorriente/man1/zshroadmap.1:61
+#: contracorriente/man1/zshzftpsys.1:655 contracorriente/man1/zshzle.1:2123
+#, no-wrap
+msgid "Completion"
+msgstr "Completación"
+
+#. type: TH
+#: contracorriente/man1/zshzftpsys.1:1
+#, no-wrap
+msgid "ZSHZFTPSYS"
+msgstr ""
+
+#.  Yodl file: Zsh/zftpsys.yo
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:15
+#: contracorriente/man1/zshzftpsys.1:5
+msgid "zshzftpsys - zftp function front-end"
+msgstr ""
+
+#. type: Plain text
+#: contracorriente/man1/zshzftpsys.1:15
 msgid ""
 "This describes the set of shell functions supplied with the source "
 "distribution as an interface to the B<zftp> builtin command, allowing you to "
 "perform FTP operations from the shell command line or within functions or "
-"scripts\\&.  The interface is similar to a traditional FTP client "
-"(e\\&.g\\&. the B<ftp> command itself, see I<ftp>(1)), but as it is entirely "
-"done within the shell all the familiar completion, editing and globbing "
-"features, and so on, are present, and macros are particularly simple to "
-"write as they are just ordinary shell functions\\&."
+"scripts\\&.  The interface is similar to a traditional FTP client (e\\&.g"
+"\\&. the B<ftp> command itself, see I<ftp>(1)), but as it is entirely done "
+"within the shell all the familiar completion, editing and globbing features, "
+"and so on, are present, and macros are particularly simple to write as they "
+"are just ordinary shell functions\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:25
+#: contracorriente/man1/zshzftpsys.1:25
 msgid ""
 "The prerequisite is that the B<zftp> command, as described in "
 "I<zshmodules>(1)  , must be available in the version of B<zsh> installed at "
 "your site\\&.  If the shell is configured to load new commands at run time, "
 "it probably is: typing `B<zmodload zsh/zftp>\\&' will make sure (if that "
 "runs silently, it has worked)\\&.  If this is not the case, it is possible "
-"B<zftp> was linked into the shell anyway: to test this, type `B<which "
-"zftp>\\&' and if B<zftp> is available you will get the message `B<zftp: "
-"shell built-in command>\\&'\\&."
+"B<zftp> was linked into the shell anyway: to test this, type `B<which zftp>"
+"\\&' and if B<zftp> is available you will get the message `B<zftp: shell "
+"built-in command>\\&'\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:31
+#: contracorriente/man1/zshzftpsys.1:31
 msgid ""
 "Commands given directly with B<zftp> builtin may be interspersed between the "
 "functions in this suite; in a few cases, using B<zftp> directly may cause "
-"some of the status information stored in shell parameters to become "
-"invalid\\&.  Note in particular the description of the variables "
-"B<$ZFTP_TMOUT>, B<$ZFTP_PREFS> and B<$ZFTP_VERBOSE> for B<zftp>\\&."
+"some of the status information stored in shell parameters to become invalid"
+"\\&.  Note in particular the description of the variables B<$ZFTP_TMOUT>, B<"
+"$ZFTP_PREFS> and B<$ZFTP_VERBOSE> for B<zftp>\\&."
 msgstr ""
 
 #. type: SH
-#: ../contracorriente/man1/zshzftpsys.1:33
+#: contracorriente/man1/zshzftpsys.1:33
 #, no-wrap
 msgid "INSTALLATION"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:45
+#: contracorriente/man1/zshzftpsys.1:45
 msgid ""
 "You should make sure all the functions from the B<Functions/Zftp> directory "
 "of the source distribution are available; they all begin with the two "
@@ -104,13 +172,13 @@ msgid ""
 "should appear as one of the elements of the B<$fpath> array (this should "
 "already be the case if they were installed), and at least the function "
 "B<zfinit> should be autoloaded; it will autoload the rest\\&.  Finally, to "
-"initialize the use of the system you need to call the B<zfinit> "
-"function\\&.  The following code in your B<\\&.zshrc> will arrange for this; "
-"assume the functions are stored in the directory B<~/myfns>:"
+"initialize the use of the system you need to call the B<zfinit> function"
+"\\&.  The following code in your B<\\&.zshrc> will arrange for this; assume "
+"the functions are stored in the directory B<~/myfns>:"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:51
+#: contracorriente/man1/zshzftpsys.1:51
 #, no-wrap
 msgid ""
 "B<fpath=(~/myfns $fpath)\n"
@@ -119,7 +187,7 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:59
+#: contracorriente/man1/zshzftpsys.1:59
 msgid ""
 "Note that B<zfinit> assumes you are using the B<zmodload> method to load the "
 "B<zftp> command\\&.  If it is already built into the shell, change B<zfinit> "
@@ -128,14 +196,8 @@ msgid ""
 "else unnecessary B<compctl> commands will be given\\&."
 msgstr ""
 
-#. type: SH
-#: ../contracorriente/man1/zshzftpsys.1:60
-#, no-wrap
-msgid "FUNCTIONS"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:67
+#: contracorriente/man1/zshzftpsys.1:67
 msgid ""
 "The sequence of operations in performing a file transfer is essentially the "
 "same as that in a standard FTP client\\&.  Note that, due to a quirk of the "
@@ -145,19 +207,19 @@ msgid ""
 msgstr ""
 
 #. type: SS
-#: ../contracorriente/man1/zshzftpsys.1:68
+#: contracorriente/man1/zshzftpsys.1:68
 #, no-wrap
 msgid "Opening a connection"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshzftpsys.1:70
+#: contracorriente/man1/zshzftpsys.1:70
 #, no-wrap
 msgid "B<zfparams> [ I<host> [ I<user> [ I<password> \\&.\\&.\\&. ] ] ]"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:81
+#: contracorriente/man1/zshzftpsys.1:81
 msgid ""
 "Set or show the parameters for a future B<zfopen> with no arguments\\&.  If "
 "no arguments are given, the current parameters are displayed (the password "
@@ -170,7 +232,7 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:86
+#: contracorriente/man1/zshzftpsys.1:86
 msgid ""
 "A single argument `B<->\\&' will delete the stored parameters\\&.  This will "
 "also cause the memory of the last directory (and so on) on the other host to "
@@ -178,23 +240,23 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshzftpsys.1:87
+#: contracorriente/man1/zshzftpsys.1:87
 #, no-wrap
 msgid "B<zfopen> [ B<-1> ] [ I<host> [ I<user> [ I<password> [ I<account> ] ] ] ]"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:94
+#: contracorriente/man1/zshzftpsys.1:94
 msgid ""
 "If I<host> is present, open a connection to that host under username I<user> "
 "with password I<password> (and, on the rare occasions when it is necessary, "
-"account I<account>)\\&.  If a necessary parameter is missing or given as "
-"`B<?>\\&' it will be prompted for\\&.  If I<host> is not present, use a "
+"account I<account>)\\&.  If a necessary parameter is missing or given as `B<?"
+">\\&' it will be prompted for\\&.  If I<host> is not present, use a "
 "previously stored set of parameters\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:100
+#: contracorriente/man1/zshzftpsys.1:100
 msgid ""
 "If the command was successful, and the terminal is compatible with B<xterm> "
 "or is B<sun-cmd>, a summary will appear in the title bar, giving the local "
@@ -203,7 +265,7 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:108
+#: contracorriente/man1/zshzftpsys.1:108
 msgid ""
 "Normally, the I<host>, I<user> and I<password> are internally recorded for "
 "later re-opening, either by a B<zfopen> with no arguments, or automatically "
@@ -214,25 +276,25 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:116
+#: contracorriente/man1/zshzftpsys.1:116
 msgid ""
 "Both B<zfopen> and B<zfanon> (but not B<zfparams>) understand URLs of the "
 "form B<ftp://>I<host>/I<path\\&.\\&.\\&.> as meaning to connect to the "
 "I<host>, then change directory to I<path> (which must be a directory, not a "
 "file)\\&.  The `B<ftp://>\\&' can be omitted; the trailing `B</>' is enough "
-"to trigger recognition of the I<path>\\&.  Note prefixes other than "
-"`B<ftp:>\\&' are not recognized, and that all characters after the first "
-"slash beyond I<host> are significant in I<path>\\&."
+"to trigger recognition of the I<path>\\&.  Note prefixes other than `B<ftp:>"
+"\\&' are not recognized, and that all characters after the first slash "
+"beyond I<host> are significant in I<path>\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshzftpsys.1:117
+#: contracorriente/man1/zshzftpsys.1:117
 #, no-wrap
 msgid "B<zfanon> [ B<-1> ] I<host>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:124
+#: contracorriente/man1/zshzftpsys.1:124
 msgid ""
 "Open a connection I<host> for anonymous FTP\\&.  The username used is "
 "`B<anonymous>\\&'\\&.  The password (which will be reported the first time) "
@@ -242,38 +304,38 @@ msgid ""
 msgstr ""
 
 #. type: SS
-#: ../contracorriente/man1/zshzftpsys.1:125
+#: contracorriente/man1/zshzftpsys.1:125
 #, no-wrap
 msgid "Directory management"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshzftpsys.1:127
+#: contracorriente/man1/zshzftpsys.1:127
 #, no-wrap
 msgid "B<zfcd> [ I<dir> ]"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshzftpsys.1:130
+#: contracorriente/man1/zshzftpsys.1:130
 #, no-wrap
 msgid "B<zfcd ->"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshzftpsys.1:133
+#: contracorriente/man1/zshzftpsys.1:133
 #, no-wrap
 msgid "B<zfcd> I<old> I<new>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:138
+#: contracorriente/man1/zshzftpsys.1:138
 msgid ""
 "Change the current directory on the remote server: this is implemented to "
 "have many of the features of the shell builtin B<cd>\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:144
+#: contracorriente/man1/zshzftpsys.1:144
 msgid ""
 "In the first form with I<dir> present, change to the directory I<dir>\\&.  "
 "The command `B<zfcd \\&.\\&.>\\&' is treated specially, so is guaranteed to "
@@ -282,12 +344,12 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:146
+#: contracorriente/man1/zshzftpsys.1:146
 msgid "The second form changes to the directory previously current\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:150
+#: contracorriente/man1/zshzftpsys.1:150
 msgid ""
 "The third form attempts to change the current directory by replacing the "
 "first occurrence of the string I<old> with the string I<new> in the current "
@@ -295,7 +357,7 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:162
+#: contracorriente/man1/zshzftpsys.1:162
 msgid ""
 "Note that in this command, and indeed anywhere a remote filename is "
 "expected, the string which on the local host corresponds to `B<~>\\&' is "
@@ -311,28 +373,28 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshzftpsys.1:163
+#: contracorriente/man1/zshzftpsys.1:163
 #, no-wrap
 msgid "B<zfhere>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:169
+#: contracorriente/man1/zshzftpsys.1:169
 msgid ""
 "Change directory on the remote server to the one corresponding to the "
-"current local directory, with special handling of `B<~>\\&' as in "
-"B<zfcd>\\&.  For example, if the current local directory is B<~/foo/bar>, "
-"then B<zfhere> performs the effect of `B<zfcd ~/foo/bar>\\&'\\&."
+"current local directory, with special handling of `B<~>\\&' as in B<zfcd>"
+"\\&.  For example, if the current local directory is B<~/foo/bar>, then "
+"B<zfhere> performs the effect of `B<zfcd ~/foo/bar>\\&'\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshzftpsys.1:169
+#: contracorriente/man1/zshzftpsys.1:169
 #, no-wrap
 msgid "B<zfdir> [ B<-rfd> ] [ B<-> ] [ I<dir-options> ] [ I<dir> ]"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:177
+#: contracorriente/man1/zshzftpsys.1:177
 msgid ""
 "Produce a long directory listing\\&.  The arguments I<dir-options> and "
 "I<dir> are passed directly to the server and their effect is implementation "
@@ -342,30 +404,30 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:191
+#: contracorriente/man1/zshzftpsys.1:191
 msgid ""
 "The directory is usually cached for re-use\\&.  In fact, two caches are "
-"maintained\\&.  One is for use when there is no I<dir-options> or I<dir>, "
-"i\\&.e\\&. a full listing of the current remote directory; it is flushed "
-"when the current remote directory changes\\&.  The other is kept for "
-"repeated use of B<zfdir> with the same arguments; for example, repeated use "
-"of `B<zfdir /pub/gnu>\\&' will only require the directory to be retrieved on "
-"the first call\\&.  Alternatively, this cache can be re-viewed with the "
-"B<-r> option\\&.  As relative directories will confuse B<zfdir>, the B<-f> "
-"option can be used to force the cache to be flushed before the directory is "
-"listed\\&.  The option B<-d> will delete both caches without showing a "
-"directory listing; it will also delete the cache of file names in the "
-"current remote directory, if any\\&."
+"maintained\\&.  One is for use when there is no I<dir-options> or I<dir>, i"
+"\\&.e\\&. a full listing of the current remote directory; it is flushed when "
+"the current remote directory changes\\&.  The other is kept for repeated use "
+"of B<zfdir> with the same arguments; for example, repeated use of `B<zfdir /"
+"pub/gnu>\\&' will only require the directory to be retrieved on the first "
+"call\\&.  Alternatively, this cache can be re-viewed with the B<-r> option"
+"\\&.  As relative directories will confuse B<zfdir>, the B<-f> option can be "
+"used to force the cache to be flushed before the directory is listed\\&.  "
+"The option B<-d> will delete both caches without showing a directory "
+"listing; it will also delete the cache of file names in the current remote "
+"directory, if any\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshzftpsys.1:192
+#: contracorriente/man1/zshzftpsys.1:192
 #, no-wrap
 msgid "B<zfls> [ I<ls-options> ] [ I<dir> ]"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:197
+#: contracorriente/man1/zshzftpsys.1:197
 msgid ""
 "List files on the remote server\\&.  With no arguments, this will produce a "
 "simple list of file names for the current remote directory\\&.  Any "
@@ -374,34 +436,34 @@ msgid ""
 msgstr ""
 
 #. type: SS
-#: ../contracorriente/man1/zshzftpsys.1:198
+#: contracorriente/man1/zshzftpsys.1:198
 #, no-wrap
 msgid "Status commands"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshzftpsys.1:200
+#: contracorriente/man1/zshzftpsys.1:200
 #, no-wrap
 msgid "B<zftype> [ I<type> ]"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:207
+#: contracorriente/man1/zshzftpsys.1:207
 msgid ""
 "With no arguments, show the type of data to be transferred, usually ASCII or "
 "binary\\&.  With an argument, change the type: the types `B<A>\\&' or "
-"`B<ASCII>\\&' for ASCII data and `B<B>' or `B<BINARY>', `B<I>' or "
-"`B<IMAGE>\\&' for binary data are understood case-insensitively\\&."
+"`B<ASCII>\\&' for ASCII data and `B<B>' or `B<BINARY>', `B<I>' or `B<IMAGE>"
+"\\&' for binary data are understood case-insensitively\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshzftpsys.1:207
+#: contracorriente/man1/zshzftpsys.1:207
 #, no-wrap
 msgid "B<zfstat> [ B<-v> ]"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:213
+#: contracorriente/man1/zshzftpsys.1:213
 msgid ""
 "Show the status of the current or last connection, as well as the status of "
 "some of B<zftp>\\&'s status variables\\&.  With the B<-v> option, a more "
@@ -410,13 +472,13 @@ msgid ""
 msgstr ""
 
 #. type: SS
-#: ../contracorriente/man1/zshzftpsys.1:214
+#: contracorriente/man1/zshzftpsys.1:214
 #, no-wrap
 msgid "Retrieving files"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:220
+#: contracorriente/man1/zshzftpsys.1:220
 msgid ""
 "The commands for retrieving files all take at least two options\\&. B<-G> "
 "suppresses remote filename expansion which would otherwise be performed (see "
@@ -426,30 +488,30 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshzftpsys.1:222
+#: contracorriente/man1/zshzftpsys.1:222
 #, no-wrap
 msgid "B<zfget> [ B<-Gtc> ] I<file1> \\&.\\&.\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:231
+#: contracorriente/man1/zshzftpsys.1:231
 msgid ""
 "Retrieve all the listed files I<file1> \\&.\\&.\\&. one at a time from the "
 "remote server\\&.  If a file contains a `B</>\\&', the full name is passed "
 "to the remote server, but the file is stored locally under the name given by "
 "the part after the final `B</>\\&'\\&.  The option B<-c> (cat) forces all "
-"files to be sent as a single stream to standard output; in this case the "
-"B<-t> option has no effect\\&."
+"files to be sent as a single stream to standard output; in this case the B<-"
+"t> option has no effect\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshzftpsys.1:231
+#: contracorriente/man1/zshzftpsys.1:231
 #, no-wrap
 msgid "B<zfuget> [ B<-Gvst> ] I<file1> \\&.\\&.\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:241
+#: contracorriente/man1/zshzftpsys.1:241
 msgid ""
 "As B<zfget>, but only retrieve files where the version on the remote server "
 "is newer (has a later modification time), or where the local file does not "
@@ -462,55 +524,55 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshzftpsys.1:241
+#: contracorriente/man1/zshzftpsys.1:241
 #, no-wrap
 msgid "B<zfcget> [ B<-Gt> ] I<file1> \\&.\\&.\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:247
+#: contracorriente/man1/zshzftpsys.1:247
 msgid ""
 "As B<zfget>, but if any of the local files exists, and is shorter than the "
 "corresponding remote file, the command assumes that it is the result of a "
-"partially completed transfer and attempts to transfer the rest of the "
-"file\\&.  This is useful on a poor connection which keeps failing\\&."
+"partially completed transfer and attempts to transfer the rest of the file"
+"\\&.  This is useful on a poor connection which keeps failing\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:251
+#: contracorriente/man1/zshzftpsys.1:251
 msgid ""
 "Note that this requires a commonly implemented, but non-standard, version of "
 "the FTP protocol, so is not guaranteed to work on all servers\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshzftpsys.1:252
+#: contracorriente/man1/zshzftpsys.1:252
 #, no-wrap
 msgid "B<zfgcp> [ B<-Gt> ] I<remote-file> I<local-file>"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshzftpsys.1:255
+#: contracorriente/man1/zshzftpsys.1:255
 #, no-wrap
 msgid "B<zfgcp> [ B<-Gt> ] I<rfile1> \\&.\\&.\\&. I<ldir>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:260
+#: contracorriente/man1/zshzftpsys.1:260
 msgid ""
 "This retrieves files from the remote server with arguments behaving "
 "similarly to the B<cp> command\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:264
+#: contracorriente/man1/zshzftpsys.1:264
 msgid ""
 "In the first form, copy I<remote-file> from the server to the local file "
 "I<local-file>\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:268
+#: contracorriente/man1/zshzftpsys.1:268
 msgid ""
 "In the second form, copy all the remote files I<rfile1> \\&.\\&.\\&. into "
 "the local directory I<ldir> retaining the same basenames\\&.  This assumes "
@@ -518,43 +580,42 @@ msgid ""
 msgstr ""
 
 #. type: SS
-#: ../contracorriente/man1/zshzftpsys.1:270
+#: contracorriente/man1/zshzftpsys.1:270
 #, no-wrap
 msgid "Sending files"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshzftpsys.1:272
+#: contracorriente/man1/zshzftpsys.1:272
 #, no-wrap
 msgid "B<zfput> [ B<-r> ] I<file1> \\&.\\&.\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:278
+#: contracorriente/man1/zshzftpsys.1:278
 msgid ""
-"Send all the I<file1> \\&.\\&.\\&. given separately to the remote "
-"server\\&.  If a filename contains a `B</>\\&', the full filename is used "
-"locally to find the file, but only the basename is used for the remote file "
-"name\\&."
+"Send all the I<file1> \\&.\\&.\\&. given separately to the remote server"
+"\\&.  If a filename contains a `B</>\\&', the full filename is used locally "
+"to find the file, but only the basename is used for the remote file name\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:284
+#: contracorriente/man1/zshzftpsys.1:284
 msgid ""
 "With the option B<-r>, if any of the I<files> are directories they are sent "
-"recursively with all their subdirectories, including files beginning with "
-"`B<\\&.>\\&'\\&.  This requires that the remote machine understand UNIX file "
+"recursively with all their subdirectories, including files beginning with `B<"
+"\\&.>\\&'\\&.  This requires that the remote machine understand UNIX file "
 "semantics, since `B</>\\&' is used as a directory separator\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshzftpsys.1:285
+#: contracorriente/man1/zshzftpsys.1:285
 #, no-wrap
 msgid "B<zfuput> [ B<-vs> ] I<file1> \\&.\\&.\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:290
+#: contracorriente/man1/zshzftpsys.1:290
 msgid ""
 "As B<zfput>, but only send files which are newer than their remote "
 "equivalents, or if the remote file does not exist\\&.  The logic is the same "
@@ -562,13 +623,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshzftpsys.1:290
+#: contracorriente/man1/zshzftpsys.1:290
 #, no-wrap
 msgid "B<zfcput> I<file1> \\&.\\&.\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:297
+#: contracorriente/man1/zshzftpsys.1:297
 msgid ""
 "As B<zfput>, but if any remote file already exists and is shorter than the "
 "local equivalent, assume it is the result of an incomplete transfer and send "
@@ -578,82 +639,83 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshzftpsys.1:297
+#: contracorriente/man1/zshzftpsys.1:297
 #, no-wrap
 msgid "B<zfpcp> I<local-file> I<remote-file>"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshzftpsys.1:300
+#: contracorriente/man1/zshzftpsys.1:300
 #, no-wrap
 msgid "B<zfpcp> I<lfile1> \\&.\\&.\\&. I<rdir>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:305
+#: contracorriente/man1/zshzftpsys.1:305
 msgid ""
 "This sends files to the remote server with arguments behaving similarly to "
 "the B<cp> command\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:309
-msgid "With two arguments, copy I<local-file> to the server as I<remote-file>\\&."
+#: contracorriente/man1/zshzftpsys.1:309
+msgid ""
+"With two arguments, copy I<local-file> to the server as I<remote-file>\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:313
+#: contracorriente/man1/zshzftpsys.1:313
 msgid ""
-"With more than two arguments, copy all the local files I<lfile1> "
-"\\&.\\&.\\&. into the existing remote directory I<rdir> retaining the same "
-"basenames\\&.  This assumes UNIX directory semantics\\&."
+"With more than two arguments, copy all the local files I<lfile1> \\&.\\&."
+"\\&. into the existing remote directory I<rdir> retaining the same basenames"
+"\\&.  This assumes UNIX directory semantics\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:323
+#: contracorriente/man1/zshzftpsys.1:323
 msgid ""
-"A problem arises if you attempt to use B<zfpcp> I<lfile1> I<rdir>, "
-"i\\&.e\\&. the second form of copying but with two arguments, as the command "
-"has no simple way of knowing if I<rdir> corresponds to a directory or a "
-"filename\\&.  It attempts to resolve this in various ways\\&.  First, if the "
-"I<rdir> argument is `B<\\&.>\\&' or `B<\\&.\\&.>' or ends in a slash, it is "
-"assumed to be a directory\\&.  Secondly, if the operation of copying to a "
-"remote file in the first form failed, and the remote server sends back the "
-"expected failure code 553 and a reply including the string `B<Is a "
-"directory>\\&', then B<zfpcp> will retry using the second form\\&."
+"A problem arises if you attempt to use B<zfpcp> I<lfile1> I<rdir>, i\\&.e"
+"\\&. the second form of copying but with two arguments, as the command has "
+"no simple way of knowing if I<rdir> corresponds to a directory or a filename"
+"\\&.  It attempts to resolve this in various ways\\&.  First, if the I<rdir> "
+"argument is `B<\\&.>\\&' or `B<\\&.\\&.>' or ends in a slash, it is assumed "
+"to be a directory\\&.  Secondly, if the operation of copying to a remote "
+"file in the first form failed, and the remote server sends back the expected "
+"failure code 553 and a reply including the string `B<Is a directory>\\&', "
+"then B<zfpcp> will retry using the second form\\&."
 msgstr ""
 
 #. type: SS
-#: ../contracorriente/man1/zshzftpsys.1:325
+#: contracorriente/man1/zshzftpsys.1:325
 #, no-wrap
 msgid "Closing the connection"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshzftpsys.1:327
+#: contracorriente/man1/zshzftpsys.1:327
 #, no-wrap
 msgid "B<zfclose>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:331
+#: contracorriente/man1/zshzftpsys.1:331
 msgid "Close the connection\\&."
 msgstr ""
 
 #. type: SS
-#: ../contracorriente/man1/zshzftpsys.1:332
+#: contracorriente/man1/zshzftpsys.1:332
 #, no-wrap
 msgid "Session management"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshzftpsys.1:334
+#: contracorriente/man1/zshzftpsys.1:334
 #, no-wrap
 msgid "B<zfsession> [ B<-lvod> ] [ I<sessname> ]"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:345
+#: contracorriente/man1/zshzftpsys.1:345
 msgid ""
 "Allows you to manage multiple FTP sessions at once\\&.  By default, "
 "connections take place in a session called `B<default>\\&'; by giving the "
@@ -666,33 +728,33 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:352
+#: contracorriente/man1/zshzftpsys.1:352
 msgid ""
 "With no arguments, B<zfsession> prints the name of the current session; with "
 "the option B<-l> it lists all sessions which currently exist, and with the "
 "option B<-v> it gives a verbose list showing the host and directory for each "
-"session, where the current session is marked with an asterisk\\&.  With "
-"B<-o>, it will switch to the most recent previous session\\&."
+"session, where the current session is marked with an asterisk\\&.  With B<-"
+"o>, it will switch to the most recent previous session\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:358
+#: contracorriente/man1/zshzftpsys.1:358
 msgid ""
 "With B<-d>, the given session (or else the current one) is removed; "
 "everything to do with it is completely forgotten\\&.  If it was the only "
-"session, a new session called `B<default>\\&' is created and made "
-"current\\&.  It is safest not to delete sessions while background commands "
-"using B<zftp> are active\\&."
+"session, a new session called `B<default>\\&' is created and made current"
+"\\&.  It is safest not to delete sessions while background commands using "
+"B<zftp> are active\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshzftpsys.1:359
+#: contracorriente/man1/zshzftpsys.1:359
 #, no-wrap
 msgid "B<zftransfer> I<sess1>B<:>I<file1> I<sess2>B<:>I<file2>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:370
+#: contracorriente/man1/zshzftpsys.1:370
 msgid ""
 "Transfer files between two sessions; no local copy is made\\&.  The file is "
 "read from the session I<sess1> as I<file1> and written to session I<sess2> "
@@ -706,7 +768,7 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:375
+#: contracorriente/man1/zshzftpsys.1:375
 msgid ""
 "The operation is performed using pipes, so it is required that the "
 "connections still be valid in a subshell, which is not the case under "
@@ -714,13 +776,13 @@ msgid ""
 msgstr ""
 
 #. type: SS
-#: ../contracorriente/man1/zshzftpsys.1:377
+#: contracorriente/man1/zshzftpsys.1:377
 #, no-wrap
 msgid "Bookmarks"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:384
+#: contracorriente/man1/zshzftpsys.1:384
 msgid ""
 "The two functions B<zfmark> and B<zfgoto> allow you to `bookmark\\&' the "
 "present location (host, user and directory) of the current FTP connection "
@@ -731,13 +793,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshzftpsys.1:386
+#: contracorriente/man1/zshzftpsys.1:386
 #, no-wrap
 msgid "B<zfmark> [ I<bookmark> ]"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:394
+#: contracorriente/man1/zshzftpsys.1:394
 msgid ""
 "If given an argument, mark the current host, user and directory under the "
 "name I<bookmark> for later use by B<zfgoto>\\&.  If there is no connection "
@@ -747,7 +809,7 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:400
+#: contracorriente/man1/zshzftpsys.1:400
 msgid ""
 "If not given an argument, list the existing bookmarks and the points to "
 "which they refer in the form I<user>B<@>I<host>B<:>I<directory>; this is the "
@@ -755,40 +817,40 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshzftpsys.1:401
+#: contracorriente/man1/zshzftpsys.1:401
 #, no-wrap
 msgid "B<zfgoto> [ B<-n> ] I<bookmark>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:409
+#: contracorriente/man1/zshzftpsys.1:409
 msgid ""
-"Return to the location given by I<bookmark>, as previously set by "
-"B<zfmark>\\&.  If the location has user `B<ftp>\\&' or `B<anonymous>', open "
-"the connection with B<zfanon>, so that no password is required\\&.  If the "
-"user and host parameters match those stored for the current session, if any, "
+"Return to the location given by I<bookmark>, as previously set by B<zfmark>"
+"\\&.  If the location has user `B<ftp>\\&' or `B<anonymous>', open the "
+"connection with B<zfanon>, so that no password is required\\&.  If the user "
+"and host parameters match those stored for the current session, if any, "
 "those will be used, and again no password is required\\&.  Otherwise a "
 "password will be prompted for\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:416
+#: contracorriente/man1/zshzftpsys.1:416
 msgid ""
 "With the option B<-n>, the bookmark is taken to be a nickname stored by the "
-"B<ncftp> program in its bookmark file, which is assumed to be "
-"B<~/\\&.ncftp/bookmarks>\\&.  The function works identically in other "
-"ways\\&.  Note that there is no mechanism for adding or modifying B<ncftp> "
-"bookmarks from the zftp functions\\&."
+"B<ncftp> program in its bookmark file, which is assumed to be B<~/\\&.ncftp/"
+"bookmarks>\\&.  The function works identically in other ways\\&.  Note that "
+"there is no mechanism for adding or modifying B<ncftp> bookmarks from the "
+"zftp functions\\&."
 msgstr ""
 
 #. type: SS
-#: ../contracorriente/man1/zshzftpsys.1:418
+#: contracorriente/man1/zshzftpsys.1:418
 #, no-wrap
 msgid "Other functions"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:422
+#: contracorriente/man1/zshzftpsys.1:422
 msgid ""
 "Mostly, these functions will not be called directly (apart from B<zfinit>), "
 "but are described here for completeness\\&.  You may wish to alter "
@@ -796,13 +858,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshzftpsys.1:424
+#: contracorriente/man1/zshzftpsys.1:424
 #, no-wrap
 msgid "B<zfinit> [ B<-n> ]"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:430
+#: contracorriente/man1/zshzftpsys.1:430
 msgid ""
 "As described above, this is used to initialize the zftp function system\\&.  "
 "The B<-n> option should be used if the zftp command is already built into "
@@ -810,13 +872,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshzftpsys.1:430
+#: contracorriente/man1/zshzftpsys.1:430
 #, no-wrap
 msgid "B<zfautocheck> [ B<-dn> ]"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:440
+#: contracorriente/man1/zshzftpsys.1:440
 msgid ""
 "This function is called to implement automatic reopening behaviour, as "
 "described in more detail below\\&.  The options must appear in the first "
@@ -829,13 +891,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshzftpsys.1:440
+#: contracorriente/man1/zshzftpsys.1:440
 #, no-wrap
 msgid "B<zfcd_match >I<prefix>B< >I<suffix>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:448
+#: contracorriente/man1/zshzftpsys.1:448
 msgid ""
 "This performs matching for completion of remote directory names\\&.  If the "
 "remote server is UNIX, it will attempt to persuade the server to list the "
@@ -846,29 +908,29 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshzftpsys.1:448
+#: contracorriente/man1/zshzftpsys.1:448
 #, no-wrap
 msgid "B<zfget_match >I<prefix>B< >I<suffix>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:455
+#: contracorriente/man1/zshzftpsys.1:455
 msgid ""
 "This performs matching for completion of remote filenames\\&.  It caches "
-"files for the current directory (only) in the shell parameter "
-"B<$zftp_fcache>\\&.  It is in the form to be called by the B<-K> option of "
-"B<compctl>, but also works when called from a widget-style completion "
-"function with I<prefix> and I<suffix> set appropriately\\&."
+"files for the current directory (only) in the shell parameter B<$zftp_fcache>"
+"\\&.  It is in the form to be called by the B<-K> option of B<compctl>, but "
+"also works when called from a widget-style completion function with "
+"I<prefix> and I<suffix> set appropriately\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshzftpsys.1:455
+#: contracorriente/man1/zshzftpsys.1:455
 #, no-wrap
 msgid "B<zfrglob >I<varname>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:461
+#: contracorriente/man1/zshzftpsys.1:461
 msgid ""
 "Perform remote globbing, as describes in more detail below\\&.  I<varname> "
 "is the name of a variable containing the pattern to be expanded; if there "
@@ -877,13 +939,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshzftpsys.1:461
+#: contracorriente/man1/zshzftpsys.1:461
 #, no-wrap
 msgid "B<zfrtime> I<lfile> I<rfile> [ I<time> ]"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:468
+#: contracorriente/man1/zshzftpsys.1:468
 msgid ""
 "Set the local file I<lfile> to have the same modification time as the remote "
 "file I<rfile>, or the explicit time I<time> in FTP format B<CCYYMMDDhhmmSS> "
@@ -891,14 +953,8 @@ msgid ""
 "perform the conversion from GMT to local time\\&."
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshzftpsys.1:468
-#, no-wrap
-msgid "B<zftp_chpwd>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:476
+#: contracorriente/man1/zshzftpsys.1:476
 msgid ""
 "This function is called every time a connection is opened, or closed, or the "
 "remote directory changes\\&.  This version alters the title bar of an "
@@ -908,7 +964,7 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:487
+#: contracorriente/man1/zshzftpsys.1:487
 #, no-wrap
 msgid ""
 "B<chpwd() {\n"
@@ -921,18 +977,12 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:491
+#: contracorriente/man1/zshzftpsys.1:491
 msgid "fits in well\\&."
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshzftpsys.1:492
-#, no-wrap
-msgid "B<zftp_progress>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:502
+#: contracorriente/man1/zshzftpsys.1:502
 msgid ""
 "This function shows the status of the transfer\\&.  It will not write "
 "anything unless the output is going to a terminal; however, if you transfer "
@@ -945,66 +995,60 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshzftpsys.1:502
+#: contracorriente/man1/zshzftpsys.1:502
 #, no-wrap
 msgid "B<zffcache>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:506
+#: contracorriente/man1/zshzftpsys.1:506
 msgid ""
 "This is used to implement caching of files in the current directory for each "
 "session separately\\&.  It is used by B<zfget_match> and B<zfrglob>\\&."
 msgstr ""
 
 #. type: SH
-#: ../contracorriente/man1/zshzftpsys.1:507
+#: contracorriente/man1/zshzftpsys.1:507
 #, no-wrap
 msgid "MISCELLANEOUS FEATURES"
 msgstr ""
 
-#. type: SS
-#: ../contracorriente/man1/zshzftpsys.1:509
-#, no-wrap
-msgid "Configuration"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:529
+#: contracorriente/man1/zshzftpsys.1:529
 msgid ""
 "Various styles are available using the standard shell style mechanism, "
-"described in I<zshmodules>(1)\\&. Briefly, the command `B<zstyle "
-"\\&':zftp:*'> I<style> I<value> \\&.\\&.\\&.'\\&.  defines the I<style> to "
-"have value I<value>; more than one value may be given, although that is not "
-"useful in the cases described here\\&.  These values will then be used "
-"throughout the zftp function system\\&.  For more precise control, the first "
-"argument, which gives a context in which the style applies, can be modified "
-"to include a particular function, as for example `B<:zftp:zfget>\\&': the "
-"style will then have the given value only in the B<zfget> function\\&.  "
-"Values for the same style in different contexts may be set; the most "
-"specific function will be used, where strings are held to be more specific "
-"than patterns, and longer patterns and shorter patterns\\&.  Note that only "
-"the top level function name, as called by the user, is used; calling of "
-"lower level functions is transparent to the user\\&.  Hence modifications to "
-"the title bar in B<zftp_chpwd> use the contexts B<:zftp:zfopen>, "
-"B<:zftp:zfcd>, etc\\&., depending where it was called from\\&.  The "
-"following styles are understood:"
+"described in I<zshmodules>(1)\\&. Briefly, the command `B<zstyle \\&':zftp:"
+"*'> I<style> I<value> \\&.\\&.\\&.'\\&.  defines the I<style> to have value "
+"I<value>; more than one value may be given, although that is not useful in "
+"the cases described here\\&.  These values will then be used throughout the "
+"zftp function system\\&.  For more precise control, the first argument, "
+"which gives a context in which the style applies, can be modified to include "
+"a particular function, as for example `B<:zftp:zfget>\\&': the style will "
+"then have the given value only in the B<zfget> function\\&.  Values for the "
+"same style in different contexts may be set; the most specific function will "
+"be used, where strings are held to be more specific than patterns, and "
+"longer patterns and shorter patterns\\&.  Note that only the top level "
+"function name, as called by the user, is used; calling of lower level "
+"functions is transparent to the user\\&.  Hence modifications to the title "
+"bar in B<zftp_chpwd> use the contexts B<:zftp:zfopen>, B<:zftp:zfcd>, etc"
+"\\&., depending where it was called from\\&.  The following styles are "
+"understood:"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshzftpsys.1:531
+#: contracorriente/man1/zshzftpsys.1:531
 #, no-wrap
 msgid "B<progress>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:543
+#: contracorriente/man1/zshzftpsys.1:543
 msgid ""
-"Controls the way that B<zftp_progress> reports on the progress of a "
-"transfer\\&.  If empty, unset, or `B<none>\\&', no progress report is made; "
-"if `B<bar>\\&' a growing bar of inverse video is shown; if `B<percent>' (or "
-"any other string, though this may change in future), the percentage of the "
-"file transferred is shown\\&.  The bar meter requires that the width of the "
+"Controls the way that B<zftp_progress> reports on the progress of a transfer"
+"\\&.  If empty, unset, or `B<none>\\&', no progress report is made; if "
+"`B<bar>\\&' a growing bar of inverse video is shown; if `B<percent>' (or any "
+"other string, though this may change in future), the percentage of the file "
+"transferred is shown\\&.  The bar meter requires that the width of the "
 "terminal be available via the B<$COLUMNS> parameter (normally this is set "
 "automatically)\\&.  If the size of the file being transferred is not "
 "available, B<bar> and B<percent> meters will simply show the number of bytes "
@@ -1012,20 +1056,20 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:547
+#: contracorriente/man1/zshzftpsys.1:547
 msgid ""
-"When B<zfinit> is run, if this style is not defined for the context "
-"B<:zftp:*>, it will be set to `bar\\&'\\&."
+"When B<zfinit> is run, if this style is not defined for the context B<:zftp:"
+"*>, it will be set to `bar\\&'\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshzftpsys.1:548
+#: contracorriente/man1/zshzftpsys.1:548
 #, no-wrap
 msgid "B<update>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:553
+#: contracorriente/man1/zshzftpsys.1:553
 msgid ""
 "Specifies the minimum time interval between updates of the progress meter in "
 "seconds\\&.  No update is made unless new data has been received, so the "
@@ -1033,46 +1077,40 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:556
-#: ../contracorriente/man1/zshzftpsys.1:569
-msgid "As described for B<progress>, B<zfinit> will force this to default to 1\\&."
+#: contracorriente/man1/zshzftpsys.1:556 contracorriente/man1/zshzftpsys.1:569
+msgid ""
+"As described for B<progress>, B<zfinit> will force this to default to 1\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshzftpsys.1:557
+#: contracorriente/man1/zshzftpsys.1:557
 #, no-wrap
 msgid "B<remote-glob>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:561
+#: contracorriente/man1/zshzftpsys.1:561
 msgid ""
 "If set to `B<1>\\&', `B<yes>' or `B<true>', filename generation (globbing) "
 "is performed on the remote machine instead of by zsh itself; see below\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshzftpsys.1:561
+#: contracorriente/man1/zshzftpsys.1:561
 #, no-wrap
 msgid "B<titlebar>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:566
+#: contracorriente/man1/zshzftpsys.1:566
 msgid ""
 "If set to `B<1>\\&', `B<yes>' or `B<true>', B<zftp_chpwd> will put the "
 "remote host and remote directory into the titlebar of terminal emulators "
 "such as xterm or sun-cmd that allow this\\&."
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshzftpsys.1:570
-#, no-wrap
-msgid "B<chpwd>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:576
+#: contracorriente/man1/zshzftpsys.1:576
 msgid ""
 "If set to `B<1>\\&' `B<yes>' or `B<true>', B<zftp_chpwd> will call the "
 "function B<chpwd> when a connection is closed\\&.  This is useful if the "
@@ -1081,14 +1119,14 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:581
+#: contracorriente/man1/zshzftpsys.1:581
 msgid ""
 "When B<zfinit> is run, it will determine whether B<chpwd> exists and if so "
 "it will set the default value for the style to 1 if none exists already\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:586
+#: contracorriente/man1/zshzftpsys.1:586
 msgid ""
 "Note that there is also an associative array B<zfconfig> which contains "
 "values used by the function system\\&.  This should not be modified or "
@@ -1096,13 +1134,13 @@ msgid ""
 msgstr ""
 
 #. type: SS
-#: ../contracorriente/man1/zshzftpsys.1:587
+#: contracorriente/man1/zshzftpsys.1:587
 #, no-wrap
 msgid "Remote globbing"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:602
+#: contracorriente/man1/zshzftpsys.1:602
 msgid ""
 "The commands for retrieving files usually perform filename generation "
 "(globbing) on their arguments; this can be turned off by passing the option "
@@ -1120,7 +1158,7 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:609
+#: contracorriente/man1/zshzftpsys.1:609
 msgid ""
 "If the B<remote-glob> style (see above) is set, globbing is instead "
 "performed on the remote host: the server is asked for a list of matching "
@@ -1131,13 +1169,13 @@ msgid ""
 msgstr ""
 
 #. type: SS
-#: ../contracorriente/man1/zshzftpsys.1:610
+#: contracorriente/man1/zshzftpsys.1:610
 #, no-wrap
 msgid "Automatic and temporary reopening"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:617
+#: contracorriente/man1/zshzftpsys.1:617
 msgid ""
 "As described for the B<zfopen> command, a subsequent B<zfopen> with no "
 "parameters will reopen the connection to the last host (this includes "
@@ -1147,7 +1185,7 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:626
+#: contracorriente/man1/zshzftpsys.1:626
 msgid ""
 "Automatic re-opening is also available\\&.  If a connection is not currently "
 "open and a command requiring a connection is given, the last connection is "
@@ -1160,7 +1198,7 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:634
+#: contracorriente/man1/zshzftpsys.1:634
 msgid ""
 "Furthermore, if the command issued is a file transfer, the connection will "
 "be closed after the transfer is finished, hence providing a one-shot mode "
@@ -1172,14 +1210,14 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:637
+#: contracorriente/man1/zshzftpsys.1:637
 msgid ""
-"Information about the previous connection is given by the B<zfstat> "
-"function\\&.  So, for example, if that reports:"
+"Information about the previous connection is given by the B<zfstat> function"
+"\\&.  So, for example, if that reports:"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:643
+#: contracorriente/man1/zshzftpsys.1:643
 #, no-wrap
 msgid ""
 "B<Session:        default\n"
@@ -1188,31 +1226,24 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:650
+#: contracorriente/man1/zshzftpsys.1:650
 msgid ""
 "then the command B<zfget file\\&.txt> will attempt to reopen a connection to "
 "B<ftp\\&.bar\\&.com>, retrieve the file B</pub/textfiles/file\\&.txt>, and "
-"immediately close the connection again\\&.  On the other hand, B<zfcd "
-"\\&.\\&.> will open the connection in the directory B</pub> and leave it "
-"open\\&."
+"immediately close the connection again\\&.  On the other hand, B<zfcd \\&."
+"\\&.> will open the connection in the directory B</pub> and leave it open\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:654
+#: contracorriente/man1/zshzftpsys.1:654
 msgid ""
 "Note that all the above is local to each session; if you return to a "
 "previous session, the connection for that session is the one which will be "
 "reopened\\&."
 msgstr ""
 
-#. type: SS
-#: ../contracorriente/man1/zshzftpsys.1:655
-#, no-wrap
-msgid "Completion"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshzftpsys.1:662
+#: contracorriente/man1/zshzftpsys.1:662
 msgid ""
 "Completion of local and remote files, directories, sessions and bookmarks is "
 "supported\\&.  The older, B<compctl>-style completion is defined when "

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: vtamara@pasosdeJesus.org\n"
-"POT-Creation-Date: 2020-09-27 09:16-0500\n"
+"POT-Creation-Date: 2020-09-27 10:31-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,43 +17,340 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #. type: TH
-#: ../contracorriente/man1/zshcompctl.1:1
-#, no-wrap
-msgid "ZSHCOMPCTL"
-msgstr ""
-
-#. type: TH
-#: ../contracorriente/man1/zshcompctl.1:1
+#: contracorriente/man1/zsh.1:1 contracorriente/man1/zshall.1:1
+#: contracorriente/man1/zshall.1:479 contracorriente/man1/zshbuiltins.1:1
+#: contracorriente/man1/zshcalsys.1:1 contracorriente/man1/zshcompctl.1:1
+#: contracorriente/man1/zshcompsys.1:1 contracorriente/man1/zshcompwid.1:1
+#: contracorriente/man1/zshcontrib.1:1 contracorriente/man1/zshexpn.1:1
+#: contracorriente/man1/zshmisc.1:1 contracorriente/man1/zshmodules.1:1
+#: contracorriente/man1/zshoptions.1:1 contracorriente/man1/zshparam.1:1
+#: contracorriente/man1/zshroadmap.1:1 contracorriente/man1/zshtcpsys.1:1
+#: contracorriente/man1/zshzftpsys.1:1 contracorriente/man1/zshzle.1:1
 #, no-wrap
 msgid "February 14, 2020"
-msgstr ""
+msgstr "Febrero 14 de 2020"
 
 #. type: TH
-#: ../contracorriente/man1/zshcompctl.1:1
+#: contracorriente/man1/zsh.1:1 contracorriente/man1/zshall.1:1
+#: contracorriente/man1/zshall.1:479 contracorriente/man1/zshbuiltins.1:1
+#: contracorriente/man1/zshcalsys.1:1 contracorriente/man1/zshcompctl.1:1
+#: contracorriente/man1/zshcompsys.1:1 contracorriente/man1/zshcompwid.1:1
+#: contracorriente/man1/zshcontrib.1:1 contracorriente/man1/zshexpn.1:1
+#: contracorriente/man1/zshmisc.1:1 contracorriente/man1/zshmodules.1:1
+#: contracorriente/man1/zshoptions.1:1 contracorriente/man1/zshparam.1:1
+#: contracorriente/man1/zshroadmap.1:1 contracorriente/man1/zshtcpsys.1:1
+#: contracorriente/man1/zshzftpsys.1:1 contracorriente/man1/zshzle.1:1
 #, no-wrap
 msgid "zsh 5\\&.8"
-msgstr ""
+msgstr "zsh 5\\&.8"
 
 #. type: SH
-#: ../contracorriente/man1/zshcompctl.1:2
+#: contracorriente/man1/zsh.1:2 contracorriente/man1/zshall.1:2
+#: contracorriente/man1/zshbuiltins.1:2 contracorriente/man1/zshcalsys.1:2
+#: contracorriente/man1/zshcompctl.1:2 contracorriente/man1/zshcompsys.1:2
+#: contracorriente/man1/zshcompwid.1:2 contracorriente/man1/zshcontrib.1:2
+#: contracorriente/man1/zshexpn.1:2 contracorriente/man1/zshmisc.1:2
+#: contracorriente/man1/zshmodules.1:2 contracorriente/man1/zshoptions.1:2
+#: contracorriente/man1/zshparam.1:2 contracorriente/man1/zshroadmap.1:2
+#: contracorriente/man1/zshtcpsys.1:2 contracorriente/man1/zshzftpsys.1:2
+#: contracorriente/man1/zshzle.1:2
 #, no-wrap
 msgid "NAME"
-msgstr ""
-
-#.  Yodl file: Zsh/compctl.yo
-#. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:5
-msgid "zshcompctl - zsh programmable completion"
-msgstr ""
+msgstr "NOMBRE"
 
 #. type: SH
-#: ../contracorriente/man1/zshcompctl.1:5
+#: contracorriente/man1/zsh.1:45 contracorriente/man1/zshall.1:44
+#: contracorriente/man1/zshcalsys.1:5 contracorriente/man1/zshcompctl.1:5
+#: contracorriente/man1/zshcompsys.1:5 contracorriente/man1/zshcompwid.1:5
+#: contracorriente/man1/zshcontrib.1:5 contracorriente/man1/zshexpn.1:5
+#: contracorriente/man1/zshmodules.1:5 contracorriente/man1/zshparam.1:5
+#: contracorriente/man1/zshtcpsys.1:5 contracorriente/man1/zshzftpsys.1:5
+#: contracorriente/man1/zshzle.1:5
 #, no-wrap
 msgid "DESCRIPTION"
 msgstr ""
 
+#. type: TP
+#: contracorriente/man1/zsh.1:151 contracorriente/man1/zshall.1:150
+#: contracorriente/man1/zshbuiltins.1:366
+#: contracorriente/man1/zshbuiltins.1:1375
+#: contracorriente/man1/zshbuiltins.1:1637
+#: contracorriente/man1/zshbuiltins.1:2445
+#: contracorriente/man1/zshbuiltins.1:2641
+#: contracorriente/man1/zshcompctl.1:181 contracorriente/man1/zshcompsys.1:4684
+#: contracorriente/man1/zshcontrib.1:2263
+#: contracorriente/man1/zshcontrib.1:2652
+#: contracorriente/man1/zshoptions.1:1991
+#, no-wrap
+msgid "B<-c>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:373
+#: contracorriente/man1/zshbuiltins.1:1416
+#: contracorriente/man1/zshbuiltins.1:1659
+#: contracorriente/man1/zshbuiltins.1:2469
+#: contracorriente/man1/zshbuiltins.1:2659
+#: contracorriente/man1/zshcompctl.1:237 contracorriente/man1/zshcompsys.1:4531
+#: contracorriente/man1/zshcontrib.1:2269
+#: contracorriente/man1/zshoptions.1:1898
+#: contracorriente/man1/zshoptions.1:1961
+#, no-wrap
+msgid "B<-p>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:376
+#: contracorriente/man1/zshbuiltins.1:2492
+#: contracorriente/man1/zshbuiltins.1:2637 contracorriente/man1/zshcalsys.1:524
+#: contracorriente/man1/zshcompctl.1:222 contracorriente/man1/zshcontrib.1:5366
+#: contracorriente/man1/zshoptions.1:1913
+#: contracorriente/man1/zshoptions.1:1976 contracorriente/man1/zshzle.1:197
+#, no-wrap
+msgid "B<-v>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:806 contracorriente/man1/zshcompctl.1:231
+#: contracorriente/man1/zshoptions.1:1814 contracorriente/man1/zshzle.1:714
+#, no-wrap
+msgid "B<-I>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:809 contracorriente/man1/zshcompctl.1:108
+#: contracorriente/man1/zshcontrib.1:5379
+#: contracorriente/man1/zshmodules.1:2533
+#: contracorriente/man1/zshoptions.1:1823
+#, no-wrap
+msgid "B<-L>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:814
+#: contracorriente/man1/zshbuiltins.1:1397
+#: contracorriente/man1/zshbuiltins.1:2168
+#: contracorriente/man1/zshbuiltins.1:2463
+#: contracorriente/man1/zshbuiltins.1:2668 contracorriente/man1/zshcalsys.1:942
+#: contracorriente/man1/zshcompctl.1:191 contracorriente/man1/zshoptions.1:1892
+#: contracorriente/man1/zshoptions.1:1955
+#: contracorriente/man1/zshoptions.1:1994 contracorriente/man1/zshzle.1:268
+#, no-wrap
+msgid "B<-m>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:841
+#: contracorriente/man1/zshbuiltins.1:2448 contracorriente/man1/zshcalsys.1:421
+#: contracorriente/man1/zshcalsys.1:939 contracorriente/man1/zshcompctl.1:206
+#: contracorriente/man1/zshzle.1:230
+#, no-wrap
+msgid "B<-d>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:844
+#: contracorriente/man1/zshbuiltins.1:2307
+#: contracorriente/man1/zshbuiltins.1:2451
+#: contracorriente/man1/zshbuiltins.1:2654
+#: contracorriente/man1/zshcompctl.1:174 contracorriente/man1/zshcompsys.1:4961
+#: contracorriente/man1/zshcompwid.1:659 contracorriente/man1/zshcontrib.1:5342
+#: contracorriente/man1/zshoptions.1:1874
+#: contracorriente/man1/zshoptions.1:1946
+#, no-wrap
+msgid "B<-f>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:848
+#: contracorriente/man1/zshbuiltins.1:1628
+#: contracorriente/man1/zshcompctl.1:243 contracorriente/man1/zshmodules.1:4238
+#: contracorriente/man1/zshoptions.1:1802
+#, no-wrap
+msgid "B<-E>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:864
+#: contracorriente/man1/zshbuiltins.1:1383 contracorriente/man1/zshcalsys.1:427
+#: contracorriente/man1/zshcompctl.1:79 contracorriente/man1/zshmodules.1:4231
+#: contracorriente/man1/zshoptions.1:1799
+#, no-wrap
+msgid "B<-D>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:1365
+#: contracorriente/man1/zshbuiltins.1:2300
+#: contracorriente/man1/zshbuiltins.1:2439
+#: contracorriente/man1/zshbuiltins.1:2663 contracorriente/man1/zshcalsys.1:404
+#: contracorriente/man1/zshcalsys.1:930 contracorriente/man1/zshcompctl.1:197
+#: contracorriente/man1/zshcompwid.1:516 contracorriente/man1/zshcontrib.1:3185
+#: contracorriente/man1/zshoptions.1:1868
+#: contracorriente/man1/zshoptions.1:1937 contracorriente/man1/zshzle.1:202
+#, no-wrap
+msgid "B<-a>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:1370
+#: contracorriente/man1/zshbuiltins.1:2442 contracorriente/man1/zshcalsys.1:409
+#: contracorriente/man1/zshcompctl.1:249 contracorriente/man1/zshoptions.1:1940
+#: contracorriente/man1/zshoptions.1:1988
+#, no-wrap
+msgid "B<-b>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:1402
+#: contracorriente/man1/zshbuiltins.1:1649
+#: contracorriente/man1/zshbuiltins.1:2466
+#: contracorriente/man1/zshcompctl.1:246 contracorriente/man1/zshcompsys.1:3715
+#: contracorriente/man1/zshcompwid.1:703 contracorriente/man1/zshcontrib.1:5352
+#: contracorriente/man1/zshmodules.1:2541
+#: contracorriente/man1/zshoptions.1:1895
+#: contracorriente/man1/zshoptions.1:1958
+#, no-wrap
+msgid "B<-n>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:1405
+#: contracorriente/man1/zshcompctl.1:225 contracorriente/man1/zshcontrib.1:3212
+#: contracorriente/man1/zshmodules.1:2546
+#: contracorriente/man1/zshoptions.1:1829
+#, no-wrap
+msgid "B<-N>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:1410
+#: contracorriente/man1/zshcompctl.1:218 contracorriente/man1/zshcontrib.1:3200
+#: contracorriente/man1/zshmodules.1:2549
+#: contracorriente/man1/zshoptions.1:1997
+#, no-wrap
+msgid "B<-o>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:1413
+#: contracorriente/man1/zshcompctl.1:234 contracorriente/man1/zshoptions.1:1832
+#, no-wrap
+msgid "B<-O>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:1426
+#: contracorriente/man1/zshbuiltins.1:1589
+#: contracorriente/man1/zshbuiltins.1:2373
+#: contracorriente/man1/zshbuiltins.1:2475 contracorriente/man1/zshcalsys.1:434
+#: contracorriente/man1/zshcalsys.1:946 contracorriente/man1/zshcompctl.1:256
+#: contracorriente/man1/zshcontrib.1:487 contracorriente/man1/zshcontrib.1:2658
+#: contracorriente/man1/zshmodules.1:1122
+#: contracorriente/man1/zshmodules.1:2556
+#: contracorriente/man1/zshoptions.1:1901
+#: contracorriente/man1/zshoptions.1:1964
+#, no-wrap
+msgid "B<-r>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:1429
+#: contracorriente/man1/zshbuiltins.1:2791
+#: contracorriente/man1/zshcompctl.1:200 contracorriente/man1/zshcompsys.1:3760
+#: contracorriente/man1/zshoptions.1:1841
+#, no-wrap
+msgid "B<-R>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:1476
+#: contracorriente/man1/zshbuiltins.1:1619
+#: contracorriente/man1/zshbuiltins.1:2813
+#: contracorriente/man1/zshcompctl.1:259
+#, no-wrap
+msgid "B<-z>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:1598
+#: contracorriente/man1/zshbuiltins.1:2472
+#: contracorriente/man1/zshcompctl.1:407 contracorriente/man1/zshcompwid.1:625
+#: contracorriente/man1/zshcompwid.1:860 contracorriente/man1/zshcontrib.1:5355
+#: contracorriente/man1/zshmodules.1:1117
+#, no-wrap
+msgid "B<-q>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:1625
+#: contracorriente/man1/zshcompctl.1:211 contracorriente/man1/zshcompwid.1:667
+#: contracorriente/man1/zshcontrib.1:491 contracorriente/man1/zshoptions.1:1871
+#: contracorriente/man1/zshoptions.1:1943 contracorriente/man1/zshzle.1:191
+#, no-wrap
+msgid "B<-e>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:1633
+#: contracorriente/man1/zshbuiltins.1:2244 contracorriente/man1/zshcalsys.1:935
+#: contracorriente/man1/zshcompctl.1:228 contracorriente/man1/zshoptions.1:1985
+#, no-wrap
+msgid "B<-A>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:2279
+#: contracorriente/man1/zshbuiltins.1:2787
+#: contracorriente/man1/zshcompctl.1:448 contracorriente/man1/zshcompwid.1:707
+#: contracorriente/man1/zshoptions.1:1850
+#, no-wrap
+msgid "B<-U>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:2399
+#: contracorriente/man1/zshbuiltins.1:2489
+#: contracorriente/man1/zshcompctl.1:262 contracorriente/man1/zshoptions.1:1910
+#: contracorriente/man1/zshoptions.1:1973
+#, no-wrap
+msgid "B<-u>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:2483 contracorriente/man1/zshcompctl.1:84
+#: contracorriente/man1/zshmodules.1:2571
+#: contracorriente/man1/zshoptions.1:1847
+#: contracorriente/man1/zshoptions.1:1931 contracorriente/man1/zshzle.1:752
+#, no-wrap
+msgid "B<-T>"
+msgstr ""
+
+#. type: TP
+#: contracorriente/man1/zshbuiltins.1:2496
+#: contracorriente/man1/zshbuiltins.1:2645
+#: contracorriente/man1/zshcompctl.1:194 contracorriente/man1/zshcompsys.1:3739
+#: contracorriente/man1/zshcontrib.1:2646
+#: contracorriente/man1/zshcontrib.1:5369
+#: contracorriente/man1/zshoptions.1:1916
+#, no-wrap
+msgid "B<-w>"
+msgstr ""
+
+#. type: TH
+#: contracorriente/man1/zshcompctl.1:1
+#, no-wrap
+msgid "ZSHCOMPCTL"
+msgstr ""
+
+#.  Yodl file: Zsh/compctl.yo
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:12
+#: contracorriente/man1/zshcompctl.1:5
+msgid "zshcompctl - zsh programmable completion"
+msgstr ""
+
+#. type: Plain text
+#: contracorriente/man1/zshcompctl.1:12
 msgid ""
 "This version of zsh has two ways of performing completion of words on the "
 "command line\\&.  New users of the shell may prefer to use the newer and "
@@ -64,68 +361,62 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:14
+#: contracorriente/man1/zshcompctl.1:14
 #, no-wrap
 msgid "B<compctl> [ B<-CDT> ] I<options> [ I<command> \\&.\\&.\\&. ]"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:16
-#: ../contracorriente/man1/zshcompctl.1:605
+#: contracorriente/man1/zshcompctl.1:16 contracorriente/man1/zshcompctl.1:605
 #, no-wrap
-msgid ""
-"B<compctl >[ B<-CDT> ] I<options> [ B<-x> I<pattern> I<options> B<-> "
-"\\&.\\&.\\&. B<->B<-> ]"
+msgid "B<compctl >[ B<-CDT> ] I<options> [ B<-x> I<pattern> I<options> B<-> \\&.\\&.\\&. B<->B<-> ]"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:18
-#: ../contracorriente/man1/zshcompctl.1:607
+#: contracorriente/man1/zshcompctl.1:18 contracorriente/man1/zshcompctl.1:607
 #, no-wrap
-msgid ""
-"        [ B<+> I<options> [ B<-x> \\&.\\&.\\&. B<->B<-> ] "
-"\\&.\\&.\\&. [B<+>] ] [ I<command> \\&.\\&.\\&. ]"
+msgid "        [ B<+> I<options> [ B<-x> \\&.\\&.\\&. B<->B<-> ] \\&.\\&.\\&. [B<+>] ] [ I<command> \\&.\\&.\\&. ]"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:20
+#: contracorriente/man1/zshcompctl.1:20
 #, no-wrap
 msgid "B<compctl> B<-M> I<match-specs> \\&.\\&.\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:22
+#: contracorriente/man1/zshcompctl.1:22
 #, no-wrap
 msgid "B<compctl> B<-L> [ B<-CDTM> ] [ I<command> \\&.\\&.\\&. ]"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:24
+#: contracorriente/man1/zshcompctl.1:24
 #, no-wrap
 msgid "B<compctl> B<+> I<command> \\&.\\&.\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:37
+#: contracorriente/man1/zshcompctl.1:37
 msgid ""
 "Control the editor\\&'s completion behavior according to the supplied set of "
-"I<options>\\&.  Various editing commands, notably "
-"B<expand-or-complete-word>, usually bound to tab, will attempt to complete a "
-"word typed by the user, while others, notably B<delete-char-or-list>, "
-"usually bound to ^D in EMACS editing mode, list the possibilities; "
-"B<compctl> controls what those possibilities are\\&.  They may for example "
-"be filenames (the most common case, and hence the default), shell variables, "
-"or words from a user-specified list\\&."
+"I<options>\\&.  Various editing commands, notably B<expand-or-complete-"
+"word>, usually bound to tab, will attempt to complete a word typed by the "
+"user, while others, notably B<delete-char-or-list>, usually bound to ^D in "
+"EMACS editing mode, list the possibilities; B<compctl> controls what those "
+"possibilities are\\&.  They may for example be filenames (the most common "
+"case, and hence the default), shell variables, or words from a user-"
+"specified list\\&."
 msgstr ""
 
 #. type: SH
-#: ../contracorriente/man1/zshcompctl.1:38
+#: contracorriente/man1/zshcompctl.1:38
 #, no-wrap
 msgid "COMMAND FLAGS"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:45
+#: contracorriente/man1/zshcompctl.1:45
 msgid ""
 "Completion of the arguments of a command may be different for each command "
 "or may use the default\\&.  The behavior when completing the command word "
@@ -136,13 +427,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:47
+#: contracorriente/man1/zshcompctl.1:47
 #, no-wrap
 msgid "I<command> \\&.\\&.\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:55
+#: contracorriente/man1/zshcompctl.1:55
 msgid ""
 "controls completion for the named commands, which must be listed last on the "
 "command line\\&.  If completion is attempted for a command with a pathname "
@@ -152,7 +443,7 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:67
+#: contracorriente/man1/zshcompctl.1:67
 msgid ""
 "Any of the I<command> strings may be patterns of the form normally used for "
 "filename generation\\&.  These should be quoted to protect them from "
@@ -166,7 +457,7 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:72
+#: contracorriente/man1/zshcompctl.1:72
 msgid ""
 "Note that aliases are expanded before the command name is determined unless "
 "the B<COMPLETE_ALIASES> option is set\\&.  Commands may not be combined with "
@@ -174,13 +465,17 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:73
+#: contracorriente/man1/zshcompctl.1:73 contracorriente/man1/zshcompsys.1:3756
+#: contracorriente/man1/zshcompwid.1:734 contracorriente/man1/zshcontrib.1:2655
+#: contracorriente/man1/zshcontrib.1:5377
+#: contracorriente/man1/zshoptions.1:1796
+#: contracorriente/man1/zshoptions.1:1928
 #, no-wrap
 msgid "B<-C>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:79
+#: contracorriente/man1/zshcompctl.1:79
 msgid ""
 "controls completion when the command word itself is being completed\\&.  If "
 "no B<compctl -C> command has been issued, the names of any executable "
@@ -188,28 +483,16 @@ msgid ""
 "functions) are completed\\&."
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshcompctl.1:79
-#, no-wrap
-msgid "B<-D>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:84
+#: contracorriente/man1/zshcompctl.1:84
 msgid ""
 "controls default completion behavior for the arguments of commands not "
 "assigned any special behavior\\&.  If no B<compctl -D> command has been "
 "issued, filenames are completed\\&."
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshcompctl.1:84
-#, no-wrap
-msgid "B<-T>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:95
+#: contracorriente/man1/zshcompctl.1:95
 msgid ""
 "supplies completion flags to be used before any other processing is done, "
 "even before processing for B<compctl>s defined for specific commands\\&.  "
@@ -223,27 +506,21 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:100
+#: contracorriente/man1/zshcompctl.1:100
 #, no-wrap
 msgid "B<compctl -T -x \\&'s[~] C[0,[^/]#]' -k friends -S/ -tn>\n"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:107
+#: contracorriente/man1/zshcompctl.1:107
 msgid ""
 "to complete the strings in the array B<friends> after a `B<~>\\&'\\&.  The "
-"B<C[>I<\\&.\\&.\\&.>B<]> argument is necessary so that this form of "
-"B<~>-completion is not tried after the directory name is finished\\&."
-msgstr ""
-
-#. type: TP
-#: ../contracorriente/man1/zshcompctl.1:108
-#, no-wrap
-msgid "B<-L>"
+"B<C[>I<\\&.\\&.\\&.>B<]> argument is necessary so that this form of B<~>-"
+"completion is not tried after the directory name is finished\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:115
+#: contracorriente/man1/zshcompctl.1:115
 msgid ""
 "lists the existing completion behavior in a manner suitable for putting into "
 "a start-up script; the existing behavior is not changed\\&.  Any combination "
@@ -253,13 +530,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:115
+#: contracorriente/man1/zshcompctl.1:115
 #, no-wrap
 msgid "I<no argument>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:120
+#: contracorriente/man1/zshcompctl.1:120
 msgid ""
 "If no argument is given, B<compctl> lists all defined completions in an "
 "abbreviated form; with a list of I<options>, all completions with those "
@@ -267,7 +544,7 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:125
+#: contracorriente/man1/zshcompctl.1:125
 msgid ""
 "If the B<+> flag is alone and followed immediately by the I<command> list, "
 "the completion behavior for all the commands in the list is reset to the "
@@ -276,7 +553,7 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:132
+#: contracorriente/man1/zshcompctl.1:132
 msgid ""
 "The form with B<-M> as the first and only option defines global matching "
 "specifications (see zshcompwid)\\&. The match specifications given will be "
@@ -286,13 +563,13 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:136
+#: contracorriente/man1/zshcompctl.1:136
 #, no-wrap
 msgid "B<compctl -M \\&'' 'm:{a-zA-Z}={A-Za-z}'>\n"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:142
+#: contracorriente/man1/zshcompctl.1:142
 msgid ""
 "This will first try completion without any global match specifications (the "
 "empty string) and, if that generates no matches, will try case insensitive "
@@ -300,67 +577,67 @@ msgid ""
 msgstr ""
 
 #. type: SH
-#: ../contracorriente/man1/zshcompctl.1:143
+#: contracorriente/man1/zshcompctl.1:143
 #, no-wrap
 msgid "OPTION FLAGS"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:145
+#: contracorriente/man1/zshcompctl.1:145
 #, no-wrap
 msgid "[ B<-fcFBdeaRGovNAIOPZEnbjrzu/12> ]"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:147
+#: contracorriente/man1/zshcompctl.1:147
 #, no-wrap
 msgid "[ B<-k> I<array> ] [ B<-g> I<globstring> ] [ B<-s> I<subststring> ]"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:149
+#: contracorriente/man1/zshcompctl.1:149
 #, no-wrap
 msgid "[ B<-K> I<function> ]"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:151
+#: contracorriente/man1/zshcompctl.1:151
 #, no-wrap
 msgid "[ B<-Q> ] [ B<-P> I<prefix> ] [ B<-S> I<suffix> ]"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:153
+#: contracorriente/man1/zshcompctl.1:153
 #, no-wrap
 msgid "[ B<-W> I<file-prefix> ] [ B<-H> I<num pattern> ]"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:155
+#: contracorriente/man1/zshcompctl.1:155
 #, no-wrap
 msgid "[ B<-q> ] [ B<-X> I<explanation> ] [ B<-Y> I<explanation> ]"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:157
+#: contracorriente/man1/zshcompctl.1:157
 #, no-wrap
 msgid "[ B<-y> I<func-or-var> ] [ B<-l> I<cmd> ] [ B<-h> I<cmd> ] [ B<-U> ]"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:159
+#: contracorriente/man1/zshcompctl.1:159
 #, no-wrap
 msgid "[ B<-t> I<continue> ] [ B<-J> I<name> ] [ B<-V> I<name> ]"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:161
+#: contracorriente/man1/zshcompctl.1:161
 #, no-wrap
 msgid "[ B<-M> I<match-spec> ]"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:169
+#: contracorriente/man1/zshcompctl.1:169
 msgid ""
 "The remaining I<options> specify the type of command arguments to look for "
 "during completion\\&.  Any combination of these flags may be specified; the "
@@ -369,149 +646,102 @@ msgid ""
 msgstr ""
 
 #. type: SS
-#: ../contracorriente/man1/zshcompctl.1:170
+#: contracorriente/man1/zshcompctl.1:170
 #, no-wrap
 msgid "Simple Flags"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:172
+#: contracorriente/man1/zshcompctl.1:172
 msgid "These produce completion lists made up by the shell itself:"
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshcompctl.1:174
-#, no-wrap
-msgid "B<-f>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:178
+#: contracorriente/man1/zshcompctl.1:178
 msgid "Filenames and file system paths\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:178
+#: contracorriente/man1/zshcompctl.1:178 contracorriente/man1/zshcompsys.1:4965
 #, no-wrap
 msgid "B<-/>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:181
+#: contracorriente/man1/zshcompctl.1:181
 msgid "Just file system paths\\&."
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshcompctl.1:181
-#, no-wrap
-msgid "B<-c>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:185
+#: contracorriente/man1/zshcompctl.1:185
 msgid ""
 "Command names, including aliases, shell functions, builtins and reserved "
 "words\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:185
+#: contracorriente/man1/zshcompctl.1:185 contracorriente/man1/zshmodules.1:4247
+#: contracorriente/man1/zshoptions.1:1805
 #, no-wrap
 msgid "B<-F>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:188
+#: contracorriente/man1/zshcompctl.1:188
 msgid "Function names\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:188
+#: contracorriente/man1/zshcompctl.1:188 contracorriente/man1/zshoptions.1:1793
 #, no-wrap
 msgid "B<-B>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:191
+#: contracorriente/man1/zshcompctl.1:191
 msgid "Names of builtin commands\\&."
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshcompctl.1:191
-#, no-wrap
-msgid "B<-m>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:194
+#: contracorriente/man1/zshcompctl.1:194
 msgid "Names of external commands\\&."
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshcompctl.1:194
-#, no-wrap
-msgid "B<-w>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:197
+#: contracorriente/man1/zshcompctl.1:197
 msgid "Reserved words\\&."
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshcompctl.1:197
-#, no-wrap
-msgid "B<-a>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:200
+#: contracorriente/man1/zshcompctl.1:200
 msgid "Alias names\\&."
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshcompctl.1:200
-#, no-wrap
-msgid "B<-R>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:203
+#: contracorriente/man1/zshcompctl.1:203
 msgid "Names of regular (non-global) aliases\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:203
+#: contracorriente/man1/zshcompctl.1:203 contracorriente/man1/zshoptions.1:1808
 #, no-wrap
 msgid "B<-G>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:206
+#: contracorriente/man1/zshcompctl.1:206
 msgid "Names of global aliases\\&."
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshcompctl.1:206
-#, no-wrap
-msgid "B<-d>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:211
+#: contracorriente/man1/zshcompctl.1:211
 msgid ""
 "This can be combined with B<-F>, B<-B>, B<-w>, B<-a>, B<-R> and B<-G> to get "
 "names of disabled functions, builtins, reserved words or aliases\\&."
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshcompctl.1:211
-#, no-wrap
-msgid "B<-e>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:218
+#: contracorriente/man1/zshcompctl.1:218
 msgid ""
 "This option (to show enabled commands) is in effect by default, but may be "
 "combined with B<-d>; B<-de> in combination with B<-F>, B<-B>, B<-w>, B<-a>, "
@@ -519,194 +749,117 @@ msgid ""
 "or aliases whether or not they are disabled\\&."
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshcompctl.1:218
-#, no-wrap
-msgid "B<-o>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:222
+#: contracorriente/man1/zshcompctl.1:222
 msgid "Names of shell options (see I<zshoptions>(1))\\&."
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshcompctl.1:222
-#, no-wrap
-msgid "B<-v>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:225
+#: contracorriente/man1/zshcompctl.1:225
 msgid "Names of any variable defined in the shell\\&."
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshcompctl.1:225
-#, no-wrap
-msgid "B<-N>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:228
+#: contracorriente/man1/zshcompctl.1:228
 msgid "Names of scalar (non-array) parameters\\&."
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshcompctl.1:228
-#, no-wrap
-msgid "B<-A>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:231
+#: contracorriente/man1/zshcompctl.1:231
 msgid "Array names\\&."
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshcompctl.1:231
-#, no-wrap
-msgid "B<-I>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:234
+#: contracorriente/man1/zshcompctl.1:234
 msgid "Names of integer variables\\&."
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshcompctl.1:234
-#, no-wrap
-msgid "B<-O>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:237
+#: contracorriente/man1/zshcompctl.1:237
 msgid "Names of read-only variables\\&."
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshcompctl.1:237
-#, no-wrap
-msgid "B<-p>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:240
-msgid "Names of parameters used by the shell (including special parameters)\\&."
+#: contracorriente/man1/zshcompctl.1:240
+msgid ""
+"Names of parameters used by the shell (including special parameters)\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:240
+#: contracorriente/man1/zshcompctl.1:240 contracorriente/man1/zshoptions.1:1865
 #, no-wrap
 msgid "B<-Z>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:243
+#: contracorriente/man1/zshcompctl.1:243
 msgid "Names of shell special parameters\\&."
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshcompctl.1:243
-#, no-wrap
-msgid "B<-E>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:246
+#: contracorriente/man1/zshcompctl.1:246
 msgid "Names of environment variables\\&."
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshcompctl.1:246
-#, no-wrap
-msgid "B<-n>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:249
+#: contracorriente/man1/zshcompctl.1:249
 msgid "Named directories\\&."
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshcompctl.1:249
-#, no-wrap
-msgid "B<-b>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:252
+#: contracorriente/man1/zshcompctl.1:252
 msgid "Key binding names\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:252
+#: contracorriente/man1/zshcompctl.1:252
 #, no-wrap
 msgid "B<-j>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:256
+#: contracorriente/man1/zshcompctl.1:256
 msgid ""
 "Job names: the first word of the job leader\\&'s command line\\&.  This is "
 "useful with the B<kill> builtin\\&."
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshcompctl.1:256
-#, no-wrap
-msgid "B<-r>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:259
+#: contracorriente/man1/zshcompctl.1:259
 msgid "Names of running jobs\\&."
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshcompctl.1:259
-#, no-wrap
-msgid "B<-z>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:262
+#: contracorriente/man1/zshcompctl.1:262
 msgid "Names of suspended jobs\\&."
 msgstr ""
 
-#. type: TP
-#: ../contracorriente/man1/zshcompctl.1:262
-#, no-wrap
-msgid "B<-u>"
-msgstr ""
-
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:265
+#: contracorriente/man1/zshcompctl.1:265
 msgid "User names\\&."
 msgstr ""
 
 #. type: SS
-#: ../contracorriente/man1/zshcompctl.1:266
+#: contracorriente/man1/zshcompctl.1:266
 #, no-wrap
 msgid "Flags with Arguments"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:269
+#: contracorriente/man1/zshcompctl.1:269
 msgid ""
 "These have user supplied arguments to determine how the list of completions "
 "is to be made up:"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:271
+#: contracorriente/man1/zshcompctl.1:271
 #, no-wrap
 msgid "B<-k> I<array>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:280
+#: contracorriente/man1/zshcompctl.1:280
 msgid ""
 "Names taken from the elements of B<$>I<array> (note that the `B<$>\\&' does "
 "not appear on the command line)\\&.  Alternatively, the argument I<array> "
@@ -716,7 +869,7 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:286
+#: contracorriente/man1/zshcompctl.1:286
 #, no-wrap
 msgid ""
 "B<compctl -k \"(cputime filesize datasize stacksize\n"
@@ -724,31 +877,31 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:289
+#: contracorriente/man1/zshcompctl.1:289
 #, no-wrap
 msgid "B<-g> I<globstring>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:298
+#: contracorriente/man1/zshcompctl.1:298
 msgid ""
 "The I<globstring> is expanded using filename globbing; it should be quoted "
 "to protect it from immediate expansion\\&. The resulting filenames are taken "
 "as the possible completions\\&.  Use `B<*(/)>\\&' instead of `B<*/>\\&' for "
 "directories\\&.  The B<fignore> special parameter is not applied to the "
-"resulting files\\&.  More than one pattern may be given separated by "
-"blanks\\&. (Note that brace expansion is I<not> part of globbing\\&.  Use "
-"the syntax `B<(either|or)>\\&' to match alternatives\\&.)"
+"resulting files\\&.  More than one pattern may be given separated by blanks"
+"\\&. (Note that brace expansion is I<not> part of globbing\\&.  Use the "
+"syntax `B<(either|or)>\\&' to match alternatives\\&.)"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:298
+#: contracorriente/man1/zshcompctl.1:298
 #, no-wrap
 msgid "B<-s> I<subststring>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:305
+#: contracorriente/man1/zshcompctl.1:305
 msgid ""
 "The I<subststring> is split into words and these words are than expanded "
 "using all shell expansion mechanisms (see I<zshexpn>(1))\\&.  The resulting "
@@ -758,13 +911,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:305
+#: contracorriente/man1/zshcompctl.1:305
 #, no-wrap
 msgid "B<-K> I<function>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:319
+#: contracorriente/man1/zshcompctl.1:319
 msgid ""
 "Call the given function to get the completions\\&.  Unless the name starts "
 "with an underscore, the function is passed two arguments: the prefix and the "
@@ -774,12 +927,12 @@ msgid ""
 "and B<-l> flags of the B<read> builtin\\&. The function should set the "
 "variable B<reply> to an array containing the completions (one completion per "
 "element); note that B<reply> should not be made local to the function\\&.  "
-"From such a function the command line can be accessed with the B<-c> and "
-"B<-l> flags to the B<read> builtin\\&.  For example,"
+"From such a function the command line can be accessed with the B<-c> and B<-"
+"l> flags to the B<read> builtin\\&.  For example,"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:325
+#: contracorriente/man1/zshcompctl.1:325
 #, no-wrap
 msgid ""
 "B<function whoson { reply=(`users`); }\n"
@@ -787,20 +940,20 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:330
+#: contracorriente/man1/zshcompctl.1:330
 msgid ""
 "completes only logged-on users after `B<talk>\\&'\\&.  Note that `B<whoson>' "
 "must return an array, so `B<reply=`users`>\\&' would be incorrect\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:331
+#: contracorriente/man1/zshcompctl.1:331
 #, no-wrap
 msgid "B<-H> I<num pattern>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:338
+#: contracorriente/man1/zshcompctl.1:338
 msgid ""
 "The possible completions are taken from the last I<num> history lines\\&.  "
 "Only words matching I<pattern> are taken\\&.  If I<num> is zero or negative "
@@ -809,58 +962,60 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:343
+#: contracorriente/man1/zshcompctl.1:343
 #, no-wrap
 msgid "B<compctl -D -f + -H 0 \\&''>\n"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:348
+#: contracorriente/man1/zshcompctl.1:348
 msgid ""
 "which forces completion to look back in the history list for a word if no "
 "filename matches\\&."
 msgstr ""
 
 #. type: SS
-#: ../contracorriente/man1/zshcompctl.1:350
+#: contracorriente/man1/zshcompctl.1:350
 #, no-wrap
 msgid "Control Flags"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:353
+#: contracorriente/man1/zshcompctl.1:353
 msgid ""
 "These do not directly specify types of name to be completed, but manipulate "
 "the options that do:"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:355
+#: contracorriente/man1/zshcompctl.1:355 contracorriente/man1/zshcompwid.1:691
+#: contracorriente/man1/zshcontrib.1:5359
+#: contracorriente/man1/zshoptions.1:1838
 #, no-wrap
 msgid "B<-Q>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:366
+#: contracorriente/man1/zshcompctl.1:366
 msgid ""
 "This instructs the shell not to quote any metacharacters in the possible "
 "completions\\&.  Normally the results of a completion are inserted into the "
 "command line with any metacharacters quoted so that they are interpreted as "
-"normal characters\\&.  This is appropriate for filenames and ordinary "
-"strings\\&.  However, for special effects, such as inserting a backquoted "
+"normal characters\\&.  This is appropriate for filenames and ordinary strings"
+"\\&.  However, for special effects, such as inserting a backquoted "
 "expression from a completion array (B<-k>) so that the expression will not "
-"be evaluated until the complete line is executed, this option must be "
-"used\\&."
+"be evaluated until the complete line is executed, this option must be used"
+"\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:366
+#: contracorriente/man1/zshcompctl.1:366 contracorriente/man1/zshcompwid.1:489
 #, no-wrap
 msgid "B<-P> I<prefix>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:371
+#: contracorriente/man1/zshcompctl.1:371
 msgid ""
 "The I<prefix> is inserted just before the completed string; any initial part "
 "already typed will be completed and the whole I<prefix> ignored for "
@@ -868,24 +1023,25 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:376
+#: contracorriente/man1/zshcompctl.1:376
 #, no-wrap
 msgid "B<compctl -j -P \"%\" kill>\n"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:380
-msgid "inserts a `%\\&' after the kill command and then completes job names\\&."
+#: contracorriente/man1/zshcompctl.1:380
+msgid ""
+"inserts a `%\\&' after the kill command and then completes job names\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:381
+#: contracorriente/man1/zshcompctl.1:381 contracorriente/man1/zshcompwid.1:495
 #, no-wrap
 msgid "B<-S> I<suffix>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:387
+#: contracorriente/man1/zshcompctl.1:387
 msgid ""
 "When a completion is found the I<suffix> is inserted after the completed "
 "string\\&.  In the case of menu completion the suffix is inserted "
@@ -894,13 +1050,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:387
+#: contracorriente/man1/zshcompctl.1:387 contracorriente/man1/zshcompwid.1:673
 #, no-wrap
 msgid "B<-W> I<file-prefix>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:392
+#: contracorriente/man1/zshcompctl.1:392
 msgid ""
 "With directory I<file-prefix>: for command, file, directory and globbing "
 "completion (options B<-c>, B<-f>, B<-/>, B<-g>), the file prefix is "
@@ -908,30 +1064,23 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:397
+#: contracorriente/man1/zshcompctl.1:397
 #, no-wrap
 msgid "B<compctl -/ -W ~/Mail maildirs>\n"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:406
+#: contracorriente/man1/zshcompctl.1:406
 msgid ""
 "completes any subdirectories to any depth beneath the directory B<~/Mail>, "
-"although that prefix does not appear on the command line\\&.  The "
-"I<file-prefix> may also be of the form accepted by the B<-k> flag, "
-"i\\&.e\\&. the name of an array or a literal list in parenthesis\\&. In this "
-"case all the directories in the list will be searched for possible "
-"completions\\&."
-msgstr ""
-
-#. type: TP
-#: ../contracorriente/man1/zshcompctl.1:407
-#, no-wrap
-msgid "B<-q>"
+"although that prefix does not appear on the command line\\&.  The I<file-"
+"prefix> may also be of the form accepted by the B<-k> flag, i\\&.e\\&. the "
+"name of an array or a literal list in parenthesis\\&. In this case all the "
+"directories in the list will be searched for possible completions\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:415
+#: contracorriente/man1/zshcompctl.1:415
 msgid ""
 "If used with a suffix as specified by the B<-S> option, this causes the "
 "suffix to be removed if the next character typed is a blank or does not "
@@ -942,33 +1091,33 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:415
+#: contracorriente/man1/zshcompctl.1:415
 #, no-wrap
 msgid "B<-l> I<cmd>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:427
+#: contracorriente/man1/zshcompctl.1:427
 msgid ""
 "This option restricts the range of command line words that are considered to "
 "be arguments\\&.  If combined with one of the extended completion patterns "
-"`B<p[>\\&.\\&.\\&.B<]>\\&', `B<r[>\\&.\\&.\\&.B<]>\\&', or "
-"`B<R[>\\&.\\&.\\&.B<]>' (see the section `Extended Completion' below) the "
-"range is restricted to the range of arguments specified in the brackets\\&.  "
-"Completion is then performed as if these had been given as arguments to the "
-"I<cmd> supplied with the option\\&. If the I<cmd> string is empty the first "
-"word in the range is instead taken as the command name, and command name "
-"completion performed on the first word in the range\\&.  For example,"
+"`B<p[>\\&.\\&.\\&.B<]>\\&', `B<r[>\\&.\\&.\\&.B<]>\\&', or `B<R[>\\&.\\&.\\&."
+"B<]>' (see the section `Extended Completion' below) the range is restricted "
+"to the range of arguments specified in the brackets\\&.  Completion is then "
+"performed as if these had been given as arguments to the I<cmd> supplied "
+"with the option\\&. If the I<cmd> string is empty the first word in the "
+"range is instead taken as the command name, and command name completion "
+"performed on the first word in the range\\&.  For example,"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:432
+#: contracorriente/man1/zshcompctl.1:432
 #, no-wrap
 msgid "B<compctl -x \\&'r[-exec,;]' -l '' -- find>\n"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:438
+#: contracorriente/man1/zshcompctl.1:438
 msgid ""
 "completes arguments between `B<-exec>\\&' and the following `B<;>' (or the "
 "end of the command line if there is no such string) as if they were a "
@@ -976,68 +1125,62 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:439
+#: contracorriente/man1/zshcompctl.1:439
 #, no-wrap
 msgid "B<-h> I<cmd>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:448
+#: contracorriente/man1/zshcompctl.1:448
 msgid ""
 "Normally zsh completes quoted strings as a whole\\&. With this option, "
 "completion can be done separately on different parts of such strings\\&. It "
 "works like the B<-l> option but makes the completion code work on the parts "
 "of the current word that are separated by spaces\\&. These parts are "
 "completed as if they were arguments to the given I<cmd>\\&. If I<cmd> is the "
-"empty string, the first part is completed as a command name, as with "
-"B<-l>\\&."
-msgstr ""
-
-#. type: TP
-#: ../contracorriente/man1/zshcompctl.1:448
-#, no-wrap
-msgid "B<-U>"
+"empty string, the first part is completed as a command name, as with B<-l>"
+"\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:460
+#: contracorriente/man1/zshcompctl.1:460
 msgid ""
 "Use the whole list of possible completions, whether or not they actually "
-"match the word on the command line\\&.  The word typed so far will be "
-"deleted\\&.  This is most useful with a function (given by the B<-K> option) "
-"which can examine the word components passed to it (or via the B<read> "
-"builtin\\&'s B<-c> and B<-l> flags) and use its own criteria to decide what "
-"matches\\&.  If there is no completion, the original word is retained\\&.  "
-"Since the produced possible completions seldom have interesting common "
-"prefixes and suffixes, menu completion is started immediately if "
-"B<AUTO_MENU> is set and this flag is used\\&."
+"match the word on the command line\\&.  The word typed so far will be deleted"
+"\\&.  This is most useful with a function (given by the B<-K> option) which "
+"can examine the word components passed to it (or via the B<read> builtin"
+"\\&'s B<-c> and B<-l> flags) and use its own criteria to decide what matches"
+"\\&.  If there is no completion, the original word is retained\\&.  Since "
+"the produced possible completions seldom have interesting common prefixes "
+"and suffixes, menu completion is started immediately if B<AUTO_MENU> is set "
+"and this flag is used\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:460
+#: contracorriente/man1/zshcompctl.1:460
 #, no-wrap
 msgid "B<-y> I<func-or-var>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:474
+#: contracorriente/man1/zshcompctl.1:474
 msgid ""
 "The list provided by I<func-or-var> is displayed instead of the list of "
 "completions whenever a listing is required; the actual completions to be "
 "inserted are not affected\\&.  It can be provided in two ways\\&. Firstly, "
 "if I<func-or-var> begins with a B<$> it defines a variable, or if it begins "
 "with a left parenthesis a literal array, which contains the list\\&.  A "
-"variable may have been set by a call to a function using the B<-K> "
-"option\\&.  Otherwise it contains the name of a function which will be "
-"executed to create the list\\&.  The function will be passed as an argument "
-"list all matching completions, including prefixes and suffixes expanded in "
-"full, and should set the array B<reply> to the result\\&.  In both cases, "
-"the display list will only be retrieved after a complete list of matches has "
-"been created\\&."
+"variable may have been set by a call to a function using the B<-K> option"
+"\\&.  Otherwise it contains the name of a function which will be executed to "
+"create the list\\&.  The function will be passed as an argument list all "
+"matching completions, including prefixes and suffixes expanded in full, and "
+"should set the array B<reply> to the result\\&.  In both cases, the display "
+"list will only be retrieved after a complete list of matches has been created"
+"\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:481
+#: contracorriente/man1/zshcompctl.1:481
 msgid ""
 "Note that the returned list does not have to correspond, even in length, to "
 "the original set of matches, and may be passed as a scalar instead of an "
@@ -1047,30 +1190,29 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:482
+#: contracorriente/man1/zshcompctl.1:482 contracorriente/man1/zshcompwid.1:594
 #, no-wrap
 msgid "B<-X> I<explanation>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:497
+#: contracorriente/man1/zshcompctl.1:497
 msgid ""
-"Print I<explanation> when trying completion on the current set of "
-"options\\&. A `B<%n>\\&' in this string is replaced by the number of matches "
-"that were added for this explanation string\\&.  The explanation only "
-"appears if completion was tried and there was no unique match, or when "
-"listing completions\\&. Explanation strings will be listed together with the "
-"matches of the group specified together with the B<-X> option (using the "
-"B<-J> or B<-V> option)\\&. If the same explanation string is given to "
-"multiple B<-X> options, the string appears only once (for each group) and "
-"the number of matches shown for the `B<%n>\\&' is the total number of all "
-"matches for each of these uses\\&. In any case, the explanation string will "
-"only be shown if there was at least one match added for the explanation "
-"string\\&."
+"Print I<explanation> when trying completion on the current set of options"
+"\\&. A `B<%n>\\&' in this string is replaced by the number of matches that "
+"were added for this explanation string\\&.  The explanation only appears if "
+"completion was tried and there was no unique match, or when listing "
+"completions\\&. Explanation strings will be listed together with the matches "
+"of the group specified together with the B<-X> option (using the B<-J> or B<-"
+"V> option)\\&. If the same explanation string is given to multiple B<-X> "
+"options, the string appears only once (for each group) and the number of "
+"matches shown for the `B<%n>\\&' is the total number of all matches for each "
+"of these uses\\&. In any case, the explanation string will only be shown if "
+"there was at least one match added for the explanation string\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:503
+#: contracorriente/man1/zshcompctl.1:503
 msgid ""
 "The sequences B<%B>, B<%b>, B<%S>, B<%s>, B<%U>, and B<%u> specify output "
 "attributes (bold, standout, and underline), B<%F>, B<%f>, B<%K>, B<%k> "
@@ -1079,13 +1221,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:504
+#: contracorriente/man1/zshcompctl.1:504
 #, no-wrap
 msgid "B<-Y> I<explanation>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:510
+#: contracorriente/man1/zshcompctl.1:510
 msgid ""
 "Identical to B<-X>, except that the I<explanation> first undergoes expansion "
 "following the usual rules for strings in double quotes\\&.  The expansion "
@@ -1094,20 +1236,20 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:510
+#: contracorriente/man1/zshcompctl.1:510
 #, no-wrap
 msgid "B<-t> I<continue>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:514
+#: contracorriente/man1/zshcompctl.1:514
 msgid ""
 "The I<continue>-string contains a character that specifies which set of "
 "completion flags should be used next\\&.  It is useful:"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:519
+#: contracorriente/man1/zshcompctl.1:519
 msgid ""
 "(i) With B<-T>, or when trying a list of pattern completions, when "
 "B<compctl> would usually continue with ordinary processing after finding "
@@ -1115,7 +1257,7 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:524
+#: contracorriente/man1/zshcompctl.1:524
 msgid ""
 "(ii) With a list of alternatives separated by B<+>, when B<compctl> would "
 "normally stop when one of the alternatives generates matches\\&.  It can be "
@@ -1124,7 +1266,7 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:531
+#: contracorriente/man1/zshcompctl.1:531
 msgid ""
 "(iii) In an extended completion list (see below), when B<compctl> would "
 "normally continue until a set of conditions succeeded, then use only the "
@@ -1135,13 +1277,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:532
+#: contracorriente/man1/zshcompctl.1:532
 #, no-wrap
 msgid "B<-J> I<name>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:541
+#: contracorriente/man1/zshcompctl.1:541
 msgid ""
 "This gives the name of the group the matches should be placed in\\&. Groups "
 "are listed and sorted separately; likewise, menu completion will offer the "
@@ -1153,20 +1295,20 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:545
+#: contracorriente/man1/zshcompctl.1:545
 msgid ""
 "This can be useful with non-exclusive alternative completions\\&.  For "
 "example, in"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:549
+#: contracorriente/man1/zshcompctl.1:549
 #, no-wrap
 msgid "B<compctl -f -J files -t+ + -v -J variables foo>\n"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:556
+#: contracorriente/man1/zshcompctl.1:556
 msgid ""
 "both files and variables are possible completions, as the B<-t+> forces both "
 "sets of alternatives before and after the B<+> to be considered at once\\&.  "
@@ -1175,13 +1317,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:557
+#: contracorriente/man1/zshcompctl.1:557
 #, no-wrap
 msgid "B<-V> I<name>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:563
+#: contracorriente/man1/zshcompctl.1:563
 msgid ""
 "Like B<-J>, but matches within the group will not be sorted in listings nor "
 "in menu completion\\&. These unsorted groups are in a different name space "
@@ -1190,13 +1332,15 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:563
+#: contracorriente/man1/zshcompctl.1:563 contracorriente/man1/zshcompwid.1:583
+#: contracorriente/man1/zshcontrib.1:3209
+#: contracorriente/man1/zshoptions.1:1766
 #, no-wrap
 msgid "B<-1>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:568
+#: contracorriente/man1/zshcompctl.1:568
 msgid ""
 "If given together with the B<-V> option, makes only consecutive duplicates "
 "in the group be removed\\&. Note that groups with and without this flag are "
@@ -1204,13 +1348,14 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:568
+#: contracorriente/man1/zshcompctl.1:568 contracorriente/man1/zshcompwid.1:589
+#: contracorriente/man1/zshoptions.1:1769
 #, no-wrap
 msgid "B<-2>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:573
+#: contracorriente/man1/zshcompctl.1:573 contracorriente/man1/zshcompwid.1:594
 msgid ""
 "If given together with the B<-J> or B<-V> option, makes all duplicates be "
 "kept\\&. Again, groups with and without this flag are in different name "
@@ -1218,13 +1363,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:573
+#: contracorriente/man1/zshcompctl.1:573 contracorriente/man1/zshcompwid.1:696
 #, no-wrap
 msgid "B<-M> I<match-spec>"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:579
+#: contracorriente/man1/zshcompctl.1:579
 msgid ""
 "This defines additional matching control specifications that should be used "
 "only when testing words for the list of flags this flag appears in\\&. The "
@@ -1232,102 +1377,98 @@ msgid ""
 msgstr ""
 
 #. type: SH
-#: ../contracorriente/man1/zshcompctl.1:580
+#: contracorriente/man1/zshcompctl.1:580
 #, no-wrap
 msgid "ALTERNATIVE COMPLETION"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:582
+#: contracorriente/man1/zshcompctl.1:582
 #, no-wrap
-msgid ""
-"B<compctl> [ B<-CDT> ] I<options> B<+> I<options> [ B<+> \\&.\\&.\\&. ] [ "
-"B<+> ] I<command> \\&.\\&.\\&."
+msgid "B<compctl> [ B<-CDT> ] I<options> B<+> I<options> [ B<+> \\&.\\&.\\&. ] [ B<+> ] I<command> \\&.\\&.\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:593
+#: contracorriente/man1/zshcompctl.1:593
 msgid ""
 "The form with `B<+>\\&' specifies alternative options\\&. Completion is "
 "tried with the options before the first `B<+>\\&'\\&. If this produces no "
-"matches completion is tried with the flags after the `B<+>\\&' and so "
-"on\\&. If there are no flags after the last `B<+>\\&' and a match has not "
-"been found up to that point, default completion is tried\\&.  If the list of "
+"matches completion is tried with the flags after the `B<+>\\&' and so on\\&. "
+"If there are no flags after the last `B<+>\\&' and a match has not been "
+"found up to that point, default completion is tried\\&.  If the list of "
 "flags contains a B<-t> with a B<+> character, the next list of flags is used "
 "even if the current list produced matches\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:597
+#: contracorriente/man1/zshcompctl.1:597
 msgid ""
 "Additional options are available that restrict completion to some part of "
 "the command line; this is referred to as `extended completion\\&'\\&."
 msgstr ""
 
 #. type: SH
-#: ../contracorriente/man1/zshcompctl.1:598
+#: contracorriente/man1/zshcompctl.1:598
 #, no-wrap
 msgid "EXTENDED COMPLETION"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:601
+#: contracorriente/man1/zshcompctl.1:601
 #, no-wrap
-msgid ""
-"B<compctl >[ B<-CDT> ] I<options> B<-x> I<pattern> I<options> B<-> "
-"\\&.\\&.\\&. B<->B<->"
+msgid "B<compctl >[ B<-CDT> ] I<options> B<-x> I<pattern> I<options> B<-> \\&.\\&.\\&. B<->B<->"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:603
+#: contracorriente/man1/zshcompctl.1:603
 #, no-wrap
 msgid "        [ I<command> \\&.\\&.\\&. ]"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:618
+#: contracorriente/man1/zshcompctl.1:618
 msgid ""
 "The form with `B<-x>\\&' specifies extended completion for the commands "
-"given; as shown, it may be combined with alternative completion using "
-"`B<+>\\&'\\&.  Each I<pattern> is examined in turn; when a match is found, "
-"the corresponding I<options>, as described in the section `Option Flags\\&' "
+"given; as shown, it may be combined with alternative completion using `B<+>"
+"\\&'\\&.  Each I<pattern> is examined in turn; when a match is found, the "
+"corresponding I<options>, as described in the section `Option Flags\\&' "
 "above, are used to generate possible completions\\&.  If no I<pattern> "
 "matches, the I<options> given before the B<-x> are used\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:622
+#: contracorriente/man1/zshcompctl.1:622
 msgid ""
 "Note that each pattern should be supplied as a single argument and should be "
 "quoted to prevent expansion of metacharacters by the shell\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:632
+#: contracorriente/man1/zshcompctl.1:632
 msgid ""
 "A I<pattern> is built of sub-patterns separated by commas; it matches if at "
-"least one of these sub-patterns matches (they are `or\\&'ed)\\&. These "
-"sub-patterns are in turn composed of other sub-patterns separated by white "
-"spaces which match if all of the sub-patterns match (they are "
-"`and\\&'ed)\\&.  An element of the sub-patterns is of the form "
-"`I<c>B<[>\\&.\\&.\\&.B<][>\\&.\\&.\\&.B<]>\\&', where the pairs of brackets "
-"may be repeated as often as necessary, and matches if any of the sets of "
-"brackets match (an `or\\&')\\&.  The example below makes this clearer\\&."
+"least one of these sub-patterns matches (they are `or\\&'ed)\\&. These sub-"
+"patterns are in turn composed of other sub-patterns separated by white "
+"spaces which match if all of the sub-patterns match (they are `and"
+"\\&'ed)\\&.  An element of the sub-patterns is of the form `I<c>B<[>\\&.\\&."
+"\\&.B<][>\\&.\\&.\\&.B<]>\\&', where the pairs of brackets may be repeated "
+"as often as necessary, and matches if any of the sets of brackets match (an "
+"`or\\&')\\&.  The example below makes this clearer\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:634
+#: contracorriente/man1/zshcompctl.1:634
 msgid "The elements may be any of the following:"
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:636
+#: contracorriente/man1/zshcompctl.1:636
 #, no-wrap
 msgid "B<s[>I<string>B<]>\\&.\\&.\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:642
+#: contracorriente/man1/zshcompctl.1:642
 msgid ""
 "Matches if the current word on the command line starts with one of the "
 "strings given in brackets\\&.  The I<string> is not removed and is not part "
@@ -1335,26 +1476,26 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:642
+#: contracorriente/man1/zshcompctl.1:642
 #, no-wrap
 msgid "B<S[>I<string>B<]>\\&.\\&.\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:646
+#: contracorriente/man1/zshcompctl.1:646
 msgid ""
-"Like B<s[>I<string>B<]> except that the I<string> is part of the "
-"completion\\&."
+"Like B<s[>I<string>B<]> except that the I<string> is part of the completion"
+"\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:646
+#: contracorriente/man1/zshcompctl.1:646
 #, no-wrap
 msgid "B<p[>I<from>B<,>I<to>B<]>\\&.\\&.\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:653
+#: contracorriente/man1/zshcompctl.1:653
 msgid ""
 "Matches if the number of the current word is between one of the I<from> and "
 "I<to> pairs inclusive\\&. The comma and I<to> are optional; I<to> defaults "
@@ -1363,78 +1504,76 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:653
+#: contracorriente/man1/zshcompctl.1:653
 #, no-wrap
 msgid "B<c[>I<offset>B<,>I<string>B<]>\\&.\\&.\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:658
+#: contracorriente/man1/zshcompctl.1:658
 msgid ""
 "Matches if the I<string> matches the word offset by I<offset> from the "
 "current word position\\&.  Usually I<offset> will be negative\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:658
+#: contracorriente/man1/zshcompctl.1:658
 #, no-wrap
 msgid "B<C[>I<offset>B<,>I<pattern>B<]>\\&.\\&.\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:661
+#: contracorriente/man1/zshcompctl.1:661
 msgid "Like B<c> but using pattern matching instead\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:661
+#: contracorriente/man1/zshcompctl.1:661
 #, no-wrap
 msgid "B<w[>I<index>B<,>I<string>B<]>\\&.\\&.\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:666
+#: contracorriente/man1/zshcompctl.1:666
 msgid ""
 "Matches if the word in position I<index> is equal to the corresponding "
-"I<string>\\&.  Note that the word count is made after any alias "
-"expansion\\&."
+"I<string>\\&.  Note that the word count is made after any alias expansion\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:666
+#: contracorriente/man1/zshcompctl.1:666
 #, no-wrap
 msgid "B<W[>I<index>B<,>I<pattern>B<]>\\&.\\&.\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:669
+#: contracorriente/man1/zshcompctl.1:669
 msgid "Like B<w> but using pattern matching instead\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:669
+#: contracorriente/man1/zshcompctl.1:669
 #, no-wrap
 msgid "B<n[>I<index>B<,>I<string>B<]>\\&.\\&.\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:676
+#: contracorriente/man1/zshcompctl.1:676
 msgid ""
 "Matches if the current word contains I<string>\\&.  Anything up to and "
 "including the I<index>th occurrence of this string will not be considered "
 "part of the completion, but the rest will\\&.  I<index> may be negative to "
-"count from the end: in most cases, I<index> will be 1 or -1\\&.  For "
-"example,"
+"count from the end: in most cases, I<index> will be 1 or -1\\&.  For example,"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:681
+#: contracorriente/man1/zshcompctl.1:681
 #, no-wrap
 msgid "B<compctl -s \\&'`users`' -x 'n[1,@]' -k hosts -- talk>\n"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:688
+#: contracorriente/man1/zshcompctl.1:688
 msgid ""
 "will usually complete usernames, but if you insert an B<@> after the name, "
 "names from the array I<hosts> (assumed to contain hostnames, though you must "
@@ -1443,13 +1582,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:689
+#: contracorriente/man1/zshcompctl.1:689
 #, no-wrap
 msgid "B<N[>I<index>B<,>I<string>B<]>\\&.\\&.\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:695
+#: contracorriente/man1/zshcompctl.1:695
 msgid ""
 "Like B<n> except that the string will be taken as a character class\\&.  "
 "Anything up to and including the I<index>th occurrence of any of the "
@@ -1457,26 +1596,26 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:695
+#: contracorriente/man1/zshcompctl.1:695
 #, no-wrap
 msgid "B<m[>I<min>B<,>I<max>B<]>\\&.\\&.\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:699
+#: contracorriente/man1/zshcompctl.1:699
 msgid ""
-"Matches if the total number of words lies between I<min> and I<max> "
-"inclusive\\&."
+"Matches if the total number of words lies between I<min> and I<max> inclusive"
+"\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:699
+#: contracorriente/man1/zshcompctl.1:699
 #, no-wrap
 msgid "B<r[>I<str1>B<,>I<str2>B<]>\\&.\\&.\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:706
+#: contracorriente/man1/zshcompctl.1:706
 msgid ""
 "Matches if the cursor is after a word with prefix I<str1>\\&.  If there is "
 "also a word with prefix I<str2> on the command line after the one matched by "
@@ -1486,24 +1625,24 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:706
+#: contracorriente/man1/zshcompctl.1:706
 #, no-wrap
 msgid "B<R[>I<str1>B<,>I<str2>B<]>\\&.\\&.\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:709
+#: contracorriente/man1/zshcompctl.1:709
 msgid "Like B<r> but using pattern matching instead\\&."
 msgstr ""
 
 #. type: TP
-#: ../contracorriente/man1/zshcompctl.1:709
+#: contracorriente/man1/zshcompctl.1:709
 #, no-wrap
 msgid "B<q[>I<str>B<]>\\&.\\&.\\&."
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:715
+#: contracorriente/man1/zshcompctl.1:715
 msgid ""
 "Matches the word currently being completed is in single quotes and the "
 "I<str> begins with the letter `s\\&', or if completion is done in double "
@@ -1512,13 +1651,13 @@ msgid ""
 msgstr ""
 
 #. type: SH
-#: ../contracorriente/man1/zshcompctl.1:716
+#: contracorriente/man1/zshcompctl.1:716
 #, no-wrap
 msgid "EXAMPLE"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:722
+#: contracorriente/man1/zshcompctl.1:722
 #, no-wrap
 msgid ""
 "B<compctl -u -x \\&'s[+] c[-1,-f],s[-f+]' \\e \n"
@@ -1526,28 +1665,27 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:726
+#: contracorriente/man1/zshcompctl.1:726
 msgid "This is to be interpreted as follows:"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:728
+#: contracorriente/man1/zshcompctl.1:728
 msgid "If the current command is B<mail>, then"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:736
+#: contracorriente/man1/zshcompctl.1:736
 #, no-wrap
 msgid ""
 "if ((the current word begins with B<+> and the previous word is B<-f>)\n"
 "or (the current word begins with B<-f+>)), then complete the\n"
-"non-directory part (the `B<:t>\\&' glob modifier) of files in the "
-"directory\n"
+"non-directory part (the `B<:t>\\&' glob modifier) of files in the directory\n"
 "B<~/Mail>; else\n"
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:739
+#: contracorriente/man1/zshcompctl.1:739
 #, no-wrap
 msgid ""
 "if the current word begins with B<-f> or the previous word was B<-f>, then\n"
@@ -1555,7 +1693,7 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../contracorriente/man1/zshcompctl.1:741
+#: contracorriente/man1/zshcompctl.1:741
 #, no-wrap
 msgid "complete user names\\&.\n"
 msgstr ""
