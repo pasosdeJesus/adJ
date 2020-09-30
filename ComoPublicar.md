@@ -52,7 +52,7 @@ Pasos importantes para publicar versión beta
    Para verificar que perl está más o menos bien ejecutar `pkg_add`.
 5. Recompilar paquetes con actualizaciones de seguridad o mejoras
 6. Retroportar paquetes, dejar resultados no incluidos en DVD pero
-   útiles en `6.6-extra`
+   útiles en `6.7-extra`
 7. Regenerar en distribución (sin paquetes ni otras compilaciones) con:
 	```
 	doas ./distribucion.sh
