@@ -2,8 +2,8 @@
 Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
 
-### Versión: 6.7b1
-Fecha de publicación: 4/Sep/2020
+### Versión: 6.7
+Fecha de publicación: 30/Sep/2020
 
 Puede ver novedades respecto a OpenBSD en:
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_7/Novedades_OpenBSD.md>
@@ -13,9 +13,9 @@ Puede ver novedades respecto a OpenBSD en:
 Puede ver las diversas versiones publicadas en: 
   <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/>
 
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/AprendiendoDeJesus-6.7b1-amd64.iso> 
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/AprendiendoDeJesus-6.7-amd64.iso> 
   es imagen en formato ISO para quemar en DVD e instalar por primera vez.
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/6.7b1-amd64/>
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/6.7-amd64/>
   es directorio con el contenido del DVD instalador apropiado para descargar 
   con rsync y actualizar un adJ ya instalado (ver  
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_7/Actualiza.md> )
@@ -23,16 +23,16 @@ Puede ver las diversas versiones publicadas en:
   directorio con versiones recientes de paquetes no incluidos en distribución 
   oficial (pueden no estar firmados y requerir instalación con 
   `pkg_add -D unsigned _paquete_`).
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/AprendiendoDeJesus-6.7b1-amd64.usb> 
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/AprendiendoDeJesus-6.7-amd64.usb> 
   es imagen para escribir en una memoria USB y arrancar con esta. Una vez 
   la descargue puede escribirla en una USB ubicada en `/dev/sd2c` 
   (verifique dispositivo con `dmesg` y remplace):
 
-       doas dd if=AprendiendoDeJesus-6.7b1-amd64.usb of=/dev/sd2c bs=1M
+       doas dd if=AprendiendoDeJesus-6.7-amd64.usb of=/dev/sd2c bs=1M
 
  O si desea probarla con qemu para instalar en un disco `virtual.raw`:
 
-       qemu-system-x86_64 -hda virtual.raw -hdb AprendiendoDeJesus-6.7b1-amd64.usb -boot menu=on
+       qemu-system-x86_64 -hda virtual.raw -hdb AprendiendoDeJesus-6.7-amd64.usb -boot menu=on
 
 
 ## 2. NOVEDADES RESPECTO A ADJ 6.6 PROVENIENTES DE OPENBSD
