@@ -206,3 +206,21 @@ Puede ver las diversas versiones publicadas en:
 ```
   setxkbmap latam
 ```
+
+## 5. SI QUIERE AYUDARNOS
+
+* Agradecemos sus oraciones.
+* Si tiene una cuenta en github por favor pongale una estrella al
+  repositorio <https://github.com/pasosdeJesus/adJ/>
+* Le invitamos a patronicar nuestro trabajo empleando el botón
+  Sponsor de <https://github.com/pasosdeJesus/adJ/>
+* También puede donarnos para recibir una USB para instalar la
+  versión más reciente de adJ o alguno de los servicios de Pasos
+  de Jesús desde <https://www.pasosdeJesus.org>
+* Agradecemos su ayuda mejorando este sitio, la documentación
+  para usuario final y la documentación técnica.
+* Agradecemos su ayuda traduciendo a español páginas del
+  manual desde: <https://hosted.weblate.org/projects/adj/>
+* Agradecemos su ayuda en el desarrollo que llevamos
+  en <https://github.com/pasosdeJesus/adJ/>
+
