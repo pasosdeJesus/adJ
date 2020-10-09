@@ -170,3 +170,5 @@ colorscheme peachpuff
 if filereadable($HOME . "/.vimrc.local")
   source ~/.vimrc.local
 endif
+set encoding&       " terminal charset: follows current locale 
+set fileencoding&   " auto-sensed charset of current buffer

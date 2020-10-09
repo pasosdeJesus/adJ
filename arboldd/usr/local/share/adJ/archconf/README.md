@@ -2,15 +2,15 @@ Archivos de configuración para adJ con base en los dotfiles de thoughtbot
 =========================================================================
 
 En entornos tipo Unix los archivos de configuración se caracterizan por
-comenzar con un punto.  Por ejemplo `~/.zhrc` es el archivo de configuración
+comenzar con un punto.  Por ejemplo `~/.zshrc` es un archivo de configuración
 empleado por el interprete de ordenes `zsh` cada vez que se inicia.
 
-Aquí encuentra archivos de configuración para la pila de edición en
+Aquí encuentras archivos de configuración para la pila de edición en
 terminal de adJ: `rcm`+`tmux`+`zsh`+neovim.  El siguiente pantallazo 
 muestra como se ve (el juego de colores es configurable):
 ![](archconf.png?raw=true)
 
-Note que:
+Nota que:
 * En el panel superior izquierdo está editando un texto plano en
 español, se marcan los errores de ortografía y se está auto-completando
 la palabra configuración.
@@ -21,16 +21,16 @@ la palabra configuración.
   más reciente de una gema en un directorio personal con la función `gemil` 
   (que usa el directorio personal configurado en `~/.bundle/config`)
 * En el panel inferior derecho se presenta la edición de un código fuente
-  en Ruby. Note que los comentarios están en español y se resaltan
+  en Ruby. Nota que los comentarios están en español y se resaltan
   palabras que no estén en el diccionario (se añaden al diccionario
   con las teclas `zg`).
 
 
-Aunque pueden emplearse en diversos sistemas operativos (por ejemplo en 
-Linux o en Mac OSX) centramos las instrucciones siguientes a la distribución
-adJ del sistema operativo OpenBSD.    Para otras plataformas puede que
-le basten estas instrucciones o puede referirse a los
-[dotfiles de Thoughtbot](https://github.com/thoughtbot/dotfiles)
+Aunque puedes emplear estos archivos de configuración en diversos sistemas 
+operativos (por ejemplo en Linux o en Mac OSX), estas instrucciones se
+centran en la distribución adJ del sistema operativo OpenBSD.    
+Para otras plataformas puede que te basten, o puede que prefieras referirte a los
+[dotfiles de Thoughtbot](https://github.com/thoughtbot/dotfiles),
 que fueron la base para estos archivos de configuración.
 
 
@@ -44,15 +44,15 @@ Requerimientos
   ```
       doas su root -c "echo /usr/local/bin/zsh >> /etc/shells" 
   ```
-  * Ponlo como tu interprete de ordenes de inicio de sesión con:
+  * Establecelo como tu interprete de ordenes de inicio de sesión con:
   ```
       chsh -s /usr/local/bin/zsh 
   ```
   * Tras esto sal y vuelve a ingresar a tu interprete de ordenes para
     empezar a usar `zsh` o mientras configuras ejecutalo desde otro
     interprete de ordenes con `zsh` 
-  * Entre sus mejoras respecto a `pdksh` está mayor auto-completación con TAB 
-    por ejemplo en las opciones de las ordenes.
+  * Entre sus mejoras respecto a `pdksh` están: más popular, mejor 
+    auto-completación con TAB, por ejemplo en las opciones de las ordenes.
     Una vez configurado prueba `ls -` y presiona TAB para ver opciones de `ls`.
   * `zsh` tiene licencia estilo MIT a diferencia de `pdksh`, el estándar de 
     OpenBSD, que es de dominio público.
@@ -68,14 +68,14 @@ Requerimientos
 ```
   * En las secciones siguientes verás como usarlo en detalle.
   * rcm usa licencia BSD de 3 clausulas
-* Usar `neovim` como editor
+* Usar neovim como editor
   * Si hace falta instala con `doas pkg_add neovim` (aunque ya viene por
     omisión en adJ 6.7)
   * Puedes iniciarlo con `nvim` o una vez instales los archivos de 
     configuraicón con `v`
   * Puede leer la configuración de `vim`, pero maneja mejor ratón y 
     portapapeles y a futuro posibilitará edición estilo IDE.
-  * `neovim` emplea licencia Apache que es menos restrictiva que la de `vim`.
+  * neovim emplea licencia Apache que es menos restrictiva que la de `vim`.
 
 
 Instalación
