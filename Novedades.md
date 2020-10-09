@@ -3,7 +3,7 @@ Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
 
 ### Versión: 6.7
-Fecha de publicación: 30/Sep/2020
+Fecha de publicación: 5/Oct/2020
 
 Puede ver novedades respecto a OpenBSD en:
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_7/Novedades_OpenBSD.md>
@@ -13,9 +13,9 @@ Puede ver novedades respecto a OpenBSD en:
 Puede ver las diversas versiones publicadas en: 
   <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/>
 
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/AprendiendoDeJesus-6.7-amd64.iso> 
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-6.7-amd64.iso> 
   es imagen en formato ISO para quemar en DVD e instalar por primera vez.
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/6.7-amd64/>
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/6.7-amd64/>
   es directorio con el contenido del DVD instalador apropiado para descargar 
   con rsync y actualizar un adJ ya instalado (ver  
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_7/Actualiza.md> )
@@ -23,10 +23,10 @@ Puede ver las diversas versiones publicadas en:
   directorio con versiones recientes de paquetes no incluidos en distribución 
   oficial (pueden no estar firmados y requerir instalación con 
   `pkg_add -D unsigned _paquete_`).
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/AprendiendoDeJesus-6.7-amd64.usb> 
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-6.7-amd64.usb> 
   es imagen para escribir en una memoria USB y arrancar con esta. Una vez 
   la descargue puede escribirla en una USB ubicada en `/dev/sd2c` 
-  (verifique dispositivo con `dmesg` y remplace):
+  (verifique dispositivo con `dmesg` y remplace) con:
 
        doas dd if=AprendiendoDeJesus-6.7-amd64.usb of=/dev/sd2c bs=1M
 
@@ -71,20 +71,20 @@ Puede ver las diversas versiones publicadas en:
 	
 * Mejoras a herramientas de Red
 	* Mejoras a pila inalámbrica general y en particular a `ifconfig` 
-	  con `nwflag` y `mode`para poner modo 11a/b/g/n.
+	  con `nwflag` y `mode` para establecer modos 11a/b/g/n.
 	* Soporte para examinar y establecer rxprio vía `ifconfig` según
 	  RFC 2983. Agregado a `vlan`, `gre`, `mpw`, `mpe`, `mpip`, 
 	 `etherip` y `bpe`.
 	* Nuevo cliente `snmp` compatible con netsnmp y eliminado `snmpctl`
 	* Diversas mejoras a `bgpd`
 	* Mejoras a `relayd` en particular ahora soporta SNI
-	* `acme-client` ahora soporta API Let's Encrypt v02.
+	* `acme-client` ahora soporta la API de Let's Encrypt v02.
 	* Varias mejoras a OpenSMTPD 6.6.0 en particular posibilidad
-	  de configurar filtros y operar detras de proxy.
+	  de configurar filtros y operar detras de un proxy.
 
 * Seguridad
 	* Función `unveil` usada en 77 programas en zona de usuarios para 
-	  restringir acceso a sistema de archivos (como `chroot` pero mejor).
+	  restringir acceso al sistema de archivos (como `chroot` pero mejor).
 	  Y ahora `ps` puede mostrar que procesos usaron `unveil` y `pledge`
 	* Se añade soporte para el Protocolo Generador de Números Aleatorios 
 	  EFI
@@ -101,7 +101,7 @@ Puede ver las diversas versiones publicadas en:
 
 ### 2.2 Paquetes 
 
-* Recompilados portes estables más recientes para evitar fallas de seguridad: 
+* Recompilados portes estables más recientes para evitar fallas de seguridad de : 
     `certbot`, `curl`, `dovecot`, `gettext-tools`, `libidn2`, `librsvg`,
     `oniguruma`, `python`, `pcre2`, `unzip` y `webkitgtk4`
 * Ruby 2.7.1 retroportado de current
@@ -122,9 +122,9 @@ Puede ver las diversas versiones publicadas en:
   enfáticamente realizar el cambio siguiendo instrucciones de:
   <https://pasosdejesus.github.io/usuario_adJ/ar01s03.html#idm3197209600>
 * Documentación actualizada: 
-	* `basico_adJ`: 
+	* `basico_adJ`: Nueva sección sobre el uso de zsh como interprete de ordenes
 	* `usuario_adJ`: Nueva sección sobre cifrados con softraid
-	* `servidor_adJ`: 
+	* `servidor_adJ`: Nueva sección sobre Jaula sftp.
 
 ### 3.2 Paquetes
 
@@ -213,7 +213,7 @@ Puede ver las diversas versiones publicadas en:
 * Si tiene una cuenta en github por favor pongale una estrella al
   repositorio <https://github.com/pasosdeJesus/adJ/>
 * Le invitamos a patronicar nuestro trabajo empleando el botón
-  Sponsor de <https://github.com/pasosdeJesus/adJ/>
+  Patrocinar (__Sponsor__) de <https://github.com/pasosdeJesus/adJ/>
 * También puede donarnos para recibir una USB para instalar la
   versión más reciente de adJ o alguno de los servicios de Pasos
   de Jesús desde <https://www.pasosdeJesus.org>
