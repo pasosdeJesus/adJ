@@ -5,55 +5,55 @@
 . ./ver.sh
 
 if (test ! -d $V$VESP-$ARQ) then {
-	echo "No existe el directorio $V$VESP-$ARQ";
-	exit 1;
+  echo "No existe el directorio $V$VESP-$ARQ";
+  exit 1;
 } fi;
 im=/usr/src/distrib/amd64/iso/obj/install${VP}.fs
 if (test ! -f $im ) then {
-	echo "Intentando crear $im"
-	doas rm -rf /home/rel-amd64 /home/relx-amd64
-	doas mkdir -p /home/rel-amd64 /home/relx-amd64
-	cmd="doas cp $V$VESP-$ARQ/{INSTALL.amd64,SHA256,base$VP.tgz,bsd,bsd.mp,bsd.rd,cdboot,cdbr,comp$VP.tgz,game$VP.tgz,man$VP.tgz} /home/rel-amd64/"
-	echo "$cmd"
-	eval "$cmd"
-	cmd="doas cp $V$VESP-$ARQ/{xbase$VP.tgz,xfont$VP.tgz,xshare$VP.tgz,xserv$VP.tgz} /home/relx-amd64/"
-	echo "$cmd"
-	eval "$cmd"
-	touch /home/relx-amd64/SHA256
-	(cd /usr/src/distrib/amd64/iso; make)
-	if (test ! -f $im ) then {
-		echo "No pudo crearse $im";
-		exit 1;
-	} fi;
+  echo "Intentando crear $im"
+  doas rm -rf /home/rel-amd64 /home/relx-amd64
+  doas mkdir -p /home/rel-amd64 /home/relx-amd64
+  cmd="doas cp $V$VESP-$ARQ/{INSTALL.amd64,SHA256,base$VP.tgz,bsd,bsd.mp,bsd.rd,cdboot,cdbr,comp$VP.tgz,game$VP.tgz,man$VP.tgz} /home/rel-amd64/"
+  echo "$cmd"
+  eval "$cmd"
+  cmd="doas cp $V$VESP-$ARQ/{xbase$VP.tgz,xfont$VP.tgz,xshare$VP.tgz,xserv$VP.tgz} /home/relx-amd64/"
+  echo "$cmd"
+  eval "$cmd"
+  touch /home/relx-amd64/SHA256
+  (cd /usr/src/distrib/amd64/iso; FSSIZE=940000 make)
+  if (test ! -f $im ) then {
+    echo "No pudo crearse $im";
+    exit 1;
+  } fi;
 } fi;
 
 function ej {
-	cmd="$1"
-	echo "Por ejecutar: $cmd"
-	echo "[ENTER] para continuar";
-	read
-	eval $cmd
-	vr="$?"
-	echo "Valor retornado: $vr"
-	return $vr
+  cmd="$1"
+  echo "Por ejecutar: $cmd"
+  echo "[ENTER] para continuar";
+  read
+  eval $cmd
+  vr="$?"
+  echo "Valor retornado: $vr"
+  return $vr
 }
 
-if (test ! -f AprendiendoDeJesus-${VP}${VESP}-${ARQ}.usb) then {
-	if (test ! -f blanco) then {
-		ej "dd of=blanco bs=1M seek=4900 count=0"
-	} else {
-		echo 'Archivo blanco existente, saltando creacion'
-	} fi;
-	ej "cat $im blanco > AprendiendoDeJesus-${VP}${VESP}-${ARQ}.usb"
+if (test ! -f AprendiendoDeJesus-${V}${VESP}-${ARQ}.usb) then {
+  if (test ! -f blanco) then {
+    ej "dd of=blanco bs=1M seek=4900 count=0"
+  } else {
+  echo 'Archivo blanco existente, saltando creacion'
+} fi;
+ej "cat $im blanco > AprendiendoDeJesus-${V}${VESP}-${ARQ}.usb"
 } else {
-	echo "Archivo AprendiendoDeJesus-${VP}${VESP}-${ARQ}.usb existente, saltando creacion"
+echo "Archivo AprendiendoDeJesus-${V}${VESP}-${ARQ}.usb existente, saltando creacion"
 } fi;
 ej "doas vnconfig -l | grep 'vnd0: not in use' > /dev/null 2>&1"
 if (test "$?" != "0") then {
-	echo "vnd0 ocupado, no se puede continuar";
-	exit 1;
+  echo "vnd0 ocupado, no se puede continuar";
+  exit 1;
 } fi;
-ej "doas vnconfig vnd0 AprendiendoDeJesus-${VP}${VESP}-${ARQ}.usb"
+ej "doas vnconfig vnd0 AprendiendoDeJesus-${V}${VESP}-${ARQ}.usb"
 ej "doas fdisk -i -b 10000 -y /dev/rvnd0c"
 # adJ64  fdisk: 1> p
 #Disk: /dev/rvnd0c       geometry: 107734/1/100 [10773440 Sectors]
