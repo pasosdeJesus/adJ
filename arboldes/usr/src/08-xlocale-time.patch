@@ -508,12 +508,11 @@ diff -ruN src62-orig/lib/libc/time/strftime_l.c src/lib/libc/time/strftime_l.c
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strftime.c src/lib/libc/time/strftime.c
 --- src54-x6/lib/libc/time/strftime.c	Sat Feb  9 14:26:54 2013
 +++ src/lib/libc/time/strftime.c	Tue Dec  3 16:12:45 2013
-@@ -29,463 +29,15 @@
+@@ -28,461 +28,16 @@
+ ** SUCH DAMAGE.
  */
  
- 
 -#include <fcntl.h>
--#include <locale.h>
 -#include <stdio.h>
 +#include <time.h>
 +#include <xlocale.h>
@@ -538,7 +537,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strftime
 -
  size_t
 -strftime(char *s, size_t maxsize, const char *format, const struct tm *t)
-+strftime(char * const __restrict s, const size_t maxsize, 
++strftime(char * const __restrict s, size_t maxsize, 
 +		const char * __restrict format, const struct tm * __restrict t)
  {
 -	char *	p;
@@ -557,7 +556,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strftime
 +	return strftime_l(s, maxsize, format, t, __get_locale());
  }
  DEF_STRONG(strftime);
--
+ 
 -static char *
 -_fmt(const char *format, const struct tm *t, char *pt, const char *ptlim, int *warnp)
 -{
@@ -977,7 +976,6 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strftime
 -		pt = _conv(((trail < 0) ? -trail : trail), "%02d", pt, ptlim);
 -	return pt;
 -}
--
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime.c src/lib/libc/time/strptime.c
 --- src54-x6/lib/libc/time/strptime.c	Sat Feb  9 14:26:54 2013
 +++ src/lib/libc/time/strptime.c	Tue Dec  3 16:12:45 2013
@@ -994,7 +992,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
  
  /*
   * We do not implement alternate representations. However, we always
-@@ -75,20 +76,29 @@
+@@ -75,20 +76,28 @@
  static	int _conv_num64(const unsigned char **, int64_t *, int64_t, int64_t);
  static	int _conv_num(const unsigned char **, int *, int, int);
  static	int leaps_thru_end_of(const int y);
@@ -1020,7 +1018,6 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
 +{
 +	return(_strptime(buf, fmt, tm, 1, loc));
 +}
-+DEF_WEAK(strptime_l);
 +
  static char *
 -_strptime(const char *buf, const char *fmt, struct tm *tm, int initialize)
@@ -1029,7 +1026,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
  {
  	unsigned char c;
  	const unsigned char *bp, *ep;
-@@ -109,8 +119,8 @@
+@@ -109,8 +118,8 @@
  		alt_format = 0;
  
  		/* Eat up white-space. */
@@ -1040,7 +1037,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
  				bp++;
  
  			fmt++;
-@@ -148,49 +158,49 @@
+@@ -148,49 +157,49 @@
  		 */
  		case 'c':	/* Date and time, using the locale's format. */
  			_LEGAL_ALT(_ALT_E);
@@ -1098,7 +1095,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
  				return (NULL);
  			break;
  
-@@ -202,13 +212,13 @@
+@@ -202,13 +211,13 @@
  			_LEGAL_ALT(0);
  			for (i = 0; i < 7; i++) {
  				/* Full name. */
@@ -1116,7 +1113,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
  					break;
  			}
  
-@@ -227,13 +237,13 @@
+@@ -227,13 +236,13 @@
  			_LEGAL_ALT(0);
  			for (i = 0; i < 12; i++) {
  				/* Full name. */
@@ -1134,7 +1131,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
  					break;
  			}
  
-@@ -308,8 +318,8 @@
+@@ -308,8 +317,8 @@
  		case 'p':	/* The locale's equivalent of AM/PM. */
  			_LEGAL_ALT(0);
  			/* AM? */
@@ -1145,7 +1142,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
  				if (tm->tm_hour > 12)	/* i.e., 13:00 AM ?! */
  					return (NULL);
  				else if (tm->tm_hour == 12)
-@@ -319,8 +329,8 @@
+@@ -319,8 +328,8 @@
  				break;
  			}
  			/* PM? */
@@ -1156,7 +1153,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
  				if (tm->tm_hour > 12)	/* i.e., 13:00 PM ?! */
  					return (NULL);
  				else if (tm->tm_hour < 12)
-@@ -388,7 +398,7 @@
+@@ -388,7 +397,7 @@
  				 */
  			do
  				bp++;
@@ -1165,7 +1162,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
  			continue;
  
  		case 'V':	/* The ISO 8601:1988 week number as decimal */
-@@ -427,7 +437,7 @@
+@@ -427,7 +436,7 @@
  			} else {
  				ep = _find_string(bp, &i,
  						 (const char * const *)tzname,
@@ -1174,7 +1171,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
  				if (ep == NULL)
  					return (NULL);
  
-@@ -453,7 +463,7 @@
+@@ -453,7 +462,7 @@
  			 * M[DS]T = Mountain: -6 | -7
  			 * P[DS]T = Pacific : -7 | -8
  			 */
@@ -1183,7 +1180,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
  				bp++;
  
  			switch (*bp++) {
-@@ -478,14 +488,14 @@
+@@ -478,14 +487,14 @@
  				break;
  			default:
  				--bp;
@@ -1200,7 +1197,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
  				if (ep != NULL) {
  					tm->tm_isdst = 1;
  					tm->tm_gmtoff = (-4 - i) * SECSPERHOUR;
-@@ -495,15 +505,15 @@
+@@ -495,15 +504,15 @@
  				}
  				return NULL;
  			}
@@ -1219,7 +1216,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
  					return NULL;
  				offs += (*bp++ - '0') * SECSPERMIN;
  			}
-@@ -520,7 +530,7 @@
+@@ -520,7 +529,7 @@
  		case 'n':	/* Any kind of white-space. */
  		case 't':
  			_LEGAL_ALT(0);
@@ -1228,7 +1225,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
  				bp++;
  			break;
  
-@@ -634,7 +644,7 @@
+@@ -634,7 +643,7 @@
  
  static const u_char *
  _find_string(const u_char *bp, int *tgt, const char * const *n1,
@@ -1237,7 +1234,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
  {
  	int i;
  	unsigned int len;
-@@ -643,7 +653,7 @@
+@@ -643,7 +652,7 @@
  	for (; n1 != NULL; n1 = n2, n2 = NULL) {
  		for (i = 0; i < c; i++, n1++) {
  			len = strlen(*n1);

@@ -1,4 +1,4 @@
-Con respecto a OpenBSD 6.7 las novedades son:
+Con respecto a OpenBSD 6.8 las novedades son:
 
 * Proceso de Instalación:
 	* En español (upgrade install install.sub)
