@@ -4437,7 +4437,7 @@ diff -ruN src/lib/libc/hidden/wchar.h.orig src/lib/libc/hidden/wchar.h
 diff -ruN src59-orig/lib/libc/hidden/xlocale.h src/lib/libc/hidden/xlocale.h
 --- src59-orig/lib/libc/hidden/xlocale.h	Wed Dec 31 19:00:00 1969
 +++ src/lib/libc/hidden/xlocale.h	Fri Aug 19 22:07:22 2016
-@@ -0,0 +1,22 @@
+@@ -0,0 +1,23 @@
 +/*
 + * Public domain according to Colombian Legislation.
 + * http://www.pasosdejesus.org/dominio_publico_colombia.html
@@ -4458,6 +4458,7 @@ diff -ruN src59-orig/lib/libc/hidden/xlocale.h src/lib/libc/hidden/xlocale.h
 +PROTO_NORMAL(strptime_l);
 +PROTO_NORMAL(strftime_l);
 +#endif
++PROTO_NORMAL(localeconv_l);
 +
 +#endif /* !_LIBC_XLOCALE_H_ */
 diff -ruN src62-orig/include/ctype.h src/include/ctype.h

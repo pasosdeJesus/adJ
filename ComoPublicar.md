@@ -3,8 +3,8 @@ COMO PUBLICAR
 
 Anhelamos publicar versión mayor (e.g 6.6) 3 meses después de OpenBSD:
 
-	11.Ene
-	1.Jul
+* 11.Ene
+* 1.Jul
 
 También publicamos revisiones (e.g 6.6p1) si la seguridad o calidad lo ameritan.
 
@@ -52,7 +52,7 @@ Pasos importantes para publicar versión beta
    Para verificar que perl está más o menos bien ejecutar `pkg_add`.
 5. Recompilar paquetes con actualizaciones de seguridad o mejoras
 6. Retroportar paquetes, dejar resultados no incluidos en DVD pero
-   útiles en `6.7-extra`
+   útiles en `6.8-extra`
 7. Regenerar en distribución (sin paquetes ni otras compilaciones) con:
 	```
 	doas ./distribucion.sh

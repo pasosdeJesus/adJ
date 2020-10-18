@@ -734,15 +734,12 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/scanf.c
  #include <stdarg.h>
 +#include <xlocale.h>
  
- /* SCANFLIKE1 */
  int
-@@ -43,6 +44,18 @@
- 
- 	va_start(ap, fmt);
- 	ret = vfscanf(stdin, fmt, ap);
-+	va_end(ap);
-+	return (ret);
-+}
+ scanf(const char *fmt, ...)
+@@ -46,3 +47,15 @@
+ 	return (ret);
+ }
+ DEF_STRONG(scanf);
 +
 +int
 +scanf_l(locale_t locale, const char *fmt, ...)
@@ -752,13 +749,13 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/scanf.c
 +
 +	va_start(ap, fmt);
 +	ret = vfscanf_l(stdin, locale, fmt, ap);
- 	va_end(ap);
- 	return (ret);
- }
++	va_end(ap);
++	return (ret);
++}
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/snprintf.c src/lib/libc/stdio/snprintf.c
 --- src54-x6/lib/libc/stdio/snprintf.c	Sat Jun 25 00:32:56 2011
 +++ src/lib/libc/stdio/snprintf.c	Tue Dec  3 16:12:41 2013
-@@ -35,34 +35,34 @@
+@@ -35,34 +35,33 @@
  #include <stdio.h>
  #include <string.h>
  #include <stdarg.h>
@@ -811,7 +808,6 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/snprint
  	return (ret);
  }
 -DEF_STRONG(snprintf);
-+DEF_WEAK(snprintf_l);
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/sprintf.c src/lib/libc/stdio/sprintf.c
 --- src54-x6/lib/libc/stdio/sprintf.c	Sat Jun 25 00:32:56 2011
 +++ src/lib/libc/stdio/sprintf.c	Tue Dec  3 16:12:41 2013
@@ -857,7 +853,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/sprintf
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/sscanf.c src/lib/libc/stdio/sscanf.c
 --- src54-x6/lib/libc/stdio/sscanf.c	Mon Nov 14 23:11:36 2011
 +++ src/lib/libc/stdio/sscanf.c	Tue Dec  3 16:12:41 2013
-@@ -34,32 +34,35 @@
+@@ -34,32 +34,34 @@
  #include <stdio.h>
  #include <string.h>
  #include <stdarg.h>
@@ -906,7 +902,6 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/sscanf.
  	return (ret);
  }
 -DEF_STRONG(sscanf);
-+DEF_WEAK(sscanf_l);
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vasprintf.c src/lib/libc/stdio/vasprintf.c
 --- src54-x6/lib/libc/stdio/vasprintf.c	Tue Nov 10 11:28:49 2009
 +++ src/lib/libc/stdio/vasprintf.c	Tue Dec  3 16:12:41 2013
