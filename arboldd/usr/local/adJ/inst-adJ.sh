@@ -1351,6 +1351,17 @@ if (test -f /usr/libdata/perl5/Math/BigInt/CalcEmu.pm) then {
 	rm -f /dev/mixer*
 } fi;
 
+if (test -f /usr/lib/libperl.a) then {
+  vac="$vac 6.7 a 6.8";
+  echo "Aplicando actualizaciones de 6.7 a 6.8" >> /var/www/tmp/inst-adJ.bitacora;
+  chmod 600 /etc/npppd/npppd.conf
+  rm -f /usr/lib/libperl.a
+  rm /usr/X11R6/lib/libxkbui.* \
+    /usr/X11R6/lib/pkgconfig/xkbui.pc \
+    /usr/X11R6/include/X11/extensions/XKBui.h
+
+} fi;
+
 
 
 if  (test "$vac" != "") then {
@@ -2067,7 +2078,18 @@ EOF
 w
 q
 EOF
-	echo "   Actualizando versión en PKG_PATH..." >> /var/www/tmp/inst-adJ.bitacora;
+	echo "   Actualizando versión en PKG_PATH de /home/$uadJ/.profile" >> /var/www/tmp/inst-adJ.bitacora;
+} fi;
+
+grep "PKG_PATH" /home/$uadJ/.zshrc> /dev/null
+if (test -f /home/$uadJ/.zshrc -a "$?" != "0") then {
+} else {
+	ed /home/$uadJ/.zshrc >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
+,s/\(PKG_PATH=.*\)[0-9][.][0-9]/\1$ACVER/g
+w
+q
+EOF
+	echo "   Actualizando versión en PKG_PATH de /home/$uadJ/.zshrc" >> /var/www/tmp/inst-adJ.bitacora;
 } fi;
 
 echo "* Configurar LANG en script de inicio de cuenta $uadJ" >> /var/www/tmp/inst-adJ.bitacora;

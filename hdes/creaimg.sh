@@ -1,5 +1,5 @@
 #!/bin/sh
-# Crea imagen fs para memorias USB (o discos duros)
+# Crea imagen img para memorias USB (o discos duros)
 # Dominio público. vtamara@pasosdeJesus.org 2017
 
 . ./ver.sh
@@ -8,7 +8,7 @@ if (test ! -d $V$VESP-$ARQ) then {
   echo "No existe el directorio $V$VESP-$ARQ";
   exit 1;
 } fi;
-im=/usr/src/distrib/amd64/iso/obj/install${VP}.fs
+im=/usr/src/distrib/amd64/iso/obj/install${VP}.img
 if (test ! -f $im ) then {
   echo "Intentando crear $im"
   doas rm -rf /home/rel-amd64 /home/relx-amd64

@@ -345,8 +345,13 @@ if (test "$sn" = "s") then {
 	# Antes de compilar todo /usr/src, compilar perl porque pkg_add
 	# depende de ese
 	cd /usr/src/gnu/usr.bin/perl && make -f Makefile.bsd-wrapper depend 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
-	cd /usr/src/gnu/usr.bin/perl && make 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
+	cd /usr/src/gnu/usr.bin/perl && make -f Makefile.bsd-wrapper 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
 	cd /usr/src/gnu/usr.bin/perl && unset DESTDIR && make install 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
+
+  # Además de esto en adJ 6.8 nos toco inicialmente:
+  # doas cp /usr/src/gnu/usr.bin/perl/libperl.so.20.0 /usr/libdata/perl5/amd64-openbsd/CORE/
+  # Pero fue mejor:
+  # doas rm /usr/libdata/perl5/amd64-openbsd/CORE/libperl.so.20.0
 
 	# build borrará código objeto 
 	# reconstruira dependencias, compilará e instalará
@@ -791,6 +796,8 @@ if (test "$sn" = "s") then {
 	# Modificados para posibilitar compilación
 	# Deben estar en mystuff
 
+	paquete chromium
+  #exit 1
 	# Todo lo de perl tuvo que recompilarse
 	# evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
 	# Si por ejemplo es:
