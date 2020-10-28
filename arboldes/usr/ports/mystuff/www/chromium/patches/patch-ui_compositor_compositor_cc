@@ -1,10 +1,10 @@
-$OpenBSD: patch-ui_compositor_compositor_cc,v 1.4 2020/04/10 18:51:32 robert Exp $
+$OpenBSD: patch-ui_compositor_compositor_cc,v 1.7 2020/09/22 11:47:42 robert Exp $
 
 Index: ui/compositor/compositor.cc
 --- ui/compositor/compositor.cc.orig
 +++ ui/compositor/compositor.cc
-@@ -669,7 +669,7 @@ void Compositor::OnFrameTokenChanged(uint32_t frame_to
-   NOTREACHED();
+@@ -731,7 +731,7 @@ void Compositor::CancelThroughtputTracker(TrackerId tr
+   throughput_tracker_map_.erase(tracker_id);
  }
  
 -#if defined(OS_LINUX) && !defined(OS_CHROMEOS)
