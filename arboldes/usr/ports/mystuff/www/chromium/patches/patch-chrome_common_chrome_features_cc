@@ -1,9 +1,9 @@
-$OpenBSD: patch-chrome_common_chrome_features_cc,v 1.23 2020/04/10 18:51:31 robert Exp $
+$OpenBSD: patch-chrome_common_chrome_features_cc,v 1.26 2020/09/22 11:47:40 robert Exp $
 
 Index: chrome/common/chrome_features.cc
 --- chrome/common/chrome_features.cc.orig
 +++ chrome/common/chrome_features.cc
-@@ -86,7 +86,7 @@ const base::Feature kAsyncDns {
+@@ -70,7 +70,7 @@ const base::Feature kAsyncDns {
  #endif
  };
  
