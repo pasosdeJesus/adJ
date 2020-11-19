@@ -25,7 +25,7 @@ gemil () {
     for i in $@; do
       g=`echo $i | sed -e "s/@.*//g"`
       v=`echo $i | sed -e "s/.*@//g"`
-      if [[ "$v" = "" ]]; then 
+      if [[ "$v" = "$g" ]]; then
         echo "Instalando versión más reciente de la gema $g"
         doas gem install -N --install-dir "$rb/ruby/$vruby/" $g;
       else
