@@ -1,20 +1,20 @@
 COMO PUBLICAR
 =============
 
-Anhelamos publicar versión mayor (e.g 6.6) 3 meses después de OpenBSD:
+Anhelamos publicar versión mayor (e.g 6.8) 3 meses después de OpenBSD:
 
 * 11.Ene
 * 1.Jul
 
-También publicamos revisiones (e.g 6.6p1) si la seguridad o calidad lo ameritan.
+También publicamos revisiones (e.g 6.8p1) si la seguridad o calidad lo ameritan.
 
-Anhelamos publicar al menos una versión beta (e.g 6.6 en directorio
+Anhelamos publicar al menos una versión beta (e.g 6.8 en directorio
 `desarrollo` del sitio de distribución) en:
 
 	10.Dic
 	10.Jun
 
-Sería ideal publicar una versión alfa mucho antes (24.Sep y 24.Mar, e.g 6.6a1).
+Sería ideal publicar una versión alfa mucho antes (24.Sep y 24.Mar, e.g 6.8a1).
 
 
 Pasos importantes para publicar versión beta
@@ -158,11 +158,11 @@ Pasos importantes para publicar versión beta
 
 13. Poner Tag en github e iniciar rama al publicar version alfa o beta (antes en master)
 	```
-	git tag -a v6.6a1 -m "Version 6.6a1"
-	git push origin v6.6a1
+	git tag -a v6.8b1 -m "Version 6.8b1"
+	git push origin v6.8b1
 	...
-	git checkout -b ADJ_6_6
-	git push origin ADJ_6_6
+	git checkout -b ADJ_6_8
+	git push origin ADJ_6_8
 	```
 14. Publicar en lista de desarrollo
 
