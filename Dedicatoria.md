@@ -7,8 +7,8 @@ a finales de Septiembre que quedé sin efectos ni alergia.
 
 -----
 
-El es quien perdona todas tus iniquidades,
-El que sana todas tus dolencias;
+Él es quien perdona todas tus iniquidades,
+Él que sana todas tus dolencias;
 
 Salmo 103:5
 
