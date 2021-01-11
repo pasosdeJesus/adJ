@@ -3,7 +3,7 @@ Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
 
 ### Versión: 6.8b1
-Fecha de publicación: 20/Dic/2020
+Fecha de publicación: 10/Ene/2020
 
 Puede ver novedades respecto a OpenBSD en:
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_8/Novedades_OpenBSD.md>
@@ -38,7 +38,7 @@ Puede ver las diversas versiones publicadas en:
        qemu-system-x86_64 -hda virtual.raw -hdb AprendiendoDeJesus-6.8b1-amd64.usb -boot menu=on
 
 
-## 2. NOVEDADES RESPECTO A ADJ 6.6 PROVENIENTES DE OPENBSD
+## 2. NOVEDADES RESPECTO A ADJ 6.7 PROVENIENTES DE OPENBSD
 
 ### 2.1 Kernel y Sistema Base
 
@@ -89,7 +89,7 @@ Puede ver las diversas versiones publicadas en:
 ### 2.2 Paquetes 
 
 * Recompilados portes estables más recientes para evitar fallas de seguridad de : 
-* Ruby 2.7.2 retroportado de current
+* Ruby 3.0.0 retroportado de current
 * Algunos paquetes típicos y su versión: dovecot x2.3.10, chromium 85.0.4183.121
   firefox x76.0 , libreoffice x6.4.3.2, nginx x1.16.1p1, mariadb x10.4.12v1,
   node x12.16.1, postgresql x12.3, python x3.7.9, ruby x2.7.1p0, vim x8.2.534,
