@@ -3,7 +3,7 @@ Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
 
 ### Versión: 6.8b1
-Fecha de publicación: 10/Ene/2020
+Fecha de publicación: 15/Ene/2020
 
 Puede ver novedades respecto a OpenBSD en:
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_8/Novedades_OpenBSD.md>
@@ -42,21 +42,26 @@ Puede ver las diversas versiones publicadas en:
 
 ### 2.1 Kernel y Sistema Base
 
-* Aplicados parches de seguridad hasta el 16.Mar.2020 provenientes de 
+Novedades tomadas de <https://www.openbsd.org/68.html> y de 
+<https://home.nuug.no/~peter/openbsd_and_you_68/#1>
+
+* Aplicados parches de seguridad hasta el 11.Ene.2020 provenientes de 
   OpenBSD que incluyen solución a fallas de OpenSMTPD y sysctl
 * Controladores ampliados o mejorados para amd64
 	* Red:
 		* Inalámbrica: Soporte para TP-Link TL-WN822N-EU v5 (y v4) en `urtwn`.
     Soporte para AP6359SA y otras variantes de BCM4359 SDIO en `bwfm`.
-
 		* Ethernet: Soporte para BCM5719A1 en `bge`. Habilitadas
     varias colas tx/rx con condensado RSS Teplitz en 
     `vmx`, `ix` and `ixl`.  Soporte para RK3308 en `dwe`. 
     Soporte para RTL8125B en `rge`. Soporte para ConnectX-6 Dx y para VLANs y
     otras mejoras a `mcx`
 		* USB y modems: 
-	* Vídeo: 
-	* Sonido: 
+	* Vídeo: Se mejoró ampliamente el código DRM. Como indica
+    <https://undeadly.org/cgi?action=article;sid=20200608075708> ahora 
+    `amdgpu` soporta vega20, raven2, renoir, navil10 y navil4, mientras que 
+    `inteldrm` soporta icelake y tigerlake.
+	* Sonido: Nuevos controladores genéricos `simpleaudio` y `simpleamp`.
 	* Almacenamiento: 
 	* Criptografía: 
 	* Sensores y otros: Soporte para sensores de temperauta RK3308 en `rktemp`.
@@ -65,7 +70,9 @@ Puede ver las diversas versiones publicadas en:
 
 	
 * Mejoras a herramientas de Red
-	* Mejoras a 
+  * Nuevo protocolo WireGuard para VPNs en kernel (antes había implementación
+  en portes) mediante el seudo-dispositivo `wg`.
+	* Mejoras a tcpdump y pppoe 
 	* Soporte para 
 	* Nuevo 
 	* Diversas mejoras a
@@ -78,7 +85,29 @@ Puede ver las diversas versiones publicadas en:
 	* Incluye OpenSSH x8.1
 	* Incluye LibreSSL x3.0.2
 * Otros
-	* Diversas mejoras a
+  * `login_ldap` añadido a base. Con este es posible autenticar usuarios
+    que no tengan cuenta en el sistema sino en un directorio LDAP.
+  * Ahora pueden leerse contadores de tiempos desde el ambiente del usuario
+  sin hacer llamadas al sistema, lo que hace más veloz la operación de 
+  varias aplicaciones comos suits de oficina,  mplayer y navegadores. Ver
+  <https://undeadly.org/cgi?action=article;sid=20200708055508>
+  * Cambio en el sistema de archivos de FFS1 (Fast File System) a 
+    FFS2 (Enhanced Fast File System). Puede determinar
+    el tipo de sistema de archivos que tiene con: `dumpfs /dev/rsd2a | head -1`
+    cambiando el dispositivo por la subpartición que va a examinar. 
+    En OpenBSD/adJ 6.8 tanto el instalador como newfs por omisión 
+    formatean en FFS2 (podría formatearse en FFS1 con la opción `-O1`).
+    Las principales ventajas de FFS2, mencionadas en
+    <https://undeadly.org/cgi?action=article;sid=20200528091634>, son:
+    * Soporta particiones de más de 1TB
+    * Es más rápido que FFS1 al crear y al chequear (con fsck)
+    * Usa marcas de tiempo y bloques de 64 bits, así que maneja fechas
+      posteriores a 2038 y particiones mucho más grandes.
+    * En todo caso las particiones muy grandes requieren mucho tiempo para
+      chequearse.
+    * No hay herramienta para convertir entre FFS1 y FFS2 --debe respaldar 
+      toda la información y formatear.
+
 
 * El sistema base incluye mejoras a componentes auditados y mejorados 
   como, `llvm` x8.0.1,  `Xenocara` (basado en `Xorg` x7.7),
