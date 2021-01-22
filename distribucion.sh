@@ -797,8 +797,6 @@ if (test "$sn" = "s") then {
   # Modificados para posibilitar compilación
   # Deben estar en mystuff
 
-  paquete ruby paquetes "ruby ruby27-ri_docs" 2.7
-  exit 1
   # Todo lo de perl tuvo que recompilarse
   # evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
   # Si por ejemplo es:
@@ -938,7 +936,7 @@ if (test "$sn" = "s") then {
 
   paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs postgresql-pg_upgrade" 
   paquete postgresql-previous 
-  paquete ruby paquetes "ruby ruby27-ri_docs" 2.7
+  paquete ruby paquetes "ruby ruby30-ri_docs" 3.0
   #paquete tiff
   #paquete geo/spatialite/libspatialite
 
@@ -947,9 +945,9 @@ if (test "$sn" = "s") then {
 
 :  ###
         # Actualizados.  Están desactualizado en OpenBSD estable y current
-  #paquete ocaml paquetes "ocaml"
-  #paquete ocamlbuild 
-  #paquete ocaml-camlp4
+  paquete ocaml paquetes "ocaml"
+  paquete ocamlbuild 
+  paquete ocaml-camlp4
 
   ####
   # Recompilados para cerrar fallas de portes actualizados (estable)
@@ -961,25 +959,25 @@ if (test "$sn" = "s") then {
   #paquete gvfs
   #paquete libgcrypt
   #paquete mpg123
-  paquete oniguruma 
-  paquete pcre2 
-  paquete webkitgtk4
-  paquete certbot paquetes "certbot py3-acme"
-  paquete unzip
-  paquete python paquetes "python" "3.7"
+  #paquete oniguruma 
+  #paquete pcre2 
+  #paquete webkitgtk4
+  #paquete certbot paquetes "certbot py3-acme"
+  #paquete unzip
+  #paquete python paquetes "python" "3.7"
 
   ###  
   # Recompilados de estable que usan xlocale (y pueden cerrar fallas)
   # No deben estar en mystuff
   paquete curl
 
-  paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 7.3
+  paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 7.4
 
   ###
   # Recompilados para mejorar dependencias y actualizar
 
-  paquete gettext-tools paquetes 'gettext-tools gettext-runtime'
-  paquete libidn2
+  #paquete gettext-tools paquetes 'gettext-tools gettext-runtime'
+  #paquete libidn2
 
   #FLAVOR=light paquete evince paquetes evince-light
   #paquete gcc paquetes "gcc" 4.9

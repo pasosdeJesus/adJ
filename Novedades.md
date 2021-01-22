@@ -117,8 +117,9 @@ Novedades tomadas de <https://www.openbsd.org/68.html> y de
 
 ### 2.2 Paquetes 
 
-* Recompilados portes estables más recientes para evitar fallas de seguridad de : 
 * Ruby 3.0.0 retroportado de current
+* Recompilados portes estables más recientes para evitar fallas de seguridad 
+  de: dovecot, php, ocaml
 * Algunos paquetes típicos y su versión: dovecot x2.3.10, chromium 85.0.4183.121
   firefox x76.0 , libreoffice x6.4.3.2, nginx x1.16.1p1, mariadb x10.4.12v1,
   node x12.16.1, postgresql x12.3, python x3.7.9, ruby x2.7.1p0, vim x8.2.534,
