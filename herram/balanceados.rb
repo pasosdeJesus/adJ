@@ -22,10 +22,10 @@ end
 nlinea = 1
 File.readlines(ar).each do |linea|
   pacs.each do |pac|
-    nab = linea.split(pac[0]).count
-    abiertos[pac[0]] += nab>0 ? nab-1 : 0
-    (1..nab).each do
-      lab[pac[0]].push(nlinea)
+    pls = linea.split(pac[0])
+    abiertos[pac[0]] += pls.count > 0 ? pls.count - 1 : 0
+    pls.each do |pl|
+      lab[pac[0]].push("#{nlinea.to_s}: #{pl}#{pac[0]}")
     end
     ldiv = linea.split(pac[1])
     ncer = ldiv.count
@@ -46,19 +46,22 @@ File.readlines(ar).each do |linea|
 end
 
 pacs.each do |pac|
+  print "\n"
   if abiertos[pac[0]] != cerrados[pac[0]]
     puts "Para pareja (#{pac[0]}, #{pac[1]}), no coinciden "\
-      "diálogos abiertos (#{abiertos[pac[0]]}) y "\
-      "diálogos cerrados (#{cerrados[pac[0]]})"
+      "abiertos (#{abiertos[pac[0]]}) y "\
+      "cerrados (#{cerrados[pac[0]]})"
     if abiertos[pac[0]] > cerrados[pac[0]]
       puts "Abiertos no cerrados: #{lab[pac[0]].count}"
       puts "Líneas donde se inician abiertos que no son cerrados:"
-      puts lab[pac[0]]
+      lab[pac[0]].each do |c|
+        puts "* #{c}"
+      end
     else
 
     end
   else
     puts "Para pareja (#{pac[0]}, #{pac[1]}), "\
-      "coinciden diálogos abiertos y diálogos cerrados"
+      "coinciden abiertos y cerrados"
   end
 end
