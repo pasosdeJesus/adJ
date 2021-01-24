@@ -111,7 +111,7 @@ Novedades tomadas de <https://www.openbsd.org/68.html> y de
 
 * Ruby 3.0.0 retroportado de current
 * Recompilados portes estables más recientes para evitar fallas de seguridad 
-  de: dovecot, php, ocaml
+  de: dovecot, oniguruma, ocaml, php
 * Algunos paquetes típicos y su versión: dovecot 2.3.11.3, 
   chromium 85.0.4183.121
   firefox x76.0 , libreoffice x6.4.3.2, nginx x1.16.1p1, mariadb x10.4.12v1,
@@ -129,7 +129,10 @@ Novedades tomadas de <https://www.openbsd.org/68.html> y de
 
 ### 3.2 Paquetes
 
-* Ahora se incluyen paquetes
+* Compiladas versiones más recientes de ocaml-4.10.2, ocamlbuild y 
+  ocaml-camlp4
+* Se mejoran scripts para usar zsh+tmux+neovim: <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_8/arboldd/usr/local/share/adJ/archconf/README.md>
+* Nueva versión 1.0a5 del motor de búsqueda Mt77
 * Se han recompilado los siguientes para aprovechar `xlocale`:
    `glib2`, `libunistring`, `vlc`
 * Retroportados y adaptados de OpenBSD-current 
