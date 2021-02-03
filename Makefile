@@ -9,8 +9,8 @@ SOURCE_GBFXML=mateo.gbfxml marcos.gbfxml lucas.gbfxml juan.gbfxml hechos.gbfxml
 
 EXT_DOCBOOK=xdbk
 
-VS_SWORDBOOK_I=John
-VS_SWORDBOOK=John
+VS_SWORDBOOK_I=Romans
+VS_SWORDBOOK=Romans
 
 # Variables requeridas por comdocbook.mak
 SOURCES=$(PROYECTO).$(EXT_DOCBOOK)
@@ -228,7 +228,7 @@ $(VS_SWORDBOOK)-o-KJV.tmp: $(VS_SWORDBOOK)-n-KJV.tmp
 	-awk -f herram/ordenastrong.awk $(VS_SWORDBOOK)-n-KJV.tmp > $(VS_SWORDBOOK)-o-KJV.tmp
 
 valida-strong: $(VS_SWORDBOOK)-o-KJV.tmp
-	-xsltproc gbfxml2strong.xsl biblia_dp.gbfxml > strong-dp.tmp
+	-xsltproc gbfxml2strong.xsl libro_dp.gbfxml > strong-dp.tmp
 	-awk -f herram/ordenastrong.awk strong-dp.tmp > strong-o-dp.tmp 
 	diff -b $(VS_SWORDBOOK)-o-KJV.tmp strong-o-dp.tmp
 

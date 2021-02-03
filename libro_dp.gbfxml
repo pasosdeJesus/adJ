@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE gbfxml SYSTEM "gbfxml.dtd" [
+  <!ENTITY % confv SYSTEM "confv.ent">
+  %confv;
+  <!ENTITY derechos SYSTEM "derechos.gbfxml">
+  <!ENTITY mateo SYSTEM "mateo.gbfxml">
+  <!ENTITY marcos SYSTEM "marcos.gbfxml">
+  <!ENTITY lucas SYSTEM "lucas.gbfxml">
+  <!ENTITY juan SYSTEM "juan.gbfxml">
+  <!ENTITY hechos SYSTEM "hechos.gbfxml">
+  <!ENTITY romanos SYSTEM "romanos.gbfxml">
+
+  <!ENTITY biblio SYSTEM "biblio.gbfxml">
+  ]>
+  
+  <!-- Traducción a español de la Biblia, de dominio público, no oficial,
+  	especialmente basada en World English Bible. 
+	Sin garantias. evangelios-dp@yahoogroups.com -->
+<gbfxml version="0.1" xml:lang="es">
+<tt>Los Evangelios: Traducción  de dominio público abierta a mejoras</tt>
+<stt>biblia_dp</stt>
+&derechos;
+<!--
+&mateo;
+&marcos; 
+&lucas; 
+&juan; 
+&hechos;
+ --> 
+&romanos;
+<!--  -->
+&biblio;
+</gbfxml>
