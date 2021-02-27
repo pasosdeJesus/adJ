@@ -57,8 +57,12 @@ _carga_conf "$HOME/.zsh/conf"
 
 /usr/games/fortune /usr/local/share/adJ/fortune/versiculos
 
+export CXX=c++
+
 # Configuración local
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
 
 # alias
 [[ -f ~/.alias ]] && source ~/.alias
+
+

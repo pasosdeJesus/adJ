@@ -121,7 +121,7 @@ Novedades tomadas de <https://www.openbsd.org/68.html> y de
 * Postgresql 13.1 tomado de correos a ports-openbsd
 * Veracrypt 13.1 tomado de correos a ports-openbsd
 * Recompilados portes estables más recientes para evitar fallas de seguridad 
-  de: dovecot, php, ocaml
+  de: dovecot, oniguruma, ocaml, php
 * Algunos paquetes típicos y su versión: dovecot 2.3.11.3, 
   chromium 85.0.4183.121
   firefox 81.0 , libreoffice 7.0.1.2, nginx 1.18.0, mariadb 10.5.5,
@@ -141,6 +141,10 @@ Novedades tomadas de <https://www.openbsd.org/68.html> y de
 
 * El paquete `evangelios_dp` ahora incluye concordancia Strong del 
   evangelio de Juan.
+* Compiladas versiones más recientes de ocaml-4.10.2, ocamlbuild y 
+  ocaml-camlp4
+* Se mejoran scripts para usar zsh+tmux+neovim: <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_8/arboldd/usr/local/share/adJ/archconf/README.md>
+* Nueva versión 1.0a5 del motor de búsqueda Mt77
 * Se han recompilado los siguientes para aprovechar `xlocale`:
    `glib2`, `libunistring`, `vlc`
 * Retroportados y adaptados de OpenBSD-current 

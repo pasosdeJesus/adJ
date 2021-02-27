@@ -14,7 +14,7 @@ if (test "$TEXTO" = "1") then {
 	cmd="$cmd $opq"
 } else {
 	opq="$opq -s -serial file:/tmp/q -monitor stdio"
-	cmd="doas /usr/X11R6/bin/xterm -e \"$cmd $opq\""
+	cmd="/usr/X11R6/bin/xterm -e \"$cmd $opq\""
 } fi;
 if (test ! -f virtual.raw) then {
 	qemu-img create -f raw virtual.raw 15G
