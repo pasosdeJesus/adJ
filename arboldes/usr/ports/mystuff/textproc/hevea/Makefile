@@ -5,11 +5,11 @@ COMMENT=	LaTeX to html translator
 CATEGORIES=	textproc print
 
 # Q Licence 1.0 + LGPL for parts of the runtime
-PERMIT_PACKAGE_CDROM=	Yes
+PERMIT_PACKAGE=	Yes
 WANTLIB=		c m
 
-DISTNAME =	hevea-2.23
-REVISION = 	2
+DISTNAME =	hevea-2.35
+REVISION = 	
 MASTER_SITES =	http://para.inria.fr/~maranget/hevea/distri/
 
 DISTFILES=	${DISTNAME}${EXTRACT_SUFX} ${DISTNAME}-manual${EXTRACT_SUFX}
