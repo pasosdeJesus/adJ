@@ -1,4 +1,4 @@
-@comment $OpenBSD: PLIST-main,v 1.31 2020/02/06 00:36:12 jeremy Exp $
+@comment $OpenBSD: PLIST-main,v 1.32 2021/02/09 20:01:37 sthen Exp $
 @conflict pgsql-*
 @conflict pgsql-clients-*
 @conflict postgresql-*
@@ -55,24 +55,24 @@ include/postgresql/sqlca.h
 include/postgresql/sqlda-compat.h
 include/postgresql/sqlda-native.h
 include/postgresql/sqlda.h
-lib/libecpg.a
+@static-lib lib/libecpg.a
 @comment lib/libecpg.so
 @comment lib/libecpg.so.7
 @lib lib/libecpg.so.${LIBecpg_VERSION}
-lib/libecpg_compat.a
+@static-lib lib/libecpg_compat.a
 @comment lib/libecpg_compat.so
 @comment lib/libecpg_compat.so.4
 @lib lib/libecpg_compat.so.${LIBecpg_compat_VERSION}
-lib/libpgcommon.a
-lib/libpgcommon_shlib.a
-lib/libpgfeutils.a
-lib/libpgport.a
-lib/libpgport_shlib.a
-lib/libpgtypes.a
+@static-lib lib/libpgcommon.a
+@static-lib lib/libpgcommon_shlib.a
+@static-lib lib/libpgfeutils.a
+@static-lib lib/libpgport.a
+@static-lib lib/libpgport_shlib.a
+@static-lib lib/libpgtypes.a
 @comment lib/libpgtypes.so
 @comment lib/libpgtypes.so.4
 @lib lib/libpgtypes.so.${LIBpgtypes_VERSION}
-lib/libpq.a
+@static-lib lib/libpq.a
 @comment lib/libpq.so
 @comment lib/libpq.so.6
 @lib lib/libpq.so.${LIBpq_VERSION}
@@ -367,7 +367,6 @@ lib/postgresql/pgxs/src/test/regress/
 share/postgresql/
 share/postgresql/errcodes.txt
 share/postgresql/information_schema.sql
-share/postgresql/postgres.description
 share/postgresql/psqlrc.sample
 share/postgresql/snowball_create.sql
 share/postgresql/sql_features.txt

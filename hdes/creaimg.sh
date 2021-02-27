@@ -90,7 +90,7 @@ ej "doas disklabel /dev/vnd0c"
 #  i:            10000               64   MSDOS              
 
 # /dev/rvnd0c> p
-OpenBSD area: 1024-737280; size: 736256; free: 0
+# OpenBSD area: 1024-737280; size: 736256; free: 0
 # adJ64           size           offset  fstype [fsize bsize   cpg]
 # a:           736256             1024  4.2BSD   2048 16384 16142 
 # c:         10773440                0  unused                    

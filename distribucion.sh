@@ -797,6 +797,9 @@ if (test "$sn" = "s") then {
   # Modificados para posibilitar compilación
   # Deben estar en mystuff
 
+  #paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs postgresql-pg_upgrade"
+  #exit 1
+  #paquete postgresql-previous 
 
   # Todo lo de perl tuvo que recompilarse
   # evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
@@ -944,8 +947,8 @@ if (test "$sn" = "s") then {
   # Recompilado con llave de adJ
   paquete chromium
 
-:  ###
-        # Actualizados.  Están desactualizado en OpenBSD estable y current
+  ###
+  # Actualizados.  Están desactualizado en OpenBSD estable y current
   paquete ocaml paquetes "ocaml"
   paquete ocamlbuild 
   paquete ocaml-camlp4
@@ -999,7 +1002,7 @@ if (test "$sn" = "s") then {
   ##
   # Nueva revisión para operar con librerías retroportadas o actualizadas
   # Deben estar en arbodes/usr/ports/mystuff
-  #paquete hevea
+  paquete hevea
   #paquete libreoffice paquetes "libreoffice libreoffice-i18n-es"
 
   ####
@@ -1011,6 +1014,8 @@ if (test "$sn" = "s") then {
 
   ##
   # Retroportados no existentes en versión actual
+
+  paquete security/veracrypt
 
   ####
   # Adaptados de portes estables pero mejorados para adJ, por 

@@ -54,7 +54,7 @@ Novedades tomadas de <https://www.openbsd.org/68.html> y de
     Soporte para AP6359SA y otras variantes de BCM4359 SDIO en `bwfm`.
 		* Ethernet: Soporte para BCM5719A1 en `bge`. Habilitadas
     varias colas tx/rx con condensado RSS Teplitz en 
-    `vmx`, `ix` and `ixl`.  Soporte para RK3308 en `dwe`. 
+    `vmx`, `ix` e `ixl`.  Soporte para RK3308 en `dwe`. 
     Soporte para RTL8125B en `rge`. Soporte para ConnectX-6 Dx y para VLANs y
     otras mejoras a `mcx`
 	* Vídeo: Se mejoró ampliamente el código DRM. Como indica
@@ -70,31 +70,32 @@ Novedades tomadas de <https://www.openbsd.org/68.html> y de
 * Mejoras a herramientas de Red
   * Nuevo protocolo WireGuard para VPNs en kernel (antes había implementación
   en portes) mediante el seudo-dispositivo `wg`.
-	* Mejoras a tcpdump y pppoe 
-  * Continua mejoras a SMP en la pila de red.
+  * Mejoras a tcpdump y pppoe 
+  * Mejoras a SMP en la pila de red.
 
 * Seguridad
-	* Más programas del sistema base y portes usan unveil
+	* Más programas del sistema base y portes usan `unveil`.
 	* Más mitigaciones a fallas en CPUs Intel
-	* Incluye LibreSSL 3.2.2 con TLSv1.3 habilitado.  Nuevo validador de cadenas de 
+	* Incluye LibreSSL 3.2.2 con TLSv1.3 habilitado.  Nuevo validador de cadenas 
+    de certificados X509
 	* Incluye OpenSSH 8.4
 * Otros
   * `login_ldap` añadido a base. Con este es posible autenticar usuarios
     que no tengan cuenta en el sistema sino en un directorio LDAP.
-  * Ahora pueden leerse contadores de tiempos desde el ambiente del usuario
+  * Ahora pueden leerse contadores de tiempo desde el ambiente del usuario
   sin hacer llamadas al sistema, lo que hace más veloz la operación de 
-  varias aplicaciones comos suits de oficina,  mplayer y navegadores. Ver
+  varias aplicaciones comos suits de oficina,  `mplayer` y navegadores. Ver
   <https://undeadly.org/cgi?action=article;sid=20200708055508>
   * Cambio en el sistema de archivos de FFS1 (Fast File System) a 
     FFS2 (Enhanced Fast File System). Puede determinar
     el tipo de sistema de archivos que tiene con: `dumpfs /dev/rsd2a | head -1`
     cambiando el dispositivo por la subpartición que va a examinar. 
-    En OpenBSD/adJ 6.8 tanto el instalador como newfs por omisión 
+    En OpenBSD/adJ 6.8 tanto el instalador como `newfs` por omisión 
     formatean en FFS2 (podría formatearse en FFS1 con la opción `-O1`).
     Las principales ventajas de FFS2, mencionadas en
     <https://undeadly.org/cgi?action=article;sid=20200528091634>, son:
     * Soporta particiones de más de 1TB
-    * Es más rápido que FFS1 al crear y al chequear (con fsck)
+    * Es más rápido que FFS1 al crear y al chequear (con `fsck`)
     * Usa marcas de tiempo y bloques de 64 bits, así que maneja fechas
       posteriores a 2038 y particiones mucho más grandes.
     * En todo caso las particiones muy grandes requieren mucho tiempo para
@@ -109,14 +110,23 @@ Novedades tomadas de <https://www.openbsd.org/68.html> y de
 
 ### 2.2 Paquetes 
 
-* Ruby 3.0.0 retroportado de current
+* Ruby 3.0.0 retroportado de current.  Ver novedades completas en 
+  <https://www.ruby-lang.org/es/news/2020/12/25/ruby-3-0-0-released/>, unas
+  que nos parecen destacadas:
+  * Es más rápido que Ruby 2, con algunas cargas de trabajo que ejecuten 
+    muchas veces unos pocos métodos.
+  * Nuevos mecanismos de concurrencia: Ractor y planificador de fibras.
+  * Introduce una notación para especificar tipos y hacer chequeo estático 
+    de tipos
+* Postgresql 13.1 tomado de correos a ports-openbsd
+* Veracrypt 13.1 tomado de correos a ports-openbsd
 * Recompilados portes estables más recientes para evitar fallas de seguridad 
   de: dovecot, php, ocaml
 * Algunos paquetes típicos y su versión: dovecot 2.3.11.3, 
   chromium 85.0.4183.121
-  firefox x76.0 , libreoffice x6.4.3.2, nginx x1.16.1p1, mariadb x10.4.12v1,
-  node x12.16.1, postgresql x12.3, python x3.7.9, ruby x2.7.1p0, vim x8.2.534,
-  neovim x0.4.3, zsh x5.8
+  firefox 81.0 , libreoffice 7.0.1.2, nginx 1.18.0, mariadb 10.5.5,
+  node 12.16.1, python 3.8.6, neovim 0.4.4, 
+  zsh 5.8p0
 
 
 ## 3. NOVEDADES RESPECTO A ADJ 6.7 PROVENIENTES DE PASOS DE JESÚS
@@ -129,7 +139,8 @@ Novedades tomadas de <https://www.openbsd.org/68.html> y de
 
 ### 3.2 Paquetes
 
-* Ahora se incluyen paquetes
+* El paquete `evangelios_dp` ahora incluye concordancia Strong del 
+  evangelio de Juan.
 * Se han recompilado los siguientes para aprovechar `xlocale`:
    `glib2`, `libunistring`, `vlc`
 * Retroportados y adaptados de OpenBSD-current 
@@ -178,7 +189,7 @@ Novedades tomadas de <https://www.openbsd.org/68.html> y de
       desde Administrar->Bitacora).
 
 
-### 3.3 Paquetes
+### 3.3 Configuración
   ... <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_8/arboldd/usr/local/share/adJ/archconf/README.md>
 
 ## 4. FE DE ERRATAS
