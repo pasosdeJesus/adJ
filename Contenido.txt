@@ -157,7 +157,7 @@ postgis-[v]		Soporte para objetos geográficos en PostgreSQL
 postgresql-client-[v]	Cliente para motor de bases de datos PostgreSQL
 postgresql-pg_upgrade-[v]	Soporte para actualizar PostgreSQL
 postgresql-previous-[v]	PostgreSQL anterior para actualizar con pg_upgrade
-postgresql-server-[v] Servidor de bases de datos PostgreSQL
+postgresql-server-[v]	Servidor de bases de datos PostgreSQL
 sqlite3-[v]	Implementación embebida de SQL (versión 2).
 
 
@@ -193,7 +193,7 @@ at-spi2-atk-[v]	Puente atk para at-spi2
 at-spi2-core-[v]	Interfaz de servicios para tecnologías asistentes
 atk-[v]		Juego de herramientas de accesibilidad
 atk2mm-[v]		Interfaz en C++ para la librería ATK
-audacious-player-[v]	Reproductor de audio gráfico que soporta muchos formatos
+audacious-player-[v]	Reproductor gráfico que soporta muchos formatos
 audacious-plugins-[v]	Extensiones de entrada y salida para Audacious
 avahi-[v]		Descubrimiento de servicio DNS multi-distribución
 babl-[v]		Librería para conversión dinámica de formatos de puntos
@@ -278,7 +278,7 @@ gnome-icon-theme-symbolic-[v]	Extensión al tema de iconos base
 gnupg-[v]	Remplazo de PGP
 gnutls-[v]		Librería segura para la capa de transporte
 gobject-introspection-[v]	Introspección GObject
-goffice-[v]	Utilidades y objetos centrados en documentos
+goffice-[v]		Utilidades y objetos centrados en documentos
 graphene-[v]		Pequeña capa de tipos de datos gráficos
 graphite2-[v]	Presentación de sistemas de escritura complejos
 gsettings-desktop-schemas-[v]	Esquemas compartidos GSettings
@@ -335,7 +335,7 @@ libbluray-[v]		Soporta reproducción de Blu-ray
 libbs2b-[v]		DSP Bauer estereofónico-a-binarual
 libcddb-[v]		Librería para acceder a un servidor CDDB
 libcdio-[v]		Librería para controlar entrada de disco compacto
-libcdio-paranoia-[v] bifurcación de cdparanoia que usa libcdio
+libcdio-paranoia-[v]	Bifurcación de cdparanoia que usa libcdio
 libcroco-[v]		Librería para reconocimiento genérico de CSS
 libcue-[v]		Librería para reconocer hojas cue
 libdaemon-[v]	Librería en C que facilita escribir servicios
@@ -403,7 +403,7 @@ libssh2-[v]		Librería que implementa protocolo ssh2
 libtalloc-[v]	Piscina de memoria jerárquica con destructores
 libtar-[v]		Librería en C para manipular archivos tar
 libtasn1-[v]		Reconocer Notación de Sintaxis Abstracta Uno
-libtermkey-[v]	Librería para procesar teclado en terminal
+libtermkey-[v]		Librería para procesar teclado en terminal
 libtextstyle-[v]	Librería para dar estilo a textos (parte de gettext)
 libtheora-[v]	Codec abierto de vídeo
 libtorrent-[v]	Librería de BitTorrent escrita en C++
@@ -456,19 +456,19 @@ opus-[v]		Codificador de audio IETF
 opusfile-[v]		API de alto nivel para decodificar en archivos Opus
 ocaml-camlp4-[v]	Sintaxis camlp4 para Ocaml
 ocamlbuild-[v]	Para construir proyectos en OCaml
-oniguruma-[v]	Librería de expresiones regulares
+oniguruma-[v]		Librería de expresiones regulares
 orc-[v]		Librería y herramientas para operar arreglos de datos
 p11-kit-[v]		Librería para enumerar módulos PKCS#11
 p5-Archive-Zip-[v]	Interfaz en perl para archivos ZIP
 p5-B-Hooks-EndOfScope-[v]	Ejecuta código tras compilación de scope
 p5-BSD-Resource-[v]	Funciones de límites y prioridades de procesos
 p5-Class-Data-Inheritable-[v] Datos de clases heredables y sobrecargables
-p5-Class-Inspector-[v] Da información de una clase y su estructura
+p5-Class-Inspector-[v]	Da información de una clase y su estructura
 p5-Class-Load-[v]	Opera 'require Class::Name' y más
 p5-Class-Load-XS-[v]	Implementación XS de partes de Class::Load
 p5-Class-Method-Modifiers-[v]	Modificar un método como Moose
 p5-Class-Singleton-[v]	Patrón singleton de perl
-p5-Class-XSAccessor-[v] Genera accesores XS rápidos sin compilación
+p5-Class-XSAccessor-[v]	Genera accesores XS rápidos sin compilación
 p5-Clone-[v]		Copia tipos de datos perl recursivamente
 p5-Clone-PP-[v]	Copia tipos de datos Perl de forma recursiva
 p5-Cpanel-JSON-XS-[v]	Serialización bifurcada de cPanel JSON:XS
@@ -484,9 +484,9 @@ p5-DateManip-[v]	Manipulación de fechas en perl
 p5-DateTime-[v]	Date Time orientado a objetos en perl
 p5-DateTime-Locale-[v]	Datos de localización para DateTime.pm
 p5-DateTime-TimeZone-[v]	Sub-módulo DateTime para TZ
-p5-Devel-OverloadInfo-[v] Operadores sobrecargados de introspección
+p5-Devel-OverloadInfo-[v]	Operadores sobrecargados de introspección
 p5-Devel-StackTrace-[v]	Objeto que representa una traza de la pila
-p5-Digest-SHA1-[v] Módulo para calcular condensados SHA1
+p5-Digest-SHA1-[v]	Módulo para calcular condensados SHA1
 p5-Dist-CheckConflicts-[v]	Declara conflicto de versiones 
 p5-DBD-MariaDB-[v]	Controlador para interfaz entre Perl5 y MariaDB y MySQL
 p5-DBD-mysql-[v]	Controladores MySQL para DBI de Perl
@@ -497,7 +497,7 @@ p5-Encode-Detect-[v]	Detecta codificación de datos
 p5-Encode-Locale-[v]	Determina codificación del locale
 p5-Error-[v]	Manejo de errores al estilo objetos
 p5-Eval-Closure-[v]	Crea closures con string eval de forma segura
-p5-Exception-Class-[v]  Modulo para declarar clases reales para excepciones
+p5-Exception-Class-[v]	Declara clases reales para excepciones
 p5-Exporter-Tiny-[v]	Exportar con características de Sub::Exporter
 p5-File-HomeDir-[v]	Recupera ubicación de directorio hogar
 p5-File-Listing-[v]	Reconoce listados de directorios
@@ -527,7 +527,7 @@ p5-List-MoreUtils-XS-[v]	Compilado de funciones de List::MoreUtils
 p5-List-SomeUtils-[v]	Provee lo que le falta a List::Util
 p5-List-SomeUtils-XS-[v]	Compilado de funciones de List::SomeUtils
 p5-List-UtilsBy-[v]	Funciones para listas de orden superior
-p5-Mail-AuthenticationResults-[v]	Encabezados Au..Results
+p5-Mail-AuthenticationResults-[v]	Encabezados
 p5-Mail-DKIM-[v]	Implementación para firma de mensajes DKIM y DomanKeys
 p5-Mail-SPF-[v]	Implementación OO de Sender Policy Framerwork
 p5-Mail-Tools-[v]	Módulo para manejar correo con Perl
@@ -582,7 +582,7 @@ p5-Time-TimeDate-[v]	Librería para formatear y reconocer fechas y tiempo
 p5-Try-Tiny-[v]	try/catch mínimo que preserva $@
 p5-URI-[v]		Librería para reconocer URIs
 p5-Variable-Magic-[v]	Asocia magia definida por usuario a variables
-p5-WWW-RobotRules-[v]	Base de datos de permisos derivados de robots.txt
+p5-WWW-RobotRules-[v]	Base de datos de permisos de robots.txt
 p5-XML-Parser-[v]	Módulo en perl para reconocer XML
 p7zip-[v]		Archivador con alta rata de compresión
 p7zip-rar-[v]	Módulos de rar para p7zip
@@ -720,9 +720,9 @@ sound-theme-freedesktop-[v]	Tema de sonido XDG
 soundtouch-[v]	Librería para procesamiento de tempo/tono
 speex-[v]		Codec para voz libre de patentes
 speexdsp-[v]		Codec para voz libre de patentes
-spidermonkey68-[v]	Implementación de Mozilla en C++ del motor Javascript
+spidermonkey68-[v]	Motor de Javascript en C+++ de Mozilla
 sqlports-[v]		Base de datos sqlite de los portes
-sudo-[v]	Ejecutar una orden como otro usuario
+sudo-[v]		Ejecutar una orden como otro usuario
 t1utils-[v]		Utilidades para fuentes PostScript tipo 1
 taglib-[v]		Para manejar meta-datos de formatos de audio
 tdb-[v]		Librería para base de datos trivial
@@ -731,7 +731,7 @@ tiff-[v]		Manipula formato gráfico TIFF
 twolame-[v]	Codificador de MPEG Audio Capa 2 (MP2) optimizado
 unibilium-[v]		Librería básica de terminfo
 vamp-plugin-sdk-[v]	API de extensiones para audio
-veracrypt-[v] Cifra contenedores
+veracrypt-[v]	Cifra contenedores
 vte3-[v]		Librería para emulación de terminal
 wavpack-[v]		Codificador de audio para compresión con y sin perdida
 webkitgtk4-[v]	Interfaz para GTK+3
