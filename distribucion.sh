@@ -1127,7 +1127,7 @@ if (test "$sn" = "s") then {
   if (test "$autoMasPaquetesInv" = "s") then {
     inv="-r"
   } fi;
-  grep ".-\[v\]" Contenido.txt | sed -e "s/-\[v\]\([-a-zA-Z_0-9]*\).*/-[0-9][0-9alphabetcdfgprvSTABLERC._+]*\1.tgz/g" | sort $inv > tmp/esperados.txt
+  grep ".-\[v\]" Contenido.txt | sed -e "s/-\[v\]\([-a-zA-Z_0-9]*\).*/-[0-9][0-9alphabetcdfgpruvSTABLERC._+]*\1.tgz/g" | sort $inv > tmp/esperados.txt
   ne=`(ls $V$VESP-$ARQ/paquetes/ ; ls $V$VESP-$ARQ/sivel/*tgz) | grep -v -f tmp/esperados.txt`;
   if (test "$ne" != "") then {
     echo "Los siguientes paquetes presentes en el directorio $V$VESP-$ARQ/paquetes no están entre los esperados:" | tee -a /var/www/tmp/distrib-adJ.bitacora;
@@ -1266,7 +1266,7 @@ else {
 if (test "$sn" = "s") then {
   echo "s/\[V\]/$V/g"  > tmp/rempCont.sed
   for i in `grep ".-\[v\]" Contenido.txt | sed -e "s/-\[v\]\([-a-zA-Z_0-9]*\).*/-[v]\1/g"`; do
-    n=`echo $i | sed -e "s/-\[v\]\([-a-zA-Z_0-9]*\).*/-[0-9][0-9alphabetcdfgrvSTABLERC._+]*\1.tgz/g"`
+    n=`echo $i | sed -e "s/-\[v\]\([-a-zA-Z_0-9]*\).*/-[0-9][0-9alphabetcdfgruvSTABLERC._+]*\1.tgz/g"`
     d=`(cd $V$VESP-$ARQ/paquetes; ls | grep "^$n"; cd ../sivel; ls | grep "^$n" 2>/dev/null | tail -n 1)`
     e=`echo $d | sed -e 's/.tgz//g'`;
     ic=`echo $i | sed -e 's/\[v\]/\\\\[v\\\\]/g'`;
