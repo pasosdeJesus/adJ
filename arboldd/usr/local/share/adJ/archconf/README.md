@@ -17,20 +17,21 @@ la palabra configuración.
 * En el panel superior derecho se ve el inicio de una sesión típica
   que por omisión presenta un versículo aleatorio (si prefiere puede
   deshabilitarlo en el archivo de configuración `.zshrc`)
-* En el panel inferior izquierdo se presenta instalación de la versión
-  más reciente de una gema en un directorio personal con la función `gemil` 
-  (que usa el directorio personal configurado en `~/.bundle/config`)
 * En el panel inferior derecho se presenta la edición de un código fuente
   en Ruby. Nota que los comentarios están en español y se resaltan
   palabras que no estén en el diccionario (se añaden al diccionario
   con las teclas `zg`).
+* En el panel inferior izquierdo se presenta instalación de la versión
+  más reciente de una gema (i.e un librería del lenguaje Ruby) en un 
+  directorio personal con la función `gemil` (que usa el directorio personal 
+  configurado en `~/.bundle/config`)
 
 
 Aunque puedes emplear estos archivos de configuración en diversos sistemas 
 operativos (por ejemplo en Linux o en Mac OSX), estas instrucciones se
-centran en la distribución adJ del sistema operativo OpenBSD.    
-Para otras plataformas puede que te basten, o puede que prefieras referirte a los
-[dotfiles de Thoughtbot](https://github.com/thoughtbot/dotfiles),
+centran en la distribución adJ del sistema operativo OpenBSD.
+Para otras plataformas puede que te basten, o puede que prefieras referirte a 
+los [dotfiles de Thoughtbot](https://github.com/thoughtbot/dotfiles),
 que fueron la base para estos archivos de configuración.
 
 
@@ -38,7 +39,7 @@ Requerimientos
 --------------
 
 * Usar `zsh` como interprete de ordenes 
-  * Si hace falta instala el paquete con `doas pkg_add zsh` (aunque en 
+  * Si hace falta instala el paquete con `doas pkg_add zsh` (aunque desde
     adJ 6.7 ya se instala por omisión).
   * Si hace falta registra `zsh` como un intérprete de ordenes aceptable con:
   ```
@@ -58,7 +59,7 @@ Requerimientos
     OpenBSD, que es de dominio público.
 * Usar `rcm` para manejar archivos de configuración 
   * Si hace falta instala con `doas pkg_add rcm` (aunque ya viene por
-    omisión en adJ 6.7)
+    omisión desde adJ 6.7)
   * Crea el directorio `~/archconf-local` y allí deja copia de tus archivos
     de configuración, quitandoles el punto inicial y añadiendoles el
     posfijo `.local`, por ejemplo:
@@ -70,7 +71,7 @@ Requerimientos
   * rcm usa licencia BSD de 3 clausulas
 * Usar neovim como editor
   * Si hace falta instala con `doas pkg_add neovim` (aunque ya viene por
-    omisión en adJ 6.7)
+    omisión desde adJ 6.7)
   * Puedes iniciarlo con `nvim` o una vez instales los archivos de 
     configuraicón con `v`
   * Puede leer la configuración de `vim`, pero maneja mejor ratón y 
@@ -340,7 +341,7 @@ Licencia y Créditos
 Estos archconf se basaron en los dotfiles de
 [thoughtbot](https://github.com/thoughtbot) 
 de septiembre de 2020 y mantienen la misma licencia que puede ver en 
-[LICENSE](https://github.com/pasosdeJesus/adJ/blob/ADJ_6_7/arboldd/usr/local/share/adJ/archconf/LICENSE).
+[LICENSE](https://github.com/pasosdeJesus/adJ/blob/ADJ_6_8/arboldd/usr/local/share/adJ/archconf/LICENSE).
 
 Los dotfiles originales dan crédito a varios
 [Contribuyentes](https://github.com/thoughtbot/archconf/contributors),
