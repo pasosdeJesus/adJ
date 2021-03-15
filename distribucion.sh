@@ -963,6 +963,7 @@ if (test "$sn" = "s") then {
   #paquete gvfs
   #paquete libgcrypt
   #paquete mpg123
+  paquete mutt
   paquete oniguruma 
   #paquete pcre2 
   #paquete webkitgtk4

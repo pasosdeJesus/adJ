@@ -1,4 +1,4 @@
-# $OpenBSD: Makefile,v 1.268 2021/02/11 17:08:42 pea Exp $
+# $OpenBSD: Makefile,v 1.271 2021/03/02 15:22:32 sthen Exp $
 
 COMMENT-main=	PostgreSQL RDBMS (client)
 COMMENT-server=	PostgreSQL RDBMS (server)
@@ -9,6 +9,7 @@ COMMENT-pg_upgrade=Support for upgrading PostgreSQL data from previous version
 
 VERSION=	13.2
 PREV_MAJOR=	12
+REVISION=	1
 DISTNAME=	postgresql-${VERSION}
 PKGNAME-main=	postgresql-client-${VERSION}
 PKGNAME-server=	postgresql-server-${VERSION}
@@ -50,10 +51,9 @@ CONFIGURE_STYLE=gnu
 MODULES=	lang/python
 MODPY_RUNDEP=	No
 
-CONFIGURE_ENV=	ac_cv_path_PYTHON=${MODPY_BIN} \
-		ac_cv_search_backtrace_symbols=no \
-		CPPFLAGS="-I${LOCALBASE}/include" \
-		LDFLAGS="-L${LOCALBASE}/lib"
+CONFIGURE_ENV=	CPPFLAGS="-I${LOCALBASE}/include" \
+		LDFLAGS="-L${LOCALBASE}/lib" \
+		PYTHON=${MODPY_BIN}
 
 CONFIGURE_ARGS=	--disable-rpath \
 		--with-openssl=/usr \
@@ -98,8 +98,9 @@ MODGNU_CONFIG_GUESS_DIRS=	${WRKSRC}/config
 ALL_TARGET=	world
 INSTALL_TARGET=	install-world
 
-LIB_DEPENDS-main=	textproc/libxml
-WANTLIB-main=		${WANTLIB} xml2
+LIB_DEPENDS-main=	devel/libexecinfo \
+			textproc/libxml
+WANTLIB-main=		${WANTLIB} execinfo xml2
 
 LIB_DEPENDS-server=	databases/postgresql=${VERSION} \
 			${LIB_DEPENDS-main}
