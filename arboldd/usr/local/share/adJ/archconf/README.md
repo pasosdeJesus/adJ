@@ -68,7 +68,7 @@ Requerimientos
       cp ~/.gitconfig ~/archconf-local/gitconfig.local
 ```
   * En las secciones siguientes verás como usarlo en detalle.
-  * rcm usa licencia BSD de 3 clausulas
+  * `rcm` usa licencia BSD de 3 clausulas
 * Usar neovim como editor
   * Si hace falta instala con `doas pkg_add neovim` (aunque ya viene por
     omisión desde adJ 6.7)
