@@ -1498,12 +1498,11 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 	cat > /home/$uadJ/.fluxbox/menu <<EOF
 
 [begin] (Fluxbox)
-	[exec] (xfe - Archivos) {PATH=\$PATH:/usr/sbin:/usr/local/sbin:/sbin doas /usr/local/bin/xfe}
+	[exec] (xfe - Archivos) {PATH=\$PATH:/usr/sbin:/usr/local/sbin:/sbin /usr/local/bin/xfe}
 	[exec] (xterm+tmux) { xterm -geometry 160x48 -en utf8 -e "TERM=xterm-color /usr/bin/tmux -2 -l" }
 	[exec] (xterm) { xterm -geometry 160x48 -en utf8 -ls }
 	[exec] (chromium) {/usr/local/bin/chrome --disable-gpu --allow-file-access-from-files}
 	[exec] (firefox) {/usr/local/bin/firefox}
-	[exec] (midori) { export \`/usr/local/bin/gnome-keyring-servicio -s\`; /usr/local/bin/midori}
 [submenu] (Espiritualidad)
 	[exec] (xiphos) {/usr/local/bin/xiphos}
 	[exec] (Evangelios de dominio publico) {/usr/local/bin/chrome --disable-gpu /usr/local/share/doc/evangelios_dp/}
