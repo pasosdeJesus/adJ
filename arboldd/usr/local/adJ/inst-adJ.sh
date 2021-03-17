@@ -5,7 +5,7 @@
 
 VER=6.8
 REV=0
-VESP="b1"
+VESP=""
 VERP=68
 
 # Falta /standard/root.hint

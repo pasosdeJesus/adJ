@@ -2,8 +2,8 @@
 Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
 
-### Versión: 6.8b1
-Fecha de publicación: 23/Ene/2020
+### Versión: 6.8
+Fecha de publicación: 23/Mar/2021
 
 Puede ver novedades respecto a OpenBSD en:
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_8/Novedades_OpenBSD.md>
@@ -13,9 +13,10 @@ Puede ver novedades respecto a OpenBSD en:
 Puede ver las diversas versiones publicadas en: 
   <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/>
 
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/AprendiendoDeJesus-6.8b1-amd64.iso> 
-  es imagen en formato ISO para quemar en DVD e instalar por primera vez.
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/6.8b1-amd64/>
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/AprendiendoDeJesus-6.8-amd64.iso> 
+  es imagen en formato ISO para quemar en DVD e instalar por primera vez
+  en modo BIOS Legacy.
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/6.8-amd64/>
   es directorio con el contenido del DVD instalador apropiado para descargar 
   con rsync y actualizar un adJ ya instalado (ver  
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_8/Actualiza.md> )
@@ -23,12 +24,13 @@ Puede ver las diversas versiones publicadas en:
   directorio con versiones recientes de paquetes no incluidos en distribución 
   oficial (pueden no estar firmados y requerir instalación con 
   `pkg_add -D unsigned _paquete_`).
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarollo/AprendiendoDeJesus-6.8b1-amd64.usb> 
-  es imagen para escribir en una memoria USB y arrancar con esta. Una vez 
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarollo/AprendiendoDeJesus-6.8-amd64.usb> 
+  es imagen para escribir en una memoria USB y arrancar con esta bien en
+  modo UEFI o bien en modo BIOS Legacy. Una vez 
   la descargue puede escribirla en una USB ubicada en `/dev/sd2c` 
   (verifique dispositivo con `dmesg` y remplace) con:
 
-       doas dd if=AprendiendoDeJesus-6.8b1-amd64.usb of=/dev/sd2c bs=1M
+       doas dd if=AprendiendoDeJesus-6.8-amd64.usb of=/dev/sd2c bs=1M
 
  Este proceso puede ser demorado, puede ver el progreso con 
 
@@ -36,17 +38,17 @@ Puede ver las diversas versiones publicadas en:
 
  O si desea probarla con qemu para instalar en un disco `virtual.raw`:
 
-       qemu-system-x86_64 -hda virtual.raw -hdb AprendiendoDeJesus-6.8b1-amd64.usb -boot menu=on
+       qemu-system-x86_64 -hda virtual.raw -hdb AprendiendoDeJesus-6.8-amd64.usb -boot menu=on
 
 
-## 2. NOVEDADES RESPECTO A ADJ 6.7 PROVENIENTES DE OPENBSD
+## 2. NOVEDADES RESPECTO A ADJ 6.8 PROVENIENTES DE OPENBSD
 
 ### 2.1 Kernel y Sistema Base
 
 Novedades tomadas de <https://www.openbsd.org/68.html> y de 
 <https://home.nuug.no/~peter/openbsd_and_you_68/#1>
 
-* Aplicados parches de seguridad hasta el 13.Ene.2020 provenientes de 
+* Aplicados parches de seguridad hasta el 12.Mar.2021 provenientes de 
   OpenBSD que incluyen solución a fallas de OpenSMTPD y sysctl
 * Controladores ampliados o mejorados para amd64
 	* Red:
@@ -66,11 +68,10 @@ Novedades tomadas de <https://www.openbsd.org/68.html> y de
   Soporte para touchpad Elantech v1 en `pms`. Mejorado soporte para
   touchpad de varios portatiles Dell Latitude en `imt`.
 
-	
 * Mejoras a herramientas de Red
   * Nuevo protocolo WireGuard para VPNs en kernel (antes había implementación
   en portes) mediante el seudo-dispositivo `wg`.
-  * Mejoras a tcpdump y pppoe 
+  * Mejoras a `tcpdump` y `pppoe`
   * Mejoras a SMP en la pila de red.
 
 * Seguridad
@@ -121,21 +122,23 @@ Novedades tomadas de <https://www.openbsd.org/68.html> y de
 * Postgresql 13.1 tomado de correos a ports-openbsd
 * Veracrypt 13.1 tomado de correos a ports-openbsd
 * Recompilados portes estables más recientes para evitar fallas de seguridad 
-  de: dovecot, oniguruma, ocaml, php
+  de: dovecot, mutt, oniguruma, php
 * Algunos paquetes típicos y su versión: dovecot 2.3.11.3, 
-  chromium 85.0.4183.121
-  firefox 81.0 , libreoffice 7.0.1.2, nginx 1.18.0, mariadb 10.5.5,
-  node 12.16.1, python 3.8.6, neovim 0.4.4, 
+  chromium 85.0.4183.121, firefox 81.0 , libreoffice 7.0.1.2, 
+  nginx 1.18.0, mariadb 10.5.5, node 12.16.1, python 3.8.6, neovim 0.4.4, 
   zsh 5.8p0
 
 
 ## 3. NOVEDADES RESPECTO A ADJ 6.7 PROVENIENTES DE PASOS DE JESÚS
 
 ### 3.1 Instalador y documentación
+
 * Documentación actualizada: 
-	* `basico_adJ`: 
-	* `usuario_adJ`: 
-	* `servidor_adJ`: 
+	* `basico_adJ`: Aumentada Sección 2.3, “Uso de zsh como interprete de ordenes” 
+	* `usuario_adJ`: Actualizada información de modo UEFI y FFS2 en Sección 1,
+    “Sobre la instalación”, Sección 4.3, “Discos duros” y Sección 5,
+    “Instalaciones duales”.
+	* `servidor_adJ`: Mejorada Sección 5.4, “Servidor ldapd”
 
 ### 3.2 Paquetes
 
@@ -143,26 +146,24 @@ Novedades tomadas de <https://www.openbsd.org/68.html> y de
   evangelio de Juan.
 * Compiladas versiones más recientes de ocaml-4.10.2, ocamlbuild y 
   ocaml-camlp4
-* Se mejoran scripts para usar zsh+tmux+neovim: <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_8/arboldd/usr/local/share/adJ/archconf/README.md>
-* Nueva versión 1.0a5 del motor de búsqueda Mt77
 * Se han recompilado los siguientes para aprovechar `xlocale`:
    `glib2`, `libunistring`, `vlc`
 * Retroportados y adaptados de OpenBSD-current 
   * `chromium` x85.0.4183.121 con llave para API de Google de Pasos de Jesús 
      en lugar de OpenBSD
 * Se incluye la versión beta 14 de `sivel2` cuyas novedades con respecto al 
-  beta 12 includo en adJ 6.7 se describen a continuación. Agradecimiento por
-  varias de  las novedades a Luis Alejandro Cruz:
+  beta 12 incluido en adJ 6.7 se describen a continuación. Agradecimiento por
+  algunas de las novedades a Luis Alejandro Cruz:
   * Mejoras en consultas
     * En listado de casos el filtro avanzado, ahora los usuarios autenticados 
       pueden buscar víctimas colectivas.
     * En listado de casos ahora se ven víctimas colectivas y víctimas 
       combatientes en la columna víctimas y se ven tipificaciones colectivas 
       y tipificaciones de combatientes en la columna tipificación.
-    * En listado de casos el filtro avanzado que pemita buscar varios 
+    * En listado de casos el filtro avanzado que permita buscar varios 
       presuntos responsables (así como permite buscar varias categorías
       de violencia).
-    * En listado de casos al usar simultaneamente filtro avanzado y el
+    * En listado de casos al usar simultáneamente filtro avanzado y el
       filtro básico la consulta ahora tiene en cuenta ambos (antes sólo
       tenía en cuenta el filtro básico).
     * API pública `casos.json` ampliada para incluir opcionalmente información 
@@ -194,7 +195,10 @@ Novedades tomadas de <https://www.openbsd.org/68.html> y de
 
 
 ### 3.3 Configuración
-  ... <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_8/arboldd/usr/local/share/adJ/archconf/README.md>
+* Es sencillo emplear como inerprete de ordendes zsh, tmux para
+  tener varias terminales y neovim como editor con archivos de 
+  configuración incluidos en adJ e instrucciones de:  
+  <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_8/arboldd/usr/local/share/adJ/archconf/README.md>
 
 ## 4. FE DE ERRATAS
 
@@ -212,9 +216,9 @@ Novedades tomadas de <https://www.openbsd.org/68.html> y de
 ## 5. SI QUIERE AYUDARNOS
 
 * Agradecemos sus oraciones.
-* Si tiene una cuenta en github por favor pongale una estrella al
+* Si tiene una cuenta en github por favor póngale una estrella al
   repositorio <https://github.com/pasosdeJesus/adJ/>
-* Le invitamos a patronicar nuestro trabajo empleando el botón
+* Le invitamos a patrocinar nuestro trabajo empleando el botón
   Patrocinar (__Sponsor__) de <https://github.com/pasosdeJesus/adJ/>
 * También puede donarnos para recibir una USB para instalar la
   versión más reciente de adJ o alguno de los servicios de Pasos
