@@ -37,7 +37,7 @@ Pasos importantes para publicar versión beta
 		 `pruebas/aplicahasta.sh arboldes/usr/src/14..` 
 
 	3.3 Compilar libc con `doas pruebas/compila-libc.sh` y correr pruebas 
-	    de regresión con `cd /usr/src/lib/libc/regress; doas make`
+	    de regresión con `cd /usr/src/regress/lib/libc/locale/; doas make`
 
 	3.4 Si falla compilación o alguna prueba de regresión hacer búsqueda 
 	    binaria entre parches, iterando desde 3.1 pero en 3.2 ir bajando a 
