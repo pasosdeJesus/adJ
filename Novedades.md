@@ -144,8 +144,8 @@ Novedades tomadas de <https://www.openbsd.org/68.html> y de
 
 * El paquete `evangelios_dp` ahora incluye concordancia Strong del 
   evangelio de Juan.
-* Compiladas versiones más recientes de ocaml-4.10.2, ocamlbuild y 
-  ocaml-camlp4
+* Compiladas versiones más recientes de `ocaml` (4.10.2), `hevea`, 
+  `ocamlbuild` y `ocaml-camlp4`
 * Se han recompilado los siguientes para aprovechar `xlocale`:
    `glib2`, `libunistring`, `vlc`
 * Retroportados y adaptados de OpenBSD-current 
@@ -195,9 +195,9 @@ Novedades tomadas de <https://www.openbsd.org/68.html> y de
 
 
 ### 3.3 Configuración
-* Es sencillo emplear como inerprete de ordendes zsh, tmux para
+* Es sencillo emplear como interprete de ordenes zsh con tmux para
   tener varias terminales y neovim como editor con archivos de 
-  configuración incluidos en adJ e instrucciones de:  
+  configuración incluidos en adJ e instrucciones en:  
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_8/arboldd/usr/local/share/adJ/archconf/README.md>
 
 ## 4. FE DE ERRATAS
