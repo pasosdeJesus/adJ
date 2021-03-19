@@ -53,7 +53,7 @@ Pasos importantes para publicar versión beta
 5. Recompilar paquetes con actualizaciones de seguridad o mejoras
 6. Retroportar paquetes, dejar resultados no incluidos en DVD pero
    útiles en `6.8-extra`
-7. Regenerar en distribución (sin paquetes ni otras compilaciones) con:
+7. Regenerar distribución (sin paquetes ni otras compilaciones) con:
 	```
 	doas ./distribucion.sh
 	```

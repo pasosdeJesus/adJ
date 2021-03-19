@@ -9,7 +9,7 @@ PERMIT_PACKAGE=	Yes
 WANTLIB=		c m
 
 DISTNAME =	hevea-2.35
-REVISION = 	
+REVISION = 1
 MASTER_SITES =	http://para.inria.fr/~maranget/hevea/distri/
 
 DISTFILES=	${DISTNAME}${EXTRACT_SUFX} ${DISTNAME}-manual${EXTRACT_SUFX}

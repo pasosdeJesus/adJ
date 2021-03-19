@@ -5,6 +5,7 @@ CATEGORIES =	lang
 
 EPOCH =		0
 V =            	4.10+1
+REVISION=1
 GH_ACCOUNT =	ocaml
 GH_PROJECT =	camlp4
 GH_TAGNAME =	${V}
