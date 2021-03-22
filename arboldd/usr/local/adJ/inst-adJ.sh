@@ -1504,7 +1504,7 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 	[exec] (chromium) {/usr/local/bin/chrome --disable-gpu --allow-file-access-from-files}
 	[exec] (firefox) {/usr/local/bin/firefox}
 [submenu] (Espiritualidad)
-	[exec] (xiphos) {/usr/local/bin/xiphos}
+	[exec] (bibletime) {/usr/local/bin/bibletime}
 	[exec] (Evangelios de dominio publico) {/usr/local/bin/chrome --disable-gpu /usr/local/share/doc/evangelios_dp/}
 [end]
 [submenu] (Dispositivos)

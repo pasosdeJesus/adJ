@@ -109,7 +109,7 @@ Con respecto a OpenBSD 6.8 las novedades son:
 	* Unicos en adJ 
 		* emulators/realboy lang/ocaml-labltk net/xmrig
  		sysutils/ganglia textproc/biblesync
-		textproc/sword textproc/xiphos database/pear-DB
+		textproc/sword textproc/bibletime database/pear-DB
 		database/pear-MDB2 database/pear-DB_DataObject
 		www/pear-HTML-Common
 		www/pear-HTML-Common2 www/pear-HTML-CSS 
