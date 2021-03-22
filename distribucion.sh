@@ -796,6 +796,11 @@ if (test "$sn" = "s") then {
 
   # Modificados para posibilitar compilación
   # Deben estar en mystuff
+  
+  paquete textproc/sword
+  paquete textproc/po4a
+  paquete textproc/bibletime
+  exit 1
 
   #paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs postgresql-pg_upgrade"
   #exit 1

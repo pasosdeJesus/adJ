@@ -7,7 +7,7 @@ COMMENT=	"Open source Bible study tool"
 
 GH_ACCOUNT = bibletime
 GH_PROJECT = bibletime
-GH_TAGNAME = v2.11.2
+GH_TAGNAME = v3.0
 #SUBST_VAR += GH_TAGNAME
 
 #V=		4.0.5
@@ -33,7 +33,8 @@ COMPILER = 	base-clang #ports-gcc
 
 BUILD_DEPENDS += devel/cmake \
 		 textproc/sword \
-		 textproc/clucene
+		 textproc/clucene \
+		 devel/gettext,-tools
 
 RUN_DEPENDS = 	x11/qt5/qtwebkit \
 		textproc/sword 
@@ -52,7 +53,7 @@ LIB_DEPENDS += 	x11/qt5/qtbase \
 #CONFIGURE_ENV+= CPPFLAGS="-I${LOCALBASE}/include -I/usr/local/include/ossp/ -L/usr/local/lib" 
 #MAKE_ENV += LD_PRELOAD=/usr/local/lib/python2.7/site-packages/libxml2mod.so
 
-WANTLIB +=	sword clucene-core Qt5Core
+WANTLIB +=	clucene-core Qt5Core
 
 
 
@@ -64,7 +65,7 @@ WANTLIB +=	sword clucene-core Qt5Core
 WANTLIB +=	X11 c m ssl
 
 CXXFLAGS += 	-std=c++11
-CONFIGURE_ARGS +=	-DCMAKE_PREFIX_PATH=${LOCALBASE}/lib/qt5/cmake/
+CONFIGURE_ARGS +=	-DCMAKE_PREFIX_PATH=${LOCALBASE}/lib/qt5/cmake/ -DBUILD_HANDBOOK_PDF=false -DBUILD_HOWTO_PDF=false
 
 
 # compilacion con waf de py-cairo

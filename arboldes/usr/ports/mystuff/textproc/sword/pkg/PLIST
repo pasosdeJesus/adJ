@@ -202,10 +202,10 @@ include/sword/ztext.h
 include/sword/ztext4.h
 include/sword/zverse.h
 include/sword/zverse4.h
-lib/libsword-1.8.0.so
-lib/libsword.a
+@so lib/libsword-1.8.1.so
+@static-lib lib/libsword.a
 lib/libsword.la
-lib/libsword.so
+@so lib/libsword.so
 lib/pkgconfig/sword.pc
 share/sword/
 share/sword/locales.d/
