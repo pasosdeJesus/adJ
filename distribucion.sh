@@ -797,10 +797,6 @@ if (test "$sn" = "s") then {
   # Modificados para posibilitar compilación
   # Deben estar en mystuff
 
-  #paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs postgresql-pg_upgrade"
-  #exit 1
-  #paquete postgresql-previous 
-
   # Todo lo de perl tuvo que recompilarse
   # evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
   # Si por ejemplo es:
@@ -932,6 +928,12 @@ if (test "$sn" = "s") then {
   paquete p5-namespace-clean
   paquete p5-strictures
 
+  paquete p5-Locale-gettext
+  paquete p5-MIME-Charset
+  paquete p5-Module-Build
+  paquete textproc/p5-SGMLSpm
+  paquete p5-Unicode-LineBreak
+
   paquete p5-Mail-SpamAssassin
 
   ####
@@ -952,6 +954,8 @@ if (test "$sn" = "s") then {
   paquete ocaml paquetes "ocaml"
   paquete ocamlbuild 
   paquete ocaml-camlp4
+  paquete findlib
+  paquete dune
 
   ####
   # Recompilados para cerrar fallas de portes actualizados (estable)
@@ -1035,6 +1039,7 @@ if (test "$sn" = "s") then {
   paquete textproc/sword
   paquete textproc/bibletime
   paquete x11/fbdesk
+  paquete textproc/po4a
 
   ####
   # Unicos en adJ liderados por pdJ

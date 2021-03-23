@@ -145,7 +145,9 @@ Novedades tomadas de <https://www.openbsd.org/68.html> y de
 * El paquete `evangelios_dp` ahora incluye concordancia Strong del 
   evangelio de Juan.
 * Compiladas versiones más recientes de `ocaml` (4.10.2), `hevea`, 
-  `ocamlbuild` y `ocaml-camlp4`
+  `ocamlbuild`, `ocaml-camlp4`, `ocamlfind` y `dune`
+* Nuevo paquete `po4a` y otros paquetes perl de los que depende.
+  Está siendo bastante usado para traducir documentación.
 * Se han recompilado los siguientes para aprovechar `xlocale`:
    `glib2`, `libunistring`, `vlc`
 * Retroportados y adaptados de OpenBSD-current 
