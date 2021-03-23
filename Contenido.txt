@@ -225,6 +225,7 @@ docbook-[v]		Definiciones XML/SGML de documentación técnica
 docbook-dsssl-[v]	Hojas de estilo DSSSL para DocBook
 double-conversion-[v]	Rutinas de conversión binario-decimal y viceversa
 dtc-[v]		Compilador de árboles de dispositivos
+dune-[v]		Sistema para construir en OCaml
 dvi2tty-[v]		Convierte archivos dvi a texto plano
 e2fsprogs-[v]	Utilidades para manejar sistemas de archivos ext2
 enca-[v]		Detecta codificación de caracteres de textos planos
@@ -237,6 +238,7 @@ femail-chroot-[v]	Cliente simple de SMTP para Apache en jaula chroot
 ffcall-[v]		Librería para llamado a funciones foráneas
 fftw3-[v]		Rutinas en C para Transformada Discreta de Fourier
 fftw3-common-[v]	Archivos comunes para paquetes fftw3
+findlib-[v]		Administrador de paquetes para OCaml
 flac-[v]		Codec abierto de audio sin perdidas
 flock-[v]	Administrador de flock para archivos de ordenes 
 foomatic-db-engine-[v]	Generador de PPDs de Foomatic
@@ -528,6 +530,7 @@ p5-List-MoreUtils-XS-[v]	Compilado de funciones de List::MoreUtils
 p5-List-SomeUtils-[v]	Provee lo que le falta a List::Util
 p5-List-SomeUtils-XS-[v]	Compilado de funciones de List::SomeUtils
 p5-List-UtilsBy-[v]	Funciones para listas de orden superior
+p5-Locale-gettext-[v]	Interfaz a a función de internacionalización gettext()
 p5-Mail-AuthenticationResults-[v]	Encabezados
 p5-Mail-DKIM-[v]	Implementación para firma de mensajes DKIM y DomanKeys
 p5-Mail-SPF-[v]	Implementación OO de Sender Policy Framerwork
@@ -536,7 +539,9 @@ p5-Math-Base-Convert-[v]	Conversor rápido de una base a otra
 p5-Math-Int64-[v]	Manipula enteros de 64 bits en Perl
 p5-MaxMind-DB-Common-[v]	Compartido por módulos reader y writer
 p5-MaxMind-DB-Reader-[v]	Lee bases DB y busca direcciones IP
+p5-MIME-Charset-[v]	Información del juego de caracteres para MIME
 p5-MLDBM-[v]		Almacena estructura de hash multi nivel en uno solo
+p5-Module-Build-[v]	Construye e instala módulos Perl
 p5-Module-Implementation-[v]	Carga una o muchos módulos alternos
 p5-Module-Runtime-[v]	Manejo de módulos en tiempo de ejecución
 p5-Moo-[v]	Orientación a objetos minimalista (compat. Moose)
@@ -571,6 +576,7 @@ p5-Sort-Naturally-[v]	Ordenamiento lexicográfico con numérico
 p5-Specio-[v]	Restricciones de tipos y coerciones para Perl
 p5-SQL-Statement-[v]	Procesamiento y reconocimiento SQL
 p5-strictures-[v]	Vuelve fatales las advertencias
+p5-SGMLSpm-[v]		Clase para usar con los reconocedores SGMLS y NSGMLS
 p5-Sub-Exporter-[v]	Exportador con esteroídes
 p5-Sub-Exporter-Progressive-[v]	Solo usa Sub::Exporter si lo necesita
 p5-Sub-Identify-[v]	Recupera nombres de referencias a códigos
@@ -581,6 +587,7 @@ p5-Task-Weaken-[v]	Asegura que una plataforma tenga soporte weaken
 p5-Throwable-[v]	Rol para clases que pueden lanzarse
 p5-Time-TimeDate-[v]	Librería para formatear y reconocer fechas y tiempo
 p5-Try-Tiny-[v]	try/catch mínimo que preserva $@
+p5-Unicode-LineBreak-[v]	Algoritmo Unicode para dividir una línea
 p5-URI-[v]		Librería para reconocer URIs
 p5-Variable-Magic-[v]	Asocia magia definida por usuario a variables
 p5-WWW-RobotRules-[v]	Base de datos de permisos de robots.txt
@@ -602,6 +609,7 @@ php-pgsql-[v]	Uso de PostgreSQL desde PHP
 php-zip-[v]		Funciones zip para PHP
 pinentry-[v]	Dialogo (ncurses) para solicitar clave o PIN	
 png-[v]		Librería para manipular imágenes PNG
+po4a-[v]		Traducción de documentación. PO para todo.
 polkit-[v]		PolicyKit Agente de autenticación para Qt4
 poppler-[v]		Librería para presentar PDF
 poppler-data-[v]	Archivos de codificación para poppler
