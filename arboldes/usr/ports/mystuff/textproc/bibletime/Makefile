@@ -14,7 +14,7 @@ GH_TAGNAME = v2.11.2
 #DISTNAME=	xiphos-${V}
 CATEGORIES=	textproc misc
 #PKGNAME=	${DISTNAME}
-REVISION=	
+REVISION=	1
 HOMEPAGE=	http://bibletime.info/
 MAINTAINER=	Vladimir Tamara Patino <vtamara@pasosdejesus.org>
 
@@ -52,7 +52,7 @@ LIB_DEPENDS += 	x11/qt5/qtbase \
 #CONFIGURE_ENV+= CPPFLAGS="-I${LOCALBASE}/include -I/usr/local/include/ossp/ -L/usr/local/lib" 
 #MAKE_ENV += LD_PRELOAD=/usr/local/lib/python2.7/site-packages/libxml2mod.so
 
-WANTLIB +=	sword clucene-core Qt5Core
+WANTLIB +=	clucene-core Qt5Core
 
 
 
