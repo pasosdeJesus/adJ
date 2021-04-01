@@ -112,8 +112,8 @@ Novedades tomadas de <https://www.openbsd.org/68.html> y de
 ### 2.2 Paquetes 
 
 * Ruby 3.0.0 retroportado de current.  Ver novedades completas en 
-  <https://www.ruby-lang.org/es/news/2020/12/25/ruby-3-0-0-released/>, unas
-  que nos parecen destacadas:
+  <https://www.ruby-lang.org/es/news/2020/12/25/ruby-3-0-0-released/> y un
+  poco más explicadas en <https://www.ruby3.dev/>. Destacamos:
   * Es más rápido que Ruby 2, con algunas cargas de trabajo que ejecuten 
     muchas veces unos pocos métodos.
   * Nuevos mecanismos de concurrencia: Ractor y planificador de fibras.
