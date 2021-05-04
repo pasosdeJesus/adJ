@@ -214,7 +214,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/co
  
  /* Current LC_COLLATE */
 -struct __collate __global_collate;
-+struct xlocale_collate __xlocale_global_collate;
++extern struct xlocale_collate __xlocale_global_collate;
  
  __BEGIN_DECLS
 -wchar_t *__collate_substitute_w(struct __collate *table, const wchar_t *s);
