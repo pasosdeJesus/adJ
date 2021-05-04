@@ -2836,70 +2836,7 @@ diff -ruN src62-orig/lib/libc/locale/iswctype_l.c src/lib/libc/locale/iswctype_l
  	return (rt & f) != 0;
  }
  
-@@ -84,78 +90,133 @@
- {
- 	return __isctype_wl(c, _CTYPE_A|_CTYPE_D, locale);
- }
-+DEF_STRONG(iswalnum_l);
- 
- int
- iswalpha_l(wint_t c, locale_t locale)
- {
- 	return __isctype_wl(c, _CTYPE_A, locale);
- }
-+DEF_STRONG(iswalpha_l);
- 
- int
- iswblank_l(wint_t c, locale_t locale)
- {
- 	return __isctype_wl(c, _CTYPE_B, locale);
- }
-+DEF_STRONG(iswblank_l);
- 
- int
- iswcntrl_l(wint_t c, locale_t locale)
- {
- 	return __isctype_wl(c, _CTYPE_C, locale);
- }
-+DEF_STRONG(iswcntrl_l);
- 
- int
- iswdigit_l(wint_t c, locale_t locale)
- {
- 	return __isctype_wl(c, _CTYPE_D, locale);
- }
-+DEF_STRONG(iswdigit_l);
- 
- int
- iswgraph_l(wint_t c, locale_t locale)
- {
- 	return __isctype_wl(c, _CTYPE_G, locale);
- }
-+DEF_STRONG(iswgraph_l);
- 
- int
- iswlower_l(wint_t c, locale_t locale)
- {
- 	return __isctype_wl(c, _CTYPE_L, locale);
- }
-+DEF_STRONG(iswlower_l);
- 
- int
- iswprint_l(wint_t c, locale_t locale)
- {
- 	return __isctype_wl(c, _CTYPE_R, locale);
- }
-+DEF_STRONG(iswprint_l);
- 
- int
- iswpunct_l(wint_t c, locale_t locale)
- {
- 	return __isctype_wl(c, _CTYPE_P, locale);
- }
-+DEF_STRONG(iswpunct_l);
- 
- int
- iswspace_l(wint_t c, locale_t locale)
+@@ -138,12 +144,50 @@
  {
  	return __isctype_wl(c, _CTYPE_S, locale);
  }
@@ -2910,42 +2847,36 @@ diff -ruN src62-orig/lib/libc/locale/iswctype_l.c src/lib/libc/locale/iswctype_l
 +{
 +	return __isctype_wl(__c, _CTYPE_X, locale);
 +}
-+DEF_STRONG(iswhexnumber_l);
 +
 +int
 +iswideogram_l(wint_t __c, locale_t locale)
 +{
 +	return __isctype_wl(__c, _CTYPE_I, locale);
 +}
-+DEF_STRONG(iswideogram_l);
 +
 +int
 +iswnumber_l(wint_t __c, locale_t locale)
 +{
 +	return __isctype_wl(__c, _CTYPE_D, locale);
 +}
-+DEF_STRONG(iswnumber_l);
 +
 +int
 +iswphonogram_l(wint_t __c, locale_t locale)
 +{
 +	return __isctype_wl(__c, _CTYPE_Q, locale);
 +}
-+DEF_STRONG(iswphonogram_l);
 +
 +int
 +iswrune_l(wint_t __c, locale_t locale)
 +{
 +	return __isctype_wl(__c, 0xFFFFFF00L, locale);
 +}
-+DEF_STRONG(iswrune_l);
 +
 +int
 +iswspecial_l(wint_t __c, locale_t locale)
 +{
 +	return __isctype_wl(__c, _CTYPE_T, locale);
 +}
-+DEF_STRONG(iswspecial_l);
 +
 +int
  iswupper_l(wint_t c, locale_t locale)
@@ -2956,49 +2887,10 @@ diff -ruN src62-orig/lib/libc/locale/iswctype_l.c src/lib/libc/locale/iswctype_l
  
  int
  iswxdigit_l(wint_t c, locale_t locale)
- {
- 	return __isctype_wl(c, _CTYPE_X, locale);
- }
-+DEF_STRONG(iswxdigit_l);
- 
- wint_t
- towupper_l(wint_t c, locale_t locale)
- {
- 	return _towctrans(c, _wctrans_upper(__runelocale(locale)));
- }
-+DEF_STRONG(towupper_l);
- 
- wint_t
- towlower_l(wint_t c, locale_t locale)
-@@ -180,6 +241,7 @@
- 
- 	return NULL;
- }
-+DEF_STRONG(wctrans_l);
- 
- /*
-  * POSIX says that the behaviour is unspecified if the LC_CTYPE in
-@@ -193,6 +255,7 @@
- {
- 	return towctrans(c, desc);
- }
-+DEF_STRONG(towctrans_l);
- 
- wctype_t
- wctype_l(const char *property, locale_t locale)
-@@ -206,6 +269,7 @@
- 			return &rl->rl_wctype[i];
- 	return NULL;
- }
-+DEF_STRONG(wctype_l);
- 
- int
- iswctype_l(wint_t c, wctype_t charclass, locale_t locale)
-@@ -215,3 +279,15 @@
+@@ -215,3 +259,14 @@
  
  	return __isctype_wl(c, ((_WCTypeEntry *)charclass)->te_mask, locale);
  }
-+DEF_STRONG(iswctype_l);
 +
 +int wcwidth_l(wchar_t c, locale_t locale)
 +{
@@ -3109,7 +3001,7 @@ diff -ruN src62-orig/include/ctype.h src/include/ctype.h
 diff -ruN src62-orig/lib/libc/locale/isctype_l.c src/lib/libc/locale/isctype_l.c
 --- src62-orig/lib/libc/locale/isctype_l.c	Fri Nov 24 14:24:59 2017
 +++ src/lib/libc/locale/isctype_l.c	Fri Nov 24 15:47:17 2017
-@@ -22,101 +22,173 @@
+@@ -22,101 +22,172 @@
  
  #define	_ANSI_LIBRARY
  #include <ctype.h>
@@ -3287,7 +3179,6 @@ diff -ruN src62-orig/lib/libc/locale/isctype_l.c src/lib/libc/locale/isctype_l.c
 +	return (__c < 0 || __c >= __ct->__mb_sb_limit) ? __c :
 +		__runes->rl_mapupper[__c];
  }
-+DEF_STRONG(toupper_l);
 +
 +#undef ishexnumber_l
 +__inline int ishexnumber_l(int __c, locale_t __l) 

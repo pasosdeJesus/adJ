@@ -2,13 +2,13 @@
 # Variables de configuración para generar distribución Aprendiendo de Jesús
 # Dominio público. 2020. vtamara@pasosdeJesus.org
 
-V=6.7
-VESP=""
+V=6.9
+VESP="a1"
 # Versión que se está desarrollando
 
 VPKGPATH=$V
 VP=`echo $V | sed -e "s/[.]//g"`
-VP=67
+VP=69
 VU=`echo $V | sed -e "s/[.]/_/g"`
 VNUM=`echo $V | sed -e "s/\.//g"`
 VNUMS=`expr $VNUM + 1`
@@ -28,6 +28,7 @@ PKG_PATH=http://ftp3.usa.openbsd.org/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
 PKG_PATH=http://openbsd.mirrors.pair.com/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
 PKG_PATH=http://mirror.esc7.net/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
 PKG_PATH=http://ftp4.usa.openbsd.org/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
+PKG_PATH=http://cdn.openbsd.org/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
 PKG_PATH=http://adJ.pasosdeJesus.org/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
 
 #Repositorio de paquetes usado --el último es el usado

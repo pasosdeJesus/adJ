@@ -155,21 +155,18 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src54-mon/lib/libc/locale/setlocale.c src
 diff -ruN src55-orig/lib/libc/stdio/printf.3 src/lib/libc/stdio/printf.3
 --- src55-orig/lib/libc/stdio/printf.3	Sun Oct  6 20:04:49 2013
 +++ src/lib/libc/stdio/printf.3	Mon Nov 11 21:11:57 2013
-@@ -183,6 +183,13 @@
- Zero or more of the following flags:
- .Bl -hyphen
- .It
-+An apostrophe
-+.Sq Cm '
-+character
+@@ -192,6 +192,10 @@
+ .It Ar flags
+ Zero or more of the following flag characters can be given:
+ .Bl -tag -width 11n
++.It Cm ' Pq apostrophe
 +specifying thousands' grouping of the integer part of a decimal conversion
 +(%i, %d, %u, %f, %F, %g, %G).  The current locale is used to separate in
 +groups and to use a thousands' separator.
-+.It
- A hash
- .Sq Cm #
- character
-@@ -759,7 +766,8 @@
+ .It Cm # Pq hash
+ Use an alternate form for the output.
+ The effect differs depending on the conversion specifier.
+@@ -902,7 +906,8 @@
  .Sh SEE ALSO
  .Xr printf 1 ,
  .Xr scanf 3 ,

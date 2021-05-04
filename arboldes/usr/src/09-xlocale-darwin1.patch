@@ -148,16 +148,17 @@ diff -u src-ant/lib/libc/stdio/printf.3 src/lib/libc/stdio/printf.3
  effectively assume an infinite
  .Fa size ;
  their use is not recommended.
-@@ -184,7 +239,7 @@
- character
+@@ -195,7 +250,8 @@
+ .It Cm ' Pq apostrophe
  specifying thousands' grouping of the integer part of a decimal conversion
  (%i, %d, %u, %f, %F, %g, %G).  The current locale is used to separate in
 -groups and to use a thousands' separator.
-+groups and to use a thousands' separator, and in the case of functions with postfix "_l" the given locale is used.
- .It
- A hash
- .Sq Cm #
-@@ -772,6 +827,7 @@
++groups and to use a thousands' separator, and in the case of functions with 
++postfix "_l" the given locale is used.
+ .It Cm # Pq hash
+ Use an alternate form for the output.
+ The effect differs depending on the conversion specifier.
+@@ -908,6 +964,7 @@
  .Xr scanf 3 ,
  .Xr wprintf 3 ,
  .Xr localeconv 3
@@ -165,7 +166,7 @@ diff -u src-ant/lib/libc/stdio/printf.3 src/lib/libc/stdio/printf.3
  .Sh STANDARDS
  The
  .Fn fprintf ,
-@@ -791,6 +847,7 @@
+@@ -927,6 +984,7 @@
  .Fn vdprintf
  functions conform to
  .St -p1003.1-2008 .

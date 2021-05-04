@@ -1,20 +1,16 @@
---- src55-orig/gnu/usr.bin/perl/Makefile.bsd-wrapper	Fri Oct 18 09:21:01 2013
-+++ src/gnu/usr.bin/perl/Makefile.bsd-wrapper	Thu Apr  3 10:05:27 2014
-@@ -15,7 +15,7 @@
- CFLAGS+= -fno-strict-aliasing
- CFLAGS+= -fno-delete-null-pointer-checks
+diff -ruN src68-orig/gnu/usr.bin/perl/hints/openbsd.sh src/gnu/usr.bin/perl/hints/openbsd.sh
+--- src68-orig/gnu/usr.bin/perl/hints/openbsd.sh	Fri Oct  9 12:39:14 2020
++++ src/gnu/usr.bin/perl/hints/openbsd.sh	Thu Oct 22 10:09:26 2020
+@@ -187,12 +187,4 @@
+ 	;;
+ esac
  
--CONFIGURE_ARGS= -dsE -Dopenbsd_distribution=defined -Dccflags='-DNO_LOCALE_NUMERIC -DNO_LOCALE_COLLATE'
-+CONFIGURE_ARGS= -dsE -Dopenbsd_distribution=defined -Dccflags=''
- 
- .if !exists(${.OBJDIR}/config.over)
- CONFIGURE_ARGS+= -Dmksymlinks
-@@ -44,7 +44,7 @@
- 
- # Arguments passed to Configure...
- 
--CPPFLAGS+= -DPERL_CORE -DNO_LOCALE_NUMERIC -DNO_LOCALE_COLLATE -DBIG_TIME -I.
-+CPPFLAGS+= -DPERL_CORE -DBIG_TIME -I.
- 
- .if defined (INSTALL_STRIP) && ${INSTALL_STRIP} == "-s"
- STRIPFLAGS='-s'
+-# openbsd has a problem regarding newlocale()
+-# https://marc.info/?l=openbsd-bugs&m=155364568608759&w=2
+-# which is being fixed.  In the meantime, forbid POSIX 2008 locales
+-d_newlocale="$undef"
+-
+-# OpenBSD's locale support is not that complete yet
+-ccflags="-DNO_LOCALE_NUMERIC -DNO_LOCALE_COLLATE $ccflags"
+-
+ # end

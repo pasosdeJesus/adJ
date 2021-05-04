@@ -1,10 +1,10 @@
-$OpenBSD: patch-content_browser_renderer_host_render_process_host_impl_cc,v 1.31 2020/04/10 18:51:31 robert Exp $
+$OpenBSD: patch-content_browser_renderer_host_render_process_host_impl_cc,v 1.34 2020/09/22 11:47:41 robert Exp $
 
 Index: content/browser/renderer_host/render_process_host_impl.cc
 --- content/browser/renderer_host/render_process_host_impl.cc.orig
 +++ content/browser/renderer_host/render_process_host_impl.cc
-@@ -241,7 +241,7 @@
- #include "content/browser/gpu/gpu_data_manager_impl.h"
+@@ -239,7 +239,7 @@
+ #include "media/audio/android/audio_manager_android.h"
  #endif
  
 -#if defined(OS_LINUX)
@@ -12,7 +12,7 @@ Index: content/browser/renderer_host/render_process_host_impl.cc
  #include <sys/resource.h>
  #include <sys/time.h>
  
-@@ -1176,7 +1176,7 @@ static constexpr size_t kUnknownPlatformProcessLimit =
+@@ -1223,7 +1223,7 @@ static constexpr size_t kUnknownPlatformProcessLimit =
  // to indicate failure and std::numeric_limits<size_t>::max() to indicate
  // unlimited.
  size_t GetPlatformProcessLimit() {
@@ -21,7 +21,7 @@ Index: content/browser/renderer_host/render_process_host_impl.cc
    struct rlimit limit;
    if (getrlimit(RLIMIT_NPROC, &limit) != 0)
      return kUnknownPlatformProcessLimit;
-@@ -1187,7 +1187,7 @@ size_t GetPlatformProcessLimit() {
+@@ -1234,7 +1234,7 @@ size_t GetPlatformProcessLimit() {
  #else
    // TODO(https://crbug.com/104689): Implement on other platforms.
    return kUnknownPlatformProcessLimit;
@@ -30,7 +30,7 @@ Index: content/browser/renderer_host/render_process_host_impl.cc
  }
  #endif  // !defined(OS_ANDROID) && !defined(OS_CHROMEOS)
  
-@@ -1256,7 +1256,7 @@ class RenderProcessHostImpl::IOThreadHostImpl
+@@ -1328,7 +1328,7 @@ class RenderProcessHostImpl::IOThreadHostImpl
          return;
      }
  
@@ -39,11 +39,20 @@ Index: content/browser/renderer_host/render_process_host_impl.cc
      if (auto font_receiver = receiver.As<font_service::mojom::FontService>()) {
        ConnectToFontService(std::move(font_receiver));
        return;
-@@ -3115,6 +3115,7 @@ void RenderProcessHostImpl::PropagateBrowserCommandLin
+@@ -3271,7 +3271,7 @@ void RenderProcessHostImpl::PropagateBrowserCommandLin
+     service_manager::switches::kDisableInProcessStackTraces,
+     service_manager::switches::kDisableSeccompFilterSandbox,
+     service_manager::switches::kNoSandbox,
+-#if defined(OS_LINUX) && !defined(OS_CHROMEOS)
++#if (defined(OS_LINUX) && !defined(OS_CHROMEOS)) || defined(OS_BSD)
+     switches::kDisableDevShmUsage,
+ #endif
+ #if defined(OS_MACOSX)
+@@ -3316,6 +3316,7 @@ void RenderProcessHostImpl::PropagateBrowserCommandLin
      switches::kDisableThreadedScrolling,
      switches::kDisableTouchAdjustment,
      switches::kDisableTouchDragDrop,
 +    switches::kDisableUnveil,
      switches::kDisableV8IdleTasks,
+     switches::kDisableVideoCaptureUseGpuMemoryBuffer,
      switches::kDisableWebGLImageChromium,
-     switches::kDomAutomationController,

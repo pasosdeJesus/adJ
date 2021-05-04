@@ -3,10 +3,10 @@
 # Dominio público de acuerdo a legislación colombiana. http://www.pasosdejesus.org/dominio_publico_colombia.html. 
 # 2015. vtamara@pasosdeJesus.org
 
-VER=6.7
+VER=6.9
 REV=0
-VESP=""
-VERP=67
+VESP="a1"
+VERP=69
 
 # Falta /standard/root.hint
 
@@ -1351,6 +1351,17 @@ if (test -f /usr/libdata/perl5/Math/BigInt/CalcEmu.pm) then {
 	rm -f /dev/mixer*
 } fi;
 
+if (test -f /usr/lib/libperl.a) then {
+  vac="$vac 6.7 a 6.8";
+  echo "Aplicando actualizaciones de 6.7 a 6.8" >> /var/www/tmp/inst-adJ.bitacora;
+  chmod 600 /etc/npppd/npppd.conf
+  rm -f /usr/lib/libperl.a
+  rm /usr/X11R6/lib/libxkbui.* \
+    /usr/X11R6/lib/pkgconfig/xkbui.pc \
+    /usr/X11R6/include/X11/extensions/XKBui.h
+
+} fi;
+
 
 
 if  (test "$vac" != "") then {
@@ -1487,14 +1498,13 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 	cat > /home/$uadJ/.fluxbox/menu <<EOF
 
 [begin] (Fluxbox)
-	[exec] (xfe - Archivos) {PATH=\$PATH:/usr/sbin:/usr/local/sbin:/sbin doas /usr/local/bin/xfe}
+	[exec] (xfe - Archivos) {PATH=\$PATH:/usr/sbin:/usr/local/sbin:/sbin /usr/local/bin/xfe}
 	[exec] (xterm+tmux) { xterm -geometry 160x48 -en utf8 -e "TERM=xterm-color /usr/bin/tmux -2 -l" }
 	[exec] (xterm) { xterm -geometry 160x48 -en utf8 -ls }
 	[exec] (chromium) {/usr/local/bin/chrome --disable-gpu --allow-file-access-from-files}
 	[exec] (firefox) {/usr/local/bin/firefox}
-	[exec] (midori) { export \`/usr/local/bin/gnome-keyring-servicio -s\`; /usr/local/bin/midori}
 [submenu] (Espiritualidad)
-	[exec] (xiphos) {/usr/local/bin/xiphos}
+	[exec] (bibletime) {/usr/local/bin/bibletime}
 	[exec] (Evangelios de dominio publico) {/usr/local/bin/chrome --disable-gpu /usr/local/share/doc/evangelios_dp/}
 [end]
 [submenu] (Dispositivos)
@@ -2067,7 +2077,18 @@ EOF
 w
 q
 EOF
-	echo "   Actualizando versión en PKG_PATH..." >> /var/www/tmp/inst-adJ.bitacora;
+	echo "   Actualizando versión en PKG_PATH de /home/$uadJ/.profile" >> /var/www/tmp/inst-adJ.bitacora;
+} fi;
+
+grep "PKG_PATH" /home/$uadJ/.zshrc> /dev/null
+if (test -f /home/$uadJ/.zshrc -a "$?" != "0") then {
+} else {
+	ed /home/$uadJ/.zshrc >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
+,s/\(PKG_PATH=.*\)[0-9][.][0-9]/\1$ACVER/g
+w
+q
+EOF
+	echo "   Actualizando versión en PKG_PATH de /home/$uadJ/.zshrc" >> /var/www/tmp/inst-adJ.bitacora;
 } fi;
 
 echo "* Configurar LANG en script de inicio de cuenta $uadJ" >> /var/www/tmp/inst-adJ.bitacora;
@@ -2919,7 +2940,7 @@ EOF
 	chown $uadJ:$uadJ /home/$uadJ/.irbrc
 } fi;
 
-VRUBY=2.7
+VRUBY=3.0
 VRUBYSP=`echo $VRUBY | sed -e "s/\.//g"`
 echo "* Configurar ruby-$VRUBY" >> /var/www/tmp/inst-adJ.bitacora;
 uruby=$uadJ
@@ -2949,12 +2970,15 @@ if (test -f "/usr/local/bin/ruby$VRUBYSP") then {
 	ln -sf /usr/local/bin/ruby$VRUBYSP /usr/local/bin/ruby
 	ln -sf /usr/local/bin/erb$VRUBYSP /usr/local/bin/erb
 	ln -sf /usr/local/bin/irb$VRUBYSP /usr/local/bin/irb
+	ln -sf /usr/local/bin/rdoc$VRUBYSP /usr/local/bin/racc
 	ln -sf /usr/local/bin/rdoc$VRUBYSP /usr/local/bin/rdoc
+	ln -sf /usr/local/bin/rdoc$VRUBYSP /usr/local/bin/rbs
 	ln -sf /usr/local/bin/ri$VRUBYSP /usr/local/bin/ri
 	ln -sf /usr/local/bin/rake$VRUBYSP /usr/local/bin/rake
 	ln -sf /usr/local/bin/gem$VRUBYSP /usr/local/bin/gem
 	ln -sf /usr/local/bin/bundle$VRUBYSP /usr/local/bin/bundle
 	ln -sf /usr/local/bin/bundler$VRUBYSP /usr/local/bin/bundler
+	ln -sf /usr/local/bin/typeprof$VRUBYSP /usr/local/bin/typeprof
 } fi;
 
 

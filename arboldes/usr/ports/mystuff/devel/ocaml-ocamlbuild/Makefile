@@ -1,19 +1,17 @@
-# $OpenBSD: Makefile,v 1.2 2016/07/06 21:31:53 sthen Exp $
+# $OpenBSD: Makefile,v 1.10 2020/06/09 17:34:13 chrisz Exp $
 
 COMMENT =	ocamlbuild
 CATEGORIES =	devel
 
-V =		0.9.2
 GH_ACCOUNT =	ocaml
 GH_PROJECT =	ocamlbuild
-GH_TAGNAME =	${V}
-DISTNAME =	${GH_PROJECT}-${V}
-REVISION =	3
+GH_TAGNAME =	0.14.0
+REVISION =	4
 
 # LGPLv2.1+
-PERMIT_PACKAGE_CDROM =	Yes
+PERMIT_PACKAGE =	Yes
 
-WANTLIB += c m
+WANTLIB += c m pthread
 
 MODULES =		lang/ocaml
 
@@ -24,6 +22,8 @@ MAKE_ENV += OCAML_NATIVE=true
 MAKE_ENV += OCAML_NATIVE=false
 .endif
 
+# simply avoid stupid check that's missing DESTDIR
+FAKE_FLAGS += CHECK_IF_PREINSTALLED=false
 
 USE_GMAKE =		Yes
 

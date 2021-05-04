@@ -455,7 +455,7 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/lib/libc/locale/wcsxfrm.c s
 diff -ruN src62-orig/lib/libc/string/strcasecmp_l.c src/lib/libc/locale/string/strcasecmp_l.c
 --- src62-orig/lib/libc/string/strcasecmp_l.c 	Mon Sep  4 22:16:13 2017
 +++ src/lib/libc/string/strcasecmp_l.c	Mon Dec  4 19:14:47 2017
-@@ -3,19 +3,150 @@
+@@ -3,19 +3,148 @@
   * Written in 2017 by Ingo Schwarze <schwarze@openbsd.org>.
   * Released into the public domain.
   */
@@ -547,9 +547,7 @@ diff -ruN src62-orig/lib/libc/string/strcasecmp_l.c src/lib/libc/locale/string/s
 -	return strcasecmp(s1, s2);
 +	return strncasecmp_l(s1, s2, strlen(s1) + 1,locale);
  }
-+DEF_STRONG(strcasecmp_l);
  
-+
 +static int
 +sbstrncasecmp(const char *s1, const char *s2, int n)
 +{

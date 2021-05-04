@@ -1,4 +1,4 @@
-Con respecto a OpenBSD 6.7 las novedades son:
+Con respecto a OpenBSD 6.9 las novedades son:
 
 * Proceso de Instalación:
 	* En español (upgrade install install.sub)
@@ -109,15 +109,8 @@ Con respecto a OpenBSD 6.7 las novedades son:
 	* Unicos en adJ 
 		* emulators/realboy lang/ocaml-labltk net/xmrig
  		sysutils/ganglia textproc/biblesync
-		textproc/sword textproc/xiphos database/pear-DB
-		database/pear-MDB2 database/pear-DB_DataObject
-		www/pear-HTML-Common
-		www/pear-HTML-Common2 www/pear-HTML-CSS 
-		www/pear-HTML-Javascript
-		www/pear-HTML-Menu www/pear-HTML-QuickForm www/pear-HTML-Table
-		www/pear-DB-DataObject-FormBuilder 
-		www/pear-HTML-QuickForm-Controller x11/fbdesk
-
+		textproc/sword textproc/bibletime database/pear-DB
+		x11/fbdesk textproc/po4a textproc/p5-SGMLNpm
 	* Únicos en adJ liderados por Pasos de Jesús
 		* evangelios_dp	Traducción en progreso de dominio público
 		* basico_adJ	Documentación de uso remoto y básico

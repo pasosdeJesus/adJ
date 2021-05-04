@@ -8,24 +8,24 @@ gemil () {
     echo "---";
     echo "BUNDLE_PATH: \"/var/www/bundler/\"";
     echo "EOF"
-    exit 1;
+    return 1;
   fi
   vruby=`ruby -v | sed -e "s/ruby \([^.]*.[^. ]*\).*/\1/g"`
   if [[ $vruby = "" ]]; then
     echo "No pudo identificarse version de ruby";
-    exit 1;
+    return 1;
   fi
   rb1=`grep BUNDLE_PATH: ~/.bundle/config 2>/dev/null`
   rb=`echo $rb1 | sed -e "s/.*\"\(.*\)\" *$/\1/g"`
   if [[ $rb = "" ]]; then
     echo "Falta BUNDLE_PATH en ~/.bundle/config";
-    exit 1;
+    return 1;
   fi
   if [[ $# -gt 0 ]]; then
     for i in $@; do
       g=`echo $i | sed -e "s/@.*//g"`
       v=`echo $i | sed -e "s/.*@//g"`
-      if [[ "$v" -eq "" ]]; then 
+      if [[ "$v" = "$g" ]]; then 
         echo "Instalando versión más reciente de la gema $g"
         doas gem install -N --install-dir "$rb/ruby/$vruby/" $g;
       else

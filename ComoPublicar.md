@@ -1,20 +1,20 @@
 COMO PUBLICAR
 =============
 
-Anhelamos publicar versión mayor (e.g 6.6) 3 meses después de OpenBSD:
+Anhelamos publicar versión mayor (e.g 6.9) 3 meses después de OpenBSD:
 
-	11.Ene
-	1.Jul
+* 11.Ene
+* 1.Jul
 
-También publicamos revisiones (e.g 6.6p1) si la seguridad o calidad lo ameritan.
+También publicamos revisiones (e.g 6.9p1) si la seguridad o calidad lo ameritan.
 
-Anhelamos publicar al menos una versión beta (e.g 6.6 en directorio
+Anhelamos publicar al menos una versión beta (e.g 6.9 en directorio
 `desarrollo` del sitio de distribución) en:
 
 	10.Dic
 	10.Jun
 
-Sería ideal publicar una versión alfa mucho antes (24.Sep y 24.Mar, e.g 6.6a1).
+Sería ideal publicar una versión alfa mucho antes (24.Sep y 24.Mar, e.g 6.9a1).
 
 
 Pasos importantes para publicar versión beta
@@ -37,7 +37,7 @@ Pasos importantes para publicar versión beta
 		 `pruebas/aplicahasta.sh arboldes/usr/src/14..` 
 
 	3.3 Compilar libc con `doas pruebas/compila-libc.sh` y correr pruebas 
-	    de regresión con `cd /usr/src/lib/libc/regress; doas make`
+	    de regresión con `cd /usr/src/regress/lib/libc/locale/; doas make`
 
 	3.4 Si falla compilación o alguna prueba de regresión hacer búsqueda 
 	    binaria entre parches, iterando desde 3.1 pero en 3.2 ir bajando a 
@@ -52,8 +52,8 @@ Pasos importantes para publicar versión beta
    Para verificar que perl está más o menos bien ejecutar `pkg_add`.
 5. Recompilar paquetes con actualizaciones de seguridad o mejoras
 6. Retroportar paquetes, dejar resultados no incluidos en DVD pero
-   útiles en `6.7-extra`
-7. Regenerar en distribución (sin paquetes ni otras compilaciones) con:
+   útiles en `6.9-extra`
+7. Regenerar distribución (sin paquetes ni otras compilaciones) con:
 	```
 	doas ./distribucion.sh
 	```
@@ -158,20 +158,20 @@ Pasos importantes para publicar versión beta
 
 13. Poner Tag en github e iniciar rama al publicar version alfa o beta (antes en master)
 	```
-	git tag -a v6.6a1 -m "Version 6.6a1"
-	git push origin v6.6a1
+	git tag -a v6.9b1 -m "Version 6.9b1"
+	git push origin v6.9b1
 	...
-	git checkout -b ADJ_6_6
-	git push origin ADJ_6_6
+	git checkout -b ADJ_6_9
+	git push origin ADJ_6_9
 	```
 14. Publicar en lista de desarrollo
 
 Pasos importantes para publicar versión mayor
 --------------------------------------------
 
-1. Usar la rama ADJ_6_6
+1. Usar la rama ADJ_6_9
 	```
-	git checkout ADJ_6_6
+	git checkout ADJ_6_9
 	```
 2. Actualizar SIVeL, evangelios, Mt77, cor1440, sal7711 y paquetes propios de 
    adJ.
@@ -189,26 +189,26 @@ Pasos importantes para publicar versión mayor
    http://aprendiendo.pasosdejesus.org/?id=MainMenu,  
 8. Poner Tag en github
 	```
-	git tag -a v6.6 -m "Version 6.6"
-	git push origin v6.6
+	git tag -a v6.9 -m "Version 6.9"
+	git push origin v6.9
 	```
 9. Publicar en Twitter y Facebook. 
    Si es tambien publicacion de SIVeL en sitio de noticias de SIVeL y Structio.
 
-	Publicado adJ 6.6 distribución para servidores y cortafuegos, 
+	Publicado adJ 6.9 distribución para servidores y cortafuegos, 
 	segura, amigable para cristian@s y en español, ver 
 	http://aprendiendo.pasosdejesus.org/
 10. Correo a listas: 
     openbsd-colombia@googlegroups.com, 
     openbsd-mexico@googlegroups.com, sivel-soporte@lists.sourceforge.net
 
-	Tema: Publicado adJ 6.6 para amd64
+	Tema: Publicado adJ 6.9 para amd64
 
 	Para instalar por primera vez descarga la imagen para DVD de:
 	  http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/
 	O solicita un DVD o una USB de instalacion por correo postal.
 
-	Si planeas actualizar de una version anterior a 6.6
+	Si planeas actualizar de una version anterior a 6.9
 	hay un procedimiento mas rápido con `rsync` (ver
 	https://github.com/pasosdeJesus/adJ/blob/master/Actualiza.md ).
 
@@ -220,8 +220,8 @@ Pasos importantes para publicar versión mayor
 	  2. La guía de instalación:
 	  http://pasosdeJesus.github.io//usuario_adJ/sobre-la-instalacion.html
 
-	Mira las novedades completas de la versión 6.6 en:
-	  http://aprendiendo.pasosdejesus.org/?id=AdJ+6.6+-+Aprendiendo+de+Jesus+6.6
+	Mira las novedades completas de la versión 6.9 en:
+	  http://aprendiendo.pasosdejesus.org/?id=AdJ+6.9+-+Aprendiendo+de+Jesus+6.9
 
 	De estas destacamos:
 	...

@@ -1,4 +1,4 @@
-# $OpenBSD: Makefile,v 1.263 2020/06/14 10:19:46 jasper Exp $
+# $OpenBSD: Makefile,v 1.271 2021/03/02 15:22:32 sthen Exp $
 
 COMMENT-main=	PostgreSQL RDBMS (client)
 COMMENT-server=	PostgreSQL RDBMS (server)
@@ -7,8 +7,9 @@ COMMENT-contrib=PostgreSQL RDBMS contributions
 COMMENT-plpython=Python procedural language for PostgreSQL
 COMMENT-pg_upgrade=Support for upgrading PostgreSQL data from previous version
 
-VERSION=	12.3
-PREV_MAJOR=	11
+VERSION=	13.2
+PREV_MAJOR=	12
+REVISION=	1
 DISTNAME=	postgresql-${VERSION}
 PKGNAME-main=	postgresql-client-${VERSION}
 PKGNAME-server=	postgresql-server-${VERSION}
@@ -17,21 +18,20 @@ PKGNAME-contrib=postgresql-contrib-${VERSION}
 PKGNAME-plpython=postgresql-plpython-${VERSION}
 PKGNAME-pg_upgrade=postgresql-pg_upgrade-${VERSION}
 
-REVISION-server =0
+DPB_PROPERTIES=	parallel
 
 CATEGORIES=	databases
 SHARED_LIBS=	ecpg		7.10 \
 		ecpg_compat	4.10 \
 		pgtypes		4.9 \
-		pq		6.11
+		pq		6.12
 
-HOMEPAGE=	http://www.postgresql.org/
+HOMEPAGE=	https://www.postgresql.org/
 
 MAINTAINER=	Pierre-Emmanuel Andre <pea@openbsd.org>
 
 # BSD
 PERMIT_PACKAGE=	Yes
-#PERMIT_PACKAGE_CDROM=	Yes
 
 WANTLIB += c curses crypto m readline ssl z
 
@@ -51,11 +51,12 @@ CONFIGURE_STYLE=gnu
 MODULES=	lang/python
 MODPY_RUNDEP=	No
 
-CONFIGURE_ENV=	ac_cv_path_PYTHON=${MODPY_BIN} \
-		CPPFLAGS="-I${LOCALBASE}/include" \
-		LDFLAGS="-L${LOCALBASE}/lib"
+CONFIGURE_ENV=	CPPFLAGS="-I${LOCALBASE}/include" \
+		LDFLAGS="-L${LOCALBASE}/lib" \
+		PYTHON=${MODPY_BIN}
 
-CONFIGURE_ARGS=	--disable-rpath --with-openssl=/usr \
+CONFIGURE_ARGS=	--disable-rpath \
+		--with-openssl=/usr \
 		--with-bsd-auth \
 		--with-perl \
 		--with-python \
@@ -77,7 +78,7 @@ CONFIGURE_ARGS=	--disable-rpath --with-openssl=/usr \
 # (apparently) a serious performance hit doing this.
 
 .if ${MACHINE_ARCH} == "alpha" || ${MACHINE_ARCH} == "hppa"
-CONFIGURE_ARGS+=--disable-spinlocks
+CONFIGURE_ARGS+= --disable-spinlocks
 .endif
 
 # To avoid problems with missed floating point overflow checks.
@@ -97,30 +98,28 @@ MODGNU_CONFIG_GUESS_DIRS=	${WRKSRC}/config
 ALL_TARGET=	world
 INSTALL_TARGET=	install-world
 
-LIB_DEPENDS-main=	archivers/xz \
-			converters/libiconv \
+LIB_DEPENDS-main=	devel/libexecinfo \
 			textproc/libxml
-WANTLIB-main =	${WANTLIB} iconv lzma xml2
+WANTLIB-main=		${WANTLIB} execinfo xml2
 
+LIB_DEPENDS-server=	databases/postgresql=${VERSION} \
+			${LIB_DEPENDS-main}
+WANTLIB-server=		${WANTLIB-main} perl pq
 
-LIB_DEPENDS-server= databases/postgresql=${VERSION} \
-		    ${LIB_DEPENDS-main}
-WANTLIB-server=	${WANTLIB-main} perl pq
-
-RUN_DEPENDS-contrib= databases/postgresql,-server=${VERSION}
-LIB_DEPENDS-contrib= databases/postgresql=${VERSION} \
-		     ${LIB_DEPENDS-main}
+RUN_DEPENDS-contrib=	databases/postgresql,-server=${VERSION}
+LIB_DEPENDS-contrib=	databases/postgresql=${VERSION} \
+			${LIB_DEPENDS-main}
 WANTLIB-contrib=	${WANTLIB-main} perl pq
 
 RUN_DEPENDS-pg_upgrade=	databases/postgresql,-server=${VERSION} \
 			databases/postgresql-previous>=${PREV_MAJOR}
 LIB_DEPENDS-pg_upgrade= databases/postgresql=${VERSION} \
-		     ${LIB_DEPENDS-main}
+			${LIB_DEPENDS-main}
 
-WANTLIB-pg_upgrade =	${WANTLIB-main} pq
+WANTLIB-pg_upgrade=	${WANTLIB-main} pq
 
 LIB_DEPENDS-plpython=	${MODPY_LIB_DEPENDS}
-WANTLIB-plpython =	c m pthread util \
+WANTLIB-plpython=	c intl m pthread util \
 			${MODPY_WANTLIB}
 RUN_DEPENDS-plpython=	databases/postgresql,-server=${VERSION}
 

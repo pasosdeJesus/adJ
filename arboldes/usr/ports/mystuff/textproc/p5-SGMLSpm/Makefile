@@ -1,6 +1,6 @@
 # $OpenBSD: Makefile,v 1.0 2020/09/27 07:49:00 vtamara Exp $
 
-COMMENT=        Perl5 class library for use with the SGMLS and NSGMLS parsers
+COMMENT=        Perl5 class for use with the SGMLS and NSGMLS parsers
 
 MODULES=        cpan
 PKG_ARCH=       *
