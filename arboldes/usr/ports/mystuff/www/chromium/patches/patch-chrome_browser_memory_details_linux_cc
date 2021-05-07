@@ -1,4 +1,4 @@
-$OpenBSD: patch-chrome_browser_memory_details_linux_cc,v 1.7 2020/09/22 11:47:40 robert Exp $
+$OpenBSD: patch-chrome_browser_memory_details_linux_cc,v 1.10 2021/04/16 18:15:06 robert Exp $
 
 Index: chrome/browser/memory_details_linux.cc
 --- chrome/browser/memory_details_linux.cc.orig
@@ -11,26 +11,26 @@ Index: chrome/browser/memory_details_linux.cc
  #include "base/files/file_util.h"
  #include "base/process/process_iterator.h"
  #include "base/process/process_metrics.h"
-@@ -26,6 +27,7 @@
+@@ -27,6 +28,7 @@
  #include "content/public/browser/browser_task_traits.h"
  #include "content/public/browser/browser_thread.h"
  #include "content/public/common/process_type.h"
-+#include "services/service_manager/sandbox/switches.h"
++#include "sandbox/policy/switches.h"
  #include "ui/base/l10n/l10n_util.h"
  
  using base::ProcessEntry;
-@@ -69,9 +71,18 @@ ProcessData GetProcessDataMemoryInformation(
+@@ -70,9 +72,18 @@ ProcessData GetProcessDataMemoryInformation(
  
      std::unique_ptr<base::ProcessMetrics> metrics(
          base::ProcessMetrics::CreateProcessMetrics(pid));
 +
 +    base::CommandLine* command_line = base::CommandLine::ForCurrentProcess();
-+    if (!command_line->HasSwitch(service_manager::switches::kNoSandbox)) {
++    if (!command_line->HasSwitch(sandbox::policy::switches::kNoSandbox)) {
 +      pmi.num_open_fds = 0;
 +      pmi.open_fds_soft_limit = 0;
 +      goto out;
 +    }
-+      
++
      pmi.num_open_fds = metrics->GetOpenFdCount();
      pmi.open_fds_soft_limit = metrics->GetOpenFdSoftLimit();
  

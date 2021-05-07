@@ -1,9 +1,9 @@
-$OpenBSD: patch-ui_gl_init_gl_initializer_linux_x11_cc,v 1.1 2020/09/22 11:47:42 robert Exp $
+$OpenBSD: patch-ui_gl_init_gl_initializer_linux_x11_cc,v 1.4 2021/04/16 18:15:07 robert Exp $
 
 Index: ui/gl/init/gl_initializer_linux_x11.cc
 --- ui/gl/init/gl_initializer_linux_x11.cc.orig
 +++ ui/gl/init/gl_initializer_linux_x11.cc
-@@ -29,12 +29,13 @@ namespace {
+@@ -28,12 +28,13 @@ namespace {
  
  #if defined(OS_OPENBSD)
  const char kGLLibraryName[] = "libGL.so";
@@ -17,5 +17,5 @@ Index: ui/gl/init/gl_initializer_linux_x11.cc
  const char kEGLLibraryName[] = "libEGL.so.1";
 +#endif
  
- const char kGLESv2ANGLELibraryName[] = "libGLESv2.so";
- const char kEGLANGLELibraryName[] = "libEGL.so";
+ #if BUILDFLAG(ENABLE_SWIFTSHADER)
+ const char kGLESv2SwiftShaderLibraryName[] = "libGLESv2.so";

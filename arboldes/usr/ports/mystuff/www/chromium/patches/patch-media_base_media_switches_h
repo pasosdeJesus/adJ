@@ -1,0 +1,14 @@
+$OpenBSD: patch-media_base_media_switches_h,v 1.4 2021/04/16 18:15:07 robert Exp $
+
+Index: media/base/media_switches.h
+--- media/base/media_switches.h.orig
++++ media/base/media_switches.h
+@@ -183,7 +183,7 @@ MEDIA_EXPORT extern const base::Feature kUseR16Texture
+ MEDIA_EXPORT extern const base::Feature kUseSodaForLiveCaption;
+ // TODO(crbug.com/1052397): Revisit once build flag switch of lacros-chrome is
+ // complete.
+-#if (defined(OS_LINUX) || BUILDFLAG(IS_CHROMEOS_LACROS))
++#if (defined(OS_LINUX) || BUILDFLAG(IS_CHROMEOS_LACROS)) || defined(OS_BSD)
+ MEDIA_EXPORT extern const base::Feature kVaapiVideoDecodeLinux;
+ MEDIA_EXPORT extern const base::Feature kVaapiVideoEncodeLinux;
+ #endif  // defined(OS_LINUX) || BUILDFLAG(IS_CHROMEOS_LACROS))

@@ -64,7 +64,10 @@ Novedades tomadas de <https://www.openbsd.org/68.html> y de
 * Seguridad
 	* 
 * Otros
-  * 
+  * Remplazado `ld` el enlazador que genera ejecutables ELF por el del
+    proyecto LLVM. Hasta OpenBSD 6.8 se usaba el del proyecto GNU.
+    El nuevo `ld` reporta situaciones erroneas, que no eran detectadas o
+    reportadas por el anterior.
 * El sistema base incluye mejoras a componentes auditados y mejorados 
   como, `llvm` x,  `Xenocara` (basado en `Xorg` x.x),
   `perl` x

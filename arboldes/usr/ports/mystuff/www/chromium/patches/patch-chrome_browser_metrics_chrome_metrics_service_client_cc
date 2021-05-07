@@ -1,25 +1,23 @@
-$OpenBSD: patch-chrome_browser_metrics_chrome_metrics_service_client_cc,v 1.16 2020/09/22 11:47:40 robert Exp $
+$OpenBSD: patch-chrome_browser_metrics_chrome_metrics_service_client_cc,v 1.21 2021/04/16 18:15:06 robert Exp $
 
 Index: chrome/browser/metrics/chrome_metrics_service_client.cc
 --- chrome/browser/metrics/chrome_metrics_service_client.cc.orig
 +++ chrome/browser/metrics/chrome_metrics_service_client.cc
-@@ -684,7 +684,7 @@ void ChromeMetricsServiceClient::RegisterMetricsServic
-       std::make_unique<AntiVirusMetricsProvider>());
- #endif  // defined(OS_WIN)
+@@ -706,7 +706,7 @@ void ChromeMetricsServiceClient::RegisterMetricsServic
  
--#if defined(OS_WIN) || defined(OS_MACOSX) || \
-+#if defined(OS_WIN) || defined(OS_MACOSX) || defined(OS_BSD) || \
-     (defined(OS_LINUX) && !defined(OS_CHROMEOS))
+ // TODO(crbug.com/1052397): Revisit the macro expression once build flag switch
+ // of lacros-chrome is complete.
+-#if defined(OS_WIN) || defined(OS_MAC) || \
++#if defined(OS_WIN) || defined(OS_MAC) || defined(OS_BSD) || \
+     (defined(OS_LINUX) || BUILDFLAG(IS_CHROMEOS_LACROS))
    metrics_service_->RegisterMetricsProvider(
        std::make_unique<DesktopPlatformFeaturesMetricsProvider>());
-@@ -950,8 +950,8 @@ bool ChromeMetricsServiceClient::RegisterForProfileEve
-         profile->GetPath());
-   }
+@@ -997,7 +997,7 @@ bool ChromeMetricsServiceClient::RegisterForProfileEve
  #endif
--#if defined(OS_WIN) || defined(OS_MACOSX) || \
--    (defined(OS_LINUX) && !defined(OS_CHROMEOS))
-+#if defined(OS_WIN) || defined(OS_MACOSX) || defined(OS_BSD) || \
-+    ((defined(OS_BSD) || defined(OS_LINUX)) && !defined(OS_CHROMEOS))
+ // TODO(crbug.com/1052397): Revisit the macro expression once build flag switch
+ // of lacros-chrome is complete.
+-#if defined(OS_WIN) || defined(OS_MAC) || \
++#if defined(OS_WIN) || defined(OS_MAC) || defined(OS_BSD) || \
+     (defined(OS_LINUX) || BUILDFLAG(IS_CHROMEOS_LACROS))
    // This creates the DesktopProfileSessionDurationsServices if it didn't exist
    // already.
-   metrics::DesktopProfileSessionDurationsServiceFactory::GetForBrowserContext(

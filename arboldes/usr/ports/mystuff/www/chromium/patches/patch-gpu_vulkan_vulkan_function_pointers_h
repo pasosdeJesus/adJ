@@ -1,47 +1,65 @@
-$OpenBSD: patch-gpu_vulkan_vulkan_function_pointers_h,v 1.10 2020/09/22 11:47:41 robert Exp $
+$OpenBSD: patch-gpu_vulkan_vulkan_function_pointers_h,v 1.15 2021/04/16 18:15:07 robert Exp $
 
 Index: gpu/vulkan/vulkan_function_pointers.h
 --- gpu/vulkan/vulkan_function_pointers.h.orig
 +++ gpu/vulkan/vulkan_function_pointers.h
-@@ -234,7 +234,7 @@ struct COMPONENT_EXPORT(VULKAN) VulkanFunctionPointers
+@@ -241,7 +241,7 @@ struct COMPONENT_EXPORT(VULKAN) VulkanFunctionPointers
        vkGetAndroidHardwareBufferPropertiesANDROID;
  #endif  // defined(OS_ANDROID)
  
--#if defined(OS_LINUX) || defined(OS_ANDROID)
-+#if defined(OS_LINUX) || defined(OS_ANDROID) || defined(OS_BSD)
+-#if defined(OS_LINUX) || defined(OS_CHROMEOS) || defined(OS_ANDROID)
++#if defined(OS_LINUX) || defined(OS_CHROMEOS) || defined(OS_ANDROID) || defined(OS_BSD)
    VulkanFunction<PFN_vkGetSemaphoreFdKHR> vkGetSemaphoreFdKHR;
    VulkanFunction<PFN_vkImportSemaphoreFdKHR> vkImportSemaphoreFdKHR;
- #endif  // defined(OS_LINUX) || defined(OS_ANDROID)
-@@ -245,7 +245,7 @@ struct COMPONENT_EXPORT(VULKAN) VulkanFunctionPointers
+ #endif  // defined(OS_LINUX) || defined(OS_CHROMEOS) || defined(OS_ANDROID)
+@@ -252,7 +252,7 @@ struct COMPONENT_EXPORT(VULKAN) VulkanFunctionPointers
        vkImportSemaphoreWin32HandleKHR;
  #endif  // defined(OS_WIN)
  
--#if defined(OS_LINUX) || defined(OS_ANDROID)
-+#if defined(OS_LINUX) || defined(OS_ANDROID) || defined(OS_BSD)
+-#if defined(OS_LINUX) || defined(OS_CHROMEOS) || defined(OS_ANDROID)
++#if defined(OS_LINUX) || defined(OS_CHROMEOS) || defined(OS_ANDROID) || defined(OS_BSD)
    VulkanFunction<PFN_vkGetMemoryFdKHR> vkGetMemoryFdKHR;
    VulkanFunction<PFN_vkGetMemoryFdPropertiesKHR> vkGetMemoryFdPropertiesKHR;
- #endif  // defined(OS_LINUX) || defined(OS_ANDROID)
-@@ -953,7 +953,7 @@ ALWAYS_INLINE VkResult vkGetAndroidHardwareBufferPrope
+ #endif  // defined(OS_LINUX) || defined(OS_CHROMEOS) || defined(OS_ANDROID)
+@@ -292,7 +292,7 @@ struct COMPONENT_EXPORT(VULKAN) VulkanFunctionPointers
+   VulkanFunction<PFN_vkGetSwapchainImagesKHR> vkGetSwapchainImagesKHR;
+   VulkanFunction<PFN_vkQueuePresentKHR> vkQueuePresentKHR;
+ 
+-#if defined(OS_LINUX) || defined(OS_CHROMEOS)
++#if defined(OS_LINUX) || defined(OS_CHROMEOS) || defined(OS_BSD)
+   VulkanFunction<PFN_vkGetImageDrmFormatModifierPropertiesEXT>
+       vkGetImageDrmFormatModifierPropertiesEXT;
+ #endif  // defined(OS_LINUX) || defined(OS_CHROMEOS)
+@@ -997,7 +997,7 @@ ALWAYS_INLINE VkResult vkGetAndroidHardwareBufferPrope
  }
  #endif  // defined(OS_ANDROID)
  
--#if defined(OS_LINUX) || defined(OS_ANDROID)
-+#if defined(OS_LINUX) || defined(OS_ANDROID) || defined(OS_BSD)
+-#if defined(OS_LINUX) || defined(OS_CHROMEOS) || defined(OS_ANDROID)
++#if defined(OS_LINUX) || defined(OS_CHROMEOS) || defined(OS_ANDROID) || defined(OS_BSD)
  ALWAYS_INLINE VkResult
  vkGetSemaphoreFdKHR(VkDevice device,
                      const VkSemaphoreGetFdInfoKHR* pGetFdInfo,
-@@ -986,7 +986,7 @@ vkImportSemaphoreWin32HandleKHR(VkDevice device,
+@@ -1030,7 +1030,7 @@ vkImportSemaphoreWin32HandleKHR(VkDevice device,
  }
  #endif  // defined(OS_WIN)
  
--#if defined(OS_LINUX) || defined(OS_ANDROID)
-+#if defined(OS_LINUX) || defined(OS_ANDROID) || defined(OS_BSD)
+-#if defined(OS_LINUX) || defined(OS_CHROMEOS) || defined(OS_ANDROID)
++#if defined(OS_LINUX) || defined(OS_CHROMEOS) || defined(OS_ANDROID) || defined(OS_BSD)
  ALWAYS_INLINE VkResult vkGetMemoryFdKHR(VkDevice device,
                                          const VkMemoryGetFdInfoKHR* pGetFdInfo,
                                          int* pFd) {
-@@ -1081,4 +1081,4 @@ ALWAYS_INLINE VkResult vkQueuePresentKHR(VkQueue queue
+@@ -1125,7 +1125,7 @@ ALWAYS_INLINE VkResult vkQueuePresentKHR(VkQueue queue
                                                               pPresentInfo);
  }
+ 
+-#if defined(OS_LINUX) || defined(OS_CHROMEOS)
++#if defined(OS_LINUX) || defined(OS_CHROMEOS) || defined(OS_BSD)
+ ALWAYS_INLINE VkResult vkGetImageDrmFormatModifierPropertiesEXT(
+     VkDevice device,
+     VkImage image,
+@@ -1135,4 +1135,4 @@ ALWAYS_INLINE VkResult vkGetImageDrmFormatModifierProp
+ }
+ #endif  // defined(OS_LINUX) || defined(OS_CHROMEOS)
  
 -#endif  // GPU_VULKAN_VULKAN_FUNCTION_POINTERS_H_
 \ No newline at end of file

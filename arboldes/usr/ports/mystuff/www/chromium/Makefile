@@ -1,18 +1,17 @@
-# $OpenBSD: Makefile,v 1.529 2020/09/22 11:47:39 robert Exp $
-
-.include <bsd.port.arch.mk>
+# $OpenBSD: Makefile,v 1.560 2021/04/16 18:15:05 robert Exp $
 
 USE_WXNEEDED=		Yes
 
-DPB_PROPERTIES=		parallel parallel2
+.include <bsd.port.arch.mk>
 .if ${MACHINE_ARCH} == "i386"
-# override parallel
 DPB_PROPERTIES=		lonesome
+.else
+DPB_PROPERTIES=		parallel parallel2
 .endif
 
 COMMENT=		Chromium browser
 
-V=			85.0.4183.121
+V=			90.0.4430.72
 
 DISTNAME=		chromium-${V}
 
@@ -38,7 +37,10 @@ PERMIT_PACKAGE =	Yes
 MASTER_SITES=	https://commondatastorage.googleapis.com/chromium-browser-official/
 MASTER_SITES0=	http://nerd.hu/distfiles/
 
+FIX_CRLF_FILES=	third_party/vulkan_memory_allocator/src/vk_mem_alloc.h
+
 MODULES=	lang/python
+MODPY_VERSION =	${MODPY_DEFAULT_VERSION_2}
 
 COMPILER =	base-clang ports-clang ports-gcc
 
@@ -74,7 +76,7 @@ WANTLIB += harfbuzz harfbuzz-subset
 WANTLIB += ffi png
 WANTLIB += iconv lzma
 WANTLIB += fido2 cbor usbhid crypto
-WANTLIB += gbm xcb-dri3
+WANTLIB += gbm xkbcommon
 
 RUN_DEPENDS=	devel/xdg-utils \
 		devel/desktop-file-utils \
@@ -98,6 +100,7 @@ LIB_DEPENDS=	devel/harfbuzz \
 		security/nss \
 		textproc/libxslt \
 		x11/gtk+3 \
+		x11/xkbcommon \
 		print/cups,-libs \
 		${MODGCC4_CPPLIBDEP}
 
@@ -146,6 +149,9 @@ GN_ARGS=	enable_nacl=false \
 		fieldtrial_testing_like_official_build=true \
 		extra_cppflags=\"-idirafter ${LOCALBASE}/include -idirafter ${X11BASE}/include\"
 
+# notyet
+GN_ARGS+=	use_vaapi=false
+
 .if ${MACHINE_ARCH} == "i386"
 GN_ARGS+=	extra_ldflags=\"-L${LOCALBASE}/lib -L${X11BASE}/lib -Wl,--no-keep-memory\"
 .else
@@ -161,19 +167,21 @@ PKG_ARGS+=	-Dswiftshader=1
 # Note: these keys are for adJ use ONLY. For your own distribution,
 # please get your own set of keys. It's free!
 GN_ARGS+=	google_api_key=\"AIzaSyC_3Uz69YR1Z2DRLUDf5ZxUJBClHuwrjL\" \
-		google_default_client_id=\"827346019416-hv5bkg8gdou5q4undk91dn3nv7ag2nm1.apps.googleusercontent.com\" \
-		google_default_client_secret=\"7ApGgPs3F_mRnRgDt6A80C0\" \
 		ffmpeg_branding=\"Chrome\" \
 		proprietary_codecs=true
+
+# These are now restricted to use by Google, so bye-bye sync.
+#GN_ARGS+=	google_default_client_id=\"827346019416-hv5bkg8gdou5q4undk91dn3nv7ag2nm1.apps.googleusercontent.com\" 
+#GN_ARGS+=	google_default_client_secret=\"7ApGgPs3F_mRnRgDt6A80C0\" 
 
 # XXX dwz doesn't work with chromium yet
 DWZ = :
 
 .if ${FLAVOR:Mdebug}
-DEBUGFLAG=	-g2
+GN_ARGS+=	symbol_level=2
 DEBUG_PACKAGES=	${BUILD_PACKAGES}
 .else
-DEBUGFLAG=	-g0
+GN_ARGS+=	symbol_level=0
 .endif
 
 .if ${FLAVOR:Mcomponent}
@@ -198,7 +206,8 @@ pre-configure:
 	@ln -sf ${TRUEPREFIX}/bin/node ${WRKSRC}/third_party/node/openbsd/node-openbsd/bin/node
 	${SUBST_CMD} ${WRKSRC}/build/gn_run_binary.py ${WRKSRC}/v8/tools/run.py \
 		${WRKSRC}/tools/protoc_wrapper/protoc_wrapper.py \
-		${WRKSRC}/build/config/compiler/BUILD.gn
+		${WRKSRC}/build/util/python2_action.py \
+		${WRKSRC}/third_party/blink/renderer/build/scripts/run_with_pythonpath.py
 
 # Configuration consists of three steps:
 # 1. replace the specified bundled libraries with hooks to use the system libs

@@ -1,21 +1,21 @@
-$OpenBSD: patch-chrome_browser_chrome_browser_interface_binders_cc,v 1.4 2020/09/22 11:47:40 robert Exp $
+$OpenBSD: patch-chrome_browser_chrome_browser_interface_binders_cc,v 1.10 2021/04/16 18:15:05 robert Exp $
 
 Index: chrome/browser/chrome_browser_interface_binders.cc
 --- chrome/browser/chrome_browser_interface_binders.cc.orig
 +++ chrome/browser/chrome_browser_interface_binders.cc
-@@ -120,7 +120,7 @@
- #endif
+@@ -145,7 +145,7 @@
+ #endif  // defined(OS_ANDROID)
  
- #if defined(OS_WIN) || defined(OS_MACOSX) || defined(OS_LINUX) || \
+ #if defined(OS_WIN) || defined(OS_MAC) || defined(OS_LINUX) || \
 -    defined(OS_CHROMEOS)
 +    defined(OS_CHROMEOS) || defined(OS_BSD)
  #include "chrome/browser/ui/webui/discards/discards.mojom.h"
  #include "chrome/browser/ui/webui/discards/discards_ui.h"
  #include "chrome/browser/ui/webui/discards/site_data.mojom.h"
-@@ -578,7 +578,7 @@ void PopulateChromeWebUIFrameBinders(
+@@ -842,7 +842,7 @@ void PopulateChromeWebUIFrameBinders(
  #endif
  
- #if defined(OS_WIN) || defined(OS_MACOSX) || defined(OS_LINUX) || \
+ #if defined(OS_WIN) || defined(OS_MAC) || defined(OS_LINUX) || \
 -    defined(OS_CHROMEOS)
 +    defined(OS_CHROMEOS) || defined(OS_BSD)
    RegisterWebUIControllerInterfaceBinder<discards::mojom::DetailsProvider,

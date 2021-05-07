@@ -1,14 +1,14 @@
-$OpenBSD: patch-components_security_interstitials_content_utils_cc,v 1.1 2020/05/29 20:03:23 robert Exp $
+$OpenBSD: patch-components_security_interstitials_content_utils_cc,v 1.5 2021/04/16 18:15:06 robert Exp $
 
 Index: components/security_interstitials/content/utils.cc
 --- components/security_interstitials/content/utils.cc.orig
 +++ components/security_interstitials/content/utils.cc
-@@ -31,7 +31,7 @@ void LaunchDateAndTimeSettings() {
+@@ -32,7 +32,7 @@ void LaunchDateAndTimeSettings() {
  #if defined(OS_ANDROID)
    JNIEnv* env = base::android::AttachCurrentThread();
    Java_DateAndTimeSettingsHelper_openDateAndTimeSettings(env);
--#elif defined(OS_LINUX)
-+#elif defined(OS_LINUX) || defined(OS_BSD)
+-#elif defined(OS_LINUX) || defined(OS_CHROMEOS)
++#elif defined(OS_LINUX) || defined(OS_CHROMEOS) || defined(OS_BSD)
    struct ClockCommand {
      const char* const pathname;
      const char* const argument;

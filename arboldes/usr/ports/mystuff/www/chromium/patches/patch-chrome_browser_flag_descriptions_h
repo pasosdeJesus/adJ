@@ -1,50 +1,59 @@
-$OpenBSD: patch-chrome_browser_flag_descriptions_h,v 1.32 2020/09/22 11:47:40 robert Exp $
+$OpenBSD: patch-chrome_browser_flag_descriptions_h,v 1.38 2021/04/16 18:15:06 robert Exp $
 
 Index: chrome/browser/flag_descriptions.h
 --- chrome/browser/flag_descriptions.h.orig
 +++ chrome/browser/flag_descriptions.h
-@@ -19,7 +19,7 @@
+@@ -21,7 +21,7 @@
  #include "ppapi/buildflags/buildflags.h"
  #include "printing/buildflags/buildflags.h"
  
--#if defined(OS_LINUX)
-+#if defined(OS_LINUX) || defined(OS_BSD)
+-#if defined(OS_LINUX) || defined(OS_CHROMEOS)
++#if defined(OS_LINUX) || defined(OS_CHROMEOS) || defined(OS_BSD)
  #include "base/allocator/buildflags.h"
- #endif  // defined(OS_LINUX)
+ #endif  // defined(OS_LINUX) || defined(OS_CHROMEOS)
  
-@@ -2402,7 +2402,7 @@ extern const char kEnableNewBadgeOnMenuItemsDescriptio
- 
+@@ -2901,7 +2901,7 @@ extern const char kEnableNewBadgeOnMenuItemsDescriptio
  // Random platform combinations -----------------------------------------------
  
--#if defined(OS_WIN) || defined(OS_LINUX) || defined(OS_CHROMEOS)
-+#if defined(OS_WIN) || defined(OS_LINUX) || defined(OS_CHROMEOS) || defined(OS_BSD)
- 
- extern const char kWebGL2ComputeContextName[];
- extern const char kWebGL2ComputeContextDescription[];
-@@ -2410,7 +2410,7 @@ extern const char kWebGL2ComputeContextDescription[];
- #endif  // defined(OS_WIN) || defined(OS_LINUX) || defined(OS_CHROMEOS)
- 
- #if defined(OS_WIN) || defined(OS_MACOSX) || defined(OS_LINUX) || \
+ #if defined(OS_WIN) || defined(OS_MAC) || defined(OS_LINUX) || \
 -    defined(OS_CHROMEOS)
 +    defined(OS_CHROMEOS) || defined(OS_BSD)
  
  extern const char kEnableMediaFeedsName[];
  extern const char kEnableMediaFeedsDescription[];
-@@ -2430,7 +2430,7 @@ extern const char kRemoteCopyProgressNotificationDescr
- #endif  // defined(OS_WIN) || defined(OS_MACOSX) || defined(OS_LINUX) ||
+@@ -2930,7 +2930,7 @@ extern const char kDirectManipulationStylusDescription
+ #endif  // defined(OS_WIN) || defined(OS_MAC) || defined(OS_LINUX) ||
          // defined(OS_CHROMEOS)
  
--#if defined(OS_WIN) || defined(OS_MACOSX) || defined(OS_LINUX)
-+#if defined(OS_WIN) || defined(OS_MACOSX) || defined(OS_LINUX) || defined(OS_BSD)
+-#if defined(OS_WIN) || defined(OS_MAC) || defined(OS_LINUX)
++#if defined(OS_WIN) || defined(OS_MAC) || defined(OS_LINUX) || defined(OS_BSD)
  
- extern const char kDirectManipulationStylusName[];
- extern const char kDirectManipulationStylusDescription[];
-@@ -2444,7 +2444,7 @@ extern const char kWebContentsOcclusionDescription[];
+ extern const char kCommanderName[];
+ extern const char kCommanderDescription[];
+@@ -2943,7 +2943,7 @@ extern const char kDesktopDetailedLanguageSettingsDesc
  
- #endif  // defined(OS_WIN) || defined(OS_MACOSX) || defined(OS_CHROMEOS)
+ #endif  // defined(OS_WIN) || defined(OS_MAC) || defined(OS_LINUX)
  
 -#if defined(OS_CHROMEOS) || defined(OS_LINUX)
 +#if defined(OS_CHROMEOS) || defined(OS_LINUX) || defined(OS_BSD)
  #if BUILDFLAG(USE_TCMALLOC)
  extern const char kDynamicTcmallocName[];
  extern const char kDynamicTcmallocDescription[];
+@@ -2963,7 +2963,7 @@ extern const char kWebShareDescription[];
+ // TODO(crbug.com/1052397): Revisit the macro expression once build flag switch
+ // of lacros-chrome is complete.
+ #if defined(OS_WIN) || (defined(OS_LINUX) || BUILDFLAG(IS_CHROMEOS_LACROS)) || \
+-    defined(OS_MAC)
++    defined(OS_MAC) || defined(OS_BSD)
+ extern const char kEnableEphemeralGuestProfilesOnDesktopName[];
+ extern const char kEnableEphemeralGuestProfilesOnDesktopDescription[];
+ #endif  // defined(OS_WIN) || (defined(OS_LINUX) ||
+@@ -3029,7 +3029,7 @@ extern const char kSendWebUIJavaScriptErrorReportsDesc
+ #endif
+ 
+ #if defined(OS_WIN) || (defined(OS_LINUX) || BUILDFLAG(IS_CHROMEOS_LACROS)) || \
+-    defined(OS_MAC)
++    defined(OS_MAC) || defined(OS_BSD)
+ extern const char kUIDebugToolsName[];
+ extern const char kUIDebugToolsDescription[];
+ #endif
