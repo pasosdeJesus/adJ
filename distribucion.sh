@@ -948,6 +948,7 @@ if (test "$sn" = "s") then {
 
   paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs postgresql-pg_upgrade" 
   paquete postgresql-previous 
+  paquete postgis
   paquete ruby paquetes "ruby ruby30-ri_docs" 3.0
   #paquete tiff
   #paquete geo/spatialite/libspatialite
@@ -968,13 +969,19 @@ if (test "$sn" = "s") then {
   # Para que operen bien basta actualizar CVS de /usr/ports 
   # Los siguientes no deben estar en arboldes/usr/ports/mystuff
   #paquete cups
-  paquete dovecot
+  #paquete dovecot
   #paquete gtk+3 paquetes "gtk+3-cups"
   #paquete gvfs
   #paquete libgcrypt
   #paquete mpg123
-  paquete mutt
-  paquete oniguruma 
+  paquete flac
+  paquete gnutls
+  paquete libxml
+  paquete lz4
+  paquete mariadb
+  #paquete mutt
+  paquete nginx
+  #paquete oniguruma 
   #paquete pcre2 
   #paquete webkitgtk4
   #paquete certbot paquetes "certbot py3-acme"
