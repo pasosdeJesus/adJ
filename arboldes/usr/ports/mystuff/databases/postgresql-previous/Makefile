@@ -11,7 +11,7 @@ CATEGORIES=	databases
 SHARED_LIBS=	ecpg		7.10 \
 		ecpg_compat	4.10 \
 		pgtypes		4.9 \
-		pq		6.11
+		pq		6.12
 
 HOMEPAGE=	http://www.postgresql.org/
 

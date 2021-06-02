@@ -803,6 +803,26 @@ if (test "$sn" = "s") then {
   # Modificados para posibilitar compilación
   # Deben estar en mystuff
 
+  paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs postgresql-pg_upgrade" 
+  paquete postgresql-previous 
+  paquete postgis
+  paquete chromium
+
+  paquete ocaml paquetes "ocaml"
+  paquete ocamlbuild 
+  paquete ocaml-camlp4
+  paquete findlib
+  paquete dune
+
+  paquete flac
+  paquete gnutls
+  paquete libxml
+  paquete lz4
+  paquete mariadb
+  paquete nginx
+
+  exit 1
+
   # Todo lo de perl tuvo que recompilarse
   # evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
   # Si por ejemplo es:

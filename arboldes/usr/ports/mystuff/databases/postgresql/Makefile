@@ -7,9 +7,8 @@ COMMENT-contrib=PostgreSQL RDBMS contributions
 COMMENT-plpython=Python procedural language for PostgreSQL
 COMMENT-pg_upgrade=Support for upgrading PostgreSQL data from previous version
 
-VERSION=	13.2
-PREV_MAJOR=	12
-REVISION=	1
+VERSION=	14beta1
+PREV_MAJOR=	13
 DISTNAME=	postgresql-${VERSION}
 PKGNAME-main=	postgresql-client-${VERSION}
 PKGNAME-server=	postgresql-server-${VERSION}
@@ -24,7 +23,7 @@ CATEGORIES=	databases
 SHARED_LIBS=	ecpg		7.10 \
 		ecpg_compat	4.10 \
 		pgtypes		4.9 \
-		pq		6.12
+		pq		6.13
 
 HOMEPAGE=	https://www.postgresql.org/
 
