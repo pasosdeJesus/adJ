@@ -904,44 +904,44 @@ include/${POSTGRESQL_DIR}/sqlda-compat.h
 include/${POSTGRESQL_DIR}/sqlda-native.h
 include/${POSTGRESQL_DIR}/sqlda.h
 lib/${POSTGRESQL_DIR}/
-lib/${POSTGRESQL_DIR}/_int.so
-lib/${POSTGRESQL_DIR}/adminpack.so
-lib/${POSTGRESQL_DIR}/amcheck.so
-lib/${POSTGRESQL_DIR}/ascii_and_mic.so
-lib/${POSTGRESQL_DIR}/auth_delay.so
-lib/${POSTGRESQL_DIR}/auto_explain.so
-lib/${POSTGRESQL_DIR}/autoinc.so
-lib/${POSTGRESQL_DIR}/bloom.so
-lib/${POSTGRESQL_DIR}/btree_gin.so
-lib/${POSTGRESQL_DIR}/btree_gist.so
-lib/${POSTGRESQL_DIR}/citext.so
-lib/${POSTGRESQL_DIR}/cube.so
-lib/${POSTGRESQL_DIR}/cyrillic_and_mic.so
-lib/${POSTGRESQL_DIR}/dblink.so
-lib/${POSTGRESQL_DIR}/dict_int.so
-lib/${POSTGRESQL_DIR}/dict_snowball.so
-lib/${POSTGRESQL_DIR}/dict_xsyn.so
-lib/${POSTGRESQL_DIR}/earthdistance.so
-lib/${POSTGRESQL_DIR}/euc2004_sjis2004.so
-lib/${POSTGRESQL_DIR}/euc_cn_and_mic.so
-lib/${POSTGRESQL_DIR}/euc_jp_and_sjis.so
-lib/${POSTGRESQL_DIR}/euc_kr_and_mic.so
-lib/${POSTGRESQL_DIR}/euc_tw_and_big5.so
-lib/${POSTGRESQL_DIR}/file_fdw.so
-lib/${POSTGRESQL_DIR}/fuzzystrmatch.so
-lib/${POSTGRESQL_DIR}/hstore.so
-lib/${POSTGRESQL_DIR}/hstore_plperl.so
-lib/${POSTGRESQL_DIR}/insert_username.so
-lib/${POSTGRESQL_DIR}/isn.so
-lib/${POSTGRESQL_DIR}/jsonb_plperl.so
-lib/${POSTGRESQL_DIR}/latin2_and_win1250.so
-lib/${POSTGRESQL_DIR}/latin_and_mic.so
-lib/${POSTGRESQL_DIR}/libecpg.a
-lib/${POSTGRESQL_DIR}/libecpg.so
+@so lib/${POSTGRESQL_DIR}/_int.so
+@so lib/${POSTGRESQL_DIR}/adminpack.so
+@so lib/${POSTGRESQL_DIR}/amcheck.so
+@so lib/${POSTGRESQL_DIR}/auth_delay.so
+@so lib/${POSTGRESQL_DIR}/auto_explain.so
+@so lib/${POSTGRESQL_DIR}/autoinc.so
+@so lib/${POSTGRESQL_DIR}/bloom.so
+@so lib/${POSTGRESQL_DIR}/bool_plperl.so
+@so lib/${POSTGRESQL_DIR}/btree_gin.so
+@so lib/${POSTGRESQL_DIR}/btree_gist.so
+@so lib/${POSTGRESQL_DIR}/citext.so
+@so lib/${POSTGRESQL_DIR}/cube.so
+@so lib/${POSTGRESQL_DIR}/cyrillic_and_mic.so
+@so lib/${POSTGRESQL_DIR}/dblink.so
+@so lib/${POSTGRESQL_DIR}/dict_int.so
+@so lib/${POSTGRESQL_DIR}/dict_snowball.so
+@so lib/${POSTGRESQL_DIR}/dict_xsyn.so
+@so lib/${POSTGRESQL_DIR}/earthdistance.so
+@so lib/${POSTGRESQL_DIR}/euc2004_sjis2004.so
+@so lib/${POSTGRESQL_DIR}/euc_cn_and_mic.so
+@so lib/${POSTGRESQL_DIR}/euc_jp_and_sjis.so
+@so lib/${POSTGRESQL_DIR}/euc_kr_and_mic.so
+@so lib/${POSTGRESQL_DIR}/euc_tw_and_big5.so
+@so lib/${POSTGRESQL_DIR}/file_fdw.so
+@so lib/${POSTGRESQL_DIR}/fuzzystrmatch.so
+@so lib/${POSTGRESQL_DIR}/hstore.so
+@so lib/${POSTGRESQL_DIR}/hstore_plperl.so
+@so lib/${POSTGRESQL_DIR}/insert_username.so
+@so lib/${POSTGRESQL_DIR}/isn.so
+@so lib/${POSTGRESQL_DIR}/jsonb_plperl.so
+@so lib/${POSTGRESQL_DIR}/latin2_and_win1250.so
+@so lib/${POSTGRESQL_DIR}/latin_and_mic.so
+@static-lib lib/${POSTGRESQL_DIR}/libecpg.a
+@so lib/${POSTGRESQL_DIR}/libecpg.so
 lib/${POSTGRESQL_DIR}/libecpg.so.7
 @lib lib/${POSTGRESQL_DIR}/libecpg.so.${LIBecpg_VERSION}
-lib/${POSTGRESQL_DIR}/libecpg_compat.a
-lib/${POSTGRESQL_DIR}/libecpg_compat.so
+@static-lib lib/${POSTGRESQL_DIR}/libecpg_compat.a
+@so lib/${POSTGRESQL_DIR}/libecpg_compat.so
 lib/${POSTGRESQL_DIR}/libecpg_compat.so.4
 @lib lib/${POSTGRESQL_DIR}/libecpg_compat.so.${LIBecpg_compat_VERSION}
 @static-lib lib/${POSTGRESQL_DIR}/libpgcommon.a
@@ -953,27 +953,27 @@ lib/${POSTGRESQL_DIR}/libecpg_compat.so.4
 @so lib/${POSTGRESQL_DIR}/libpgtypes.so
 lib/${POSTGRESQL_DIR}/libpgtypes.so.4
 @lib lib/${POSTGRESQL_DIR}/libpgtypes.so.${LIBpgtypes_VERSION}
-lib/${POSTGRESQL_DIR}/libpq.a
-lib/${POSTGRESQL_DIR}/libpq.so
+@static-lib lib/${POSTGRESQL_DIR}/libpq.a
+@so lib/${POSTGRESQL_DIR}/libpq.so
 lib/${POSTGRESQL_DIR}/libpq.so.6
 @lib lib/${POSTGRESQL_DIR}/libpq.so.${LIBpq_VERSION}
-lib/${POSTGRESQL_DIR}/libpqwalreceiver.so
-lib/${POSTGRESQL_DIR}/lo.so
-lib/${POSTGRESQL_DIR}/ltree.so
-lib/${POSTGRESQL_DIR}/moddatetime.so
-lib/${POSTGRESQL_DIR}/pageinspect.so
-lib/${POSTGRESQL_DIR}/passwordcheck.so
-lib/${POSTGRESQL_DIR}/pg_buffercache.so
-lib/${POSTGRESQL_DIR}/pg_freespacemap.so
-lib/${POSTGRESQL_DIR}/pg_prewarm.so
-lib/${POSTGRESQL_DIR}/pg_stat_statements.so
-lib/${POSTGRESQL_DIR}/pg_trgm.so
-lib/${POSTGRESQL_DIR}/pg_visibility.so
-lib/${POSTGRESQL_DIR}/pgcrypto.so
-lib/${POSTGRESQL_DIR}/pgoutput.so
-lib/${POSTGRESQL_DIR}/pgrowlocks.so
-lib/${POSTGRESQL_DIR}/pgstattuple.so
-lib/${POSTGRESQL_DIR}/pgxml.so
+@so lib/${POSTGRESQL_DIR}/libpqwalreceiver.so
+@so lib/${POSTGRESQL_DIR}/lo.so
+@so lib/${POSTGRESQL_DIR}/ltree.so
+@so lib/${POSTGRESQL_DIR}/moddatetime.so
+@so lib/${POSTGRESQL_DIR}/pageinspect.so
+@so lib/${POSTGRESQL_DIR}/passwordcheck.so
+@so lib/${POSTGRESQL_DIR}/pg_buffercache.so
+@so lib/${POSTGRESQL_DIR}/pg_freespacemap.so
+@so lib/${POSTGRESQL_DIR}/pg_prewarm.so
+@so lib/${POSTGRESQL_DIR}/pg_stat_statements.so
+@so lib/${POSTGRESQL_DIR}/pg_trgm.so
+@so lib/${POSTGRESQL_DIR}/pg_visibility.so
+@so lib/${POSTGRESQL_DIR}/pgcrypto.so
+@so lib/${POSTGRESQL_DIR}/pgoutput.so
+@so lib/${POSTGRESQL_DIR}/pgrowlocks.so
+@so lib/${POSTGRESQL_DIR}/pgstattuple.so
+@so lib/${POSTGRESQL_DIR}/pgxml.so
 lib/${POSTGRESQL_DIR}/pgxs/
 lib/${POSTGRESQL_DIR}/pgxs/config/
 lib/${POSTGRESQL_DIR}/pgxs/config/install-sh
@@ -993,38 +993,41 @@ lib/${POSTGRESQL_DIR}/pkgconfig/libecpg.pc
 lib/${POSTGRESQL_DIR}/pkgconfig/libecpg_compat.pc
 lib/${POSTGRESQL_DIR}/pkgconfig/libpgtypes.pc
 lib/${POSTGRESQL_DIR}/pkgconfig/libpq.pc
-lib/${POSTGRESQL_DIR}/plperl.so
-lib/${POSTGRESQL_DIR}/plpgsql.so
-lib/${POSTGRESQL_DIR}/postgres_fdw.so
-lib/${POSTGRESQL_DIR}/refint.so
-lib/${POSTGRESQL_DIR}/seg.so
-lib/${POSTGRESQL_DIR}/sslinfo.so
-lib/${POSTGRESQL_DIR}/tablefunc.so
-lib/${POSTGRESQL_DIR}/tcn.so
-lib/${POSTGRESQL_DIR}/test_decoding.so
-lib/${POSTGRESQL_DIR}/tsm_system_rows.so
-lib/${POSTGRESQL_DIR}/tsm_system_time.so
-lib/${POSTGRESQL_DIR}/unaccent.so
-lib/${POSTGRESQL_DIR}/utf8_and_ascii.so
-lib/${POSTGRESQL_DIR}/utf8_and_big5.so
-lib/${POSTGRESQL_DIR}/utf8_and_cyrillic.so
-lib/${POSTGRESQL_DIR}/utf8_and_euc2004.so
-lib/${POSTGRESQL_DIR}/utf8_and_euc_cn.so
-lib/${POSTGRESQL_DIR}/utf8_and_euc_jp.so
-lib/${POSTGRESQL_DIR}/utf8_and_euc_kr.so
-lib/${POSTGRESQL_DIR}/utf8_and_euc_tw.so
-lib/${POSTGRESQL_DIR}/utf8_and_gb18030.so
-lib/${POSTGRESQL_DIR}/utf8_and_gbk.so
-lib/${POSTGRESQL_DIR}/utf8_and_iso8859.so
-lib/${POSTGRESQL_DIR}/utf8_and_iso8859_1.so
-lib/${POSTGRESQL_DIR}/utf8_and_johab.so
-lib/${POSTGRESQL_DIR}/utf8_and_sjis.so
-lib/${POSTGRESQL_DIR}/utf8_and_sjis2004.so
-lib/${POSTGRESQL_DIR}/utf8_and_uhc.so
-lib/${POSTGRESQL_DIR}/utf8_and_win.so
-lib/${POSTGRESQL_DIR}/uuid-ossp.so
+@so lib/${POSTGRESQL_DIR}/plperl.so
+@so lib/${POSTGRESQL_DIR}/plpgsql.so
+@so lib/${POSTGRESQL_DIR}/postgres_fdw.so
+@so lib/${POSTGRESQL_DIR}/refint.so
+@so lib/${POSTGRESQL_DIR}/seg.so
+@so lib/${POSTGRESQL_DIR}/sslinfo.so
+@so lib/${POSTGRESQL_DIR}/tablefunc.so
+@so lib/${POSTGRESQL_DIR}/tcn.so
+@so lib/${POSTGRESQL_DIR}/test_decoding.so
+@so lib/${POSTGRESQL_DIR}/tsm_system_rows.so
+@so lib/${POSTGRESQL_DIR}/tsm_system_time.so
+@so lib/${POSTGRESQL_DIR}/unaccent.so
+@so lib/${POSTGRESQL_DIR}/utf8_and_big5.so
+@so lib/${POSTGRESQL_DIR}/utf8_and_cyrillic.so
+@so lib/${POSTGRESQL_DIR}/utf8_and_euc2004.so
+@so lib/${POSTGRESQL_DIR}/utf8_and_euc_cn.so
+@so lib/${POSTGRESQL_DIR}/utf8_and_euc_jp.so
+@so lib/${POSTGRESQL_DIR}/utf8_and_euc_kr.so
+@so lib/${POSTGRESQL_DIR}/utf8_and_euc_tw.so
+@so lib/${POSTGRESQL_DIR}/utf8_and_gb18030.so
+@so lib/${POSTGRESQL_DIR}/utf8_and_gbk.so
+@so lib/${POSTGRESQL_DIR}/utf8_and_iso8859.so
+@so lib/${POSTGRESQL_DIR}/utf8_and_iso8859_1.so
+@so lib/${POSTGRESQL_DIR}/utf8_and_johab.so
+@so lib/${POSTGRESQL_DIR}/utf8_and_sjis.so
+@so lib/${POSTGRESQL_DIR}/utf8_and_sjis2004.so
+@so lib/${POSTGRESQL_DIR}/utf8_and_uhc.so
+@so lib/${POSTGRESQL_DIR}/utf8_and_win.so
+@so lib/${POSTGRESQL_DIR}/uuid-ossp.so
 share/doc/postgresql/
 share/doc/postgresql/extension/
+share/doc/postgresql/extension/autoinc.example
+share/doc/postgresql/extension/insert_username.example
+share/doc/postgresql/extension/moddatetime.example
+share/doc/postgresql/extension/refint.example
 share/${POSTGRESQL_DIR}/
 share/${POSTGRESQL_DIR}/errcodes.txt
 share/${POSTGRESQL_DIR}/extension/

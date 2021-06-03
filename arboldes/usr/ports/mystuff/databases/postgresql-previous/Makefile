@@ -2,7 +2,7 @@
 
 COMMENT=	PostgreSQL RDBMS (previous version, for pg_upgrade)
 
-VERSION=	12.5
+VERSION=	13.3
 #REVISION=	1
 DISTNAME=	postgresql-${VERSION}
 PKGNAME=	postgresql-previous-${VERSION}

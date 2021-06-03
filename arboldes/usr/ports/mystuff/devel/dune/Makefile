@@ -6,8 +6,8 @@ CATEGORIES =		devel
 
 GH_ACCOUNT =		ocaml
 GH_PROJECT =		dune
-GH_TAGNAME =		1.11.3
-REVISION =		2
+GH_TAGNAME =		2.8.5
+REVISION =		
 
 HOMEPAGE =		https://github.com/ocaml/dune
 
