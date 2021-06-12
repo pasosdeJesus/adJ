@@ -3,7 +3,7 @@
 COMMENT=	OCaml package manager
 CATEGORIES=	sysutils
 DISTNAME=	findlib-1.9.1
-REVISION=	
+REVISION=1
 
 MASTER_SITES=	http://download.camlcity.org/download/
 

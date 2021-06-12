@@ -16,14 +16,3 @@
        builtin_define ("__unix__");		\
        builtin_define ("__ANSI_COMPAT");		\
        builtin_assert ("system=unix");		\
-diff -ruN src65-orig/gnu/llvm/clang/lib/Basic/Targets/OSTargets.h src/gnu/llvm/clang/lib/Basic/Targets/OSTargets.h
---- src65-orig/gnu/llvm/clang/lib/Basic/Targets/OSTargets.h	Sun Jan 27 11:43:02 2019
-+++ src/gnu/llvm/clang/lib/Basic/Targets/OSTargets.h	Mon Jul  8 03:11:42 2019
-@@ -382,6 +382,7 @@
-     // OpenBSD defines; list based off of gcc output
- 
-     Builder.defineMacro("__OpenBSD__");
-+    Builder.defineMacro("__adJ__");
-     DefineStd(Builder, "unix", Opts);
-     Builder.defineMacro("__ELF__");
-     if (Opts.POSIXThreads)

@@ -53,10 +53,10 @@ export autoJuegosInstalacion=n
 # Crear juegos de instalación en subdirectorio de este
 export autoTodosPaquetes=n
 # Compilar todos los paquetes (util en Octubre y Abril)
-export autoPaquetes=n
+export autoPaquetes=s
 # Compilar paquetes especiales que hacen parte de la distribución
 
-export autoMasPaquetes=n
+export autoMasPaquetes=s
 # Descargar resto de paquetes de repositorio PKG_PATH
 export autoMasPaquetesInv=n
 # Descargar resto de paquetes en orden alfabético inverso

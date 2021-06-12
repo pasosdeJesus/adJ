@@ -1,0 +1,43 @@
+$OpenBSD$
+
+Index: src/gboy.h
+--- src/gboy.h.orig
++++ src/gboy.h
+@@ -155,7 +155,7 @@
+  */
+ 
+ /* Information about the cartridge being executed */
+-struct gb_cart {
++struct s_gb_cart {
+ 	char cart_name[17];
+ 	char cart_licensee[3];
+ 	Uint8 cart_type; // MBC used by cartridge
+@@ -173,7 +173,8 @@ struct gb_cart {
+ 	Uint8 *cart_wram_bank;
+ 	FILE *cart_ram_fd;
+ 	FILE *cart_rtc_fd; // MBC3's Real Time Clock
+-} gb_cart;
++};
++extern struct s_gb_cart gb_cart;
+ 
+ /* 
+  * Information about the cartridge's MBC chip.
+@@ -184,7 +185,7 @@ struct gb_cart {
+  * Be careful if adding, removing or changing order of elements.
+  * YOU HAVE BEEN WARNED.
+  */
+-struct gb_mbc {
++struct s_gb_mbc {
+ 	void (*mbc_funcs[10])(int); // MBC generic functions
+ 	time_t mbc_rtc_last;
+ 	long mbc_rtc_regs[5]; // MBC3 RTC's registers
+@@ -192,7 +193,8 @@ struct gb_mbc {
+ 	char mbc_ram_rom_mode;
+ 	char mbc_ram_rom_upp;
+ 	char mbc_rtc_reg_sel;
+-} gb_mbc;
++};
++extern struct s_gb_mbc gb_mbc;
+ 
+ /* 
+  * Structures used by the commmand-line interpreter.

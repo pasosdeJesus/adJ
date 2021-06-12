@@ -2,7 +2,7 @@
 Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
 
-### Versión: 6.9
+### Versión: 6.9a1
 Fecha de publicación: 10/Jun/2021
 
 Puede ver novedades respecto a OpenBSD en:
@@ -13,10 +13,10 @@ Puede ver novedades respecto a OpenBSD en:
 Puede ver las diversas versiones publicadas en: 
   <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/>
 
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/AprendiendoDeJesus-6.9-amd64.iso> 
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/AprendiendoDeJesus-6.9a1-amd64.iso> 
   es imagen en formato ISO para quemar en DVD e instalar por primera vez
   en modo BIOS Legacy.
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/6.9-amd64/>
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/6.9a1-amd64/>
   es directorio con el contenido del DVD instalador apropiado para descargar 
   con rsync y actualizar un adJ ya instalado (ver  
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_9/Actualiza.md> )
@@ -24,13 +24,13 @@ Puede ver las diversas versiones publicadas en:
   directorio con versiones recientes de paquetes no incluidos en distribución 
   oficial (pueden no estar firmados y requerir instalación con 
   `pkg_add -D unsigned _paquete_`).
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarollo/AprendiendoDeJesus-6.9-amd64.usb> 
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarollo/AprendiendoDeJesus-6.9a1-amd64.usb> 
   es imagen para escribir en una memoria USB y arrancar con esta bien en
   modo UEFI o bien en modo BIOS Legacy. Una vez 
   la descargue puede escribirla en una USB ubicada en `/dev/sd2c` 
   (verifique dispositivo con `dmesg` y remplace) con:
 
-       doas dd if=AprendiendoDeJesus-6.9-amd64.usb of=/dev/sd2c bs=1M
+       doas dd if=AprendiendoDeJesus-6.9a1-amd64.usb of=/dev/sd2c bs=1M
 
  Este proceso puede ser demorado, puede ver el progreso con 
 
@@ -38,21 +38,20 @@ Puede ver las diversas versiones publicadas en:
 
  O si desea probarla con qemu para instalar en un disco `virtual.raw`:
 
-       qemu-system-x86_64 -hda virtual.raw -hdb AprendiendoDeJesus-6.9-amd64.usb -boot menu=on
+       qemu-system-x86_64 -hda virtual.raw -hdb AprendiendoDeJesus-6.9a1-amd64.usb -boot menu=on
 
 
 ## 2. NOVEDADES RESPECTO A ADJ 6.9 PROVENIENTES DE OPENBSD
 
 ### 2.1 Kernel y Sistema Base
 
-Novedades tomadas de <https://www.openbsd.org/68.html> y de 
-<https://home.nuug.no/~peter/openbsd_and_you_68/#1>
+Novedades tomadas de <https://www.openbsd.org/69.html> 
 
-* Aplicados parches de seguridad hasta el 2.Jun.2021 provenientes de 
-  OpenBSD que incluyen solución a fallas de OpenSMTPD y sysctl
+* Aplicados parches de seguridad hasta el x.y.2021 provenientes de 
+  OpenBSD que incluyen soluciones a fallas
 * Controladores ampliados o mejorados para amd64
 	* Red:
-		* Inalámbrica: 
+		* Inalámbrica: Mejorados `iwm` e `iwx`
 		* Ethernet:
 	* Vídeo: 
 	* Sonido:
@@ -64,19 +63,24 @@ Novedades tomadas de <https://www.openbsd.org/68.html> y de
 * Seguridad
 	* 
 * Otros
+  * Permite arranque desde GPT en discos formateados de más de 4TB
+  * 
+  * Nueva disciplina para softraid RAID1C (raid1 cifrado)
+  * Nuevo kern.video.record para sysctl que previene o posibilita grabar video,
+    analogo a kern.audio.record.
   * Remplazado `ld` el enlazador que genera ejecutables ELF por el del
     proyecto LLVM. Hasta OpenBSD 6.8 se usaba el del proyecto GNU.
     El nuevo `ld` reporta situaciones erroneas, que no eran detectadas o
     reportadas por el anterior.
 * El sistema base incluye mejoras a componentes auditados y mejorados 
-  como, `llvm` x,  `Xenocara` (basado en `Xorg` x.x),
-  `perl` x
-* El repositorio de paquetes de OpenBSD cuenta con x para amd64
+  como, `llvm` 10.0.1,  `Xenocara` (basado en `Xorg` 7.7),
+  `perl` 5.32
+* El repositorio de paquetes de OpenBSD cuenta con 11310 para amd64
 
 
 ### 2.2 Paquetes 
 
-* Ruby 3...
+* Ruby 3.0.1
   * 
 * Postgresql ... tomado de correos a ports-openbsd
 * Veracrypt ...  tomado de correos a ports-openbsd
@@ -129,9 +133,12 @@ Novedades tomadas de <https://www.openbsd.org/68.html> y de
 
 ## 4. FE DE ERRATAS
 
-- Chromium sigue siendo inestable por ejemplo en ocasiones en 
-  <http://drive.google.com>
-  por esto sigue incluyendose firefox que en casos como ese puede operar.
+- Chromium no permite ingreso a servicios de Google como
+  <https://drive.google.com>
+  por esto sigue incluyéndose firefox que en casos como ese puede operar.
+
+- Firefox empezó a ser inestable en servicios como <https://drive.google.com>
+
 
 - `xenodm` no logra utilizar un teclado latinoamericano que se haya
   configurado en `/etc/kbdtype`.  Para usarlo

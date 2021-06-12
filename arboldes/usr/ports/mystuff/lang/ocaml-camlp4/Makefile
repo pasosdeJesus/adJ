@@ -4,8 +4,7 @@ COMMENT =	OCaml Preprocessor and Pretty-Printer
 CATEGORIES =	lang
 
 EPOCH =		0
-V =            	4.10+1
-REVISION=1
+V =            	4.12+1
 GH_ACCOUNT =	ocaml
 GH_PROJECT =	camlp4
 GH_TAGNAME =	${V}
@@ -29,7 +28,7 @@ USE_GMAKE =		Yes
 
 CONFIGURE_STYLE =	simple
 
-BUILD_DEPENDS =         devel/ocaml-ocamlbuild
+#BUILD_DEPENDS =         devel/ocaml-ocamlbuild
 
 MAKE_ENV =		DESTDIR=${WRKINST}
 

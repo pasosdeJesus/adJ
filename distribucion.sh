@@ -803,25 +803,6 @@ if (test "$sn" = "s") then {
   # Modificados para posibilitar compilación
   # Deben estar en mystuff
 
-  paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs postgresql-pg_upgrade" 
-  paquete postgresql-previous 
-  paquete postgis
-  paquete chromium
-
-  paquete ocaml paquetes "ocaml"
-  paquete ocamlbuild 
-  paquete ocaml-camlp4
-  paquete findlib
-  paquete dune
-
-  paquete flac
-  paquete gnutls
-  paquete libxml
-  paquete lz4
-  paquete mariadb
-  paquete nginx
-
-  exit 1
 
   # Todo lo de perl tuvo que recompilarse
   # evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
@@ -906,6 +887,7 @@ if (test "$sn" = "s") then {
   paquete p5-HTTP-Negotiate
   paquete p5-IO-HTML
   paquete p5-IO-Socket-SSL
+  paquete p5-JSON
   paquete p5-JSON-MaybeXS
   paquete p5-LWP-MediaTypes
   paquete p5-LWP-Protocol-https
@@ -935,6 +917,7 @@ if (test "$sn" = "s") then {
   paquete p5-Net-SSLeay
   paquete p5-NetAddr-IP
   paquete p5-PlRPC
+  paquete p5-Pod-Parser
   paquete p5-Role-Tiny
   paquete p5-SQL-Statement
   paquete p5-Socket6
@@ -980,9 +963,10 @@ if (test "$sn" = "s") then {
   # Actualizados.  Están desactualizado en OpenBSD estable y current
   paquete ocaml paquetes "ocaml"
   paquete ocamlbuild 
-  paquete ocaml-camlp4
+  #paquete ocaml-camlp4
   paquete findlib
-  paquete dune
+  paquete dune # requiere findlib
+  paquete hevea # requiere ocamlbuild
 
   ####
   # Recompilados para cerrar fallas de portes actualizados (estable)
@@ -998,7 +982,7 @@ if (test "$sn" = "s") then {
   paquete gnutls
   paquete libxml
   paquete lz4
-  paquete mariadb
+  paquete mariadb-client paquetes "mariadb-client mariadb-server" 
   #paquete mutt
   paquete nginx
   #paquete oniguruma 

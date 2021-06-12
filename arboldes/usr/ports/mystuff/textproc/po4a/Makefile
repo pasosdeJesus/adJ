@@ -5,7 +5,7 @@
 COMMENT= "Translation of documentation. PO for anything"
 
 VERSION=         0.63
-REVISION= 
+REVISION=        1
 DISTNAME=        v${VERSION}
 CATEGORIES=      textproc
 PKGNAME=         po4a-${VERSION}
@@ -22,6 +22,7 @@ PERMIT_PACKAGE=  Yes
 
 BUILD_DEPENDS=   ${RUN_DEPENDS} 
 RUN_DEPENDS=     devel/p5-Locale-gettext \
+                 textproc/p5-Pod-Parser \
                  textproc/p5-SGMLSpm \
                  converters/p5-Unicode-LineBreak \
                  textproc/openjade \

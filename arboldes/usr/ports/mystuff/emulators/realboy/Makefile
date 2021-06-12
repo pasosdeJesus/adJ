@@ -6,7 +6,7 @@ COMMENT=	Emulador de Game Boy Classic/Game Boy Color
 
 VERSION=	0.2.2
 DISTNAME=       realboy-${VERSION}
-REVISION=	0
+REVISION=	1
 #PKGNAME=        ${DISTNAME:L}
 
 

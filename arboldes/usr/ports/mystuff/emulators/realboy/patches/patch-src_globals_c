@@ -1,0 +1,24 @@
+$OpenBSD$
+
+Index: src/globals.c
+--- src/globals.c.orig
++++ src/globals.c
+@@ -19,6 +19,8 @@
+ #include <SDL/SDL.h>
+ #define MAX_STRS 8
+ 
++#include "gboy.h"
++
+ /* Misc globals */
+ char inp_buf[512];
+ char *cmd_ptrs[MAX_STRS+2];
+@@ -29,3 +31,9 @@ char *file_path=NULL;
+ Uint8 addr_sp[0x10000];
+ long chg_gam=0;
+ long addr_sp_ptrs[16] = { 0 };
++
++
++struct s_gb_cart gb_cart;
++
++struct s_gb_mbc gb_mbc;
++

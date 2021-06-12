@@ -49,7 +49,6 @@ TiposLectoEscritura-[v]	Tipos de letra para aprender a leer y escribir
 ** Otros
 
 realboy-[v]		Emulador de Game Boy Classic/Color
-xmrig-[v]		Para minar criptomoneda monero
 
 ----
 COMPONENTES BÁSICOS DE OPENBSD [V] PARA amd64.  http://www.openbsd.org
@@ -87,8 +86,8 @@ fbdesk-[v]		Permite poner iconos en escritorio fluxbox
 fluxbox-[v]		Escritorio extra liviano
 fluxter-[v]		Pagina espacios de trabajo en fluxbox
 filezilla-[v]	Transmite archivos (soporta protocolo ssh)
-firefox-[v]		Navegador web Firefox
-firefox-i18n-es-AR-[v]	Componente de Español para Firefox
+firefox-esr-[v]		Navegador web Firefox, versión con soporte extendido
+firefox-esr-i18n-es-AR-[v]	Componente de Español para Firefox
 gimp-[v]		Editor gráfico por pixels
 gnumeric-[v]	Hoja de cálculo
 gv-[v]		Visualizador de PostScript y PDF
@@ -209,6 +208,7 @@ clisp-[v]		Implementación de ANSI Common Lisp
 clucene-core-[v]	Librería para búsquedas de textos completos
 colord-[v]		Maneja perfiles de colores de dispositivos
 consolekit2-[v]	Entorno para definir y seguir usuarios
+coreutils-[v]
 cups-libs-[v]		Librerías y encabezados de CUPS
 cups-filters-[v]	Filtros para CUPS de OpenPrinting
 cvsps-[v]		Genera conjuntos de parches de repositorios CVS
@@ -462,7 +462,6 @@ openpam-[v]	Modulo enchufable de autenticación
 opensp-[v]		Reconocedor SGML orientado a objetos
 opus-[v]		Codificador de audio IETF
 opusfile-[v]		API de alto nivel para decodificar en archivos Opus
-ocaml-camlp4-[v]	Sintaxis camlp4 para Ocaml
 ocamlbuild-[v]	Para construir proyectos en OCaml
 oniguruma-[v]		Librería de expresiones regulares
 orc-[v]		Librería y herramientas para operar arreglos de datos
@@ -526,6 +525,7 @@ p5-IO-HTML-[v]	Interfaz para objetos AF_INET y AF_INET6
 p5-IO-Socket-SSL-[v]	Interfaz para sockets SSL	
 p5-IO-String-[v]	Emula interfaz IO::File para cadenas in-core
 p5-IPC-Run3-[v]	Ejecuta subproceso en modo por lotes
+p5-JSON-[v]	
 p5-JSON-MaybeXS-[v]	Usa Cpanel::JSON::XS o JSON::XS o JSON:PP
 p5-libwww-[v]	Librería de acceso WWW
 p5-LWP-MediaTypes-[v]	Adivina tipo de medio en una url
@@ -573,9 +573,10 @@ p5-Package-Stash-XS-[v]	Como p5-Package-Stash más rápido y correcto
 p5-Params-Util-[v]	Facilita revisión de parámetros	
 p5-Params-Validate-[v]	Valida parámetros de funciones/métodos
 p5-Params-ValidationCompiler-[v] 	Construye validador de parámetros
+p5-Pod-Parser-[v]	
+p5-PlRPC-[v]	Módulo para escribir clientes y servidores RPC
 p5-Ref-Util-[v]	Funciones para checquear referencias
 p5-Ref-Util-XS-[v]	Funciones para checquear referencias (versión XS)
-p5-PlRPC-[v]	Módulo para escribir clientes y servidores RPC
 p5-Role-Tiny-[v]	Herramienta de composición de roles minimalista
 p5-Socket6-[v]	Definiciones relacionadas con sockets AF_INET6	
 p5-Sort-Naturally-[v]	Ordenamiento lexicográfico con numérico
