@@ -12,8 +12,8 @@ muestra como se ve (el juego de colores es configurable):
 
 Nota que:
 * En el panel superior izquierdo está editando un texto plano en
-español, se marcan los errores de ortografía y se está auto-completando
-la palabra configuración.
+  español, se marcan los errores de ortografía y se está auto-completando
+  la palabra configuración.
 * En el panel superior derecho se ve el inicio de una sesión típica
   que por omisión presenta un versículo aleatorio (si prefiere puede
   deshabilitarlo en el archivo de configuración `.zshrc`)
