@@ -2665,7 +2665,15 @@ diff -ruN src/lib/libc/hidden/monetary.h.orig src/lib/libc/hidden/monentary.h
 diff -ruN src/lib/libc/hidden/stdlib.h.orig  src/lib/libc/hidden/stdlib.h
 --- src/lib/libc/hidden/stdlib.h.orig	Sun Aug 21 23:26:56 2016
 +++ src/lib/libc/hidden/stdlib.h	Sun Aug 21 23:27:02 2016
-@@ -145,9 +145,12 @@
+@@ -51,6 +51,7 @@
+ #endif
+ 
+ PROTO_NORMAL(__mb_cur_max);
++PROTO_NORMAL(___mb_cur_max_l);
+ PROTO_STD_DEPRECATED(_Exit);
+ PROTO_DEPRECATED(a64l);
+ PROTO_NORMAL(abort);
+@@ -153,9 +154,12 @@
  PROTO_DEPRECATED(srandom_deterministic);
  PROTO_DEPRECATED(srandomdev);
  PROTO_NORMAL(strtod);
