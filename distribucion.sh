@@ -803,6 +803,14 @@ if (test "$sn" = "s") then {
   # Modificados para posibilitar compilación
   # Deben estar en mystuff
 
+  paquete ruby paquetes "ruby ruby30-ri_docs" 3.0
+  paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs postgresql-pg_upgrade" 
+  paquete curl
+  paquete dovecot
+  paquete python paquetes "python" "3.9"
+  paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 8.0
+  paquete mariadb-client paquetes "mariadb-client mariadb-server" 
+  exit 1
 
   # Todo lo de perl tuvo que recompilarse
   # evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)

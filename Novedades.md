@@ -105,13 +105,6 @@ Novedades tomadas de <https://www.openbsd.org/69.html>
 
 * El paquete `evangelios_dp` ahora incluye ...
   evangelio de Juan.
-* Compiladas versiones más recientes de ...
-* Nuevo paquete ...
-* Se han recompilado los siguientes para aprovechar `xlocale`:
-   `glib2`, `libunistring`, `vlc`
-* Retroportados y adaptados de OpenBSD-current 
-  * `chromium` x con llave para API de Google de Pasos de Jesús 
-     en lugar de OpenBSD
 * Se incluye la versión beta 16 de `sivel2` cuyas novedades con respecto al 
   beta 14 incluido en adJ 6.8 se describen a continuación. Agradecimiento por
   algunas de las novedades a Luis Alejandro Cruz:
@@ -123,7 +116,17 @@ Novedades tomadas de <https://www.openbsd.org/69.html>
     * 
   * Control de acceso y bitácoras
     * 
-
+* Adaptados de portes enviados a lista de portes de OpenBSD:
+  * `postgresql-14beta2`
+* Retroportados y adaptados de OpenBSD-current 
+  * `ruby-3.0.2`
+  * `chromium` x con llave para API de Google de Pasos de Jesús 
+     en lugar de OpenBSD
+* Se han recompilado los siguientes para aprovechar `xlocale`:
+   `glib2`, `libunistring`, `vlc`
+* Nuevo paquete ...
+* Para cerrar fallas de seguridad actualizados portes de la rama estable
+  de OpenBSD para: `curl`, `dovecot`, `python 3.9`, `php 8.0`, `mariadb`
 
 ### 3.3 Configuración
 * Es sencillo emplear como interprete de ordenes zsh con tmux para
