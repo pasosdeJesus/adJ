@@ -9,33 +9,3 @@ diff -ruN src65-orig/gnu/llvm/clang/lib/Basic/Targets/OSTargets.h src/gnu/llvm/c
      DefineStd(Builder, "unix", Opts);
      Builder.defineMacro("__ELF__");
      if (Opts.POSIXThreads)
-diff -ruN src69-orig/gnu/llvm/libcxx/include/__config src/gnu/llvm/libcxx/include/__config
---- src69-orig/gnu/llvm/libcxx/include/__config	Sat Jan  2 16:18:29 2021
-+++ src/gnu/llvm/libcxx/include/__config	Fri Jun 11 21:38:16 2021
-@@ -915,7 +915,8 @@
- #endif
- 
- #if defined(__APPLE__) || defined(__FreeBSD__) || defined(_LIBCPP_MSVCRT_LIKE) || \
--    defined(__sun__) || defined(__NetBSD__) || defined(__CloudABI__)
-+    defined(__sun__) || defined(__NetBSD__) || defined(__CloudABI__) || \
-+    defined(__adJ__)
- #define _LIBCPP_LOCALE__L_EXTENSIONS 1
- #endif
- 
-diff -ruN src69-orig/gnu/llvm/libcxx/include/__locale src/gnu/llvm/libcxx/include/__locale
---- src69-orig/gnu/llvm/libcxx/include/__locale	Sat Jan  2 16:18:29 2021
-+++ src/gnu/llvm/libcxx/include/__locale	Fri Jun 11 22:05:19 2021
-@@ -28,10 +28,11 @@
- #elif defined(__sun__)
- # include <xlocale.h>
- # include <support/solaris/xlocale.h>
--#elif defined(_NEWLIB_VERSION) || defined(__OpenBSD__)
-+#elif defined(_NEWLIB_VERSION) || (defined(__OpenBSD__) && !defined(__adJ__))
- # include <support/newlib/xlocale.h>
- #elif (defined(__APPLE__)      || defined(__FreeBSD__) \
--    || defined(__EMSCRIPTEN__) || defined(__IBMCPP__))
-+    || defined(__EMSCRIPTEN__) || defined(__IBMCPP__) \
-+    || defined(__adJ__)) 
- # include <xlocale.h>
- #elif defined(__Fuchsia__)
- # include <support/fuchsia/xlocale.h>
