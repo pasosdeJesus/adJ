@@ -208,7 +208,7 @@ clisp-[v]		Implementación de ANSI Common Lisp
 clucene-core-[v]	Librería para búsquedas de textos completos
 colord-[v]		Maneja perfiles de colores de dispositivos
 consolekit2-[v]	Entorno para definir y seguir usuarios
-coreutils-[v]
+coreutils-[v] Utilidades para archivos, interprete de órdenes y texto
 cups-libs-[v]		Librerías y encabezados de CUPS
 cups-filters-[v]	Filtros para CUPS de OpenPrinting
 cvsps-[v]		Genera conjuntos de parches de repositorios CVS
@@ -300,7 +300,7 @@ gtk+3-cups-[v]	Punto al lado del servidor de sistema CUPS para gtk+3
 gtk-update-icon-cache-[v]	Utilidad para almacenar temas de iconos
 gtk2mm-[v]		Interfaz en C++ para gtk2+	
 gtkspell-[v]	Corrector ortográfico para gtk2
-gumbo-[v]
+gumbo-[v] 	Librería para reconocimiento de HTML5 en C99 puro
 gvfs-[v]		Sistema de archivos virtual de GNOME
 harfbuzz-[v]		Librería para dar formas a texto OpenType
 harfbuzz-icu-[v]	Soporte ICU para librería harfbuzz
@@ -354,7 +354,7 @@ liberation-fonts-[v]	Sustituto para fuentes principales MS TTF
 libevent-[v]		Librería para notificación de eventos
 libexecinfo-[v]	Facilidad backtrace
 libexif-[v]		Extrae tags de cámara digital de imágenes JPEG
-libexttextcat-[v]
+libexttextcat-[v]	Librería para adivinar idioma teniendo en cuenta UTF-8
 libfilezilla-[v]	Librería de soporte para FileZilla
 libffi-[v]		Interfaz de funciones foráneas
 libgadu-[v]	Implementación del protocolo de Mensajería Gadu-Gadu
@@ -392,7 +392,7 @@ libpsl-[v]		Librería con lista de sufijos pública
 libpurple-[v]	Librería multi-protocolo de mensajería instantánea
 libraw-[v]		Librería para leer archivos RAW
 librsvg-[v]		Librería para reconocer archivos SVG basada en SAX
-librttopo-[v]
+librttopo-[v]	Librería de topología RT
 libsamplerate-[v]	Librería de conversión de rata de audios
 libsecret-[v]	Librería para almacenar y recuperar claves y secretos
 libsigc++-[v]	Plataforma de retro-llamadas para C++
@@ -406,7 +406,7 @@ libspatialite-[v]	sqlite extendido con capacidades SQL espaciales
 libspectre-[v]	Librería para presentar documentos Postscript
 libssh-[v]		Librería que implementa protocolo ssh
 libssh2-[v]		Librería que implementa protocolo ssh2
-libstemmer-[v]
+libstemmer-[v]	Algoritmos de raíces para procesamiento de texto
 libtalloc-[v]	Piscina de memoria jerárquica con destructores
 libtar-[v]		Librería en C para manipular archivos tar
 libtasn1-[v]		Reconocer Notación de Sintaxis Abstracta Uno
@@ -438,7 +438,7 @@ lz4-[v]		Compresión de datos rápida con licencia BSD
 lzlib-[v]		Librería para compresión lzip
 lzo2-[v]		Librería de compresión portable
 meanwhile-[v]	Implementación del protocolo Lotus Sametime Community
-minizip-[v]
+minizip-[v]	Librería para manipulación de zip
 mozilla-dicts-en-GB-[v]	Diccionario requerido por hunspell
 mpfr-[v]		Librería de punto flotante de precisión múltiple
 mpg123-[v]		Librería para decodificar y reproducir MPEG
@@ -525,7 +525,7 @@ p5-IO-HTML-[v]	Interfaz para objetos AF_INET y AF_INET6
 p5-IO-Socket-SSL-[v]	Interfaz para sockets SSL	
 p5-IO-String-[v]	Emula interfaz IO::File para cadenas in-core
 p5-IPC-Run3-[v]	Ejecuta subproceso en modo por lotes
-p5-JSON-[v]	
+p5-JSON-[v]	Reconoce y convierte a JSON
 p5-JSON-MaybeXS-[v]	Usa Cpanel::JSON::XS o JSON::XS o JSON:PP
 p5-libwww-[v]	Librería de acceso WWW
 p5-LWP-MediaTypes-[v]	Adivina tipo de medio en una url
@@ -573,7 +573,7 @@ p5-Package-Stash-XS-[v]	Como p5-Package-Stash más rápido y correcto
 p5-Params-Util-[v]	Facilita revisión de parámetros	
 p5-Params-Validate-[v]	Valida parámetros de funciones/métodos
 p5-Params-ValidationCompiler-[v] 	Construye validador de parámetros
-p5-Pod-Parser-[v]	
+p5-Pod-Parser-[v]	Módulos para reconocer/traducir documentos en formato POD
 p5-PlRPC-[v]	Módulo para escribir clientes y servidores RPC
 p5-Ref-Util-[v]	Funciones para checquear referencias
 p5-Ref-Util-XS-[v]	Funciones para checquear referencias (versión XS)
@@ -650,8 +650,8 @@ py-idna-[v]		Librería de Python para soportar el protocolo IDNA
 py-lxml-[v]		Uniones en Python para libxml2 y libxslt
 py-numpy-[v]	Librearía numérica y de arreglos rápida en Python
 py-setuptools-[v]	Sistema de empaquetamiento de módulos Python
-py-talloc-[v]
-py-tdb-[v]
+py-talloc-[v]	Uniones Python 2.7 para talloc
+py-tdb-[v]	Uniones Python 2.7 para tdb
 py-urllib3-[v]	Librería HTTP para Python
 py3-acme-[v]	Implementación del protocolo ACME
 py3-asn1-[v]	Librería de ASN.1 para Python
@@ -692,7 +692,7 @@ py3-werkzeug-[v]	Colección de utilidades WSGI
 py3-zopecomponent-[v]	Arquitectura por componentes de Zope
 py3-zopeevent-[v]	Sistema de publicación básico de Zope
 py3-zopeinterface-[v]	Interfaz a infraestructura de objetos de Zope
-qemu-ga-[v]
+qemu-ga-[v]	Agente invitado para qemu
 qhull-[v]		Calcular caso convexo
 qdbm-[v]		Librería, base de datos de alto desempeño
 qpdf-[v]		Utilidad para inspeccionar y transformar PDF
@@ -742,7 +742,7 @@ speexdsp-[v]		Codec para voz libre de patentes
 spidermonkey78-[v]	Motor de Javascript en C+++ de Mozilla
 sqlports-[v]		Base de datos sqlite de los portes
 sudo-[v]		Ejecutar una orden como otro usuario
-suitesparse-[v]
+suitesparse-[v]	Juego de algoritmos para matrices dispersas
 t1utils-[v]		Utilidades para fuentes PostScript tipo 1
 taglib-[v]		Para manejar meta-datos de formatos de audio
 tdb-[v]		Librería para base de datos trivial

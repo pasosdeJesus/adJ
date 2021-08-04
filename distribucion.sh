@@ -803,15 +803,6 @@ if (test "$sn" = "s") then {
   # Modificados para posibilitar compilación
   # Deben estar en mystuff
 
-  paquete ruby paquetes "ruby ruby30-ri_docs" 3.0
-  paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs postgresql-pg_upgrade" 
-  paquete curl
-  paquete dovecot
-  paquete python paquetes "python" "3.9"
-  paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 8.0
-  paquete mariadb-client paquetes "mariadb-client mariadb-server" 
-  exit 1
-
   # Todo lo de perl tuvo que recompilarse
   # evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
   # Si por ejemplo es:
@@ -980,32 +971,34 @@ if (test "$sn" = "s") then {
   # Recompilados para cerrar fallas de portes actualizados (estable)
   # Para que operen bien basta actualizar CVS de /usr/ports 
   # Los siguientes no deben estar en arboldes/usr/ports/mystuff
+  #paquete certbot paquetes "certbot py3-acme"
   #paquete cups
-  #paquete dovecot
+  paquete dovecot
+  paquete firefox-esr
+  paquete flac
   #paquete gtk+3 paquetes "gtk+3-cups"
+  paquete gnutls
   #paquete gvfs
   #paquete libgcrypt
-  #paquete mpg123
-  paquete flac
-  paquete gnutls
   paquete libxml
   paquete lz4
   paquete mariadb-client paquetes "mariadb-client mariadb-server" 
+  #paquete mpg123
   #paquete mutt
   paquete nginx
   #paquete oniguruma 
   #paquete pcre2 
-  #paquete webkitgtk4
-  #paquete certbot paquetes "certbot py3-acme"
+  paquete python paquetes "python" "3.9"
+  paquete rsync
   #paquete unzip
-  #paquete python paquetes "python" "3.7"
+  paquete webkitgtk4
 
   ###  
   # Recompilados de estable que usan xlocale (y pueden cerrar fallas)
   # No deben estar en mystuff
   paquete curl
 
-  paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 7.4
+  paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 8.0
 
   ###
   # Recompilados para mejorar dependencias y actualizar
@@ -1016,12 +1009,10 @@ if (test "$sn" = "s") then {
   #FLAVOR=light paquete evince paquetes evince-light
   #paquete gcc paquetes "gcc" 4.9
   #paquete git paquetes "git"
-  #paquete mariadb-client paquetes "mariadb-client mariadb-server" 
   #paquete p7zip paquetes "p7zip p7zip-rar"
   #paquete pidgin paquetes "libpurple pidgin"
   #paquete samba paquetes "ldb samba tevent"
   #paquete webkit paquetes "webkit webkit-gtk3"
-  #paquete webkitgtk4
   # FLAVOR=gtk3 make paquete webkit-gtk3
   #FLAVOR=python3 paquete py-gobject3 paquetes py3-gobject3
   #paquete py-gobject3 paquetes py-gobject3

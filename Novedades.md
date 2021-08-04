@@ -2,7 +2,7 @@
 Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
 
-### Versión: 6.9a1
+### Versión: 6.9b1
 Fecha de publicación: 10/Jun/2021
 
 Puede ver novedades respecto a OpenBSD en:
@@ -13,10 +13,10 @@ Puede ver novedades respecto a OpenBSD en:
 Puede ver las diversas versiones publicadas en: 
   <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/>
 
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/AprendiendoDeJesus-6.9a1-amd64.iso> 
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/AprendiendoDeJesus-6.9b1-amd64.iso> 
   es imagen en formato ISO para quemar en DVD e instalar por primera vez
   en modo BIOS Legacy.
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/6.9a1-amd64/>
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/6.9b1-amd64/>
   es directorio con el contenido del DVD instalador apropiado para descargar 
   con rsync y actualizar un adJ ya instalado (ver  
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_9/Actualiza.md> )
@@ -24,13 +24,13 @@ Puede ver las diversas versiones publicadas en:
   directorio con versiones recientes de paquetes no incluidos en distribución 
   oficial (pueden no estar firmados y requerir instalación con 
   `pkg_add -D unsigned _paquete_`).
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarollo/AprendiendoDeJesus-6.9a1-amd64.usb> 
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarollo/AprendiendoDeJesus-6.9b1-amd64.usb> 
   es imagen para escribir en una memoria USB y arrancar con esta bien en
   modo UEFI o bien en modo BIOS Legacy. Una vez 
   la descargue puede escribirla en una USB ubicada en `/dev/sd2c` 
   (verifique dispositivo con `dmesg` y remplace) con:
 
-       doas dd if=AprendiendoDeJesus-6.9a1-amd64.usb of=/dev/sd2c bs=1M
+       doas dd if=AprendiendoDeJesus-6.9b1-amd64.usb of=/dev/sd2c bs=1M
 
  Este proceso puede ser demorado, puede ver el progreso con 
 
@@ -38,7 +38,7 @@ Puede ver las diversas versiones publicadas en:
 
  O si desea probarla con qemu para instalar en un disco `virtual.raw`:
 
-       qemu-system-x86_64 -hda virtual.raw -hdb AprendiendoDeJesus-6.9a1-amd64.usb -boot menu=on
+       qemu-system-x86_64 -hda virtual.raw -hdb AprendiendoDeJesus-6.9b1-amd64.usb -boot menu=on
 
 
 ## 2. NOVEDADES RESPECTO A ADJ 6.9 PROVENIENTES DE OPENBSD
@@ -120,13 +120,14 @@ Novedades tomadas de <https://www.openbsd.org/69.html>
   * `postgresql-14beta2`
 * Retroportados y adaptados de OpenBSD-current 
   * `ruby-3.0.2`
-  * `chromium` x con llave para API de Google de Pasos de Jesús 
+  * `chromium 90` con llave para API de Google de Pasos de Jesús 
      en lugar de OpenBSD
 * Se han recompilado los siguientes para aprovechar `xlocale`:
    `glib2`, `libunistring`, `vlc`
 * Nuevo paquete ...
 * Para cerrar fallas de seguridad actualizados portes de la rama estable
-  de OpenBSD para: `curl`, `dovecot`, `python 3.9`, `php 8.0`, `mariadb`
+  de OpenBSD para: `curl`, `dovecot`,  `firefox-esr`, `mariadb`, `php 8.0`, 
+  `python 3.9`, `rsync`, `webkitgtk4`
 
 ### 3.3 Configuración
 * Es sencillo emplear como interprete de ordenes zsh con tmux para
