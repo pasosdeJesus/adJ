@@ -3,7 +3,7 @@ Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
 
 ### Versión: 6.9b1
-Fecha de publicación: 10/Jun/2021
+Fecha de publicación: 10/Ago/2021
 
 Puede ver novedades respecto a OpenBSD en:
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_9/Novedades_OpenBSD.md>
@@ -18,11 +18,11 @@ Puede ver las diversas versiones publicadas en:
   en modo BIOS Legacy.
 * <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/6.9b1-amd64/>
   es directorio con el contenido del DVD instalador apropiado para descargar 
-  con rsync y actualizar un adJ ya instalado (ver  
+  con rsync desde un adJ o un OpenBSD ya instalado para actualizarlo (ver  
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_9/Actualiza.md> )
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/6.9-extra/> es 
-  directorio con versiones recientes de paquetes no incluidos en distribución 
-  oficial (pueden no estar firmados y requerir instalación con 
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/6.9-extra/> 
+  es directorio con versiones recientes de paquetes no incluidos en 
+  distribución oficial (pueden no estar firmados y requerir instalación con 
   `pkg_add -D unsigned _paquete_`).
 * <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarollo/AprendiendoDeJesus-6.9b1-amd64.usb> 
   es imagen para escribir en una memoria USB y arrancar con esta bien en
@@ -47,49 +47,60 @@ Puede ver las diversas versiones publicadas en:
 
 Novedades tomadas de <https://www.openbsd.org/69.html> 
 
-* Aplicados parches de seguridad hasta el x.y.2021 provenientes de 
+* Aplicados parches de seguridad hasta el 1.Ago.2021 provenientes de 
   OpenBSD que incluyen soluciones a fallas
 * Controladores ampliados o mejorados para amd64
 	* Red:
-		* Inalámbrica: Mejorados `iwm` e `iwx`
-		* Ethernet:
-	* Vídeo: 
-	* Sonido:
-	* Sensores y otros:
+		* Inalámbrica: Mejorados `athn`, `bwfm`, `ipw`, `iwi`, `iwm`, `iwx` 
+      y `urtwn`,
+		* Ethernet: Nuevo `mvsw`  para switches Marvel "SOHO". `mvpp` ahora soporta
+    10G.  Mejorados `ix`, `mvneta`, `mvpp`,  `mvsw`,  `ogx`, `rge` 
+    * SFP:  `ofw`
+	* Vídeo: Soporte para 30-bits de color en `simplefb` y `wsfb`
+	* Sensores y otros: Soporte para AMD Vi y VTD IOMMU que crean dominios
+  separados para cada dispositivo PCI dando protección contra accesos 
+  inválidos a memoria.  Mejorado soporte para ACPI con nuevos controladores
+  `pcamux`, `acpige` para manejo de botón de apagado, `imxiic`.  Mejor
+  soporte para touchpads `dwiic`, `ims`, `wsmouse`
 
 * Mejoras a herramientas de Red
-  * 
+  * Nuevo controlador puente virtual Eternet `veb` 
+  * Mejoras a bgpd, ospf, IPSEC, httpd, dig, dhclient, OpenSMTPD, 
+  * Nuevos servicios `dhcpleased` y `resolvd` (por habiltiar con `rcctl`) que 
+    junto con `slaacd` y  `unwind` proveen una configuación automática 
+    de interfaces de red y resolución DNS.
 
 * Seguridad
-	* 
+	* Nuevas versiones de LibreSSL y OpenSSH.
 * Otros
   * Permite arranque desde GPT en discos formateados de más de 4TB
-  * 
+  * El instalador ahora incluye una versión comprimida con gzip de `bsd.rd`
   * Nueva disciplina para softraid RAID1C (raid1 cifrado)
   * Nuevo kern.video.record para sysctl que previene o posibilita grabar video,
     analogo a kern.audio.record.
-  * Remplazado `ld` el enlazador que genera ejecutables ELF por el del
+  * Enlazador `ld` que genera ejecutables ELF remplazado por el del
     proyecto LLVM. Hasta OpenBSD 6.8 se usaba el del proyecto GNU.
     El nuevo `ld` reporta situaciones erroneas, que no eran detectadas o
     reportadas por el anterior.
 * El sistema base incluye mejoras a componentes auditados y mejorados 
-  como, `llvm` 10.0.1,  `Xenocara` (basado en `Xorg` 7.7),
-  `perl` 5.32
+  como, `llvm 10.0.1`,  `Xenocara` (basado en `Xorg` 7.7),
+  `perl 5.32` 
 * El repositorio de paquetes de OpenBSD cuenta con 11310 para amd64
 
 
 ### 2.2 Paquetes 
 
-* Ruby 3.0.1
-  * 
-* Postgresql ... tomado de correos a ports-openbsd
-* Veracrypt ...  tomado de correos a ports-openbsd
+* Ruby 3.0.2. Con correcciones de seguridad respecto a 3.0
+* Postgresql 14b2 tomado de correos a `ports-openbsd`
+* Veracrypt 1.24u7p1  tomado de correos a `ports-openbsd`
 * Recompilados portes estables más recientes para evitar fallas de seguridad 
-  de: x,y,z
-* Algunos paquetes típicos y su versión: dovecot x
-  chromium , firefox x , libreoffice x
-  nginx x, mariadb x, node x, python x, neovim x,
-  zsh x
+  de: `curl`, `dovecot`,  `firefox-esr`, `mariadb`, `php 8.0`, 
+  `python 3.9`, `rsync`, `webkitgtk4`
+
+* Algunos paquetes típicos y su versión: `dovecot 2.3.14`,
+  `chromium 90.0.4430.72p1`, `firefox-esr 78.12`, `libreoffice 7.0.5.2v0`,
+  `nginx 1.18.0p5`, `mariadb 10.5.10v1`, `node 12.16.1p1`, `python 3.9.6`,
+  `neovim 0.4.4`, `zsh 5.8p0`
 
 
 ## 3. NOVEDADES RESPECTO A ADJ 6.8 PROVENIENTES DE PASOS DE JESÚS
@@ -103,8 +114,6 @@ Novedades tomadas de <https://www.openbsd.org/69.html>
 
 ### 3.2 Paquetes
 
-* El paquete `evangelios_dp` ahora incluye ...
-  evangelio de Juan.
 * Se incluye la versión beta 16 de `sivel2` cuyas novedades con respecto al 
   beta 14 incluido en adJ 6.8 se describen a continuación. Agradecimiento por
   algunas de las novedades a Luis Alejandro Cruz:
@@ -124,25 +133,18 @@ Novedades tomadas de <https://www.openbsd.org/69.html>
      en lugar de OpenBSD
 * Se han recompilado los siguientes para aprovechar `xlocale`:
    `glib2`, `libunistring`, `vlc`
-* Nuevo paquete ...
-* Para cerrar fallas de seguridad actualizados portes de la rama estable
-  de OpenBSD para: `curl`, `dovecot`,  `firefox-esr`, `mariadb`, `php 8.0`, 
-  `python 3.9`, `rsync`, `webkitgtk4`
 
 ### 3.3 Configuración
-* Es sencillo emplear como interprete de ordenes zsh con tmux para
-  tener varias terminales y neovim como editor con archivos de 
+* Es sencillo emplear como interprete de ordenes `zsh` con `tmux` para
+  tener varias terminales y `neovim` como editor con archivos de 
   configuración incluidos en adJ e instrucciones en:  
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_9/arboldd/usr/local/share/adJ/archconf/README.md>
 
 ## 4. FE DE ERRATAS
 
-- Chromium no permite ingreso a servicios de Google como
-  <https://drive.google.com>
-  por esto sigue incluyéndose firefox que en casos como ese puede operar.
-
-- Firefox empezó a ser inestable en servicios como <https://drive.google.com>
-
+- Ni `chromium` ni `firefox` permite ingreso a servicios de Google como
+  <https://drive.google.com> por esto incluimos `firefox-esr` que en casos 
+  como ese puede operar.
 
 - `xenodm` no logra utilizar un teclado latinoamericano que se haya
   configurado en `/etc/kbdtype`.  Para usarlo

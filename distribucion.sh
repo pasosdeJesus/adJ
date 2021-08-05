@@ -988,6 +988,8 @@ if (test "$sn" = "s") then {
   paquete nginx
   #paquete oniguruma 
   #paquete pcre2 
+  paquete python paquetes "python" "2.7"
+  paquete python paquetes "python" "3.8"
   paquete python paquetes "python" "3.9"
   paquete rsync
   #paquete unzip
