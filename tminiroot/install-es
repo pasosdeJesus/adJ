@@ -31,7 +31,7 @@ presionando Control-C, pero esto puede dejar su sistema
 en un estado inconsistente.";
 _slwelcome="Bienvenido al programa para \$_SMODE OpenBSD \$ARCH.
 
-En preguntas, excepto en claves, escape al interprete de comandos con '!'. 
+En preguntas, excepto en claves, escape al interprete de ordenes con '!'. 
 Las respuestas por defecto aparecen entre [], se seleccionan con RETORNO.  
 Puede salir con Control-C, pero esto puede dejar su sistema inconsistente.";
 _slbackedup="RESPALDO SUS DATOS? Este programa puede causar perdida SIGNIFICATIVA.";
@@ -47,7 +47,7 @@ _slskipdisk="¿Saltar inicialización del disco?";
 _slproceedinstall="¿Proceder con la instalación?";
 _slenterhalt="Salga con 'halt' e inicie su sistema operativo original."
 _slcool="¡Bien! Manos a la obra."
-_slnonamefound="No se encontro(aron) mas";
+_slnonamefound="No se encontró(aron) mas";
 _slnonamefound2="";
 _slavailablenames="";
 _slavailablenames2="disponibles son";
@@ -64,10 +64,10 @@ _slwith="con";
 _slmanualnet="¿Configurar manualmente la red?"
 _slexit="'exit' regresa";
 _slmakedevnf="MAKEDEV no hallado.  No se crean nodos de dispositivos.";
-_slselectsets="Selecccione componentes por instalar, un patrn o 'todos'.
-Deseleccione poniendo un '-' antes del nombre, del patrn o de 'todos'.  
+_slselectsets="Seleccione componentes por instalar, un patrón o 'todos'.
+Deseleccione poniendo un '-' antes del nombre, del patrón o de 'todos'.  
 Los seleccionados se marcan con '[X]'.";
-_slthexbasesetrequires="El juego xbase requiere a comp, asi que poniendo comp de nuevo."
+_slthexbasesetrequires="El juego xbase requiere a comp, así que poniendo comp de nuevo."
 _slinterface="interfaz"
 _slinit="desea inicializar"
 _slnomoreint="No hay mas interfaces por inicializar"
@@ -137,7 +137,7 @@ _slsubtimezone2="esta? ('?' muestra lista)"
 _slsettinglocal="Estableciendo zona "
 _slnotvalidzone="no es zona valida"
 _slnotinstalled="no fue instalado.\n*SEGURO* se completó el proceso sin"
-_sllets="\n¡Por \$_SMODE componentes basicos!"
+_sllets="\n¡Por \$_SMODE componentes básicos!"
 _sllocsets="¿Localización"
 _slor="o"
 _slnotfstab="No se pudo crear /etc/fstab valido."
@@ -163,7 +163,7 @@ _slinitialize="Inicializara el disco para OpenBSD. Se sugiere que
 configure subparticiones para /, /tmp, /var, /usr y /home.";
 _sldisk="disco";
 _slavailabledisks="Los discos disponibles son"
-_slwhichroot="¿Cúal es el disco raíz? ('?' muestra detalles)"
+_slwhichroot="¿Cuál es el disco raíz? ('?' muestra detalles)"
 _slnosuchdisk="no hay tal disco"
 _slDisks="Discos";
 _slnomoredisks="No hay mas discos por inicializar"
@@ -172,7 +172,7 @@ _sluse="usar"
 _slusec="Usar"
 _slrootpassword="Debe establecer una contraseña para root."
 _slsecurityprotocol="¿Protocolo de Seguridad? (A)bierto, (W)EP, W(P)A"
-_slaccesspoint="¿Punto de Acceso Inalambrico? (ESSID, 'cualquiera', #lista o '?'
+_slaccesspoint="¿Punto de Acceso Inalámbrico? (ESSID, 'cualquiera', #lista o '?'
 )"
 _slany="cualquiera"
 _slthereisnoline="No hay línea"
@@ -211,16 +211,16 @@ _sluseall="¿Usar todo"
 _sluseall2="para OpenBSD?"
 _slputtingall="Estableciendo todo"
 _slputtingall2="como partición OpenBSD en el RMA (tipo 'A6')..."
-_slmbr="Creara sólo una partición en el RMA que contendra los datos de OpenBSD
+_slmbr="Creara sólo una partición en el RMA que contendrá los datos de OpenBSD
 Esta partición debe tener identificación 'A6'; *NO* debe traslaparse sobre
 otras particiones; y debe estar marcada como la única partición activa.
 
-El comando 'manual' describe en detalle los comandos."
+La orden 'manual' describe en detalle las ordenes."
 
 _slpartinfo="Información de particiones:"
 
 _slcreatedisklabel="Ahora cree etiquetas de discos OpenBSD dentro de la partición de OpenBSD
-en el Registro Maestro de Arranque (RMA).  Las etiquetas definen como dividira
+en el Registro Maestro de Arranque (RMA).  Las etiquetas definen como dividirá
 la partición del RMA en particiones de OpenBSD en las que se crean las
 subparticiones y espacio de intercambio.
 
@@ -229,24 +229,22 @@ comienzo del disco, NO al comienzo de la partición en el RMA de OpenBSD."
 _slwarninglabelcorrupted="ADVERTENCIA: Etiqueta del disco"
 _slwarninglabelcorrupted2="dañada. Repararla."
 # upgrade.sh
-_slrootfilesystem="¿Subpartición raiz?"
+_slrootfilesystem="¿Subpartición raíz?"
 _slsorrynotblock=""
 _slsorrynotblock2="no es dispositivo por bloques."
 _slcheckingroot="Revisando subpartición raíz"
 _slfsckmanually="Ejecutar fsck"
 _slfsckmanually2="manualmente."
-_slmountingroot="Montando subpartición raiz..."
+_slmountingroot="Montando subpartición raíz..."
 _slerrorcantmount="ERROR: ¡no puede montar subpartición raíz!"
 _slerrorno="ERROR: sin"
 _slenablenet="¿Activar red usando configuración de la subpartición raíz?"
 _slfstabas="fstab esta configurado así:"
-_slfstabnoauto="Al \$_SMODE, se montaran subparticioens de fstab sin 'noauto'.
+_slfstabnoauto="Al \$_SMODE, se montaran subparticiones de fstab sin 'noauto'.
 Las que no sean ffs se montaran como sólo lectura.
 
 Puede editar temporalmente el archivo /etc/fstab."
 _slerrorunmount="ERROR: ¡no puede desmontar la raíz!"
-
-# 4.6
 
 _slmustbeconfigured="debe ser configurado"
 _sland="y"
@@ -260,7 +258,7 @@ _slaccount=""
 _slwillnotecho="no se vera"
 _slagain="nuevamente"
 _slsetupauser="¿Crear cuenta de usuario? (nombre de cuenta en minúscula o 'no')"
-_slnoreally="No, de verdad, ¿cúal es el nombre de cuenta en minúscula o 'no'?"
+_slnoreally="No, de verdad, ¿cuál es el nombre de cuenta en minúscula o 'no'?"
 _slisnotauseable="no es nombre de cuenta utilizable"
 _slfullusername="Nombre completo para usuario "
 _slarenotallowed="no son permitidos"
@@ -285,7 +283,7 @@ _slandfoundno="y no se encontraron juegos de \$OBSD.  Los nombres de juegos busc
 _slthesha256="El condensado SHA256"
 _slforfdidnotmatch="para \$_f no corresponde a lo que este bsd.rd esperaba."
 _slwasnotable="No pudo obtener lista ftp de ftp.openbsd.org, pero esta bien"
-_slserver3="¿Servidor HTTP? (nombre, # en lista, 'listo' or '?')";
+_slserver3="¿Servidor HTTP? (nombre, # en lista, 'listo' o '?')";
 _slserver4="¿Servidor HTTP? (nombre o 'listo')";
 _slisnotavalidhostname="no es nombre de maquina valido"
 _slnotpropmounted="!ADVERTENCIA! Los siguientes sistemas de archivos no pudieron montarse apropiadamente"
@@ -299,11 +297,11 @@ _slduringinstall="durante instalación"
 _slxenodm="¿Desea que el sistema X Window sea iniciado por xenodm(1)?"
 
 _slcongrat2="FELICITACIONES! El proceso para \$_SMODE ha sido completado con éxito!
- Para iniciar el nuevo sistema, ingrese 'reboot' en la línea de comandos."
+ Para iniciar el nuevo sistema, ingrese 'reboot' en la línea de ordenes."
 
 _slnewmail="Cuando ingrese por primera vez, por favor lea correo usando 
-el comando 'mail'."
-_slatanyprompt="En cualquier pregunta, excepto claves puede escapar al interprete de comandos
+la orden 'mail'."
+_slatanyprompt="En cualquier pregunta, excepto claves puede escapar al interprete de ordenes
 tecleando '!'. Las respuestas por defecto se presentan entre [] y se seleccionan
 presionando RETORNO.  Puede salir de este programa presionando
 Control-C, pero esto puede dejar su sistema en un estado inconsistente."
@@ -322,7 +320,7 @@ _slsettingopenbsd="Estableciendo partición de OpenBSD en RMA como el disco \$_d
 _slyouwillnowcreate="Ahora creara una sola partición en el RMA que con todos sus datos de OpenBSD
 Esta partición debe tener identificación 'A6'; *NO* debe traslaparse con otras
 particiones y debe marcarse como la única partición activa.  En el programa
-fdisk, el comando 'manual' describe todos los comandos de fdisk en detalle."
+fdisk, la orden 'manual' describe todas las ordenes de fdisk en detalle."
 _slautoallocated="La distribución autolocalizada para \$_disk es:"
 _sluseautolayout="Usar distribución (A)utolocalizada, (E)ditarla, o (C)rear una distribución?" 
 _slcantbemountedat="No pueden montarse \$_pp y \$1 en \$_mp."
@@ -371,7 +369,7 @@ _slverifying="Verificando"
 _sldirectorydoesnot="El directorio no contiene"
 _slaresponseisrequired="Se requiere una respuesta."
 _slisnotvalidchoice="no es opción valida."
-_slquestionhasnoanswer="La pregunta no tiene repuesta en el archivo de respuestas."
+_slquestionhasnoanswer="La pregunta no tiene repuesta en el archivo de respuestas:"
 _slusage="uso"
 _sluser="usuario"
 _slthexbasesetrequires="El juego xbase requiere el juego comp, agregandolo de nuevo."
@@ -401,7 +399,7 @@ _slyouwillnowreatetwogpt="Ahora creara dos particiones GPT. La primera debe tene
 'EF' y ser suficientemente grande para los programas de arranque de OpenBSD,
 al menos 960 bloques. La segunda debe tener identificación 'A6' y
 contendra sus datos de OpenBSD. Una partición no puede traslaparse con la otra.
-Dentro del comando fdisk , el comando 'manual' describe los comandos
+Dentro de la orden fdisk , la orden 'manual' describe las ordenes
 de fdisk en detalle."
 _slnoopenbsdpartitioningpt="No hay partición OpenBSD en GPT,"
 _slnoefisyspartitioningpt="No hay partición EFI Sys en GPT,"
@@ -431,3 +429,5 @@ _slunabletoconnect="No pudo conectarse usando https. En lugar de esto usar http?
 _slunabletogetaverified="No pudo obtenerse una lista verificada de juegos de instalación."
 _slinstalling="Instalando"
 _slextracting="Extrayendo"
+_slnodhcpaddress="Sin dirección dhcp en la interfaz $_if en 30 segundos."
+_slwhichrootcorto="Cuál es el disco raíz"
