@@ -974,9 +974,11 @@ if (test "$sn" = "s") then {
   #paquete certbot paquetes "certbot py3-acme"
   #paquete cups
   paquete dovecot
+  paquete dtc
   paquete firefox-esr
   paquete flac
   #paquete gtk+3 paquetes "gtk+3-cups"
+  paquete gdal
   paquete gnutls
   #paquete gvfs
   #paquete libgcrypt
@@ -1013,7 +1015,7 @@ if (test "$sn" = "s") then {
   #paquete git paquetes "git"
   #paquete p7zip paquetes "p7zip p7zip-rar"
   #paquete pidgin paquetes "libpurple pidgin"
-  #paquete samba paquetes "ldb samba tevent"
+  paquete samba paquetes "ldb samba tevent"
   #paquete webkit paquetes "webkit webkit-gtk3"
   # FLAVOR=gtk3 make paquete webkit-gtk3
   #FLAVOR=python3 paquete py-gobject3 paquetes py3-gobject3
