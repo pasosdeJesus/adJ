@@ -8,6 +8,7 @@ empleado por el interprete de ordenes `zsh` cada vez que se inicia.
 Aquí encuentras archivos de configuración para la pila de edición en
 terminal de adJ: `rcm`+`tmux`+`zsh`+neovim.  El siguiente pantallazo 
 muestra como se ve (el juego de colores es configurable):
+
 ![](archconf.png?raw=true)
 
 Nota que:
@@ -51,7 +52,8 @@ Requerimientos
   ```
   * Tras esto sal y vuelve a ingresar a tu interprete de ordenes para
     empezar a usar `zsh` o mientras configuras ejecutalo desde otro
-    interprete de ordenes con `zsh` 
+    interprete de ordenes con `zsh`.  En su primer arranque `zsh` 
+    le permite configurarlo mediante menús, puede saltar con la opción 0.
   * Entre sus mejoras respecto a `pdksh` están: más popular, mejor 
     auto-completación con TAB, por ejemplo en las opciones de las ordenes.
     Una vez configurado prueba `ls -` y presiona TAB para ver opciones de `ls`.
@@ -63,10 +65,10 @@ Requerimientos
   * Crea el directorio `~/archconf-local` y allí deja copia de tus archivos
     de configuración, quitandoles el punto inicial y añadiendoles el
     posfijo `.local`, por ejemplo:
-```
+  ```
       mkdir ~/archconf-local/
       cp ~/.gitconfig ~/archconf-local/gitconfig.local
-```
+  ```
   * En las secciones siguientes verás como usarlo en detalle.
   * `rcm` usa licencia BSD de 3 clausulas
 * Usar neovim como editor
@@ -86,12 +88,6 @@ Copia estos archivos de configuración en el directorio `archconf`
 de tu directorio personal
 
     cp -rf /usr/local/share/adJ/archconf ~/
-
-O si planeas apoyar el desarrollo de estos archivos de configuración y de
-adJ puedes enlazarlos al directorio donde clonaste el repositorio adJ por 
-ejemplo `$HOME/comp/adJ`:
-
-    ln -s ~/comp/adJ/arboldd/usr/local/share/adJ/archconf ~/
 
 Instala estos archivos de configuración de `~/archconf`, así como 
 tus personalizaciones de `~/archconf-local` con:
@@ -130,7 +126,7 @@ De esta manera se copiaran los nuevos archivos y se instalarán nuevas
 extensiones neovim.
 **Nota** _Debes_ ejecutar `rcup` después de copiar para asegurar
 que todos los archivos de las extensiones queden instalados adecuadamente.
-Puedes ejecutar `rcup` muchas veces, así que !actualiza pronto y actualiza
+Puedes ejecutar `rcup` muchas veces, así que ¡actualiza pronto y actualiza
 con frecuencia!
 
 
