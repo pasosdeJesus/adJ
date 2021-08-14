@@ -47,7 +47,7 @@ Puede ver las diversas versiones publicadas en:
 
 Novedades tomadas de <https://www.openbsd.org/69.html> 
 
-* Aplicados parches de seguridad hasta el 1.Ago.2021 provenientes de 
+* Aplicados parches de seguridad hasta el 12.Ago.2021 provenientes de 
   OpenBSD que incluyen soluciones a fallas
 * Controladores ampliados o mejorados para amd64
 	* Red:
@@ -90,12 +90,11 @@ Novedades tomadas de <https://www.openbsd.org/69.html>
 
 ### 2.2 Paquetes 
 
-* Ruby 3.0.2. Con correcciones de seguridad respecto a 3.0
-* Postgresql 14b2 tomado de correos a `ports-openbsd`
 * Veracrypt 1.24u7p1  tomado de correos a `ports-openbsd`
 * Recompilados portes estables más recientes para evitar fallas de seguridad 
-  de: `curl`, `dovecot`,  `firefox-esr`, `mariadb`, `php 8.0`, 
-  `python 3.9`, `rsync`, `webkitgtk4`
+  de: `curl`, `dovecot`,  `dtc`, `firefox-esr`,  `flac`, `gdal`,
+  `gnutls`, `libxml`, `lz4`, `lua`, `mariadb`, `nginx`, `php 8.0`, 
+  `python` 2.7 y 3.8, `rsync`, `samba`, `webkitgtk4`
 
 * Algunos paquetes típicos y su versión: `dovecot 2.3.14`,
   `chromium 90.0.4430.72p1`, `firefox-esr 78.12`, `libreoffice 7.0.5.2v0`,
@@ -125,12 +124,14 @@ Novedades tomadas de <https://www.openbsd.org/69.html>
     * 
   * Control de acceso y bitácoras
     * 
-* Adaptados de portes enviados a lista de portes de OpenBSD:
-  * `postgresql-14beta2`
+* Adaptados de portes de OpenBSD estable:
+  * `postgresql 13.4`, `gdal`, `postgis`
 * Retroportados y adaptados de OpenBSD-current 
   * `ruby-3.0.2`
   * `chromium 90` con llave para API de Google de Pasos de Jesús 
      en lugar de OpenBSD
+* Portes más actualizados que los disponibles en OpenBSD
+  * `ocaml 4.12`, `ocamlbuild`, `findlib`, `dune`, `hevea`
 * Se han recompilado los siguientes para aprovechar `xlocale`:
    `glib2`, `libunistring`, `vlc`
 

@@ -803,6 +803,11 @@ if (test "$sn" = "s") then {
   # Modificados para posibilitar compilación
   # Deben estar en mystuff
 
+  paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs postgresql-pg_upgrade" 
+  paquete gdal
+  paquete postgis
+
+  exit 1
   # Todo lo de perl tuvo que recompilarse
   # evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
   # Si por ejemplo es:
@@ -992,7 +997,6 @@ if (test "$sn" = "s") then {
   #paquete pcre2 
   paquete python paquetes "python" "2.7"
   paquete python paquetes "python" "3.8"
-  paquete python paquetes "python" "3.9"
   paquete rsync
   #paquete unzip
   paquete webkitgtk4
@@ -1027,7 +1031,6 @@ if (test "$sn" = "s") then {
   ##
   # Nueva revisión para operar con librerías retroportadas o actualizadas
   # Deben estar en arbodes/usr/ports/mystuff
-  paquete hevea
   #paquete libreoffice paquetes "libreoffice libreoffice-i18n-es"
 
   ####
