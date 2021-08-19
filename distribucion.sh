@@ -440,17 +440,17 @@ EOF
   echo "* Parece que sobreescribe /releasedir/bsd y /releasedir/bsd.mp con GENERIC tocaria recuperar los compilador antes"
   find "$DESTDIR"  -exec touch {} ';' 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
   find "$RELEASEDIR"  -exec touch {} ';' 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
-} fi;
+#} fi;
 
 echo " *> Suponiendo que ya se completo un build en /, instalar en $DESTDIR y de este dejar comprimidos en $RELEASEDIR" | tee -a /var/www/tmp/distrib-adJ.bitacora;
-if (test "$inter" = "-i") then {
-  echo -n "(s/n)? "
-  read sn
-}
-else {
-  sn=$autoGenTGZ
-} fi;
-if (test "$sn" = "s") then {
+# if (test "$inter" = "-i") then {
+#   echo -n "(s/n)? "
+#   read sn
+# }
+# else {
+#   sn=$autoGenTGZ
+#} fi;
+#if (test "$sn" = "s") then {
   cd $D_DESTDIR/etc && $dini/arboldd/usr/local/adJ/servicio-etc.sh 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
   cd /usr/src/etc && DESTDIR=/$D_DESTDIR nice make release-sets 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora;
   echo "* Completo make release-sets"
