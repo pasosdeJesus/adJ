@@ -3,7 +3,7 @@ Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
 
 ### Versión: 6.9
-Fecha de publicación: 10/Ago/2021
+Fecha de publicación: 20/Sep/2021
 
 Puede ver novedades respecto a OpenBSD en:
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_6_9/Novedades_OpenBSD.md>
@@ -47,7 +47,7 @@ Puede ver las diversas versiones publicadas en:
 
 Novedades tomadas de <https://www.openbsd.org/69.html> 
 
-* Aplicados parches de seguridad hasta el 12.Ago.2021 provenientes de 
+* Aplicados parches de seguridad hasta el 12.Sep.2021 provenientes de 
   OpenBSD que incluyen soluciones a fallas
 * Controladores ampliados o mejorados para amd64
 	* Red:
@@ -93,8 +93,8 @@ Novedades tomadas de <https://www.openbsd.org/69.html>
 * Veracrypt 1.24u7p1  tomado de correos a `ports-openbsd`
 * Recompilados portes estables más recientes para evitar fallas de seguridad 
   de: `curl`, `dovecot`,  `dtc`, `firefox-esr`,  `flac`, `gdal`,
-  `gnutls`, `libxml`, `lz4`, `lua`, `mariadb`, `nginx`, `php 8.0`, 
-  `python` 2.7 y 3.8, `rsync`, `samba`, `webkitgtk4`
+  `gnutls`, `libssh`, `libxml`, `lz4`, `lua`, `mariadb`, `mutt`,
+  `nginx`, `php 8.0`, `python` 2.7 y 3.8, `rsync`, `samba`, `webkitgtk4`
 
 * Algunos paquetes típicos y su versión: `dovecot 2.3.14`,
   `chromium 90.0.4430.72p1`, `firefox-esr 78.12`, `libreoffice 7.0.5.2v0`,
@@ -116,14 +116,41 @@ Novedades tomadas de <https://www.openbsd.org/69.html>
 * Se incluye la versión beta 16 de `sivel2` cuyas novedades con respecto al 
   beta 14 incluido en adJ 6.8 se describen a continuación. Agradecimiento por
   algunas de las novedades a Luis Alejandro Cruz:
-  * Mejoras en consultas
-    * 
+  * Mejoras en consultas, reportes y conteos
+    * Desde listado de casos permite filtrar por tipificaciones de bélicas
+    * Desde listado de casos botones Filtrar y Limpiar se reubican al expandir la Búsqueda Avanzada
+    * En conteo de victimizaciones individuales nuevo campo para desagregar Por
+      columnas con opción CATEGORÍAS que presenta una columna por cada categoría
+      (agrupando por nombre, independiente de la supracategoría).
+    * En reporte revista y reporte general ahora aparece polo antes de cada
+      presunto responsable.
   * Mejoras en sistematización y en importación 
-    * 
-  * Mejoras en reportes 
-    * 
-  * Control de acceso y bitácoras
-    * 
+    * Orientación Sexual ahora tiene la opción LGBTQ+ para referenciar otras o
+      cuando se sabe que tiene una orientación sexual diversa pero sin detalle
+      de cual.
+    * No permite registrar 2 fuentes de prensa diferentes con la misma fecha y
+      la misma prensa
+    * Permite fuentes de prensa con fecha anterior a la del caso (por ejemplo
+      para registrar antecedentes).
+    * Cuando se agregan víctimas con nombre N y apellido N aparece una
+      numeración automática de NNs tanto en el la pestaña de víctimas como en la
+      de actos. Ver vídeo en
+      https://user-images.githubusercontent.com/12545631/127715238-e424e79b-bc2f-43ff-9934-89ce63ca02e0.MOV
+    * Importación y exportación en XRLAT ahora tiene en cuenta combatientes
+  * Tablas básicas
+    * En tabla básica región pueden especificarse departamentos completos o
+      municipios completos.
+    * Filtro por fecha de creación.
+    * Nueva visualización de la estructura de presuntos responsables habilitados
+      desde Administrar->Árbol de Presuntos Responsables.
+    * Se deshabilitó el presunto responsable "INFORMACIÓN CONTRADICTORIA"
+  * Mejoras al diseño visual con actualización a Bootsrap 5:
+    * Tipografía base es sans-serif del sistema de tamaño 16
+    * En alertas, mejorado el botón de cerrar.
+    * Mejorada apariencia de cuadros de verificación
+    * En tablas, la línea que separa encabezado de cuerpo es más ancha.
+    * Secciones colapsables mejor diferenciadas y con ícono para
+      expandir/colapsar animado.
 * Adaptados de portes de OpenBSD estable:
   * `postgresql 13.4`, `gdal`, `postgis`
 * Retroportados y adaptados de OpenBSD-current 
@@ -143,7 +170,7 @@ Novedades tomadas de <https://www.openbsd.org/69.html>
 
 ## 4. FE DE ERRATAS
 
-- Ni `chromium` ni `firefox` permite ingreso a servicios de Google como
+- Ni `chromium` ni `firefox` permiten ingreso a servicios de Google como
   <https://drive.google.com> por esto incluimos `firefox-esr` que en casos 
   como ese puede operar.
 
@@ -153,7 +180,6 @@ Novedades tomadas de <https://www.openbsd.org/69.html>
 ```
   setxkbmap latam
 ```
-- ruby 
 
 ## 5. SI QUIERE AYUDARNOS
 

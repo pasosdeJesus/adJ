@@ -982,12 +982,13 @@ if (test "$sn" = "s") then {
   paquete gnutls
   #paquete gvfs
   #paquete libgcrypt
+  paquete libssh
   paquete libxml
   paquete lz4
   paquete mariadb-client paquetes "mariadb-client mariadb-server" 
   #paquete mpg123
-  #paquete mutt
-  paquete nginx
+  paquete mutt
+  #paquete nginx
   #paquete oniguruma 
   #paquete pcre2 
   paquete python paquetes "python" "2.7"
@@ -1052,7 +1053,7 @@ if (test "$sn" = "s") then {
   # Unicos en adJ 
   # Deben estar en arboldes/usr/ports/mystuff pero no en /usr/ports
   paquete emulators/realboy
-  paquete net/xmrig
+  #paquete net/xmrig
   #paquete sysutils/ganglia
   paquete textproc/sword
   paquete textproc/bibletime

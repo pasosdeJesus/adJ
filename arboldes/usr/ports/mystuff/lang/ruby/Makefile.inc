@@ -1,4 +1,4 @@
-# $OpenBSD: Makefile.inc,v 1.24 2020/03/20 16:44:24 naddy Exp $
+# $OpenBSD: Makefile.inc,v 1.26 2021/08/13 18:45:45 jeremy Exp $
 
 COMMENT-main ?=		object oriented script language with threads
 COMMENT-gdbm ?=		gdbm interface for ruby
@@ -33,6 +33,7 @@ CONFIGURE_ARGS +=	--enable-shared \
 			--with-soname=ruby${BINREV} \
 			--with-ruby-version=minor \
 			--with-mantype=doc \
+			--with-setjmp-type=_setjmp \
 			--enable-pthread \
 			--enable-ipv6 \
 			--without-bundled-libffi \
@@ -54,10 +55,10 @@ LIB_DEPENDS-main +=	devel/gmp \
 			devel/libyaml \
 			devel/libffi
 
-WANTLIB-gdbm +=		c m gdbm gmp pthread #ruby${BINREV}
+WANTLIB-gdbm +=		c m gdbm gmp pthread ruby${BINREV}
 LIB_DEPENDS-gdbm +=	databases/gdbm \
-			devel/gmp #\
-			#lang/ruby/${REV},-main>=${VERSION},<${NEXTVER}
+			devel/gmp \
+			lang/ruby/${REV},-main>=${VERSION},<${NEXTVER}
 RUN_DEPENDS-gdbm ?=
 
 DEBUG_PACKAGES ?=	-main
