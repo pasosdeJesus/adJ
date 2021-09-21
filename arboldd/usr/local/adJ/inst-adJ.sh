@@ -1531,7 +1531,7 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 	[exec] (xterm+tmux) { xterm -geometry 160x48 -en utf8 -e "TERM=xterm-color /usr/bin/tmux -2 -l" }
 	[exec] (xterm) { xterm -geometry 160x48 -en utf8 -ls }
 	[exec] (chromium) {/usr/local/bin/chrome --disable-gpu --allow-file-access-from-files}
-	[exec] (firefox) {/usr/local/bin/firefox}
+	[exec] (firefox-esr) {/usr/local/bin/firefox-esr}
 [submenu] (Espiritualidad)
 	[exec] (bibletime) {/usr/local/bin/bibletime}
 	[exec] (Evangelios de dominio publico) {/usr/local/bin/chrome --disable-gpu /usr/local/share/doc/evangelios_dp/}
