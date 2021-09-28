@@ -2,29 +2,29 @@
 #
 # $OpenBSD: postgresql.rc,v 1.13 2019/08/27 19:49:46 awolk Exp $
 
-servicio="${TRUEPREFIX}/bin/pg_ctl"
-servicio_flags="-D /var/postgresql/data -w -l /var/postgresql/logfile"
-servicio_user="_postgresql"
+daemon="${TRUEPREFIX}/bin/pg_ctl"
+daemon_flags="-D /var/postgresql/data -w -l /var/postgresql/logfile"
+daemon_user="_postgresql"
 
 . /etc/rc.d/rc.subr
 
 rc_usercheck=NO
 
 rc_check() {
-	${rcexec} "${servicio} status ${servicio_flags}"
+	${rcexec} "${daemon} status ${daemon_flags}"
 }
 
 rc_reload() {
-	${rcexec} "${servicio} reload ${servicio_flags}"
+	${rcexec} "${daemon} reload ${daemon_flags}"
 }
 
 rc_start() {
-	${rcexec} "${servicio} start ${servicio_flags}"
+	${rcexec} "${daemon} start ${daemon_flags}"
 }
 
 rc_stop() {
-	${rcexec} "${servicio} stop ${servicio_flags} -m fast" || \
-		${rcexec} "${servicio} stop ${servicio_flags} -m immediate"
+	${rcexec} "${daemon} stop ${daemon_flags} -m fast" || \
+		${rcexec} "${daemon} stop ${daemon_flags} -m immediate"
 }
 
 rc_cmd $1

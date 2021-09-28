@@ -1068,13 +1068,18 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mb
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/multibyte_citrus.c src/lib/libc/locale/multibyte_citrus.c
 --- src53collation/lib/libc/locale/multibyte_citrus.c	Sat Sep 12 11:23:14 2015
 +++ src/lib/libc/locale/multibyte_citrus.c	Sun May  8 05:36:41 2016
-@@ -33,88 +33,144 @@
+@@ -33,88 +33,149 @@
  #include <wchar.h>
  
  #include "citrus_ctype.h"
 +#include "mblocal.h"
 +#include "xlocale_private.h"
  
++int ___mb_cur_max_l(locale_t __l) {
++	return XLOCALE_CTYPE(__l)->__mb_cur_max;
++}
++DEF_WEAK(___mb_cur_max_l);
++
  int
 -mbsinit(const mbstate_t *ps)
 +mbsinit_l(const mbstate_t *ps, locale_t loc)
@@ -1170,7 +1175,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mu
  	if (ps == NULL)
  		ps = &mbs;
 -	if (__mb_cur_max() == 1)
-+	if (XLOCALE_CTYPE(loc)->__mb_cur_max == 1)
++	if (loc == 0 || XLOCALE_CTYPE(loc)->__mb_cur_max == 1)
  		return _citrus_none_ctype_wcrtomb(s, wc);
  	return _citrus_utf8_ctype_wcrtomb(s, wc, ps);
  }

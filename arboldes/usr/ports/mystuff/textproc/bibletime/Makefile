@@ -14,7 +14,7 @@ GH_TAGNAME = v2.11.2
 #DISTNAME=	xiphos-${V}
 CATEGORIES=	textproc misc
 #PKGNAME=	${DISTNAME}
-REVISION=	1
+REVISION=	2
 HOMEPAGE=	http://bibletime.info/
 MAINTAINER=	Vladimir Tamara Patino <vtamara@pasosdejesus.org>
 

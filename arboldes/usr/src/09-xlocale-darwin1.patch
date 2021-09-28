@@ -2693,7 +2693,7 @@ diff -u src-ant/lib/libc/locale/xlocale.3 src/lib/libc/locale/xlocale.3
  .Xr wcstod_l 3 ,
  .Xr wcstof_l 3 ,
  .Xr wcstol_l 3 ,
-@@ -348,11 +224,49 @@
+@@ -348,11 +224,57 @@
  .Xr wcstoll_l 3 ,
  .Xr wcstoul_l 3 ,
  .Xr wcstoull_l 3 ,
@@ -2725,6 +2725,14 @@ diff -u src-ant/lib/libc/locale/xlocale.3 src/lib/libc/locale/xlocale.3
 +except in thread safety.
 +Some functions are Darwin extensions.
 +The function strtonum_l is an adJ's extension.
++
++The following macro is also defined:
++.Bl -bullet -offset indent
++.It 
++MB_CUR_MAX_L(loc) returns the longest length of a multibyte string that 
++can represent one character in the locale loc.
++.El
++
 +.Sh HISTORY
 +The xlocale APIs first appeared in Darwin 8.0.
 +David Chisnall implemented it for FreeBSD 9.1
@@ -3120,7 +3128,7 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/stdio/swsc
 diff -ruN src/lib/libc/Symbols.list.orig  src/lib/libc/Symbols.list
 --- src/lib/libc/Symbols.list.orig	Mon Aug 22 08:08:28 2016
 +++ src/lib/libc/Symbols.list	Mon Aug 22 08:12:10 2016
-@@ -1395,6 +1395,7 @@
+@@ -1409,6 +1409,7 @@
  open_wmemstream
  perror
  printf
@@ -3128,7 +3136,7 @@ diff -ruN src/lib/libc/Symbols.list.orig  src/lib/libc/Symbols.list
  putc
  putc_unlocked
  putchar
-@@ -1413,10 +1414,13 @@
+@@ -1427,10 +1428,13 @@
  snprintf
  snprintf_l
  sprintf
@@ -3142,7 +3150,7 @@ diff -ruN src/lib/libc/Symbols.list.orig  src/lib/libc/Symbols.list
  tempnam
  tmpfile
  tmpnam
-@@ -1542,14 +1546,23 @@
+@@ -1561,14 +1565,23 @@
  setstate
  sradixsort
  strtoimax
@@ -3166,10 +3174,11 @@ diff -ruN src/lib/libc/Symbols.list.orig  src/lib/libc/Symbols.list
  suboptarg
  system
  tdelete
-@@ -1745,10 +1758,24 @@
+@@ -1764,10 +1777,25 @@
  
  
  /* xlocale */
++___mb_cur_max_l
 +asprintf_l
 +atof_l
 +atoi_l
@@ -3191,7 +3200,7 @@ diff -ruN src/lib/libc/Symbols.list.orig  src/lib/libc/Symbols.list
  isalnum_l
  isalpha_l
  isblank_l
-@@ -1808,13 +1835,23 @@
+@@ -1827,13 +1855,23 @@
  wcrtomb_l
  wcsnrtombs_l
  wcsrtombs_l
@@ -3215,4 +3224,3 @@ diff -ruN src/lib/libc/Symbols.list.orig  src/lib/libc/Symbols.list
  
  
  /* yp */
-

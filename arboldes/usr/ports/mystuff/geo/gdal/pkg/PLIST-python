@@ -1,0 +1,178 @@
+@comment $OpenBSD: PLIST-python,v 1.23 2021/01/04 14:06:31 sthen Exp $
+@conflict py-gdal-<3.1.1
+@pkgpath geo/gdal,-python
+bin/epsg_tr.py
+bin/esri2wkt.py
+bin/gcps2vec.py
+bin/gcps2wld.py
+bin/gdal2tiles.py
+bin/gdal2xyz.py
+bin/gdal_auth.py
+bin/gdal_calc.py
+bin/gdal_edit.py
+bin/gdal_fillnodata.py
+bin/gdal_merge.py
+bin/gdal_pansharpen.py
+bin/gdal_polygonize.py
+bin/gdal_proximity.py
+bin/gdal_retile.py
+bin/gdal_sieve.py
+bin/gdalchksum.py
+bin/gdalcompare.py
+bin/gdalident.py
+bin/gdalimport.py
+bin/gdalmove.py
+bin/mkgraticule.py
+bin/ogrmerge.py
+bin/pct2rgb.py
+bin/rgb2pct.py
+lib/python${MODPY_VERSION}/site-packages/GDAL-${MODPY_EGG_VERSION}-py${MODPY_VERSION}.egg-info/
+lib/python${MODPY_VERSION}/site-packages/GDAL-${MODPY_EGG_VERSION}-py${MODPY_VERSION}.egg-info/PKG-INFO
+lib/python${MODPY_VERSION}/site-packages/GDAL-${MODPY_EGG_VERSION}-py${MODPY_VERSION}.egg-info/SOURCES.txt
+lib/python${MODPY_VERSION}/site-packages/GDAL-${MODPY_EGG_VERSION}-py${MODPY_VERSION}.egg-info/dependency_links.txt
+lib/python${MODPY_VERSION}/site-packages/GDAL-${MODPY_EGG_VERSION}-py${MODPY_VERSION}.egg-info/not-zip-safe
+lib/python${MODPY_VERSION}/site-packages/GDAL-${MODPY_EGG_VERSION}-py${MODPY_VERSION}.egg-info/requires.txt
+lib/python${MODPY_VERSION}/site-packages/GDAL-${MODPY_EGG_VERSION}-py${MODPY_VERSION}.egg-info/top_level.txt
+lib/python${MODPY_VERSION}/site-packages/osgeo/
+lib/python${MODPY_VERSION}/site-packages/osgeo/__init__.py
+${MODPY_COMMENT}lib/python${MODPY_VERSION}/site-packages/osgeo/${MODPY_PYCACHE}/
+lib/python${MODPY_VERSION}/site-packages/osgeo/${MODPY_PYCACHE}__init__.${MODPY_PYC_MAGIC_TAG}pyc
+lib/python${MODPY_VERSION}/site-packages/osgeo/${MODPY_PYCACHE}gdal.${MODPY_PYC_MAGIC_TAG}pyc
+lib/python${MODPY_VERSION}/site-packages/osgeo/${MODPY_PYCACHE}gdal_array.${MODPY_PYC_MAGIC_TAG}pyc
+lib/python${MODPY_VERSION}/site-packages/osgeo/${MODPY_PYCACHE}gdalconst.${MODPY_PYC_MAGIC_TAG}pyc
+lib/python${MODPY_VERSION}/site-packages/osgeo/${MODPY_PYCACHE}gdalnumeric.${MODPY_PYC_MAGIC_TAG}pyc
+lib/python${MODPY_VERSION}/site-packages/osgeo/${MODPY_PYCACHE}gnm.${MODPY_PYC_MAGIC_TAG}pyc
+lib/python${MODPY_VERSION}/site-packages/osgeo/${MODPY_PYCACHE}ogr.${MODPY_PYC_MAGIC_TAG}pyc
+lib/python${MODPY_VERSION}/site-packages/osgeo/${MODPY_PYCACHE}osr.${MODPY_PYC_MAGIC_TAG}pyc
+@so lib/python${MODPY_VERSION}/site-packages/osgeo/_gdal.${MODPY_PYC_MAGIC_TAG}so
+@so lib/python${MODPY_VERSION}/site-packages/osgeo/_gdal_array.${MODPY_PYC_MAGIC_TAG}so
+@so lib/python${MODPY_VERSION}/site-packages/osgeo/_gdalconst.${MODPY_PYC_MAGIC_TAG}so
+@so lib/python${MODPY_VERSION}/site-packages/osgeo/_gnm.${MODPY_PYC_MAGIC_TAG}so
+@so lib/python${MODPY_VERSION}/site-packages/osgeo/_ogr.${MODPY_PYC_MAGIC_TAG}so
+@so lib/python${MODPY_VERSION}/site-packages/osgeo/_osr.${MODPY_PYC_MAGIC_TAG}so
+lib/python${MODPY_VERSION}/site-packages/osgeo/gdal.py
+lib/python${MODPY_VERSION}/site-packages/osgeo/gdal_array.py
+lib/python${MODPY_VERSION}/site-packages/osgeo/gdalconst.py
+lib/python${MODPY_VERSION}/site-packages/osgeo/gdalnumeric.py
+lib/python${MODPY_VERSION}/site-packages/osgeo/gnm.py
+lib/python${MODPY_VERSION}/site-packages/osgeo/ogr.py
+lib/python${MODPY_VERSION}/site-packages/osgeo/osr.py
+lib/python${MODPY_VERSION}/site-packages/osgeo/utils/
+lib/python${MODPY_VERSION}/site-packages/osgeo/utils/__init__.py
+${MODPY_COMMENT}lib/python${MODPY_VERSION}/site-packages/osgeo/utils/${MODPY_PYCACHE}/
+lib/python${MODPY_VERSION}/site-packages/osgeo/utils/${MODPY_PYCACHE}__init__.${MODPY_PYC_MAGIC_TAG}pyc
+lib/python${MODPY_VERSION}/site-packages/osgeo/utils/${MODPY_PYCACHE}epsg_tr.${MODPY_PYC_MAGIC_TAG}pyc
+lib/python${MODPY_VERSION}/site-packages/osgeo/utils/${MODPY_PYCACHE}esri2wkt.${MODPY_PYC_MAGIC_TAG}pyc
+lib/python${MODPY_VERSION}/site-packages/osgeo/utils/${MODPY_PYCACHE}gcps2vec.${MODPY_PYC_MAGIC_TAG}pyc
+lib/python${MODPY_VERSION}/site-packages/osgeo/utils/${MODPY_PYCACHE}gcps2wld.${MODPY_PYC_MAGIC_TAG}pyc
+lib/python${MODPY_VERSION}/site-packages/osgeo/utils/${MODPY_PYCACHE}gdal2xyz.${MODPY_PYC_MAGIC_TAG}pyc
+lib/python${MODPY_VERSION}/site-packages/osgeo/utils/${MODPY_PYCACHE}gdal_auth.${MODPY_PYC_MAGIC_TAG}pyc
+lib/python${MODPY_VERSION}/site-packages/osgeo/utils/${MODPY_PYCACHE}gdal_calc.${MODPY_PYC_MAGIC_TAG}pyc
+lib/python${MODPY_VERSION}/site-packages/osgeo/utils/${MODPY_PYCACHE}gdal_edit.${MODPY_PYC_MAGIC_TAG}pyc
+lib/python${MODPY_VERSION}/site-packages/osgeo/utils/${MODPY_PYCACHE}gdal_fillnodata.${MODPY_PYC_MAGIC_TAG}pyc
+lib/python${MODPY_VERSION}/site-packages/osgeo/utils/${MODPY_PYCACHE}gdal_merge.${MODPY_PYC_MAGIC_TAG}pyc
+lib/python${MODPY_VERSION}/site-packages/osgeo/utils/${MODPY_PYCACHE}gdal_pansharpen.${MODPY_PYC_MAGIC_TAG}pyc
+lib/python${MODPY_VERSION}/site-packages/osgeo/utils/${MODPY_PYCACHE}gdal_polygonize.${MODPY_PYC_MAGIC_TAG}pyc
+lib/python${MODPY_VERSION}/site-packages/osgeo/utils/${MODPY_PYCACHE}gdal_proximity.${MODPY_PYC_MAGIC_TAG}pyc
+lib/python${MODPY_VERSION}/site-packages/osgeo/utils/${MODPY_PYCACHE}gdal_retile.${MODPY_PYC_MAGIC_TAG}pyc
+lib/python${MODPY_VERSION}/site-packages/osgeo/utils/${MODPY_PYCACHE}gdal_sieve.${MODPY_PYC_MAGIC_TAG}pyc
+lib/python${MODPY_VERSION}/site-packages/osgeo/utils/${MODPY_PYCACHE}gdalchksum.${MODPY_PYC_MAGIC_TAG}pyc
+lib/python${MODPY_VERSION}/site-packages/osgeo/utils/${MODPY_PYCACHE}gdalcompare.${MODPY_PYC_MAGIC_TAG}pyc
+lib/python${MODPY_VERSION}/site-packages/osgeo/utils/${MODPY_PYCACHE}gdalident.${MODPY_PYC_MAGIC_TAG}pyc
+lib/python${MODPY_VERSION}/site-packages/osgeo/utils/${MODPY_PYCACHE}gdalimport.${MODPY_PYC_MAGIC_TAG}pyc
+lib/python${MODPY_VERSION}/site-packages/osgeo/utils/${MODPY_PYCACHE}gdalmove.${MODPY_PYC_MAGIC_TAG}pyc
+lib/python${MODPY_VERSION}/site-packages/osgeo/utils/${MODPY_PYCACHE}mkgraticule.${MODPY_PYC_MAGIC_TAG}pyc
+lib/python${MODPY_VERSION}/site-packages/osgeo/utils/${MODPY_PYCACHE}ogrmerge.${MODPY_PYC_MAGIC_TAG}pyc
+lib/python${MODPY_VERSION}/site-packages/osgeo/utils/${MODPY_PYCACHE}pct2rgb.${MODPY_PYC_MAGIC_TAG}pyc
+lib/python${MODPY_VERSION}/site-packages/osgeo/utils/${MODPY_PYCACHE}rgb2pct.${MODPY_PYC_MAGIC_TAG}pyc
+lib/python${MODPY_VERSION}/site-packages/osgeo/utils/epsg_tr.py
+lib/python${MODPY_VERSION}/site-packages/osgeo/utils/esri2wkt.py
+lib/python${MODPY_VERSION}/site-packages/osgeo/utils/gcps2vec.py
+lib/python${MODPY_VERSION}/site-packages/osgeo/utils/gcps2wld.py
+lib/python${MODPY_VERSION}/site-packages/osgeo/utils/gdal2xyz.py
+lib/python${MODPY_VERSION}/site-packages/osgeo/utils/gdal_auth.py
+lib/python${MODPY_VERSION}/site-packages/osgeo/utils/gdal_calc.py
+lib/python${MODPY_VERSION}/site-packages/osgeo/utils/gdal_edit.py
+lib/python${MODPY_VERSION}/site-packages/osgeo/utils/gdal_fillnodata.py
+lib/python${MODPY_VERSION}/site-packages/osgeo/utils/gdal_merge.py
+lib/python${MODPY_VERSION}/site-packages/osgeo/utils/gdal_pansharpen.py
+lib/python${MODPY_VERSION}/site-packages/osgeo/utils/gdal_polygonize.py
+lib/python${MODPY_VERSION}/site-packages/osgeo/utils/gdal_proximity.py
+lib/python${MODPY_VERSION}/site-packages/osgeo/utils/gdal_retile.py
+lib/python${MODPY_VERSION}/site-packages/osgeo/utils/gdal_sieve.py
+lib/python${MODPY_VERSION}/site-packages/osgeo/utils/gdalchksum.py
+lib/python${MODPY_VERSION}/site-packages/osgeo/utils/gdalcompare.py
+lib/python${MODPY_VERSION}/site-packages/osgeo/utils/gdalident.py
+lib/python${MODPY_VERSION}/site-packages/osgeo/utils/gdalimport.py
+lib/python${MODPY_VERSION}/site-packages/osgeo/utils/gdalmove.py
+lib/python${MODPY_VERSION}/site-packages/osgeo/utils/mkgraticule.py
+lib/python${MODPY_VERSION}/site-packages/osgeo/utils/ogrmerge.py
+lib/python${MODPY_VERSION}/site-packages/osgeo/utils/pct2rgb.py
+lib/python${MODPY_VERSION}/site-packages/osgeo/utils/rgb2pct.py
+@man man/man1/gdal2tiles.1
+@man man/man1/gdal_calc.1
+@man man/man1/gdal_edit.1
+@man man/man1/gdal_fillnodata.1
+@man man/man1/gdal_pansharpen.1
+@man man/man1/gdal_polygonize.1
+@man man/man1/gdal_proximity.1
+@man man/man1/gdal_retile.1
+@man man/man1/gdal_sieve.1
+@man man/man1/gdalcompare.1
+@man man/man1/gdalmove.1
+@man man/man1/ogrmerge.1
+@man man/man1/pct2rgb.1
+@man man/man1/rgb2pct.1
+share/examples/${MODPY_PY_PREFIX}gdal/
+share/examples/${MODPY_PY_PREFIX}gdal/assemblepoly.py
+share/examples/${MODPY_PY_PREFIX}gdal/attachpct.py
+share/examples/${MODPY_PY_PREFIX}gdal/build_jp2_from_xml.py
+share/examples/${MODPY_PY_PREFIX}gdal/classify.py
+share/examples/${MODPY_PY_PREFIX}gdal/crs2crs2grid.py
+share/examples/${MODPY_PY_PREFIX}gdal/densify.py
+share/examples/${MODPY_PY_PREFIX}gdal/dump_jp2.py
+share/examples/${MODPY_PY_PREFIX}gdal/fft.py
+share/examples/${MODPY_PY_PREFIX}gdal/fix_gpkg.py
+share/examples/${MODPY_PY_PREFIX}gdal/gcps2ogr.py
+share/examples/${MODPY_PY_PREFIX}gdal/gdal2grd.py
+share/examples/${MODPY_PY_PREFIX}gdal/gdal_cp.py
+share/examples/${MODPY_PY_PREFIX}gdal/gdal_create_pdf.py
+share/examples/${MODPY_PY_PREFIX}gdal/gdal_ls.py
+share/examples/${MODPY_PY_PREFIX}gdal/gdal_lut.py
+share/examples/${MODPY_PY_PREFIX}gdal/gdal_mkdir.py
+share/examples/${MODPY_PY_PREFIX}gdal/gdal_remove_towgs84.py
+share/examples/${MODPY_PY_PREFIX}gdal/gdal_rm.py
+share/examples/${MODPY_PY_PREFIX}gdal/gdal_rmdir.py
+share/examples/${MODPY_PY_PREFIX}gdal/gdal_vrtmerge.py
+share/examples/${MODPY_PY_PREFIX}gdal/gdal_zip.py
+share/examples/${MODPY_PY_PREFIX}gdal/gdalcopyproj.py
+share/examples/${MODPY_PY_PREFIX}gdal/gdalfilter.py
+share/examples/${MODPY_PY_PREFIX}gdal/gdalinfo.py
+share/examples/${MODPY_PY_PREFIX}gdal/gdalpythonserver.py
+share/examples/${MODPY_PY_PREFIX}gdal/get_soundg.py
+share/examples/${MODPY_PY_PREFIX}gdal/histrep.py
+share/examples/${MODPY_PY_PREFIX}gdal/hsv_merge.py
+share/examples/${MODPY_PY_PREFIX}gdal/jpeg_in_tiff_extract.py
+share/examples/${MODPY_PY_PREFIX}gdal/load2odbc.py
+share/examples/${MODPY_PY_PREFIX}gdal/loslas2ntv2.py
+share/examples/${MODPY_PY_PREFIX}gdal/magphase.py
+share/examples/${MODPY_PY_PREFIX}gdal/make_fuzzer_friendly_archive.py
+share/examples/${MODPY_PY_PREFIX}gdal/ogr2ogr.py
+share/examples/${MODPY_PY_PREFIX}gdal/ogr2vrt.py
+share/examples/${MODPY_PY_PREFIX}gdal/ogr_build_junction_table.py
+share/examples/${MODPY_PY_PREFIX}gdal/ogr_dispatch.py
+share/examples/${MODPY_PY_PREFIX}gdal/ogr_layer_algebra.py
+share/examples/${MODPY_PY_PREFIX}gdal/ogrinfo.py
+share/examples/${MODPY_PY_PREFIX}gdal/ogrupdate.py
+share/examples/${MODPY_PY_PREFIX}gdal/rel.py
+share/examples/${MODPY_PY_PREFIX}gdal/tigerpoly.py
+share/examples/${MODPY_PY_PREFIX}gdal/tile_extent_from_raster.py
+share/examples/${MODPY_PY_PREFIX}gdal/tolatlong.py
+share/examples/${MODPY_PY_PREFIX}gdal/val_at_coord.py
+share/examples/${MODPY_PY_PREFIX}gdal/val_repl.py
+share/examples/${MODPY_PY_PREFIX}gdal/validate_cloud_optimized_geotiff.py
+share/examples/${MODPY_PY_PREFIX}gdal/validate_gpkg.py
+share/examples/${MODPY_PY_PREFIX}gdal/validate_jp2.py
+share/examples/${MODPY_PY_PREFIX}gdal/vec_tr.py
+share/examples/${MODPY_PY_PREFIX}gdal/vec_tr_spat.py
+share/examples/${MODPY_PY_PREFIX}gdal/wcs_virtds_params.py

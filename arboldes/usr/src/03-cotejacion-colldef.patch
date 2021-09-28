@@ -3870,7 +3870,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/usr.bin/colldef/scan.l 
 +FILE *map_fp;
 +YY_BUFFER_STATE main_buf, map_buf;
 +#ifdef FLEX_DEBUG
-+YYSTYPE yylval;
++extern YYSTYPE yylval;
 +#endif /* FLEX_DEBUG */
 +int yylex(void);
 +%}

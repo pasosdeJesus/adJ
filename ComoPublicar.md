@@ -185,20 +185,18 @@ Pasos importantes para publicar versión mayor
 5. Análogo a pasos de versión beta
 6. Actualizar version en reto de P2PU (las 4 primeras tareas) 
    https://p2pu.org/es/groups/openbsd-adj-como-sistema-de-escritorio/
-7. Actualizar Artículo como Noticia en http://aprendiendo.pasosdeJesus.org,
-   http://aprendiendo.pasosdejesus.org/?id=MainMenu,  
-8. Poner Tag en github
+7. Poner Tag en github
 	```
 	git tag -a v6.9 -m "Version 6.9"
 	git push origin v6.9
 	```
-9. Publicar en Twitter y Facebook. 
+8. Publicar en Twitter y Facebook. 
    Si es tambien publicacion de SIVeL en sitio de noticias de SIVeL y Structio.
 
 	Publicado adJ 6.9 distribución para servidores y cortafuegos, 
 	segura, amigable para cristian@s y en español, ver 
 	http://aprendiendo.pasosdejesus.org/
-10. Correo a listas: 
+9. Correo a listas: 
     openbsd-colombia@googlegroups.com, 
     openbsd-mexico@googlegroups.com, sivel-soporte@lists.sourceforge.net
 
@@ -233,8 +231,8 @@ Pasos importantes para publicar versión mayor
 
 	Bendiciones
 
-11. Actualiza artículos de Wikipedia 
+10. Actualiza artículos de Wikipedia 
    <https://en.wikipedia.org/wiki/AdJ> y <https://es.wikipedia.org/wiki/AdJ>
 
-12. Publicar noticia en <http://sivel.sf.net> y en  <http://structio.sf.net>
+11. Publicar noticia en <http://sivel.sf.net> y en  <http://structio.sf.net>
 

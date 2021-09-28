@@ -1,0 +1,115 @@
+diff -ruN src69-orig/gnu/llvm/libcxx/include/__config src/gnu/llvm/libcxx/include/__config
+--- src69-orig/gnu/llvm/libcxx/include/__config	Sat Jan  2 16:18:29 2021
++++ src/gnu/llvm/libcxx/include/__config	Sat Jul 24 13:51:15 2021
+@@ -915,7 +915,8 @@
+ #endif
+ 
+ #if defined(__APPLE__) || defined(__FreeBSD__) || defined(_LIBCPP_MSVCRT_LIKE) || \
+-    defined(__sun__) || defined(__NetBSD__) || defined(__CloudABI__)
++    defined(__sun__) || defined(__NetBSD__) || defined(__CloudABI__) || \
++    defined(__adJ__)
+ #define _LIBCPP_LOCALE__L_EXTENSIONS 1
+ #endif
+ 
+@@ -1234,6 +1235,7 @@
+ 
+ #if defined(__BIONIC__) || defined(__CloudABI__) || defined(__OpenBSD__) ||    \
+     defined(__Fuchsia__) || defined(__wasi__) || defined(_LIBCPP_HAS_MUSL_LIBC)
++// In adJ _DefaultRuneLocale is in libc but hidden
+ #define _LIBCPP_PROVIDES_DEFAULT_RUNE_TABLE
+ #endif
+ 
+diff -ruN src69-orig/gnu/llvm/libcxx/include/__locale src/gnu/llvm/libcxx/include/__locale
+--- src69-orig/gnu/llvm/libcxx/include/__locale	Sat Jan  2 16:18:29 2021
++++ src/gnu/llvm/libcxx/include/__locale	Sat Jul 24 13:44:23 2021
+@@ -28,10 +28,11 @@
+ #elif defined(__sun__)
+ # include <xlocale.h>
+ # include <support/solaris/xlocale.h>
+-#elif defined(_NEWLIB_VERSION) || defined(__OpenBSD__)
++#elif defined(_NEWLIB_VERSION)
+ # include <support/newlib/xlocale.h>
+ #elif (defined(__APPLE__)      || defined(__FreeBSD__) \
+-    || defined(__EMSCRIPTEN__) || defined(__IBMCPP__))
++    || defined(__EMSCRIPTEN__) || defined(__IBMCPP__)) \
++    || defined(__adJ__)
+ # include <xlocale.h>
+ #elif defined(__Fuchsia__)
+ # include <support/fuchsia/xlocale.h>
+diff -ruN src69-orig/gnu/llvm/libcxx/include/locale src/gnu/llvm/libcxx/include/locale
+--- src69-orig/gnu/llvm/libcxx/include/locale	Sat Jan  2 16:18:29 2021
++++ src/gnu/llvm/libcxx/include/locale	Thu Jul 22 04:58:37 2021
+@@ -1571,7 +1571,7 @@
+             __nc = __libcpp_asprintf_l(&__nb, _LIBCPP_GET_C_LOCALE, __fmt, (int)__iob.precision(), __v);
+         else
+             __nc = __libcpp_asprintf_l(&__nb, _LIBCPP_GET_C_LOCALE, __fmt, __v);
+-        if (__nc == -1)
++        if (__nb == 0)
+             __throw_bad_alloc();
+         __nbh.reset(__nb);
+     }
+@@ -1622,7 +1622,7 @@
+             __nc = __libcpp_asprintf_l(&__nb, _LIBCPP_GET_C_LOCALE, __fmt, (int)__iob.precision(), __v);
+         else
+             __nc = __libcpp_asprintf_l(&__nb, _LIBCPP_GET_C_LOCALE, __fmt, __v);
+-        if (__nc == -1)
++        if (__nb == 0)
+             __throw_bad_alloc();
+         __nbh.reset(__nb);
+     }
+@@ -3403,7 +3403,7 @@
+     if (__n > __bs-1)
+     {
+         __n = static_cast<size_t>(__libcpp_asprintf_l(&__bb, _LIBCPP_GET_C_LOCALE, "%.0Lf", __units));
+-        if (__n == -1)
++        if (__bb == 0)
+             __throw_bad_alloc();
+         __hn.reset(__bb);
+         __hd.reset((char_type*)malloc(__n * sizeof(char_type)));
+diff -ruN src69-orig/gnu/llvm/libcxx/include/support/newlib/xlocale.h src/gnu/llvm/libcxx/include/support/newlib/xlocale.h
+--- src69-orig/gnu/llvm/libcxx/include/support/newlib/xlocale.h	Sat Jan  2 16:18:29 2021
++++ src/gnu/llvm/libcxx/include/support/newlib/xlocale.h	Thu Jul 22 04:53:01 2021
+@@ -9,20 +9,18 @@
+ #ifndef _LIBCPP_SUPPORT_NEWLIB_XLOCALE_H
+ #define _LIBCPP_SUPPORT_NEWLIB_XLOCALE_H
+ 
+-#if defined(_NEWLIB_VERSION) || defined(__OpenBSD__)
++#if defined(_NEWLIB_VERSION)
+ 
+ #include <cstdlib>
+ #include <clocale>
+ #include <cwctype>
+ #include <ctype.h>
+-#if !defined(__OpenBSD__)
+ #if !defined(__NEWLIB__) || __NEWLIB__ < 2 || \
+     __NEWLIB__ == 2 && __NEWLIB_MINOR__ < 5
+ #include <support/xlocale/__nop_locale_mgmt.h>
+ #include <support/xlocale/__posix_l_fallback.h>
+-#endif
+-#endif
+ #include <support/xlocale/__strtonum_fallback.h>
++#endif
+ 
+ #endif // _NEWLIB_VERSION
+ 
+diff -ruN src69-orig/gnu/lib/libcxx/Makefile src/gnu/lib/libcxx/Makefile
+--- src69-orig/gnu/lib/libcxx/Makefile	Mon Jan 11 10:27:21 2021
++++ src/gnu/lib/libcxx/Makefile	Sat Jul 24 13:59:09 2021
+@@ -270,16 +270,7 @@
+ 		cmp -s ${src} ${DESTDIR}/${EXPDIR}/${hdr} || \
+ 		    ${INSTALL} ${INSTALL_COPY} -m 444 ${src} ${DESTDIR}/${EXPDIR}/${hdr};
+ .	endfor
+-	${INSTALL} -d -m 755 ${DESTDIR}/${CXXINCLUDEDIR}/support/newlib;
+-	cmp -s ${HDRDIR}/support/newlib/xlocale.h \
+-	    ${DESTDIR}/${CXXINCLUDEDIR}/support/newlib/xlocale.h || \
+-	    ${INSTALL} ${INSTALL_COPY} -m 444 ${HDRDIR}/support/newlib/xlocale.h \
+-	    ${DESTDIR}/${CXXINCLUDEDIR}/support/newlib/xlocale.h;
+-	${INSTALL} -d -m 755 ${DESTDIR}/${CXXINCLUDEDIR}/support/xlocale;
+-.	for hdr src in ${XLOCALE}
+-		cmp -s ${src} ${DESTDIR}/${XLOCALEDIR}/${hdr} || \
+-		    ${INSTALL} ${INSTALL_COPY} -m 444 ${src} ${DESTDIR}/${XLOCALEDIR}/${hdr};
+-.	endfor
++
+ 
+ .include <bsd.lib.mk>
+ 

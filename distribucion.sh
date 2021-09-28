@@ -440,17 +440,17 @@ EOF
   echo "* Parece que sobreescribe /releasedir/bsd y /releasedir/bsd.mp con GENERIC tocaria recuperar los compilador antes"
   find "$DESTDIR"  -exec touch {} ';' 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
   find "$RELEASEDIR"  -exec touch {} ';' 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
-} fi;
+#} fi;
 
 echo " *> Suponiendo que ya se completo un build en /, instalar en $DESTDIR y de este dejar comprimidos en $RELEASEDIR" | tee -a /var/www/tmp/distrib-adJ.bitacora;
-if (test "$inter" = "-i") then {
-  echo -n "(s/n)? "
-  read sn
-}
-else {
-  sn=$autoGenTGZ
-} fi;
-if (test "$sn" = "s") then {
+# if (test "$inter" = "-i") then {
+#   echo -n "(s/n)? "
+#   read sn
+# }
+# else {
+#   sn=$autoGenTGZ
+#} fi;
+#if (test "$sn" = "s") then {
   cd $D_DESTDIR/etc && $dini/arboldd/usr/local/adJ/servicio-etc.sh 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
   cd /usr/src/etc && DESTDIR=/$D_DESTDIR nice make release-sets 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora;
   echo "* Completo make release-sets"
@@ -803,7 +803,6 @@ if (test "$sn" = "s") then {
   # Modificados para posibilitar compilación
   # Deben estar en mystuff
 
-
   # Todo lo de perl tuvo que recompilarse
   # evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
   # Si por ejemplo es:
@@ -972,32 +971,38 @@ if (test "$sn" = "s") then {
   # Recompilados para cerrar fallas de portes actualizados (estable)
   # Para que operen bien basta actualizar CVS de /usr/ports 
   # Los siguientes no deben estar en arboldes/usr/ports/mystuff
+  #paquete certbot paquetes "certbot py3-acme"
   #paquete cups
-  #paquete dovecot
+  paquete dovecot
+  paquete dtc
+  paquete firefox-esr
+  paquete flac
   #paquete gtk+3 paquetes "gtk+3-cups"
+  paquete gdal
+  paquete gnutls
   #paquete gvfs
   #paquete libgcrypt
-  #paquete mpg123
-  paquete flac
-  paquete gnutls
+  paquete libssh
   paquete libxml
   paquete lz4
   paquete mariadb-client paquetes "mariadb-client mariadb-server" 
-  #paquete mutt
-  paquete nginx
+  #paquete mpg123
+  paquete mutt
+  #paquete nginx
   #paquete oniguruma 
   #paquete pcre2 
-  #paquete webkitgtk4
-  #paquete certbot paquetes "certbot py3-acme"
+  paquete python paquetes "python" "2.7"
+  paquete python paquetes "python" "3.8"
+  paquete rsync
   #paquete unzip
-  #paquete python paquetes "python" "3.7"
+  paquete webkitgtk4
 
   ###  
   # Recompilados de estable que usan xlocale (y pueden cerrar fallas)
   # No deben estar en mystuff
   paquete curl
 
-  paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 7.4
+  paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 8.0
 
   ###
   # Recompilados para mejorar dependencias y actualizar
@@ -1008,12 +1013,10 @@ if (test "$sn" = "s") then {
   #FLAVOR=light paquete evince paquetes evince-light
   #paquete gcc paquetes "gcc" 4.9
   #paquete git paquetes "git"
-  #paquete mariadb-client paquetes "mariadb-client mariadb-server" 
   #paquete p7zip paquetes "p7zip p7zip-rar"
   #paquete pidgin paquetes "libpurple pidgin"
-  #paquete samba paquetes "ldb samba tevent"
+  paquete samba paquetes "ldb samba tevent"
   #paquete webkit paquetes "webkit webkit-gtk3"
-  #paquete webkitgtk4
   # FLAVOR=gtk3 make paquete webkit-gtk3
   #FLAVOR=python3 paquete py-gobject3 paquetes py3-gobject3
   #paquete py-gobject3 paquetes py-gobject3
@@ -1024,7 +1027,6 @@ if (test "$sn" = "s") then {
   ##
   # Nueva revisión para operar con librerías retroportadas o actualizadas
   # Deben estar en arbodes/usr/ports/mystuff
-  paquete hevea
   #paquete libreoffice paquetes "libreoffice libreoffice-i18n-es"
 
   ####
@@ -1051,7 +1053,7 @@ if (test "$sn" = "s") then {
   # Unicos en adJ 
   # Deben estar en arboldes/usr/ports/mystuff pero no en /usr/ports
   paquete emulators/realboy
-  paquete net/xmrig
+  #paquete net/xmrig
   #paquete sysutils/ganglia
   paquete textproc/sword
   paquete textproc/bibletime
