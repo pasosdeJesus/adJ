@@ -10,9 +10,17 @@ Con respecto a OpenBSD 6.9 las novedades son:
 	* Nombre de compilación del kernel reportado por uname 
 	  APRENDIENDODEJESUS
 
+* Herramientas de compilación fundamentales
+  * Encabezados de gcc y clang modificados para definir 
+    símbolo \_\_adJ\_\_ que identifica compilaciones en el sistema 
+    operativo. Facilita uso de xlocale y características únicas de 
+    adJ respecto a OpenBSD en algunos portes --como libunistring.
+
 * Modificaciones a librería fundamental `libc`:
 	* Con soporte para localizaciones (fecha y hora, cantidades,
-	  cantidades monetarias, cotejación y ordenamiento) y xlocale
+	  cantidades monetarias, cotejación y ordenamiento) y xlocale.
+    Así mismo las respectivas páginas del manual
+
 
 * Sistema Base
 	* Binarios nuevos en /usr/bin/
@@ -33,7 +41,6 @@ Con respecto a OpenBSD 6.9 las novedades son:
 		* pkg_*		Permiten caracteres en español en descripciones
 		* Muchos otros cambiando daemon por servicio
 	* Archivos de órdenes nuevos en /usr/local/adJ/
-
 		* resto-altroot.sh     para copiar resto de particiones altroot
 		  ver <http://dhobsd.pasosdejesus.org/Respaldo_altroot.html>
 		* amplia-vnd.sh 	Amplia tamaño de imagen cifrada para 
@@ -65,10 +72,6 @@ Con respecto a OpenBSD 6.9 las novedades son:
 		tolower_l toupper_l towctrans_l towlower_l towupper_l
 		uselocale wcscoll wcsnrtombs_l wcsrtombs_l wcstombs_l
 		wcsxfrm wctob_l wctomb_l wctype_l xlocale
-	* Encabezados de gcc y clang modificados para definir 
-          símbolo \_\_adJ\_\_ que identifica compilaciones en el sistema 
-          operativo. Facilita uso de xlocale y características únicas de 
-          adJ respecto a OpenBSD en algunos portes --como libunistring.
 	* Locales nuevos en /usr/share/locale/
 		* Entre otros de todos los paises de latinoamérica
 	* Zonas horarias nuevas en /usr/share/zoneinfo:
@@ -89,27 +92,25 @@ Con respecto a OpenBSD 6.9 las novedades son:
 
 * Paquetes
 	* Retroportados para cerrar fallas y/o actualizar y/o usar xlocale:
-	  postgresql-server, postgresql-client, postgresql-contrib, 
-	  postgresql-docs, ruby, ruby26-ri_docs.
+    ruby-3.0.2, chromium-90, 
+    postgresql-server, postgresql-client, postgresql-contrib, 
+    postgresql-docs, postgresql-previous, postgis
 	* Se recompilaron de portes estables recientes para cerrar 
-	  fallas: cups, curl, dovecot, gvfs, libgcrypt, mpg123, php,
-	  webkitgtk4
+	  fallas o usar xlocale: 
+    curl, dovecot, dtc, firefox-esr, flac, gdal, gnutls, libssh, libxml, lz4,
+    mariadb-client mariadb-server, mutt, python 2.7 y 3.8, php,
+    rsync, samba, webkitgtk4
 	* Recompilados todos los paquetes de perl
-	* Recompilado con llave de adJ
-		* chromium 
-	* Modificados para usar xlocale
+	* Modificados o recompilados para usar xlocale
 		* libunistring
-	* Recompilados de portes estables para usar xlocale y cerrar fallas
-		* gettext-tools, gdk-pixbuf, glib2, gtar, libidn, 
-		  libunistring, libxslt, scribus, wget
 	* Adaptados de portes estables pero mejorados para adJ:
 		* colorls	Ordena alfabeticamente de acuerdo a locale
 		* hexedit 	Soporta tamaños de archivos más grandes
 		* xfe		Soporta paquetes tgz
+    * ocaml 4.12, ocamlbuild, findlib, dune, hevea
 	* Unicos en adJ 
-		* emulators/realboy lang/ocaml-labltk net/xmrig
- 		sysutils/ganglia textproc/biblesync
-		textproc/sword textproc/bibletime database/pear-DB
+		* emulators/realboy lang/ocaml-labltk textproc/biblesync
+		textproc/sword textproc/bibletime 
 		x11/fbdesk textproc/po4a textproc/p5-SGMLNpm
 	* Únicos en adJ liderados por Pasos de Jesús
 		* evangelios_dp	Traducción en progreso de dominio público
@@ -122,10 +123,6 @@ Con respecto a OpenBSD 6.9 las novedades son:
 		* NombresCursiva	Ejercicios lectoescritura
 		* TiposLectoEscritura Tipografía
 		* asigna		Asigna horario
-		* markup		Librería para xml
-		* repasa		Para repasar contenidos
-		* sigue		Manejar calificaciones
 		* Mt77		Buscador
-		* sivel 1.2	Sistema de Información de violencia política
-		* sivel 2.0	Versión en desarrollo
+		* sivel 2.0	Sistema de Información de violencia política
 
