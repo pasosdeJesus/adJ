@@ -106,10 +106,12 @@ Novedades tomadas de <https://www.openbsd.org/69.html>
 
 ### 3.1 Instalador y documentación
 
-* Documentación actualizada: 
-	* `basico_adJ`: 
-	* `usuario_adJ`: 
-	* `servidor_adJ`:
+* Documentación actualizada (que ahora usa pandoc de portes de OpenBSD): 
+	* `basico_adJ`: mejorada sección de conceptos
+    <http://pasosdejesus.github.io/basico_adJ/>
+  * `usuario_adJ` <http://pasosdejesus.github.io/usuario_adJ/>
+  * `servidor_adJ`: mejoradas secciones de mariadb y pf 
+    <http://pasosdejesus.github.io/servidor_adJ>
 
 ### 3.2 Paquetes
 
