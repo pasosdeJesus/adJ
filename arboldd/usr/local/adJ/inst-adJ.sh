@@ -1427,6 +1427,28 @@ if (test -f /usr/bin/podselect) then {
 
 } fi;
 
+  
+if (test -f /usr/X11R6/include/X11/extensions/dmxext.h) then {
+  vac="$vac 6.9 a 7.0";
+  echo "Aplicando actualizaciones de 6.9 a 7.0" >> /var/www/tmp/inst-adJ.bitacora;
+  rm -f /usr/X11R6/lib/libdmx.*
+  rm -f /usr/X11R6/include/X11/extensions/dmxext.h
+  rm -f /usr/X11R6/lib/pkgconfig/dmx.pc
+  rm -f /usr/X11R6/man/man3/DMX*.3
+
+  id named > /dev/null 2>&1
+  if (test "$?" != "0") then {
+    userdel named
+    groupdel named
+  } fi;
+  rm -rf /var/named
+
+  id _btd > /dev/null 2>&1
+  if (test "$?" != "0") then {
+    userdel _btd
+  } fi;
+} fi;
+
 
 if  (test "$vac" != "") then {
 	dialog --title 'Actualizaciones aplicadas' --msgbox "\\nSe aplicaron actualizaciones: $vac\\n\\n$mac\\n" 15 60
