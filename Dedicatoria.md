@@ -5,7 +5,7 @@ errores, para transformarme por su amor a su buen propósito.
 
 -----
 
-¿No sabéis que sois templo de Dios y que 
+¿No sabéis que sois templo de Dios y que
 el Espíritu de Dios habita en vosotros?
 
 1 Cor 3:16
