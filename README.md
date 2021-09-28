@@ -36,10 +36,10 @@ Prerequisitos
 4. Desde github bifurque (fork) la rama de la versión que desea del 
    repositorio <https://github.com/pasosdeJesus/adJ>.  
    La versión en desarrollo está en la rama
-   ```ADJ_6_9```.
+   ```ADJ_7_0```.
 5. Clone su bifuración a su directorio preferido:
 ```
-mkdir ~/comp; cd ~/comp; git clone -b ADJ_6_9 git@github.com/pasosdeJesus/adJ.git
+mkdir ~/comp; cd ~/comp; git clone -b ADJ_7_0 git@github.com/pasosdeJesus/adJ.git
 ```
 6. Copie el archivo local de variables y modifiquelo:
 ```

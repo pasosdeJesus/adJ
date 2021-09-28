@@ -1,4 +1,4 @@
-# Actualización a Aprendiendo De Jesús 6.9
+# Actualización a Aprendiendo De Jesús 7.0
 
 La actualización consta de 3 partes:
 
@@ -14,7 +14,7 @@ La actualización consta de 3 partes:
 	```
 	mkdir -p ~/comp/adJ;
 	cd ~/comp/adJ;
-	rsync-adJ 6.9
+	rsync-adJ 7.0a1
 	```
 
   Si ocurre alguna falla durante la transmisión podrá continuar donde
@@ -27,7 +27,7 @@ La actualización consta de 3 partes:
   Si descargó fuentes con el procedimiento anterior ejecutelo con:
 
 	```
-       	doas ~/comp/adJ/6.9-amd64/util/preact-adJ.sh
+       	doas ~/comp/adJ/7.0a1-amd64/util/preact-adJ.sh
 
 ## 2. Actualizar el sistema base:
 
@@ -37,7 +37,7 @@ La actualización consta de 3 partes:
 
 		```
 		cd ~/comp/adJ; 
-		ARCH=~/comp/adJ/6.9-amd64 doas 6.9-amd64/util/actbase.sh 6.9
+		ARCH=~/comp/adJ/7.0a1-amd64 doas 7.0-amd64/util/actbase.sh 7.0
 		```
 
 ## 3. Actualizar aplicaciones:
@@ -49,12 +49,12 @@ La actualización consta de 3 partes:
   puede usar:
 
 	```
-	ARCH=~/comp/adJ/6.9-amd64 doas /inst-adJ.sh
+	ARCH=~/comp/adJ/7.0a1-amd64 doas /inst-adJ.sh
 	```
 	
   Este archivo de ordenes asiste actualizaciones que puedan hacer 
   falta de una versión a otra del sistema base (incluidas las d
-  escritas en http://openbsd.org/faq/upgrade67.html) y actualiza cuando es 
+  escritas en http://openbsd.org/faq/upgrade70.html) y actualiza cuando es 
   posible archivos de configuración de diversos paquetes.
 * Puede ejecutar varias veces este archivo de órdenes, pero si el 
   proceso no concluye exitosamente por favor después de ejecutar

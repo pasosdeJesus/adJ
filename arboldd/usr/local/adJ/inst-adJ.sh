@@ -3,10 +3,10 @@
 # Dominio público de acuerdo a legislación colombiana. http://www.pasosdejesus.org/dominio_publico_colombia.html. 
 # 2015. vtamara@pasosdeJesus.org
 
-VER=6.9
+VER=7.0
 REV=0
-VESP=""
-VERP=69
+VESP="a1"
+VERP=70
 
 # Falta /standard/root.hint
 
