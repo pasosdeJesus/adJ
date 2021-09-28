@@ -1355,6 +1355,12 @@ if (test -f /usr/libdata/perl5/Math/BigInt/CalcEmu.pm) then {
     groupdel named
   } fi;
   rm -rf /var/named
+
+  id _btd > /dev/null 2>&1
+  if (test "$?" != "0") then {
+    userdel _btd
+  } fi;
+
 } fi;
 
 if (test -f /usr/lib/libperl.a) then {
@@ -1371,6 +1377,11 @@ if (test -f /usr/lib/libperl.a) then {
     groupdel named
   } fi;
   rm -rf /var/named
+
+  id _btd > /dev/null 2>&1
+  if (test "$?" != "0") then {
+    userdel _btd
+  } fi;
 
 } fi;
 
@@ -1408,6 +1419,11 @@ if (test -f /usr/bin/podselect) then {
     groupdel named
   } fi;
   rm -rf /var/named
+
+  id _btd > /dev/null 2>&1
+  if (test "$?" != "0") then {
+    userdel _btd
+  } fi;
 
 } fi;
 
