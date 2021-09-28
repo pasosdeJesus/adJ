@@ -1349,6 +1349,12 @@ if (test -f /usr/libdata/perl5/Math/BigInt/CalcEmu.pm) then {
 	rm -f /usr/sbin/{dig,host,nslookup}
 
 	rm -f /dev/mixer*
+  id named > /dev/null 2>&1
+  if (test "$?" != "0") then {
+    userdel named
+    groupdel named
+  } fi;
+  rm -rf /var/named
 } fi;
 
 if (test -f /usr/lib/libperl.a) then {
@@ -1359,6 +1365,12 @@ if (test -f /usr/lib/libperl.a) then {
   rm /usr/X11R6/lib/libxkbui.* \
     /usr/X11R6/lib/pkgconfig/xkbui.pc \
     /usr/X11R6/include/X11/extensions/XKBui.h
+  id named > /dev/null 2>&1
+  if (test "$?" != "0") then {
+    userdel named
+    groupdel named
+  } fi;
+  rm -rf /var/named
 
 } fi;
 
@@ -1389,6 +1401,13 @@ if (test -f /usr/bin/podselect) then {
     /usr/share/man/man3p/Pod::Parser.3p \
     /usr/share/man/man3p/Pod::PlainText.3p \
     /usr/share/man/man3p/Pod::Select.3p
+
+  id named > /dev/null 2>&1
+  if (test "$?" != "0") then {
+    userdel named
+    groupdel named
+  } fi;
+  rm -rf /var/named
 
 } fi;
 
