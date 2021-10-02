@@ -5,7 +5,7 @@ COMMENT=	Tipos de letra para aprender a leer y escribir
 V=1.1
 PKGNAME=	TiposLectoEscritura-$V
 DISTNAME=	TiposLectoescritura-$V
-REVISION=	
+REVISION=	1
 CATEGORIES=	fonts
 
 HOMEPAGE=	http://structio.sourceforge.net/
@@ -17,7 +17,7 @@ NO_BUILD=	Yes
 NO_TEST=	Yes
 
 WRKDIST=	${WRKDIR}
-DIRTIPOS=	${PREFIX}/lib/X11/fonts/structio
+DIRTIPOS=	${PREFIX}/share/fonts/structio
 
 
 MASTER_SITES=	${MASTER_SITE_SOURCEFORGE:=structio/TiposLectoescritura/}
