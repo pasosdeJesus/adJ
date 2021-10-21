@@ -3,7 +3,7 @@ Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
 
 ### Versión: 7.0a1
-Fecha de publicación: 30/Sep/2021
+Fecha de publicación: 30/Oct/2021
 
 Puede ver novedades respecto a OpenBSD en:
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_7_0/Novedades_OpenBSD.md>
@@ -47,112 +47,74 @@ Puede ver las diversas versiones publicadas en:
 
 Novedades tomadas de <https://www.openbsd.org/70.html> 
 
-* Aplicados parches de seguridad hasta el 12.Sep.2021 provenientes de 
+* Aplicados parches de seguridad hasta el x provenientes de 
   OpenBSD que incluyen soluciones a fallas
 * Controladores ampliados o mejorados para amd64
 	* Red:
-		* Inalámbrica: Mejorados `athn`, `bwfm`, `ipw`, `iwi`, `iwm`, `iwx` 
-      y `urtwn`,
-		* Ethernet: Nuevo `mvsw`  para switches Marvel "SOHO". `mvpp` ahora soporta
-    10G.  Mejorados `ix`, `mvneta`, `mvpp`,  `mvsw`,  `ogx`, `rge` 
-    * SFP:  `ofw`
-	* Vídeo: Soporte para 30-bits de color en `simplefb` y `wsfb`
-	* Sensores y otros: Soporte para AMD Vi y VTD IOMMU que crean dominios
-  separados para cada dispositivo PCI dando protección contra accesos 
-  inválidos a memoria.  Mejorado soporte para ACPI con nuevos controladores
-  `pcamux`, `acpige` para manejo de botón de apagado, `imxiic`.  Mejor
-  soporte para touchpads `dwiic`, `ims`, `wsmouse`
+		* Inalámbrica: 
+		* Ethernet: 
+    * SFP: 
+	* Vídeo:
+	* Sensores y otros:
 
 * Mejoras a herramientas de Red
-  * Nuevo controlador puente virtual Eternet `veb` 
-  * Mejoras a bgpd, ospf, IPSEC, httpd, dig, dhclient, OpenSMTPD, 
-  * Nuevos servicios `dhcpleased` y `resolvd` (por habiltiar con `rcctl`) que 
-    junto con `slaacd` y  `unwind` proveen una configuación automática 
-    de interfaces de red y resolución DNS.
+  * 
+  * 
 
 * Seguridad
-	* Nuevas versiones de LibreSSL y OpenSSH.
+	* 
+
 * Otros
-  * Permite arranque desde GPT en discos formateados de más de 4TB
-  * El instalador ahora incluye una versión comprimida con gzip de `bsd.rd`
-  * Nueva disciplina para softraid RAID1C (raid1 cifrado)
-  * Nuevo kern.video.record para sysctl que previene o posibilita grabar video,
-    analogo a kern.audio.record.
-  * Enlazador `ld` que genera ejecutables ELF remplazado por el del
-    proyecto LLVM. Hasta OpenBSD 6.8 se usaba el del proyecto GNU.
-    El nuevo `ld` reporta situaciones erroneas, que no eran detectadas o
-    reportadas por el anterior.
+  * 
+
 * El sistema base incluye mejoras a componentes auditados y mejorados 
-  como, `llvm 10.0.1`,  `Xenocara` (basado en `Xorg` 7.7),
+  como, `llvm 11.1.0`,  `Xenocara` (basado en `Xorg` 7.7),
   `perl 5.32` 
 * El repositorio de paquetes de OpenBSD cuenta con 11310 para amd64
 
 
 ### 2.2 Paquetes 
 
-* Veracrypt 1.24u7p1  tomado de correos a `ports-openbsd`
-* Recompilados portes estables más recientes para evitar fallas de seguridad 
-  de: `curl`, `dovecot`,  `dtc`, `firefox-esr`,  `flac`, `gdal`,
-  `gnutls`, `libssh`, `libxml`, `lz4`, `lua`, `mariadb`, `mutt`,
-  `nginx`, `php 8.0`, `python` 2.7 y 3.8, `rsync`, `samba`, `webkitgtk4`
+* Para cerrar fallas se usan las versiones más recientes preparadas
+  por OpenBSD de: ``, ``,  ``, ``,  ``, ``,
 
-* Algunos paquetes típicos y su versión: `dovecot 2.3.14`,
-  `chromium 90.0.4430.72p1`, `firefox-esr 78.12`, `libreoffice 7.0.5.2v0`,
-  `nginx 1.18.0p5`, `mariadb 10.5.10v1`, `node 12.16.1p1`, `python 3.9.6`,
-  `neovim 0.4.4`, `zsh 5.8p0`
+* Algunos paquetes típicos y su versión: `dovecot x`,
+  `chromium x`, `firefox-esr x`, `libreoffice x`,
+  `nginx x`, `mariadb x`, `node x`, `python x`,
+  `neovim x`, `zsh x`
 
 
 ## 3. NOVEDADES RESPECTO A ADJ 6.8 PROVENIENTES DE PASOS DE JESÚS
 
 ### 3.1 Instalador y documentación
 
-* Documentación actualizada (que ahora usa pandoc de portes de OpenBSD): 
-	* `basico_adJ`: mejorada sección de conceptos
+* Documentación actualizada (que ahora usa `pandoc` de portes de OpenBSD): 
+	* `basico_adJ`: 
     <http://pasosdejesus.github.io/basico_adJ/>
-  * `usuario_adJ` <http://pasosdejesus.github.io/usuario_adJ/>
-  * `servidor_adJ`: mejoradas secciones de mariadb y pf 
+  * `usuario_adJ` 
+    <http://pasosdejesus.github.io/usuario_adJ/>
+  * `servidor_adJ`: 
     <http://pasosdejesus.github.io/servidor_adJ>
 
 ### 3.2 Paquetes
 
-* Se incluye la versión beta 16 de `sivel2` cuyas novedades con respecto al 
-  beta 14 incluido en adJ 6.8 se describen a continuación. Agradecimiento por
+* Además de chromium incluimos `firefox 92` en lugar de `firefox-esr` 
+  (firefox-esr tiene regresiones en OpenBSD 7).  Ahora firefox 
+  y chromium permiten autenticar y usar sitios 
+  como <https://drive.google.com>
+
+* Se incluye la versión 2.0  de `sivel2` cuyas novedades con respecto al 
+  beta 16 incluido en adJ 6.9 se describen a continuación. Agradecimiento por
   algunas de las novedades a Luis Alejandro Cruz:
   * Mejoras en consultas, reportes y conteos
-    * Desde listado de casos permite filtrar por tipificaciones de bélicas
-    * Desde listado de casos botones Filtrar y Limpiar se reubican al expandir la Búsqueda Avanzada
-    * En conteo de victimizaciones individuales nuevo campo para desagregar Por
-      columnas con opción CATEGORÍAS que presenta una columna por cada categoría
-      (agrupando por nombre, independiente de la supracategoría).
-    * En reporte revista y reporte general ahora aparece polo antes de cada
-      presunto responsable.
+    *
   * Mejoras en sistematización y en importación 
-    * Orientación Sexual ahora tiene la opción LGBTQ+ para referenciar otras o
-      cuando se sabe que tiene una orientación sexual diversa pero sin detalle
-      de cual.
-    * No permite registrar 2 fuentes de prensa diferentes con la misma fecha y
-      la misma prensa
-    * Permite fuentes de prensa con fecha anterior a la del caso (por ejemplo
-      para registrar antecedentes).
-    * Cuando se agregan víctimas con nombre N y apellido N aparece una
-      numeración automática de NNs tanto en el la pestaña de víctimas como en la
-      de actos. Ver vídeo en
-      https://user-images.githubusercontent.com/12545631/127715238-e424e79b-bc2f-43ff-9934-89ce63ca02e0.MOV
-    * Importación y exportación en XRLAT ahora tiene en cuenta combatientes
+    *
   * Tablas básicas
-    * En tabla básica región pueden especificarse departamentos completos o
-      municipios completos.
-    * Filtro por fecha de creación.
-    * Nueva visualización de la estructura de presuntos responsables habilitados
-      desde Administrar->Árbol de Presuntos Responsables.
-    * Se deshabilitó el presunto responsable "INFORMACIÓN CONTRADICTORIA"
+    * 
   * Mejoras al diseño visual con actualización a Bootsrap 5:
-    * Tipografía base es sans-serif del sistema de tamaño 16
-    * En alertas, mejorado el botón de cerrar.
-    * Mejorada apariencia de cuadros de verificación
-    * En tablas, la línea que separa encabezado de cuerpo es más ancha.
-    * Secciones colapsables mejor diferenciadas y con ícono para
-      expandir/colapsar animado.
+    * 
+
 * Adaptados de portes de OpenBSD estable:
   * `postgresql 13.4`, `gdal`, `postgis`
 * Retroportados y adaptados de OpenBSD-current 
@@ -165,16 +127,13 @@ Novedades tomadas de <https://www.openbsd.org/70.html>
    `glib2`, `libunistring`, `vlc`
 
 ### 3.3 Configuración
+
 * Es sencillo emplear como interprete de ordenes `zsh` con `tmux` para
   tener varias terminales y `neovim` como editor con archivos de 
   configuración incluidos en adJ e instrucciones en:  
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_7_0/arboldd/usr/local/share/adJ/archconf/README.md>
 
 ## 4. FE DE ERRATAS
-
-- Ni `chromium` ni `firefox` permiten ingreso a servicios de Google como
-  <https://drive.google.com> por esto incluimos `firefox-esr` que en casos 
-  como ese puede operar.
 
 - `xenodm` no logra utilizar un teclado latinoamericano que se haya
   configurado en `/etc/kbdtype`.  Para usarlo
@@ -197,6 +156,6 @@ Novedades tomadas de <https://www.openbsd.org/70.html>
   para usuario final y la documentación técnica.
 * Agradecemos su ayuda traduciendo a español páginas del
   manual desde: <https://hosted.weblate.org/projects/adj/>
-* Agradecemos su ayuda en el desarrollo que llevamos
+* Agradecemos su ayuda en el desarrollo de fuentes abiertas que llevamos
   en <https://github.com/pasosdeJesus/adJ/>
 

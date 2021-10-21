@@ -7,7 +7,7 @@ VESP="a1"
 # Versión que se está desarrollando
 
 VPKGPATH=$V
-VPKGPATH=snapshots
+VPKGPATH=7.0
 
 VP=`echo $V | sed -e "s/[.]//g"`
 VP=70
@@ -46,7 +46,7 @@ RUTAKERNELREESPECIAL=""
 
 # Datos del CVS del cual se actualizan fuentes de OpenBSD
 USUARIOCVS="anoncvs"
-MAQCVS="anoncvs4.usa.openbsd.org"
+MAQCVS="anoncvs3.usa.openbsd.org"
 DIRCVS="/cvs"
 
 export DESTDIR=/build/destdir; 
