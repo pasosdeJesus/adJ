@@ -60,13 +60,20 @@ u.strong:hover {
 
 a.footnote:link {
 	border-bottom: 3px;
+  color: blue;
+
 }
 a.footnote:hover {
 	text-decoration: none; 
 	border-bottom: 3px double;
+  color: blue;
 }
 a.footnote:visited {
 	border-bottom: 3px;
+  color: blue;
 }
 
 
+.texto-pie-resaltado {
+  border-bottom: 3px double blue;
+}

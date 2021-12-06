@@ -59,7 +59,7 @@ $(HTML_TARGET).bak: gbfxml2html.xsl $(PROYECTO).gbfxml
 
 multi: gbfxml2vhtml.xsl $(PROYECTO).gbfxml
 	mkdir -p $(HTML_DIR)/
-	cp -f $(PROYECTO).css $(HTML_DIR)/
+	cp -f $(PROYECTO).css $(PROYECTO).js $(HTML_DIR)/
 	SGML_CATALOG_FILES=$(CATALOG_DOCBOOK) $(XSLTPROC) --stringparam outlang es --stringparam css $(PROYECTO).css --catalogs --nonet gbfxml2vhtml.xsl $(PROYECTO).gbfxml 
 
 

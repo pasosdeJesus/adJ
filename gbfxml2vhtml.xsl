@@ -16,6 +16,7 @@
 <xsl:param name="outlang">es</xsl:param>
 <!-- CSS file to use -->
 <xsl:param name="css">biblia_dp.css</xsl:param>
+<xsl:param name="js">biblia_dp.js</xsl:param>
 
 
 <xsl:output method="html" version="4.0" 
@@ -34,6 +35,7 @@
         <title><xsl:value-of select="$titulo"/></title>
         <link rel="stylesheet" type="text/css" href="{$css}" />
         <xsl:if test="$nstrong!='no'">
+            <script defer='defer' src="{$js}" />
             <script type="text/javascript">
                 <xsl:comment>
 function changeIt() {
@@ -562,13 +564,15 @@ function changeIt() {
     </xsl:variable>
 
     <xsl:if test="$ct!=''"> 
-        <a name="b_{generate-id(key('footnote',.))}"/>
-        <a href="#{generate-id(key('footnote',.))}" class="footnote">
-            <xsl:apply-templates/></a>
-        <a href="#{generate-id(key('footnote',.))}" class="footnote">
-            <sup class="footnote">[<xsl:value-of select="$nf2+$nf3+1"/>]</sup></a>
+      <a name="b_{generate-id(key('footnote',.))}"/>
+      <span id="t_{generate-id(key('footnote',.))}" class='texto-enlace-piedepagina'>
+        <xsl:apply-templates/>
+      </span> <!-- class='texto-enlace-piedepagina'-->
+      <a href="#{generate-id(key('footnote',.))}" class="footnote">
+        <sup class="footnote" id="s_{generate-id(key('footnote',.))}">[<xsl:value-of select="$nf2+$nf3+1"/>]</sup>
+      </a>
     </xsl:if>
-</xsl:template>
+  </xsl:template>
 
 <xsl:template match="rb" mode="footnotes">
     <xsl:variable name="pf" select="preceding::rb"/>
