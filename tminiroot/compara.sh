@@ -6,7 +6,7 @@ comp() {
 	read
 	egrep -v "^[[:space:]]*#" "$1" > /tmp/f1
 	egrep -v "^[[:space:]]*#" "$2" > /tmp/f2
-	diff /tmp/f1 /tmp/f2 | less
+	diff -u /tmp/f1 /tmp/f2 | less
 }
 
 comp install-amd64.md install-amd64-en.md 

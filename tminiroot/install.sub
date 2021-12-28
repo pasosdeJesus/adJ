@@ -1,5 +1,5 @@
 #!/bin/ksh
-#	$OpenBSD: install.sub,v 1.1163 2021/03/19 23:52:55 kn Exp $
+#	$OpenBSD: install.sub,v 1.1178 2021/09/13 11:49:21 robert Exp $
 #
 # Copyright (c) 1997-2015 Todd Miller, Theo de Raadt, Ken Westerback
 # Copyright (c) 2015, Robert Peichaer <rpe@openbsd.org>
@@ -223,7 +223,7 @@ tmpdir() {
 unique_filename() {
 	local _fn=$1 _ufn
 
-	while _ufn=${_fn}.$RANDOM && [[ -e $_ufn ]]; do done
+	while _ufn=${_fn}.$RANDOM && [[ -e $_ufn ]]; do :; done
 	print -- "$_ufn"
 }
 
@@ -244,21 +244,20 @@ prep_root_mail() {
 __EOT
 }
 
-# Examine the contents of the DHCP lease file $1 for a line containing the
-# field provided as parameters and return the value of the first field found.
+# Examine the contents of the dhcpleased lease file $1 for a line containing the
+# field(s) provided as parameters and return the value of the first field found.
 #
-# Note that strings are unescaped but not unvis()'d.
+# Note that value strings are VIS_SAFE'd.
 lease_value() {
-	local _lf=$1 _o
+	local _lf=$1 _o _opt _val
 
 	[[ -s $_lf ]] || return
 	shift
 
 	for _o; do
-		sed -E \
-			-e '/^ *(option )?'"$_o"' (.*);$/!d;s//\2/' \
-			-e '/^"(.*)"$/{s//\1/;s/\\(.)/\1/g;};q' "$_lf" \
-			| grep ^ && return
+		while read -r _opt _val; do
+			[[ $_opt == ${_o}: ]] && echo "$_val" && return
+		done < "$_lf"
 	done
 }
 
@@ -380,6 +379,9 @@ disk_has() {
 	# Patterns for partition-table-types and partition-types.
 	local _p_gpt='Usable LBA:'
 	local _p_gpt_openbsd='^[ *]...: OpenBSD '
+	local _p_gpt_apfs='^[ *]...: APFS '
+	local _p_gpt_apfsisc='^[ *]...: APFS ISC '
+	local _p_gpt_apfsrecovery='^[ *]...: APFS Recovry '
 	local _p_gpt_efisys='^[ *]...: EFI Sys '
 	local _p_hfs='^Partition map '
 	local _p_hfs_openbsd=' OpenBSD OpenBSD '
@@ -527,7 +529,7 @@ configure_disk() {
 
 # Acquire lock.
 lock() {
-	while ! mkdir /tmp/i/lock 2>/dev/null && sleep .1; do done
+	while ! mkdir /tmp/i/lock 2>/dev/null && sleep .1; do :; done
 }
 
 # Release lock.
@@ -601,7 +603,7 @@ get_responsefile() {
 	[[ -f $_rf ]] && cp $_rf /tmp/ai/ai.$AI_MODE.conf && return
 
 	for _if in ''; do
-		[[ -x /sbin/dhclient ]] || break
+		[[ -x /sbin/dhcpleased ]] || break
 
 		# Select a network interface for initial dhcp request.
 		# Prefer the interface the system netbooted from.
@@ -618,8 +620,8 @@ get_responsefile() {
 		done
 
 		# Issue initial dhcp request via the found interface.
-		[[ -n $_if ]] && dhclient $_if || break
-		_lf=/var/db/dhclient.leases.$_if
+		[[ -n $_if ]] && ifconfig $_if inet autoconf || break
+		_lf=/var/db/dhcpleased/$_if
 
 		if ! wait_for_dhcp_info $_if 30; then
 			echo "No dhcp address on interface $_if in 30 seconds."
@@ -627,14 +629,13 @@ get_responsefile() {
 		fi
 
 		# Extract installer mode and response file path from lease file.
-		_aifile=$(lease_value $_lf filename bootfile-name)
+		_aifile=$(lease_value $_lf filename)
 		[[ $_aifile == ?(*/)auto_@(install|upgrade) ]] || _aifile=
 		_path=${_aifile%auto_@(install|upgrade)}
 		AI_MODE=${_aifile##*?(/)auto_}
 
 		# Extract install server ip address from lease file.
-		AI_SERVER=$(lease_value $_lf \
-			server-name tftp-server-name next-server)
+		AI_SERVER=$(lease_value $_lf next-server)
 
 		# Prime hostname with host-name option from lease file.
 		AI_HOSTNAME=$(lease_value $_lf host-name)
@@ -654,7 +655,9 @@ get_responsefile() {
 			echo "Fetching $_url"
 			if unpriv ftp -Vo - "$_url" \
 				>"/tmp/ai/ai.$AI_MODE.conf" 2>/dev/null; then
-				ifconfig $_if delete down 2>/dev/null
+				ifconfig $_if inet -autoconf delete down \
+				    2>/dev/null
+				rm /var/db/dhcpleased/$_if
 				return 0
 			fi
 		done
@@ -682,7 +685,7 @@ get_responsefile() {
 	echo "Fetching $_rf"
 	[[ -f $_rf ]] && _rf="file://$_rf"
 	if unpriv ftp -Vo - "$_rf" >"/tmp/ai/ai.$AI_MODE.conf" 2>/dev/null; then
-		ifconfig $_if delete down 2>/dev/null
+		ifconfig $_if inet -autoconf delete down 2>/dev/null
 		return 0
 	fi
 	return 1
@@ -762,7 +765,7 @@ _ask() {
 ask() {
 
 	# Prompt again in case the dmesg listener detected a change.
-	while ! _ask "$1" "$2"; do done
+	while ! _ask "$1" "$2"; do :; done
 	log_answers "$1" "$resp"
 }
 
@@ -892,18 +895,19 @@ ask_password() {
 dhcp_request() {
 	local _if=$1
 
-	echo "lookup file bind" >/etc/resolv.conf.tail
+	echo "lookup file bind" >>/etc/resolv.conf
 
 	ifconfig $_if group dhcp >/dev/null 2>&1
 
-	if [[ -x /sbin/dhclient ]]; then
-		/sbin/dhclient $_if
-	else
-		echo "DHCP leases not available during install - no /sbin/dhclient."
-	fi
+	if [[ -x /sbin/dhcpleased ]]; then
+		ifconfig $_if inet autoconf
+		if ! wait_for_dhcp_info $_if 30; then
+			echo "No dhcp address on interface $_if in 30 seconds."
+		fi
 
-	# Move resolv.conf to where it will be copied to the installed system.
-	mv /etc/resolv.conf.tail /tmp/i/resolv.conf.tail
+	else
+		echo "DHCP leases not available during install."
+	fi
 }
 
 # Obtain and output the inet information related to interface $1.
@@ -930,7 +934,7 @@ wait_for_dhcp_info() {
 
 	# Wait until there is a leases file to parse.
 	while (( _secs > 0 )); do
-		[[ -s /var/db/dhclient.leases.$_if ]] && break
+		[[ -s /var/db/dhcpleased/$_if ]] && break
 		sleep 1
 		(( _secs-- ))
 	done
@@ -1043,13 +1047,14 @@ v4_config() {
 	ifconfig $_if -group dhcp >/dev/null 2>&1
 
 	while :; do
-		ask_until "IPv4 address for $_if? (or 'dhcp' or 'none')" \
-			  "${_addr:-dhcp}"
+		ask_until "IPv4 address for $_if? (or 'autoconf' or 'none')" \
+			  "${_addr:-autoconf}"
 		case $resp in
 		none)	return
 			;;
-		dhcp)	dhcp_request $_if
-			echo "dhcp" >>$_hn
+		autoconf|dhcp)
+			dhcp_request $_if
+			echo "autoconf" >>$_hn
 			return
 			;;
 		esac
@@ -1325,7 +1330,7 @@ v4_defroute() {
 	local _dr _dr_if
 
 	# Only configure a default route if an IPv4 address was configured.
-	[[ -n $(ifconfig | sed -n '/[ 	]inet .* broadcast /p') ]] || return
+	grep -q '^inet ' /tmp/i/hostname.* 2>/dev/null || return
 
 	# Check routing table to see if a default route ($1) already exists
 	# and what interface it is connected to ($2).
@@ -1333,7 +1338,7 @@ v4_defroute() {
 		sed -En 's/^default +([0-9.]+) .* ([a-z0-9]+) *$/\1 \2/p')
 	[[ -n $1 ]] && _dr=$1 _dr_if=$2
 
-	# Don't ask if a default route exits and is handled by dhclient.
+	# Don't ask if a default route exits and is handled by dhcp.
 	[[ -n $_dr ]] && isin "$_dr_if" $(get_ifs dhcp) && return
 
 	while :; do
@@ -1682,6 +1687,7 @@ install_files() {
 		fi
 		if isin comp$VERSION.tgz $_get_sets; then
 			rm -rf /mnt/usr/lib/{gcc-lib,clang}
+			rm -rf /mnt/usr/bin/{gcc,g++}
 			rm -rf /mnt/usr/include/g++
 		fi
 		rm -rf /mnt/var/syspatch/*
@@ -2047,38 +2053,34 @@ set_term() {
 
 # Configure the network.
 donetconfig() {
-	local _dn _ns _f1 _f2 _f3
+	local _dn _ns _f1 _f2 _f3 _autoconf_ns=false
 
 	configure_ifs
 	v4_defroute
 	v6_defroute
 
-	# As dhclient will populate /etc/resolv.conf, a symbolic link to
-	# /tmp/i/resolv.conf.shadow, mv any such file to /tmp/i/resolv.conf
-	# so it will eventually be copied to /mnt/etc/resolv.conf and will
-	# not in the meantime remove the user's ability to choose to use it
-	# or not, during the rest of the install.
-	if [[ -f /tmp/i/resolv.conf.shadow ]]; then
-		mv /tmp/i/resolv.conf.shadow /tmp/i/resolv.conf
+	# Check for nameserver proposals resolvd found.
+	if [[ -f /etc/resolv.conf ]]; then
 		# Get/store nameserver address(es) as a blank separated list
 		# and the default fully qualified domain name from *first*
 		# domain given on *last* search or domain statement.
 		while read -r -- _f1 _f2 _f3; do
 			[[ $_f1 == nameserver ]] && _ns="${_ns:+$_ns }$_f2"
+			[[ $_f3 == '# resolvd: '* ]] && _autoconf_ns=true
 			[[ $_f1 == @(domain|search) ]] && _dn=$_f2
-		done </tmp/i/resolv.conf
+		done </etc/resolv.conf
 	fi
 
 	# Get & apply fqdn to hostname. Don't ask if there's only one configured
 	# interface and if it's managed by dhclient and if the domain name is
 	# configured via dhclient too.
 	resp="${_dn:-$(get_fqdn)}"
-	if ifconfig dhcp >/dev/null 2>&1 && [[ $NIFS == 1 && -n $_dn ]]; then
+	if ifconfig dhcp >/dev/null 2>&1 && [[ $NIFS == 1 && -z $_dn ]]; then
 		# If we have a 'domain-name' option in the lease file use that.
 		# It might *NOT* not be the same as the first domain in any
 		# 'domain-search' option.
 		set -- $(get_ifs dhcp)
-		set -- $(lease_value /var/db/dhclient.leases.$1 domain-name)
+		set -- $(lease_value /var/db/dhcpleased/$1 domain-name)
 		[[ -n $1 ]] && resp=$1
 		echo "Using DNS domainname $resp"
 	else
@@ -2086,9 +2088,14 @@ donetconfig() {
 	fi
 	hostname "$(hostname -s).$resp"
 
-	# Get & add nameservers to /tmp/i/resolv.conf. Don't ask if there's only
-	# one configured interface and if it's managed by dhclient and if the
-	# nameserver is configured via dhclient too.
+	if $_autoconf_ns && [[ -n $_ns ]]; then
+		echo "Using DNS nameservers at $_ns"
+		return
+	fi
+
+	# Get & add nameservers to /tmp/resolv.conf. Don't ask if there's only
+	# one configured interface and if it's managed by dhcp and if the
+	# nameserver is configured via dhcp too.
 	resp="${_ns:-none}"
 	if ifconfig dhcp >/dev/null 2>&1 && [[ $NIFS == 1 && -n $_ns ]]; then
 		echo "Using DNS nameservers at $resp"
@@ -2098,11 +2105,12 @@ donetconfig() {
 
 	# Construct appropriate resolv.conf.
 	if [[ $resp != none ]]; then
-		echo "lookup file bind" >/tmp/i/resolv.conf
+		echo "lookup file bind" >/tmp/resolv.conf
 		for _ns in $resp; do
-			echo "nameserver $_ns" >>/tmp/i/resolv.conf
+			echo "nameserver $_ns" >>/tmp/resolv.conf
 		done
-		cp /tmp/i/resolv.conf /tmp/i/resolv.conf.shadow
+		# replace it, and resolvd will repair
+		cp /tmp/resolv.conf /etc/resolv.conf
 	fi
 }
 
@@ -2336,26 +2344,23 @@ get_rootinfo() {
 # Fill the _cmds array with the resulting interface configuration commands.
 parse_hn_line() {
 	local _af=0 _name=1 _mask=2 _bc=3 _prefix=2 _c _cmd _prev _daddr _dhcp _i
-	local _has_dhclient=false _has_inet6=false
+	local _has_dhcp=false _has_inet6=false
 	set -A _c -- "$@"
 	set -o noglob
 
 	ifconfig $_if inet6 >/dev/null 2>&1 && _has_inet6=true
-	[[ -x /sbin/dhclient ]] && _has_dhclient=true
-
-	# XXX Reverse when dhcpleased is made the default.
-	if  { [[ ${_c[_af]} == inet ]] && [[ ${_c[_name]} == autoconf ]]; } ||
-	    { [[ ${_c[_af]} == autoconf ]]; }; then
-		# emulate "[inet] autoconf" with "dhcp"
-		[[ ${_c[_af]} == inet ]] && shift 2 || shift 1
-		set -A _c -- dhcp "$@"
-	fi
+	[[ -x /sbin/dhcpleased ]] && _has_dhcp=true
 
 	case ${_c[_af]} in
 	''|*([[:blank:]])'#'*)
 		return
 		;;
 	inet)	((${#_c[*]} > 1)) || return
+		if [[ ${_c[_name]} == autoconf ]]; then
+			_cmds[${#_cmds[*]}]="ifconfig $_if ${_c[@]}"
+			V4_AUTOCONF=true
+			return
+		fi
 		[[ ${_c[_name]} == alias ]] && _mask=3 _bc=4
 		[[ -n ${_c[_mask]} ]] && _c[_mask]="netmask ${_c[_mask]}"
 		if [[ -n ${_c[_bc]} ]]; then
@@ -2385,22 +2390,9 @@ parse_hn_line() {
 		_c[_name]="${_c[_name]} $_daddr"
 		_cmds[$_prev]="${_c[@]}"
 		;;
-	dhcp)	! $_has_dhclient && return
-		unset _c[0]
-		_i=1
-		while [[ ${_c[$_i]} == @(-c|-d|-i|-n|-r|-v) ]]; do
-			if [[ ${_c[$_i]} == @(-c|-i) ]]; then
-				_dhcp[${#_dhcp[*]}]=${_c[$_i]}
-				unset _c[$_i]
-				(( _i++ ))
-			fi
-			_dhcp[${#_dhcp[*]}]=${_c[$_i]}
-			unset _c[$_i]
-			(( _i++ ))
-		done
-		((${#_c[*]} > 0)) && _cmds[${#_cmds[*]}]="ifconfig $_if ${_c[@]}"
-		_cmds[${#_cmds[*]}]="dhclient ${_dhcp[@]} $_if"
-		V4_DHCPCONF=true
+	dhcp)	! $_has_dhcp && return
+		_cmds[${#_cmds[*]}]="ifconfig $_if inet autoconf"
+		V4_AUTOCONF=true
 		;;
 	'!'*|bridge)
 		# Skip shell commands and bridge in the installer.
@@ -2445,7 +2437,7 @@ enable_network() {
 	local _f _gw _v4set=false _v6set=false _hn _if _trunks _svlans _vlans
 
 	# Use installed network configuration files during upgrade.
-	for _f in dhclient.conf resolv.conf resolv.conf.tail; do
+	for _f in dhclient.conf resolv.conf; do
 		if [[ -f /mnt/etc/$_f ]]; then
 			cp /mnt/etc/$_f /etc/$_f
 		fi
@@ -2496,7 +2488,7 @@ enable_network() {
 			continue
 			;;
 		!(*:*))
-			($_v4set || $V4_DHCPCONF) && continue
+			($_v4set || $V4_AUTOCONF) && continue
 			route -qn add -host default $_gw
 			_v4set=true
 			;;
@@ -2866,7 +2858,10 @@ finish_up() {
 		tar -C $_kernel_dir -xzf $_kernel_dir.tgz $_kernel
 		rm -f $_kernel_dir.tgz
 		chroot /mnt /bin/ksh -e -c "cd ${_kernel_dir#/mnt}/$_kernel; \
-			make newbsd; make newinstall"
+			make newbsd; \
+			[ -f /etc/bsd.re-config ] && \
+			    config -e -c /etc/bsd.re-config -f bsd; \
+			make newinstall"
 		) >/dev/null 2>&1 && echo " done." || echo " failed."
 	fi
 
@@ -3130,8 +3125,8 @@ do_install() {
 	echo -n "Saving configuration files..."
 
 	# Save any leases obtained during install.
-	(cd /var/db; for _f in dhclient.leases.*; do
-		[[ -f $_f ]] && mv $_f /mnt/var/db/.
+	(cd /var/db/dhcpleased; for _f in *; do
+		[[ -f $_f ]] && mv $_f /mnt/var/db/dhcpleased/.
 	done)
 
 	# Move configuration files from /tmp/i/ to /mnt/etc.
@@ -3162,11 +3157,12 @@ do_install() {
 	fi
 
 	# Possible files to copy from /tmp/i/: fstab hostname.* kbdtype mygate
-	#     myname ttys boot.conf resolv.conf sysctl.conf resolv.conf.tail
+	#     myname ttys boot.conf resolv.conf sysctl.conf
 	# Save only non-empty (-s) regular (-f) files.
-	(cd /tmp/i; for _f in fstab hostname* kbdtype my* ttys *.conf *.tail; do
+	(cd /tmp/i; for _f in fstab hostname* kbdtype my* ttys *.conf; do
 		[[ -f $_f && -s $_f ]] && mv $_f /mnt/etc/.
 	done)
+	[[ -s /etc/resolv.conf ]] && cp /etc/resolv.conf /mnt/etc/resolv.conf
 
 	echo " done."
 
@@ -3398,7 +3394,7 @@ ROOTDEV=
 ROOTDISK=
 SETDIR="$VNAME/$ARCH"
 UPGRADE_BSDRD=false
-V4_DHCPCONF=false
+V4_AUTOCONF=false
 V6_AUTOCONF=false
 WLANLIST=/tmp/i/wlanlist
 

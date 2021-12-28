@@ -1,4 +1,4 @@
-$OpenBSD: patch-configure,v 1.2 2021/11/28 20:07:58 tb Exp $
+$OpenBSD: patch-configure,v 1.1.1.1 2020/12/28 16:45:27 jeremy Exp $
 
 Set correct shared library name.
 
@@ -8,21 +8,21 @@ so ports don't have to be bumped when OpenBSD version changes.
 Index: configure
 --- configure.orig
 +++ configure
-@@ -29855,7 +29855,7 @@ fi
+@@ -30742,7 +30742,7 @@ fi
  	 ;; #(
    openbsd*|mirbsd*) :
  
 -	LIBRUBY_SO='lib$(RUBY_SO_NAME).$(SOEXT).$(MAJOR).'`expr ${MINOR} \* 10 + ${TEENY}`
-+	LIBRUBY_SO='lib$(RUBY_SO_NAME).so.'${LIBruby30_VERSION}
++	LIBRUBY_SO='lib$(RUBY_SO_NAME).so.'${LIBruby31_VERSION}
  	 ;; #(
    solaris*) :
  
-@@ -31424,7 +31424,7 @@ _ACEOF
+@@ -32366,7 +32366,7 @@ else
  
  else
  
--    arch="${target_cpu}-${target_os}"
-+    arch="${target_cpu}-openbsd"
+-        arch="${target_cpu}-${target_os}"
++        arch="${target_cpu}-openbsd"
+ 
+ fi
      cat >>confdefs.h <<_ACEOF
- #define RUBY_PLATFORM "$arch"
- _ACEOF

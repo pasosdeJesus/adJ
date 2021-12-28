@@ -1,4 +1,4 @@
-# $OpenBSD: Makefile,v 1.271 2021/03/02 15:22:32 sthen Exp $
+# $OpenBSD: Makefile,v 1.279 2021/11/22 13:55:55 espie Exp $
 
 COMMENT-main=	PostgreSQL RDBMS (client)
 COMMENT-server=	PostgreSQL RDBMS (server)
@@ -7,16 +7,10 @@ COMMENT-contrib=PostgreSQL RDBMS contributions
 COMMENT-plpython=Python procedural language for PostgreSQL
 COMMENT-pg_upgrade=Support for upgrading PostgreSQL data from previous version
 
-VERSION=	13.4
-PREV_MAJOR=	12
-REVISION=	
+VERSION=	14.1
+PREV_MAJOR=	13.6
 DISTNAME=	postgresql-${VERSION}
 PKGNAME-main=	postgresql-client-${VERSION}
-PKGNAME-server=	postgresql-server-${VERSION}
-PKGNAME-docs=	postgresql-docs-${VERSION}
-PKGNAME-contrib=postgresql-contrib-${VERSION}
-PKGNAME-plpython=postgresql-plpython-${VERSION}
-PKGNAME-pg_upgrade=postgresql-pg_upgrade-${VERSION}
 
 DPB_PROPERTIES=	parallel
 
@@ -24,7 +18,7 @@ CATEGORIES=	databases
 SHARED_LIBS=	ecpg		7.10 \
 		ecpg_compat	4.10 \
 		pgtypes		4.9 \
-		pq		6.12
+		pq		6.13
 
 HOMEPAGE=	https://www.postgresql.org/
 
@@ -35,8 +29,8 @@ PERMIT_PACKAGE=	Yes
 
 WANTLIB += c curses crypto m readline ssl z
 
-MASTER_SITES=	https://ftp.postgresql.org/pub/source/v${VERSION}/ \
-		ftp://ftp.postgresql.org/pub/source/v${VERSION}/
+MASTER_SITES=	https://ftp.postgresql.org/pub/source/v${VERSION}/
+
 MULTI_PACKAGES=	-docs -main -server -contrib -pg_upgrade -plpython
 
 MAKE_FILE=	GNUmakefile
@@ -77,7 +71,7 @@ CONFIGURE_ARGS=	--disable-rpath \
 # a system to get this working, disable them for now. There is
 # (apparently) a serious performance hit doing this.
 
-.if ${MACHINE_ARCH} == "alpha" || ${MACHINE_ARCH} == "hppa"
+.if ${MACHINE_ARCH} == "alpha" || ${MACHINE_ARCH} == "hppa" || ${MACHINE_ARCH} == "riscv64"
 CONFIGURE_ARGS+= --disable-spinlocks
 .endif
 
@@ -98,8 +92,7 @@ MODGNU_CONFIG_GUESS_DIRS=	${WRKSRC}/config
 ALL_TARGET=	world
 INSTALL_TARGET=	install-world
 
-LIB_DEPENDS-main=	devel/libexecinfo \
-			textproc/libxml
+LIB_DEPENDS-main=	textproc/libxml
 WANTLIB-main=		${WANTLIB} execinfo xml2
 
 LIB_DEPENDS-server=	databases/postgresql=${VERSION} \

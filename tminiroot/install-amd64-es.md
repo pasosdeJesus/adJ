@@ -95,7 +95,7 @@ Ahora creara dos particiones GPT. La primera debe tener una identificacion
 'EF' y ser suficientemente grande para los programas de arranque de OpenBSD,
 al menos 960 bloques. La segunda debe tener identificacion 'A6' y
 contendra sus datos de OpenBSD. Una particion no puede traslaparse con la otra.
-Dentro del comando fdisk , el comando 'manual' describe los comandos
+Dentro de la orden fdisk , la orden 'manual' describe las ordenes
 de fdisk en detalle.
 
 $(fdisk $_disk)
@@ -117,7 +117,7 @@ __EOT
 Ahora creara una sola particion en el RMA que con todos sus datos de OpenBSD
 Esta particion debe tener identificacion 'A6'; *NO* debe traslaparse con otras
 particiones y debe marcarse como la unica particion activa.  En el programa
-fdisk, el comando 'manual' describe todos los comandos de fdisk en detalle.
+fdisk, la orden 'manual' describe todas las ordenes de fdisk en detalle.
 
 $(fdisk $_disk)
 __EOT

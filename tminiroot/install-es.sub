@@ -1,5 +1,5 @@
 #!/bin/ksh
-#      $OpenBSD: install.sub,v 1.1144 2019/10/01 02:11:41 deraadt Exp $
+#      $OpenBSD: install.sub,v 1.1178 2021/09/13 11:49:21 robert Exp $
 #
 # Copyright (c) 1997-2015 Todd Miller, Theo de Raadt, Ken Westerback
 # Copyright (c) 2015, Robert Peichaer <rpe@openbsd.org>
@@ -195,8 +195,7 @@ show_cols() {
 	rm -rf -- $_cdir
 }
 
-# Echo file $1 to stdout. Skip comment lines and delete everything
-# after the first '#' from other lines. Strip leading and trailing
+# Echo file $1 to stdout. Skip comment lines. Strip leading and trailing
 # whitespace if IFS is set.
 stripcom() {
 	local _file=$1 _line
@@ -224,7 +223,7 @@ tmpdir() {
 unique_filename() {
 	local _fn=$1 _ufn
 
-	while _ufn=${_fn}.$RANDOM && [[ -e $_ufn ]]; do done
+	while _ufn=${_fn}.$RANDOM && [[ -e $_ufn ]]; do :; done
 	print -- "$_ufn"
 }
 
@@ -245,21 +244,20 @@ prep_root_mail() {
 __EOT
 }
 
-# Examine the contents of the DHCP lease file $1 for a line containing the
-# field provided as parameters and return the value of the first field found.
+# Examine the contents of the dhcpleased lease file $1 for a line containing the
+# field(s) provided as parameters and return the value of the first field found.
 #
 # Note that strings are unescaped but not unvis()'d.
 lease_value() {
-	local _lf=$1 _o
+	local _lf=$1 _o _opt _val
 
 	[[ -s $_lf ]] || return
 	shift
 
 	for _o; do
-		sed -E \
-			-e '/^ *(option )?'"$_o"' (.*);$/!d;s//\2/' \
-			-e '/^"(.*)"$/{s//\1/;s/\(.)/\1/g;};q' "$_lf" \
-			| grep ^ && return
+		while read -r _opt _val; do
+			[[ $_opt == ${_o}: ]] && echo "$_val" && return
+		done < "$_lf"
 	done
 }
 
@@ -381,6 +379,9 @@ disk_has() {
 	# Patterns for partition-table-types and partition-types.
 	local _p_gpt='Usable LBA:'
 	local _p_gpt_openbsd='^[ *]...: OpenBSD '
+	local _p_gpt_apfs='^[ *]...: APFS '
+	local _p_gpt_apfsisc='^[ *]...: APFS ISC '
+	local _p_gpt_apfsrecovery='^[ *]...: APFS Recovry '
 	local _p_gpt_efisys='^[ *]...: EFI Sys '
 	local _p_hfs='^Partition map '
 	local _p_hfs_openbsd=' OpenBSD OpenBSD '
@@ -505,11 +506,12 @@ configure_disk() {
 		while read _pp _mp _fstype _rest; do
 			[[ $_fstype == ffs ]] || continue
 
-			# Use machine-dependent newfs options for the root
-			# partition if defined.
-			_opt=
-			[[ $_mp == / ]] && _opt=$MDROOTFSOPT
-
+			# Default to FFS2 unless otherwise directed.
+			if [[ $_mp == / ]]; then
+				_opt=${MDROOTFSOPT:--O2}
+			else
+				_opt=${MDFSOPT:--O2}
+			fi
 			newfs -q $_opt ${_pp##/dev/}
 
 			# N.B.: '!' is lexically < '/'.
@@ -527,7 +529,7 @@ configure_disk() {
 
 # Acquire lock.
 lock() {
-	while ! mkdir /tmp/i/lock 2>/dev/null && sleep .1; do done
+	while ! mkdir /tmp/i/lock 2>/dev/null && sleep .1; do :; done
 }
 
 # Release lock.
@@ -601,7 +603,7 @@ get_responsefile() {
 	[[ -f $_rf ]] && cp $_rf /tmp/ai/ai.$AI_MODE.conf && return
 
 	for _if in ''; do
-		[[ -x /sbin/dhclient ]] || break
+		[[ -x /sbin/dhcpleased ]] || break
 
 		# Select a network interface for initial dhcp request.
 		# Prefer the interface the system netbooted from.
@@ -618,18 +620,22 @@ get_responsefile() {
 		done
 
 		# Issue initial dhcp request via the found interface.
-		[[ -n $_if ]] && dhclient $_if || break
-		_lf=/var/db/dhclient.leases.$_if
+		[[ -n $_if ]] && ifconfig $_if inet autoconf || break
+		_lf=/var/db/dhcpleased/$_if
+
+		if ! wait_for_dhcp_info $_if 30; then
+			echo "Sin direccion dhcp en la interfaz $_if en 30 segundos."
+			continue
+		fi
 
 		# Extract installer mode and response file path from lease file.
-		_aifile=$(lease_value $_lf filename bootfile-name)
+		_aifile=$(lease_value $_lf filename)
 		[[ $_aifile == ?(*/)auto_@(install|upgrade) ]] || _aifile=
 		_path=${_aifile%auto_@(install|upgrade)}
 		AI_MODE=${_aifile##*?(/)auto_}
 
 		# Extract install server ip address from lease file.
-		AI_SERVER=$(lease_value $_lf \
-			server-name tftp-server-name next-server)
+		AI_SERVER=$(lease_value $_lf next-server)
 
 		# Prime hostname with host-name option from lease file.
 		AI_HOSTNAME=$(lease_value $_lf host-name)
@@ -649,7 +655,9 @@ get_responsefile() {
 			echo "Descargando $_url"
 			if unpriv ftp -Vo - "$_url" \
 				>"/tmp/ai/ai.$AI_MODE.conf" 2>/dev/null; then
-				ifconfig $_if delete down 2>/dev/null
+				ifconfig $_if inet -autoconf delete down \
+				    2>/dev/null
+				rm /var/db/dhcpleased/$_if
 				return 0
 			fi
 		done
@@ -677,7 +685,7 @@ get_responsefile() {
 	echo "Descargando $_rf"
 	[[ -f $_rf ]] && _rf="file://$_rf"
 	if unpriv ftp -Vo - "$_rf" >"/tmp/ai/ai.$AI_MODE.conf" 2>/dev/null; then
-		ifconfig $_if delete down 2>/dev/null
+		ifconfig $_if inet -autoconf delete down 2>/dev/null
 		return 0
 	fi
 	return 1
@@ -710,7 +718,7 @@ _autorespond() {
 		print -r " $_l"
 	done </tmp/ai/ai.conf.tmp >/tmp/ai/ai.conf
 	[[ -n $_def ]] && resp=$_def && return
-	err_exit "\nLa pregunta no tiene repuesta en el archivo de respuestas. \"$_q\""
+	err_exit "\nLa pregunta no tiene repuesta en el archivo de respuestas: \"$_q\""
 }
 
 # Capture user response either by issuing an interactive read or by searching
@@ -757,7 +765,7 @@ _ask() {
 ask() {
 
 	# Prompt again in case the dmesg listener detected a change.
-	while ! _ask "$1" "$2"; do done
+	while ! _ask "$1" "$2"; do :; done
 	log_answers "$1" "$resp"
 }
 
@@ -887,23 +895,19 @@ ask_password() {
 dhcp_request() {
 	local _if=$1
 
-	echo "lookup file bind" >/etc/resolv.conf.tail
+	echo "lookup file bind" >>/etc/resolv.conf
 
 	ifconfig $_if group dhcp >/dev/null 2>&1
 
-	if [[ -x /sbin/dhclient ]]; then
-		/sbin/dhclient -c /dev/stdin $_if <<__EOT
-initial-interval 1;
-backoff-cutoff 2;
-reboot 5;
-timeout 10;
-__EOT
-	else
-		echo "DHCP leases not available during install - no /sbin/dhclient."
-	fi
+	if [[ -x /sbin/dhcpleased ]]; then
+		ifconfig $_if inet autoconf
+		if ! wait_for_dhcp_info $_if 30; then
+			echo "Sin direccion dhcp en la interfaz $_if en 30 segundos."
+		fi
 
-	# Move resolv.conf to where it will be copied to the installed system.
-	mv /etc/resolv.conf.tail /tmp/i/resolv.conf.tail
+	else
+		echo "Prestamos DHCP no disponibles durante la instalacion."
+	fi
 }
 
 # Obtain and output the inet information related to interface $1.
@@ -914,6 +918,28 @@ v4_info() {
 		1s/.*flags=.*<\(.*\)>.*/\1/p
 		/inet/s/netmask //
 		/.inet /s///p'
+}
+
+# Wait until dhcp has configured interface $1 within timeout $2 seconds.
+wait_for_dhcp_info() {
+	local _if=$1 _secs=$2
+
+	# Wait until $_if has a V4 address.
+	while (( _secs > 0 )); do
+		set -- $(v4_info $_if)
+		[[ -n $2 ]] && break
+		sleep 1
+		(( _secs-- ))
+	done
+
+	# Wait until there is a leases file to parse.
+	while (( _secs > 0 )); do
+		[[ -s /var/db/dhcpleased/$_if ]] && break
+		sleep 1
+		(( _secs-- ))
+	done
+
+	return $(( _secs <= 0 ))
 }
 
 # Convert a netmask in hex format ($1) to dotted decimal format.
@@ -1005,7 +1031,7 @@ vlan_config() {
 	ifconfig $_if $_vi parent $_vd
 }
 
-# Configure IPv4 interface $1.
+# Configure IPv4 on interface $1.
 v4_config() {
 	local _if=$1 _name=$2 _hn=$3 _addr _mask _newaddr
 
@@ -1021,13 +1047,14 @@ v4_config() {
 	ifconfig $_if -group dhcp >/dev/null 2>&1
 
 	while :; do
-		ask_until "Direccion IPv4 para $_if? (o 'dhcp' o 'nada')" \
-			  "${_addr:-dhcp}"
+		ask_until "Direccion IPv4 para $_if? (o 'autoconf' o 'nada')" \
+			  "${_addr:-autoconf}"
 		case $resp in
 		nada)	return
 			;;
-		dhcp)   dhcp_request $_if
-			echo "dhcp" >>$_hn
+		autoconf|dhcp)
+			dhcp_request $_if
+			echo "autoconf" >>$_hn
 			return
 			;;
 		esac
@@ -1038,7 +1065,7 @@ v4_config() {
 		if [[ $_newaddr == */* ]]; then
 			ifconfig $_if $_newaddr up
 		else
-			ask_until "Mascara de red para  $_if?" "${_mask:=255.255.255.0}"
+			ask_until "Mascara de red para  $_if?" "${_mask:-255.255.255.0}"
 			ifconfig $_if $_newaddr netmask $resp
 		fi
 
@@ -1053,6 +1080,7 @@ v4_config() {
 	done
 }
 
+# Obtain and output the inet6 information related to interface $1.
 # <flags>\n<addr> <prefixlen> <rest of inet6 line>[\n<more inet6 lines>]
 v6_info() {
 	ifconfig $1 inet6 | sed -n '
@@ -1111,7 +1139,6 @@ v6_defroute() {
 			fi
 		done
 	fi
-
 }
 
 # Configure IPv6 interface $1, add hostname $2 to the hosts file,
@@ -1138,7 +1165,7 @@ v6_config() {
 
 	while :; do
 		ask_until "Direccion IPv6 para $_if? (o 'autoconf' o 'nada')" \
-			"${_addr:-nada}"
+			  "${_addr:-nada}"
 		case $resp in
 		nada)	return
 			;;
@@ -1154,7 +1181,7 @@ v6_config() {
 			ifconfig $_if inet6 $_newaddr up
 		else
 			ask_until "IPv6 prefix length for $_if?" \
-				"${_prefixlen:-64}"
+				  "${_prefixlen:-64}"
 			ifconfig $_if inet6 $_newaddr/$resp up
 		fi
 
@@ -1164,6 +1191,7 @@ v6_config() {
 			add_hostent "$2" "$_name"
 			return
 		fi
+
 		$AI && exit 1
 	done
 }
@@ -1172,7 +1200,7 @@ v6_config() {
 ieee80211_scan() {
 	[[ -f $WLANLIST ]] ||
 		ifconfig $1 scan |
-		sed -n 's/^[[:space:]]*nwid \(.*\) chan [0-9]* bssid \([[:xdigit:]:]*\).*/\1 (\2)/p' >$WLANLIST
+			sed -n 's/^[[:space:]]*nwid \(.*\) chan [0-9]* bssid \([[:xdigit:]:]*\).*/\1 (\2)/p' >$WLANLIST
 	cat $WLANLIST
 }
 
@@ -1194,11 +1222,11 @@ ieee80211_config() {
 		case "$resp" in
 		+([0-9]))
 			_nwid=$(ieee80211_scan $_if |
-				sed -n ${resp}'{s/ ([[:xdigit:]:]*)$//p;q;}')
+			    sed -n ${resp}'{s/ ([[:xdigit:]:]*)$//p;q;}')
 			[[ -z $_nwid ]] && echo "No hay linea $resp."
 			[[ $_nwid = \"*\" ]] && _nwid=${_nwid#\"} _nwid=${_nwid%\"}
 			;;
-		\?)     ieee80211_scan $_if | cat -n | more -c
+		\?)	ieee80211_scan $_if | cat -n | more -c
 			;;
 		*)	_nwid=$resp
 			;;
@@ -1303,7 +1331,7 @@ v4_defroute() {
 	local _dr _dr_if
 
 	# Only configure a default route if an IPv4 address was configured.
-	[[ -n $(ifconfig | sed -n '/[ 	]inet .* broadcast /p') ]] || return
+	grep -q '^inet ' /tmp/i/hostname.* 2>/dev/null || return
 
 	# Check routing table to see if a default route ($1) already exists
 	# and what interface it is connected to ($2).
@@ -1311,7 +1339,7 @@ v4_defroute() {
 		sed -En 's/^default +([0-9.]+) .* ([a-z0-9]+) *$/\1 \2/p')
 	[[ -n $1 ]] && _dr=$1 _dr_if=$2
 
-	# Don't ask if a default route exits and is handled by dhclient.
+	# Don't ask if a default route exits and is handled by dhcp.
 	[[ -n $_dr ]] && isin "$_dr_if" $(get_ifs dhcp) && return
 
 	while :; do
@@ -1388,8 +1416,8 @@ select_sets() {
 
 	cat <<__EOT
 
-Selecccione componentes por instalar, un patrn o 'todos'.
-Deseleccione poniendo un '-' antes del nombre, del patrn o de 'todos'.  
+Seleccione componentes por instalar, un patron o 'todos'.
+Deseleccione poniendo un '-' antes del nombre, del patron o de 'todos'.  
 Los seleccionados se marcan con '[X]'.
 __EOT
 	while :; do
@@ -1657,11 +1685,12 @@ install_files() {
 	if [[ $MODE == upgrade ]]; then
 		if isin base$VERSION.tgz $_get_sets; then
 			rm -f /mnt/usr/share/relink/usr/lib/*
-			rm -rf /mnt/usr/lib/libLLVM.so.0.0
+			rm -rf /mnt/usr/lib/libLLVM.so.[012].0
 			rm -rf /mnt/usr/libdata/perl5
 		fi
 		if isin comp$VERSION.tgz $_get_sets; then
 			rm -rf /mnt/usr/lib/{gcc-lib,clang}
+			rm -rf /mnt/usr/bin/{gcc,g++}
 			rm -rf /mnt/usr/include/g++
 		fi
 		rm -rf /mnt/var/syspatch/*
@@ -1674,7 +1703,6 @@ install_files() {
 
 		# Take the set file from the prefetch area if possible.
 		[[ -f $_tmpsrc/$_f ]] && _fsrc="file://$_tmpsrc/$_f"
-
 
 		# Extract the set files and put the kernel files in place.
 		case $_fsrc in
@@ -1720,8 +1748,6 @@ install_files() {
 	fi
 
 	$UU && reset_watchdog
-
-
 }
 
 # Fetch install sets from an HTTP server possibly using a proxy.
@@ -1746,7 +1772,7 @@ install_http() {
 	# If the mirror server listfile download failed, inform the user and
 	# show a reduced prompt.
 	if [[ -s $HTTP_LIST ]]; then
-		_prompt="Servidor HTTP? (nombre, # en lista, 'listo' or '?')"
+		_prompt="Servidor HTTP? (nombre, # en lista, 'listo' o '?')"
 	else
 		echo "(No pudo obtener lista ftp de ftp.openbsd.org, pero esta bien)"
 		_prompt="Servidor HTTP? (nombre o 'listo')"
@@ -1999,6 +2025,7 @@ mount_mnt2() {
 # ------------------------------------------------------------------------------
 # Functions used in install.sh/upgrade.sh and its associates
 # ------------------------------------------------------------------------------
+
 # Ask for terminal type if on console, otherwise ask for/set keyboard layout.
 set_term() {
 	local _layouts
@@ -2013,12 +2040,12 @@ set_term() {
 		while :; do
 			ask "Elija distribucion de teclado ('?' o 'L' para ver lista)" predefinida
 			case $resp in
-			[lL\?]) 	echo "Distribuciones disponibles: $_layouts"
+			[lL\?])		echo "Distribuciones disponibles: $_layouts"
 					;;
-			predefinida) 	break
+			predefinida)	break
 					;;
 			*)		if kbd -q "$resp"; then
-			       			echo $resp >/tmp/i/kbdtype
+						echo $resp >/tmp/i/kbdtype
 						break
 					fi
 					;;
@@ -2029,38 +2056,34 @@ set_term() {
 
 # Configure the network.
 donetconfig() {
-	local _dn _ns _f1 _f2 _f3
+	local _dn _ns _f1 _f2 _f3 _autoconf_ns=false
 
 	configure_ifs
 	v4_defroute
 	v6_defroute
 
-	# As dhclient will populate /etc/resolv.conf, a symbolic link to
-	# /tmp/i/resolv.conf.shadow, mv any such file to /tmp/i/resolv.conf
-	# so it will eventually be copied to /mnt/etc/resolv.conf and will
-	# not in the meantime remove the user's ability to choose to use it
-	# or not, during the rest of the install.
-	if [[ -f /tmp/i/resolv.conf.shadow ]]; then
-		mv /tmp/i/resolv.conf.shadow /tmp/i/resolv.conf
+	# Check for nameserver proposals resolvd found.
+	if [[ -f /etc/resolv.conf ]]; then
 		# Get/store nameserver address(es) as a blank separated list
 		# and the default fully qualified domain name from *first*
 		# domain given on *last* search or domain statement.
 		while read -r -- _f1 _f2 _f3; do
 			[[ $_f1 == nameserver ]] && _ns="${_ns:+$_ns }$_f2"
+			[[ $_f3 == '# resolvd: '* ]] && _autoconf_ns=true
 			[[ $_f1 == @(domain|search) ]] && _dn=$_f2
-		done </tmp/i/resolv.conf
+		done </etc/resolv.conf
 	fi
 
 	# Get & apply fqdn to hostname. Don't ask if there's only one configured
 	# interface and if it's managed by dhclient and if the domain name is
 	# configured via dhclient too.
 	resp="${_dn:-$(get_fqdn)}"
-	if ifconfig dhcp >/dev/null 2>&1 && [[ $NIFS == 1 && -n $_dn ]]; then
+	if ifconfig dhcp >/dev/null 2>&1 && [[ $NIFS == 1 && -z $_dn ]]; then
 		# If we have a 'domain-name' option in the lease file use that.
 		# It might *NOT* not be the same as the first domain in any
 		# 'domain-search' option.
 		set -- $(get_ifs dhcp)
-		set -- $(lease_value /var/db/dhclient.leases.$1 domain-name)
+		set -- $(lease_value /var/db/dhcpleased/$1 domain-name)
 		[[ -n $1 ]] && resp=$1
 		echo "Usando nombre de dominio DNS $resp"
 	else
@@ -2068,9 +2091,14 @@ donetconfig() {
 	fi
 	hostname "$(hostname -s).$resp"
 
-	# Get & add nameservers to /tmp/i/resolv.conf. Don't ask if there's only
-	# one configured interface and if it's managed by dhclient and if the
-	# nameserver is configured via dhclient too.
+	if $_autoconf_ns && [[ -n $_ns ]]; then
+		echo "Usando servidores de nombres DNS en $_ns"
+		return
+	fi
+
+	# Get & add nameservers to /tmp/resolv.conf. Don't ask if there's only
+	# one configured interface and if it's managed by dhcp and if the
+	# nameserver is configured via dhcp too.
 	resp="${_ns:-nada}"
 	if ifconfig dhcp >/dev/null 2>&1 && [[ $NIFS == 1 && -n $_ns ]]; then
 		echo "Usando servidores de nombres DNS en $resp"
@@ -2080,11 +2108,12 @@ donetconfig() {
 
 	# Construct appropriate resolv.conf.
 	if [[ $resp != nada ]]; then
-		echo "lookup file bind" >/tmp/i/resolv.conf
+		echo "lookup file bind" >/tmp/resolv.conf
 		for _ns in $resp; do
-			echo "nameserver $_ns" >>/tmp/i/resolv.conf
+			echo "nameserver $_ns" >>/tmp/resolv.conf
 		done
-		cp /tmp/i/resolv.conf /tmp/i/resolv.conf.shadow
+		# replace it, and resolvd will repair
+		cp /tmp/resolv.conf /etc/resolv.conf
 	fi
 }
 
@@ -2105,7 +2134,7 @@ questions() {
 				APERTURE=$MDXAPERTURE
 		fi
 		if [[ -n $MDXDM && $resp != n ]]; then
-			ask_yn "Desea que el sistema X Window sea iniciado por xenodm(1)?" si
+			ask_yn "Desea que el sistema X Window sea iniciado por xenodm(1)?"
 			START_XDM=$resp
 		fi
 	fi
@@ -2266,7 +2295,11 @@ is_rootdisk() {
 		make_dev $_d
 		if disklabel $_d | grep -q '^  a: .*4\.2BSD ' &&
 			mount -t ffs -r /dev/${_d}a /mnt; then
-			ls -d /mnt/{bin,dev,etc,home,mnt,root,sbin,tmp,usr,var}
+			if $UU; then
+				ls -d /mnt/{auto_upgrade.conf,bin,dev,etc,home,mnt,root,sbin,tmp,usr,var}
+			else
+				ls -d /mnt/{bin,dev,etc,home,mnt,root,sbin,tmp,usr,var}
+			fi
 			_rc=$?
 			umount -f /mnt
 		fi
@@ -2313,19 +2346,25 @@ get_rootinfo() {
 # Parse and "unpack" a hostname.if(5) line given as positional parameters.
 # Fill the _cmds array with the resulting interface configuration commands.
 parse_hn_line() {
-	local _af=0 _name=1 _mask=2 _bc=3 _prefix=2 _c _cmd _prev _daddr
-	local _has_dhclient=false _has_inet6=false
+	local _af=0 _name=1 _mask=2 _bc=3 _prefix=2 _c _cmd _prev _daddr _dhcp _i
+	local _has_dhcp=false _has_inet6=false
 	set -A _c -- "$@"
 	set -o noglob
 
 	ifconfig $_if inet6 >/dev/null 2>&1 && _has_inet6=true
-	[[ -x /sbin/dhclient ]] && _has_dhclient=true
+	[[ -x /sbin/dhcpleased ]] && _has_dhcp=true
+
 
 	case ${_c[_af]} in
 	''|*([[:blank:]])'#'*)
 		return
 		;;
 	inet)	((${#_c[*]} > 1)) || return
+		if [[ ${_c[_name]} == autoconf ]]; then
+			_cmds[${#_cmds[*]}]="ifconfig $_if ${_c[@]}"
+			V4_AUTOCONF=true
+			return
+		fi
 		[[ ${_c[_name]} == alias ]] && _mask=3 _bc=4
 		[[ -n ${_c[_mask]} ]] && _c[_mask]="netmask ${_c[_mask]}"
 		if [[ -n ${_c[_bc]} ]]; then
@@ -2355,10 +2394,9 @@ parse_hn_line() {
 		_c[_name]="${_c[_name]} $_daddr"
 		_cmds[$_prev]="${_c[@]}"
 		;;
-	dhcp)	! $_has_dhclient && return
-		_c[0]=
-		_cmds[${#_cmds[*]}]="ifconfig $_if ${_c[@]} up;dhclient $_if"
-		V4_DHCPCONF=true
+	dhcp)	! $_has_dhcp && return
+		_cmds[${#_cmds[*]}]="ifconfig $_if inet autoconf"
+		V4_AUTOCONF=true
 		;;
 	'!'*|bridge)
 		# Skip shell commands and bridge in the installer.
@@ -2400,18 +2438,18 @@ ifstart() {
 
 # Configure the network during upgrade based on the on-disk configuration.
 enable_network() {
-	local _f _gw _hn _if _trunks _svlans _vlans
+	local _f _gw _v4set=false _v6set=false _hn _if _trunks _svlans _vlans
 
 	# Use installed network configuration files during upgrade.
-	for _f in resolv.conf resolv.conf.tail; do
+	for _f in dhclient.conf resolv.conf; do
 		if [[ -f /mnt/etc/$_f ]]; then
 			cp /mnt/etc/$_f /etc/$_f
 		fi
 	done
 
 	# Create a minimal hosts file.
-	echo "127.0.0.1	localhost" >/tmp/i/hosts
-	echo "::1		localhost" >>/tmp/i/hosts
+	echo "127.0.0.1\tlocalhost" >/tmp/i/hosts
+	echo "::1\t\tlocalhost" >>/tmp/i/hosts
 
 	_f=/mnt/etc/soii.key
 	[[ -f $_f ]] && sysctl "net.inet6.ip6.soiikey=$(<$_f)"
@@ -2446,15 +2484,24 @@ enable_network() {
 	# /mnt/etc/mygate, if it exists, contains the address(es) of my
 	# default gateway(s). Use for ipv4 if no interfaces configured via
 	# dhcp. Use for ipv6 if no interfaces configured via autoconf.
-	! $V4_DHCPCONF && stripcom /mnt/etc/mygate |
+	stripcom /mnt/etc/mygate |
 	while read _gw; do
-		[[ $_gw == @(*:*) ]] && continue
-		route -qn add -host default $_gw && break
-	done
-	! $V6_AUTOCONF && stripcom /mnt/etc/mygate |
-	while read _gw; do
-		[[ $_gw == !(*:*) ]] && continue
-		route -qn add -host -inet6 default $_gw && break
+		case $_gw in
+		'!'*)
+			# Skip shell commands in the installer.
+			continue
+			;;
+		!(*:*))
+			($_v4set || $V4_AUTOCONF) && continue
+			route -qn add -host default $_gw
+			_v4set=true
+			;;
+		*)
+			($_v6set || $V6_AUTOCONF) && continue
+			route -qn add -host -inet6 default $_gw
+			_v6set=true
+			;;
+		esac
 	done
 
 	route -qn add -net 127 127.0.0.1 -reject >/dev/null
@@ -2674,7 +2721,6 @@ install_sets() {
 		# Set default to 'done' to leave the while-loop.
 		sane_install quiet || $AI && _d=listo
 	done
-
 }
 
 # Apply configuration settings based on the previously gathered information.
@@ -2720,6 +2766,7 @@ apply() {
 #
 encr_pwd() {
 	local _p=$1
+
 	if [[ -z $_p ]]; then
 		echo '*'
 	elif [[ $_p == \$2?\$[0-9][0-9]\$* && ${#_p} > 40 ||
@@ -2816,7 +2863,10 @@ finish_up() {
 		tar -C $_kernel_dir -xzf $_kernel_dir.tgz $_kernel
 		rm -f $_kernel_dir.tgz
 		chroot /mnt /bin/ksh -e -c "cd ${_kernel_dir#/mnt}/$_kernel; \
-			make newbsd; make newinstall"
+			make newbsd; \
+			[ -f /etc/bsd.re-config ] && \
+			    config -e -c /etc/bsd.re-config -f bsd; \
+			make newinstall"
 		) >/dev/null 2>&1 && echo " listo." || echo " fallo."
 	fi
 
@@ -2836,11 +2886,11 @@ finish_up() {
 	# on the console and in the rc.firsttime output mail.
 	isin "$ARCH" $_syspatch_archs && cat <<__EOT >>/mnt/etc/rc.firsttime
 set -A _KERNV -- \$(sysctl -n kern.version |
-	sed 's/^OpenBSD \([0-9]\.[0-9]\)\([^ ]*\).*/\1 \2/;q')
+	sed 's/^OpenBSD \([1-9][0-9]*\.[0-9]\)\([^ ]*\).*/\1 \2/;q')
 if ((\${#_KERNV[*]} == 1)) && [[ -s /etc/installurl ]] &&
 	_CKPATCH=\$(mktemp /tmp/_ckpatch.XXXXXXXXXX); then
 	echo "Buscando parches binarios disponsibles..."
-	syspatch -c > \$_CKPATCH 
+	syspatch -c > \$_CKPATCH
 	if [[ -s \$_CKPATCH ]]; then
 		echo "Ejecute syspatch(8) para instalar:"
 		column -xc 80 \$_CKPATCH
@@ -2870,7 +2920,7 @@ __EOT
 __EOT
 	[[ $MODE == install ]] && cat <<__EOT
 Cuando ingrese por primera vez, por favor lea correo usando 
-el comando 'mail'.
+la orden 'mail'.
 
 __EOT
 
@@ -2883,20 +2933,13 @@ do_autoinstall() {
 
 	echo "Performing non-interactive $AI_MODE..."
 	/$AI_MODE -af /tmp/ai/ai.$AI_MODE.conf 2>&1 </dev/null |
-		tee /dev/stderr | sed "s/^.*$(echo '')//" >/tmp/ai/ai.log
+		tee /dev/stderr | sed "s/^.*$(echo '\r')//" >/tmp/ai/ai.log
 
-	$UU || [[ -f /tmp/ai/ai.done ]] ||
+	$UU || [[ -f /tmp/ai/ai.done ]] || 
 		err_exit "failed; check /tmp/ai/ai.log"
 
 	# Email autoinstall protocol to root on next boot.
 	prep_root_mail /tmp/ai/ai.log "$(hostname) $AI_MODE log"
-
-	# SYSUP-COMPAT
-	if $UU; then
-		cat <<__EOT >>/mnt/etc/rc.firsttime
-[[ ! -e /home/_sysupgrade/keep ]] && rm -f /home/_sysupgrade/*
-__EOT
-	fi
 
 	exec reboot
 }
@@ -2922,7 +2965,6 @@ do_install() {
 	# Configure the network.
 	donetconfig
 
-	
 	# Fetch list of mirror servers and installer choices from previous runs.
 	start_cgiinfo
 
@@ -3088,8 +3130,8 @@ do_install() {
 	echo -n "Guardando configuracion..."
 
 	# Save any leases obtained during install.
-	(cd /var/db; for _f in dhclient.leases.*; do
-		[[ -f $_f ]] && mv $_f /mnt/var/db/.
+	(cd /var/db/dhcpleased; for _f in *; do
+		[[ -f $_f ]] && mv $_f /mnt/var/db/dhcpleased/.
 	done)
 
 	# Move configuration files from /tmp/i/ to /mnt/etc.
@@ -3111,20 +3153,22 @@ do_install() {
 		_dn=$(get_fqdn)
 		while read _addr _hn _aliases; do
 			if [[ -n $_aliases || $_hn != ${_hn%%.*} || -z $_dn ]]; then
-				echo "$_addr	$_hn $_aliases"
+				echo "$_addr\t$_hn $_aliases"
 			else
-				echo "$_addr	$_hn.$_dn $_hn"
+				echo "$_addr\t$_hn.$_dn $_hn"
 			fi
 		done </tmp/i/hosts >>/mnt/etc/hosts
 		rm /tmp/i/hosts
 	fi
 
 	# Possible files to copy from /tmp/i/: fstab hostname.* kbdtype mygate
-	#     myname ttys boot.conf resolv.conf sysctl.conf resolv.conf.tail
+	#     myname ttys boot.conf resolv.conf sysctl.conf
 	# Save only non-empty (-s) regular (-f) files.
-	(cd /tmp/i; for _f in fstab hostname* kbdtype my* ttys *.conf *.tail; do
+	(cd /tmp/i; for _f in fstab hostname* kbdtype my* ttys *.conf; do
 		[[ -f $_f && -s $_f ]] && mv $_f /mnt/etc/.
 	done)
+	[[ -s /etc/resolv.conf ]] && cp /etc/resolv.conf /mnt/etc/resolv.conf
+
 
 	echo " listo."
 
@@ -3149,7 +3193,6 @@ do_install() {
 		sed -i -e "s@^wheel:.:0:root\$@wheel:\*:0:root,${ADMIN}@" \
 			/mnt/etc/group 2>/dev/null
 
-
 		# During autoinstall, add public ssh key to authorized_keys.
 		[[ -n "$ADMIN_KEY" ]] &&
 			print -r -- "$ADMIN_KEY" >>$_home/.ssh/authorized_keys
@@ -3173,10 +3216,8 @@ do_install() {
 	finish_up
 }
 
-
 do_upgrade() {
 	local _f
-
 
 	# Get $ROOTDISK and $ROOTDEV
 	get_rootinfo
@@ -3240,26 +3281,10 @@ check_unattendedupgrade() {
 		if [[ -n $_d ]]; then
 			make_dev $_d
 			if mount -t ffs -r /dev/${_d}a /mnt; then
-				### NOTYET (uncomment once SYSUP-COMPAT is gone)
-				#[[ -f /mnt/bsd.upgrade && -f /mnt/auto_upgrade.conf ]]
-				#_rc=$?
-				#((_rc == 0)) && cp /mnt/auto_upgrade.conf /
-				### BEGIN SYSUP-COMPAT
-				ls /mnt/bsd.upgrade 
+				[[ -f /mnt/bsd.upgrade && -f /mnt/auto_upgrade.conf ]]
 				_rc=$?
-				if ((_rc == 0)); then
-					if [[ -f /mnt/auto_upgrade.conf ]]; then
-						cp /mnt/auto_upgrade.conf /
-					else
-						cat <<__EOT >/auto_upgrade.conf
-Location of sets = disk
-Pathname to the sets = /home/_sysupgrade/
-Set name(s) = done
-Directory does not contain SHA256.sig. Continue without verification = yes
-__EOT
-					fi
-				fi
-				### END SYSUP-COMPAT 
+				((_rc == 0)) && cp /mnt/auto_upgrade.conf /
+				echo "Cual es el disco raiz = ${_d}" >> /auto_upgrade.conf
 				umount -f /mnt
 			fi
 			rm -f /dev/{r,}$_d?
@@ -3288,9 +3313,9 @@ start_watchdog() {
 	exec 3>&p; exec 3>&-
 }
 
-
 # ------------------------------------------------------------------------------
 # Initial actions common to both installs and upgrades.
+#
 # Some may require machine dependent routines, which may call functions defined
 # above, so it's safest to put this code here rather than at the top.
 # ------------------------------------------------------------------------------
@@ -3342,7 +3367,8 @@ umount -af >/dev/null 2>&1
 #
 # The following variables can be provided if required:
 #	MDEFI       - set to 'y' on archs that support GPT partitioning
-#	MDROOTFSOPT - newfs options for the root partition
+#	MDFSOPT     - newfs options for non-root partitions, '-O2' assumed if not provided
+#	MDROOTFSOPT - newfs options for the root partition, '-O2' assumed if not provided
 #	MDSETS	    - list of files to add to DEFAULT and ALLSETS
 #	MDSANESETS  - list of files to add to SANESETS
 #	MDTERM      - 'vt220' assumed if not provided
@@ -3374,7 +3400,7 @@ ROOTDEV=
 ROOTDISK=
 SETDIR="/"
 UPGRADE_BSDRD=false
-V4_DHCPCONF=false
+V4_AUTOCONF=false
 V6_AUTOCONF=false
 WLANLIST=/tmp/i/wlanlist
 
@@ -3426,7 +3452,7 @@ export COLUMNS=$(stty -a </dev/console |
 # Interactive or automatic installation?
 if ! $AI; then
 	cat <<__EOT
-En cualquier pregunta, excepto claves puede escapar al interprete de comandos
+En cualquier pregunta, excepto claves puede escapar al interprete de ordenes
 tecleando '!'. Las respuestas por defecto se presentan entre [] y se seleccionan
 presionando RETORNO.  Puede salir de este programa presionando
 Control-C, pero esto puede dejar su sistema en un estado inconsistente.

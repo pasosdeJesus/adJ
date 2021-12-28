@@ -1,12 +1,10 @@
-# $OpenBSD: Makefile,v 1.9 2021/11/28 20:07:58 tb Exp $
+# $OpenBSD: Makefile,v 1.7 2021/10/08 14:12:36 jeremy Exp $
 
-VERSION =		3.0.3
+VERSION =		3.1.0
 DISTNAME =		ruby-${VERSION}
-SHARED_LIBS =		ruby30	0.0
-NEXTVER =		3.1
-PKGSPEC-main ?=         ruby->=3.0.0,<${NEXTVER}
-
-REVISION-main =		0
+SHARED_LIBS =		ruby31	0.0
+NEXTVER =		3.2
+PKGSPEC-main ?=         ruby->=3.1.0,<${NEXTVER}
 
 PSEUDO_FLAVORS=		no_ri_docs bootstrap
 # Do not build the RI docs on slow arches
@@ -16,7 +14,7 @@ FLAVOR?=		no_ri_docs bootstrap
 FLAVOR?=
 .endif
 
-MULTI_PACKAGES =	-main -gdbm -ri_docs
+MULTI_PACKAGES =	-main -ri_docs
 .include <bsd.port.arch.mk>
 
 .if ${BUILD_PACKAGES:M-ri_docs}
@@ -28,6 +26,8 @@ INSTALL_TARGET +=	install-doc
 CONFIGURE_ENV +=	ac_cv_path_MJIT_CC=`which ${CC}`
 
 WANTLIB-main +=	curses yaml-0
+
+BUILD_DEPENDS += devel/dwz
 
 post-extract:
 	${POST_EXTRACT}
