@@ -10,7 +10,9 @@ SOURCE_GBFXML=mateo.gbfxml marcos.gbfxml lucas.gbfxml juan.gbfxml hechos.gbfxml
 EXT_DOCBOOK=xdbk
 
 VS_SWORDBOOK_I=I Corinthians
+#VS_SWORDBOOK_I=Romans
 VS_SWORDBOOK=I_Corinthians
+#VS_SWORDBOOK=Romans
 
 # Variables requeridas por comdocbook.mak
 SOURCES=$(PROYECTO).$(EXT_DOCBOOK)
@@ -220,7 +222,21 @@ $(VS_SWORDBOOK)-KJV.tmp: KJV.imp
 	sed -e "s/<w /|<w /g" /tmp/kjv-awk | tr "|" "\n" | sed -e  "s/ [ ]*$$//g" | sed -e "s/\(<\/w>[.,;]*\)[ ]*\(.\)/\1|\2/g" | tr "|" "\n" > $(VS_SWORDBOOK)-KJV.tmp
 
 $(VS_SWORDBOOK)-n-KJV.tmp: $(VS_SWORDBOOK)-KJV.tmp
-	grep -v '^[ ]*$$' $(VS_SWORDBOOK)-KJV.tmp | grep -v "Heading \]" | grep -v "strongsMarkup" | grep -v "^[A-Za-z].*" | grep -v "^<q .*" | sed -e 's/.*src=.\([0-9]*\).*:G\([0-9]*\).*x-Robinson:\([^"]*\)".*/\1,\2,\3/g;s/.*lemma="strong:G\([0-9]*\) *\([^"]*\)".*morph="robinson:\([^ "]*\) *\([^"]*\)".*src="\([0-9]*\) *\([^"]*\)".*/\5,\1,\3|lemma="\2" morph="\4" src="\6"/g;s/lemma="strong:G\([0-9]*\) *\([^"]*\)".*morph="robinson:\([^ "]*\) *\([^"]*\)".*src="\([0-9]*\) *\([^"]*\)".*/\5,\1,\3|lemma="\2" morph="\4" src="\6"/g;s/lemma="strong:G\([0-9]*\) *\([^"]*\)".*morph="robinson:\([^ "]*\) *\([^"]*\)".*src="\([0-9]*\) *\([^"]*\)".*/\5,\1,\3|lemma="\2" morph="\4" src="\6"/g;s/lemma="strong:G\([0-9]*\) *\([^"]*\)".*morph="robinson:\([^ "]*\) *\([^"]*\)".*src="\([0-9]*\) *\([^"]*\)".*/\5,\1,\3|lemma="\2" morph="\4" src="\6"/g;s/|lemma="".*morph="".*src="".*//g;s/|lemma="lemma.TR.*//g;s/.*lemma="strong:G\([0-9]*\)"  *src="\([0-9]*\)" *>/\2,\1, /g;s/\$$\$$\$$[^ ]* \([0-9:]*\)/\1/g' | grep "^[0-9]" | tr "|" "\n" > $(VS_SWORDBOOK)-n-KJV.tmp
+	grep -v '^[ ]*$$' $(VS_SWORDBOOK)-KJV.tmp | \
+		grep -v "Heading \]" |\
+		grep -v "strongsMarkup" | \
+		grep -v "^[A-Za-z].*" | \
+		grep -v "^<q .*" | \
+		sed -e 's/.*src=.\([0-9]*\).*:G\([0-9]*\).*x-Robinson:\([^"]*\)".*/\1,\2,\3/g' | \
+		sed -e 's/.*lemma="strong:G\([0-9]*\) *\([^"]*\)".*morph="robinson:\([^ "]*\) *\([^"]*\)".*src="\([0-9]*\) *\([^"]*\)".*/\5,\1,\3|lemma="\2" morph="\4" src="\6"/g' |\
+		sed -e 's/lemma="strong:G\([0-9]*\) *\([^"]*\)".*morph="robinson:\([^ "]*\) *\([^"]*\)".*src="\([0-9]*\) *\([^"]*\)".*/\5,\1,\3|lemma="\2" morph="\4" src="\6"/g' |\
+		sed -e 's/lemma="strong:G\([0-9]*\) *\([^"]*\)".*morph="robinson:\([^ "]*\) *\([^"]*\)".*src="\([0-9]*\) *\([^"]*\)".*/\5,\1,\3|lemma="\2" morph="\4" src="\6"/g' |\
+		sed -e 's/lemma="strong:G\([0-9]*\) *\([^"]*\)".*morph="robinson:\([^ "]*\) *\([^"]*\)".*src="\([0-9]*\) *\([^"]*\)".*/\5,\1,\3|lemma="\2" morph="\4" src="\6"/g' |\
+		sed -e 's/|lemma="".*morph="".*src="".*//g' |\
+		sed -e 's/|lemma="lemma.TR.*//g' | \
+		sed -e 's/.*lemma="strong:G\([0-9]*\)"  *src="\([0-9]*\)" *>/\2,\1, /g' |\
+		sed -e 's/\$$\$$\$$[^0-9]*\([0-9][0-9:]*\)/\1/g' | \
+		grep "^[0-9]" | tr "|" "\n" > $(VS_SWORDBOOK)-n-KJV.tmp
 	#grep -v '^[ ]*$$' $(VS_SWORDBOOK)-KJV.tmp | grep -v "Heading \]" | grep -v "strongsMarkup" | grep -v "^[A-Za-z].*" | grep -v "^<q .*" | sed -e 's/.*src=.\([0-9]*\).*:G\([0-9]*\).*x-Robinson:\([^"]*\)".*/\1,\2,\3/g;s/.*lemma="strong:G\([0-9]*\) *\([^"]*\)".*morph="robinson:\([^ "]*\) *\([^"]*\)".*src="\([0-9]*\) *\([^"]*\)".*/\5,\1,\3|lemma="strong:\2" morph="robinson:\4" src="\6"/g;s/1,\3,\7|\12,\4,\8/g;s/.*lemma="strong:G\([0-9]*\) strong:G\([0-9]*\) strong:G\([0-9]*\)".*robinson:\([^ ]*\) robinson:\([^ ]*\) robinson:\([^"]*\)".*src="\([0-9]*\) \([0-9]*\) \([0-9]*\)".*/\7,\1,\4|\8,\2,\5|\9,\3,\6/g;s/.*lemma="strong:G\([0-9]*\) strong:G\([0-9]*\)".*robinson:\([^ ]*\) robinson:\([^"]*\)".*src="\([0-9]*\) \([0-9]*\)".*/\5,\1,\3|\6,\2,\4/g;s/.*lemma="strong:G\([0-9]*\).*robinson:\([^"]*\)".*src=.\([0-9]*\).*/\3,\1,\2/g;s/.*lemma="strong:G\([0-9]*\)"  *src="\([0-9]*\)" *>/\2,\1, /g;s/\$$\$$\$$[^ ]* \([0-9:]*\)/\1/g' | grep "^[0-9]" | tr "|" "\n" > $(VS_SWORDBOOK)-n-KJV.tmp
 # Formato tanto de sword-1.5.8 como 1.5.10
 
