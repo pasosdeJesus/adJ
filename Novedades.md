@@ -2,8 +2,8 @@
 Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
 
-### Versión: 7.0a1
-Fecha de publicación: 30/Oct/2021
+### Versión: 7.0b1
+Fecha de publicación: 10/Ene/2021
 
 Puede ver novedades respecto a OpenBSD en:
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_7_0/Novedades_OpenBSD.md>
@@ -114,13 +114,11 @@ Novedades tomadas de <https://www.openbsd.org/70.html>
     * 
   * Mejoras al diseño visual con actualización a Bootsrap 5:
     * 
-
-* Adaptados de portes de OpenBSD estable:
+* evangelios 0.9 ahora incluye marco strong para la traducción al libro de
+  Romanos.
+* Adaptados de propuestas de portes para OpenBSD-current:
   * `postgresql 13.4`, `gdal`, `postgis`
-* Retroportados y adaptados de OpenBSD-current 
-  * `ruby-3.0.2`
-  * `chromium 90` con llave para API de Google de Pasos de Jesús 
-     en lugar de OpenBSD
+  * `ruby-3.1`
 * Portes más actualizados que los disponibles en OpenBSD
   * `ocaml 4.12`, `ocamlbuild`, `findlib`, `dune`, `hevea`
 * Se han recompilado los siguientes para aprovechar `xlocale`:

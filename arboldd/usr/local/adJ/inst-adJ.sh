@@ -5,7 +5,7 @@
 
 VER=7.0
 REV=0
-VESP="a1"
+VESP="b1"
 VERP=70
 
 # Falta /standard/root.hint
@@ -2386,7 +2386,7 @@ insacp libiconv
 echo "* Instalar PostgreSQL y PostGIS"  >> /var/www/tmp/inst-adJ.bitacora
 f=`ls /var/db/pkg/postgresql-server* 2> /dev/null > /dev/null`;
 if (test "$?" != "0") then {
-	p=`ls $PKG_PATH/libxml-* $PKG_PATH/libiconv-* $PKG_PATH/postgresql-client-* $PKG_PATH/postgresql-server* $PKG_PATH/postgresql-contrib* $PKG_PATH/postgresql-doc*`
+	p=`ls $PKG_PATH/libxml-* $PKG_PATH/libiconv-* $PKG_PATH/postgresql-client-* $PKG_PATH/postgresql-*-server* $PKG_PATH/postgresql-*-contrib* $PKG_PATH/postgresql-*-doc*`
 	pkg_add -I -r -D repair -D update -D updatedepends $p >> /var/www/tmp/inst-adJ.bitacora 2>&1
 	insacp jpeg
 	insacp tiff

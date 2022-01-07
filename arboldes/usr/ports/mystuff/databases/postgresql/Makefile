@@ -8,11 +8,17 @@ COMMENT-plpython=Python procedural language for PostgreSQL
 COMMENT-pg_upgrade=Support for upgrading PostgreSQL data from previous version
 
 VERSION=	14.1
-PREV_MAJOR=	13.6
+PREV_MAJOR=	13.4
 DISTNAME=	postgresql-${VERSION}
 PKGNAME-main=	postgresql-client-${VERSION}
 
 DPB_PROPERTIES=	parallel
+
+PKGNAME-server=       postgresql-server-${VERSION}
+PKGNAME-docs= postgresql-docs-${VERSION}
+PKGNAME-contrib=postgresql-contrib-${VERSION}
+PKGNAME-plpython=postgresql-plpython-${VERSION}
+PKGNAME-pg_upgrade=postgresql-pg_upgrade-${VERSION}
 
 CATEGORIES=	databases
 SHARED_LIBS=	ecpg		7.10 \

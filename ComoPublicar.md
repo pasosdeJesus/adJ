@@ -173,7 +173,7 @@ Pasos importantes para publicar versión mayor
 	```
 	git checkout ADJ_7_0
 	```
-2. Actualizar SIVeL, evangelios, Mt77, cor1440, sal7711 y paquetes propios de 
+2. Actualizar SIVeL, evangelios, Mt77 y paquetes propios de 
    adJ.
 3. Actualizar documentación (`basico_adJ`, `usuario_adJ` y `servidor_adJ`), 
    publicar en Internet
