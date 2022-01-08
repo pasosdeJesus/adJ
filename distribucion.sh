@@ -803,7 +803,11 @@ if (test "$sn" = "s") then {
   # Modificados para posibilitar compilación
   # Deben estar en mystuff
 
-  paquete postgis
+  paquete colorls
+  paquete firefox-esr
+
+
+
   exit 1
   # Todo lo de perl tuvo que recompilarse
   # evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
@@ -964,7 +968,6 @@ if (test "$sn" = "s") then {
   # Actualizados.  Están desactualizado en OpenBSD estable y current
   paquete ocaml paquetes "ocaml"
   paquete ocamlbuild 
-  #paquete ocaml-camlp4
   paquete findlib
   paquete dune # requiere findlib
   paquete hevea # requiere ocamlbuild
@@ -980,7 +983,7 @@ if (test "$sn" = "s") then {
   paquete firefox-esr
   paquete flac
   #paquete gtk+3 paquetes "gtk+3-cups"
-  paquete gdal
+  #paquete gdal
   paquete gnutls
   #paquete gvfs
   #paquete libgcrypt

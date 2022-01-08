@@ -76,12 +76,12 @@ Novedades tomadas de <https://www.openbsd.org/70.html>
 ### 2.2 Paquetes 
 
 * Para cerrar fallas se usan las versiones más recientes preparadas
-  por OpenBSD de: ``, ``,  ``, ``,  ``, ``,
+  por OpenBSD de: `php`, `samba`,  `firefox-esr`, ``,  ``, ``,
 
-* Algunos paquetes típicos y su versión: `dovecot x`,
-  `chromium x`, `firefox-esr x`, `libreoffice x`,
-  `nginx x`, `mariadb x`, `node x`, `python x`,
-  `neovim x`, `zsh x`
+* Algunos paquetes típicos y su versión: `dovecot 2.3.16p1v0`,
+  `chromium 93.0.4577.82`, `firefox-esr x`, `libreoffice 7.2.12`,
+  `nginx 1.20.1`, `mariadb 10.6.4`, `node 12.22.6`, `python 3.9.7`,
+  `neovim 0.5.0`, `zsh 5.8`
 
 
 ## 3. NOVEDADES RESPECTO A ADJ 6.8 PROVENIENTES DE PASOS DE JESÚS
@@ -117,10 +117,10 @@ Novedades tomadas de <https://www.openbsd.org/70.html>
 * evangelios 0.9 ahora incluye marco strong para la traducción al libro de
   Romanos.
 * Adaptados de propuestas de portes para OpenBSD-current:
-  * `postgresql 13.4`, `gdal`, `postgis`
+  * `postgresql 14.1`
   * `ruby-3.1`
-* Portes más actualizados que los disponibles en OpenBSD
-  * `ocaml 4.12`, `ocamlbuild`, `findlib`, `dune`, `hevea`
+* Portes más actualizados que los disponibles en OpenBSD:
+  * `ocaml 4.12`, `ocamlbuild`, `findlib`, `dune`, `hevea`, `postgis`
 * Se han recompilado los siguientes para aprovechar `xlocale`:
    `glib2`, `libunistring`, `vlc`
 

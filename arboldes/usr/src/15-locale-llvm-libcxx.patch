@@ -39,7 +39,19 @@ diff -ruN src69-orig/gnu/llvm/libcxx/include/__locale src/gnu/llvm/libcxx/includ
 diff -ruN src69-orig/gnu/llvm/libcxx/include/locale src/gnu/llvm/libcxx/include/locale
 --- src69-orig/gnu/llvm/libcxx/include/locale	Sat Jan  2 16:18:29 2021
 +++ src/gnu/llvm/libcxx/include/locale	Thu Jul 22 04:58:37 2021
-@@ -1571,7 +1571,7 @@
+@@ -201,11 +201,7 @@
+ #include <Availability.h>
+ #endif
+ 
+-#ifdef _LIBCPP_LOCALE__L_EXTENSIONS
+ #include <__bsd_locale_defaults.h>
+-#else
+-#include <__bsd_locale_fallbacks.h>
+-#endif
+ 
+ #if !defined(_LIBCPP_HAS_NO_PRAGMA_SYSTEM_HEADER)
+ #pragma GCC system_header
+@@ -1571,7 +1567,7 @@
              __nc = __libcpp_asprintf_l(&__nb, _LIBCPP_GET_C_LOCALE, __fmt, (int)__iob.precision(), __v);
          else
              __nc = __libcpp_asprintf_l(&__nb, _LIBCPP_GET_C_LOCALE, __fmt, __v);
@@ -48,7 +60,7 @@ diff -ruN src69-orig/gnu/llvm/libcxx/include/locale src/gnu/llvm/libcxx/include/
              __throw_bad_alloc();
          __nbh.reset(__nb);
      }
-@@ -1622,7 +1622,7 @@
+@@ -1622,7 +1618,7 @@
              __nc = __libcpp_asprintf_l(&__nb, _LIBCPP_GET_C_LOCALE, __fmt, (int)__iob.precision(), __v);
          else
              __nc = __libcpp_asprintf_l(&__nb, _LIBCPP_GET_C_LOCALE, __fmt, __v);
@@ -57,7 +69,7 @@ diff -ruN src69-orig/gnu/llvm/libcxx/include/locale src/gnu/llvm/libcxx/include/
              __throw_bad_alloc();
          __nbh.reset(__nb);
      }
-@@ -3403,7 +3403,7 @@
+@@ -3403,7 +3399,7 @@
      if (__n > __bs-1)
      {
          __n = static_cast<size_t>(__libcpp_asprintf_l(&__bb, _LIBCPP_GET_C_LOCALE, "%.0Lf", __units));
