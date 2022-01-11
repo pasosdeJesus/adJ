@@ -76,15 +76,15 @@ Novedades tomadas de <https://www.openbsd.org/70.html>
 ### 2.2 Paquetes 
 
 * Para cerrar fallas se usan las versiones más recientes preparadas
-  por OpenBSD de: `php`, `samba`,  `firefox-esr`, ``,  ``, ``,
+  por OpenBSD de: `php`, `samba`,  `firefox-esr`, `colorls`
 
 * Algunos paquetes típicos y su versión: `dovecot 2.3.16p1v0`,
-  `chromium 93.0.4577.82`, `firefox-esr x`, `libreoffice 7.2.12`,
-  `nginx 1.20.1`, `mariadb 10.6.4`, `node 12.22.6`, `python 3.9.7`,
+  `chromium 93.0.4577.82`, `firefox-esr 91.4.1`, `libreoffice 7.2.12`,
+  `nginx 1.20.1`, `mariadb 10.6.4`, `node 12.22.6`, `python 3.8.12`,
   `neovim 0.5.0`, `zsh 5.8`
 
 
-## 3. NOVEDADES RESPECTO A ADJ 6.8 PROVENIENTES DE PASOS DE JESÚS
+## 3. NOVEDADES RESPECTO A ADJ 6.9 PROVENIENTES DE PASOS DE JESÚS
 
 ### 3.1 Instalador y documentación
 
@@ -98,10 +98,11 @@ Novedades tomadas de <https://www.openbsd.org/70.html>
 
 ### 3.2 Paquetes
 
-* Además de chromium incluimos `firefox 92` en lugar de `firefox-esr` 
-  (firefox-esr tiene regresiones en OpenBSD 7).  Ahora firefox 
-  y chromium permiten autenticar y usar sitios 
-  como <https://drive.google.com>
+* Chromium recompilado con llave de Pasos de Jesús.  Ahora permite autenticar
+  y usar sitios como https://drive.google.com  --si tiene problemas para
+  autenticarse intente desde un nuevo perfil .
+* Además de chromium incluimos `firefox-esr` que también ha resultado
+  bastante estable.
 
 * Se incluye la versión 2.0  de `sivel2` cuyas novedades con respecto al 
   beta 16 incluido en adJ 6.9 se describen a continuación. Agradecimiento por

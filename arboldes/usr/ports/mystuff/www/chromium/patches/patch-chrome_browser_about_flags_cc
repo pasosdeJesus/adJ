@@ -1,9 +1,9 @@
-$OpenBSD: patch-chrome_browser_about_flags_cc,v 1.74 2021/04/16 18:15:05 robert Exp $
+$OpenBSD: patch-chrome_browser_about_flags_cc,v 1.80 2021/09/14 06:19:48 robert Exp $
 
 Index: chrome/browser/about_flags.cc
 --- chrome/browser/about_flags.cc.orig
 +++ chrome/browser/about_flags.cc
-@@ -193,7 +193,7 @@
+@@ -195,7 +195,7 @@
  #include "ui/gl/gl_switches.h"
  #include "ui/native_theme/native_theme_features.h"
  
@@ -12,7 +12,7 @@ Index: chrome/browser/about_flags.cc
  #include "base/allocator/buildflags.h"
  #endif
  
-@@ -968,7 +968,7 @@ const FeatureEntry::Choice kMemlogSamplingRateChoices[
+@@ -1013,7 +1013,7 @@ const FeatureEntry::FeatureVariation kMemoriesVariatio
  };
  
  #if defined(OS_LINUX) || defined(OS_CHROMEOS) || defined(OS_MAC) || \
@@ -21,8 +21,8 @@ Index: chrome/browser/about_flags.cc
  const FeatureEntry::FeatureParam kOmniboxDocumentProviderServerScoring[] = {
      {"DocumentUseServerScore", "true"},
      {"DocumentUseClientScore", "false"},
-@@ -2465,7 +2465,7 @@ constexpr char kAssistantBetterOnboardingInternalName[
- constexpr char kAssistantTimersV2InternalName[] = "enable-assistant-timers-v2";
+@@ -2577,7 +2577,7 @@ constexpr char kAssistantBetterOnboardingInternalName[
+     "enable-assistant-better-onboarding";
  #endif  // BUILDFLAG(IS_CHROMEOS_ASH)
  
 -#if defined(OS_LINUX) || defined(OS_CHROMEOS)
@@ -30,7 +30,7 @@ Index: chrome/browser/about_flags.cc
  const FeatureEntry::FeatureParam
      kSendWebUIJavaScriptErrorReportsVariationSendToStaging[] = {
          {features::kSendWebUIJavaScriptErrorReportsSendToProductionVariation,
-@@ -2651,7 +2651,7 @@ const FeatureEntry kFeatureEntries[] = {
+@@ -2798,7 +2798,7 @@ const FeatureEntry kFeatureEntries[] = {
       flag_descriptions::kWebrtcPipeWireCapturerDescription, kOsLinux,
       FEATURE_VALUE_TYPE(features::kWebRtcPipeWireCapturer)},
  #endif  // defined(WEBRTC_USE_PIPEWIRE)
@@ -39,16 +39,16 @@ Index: chrome/browser/about_flags.cc
      {"send-webui-javascript-error-reports",
       flag_descriptions::kSendWebUIJavaScriptErrorReportsName,
       flag_descriptions::kSendWebUIJavaScriptErrorReportsDescription,
-@@ -3069,7 +3069,7 @@ const FeatureEntry kFeatureEntries[] = {
+@@ -3263,7 +3263,7 @@ const FeatureEntry kFeatureEntries[] = {
       FEATURE_VALUE_TYPE(media::kDeprecateLowUsageCodecs)},
- #endif  // BUILDFLAG(IS_CHROMEOS_ASH)
+ #endif  // defined(OS_CHROMEOS)
  
--#if (defined(OS_LINUX) || BUILDFLAG(IS_CHROMEOS_LACROS)) && !defined(OS_ANDROID)
-+#if (defined(OS_LINUX) || defined(OS_BSD) || BUILDFLAG(IS_CHROMEOS_LACROS)) && !defined(OS_ANDROID)
+-#if defined(OS_LINUX)
++#if defined(OS_LINUX) || defined(OS_BSD)
      {
          "enable-accelerated-video-decode",
          flag_descriptions::kAcceleratedVideoDecodeName,
-@@ -3451,7 +3451,7 @@ const FeatureEntry kFeatureEntries[] = {
+@@ -3637,7 +3637,7 @@ const FeatureEntry kFeatureEntries[] = {
      {"enable-login-detection", flag_descriptions::kEnableLoginDetectionName,
       flag_descriptions::kEnableLoginDetectionDescription, kOsAll,
       FEATURE_VALUE_TYPE(login_detection::kLoginDetection)},
@@ -57,7 +57,7 @@ Index: chrome/browser/about_flags.cc
      {"enable-save-data", flag_descriptions::kEnableSaveDataName,
       flag_descriptions::kEnableSaveDataDescription, kOsCrOS | kOsLinux,
       SINGLE_VALUE_TYPE(
-@@ -4304,7 +4304,7 @@ const FeatureEntry kFeatureEntries[] = {
+@@ -4456,7 +4456,7 @@ const FeatureEntry kFeatureEntries[] = {
       FEATURE_VALUE_TYPE(omnibox::kOmniboxTrendingZeroPrefixSuggestionsOnNTP)},
  
  #if defined(OS_LINUX) || defined(OS_CHROMEOS) || defined(OS_MAC) || \
@@ -66,25 +66,25 @@ Index: chrome/browser/about_flags.cc
      {"omnibox-experimental-keyword-mode",
       flag_descriptions::kOmniboxExperimentalKeywordModeName,
       flag_descriptions::kOmniboxExperimentalKeywordModeDescription, kOsDesktop,
-@@ -4711,7 +4711,7 @@ const FeatureEntry kFeatureEntries[] = {
+@@ -4817,7 +4817,7 @@ const FeatureEntry kFeatureEntries[] = {
  #endif  // !defined(OS_ANDROID)
  
  #if defined(OS_WIN) || defined(OS_MAC) || defined(OS_LINUX) || \
 -    defined(OS_CHROMEOS)
 +    defined(OS_CHROMEOS) || defined(OS_BSD)
-     {"direct-manipulation-stylus",
-      flag_descriptions::kDirectManipulationStylusName,
-      flag_descriptions::kDirectManipulationStylusDescription,
-@@ -5377,7 +5377,7 @@ const FeatureEntry kFeatureEntries[] = {
- #endif  // BUILDFLAG(ENABLE_CLICK_TO_CALL)
+     {"webui-feedback", flag_descriptions::kWebuiFeedbackName,
+      flag_descriptions::kWebuiFeedbackDescription, kOsDesktop,
+      FEATURE_VALUE_TYPE(features::kWebUIFeedback)},
+@@ -5449,7 +5449,7 @@ const FeatureEntry kFeatureEntries[] = {
+      flag_descriptions::kSharingSendViaSyncDescription, kOsAll,
+      FEATURE_VALUE_TYPE(kSharingSendViaSync)},
  
- #if defined(OS_WIN) || defined(OS_MAC) || defined(OS_LINUX) || \
--    defined(OS_CHROMEOS)
-+    defined(OS_CHROMEOS) || defined(OS_BSD)
-     {"remote-copy-receiver", flag_descriptions::kRemoteCopyReceiverName,
-      flag_descriptions::kRemoteCopyReceiverDescription, kOsDesktop,
-      FEATURE_VALUE_TYPE(kRemoteCopyReceiver)},
-@@ -5951,7 +5951,7 @@ const FeatureEntry kFeatureEntries[] = {
+-#if defined(OS_WIN) || defined(OS_MAC) || defined(OS_LINUX)
++#if defined(OS_WIN) || defined(OS_MAC) || defined(OS_LINUX) || defined(OS_BSD)
+     {"sharing-hub-desktop-app-menu",
+      flag_descriptions::kSharingHubDesktopAppMenuName,
+      flag_descriptions::kSharingHubDesktopAppMenuDescription, kOsDesktop,
+@@ -5944,7 +5944,7 @@ const FeatureEntry kFeatureEntries[] = {
       FEATURE_VALUE_TYPE(features::kMouseSubframeNoImplicitCapture)},
  
  #if defined(OS_WIN) || defined(OS_MAC) || defined(OS_LINUX) || \
@@ -93,17 +93,17 @@ Index: chrome/browser/about_flags.cc
      {"global-media-controls", flag_descriptions::kGlobalMediaControlsName,
       flag_descriptions::kGlobalMediaControlsDescription,
       kOsWin | kOsMac | kOsLinux,
-@@ -6187,7 +6187,7 @@ const FeatureEntry kFeatureEntries[] = {
-          "ButterForPasswords")},
+@@ -6807,7 +6807,7 @@ const FeatureEntry kFeatureEntries[] = {
+ #endif
  
- #if defined(OS_WIN) || defined(OS_MAC) || defined(OS_LINUX) || \
+ #if defined(OS_MAC) || defined(OS_WIN) || defined(OS_LINUX) || \
 -    defined(OS_CHROMEOS)
 +    defined(OS_CHROMEOS) || defined(OS_BSD)
-     {"passwords-account-storage-iph",
-      flag_descriptions::kEnablePasswordsAccountStorageIPHName,
-      flag_descriptions::kEnablePasswordsAccountStorageIPHDescription,
-@@ -6853,7 +6853,7 @@ const FeatureEntry kFeatureEntries[] = {
-      FEATURE_VALUE_TYPE(language::kDetailedLanguageSettings)},
+     {"incognito-brand-consistency-for-desktop",
+      flag_descriptions::kIncognitoBrandConsistencyForDesktopName,
+      flag_descriptions::kIncognitoBrandConsistencyForDesktopDescription,
+@@ -6917,7 +6917,7 @@ const FeatureEntry kFeatureEntries[] = {
+      FEATURE_VALUE_TYPE(language::kForceAppLanguagePrompt)},
  #endif
  
 -#if defined(OS_WIN) || defined(OS_MAC) || defined(OS_LINUX)
@@ -111,26 +111,17 @@ Index: chrome/browser/about_flags.cc
      {"commander", flag_descriptions::kCommanderName,
       flag_descriptions::kCommanderDescription, kOsDesktop,
       FEATURE_VALUE_TYPE(features::kCommander)},
-@@ -6891,7 +6891,7 @@ const FeatureEntry kFeatureEntries[] = {
- #endif
+@@ -6945,7 +6945,7 @@ const FeatureEntry kFeatureEntries[] = {
+      FEATURE_VALUE_TYPE(switches::kSyncAutofillWalletOfferData)},
  
- #if defined(OS_WIN) || defined(OS_MAC) || defined(OS_LINUX) || \
--    defined(OS_CHROMEOS)
-+    defined(OS_CHROMEOS) || defined(OS_BSD)
+ #if (defined(OS_WIN) || defined(OS_MAC) || defined(OS_LINUX) || \
+-     defined(OS_CHROMEOS)) &&                                   \
++     defined(OS_CHROMEOS) || defined(OS_BSD)) &&                \
+     BUILDFLAG(ENABLE_PRINTING)
      {"enable-oop-print-drivers", flag_descriptions::kEnableOopPrintDriversName,
       flag_descriptions::kEnableOopPrintDriversDescription, kOsDesktop,
-      FEATURE_VALUE_TYPE(printing::features::kEnableOopPrintDrivers)},
-@@ -6923,7 +6923,7 @@ const FeatureEntry kFeatureEntries[] = {
- // TODO(crbug.com/1052397): Revisit the macro expression once build flag switch
- // of lacros-chrome is complete.
- #if defined(OS_WIN) || (defined(OS_LINUX) || BUILDFLAG(IS_CHROMEOS_LACROS)) || \
--    defined(OS_MAC)
-+    defined(OS_MAC) || defined(OS_BSD)
-     {"enable-ephemeral-guest-profiles-on-desktop",
-      flag_descriptions::kEnableEphemeralGuestProfilesOnDesktopName,
-      flag_descriptions::kEnableEphemeralGuestProfilesOnDesktopDescription,
-@@ -7211,7 +7211,7 @@ const FeatureEntry kFeatureEntries[] = {
- #endif  // BUILDFLAG(IS_CHROMEOS_ASH)
+@@ -7240,7 +7240,7 @@ const FeatureEntry kFeatureEntries[] = {
+ #endif  // defined(ARCH_CPU_X86_FAMILY) && BUILDFLAG(IS_CHROMEOS_ASH)
  
  #if defined(OS_WIN) || (defined(OS_LINUX) || BUILDFLAG(IS_CHROMEOS_LACROS)) || \
 -    defined(OS_MAC)
@@ -138,3 +129,21 @@ Index: chrome/browser/about_flags.cc
      {
          "ui-debug-tools",
          flag_descriptions::kUIDebugToolsName,
+@@ -7324,7 +7324,7 @@ const FeatureEntry kFeatureEntries[] = {
+      FEATURE_VALUE_TYPE(metrics::structured::kBluetoothSessionizedMetrics)},
+ #endif
+ 
+-#if defined(OS_LINUX) && defined(USE_OZONE)
++#if (defined(OS_BSD) || defined(OS_LINUX)) && defined(USE_OZONE)
+     {"use-ozone-platform", flag_descriptions::kUseOzonePlatformName,
+      flag_descriptions::kUseOzonePlatformDescription, kOsLinux,
+      FEATURE_VALUE_TYPE(features::kUseOzonePlatform)},
+@@ -7618,7 +7618,7 @@ const FeatureEntry kFeatureEntries[] = {
+ #endif
+ 
+ #if defined(OS_WIN) || (defined(OS_LINUX) || BUILDFLAG(IS_CHROMEOS_LACROS)) || \
+-    defined(OS_MAC) || (defined(OS_ANDROID))
++    defined(OS_MAC) || (defined(OS_ANDROID)) || defined(OS_BSD)
+     {"omnibox-updated-connection-security-indicators",
+      flag_descriptions::kOmniboxUpdatedConnectionSecurityIndicatorsName,
+      flag_descriptions::kOmniboxUpdatedConnectionSecurityIndicatorsDescription,

@@ -1,4 +1,6 @@
-# $OpenBSD: Makefile,v 1.560 2021/04/16 18:15:05 robert Exp $
+# $OpenBSD: Makefile,v 1.586 2021/09/14 06:19:48 robert Exp $
+
+BROKEN-powerpc64 =	Check failed: false. OS architecture not handled. (powerpc64)
 
 USE_WXNEEDED=		Yes
 
@@ -11,13 +13,13 @@ DPB_PROPERTIES=		parallel parallel2
 
 COMMENT=		Chromium browser
 
-V=			90.0.4430.72
+V=			93.0.4577.82
+
+REVISION=		1
 
 DISTNAME=		chromium-${V}
 
 DISTFILES+=		chromium-${V}${EXTRACT_SUFX}
-
-REVISION=1
 
 CATEGORIES=		www
 
@@ -37,10 +39,8 @@ PERMIT_PACKAGE =	Yes
 MASTER_SITES=	https://commondatastorage.googleapis.com/chromium-browser-official/
 MASTER_SITES0=	http://nerd.hu/distfiles/
 
-FIX_CRLF_FILES=	third_party/vulkan_memory_allocator/src/vk_mem_alloc.h
-
 MODULES=	lang/python
-MODPY_VERSION =	${MODPY_DEFAULT_VERSION_2}
+MODPY_VERSION =	${MODPY_DEFAULT_VERSION_3}
 
 COMPILER =	base-clang ports-clang ports-gcc
 
@@ -72,11 +72,12 @@ WANTLIB += drm epoxy fontconfig freetype fribidi gmodule-2.0 graphite2
 WANTLIB += gthread-2.0 intl pangoft2-1.0 pcre pixman-1
 WANTLIB += plc4 plds4 util xcb-dri2 xcb-glx xcb-render xcb-shm
 WANTLIB += xml2 z
-WANTLIB += harfbuzz harfbuzz-subset
+WANTLIB += harfbuzz harfbuzz-subset harfbuzz-gobject
 WANTLIB += ffi png
 WANTLIB += iconv lzma
 WANTLIB += fido2 cbor usbhid crypto
 WANTLIB += gbm xkbcommon
+WANTLIB += tiff xshmfence
 
 RUN_DEPENDS=	devel/xdg-utils \
 		devel/desktop-file-utils \
@@ -96,7 +97,7 @@ BUILD_DEPENDS=	archivers/bzip2 \
 		x11/py-xcbgen \
 		${MODGCC4_CPPDEP}
 LIB_DEPENDS=	devel/harfbuzz \
-		devel/libexecinfo \
+		graphics/tiff \
 		security/nss \
 		textproc/libxslt \
 		x11/gtk+3 \
@@ -147,7 +148,8 @@ GN_ARGS=	enable_nacl=false \
 		clang_use_chrome_plugins=false \
 		use_allocator=\"none\" \
 		fieldtrial_testing_like_official_build=true \
-		extra_cppflags=\"-idirafter ${LOCALBASE}/include -idirafter ${X11BASE}/include\"
+		extra_cppflags=\"-idirafter ${LOCALBASE}/include -idirafter ${X11BASE}/include\" \
+		fatal_linker_warnings=false
 
 # notyet
 GN_ARGS+=	use_vaapi=false
@@ -171,8 +173,8 @@ GN_ARGS+=	google_api_key=\"AIzaSyC_3Uz69YR1Z2DRLUDf5ZxUJBClHuwrjL\" \
 		proprietary_codecs=true
 
 # These are now restricted to use by Google, so bye-bye sync.
-#GN_ARGS+=	google_default_client_id=\"827346019416-hv5bkg8gdou5q4undk91dn3nv7ag2nm1.apps.googleusercontent.com\" 
-#GN_ARGS+=	google_default_client_secret=\"7ApGgPs3F_mRnRgDt6A80C0\" 
+#GN_ARGS+=	google_default_client_id=\"451220141585.apps.googleusercontent.com\"
+#GN_ARGS+=	google_default_client_secret=\"nQcDyaBvDyCeDrsRqKIWSHJn\" \
 
 # XXX dwz doesn't work with chromium yet
 DWZ = :
@@ -192,6 +194,7 @@ GN_ARGS+=	is_component_build=false
 
 pre-configure:
 	@ln -sf ${MODPY_BIN} ${WRKDIR}/bin/python
+	@ln -sf ${MODPY_BIN} ${WRKDIR}/bin/python3
 .for _arch in x64 ia32 arm64
 .  for _dir in avcodec avformat avutil
 	@cp -pR ${WRKSRC}/third_party/ffmpeg/chromium/config/Chrome/linux/${_arch}/lib${_dir} \
@@ -229,7 +232,7 @@ do-install:
 	${INSTALL_DATA_DIR} ${PREFIX}/${DIST_TARGET_DIR}
 	${INSTALL_PROGRAM} ${BUILDDIR}/${DIST_TARGET_DIR} ${PREFIX}/${DIST_TARGET_DIR}
 	${SUBST_PROGRAM} ${FILESDIR}/${DIST_TARGET_DIR} ${PREFIX}/bin/${DIST_TARGET_DIR}
-	${INSTALL_PROGRAM} ${BUILDDIR}/chromedriver ${PREFIX}/bin/chromedriver
+	${INSTALL_PROGRAM} ${BUILDDIR}/chromedriver.unstripped ${PREFIX}/bin/chromedriver
 	${INSTALL_MAN} ${WRKSRC}/chrome/app/resources/manpage.1.in ${PREFIX}/man/man1/chrome.1
 	@perl -pi -e "s,\@\@PACKAGE\@\@,chromium,g;s,\@\@MENUNAME\@\@,Chromium Web Browser,g" \
 		${PREFIX}/man/man1/chrome.1
@@ -252,6 +255,8 @@ do-install:
 .for f in libVkICD_mock_icd
 	${INSTALL_DATA} ${BUILDDIR}/${f}.so ${PREFIX}/${DIST_TARGET_DIR}
 .endfor
+	${INSTALL_DATA} ${BUILDDIR}/libvulkan.so.1 \
+		${PREFIX}/${DIST_TARGET_DIR}/libvulkan.so
 
 .if ${MACHINE_ARCH} != "aarch64"
 	# SwiftShader
