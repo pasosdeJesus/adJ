@@ -5,7 +5,7 @@ COMMENT=	Tipos de letra para aprender a leer y escribir
 V=1.1
 PKGNAME=	TiposLectoEscritura-$V
 DISTNAME=	TiposLectoescritura-$V
-REVISION=	1
+REVISION=	2
 CATEGORIES=	fonts
 
 HOMEPAGE=	http://structio.sourceforge.net/
