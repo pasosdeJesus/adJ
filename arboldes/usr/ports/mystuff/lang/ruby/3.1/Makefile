@@ -1,6 +1,6 @@
 # $OpenBSD: Makefile,v 1.7 2021/10/08 14:12:36 jeremy Exp $
 
-VERSION =		3.1.0
+VERSION =		3.1.1
 DISTNAME =		ruby-${VERSION}
 SHARED_LIBS =		ruby31	0.0
 NEXTVER =		3.2
