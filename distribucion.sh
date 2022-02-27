@@ -804,19 +804,6 @@ if (test "$sn" = "s") then {
   # Deben estar en mystuff
 
 
-  paquete ruby paquetes "ruby ruby31-ri_docs" 3.1
-  paquete firefox-esr
-  paquete libxslt
-  paquete libxml
-  paquete zsh
-  paquete gnutls
-  paquete samba
-  paquete node
-  paquete quirks
-  paquete postgresql
-  paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 8.0
-
-  exit 1
   # Todo lo de perl tuvo que recompilarse
   # evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
   # Si por ejemplo es:
@@ -997,18 +984,22 @@ if (test "$sn" = "s") then {
   #paquete libgcrypt
   paquete libssh
   paquete libxml
+  paquete libxslt
   paquete lz4
   paquete mariadb-client paquetes "mariadb-client mariadb-server" 
   #paquete mpg123
   paquete mutt
   #paquete nginx
+  paquete node
   #paquete oniguruma 
+  paquete quirks
   #paquete pcre2 
   paquete python paquetes "python" "2.7"
   paquete python paquetes "python" "3.8"
   paquete rsync
   #paquete unzip
   paquete webkitgtk4
+  paquete zsh
 
   ###  
   # Recompilados de estable que usan xlocale (y pueden cerrar fallas)

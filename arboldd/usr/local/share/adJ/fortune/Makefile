@@ -1,5 +1,5 @@
 
-STRFILE= /usr/src/games/fortune/strfile/strfile versiculos versiculos.dat
+STRFILE= /usr/src/games/fortune/strfile/obj/strfile versiculos versiculos.dat
 
 all: versiculos.dat
 

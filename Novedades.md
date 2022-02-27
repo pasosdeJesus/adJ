@@ -3,7 +3,7 @@ Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
 
 ### Versión: 7.0
-Fecha de publicación: 25/Feb/2022
+Fecha de publicación: 26/Feb/2022
 
 Puede ver novedades respecto a OpenBSD en:
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_7_0/Novedades_OpenBSD.md>
@@ -47,48 +47,66 @@ Puede ver las diversas versiones publicadas en:
 
 Novedades tomadas de <https://www.openbsd.org/70.html> 
 
-* Aplicados parches de seguridad hasta el x provenientes de 
+* Aplicados parches de seguridad hasta el 24.Feb.2022 provenientes de 
   OpenBSD que incluyen soluciones a fallas
 * Controladores ampliados o mejorados para amd64
-	* Red:
-		* Inalámbrica: 
-		* Ethernet: 
-    * SFP: 
-	* Vídeo:
-	* Sensores y otros:
-
+  * CPU: Se puede habilitar modo turbo poniendo hw.setperf en 100 (su operación
+    normal es en 99). Corrección a fallas con TLB.
+  * Tarjetas Ethernet: Ampliado `re`  para soportar 
+    RTL8168FP/RTL8111FP/RTL8117, Ampliado 
+    `brgphy` para soportar BCM5725. Nuevo controlador `aq` para tarjetas
+    PCI Express Ethernet 10G Aquantia.  Nuevo controlador `uaq`  para
+    tarjetas USB Ethernet Aquantia AQC111U/AQC112U.
+  * Tarjetas inalámbricas: Mejorados controladores `iwm`, `iwx` y
+    `bwfm`
+  * Video: Actualizados drm, inteldrm y amdgpu para soportar mejor Tiger Lake,
+    Navi 12, Navi 21 "Sienna Cichlid", Arcturus y Cezanne "Green Sardine" Ryzen
+    5000 APU
+  * Sonido: Mejorado `azalia` con X1 Extreme Gen 1, Thinkpad X1 Extreme, 
+  * Sensores y otros: Controlador `cy` para boards multipuertos seriales 
+    Cyclom-4Y, Cyclom-8Y y Cyclom-16Y.
 * Mejoras a herramientas de Red
-  * 
-  * 
-
+  * OpenSMTDP 7.0.0
+  * Mejoras a bgpd, pf e IPSEC
+  * DHCP ahora es manejado por dhcpleased
 * Seguridad
-	* 
-
+  * ssh actualizado a la versión 8.8 que por ejemplo deshabilita firmas RSA
+    que usan condensados SHA-1. Avanza en remplazar SCP/RCP con SFTP cuando
+    se use scp.
+  * libressl actualizado a la versión 3.4.1 que amplió el API para soportar
+    OpenSSL 1.1.1 TLSv1.3 y habilita un nuvo validador X.509
 * Otros
-  * 
+  * Seudo-dispositivo `dt` habilitado de manera predeterminada y 
+    la herramienta asociada `btrace` mejorada para pemitir
+    depuración dinámica del kernel. 
+  * Mejoras a SMP por ejemplo eliminando candados en algunas operaciones
+  * Mejoras a VMM/VMD
+  * Mejoras a tmux
 
 * El sistema base incluye mejoras a componentes auditados y mejorados 
   como, `llvm 11.1.0`,  `Xenocara` (basado en `Xorg` 7.7),
   `perl 5.32` 
-* El repositorio de paquetes de OpenBSD cuenta con 11310 para amd64
+* El repositorio de paquetes de OpenBSD cuenta con 11325 para amd64
 
 
 ### 2.2 Paquetes 
 
 * Para cerrar fallas se usan las versiones más recientes preparadas
-  por OpenBSD de: `php`, `samba`,  `firefox-esr`, `colorls`
+  por OpenBSD de: `zsh`, `node`, `php`, `libxml`, `libxslt`, 
+  `gnutls`, `firefox-esr`, `samba`, `colorls`, `quirks`,
+  `webkitgtk4`
 
 * Algunos paquetes típicos y su versión: `dovecot 2.3.16p1v0`,
-  `chromium 93.0.4577.82`, `firefox-esr 91.4.1`, `libreoffice 7.2.12`,
-  `nginx 1.20.1`, `mariadb 10.6.4`, `node 12.22.6`, `python 3.8.12`,
-  `neovim 0.5.0`, `zsh 5.8`
+  `chromium 93.0.4577.82p1`, `firefox-esr 91.6.0`, `libreoffice 7.2.1.2v0`,
+  `nginx 1.20.1p0`, `mariadb 10.6.4p2v1`, `node 12.22.9p0`, `python 3.8.12`,
+  `neovim 0.5.0`, `zsh 5.8.1`
 
 
 ## 3. NOVEDADES RESPECTO A ADJ 6.9 PROVENIENTES DE PASOS DE JESÚS
 
 ### 3.1 Instalador y documentación
 
-* Documentación actualizada (que ahora usa `pandoc` de portes de OpenBSD): 
+* Documentación actualizada 
 	* `basico_adJ`: 
     <http://pasosdejesus.github.io/basico_adJ/>
   * `usuario_adJ` 
@@ -115,11 +133,10 @@ Novedades tomadas de <https://www.openbsd.org/70.html>
     * 
   * Mejoras al diseño visual con actualización a Bootsrap 5:
     * 
-* evangelios 0.9 ahora incluye marco strong para la traducción al libro de
-  Romanos.
+* evangelios 0.9
 * Adaptados de propuestas de portes para OpenBSD-current:
-  * `postgresql 14.1`
-  * `ruby-3.1`
+  * `postgresql 14.2`
+  * `ruby-3.1.1`
 * Portes más actualizados que los disponibles en OpenBSD:
   * `ocaml 4.12`, `ocamlbuild`, `findlib`, `dune`, `hevea`, `postgis`
 * Se han recompilado los siguientes para aprovechar `xlocale`:
