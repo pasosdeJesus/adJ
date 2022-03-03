@@ -3,7 +3,7 @@ Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
 
 ### Versión: 7.0
-Fecha de publicación: 26/Feb/2022
+Fecha de publicación: 3/Mar/2022
 
 Puede ver novedades respecto a OpenBSD en:
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_7_0/Novedades_OpenBSD.md>
@@ -126,14 +126,28 @@ Novedades tomadas de <https://www.openbsd.org/70.html>
   beta 16 incluido en adJ 6.9 se describen a continuación. Agradecimiento por
   algunas de las novedades a Luis Alejandro Cruz:
   * Mejoras en consultas, reportes y conteos
-    *
-  * Mejoras en sistematización y en importación 
-    *
-  * Tablas básicas
-    * 
-  * Mejoras al diseño visual con actualización a Bootsrap 5:
-    * 
-* evangelios 0.9
+    * En conteo de victimizaciones individuales agrega código DIVIPOLA del
+      departamento al desagregar por departamento
+  * Mejoras a datos básicos
+    * Se actualizó la división política de Colombia al DIVIPOLA 2021 corregido,
+      ver un resumen ejecutivo de los cambios
+  * Seguridad
+    * Más herramientas para análisis estático (SAST) corriendo como tareas de
+      integración continua para auditar seguridad de fuentes con cada cambio.
+    * Pruebas de control de acceso extensas con minitest (1037 pruebas)
+    * Pruebas de regresión con sideex mejoradas (224 casos de prueba)
+    * Se completó auditoria a la aplicación y sus motores con base en OWASP Top
+      Ten, ver comentarios de lo auditado.
+  * Mejoras al proceso de desarrollo de software
+    * Aumentada cobertura de las pruebas de regresión automáticas con minitest
+      (promedio entre motores y aplicación del 57%).
+    * Mejorada integración continua en github y gitlab y reportes de calidad 
+      del código en codeclimate
+    * Documentación de la API en
+      <https://github.com/pasosdeJesus/sivel2/blob/main/doc/API_sivel2.md>
+  * Soluciones a diversas fallas (e.g ortografía, validación DTD,filtro por
+    sector social para autenticados, no se pierden datos deshabilitados 
+    elegidos en cuadro de selección múltiple o sencilla)
 * Adaptados de propuestas de portes para OpenBSD-current:
   * `postgresql 14.2`
   * `ruby-3.1.1`

@@ -2,7 +2,7 @@
 
 # Port in the public domain.
 
-VERSION=2.0b16
+VERSION=2.0
 #REVISION=1
 DISTNAME=v${VERSION}
 PKGNAME=sivel-v${VERSION}
@@ -16,7 +16,7 @@ DISTFILES=v${VERSION}${EXTRACT_SUFX}
 #DCOMP=sivel2-${VERSION}
 SIVEL_RAIZ ?= htdocs/sivel2
 
-RUN_DEPENDS += lang/ruby/3.0
+RUN_DEPENDS += lang/ruby/3.1
 #BUILD_DEPENDS += www/phantomjs
 
 
