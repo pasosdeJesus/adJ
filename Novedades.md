@@ -118,7 +118,8 @@ Novedades tomadas de <https://www.openbsd.org/70.html>
 
 * Chromium recompilado con llave de Pasos de Jesús.  Ahora permite autenticar
   y usar sitios como https://drive.google.com  --si tiene problemas para
-  autenticarse intente desde un nuevo perfil .
+  autenticarse intente desde un nuevo perfil (obligatorio por ejemplo si cambia
+  su clave en gmail).
 * Además de chromium incluimos `firefox-esr` que también ha resultado
   bastante estable.
 
