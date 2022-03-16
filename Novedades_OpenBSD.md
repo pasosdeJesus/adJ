@@ -92,24 +92,24 @@ Con respecto a OpenBSD 7.0 las novedades son:
 
 * Paquetes
 	* Retroportados para cerrar fallas y/o actualizar y/o usar xlocale:
-    ruby-3.0.2, chromium-90, 
-    postgresql-server, postgresql-client, postgresql-contrib, 
-    postgresql-docs, postgresql-previous, postgis
+    ruby-3.1.1, 
+    postgresql-server-14.2, postgresql-client, postgresql-contrib, 
+    postgresql-docs, postgresql-previous, postgis-3.1.4
 	* Se recompilaron de portes estables recientes para cerrar 
 	  fallas o usar xlocale: 
-    curl, dovecot, dtc, firefox-esr, flac, gdal, gnutls, libssh, libxml, lz4,
-    mariadb-client mariadb-server, mutt, python 2.7 y 3.8, php,
-    rsync, samba, webkitgtk4
+    chromium, curl, dovecot, dtc, firefox-esr, flac, gnutls, libssh, 
+    libxml, libxslt, lz4, mariadb-client, mariadb-server, mutt, node-12.22.9p0,
+    python 2.7.18p3 y 3.8.12, php 8.0.16, rsync, samba, webkitgtk4, zsh
 	* Recompilados todos los paquetes de perl
 	* Modificados o recompilados para usar xlocale
-		* libunistring
+		* glib2, libunistring, vlc
 	* Adaptados de portes estables pero mejorados para adJ:
 		* colorls	Ordena alfabeticamente de acuerdo a locale
 		* hexedit 	Soporta tamaños de archivos más grandes
 		* xfe		Soporta paquetes tgz
     * ocaml 4.12, ocamlbuild, findlib, dune, hevea
 	* Unicos en adJ 
-		* emulators/realboy lang/ocaml-labltk textproc/biblesync
+		* emulators/realboy , textproc/biblesync
 		textproc/sword textproc/bibletime 
 		x11/fbdesk textproc/po4a textproc/p5-SGMLNpm
 	* Únicos en adJ liderados por Pasos de Jesús
