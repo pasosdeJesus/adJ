@@ -2,15 +2,15 @@
 # Variables de configuración para generar distribución Aprendiendo de Jesús
 # Dominio público. 2020. vtamara@pasosdeJesus.org
 
-V=7.0
-VESP=""
+V=7.1
+VESP="a1"
 # Versión que se está desarrollando
 
 VPKGPATH=$V
-VPKGPATH=7.0
+VPKGPATH=snapshots
 
 VP=`echo $V | sed -e "s/[.]//g"`
-VP=70
+VP=71
 VU=`echo $V | sed -e "s/[.]/_/g"`
 VNUM=`echo $V | sed -e "s/\.//g"`
 VNUMS=`expr $VNUM + 1`

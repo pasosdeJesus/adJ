@@ -1110,6 +1110,8 @@ if (test "$sn" = "s") then {
   arcdis="tmp/disponibles.txt";
   arcdis2="tmp/disponibles2.txt";
 
+  echo "Extrayendo paquetes de $PKG_PATH"
+
   pftp=`echo $PKG_PATH | sed -e "s/^ftp:.*/ftp/g;s/^http:.*/http/g"`;
   echo pftp $pftp
 

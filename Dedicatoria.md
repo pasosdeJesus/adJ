@@ -1,11 +1,22 @@
 
-Agradezco a Dios porque su Santo Espíritu vive en mí, a pesar de mis
-errores, para transformarme por su amor a su buen propósito.
-  Vladimir Támara Patiño. 28.Sep.2021
+Él es quien perdona todas tus iniquidades,
 
------
+El que sana todas tus dolencias;
 
-¿No sabéis que sois templo de Dios y que
-el Espíritu de Dios habita en vosotros?
+El que rescata del hoyo tu vida,
 
-1 Cor 3:16
+El que te corona de favores y misericordias;
+
+El que sacia de bien tu boca
+
+De modo que te rejuvenezcas como el águila.
+
+Salmo 103:3-5
+
+---
+
+Agradezco a Dios por perdonar mis iniquidades  y oro para ser misericordioso
+como Él
+  Vladimir Támara Patiño. 17.Mar.2022
+
+
