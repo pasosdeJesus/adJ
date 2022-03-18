@@ -3007,7 +3007,8 @@ for i in ruby19-railties-3.1.3 ruby19-actionmailer-3.1.3 \
     ruby19-hike-1.2.1 ruby19-arel-2.2.1 ruby19-rack-mount-0.8.3 \
     ruby19-thor-0.14.6p1 ruby19-activesupport-3.1.3 \
     ruby19-actionmailer-3.1.3 ruby19-sprockets-2.0.3 ruby19-rack-cache-1.1 \
-    ruby19-actionpack-3.1.3 ruby-2.3.1 ruby23-ri-docs; do
+    ruby19-actionpack-3.1.3 ruby-2.3.1 ruby23-ri-docs ruby ruby30 ruby30-gdbm \
+    ruby30-ri_docs; do
 	pkg_delete -I -D dependencies $i >> /var/www/tmp/inst-adJ.bitacora 2>&1
 done
 
@@ -3027,11 +3028,11 @@ EOF
 	chown $uadJ:$uadJ /home/$uadJ/.irbrc
 } fi;
 
-VRUBY=3.0
+VRUBY=3.1
 VRUBYSP=`echo $VRUBY | sed -e "s/\.//g"`
 echo "* Configurar ruby-$VRUBY" >> /var/www/tmp/inst-adJ.bitacora;
 uruby=$uadJ
-for vrelim in 2.3 2.4 2.5 2.6; do
+for vrelim in 2.3 2.4 2.5 2.6 2.7 3.0; do
 	v=`(cd /var/db/pkg/; ls) | grep ruby-$vrelim`
 	if (test -d /var/www/bundler/ruby/$vrelim/bundler/gems/ -o -d /usr/local/lib/ruby/$vrelim -o "$v" != "") then {
 		if (test -d /var/www/bundler/ruby/$vrelim) then {
@@ -3292,6 +3293,8 @@ echo "Eliminando problemáticos" >> /var/www/tmp/inst-adJ.bitacora
 pkg_delete -I -D dependencies libstdc++ >> /var/www/tmp/inst-adJ.bitacora  2>&1
 pkg_delete -I -D dependencies lua >> /var/www/tmp/inst-adJ.bitacora  2>&1
 pkg_delete -I -D dependencies gtk+2 >> /var/www/tmp/inst-adJ.bitacora  2>&1
+
+pkg_delete -I -D dependencies postgresql-docs
 
 echo "Instalando algunos comunes" >> /var/www/tmp/inst-adJ.bitacora 
 pkg_add -I -D repair -D updatedepends -D update -D libdepends -r $PKG_PATH/sdl*tgz $PKG_PATH/libxml*tgz $PKG_PATH/libgpg-error*tgz $PKG_PATH/libart-*.tgz  >> /var/www/tmp/inst-adJ.bitacora 2>&1
