@@ -1,8 +1,8 @@
-diff -ruN src63-orig/usr.sbin/pkg_add/OpenBSD/State.pm src/usr.sbin/pkg_add/OpenBSD/State.pm
---- src63-orig/usr.sbin/pkg_add/OpenBSD/State.pm	Tue Feb 27 17:46:53 2018
-+++ src/usr.sbin/pkg_add/OpenBSD/State.pm	Thu May 17 20:18:19 2018
-@@ -174,7 +174,7 @@
- 	exit($code);
+diff -ruN src71-orig/usr.sbin/pkg_add/OpenBSD/BaseState.pm src/usr.sbin/pkg_add/OpenBSD/BaseState.pm > /tmp/x
+--- src71-orig/usr.sbin/pkg_add/OpenBSD/BaseState.pm	Thu Mar 17 23:12:55 2022
++++ src/usr.sbin/pkg_add/OpenBSD/BaseState.pm	Fri Mar 18 17:33:56 2022
+@@ -30,7 +30,7 @@
+ {
  }
  
 -my $forbidden = qr{[^[:print:]\s]};

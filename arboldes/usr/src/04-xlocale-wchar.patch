@@ -3353,16 +3353,16 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src55-orig/lib/libc/locale/xlocal
 +
 +	if (NULL == locale) {
 +		realLocale = "C";
-+	} else if ('\0' == locale[0]) {
++	} else if ('\0' == locale[0] || (realLocale != NULL && realLocale[0] == '\0')) {
 +		useenv = 1;
 +	}
 +
 +	/* In FreeBSD mask start in bit 1, in OpenBSD in bit 2, see locale.h */
 +        mask >>= 1;
 +	for (type=0 ; type<XLC_LAST ; type++) {
-+		if (mask & 1) {
++		if ((mask & 1) && (__xlocale_global_locale.components[type] != 0)) {
 +			if (useenv) {
-+				realLocale = _get_locname(type, "");
++				realLocale = _get_locname(type + 1, "");
 +			}
 +			new->components[type] =
 +			     constructors[type](realLocale, new);
@@ -3475,7 +3475,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src55-orig/lib/libc/locale/xlocal
 +	printf("numeric_locale_changed=%i\n", loc->numeric_locale_changed);
 +	printf("header.retain_count=%li ", loc->header.retain_count);
 +	printf("header.destructor=%p ", loc->header.destructor);
-+	//printf("mblen=%p\n", loc->mblen);
++	printf("\n");
 +
 +	for (type=0 ; type<XLC_LAST ; type++) {
 +		printf("t=%i, %p", type, loc->components[type]);
@@ -3704,7 +3704,6 @@ diff -ruN src54-num/lib/libc/locale/xlocale_private.h src/lib/libc/locale/xlocal
 +
 +#define ENCODING_LEN 31
 +#define CATEGORY_LEN 11
-+
 +
 +#endif
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src54-num/regress/lib/libc/locale/Makefile src/regress/lib/libc/locale/Makefile

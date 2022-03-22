@@ -1675,8 +1675,6 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/xlocal
 +};
 +
 +_TimeLocale *__get_current_time_locale(locale_t loc);
- 
- #endif
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regress/lib/libc/locale/check_xlocale/check_xlocale.c
 --- src54-x6/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Sat Feb  9 14:26:54 2013
 +++ src/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Tue Dec  3 16:12:45 2013

@@ -368,22 +368,18 @@ diff -u src-ant/lib/libc/stdio/fwscanf.c src/lib/libc/stdio/fwscanf.c
 diff -u src-ant/lib/libc/stdio/fputws.c src/lib/libc/stdio/fputws.c
 --- src-ant/lib/libc/stdio/fputws.c	Thu May 15 05:35:00 2014
 +++ src/lib/libc/stdio/fputws.c	Thu May 15 05:35:39 2014
-@@ -33,19 +33,23 @@
+@@ -33,17 +33,19 @@
  #include <errno.h>
  #include <stdio.h>
  #include <wchar.h>
 +#include <xlocale.h>
-+
  #include "local.h"
 +#include "locale/xlocale_private.h"
  #include "fvwrite.h"
  
  int
--fputws(ws, fp)
-+fputws_l(ws, fp, loc)
- 	const wchar_t * __restrict ws;
- 	FILE * __restrict fp;
-+	locale_t loc;
+-fputws(const wchar_t * __restrict ws, FILE * __restrict fp)
++fputws_l(const wchar_t * __restrict ws, FILE * __restrict fp, locale_t loc)
  {
  	FLOCKFILE(fp);
  	_SET_ORIENTATION(fp, 1);
@@ -394,7 +390,7 @@ diff -u src-ant/lib/libc/stdio/fputws.c src/lib/libc/stdio/fputws.c
  			FUNLOCKFILE(fp);
  			return (-1);
  		}
-@@ -54,4 +58,12 @@
+@@ -52,5 +54,13 @@
  	FUNLOCKFILE(fp);
  
  	return (0);
@@ -407,6 +403,7 @@ diff -u src-ant/lib/libc/stdio/fputws.c src/lib/libc/stdio/fputws.c
 +{
 +	return fputws_l(ws, fp, __get_locale());
  }
+ DEF_STRONG(fputws);
 diff -u src-ant/lib/libc/stdio/fgetws.c src/lib/libc/stdio/fgetws.c
 --- src-ant/lib/libc/stdio/fgetws.c	Thu May 15 05:35:00 2014
 +++ src/lib/libc/stdio/fgetws.c	Thu May 15 05:35:39 2014
@@ -1184,15 +1181,14 @@ diff -u src-ant/lib/libc/stdlib/strtoull.c src/lib/libc/stdlib/strtoull.c
 diff -u src-ant/lib/libc/stdlib/atoll.c src/lib/libc/stdlib/atoll.c
 --- src-ant/lib/libc/stdlib/atoll.c	Thu May 15 07:59:00 2014
 +++ src/lib/libc/stdlib/atoll.c	Thu May 15 08:00:28 2014
-@@ -29,10 +29,17 @@
+@@ -29,9 +29,16 @@
   */
  
  #include <stdlib.h>
 +#include <xlocale.h>
  
  long long
- atoll(str)
- 	const char *str;
+ atoll(const char *str)
  {
  	return(strtoll(str, (char **)NULL, 10));
 +}
