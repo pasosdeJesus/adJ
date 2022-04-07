@@ -1,9 +1,7 @@
-$OpenBSD: patch-third_party_boringssl_src_crypto_rand_extra_arc4random_c,v 1.1 2018/07/25 06:53:36 robert Exp $
-
 Index: third_party/boringssl/src/crypto/rand_extra/arc4random.c
 --- third_party/boringssl/src/crypto/rand_extra/arc4random.c.orig
 +++ third_party/boringssl/src/crypto/rand_extra/arc4random.c
-@@ -0,0 +1,29 @@
+@@ -0,0 +1,33 @@
 +/* Copyright (c) 2018, Robert Nagy <robert@openbsd.org>
 + *
 + * Permission to use, copy, modify, and/or distribute this software for any
@@ -27,6 +25,10 @@ Index: third_party/boringssl/src/crypto/rand_extra/arc4random.c
 +#include <stdlib.h>
 +
 +#include "../fipsmodule/rand/internal.h"
++
++void CRYPTO_sysrand_for_seed(uint8_t *out, size_t requested) {                 
++  CRYPTO_sysrand(out, requested);
++}                                                                              
 +
 +void CRYPTO_sysrand(uint8_t *out, size_t requested) {
 +  arc4random_buf(out, requested);

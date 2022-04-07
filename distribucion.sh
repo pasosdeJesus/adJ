@@ -1157,7 +1157,7 @@ if (test "$sn" = "s") then {
   if (test "$autoMasPaquetesInv" = "s") then {
     inv="-r"
   } fi;
-  grep ".-\[v\]" Contenido.txt | sed -e "s/-\[v\]\([-a-zA-Z_0-9]*\).*/-[0-9][0-9alphabetcdfgmpruvSTABLERC._+]*\1.tgz/g" | sort $inv > tmp/esperados.txt
+  grep ".-\[v\]" Contenido.txt | sed -e "s/-\[v\]\([-a-zA-Z_0-9]*\).*/-[0-9][0-9alphabetcdfgnmpruvSTABLERC._+]*\1.tgz/g" | sort $inv > tmp/esperados.txt
   ne=`(ls $V$VESP-$ARQ/paquetes/ ; ls $V$VESP-$ARQ/sivel/*tgz) | grep -v -f tmp/esperados.txt`;
   if (test "$ne" != "") then {
     echo "Los siguientes paquetes presentes en el directorio $V$VESP-$ARQ/paquetes no están entre los esperados:" | tee -a /var/www/tmp/distrib-adJ.bitacora;

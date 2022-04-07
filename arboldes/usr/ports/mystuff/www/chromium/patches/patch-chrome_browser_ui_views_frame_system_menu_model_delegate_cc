@@ -1,5 +1,3 @@
-$OpenBSD: patch-chrome_browser_ui_views_frame_system_menu_model_delegate_cc,v 1.8 2021/09/01 16:54:39 robert Exp $
-
 Index: chrome/browser/ui/views/frame/system_menu_model_delegate.cc
 --- chrome/browser/ui/views/frame/system_menu_model_delegate.cc.orig
 +++ chrome/browser/ui/views/frame/system_menu_model_delegate.cc
@@ -7,8 +5,8 @@ Index: chrome/browser/ui/views/frame/system_menu_model_delegate.cc
  
  // TODO(crbug.com/1052397): Revisit the macro expression once build flag switch
  // of lacros-chrome is complete.
--#if defined(OS_LINUX) || BUILDFLAG(IS_CHROMEOS_LACROS)
-+#if defined(OS_LINUX) || BUILDFLAG(IS_CHROMEOS_LACROS) || defined(OS_BSD)
+-#if BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS_LACROS)
++#if BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS_LACROS) || BUILDFLAG(IS_BSD)
  #include "chrome/common/pref_names.h"
  #include "components/prefs/pref_service.h"
  #endif
@@ -16,17 +14,17 @@ Index: chrome/browser/ui/views/frame/system_menu_model_delegate.cc
  bool SystemMenuModelDelegate::IsCommandIdChecked(int command_id) const {
  // TODO(crbug.com/1052397): Revisit the macro expression once build flag switch
  // of lacros-chrome is complete.
--#if defined(OS_LINUX) || BUILDFLAG(IS_CHROMEOS_LACROS)
-+#if defined(OS_LINUX) || BUILDFLAG(IS_CHROMEOS_LACROS) || defined(OS_BSD)
+-#if BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS_LACROS)
++#if BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS_LACROS) || BUILDFLAG(IS_BSD)
    if (command_id == IDC_USE_SYSTEM_TITLE_BAR) {
      PrefService* prefs = browser_->profile()->GetPrefs();
      return !prefs->GetBoolean(prefs::kUseCustomChromeFrame);
-@@ -60,7 +60,7 @@ bool SystemMenuModelDelegate::IsCommandIdEnabled(int c
+@@ -62,7 +62,7 @@ bool SystemMenuModelDelegate::IsCommandIdEnabled(int c
  bool SystemMenuModelDelegate::IsCommandIdVisible(int command_id) const {
  // TODO(crbug.com/1052397): Revisit the macro expression once build flag switch
  // of lacros-chrome is complete.
--#if defined(OS_LINUX) || BUILDFLAG(IS_CHROMEOS_LACROS)
-+#if defined(OS_LINUX) || BUILDFLAG(IS_CHROMEOS_LACROS) || defined(OS_BSD)
+-#if BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS_LACROS)
++#if BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS_LACROS) || BUILDFLAG(IS_BSD)
    bool is_maximized = browser_->window()->IsMaximized();
    switch (command_id) {
      case IDC_MAXIMIZE_WINDOW:

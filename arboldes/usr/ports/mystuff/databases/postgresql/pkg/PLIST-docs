@@ -1,6 +1,3 @@
-@comment $OpenBSD: PLIST-docs,v 1.100 2021/02/11 17:08:42 pea Exp $
-include/postgresql/server/access/visibilitymapdefs.h
-include/postgresql/server/executor/nodeMemoize.h
 share/doc/postgresql/
 share/doc/postgresql/COPYRIGHT
 share/doc/postgresql/HISTORY
@@ -705,9 +702,9 @@ share/doc/postgresql/html/regress-run.html
 share/doc/postgresql/html/regress-tap.html
 share/doc/postgresql/html/regress-variant.html
 share/doc/postgresql/html/regress.html
-share/doc/postgresql/html/release-${V_MAJOR}-1.html
-share/doc/postgresql/html/release-${V_MAJOR}-2.html
-share/doc/postgresql/html/release-${V_MAJOR}.html
+share/doc/postgresql/html/release-14-1.html
+share/doc/postgresql/html/release-14-2.html
+share/doc/postgresql/html/release-14.html
 share/doc/postgresql/html/release-prior.html
 share/doc/postgresql/html/release.html
 share/doc/postgresql/html/replication-origins.html

@@ -1,5 +1,3 @@
-# $OpenBSD: unveil.main,v 1.9 2021/09/10 13:36:51 kevlo Exp $
-
 # needed for video(4)
 /dev/video rw
 
@@ -57,6 +55,7 @@
 
 ~/.cache/chromium rwc
 ~/.cache/dconf rwc
+~/.cache/fontconfig rwc
 ~/.cache/thumbnails rwc
 
 ~/.config/chromium rwc

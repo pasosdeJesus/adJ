@@ -1,21 +1,20 @@
-$OpenBSD: patch-sandbox_policy_BUILD_gn,v 1.6 2021/09/01 16:54:40 robert Exp $
-
 Index: sandbox/policy/BUILD.gn
 --- sandbox/policy/BUILD.gn.orig
 +++ sandbox/policy/BUILD.gn
-@@ -32,7 +32,7 @@ component("policy") {
-     "//sandbox:common",
+@@ -35,7 +35,7 @@ component("policy") {
+     "//sandbox/policy/mojom",
    ]
    public_deps = []
 -  if (is_linux || is_chromeos) {
-+  if ((is_linux || is_chromeos) && !is_openbsd) {
++  if ((is_linux || is_chromeos) && !is_bsd) {
      sources += [
        "linux/bpf_audio_policy_linux.cc",
        "linux/bpf_audio_policy_linux.h",
-@@ -82,6 +82,16 @@ component("policy") {
+@@ -88,6 +88,27 @@ component("policy") {
+       "//sandbox/linux:sandbox_services",
        "//sandbox/linux:seccomp_bpf",
        "//sandbox/linux:suid_sandbox_client",
-     ]
++    ]
 +  }
 +  if (is_openbsd) {
 +    sources += [
@@ -24,8 +23,18 @@ Index: sandbox/policy/BUILD.gn
 +    ]
 +    deps += [
 +      "//sandbox:sandbox_buildflags",
++      "//ui/gfx/x",
 +    ]
 +    libs = [ "util" ]
++  }
++  if (is_freebsd) {
++    sources += [
++      "freebsd/sandbox_freebsd.cc",
++      "freebsd/sandbox_freebsd.h",
++    ]
++    deps += [
++      "//sandbox:sandbox_buildflags",
++      "//ui/gfx/x",
+     ]
    }
    if (is_chromeos_ash) {
-     sources += [

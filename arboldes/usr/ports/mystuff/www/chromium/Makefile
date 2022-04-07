@@ -1,25 +1,23 @@
-# $OpenBSD: Makefile,v 1.586 2021/09/14 06:19:48 robert Exp $
-
 BROKEN-powerpc64 =	Check failed: false. OS architecture not handled. (powerpc64)
 
 USE_WXNEEDED=		Yes
 
-.include <bsd.port.arch.mk>
-.if ${MACHINE_ARCH} == "i386"
-DPB_PROPERTIES=		lonesome
-.else
 DPB_PROPERTIES=		parallel parallel2
-.endif
 
 COMMENT=		Chromium browser
 
-V=			93.0.4577.82
-
-REVISION=		1
+V=			99.0.4844.82
+REVISION=		0
 
 DISTNAME=		chromium-${V}
 
-DISTFILES+=		chromium-${V}${EXTRACT_SUFX}
+DISTFILES+=		${EXTRACT_ONLY} \
+			${REGRESS_DISTFILES}
+
+REGRESS_DISTFILES+=	chromium-${V}-testdata${EXTRACT_SUFX} \
+			test_fonts-cd96fc55dc243f6c6f4cb63ad117cad6cd48dceb.tar.gz:0
+
+EXTRACT_ONLY=		chromium-${V}${EXTRACT_SUFX}
 
 CATEGORIES=		www
 
@@ -40,7 +38,6 @@ MASTER_SITES=	https://commondatastorage.googleapis.com/chromium-browser-official
 MASTER_SITES0=	http://nerd.hu/distfiles/
 
 MODULES=	lang/python
-MODPY_VERSION =	${MODPY_DEFAULT_VERSION_3}
 
 COMPILER =	base-clang ports-clang ports-gcc
 
@@ -78,6 +75,7 @@ WANTLIB += iconv lzma
 WANTLIB += fido2 cbor usbhid crypto
 WANTLIB += gbm xkbcommon
 WANTLIB += tiff xshmfence
+WANTLIB += lzo2
 
 RUN_DEPENDS=	devel/xdg-utils \
 		devel/desktop-file-utils \
@@ -94,7 +92,7 @@ BUILD_DEPENDS=	archivers/bzip2 \
 		sysutils/pciutils \
 		devel/ninja \
 		x11/gtk+3 \
-		x11/py-xcbgen \
+		x11/py-xcbgen${MODPY_FLAVOR} \
 		${MODGCC4_CPPDEP}
 LIB_DEPENDS=	devel/harfbuzz \
 		graphics/tiff \
@@ -113,7 +111,19 @@ BUILDTYPE=	Release
 SUBST_VARS+=	WRKSRC WRKDIR DEBUGFLAG
 
 ALL_TARGET=		chrome chromedriver
-TEST_TARGET=		base_unittests
+TEST_TARGET=		base_unittests \
+			blink_unittests \
+			chromedriver_unittests \
+			components_unittests \
+			content_unittests \
+			crypto_unittests \
+			headless_unittests \
+			media_unittests \
+			mojo_unittests \
+			net_unittests \
+			printing_unittests \
+			url_unittests
+
 DIST_TARGET_DIR=	chrome
 
 CONFIGURE_STYLE=none # prevent python MODULE from overriding do-build
@@ -130,10 +140,11 @@ GN_ARGS=	enable_nacl=false \
 		is_official_build=true \
 		is_debug=false \
 		is_cfi=false \
-		optimize_webui=false \
+		optimize_webui=true \
 		enable_js_type_check=false \
 		enable_one_click_signin=true \
 		enable_remoting=false \
+		enable_hangout_services_extension=true \
 		use_kerberos=false \
 		use_sndio=true \
 		use_cups=true \
@@ -147,9 +158,15 @@ GN_ARGS=	enable_nacl=false \
 		treat_warnings_as_errors=false \
 		clang_use_chrome_plugins=false \
 		use_allocator=\"none\" \
-		fieldtrial_testing_like_official_build=true \
+		use_allocator_shim=false \
+		disable_fieldtrial_testing_config=true \
 		extra_cppflags=\"-idirafter ${LOCALBASE}/include -idirafter ${X11BASE}/include\" \
-		fatal_linker_warnings=false
+		fatal_linker_warnings=false \
+		use_custom_libcxx=false \
+		enable_wmax_tokens=false \
+		use_thin_lto=false \
+		thin_lto_enable_optimizations=false \
+		use_udev=false
 
 # notyet
 GN_ARGS+=	use_vaapi=false
@@ -166,9 +183,9 @@ PKG_ARGS+=	-Dswiftshader=0
 PKG_ARGS+=	-Dswiftshader=1
 .endif
 
-# Note: these keys are for adJ use ONLY. For your own distribution,
+# Note: these keys are for OpenBSD use ONLY. For your own distribution,
 # please get your own set of keys. It's free!
-GN_ARGS+=	google_api_key=\"AIzaSyC_3Uz69YR1Z2DRLUDf5ZxUJBClHuwrjL\" \
+GN_ARGS+=	google_api_key=\"AIzaSyA015yecfJyWi8UQpneQVrNzIKlxjv4MhI\" \
 		ffmpeg_branding=\"Chrome\" \
 		proprietary_codecs=true
 
@@ -180,7 +197,7 @@ GN_ARGS+=	google_api_key=\"AIzaSyC_3Uz69YR1Z2DRLUDf5ZxUJBClHuwrjL\" \
 DWZ = :
 
 .if ${FLAVOR:Mdebug}
-GN_ARGS+=	symbol_level=2
+GN_ARGS+=	symbol_level=1
 DEBUG_PACKAGES=	${BUILD_PACKAGES}
 .else
 GN_ARGS+=	symbol_level=0
@@ -194,23 +211,18 @@ GN_ARGS+=	is_component_build=false
 
 pre-configure:
 	@ln -sf ${MODPY_BIN} ${WRKDIR}/bin/python
-	@ln -sf ${MODPY_BIN} ${WRKDIR}/bin/python3
 .for _arch in x64 ia32 arm64
 .  for _dir in avcodec avformat avutil
 	@cp -pR ${WRKSRC}/third_party/ffmpeg/chromium/config/Chrome/linux/${_arch}/lib${_dir} \
 		${WRKSRC}/third_party/ffmpeg/chromium/config/Chrome/openbsd/${_arch}/lib${_dir}
 .  endfor
 .endfor
-	@mkdir -p ${WRKSRC}/media/audio/sndio ${WRKSRC}/media/audio/openbsd
-	@cp ${FILESDIR}/hid_{service,connection}_fido.{cc,h} ${WRKSRC}/services/device/hid
-	@cp ${FILESDIR}/sndio_{out,in}put.{cc,h} ${WRKSRC}/media/audio/sndio
-	@cp ${FILESDIR}/audio_manager_openbsd.{cc,h} ${WRKSRC}/media/audio/openbsd
 	@mkdir -p ${WRKSRC}/third_party/node/openbsd/node-openbsd/bin
 	@ln -sf ${TRUEPREFIX}/bin/node ${WRKSRC}/third_party/node/openbsd/node-openbsd/bin/node
 	${SUBST_CMD} ${WRKSRC}/build/gn_run_binary.py ${WRKSRC}/v8/tools/run.py \
 		${WRKSRC}/tools/protoc_wrapper/protoc_wrapper.py \
-		${WRKSRC}/build/util/python2_action.py \
-		${WRKSRC}/third_party/blink/renderer/build/scripts/run_with_pythonpath.py
+		${WRKSRC}/third_party/blink/renderer/build/scripts/run_with_pythonpath.py \
+		${WRKSRC}/base/third_party/libevent/BUILD.gn
 
 # Configuration consists of three steps:
 # 1. replace the specified bundled libraries with hooks to use the system libs
@@ -285,5 +297,20 @@ do-install:
     unveil.utility_network unveil.utility_video
 	${INSTALL_DATA} ${FILESDIR}/${f} ${PREFIX}/share/examples/chromium
 .endfor
+
+pre-test:
+.for _d in ${REGRESS_DISTFILES:C/:[0-9]$//}
+	@${ECHO_MSG} "Extracting ${_d}"
+	@case ${_d} in \
+	*testdata*.tar.xz) \
+		xzdec <${FULLDISTDIR}/${_d} | ${TAR} -C ${WRKDIR} -xf -;; \
+	*font*.tar.gz) \
+		${GZIP_CMD} -d <${FULLDISTDIR}/${_d} | ${TAR} -C ${WRKDIST}/third_party/test_fonts -xf -;; \
+	esac;
+.endfor
+
+do-test:
+	@cd ${WRKSRC} && env -i ${MAKE_ENV} ninja \
+		-j ${MAKE_JOBS} -C out/${BUILDTYPE} ${TEST_TARGET}
 
 .include <bsd.port.mk>

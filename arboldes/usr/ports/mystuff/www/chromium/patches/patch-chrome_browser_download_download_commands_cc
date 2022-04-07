@@ -1,32 +1,21 @@
-$OpenBSD: patch-chrome_browser_download_download_commands_cc,v 1.25 2021/09/01 16:54:38 robert Exp $
-
 Index: chrome/browser/download/download_commands.cc
 --- chrome/browser/download/download_commands.cc.orig
 +++ chrome/browser/download/download_commands.cc
-@@ -28,7 +28,7 @@
+@@ -27,7 +27,7 @@
  #include "ui/base/clipboard/scoped_clipboard_writer.h"
  
- #if defined(OS_WIN) || defined(OS_LINUX) || defined(OS_CHROMEOS) || \
--    defined(OS_MAC)
-+    defined(OS_MAC) || defined(OS_BSD)
+ #if BUILDFLAG(IS_WIN) || BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS) || \
+-    BUILDFLAG(IS_MAC) || BUILDFLAG(IS_FUCHSIA)
++    BUILDFLAG(IS_MAC) || BUILDFLAG(IS_FUCHSIA) || BUILDFLAG(IS_BSD)
  #include "chrome/browser/ui/browser.h"
  #include "chrome/browser/ui/browser_finder.h"
  #include "chrome/browser/ui/scoped_tabbed_browser_displayer.h"
-@@ -166,7 +166,7 @@ void DownloadCommands::ExecuteCommand(Command command)
+@@ -168,7 +168,7 @@ void DownloadCommands::ExecuteCommand(Command command)
  }
  
- #if defined(OS_WIN) || defined(OS_MAC) || defined(OS_LINUX) || \
--    defined(OS_CHROMEOS)
-+    defined(OS_CHROMEOS) || defined(OS_BSD)
+ #if BUILDFLAG(IS_WIN) || BUILDFLAG(IS_MAC) || BUILDFLAG(IS_LINUX) || \
+-    BUILDFLAG(IS_CHROMEOS) || BUILDFLAG(IS_FUCHSIA)
++    BUILDFLAG(IS_CHROMEOS) || BUILDFLAG(IS_FUCHSIA) || BUILDFLAG(IS_BSD)
  
  Browser* DownloadCommands::GetBrowser() const {
    if (!model_)
-@@ -195,7 +195,7 @@ bool DownloadCommands::CanOpenPdfInSystemViewer() cons
-   return IsDownloadPdf() &&
-          (IsAdobeReaderDefaultPDFViewer() ? is_adobe_pdf_reader_up_to_date
-                                           : true);
--#elif defined(OS_MAC) || defined(OS_LINUX) || defined(OS_CHROMEOS)
-+#elif defined(OS_MAC) || defined(OS_LINUX) || defined(OS_CHROMEOS) || defined(OS_BSD)
-   return IsDownloadPdf();
- #endif
- }

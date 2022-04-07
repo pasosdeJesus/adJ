@@ -1,5 +1,3 @@
-$OpenBSD: patch-ui_views_window_dialog_delegate_cc,v 1.32 2021/09/01 16:54:41 robert Exp $
-
 Index: ui/views/window/dialog_delegate.cc
 --- ui/views/window/dialog_delegate.cc.orig
 +++ ui/views/window/dialog_delegate.cc
@@ -7,8 +5,8 @@ Index: ui/views/window/dialog_delegate.cc
  
  // static
  bool DialogDelegate::CanSupportCustomFrame(gfx::NativeView parent) {
--#if (defined(OS_LINUX) || defined(OS_CHROMEOS)) && \
-+#if (defined(OS_LINUX) || defined(OS_CHROMEOS) || defined(OS_BSD)) && \
+-#if (BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS)) && \
++#if (BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS) || BUILDFLAG(IS_BSD)) && \
      BUILDFLAG(ENABLE_DESKTOP_AURA)
    // The new style doesn't support unparented dialogs on Linux desktop.
    return parent != nullptr;

@@ -1,4 +1,3 @@
-$OpenBSD: patch-net_dns_host_resolver_proc_cc,v 1.10 2021/09/01 16:54:40 robert Exp $
 Index: net/dns/host_resolver_proc.cc
 --- net/dns/host_resolver_proc.cc.orig
 +++ net/dns/host_resolver_proc.cc
@@ -6,10 +5,19 @@ Index: net/dns/host_resolver_proc.cc
  #include "net/dns/dns_util.h"
  #include "net/dns/host_resolver.h"
  
--#if defined(OS_OPENBSD)
+-#if BUILDFLAG(IS_OPENBSD)
 -#define AI_ADDRCONFIG 0
 -#endif
 -
  namespace net {
  
  HostResolverProc* HostResolverProc::default_proc_ = nullptr;
+@@ -177,7 +173,7 @@ int SystemHostResolverCall(const std::string& host,
+                                                 base::BlockingType::WILL_BLOCK);
+ 
+ #if BUILDFLAG(IS_POSIX) && \
+-    !(BUILDFLAG(IS_APPLE) || BUILDFLAG(IS_OPENBSD) || BUILDFLAG(IS_ANDROID))
++    !(BUILDFLAG(IS_APPLE) || BUILDFLAG(IS_BSD) || BUILDFLAG(IS_ANDROID))
+   DnsReloaderMaybeReload();
+ #endif
+   absl::optional<AddressInfo> ai;

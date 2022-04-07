@@ -1,5 +1,3 @@
-# $OpenBSD: Makefile,v 1.279 2021/11/22 13:55:55 espie Exp $
-
 COMMENT-main=	PostgreSQL RDBMS (client)
 COMMENT-server=	PostgreSQL RDBMS (server)
 COMMENT-docs=	PostgreSQL RDBMS documentation
@@ -8,17 +6,13 @@ COMMENT-plpython=Python procedural language for PostgreSQL
 COMMENT-pg_upgrade=Support for upgrading PostgreSQL data from previous version
 
 VERSION=	14.2
-PREV_MAJOR=	13.4
+PREV_MAJOR=	13
 DISTNAME=	postgresql-${VERSION}
 PKGNAME-main=	postgresql-client-${VERSION}
 
-DPB_PROPERTIES=	parallel
+REVISION-server=1
 
-PKGNAME-server=       postgresql-server-${VERSION}
-PKGNAME-docs= postgresql-docs-${VERSION}
-PKGNAME-contrib=postgresql-contrib-${VERSION}
-PKGNAME-plpython=postgresql-plpython-${VERSION}
-PKGNAME-pg_upgrade=postgresql-pg_upgrade-${VERSION}
+DPB_PROPERTIES=	parallel
 
 CATEGORIES=	databases
 SHARED_LIBS=	ecpg		7.10 \
@@ -28,15 +22,15 @@ SHARED_LIBS=	ecpg		7.10 \
 
 HOMEPAGE=	https://www.postgresql.org/
 
-MAINTAINER=	Pierre-Emmanuel Andre <pea@openbsd.org>
+MAINTAINER=	Jeremy Evans <jeremy@openbsd.org>
 
 # BSD
 PERMIT_PACKAGE=	Yes
 
 WANTLIB += c curses crypto m readline ssl z
 
-MASTER_SITES=	https://ftp.postgresql.org/pub/source/v${VERSION}/
-
+MASTER_SITES=	https://ftp.postgresql.org/pub/source/v${VERSION}/ \
+		ftp://ftp.postgresql.org/pub/source/v${VERSION}/
 MULTI_PACKAGES=	-docs -main -server -contrib -pg_upgrade -plpython
 
 MAKE_FILE=	GNUmakefile
