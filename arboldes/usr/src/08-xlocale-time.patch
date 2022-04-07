@@ -1647,26 +1647,12 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/setloc
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/xlocale_private.h src/lib/libc/locale/xlocale_private.h
 --- src54-x6/lib/libc/locale/xlocale_private.h	Sat Feb  9 14:26:54 2013
 +++ src/lib/libc/locale/xlocale_private.h	Tue Dec  3 16:12:45 2013
-@@ -55,7 +55,6 @@
- 	XLC_LAST
- };
- 
--
- /**
-  * Header used for objects that are reference counted.  Objects may optionally
-  * have a destructor associated, which is responsible for destroying the
-@@ -211,7 +210,6 @@
-  */
- #define FIX_LOCALE(l) (l = get_real_locale(l))
- 
--
- struct xlocale_numeric {
- 	struct xlocale_component header;
- 	char *buffer;
-@@ -227,5 +225,13 @@
+@@ -227,6 +227,13 @@
  };
  
  _MonetaryLocale *__get_current_monetary_locale(locale_t loc);
+- 
+- #endif
 +
 +struct xlocale_time {
 +	struct xlocale_component header;
@@ -1675,6 +1661,8 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/xlocal
 +};
 +
 +_TimeLocale *__get_current_time_locale(locale_t loc);
++
+ #endif
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regress/lib/libc/locale/check_xlocale/check_xlocale.c
 --- src54-x6/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Sat Feb  9 14:26:54 2013
 +++ src/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Tue Dec  3 16:12:45 2013
