@@ -6,8 +6,7 @@ DPB_PROPERTIES=		parallel parallel2
 
 COMMENT=		Chromium browser
 
-V=			99.0.4844.82
-REVISION=		0
+V=			100.0.4896.75
 
 DISTNAME=		chromium-${V}
 
@@ -117,12 +116,16 @@ TEST_TARGET=		base_unittests \
 			components_unittests \
 			content_unittests \
 			crypto_unittests \
+			gl_tests \
+			gpu_unittests \
 			headless_unittests \
 			media_unittests \
 			mojo_unittests \
 			net_unittests \
 			printing_unittests \
-			url_unittests
+			skia_unittests \
+			url_unittests \
+			wm_unittests
 
 DIST_TARGET_DIR=	chrome
 
@@ -183,9 +186,9 @@ PKG_ARGS+=	-Dswiftshader=0
 PKG_ARGS+=	-Dswiftshader=1
 .endif
 
-# Note: these keys are for OpenBSD use ONLY. For your own distribution,
+# Note: these keys are for adJ use ONLY. For your own distribution,
 # please get your own set of keys. It's free!
-GN_ARGS+=	google_api_key=\"AIzaSyA015yecfJyWi8UQpneQVrNzIKlxjv4MhI\" \
+GN_ARGS+=	google_api_key=\"AIzaSyC_3Uz69YR1Z2DRLUDf5ZxUJBClHuwrjL\" \
 		ffmpeg_branding=\"Chrome\" \
 		proprietary_codecs=true
 
@@ -273,6 +276,7 @@ do-install:
 .if ${MACHINE_ARCH} != "aarch64"
 	# SwiftShader
 	${INSTALL_DATA_DIR} ${PREFIX}/${DIST_TARGET_DIR}/swiftshader
+	${INSTALL_DATA} ${BUILDDIR}/libvk_swiftshader.so ${PREFIX}/${DIST_TARGET_DIR}
 .for f in libEGL.so libGLESv2.so
 	${INSTALL_DATA} ${BUILDDIR}/swiftshader/${f} ${PREFIX}/${DIST_TARGET_DIR}/swiftshader
 .endfor
