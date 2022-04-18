@@ -1,0 +1,127 @@
+@bin bin/create-hardfork
+@bin bin/dht-server
+@bin bin/fift
+@bin bin/func
+@bin bin/generate-random-id
+@bin bin/lite-client
+@bin bin/pow-miner
+@bin bin/tonlib-cli
+@bin bin/validator-engine
+@bin bin/validator-engine-console
+include/tonlib/
+include/tonlib/tonlib_client_json.h
+include/tonlib/tonlibjson_export.h
+lib/cmake/
+lib/cmake/Tonlib/
+lib/cmake/Tonlib/TonlibConfig.cmake
+lib/cmake/Tonlib/TonlibConfigVersion.cmake
+lib/cmake/Tonlib/TonlibTargets${MODCMAKE_BUILD_SUFFIX}
+lib/cmake/Tonlib/TonlibTargets.cmake
+lib/fift/
+lib/fift/Asm.fif
+lib/fift/Color.fif
+lib/fift/Fift.fif
+lib/fift/GetOpt.fif
+lib/fift/Lisp.fif
+lib/fift/Lists.fif
+lib/fift/Stack.fif
+lib/fift/TonUtil.fif
+@static-lib lib/libtdactor.a
+@static-lib lib/libtddb.a
+@static-lib lib/libtddb_utils.a
+@static-lib lib/libtdutils.a
+@lib lib/libtonlibjson.so.0.0
+share/ton/
+share/ton/smartcont/
+share/ton/smartcont/CreateState.fif
+share/ton/smartcont/asm-to-cpp.fif
+share/ton/smartcont/auto/
+share/ton/smartcont/auto-dns.fif
+share/ton/smartcont/auto/config-code.cpp
+share/ton/smartcont/auto/config-code.fif
+share/ton/smartcont/auto/dns-auto-code.cpp
+share/ton/smartcont/auto/dns-auto-code.fif
+share/ton/smartcont/auto/dns-manual-code.cpp
+share/ton/smartcont/auto/dns-manual-code.fif
+share/ton/smartcont/auto/elector-code.cpp
+share/ton/smartcont/auto/elector-code.fif
+share/ton/smartcont/auto/highload-wallet-code.cpp
+share/ton/smartcont/auto/highload-wallet-code.fif
+share/ton/smartcont/auto/highload-wallet-v2-code.cpp
+share/ton/smartcont/auto/highload-wallet-v2-code.fif
+share/ton/smartcont/auto/multisig-code.cpp
+share/ton/smartcont/auto/multisig-code.fif
+share/ton/smartcont/auto/payment-channel-code.cpp
+share/ton/smartcont/auto/payment-channel-code.fif
+share/ton/smartcont/auto/pow-testgiver-code.cpp
+share/ton/smartcont/auto/pow-testgiver-code.fif
+share/ton/smartcont/auto/restricted-wallet-code.cpp
+share/ton/smartcont/auto/restricted-wallet-code.fif
+share/ton/smartcont/auto/restricted-wallet2-code.cpp
+share/ton/smartcont/auto/restricted-wallet2-code.fif
+share/ton/smartcont/auto/restricted-wallet3-code.cpp
+share/ton/smartcont/auto/restricted-wallet3-code.fif
+share/ton/smartcont/auto/simple-wallet-code.cpp
+share/ton/smartcont/auto/simple-wallet-code.fif
+share/ton/smartcont/auto/simple-wallet-ext-code.cpp
+share/ton/smartcont/auto/simple-wallet-ext-code.fif
+share/ton/smartcont/auto/wallet-code.cpp
+share/ton/smartcont/auto/wallet-code.fif
+share/ton/smartcont/auto/wallet3-code.cpp
+share/ton/smartcont/auto/wallet3-code.fif
+share/ton/smartcont/complaint-vote-req.fif
+share/ton/smartcont/complaint-vote-signed.fif
+share/ton/smartcont/config-code.fc
+share/ton/smartcont/config-proposal-vote-req.fif
+share/ton/smartcont/config-proposal-vote-signed.fif
+share/ton/smartcont/create-config-proposal.fif
+share/ton/smartcont/create-config-upgrade-proposal.fif
+share/ton/smartcont/create-elector-upgrade-proposal.fif
+share/ton/smartcont/dns-auto-code.fc
+share/ton/smartcont/dns-manual-code.fc
+share/ton/smartcont/elector-code.fc
+share/ton/smartcont/envelope-complaint.fif
+share/ton/smartcont/gen-zerostate-test.fif
+share/ton/smartcont/gen-zerostate.fif
+share/ton/smartcont/highload-wallet-code.fc
+share/ton/smartcont/highload-wallet-v2-code.fc
+share/ton/smartcont/highload-wallet-v2-one.fif
+share/ton/smartcont/highload-wallet-v2.fif
+share/ton/smartcont/highload-wallet.fif
+share/ton/smartcont/manual-dns-manage.fif
+share/ton/smartcont/multisig-code.fc
+share/ton/smartcont/new-auto-dns.fif
+share/ton/smartcont/new-highload-wallet-v2.fif
+share/ton/smartcont/new-highload-wallet.fif
+share/ton/smartcont/new-manual-dns.fif
+share/ton/smartcont/new-pinger.fif
+share/ton/smartcont/new-pow-testgiver.fif
+share/ton/smartcont/new-restricted-wallet.fif
+share/ton/smartcont/new-restricted-wallet2.fif
+share/ton/smartcont/new-restricted-wallet3.fif
+share/ton/smartcont/new-testgiver.fif
+share/ton/smartcont/new-wallet-v2.fif
+share/ton/smartcont/new-wallet-v3.fif
+share/ton/smartcont/new-wallet.fif
+share/ton/smartcont/payment-channel-code.fc
+share/ton/smartcont/pow-testgiver-code.fc
+share/ton/smartcont/recover-stake.fif
+share/ton/smartcont/restricted-wallet-code.fc
+share/ton/smartcont/restricted-wallet2-code.fc
+share/ton/smartcont/restricted-wallet3-code.fc
+share/ton/smartcont/show-addr.fif
+share/ton/smartcont/simple-wallet-code.fc
+share/ton/smartcont/simple-wallet-ext-code.fc
+share/ton/smartcont/stdlib.fc
+share/ton/smartcont/testgiver.fif
+share/ton/smartcont/update-config-smc.fif
+share/ton/smartcont/update-config.fif
+share/ton/smartcont/update-elector-smc.fif
+share/ton/smartcont/validator-elect-req.fif
+share/ton/smartcont/validator-elect-signed.fif
+share/ton/smartcont/wallet-code.fc
+share/ton/smartcont/wallet-v2.fif
+share/ton/smartcont/wallet-v3-code.fif
+share/ton/smartcont/wallet-v3.fif
+share/ton/smartcont/wallet.fif
+share/ton/smartcont/wallet3-code.fc
