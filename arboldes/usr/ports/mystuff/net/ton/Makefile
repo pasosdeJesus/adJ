@@ -63,10 +63,5 @@ pre-patch:
 	mv -f ${WRKDIR}/rocksdb-${COMMIT_ROCKSDB}/* ${WRKDIST}/third-party/rocksdb/
 
 
-#post-configure:
-#	echo "../tl/CMakeFiles/tl_api.dir/generate/auto/tl/ton_api.cpp.o" >>  ${WRKBUILD}/lite-client/CMakeFiles/lite-client.dir/link.txt
-#	echo "../tl/CMakeFiles/tl_api.dir/generate/auto/tl/ton_api.cpp.o >>  ${WRKBUILD}/lite-client/CMakeFiles/lite-client.dir/link.txt"
-#	exit 1
-
 .include <bsd.port.mk>
 
