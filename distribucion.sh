@@ -803,12 +803,15 @@ if (test "$sn" = "s") then {
   # Modificados para posibilitar compilación
   # Deben estar en mystuff
 
+
   # Todo lo de perl tuvo que recompilarse
   # evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
   # Si por ejemplo es:
   #Name.c: loadable library and perl binaries are mismatched (got handshake key 0xb700000, needed 0xbb00000)
   # Buscar módulo de Perl con pkg_locate Name.so, recompilarlo e instalarlo 
+  paquete p5-NetAddr-IP
   paquete p5-Params-Validate
+  paquete p5-Params-Util
   paquete p5-Package-Stash-XS
   paquete p5-Class-Inspector
   paquete p5-Class-Load-XS
@@ -831,7 +834,6 @@ if (test "$sn" = "s") then {
   paquete p5-Module-Runtime
   paquete p5-Package-DeprecationManager
   paquete p5-Package-Stash-XS
-  paquete p5-Params-Util
   paquete p5-Sub-Exporter
   paquete p5-Sub-Name
   paquete p5-Try-Tiny
@@ -914,7 +916,6 @@ if (test "$sn" = "s") then {
   paquete p5-Net-LibIDN
   paquete p5-Net-Patricia
   paquete p5-Net-SSLeay
-  paquete p5-NetAddr-IP
   paquete p5-PlRPC
   paquete p5-Pod-Parser
   paquete p5-Role-Tiny
@@ -972,40 +973,40 @@ if (test "$sn" = "s") then {
   # Los siguientes no deben estar en arboldes/usr/ports/mystuff
   #paquete certbot paquetes "certbot py3-acme"
   #paquete cups
-  paquete dovecot
-  paquete dtc
-  paquete firefox-esr
-  paquete flac
+  #paquete dovecot
+  #paquete dtc
+  #paquete firefox-esr
+  #paquete flac
   #paquete gtk+3 paquetes "gtk+3-cups"
   #paquete gdal
-  paquete gnutls
+  #paquete gnutls
   #paquete gvfs
   #paquete libgcrypt
-  paquete libssh
-  paquete libxml
-  paquete libxslt
-  paquete lz4
-  paquete mariadb-client paquetes "mariadb-client mariadb-server" 
+  #paquete libssh
+  #paquete libxml
+  #paquete libxslt
+  #paquete lz4
+  #paquete mariadb-client paquetes "mariadb-client mariadb-server" 
   #paquete mpg123
-  paquete mutt
+  #paquete mutt
   #paquete nginx
-  paquete node
+  #paquete node
   #paquete oniguruma 
-  paquete quirks
+  #paquete quirks
   #paquete pcre2 
-  paquete python paquetes "python" "2.7"
-  paquete python paquetes "python" "3.8"
-  paquete rsync
+  #paquete python paquetes "python" "2.7"
+  #paquete python paquetes "python" "3.8"
+  #paquete rsync
   #paquete unzip
-  paquete webkitgtk4
-  paquete zsh
+  #paquete webkitgtk4
+  #paquete zsh
 
   ###  
   # Recompilados de estable que usan xlocale (y pueden cerrar fallas)
   # No deben estar en mystuff
   paquete curl
 
-  paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 8.0
+  paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 8.1
 
   ###
   # Recompilados para mejorar dependencias y actualizar
@@ -1018,7 +1019,7 @@ if (test "$sn" = "s") then {
   #paquete git paquetes "git"
   #paquete p7zip paquetes "p7zip p7zip-rar"
   #paquete pidgin paquetes "libpurple pidgin"
-  paquete samba paquetes "ldb samba tevent"
+  #paquete samba paquetes "ldb samba tevent"
   #paquete webkit paquetes "webkit webkit-gtk3"
   # FLAVOR=gtk3 make paquete webkit-gtk3
   #FLAVOR=python3 paquete py-gobject3 paquetes py3-gobject3

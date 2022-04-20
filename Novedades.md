@@ -2,8 +2,8 @@
 Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
 
-### Versión: 7.1
-Fecha de publicación: 4/Mar/2022
+### Versión: 7.1a1
+Fecha de publicación: 18/Abr/2022
 
 Puede ver novedades respecto a OpenBSD en:
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_7_1/Novedades_OpenBSD.md>
@@ -13,10 +13,10 @@ Puede ver novedades respecto a OpenBSD en:
 Puede ver las diversas versiones publicadas en: 
   <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/>
 
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-7.1-amd64.iso> 
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/AprendiendoDeJesus-7.1a1-amd64.iso> 
   es imagen en formato ISO para quemar en DVD e instalar por primera vez
   en modo BIOS Legacy.
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/7.1-amd64/>
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/7.1a1-amd64/>
   es directorio con el contenido del DVD instalador apropiado para descargar 
   con rsync desde un adJ o un OpenBSD ya instalado para actualizarlo (ver  
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_7_1/Actualiza.md> )
@@ -30,7 +30,7 @@ Puede ver las diversas versiones publicadas en:
   la descargue puede escribirla en una USB ubicada en `/dev/sd2c` 
   (verifique dispositivo con `dmesg` y remplace) con:
 
-       doas dd if=AprendiendoDeJesus-7.1-amd64.usb of=/dev/sd2c bs=1M
+       doas dd if=AprendiendoDeJesus-7.1a1-amd64.usb of=/dev/sd2c bs=1M
 
  Este proceso puede ser demorado, puede ver el progreso con 
 
@@ -38,71 +38,53 @@ Puede ver las diversas versiones publicadas en:
 
  O si desea probarla con qemu para instalar en un disco `virtual.raw`:
 
-       qemu-system-x86_64 -hda virtual.raw -hdb AprendiendoDeJesus-7.1-amd64.usb -boot menu=on
+       qemu-system-x86_64 -hda virtual.raw -hdb AprendiendoDeJesus-7.1a1-amd64.usb -boot menu=on
 
 
-## 2. NOVEDADES RESPECTO A ADJ 7.1 PROVENIENTES DE OPENBSD
+## 2. NOVEDADES RESPECTO A ADJ 7.1a1 PROVENIENTES DE OPENBSD
 
 ### 2.1 Kernel y Sistema Base
 
-Novedades tomadas de <https://www.openbsd.org/70.html> 
+Novedades tomadas de <https://www.openbsd.org/71.html> 
 
-* Aplicados parches de seguridad hasta el 24.Feb.2022 provenientes de 
+* Aplicados parches de seguridad hasta el 16.Abr.2022 provenientes de 
   OpenBSD que incluyen soluciones a fallas
 * Controladores ampliados o mejorados para amd64
-  * CPU: Se puede habilitar modo turbo poniendo hw.setperf en 100 (su operación
-    normal es en 99). Corrección a fallas con TLB.
-  * Tarjetas Ethernet: Ampliado `re`  para soportar 
-    RTL8168FP/RTL8111FP/RTL8117, Ampliado 
-    `brgphy` para soportar BCM5725. Nuevo controlador `aq` para tarjetas
-    PCI Express Ethernet 10G Aquantia.  Nuevo controlador `uaq`  para
-    tarjetas USB Ethernet Aquantia AQC111U/AQC112U.
-  * Tarjetas inalámbricas: Mejorados controladores `iwm`, `iwx` y
-    `bwfm`
-  * Video: Actualizados drm, inteldrm y amdgpu para soportar mejor Tiger Lake,
-    Navi 12, Navi 21 "Sienna Cichlid", Arcturus y Cezanne "Green Sardine" Ryzen
-    5000 APU
-  * Sonido: Mejorado `azalia` con X1 Extreme Gen 1, Thinkpad X1 Extreme, 
-  * Sensores y otros: Controlador `cy` para boards multipuertos seriales 
-    Cyclom-4Y, Cyclom-8Y y Cyclom-16Y.
+  * CPU: 
+  * Tarjetas Ethernet: 
+  * Tarjetas inalámbricas: 
+  * Video: 
+  * Sonido: 
+  * Sensores y otros:
 * Mejoras a herramientas de Red
-  * OpenSMTDP 7.0.0
-  * Mejoras a bgpd, pf e IPSEC
-  * DHCP ahora es manejado por dhcpleased
+  * OpenSMTDP  ...
+  * ...
+  * ...
 * Seguridad
-  * ssh actualizado a la versión 8.8 que por ejemplo deshabilita firmas RSA
-    que usan condensados SHA-1. Avanza en remplazar SCP/RCP con SFTP cuando
-    se use scp.
-  * libressl actualizado a la versión 3.4.1 que amplió el API para soportar
-    OpenSSL 1.1.1 TLSv1.3 y habilita un nuvo validador X.509
+  * ssh actualizado a la versión ... que ...
+  * libressl actualizado a la versión ... que ...
 * Otros
-  * Seudo-dispositivo `dt` habilitado de manera predeterminada y 
-    la herramienta asociada `btrace` mejorada para pemitir
-    depuración dinámica del kernel. 
-  * Mejoras a SMP por ejemplo eliminando candados en algunas operaciones
-  * Mejoras a VMM/VMD
-  * Mejoras a tmux
+  * ...
+  * ...
 
 * El sistema base incluye mejoras a componentes auditados y mejorados 
-  como, `llvm 11.1.0`,  `Xenocara` (basado en `Xorg` 7.7),
-  `perl 5.32` 
-* El repositorio de paquetes de OpenBSD cuenta con 11325 para amd64
+  como, `llvm 13.0.0`,  `Xenocara` (basado en `Xorg` 7.7),
+  `perl 5.32.1` 
+* El repositorio de paquetes de OpenBSD cuenta con ... para amd64
 
 
 ### 2.2 Paquetes 
 
 * Para cerrar fallas se usan las versiones más recientes preparadas
-  por OpenBSD de: `zsh`, `node`, `php`, `libxml`, `libxslt`, 
-  `gnutls`, `firefox-esr`, `samba`, `colorls`, `quirks`,
-  `webkitgtk4`
+  por OpenBSD de: `node`, `php`, `...
 
 * Algunos paquetes típicos y su versión: `dovecot 2.3.16p1v0`,
-  `chromium 93.0.4577.82p1`, `firefox-esr 91.6.0`, `libreoffice 7.2.1.2v0`,
-  `nginx 1.20.1p0`, `mariadb 10.6.4p2v1`, `node 12.22.9p0`, `python 3.8.12`,
-  `neovim 0.5.0`, `zsh 5.8.1`
+  `chromium 100.0.4896.60, `firefox-esr 91.7.1`, `libreoffice 7.3.1.3v0`,
+  `nginx 1.20.2p0`, `mariadb 10.6.7p0v1`, `node 16.14.2`, `python 3.9.10p0`,
+  `neovim 0.6.1`, `zsh 5.8.1`
 
 
-## 3. NOVEDADES RESPECTO A ADJ 6.9 PROVENIENTES DE PASOS DE JESÚS
+## 3. NOVEDADES RESPECTO A ADJ 7.0 PROVENIENTES DE PASOS DE JESÚS
 
 ### 3.1 Instalador y documentación
 
@@ -116,6 +98,7 @@ Novedades tomadas de <https://www.openbsd.org/70.html>
 
 ### 3.2 Paquetes
 
+* `ton` son las herramientas del Blockchain TON (The Open Network).
 * Chromium recompilado con llave de Pasos de Jesús.  Ahora permite autenticar
   y usar sitios como https://drive.google.com  --si tiene problemas para
   autenticarse intente desde un nuevo perfil (obligatorio por ejemplo si cambia
@@ -124,28 +107,12 @@ Novedades tomadas de <https://www.openbsd.org/70.html>
   bastante estable.
 
 * Se incluye la versión 2.0  de `sivel2` cuyas novedades con respecto al 
-  beta 16 incluido en adJ 6.9 se describen a continuación. Agradecimiento por
+  beta 16 incluido en adJ 7.0 se describen a continuación. Agradecimiento por
   algunas de las novedades a Luis Alejandro Cruz:
   * Mejoras en consultas, reportes y conteos
-    * En conteo de victimizaciones individuales agrega código DIVIPOLA del
-      departamento al desagregar por departamento
   * Mejoras a datos básicos
-    * Se actualizó la división política de Colombia al DIVIPOLA 2021 corregido,
-      ver un resumen ejecutivo de los cambios
   * Seguridad
-    * Más herramientas para análisis estático (SAST) corriendo como tareas de
-      integración continua para auditar seguridad de fuentes con cada cambio.
-    * Pruebas de control de acceso extensas con minitest (1037 pruebas)
-    * Pruebas de regresión con sideex mejoradas (224 casos de prueba)
-    * Se completó auditoria a la aplicación y sus motores con base en OWASP Top
-      Ten, ver comentarios de lo auditado.
   * Mejoras al proceso de desarrollo de software
-    * Aumentada cobertura de las pruebas de regresión automáticas con minitest
-      (promedio entre motores y aplicación del 57%).
-    * Mejorada integración continua en github y gitlab y reportes de calidad 
-      del código en codeclimate
-    * Documentación de la API en
-      <https://github.com/pasosdeJesus/sivel2/blob/main/doc/API_sivel2.md>
   * Soluciones a diversas fallas (e.g ortografía, validación DTD,filtro por
     sector social para autenticados, no se pierden datos deshabilitados 
     elegidos en cuadro de selección múltiple o sencilla)
