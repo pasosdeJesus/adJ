@@ -8,9 +8,9 @@ if (test "$ARQ" = "i386") then {
 } else {
 	cmd="qemu-system-x86_64"
 } fi;
-opq="-m 512M -boot $qemuboot -cdrom AprendiendoDeJesus-$V$VESP-$ARQ.iso virtual.raw"
+opq="-m 512M -no-fd-bootchk -boot $qemuboot -cdrom AprendiendoDeJesus-$V$VESP-$ARQ.iso -drive file=virtual.raw,format=raw"
 if (test "$TEXTO" = "1") then {
-	opq="$opq -nographic -curses -s"
+	opq="$opq -nographic -display curses -s"
 	cmd="$cmd $opq"
 } else {
 	opq="$opq -s -serial file:/tmp/q -monitor stdio"
