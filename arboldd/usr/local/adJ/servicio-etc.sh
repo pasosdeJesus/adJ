@@ -230,6 +230,9 @@ i
 [ ! -z "\${daemon_user}"  ] && servicio_user=\${daemon_user}
 [ ! -z "\${daemon_flags}"  ] && servicio_flags=\${daemon_flags}
 [ ! -z "\${daemon_class}"  ] && servicio_class=\${daemon_class}
+[ ! -z "\${daemon_logger}"  ] && servicio_logger=\${daemon_logger}
+[ ! -z "\${daemon_rtable}"  ] && servicio_rtable=\${daemon_rtable}
+[ ! -z "\${daemon_timeout}"  ] && servicio_timeout=\${daemon_timeout}
 
 .
 w
