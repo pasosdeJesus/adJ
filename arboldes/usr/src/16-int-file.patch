@@ -1,0 +1,61 @@
+diff -ruN src71-orig/include/stdio.h src/include/stdio.h
+--- src71-orig/include/stdio.h	Fri Mar 18 20:06:34 2022
++++ src/include/stdio.h	Mon May  9 12:18:39 2022
+@@ -101,7 +101,7 @@
+ 	int	_r;		/* read space left for getc() */
+ 	int	_w;		/* write space left for putc() */
+ 	short	_flags;		/* flags, below; this FILE is free if 0 */
+-	short	_file;		/* fileno, if Unix descriptor, else -1 */
++	int	_file;		/* fileno, if Unix descriptor, else -1 */
+ 	struct	__sbuf _bf;	/* the buffer (at least 1 byte, if !NULL) */
+ 	int	_lbfsize;	/* 0 or -_bf._size, for inline putc */
+ 
+diff -ruN src71-orig/lib/libc/stdio/fdopen.c src/lib/libc/stdio/fdopen.c
+--- src71-orig/lib/libc/stdio/fdopen.c	Fri Mar 18 19:46:21 2022
++++ src/lib/libc/stdio/fdopen.c	Mon May  9 12:17:18 2022
+@@ -45,8 +45,8 @@
+ 	FILE *fp;
+ 	int flags, oflags, fdflags, tmp;
+ 
+-	/* _file is only a short */
+-	if (fd > SHRT_MAX) {
++	/* _file is int */
++	if (fd > INT_MAX) {
+ 		errno = EMFILE;
+ 		return (NULL);
+ 	}
+diff -ruN src71-orig/lib/libc/gen/sysconf.c src/lib/libc/gen/sysconf.c
+--- src71-orig/lib/libc/gen/sysconf.c	Fri Mar 18 19:46:20 2022
++++ src/lib/libc/gen/sysconf.c	Tue May 10 19:05:44 2022
+@@ -110,14 +110,8 @@
+ 			errno = EOVERFLOW;
+ 			return (-1);
+ 		}
+-		/*
+-		 * struct __sFILE currently has a limitation that
+-		 * file descriptors must fit in a signed short.
+-		 * This doesn't precisely capture the letter of POSIX
+-		 * but approximates the spirit.
+-		 */
+-		if (rl.rlim_cur > SHRT_MAX)
+-			return (SHRT_MAX);
++		if (rl.rlim_cur > INT_MAX)
++			return (INT_MAX);
+ 
+ 		return ((long)rl.rlim_cur);
+ 	case _SC_TZNAME_MAX:
+
+diff -ruN src71-orig/lib/libc/stdio/freopen.c src/lib/libc/stdio/freopen.c
+--- src71-orig/lib/libc/stdio/freopen.c	Fri Mar 18 19:46:21 2022
++++ src/lib/libc/stdio/freopen.c	Tue May 10 19:06:42 2022
+@@ -140,8 +140,8 @@
+ 		}
+ 	}
+ 
+-	/* _file is only a short */
+-	if (f > SHRT_MAX) {
++	/* _file is int */
++	if (f > INT_MAX) {
+ 		fp->_flags = 0;		/* set it free */
+ 		FUNLOCKFILE(fp);
+ 		errno = EMFILE;
