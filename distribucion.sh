@@ -804,6 +804,8 @@ if (test "$sn" = "s") then {
   # Deben estar en mystuff
 
 
+  paquete ruby paquetes "ruby ruby31-ri_docs" 3.1
+  exit 1
   # Todo lo de perl tuvo que recompilarse
   # evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
   # Si por ejemplo es:
@@ -988,15 +990,17 @@ if (test "$sn" = "s") then {
   #paquete lz4
   #paquete mariadb-client paquetes "mariadb-client mariadb-server" 
   #paquete mpg123
-  #paquete mutt
+  paquete mutt
   #paquete nginx
   #paquete node
+  paquete nspr
   #paquete oniguruma 
   #paquete quirks
   #paquete pcre2 
   #paquete python paquetes "python" "2.7"
-  #paquete python paquetes "python" "3.8"
+  paquete python paquetes "python" "3.9"
   #paquete rsync
+  paquete sqlite3
   #paquete unzip
   #paquete webkitgtk4
   #paquete zsh

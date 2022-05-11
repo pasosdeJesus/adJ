@@ -1,6 +1,8 @@
 COMMENT =		Tools for the Blockchain TON - The Open Network
-V =			20220417
+V =			20220430
 REVISION =		
+
+# Patches were added just to change daemon for service
 
 DISTNAME=	ton-$V
 GH_ACCOUNT=	vtamara

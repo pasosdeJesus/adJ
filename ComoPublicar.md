@@ -15,7 +15,7 @@ Anhelamos publicar al menos una versión beta (e.g 7.1 en directorio
 	O bien el 10.Jun
 
 Sería ideal publicar una versión alfa mucho antes (digamos bien 24.Sep o
-bien 24.Mar, e.g 7.1a1).
+bien 24.Mar, e.g 7.1b1).
 
 
 

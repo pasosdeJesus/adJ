@@ -2,6 +2,7 @@ VERSION =		3.1.2
 DISTNAME =		ruby-${VERSION}
 SHARED_LIBS =		ruby31	0.0
 NEXTVER =		3.2
+REVISION=
 PKGSPEC-main ?=         ruby->=3.1.0,<${NEXTVER}
 
 PSEUDO_FLAVORS=		no_ri_docs bootstrap

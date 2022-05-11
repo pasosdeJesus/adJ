@@ -5,7 +5,7 @@
 
 VER=7.1
 REV=0
-VESP="a1"
+VESP="b1"
 VERP=71
 
 # Falta /standard/root.hint
@@ -1617,13 +1617,11 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 [end]
 [submenu] (Oficina)
 	[exec] (evince) {evince}
-	[exec] (dia) {/usr/local/bin/dia}
 	[exec] (gnumeric) {LC_CTYPE=C /usr/local/bin/gnumeric}
 	[exec] (gv) {gv}
 	[exec] (gimp) {LC_CTYPE=C /usr/local/bin/gimp}
 	[exec] (inkscape) {inkscape}
 	[exec] (LibreOffice) {/usr/local/bin/soffice}
-	[exec] (scribus) {scribus}
 [end]
 [submenu] (Multimedia)
 	[exec] (audacios) {audacious}
@@ -1631,12 +1629,10 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 	[exec] (cdio cdplay) {xterm -en utf8 -e "cdio cdplay"}
 	[exec] (musescore) {musescore}
 	[exec] (xcdplayer) {xcdplayer}
-	[exec] (xsane) {xsane}
 	[exec] (vlc) {vlc}
 [end]
 [submenu] (Internet)
 	[exec] (FileZilla) {filezilla}
-	[exec] (Pidgin) {pidgin}
 [end]
 [submenu] (Documentos)
 	[exec] (adJ basico) {/usr/local/bin/chrome --disable-gpu /usr/local/share/doc/basico_adJ/index.html}
@@ -1646,7 +1642,6 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 [submenu] (Otros)
 [exec] (gvim) {gvim}
 [exec] (qemu) {qemu-system-x86_64}
-[exec] (qgis) {qgis}
 [exec] (xarchiver) {xarchiver}
 [exec] (xfw) {xfw}
 [end]
