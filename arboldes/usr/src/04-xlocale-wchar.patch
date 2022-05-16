@@ -2520,17 +2520,14 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/wc
  }
  DEF_STRONG(wctob);
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/wctomb.3 src/lib/libc/locale/wctomb.3
---- src53collation/lib/libc/locale/wctomb.3	Mon Mar 25 18:28:42 2013
-+++ src/lib/libc/locale/wctomb.3	Wed Apr  3 11:15:27 2013
-@@ -29,27 +29,37 @@
- .Dt WCTOMB 3
+--- src53collation/lib/libc/locale/wctomb.3.orig	Sat Apr 16 05:41:48 2022
++++ src/lib/libc/locale/wctomb.3	Wed May 11 10:20:30 2022
+@@ -30,26 +30,34 @@
  .Os
  .Sh NAME
--.Nm wctomb
--.Nd converts a wide character to a multibyte character
-+.Nm wctomb ,
+ .Nm wctomb
 +.Nm wctomb_l
-+.Nd convert a wide character to a multibyte character
+ .Nd converts a wide character to a multibyte character
  .Sh SYNOPSIS
  .In stdlib.h
  .Ft int
@@ -2542,9 +2539,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/wc
 -The
 +The functions
  .Fn wctomb
--converts the wide character
-+and
-+.Fn wctomb_l
+-function converts the wide character
 +convert the wide character
  .Fa wchar
 -to the corresponding multibyte character, and stores it in the array
@@ -2565,12 +2560,12 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/wc
  may store the special sequence to change the conversion state
  before an actual multibyte character into the array pointed to by
  .Fa s .
-@@ -57,13 +67,15 @@
+@@ -57,13 +65,15 @@
  .Fa wchar
  is a null wide character
  .Pq Sq \e0 ,
 -this function places its own internal state to an initial conversion state.
-+theses functions place its own internal state to an initial conversion state.
++these functions place its own internal state to an initial conversion state.
  .Pp
  Calling any other functions in
  .Em libc
@@ -2583,7 +2578,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/wc
  except for calling
  .Xr setlocale 3
  with the
-@@ -77,7 +89,10 @@
+@@ -77,7 +87,10 @@
  .Fn wctomb
  is affected by
  .Dv LC_CTYPE
@@ -2595,7 +2590,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/wc
  .Pp
  There is a special case:
  .Bl -tag -width 012345678901
-@@ -123,7 +138,8 @@
+@@ -123,7 +136,8 @@
  .Sh ERRORS
  No errors are defined.
  .Sh SEE ALSO

@@ -86,6 +86,11 @@ Novedades tomadas de <https://www.openbsd.org/71.html>
 
 ## 3. NOVEDADES RESPECTO A ADJ 7.0 PROVENIENTES DE PASOS DE JESÚS
 
+### 3.1 Kernel y sistema base
+
+* Los descriptores de archivos pueden ser enteros (en OpenBSD y FreeBSD
+  son enteros cortos).
+
 ### 3.1 Instalador y documentación
 
 * Documentación actualizada 

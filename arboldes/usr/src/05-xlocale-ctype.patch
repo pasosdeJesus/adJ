@@ -1490,40 +1490,31 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/string/wcs
 diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/mbrlen.3 src53xlocale2/lib/libc/locale/mbrlen.3
 --- src53xlocale1/lib/libc/locale/mbrlen.3	Mon Apr  8 21:20:25 2013
 +++ src53xlocale2/lib/libc/locale/mbrlen.3	Fri Apr 12 12:07:57 2013
-@@ -30,21 +30,27 @@
- .Os
- .\" ----------------------------------------------------------------------
- .Sh NAME
--.Nm mbrlen
-+.Nm mbrlen ,
-+.Nm mbrlen_l
- .Nd get number of bytes in a multibyte character (restartable)
- .\" ----------------------------------------------------------------------
- .Sh SYNOPSIS
+@@ -37,14 +37,19 @@
  .In wchar.h
  .Ft size_t
  .Fn mbrlen "const char * restrict s" "size_t n" "mbstate_t * restrict ps"
 +.In xlocale.h
 +.Ft size_t
-+.Fn mbrlen_l "const char * restrict s" "size_t n" "mbstate_t * restrict ps" "locale_t loc"
++.Fn mbrlen_t "const char * restrict s" "size_t n" "mbstate_t * restrict ps" "locale_t loc"
  .\" ----------------------------------------------------------------------
  .Sh DESCRIPTION
  The
  .Fn mbrlen
--function usually determines the number of bytes in
+-function returns the number of bytes
 +and
 +.Fn mbrlen_l
-+functions usually determine the number of bytes in
- a multibyte character pointed to by
- .Fa s
--and returns it.
-+and return it.
- This function shall only examine max n bytes of the array beginning from
++functions return the number of bytes
+ in the first multibyte character of the multibyte string
  .Fa s .
- .Pp
-@@ -86,7 +92,9 @@
+-It examines at most the first
++They examine at most the first
+ .Fa n
+ bytes of
+ .Fa s .
+@@ -88,7 +93,9 @@
  .Fn mbrlen
- is affected by
+ is affected by the
  .Dv LC_CTYPE
 -category of the current locale.
 +category of the current locale, while
@@ -1532,7 +1523,7 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/mbr
  .Pp
  There are the special cases:
  .Bl -tag -width 0123456789
-@@ -205,3 +213,6 @@
+@@ -210,3 +217,6 @@
  .\" .St -isoC99 .
  ISO/IEC 9899/1999
  .Pq Dq ISO C99 .

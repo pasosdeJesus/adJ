@@ -312,8 +312,30 @@ if (test "$sn" = "s") then {
   # Aplicando parches sobre las fuentes de OpenBSD sin cambios para
   # facilitar aportar  a OpenBSD con prioridad cambios que posiblemente
   # serán aceptados más facilmente
-  (cd $dini/arboldes/usr/src; for i in *patch; do echo $i; if (test ! -f /usr/src/$i) then { cp $i /usr/src; (cd /usr/src; echo "A mano"; patch -p1 < $i;) } fi; done) 2>&1 |  tee -a  /var/www/tmp/distrib-adJ.bitacora
-  (cd $dini/arboldes/usr/ports; for i in *patch; do echo $i; if (test ! -f /usr/ports/$i) then { cp $i /usr/ports; (cd /usr/ports; echo "A mano"; patch -p1 < $i;) } fi; done) 2>&1 |  tee -a  /var/www/tmp/distrib-adJ.bitacora
+  (cd $dini/arboldes/usr/src; 
+  for i in *patch; do 
+    echo $i; 
+    if (test ! -f /usr/src/$i) then { 
+      cp $i /usr/src; 
+      ( cd /usr/src; 
+        echo "A mano"; 
+        patch -p1 < $i;
+        if (test "$?" != "0") then { exit $?; } fi; 
+      )
+    } fi; 
+  done) 2>&1 |  tee -a  /var/www/tmp/distrib-adJ.bitacora
+  (cd $dini/arboldes/usr/ports; 
+  for i in *patch; do 
+    echo $i; 
+    if (test ! -f /usr/ports/$i) then { 
+      cp $i /usr/ports; 
+      ( cd /usr/ports; 
+        echo "A mano"; 
+        patch -p1 < $i;
+        if (test "$?" != "0") then { exit $?; } fi; 
+      ) 
+    } fi;
+  done) 2>&1 |  tee -a  /var/www/tmp/distrib-adJ.bitacora
 
   echo "* Copiando archivos nuevos en /usr/src" | tee -a /var/www/tmp/distrib-adJ.bitacora
   (cd $dini/arboldes/usr/src ; for i in `find . -type f | grep -v CVS | grep -v .patch`; do  if (test ! -f /usr/src/$i) then { echo $i; n=`dirname $i`; mkdir -p /usr/src/$n; cp $i /usr/src/$i; } fi; done ) 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora

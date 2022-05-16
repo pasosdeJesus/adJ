@@ -1836,6 +1836,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/wcsftime
 --- src54-x6/lib/libc/time/wcsftime.3	Sat Feb  9 14:26:54 2013
 +++ src/lib/libc/time/wcsftime.3	Tue Dec  3 16:12:45 2013
 @@ -17,16 +17,26 @@
+@@ -17,16 +17,26 @@
  .Dt WCSFTIME 3
  .Os
  .Sh NAME
@@ -1853,14 +1854,13 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/wcsftime
  .Sh DESCRIPTION
  The
  .Fn wcsftime
--is a wide char equivalent of
--.Xr strftime 3 .
+-function is a wide char equivalent of
 +and
 +.Fn wcsftime_l
-+functions are char equivalent of
-+.Xr strftime 3
++functions are wide char equivalent of
+ .Xr strftime 3 .
 +and
-+.Xr strftime_l 3
++.Xr strftime_l 3 .
  .Sh SEE ALSO
  .Xr strftime 3
 +.Xr strftime_l 3
