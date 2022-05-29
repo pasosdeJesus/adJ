@@ -825,9 +825,6 @@ if (test "$sn" = "s") then {
   # Modificados para posibilitar compilación
   # Deben estar en mystuff
 
-
-  paquete ruby paquetes "ruby ruby31-ri_docs" 3.1
-  exit 1
   # Todo lo de perl tuvo que recompilarse
   # evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
   # Si por ejemplo es:

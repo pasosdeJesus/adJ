@@ -992,7 +992,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
  
  /*
   * We do not implement alternate representations. However, we always
-@@ -75,20 +76,28 @@
+@@ -75,20 +76,29 @@
  static	int _conv_num64(const unsigned char **, int64_t *, int64_t, int64_t);
  static	int _conv_num(const unsigned char **, int *, int, int);
  static	int leaps_thru_end_of(const int y);
@@ -1018,6 +1018,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
 +{
 +	return(_strptime(buf, fmt, tm, 1, loc));
 +}
++DEF_STRONG(strptime_l);
 +
  static char *
 -_strptime(const char *buf, const char *fmt, struct tm *tm, int initialize)
@@ -1026,7 +1027,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
  {
  	unsigned char c;
  	const unsigned char *bp, *ep;
-@@ -109,8 +118,8 @@
+@@ -109,8 +119,8 @@
  		alt_format = 0;
  
  		/* Eat up white-space. */
@@ -1037,7 +1038,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
  				bp++;
  
  			fmt++;
-@@ -148,49 +157,49 @@
+@@ -148,49 +158,49 @@
  		 */
  		case 'c':	/* Date and time, using the locale's format. */
  			_LEGAL_ALT(_ALT_E);
@@ -1095,7 +1096,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
  				return (NULL);
  			break;
  
-@@ -202,13 +211,13 @@
+@@ -202,13 +212,13 @@
  			_LEGAL_ALT(0);
  			for (i = 0; i < 7; i++) {
  				/* Full name. */
@@ -1113,7 +1114,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
  					break;
  			}
  
-@@ -227,13 +236,13 @@
+@@ -227,13 +237,13 @@
  			_LEGAL_ALT(0);
  			for (i = 0; i < 12; i++) {
  				/* Full name. */
@@ -1131,7 +1132,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
  					break;
  			}
  
-@@ -308,8 +317,8 @@
+@@ -308,8 +318,8 @@
  		case 'p':	/* The locale's equivalent of AM/PM. */
  			_LEGAL_ALT(0);
  			/* AM? */
@@ -1142,7 +1143,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
  				if (tm->tm_hour > 12)	/* i.e., 13:00 AM ?! */
  					return (NULL);
  				else if (tm->tm_hour == 12)
-@@ -319,8 +328,8 @@
+@@ -319,8 +329,8 @@
  				break;
  			}
  			/* PM? */
@@ -1153,7 +1154,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
  				if (tm->tm_hour > 12)	/* i.e., 13:00 PM ?! */
  					return (NULL);
  				else if (tm->tm_hour < 12)
-@@ -388,7 +397,7 @@
+@@ -388,7 +398,7 @@
  				 */
  			do
  				bp++;
@@ -1162,7 +1163,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
  			continue;
  
  		case 'V':	/* The ISO 8601:1988 week number as decimal */
-@@ -427,7 +436,7 @@
+@@ -427,7 +437,7 @@
  			} else {
  				ep = _find_string(bp, &i,
  						 (const char * const *)tzname,
@@ -1171,7 +1172,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
  				if (ep == NULL)
  					return (NULL);
  
-@@ -453,7 +462,7 @@
+@@ -453,7 +463,7 @@
  			 * M[DS]T = Mountain: -6 | -7
  			 * P[DS]T = Pacific : -7 | -8
  			 */
@@ -1180,7 +1181,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
  				bp++;
  
  			switch (*bp++) {
-@@ -478,14 +487,14 @@
+@@ -478,14 +488,14 @@
  				break;
  			default:
  				--bp;
@@ -1197,7 +1198,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
  				if (ep != NULL) {
  					tm->tm_isdst = 1;
  					tm->tm_gmtoff = (-4 - i) * SECSPERHOUR;
-@@ -495,15 +504,15 @@
+@@ -495,15 +505,15 @@
  				}
  				return NULL;
  			}
@@ -1216,7 +1217,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
  					return NULL;
  				offs += (*bp++ - '0') * SECSPERMIN;
  			}
-@@ -520,7 +529,7 @@
+@@ -520,7 +530,7 @@
  		case 'n':	/* Any kind of white-space. */
  		case 't':
  			_LEGAL_ALT(0);
@@ -1225,7 +1226,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
  				bp++;
  			break;
  
-@@ -634,7 +643,7 @@
+@@ -634,7 +644,7 @@
  
  static const u_char *
  _find_string(const u_char *bp, int *tgt, const char * const *n1,
@@ -1234,7 +1235,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
  {
  	int i;
  	unsigned int len;
-@@ -643,7 +652,7 @@
+@@ -643,7 +653,7 @@
  	for (; n1 != NULL; n1 = n2, n2 = NULL) {
  		for (i = 0; i < c; i++, n1++) {
  			len = strlen(*n1);
@@ -1887,30 +1888,25 @@ diff -ruN src/lib/libc/Symbols.list.orig  src/lib/libc/Symbols.list
 diff -ruN src61-orig/lib/libc/hidden/time.h src/lib/libc/hidden/time.h
 --- src61-orig/lib/libc/hidden/time.h	Sat May  7 14:05:22 2016
 +++ src/lib/libc/hidden/time.h	Tue May 16 08:11:18 2017
-@@ -24,6 +24,13 @@
- extern PROTO_NORMAL(tzname);
- #endif
+@@ -19,6 +19,7 @@
+ #define	_LIBC_TIME_H_
  
-+
-+__BEGIN_HIDDEN_DECLS
-+typedef struct  _xlocale *locale_t;
-+size_t	 strftime_l(char * __restrict, size_t, const char * __restrict,
-+	    const struct tm * __restrict, locale_t); 
-+__END_HIDDEN_DECLS
-+
- PROTO_NORMAL(asctime);
- PROTO_NORMAL(asctime_r);
- PROTO_STD_DEPRECATED(clock);
-@@ -41,7 +48,7 @@
+ #include_next <time.h>
++#include_next <xlocale.h>
+ 
+ #if 0
+ extern PROTO_NORMAL(tzname);
+@@ -41,8 +42,9 @@
  PROTO_NORMAL(mktime);
  PROTO_CANCEL(nanosleep);
  PROTO_NORMAL(strftime);
 -PROTO_DEPRECATED(strftime_l);
 +PROTO_NORMAL(strftime_l);
  PROTO_NORMAL(strptime);
++PROTO_NORMAL(strptime_l);
  PROTO_NORMAL(time);
  PROTO_DEPRECATED(timegm);
-
+ PROTO_DEPRECATED(timelocal);
 diff -ruN src-m/lib/libc/locale/nl_langinfo_l.c.orig src/lib/libc/locale/nl_langinfo_l.c
 --- src-m/lib/libc/locale/nl_langinfo_l.c.orig	Sun Dec 10 06:31:51 2017
 +++ src/lib/libc/locale/nl_langinfo_l.c	Sun Dec 10 06:28:37 2017
