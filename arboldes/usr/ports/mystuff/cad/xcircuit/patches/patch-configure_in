@@ -1,0 +1,25 @@
+Index: configure.in
+--- configure.in.orig
++++ configure.in
+@@ -685,6 +685,12 @@ fi
+ # --------------------------------------------------------------
+ 
+ if test "x$xc_with_tcl" != "x" ; then
++  # Tcl and Tk's lib versions can differ on some systems
++  case $target in
++     *-openbsd*)
++	SHDLIB_EXT=".so.${TK_LIB_FILE##*.so.}"
++	;;
++  esac
+   if test "x${xc_with_tk_libraries}" != "x" ; then
+     TK_LIB_SPEC=""
+     for libname in \
+@@ -1109,7 +1115,7 @@ fi
+ 
+ # Add -lm last to LDFLAGS, or Tcl/Tk's addition of -lieee can cause
+ # an error.
+-EXTRA_LIB_SPECS="$EXTRA_LIB_SPECS -lm"
++EXTRA_LIB_SPECS="$EXTRA_LIB_SPECS -lm -lpthread"
+ 
+ dnl Memory debugging:
+ dnl The non-Tcl version uses (links to) ElectricFence.
