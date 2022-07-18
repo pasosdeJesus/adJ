@@ -967,6 +967,12 @@ if (test "$sn" = "s") then {
 
   paquete p5-Mail-SpamAssassin
 
+  ### Paquetes que deben recompilarse por cambio en FILE
+
+  paquete unzip
+  paquete python paquetes "python" "3.9"
+  paquete ruby paquetes "ruby ruby31-ri_docs" 3.1
+
   ####
   # Retroportados para cerrar fallas o actualizar
   # Deben estar en arboldes/usr/ports/mystuff y en /usr/ports de current
@@ -974,7 +980,6 @@ if (test "$sn" = "s") then {
   paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs postgresql-pg_upgrade" 
   paquete postgresql-previous 
   paquete postgis
-  paquete ruby paquetes "ruby ruby31-ri_docs" 3.1
   #paquete tiff
   #paquete geo/spatialite/libspatialite
 
@@ -1018,7 +1023,6 @@ if (test "$sn" = "s") then {
   #paquete quirks
   #paquete pcre2 
   #paquete python paquetes "python" "2.7"
-  paquete python paquetes "python" "3.9"
   #paquete rsync
   paquete sqlite3
   #paquete unzip
