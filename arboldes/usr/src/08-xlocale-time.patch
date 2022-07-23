@@ -1837,7 +1837,6 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/wcsftime
 --- src54-x6/lib/libc/time/wcsftime.3	Sat Feb  9 14:26:54 2013
 +++ src/lib/libc/time/wcsftime.3	Tue Dec  3 16:12:45 2013
 @@ -17,16 +17,26 @@
-@@ -17,16 +17,26 @@
  .Dt WCSFTIME 3
  .Os
  .Sh NAME
@@ -1896,17 +1895,6 @@ diff -ruN src61-orig/lib/libc/hidden/time.h src/lib/libc/hidden/time.h
  
  #if 0
  extern PROTO_NORMAL(tzname);
-@@ -41,8 +42,9 @@
- PROTO_NORMAL(mktime);
- PROTO_CANCEL(nanosleep);
- PROTO_NORMAL(strftime);
--PROTO_DEPRECATED(strftime_l);
-+PROTO_NORMAL(strftime_l);
- PROTO_NORMAL(strptime);
-+PROTO_NORMAL(strptime_l);
- PROTO_NORMAL(time);
- PROTO_DEPRECATED(timegm);
- PROTO_DEPRECATED(timelocal);
 diff -ruN src-m/lib/libc/locale/nl_langinfo_l.c.orig src/lib/libc/locale/nl_langinfo_l.c
 --- src-m/lib/libc/locale/nl_langinfo_l.c.orig	Sun Dec 10 06:31:51 2017
 +++ src/lib/libc/locale/nl_langinfo_l.c	Sun Dec 10 06:28:37 2017

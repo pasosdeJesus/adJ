@@ -4436,7 +4436,7 @@ diff -ruN src/lib/libc/hidden/wchar.h.orig src/lib/libc/hidden/wchar.h
 diff -ruN src59-orig/lib/libc/hidden/xlocale.h src/lib/libc/hidden/xlocale.h
 --- src59-orig/lib/libc/hidden/xlocale.h	Wed Dec 31 19:00:00 1969
 +++ src/lib/libc/hidden/xlocale.h	Fri Aug 19 22:07:22 2016
-@@ -0,0 +1,23 @@
+@@ -0,0 +1,24 @@
 +/*
 + * Public domain according to Colombian Legislation.
 + * http://www.pasosdejesus.org/dominio_publico_colombia.html
@@ -4449,12 +4449,13 @@ diff -ruN src59-orig/lib/libc/hidden/xlocale.h src/lib/libc/hidden/xlocale.h
 +#define _LIBC_XLOCALE_H_
 +
 +#include_next <locale.h>
++#include_next <time.h>
 +#include_next <xlocale.h>
 +
 +PROTO_STD_DEPRECATED(querylocale);
 +
-+#if defined(_LIBC_TIME_H_)
 +PROTO_NORMAL(strptime_l);
++#if defined(_LIBC_TIME_H_)
 +PROTO_NORMAL(strftime_l);
 +#endif
 +PROTO_NORMAL(localeconv_l);
@@ -5121,3 +5122,15 @@ diff -ruN src71-orig/lib/libc/locale/runeglue.c  src/lib/libc/locale/runeglue.c
  		p->toupper_tab[i + 1] = (short)rl->rl_mapupper[i];
  		p->tolower_tab[i + 1] = (short)rl->rl_maplower[i];
 
+diff -ruN src71-orig/lib/libc/hidden/time.h hidden/time.h
+--- src71-orig/lib/libc/hidden/time.h	Fri Mar 18 19:46:21 2022
++++ hidden/time.h	Mon Jul 18 05:26:49 2022
+@@ -41,7 +41,7 @@
+ PROTO_NORMAL(mktime);
+ PROTO_CANCEL(nanosleep);
+ PROTO_NORMAL(strftime);
+-PROTO_DEPRECATED(strftime_l);
++PROTO_NORMAL(strftime_l);
+ PROTO_NORMAL(strptime);
+ PROTO_NORMAL(time);
+ PROTO_DEPRECATED(timegm);

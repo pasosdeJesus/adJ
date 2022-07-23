@@ -3124,7 +3124,6 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/stdio/swsc
 diff -ruN src/lib/libc/Symbols.list.orig  src/lib/libc/Symbols.list
 --- src/lib/libc/Symbols.list.orig	Mon Aug 22 08:08:28 2016
 +++ src/lib/libc/Symbols.list	Mon Aug 22 08:12:10 2016
-@@ -1409,6 +1409,7 @@
 @@ -591,6 +591,7 @@
  closelog_r
  confstr
@@ -3179,15 +3178,7 @@ diff -ruN src/lib/libc/Symbols.list.orig  src/lib/libc/Symbols.list
  suboptarg
  system
  tdelete
-@@ -1736,6 +1750,7 @@
- strftime
- strftime_l
- strptime
-+strptime_l
- time2posix
- timegm
- timelocal
-@@ -1761,10 +1776,25 @@
+@@ -1763,10 +1777,25 @@
  
  
  /* xlocale */
@@ -3213,7 +3204,7 @@ diff -ruN src/lib/libc/Symbols.list.orig  src/lib/libc/Symbols.list
  isalnum_l
  isalpha_l
  isblank_l
-@@ -1824,13 +1854,23 @@
+@@ -1826,13 +1855,23 @@
  wcrtomb_l
  wcsnrtombs_l
  wcsrtombs_l
@@ -3237,3 +3228,4 @@ diff -ruN src/lib/libc/Symbols.list.orig  src/lib/libc/Symbols.list
  
  
  /* yp */
+

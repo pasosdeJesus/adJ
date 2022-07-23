@@ -980,7 +980,8 @@ if (test "$sn" = "s") then {
   paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs postgresql-pg_upgrade" 
   paquete postgresql-previous 
   paquete postgis
-  #paquete tiff
+  paquete ruby paquetes "ruby ruby31-ri_docs" 3.1
+  paquete tiff
   #paquete geo/spatialite/libspatialite
 
   # Recompilado con llave de adJ
@@ -999,34 +1000,40 @@ if (test "$sn" = "s") then {
   # Para que operen bien basta actualizar CVS de /usr/ports 
   # Los siguientes no deben estar en arboldes/usr/ports/mystuff
   #paquete certbot paquetes "certbot py3-acme"
-  #paquete cups
-  #paquete dovecot
+  paquete cups
+  paquete dovecot
   #paquete dtc
-  #paquete firefox-esr
+  paquete firefox-esr
   #paquete flac
   #paquete gtk+3 paquetes "gtk+3-cups"
   #paquete gdal
   #paquete gnutls
+  paquete gnupg
   #paquete gvfs
   #paquete libgcrypt
+  paquete libmad
   #paquete libssh
-  #paquete libxml
+  paquete libxml
   #paquete libxslt
   #paquete lz4
-  #paquete mariadb-client paquetes "mariadb-client mariadb-server" 
+  paquete mariadb-client paquetes "mariadb-client mariadb-server" 
   #paquete mpg123
   paquete mutt
   #paquete nginx
   #paquete node
   paquete nspr
   #paquete oniguruma 
+  paquete openssl
   #paquete quirks
   #paquete pcre2 
   #paquete python paquetes "python" "2.7"
-  #paquete rsync
+  paquete python paquetes "python" "3.9"
+  paquete rsync
   paquete sqlite3
-  #paquete unzip
-  #paquete webkitgtk4
+  paquete unrar
+  paquete unzip
+  paquete wavpack
+  paquete webkitgtk4
   #paquete zsh
 
   ###  
