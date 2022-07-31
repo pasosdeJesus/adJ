@@ -160,8 +160,8 @@ Pasos importantes para publicar versión beta
 
 13. Poner Tag en github e iniciar rama al publicar version alfa o beta (antes en master)
 	```
-	git tag -a v7.1b1 -m "Version 7.1b1"
-	git push origin v7.1b1
+	git tag -a v7.1b2 -m "Version 7.1b2"
+	git push origin v7.1b2
 	...
 	git checkout -b ADJ_7_1
 	git push origin ADJ_7_1

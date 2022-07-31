@@ -981,7 +981,6 @@ if (test "$sn" = "s") then {
   paquete postgresql-previous 
   paquete postgis
   paquete ruby paquetes "ruby ruby31-ri_docs" 3.1
-  paquete tiff
   #paquete geo/spatialite/libspatialite
 
   # Recompilado con llave de adJ
@@ -1030,6 +1029,7 @@ if (test "$sn" = "s") then {
   paquete python paquetes "python" "3.9"
   paquete rsync
   paquete sqlite3
+  paquete tiff
   paquete unrar
   paquete unzip
   paquete wavpack

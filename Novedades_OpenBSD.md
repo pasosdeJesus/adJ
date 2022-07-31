@@ -20,6 +20,10 @@ Con respecto a OpenBSD 7.1 las novedades son:
 	* Con soporte para localizaciones (fecha y hora, cantidades,
 	  cantidades monetarias, cotejación y ordenamiento) y xlocale.
     Así mismo las respectivas páginas del manual
+  * Aumentados descriptores de archivos de 2^15 a 2^63
+    (La limitacíon de 32767 descriptores de archivos está en
+     OpenBSD y en FreeBSD). Detalles en 
+     <https://github.com/pasosdeJesus/adJ/issues/8>
 
 
 * Sistema Base
