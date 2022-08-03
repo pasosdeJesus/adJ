@@ -1,0 +1,12 @@
+Index: lite-client/lite-client.cpp
+--- lite-client/lite-client.cpp.orig
++++ lite-client/lite-client.cpp
+@@ -4267,7 +4267,7 @@ int main(int argc, char* argv[]) {
+                [&](td::Slice arg) { td::actor::send_closure(x, &TestNode::set_public_key, td::BufferSlice{arg}); });
+   p.add_option('b', "b64", "remote public key as base64",
+                [&](td::Slice arg) { td::actor::send_closure(x, &TestNode::decode_public_key, td::BufferSlice{arg}); });
+-  p.add_option('d', "daemonize", "set SIGHUP", [&]() {
++  p.add_option('d', "servicioize", "set SIGHUP", [&]() {
+     td::set_signal_handler(td::SignalType::HangUp, [](int sig) {
+ #if TD_DARWIN || TD_LINUX
+       close(0);

@@ -967,11 +967,19 @@ if (test "$sn" = "s") then {
 
   paquete p5-Mail-SpamAssassin
 
-  ### Paquetes que deben recompilarse por cambio en FILE
+  ### Requieren recompilación por cambio en FILE
+
+  paquete gettext-tools paquetes 'gettext-tools gettext-runtime'
+  paquete m4
+  paquete bison
+  paquete gmake
 
   paquete unzip
   paquete python paquetes "python" "3.9"
   paquete ruby paquetes "ruby ruby31-ri_docs" 3.1
+
+  paquete print/texlive/base paquetes texlive_base
+  paquete print/texlive/texmf paquetes texlive_texmf-minimal-2021
 
   ####
   # Retroportados para cerrar fallas o actualizar
@@ -988,10 +996,7 @@ if (test "$sn" = "s") then {
 
   ###
   # Actualizados.  Están desactualizado en OpenBSD estable y current
-  paquete ocaml paquetes "ocaml"
-  paquete ocamlbuild 
-  paquete findlib
-  paquete dune # requiere findlib
+  paquete git paquetes "git"
   paquete hevea # requiere ocamlbuild
 
   ####
@@ -1002,7 +1007,7 @@ if (test "$sn" = "s") then {
   paquete cups
   paquete dovecot
   #paquete dtc
-  paquete firefox-esr
+  #paquete firefox-esr
   #paquete flac
   #paquete gtk+3 paquetes "gtk+3-cups"
   #paquete gdal
@@ -1046,7 +1051,6 @@ if (test "$sn" = "s") then {
   ###
   # Recompilados para mejorar dependencias y actualizar
 
-  #paquete gettext-tools paquetes 'gettext-tools gettext-runtime'
   #paquete libidn2
 
   #FLAVOR=light paquete evince paquetes evince-light

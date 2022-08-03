@@ -1,0 +1,12 @@
+Index: dht-server/dht-server.cpp
+--- dht-server/dht-server.cpp.orig
++++ dht-server/dht-server.cpp
+@@ -1209,7 +1209,7 @@ int main(int argc, char *argv[]) {
+   p.add_option('D', "db", "root for dbs", [&](td::Slice fname) {
+     acts.push_back([&x, fname = fname.str()]() { td::actor::send_closure(x, &DhtServer::set_db_root, fname); });
+   });
+-  p.add_option('d', "daemonize", "set SIGHUP", [&]() {
++  p.add_option('d', "servicioize", "set SIGHUP", [&]() {
+ #if TD_DARWIN || TD_LINUX
+     close(0);
+     setsid();

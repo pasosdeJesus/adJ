@@ -1,0 +1,12 @@
+Index: test/test-validator.cpp
+--- test/test-validator.cpp.orig
++++ test/test-validator.cpp
+@@ -322,7 +322,7 @@ int main(int argc, char *argv[]) {
+     td::actor::send_closure(x, &TestNode::set_zero_state, fname.str());
+     return td::Status::OK();
+   });
+-  p.add_option('d', "daemonize", "set SIGHUP", [&]() {
++  p.add_option('d', "servicioize", "set SIGHUP", [&]() {
+     td::set_signal_handler(td::SignalType::HangUp, [](int sig) {
+ #if TD_DARWIN || TD_LINUX
+       close(0);

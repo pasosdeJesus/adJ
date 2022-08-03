@@ -1,0 +1,29 @@
+Index: doc/FullNode-HOWTO
+--- doc/FullNode-HOWTO.orig
++++ doc/FullNode-HOWTO
+@@ -60,14 +60,14 @@ $ validator-engine -C /var/ton-work/etc/ton-global.con
+ 
+ Here `/var/ton-work/log` is the log directory of `validator-engine`, where it will create its log files. The argument to the `-C` command-line option is the global configuration file downloaded from test.ton.org as explained above, and `/var/ton-work/db/` is the working directory ${DB_ROOT}. Finally, <IP>:<PORT> are the global IP address of this full node (you need to indicate a public IPv4 address here) and the UDP port used to run TON Network protocols such as ADNL and RLDP. Make sure that your firewall is configured to pass UDP packets with source or destination <IP>:<PORT> at least for the `validator-engine` binary.
+ 
+-When validator-engine is invoked as above, and ${DB_ROOT}/config.json does not exist, it creates a new local configuration file ${DB_ROOT}/config.json using the information from the global configuration file and from the command-line options such as --ip, and then exits. If ${DB_ROOT}/config.json already exists, it is not rewritten; instead validator-engine starts up as a daemon using both the local and the global configuration.
++When validator-engine is invoked as above, and ${DB_ROOT}/config.json does not exist, it creates a new local configuration file ${DB_ROOT}/config.json using the information from the global configuration file and from the command-line options such as --ip, and then exits. If ${DB_ROOT}/config.json already exists, it is not rewritten; instead validator-engine starts up as a servicio using both the local and the global configuration.
+ 
+ If you need to change the local configuration afterwards, you'll need to either delete this file and regenerate it from the global configuration (potentially forgetting other important information accumulated in the local configuration), or edit the local configuration in a text editor (when validator-engine is not running).
+ 
+ 6. Setting up remote control CLI
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 
+-You will almost surely want to enable validator-engine-console in the local configuration, to be able to control your Full Node (i.e., validator-engine daemon) when it is running. For this, you'll need to generate two keypairs, one for the server (validator-engine) and one for the client (validator-engine-console). In the examples below we assume that validator-engine-console runs on the same machine and connects to validator-engine through the loopback network interface. (This is not necessarily so; you can use validator-engine-console for remote control as well.)
++You will almost surely want to enable validator-engine-console in the local configuration, to be able to control your Full Node (i.e., validator-engine servicio) when it is running. For this, you'll need to generate two keypairs, one for the server (validator-engine) and one for the client (validator-engine-console). In the examples below we assume that validator-engine-console runs on the same machine and connects to validator-engine through the loopback network interface. (This is not necessarily so; you can use validator-engine-console for remote control as well.)
+ 
+ As a first step, use the `generate-random-id` executable to create two keypairs, one for the server (on the machine running `validator-engine`) and one for the client (on the machine running `validator-engine-console`):
+ 
+@@ -116,7 +116,7 @@ To run the full node, simply run the validator-engine 
+ 
+ $ validator-engine --db ${DB_ROOT} -C /var/ton-work/etc/ton-global.config.json  -l /var/ton-work/log
+ 
+-It will read the global configuration from /var/ton-work/etc/ton-global.config.json, the local configuration from ${DB_ROOT}/config.json, and continue running silently. You should write suitable scripts for invoking validator-engine as a daemon (so that it does not terminate when the console is closed), but we'll skip these considerations for simplicity. (The command-line option `-d` of validator-engine should be sufficient for this on most *nix systems.)
++It will read the global configuration from /var/ton-work/etc/ton-global.config.json, the local configuration from ${DB_ROOT}/config.json, and continue running silently. You should write suitable scripts for invoking validator-engine as a servicio (so that it does not terminate when the console is closed), but we'll skip these considerations for simplicity. (The command-line option `-d` of validator-engine should be sufficient for this on most *nix systems.)
+ 
+ If the configuration is invalid, validator-engine will terminate immediately and, in most cases, output nothing. You'll have to study the log files under /var/ton-work/log to find out what went wrong. Otherwise, validator-engine will keep working silently. Again, you can understand what's going on by inspecting the log files, and by looking into subdirectories of the ${DB_ROOT} directory.
+ 

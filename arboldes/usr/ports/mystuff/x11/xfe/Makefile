@@ -2,7 +2,8 @@
 
 COMMENT=	MS-Explorer like file manager for X
 
-DISTNAME=	xfe-1.43.2
+DISTNAME=	xfe-1.44
+EXTRACT_SUFX=.tar.xz
 REVISION=       0
 CATEGORIES=	x11
 

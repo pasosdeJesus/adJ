@@ -1,6 +1,7 @@
 $adJ$
---- src/File.cpp.orig	Mon Jun 13 08:55:40 2016
-+++ src/File.cpp	Sat Dec 31 07:44:41 2016
+Index: src/File.cpp
+--- src/File.cpp.orig
++++ src/File.cpp
 @@ -7,6 +7,9 @@
  #include <utime.h>
  #if defined(linux)
@@ -11,7 +12,7 @@ $adJ$
  #endif
  
  // For Sun compatibility
-@@ -2083,8 +2086,9 @@ int File::mount(const FXString dir, const FXString msg
+@@ -2117,8 +2120,9 @@ int File::mount(const FXString dir, const FXString msg
      }
      return(1);
  }
@@ -22,7 +23,7 @@ $adJ$
  // Install / Upgrade package
  int File::pkgInstall(const FXString name, const FXString cmd)
  {
-@@ -2122,7 +2126,6 @@ int File::pkgUninstall(const FXString name, const FXSt
+@@ -2156,7 +2160,6 @@ int File::pkgUninstall(const FXString name, const FXSt
  
  
  #endif

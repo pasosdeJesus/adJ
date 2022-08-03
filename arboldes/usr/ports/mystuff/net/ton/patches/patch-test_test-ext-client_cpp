@@ -1,0 +1,12 @@
+Index: test/test-ext-client.cpp
+--- test/test-ext-client.cpp.orig
++++ test/test-ext-client.cpp
+@@ -187,7 +187,7 @@ int main(int argc, char *argv[]) {
+     td::actor::send_closure(x, &TestNode::set_db_root, fname.str());
+     return td::Status::OK();
+   });
+-  p.add_option('d', "daemonize", "set SIGHUP", [&]() {
++  p.add_option('d', "servicioize", "set SIGHUP", [&]() {
+     td::set_signal_handler(td::SignalType::HangUp, [](int sig) {
+ #if TD_DARWIN || TD_LINUX
+       close(0);

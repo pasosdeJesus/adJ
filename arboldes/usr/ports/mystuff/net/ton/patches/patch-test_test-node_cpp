@@ -1,0 +1,12 @@
+Index: test/test-node.cpp
+--- test/test-node.cpp.orig
++++ test/test-node.cpp
+@@ -343,7 +343,7 @@ int main(int argc, char *argv[]) {
+     td::actor::send_closure(x, &TestNode::set_broadcast_size, std::atoi(fname.str().c_str()));
+     return td::Status::OK();
+   });
+-  p.add_option('d', "daemonize", "set SIGHUP", [&]() {
++  p.add_option('d', "servicioize", "set SIGHUP", [&]() {
+     td::set_signal_handler(td::SignalType::HangUp, [](int sig) {
+ #if TD_DARWIN || TD_LINUX
+       close(0);

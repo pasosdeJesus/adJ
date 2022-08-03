@@ -1,0 +1,12 @@
+Index: adnl/adnl-pong.cpp
+--- adnl/adnl-pong.cpp.orig
++++ adnl/adnl-pong.cpp
+@@ -109,7 +109,7 @@ int main(int argc, char *argv[]) {
+     std::cout << sb.as_cslice().c_str();
+     std::exit(2);
+   });
+-  p.add_option('d', "daemonize", "set SIGHUP", [&]() {
++  p.add_option('d', "servicioize", "set SIGHUP", [&]() {
+ #if TD_DARWIN || TD_LINUX
+     close(0);
+     setsid();

@@ -1,29 +1,21 @@
-$OpenBSD$
---- src/xfedefs.h.orig	Wed Jul 27 06:27:41 2016
-+++ src/xfedefs.h	Sat Dec 31 07:40:19 2016
-@@ -172,11 +172,19 @@
+Index: src/xfedefs.h
+--- src/xfedefs.h.orig
++++ src/xfedefs.h
+@@ -172,11 +172,11 @@
  
  // Command to launch Xfe as root with sudo or su, using st as a terminal
- #ifndef SUDOCMD
--#define SUDOCMD    " -g 60x4 -e sudo su -c 'nohup xfe >& /dev/null & sleep 1'"
-+#  if defined(__OpenBSD__)
-+#    define SUDOCMD    " -g 60x4 -e doas su root -c 'nohup xfe >& /dev/null & sleep 1'"
-+#  else
-+#    define SUDOCMD    " -g 60x4 -e sudo su -c 'nohup xfe >& /dev/null & sleep 1'"
-+#  endif
+ #ifndef DEFAULT_SUDO_CMD
+-#define DEFAULT_SUDO_CMD    "sudo -b xfe"
++#define DEFAULT_SUDO_CMD    "doas su root -c 'nohup xfe >/dev/null 2>&1 & sleep 1"
  #endif
  
- #ifndef SUCMD
--#define SUCMD    " -g 60x4 -e su -c 'nohup xfe >& /dev/null & sleep 1'"
-+#  if defined(__OpenBSD__)
-+#    define SUCMD    " -g 60x4 -e su root -c 'nohup xfe >& /dev/null & sleep 1'"
-+#  else
-+#    define SUCMD    " -g 60x4 -e su -c 'nohup xfe >& /dev/null & sleep 1'"
-+#  endif
+ #ifndef DEFAULT_SU_CMD
+-#define DEFAULT_SU_CMD    "su -c 'nohup xfe >& /dev/null &'"
++#define DEFAULT_SU_CMD    "su root -c 'nohup xfe >/dev/null 2>&1 & sleep 1'"
  #endif
  
  // Tooltips setup time and duration
-@@ -279,7 +287,7 @@
+@@ -279,7 +279,7 @@
  
  // Linux specials
  
@@ -32,7 +24,7 @@ $OpenBSD$
  
  // fstab path
  #ifndef FSTAB_PATH
-@@ -295,5 +303,6 @@
+@@ -295,5 +295,6 @@
  #define DEB_PKG      0
  #define RPM_PKG      1
  #define OTHER_PKG    2

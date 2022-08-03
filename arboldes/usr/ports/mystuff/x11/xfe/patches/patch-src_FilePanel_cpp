@@ -1,6 +1,7 @@
 $adJ$
---- src/FilePanel.cpp.orig	Wed Jul 27 04:48:17 2016
-+++ src/FilePanel.cpp	Sat Dec 31 08:30:29 2016
+Index: src/FilePanel.cpp
+--- src/FilePanel.cpp.orig
++++ src/FilePanel.cpp
 @@ -64,6 +64,8 @@ extern int  FilterNum;
  #if defined(linux)
  extern FXStringDict* fsdevices;
@@ -10,7 +11,7 @@ $adJ$
  extern FXbool        pkg_format;
  #endif
  
-@@ -159,6 +161,8 @@ FXDEFMAP(FilePanel) FilePanelMap[] =
+@@ -162,6 +164,8 @@ FXDEFMAP(FilePanel) FilePanelMap[] =
      FXMAPFUNC(SEL_COMMAND, FilePanel::ID_UMOUNT, FilePanel::onCmdMount),
      FXMAPFUNC(SEL_UPDATE, FilePanel::ID_MOUNT, FilePanel::onUpdMount),
      FXMAPFUNC(SEL_UPDATE, FilePanel::ID_UMOUNT, FilePanel::onUpdUnmount),
@@ -19,7 +20,7 @@ $adJ$
      FXMAPFUNC(SEL_COMMAND, FilePanel::ID_PKG_QUERY, FilePanel::onCmdPkgQuery),
      FXMAPFUNC(SEL_COMMAND, FilePanel::ID_PKG_INSTALL, FilePanel::onCmdPkgInstall),
      FXMAPFUNC(SEL_COMMAND, FilePanel::ID_PKG_UNINSTALL, FilePanel::onCmdPkgUninstall),
-@@ -4499,6 +4503,18 @@ long FilePanel::onCmdPopupMenu(FXObject* o, FXSelector
+@@ -4631,6 +4635,18 @@ long FilePanel::onCmdPopupMenu(FXObject* o, FXSelector
                  ar = true;
                  new FXMenuCommand(menu, _("&Extract here"), archexticon, current, FilePanel::ID_EXTRACT_HERE);
              }
@@ -38,7 +39,7 @@ $adJ$
              else if ((num == 1) && ((ext1 == "tar") || (ext1 == "tgz") || (ext1 == "tbz2") || (ext1 == "tbz") || (ext1 == "taz") || (ext1 == "txz") || (ext1 == "zip") || (ext1 == "7z") || (ext1 == "lzh") || (ext1 == "rar") || (ext1 == "ace") || (ext1 == "arj")))
              {
                  ar = true;
-@@ -4534,7 +4550,7 @@ long FilePanel::onCmdPopupMenu(FXObject* o, FXSelector
+@@ -4666,7 +4682,7 @@ long FilePanel::onCmdPopupMenu(FXObject* o, FXSelector
          {
              new FXMenuCommand(menu, _("&Add to archive..."), archaddicon, current, FilePanel::ID_ADD_TO_ARCH);
          }
@@ -47,7 +48,7 @@ $adJ$
          if ((num == 1) && !ar)
          {
              new FXMenuCommand(menu, _("Packages &query "), packageicon, current, FilePanel::ID_PKG_QUERY);
-@@ -5340,7 +5356,7 @@ long FilePanel::onCmdExtractHere(FXObject*, FXSelector
+@@ -5488,7 +5504,7 @@ long FilePanel::onCmdExtractHere(FXObject*, FXSelector
  }
  
  
@@ -56,7 +57,7 @@ $adJ$
  // Install/Upgrade package
  long FilePanel::onCmdPkgInstall(FXObject*, FXSelector, void*)
  {
-@@ -5367,6 +5383,10 @@ long FilePanel::onCmdPkgInstall(FXObject*, FXSelector,
+@@ -5515,6 +5531,10 @@ long FilePanel::onCmdPkgInstall(FXObject*, FXSelector,
          {
              cmd = "dpkg -i "+ path;
          }
@@ -67,7 +68,7 @@ $adJ$
  
          // Wait cursor
          getApp()->beginWaitCursor();
-@@ -5416,6 +5436,11 @@ long FilePanel::onCmdPkgUninstall(FXObject*, FXSelecto
+@@ -5564,6 +5584,11 @@ long FilePanel::onCmdPkgUninstall(FXObject*, FXSelecto
              name = name.section('_', 0);
              cmd = "dpkg -r "+ name;
          }
@@ -79,7 +80,7 @@ $adJ$
  
          // Wait cursor
          getApp()->beginWaitCursor();
-@@ -5699,7 +5724,7 @@ long FilePanel::onCmdGoScriptDir(FXObject* o, FXSelect
+@@ -5847,7 +5872,7 @@ long FilePanel::onCmdGoScriptDir(FXObject* o, FXSelect
  }
  
  
@@ -88,7 +89,7 @@ $adJ$
  // Mount/Unmount file systems
  long FilePanel::onCmdMount(FXObject*, FXSelector sel, void*)
  {
-@@ -5883,8 +5908,9 @@ long FilePanel::onUpdUnmount(FXObject* o, FXSelector s
+@@ -6031,8 +6056,9 @@ long FilePanel::onUpdUnmount(FXObject* o, FXSelector s
  
      return(1);
  }
@@ -99,7 +100,7 @@ $adJ$
  // Query packages data base
  long FilePanel::onCmdPkgQuery(FXObject* o, FXSelector sel, void*)
  {
-@@ -5902,9 +5928,13 @@ long FilePanel::onCmdPkgQuery(FXObject* o, FXSelector 
+@@ -6050,9 +6076,13 @@ long FilePanel::onCmdPkgQuery(FXObject* o, FXSelector 
      {
          cmd = "rpm -qf " + ::quote(file);
      }
@@ -114,7 +115,7 @@ $adJ$
          return(0);
      }
  
-@@ -5961,6 +5991,11 @@ long FilePanel::onCmdPkgQuery(FXObject* o, FXSelector 
+@@ -6112,6 +6142,11 @@ long FilePanel::onCmdPkgQuery(FXObject* o, FXSelector 
              str = "";
          }
      }
@@ -126,7 +127,7 @@ $adJ$
  
      // Display the related output message
      FXString message;
-@@ -6010,7 +6045,7 @@ long FilePanel::onUpdPkgQuery(FXObject* o, FXSelector 
+@@ -6161,7 +6196,7 @@ long FilePanel::onUpdPkgQuery(FXObject* o, FXSelector 
  }
  
  
