@@ -968,18 +968,18 @@ if (test "$sn" = "s") then {
   paquete p5-Mail-SpamAssassin
 
   ### Requieren recompilación por cambio en FILE
-
-  paquete gettext-tools paquetes 'gettext-tools gettext-runtime'
-  paquete m4
-  paquete bison
-  paquete gmake
-
   paquete unzip
   paquete python paquetes "python" "3.9"
   paquete ruby paquetes "ruby ruby31-ri_docs" 3.1
 
-  paquete print/texlive/base paquetes texlive_base
-  paquete print/texlive/texmf paquetes texlive_texmf-minimal-2021
+  paquete gettext-tools paquetes 'gettext-tools gettext-runtime'  # Requerido para compilar muchos
+  paquete m4 # Requerido para compilar bison
+  paquete bison # Requerido para compilar MariaDB
+  paquete gmake # requerido para compilar PostgreSQL
+  paquete ImageMagick  # requerido para compilar postgis
+
+  paquete print/texlive/base paquetes texlive_base # Requerido para compilar ton
+  paquete print/texlive/texmf paquetes texlive_texmf-minimal-2021 # Requerido para compilar ton
 
   ####
   # Retroportados para cerrar fallas o actualizar
