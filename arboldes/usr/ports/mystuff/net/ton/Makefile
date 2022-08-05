@@ -1,5 +1,5 @@
 COMMENT =		Tools for the Blockchain TON - The Open Network
-V =			20220802
+V =			20220805
 REVISION =		
 
 # Patches were added just to change daemon for service
@@ -8,7 +8,7 @@ DISTNAME=	ton-$V
 GH_ACCOUNT=	pasosdeJesus
 GH_PROJECT=	ton
 GH_BRANCH=adJ
-GH_COMMIT=	988885190eb2587c926af3e1276f3c8c3c0e1419
+GH_COMMIT=	6799e7640b94d6c82d99f0480378b428e418eeab
 
 CATEGORIES =		net
 

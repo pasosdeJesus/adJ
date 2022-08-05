@@ -96,8 +96,8 @@ Con respecto a OpenBSD 7.1 las novedades son:
 
 * Paquetes
 	* Retroportados para cerrar fallas y/o actualizar y/o usar xlocale:
-    ruby-3.1.1, 
-    postgresql-server-14.2, postgresql-client, postgresql-contrib, 
+    ruby-3.2
+    postgresql-server-14.4, postgresql-client, postgresql-contrib, 
     postgresql-docs, postgresql-previous, postgis-3.1.4
 	* Se recompilaron de portes estables recientes para cerrar 
 	  fallas o usar xlocale: 
