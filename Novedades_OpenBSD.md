@@ -22,8 +22,11 @@ Con respecto a OpenBSD 7.1 las novedades son:
     Así mismo las respectivas páginas del manual
   * Aumentados descriptores de archivos de 2^15 a 2^63
     (La limitacíon de 32767 descriptores de archivos está en
-     OpenBSD y en FreeBSD). Detalles en 
-     <https://github.com/pasosdeJesus/adJ/issues/8>
+     OpenBSD y en FreeBSD). Este cambio implica que no hay
+     garantía en compatibilidad de binarios entre OpenBSD y adJ.
+     En genereal la habrá, excepto en programas que usen macros
+     que referencien estructura de FILE como `__sfileno`.
+     Detalles en <https://github.com/pasosdeJesus/adJ/issues/8>
 
 
 * Sistema Base
