@@ -1,4 +1,4 @@
-#     $OpenBSD: install.md,v 1.55 2017/07/28 18:15:44 rpe Exp $
+#     $OpenBSD: install.md,v 1.56 2021/09/26 12:39:25 krw Exp $
 #
 #
 # Copyright (c) 1996 The NetBSD Foundation, Inc.
@@ -83,7 +83,7 @@ md_prep_fdisk() {
 			fi
 
 			echo -n "$_slsettingopenbsdgpt $_disk..."
-			fdisk -iy -g -b 960 $_disk >/dev/null
+			fdisk -gy -b 960 $_disk >/dev/null
 			echo "$_sldone."
 			return ;;
 		[eE]*)

@@ -1,5 +1,5 @@
 #!/bin/ksh
-#      $OpenBSD: install.sub,v 1.1178 2021/09/13 11:49:21 robert Exp $
+#      $OpenBSD: install.sub,v 1.1193 2022/03/28 18:53:40 kettenis Exp $
 #
 # Copyright (c) 1997-2015 Todd Miller, Theo de Raadt, Ken Westerback
 # Copyright (c) 2015, Robert Peichaer <rpe@openbsd.org>
@@ -382,6 +382,7 @@ disk_has() {
 	local _p_gpt_apfs='^[ *]...: APFS '
 	local _p_gpt_apfsisc='^[ *]...: APFS ISC '
 	local _p_gpt_apfsrecovery='^[ *]...: APFS Recovry '
+	local _p_gpt_biosboot='^[ *]...: BIOS Boot '
 	local _p_gpt_efisys='^[ *]...: EFI Sys '
 	local _p_hfs='^Partition map '
 	local _p_hfs_openbsd=' OpenBSD OpenBSD '
@@ -885,6 +886,27 @@ ask_password() {
 	done
 }
 
+# Ask for a passphrase once showing prompt $1. Ensure input is not empty
+# save it in $_passphrase.
+ask_passphrase() {
+	local _q=$1
+
+	if $AI; then
+		echo -n "$_q "
+		_autorespond "$_q"
+		echo '<provided>'
+		_passphrase=$resp
+		return
+	fi
+
+	while :; do
+		IFS= read -r _passphrase?"$_q (will echo) "
+
+		[[ -n $_passphrase ]] && break
+
+		echo "Empty passphrase, try again."
+	done
+}
 
 # ------------------------------------------------------------------------------
 # Support functions for donetconfig()
@@ -1054,7 +1076,7 @@ v4_config() {
 			;;
 		autoconf|dhcp)
 			dhcp_request $_if
-			echo "autoconf" >>$_hn
+			echo "inet autoconf" >>$_hn
 			return
 			;;
 		esac
@@ -1107,7 +1129,7 @@ v6_defroute() {
 	_routers=$(route -n show -inet6 |
 		sed -En 's/^default[[:space:]]+([^[:space:]]+).*/\1 /p')
 
-	# Add more default router canditates by ping6'ing
+	# Add more default router candidates by ping6'ing
 	# the All-Routers multicast address.
 	for _if in $_v6ifs; do
 		_resp=$(ping6 -n -c 2 ff02::2%$_if 2>/dev/null |
@@ -1242,23 +1264,23 @@ ieee80211_config() {
 			ask_until "$_prompt" "O"
 			case "$_haswpa-$resp" in
 			?-[Oo]) # No further questions
-				ifconfig $_if nwid "$_nwid"
-				quote nwid "$_nwid" >>$_hn
+				ifconfig $_if join "$_nwid"
+				quote join "$_nwid" >>$_hn
 				break
 				;;
-			?-[Ww])	ask_until "Llave WEP? (no se vera)"
+			?-[Ww])	ask_passphrase "Llave WEP?"
 				# Make sure ifconfig accepts the key.
-				if _err=$(ifconfig $_if nwid "$_nwid" nwkey "$resp" 2>&1) &&
+				if _err=$(ifconfig $_if join "$_nwid" nwkey "$_passphrase" 2>&1) &&
 					[[ -z $_err ]]; then
 					quote nwid "$_nwid" nwkey "$resp" >>$_hn
 					break
 				fi
 				echo "$_err"
 				;;
-			1-[Pp])	ask_until "Palabra secreta WPA? (se vera)"
+			1-[Pp])	ask_passphrase "Palabra secreta WPA?"
 				# Make sure ifconfig accepts the key.
-				if ifconfig $_if nwid "$_nwid" wpakey "$resp"; then
-					quote nwid "$_nwid" wpakey "$resp" >>$_hn
+				if ifconfig $_if join "$_nwid" wpakey "$resp"; then
+					quote join "$_nwid" wpakey "$resp" >>$_hn
 					break
 				fi
 				;;
@@ -1774,7 +1796,7 @@ install_http() {
 	if [[ -s $HTTP_LIST ]]; then
 		_prompt="Servidor HTTP? (nombre, # en lista, 'listo' o '?')"
 	else
-		echo "(No pudo obtener lista ftp de ftp.openbsd.org, pero esta bien)"
+		echo "(No pudo obtener lista de openbsd.org, pero esta bien)"
 		_prompt="Servidor HTTP? (nombre o 'listo')"
 	fi
 
@@ -1870,7 +1892,7 @@ install_http() {
 		case $_tls in
 		force)	$AI && exit 1 || return
 			;;
-		try)	ask_yn "No pudo conectarse usando https. En lugar de esto usar http?" ||
+		try)	ask_yn "No pudo conectarse usando HTTPS. Usar HTTP?" ||
 				return
 			_http_proto=http
 			_url_base="http://$HTTP_SERVER/$HTTP_DIR"
@@ -1918,7 +1940,7 @@ install_http() {
 	if [[ -n $INSTALL_MIRROR ]]; then
 		INSTALL_URL=$_http_proto://$INSTALL_MIRROR
 	else
-		# Remove the architecture and snaphots or version part.
+		# Remove the architecture and snapshots or version part.
 		INSTALL_URL=${_url_base%/$ARCH}
 		INSTALL_URL=${INSTALL_URL%@(/$VNAME|/snapshots)}
 	fi
@@ -2075,7 +2097,7 @@ donetconfig() {
 	fi
 
 	# Get & apply fqdn to hostname. Don't ask if there's only one configured
-	# interface and if it's managed by dhclient and if the domain name is
+	# interface and if it's managed by dhcp and if the domain name is
 	# configured via dhclient too.
 	resp="${_dn:-$(get_fqdn)}"
 	if ifconfig dhcp >/dev/null 2>&1 && [[ $NIFS == 1 && -z $_dn ]]; then
@@ -2301,7 +2323,7 @@ is_rootdisk() {
 				ls -d /mnt/{bin,dev,etc,home,mnt,root,sbin,tmp,usr,var}
 			fi
 			_rc=$?
-			umount -f /mnt
+			umount /mnt
 		fi
 		rm -f /dev/{r,}$_d?
 		return $_rc
@@ -2353,7 +2375,6 @@ parse_hn_line() {
 
 	ifconfig $_if inet6 >/dev/null 2>&1 && _has_inet6=true
 	[[ -x /sbin/dhcpleased ]] && _has_dhcp=true
-
 
 	case ${_c[_af]} in
 	''|*([[:blank:]])'#'*)
@@ -2437,22 +2458,8 @@ ifstart() {
 }
 
 # Configure the network during upgrade based on the on-disk configuration.
-enable_network() {
-	local _f _gw _v4set=false _v6set=false _hn _if _trunks _svlans _vlans
-
-	# Use installed network configuration files during upgrade.
-	for _f in dhclient.conf resolv.conf; do
-		if [[ -f /mnt/etc/$_f ]]; then
-			cp /mnt/etc/$_f /etc/$_f
-		fi
-	done
-
-	# Create a minimal hosts file.
-	echo "127.0.0.1\tlocalhost" >/tmp/i/hosts
-	echo "::1\t\tlocalhost" >>/tmp/i/hosts
-
-	_f=/mnt/etc/soii.key
-	[[ -f $_f ]] && sysctl "net.inet6.ip6.soiikey=$(<$_f)"
+enable_ifs() {
+	local _gw _v4set=false _v6set=false _hn _if _trunks _svlans _vlans
 
 	# Set the address for the loopback interface. Bringing the
 	# interface up, automatically invokes the IPv6 address ::1.
@@ -2483,7 +2490,7 @@ enable_network() {
 
 	# /mnt/etc/mygate, if it exists, contains the address(es) of my
 	# default gateway(s). Use for ipv4 if no interfaces configured via
-	# dhcp. Use for ipv6 if no interfaces configured via autoconf.
+	# autoconf. Use for ipv6 if no interfaces configured via autoconf.
 	stripcom /mnt/etc/mygate |
 	while read _gw; do
 		case $_gw in
@@ -2507,6 +2514,26 @@ enable_network() {
 	route -qn add -net 127 127.0.0.1 -reject >/dev/null
 }
 
+enable_network() {
+	local _f
+
+	# Use installed network configuration files during upgrade.
+	for _f in dhclient.conf resolv.conf; do
+		if [[ -f /mnt/etc/$_f ]]; then
+			cp /mnt/etc/$_f /etc/$_f
+		fi
+	done
+
+	# Create a minimal hosts file.
+	echo "127.0.0.1	localhost" >/tmp/i/hosts
+	echo "::1		localhost" >>/tmp/i/hosts
+
+	_f=/mnt/etc/soii.key
+	[[ -f $_f ]] && sysctl "net.inet6.ip6.soiikey=$(<$_f)"
+
+	enable_ifs
+}
+
 # Fetch the list of mirror servers and installer choices from previous runs if
 # available from ftplist.cgi. Start the ftp process in the background, but kill
 # it if it takes longer than 12 seconds.
@@ -2515,13 +2542,14 @@ start_cgiinfo() {
 	((NIFS < 1)) && return
 
 	# Ensure proper name resolution in case there's no dns yet.
-	add_hostent 129.128.5.191 ftp.openbsd.org
+	add_hostent 199.185.178.80 ftplist1.openbsd.org
+	add_hostent 129.128.5.194 ftplist2.openbsd.org
 
 	# Make sure the ftp subshell gets its own process group.
 	set -m
 	(
 		unpriv2 ftp -w 15 -Vao - \
-			"$HTTP_PROTO://ftp.openbsd.org/cgi-bin/ftplist.cgi?dbversion=1" \
+			"$HTTP_PROTO://ftplist1.openbsd.org/cgi-bin/ftplist.cgi?dbversion=1" \
 			2>/dev/null >$CGI_INFO
 
 		# Remember finish time for adjusting the received timestamp.
@@ -2718,6 +2746,12 @@ install_sets() {
 		# Preserve the selected install source selection.
 		[[ -n $INSTALL_METHOD ]] && _d=$INSTALL_METHOD
 
+		if [ -x /mnt/usr/sbin/fw_update -a \
+		    "$(echo /mnt2/*firmware*tgz)" != "/mnt2/*firmware*tgz" ]; then
+			DESTDIR=/mnt /mnt/usr/sbin/fw_update /mnt2/*firmware*tgz
+			enable_ifs	# try again with firmwares
+		fi
+
 		# Set default to 'done' to leave the while-loop.
 		sane_install quiet || $AI && _d=listo
 	done
@@ -2745,7 +2779,8 @@ apply() {
 
 	if [[ $DEFCONS == y ]]; then
 		cp /mnt/etc/ttys /tmp/i/ttys
-		sed	-e "/^$CTTY/s/std.9600/std.${CSPEED}/" \
+		sed	-e "/^console/s/on  secure/off secure/" \
+			-e "/^$CTTY/s/std.9600/std.${CSPEED}/" \
 			-e "/^$CTTY/s/std.115200/std.${CSPEED}/" \
 			-e "/^$CTTY/s/unknown/vt220	/" \
 			-e "/$CTTY/s/off.*/on secure/" /tmp/i/ttys >/mnt/etc/ttys
@@ -2821,6 +2856,8 @@ finish_up() {
 	)
 	echo " listo."
 
+	[ -x /mnt/usr/sbin/fw_update ] && DESTDIR=/mnt /mnt/usr/sbin/fw_update
+
 	# We may run some programs in chroot, and some of them might be
 	# dynamic.  That is highly discouraged, but let us play it safe.
 	rm -f /mnt/var/run/ld.so.hints
@@ -2879,7 +2916,7 @@ finish_up() {
 		quote export "http_proxy=$http_proxy" >>/mnt/etc/rc.firsttime
 
 	# Ensure that fw_update is run on reboot.
-	echo "/usr/sbin/fw_update -v" >>/mnt/etc/rc.firsttime
+	echo "/usr/sbin/fw_update " >>/mnt/etc/rc.firsttime
 
 	# Run syspatch -c on reboot if the arch is supported and if it is a
 	# release system (not -stable or -current). List uninstalled syspatches
@@ -3118,7 +3155,7 @@ do_install() {
 		_i=$_i${INSTALL_METHOD:+method=$INSTALL_METHOD}
 		_i=${_i%&}
 		[[ -n $_i ]] && unpriv2 ftp -w 15 -Vao - \
-			"$HTTP_PROTO://ftp.openbsd.org/cgi-bin/ftpinstall.cgi?dbversion=1&$_i" \
+			"$HTTP_PROTO://ftplist1.openbsd.org/cgi-bin/ftpinstall.cgi?dbversion=1&$_i" \
 			 >/dev/null 2>&1 &
 	fi
 
@@ -3148,8 +3185,8 @@ do_install() {
 
 	# Note we may have no hosts file if no interfaces were configured.
 	if [[ -f /tmp/i/hosts ]]; then
-		# Remove the entry for ftp.openbsd.org
-		sed -i '/^129\.128\.5\.191 /d' /tmp/i/hosts
+		# Remove the entry for ftplist*.openbsd.org
+		sed -i '/ ftplist[0-9]\.openbsd\.org$/d' /tmp/i/hosts
 		_dn=$(get_fqdn)
 		while read _addr _hn _aliases; do
 			if [[ -n $_aliases || $_hn != ${_hn%%.*} || -z $_dn ]]; then
@@ -3168,7 +3205,6 @@ do_install() {
 		[[ -f $_f && -s $_f ]] && mv $_f /mnt/etc/.
 	done)
 	[[ -s /etc/resolv.conf ]] && cp /etc/resolv.conf /mnt/etc/resolv.conf
-
 
 	echo " listo."
 
@@ -3244,17 +3280,19 @@ do_upgrade() {
 	# Configure the network.
 	enable_network
 
-	# Fetch list of mirror servers and installer choices from previous runs.
-	start_cgiinfo
-
 	# Create a skeletal /etc/fstab which is usable for the upgrade process.
 	munge_fstab
+
+	# Do not need to look in /mnt anymore
+	umount /mnt || { echo "No puede montar $ROOTDEV!"; exit; }
+
+	# Fetch list of mirror servers and installer choices from previous runs.
+	start_cgiinfo
 
 	# fsck -p non-root filesystems in /etc/fstab.
 	check_fs
 
 	# Mount filesystems in /etc/fstab.
-	umount /mnt || { echo "No puede montar $ROOTDEV!"; exit; }
 	mount_fs
 
 	rm -f /mnt/bsd.upgrade /mnt/auto_upgrade.conf
@@ -3285,7 +3323,7 @@ check_unattendedupgrade() {
 				_rc=$?
 				((_rc == 0)) && cp /mnt/auto_upgrade.conf /
 				echo "Cual es el disco raiz = ${_d}" >> /auto_upgrade.conf
-				umount -f /mnt
+				umount /mnt
 			fi
 			rm -f /dev/{r,}$_d?
 		fi
