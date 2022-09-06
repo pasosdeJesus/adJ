@@ -1,5 +1,5 @@
 COMMENT =		Tools for the Blockchain TON - The Open Network
-V =			20220805
+V =			20220904
 REVISION =		
 
 # Patches were added just to change daemon for service
@@ -8,7 +8,7 @@ DISTNAME=	ton-$V
 GH_ACCOUNT=	pasosdeJesus
 GH_PROJECT=	ton
 GH_BRANCH=adJ
-GH_COMMIT=	6799e7640b94d6c82d99f0480378b428e418eeab
+GH_COMMIT=	cc252b02d80eb1bf1d542101452fb772000989ae
 
 CATEGORIES =		net
 
@@ -24,7 +24,7 @@ MASTER_SITES4 =		https://github.com/facebook/rocksdb/archive/
 EXTRACT_SUFX=.tar.gz
 
 COMMIT_ABSEIL_CPP=8c6e53ef3adb1227fffa442c50349dab134a54bc
-COMMIT_CRC32C=fd33bccdf4824716df2552f7addd735264f77872
+COMMIT_CRC32C=02e65f4fd3065d27b2e29324800ca6d04df16126
 COMMIT_LIBRAPTORQ=14baff5994b6faf7739a5f058481797365b57fb1
 COMMIT_ROCKSDB=fcf3d75f3f022a6a55ff1222d6b06f8518d38c7c
 

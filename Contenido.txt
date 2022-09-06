@@ -194,10 +194,10 @@ atk2mm-[v]		Interfaz en C++ para la librería ATK
 audacious-player-[v]	Reproductor gráfico que soporta muchos formatos
 audacious-plugins-[v]	Extensiones de entrada y salida para Audacious
 avahi-[v]		Descubrimiento de servicio DNS multi-distribución
-avahi-glib-[v]	
-avahi-libs-[v]	
+avahi-glib-[v]	Librerías de integración GLib y GObject para avahi
+avahi-libs-[v]	Librerías y archivos de datos comunes para avahi
 babl-[v]		Librería para conversión dinámica de formatos de puntos
-bison-[v]
+bison-[v]	Generador de reconocedores de sintaxis
 blas-[v]		Subprogramas básicos de álgebra lineal
 boehm-gc-[v]	Recolector de basura y detector de fallas para C y C++
 boost-[v]		Librerías libres revisadas por pares en C++ portable
@@ -311,7 +311,7 @@ hyphen-[v]		Librería de separación silábica
 icu4c-[v]		Componentes internacionales para Unicode
 icu4c-wwwdata-[v]	Datos ICU para usar en la jaula chroot /var/ww
 ijs-[v]		Librería para transmisión de imágenes raster
-Imath-[v]
+Imath-[v]	Librería en C++ y python para matrices y vectpres 2D y 3D
 imlib2-[v]		Librería para manipulación de imágenes 2
 iodbc-[v]		Manejador ODBC 2
 iso-codes-[v]		Lista de códigos ISO de países, idiomas y monedas
@@ -330,7 +330,7 @@ lcdf-typetools-[v]	Herramientas para manipular archivos con tipografias
 lcms-[v]		Librería para manejo de color
 lcms2-[v]		Librería para manejo de color
 ldb-[v]		Base de datos empotrada estilo LDAP
-lib2geom-[v]
+lib2geom-[v]	Librería fácil de usar en C++ para geometría 2D
 libao-[v]		Librería portable para emitir audio
 libarchive-[v]	Librería para leer y escribir archivos de emisión
 libass-[v]		Librería para decodificación AC-3
@@ -339,7 +339,7 @@ libb2-[v]		Librería de funciones de condensando BLAKE2{b,s,bp,sp}
 libbfio-[v]	Librería de abstracción de entrada/salida en C
 libbluray-[v]		Soporta reproducción de Blu-ray
 libbs2b-[v]		DSP Bauer estereofónico-a-binarual
-libcares-[v]
+libcares-[v]	Librería de resolvedor asíncrono
 libcddb-[v]		Librería para acceder a un servidor CDDB
 libcdio-[v]		Librería para controlar entrada de disco compacto
 libcdio-paranoia-[v]	Bifurcación de cdparanoia que usa libcdio
@@ -367,7 +367,7 @@ libglade2-[v]	Carga interfaces Glade
 libgnome-keyring-[v]	Librería GNOME para integración con keyring
 libgpg-error-[v]	Códigos de error de GnuPG
 libgsf-[v]		Archivos estructurados de Gnome
-libhandy-[v]
+libhandy-[v]	Bloques para aplicaciones GNOME modernas y adaptables
 libheif-[v]		Codificador/decodificador de HEIF ISO/IEC 23008-12:2017
 libiconv-[v]		Conversión entre codificaciones de caracteres
 libid3tag-[v]	Lector de marcas ID3
@@ -378,7 +378,7 @@ libksba-[v]		Librería de X.509
 libltdl-[v]		Envoltura para dlopen de gnu libtool
 libmad-[v]	Decodificador de MPEG
 libmatroska-[v]	Contenedor estándar y abierto de audio y vídeo
-libmicrohttpd-[v]
+libmicrohttpd-[v]	Librería httpd miniatura y empotrable
 libmms-[v]		Librería para reconocer mms:// y mmsh://
 libmng-[v]		Librería de referencia del formato gráfico MNG
 libmodplug-[v]	Librería para decodificar formatos de música estilo mod
@@ -398,8 +398,8 @@ librsvg-[v]		Librería para reconocer archivos SVG basada en SAX
 librttopo-[v]	Librería de topología RT
 libsamplerate-[v]	Librería de conversión de rata de audios
 libsecret-[v]	Librería para almacenar y recuperar claves y secretos
-libshout-[v]
-libsoup3-[v]
+libshout-[v]	Librería para comunicaciones con un servidor icecast
+libsoup3-[v]	Librería cliente/servidor HTTP para GNOME
 libsigc++-[v]	Plataforma de retro-llamadas para C++
 libsigsegv-[v]		Librería para manejar fallos de página en modo usuario
 libsmb2-[v]		Librería cliente en espacio de usuario para SMB2/SMB3
@@ -419,14 +419,14 @@ libtermkey-[v]		Librería para procesar teclado en terminal
 libtextstyle-[v]	Librería para dar estilo a textos (parte de gettext)
 libtheora-[v]	Codec abierto de vídeo
 libtorrent-[v]	Librería de BitTorrent escrita en C++
-libudfread-[v]
+libudfread-[v]	Librería para leer UDF de dispositivos puros
 libunbound-[v]	Librería de resolvedor DNS que valida
 libunistring-[v]	Manipula cadenas Unicode
 libusb1-[v]	Rutinas para manejar dispositivos USB
 libuv-[v]		Librería para entrada/salida multiplataforma
 libv4l-[v]		Librería en espacio de usuario de libv4l
 libvhdi-[v]	Librería y herramientas para el formato de imagenes VHD
-libvidstab-[v]
+libvidstab-[v]	Librería para estabilización de vídeo
 libvmdk-[v]	Librería y herramientas para el formato de vmdk
 libvorbis-[v]		Codec para compresión de audio
 libvpx-[v]	Codec para video VP8 de Google
@@ -440,12 +440,12 @@ libyaml-[v]		Reconocedor y emisor de YAML 1.1 escrito en C
 libyajl-[v]		Pequeña librería JSON escrita en ANSI C
 libzip-[v]		Librería para leer, crear y modificar archivos zip
 lockfile-[v]		Maneja archivos semáforos en archivos de órdenes
-lua-compat53-[v]
+lua-compat53-[v]	Módulo de compatibilidad con API estilo Lua 5.3
 lua-libmpack-[v]	Uniones en lua para libmsgpack
 lz4-[v]		Compresión de datos rápida con licencia BSD
 lzlib-[v]		Librería para compresión lzip
 lzo2-[v]		Librería de compresión portable
-m4-[v]
+m4-[v	Lenguaje de macros m4
 meanwhile-[v]	Implementación del protocolo Lotus Sametime Community
 minizip-[v]	Librería para manipulación de zip
 mozilla-dicts-en-GB-[v]	Diccionario requerido por hunspell
@@ -469,7 +469,7 @@ openjp2-[v]		Codec de fuentes abiertas de JPEG 2000
 openldap-client-[v]	Cliente de LDAP de fuentes abiertas
 openpam-[v]	Modulo enchufable de autenticación
 opensp-[v]		Reconocedor SGML orientado a objetos
-openssl-[v]
+openssl-[v]	Librería y herramientas TLS/SSL
 opus-[v]		Codificador de audio IETF
 opusfile-[v]		API de alto nivel para decodificar en archivos Opus
 ocamlbuild-[v]	Para construir proyectos en OCaml
@@ -489,9 +489,9 @@ p5-Class-XSAccessor-[v]	Genera accesores XS rápidos sin compilación
 p5-Clone-[v]		Copia tipos de datos perl recursivamente
 p5-Clone-PP-[v]	Copia tipos de datos Perl de forma recursiva
 p5-Cpanel-JSON-XS-[v]	Serialización bifurcada de cPanel JSON:XS
-p5-Crypt-OpenSSL-Bignum-[v]	Aritmética multi-precisión de OpenSLL
-p5-Crypt-OpenSSL-Guess-[v]	
-p5-Crypt-OpenSSL-Random-[v]	Rutinas para acceder al prng de OpenSLL
+p5-Crypt-OpenSSL-Bignum-[v]	Aritmética multi-precisión de OpenSSL
+p5-Crypt-OpenSSL-Guess-[v]	Adivinar rutas de inclusión de OpenSSL
+p5-Crypt-OpenSSL-Random-[v]	Rutinas para acceder al prng de OpenSSL
 p5-Crypt-OpenSSL-RSA-[v]	Codificación y decodificación RSA con OpenSSL
 p5-Data-Dumper-Concise-[v]	Menos indentación
 p5-Data-IEEE754-[v]	Empaqueta  y desempaqueta flotantes big-endian
@@ -611,6 +611,7 @@ p5-WWW-RobotRules-[v]	Base de datos de permisos de robots.txt
 p5-XML-Parser-[v]	Módulo en perl para reconocer XML
 p7zip-[v]		Archivador con alta rata de compresión
 p7zip-rar-[v]	Módulos de rar para p7zip
+pandoc-[v]	Convertidor entre lengaujes de marcado para documentos
 pango-[v]		Organización y presentación de texto
 pangomm-[v]		Interfaz en C++ para pango
 pcre-[v]		Librería de expresiones regulares a la Perl
@@ -656,7 +657,7 @@ py3-acme-[v]	Implementación del protocolo ACME
 py3-asn1-[v]	Librería de ASN.1 para Python
 py3-asn1crypto-[v]	Serializador y reconocedor rápido de ASN.1
 py3-beaker-[v]	Librería para sesiones y colchón (buffer) con capa wsgi
-py3-brotli-[v]
+py3-brotli-[v]	Uniones en Python para la librería de compresión brotli
 py3-cairo-[v]	Uniones con cairo para Python
 py3-certifi-[v]	Paquete python para revisar certificados 
 py3-cffi-[v]	Interfaz de funciones foráneas para llamar código C
@@ -666,12 +667,12 @@ py3-configobj-[v]	Escribe y lee archivo de configuración
 py3-cparser-[v]	Reconocedor de C en Python puro
 py3-cryptography-[v]	Recetas y primitivas criptográficas en Python
 py3-cryptodome-[v]	Librería criptográfica autocontenida para Python
-py3-dnspython-[v]
+py3-dnspython-[v]	Juego de herramientas DNS para Python
 py3-distro-[v]	Provee información sobre el sistema operativo
 py3-gobject3-[v]	Uniones Python para GLib y GObject
 py3-josepy-[v]	Cifrado y firma de objets en Javascript
 py3-idna-[v]		Librería de Python para soportar el protocolo IDNA
-py3-importlib_metadata-[v]
+py3-importlib_metadata-[v]	Librería para acceder metadatos de paquetes
 py3-MarkupSafe-[v]	Implementa una cadena segura de marcado XML/HTML/XHTML
 py3-lxml-[v]	Uniones en Python para libxml2 y libxslt
 py3-mako-[v]	Lenguaje de plantillas super rápido
@@ -685,12 +686,12 @@ py3-requests-[v]	Librería Python para HTTP simple y elegante
 py3-requests-toolbelt-[v]	Cinturón de utilidades para py-requests
 py3-setuptools-[v]	Sistema de empaquetamiento de módulos Python
 py3-six-[v]	Librería de compatibilidad entre Python 2 y 3
-py3-talloc-[v]
-py3-tdb-[v]
+py3-talloc-[v]	Uniones para Python3.9 para talloc
+py3-tdb-[v]	Uniones para Python 3.9 para tdb
 py3-tz-[v]		API de Python para tratar con zonas horarias
 py3-urllib3-[v]	Librería HTTP para Python
 py3-werkzeug-[v]	Colección de utilidades WSGI
-py3-zipp-[v]
+py3-zipp-[v]	Retroporte de librería para archivos zip
 py3-zopecomponent-[v]	Arquitectura por componentes de Zope
 py3-zopeevent-[v]	Sistema de publicación básico de Zope
 py3-zopeinterface-[v]	Interfaz a infraestructura de objetos de Zope
@@ -703,7 +704,7 @@ qtdeclarative-[v]	Componentes Qt5 Quick y QML
 qtlocation-[v]	APIs Qt5 para geo posicionamiento
 qtquickcontrols2-[v]	Controles de interfaz para Qt5 Quick de Qt Labs
 qtsensors-[v]	Soporte en Qt5 para sensores de hardware
-qtserialport-[v]
+qtserialport-[v]	Componentes Qt5 para acceso a puertos seriales
 qtsvg-[v]		Soporte SVG para Qt5
 qttools-[v]		Herramientas de desarrollo de Qt
 qtwebchannel-[v]	Integración Qt5 HTML/Javascript
@@ -726,7 +727,7 @@ sdl-[v]		Librería multimedia
 sdl2-[v]		Versión 2 de la librería multimedia
 sdl-image-[v]	Librería de imágenes de SDL
 silc-toolkit-[v]	Herramientas para desarrollo de aplicaciones SILC
-smartmontools-[v]
+smartmontools-[v]	Control y monitoreo de sistemas de almacenamiento con SMART
 snappy-[v]		Librería para compresión/descompresión rápida
 soundtouch-[v]	Librería para procesamiento de tempo/tono
 speex-[v]		Codec para voz libre de patentes
@@ -740,7 +741,7 @@ taglib-[v]		Para manejar meta-datos de formatos de audio
 tdb-[v]		Librería para base de datos trivial
 tevent-[v]	Sistema de eventos basado en talloc
 tiff-[v]		Manipula formato gráfico TIFF
-tree-sitter-[v] 	
+tree-sitter-[v] 	Herramient para generar reconocedores de sintaxis
 ton-[v] Tools for the Blockchain TON - The Open Network
 twolame-[v]	Codificador de MPEG Audio Capa 2 (MP2) optimizado
 unibilium-[v]		Librería básica de terminfo

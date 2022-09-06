@@ -51,7 +51,7 @@ do-install:
 	echo 'BUNDLE_DISABLE_SHARED_GEMS: "true"' >> ${PREFIX}/${SIVEL_RAIZ}/.bundle/config
 	( cd ${PREFIX}/${SIVEL_RAIZ}; \
 	bundle config build.nokogiri --use-system-libraries --with-xml2-include=/usr/local/include/libxml2/; \
-	bundle install )
+	DISABLE_SSL=1 bundle install )
 #	CFLAGS=-fdeclspec LDFLAGS=-fdeclspec CC=clang CXX=clang++ gem install --install-dir ./bundler/ruby/3.0 nokogiri -- --use-system-libraries; \
 	
 
