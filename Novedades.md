@@ -3,7 +3,7 @@ Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
 
 ### Versión: 7.1
-Fecha de publicación: 7/Ago/2022
+Fecha de publicación: 7/Sep/2022
 
 Puede ver novedades respecto a OpenBSD en:
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_7_1/Novedades_OpenBSD.md>
@@ -47,11 +47,12 @@ Puede ver las diversas versiones publicadas en:
 
 Novedades tomadas de <https://www.openbsd.org/71.html> 
 
-* Aplicados parches de seguridad hasta el 16.Abr.2022 provenientes de 
+* Aplicados parches de seguridad hasta el 7.Sep.2022 provenientes de 
   OpenBSD que incluyen soluciones a fallas
 * Controladores ampliados o mejorados para amd64
-  * CPU: 
-  * Tarjetas Ethernet: 
+  * Tarjetas Ethernet: `igc` soporta Intel I225 1Gb/2.5Gb. Soporte para 
+    interfaces USB-Ethernet RTL8156B en `ure`. Mejorados `ix` e  `ixl` para
+    tarjetas Intel de 10GB y 40GB respectivamente.
   * Tarjetas inalámbricas: 
   * Video: 
   * Sonido: 
@@ -77,7 +78,11 @@ Novedades tomadas de <https://www.openbsd.org/71.html>
 
 * Para cerrar fallas se usan las versiones más recientes preparadas
   por OpenBSD de: `node`, `php`, `...
-
+* Hay varios paquetes nuevos en esta versión de adJ de los que
+  destacamos: `smartmontools` para monitorear discos duros que soportan SMART,
+  `pandoc` para convertir entre diveros lenguajes de marcado (lo usamos 
+  para ge;erar esta documentación), `redis` que es una base de datos tipo 
+  llave-valor usada por ActionCable en la nueva infraestructura de rails.
 * Algunos paquetes típicos y su versión: `dovecot 2.3.16p1v0`,
   `chromium 100.0.4896.60, `firefox-esr 91.7.1`, `libreoffice 7.3.1.3v0`,
   `nginx 1.20.2p0`, `mariadb 10.6.7p0v1`, `node 16.14.2`, `python 3.9.10p0`,

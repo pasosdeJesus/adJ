@@ -1560,7 +1560,7 @@ if (test "$?" != "0") then {
 	} fi;
         pkg_add -I -D repair -D update -D updatedepends -r $p >> /var/www/tmp/inst-adJ.bitacora 2>&1
 	insacp fribidi
-	p=`ls $PKG_PATH/jpeg-* $PKG_PATH/libid3tag-* $PKG_PATH/png-* $PKG_PATH/bzip2-* $PKG_PATH/libungif-* $PKG_PATH/imlib2-* $PKG_PATH/libltdl-* $PKG_PATH/fluxbox-* $PKG_PATH/fluxter-* $PKG_PATH/fbdesk-* 2>/dev/null`
+	p=`ls $PKG_PATH/jpeg-* $PKG_PATH/libid3tag-* $PKG_PATH/png-* $PKG_PATH/bzip2-* $PKG_PATH/libungif-* $PKG_PATH/imlib2-* $PKG_PATH/libltdl-* $PKG_PATH/fluxbox-* $PKG_PATH/fluxter-* 2>/dev/null`
         pkg_add -I -D repair -D update -D updatedepends -r $p >> /var/www/tmp/inst-adJ.bitacora 2>&1
 	if (test ! -f /home/$uadJ/.xsession) then {
 		cat > /home/$uadJ/.xsession <<EOF
@@ -1700,9 +1700,6 @@ im=fondo.jpg
 if (test -x /usr/local/bin/fbsetbg -a -x /usr/local/bin/display -a -f /home/$uadJ/.fluxbox/backgrounds/\$im) then {
 	display -backdrop -window root /home/$uadJ/.fluxbox/backgrounds/\$im
 } fi;
-if (test -x /usr/local/bin/fbdesk) then {
-	/usr/local/bin/fbdesk &
-} fi;
 if (test -x /usr/local/bin/pidgin) then {
 	LANG=es_CO.UTF-8 /usr/local/bin/pidgin &
 } fi;
@@ -1728,40 +1725,6 @@ grep -v "display -backdrop -window .*\$im"  /home/$uadJ/.fluxbox/apps > /tmp/a 2
 cat /tmp/a - > /home/$uadJ/.fluxbox/apps <<EOF
 	[startup] {display -backdrop -window root /home/$uadJ/.fluxbox/backgrounds/fondo.jpg}
 EOF
-} fi;
-
-if (test ! -f /home/$uadJ/.fluxbox/fbdesk) then {
-	mkdir -p /home/$uadJ/.fluxbox/
-	cat > /home/$uadJ/.fluxbox/fbdesk <<EOF
-session.styleFile:      /usr/local/share/fluxbox/styles/Operation
-fbdesk.snapY:   5
-fbdesk.lockPositions:   false
-fbdesk.textPlacement:   Bottom
-fbdesk.snapX:   5
-fbdesk.textColor:       black
-fbdesk.doubleClickInterval:     200
-fbdesk.iconFile:        ~/.fluxbox/fbdesk.icons
-fbdesk.textBackground:  white
-fbdesk.textAlpha:       0
-fbdesk.font:    fixed
-fbdesk.iconAlpha:       255
-EOF
-	cat > /home/$uadJ/.fluxbox/fbdesk.icons <<EOF
-[Desktop Entry]
-Name=xterm
-Exec=xterm -en utf8 -e /bin/ksh -l
-Icon=/usr/local/share/icons/hicolor/48x48/apps/applications-other.png
-Pos= 23 5
-[end]
-
-[Desktop Entry]
-Name=chromium
-Exec=chrome --disable-gpu
-Icon=/usr/local/share/icons/hicolor/48x48/apps/applications-internet.png
-Pos= 27 86
-[end]
-EOF
-
 } fi;
 
 if (test ! -f /home/$uadJ/.fluxbox/init) then {
@@ -2456,6 +2419,12 @@ EOF
 w
 q
 EOF
+	ed /var/postgresql/data/postgresql.conf >> /var/www/tmp/inst-adJ.bitacora 2>&1 <<EOF
+,s/#work_mem *=.*/work_mem=16MB/g
+w
+q
+EOF
+
 } else {
 	echo "   Saltando..." >> /var/www/tmp/inst-adJ.bitacora;
 } fi;

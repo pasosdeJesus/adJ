@@ -1,4 +1,4 @@
-V=		7.0
+V=		7.1
 
 DISTNAME=	${PNAME}-${V}
 CATEGORIES=	books

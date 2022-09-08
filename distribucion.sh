@@ -1101,7 +1101,6 @@ if (test "$sn" = "s") then {
   #paquete sysutils/ganglia
   paquete textproc/sword
   paquete textproc/bibletime
-  paquete x11/fbdesk
   paquete textproc/po4a
 
   ####
