@@ -53,36 +53,35 @@ Novedades tomadas de <https://www.openbsd.org/71.html>
   * Tarjetas Ethernet: `igc` soporta Intel I225 1Gb/2.5Gb. Soporte para 
     interfaces USB-Ethernet RTL8156B en `ure`. Mejorados `ix` e  `ixl` para
     tarjetas Intel de 10GB y 40GB respectivamente.
-  * Tarjetas inalámbricas: 
-  * Video: 
-  * Sonido: 
-  * Sensores y otros:
+  * Tarjetas inalámbricas: Nuevo controlador `mtw` soporta dispositivos
+    Wifi MediaTek MT7601U USB. Soporte para BCM4387 añadido a `bwfm`.
+    Soporte para 802.11n (40MHz y velocidades 72 a 600MBs) y 802.11ac (80MHz 
+    y velocidades 433 a 6933MBs) a `iwm` y `iwx.`
 * Mejoras a herramientas de Red
-  * OpenSMTDP  ...
-  * ...
-  * ...
+  * Mejorado DHCP, soporte IPSEC, httpd, smtpd, rpki-client, bgpd.
 * Seguridad
-  * ssh actualizado a la versión ... que ...
-  * libressl actualizado a la versión ... que ...
+  * ssh actualizado a la versión 9.0 que emplea protocolo SFTP con scp en lugar
+    del protocolo scp/rcp (hay incompatibilidades en rutas con comodines)
+  * libressl actualizado a la versión 3.5.2 que soporta RFC 3779
 * Otros
-  * ...
-  * ...
+  * Mejoras a tmux, mandoc.
 
 * El sistema base incluye mejoras a componentes auditados y mejorados 
   como, `llvm 13.0.0`,  `Xenocara` (basado en `Xorg` 7.7),
   `perl 5.32.1` 
-* El repositorio de paquetes de OpenBSD cuenta con ... para amd64
+* El repositorio de paquetes de OpenBSD cuenta con 11301 para amd64
 
 
 ### 2.2 Paquetes 
 
 * Para cerrar fallas se usan las versiones más recientes preparadas
-  por OpenBSD de: `node`, `php`, `...
-* Hay varios paquetes nuevos en esta versión de adJ de los que
-  destacamos: `smartmontools` para monitorear discos duros que soportan SMART,
-  `pandoc` para convertir entre diveros lenguajes de marcado (lo usamos 
-  para ge;erar esta documentación), `redis` que es una base de datos tipo 
-  llave-valor usada por ActionCable en la nueva infraestructura de rails.
+  por OpenBSD de: `postgresql`, `mariadb`, `node`, `php`, `curl`, 
+  `cups`, `dovecot`,  `gnutls`, `gnugp`, `libmad`, `libxml`, `mutt`, 
+  `nspr`, `openssl`, `rsync`, `sqlite3`, `tiff`, `unrar`, `unzip`, 
+  `wavpack`, `webkitgtk4`, `samba`
+* Para aprovechar el xlocale extendido de adJ se han recompilado
+  `vlc`, `glib2` y `libunistring`.
+
 * Algunos paquetes típicos y su versión: `dovecot 2.3.16p1v0`,
   `chromium 100.0.4896.60, `firefox-esr 91.7.1`, `libreoffice 7.3.1.3v0`,
   `nginx 1.20.2p0`, `mariadb 10.6.7p0v1`, `node 16.14.2`, `python 3.9.10p0`,
@@ -93,8 +92,17 @@ Novedades tomadas de <https://www.openbsd.org/71.html>
 
 ### 3.1 Kernel y sistema base
 
-* Los descriptores de archivos pueden ser enteros (en OpenBSD y FreeBSD
-  son enteros cortos).
+* Los descriptores de archivos pueden ser enteros (en OpenBSD y FreeBSD son 
+  enteros cortos lo cual los limita a abri máximo 32.000 archivos 
+  simultaneamente).  Con esta implementación en adJ hemos probado abrir 
+  simultanemente más de 500.000 archivos:
+  ![Pantallazo de programa de prueba con más de 500.000 descriptores de archivos](https://aprendiendo.pasosdejesus.org/assets/images/muchosdescriptores.png)
+
+  Para usar más descriptores efectivamente (digamos 200.000):
+  ```
+  doas sysctl -w kern.maxfiles=200000
+  ulimit -n 200000
+  ```
 
 ### 3.1 Instalador y documentación
 
@@ -108,31 +116,28 @@ Novedades tomadas de <https://www.openbsd.org/71.html>
 
 ### 3.2 Paquetes
 
-* `ton` son las herramientas del Blockchain TON (The Open Network).
-* Chromium recompilado con llave de Pasos de Jesús.  Ahora permite autenticar
+* El nuevo paquete `ton` consta de las herramientas del Blockchain TON 
+  (The Open Network).  Ver documentación de como probar un 
+  contato inteligente sobre adJ en
+  http://pasosdejesus.github.io/usuario_adJ/conf-programas.html#ton
+* Incluimos más paquetes de OpenBSD en esta versión de adJ entre los que
+  destacamos: `smartmontools` para monitorear discos duros que soportan SMART,
+  `pandoc` para convertir entre diveros lenguajes de marcado (lo usamos 
+  para generar esta documentación), `redis` que es una base de datos tipo 
+  llave-valor usada por ActionCable en la infraestructura reciente de rails.
+* El aumento en número de descriptores de archivos puede afectar algunos
+  binarios por lo que tuvieron que recompilarse:
+  `unzip`, `bison`, `m4`, `unzip`, `python`, `ruby`,
+  `gettext-tools`,  `gmake`, `ImageMagick`, 
+  `texlive_base` y `texlive_texmf-minimal`
+* Chromium recompilado con llave de Pasos de Jesús.  Ya permite autenticar
   y usar sitios como https://drive.google.com  --si tiene problemas para
   autenticarse intente desde un nuevo perfil (obligatorio por ejemplo si cambia
   su clave en gmail).
 * Además de chromium incluimos `firefox-esr` que también ha resultado
   bastante estable.
-
-* Se incluye la versión 2.0  de `sivel2` cuyas novedades con respecto al 
-  beta 16 incluido en adJ 7.0 se describen a continuación. Agradecimiento por
-  algunas de las novedades a Luis Alejandro Cruz:
-  * Mejoras en consultas, reportes y conteos
-  * Mejoras a datos básicos
-  * Seguridad
-  * Mejoras al proceso de desarrollo de software
-  * Soluciones a diversas fallas (e.g ortografía, validación DTD,filtro por
-    sector social para autenticados, no se pierden datos deshabilitados 
-    elegidos en cuadro de selección múltiple o sencilla)
-* Adaptados de propuestas de portes para OpenBSD-current:
-  * `postgresql 14.2`
-  * `ruby-3.1.1`
-* Portes más actualizados que los disponibles en OpenBSD:
-  * `ocaml 4.12`, `ocamlbuild`, `findlib`, `dune`, `hevea`, `postgis`
-* Se han recompilado los siguientes para aprovechar `xlocale`:
-   `glib2`, `libunistring`, `vlc`
+* Se han recompilado los siguientes para aprovechar `xlocale` (además de muchos
+  para perl): `glib2`, `libunistring`, `vlc`
 
 ### 3.3 Configuración
 
