@@ -6,9 +6,9 @@ Anhelamos publicar versión mayor (e.g 7.1) 3 meses después de OpenBSD:
 * Bien el 11.Ene
 * O bien el 1.Jul
 
-También publicamos revisiones (e.g 7.1p1) si la seguridad o calidad lo ameritan.
+Publicamos revisiones (e.g 7.1p1) si la seguridad o calidad lo ameriten.
 
-Anhelamos publicar al menos una versión beta (e.g 7.1 en directorio
+Anhelamos publicar al menos una versión beta (e.g 7.1b1 en directorio
 `desarrollo` del sitio de distribución):
 
 	Bien el 10.Dic
@@ -16,7 +16,6 @@ Anhelamos publicar al menos una versión beta (e.g 7.1 en directorio
 
 Sería ideal publicar una versión alfa mucho antes (digamos bien 24.Sep o
 bien 24.Mar, e.g 7.1b1).
-
 
 
 Pasos importantes para publicar versión beta

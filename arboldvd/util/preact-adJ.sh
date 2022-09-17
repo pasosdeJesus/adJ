@@ -5,7 +5,7 @@
 
 VER=7.1
 REV=
-VESP=""
+VESP="p1"
 
 ACVERC=`uname -r`
 ACVER=`echo $ACVERC | sed -e "s/\.//g"`

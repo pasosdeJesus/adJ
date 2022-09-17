@@ -3,11 +3,11 @@
 # Dominio público. 2020. vtamara@pasosdeJesus.org
 
 V=7.1
-VESP=""
+VESP="p1"
 # Versión que se está desarrollando
 
-VPKGPATH=$V
 VPKGPATH=snapshots
+VPKGPATH=$V
 
 VP=`echo $V | sed -e "s/[.]//g"`
 VP=71

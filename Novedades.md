@@ -2,8 +2,8 @@
 Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
 
-### Versión: 7.1
-Fecha de publicación: 10/Sep/2022
+### Versión: 7.1p1
+Fecha de publicación: 18/Sep/2022
 
 Puede ver novedades respecto a OpenBSD en:
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_7_1/Novedades_OpenBSD.md>
@@ -13,10 +13,10 @@ Puede ver novedades respecto a OpenBSD en:
 Puede ver las diversas versiones publicadas en: 
   <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/>
 
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/AprendiendoDeJesus-7.1-amd64.iso> 
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/AprendiendoDeJesus-7.1p1-amd64.iso> 
   es imagen en formato ISO para quemar en DVD e instalar por primera vez
   en modo BIOS Legacy.
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/7.1-amd64/>
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/7.1p1-amd64/>
   es directorio con el contenido del DVD instalador apropiado para descargar 
   con rsync desde un adJ o un OpenBSD ya instalado para actualizarlo (ver  
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_7_1/Actualiza.md> )
@@ -24,13 +24,13 @@ Puede ver las diversas versiones publicadas en:
   es directorio con versiones recientes de paquetes no incluidos en 
   distribución oficial (pueden no estar firmados y requerir instalación con 
   `pkg_add -D unsigned _paquete_`).
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-7.1-amd64.usb> 
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-7.1p1-amd64.usb> 
   es imagen para escribir en una memoria USB y arrancar con esta bien en
   modo UEFI o bien en modo BIOS Legacy. Una vez 
   la descargue puede escribirla en una USB ubicada en `/dev/sd2c` 
   (verifique dispositivo con `dmesg` y remplace) con:
 
-       doas dd if=AprendiendoDeJesus-7.1-amd64.usb of=/dev/sd2c bs=1M
+       doas dd if=AprendiendoDeJesus-7.1p1-amd64.usb of=/dev/sd2c bs=1M
 
  Este proceso puede ser demorado, puede ver el progreso con 
 
@@ -38,10 +38,10 @@ Puede ver las diversas versiones publicadas en:
 
  O si desea probarla con qemu para instalar en un disco `virtual.raw`:
 
-       qemu-system-x86_64 -hda virtual.raw -hdb AprendiendoDeJesus-7.1-amd64.usb -boot menu=on
+       qemu-system-x86_64 -hda virtual.raw -hdb AprendiendoDeJesus-7.1p1-amd64.usb -boot menu=on
 
 
-## 2. NOVEDADES RESPECTO A ADJ 7.1 PROVENIENTES DE OPENBSD
+## 2. NOVEDADES RESPECTO A ADJ 7.1p1 PROVENIENTES DE OPENBSD
 
 ### 2.1 Kernel y Sistema Base
 
@@ -88,7 +88,7 @@ Novedades tomadas de <https://www.openbsd.org/71.html>
   `neovim 0.6.1`, `zsh 5.8.1`
 
 
-## 3. NOVEDADES RESPECTO A ADJ 7.0 PROVENIENTES DE PASOS DE JESÚS
+## 3. NOVEDADES RESPECTO A ADJ 7.1 PROVENIENTES DE PASOS DE JESÚS
 
 ### 3.1 Kernel y sistema base
 
