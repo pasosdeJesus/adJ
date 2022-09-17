@@ -38,6 +38,8 @@ if (test -f /tmp/penc.txt -a ! -z /tmp/penc.txt) then {
 	dbenc=`grep -v "(1 row)" /tmp/penc.txt | grep -v "server_encoding" | grep -v "[-]-----" | grep -v "^ *$" | sed -e "s/  *//g"`
 } fi;
 echo "pg_dumpall $acuspos --inserts --column-inserts --host=$sockpsql > $res-t" > /tmp/cu.sh
+echo "pg_dumpall $acuspos --host=$sockpsql > $res-rapida-t" >> /tmp/cu.sh
+
 echo "if (test \"\$?\" != \"0\") then {" >> /tmp/cu.sh 
 echo "  echo \"No pudo completarse la copia\";" >> /tmp/cu.sh 
 echo "  exit 1;" >> /tmp/cu.sh 
@@ -52,5 +54,11 @@ if (test "$?" != "0" -a -f $res-t) then {
 	grep "CREATE DATABASE" $res-t | grep -v "ENCODING" > /tmp/cb.sed
 	sed -e "s/\(.*\);$/s\/\1;\/\1 ENCODING='$dbenc';\/g/g" /tmp/cb.sed  > /tmp/cb2.sed
 	grep -v "ALTER ROLE $uspos" $res-t | sed -f /tmp/cb2.sed > $res
+	rm $res-t
+	grep "CREATE DATABASE" $res-rapida-t | grep -v "ENCODING" > /tmp/cc.sed
+	sed -e "s/\(.*\);$/s\/\1;\/\1 ENCODING='$dbenc';\/g/g" /tmp/cc.sed  > /tmp/cc2.sed
+	grep -v "ALTER ROLE $uspos" $res-rapida-t | sed -f /tmp/cc2.sed > $res-rapida
+	rm $res-rapida-t
+
 } fi;
 
