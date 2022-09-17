@@ -136,7 +136,7 @@ if (test "$im" = "") then {
 	exit 1;
 } fi;
 cat > $ar << EOF
-#!/bin/sh
+#!/bin/ksh
 
 servicio="/sbin/mount"
 
@@ -1454,6 +1454,13 @@ if  (test "$vac" != "") then {
 	dialog --title 'Actualizaciones aplicadas' --msgbox "\\nSe aplicaron actualizaciones: $vac\\n\\n$mac\\n" 15 60
 } fi;
 
+
+ar=`ls /etc/rc.d/ | grep -v copia`
+cd /etc/rc.d && for i in `grep "^\#\!/bin/sh" -l $ar`; do 
+  echo "$i: Cambiando /bin/sh por /bin/ksh"; 
+  doas sed -i.copia -e "s/^#\!\/bin\/sh/#\!\/bin\/ksh/g" $i
+done
+
 cd /etc && /usr/local/adJ/servicio-etc.sh >> /var/www/tmp/inst-adJ.bitacora 2>&1
 cap_mkdb /etc/login.conf
 cap_mkdb /etc/master.passwd
@@ -1595,7 +1602,7 @@ if (test ! -f /home/$uadJ/.fluxbox/menu) then {
 [end]
 [submenu] (Dispositivos)
 	[exec] (Apagar) {doas /sbin/halt -p}
-	[exec] (Iniciar servicios faltantes) {xterm -en utf8 -e "/usr/bin/doas /bin/sh /etc/rc.local espera"}
+	[exec] (Iniciar servicios faltantes) {xterm -en utf8 -e "/usr/bin/doas /bin/ksh /etc/rc.local espera"}
 	[exec] (Montar CD) {doas /sbin/mount /mnt/cdrom ; doas xfe /mnt/cdrom/ }
 	[exec] (Desmontar CD) {doas /sbin/umount -f /mnt/cdrom}
 	[exec] (Montar USB) {doas /sbin/mount /mnt/usb ; doas xfe /mnt/usb/}
