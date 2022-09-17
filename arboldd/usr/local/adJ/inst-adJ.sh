@@ -2239,10 +2239,14 @@ if (test "$?" = "0") then {
 		if (test "$?" = "0") then {
 			mkdir -p /var/www/resbase
 			touch /var/www/resbase/pga-$nb.sql
+			touch /var/www/resbase/pga-rapida-$nb.sql
 			chown _postgresql:_postgresql /var/www/resbase/pga-$nb.sql
+			chown _postgresql:_postgresql /var/www/resbase/pga-rapida-$nb.sql
 			touch /var/www/resbase/pga-conc.sql
+			touch /var/www/resbase/pga-rapida-conc.sql
 			chmod +x /var/www/resbase/
 			chown _postgresql:_postgresql /var/www/resbase/pga-conc.sql
+			chown _postgresql:_postgresql /var/www/resbase/pga-rapida-conc.sql
 			rm -f /tmp/penc.txt
 			echo "psql -h$sockpsql $acuspos -c 'SHOW SERVER_ENCODING' > /tmp/penc.txt" > /tmp/cu.sh
 			chmod +x /tmp/cu.sh
@@ -2252,6 +2256,7 @@ if (test "$?" = "0") then {
 				dbenc=`grep -v "(1 row)" /tmp/penc.txt | grep -v "server_encoding" | grep -v "[-]-----" | grep -v "^ *$" | sed -e "s/  *//g"`
 			} fi;
 			echo "pg_dumpall $acuspos --inserts --column-inserts --host=$sockpsql > /var/www/resbase/pga-conc.sql" > /tmp/cu.sh
+			echo "pg_dumpall $acuspos --host=$sockpsql > /var/www/resbase/pga-rapida-conc.sql" >> /tmp/cu.sh
 			echo "if (test \"\$?\" != \"0\") then {" >> /tmp/cu.sh 
 			echo "  echo \"No pudo completarse la copia\";" >> /tmp/cu.sh 
 			echo "  exit 1;" >> /tmp/cu.sh 
@@ -2267,6 +2272,10 @@ if (test "$?" = "0") then {
 				sed -e "s/\(.*\);$/s\/\1;\/\1 ENCODING='$dbenc';\/g/g" /tmp/cb.sed  > /tmp/cb2.sed
 				cat /tmp/cb2.sed >> /var/www/tmp/inst-adJ.bitacora
 				grep -v "ALTER ROLE $uspos" /var/www/resbase/pga-conc.sql | sed -f /tmp/cb2.sed > /var/www/resbase/pga-$nb.sql
+				grep "CREATE DATABASE" /var/www/resbase/pga-rapida-conc.sql | grep -v "ENCODING" > /tmp/cc.sed
+				sed -e "s/\(.*\);$/s\/\1;\/\1 ENCODING='$dbenc';\/g/g" /tmp/cc.sed  > /tmp/cc2.sed
+				cat /tmp/cc2.sed >> /var/www/tmp/inst-adJ.bitacora
+				grep -v "ALTER ROLE $uspos" /var/www/resbase/pga-rapida-conc.sql | sed -f /tmp/cc2.sed > /var/www/resbase/pga-rapida-$nb.sql
 			} fi;
 		} else {
 			echo "PostgreSQL no está corriendo, no fue posible sacar copia" >> /var/www/tmp/inst-adJ.bitacora;

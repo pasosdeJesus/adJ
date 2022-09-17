@@ -98,7 +98,7 @@ if (test "$?" = "0") then {
 	while (test -f /var/www/resbase/pga-$nb.sql -o -f /var/www/resbase/pga-$nb.sql.gz) do
 		nb=`expr $nb + 1`;
 	done;
-	dialog --title 'Respaldo de datos de PostgreSQL' --yesno "\\n¿Intentar sacar copia de respaldo de todas las bases PostgreSQL en /var/www/resbase/pga-$nb.sql ?\n" 15 60
+	dialog --title 'Respaldo de datos de PostgreSQL' --yesno "\\n¿Intentar sacar copia de respaldo de todas las bases PostgreSQL en /var/www/resbase/pga-$nb.sql y /var/www/resbase/pga-rapido-$nb.sql ?\n" 15 60
 	if (test "$?" = "0") then {
 		pgrep post > /dev/null 2>&1
 		if (test "$?" = "0") then {
@@ -106,8 +106,10 @@ if (test "$?" = "0") then {
 			touch /var/www/resbase/pga-$nb.sql
 			chown _postgresql:_postgresql /var/www/resbase/pga-$nb.sql
 			touch /var/www/resbase/pga-conc.sql
+			touch /var/www/resbase/pga-rapido-conc.sql
 			chmod +x /var/www/resbase/
 			chown _postgresql:_postgresql /var/www/resbase/pga-conc.sql
+			chown _postgresql:_postgresql /var/www/resbase/pga-rapido-conc.sql
 			rm -f /tmp/penc.txt
 			echo "psql -h$sockpsql $acuspos -c 'SHOW SERVER_ENCODING' > /tmp/penc.txt" > /tmp/cu.sh
 			chmod +x /tmp/cu.sh
@@ -116,18 +118,23 @@ if (test "$?" = "0") then {
 			if (test -f /tmp/penc.txt -a ! -z /tmp/penc.txt) then {
 				dbenc=`grep -v "(1 row)" /tmp/penc.txt | grep -v "server_encoding" | grep -v "[-]-----" | grep -v "^ *$" | sed -e "s/  *//g"`
 			} fi;
-			echo -n "pg_dumpall $acuspos --inserts --column-inserts --host=$sockpsql > /var/www/resbase/pga-conc.sql" > /tmp/cu.sh
+			echo "pg_dumpall $acuspos --inserts --column-inserts --host=$sockpsql > /var/www/resbase/pga-conc.sql" > /tmp/cu.sh
+			echo "pg_dumpall $acuspos --host=$sockpsql > /var/www/resbase/pga-rapido-conc.sql" >> /tmp/cu.sh
 			chmod +x /tmp/cu.sh
 			cat /tmp/cu.sh >> /var/tmp/preact-adJ.bitacora
 			su - _postgresql /tmp/cu.sh >> /var/tmp/preact-adJ.bitacora;
 			grep "CREATE DATABASE" /var/www/resbase/pga-conc.sql | grep -v "ENCODING" > /tmp/cb.sed
 			sed -e "s/\(.*\);$/s\/\1;\/\1 ENCODING='$dbenc';\/g/g" /tmp/cb.sed  > /tmp/cb2.sed
 			cat /tmp/cb2.sed >> /var/tmp/preact-adJ.bitacora
+			grep "CREATE DATABASE" /var/www/resbase/pga-rapido-conc.sql | grep -v "ENCODING" > /tmp/cc.sed
+			sed -e "s/\(.*\);$/s\/\1;\/\1 ENCODING='$dbenc';\/g/g" /tmp/cc.sed  > /tmp/cc2.sed
+			cat /tmp/cc2.sed >> /var/tmp/preact-adJ.bitacora
 			grep -v "ALTER ROLE $uspos" /var/www/resbase/pga-conc.sql | sed -f /tmp/cb2.sed > /var/www/resbase/pga-$nb.sql
+			grep -v "ALTER ROLE $uspos" /var/www/resbase/pga-rapido-conc.sql | sed -f /tmp/cb2.sed > /var/www/resbase/pga-rapido-$nb.sql
 		} else {
 			echo "PostgreSQL no está corriendo, no fue posible sacar copia" >> /var/tmp/preact-adJ.bitacora;
 		} fi;
-		if (test ! -s /var/www/resbase/pga-$nb.sql) then {
+		if (test ! -s /var/www/resbase/pga-$nb.sql -o ! -s /var/www/resbase/pga-rapido-$nb.sql) then {
 			echo "* No fue posible sacar copia, por favor saquela manualmente en un archivo de nombre /var/www/resbase/pga-$nb.sql o asegurarse de sacarlo con pg_dumpall o en último caso sacando una copia del directorio /var/postgresql/data" | tee -a /var/tmp/preact-adJ.bitacora;
 			echo "* Vuelva a este script con 'exit'" 
 			sh
