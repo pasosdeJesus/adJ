@@ -14,7 +14,6 @@ d="/var/adJ/auditabitacoras/$d"
 rep="$d/auditabitacoras.txt"
 echo "Auditando y enviando reporte a $rep" 
 
-
 mkdir -p $d 
 cp -rf /var/log/* $d
 gzip -fd $d/*gz
@@ -38,4 +37,7 @@ for i in /var/www/logs/*access*log*; do
 	echo "** Bitacora $i" | tee -a $rep;
 	/usr/local/adJ/revisaapachelog.pl $i* >> $rep
 done
+
+echo "Examinando bitacoras de servidor de correo" | tee -a $rep
+/usr/local/adJ/revisamaillog.rb /var/log/maillog* >> $rep
 
