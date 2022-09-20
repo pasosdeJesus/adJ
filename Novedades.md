@@ -3,7 +3,7 @@ Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
 
 ### Versión: 7.1p1
-Fecha de publicación: 18/Sep/2022
+Fecha de publicación: 20/Sep/2022
 
 Puede ver novedades respecto a OpenBSD en:
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_7_1/Novedades_OpenBSD.md>
@@ -138,6 +138,8 @@ Novedades tomadas de <https://www.openbsd.org/71.html>
   bastante estable.
 * Se han recompilado los siguientes para aprovechar `xlocale` (además de muchos
   para perl): `glib2`, `libunistring`, `vlc`
+* Se han retroportado de OpenBSD-current los siguientes paquetes para cerrar 
+  fallas: `jansson`, `postgresql-client`, `postgis`, `ruby`
 
 ### 3.3 Configuración
 

@@ -989,6 +989,7 @@ if (test "$sn" = "s") then {
   paquete postgis
   paquete ruby paquetes "ruby ruby31-ri_docs" 3.1
   #paquete geo/spatialite/libspatialite
+  paquete jansson
 
   # Recompilado con llave de adJ
   paquete chromium
