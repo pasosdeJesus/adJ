@@ -140,6 +140,8 @@ Novedades tomadas de <https://www.openbsd.org/71.html>
   para perl): `glib2`, `libunistring`, `vlc`
 * Se han retroportado de OpenBSD-current los siguientes paquetes para cerrar 
   fallas: `jansson`, `postgresql-client`, `postgis`, `ruby`
+* Se han parchado minimamente los siguientes para usar `servicio` en lugar
+  de `daemon`: `postgresql`, `git` y `smartmontools`
 
 ### 3.3 Configuración
 
