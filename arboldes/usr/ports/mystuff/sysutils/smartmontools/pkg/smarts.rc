@@ -1,0 +1,7 @@
+#!/bin/ksh
+
+servicio="${TRUEPREFIX}/sbin/smartd"
+
+. /etc/rc.d/rc.subr
+
+rc_cmd $1

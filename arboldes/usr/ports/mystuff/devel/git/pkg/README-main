@@ -1,0 +1,12 @@
+
++-----------------------------------------------------------------------
+| Running ${PKGSTEM} on OpenBSD
++-----------------------------------------------------------------------
+
+git send-email
+==============
+To make it work with SSL/TLS and SMTP auth you have to install
+the following additional packages.
+
+	p5-Net-SMTP-SSL
+	p5-Authen-SASL
