@@ -8,7 +8,7 @@ diff -u src54-coll/lib/libc/locale/Makefile.inc src54-mon/lib/libc/locale/Makefi
 -	__mb_cur_max.c collate.c _CurrentRuneLocale.c _get_locname.c \
 +	__mb_cur_max.c collate.c _CurrentRuneLocale.c \
 +	fix_grouping.c _get_locname.c \
- 	isctype_l.c iswctype.c iswctype_l.c \
+ 	isctype_l.c iswctype.c iswctype_l.c wctype.c \
  	loadtextcat.c \
  	mblen.c mbrlen.c mbstowcs.c mbtowc.c multibyte_citrus.c wcscoll.c \
 diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/locale/_def_monetary.c src/lib/libc/locale/_def_monetary.c

@@ -1,21 +1,21 @@
 COMO PUBLICAR
 =============
 
-Anhelamos publicar versión mayor (e.g 7.1) 3 meses después de OpenBSD:
+Anhelamos publicar versión mayor (e.g 7.2) 3 meses después de OpenBSD:
 
 * Bien el 11.Ene
 * O bien el 1.Jul
 
-Publicamos revisiones (e.g 7.1p1) si la seguridad o calidad lo ameriten.
+Publicamos revisiones (e.g 7.2p1) si la seguridad o calidad lo ameriten.
 
-Anhelamos publicar al menos una versión beta (e.g 7.1b1 en directorio
+Anhelamos publicar al menos una versión beta (e.g 7.2b1 en directorio
 `desarrollo` del sitio de distribución):
 
 	Bien el 10.Dic
 	O bien el 10.Jun
 
 Sería ideal publicar una versión alfa mucho antes (digamos bien 24.Sep o
-bien 24.Mar, e.g 7.1b1).
+bien 24.Mar, e.g 7.2a1).
 
 
 Pasos importantes para publicar versión beta
@@ -53,7 +53,7 @@ Pasos importantes para publicar versión beta
    Para verificar que perl está más o menos bien ejecutar `pkg_add`.
 5. Recompilar paquetes con actualizaciones de seguridad o mejoras
 6. Retroportar paquetes, dejar resultados no incluidos en DVD pero
-   útiles en `7.1-extra`
+   útiles en `7.2-extra`
 7. Regenerar distribución (sin paquetes ni otras compilaciones) con:
 	```
 	doas ./distribucion.sh
@@ -159,20 +159,20 @@ Pasos importantes para publicar versión beta
 
 13. Poner Tag en github e iniciar rama al publicar version alfa o beta (antes en master)
 	```
-	git tag -a v7.1b2 -m "Version 7.1b2"
-	git push origin v7.1b2
+	git tag -a v7.2b1 -m "Version 7.2b1"
+	git push origin v7.2b1
 	...
-	git checkout -b ADJ_7_1
-	git push origin ADJ_7_1
+	git checkout -b ADJ_7_2
+	git push origin ADJ_7_2
 	```
 14. Publicar en lista de desarrollo
 
 Pasos importantes para publicar versión mayor
 --------------------------------------------
 
-1. Usar la rama ADJ_7_1
+1. Usar la rama ADJ_7_2
 	```
-	git checkout ADJ_7_1
+	git checkout ADJ_7_2
 	```
 2. Actualizar SIVeL, evangelios, Mt77 y paquetes propios de 
    adJ.
@@ -186,24 +186,24 @@ Pasos importantes para publicar versión mayor
 5. Análogo a pasos de versión beta
 6. Actualizar version en reto de P2PU (las 4 primeras tareas) 
    https://p2pu.org/es/groups/openbsd-adj-como-sistema-de-escritorio/
-7. Publicar un "Release" en github Versión 7.1 con enlace a novedades.
+7. Publicar un "Release" en github Versión 7.2 con enlace a novedades.
 8. Publicar en Twitter y Facebook. 
    Si es tambien publicacion de SIVeL en sitio de noticias de SIVeL y Structio.
 
-	Publicado adJ 7.1 distribución para servidores y cortafuegos, 
+	Publicado adJ 7.2 distribución para servidores y cortafuegos, 
 	segura, amigable para cristian@s y en español, ver 
 	http://aprendiendo.pasosdejesus.org/
 9. Correo a listas: 
     openbsd-colombia@googlegroups.com, 
     openbsd-mexico@googlegroups.com, sivel-soporte@lists.sourceforge.net
 
-	Tema: Publicado adJ 7.1 para amd64
+	Tema: Publicado adJ 7.2 para amd64
 
 	Para instalar por primera vez descarga la imagen para DVD de:
 	  http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/
 	O solicita un DVD o una USB de instalacion por correo postal.
 
-	Si planeas actualizar de una version anterior a 7.1
+	Si planeas actualizar de una version anterior a 7.2
 	hay un procedimiento mas rápido con `rsync` (ver
 	https://github.com/pasosdeJesus/adJ/blob/master/Actualiza.md ).
 
@@ -215,8 +215,8 @@ Pasos importantes para publicar versión mayor
 	  2. La guía de instalación:
 	  http://pasosdeJesus.github.io//usuario_adJ/sobre-la-instalacion.html
 
-	Mira las novedades completas de la versión 7.1 en:
-	  https://aprendiendo.pasosdejesus.org/AdJ_7.1_-_Aprendiendo_de_Jesus_7.1.html/
+	Mira las novedades completas de la versión 7.2 en:
+	  https://aprendiendo.pasosdejesus.org/AdJ_7.2_-_Aprendiendo_de_Jesus_7.2.html/
 
 	De estas destacamos:
 	...

@@ -1,12 +1,12 @@
 #!/bin/sh
 # Instala/Actualiza un Aprendiendo de Jesús 
 # Dominio público de acuerdo a legislación colombiana. http://www.pasosdejesus.org/dominio_publico_colombia.html. 
-# 2015. vtamara@pasosdeJesus.org
+# 2022. vtamara@pasosdeJesus.org
 
-VER=7.1
+VER=7.2
 REV=0
 VESP=""
-VERP=71
+VERP=72
 
 # Falta /standard/root.hint
 

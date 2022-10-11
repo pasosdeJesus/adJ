@@ -484,7 +484,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/setloc
 @@ -229,98 +223,3 @@
  .Fn setlocale
  function first appeared in
- .Bx 4.4 .
+ .Bx 4.3 Net/2 .
 -.Sh CAVEATS
 -On systems other than
 -.Ox ,

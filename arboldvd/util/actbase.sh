@@ -2,7 +2,7 @@
 # Actualiza sistema base a partir de instalador de adJ
 # Basada en instrucciones del FAQ de OpenBSD
 # Dominio público de acuerdo a legislación colombiana. http://www.pasosdejesus.org/dominio_publico_colombia.html. 
-# 2011. vtamara@pasosdeJesus.org
+# 2022. vtamara@pasosdeJesus.org
 
 VCOR=`uname -r`
 u=`whoami`
@@ -11,7 +11,7 @@ if (test "$u" != "root") then {
 	exit 1;
 } fi;
 VCORSP=`echo $VCOR | sed -e "s/\.//g"`
-VSP=71
+VSP=72
 
 if (test -f "ver.sh") then {
 	. ./ver.sh
@@ -19,7 +19,7 @@ if (test -f "ver.sh") then {
 	V=$1
 	if (test "$V" = "") then {
 		echo "Primer parámetro debería ser versión, e.g"
-		echo "actbase.sh 7.2"
+		echo "actbase.sh 7.3"
 		exit 1;
 	} fi;
 	VP=`echo $V | sed -e "s/[.]//g"`

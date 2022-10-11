@@ -36,10 +36,10 @@ Prerequisitos
 4. Desde github bifurque (fork) la rama de la versión que desea del 
    repositorio <https://github.com/pasosdeJesus/adJ>.  
    La versión en desarrollo está en la rama
-   ```ADJ_7_1```.
+   ```ADJ_7_2```.
 5. Clone su bifuración a su directorio preferido:
 ```
-mkdir ~/comp; cd ~/comp; git clone -b ADJ_7_1 git@github.com/pasosdeJesus/adJ.git
+mkdir ~/comp; cd ~/comp; git clone -b ADJ_7_2 git@github.com/pasosdeJesus/adJ.git
 ```
 6. Copie el archivo local de variables y modifiquelo:
 ```
@@ -104,7 +104,7 @@ en la variable asociada y lo desactiva poniendo ```n```.
   (```autoSite```), genere textos en el instalador (```autoContenido```).
   Vea más detalles en <https://github.com/pasosdeJesus/adJ/blob/master/ComoPublicar.md>.
 * Una vez con juegos de instalación, paquetes y textos listos en 
-  subdirectorio ```7.1-amd64``` genere imagen ISO con: 
+  subdirectorio ```7.2-amd64``` genere imagen ISO con: 
 	```
 	doas hdes/creaiso.sh
 	```
@@ -118,8 +118,8 @@ en la variable asociada y lo desactiva poniendo ```n```.
 	```TEXTO=1 dhes/qemu.sh```
 * Envie sus mejoras al repositorio en github.com.  Respecto a ramas 
   (branches) y etiquetas (tags), ponemos una etiqueta cada vez que 
-  publicamos en <http://aprendiendo.pasosdeJesus.org> (e.g ```v7.1p1```), 
-  y mantenemos una rama para cada versión mayor publicada (e.g ```ADJ_7_1```) 
+  publicamos en <http://aprendiendo.pasosdeJesus.org> (e.g ```v7.2a1```), 
+  y mantenemos una rama para cada versión mayor publicada (e.g ```ADJ_7_2```) 
   en la que eventualmente se aplicarán actualizaciones de seguridad para esa 
   versión.
 * Para aportar mejoras a OpenBSD procuramos crear parches que se apliquen 

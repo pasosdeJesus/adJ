@@ -22,8 +22,11 @@ CONFIGURE_STYLE=	simple
 CONFIGURE_SCRIPT=	conf.sh
 CONFIGURE_ARGS+=-p ${PREFIX}
 
-BUILD_DEPENDS=	lang/ocaml lang/ocaml-labltk x11/tk/8.5 textproc/markup print/texlive/base lang/ocaml-camlp4 devel/ocaml-ocamlbuild
-RUN_DEPENDS=	textproc/markup x11/tk/8.5
+BUILD_DEPENDS=	lang/ocaml lang/ocaml-labltk x11/tk/8.5 \
+								print/texlive/base lang/ocaml-camlp4 devel/ocaml-ocamlbuild
+#								textproc/markup 
+RUN_DEPENDS=	x11/tk/8.5
+# textproc/markup 
 
 FAKE_TARGET=	instala-sin-catalogo-opt
 FAKE_FLAGS=	PREFIX=${WRKINST}${PREFIX}

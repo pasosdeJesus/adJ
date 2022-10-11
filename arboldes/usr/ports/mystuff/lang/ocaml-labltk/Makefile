@@ -4,8 +4,8 @@
 # Ideas from https://www.freshports.org/x11-toolkits/ocaml-labltk/
 
 COMMENT=	"Interface to the Tcl/Tk GUI framework"
-VERSION=	8.06.7
-REVISION=	1
+VERSION=	8.06.10
+REVISION=	
 
 PKGNAME=	ocaml-labltk-${VERSION}
 DISTNAME=	labltk-${VERSION}

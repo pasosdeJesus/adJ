@@ -1206,7 +1206,7 @@ diff -u src-ant/lib/libc/stdlib/atof.3 src/lib/libc/stdlib/atof.3
  .Os
  .Sh NAME
 -.Nm atof
-+.Nm atof ,
++.Nm atof , 
 +.Nm atof_l
  .Nd convert ASCII string to double
  .Sh SYNOPSIS
@@ -1225,7 +1225,7 @@ diff -u src-ant/lib/libc/stdlib/atof.3 src/lib/libc/stdlib/atof.3
 +functions convert the initial portion of the string pointed to by
  .Fa nptr
  to
- .Li double
+ .Vt double
 -representation.
 +representation. The
 +.Fn atof
@@ -1264,7 +1264,7 @@ diff -u src-ant/lib/libc/stdlib/strtonum.3 src/lib/libc/stdlib/strtonum.3
  .Nd reliably convert string value to an integer
  .Sh SYNOPSIS
  .In stdlib.h
-@@ -29,14 +30,30 @@
+@@ -29,15 +30,30 @@
  .Fa "long long maxval"
  .Fa "const char **errstr"
  .Fc
@@ -1286,17 +1286,18 @@ diff -u src-ant/lib/libc/stdlib/strtonum.3 src/lib/libc/stdlib/strtonum.3
 +functions convert the string in
  .Fa nptr
  to a
- .Li long long
+ .Vt long long
 -value.
-+value. The
+-The
++value. The function
 +.Fn strtonum
-+function uses the current locale (to determine digits and decimal point
-+character), while the
++uses the current locale (to determine digits and the decimal point character),
++while the function
 +.Fn strtonum_l
-+function uses the locale given as parameter.
- The
++uses the locale given as parameter. The
  .Fn strtonum
  function was designed to facilitate safe, robust programming
+ and overcome the shortcomings of the
 diff -u src-ant/lib/libc/stdlib/strtonum.c src/lib/libc/stdlib/strtonum.c
 --- src-ant/lib/libc/stdlib/strtonum.c	Thu May 15 06:40:37 2014
 +++ src/lib/libc/stdlib/strtonum.c	Thu May 15 06:41:09 2014
@@ -1368,11 +1369,11 @@ diff -u src-ant/lib/libc/stdlib/atoll.3 src/lib/libc/stdlib/atoll.3
 +functions convert the initial portion of the string pointed to by
  .Fa nptr
  to
- .Li long long integer
+ .Vt long long integer
 -representation.
-+representation. The
++representation. The function
 +.Fn atoll
-+function uses the current locale, while
++uses the current locale, while
 +.Fn atoll_l
 +uses the locale provided as second argument.
  .Pp
@@ -1408,7 +1409,7 @@ diff -u src-ant/lib/libc/stdlib/atol.3 src/lib/libc/stdlib/atol.3
  .Fn atol "const char *nptr"
 +.In xlocale.h
 +.Ft long
-+.Fn atol_l "const char *nptr" "locale_t loc"
++.Fn atol_L "const char *nptr" "locale_t loc"
  .Sh DESCRIPTION
  The
  .Fn atol
@@ -1418,11 +1419,11 @@ diff -u src-ant/lib/libc/stdlib/atol.3 src/lib/libc/stdlib/atol.3
 +functions convert the initial portion of the string pointed to by
  .Fa nptr
  to
- .Li long integer
+ .Vt long integer
 -representation.
-+representation.  The
++representation. The function
 +.Fn atol
-+function uses the current locale while
++uses the current locale whil
 +.Fn atol_l
 +uses the locale provided as parameter.
  .Pp
@@ -1444,7 +1445,7 @@ diff -u src-ant/lib/libc/stdlib/atol.3 src/lib/libc/stdlib/atol.3
 diff -u src-ant/lib/libc/stdlib/atoi.3 src/lib/libc/stdlib/atoi.3
 --- src-ant/lib/libc/stdlib/atoi.3	Thu May 15 06:23:46 2014
 +++ src/lib/libc/stdlib/atoi.3	Thu May 15 06:26:45 2014
-@@ -35,20 +35,31 @@
+@@ -35,20 +35,30 @@
  .Dt ATOI 3
  .Os
  .Sh NAME
@@ -1462,23 +1463,23 @@ diff -u src-ant/lib/libc/stdlib/atoi.3 src/lib/libc/stdlib/atoi.3
  .Sh DESCRIPTION
  The
  .Fn atoi
+-function converts the initial portion of the string pointed to by
 +and
 +.Fn atoi_l
- function converts the initial portion of the string pointed to by
++functions convert the initial portion of the string pointed to by
  .Fa nptr
  to
- .Li integer
+ .Vt integer
 -representation.
-+representation.  The
++representation. The function
 +.Fn atoi
-+function uses the current locale while 
++uses the current locale, while
 +.Fn atoi_l
-+uses the locale given as parameter, see
-+.Xr xlocale 3 .
++uses the locale provided as parameter.
  .Pp
  It is equivalent to:
  .Bd -literal -offset indent
-@@ -61,11 +72,15 @@
+@@ -61,11 +71,15 @@
  .Xr strtol 3 ,
  .Xr strtonum 3 ,
  .Xr strtoul 3
@@ -1494,7 +1495,7 @@ diff -u src-ant/lib/libc/stdlib/atoi.3 src/lib/libc/stdlib/atoi.3
  .Sh HISTORY
  An
  .Fn atoi
-@@ -79,9 +94,11 @@
+@@ -79,9 +93,11 @@
  .Dq "123abc" )
  poorly.
  Careful use of

@@ -8,7 +8,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src54-num/lib/libc/locale/Makefil
 -	duplocale.c freelocale.c newlocale.c uselocale.c \
  	__mb_cur_max.c collate.c _CurrentRuneLocale.c \
  	fix_grouping.c _get_locname.c \
- 	isctype_l.c iswctype.c iswctype_l.c \
+ 	isctype_l.c iswctype.c iswctype_l.c wctype.c \
  	loadtextcat.c \
 -	mblen.c mbrlen.c mbstowcs.c mbtowc.c multibyte_citrus.c wcscoll.c \
 -	wcscoll_l.c \
@@ -17,11 +17,11 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src54-num/lib/libc/locale/Makefil
 +	wcscoll.c wcscoll_l.c \
  	wcstombs.c wctob.c wctomb.c wcstof.c wcstod.c wcstold.c wcstol.c \
  	wcstoul.c wcstoll.c wcstoull.c wcstoimax.c wcstoumax.c \
- 	runeglue.c rune.c runetable.c ___runetype_mb.c \
+ 	rune.c runetable.c ___runetype_mb.c \
 -	_wctrans.c wcsxfrm.c wcsxfrm_l.c
 +	_wctrans.c wcsxfrm.c wcsxfrm_l.c xlocale.c
  
- MAN+=	nl_langinfo.3 setlocale.3 newlocale.3 uselocale.3 \
+ MAN+=	nl_langinfo.3 setlocale.3 newlocale.3 uselocale.3 localeconv.3 \
  	iswalnum.3 towlower.3 \
 @@ -25,3 +25,5 @@
  	wctype.3 iswctype.3 wctrans.3 towctrans.3 wcwidth.3
@@ -4680,7 +4680,7 @@ diff -ruN -x obj src67-orig/regress/lib/libc/locale/uselocale/uselocale.c src/re
  #define	_LOCALE_BAD	 (locale_t)3
  
  /* Options for switch_thread() below. */
-@@ -236,7 +235,7 @@
+@@ -229,7 +228,7 @@
  	TEST_ER(newlocale, ENOENT, _LOCALE_NONE, LC_COLLATE_MASK, "C.INV");
  	TEST_R(MB_CUR_MAX, 1);
  	setenv("LC_TIME", "C.INV", 1);
@@ -4689,24 +4689,23 @@ diff -ruN -x obj src67-orig/regress/lib/libc/locale/uselocale/uselocale.c src/re
  	unsetenv("LC_TIME");
  	TEST_R(MB_CUR_MAX, 1);
  	setenv("LC_CTYPE", "C.INV", 1);
-@@ -244,126 +243,131 @@
+@@ -237,122 +236,126 @@
  	TEST_R(MB_CUR_MAX, 1);
  
  	/* Test duplocale(3). */
 -	TEST_ER(duplocale, EINVAL, _LOCALE_NONE, _LOCALE_UTF8);
 -	TEST_R(duplocale, _LOCALE_C, _LOCALE_C);
 -	TEST_R(duplocale, _LOCALE_C, LC_GLOBAL_LOCALE);
-+	/* TEST_ER(duplocale, EINVAL, _LOCALE_NONE, _LOCALE_UTF8); */
-+	/* TEST_R(duplocale, _LOCALE_C, _LOCALE_C);
-+	 TEST_R(duplocale, _LOCALE_C, LC_GLOBAL_LOCALE); */
++	/* TEST_ER(duplocale, EINVAL, _LOCALE_NONE, _LOCALE_UTF8); 
++	TEST_R(duplocale, _LOCALE_C, _LOCALE_C); 
++	TEST_R(duplocale, _LOCALE_C, LC_GLOBAL_LOCALE); */
  
  	/* Test premature UTF-8 uselocale(3). */
 -	TEST_ER(uselocale, EINVAL, _LOCALE_NONE, _LOCALE_UTF8);
--	TEST_R(MB_CUR_MAX, 1);
++	/*TEST_ER(uselocale, EINVAL, _LOCALE_NONE, _LOCALE_UTF8); */
+ 	TEST_R(MB_CUR_MAX, 1);
 -	TEST_R(uselocale, LC_GLOBAL_LOCALE, _LOCALE_NONE);
-+	/* TEST_ER(uselocale, EINVAL, _LOCALE_NONE, _LOCALE_UTF8); */
-+	TEST_R(MB_CUR_MAX, 1); 
-+	/*TEST_R(uselocale, LC_GLOBAL_LOCALE, _LOCALE_NONE);*/
++	/* TEST_R(uselocale, LC_GLOBAL_LOCALE, _LOCALE_NONE); */
  
  	/* Test UTF-8 initialization. */
  	setenv("LC_CTYPE", "C.UTF-8", 1);
@@ -4723,10 +4722,10 @@ diff -ruN -x obj src67-orig/regress/lib/libc/locale/uselocale/uselocale.c src/re
  
  	/* Test invalid uselocale(3) argument. */
 -	TEST_ER(uselocale, EINVAL, _LOCALE_NONE, _LOCALE_BAD);
-+	/*TEST_ER(uselocale, EINVAL, _LOCALE_NONE, _LOCALE_BAD); */
++	/* TEST_ER(uselocale, EINVAL, _LOCALE_NONE, _LOCALE_BAD); */
  	TEST_R(MB_CUR_MAX, 1);
 -	TEST_R(uselocale, LC_GLOBAL_LOCALE, _LOCALE_NONE);
-+	/*TEST_R(uselocale, LC_GLOBAL_LOCALE, _LOCALE_NONE);*/
++	/* TEST_R(uselocale, LC_GLOBAL_LOCALE, _LOCALE_NONE); */
  	TEST_R(nl_langinfo, "US-ASCII", CODESET);
 -	TEST_R(nl_langinfo_l, "UTF-8", CODESET, _LOCALE_UTF8);
 +	/* TEST_R(nl_langinfo_l, "UTF-8", CODESET, _LOCALE_UTF8); */
@@ -4742,23 +4741,21 @@ diff -ruN -x obj src67-orig/regress/lib/libc/locale/uselocale/uselocale.c src/re
  
  	/* Test switching the thread locale. */
 -	TEST_R(uselocale, LC_GLOBAL_LOCALE, _LOCALE_UTF8);
--	TEST_R(MB_CUR_MAX, 4);
++	/* TEST_R(uselocale, LC_GLOBAL_LOCALE, _LOCALE_UTF8); */
+ 	TEST_R(MB_CUR_MAX, 4);
 -	TEST_R(uselocale, _LOCALE_UTF8, _LOCALE_NONE);
 -	TEST_R(nl_langinfo, "UTF-8", CODESET);
 -	TEST_R(nl_langinfo_l, "UTF-8", CODESET, _LOCALE_UTF8);
-+	/* TEST_R(uselocale, LC_GLOBAL_LOCALE, _LOCALE_UTF8); */
-+	/*uselocale(utf8);
-+	TEST_R(MB_CUR_MAX, 4);  */
 +	/* TEST_R(uselocale, _LOCALE_UTF8, _LOCALE_NONE); */
-+	/*TEST_R(nl_langinfo, "UTF-8", CODESET); */
-+	/*TEST_R(nl_langinfo_l, "UTF-8", CODESET, utf8); */
++	/* TEST_R(nl_langinfo, "UTF-8", CODESET); */
++	/* TEST_R(nl_langinfo_l, "UTF-8", CODESET, _LOCALE_UTF8); */
  	TEST_R(nl_langinfo_l, "US-ASCII", CODESET, _LOCALE_C);
 -	TEST_R(isalpha, _L, 0x65);  /* e */
 -	TEST_R(isalpha_l, _L, 0x65, _LOCALE_UTF8);
 -	TEST_R(isalpha_l, _L, 0x65, _LOCALE_C);
 -	TEST_R(isalpha_l, _L, 0x65, _LOCALE_C);
 +	TEST_R(isalpha, __CTYPE_L, 0x65);  /* e */
-+	/* TEST_R(isalpha_l, _L, 0x65, _LOCALE_UTF8); */
++	TEST_R(isalpha_l, __CTYPE_L, 0x65, _LOCALE_UTF8);
 +	TEST_R(isalpha_l, __CTYPE_L, 0x65, _LOCALE_C);
 +	TEST_R(isalpha_l, __CTYPE_L, 0x65, _LOCALE_C);
  	TEST_R(isalpha, 0, 0x30);  /* 0 */
@@ -4775,7 +4772,7 @@ diff -ruN -x obj src67-orig/regress/lib/libc/locale/uselocale/uselocale.c src/re
  	TEST_R(tolower_l, 0x40, 0x40, _LOCALE_C);
 -	TEST_R(iswalpha, 1, 0x00E9);  /* e accent aigu */
 -	TEST_R(iswalpha_l, 1, 0x00E9, _LOCALE_UTF8);
-+	/* TEST_R(iswalpha, 1, 0x00E9); */  /* e accent aigu */ 
++	/* TEST_R(iswalpha, 1, 0x00E9); */  /* e accent aigu */
 +	/* TEST_R(iswalpha_l, 1, 0x00E9, _LOCALE_UTF8); */
  	TEST_R(iswalpha_l, 0, 0x00E9, _LOCALE_C);
 -	TEST_R(iswalpha, 1, 0x0153);  /* ligature oe */
@@ -4789,7 +4786,7 @@ diff -ruN -x obj src67-orig/regress/lib/libc/locale/uselocale/uselocale.c src/re
  	TEST_R(iswalpha_l, 0, 0x2200, _LOCALE_C);
 -	TEST_R(towupper, 0x00C9, 0x00E9);
 -	TEST_R(towupper_l, 0x00C9, 0x00E9, _LOCALE_UTF8);
-+	/* TEST_R(towupper, 0x00C9, 0x00E9); */
++	/* TEST_R(towupper, 0x00C9, 0x00E9);*/
 +	/* TEST_R(towupper_l, 0x00C9, 0x00E9, _LOCALE_UTF8); */
  	TEST_R(towupper_l, 0x00E9, 0x00E9, _LOCALE_C);
 -	TEST_R(towupper, 0x0152, 0x0153);
@@ -4805,7 +4802,7 @@ diff -ruN -x obj src67-orig/regress/lib/libc/locale/uselocale/uselocale.c src/re
  	if (wctyg == NULL)
  		errx(1, "wctype(upper) == NULL");
 -	wctyu = wctype_l("upper", _LOCALE_UTF8);
-+	/* wctyu = wctype_l("upper", _LOCALE_UTF8);
++	/* wctyu = wctype_l("upper", _LOCALE_UTF8); 
  	if (wctyu == NULL)
  		errx(1, "wctype_l(upper, UTF-8) == NULL");
  	if (wctyg != wctyu)
@@ -4814,12 +4811,8 @@ diff -ruN -x obj src67-orig/regress/lib/libc/locale/uselocale/uselocale.c src/re
  	wctyc = wctype_l("upper", _LOCALE_C);
  	if (wctyc == NULL)
  		errx(1, "wctype_l(upper, C) == NULL");
--	if (wctyg == wctyc)
--		errx(1, "wctype global == C");
 -	TEST_R(iswctype, 1, 0x00D0, wctyg);  /* Eth */
 -	TEST_R(iswctype_l, 1, 0x00D0, wctyu, _LOCALE_UTF8);
-+	/* if (wctyg == wctyc)
-+		errx(1, "wctype global == C"); */
 +	//TEST_R(iswctype, 1, 0x00D0, wctyg);  /* Eth */
 +	/* TEST_R(iswctype_l, 1, 0x00D0, wctyu, _LOCALE_UTF8); */
  	TEST_R(iswctype_l, 0, 0x00D0, wctyc, _LOCALE_C);
@@ -4838,20 +4831,15 @@ diff -ruN -x obj src67-orig/regress/lib/libc/locale/uselocale/uselocale.c src/re
 -	wctru = wctrans_l("tolower", _LOCALE_UTF8);
 +	/* wctru = wctrans_l("tolower", _LOCALE_UTF8);
  	if (wctru == NULL)
--		errx(1, "wctrans(tolower, UTF-8) == NULL");
-+		errx(1, "wctrans(tolower, UTF-8) == NULL"); 
+ 		errx(1, "wctrans(tolower, UTF-8) == NULL");
  	if (wctrg != wctru)
 -		errx(1, "wctrans global != UTF-8");
 +		errx(1, "wctrans global != UTF-8"); */
  	wctrc = wctrans_l("tolower", _LOCALE_C);
  	if (wctrc == NULL)
  		errx(1, "wctrans(tolower, C) == NULL");
--	if (wctrg == wctrc)
--		errx(1, "wctrans global == C");
 -	TEST_R(towctrans, 0x00FE, 0x00DE, wctrg);  /* Thorn */
 -	TEST_R(towctrans_l, 0x00FE, 0x00DE, wctru, _LOCALE_UTF8);
-+	/*if (wctrg == wctrc)
-+		errx(1, "wctrans global == C");*/
 +	//TEST_R(towctrans, 0x00FE, 0x00DE, wctrg);  /* Thorn */
 +	/* TEST_R(towctrans_l, 0x00FE, 0x00DE, wctru, _LOCALE_UTF8); */
  	TEST_R(towctrans_l, 0x00DE, 0x00DE, wctrc, _LOCALE_C);
@@ -4864,9 +4852,8 @@ diff -ruN -x obj src67-orig/regress/lib/libc/locale/uselocale/uselocale.c src/re
 -	TEST_R(towctrans_l, 0x2207, 0x2207, wctru, _LOCALE_UTF8);
 +	/* TEST_R(towctrans_l, 0x2207, 0x2207, wctru, _LOCALE_UTF8); */
  	TEST_R(towctrans_l, 0x2207, 0x2207, wctrc, _LOCALE_C);
--	TEST_R(wcscasecmp, 0, s1, s2);
+ 	TEST_R(wcscasecmp, 0, s1, s2);
 -	TEST_R(wcscasecmp_l, 0, s1, s2, _LOCALE_UTF8);
-+	//TEST_R(wcscasecmp, 0, s1, s2);
 +	/* TEST_R(wcscasecmp_l, 0, s1, s2, _LOCALE_UTF8); */
  	TEST_R(wcscasecmp_l, *s1 - *s2, s1, s2, _LOCALE_C);
 -	TEST_R(wcsncasecmp, 0, s3, s4, 2);
@@ -4877,11 +4864,11 @@ diff -ruN -x obj src67-orig/regress/lib/libc/locale/uselocale/uselocale.c src/re
  
  	/* Test non-ctype newlocale(3). */
 -	TEST_R(newlocale, _LOCALE_C, LC_MESSAGES_MASK, "en_US.UTF-8");
-+	//TEST_R(newlocale, _LOCALE_C, LC_MESSAGES_MASK, "en_US.UTF-8");
++	// TEST_R(newlocale, _LOCALE_C, LC_MESSAGES_MASK, "en_US.UTF-8");
  
  	/* Test strerror(3). */
  	sego = strerror(EPERM);
-@@ -394,26 +398,28 @@
+@@ -383,26 +386,28 @@
  
  	/* Test switching the thread locale back. */
  	TEST_R(MB_CUR_MAX, 4);
@@ -4920,7 +4907,7 @@ diff -ruN -x obj src67-orig/regress/lib/libc/locale/uselocale/uselocale.c src/re
  	/* Check that the global locale takes effect even in a thread. */
  	TEST_R(nl_langinfo, "UTF-8", CODESET);
  	TEST_R(iswalpha, 1, 0x0153);
-@@ -452,14 +458,14 @@
+@@ -451,14 +456,14 @@
  	TEST_R(MB_CUR_MAX, 1);
  
  	/* Check that *_l(3) works without any locale installed. */
@@ -5082,46 +5069,6 @@ diff -ruN src71-orig/lib/libc/gen/isctype.c src/lib/libc/gen/isctype.c
  }
  DEF_STRONG(isxdigit);
  
-diff -ruN src71-orig/lib/libc/locale/runeglue.c  src/lib/libc/locale/runeglue.c
---- src71-orig/lib/libc/locale/runeglue.c	Sat Aug  5 10:16:32 2017
-+++ src/lib/libc/locale/runeglue.c	Mon Mar 28 20:35:21 2022
-@@ -80,19 +80,19 @@
- 	for (i = 0; i < limit; i++) {
- 		p->ctype_tab[i + 1] = 0;
- 		if (rl->rl_runetype[i] & _CTYPE_U)
--			p->ctype_tab[i + 1] |= _U;
-+			p->ctype_tab[i + 1] |= __CTYPE_U;
- 		if (rl->rl_runetype[i] & _CTYPE_L)
--			p->ctype_tab[i + 1] |= _L;
-+			p->ctype_tab[i + 1] |= __CTYPE_L;
- 		if (rl->rl_runetype[i] & _CTYPE_D)
--			p->ctype_tab[i + 1] |= _N;
-+			p->ctype_tab[i + 1] |= __CTYPE_N;
- 		if (rl->rl_runetype[i] & _CTYPE_S)
--			p->ctype_tab[i + 1] |= _S;
-+			p->ctype_tab[i + 1] |= __CTYPE_S;
- 		if (rl->rl_runetype[i] & _CTYPE_P)
--			p->ctype_tab[i + 1] |= _P;
-+			p->ctype_tab[i + 1] |= __CTYPE_P;
- 		if (rl->rl_runetype[i] & _CTYPE_C)
--			p->ctype_tab[i + 1] |= _C;
-+			p->ctype_tab[i + 1] |= __CTYPE_C;
- 		if (rl->rl_runetype[i] & _CTYPE_X)
--			p->ctype_tab[i + 1] |= _X;
-+			p->ctype_tab[i + 1] |= _CTYPE_X;
- 		/*
- 		 * _B has been used incorrectly (or with older declaration)
- 		 * in ctype.h isprint() macro.
-@@ -102,7 +102,7 @@
- 		 */
- 		if ((rl->rl_runetype[i] & (_CTYPE_R | _CTYPE_G))
- 		    == _CTYPE_R)
--			p->ctype_tab[i + 1] |= _B;
-+			p->ctype_tab[i + 1] |= __CTYPE_B;
- 
- 		p->toupper_tab[i + 1] = (short)rl->rl_mapupper[i];
- 		p->tolower_tab[i + 1] = (short)rl->rl_maplower[i];
-
 diff -ruN src71-orig/lib/libc/hidden/time.h hidden/time.h
 --- src71-orig/lib/libc/hidden/time.h	Fri Mar 18 19:46:21 2022
 +++ hidden/time.h	Mon Jul 18 05:26:49 2022

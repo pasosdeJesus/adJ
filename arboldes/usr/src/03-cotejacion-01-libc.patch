@@ -7,7 +7,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/locale/Makefil
  	duplocale.c freelocale.c newlocale.c uselocale.c \
 -	__mb_cur_max.c _CurrentRuneLocale.c _get_locname.c \
 +	__mb_cur_max.c collate.c _CurrentRuneLocale.c _get_locname.c \
- 	isctype_l.c iswctype.c iswctype_l.c \
+ 	isctype_l.c iswctype.c iswctype_l.c wctype.c \
  	loadtextcat.c \
  	mblen.c mbrlen.c mbstowcs.c mbtowc.c multibyte_citrus.c wcscoll.c \
 @@ -23,4 +23,4 @@

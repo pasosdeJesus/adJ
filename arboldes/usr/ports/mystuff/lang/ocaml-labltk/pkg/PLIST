@@ -1,5 +1,5 @@
-@comment $adJ: PLIST,v$
 @option no-default-conflict
+@comment $adJ: PLIST,v$
 bin/labltk
 bin/ocamlbrowser
 lib/ocaml/labltk/
@@ -130,6 +130,8 @@ lib/ocaml/labltk/cWm.cmx
 lib/ocaml/labltk/cWm.mli
 lib/ocaml/labltk/camltk.cmi
 lib/ocaml/labltk/camltk.cmx
+lib/ocaml/labltk/camltkwrap.cmi
+lib/ocaml/labltk/camltkwrap.cmx
 lib/ocaml/labltk/canvas.cmi
 lib/ocaml/labltk/canvas.cmx
 lib/ocaml/labltk/canvas.mli
@@ -252,7 +254,7 @@ lib/ocaml/labltk/labltk.cmi
 lib/ocaml/labltk/labltk.cmx
 lib/ocaml/labltk/labltk.cmxa
 lib/ocaml/labltk/labltktop
-lib/ocaml/labltk/liblabltk.a
+@static-lib lib/ocaml/labltk/liblabltk.a
 lib/ocaml/labltk/listbox.cmi
 lib/ocaml/labltk/listbox.cmx
 lib/ocaml/labltk/listbox.mli

@@ -3226,15 +3226,12 @@ diff -ruN src62-orig/lib/libc/locale/isctype_l.c src/lib/libc/locale/isctype_l.c
 diff -ruN -x obj src67-orig/regress/lib/libc/locale/uselocale/uselocale.c src/regress/lib/libc/locale/uselocale/uselocale.c
 --- src67-orig/regress/lib/libc/locale/uselocale/uselocale.c	Wed Aug 16 08:52:50 2017
 +++ src/regress/lib/libc/locale/uselocale/uselocale.c	Sun Jun 21 07:26:09 2020
-@@ -286,8 +286,8 @@
+@@ -277,7 +277,7 @@
+ 	/* TEST_R(nl_langinfo_l, "UTF-8", CODESET, _LOCALE_UTF8); */
  	TEST_R(nl_langinfo_l, "US-ASCII", CODESET, _LOCALE_C);
  	TEST_R(isalpha, __CTYPE_L, 0x65);  /* e */
- 	/* TEST_R(isalpha_l, _L, 0x65, _LOCALE_UTF8); */
--	TEST_R(isalpha_l, __CTYPE_L, 0x65, _LOCALE_C);
--	TEST_R(isalpha_l, __CTYPE_L, 0x65, _LOCALE_C);
-+	TEST_R(isalpha_l, 1, 0x65, _LOCALE_C);
-+	TEST_R(isalpha_l, 1, 0x65, _LOCALE_C);
+-	TEST_R(isalpha_l, __CTYPE_L, 0x65, _LOCALE_UTF8);
++	// TEST_R(isalpha_l, __CTYPE_L, 0x65, _LOCALE_UTF8);
+ 	TEST_R(isalpha_l, __CTYPE_L, 0x65, _LOCALE_C);
+ 	TEST_R(isalpha_l, __CTYPE_L, 0x65, _LOCALE_C);
  	TEST_R(isalpha, 0, 0x30);  /* 0 */
- 	/* TEST_R(isalpha_l, 0, 0x30, _LOCALE_UTF8); */
- 	TEST_R(isalpha_l, 0, 0x30, _LOCALE_C);
-

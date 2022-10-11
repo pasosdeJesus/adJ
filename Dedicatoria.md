@@ -1,22 +1,7 @@
+Habiendo reunido a sus doce discípulos, les dio poder y autoridad sobre todos
+los demonios, y para sanar enfermedades. Y los envió a predicar el reino de
+Dios y a sanar a los enfermos.
 
-Él es quien perdona todas tus iniquidades,
-
-El que sana todas tus dolencias;
-
-El que rescata del hoyo tu vida,
-
-El que te corona de favores y misericordias;
-
-El que sacia de bien tu boca
-
-De modo que te rejuvenezcas como el águila.
-
-Salmo 103:3-5
-
----
-
-Agradezco a Dios por perdonar mis iniquidades  y oro para ser misericordioso
-como Él
-  Vladimir Támara Patiño. 17.Mar.2022
+Lucas 9:1-2
 
 

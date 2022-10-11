@@ -596,15 +596,26 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/iswcty
  
  	if (rl->rl_wctrans[_WCTRANS_INDEX_LOWER].te_name==NULL)
  		_wctrans_init(rl);
-@@ -204,7 +207,7 @@
+diff -ruN src72-orig/lib/libc/locale/wctype.c src/lib/libc/locale/wctype.c
+--- src72-orig/lib/libc/locale/wctype.c	Tue Oct  4 18:12:54 2022
++++ src/lib/libc/locale/wctype.c	Thu Oct  6 10:58:02 2022
+@@ -61,11 +61,12 @@
  wctype(const char *property)
  {
  	int i;
--	_RuneLocale *rl = _CurrentRuneLocale();
 +	_RuneLocale *rl = XLOCALE_CTYPE(__get_locale())->runes;
  
- 	for (i=0; i<_WCTYPE_NINDEXES; i++)
- 		if (!strcmp(rl->rl_wctype[i].te_name, property))
+-	for (i = 0; i < _WCTYPE_NINDEXES; i++)
+-		if (strcmp(wctype_entries[i].te_name, property) == 0)
+-			return &wctype_entries[i];
+-	return NULL;
++	for (i=0; i<_WCTYPE_NINDEXES; i++)
++		if (!strcmp(rl->rl_wctype[i].te_name, property))
++			return ((wctype_t)&rl->rl_wctype[i]);
++	return ((wctype_t)NULL);
+ }
+ DEF_STRONG(wctype);
+ 
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/mbrlen.c src/lib/libc/locale/mbrlen.c
 --- src54-x6/lib/libc/locale/mbrlen.c	Tue Dec  3 16:05:32 2013
 +++ src/lib/libc/locale/mbrlen.c	Tue Dec  3 22:25:11 2013
@@ -1972,10 +1983,11 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src55-orig/lib/libc/stdlib/strt
  .Nd convert ASCII string to double, float or long double
  .Sh SYNOPSIS
  .In stdlib.h
-@@ -49,24 +52,39 @@
+@@ -49,24 +52,40 @@
  .Pp
  .Ft long double
  .Fn strtold "const char *nptr" "char **endptr"
++.Pp
 +.In xlocale.h
 +.Ft double
 +.Fn strtod_l "const char *nptr" "char **endptr" "locale_t loc"
@@ -1991,31 +2003,31 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src55-orig/lib/libc/stdlib/strt
 -function converts the initial portion of the string pointed to by
 +and
 +.Fn strtod_l
-+functions convert the initial portion of the string pointed to by
++functions converts the initial portion of the string pointed to by
  .Fa nptr
  to
- .Li double
+ .Vt double
  representation.
  The
  .Fn strtof
 -function converts the initial portion of the string pointed to by
 +and
 +.Fn strtof_l
-+functions convert the initial portion of the string pointed to by
++functions converts the initial portion of the string pointed to by
  .Fa nptr
  to
- .Li float
+ .Vt float
  representation.
  The
  .Fn strtold
 -function converts the initial portion of the string pointed to by
 +and
 +.Fn strtold_l
-+functions convert the initial portion of the string pointed to by
++functions converts the initial portion of the string pointed to by
  .Fa nptr
  to
- .Li long double
-@@ -115,6 +133,22 @@
+ .Vt long double
+@@ -115,6 +134,22 @@
  string (as defined by the
  .Xr isspace 3
  function) are skipped.
