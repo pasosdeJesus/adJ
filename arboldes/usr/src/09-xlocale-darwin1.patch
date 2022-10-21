@@ -3125,7 +3125,7 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/stdio/swsc
 diff -ruN src/lib/libc/Symbols.list.orig  src/lib/libc/Symbols.list
 --- src/lib/libc/Symbols.list.orig	Mon Aug 22 08:08:28 2016
 +++ src/lib/libc/Symbols.list	Mon Aug 22 08:12:10 2016
-@@ -591,6 +591,7 @@
+@@ -595,6 +595,7 @@
  closelog_r
  confstr
  ctermid
@@ -3133,7 +3133,7 @@ diff -ruN src/lib/libc/Symbols.list.orig  src/lib/libc/Symbols.list
  daemon
  devname
  dirfd
-@@ -1408,6 +1409,7 @@
+@@ -1412,6 +1413,7 @@
  open_wmemstream
  perror
  printf
@@ -3141,7 +3141,7 @@ diff -ruN src/lib/libc/Symbols.list.orig  src/lib/libc/Symbols.list
  putc
  putc_unlocked
  putchar
-@@ -1426,10 +1428,13 @@
+@@ -1430,10 +1432,13 @@
  snprintf
  snprintf_l
  sprintf
@@ -3155,7 +3155,7 @@ diff -ruN src/lib/libc/Symbols.list.orig  src/lib/libc/Symbols.list
  tempnam
  tmpfile
  tmpnam
-@@ -1560,14 +1565,23 @@
+@@ -1564,14 +1569,23 @@
  setstate
  sradixsort
  strtoimax
@@ -3179,7 +3179,7 @@ diff -ruN src/lib/libc/Symbols.list.orig  src/lib/libc/Symbols.list
  suboptarg
  system
  tdelete
-@@ -1763,10 +1777,25 @@
+@@ -1767,10 +1781,25 @@
  
  
  /* xlocale */
@@ -3205,7 +3205,7 @@ diff -ruN src/lib/libc/Symbols.list.orig  src/lib/libc/Symbols.list
  isalnum_l
  isalpha_l
  isblank_l
-@@ -1826,13 +1855,23 @@
+@@ -1829,14 +1858,24 @@
  wcrtomb_l
  wcsnrtombs_l
  wcsrtombs_l
@@ -3223,10 +3223,12 @@ diff -ruN src/lib/libc/Symbols.list.orig  src/lib/libc/Symbols.list
  wctob_l
  wctomb_l
  wctrans_l
++wcstof_l
  wctype_l
  wcwidth_l
+-
 +wprintf_l
  
- 
  /* yp */
+ yp_all
 

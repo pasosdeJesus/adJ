@@ -1805,6 +1805,23 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/ru
  typedef uint64_t	__runepad_t;
  
  
+@@ -150,7 +153,7 @@
+  * wctype stuffs.
+  */
+ typedef struct _WCTypeEntry {
+-	char		te_name[8];
++	char		*te_name;
+ 	_RuneType	te_mask;
+ } _WCTypeEntry;
+ #define _WCTYPE_INDEX_ALNUM	0
+@@ -200,6 +203,7 @@
+ 	 */
+ 	char				*rl_codeset;
+ 	_WCTransEntry			rl_wctrans[_WCTRANS_NINDEXES];
++	_WCTypeEntry			rl_wctype[_WCTYPE_NINDEXES];
+ 
+ 	struct old_tabs *		rl_tabs;
+ 
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src55-orig/lib/libc/locale/setlocale.c src/lib/libc/locale/setlocale.c
 --- src55-orig/lib/libc/locale/setlocale.c	Mon Apr  1 08:25:36 2013
 +++ src/lib/libc/locale/setlocale.c	Wed Apr  3 06:41:58 2013
@@ -5081,3 +5098,227 @@ diff -ruN src71-orig/lib/libc/hidden/time.h hidden/time.h
  PROTO_NORMAL(strptime);
  PROTO_NORMAL(time);
  PROTO_DEPRECATED(timegm);
+
+diff -ruN src72-orig/lib/libc/locale/runetable.c src/lib/libc/locale/runetable.c
+--- src72-orig/lib/libc/locale/runetable.c	Tue Oct  4 18:12:54 2022
++++ src/lib/libc/locale/runetable.c	Wed Oct 19 15:34:10 2022
+@@ -252,5 +252,19 @@
+ 	    { NULL, NULL, NULL },
+ 	    { NULL, NULL, NULL },
+     },
++    {
++	    { "alnum", _CTYPE_A|_CTYPE_D },
++	    { "alpha", _CTYPE_A },
++	    { "blank", _CTYPE_B },
++	    { "cntrl", _CTYPE_C },
++	    { "digit", _CTYPE_D },
++	    { "graph", _CTYPE_G },
++	    { "lower", _CTYPE_L },
++	    { "print", _CTYPE_R },
++	    { "punct", _CTYPE_P },
++	    { "space", _CTYPE_S }, 
++	    { "upper", _CTYPE_U },
++	    { "xdigit", _CTYPE_X },
++    },                      
+     NULL
+ };
+diff -ruN src72-orig/lib/libc/locale/wctype.c src/lib/libc/locale/wctype.c
+--- src72-orig/lib/libc/locale/wctype.c	Tue Oct  4 18:12:54 2022
++++ src/lib/libc/locale/wctype.c	Wed Oct 19 16:13:16 2022
+@@ -1,4 +1,4 @@
+-/*	$OpenBSD: wctype.c,v 1.1 2022/07/25 21:38:24 guenther Exp $ */
++/*	$OpenBSD: iswctype.c,v 1.8 2022/07/25 21:38:24 guenther Exp $ */
+ /*	$NetBSD: iswctype.c,v 1.15 2005/02/09 21:35:46 kleink Exp $	*/
+ 
+ /*
+@@ -37,40 +37,48 @@
+ 
+ #include <wchar.h>
+ #include <wctype.h>
++#include <ctype.h>
++#include <errno.h>
+ #include <string.h>
++
++#include "mblocal.h"
+ #include "rune.h"
+ #include "runetype.h"
++#include "rune_local.h"
++#include "_wctrans_local.h"
++#include "xlocale_private.h"
+ 
+-static struct _WCTypeEntry wctype_entries[_WCTYPE_NINDEXES] =
+-{
+-	{ "alnum", _CTYPE_A|_CTYPE_D },
+-	{ "alpha", _CTYPE_A },
+-	{ "blank", _CTYPE_B },
+-	{ "cntrl", _CTYPE_C },
+-	{ "digit", _CTYPE_D },
+-	{ "graph", _CTYPE_G },
+-	{ "lower", _CTYPE_L },
+-	{ "print", _CTYPE_R },
+-	{ "punct", _CTYPE_P },
+-	{ "space", _CTYPE_S },
+-	{ "upper", _CTYPE_U },
+-	{ "xdigit", _CTYPE_X },
+-};
+-
+ wctype_t
+ wctype(const char *property)
+ {
+-	int i;
++       int i;
++       _RuneLocale *rl = _CurrentRuneLocale();
+ 
+-	for (i = 0; i < _WCTYPE_NINDEXES; i++)
+-		if (strcmp(wctype_entries[i].te_name, property) == 0)
+-			return &wctype_entries[i];
+-	return NULL;
++       for (i=0; i<_WCTYPE_NINDEXES; i++)
++               if (!strcmp(rl->rl_wctype[i].te_name, property))
++                       return ((wctype_t)&rl->rl_wctype[i]);
++       return ((wctype_t)NULL);
+ }
+ DEF_STRONG(wctype);
+ 
+-wctype_t
+-wctype_l(const char *property, locale_t locale __attribute__((__unused__)))
++
++static _RuneLocale *
++__runelocale(locale_t locale)
+ {
+-	return wctype(property);
++	FIX_LOCALE(locale);
++	_RuneLocale	*rl = XLOCALE_CTYPE(locale)->runes;
++	return rl;
+ }
++
++wctype_t
++wctype_l(const char *property, locale_t locale)
++{
++       _RuneLocale     *rl;
++       int              i;
++
++       rl = __runelocale(locale);
++       for (i = 0; i < _WCTYPE_NINDEXES; i++)
++               if (strcmp(rl->rl_wctype[i].te_name, property) == 0)
++                       return &rl->rl_wctype[i];
++       return NULL;
++}
+diff -ruN src72-orig/lib/libc/locale/runeglue.c src/lib/libc/locale/runeglue.c
+--- src72-orig/lib/libc/locale/runeglue.c	Wed Dec 31 19:00:00 1969
++++ src/lib/libc/locale/runeglue.c	Wed Oct 19 21:54:08 2022
+@@ -0,0 +1,114 @@
++/*	$OpenBSD: runeglue.c,v 1.5 2017/08/05 15:16:32 schwarze Exp $ */
++/*	$NetBSD: runeglue.c,v 1.10 2003/03/10 21:18:49 tshiozak Exp $	*/
++
++/*-
++ * Copyright (c)1999 Citrus Project,
++ * All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
++ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
++ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++ * SUCH DAMAGE.
++ *
++ *	Id: runeglue.c,v 1.7 2000/12/22 22:52:29 itojun Exp
++ */
++
++/*
++ * Glue code to hide "rune" facility from user programs.
++ * This is important to keep backward/future compatibility.
++ */
++
++#include <assert.h>
++#include <limits.h>
++#include <stdio.h>
++#include <sys/types.h>
++#include <ctype.h>
++#include <stdlib.h>
++#include <string.h>
++#include <wchar.h>
++#include "rune.h"
++#include "rune_local.h"
++#include "ctype_private.h"
++
++#if EOF != -1
++#error "EOF != -1"
++#endif
++#if _CACHED_RUNES != 256
++#error "_CACHED_RUNES != 256"
++#endif
++
++int
++__make_ctype_tabs(_RuneLocale *rl)
++{
++	int i, limit;
++	struct old_tabs *p;
++
++	p = malloc(sizeof *p);
++	if (!p)
++		return -1;
++
++	/* By default, fill the ctype tab completely. */
++	limit = CTYPE_NUM_CHARS;
++
++	/* In UTF-8-encoded locales, the single-byte ctype functions
++	 * must only return non-zero values for ASCII characters.
++	 * Any non-ASCII single-byte character is not a valid UTF-8 sequence.
++	 */
++	if (strcmp(rl->rl_encoding, "UTF8") == 0)
++		limit = 128;
++
++	rl->rl_tabs = p;
++	p->ctype_tab[0] = 0;
++	p->toupper_tab[0] = EOF;
++	p->tolower_tab[0] = EOF;
++	for (i = 0; i < limit; i++) {
++		p->ctype_tab[i + 1] = 0;
++		if (rl->rl_runetype[i] & _CTYPE_U)
++			p->ctype_tab[i + 1] |= __CTYPE_U;
++		if (rl->rl_runetype[i] & _CTYPE_L)
++			p->ctype_tab[i + 1] |= __CTYPE_L;
++		if (rl->rl_runetype[i] & _CTYPE_D)
++			p->ctype_tab[i + 1] |= __CTYPE_N;
++		if (rl->rl_runetype[i] & _CTYPE_S)
++			p->ctype_tab[i + 1] |= __CTYPE_S;
++		if (rl->rl_runetype[i] & _CTYPE_P)
++			p->ctype_tab[i + 1] |= __CTYPE_P;
++		if (rl->rl_runetype[i] & _CTYPE_C)
++			p->ctype_tab[i + 1] |= __CTYPE_C;
++		if (rl->rl_runetype[i] & _CTYPE_X)
++			p->ctype_tab[i + 1] |= __CTYPE_X;
++		/*
++		 * _B has been used incorrectly (or with older declaration)
++		 * in ctype.h isprint() macro.
++		 * _B does not mean isblank, it means "isprint && !isgraph".
++		 * the following is okay since isblank() was hardcoded in
++		 * function (i.e. isblank() is inherently locale unfriendly).
++		 */
++		if ((rl->rl_runetype[i] & (_CTYPE_R | _CTYPE_G))
++		    == _CTYPE_R)
++			p->ctype_tab[i + 1] |= __CTYPE_B;
++
++		p->toupper_tab[i + 1] = (short)rl->rl_mapupper[i];
++		p->tolower_tab[i + 1] = (short)rl->rl_maplower[i];
++	}
++	for (i = limit; i < CTYPE_NUM_CHARS; i++)
++		p->ctype_tab[i + 1] = 0;
++
++	return 0;
++}

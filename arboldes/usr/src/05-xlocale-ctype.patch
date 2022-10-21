@@ -1,9 +1,9 @@
 diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src54-x4/lib/libc/locale/Makefile.inc src/lib/libc/locale/Makefile.inc
 --- src54-x4/lib/libc/locale/Makefile.inc	Thu Dec  5 19:12:05 2013
 +++ src/lib/libc/locale/Makefile.inc	Thu Dec  5 19:17:22 2013
-@@ -9,7 +9,8 @@
+@@ -9,12 +9,13 @@
  	fix_grouping.c _get_locname.c \
- 	isctype_l.c iswctype.c iswctype_l.c \
+ 	isctype_l.c iswctype.c iswctype_l.c wctype.c \
  	loadtextcat.c \
 -	mblen.c mbrlen.c mbstowcs.c mbtowc.c multibyte_citrus.c none.c \
 +	mblen.c mbrlen.c mbstowcs.c mbtowc.c multibyte_citrus.c \
@@ -11,6 +11,12 @@ diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src54-x4/lib/l
  	setrunelocale.c \
  	wcscoll.c wcscoll_l.c \
  	wcstombs.c wctob.c wctomb.c wcstof.c wcstod.c wcstold.c wcstol.c \
+ 	wcstoul.c wcstoll.c wcstoull.c wcstoimax.c wcstoumax.c \
+-	rune.c runetable.c ___runetype_mb.c \
++	runeglue.c rune.c runetable.c ___runetype_mb.c \
+ 	_wctrans.c wcsxfrm.c wcsxfrm_l.c xlocale.c
+ 
+ MAN+=	nl_langinfo.3 setlocale.3 newlocale.3 uselocale.3 localeconv.3 \
 @@ -22,7 +23,8 @@
  	btowc.3 mblen.3 mbrlen.3 mbrtowc.3 mbsinit.3 mbsrtowcs.3 \
  	mbstowcs.3 mbtowc.3 wcrtomb.3 wcscoll.3 wcsrtombs.3 wcstod.3 \
@@ -539,7 +545,7 @@ diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src53xlocale1/
 +	}
 +	return (-1);
 +}
-+DEF_WEAK(nextwctype_l);
++DEF_STRONG(nextwctype_l);
 +
 +wint_t
 +nextwctype(wint_t wc, wctype_t wct)
@@ -573,7 +579,7 @@ diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src53xlocale1/
  	return w;
  }
 -DEF_WEAK(wcswidth);
-+DEF_WEAK(wcswidth_l);
++DEF_STRONG(wcswidth_l);
 +
 +int
 +wcswidth(const wchar_t *s, size_t n)
@@ -2564,7 +2570,7 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/stdio/fget
 diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src56xlocale1/lib/libc/locale/rune_local.h src56xlocale2/lib/libc/locale/rune_local.h
 --- src56xlocale1/lib/libc/locale/rune_local.h	Mon Apr  8 21:20:25 2013
 +++ src56xlocale2/lib/libc/locale/rune_local.h	Fri Apr 12 12:07:57 2013
-@@ -32,6 +32,8 @@
+@@ -32,11 +32,17 @@
  
  __BEGIN_HIDDEN_DECLS
  
@@ -2573,14 +2579,15 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src56xlocale1/lib/libc/locale/run
  /* rune.c */
  extern _RuneLocale *_Read_RuneMagi(FILE *fp);
  
-@@ -40,6 +42,7 @@
- 
++/* runeglue.c */
++extern int __make_ctype_tabs(_RuneLocale *);
++
  /* ___runetype_mb.c */
  extern _RuneType ___runetype_mb(wint_t, _RuneLocale *);
 +extern _RuneType ___runetype_mb_l(wint_t, locale_t loc);
  
  __END_HIDDEN_DECLS
- 
+
 diff -ruN src59-orig/lib/libc/hidden/ctype.h src/lib/libc/hidden/ctype.h
 --- src59-orig/lib/libc/hidden/ctype.h	Thu Jun  9 23:21:42 2016
 +++ src/lib/libc/hidden/ctype.h	Sat Aug 20 22:41:28 2016
@@ -2593,7 +2600,7 @@ diff -ruN src59-orig/lib/libc/hidden/ctype.h src/lib/libc/hidden/ctype.h
  PROTO_NORMAL(isgraph);
  PROTO_DEPRECATED(isgraph_l);
  PROTO_NORMAL(islower);
-@@ -78,19 +78,37 @@
+@@ -78,14 +78,14 @@
  PROTO_NORMAL(ispunct);
  PROTO_DEPRECATED(ispunct_l);
  PROTO_NORMAL(isspace);
@@ -2610,33 +2617,10 @@ diff -ruN src59-orig/lib/libc/hidden/ctype.h src/lib/libc/hidden/ctype.h
  PROTO_NORMAL(toupper);
  PROTO_DEPRECATED(toupper_l);
  PROTO_STD_DEPRECATED(_tolower);
- PROTO_STD_DEPRECATED(_toupper);
- 
-+__only_inline int	digittoint_l(int _c, locale_t _l);
-+__only_inline int	isdigit_l(int _c, locale_t _l);
-+__only_inline int	ishexnumber_l(int _c, locale_t _l);
-+__only_inline int	isideogram_l(int _c, locale_t _l);
-+__only_inline int	isnumber_l(int _c, locale_t _l);
-+__only_inline int	isphonogram_l(int _c, locale_t _l);
-+__only_inline int	isrune_l(int _c, locale_t _l);
-+__only_inline int	isspecial_l(int _c, locale_t _l);
-+
-+PROTO_NORMAL(digittoint_l);
-+PROTO_NORMAL(isdigit_l);
-+PROTO_STD_DEPRECATED(ishexnumber_l);
-+PROTO_NORMAL(isideogram_l);
-+PROTO_NORMAL(isnumber_l);
-+PROTO_NORMAL(isphonogram_l);
-+PROTO_NORMAL(isrune_l);
-+PROTO_NORMAL(isspecial_l);
-+ 
- #include_next <ctype.h>
- 
- #if 0
 diff -ruN src/lib/libc/hidden/wchar.h.orig src/lib/libc/hidden/wchar.h
 --- src/lib/libc/hidden/wchar.h.orig	Sat Aug 20 19:49:11 2016
 +++ src/lib/libc/hidden/wchar.h	Sat Aug 20 22:50:10 2016
-@@ -61,11 +61,12 @@
+@@ -61,7 +61,7 @@
  PROTO_NORMAL(wcschr);
  PROTO_NORMAL(wcscmp);
  PROTO_NORMAL(wcscoll);
@@ -2645,26 +2629,16 @@ diff -ruN src/lib/libc/hidden/wchar.h.orig src/lib/libc/hidden/wchar.h
  PROTO_STD_DEPRECATED(wcscpy);
  PROTO_NORMAL(wcscspn);
  PROTO_NORMAL(wcsdup);
- PROTO_STD_DEPRECATED(wcsftime);
-+PROTO_STD_DEPRECATED(wcsftime_l);
- PROTO_NORMAL(wcslcat);
- PROTO_NORMAL(wcslcpy);
- PROTO_NORMAL(wcslen);
-@@ -91,11 +92,13 @@
- PROTO_NORMAL(wcstoull);
+@@ -92,7 +92,7 @@
  PROTO_DEPRECATED(wcswcs);
  PROTO_NORMAL(wcswidth);
-+PROTO_NORMAL(wcswidth_l);
  PROTO_NORMAL(wcsxfrm);
 -PROTO_DEPRECATED(wcsxfrm_l);
 +PROTO_NORMAL(wcsxfrm_l);
  PROTO_NORMAL(wctob);
  PROTO_NORMAL(wctob_l);
  PROTO_NORMAL(wcwidth);
-+PROTO_NORMAL(wcwidth_l);
- PROTO_NORMAL(wmemchr);
- PROTO_NORMAL(wmemcmp);
- PROTO_NORMAL(wmemcpy);
+
 diff -ruN src59-orig/lib/libc/hidden/wctype.h src/lib/libc/hidden/wctype.h
 --- src59-orig/lib/libc/hidden/wctype.h	Thu Jun  9 23:21:42 2016
 +++ src/lib/libc/hidden/wctype.h	Sat Aug 20 22:45:54 2016
@@ -2895,7 +2869,7 @@ diff -ruN src62-orig/lib/libc/locale/iswctype_l.c src/lib/libc/locale/iswctype_l
 +				>> _CTYPE_SWS);
 +	return -1;
 +}
-+DEF_WEAK(wcwidth_l);
++DEF_STRONG(wcwidth_l);
 +
 +
 diff -ruN src62-orig/include/ctype.h src/include/ctype.h
@@ -3235,3 +3209,56 @@ diff -ruN -x obj src67-orig/regress/lib/libc/locale/uselocale/uselocale.c src/re
  	TEST_R(isalpha_l, __CTYPE_L, 0x65, _LOCALE_C);
  	TEST_R(isalpha_l, __CTYPE_L, 0x65, _LOCALE_C);
  	TEST_R(isalpha, 0, 0x30);  /* 0 */
+diff -ruN src72-orig/lib/libc/locale/rune.c src/lib/libc/locale/rune.c
+--- src72-orig/lib/libc/locale/rune.c	Tue Oct  4 18:12:54 2022
++++ src/lib/libc/locale/rune.c	Wed Oct 19 15:26:24 2022
+@@ -80,6 +80,7 @@
+ 
+ static int readrange(_RuneLocale *, _RuneRange *, uint32_t, void *, FILE *);
+ static void _freeentry(_RuneRange *);
++static void _wctype_init(_RuneLocale *rl);
+ 
+ static int
+ readrange(_RuneLocale *rl, _RuneRange *rr, uint32_t nranges, void *lastp,
+@@ -205,6 +206,13 @@
+ }
+ 
+ 
++void
++_wctype_init(_RuneLocale *rl)
++{
++	memcpy(&rl->rl_wctype, &_DefaultRuneLocale.rl_wctype,
++			sizeof(rl->rl_wctype));
++}    
++
+ _RuneLocale *
+ _Read_RuneMagi(FILE *fp)
+ {
+@@ -262,6 +270,11 @@
+ 	rl = (_RuneLocale *)hostdata;
+ 	rl->rl_variable = rl + 1;
+ 
++	memcpy(rl->rl_magic, frl.frl_magic, sizeof(rl->rl_magic));
++	memcpy(rl->rl_encoding, frl.frl_encoding, sizeof(rl->rl_encoding));
++
++	/* XXX assumes rune_t = uint32_t */
++	rl->rl_invalid_rune = ntohl((uint32_t)frl.frl_invalid_rune);
+ 	rl->rl_variable_len = ntohl((uint32_t)frl.frl_variable_len);
+ 
+ 	for (x = 0; x < _CACHED_RUNES; ++x) {
+@@ -290,11 +303,13 @@
+ 		goto rune_err;
+ 	if (find_codeset(rl))
+ 		goto rune_err;
++	_wctype_init(rl);
+ 
+ 	/*
+-	 * error if we have junk at the tail
++	 * error if we have junk at the tail,
++	 * or if we can't allocate memory.
+ 	 */
+-	if (ftello(fp) != sb.st_size)
++	if (ftello(fp) != sb.st_size || __make_ctype_tabs(rl) == -1)
+ 		goto rune_err;
+ 
+ 	return(rl);

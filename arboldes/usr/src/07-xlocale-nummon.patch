@@ -599,23 +599,18 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/iswcty
 diff -ruN src72-orig/lib/libc/locale/wctype.c src/lib/libc/locale/wctype.c
 --- src72-orig/lib/libc/locale/wctype.c	Tue Oct  4 18:12:54 2022
 +++ src/lib/libc/locale/wctype.c	Thu Oct  6 10:58:02 2022
-@@ -61,11 +61,12 @@
+@@ -52,9 +52,9 @@
  wctype(const char *property)
  {
- 	int i;
-+	_RuneLocale *rl = XLOCALE_CTYPE(__get_locale())->runes;
+        int i;
+-       _RuneLocale *rl = _CurrentRuneLocale();
++       _RuneLocale *rl = XLOCALE_CTYPE(__get_locale())->runes;
  
--	for (i = 0; i < _WCTYPE_NINDEXES; i++)
--		if (strcmp(wctype_entries[i].te_name, property) == 0)
--			return &wctype_entries[i];
--	return NULL;
-+	for (i=0; i<_WCTYPE_NINDEXES; i++)
-+		if (!strcmp(rl->rl_wctype[i].te_name, property))
-+			return ((wctype_t)&rl->rl_wctype[i]);
-+	return ((wctype_t)NULL);
- }
- DEF_STRONG(wctype);
- 
+-       for (i=0; i<_WCTYPE_NINDEXES; i++)
++       for (i = 0; i < _WCTYPE_NINDEXES; i++)
+                if (!strcmp(rl->rl_wctype[i].te_name, property))
+                        return ((wctype_t)&rl->rl_wctype[i]);
+        return ((wctype_t)NULL);
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/mbrlen.c src/lib/libc/locale/mbrlen.c
 --- src54-x6/lib/libc/locale/mbrlen.c	Tue Dec  3 16:05:32 2013
 +++ src/lib/libc/locale/mbrlen.c	Tue Dec  3 22:25:11 2013
@@ -2622,7 +2617,7 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/wcs
 diff -ruN src-m/lib/libc/Symbols.list src/lib/libc/Symbols.list
 --- src-m/lib/libc/Symbols.list	Sun Aug 21 22:30:17 2016
 +++ src/lib/libc/Symbols.list	Sun Aug 21 22:14:39 2016
-@@ -845,8 +845,11 @@
+@@ -860,8 +860,11 @@
  __hldtoa
  __ldtoa
  strtod
@@ -2634,7 +2629,7 @@ diff -ruN src-m/lib/libc/Symbols.list src/lib/libc/Symbols.list
  
  /* gmon */
  _gmonparam
-@@ -1408,8 +1411,10 @@
+@@ -1425,8 +1428,10 @@
  setlinebuf
  setvbuf
  snprintf
@@ -2645,7 +2640,7 @@ diff -ruN src-m/lib/libc/Symbols.list src/lib/libc/Symbols.list
  swprintf
  swscanf
  tempnam
-@@ -1709,6 +1714,7 @@
+@@ -1731,6 +1736,7 @@
  offtime
  posix2time
  strfmon
@@ -2653,14 +2648,6 @@ diff -ruN src-m/lib/libc/Symbols.list src/lib/libc/Symbols.list
  strftime
  strftime_l
  strptime
-@@ -1778,6 +1784,7 @@
- iswupper_l
- iswxdigit_l
- isxdigit_l
-+localeconv_l
- mblen_l
- mbrlen_l
- mbrtowc_l
 diff -ruN src/lib/libc/hidden/monetary.h.orig src/lib/libc/hidden/monentary.h
 --- src/lib/libc/hidden/monetary.h.orig	Sun Aug 21 23:03:32 2016
 +++ src/lib/libc/hidden/monetary.h	Sun Aug 21 23:03:40 2016
