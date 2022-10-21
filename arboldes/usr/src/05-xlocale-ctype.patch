@@ -2591,7 +2591,23 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src56xlocale1/lib/libc/locale/run
 diff -ruN src59-orig/lib/libc/hidden/ctype.h src/lib/libc/hidden/ctype.h
 --- src59-orig/lib/libc/hidden/ctype.h	Thu Jun  9 23:21:42 2016
 +++ src/lib/libc/hidden/ctype.h	Sat Aug 20 22:41:28 2016
-@@ -68,7 +68,7 @@
+@@ -58,6 +58,15 @@
+ __only_inline int	toupper_l(int _c, locale_t _l);
+ __only_inline int	isblank_l(int _c, locale_t _l);
+ 
++__only_inline int	isideogram_l(int _c, locale_t _l);
++__only_inline int	isnumber_l(int _c, locale_t _l);
++__only_inline int	isphonogram_l(int _c, locale_t _l);
++__only_inline int	isrune_l(int _c, locale_t _l);
++__only_inline int	isspecial_l(int _c, locale_t _l);
++__only_inline int	digittoint_l(int _c, locale_t _l);
++/*__only_inline int	wcswidth_l(int _c, locale_t _l);
++__only_inline int	wcwidth_l(int _c, locale_t _l);*/
++
+ PROTO_NORMAL(isalnum);
+ PROTO_DEPRECATED(isalnum_l);
+ PROTO_NORMAL(isalpha);
+@@ -68,7 +77,7 @@
  PROTO_NORMAL(iscntrl);
  PROTO_DEPRECATED(iscntrl_l);
  PROTO_NORMAL(isdigit);
@@ -2600,7 +2616,7 @@ diff -ruN src59-orig/lib/libc/hidden/ctype.h src/lib/libc/hidden/ctype.h
  PROTO_NORMAL(isgraph);
  PROTO_DEPRECATED(isgraph_l);
  PROTO_NORMAL(islower);
-@@ -78,14 +78,14 @@
+@@ -78,18 +87,24 @@
  PROTO_NORMAL(ispunct);
  PROTO_DEPRECATED(ispunct_l);
  PROTO_NORMAL(isspace);
@@ -2617,6 +2633,16 @@ diff -ruN src59-orig/lib/libc/hidden/ctype.h src/lib/libc/hidden/ctype.h
  PROTO_NORMAL(toupper);
  PROTO_DEPRECATED(toupper_l);
  PROTO_STD_DEPRECATED(_tolower);
+ PROTO_STD_DEPRECATED(_toupper);
++PROTO_NORMAL(isideogram_l);
++PROTO_NORMAL(isnumber_l);
++PROTO_NORMAL(isphonogram_l);
++PROTO_NORMAL(isrune_l);
++PROTO_NORMAL(isspecial_l);
++PROTO_NORMAL(digittoint_l);
+ 
+ #include_next <ctype.h>
+ 
 diff -ruN src/lib/libc/hidden/wchar.h.orig src/lib/libc/hidden/wchar.h
 --- src/lib/libc/hidden/wchar.h.orig	Sat Aug 20 19:49:11 2016
 +++ src/lib/libc/hidden/wchar.h	Sat Aug 20 22:50:10 2016
@@ -2629,7 +2655,7 @@ diff -ruN src/lib/libc/hidden/wchar.h.orig src/lib/libc/hidden/wchar.h
  PROTO_STD_DEPRECATED(wcscpy);
  PROTO_NORMAL(wcscspn);
  PROTO_NORMAL(wcsdup);
-@@ -92,7 +92,7 @@
+@@ -92,10 +92,12 @@
  PROTO_DEPRECATED(wcswcs);
  PROTO_NORMAL(wcswidth);
  PROTO_NORMAL(wcsxfrm);
@@ -2638,7 +2664,11 @@ diff -ruN src/lib/libc/hidden/wchar.h.orig src/lib/libc/hidden/wchar.h
  PROTO_NORMAL(wctob);
  PROTO_NORMAL(wctob_l);
  PROTO_NORMAL(wcwidth);
-
++PROTO_NORMAL(wcwidth_l);
++PROTO_NORMAL(wcswidth_l);
+ PROTO_NORMAL(wmemchr);
+ PROTO_NORMAL(wmemcmp);
+ PROTO_NORMAL(wmemcpy);
 diff -ruN src59-orig/lib/libc/hidden/wctype.h src/lib/libc/hidden/wctype.h
 --- src59-orig/lib/libc/hidden/wctype.h	Thu Jun  9 23:21:42 2016
 +++ src/lib/libc/hidden/wctype.h	Sat Aug 20 22:45:54 2016
