@@ -3,6 +3,7 @@
 
 <!-- XSL to convert from GBF XML in HTML -->
 <!-- Source released to the public domain 2003 vtamara@pasosdeJesus.org -->
+<!-- Vladimir TÃ¡mara PatiÃ±o -->
 
 <!-- Modularity ideas from http://nwalsh.com/docs/articles/dbdesign/ -->
 <!DOCTYPE xsl:stylesheet []>
@@ -160,7 +161,7 @@ function changeIt() {
                         <input name="mostrarStrong" type="checkbox" 
                             checked="checked" id="mostrarStrong" 
                             onclick="changeIt();"/>
-                        <label for="mostrarStrong">Números Strong</label>
+                        <label for="mostrarStrong">NÃºmeros Strong</label>
                     </div>
                 </xsl:if>
                 <hr/>
@@ -204,8 +205,8 @@ function changeIt() {
                 <h3>Tabla de Contenido</h3></center>
             <ul>
                 <xsl:apply-templates select=".//sb" mode="tdc"/>
-                <li> <a href="strong.html">Números Strong</a></li>
-                <li> <a href="terminos.html">Términos y Créditos</a> </li>
+                <li> <a href="strong.html">NÃºmeros Strong</a></li>
+                <li> <a href="terminos.html">TÃ©rminos y CrÃ©ditos</a> </li>
                 <li> <a href="referencias.html">Referencias</a></li>
             </ul>
         </xsl:with-param>
@@ -217,7 +218,7 @@ function changeIt() {
 
     <xsl:call-template name="pagina">
         <xsl:with-param name="href">html/strong.html</xsl:with-param>
-        <xsl:with-param name="titulo">Números Strong</xsl:with-param>
+        <xsl:with-param name="titulo">NÃºmeros Strong</xsl:with-param>
         <xsl:with-param name="nstrong">no</xsl:with-param>
         <xsl:with-param name="anterior" select="$lastc"/>
         <xsl:with-param name="siguiente">terminos.html</xsl:with-param>
@@ -258,19 +259,19 @@ function changeIt() {
 
     <xsl:call-template name="pagina">
         <xsl:with-param name="href">html/terminos.html</xsl:with-param>
-        <xsl:with-param name="titulo">Términos y Créditos</xsl:with-param>
+        <xsl:with-param name="titulo">TÃ©rminos y CrÃ©ditos</xsl:with-param>
         <xsl:with-param name="anterior">strong.html</xsl:with-param>
         <xsl:with-param name="siguiente">referencias.html</xsl:with-param>
         <xsl:with-param name="tdc">index.html</xsl:with-param>
         <xsl:with-param name="nstrong">no</xsl:with-param>
         <xsl:with-param name="contenido">
             <a name="srights"/>
-            <h3>Términos</h3>
+            <h3>TÃ©rminos</h3>
             <xsl:apply-templates select=".//rights">
                 </xsl:apply-templates><xsl:text> 
             </xsl:text>  
             <a name="credits"/>
-            <h3>Créditos</h3>
+            <h3>CrÃ©ditos</h3>
             <xsl:apply-templates select=".//credits">
                 </xsl:apply-templates><xsl:text> 
             </xsl:text>  
@@ -371,7 +372,7 @@ function changeIt() {
 <xsl:template match="sc">
     <xsl:param name="titulo"/>
     <xsl:variable name="numcap" select="substring-after(./@id,'-')"/>
-    <xsl:variable name="ntitle" select="concat($titulo, '. Capítulo ', $numcap)"/>
+    <xsl:variable name="ntitle" select="concat($titulo, '. CapÃ­tulo ', $numcap)"/>
     <xsl:variable name="filename" select="concat('html/', concat(./@id, '.html'))"/>
     <xsl:variable name="psc" select="preceding-sibling::sc[position()=1]"/>
     <xsl:variable name="nsc" select="following-sibling::sc"/>
@@ -576,7 +577,7 @@ function changeIt() {
 <xsl:key name="footnote" match="rb" use="."/>
 
 <xsl:template match="rb">
-    <!-- Numeración con base en num. pies de páginas de Docbook (N. Walsh) -->
+    <!-- NumeraciÃ³n con base en num. pies de pÃ¡ginas de Docbook (N. Walsh) -->
     <xsl:variable name="pf" select="preceding::rb"/>
     <xsl:variable name="pf2" select="preceding::rb[@xml:lang='es']"/>
     <xsl:variable name="pf3" select="preceding::rb/t[@xml:lang='es']"/>
