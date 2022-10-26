@@ -3036,16 +3036,17 @@ if (test ! -f "/usr/local/bin/ruby$VRUBYSP") then {
 if (test -f "/usr/local/bin/ruby$VRUBYSP") then {
         echo "* Creando enlaces para ruby $VRUBY" >> /var/www/tmp/inst-adJ.bitacora;
 	ln -sf /usr/local/bin/ruby$VRUBYSP /usr/local/bin/ruby
-	ln -sf /usr/local/bin/erb$VRUBYSP /usr/local/bin/erb
-	ln -sf /usr/local/bin/irb$VRUBYSP /usr/local/bin/irb
-	ln -sf /usr/local/bin/rdoc$VRUBYSP /usr/local/bin/racc
-	ln -sf /usr/local/bin/rdoc$VRUBYSP /usr/local/bin/rdoc
-	ln -sf /usr/local/bin/rdoc$VRUBYSP /usr/local/bin/rbs
-	ln -sf /usr/local/bin/ri$VRUBYSP /usr/local/bin/ri
-	ln -sf /usr/local/bin/rake$VRUBYSP /usr/local/bin/rake
-	ln -sf /usr/local/bin/gem$VRUBYSP /usr/local/bin/gem
 	ln -sf /usr/local/bin/bundle$VRUBYSP /usr/local/bin/bundle
 	ln -sf /usr/local/bin/bundler$VRUBYSP /usr/local/bin/bundler
+	ln -sf /usr/local/bin/erb$VRUBYSP /usr/local/bin/erb
+	ln -sf /usr/local/bin/gem$VRUBYSP /usr/local/bin/gem
+	ln -sf /usr/local/bin/irb$VRUBYSP /usr/local/bin/irb
+	ln -sf /usr/local/bin/racc$VRUBYSP /usr/local/bin/racc
+	ln -sf /usr/local/bin/rake$VRUBYSP /usr/local/bin/rake
+	ln -sf /usr/local/bin/rbs$VRUBYSP /usr/local/bin/rbs
+	ln -sf /usr/local/bin/rdbg$VRUBYSP /usr/local/bin/rdbg
+	ln -sf /usr/local/bin/rdoc$VRUBYSP /usr/local/bin/rdoc
+	ln -sf /usr/local/bin/ri$VRUBYSP /usr/local/bin/ri
 	ln -sf /usr/local/bin/typeprof$VRUBYSP /usr/local/bin/typeprof
 } fi;
 
