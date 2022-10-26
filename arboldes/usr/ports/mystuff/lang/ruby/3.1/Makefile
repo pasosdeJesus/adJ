@@ -2,8 +2,11 @@ VERSION =		3.1.2
 DISTNAME =		ruby-${VERSION}
 SHARED_LIBS =		ruby31	0.0
 NEXTVER =		3.2
-REVISION=
 PKGSPEC-main ?=         ruby->=3.1.0,<${NEXTVER}
+REVISION-main =		0
+
+# Backport fix for fixnum*fixnum multiplication on octeon
+PATCHFILES =		ruby-octeon-fix{fe6245b4309c855e6aca5b786ad50a72d53d278a}.patch:0
 
 PSEUDO_FLAVORS=		no_ri_docs bootstrap
 # Do not build the RI docs on slow arches

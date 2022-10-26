@@ -1,5 +1,3 @@
-# $OpenBSD: Makefile.inc,v 1.26 2021/08/13 18:45:45 jeremy Exp $
-
 COMMENT-main ?=		object oriented script language with threads
 COMMENT-gdbm ?=		gdbm interface for ruby
 COMMENT-ri_docs ?=	ri documentation files for ruby
@@ -25,7 +23,8 @@ MAINTAINER ?=	Jeremy Evans <jeremy@openbsd.org>
 PERMIT_PACKAGE?= Yes
 
 MASTER_SITES ?=		https://cache.ruby-lang.org/pub/ruby/${VERSION:R}/
-MASTER_SITES0 ?=	https://bugs.ruby-lang.org/attachments/download/
+MASTER_SITES0 ?=	https://github.com/ruby/ruby/commit/
+PATCH_DIST_STRIP ?=	-p1
 
 CONFIGURE_STYLE ?=	gnu
 CONFIGURE_ARGS +=	--enable-shared \
