@@ -456,6 +456,7 @@ EOF
   chown build /usr/src/etc/master.passwd 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
   chown build /usr/src/sys/arch/amd64/compile/APRENDIENDODEJESUS/obj/version 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
   chown build /usr/src/sys/arch/amd64/compile/APRENDIENDODEJESUS.MP/obj/version 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
+  chown build /usr/src/usr.sbin/fw_update/obj/firmware_patterns 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
   cd /usr/src/etc && RELEASEDIR=/$D_RELEASEDIR DESTDIR=/$D_DESTDIR nice make release 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora;
   echo "* Completo make release"
   cd $D_DESTDIR/etc && $dini/arboldd/usr/local/adJ/servicio-etc.sh 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
@@ -967,12 +968,11 @@ if (test "$sn" = "s") then {
   paquete p5-Mail-SpamAssassin
 
   ### Requieren recompilación por cambio en FILE
-  paquete unzip
+  paquete unzip  # De no hacerse envía descompresiones a salida estándar
   paquete python paquetes "python" "3.9"
   paquete ruby paquetes "ruby ruby31-ri_docs" 3.1
-
   paquete gettext-tools paquetes 'gettext-tools gettext-runtime'  # Requerido para compilar muchos
-  paquete m4 # Requerido para compilar bison
+  paquete m4 # Requerido para compilar bison (instalar antes de compilar bison)
   paquete bison # Requerido para compilar MariaDB
   paquete gmake # requerido para compilar PostgreSQL
   paquete ImageMagick  # requerido para compilar postgis
@@ -984,69 +984,68 @@ if (test "$sn" = "s") then {
   # Retroportados para cerrar fallas o actualizar
   # Deben estar en arboldes/usr/ports/mystuff y en /usr/ports de current
 
-  paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs postgresql-pg_upgrade" 
-  paquete postgresql-previous 
-  paquete postgis
-  paquete ruby paquetes "ruby ruby31-ri_docs" 3.1
+  #paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs postgresql-pg_upgrade" 
+  #paquete postgresql-previous 
+  #paquete postgis
   #paquete geo/spatialite/libspatialite
-  paquete jansson
+  #paquete jansson
 
   # Recompilado con llave de adJ
   paquete chromium
 
   ###
   # Actualizados.  Están desactualizado en OpenBSD estable y current
-  paquete git paquetes "git"
-  paquete hevea # requiere ocamlbuild
+  #paquete git paquetes "git"
+  #paquete hevea # requiere ocamlbuild
 
   ####
   # Recompilados para cerrar fallas de portes actualizados (estable)
   # Para que operen bien basta actualizar CVS de /usr/ports 
   # Los siguientes no deben estar en arboldes/usr/ports/mystuff
   #paquete certbot paquetes "certbot py3-acme"
-  paquete cups
-  paquete dovecot
+  #paquete cups
+  #paquete dovecot
   #paquete dtc
   #paquete firefox-esr
   #paquete flac
   #paquete gtk+3 paquetes "gtk+3-cups"
   #paquete gdal
-  paquete gnutls
-  paquete gnupg
+  #paquete gnutls
+  #paquete gnupg
   #paquete gvfs
   #paquete libgcrypt
-  paquete libmad
+  #paquete libmad
   #paquete libssh
-  paquete libxml
+  #paquete libxml
   #paquete libxslt
   #paquete lz4
-  paquete mariadb-client paquetes "mariadb-client mariadb-server" 
+  #paquete mariadb-client paquetes "mariadb-client mariadb-server" 
   #paquete mpg123
-  paquete mutt
+  #paquete mutt
   #paquete nginx
   #paquete node
-  paquete nspr
+  #paquete nspr
   #paquete oniguruma 
-  paquete openssl
+  #paquete openssl
   #paquete quirks
   #paquete pcre2 
   #paquete python paquetes "python" "2.7"
-  paquete python paquetes "python" "3.9"
-  paquete rsync
-  paquete sqlite3
-  paquete tiff
-  paquete unrar
-  paquete unzip
-  paquete wavpack
-  paquete webkitgtk4
+  #paquete python paquetes "python" "3.9"
+  #paquete rsync
+  paquete samba paquetes "ldb samba tevent"
+  #paquete sqlite3
+  #paquete tiff
+  #paquete unrar
+  #paquete wavpack
+  #paquete webkitgtk41
   #paquete zsh
 
   ###  
   # Recompilados de estable que usan xlocale (y pueden cerrar fallas)
   # No deben estar en mystuff
-  paquete curl
+  #paquete curl
 
-  paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 8.1
+  #paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 8.1
 
   ###
   # Recompilados para mejorar dependencias y actualizar
@@ -1058,7 +1057,6 @@ if (test "$sn" = "s") then {
   #paquete git paquetes "git"
   #paquete p7zip paquetes "p7zip p7zip-rar"
   #paquete pidgin paquetes "libpurple pidgin"
-  paquete samba paquetes "ldb samba tevent"
   #paquete webkit paquetes "webkit webkit-gtk3"
   # FLAVOR=gtk3 make paquete webkit-gtk3
   #FLAVOR=python3 paquete py-gobject3 paquetes py3-gobject3

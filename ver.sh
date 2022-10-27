@@ -30,8 +30,8 @@ PKG_PATH=http://ftp3.usa.openbsd.org/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
 PKG_PATH=http://openbsd.mirrors.pair.com/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
 PKG_PATH=http://mirror.esc7.net/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
 PKG_PATH=http://ftp4.usa.openbsd.org/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
-PKG_PATH=http://cdn.openbsd.org/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
 PKG_PATH=http://adJ.pasosdeJesus.org/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
+PKG_PATH=http://cdn.openbsd.org/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
 
 #Repositorio de paquetes usado --el último es el usado
 

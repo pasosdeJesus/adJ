@@ -17,9 +17,15 @@ Con respecto a OpenBSD 7.2 las novedades son:
     adJ respecto a OpenBSD en algunos portes --como libunistring.
 
 * Modificaciones a librería fundamental `libc`:
-	* Con soporte para localizaciones (fecha y hora, cantidades,
+  * OpenBSD soporta unicamente codificaciones ASCII y UTF-8,
+    adJ soporta más codificaciones, aunque la única que se
+    ha probado extensivamente (además de ASCII y UTF-8) es ISO8859-1.
+	* adJ tiene soporte completo para localizaciones (fecha y hora, cantidades,
 	  cantidades monetarias, cotejación y ordenamiento) y xlocale.
-    Así mismo las respectivas páginas del manual
+    Así mismo cuenta con páginas del manual completas para las diversas
+    funciones de xlocale.
+  * C++ moderno depende de xlocale, por lo que diversos programas
+    recientes en C++ podrán compilarse con más facilidad en adJ.
   * Aumentados descriptores de archivos de 2^15 a 2^63
     (La limitacíon de 32767 descriptores de archivos está en
      OpenBSD y en FreeBSD). Este cambio implica que no hay

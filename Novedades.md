@@ -3,7 +3,7 @@ Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
 
 ### Versión: 7.2a1
-Fecha de publicación: 20/Sep/2022
+Fecha de publicación: 25/Oct/2022
 
 Puede ver novedades respecto a OpenBSD en:
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_7_2/Novedades_OpenBSD.md>
@@ -47,7 +47,7 @@ Puede ver las diversas versiones publicadas en:
 
 Novedades tomadas de <https://www.openbsd.org/71.html> 
 
-* Aplicados parches de seguridad hasta el 7.Sep.2022 provenientes de 
+* Aplicados parches de seguridad hasta el 20.Oct.2022 provenientes de 
   OpenBSD que incluyen soluciones a fallas
 * Controladores ampliados o mejorados para amd64
   * Tarjetas Ethernet: `igc` soporta Intel I225 1Gb/2.5Gb. Soporte para 
