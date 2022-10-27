@@ -3,14 +3,25 @@
 # Port in the public domain.
 
 VERSION=2.0
-#REVISION=1
+REVISION=1
 #v${VERSION}
 PKGNAME=sivel-v${VERSION}
 
 #GH_MAIN=sivel2.0
 GH_ACCOUNT=pasosdeJesus
 GH_PROJECT=sivel2
-GH_COMMIT=c71dc561ed0fb44cfab43f8d1ee6365078b6330f
+GH_COMMIT=0d6e569f5371e6bdf9b5e266fb2da1f02477e5aa
+
+# Comenzado adJ 7.2 para logar que bundler corriera en
+# /usr/ports/pobj/sivel-2.0/fake-amd64/var/www/htdocs/sivel2
+# Tuvo que descargarse fuentes de libxml-ruby crear la gema
+# con 
+# 	gem build libxml-ruby.gemspec
+# e instalarla manualmente con
+# 	doas gem install --install-dir /usr/ports/pobj/sivel-2.0/fake-amd64/var/www/htdocs/sivel2/bundler/ruby/3.1 ./libxml-ruby-3.2.3.gem
+# Esto debido a incompatibilidad de la gema publicada y libxml reciente
+# de OpenBSD, como requiere compilación de extensiones y cambio de permisos
+# no bastaba poner repositorio de github en el Gemfile.
 
 DISTNAME=${GH_COMMIT}
 
