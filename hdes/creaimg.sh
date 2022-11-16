@@ -130,6 +130,6 @@ ej "doas mknod $duid.i b 14 8" # Como /dev/vnd0i
 
 ej "doas installboot -v -r /mnt/tmp/ vnd0c /mnt/tmp/usr/mdec/biosboot /mnt/tmp/boot"
 
-ej "doas umount /mnt/tmp"
+ej "doas umount -f /mnt/tmp"
 
 
