@@ -1,8 +1,7 @@
-V =	3.2.1
+V =	3.3.2
 COMMENT=	geographic objects support for PostgreSQL
 DISTNAME=	postgis-${V}
 CATEGORIES=	geo databases
-REVISION =	0
 
 HOMEPAGE=	http://www.postgis.net/
 
@@ -11,10 +10,10 @@ MAINTAINER=	Landry Breuil <landry@openbsd.org>
 # GPLv2
 PERMIT_PACKAGE=	Yes
 
-WANTLIB += c charset crypto curl expat freexl gdal geos geos_c geotiff gif iconv intl
+WANTLIB += c crypto curl expat freexl gdal geos geos_c geotiff gif iconv intl
 WANTLIB += jpeg json-c lz4 lzma m nghttp2 openjp2 pcre2-8 png pq>=5.3 protobuf-c zstd
-WANTLIB += proj pthread qhull spatialite sqlite3 ssl ${COMPILER_LIBCXX} tiff webp xml2 z
-WANTLIB += hdf5 hdf5_hl minizip netcdf rttopo
+WANTLIB += proj pthread qhull_r spatialite sqlite3 ssl ${COMPILER_LIBCXX} tiff webp xml2 z
+WANTLIB += hdf5 hdf5_hl minizip netcdf rttopo execinfo fontconfig freetype lcms2 poppler
 
 COMPILER =		base-clang ports-gcc base-gcc
 
@@ -38,9 +37,9 @@ TEST_DEPENDS =	devel/cunit
 
 USE_GMAKE=	Yes
 USE_LIBTOOL =	Yes
-#for iconv.h
+#for iconv.h and https://trac.osgeo.org/postgis/ticket/4573
 CONFIGURE_ENV=	LDFLAGS=-L${LOCALBASE}/lib \
-		CFLAGS=-I${LOCALBASE}/include
+		CPPFLAGS=-I${LOCALBASE}/include
 CONFIGURE_STYLE=gnu
 CONFIGURE_ARGS=	--with-xsldir=${PREFIX}/share/xsl/docbook/ \
 		--libdir=${PREFIX}/lib/postgresql

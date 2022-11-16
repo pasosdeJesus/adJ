@@ -9,4 +9,4 @@ Index: src/bin/scripts/vacuumdb.c
 +
  #include "postgres_fe.h"
  
- #include <limits.h>
+ #include "catalog/pg_class_d.h"

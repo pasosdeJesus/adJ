@@ -1,0 +1,14 @@
+Index: src/interfaces/ecpg/pgtypeslib/Makefile
+--- src/interfaces/ecpg/pgtypeslib/Makefile.orig
++++ src/interfaces/ecpg/pgtypeslib/Makefile
+@@ -15,8 +15,8 @@ include $(top_builddir)/src/Makefile.global
+ 
+ PGFILEDESC = "pgtypes - library for data type mapping"
+ NAME= pgtypes
+-SO_MAJOR_VERSION= 3
+-SO_MINOR_VERSION= $(MAJORVERSION)
++SO_MAJOR_VERSION= ${LIBpgtypes_MAJOR}
++SO_MINOR_VERSION= ${LIBpgtypes_MINOR}
+ 
+ override CPPFLAGS := -I../include -I$(top_srcdir)/src/interfaces/ecpg/include \
+ 	-DFRONTEND $(CPPFLAGS)

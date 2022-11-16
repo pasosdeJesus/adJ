@@ -118,7 +118,7 @@ en la variable asociada y lo desactiva poniendo ```n```.
 	```TEXTO=1 dhes/qemu.sh```
 * Envie sus mejoras al repositorio en github.com.  Respecto a ramas 
   (branches) y etiquetas (tags), ponemos una etiqueta cada vez que 
-  publicamos en <http://aprendiendo.pasosdeJesus.org> (e.g ```v7.2a1```), 
+  publicamos en <http://aprendiendo.pasosdeJesus.org> (e.g ```v7.2b1```), 
   y mantenemos una rama para cada versión mayor publicada (e.g ```ADJ_7_2```) 
   en la que eventualmente se aplicarán actualizaciones de seguridad para esa 
   versión.

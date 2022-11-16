@@ -2388,7 +2388,6 @@ if (test "$?" != "0") then {
 	insacp pcre
 	insacp json-c
 	insacp bzip2
-	insacp py-setuptools
 	insacp gdal 
 	insacp postgis
 	grep "^postgresql:" /etc/login.conf > /dev/null 2>&1

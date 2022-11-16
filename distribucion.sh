@@ -984,9 +984,9 @@ if (test "$sn" = "s") then {
   # Retroportados para cerrar fallas o actualizar
   # Deben estar en arboldes/usr/ports/mystuff y en /usr/ports de current
 
-  #paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs postgresql-pg_upgrade" 
-  #paquete postgresql-previous 
-  #paquete postgis
+  paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs postgresql-pg_upgrade" 
+  paquete postgresql-previous 
+  paquete postgis
   #paquete geo/spatialite/libspatialite
   #paquete jansson
 
