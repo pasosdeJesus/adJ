@@ -353,7 +353,7 @@ echo "PREFIX=$prefix" >> Make.inc
 if (test "$VERBOSE_FLAG" -gt "0") then {
 	echo "Generando confv.ent"
 } fi;
-echo "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" > confv.ent
+echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" > confv.ent
 echo "<!-- Variables de configuración  -->" >> confv.ent
 echo "<!-- Este archivo es generado automáticamente por conf.sh. No editar -->" >> confv.ent
 echo "<!ENTITY DOCBOOK-XSL-HTML \"$db_html\">" >> confv.ent

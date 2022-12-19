@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!-- Extends DocBook XSL 1.56.1 -->
 <!-- Extensions released to the public domain -->
 <!-- http://structio.sourceforge.net/repasa -->

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!-- XSL to convert from GBF XML to a sequence of Strong numbers -->
 <!-- Source released to the public domain 2005.

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--  vim: set expandtab tabstop=4 shiftwidth=4 foldmethod=marker:  -->
 
 <!-- XSL to convert from GBF XML in HTML -->
@@ -22,7 +22,7 @@
 
 <xsl:output method="html" version="4.0" 
     doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN" 
-    encoding="ISO-8859-1"/>
+    encoding="UTF-8"/>
 
 <xsl:key name="numstrong" match="//wi" use="substring-before(./@value,',')"/>
 
@@ -145,7 +145,7 @@ function changeIt() {
 
     <exsl:document href="{$href}" method="html" version="4.0" 
         doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN" 
-        encoding="ISO-8859-1">
+        encoding="UTF-8">
         <html>
             <xsl:call-template name="encabezado">
                 <xsl:with-param name="titulo" select="$titulo"/>

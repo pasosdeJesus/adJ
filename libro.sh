@@ -1,6 +1,6 @@
 #!/bin/sh
-# Genera distribución de fuentes de un libro o un grupo de libros
-# Dominio público. Sin garantías. 2004. vtamara@infomatik.uni-kl.de
+# Genera distribuciÃ³n de fuentes de un libro o un grupo de libros
+# Dominio pÃºblico. Sin garantÃ­as. 2004. vtamara@infomatik.uni-kl.de
 
 dir=$1;
 pry=$2;
@@ -14,47 +14,47 @@ sword2=$9
 imagenes=${10};
 
 if (test "$dir" = "") then {
-	echo "Falta directorio como primer parámetro";
+	echo "Falta directorio como primer parÃ¡metro";
 	exit 1;
 } fi;
 
 if (test "$pry" = "") then {
-	echo "Falta nombre corto del proyecto como segundo parámetro";
+	echo "Falta nombre corto del proyecto como segundo parÃ¡metro";
 	exit 1;
 } fi;
 
 if (test "$desc" = "") then {
-	echo "Falta descripción del libro como tercer parámetro";
+	echo "Falta descripciÃ³n del libro como tercer parÃ¡metro";
 	exit 1;
 } fi;
 
 if (test "$fuentes" = "") then {
-	echo "Faltan fuentes como cuarto parámetro";
+	echo "Faltan fuentes como cuarto parÃ¡metro";
 	exit 1;
 } fi;
 
 if (test "$tipoestilo" != "1ev" -a "$tipoestilo" != "4ev") then {
-	echo "Quinto parámetro debe ser tipo de estilo (1ev o 4ev)";
+	echo "Quinto parÃ¡metro debe ser tipo de estilo (1ev o 4ev)";
 	exit 1;
 } fi;
 
 if (test "$gutnum" = "") then {
-	echo "Falta número Gutenberg como sexto parámetro";
+	echo "Falta nÃºmero Gutenberg como sexto parÃ¡metro";
 	exit 1;
 } fi;
 
 if (test "$gutdate" = "") then {
-	echo "Falta fecha de publicación en Gutenberg como septimo parámetro";
+	echo "Falta fecha de publicaciÃ³n en Gutenberg como septimo parÃ¡metro";
 	exit 1;
 } fi;
 
 if (test "$sword1" = "") then {
-	echo "Nombre de módulo en Sword es octavo parámetro";
+	echo "Nombre de mÃ³dulo en Sword es octavo parÃ¡metro";
 	exit 1;
 } fi;
 
 if (test "$sword2" = "") then {
-	echo "Nombre de módulo/archivo en Sword es noveno parámetro";
+	echo "Nombre de mÃ³dulo/archivo en Sword es noveno parÃ¡metro";
 	exit 1;
 } fi;
 
@@ -80,7 +80,7 @@ function necp {
 
 function nesed {
 	if (test ! -f $2) then {
-		sed -e "s|biblia_dp|$pry|g;s|Biblia de dominio público|$desc|g;s|PRY_DESC=\"[^\"]*\"|PRY_DESC=\"$desc\"|g;s|SOURCE_GBFXML=.*|SOURCE_GBFXML=$fuentes|g;s|IMAGES=.*|IMAGES=$imagenes|g;s|Traducción a español de la Biblia|Traducción a español|g;s|PRY_VERSION=\"[^\"]*\"|PRY_VERSION=\"$version\"|g;s|GUTNUM=.*|GUTNUM=\"$gutnum\"|g;s|GUTDATE=.*|GUTDATE=\"$gutdate\"|g;s|GUTURL=.*|GUTURL=\"$guturl\"|g;s|VS_SWORDBOOK_I=.*|VS_SWORDBOOK_I=$sword1|g;s|VS_SWORDBOOK=.*|VS_SWORDBOOK=$sword2|g" $1 > $2
+		sed -e "s|biblia_dp|$pry|g;s|Biblia de dominio pÃºblico|$desc|g;s|PRY_DESC=\"[^\"]*\"|PRY_DESC=\"$desc\"|g;s|SOURCE_GBFXML=.*|SOURCE_GBFXML=$fuentes|g;s|IMAGES=.*|IMAGES=$imagenes|g;s|TraducciÃ³n a espaÃ±ol de la Biblia|TraducciÃ³n a espaÃ±ol|g;s|PRY_VERSION=\"[^\"]*\"|PRY_VERSION=\"$version\"|g;s|GUTNUM=.*|GUTNUM=\"$gutnum\"|g;s|GUTDATE=.*|GUTDATE=\"$gutdate\"|g;s|GUTURL=.*|GUTURL=\"$guturl\"|g;s|VS_SWORDBOOK_I=.*|VS_SWORDBOOK_I=$sword1|g;s|VS_SWORDBOOK=.*|VS_SWORDBOOK=$sword2|g" $1 > $2
 	} fi
 }
 
@@ -152,8 +152,8 @@ if (test ! -d $dir/herram) then {
 } fi;
 
 
-# Generación de libro
-echo '<?xml version="1.0" encoding="ISO-8859-1"?>
+# GeneraciÃ³n de libro
+echo '<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE gbfxml SYSTEM "gbfxml.dtd" [
 <!ENTITY % confv SYSTEM "confv.ent">
 %confv;

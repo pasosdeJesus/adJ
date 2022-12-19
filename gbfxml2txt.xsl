@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!-- XSL to convert from GBF XML in Text -->
 <!-- Source released to the public domain 2003.
@@ -30,7 +30,7 @@
 </xsl:template>
 
 
-<xsl:output method="text" encoding="ISO-8859-1" />
+<xsl:output method="text" encoding="UTF-8" />
 
 
 <!-- Entry point -->
@@ -108,7 +108,7 @@
 <!-- Credits -->
 <xsl:template match="credits">
   <xsl:param name="lang" select="./@lang"/>
-  <xsl:text>Versión: </xsl:text><xsl:value-of select="./@version"/>
+  <xsl:text>VersiÃ³n: </xsl:text><xsl:value-of select="./@version"/>
   <xsl:text>.  </xsl:text> 
   <xsl:variable name="n"><xsl:call-template name="newlang"><xsl:with-param name="lang" select="$lang"/></xsl:call-template></xsl:variable>
   <xsl:apply-templates>
@@ -322,7 +322,7 @@
   <xsl:param name="lang" select="./@lang"/>
   <xsl:variable name="n"><xsl:call-template name="newlang"><xsl:with-param name="lang" select="$lang"/></xsl:call-template></xsl:variable>
   <xsl:text>
-Bibliografía</xsl:text>
+BibliografÃ­a</xsl:text>
   <xsl:apply-templates>
     <xsl:with-param name="lang" select="$n"/>
   </xsl:apply-templates>

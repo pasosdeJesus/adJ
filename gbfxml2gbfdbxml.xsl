@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!-- XSL to convert from GBF XML in GBF DocBook XML -->
 <!-- Source released to the public domain 2002 vtamara@informatik.uni-kl.de -->
@@ -54,7 +54,7 @@
 </xsl:template>
 
 
-<xsl:output method="xml" doctype-public="&docbook.id;" encoding="ISO-8859-1" omit-xml-declaration="no" doctype-system="&docbook.url;" />
+<xsl:output method="xml" doctype-public="&docbook.id;" encoding="UTF-8" omit-xml-declaration="no" doctype-system="&docbook.url;" />
 
 
 <!-- Entry point -->
@@ -149,7 +149,7 @@
 <!-- Credits -->
 <xsl:template match="credits">
   <xsl:param name="lang" select="./@lang"/>
-  Versión: <xsl:value-of select="./@version"/>. 
+  VersiÃ³n: <xsl:value-of select="./@version"/>. 
   <xsl:variable name="n"><xsl:call-template name="newlang"><xsl:with-param name="lang" select="$lang"/></xsl:call-template></xsl:variable>
   <xsl:apply-templates>
   <xsl:with-param name="lang" select="$n"/>
