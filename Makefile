@@ -5,13 +5,13 @@
 
 include Make.inc
 
-SOURCE_GBFXML=mateo.gbfxml marcos.gbfxml lucas.gbfxml juan.gbfxml hechos.gbfxml romanos.gbfxml corintios1.gbfxml
+SOURCE_GBFXML=mateo.gbfxml marcos.gbfxml lucas.gbfxml juan.gbfxml hechos.gbfxml romanos.gbfxml corintios1.gbfxml corintios2.gbfxml
 
 EXT_DOCBOOK=xdbk
 
-VS_SWORDBOOK_I=I Corinthians
+VS_SWORDBOOK_I=II Corinthians
 #VS_SWORDBOOK_I=Acts
-VS_SWORDBOOK=I_Corinthians
+VS_SWORDBOOK=II_Corinthians
 #VS_SWORDBOOK=Acts
 
 # Variables requeridas por comdocbook.mak
