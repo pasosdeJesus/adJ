@@ -30,7 +30,7 @@ CONFIGURE_STYLE ?=	gnu
 CONFIGURE_ARGS +=	--enable-shared \
 			--program-suffix=${BINREV} \
 			--with-soname=ruby${BINREV} \
-			--with-ruby-version=minor \
+			--with-ruby-version=${REV} \
 			--with-mantype=doc \
 			--with-setjmp-type=_setjmp \
 			--enable-pthread \
@@ -44,7 +44,7 @@ CONFIGURE_ENV +=	LIBruby${BINREV}_VERSION=${LIBruby${BINREV}_VERSION} \
 			LDFLAGS="-L${LOCALBASE}/lib" \
 			DLDFLAGS="-L${LOCALBASE}/lib" \
 			ac_cv_prog_DOXYGEN="" \
-			ac_cv_prog_DOT="" \
+			ac_cv_prog_DOT=""
 
 MAKE_ENV +=		DLDFLAGS="-I${LOCALBASE}/lib"
 

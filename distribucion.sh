@@ -825,6 +825,8 @@ if (test "$sn" = "s") then {
 
   # Modificados para posibilitar compilación
   # Deben estar en mystuff
+  paquete ruby paquetes "ruby ruby32-ri_docs" 3.2
+  exit 1
 
   # Todo lo de perl tuvo que recompilarse
   # evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
@@ -1006,7 +1008,7 @@ if (test "$sn" = "s") then {
   #paquete cups
   #paquete dovecot
   #paquete dtc
-  #paquete firefox-esr
+  paquete firefox-esr
   #paquete flac
   #paquete gtk+3 paquetes "gtk+3-cups"
   #paquete gdal
@@ -1026,7 +1028,7 @@ if (test "$sn" = "s") then {
   #paquete node
   #paquete nspr
   #paquete oniguruma 
-  #paquete openssl
+  paquete openssl
   #paquete quirks
   #paquete pcre2 
   #paquete python paquetes "python" "2.7"
@@ -1034,16 +1036,16 @@ if (test "$sn" = "s") then {
   #paquete rsync
   paquete samba paquetes "ldb samba tevent"
   #paquete sqlite3
-  #paquete tiff
+  paquete tiff
   #paquete unrar
   #paquete wavpack
-  #paquete webkitgtk41
+  paquete webkitgtk41
   #paquete zsh
 
   ###  
   # Recompilados de estable que usan xlocale (y pueden cerrar fallas)
   # No deben estar en mystuff
-  #paquete curl
+  paquete curl
 
   #paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 8.1
 
