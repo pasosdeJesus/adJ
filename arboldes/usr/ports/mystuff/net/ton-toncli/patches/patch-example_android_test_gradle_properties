@@ -1,0 +1,12 @@
+Index: example/android/test/gradle.properties
+--- example/android/test/gradle.properties.orig
++++ example/android/test/gradle.properties
+@@ -4,7 +4,7 @@
+ # any settings specified in this file.
+ # For more details on how to configure your build environment visit
+ # http://www.gradle.org/docs/current/userguide/build_environment.html
+-# Specifies the JVM arguments used for the daemon process.
++# Specifies the JVM arguments used for the servicio process.
+ # The setting is particularly useful for tweaking memory settings.
+ org.gradle.jvmargs=-Xmx1536m
+ # When configured, Gradle will run in incubating parallel mode.

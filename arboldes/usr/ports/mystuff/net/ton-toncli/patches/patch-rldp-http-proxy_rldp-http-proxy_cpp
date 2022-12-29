@@ -1,0 +1,12 @@
+Index: rldp-http-proxy/rldp-http-proxy.cpp
+--- rldp-http-proxy/rldp-http-proxy.cpp.orig
++++ rldp-http-proxy/rldp-http-proxy.cpp
+@@ -1443,7 +1443,7 @@ int main(int argc, char *argv[]) {
+         }
+         return add_local_host(arg.substr(0, ch).str(), arg.substr(ch + 1).str());
+       });
+-  p.add_option('d', "daemonize", "set SIGHUP", [&]() {
++  p.add_option('d', "servicioize", "set SIGHUP", [&]() {
+     td::set_signal_handler(td::SignalType::HangUp, [](int sig) {
+ #if TD_DARWIN || TD_LINUX
+       close(0);

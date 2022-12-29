@@ -1,0 +1,12 @@
+Index: adnl/adnl-proxy.cpp
+--- adnl/adnl-proxy.cpp.orig
++++ adnl/adnl-proxy.cpp
+@@ -315,7 +315,7 @@ int main(int argc, char *argv[]) {
+     std::exit(2);
+   });
+   p.add_option('c', "config", "config file", [&](td::Slice arg) { config = arg.str(); });
+-  p.add_option('d', "daemonize", "set SIGHUP", [&]() {
++  p.add_option('d', "servicioize", "set SIGHUP", [&]() {
+ #if TD_DARWIN || TD_LINUX
+     close(0);
+     setsid();

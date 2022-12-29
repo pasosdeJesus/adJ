@@ -1,0 +1,14 @@
+Index: CMakeLists.txt
+--- CMakeLists.txt.orig
++++ CMakeLists.txt
+@@ -18,6 +18,10 @@ add_dependencies(git check_git)
+ get_filename_component(TON_REAL_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}" REALPATH)
+ get_filename_component(TON_REAL_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}" REALPATH)
+ 
++set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I/usr/local/include")
++set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -L/usr/local/lib")
++set(CMAKE_INSTALL_PREFIX "/usr/local/ton-toncli")
++
+ if (TON_REAL_BINARY_DIR STREQUAL TON_REAL_SOURCE_DIR)
+   message("  Out-of-source build should be used to build TON.")
+   message("  You need to remove the files already created by CMake and")

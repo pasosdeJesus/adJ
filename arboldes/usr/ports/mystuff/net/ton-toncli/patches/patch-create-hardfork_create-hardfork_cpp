@@ -1,0 +1,12 @@
+Index: create-hardfork/create-hardfork.cpp
+--- create-hardfork/create-hardfork.cpp.orig
++++ create-hardfork/create-hardfork.cpp
+@@ -366,7 +366,7 @@ int main(int argc, char *argv[]) {
+                            return td::Status::Error("cannot parse BlockIdExt");
+                          }
+                        });
+-  p.add_option('d', "daemonize", "set SIGHUP", [&]() {
++  p.add_option('d', "servicioize", "set SIGHUP", [&]() {
+     td::set_signal_handler(td::SignalType::HangUp, [](int sig) {
+ #if TD_DARWIN || TD_LINUX
+       close(0);

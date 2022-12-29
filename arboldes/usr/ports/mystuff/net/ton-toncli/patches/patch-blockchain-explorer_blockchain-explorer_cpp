@@ -1,0 +1,47 @@
+Index: blockchain-explorer/blockchain-explorer.cpp
+--- blockchain-explorer/blockchain-explorer.cpp.orig
++++ blockchain-explorer/blockchain-explorer.cpp
+@@ -129,7 +129,7 @@ class CoreActor : public CoreActorInterface {
+   std::vector<td::actor::ActorOwn<ton::adnl::AdnlExtClient>> clients_;
+ 
+   td::uint32 http_port_ = 80;
+-  MHD_Daemon* daemon_ = nullptr;
++  MHD_Daemon* servicio_ = nullptr;
+ 
+   td::IPAddress remote_addr_;
+   ton::PublicKey remote_public_key_;
+@@ -251,9 +251,9 @@ class CoreActor : public CoreActorInterface {
+     self_id_ = actor_id(this);
+   }
+   void tear_down() override {
+-    if (daemon_) {
+-      MHD_stop_daemon(daemon_);
+-      daemon_ = nullptr;
++    if (servicio_) {
++      MHD_stop_daemon(servicio_);
++      servicio_ = nullptr;
+     }
+   }
+ 
+@@ -475,10 +475,10 @@ class CoreActor : public CoreActorInterface {
+       clients_.emplace_back(ton::adnl::AdnlExtClient::create(ton::adnl::AdnlNodeIdFull{remote_public_key_},
+                                                              remote_addr_, make_callback(0)));
+     }
+-    daemon_ = MHD_start_daemon(MHD_USE_SELECT_INTERNALLY, static_cast<td::uint16>(http_port_), nullptr, nullptr,
++    servicio_ = MHD_start_daemon(MHD_USE_SELECT_INTERNALLY, static_cast<td::uint16>(http_port_), nullptr, nullptr,
+                                &process_http_request, nullptr, MHD_OPTION_NOTIFY_COMPLETED, request_completed, nullptr,
+                                MHD_OPTION_THREAD_POOL_SIZE, 16, MHD_OPTION_END);
+-    CHECK(daemon_ != nullptr);
++    CHECK(servicio_ != nullptr);
+   }
+ };
+ 
+@@ -625,7 +625,7 @@ int main(int argc, char* argv[]) {
+     SET_VERBOSITY_LEVEL(VERBOSITY_NAME(FATAL) + verbosity);
+     return (verbosity >= 0 && verbosity <= 9) ? td::Status::OK() : td::Status::Error("verbosity must be 0..9");
+   });
+-  p.add_checked_option('d', "daemonize", "set SIGHUP", [&]() {
++  p.add_checked_option('d', "servicioize", "set SIGHUP", [&]() {
+     td::set_signal_handler(td::SignalType::HangUp, [](int sig) {
+ #if TD_DARWIN || TD_LINUX
+       close(0);

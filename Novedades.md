@@ -3,7 +3,7 @@ Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
 
 ### Versión: 7.2b1
-Fecha de publicación: 25/Oct/2022
+Fecha de publicación: 28/Dic/2022
 
 Puede ver novedades respecto a OpenBSD en:
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_7_2/Novedades_OpenBSD.md>
@@ -47,7 +47,7 @@ Puede ver las diversas versiones publicadas en:
 
 Novedades tomadas de <https://www.openbsd.org/71.html> 
 
-* Aplicados parches de seguridad hasta el 20.Oct.2022 provenientes de 
+* Aplicados parches de seguridad hasta el 27.Dic.2022 provenientes de 
   OpenBSD que incluyen soluciones a fallas
 * Controladores ampliados o mejorados para amd64
   * Tarjetas Ethernet: `igc` soporta Intel I225 1Gb/2.5Gb. Soporte para 
@@ -116,12 +116,21 @@ Novedades tomadas de <https://www.openbsd.org/71.html>
 
 ### 3.2 Paquetes
 
-* El nuevo paquete `ton` consta de las herramientas del Blockchain TON 
-  (The Open Network).  Ver documentación de como probar un 
-  contato inteligente sobre adJ en
-  http://pasosdejesus.github.io/usuario_adJ/conf-programas.html#ton
+* Como herramientas para el blockchain TON (The Open Network), además 
+  del paquete `ton` ahora incluimos el paquete `ton-toncli`. El primero 
+  consta de las herramientas estándar, el segundo se trata de las mismas 
+  herramientas pero que emplean una máquina virtual TON ampliada para 
+  facilitar depuración y el desarrollo de contratos con toncli.
+  Estamos actualizando la documentación de como probar un contrato 
+  inteligente sobre adJ en
+  <http://pasosdejesus.github.io/usuario_adJ/conf-programas.html#ton>
+* Hemos retroportade ruby de OpenBSD-current pues incluye Ruby 3.2 que
+  trae un nuevo compilador JIT que podría aumentar la velocidad de
+  aplicaciones rails, ver
+  https://www.ruby-lang.org/es/news/2022/12/25/ruby-3-2-0-released/
 * Incluimos más paquetes de OpenBSD en esta versión de adJ entre los que
-  destacamos: `smartmontools` para monitorear discos duros que soportan SMART,
+  destacamos: `smartmontools` para monitorear discos duros que soportan 
+  SMART, 
   `pandoc` para convertir entre diveros lenguajes de marcado (lo usamos 
   para generar esta documentación), `redis` que es una base de datos tipo 
   llave-valor usada por ActionCable en la infraestructura reciente de rails.
@@ -131,15 +140,15 @@ Novedades tomadas de <https://www.openbsd.org/71.html>
   `gettext-tools`,  `gmake`, `ImageMagick`, 
   `texlive_base` y `texlive_texmf-minimal`
 * Chromium recompilado con llave de Pasos de Jesús.  Ya permite autenticar
-  y usar sitios como https://drive.google.com  --si tiene problemas para
-  autenticarse intente desde un nuevo perfil (obligatorio por ejemplo si cambia
-  su clave en gmail).
+  y usar sitios como <https://drive.google.com>  --si tiene problemas para
+  autenticarse intente desde un nuevo perfil (obligatorio por ejemplo si 
+  cambia su clave en gmail).
 * Además de chromium incluimos `firefox-esr` que también ha resultado
   bastante estable.
 * Se han recompilado los siguientes para aprovechar `xlocale` (además de muchos
   para perl): `glib2`, `libunistring`, `vlc`
 * Se han retroportado de OpenBSD-current los siguientes paquetes para cerrar 
-  fallas: `jansson`, `postgresql-client`, `postgis`, `ruby`
+  fallas: `jansson`, `postgresql-client`, `postgis`
 * Se han parchado minimamente los siguientes para usar `servicio` en lugar
   de `daemon`: `postgresql`, `git` y `smartmontools`
 
