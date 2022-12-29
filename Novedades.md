@@ -10,8 +10,9 @@ Puede ver novedades respecto a OpenBSD en:
 
 ## 1. DESCARGAS
 
-Puede ver las diversas versiones publicadas en: 
-  <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/>
+Puede ver las diversas versiones publicadas en
+  <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/> donde entre otras
+  encontrará:
 
 * <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/AprendiendoDeJesus-7.2b1-amd64.iso> 
   es imagen en formato ISO para quemar en DVD e instalar por primera vez
@@ -50,59 +51,50 @@ Novedades tomadas de <https://www.openbsd.org/71.html>
 * Aplicados parches de seguridad hasta el 27.Dic.2022 provenientes de 
   OpenBSD que incluyen soluciones a fallas
 * Controladores ampliados o mejorados para amd64
-  * Tarjetas Ethernet: `igc` soporta Intel I225 1Gb/2.5Gb. Soporte para 
-    interfaces USB-Ethernet RTL8156B en `ure`. Mejorados `ix` e  `ixl` para
-    tarjetas Intel de 10GB y 40GB respectivamente.
-  * Tarjetas inalámbricas: Nuevo controlador `mtw` soporta dispositivos
-    Wifi MediaTek MT7601U USB. Soporte para BCM4387 añadido a `bwfm`.
-    Soporte para 802.11n (40MHz y velocidades 72 a 600MBs) y 802.11ac (80MHz 
-    y velocidades 433 a 6933MBs) a `iwm` y `iwx.`
+  * Tarjetas Ethernet: Mejorados `uaq` (USB-Ethernet), `reg`, `mvneta`, 
+    `igc`, `bnxt` e `ix`.
+  * Tarjetas inalámbricas: Mejorados `iwx`, `iwm`, `bwfm`, `urtwn`
 * Mejoras a herramientas de Red
-  * Mejorado DHCP, soporte IPSEC, httpd, smtpd, rpki-client, bgpd.
+  * Mejorado openrsync, pf, bgpd, rpki-client, snmpd, ldapd, ospfd, tcpdump,
+    dhclient, dig, resolvd, httpd, relayd y ftp.
 * Seguridad
-  * ssh actualizado a la versión 9.0 que emplea protocolo SFTP con scp en lugar
-    del protocolo scp/rcp (hay incompatibilidades en rutas con comodines)
-  * libressl actualizado a la versión 3.5.2 que soporta RFC 3779
+  * Separación de privilegios en más programas
+  * Mejorada seguridad de ypldap, dhcpleased, mountd, nfsd, pflogd, 
+    resolvd, nwind entre otros.
+  * libressl actualizado a la versión 3.6.0 que incluye soporte
+    experimental para BoringSSL QUIC API.
+  * Incluye OpenSSH 9.1
 * Otros
-  * Mejoras a tmux, mandoc.
+  * Mejoras a candados en diversas partes del sistema base.
+  * Mejoas a tmux y mandoc
 
 * El sistema base incluye mejoras a componentes auditados y mejorados 
   como, `llvm 13.0.0`,  `Xenocara` (basado en `Xorg` 7.7),
   `perl 5.32.1` 
-* El repositorio de paquetes de OpenBSD cuenta con 11301 para amd64
+* El repositorio de paquetes de OpenBSD cuenta con 11451 para amd64
 
 
 ### 2.2 Paquetes 
 
 * Para cerrar fallas se usan las versiones más recientes preparadas
-  por OpenBSD de: `postgresql`, `mariadb`, `node`, `php`, `curl`, 
-  `cups`, `dovecot`,  `gnutls`, `gnugp`, `libmad`, `libxml`, `mutt`, 
-  `nspr`, `openssl`, `rsync`, `sqlite3`, `tiff`, `unrar`, `unzip`, 
-  `wavpack`, `webkitgtk4`, `samba`
+  por OpenBSD de: `curl`, `firefox-esr`,  `postgis`, `postgresql`,
+  `openssl`, `samba`, `webkitgtk4`, 
 * Para aprovechar el xlocale extendido de adJ se han recompilado
   `vlc`, `glib2` y `libunistring`.
+* Por el aumento en número de descriptores de archivos tuvimos que
+  recompilar:
+  `unzip`, `bison`, `m4`, `unzip`, `python`, `ruby`,
+  `gettext-tools`,  `gmake`, `ImageMagick`, 
+  `texlive_base` y `texlive_texmf-minimal`
 
-* Algunos paquetes típicos y su versión: `dovecot 2.3.16p1v0`,
-  `chromium 100.0.4896.60, `firefox-esr 91.7.1`, `libreoffice 7.3.1.3v0`,
-  `nginx 1.20.2p0`, `mariadb 10.6.7p0v1`, `node 16.14.2`, `python 3.9.10p0`,
-  `neovim 0.6.1`, `zsh 5.8.1`
+* Algunos paquetes típicos y su versión: `dovecot 2.3.19.1p0v0`,
+  `chromium 105.0.5195.125`, `firefox-esr-102.3.0`, 
+  `libreoffice 7.4.1.2v0`,
+  `nginx 1.22.0p0`, `mariadb 10.9.3v1`, `node 16.17.1v0`, 
+  `python 3.9.15p0`, `neovim 0.7.2`, `zsh 5.9`
 
 
 ## 3. NOVEDADES RESPECTO A ADJ 7.2 PROVENIENTES DE PASOS DE JESÚS
-
-### 3.1 Kernel y sistema base
-
-* Los descriptores de archivos pueden ser enteros (en OpenBSD y FreeBSD son 
-  enteros cortos lo cual los limita a abri máximo 32.000 archivos 
-  simultaneamente).  Con esta implementación en adJ hemos probado abrir 
-  simultanemente más de 500.000 archivos:
-  ![Pantallazo de programa de prueba con más de 500.000 descriptores de archivos](https://aprendiendo.pasosdejesus.org/assets/images/muchosdescriptores.png)
-
-  Para usar más descriptores efectivamente (digamos 200.000):
-  ```
-  doas sysctl -w kern.maxfiles=200000
-  ulimit -n 200000
-  ```
 
 ### 3.1 Instalador y documentación
 
@@ -121,24 +113,14 @@ Novedades tomadas de <https://www.openbsd.org/71.html>
   consta de las herramientas estándar, el segundo se trata de las mismas 
   herramientas pero que emplean una máquina virtual TON ampliada para 
   facilitar depuración y el desarrollo de contratos con toncli.
-  Estamos actualizando la documentación de como probar un contrato 
+  Estamos actualizando la documentación de como desarrollar un contrato 
   inteligente sobre adJ en
   <http://pasosdejesus.github.io/usuario_adJ/conf-programas.html#ton>
 * Hemos retroportade ruby de OpenBSD-current pues incluye Ruby 3.2 que
   trae un nuevo compilador JIT que podría aumentar la velocidad de
   aplicaciones rails, ver
-  https://www.ruby-lang.org/es/news/2022/12/25/ruby-3-2-0-released/
-* Incluimos más paquetes de OpenBSD en esta versión de adJ entre los que
-  destacamos: `smartmontools` para monitorear discos duros que soportan 
-  SMART, 
-  `pandoc` para convertir entre diveros lenguajes de marcado (lo usamos 
-  para generar esta documentación), `redis` que es una base de datos tipo 
-  llave-valor usada por ActionCable en la infraestructura reciente de rails.
-* El aumento en número de descriptores de archivos puede afectar algunos
-  binarios por lo que tuvieron que recompilarse:
-  `unzip`, `bison`, `m4`, `unzip`, `python`, `ruby`,
-  `gettext-tools`,  `gmake`, `ImageMagick`, 
-  `texlive_base` y `texlive_texmf-minimal`
+  <https://www.ruby-lang.org/es/news/2022/12/25/ruby-3-2-0-released/>
+* Eliminamos python 2 y paquetes para este. 
 * Chromium recompilado con llave de Pasos de Jesús.  Ya permite autenticar
   y usar sitios como <https://drive.google.com>  --si tiene problemas para
   autenticarse intente desde un nuevo perfil (obligatorio por ejemplo si 

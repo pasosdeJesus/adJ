@@ -54,7 +54,7 @@ LIB_DEPENDS =
 
 RUN_DEPENDS =		
 
-PREFIX=/usr/local/share/ton-toncli/
+PREFIX=/usr/local/ton-toncli
 CMAKE_INSTALL_PREFIX=${PREFIX}
 
 CONFIGURE_ARGS += 
