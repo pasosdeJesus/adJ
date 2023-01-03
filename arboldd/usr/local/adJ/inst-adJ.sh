@@ -3396,5 +3396,5 @@ chmod a+xrw /var/www/tmp
 
 echo "* Volviendo a cambiar en por servicio en etc" >> /var/www/tmp/inst-adJ.bitacora;
 cd /etc && /usr/local/adJ/servicio-etc.sh >> /var/www/tmp/inst-adJ.bitacora 2>&1
-dialog --title 'Componentes básicos instalados' --msgbox "\\nFELICITACIONES!  La instalación/actualización de la distribución Aprendiendo de Jesús $VER se completó satisfactoriamente\\n\\n Para instalar SIVeL ejecute \"doas /usr/local/adJ/inst-sivel.sh\"" 15 60
+dialog --title 'Componentes básicos instalados' --msgbox "\\nFELICITACIONES!  La instalación/actualización de la distribución Aprendiendo de Jesús $VER se completó satisfactoriamente" 15 60
 
