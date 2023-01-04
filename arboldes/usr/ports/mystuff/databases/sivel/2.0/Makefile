@@ -10,7 +10,7 @@ PKGNAME=sivel-v${VERSION}
 #GH_MAIN=sivel2.0
 GH_ACCOUNT=pasosdeJesus
 GH_PROJECT=sivel2
-GH_COMMIT=0d6e569f5371e6bdf9b5e266fb2da1f02477e5aa
+GH_COMMIT=41ebfb8bcb25f73fd8361e23310647ea3ca5366d
 
 # Comenzado adJ 7.2 para logar que bundler corriera en
 # /usr/ports/pobj/sivel-2.0/fake-amd64/var/www/htdocs/sivel2

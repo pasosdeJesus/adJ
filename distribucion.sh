@@ -825,8 +825,6 @@ if (test "$sn" = "s") then {
 
   # Modificados para posibilitar compilación
   # Deben estar en mystuff
-  paquete ruby paquetes "ruby ruby32-ri_docs" 3.2
-  exit 1
 
   # Todo lo de perl tuvo que recompilarse
   # evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
@@ -972,7 +970,7 @@ if (test "$sn" = "s") then {
   ### Requieren recompilación por cambio en FILE
   paquete unzip  # De no hacerse envía descompresiones a salida estándar
   paquete python paquetes "python" "3.9"
-  paquete ruby paquetes "ruby ruby31-ri_docs" 3.1
+  paquete ruby paquetes "ruby ruby32-ri_docs" 3.2
   paquete gettext-tools paquetes 'gettext-tools gettext-runtime'  # Requerido para compilar muchos
   paquete m4 # Requerido para compilar bison (instalar antes de compilar bison)
   paquete bison # Requerido para compilar MariaDB
@@ -1096,6 +1094,7 @@ if (test "$sn" = "s") then {
   # Unicos en adJ 
   # Deben estar en arboldes/usr/ports/mystuff pero no en /usr/ports
   paquete net/ton
+  paquete net/ton-toncli
   paquete emulators/realboy
   #paquete net/xmrig
   #paquete sysutils/ganglia
@@ -1160,29 +1159,29 @@ if (test "$sn" = "s") then {
     if (test "$pftp" = "ftp") then {
       cmd="echo \"ls\" | ftp $PKG_PATH > /tmp/actu2-l"
     } elif (test "$pftp" = "http") then {
-      cmd="ftp -o /tmp/actu2-l $PKG_PATH"
-    } else {
-      cmd="ls $PKG_PATH > /tmp/actu2-l";
-    } fi;
-    echo $cmd; eval $cmd;
-    cmd="grep -a \".tgz\" /tmp/actu2-l | sort "
-    if (test "$autoMasPaquetesInv" = "s") then {
-      cmd="$cmd -r ";
-    } fi;
-    cmd="$cmd > /tmp/actu2-g"
-    echo $cmd; eval $cmd;
-    cmd="sed -e \"s/.*[^_A-Za-z0-9.@+-]\([A-Za-z0-9.-][_A-Za-z0-9.@+-_]*.tgz\).*/\1 /g\" /tmp/actu2-g > /tmp/actu2-s"
-    echo $cmd; eval $cmd;
-    if (test "$excluye" != "") then {
-      cmd="grep -v -f tmp/excluye.txt /tmp/actu2-s > $arcdis";
-    } else {
-      cmd="cp /tmp/actu2-s $arcdis";
-    } fi;
-    echo $cmd; eval $cmd;
+    cmd="ftp -o /tmp/actu2-l $PKG_PATH"
+  } else {
+  cmd="ls $PKG_PATH > /tmp/actu2-l";
+} fi;
+echo $cmd; eval $cmd;
+cmd="grep -a \".tgz\" /tmp/actu2-l | sort "
+if (test "$autoMasPaquetesInv" = "s") then {
+  cmd="$cmd -r ";
+} fi;
+cmd="$cmd > /tmp/actu2-g"
+echo $cmd; eval $cmd;
+cmd="sed -e \"s/.*[^_A-Za-z0-9.@+-]\([A-Za-z0-9.-][_A-Za-z0-9.@+-_]*.tgz\).*/\1 /g\" /tmp/actu2-g > /tmp/actu2-s"
+echo $cmd; eval $cmd;
+if (test "$excluye" != "") then {
+  cmd="grep -v -f tmp/excluye.txt /tmp/actu2-s > $arcdis";
+} else {
+cmd="cp /tmp/actu2-s $arcdis";
+} fi;
+echo $cmd; eval $cmd;
 
-    if (test ! -s "$arcdis") then {
-      echo "No pudo obtenerse lista (asegurese de terminar ruta con /)";
-      exit 1;
+if (test ! -s "$arcdis") then {
+  echo "No pudo obtenerse lista (asegurese de terminar ruta con /)";
+  exit 1;
     } fi;
   } else  {
     echo "Usando lista de disponibles de $arcdis" | tee -a /var/www/tmp/distrib-adJ.bitacora;

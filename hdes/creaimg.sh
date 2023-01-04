@@ -40,7 +40,7 @@ function ej {
 
 if (test ! -f AprendiendoDeJesus-${V}${VESP}-${ARQ}.usb) then {
   if (test ! -f blanco) then {
-    ej "dd of=blanco bs=1M seek=4900 count=0"
+    ej "dd of=blanco bs=1M seek=5000 count=0"
   } else {
   echo 'Archivo blanco existente, saltando creacion'
 } fi;

@@ -1,5 +1,5 @@
 COMMENT = Tools for the blockchain TON to be used with toncli
-V =			20221203
+V =			20221230
 REVISION =		
 
 # Patches were added just to change daemon for service
@@ -54,8 +54,8 @@ LIB_DEPENDS =
 
 RUN_DEPENDS =		
 
-PREFIX=/usr/local/ton-toncli
-CMAKE_INSTALL_PREFIX=${PREFIX}
+#PREFIX=/usr/local/ton-toncli
+#CMAKE_INSTALL_PREFIX=${PREFIX}
 
 CONFIGURE_ARGS += 
 CPP_FLAGS="-I/usr/local/include"
@@ -69,6 +69,15 @@ pre-patch:
 	mv -f ${WRKDIR}/libRaptorQ-${COMMIT_LIBRAPTORQ}/* ${WRKDIST}/third-party/libraptorq/
 	mv -f ${WRKDIR}/rocksdb-${COMMIT_ROCKSDB}/* ${WRKDIST}/third-party/rocksdb/
 
+post-install:
+	mkdir -p ${WRKINST}/usr/local/bin/ton-toncli/
+	mv ${WRKINST}/usr/local/ton-toncli/bin/* ${WRKINST}/usr/local/bin/ton-toncli/
+	mkdir -p ${WRKINST}/usr/local/lib/ton-toncli/
+	mv ${WRKINST}/usr/local/ton-toncli/lib/* ${WRKINST}/usr/local/lib/ton-toncli/
+	mkdir -p ${WRKINST}/usr/local/share/ton-toncli/
+	mv ${WRKINST}/usr/local/ton-toncli/share/ton/* ${WRKINST}/usr/local/share/ton-toncli/
+	mkdir -p ${WRKINST}/usr/local/include/ton-toncli/
+	mv ${WRKINST}/usr/local/ton-toncli/include/tonlib ${WRKINST}/usr/local/include/ton-toncli/
+	rm -rf ${WRKINST}/usr/local/ton-toncli/
 
 .include <bsd.port.mk>
-
