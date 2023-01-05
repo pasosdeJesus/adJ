@@ -34,7 +34,7 @@ DISTFILES +=	${GH_COMMIT}${EXTRACT_SUFX}  \
 	${COMMIT_LIBRAPTORQ}${EXTRACT_SUFX}:3  \
 	${COMMIT_ROCKSDB}${EXTRACT_SUFX}:4
 
-LIBtonlibjson_VERSION=0.0
+
 
 MAINTAINER =		Vladimir Támara Patiño <vtamara@pasosdeJesus.org>
 
@@ -56,6 +56,8 @@ RUN_DEPENDS =
 
 #PREFIX=/usr/local/ton-toncli
 #CMAKE_INSTALL_PREFIX=${PREFIX}
+
+SHARED_LIBS +=	tonlibjson	0.5	# 2.0
 
 CONFIGURE_ARGS += 
 CPP_FLAGS="-I/usr/local/include"

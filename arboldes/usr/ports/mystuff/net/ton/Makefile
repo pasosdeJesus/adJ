@@ -34,7 +34,7 @@ DISTFILES +=	${GH_COMMIT}${EXTRACT_SUFX}  \
 	${COMMIT_LIBRAPTORQ}${EXTRACT_SUFX}:3  \
 	${COMMIT_ROCKSDB}${EXTRACT_SUFX}:4
 
-LIBtonlibjson_VERSION=0.0
+SHARED_LIBS +=	tonlibjson	0.5	# 2.0
 
 MAINTAINER =		Vladimir Támara Patiño <vtamara@pasosdeJesus.org>
 

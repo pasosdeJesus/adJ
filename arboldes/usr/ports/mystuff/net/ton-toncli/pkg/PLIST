@@ -33,7 +33,7 @@ lib/ton-toncli/fift/TonUtil.fif
 @static-lib lib/ton-toncli/libtddb.a
 @static-lib lib/ton-toncli/libtddb_utils.a
 @static-lib lib/ton-toncli/libtdutils.a
-@lib lib/ton-toncli/libtonlibjson.so.0.0
+@lib lib/ton-toncli/libtonlibjson.so.${LIBtonlibjson_VERSION}
 share/ton-toncli/
 share/ton-toncli/smartcont/
 share/ton-toncli/smartcont/CreateState.fif

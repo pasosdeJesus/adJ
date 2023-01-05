@@ -1,3 +1,4 @@
+@comment $OpenBSD: PLIST,v$
 @bin bin/create-hardfork
 @bin bin/dht-server
 @bin bin/fift
@@ -30,7 +31,7 @@ lib/fift/TonUtil.fif
 @static-lib lib/libtddb.a
 @static-lib lib/libtddb_utils.a
 @static-lib lib/libtdutils.a
-@lib lib/libtonlibjson.so.0.0
+@lib lib/libtonlibjson.so.${LIBtonlibjson_VERSION}
 share/ton/
 share/ton/smartcont/
 share/ton/smartcont/CreateState.fif
