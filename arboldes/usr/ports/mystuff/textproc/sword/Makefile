@@ -2,13 +2,13 @@
 
 COMMENT=	"Bible study platform with KJV module"
 
-V=              1.8.1
+V=              1.9.0
 DISTNAME=	sword-${V}
 PKGNAME=        sword-${V}
-REVISION=	1
+#REVISION=	1
 # KJV cambia continuamente
 CATEGORIES=    	textproc books
-SHARED_LIBS=	sword 8.1 
+SHARED_LIBS=	sword 9.0 
 
 HOMEPAGE=	http://crosswire.org/sword/software/swordapi.jsp
 MAINTAINER=	Vladimir Támara Patiño <vtamara@pasosdeJesus.org>
@@ -19,7 +19,7 @@ PERMIT_PACKAGE=	Yes
 BUILD_DEPENDS= archivers/unzip 
 #LIB_DEPENDS= net/curl
 
-MASTER_SITES=	http://crosswire.org/ftpmirror/pub/sword/source/v1.8/
+MASTER_SITES=	http://crosswire.org/ftpmirror/pub/sword/source/v1.9/
 MASTER_SITES0=	http://crosswire.org/ftpmirror/pub/sword/packages/rawzip/
 DISTFILES=	${DISTNAME}${EXTRACT_SUFX} 
 DISTFILES+=	KJV.zip:0
