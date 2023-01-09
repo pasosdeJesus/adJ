@@ -2,7 +2,8 @@ COMMENT =		library for manipulating JSON data
 
 V = 			2.14
 DISTNAME =		jansson-${V}
-
+REVISION=1
+# Porque adJ 7.1 tenía 2.14 pero con shared_libs 4.1
 SHARED_LIBS =		jansson 4.2
 
 CATEGORIES =		devel
