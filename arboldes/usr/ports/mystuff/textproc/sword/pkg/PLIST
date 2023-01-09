@@ -11,7 +11,6 @@
 @bin bin/mod2vpl
 @bin bin/mod2zmod
 @bin bin/osis2mod
-@bin bin/stripaccents
 @bin bin/tei2mod
 @bin bin/vpl2mod
 @bin bin/vs2osisref
@@ -171,7 +170,6 @@ include/sword/thmlxhtml.h
 include/sword/treekey.h
 include/sword/treekeyidx.h
 include/sword/unicodertf.h
-include/sword/untgz.h
 include/sword/url.h
 include/sword/utf16utf8.h
 include/sword/utf8arabicpoints.h
@@ -202,7 +200,7 @@ include/sword/ztext.h
 include/sword/ztext4.h
 include/sword/zverse.h
 include/sword/zverse4.h
-@so lib/libsword-1.8.1.so
+@so lib/libsword-1.9.0.so
 @static-lib lib/libsword.a
 lib/libsword.la
 @so lib/libsword.so
@@ -265,6 +263,7 @@ share/sword/locales.d/locales.conf
 share/sword/locales.d/lt-utf8.conf
 share/sword/locales.d/lv-utf8.conf
 share/sword/locales.d/mt-utf8.conf
+share/sword/locales.d/my-utf8.conf
 share/sword/locales.d/nb-utf8.conf
 share/sword/locales.d/nb.conf
 share/sword/locales.d/nl-utf8.conf
