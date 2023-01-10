@@ -77,8 +77,8 @@ Novedades tomadas de <https://www.openbsd.org/71.html>
 ### 2.2 Paquetes 
 
 * Para cerrar fallas se usan las versiones más recientes preparadas
-  por OpenBSD de: `curl`, `firefox-esr`,  `postgis`, `postgresql`,
-  `openssl`, `samba`, `webkitgtk4`, 
+  por OpenBSD 7.2 de: `curl`, `firefox-esr`,  `openssl`, `postgis`, 
+  `postgresql`, `samba`, `webkitgtk4`, 
 * Para aprovechar el xlocale extendido de adJ se han recompilado
   `vlc`, `glib2` y `libunistring`.
 * Por el aumento en número de descriptores de archivos tuvimos que
@@ -90,7 +90,7 @@ Novedades tomadas de <https://www.openbsd.org/71.html>
 * Algunos paquetes típicos y su versión: `dovecot 2.3.19.1p0v0`,
   `chromium 105.0.5195.125`, `firefox-esr-102.3.0`, 
   `libreoffice 7.4.1.2v0`,
-  `nginx 1.22.0p0`, `mariadb 10.9.3v1`, `node 16.17.1v0`, 
+  `nginx 1.22.0p0`, `mariadb 10.9.3v1`,
   `python 3.9.15p0`, `neovim 0.7.2`, `zsh 5.9`
 
 
@@ -111,16 +111,19 @@ Novedades tomadas de <https://www.openbsd.org/71.html>
 * Como herramientas para el blockchain TON (The Open Network), además 
   del paquete `ton` ahora incluimos el paquete `ton-toncli`. El primero 
   consta de las herramientas estándar, el segundo se trata de las mismas 
-  herramientas pero que emplean una máquina virtual TON ampliada para 
-  facilitar depuración y el desarrollo de contratos con toncli.
-  Estamos actualizando la documentación de como desarrollar un contrato 
-  inteligente sobre adJ en
+  herramientas en rutas diferentes pues emplean una máquina virtual TON 
+  ampliada para facilitar depuración y el desarrollo de contratos con 
+  `toncli`. Puede ver la documentación actualizada en
   <http://pasosdejesus.github.io/usuario_adJ/conf-programas.html#ton>
-* Hemos retroportade ruby de OpenBSD-current pues incluye Ruby 3.2 que
+* Hemos retroportado ruby de OpenBSD-current pues incluye Ruby 3.2 que
   trae un nuevo compilador JIT que podría aumentar la velocidad de
   aplicaciones rails, ver
   <https://www.ruby-lang.org/es/news/2022/12/25/ruby-3-2-0-released/>
-* Eliminamos python 2 y paquetes para este. 
+* Hemos retroportado node 18.12.1 (publicado en Nov.2022) de OpenBSD-current 
+  para tener el entorno de desarrollo estable de larga duración más 
+  actualizado y sin fallas de seguridad conocidas hasta el momento. Ver
+  <https://github.com/nodejs/release#release-schedule>
+* Eliminamos python 2 y paquetes para este.
 * Chromium recompilado con llave de Pasos de Jesús.  Ya permite autenticar
   y usar sitios como <https://drive.google.com>  --si tiene problemas para
   autenticarse intente desde un nuevo perfil (obligatorio por ejemplo si 
@@ -129,8 +132,6 @@ Novedades tomadas de <https://www.openbsd.org/71.html>
   bastante estable.
 * Se han recompilado los siguientes para aprovechar `xlocale` (además de muchos
   para perl): `glib2`, `libunistring`, `vlc`
-* Se han retroportado de OpenBSD-current los siguientes paquetes para cerrar 
-  fallas: `jansson`, `postgresql-client`, `postgis`
 * Se han parchado minimamente los siguientes para usar `servicio` en lugar
   de `daemon`: `postgresql`, `git` y `smartmontools`
 
