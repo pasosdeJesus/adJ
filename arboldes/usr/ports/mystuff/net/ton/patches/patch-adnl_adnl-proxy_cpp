@@ -1,7 +1,7 @@
 Index: adnl/adnl-proxy.cpp
 --- adnl/adnl-proxy.cpp.orig
 +++ adnl/adnl-proxy.cpp
-@@ -316,7 +316,7 @@ int main(int argc, char *argv[]) {
+@@ -315,7 +315,7 @@ int main(int argc, char *argv[]) {
      std::exit(2);
    });
    p.add_option('c', "config", "config file", [&](td::Slice arg) { config = arg.str(); });

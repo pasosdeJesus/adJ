@@ -1,7 +1,7 @@
 Index: test/test-validator-session.cpp
 --- test/test-validator-session.cpp.orig
 +++ test/test-validator-session.cpp
-@@ -322,7 +322,7 @@ int main(int argc, char *argv[]) {
+@@ -323,7 +323,7 @@ int main(int argc, char *argv[]) {
      td::actor::send_closure(x, &TestNode::set_local_config, fname.str());
      return td::Status::OK();
    });

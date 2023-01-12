@@ -5,18 +5,19 @@ REVISION =
 # Patches were added just to change daemon for service
 
 DISTNAME=	ton-$V
-GH_ACCOUNT=	pasosdeJesus
+#GH_ACCOUNT=	pasosdeJesus
+GH_ACCOUNT=	ton-blockchain
 GH_PROJECT=	ton
 GH_BRANCH=master
 #GH_BRANCH=adJ
-GH_COMMIT=	v2022.12
+GH_COMMIT=	f59c363ab942a5ddcacd670c97c6fbd023007799
 
 CATEGORIES =		net
 
 DEBUG_PACKAGES =	${BUILD_PACKAGES}
 
 HOMEPAGE =		https://ton.org
-MASTER_SITES =		https://github.com/pasosdeJesus/ton/archive/
+MASTER_SITES =		https://github.com/ton-blockchain/ton/archive/
 MASTER_SITES1 =		https://github.com/abseil/abseil-cpp/archive/
 MASTER_SITES2 =		https://github.com/google/crc32c/archive/
 MASTER_SITES3 =		https://github.com/ton-blockchain/libRaptorQ/archive/

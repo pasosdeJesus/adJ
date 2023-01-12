@@ -1,9 +1,9 @@
 Index: rldp-http-proxy/rldp-http-proxy.cpp
 --- rldp-http-proxy/rldp-http-proxy.cpp.orig
 +++ rldp-http-proxy/rldp-http-proxy.cpp
-@@ -1192,7 +1192,7 @@ int main(int argc, char *argv[]) {
-         td::actor::send_closure(x, &RldpHttpProxy::set_local_host, arg.substr(0, ch).str(), addr);
-         return td::Status::OK();
+@@ -1564,7 +1564,7 @@ int main(int argc, char *argv[]) {
+         }
+         return add_local_host(arg.substr(0, ch).str(), arg.substr(ch + 1).str());
        });
 -  p.add_option('d', "daemonize", "set SIGHUP", [&]() {
 +  p.add_option('d', "servicioize", "set SIGHUP", [&]() {

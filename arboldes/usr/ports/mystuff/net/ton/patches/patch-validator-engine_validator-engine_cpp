@@ -1,7 +1,7 @@
 Index: validator-engine/validator-engine.cpp
 --- validator-engine/validator-engine.cpp.orig
 +++ validator-engine/validator-engine.cpp
-@@ -3459,7 +3459,7 @@ int main(int argc, char *argv[]) {
+@@ -3515,7 +3515,7 @@ int main(int argc, char *argv[]) {
    p.add_option('f', "fift-dir", "directory with fift scripts", [&](td::Slice fname) {
      acts.push_back([&x, fname = fname.str()]() { td::actor::send_closure(x, &ValidatorEngine::set_fift_dir, fname); });
    });
