@@ -1,21 +1,21 @@
 COMMENT = Tools for the blockchain TON to be used with toncli
-V =			20221230
+V =			20230112
 REVISION =		
 
 # Patches were added just to change daemon for service
 
 DISTNAME=	ton-toncli-$V
-GH_ACCOUNT=	vtamara
-GH_PROJECT=	SpyCheese-ton
-GH_BRANCH=toncli-local-adJ
-GH_COMMIT=	66fa9eb02f4c988295b070d034a1ba495b4dabc1
+GH_ACCOUNT=	SpyCheese
+GH_PROJECT=	ton
+GH_BRANCH=toncli-local
+GH_COMMIT=	9916f286b714ebb66c1b2df399700e85298ec851
 
 CATEGORIES =		net
 
 DEBUG_PACKAGES =	${BUILD_PACKAGES}
 
 HOMEPAGE =		https://ton.org
-MASTER_SITES =		https://github.com/vtamara/SpyCheese-ton/archive/
+MASTER_SITES =		https://github.com/SpyCheese/ton/archive/
 MASTER_SITES1 =		https://github.com/abseil/abseil-cpp/archive/
 MASTER_SITES2 =		https://github.com/google/crc32c/archive/
 MASTER_SITES3 =		https://github.com/ton-blockchain/libRaptorQ/archive/
@@ -33,8 +33,6 @@ DISTFILES +=	${GH_COMMIT}${EXTRACT_SUFX}  \
 	${COMMIT_CRC32C}${EXTRACT_SUFX}:2  \
 	${COMMIT_LIBRAPTORQ}${EXTRACT_SUFX}:3  \
 	${COMMIT_ROCKSDB}${EXTRACT_SUFX}:4
-
-
 
 MAINTAINER =		Vladimir Támara Patiño <vtamara@pasosdeJesus.org>
 
@@ -73,13 +71,18 @@ pre-patch:
 
 post-install:
 	mkdir -p ${WRKINST}/usr/local/bin/ton-toncli/
-	mv ${WRKINST}/usr/local/ton-toncli/bin/* ${WRKINST}/usr/local/bin/ton-toncli/
+	find ${WRKINST}/usr/local/bin/ -type f -exec mv {} ${WRKINST}/usr/local/bin/ton-toncli/ ';'
 	mkdir -p ${WRKINST}/usr/local/lib/ton-toncli/
-	mv ${WRKINST}/usr/local/ton-toncli/lib/* ${WRKINST}/usr/local/lib/ton-toncli/
+	mv ${WRKINST}/usr/local/lib/{*a,*.so*} ${WRKINST}/usr/local/lib/ton-toncli/
+	mkdir -p ${WRKINST}/usr/local/lib/ton-toncli/cmake/Tonlib
+	mv ${WRKINST}/usr/local/lib/cmake/Tonlib/* ${WRKINST}/usr/local/lib/ton-toncli/cmake/Tonlib
+	sed -i -e "s/\/lib\//\/lib\/ton-toncli\//g" ${WRKINST}/usr/local/lib/ton-toncli/cmake/Tonlib/TonlibTargets.cmake 
+	rm -rf ${WRKINST}/usr/local/lib/cmake
+	mv ${WRKINST}/usr/local/lib/fift ${WRKINST}/usr/local/lib/ton-toncli/
 	mkdir -p ${WRKINST}/usr/local/share/ton-toncli/
-	mv ${WRKINST}/usr/local/ton-toncli/share/ton/* ${WRKINST}/usr/local/share/ton-toncli/
+	mv ${WRKINST}/usr/local/share/ton/* ${WRKINST}/usr/local/share/ton-toncli/
+	rm -rf ${WRKINST}/usr/local/share/ton
 	mkdir -p ${WRKINST}/usr/local/include/ton-toncli/
-	mv ${WRKINST}/usr/local/ton-toncli/include/tonlib ${WRKINST}/usr/local/include/ton-toncli/
-	rm -rf ${WRKINST}/usr/local/ton-toncli/
+	mv ${WRKINST}/usr/local/include/tonlib ${WRKINST}/usr/local/include/ton-toncli/
 
 .include <bsd.port.mk>

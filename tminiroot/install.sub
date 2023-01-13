@@ -1,5 +1,5 @@
 #!/bin/ksh
-#	$OpenBSD: install.sub,v 1.1193 2022/03/28 18:53:40 kettenis Exp $
+#	$OpenBSD: install.sub,v 1.1205 2022/09/19 15:40:36 florian Exp $
 #
 # Copyright (c) 1997-2015 Todd Miller, Theo de Raadt, Ken Westerback
 # Copyright (c) 2015, Robert Peichaer <rpe@openbsd.org>
@@ -76,7 +76,10 @@ usage() {
 wait_cgiinfo() {
 	local _l _s _key _val
 
-	wait "$CGIPID" 2>/dev/null
+	if [ -f /tmp/cgipid ]; then
+		wait "$(cat /tmp/cgipid)" 2>/dev/null
+		rm -f /tmp/cgipid
+	fi
 
 	# Ensure, there is actual data to extract info from.
 	[[ -s $CGI_INFO ]] || return
@@ -374,14 +377,11 @@ disk_has() {
 
 	# Commands to inspect disk. Default: "fdisk $_disk"
 	local _c_hfs="pdisk -l $_disk"
-	local _c_sr="bioctl -q $_disk"
 
 	# Patterns for partition-table-types and partition-types.
 	local _p_gpt='Usable LBA:'
 	local _p_gpt_openbsd='^[ *]...: OpenBSD '
-	local _p_gpt_apfs='^[ *]...: APFS '
 	local _p_gpt_apfsisc='^[ *]...: APFS ISC '
-	local _p_gpt_apfsrecovery='^[ *]...: APFS Recovry '
 	local _p_gpt_biosboot='^[ *]...: BIOS Boot '
 	local _p_gpt_efisys='^[ *]...: EFI Sys '
 	local _p_hfs='^Partition map '
@@ -391,8 +391,6 @@ disk_has() {
 	local _p_mbr_dos='^..: 06 '
 	local _p_mbr_dos_active='^\*.: 06 '
 	local _p_mbr_linux='^..: 83 '
-	local _p_sr='OPENBSD, SR'
-	local _p_sr_crypto='OPENBSD, SR CRYPTO'
 
 	# Compose command and patterns based on the parameters.
 	eval "_cmd=\"\$_c_${_pttype}\""
@@ -540,7 +538,7 @@ unlock() {
 
 # Add a trap to kill the dmesg listener co-process on exit of the installer.
 retrap() {
-	trap 'kill -KILL $CPPID 2>/dev/null; echo; stty echo; exit 0' \
+	trap '_cppid=$(</tmp/cppid); if [ -n $_cppid ]; then kill -KILL -$_cppid 2>/dev/null; rm -f /tmp/cppid; fi; echo; stty echo; exit 0' \
 		INT EXIT TERM
 }
 
@@ -559,6 +557,7 @@ start_dmesg_listener() {
 
 	# To ensure that only one dmesg listener instance can be active, run it
 	# in a co-process subshell of which there can always only be one active.
+	set -m
 	(
 	while :; do
 		lock
@@ -568,17 +567,17 @@ start_dmesg_listener() {
 		# contents of that file.
 		if [[ -e $_update && "$(dmesgtail)" != "$(<$_update)" ]]; then
 			dmesgtail >$_update
+			rm -f /tmp/cppid
 			kill -TERM 2>/dev/null $$ || exit 1
 		fi
 		unlock
 		sleep .5
 	done
 	) |&
-
-	# Save the co-process PID in a global variable so it can be used in
-	# the retrap() function which adds a trap to kill the co-process on
-	# exit of the installer script.
-	CPPID=$!
+	# Save the co-process pid so it can be used in the retrap() function which
+	# adds a trap to kill the co-process on exit of the installer script.
+	echo $! > /tmp/cppid
+	set +m
 	retrap
 }
 
@@ -1292,7 +1291,7 @@ ieee80211_config() {
 
 # Set up IPv4 and IPv6 interface configuration.
 configure_ifs() {
-	local _first _hn _if _name _p _vi
+	local _first _hn _if _name _p _vi _vn
 
 	# Always need lo0 configured.
 	ifconfig lo0 inet 127.0.0.1/8
@@ -1305,9 +1304,10 @@ configure_ifs() {
 		# minor for the next offered vlan interface.
 		_vi=$(get_ifs vlan | sed '$!d;s/^vlan//')
 		[[ -n $_vi ]] && ((_vi++))
+		[[ -n $(get_ifs) ]] && _vn="vlan${_vi:-0}"
 
 		ask_which "network interface" "do you wish to configure" \
-			"\$(get_ifs) vlan${_vi:-0}" \
+			"\$(get_ifs) $_vn" \
 			${_p:-'$( (get_ifs netboot; get_ifs) | sed q )'}
 		[[ $resp == done ]] && break
 
@@ -1652,7 +1652,7 @@ install_files() {
 
 		# Fetch and verify the set files.
 		for _f in $_get_sets; do
-			$UU && reset_watchdog
+			reset_watchdog
 
 			rm -f /tmp/h /tmp/fail
 
@@ -1717,7 +1717,7 @@ install_files() {
 
 	# Install the set files.
 	for _f in $_get_sets; do
-		$UU && reset_watchdog
+		reset_watchdog
 		_fsrc="$_src/$_f"
 
 		# Take the set file from the prefetch area if possible.
@@ -1766,7 +1766,7 @@ install_files() {
 		cp ${_src#file://}/SHA256 /mnt/var/db/installed.SHA256
 	fi
 
-	$UU && reset_watchdog
+	reset_watchdog
 }
 
 # Fetch install sets from an HTTP server possibly using a proxy.
@@ -2314,9 +2314,9 @@ is_rootdisk() {
 		if disklabel $_d | grep -q '^  a: .*4\.2BSD ' &&
 			mount -t ffs -r /dev/${_d}a /mnt; then
 			if $UU; then
-				ls -d /mnt/{auto_upgrade.conf,bin,dev,etc,home,mnt,root,sbin,tmp,usr,var}
+				ls -d /mnt/{auto_upgrade.conf,bin,dev,etc,home,sbin,tmp,usr,var}
 			else
-				ls -d /mnt/{bin,dev,etc,home,mnt,root,sbin,tmp,usr,var}
+				ls -d /mnt/{bin,dev,etc,home,sbin,tmp,usr,var}
 			fi
 			_rc=$?
 			umount /mnt
@@ -2415,8 +2415,8 @@ parse_hn_line() {
 		_cmds[${#_cmds[*]}]="ifconfig $_if inet autoconf"
 		V4_AUTOCONF=true
 		;;
-	'!'*|bridge)
-		# Skip shell commands and bridge in the installer.
+	'!'*)
+		# Skip shell commands in the installer.
 		return
 		;;
 	*)	_cmds[${#_cmds[*]}]="ifconfig $_if ${_c[@]}"
@@ -2514,7 +2514,7 @@ enable_network() {
 	local _f
 
 	# Use installed network configuration files during upgrade.
-	for _f in dhclient.conf resolv.conf; do
+	for _f in resolv.conf; do
 		if [[ -f /mnt/etc/$_f ]]; then
 			cp /mnt/etc/$_f /etc/$_f
 		fi
@@ -2539,7 +2539,6 @@ start_cgiinfo() {
 
 	# Ensure proper name resolution in case there's no dns yet.
 	add_hostent 199.185.178.80 ftplist1.openbsd.org
-	add_hostent 129.128.5.194 ftplist2.openbsd.org
 
 	# Make sure the ftp subshell gets its own process group.
 	set -m
@@ -2551,13 +2550,18 @@ start_cgiinfo() {
 		# Remember finish time for adjusting the received timestamp.
 		echo -n $SECONDS >$HTTP_SEC
 		feed_random
-	) & CGIPID=$!
+	) &
+	echo $! > /tmp/cgipid
 	set +m
 
 	# If the ftp process takes more than 12 seconds, kill it.
-	# XXX We are relying on the pid space not randomly biting us.
-	# XXX ftp could terminate early, and the pid could be reused.
-	(sleep 12; kill -INT -$CGIPID >/dev/null 2>&1) &
+	(
+		sleep 12;
+		if [ -f /tmp/cgipid ]; then
+			kill -INT -"$(cat /tmp/cgipid)" >/dev/null 2>&1
+			# wait will be done by wait_cgiinfo
+		fi
+	) &
 }
 
 # Create a skeletal but useful /etc/fstab from /tmp/i/fstab by stripping all
@@ -2851,8 +2855,6 @@ finish_up() {
 	)
 	echo " done."
 
-	[ -x /mnt/usr/sbin/fw_update ] && DESTDIR=/mnt /mnt/usr/sbin/fw_update
-
 	# We may run some programs in chroot, and some of them might be
 	# dynamic.  That is highly discouraged, but let us play it safe.
 	rm -f /mnt/var/run/ld.so.hints
@@ -2886,22 +2888,6 @@ finish_up() {
 	# ensure it references the kernel as /bsd.
 	sha256 /mnt/bsd | (umask 077; sed 's,/mnt,,' >/mnt/var/db/kernel.SHA256)
 
-	if [[ -f $_kernel_dir.tgz ]]; then
-		echo -n "Relinking to create unique kernel..."
-		(
-		set -e
-		rm -rf $_kernel_dir
-		mkdir -m 700 -p $_kernel_dir
-		tar -C $_kernel_dir -xzf $_kernel_dir.tgz $_kernel
-		rm -f $_kernel_dir.tgz
-		chroot /mnt /bin/ksh -e -c "cd ${_kernel_dir#/mnt}/$_kernel; \
-			make newbsd; \
-			[ -f /etc/bsd.re-config ] && \
-			    config -e -c /etc/bsd.re-config -f bsd; \
-			make newinstall"
-		) >/dev/null 2>&1 && echo " done." || echo " failed."
-	fi
-
 	# Ensure that sysmerge in batch mode is run on reboot.
 	[[ $MODE == upgrade ]] &&
 		echo "/usr/sbin/sysmerge -b" >>/mnt/etc/rc.sysmerge
@@ -2930,6 +2916,24 @@ if ((\${#_KERNV[*]} == 1)) && [[ -s /etc/installurl ]] &&
 	rm -f \$_CKPATCH
 fi
 __EOT
+
+	[ -x /mnt/usr/sbin/fw_update ] && DESTDIR=/mnt /mnt/usr/sbin/fw_update
+
+	if [[ -f $_kernel_dir.tgz ]]; then
+		echo -n "Relinking to create unique kernel..."
+		(
+		set -e
+		rm -rf $_kernel_dir
+		mkdir -m 700 -p $_kernel_dir
+		tar -C $_kernel_dir -xzf $_kernel_dir.tgz $_kernel
+		rm -f $_kernel_dir.tgz
+		chroot /mnt /bin/ksh -e -c "cd ${_kernel_dir#/mnt}/$_kernel; \
+			make newbsd; \
+			[ -f /etc/bsd.re-config ] && \
+			    config -e -c /etc/bsd.re-config -f bsd; \
+			make newinstall"
+		) >/dev/null 2>&1 && echo " done." || echo " failed."
+	fi
 
 	# Email installer questions and their answers to root on next boot.
 	prep_root_mail /tmp/i/$MODE.resp "$(hostname) $MODE response file"
@@ -3133,13 +3137,12 @@ do_install() {
 	# than 120 seconds, ask if the user wants to adjust the time.
 	if _time=$(http_time) && _now=$(date +%s) &&
 		(( _now - _time > 120 || _time - _now > 120 )); then
-		_tz=/mnt/usr/share/zoneinfo/$TZ
-		if ask_yn "Time appears wrong.  Set to '$(TZ=$_tz date -r "$(http_time)")'?" yes; then
-			# We do not need to specify TZ below since both date
-			# invocations use the same one.
+		ln -sf /mnt/usr/share/zoneinfo/$TZ /etc/localtime
+		if ask_yn "Time appears wrong.  Set to '$(date -r "$(http_time)")'?" yes; then
 			date $(date -r "$(http_time)" "+%Y%m%d%H%M.%S") >/dev/null
 			# N.B. This will screw up SECONDS.
 		fi
+		rm -f /etc/localtime
 	fi
 
 	# If we managed to talk to the cgi server before, tell it what
@@ -3304,6 +3307,11 @@ do_upgrade() {
 
 	# Perform final steps common to both an install and an upgrade.
 	finish_up
+	if [ -f /tmp/wdpid ]; then
+		kill -KILL "$(cat /tmp/wdpid)" 2>/dev/null
+		# do not bother waiting
+		rm -f /tmp/wdpid
+	fi
 }
 
 check_unattendedupgrade() {
@@ -3330,20 +3338,25 @@ WATCHDOG_PERIOD_SEC=$((30 * 60))
 
 # Restart the background timer.
 reset_watchdog() {
-	kill -KILL $WDPID 2>/dev/null
-	start_watchdog
+	local _pid
+	if [ -f /tmp/wdpid ]; then
+		_pid=$(cat /tmp/wdpid)
+		kill -KILL -$_pid 2>/dev/null
+		wait $_pid 2>/dev/null
+		rm -f /tmp/wdpid
+		start_watchdog
+	fi
 }
 
-# Start a co-process to reboot a stalled sysupgrade.
+# Start a process to reboot a stalled sysupgrade.
 # This mechanism is only used during non-interactive sysupgrade.
 start_watchdog() {
+	set -m
 	(
-		sleep $WATCHDOG_PERIOD_SEC && reboot
-	) |&
-	WDPID=$!
-
-	# Close standard input of the co-process.
-	exec 3>&p; exec 3>&-
+		sleep $WATCHDOG_PERIOD_SEC && echo WATCHDOG > /dev/tty && reboot
+	) >/dev/null 2>&1 &
+	echo $! > /tmp/wdpid
+	set +m
 }
 
 # ------------------------------------------------------------------------------

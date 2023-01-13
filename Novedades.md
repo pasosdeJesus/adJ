@@ -2,8 +2,8 @@
 Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
 
-### Versión: 7.2b1
-Fecha de publicación: 28/Dic/2022
+### Versión: 7.2
+Fecha de publicación: 12/Ene/2022
 
 Puede ver novedades respecto a OpenBSD en:
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_7_2/Novedades_OpenBSD.md>
@@ -14,10 +14,10 @@ Puede ver las diversas versiones publicadas en
   <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/> donde entre otras
   encontrará:
 
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/AprendiendoDeJesus-7.2b1-amd64.iso> 
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/AprendiendoDeJesus-7.2-amd64.iso> 
   es imagen en formato ISO para quemar en DVD e instalar por primera vez
   en modo BIOS Legacy.
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/7.2b1-amd64/>
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/7.2-amd64/>
   es directorio con el contenido del DVD instalador apropiado para descargar 
   con rsync desde un adJ o un OpenBSD ya instalado para actualizarlo (ver  
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_7_2/Actualiza.md> )
@@ -25,13 +25,13 @@ Puede ver las diversas versiones publicadas en
   es directorio con versiones recientes de paquetes no incluidos en 
   distribución oficial (pueden no estar firmados y requerir instalación con 
   `pkg_add -D unsigned _paquete_`).
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-7.2b1-amd64.usb> 
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-7.2-amd64.usb> 
   es imagen para escribir en una memoria USB y arrancar con esta bien en
   modo UEFI o bien en modo BIOS Legacy. Una vez 
   la descargue puede escribirla en una USB ubicada en `/dev/sd2c` 
   (verifique dispositivo con `dmesg` y remplace) con:
 
-       doas dd if=AprendiendoDeJesus-7.2b1-amd64.usb of=/dev/sd2c bs=1M
+       doas dd if=AprendiendoDeJesus-7.2-amd64.usb of=/dev/sd2c bs=1M
 
  Este proceso puede ser demorado, puede ver el progreso con 
 
@@ -39,16 +39,16 @@ Puede ver las diversas versiones publicadas en
 
  O si desea probarla con qemu para instalar en un disco `virtual.raw`:
 
-       qemu-system-x86_64 -hda virtual.raw -hdb AprendiendoDeJesus-7.2b1-amd64.usb -boot menu=on
+       qemu-system-x86_64 -hda virtual.raw -hdb AprendiendoDeJesus-7.2-amd64.usb -boot menu=on
 
 
-## 2. NOVEDADES RESPECTO A ADJ 7.2b1 PROVENIENTES DE OPENBSD
+## 2. NOVEDADES RESPECTO A ADJ 7.2 PROVENIENTES DE OPENBSD
 
 ### 2.1 Kernel y Sistema Base
 
 Novedades tomadas de <https://www.openbsd.org/71.html> 
 
-* Aplicados parches de seguridad hasta el 27.Dic.2022 provenientes de 
+* Aplicados parches de seguridad hasta el 13.Ene.2023 provenientes de 
   OpenBSD que incluyen soluciones a fallas
 * Controladores ampliados o mejorados para amd64
   * Tarjetas Ethernet: Mejorados `uaq` (USB-Ethernet), `reg`, `mvneta`, 
@@ -77,16 +77,14 @@ Novedades tomadas de <https://www.openbsd.org/71.html>
 ### 2.2 Paquetes 
 
 * Para cerrar fallas se usan las versiones más recientes preparadas
-  por OpenBSD 7.2 de: `curl`, `firefox-esr`,  `openssl`, `postgis`, 
-  `postgresql`, `samba`, `webkitgtk4`, 
+  por OpenBSD 7.2 de: `curl`, `firefox-esr`, `openssl`, `php`, `postgis`,
+  `postgresql`, `samba`, `webkitgtk4`,
 * Para aprovechar el xlocale extendido de adJ se han recompilado
   `vlc`, `glib2` y `libunistring`.
 * Por el aumento en número de descriptores de archivos tuvimos que
-  recompilar:
-  `unzip`, `bison`, `m4`, `unzip`, `python`, `ruby`,
+  recompilar: `unzip`, `bison`, `m4`, `unzip`, `python`, `ruby`,
   `gettext-tools`,  `gmake`, `ImageMagick`, 
   `texlive_base` y `texlive_texmf-minimal`
-
 * Algunos paquetes típicos y su versión: `dovecot 2.3.19.1p0v0`,
   `chromium 105.0.5195.125`, `firefox-esr-102.3.0`, 
   `libreoffice 7.4.1.2v0`,
@@ -113,7 +111,9 @@ Novedades tomadas de <https://www.openbsd.org/71.html>
   consta de las herramientas estándar, el segundo se trata de las mismas 
   herramientas en rutas diferentes pues emplean una máquina virtual TON 
   ampliada para facilitar depuración y el desarrollo de contratos con 
-  `toncli`. Puede ver la documentación actualizada en
+  `toncli`. Estos paquetes incluyen parches que propusimos para mejorar
+  portabilidad de TON a adJ y que fueron aceptados por los desarrolladores
+  de TON. Puede ver la documentación actualizada en
   <http://pasosdejesus.github.io/usuario_adJ/conf-programas.html#ton>
 * Hemos retroportado ruby de OpenBSD-current pues incluye Ruby 3.2 que
   trae un nuevo compilador JIT que podría aumentar la velocidad de

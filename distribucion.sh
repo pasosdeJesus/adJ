@@ -207,7 +207,7 @@ if (test "$sn" = "s") then {
 
 } fi;
 
-echo " *> Instalar kernel recien compilado" | tee -a /var/www/tmp/distrib-adJ.bitacora
+echo " *> Instalar kernel recién compilado" | tee -a /var/www/tmp/distrib-adJ.bitacora
 if (test "$inter" = "-i") then {
   echo -n "(s/n)? "
   read sn
@@ -826,11 +826,9 @@ if (test "$sn" = "s") then {
   # Modificados para posibilitar compilación
   # Deben estar en mystuff
 
-  paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs postgresql-pg_upgrade" 
-  paquete postgresql-previous 
-  paquete postgis
+  paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 8.1
 
-  exit 1
+  continue
   # Todo lo de perl tuvo que recompilarse
   # evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
   # Si por ejemplo es:
@@ -1050,7 +1048,7 @@ if (test "$sn" = "s") then {
   # No deben estar en mystuff
   paquete curl
 
-  #paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 8.1
+  paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 8.1
 
   ###
   # Recompilados para mejorar dependencias y actualizar

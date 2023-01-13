@@ -1,11 +1,21 @@
 Index: rldp2/CMakeLists.txt
 --- rldp2/CMakeLists.txt.orig
 +++ rldp2/CMakeLists.txt
-@@ -51,7 +51,7 @@ target_include_directories(rldp PUBLIC 
+@@ -1,5 +1,9 @@
+ cmake_minimum_required(VERSION 3.0.2 FATAL_ERROR)
+ 
++
++set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I/usr/local/include")
++set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -L/usr/local/lib")
++
+ if (NOT OPENSSL_FOUND)
+   find_package(OpenSSL REQUIRED)
+ endif()
+@@ -54,7 +58,7 @@ target_include_directories(rldp PUBLIC 
    ${OPENSSL_INCLUDE_DIR}
  )
- if (GSL_FOUND)
--  target_link_libraries(rldp2 PRIVATE gsl)
+ if (GSL_FOUND AND BLAS_FOUND)
+-  target_link_libraries(rldp2 PRIVATE gsl blas)
 +  target_link_libraries(rldp2 PRIVATE gsl gslcblas)
    target_compile_definitions(rldp2 PRIVATE -DTON_HAVE_GSL=1)
  endif()
