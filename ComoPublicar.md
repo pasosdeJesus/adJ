@@ -145,9 +145,9 @@ Pasos importantes para publicar versión beta
 11. En adJ.pasosdeJesus.org
 	```
 	hdes/creaiso.sh
-	cp -rf AprendiendoDeJesus-6.6-amd64.iso 6.6-amd64 /dirftp
-	mkdir /dirftp/6.6-extra
-	rsync compdes:comp/adJ/extra-6.6/* /dirftp/6.6-extra
+	cp -rf AprendiendoDeJesus-7.2-amd64.iso 7.2-amd64 /dirftp
+	mkdir /dirftp/7.2-extra
+	rsync compdes:comp/adJ/extra-7.7/* /dirftp/7.2-extra
 	```
 12. Verificar operación de:
   * http://pasosdeJesus.github.io/basico_adJ http://pasosdeJesus.github.io/usuario_adJ http://pasosdeJesus.github.io/servidor_adJ
