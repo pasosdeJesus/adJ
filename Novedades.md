@@ -106,8 +106,8 @@ Novedades tomadas de <https://www.openbsd.org/71.html>
 
 ### 3.2 Paquetes
 
-* Incluye el paquete evangelios-0.9.7 que agrega traducción y marcado Strong
-  de 1 de Coritinios.
+* Incluye evangelios_dp 0.9.7 con traducción y marcado Strong de
+  1 Corintios.
 * Como herramientas para el blockchain TON (The Open Network), además 
   del paquete `ton` ahora incluimos el paquete `ton-toncli`. El primero 
   consta de las herramientas estándar, el segundo se trata de las mismas 
