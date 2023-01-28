@@ -1,0 +1,10 @@
+# No arguments: `git status`
+# With arguments: acts like `git`
+vg() {
+  if [[ $# -gt 0 ]]; then
+    nvim "$@"
+    git add "$@"
+  else
+    git status
+  fi
+}
