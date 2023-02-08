@@ -2,12 +2,13 @@ Port for adJ/OpenBSD of the tools for the Blockchain TON - The Open Network (<ht
 
 # 1. INSTALL
 
-It will be easier if you install a precompiled version:
+It could be easier if you install a precompiled version:
 * adJ 7.1 <http://adj.pasosdejesus.org/pub/AprendiendoDeJesus/7.1p1-amd64/paquetes/ton-20220802.tgz>
 * adJ 7.2 <http://adj.pasosdejesus.org/pub/AprendiendoDeJesus/7.2-amd64/paquetes/ton-20230109.tgz>
 
+However the compilation was done on an x86_64, and we notice that the resulting binary is very optimized for the instruction set of the machine where it was compiled.  If you happen to used and amd64 or maybe the instruction set of your processor doesn't match the one of processor used to create those packages, you would need to compile from source.
 
-# 2. BUILD
+# 2. COMPILE
 
 To compile the package from this port on an adJ/OpenBSD that already has `/usr/ports` infrastructure (see <https://www.openbsd.org/faq/ports/ports.html>), copy the content of this directory to `/usr/ports/mystuff/net/ton` and run from it
 ```
