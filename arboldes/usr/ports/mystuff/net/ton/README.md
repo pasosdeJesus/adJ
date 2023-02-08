@@ -61,13 +61,13 @@ This will generate the file `w3.fif` in fift assembler.
 
 Before running fift be sure to run:
 ```
-export FIFTPATH=/usr/local/share/ton/fift/lib:/usr/local/share/ton/smartcont/
+export FIFTPATH=/usr/local/lib/fift/:/usr/local/share/ton/smartcont/
 ```
 or better add that to your `~/.profile` or `~/.zshrc.local` or equivalent.
 
 If you created `w3.fif` with `func` as described before, you can run:
 ```
-./crypto/fift -s w3.fif 
+fift -s w3.fif 
 ```
 However to generate a boc file (binary representation of a cell) you should edit `w3.fif` and add at the end the line
 ```
@@ -76,7 +76,7 @@ boc>B "w3.cell" B>file
 
 By running again
 ```
-./crypto/fift -s w3.fif 
+fift -s w3.fif 
 ```
 It will generate the binary file `w3.cell with the smart contract ready for the TVM.
 
