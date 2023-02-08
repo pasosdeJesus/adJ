@@ -1,4 +1,4 @@
-Port of TON tools (<https://github.com/ton-blockchain/ton>) to adJ/OpenBSD.
+Port for adJ/OpenBSD of the tools for the Blockchain TON - The Open Network (<https://github.com/ton-blockchain/ton>) 
 
 # 1. INSTALL
 
