@@ -13,6 +13,10 @@ To compile the package from this port on an adJ/OpenBSD that already has `/usr/p
 ```
 make
 ```
+if you want to install the package you built:
+```
+make install
+```
 
 # 3. USAGE
 
