@@ -84,6 +84,6 @@ In 2022 we had success testing mining (when it was available in the TON blockcha
 
 [![asciicast](https://asciinema.org/a/dh8yxO2NTqQGqnNOfhN4cVTKq.png)](https://asciinema.org/a/dh8yxO2NTqQGqnNOfhN4cVTKq)
 
-# DONATIONS
+# 5. DONATIONS
 
 You can donate with TONCoin by sending to the address EQDKO7XwFbfRuAxX-5vs8oT_U7LG1hUyJLl-VnruqWRVdldW
