@@ -12,12 +12,15 @@ To compile the package from this port on an adJ/OpenBSD that already has `/usr/p
 make
 ```
 
-# 3. USAGE AND FUNCTIONALITY WITH toncli
+# 3. USAGE
 
-These tools are fully funcitonal to develop and test smart contracts in FunC with toncli (the author used them in the contests of FunC held during 2022 and he had good results).
-We wrote an article on how to use this package to test a simple smart contract, it is available at
+We wrote an article on how to use this package and `toncli` to test a simple smart contract, it is available at
 <https://medium.com/@vladimirtmara/developing-and-testing-a-simple-smart-contract-with-toncli-de96ad0a6f5c>
 
-# 4. DONATIONS
+# 4. FUNCTIONALITY
+
+These tools are fully functional to test smart contracts in FunC with `toncli`, the author used them in the contests of FunC held during 2022 and he had good results.
+
+# 5. DONATIONS
 
 You can donate with TONCoin by sending to the address EQDKO7XwFbfRuAxX-5vs8oT_U7LG1hUyJLl-VnruqWRVdldW
