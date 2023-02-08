@@ -5,7 +5,7 @@ Port of TON tools to be used with toncli (<[https://github.com/ton-blockchain/to
 It will be easier if you install a precompiled version:
 * adJ 7.2 <http://adj.pasosdejesus.org/pub/AprendiendoDeJesus/7.2-amd64/paquetes/ton-toncli-20230112.tgz>
 
-However the compilation was done on an x86_64, and [we noticed](https://github.com/pasosdeJesus/adJ/issues/11) that the resulting binary is very optimized for the instruction set of the machine where it was compiled.  If you happen to use an amd64 or maybe the instruction set of your processor doesn't match the one of the processor used to create those packages, you would need to compile from source.
+However the compilation was done on an x86_64, and [we noticed](https://github.com/pasosdeJesus/adJ/issues/11) that the resulting binary is very optimized for the instruction set of the machine where it was compiled.  If you happen to use an amd64 or maybe the instruction set of your processor doesn't match the one of the processor used to create those packages,  when you run `func` of `fift` you will get an `Illegal Instruction` and you will need to compile from source.
 
 # 2. COMPILE
 
