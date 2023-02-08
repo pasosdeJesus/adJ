@@ -19,7 +19,7 @@ make install
 # 3. USAGE
 
 We wrote an article on how to use this package and `toncli` to test a simple smart contract, it is available at
-<https://medium.com/@vladimirtmara/developing-and-testing-a-simple-smart-contract-with-toncli-de96ad0a6f5c>
+<https://medium.com/@vladimirtmara/developing-and-testing-a-simple-smart-contract-with-toncli-de96ad0a6f5c>.
 
 # 4. FUNCTIONALITY
 
