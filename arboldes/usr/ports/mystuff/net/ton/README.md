@@ -78,7 +78,7 @@ By running again
 ```
 fift -s w3.fif 
 ```
-It will generate the binary file `w3.cell with the smart contract ready for the TVM.
+It will generate the binary file `w3.cell` with the smart contract ready for the TVM.
 
 
 # 4.4 `validator-node`
