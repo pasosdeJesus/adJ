@@ -7,9 +7,13 @@ It will be easier if you install a precompiled version:
 
 # 2. BUILD
 
-To compile the package from this port on an adJ/OpenBSD that already has `/usr/ports` infrastructure (see <https://www.openbsd.org/faq/ports/ports.html>), copy the content of this directory to `/usr/ports/mystuff/net/ton` and run from it
+To compile the package from this port on an adJ/OpenBSD that already has `/usr/ports` infrastructure (see <https://www.openbsd.org/faq/ports/ports.html>), copy the content of this directory to `/usr/ports/mystuff/net/ton-toncli` and run from it
 ```
 make
+```
+if you want to install the package you built:
+```
+make install
 ```
 
 # 3. USAGE
