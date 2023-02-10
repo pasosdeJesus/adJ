@@ -11,7 +11,7 @@ It is easier if you install a precompiled version:
 * adJ 7.2 
   ```
    PKG_PATH=http://adj.pasosdejesus.org/pub/AprendiendoDeJesus/7.2-extra/ doas \
-     pkg_add -r -D unsigned -D installed ton ton-toncli
+     pkg_add -r -D unsigned -D installed ton
   ```
 
 # 2. COMPILE
@@ -57,7 +57,7 @@ See more commands with `help` and exit with `quit`.
 
 # 4.2 `func`
 
-Try it to compile the smart contract of a standard wallet with
+Try it by compiling the smart contract of a standard wallet with
 
 ```
 func -o w3.fif -SPA /usr/local/share/ton/smartcont/stdlib.fc /usr/local/share/ton/smartcont/wallet3-code.fc
@@ -66,7 +66,7 @@ This will generate the file `w3.fif` in fift assembler.
 
 # 4.3 `fift`
 
-Before running fift be sure to run:
+Before running `fift` be sure to run:
 ```
 export FIFTPATH=/usr/local/lib/fift/:/usr/local/share/ton/smartcont/
 ```
