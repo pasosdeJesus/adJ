@@ -2,11 +2,17 @@ Port for adJ/OpenBSD of the tools for the Blockchain TON - The Open Network (<ht
 
 # 1. INSTALL
 
-It could be easier if you install a precompiled version:
-* adJ 7.1 <http://adj.pasosdejesus.org/pub/AprendiendoDeJesus/7.1p1-amd64/paquetes/ton-20220802.tgz>
-* adJ 7.2 <http://adj.pasosdejesus.org/pub/AprendiendoDeJesus/7.2-amd64/paquetes/ton-20230109.tgz>
-
-However the compilation was done on an x86_64, and [we noticed](https://github.com/pasosdeJesus/adJ/issues/11) that the resulting binary is very optimized for the instruction set of the machine where it was compiled.  If you happen to use and amd64 or maybe the instruction set of your processor doesn't match the one of the processor used to create those packages, when you run `func` of `fift` you will get an `Illegal Instruction` and you will need to compile from source.
+It is easier if you install a precompiled version:
+* adJ 7.1:
+  ```
+  PKG_PATH=http//adj.pasosdejesus.org/pub/AprendiendoDeJesus/7.1p1-amd64/paquetes/ doas \
+    pkg_add ton-20220802.tgz
+  ```
+* adJ 7.2 
+  ```
+   PKG_PATH=http://adj.pasosdejesus.org/pub/AprendiendoDeJesus/7.2-extra/ doas \
+     pkg_add -r -D unsigned -D installed ton ton-toncli
+  ```
 
 # 2. COMPILE
 
@@ -14,7 +20,7 @@ To compile the package from this port on an adJ/OpenBSD that already has `/usr/p
 ```
 make
 ```
-if you want to install the package you built:
+and to install your compiled package:
 ```
 make install
 ```
