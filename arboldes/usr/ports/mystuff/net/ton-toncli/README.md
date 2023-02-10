@@ -2,18 +2,20 @@ Port of TON tools to be used with toncli (<[https://github.com/ton-blockchain/to
 
 # 1. INSTALL
 
-It will be easier if you install a precompiled version:
-* adJ 7.2 <http://adj.pasosdejesus.org/pub/AprendiendoDeJesus/7.2-amd64/paquetes/ton-toncli-20230112.tgz>
-
-However the compilation was done on an x86_64, and [we noticed](https://github.com/pasosdeJesus/adJ/issues/11) that the resulting binary is very optimized for the instruction set of the machine where it was compiled.  If you happen to use an amd64 or maybe the instruction set of your processor doesn't match the one of the processor used to create those packages,  when you run `func` of `fift` you will get an `Illegal Instruction` and you will need to compile from source.
-
+It is easier if you install a precompiled version:
+* adJ 7.2 
+  ```
+   PKG_PATH=http://adj.pasosdejesus.org/pub/AprendiendoDeJesus/7.2-extra/ doas \
+     pkg_add -r -D unsigned -D installed ton-toncli
+  ```
+  
 # 2. COMPILE
 
 To compile the package from this port on an adJ/OpenBSD that already has `/usr/ports` infrastructure (see <https://www.openbsd.org/faq/ports/ports.html>), copy the content of this directory to `/usr/ports/mystuff/net/ton-toncli` and run from it
 ```
 make
 ```
-if you want to install the package you built:
+to install the package you built:
 ```
 make install
 ```
