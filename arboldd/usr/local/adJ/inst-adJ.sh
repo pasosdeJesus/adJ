@@ -2456,17 +2456,23 @@ activarcs postgresql
 grep "kern.seminfo.semmns" /etc/sysctl.conf > /dev/null 2> /dev/null
 if (test "$?" != "0") then {
 	cat >> /etc/sysctl.conf <<EOF
-kern.shminfo.shmmni=1024
+kern.seminfo.semmni=1024
 kern.seminfo.semmns=2048
-kern.shminfo.shmmax=50331648
-kern.shminfo.shmall=51200
 kern.maxfiles=20000
+
+kern.shminfo.shmmax=150000000
+kern.shminfo.shmall=591200
+kern.shminfo.shmmni=8192
+kern.shminfo.shmseg=256
 EOF
-	sysctl -w kern.shminfo.shmmni=1024> /dev/null
-	sysctl -w kern.seminfo.semmns=2048 >/dev/null
-	sysctl -w kern.shminfo.shmmax=50331648 > /dev/null
-	sysctl -w kern.shminfo.shmall=51200 > /dev/null
+	sysctl -w kern.seminfo.semmni=1024 > /dev/null
+	sysctl -w kern.seminfo.semmns=2048 > /dev/null
 	sysctl -w kern.maxfiles=20000 > /dev/null
+	sysctl -w  > /dev/null
+	sysctl -w kern.shminfo.shmmax=150000000 > /dev/null
+	sysctl -w kern.shminfo.shmall=591200 > /dev/null
+	sysctl -w kern.shminfo.shmmni=8192 > /dev/null
+	sysctl -w kern.shminfo.shmseg=256 > /dev/null
 } fi;
 
 #staff:\
