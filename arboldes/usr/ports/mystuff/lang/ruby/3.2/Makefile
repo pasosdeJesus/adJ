@@ -1,4 +1,7 @@
-VERSION =		3.2.0
+# Based on Jeremy Evans version
+# But allowing doas gem update --system
+
+VERSION =		3.2.1
 DISTNAME =		ruby-${VERSION}
 SHARED_LIBS =		ruby32	0.0
 NEXTVER =		3.3
@@ -31,6 +34,9 @@ COMPILER =      base-clang ports-gcc
 # Fix path for JIT compiler to not use shims in ports obj bin dir
 CONFIGURE_ENV +=	ac_cv_path_MJIT_CC=`which ${CC}`
 
+TEST_ENV =    RUBYGEMS_SYSTEM_UPDATE_MESSAGE=enable
+EST_TARGET =    check TESTOPTS="-v -q"
+
 GEM_EXTENSIONS_DIR = lib/ruby/gems/${REV}/extensions/${MACHINE_ARCH:S/i386/x86/:S/amd64/x86_64/}-openbsd
 SUBST_VARS += GEM_EXTENSIONS_DIR
 
@@ -47,8 +53,5 @@ pre-install:
 
 post-install:
 	${FIX_RBCONFIG}
-
-do-test:
-	cd ${WRKSRC} && make check
 
 .include <bsd.port.mk>
