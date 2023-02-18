@@ -3,7 +3,7 @@
 # Dominio público. 2022. vtamara@pasosdeJesus.org
 
 V=7.2
-VESP=""
+VESP="p1"
 # Versión que se está desarrollando
 
 VPKGPATH=snapshots
