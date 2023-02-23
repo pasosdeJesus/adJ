@@ -39,8 +39,12 @@ ARGV.each do |bit|
   end 
 end
 
+ol = ipusuario.map{|l,v| [l, v.length]}.sort {|x,y| y[1] <=> x[1]}
+
 puts "IPs y usuarios inexistentes o con clave errada"
-ipusuario.each do |i, lu|
+ol.each do |sig|
+  i = sig[0]
+  lu = ipusuario[i]
   puts "#{i} (#{lu.length})"
   linea = "  "
   lo = lu.sort
