@@ -2,11 +2,11 @@
 Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
 
-### Versión: 7.2
+### Versión: 7.3
 Fecha de publicación: 17/Ene/2022
 
 Puede ver novedades respecto a OpenBSD en:
-  <https://github.com/pasosdeJesus/adJ/blob/ADJ_7_2/Novedades_OpenBSD.md>
+  <https://github.com/pasosdeJesus/adJ/blob/ADJ_7_3/Novedades_OpenBSD.md>
 
 ## 1. DESCARGAS
 
@@ -14,24 +14,24 @@ Puede ver las diversas versiones publicadas en
   <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/> donde entre otras
   encontrará:
 
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/AprendiendoDeJesus-7.2-amd64.iso> 
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/AprendiendoDeJesus-7.3-amd64.iso> 
   es imagen en formato ISO para quemar en DVD e instalar por primera vez
   en modo BIOS Legacy.
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/7.2-amd64/>
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/7.3-amd64/>
   es directorio con el contenido del DVD instalador apropiado para descargar 
   con rsync desde un adJ o un OpenBSD ya instalado para actualizarlo (ver  
-  <https://github.com/pasosdeJesus/adJ/blob/ADJ_7_2/Actualiza.md> )
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/7.2-extra/> 
+  <https://github.com/pasosdeJesus/adJ/blob/ADJ_7_3/Actualiza.md> )
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/7.3-extra/> 
   es directorio con versiones recientes de paquetes no incluidos en 
   distribución oficial (pueden no estar firmados y requerir instalación con 
   `pkg_add -D unsigned _paquete_`).
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-7.2-amd64.usb> 
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-7.3-amd64.usb> 
   es imagen para escribir en una memoria USB y arrancar con esta bien en
   modo UEFI o bien en modo BIOS Legacy. Una vez 
   la descargue puede escribirla en una USB ubicada en `/dev/sd2c` 
   (verifique dispositivo con `dmesg` y remplace) con:
 
-       doas dd if=AprendiendoDeJesus-7.2-amd64.usb of=/dev/sd2c bs=1M
+       doas dd if=AprendiendoDeJesus-7.3-amd64.usb of=/dev/sd2c bs=1M
 
  Este proceso puede ser demorado, puede ver el progreso con 
 
@@ -39,10 +39,10 @@ Puede ver las diversas versiones publicadas en
 
  O si desea probarla con qemu para instalar en un disco `virtual.raw`:
 
-       qemu-system-x86_64 -hda virtual.raw -hdb AprendiendoDeJesus-7.2-amd64.usb -boot menu=on
+       qemu-system-x86_64 -hda virtual.raw -hdb AprendiendoDeJesus-7.3-amd64.usb -boot menu=on
 
 
-## 2. NOVEDADES RESPECTO A ADJ 7.2 PROVENIENTES DE OPENBSD
+## 2. NOVEDADES RESPECTO A ADJ 7.3 PROVENIENTES DE OPENBSD
 
 ### 2.1 Kernel y Sistema Base
 
@@ -77,7 +77,7 @@ Novedades tomadas de <https://www.openbsd.org/71.html>
 ### 2.2 Paquetes 
 
 * Para cerrar fallas se usan las versiones más recientes preparadas
-  por OpenBSD 7.2 de: `curl`, `firefox-esr`, `openssl`, `php`, `postgis`,
+  por OpenBSD 7.3 de: `curl`, `firefox-esr`, `openssl`, `php`, `postgis`,
   `postgresql`, `samba`, `webkitgtk4`,
 * Para aprovechar el xlocale extendido de adJ se han recompilado
   `vlc`, `glib2` y `libunistring`.
@@ -92,7 +92,7 @@ Novedades tomadas de <https://www.openbsd.org/71.html>
   `python 3.9.15p0`, `neovim 0.7.2`, `zsh 5.9`
 
 
-## 3. NOVEDADES RESPECTO A ADJ 7.2 PROVENIENTES DE PASOS DE JESÚS
+## 3. NOVEDADES RESPECTO A ADJ 7.3 PROVENIENTES DE PASOS DE JESÚS
 
 ### 3.1 Instalador y documentación
 
@@ -142,7 +142,7 @@ Novedades tomadas de <https://www.openbsd.org/71.html>
 * Es sencillo emplear como interprete de ordenes `zsh` con `tmux` para
   tener varias terminales y `neovim` como editor con archivos de 
   configuración incluidos en adJ e instrucciones en:  
-  <https://github.com/pasosdeJesus/adJ/blob/ADJ_7_2/arboldd/usr/local/share/adJ/archconf/README.md>
+  <https://github.com/pasosdeJesus/adJ/blob/ADJ_7_3/arboldd/usr/local/share/adJ/archconf/README.md>
 
 ## 4. FE DE ERRATAS
 

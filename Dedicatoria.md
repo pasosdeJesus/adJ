@@ -1,7 +1,6 @@
-Habiendo reunido a sus doce discípulos, les dio poder y autoridad sobre todos
-los demonios, y para sanar enfermedades. Y los envió a predicar el reino de
-Dios y a sanar a los enfermos.
+[Jesús] les dijo: ¿Y vosotros, quién decís que soy? Entonces respondiendo 
+Pedro, dijo: El Cristo de Dios.
 
-Lucas 9:1-2
+Lucas 9:20
 
 
