@@ -31,7 +31,7 @@ diff -ruN -x *~ -x *orig -x obj* src56-orig/usr.bin/localedef/Makefile src/usr.b
 +
 +lexer.o: parser.h
 +
-+CLEANFILES+=parser.c parser.h lexer.o
++CLEANFILES+=parser.c parser.h lexer.o y.output
 +
 +.include <bsd.prog.mk>
 +

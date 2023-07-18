@@ -2591,10 +2591,11 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src56xlocale1/lib/libc/locale/run
 diff -ruN src59-orig/lib/libc/hidden/ctype.h src/lib/libc/hidden/ctype.h
 --- src59-orig/lib/libc/hidden/ctype.h	Thu Jun  9 23:21:42 2016
 +++ src/lib/libc/hidden/ctype.h	Sat Aug 20 22:41:28 2016
-@@ -58,6 +58,15 @@
+@@ -58,6 +58,16 @@
  __only_inline int	toupper_l(int _c, locale_t _l);
  __only_inline int	isblank_l(int _c, locale_t _l);
  
++__only_inline int	ishexnumber_l(int _c, locale_t _l);
 +__only_inline int	isideogram_l(int _c, locale_t _l);
 +__only_inline int	isnumber_l(int _c, locale_t _l);
 +__only_inline int	isphonogram_l(int _c, locale_t _l);
@@ -2607,7 +2608,7 @@ diff -ruN src59-orig/lib/libc/hidden/ctype.h src/lib/libc/hidden/ctype.h
  PROTO_NORMAL(isalnum);
  PROTO_DEPRECATED(isalnum_l);
  PROTO_NORMAL(isalpha);
-@@ -68,7 +77,7 @@
+@@ -68,7 +78,7 @@
  PROTO_NORMAL(iscntrl);
  PROTO_DEPRECATED(iscntrl_l);
  PROTO_NORMAL(isdigit);
@@ -2616,7 +2617,7 @@ diff -ruN src59-orig/lib/libc/hidden/ctype.h src/lib/libc/hidden/ctype.h
  PROTO_NORMAL(isgraph);
  PROTO_DEPRECATED(isgraph_l);
  PROTO_NORMAL(islower);
-@@ -78,18 +87,24 @@
+@@ -78,18 +88,25 @@
  PROTO_NORMAL(ispunct);
  PROTO_DEPRECATED(ispunct_l);
  PROTO_NORMAL(isspace);
@@ -2634,6 +2635,7 @@ diff -ruN src59-orig/lib/libc/hidden/ctype.h src/lib/libc/hidden/ctype.h
  PROTO_DEPRECATED(toupper_l);
  PROTO_STD_DEPRECATED(_tolower);
  PROTO_STD_DEPRECATED(_toupper);
++PROTO_NORMAL(ishexnumber_l);
 +PROTO_NORMAL(isideogram_l);
 +PROTO_NORMAL(isnumber_l);
 +PROTO_NORMAL(isphonogram_l);
@@ -3001,7 +3003,7 @@ diff -ruN src62-orig/include/ctype.h src/include/ctype.h
 diff -ruN src62-orig/lib/libc/locale/isctype_l.c src/lib/libc/locale/isctype_l.c
 --- src62-orig/lib/libc/locale/isctype_l.c	Fri Nov 24 14:24:59 2017
 +++ src/lib/libc/locale/isctype_l.c	Fri Nov 24 15:47:17 2017
-@@ -22,101 +22,172 @@
+@@ -22,101 +22,173 @@
  
  #define	_ANSI_LIBRARY
  #include <ctype.h>
@@ -3185,6 +3187,7 @@ diff -ruN src62-orig/lib/libc/locale/isctype_l.c src/lib/libc/locale/isctype_l.c
 +{ 
 +	return __sbistype_l(__c, _CTYPE_X, __l); 
 +}
++DEF_STRONG(ishexnumber_l);
 +
 +#undef isideogram_l
 +__inline int isideogram_l(int __c, locale_t __l) 
