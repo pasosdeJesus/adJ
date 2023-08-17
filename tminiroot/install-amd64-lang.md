@@ -1,4 +1,4 @@
-#     $OpenBSD: install.md,v 1.56 2021/09/26 12:39:25 krw Exp $
+#     $OpenBSD: install.md,v 1.59 2023/03/07 17:29:42 kn Exp $
 #
 #
 # Copyright (c) 1996 The NetBSD Foundation, Inc.
@@ -33,6 +33,7 @@
 #
 
 MDKERNEL=APRENDIENDODEJESUS
+MDBOOTSR=y
 MDXAPERTURE=2
 MDXDM=y
 NCPU=$(sysctl -n hw.ncpufound)
@@ -83,7 +84,7 @@ md_prep_fdisk() {
 			fi
 
 			echo -n "$_slsettingopenbsdgpt $_disk..."
-			fdisk -gy -b 960 $_disk >/dev/null
+			fdisk -gy -b 532480 $_disk >/dev/null
 			echo "$_sldone."
 			return ;;
 		[eE]*)

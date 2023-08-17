@@ -164,14 +164,14 @@ configure subparticiones para /, /tmp, /var, /usr y /home.";
 _sldisk="disco";
 _slavailabledisks="Los discos disponibles son"
 _slwhichroot="¿Cuál es el disco raíz? ('?' muestra detalles)"
-_slnosuchdisk="no hay tal disco"
+_slnosuchdisk="No hay tal disco"
 _slDisks="Discos";
 _slnomoredisks="No hay mas discos por inicializar"
 _slerrornoroot="ERROR: No hay partición raíz"
 _sluse="usar"
 _slusec="Usar"
 _slrootpassword="Debe establecer una contraseña para root."
-_slsecurityprotocol="¿Protocolo de Seguridad? (A)bierto, (W)EP, W(P)A"
+_slsecurityprotocol="¿Protocolo de Seguridad? Abiert(O)"
 _slaccesspoint="¿Punto de Acceso Inalámbrico? (ESSID, 'cualquiera', #lista o '?'
 )"
 _slany="cualquiera"
@@ -397,14 +397,14 @@ _slanefigpt="Un disco EFI/GPT podría no arrancar. ¿Proceder?"
 _slsettingopenbsdgpt="Estableceendo la partición OpenBSD GPT para el disco completo"
 _slyouwillnowreatetwogpt="Ahora creara dos particiones GPT. La primera debe tener una identificación
 'EF' y ser suficientemente grande para los programas de arranque de OpenBSD,
-al menos 960 bloques. La segunda debe tener identificación 'A6' y
+al menos 532480 bloques. La segunda debe tener identificación 'A6' y
 contendra sus datos de OpenBSD. Una partición no puede traslaparse con la otra.
 Dentro de la orden fdisk , la orden 'manual' describe las ordenes
 de fdisk en detalle."
 _slnoopenbsdpartitioningpt="No hay partición OpenBSD en GPT,"
 _slnoefisyspartitioningpt="No hay partición EFI Sys en GPT,"
 _slnoopenbsdpartitioninmbr="No hay partición OpenBSD en el RMA (MBR),"
-_sltryagain="intente nuevamente." 
+_sltryagain=" intente nuevamente." 
 _slnoefitryagain="No hay partición EFI Sys en GPT, intente nuevament."
 _slnovalidmbrorgpt="No hay un RAM o un GPT valido."
 _slpepdit="(E)ditar"
@@ -432,3 +432,8 @@ _slextracting="Extrayendo"
 _slnodhcpaddress="Sin dirección dhcp en la interfaz \$_if en 30 segundos."
 _slwhichrootcorto="Cuál es el disco raíz"
 _sldhcpleases="Prestamos DHCP no disponibles durante la instalación."
+_slavailablenetworkif="Las interfaces de red disponibles son:"
+_slnetworkiftoconfigure="Interfaz de red por configurar?"
+_slencryptroot="Cifrar el disco raíz? (disco, 'no' o '?' para ver detalles)"
+_slcreatepassphrase="Crear un volumen cifrado/CRYPTO softrad con una contraseña que sea el disco raíz."
+_slnosuchdisk="No hay tal disco"

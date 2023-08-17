@@ -1,4 +1,4 @@
-#     $OpenBSD: install.md,v 1.56 2021/09/26 12:39:25 krw Exp $
+#     $OpenBSD: install.md,v 1.59 2023/03/07 17:29:42 kn Exp $
 #
 #
 # Copyright (c) 1996 The NetBSD Foundation, Inc.
@@ -33,6 +33,7 @@
 #
 
 MDKERNEL=APRENDIENDODEJESUS
+MDBOOTSR=y
 MDXAPERTURE=2
 MDXDM=y
 NCPU=$(sysctl -n hw.ncpufound)
@@ -83,7 +84,7 @@ md_prep_fdisk() {
 			fi
 
 			echo -n "Estableceendo la particion OpenBSD GPT para el disco completo $_disk..."
-			fdisk -gy -b 960 $_disk >/dev/null
+			fdisk -gy -b 532480 $_disk >/dev/null
 			echo "listo."
 			return ;;
 		[eE]*)
@@ -93,7 +94,7 @@ md_prep_fdisk() {
 
 Ahora creara dos particiones GPT. La primera debe tener una identificacion
 'EF' y ser suficientemente grande para los programas de arranque de OpenBSD,
-al menos 960 bloques. La segunda debe tener identificacion 'A6' y
+al menos 532480 bloques. La segunda debe tener identificacion 'A6' y
 contendra sus datos de OpenBSD. Una particion no puede traslaparse con la otra.
 Dentro de la orden fdisk , la orden 'manual' describe las ordenes
 de fdisk en detalle.
@@ -125,7 +126,7 @@ __EOT
 				disk_has $_disk mbr openbsd && return
 				echo -n "No hay particion OpenBSD en el RMA (MBR),"
 			fi
-			echo "intente nuevamente." ;;
+			echo " intente nuevamente." ;;
 		[oO]*)
 			[[ $_d == OpenBSD ]] || continue
 			if [[ $_disk == $ROOTDISK ]] && disk_has $_disk gpt &&
