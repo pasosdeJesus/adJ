@@ -9,21 +9,25 @@ servicio_timeout=300
 
 rc_usercheck=NO
 
+# rc_exec is used because
+# pg_ctl: cannot be run as root
+# Please log in (using, e.g., "su") as the (unprivileged) user that will own the server process.
+
 rc_check() {
-	${rcexec} "${servicio} status ${servicio_flags}"
+	rc_exec "${servicio} status ${servicio_flags}"
 }
 
 rc_reload() {
-	${rcexec} "${servicio} reload ${servicio_flags}"
+	rc_exec "${servicio} reload ${servicio_flags}"
 }
 
 rc_start() {
-	${rcexec} "${servicio} start ${servicio_flags}"
+	rc_exec "${servicio} start ${servicio_flags}"
 }
 
 rc_stop() {
-	${rcexec} "${servicio} stop ${servicio_flags} -m fast" || \
-		${rcexec} "${servicio} stop ${servicio_flags} -m immediate"
+	rc_exec "${servicio} stop ${servicio_flags} -m fast" || \
+		rc_exec "${servicio} stop ${servicio_flags} -m immediate"
 }
 
 rc_cmd $1
