@@ -12,10 +12,10 @@ CATEGORIES=    	books
 MAINTAINER=	Vladimir Támara Patiño <vtamara@pasosdeJesus.org>
 
 HOMEPAGE=	http://traduccion.pasosdeJesus.org
-MASTER_SITES=	https://github.com/pasosdeJesus/biblia_dp/archive/
+MASTER_SITES=	https://gitlab.com/pasosdeJesus/biblia_dp/-/archive/v$V/
 DISTFILES=	v${V}.zip
 
-WRKDIST=        ${WRKDIR}/biblia_dp-${V}
+WRKDIST=        ${WRKDIR}/biblia_dp-v${V}-${DIRCOM}
 
 #Public domain
 PERMIT_PACKAGE=	Yes
