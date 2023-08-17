@@ -1,9 +1,9 @@
 Index: base/allocator/partition_allocator/partition_address_space.cc
 --- base/allocator/partition_allocator/partition_address_space.cc.orig
 +++ base/allocator/partition_allocator/partition_address_space.cc
-@@ -233,7 +233,7 @@ void PartitionAddressSpace::UninitConfigurablePoolForT
-   setup_.configurable_pool_ = 0;
+@@ -416,7 +416,7 @@ void PartitionAddressSpace::UninitPkeyPoolForTesting()
  }
+ #endif
  
 -#if BUILDFLAG(IS_LINUX) && defined(ARCH_CPU_ARM64)
 +#if (BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_BSD)) && defined(ARCH_CPU_ARM64)

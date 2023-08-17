@@ -1,7 +1,7 @@
 Index: gpu/vulkan/vulkan_device_queue.cc
 --- gpu/vulkan/vulkan_device_queue.cc.orig
 +++ gpu/vulkan/vulkan_device_queue.cc
-@@ -85,7 +85,7 @@ bool VulkanDeviceQueue::Initialize(
+@@ -89,7 +89,7 @@ bool VulkanDeviceQueue::Initialize(
  
        // In dual-CPU cases, we cannot detect the active GPU correctly on Linux,
        // so don't select GPU device based on the |gpu_info|.

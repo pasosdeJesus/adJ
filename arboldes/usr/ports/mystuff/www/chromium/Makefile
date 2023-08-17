@@ -6,13 +6,14 @@ DPB_PROPERTIES=		parallel parallel2
 
 COMMENT=		Chromium browser
 
-V=			105.0.5195.125
+V=			111.0.5563.110
 
 DISTNAME=		chromium-${V}
 
 DISTFILES+=		${CHROMIUM_DISTFILES} \
 			${PROFILE_DISTFILES}:0 \
-			${REGRESS_DISTFILES}
+			${REGRESS_DISTFILES} \
+			libudev-openbsd-20221108-c3330efd.tar.gz:0
 
 CHROMIUM_DISTFILES+=	chromium-${V}${EXTRACT_SUFX}
 PROFILE_DISTFILES+=	chrome-linux-${V}-llvm13.profdata${EXTRACT_SUFX}
@@ -40,12 +41,12 @@ PERMIT_PACKAGE =	Yes
 MASTER_SITES=	https://commondatastorage.googleapis.com/chromium-browser-official/
 MASTER_SITES0=	http://nerd.hu/distfiles/
 
-MODULES=	lang/python
+MODULES=	lang/python x11/qt5
+MODQT5_DEPS=	No
 
 COMPILER =	base-clang ports-clang ports-gcc
 
 MODPY_RUNDEP=		No
-MODPY_SETUPTOOLS=	Yes
 
 PATCHORIG=	.orig.port
 
@@ -57,7 +58,7 @@ WANTLIB+=	fontconfig freetype fribidi gbm gio-2.0 glib-2.0 gmodule-2.0
 WANTLIB+=	gobject-2.0 graphite2 gthread-2.0 harfbuzz harfbuzz-gobject
 WANTLIB+=	harfbuzz-subset iconv icudata icui18n icuuc intl jpeg kvm lzo2 m
 WANTLIB+=	nspr4 nss3 nssutil3 openh264 pango-1.0 pangocairo-1.0
-WANTLIB+=	pangoft2-1.0 pcre pixman-1 plc4 plds4 png pthread pthread smime3
+WANTLIB+=	pangoft2-1.0 pcre2-8 pixman-1 plc4 plds4 png pthread pthread smime3
 WANTLIB+=	snappy sndio usbhid util xcb xcb-render xcb-shm xkbcommon xml2
 WANTLIB+=	xshmfence xslt z
 
@@ -77,6 +78,7 @@ BUILD_DEPENDS=	archivers/bzip2 \
 		sysutils/pciutils \
 		devel/ninja \
 		x11/py-xcbgen${MODPY_FLAVOR} \
+		x11/qt5/qtbase,-main \
 		${MODGCC4_CPPDEP} \
 		${RUN_DEPENDS}
 LIB_DEPENDS=	archivers/snappy \
@@ -86,10 +88,12 @@ LIB_DEPENDS=	archivers/snappy \
 		security/nss \
 		textproc/icu4c \
 		textproc/libxslt \
-		x11/gnome/at-spi2-atk \
+		x11/gnome/at-spi2-core \
 		x11/xkbcommon \
 		print/cups,-libs \
 		${MODGCC4_CPPLIBDEP}
+
+BUILD_DEPENDS+=	sysutils/libudev-openbsd:build
 
 .include <bsd.own.mk>
 
@@ -111,10 +115,13 @@ TEST_TARGET=		base_unittests \
 			media_unittests \
 			mojo_unittests \
 			net_unittests \
+			pdf_unittests \
 			printing_unittests \
 			skia_unittests \
 			url_unittests \
 			wm_unittests
+
+TEST_ENV+=	FONTCONFIG_SYSROOT=${WRKSRC}/third_party/test_fonts
 
 DIST_TARGET_DIR=	chrome
 
@@ -156,14 +163,15 @@ GN_ARGS=	enable_nacl=false \
 		use_sysroot=false \
 		treat_warnings_as_errors=false \
 		clang_use_chrome_plugins=false \
-		use_allocator=\"none\" \
 		use_allocator_shim=false \
+		use_partition_alloc=true \
+		use_partition_alloc_as_malloc=false \
+		enable_backup_ref_ptr_support=false \
 		disable_fieldtrial_testing_config=true \
 		extra_cppflags=\"-idirafter ${LOCALBASE}/include -idirafter ${X11BASE}/include\" \
 		fatal_linker_warnings=false \
 		use_custom_libcxx=false \
-		enable_wmax_tokens=false \
-		use_udev=false
+		use_udev=true
 
 # notyet
 GN_ARGS+=	use_vaapi=false
@@ -180,7 +188,7 @@ PKG_ARGS+=	-Dswiftshader=0
 PKG_ARGS+=	-Dswiftshader=1
 .endif
 
-# Note: these keys are for adJ use ONLY. For your own distribution,
+# Note: these keys are for OpenBSD use ONLY. For your own distribution,
 # please get your own set of keys. It's free!
 GN_ARGS+=	google_api_key=\"AIzaSyC_3Uz69YR1Z2DRLUDf5ZxUJBClHuwrjL\" \
 		ffmpeg_branding=\"Chrome\" \
@@ -188,7 +196,7 @@ GN_ARGS+=	google_api_key=\"AIzaSyC_3Uz69YR1Z2DRLUDf5ZxUJBClHuwrjL\" \
 
 # These are now restricted to use by Google, so bye-bye sync.
 #GN_ARGS+=	google_default_client_id=\"451220141585.apps.googleusercontent.com\"
-#GN_ARGS+=	google_default_client_secret=\"nQcDyaBvDyCeDrsRqKIWSHJn\" \
+#GN_ARGS+=	google_default_client_secret=\"nQcDyaBvDyCeDrsRqKIWSHJn\"
 
 # XXX dwz doesn't work with chromium yet
 DWZ = :
@@ -218,6 +226,7 @@ GN_ARGS+=	use_thin_lto=false \
 
 pre-configure:
 	@ln -sf ${MODPY_BIN} ${WRKDIR}/bin/python
+	@ln -sf ${MODQT5_MOC} ${WRKDIR}/bin/moc
 .for _arch in x64 ia32 arm64
 .  for _dir in avcodec avformat avutil
 	@cp -pR ${WRKSRC}/third_party/ffmpeg/chromium/config/Chrome/linux/${_arch}/lib${_dir} \
@@ -235,6 +244,8 @@ pre-configure:
 # 2. bootstrap gn, the tool to generate ninja files
 # 3. run gn with the appropriate configuration arguments
 do-configure:
+	# Regenerate build and perlasm files (force json to not overwrite our local gn patches)
+	@cd ${WRKSRC}/third_party/boringssl && ${MODPY_BIN} src/util/generate_build_files.py json
 	@cd ${WRKSRC} && env -i ${MAKE_ENV} build/linux/unbundle/replace_gn_files.py \
 		--system-libraries ${GN_SYSTEM_LIBS}
 	@cd ${WRKSRC}/tools/gn && env -i ${MAKE_ENV} LDFLAGS=-L${LOCALBASE}/lib ${MODPY_BIN} bootstrap/bootstrap.py \
@@ -300,6 +311,8 @@ do-install:
     unveil.utility_network unveil.utility_video
 	${INSTALL_DATA} ${FILESDIR}/${f} ${PREFIX}/share/examples/chromium
 .endfor
+	${INSTALL_DATA} ${WRKDIR}/sysutils/libudev-openbsd/build-${MACHINE_ARCH}/libudev.so.0.0 \
+		${PREFIX}/${DIST_TARGET_DIR}/libudev.so.0
 
 pre-test:
 .for _d in ${REGRESS_DISTFILES:C/:[0-9]$//}
