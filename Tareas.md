@@ -1,3 +1,14 @@
+7.3
+
+ruby
+php
+cups-filters
+curl
+samba
+firefox-esr
+mozilla-firefox
+
+
 
 * Entre OpenBSD 6.4 y 6.6 quitaron funcionalidad de cotejacion dependiente del locale de sort.  Volverla a habilitar.
 

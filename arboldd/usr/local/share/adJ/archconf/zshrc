@@ -7,9 +7,9 @@ export LANG=es_CO.UTF-8
 PATH=$HOME/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:/usr/games:/usr/local/jdk-1.8.0/bin:.
 
 export PATH HOME TERM
-export PKG_PATH=http://ftp5.usa.openbsd.org/pub/OpenBSD/7.2/packages/amd64/
+export PKG_PATH=http://ftp5.usa.openbsd.org/pub/OpenBSD/7.3/packages/amd64/
 export PKG_PATH=http://adJ.pasosdeJesus.org/pub/OpenBSD/snapshots/packages/amd64/
-export PKG_PATH=http://adJ.pasosdeJesus.org/pub/OpenBSD/7.2/packages/amd64/
+export PKG_PATH=http://adJ.pasosdeJesus.org/pub/OpenBSD/7.3/packages/amd64/
 if (test "$TERM" = "xterm") then {
   export TERM=xterm-color
 } fi;
