@@ -826,14 +826,24 @@ if (test "$sn" = "s") then {
   # Modificados para posibilitar compilación
   # Deben estar en mystuff
 
+
   # Todo lo de perl tuvo que recompilarse
   # evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
   # Si por ejemplo es:
   #Name.c: loadable library and perl binaries are mismatched (got handshake key 0xb700000, needed 0xbb00000)
   # Buscar módulo de Perl con pkg_locate Name.so, recompilarlo e instalarlo 
+  paquete p5-XML-LibXML
+  paquete p5-Module-Build-Tiny
+  paquete p5-Module-Build
+  paquete p5-Test-Fatal
+  paquete p5-Test-Requires
+  paquete p5-ExtUtils-Helpers
+  paquete p5-Net-LibIDN2
+  paquete p5-Digest-HMAC
   paquete p5-NetAddr-IP
   paquete p5-Params-Validate
   paquete p5-Params-Util
+  paquete p5-DBD-SQLite
   paquete p5-Package-Stash-XS
   paquete p5-Class-Inspector
   paquete p5-Class-Load-XS
@@ -841,10 +851,22 @@ if (test "$sn" = "s") then {
   paquete p5-List-MoreUtils-XS
   paquete p5-List-SomeUtils-XS
   paquete p5-Ref-Util-XS
+  paquete p5-YAML-XS
   paquete p5-List-MoreUtils
   paquete p5-Class-XSAccessor
   paquete p5-MooX-Types-MooseLike
   paquete p5-Digest-SHA1
+  paquete p5-Authen-SASL
+  paquete p5-CGI
+  paquete p5-Email-Abstract
+  paquete p5-Email-Date-Format
+  paquete p5-Email-MIME-ContentType
+  paquete p5-Email-MessageID
+  paquete p5-File-Copy-Recursive
+  paquete p5-MIME-Types
+  paquete p5-XML-NamespaceSupport
+  paquete p5-XML-SAX
+  paquete p5-XML-SAX-Base
   paquete p5-Data-OptList
   paquete p5-Devel-GlobalDestruction
   paquete p5-Devel-OverloadInfo
@@ -891,7 +913,6 @@ if (test "$sn" = "s") then {
   paquete p5-Data-Printer
   paquete p5-Data-Validate-IP
   paquete p5-DateTime
-  paquete p5-Digest-HMAC
   paquete p5-Encode-Detect
   paquete p5-Encode-Locale
   paquete p5-Error
@@ -961,7 +982,6 @@ if (test "$sn" = "s") then {
 
   paquete p5-Locale-gettext
   paquete p5-MIME-Charset
-  paquete p5-Module-Build
   paquete textproc/p5-SGMLSpm
   paquete p5-Unicode-LineBreak
 
@@ -1002,6 +1022,10 @@ if (test "$sn" = "s") then {
   # Recompilados para cerrar fallas de portes actualizados (estable)
   # Para que operen bien basta actualizar CVS de /usr/ports 
   # Los siguientes no deben estar en arboldes/usr/ports/mystuff
+
+
+  paquete zstd
+
   #paquete certbot paquetes "certbot py3-acme"
   #paquete cups
   #paquete dovecot
@@ -1037,7 +1061,7 @@ if (test "$sn" = "s") then {
   paquete tiff
   #paquete unrar
   #paquete wavpack
-  paquete webkitgtk41
+  #paquete webkitgtk41
   #paquete zsh
 
   ###  
@@ -1045,7 +1069,7 @@ if (test "$sn" = "s") then {
   # No deben estar en mystuff
   paquete curl
 
-  paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 8.1
+  paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 8.2
 
   ###
   # Recompilados para mejorar dependencias y actualizar
@@ -1175,7 +1199,7 @@ echo $cmd; eval $cmd;
 if (test "$excluye" != "") then {
   cmd="grep -v -f tmp/excluye.txt /tmp/actu2-s > $arcdis";
 } else {
-cmd="cp /tmp/actu2-s $arcdis";
+  cmd="cp /tmp/actu2-s $arcdis";
 } fi;
 echo $cmd; eval $cmd;
 
