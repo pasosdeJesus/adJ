@@ -22,7 +22,7 @@ MODRUBY_HANDLE_FLAVORS ?= No
 # If ruby.pork.mk should handle FLAVORs, define a separate FLAVOR
 # for each ruby interpreter
 .    if !defined(FLAVORS)
-FLAVORS=	ruby27 ruby30 ruby31 ruby32
+FLAVORS=	ruby30 ruby31 ruby32
 .      if !${CONFIGURE_STYLE:L:Mext}
 FLAVORS+=	jruby
 .      endif
@@ -50,12 +50,12 @@ FLAVOR =		ruby31
 
 # Check for conflicting FLAVORs and set MODRUBY_REV appropriately based
 # on the FLAVOR.
-.    for i in ruby27 ruby30 ruby31 ruby32 jruby
+.    for i in ruby30 ruby31 ruby32 jruby
 .      if ${FLAVOR:M$i}
 MODRUBY_REV = ${i:C/ruby([0-9])/\1./}
-.        if ${FLAVOR:N$i:Mruby27} || \
-            ${FLAVOR:N$i:Mruby30} || \
+.        if ${FLAVOR:N$i:Mruby30} || \
             ${FLAVOR:N$i:Mruby31} || \
+            ${FLAVOR:N$i:Mruby32} || \
 	    ${FLAVOR:N$i:Mjruby}
 ERRORS += "Fatal: Conflicting flavors used: ${FLAVOR}"
 .        endif
@@ -202,6 +202,11 @@ EXTRACT_SUFX=	.gem
 
 # Pure ruby gem ports without C extensions are arch-independent.
 .  if ${CONFIGURE_STYLE:L:Mext}
+# Use ports-gcc for ruby32 extensions
+.    if ${FLAVOR:Mruby32}
+COMPILER ?= 	base-clang ports-gcc
+COMPILER_LANGS ?= c
+.    endif
 # Add build complete file to package so rubygems doesn't complain
 # or build extensions at runtime
 GEM_EXTENSIONS_DIR ?= ${GEM_LIB}/extensions/${MODRUBY_ARCH:S/i386/x86/}/${MODRUBY_REV}/${DISTNAME}
