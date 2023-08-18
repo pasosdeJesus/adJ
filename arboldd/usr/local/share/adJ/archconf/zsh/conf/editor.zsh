@@ -1,2 +1,2 @@
-export VISUAL=/usr/local/bin/nvim
+export VISUAL=/usr/local/bin/vim
 export EDITOR=$VISUAL
