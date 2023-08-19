@@ -164,11 +164,15 @@ set complete+=kspell
 " Siempre usar diffs verticales
 set diffopt+=vertical
 
-colorscheme peachpuff
+set encoding&       " terminal charset: follows current locale 
+set fileencoding&   " auto-sensed charset of current buffer
+
+autocmd FileType gbfxml colorscheme zellner
+
+autocmd FileType ruby runtime macros/matchit.vim "https://thoughtbot.com/upcase/videos/navigating-within-ruby-files
+
 
 " Configuración local
 if filereadable($HOME . "/.vimrc.local")
   source ~/.vimrc.local
 endif
-set encoding&       " terminal charset: follows current locale 
-set fileencoding&   " auto-sensed charset of current buffer
