@@ -457,6 +457,7 @@ EOF
   chown build /usr/src/sys/arch/amd64/compile/APRENDIENDODEJESUS/obj/version 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
   chown build /usr/src/sys/arch/amd64/compile/APRENDIENDODEJESUS.MP/obj/version 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
   chown build /usr/src/usr.sbin/fw_update/obj/firmware_patterns 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
+  chown build:wsrc /usr/src/usr.bin/ssh/sshd/obj/sshd* 
   cd /usr/src/etc && RELEASEDIR=/$D_RELEASEDIR DESTDIR=/$D_DESTDIR nice make release 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora;
   echo "* Completo make release"
   cd $D_DESTDIR/etc && $dini/arboldd/usr/local/adJ/servicio-etc.sh 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
@@ -826,7 +827,6 @@ if (test "$sn" = "s") then {
   # Modificados para posibilitar compilación
   # Deben estar en mystuff
 
-  paquete curl
 
   # Todo lo de perl tuvo que recompilarse
   # evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
@@ -990,7 +990,7 @@ if (test "$sn" = "s") then {
 
   ### Requieren recompilación por cambio en FILE
   paquete unzip  # De no hacerse envía descompresiones a salida estándar
-  paquete python paquetes "python" "3.9"
+  paquete python paquetes "python" "3.10"
   paquete ruby paquetes "ruby ruby32-ri_docs" 3.2
   paquete gettext-tools paquetes 'gettext-tools gettext-runtime'  # Requerido para compilar muchos
   paquete m4 # Requerido para compilar bison (instalar antes de compilar bison)

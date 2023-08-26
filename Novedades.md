@@ -14,10 +14,10 @@ Puede ver las diversas versiones publicadas en
   <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/> donde entre otras
   encontrará:
 
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/AprendiendoDeJesus-7.3-amd64.iso> 
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/AprendiendoDeJesus-7.3b1-amd64.iso> 
   es imagen en formato ISO para quemar en DVD e instalar por primera vez
   en modo BIOS Legacy.
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/7.3-amd64/>
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/7.3b1-amd64/>
   es directorio con el contenido del DVD instalador apropiado para descargar 
   con rsync desde un adJ o un OpenBSD ya instalado para actualizarlo (ver  
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_7_3/Actualiza.md> )

@@ -9,3 +9,17 @@ diff -ruN src65-orig/gnu/llvm/clang/lib/Basic/Targets/OSTargets.h src/gnu/llvm/c
      DefineStd(Builder, "unix", Opts);
      Builder.defineMacro("__ELF__");
      if (Opts.POSIXThreads)
+--- src73-orig/gnu/llvm/libcxx/include/__config_site.in.orig	Mon Aug 21 08:35:01 2023
++++ src/gnu/llvm/libcxx/include/__config_site.in	Mon Aug 21 08:36:24 2023
+@@ -9,6 +9,11 @@
+ #ifndef _LIBCPP_CONFIG_SITE
+ #define _LIBCPP_CONFIG_SITE
+ 
++
++// Este facilita bootstrap para que clang de OpenBSD pueda compilar clang
++// de adJ y quedar internamente con el símbolo __adJ__
++#define __adJ__
++
+ #cmakedefine _LIBCPP_ABI_VERSION @_LIBCPP_ABI_VERSION@
+ #cmakedefine _LIBCPP_ABI_UNSTABLE
+ #cmakedefine _LIBCPP_ABI_FORCE_ITANIUM

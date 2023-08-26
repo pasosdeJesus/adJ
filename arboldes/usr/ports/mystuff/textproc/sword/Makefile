@@ -5,7 +5,7 @@ COMMENT=	"Bible study platform with KJV module"
 V=              1.9.0
 DISTNAME=	sword-${V}
 PKGNAME=        sword-${V}
-#REVISION=	1
+REVISION=	1
 # KJV cambia continuamente
 CATEGORIES=    	textproc books
 SHARED_LIBS=	sword 9.0 
