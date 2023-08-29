@@ -116,12 +116,8 @@ Novedades tomadas de <https://www.openbsd.org/73.html>
   comportamiento original de Ruby y sugerimos actualizar gemas del 
   sistema tan pronto y tanto como sea posible con 
   `doas gem update --system`
-* Retro-portamos porte de PostgreSQL 15.4 de OpenBSD-current
-* Hemos retroportado node 18.12.1 (publicado en Nov.2022) de OpenBSD-current 
-  para tener el entorno de desarrollo estable de larga duración más 
   actualizado y sin fallas de seguridad conocidas hasta el momento. Ver
   <https://github.com/nodejs/release#release-schedule>
-* Eliminamos python 2 y paquetes para este.
 * Chromium recompilado con llave de Pasos de Jesús.  Ya permite autenticar
   y usar sitios como <https://drive.google.com>  --si tiene problemas para
   autenticarse intente desde un nuevo perfil (obligatorio por ejemplo si 
@@ -136,7 +132,7 @@ Novedades tomadas de <https://www.openbsd.org/73.html>
 ### 3.3 Configuración
 
 * Es sencillo emplear como interprete de ordenes `zsh` con `tmux` para
-  tener varias terminales y `neovim` como editor con archivos de 
+  tener varias terminales y `vim` como editor con archivos de 
   configuración incluidos en adJ e instrucciones en:  
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_7_3/arboldd/usr/local/share/adJ/archconf/README.md>
 
