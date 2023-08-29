@@ -14,17 +14,6 @@ Puede ver las diversas versiones publicadas en
   <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/> donde entre otras
   encontrará:
 
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/AprendiendoDeJesus-7.3b1-amd64.iso> 
-  es imagen en formato ISO para quemar en DVD e instalar por primera vez
-  en modo BIOS Legacy.
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/7.3b1-amd64/>
-  es directorio con el contenido del DVD instalador apropiado para descargar 
-  con rsync desde un adJ o un OpenBSD ya instalado para actualizarlo (ver  
-  <https://github.com/pasosdeJesus/adJ/blob/ADJ_7_3/Actualiza.md> )
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/7.3-extra/> 
-  es directorio con versiones recientes de paquetes no incluidos en 
-  distribución oficial (pueden no estar firmados y requerir instalación con 
-  `pkg_add -D unsigned _paquete_`).
 * <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-7.3-amd64.usb> 
   es imagen para escribir en una memoria USB y arrancar con esta bien en
   modo UEFI o bien en modo BIOS Legacy. Una vez 
@@ -39,8 +28,21 @@ Puede ver las diversas versiones publicadas en
 
  O si desea probarla con qemu para instalar en un disco `virtual.raw`:
 
-       qemu-system-x86_64 -hda virtual.raw -hdb AprendiendoDeJesus-7.3-amd64.usb -boot menu=on
+       qemu-system-x86_64 -hda virtual.raw -hdb AprendiendoDeJesus-7.3b1-amd64.usb -boot menu=on
 
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/AprendiendoDeJesus-7.3b1-amd64.iso> 
+  es imagen en formato ISO para quemar en DVD e instalar por primera vez
+  en modo BIOS Legacy.
+
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/7.3b1-amd64/>
+  es directorio con el contenido del DVD instalador apropiado para descargar 
+  con rsync desde un adJ o un OpenBSD ya instalado para actualizarlo (ver  
+  <https://github.com/pasosdeJesus/adJ/blob/ADJ_7_3/Actualiza.md> )
+
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/7.3-extra/> 
+  es directorio con versiones recientes de paquetes no incluidos en 
+  distribución oficial (pueden no estar firmados y requerir instalación con 
+  `pkg_add -D unsigned _paquete_`).
 
 ## 2. NOVEDADES RESPECTO A ADJ 7.3 PROVENIENTES DE OPENBSD
 
@@ -78,20 +80,16 @@ Novedades tomadas de <https://www.openbsd.org/73.html>
 
 ### 2.2 Paquetes 
 
-* Para cerrar fallas se usan las versiones más recientes preparadas
-  por OpenBSD 7.3 de: `curl`, `firefox-esr`, `openssl`, `php`, `postgis`,
+* Para cerrar fallas se usan las versiones más recientes de portes
+  para OpenBSD 7.3 de: `curl`, `firefox-esr`, `openssl`, `php`, `postgis`,
   `postgresql`, `samba`, `webkitgtk4`,
 * Para aprovechar el xlocale extendido de adJ se han recompilado
   `vlc`, `glib2` y `libunistring`.
-* Por el aumento en número de descriptores de archivos tuvimos que
-  recompilar: `unzip`, `bison`, `m4`, `unzip`, `python`, `ruby`,
-  `gettext-tools`,  `gmake`, `ImageMagick`, 
-  `texlive_base` y `texlive_texmf-minimal`
-* Algunos paquetes típicos y su versión: `dovecot 2.3.19.1p0v0`,
-  `chromium 105.0.5195.125`, `firefox-esr-102.3.0`, 
-  `libreoffice 7.4.1.2v0`,
-  `nginx 1.22.0p0`, `mariadb 10.9.3v1`,
-  `python 3.9.15p0`, `neovim 0.7.2`, `zsh 5.9`
+* Algunos paquetes típicos y su versión: `dovecot 2.3.20v0`,
+  `chromium 111.0.5563.110`, `firefox-esr-102.9.0`, 
+  `libreoffice 7.5.1.2v0`,
+  `nginx 1.22.0p0`, `mariadb 10.9.4v1`,
+  `python 3.10.12`, `vim 9.0.1388`, `zsh 5.9`
 
 
 ## 3. NOVEDADES RESPECTO A ADJ 7.3 PROVENIENTES DE PASOS DE JESÚS
@@ -108,17 +106,8 @@ Novedades tomadas de <https://www.openbsd.org/73.html>
 
 ### 3.2 Paquetes
 
-* Incluye evangelios_dp 0.9.7 con traducción y marcado Strong de
-  1 Corintios.
-* Como herramientas para el blockchain TON (The Open Network), además 
-  del paquete `ton` ahora incluimos el paquete `ton-toncli`. El primero 
-  consta de las herramientas estándar, el segundo se trata de las mismas 
-  herramientas en rutas diferentes pues emplean una máquina virtual TON 
-  ampliada para facilitar depuración y el desarrollo de contratos con 
-  `toncli`. Estos paquetes incluyen parches que propusimos para mejorar
-  portabilidad de TON a adJ y que fueron aceptados por los desarrolladores
-  de TON. Puede ver la documentación actualizada en
-  <http://pasosdejesus.github.io/usuario_adJ/conf-programas.html#ton>
+* Incluye evangelios_dp 0.9.8 con traducción y marcado Strong del
+  comienzo del nuevo testamento hasta 2 Corintios.
 * El porte para OpenBSD-current de Ruby 3.2.2, diligentemente mantenido
   por Jeremy Evans, quita el aviso de actualizar gemas del sistema cuando
   hay nuevas versiones disponibles, pues implícitamente sugiere instalar el 
@@ -127,7 +116,7 @@ Novedades tomadas de <https://www.openbsd.org/73.html>
   comportamiento original de Ruby y sugerimos actualizar gemas del 
   sistema tan pronto y tanto como sea posible con 
   `doas gem update --system`
-* Retro-portamos porte de PostgreSQL 15.3 de OpenBSD-current
+* Retro-portamos porte de PostgreSQL 15.4 de OpenBSD-current
 * Hemos retroportado node 18.12.1 (publicado en Nov.2022) de OpenBSD-current 
   para tener el entorno de desarrollo estable de larga duración más 
   actualizado y sin fallas de seguridad conocidas hasta el momento. Ver
