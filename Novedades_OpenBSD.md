@@ -26,14 +26,6 @@ Con respecto a OpenBSD 7.3 las novedades son:
     funciones de xlocale.
   * C++ moderno depende de xlocale, por lo que diversos programas
     recientes en C++ podrán compilarse con más facilidad en adJ.
-  * Aumentados descriptores de archivos de 2^15 a 2^63
-    (La limitacíon de 32767 descriptores de archivos está en
-     OpenBSD y en FreeBSD). Este cambio implica que no hay
-     garantía en compatibilidad de binarios entre OpenBSD y adJ.
-     En genereal la habrá, excepto en programas que usen macros
-     que referencien estructura de FILE como `__sfileno`.
-     Detalles en <https://github.com/pasosdeJesus/adJ/issues/8>
-
 
 * Sistema Base
 	* Binarios nuevos en /usr/bin/
@@ -105,14 +97,15 @@ Con respecto a OpenBSD 7.3 las novedades son:
 
 * Paquetes
 	* Retroportados para cerrar fallas y/o actualizar y/o usar xlocale:
-    ruby-3.2
-    postgresql-server-14.4, postgresql-client, postgresql-contrib, 
-    postgresql-docs, postgresql-previous, postgis-3.1.4
+    ruby
+    postgresql-server, postgresql-client, postgresql-contrib, 
+    postgresql-docs, postgresql-previous, postgis
 	* Se recompilaron de portes estables recientes para cerrar 
 	  fallas o usar xlocale: 
-    chromium, curl, dovecot, dtc, firefox-esr, flac, gnutls, libssh, 
-    libxml, libxslt, lz4, mariadb-client, mariadb-server, mutt, node-12.22.9p0,
-    python 2.7.18p3 y 3.8.12, php 8.0.16, rsync, samba, webkitgtk4, zsh
+    chromium, curl, dovecot, dtc, firefox-esr, flac, gnutls, 
+    libssh, libxml, libxslt, lz4, mariadb-client, 
+    mariadb-server, mutt, node, python, php, rsync, samba, 
+    webkitgtk4, zsh
 	* Recompilados todos los paquetes de perl
 	* Modificados o recompilados para usar xlocale
 		* glib2, libunistring, vlc
