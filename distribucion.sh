@@ -828,6 +828,21 @@ if (test "$sn" = "s") then {
   # Deben estar en mystuff
 
 
+  paquete p5-Email-Address-XS
+  paquete p5-ExtUtils-Config
+  paquete p5-ExtUtils-InstallPaths
+  paquete p5-Net-IDN-Encode
+  paquete p5-Class-Tiny
+  paquete p5-Scope-Guard
+  paquete p5-Path-Tiny
+  paquete p5-Text-Unidecode
+  paquete p5-Email-Address
+  paquete p5-Email-Address-XS
+  paquete p5-Email-MIME-Encodings
+  paquete p5-Module-Pluggable
+  
+  exit 1
+
   # Todo lo de perl tuvo que recompilarse
   # evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
   # Si por ejemplo es:
@@ -838,7 +853,10 @@ if (test "$sn" = "s") then {
   paquete p5-Module-Build
   paquete p5-Test-Fatal
   paquete p5-Test-Requires
+  paquete p5-ExtUtils-Config
   paquete p5-ExtUtils-Helpers
+  paquete p5-ExtUtils-InstallPaths
+  paquete p5-Net-IDN-Encode
   paquete p5-Net-LibIDN2
   paquete p5-Digest-HMAC
   paquete p5-NetAddr-IP
@@ -858,6 +876,19 @@ if (test "$sn" = "s") then {
   paquete p5-MooX-Types-MooseLike
   paquete p5-Digest-SHA1
   paquete p5-Authen-SASL
+  paquete p5-Email-Address-XS
+  paquete p5-ExtUtils-Config
+  paquete p5-ExtUtils-InstallPaths
+  paquete p5-Net-IDN-Encode
+  paquete p5-Class-Tiny
+  paquete p5-Scope-Guard
+  paquete p5-Path-Tiny
+  paquete p5-Text-Unidecode
+  paquete p5-Email-Address
+  paquete p5-Email-Address-XS
+  paquete p5-Email-MIME-Encodings
+  paquete p5-Module-Pluggable
+ 
   paquete p5-CGI
   paquete p5-Email-Abstract
   paquete p5-Email-Date-Format

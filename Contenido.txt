@@ -119,7 +119,6 @@ htop-[v]		Visor de procesos interactivo para sistemas Unix
 ImageMagick-[v]	Conversión de formatos gráficos
 ispell-[v]	Chequea ortografía interactivamente
 mutt-[v]		Cliente de correo
-neovim-[v]		Continuación y extensión de vim
 rcm-[v]		Maneja archivos de configuración
 rsync-[v]		Para sincronizar copias remotas
 rtorrent-[v]	Sistema de distribución de archivos cooperativo 
@@ -492,6 +491,7 @@ p5-Class-Load-[v]	Opera 'require Class::Name' y más
 p5-Class-Load-XS-[v]	Implementación XS de partes de Class::Load
 p5-Class-Method-Modifiers-[v]	Modificar un método como Moose
 p5-Class-Singleton-[v]	Patrón singleton de perl
+p5-Class-Tiny-[v]	
 p5-Class-XSAccessor-[v]	Genera accesores XS rápidos sin compilación
 p5-Clone-[v]		Copia tipos de datos perl recursivamente
 p5-Clone-PP-[v]	Copia tipos de datos Perl de forma recursiva
@@ -522,10 +522,13 @@ p5-DBIx-Simple-[v]
 p5-Devel-GlobalDestruction-[v]	Expone bandera de destrucción global
 p5-Digest-HMAC-[v]	Interfaz para los algoritmos HMAC
 p5-Email-Abstract-[v]
+p5-Email-Address-[v]
+p5-Email-Address-XS-[v]
 p5-Email-Date-Format-[v]
 p5-Email-MessageID-[v]
 p5-Email-MIME-[v]
 p5-Email-MIME-ContentType-[v]
+p5-Email-MIME-Encodings-[v]
 p5-Email-Sender-[v]
 p5-Email-Simple-[v]
 p5-Encode-Detect-[v]	Detecta codificación de datos
@@ -534,7 +537,9 @@ p5-Error-[v]	Manejo de errores al estilo objetos
 p5-Eval-Closure-[v]	Crea closures con string eval de forma segura
 p5-Exception-Class-[v]	Declara clases reales para excepciones
 p5-Exporter-Tiny-[v]	Exportar con características de Sub::Exporter
+p5-ExtUtils-Config-[v]
 p5-ExtUtils-Helpers-[v]
+p5-ExtUtils-InstallPaths-[v]
 p5-File-Copy-Recursive-[v]	
 p5-File-HomeDir-[v]	Recupera ubicación de directorio hogar
 p5-File-Listing-[v]	Reconoce listados de directorios
@@ -583,6 +588,7 @@ p5-MLDBM-[v]		Almacena estructura de hash multi nivel en uno solo
 p5-Module-Build-[v]	Construye e instala módulos Perl
 p5-Module-Build-Tiny-[v]	
 p5-Module-Implementation-[v]	Carga una o muchos módulos alternos
+p5-Module-Pluggable-[v]
 p5-Module-Runtime-[v]	Manejo de módulos en tiempo de ejecución
 p5-Moo-[v]		Orientación a objetos minimalista (compat. Moose)
 p5-Moose-[v]		Sistema de objetos moderno y completo para perl
@@ -598,6 +604,7 @@ p5-Net-Daemon-[v]	Extensión para servicios portables
 p5-Net-DNS-[v]		Interfaz al resolvedor DNS
 p5-Net-DNS-Resolver-Programmable-[v]	Emulación de resolvedor
 p5-Net-HTTP-[v]	Cliente en perl para conexiones HTTP
+p5-Net-IDN-Encode-[v]
 p5-Net-IP-[v]
 p5-Net-LibIDN-[v]	Uniones en Perl para GNU Libidn
 p5-Net-LibIDN2-[v]	
@@ -611,6 +618,7 @@ p5-Package-Stash-XS-[v]	Como p5-Package-Stash más rápido y correcto
 p5-Params-Util-[v]	Facilita revisión de parámetros
 p5-Params-Validate-[v]	Valida parámetros de funciones/métodos
 p5-Params-ValidationCompiler-[v] 	Construye validador de parámetros
+p5-Path-Tiny-[v] 	
 p5-Pod-Parser-[v]	Para reconocer/traducir documentos en formato POD
 p5-PlRPC-[v]	Módulo para escribir clientes y servidores RPC
 p5-Ref-Util-[v]	Funciones para checquear referencias
@@ -618,6 +626,7 @@ p5-Ref-Util-XS-[v]	Funciones para checquear referencias (versión XS)
 p5-Regexp-Common-[v]
 p5-Regexp-IPv6-[v]	
 p5-Role-Tiny-[v]	Herramienta de composición de roles minimalista
+p5-Scope-Guard-[v]	
 p5-SGMLSpm-[v]	Herramienta de composición de roles minimalista
 p5-Socket6-[v]	Definiciones relacionadas con sockets AF_INET6
 p5-Sort-Naturally-[v]	Ordenamiento lexicográfico con numérico
@@ -634,6 +643,7 @@ p5-Task-Weaken-[v]	Asegura que una plataforma tenga soporte weaken
 p5-Test-Fatal-[v]
 p5-Test-File-ShareDir-[v]
 p5-Test-Requires-[v]
+ p5-Text-Unidecode-[v]
 p5-Throwable-[v]	Rol para clases que pueden lanzarse
 p5-Time-TimeDate-[v]	Librería para formatear y reconocer fechas y tiempo
 p5-Try-Tiny-[v]	try/catch mínimo que preserva $@

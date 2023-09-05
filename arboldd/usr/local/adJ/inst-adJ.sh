@@ -343,7 +343,7 @@ function insacp {
 }
 
 
-insacp gettext
+insacp gettext-runtime
 insacp libiconv
 insacp dialog
 l=`ls /var/db/pkg/ | grep "^dialog-"`
