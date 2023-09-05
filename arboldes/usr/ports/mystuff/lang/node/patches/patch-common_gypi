@@ -1,0 +1,31 @@
+Index: common.gypi
+--- common.gypi.orig
++++ common.gypi
+@@ -180,7 +180,6 @@
+             }],
+           ],
+         },
+-        'cflags': [ '-O3' ],
+         'conditions': [
+           ['enable_lto=="true"', {
+             'cflags': ['<(lto)'],
+@@ -409,7 +408,9 @@
+           }],
+           ['OS=="openbsd"', {
+             'cflags': [ '-I/usr/local/include' ],
+-            'ldflags': [ '-Wl,-z,wxneeded' ],
++            'ldflags': [ '-Wl,-z,wxneeded'
++                , '-Wl,-rpath,${EOPENSSL_LIB}'
++            ],
+           }],
+         ],
+         'conditions': [
+@@ -426,7 +427,7 @@
+             'ldflags': [ '-m32' ],
+           }],
+           [ 'target_arch=="ppc64" and OS not in "aix os400"', {
+-            'cflags': [ '-m64', '-mminimal-toc' ],
++            'cflags': [ '-m64' ],
+             'ldflags': [ '-m64' ],
+           }],
+           [ 'target_arch=="s390x" and OS=="linux"', {
