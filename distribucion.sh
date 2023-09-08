@@ -828,35 +828,21 @@ if (test "$sn" = "s") then {
   # Deben estar en mystuff
 
 
-  paquete p5-Email-Address-XS
-  paquete p5-ExtUtils-Config
-  paquete p5-ExtUtils-InstallPaths
-  paquete p5-Net-IDN-Encode
-  paquete p5-Class-Tiny
-  paquete p5-Scope-Guard
-  paquete p5-Path-Tiny
-  paquete p5-Text-Unidecode
-  paquete p5-Email-Address
-  paquete p5-Email-Address-XS
-  paquete p5-Email-MIME-Encodings
-  paquete p5-Module-Pluggable
-  
-  exit 1
-
   # Todo lo de perl tuvo que recompilarse
   # evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
   # Si por ejemplo es:
   #Name.c: loadable library and perl binaries are mismatched (got handshake key 0xb700000, needed 0xbb00000)
   # Buscar módulo de Perl con pkg_locate Name.so, recompilarlo e instalarlo 
+  paquete p5-HTML-Parser
+  paquete p5-Unicode-Stringprep
+  paquete p5-Net-IDN-Nameprep
   paquete p5-XML-LibXML
-  paquete p5-Module-Build-Tiny
   paquete p5-Module-Build
-  paquete p5-Test-Fatal
-  paquete p5-Test-Requires
   paquete p5-ExtUtils-Config
   paquete p5-ExtUtils-Helpers
   paquete p5-ExtUtils-InstallPaths
   paquete p5-Net-IDN-Encode
+  paquete p5-Net-IDN-Nameprep
   paquete p5-Net-LibIDN2
   paquete p5-Digest-HMAC
   paquete p5-NetAddr-IP
@@ -870,11 +856,8 @@ if (test "$sn" = "s") then {
   paquete p5-List-MoreUtils-XS
   paquete p5-List-SomeUtils-XS
   paquete p5-Ref-Util-XS
-  paquete p5-YAML-XS
-  paquete p5-List-MoreUtils
   paquete p5-Class-XSAccessor
   paquete p5-MooX-Types-MooseLike
-  paquete p5-Digest-SHA1
   paquete p5-Authen-SASL
   paquete p5-Email-Address-XS
   paquete p5-ExtUtils-Config
@@ -913,7 +896,6 @@ if (test "$sn" = "s") then {
   paquete p5-Sub-Exporter
   paquete p5-Sub-Name
   paquete p5-Try-Tiny
-  paquete p5-Task-Weaken
   paquete p5-Moose
   paquete p5-File-ShareDir
   paquete p5-File-ShareDir-Install
@@ -938,7 +920,6 @@ if (test "$sn" = "s") then {
   paquete p5-Crypt-OpenSSL-Bignum
   paquete p5-Crypt-OpenSSL-RSA
   paquete p5-Crypt-OpenSSL-Random
-  paquete p5-DBD-mysql
   paquete p5-DBI
   paquete p5-Data-Dumper-Concise
   paquete p5-Data-IEEE754
@@ -954,7 +935,6 @@ if (test "$sn" = "s") then {
   paquete p5-File-Which
   paquete p5-FreezeThaw
   paquete p5-GeoIP2
-  paquete p5-HTML-Parser
   paquete p5-HTML-Tagset
   paquete p5-HTTP-Cookies
   paquete p5-HTTP-Daemon
@@ -976,7 +956,6 @@ if (test "$sn" = "s") then {
   paquete p5-Mail-SPF
   paquete p5-Mail-Tools
   paquete p5-Math-Base-Convert
-  paquete p5-Math-Int64
   paquete p5-MaxMind-DB-Common
   paquete p5-MaxMind-DB-Reader
   paquete p5-Moo
@@ -988,7 +967,6 @@ if (test "$sn" = "s") then {
   paquete p5-Net-DNS-Resolver-Programmable
   paquete p5-Net-Daemon
   paquete p5-Net-HTTP
-  paquete p5-Net-LibIDN
   paquete p5-Net-Patricia
   paquete p5-Net-SSLeay
   paquete p5-PlRPC
@@ -996,7 +974,6 @@ if (test "$sn" = "s") then {
   paquete p5-Role-Tiny
   paquete p5-SQL-Statement
   paquete p5-Socket6
-  paquete p5-Sort-Naturally
   paquete p5-Sub-Exporter-Progressive
   paquete p5-Sub-Identify
   paquete p5-Sub-Install
@@ -1082,7 +1059,7 @@ if (test "$sn" = "s") then {
   paquete node
   #paquete nspr
   #paquete oniguruma 
-  paquete openssl paquetes "openssl" 3.0
+  paquete openssl paquetes "openssl" 3.1
   #paquete quirks
   #paquete pcre2 
   #paquete python paquetes "python" "2.7"

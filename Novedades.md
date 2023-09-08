@@ -104,7 +104,13 @@ Novedades tomadas de <https://www.openbsd.org/73.html>
   * `servidor_adJ`: 
     <http://pasosdejesus.github.io/servidor_adJ>
 
-### 3.2 Paquetes
+### 3.2 Núcleo y librerías fundamentales
+
+* Se ha retirado el soporte para muchos descriptores de archivo porque: 
+  (1) quitaba compatibilidad de diversos binarios con OpenBSD y
+  (2) actualmente no hay una aplicación en uso que justifique el cambio.
+
+### 3.3 Paquetes
 
 * Incluye evangelios_dp 0.9.8 con traducción y marcado Strong del
   comienzo del nuevo testamento hasta 2 Corintios.
@@ -118,6 +124,11 @@ Novedades tomadas de <https://www.openbsd.org/73.html>
   `doas gem update --system`
   actualizado y sin fallas de seguridad conocidas hasta el momento. Ver
   <https://github.com/nodejs/release#release-schedule>
+* Retroportados de OpenBSD-current los paquetes openssl y node para
+  tener la versión de node estable recomendada en <https://nodejs.org>
+* Se ha retirado el paquete neovim por cuanto vim es tipicamente
+  suficiente y no depende de paquetes desactualizados (neovim depende de
+  una versión antigua de lua).
 * Chromium recompilado con llave de Pasos de Jesús.  Ya permite autenticar
   y usar sitios como <https://drive.google.com>  --si tiene problemas para
   autenticarse intente desde un nuevo perfil (obligatorio por ejemplo si 
@@ -129,7 +140,7 @@ Novedades tomadas de <https://www.openbsd.org/73.html>
 * Se han parchado minimamente los siguientes para usar `servicio` en lugar
   de `daemon`: `postgresql`, `git` y `smartmontools`
 
-### 3.3 Configuración
+### 3.4 Configuración
 
 * Es sencillo emplear como interprete de ordenes `zsh` con `tmux` para
   tener varias terminales y `vim` como editor con archivos de 
