@@ -54,7 +54,7 @@ cat > /home/$uadJ/.fluxbox/menu <<EOF
                 [exec] (Configurar interfaces de red) {xterm -en utf8 -e '/sbin/ifconfig | grep "^[a-z]*[0-9]:" | sed -e "s/:.*//g" | grep -v "lo0" | grep -v "enc0" | grep -v "pflog0" | grep -v "tun[0-9]" | sed -e "s/\(.*\)/echo \"ENTER para configurar \1\";read;xfw \/etc\/hostname.\1/g" > /tmp/porc.sh;  xhost +; doas sh /tmp/porc.sh' }
                 [exec] (Configurar puerta de enlace) {doas touch /etc/mygate; xhost +; doas xfw /etc/mygate}
                 [exec] (Configurar cortafuegos) {xhost +; doas xfw /etc/pf.conf}
-                [exec] (Reiniciar red) {xterm -en utf8 -e 'PATH=/sbin:/usr/sbin:/bin:/usr/bin/ /usr/bin/oas /bin/sh /etc/netstart && /usr/bin/doas /sbin/pfctl -f /etc/pf.conf; echo "[RETORNO] para continuar"; read'}
+                [exec] (Reiniciar red) {xterm -en utf8 -e 'PATH=/sbin:/usr/sbin:/bin:/usr/bin/ /usr/bin/doas /bin/sh /etc/netstart && /usr/bin/doas /sbin/pfctl -f /etc/pf.conf; echo "[RETORNO] para continuar"; read'}
                 [exec] (ping a Internet) {xterm -en utf8 -e '/sbin/ping 157.253.1.13'}
         [end]
 [end]
