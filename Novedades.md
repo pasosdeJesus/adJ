@@ -142,10 +142,8 @@ Novedades tomadas de <https://www.openbsd.org/73.html>
 
 ### 3.4 Configuración
 
-* Es sencillo emplear como interprete de ordenes `zsh` con `tmux` para
-  tener varias terminales y `vim` como editor con archivos de 
-  configuración incluidos en adJ e instrucciones en:  
-  <https://github.com/pasosdeJesus/adJ/blob/ADJ_7_3/arboldd/usr/local/share/adJ/archconf/README.md>
+* Guión `/usr/local/adJ/reconf-fluxbox.sh` para configurar o reconfigurar
+  fluxbox en una cuenta.
 
 ## 4. FE DE ERRATAS
 
