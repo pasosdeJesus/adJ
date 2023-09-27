@@ -1,6 +1,6 @@
 COMMENT = Tools for the blockchain TON to be used with toncli
 V =			20230112
-REVISION =		
+REVISION =		1
 
 # Patches were added just to change daemon for service
 

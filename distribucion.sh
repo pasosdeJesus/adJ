@@ -827,6 +827,22 @@ if (test "$sn" = "s") then {
   # Modificados para posibilitar compilación
   # Deben estar en mystuff
 
+  paquete books/basico_adJ
+  paquete books/usuario_adJ
+  paquete books/servidor_adJ
+
+  paquete python paquetes "python" "3.10"
+  paquete firefox-esr
+  paquete cups
+
+  paquete curl
+
+  paquete mutt
+
+  paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 8.2
+
+  paquete libwebp
+  paquete vim
 
   # Todo lo de perl tuvo que recompilarse
   # evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
@@ -916,7 +932,6 @@ if (test "$sn" = "s") then {
   paquete p5-Class-Singleton
   paquete p5-Class-XSAccessor
   paquete p5-Clone
-  paquete p5-Clone-PP
   paquete p5-Crypt-OpenSSL-Bignum
   paquete p5-Crypt-OpenSSL-RSA
   paquete p5-Crypt-OpenSSL-Random
@@ -1036,7 +1051,7 @@ if (test "$sn" = "s") then {
   paquete zstd
 
   #paquete certbot paquetes "certbot py3-acme"
-  #paquete cups
+  paquete cups
   #paquete dovecot
   #paquete dtc
   paquete firefox-esr
@@ -1054,7 +1069,7 @@ if (test "$sn" = "s") then {
   #paquete lz4
   #paquete mariadb-client paquetes "mariadb-client mariadb-server" 
   #paquete mpg123
-  #paquete mutt
+  paquete mutt
   #paquete nginx
   paquete node
   #paquete nspr

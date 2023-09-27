@@ -1449,6 +1449,19 @@ if (test -f /usr/X11R6/include/X11/extensions/dmxext.h) then {
   } fi;
 } fi;
 
+if (test -f /etc/rc.d/switchd) then {
+  vac="$vac 7.1 a 7.2";
+  echo "Aplicando actualizaciones de 7.1 a 7.2" >> /var/www/tmp/inst-adJ.bitacora;
+  userdel _switchd
+  groupdel _switchd
+  rm -f /etc/rc.d/switchd \
+     /usr/sbin/switchctl \
+     /usr/sbin/switchd \
+     /usr/share/man/man4/switch.4 \
+     /usr/share/man/man5/switchd.conf.5 \
+     /usr/share/man/man8/switchctl.8 \
+     /usr/share/man/man8/switchd.8
+} fi;
 
 if  (test "$vac" != "") then {
 	dialog --title 'Actualizaciones aplicadas' --msgbox "\\nSe aplicaron actualizaciones: $vac\\n\\n$mac\\n" 15 60

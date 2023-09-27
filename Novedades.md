@@ -3,7 +3,7 @@ Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
 
 ### Versión: 7.3
-Fecha de publicación: 28/Ago/2022
+Fecha de publicación: 28/Sep/2023
 
 Puede ver novedades respecto a OpenBSD en:
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_7_3/Novedades_OpenBSD.md>
@@ -28,13 +28,13 @@ Puede ver las diversas versiones publicadas en
 
  O si desea probarla con qemu para instalar en un disco `virtual.raw`:
 
-       qemu-system-x86_64 -hda virtual.raw -hdb AprendiendoDeJesus-7.3b1-amd64.usb -boot menu=on
+       qemu-system-x86_64 -hda virtual.raw -hdb AprendiendoDeJesus-7.3-amd64.usb -boot menu=on
 
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/AprendiendoDeJesus-7.3b1-amd64.iso> 
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-7.3-amd64.iso> 
   es imagen en formato ISO para quemar en DVD e instalar por primera vez
   en modo BIOS Legacy.
 
-* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/endesarrollo/7.3b1-amd64/>
+* <http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/7.3-amd64/>
   es directorio con el contenido del DVD instalador apropiado para descargar 
   con rsync desde un adJ o un OpenBSD ya instalado para actualizarlo (ver  
   <https://github.com/pasosdeJesus/adJ/blob/ADJ_7_3/Actualiza.md> )
@@ -50,7 +50,7 @@ Puede ver las diversas versiones publicadas en
 
 Novedades tomadas de <https://www.openbsd.org/73.html> 
 
-* Aplicados parches de seguridad hasta el 26.Ago.2023 provenientes de 
+* Aplicados parches de seguridad hasta el 26.Sep.2023 provenientes de 
   OpenBSD que incluyen soluciones a fallas
 * Controladores ampliados o mejorados para amd64
   * Tarjetas Ethernet: Mejorados `em`, `mcx`. Hasta 2.5GB `rge`.
