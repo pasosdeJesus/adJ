@@ -55,19 +55,19 @@ cat > /home/$uadJ/.fluxbox/menu <<EOF
                 [exec] (Configurar puerta de enlace) {doas touch /etc/mygate; xhost +; doas xfw /etc/mygate}
                 [exec] (Configurar cortafuegos) {xhost +; doas xfw /etc/pf.conf}
                 [exec] (Reiniciar red) {xterm -en utf8 -e 'PATH=/sbin:/usr/sbin:/bin:/usr/bin/ /usr/bin/doas /bin/sh /etc/netstart && /usr/bin/doas /sbin/pfctl -f /etc/pf.conf; echo "[RETORNO] para continuar"; read'}
-                [exec] (ping a Internet) {xterm -en utf8 -e '/sbin/ping 157.253.1.13'}
+                [exec] (ping a Internet) {xterm -en utf8 -e '/sbin/ping 190.71.138.118'}
         [end]
 [end]
 [submenu] (Oficina)
 	[exec] (evince) {evince}
 	[exec] (gnumeric) {LC_CTYPE=C /usr/local/bin/gnumeric}
 	[exec] (gv) {gv}
-	[exec] (gimp) {LC_CTYPE=C /usr/local/bin/gimp}
+	[exec] (gimp) {LC_CTYPE=C /usr/local/bin/gimp-2.99}
 	[exec] (inkscape) {inkscape}
 	[exec] (LibreOffice) {/usr/local/bin/soffice}
 [end]
 [submenu] (Multimedia)
-	[exec] (audacios) {audacious}
+	[exec] (audacious) {audacious}
 	[exec] (audacity) {audacity}
 	[exec] (cdio cdplay) {xterm -en utf8 -e "cdio cdplay"}
 	[exec] (musescore) {musescore}
