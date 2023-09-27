@@ -827,22 +827,7 @@ if (test "$sn" = "s") then {
   # Modificados para posibilitar compilación
   # Deben estar en mystuff
 
-  paquete books/basico_adJ
-  paquete books/usuario_adJ
-  paquete books/servidor_adJ
-
-  paquete python paquetes "python" "3.10"
-  paquete firefox-esr
-  paquete cups
-
-  paquete curl
-
-  paquete mutt
-
-  paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 8.2
-
-  paquete libwebp
-  paquete vim
+  paquete databases/sivel sivel sivel 2.0
 
   # Todo lo de perl tuvo que recompilarse
   # evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)

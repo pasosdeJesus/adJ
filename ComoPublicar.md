@@ -170,9 +170,9 @@ Pasos importantes para publicar versión beta
 Pasos importantes para publicar versión mayor
 --------------------------------------------
 
-1. Usar la rama ADJ_7_2
+1. Usar la rama ADJ_7_3
 	```
-	git checkout ADJ_7_2
+	git checkout ADJ_7_3
 	```
 2. Actualizar SIVeL, evangelios, Mt77 y paquetes propios de 
    adJ.
@@ -180,7 +180,7 @@ Pasos importantes para publicar versión mayor
    publicar en Internet
 4. Actualizar versión en logo que presenta xenodm en `arboldd/etc/X11/xenodm/pixmaps/`. 
    Con gimp iniciar con el de resolución 15bpp, modificarlo el número de 
-   versión es tipo Sans tamaño 18. Par converitr a xpm en 
+   versión es tipo Sans tamaño 18. Para converitr a xpm en 
    Imagen > Modo > Indexado. 15bpp y 8bpp con paleta de 255 colores. 
    4bpp con paleta de 15 colores, 1bpp con paleta de 2 colores.
 5. Análogo a pasos de versión beta
