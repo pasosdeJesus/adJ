@@ -41,6 +41,7 @@ A.strong:hover   {cursor: crosshair; color: #C0FFC0; background-color: lightslat
 
 sup.strong {
 	font-size: smaller;
+  color: #909090;
 }
 
 sup.footnote {
@@ -60,13 +61,20 @@ u.strong:hover {
 
 a.footnote:link {
 	border-bottom: 3px;
+  color: blue;
+
 }
 a.footnote:hover {
 	text-decoration: none; 
 	border-bottom: 3px double;
+  color: blue;
 }
 a.footnote:visited {
 	border-bottom: 3px;
+  color: blue;
 }
 
 
+.texto-pie-resaltado {
+  border-bottom: 3px double blue;
+}

@@ -67,9 +67,12 @@ if (test ! -d /usr/obj) then {
 
 narq=`uname -m`
 
+cp /usr/local/share/doc/evangelios_dp/* arboldvd/evangelios_dp
 if (test ! -d $V$VESP-$ARQ) then {
   mkdir -p $V$VESP-$ARQ/paquetes/
   cp -rf arboldvd/* $V$VESP-$ARQ/
+} else {
+  cp /usr/local/share/doc/evangelios_dp/* $V$VESP-$ARQ/evangelios_dp
 } fi;
 
 ANONCVS="anoncvs@anoncvs1.ca.openbsd.org:/cvs"

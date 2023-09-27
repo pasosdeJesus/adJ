@@ -81,15 +81,16 @@ Novedades tomadas de <https://www.openbsd.org/73.html>
 ### 2.2 Paquetes 
 
 * Para cerrar fallas se usan las versiones más recientes de portes
-  para OpenBSD 7.3 de: `curl`, `firefox-esr`, `openssl`, `php`, `postgis`,
-  `postgresql`, `samba`, `webkitgtk4`,
+  para OpenBSD 7.3 de: `curl`, `cups`, `firefox-esr`, `mutt`, 
+  `openssl`, `php`, `postgis`, `postgresql`, `python`, `samba`, 
+  `vim`, `webkitgtk4`,
 * Para aprovechar el xlocale extendido de adJ se han recompilado
   `vlc`, `glib2` y `libunistring`.
 * Algunos paquetes típicos y su versión: `dovecot 2.3.20v0`,
   `chromium 111.0.5563.110`, `firefox-esr-102.9.0`, 
   `libreoffice 7.5.1.2v0`,
   `nginx 1.22.0p0`, `mariadb 10.9.4v1`,
-  `python 3.10.12`, `vim 9.0.1388`, `zsh 5.9`
+  `python 3.10.13`, `vim 9.0.1376`, `zsh 5.9`
 
 
 ## 3. NOVEDADES RESPECTO A ADJ 7.3 PROVENIENTES DE PASOS DE JESÚS
@@ -122,11 +123,9 @@ Novedades tomadas de <https://www.openbsd.org/73.html>
   comportamiento original de Ruby y sugerimos actualizar gemas del 
   sistema tan pronto y tanto como sea posible con 
   `doas gem update --system`
-  actualizado y sin fallas de seguridad conocidas hasta el momento. Ver
-  <https://github.com/nodejs/release#release-schedule>
 * Retroportados de OpenBSD-current los paquetes openssl y node para
   tener la versión de node estable recomendada en <https://nodejs.org>
-* Se ha retirado el paquete neovim por cuanto vim es tipicamente
+* Se ha retirado el paquete neovim por cuanto vim es típicamente
   suficiente y no depende de paquetes desactualizados (neovim depende de
   una versión antigua de lua).
 * Chromium recompilado con llave de Pasos de Jesús.  Ya permite autenticar

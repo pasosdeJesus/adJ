@@ -1,21 +1,21 @@
 COMO PUBLICAR
 =============
 
-Anhelamos publicar versión mayor (e.g 7.2) 3 meses después de OpenBSD:
+Anhelamos publicar versión mayor (e.g 7.3) 3 meses después de OpenBSD:
 
 * Bien el 11.Ene
 * O bien el 1.Jul
 
-Publicamos revisiones (e.g 7.2p1) si la seguridad o calidad lo ameriten.
+Publicamos revisiones (e.g 7.3p1) si la seguridad o calidad lo ameriten.
 
-Anhelamos publicar al menos una versión beta (e.g 7.2b1 en directorio
+Anhelamos publicar al menos una versión beta (e.g 7.3b1 en directorio
 `desarrollo` del sitio de distribución):
 
 	Bien el 10.Dic
 	O bien el 10.Jun
 
 Sería ideal publicar una versión alfa mucho antes (digamos bien 24.Sep o
-bien 24.Mar, e.g 7.2a1).
+bien 24.Mar, e.g 7.3a1).
 
 
 Pasos importantes para publicar versión beta
@@ -53,7 +53,7 @@ Pasos importantes para publicar versión beta
    Para verificar que perl está más o menos bien ejecutar `pkg_add`.
 5. Recompilar paquetes con actualizaciones de seguridad o mejoras
 6. Retroportar paquetes, dejar resultados no incluidos en DVD pero
-   útiles en `7.2-extra`
+   útiles en `7.3-extra`
 7. Regenerar distribución (sin paquetes ni otras compilaciones) con:
 	```
 	doas ./distribucion.sh
@@ -65,7 +65,7 @@ Pasos importantes para publicar versión beta
   `TEXTO=1 hdes/qemu.sh`): 
 	- Instalación de sistema base, `uname -a` debe reportar 
 		`APRENDIENDODEJESUS`
-	- Verificar que kernel tiene renombramiento de daemon por servicio con:
+	- Verificar que kernel tiene renombramiento de `daemon` por `servicio` con:
 	```
 	$  vmstat -s | grep servicio
 	4 pages reserved for pageservicio
@@ -105,10 +105,10 @@ Pasos importantes para publicar versión beta
 	my $a = 1987.23;
 	printf "%g\n", $a;
 	```
-	- Ejecución de /inst-adJ.sh en nuevo y actualización, 
+	- Ejecución de `/inst-adJ.sh` en nuevo y actualización, 
 	- Verificar que desde el directorio paquetes del medio de
-	  instalacion se ejecute sin fallas PKG_PATH=. doas pkg_add *
-	- Con paquete `colorls` modificado y actualizado, verificar cotejacion 
+	  instalacion se ejecute sin fallas `PKG_PATH=. doas pkg_add *`
+	- Con paquete `colorls` modificado y actualizado, verificar cotejación 
 	  en español en terminal grafica:
 	```sh
 	touch a
@@ -145,9 +145,9 @@ Pasos importantes para publicar versión beta
 11. En adJ.pasosdeJesus.org
 	```
 	hdes/creaiso.sh
-	cp -rf AprendiendoDeJesus-7.2-amd64.iso 7.2-amd64 /dirftp
-	mkdir /dirftp/7.2-extra
-	rsync compdes:comp/adJ/extra-7.7/* /dirftp/7.2-extra
+	cp -rf AprendiendoDeJesus-7.3-amd64.iso 7.3-amd64 /dirftp
+	mkdir /dirftp/7.3-extra
+	rsync compdes:comp/adJ/extra-7.7/* /dirftp/7.3-extra
 	```
 12. Verificar operación de:
   * http://pasosdeJesus.github.io/basico_adJ http://pasosdeJesus.github.io/usuario_adJ http://pasosdeJesus.github.io/servidor_adJ
@@ -155,15 +155,16 @@ Pasos importantes para publicar versión beta
   * http://aprendiendo.pasosdeJesus.org
   * http://www.pasosdeJesus.org
   * http://adJ.pasosdeJesus.org
+  * https://fe.pasosdeJesus.org
   * rsync://adJ.pasosdeJesus.org
 
 13. Poner Tag en github e iniciar rama al publicar version alfa o beta (antes en master)
 	```
-	git tag -a v7.2b1 -m "Version 7.2b1"
-	git push origin v7.2b1
+	git tag -a v7.3b1 -m "Version 7.3b1"
+	git push origin v7.3b1
 	...
-	git checkout -b ADJ_7_2
-	git push origin ADJ_7_2
+	git checkout -b ADJ_7_3
+	git push origin ADJ_7_3
 	```
 14. Publicar en lista de desarrollo
 
@@ -186,24 +187,24 @@ Pasos importantes para publicar versión mayor
 5. Análogo a pasos de versión beta
 6. Actualizar version en reto de P2PU (las 4 primeras tareas) 
    https://p2pu.org/es/groups/openbsd-adj-como-sistema-de-escritorio/
-7. Publicar un "Release" en github Versión 7.2 con enlace a novedades.
+7. Publicar un "Release" en github Versión 7.3 con enlace a novedades.
 8. Publicar en Twitter y Facebook. 
    Si es tambien publicacion de SIVeL en sitio de noticias de SIVeL y Structio.
 
-	Publicado adJ 7.2 distribución para servidores y cortafuegos, 
+	Publicado adJ 7.3 distribución para servidores y cortafuegos, 
 	segura, amigable para cristian@s y en español, ver 
 	http://aprendiendo.pasosdejesus.org/
 9. Correo a listas: 
     openbsd-colombia@googlegroups.com, 
     openbsd-mexico@googlegroups.com, sivel-soporte@lists.sourceforge.net
 
-	Tema: Publicado adJ 7.2 para amd64
+	Tema: Publicado adJ 7.3 para amd64
 
 	Para instalar por primera vez descarga la imagen para DVD de:
 	  http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/
 	O solicita un DVD o una USB de instalacion por correo postal.
 
-	Si planeas actualizar de una version anterior a 7.2
+	Si planeas actualizar de una version anterior a 7.3
 	hay un procedimiento mas rápido con `rsync` (ver
 	https://github.com/pasosdeJesus/adJ/blob/master/Actualiza.md ).
 
@@ -215,8 +216,8 @@ Pasos importantes para publicar versión mayor
 	  2. La guía de instalación:
 	  http://pasosdeJesus.github.io//usuario_adJ/sobre-la-instalacion.html
 
-	Mira las novedades completas de la versión 7.2 en:
-	  https://aprendiendo.pasosdejesus.org/AdJ_7.2_-_Aprendiendo_de_Jesus_7.2.html/
+	Mira las novedades completas de la versión 7.3 en:
+	  https://aprendiendo.pasosdejesus.org/AdJ_7.3_-_Aprendiendo_de_Jesus_7.3.html/
 
 	De estas destacamos:
 	...
