@@ -121,12 +121,14 @@ cat > /home/$uadJ/.fluxbox/menu <<EOF
 [end]
 EOF
 
-if (test ! -f /home/$uadJ/.fluxbox/startup -a "$ARCH" != "" -a -d "$ARCH") then {
+if (test ! -f /home/$uadJ/.fluxbox/startup) then {
 	mkdir -p /home/$uadJ/.fluxbox/backgrounds/
-	imfondo=`ls -lat $ARCH/medios/*.jpg | head -n 1 | sed -e "s/.*medios\///g"`
-	echo "Imagen de fondo: $imfondo" 
-	cp $ARCH/medios/*.jpg /home/$uadJ/.fluxbox/backgrounds/
-	cp $ARCH/medios/$imfondo /home/$uadJ/.fluxbox/backgrounds/fondo.jpg
+  if (test "$ARCH" != "" -a -d "$ARCH") then {
+	  imfondo=`ls -lat $ARCH/medios/*.jpg | head -n 1 | sed -e "s/.*medios\///g"`
+	  echo "Imagen de fondo: $imfondo" 
+	  cp $ARCH/medios/*.jpg /home/$uadJ/.fluxbox/backgrounds/
+	  cp $ARCH/medios/$imfondo /home/$uadJ/.fluxbox/backgrounds/fondo.jpg
+  } fi;
 	cat > /home/$uadJ/.fluxbox/startup <<EOF
 #fbsetroot -to blue -solid lightblue
 export LANG=es_CO.UTF-8
@@ -158,8 +160,8 @@ if (test -x /usr/X11R6/bin/xcompmgr) then {
 
 exec /usr/local/bin/fluxbox -log ~/.fluxbox/log
 EOF
-  grep -v "display -backdrop -window .*\$im"  /home/$uadJ/.fluxbox/apps > /tmp/a 2>/dev/null
-  cat /tmp/a - > /home/$uadJ/.fluxbox/apps <<EOF
+  grep -v "display -backdrop -window .*\$im"  /home/$uadJ/.fluxbox/apps > /tmp/apps 2>/dev/null
+  cat /tmp/apps - > /home/$uadJ/.fluxbox/apps <<EOF
 	[startup] {display -backdrop -window root /home/$uadJ/.fluxbox/backgrounds/fondo.jpg}
 EOF
 } fi;
