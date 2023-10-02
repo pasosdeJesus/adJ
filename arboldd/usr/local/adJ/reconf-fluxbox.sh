@@ -19,6 +19,16 @@ if (test -f /home/$uadJ/.fluxbox/menu) then {
 	rm -f /home/$uadJ/.fluxbox/init
 } fi;
 
+if (test ! -f /home/$uadJ/.Xmodmap-usintl) then {
+  cat > /home/$uadJ/.Xmodmap-usintl <<EOF
+keycode 64=Alt_L Multi_key
+keycode 48=dead_acute dead_diaeresis
+keycode 49=dead_grave dead_tilde 
+EOF
+} fi;
+
+
+
 mkdir -p /home/$uadJ/.fluxbox
 cat > /home/$uadJ/.fluxbox/menu <<EOF
 
@@ -46,7 +56,7 @@ cat > /home/$uadJ/.fluxbox/menu <<EOF
 	[exec] (Configurar Impresora con CUPS) {echo y | doas cups-enable; doas chmod a+rw /dev/ulpt* /dev/lpt*; /usr/local/bin/chrome --disable-gpu http://127.0.0.1:631}
 	[submenu] (Teclado)
                 [exec] (Cambiar a distribucion Lationoamerica) {setxkbmap latam}
-                [exec] (Cambiar a distribucion Estados Unidos) {setxkbmap us}
+                [exec] (Cambiar a distribucion Estados Unidos Intl.) {setxkbmap us; xmodmap ~/.Xmodmap-usintl}
   [end]
 	[submenu] (Red)
                 [exec] (Examinar red) {xterm -en utf8 -e '/sbin/ifconfig; echo -n "\n[RETORNO] para examinar enrutamiento (podrá salir con q)"; read; /sbin/route -n show | less'}
