@@ -54,6 +54,7 @@ Con respecto a OpenBSD 7.4 las novedades son:
 		* inst-adJ.sh	Instala adJ
 		* inst-sivel.sh	Instala SIVeL
 		* inst.sh		Inicia inst-adJ
+        * reconf-fluxbox.sh reconfigura fluxbox en una cuenta.
 		* reflejazona.sh 	Genera zona reflejada para DNS
 		* repadicuenta.sh Ejecuta adicuenta para todo usuario
 		* revisaapachelog.pl Revisa bitácora de Apache

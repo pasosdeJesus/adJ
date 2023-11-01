@@ -35,7 +35,7 @@ Pasos importantes para publicar versión beta
  	    `/usr/src` a partir de `/usr/src$V-orig`
 
 	3.2 Tratar de aplicar todos los parches con último parche:
-		 `pruebas/aplicahasta.sh arboldes/usr/src/14..` 
+		 `pruebas/aplicahasta.sh arboldes/usr/src/15..` 
 
 	3.3 Compilar libc con `doas pruebas/compila-libc.sh` y correr pruebas 
 	    de regresión con `cd /usr/src/regress/lib/libc/locale/; doas make`

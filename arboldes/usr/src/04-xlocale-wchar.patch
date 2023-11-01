@@ -1,19 +1,20 @@
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src54-num/lib/libc/locale/Makefile.inc src/lib/libc/locale/Makefile.inc
 --- src54-num/lib/libc/locale/Makefile.inc	Thu Dec  5 18:53:15 2013
 +++ src/lib/libc/locale/Makefile.inc	Thu Dec  5 19:03:47 2013
-@@ -5,17 +5,17 @@
+@@ -5,18 +5,18 @@
  
- SRCS+=	btowc.c _def_messages.c _def_monetary.c _def_numeric.c _def_time.c \
+ SRCS+=	_def_messages.c _def_monetary.c _def_numeric.c _def_time.c \
  	localeconv.c nl_langinfo.c nl_langinfo_l.c setlocale.c \
 -	duplocale.c freelocale.c newlocale.c uselocale.c \
  	__mb_cur_max.c collate.c _CurrentRuneLocale.c \
  	fix_grouping.c _get_locname.c \
  	isctype_l.c iswctype.c iswctype_l.c wctype.c \
  	loadtextcat.c \
--	mblen.c mbrlen.c mbstowcs.c mbtowc.c multibyte_citrus.c wcscoll.c \
+ 	mblen.c mbrlen.c mbrtoc16.c mbrtoc32.c mbstowcs.c mbtowc.c \
+-	btowc.c c16rtomb.c c32rtomb.c multibyte_citrus.c wcscoll.c \
 -	wcscoll_l.c \
-+	mblen.c mbrlen.c mbstowcs.c mbtowc.c multibyte_citrus.c none.c \
-+	setrunelocale.c \
++	btowc.c c16rtomb.c c32rtomb.c multibyte_citrus.c \
++	none.c setrunelocale.c \
 +	wcscoll.c wcscoll_l.c \
  	wcstombs.c wctob.c wctomb.c wcstof.c wcstod.c wcstold.c wcstol.c \
  	wcstoul.c wcstoll.c wcstoull.c wcstoimax.c wcstoumax.c \
@@ -23,7 +24,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src54-num/lib/libc/locale/Makefil
  
  MAN+=	nl_langinfo.3 setlocale.3 newlocale.3 uselocale.3 localeconv.3 \
  	iswalnum.3 towlower.3 \
-@@ -25,3 +25,5 @@
+@@ -27,3 +27,5 @@
  	wctype.3 iswctype.3 wctrans.3 towctrans.3 wcwidth.3
  
  CFLAGS+=-I${.CURDIR} -I${LIBCSRCDIR}/citrus -DCOLLATE_DEBUG
@@ -604,55 +605,49 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src54-num/lib/libc/locale/mbrlen.
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53/lib/libc/locale/mbrtowc.3 src/lib/libc/locale/mbrtowc.3
 --- src53/lib/libc/locale/mbrtowc.3	Mon Mar 25 18:28:42 2013
 +++ src/lib/libc/locale/mbrtowc.3	Tue Apr  9 09:45:12 2013
-@@ -29,21 +29,27 @@
- .Dt MBRTOWC 3
+@@ -32,6 +32,7 @@
  .Os
  .Sh NAME
--.Nm mbrtowc
--.Nd converts a multibyte character to a wide character (restartable)
-+.Nm mbrtowc ,
-+.Nm mbrtowc_l
-+.Nd convert a multibyte character to a wide character (restartable)
+ .Nm mbrtowc ,
++.Nm mbrtowc_l ,
+ .Nm mbrtoc32
+ .Nd convert a multibyte character to a wide character (restartable)
  .Sh SYNOPSIS
- .In wchar.h
- .Ft size_t
- .Fn mbrtowc "wchar_t * restrict wc" "const char * restrict s" "size_t n" \
- "mbstate_t * restrict mbs"
+@@ -42,6 +43,13 @@
+ .Fa "const char * restrict s"
+ .Fa "size_t n"
+ .Fa "mbstate_t * restrict mbs"
 +.Ft size_t
-+.Fn mbrtowc_l "wchar_t * restrict wc" "const char * restrict s" "size_t n" \
-+"mbstate_t * restrict mbs" "locale_t l"
++.Fo mbrtowc_l
++.Fa "wchar_t * restrict wc"
++.Fa "const char * restrict s"
++.Fa "size_t n"
++.Fa "mbstate_t * restrict mbs"
++.Fa "locale_t l"
+ .Fc
+ .In uchar.h
+ .Ft size_t
+@@ -54,6 +62,8 @@
  .Sh DESCRIPTION
--The
-+The functions
+ The
  .Fn mbrtowc
--function examines at most
-+and
++,
 +.Fn mbrtowc_l
-+examine at most
- .Fa n
- bytes of the multibyte character byte string pointed to by
- .Fa s ,
--converts those bytes to a wide character, and stores the wide character
-+convert those bytes to a wide character, and store the wide character
- in the wchar_t object pointed to by
- .Fa wc
- if
-@@ -59,9 +65,10 @@
- .Fa mbs .
- The mbstate_t object must be initialized to zero before the application's
- first call to
--.Fn mbrtowc .
--If the previous call to
+ and
+ .Fn mbrtoc32
+ functions examine at most
+@@ -75,6 +85,8 @@
+ which must be initialized to zero before the application's first call to
  .Fn mbrtowc
+ or
++.Fn mbrtowc_l
 +or
-+.Fn mbrtowc_l .
-+If the previous call to the function
- did not return (size_t)-1, the mbstate_t object can safely be reused
- without reinitialization.
- .Pp
-@@ -69,7 +76,12 @@
- .Fn mbrtowc
- is affected by the
+ .Fn mbrtoc32 .
+ If the previous call did not return
+ .Po Vt size_t Pc Ns \-1 ,
+@@ -89,7 +101,12 @@
+ .Fa s
+ is determined by the
  .Dv LC_CTYPE
 -category of the current locale.
 +category of the current locale, while the behavior of
@@ -660,26 +655,20 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53/lib/libc/locale/mbrtowc.3 s
 +is affected by the
 +.Dv LC_CTYPE
 +category of the locale provided as parameter, see
-+.Xr xlocale 3
- If the locale is changed without reinitialization of the mbstate_t object
- pointed to by
- .Fa mbs ,
-@@ -238,12 +250,14 @@
- .Sh SEE ALSO
++.Xr xlocale 3 
+ If the locale is changed without reinitialization of
+ .Pf * Fa mbs ,
+ the behaviour is undefined.
+@@ -268,7 +285,8 @@
  .Xr mbrlen 3 ,
  .Xr mbtowc 3 ,
--.Xr setlocale 3
-+.Xr setlocale 3,
+ .Xr setlocale 3 ,
+-.Xr wcrtomb 3
++.Xr wcrtomb 3,
 +.Xr xlocale 3
  .Sh STANDARDS
- The
  .Fn mbrtowc
- function conforms to
- .\" .St -isoC-amd1 .
-+POSIX 2008,
- ISO/IEC 9899/AMD1:1995
- .Pq Dq ISO C90, Amendment 1 .
- The restrict qualifier is added at
+ conforms to
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mbsinit.3 src/lib/libc/locale/mbsinit.3
 --- src53collation/lib/libc/locale/mbsinit.3	Mon Mar 25 18:28:42 2013
 +++ src/lib/libc/locale/mbsinit.3	Wed Apr  3 11:15:27 2013

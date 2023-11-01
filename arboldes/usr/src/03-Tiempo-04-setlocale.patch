@@ -59,9 +59,9 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/locale/Make
  	__mb_cur_max.c _CurrentRuneLocale.c _get_locname.c \
  	isctype_l.c iswctype.c iswctype_l.c wctype.c \
 +	loadtextcat.c \
- 	mblen.c mbrlen.c mbstowcs.c mbtowc.c multibyte_citrus.c wcscoll.c \
+ 	mblen.c mbrlen.c mbrtoc16.c mbrtoc32.c mbstowcs.c mbtowc.c \
+ 	btowc.c c16rtomb.c c32rtomb.c multibyte_citrus.c wcscoll.c \
  	wcscoll_l.c \
- 	wcstombs.c wctob.c wctomb.c wcstof.c wcstod.c wcstold.c wcstol.c \
 diff -ruN src56-orig/lib/libc/locale/loadtextcat.h src/lib/libc/locale/loadtextcat.h
 --- src56-orig/lib/libc/locale/loadtextcat.h	Wed Dec 31 19:00:00 1969
 +++ src/lib/libc/locale/loadtextcat.h	Mon Apr 28 22:16:18 2014

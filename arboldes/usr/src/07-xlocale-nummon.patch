@@ -487,64 +487,66 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/gdtoa/strtorx
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/wcrtomb.3 src/lib/libc/locale/wcrtomb.3
 --- src54-x6/lib/libc/locale/wcrtomb.3	Tue Dec  3 16:08:11 2013
 +++ src/lib/libc/locale/wcrtomb.3	Tue Dec  3 16:12:25 2013
-@@ -30,19 +30,25 @@
+@@ -31,6 +31,8 @@
  .Os
- .\" ----------------------------------------------------------------------
  .Sh NAME
--.Nm wcrtomb
--.Nd converts a wide character to a multibyte character (restartable)
-+.Nm wcrtomb,
-+.Nm wcrtomb_l
-+.Nd convert a wide character to a multibyte character (restartable)
- .\" ----------------------------------------------------------------------
+ .Nm wcrtomb ,
++.Nm wcrtomb_l ,
++and
+ .Nm c32rtomb
+ .Nd convert a wide character to a multibyte character
  .Sh SYNOPSIS
- .In wchar.h
- .Ft size_t
- .Fn wcrtomb "const char * restrict s" "wchar_t wc" "mbstate_t * restrict ps"
+@@ -40,6 +42,9 @@
+ .Fa "const char * restrict s"
+ .Fa "wchar_t wc"
+ .Fa "mbstate_t * restrict mbs"
 +.In xlocale.h
 +.Ft size_t
 +.Fn wcrtomb_l "const char * restrict s" "wchar_t wc" "mbstate_t * restrict ps" "locale_t loc"
- .\" ----------------------------------------------------------------------
+ .Fc
+ .In uchar.h
+ .Ft size_t
+@@ -49,7 +54,8 @@
+ .Fa "mbstate_t * restrict mbs"
+ .Fc
  .Sh DESCRIPTION
- .Fn wcrtomb
--converts the wide character given by
-+and
+-.Fn wcrtomb
++.Fn wcrtomb ,
 +.Fn wcrtomb_l
-+convert the wide character given by
- .Fa wc
--to the corresponding multibyte character, and stores up to
-+to the corresponding multibyte character, and store up to
- .Dv MB_CUR_MAX
- bytes in the array pointed to by
+ and
+ .Fn c32rtomb
+ convert the wide character
+@@ -81,7 +87,9 @@
  .Fa s
-@@ -54,7 +60,9 @@
- .Fn wcrtomb
- is affected by the
+ is determined by the
  .Dv LC_CTYPE
 -category of the current locale.
-+category of the current locale, while 
++category of the current locale while
 +.Fn wcrtomb_l
 +uses the locale given as parameter.
- .Pp
- These are the special cases:
- .Bl -tag -width 012345678901
-@@ -126,7 +134,8 @@
- .\" ----------------------------------------------------------------------
+ .Ox
+ only supports UTF-8 and ASCII output,
+ and these functions are only useful for UTF-8.
+@@ -139,6 +147,9 @@
+ is not a valid wide character
+ or if it cannot be represented in the multibyte encoding selected with
+ .Dv LC_CTYPE ,
++The
++.Fn wcrtomb_l
++function is a Darwin extension.
+ both functions return
+ .Po Vt size_t Pc Ns \-1
+ and set
+@@ -163,7 +174,8 @@
  .Sh SEE ALSO
+ .Xr mbrtowc 3 ,
  .Xr setlocale 3 ,
 -.Xr wctomb 3
 +.Xr wctomb 3 ,
 +.Xr xlocale 3
- .\" ----------------------------------------------------------------------
  .Sh STANDARDS
- The
-@@ -139,3 +148,6 @@
- .\" .St -isoC99 .
- ISO/IEC 9899/1999
- .Pq Dq ISO C99 .
-+The
-+.Fn wcrtomb_l
-+function is a Darwin extension.
+ .Fn wcrtomb
+ conforms to
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/iswctype.c src/lib/libc/locale/iswctype.c
 --- src54-x6/lib/libc/locale/iswctype.c	Tue Dec  3 16:08:11 2013
 +++ src/lib/libc/locale/iswctype.c	Tue Dec  3 16:12:25 2013
@@ -2664,15 +2666,15 @@ diff -ruN src/lib/libc/hidden/monetary.h.orig src/lib/libc/hidden/monentary.h
 diff -ruN src/lib/libc/hidden/stdlib.h.orig  src/lib/libc/hidden/stdlib.h
 --- src/lib/libc/hidden/stdlib.h.orig	Sun Aug 21 23:26:56 2016
 +++ src/lib/libc/hidden/stdlib.h	Sun Aug 21 23:27:02 2016
-@@ -51,6 +51,7 @@
+@@ -53,6 +53,7 @@
  #endif
  
  PROTO_NORMAL(__mb_cur_max);
 +PROTO_NORMAL(___mb_cur_max_l);
+ PROTO_NORMAL(__realpath);
  PROTO_STD_DEPRECATED(_Exit);
  PROTO_DEPRECATED(a64l);
- PROTO_NORMAL(abort);
-@@ -153,9 +154,12 @@
+@@ -156,9 +157,12 @@
  PROTO_DEPRECATED(srandom_deterministic);
  PROTO_DEPRECATED(srandomdev);
  PROTO_NORMAL(strtod);

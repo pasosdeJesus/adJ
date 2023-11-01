@@ -181,6 +181,7 @@ w3m-[v]	Navegador modo texto que soporta UTF-8 y descargas
 
 * Soporte, librerías y desarrollo
 aalib-[v]		Librería de arte ASCII
+adplug-[v]  Librería del reproductor de sonido AdLib
 aom-[v]		Codec de vídeo Alliance for Open Media AV1
 appstream-glib-[v]	Librería de metadatos AppStream
 adwaita-icon-theme-[v]	Tema de iconos para GNOME
@@ -204,10 +205,12 @@ cairomm-[v]		Interfaz en C++ para Cairo
 capstone-[v]		Entorno para desensamblar multi-plataforma
 cblas-[v]		Interfaz C para la librería BLAS
 celt-[v]		Codec experimental de audio ultra-bajo 
+cfitsio-[v] Librería para manejar datos FITS
 clisp-[v]		Implementación de ANSI Common Lisp
 clucene-core-[v]	Librería para búsquedas de textos completos
 consolekit2-[v]	Entorno para definir y seguir usuarios
 coreutils-[v]		Utilidades para archivos, interprete de órdenes y texto
+cups-browsed-[v]
 cups-libs-[v]		Librerías y encabezados de CUPS
 cups-filters-[v]	Filtros para CUPS de OpenPrinting
 cvsps-[v]		Genera conjuntos de parches de repositorios CVS
@@ -232,6 +235,7 @@ e2fsprogs-[v]	Utilidades para manejar sistemas de archivos ext2
 enca-[v]		Detecta codificación de caracteres de textos planos
 enchant-[v]		Librería genérica para corrección ortográfica
 enchant2-[v]		Librería genérica para corrección ortográfica
+epoll-shim-[v]  Pequeña implementación de epoll que usa kqueu
 exiv2-[v]		Manipula metadatos de imágenes como exif e ipct
 faad-[v]		Decodificar AAC de MPEG-2 y MPEG-4
 femail-[v]		Cliente simple de SMTP
@@ -266,6 +270,7 @@ giblib-[v]		Librería de utilidades
 giflib-[v]		Librería y herramientas para operar gráficos GIF
 ghostscript-[v]	Genera PostScript
 ghostscript-fonts-[v]	Fuentes para GhostScript
+gitwrapper-[v]  Llama al servidor de repositorios Git apropiado
 glew-[v]		Librería GL Extension Wrangler
 glib2-[v]		Librería de utilidades de propósito general
 glib2-networking-[v]	Módulos relaciones con red gio de GLib
@@ -286,17 +291,20 @@ gsl-[v]		Librería científica
 gsm-[v]		Conversor de audio u-law a gsm
 gspell-[v]		Librería de revisión ortográfica para GTK+
 gstreamer1-[v]	Ambiente para emitir multi-medios
+gstreamer1-plugins-bad-[v] Elementos malos para GStreamer
 gstreamer1-plugins-base-[v]	Elementos base para GStreamer
 gstreamer1-plugins-good-[v]	Buenos elementos para GStreamer
 gtar-[v]		Otra versión del archivador tar
 gtest-[v]	Ambiente de pruebas para C++
-gtk3mm-[v]		Interfaz en C++ para GTK3+
 gtk+2-[v]		Componentes gráficos GTK+2
 gtk+3-[v]		Componentes gráficos GTK+3
 gtk+3-cups-[v]	Punto al lado del servidor de sistema CUPS para gtk+3
 gtk-update-icon-cache-[v]	Utilidad para almacenar temas de iconos
 gtk2mm-[v]		Interfaz en C++ para gtk2+
+gtk3mm-[v]		Interfaz en C++ para GTK3+
+gtk4-update-icon-cache-[v]
 gtkspell-[v]	Corrector ortográfico para gtk2
+gtksourceview4-[v]  Widget que extiende el widget GtkTextView de GTK4
 gvfs-[v]		Sistema de archivos virtual de GNOME
 harfbuzz-[v]		Librería para dar formas a texto OpenType
 harfbuzz-icu-[v]	Soporte ICU para librería harfbuzz
@@ -329,10 +337,12 @@ lcms2-[v]		Librería para manejo de color
 lib2geom-[v]		Librería fácil de usar en C++ para geometría 2D
 libao-[v]		Librería portable para emitir audio
 libarchive-[v]	Librería para leer y escribir archivos de emisión
+libavif-[v] Librería para codificar/decodificar
 libass-[v]		Librería para decodificación AC-3
 libassuan-[v]		Librería IPC usada por GnuPG y gpme
 libb2-[v]		Librería de funciones de condensando BLAKE2{b,s,bp,sp}
 libbfio-[v]	Librería de abstracción de entrada/salida en C
+libbinio-[v]  Librería de clases para flujos binarios de E/S
 libbluray-[v]		Soporta reproducción de Blu-ray
 libbs2b-[v]		DSP Bauer estereofónico-a-binarual
 libcares-[v]		Librería de resolvedor asíncrono
@@ -341,8 +351,10 @@ libcdio-[v]		Librería para controlar entrada de disco compacto
 libcdio-paranoia-[v]	Bifurcación de cdparanoia que usa libcdio
 libcroco-[v]	Librería para reconocimiento genérico de CSS
 libcue-[v]		Librería para reconocer hojas cue
+libcupsfilters-[v]  Librería para desarrollar filtros de impresión
 libdaemon-[v]	Librería en C que facilita escribir servicios
 libde265-[v]		Implementación del codec de vídeo H.265
+libdeflate-[v]  Librería optimizada para decompresión DEFLATE/zlib/gzip
 libdv-[v]		Codec Quasar DV
 libdvbpsi-[v]		Librería para decodificar/generar tablas MPEG TS/DVB
 libdvdcss-[v]		Desenmaraña DVDs enmarañados
@@ -389,9 +401,11 @@ libnotify-[v]		Envía notificaciones de escritorio a un servicio
 libogg-[v]		Librería para flujos de bits OGG
 libpaper-[v]		Librería para manejar tipos de papel
 libplacebo-[v]	Librería reusable para vídeo acelerado por GPU
+libppd-[v]    Librería para retro-adaptar controladores de impresión legados
 libproxy-[v]	Librería para manejar detalles de un proxy
 libpsl-[v]		Librería con lista de sufijos pública
 libraw-[v]		Librería para leer archivos RAW
+librevenge-[v] Librería base para escribir filtros de importación de documentos
 librsvg-[v]	Librería para reconocer archivos SVG basada en SAX
 librttopo-[v]	Librería de topología RT
 libsamplerate-[v]	Librería de conversión de rata de audios
@@ -421,6 +435,7 @@ libtorrent-[v]	Librería de BitTorrent escrita en C++
 libudfread-[v]	Librería para leer UDF de dispositivos puros
 libunbound-[v]	Librería de resolvedor DNS que valida
 libunistring-[v]	Manipula cadenas Unicode
+libunibreak-[v] Implementación de ruptura de líneas y palabras
 libusb1-[v]		Rutinas para manejar dispositivos USB
 libuv-[v]		Librería para entrada/salida multiplataforma
 libv4l-[v]		Librería en espacio de usuario de libv4l
@@ -436,6 +451,7 @@ libvpx-[v]	Codec para video VP8 de Google
 libvterm-[v]	Librería para emular una termina VT220/xterm/ECMA-48
 libwebp-[v]		Conversión del formatos gráficos Google WebP
 libwmf-[v]	Conversión y manejo WMF
+libwpd-[v]  Importa y exporta documentos WordPerfect
 libxkbcommon-[v]	Librería para manejar descripciones de teclado
 libxml-[v]		Librería para reconocimiento de XML
 libxslt-[v]	Librería para transformaciones XSL en C
@@ -501,6 +517,7 @@ p5-Crypt-OpenSSL-Bignum-[v]	Aritmética multi-precisión de OpenSSL
 p5-Crypt-OpenSSL-Guess-[v]	Adivinar rutas de inclusión de OpenSSL
 p5-Crypt-OpenSSL-Random-[v]	Rutinas para acceder al prng de OpenSSL
 p5-Crypt-OpenSSL-RSA-[v]	Codificación y decodificación RSA con OpenSSL
+p5-CryptX-[v] Kit de herramientas criptográficas para Perl
 p5-Data-Dumper-Concise-[v]	Menos indentación
 p5-Data-IEEE754-[v]	Empaqueta  y desempaqueta flotantes big-endian
 p5-Data-OptList-[v]	Reconoce y valida pares de opciones nombre/valor
@@ -714,7 +731,9 @@ py3-ndg-httpsclient-[v]	Soporte HTTPS ampliado para httplib y urllib2
 py3-numpy-[v]	Librearía numérica y de arreglos rápida en Python
 py3-openssl-[v]	Interfaz para python a librería OpenSSL
 py3-parsedatetime-[v]	Reconocer fechas y horas leíbles por humanos
+py3-puremagic-[v]
 py3-pyRFC3339-[v]	Da formato a fechas de acuerdo al RFC3339
+py3-pypdf-[v]
 py3-requests-[v]	Librería Python para HTTP simple y elegante
 py3-requests-toolbelt-[v]	Cinturón de utilidades para py-requests
 py3-setuptools-[v]	Sistema de empaquetamiento de módulos Python
@@ -788,6 +807,7 @@ wxWidgets-gtk3-[v]	Herramientas para GUIs multi-plataforma
 Xaw3d-[v]		Componentes gráficos 3D Athena similares a Motif
 x265-[v]		Codificador H.265/HEVC libre
 x264-[v]		Codificador abierto h264/avc
+xapian-core-[v]
 xcdroast-[v]	Quemador de CD
 xdg-utils-[v]	Asisten integración de tareas de escritorio
 xvidcore-[v]		Codificador y decodificador de MPEG-4

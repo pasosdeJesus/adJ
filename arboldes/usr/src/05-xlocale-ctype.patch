@@ -1,24 +1,22 @@
 diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src54-x4/lib/libc/locale/Makefile.inc src/lib/libc/locale/Makefile.inc
 --- src54-x4/lib/libc/locale/Makefile.inc	Thu Dec  5 19:12:05 2013
 +++ src/lib/libc/locale/Makefile.inc	Thu Dec  5 19:17:22 2013
-@@ -9,12 +9,13 @@
- 	fix_grouping.c _get_locname.c \
- 	isctype_l.c iswctype.c iswctype_l.c wctype.c \
+@@ -11,11 +11,11 @@
  	loadtextcat.c \
--	mblen.c mbrlen.c mbstowcs.c mbtowc.c multibyte_citrus.c none.c \
-+	mblen.c mbrlen.c mbstowcs.c mbtowc.c multibyte_citrus.c \
-+	nextwctype.c none.c \
- 	setrunelocale.c \
+ 	mblen.c mbrlen.c mbrtoc16.c mbrtoc32.c mbstowcs.c mbtowc.c \
+ 	btowc.c c16rtomb.c c32rtomb.c multibyte_citrus.c \
+-	none.c setrunelocale.c \
++	nextwctype.c none.c setrunelocale.c \
  	wcscoll.c wcscoll_l.c \
  	wcstombs.c wctob.c wctomb.c wcstof.c wcstod.c wcstold.c wcstol.c \
  	wcstoul.c wcstoll.c wcstoull.c wcstoimax.c wcstoumax.c \
 -	rune.c runetable.c ___runetype_mb.c \
-+	runeglue.c rune.c runetable.c ___runetype_mb.c \
++	rune.c runeglue.c runetable.c ___runetype_mb.c \
  	_wctrans.c wcsxfrm.c wcsxfrm_l.c xlocale.c
  
  MAN+=	nl_langinfo.3 setlocale.3 newlocale.3 uselocale.3 localeconv.3 \
-@@ -22,7 +23,8 @@
- 	btowc.3 mblen.3 mbrlen.3 mbrtowc.3 mbsinit.3 mbsrtowcs.3 \
+@@ -24,7 +24,8 @@
+ 	mbsinit.3 mbsrtowcs.3 \
  	mbstowcs.3 mbtowc.3 wcrtomb.3 wcscoll.3 wcsrtombs.3 wcstod.3 \
  	wcstol.3 wcstombs.3 wcsxfrm.3 wctob.3 wctomb.3 \
 -	wctype.3 iswctype.3 wctrans.3 towctrans.3 wcwidth.3

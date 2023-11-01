@@ -54,10 +54,13 @@ Novedades tomadas de <https://www.openbsd.org/74.html>
 * Aplicados parches de seguridad hasta el 26.Nov.2023 provenientes de
   OpenBSD que incluyen soluciones a fallas
 * Controladores ampliados o mejorados para amd64
-  * Tarjetas Ethernet:
-  * Tarjetas inalámbricas:
+  * Tarjetas Ethernet: Ethernet USB: ure soporta RTL8153D.
+  * Tarjetas inalámbricas: Soporte para Quectel LTE&5G en umb, soporte para
+    RTL8188FTV en urtwn. Mejoras a iwm e iwx.
   * Video: 
-* Mejoras al kernel, SMP y seguridad
+  * Otros: sensores térmicos de Ryzen 9 79xx en ksmn.
+* Mejoras al kernel, SMP y seguridad: Implmentados dt y utrace en amd64, 
+  retira soporte a softdep en mount.
 * Mejoras a `vmm`
 * Mejoras a herramientas de Red
   * Mejorados ``, ``
