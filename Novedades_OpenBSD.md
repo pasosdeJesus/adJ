@@ -39,7 +39,10 @@ Con respecto a OpenBSD 7.4 las novedades son:
 		* monitorea 	Revisa conexión a otro servidor
 		* prepopensmtpd 	Prepara servidor de correo
 	* Binarios modificados en /usr/bin
-		* perl 		con soporte para locale monetario y numérico
+		* perl 		no usa locale monetario y numérico para mantener
+            más compatibilidad con OpenBSD por ejemplo en uso de pkg_info y 
+            pkg_add --con soporte completo requeriría preceder toda llamada
+            con LANG=POSIX
 		* Muchos otros cambiando daemon por servicio
 	* Binarios modificados en /usr/sbin
 		* sysmerge	Usa llaves de adJ

@@ -1,21 +1,21 @@
 COMO PUBLICAR
 =============
 
-Anhelamos publicar versión mayor (e.g 7.3) 3 meses después de OpenBSD:
+Anhelamos publicar versión mayor (e.g 7.4) 3 meses después de OpenBSD:
 
 * Bien el 11.Ene
 * O bien el 1.Jul
 
-Publicamos revisiones (e.g 7.3p1) si la seguridad o calidad lo ameriten.
+Publicamos revisiones (e.g 7.4p1) si la seguridad o calidad lo ameriten.
 
-Anhelamos publicar al menos una versión beta (e.g 7.3b1 en directorio
+Anhelamos publicar al menos una versión beta (e.g 7.4b1 en directorio
 `desarrollo` del sitio de distribución):
 
 	Bien el 10.Dic
 	O bien el 10.Jun
 
 Sería ideal publicar una versión alfa mucho antes (digamos bien 24.Sep o
-bien 24.Mar, e.g 7.3a1).
+bien 24.Mar, e.g 7.4a1).
 
 
 Pasos importantes para publicar versión beta
@@ -53,7 +53,7 @@ Pasos importantes para publicar versión beta
    Para verificar que perl está más o menos bien ejecutar `pkg_add`.
 5. Recompilar paquetes con actualizaciones de seguridad o mejoras
 6. Retroportar paquetes, dejar resultados no incluidos en DVD pero
-   útiles en `7.3-extra`
+   útiles en `7.4-extra`
 7. Regenerar distribución (sin paquetes ni otras compilaciones) con:
 	```
 	doas ./distribucion.sh
@@ -95,21 +95,11 @@ Pasos importantes para publicar versión beta
 	  return 0;
 	}
 	```
-	- Operación de locale numeric en perl. El siguiente programa en perl 
-	debe dar respuesta 1987,23:
-	```perl
-	# Basado en http://perldoc.perl.org/perllocale.html
-	use locale;
-	use POSIX qw(locale_h);
-	setlocale(LC_NUMERIC, "es_CO.UTF-8") or die "No pone locale LC_NUMERIC en es_CO.UTF-8";                                                        
-	my $a = 1987.23;
-	printf "%g\n", $a;
-	```
 	- Ejecución de `/inst-adJ.sh` en nuevo y actualización, 
 	- Verificar que desde el directorio paquetes del medio de
-	  instalacion se ejecute sin fallas `PKG_PATH=. doas pkg_add *`
+	  instalación se ejecute sin fallas `PKG_PATH=. doas pkg_add *`
 	- Con paquete `colorls` modificado y actualizado, verificar cotejación 
-	  en español en terminal grafica:
+	  en español en terminal gráfica:
 	```sh
 	touch a
 	touch í
@@ -118,7 +108,7 @@ Pasos importantes para publicar versión beta
 	```
   	  Debe mostrar los directorios en orden alfabético correcto (í 
 	  entre a y o).
-	- Con paquete postgresql modificado y actualizado, verificar que 
+	- Con paquete PostgreSQL modificado y actualizado, verificar que 
 	  coteja en español con:
 	```sh
 	doas su - _postgresql
@@ -145,9 +135,9 @@ Pasos importantes para publicar versión beta
 11. En adJ.pasosdeJesus.org
 	```
 	hdes/creaiso.sh
-	cp -rf AprendiendoDeJesus-7.3-amd64.iso 7.3-amd64 /dirftp
-	mkdir /dirftp/7.3-extra
-	rsync compdes:comp/adJ/extra-7.7/* /dirftp/7.3-extra
+	cp -rf AprendiendoDeJesus-7.4-amd64.iso 7.4-amd64 /dirftp
+	mkdir /dirftp/7.4-extra
+	rsync compdes:comp/adJ/extra-7.7/* /dirftp/7.4-extra
 	```
 12. Verificar operación de:
   * http://pasosdeJesus.github.io/basico_adJ http://pasosdeJesus.github.io/usuario_adJ http://pasosdeJesus.github.io/servidor_adJ
@@ -158,28 +148,29 @@ Pasos importantes para publicar versión beta
   * https://fe.pasosdeJesus.org
   * rsync://adJ.pasosdeJesus.org
 
-13. Poner Tag en github e iniciar rama al publicar version alfa o beta (antes en master)
+13. Poner Tag en github e iniciar rama al publicar versión alfa o beta (antes en master)
 	```
-	git tag -a v7.3b1 -m "Version 7.3b1"
-	git push origin v7.3b1
+	git tag -a v7.4b1 -m "Version 7.4b1"
+	git push origin v7.4b1
 	...
-	git checkout -b ADJ_7_3
-	git push origin ADJ_7_3
+	git checkout -b ADJ_7_4
+	git push origin ADJ_7_4
 	```
 14. Publicar en lista de desarrollo
 
 Pasos importantes para publicar versión mayor
 --------------------------------------------
 
-1. Usar la rama ADJ_7_3
+1. Usar la rama ADJ_7_4
 	```
-	git checkout ADJ_7_3
+	git checkout ADJ_7_4
 	```
 2. Actualizar SIVeL, evangelios, Mt77 y paquetes propios de 
    adJ.
 3. Actualizar documentación (`basico_adJ`, `usuario_adJ` y `servidor_adJ`), 
    publicar en Internet
-4. Actualizar versión en logo que presenta xenodm en `arboldd/etc/X11/xenodm/pixmaps/`. 
+4. Actualizar versión en logo que presenta xenodm en 
+   `arboldd/etc/X11/xenodm/pixmaps/`. 
    Con gimp iniciar con el de resolución 15bpp, modificarlo el número de 
    versión es tipo Sans tamaño 18. Para converitr a xpm en 
    Imagen > Modo > Indexado. 15bpp y 8bpp con paleta de 255 colores. 
@@ -187,24 +178,24 @@ Pasos importantes para publicar versión mayor
 5. Análogo a pasos de versión beta
 6. Actualizar version en reto de P2PU (las 4 primeras tareas) 
    https://p2pu.org/es/groups/openbsd-adj-como-sistema-de-escritorio/
-7. Publicar un "Release" en github Versión 7.3 con enlace a novedades.
+7. Publicar un "Release" en github Versión 7.4 con enlace a novedades.
 8. Publicar en Twitter y Facebook. 
    Si es tambien publicacion de SIVeL en sitio de noticias de SIVeL y Structio.
 
-	Publicado adJ 7.3 distribución para servidores y cortafuegos, 
+	Publicado adJ 7.4 distribución para servidores y cortafuegos, 
 	segura, amigable para cristian@s y en español, ver 
 	http://aprendiendo.pasosdejesus.org/
 9. Correo a listas: 
     openbsd-colombia@googlegroups.com, 
     openbsd-mexico@googlegroups.com, sivel-soporte@lists.sourceforge.net
 
-	Tema: Publicado adJ 7.3 para amd64
+	Tema: Publicado adJ 7.4 para amd64
 
 	Para instalar por primera vez descarga la imagen para DVD de:
 	  http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/
 	O solicita un DVD o una USB de instalacion por correo postal.
 
-	Si planeas actualizar de una version anterior a 7.3
+	Si planeas actualizar de una version anterior a 7.4
 	hay un procedimiento mas rápido con `rsync` (ver
 	https://github.com/pasosdeJesus/adJ/blob/master/Actualiza.md ).
 
@@ -216,8 +207,8 @@ Pasos importantes para publicar versión mayor
 	  2. La guía de instalación:
 	  http://pasosdeJesus.github.io//usuario_adJ/sobre-la-instalacion.html
 
-	Mira las novedades completas de la versión 7.3 en:
-	  https://aprendiendo.pasosdejesus.org/AdJ_7.3_-_Aprendiendo_de_Jesus_7.3.html/
+	Mira las novedades completas de la versión 7.4 en:
+	  https://aprendiendo.pasosdejesus.org/AdJ_7.4_-_Aprendiendo_de_Jesus_7.4.html/
 
 	De estas destacamos:
 	...
