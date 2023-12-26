@@ -6,7 +6,7 @@ comenzar con un punto.  Por ejemplo `~/.zshrc` es un archivo de configuración
 empleado por el interprete de ordenes `zsh` cada vez que se inicia.
 
 Aquí encuentras archivos de configuración para la pila de edición en
-terminal de adJ: `rcm`+`tmux`+`zsh`+neovim.  El siguiente pantallazo 
+terminal de adJ: `rcm`+`tmux`+`zsh`+`vim`.  El siguiente pantallazo 
 muestra como se ve (el juego de colores es configurable):
 
 ![](archconf.png?raw=true)
@@ -71,14 +71,11 @@ Requerimientos
   ```
   * En las secciones siguientes verás como usarlo en detalle.
   * `rcm` usa licencia BSD de 3 clausulas
-* Usar neovim como editor
-  * Si hace falta instala con `doas pkg_add neovim` (aunque ya viene por
-    omisión desde adJ 6.7)
-  * Puedes iniciarlo con `nvim` o una vez instales los archivos de 
+* Usar `vim` como editor
+  * Si hace falta instala con `doas pkg_add vim` (aunque viene por
+    omisión en adJ)
+  * Puedes iniciarlo con `vim` o una vez instales los archivos de 
     configuraicón con `v`
-  * Puede leer la configuración de `vim`, pero maneja mejor ratón y 
-    portapapeles y a futuro posibilitará edición estilo IDE.
-  * neovim emplea licencia Apache que es menos restrictiva que la de `vim`.
 
 
 Instalación
@@ -123,7 +120,7 @@ nuevamente a tu directorio `~/archconf` y volver a ejecutar `rcup`:
     rcup
 
 De esta manera se copiaran los nuevos archivos y se instalarán nuevas
-extensiones neovim.
+extensiones vim.
 **Nota** _Debes_ ejecutar `rcup` después de copiar para asegurar
 que todos los archivos de las extensiones queden instalados adecuadamente.
 Puedes ejecutar `rcup` muchas veces, así que ¡actualiza pronto y actualiza
@@ -240,8 +237,8 @@ El archivo `~/archconf-local/zshrc.local` se carga después de
 `~/archconf-local/zsh/configs`.
 
 
-Configuraciones de vim y neovim
--------------------------------
+Configuraciones de vim
+----------------------
 
 De forma análoga al directorio de configuración para `zsh` antes descrito, 
 `vim` carga automáticamente los archivos del directorio 
@@ -256,9 +253,6 @@ vez que inicia vim, sin importar el nombre del archivo:
     set cinoptions=:0,t0,+4,(4
     autocmd BufNewFile,BufRead *.[ch] setlocal sw=0 ts=8 noet
 
-neovim empleará la configuración de `vim` más otra que pueda añadir 
-en `~/archconf-local/config/nvim/`
-
 ¿Qué viene incluido?
 --------------------
 
@@ -267,7 +261,7 @@ Configuración de [tmux](http://robots.thoughtbot.com/a-tmux-crash-course):
 * Mejora la resolución del color.
 * Suaviza el color de la barra de estatus a negro con fondo azul claro
 
-Configuración de [vim](http://www.vim.org/) y [neovim](http://neovim.io):
+Configuración de [vim](http://www.vim.org/):
 
 * [fzf](https://github.com/junegunn/fzf.vim) para búsqueda difusa de
   archivos/colchones/etiquetas.
