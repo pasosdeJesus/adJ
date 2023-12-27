@@ -233,14 +233,14 @@ ADMADJ=$uadJ;
 echo "* Creando cuenta inicial"  >> /var/www/tmp/inst-adJ.bitacora
 groupinfo $uadJ > /dev/null 2>&1
 if (test "$?" != "0") then {
-groupadd $uadJ
+	groupadd $uadJ
 } fi;
 userinfo $uadJ >/dev/null 2>&1
 if (test "$?" != "0") then {
-adduser -v -batch $uadJ $uadJ,wheel $uadJ
-passwd $uadJ
+	adduser -v -batch $uadJ $uadJ,wheel $uadJ
+	passwd $uadJ
 } else {
-echo "   Saltando..."  >> /var/www/tmp/inst-adJ.bitacora;
+	echo "   Saltando..."  >> /var/www/tmp/inst-adJ.bitacora;
 } fi;
 user mod -g $uadJ $uadJ
 user mod -G users $uadJ
@@ -1461,6 +1461,13 @@ if (test -f /etc/rc.d/switchd) then {
      /usr/share/man/man5/switchd.conf.5 \
      /usr/share/man/man8/switchctl.8 \
      /usr/share/man/man8/switchd.8
+} fi;
+
+grep _shutdown /etc/group > /dev/null
+if (test "$?" != "0") then {
+  vac="$vac 7.3 a 7.4";
+  echo "Aplicando actualizaciones de 7.3 a 7.4" >> /var/www/tmp/inst-adJ.bitacora;
+  groupadd -g 118 _shutdown
 } fi;
 
 if  (test "$vac" != "") then {
