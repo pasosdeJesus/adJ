@@ -2746,7 +2746,7 @@ EOF
 	chown $uadJ:$uadJ /home/$uadJ/.irbrc
 } fi;
 
-VRUBY=3.2
+VRUBY=3.3
 VRUBYSP=`echo $VRUBY | sed -e "s/\.//g"`
 echo "* Configurar ruby-$VRUBY" >> /var/www/tmp/inst-adJ.bitacora;
 uruby=$uadJ
