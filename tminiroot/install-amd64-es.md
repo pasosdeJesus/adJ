@@ -1,4 +1,4 @@
-#     $OpenBSD: install.md,v 1.59 2023/03/07 17:29:42 kn Exp $
+#     $OpenBSD: install.md,v 1.61 2023/05/26 11:41:50 kn Exp $
 #
 #
 # Copyright (c) 1996 The NetBSD Foundation, Inc.
@@ -79,8 +79,7 @@ md_prep_fdisk() {
 			return ;;
 		[gG]*)
 			if [[ $MDEFI != y ]]; then
-				ask_yn "Un disco EFI/GPT podria no arrancar. Proceder?"
-				[[ $resp == n ]] && continue
+				ask_yn "Un disco EFI/GPT podria no arrancar. Proceder?" || continue
 			fi
 
 			echo -n "Estableceendo la particion OpenBSD GPT para el disco completo $_disk..."
@@ -129,8 +128,8 @@ __EOT
 			echo " intente nuevamente." ;;
 		[oO]*)
 			[[ $_d == OpenBSD ]] || continue
-			if [[ $_disk == $ROOTDISK ]] && disk_has $_disk gpt &&
-				! disk_has $_disk gpt efisys; then
+			if [[ $_disk == @($ROOTDISK|$CRYPTOCHUNK) ]] &&
+			    disk_has $_disk gpt && ! disk_has $_disk gpt efisys; then
 				echo "No hay particion EFI Sys en GPT, intente nuevament."
 				$AUTO && exit 1
 				continue

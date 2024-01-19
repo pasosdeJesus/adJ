@@ -1,4 +1,4 @@
-#     $OpenBSD: install.md,v 1.59 2023/03/07 17:29:42 kn Exp $
+#     $OpenBSD: install.md,v 1.61 2023/05/26 11:41:50 kn Exp $
 #
 #
 # Copyright (c) 1996 The NetBSD Foundation, Inc.
@@ -79,8 +79,7 @@ md_prep_fdisk() {
 			return ;;
 		[gG]*)
 			if [[ $MDEFI != y ]]; then
-				ask_yn "$_slanefigpt"
-				[[ $resp == n ]] && continue
+				ask_yn "$_slanefigpt" || continue
 			fi
 
 			echo -n "$_slsettingopenbsdgpt $_disk..."
@@ -121,8 +120,8 @@ __EOT
 			echo "$_sltryagain" ;;
 		[oO]*)
 			[[ $_d == OpenBSD ]] || continue
-			if [[ $_disk == $ROOTDISK ]] && disk_has $_disk gpt &&
-				! disk_has $_disk gpt efisys; then
+			if [[ $_disk == @($ROOTDISK|$CRYPTOCHUNK) ]] &&
+			    disk_has $_disk gpt && ! disk_has $_disk gpt efisys; then
 				echo "$_slnoefitryagain"
 				$AUTO && exit 1
 				continue
