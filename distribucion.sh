@@ -830,6 +830,7 @@ if (test "$sn" = "s") then {
   # Modificados para posibilitar compilación
   # Deben estar en mystuff
 
+  paquete ruby paquetes "ruby ruby33-ri_docs" 3.3
   paquete databases/sivel sivel sivel 2.0
 
   # Todo lo de perl tuvo que recompilarse
@@ -1002,7 +1003,7 @@ if (test "$sn" = "s") then {
   ### Requieren recompilación por cambio en FILE
   paquete unzip  # De no hacerse envía descompresiones a salida estándar
   paquete python paquetes "python" "3.10"
-  paquete ruby paquetes "ruby ruby32-ri_docs" 3.2
+  paquete ruby paquetes "ruby ruby33-ri_docs" 3.3
   paquete gettext-tools paquetes 'gettext-tools gettext-runtime'  # Requerido para compilar muchos
   paquete m4 # Requerido para compilar bison (instalar antes de compilar bison)
   paquete bison # Requerido para compilar MariaDB

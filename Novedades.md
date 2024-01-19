@@ -54,27 +54,31 @@ Novedades tomadas de <https://www.openbsd.org/74.html>
 * Aplicados parches de seguridad hasta el 26.Nov.2023 provenientes de
   OpenBSD que incluyen soluciones a fallas
 * Controladores ampliados o mejorados para amd64
-  * Tarjetas Ethernet: Ethernet USB: ure soporta RTL8153D.
-  * Tarjetas inalámbricas: Soporte para Quectel LTE&5G en umb, soporte para
-    RTL8188FTV en urtwn. Mejoras a iwm e iwx.
-  * Video: 
-  * Otros: sensores térmicos de Ryzen 9 79xx en ksmn.
+  * Tarjetas Ethernet: Nuevo `ngbe` que soporta dispositivos Ethernet
+    WangXun WX1860 PCI Express 10/100/1Gb. Añadido soporte para 100GB
+    y para Mellanox ConnectX-6 Lx en `mcx.` Ethernet USB: `ure` soporta 
+    RTL8153D. 
+  * Tarjetas inalámbricas: Soporte para Quectel LTE&5G en `umb`, soporte para
+    RTL8188FTV en `urtwn`. Mejoras a `iwm` e `iwx`.
+  * Video: Se actualizó `drm` al de Linux 6.1.55. 
+  * Otros: sensores térmicos de Ryzen 9 79xx en `ksmn`.
 * Mejoras al kernel, SMP y seguridad: Implmentados dt y utrace en amd64, 
   retira soporte a softdep en mount.
 * Mejoras a `vmm`
 * Mejoras a herramientas de Red
-  * Mejorados ``, ``
 * Seguridad
-  * 
-  * `libressl` actualizado a 
-  * Incluye OpenSSH 
-* Otros
-  * Mejoras a 
+  * Evita falla Zenbleed en CPUs AMD y permite actualizar microcódigo.
+  * Habilita "indirect branch tracking (IBT)" en amd64 que ayuda a
+    garantizar integridad del control de flujo evitando que código
+    malicioso salte a la mitad de una función.
+  * `libressl` actualizado a 3.8.2
+  * Incluye OpenSSH 9.5
+  * `shutdown` sólo puede ser ejecutado por miembros del nuevo grupo `_shutdown`
 
 * El sistema base incluye mejoras a componentes auditados y mejorados
-  como, `llvm x.0.0`,  `Xenocara` (basado en `Xorg` 7.7),
+  como, `llvm 13.0.0`,  `Xenocara` (basado en `Xorg` 7.7),
   `perl 5.x.0`
-* El repositorio de paquetes de OpenBSD cuenta con y para amd64
+* El repositorio de paquetes de OpenBSD cuenta con 11.845 para amd64
 
 
 ### 2.2 Paquetes
@@ -110,11 +114,13 @@ Novedades tomadas de <https://www.openbsd.org/74.html>
 
 * Incluye `evangelios_dp-0.9.9` con traducción y marcado Strong del
   comienzo del nuevo testamento hasta Galatas
-* El porte para OpenBSD-current de Ruby 3.2.2, diligentemente mantenido
+* El porte para OpenBSD-current de Ruby 3.3, diligentemente mantenido
   por Jeremy Evans, quita el aviso de actualizar gemas del sistema cuando
   hay nuevas versiones disponibles, pues implícitamente sugiere instalar el
-  paquete de Ruby para OpenBSD más actualizado (en caso de que los haya).
-  En adJ retro-portamos la mayoría de ese porte pero mantenemos el
+  paquete de la gema de Ruby para OpenBSD más actualizado 
+  (en caso de que los haya).
+  En adJ recomendamos usar gemas directamente (en lugar de paquetes con gemas)
+  y  retro-portamos la mayoría de ese porte pero mantenemos el
   comportamiento original de Ruby y sugerimos actualizar gemas del
   sistema tan pronto y tanto como sea posible con
   `doas gem update --system`
