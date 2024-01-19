@@ -20,7 +20,7 @@ WRKDIST=	${WRKDIR}
 DIRTIPOS=	${PREFIX}/share/fonts/structio
 
 
-MASTER_SITES=	${MASTER_SITE_SOURCEFORGE:=structio/TiposLectoescritura/}
+SITES=	${SITE_SOURCEFORGE:=structio/TiposLectoescritura/}
 EXTRACT_SUFX=	.tar.gz
 DISTFILES=      ${DISTNAME}${EXTRACT_SUFX} 
 
