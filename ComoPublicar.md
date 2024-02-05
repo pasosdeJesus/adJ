@@ -58,11 +58,12 @@ Pasos importantes para publicar versión beta
 	```
 	doas ./distribucion.sh
 	```
+
 8. Retocar fecha de publicacion en `Novedades.md` y publicar escondido en
    <http://aprendiendo.pasosdeJesus.org>
 9. Generar distribución, imagen iso (`hdes/creaiso.sh`)
-9. Probar por ejemplo en `qemu` (`hdes/qemu.sh` o remotamente 
-  `TEXTO=1 hdes/qemu.sh`): 
+10. Probar por ejemplo en `qemu` (`hdes/qemu.sh` o remotamente 
+  `doas TEXTO=1 hdes/qemu.sh`): 
 	- Instalación de sistema base, `uname -a` debe reportar 
 		`APRENDIENDODEJESUS`
 	- Verificar que kernel tiene renombramiento de `daemon` por `servicio` con:
@@ -127,19 +128,19 @@ Pasos importantes para publicar versión beta
 	- Que opere bien una aplicación Ruby on Rails
 	- Que toda entrada del menú desde la interfaz gráfica opere.  
 	  Arreglar y repetir hasta que no haya errores.
-10. En computador de desarrollo tras configurar `var-local.sh` enviar a
+11. En computador de desarrollo tras configurar `var-local.sh` enviar a
    adJ.pasosdeJesus.org:
 	```
 	hdes/rsync-aotro.sh
 	```
-11. En adJ.pasosdeJesus.org
+12. En adJ.pasosdeJesus.org
 	```
 	hdes/creaiso.sh
 	cp -rf AprendiendoDeJesus-7.4-amd64.iso 7.4-amd64 /dirftp
 	mkdir /dirftp/7.4-extra
 	rsync compdes:comp/adJ/extra-7.7/* /dirftp/7.4-extra
 	```
-12. Verificar operación de:
+13. Verificar operación de:
   * http://pasosdeJesus.github.io/basico_adJ http://pasosdeJesus.github.io/usuario_adJ http://pasosdeJesus.github.io/servidor_adJ
   * http://sivel.sf.net/
   * http://aprendiendo.pasosdeJesus.org
@@ -148,7 +149,7 @@ Pasos importantes para publicar versión beta
   * https://fe.pasosdeJesus.org
   * rsync://adJ.pasosdeJesus.org
 
-13. Poner Tag en github e iniciar rama al publicar versión alfa o beta (antes en master)
+14. Poner Tag en github e iniciar rama al publicar versión alfa o beta (antes en master)
 	```
 	git tag -a v7.4b1 -m "Version 7.4b1"
 	git push origin v7.4b1
@@ -175,17 +176,24 @@ Pasos importantes para publicar versión mayor
    versión es tipo Sans tamaño 18. Para converitr a xpm en 
    Imagen > Modo > Indexado. 15bpp y 8bpp con paleta de 255 colores. 
    4bpp con paleta de 15 colores, 1bpp con paleta de 2 colores.
-5. Análogo a pasos de versión beta
-6. Actualizar version en reto de P2PU (las 4 primeras tareas) 
+5. Actualizar instalador con las novedades de OpenBSD ayudan:
+   cd tminiroot
+   ./prep.sh
+   ./compara.sh
+   ./conv.sh en
+   ./conv.sh es
+   ./compara.sh
+6. Análogo a pasos de versión beta
+7. Actualizar version en reto de P2PU (las 4 primeras tareas) 
    https://p2pu.org/es/groups/openbsd-adj-como-sistema-de-escritorio/
-7. Publicar un "Release" en github Versión 7.4 con enlace a novedades.
-8. Publicar en Twitter y Facebook. 
+8. Publicar un "Release" en github Versión 7.4 con enlace a novedades.
+9. Publicar en Twitter y Facebook. 
    Si es tambien publicacion de SIVeL en sitio de noticias de SIVeL y Structio.
 
 	Publicado adJ 7.4 distribución para servidores y cortafuegos, 
 	segura, amigable para cristian@s y en español, ver 
 	http://aprendiendo.pasosdejesus.org/
-9. Correo a listas: 
+10. Correo a listas: 
     openbsd-colombia@googlegroups.com, 
     openbsd-mexico@googlegroups.com, sivel-soporte@lists.sourceforge.net
 
@@ -220,7 +228,7 @@ Pasos importantes para publicar versión mayor
 
 	Bendiciones
 
-10. Actualiza artículos de Wikipedia 
+11. Actualiza artículos de Wikipedia 
    <https://en.wikipedia.org/wiki/AdJ>
 
 

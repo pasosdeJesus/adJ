@@ -111,6 +111,7 @@ cp $rutak/bsd.rd $rutak/bsd.mp /
 echo -n "[ENTER] para continuar con juegos de instalacion: "
 read
 cp /sbin/reboot /sbin/oreboot
+cp /usr/sbin/installboot /usr/sbin/oinstallboot
 for i in xserv xfont xshare xbase game comp man site base; do
 	echo $i;
 	tar -C / -xzphf $V$VESP-$ARQ/$i$VSP.tgz
