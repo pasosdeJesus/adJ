@@ -14,7 +14,6 @@ MAINTAINER=	Vladimir Támara Patiño <vtamara@pasosdejesus.org>
 GH_PROJECT=	biblesync
 GH_ACCOUNT=	karlkleinpaste
 GH_TAGNAME=	${V}
-#MASTER_SITES=	${MASTER_SITE_SOURCEFORGE:=gnomesword/BibleSync/${V}/}
 	
 DISTFILES=	${DISTNAME}.tar.gz
 

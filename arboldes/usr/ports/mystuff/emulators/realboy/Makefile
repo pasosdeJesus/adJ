@@ -17,7 +17,7 @@ HOMEPAGE=	http://realboyemulator.wordpress.com/
 # GPL 2
 PERMIT_PACKAGE=	Yes
 
-MASTER_SITES=	${MASTER_SITE_SOURCEFORGE:=realboy/}
+SITES=	${SITE_SOURCEFORGE:=realboy/}
 DISTFILES=	${DISTNAME}.tar.gz
 
 BUILD_DEPENDS=	devel/sdl 

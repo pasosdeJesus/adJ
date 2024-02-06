@@ -17,11 +17,11 @@ CATEGORIES =		net
 DEBUG_PACKAGES =	${BUILD_PACKAGES}
 
 HOMEPAGE =		https://ton.org
-MASTER_SITES =		https://github.com/ton-blockchain/ton/archive/
-MASTER_SITES1 =		https://github.com/abseil/abseil-cpp/archive/
-MASTER_SITES2 =		https://github.com/google/crc32c/archive/
-MASTER_SITES3 =		https://github.com/ton-blockchain/libRaptorQ/archive/
-MASTER_SITES4 =		https://github.com/facebook/rocksdb/archive/
+SITES =		https://github.com/ton-blockchain/ton/archive/
+SITES.a =		https://github.com/abseil/abseil-cpp/archive/
+SITES.b =		https://github.com/google/crc32c/archive/
+SITES.c =		https://github.com/ton-blockchain/libRaptorQ/archive/
+SITES.d =		https://github.com/facebook/rocksdb/archive/
 
 EXTRACT_SUFX=.tar.gz
 
@@ -30,11 +30,11 @@ COMMIT_CRC32C=02e65f4fd3065d27b2e29324800ca6d04df16126
 COMMIT_LIBRAPTORQ=14baff5994b6faf7739a5f058481797365b57fb1
 COMMIT_ROCKSDB=fcf3d75f3f022a6a55ff1222d6b06f8518d38c7c
 
-DISTFILES +=	${GH_COMMIT}${EXTRACT_SUFX}  \
-	${COMMIT_ABSEIL_CPP}${EXTRACT_SUFX}:1  \
-	${COMMIT_CRC32C}${EXTRACT_SUFX}:2  \
-	${COMMIT_LIBRAPTORQ}${EXTRACT_SUFX}:3  \
-	${COMMIT_ROCKSDB}${EXTRACT_SUFX}:4
+DISTFILES +=	${GH_COMMIT}${EXTRACT_SUFX}  
+DISTFILES.a +=	${COMMIT_ABSEIL_CPP}${EXTRACT_SUFX}
+DISTFILES.b +=	${COMMIT_CRC32C}${EXTRACT_SUFX}:2  \
+DISTFILES.c +=	${COMMIT_LIBRAPTORQ}${EXTRACT_SUFX}:3  \
+DISTFILES.d +=	${COMMIT_ROCKSDB}${EXTRACT_SUFX}:4
 
 SHARED_LIBS +=	tonlibjson	0.5	# 2.0
 

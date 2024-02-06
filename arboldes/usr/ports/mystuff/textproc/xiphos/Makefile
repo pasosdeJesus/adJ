@@ -16,10 +16,6 @@ REVISION=
 HOMEPAGE=	http://xiphos.org
 MAINTAINER=	Vladimir Tamara Patino <vtamara@pasosdejesus.org>
 
-#MASTER_SITES=	${MASTER_SITE_SOURCEFORGE:=gnomesword/Xiphos/${V}/}
-	
-#DISTFILES=	${DISTNAME}-20170423.tar.gz
-
 #GPL
 PERMIT_PACKAGE=	Yes
 

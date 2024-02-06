@@ -19,10 +19,10 @@ PERMIT_PACKAGE=	Yes
 BUILD_DEPENDS= archivers/unzip 
 #LIB_DEPENDS= net/curl
 
-MASTER_SITES=	http://crosswire.org/ftpmirror/pub/sword/source/v1.9/
-MASTER_SITES0=	http://crosswire.org/ftpmirror/pub/sword/packages/rawzip/
+SITES=	http://crosswire.org/ftpmirror/pub/sword/source/v1.9/
+SITES.a=	http://crosswire.org/ftpmirror/pub/sword/packages/rawzip/
 DISTFILES=	${DISTNAME}${EXTRACT_SUFX} 
-DISTFILES+=	KJV.zip:0
+DISTFILES.a+=	KJV.zip
 CONFIGURE_STYLE=	gnu 
 
 WANTLIB=	c m

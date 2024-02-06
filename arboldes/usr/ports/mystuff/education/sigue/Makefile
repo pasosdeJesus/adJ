@@ -13,8 +13,8 @@ PKGNAME=	${DISTNAME}
 HOMEPAGE=	http://structio.sourceforge.net/sigue
 MAINTAINER=	Vladimir Támara Patiño <vtamara@pasosdeJesus.org>
 
-MASTER_SITES=	${MASTER_SITE_SOURCEFORGE:=structio/}
-MASTER_SITES0=	${HOMEPAGE}/
+SITES=	${SITE_SOURCEFORGE:=structio/}
+SITES.a=	${HOMEPAGE}/
 DISTFILES=	${DISTNAME}.tar.gz
 
 #Public domain

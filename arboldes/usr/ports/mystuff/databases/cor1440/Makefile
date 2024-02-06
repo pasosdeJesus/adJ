@@ -9,7 +9,7 @@ PKGNAME=sivel-v${VERSION}
 HOMEPAGE=http://pasosdeJesus.github.io/sivel2
 PKGSPEC = sivel->=2.0,<2.1
 
-MASTER_SITES=https://github.com/pasosdeJesus/sivel2/archive/
+SITES=https://github.com/pasosdeJesus/sivel2/archive/
 EXTRACT_SUFX=.tar.gz
 DISTFILES=v${VERSION}${EXTRACT_SUFX}
 DCOMP=sivel2-${VERSION}

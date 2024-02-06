@@ -16,7 +16,7 @@ HOMEPAGE=		http://fluxbox.sourceforge.net/fbdesk/
 # 
 PERMIT_PACKAGE=	Yes
 
-MASTER_SITES=		http://fluxbox.sourceforge.net/download/
+SITES=		http://fluxbox.sourceforge.net/download/
 
 WANTLIB=		Xpm Xft Xrender fontconfig expat png Imlib2 freetype z Xext Xdmcp Xau m ICE X11 c SM stdc++
 

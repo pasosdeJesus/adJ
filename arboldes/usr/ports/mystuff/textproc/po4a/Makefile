@@ -16,7 +16,7 @@ HOMEPAGE=        https://po4a.org/
 PKGSPEC =        Mt77->=1.0,<1.1
 MAINTAINER=      Vladimir Támara Patiño <vtamara@pasosdeJesus.org>
 
-MASTER_SITES=    https://github.com/mquinson/po4a/archive/
+SITES=    https://github.com/mquinson/po4a/archive/
 
 PERMIT_PACKAGE=  Yes
 

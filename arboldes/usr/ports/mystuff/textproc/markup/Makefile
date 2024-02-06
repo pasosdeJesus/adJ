@@ -10,7 +10,7 @@ REVISION=	5
 CATEGORIES=	textproc
 HOMEPAGE=	http://ocaml-programming.de/markup/
 
-MASTER_SITES=	http://ocaml-programming.de/markup/
+SITES=	http://ocaml-programming.de/markup/
 DISTFILES=	${DISTNAME}.tar.gz
 
 MAINTAINER=	Vladimir Támara Patiño <vtamara@pasosdeJesus.org>

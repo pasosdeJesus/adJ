@@ -19,7 +19,7 @@ EXTRACT_SUFX =	.tar.xz
 REVISION =	3
 
 HOMEPAGE =	http://webkitgtk.org/
-MASTER_SITES =	${HOMEPAGE}/releases/
+SITES =	${HOMEPAGE}/releases/
 
 MAINTAINER =	Landry Breuil <landry@openbsd.org> \
 		Antoine Jacoutot <ajacoutot@openbsd.org>
