@@ -18,7 +18,6 @@ REVISION=	2
 HOMEPAGE=	http://bibletime.info/
 MAINTAINER=	Vladimir Tamara Patino <vtamara@pasosdejesus.org>
 
-#MASTER_SITES=	${MASTER_SITE_SOURCEFORGE:=gnomesword/Xiphos/${V}/}
 	
 #DISTFILES=	${DISTNAME}-20170423.tar.gz
 

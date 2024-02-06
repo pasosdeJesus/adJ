@@ -16,25 +16,25 @@ MAINTAINER=	Vladimir Tamara <vtamara@pasosdeJesus.org>
 
 HOMEPAGE=	http://www.onlyoffice.org
 
-MASTER_SITES=	https://github.com/ONLYOFFICE/DesktopEditors/archive/
-MASTER_SITES1=	https://github.com/ONLYOFFICE/core/archive/
-MASTER_SITES2=	https://github.com/ONLYOFFICE/desktop-apps/archive/
-MASTER_SITES3=	https://github.com/ONLYOFFICE/desktop-sdk/archive/
-MASTER_SITES4=	https://github.com/ONLYOFFICE/dictionaries/archive/
-MASTER_SITES5=	https://github.com/ONLYOFFICE/sdkjs/archive/
-MASTER_SITES6=	https://github.com/ONLYOFFICE/web-apps/archive/
-MASTER_SITES7=	https://github.com/v8/v8/archive/
+SITES=	https://github.com/ONLYOFFICE/DesktopEditors/archive/
+SITES.a=	https://github.com/ONLYOFFICE/core/archive/
+SITES.b=	https://github.com/ONLYOFFICE/desktop-apps/archive/
+SITES.c=	https://github.com/ONLYOFFICE/desktop-sdk/archive/
+SITES.d=	https://github.com/ONLYOFFICE/dictionaries/archive/
+SITES.e=	https://github.com/ONLYOFFICE/sdkjs/archive/
+SITES.f=	https://github.com/ONLYOFFICE/web-apps/archive/
+SITES.g=	https://github.com/v8/v8/archive/
 
 EXTRACT_SUFX=	.tar.gz
 DISTFILES=	ONLYOFFICE-DesktopEditors-${VERSION}${EXTRACT_SUFX}
 
-DISTFILES+= 	13d57361e4db28309a28cceb05b3267b4014a222${EXTRACT_SUFX}:1 \
-		942bdffe28c329c12f34f124b8359ebc37418235${EXTRACT_SUFX}:2 \
-		1d5ea8684503e6536238b052afbc0b1eb2d2d5a2${EXTRACT_SUFX}:3 \
-		474a6c687d3e909004514ce593058a47e667e764${EXTRACT_SUFX}:4 \
-		e31de797da58533cd7eabea5d1dcb473554581c5${EXTRACT_SUFX}:5 \
-		24ce4d9b3a134a513607c8f86520eb88abae398c${EXTRACT_SUFX}:6 \
-		5.7.492.60${EXTRACT_SUFX}:7 
+DISTFILES.a+= 	13d57361e4db28309a28cceb05b3267b4014a222${EXTRACT_SUFX}
+DISTFILES.b+=		942bdffe28c329c12f34f124b8359ebc37418235${EXTRACT_SUFX}
+DISTFILES.c+=		1d5ea8684503e6536238b052afbc0b1eb2d2d5a2${EXTRACT_SUFX}
+DISTFILES.d+=		474a6c687d3e909004514ce593058a47e667e764${EXTRACT_SUFX}
+DISTFILES.e+=		e31de797da58533cd7eabea5d1dcb473554581c5${EXTRACT_SUFX}
+DISTFILES.f+=		24ce4d9b3a134a513607c8f86520eb88abae398c${EXTRACT_SUFX}
+DISTFILES.g+=		5.7.492.60${EXTRACT_SUFX}:
 
 DIST_SUBDIR=	desktopeditors
 

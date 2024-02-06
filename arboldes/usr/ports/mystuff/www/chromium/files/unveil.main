@@ -20,7 +20,9 @@
 /usr/bin/lpr rx
 
 # needed for xdg tools
+/usr/local/bin/update-desktop-database rx
 /usr/local/bin/xdg-desktop-menu rx
+/usr/local/bin/xdg-icon-resource rx
 /usr/local/bin/xdg-open rx
 /usr/local/bin/xdg-settings rx
 
@@ -54,8 +56,10 @@
 ~/.terminfo r
 
 ~/.cache/chromium rwc
+~/.cache/at-spi rw
 ~/.cache/dconf rwc
 ~/.cache/fontconfig rwc
+~/.cache/gvfsd rwc
 ~/.cache/thumbnails rwc
 
 ~/.config/chromium rwc
@@ -63,6 +67,7 @@
 ~/.config/fcitx r
 ~/.config/fontconfig r
 ~/.config/gtk-3.0 r
+~/.config/ibus r
 ~/.config/mimeapps.list r
 ~/.config/user-dirs.dirs r
 

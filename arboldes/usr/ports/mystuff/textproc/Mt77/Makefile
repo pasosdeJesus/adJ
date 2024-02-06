@@ -16,7 +16,7 @@ HOMEPAGE=http://pasosdeJesus.github.io/Mt77/
 PKGSPEC = Mt77->=1.0,<1.1
 MAINTAINER=     Vladimir Támara Patiño <vtamara@pasosdeJesus.org>
 
-MASTER_SITES=https://github.com/pasosdeJesus/Mt77/archive/
+SITES=https://github.com/pasosdeJesus/Mt77/archive/
 #EXTRACT_SUFX=.tar.gz
 #DCOMP ?=${DISTNAME}
 #WRKSRC = ${PKGNAME}

@@ -18,7 +18,7 @@ WANTLIB += fontconfig freetype intl m png util xcb xcb-util z
 
 COMPILER =		base-clang ports-gcc base-gcc
 
-MASTER_SITES=	${MASTER_SITE_SOURCEFORGE:=xfe/}
+SITES=	${SITE_SOURCEFORGE:=xfe/}
 
 MODULES=	textproc/intltool
 

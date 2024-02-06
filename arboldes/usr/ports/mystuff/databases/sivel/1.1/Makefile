@@ -14,7 +14,7 @@ DISTNAME=sivel-${VERSION}
 HOMEPAGE=	http://sivel.sourceforge.net/
 PKGSPEC = sivel->=1.1,<1.2
 
-MASTER_SITES=	${MASTER_SITE_SOURCEFORGE:=sivel/}
+SITES=	${SITE_SOURCEFORGE:=sivel/}
 EXTRACT_SUFX=	.tar.gz
 SIVEL_RAIZ ?= htdocs/sivel
 

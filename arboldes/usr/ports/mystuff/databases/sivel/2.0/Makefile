@@ -28,8 +28,6 @@ DISTNAME=${GH_COMMIT}
 HOMEPAGE=http://pasosdeJesus.github.io/sivel2
 PKGSPEC = sivel->=2.0,<2.1
 
-#MASTER_SITES=https://github.com/pasosdeJesus/sivel2/archive/
-#EXTRACT_SUFX=.tar.gz
 DISTFILES=xv${VERSION}${EXTRACT_SUFX}
 DCOMP=sivel2-${GH_COMMIT}
 SIVEL_RAIZ ?= htdocs/sivel2

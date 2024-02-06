@@ -10,7 +10,7 @@ WANTLIB=		c m
 
 DISTNAME =	hevea-2.36
 REVISION = 2
-MASTER_SITES =	http://para.inria.fr/~maranget/hevea/distri/
+SITES =	http://para.inria.fr/~maranget/hevea/distri/
 
 DISTFILES=	${DISTNAME}${EXTRACT_SUFX} ${DISTNAME}-manual${EXTRACT_SUFX}
 

@@ -6,19 +6,21 @@ DPB_PROPERTIES=		parallel parallel2
 
 COMMENT=		Chromium browser
 
-V=			111.0.5563.110
+V=			117.0.5938.149
 
 DISTNAME=		chromium-${V}
 
 DISTFILES+=		${CHROMIUM_DISTFILES} \
-			${PROFILE_DISTFILES}:0 \
-			${REGRESS_DISTFILES} \
-			libudev-openbsd-20221108-c3330efd.tar.gz:0
+			${REGRESS_DISTFILES}
+			
+DISTFILES.a+=		${PROFILE_DISTFILES} \
+			libudev-openbsd-20221108-c3330efd.tar.gz \
+			${REGRESS_DISTFILES.a}
 
 CHROMIUM_DISTFILES+=	chromium-${V}${EXTRACT_SUFX}
 PROFILE_DISTFILES+=	chrome-linux-${V}-llvm13.profdata${EXTRACT_SUFX}
-REGRESS_DISTFILES+=	chromium-${V}-testdata${EXTRACT_SUFX} \
-			test_fonts-336e775eec536b2d785cc80eff6ac39051931286.tar.gz:0
+REGRESS_DISTFILES+=	chromium-${V}-testdata${EXTRACT_SUFX}
+REGRESS_DISTFILES.a+= 	test_fonts-336e775eec536b2d785cc80eff6ac39051931286.tar.gz
 
 EXTRACT_ONLY=		${CHROMIUM_DISTFILES} \
 			${PROFILE_DISTFILES}
@@ -38,8 +40,8 @@ FLAVOR?=
 # BSD-like
 PERMIT_PACKAGE =	Yes
 
-MASTER_SITES=	https://commondatastorage.googleapis.com/chromium-browser-official/
-MASTER_SITES0=	http://nerd.hu/distfiles/
+SITES=	https://commondatastorage.googleapis.com/chromium-browser-official/
+SITES.a=http://nerd.hu/distfiles/
 
 MODULES=	lang/python x11/qt5
 MODQT5_DEPS=	No
@@ -48,16 +50,14 @@ COMPILER =	base-clang ports-clang ports-gcc
 
 MODPY_RUNDEP=		No
 
-PATCHORIG=	.orig.port
-
 # uses pledge()
 WANTLIB+=	GL X11 Xau Xcomposite Xdamage Xdmcp Xext Xfixes Xft Xi Xrandr
 WANTLIB+=	Xrender Xtst atk-1.0 atk-bridge-2.0 atspi c c++ c++abi cairo
-WANTLIB+=	cbor crypto cups dbus-1 drm event execinfo expat ffi fido2
+WANTLIB+=	cbor crypto cups dav1d dbus-1 drm event execinfo expat ffi fido2
 WANTLIB+=	fontconfig freetype fribidi gbm gio-2.0 glib-2.0 gmodule-2.0
 WANTLIB+=	gobject-2.0 graphite2 gthread-2.0 harfbuzz harfbuzz-gobject
-WANTLIB+=	harfbuzz-subset iconv icudata icui18n icuuc intl jpeg kvm lzo2 m
-WANTLIB+=	nspr4 nss3 nssutil3 openh264 pango-1.0 pangocairo-1.0
+WANTLIB+=	harfbuzz-subset iconv icudata icui18n icuuc intl jpeg kvm m
+WANTLIB+=	nspr4 nss3 nssutil3 openh264 opus pango-1.0 pangocairo-1.0
 WANTLIB+=	pangoft2-1.0 pcre2-8 pixman-1 plc4 plds4 png pthread pthread smime3
 WANTLIB+=	snappy sndio usbhid util xcb xcb-render xcb-shm xkbcommon xml2
 WANTLIB+=	xshmfence xslt z
@@ -67,7 +67,7 @@ RUN_DEPENDS=	devel/xdg-utils \
 		fonts/noto/fonts \
 		graphics/libexif \
 		x11/gtk+3,-main \
-		x11/gtk+3,-guic \
+		x11/gtk+4,-guic \
 		x11/gtk+3,-cups
 BUILD_DEPENDS=	archivers/bzip2 \
 		devel/gperf \
@@ -82,8 +82,10 @@ BUILD_DEPENDS=	archivers/bzip2 \
 		${MODGCC4_CPPDEP} \
 		${RUN_DEPENDS}
 LIB_DEPENDS=	archivers/snappy \
+		audio/opus \
 		devel/pango \
 		graphics/jpeg \
+		multimedia/dav1d \
 		multimedia/openh264 \
 		security/nss \
 		textproc/icu4c \
@@ -94,6 +96,8 @@ LIB_DEPENDS=	archivers/snappy \
 		${MODGCC4_CPPLIBDEP}
 
 BUILD_DEPENDS+=	sysutils/libudev-openbsd:build
+
+USE_GMAKE=	Yes
 
 .include <bsd.own.mk>
 
@@ -132,13 +136,15 @@ BUILDDIR=	${WRKSRC}/out/${BUILDTYPE}
 # These libraries are used from the system and the build infrastructure
 # removes them from the bundled third_party directory and replaces them
 # with hooks to use them from the system.
-GN_SYSTEM_LIBS=	icu \
+GN_SYSTEM_LIBS=	dav1d \
+		icu \
 		libevent \
 		libjpeg \
 		libpng \
 		libxml \
 		libxslt \
 		openh264 \
+		opus \
 		snappy
 
 GN_ARGS=	enable_nacl=false \
@@ -146,9 +152,9 @@ GN_ARGS=	enable_nacl=false \
 		is_debug=false \
 		is_cfi=false \
 		optimize_webui=true \
-		enable_js_type_check=false \
 		enable_remoting=false \
 		enable_hangout_services_extension=true \
+		enable_rust=false \
 		use_bundled_fontconfig=false \
 		use_kerberos=false \
 		use_sndio=true \
@@ -157,7 +163,6 @@ GN_ARGS=	enable_nacl=false \
 		use_system_libjpeg=true \
 		use_system_harfbuzz=true \
 		use_system_freetype=false \
-		use_gnome_keyring=false \
 		icu_use_data_file=false \
 		is_clang=true \
 		use_sysroot=false \
@@ -176,22 +181,32 @@ GN_ARGS=	enable_nacl=false \
 # notyet
 GN_ARGS+=	use_vaapi=false
 
-.if ${MACHINE_ARCH} == "i386"
-GN_ARGS+=	extra_ldflags=\"-L${LOCALBASE}/lib -L${X11BASE}/lib -Wl,--no-keep-memory\"
-.else
-GN_ARGS+=	extra_ldflags=\"-L${LOCALBASE}/lib -L${X11BASE}/lib\"
-.endif
-
 .if ${MACHINE_ARCH} == "aarch64"
+GN_ARGS+=	extra_ldflags=\"-L${LOCALBASE}/lib -L${X11BASE}/lib\"
 PKG_ARGS+=	-Dswiftshader=0
-.else
+FFMPEG_TARGET=	arm64
+.elif ${MACHINE_ARCH} == "amd64"
+BUILD_DEPENDS+=	devel/nasm
+GN_ARGS+=	extra_ldflags=\"-L${LOCALBASE}/lib -L${X11BASE}/lib\"
 PKG_ARGS+=	-Dswiftshader=1
+FFMPEG_TARGET=	x64
+.elif ${MACHINE_ARCH} == "i386"
+BUILD_DEPENDS+=	devel/nasm
+GN_ARGS+=	extra_ldflags=\"-L${LOCALBASE}/lib -L${X11BASE}/lib -Wl,--no-keep-memory\"
+PKG_ARGS+=	-Dswiftshader=1
+FFMPEG_TARGET=	ia32
+.else
+PKG_ARGS+=	-Dswiftshader=0
 .endif
 
-# Note: these keys are for OpenBSD use ONLY. For your own distribution,
+FFMPEG_BRAND=	Chrome
+FFMPEG_BDIR=	${WRKSRC}/build.${FFMPEG_TARGET}.openbsd/${FFMPEG_BRAND}
+FFMPEG_CDIR=	${WRKSRC}/third_party/ffmpeg/chromium/config/${FFMPEG_BRAND}/openbsd/${FFMPEG_TARGET}
+
+# Note: these keys are for adJ use ONLY. For your own distribution,
 # please get your own set of keys. It's free!
 GN_ARGS+=	google_api_key=\"AIzaSyC_3Uz69YR1Z2DRLUDf5ZxUJBClHuwrjL\" \
-		ffmpeg_branding=\"Chrome\" \
+		ffmpeg_branding=\"${FFMPEG_BRAND}\" \
 		proprietary_codecs=true
 
 # These are now restricted to use by Google, so bye-bye sync.
@@ -227,11 +242,12 @@ GN_ARGS+=	use_thin_lto=false \
 pre-configure:
 	@ln -sf ${MODPY_BIN} ${WRKDIR}/bin/python
 	@ln -sf ${MODQT5_MOC} ${WRKDIR}/bin/moc
-.for _arch in x64 ia32 arm64
-.  for _dir in avcodec avformat avutil
-	@cp -pR ${WRKSRC}/third_party/ffmpeg/chromium/config/Chrome/linux/${_arch}/lib${_dir} \
-		${WRKSRC}/third_party/ffmpeg/chromium/config/Chrome/openbsd/${_arch}/lib${_dir}
-.  endfor
+	cd ${WRKSRC}/third_party/ffmpeg && \
+		${MODPY_BIN} chromium/scripts/build_ffmpeg.py openbsd ${FFMPEG_TARGET} --config-only --branding=${FFMPEG_BRAND}
+	cd ${FFMPEG_BDIR} && ${GMAKE} ffversion.h
+	${INSTALL_DATA_DIR} ${FFMPEG_CDIR}
+.for _e in config.h config.asm config_components.h libavcodec libavformat libavutil
+	-cp -pR ${FFMPEG_BDIR}/${_e} ${FFMPEG_CDIR}
 .endfor
 	@mkdir -p ${WRKSRC}/third_party/node/openbsd/node-openbsd/bin
 	@ln -sf ${TRUEPREFIX}/bin/node ${WRKSRC}/third_party/node/openbsd/node-openbsd/bin/node
@@ -245,12 +261,12 @@ pre-configure:
 # 3. run gn with the appropriate configuration arguments
 do-configure:
 	# Regenerate build and perlasm files (force json to not overwrite our local gn patches)
-	@cd ${WRKSRC}/third_party/boringssl && ${MODPY_BIN} src/util/generate_build_files.py json
+	# @cd ${WRKSRC}/third_party/boringssl && ${MODPY_BIN} src/util/generate_build_files.py json
 	@cd ${WRKSRC} && env -i ${MAKE_ENV} build/linux/unbundle/replace_gn_files.py \
 		--system-libraries ${GN_SYSTEM_LIBS}
 	@cd ${WRKSRC}/tools/gn && env -i ${MAKE_ENV} LDFLAGS=-L${LOCALBASE}/lib ${MODPY_BIN} bootstrap/bootstrap.py \
 		--no-clean -s --gn-gen-args "${GN_ARGS}"
-	@cd ${WRKSRC} && env -i ${CONFIGURE_ENV} ${WRKSRC}/out/Release/gn \
+	@cd ${WRKSRC} && env -i ${CONFIGURE_ENV} ${WRKSRC}/out/${BUILDTYPE}/gn \
 		gen --args="${GN_ARGS}" out/${BUILDTYPE}
 
 do-build:
@@ -307,8 +323,7 @@ do-install:
 
 	${INSTALL_DATA_DIR} ${PREFIX}/share/examples/chromium
 .for f in pledge.main pledge.utility_audio pledge.utility_network pledge.utility_video \
-    unveil.gpu unveil.main unveil.plugin unveil.renderer unveil.utility unveil.utility_audio \
-    unveil.utility_network unveil.utility_video
+    unveil.gpu unveil.main unveil.utility_audio unveil.utility_network unveil.utility_video
 	${INSTALL_DATA} ${FILESDIR}/${f} ${PREFIX}/share/examples/chromium
 .endfor
 	${INSTALL_DATA} ${WRKDIR}/sysutils/libudev-openbsd/build-${MACHINE_ARCH}/libudev.so.0.0 \

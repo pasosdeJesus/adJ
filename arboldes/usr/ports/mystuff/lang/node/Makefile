@@ -15,7 +15,7 @@ DISTNAME =		node-${NODE_VERSION}
 PKGNAME =		${DISTNAME:S/v//g}
 EPOCH =			0
 
-MASTER_SITES0 =		https://github.com/qbit/node-pledge/archive/
+SITES.a =		https://github.com/qbit/node-pledge/archive/
 
 CATEGORIES =		lang devel
 
@@ -25,7 +25,7 @@ MAINTAINER =		Volker Schlecht <openbsd-ports@schlecht.dev>
 # MIT
 PERMIT_PACKAGE =	Yes
 
-MASTER_SITES =		${HOMEPAGE}dist/${NODE_VERSION}/
+SITES =		${HOMEPAGE}dist/${NODE_VERSION}/
 
 MODULES =		lang/python
 

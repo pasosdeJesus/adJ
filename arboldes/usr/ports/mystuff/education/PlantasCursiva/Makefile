@@ -11,7 +11,7 @@ CATEGORIES=    	education
 HOMEPAGE=	http://structio.sourceforge.net/escritura
 MAINTAINER=	Vladimir Támara Patiño <vtamara@pasosdeJesus.org>
 
-MASTER_SITES=	${MASTER_SITE_SOURCEFORGE:=structio/}
+SITES=	${SITE_SOURCEFORGE:=structio/}
 DISTFILES=	plantas_cursiva-${V}.tar.gz
 
 

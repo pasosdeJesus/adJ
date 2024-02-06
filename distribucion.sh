@@ -830,8 +830,34 @@ if (test "$sn" = "s") then {
   # Modificados para posibilitar compilación
   # Deben estar en mystuff
 
-  paquete ruby paquetes "ruby ruby33-ri_docs" 3.3
-  paquete databases/sivel sivel sivel 2.0
+    ####
+  # Unicos en adJ liderados por pdJ
+  # Deben estar en arboldes/usr/ports/mystuff 
+  paquete books/evangelios_dp
+  paquete books/basico_adJ
+  paquete books/usuario_adJ
+  paquete books/servidor_adJ
+  paquete education/AnimalesI
+  paquete education/AprestamientoI
+  paquete education/PlantasCursiva
+  paquete education/NombresCursiva
+  paquete fonts/TiposLectoEscritura
+  paquete education/asigna
+  #paquete textproc/markup  --fuentes ya no existen
+  #paquete education/repasa -- dependia de markup
+  #paquete education/sigue -- dependía de repasa
+  paquete textproc/Mt77
+
+  paquete emulators/realboy
+  #paquete net/xmrig
+  #paquete sysutils/ganglia
+  paquete textproc/sword
+  paquete textproc/bibletime
+  paquete textproc/po4a
+  paquete net/ton
+  paquete net/ton-toncli
+
+
 
   # Todo lo de perl tuvo que recompilarse
   # evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)

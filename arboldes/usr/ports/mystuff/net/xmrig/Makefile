@@ -21,7 +21,7 @@ GH_TAGNAME=${VERSION}
 GH_PROJECT=xmrig
 HOMEPAGE=https://github.com/xmrig/xmrig
 
-MASTER_SITES=https://github.com/xmrig/xmrig/archive/
+SITES=https://github.com/xmrig/xmrig/archive/
 EXTRACT_SUFX=.tar.gz
 DISTFILES=v${VERSION}${EXTRACT_SUFX}
 
