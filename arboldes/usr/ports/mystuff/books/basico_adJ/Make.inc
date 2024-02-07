@@ -8,11 +8,11 @@ VHERRAM=	40964c3d01fe7d1a070024b6bc74495c581de1b0
 VHERRAMCORTA=	40964c3d
 
 HOMEPAGE=       http://pasosdeJesus.github.io/${PNAME}/
-MASTER_SITES=	https://github.com/pasosdeJesus/${PNAME}/archive/
-MASTER_SITES1=	https://gitlab.com/pasosdeJesus/herram_confsh/-/archive/${VHERRAMCORTA}/
+SITES=	https://github.com/pasosdeJesus/${PNAME}/archive/
+SITES.a=	https://gitlab.com/pasosdeJesus/herram_confsh/-/archive/${VHERRAMCORTA}/
 EXTRACT_SUFX=.tar.gz
 DISTFILES=	${PNAME}-${V}${EXTRACT_SUFX}
-DISTFILES+=	herram_confsh-${VHERRAMCORTA}-${VHERRAM}${EXTRACT_SUFX}:1
+DISTFILES.a+=	herram_confsh-${VHERRAMCORTA}-${VHERRAM}${EXTRACT_SUFX}
 DCOMP=${PNAME}-${V}
 
 #Public domain
