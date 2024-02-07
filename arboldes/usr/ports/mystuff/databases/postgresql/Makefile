@@ -5,7 +5,7 @@ COMMENT-contrib=PostgreSQL RDBMS contributions
 COMMENT-plpython=Python procedural language for PostgreSQL
 COMMENT-pg_upgrade=Support for upgrading PostgreSQL data from previous version
 
-VERSION=	15.4
+VERSION=	15.5
 PREV_MAJOR=	14
 DISTNAME=	postgresql-${VERSION}
 PKGNAME-main=	postgresql-client-${VERSION}
@@ -27,7 +27,7 @@ PERMIT_PACKAGE=	Yes
 
 WANTLIB += c curses crypto m readline ssl z
 
-SITES=	https://ftp.postgresql.org/pub/source/v${VERSION}/ \
+SITES=		https://ftp.postgresql.org/pub/source/v${VERSION}/ \
 		ftp://ftp.postgresql.org/pub/source/v${VERSION}/
 MULTI_PACKAGES=	-docs -main -server -contrib -pg_upgrade -plpython
 
@@ -35,6 +35,7 @@ MAKE_FILE=	GNUmakefile
 
 V_MAJOR=	${VERSION:R}
 SUBST_VARS=	VERSION V_MAJOR PREV_MAJOR
+UPDATE_PLIST_ARGS=	-i V_MAJOR
 
 USE_GMAKE=	Yes
 
