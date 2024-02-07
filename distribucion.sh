@@ -833,31 +833,9 @@ if (test "$sn" = "s") then {
     ####
   # Unicos en adJ liderados por pdJ
   # Deben estar en arboldes/usr/ports/mystuff 
-  paquete books/evangelios_dp
-  paquete books/basico_adJ
-  paquete books/usuario_adJ
-  paquete books/servidor_adJ
-  paquete education/AnimalesI
-  paquete education/AprestamientoI
-  paquete education/PlantasCursiva
-  paquete education/NombresCursiva
-  paquete fonts/TiposLectoEscritura
-  paquete education/asigna
-  #paquete textproc/markup  --fuentes ya no existen
-  #paquete education/repasa -- dependia de markup
-  #paquete education/sigue -- dependía de repasa
-  paquete textproc/Mt77
-
-  paquete emulators/realboy
-  #paquete net/xmrig
-  #paquete sysutils/ganglia
-  paquete textproc/sword
-  paquete textproc/bibletime
-  paquete textproc/po4a
-  paquete net/ton
-  paquete net/ton-toncli
 
 
+  paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs postgresql-pg_upgrade" 
 
   # Todo lo de perl tuvo que recompilarse
   # evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
@@ -1086,7 +1064,7 @@ if (test "$sn" = "s") then {
   #paquete mpg123
   paquete mutt
   #paquete nginx
-  paquete node
+  #paquete node
   #paquete nspr
   #paquete oniguruma 
   paquete openssl paquetes "openssl" 3.1
