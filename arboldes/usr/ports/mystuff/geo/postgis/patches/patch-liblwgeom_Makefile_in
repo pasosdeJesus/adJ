@@ -1,0 +1,14 @@
+our libtool doesnt link the contents of libryu.a ?
+
+Index: liblwgeom/Makefile.in
+--- liblwgeom/Makefile.in.orig
++++ liblwgeom/Makefile.in
+@@ -188,7 +188,7 @@ $(RYU_LIBPATH): ../deps/ryu/d2s.c
+ 	$(MAKE) -C ../deps/ryu @RYU_LIB@
+ 
+ liblwgeom.la: $(LT_OBJS) $(RYU_LIBPATH)
+-	$(LIBTOOL) --tag=CC --mode=link $(CC) -rpath $(libdir) $(LT_OBJS) $(RYU_LIBPATH)\
++	$(LIBTOOL) --tag=CC --mode=link $(CC) -rpath $(libdir) $(LT_OBJS) ../deps/ryu/d2s.lo \
+              -release $(SOVER) -version-info $(VERSION_INFO) $(LDFLAGS) -static -o $@
+ 
+ maintainer-clean: clean
