@@ -834,8 +834,7 @@ if (test "$sn" = "s") then {
   # Unicos en adJ liderados por pdJ
   # Deben estar en arboldes/usr/ports/mystuff 
 
-
-  paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs postgresql-pg_upgrade" 
+  paquete blosc
 
   # Todo lo de perl tuvo que recompilarse
   # evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
@@ -1023,6 +1022,7 @@ if (test "$sn" = "s") then {
 
   paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs postgresql-pg_upgrade" 
   paquete postgresql-previous 
+  paquete blosc
   paquete postgis
   #paquete geo/spatialite/libspatialite
   paquete jansson

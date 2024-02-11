@@ -124,8 +124,9 @@ Novedades tomadas de <https://www.openbsd.org/74.html>
   comportamiento original de Ruby y sugerimos actualizar gemas del
   sistema tan pronto y tanto como sea posible con
   `doas gem update --system`
-* Retroportados de OpenBSD-current los paquetes `` y `` para ...
-* Se ha retirado
+* Retroportados de OpenBSD-current los paquetes postgresql (incluyendo 
+  parches por correo de Jeremy Evans del 8.Feb),  postgis y blosc.
+* Se han retirado
 * `chromium` recompilado con llave de Pasos de Jesús.  Ya permite autenticar
   y usar sitios como <https://drive.google.com>  --si tiene problemas para
   autenticarse intente desde un nuevo perfil (obligatorio por ejemplo si
