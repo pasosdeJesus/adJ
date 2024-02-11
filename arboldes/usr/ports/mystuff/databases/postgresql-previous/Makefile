@@ -1,6 +1,6 @@
 COMMENT=	PostgreSQL RDBMS (previous version, for pg_upgrade)
 
-VERSION=	14.6
+VERSION=	15.4
 DISTNAME=	postgresql-${VERSION}
 PKGNAME=	postgresql-previous-${VERSION}
 
@@ -8,7 +8,7 @@ CATEGORIES=	databases
 SHARED_LIBS=	ecpg		7.10 \
 		ecpg_compat	4.10 \
 		pgtypes		4.9 \
-		pq		6.13
+		pq		6.14
 
 HOMEPAGE=	https://www.postgresql.org/
 
@@ -19,7 +19,7 @@ PERMIT_PACKAGE=	Yes
 
 WANTLIB =  c crypto curses execinfo m perl readline ssl xml2 z
 
-SITES=	https://ftp.postgresql.org/pub/source/v${VERSION}/ \
+SITES=		https://ftp.postgresql.org/pub/source/v${VERSION}/ \
 		ftp://ftp.postgresql.org/pub/source/v${VERSION}/
 
 MAKE_FILE=	GNUmakefile
@@ -30,13 +30,9 @@ USE_GMAKE=	Yes
 
 CONFIGURE_STYLE=gnu
 
-MODULES=	lang/python
-MODPY_VERSION =	${MODPY_DEFAULT_VERSION_2}
-MODPY_RUNDEP=	No
 POSTGRESQL_DIR=	postgresql-${VERSION:C/.[0-9]+$//}
 
-CONFIGURE_ENV=	ac_cv_path_PYTHON=${MODPY_BIN} \
-		CPPFLAGS="-I${LOCALBASE}/include" \
+CONFIGURE_ENV=	CPPFLAGS="-I${LOCALBASE}/include" \
 		LDFLAGS="-L${LOCALBASE}/lib"
 
 CONFIGURE_ARGS=	--with-openssl=/usr \
@@ -63,15 +59,6 @@ CONFIGURE_ARGS=	--with-openssl=/usr \
 .if ${MACHINE_ARCH} == "alpha" || ${MACHINE_ARCH} == "hppa" || ${MACHINE_ARCH} == "riscv64"
 CONFIGURE_ARGS+=--disable-spinlocks
 .endif
-
-# To avoid problems with missed floating point overflow checks.
-# pgsql 10.6+ refuses to build on i386 clang unless -msse2 is set.
-# If clang gains "-fexcess-precision=standard" support then this
-# should be removed.
-MODULES+=	gcc4
-MODPY_VERSION =	${MODPY_DEFAULT_VERSION_2}
-MODGCC4_ARCHS=	i386
-MODGCC4_LANGS=	c
 
 MODGNU_CONFIG_GUESS_DIRS=	${WRKSRC}/config
 

@@ -1,0 +1,9 @@
+@@ -21,7 +21,7 @@
+          /*
+           * Build up a shell command to tell the user how to start the server
+           */
+-@@ -3183,6 +3193,7 @@ main(int argc, char *argv[])
++@@ -3442,6 +3452,7 @@ main(int argc, char *argv[])
+                 start_db_cmd->data);
+  
+          destroyPQExpBuffer(start_db_cmd);
