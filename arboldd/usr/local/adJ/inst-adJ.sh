@@ -1568,6 +1568,8 @@ if (test -f /etc/rc.d/cron) then {
 	activarcs cron
 } fi;
 
+pkg_delete -I -D dependencies python >> /var/www/tmp/inst-adJ.bitacora 2>&1
+
 echo "* Configurando escritorio de cuenta de administrador(a)" | tee -a /var/www/tmp/inst-adJ.bitacora;
 f=`ls /var/db/pkg/fluxbox* 2> /dev/null > /dev/null`;
 if (test "$?" = "0") then {
