@@ -1,4 +1,4 @@
-V=		7.3
+V=		7.4
 
 DISTNAME=	${PNAME}-${V}
 CATEGORIES=	books
@@ -7,8 +7,8 @@ MAINTAINER=     Vladimir Támara Patiño <vtamara@pasosdeJesus.org>
 VHERRAM=	40964c3d01fe7d1a070024b6bc74495c581de1b0
 VHERRAMCORTA=	40964c3d
 
-HOMEPAGE=       http://pasosdeJesus.github.io/${PNAME}/
-SITES=	https://github.com/pasosdeJesus/${PNAME}/archive/
+HOMEPAGE=       http://pasosdeJesus.org/doc/${PNAME}/
+SITES=	https://gitlab.com/pasosdeJesus/${PNAME}/-/archive/
 SITES.a=	https://gitlab.com/pasosdeJesus/herram_confsh/-/archive/${VHERRAMCORTA}/
 EXTRACT_SUFX=.tar.gz
 DISTFILES=	${PNAME}-${V}${EXTRACT_SUFX}
@@ -30,6 +30,6 @@ pre-patch:
 	mv -f ${WRKDIR}/herram_confsh-${VHERRAMCORTA}-${VHERRAM}/* ${WRKDIST}/herram_confsh/
 
 post-extract:
-	mv `dirname ${WRKBUILD}`/${PNAME}-${PNAME}-${V} ${WRKBUILD}
+	mv `dirname ${WRKBUILD}`/${PNAME}-${PNAME}-${V}* ${WRKBUILD}
 
 .include <bsd.port.mk>
