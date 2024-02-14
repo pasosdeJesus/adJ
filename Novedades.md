@@ -106,11 +106,7 @@ Novedades tomadas de <https://www.openbsd.org/74.html>
   * `servidor_adJ`
     <https://pasosdejesus.github.io/servidor_adJ>
 
-### 3.2 Núcleo y librerías fundamentales
-
-* 
-
-### 3.3 Paquetes
+### 3.2 Paquetes
 
 * Incluye `evangelios_dp-0.9.9` con traducción y marcado Strong del
   comienzo del nuevo testamento hasta Galatas
@@ -138,10 +134,12 @@ Novedades tomadas de <https://www.openbsd.org/74.html>
 * Se han parchado minimamente los siguientes para usar `servicio` en lugar
   de `daemon`: `postgresql`, `git` y `smartmontools`
 
-### 3.4 Configuración
+### 3.3 Configuración
 
-* Guión `/usr/local/adJ/reconf-fluxbox.sh` para configurar o reconfigurar
-  fluxbox en una cuenta.
+* Guión `/usr/local/adJ/pg_preact_postgis.sh` para facilitar actualización
+  de versiones mayores de PostgreSQL cuando hay bases con PostGIS.
+  Ver documentación en
+  <https://pasosdejesus.org/doc/servidor_adJ/otros_servicios_que_puede_prestar_el_servidor.html#pg-upgrade>
 
 ## 4. FE DE ERRATAS
 
