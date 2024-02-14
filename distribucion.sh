@@ -834,8 +834,6 @@ if (test "$sn" = "s") then {
   # Unicos en adJ liderados por pdJ
   # Deben estar en arboldes/usr/ports/mystuff 
 
-  paquete blosc
-
   # Todo lo de perl tuvo que recompilarse
   # evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
   # Si por ejemplo es:
