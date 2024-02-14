@@ -3,8 +3,8 @@
 Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
 
-### Versión: 7.4b1
-Fecha de publicación: 28/Nov/2023
+### Versión: 7.4
+Fecha de publicación: 15/Feb/2023
 
 Puedes ver novedades respecto a OpenBSD en:
   <https://gitlab.com/pasosdeJesus/adJ/-/blob/ADJ_7_4/Novedades_OpenBSD.md>
@@ -15,13 +15,13 @@ Puedes ver las diversas versiones publicadas en
 <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/> donde entre otras
 encontrarás:
 
-* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-7.4b1-amd64.usb>
+* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-7.4-amd64.usb>
   que es imagen para escribir en una memoria USB y arrancar con esta bien en
   modo UEFI o bien en modo BIOS Legacy. Una vez
   la descargues puedes escribirla en una USB ubicada en `/dev/sd2c`
   (verifica el dispositivo con `dmesg` y remplaza) con:
 
-       doas dd if=AprendiendoDeJesus-7.4b1-amd64.usb of=/dev/sd2c bs=1M
+       doas dd if=AprendiendoDeJesus-7.4-amd64.usb of=/dev/sd2c bs=1M
 
   Este proceso puede ser demorado, podrás ver el progreso con
 
@@ -29,13 +29,13 @@ encontrarás:
 
   O si deseas probarla con `qemu` para instalar en un disco `virtual.raw`:
 
-       qemu-system-x86_64 -hda virtual.raw -hdb AprendiendoDeJesus-7.4b1-amd64.usb -boot menu=on
+       qemu-system-x86_64 -hda virtual.raw -hdb AprendiendoDeJesus-7.4-amd64.usb -boot menu=on
 
-* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-7.4b1-amd64.iso>
+* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-7.4-amd64.iso>
   que es imagen en formato ISO para quemar en DVD e instalar por primera vez
   en modo BIOS Legacy.
 
-* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/7.4b1-amd64/>
+* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/7.4-amd64/>
   que es directorio con el contenido del DVD instalador apropiado para descargar
   con `rsync` desde un adJ o un OpenBSD ya instalado para actualizarlo (ver
   <https://gitlab.com/pasosdeJesus/adJ/-/blob/ADJ_7_4/Actualiza.md> )
@@ -51,7 +51,7 @@ encontrarás:
 
 Novedades tomadas de <https://www.openbsd.org/74.html>
 
-* Aplicados parches de seguridad hasta el 26.Nov.2023 provenientes de
+* Aplicados parches de seguridad hasta el 13.Feb.2024 provenientes de
   OpenBSD que incluyen soluciones a fallas
 * Controladores ampliados o mejorados para amd64
   * Tarjetas Ethernet: Nuevo `ngbe` que soporta dispositivos Ethernet
@@ -62,8 +62,8 @@ Novedades tomadas de <https://www.openbsd.org/74.html>
     RTL8188FTV en `urtwn`. Mejoras a `iwm` e `iwx`.
   * Video: Se actualizó `drm` al de Linux 6.1.55. 
   * Otros: sensores térmicos de Ryzen 9 79xx en `ksmn`.
-* Mejoras al kernel, SMP y seguridad: Implmentados dt y utrace en amd64, 
-  retira soporte a softdep en mount.
+* Mejoras al kernel, SMP y seguridad: Implmentados `dt` y `utrace` en amd64, 
+  retira soporte a `softdep` en mount.
 * Mejoras a `vmm`
 * Mejoras a herramientas de Red
 * Seguridad
@@ -83,15 +83,13 @@ Novedades tomadas de <https://www.openbsd.org/74.html>
 
 ### 2.2 Paquetes
 
-* Para cerrar fallas se usan las versiones más recientes de portes
-  para OpenBSD 7.4 de: ``
 * Para aprovechar el xlocale extendido de adJ se han recompilado
   `vlc`, `glib2` y `libunistring`.
 * Algunos paquetes típicos y su versión: `dovecot 0`,
-  `chromium 0`, `firefox-esr-0`,
-  `libreoffice 0`,
-  `nginx 0`, `mariadb 0`,
-  `python 0`, `vim 0`, `zsh 5.9`
+  `chromium 117.0.5938.149`, `firefox-esr-115.3.1`,
+  `libreoffice 7.6.2.1v0`,
+  `nginx 1.24.0p0`, `mariadb 10.9.6v1`,
+  `python 3.10.13`, `vim 9.0.1897`, `zsh 5.9`
 
 
 ## 3. NOVEDADES RESPECTO A ADJ 7.3 PROVENIENTES DE PASOS DE JESÚS
@@ -122,11 +120,6 @@ Novedades tomadas de <https://www.openbsd.org/74.html>
   `doas gem update --system`
 * Retroportados de OpenBSD-current los paquetes postgresql (incluyendo 
   parches por correo de Jeremy Evans del 8.Feb),  postgis y blosc.
-* Se han retirado
-* `chromium` recompilado con llave de Pasos de Jesús.  Ya permite autenticar
-  y usar sitios como <https://drive.google.com>  --si tiene problemas para
-  autenticarse intente desde un nuevo perfil (obligatorio por ejemplo si
-  cambia su clave en gmail).
 * Además de `chromium` incluimos `firefox-esr` que también ha resultado
   bastante estable.
 * Se han recompilado los siguientes para aprovechar `xlocale` (además de muchos
