@@ -10,11 +10,10 @@ Documentación
 -------------
 
 
-* Básica <http://pasosdejesus.github.io/basico_adJ/>
-* Usuario <http://pasosdejesus.github.io/usuario_adJ/>
-* Servidor <http://pasosdejesus.github.io/servidor_adJ/>
+* Básica <https://pasosdejesus.org/doc/basico_adJ/>
+* Usuario <https://pasosdejesus.org/doc/usuario_adJ/>
+* Servidor <https://pasosdejesus.org/doc/servidor_adJ/>
 * Anuncios de nuevas versiones: <http://aprendiendo.pasosdejesus.org/> y en la lista <https://groups.google.com/forum/#!forum/openbsd-colombia>
-* Curso de instalación: <https://courses.p2pu.org/es/groups/openbsd-adj-como-sistema-de-escritorio/>
 
 Concepto de estas fuentes
 -------------------------
@@ -28,7 +27,7 @@ instalador y el DVD de distribución de adJ.
 Prerequisitos
 -------------
 
-1. Computador con procesador de 64 bits.
+1. Computador con procesador Amd/Intel de 64 bits.
 2. OpenBSD o adJ para 64 bits instalados.
 3. Fuentes de la versión de OpenBSD que usa descargadas e instaladas 
    en ```/usr/src```, ```/usr/src/sys```, ```/usr/ports``` y 

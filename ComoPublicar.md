@@ -184,16 +184,14 @@ Pasos importantes para publicar versión mayor
    ./conv.sh es
    ./compara.sh
 6. Análogo a pasos de versión beta
-7. Actualizar version en reto de P2PU (las 4 primeras tareas) 
-   https://p2pu.org/es/groups/openbsd-adj-como-sistema-de-escritorio/
-8. Publicar un "Release" en github Versión 7.4 con enlace a novedades.
-9. Publicar en Twitter y Facebook. 
+7. Publicar un "Release" en github Versión 7.4 con enlace a novedades.
+8. Publicar en Twitter y Facebook. 
    Si es tambien publicacion de SIVeL en sitio de noticias de SIVeL y Structio.
 
 	Publicado adJ 7.4 distribución para servidores y cortafuegos, 
 	segura, amigable para cristian@s y en español, ver 
 	http://aprendiendo.pasosdejesus.org/
-10. Correo a listas: 
+9. Correo a listas: 
     openbsd-colombia@googlegroups.com, 
     openbsd-mexico@googlegroups.com, sivel-soporte@lists.sourceforge.net
 
