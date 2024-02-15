@@ -434,14 +434,15 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/stdlib/Makefile.inc s
 -	realpath.c remque.c setenv.c strtoimax.c \
 +	realpath.c remque.c setenv.c strtoimax.c strfmon.c \
  	strtol.c strtoll.c strtonum.c strtoul.c strtoull.c strtoumax.c \
- 	system.c tfind.c tsearch.c _rand48.c drand48.c erand48.c jrand48.c \
- 	lcong48.c lrand48.c mrand48.c nrand48.c seed48.c srand48.c qabs.c \
-@@ -28,4 +28,4 @@
+ 	system.c \
+ 	tfind.c thread_atexit.c tsearch.c \
+@@ -30,4 +30,5 @@
  	getsubopt.3 hcreate.3 imaxabs.3 imaxdiv.3 insque.3 labs.3 ldiv.3 \
  	lldiv.3 lsearch.3 malloc.3 posix_memalign.3 posix_openpt.3 ptsname.3 \
- 	qabs.3 qdiv.3 qsort.3 radixsort.3 rand48.3 rand.3 random.3 realpath.3 \
--	strtod.3 strtonum.3 strtol.3 strtoul.3 system.3 tsearch.3 \
-+	strfmon.3 strtod.3 strtonum.3 strtol.3 strtoul.3 system.3 tsearch.3 \
+ 	qsort.3 radixsort.3 rand48.3 rand.3 random.3 realpath.3 \
+-	strtod.3 strtonum.3 strtol.3 strtoul.3 system.3 tsearch.3
++	strfmon.3 strtod.3 strtonum.3 strtol.3 strtoul.3 system.3 tsearch.3
++
 diff -ruN -x obj -x CVS -x *~ -x *orig src55-orig/lib/libc/stdlib/strfmon.3 src/lib/libc/stdlib/strfmon.3
 --- src55-orig/lib/libc/stdlib/strfmon.3	Wed Dec 31 19:00:00 1969
 +++ src/lib/libc/stdlib/strfmon.3	Fri Nov 15 22:20:42 2013

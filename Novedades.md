@@ -51,7 +51,7 @@ encontrarás:
 
 Novedades tomadas de <https://www.openbsd.org/74.html>
 
-* Aplicados parches de seguridad hasta el 13.Feb.2024 provenientes de
+* Aplicados parches de seguridad hasta el 14.Feb.2024 provenientes de
   OpenBSD que incluyen soluciones a fallas
 * Controladores ampliados o mejorados para amd64
   * Tarjetas Ethernet: Nuevo `ngbe` que soporta dispositivos Ethernet
