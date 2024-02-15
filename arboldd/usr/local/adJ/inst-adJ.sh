@@ -2097,6 +2097,7 @@ f=`ls /var/db/pkg/postgresql-server* 2> /dev/null > /dev/null`;
 if (test "$?" != "0") then {
 	p=`ls $PKG_PATH/libxml-* $PKG_PATH/libiconv-* $PKG_PATH/postgresql-client-* $PKG_PATH/postgresql-*-server* $PKG_PATH/postgresql-*-contrib* $PKG_PATH/postgresql-*-doc*`
 	pkg_add -I -r -D repair -D update -D updatedepends $p >> /var/www/tmp/inst-adJ.bitacora 2>&1
+	insacp icu4c
 	insacp postgresql-contrib
 	insacp jpeg
 	insacp tiff
@@ -2112,7 +2113,6 @@ if (test "$?" != "0") then {
 	insacp geos
 	insacp proj
 	insacp sqlite3
-	insacp libspatialite
 	insacp libgeotiff
 	insacp jasper
 	insacp libidn
@@ -2123,7 +2123,16 @@ if (test "$?" != "0") then {
 	insacp pcre
 	insacp json-c
 	insacp bzip2
+	insacp libwebp
+	insacp libarchive
+	insacp minizip
+	insacp freexl
+	insacp hdf5
+	insacp netcdf
+	insacp proj
+	insacp libspatialite
 	insacp gdal 
+  insacp zstd
 	insacp postgis
 	grep "^postgresql:" /etc/login.conf > /dev/null 2>&1
 	if (test "$?" = "1") then {
