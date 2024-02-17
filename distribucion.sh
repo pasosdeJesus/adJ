@@ -830,6 +830,7 @@ if (test "$sn" = "s") then {
   # Modificados para posibilitar compilación
   # Deben estar en mystuff
 
+
     ####
   # Unicos en adJ liderados por pdJ
   # Deben estar en arboldes/usr/ports/mystuff 
@@ -925,6 +926,7 @@ if (test "$sn" = "s") then {
   paquete p5-Crypt-OpenSSL-Bignum
   paquete p5-Crypt-OpenSSL-RSA
   paquete p5-Crypt-OpenSSL-Random
+  paquete p5-CryptX
   paquete p5-DBI
   paquete p5-Data-Dumper-Concise
   paquete p5-Data-IEEE754
