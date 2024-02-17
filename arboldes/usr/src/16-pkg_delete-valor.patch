@@ -1,0 +1,11 @@
+diff -ruN src74-orig/usr.sbin/pkg_add/OpenBSD/PackingElement.pm src/usr.sbin/pkg_add/OpenBSD/PackingElement.pm
+--- src74-orig/usr.sbin/pkg_add/OpenBSD/PackingElement.pm	Mon Dec 18 19:00:42 2023
++++ src/usr.sbin/pkg_add/OpenBSD/PackingElement.pm	Sat Feb 17 14:32:03 2024
+@@ -287,6 +287,7 @@
+ sub compute_digest($self, $filename, $class = 'OpenBSD::sha')
+ {
+ 	require OpenBSD::md5;
++	$class //= 'OpenBSD::sha';
+ 	return $class->new($filename);
+ }
+ 
