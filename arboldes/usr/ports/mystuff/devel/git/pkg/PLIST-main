@@ -1,14 +1,15 @@
 @conflict git-x11-<2.33.1p0
 @pkgpath devel/git
 @newgroup _gitdaemon:778
-@newuser _gitdaemon:778:_gitdaemon:daemon:Git Daemon:/nonexistent:/sbin/nologin
-@rcscript ${RCDIR}/gitservicio
+@newuser _gitdaemon:778:_gitdaemon::Git Daemon:/nonexistent:/sbin/nologin
+@rcscript ${RCDIR}/gitdaemon
 @bin bin/git
 bin/git-cvsserver
 @bin bin/git-receive-pack
 @shell bin/git-shell
 @bin bin/git-upload-archive
 @bin bin/git-upload-pack
+@bin bin/scalar
 @static-lib lib/libgit.a
 ${P5SITE}/Git/
 ${P5SITE}/Git.pm
@@ -23,14 +24,12 @@ ${P5SITE}/Git/Packet.pm
 libexec/git/
 @bin libexec/git/git
 @bin libexec/git/git-add
-libexec/git/git-add--interactive
 @bin libexec/git/git-am
 @bin libexec/git/git-annotate
 @bin libexec/git/git-apply
 libexec/git/git-archimport
 @bin libexec/git/git-archive
-libexec/git/git-bisect
-@bin libexec/git/git-bisect--helper
+@bin libexec/git/git-bisect
 @bin libexec/git/git-blame
 @bin libexec/git/git-branch
 @bin libexec/git/git-bugreport
@@ -62,13 +61,13 @@ libexec/git/git-cvsimport
 libexec/git/git-cvsserver
 @bin libexec/git/git-daemon
 @bin libexec/git/git-describe
+@bin libexec/git/git-diagnose
 @bin libexec/git/git-diff
 @bin libexec/git/git-diff-files
 @bin libexec/git/git-diff-index
 @bin libexec/git/git-diff-tree
 @bin libexec/git/git-difftool
 libexec/git/git-difftool--helper
-@bin libexec/git/git-env--helper
 @bin libexec/git/git-fast-export
 @bin libexec/git/git-fast-import
 @bin libexec/git/git-fetch
@@ -80,11 +79,13 @@ libexec/git/git-filter-branch
 @bin libexec/git/git-format-patch
 @bin libexec/git/git-fsck
 @bin libexec/git/git-fsck-objects
+@bin libexec/git/git-fsmonitor--daemon
 @bin libexec/git/git-gc
 @bin libexec/git/git-get-tar-commit-id
 @bin libexec/git/git-grep
 @bin libexec/git/git-hash-object
 @bin libexec/git/git-help
+@bin libexec/git/git-hook
 @bin libexec/git/git-http-backend
 @bin libexec/git/git-http-fetch
 @bin libexec/git/git-http-push
@@ -185,6 +186,7 @@ libexec/git/git-subtree
 @bin libexec/git/git-verify-commit
 @bin libexec/git/git-verify-pack
 @bin libexec/git/git-verify-tag
+@bin libexec/git/git-version
 libexec/git/git-web--browse
 @bin libexec/git/git-whatchanged
 @bin libexec/git/git-worktree
@@ -213,6 +215,7 @@ libexec/git/mergetools/tortoisemerge
 libexec/git/mergetools/vimdiff
 libexec/git/mergetools/winmerge
 libexec/git/mergetools/xxdiff
+@bin libexec/git/scalar
 @man man/man1/git-add.1
 @man man/man1/git-am.1
 @man man/man1/git-annotate.1
@@ -250,6 +253,7 @@ libexec/git/mergetools/xxdiff
 @man man/man1/git-cvsserver.1
 @man man/man1/git-daemon.1
 @man man/man1/git-describe.1
+@man man/man1/git-diagnose.1
 @man man/man1/git-diff-files.1
 @man man/man1/git-diff-index.1
 @man man/man1/git-diff-tree.1
@@ -266,11 +270,13 @@ libexec/git/mergetools/xxdiff
 @man man/man1/git-format-patch.1
 @man man/man1/git-fsck-objects.1
 @man man/man1/git-fsck.1
+@man man/man1/git-fsmonitor--daemon.1
 @man man/man1/git-gc.1
 @man man/man1/git-get-tar-commit-id.1
 @man man/man1/git-grep.1
 @man man/man1/git-hash-object.1
 @man man/man1/git-help.1
+@man man/man1/git-hook.1
 @man man/man1/git-http-backend.1
 @man man/man1/git-http-fetch.1
 @man man/man1/git-http-push.1
@@ -368,11 +374,23 @@ libexec/git/mergetools/xxdiff
 @man man/man1/git-write-tree.1
 @man man/man1/git.1
 @man man/man1/gitweb.1
+@man man/man1/scalar.1
 @man man/man5/gitattributes.5
+@man man/man5/gitformat-bundle.5
+@man man/man5/gitformat-chunk.5
+@man man/man5/gitformat-commit-graph.5
+@man man/man5/gitformat-index.5
+@man man/man5/gitformat-pack.5
+@man man/man5/gitformat-signature.5
 @man man/man5/githooks.5
 @man man/man5/gitignore.5
 @man man/man5/gitmailmap.5
 @man man/man5/gitmodules.5
+@man man/man5/gitprotocol-capabilities.5
+@man man/man5/gitprotocol-common.5
+@man man/man5/gitprotocol-http.5
+@man man/man5/gitprotocol-pack.5
+@man man/man5/gitprotocol-v2.5
 @man man/man5/gitrepository-layout.5
 @man man/man5/gitweb.conf.5
 @man man/man7/gitcli.7

@@ -2,8 +2,7 @@ COMMENT-main =	distributed version control system
 COMMENT-svn =	subversion interoperability tools
 COMMENT-x11 =	graphical tools
 
-V =		2.35.4
-REVISION =
+V =		2.40.0
 DISTNAME =	git-${V}
 CATEGORIES =	devel
 
@@ -26,6 +25,9 @@ MODULES =		perl \
 
 MODTK_VERSION =		8.6
 
+COMPILER =		base-clang ports-gcc
+COMPILER_LANGS =	c
+
 BUILD_DEPENDS =		devel/gettext,-tools \
 			devel/p5-Error \
 			textproc/asciidoc \
@@ -33,8 +35,10 @@ BUILD_DEPENDS =		devel/gettext,-tools \
 
 MULTI_PACKAGES =	-main -svn -x11
 
-WANTLIB-main =		c charset crypto curl expat iconv intl nghttp2 pthread \
-			ssl z
+WANTLIB-main =		c crypto curl expat iconv intl pthread ssl z
+# for curl
+WANTLIB-main +=		nghttp2
+
 
 RUN_DEPENDS-main =	devel/cvsps \
 			devel/p5-Error \
@@ -130,8 +134,6 @@ post-install:
 	chown -R ${BINOWN}:${BINGRP} ${PREFIX}/libexec/git
 	${MAKE_ENV} ${MAKE_PROGRAM} -C ${WRKBUILD}/contrib/subtree \
 		${MAKE_FLAGS} install install-man
-	${MAKE_ENV} ${MAKE_PROGRAM} -C ${WRKBUILD}/gitweb \
-		gitwebdir=${TRUEPREFIX}/share/gitweb install
 	perl -pi -e "s|${WRKINST}||g" ${PREFIX}/share/gitweb/gitweb.cgi
 	${INSTALL_DATA} ${WRKBUILD}/gitweb/README ${PREFIX}/share/gitweb
 	${MODTCL_WISH_ADJ} ${PREFIX}/libexec/git/git-gui--askpass
