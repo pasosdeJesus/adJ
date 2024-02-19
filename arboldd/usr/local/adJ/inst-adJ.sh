@@ -2046,6 +2046,32 @@ if (test "$?" = "0") then {
 	rm -f /var/postgresql/data/postmaster.pid
 } fi;
 
+
+v_pg_ac=""
+v_pg_sig=""
+echo "* Verificando si puede hacer pg_upgrade" >> /var/www/tmp/inst-adJ.bitacora
+if (test -f /var/postgresql/data/PG_VERSION) then {
+	v_pg_ac=`cat /var/postgresql/data/PG_VERSION`
+	v_pg_sig=`ls $PKG_PATH/postgresql-server-*.tgz | sed -e "s/.*server-\([0-9]*\)[.].*/\1/g"`;
+	if (test "$v_pg_sig" = "") then {
+		echo "No se encontró paquete postgresql en instaladores de adJ. Está incompleta se recomienda detener con ControlC y descargarla completa";
+		read;
+	} else {
+		if (test "$v_pg_ac" != "") then {
+			
+			echo "Hay un cambio mayor de versión de PostgreSQL pasando de $v_pg_ac a $v_pg_sig" | tee -a /var/www/tmp/inst-adJ.bitacora
+			v_pg_ac_mas_uno=`expr "$v_pg_ac + 1"`
+			if (test "$v_pg_sig" = "$v_pg_ac_mas_uno") then {
+				echo "Sería mejor usar pg_upgrade si antes de actualizar prepara scripts para desconfigurar y configurar PostGIS";
+			} else {
+				echo "Deberá restaurar volcado completo";
+			} fi;
+			echo "[ENTER] para continuar";
+			read;
+		} fi;
+	} fi;
+} fi;
+
 f=`ls /var/db/pkg/postgresql-server* 2> /dev/null > /dev/null`;
 if (test "$?" = "0") then {
 	dialog --title 'Eliminar PostgreSQL' --yesno "\\nDesea eliminar la actual versión de PostgreSQL y los datos asociados para actualizarla\\n" 15 60
