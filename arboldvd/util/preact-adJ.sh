@@ -7,6 +7,8 @@ VER=7.4
 REV=
 VESP=""
 
+p0=$0
+d0=`dirname $0`
 ACVERC=`uname -r`
 ACVER=`echo $ACVERC | sed -e "s/\.//g"`
 ARQ=`uname -m`
@@ -149,6 +151,26 @@ if (test "$?" = "0") then {
 			exit 1;
 		} fi;
 	} fi;
+} fi;
+
+ls /var/db/pkg/ | grep postgis > /dev/null 2>&1
+if (test "$?" = "0") then {
+  dialog --title 'Guiones para desconfigurar/configurar PostGIS' --yesno "\\nPostGIS está instalado, si desea hacer actualización con pg_upgrade es recomendable generar un guión para deshabilitarlo en cada una de las bases de datos donde se use y convertir datos de tipos geometry y geography  a texto antes de actualizar y otro para volver a configurarlo en las mismas bases y pasar los textos a geometry y geography. ¿Crear los scripts?\n" 15 60
+  if (test "$?" = "0") then {
+      echo "si1"
+      echo "$d0/pg_preact_postgis.sh"
+    if (test -f "$d0/pg_preact_postgis.sh") then {
+      echo "si2"
+      rm /var/www/tmp/rp-todas.txt
+      rm /var/www/tmp/quita-postgis.sh
+      rm /var/www/tmp/agrega-postgis.sh
+      doas -u _postgresql $d0/pg_preact_postgis.sh
+      dialog --title 'Correr guión para desconfigurar PostGIS' --yesno "\\nSe crearon los guiones /var/www/tmp/quita-postgis.sh y /var/www/tmp/agrega-postgis.sh.  Ejecutar quita-postgis.sh ahora ? --tendrá que ejcutar agrega-postgis después de actualizar adJ y PostgreSQL.\n" 15 60
+      if (test "$?" = "0") then {
+        doas -u _postgresql /var/www/tmp/quita-postgis.sh
+      } fi;
+    } fi;
+  }  fi;
 } fi;
 
 if (test "$ACVER" -lt "55") then {
