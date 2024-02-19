@@ -2267,8 +2267,7 @@ cat /etc/rc.conf.local >> /var/www/tmp/inst-adJ.bitacora
 cat /etc/sysctl.conf >> /var/www/tmp/inst-adJ.bitacora
 
 echo "* Iniciando PostgreSQL"  | tee -a /var/www/tmp/inst-adJ.bitacora
-/etc/rc.d/postgresql start >> /var/www/tmp/inst-adJ.bitacora
-echo
+doas sh /etc/rc.local
 sleep 1
 /etc/rc.d/postgresql restart >> /var/www/tmp/inst-adJ.bitacora
 echo
