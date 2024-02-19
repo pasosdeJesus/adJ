@@ -168,7 +168,7 @@ if (test "$?" = "0") then {
       rm /var/www/tmp/quita-postgis.sh
       rm /var/www/tmp/agrega-postgis.sh
       doas -u _postgresql /tmp/pg_preact_postgis.sh
-      dialog --title 'Correr guión para desconfigurar PostGIS' --yesno "\\nSe crearon los guiones /var/www/tmp/quita-postgis.sh y /var/www/tmp/agrega-postgis.sh.  Ejecutar quita-postgis.sh ahora ? --tendrá que ejcutar agrega-postgis después de actualizar adJ y PostgreSQL.\n" 15 60
+      dialog --title 'Correr guión para desconfigurar PostGIS' --yesno "\\nSe crearon los guiones /var/www/tmp/quita-postgis.sh y /var/www/tmp/agrega-postgis.sh.  Ejecutar quita-postgis.sh ahora ? --tendrá que ejecutar agrega-postgis después de actualizar adJ y PostgreSQL.\n" 15 60
       if (test "$?" = "0") then {
         doas -u _postgresql /var/www/tmp/quita-postgis.sh
       } fi;
