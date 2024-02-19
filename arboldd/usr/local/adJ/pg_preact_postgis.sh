@@ -2,6 +2,14 @@
 # Prepara motor con bases PostGIS para actualizar
 # vtamara@pasosdeJesus.org.   Licencia ISC
 
+w=`whoami`
+if (test "$w" != "_postgresql") then {
+	echo "Este script debe ser ejecutado por _postgresql";
+	exit 1;
+} fi;
+
+cd /var/postgresql
+
 function gen_para_base {
   base=$1;
   for tabla in `psql -U postgres -h /var/www/var/run/postgresql -c "SELECT distinct table_name FROM information_schema.columns WHERE table_schema='public' AND udt_name IN ('geometry', 'geography');" $base | grep "^ [^ ]" `; do 
@@ -28,7 +36,10 @@ function gen_para_base {
 
 psql -U postgres -h /var/www/var/run/postgresql/ -c "select datname from pg_database;" |\
 	sed -e "s/^ *datname//g;s/^---*//g;s/^(.*rows.*//g" > /var/www/tmp/rp-todas.txt
-
+if (test "$?" != "0") then {
+  echo "No pudo crearse /var/www/tmp/rp-todas.txt";
+  exit 1;
+} fi;
 echo "#!/bin/sh" > /var/www/tmp/quita-postgis.sh
 echo "#!/bin/sh" > /var/www/tmp/agrega-postgis.sh
 for i in `cat /var/www/tmp/rp-todas.txt `; do

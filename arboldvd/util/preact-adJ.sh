@@ -8,7 +8,9 @@ REV=
 VESP=""
 
 p0=$0
+dpwd=`pwd`
 d0=`dirname $0`
+d0="$dpwd/$d0"
 ACVERC=`uname -r`
 ACVER=`echo $ACVERC | sed -e "s/\.//g"`
 ARQ=`uname -m`
@@ -160,11 +162,12 @@ if (test "$?" = "0") then {
       echo "si1"
       echo "$d0/pg_preact_postgis.sh"
     if (test -f "$d0/pg_preact_postgis.sh") then {
+      cp $d0/pg_preact_postgis.sh /tmp/pg_preact_postgis.sh
       echo "si2"
       rm /var/www/tmp/rp-todas.txt
       rm /var/www/tmp/quita-postgis.sh
       rm /var/www/tmp/agrega-postgis.sh
-      doas -u _postgresql $d0/pg_preact_postgis.sh
+      doas -u _postgresql /tmp/pg_preact_postgis.sh
       dialog --title 'Correr guión para desconfigurar PostGIS' --yesno "\\nSe crearon los guiones /var/www/tmp/quita-postgis.sh y /var/www/tmp/agrega-postgis.sh.  Ejecutar quita-postgis.sh ahora ? --tendrá que ejcutar agrega-postgis después de actualizar adJ y PostgreSQL.\n" 15 60
       if (test "$?" = "0") then {
         doas -u _postgresql /var/www/tmp/quita-postgis.sh
