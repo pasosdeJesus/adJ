@@ -2761,8 +2761,8 @@ VRUBY=3.3
 VRUBYSP=`echo $VRUBY | sed -e "s/\.//g"`
 echo "* Configurar ruby-$VRUBY" >> /var/www/tmp/inst-adJ.bitacora;
 uruby=$uadJ
-for vrelim in 2.3 2.4 2.5 2.6 2.7 3.0 3.1; do
-	v=`(cd /var/db/pkg/; ls) | grep ruby-$vrelim`
+for vrelim in 2.3 2.4 2.5 2.6 2.7 3.0 3.1 3.2; do
+	v=`(cd /var/db/pkg/; ls) | grep ruby*-$vrelim`
 	if (test -d /var/www/bundler/ruby/$vrelim/bundler/gems/ -o -d /usr/local/lib/ruby/$vrelim -o "$v" != "") then {
 		if (test -d /var/www/bundler/ruby/$vrelim) then {
 			uruby=`stat -f "%u" /var/www/bundler/ruby/$vrelim`
@@ -2779,6 +2779,7 @@ for vrelim in 2.3 2.4 2.5 2.6 2.7 3.0 3.1; do
 done
 	
 if (test ! -f "/usr/local/bin/ruby$VRUBYSP") then {
+  insacp gmp
 	insacp ruby
 } fi
 
