@@ -1,3 +1,4 @@
+#!/bin/sh
 # Redimensiona un contendor cifrado opcionalmente cambiando clave
 # Dominio público. 2015. vtamara@pasosdeJesus.org
 # amplia-vn.sh 1 
