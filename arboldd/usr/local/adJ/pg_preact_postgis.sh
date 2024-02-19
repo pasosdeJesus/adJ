@@ -33,15 +33,18 @@ echo "#!/bin/sh" > /var/www/tmp/quita-postgis.sh
 echo "#!/bin/sh" > /var/www/tmp/agrega-postgis.sh
 for i in `cat /var/www/tmp/rp-todas.txt `; do
 	if (test "$i" != "template0") then {
+		echo -n "$i: ";
 		psql -U postgres -h /var/www/var/run/postgresql/ $i \
 			-c "SELECT extname FROM pg_extension WHERE extname='postgis';" | grep postgis
 		if (test "$?" = "0") then {
-			echo $i;
+      echo "Usa PostGIS"
 			echo "echo $i;" >> /var/www/tmp/quita-postgis.sh;
 			echo "echo $i;" >> /var/www/tmp/agrega-postgis.sh;
 			echo "psql -U postgres -h /var/www/var/run/postgresql/ $i -c \"CREATE EXTENSION postgis;\"" >> /var/www/tmp/agrega-postgis.sh
       gen_para_base $i
 			echo "psql -U postgres -h /var/www/var/run/postgresql/ $i -c \"DROP EXTENSION postgis;\"" >> /var/www/tmp/quita-postgis.sh
+    } else {
+      echo "No usa PostGIS"
 		} fi;
 	} fi;
 done
