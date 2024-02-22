@@ -1587,6 +1587,9 @@ if (test "$?" != "0") then {
 		echo 'No se encuentra paquete tiff'
 		exit 1;
 	} fi;
+	insacp jpeg
+	insacp xz
+	insacp zstd
         pkg_add -I -D repair -D update -D updatedepends -r $p >> /var/www/tmp/inst-adJ.bitacora 2>&1
 	insacp fribidi
 	p=`ls $PKG_PATH/jpeg-* $PKG_PATH/libid3tag-* $PKG_PATH/png-* $PKG_PATH/bzip2-* $PKG_PATH/libungif-* $PKG_PATH/imlib2-* $PKG_PATH/libltdl-* $PKG_PATH/fluxbox-* $PKG_PATH/fluxter-* 2>/dev/null`
@@ -2083,7 +2086,7 @@ if (test "$?" = "0") then {
 	dialog --title 'Eliminar PostgreSQL' --yesno "\\nDesea eliminar la actual versión de PostgreSQL y los datos asociados para actualizarla\\n" 15 60
 	if (test "$?" = "0") then {
 		echo "s" >> /var/www/tmp/inst-adJ.bitacora
-		pkg_delete -I -D dependencies GeoIP >> /var/www/tmp/inst-adJ.bitacora 2>&1
+		pkg_delete -I -D dependencies postgis >> /var/www/tmp/inst-adJ.bitacora 2>&1
 		pkg_delete -I -D dependencies postgresql-contrib >> /var/www/tmp/inst-adJ.bitacora 2>&1
 		pkg_delete -I -D dependencies postgresql-server >> /var/www/tmp/inst-adJ.bitacora 2>&1
 		pkg_delete -I -D dependencies postgresql-client >> /var/www/tmp/inst-adJ.bitacora 2>&1
@@ -2142,8 +2145,6 @@ if (test "$?" != "0") then {
 	insacp openjp2
 	insacp giflib
 	insacp imlib2
-	insacp geos
-	insacp proj
 	insacp sqlite3
 	insacp libgeotiff
 	insacp jasper
@@ -2162,9 +2163,11 @@ if (test "$?" != "0") then {
 	insacp hdf5
 	insacp netcdf
 	insacp proj
+	insacp geos
+	insacp proj
 	insacp libspatialite
 	insacp gdal 
-  insacp zstd
+	insacp zstd
 	insacp postgis
 	grep "^postgresql:" /etc/login.conf > /dev/null 2>&1
 	if (test "$?" = "1") then {
@@ -2177,6 +2180,10 @@ EOF
 	} fi;
 	echo -n "La clave del administrador de 'postgres' quedará en /var/postresql/.pgpass " >> /var/www/tmp/inst-adJ.bitacora;
 	clpg=`apg | head -n 1`
+
+	echo "OJO Montando lo que falte";
+read
+	sh /etc/rc.local >> /var/www/tmp/inst-adJ.bitacora 2>&1
 	mkdir -p /var/postgresql/data
 	echo "*:*:*:$uspos:$clpg" > /var/postgresql/.pgpass;
 	chown -R _postgresql:_postgresql /var/postgresql/
