@@ -4,7 +4,7 @@ Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
 
 ### Versión: 7.4
-Fecha de publicación: 15/Feb/2023
+Fecha de publicación: 22/Feb/2023
 
 Puedes ver novedades respecto a OpenBSD en:
   <https://gitlab.com/pasosdeJesus/adJ/-/blob/ADJ_7_4/Novedades_OpenBSD.md>
@@ -129,7 +129,8 @@ Novedades tomadas de <https://www.openbsd.org/74.html>
 
 ### 3.3 Configuración
 
-* Guión `/usr/local/adJ/pg_preact_postgis.sh` para facilitar actualización
+* Guión `/usr/local/adJ/pg_preact_postgis.sh` replicado en el directorio
+  `util` del instalador, para facilitar actualización
   de versiones mayores de PostgreSQL cuando hay bases con PostGIS.
   Ver documentación en
   <https://pasosdejesus.org/doc/servidor_adJ/otros_servicios_que_puede_prestar_el_servidor.html#pg-upgrade>
