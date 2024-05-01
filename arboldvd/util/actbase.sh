@@ -1,6 +1,6 @@
 #!/bin/sh
 # Actualiza sistema base a partir de instalador de adJ
-# Basada en instrucciones del FAQ de OpenBSD
+# basada en instrucciones del FAQ de OpenBSD
 # Dominio público de acuerdo a legislación colombiana. http://www.pasosdejesus.org/dominio_publico_colombia.html. 
 # 2022. vtamara@pasosdeJesus.org
 

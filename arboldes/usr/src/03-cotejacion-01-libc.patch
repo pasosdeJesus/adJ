@@ -81,7 +81,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/lib/libc/locale/collate
 +int __collate_load_error;
 +
 +
-+struct __collate __global_collate = {
++extern struct __collate __global_collate = {
 +	1, 0
 +};
 +
@@ -1217,8 +1217,9 @@ diff -ruN src59-orig/lib/libc/hidden/wchar.h src/lib/libc/hidden/wchar.h
  PROTO_NORMAL(wcscat);
  PROTO_NORMAL(wcschr);
  PROTO_NORMAL(wcscmp);
--PROTO_STD_DEPRECATED(wcscoll);
+-//PROTO_STD_DEPRECATED(wcscoll);
 +PROTO_NORMAL(wcscoll);
  PROTO_DEPRECATED(wcscoll_l);
  PROTO_STD_DEPRECATED(wcscpy);
  PROTO_NORMAL(wcscspn);
+

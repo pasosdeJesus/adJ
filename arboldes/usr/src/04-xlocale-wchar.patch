@@ -951,16 +951,15 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mb
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mbtowc.3 src/lib/libc/locale/mbtowc.3
 --- src53collation/lib/libc/locale/mbtowc.3	Mon Mar 25 18:28:42 2013
 +++ src/lib/libc/locale/mbtowc.3	Wed Apr  3 11:15:27 2013
-@@ -30,21 +30,27 @@
+@@ -31,20 +31,26 @@
+ .Dt MBTOWC 3
  .Os
- .\" ----------------------------------------------------------------------
  .Sh NAME
 -.Nm mbtowc
 -.Nd converts a multibyte character to a wide character
 +.Nm mbtowc ,
 +.Nm mbtowc_l
 +.Nd convert a multibyte character to a wide character
- .\" ----------------------------------------------------------------------
  .Sh SYNOPSIS
  .In stdlib.h
  .Ft int
@@ -994,7 +993,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mb
  be undefined.
  .Pp
  If a call to
-@@ -73,7 +79,10 @@
+@@ -76,14 +82,18 @@
  .Fn mbtowc
  is affected by the
  .Dv LC_CTYPE
@@ -1006,16 +1005,15 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mb
  Calling any other functions in
  .Em libc
  never changes the internal
-@@ -178,7 +187,8 @@
- .Sh SEE ALSO
- .Xr mblen 3 ,
- .Xr mbrtowc 3 ,
+ state of
+ .Fn mbtowc ,
+ except for calling
 -.Xr setlocale 3
 +.Xr setlocale 3 ,
 +.Xr xlocale 3
- .\" ----------------------------------------------------------------------
- .Sh STANDARDS
- The
+ with the
+ .Dv LC_CTYPE
+ category set to a different locale.
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mbtowc.c src/lib/libc/locale/mbtowc.c
 --- src53collation/lib/libc/locale/mbtowc.c	Mon Mar 25 18:28:42 2013
 +++ src/lib/libc/locale/mbtowc.c	Wed Apr  3 11:15:27 2013
@@ -4474,22 +4472,22 @@ diff -ruN src62-orig/include/ctype.h src/include/ctype.h
  
  #include <sys/cdefs.h>
  
--#define	_U	0x01
--#define	_L	0x02
--#define	_N	0x04
--#define	_S	0x08
--#define	_P	0x10
--#define	_C	0x20
--#define	_X	0x40
--#define	_B	0x80
-+#define __CTYPE_U	0x01
-+#define __CTYPE_L	0x02
-+#define __CTYPE_N	0x04
-+#define __CTYPE_S	0x08
-+#define __CTYPE_P	0x10
-+#define __CTYPE_C	0x20
-+#define __CTYPE_X	0x40
-+#define __CTYPE_B	0x80
+-#define	_CTYPE_U	0x01
+-#define	_CTYPE_L	0x02
+-#define	_CTYPE_N	0x04
+-#define	_CTYPE_S	0x08
+-#define	_CTYPE_P	0x10
+-#define	_CTYPE_C	0x20
+-#define	_CTYPE_X	0x40
+-#define	_CTYPE_B	0x80
++#define	__CTYPE_U	0x01
++#define	__CTYPE_L	0x02
++#define	__CTYPE_N	0x04
++#define	__CTYPE_S	0x08
++#define	__CTYPE_P	0x10
++#define	__CTYPE_C	0x20
++#define	__CTYPE_X	0x40
++#define	__CTYPE_B	0x80
  
  #if __POSIX_VISIBLE >= 200809
  #ifndef	_LOCALE_T_DEFINED_
@@ -4499,72 +4497,76 @@ diff -ruN src62-orig/include/ctype.h src/include/ctype.h
  #endif
  #endif
  
-@@ -114,57 +114,57 @@
- 
+@@ -115,61 +115,61 @@
  __only_inline int isalnum(int _c)
  {
--	return (_c == -1 ? 0 : ((_ctype_ + 1)[(unsigned char)_c] & (_U|_L|_N)));
-+	return (_c == -1 ? 0 : ((_ctype_ + 1)[(unsigned char)_c] & (__CTYPE_U|__CTYPE_L|__CTYPE_N)));
+ 	return (_c == -1 ? 0 : ((_ctype_ + 1)[(unsigned char)_c] &
+-	    (_CTYPE_U|_CTYPE_L|_CTYPE_N)));
++	    (__CTYPE_U|__CTYPE_L|__CTYPE_N)));
  }
  
  __only_inline int isalpha(int _c)
  {
--	return (_c == -1 ? 0 : ((_ctype_ + 1)[(unsigned char)_c] & (_U|_L)));
-+	return (_c == -1 ? 0 : ((_ctype_ + 1)[(unsigned char)_c] & (__CTYPE_U|__CTYPE_L)));
+ 	return (_c == -1 ? 0 : ((_ctype_ + 1)[(unsigned char)_c] &
+-	    (_CTYPE_U|_CTYPE_L)));
++	    (__CTYPE_U|__CTYPE_L)));
  }
  
  __only_inline int iscntrl(int _c)
  {
--	return (_c == -1 ? 0 : ((_ctype_ + 1)[(unsigned char)_c] & _C));
+-	return (_c == -1 ? 0 : ((_ctype_ + 1)[(unsigned char)_c] & _CTYPE_C));
 +	return (_c == -1 ? 0 : ((_ctype_ + 1)[(unsigned char)_c] & __CTYPE_C));
  }
  
  __only_inline int isdigit(int _c)
  {
--	return (_c == -1 ? 0 : ((_ctype_ + 1)[(unsigned char)_c] & _N));
+-	return (_c == -1 ? 0 : ((_ctype_ + 1)[(unsigned char)_c] & _CTYPE_N));
 +	return (_c == -1 ? 0 : ((_ctype_ + 1)[(unsigned char)_c] & __CTYPE_N));
  }
  
  __only_inline int isgraph(int _c)
  {
--	return (_c == -1 ? 0 : ((_ctype_ + 1)[(unsigned char)_c] & (_P|_U|_L|_N)));
-+	return (_c == -1 ? 0 : ((_ctype_ + 1)[(unsigned char)_c] & (__CTYPE_P|__CTYPE_U|__CTYPE_L|__CTYPE_N)));
+ 	return (_c == -1 ? 0 : ((_ctype_ + 1)[(unsigned char)_c] &
+-	    (_CTYPE_P|_CTYPE_U|_CTYPE_L|_CTYPE_N)));
++	    (__CTYPE_P|__CTYPE_U|__CTYPE_L|__CTYPE_N)));
  }
  
  __only_inline int islower(int _c)
  {
--	return (_c == -1 ? 0 : ((_ctype_ + 1)[(unsigned char)_c] & _L));
+-	return (_c == -1 ? 0 : ((_ctype_ + 1)[(unsigned char)_c] & _CTYPE_L));
 +	return (_c == -1 ? 0 : ((_ctype_ + 1)[(unsigned char)_c] & __CTYPE_L));
  }
  
  __only_inline int isprint(int _c)
  {
--	return (_c == -1 ? 0 : ((_ctype_ + 1)[(unsigned char)_c] & (_P|_U|_L|_N|_B)));
-+	return (_c == -1 ? 0 : ((_ctype_ + 1)[(unsigned char)_c] & (__CTYPE_P|__CTYPE_U|__CTYPE_L|__CTYPE_N|__CTYPE_B)));
+ 	return (_c == -1 ? 0 : ((_ctype_ + 1)[(unsigned char)_c] &
+-	    (_CTYPE_P|_CTYPE_U|_CTYPE_L|_CTYPE_N|_CTYPE_B)));
++	    (__CTYPE_P|__CTYPE_U|__CTYPE_L|__CTYPE_N|__CTYPE_B)));
  }
  
  __only_inline int ispunct(int _c)
  {
--	return (_c == -1 ? 0 : ((_ctype_ + 1)[(unsigned char)_c] & _P));
+-	return (_c == -1 ? 0 : ((_ctype_ + 1)[(unsigned char)_c] & _CTYPE_P));
 +	return (_c == -1 ? 0 : ((_ctype_ + 1)[(unsigned char)_c] & __CTYPE_P));
  }
  
  __only_inline int isspace(int _c)
  {
--	return (_c == -1 ? 0 : ((_ctype_ + 1)[(unsigned char)_c] & _S));
+-	return (_c == -1 ? 0 : ((_ctype_ + 1)[(unsigned char)_c] & _CTYPE_S));
 +	return (_c == -1 ? 0 : ((_ctype_ + 1)[(unsigned char)_c] & __CTYPE_S));
  }
  
  __only_inline int isupper(int _c)
  {
--	return (_c == -1 ? 0 : ((_ctype_ + 1)[(unsigned char)_c] & _U));
+-	return (_c == -1 ? 0 : ((_ctype_ + 1)[(unsigned char)_c] & _CTYPE_U));
 +	return (_c == -1 ? 0 : ((_ctype_ + 1)[(unsigned char)_c] & __CTYPE_U));
  }
  
  __only_inline int isxdigit(int _c)
  {
--	return (_c == -1 ? 0 : ((_ctype_ + 1)[(unsigned char)_c] & (_N|_X)));
-+	return (_c == -1 ? 0 : ((_ctype_ + 1)[(unsigned char)_c] & (__CTYPE_N|__CTYPE_X)));
+ 	return (_c == -1 ? 0 : ((_ctype_ + 1)[(unsigned char)_c] &
+-	    (_CTYPE_N|_CTYPE_X)));
++	    (__CTYPE_N|__CTYPE_X)));
  }
  
  __only_inline int tolower(int _c)
@@ -4976,102 +4978,102 @@ diff -ruN src71-orig/lib/libc/gen/ctype_.c src/lib/libc/gen/ctype_.c
 diff -ruN src71-orig/lib/libc/gen/isctype.c src/lib/libc/gen/isctype.c
 --- src71-orig/lib/libc/gen/isctype.c	Fri Mar 18 05:16:25 2022
 +++ src/lib/libc/gen/isctype.c	Mon Mar 28 20:26:27 2022
-@@ -41,7 +41,7 @@
- int
+@@ -42,7 +42,7 @@
  isalnum(int c)
  {
--	return (c == EOF ? 0 : ((_ctype_ + 1)[(unsigned char)c] & (_U|_L|_N)));
-+	return (c == EOF ? 0 : ((_ctype_ + 1)[(unsigned char)c] & (__CTYPE_U|__CTYPE_L|__CTYPE_N)));
+ 	return (c == EOF ? 0 : ((_ctype_ + 1)[(unsigned char)c] &
+-	    (_CTYPE_U|_CTYPE_L|_CTYPE_N)));
++	    (__CTYPE_U|__CTYPE_L|__CTYPE_N)));
  }
  DEF_STRONG(isalnum);
  
-@@ -49,7 +49,7 @@
- int
+@@ -51,7 +51,7 @@
  isalpha(int c)
  {
--	return (c == EOF ? 0 : ((_ctype_ + 1)[(unsigned char)c] & (_U|_L)));
-+	return (c == EOF ? 0 : ((_ctype_ + 1)[(unsigned char)c] & (__CTYPE_U|__CTYPE_L)));
+ 	return (c == EOF ? 0 : ((_ctype_ + 1)[(unsigned char)c] &
+-	    (_CTYPE_U|_CTYPE_L)));
++	    (__CTYPE_U|__CTYPE_L)));
  }
  DEF_STRONG(isalpha);
  
-@@ -65,7 +65,7 @@
+@@ -67,7 +67,7 @@
  int
  iscntrl(int c)
  {
--	return (c == EOF ? 0 : ((_ctype_ + 1)[(unsigned char)c] & _C));
+-	return (c == EOF ? 0 : ((_ctype_ + 1)[(unsigned char)c] & _CTYPE_C));
 +	return (c == EOF ? 0 : ((_ctype_ + 1)[(unsigned char)c] & __CTYPE_C));
  }
  DEF_STRONG(iscntrl);
  
-@@ -73,7 +73,7 @@
+@@ -75,7 +75,7 @@
  int
  isdigit(int c)
  {
--	return (c == EOF ? 0 : ((_ctype_ + 1)[(unsigned char)c] & _N));
+-	return (c == EOF ? 0 : ((_ctype_ + 1)[(unsigned char)c] & _CTYPE_N));
 +	return (c == EOF ? 0 : ((_ctype_ + 1)[(unsigned char)c] & __CTYPE_N));
  }
  DEF_STRONG(isdigit);
  
-@@ -81,7 +81,7 @@
- int
+@@ -84,7 +84,7 @@
  isgraph(int c)
  {
--	return (c == EOF ? 0 : ((_ctype_ + 1)[(unsigned char)c] & (_P|_U|_L|_N)));
-+	return (c == EOF ? 0 : ((_ctype_ + 1)[(unsigned char)c] & (__CTYPE_P|__CTYPE_U|__CTYPE_L|__CTYPE_N)));
+ 	return (c == EOF ? 0 : ((_ctype_ + 1)[(unsigned char)c] &
+-	    (_CTYPE_P|_CTYPE_U|_CTYPE_L|_CTYPE_N)));
++	    (__CTYPE_P|__CTYPE_U|__CTYPE_L|__CTYPE_N)));
  }
  DEF_STRONG(isgraph);
  
-@@ -89,7 +89,7 @@
+@@ -92,7 +92,7 @@
  int
  islower(int c)
  {
--	return (c == EOF ? 0 : ((_ctype_ + 1)[(unsigned char)c] & _L));
+-	return (c == EOF ? 0 : ((_ctype_ + 1)[(unsigned char)c] & _CTYPE_L));
 +	return (c == EOF ? 0 : ((_ctype_ + 1)[(unsigned char)c] & __CTYPE_L));
  }
  DEF_STRONG(islower);
  
-@@ -97,7 +97,7 @@
- int
+@@ -101,7 +101,7 @@
  isprint(int c)
  {
--	return (c == EOF ? 0 : ((_ctype_ + 1)[(unsigned char)c] & (_P|_U|_L|_N|_B)));
-+	return (c == EOF ? 0 : ((_ctype_ + 1)[(unsigned char)c] & (__CTYPE_P|__CTYPE_U|__CTYPE_L|__CTYPE_N|__CTYPE_B)));
+ 	return (c == EOF ? 0 : ((_ctype_ + 1)[(unsigned char)c] &
+-	    (_CTYPE_P|_CTYPE_U|_CTYPE_L|_CTYPE_N|_CTYPE_B)));
++	    (__CTYPE_P|__CTYPE_U|__CTYPE_L|__CTYPE_N|__CTYPE_B)));
  }
  DEF_STRONG(isprint);
  
-@@ -105,7 +105,7 @@
+@@ -109,7 +109,7 @@
  int
  ispunct(int c)
  {
--	return (c == EOF ? 0 : ((_ctype_ + 1)[(unsigned char)c] & _P));
+-	return (c == EOF ? 0 : ((_ctype_ + 1)[(unsigned char)c] & _CTYPE_P));
 +	return (c == EOF ? 0 : ((_ctype_ + 1)[(unsigned char)c] & __CTYPE_P));
  }
  DEF_STRONG(ispunct);
  
-@@ -113,7 +113,7 @@
+@@ -117,7 +117,7 @@
  int
  isspace(int c)
  {
--	return (c == EOF ? 0 : ((_ctype_ + 1)[(unsigned char)c] & _S));
+-	return (c == EOF ? 0 : ((_ctype_ + 1)[(unsigned char)c] & _CTYPE_S));
 +	return (c == EOF ? 0 : ((_ctype_ + 1)[(unsigned char)c] & __CTYPE_S));
  }
  DEF_STRONG(isspace);
  
-@@ -121,7 +121,7 @@
+@@ -125,7 +125,7 @@
  int
  isupper(int c)
  {
--	return (c == EOF ? 0 : ((_ctype_ + 1)[(unsigned char)c] & _U));
+-	return (c == EOF ? 0 : ((_ctype_ + 1)[(unsigned char)c] & _CTYPE_U));
 +	return (c == EOF ? 0 : ((_ctype_ + 1)[(unsigned char)c] & __CTYPE_U));
  }
  DEF_STRONG(isupper);
  
-@@ -129,7 +129,7 @@
- int
+@@ -134,7 +134,7 @@
  isxdigit(int c)
  {
--	return (c == EOF ? 0 : ((_ctype_ + 1)[(unsigned char)c] & (_N|_X)));
-+	return (c == EOF ? 0 : ((_ctype_ + 1)[(unsigned char)c] & (__CTYPE_N|__CTYPE_X)));
+ 	return (c == EOF ? 0 : ((_ctype_ + 1)[(unsigned char)c] &
+-	    (_CTYPE_N|_CTYPE_X)));
++	    (__CTYPE_N|__CTYPE_X)));
  }
  DEF_STRONG(isxdigit);
  
@@ -5115,12 +5117,12 @@ diff -ruN src72-orig/lib/libc/locale/wctype.c src/lib/libc/locale/wctype.c
 --- src72-orig/lib/libc/locale/wctype.c	Tue Oct  4 18:12:54 2022
 +++ src/lib/libc/locale/wctype.c	Wed Oct 19 16:13:16 2022
 @@ -1,4 +1,4 @@
--/*	$OpenBSD: wctype.c,v 1.1 2022/07/25 21:38:24 guenther Exp $ */
+-/*	$OpenBSD: wctype.c,v 1.2 2024/02/04 12:46:01 jca Exp $ */
 +/*	$OpenBSD: iswctype.c,v 1.8 2022/07/25 21:38:24 guenther Exp $ */
  /*	$NetBSD: iswctype.c,v 1.15 2005/02/09 21:35:46 kleink Exp $	*/
  
  /*
-@@ -37,40 +37,48 @@
+@@ -37,40 +37,47 @@
  
  #include <wchar.h>
  #include <wctype.h>
@@ -5137,53 +5139,49 @@ diff -ruN src72-orig/lib/libc/locale/wctype.c src/lib/libc/locale/wctype.c
  
 -static struct _WCTypeEntry wctype_entries[_WCTYPE_NINDEXES] =
 -{
--	{ "alnum", _CTYPE_A|_CTYPE_D },
--	{ "alpha", _CTYPE_A },
--	{ "blank", _CTYPE_B },
--	{ "cntrl", _CTYPE_C },
--	{ "digit", _CTYPE_D },
--	{ "graph", _CTYPE_G },
--	{ "lower", _CTYPE_L },
--	{ "print", _CTYPE_R },
--	{ "punct", _CTYPE_P },
--	{ "space", _CTYPE_S },
--	{ "upper", _CTYPE_U },
--	{ "xdigit", _CTYPE_X },
+-	{ "alnum", _RUNETYPE_A|_RUNETYPE_D },
+-	{ "alpha", _RUNETYPE_A },
+-	{ "blank", _RUNETYPE_B },
+-	{ "cntrl", _RUNETYPE_C },
+-	{ "digit", _RUNETYPE_D },
+-	{ "graph", _RUNETYPE_G },
+-	{ "lower", _RUNETYPE_L },
+-	{ "print", _RUNETYPE_R },
+-	{ "punct", _RUNETYPE_P },
+-	{ "space", _RUNETYPE_S },
+-	{ "upper", _RUNETYPE_U },
+-	{ "xdigit", _RUNETYPE_X },
 -};
 -
  wctype_t
  wctype(const char *property)
  {
--	int i;
-+       int i;
-+       _RuneLocale *rl = _CurrentRuneLocale();
+ 	int i;
++	_RuneLocale *rl = _CurrentRuneLocale();
  
--	for (i = 0; i < _WCTYPE_NINDEXES; i++)
+ 	for (i = 0; i < _WCTYPE_NINDEXES; i++)
 -		if (strcmp(wctype_entries[i].te_name, property) == 0)
 -			return &wctype_entries[i];
 -	return NULL;
-+       for (i=0; i<_WCTYPE_NINDEXES; i++)
-+               if (!strcmp(rl->rl_wctype[i].te_name, property))
-+                       return ((wctype_t)&rl->rl_wctype[i]);
-+       return ((wctype_t)NULL);
++		if (strcmp(rl->rl_wctype[i].te_name, property) == 0)
++			return ((wctype_t)&rl->rl_wctype[i]);
++	return (wctype_t)NULL;
  }
  DEF_STRONG(wctype);
  
--wctype_t
--wctype_l(const char *property, locale_t locale __attribute__((__unused__)))
-+
 +static _RuneLocale *
 +__runelocale(locale_t locale)
- {
--	return wctype(property);
++ {
 +	FIX_LOCALE(locale);
 +	_RuneLocale	*rl = XLOCALE_CTYPE(locale)->runes;
 +	return rl;
- }
++}
 +
-+wctype_t
+ wctype_t
+-wctype_l(const char *property, locale_t locale __attribute__((__unused__)))
 +wctype_l(const char *property, locale_t locale)
-+{
+ {
+-	return wctype(property);
 +       _RuneLocale     *rl;
 +       int              i;
 +
@@ -5192,7 +5190,7 @@ diff -ruN src72-orig/lib/libc/locale/wctype.c src/lib/libc/locale/wctype.c
 +               if (strcmp(rl->rl_wctype[i].te_name, property) == 0)
 +                       return &rl->rl_wctype[i];
 +       return NULL;
-+}
+ }
 diff -ruN src72-orig/lib/libc/locale/runeglue.c src/lib/libc/locale/runeglue.c
 --- src72-orig/lib/libc/locale/runeglue.c	Wed Dec 31 19:00:00 1969
 +++ src/lib/libc/locale/runeglue.c	Wed Oct 19 21:54:08 2022

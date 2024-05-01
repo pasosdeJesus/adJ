@@ -714,3 +714,15 @@ diff -ruN -x *~ -x *orig src56-orig/regress/lib/libc/locale/check_time/check_tim
 +	return bad != 0;
 +}
 +
+diff -ruN src75-orig/lib/libc/hidden/wchar.h src/lib/libc/hidden/wchar.h
+--- src75-orig/lib/libc/hidden/wchar.h	Mon Apr 17 18:54:48 2023
++++ src/lib/libc/hidden/wchar.h	Tue Apr 30 17:18:20 2024
+@@ -52,7 +52,7 @@
+ PROTO_NORMAL(wcscat);
+ PROTO_NORMAL(wcschr);
+ PROTO_NORMAL(wcscmp);
+-PROTO_STD_DEPRECATED(wcscoll);
++//PROTO_STD_DEPRECATED(wcscoll);
+ PROTO_DEPRECATED(wcscoll_l);
+ PROTO_STD_DEPRECATED(wcscpy);
+ PROTO_NORMAL(wcscspn);
