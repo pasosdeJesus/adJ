@@ -2836,34 +2836,33 @@ diff -ruN src62-orig/lib/libc/locale/iswctype_l.c src/lib/libc/locale/iswctype_l
  	return (rt & f) != 0;
  }
  
-@@ -138,12 +144,50 @@
+@@ -138,12 +144,49 @@
  {
- 	return __isctype_wl(c, _CTYPE_S, locale);
+ 	return __isctype_wl(c, _RUNETYPE_S, locale);
  }
 +DEF_STRONG(iswspace_l);
  
- int
 +iswhexnumber_l(wint_t __c, locale_t locale)
 +{
-+	return __isctype_wl(__c, _CTYPE_X, locale);
++	return __isctype_wl(__c, _RUNETYPE_X, locale);
 +}
 +
-+int
+ int
 +iswideogram_l(wint_t __c, locale_t locale)
 +{
-+	return __isctype_wl(__c, _CTYPE_I, locale);
++	return __isctype_wl(__c, _RUNETYPE_I, locale);
 +}
 +
 +int
 +iswnumber_l(wint_t __c, locale_t locale)
 +{
-+	return __isctype_wl(__c, _CTYPE_D, locale);
++	return __isctype_wl(__c, _RUNETYPE_D, locale);
 +}
 +
 +int
 +iswphonogram_l(wint_t __c, locale_t locale)
 +{
-+	return __isctype_wl(__c, _CTYPE_Q, locale);
++	return __isctype_wl(__c, _RUNETYPE_Q, locale);
 +}
 +
 +int
@@ -2875,28 +2874,28 @@ diff -ruN src62-orig/lib/libc/locale/iswctype_l.c src/lib/libc/locale/iswctype_l
 +int
 +iswspecial_l(wint_t __c, locale_t locale)
 +{
-+	return __isctype_wl(__c, _CTYPE_T, locale);
++	return __isctype_wl(__c, _RUNETYPE_T, locale);
 +}
 +
 +int
  iswupper_l(wint_t c, locale_t locale)
  {
- 	return __isctype_wl(c, _CTYPE_U, locale);
+ 	return __isctype_wl(c, _RUNETYPE_U, locale);
  }
 +DEF_STRONG(iswupper_l);
  
  int
  iswxdigit_l(wint_t c, locale_t locale)
-@@ -215,3 +259,14 @@
+@@ -202,3 +245,14 @@
  
  	return __isctype_wl(c, ((_WCTypeEntry *)charclass)->te_mask, locale);
  }
 +
 +int wcwidth_l(wchar_t c, locale_t locale)
 +{
-+	if (__isctype_wl((c), _CTYPE_R, locale))
-+		return (((unsigned)__runetype_wl(c, locale) & _CTYPE_SWM)
-+				>> _CTYPE_SWS);
++	if (__isctype_wl((c), _RUNETYPE_R, locale))
++		return (((unsigned)__runetype_wl(c, locale) & _RUNETYPE_SWM)
++				>> _RUNETYPE_SWS);
 +	return -1;
 +}
 +DEF_STRONG(wcwidth_l);
@@ -3036,7 +3035,7 @@ diff -ruN src62-orig/lib/libc/locale/isctype_l.c src/lib/libc/locale/isctype_l.c
 +__inline int isalnum_l(int __c, locale_t __l)
  {
 -	return isalnum(c);
-+	return __sbistype_l(__c, _CTYPE_A|_CTYPE_D, __l);
++	return __sbistype_l(__c, _RUNETYPE_A|_RUNETYPE_D, __l);
  }
  
  #undef isalpha_l
@@ -3046,7 +3045,7 @@ diff -ruN src62-orig/lib/libc/locale/isctype_l.c src/lib/libc/locale/isctype_l.c
 -	return isalpha(c);
 +__inline int isalpha_l(int __c, locale_t __l) 
 +{ 
-+	return __sbistype_l(__c, _CTYPE_A, __l); 
++	return __sbistype_l(__c, _RUNETYPE_A, __l); 
  }
  
  #undef isblank_l
@@ -3056,7 +3055,7 @@ diff -ruN src62-orig/lib/libc/locale/isctype_l.c src/lib/libc/locale/isctype_l.c
 -	return isblank(c);
 +__inline int isblank_l(int __c, locale_t __l) 
 +{ 
-+	return __sbistype_l(__c, _CTYPE_B, __l); 
++	return __sbistype_l(__c, _RUNETYPE_B, __l); 
  }
  
  #undef iscntrl_l
@@ -3066,7 +3065,7 @@ diff -ruN src62-orig/lib/libc/locale/isctype_l.c src/lib/libc/locale/isctype_l.c
 -	return iscntrl(c);
 +__inline int iscntrl_l(int __c, locale_t __l) 
 +{ 
-+	return __sbistype_l(__c, _CTYPE_C, __l);
++	return __sbistype_l(__c, _RUNETYPE_C, __l);
  }
  
  #undef isdigit_l
@@ -3076,7 +3075,7 @@ diff -ruN src62-orig/lib/libc/locale/isctype_l.c src/lib/libc/locale/isctype_l.c
 -	return isdigit(c);
 +__inline int isdigit_l(int __c, locale_t __l) 
 +{ 
-+	return __sbistype_l(__c, _CTYPE_D, __l); 
++	return __sbistype_l(__c, _RUNETYPE_D, __l); 
  }
 +DEF_STRONG(isdigit_l);
  
@@ -3087,7 +3086,7 @@ diff -ruN src62-orig/lib/libc/locale/isctype_l.c src/lib/libc/locale/isctype_l.c
 -	return isgraph(c);
 +__inline int isgraph_l(int __c, locale_t __l) 
 +{ 
-+	return __sbistype_l(__c, _CTYPE_G, __l); 
++	return __sbistype_l(__c, _RUNETYPE_G, __l); 
  }
  
  #undef islower_l
@@ -3097,7 +3096,7 @@ diff -ruN src62-orig/lib/libc/locale/isctype_l.c src/lib/libc/locale/isctype_l.c
 -	return islower(c);
 +__inline int islower_l(int __c, locale_t __l) 
 +{ 
-+	return __sbistype_l(__c, _CTYPE_L, __l);
++	return __sbistype_l(__c, _RUNETYPE_L, __l);
  }
  
  #undef isprint_l
@@ -3107,7 +3106,7 @@ diff -ruN src62-orig/lib/libc/locale/isctype_l.c src/lib/libc/locale/isctype_l.c
 -	return isprint(c);
 +__inline int isprint_l(int __c, locale_t __l) 
 +{ 
-+	return __sbistype_l(__c, _CTYPE_R, __l);
++	return __sbistype_l(__c, _RUNETYPE_R, __l);
  }
  
  #undef ispunct_l
@@ -3117,7 +3116,7 @@ diff -ruN src62-orig/lib/libc/locale/isctype_l.c src/lib/libc/locale/isctype_l.c
 -	return ispunct(c);
 +__inline int ispunct_l(int __c, locale_t __l)
 +{ 
-+	return __sbistype_l(__c, _CTYPE_P, __l);
++	return __sbistype_l(__c, _RUNETYPE_P, __l);
  }
  
  #undef isspace_l
@@ -3127,7 +3126,7 @@ diff -ruN src62-orig/lib/libc/locale/isctype_l.c src/lib/libc/locale/isctype_l.c
 -	return isspace(c);
 +__inline int isspace_l(int __c, locale_t __l) 
 +{ 
-+	return __sbistype_l(__c, _CTYPE_S, __l);
++	return __sbistype_l(__c, _RUNETYPE_S, __l);
  }
 +DEF_STRONG(isspace_l);
  
@@ -3138,7 +3137,7 @@ diff -ruN src62-orig/lib/libc/locale/isctype_l.c src/lib/libc/locale/isctype_l.c
 -	return isupper(c);
 +__inline int isupper_l(int __c, locale_t __l) 
 +{ 
-+	return __sbistype_l(__c, _CTYPE_U, __l);
++	return __sbistype_l(__c, _RUNETYPE_U, __l);
  }
  
  #undef isxdigit_l
@@ -3148,7 +3147,7 @@ diff -ruN src62-orig/lib/libc/locale/isctype_l.c src/lib/libc/locale/isctype_l.c
 -	return isxdigit(c);
 +__inline int isxdigit_l(int __c, locale_t __l) 
 +{ 
-+	return __sbistype_l(__c, _CTYPE_X, __l); 
++	return __sbistype_l(__c, _RUNETYPE_X, __l); 
  }
  
  #undef tolower_l
@@ -3183,28 +3182,28 @@ diff -ruN src62-orig/lib/libc/locale/isctype_l.c src/lib/libc/locale/isctype_l.c
 +#undef ishexnumber_l
 +__inline int ishexnumber_l(int __c, locale_t __l) 
 +{ 
-+	return __sbistype_l(__c, _CTYPE_X, __l); 
++	return __sbistype_l(__c, _RUNETYPE_X, __l); 
 +}
 +DEF_STRONG(ishexnumber_l);
 +
 +#undef isideogram_l
 +__inline int isideogram_l(int __c, locale_t __l) 
 +{ 
-+	return __sbistype_l(__c, _CTYPE_I, __l);
++	return __sbistype_l(__c, _RUNETYPE_I, __l);
 +}
 +DEF_STRONG(isideogram_l);
 +
 +#undef isnumber_l
 +__inline int isnumber_l(int __c, locale_t __l) 
 +{ 
-+	return __sbistype_l(__c, _CTYPE_D, __l);
++	return __sbistype_l(__c, _RUNETYPE_D, __l);
 +}
 +DEF_STRONG(isnumber_l);
 +
 +#undef isphonogram_l
 +__inline int isphonogram_l(int __c, locale_t __l) 
 +{ 
-+	return __sbistype_l(__c, _CTYPE_Q, __l);
++	return __sbistype_l(__c, _RUNETYPE_Q, __l);
 +}
 +DEF_STRONG(isphonogram_l);
 +
@@ -3218,7 +3217,7 @@ diff -ruN src62-orig/lib/libc/locale/isctype_l.c src/lib/libc/locale/isctype_l.c
 +#undef isspecial_l
 +__inline int isspecial_l(int __c, locale_t __l) 
 +{ 
-+	return __sbistype_l(__c, _CTYPE_T, __l);
++	return __sbistype_l(__c, _RUNETYPE_T, __l);
 +}
 +DEF_STRONG(isspecial_l);
 +
@@ -3228,18 +3227,6 @@ diff -ruN src62-orig/lib/libc/locale/isctype_l.c src/lib/libc/locale/isctype_l.c
 +	return __sbmaskrune_l((__c), 0xFF, __l); 
 +}
 +DEF_STRONG(digittoint_l);
-diff -ruN -x obj src67-orig/regress/lib/libc/locale/uselocale/uselocale.c src/regress/lib/libc/locale/uselocale/uselocale.c
---- src67-orig/regress/lib/libc/locale/uselocale/uselocale.c	Wed Aug 16 08:52:50 2017
-+++ src/regress/lib/libc/locale/uselocale/uselocale.c	Sun Jun 21 07:26:09 2020
-@@ -277,7 +277,7 @@
- 	/* TEST_R(nl_langinfo_l, "UTF-8", CODESET, _LOCALE_UTF8); */
- 	TEST_R(nl_langinfo_l, "US-ASCII", CODESET, _LOCALE_C);
- 	TEST_R(isalpha, __CTYPE_L, 0x65);  /* e */
--	TEST_R(isalpha_l, __CTYPE_L, 0x65, _LOCALE_UTF8);
-+	// TEST_R(isalpha_l, __CTYPE_L, 0x65, _LOCALE_UTF8);
- 	TEST_R(isalpha_l, __CTYPE_L, 0x65, _LOCALE_C);
- 	TEST_R(isalpha_l, __CTYPE_L, 0x65, _LOCALE_C);
- 	TEST_R(isalpha, 0, 0x30);  /* 0 */
 diff -ruN src72-orig/lib/libc/locale/rune.c src/lib/libc/locale/rune.c
 --- src72-orig/lib/libc/locale/rune.c	Tue Oct  4 18:12:54 2022
 +++ src/lib/libc/locale/rune.c	Wed Oct 19 15:26:24 2022

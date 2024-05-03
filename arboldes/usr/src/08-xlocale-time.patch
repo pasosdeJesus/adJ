@@ -1648,12 +1648,11 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/setloc
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/xlocale_private.h src/lib/libc/locale/xlocale_private.h
 --- src54-x6/lib/libc/locale/xlocale_private.h	Sat Feb  9 14:26:54 2013
 +++ src/lib/libc/locale/xlocale_private.h	Tue Dec  3 16:12:45 2013
-@@ -227,6 +227,13 @@
+@@ -227,5 +227,13 @@
  };
  
  _MonetaryLocale *__get_current_monetary_locale(locale_t loc);
 - 
-- #endif
 +
 +struct xlocale_time {
 +	struct xlocale_component header;

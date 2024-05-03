@@ -601,18 +601,15 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/iswcty
 diff -ruN src72-orig/lib/libc/locale/wctype.c src/lib/libc/locale/wctype.c
 --- src72-orig/lib/libc/locale/wctype.c	Tue Oct  4 18:12:54 2022
 +++ src/lib/libc/locale/wctype.c	Thu Oct  6 10:58:02 2022
-@@ -52,9 +52,9 @@
+@@ -52,7 +52,7 @@
  wctype(const char *property)
  {
-        int i;
--       _RuneLocale *rl = _CurrentRuneLocale();
-+       _RuneLocale *rl = XLOCALE_CTYPE(__get_locale())->runes;
+ 	int i;
+-	_RuneLocale *rl = _CurrentRuneLocale();
++	_RuneLocale *rl = XLOCALE_CTYPE(__get_locale())->runes;
  
--       for (i=0; i<_WCTYPE_NINDEXES; i++)
-+       for (i = 0; i < _WCTYPE_NINDEXES; i++)
-                if (!strcmp(rl->rl_wctype[i].te_name, property))
-                        return ((wctype_t)&rl->rl_wctype[i]);
-        return ((wctype_t)NULL);
+ 	for (i = 0; i < _WCTYPE_NINDEXES; i++)
+ 		if (strcmp(rl->rl_wctype[i].te_name, property) == 0)
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/mbrlen.c src/lib/libc/locale/mbrlen.c
 --- src54-x6/lib/libc/locale/mbrlen.c	Tue Dec  3 16:05:32 2013
 +++ src/lib/libc/locale/mbrlen.c	Tue Dec  3 22:25:11 2013

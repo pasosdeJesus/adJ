@@ -1,45 +1,54 @@
+diff -ruN src75-orig/gnu/lib/libcxx/include/c++/v1/__config_site src/gnu/lib/libcxx/include/c++/v1/__config_site
+--- src75-orig/gnu/lib/libcxx/include/c++/v1/__config_site	Tue Apr  9 16:42:07 2024
++++ src/gnu/lib/libcxx/include/c++/v1/__config_site	Thu May  2 14:08:04 2024
+@@ -9,6 +9,8 @@
+ #ifndef _LIBCPP___CONFIG_SITE
+ #define _LIBCPP___CONFIG_SITE
+ 
++#define __adJ__
++
+ #define _LIBCPP_ABI_VERSION 1
+ #define _LIBCPP_ABI_NAMESPACE __1
+ /* #undef _LIBCPP_ABI_FORCE_ITANIUM */
 diff -ruN src69-orig/gnu/llvm/libcxx/include/__config src/gnu/llvm/libcxx/include/__config
 --- src69-orig/gnu/llvm/libcxx/include/__config	Sat Jan  2 16:18:29 2021
 +++ src/gnu/llvm/libcxx/include/__config	Sat Jul 24 13:51:15 2021
-@@ -940,7 +940,8 @@
- #endif
+@@ -724,7 +724,7 @@
+ #  endif // _LIBCPP_CXX03_LANG
  
- #if defined(__APPLE__) || defined(__FreeBSD__) || defined(_LIBCPP_MSVCRT_LIKE) || \
--    defined(__sun__) || defined(__NetBSD__) || defined(__CloudABI__)
-+    defined(__sun__) || defined(__NetBSD__) || defined(__CloudABI__) || \
-+    defined(__adJ__)
- #define _LIBCPP_LOCALE__L_EXTENSIONS 1
- #endif
+ #  if defined(__APPLE__) || defined(__FreeBSD__) || defined(_LIBCPP_MSVCRT_LIKE) || defined(__sun__) ||                \
+-      defined(__NetBSD__)
++      defined(__NetBSD__) || defined(__adJ__)
+ #    define _LIBCPP_LOCALE__L_EXTENSIONS 1
+ #  endif
  
-@@ -1243,6 +1244,7 @@
- #if defined(__BIONIC__) || defined(__CloudABI__) || defined(__NuttX__) ||      \
-     defined(__Fuchsia__) || defined(__wasi__) || defined(_LIBCPP_HAS_MUSL_LIBC) || \
-     defined(__MVS__) || defined(__OpenBSD__)
+@@ -1009,6 +1009,7 @@
+ 
+ #  if defined(__BIONIC__) || defined(__NuttX__) || defined(__Fuchsia__) || defined(__wasi__) ||                        \
+       defined(_LIBCPP_HAS_MUSL_LIBC) || defined(__OpenBSD__)
 +// In adJ __DefaultRuneLocale is in libc but hidden
- #define _LIBCPP_PROVIDES_DEFAULT_RUNE_TABLE
- #endif
+ #    define _LIBCPP_PROVIDES_DEFAULT_RUNE_TABLE
+ #  endif
  
 diff -ruN src69-orig/gnu/llvm/libcxx/include/__locale src/gnu/llvm/libcxx/include/__locale
 --- src69-orig/gnu/llvm/libcxx/include/__locale	Sat Jan  2 16:18:29 2021
 +++ src/gnu/llvm/libcxx/include/__locale	Sat Jul 24 13:44:23 2021
-@@ -33,10 +33,11 @@
- # include <__support/solaris/xlocale.h>
+@@ -33,9 +33,9 @@
+ # include <xlocale.h>
  #elif defined(_NEWLIB_VERSION)
  # include <__support/newlib/xlocale.h>
 -#elif defined(__OpenBSD__)
-+#elif defined(__OpenBSD__) && !defined(__adJ__)
++#elif defined(__OpenBSD__)  && !defined(__adJ__)
  # include <__support/openbsd/xlocale.h>
- #elif (defined(__APPLE__)      || defined(__FreeBSD__) \
--    || defined(__EMSCRIPTEN__) || defined(__IBMCPP__))
-+    || defined(__EMSCRIPTEN__) || defined(__IBMCPP__)) \
-+    || defined(__adJ__)
+-#elif (defined(__APPLE__) || defined(__FreeBSD__))
++#elif (defined(__APPLE__) || defined(__FreeBSD__) || defined(__adJ__))
  # include <xlocale.h>
  #elif defined(__Fuchsia__)
  # include <__support/fuchsia/xlocale.h>
-@@ -450,10 +451,10 @@
-     static const mask blank  = _BLANK;
-     static const mask __regex_word = 0x80;
+@@ -455,10 +455,10 @@
+     static const mask __regex_word = 0x4000; // 0x8000 and 0x0100 and 0x00ff are used
  # define _LIBCPP_CTYPE_MASK_IS_COMPOSITE_PRINT
+ # define _LIBCPP_CTYPE_MASK_IS_COMPOSITE_ALPHA
 -#elif defined(__APPLE__) || defined(__FreeBSD__) || defined(__EMSCRIPTEN__) || defined(__NetBSD__)
 +#elif defined(__APPLE__) || defined(__FreeBSD__) || defined(__EMSCRIPTEN__) || defined(__NetBSD__) || defined(__adJ__)
  # ifdef __APPLE__
@@ -49,7 +58,6 @@ diff -ruN src69-orig/gnu/llvm/libcxx/include/__locale src/gnu/llvm/libcxx/includ
      typedef unsigned long mask;
  # elif defined(__EMSCRIPTEN__) || defined(__NetBSD__)
      typedef unsigned short mask;
-
 diff -ruN src71-orig/gnu/llvm/libcxx/include/__support/openbsd/xlocale.h src/gnu/llvm/libcxx/include/__support/openbsd/xlocale.h
 --- src71-orig/gnu/llvm/libcxx/include/__support/openbsd/xlocale.h	Thu Mar 17 23:10:55 2022
 +++ src/gnu/llvm/libcxx/include/__support/openbsd/xlocale.h	Mon Mar 21 08:13:17 2022

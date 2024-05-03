@@ -337,7 +337,7 @@ diff -ruN src/lib/libc/locale/xlocale_private.h.orig src/lib/libc/locale/xlocale
  
  enum {
  	XLC_COLLATE = 0,
-@@ -210,7 +212,21 @@
+@@ -210,7 +212,20 @@
  #define FIX_LOCALE(l) (l = get_real_locale(l))
  
  
@@ -359,8 +359,7 @@ diff -ruN src/lib/libc/locale/xlocale_private.h.orig src/lib/libc/locale/xlocale
 +
 +_MonetaryLocale *__get_current_monetary_locale(locale_t loc);
 + 
-+ #endif
- 
+ #endif
 diff -ruN src-m/lib/libc/locale/xlocale.c src/lib/libc/locale/xlocale.c
 --- src-m/lib/libc/locale/xlocale.c	Fri Dec  1 13:22:30 2017
 +++ src/lib/libc/locale/xlocale.c	Fri Dec  1 16:00:39 2017
