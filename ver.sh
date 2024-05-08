@@ -10,7 +10,7 @@ VPKGPATH=snapshots
 VPKGPATH=$V
 
 VP=`echo $V | sed -e "s/[.]//g"`
-VP=HEAD
+VP=75
 VU=`echo $V | sed -e "s/[.]/_/g"`
 VNUM=`echo $V | sed -e "s/\.//g"`
 VNUMS=`expr $VNUM + 1`
