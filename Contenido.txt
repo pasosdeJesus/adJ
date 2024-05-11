@@ -92,7 +92,6 @@ gnumeric-[v]	Hoja de cálculo
 gv-[v]		Visualizador de PostScript y PDF
 inkscape-[v]		Editor gráfico vectorial
 mplayer-[v]	Escuchar y ver diversidad de audio y vídeo
-musescore-[v]		Software de notación musical WYSIWYG (MuseScore)
 libreoffice-[v]	Aplicaciones de oficina
 libreoffice-i18n-es-[v]	Localización en Español para LibreOffice
 qemu-[v]		Emulador de varios sistemas
@@ -181,6 +180,7 @@ w3m-[v]	Navegador modo texto que soporta UTF-8 y descargas
 
 * Soporte, librerías y desarrollo
 aalib-[v]		Librería de arte ASCII
+abseil-cpp-[v]
 adplug-[v]  Librería del reproductor de sonido AdLib
 aom-[v]		Codec de vídeo Alliance for Open Media AV1
 appstream-glib-[v]	Librería de metadatos AppStream
@@ -277,6 +277,7 @@ glib2-[v]		Librería de utilidades de propósito general
 glib2-networking-[v]	Módulos relaciones con red gio de GLib
 glib2mm-[v]		Interfaz en C++ para glib2
 glm-[v]		Encabezados de matemáticas de OpenGL
+glslang-[v]
 gmake-[v]		Construir programas a partir de fuentes
 gmp-[v]		Librería de aritmética de precisión arbitraría
 gnome-icon-theme-[v]	Iconos para GNOME
@@ -432,6 +433,7 @@ libtermkey-[v]		Librería para procesar teclado en terminal
 libtextstyle-[v]	Librería para dar estilo a textos (parte de gettext)
 libtheora-[v]	Codec abierto de vídeo
 libtorrent-[v]	Librería de BitTorrent escrita en C++
+libudev-openbsd-[v]
 libudfread-[v]	Librería para leer UDF de dispositivos puros
 libunbound-[v]	Librería de resolvedor DNS que valida
 libunistring-[v]	Manipula cadenas Unicode
@@ -448,13 +450,16 @@ libvterm-[v]		Librería para emular una termina VT220/xterm/ECMA-48
 libwebp-[v]	Conversión del formatos gráficos Google WebP
 libwmf-[v]	Conversión y manejo WMF
 libwpd-[v]		Importa y exporta documentos WordPerfect
+libwpe-[v]
 libxkbcommon-[v]	Librería para manejar descripciones de teclado
 libxml-[v]		Librería para reconocimiento de XML
 libxslt-[v]		Librería para transformaciones XSL en C
 libyaml-[v]		Reconocedor y emisor de YAML 1.1 escrito en C
 libyajl-[v]		Pequeña librería JSON escrita en ANSI C
 libzip-[v]		Librería para leer, crear y modificar archivos zip
+lilv-[v]
 lockfile-[v]		Maneja archivos semáforos en archivos de órdenes
+lv2-[v]
 lz4-[v]		Compresión de datos rápida con licencia BSD
 lzlib-[v]		Librería para compresión lzip
 lzo2-[v]		Librería de compresión portable
@@ -754,7 +759,6 @@ qtquickcontrols2-[v]	Controles de interfaz para Qt5 Quick de Qt Labs
 qtsensors-[v]	Soporte en Qt5 para sensores de hardware
 qtserialport-[v]	Componentes Qt5 para acceso a puertos seriales
 qtsvg-[v]		Soporte SVG para Qt5
-qttools-[v]		Herramientas de desarrollo de Qt
 qtwebchannel-[v]	Integración Qt5 HTML/Javascript
 qtwebkit-[v]	Antiguo marco de integración entre Qt y Webkit
 qtwebsockets-[v]	Implementación para Qt5 del protocolo WebSocket
@@ -769,18 +773,23 @@ redland-[v]	Interfaz de alto nivel para RDF
 ruby33-ri_docs-[v]	Documentación de núcleo y librería estándar de Ruby
 samba-[v]		Interconexión con Windows con protocolos SMB/CIFS
 sane-backends-[v]	API para acceder a scanners
+serd-[v]
 shared-mime-info-[v]	Base de datos mime compartida para escritorios
+shaderc-[v]
 sdl-[v]		Librería multimedia
 sdl2-[v]		Versión 2 de la librería multimedia
 sdl-image-[v]	Librería de imágenes de SDL
 silc-toolkit-[v]	Herramientas para desarrollo de aplicaciones SILC
 smartmontools-[v]	Control y monitoreo de almacenamiento con SMART
 snappy-[v]		Librería para compresión/descompresión rápida
+sord-[v]
 soundtouch-[v]	Librería para procesamiento de tempo/tono
 speex-[v]		Codec para voz libre de patentes
 speexdsp-[v]		Codec para voz libre de patentes
 sqlports-[v]		Base de datos sqlite de los portes
+sratom-[v]
 sudo-[v]		Ejecutar una orden como otro usuario
+suil-[v]
 suitesparse-[v]	Juego de algoritmos para matrices dispersas
 t1utils-[v]		Utilidades para fuentes PostScript tipo 1
 taglib-[v]		Para manejar meta-datos de formatos de audio
@@ -796,9 +805,14 @@ vamp-plugin-sdk-[v]	API de extensiones para audio
 veracrypt-[v]	Cifra contenedores
 vte3-[v]		Librería para emulación de terminal
 vte3-common-[v]	Archivos compartidos para vte3
+vulkan-headers-[v]
+vulkan-loader-[v]
+wayland-[v]
+wayland-[v]
 wavpack-[v]		Codificador de audio para compresión con y sin perdida
 webkitgtk41-[v]	Interfaz para GTK+3
 woff2-[v]		Librería para el formato Web Open Font 2.0
+wpebackend-fdo-[v]
 wxWidgets-gtk3-[v]	Herramientas para GUIs multi-plataforma
 Xaw3d-[v]		Componentes gráficos 3D Athena similares a Motif
 x265-[v]		Codificador H.265/HEVC libre
