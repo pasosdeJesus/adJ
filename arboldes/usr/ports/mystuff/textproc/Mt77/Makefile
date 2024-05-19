@@ -36,7 +36,7 @@ do-regress:
 pre-patch:
 	pwd
 	echo "WRKDIR=${WRKDIR}"
-	mv -f ${WRKDIR}/Mt77-v1.0a6*/* ${WRKDIR}/Mt77-1.0a6*/
+	mv -f ${WRKDIR}/Mt77-v1.0a6* ${WRKDIR}/Mt77-1.0a6/
 
 do-install:
 	cd ${WRKSRC} && ${SETENV} ${MAKE_ENV} DESTDIR=${DESTDIR} ${MAKE_PROGRAM} ${MAKE_FLAGS} instala 
