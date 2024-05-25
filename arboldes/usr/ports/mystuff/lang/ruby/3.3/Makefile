@@ -1,10 +1,13 @@
-VERSION =		3.3.0
+VERSION =		3.3.1
 DISTNAME =		ruby-${VERSION}
 PKGNAME-main =		ruby-${VERSION}
 PKGNAME-ri_docs =	ruby${BINREV}-ri_docs-${VERSION}
 SHARED_LIBS =		ruby33	0.0
 NEXTVER =		3.4
 PKGSPEC-main ?=         ruby->=3.3.0,<${NEXTVER}
+
+# Backport fix i386 compilation warning
+PATCHFILES.p =		ruby33-i386-compile-warning{055613fd868a8c94e43893f8c58a00cdd2a81f6d}.patch
 
 PSEUDO_FLAVORS=		no_ri_docs bootstrap
 # Do not build the RI docs on slow arches
@@ -14,11 +17,16 @@ FLAVOR?=		no_ri_docs bootstrap
 FLAVOR?=
 .endif
 
-.if ${MACHINE_ARCH:Mamd64} || ${MACHINE_ARCH:Maarch64}
+.if ${MACHINE_ARCH:Mamd64}
 # Support YJIT JIT compiler on arches Ruby supports
 BUILD_DEPENDS +=		lang/rust
 WANTLIB-main +=		c++abi
 MAKE_ENV +=		LIBRUBY_DLDFLAGS="-lc++abi"
+.endif
+
+.if ${MACHINE_ARCH:Maarch64}
+# Disable YJIT on arm64 until it is fixed
+CONFIGURE_ARGS +=	--disable-yjit
 .endif
 
 MULTI_PACKAGES =	-main -ri_docs
@@ -35,7 +43,7 @@ GEM_EXTENSIONS_DIR = lib/ruby/gems/${REV}/extensions/${MACHINE_ARCH:S/i386/x86/:
 SUBST_VARS += GEM_EXTENSIONS_DIR
 
 TEST_ENV =	RUBYGEMS_SYSTEM_UPDATE_MESSAGE=enable
-TEST_TARGET =	check TESTOPTS="-v -q"
+TEST_TARGET =	test-all TESTOPTS="-v -q"
 
 post-extract:
 	${POST_EXTRACT}
