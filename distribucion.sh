@@ -874,8 +874,6 @@ if (test "$sn" = "s") then {
   paquete p5-Scope-Guard
   paquete p5-Path-Tiny
   paquete p5-Text-Unidecode
-  paquete p5-Email-Address
-  paquete p5-Email-Address-XS
   paquete p5-Email-MIME-Encodings
   paquete p5-Module-Pluggable
  
@@ -1003,18 +1001,22 @@ if (test "$sn" = "s") then {
 
   paquete p5-Mail-SpamAssassin
 
-  ### Requieren recompilación por cambio en FILE
-  paquete unzip  # De no hacerse envía descompresiones a salida estándar
-  paquete python paquetes "python" "3.10"
-  paquete ruby paquetes "ruby ruby33-ri_docs" 3.3
-  paquete gettext-tools paquetes 'gettext-tools gettext-runtime'  # Requerido para compilar muchos
-  paquete m4 # Requerido para compilar bison (instalar antes de compilar bison)
-  paquete bison # Requerido para compilar MariaDB
-  paquete gmake # requerido para compilar PostgreSQL
-  paquete ImageMagick  # requerido para compilar postgis
+  ## Muy necesarios de estable con actualizaciones
+  paquete curl
+  paquete node
 
-  paquete print/texlive/base paquetes texlive_base # Requerido para compilar ton
-  paquete print/texlive/texmf paquetes texlive_texmf-minimal-2021 # Requerido para compilar ton
+  ### Requieren recompilación por cambio en FILE
+  #paquete unzip  # De no hacerse envía descompresiones a salida estándar
+  Epaquete python paquetes "python" "3.10"
+  paquete ruby paquetes "ruby ruby33-ri_docs" 3.3
+  #paquete gettext-tools paquetes 'gettext-tools gettext-runtime'  # Requerido para compilar muchos
+  #paquete m4 # Requerido para compilar bison (instalar antes de compilar bison)
+  #paquete bison # Requerido para compilar MariaDB
+  #paquete gmake # requerido para compilar PostgreSQL
+  #paquete ImageMagick  # requerido para compilar postgis
+
+  #paquete print/texlive/base paquetes texlive_base # Requerido para compilar ton
+  #paquete print/texlive/texmf paquetes texlive_texmf-minimal-2021 # Requerido para compilar ton
 
   ####
   # Retroportados para cerrar fallas o actualizar
@@ -1022,10 +1024,10 @@ if (test "$sn" = "s") then {
 
   paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs postgresql-pg_upgrade" 
   paquete postgresql-previous 
-  paquete blosc
+  #paquete blosc
   paquete postgis
   #paquete geo/spatialite/libspatialite
-  paquete jansson
+  #paquete jansson
 
   # Recompilado con llave de adJ
   paquete chromium
@@ -1036,18 +1038,25 @@ if (test "$sn" = "s") then {
   #paquete hevea # requiere ocamlbuild
 
   ####
+  # Modificados para que usen xlocale (pueden cerrar fallas)
+  # Estan en mystuff
+  paquete glib2
+  paquete libunistring
+  paquete vlc
+
+  ####
   # Recompilados para cerrar fallas de portes actualizados (estable)
   # Para que operen bien basta actualizar CVS de /usr/ports 
   # Los siguientes no deben estar en arboldes/usr/ports/mystuff
 
 
-  paquete zstd
+  #paquete zstd
 
   #paquete certbot paquetes "certbot py3-acme"
-  paquete cups
+  #paquete cups
   #paquete dovecot
   #paquete dtc
-  paquete firefox-esr
+  #paquete firefox-esr
   #paquete flac
   #paquete gtk+3 paquetes "gtk+3-cups"
   #paquete gdal
@@ -1062,20 +1071,19 @@ if (test "$sn" = "s") then {
   #paquete lz4
   #paquete mariadb-client paquetes "mariadb-client mariadb-server" 
   #paquete mpg123
-  paquete mutt
+  #paquete mutt
   #paquete nginx
-  #paquete node
   #paquete nspr
   #paquete oniguruma 
-  paquete openssl paquetes "openssl" 3.1
+  #paquete openssl paquetes "openssl" 3.2
   #paquete quirks
   #paquete pcre2 
   #paquete python paquetes "python" "2.7"
   #paquete python paquetes "python" "3.9"
   #paquete rsync
-  paquete samba paquetes "ldb samba tevent"
+  #paquete samba paquetes "ldb samba tevent"
   #paquete sqlite3
-  paquete tiff
+  #paquete tiff
   #paquete unrar
   #paquete wavpack
   #paquete webkitgtk41
@@ -1084,9 +1092,8 @@ if (test "$sn" = "s") then {
   ###  
   # Recompilados de estable que usan xlocale (y pueden cerrar fallas)
   # No deben estar en mystuff
-  paquete curl
 
-  paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 8.2
+  paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 8.3
 
   ###
   # Recompilados para mejorar dependencias y actualizar
@@ -1110,13 +1117,6 @@ if (test "$sn" = "s") then {
   # Nueva revisión para operar con librerías retroportadas o actualizadas
   # Deben estar en arbodes/usr/ports/mystuff
   #paquete libreoffice paquetes "libreoffice libreoffice-i18n-es"
-
-  ####
-  # Modificados para que usen xlocale (pueden cerrar fallas)
-  # Estan en mystuff
-  paquete glib2
-  paquete libunistring
-  paquete vlc
 
   ##
   # Retroportados no existentes en versión actual

@@ -3,8 +3,8 @@
 Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
 
-### Versión: 7.5
-Fecha de publicación: 22/Jun/2024
+### Versión: 7.5b1
+Fecha de publicación: 22/May/2024
 
 Puedes ver novedades respecto a OpenBSD en:
   <https://gitlab.com/pasosdeJesus/adJ/-/blob/ADJ_7_5/Novedades_OpenBSD.md>
@@ -15,13 +15,13 @@ Puedes ver las diversas versiones publicadas en
 <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/> donde entre otras
 encontrarás:
 
-* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-7.5-amd64.usb>
+* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-7.5b1-amd64.usb>
   que es imagen para escribir en una memoria USB y arrancar con esta bien en
   modo UEFI o bien en modo BIOS Legacy. Una vez
   la descargues puedes escribirla en una USB ubicada en `/dev/sd2c`
   (verifica el dispositivo con `dmesg` y remplaza) con:
 
-       doas dd if=AprendiendoDeJesus-7.5-amd64.usb of=/dev/sd2c bs=1M
+       doas dd if=AprendiendoDeJesus-7.5b1-amd64.usb of=/dev/sd2c bs=1M
 
   Este proceso puede ser demorado, podrás ver el progreso con
 
@@ -29,13 +29,13 @@ encontrarás:
 
   O si deseas probarla con `qemu` para instalar en un disco `virtual.raw`:
 
-       qemu-system-x86_64 -hda virtual.raw -hdb AprendiendoDeJesus-7.5-amd64.usb -boot menu=on
+       qemu-system-x86_64 -hda virtual.raw -hdb AprendiendoDeJesus-7.5b1-amd64.usb -boot menu=on
 
-* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-7.5-amd64.iso>
+* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-7.5b1-amd64.iso>
   que es imagen en formato ISO para quemar en DVD e instalar por primera vez
   en modo BIOS Legacy.
 
-* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/7.5-amd64/>
+* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/7.5b1-amd64/>
   que es directorio con el contenido del DVD instalador apropiado para descargar
   con `rsync` desde un adJ o un OpenBSD ya instalado para actualizarlo (ver
   <https://gitlab.com/pasosdeJesus/adJ/-/blob/ADJ_7_5/Actualiza.md> )
@@ -51,11 +51,14 @@ encontrarás:
 
 Novedades tomadas de <https://www.openbsd.org/75.html>
 
-* Aplicados parches de seguridad hasta el 14.Feb.2024 provenientes de
+* Aplicados parches de seguridad hasta el 11.May.2024 provenientes de
   OpenBSD que incluyen soluciones a fallas
 * Controladores ampliados o mejorados para amd64
-  * Tarjetas Ethernet:
-  * Tarjetas inalámbricas:
+  * Tarjetas Ethernet: Soporte para Elkahart Lake Ethernet en `dwqe`,
+    soporte para AX88179A en `axen`. Mejoras a `em`, `ixl`, `rge`,
+    `bnxt`
+  * Tarjetas inalámbricas: Nuevo controlador `qwx` para dispositivos 
+    QCNFA765, 
   * Video:
   * Otros:
 * Mejoras al kernel, SMP y seguridad:
