@@ -1,7 +1,7 @@
 Index: chrome/browser/prefs/browser_prefs.cc
 --- chrome/browser/prefs/browser_prefs.cc.orig
 +++ chrome/browser/prefs/browser_prefs.cc
-@@ -472,13 +472,13 @@
+@@ -486,18 +486,18 @@
  #endif
  
  #if BUILDFLAG(IS_WIN) || BUILDFLAG(IS_MAC) || BUILDFLAG(IS_LINUX) || \
@@ -17,7 +17,13 @@ Index: chrome/browser/prefs/browser_prefs.cc
      (BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS_LACROS))
  #include "chrome/browser/browser_switcher/browser_switcher_prefs.h"
  #endif
-@@ -511,7 +511,7 @@
+ 
+-#if BUILDFLAG(IS_WIN) || BUILDFLAG(IS_MAC) || BUILDFLAG(IS_LINUX)
++#if BUILDFLAG(IS_WIN) || BUILDFLAG(IS_MAC) || BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_BSD)
+ #include "chrome/browser/enterprise/signin/enterprise_signin_prefs.h"
+ #endif
+ 
+@@ -529,7 +529,7 @@
  #include "chrome/browser/sessions/session_service_log.h"
  #endif
  
@@ -26,7 +32,7 @@ Index: chrome/browser/prefs/browser_prefs.cc
  #include "ui/color/system_theme.h"
  #endif
  
-@@ -716,7 +716,7 @@ const char kPluginsPluginsList[] = "plugins.plugins_li
+@@ -567,7 +567,7 @@ const char kPluginsPluginsList[] = "plugins.plugins_li
  const char kPluginsShowDetails[] = "plugins.show_details";
  
  // Deprecated 02/2023.
@@ -35,25 +41,16 @@ Index: chrome/browser/prefs/browser_prefs.cc
  const char kWebAppsUrlHandlerInfo[] = "web_apps.url_handler_info";
  #endif  // BUILDFLAG(IS_WIN) || BUILDFLAG(IS_MAC) || BUILDFLAG(IS_LINUX)
  
-@@ -1007,7 +1007,7 @@ void RegisterLocalStatePrefsForMigration(PrefRegistryS
- #endif  // BUILDFLAG(IS_CHROMEOS_ASH)
- 
-   // Deprecated 02/2023.
+@@ -972,7 +972,7 @@ const char kBorealisVmTokenHash[] = "borealis.vm_token
+ // key).
+ void RegisterLocalStatePrefsForMigration(PrefRegistrySimple* registry) {
+ // Deprecated 02/2023.
 -#if BUILDFLAG(IS_WIN) || BUILDFLAG(IS_MAC) || BUILDFLAG(IS_LINUX)
 +#if BUILDFLAG(IS_WIN) || BUILDFLAG(IS_MAC) || BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_BSD)
    registry->RegisterDictionaryPref(kWebAppsUrlHandlerInfo);
  #endif  // BUILDFLAG(IS_WIN) || BUILDFLAG(IS_MAC) || BUILDFLAG(IS_LINUX)
  
-@@ -1163,7 +1163,7 @@ void RegisterProfilePrefsForMigration(
-   registry->RegisterIntegerPref(kProfileAvatarTutorialShown, 0);
- #endif
- 
--#if BUILDFLAG(IS_LINUX)
-+#if BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_BSD)
-   // Deprecated 08/2022.
-   registry->RegisterBooleanPref(prefs::kUsesSystemThemeDeprecated, false);
- #endif
-@@ -1964,12 +1964,12 @@ void RegisterProfilePrefs(user_prefs::PrefRegistrySync
+@@ -1986,12 +1986,12 @@ void RegisterProfilePrefs(user_prefs::PrefRegistrySync
  #endif
  
  #if BUILDFLAG(IS_WIN) || BUILDFLAG(IS_MAC) || BUILDFLAG(IS_LINUX) || \
@@ -66,23 +63,14 @@ Index: chrome/browser/prefs/browser_prefs.cc
 -#if BUILDFLAG(IS_WIN) || BUILDFLAG(IS_MAC) || BUILDFLAG(IS_LINUX)
 +#if BUILDFLAG(IS_WIN) || BUILDFLAG(IS_MAC) || BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_BSD)
    browser_switcher::BrowserSwitcherPrefs::RegisterProfilePrefs(registry);
+   enterprise_signin::RegisterProfilePrefs(registry);
  #endif
+@@ -2121,7 +2121,7 @@ void MigrateObsoleteLocalStatePrefs(PrefService* local
+   // Please don't delete the preceding line. It is used by PRESUBMIT.py.
  
-@@ -2127,7 +2127,7 @@ void MigrateObsoleteLocalStatePrefs(PrefService* local
- #endif  // BUILDFLAG(IS_CHROMEOS_ASH)
- 
-   // Added 02/2023
+ // Added 02/2023.
 -#if BUILDFLAG(IS_WIN) || BUILDFLAG(IS_MAC) || BUILDFLAG(IS_LINUX)
 +#if BUILDFLAG(IS_WIN) || BUILDFLAG(IS_MAC) || BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_BSD)
    local_state->ClearPref(kWebAppsUrlHandlerInfo);
  #endif  // BUILDFLAG(IS_WIN) || BUILDFLAG(IS_MAC) || BUILDFLAG(IS_LINUX)
  
-@@ -2297,7 +2297,7 @@ void MigrateObsoleteProfilePrefs(Profile* profile) {
-   profile_prefs->ClearPref(kProfileAvatarTutorialShown);
- #endif
- 
--#if BUILDFLAG(IS_LINUX)
-+#if BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_BSD)
-   // Added 08/2022.
-   if (profile_prefs->HasPrefPath(prefs::kUsesSystemThemeDeprecated)) {
-     auto migrated_theme =

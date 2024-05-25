@@ -1,9 +1,9 @@
 Index: ui/gfx/x/xlib_support.cc
 --- ui/gfx/x/xlib_support.cc.orig
 +++ ui/gfx/x/xlib_support.cc
-@@ -38,10 +38,18 @@ void InitXlib() {
-   if (xlib_loader->loaded())
+@@ -39,10 +39,18 @@ void InitXlib() {
      return;
+   }
  
 +#if BUILDFLAG(IS_BSD)
 +  CHECK(xlib_loader->Load("libX11.so"));
