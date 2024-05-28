@@ -866,6 +866,7 @@ if (test "$sn" = "s") then {
   paquete p5-Class-XSAccessor
   paquete p5-MooX-Types-MooseLike
   paquete p5-Authen-SASL
+  paquete p5-DateManip
   paquete p5-Email-Address-XS
   paquete p5-ExtUtils-Config
   paquete p5-ExtUtils-InstallPaths
