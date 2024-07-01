@@ -831,6 +831,17 @@ if (test "$sn" = "s") then {
   # Deben estar en mystuff
 
 
+  paquete glib2
+  paquete libxml
+  paquete ruby paquetes "ruby ruby33-ri_docs" 3.3
+  paquete firefox-esr
+  paquete ghostscript
+  paquete samba paquetes "ldb samba tevent"
+  paquete libvpx
+  paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 8.3
+  paquete git paquetes "git"
+
+
     ####
   # Unicos en adJ liderados por pdJ
   # Deben estar en arboldes/usr/ports/mystuff 
@@ -999,6 +1010,31 @@ if (test "$sn" = "s") then {
   paquete p5-MIME-Charset
   paquete textproc/p5-SGMLSpm
   paquete p5-Unicode-LineBreak
+  
+  paquete p5-Archive-Zip
+  paquete p5-Class-Data-Inheritable
+  paquete p5-Config-Tiny
+  paquete p5-Crypt-OpenSSL-Guess
+  paquete p5-DBD-MariaDB
+  paquete p5-DBIx-Simple
+  paquete p5-Email-MIME
+  paquete p5-Email-Sender
+  paquete p5-Email-Simple
+  paquete p5-Exception-Class
+  paquete p5-Getopt-Long-Descriptive
+  paquete p5-IO-Socket-INET6
+  paquete p5-IPC-Run3
+  paquete p5-Mail-DMARC
+  paquete p5-Net-IP
+  paquete p5-Net-SMTPS
+  paquete p5-Net-Server
+  paquete p5-Package-Stash
+  paquete p5-Ref-Util
+  paquete p5-Regexp-Common
+  paquete p5-Regexp-IPv6
+  paquete p5-Test-File-ShareDir
+  paquete p5-IO-String
+
 
   paquete p5-Mail-SpamAssassin
 
@@ -1006,7 +1042,7 @@ if (test "$sn" = "s") then {
   paquete curl
   paquete node
 
-  ### Requieren recompilación por cambio en FILE
+  ### Requieren recompilación en caso de incluir cambio en FILE
   #paquete unzip  # De no hacerse envía descompresiones a salida estándar
   Epaquete python paquetes "python" "3.10"
   paquete ruby paquetes "ruby ruby33-ri_docs" 3.3
@@ -1035,7 +1071,7 @@ if (test "$sn" = "s") then {
 
   ###
   # Actualizados.  Están desactualizado en OpenBSD estable y current
-  #paquete git paquetes "git"
+  paquete git paquetes "git"
   #paquete hevea # requiere ocamlbuild
 
   ####
@@ -1057,7 +1093,7 @@ if (test "$sn" = "s") then {
   #paquete cups
   #paquete dovecot
   #paquete dtc
-  #paquete firefox-esr
+  paquete firefox-esr
   #paquete flac
   #paquete gtk+3 paquetes "gtk+3-cups"
   #paquete gdal
@@ -1067,7 +1103,7 @@ if (test "$sn" = "s") then {
   #paquete libgcrypt
   #paquete libmad
   #paquete libssh
-  #paquete libxml
+  paquete libxml
   #paquete libxslt
   #paquete lz4
   #paquete mariadb-client paquetes "mariadb-client mariadb-server" 
@@ -1082,7 +1118,7 @@ if (test "$sn" = "s") then {
   #paquete python paquetes "python" "2.7"
   #paquete python paquetes "python" "3.9"
   #paquete rsync
-  #paquete samba paquetes "ldb samba tevent"
+  paquete samba paquetes "ldb samba tevent"
   #paquete sqlite3
   #paquete tiff
   #paquete unrar

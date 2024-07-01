@@ -100,9 +100,9 @@ Novedades tomadas de <https://www.openbsd.org/75.html>
 
 ### 3.2 Paquetes
 
-* Incluye `evangelios_dp-0.x.9` con traducción y marcado Strong del
-  comienzo del nuevo testamento hasta Galatas
-* El porte para OpenBSD-current de Ruby 3.3.x, diligentemente mantenido
+* Incluye `evangelios_dp-0.9.10` con traducción y marcado Strong del
+  comienzo del nuevo testamento hasta Filipenses
+* El porte para OpenBSD-current de Ruby 3.3.1, diligentemente mantenido
   por Jeremy Evans, quita el aviso de actualizar gemas del sistema cuando
   hay nuevas versiones disponibles, pues implícitamente sugiere instalar el
   paquete de la gema de Ruby para OpenBSD más actualizado 
@@ -112,22 +112,14 @@ Novedades tomadas de <https://www.openbsd.org/75.html>
   comportamiento original de Ruby y sugerimos actualizar gemas del
   sistema tan pronto y tanto como sea posible con
   `doas gem update --system`
-* Retroportados de OpenBSD-current los paquetes postgresql,  postgis y blosc.
-* Además de `chromium` incluimos `firefox-esr` que también ha resultado
-  bastante estable.
+* Además de `chromium` (con llave del API de Google de adJ) incluimos 
+  `firefox-esr` que también ha resultado bastante estable.
 * Se han recompilado los siguientes para aprovechar `xlocale` (además de muchos
   para `perl`): `glib2`, `libunistring`, `vlc`
-* Se han parchado minimamente los siguientes para usar `servicio` en lugar
+* Se han parchado mínimamente los siguientes para usar `servicio` en lugar
   de `daemon`: `postgresql`, `git` y `smartmontools`
 
 ### 3.3 Configuración
-
-* pg_upgrade ...
- Era: Guión `/usr/local/adJ/pg_preact_postgis.sh` replicado en el directorio
-  `util` del instalador, para facilitar actualización
-  de versiones mayores de PostgreSQL cuando hay bases con PostGIS.
-  Ver documentación en
-  <https://pasosdejesus.org/doc/servidor_adJ/otros_servicios_que_puede_prestar_el_servidor.html#pg-upgrade>
 
 ## 4. FE DE ERRATAS
 
