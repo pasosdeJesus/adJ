@@ -1,5 +1,5 @@
 #!/bin/ksh
-#      $OpenBSD: install.sub,v 1.1255 2023/08/21 14:33:55 kn Exp $
+#      $OpenBSD: install.sub,v 1.1261 2024/03/05 19:47:58 kn Exp $
 #
 # Copyright (c) 1997-2015 Todd Miller, Theo de Raadt, Ken Westerback
 # Copyright (c) 2015, Robert Peichaer <rpe@openbsd.org>
@@ -1777,13 +1777,15 @@ install_files() {
 	if [[ $MODE == upgrade ]]; then
 		if isin base$VERSION.tgz $_get_sets; then
 			rm -f /mnt/usr/share/relink/usr/lib/*
-			rm -rf /mnt/usr/lib/libLLVM.so.[0-6].0
+			rm -rf /mnt/usr/lib/libLLVM.so.[0-7].0
 			rm -rf /mnt/usr/libdata/perl5
 		fi
 		if isin comp$VERSION.tgz $_get_sets; then
 			rm -rf /mnt/usr/lib/{gcc-lib,clang}
 			rm -rf /mnt/usr/bin/{gcc,g++}
 			rm -rf /mnt/usr/include/g++
+			# file changed to dir in libc++
+			rm -rf /mnt/usr/include/c++/v1
 		fi
 		rm -rf /mnt/var/syspatch/*
 	fi
@@ -2631,7 +2633,7 @@ start_cgiinfo() {
 	((NIFS < 1)) && return
 
 	# Ensure proper name resolution in case there's no dns yet.
-	add_hostent 199.185.178.80 ftplist1.openbsd.org
+	add_hostent 2620:3d:c000:178::80 ftplist1.openbsd.org
 
 	# Make sure the ftp subshell gets its own process group.
 	set -m
@@ -3074,8 +3076,32 @@ do_autoinstall() {
 	exec reboot
 }
 
+# Chose an existing partition as key disk and set global $KEYDISK on success,
+# otherwise return non-zero.
+pick_keydisk() {
+	KEYDISK=
+	local _disk _label
+
+	ask_which disk "contains the key disk" '$(rmel $ROOTDISK $(get_dkdevs))'
+	[[ $resp == done ]] && return 1
+	_disk=$resp
+
+	make_dev $_disk
+	if disklabel $_disk 2>/dev/null | ! grep -qw RAID; then
+		echo "$_disk must contain a RAID partition ."
+		return 1
+	fi
+
+	ask_which "$_disk partition" "is the key disk" \
+		"\$(disklabel $_disk 2>/dev/null |
+		    sed -En 's/^  ([a-p]):.*RAID.*$/\1/p')"
+	[[ $resp == done ]] && return 1
+	_label=$resp
+	KEYDISK=$_disk$_label
+}
+
 encrypt_root() {
-	local _chunk=$ROOTDISK
+	local _args _chunk=$ROOTDISK
 
 	[[ $MDBOOTSR == y ]] || return
 
@@ -3088,13 +3114,37 @@ encrypt_root() {
 	# e.g. auto-assembled at boot or done in (S)hell.
 	[[ -z $(get_softraid_volumes) ]] || return
 
-	ask_yn "Encrypt the root disk with a passphrase?" || return
+
+	while :; do
+		ask "Encrypt the root disk with a (p)assphrase or (k)eydisk?" no
+		case $resp in
+		# Retry on failure to allow passphrase or skip.
+		[dDkK]*)
+			pick_keydisk || continue
+			_args=-k$KEYDISK
+			break
+			;;
+		[cCpP]*)  $AI || break
+			ask_passphrase "New passphrase ?'
+			_args=-s
+			break
+			;;
+		[nN]*)	return
+			;;
+		*)	echo "'$resp' is not a valid choice."
+			;;
+		esac
+	done
 
 	echo "\nConfiguring the crypto chunk $_chunk...\n"
 	md_prep_fdisk $_chunk
 	echo 'RAID *' | disklabel -w -A -T- $_chunk
 
-	bioctl -Cforce -cC -l${_chunk}a softraid0 >/dev/null
+
+	# Standard input is ignored in interactive mode.
+	print -r -- "$_passphrase" |
+		bioctl -Cforce -cC -l${_chunk}a $_args softraid0 >/dev/null
+	unset _passphrase
 
 	# No volumes existed before asking, but we just created one.
 	ROOTDISK=$(get_softraid_volumes)
