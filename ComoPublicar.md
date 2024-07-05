@@ -26,7 +26,7 @@ Pasos importantes para publicar versión beta
    `README.md`, `Novedades_OpenBSD.md`, 
    {$V-`amd64`,`arboldvd`}`/util/actbase.sh` y
    cambiar `Dedicatoria.md`
-2. Instalar o bien la versión alfa de adJ misma versión o bien la
+2. Instalar o bien la versión alfa de adJ con la misma versión o bien la
    versión estable de OpenBSD
 3. Actualizar parches de locale y xlocale en libc de forma que puedan aplicarse
    sobre la nueva versión de OpenBSD. 
@@ -141,7 +141,7 @@ Pasos importantes para publicar versión beta
 	rsync compdes:comp/adJ/extra-7.5/* /dirftp/7.5-extra
 	```
 13. Verificar operación de:
-  * http://pasosdeJesus.github.io/basico_adJ http://pasosdeJesus.github.io/usuario_adJ http://pasosdeJesus.github.io/servidor_adJ
+  * https://www.pasosdeJesus.org/doc/basico_adJ https://www.pasosdeJesus.org/doc/usuario_adJ https://www.pasosdeJesus.org/doc/servidor_adJ 
   * http://sivel.sf.net/
   * http://aprendiendo.pasosdeJesus.org
   * http://www.pasosdeJesus.org

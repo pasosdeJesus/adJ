@@ -3125,7 +3125,7 @@ encrypt_root() {
 			break
 			;;
 		[cCpP]*)  $AI || break
-			ask_passphrase "New passphrase ?'
+			ask_passphrase "New passphrase ?"
 			_args=-s
 			break
 			;;

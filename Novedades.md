@@ -3,8 +3,8 @@
 Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
 
-### Versión: 7.5b1
-Fecha de publicación: 22/May/2024
+### Versión: 7.5
+Fecha de publicación: 3/Jul/2024
 
 Puedes ver novedades respecto a OpenBSD en:
   <https://gitlab.com/pasosdeJesus/adJ/-/blob/ADJ_7_5/Novedades_OpenBSD.md>
@@ -15,13 +15,13 @@ Puedes ver las diversas versiones publicadas en
 <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/> donde entre otras
 encontrarás:
 
-* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-7.5b1-amd64.usb>
+* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-7.5-amd64.usb>
   que es imagen para escribir en una memoria USB y arrancar con esta bien en
   modo UEFI o bien en modo BIOS Legacy. Una vez
   la descargues puedes escribirla en una USB ubicada en `/dev/sd2c`
   (verifica el dispositivo con `dmesg` y remplaza) con:
 
-       doas dd if=AprendiendoDeJesus-7.5b1-amd64.usb of=/dev/sd2c bs=1M
+       doas dd if=AprendiendoDeJesus-7.5-amd64.usb of=/dev/sd2c bs=1M
 
   Este proceso puede ser demorado, podrás ver el progreso con
 
@@ -29,13 +29,13 @@ encontrarás:
 
   O si deseas probarla con `qemu` para instalar en un disco `virtual.raw`:
 
-       qemu-system-x86_64 -hda virtual.raw -hdb AprendiendoDeJesus-7.5b1-amd64.usb -boot menu=on
+       qemu-system-x86_64 -hda virtual.raw -hdb AprendiendoDeJesus-7.5-amd64.usb -boot menu=on
 
-* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-7.5b1-amd64.iso>
+* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-7.5-amd64.iso>
   que es imagen en formato ISO para quemar en DVD e instalar por primera vez
   en modo BIOS Legacy.
 
-* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/7.5b1-amd64/>
+* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/7.5-amd64/>
   que es directorio con el contenido del DVD instalador apropiado para descargar
   con `rsync` desde un adJ o un OpenBSD ya instalado para actualizarlo (ver
   <https://gitlab.com/pasosdeJesus/adJ/-/blob/ADJ_7_5/Actualiza.md> )
@@ -102,7 +102,7 @@ Novedades tomadas de <https://www.openbsd.org/75.html>
 
 * Incluye `evangelios_dp-0.9.10` con traducción y marcado Strong del
   comienzo del nuevo testamento hasta Filipenses
-* El porte para OpenBSD-current de Ruby 3.3.1, diligentemente mantenido
+* El porte para OpenBSD-current de Ruby 3.3.3, diligentemente mantenido
   por Jeremy Evans, quita el aviso de actualizar gemas del sistema cuando
   hay nuevas versiones disponibles, pues implícitamente sugiere instalar el
   paquete de la gema de Ruby para OpenBSD más actualizado 
@@ -118,6 +118,10 @@ Novedades tomadas de <https://www.openbsd.org/75.html>
   para `perl`): `glib2`, `libunistring`, `vlc`
 * Se han parchado mínimamente los siguientes para usar `servicio` en lugar
   de `daemon`: `postgresql`, `git` y `smartmontools`
+* Se han recompilado los siguientes para incluir versiones más recientes
+  disponibles para OpenBSD 7.5 después de su lanzamiento:
+  `firefox-esr-115.12.0`, `ghostscript-10.03.1`, `git-2.44.1`, `glib2-2.78.6`, 
+  `libvpx-1.14.1v0`, `libxml-2.12.7`, `php-8.3.8`, `samba-4.19.7v0`
 
 ### 3.3 Configuración
 

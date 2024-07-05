@@ -831,16 +831,6 @@ if (test "$sn" = "s") then {
   # Deben estar en mystuff
 
 
-  paquete glib2
-  paquete libxml
-  paquete ruby paquetes "ruby ruby33-ri_docs" 3.3
-  paquete firefox-esr
-  paquete ghostscript
-  paquete samba paquetes "ldb samba tevent"
-  paquete libvpx
-  paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 8.3
-  paquete git paquetes "git"
-
 
     ####
   # Unicos en adJ liderados por pdJ
@@ -1071,7 +1061,6 @@ if (test "$sn" = "s") then {
 
   ###
   # Actualizados.  Están desactualizado en OpenBSD estable y current
-  paquete git paquetes "git"
   #paquete hevea # requiere ocamlbuild
 
   ####
@@ -1097,12 +1086,14 @@ if (test "$sn" = "s") then {
   #paquete flac
   #paquete gtk+3 paquetes "gtk+3-cups"
   #paquete gdal
+  paquete ghostscript
   #paquete gnutls
   #paquete gnupg
   #paquete gvfs
   #paquete libgcrypt
   #paquete libmad
   #paquete libssh
+  paquete libvpx
   paquete libxml
   #paquete libxslt
   #paquete lz4
@@ -1139,7 +1130,7 @@ if (test "$sn" = "s") then {
 
   #FLAVOR=light paquete evince paquetes evince-light
   #paquete gcc paquetes "gcc" 4.9
-  #paquete git paquetes "git"
+  paquete git paquetes "git"
   #paquete p7zip paquetes "p7zip p7zip-rar"
   #paquete pidgin paquetes "libpurple pidgin"
   #paquete webkit paquetes "webkit webkit-gtk3"
@@ -1199,7 +1190,7 @@ if (test "$sn" = "s") then {
   paquete textproc/Mt77
 
   #paquete databases/sivel sivel sivel 1.2
-  paquete databases/sivel sivel sivel 2.0
+  paquete databases/sivel sivel sivel 2.1
 
   rm $dini/$V$VESP-$ARQ/$dest/php5-gd-*-no_x11.tgz > /dev/null 2>&1
 

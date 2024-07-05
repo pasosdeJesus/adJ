@@ -1,11 +1,11 @@
-V=		7.4
+V=		7.5
 
 DISTNAME=	${PNAME}-${V}
 CATEGORIES=	books
 MAINTAINER=     Vladimir Támara Patiño <vtamara@pasosdeJesus.org>
 
-VHERRAM=	40964c3d01fe7d1a070024b6bc74495c581de1b0
-VHERRAMCORTA=	40964c3d
+VHERRAM=	c4e48748db6e642f4d026cb3fe5542cd80b514bf
+VHERRAMCORTA=	c4e48748d
 
 HOMEPAGE=       http://pasosdeJesus.org/doc/${PNAME}/
 SITES=	https://gitlab.com/pasosdeJesus/${PNAME}/-/archive/

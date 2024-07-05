@@ -1,4 +1,4 @@
-# Actualización a Aprendiendo De Jesús 7.5b1
+# Actualización a Aprendiendo De Jesús 7.5
 
 La actualización consta de 3 partes:
 
@@ -27,7 +27,7 @@ La actualización consta de 3 partes:
   Si descargó fuentes con el procedimiento anterior ejecutelo con:
 
 	```
-       	doas ~/comp/adJ/7.5b1-amd64/util/preact-adJ.sh
+       	doas ~/comp/adJ/7.5-amd64/util/preact-adJ.sh
 
 ## 2. Actualizar el sistema base:
 
@@ -37,7 +37,7 @@ La actualización consta de 3 partes:
 
 		```
 		cd ~/comp/adJ; 
-		ARCH=~/comp/adJ/7.5b1-amd64 doas 7.5b1-amd64/util/actbase.sh 7.5b1
+		ARCH=~/comp/adJ/7.5-amd64 doas 7.5-amd64/util/actbase.sh 7.5
 		```
 
 ## 3. Actualizar aplicaciones:
@@ -49,7 +49,7 @@ La actualización consta de 3 partes:
   puede usar:
 
 	```
-	ARCH=~/comp/adJ/7.5b1-amd64 doas /inst-adJ.sh
+	ARCH=~/comp/adJ/7.5-amd64 doas /inst-adJ.sh
 	```
 	
   Este archivo de ordenes asiste actualizaciones que puedan hacer 
