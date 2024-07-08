@@ -830,6 +830,7 @@ if (test "$sn" = "s") then {
   # Modificados para posibilitar compilación
   # Deben estar en mystuff
 
+  paquete node
 
 
     ####
