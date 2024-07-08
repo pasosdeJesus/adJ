@@ -112,6 +112,7 @@ Novedades tomadas de <https://www.openbsd.org/75.html>
   comportamiento original de Ruby y sugerimos actualizar gemas del
   sistema tan pronto y tanto como sea posible con
   `doas gem update --system`
+* Se ha retroportado node 20.15 de OpenBSD-current.
 * Además de `chromium` (con llave del API de Google de adJ) incluimos 
   `firefox-esr` que también ha resultado bastante estable.
 * Se han recompilado los siguientes para aprovechar `xlocale` (además de muchos
