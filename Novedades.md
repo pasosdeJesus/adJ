@@ -4,7 +4,7 @@ Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
 
 ### Versión: 7.5
-Fecha de publicación: 3/Jul/2024
+Fecha de publicación: 22/Jul/2024
 
 Puedes ver novedades respecto a OpenBSD en:
   <https://gitlab.com/pasosdeJesus/adJ/-/blob/ADJ_7_5/Novedades_OpenBSD.md>
@@ -29,15 +29,16 @@ encontrarás:
 
   O si deseas probarla con `qemu` para instalar en un disco `virtual.raw`:
 
-       qemu-system-x86_64 -hda virtual.raw -hdb AprendiendoDeJesus-7.5-amd64.usb -boot menu=on
+      qemu-system-x86_64 -hda virtual.raw -hdb AprendiendoDeJesus-7.5-amd64.usb -boot menu=on
 
 * <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-7.5-amd64.iso>
   que es imagen en formato ISO para quemar en DVD e instalar por primera vez
   en modo BIOS Legacy.
 
 * <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/7.5-amd64/>
-  que es directorio con el contenido del DVD instalador apropiado para descargar
-  con `rsync` desde un adJ o un OpenBSD ya instalado para actualizarlo (ver
+  que es directorio con el contenido del DVD instalador apropiado para 
+  descargar con `rsync` desde un adJ o un OpenBSD ya instalado para 
+  actualizarlo (ver
   <https://gitlab.com/pasosdeJesus/adJ/-/blob/ADJ_7_5/Actualiza.md> )
 
 * <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/7.5-extra/>
@@ -51,45 +52,49 @@ encontrarás:
 
 Novedades tomadas de <https://www.openbsd.org/75.html>
 
-* Aplicados parches de seguridad hasta el 11.May.2024 provenientes de
+* Aplicados parches de seguridad hasta el 14.Jul.2024 provenientes de
   OpenBSD que incluyen soluciones a fallas
 * Controladores ampliados o mejorados para amd64
   * Tarjetas Ethernet: Soporte para Elkahart Lake Ethernet en `dwqe`,
     soporte para AX88179A en `axen`. Mejoras a `em`, `ixl`, `rge`,
-    `bnxt`
+    `bnxt`.
   * Tarjetas inalámbricas: Nuevo controlador `qwx` para dispositivos 
-    QCNFA765, 
-  * Video:
-  * Otros:
-* Mejoras al kernel, SMP y seguridad:
+    QCNFA765. Mejoras a `iwx`, `iwm` e `iwn`
+  * Otros: Mejoras a `ugold` para soportar mejor y más sensores de 
+    temperatura. `fanpwr` soporte reguladores de voltaje Rockchip RK8602 y
+    RK8603.
+* Mejoras al kernel y SMP
 * Mejoras a `vmm`
 * Mejoras a herramientas de Red
 * Seguridad
-  * 
-  * `libressl` actualizado a 
-  * Incluye OpenSSH x
-
+  * Eliminación de `syscall` para la mayoría de usos
+    desde aplicaciones  y nuevo `pinsyscall`.
+  * `libressl` actualizado a 3.9.0
+  * Incluye OpenSSH 9.7 que en OpenBSD no era vulnerable a la falla 
+    regreSSHion CVE-2024-6387.
 * El sistema base incluye mejoras a componentes auditados y mejorados
-  como, `llvm x.0.0`,  `Xenocara` (basado en `Xorg` x.7),
-  `perl 5.x.0`
-* El repositorio de paquetes de OpenBSD cuenta con n para amd64
+  como, `llvm 16.0.6`,  `Xenocara` (basado en `Xorg` 7.7),
+  `perl 5.36.3`
+* El repositorio de paquetes de OpenBSD cuenta con 12309 para amd64
 
 
 ### 2.2 Paquetes
 
 * Para aprovechar el xlocale extendido de adJ se han recompilado
   `vlc`, `glib2` y `libunistring`.
-* Algunos paquetes típicos y su versión: `dovecot 0`,
-  `chromium x17.0.5938.149`, `firefox-esr-x15.3.1`,
-  `libreoffice x.6.2.1v0`,
-  `nginx x.24.0p0`, `mariadb x0.9.6v1`,
-  `python x.10.13`, `vim x.0.1897`, `zsh x.9`
+* Algunos paquetes típicos y su versión: `dovecot 2.3.21v0`,
+  `chromium 122.0.6261.111`, `firefox-esr-115.13.0`,
+  `libreoffice 24.2.1.2v0`,
+  `nginx 1.24.0p0`, `mariadb 10.9.8p0v1`,
+  `python 3.10.14`, `vim 9.1.139`, `zsh 5.9`
 
 
 ## 3. NOVEDADES RESPECTO A ADJ 7.4 PROVENIENTES DE PASOS DE JESÚS
 
 ### 3.1 Instalador y documentación
 
+* El instalador en CD ahora debe permitir arrancar en modo EFI además
+  de modo Legacy del BIOS.
 * Documentación actualizada
   * `basico_adJ`
     <https://pasosdejesus.github.io/basico_adJ/>
@@ -122,7 +127,7 @@ Novedades tomadas de <https://www.openbsd.org/75.html>
 * Se han recompilado los siguientes para incluir versiones más recientes
   disponibles para OpenBSD 7.5 después de su lanzamiento:
   `firefox-esr-115.12.0`, `ghostscript-10.03.1`, `git-2.44.1`, `glib2-2.78.6`, 
-  `libvpx-1.14.1v0`, `libxml-2.12.7`, `php-8.3.8`, `samba-4.19.7v0`
+  `libvpx-1.14.1v0`, `libxml-2.12.7`, `php-8.3.9`, `samba-4.19.7v0`
 
 ### 3.3 Configuración
 

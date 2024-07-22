@@ -23,7 +23,7 @@ else {
 im=cdbr
 
 cd $V$VESP-$ARQ
-cmd="mkisofs -r -no-emul-boot -b $im -c boot.catalog -copyright Derechos.txt   -v -l -posix-L -T -J -o ../AprendiendoDeJesus-$V$VESP-$ARQ.iso  ."
+cmd="mkhybrid -r -e eficdboot -b $im -c boot.catalog -copyright Derechos.txt   -v -l -f -T -J -o ../AprendiendoDeJesus-$V$VESP-$ARQ.iso  ."
 echo "$cmd";
 eval "$cmd";
 

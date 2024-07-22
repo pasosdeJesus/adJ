@@ -637,7 +637,9 @@ if (test "$sn" = "s") then {
   cd /usr/src/distrib/$ARQ/ramdisk_cd
   DLENG=es RELEASEDIR=${RELEASEDIR} make
   cp obj/bsd.rd ${RELEASEDIR}
+  cp obj/eficdboot ${RELEASEDIR}
   cp obj/bsd.rd $dini/$V$VESP-$ARQ
+  cp obj/eficdboot $dini/$V$VESP-$ARQ
 } fi;
 
 cd $cdir
@@ -830,7 +832,8 @@ if (test "$sn" = "s") then {
   # Modificados para posibilitar compilación
   # Deben estar en mystuff
 
-  paquete node
+  paquete www/firefox-esr-i18n paquetes "firefox-esr-i18n-es-AR"
+  #paquete gtk+3 paquetes "gtk+3-cups"
 
 
     ####
@@ -1084,6 +1087,7 @@ if (test "$sn" = "s") then {
   #paquete dovecot
   #paquete dtc
   paquete firefox-esr
+  paquete www/firefox-esr-i18n paquetes "firefox-esr-i18n-es-AR"
   #paquete flac
   #paquete gtk+3 paquetes "gtk+3-cups"
   #paquete gdal
