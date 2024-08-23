@@ -117,8 +117,8 @@ en la variable asociada y lo desactiva poniendo ```n```.
 	```TEXTO=1 dhes/qemu.sh```
 * Envie sus mejoras al repositorio en github.com.  Respecto a ramas 
   (branches) y etiquetas (tags), ponemos una etiqueta cada vez que 
-  publicamos en <http://aprendiendo.pasosdeJesus.org> (e.g ```v7.5b1```), 
-  y mantenemos una rama para cada versión mayor publicada (e.g ```ADJ_7_5```) 
+  publicamos en <http://aprendiendo.pasosdeJesus.org> (e.g ```v7.6b1```), 
+  y mantenemos una rama para cada versión mayor publicada (e.g ```ADJ_7_6```) 
   en la que eventualmente se aplicarán actualizaciones de seguridad para esa 
   versión.
 * Para aportar mejoras a OpenBSD procuramos crear parches que se apliquen 

@@ -1,16 +1,12 @@
+El Señor no retarda su promesa, según algunos la tienen por tardanza, sino que
+es paciente para con nosotros, no queriendo que ninguno perezca, sino que todos
+procedan al arrepentimiento.
 
-Gracias Padre, Hijo y Espíritu Santo, Dios único por no discriminar personas,
-por enseñarnos que los palestinos son tan valiosos como los israelitas,
-como los hispanohablantes y como caulquier otro.  Ayudanos a detener
-el genocidio en el nombre de Jesús.
+Pedro 3:9
 
 ----
 
-
-Pedro, abriendo la boca, dijo: En verdad comprendo que 
-Dios no hace acepción de personas, 
-sino que en toda nación se agrada del que le teme y hace justicia
-
-Hechos 10:34-35
-
-
+Gracias Dios por querer la salvación de todos, por favor ayuda a cada
+miembro de Tu iglesia a  compartir de Tí a tantas personas como sea posible 
+y orando para que lleguen a recibirte como Señor y Salvador. 
+Oro en el nombre de Jesús.

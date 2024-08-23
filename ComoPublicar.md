@@ -1,21 +1,21 @@
 COMO PUBLICAR
 =============
 
-Anhelamos publicar versión mayor (e.g 7.5) 3 meses después de OpenBSD:
+Anhelamos publicar versión mayor (e.g 7.6) 3 meses después de OpenBSD:
 
 * Bien el 11.Ene
 * O bien el 1.Jul
 
-Publicamos revisiones (e.g 7.5p1) si la seguridad o calidad lo ameriten.
+Publicamos revisiones (e.g 7.6p1) si la seguridad o calidad lo ameriten.
 
-Anhelamos publicar al menos una versión beta (e.g 7.5b1 en directorio
+Anhelamos publicar al menos una versión beta (e.g 7.6b1 en directorio
 `desarrollo` del sitio de distribución):
 
 	Bien el 10.Dic
 	O bien el 10.Jun
 
 Sería ideal publicar una versión alfa mucho antes (digamos bien 24.Sep o
-bien 24.Mar, e.g 7.5a1).
+bien 24.Mar, e.g 7.6a1).
 
 
 Pasos importantes para publicar versión beta
@@ -136,9 +136,9 @@ Pasos importantes para publicar versión beta
 12. En adJ.pasosdeJesus.org
 	```
 	hdes/creaiso.sh
-	cp -rf AprendiendoDeJesus-7.5a1-amd64.iso 7.5a1-amd64 /dirftp
-	mkdir /dirftp/7.5-extra
-	rsync compdes:comp/adJ/extra-7.5/* /dirftp/7.5-extra
+	cp -rf AprendiendoDeJesus-7.6a1-amd64.iso 7.6a1-amd64 /dirftp
+	mkdir /dirftp/7.6-extra
+	rsync compdes:comp/adJ/extra-7.6/* /dirftp/7.6-extra
 	```
 13. Verificar operación de:
   * https://www.pasosdeJesus.org/doc/basico_adJ https://www.pasosdeJesus.org/doc/usuario_adJ https://www.pasosdeJesus.org/doc/servidor_adJ 
@@ -151,20 +151,20 @@ Pasos importantes para publicar versión beta
 
 14. Poner Tag en github e iniciar rama al publicar versión alfa o beta (antes en master)
 	```
-	git tag -a v7.5b1 -m "Version 7.5b1"
-	git push origin v7.5b1
+	git tag -a v7.6b1 -m "Version 7.6b1"
+	git push origin v7.6b1
 	...
-	git checkout -b ADJ_7_5
-	git push origin ADJ_7_5
+	git checkout -b ADJ_7_6
+	git push origin ADJ_7_6
 	```
 14. Publicar en lista de desarrollo
 
 Pasos importantes para publicar versión mayor
 --------------------------------------------
 
-1. Usar la rama ADJ_7_5
+1. Usar la rama ADJ_7_6
 	```
-	git checkout ADJ_7_5
+	git checkout ADJ_7_6
 	```
 2. Actualizar SIVeL, evangelios, Mt77 y paquetes propios de 
    adJ.
@@ -184,24 +184,24 @@ Pasos importantes para publicar versión mayor
    ./conv.sh es
    ./compara.sh
 6. Análogo a pasos de versión beta
-7. Publicar un "Release" en github Versión 7.5 con enlace a novedades.
+7. Publicar un "Release" en github Versión 7.6 con enlace a novedades.
 8. Publicar en Twitter y Facebook. 
    Si es tambien publicacion de SIVeL en sitio de noticias de SIVeL y Structio.
 
-	Publicado adJ 7.5 distribución para servidores y cortafuegos, 
+	Publicado adJ 7.6 distribución para servidores y cortafuegos, 
 	segura, amigable para cristian@s y en español, ver 
 	http://aprendiendo.pasosdejesus.org/
 9. Correo a listas: 
     openbsd-colombia@googlegroups.com, 
     openbsd-mexico@googlegroups.com, sivel-soporte@lists.sourceforge.net
 
-	Tema: Publicado adJ 7.5 para amd64
+	Tema: Publicado adJ 7.6 para amd64
 
 	Para instalar por primera vez descarga la imagen para DVD de:
 	  http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/
 	O solicita un DVD o una USB de instalacion por correo postal.
 
-	Si planeas actualizar de una version anterior a 7.5
+	Si planeas actualizar de una version anterior a 7.6
 	hay un procedimiento mas rápido con `rsync` (ver
 	https://github.com/pasosdeJesus/adJ/blob/master/Actualiza.md ).
 
@@ -213,8 +213,8 @@ Pasos importantes para publicar versión mayor
 	  2. La guía de instalación:
 	  http://pasosdeJesus.github.io//usuario_adJ/sobre-la-instalacion.html
 
-	Mira las novedades completas de la versión 7.5 en:
-	  https://aprendiendo.pasosdejesus.org/AdJ_7.5_-_Aprendiendo_de_Jesus_7.5.html/
+	Mira las novedades completas de la versión 7.6 en:
+	  https://aprendiendo.pasosdejesus.org/AdJ_7.6_-_Aprendiendo_de_Jesus_7.6.html/
 
 	De estas destacamos:
 	...

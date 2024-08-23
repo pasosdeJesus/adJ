@@ -11,7 +11,7 @@ if (test "$u" != "root") then {
 	exit 1;
 } fi;
 VCORSP=`echo $VCOR | sed -e "s/\.//g"`
-VSP=75
+VSP=76
 
 if (test -f "ver.sh") then {
 	. ./ver.sh

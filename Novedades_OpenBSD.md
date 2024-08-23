@@ -1,4 +1,4 @@
-Con respecto a OpenBSD 7.5 las novedades son:
+Con respecto a OpenBSD 7.6 las novedades son:
 
 * Proceso de Instalación:
 	* En español (upgrade install install.sub)
