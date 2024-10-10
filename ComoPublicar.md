@@ -136,7 +136,7 @@ Pasos importantes para publicar versión beta
 12. En adJ.pasosdeJesus.org
 	```
 	hdes/creaiso.sh
-	cp -rf AprendiendoDeJesus-7.6a1-amd64.iso 7.6a1-amd64 /dirftp
+	cp -rf AprendiendoDeJesus-7.6b1-amd64.iso 7.6b1-amd64 /dirftp
 	mkdir /dirftp/7.6-extra
 	rsync compdes:comp/adJ/extra-7.6/* /dirftp/7.6-extra
 	```

@@ -3,7 +3,7 @@
 # Dominio público. 2022. vtamara@pasosdeJesus.org
 
 V=7.6
-VESP="a1"
+VESP="b1"
 # Versión que se está desarrollando
 
 VPKGPATH=snapshots
@@ -29,9 +29,9 @@ PKG_PATH=http://ftp.openbsd.org/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
 PKG_PATH=http://ftp3.usa.openbsd.org/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
 PKG_PATH=http://openbsd.mirrors.pair.com/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
 PKG_PATH=http://mirror.esc7.net/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
-PKG_PATH=http://ftp4.usa.openbsd.org/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
 PKG_PATH=http://cdn.openbsd.org/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
 PKG_PATH=http://adJ.pasosdeJesus.org/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
+PKG_PATH=http://ftp5.usa.openbsd.org/pub/OpenBSD/$VPKGPATH/packages/$ARQ/
 
 #Repositorio de paquetes usado --el último es el usado
 
