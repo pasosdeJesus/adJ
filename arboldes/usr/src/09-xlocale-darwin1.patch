@@ -32,7 +32,7 @@ diff -u src-ant/lib/libc/stdio/printf.3 src/lib/libc/stdio/printf.3
  .Sh SYNOPSIS
  .In stdio.h
 @@ -78,12 +90,39 @@
- .Fn vasprintf "char **ret" "const char *format" "va_list ap"
+ .Fn vasprintf "char ** restrict ret" "const char * restrict format" "va_list ap"
  .Ft int
  .Fn vdprintf "int fd" "const char * restrict format" "va_list ap"
 +.In xlocale.h
@@ -158,7 +158,7 @@ diff -u src-ant/lib/libc/stdio/printf.3 src/lib/libc/stdio/printf.3
  .It Cm # Pq hash
  Use an alternate form for the output.
  The effect differs depending on the conversion specifier.
-@@ -908,6 +964,7 @@
+@@ -897,6 +953,7 @@
  .Xr scanf 3 ,
  .Xr wprintf 3 ,
  .Xr localeconv 3
@@ -166,10 +166,10 @@ diff -u src-ant/lib/libc/stdio/printf.3 src/lib/libc/stdio/printf.3
  .Sh STANDARDS
  The
  .Fn fprintf ,
-@@ -927,6 +984,7 @@
- .Fn vdprintf
+@@ -918,6 +975,7 @@
+ .Fn vasprintf
  functions conform to
- .St -p1003.1-2008 .
+ .St -p1003.1-2024 .
 +The functions with postfix "_l" are Darwin extensions.
  .Sh HISTORY
  The predecessors

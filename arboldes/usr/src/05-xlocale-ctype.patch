@@ -28,25 +28,23 @@ diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src54-x4/lib/l
 diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src53xlocale1/lib/libc/locale/___runetype_mb.c src/lib/libc/locale/___runetype_mb.c
 --- src53xlocale1/lib/libc/locale/___runetype_mb.c	Mon Mar 25 18:28:42 2013
 +++ src/lib/libc/locale/___runetype_mb.c	Thu Apr  4 09:52:18 2013
-@@ -34,12 +34,14 @@
+@@ -34,11 +34,14 @@
   */
  
  #include <wctype.h>
-+
 +#include "mblocal.h"
- #include "rune.h"
++#include "rune.h"
+ #include "runetype.h"
  #include "rune_local.h"
 +#include "xlocale_private.h"
  
--_RuneType
+ _RuneType
 -___runetype_mb(wint_t c, _RuneLocale *rl)
--{
-+_RuneType 
-+___runetype_mb(wint_t c, _RuneLocale *runes) {
++___runetype_mb(wint_t c, _RuneLocale *runes)
+ {
  	rune_t c0;
  	uint32_t x;
- 	_RuneRange *rr;
-@@ -49,7 +51,8 @@
+@@ -49,7 +52,8 @@
  		return (0U);
  
  	c0 = (rune_t)c; /* XXX assumes wint_t = int */
@@ -56,7 +54,7 @@ diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src53xlocale1/
  	base = rr->rr_rune_ranges;
  	for (x = rr->rr_nranges; x; x >>= 1) {
  		re = base + (x >> 1);
-@@ -66,3 +69,12 @@
+@@ -66,3 +70,12 @@
  
  	return (0U);
  }
@@ -3230,7 +3228,16 @@ diff -ruN src62-orig/lib/libc/locale/isctype_l.c src/lib/libc/locale/isctype_l.c
 diff -ruN src72-orig/lib/libc/locale/rune.c src/lib/libc/locale/rune.c
 --- src72-orig/lib/libc/locale/rune.c	Tue Oct  4 18:12:54 2022
 +++ src/lib/libc/locale/rune.c	Wed Oct 19 15:26:24 2022
-@@ -80,6 +80,7 @@
+@@ -69,6 +69,8 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <wchar.h>
++
++#include "rune.h"
+ #include "runetype.h"
+ #include "rune_local.h"
+ 
+@@ -81,6 +83,7 @@
  
  static int readrange(_RuneLocale *, _RuneRange *, uint32_t, void *, FILE *);
  static void _freeentry(_RuneRange *);
@@ -3238,7 +3245,7 @@ diff -ruN src72-orig/lib/libc/locale/rune.c src/lib/libc/locale/rune.c
  
  static int
  readrange(_RuneLocale *rl, _RuneRange *rr, uint32_t nranges, void *lastp,
-@@ -205,6 +206,13 @@
+@@ -206,6 +209,13 @@
  }
  
  
@@ -3252,7 +3259,7 @@ diff -ruN src72-orig/lib/libc/locale/rune.c src/lib/libc/locale/rune.c
  _RuneLocale *
  _Read_RuneMagi(FILE *fp)
  {
-@@ -262,6 +270,11 @@
+@@ -263,6 +273,11 @@
  	rl = (_RuneLocale *)hostdata;
  	rl->rl_variable = rl + 1;
  
@@ -3264,7 +3271,7 @@ diff -ruN src72-orig/lib/libc/locale/rune.c src/lib/libc/locale/rune.c
  	rl->rl_variable_len = ntohl((uint32_t)frl.frl_variable_len);
  
  	for (x = 0; x < _CACHED_RUNES; ++x) {
-@@ -290,11 +303,13 @@
+@@ -291,11 +306,13 @@
  		goto rune_err;
  	if (find_codeset(rl))
  		goto rune_err;

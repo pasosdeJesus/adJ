@@ -688,9 +688,9 @@ diff -ruN -x *~ -x *orig src56-orig/regress/lib/libc/locale/check_time/check_tim
 +			ptl = localtime(&ti);
 +
 +			strftime(col, sizeof(col), "%Z", ptl);
-+			p(strcmp(col, "-05") == 0);
++			p(strcmp(col, "EDT") == 0);
 +			wcsftime(wcol, sizeof(wcol), L"%Z", ptl);
-+			p(wcscmp(wcol, L"-05") == 0);
++			p(wcscmp(wcol, L"EDT") == 0);
 +
 +			strftime(col, sizeof(col), "%z", &tl);
 +			p(strcmp(col, "+0000") == 0);
