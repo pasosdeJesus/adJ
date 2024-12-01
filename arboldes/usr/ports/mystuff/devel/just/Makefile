@@ -1,4 +1,4 @@
-COMMENT =	Just a command runner: handy way to save/run project-specific commands
+COMMENT =	Just a command runner
 
 GH_ACCOUNT =	casey
 GH_PROJECT =	just
