@@ -52,7 +52,7 @@ encontrarás:
 
 Novedades tomadas de <https://www.openbsd.org/76.html>
 
-* Aplicados parches de seguridad hasta el 14.Ene.2024 provenientes de
+* Aplicados parches de seguridad hasta el 29.Nov.2024 provenientes de
   OpenBSD que incluyen soluciones a fallas
 * Controladores ampliados o mejorados para amd64
   * Tarjetas Ethernet: 
