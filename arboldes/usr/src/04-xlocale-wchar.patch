@@ -1065,7 +1065,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mu
 +int ___mb_cur_max_l(locale_t __l) {
 +	return XLOCALE_CTYPE(__l)->__mb_cur_max;
 +}
-+//DEF_WEAK(___mb_cur_max_l);
++DEF_STRONG(___mb_cur_max_l);
 +
  int
 -mbsinit(const mbstate_t *ps)
