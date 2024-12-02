@@ -2,3 +2,11 @@ just is a handy way to save and run project-specific commands.
 
 Commands, called recipes, are stored in a file called justfile with syntax
 inspired by make.
+
+If runnning `just` you get an error like:
+
+  error: Call to function just_executable failed: 
+  Error getting current executable: no current exe available (short)
+
+solve by running `/usr/local/bin/just` instead of `just`
+(see https://github.com/casey/just/issues/2499 ).
