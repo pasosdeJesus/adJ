@@ -9,7 +9,8 @@ DPB_PROPERTIES+=	lonesome
 
 COMMENT=		Chromium browser
 
-V=			122.0.6261.111
+V=			128.0.6613.137
+
 REVISION=		0
 
 DISTNAME=		chromium-${V}
@@ -75,9 +76,12 @@ RUN_DEPENDS=	devel/xdg-utils \
 		x11/gtk+4,-guic \
 		x11/gtk+3,-cups
 BUILD_DEPENDS=	archivers/bzip2 \
+		audio/pulseaudio \
 		devel/gperf \
 		devel/bison \
+		devel/rust-bindgen \
 		lang/node \
+		lang/rust \
 		shells/bash \
 		sysutils/flock \
 		sysutils/pciutils \
@@ -108,7 +112,7 @@ USE_GMAKE=	Yes
 # Set BUILDTYPE to Release
 BUILDTYPE=	Release
 
-SUBST_VARS+=	WRKSRC WRKDIR DEBUGFLAG
+SUBST_VARS+=	WRKSRC WRKDIR DEBUGFLAG MODCLANG_VERSION
 
 ALL_TARGET=		chrome chromedriver
 TEST_TARGET=		base_unittests \
@@ -161,9 +165,9 @@ GN_ARGS=	enable_nacl=false \
 		enable_remoting=false \
 		enable_hangout_services_extension=true \
 		enable_log_error_not_reached=true \
-		enable_rust=false \
 		use_kerberos=false \
 		use_sndio=true \
+		use_pulseaudio=true \
 		use_cups=true \
 		use_system_libdrm=true \
 		use_system_libjpeg=true \
@@ -185,6 +189,13 @@ GN_ARGS=	enable_nacl=false \
 		use_custom_libunwind=true \
 		use_udev=true \
 		v8_enable_cet_ibt=true
+
+# rust
+RUSTC_VERSION!!=rustc -V
+MAKE_ENV+=	RUSTC_BOOTSTRAP=1
+GN_ARGS+=	enable_rust=true \
+		rust_sysroot_absolute=\"${LOCALBASE}\" \
+		rustc_version=\"${RUSTC_VERSION}\"
 
 # notyet
 GN_ARGS+=	use_vaapi=false
@@ -208,7 +219,7 @@ PKG_ARGS+=	-Dswiftshader=0
 .endif
 
 FFMPEG_BRAND=	Chrome
-FFMPEG_BDIR=	${WRKSRC}/build.${FFMPEG_TARGET}.openbsd/${FFMPEG_BRAND}
+FFMPEG_BDIR=	${WRKSRC}/third_party/ffmpeg/build.${FFMPEG_TARGET}.openbsd/${FFMPEG_BRAND}
 FFMPEG_CDIR=	${WRKSRC}/third_party/ffmpeg/chromium/config/${FFMPEG_BRAND}/openbsd/${FFMPEG_TARGET}
 
 # Note: these keys are for OpenBSD use ONLY. For your own distribution,
@@ -247,20 +258,15 @@ GN_ARGS+=	use_thin_lto=false \
 		thin_lto_enable_optimizations=true
 .endif
 
-pre-configure:
+post-patch:
 	@ln -sf ${MODPY_BIN} ${WRKDIR}/bin/python
 	@ln -sf ${MODQT5_MOC} ${WRKDIR}/bin/moc
 	@ln -sf ${LOCALBASE}/bin/llvm-ar-${MODCLANG_VERSION} ${WRKDIR}/bin/ar
-	cd ${WRKSRC}/third_party/ffmpeg && \
-		${MODPY_BIN} chromium/scripts/build_ffmpeg.py openbsd ${FFMPEG_TARGET} --config-only --branding=${FFMPEG_BRAND}
-	cd ${FFMPEG_BDIR} && ${GMAKE} ffversion.h
-	${INSTALL_DATA_DIR} ${FFMPEG_CDIR}
-.for _e in config.h config.asm config_components.h libavcodec libavformat libavutil
-	-cp -pR ${FFMPEG_BDIR}/${_e} ${FFMPEG_CDIR}
-.endfor
 	@mkdir -p ${WRKSRC}/third_party/node/openbsd/node-openbsd/bin
 	@ln -sf ${TRUEPREFIX}/bin/node ${WRKSRC}/third_party/node/openbsd/node-openbsd/bin/node
-	${SUBST_CMD} ${WRKSRC}/build/gn_run_binary.py ${WRKSRC}/v8/tools/run.py \
+	${SUBST_CMD} ${WRKSRC}/build/gn_run_binary.py \
+		${WRKSRC}/build/rust/rust_bindgen.gni \
+		${WRKSRC}/v8/tools/run.py \
 		${WRKSRC}/tools/protoc_wrapper/protoc_wrapper.py \
 		${WRKSRC}/third_party/blink/renderer/build/scripts/run_with_pythonpath.py
 
@@ -271,10 +277,17 @@ pre-configure:
 do-configure:
 	# Regenerate build and perlasm files (force json to not overwrite our local gn patches)
 	# @cd ${WRKSRC}/third_party/boringssl && ${MODPY_BIN} src/util/generate_build_files.py json
+	@cd ${WRKSRC}/media/ffmpeg && \
+		${MODPY_BIN} scripts/build_ffmpeg.py openbsd ${FFMPEG_TARGET} --config-only --branding=${FFMPEG_BRAND}
+	@cd ${FFMPEG_BDIR} && ${GMAKE} ffversion.h
+	@${INSTALL_DATA_DIR} ${FFMPEG_CDIR}
+.for _e in config.h config.asm config_components.h libavcodec libavformat libavutil
+	@-cp -pR ${FFMPEG_BDIR}/${_e} ${FFMPEG_CDIR}
+.endfor
 	@cd ${WRKSRC} && env -i ${MAKE_ENV} build/linux/unbundle/replace_gn_files.py \
 		--system-libraries ${GN_SYSTEM_LIBS}
 	@cd ${WRKSRC}/tools/gn && env -i ${MAKE_ENV} LDFLAGS=-L${LOCALBASE}/lib ${MODPY_BIN} bootstrap/bootstrap.py \
-		--no-clean -s --gn-gen-args "${GN_ARGS}"
+		--no-clean -s --skip-generate-buildfiles
 	@cd ${WRKSRC} && env -i ${CONFIGURE_ENV} ${WRKSRC}/out/${BUILDTYPE}/gn \
 		gen --args="${GN_ARGS}" out/${BUILDTYPE}
 
@@ -338,7 +351,7 @@ do-install:
 .endfor
 
 pre-test:
-.for _d in ${REGRESS_DISTFILES:C/:[0-9]$//}
+.for _d in ${REGRESS_DISTFILES:C/:[0-9]$//} ${REGRESS_DISTFILES.a:C/:[0-9]$//}
 	@${ECHO_MSG} "Extracting ${_d}"
 	@case ${_d} in \
 	*testdata*.tar.xz) \

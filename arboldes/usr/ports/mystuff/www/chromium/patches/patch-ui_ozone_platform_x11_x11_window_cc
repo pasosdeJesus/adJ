@@ -8,5 +8,5 @@ Index: ui/ozone/platform/x11/x11_window.cc
 -#if BUILDFLAG(IS_LINUX)
 +#if BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_BSD)
      platform_window_delegate_->OnWindowTiledStateChanged(tiled_state);
+     UpdateDecorationInsets();
  #endif
-   }
