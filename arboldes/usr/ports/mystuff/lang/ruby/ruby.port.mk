@@ -42,9 +42,9 @@ FULLPKGNAME?=		${MODRUBY_PKG_PREFIX}-${PKGNAME}
 SUBST_VARS+=		GEM_BIN_SUFFIX GEM_MAN_SUFFIX
 
 FLAVOR?=
-# Without a FLAVOR, assume the use of ruby 3.2.
+# Without a FLAVOR, assume the use of ruby 3.3.
 .    if empty(FLAVOR)
-FLAVOR =		ruby32
+FLAVOR =		ruby33
 .    endif
 
 # Check for conflicting FLAVORs and set MODRUBY_REV appropriately based
@@ -63,8 +63,8 @@ ERRORS += "Fatal: Conflicting flavors used: ${FLAVOR}"
 .endif
 
 # The default ruby version to use for non-gem ports.  Defaults to ruby
-# 3.2 for consistency with the default ruby32 FLAVOR for gem ports.
-MODRUBY_REV?=		3.2
+# 3.3 for consistency with the default ruby33 FLAVOR for gem ports.
+MODRUBY_REV?=		3.3
 
 # Use the FLAVOR as the prefix for the package, to avoid conflicts.
 MODRUBY_PKG_PREFIX =	${MODRUBY_FLAVOR}
@@ -154,7 +154,7 @@ EXTRACT_SUFX=	.gem
 
 .  if ${CONFIGURE_STYLE:L:Mext}
 # Use ports-gcc for ruby32 extensions if base does not use clang
-.    if ${FLAVOR:Mruby32}
+.    if ${FLAVOR:Mruby32} || ${FLAVOR:Mruby33}
 COMPILER ?= 	base-clang ports-gcc
 COMPILER_LANGS ?= c
 .    endif
@@ -192,8 +192,8 @@ _GEM_MAKE=	"make V=1"
 # signatures.
 EXTRACT_CASES += *.gem) \
     mkdir ${WRKDIST} ${_GEM_CONTENT}; \
-    cd ${_GEM_CONTENT} && tar -xf ${FULLDISTDIR}/$$archive; \
-    cd ${WRKDIST} && tar -xzf ${_GEM_DATAFILE} && rm -f ${_GEM_DATAFILE}; \
+    tar -xf ${FULLDISTDIR}/$$archive -C ${_GEM_CONTENT}; \
+    tar -xzf ${_GEM_DATAFILE} -C ${WRKDIST} && rm -f ${_GEM_DATAFILE}; \
     gzcat ${_GEM_CONTENT}/metadata.gz > ${WRKDIST}/.metadata; \
     rm -f ${_GEM_CONTENT}/*.gz.sig ${_GEM_CONTENT}/checksums.yaml.gz;;
 

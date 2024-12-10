@@ -455,6 +455,11 @@ w
 q
 EOF
   #compilabase
+  gb=`doas groups build`
+  if (test "$gb" != "wobj wsrc") then {
+    echo "El usuario build debe estar en los grupos wobj y wsrc"
+    exit 1;
+  } fi;
   echo "DESTDIR=$DESTDIR" | tee -a /var/www/tmp/distrib-adJ.bitacora;
   chown build /usr/src/etc/master.passwd 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
   chown build /usr/src/sys/arch/amd64/compile/APRENDIENDODEJESUS/obj/version 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
@@ -832,7 +837,7 @@ if (test "$sn" = "s") then {
   # Modificados para posibilitar compilación
   # Deben estar en mystuff
 
-  paquete www/firefox-esr-i18n paquetes "firefox-esr-i18n-es-AR"
+  #paquete www/firefox-esr-i18n paquetes "firefox-esr-i18n-es-AR"
   #paquete gtk+3 paquetes "gtk+3-cups"
 
 
@@ -845,11 +850,13 @@ if (test "$sn" = "s") then {
   # Si por ejemplo es:
   #Name.c: loadable library and perl binaries are mismatched (got handshake key 0xb700000, needed 0xbb00000)
   # Buscar módulo de Perl con pkg_locate Name.so, recompilarlo e instalarlo 
+  function ya {
   paquete p5-HTML-Parser
+  paquete p5-Module-Build
   paquete p5-Unicode-Stringprep
+  paquete p5-Module-Install
   paquete p5-Net-IDN-Nameprep
   paquete p5-XML-LibXML
-  paquete p5-Module-Build
   paquete p5-ExtUtils-Config
   paquete p5-ExtUtils-Helpers
   paquete p5-ExtUtils-InstallPaths
@@ -860,6 +867,7 @@ if (test "$sn" = "s") then {
   paquete p5-NetAddr-IP
   paquete p5-Params-Validate
   paquete p5-Params-Util
+  paquete p5-DBI
   paquete p5-DBD-SQLite
   paquete p5-Package-Stash-XS
   paquete p5-Class-Inspector
@@ -909,15 +917,12 @@ if (test "$sn" = "s") then {
   paquete p5-Try-Tiny
   paquete p5-Moose
   paquete p5-File-ShareDir
-  paquete p5-File-ShareDir-Install
+  paquete p5-File-ShareDir-Install  # Instalar
   paquete p5-Params-ValidationCompiler
   paquete p5-Specio
   paquete p5-namespace-autoclean
   paquete p5-DateTime-Locale
   paquete p5-DateTime-TimeZone
-
-
-  paquete p5-DBI
   paquete p5-BSD-Resource
 
   paquete p5-B-Hooks-EndOfScope
@@ -1009,6 +1014,9 @@ if (test "$sn" = "s") then {
   paquete p5-Class-Data-Inheritable
   paquete p5-Config-Tiny
   paquete p5-Crypt-OpenSSL-Guess
+
+  paquete p5-Devel-CheckLib # instalar antes de p5-DBD-MariaDB
+
   paquete p5-DBD-MariaDB
   paquete p5-DBIx-Simple
   paquete p5-Email-MIME
@@ -1031,6 +1039,7 @@ if (test "$sn" = "s") then {
 
 
   paquete p5-Mail-SpamAssassin
+}
 
   ## Muy necesarios de estable con actualizaciones
   paquete curl

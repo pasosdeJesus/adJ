@@ -1,4 +1,4 @@
-VERSION =		3.2.2
+VERSION =		3.2.5
 DISTNAME =		ruby-${VERSION}
 SHARED_LIBS =		ruby32	0.0
 NEXTVER =		3.3
@@ -14,8 +14,9 @@ FLAVOR?=
 
 .if ${MACHINE_ARCH:Mamd64} || ${MACHINE_ARCH:Maarch64}
 # Support YJIT JIT compiler on arches Ruby supports
-BUILD_DEPENDS +=	lang/rust
+MODULES +=		lang/rust
 WANTLIB-main +=		c++abi
+MAKE_ENV +=		LIBRUBY_DLDFLAGS="-lc++abi"
 .endif
 
 MULTI_PACKAGES =	-main -ri_docs
@@ -34,7 +35,7 @@ CONFIGURE_ENV +=	ac_cv_path_MJIT_CC=`which ${CC}`
 GEM_EXTENSIONS_DIR = lib/ruby/gems/${REV}/extensions/${MACHINE_ARCH:S/i386/x86/:S/amd64/x86_64/}-openbsd
 SUBST_VARS += GEM_EXTENSIONS_DIR
 
-WANTLIB-main +=	curses yaml-0
+WANTLIB-main +=	curses readline
 
 TEST_ENV =	RUBYGEMS_SYSTEM_UPDATE_MESSAGE=enable
 TEST_TARGET =	check TESTOPTS="-v -q"

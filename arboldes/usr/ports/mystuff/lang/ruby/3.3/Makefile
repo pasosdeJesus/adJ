@@ -1,6 +1,4 @@
-REVISION-main =		1
-
-VERSION =		3.3.3
+VERSION =		3.3.5
 DISTNAME =		ruby-${VERSION}
 PKGNAME-main =		ruby-${VERSION}
 PKGNAME-ri_docs =	ruby${BINREV}-ri_docs-${VERSION}
@@ -23,7 +21,7 @@ FLAVOR?=
 
 .if ${MACHINE_ARCH:Mamd64}
 # Support YJIT JIT compiler on arches Ruby supports
-BUILD_DEPENDS +=		lang/rust
+MODULES +=		lang/rust
 WANTLIB-main +=		c++abi
 MAKE_ENV +=		LIBRUBY_DLDFLAGS="-lc++abi"
 .endif
@@ -61,5 +59,7 @@ pre-install:
 
 post-install:
 	${FIX_RBCONFIG}
+	rm -rf ${PREFIX}/lib/ruby/gems/${REV}/gems/{debug,rbs}-*/ext/
+	rm -f ${PREFIX}/bin/*.lock
 
 .include <bsd.port.mk>
