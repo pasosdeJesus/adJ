@@ -1,5 +1,3 @@
-# $OpenBSD: Makefile,v 1.11 2019/07/12 20:43:49 sthen Exp $
-
 COMMENT =		manipulate Unicode strings
 
 DISTNAME =		libunistring-0.9.7
@@ -17,7 +15,7 @@ PERMIT_PACKAGE =	Yes
 
 WANTLIB =		iconv
 
-SITES =		${SITE_GNU:=libunistring/}
+SITES =			${SITE_GNU:=libunistring/}
 
 LIB_DEPENDS =		converters/libiconv
 
