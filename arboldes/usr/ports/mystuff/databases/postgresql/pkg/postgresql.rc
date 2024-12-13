@@ -1,0 +1,33 @@
+#!/bin/ksh
+
+servicio="${TRUEPREFIX}/bin/pg_ctl"
+servicio_flags="-D /var/postgresql/data -w -l /var/postgresql/logfile"
+servicio_user="_postgresql"
+servicio_timeout=300
+
+. /etc/rc.d/rc.subr
+
+rc_usercheck=NO
+
+# rc_exec is used because
+# pg_ctl: cannot be run as root
+# Please log in (using, e.g., "su") as the (unprivileged) user that will own the server process.
+
+rc_check() {
+	rc_exec "${servicio} status ${servicio_flags}"
+}
+
+rc_reload() {
+	rc_exec "${servicio} reload ${servicio_flags}"
+}
+
+rc_start() {
+	rc_exec "${servicio} start ${servicio_flags}"
+}
+
+rc_stop() {
+	rc_exec "${servicio} stop ${servicio_flags} -m fast" || \
+		rc_exec "${servicio} stop ${servicio_flags} -m immediate"
+}
+
+rc_cmd $1

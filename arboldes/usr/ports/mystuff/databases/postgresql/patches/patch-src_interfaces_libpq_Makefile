@@ -1,0 +1,14 @@
+Index: src/interfaces/libpq/Makefile
+--- src/interfaces/libpq/Makefile.orig
++++ src/interfaces/libpq/Makefile
+@@ -19,8 +19,8 @@ PGFILEDESC = "PostgreSQL Access Library"
+ 
+ # shared library parameters
+ NAME= pq
+-SO_MAJOR_VERSION= 5
+-SO_MINOR_VERSION= $(MAJORVERSION)
++SO_MAJOR_VERSION= ${LIBpq_MAJOR}
++SO_MINOR_VERSION= ${LIBpq_MINOR}
+ 
+ override CPPFLAGS :=  -I$(srcdir) $(CPPFLAGS) -I$(top_builddir)/src/port -I$(top_srcdir)/src/port
+ ifneq ($(PORTNAME), win32)

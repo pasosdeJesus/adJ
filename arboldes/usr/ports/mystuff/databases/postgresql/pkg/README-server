@@ -1,0 +1,191 @@
++-----------------------------------------------------------------------
+| Running ${PKGSTEM} on OpenBSD
++-----------------------------------------------------------------------
+
+At least two different accounts are involved when working with PostgreSQL:
+One is an OpenBSD userid, '_postgresql', which is used as the userid of files
+that are part of PostgreSQL.  The other, usually named 'postgres', is not an
+OpenBSD userid, i.e. you will not find it in /etc/passwd, but an account
+internal to the database system.  The 'postgres' account is called the dba
+account (database administrator) and is created when a new database is
+initialized using the initdb command.
+
+If you are installing PostgreSQL for the first time, you have to create
+a default database first.  In the following example we install a database
+in /var/postgresql/data with a dba account 'postgres' and scram-sha-256
+authentication. We will be prompted for a password to protect the dba account:
+
+       # su - _postgresql
+       $ mkdir /var/postgresql/data
+       $ initdb -D /var/postgresql/data -U postgres -A scram-sha-256 -E UTF8 -W
+
+It is strongly advised that you do not work with the postgres dba account
+other than creating more users and/or databases or for administrative tasks.
+Use the PostgreSQL permission system to make sure that a database is only
+accessed by programs/users that have the right to do so.
+
+Please consult the PostgreSQL website for more information, especially when
+you are upgrading an existing database installation.
+
+
+Network Connections
+===================
+To allow connections over TCP (and other options) edit the file:
+
+	/var/postgresql/data/postgresql.conf
+
+and also edit the pg_hba.conf (in the same directory) making the
+appropriate changes to allow connection from your network.
+
+To allow SSL connections, edit postgresql.conf and enable the
+'ssl' keyword, and create keys and certificates:
+
+       # su - _postgresql
+       $ cd /var/postgresql/data
+       $ umask 077
+       $ openssl genrsa -out server.key 2048
+       $ openssl req -new -key server.key -out server.csr
+
+Either take the CSR to a Certifying Authority (CA) to sign your
+certificate, or self-sign it:
+
+       $ openssl x509 -req -days 365 -in server.csr \
+         -signkey server.key -out server.crt
+
+Restart PostgreSQL to allow these changes to take effect.
+
+Tuning for busy servers
+=======================
+The default sizes in the GENERIC kernel for SysV semaphores are not
+large enough for PostgreSQL to use the default max_connections
+configuration value of 100, so PostgreSQL will use a smaller than
+default max_connections if you do not increase the limits.  Adding the
+following in /etc/sysctl.conf will be reasonable for many systems:
+
+	kern.seminfo.semmni=256
+	kern.seminfo.semmns=2048
+
+You may also want to tune the max_connections value in the
+postgresql.conf file to increase the number of connections to the
+backend.
+
+By default, the _postgresql user, and so the postmaster and backend
+processes run in the login(1) class of "postgresql". On a busy server,
+it may be advisable to tune resources, such as more open file
+descriptors (used for network connections as well as files), possibly
+more memory, etc.
+
+The capability database file is located at /etc/login.conf.d/postgresql
+ 
+For more than about 250 connections, these numbers should be
+increased. Please report any changes and experiences to the package
+maintainers so that we can update this file for future versions.
+
+Upgrade Howto (for a major upgrade)
+===================================
+If you didn't install PostgreSQL by following this README,
+you must adapt these instructions to your setup.
+
+Option 1: Dump and Restore
+--------------------------
+
+This will work for any upgrade from any major version of PostgreSQL
+to the current version.
+
+1) Backup all your data:
+# su _postgresql -c "cd /var/postgresql && \
+    pg_dumpall -U postgres > /var/postgresql/full.sqldump"
+
+2) Shutdown the server:
+# rcctl stop postgresql
+
+3) Upgrade your PostgreSQL package with pkg_add.
+# pkg_add -ui postgresql-server
+
+4) Backup your old data directory and rename:
+# cd /var/postgresql && tar cf - data | gzip -1 > data.tar.gz
+# mv /var/postgresql/data /var/postgresql/data-${PREV_MAJOR}
+
+5) Create a new data directory:
+# su _postgresql -c "mkdir /var/postgresql/data"
+# su _postgresql -c "cd /var/postgresql && \
+    initdb -D /var/postgresql/data -U postgres -A scram-sha-256 -E UTF8 -W"
+
+6) Restore your old pg_hba.conf and (if used) SSL certificates
+# su _postgresql -c \
+    "cp /var/postgresql/data-${PREV_MAJOR}/pg_hba.conf /var/postgresql/data/"
+# su _postgresql -c \
+    "cp /var/postgresql/data-${PREV_MAJOR}/server.{crt,key} /var/postgresql/data/"
+
+Some postgresql.conf settings changed or disappeared in this version.
+Examine your old file for local changes and apply them to the new version
+(/var/postgresql/data/postgresql.conf). The following command may help
+identify them:
+
+# diff -wu ${LOCALBASE}/share/postgresql-${PREV_MAJOR}/postgresql.conf.sample \
+    /var/postgresql/data-${PREV_MAJOR}/postgresql.conf
+
+7) Start PostgreSQL:
+# rcctl start postgresql
+
+8) Restore your data:
+# su _postgresql -c "cd /var/postgresql && \
+    psql -U postgres < /var/postgresql/full.sqldump"
+
+Option 2: pg_upgrade
+--------------------
+
+This will work for an upgrade from the previous major version of
+PostgreSQL supported by OpenBSD to the current version, and should be
+faster than a dump and reload, especially for large databases.
+
+1) Shutdown the server:
+# rcctl stop postgresql
+
+2) Upgrade your PostgreSQL package with pkg_add.
+# pkg_add postgresql-pg_upgrade
+
+3) Backup your old data directory:
+# mv /var/postgresql/data /var/postgresql/data-${PREV_MAJOR}
+
+4) Create a new data directory:
+# su _postgresql -c "mkdir /var/postgresql/data && cd /var/postgresql && \
+    initdb -D /var/postgresql/data -U postgres -A scram-sha-256 -E UTF8 -W"
+
+(The database environment defaults to UTF-8 if your terminal is already
+in a UTF-8 locale; if that is the case and you require an ASCII database
+environment, use "initdb --locale=C -D /var/postgresql/data [...]").
+
+5) Temporarily support connecting without a password for local users by
+   editing pg_hba.conf to include "local all postgres trust"
+# vi /var/postgresql/data-${PREV_MAJOR}/pg_hba.conf
+
+6) Restore your old pg_hba.conf and (if used) SSL certificates
+# cp -p /var/postgresql/data-${PREV_MAJOR}/pg_hba.conf /var/postgresql/data/
+# cp -p /var/postgresql/data-${PREV_MAJOR}/server.{crt,key} /var/postgresql/data/
+
+Some postgresql.conf settings changed or disappeared in this version.
+Examine your old file for local changes and apply them to the new version
+(/var/postgresql/data/postgresql.conf). The following command may help
+identify them:
+
+# diff -wu ${LOCALBASE}/share/postgresql-${PREV_MAJOR}/postgresql.conf.sample \
+    /var/postgresql/data-${PREV_MAJOR}/postgresql.conf
+
+7) Run pg_upgrade:
+# su _postgresql -c "cd /var/postgresql && \
+    pg_upgrade -b /usr/local/bin/postgresql-${PREV_MAJOR}/ -B /usr/local/bin \
+    -U postgres -d /var/postgresql/data-${PREV_MAJOR}/ -D /var/postgresql/data"
+
+8) Remove "local all postgres trust" line from pg_hba.conf
+# vi /var/postgresql/data/pg_hba.conf
+
+9) Start PostgreSQL:
+# rcctl start postgresql
+
+Clients/Frontends
+=================
+Many applications can use the PostgreSQL database right away.  To facilitate
+administration of a PostgreSQL database, a client is notable:
+
+www/phppgadmin		A web based user interface that uses PHP

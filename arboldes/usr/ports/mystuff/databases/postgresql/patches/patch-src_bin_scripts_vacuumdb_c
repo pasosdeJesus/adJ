@@ -1,0 +1,12 @@
+Index: src/bin/scripts/vacuumdb.c
+--- src/bin/scripts/vacuumdb.c.orig
++++ src/bin/scripts/vacuumdb.c
+@@ -10,6 +10,8 @@
+  *-------------------------------------------------------------------------
+  */
+ 
++#include <sys/select.h> /* FD_SETSIZE */
++
+ #include "postgres_fe.h"
+ 
+ #include <limits.h>

@@ -840,10 +840,7 @@ if (test "$sn" = "s") then {
   #paquete www/firefox-esr-i18n paquetes "firefox-esr-i18n-es-AR"
   #paquete gtk+3 paquetes "gtk+3-cups"
 
-
-    ####
-  # Unicos en adJ liderados por pdJ
-  # Deben estar en arboldes/usr/ports/mystuff 
+  paquete devel/just
 
   # Todo lo de perl tuvo que recompilarse
   # evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
@@ -1095,20 +1092,20 @@ if (test "$sn" = "s") then {
   #paquete cups
   #paquete dovecot
   #paquete dtc
-  paquete firefox-esr
-  paquete www/firefox-esr-i18n paquetes "firefox-esr-i18n-es-AR"
+  #paquete firefox-esr
+  #paquete www/firefox-esr-i18n paquetes "firefox-esr-i18n-es-AR"
   #paquete flac
   #paquete gtk+3 paquetes "gtk+3-cups"
   #paquete gdal
-  paquete ghostscript
+  #paquete ghostscript
   #paquete gnutls
   #paquete gnupg
   #paquete gvfs
   #paquete libgcrypt
   #paquete libmad
   #paquete libssh
-  paquete libvpx
-  paquete libxml
+  #paquete libvpx
+  #paquete libxml
   #paquete libxslt
   #paquete lz4
   #paquete mariadb-client paquetes "mariadb-client mariadb-server" 
@@ -1123,7 +1120,7 @@ if (test "$sn" = "s") then {
   #paquete python paquetes "python" "2.7"
   #paquete python paquetes "python" "3.9"
   #paquete rsync
-  paquete samba paquetes "ldb samba tevent"
+  #paquete samba paquetes "ldb samba tevent"
   #paquete sqlite3
   #paquete tiff
   #paquete unrar
@@ -1144,7 +1141,7 @@ if (test "$sn" = "s") then {
 
   #FLAVOR=light paquete evince paquetes evince-light
   #paquete gcc paquetes "gcc" 4.9
-  paquete git paquetes "git"
+  #paquete git paquetes "git"
   #paquete p7zip paquetes "p7zip p7zip-rar"
   #paquete pidgin paquetes "libpurple pidgin"
   #paquete webkit paquetes "webkit webkit-gtk3"
@@ -1176,6 +1173,7 @@ if (test "$sn" = "s") then {
   ####
   # Unicos en adJ 
   # Deben estar en arboldes/usr/ports/mystuff pero no en /usr/ports
+  paquete devel/just
   paquete net/ton
   paquete net/ton-toncli
   paquete emulators/realboy
