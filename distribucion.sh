@@ -837,10 +837,7 @@ if (test "$sn" = "s") then {
   # Modificados para posibilitar compilación
   # Deben estar en mystuff
 
-  #paquete www/firefox-esr-i18n paquetes "firefox-esr-i18n-es-AR"
-  #paquete gtk+3 paquetes "gtk+3-cups"
-
-  paquete devel/just
+  paquete openssl paquetes "openssl" 3.3
 
   # Todo lo de perl tuvo que recompilarse
   # evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
@@ -1045,7 +1042,7 @@ if (test "$sn" = "s") then {
   ### Requieren recompilación en caso de incluir cambio en FILE
   #paquete unzip  # De no hacerse envía descompresiones a salida estándar
   Epaquete python paquetes "python" "3.10"
-  paquete ruby paquetes "ruby ruby33-ri_docs" 3.3
+  paquete ruby paquetes "ruby ruby34-ri_docs" 3.4
   #paquete gettext-tools paquetes 'gettext-tools gettext-runtime'  # Requerido para compilar muchos
   #paquete m4 # Requerido para compilar bison (instalar antes de compilar bison)
   #paquete bison # Requerido para compilar MariaDB
@@ -1065,9 +1062,12 @@ if (test "$sn" = "s") then {
   paquete postgis
   #paquete geo/spatialite/libspatialite
   #paquete jansson
+  paquete textproc/sword
 
   # Recompilado con llave de adJ
-  paquete chromium
+  function aparte {
+    paquete chromium
+  }
 
   ###
   # Actualizados.  Están desactualizado en OpenBSD estable y current
@@ -1092,8 +1092,8 @@ if (test "$sn" = "s") then {
   #paquete cups
   #paquete dovecot
   #paquete dtc
-  #paquete firefox-esr
-  #paquete www/firefox-esr-i18n paquetes "firefox-esr-i18n-es-AR"
+  paquete firefox-esr
+  paquete www/firefox-esr-i18n paquetes "firefox-esr-i18n-es-AR"
   #paquete flac
   #paquete gtk+3 paquetes "gtk+3-cups"
   #paquete gdal
@@ -1114,6 +1114,7 @@ if (test "$sn" = "s") then {
   #paquete nginx
   #paquete nspr
   #paquete oniguruma 
+  paquete openssl paquetes "openssl" 3.3
   #paquete openssl paquetes "openssl" 3.2
   #paquete quirks
   #paquete pcre2 
@@ -1179,7 +1180,6 @@ if (test "$sn" = "s") then {
   paquete emulators/realboy
   #paquete net/xmrig
   #paquete sysutils/ganglia
-  paquete textproc/sword
   paquete textproc/bibletime
   paquete textproc/po4a
 

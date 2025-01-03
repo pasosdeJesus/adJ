@@ -71,17 +71,6 @@ Novedades tomadas de <https://www.openbsd.org/76.html>
 * El repositorio de paquetes de OpenBSD cuenta con xxx para amd64
 
 
-### 2.2 Paquetes
-
-* Para aprovechar el xlocale extendido de adJ se han recompilado
-  `vlc`, `glib2` y `libunistring`.
-* Algunos paquetes típicos y su versión: `dovecot x`,
-  `chromium x`,
-  `libreoffice x`,
-  `nginx x`, `mariadb x`,
-  `python x`, `vim x`, `zsh x`
-
-
 ## 3. NOVEDADES RESPECTO A ADJ 7.5 PROVENIENTES DE PASOS DE JESÚS
 
 ### 3.1 Instalador y documentación
@@ -97,19 +86,31 @@ Novedades tomadas de <https://www.openbsd.org/76.html>
 
 ### 3.2 Paquetes
 
+
+* Se compilan versiones más recientes de paquetes estables: 
+  `curl`, `openssl-3.3.2p0v0`
+* Actualizamos porte de PostgreSQL 16.4 a 16.6
+* Para aprovechar el xlocale extendido de adJ se han recompilado
+  `vlc`, `glib2` y `libunistring`.
+* Algunos paquetes típicos y su versión: `dovecot x`,
+  `chromium x`,
+  `libreoffice x`,
+  `nginx x`, `mariadb x`,
+  `python x`, `vim x`, `zsh x`
+
+
 * Incluye `evangelios_dp-0.9.x` con traducción y marcado Strong del
   comienzo del nuevo testamento hasta Filipenses
-* El porte para OpenBSD-current de Ruby x, diligentemente mantenido
-  por Jeremy Evans, quita el aviso de actualizar gemas del sistema cuando
-  hay nuevas versiones disponibles, pues implícitamente sugiere instalar el
-  paquete de la gema de Ruby para OpenBSD más actualizado 
-  (en caso de que los haya).
+* Los portes para ruby de OpenBSD diligentemente mantenidos por 
+  Jeremy Evans, quitan el aviso de actualizar gemas del sistema cuando 
+  hay nuevas versiones disponibles, 
+  pues implícitamente sugiere instalar el paquete de la gema de Ruby para 
+  OpenBSD más actualizado (en caso de que los haya).
   En adJ recomendamos usar gemas directamente (en lugar de paquetes con gemas)
   y  retro-portamos la mayoría de ese porte pero mantenemos el
   comportamiento original de Ruby y sugerimos actualizar gemas del
   sistema tan pronto y tanto como sea posible con
   `doas gem update --system`
-* Se ha retroportado node x de OpenBSD-current.
 * Además de `chromium` (con llave del API de Google de adJ) incluimos 
   `firefox-esr` que también ha resultado bastante estable.
 * Se han recompilado los siguientes para aprovechar `xlocale` (además de muchos

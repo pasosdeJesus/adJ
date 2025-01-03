@@ -25,7 +25,7 @@ MODRUBY_HANDLE_FLAVORS ?= No
 # If ruby.pork.mk should handle FLAVORs, define a separate FLAVOR
 # for each ruby version.
 .    if !defined(FLAVORS)
-FLAVORS=	ruby31 ruby32 ruby33
+FLAVORS=	ruby32 ruby33 ruby34
 .    endif
 
 # Instead of adding flavors to the end of the package name, we use
@@ -44,17 +44,17 @@ SUBST_VARS+=		GEM_BIN_SUFFIX GEM_MAN_SUFFIX
 FLAVOR?=
 # Without a FLAVOR, assume the use of ruby 3.3.
 .    if empty(FLAVOR)
-FLAVOR =		ruby33
+FLAVOR =		ruby34
 .    endif
 
 # Check for conflicting FLAVORs and set MODRUBY_REV appropriately based
 # on the FLAVOR.
-.    for i in ruby31 ruby32 ruby33
+.    for i in ruby32 ruby33 ruby34
 .      if ${FLAVOR:M$i}
 MODRUBY_REV = ${i:C/ruby([0-9])/\1./}
-.        if ${FLAVOR:N$i:Mruby31} || \
-            ${FLAVOR:N$i:Mruby32} || \
-            ${FLAVOR:N$i:Mruby33}
+.        if ${FLAVOR:N$i:Mruby32} || \
+            ${FLAVOR:N$i:Mruby33} || \
+            ${FLAVOR:N$i:Mruby34}
 ERRORS += "Fatal: Conflicting flavors used: ${FLAVOR}"
 .        endif
 .      endif
@@ -154,7 +154,7 @@ EXTRACT_SUFX=	.gem
 
 .  if ${CONFIGURE_STYLE:L:Mext}
 # Use ports-gcc for ruby32 extensions if base does not use clang
-.    if ${FLAVOR:Mruby32} || ${FLAVOR:Mruby33}
+.    if ${FLAVOR:Mruby32} || ${FLAVOR:Mruby33} || ${FLAVOR:Mruby34} 
 COMPILER ?= 	base-clang ports-gcc
 COMPILER_LANGS ?= c
 .    endif
