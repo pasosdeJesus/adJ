@@ -1,7 +1,8 @@
 COMMENT=		control and monitor storage systems using SMART
 
 # XXX at update time check whether C++11 is actually needed
-DISTNAME=		smartmontools-7.3
+DISTNAME=		smartmontools-7.4
+REVISION=		0
 CATEGORIES=		sysutils
 
 HOMEPAGE=		https://www.smartmontools.org/
@@ -14,7 +15,7 @@ PERMIT_PACKAGE=	Yes
 WANTLIB=		c m ${COMPILER_LIBCXX} util
 
 COMPILER =		base-clang ports-gcc base-gcc
-SITES=		${SITE_SOURCEFORGE:=smartmontools/}
+SITES=			${SITE_SOURCEFORGE:=smartmontools/}
 
 SEPARATE_BUILD=		Yes
 USE_GMAKE=		Yes
