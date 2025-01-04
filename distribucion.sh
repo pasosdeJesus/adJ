@@ -837,7 +837,6 @@ if (test "$sn" = "s") then {
   # Modificados para posibilitar compilación
   # Deben estar en mystuff
 
-  paquete openssl paquetes "openssl" 3.3
 
   # Todo lo de perl tuvo que recompilarse
   # evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
@@ -1051,6 +1050,11 @@ if (test "$sn" = "s") then {
 
   #paquete print/texlive/base paquetes texlive_base # Requerido para compilar ton
   #paquete print/texlive/texmf paquetes texlive_texmf-minimal-2021 # Requerido para compilar ton
+
+  ##
+  # Renombrado daemon por service en guion rc.d
+  ##
+  paquete smartmontools
 
   ####
   # Retroportados para cerrar fallas o actualizar

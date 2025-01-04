@@ -1,4 +1,4 @@
-@rcscript ${RCDIR}/smartd
+@rcscript ${RCDIR}/smarts
 @man man/man5/smartd.conf.5
 @man man/man8/smartctl.8
 @man man/man8/smartd.8
@@ -14,7 +14,7 @@ share/doc/smartmontools/NEWS
 share/doc/smartmontools/README
 share/doc/smartmontools/TODO
 share/doc/smartmontools/smartd.conf
-@sample ${SYSCONFDIR}/smartd.conf
+@sample ${SYSCONFDIR}/smarts.conf
 share/examples/smartmontools/
 share/examples/smartmontools/Example1
 share/examples/smartmontools/Example2

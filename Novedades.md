@@ -86,39 +86,28 @@ Novedades tomadas de <https://www.openbsd.org/76.html>
 
 ### 3.2 Paquetes
 
-
-* Se compilan versiones más recientes de paquetes estables: 
-  `curl`, `openssl-3.3.2p0v0`
-* Actualizamos porte de PostgreSQL 16.4 a 16.6
-* Para aprovechar el xlocale extendido de adJ se han recompilado
-  `vlc`, `glib2` y `libunistring`.
-* Algunos paquetes típicos y su versión: `dovecot x`,
-  `chromium x`,
-  `libreoffice x`,
-  `nginx x`, `mariadb x`,
-  `python x`, `vim x`, `zsh x`
-
-
 * Incluye `evangelios_dp-0.9.x` con traducción y marcado Strong del
   comienzo del nuevo testamento hasta Filipenses
-* Los portes para ruby de OpenBSD diligentemente mantenidos por 
-  Jeremy Evans, quitan el aviso de actualizar gemas del sistema cuando 
-  hay nuevas versiones disponibles, 
+* Retroportamos ruby 3.4.1 de OpenBSD-current. Los portes para ruby de OpenBSD 
+  diligentemente mantenidos por Jeremy Evans, quitan el aviso de actualizar 
+  gemas del sistema cuando hay nuevas versiones disponibles, 
   pues implícitamente sugiere instalar el paquete de la gema de Ruby para 
   OpenBSD más actualizado (en caso de que los haya).
   En adJ recomendamos usar gemas directamente (en lugar de paquetes con gemas)
-  y  retro-portamos la mayoría de ese porte pero mantenemos el
-  comportamiento original de Ruby y sugerimos actualizar gemas del
-  sistema tan pronto y tanto como sea posible con
+  y  mantenemos el comportamiento original de Ruby y sugerimos actualizar 
+  gemas del sistema tan pronto y tanto como sea posible con
   `doas gem update --system`
+* Actualizamos porte de PostgreSQL 16.4 a 16.6
+* Para aprovechar el xlocale extendido de adJ se han recompilado todos
+  los paquetes incluidos para perl (comienzan con `p5`) y
+  `vlc`, `glib2` y `libunistring`.
 * Además de `chromium` (con llave del API de Google de adJ) incluimos 
   `firefox-esr` que también ha resultado bastante estable.
-* Se han recompilado los siguientes para aprovechar `xlocale` (además de muchos
-  para `perl`): `glib2`, `libunistring`, `vlc`
 * Se han parchado mínimamente los siguientes para usar `servicio` en lugar
-  de `daemon`: `postgresql`, `git` y `smartmontools`
+  de `daemon`: `postgresql`, y `smartmontools`
 * Se han recompilado los siguientes para incluir versiones más recientes
   disponibles para OpenBSD 7.6 después de su lanzamiento:
+  `curl`, `openssl-3.3.2p0v0`, `firefox-esr`
   `firefox-esr-x`, `ghostscript-x`, `git-x`, `glib2-x`, 
   `libvpx-x`, `libxml-x`, `php-x`, `samba-x`
 
