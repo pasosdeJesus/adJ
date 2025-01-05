@@ -2802,6 +2802,7 @@ uruby=$uadJ
 for vrelim in 2.3 2.4 2.5 2.6 2.7 3.0 3.1 3.2 3.3; do
 	v=`(cd /var/db/pkg/; ls) | grep ruby*-$vrelim`
 	if (test -d /var/www/bundler/ruby/$vrelim/bundler/gems/ -o -d /usr/local/lib/ruby/$vrelim -o "$v" != "") then {
+		vr2=`echo $vrelim | sed -e "s/\.//g"`
 		if (test -d /var/www/bundler/ruby/$vrelim) then {
 			uruby=`stat -f "%u" /var/www/bundler/ruby/$vrelim`
 			echo "uruby=$uruby" >> /var/www/tmp/inst-adJ.bitacora;
@@ -2809,6 +2810,7 @@ for vrelim in 2.3 2.4 2.5 2.6 2.7 3.0 3.1 3.2 3.3; do
 		dialog --title "Eliminar ruby $vrelim y sus librerías" --yesno "\\nSe encontró algo de ruby $vrelim ¿Eliminar para evitar conflictos con la versión $VRUBY?" 15 60
 		if (test "$v" != "") then {
 			pkg_delete -I -D dependencies $v >> /var/www/tmp/inst-adJ.bitacora 2>&1
+			pkg_delete -I -D dependencies rubydoc$vr2 >> /var/www/tmp/inst-adJ.bitacora 2>&1
 		} fi;
 		echo "* Eliminando directorios de $vrelim" >> /var/www/tmp/inst-adJ.bitacora;
 		rm -rf /var/www/bundler/ruby/$vrelim
@@ -2817,7 +2819,7 @@ for vrelim in 2.3 2.4 2.5 2.6 2.7 3.0 3.1 3.2 3.3; do
 done
 	
 if (test ! -f "/usr/local/bin/ruby$VRUBYSP") then {
-  insacp gmp
+  insacp libyaml gmp libffi
 	insacp ruby
 } fi
 
@@ -2835,6 +2837,7 @@ if (test -f "/usr/local/bin/ruby$VRUBYSP") then {
 	ln -sf /usr/local/bin/rdbg$VRUBYSP /usr/local/bin/rdbg
 	ln -sf /usr/local/bin/rdoc$VRUBYSP /usr/local/bin/rdoc
 	ln -sf /usr/local/bin/ri$VRUBYSP /usr/local/bin/ri
+	ln -sf /usr/local/bin/syntax_suggest$VRUBYSP /usr/local/bin/syntax_suggest
 	ln -sf /usr/local/bin/typeprof$VRUBYSP /usr/local/bin/typeprof
 } fi;
 
