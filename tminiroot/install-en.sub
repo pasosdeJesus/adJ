@@ -1,5 +1,5 @@
 #!/bin/ksh
-#      $OpenBSD: install.sub,v 1.1261 2024/03/05 19:47:58 kn Exp $
+#      $OpenBSD: install.sub,v 1.1266 2024/07/09 14:47:21 krw Exp $
 #
 # Copyright (c) 1997-2015 Todd Miller, Theo de Raadt, Ken Westerback
 # Copyright (c) 2015, Robert Peichaer <rpe@openbsd.org>
@@ -1664,7 +1664,8 @@ install_files() {
 	_get_sets=$resp
 
 	# Reorder $_get_sets.
-	_get_sets=$(for s in $ALLSETS; do isin "$s" $_get_sets && echo $s; done)
+	_get_sets=$(for s in $ALLSETS; do isin "$s" $_get_sets && echo $s; done;
+	    isin "BUILDINFO" $_files && echo "BUILDINFO")
 
 	# Note which sets didn't verify ok.
 	_unver=$_get_sets
@@ -1807,6 +1808,9 @@ install_files() {
 				file:///mnt/var/sysmerge/${_f%%base*}etc.tgz |
 				tar -zxphf - -C /mnt
 			fi
+			;;
+		*BUILDINFO) $_unpriv ftp -D Installing -Vmo - "$_fsrc" \
+			    > "/mnt/var/db/installed.$_f"
 			;;
 		*)	# Make a backup of the existing ramdisk kernel in the
 			# bsd.rd only download/verify/install case.
@@ -2633,6 +2637,7 @@ start_cgiinfo() {
 	((NIFS < 1)) && return
 
 	# Ensure proper name resolution in case there's no dns yet.
+	add_hostent 199.185.178.80 ftplist1.openbsd.org
 	add_hostent 2620:3d:c000:178::80 ftplist1.openbsd.org
 
 	# Make sure the ftp subshell gets its own process group.
@@ -2670,10 +2675,9 @@ start_cgiinfo() {
 #
 # In addition,
 #
-# 1) delete 'softdep' options (no soft updates in ramdisk kernels),
-# 2) mount non-ffs filesystems read only,
-# 3) prepend '/mnt' to all mount points,
-# 4) delete any trailing '/' from the mount point (e.g. root),
+# 1) mount non-ffs filesystems read only,
+# 2) prepend '/mnt' to all mount points,
+# 3) delete any trailing '/' from the mount point (e.g. root),
 #
 # If no /etc/fstab is created, do not proceed with install/upgrade.
 munge_fstab() {
@@ -2686,10 +2690,6 @@ munge_fstab() {
 			! -f /sbin/mount_$_fstype ||
 			$_opt == *noauto* ||
 			$_opt == *xx* ]] && continue
-
-		# Remove any softdep options, as soft updates are not
-		# available in the ramdisk kernels.
-		_opt=$(echo $_opt | sed 's/softdep//')
 
 		# Change read-only ffs to read-write since we'll potentially
 		# write to these filesystems.
@@ -3010,7 +3010,11 @@ if ((${#_KERNV[*]} == 1)); then
 fi
 __EOT
 
-	[ -x /mnt/usr/sbin/fw_update ] && DESTDIR=/mnt /mnt/usr/sbin/fw_update
+	if [[ -x /mnt/usr/sbin/fw_update ]]; then
+		DESTDIR=/mnt /mnt/usr/sbin/fw_update
+		# Rerun installboot(8) to pick up just fetched boot firmware.
+		typeset -f md_fw >/dev/null && md_fw $ROOTDISK apple-boot
+	fi
 
 	if [[ -f $_kernel_dir.tgz ]]; then
 		echo -n "Relinking to create unique kernel..."
@@ -3104,9 +3108,6 @@ encrypt_root() {
 	local _args _chunk=$ROOTDISK
 
 	[[ $MDBOOTSR == y ]] || return
-
-	# The interactive bioctl(8) passphrase prompt requires a TTY.
-	$AI && return
 
 	[[ -x /sbin/bioctl ]] || return
 
@@ -3588,6 +3589,7 @@ umount -af >/dev/null 2>&1
 #	md_consoleinfo()	  - set CDEV, CTTY, CSPEED, CPROM
 #
 # The following functions can be provided if required:
+#	md_fw()                   - device specific firmware quirks
 #	md_prep_fdisk()           - put a partition table on the disk
 #
 # The following variables can be provided if required:
