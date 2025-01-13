@@ -1,12 +1,12 @@
-7.3
+7.6
 
-ruby
-php
-cups-filters
-curl
-samba
-firefox-esr
-mozilla-firefox
+sivel2
+
+doc
+
+hexedit 1.6
+colorls 7.5
+xfe 1.46.2p0
 
 
 

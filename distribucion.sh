@@ -844,9 +844,14 @@ if (test "$sn" = "s") then {
   #Name.c: loadable library and perl binaries are mismatched (got handshake key 0xb700000, needed 0xbb00000)
   # Buscar módulo de Perl con pkg_locate Name.so, recompilarlo e instalarlo 
   function ya {
+  }
   paquete p5-HTML-Parser
   paquete p5-Module-Build
   paquete p5-Unicode-Stringprep
+  paquete p5-YAML-Tiny
+  paquete p5-Module-ScanDeps
+  paquete p5-PAR-Dist
+  paquete p5-File-Remove
   paquete p5-Module-Install
   paquete p5-Net-IDN-Nameprep
   paquete p5-XML-LibXML
@@ -1032,7 +1037,7 @@ if (test "$sn" = "s") then {
 
 
   paquete p5-Mail-SpamAssassin
-}
+
 
   ## Muy necesarios de estable con actualizaciones
   paquete curl
