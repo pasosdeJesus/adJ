@@ -184,7 +184,7 @@ if (test "$sn" = "s") then {
 
   cd /sys/arch/$ARQ/conf 2>&1 >> /var/www/tmp/distrib-adJ.bitacora
   echo "pwd=" `pwd` 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
-  sed -e "s/^#\(option.*NTFS.*\)/\1/g" GENERIC > APRENDIENDODEJESUS
+  sed -e "s/^#\(option.*NTFS.*\)/\1/g" GENERIC | grep -v amdgpu > APRENDIENDODEJESUS
   rm -rf /sys/arch/$ARQ/compile/APRENDIENDODEJESUS/obj/* 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
   chown -R build:wsrc /usr/obj
   config APRENDIENDODEJESUS 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora

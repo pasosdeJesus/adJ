@@ -38,22 +38,22 @@ function ej {
   return $vr
 }
 
-if (test ! -f AprendiendoDeJesus-${V}${VESP}-${ARQ}.usb) then {
+if (test ! -f AprendiendoDeJesus-${V}${VESP}-${ARQ}.img) then {
   if (test ! -f blanco) then {
     ej "dd of=blanco bs=1M seek=5000 count=0"
   } else {
   echo 'Archivo blanco existente, saltando creacion'
 } fi;
-ej "cat $im blanco > AprendiendoDeJesus-${V}${VESP}-${ARQ}.usb"
+ej "cat $im blanco > AprendiendoDeJesus-${V}${VESP}-${ARQ}.img"
 } else {
-echo "Archivo AprendiendoDeJesus-${V}${VESP}-${ARQ}.usb existente, saltando creacion"
+echo "Archivo AprendiendoDeJesus-${V}${VESP}-${ARQ}.img existente, saltando creacion"
 } fi;
 ej "doas vnconfig -l | grep 'vnd0: not in use' > /dev/null 2>&1"
 if (test "$?" != "0") then {
   echo "vnd0 ocupado, no se puede continuar";
   exit 1;
 } fi;
-ej "doas vnconfig vnd0 AprendiendoDeJesus-${V}${VESP}-${ARQ}.usb"
+ej "doas vnconfig vnd0 AprendiendoDeJesus-${V}${VESP}-${ARQ}.img"
 ej "doas fdisk -i -b 10000 -y /dev/rvnd0c"
 # adJ64  fdisk: 1> p
 #Disk: /dev/rvnd0c       geometry: 107734/1/100 [10773440 Sectors]
