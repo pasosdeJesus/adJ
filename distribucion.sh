@@ -1170,7 +1170,7 @@ if (test "$sn" = "s") then {
   ##
   # Retroportados no existentes en versión actual
 
-  paquete security/veracrypt
+  paquete misc/llama.cpp
 
   ####
   # Adaptados de portes estables pero mejorados para adJ, por 
