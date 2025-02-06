@@ -86,8 +86,11 @@ Novedades tomadas de <https://www.openbsd.org/76.html>
 
 ### 3.2 Paquetes
 
-* Incluye `evangelios_dp-0.9.x` con traducción y marcado Strong del
-  comienzo del nuevo testamento hasta Filipenses
+* Incluye `evangelios_dp-0.9.12` con traducción y marcado Strong del
+  comienzo del nuevo testamento hasta I Timoteo
+* Retroportamos el paquete llama-cpp que permite ejecutar modelos de IA
+  usando vulkan y tarjetas graficadoras. Al respecto escribimos este
+  artículo: <https://github.com/vtamara/llama.cpp/wiki/Probando-el-espa%C3%B1ol-de-modelos-simplificados-de-IA-con-DeepSeek%E2%80%90R1-en-adJ-OpenBSD-7.6>
 * Retroportamos ruby 3.4.1 de OpenBSD-current. Los portes para ruby de OpenBSD 
   diligentemente mantenidos por Jeremy Evans, quitan el aviso de actualizar 
   gemas del sistema cuando hay nuevas versiones disponibles, 
@@ -106,10 +109,11 @@ Novedades tomadas de <https://www.openbsd.org/76.html>
 * Se han parchado mínimamente los siguientes para usar `servicio` en lugar
   de `daemon`: `postgresql`, y `smartmontools`
 * Se han recompilado los siguientes para incluir versiones más recientes
-  disponibles para OpenBSD 7.6 después de su lanzamiento:
-  `curl`, `openssl-3.3.2p0v0`, `firefox-esr`
-  `firefox-esr-x`, `ghostscript-x`, `git-x`, `glib2-x`, 
-  `libvpx-x`, `libxml-x`, `php-x`, `samba-x`
+  disponibles para OpenBSD 7.6 que cierra fallas de seguridad:
+  `cups`, `curl`, `dkimproxy`,  `firefox-esr`
+  `ghostscript`, `libarchive`, `libcupsfilter`, 
+  `libppd`, `libunbound`, `mpg123`, 
+  `openssl`, `python`, `php-x`,  `rscync`, `vim`
 
 ### 3.3 Configuración
 

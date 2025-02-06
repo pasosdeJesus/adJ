@@ -184,7 +184,13 @@ if (test "$sn" = "s") then {
 
   cd /sys/arch/$ARQ/conf 2>&1 >> /var/www/tmp/distrib-adJ.bitacora
   echo "pwd=" `pwd` 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
-  sed -e "s/^#\(option.*NTFS.*\)/\1/g" GENERIC | grep -v amdgpu > APRENDIENDODEJESUS
+  # Omite amdgpu cuando SINAMDGPU es 1
+  detamdgpu=`dmesg | grep amdgpu`
+  if (test "$SINAMDGPU" = "1") then {
+    sed -e "s/^#\(option.*NTFS.*\)/\1/g" GENERIC | grep -v amdgpu > APRENDIENDODEJESUS
+  } else {
+    sed -e "s/^#\(option.*NTFS.*\)/\1/g" GENERIC > APRENDIENDODEJESUS
+  } fi;
   rm -rf /sys/arch/$ARQ/compile/APRENDIENDODEJESUS/obj/* 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
   chown -R build:wsrc /usr/obj
   config APRENDIENDODEJESUS 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
@@ -837,6 +843,8 @@ if (test "$sn" = "s") then {
   # Modificados para posibilitar compilación
   # Deben estar en mystuff
 
+  paquete misc/llama-cpp
+  exit 1
 
   # Todo lo de perl tuvo que recompilarse
   # evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
@@ -1039,7 +1047,7 @@ if (test "$sn" = "s") then {
   paquete p5-Mail-SpamAssassin
 
 
-  ## Muy necesarios de estable con actualizaciones
+  ## Muy necesarios de estable con actualizaciones de seguridad
   paquete curl
   paquete node
 
@@ -1098,7 +1106,8 @@ if (test "$sn" = "s") then {
   #paquete zstd
 
   #paquete certbot paquetes "certbot py3-acme"
-  #paquete cups
+  paquete cups
+  paquete dkimproxy
   #paquete dovecot
   #paquete dtc
   paquete firefox-esr
@@ -1106,34 +1115,42 @@ if (test "$sn" = "s") then {
   #paquete flac
   #paquete gtk+3 paquetes "gtk+3-cups"
   #paquete gdal
-  #paquete ghostscript
+  paquete ghostscript
   #paquete gnutls
   #paquete gnupg
   #paquete gvfs
+  paquete libarchive
+  paquete libcupsfilter
   #paquete libgcrypt
+  paquete libgfs
+  paquete libinih
   #paquete libmad
+  paquete libppd
   #paquete libssh
+  paquete libunbound
   #paquete libvpx
   #paquete libxml
   #paquete libxslt
   #paquete lz4
   #paquete mariadb-client paquetes "mariadb-client mariadb-server" 
-  #paquete mpg123
+  paquete mpg123
   #paquete mutt
   #paquete nginx
   #paquete nspr
   #paquete oniguruma 
   paquete openssl paquetes "openssl" 3.3
   #paquete openssl paquetes "openssl" 3.2
+  #paquete opus
   #paquete quirks
   #paquete pcre2 
   #paquete python paquetes "python" "2.7"
-  #paquete python paquetes "python" "3.9"
-  #paquete rsync
+  paquete python paquetes "python" "3.11"
+  paquete rsync
   #paquete samba paquetes "ldb samba tevent"
   #paquete sqlite3
   #paquete tiff
   #paquete unrar
+  paquete vim
   #paquete wavpack
   #paquete webkitgtk41
   #paquete zsh
@@ -1170,7 +1187,7 @@ if (test "$sn" = "s") then {
   ##
   # Retroportados no existentes en versión actual
 
-  paquete misc/llama.cpp
+  paquete misc/llama-cpp
 
   ####
   # Adaptados de portes estables pero mejorados para adJ, por 
