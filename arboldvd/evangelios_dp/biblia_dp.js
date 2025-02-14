@@ -14,3 +14,9 @@ document.addEventListener('mouseover', function(e) {
   }
 
 })
+
+if (window.location.search == "?mostrarStrong=0" && document.getElementById("mostrarStrong") && document.getElementById("mostrarStrong").checked) {
+  document.getElementById("mostrarStrong").checked = false
+  changeIt()
+}
+

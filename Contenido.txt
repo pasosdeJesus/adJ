@@ -169,7 +169,7 @@ dialog-[v]	Mejora la presentación de archivos de ordenes
 docbook-xsl-[v]	Hojas de estilo XSL para DocBook
 git-[v]		Almacenar historia de árbol de directorios
 hevea-[v]		Traductor de LaTeX a HTML
-llama-cpp-[v]
+llama-cpp-[v]	Sistema de inferencia de Grandes Modelos de Lenguaje (LLM)
 llvm-[v]		Compilador modular y rápido de C/C++/ObjC
 lua-[v]	Lenguaje de programación potente y liviano
 ocaml-[v]		Lenguaje de programación funcional
@@ -260,7 +260,7 @@ gdal-[v]		Librería de traducción de formatos geoespaciales
 gcc-libs-[v]	Librerías de soporte para gcc
 gcr-[v]		Librería de criptografía para interfaz de usuario
 gcr4-[v]		Librería de criptografía para interfaz de usuario
-gdbm-[v]		Versión de dbm	
+gdbm-[v]		Versión de dbm
 gdk-pixbuf-[v]	Librería gráfica para GTK+2
 gdk-pixbuf-[v]	Librería gráfica para GTK+2
 gdl-[v]		Librería de acoplamiento de GNOME
@@ -334,7 +334,7 @@ jbig2dec-[v]		Decodificador para formato comprimido monocromo JBIG2
 jpeg-[v]		Utilidades de compresión JPEG
 json-c-[v]		Implementación de JSON en C
 json-glib-[v]		Reconocedor de JSON para librerías y aplicaciones GLib
-just-[v]
+just-[v]	Simplemente un ejecutor de ordenes
 lame-[v]		Codificador de MP3
 lapack-[v]		Librería de subrutinas de álgebra lineal
 lcdf-typetools-[v]	Herramientas para manipular archivos con tipografias
@@ -378,7 +378,6 @@ libgcrypt-[v]	Criptografía basada en GnuPG
 libgeotiff-[v]	Librería pata intercambio TIFF en GIS
 libgexiv2-[v]	Envoltura GObject alrededor de exiv2
 libglade2-[v]	Carga interfaces Glade
-libgnome-keyring-[v]	Librería GNOME para integración con keyring
 libgpg-error-[v]	Códigos de error de GnuPG
 libgsf-[v]	Archivos estructurados de Gnome
 libhandy-[v]		Bloques para aplicaciones GNOME modernas y adaptables
@@ -387,7 +386,7 @@ libiconv-[v]		Conversión entre codificaciones de caracteres
 libid3tag-[v]	Lector de marcas ID3
 libidn-[v]		Manejo de cadenas de internacionalización
 libidn2-[v]		Implementación de internacionalización IDNA2008
-libinih-[v]
+libinih-[v]	Analizador simple de archivos .INI en C
 libinotify-[v]	Envía notif. de escritorio a un servicio de notif.
 libiscsi-[v]	Librería al lado del cliente para implementar iSCSI
 libjxl-[v]		Implementación de referencia del formato JPEG XL
@@ -490,7 +489,7 @@ npth-[v]		Librería portable de hilos de ejecución (threads)
 nspr-[v]		Herramientas para ejecución de netscape
 nss-[v]		Desarrollo de aplicaciones con protocolos seguros
 openbsd-backgrounds-[v]	Imágenes para fondo por desarrolladores de OpenBSD
-opencore-amr-[v]
+opencore-amr-[v]	Implementación de codec para habla
 OpenEXR-[v]		Formato de imágenes de rango alto y dinámico
 openh264-[v]	Implementación de Cisco del codec H.264
 openjade-[v]	Motor DSSSL orientado a objetos 
@@ -535,7 +534,7 @@ p5-DateManip-[v]	Manipulación de fechas en perl
 p5-DateTime-[v]	Date Time orientado a objetos en perl
 p5-DateTime-Locale-[v]	Datos de localización para DateTime.pm
 p5-DateTime-TimeZone-[v]	Sub-módulo DateTime para TZ
-p5-Devel-CheckLib-[v]	
+p5-Devel-CheckLib-[v]	revisa disponibilidad de liberías en C
 p5-Devel-OverloadInfo-[v]	Operadores sobrecargados de introspección
 p5-Devel-StackTrace-[v]	Objeto que representa una traza de la pila
 p5-Dist-CheckConflicts-[v]	Declara conflicto de versiones 
@@ -566,14 +565,14 @@ p5-ExtUtils-InstallPaths-[v]	Facilita lógico de Build.PL
 p5-File-Copy-Recursive-[v]	Copia recursiva de archivos y directorios
 p5-File-HomeDir-[v]	Recupera localización del directorio personal
 p5-File-Listing-[v]	Reconoce listados de directorios
-p5-File-Remove-[v]	
+p5-File-Remove-[v]	Elimina archivos y directorios con perl
 p5-File-ShareDir-[v]	Localiza datos de instalación por modulo
 p5-File-ShareDir-Install-[v]	Instala archivos compartidos
 p5-File-Which-[v]	Implementación portable de 'which'
 p5-FreezeThaw-[v]	Convierte estructuras a cadena y viceversa
 p5-GeoIP2-[v]	Busca país de una IP
 p5-Getopt-Long-Descriptive-[v]	Getopt::Long pero más simple y poderoso
-p5-HTML-Parser
+p5-HTML-Parser-[v]	Extraer información de HTML
 p5-HTML-Tagset-[v]	Tablas de datos útiles para reconocer HTML
 p5-HTML-Parser-[v]	Reconoce y extrae información de HTML
 p5-HTTP-Cookies-[v]	Jarras de galletas HTTP
@@ -609,12 +608,12 @@ p5-MIME-Charset-[v]	Información del juego de caracteres para MIME
 p5-MIME-Types-[v]	Módulo perl para manejar tipos MIME
 p5-MLDBM-[v]		Almacena estructura de hash multi nivel en uno solo
 p5-Module-Build-[v]	Construye e instala módulos Perl
-p5-Module-Build-Tiny-[v]	
+p5-Module-Build-Tiny-[v]	Reemplazo para Module::Build
 p5-Module-Implementation-[v]	Carga una o muchos módulos alternos
-p5-Module-Install-[v]	
+p5-Module-Install-[v]	Instalador extensible de módulos
 p5-Module-Pluggable-[v]	De a su módulo la habilidad de tener plugins
 p5-Module-Runtime-[v]	Manejo de módulos en tiempo de ejecución
-p5-Module-ScanDeps-[v]	
+p5-Module-ScanDeps-[v]	Analiza dependencias recursivamente en código perl
 p5-Moo-[v]		Orientación a objetos minimalista (compat. Moose)
 p5-Moose-[v]		Sistema de objetos moderno y completo para perl
 p5-MooX-StrictConstructor-[v]	Explota con atributos desconocidos
@@ -637,7 +636,7 @@ p5-Net-Patricia-[v]	Tries Patricia para ubicar IPs rapidamente
 p5-Net-Server-[v]	Marco de trabajo extensible para motores de servidores
 p5-Net-SMTPS-[v]	Soporte para SSL/STARTTLS para Net::SMTP
 p5-Net-SSLeay-[v]	Módulo para usar OpenSSL
-p5-PAR-Dist-[v]	
+p5-PAR-Dist-[v]	Crea y manipula distribuciones PAR
 p5-Package-DeprecationManager-[v]	Mensajes de no-recomendado
 p5-Package-Stash-[v]	Manipulación de alijos (stashes)
 p5-Package-Stash-XS-[v]	Como p5-Package-Stash más rápido y correcto
@@ -679,7 +678,7 @@ p5-XML-NamespaceSupport-[v]	Módulo para la clase SAX2 NamespaceSupport
 p5-XML-Parser-[v]	Módulo en perl para reconocer XML
 p5-XML-SAX-[v]	Marco de trabajo para SAX2 XML
 p5-XML-SAX-Base-[v]	Clase base para controladores y filtros SAX
-p5-YAML-Tiny-[v]
+p5-YAML-Tiny-[v]	Lee/escribre archivos YAML
 p7zip-[v]		Archivador con alta rata de compresión
 p7zip-rar-[v]	Módulos de rar para p7zip
 pandoc-[v]		Convertidor entre lengaujes de marcado para documentos
@@ -746,7 +745,7 @@ py3-markdown-[v]	Herramienta oara cibvertir texto a HTML
 py3-ndg-httpsclient-[v]	Soporte HTTPS ampliado para httplib y urllib2
 py3-numpy-[v]	Librearía numérica y de arreglos rápida en Python
 py3-openssl-[v]	Interfaz para python a librería OpenSSL
-py3-packaging-[v]
+py3-packaging-[v]	Utilidades centrales para empaquetar
 py3-parsedatetime-[v]	Reconocer fechas y horas leíbles por humanos
 py3-puremagic-[v]	Implementación en python de detección de formatos
 py3-pyRFC3339-[v]	Da formato a fechas de acuerdo al RFC3339
@@ -812,8 +811,6 @@ tdb-[v]		Librería para base de datos trivial
 tiff-[v]		Manipula formato gráfico TIFF
 transfig-[v]		Herramientas para convertir archivos .fig de Xfig
 tree-sitter-[v] 	Herramient para generar reconocedores de sintaxis
-ton-[v]		Herramientas para el Blockchain TON - The Open Network
-ton-toncli-[v]	Herramientas de TON para desarrollar con toncli
 twolame-[v]		Codificador de MPEG Audio Capa 2 (MP2) optimizado
 unibilium-[v]		Librería básica de terminfo
 updatedb-[v]		pkg_add speed up cache

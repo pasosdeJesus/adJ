@@ -843,8 +843,6 @@ if (test "$sn" = "s") then {
   # Modificados para posibilitar compilación
   # Deben estar en mystuff
 
-  paquete misc/llama-cpp
-  exit 1
 
   # Todo lo de perl tuvo que recompilarse
   # evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
@@ -1083,6 +1081,9 @@ if (test "$sn" = "s") then {
 
   # Recompilado con llave de adJ
   function aparte {
+    # Incluso /usr/ports/www/chromium:
+    # │|+++ build/linux/strip_binary.py
+    # │File to patch:
     paquete chromium
   }
 
@@ -1120,9 +1121,9 @@ if (test "$sn" = "s") then {
   #paquete gnupg
   #paquete gvfs
   paquete libarchive
-  paquete libcupsfilter
+  paquete libcupsfilters
   #paquete libgcrypt
-  paquete libgfs
+  paquete libgsf
   paquete libinih
   #paquete libmad
   paquete libppd
@@ -1144,7 +1145,7 @@ if (test "$sn" = "s") then {
   #paquete quirks
   #paquete pcre2 
   #paquete python paquetes "python" "2.7"
-  paquete python paquetes "python" "3.11"
+  paquete python paquetes "python" "3"
   paquete rsync
   #paquete samba paquetes "ldb samba tevent"
   #paquete sqlite3
@@ -1193,7 +1194,7 @@ if (test "$sn" = "s") then {
   # Adaptados de portes estables pero mejorados para adJ, por 
   # ejemplo ordenamientos en español deben ser correctos.
   # Deben estar en arboldes/usr/ports/mystuff 
-  paquete xfe
+  #paquete xfe
   paquete colorls
   paquete editors/hexedit # Soporta tamaños de archivos más grandes
 
@@ -1201,8 +1202,8 @@ if (test "$sn" = "s") then {
   # Unicos en adJ 
   # Deben estar en arboldes/usr/ports/mystuff pero no en /usr/ports
   paquete devel/just
-  paquete net/ton
-  paquete net/ton-toncli
+  #paquete net/ton
+  #paquete net/ton-toncli
   paquete emulators/realboy
   #paquete net/xmrig
   #paquete sysutils/ganglia

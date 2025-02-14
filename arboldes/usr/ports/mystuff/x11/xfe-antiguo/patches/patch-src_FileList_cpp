@@ -1,0 +1,12 @@
+Index: src/FileList.cpp
+--- src/FileList.cpp.orig
++++ src/FileList.cpp
+@@ -56,6 +56,8 @@ extern double scalefrac;
+ #if defined(linux)
+ FXStringDict* fsdevices = NULL; // Devices from fstab
+ FXStringDict* mtdevices = NULL; // Mounted devices
++#endif
++#if defined(linux) || defined(__OpenBSD__)
+ FXStringDict* updevices = NULL; // Responding devices
+ #endif
+ 

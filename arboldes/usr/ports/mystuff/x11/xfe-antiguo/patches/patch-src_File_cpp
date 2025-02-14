@@ -1,0 +1,33 @@
+$adJ$
+Index: src/File.cpp
+--- src/File.cpp.orig
++++ src/File.cpp
+@@ -7,6 +7,9 @@
+ #include <utime.h>
+ #if defined(linux)
+ #include <sys/statfs.h>
++#elif defined(__OpenBSD__)
++#include <sys/param.h>
++#include <sys/mount.h>
+ #endif
+ 
+ // For Sun compatibility
+@@ -2117,8 +2120,9 @@ int File::mount(const FXString dir, const FXString msg
+     }
+     return(1);
+ }
++#endif
+ 
+-
++#if defined(linux) || defined(__OpenBSD__)
+ // Install / Upgrade package
+ int File::pkgInstall(const FXString name, const FXString cmd)
+ {
+@@ -2156,7 +2160,6 @@ int File::pkgUninstall(const FXString name, const FXSt
+ 
+ 
+ #endif
+-
+ 
+ // Handle cancel button in progress bar dialog
+ long File::onCmdCancel(FXObject*, FXSelector, void*)

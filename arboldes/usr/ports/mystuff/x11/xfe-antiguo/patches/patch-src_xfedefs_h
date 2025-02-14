@@ -1,0 +1,33 @@
+Index: src/xfedefs.h
+--- src/xfedefs.h.orig
++++ src/xfedefs.h
+@@ -172,11 +172,11 @@
+ 
+ // Command to launch Xfe as root with sudo or su, using st as a terminal
+ #ifndef DEFAULT_SUDO_CMD
+-#define DEFAULT_SUDO_CMD    "sudo -b xfe"
++#define DEFAULT_SUDO_CMD    "doas su root -c 'nohup xfe >/dev/null 2>&1 & sleep 1"
+ #endif
+ 
+ #ifndef DEFAULT_SU_CMD
+-#define DEFAULT_SU_CMD    "su -c 'nohup xfe >& /dev/null &'"
++#define DEFAULT_SU_CMD    "su root -c 'nohup xfe >/dev/null 2>&1 & sleep 1'"
+ #endif
+ 
+ // Tooltips setup time and duration
+@@ -279,7 +279,7 @@
+ 
+ // Linux specials
+ 
+-#if defined(linux)
++#if defined(linux) || defined(__OpenBSD__)
+ 
+ // fstab path
+ #ifndef FSTAB_PATH
+@@ -295,5 +295,6 @@
+ #define DEB_PKG      0
+ #define RPM_PKG      1
+ #define OTHER_PKG    2
++#define OPENBSD_PKG    3
+ 
+ #endif

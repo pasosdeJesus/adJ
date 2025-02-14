@@ -1,0 +1,12 @@
+$OpenBSD$
+--- src/SearchPanel.cpp.orig	Wed Jul 27 04:46:58 2016
++++ src/SearchPanel.cpp	Fri Dec 30 06:40:29 2016
+@@ -30,7 +30,7 @@
+ 
+ 
+ 
+-#if defined(linux)
++#if defined(linux) || defined(__OpenBSD__)
+ extern FXStringDict* fsdevices; // Devices from fstab
+ #endif
+ 

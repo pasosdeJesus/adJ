@@ -1,0 +1,22 @@
+$adJ$
+Index: src/main.cpp
+--- src/main.cpp.orig
++++ src/main.cpp
+@@ -207,7 +207,7 @@ bool FXApp::runOneEvent(bool blocking)
+ char** args;
+ FXbool xim_used = false;
+ 
+-#if defined(linux)
++#if defined(linux) || defined(__OpenBSD__)
+ FXuint pkg_format;
+ #endif
+ 
+@@ -433,6 +433,8 @@ int main(int argc, char* argv[])
+             pkg_format = OTHER_PKG; // other (unsupported) package system
+         }
+     }
++#elif defined(__OpenBSD__)
++    pkg_format = OPENBSD_PKG;
+ #endif
+ 
+     // Parse basic arguments

@@ -1,0 +1,23 @@
+Index: Makefile.in
+--- Makefile.in.orig
++++ Makefile.in
+@@ -600,17 +600,13 @@ uninstall-iconDATA:
+ install-rcDATA: $(rc_DATA)
+ 	@$(NORMAL_INSTALL)
+ 	@list='$(rc_DATA)'; test -n "$(rcdir)" || list=; \
+-	if test -n "$$list"; then \
+-	  echo " $(MKDIR_P) '$(DESTDIR)$(rcdir)'"; \
+-	  $(MKDIR_P) "$(DESTDIR)$(rcdir)" || exit 1; \
+-	fi; \
+ 	for p in $$list; do \
+ 	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+ 	  echo "$$d$$p"; \
+ 	done | $(am__base_list) | \
+ 	while read files; do \
+-	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(rcdir)'"; \
+-	  $(INSTALL_DATA) $$files "$(DESTDIR)$(rcdir)" || exit $$?; \
++	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(prefix)/share/xfe'"; \
++	  $(INSTALL_DATA) $$files "$(DESTDIR)$(prefix)/share/xfe" || exit $$?; \
+ 	done
+ 
+ uninstall-rcDATA:
