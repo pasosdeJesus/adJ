@@ -183,7 +183,7 @@ Pasos importantes para publicar versión mayor
    ./conv.sh es
    ./compara.sh
 6. Análogo a pasos de versión beta
-7. Publicar un "Release" en github Versión 7.6 con enlace a novedades.
+7. Publicar un "Release" en gitlab versión 7.6 con enlace a novedades.
 8. Publicar en Twitter y Facebook.
    Si es tambien publicacion de SIVeL en sitio de noticias de SIVeL y Structio.
 
