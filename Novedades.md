@@ -4,7 +4,7 @@ Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
 
 ### Versión: 7.6
-Fecha de publicación: 14/Feb/2025
+Fecha de publicación: 15/Feb/2025
 
 Puedes ver novedades respecto a OpenBSD en:
   <https://gitlab.com/pasosdeJesus/adJ/-/blob/ADJ_7_6/Novedades_OpenBSD.md>
@@ -52,23 +52,27 @@ encontrarás:
 
 Novedades tomadas de <https://www.openbsd.org/76.html>
 
-* Aplicados parches de seguridad hasta el 29.Nov.2024 provenientes de
+* Aplicados parches de seguridad hasta el 5.Feb.2025 provenientes de
   OpenBSD que incluyen soluciones a fallas
 * Controladores ampliados o mejorados para amd64
-  * Tarjetas Ethernet: 
-  * Tarjetas inalámbricas:
-  * Otros:
-* Mejoras al kernel y SMP
-* Mejoras a `vmm`
-* Mejoras a herramientas de Red
+  * Tarjetas Ethernet: `rge` ahora soporta Realtek RTL8126 de 2.5Gb
+  * CPUs y GPUs: Sopote para AVX-512, drm(4) actualizado al de Linux 6.6.52,
+    `inteldrm` soporta Meteor Lake
+  * Otros:  Mejora suspender/retomark. Mejoras al controlador `nvme` de ese 
+    tipo de discos. Controlador `umb` para dispositivos USB MBIM (Mobile
+    Broadband Interface Model) soporta ahora Quectel EM060K
+* Mejoras a `vmm`: Mejorado suspender/resumir
+* Mejoras a herramientas de Red: Reenvio IPv6 solo en IPsec 
+  (`sysctl net.inet6.ip6.forwarding = 2`), Radius mejorado, BGPD mejorado
 * Seguridad
-  * 
-  * `libressl` actualizado a 
-  * Incluye OpenSSH x
+  * pledge en más programas
+  * IPSec mejorado
+  * `libressl` actualizado a 4.0.0
+  * Incluye OpenSSH 9.9
 * El sistema base incluye mejoras a componentes auditados y mejorados
-  como, `llvm xxx`,  `Xenocara` (basado en `Xorg` 7.7),
-  `perl xxx`
-* El repositorio de paquetes de OpenBSD cuenta con xxx para amd64
+  como, `llvm 16.0.6`,  `Xenocara` (basado en `Xorg` 7.7),
+  `perl 5.38.2`
+* El repositorio de paquetes de OpenBSD cuenta con 12312 para amd64
 
 
 ## 3. NOVEDADES RESPECTO A ADJ 7.5 PROVENIENTES DE PASOS DE JESÚS
@@ -104,8 +108,7 @@ Novedades tomadas de <https://www.openbsd.org/76.html>
 * Para aprovechar el xlocale extendido de adJ se han recompilado todos
   los paquetes incluidos para perl (comienzan con `p5`) y
   `vlc`, `glib2` y `libunistring`.
-* Además de `chromium` (con llave del API de Google de adJ) incluimos 
-  `firefox-esr` que también ha resultado bastante estable.
+* Además de `chromium` incluimos `firefox-esr` que también ha resultado estable.
 * Se han parchado mínimamente los siguientes para usar `servicio` en lugar
   de `daemon`: `postgresql`, y `smartmontools`
 * Se han recompilado los siguientes para incluir versiones más recientes
@@ -115,7 +118,6 @@ Novedades tomadas de <https://www.openbsd.org/76.html>
   `libppd`, `libunbound`, `mpg123`, 
   `openssl`, `python`, `php-x`,  `rscync`, `vim`
 
-### 3.3 Configuración
 
 ## 4. FE DE ERRATAS
 
@@ -134,9 +136,9 @@ Novedades tomadas de <https://www.openbsd.org/76.html>
   en [github](https://github.com/pasosdeJesus/adJ/)
 * Te invitamos a patrocinar nuestro trabajo empleando el botón
   Patrocinar (__Sponsor__) de <https://github.com/pasosdeJesus/adJ/>
-* También puedes donarnos para recibir una USB para instalar la
-  versión más reciente de adJ o alguno de los servicios de Pasos
-  de Jesús desde <https://www.pasosdeJesus.org>
+* También puedes comprar una USB de instalación con la versión más reciente de 
+  adJ o contratar alguno de los servicios de Pasos de Jesús 
+  desde <https://www.pasosdeJesus.org>
 * Agradecemos tu ayuda mejorando este sitio, la documentación
   para usuario final y la documentación técnica.
 * Agradecemos tu ayuda traduciendo a español páginas del
