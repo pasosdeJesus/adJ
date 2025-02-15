@@ -1,4 +1,4 @@
-# adJ - Aprendiendo de Jesús
+# AdJ - Aprendiendo de Jesus
 
 Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
@@ -15,13 +15,13 @@ Puedes ver las diversas versiones publicadas en
 <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/> donde entre otras
 encontrarás:
 
-* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-7.6-amd64.usb>
+* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-7.6-amd64.img>
   que es imagen para escribir en una memoria USB y arrancar con esta bien en
   modo UEFI o bien en modo BIOS Legacy. Una vez
   la descargues puedes escribirla en una USB ubicada en `/dev/sd2c`
   (verifica el dispositivo con `dmesg` y remplaza) con:
 
-       doas dd if=AprendiendoDeJesus-7.6-amd64.usb of=/dev/sd2c bs=1M
+       doas dd if=AprendiendoDeJesus-7.6-amd64.img of=/dev/sd2c bs=1M
 
   Este proceso puede ser demorado, podrás ver el progreso con
 
@@ -29,7 +29,7 @@ encontrarás:
 
   O si deseas probarla con `qemu` para instalar en un disco `virtual.raw`:
 
-      qemu-system-x86_64 -hda virtual.raw -hdb AprendiendoDeJesus-7.6-amd64.usb -boot menu=on
+      qemu-system-x86_64 -hda virtual.raw -hdb AprendiendoDeJesus-7.6-amd64.img -boot menu=on
 
 * <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-7.6-amd64.iso>
   que es imagen en formato ISO para quemar en DVD e instalar por primera vez
@@ -58,7 +58,7 @@ Novedades tomadas de <https://www.openbsd.org/76.html>
   * Tarjetas Ethernet: `rge` ahora soporta Realtek RTL8126 de 2.5Gb
   * CPUs y GPUs: Sopote para AVX-512, drm(4) actualizado al de Linux 6.6.52,
     `inteldrm` soporta Meteor Lake
-  * Otros:  Mejora suspender/retomark. Mejoras al controlador `nvme` de ese 
+  * Otros:  Mejora suspender/retomar. Mejoras al controlador `nvme` de ese 
     tipo de discos. Controlador `umb` para dispositivos USB MBIM (Mobile
     Broadband Interface Model) soporta ahora Quectel EM060K
 * Mejoras a `vmm`: Mejorado suspender/resumir
@@ -82,11 +82,11 @@ Novedades tomadas de <https://www.openbsd.org/76.html>
 *
 * Documentación actualizada
   * `basico_adJ`
-    <https://pasosdejesus.github.io/basico_adJ/>
+    <https://pasosdejesus.org/basico_adJ/index.html>
   * `usuario_adJ`
-    <https://pasosdejesus.github.io/usuario_adJ/>
+    <https://pasosdejesus.org/usuario_adJ/index.html>
   * `servidor_adJ`
-    <https://pasosdejesus.github.io/servidor_adJ>
+    <https://pasosdejesus.org/servidor_adJ/index.html>
 
 ### 3.2 Paquetes
 
@@ -94,7 +94,7 @@ Novedades tomadas de <https://www.openbsd.org/76.html>
   comienzo del nuevo testamento hasta I Timoteo
 * Retroportamos el paquete llama-cpp que permite ejecutar modelos de IA
   usando vulkan y tarjetas graficadoras. Al respecto escribimos este
-  artículo: <https://github.com/vtamara/llama.cpp/wiki/Probando-el-espa%C3%B1ol-de-modelos-simplificados-de-IA-con-DeepSeek%E2%80%90R1-en-adJ-OpenBSD-7.6>
+  artículo: <https://dhobsd.pasosdejesus.org/probando-el-espanol-de-modelos-simplificados-de-ia-con-deepseek-r1-en-adj-openbsd-7-6.html>
 * Retroportamos ruby 3.4.1 de OpenBSD-current. Los portes para ruby de OpenBSD 
   diligentemente mantenidos por Jeremy Evans, quitan el aviso de actualizar 
   gemas del sistema cuando hay nuevas versiones disponibles, 
