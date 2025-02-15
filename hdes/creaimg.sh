@@ -19,7 +19,7 @@ if (test ! -f $im ) then {
   cmd="doas cp $V$VESP-$ARQ/{xbase$VP.tgz,xfont$VP.tgz,xshare$VP.tgz,xserv$VP.tgz} /home/relx-amd64/"
   echo "$cmd"
   eval "$cmd"
-  touch /home/relx-amd64/SHA256
+  touch /home/relx-amd64/SHA256 /home/rel-amd64/BUILDINFO
   (cd /usr/src/distrib/amd64/iso; FSSIZE=940000 make)
   if (test ! -f $im ) then {
     echo "No pudo crearse $im";
