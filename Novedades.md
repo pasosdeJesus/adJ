@@ -1,4 +1,4 @@
-# adJ - Aprendiendo de Jesús
+# AdJ - Aprendiendo de Jesus
 
 Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
@@ -58,7 +58,7 @@ Novedades tomadas de <https://www.openbsd.org/76.html>
   * Tarjetas Ethernet: `rge` ahora soporta Realtek RTL8126 de 2.5Gb
   * CPUs y GPUs: Sopote para AVX-512, drm(4) actualizado al de Linux 6.6.52,
     `inteldrm` soporta Meteor Lake
-  * Otros:  Mejora suspender/retomark. Mejoras al controlador `nvme` de ese 
+  * Otros:  Mejora suspender/retomar. Mejoras al controlador `nvme` de ese 
     tipo de discos. Controlador `umb` para dispositivos USB MBIM (Mobile
     Broadband Interface Model) soporta ahora Quectel EM060K
 * Mejoras a `vmm`: Mejorado suspender/resumir
@@ -82,11 +82,11 @@ Novedades tomadas de <https://www.openbsd.org/76.html>
 *
 * Documentación actualizada
   * `basico_adJ`
-    <https://pasosdejesus.github.io/basico_adJ/>
+    <https://pasosdejesus.org/basico_adJ/index.html>
   * `usuario_adJ`
-    <https://pasosdejesus.github.io/usuario_adJ/>
+    <https://pasosdejesus.org/usuario_adJ/index.html>
   * `servidor_adJ`
-    <https://pasosdejesus.github.io/servidor_adJ>
+    <https://pasosdejesus.org/servidor_adJ/index.html>
 
 ### 3.2 Paquetes
 
@@ -94,7 +94,7 @@ Novedades tomadas de <https://www.openbsd.org/76.html>
   comienzo del nuevo testamento hasta I Timoteo
 * Retroportamos el paquete llama-cpp que permite ejecutar modelos de IA
   usando vulkan y tarjetas graficadoras. Al respecto escribimos este
-  artículo: <https://github.com/vtamara/llama.cpp/wiki/Probando-el-espa%C3%B1ol-de-modelos-simplificados-de-IA-con-DeepSeek%E2%80%90R1-en-adJ-OpenBSD-7.6>
+  artículo: <https://dhobsd.pasosdejesus.org/probando-el-espanol-de-modelos-simplificados-de-ia-con-deepseek-r1-en-adj-openbsd-7-6.html>
 * Retroportamos ruby 3.4.1 de OpenBSD-current. Los portes para ruby de OpenBSD 
   diligentemente mantenidos por Jeremy Evans, quitan el aviso de actualizar 
   gemas del sistema cuando hay nuevas versiones disponibles, 
