@@ -1,12 +1,13 @@
-El Señor no retarda su promesa, según algunos la tienen por tardanza, sino que
-es paciente para con nosotros, no queriendo que ninguno perezca, sino que todos
-procedan al arrepentimiento.
 
-Pedro 3:9
+Pero nosotros, que somos del día, seamos sobrios, habiéndonos vestido con la
+coraza de fe y de amor, y con la esperanza de salvación como yelmo. 
+Porque no nos ha puesto Dios para ira, sino para alcanzar salvación por 
+medio de nuestro Señor Jesucristo, quien murió por nosotros para que 
+ya sea que velemos, o que durmamos, vivamos juntamente con él.
+
+1 Tesalonicenses 5:8-10 (RVR1960)
 
 ----
 
-Gracias Dios por querer la salvación de todos, por favor ayuda a cada
-miembro de Tu iglesia a  compartir de Tí a tantas personas como sea posible 
-y orando para que lleguen a recibirte como Señor y Salvador. 
-Oro en el nombre de Jesús.
+Gracias Jesús por sufrir humillaciones, torturas y muerte para dar
+salvación al que crea.

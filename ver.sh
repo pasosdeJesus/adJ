@@ -2,8 +2,8 @@
 # Variables de configuración para generar distribución Aprendiendo de Jesús
 # Dominio público. 2022. vtamara@pasosdeJesus.org
 
-V=7.6
-VESP="b1"
+V=7.7
+VESP="a1"
 # Versión que se está desarrollando
 
 VPKGPATH=snapshots
