@@ -55,7 +55,7 @@ cat > /home/$uadJ/.fluxbox/menu <<EOF
 	[exec] (Desmontar Floppy) {doas /sbin/umount -f /mnt/floppy}
 	[exec] (Configurar Impresora con CUPS) {echo y | doas cups-enable; doas chmod a+rw /dev/ulpt* /dev/lpt*; /usr/local/bin/chrome --disable-gpu http://127.0.0.1:631}
 	[submenu] (Teclado)
-                [exec] (Cambiar a distribucion Lationoamerica) {setxkbmap latam}
+                [exec] (Cambiar a distribucion Latinoamérica) {setxkbmap latam}
                 [exec] (Cambiar a distribucion España) {setxkbmap es}
                 [exec] (Cambiar a distribucion Estados Unidos Intl.) {setxkbmap us; xmodmap ~/.Xmodmap-usintl}
   [end]
