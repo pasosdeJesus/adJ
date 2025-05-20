@@ -1000,6 +1000,7 @@ if (test "$sn" = "s") then {
   paquete p5-Sub-Quote
   paquete p5-Throwable
   paquete p5-Time-TimeDate
+  paquete p5-MIME-Base32
   paquete p5-URI
   paquete p5-Variable-Magic
   paquete p5-WWW-RobotRules
@@ -1051,7 +1052,7 @@ if (test "$sn" = "s") then {
 
   ### Requieren recompilación en caso de incluir cambio en FILE
   #paquete unzip  # De no hacerse envía descompresiones a salida estándar
-  paquete python paquetes "python" "3.10"
+  paquete python paquetes "python" "3"
   paquete ruby paquetes "ruby ruby34-ri_docs" 3.4
   #paquete gettext-tools paquetes 'gettext-tools gettext-runtime'  # Requerido para compilar muchos
   #paquete m4 # Requerido para compilar bison (instalar antes de compilar bison)
@@ -1107,8 +1108,8 @@ if (test "$sn" = "s") then {
   #paquete zstd
 
   #paquete certbot paquetes "certbot py3-acme"
-  paquete cups
-  paquete dkimproxy
+  #paquete cups
+  #paquete dkimproxy
   #paquete dovecot
   #paquete dtc
   paquete firefox-esr
@@ -1117,43 +1118,43 @@ if (test "$sn" = "s") then {
   #paquete gtk+3 paquetes "gtk+3-cups"
   #paquete gdal
   paquete ghostscript
-  #paquete gnutls
+  paquete gnutls
   #paquete gnupg
   #paquete gvfs
-  paquete libarchive
-  paquete libcupsfilters
+  #paquete libarchive
+  #paquete libcupsfilters
   #paquete libgcrypt
-  paquete libgsf
-  paquete libinih
+  #paquete libgsf
+  #paquete libinih
   #paquete libmad
-  paquete libppd
+  #paquete libppd
   #paquete libssh
-  paquete libunbound
+  #paquete libunbound
   #paquete libvpx
   #paquete libxml
   #paquete libxslt
   #paquete lz4
   #paquete mariadb-client paquetes "mariadb-client mariadb-server" 
-  paquete mpg123
+  #paquete mpg123
   #paquete mutt
   #paquete nginx
   #paquete nspr
   #paquete oniguruma 
-  paquete openssl paquetes "openssl" 3.3
+  #paquete openssl paquetes "openssl" 3.3
   #paquete openssl paquetes "openssl" 3.2
   #paquete opus
   #paquete quirks
   #paquete pcre2 
   #paquete python paquetes "python" "2.7"
-  paquete python paquetes "python" "3"
-  paquete rsync
+  #paquete python paquetes "python" "3"
+  #paquete rsync
   #paquete samba paquetes "ldb samba tevent"
   #paquete sqlite3
   #paquete tiff
   #paquete unrar
-  paquete vim
+  #paquete vim
   #paquete wavpack
-  #paquete webkitgtk41
+  paquete webkitgtk41
   #paquete zsh
 
   ###  

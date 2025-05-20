@@ -188,6 +188,7 @@ appstream-glib-[v]	Librería de metadatos AppStream
 adwaita-icon-theme-[v]	Tema de iconos para GNOME
 adwaita-icon-theme-legacy-[v]
 argon2-[v]	Implementación en C de Argon 2 - condensado/hashing
+arrow-cpp-[v]
 aspell-[v]		Revisor de ortografía
 at-spi2-core-[v]	Interfaz de servicios para tecnologías asistentes
 atk2mm-[v]		Interfaz en C++ para la librería ATK
@@ -246,7 +247,9 @@ femail-chroot-[v]	Cliente simple de SMTP para Apache en jaula chroot
 ffcall-[v]		Librería para llamado a funciones foráneas
 fftw3-[v]		Rutinas en C para Transformada Discreta de Fourier
 fftw3-common-[v]	Archivos comunes para paquetes fftw3
+findutils-[v]
 flac-[v]		Codec abierto de audio sin perdidas
+flite-[v]
 flock-[v]	Administrador de flock para archivos de ordenes 
 foomatic-db-engine-[v]	Generador de PPDs de Foomatic
 foomatic-db-[v]	Datos PPD de Foomatic
@@ -283,6 +286,7 @@ glm-[v]		Encabezados de matemáticas de OpenGL
 glslang-[v]		Interfaz de referencia para GLSL y ESSL
 gmake-[v]		Construir programas a partir de fuentes
 gmp-[v]		Librería de aritmética de precisión arbitraría
+gmpxx-[v]
 gnome-icon-theme-[v]	Iconos para GNOME
 gnome-icon-theme-symbolic-[v]	Extensión al tema de iconos base
 gnupg-[v]		Remplazo de PGP
@@ -295,6 +299,9 @@ gsettings-desktop-schemas-[v]	Esquemas compartidos GSettings
 gsl-[v]		Librería científica
 gsm-[v]		Conversor de audio u-law a gsm
 gspell-[v]		Librería de revisión ortográfica para GTK+
+gst-plugins-bad-[v]
+gst-plugins-base-[v]
+gst-plugins-good-[v]
 gstreamer1-[v]	Ambiente para emitir multi-medios
 gstreamer1-plugins-bad-[v] Elementos malos para GStreamer
 gstreamer1-plugins-base-[v]	Elementos base para GStreamer
@@ -340,6 +347,7 @@ lapack-[v]		Librería de subrutinas de álgebra lineal
 lcdf-typetools-[v]	Herramientas para manipular archivos con tipografias
 lcms-[v]		Librería para manejo de color
 lcms2-[v]		Librería para manejo de color
+lerc-[v]
 lib2geom-[v]		Librería fácil de usar en C++ para geometría 2D
 libao-[v]		Librería portable para emitir audio
 libarchive-[v]	Librería para leer y escribir archivos de emisión
@@ -604,6 +612,7 @@ p5-Mail-Tools-[v]	Módulo para manejar correo con Perl
 p5-Math-Base-Convert-[v]	Conversor rápido de una base a otra
 p5-MaxMind-DB-Common-[v]	Compartido por módulos reader y writer
 p5-MaxMind-DB-Reader-[v]	Lee bases DB y busca direcciones IP
+p5-MIME-Base32-[v]
 p5-MIME-Charset-[v]	Información del juego de caracteres para MIME
 p5-MIME-Types-[v]	Módulo perl para manejar tipos MIME
 p5-MLDBM-[v]		Almacena estructura de hash multi nivel en uno solo
@@ -742,6 +751,9 @@ py3-MarkupSafe-[v]	Implementa una cadena segura de marcado XML/HTML/XHTML
 py3-lxml-[v]		Uniones en Python para libxml2 y libxslt
 py3-mako-[v]		Lenguaje de plantillas super rápido
 py3-markdown-[v]	Herramienta oara cibvertir texto a HTML
+py3-more-itertools-[v]
+py3-typing_extensions-[v]
+py3-wheel-[v]
 py3-ndg-httpsclient-[v]	Soporte HTTPS ampliado para httplib y urllib2
 py3-numpy-[v]	Librearía numérica y de arreglos rápida en Python
 py3-openssl-[v]	Interfaz para python a librería OpenSSL
@@ -780,6 +792,7 @@ qtwebsockets-[v]	Implementación para Qt5 del protocolo WebSocket
 qtxmlpatterns-[v]	Soporte Qt5 para XPath, XQuery, XLST y esquemas XML
 qtx11extras-[v]	Partes específicas de Qt para X11
 quirks-[v]		Excepciones a reglas de pkg_add
+rapidjson-[v]
 raptor-[v]		Herramientas para reconocer RDF usadas por redland
 rasqal-[v]		Librería de consultas RDF para Redland
 re2c-[v]		Generador de reconocedores de expresiones regulares
@@ -793,6 +806,7 @@ shaderc-[v]	Compilador de sombreador SL/HLSL a SPIR-V
 sdl-[v]		Librería multimedia
 sdl2-[v]		Versión 2 de la librería multimedia
 sdl-image-[v]	Librería de imágenes de SDL
+sfcgal-[v]
 silc-toolkit-[v]	Herramientas para desarrollo de aplicaciones SILC
 smartmontools-[v]	Control y monitoreo de almacenamiento con SMART
 snappy-[v]		Librería para compresión/descompresión rápida
@@ -811,6 +825,7 @@ tdb-[v]		Librería para base de datos trivial
 tiff-[v]		Manipula formato gráfico TIFF
 transfig-[v]		Herramientas para convertir archivos .fig de Xfig
 tree-sitter-[v] 	Herramient para generar reconocedores de sintaxis
+thrift-[v]
 twolame-[v]		Codificador de MPEG Audio Capa 2 (MP2) optimizado
 unibilium-[v]		Librería básica de terminfo
 updatedb-[v]		pkg_add speed up cache

@@ -3,14 +3,14 @@
 # Dominio público. 2022. vtamara@pasosdeJesus.org
 
 V=7.7
-VESP="a1"
+VESP="b1"
 # Versión que se está desarrollando
 
 VPKGPATH=snapshots
 VPKGPATH=$V
 
 VP=`echo $V | sed -e "s/[.]//g"`
-VP=76
+VP=77
 VU=`echo $V | sed -e "s/[.]/_/g"`
 VNUM=`echo $V | sed -e "s/\.//g"`
 VNUMS=`expr $VNUM + 1`
@@ -57,9 +57,9 @@ export XSRCDIR=/usr/xenocara;
 # Estas variables controlan operacion de distribucion.sh pueden ser s o n
 export autoCvs=n
 # Actualizar fuentes y portes del CVS de OpenBSD 
-export autoCompKernel=n
+export autoCompKernel=s
 # Transformar y compilar kernel 
-export autoInsKernel=n
+export autoInsKernel=s
 # Instalar kernel compilado
 export autoActZonasHorarias=n
 # Actualizar zonas horarias
