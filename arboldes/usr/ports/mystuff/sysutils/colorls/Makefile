@@ -1,7 +1,9 @@
+# $OpenBSD: Makefile,v 1.41 2021/05/09 13:38:57 naddy Exp $
+
 COMMENT=	ls(1) that can use color to display file attributes
 
-VERSION=	7.6
-REVISION=0
+VERSION=	6.9
+REVISION=1
 DISTNAME=	ls-${VERSION}
 PKGNAME=	colorls-${VERSION}
 CATEGORIES=	sysutils
@@ -11,10 +13,11 @@ MAINTAINER=	Christian Weisgerber <naddy@openbsd.org>
 # BSD
 PERMIT_PACKAGE=	Yes
 
-SITES=		https://shell.uugrn.org/~naddy/
+SITES=	https://shell.uugrn.org/~naddy/
 
 WANTLIB=	c curses util
 
+WRKDIST=	${WRKDIR}/ls
 NO_TEST=	Yes
 
 # copy file and substitute a string near a CVS keyword
