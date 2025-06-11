@@ -844,6 +844,7 @@ if (test "$sn" = "s") then {
   # Deben estar en mystuff
 
 
+
   # Todo lo de perl tuvo que recompilarse
   # evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
   # Si por ejemplo es:
@@ -1189,7 +1190,7 @@ if (test "$sn" = "s") then {
   ##
   # Retroportados no existentes en versión actual
 
-  paquete misc/llama-cpp
+  paquete misc/llama.cpp paquetes llama-cpp
 
   ####
   # Adaptados de portes estables pero mejorados para adJ, por 
