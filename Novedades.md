@@ -92,10 +92,15 @@ Novedades tomadas de <https://www.openbsd.org/76.html>
 
 * Incluye `evangelios_dp-0.9.12` con traducción y marcado Strong del
   comienzo del nuevo testamento hasta I Timoteo
-* Retroportamos el paquete llama-cpp que permite ejecutar modelos de IA
+* Hemos podido desarrollar aplicaciones para Android desde adJ/OpenBSD
+  usando Android Studio Cloud como se describe en:
+  https://dhobsd.pasosdejesus.org/usando-android-studio-cloud-en-adj-openbsd-7-7.html
+* Hemos empezado a usar Next.js en aplicaciones cliente servidor.
+
+* Retroportamos el paquete `llama-cpp` que permite ejecutar modelos de IA
   usando vulkan y tarjetas graficadoras. Al respecto escribimos este
   artículo: <https://dhobsd.pasosdejesus.org/probando-el-espanol-de-modelos-simplificados-de-ia-con-deepseek-r1-en-adj-openbsd-7-6.html>
-* Retroportamos ruby 3.4.1 de OpenBSD-current. Los portes para ruby de OpenBSD 
+* Retroportamos ruby 3.4.4 de OpenBSD-current. Los portes para ruby de OpenBSD 
   diligentemente mantenidos por Jeremy Evans, quitan el aviso de actualizar 
   gemas del sistema cuando hay nuevas versiones disponibles, 
   pues implícitamente sugiere instalar el paquete de la gema de Ruby para 
@@ -104,7 +109,9 @@ Novedades tomadas de <https://www.openbsd.org/76.html>
   y  mantenemos el comportamiento original de Ruby y sugerimos actualizar 
   gemas del sistema tan pronto y tanto como sea posible con
   `doas gem update --system`
-* Actualizamos porte de PostgreSQL 16.4 a 16.6
+* Actualizamos porte de PostgreSQL de 16.6 a 17.5, recuerde hacer un volcado
+  antes de comenzar a actualizar.
+* Actualizamos porte de colorls a la versión 7.6
 * Para aprovechar el xlocale extendido de adJ se han recompilado todos
   los paquetes incluidos para perl (comienzan con `p5`) y
   `vlc`, `glib2` y `libunistring`.

@@ -44,7 +44,7 @@ SUBST_VARS+=		GEM_BIN_SUFFIX GEM_MAN_SUFFIX
 FLAVOR?=
 # Without a FLAVOR, assume the use of ruby 3.3.
 .    if empty(FLAVOR)
-FLAVOR =		ruby34
+FLAVOR =		ruby33
 .    endif
 
 # Check for conflicting FLAVORs and set MODRUBY_REV appropriately based
@@ -154,10 +154,8 @@ EXTRACT_SUFX=	.gem
 
 .  if ${CONFIGURE_STYLE:L:Mext}
 # Use ports-gcc for ruby32 extensions if base does not use clang
-.    if ${FLAVOR:Mruby32} || ${FLAVOR:Mruby33} || ${FLAVOR:Mruby34} 
 COMPILER ?= 	base-clang ports-gcc
 COMPILER_LANGS ?= c
-.    endif
 # Add build complete file to package so rubygems doesn't complain
 # or build extensions at runtime
 GEM_EXTENSIONS_DIR ?= ${GEM_LIB}/extensions/${MODRUBY_ARCH:S/i386/x86/}/${MODRUBY_REV}/${DISTNAME}

@@ -1,15 +1,10 @@
-VERSION =		3.3.5
+VERSION =		3.3.8
 DISTNAME =		ruby-${VERSION}
 PKGNAME-main =		ruby-${VERSION}
 PKGNAME-ri_docs =	ruby${BINREV}-ri_docs-${VERSION}
 SHARED_LIBS =		ruby33	0.0
 NEXTVER =		3.4
 PKGSPEC-main ?=         ruby->=3.3.0,<${NEXTVER}
-
-SITES.p1 =		https://github.com/ruby/openssl/commit/
-
-# Fix openssl test failure
-PATCHFILES.p1 +=	ruby33-openssl-csr-version-failure{c06fdeb0912221d9a2888369bbf9c10704af021e}.patch
 
 PSEUDO_FLAVORS=		no_ri_docs bootstrap
 # Do not build the RI docs on slow arches
@@ -29,6 +24,10 @@ MAKE_ENV +=		LIBRUBY_DLDFLAGS="-lc++abi"
 .if ${MACHINE_ARCH:Maarch64}
 # Disable YJIT on arm64 until it is fixed
 CONFIGURE_ARGS +=	--disable-yjit
+.endif
+
+.if ${MACHINE_ARCH:Mriscv64}
+CONFIGURE_ARGS +=	--with-coroutine=riscv64
 .endif
 
 MULTI_PACKAGES =	-main -ri_docs

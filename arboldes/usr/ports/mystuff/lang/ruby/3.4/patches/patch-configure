@@ -1,3 +1,5 @@
+Using -mbranch-protection=standard to build with BTI support on aarch64.
+
 Set correct shared library name.
 
 Override the arch setting to remove OpenBSD version from it,
@@ -6,6 +8,15 @@ so ports don't have to be bumped when OpenBSD version changes.
 Index: configure
 --- configure.orig
 +++ configure
+@@ -11057,7 +11057,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.b
+         if test "x$rb_cv_libunwind_broken_ra_signing" = "xno"
+ then :
+ 
+-            for opt in -mbranch-protection=pac-ret -msign-return-address=all
++            for opt in -mbranch-protection=standard -msign-return-address=all
+ do :
+ 
+                 # Try these flags in the _prepended_ position - i.e. we want to try building a program
 @@ -32280,7 +32280,7 @@ fi
  	 ;; #(
    openbsd*|mirbsd*) :

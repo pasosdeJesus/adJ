@@ -1,4 +1,4 @@
-VERSION =		3.4.1
+VERSION =		3.4.4
 DISTNAME =		ruby-${VERSION}
 PKGNAME-main =		ruby-${VERSION}
 PKGNAME-ri_docs =	ruby${BINREV}-ri_docs-${VERSION}
@@ -19,6 +19,15 @@ FLAVOR?=
 MODULES +=		lang/rust
 WANTLIB-main +=		c++abi
 MAKE_ENV +=		LIBRUBY_DLDFLAGS="-lc++abi"
+.endif
+
+.if ${MACHINE_ARCH:Maarch64}
+# Disable YJIT on arm64 until it is fixed
+CONFIGURE_ARGS +=	--disable-yjit
+.endif
+
+.if ${MACHINE_ARCH:Mriscv64}
+CONFIGURE_ARGS +=	--with-coroutine=riscv64
 .endif
 
 MULTI_PACKAGES =	-main -ri_docs

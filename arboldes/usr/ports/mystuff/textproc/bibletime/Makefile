@@ -24,14 +24,11 @@ MAINTAINER=	Vladimir Tamara Patino <vtamara@pasosdejesus.org>
 #GPL
 PERMIT_PACKAGE=	Yes
 
-MODULES += devel/cmake \
-	   x11/qt5 \
-	   lang/clang
+MODULES += devel/cmake x11/qt5 lang/clang
 
 COMPILER = 	base-clang #ports-gcc
 
-BUILD_DEPENDS += devel/cmake \
-		 textproc/sword \
+BUILD_DEPENDS += textproc/sword \
 		 textproc/clucene
 
 RUN_DEPENDS = 	x11/qt5/qtwebkit \
