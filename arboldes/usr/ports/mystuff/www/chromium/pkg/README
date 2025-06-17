@@ -41,3 +41,6 @@ Interoperability with base window managers:
 - some window managers do not have compositing support; for instance, fvwm.
 In order to have decent graphic rendering, they should be supplemented by
 a compositing manager. For instance, xcompmgr in base.
+
+WebAssembly support:
+- WebAssembly can be disabled by setting ENABLE_WASM=0 in your environment.

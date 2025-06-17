@@ -1,3 +1,4 @@
+BROKEN-i386 =		v8/src/compiler/turboshaft/int64-lowering-reducer.h:295:24: error: call to member function 'Word32Constant' is ambiguous (but will probably run out of memory linking under DPB even if fixed)
 BROKEN-powerpc64 =	Check failed: false. OS architecture not handled. (powerpc64)
 
 USE_WXNEEDED=		Yes
@@ -9,7 +10,7 @@ DPB_PROPERTIES+=	lonesome
 
 COMMENT=		Chromium browser
 
-V=			128.0.6613.137
+V=			135.0.7049.52
 
 REVISION=		0
 
@@ -18,16 +19,10 @@ DISTNAME=		chromium-${V}
 DISTFILES+=		${CHROMIUM_DISTFILES} \
 			${REGRESS_DISTFILES}
 
-DISTFILES.a+=		${PROFILE_DISTFILES} \
-			${REGRESS_DISTFILES.a}
-
 CHROMIUM_DISTFILES+=	chromium-${V}${EXTRACT_SUFX}
-PROFILE_DISTFILES+=	chrome-linux-${V}-llvm17.profdata${EXTRACT_SUFX}
 REGRESS_DISTFILES+=	chromium-${V}-testdata${EXTRACT_SUFX}
-REGRESS_DISTFILES.a+=	test_fonts-336e775eec536b2d785cc80eff6ac39051931286.tar.gz
 
-EXTRACT_ONLY=		${CHROMIUM_DISTFILES} \
-			${PROFILE_DISTFILES}
+EXTRACT_ONLY=		${CHROMIUM_DISTFILES}
 
 CATEGORIES=		www
 
@@ -45,11 +40,10 @@ FLAVOR?=
 PERMIT_PACKAGE =	Yes
 
 SITES=		https://commondatastorage.googleapis.com/chromium-browser-official/
-SITES.a=	http://nerd.hu/distfiles/
 
 MODULES=	lang/clang lang/python x11/qt5
 
-MODCLANG_VERSION=	17
+MODCLANG_VERSION=	19
 MODQT5_DEPS=		No
 MODPY_RUNDEP=		No
 
@@ -86,7 +80,7 @@ BUILD_DEPENDS=	archivers/bzip2 \
 		sysutils/flock \
 		sysutils/pciutils \
 		devel/ninja \
-		x11/py-xcbgen${MODPY_FLAVOR} \
+		x11/py-xcbgen \
 		x11/qt5/qtbase,-main \
 		${MODGCC4_CPPDEP} \
 		${RUN_DEPENDS}
@@ -148,7 +142,6 @@ GN_SYSTEM_LIBS=	dav1d \
 		fontconfig \
 		icu \
 		libaom \
-		libevent \
 		libjpeg \
 		libpng \
 		libvpx \
@@ -164,7 +157,6 @@ GN_ARGS=	enable_nacl=false \
 		optimize_webui=true \
 		enable_remoting=false \
 		enable_hangout_services_extension=true \
-		enable_log_error_not_reached=true \
 		use_kerberos=false \
 		use_sndio=true \
 		use_pulseaudio=true \
@@ -183,7 +175,7 @@ GN_ARGS=	enable_nacl=false \
 		use_partition_alloc_as_malloc=false \
 		enable_backup_ref_ptr_support=false \
 		disable_fieldtrial_testing_config=true \
-		extra_cppflags=\"-idirafter ${LOCALBASE}/include -idirafter ${X11BASE}/include\" \
+		extra_cppflags=\"-I${LOCALBASE}/include/libepoll-shim -idirafter ${LOCALBASE}/include -idirafter ${X11BASE}/include\" \
 		fatal_linker_warnings=false \
 		use_custom_libcxx=true \
 		use_custom_libunwind=true \
@@ -266,6 +258,7 @@ post-patch:
 	@ln -sf ${TRUEPREFIX}/bin/node ${WRKSRC}/third_party/node/openbsd/node-openbsd/bin/node
 	${SUBST_CMD} ${WRKSRC}/build/gn_run_binary.py \
 		${WRKSRC}/build/rust/rust_bindgen.gni \
+		${WRKSRC}/build/rust/rust_bindgen_generator.gni \
 		${WRKSRC}/v8/tools/run.py \
 		${WRKSRC}/tools/protoc_wrapper/protoc_wrapper.py \
 		${WRKSRC}/third_party/blink/renderer/build/scripts/run_with_pythonpath.py
@@ -355,9 +348,8 @@ pre-test:
 	@${ECHO_MSG} "Extracting ${_d}"
 	@case ${_d} in \
 	*testdata*.tar.xz) \
-		xzdec <${FULLDISTDIR}/${_d} | ${TAR} -C ${WRKDIR} -xf -;; \
-	*font*.tar.gz) \
-		${GZIP_CMD} -d <${FULLDISTDIR}/${_d} | ${TAR} -C ${WRKDIST}/third_party/test_fonts -xf -;; \
+		test -d ${WRKSRC}/base/tracing/test/data || \
+			xzdec <${FULLDISTDIR}/${_d} | ${TAR} -C ${WRKDIR} -xf -;; \
 	esac;
 .endfor
 
