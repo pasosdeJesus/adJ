@@ -1,4 +1,4 @@
-#	$OpenBSD: install.md,v 1.62 2023/10/11 17:53:52 kn Exp $
+#	$OpenBSD: install.md,v 1.66 2025/03/29 14:26:41 kn Exp $
 #
 # Copyright (c) 1996 The NetBSD Foundation, Inc.
 # All rights reserved.
@@ -36,12 +36,12 @@ MDXAPERTURE=2
 MDXDM=y
 NCPU=$(sysctl -n hw.ncpufound)
 
-if dmesg | grep -q 'efifb0 at mainbus0'; then
-	MDEFI=y
-fi
+# Two reasons to prefer GPT instead of MBR
+grep -q -e '^efifb0 at mainbus0' -e '^acpi0 at bios0: ACPI [5-9]\.' \
+    $DMESGBOOT && MDEFI=y
 
 md_installboot() {
-	if ! installboot -r /mnt ${1}; then
+	if ! installboot -cr /mnt ${1}; then
 		echo "\nFailed to install bootblocks."
 		echo "You will not be able to boot OpenBSD from ${1}."
 		exit

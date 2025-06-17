@@ -1,5 +1,5 @@
 #!/bin/ksh
-#	$OpenBSD: install.sub,v 1.1266 2024/07/09 14:47:21 krw Exp $
+#	$OpenBSD: install.sub,v 1.1269 2025/04/06 11:54:36 kn Exp $
 #
 # Copyright (c) 1997-2015 Todd Miller, Theo de Raadt, Ken Westerback
 # Copyright (c) 2015, Robert Peichaer <rpe@openbsd.org>
@@ -253,7 +253,7 @@ lease_value() {
 	done
 }
 
-# Extract one boot's worth of dmesg.
+# Extract the latest boot's worth of dmesg.
 dmesgtail() {
 	dmesg | sed -n 'H;/^OpenBSD/h;${g;p;}'
 }
@@ -290,9 +290,9 @@ make_dev() {
 	[[ -z $(cd /dev && sh MAKEDEV "$@" 2>&1) ]]
 }
 
-# Sort and print information from dmesg.boot using sed expression $1.
+# Sort and print the current boot's information using sed expression $1.
 scan_dmesg() {
-	bsort $(sed -n "$1" /var/run/dmesg.boot)
+	bsort $(sed -n "$1" $DMESGBOOT)
 }
 
 # Extract device names from hw.disknames matching sed expression $1.
@@ -1146,7 +1146,7 @@ v6_info() {
 # in the /etc/mygate file. Ask the user to either select from a list of default
 # router candidates or to enter a router IPv6 address.
 v6_defroute() {
-	local _if _v6ifs _prompt _resp _routers _dr PS3
+	local _if _v6ifs _prompt _resp _routers _dr
 
 	# Only configure a default route if an IPv6 address was manually configured.
 	for _if in $(get_ifs); do
@@ -1179,14 +1179,30 @@ v6_defroute() {
 			route -n add -inet6 -host default $resp &&
 			echo $resp >>/tmp/i/mygate
 	else
-		PS3="$_prompt (list #, IPv6 address or 'none') "
-		select _resp in none $_routers; do
-			[[ $REPLY == none || $_resp == none ]] && break
-			[[ -z $_resp ]] && _resp=$REPLY
+		set -A _routers -- $_routers
+		while :; do
+			ask_until "$_prompt (IPv6 address, list#, 'none' or '?')"
+			case $resp in
+			none)	return
+				;;
+			'?')	for _dr in ${_routers[@]}; do
+					echo $_dr
+				done | cat -n
+				continue
+				;;
+			+([0-9]))
+				if ((resp < 1 || resp > ${#_routers[@]})); then
+					echo "$resp is not a valid choice."
+					continue
+				fi
+				resp=${_routers[$((--resp))]}
+				;;
+			esac
+
 			# Avoid possible "file exists" errors
-			route -n -q delete -inet6 -host default $_resp
-			if route -n add -inet6 -host default $_resp; then
-				echo $_resp >>/tmp/i/mygate
+			route -n -q delete -inet6 -host default "$resp"
+			if route -n add -inet6 -host default "$resp"; then
+				echo "$resp" >>/tmp/i/mygate
 				break
 			fi
 		done
@@ -1909,7 +1925,7 @@ install_http() {
 			HTTP_SERVER=${1%%/*}
 			# Repeat loop to get user to confirm server address.
 			;;
-		?(http?(s)://)+([A-Za-z0-9:.\[\]_-]))
+		?(http?(s)://)+([A-Za-z0-9:.\[\]%_-]))
 			case $resp in
 			https://*)	_tls=force _http_proto=https;;
 			http://*)	_tls=no    _http_proto=http;;
@@ -3578,6 +3594,10 @@ done
 cd /
 umount -af >/dev/null 2>&1
 
+# Save the current boot's dmesg.
+DMESGBOOT=/var/run/dmesg.boot
+dmesgtail >$DMESGBOOT
+
 # Include machine-dependent functions and definitions.
 #
 # The following functions must be provided:
@@ -3630,9 +3650,6 @@ V4_AUTOCONF=false
 V6_AUTOCONF=false
 WLANLIST=/tmp/i/wlanlist
 
-# Save one boot's worth of dmesg.
-dmesgtail >/var/run/dmesg.boot
-
 # Are we in a real release, or a snapshot?  If this is a snapshot
 # install media, default us to a snapshot directory.
 HTTP_SETDIR=$SETDIR
@@ -3648,7 +3665,7 @@ else
 	HTTP_PROTO=http
 fi
 
-# Scan /var/run/dmesg.boot for console device.
+# Scan for console device.
 CONSOLE=$(scan_dmesg '/^\([^ ]*\).*: console$/s//\1/p')
 [[ -n $CONSOLE ]] && CSPEED=$(stty speed </dev/console)
 
