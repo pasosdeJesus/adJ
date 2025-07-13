@@ -3,10 +3,10 @@
 # Dominio público de acuerdo a legislación colombiana. http://www.pasosdejesus.org/dominio_publico_colombia.html. 
 # 2022. vtamara@pasosdeJesus.org
 
-VER=7.6
+VER=7.7
 REV=
-VESP="p1"
-VERP=76
+VESP=""
+VERP=77
 
 # Falta /standard/root.hint
 
@@ -1468,6 +1468,12 @@ if (test "$?" != "0") then {
   vac="$vac 7.3 a 7.4";
   echo "Aplicando actualizaciones de 7.3 a 7.4" >> /var/www/tmp/inst-adJ.bitacora;
   groupadd -g 118 _shutdown
+} fi;
+
+if (test -f /usr/libdata/perl5/*/PerlIO/scalar.pm) then {
+  vac="$vac 7.6 a 7.7";
+  rm -rf /usr/libdata/perl5/*/PerlIO/scalar.pm \
+    /usr/libdata/perl5/*/auto/PerlIO/scalar
 } fi;
 
 if  (test "$vac" != "") then {
