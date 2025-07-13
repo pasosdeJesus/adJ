@@ -4,7 +4,7 @@ Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
 
 ### Versión: 7.7
-Fecha de publicación: 14/Feb/2025
+Fecha de publicación: 1/Jul/2025
 
 Puedes ver novedades respecto a OpenBSD en:
   <https://gitlab.com/pasosdeJesus/adJ/-/blob/ADJ_7_7/Novedades_OpenBSD.md>
@@ -52,7 +52,7 @@ encontrarás:
 
 Novedades tomadas de <https://www.openbsd.org/76.html>
 
-* Aplicados parches de seguridad hasta el 5.Feb.2025 provenientes de
+* Aplicados parches de seguridad hasta el 17.Jun.2025 provenientes de
   OpenBSD que incluyen soluciones a fallas
 * Controladores ampliados o mejorados para amd64
   * Tarjetas Ethernet: `rge` ahora soporta Realtek RTL8126 de 2.5Gb
@@ -92,9 +92,6 @@ Novedades tomadas de <https://www.openbsd.org/76.html>
 
 * Incluye `evangelios_dp-0.9.12` con traducción y marcado Strong del
   comienzo del nuevo testamento hasta I Timoteo
-* Retroportamos el paquete llama-cpp que permite ejecutar modelos de IA
-  usando vulkan y tarjetas graficadoras. Al respecto escribimos este
-  artículo: <https://dhobsd.pasosdejesus.org/probando-el-espanol-de-modelos-simplificados-de-ia-con-deepseek-r1-en-adj-openbsd-7-6.html>
 * Retroportamos ruby 3.4.4 de OpenBSD-current. Los portes para ruby de OpenBSD 
   diligentemente mantenidos por Jeremy Evans, quitan el aviso de actualizar 
   gemas del sistema cuando hay nuevas versiones disponibles, 
@@ -104,7 +101,9 @@ Novedades tomadas de <https://www.openbsd.org/76.html>
   y  mantenemos el comportamiento original de Ruby y sugerimos actualizar 
   gemas del sistema tan pronto y tanto como sea posible con
   `doas gem update --system`
-* Actualizamos porte de PostgreSQL 16.4 a 16.6
+* Actualizamos porte de PostgreSQL 16.6 a 17.5. Haga copia de respaldo antes
+  de actualizar el sistema operativo y en lo posible usa pg_upgrade como
+  se describe en 
 * Para aprovechar el xlocale extendido de adJ se han recompilado todos
   los paquetes incluidos para perl (comienzan con `p5`) y
   `vlc`, `glib2` y `libunistring`.

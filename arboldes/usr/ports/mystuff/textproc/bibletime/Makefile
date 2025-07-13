@@ -30,8 +30,7 @@ MODULES += devel/cmake \
 
 COMPILER = 	base-clang #ports-gcc
 
-BUILD_DEPENDS += devel/cmake \
-		 textproc/sword \
+BUILD_DEPENDS += textproc/sword \
 		 textproc/clucene
 
 RUN_DEPENDS = 	x11/qt5/qtwebkit \

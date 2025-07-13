@@ -843,7 +843,7 @@ if (test "$sn" = "s") then {
   # Modificados para posibilitar compilación
   # Deben estar en mystuff
 
-
+  paquete python paquetes "python" "3"
 
   # Todo lo de perl tuvo que recompilarse
   # evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
@@ -1113,8 +1113,8 @@ if (test "$sn" = "s") then {
   #paquete dkimproxy
   #paquete dovecot
   #paquete dtc
-  paquete firefox-esr
-  paquete www/firefox-esr-i18n paquetes "firefox-esr-i18n-es-AR"
+  #paquete firefox-esr # No logra compilarlo
+  #paquete www/firefox-esr-i18n paquetes "firefox-esr-i18n-es-AR"
   #paquete flac
   #paquete gtk+3 paquetes "gtk+3-cups"
   #paquete gdal
@@ -1146,6 +1146,7 @@ if (test "$sn" = "s") then {
   #paquete opus
   #paquete quirks
   #paquete pcre2 
+  paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 8.3
   #paquete python paquetes "python" "2.7"
   #paquete python paquetes "python" "3"
   #paquete rsync
@@ -1162,7 +1163,6 @@ if (test "$sn" = "s") then {
   # Recompilados de estable que usan xlocale (y pueden cerrar fallas)
   # No deben estar en mystuff
 
-  paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 8.3
 
   ###
   # Recompilados para mejorar dependencias y actualizar
