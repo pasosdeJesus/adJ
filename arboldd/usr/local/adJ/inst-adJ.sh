@@ -2092,6 +2092,7 @@ if (test -f /var/postgresql/data/PG_VERSION) then {
   } fi;
 } fi;
 
+eliminopg=""
 f=`ls /var/db/pkg/postgresql-server* 2> /dev/null > /dev/null`;
 if (test "$?" = "0" -a "$v_pg_ac" != "$v_pg_sig") then {
 	dialog --title 'Actualización mayor a PostgreSQL eliminando' --yesno "\\nSi no ha hecho copia de respaldo detenga este script.  Desea eliminar la actual versión de PostgreSQL y los datos asociados para actualizarla\\n" 15 60
@@ -2112,6 +2113,9 @@ if (test "$?" = "0" -a "$v_pg_ac" != "$v_pg_sig") then {
 		done;
 		tar cvfz /var/postgresql/${nd}.tar.gz /var/postgresql/data >> /var/www/tmp/inst-adJ.bitacora 2>&1
 		rm -rf /var/postgresql/data
+    eliminopg="si"
+  } else {
+    eliminopg="no"
 	} fi;
 } fi;
 
@@ -2317,7 +2321,7 @@ if (test ! -S "$sockpsql/.s.PGSQL.5432") then {
 
 pb=`ls -t /var/www/resbase/pga*sql 2>/dev/null | head -n 1`;
 echo "pb=$pb" >> /var/www/tmp/inst-adJ.bitacora;
-if (test -f "$pb") then {
+if (test -f "$pb" -a "$eliminopg" != "no") then {
 	echo -n " (s/n): " >> /var/www/tmp/inst-adJ.bitacora;
 	dialog --title 'Restaurar' --yesno "\\nRestaurar la copia de respaldo $pb\\n" 15 60
 	if (test "$?" = "0") then {
