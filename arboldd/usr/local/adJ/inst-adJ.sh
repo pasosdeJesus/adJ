@@ -2065,31 +2065,36 @@ if (test -f /var/postgresql/data/PG_VERSION) then {
   v_pg_sig=`ls $PKG_PATH/postgresql-server-*.tgz | sed -e "s/.*server-\([0-9]*\)[.].*/\1/g"`;
   echo "v_pg_sig=$v_pg_sig" >> /var/www/tmp/inst-adJ.bitacora
   if (test "$v_pg_sig" = "") then {
-    echo "No se encontró paquete postgresql en instaladores de adJ. Está incompleta se recomienda detener con ControlC y descargarla completa";
+    echo "No se encontró paquete postgresql en instaladores de adJ. Está incompleta se recomienda detener con Control-C y descargarla completa";
     read;
   } else {
     if (test "$v_pg_ac" != "") then {
       if (test "$v_pg_ac" = "$v_pg_sig") then {
-        echo "No hay cambio mayor de version de PostgreSQL quedará en $v_pg_sig, no es necesario ejecutar pg_upgrade ni restaruar respaldos solo detener, actualizar y volver a arrancar";
+        echo "No hay cambio mayor de version de PostgreSQL quedará en "\
+          "$v_pg_sig, no es necesario respaldar+eliminar+instalar+restaurar "\
+          "ni ejecutar pg_upgrade solo no iniciarla, actualizar y volver a arrancar";
+
       } else {
         echo "Hay un cambio mayor de versión de PostgreSQL pasando de $v_pg_ac a $v_pg_sig" | tee -a /var/www/tmp/inst-adJ.bitacora
         v_pg_ac_mas_uno=`expr $v_pg_ac + 1`
         echo "v_pg_ac_mas_uno=$v_pg_ac_mas_uno" >> /var/www/tmp/inst-adJ.bitacora;
         if (test "$v_pg_sig" = "$v_pg_ac_mas_uno") then {
-          echo "Sería mejor usar pg_upgrade si antes de actualizar prepara scripts para desconfigurar y configurar PostGIS";
+          dialog --title 'Actualización mayor a PostgreSQL con pg_upgrade' \
+          --yesno "\\nComo PostgreSQL pasa de $v_pg_ac a $v_pg_sig es posible actualizar con pg_upgrade como se describe en https://pasosdejesus.org/doc/servidor_adJ/otros_servicios_que_puede_prestar_el_servidor.html#pg-upgrade. Puede detener este script, ejecutar pg_upgrade y volver a inicar este script. \\n¿Desea detener este script para actualizar con pg_upgrade?\\n" 15 60
+          if (test "$?" = "0") then {
+            exit 1
+          } fi;
         } else {
           echo "Deberá restaurar volcado completo";
         } fi;
       } fi;
-      echo "[ENTER] para continuar";
-      read;
     } fi;
   } fi;
 } fi;
 
 f=`ls /var/db/pkg/postgresql-server* 2> /dev/null > /dev/null`;
-if (test "$?" = "0") then {
-	dialog --title 'Eliminar PostgreSQL' --yesno "\\nDesea eliminar la actual versión de PostgreSQL y los datos asociados para actualizarla\\n" 15 60
+if (test "$?" = "0" -a "$v_pg_ac" != "$v_pg_sig") then {
+	dialog --title 'Actualización mayor a PostgreSQL eliminando' --yesno "\\nSi no ha hecho copia de respaldo detenga este script.  Desea eliminar la actual versión de PostgreSQL y los datos asociados para actualizarla\\n" 15 60
 	if (test "$?" = "0") then {
 		echo "s" >> /var/www/tmp/inst-adJ.bitacora
 		pkg_delete -I -D dependencies postgis >> /var/www/tmp/inst-adJ.bitacora 2>&1
