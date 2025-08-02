@@ -2072,7 +2072,7 @@ if (test -f /var/postgresql/data/PG_VERSION) then {
       if (test "$v_pg_ac" = "$v_pg_sig") then {
         echo "No hay cambio mayor de version de PostgreSQL quedará en "\
           "$v_pg_sig, no es necesario respaldar+eliminar+instalar+restaurar "\
-          "ni ejecutar pg_upgrade solo no iniciarla, actualizar y volver a arrancar";
+          "ni ejecutar pg_upgrade solo actualizar paquete y volver a arrancar";
 
       } else {
         echo "Hay un cambio mayor de versión de PostgreSQL pasando de $v_pg_ac a $v_pg_sig" | tee -a /var/www/tmp/inst-adJ.bitacora
@@ -2855,27 +2855,27 @@ if (test -f "/usr/local/bin/ruby$VRUBYSP") then {
 
 echo "* Verificando limites sysctl buenos para ruby" >> /var/www/tmp/inst-adJ.bitacora;
 if (test `sysctl -n kern.shminfo.shmmni` -lt "1024") then {
-	echo "Aumentar valor de kern.shminfo.shmmni en /etc/sysctl.conf" | tee -a /var/www/tmp/inst-adJ.bitacora;
+	echo "* Aumentar valor de kern.shminfo.shmmni en /etc/sysctl.conf" | tee -a /var/www/tmp/inst-adJ.bitacora;
 } fi;
 if (test `sysctl -n kern.shminfo.shmmax` -lt "50331648") then {
-	echo "Aumentar valor de kern.shminfo.shmmax en /etc/sysctl.conf" | tee -a /var/www/tmp/inst-adJ.bitacora;
+	echo "* Aumentar valor de kern.shminfo.shmmax en /etc/sysctl.conf" | tee -a /var/www/tmp/inst-adJ.bitacora;
 } fi;
 if (test `sysctl -n kern.seminfo.semmns` -lt "2048") then {
-	echo "Aumentar valor de kern.seminfo.semmns /etc/sysctl.conf" | tee -a /var/www/tmp/inst-adJ.bitacora;
+	echo "* Aumentar valor de kern.seminfo.semmns /etc/sysctl.conf" | tee -a /var/www/tmp/inst-adJ.bitacora;
 } fi;
 if (test `sysctl -n kern.shminfo.shmall` -lt "51200") then {
-	echo "Aumentar valor de kern.shminfo.shmmall en /etc/sysctl.conf" | tee -a /var/www/tmp/inst-adJ.bitacora;
+	echo "* Aumentar valor de kern.shminfo.shmmall en /etc/sysctl.conf" | tee -a /var/www/tmp/inst-adJ.bitacora;
 } fi;
 if (test `sysctl -n kern.maxfiles` -lt "20000") then {
-	echo "Aumentar valor de kern.maxfiles en /etc/sysctl.conf" | tee -a /var/www/tmp/inst-adJ.bitacora;
+	echo "* Aumentar valor de kern.maxfiles en /etc/sysctl.conf" | tee -a /var/www/tmp/inst-adJ.bitacora;
 } fi;
 if (test ! -d /var/www/bundler/ruby/$VRUBY) then {
-  echo "Creando /var/www/bundler/$VRUBY" >> /var/www/tmp/inst-adJ.bitacora;
+  echo "* Creando /var/www/bundler/$VRUBY" >> /var/www/tmp/inst-adJ.bitacora;
   doas mkdir -p /var/www/bundler/ruby/$VRUBY/
   doas chown -R $uruby:www /var/www/bundler/ruby/$VRUBY/
 } fi;
 
-echo "Eliminando gemas generales repetidas" >> /var/www/tmp/inst-adJ.bitacora;
+echo "* Eliminando gemas generales repetidas" >> /var/www/tmp/inst-adJ.bitacora;
 for i in `gem list | grep "(.*," | sed -e "s/ *([^,]*,/,/g;s/, default: [^,]*//g;s/, /,/g;s/)$//g;s/  */ /g" `; do 
   echo $i; 
   n=`echo $i | sed "s/,.*//g"`
@@ -2888,13 +2888,13 @@ done
 # Seria bueno eliminar gemas repetidas de /var/www/bundler/ruby/gems/$VRUBY
 # gem uninstall no ha operado con --install-dir (aunque la documentacion dice que si).
 
-echo "Actualizando gemas del sistema" >> /var/www/tmp/inst-adJ.bitacora;
+echo "* Actualizando gemas del sistema" >> /var/www/tmp/inst-adJ.bitacora;
 gem update --system >> /var/www/tmp/inst-adJ.bitacora 2>&1
 
-echo "Reinstalando gemas generales" >> /var/www/tmp/inst-adJ.bitacora;
+echo "* Reinstalando gemas generales" >> /var/www/tmp/inst-adJ.bitacora;
 QMAKE=qmake-qt5 make=gmake MAKE=gmake doas gem pristine --all >> /var/www/tmp/inst-adJ.bitacora 2>&1
 
-echo "Reinstalando versiones mas actualizadas de gemas de /var/www/bundler/ruby/$VRUBY con extensiones cuando se cambia version menor" >> /var/www/tmp/inst-adJ.bitacora
+echo "* Reinstalando versiones mas actualizadas de gemas de /var/www/bundler/ruby/$VRUBY con extensiones cuando se cambia version menor" >> /var/www/tmp/inst-adJ.bitacora
 rm -f /usr/local/bin/bundle
 for i in `ls /var/www/bundler/ruby/$VRUBY/extensions/x86_64-openbsd/$VRUBY/ 2> /dev/null | sed -e "s/-[0-9.]*$//g" | sort -u`; do
   uj=""
@@ -2908,9 +2908,11 @@ for i in `ls /var/www/bundler/ruby/$VRUBY/extensions/x86_64-openbsd/$VRUBY/ 2> /
   eval "$cmd" >> /var/www/tmp/inst-adJ.bitacora 2>&1
 done
 
-echo "Instalando gemas importantes " >> /var/www/tmp/inst-adJ.bitacora
+echo "* Instalando gemas importantes " >> /var/www/tmp/inst-adJ.bitacora
 gem install pkg-config >> /var/www/tmp/inst-adJ.bitacora 2>&1
 gem install bundler >> /var/www/tmp/inst-adJ.bitacora 2>&1
+
+echo "VRUBYSP=$VRUBYSP" >> /var/www/tmp/inst-adJ.bitacora
 if (test -x /usr/lcoal/bin/bundle$VRUBYSP) then { 
       ln -sf /usr/local/bin/bundle$VRUBYSP /usr/local/bin/bundle
 } fi
@@ -2984,7 +2986,7 @@ if (test "$?" != "0") then {
 	#echo "  * Configure localización en español desde about:config general.useragent.local es-AR"
 	#echo "  * Como página de inicio use https://127.0.0.1/";
 } else {
-	echo "   Saltando..." >> /var/www/tmp/inst-adJ.bitacora;
+	echo "** Saltando..." >> /var/www/tmp/inst-adJ.bitacora;
 } fi;
 
 echo "* Permisos para aplicaciones" >> /var/www/tmp/inst-adJ.bitacora;
@@ -3065,25 +3067,25 @@ dialog --title 'Componentes básicos instalados' --msgbox "\\nInstalación y con
 #echo "Si hay inconvenientes puede examinar log de Apache en /var/www/logs/error y ayudar en el desarrollo de SIVeL suscribiendose y enviando sus mejoras a adJ-soporte@lists.sourceforge.net";
 
 clear
-echo "Eliminando parciales" >> /var/www/tmp/inst-adJ.bitacora 
+echo "* Eliminando parciales" >> /var/www/tmp/inst-adJ.bitacora 
 cd /var/db/pkg
 for i in partial-*; do 
 	echo $i >> /var/www/tmp/inst-adJ.bitacora ; 
 	pkg_delete -I-D dependencies  $i >> /var/www/tmp/inst-adJ.bitacora 2>&1
 done
 
-echo "Eliminando problemáticos" >> /var/www/tmp/inst-adJ.bitacora 
+echo "* Eliminando problemáticos" >> /var/www/tmp/inst-adJ.bitacora 
 pkg_delete -I -D dependencies libstdc++ >> /var/www/tmp/inst-adJ.bitacora  2>&1
 pkg_delete -I -D dependencies lua >> /var/www/tmp/inst-adJ.bitacora  2>&1
 pkg_delete -I -D dependencies gtk+2 >> /var/www/tmp/inst-adJ.bitacora  2>&1
 
 pkg_delete -I -D dependencies postgresql-docs
 
-echo "Instalando algunos comunes" >> /var/www/tmp/inst-adJ.bitacora 
+echo "* Instalando algunos comunes" >> /var/www/tmp/inst-adJ.bitacora 
 pkg_add -I -D repair -D updatedepends -D update -D libdepends -r $PKG_PATH/sdl*tgz $PKG_PATH/libxml*tgz $PKG_PATH/libgpg-error*tgz $PKG_PATH/libart-*.tgz  >> /var/www/tmp/inst-adJ.bitacora 2>&1
 pkg_add -I -D repair -D updatedepends -D update -D libdepends -r $PKG_PATH/gtk+2*tgz >> /var/www/tmp/inst-adJ.bitacora 2>&1
 
-echo "Instalando todos los disponibles en PKG_PATH" >> /var/www/tmp/inst-adJ.bitacora 
+echo "* Instalando todos los disponibles en PKG_PATH" >> /var/www/tmp/inst-adJ.bitacora 
 pkg_add -I -D repair -D update -u 
 cd /var/db/pkg/
 for i in $PKG_PATH/*tgz; do
@@ -3091,7 +3093,7 @@ for i in $PKG_PATH/*tgz; do
 	pkg_add -I -D repair -D updatedepends -D update -D libdepends -r $i >> /var/www/tmp/inst-adJ.bitacora 2>&1
 done;
 
-echo "Eliminando librerías innecesarias" >> /var/www/tmp/inst-adJ.bitacora 
+echo "* Eliminando librerías innecesarias" >> /var/www/tmp/inst-adJ.bitacora 
 cd /var/db/pkg
 for i in .libs*; do 
 	echo $i >> /var/www/tmp/inst-adJ.bitacora ; 
