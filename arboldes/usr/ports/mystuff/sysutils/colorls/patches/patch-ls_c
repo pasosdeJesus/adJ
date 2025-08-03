@@ -1,5 +1,6 @@
---- ls.c.orig	Fri Aug  5 21:32:46 2016
-+++ ls.c	Fri Aug  5 21:41:30 2016
+Index: ls.c
+--- ls.c.orig
++++ ls.c
 @@ -50,6 +50,10 @@
  #include <limits.h>
  #include <locale.h>
@@ -27,7 +28,7 @@
  
  int rval;
  
-@@ -103,6 +116,11 @@ ls_main(int argc, char *argv[])
+@@ -103,9 +116,14 @@ ls_main(int argc, char *argv[])
  	int ch, fts_options, notused;
  	int kflag = 0;
  	char *p;
@@ -38,7 +39,11 @@
 +#endif
  
  #ifndef SMALL
- 	setlocale(LC_CTYPE, "");
+-	setlocale(LC_CTYPE, "");
++	char *nl = setlocale(LC_ALL, "");
+ #endif
+ 
+ 	/* Terminal defaults to -Cq, non-terminal defaults to -1. */
 @@ -124,7 +142,11 @@ ls_main(int argc, char *argv[])
  	if (termwidth == 0)
  		termwidth = 80;

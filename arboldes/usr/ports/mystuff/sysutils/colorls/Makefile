@@ -1,6 +1,7 @@
 COMMENT=	ls(1) that can use color to display file attributes
 
-VERSION=	7.4
+VERSION=	7.6
+REVISION=	0
 DISTNAME=	ls-${VERSION}
 PKGNAME=	colorls-${VERSION}
 CATEGORIES=	sysutils
@@ -14,7 +15,6 @@ SITES=		https://shell.uugrn.org/~naddy/
 
 WANTLIB=	c curses util
 
-WRKDIST=	${WRKDIR}/ls
 NO_TEST=	Yes
 
 # copy file and substitute a string near a CVS keyword

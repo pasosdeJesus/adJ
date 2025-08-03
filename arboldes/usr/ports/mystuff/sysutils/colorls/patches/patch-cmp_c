@@ -1,6 +1,6 @@
-$OpenBSD$
---- cmp.c.orig	Mon Aug 22 15:48:41 2016
-+++ cmp.c	Mon Aug 22 15:48:51 2016
+Index: cmp.c
+--- cmp.c.orig
++++ cmp.c
 @@ -45,13 +45,13 @@
  int
  namecmp(const FTSENT *a, const FTSENT *b)
