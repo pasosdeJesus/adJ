@@ -1,0 +1,103 @@
+@conflict cargo-<0.20.0
+@pkgpath devel/cargo
+@bin bin/cargo
+@bin bin/rustc
+@bin bin/rustdoc
+@so lib/librustc_driver-${LIBRUST_HASH}11.so
+lib/rustlib/
+lib/rustlib/${TRIPLE_ARCH}/
+lib/rustlib/${TRIPLE_ARCH}/bin/
+@bin lib/rustlib/${TRIPLE_ARCH}/bin/rust-objcopy
+lib/rustlib/${TRIPLE_ARCH}/lib/
+lib/rustlib/${TRIPLE_ARCH}/lib/libaddr2line-${LIBRUST_HASH}00.rlib
+lib/rustlib/${TRIPLE_ARCH}/lib/libadler2-${LIBRUST_HASH}01.rlib
+lib/rustlib/${TRIPLE_ARCH}/lib/liballoc-${LIBRUST_HASH}02.rlib
+lib/rustlib/${TRIPLE_ARCH}/lib/libcfg_if-${LIBRUST_HASH}03.rlib
+lib/rustlib/${TRIPLE_ARCH}/lib/libcompiler_builtins-${LIBRUST_HASH}04.rlib
+lib/rustlib/${TRIPLE_ARCH}/lib/libcore-${LIBRUST_HASH}05.rlib
+lib/rustlib/${TRIPLE_ARCH}/lib/libgetopts-${LIBRUST_HASH}06.rlib
+lib/rustlib/${TRIPLE_ARCH}/lib/libgimli-${LIBRUST_HASH}07.rlib
+lib/rustlib/${TRIPLE_ARCH}/lib/libhashbrown-${LIBRUST_HASH}08.rlib
+lib/rustlib/${TRIPLE_ARCH}/lib/liblibc-${LIBRUST_HASH}09.rlib
+lib/rustlib/${TRIPLE_ARCH}/lib/libmemchr-${LIBRUST_HASH}0a.rlib
+lib/rustlib/${TRIPLE_ARCH}/lib/libminiz_oxide-${LIBRUST_HASH}0b.rlib
+lib/rustlib/${TRIPLE_ARCH}/lib/libobject-${LIBRUST_HASH}0c.rlib
+lib/rustlib/${TRIPLE_ARCH}/lib/libpanic_abort-${LIBRUST_HASH}0d.rlib
+lib/rustlib/${TRIPLE_ARCH}/lib/libpanic_unwind-${LIBRUST_HASH}0e.rlib
+lib/rustlib/${TRIPLE_ARCH}/lib/libproc_macro-${LIBRUST_HASH}0f.rlib
+lib/rustlib/${TRIPLE_ARCH}/lib/librustc_demangle-${LIBRUST_HASH}10.rlib
+lib/rustlib/${TRIPLE_ARCH}/lib/librustc_literal_escaper-${LIBRUST_HASH}12.rlib
+lib/rustlib/${TRIPLE_ARCH}/lib/librustc_std_workspace_alloc-${LIBRUST_HASH}13.rlib
+lib/rustlib/${TRIPLE_ARCH}/lib/librustc_std_workspace_core-${LIBRUST_HASH}14.rlib
+lib/rustlib/${TRIPLE_ARCH}/lib/librustc_std_workspace_std-${LIBRUST_HASH}15.rlib
+lib/rustlib/${TRIPLE_ARCH}/lib/libstd-${LIBRUST_HASH}16.rlib
+@so lib/rustlib/${TRIPLE_ARCH}/lib/libstd-${LIBRUST_HASH}16.so
+lib/rustlib/${TRIPLE_ARCH}/lib/libstd_detect-${LIBRUST_HASH}17.rlib
+lib/rustlib/${TRIPLE_ARCH}/lib/libsysroot-${LIBRUST_HASH}18.rlib
+lib/rustlib/${TRIPLE_ARCH}/lib/libtest-${LIBRUST_HASH}19.rlib
+lib/rustlib/${TRIPLE_ARCH}/lib/libunicode_width-${LIBRUST_HASH}1a.rlib
+lib/rustlib/${TRIPLE_ARCH}/lib/libunwind-${LIBRUST_HASH}1b.rlib
+@man man/man1/cargo-add.1
+@man man/man1/cargo-bench.1
+@man man/man1/cargo-build.1
+@man man/man1/cargo-check.1
+@man man/man1/cargo-clean.1
+@man man/man1/cargo-doc.1
+@man man/man1/cargo-fetch.1
+@man man/man1/cargo-fix.1
+@man man/man1/cargo-generate-lockfile.1
+@man man/man1/cargo-help.1
+@man man/man1/cargo-info.1
+@man man/man1/cargo-init.1
+@man man/man1/cargo-install.1
+@man man/man1/cargo-locate-project.1
+@man man/man1/cargo-login.1
+@man man/man1/cargo-logout.1
+@man man/man1/cargo-metadata.1
+@man man/man1/cargo-new.1
+@man man/man1/cargo-owner.1
+@man man/man1/cargo-package.1
+@man man/man1/cargo-pkgid.1
+@man man/man1/cargo-publish.1
+@man man/man1/cargo-remove.1
+@man man/man1/cargo-report.1
+@man man/man1/cargo-run.1
+@man man/man1/cargo-rustc.1
+@man man/man1/cargo-rustdoc.1
+@man man/man1/cargo-search.1
+@man man/man1/cargo-test.1
+@man man/man1/cargo-tree.1
+@man man/man1/cargo-uninstall.1
+@man man/man1/cargo-update.1
+@man man/man1/cargo-vendor.1
+@man man/man1/cargo-version.1
+@man man/man1/cargo-yank.1
+@man man/man1/cargo.1
+@man man/man1/rustc.1
+@man man/man1/rustdoc.1
+share/bash-completion/
+share/bash-completion/completions/
+share/bash-completion/completions/cargo
+share/doc/cargo/
+share/doc/cargo/LICENSE-APACHE
+share/doc/cargo/LICENSE-MIT
+share/doc/cargo/LICENSE-THIRD-PARTY
+share/doc/cargo/README.md
+share/doc/rust/
+share/doc/rust/COPYRIGHT-library.html
+share/doc/rust/COPYRIGHT.html
+share/doc/rust/README.md
+share/doc/rust/licenses/
+share/doc/rust/licenses/Apache-2.0.txt
+share/doc/rust/licenses/BSD-2-Clause.txt
+share/doc/rust/licenses/CC-BY-SA-4.0.txt
+share/doc/rust/licenses/GCC-exception-3.1.txt
+share/doc/rust/licenses/GPL-2.0-only.txt
+share/doc/rust/licenses/GPL-3.0-or-later.txt
+share/doc/rust/licenses/ISC.txt
+share/doc/rust/licenses/LLVM-exception.txt
+share/doc/rust/licenses/MIT.txt
+share/doc/rust/licenses/NCSA.txt
+share/doc/rust/licenses/OFL-1.1.txt
+share/doc/rust/licenses/Unicode-3.0.txt
+share/zsh/site-functions/_cargo

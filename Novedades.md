@@ -104,6 +104,7 @@ Novedades tomadas de <https://www.openbsd.org/76.html>
 * Actualizamos porte de PostgreSQL 16.6 a 17.5. Haga copia de respaldo antes
   de actualizar el sistema operativo y en lo posible usa pg_upgrade como
   se describe en 
+* Retroportamos e incluimos `rust` 1.88.0
 * Para aprovechar el xlocale extendido de adJ se han recompilado todos
   los paquetes incluidos para perl (comienzan con `p5`) y
   `vlc`, `glib2` y `libunistring`.

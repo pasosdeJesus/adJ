@@ -1,0 +1,46 @@
+amd64: make -Z cf-protection=branch the default
+aarch64: make -Z branch-protection=bti,pac-ret the default
+
+Index: compiler/rustc_session/src/options.rs
+--- compiler/rustc_session/src/options.rs.orig
++++ compiler/rustc_session/src/options.rs
+@@ -1927,6 +1927,25 @@ pub mod parse {
+     }
+ }
+ 
++#[cfg(all(target_os="openbsd", target_arch="x86_64"))]
++const DEFAULT_CF_PROTECTION: CFProtection = CFProtection::Branch;
++
++#[cfg(not(all(target_os="openbsd", target_arch="x86_64")))]
++const DEFAULT_CF_PROTECTION: CFProtection = CFProtection::None;
++
++#[cfg(all(target_os="openbsd", target_arch="aarch64"))]
++const DEFAULT_BRANCH_PROTECTION: Option<BranchProtection> = Some(BranchProtection {
++    bti: true,
++    pac_ret: Some(PacRet {
++        leaf: false,
++        pc: false,
++        key: PAuthKey::A,
++    }),
++});
++
++#[cfg(not(all(target_os="openbsd", target_arch="aarch64")))]
++const DEFAULT_BRANCH_PROTECTION: Option<BranchProtection> = None;
++
+ options! {
+     CodegenOptions, CodegenOptionsTargetModifiers, CG_OPTIONS, cgopts, "C", "codegen",
+ 
+@@ -2111,11 +2130,11 @@ options! {
+         (default: no)"),
+     box_noalias: bool = (true, parse_bool, [TRACKED],
+         "emit noalias metadata for box (default: yes)"),
+-    branch_protection: Option<BranchProtection> = (None, parse_branch_protection, [TRACKED],
++    branch_protection: Option<BranchProtection> = (DEFAULT_BRANCH_PROTECTION, parse_branch_protection, [TRACKED],
+         "set options for branch target identification and pointer authentication on AArch64"),
+     build_sdylib_interface: bool = (false, parse_bool, [UNTRACKED],
+         "whether the stable interface is being built"),
+-    cf_protection: CFProtection = (CFProtection::None, parse_cfprotection, [TRACKED],
++    cf_protection: CFProtection = (DEFAULT_CF_PROTECTION, parse_cfprotection, [TRACKED],
+         "instrument control-flow architecture protection"),
+     check_cfg_all_expected: bool = (false, parse_bool, [UNTRACKED],
+         "show all expected values in check-cfg diagnostics (default: no)"),
