@@ -843,7 +843,7 @@ if (test "$sn" = "s") then {
   # Modificados para posibilitar compilación
   # Deben estar en mystuff
 
-
+  paquete libxml
 
   # Todo lo de perl tuvo que recompilarse
   # evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
@@ -1134,10 +1134,10 @@ if (test "$sn" = "s") then {
   #paquete libssh
   #paquete libunbound
   #paquete libvpx
-  #paquete libxml
+  paquete libxml
   #paquete libxslt
   #paquete lz4
-  #paquete mariadb-client paquetes "mariadb-client mariadb-server" 
+  paquete mariadb-client paquetes "mariadb-client mariadb-server" 
   #paquete mpg123
   #paquete mutt
   #paquete nginx

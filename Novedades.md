@@ -4,7 +4,7 @@ Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
 
 ### Versión: 7.7
-Fecha de publicación: 14/Jul/2025
+Fecha de publicación: 16/Ago/2025
 
 Puedes ver novedades respecto a OpenBSD en:
   <https://gitlab.com/pasosdeJesus/adJ/-/blob/ADJ_7_7/Novedades_OpenBSD.md>
@@ -36,8 +36,8 @@ encontrarás:
   en modo BIOS Legacy.
 
 * <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/7.7-amd64/>
-  que es directorio con el contenido del DVD instalador apropiado para 
-  descargar con `rsync` desde un adJ o un OpenBSD ya instalado para 
+  que es directorio con el contenido del DVD instalador apropiado para
+  descargar con `rsync` desde un adJ o un OpenBSD ya instalado para
   actualizarlo (ver
   <https://gitlab.com/pasosdeJesus/adJ/-/blob/ADJ_7_7/Actualiza.md> )
 
@@ -52,17 +52,17 @@ encontrarás:
 
 Novedades tomadas de <https://www.openbsd.org/76.html>
 
-* Aplicados parches de seguridad hasta el 17.Jun.2025 provenientes de
+* Aplicados parches de seguridad hasta el 7.Ago.2025 provenientes de
   OpenBSD que incluyen soluciones a fallas
 * Controladores ampliados o mejorados para amd64
   * Tarjetas Ethernet: `rge` ahora soporta Realtek RTL8126 de 2.5Gb
   * CPUs y GPUs: Sopote para AVX-512, drm(4) actualizado al de Linux 6.6.52,
     `inteldrm` soporta Meteor Lake
-  * Otros:  Mejora suspender/retomar. Mejoras al controlador `nvme` de ese 
+  * Otros:  Mejora suspender/retomar. Mejoras al controlador `nvme` de ese
     tipo de discos. Controlador `umb` para dispositivos USB MBIM (Mobile
     Broadband Interface Model) soporta ahora Quectel EM060K
 * Mejoras a `vmm`: Mejorado suspender/resumir
-* Mejoras a herramientas de Red: Reenvio IPv6 solo en IPsec 
+* Mejoras a herramientas de Red: Reenvio IPv6 solo en IPsec
   (`sysctl net.inet6.ip6.forwarding = 2`), Radius mejorado, BGPD mejorado
 * Seguridad
   * pledge en más programas
@@ -92,31 +92,31 @@ Novedades tomadas de <https://www.openbsd.org/76.html>
 
 * Incluye `evangelios_dp-0.9.12` con traducción y marcado Strong del
   comienzo del nuevo testamento hasta I Timoteo
-* Retroportamos ruby 3.4.4 de OpenBSD-current. Los portes para ruby de OpenBSD 
-  diligentemente mantenidos por Jeremy Evans, quitan el aviso de actualizar 
-  gemas del sistema cuando hay nuevas versiones disponibles, 
-  pues implícitamente sugiere instalar el paquete de la gema de Ruby para 
+* Retroportamos ruby 3.4.5 de OpenBSD-current. Los portes para ruby de OpenBSD
+  diligentemente mantenidos por Jeremy Evans, quitan el aviso de actualizar
+  gemas del sistema cuando hay nuevas versiones disponibles,
+  pues implícitamente sugiere instalar el paquete de la gema de Ruby para
   OpenBSD más actualizado (en caso de que los haya).
   En adJ recomendamos usar gemas directamente (en lugar de paquetes con gemas)
-  y  mantenemos el comportamiento original de Ruby y sugerimos actualizar 
+  y  mantenemos el comportamiento original de Ruby y sugerimos actualizar
   gemas del sistema tan pronto y tanto como sea posible con
   `doas gem update --system`
-* Actualizamos porte de PostgreSQL 16.6 a 17.5. Haga copia de respaldo antes
-  de actualizar el sistema operativo y en lo posible usa pg_upgrade como
-  se describe en 
+* Actualizamos porte de PostgreSQL 16.6 a 17.5. Haz copia de respaldo antes
+  de actualizar el sistema operativo y en lo posible usa `pg_upgrade` como
+  se describe en <https://pasosdejesus.org/doc/servidor_adJ/otros_servicios_que_puede_prestar_el_servidor.html#pg-upgrade>
 * Retroportamos e incluimos `rust` 1.88.0
 * Para aprovechar el xlocale extendido de adJ se han recompilado todos
   los paquetes incluidos para perl (comienzan con `p5`) y
   `vlc`, `glib2` y `libunistring`.
-* Además de `chromium` incluimos `firefox-esr` que también ha resultado estable.
+* Además de `chromium` incluimos `firefox-esr` que también ha resultado
+  estable.
 * Se han parchado mínimamente los siguientes para usar `servicio` en lugar
   de `daemon`: `postgresql`, y `smartmontools`
 * Se han recompilado los siguientes para incluir versiones más recientes
   disponibles para OpenBSD 7.7 que cierra fallas de seguridad:
-  `cups`, `curl`, `dkimproxy`,  `firefox-esr`
-  `ghostscript`, `libarchive`, `libcupsfilter`, 
-  `libppd`, `libunbound`, `mpg123`, 
-  `openssl`, `python`, `php-x`,  `rscync`, `vim`
+  `curl`, `firefox-esr` `ghostscript`, `gnutls`, 
+  `libcupsfilter`, `libppd`, `libxml`, `mariadb`,
+  `node`, `python`, `php`
 
 
 ## 4. FE DE ERRATAS
@@ -136,8 +136,8 @@ Novedades tomadas de <https://www.openbsd.org/76.html>
   en [github](https://github.com/pasosdeJesus/adJ/)
 * Te invitamos a patrocinar nuestro trabajo empleando el botón
   Patrocinar (__Sponsor__) de <https://github.com/pasosdeJesus/adJ/>
-* También puedes comprar una USB de instalación con la versión más reciente de 
-  adJ o contratar alguno de los servicios de Pasos de Jesús 
+* También puedes comprar una USB de instalación con la versión más reciente de
+  adJ o contratar alguno de los servicios de Pasos de Jesús
   desde <https://www.pasosdeJesus.org>
 * Agradecemos tu ayuda mejorando este sitio, la documentación
   para usuario final y la documentación técnica.

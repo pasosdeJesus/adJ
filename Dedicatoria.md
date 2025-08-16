@@ -10,4 +10,4 @@ ya sea que velemos, o que durmamos, vivamos juntamente con él.
 ----
 
 Gracias Jesús por sufrir humillaciones, torturas y muerte para dar
-salvación al que crea.
+salvación a quien crea.
