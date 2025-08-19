@@ -15,13 +15,13 @@ Puedes ver las diversas versiones publicadas en
 <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/> donde entre otras
 encontrarás:
 
-* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-7.7-amd64.usb>
+* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-7.7-amd64.img>
   que es imagen para escribir en una memoria USB y arrancar con esta bien en
   modo UEFI o bien en modo BIOS Legacy. Una vez
   la descargues puedes escribirla en una USB ubicada en `/dev/sd2c`
   (verifica el dispositivo con `dmesg` y remplaza) con:
 
-       doas dd if=AprendiendoDeJesus-7.7-amd64.usb of=/dev/sd2c bs=1M
+       doas dd if=AprendiendoDeJesus-7.7-amd64.img of=/dev/sd2c bs=1M
 
   Este proceso puede ser demorado, podrás ver el progreso con
 
@@ -29,7 +29,7 @@ encontrarás:
 
   O si deseas probarla con `qemu` para instalar en un disco `virtual.raw`:
 
-      qemu-system-x86_64 -hda virtual.raw -hdb AprendiendoDeJesus-7.7-amd64.usb -boot menu=on
+      qemu-system-x86_64 -hda virtual.raw -hdb AprendiendoDeJesus-7.7-amd64.img -boot menu=on
 
 * <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-7.7-amd64.iso>
   que es imagen en formato ISO para quemar en DVD e instalar por primera vez
