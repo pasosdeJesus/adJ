@@ -50,7 +50,7 @@ encontrarás:
 
 ### 2.1 Kernel y Sistema Base
 
-Novedades tomadas de <https://www.openbsd.org/76.html>
+Novedades tomadas de <https://www.openbsd.org/77.html>
 
 * Aplicados parches de seguridad hasta el 7.Ago.2025 provenientes de
   OpenBSD que incluyen soluciones a fallas
@@ -75,18 +75,18 @@ Novedades tomadas de <https://www.openbsd.org/76.html>
 * El repositorio de paquetes de OpenBSD cuenta con 12312 para amd64
 
 
-## 3. NOVEDADES RESPECTO A ADJ 7.5 PROVENIENTES DE PASOS DE JESÚS
+## 3. NOVEDADES RESPECTO A ADJ 7.6 PROVENIENTES DE PASOS DE JESÚS
 
 ### 3.1 Instalador y documentación
 
 *
 * Documentación actualizada
   * `basico_adJ`
-    <https://pasosdejesus.org/basico_adJ/index.html>
+    <https://pasosdejesus.org/doc/basico_adJ/index.html>
   * `usuario_adJ`
-    <https://pasosdejesus.org/usuario_adJ/index.html>
+    <https://pasosdejesus.org/doc/usuario_adJ/index.html>
   * `servidor_adJ`
-    <https://pasosdejesus.org/servidor_adJ/index.html>
+    <https://pasosdejesus.org/doc/servidor_adJ/index.html>
 
 ### 3.2 Paquetes
 
