@@ -3,7 +3,7 @@
 Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
 
-### Versión: 7.7
+### Versión: 7.7p1
 Fecha de publicación: 19/Ago/2025
 
 Puedes ver novedades respecto a OpenBSD en:
@@ -90,33 +90,8 @@ Novedades tomadas de <https://www.openbsd.org/77.html>
 
 ### 3.2 Paquetes
 
-* Incluye `evangelios_dp-0.9.12` con traducción y marcado Strong del
-  comienzo del nuevo testamento hasta I Timoteo
-* Retroportamos ruby 3.4.5 de OpenBSD-current. Los portes para ruby de OpenBSD
-  diligentemente mantenidos por Jeremy Evans, quitan el aviso de actualizar
-  gemas del sistema cuando hay nuevas versiones disponibles,
-  pues implícitamente sugiere instalar el paquete de la gema de Ruby para
-  OpenBSD más actualizado (en caso de que los haya).
-  En adJ recomendamos usar gemas directamente (en lugar de paquetes con gemas)
-  y  mantenemos el comportamiento original de Ruby y sugerimos actualizar
-  gemas del sistema tan pronto y tanto como sea posible con
-  `doas gem update --system`
-* Actualizamos porte de PostgreSQL 16.6 a 17.5. Haz copia de respaldo antes
-  de actualizar el sistema operativo y en lo posible usa `pg_upgrade` como
-  se describe en <https://pasosdejesus.org/doc/servidor_adJ/otros_servicios_que_puede_prestar_el_servidor.html#pg-upgrade>
-* Retroportamos e incluimos `rust` 1.88.0
-* Para aprovechar el xlocale extendido de adJ se han recompilado todos
-  los paquetes incluidos para perl (comienzan con `p5`) y
-  `vlc`, `glib2` y `libunistring`.
-* Además de `chromium` incluimos `firefox-esr` que también ha resultado
-  estable.
-* Se han parchado mínimamente los siguientes para usar `servicio` en lugar
-  de `daemon`: `postgresql`, y `smartmontools`
-* Se han recompilado los siguientes para incluir versiones más recientes
-  disponibles para OpenBSD 7.7 que cierra fallas de seguridad:
-  `curl`, `firefox-esr` `ghostscript`, `gnutls`, 
-  `libcupsfilter`, `libppd`, `libxml`, `mariadb`,
-  `node`, `python`, `php`
+* Incluye retroporte de llama-cpp-0.0.5372
+* Incluye retroporte de ruby 3.4.6
 
 
 ## 4. FE DE ERRATAS

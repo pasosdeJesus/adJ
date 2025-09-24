@@ -843,7 +843,9 @@ if (test "$sn" = "s") then {
   # Modificados para posibilitar compilación
   # Deben estar en mystuff
 
-  paquete libxml
+  paquete misc/llama.cpp paquetes llama-cpp
+  paquete ruby paquetes "ruby ruby34-ri_docs" 3.4
+  exit 1
 
   # Todo lo de perl tuvo que recompilarse
   # evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)

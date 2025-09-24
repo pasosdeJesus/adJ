@@ -183,24 +183,24 @@ Pasos importantes para publicar versión mayor
    ./conv.sh es
    ./compara.sh
 6. Análogo a pasos de versión beta
-7. Publicar un "Release" en gitlab Versión 7.7 con enlace a novedades.
+7. Publicar un "Release" en gitlab Versión 7.7p1 con enlace a novedades.
 8. Publicar en Twitter y Facebook.
    Si es tambien publicacion de SIVeL en sitio de noticias de SIVeL y Structio.
 
-	Publicado adJ 7.7 distribución para servidores y cortafuegos,
+	Publicado adJ 7.7p1 distribución para servidores y cortafuegos,
 	segura, amigable para cristian@s y en español, ver
 	http://aprendiendo.pasosdejesus.org/
 9. Correo a listas:
     openbsd-colombia@googlegroups.com,
     openbsd-mexico@googlegroups.com, sivel-soporte@lists.sourceforge.net
 
-	Tema: Publicado adJ 7.7 para amd64
+	Tema: Publicado adJ 7.7p1 para amd64
 
 	Para instalar por primera vez descarga la imagen para DVD de:
 	  http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/
 	O solicita un DVD o una USB de instalacion por correo postal.
 
-	Si planeas actualizar de una version anterior a 7.7
+	Si planeas actualizar de una version anterior a 7.7p1
 	hay un procedimiento mas rápido con `rsync` (ver
 	https://github.com/pasosdeJesus/adJ/blob/master/Actualiza.md ).
 
@@ -212,7 +212,7 @@ Pasos importantes para publicar versión mayor
 	  2. La guía de instalación:
 	  http://pasosdeJesus.github.io//usuario_adJ/sobre-la-instalacion.html
 
-	Mira las novedades completas de la versión 7.7 en:
+	Mira las novedades completas de la versión 7.7p1 en:
 	  https://aprendiendo.pasosdejesus.org/AdJ_7.7_-_Aprendiendo_de_Jesus_7.7.html/
 
 	De estas destacamos:
