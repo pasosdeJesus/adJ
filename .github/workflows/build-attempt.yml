@@ -81,12 +81,18 @@ jobs:
         echo "=== Container Experiment ==="
         echo "Investigating BSD-like environment possibilities..."
         
-        # Install some BSD-like tools and ksh
+        # Install some BSD-like tools and compile oksh
         sudo apt-get update
-        sudo apt-get install -y patchutils diffutils ksh
+        sudo apt-get install -y patchutils diffutils build-essential libncurses-dev
         
-        echo "=== Testing ksh compatibility ==="
-        echo "ksh version: $(ksh --version 2>&1 | head -1 || echo 'ksh installed')"
+        echo "=== Compiling oksh (portable OpenBSD ksh) ==="
+        cd /tmp
+        git clone https://github.com/ibara/oksh.git
+        cd oksh
+        ./configure
+        make
+        echo "oksh compiled successfully"
+        /tmp/oksh/oksh -c 'echo "oksh version: $KSH_VERSION"'
         
         echo "=== Testing patch application simulation ==="
         # Create a test environment to validate patches
@@ -128,23 +134,29 @@ jobs:
           echo "✓ Configuration template copied"
         fi
         
-        # Install ksh for proper syntax checking
-        sudo apt-get install -y ksh
+        # Compile oksh for proper syntax checking
+        echo "=== Compiling oksh (portable OpenBSD ksh) ==="
+        cd /tmp
+        git clone https://github.com/ibara/oksh.git
+        cd oksh
+        ./configure
+        make
+        cd /workspaces/adJ
         
-        # Test script syntax with ksh (native OpenBSD shell)
-        echo "=== Testing with ksh (native OpenBSD shell) ==="
+        # Test script syntax with oksh (authentic OpenBSD ksh)
+        echo "=== Testing with oksh (authentic OpenBSD ksh) ==="
         echo "Checking distribucion.sh..."
-        if ksh -n distribucion.sh 2>&1 | grep -q "syntax error"; then
-          echo "⚠ distribucion.sh has syntax errors"
+        if /tmp/oksh/oksh -n distribucion.sh; then
+          echo "✓ distribucion.sh syntax perfect with OpenBSD ksh"
         else
-          echo "✓ distribucion.sh syntax OK with ksh (warnings normal)"
+          echo "⚠ distribucion.sh has syntax errors"
         fi
         
         echo "Checking ver.sh..."
-        if ksh -n ver.sh 2>&1 | grep -q "syntax error"; then
-          echo "⚠ ver.sh has syntax errors"  
+        if /tmp/oksh/oksh -n ver.sh; then
+          echo "✓ ver.sh syntax perfect with OpenBSD ksh"
         else
-          echo "✓ ver.sh syntax OK with ksh (warnings normal)"
+          echo "⚠ ver.sh has syntax errors"
         fi
         
         echo "=== Summary ==="

@@ -13,50 +13,57 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
-    - name: Install dependencies
+    - name: Install dependencies and compile oksh
       run: |
         sudo apt-get update
-        sudo apt-get install -y ksh genisoimage xorriso build-essential
+        sudo apt-get install -y genisoimage xorriso build-essential libncurses-dev
+        
+        # Compile oksh (portable OpenBSD ksh)
+        cd /tmp
+        git clone https://github.com/ibara/oksh.git
+        cd oksh
+        ./configure
+        make
+        echo "oksh compiled successfully at /tmp/oksh/oksh"
+        /tmp/oksh/oksh -c 'echo "oksh version: $KSH_VERSION"'
     
-    - name: Validate shell script syntax with ksh
+    - name: Validate shell script syntax with oksh (OpenBSD ksh)
       run: |
-        echo "=== Validating main scripts with ksh ==="
-        # ksh es el shell nativo de OpenBSD, mucho mejor que dash para validación
+        echo "=== Validating main scripts with oksh (portable OpenBSD ksh) ==="
+        # oksh es el ksh portable de OpenBSD, comportamiento idéntico al original
         echo "Checking distribucion.sh..."
-        if ksh -n ./distribucion.sh 2>&1 | tee /tmp/dist_check.log; then
-          if grep -q "syntax error" /tmp/dist_check.log; then
-            echo "⚠ distribucion.sh has syntax errors"
-          else
-            echo "✓ distribucion.sh syntax OK (warnings are normal)"
-          fi
+        if /tmp/oksh/oksh -n distribucion.sh; then
+          echo "✓ distribucion.sh syntax OK with OpenBSD ksh"
+        else
+          echo "⚠ distribucion.sh has syntax errors"
+          exit 1
         fi
         
         echo -e "\nChecking ver.sh..."
-        if ksh -n ./ver.sh 2>&1 | tee /tmp/ver_check.log; then
-          if grep -q "syntax error" /tmp/ver_check.log; then
-            echo "⚠ ver.sh has syntax errors"
-          else
-            echo "✓ ver.sh syntax OK (warnings are normal)"
-          fi
+        if /tmp/oksh/oksh -n ver.sh; then
+          echo "✓ ver.sh syntax OK with OpenBSD ksh"
+        else
+          echo "⚠ ver.sh has syntax errors"
+          exit 1
         fi
         
         echo -e "\n=== Validating hdes scripts ==="
         find hdes/ -name "*.sh" -type f | while read script; do
           echo "Checking $script"
-          if ksh -n "$script" 2>&1 | grep -q "syntax error"; then
-            echo "⚠ $script has syntax errors"
-          else
+          if /tmp/oksh/oksh -n "$script"; then
             echo "✓ $script syntax OK"
+          else
+            echo "⚠ $script has syntax errors"
           fi
         done
         
         echo -e "\n=== Validating pruebas scripts ==="
         find pruebas/ -name "*.sh" -type f | while read script; do
           echo "Checking $script"
-          if ksh -n "$script" 2>&1 | grep -q "syntax error"; then
-            echo "⚠ $script has syntax errors"
-          else
+          if /tmp/oksh/oksh -n "$script"; then
             echo "✓ $script syntax OK"
+          else
+            echo "⚠ $script has syntax errors"
           fi
         done
 

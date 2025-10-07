@@ -10,13 +10,13 @@ Este directorio contiene workflows experimentales de GitHub Actions para automat
 **Trigger**: Push y Pull Request a ramas `expgh` y `ADJ_*`
 
 **Funciones**:
-- ✅ Validación de sintaxis con `ksh` (shell nativo de OpenBSD)
+- ✅ Validación de sintaxis con `oksh` (ksh portable de OpenBSD)
 - ✅ Verificación de formato de archivos `.patch`  
 - ✅ Validación de estructura de directorios
 - ✅ Verificación de archivos de configuración
 - ✅ Comprobación de documentación básica
 
-**Nota**: Usa `ksh` real en lugar de `shellcheck` para mejor compatibilidad con OpenBSD.
+**Nota**: Usa `oksh` (compilado desde fuentes) para validación idéntica a OpenBSD.
 
 ### 2. `build-attempt.yml` - Intentos de Compilación
 **Trigger**: Manual (workflow_dispatch)
@@ -78,11 +78,11 @@ git push  # Triggerea documentation.yml
 - **Necesita VM completa**: ~20GB+ y 8+ horas de compilación
 - **Configuración compleja**: auto_install.conf, SSH automation, etc.
 
-### ⚠️ Validación de Sintaxis
-- **Usa ksh real**: ksh de Ubuntu (AT&T ksh93u+m) para validación
-- **Compatibilidad buena**: Debería detectar la mayoría de errores de sintaxis
-- **Warnings normales**: Puede reportar warnings sobre sintaxis obsoleta (backticks vs $())
-- **Diferencias menores**: ksh de Ubuntu vs OpenBSD pueden tener pequeñas diferencias
+### ✅ Validación de Sintaxis Perfecta
+- **Usa oksh auténtico**: Compilado desde https://github.com/ibara/oksh
+- **Compatibilidad perfecta**: oksh es ksh portable de OpenBSD, comportamiento idéntico
+- **Sin falsos positivos**: No reporta errores en código válido de ksh
+- **Validación precisa**: Detecta exactamente los mismos errores que ksh de OpenBSD
 
 ### ✅ Lo Que SÍ Funciona
 - Validación básica de estructura
