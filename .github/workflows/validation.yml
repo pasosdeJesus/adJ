@@ -16,25 +16,48 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y genisoimage xorriso build-essential
+        sudo apt-get install -y ksh genisoimage xorriso build-essential
     
-    - name: Validate shell script syntax with ksh simulation
+    - name: Validate shell script syntax with ksh
       run: |
-        echo "=== Validating main scripts (ksh syntax) ==="
-        # Use dash as closest approximation to ksh for basic syntax check
-        dash -n ./distribucion.sh && echo "✓ distribucion.sh basic syntax OK" || echo "⚠ distribucion.sh may have syntax issues"
-        dash -n ./ver.sh && echo "✓ ver.sh basic syntax OK" || echo "⚠ ver.sh may have syntax issues"
+        echo "=== Validating main scripts with ksh ==="
+        # ksh es el shell nativo de OpenBSD, mucho mejor que dash para validación
+        echo "Checking distribucion.sh..."
+        if ksh -n ./distribucion.sh 2>&1 | tee /tmp/dist_check.log; then
+          if grep -q "syntax error" /tmp/dist_check.log; then
+            echo "⚠ distribucion.sh has syntax errors"
+          else
+            echo "✓ distribucion.sh syntax OK (warnings are normal)"
+          fi
+        fi
         
-        echo "=== Validating hdes scripts ==="
+        echo -e "\nChecking ver.sh..."
+        if ksh -n ./ver.sh 2>&1 | tee /tmp/ver_check.log; then
+          if grep -q "syntax error" /tmp/ver_check.log; then
+            echo "⚠ ver.sh has syntax errors"
+          else
+            echo "✓ ver.sh syntax OK (warnings are normal)"
+          fi
+        fi
+        
+        echo -e "\n=== Validating hdes scripts ==="
         find hdes/ -name "*.sh" -type f | while read script; do
           echo "Checking $script"
-          dash -n "$script" && echo "✓ $script syntax OK" || echo "⚠ $script may have issues"
+          if ksh -n "$script" 2>&1 | grep -q "syntax error"; then
+            echo "⚠ $script has syntax errors"
+          else
+            echo "✓ $script syntax OK"
+          fi
         done
         
-        echo "=== Validating pruebas scripts ==="
+        echo -e "\n=== Validating pruebas scripts ==="
         find pruebas/ -name "*.sh" -type f | while read script; do
           echo "Checking $script"
-          dash -n "$script" && echo "✓ $script syntax OK" || echo "⚠ $script may have issues"
+          if ksh -n "$script" 2>&1 | grep -q "syntax error"; then
+            echo "⚠ $script has syntax errors"
+          else
+            echo "✓ $script syntax OK"
+          fi
         done
 
     - name: Validate patch files

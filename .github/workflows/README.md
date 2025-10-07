@@ -10,13 +10,13 @@ Este directorio contiene workflows experimentales de GitHub Actions para automat
 **Trigger**: Push y Pull Request a ramas `expgh` y `ADJ_*`
 
 **Funciones**:
-- ✅ Validación básica de sintaxis con `dash` (aproximación a ksh)
+- ✅ Validación de sintaxis con `ksh` (shell nativo de OpenBSD)
 - ✅ Verificación de formato de archivos `.patch`  
 - ✅ Validación de estructura de directorios
 - ✅ Verificación de archivos de configuración
 - ✅ Comprobación de documentación básica
 
-**Nota**: NO usa `shellcheck` porque no comprende la sintaxis específica de ksh de OpenBSD.
+**Nota**: Usa `ksh` real en lugar de `shellcheck` para mejor compatibilidad con OpenBSD.
 
 ### 2. `build-attempt.yml` - Intentos de Compilación
 **Trigger**: Manual (workflow_dispatch)
@@ -78,10 +78,11 @@ git push  # Triggerea documentation.yml
 - **Necesita VM completa**: ~20GB+ y 8+ horas de compilación
 - **Configuración compleja**: auto_install.conf, SSH automation, etc.
 
-### ⚠️ Validación de Sintaxis Limitada
-- **No usa shellcheck**: shellcheck no comprende sintaxis específica de ksh
-- **Usa dash como aproximación**: Detecta errores básicos pero no específicos de ksh
-- **Falsos positivos**: Puede reportar errores en código válido de ksh
+### ⚠️ Validación de Sintaxis
+- **Usa ksh real**: ksh de Ubuntu (AT&T ksh93u+m) para validación
+- **Compatibilidad buena**: Debería detectar la mayoría de errores de sintaxis
+- **Warnings normales**: Puede reportar warnings sobre sintaxis obsoleta (backticks vs $())
+- **Diferencias menores**: ksh de Ubuntu vs OpenBSD pueden tener pequeñas diferencias
 
 ### ✅ Lo Que SÍ Funciona
 - Validación básica de estructura

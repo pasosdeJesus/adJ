@@ -81,9 +81,12 @@ jobs:
         echo "=== Container Experiment ==="
         echo "Investigating BSD-like environment possibilities..."
         
-        # Install some BSD-like tools
+        # Install some BSD-like tools and ksh
         sudo apt-get update
-        sudo apt-get install -y patchutils diffutils
+        sudo apt-get install -y patchutils diffutils ksh
+        
+        echo "=== Testing ksh compatibility ==="
+        echo "ksh version: $(ksh --version 2>&1 | head -1 || echo 'ksh installed')"
         
         echo "=== Testing patch application simulation ==="
         # Create a test environment to validate patches
@@ -125,10 +128,24 @@ jobs:
           echo "✓ Configuration template copied"
         fi
         
-        # Test script syntax with ksh simulation
-        echo "=== Testing with dash (closest to ksh) ==="
-        dash -n distribucion.sh && echo "✓ distribucion.sh syntax OK" || echo "⚠ Syntax issues in distribucion.sh (expected for ksh-specific features)"
-        dash -n ver.sh && echo "✓ ver.sh syntax OK" || echo "⚠ Syntax issues in ver.sh (expected for ksh-specific features)"
+        # Install ksh for proper syntax checking
+        sudo apt-get install -y ksh
+        
+        # Test script syntax with ksh (native OpenBSD shell)
+        echo "=== Testing with ksh (native OpenBSD shell) ==="
+        echo "Checking distribucion.sh..."
+        if ksh -n distribucion.sh 2>&1 | grep -q "syntax error"; then
+          echo "⚠ distribucion.sh has syntax errors"
+        else
+          echo "✓ distribucion.sh syntax OK with ksh (warnings normal)"
+        fi
+        
+        echo "Checking ver.sh..."
+        if ksh -n ver.sh 2>&1 | grep -q "syntax error"; then
+          echo "⚠ ver.sh has syntax errors"  
+        else
+          echo "✓ ver.sh syntax OK with ksh (warnings normal)"
+        fi
         
         echo "=== Summary ==="
         echo "✓ Repository structure validated"
