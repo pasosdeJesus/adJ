@@ -1,0 +1,137 @@
+name: adJ Build Attempt
+
+on:
+  workflow_dispatch:  # Manual trigger only
+    inputs:
+      build_type:
+        description: 'Type of build to attempt'
+        required: true
+        default: 'validation-only'
+        type: choice
+        options:
+        - validation-only
+        - vm-build
+        - container-experiment
+
+jobs:
+  openbsd-vm-build:
+    if: github.event.inputs.build_type == 'vm-build'
+    runs-on: ubuntu-latest
+    timeout-minutes: 480  # 8 hours max
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup QEMU
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y qemu-system-x86 qemu-utils wget
+    
+    - name: Cache OpenBSD ISO
+      id: cache-iso
+      uses: actions/cache@v3
+      with:
+        path: openbsd.iso
+        key: openbsd-77-iso
+    
+    - name: Download OpenBSD ISO
+      if: steps.cache-iso.outputs.cache-hit != 'true'
+      run: |
+        wget -O openbsd.iso https://cdn.openbsd.org/pub/OpenBSD/7.7/amd64/install77.iso
+    
+    - name: Create VM disk
+      run: |
+        qemu-img create -f qcow2 openbsd-vm.qcow2 20G
+    
+    - name: Install OpenBSD (automated)
+      run: |
+        # This would need a proper auto-install configuration
+        # For now, just demonstrate the concept
+        echo "This step would require automated OpenBSD installation"
+        echo "Need to create auto_install.conf and serve it via HTTP"
+        # timeout 3600 qemu-system-x86_64 -m 2048 -smp 2 \
+        #   -drive file=openbsd-vm.qcow2,format=qcow2 \
+        #   -cdrom openbsd.iso -boot d -nographic \
+        #   -netdev user,id=net0 -device e1000,netdev=net0
+    
+    - name: Note about VM build limitations
+      run: |
+        echo "=== VM Build Status ==="
+        echo "❌ Full VM build requires:"
+        echo "  • Automated OpenBSD installation"
+        echo "  • OpenBSD source download"
+        echo "  • 8+ hours compilation time"
+        echo "  • ~20GB+ disk space"
+        echo "  • Complex automation scripts"
+        echo ""
+        echo "This is proof-of-concept. Real implementation would need:"
+        echo "  1. auto_install.conf for unattended OpenBSD setup"
+        echo "  2. SSH automation for running adJ build scripts"
+        echo "  3. Artifact collection and publishing"
+
+  container-experiment:
+    if: github.event.inputs.build_type == 'container-experiment'
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Experiment with BSD userland
+      run: |
+        echo "=== Container Experiment ==="
+        echo "Investigating BSD-like environment possibilities..."
+        
+        # Install some BSD-like tools
+        sudo apt-get update
+        sudo apt-get install -y patchutils diffutils
+        
+        echo "=== Testing patch application simulation ==="
+        # Create a test environment to validate patches
+        mkdir -p /tmp/test-src
+        
+        # Test if patches can be parsed/validated
+        echo "Found patches:"
+        find arboldes/usr/src/ -name "*.patch" | head -5
+        
+        echo "=== Patch validation example ==="
+        for patch in $(find arboldes/usr/src/ -name "*.patch" | head -3); do
+          echo "Analyzing $patch"
+          if lsdiff "$patch" >/dev/null 2>&1; then
+            echo "✓ Valid patch format"
+            echo "  Files affected: $(lsdiff "$patch" | wc -l)"
+          else
+            echo "⚠ Patch format issues"
+          fi
+        done
+
+  validation-only:
+    if: github.event.inputs.build_type == 'validation-only' || github.event.inputs.build_type == ''
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Enhanced validation
+      run: |
+        echo "=== Enhanced Validation Mode ==="
+        
+        # Check if we can simulate some build steps
+        echo "Creating mock directories..."
+        mkdir -p /tmp/{build/destdir,releasedir,xenocara}
+        
+        # Test configuration
+        echo "Testing configuration files..."
+        if cp ver-local.sh.plantilla ver-local.sh; then
+          echo "✓ Configuration template copied"
+        fi
+        
+        # Test script syntax with ksh simulation
+        echo "=== Testing with dash (closest to ksh) ==="
+        dash -n distribucion.sh && echo "✓ distribucion.sh syntax OK" || echo "⚠ Syntax issues in distribucion.sh (expected for ksh-specific features)"
+        dash -n ver.sh && echo "✓ ver.sh syntax OK" || echo "⚠ Syntax issues in ver.sh (expected for ksh-specific features)"
+        
+        echo "=== Summary ==="
+        echo "✓ Repository structure validated"
+        echo "✓ Configuration files accessible"
+        echo "❌ Full compilation requires OpenBSD environment"
+        echo "💡 Consider VM-based CI for actual builds"

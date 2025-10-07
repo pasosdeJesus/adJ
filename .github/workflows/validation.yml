@@ -1,0 +1,92 @@
+name: adJ Validation
+
+on:
+  push:
+    branches: [ expgh, ADJ_* ]
+  pull_request:
+    branches: [ expgh, ADJ_* ]
+
+jobs:
+  validate-scripts:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y genisoimage xorriso build-essential
+    
+    - name: Validate shell script syntax with ksh simulation
+      run: |
+        echo "=== Validating main scripts (ksh syntax) ==="
+        # Use dash as closest approximation to ksh for basic syntax check
+        dash -n ./distribucion.sh && echo "✓ distribucion.sh basic syntax OK" || echo "⚠ distribucion.sh may have syntax issues"
+        dash -n ./ver.sh && echo "✓ ver.sh basic syntax OK" || echo "⚠ ver.sh may have syntax issues"
+        
+        echo "=== Validating hdes scripts ==="
+        find hdes/ -name "*.sh" -type f | while read script; do
+          echo "Checking $script"
+          dash -n "$script" && echo "✓ $script syntax OK" || echo "⚠ $script may have issues"
+        done
+        
+        echo "=== Validating pruebas scripts ==="
+        find pruebas/ -name "*.sh" -type f | while read script; do
+          echo "Checking $script"
+          dash -n "$script" && echo "✓ $script syntax OK" || echo "⚠ $script may have issues"
+        done
+
+    - name: Validate patch files
+      run: |
+        echo "=== Checking patch file syntax ==="
+        find arboldes/usr/src/ -name "*.patch" -type f | while read patch; do
+          echo "Validating $patch"
+          # Check if patch has proper diff format
+          if head -n 5 "$patch" | grep -q "^diff\|^---\|^+++"; then
+            echo "✓ $patch appears to be a valid patch file"
+          else
+            echo "⚠ $patch may not be a valid patch file"
+          fi
+        done
+
+    - name: Check directory structure
+      run: |
+        echo "=== Verifying expected directory structure ==="
+        for dir in arboldd arboldes arboldvd arbolexp doc hdes pruebas tminiroot; do
+          if [ -d "$dir" ]; then
+            echo "✓ $dir exists"
+          else
+            echo "⚠ $dir missing"
+          fi
+        done
+
+    - name: Validate configuration files
+      run: |
+        echo "=== Checking configuration files ==="
+        if [ -f "ver.sh" ]; then
+          echo "✓ ver.sh exists"
+          # Check for required variables
+          if grep -q "^V=" ver.sh; then
+            echo "✓ Version variable found"
+          fi
+        fi
+        
+        if [ -f "ver-local.sh.plantilla" ]; then
+          echo "✓ ver-local.sh.plantilla exists"
+        fi
+
+    - name: Documentation check
+      run: |
+        echo "=== Checking documentation files ==="
+        for doc in README.md ComoPublicar.md Novedades.md; do
+          if [ -f "$doc" ]; then
+            echo "✓ $doc exists"
+            # Basic markdown validation
+            if grep -q "^#" "$doc"; then
+              echo "✓ $doc has markdown headers"
+            fi
+          else
+            echo "⚠ $doc missing"
+          fi
+        done

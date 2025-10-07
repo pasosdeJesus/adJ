@@ -1,0 +1,156 @@
+name: Documentation
+
+on:
+  push:
+    branches: [ expgh ]
+    paths:
+      - '**.md'
+      - 'doc/**'
+      - '.github/workflows/documentation.yml'
+  workflow_dispatch:
+
+jobs:
+  generate-docs:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js for documentation tools
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+    
+    - name: Install documentation tools
+      run: |
+        npm install -g markdownlint-cli
+        sudo apt-get update
+        sudo apt-get install -y pandoc tree
+    
+    - name: Validate Markdown files
+      run: |
+        echo "=== Markdown Validation ==="
+        markdownlint *.md doc/*.md || echo "Markdown issues found but continuing..."
+    
+    - name: Generate project structure
+      run: |
+        echo "=== Generating Project Structure ==="
+        echo "# Estructura del Proyecto adJ" > ESTRUCTURA.md
+        echo "" >> ESTRUCTURA.md
+        echo "Generado automáticamente el $(date)" >> ESTRUCTURA.md
+        echo "" >> ESTRUCTURA.md
+        echo '```' >> ESTRUCTURA.md
+        tree -I '.git|obj|*.iso|*.img' >> ESTRUCTURA.md
+        echo '```' >> ESTRUCTURA.md
+        
+        echo "## Estadísticas del Proyecto" >> ESTRUCTURA.md
+        echo "" >> ESTRUCTURA.md
+        echo "- **Scripts de shell**: $(find . -name '*.sh' | wc -l)" >> ESTRUCTURA.md
+        echo "- **Parches**: $(find . -name '*.patch' | wc -l)" >> ESTRUCTURA.md
+        echo "- **Archivos de documentación**: $(find . -name '*.md' | wc -l)" >> ESTRUCTURA.md
+        echo "- **Total de archivos**: $(find . -type f | grep -v '.git' | wc -l)" >> ESTRUCTURA.md
+    
+    - name: Generate patch analysis
+      run: |
+        echo "=== Analyzing Patches ==="
+        echo "# Análisis de Parches adJ" > PARCHES.md
+        echo "" >> PARCHES.md
+        echo "Análisis automático de parches en \`arboldes/usr/src/\`" >> PARCHES.md
+        echo "" >> PARCHES.md
+        
+        echo "## Resumen de Parches" >> PARCHES.md
+        echo "" >> PARCHES.md
+        
+        categories=("02-" "03-Tiempo" "03-cotejacion" "03-monetario" "03-numerico" "04-xlocale" "05-xlocale" "06-xlocale" "07-xlocale" "08-xlocale" "09-xlocale" "10-" "11-xlocale" "12-" "13-" "14-" "15-" "16-")
+        
+        for cat in "${categories[@]}"; do
+          patches=$(find arboldes/usr/src/ -name "${cat}*.patch" 2>/dev/null || true)
+          if [ -n "$patches" ]; then
+            echo "### Categoría: $cat" >> PARCHES.md
+            echo "" >> PARCHES.md
+            echo "$patches" | while read patch; do
+              if [ -f "$patch" ]; then
+                lines=$(wc -l < "$patch")
+                echo "- \`$(basename "$patch")\`: $lines líneas" >> PARCHES.md
+              fi
+            done
+            echo "" >> PARCHES.md
+          fi
+        done
+        
+        echo "## Archivos Modificados por Parches" >> PARCHES.md
+        echo "" >> PARCHES.md
+        find arboldes/usr/src/ -name "*.patch" | while read patch; do
+          echo "### $(basename "$patch")" >> PARCHES.md
+          echo "" >> PARCHES.md
+          echo '```' >> PARCHES.md
+          grep "^+++" "$patch" | head -10 | sed 's/+++ //' >> PARCHES.md || true
+          echo '```' >> PARCHES.md
+          echo "" >> PARCHES.md
+        done
+    
+    - name: Generate script inventory
+      run: |
+        echo "=== Generating Script Inventory ==="
+        echo "# Inventario de Scripts adJ" > SCRIPTS.md
+        echo "" >> SCRIPTS.md
+        echo "Inventario automático de scripts en el proyecto adJ" >> SCRIPTS.md
+        echo "" >> SCRIPTS.md
+        
+        echo "## Scripts Principales" >> SCRIPTS.md
+        echo "" >> SCRIPTS.md
+        echo "| Script | Propósito | Líneas |" >> SCRIPTS.md
+        echo "|--------|-----------|--------|" >> SCRIPTS.md
+        
+        for script in distribucion.sh ver.sh; do
+          if [ -f "$script" ]; then
+            lines=$(wc -l < "$script")
+            purpose=$(head -5 "$script" | grep "^#" | tail -1 | sed 's/^# *//' || echo "Sin descripción")
+            echo "| \`$script\` | $purpose | $lines |" >> SCRIPTS.md
+          fi
+        done
+        
+        echo "" >> SCRIPTS.md
+        echo "## Scripts en hdes/" >> SCRIPTS.md
+        echo "" >> SCRIPTS.md
+        echo "| Script | Líneas |" >> SCRIPTS.md
+        echo "|--------|--------|" >> SCRIPTS.md
+        
+        find hdes/ -name "*.sh" | while read script; do
+          lines=$(wc -l < "$script")
+          echo "| \`$(basename "$script")\` | $lines |" >> SCRIPTS.md
+        done
+        
+        echo "" >> SCRIPTS.md
+        echo "## Scripts en pruebas/" >> SCRIPTS.md
+        echo "" >> SCRIPTS.md
+        echo "| Script | Líneas |" >> SCRIPTS.md
+        echo "|--------|--------|" >> SCRIPTS.md
+        
+        find pruebas/ -name "*.sh" | while read script; do
+          lines=$(wc -l < "$script")
+          echo "| \`$(basename "$script")\` | $lines |" >> SCRIPTS.md
+        done
+    
+    - name: Commit generated documentation
+      run: |
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "actions@github.com"
+        
+        if [ -n "$(git status --porcelain)" ]; then
+          git add ESTRUCTURA.md PARCHES.md SCRIPTS.md
+          git commit -m "📚 Actualizar documentación automática [skip ci]"
+          echo "Documentation updated and committed"
+        else
+          echo "No changes in documentation"
+        fi
+    
+    - name: Upload documentation artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: generated-docs
+        path: |
+          ESTRUCTURA.md
+          PARCHES.md
+          SCRIPTS.md
+          *.md
