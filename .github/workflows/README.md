@@ -78,11 +78,12 @@ git push  # Triggerea documentation.yml
 - **Necesita VM completa**: ~20GB+ y 8+ horas de compilación
 - **Configuración compleja**: auto_install.conf, SSH automation, etc.
 
-### ✅ Validación de Sintaxis Perfecta
-- **Usa oksh auténtico**: Compilado desde https://github.com/ibara/oksh
-- **Compatibilidad perfecta**: oksh es ksh portable de OpenBSD, comportamiento idéntico
-- **Sin falsos positivos**: No reporta errores en código válido de ksh
-- **Validación precisa**: Detecta exactamente los mismos errores que ksh de OpenBSD
+### ✅ Validación de Sintaxis con oksh (Aproximación)
+- **Usa oksh**: Versión portable mantenida por terceros de ksh de OpenBSD
+- **Buena compatibilidad**: Muy similar al ksh nativo de OpenBSD pero no idéntico
+- **Pocos falsos positivos**: Mucho mejor que shellcheck o otros shells
+- **Limitación**: No es exactamente el mismo que el ksh nativo de OpenBSD
+- **Solución definitiva necesaria**: Validación en VM real de OpenBSD/adJ
 
 ### ✅ Lo Que SÍ Funciona
 - Validación básica de estructura
@@ -91,7 +92,27 @@ git push  # Triggerea documentation.yml
 - Análisis de parches
 - Testing parcial de scripts
 
-## Mejoras Futuras Posibles
+## Prioridades de Desarrollo
+
+### 🚀 **ALTA PRIORIDAD: VM de OpenBSD Real**
+La validación actual con `oksh` es una buena aproximación, pero la **solución definitiva** es implementar una máquina virtual real de OpenBSD/adJ en GitHub Actions:
+
+#### Beneficios de VM Real:
+- ✅ **ksh nativo**: El shell exacto de OpenBSD, no una aproximación
+- ✅ **Compilación real**: Posibilidad de compilar adJ completamente  
+- ✅ **Testing auténtico**: Pruebas en el entorno real de destino
+- ✅ **Detección precisa**: Errores exactos que verían los usuarios finales
+
+#### Desafíos a Resolver:
+- ⚠️ **Tiempo**: Instalación automatizada puede tomar 15-30 minutos
+- ⚠️ **Espacio**: Requiere ~8-10GB para instalación completa
+- ⚠️ **Automatización**: Necesita auto_install.conf y scripts no interactivos
+- ⚠️ **Caching**: Optimizar para evitar reinstalar en cada ejecución
+
+#### Plan de Implementación:
+1. **Fase 1**: VM básica con validación de sintaxis únicamente
+2. **Fase 2**: VM con compilación parcial (kernel + base)
+3. **Fase 3**: VM con compilación completa de adJ
 
 ### 1. Compilación Real en VM
 ```yaml
