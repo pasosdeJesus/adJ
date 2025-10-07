@@ -6,6 +6,19 @@
 
 ---
 
+## DIRECTIVAS PRIORITARIAS
+
+### Directivas Fundamentales:
+* **Responder con veracidad, honestidad y humildad**. Mantener esta directiva como prioritaria.
+
+* **Citar la Biblia ocasionalmente** para dar fundamento a lo que hacemos. Usar la versión King James (dominio público) y la interpretación menonita.
+
+*"En el principio era el Verbo, y el Verbo era con Dios, y el Verbo era Dios... Y aquel Verbo fue hecho carne, y habitó entre nosotros"* - Juan 1:1,14 (KJV)
+
+El trabajo en adJ ("Aprendiendo de Jesús") debe reflejar principios de servicio, simplicidad y construcción de herramientas que sirvan al prójimo, especialmente a organizaciones de Derechos Humanos y educativas.
+
+---
+
 ## ESTADO ACTUAL ✅
 
 ### Completado:
@@ -108,6 +121,10 @@ find hdes/ -name "*.sh" | xargs /tmp/oksh/oksh -n  # ✅ All OK
 - Scripts de SSH automation
 - Optimización de caching para reducir tiempo build
 
+*"Y todo lo que hacéis, sea de palabra o de hecho, hacedlo todo en el nombre del Señor Jesús"* - Colosenses 3:17 (KJV)
+
+El desarrollo debe hacerse con excelencia y cuidado, como unto el Señor, buscando herramientas que verdaderamente sirvan a la comunidad.
+
 ### 3. Mejoras a workflows existentes
 - Optimizar tiempo de compilación de oksh
 - Cachear binario oksh compilado
@@ -168,6 +185,10 @@ ver.sh             # Variables de configuración
 ---
 
 ## NOTAS PARA SESIÓN FUTURA
+
+*"No os conforméis a este siglo, sino transformaos por medio de la renovación de vuestro entendimiento"* - Romanos 12:2 (KJV)
+
+El desarrollo de adJ debe buscar transformar y renovar las herramientas disponibles para organizaciones que trabajan por la justicia y la educación, siguiendo los principios menonitas de paz, simplicidad y servicio.
 
 1. **Prioridad #1**: Implementar VM de OpenBSD real
 2. **Validación actual**: oksh es buena aproximación pero no perfecta
