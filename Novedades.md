@@ -3,11 +3,11 @@
 Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
 
-### Versión: 7.7p1
+### Versión: 7.8a1
 Fecha de publicación: 19/Ago/2025
 
 Puedes ver novedades respecto a OpenBSD en:
-  <https://gitlab.com/pasosdeJesus/adJ/-/blob/ADJ_7_7/Novedades_OpenBSD.md>
+  <https://gitlab.com/pasosdeJesus/adJ/-/blob/ADJ_7_8/Novedades_OpenBSD.md>
 
 ## 1. DESCARGAS
 
@@ -15,13 +15,13 @@ Puedes ver las diversas versiones publicadas en
 <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/> donde entre otras
 encontrarás:
 
-* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-7.7-amd64.img>
+* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-7.8-amd64.img>
   que es imagen para escribir en una memoria USB y arrancar con esta bien en
   modo UEFI o bien en modo BIOS Legacy. Una vez
   la descargues puedes escribirla en una USB ubicada en `/dev/sd2c`
   (verifica el dispositivo con `dmesg` y remplaza) con:
 
-       doas dd if=AprendiendoDeJesus-7.7-amd64.img of=/dev/sd2c bs=1M
+       doas dd if=AprendiendoDeJesus-7.8-amd64.img of=/dev/sd2c bs=1M
 
   Este proceso puede ser demorado, podrás ver el progreso con
 
@@ -29,24 +29,24 @@ encontrarás:
 
   O si deseas probarla con `qemu` para instalar en un disco `virtual.raw`:
 
-      qemu-system-x86_64 -hda virtual.raw -hdb AprendiendoDeJesus-7.7-amd64.img -boot menu=on
+      qemu-system-x86_64 -hda virtual.raw -hdb AprendiendoDeJesus-7.8-amd64.img -boot menu=on
 
-* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-7.7-amd64.iso>
+* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-7.8-amd64.iso>
   que es imagen en formato ISO para quemar en DVD e instalar por primera vez
   en modo BIOS Legacy.
 
-* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/7.7-amd64/>
+* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/7.8-amd64/>
   que es directorio con el contenido del DVD instalador apropiado para
   descargar con `rsync` desde un adJ o un OpenBSD ya instalado para
   actualizarlo (ver
-  <https://gitlab.com/pasosdeJesus/adJ/-/blob/ADJ_7_7/Actualiza.md> )
+  <https://gitlab.com/pasosdeJesus/adJ/-/blob/ADJ_7_8/Actualiza.md> )
 
-* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/7.7-extra/>
+* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/7.8-extra/>
   es directorio con versiones recientes de paquetes no incluidos en
   distribución oficial (pueden no estar firmados y requerir instalación con
   `pkg_add -D unsigned _paquete_`).
 
-## 2. NOVEDADES RESPECTO A ADJ 7.7 PROVENIENTES DE OPENBSD
+## 2. NOVEDADES RESPECTO A ADJ 7.8 PROVENIENTES DE OPENBSD
 
 ### 2.1 Kernel y Sistema Base
 
@@ -70,7 +70,7 @@ Novedades tomadas de <https://www.openbsd.org/77.html>
   * `libressl` actualizado a 4.0.0
   * Incluye OpenSSH 9.9
 * El sistema base incluye mejoras a componentes auditados y mejorados
-  como, `llvm 16.0.6`,  `Xenocara` (basado en `Xorg` 7.7),
+  como, `llvm 16.0.6`,  `Xenocara` (basado en `Xorg` 7.8),
   `perl 5.38.2`
 * El repositorio de paquetes de OpenBSD cuenta con 12312 para amd64
 

@@ -1,21 +1,21 @@
 COMO PUBLICAR
 =============
 
-Anhelamos publicar versión mayor (e.g 7.7) 3 meses después de OpenBSD:
+Anhelamos publicar versión mayor (e.g 7.8) 3 meses después de OpenBSD:
 
 * Bien el 11.Ene
 * O bien el 1.Jul
 
-Publicamos revisiones (e.g 7.7p1) si la seguridad o calidad lo ameriten.
+Publicamos revisiones (e.g 7.8p1) si la seguridad o calidad lo ameriten.
 
-Anhelamos publicar al menos una versión beta (e.g 7.7b1 en directorio
+Anhelamos publicar al menos una versión beta (e.g 7.8b1 en directorio
 `desarrollo` del sitio de distribución):
 
 	Bien el 10.Dic
 	O bien el 10.Jun
 
 Sería ideal publicar una versión alfa mucho antes (digamos bien 24.Sep o
-bien 24.Mar, e.g 7.7a1).
+bien 24.Mar, e.g 7.8a1).
 
 
 Pasos importantes para publicar versión beta
@@ -54,7 +54,7 @@ Pasos importantes para publicar versión beta
    o temporalmente `LANG=C pkg_add` .
 5. Recompilar paquetes con actualizaciones de seguridad o mejoras
 6. Retroportar paquetes, dejar resultados no incluidos en DVD pero
-   útiles en `7.7-extra`
+   útiles en `7.8-extra`
 7. Regenerar distribución (sin paquetes ni otras compilaciones) con:
 	```
 	doas ./distribucion.sh
@@ -130,13 +130,13 @@ Pasos importantes para publicar versión beta
 	- Que toda entrada del menú desde la interfaz gráfica opere.
 	  Arreglar y repetir hasta que no haya errores.
 11. En adJ.pasosdeJesus.org
-	mkdir /dirftp/7.7-extra
+	mkdir /dirftp/7.8-extra
 12. En computador de desarrollo tras configurar `var-local.sh` enviar a
    adJ.pasosdeJesus.org:
 	```
 	hdes/rsync-aotro.sh
-	scp -rf AprendiendoDeJesus-7.7-amd64.{img,iso} 7.7-amd64 adJ.pasosdeJesus.org:/dirftp/
-	rsync extra-7.7/* adJ.pasosdeJesus.org:/dirftp/7.7-extra/
+	scp -rf AprendiendoDeJesus-7.8-amd64.{img,iso} 7.8-amd64 adJ.pasosdeJesus.org:/dirftp/
+	rsync extra-7.8/* adJ.pasosdeJesus.org:/dirftp/7.8-extra/
 	```
 13. Verificar operación de:
   * https://www.pasosdeJesus.org/doc/basico_adJ https://www.pasosdeJesus.org/doc/usuario_adJ https://www.pasosdeJesus.org/doc/servidor_adJ
@@ -150,20 +150,20 @@ Pasos importantes para publicar versión beta
 14. Poner Tag en github e iniciar rama al publicar versión alfa o beta 
     (antes en master)
 	```
-	git tag -a v7.7b1 -m "Version 7.7b1"
-	git push origin v7.7b1
+	git tag -a v7.8b1 -m "Version 7.8b1"
+	git push origin v7.8b1
 	...
-	git checkout -b ADJ_7_7
-	git push origin ADJ_7_7
+	git checkout -b ADJ_7_8
+	git push origin ADJ_7_8
 	```
 14. Publicar en lista de desarrollo
 
 Pasos importantes para publicar versión mayor
 --------------------------------------------
 
-1. Usar la rama ADJ_7_7
+1. Usar la rama ADJ_7_8
 	```
-	git checkout ADJ_7_7
+	git checkout ADJ_7_8
 	```
 2. Actualizar SIVeL, evangelios, Mt77 y paquetes propios de
    adJ.
@@ -183,24 +183,24 @@ Pasos importantes para publicar versión mayor
    ./conv.sh es
    ./compara.sh
 6. Análogo a pasos de versión beta
-7. Publicar un "Release" en gitlab Versión 7.7p1 con enlace a novedades.
+7. Publicar un "Release" en gitlab Versión 7.8a1 con enlace a novedades.
 8. Publicar en Twitter y Facebook.
    Si es tambien publicacion de SIVeL en sitio de noticias de SIVeL y Structio.
 
-	Publicado adJ 7.7p1 distribución para servidores y cortafuegos,
+	Publicado adJ 7.8a1 distribución para servidores y cortafuegos,
 	segura, amigable para cristian@s y en español, ver
 	http://aprendiendo.pasosdejesus.org/
 9. Correo a listas:
     openbsd-colombia@googlegroups.com,
     openbsd-mexico@googlegroups.com, sivel-soporte@lists.sourceforge.net
 
-	Tema: Publicado adJ 7.7p1 para amd64
+	Tema: Publicado adJ 7.8a1 para amd64
 
 	Para instalar por primera vez descarga la imagen para DVD de:
 	  http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/
 	O solicita un DVD o una USB de instalacion por correo postal.
 
-	Si planeas actualizar de una version anterior a 7.7p1
+	Si planeas actualizar de una version anterior a 7.8p1
 	hay un procedimiento mas rápido con `rsync` (ver
 	https://github.com/pasosdeJesus/adJ/blob/master/Actualiza.md ).
 
@@ -212,8 +212,8 @@ Pasos importantes para publicar versión mayor
 	  2. La guía de instalación:
 	  http://pasosdeJesus.github.io//usuario_adJ/sobre-la-instalacion.html
 
-	Mira las novedades completas de la versión 7.7p1 en:
-	  https://aprendiendo.pasosdejesus.org/AdJ_7.7_-_Aprendiendo_de_Jesus_7.7.html/
+	Mira las novedades completas de la versión 7.8p1 en:
+	  https://aprendiendo.pasosdejesus.org/AdJ_7.8_-_Aprendiendo_de_Jesus_7.8.html/
 
 	De estas destacamos:
 	...
