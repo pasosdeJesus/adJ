@@ -2258,7 +2258,7 @@ kern.seminfo.semmni=1024
 kern.seminfo.semmns=2048
 kern.maxfiles=20000
 
-kern.shminfo.shmmax=150000000
+kern.shminfo.shmmax=2140000000
 kern.shminfo.shmall=591200
 kern.shminfo.shmmni=8192
 kern.shminfo.shmseg=256
@@ -2274,7 +2274,7 @@ EOF
 } fi;
 
 #staff:\
-#	:datasize-cur=1536M:\
+#	:datasize-cur=:\
 #	:datasize-max=infinity:\
 #	:maxproc-max=4096:\
 #	:maxproc-cur=4096:\
