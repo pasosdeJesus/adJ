@@ -79,7 +79,6 @@ Novedades tomadas de <https://www.openbsd.org/77.html>
 
 ### 3.1 Instalador y documentación
 
-*
 * Documentación actualizada
   * `basico_adJ`
     <https://pasosdejesus.org/doc/basico_adJ/index.html>
@@ -90,8 +89,15 @@ Novedades tomadas de <https://www.openbsd.org/77.html>
 
 ### 3.2 Paquetes
 
-* Incluye retroporte de llama-cpp-0.0.5372
-* Incluye retroporte de ruby 3.4.6
+* Incluye retro-porte de llama-cpp-0.0.5372
+* Incluye retro-porte de ruby 3.4.6
+* Incluye retro-porte de node 22.20.0 junto con paquetes que requiere 
+  libuv 1.51.0p0 y openssl 3.5.4v0
+* Incluye portes actualizados para cerrar fallas de curl 8.13,
+  geolite2-country-20191224p3, glib2-2.82.5p0,
+  libarchive 3.8.1, libssh 0.11.3, libxml 2.13.9, libxslt, 1.1.43p1, 
+  mutt 2.2.15v3, nginx 1.26.3, p5-Cpanel-JSON-XS 4.40, php-8.3.26,
+  redis 6.2.20, tiff 4.7.1p0
 
 
 ## 4. FE DE ERRATAS

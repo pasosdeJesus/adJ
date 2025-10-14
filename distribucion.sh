@@ -843,10 +843,6 @@ if (test "$sn" = "s") then {
   # Modificados para posibilitar compilación
   # Deben estar en mystuff
 
-  paquete misc/llama.cpp paquetes llama-cpp
-  paquete ruby paquetes "ruby ruby34-ri_docs" 3.4
-  exit 1
-
   # Todo lo de perl tuvo que recompilarse
   # evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
   # Si por ejemplo es:
@@ -1051,6 +1047,8 @@ if (test "$sn" = "s") then {
 
   ## Muy necesarios de estable con actualizaciones de seguridad
   paquete curl
+  paquete libuv
+  paquete openssl paquetes "openssl" 3.5
   paquete node
 
   ### Requieren recompilación en caso de incluir cambio en FILE
@@ -1117,7 +1115,7 @@ if (test "$sn" = "s") then {
   #paquete dkimproxy
   #paquete dovecot
   #paquete dtc
-  #paquete firefox-esr # No logra compilarlo
+  paquete firefox-esr # No logra compilarlo
   #paquete www/firefox-esr-i18n paquetes "firefox-esr-i18n-es-AR"
   #paquete flac
   #paquete gtk+3 paquetes "gtk+3-cups"
@@ -1126,37 +1124,38 @@ if (test "$sn" = "s") then {
   paquete gnutls
   #paquete gnupg
   #paquete gvfs
-  #paquete libarchive
+  paquete libarchive
   #paquete libcupsfilters
   #paquete libgcrypt
   #paquete libgsf
   #paquete libinih
   #paquete libmad
   #paquete libppd
-  #paquete libssh
+  paquete libssh
   #paquete libunbound
   #paquete libvpx
   paquete libxml
-  #paquete libxslt
+  paquete libxslt
   #paquete lz4
   paquete mariadb-client paquetes "mariadb-client mariadb-server" 
   #paquete mpg123
-  #paquete mutt
-  #paquete nginx
+  paquete mutt
+  paquete nginx
   #paquete nspr
   #paquete oniguruma 
   #paquete openssl paquetes "openssl" 3.3
   #paquete openssl paquetes "openssl" 3.2
   #paquete opus
-  #paquete quirks
   #paquete pcre2 
   paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 8.3
   #paquete python paquetes "python" "2.7"
   #paquete python paquetes "python" "3"
+  #paquete quirks
+  paquete redis
   #paquete rsync
   #paquete samba paquetes "ldb samba tevent"
   #paquete sqlite3
-  #paquete tiff
+  paquete tiff
   #paquete unrar
   #paquete vim
   #paquete wavpack
