@@ -1,0 +1,18 @@
+class CPUInfo should only be used on Linux to read /proc/cpuinfo contents.
+OpenBSD/riscv64 always uses floating-point support.
+
+Index: deps/v8/src/base/cpu.cc
+--- deps/v8/src/base/cpu.cc.orig
++++ deps/v8/src/base/cpu.cc
+@@ -933,7 +933,10 @@ CPU::CPU()
+   if (HasListItem(mmu, "sv57")) {
+     riscv_mmu_ = RV_MMU_MODE::kRiscvSV57;
+   }
+-#endif
++#elif V8_OS_OPENBSD // V8_OS_LINUX
++  // OpenBSD requires and defaults to FP support.
++  has_fpu_ = true;
++#endif  // V8_OS_OPENBSD
+ #endif  // V8_HOST_ARCH_RISCV64
+ }
+ 

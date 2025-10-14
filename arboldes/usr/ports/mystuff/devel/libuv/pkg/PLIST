@@ -1,0 +1,11 @@
+include/uv/
+include/uv.h
+include/uv/bsd.h
+include/uv/errno.h
+include/uv/threadpool.h
+include/uv/unix.h
+include/uv/version.h
+@static-lib lib/libuv.a
+lib/libuv.la
+@lib lib/libuv.so.${LIBuv_VERSION}
+lib/pkgconfig/libuv.pc

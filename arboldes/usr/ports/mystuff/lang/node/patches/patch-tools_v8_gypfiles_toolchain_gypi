@@ -1,0 +1,25 @@
+Index: tools/v8_gypfiles/toolchain.gypi
+--- tools/v8_gypfiles/toolchain.gypi.orig
++++ tools/v8_gypfiles/toolchain.gypi
+@@ -692,7 +692,7 @@
+         'defines': [ '__C99FEATURES__=1' ],  # isinf() etc.
+       }],
+       ['OS=="freebsd" or OS=="openbsd"', {
+-        'cflags': [ '-I/usr/local/include' ],
++        'cflags': [ '-idirafter /usr/local/include' ],
+       }],
+       ['OS=="netbsd"', {
+         'cflags': [ '-I/usr/pkg/include' ],
+@@ -877,11 +877,9 @@
+               # Don't use -O3 with sanitizers.
+               ['asan==0 and msan==0 and lsan==0 \
+                 and tsan==0 and ubsan==0 and ubsan_vptr==0', {
+-                'cflags': ['-O3'],
+-                'cflags!': ['-O2'],
++                'cflags': ['-O2'],
+               }, {
+                 'cflags': ['-O2'],
+-                'cflags!': ['-O3'],
+               }],
+             ],
+           }],
