@@ -94,7 +94,7 @@ Novedades tomadas de <https://www.openbsd.org/77.html>
 * Incluye retro-porte de node 22.20.0 junto con paquetes que requiere 
   libuv 1.51.0p0 y openssl 3.5.4v0. Con esta versión opera bien next.js 16
   como se describe en
-<https://dhobsd.pasosdejesus.org/api-con-nextjs-y-kysely-en-adj-openbsd-7-7.html>
+<https://dhobsd.pasosdejesus.org/api-con-nextjs-y-kysely-en-adj-openbsd-7-7p1.html>
 * Incluye portes actualizados para cerrar fallas de curl 8.13,
   geolite2-country-20191224p3, glib2-2.82.5p0,
   libarchive 3.8.1, libssh 0.11.3, libxml 2.13.9, libxslt, 1.1.43p1, 
