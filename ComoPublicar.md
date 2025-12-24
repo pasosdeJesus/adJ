@@ -183,18 +183,18 @@ Pasos importantes para publicar versión mayor
    ./conv.sh es
    ./compara.sh
 6. Análogo a pasos de versión beta
-7. Publicar un "Release" en gitlab Versión 7.8a1 con enlace a novedades.
+7. Publicar un "Release" en gitlab Versión 7.8b1 con enlace a novedades.
 8. Publicar en Twitter y Facebook.
    Si es tambien publicacion de SIVeL en sitio de noticias de SIVeL y Structio.
 
-	Publicado adJ 7.8a1 distribución para servidores y cortafuegos,
+	Publicado adJ 7.8b1 distribución para servidores y cortafuegos,
 	segura, amigable para cristian@s y en español, ver
 	http://aprendiendo.pasosdejesus.org/
 9. Correo a listas:
     openbsd-colombia@googlegroups.com,
     openbsd-mexico@googlegroups.com, sivel-soporte@lists.sourceforge.net
 
-	Tema: Publicado adJ 7.8a1 para amd64
+	Tema: Publicado adJ 7.8b1 para amd64
 
 	Para instalar por primera vez descarga la imagen para DVD de:
 	  http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/
