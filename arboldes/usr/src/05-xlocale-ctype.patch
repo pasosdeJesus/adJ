@@ -1915,19 +1915,20 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/stdio/vdpr
 -vdprintf(int fd, const char * __restrict fmt, va_list ap)
 +vdprintf_l(int fd, locale_t loc, const char * __restrict fmt, va_list ap)
  {
- 	FILE f;
- 	struct __sfileext fext;
-@@ -71,3 +72,10 @@
+ 	FILE f = FILEINIT(__SWR);
+ 	unsigned char buf[BUFSIZ];
+@@ -65,5 +66,11 @@
+ 		return ret;
  
- 	return fflush(&f) ? EOF : ret;
- }
-+
+ 	return __sflush(&f) ? EOF : ret;
++}
++	
 +int
 +vdprintf(int fd, const char * __restrict fmt, va_list ap)
 +{
-+       return vdprintf_l(fd, __get_locale(), fmt, ap);
-+}
-+
++	return vdprintf_l(fd, __get_locale(), fmt, ap);
+ }
+ DEF_WEAK(vdprintf);
 diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/stdio/dprintf.c src53xlocale2/lib/libc/stdio/dprintf.c
 --- src53xlocale1/lib/libc/stdio/dprintf.c	Mon Apr  8 21:20:25 2013
 +++ src53xlocale2/lib/libc/stdio/dprintf.c	Fri Apr 12 12:07:57 2013
@@ -2461,22 +2462,7 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/stdio/wsca
 diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/stdio/fgetws.3 src53xlocale2/lib/libc/stdio/fgetws.3
 --- src53xlocale1/lib/libc/stdio/fgetws.3	Mon Apr  8 21:20:25 2013
 +++ src53xlocale2/lib/libc/stdio/fgetws.3	Fri Apr 12 12:07:57 2013
-@@ -43,22 +43,28 @@
- .Dt FGETWS 3
- .Os
- .Sh NAME
--.Nm fgetws
-+.Nm fgetws ,
-+.Nm fgetws_l ,
- .Nd get a line of wide characters from a stream
- .Sh SYNOPSIS
- .In stdio.h
- .In wchar.h
- .Ft "wchar_t *"
- .Fn fgetws "wchar_t * restrict ws" "int n" "FILE * restrict fp"
-+.In xlocale.h
-+.Ft "wchar_t *"
-+.Fn fgetws_l "wchar_t * restrict ws" "int n" "FILE * restrict fp" "locale_t loc"
+@@ -53,12 +53,14 @@
  .Sh DESCRIPTION
  The
  .Fn fgetws
@@ -2494,7 +2480,7 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/stdio/fget
  .Fa ws .
  Reading stops when a newline character is found,
  at end-of-file, or error.
-@@ -66,25 +72,33 @@
+@@ -66,25 +68,33 @@
  If any characters are read and there is no error, a
  .Ql \e0
  character is appended to end the string.
@@ -2537,7 +2523,7 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/stdio/fget
  .Xr feof 3
  and
  .Xr ferror 3
-@@ -100,8 +114,10 @@
+@@ -100,8 +110,10 @@
  multibyte character.
  .El
  .Pp
@@ -2549,7 +2535,7 @@ diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/stdio/fget
  may also fail and set
  .Va errno
  for any of the errors specified for the routines
-@@ -114,9 +130,13 @@
+@@ -114,9 +126,13 @@
  .Xr feof 3 ,
  .Xr ferror 3 ,
  .Xr fgets 3

@@ -913,3 +913,14 @@ diff -ruN src65-orig/lib/libc/locale/localeconv.3 src/lib/libc/locale/localeconv
  .Dv LC_NUMERIC
  and
  .Dv LC_MONETARY
+diff -ruN src78-orig/lib/libc/hidden/stdlib.h src/lib/libc/hidden/stdlib.h
+--- src78-orig/lib/libc/hidden/stdlib.h	Fri Mar  1 16:30:40 2024
++++ src/lib/libc/hidden/stdlib.h	Thu Jan  8 15:25:27 2026
+@@ -54,6 +54,7 @@
+ #endif
+ 
+ PROTO_NORMAL(__mb_cur_max);
++PROTO_NORMAL(___mb_cur_max_l);
+ PROTO_NORMAL(__realpath);
+ PROTO_STD_DEPRECATED(_Exit);
+ PROTO_DEPRECATED(a64l);

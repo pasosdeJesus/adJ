@@ -715,10 +715,10 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/local.h
   */
  
  #include <wchar.h> 
-+#include <xlocale.h> 
- #include "wcio.h"
- #include "fileext.h"
++#include <xlocale.h>
+ #include "thread_private.h"
  
+ __BEGIN_HIDDEN_DECLS
 @@ -58,8 +59,8 @@
  int	__sflags(const char *, int *);
  wint_t __fgetwc_unlock(FILE *);
@@ -760,11 +760,9 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/scanf.c
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/snprintf.c src/lib/libc/stdio/snprintf.c
 --- src54-x6/lib/libc/stdio/snprintf.c	Sat Jun 25 00:32:56 2011
 +++ src/lib/libc/stdio/snprintf.c	Tue Dec  3 16:12:41 2013
-@@ -35,34 +35,33 @@
- #include <stdio.h>
+@@ -36,7 +36,9 @@
  #include <string.h>
  #include <stdarg.h>
-+
  #include "local.h"
 +#include "locale/xlocale_private.h"
  
@@ -772,47 +770,30 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/snprint
  int
  snprintf(char *str, size_t n, const char *fmt, ...)
  {
-+	int ret;
-+ 	va_list ap;
+@@ -56,9 +58,22 @@
+ 	f._bf._base = f._p = (unsigned char *)str;
+ 	f._bf._size = f._w = n - 1;
+ 	va_start(ap, fmt);
+-	ret = __vfprintf(&f, fmt, ap);
++	ret = __vfprintf(&f, __get_locale(), fmt, ap);
+ 	va_end(ap);
+ 	*f._p = '\0';
+ 	return (ret);
+ }
+ DEF_STRONG(snprintf);
 +
-+	va_start(ap, fmt);
-+	ret = vsnprintf(str, n, fmt, ap);
-+	va_end(ap);
-+
-+	return ret;
-+}
-+DEF_STRONG(snprintf);
 +
 +int
 +snprintf_l(char *str, size_t n, locale_t loc, const char *fmt, ...)
 +{
- 	va_list ap;
- 	int ret;
--	char dummy;
--	FILE f;
--	struct __sfileext fext;
- 
--	/* While snprintf(3) specifies size_t stdio uses an int internally */
--	if (n > INT_MAX)
--		n = INT_MAX;
--	/* Stdio internals do not deal correctly with zero length buffer */
--	if (n == 0) {
--		str = &dummy;
--		n = 1;
--	}
--	_FILEEXT_SETUP(&f, &fext);
--	f._file = -1;
--	f._flags = __SWR | __SSTR;
--	f._bf._base = f._p = (unsigned char *)str;
--	f._bf._size = f._w = n - 1;
- 	va_start(ap, fmt);
--	ret = __vfprintf(&f, fmt, ap);
++ 	va_list ap;
++ 	int ret;
++ 
++ 	va_start(ap, fmt);
 +	ret = vsnprintf_l(str, n, loc, fmt, ap);
- 	va_end(ap);
--	*f._p = '\0';
- 	return (ret);
- }
--DEF_STRONG(snprintf);
++ 	va_end(ap);
++ 	return (ret);
++}
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/sprintf.c src/lib/libc/stdio/sprintf.c
 --- src54-x6/lib/libc/stdio/sprintf.c	Sat Jun 25 00:32:56 2011
 +++ src/lib/libc/stdio/sprintf.c	Tue Dec  3 16:12:41 2013
@@ -826,7 +807,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/sprintf
  
  #if defined(APIWARN)
  __warn_references(sprintf,
-@@ -56,7 +58,27 @@
+@@ -52,7 +54,23 @@
  	f._bf._base = f._p = (unsigned char *)str;
  	f._bf._size = f._w = INT_MAX;
  	va_start(ap, fmt);
@@ -842,12 +823,8 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/sprintf
 +{
 +	int ret;
 +	va_list ap;
-+	FILE f;
-+	struct __sfileext fext;
++	FILE f = FILEINIT(__SWR | __SSTR);
 +
-+	_FILEEXT_SETUP(&f, &fext);
-+	f._file = -1;
-+	f._flags = __SWR | __SSTR;
 +	f._bf._base = f._p = (unsigned char *)str;
 +	f._bf._size = f._w = INT_MAX;
 +	va_start(ap, fmt);
@@ -858,55 +835,37 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/sprintf
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/sscanf.c src/lib/libc/stdio/sscanf.c
 --- src54-x6/lib/libc/stdio/sscanf.c	Mon Nov 14 23:11:36 2011
 +++ src/lib/libc/stdio/sscanf.c	Tue Dec  3 16:12:41 2013
-@@ -34,32 +34,34 @@
- #include <stdio.h>
+@@ -35,6 +35,7 @@
  #include <string.h>
  #include <stdarg.h>
-+
  #include "local.h"
 +#include "../locale/xlocale_private.h"
  
--static int
--eofread(void *cookie, char *buf, int len)
+ static int
+ eofread(void *cookie, char *buf, int len)
+@@ -54,8 +55,21 @@
+ 	f._bf._size = f._r = strlen(str);
+ 	f._read = eofread;
+ 	va_start(ap, fmt);
+-	ret = __svfscanf(&f, fmt, ap);
++	ret = __svfscanf(&f, __get_locale(), fmt, ap);
+ 	va_end(ap);
+ 	return (ret);
+ }
+ DEF_STRONG(sscanf);
++
 +int
-+sscanf(const char *str, const char *fmt, ...)
- {
++sscanf_l(const char *str, locale_t loc, const char *fmt, ...)
++{
 +	int ret;
 +	va_list ap;
- 
--	return (0);
++
 +	va_start(ap, fmt);
-+	ret = vsscanf(str, fmt, ap);
++	ret = vsscanf_l(str, loc, fmt, ap);
 +	va_end(ap);
 +
 +	return (ret);
- }
-+DEF_STRONG(sscanf);
- 
-+
- int
--sscanf(const char *str, const char *fmt, ...)
-+sscanf_l(const char *str, locale_t loc, const char *fmt, ...)
- {
- 	int ret;
- 	va_list ap;
--	FILE f;
--	struct __sfileext fext;
- 
--	_FILEEXT_SETUP(&f, &fext);
--	f._flags = __SRD;
--	f._bf._base = f._p = (unsigned char *)str;
--	f._bf._size = f._r = strlen(str);
--	f._read = eofread;
--	f._lb._base = NULL;
- 	va_start(ap, fmt);
--	ret = __svfscanf(&f, fmt, ap);
-+	ret = vsscanf_l(str, loc, fmt, ap);
- 	va_end(ap);
-+
- 	return (ret);
- }
--DEF_STRONG(sscanf);
++}
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vasprintf.c src/lib/libc/stdio/vasprintf.c
 --- src54-x6/lib/libc/stdio/vasprintf.c	Tue Nov 10 11:28:49 2009
 +++ src/lib/libc/stdio/vasprintf.c	Tue Dec  3 16:12:41 2013
@@ -1440,19 +1399,18 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/stdio/vsscanf
  
  static int
  eofread(void *cookie, char *buf, int len)
-@@ -43,7 +45,7 @@
+@@ -43,13 +45,19 @@
  }
  
  int
 -vsscanf(const char *str, const char *fmt, __va_list ap)
 +vsscanf_l(const char *str, locale_t loc, const char *fmt, __va_list ap)
  {
- 	FILE f;
- 	struct __sfileext fext;
-@@ -54,6 +56,12 @@
+ 	FILE f = FILEINIT(__SRD);
+ 
+ 	f._bf._base = f._p = (unsigned char *)str;
  	f._bf._size = f._r = strlen(str);
  	f._read = eofread;
- 	f._lb._base = NULL;
 -	return (__svfscanf(&f, fmt, ap));
 +	return (__svfscanf(&f, loc, fmt, ap));
 +}
@@ -2663,15 +2621,7 @@ diff -ruN src/lib/libc/hidden/monetary.h.orig src/lib/libc/hidden/monentary.h
 diff -ruN src/lib/libc/hidden/stdlib.h.orig  src/lib/libc/hidden/stdlib.h
 --- src/lib/libc/hidden/stdlib.h.orig	Sun Aug 21 23:26:56 2016
 +++ src/lib/libc/hidden/stdlib.h	Sun Aug 21 23:27:02 2016
-@@ -53,6 +53,7 @@
- #endif
- 
- PROTO_NORMAL(__mb_cur_max);
-+PROTO_NORMAL(___mb_cur_max_l);
- PROTO_NORMAL(__realpath);
- PROTO_STD_DEPRECATED(_Exit);
- PROTO_DEPRECATED(a64l);
-@@ -156,9 +157,12 @@
+@@ -159,9 +159,12 @@
  PROTO_DEPRECATED(srandom_deterministic);
  PROTO_DEPRECATED(srandomdev);
  PROTO_NORMAL(strtod);
@@ -2687,18 +2637,18 @@ diff -ruN src/lib/libc/hidden/stdlib.h.orig  src/lib/libc/hidden/stdlib.h
 diff -ruN src61-orig/lib/libc/hidden/stdio.h src/lib/libc/hidden/stdio.h
 --- src61-orig/lib/libc/hidden/stdio.h	Tue Sep  6 14:56:36 2016
 +++ src/lib/libc/hidden/stdio.h	Tue May 16 07:28:33 2017
-@@ -29,6 +29,8 @@
- #include_next <stdio.h>
+@@ -30,6 +30,8 @@
+ #include <_stdio.h>		/* struct __sFILE, std{in,out,err} */
  
  __BEGIN_HIDDEN_DECLS
 +typedef struct  _xlocale *locale_t;
 +int      asprintf_l(char **, locale_t, const char *, ...);
- char	*_mktemp(char *);
- __END_HIDDEN_DECLS
+ int	__cleanfile(FILE *, int _doclose);
+ void	__relefile(FILE *);
+ int	__srget(FILE *);
+@@ -46,6 +48,7 @@
+ #endif
  
-@@ -42,6 +44,7 @@
- 
- PROTO_NORMAL(__srget);
  PROTO_NORMAL(asprintf);
 +PROTO_NORMAL(asprintf_l);
  PROTO_NORMAL(clearerr);

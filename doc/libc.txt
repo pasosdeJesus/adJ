@@ -6,9 +6,9 @@ Aqui traducimos parte de src/lib/libc/include/README
 
 
 
-- Hay símobolos internos de libc usados sólo dentro de libc y
+- Hay símbolos internos de libc usados sólo dentro de libc y
   otros públicos. 
-- Símbolos interos:
+- Símbolos internos:
 	- Uno que se use en un sólo archivo con static
 	- Si se usa en varios ponerlo en un .h dentro de
 	  __BEGIN_HIDDEN_DECLS y __END_HIDDEN_DECLS.  si
@@ -43,7 +43,7 @@ Aqui traducimos parte de src/lib/libc/include/README
 			PROTO_NORMAL(nombre_funcion);
 		  En el .c donde se define:
 		  - Si la función se especifica en ISO C o
-	 	    su nombre comiena con  agregar:
+	 	    su nombre comienza con  agregar:
 			DEF_STRONG(nombre_funcion);
 		  - En otro caso:
 			DEF_WEAK(nombre_funcion);

@@ -252,18 +252,18 @@ diff -u src-ant/lib/libc/stdio/fputwc.c src/lib/libc/stdio/fputwc.c
 -__fputwc_unlock(wchar_t wc, FILE *fp)
 +__fputwc_unlock(wchar_t wc, FILE *fp, locale_t loc)
  {
- 	struct wchar_io_data *wcio;
- 	mbstate_t *st;
-@@ -61,7 +64,7 @@
- 	wcio->wcio_ungetwc_inbuf = 0;
- 	st = &wcio->wcio_mbstate_out;
+ 	size_t size;
+ 	char buf[MB_LEN_MAX];
+@@ -52,7 +55,7 @@
  
--	size = wcrtomb(buf, wc, st);
-+	size = wcrtomb_l(buf, wc, st, loc);
+ 	fp->_ungetwc_inbuf = 0;
+ 
+-	size = wcrtomb(buf, wc, &fp->_mbstate_out);
++	size = wcrtomb_l(buf, wc, &fp->_mbstate_out, loc);
  	if (size == (size_t)-1) {
- 		errno = EILSEQ;
+ 		fp->_flags |= __SERR;
  		return WEOF;
-@@ -76,13 +79,20 @@
+@@ -67,14 +70,21 @@
  }
  
  wint_t
@@ -286,6 +286,7 @@ diff -u src-ant/lib/libc/stdio/fputwc.c src/lib/libc/stdio/fputwc.c
 +	return fputwc_l(wc, fp, __get_locale());
 +}
 +
+ DEF_STRONG(fputwc);
 diff -u src-ant/lib/libc/stdio/fgetwc.c src/lib/libc/stdio/fgetwc.c
 --- src-ant/lib/libc/stdio/fgetwc.c	Thu May 15 05:35:00 2014
 +++ src/lib/libc/stdio/fgetwc.c	Thu May 15 05:35:39 2014
@@ -302,18 +303,18 @@ diff -u src-ant/lib/libc/stdio/fgetwc.c src/lib/libc/stdio/fgetwc.c
 -__fgetwc_unlock(FILE *fp)
 +__fgetwc_unlock(FILE *fp, locale_t loc)
  {
- 	struct wchar_io_data *wcio;
- 	mbstate_t *st;
-@@ -67,7 +70,7 @@
+ 	wchar_t wc;
+ 	size_t size;
+@@ -58,7 +61,7 @@
  		}
  
  		c = ch;
--		size = mbrtowc(&wc, &c, 1, st);
-+		size = mbrtowc_l(&wc, &c, 1, st, loc);
+-		size = mbrtowc(&wc, &c, 1, &fp->_mbstate_in);
++		size = mbrtowc_l(&wc, &c, 1, &fp->_mbstate_in, loc);
  		if (size == (size_t)-1) {
- 			errno = EILSEQ;
+ 			fp->_flags |= __SERR;
  			return WEOF;
-@@ -83,7 +86,19 @@
+@@ -74,7 +77,19 @@
  	wint_t r;
  
  	FLOCKFILE(fp);
@@ -818,8 +819,8 @@ diff -u src-ant/lib/libc/stdio/vswscanf.c src/lib/libc/stdio/vswscanf.c
 +		const wchar_t * __restrict fmt, __va_list ap)
  {
  	mbstate_t mbs;
- 	FILE f;
-@@ -64,12 +68,12 @@
+ 	FILE f = FILEINIT(__SRD);
+@@ -63,12 +67,12 @@
  	 * XXX Convert the wide character string to multibyte, which
  	 * __vfwscanf() will convert back to wide characters.
  	 */
@@ -834,24 +835,23 @@ diff -u src-ant/lib/libc/stdio/vswscanf.c src/lib/libc/stdio/vswscanf.c
  		free(mbstr);
  		return (EOF);
  	}
-@@ -81,8 +85,16 @@
+@@ -77,9 +81,15 @@
+ 	f._bf._base = f._p = (unsigned char *)mbstr;
  	f._bf._size = f._r = mlen;
  	f._read = eofread;
- 	f._lb._base = NULL;
 -	r = __vfwscanf(&f, fmt, ap);
 +	r = __vfwscanf(&f, loc, fmt, ap);
  	free(mbstr);
  
  	return (r);
- }
-+
++}
 +int
 +vswscanf(const wchar_t * __restrict str, const wchar_t * __restrict fmt,
-+    __va_list ap)
++		__va_list ap)
 +{
 +	return vswscanf_l(str, __get_locale(), fmt, ap);
-+}
-+
+ }
+ DEF_STRONG(vswscanf);
 diff -u src-ant/lib/libc/stdio/vfwprintf.c src/lib/libc/stdio/vfwprintf.c
 --- src-ant/lib/libc/stdio/vfwprintf.c	Thu May 15 05:35:00 2014
 +++ src/lib/libc/stdio/vfwprintf.c	Thu May 15 05:35:39 2014

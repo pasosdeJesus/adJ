@@ -71,7 +71,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/co
  int __collate_load_error;
  
  
--extern struct __collate __global_collate = {
+-struct __collate __global_collate = {
 -	1, 0
 +struct xlocale_collate __xlocale_global_collate = {
 +	{{0}, "C"}, 1, 0
@@ -214,7 +214,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/co
  
  
  /* Current LC_COLLATE */
--struct __collate __global_collate;
+-extern struct __collate __global_collate;
 +extern struct xlocale_collate __xlocale_global_collate;
  
  __BEGIN_DECLS
@@ -398,7 +398,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src67-orig/lib/libc/locale/iswcty
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mblen.3 src/lib/libc/locale/mblen.3
 --- src53collation/lib/libc/locale/mblen.3	Mon Mar 25 18:28:42 2013
 +++ src/lib/libc/locale/mblen.3	Wed Apr  3 11:15:27 2013
-@@ -31,21 +31,26 @@
+@@ -31,20 +31,25 @@
  .\" ----------------------------------------------------------------------
  .Sh NAME
  .Nm mblen
@@ -416,20 +416,18 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mb
 -The
 +The functions
  .Fn mblen
--function usually determines the number of bytes in
+-function returns the number of bytes
 +and
 +.Fn mblen_l
-+usually determines the number of bytes in
- a multibyte character pointed to by
- .Fa s
--and returns it.
--This function shall only examine max n bytes of the array beginning from
-+and return it.
-+These functions shall only examine max n bytes of the array beginning from
++return the number of bytes
+ in the first multibyte character of the multibyte string
  .Fa s .
- .Pp
- In state-dependent encodings,
-@@ -93,7 +98,10 @@
+-It examines at most the first
++They examine at most the first
+ .Fa n
+ bytes of
+ .Fa s .
+@@ -92,7 +97,10 @@
  .Fn mblen
  is affected by the
  .Dv LC_CTYPE
@@ -441,7 +439,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/mb
  .Pp
  There are special cases:
  .Bl -tag -width 0123456789
-@@ -170,6 +178,7 @@
+@@ -169,6 +177,7 @@
  .Xr mbrlen 3 ,
  .Xr mbtowc 3 ,
  .Xr setlocale 3
@@ -4382,18 +4380,19 @@ diff -ruN src/lib/libc/hidden/stdlib.h.orig src/lib/libc/hidden/stdlib.h
 diff -ruN src/lib/libc/hidden/wchar.h.orig src/lib/libc/hidden/wchar.h
 --- src/lib/libc/hidden/wchar.h.orig	Thu Jun  9 23:21:42 2016
 +++ src/lib/libc/hidden/wchar.h	Fri Aug 19 06:29:53 2016
-@@ -19,8 +19,10 @@
- #define _LIBC_WCHAR_H_
+@@ -24,9 +24,11 @@
+ #endif
  
  #include_next <wchar.h>
 +#include_next <xlocale.h>
+ #include <_stdio.h>		/* struct __sFILE, std{in,out,err} */
  
  PROTO_NORMAL(btowc);
 +PROTO_NORMAL(btowc_l);
  PROTO_NORMAL(fgetwc);
  PROTO_NORMAL(fgetws);
  PROTO_NORMAL(fputwc);
-@@ -31,10 +33,15 @@
+@@ -37,10 +39,15 @@
  PROTO_NORMAL(getwc);
  PROTO_NORMAL(getwchar);
  PROTO_NORMAL(mbrlen);
@@ -4409,7 +4408,7 @@ diff -ruN src/lib/libc/hidden/wchar.h.orig src/lib/libc/hidden/wchar.h
  PROTO_DEPRECATED(open_wmemstream);
  PROTO_NORMAL(putwc);
  PROTO_NORMAL(putwchar);
-@@ -48,6 +55,7 @@
+@@ -54,6 +61,7 @@
  PROTO_NORMAL(vwprintf);
  PROTO_NORMAL(vwscanf);
  PROTO_NORMAL(wcrtomb);
@@ -4417,9 +4416,9 @@ diff -ruN src/lib/libc/hidden/wchar.h.orig src/lib/libc/hidden/wchar.h
  PROTO_NORMAL(wcscasecmp);
  PROTO_NORMAL(wcscat);
  PROTO_NORMAL(wcschr);
-@@ -65,9 +73,11 @@
- PROTO_NORMAL(wcsncmp);
+@@ -73,9 +81,11 @@
  PROTO_NORMAL(wcsncpy);
+ PROTO_DEPRECATED(wcsnlen);
  PROTO_NORMAL(wcsnrtombs);
 +PROTO_NORMAL(wcsnrtombs_l);
  PROTO_NORMAL(wcspbrk);
@@ -4429,9 +4428,9 @@ diff -ruN src/lib/libc/hidden/wchar.h.orig src/lib/libc/hidden/wchar.h
  PROTO_NORMAL(wcsspn);
  PROTO_NORMAL(wcsstr);
  PROTO_NORMAL(wcstod);
-@@ -82,6 +92,7 @@
- PROTO_NORMAL(wcswidth);
+@@ -91,6 +101,7 @@
  PROTO_NORMAL(wcsxfrm);
+ PROTO_DEPRECATED(wcsxfrm_l);
  PROTO_NORMAL(wctob);
 +PROTO_NORMAL(wctob_l);
  PROTO_NORMAL(wcwidth);
