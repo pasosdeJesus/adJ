@@ -1,6 +1,8 @@
 BROKEN-i386 =		v8/src/compiler/turboshaft/int64-lowering-reducer.h:295:24: error: call to member function 'Word32Constant' is ambiguous (but will probably run out of memory linking under DPB even if fixed)
 BROKEN-powerpc64 =	Check failed: false. OS architecture not handled. (powerpc64)
 
+PORTROACH=		ignore:1
+
 USE_WXNEEDED=		Yes
 
 DPB_PROPERTIES=		parallel parallel2
@@ -10,17 +12,17 @@ DPB_PROPERTIES+=	lonesome
 
 COMMENT=		Chromium browser
 
-V=			135.0.7049.52
-
-REVISION=		0
+V=			141.0.7390.54
 
 DISTNAME=		chromium-${V}
 
 DISTFILES+=		${CHROMIUM_DISTFILES} \
 			${REGRESS_DISTFILES}
+DISTFILES.a=		${REGRESS_DISTFILES.a}
 
 CHROMIUM_DISTFILES+=	chromium-${V}${EXTRACT_SUFX}
 REGRESS_DISTFILES+=	chromium-${V}-testdata${EXTRACT_SUFX}
+REGRESS_DISTFILES.a=	test_fonts-a28b222b79851716f8358d2800157d9ffe117b3545031ae51f69b7e1e1b9a969.tar.gz
 
 EXTRACT_ONLY=		${CHROMIUM_DISTFILES}
 
@@ -40,26 +42,26 @@ FLAVOR?=
 PERMIT_PACKAGE =	Yes
 
 SITES=		https://commondatastorage.googleapis.com/chromium-browser-official/
+SITES.a=	https://nerd.hu/distfiles/
 
-MODULES=	lang/clang lang/python x11/qt5
+MODULES=	lang/clang lang/python x11/qt5 x11/qt6
 
 MODCLANG_VERSION=	19
 MODQT5_DEPS=		No
+MODQT6_DEPS=		No
 MODPY_RUNDEP=		No
 
 COMPILER=		ports-clang
 
 # uses pledge()
-WANTLIB+=	GL X11 Xau Xcomposite Xdamage Xdmcp Xext Xfixes Xft Xi Xrandr
-WANTLIB+=	Xrender Xtst aom atk-1.0 atk-bridge-2.0 atspi c cairo
-WANTLIB+=	cbor crypto cups dav1d dbus-1 drm event execinfo expat ffi fido2
-WANTLIB+=	fontconfig freetype fribidi gbm gio-2.0 glib-2.0 gmodule-2.0
-WANTLIB+=	gobject-2.0 graphite2 gthread-2.0 harfbuzz harfbuzz-gobject
-WANTLIB+=	harfbuzz-subset iconv icudata icui18n icuuc intl jpeg kvm m
-WANTLIB+=	nspr4 nss3 nssutil3 openh264 opus pango-1.0 pangocairo-1.0
-WANTLIB+=	pangoft2-1.0 pcre2-8 pixman-1 plc4 plds4 png pthread pthread smime3
-WANTLIB+=	sndio usbhid util vpx xcb xcb-render xcb-shm xkbcommon xml2
-WANTLIB+=	xshmfence xslt z
+WANTLIB+=	GL X11 Xcomposite Xdamage Xext Xfixes Xi Xrandr Xrender Xtst
+WANTLIB+=	aom atk-1.0 atk-bridge-2.0 atspi c cairo cbor crypto cups
+WANTLIB+=	dav1d dbus-1 drm epoll-shim execinfo expat fido2 fontconfig
+WANTLIB+=	gbm gio-2.0 glib-2.0 gmodule-2.0 gobject-2.0 gthread-2.0
+WANTLIB+=	harfbuzz harfbuzz-subset icudata icui18n icuuc intl jpeg kvm
+WANTLIB+=	m nspr4 nss3 nssutil3 openh264 opus pango-1.0 pangocairo-1.0
+WANTLIB+=	plc4 plds4 png pthread pthread smime3 sndio udev usbhid util
+WANTLIB+=	vpx xcb xkbcommon xml2 xshmfence xslt z
 
 RUN_DEPENDS=	devel/xdg-utils \
 		devel/desktop-file-utils \
@@ -81,7 +83,8 @@ BUILD_DEPENDS=	archivers/bzip2 \
 		sysutils/pciutils \
 		devel/ninja \
 		x11/py-xcbgen \
-		x11/qt5/qtbase,-main \
+		${MODQT5_LIB_DEPENDS} \
+		${MODQT6_LIB_DEPENDS} \
 		${MODGCC4_CPPDEP} \
 		${RUN_DEPENDS}
 LIB_DEPENDS=	audio/opus \
@@ -150,8 +153,7 @@ GN_SYSTEM_LIBS=	dav1d \
 		openh264 \
 		opus
 
-GN_ARGS=	enable_nacl=false \
-		is_official_build=true \
+GN_ARGS=	is_official_build=true \
 		is_debug=false \
 		is_cfi=false \
 		optimize_webui=true \
@@ -180,7 +182,11 @@ GN_ARGS=	enable_nacl=false \
 		use_custom_libcxx=true \
 		use_custom_libunwind=true \
 		use_udev=true \
-		v8_enable_cet_ibt=true
+		v8_enable_cet_ibt=true \
+		use_qt5=true \
+		use_qt6=true \
+		moc_qt5_path=\"${MODQT5_MOC}\" \
+		moc_qt6_path=\"${MODQT6_MOC}\"
 
 # rust
 RUSTC_VERSION!!=rustc -V
@@ -252,7 +258,6 @@ GN_ARGS+=	use_thin_lto=false \
 
 post-patch:
 	@ln -sf ${MODPY_BIN} ${WRKDIR}/bin/python
-	@ln -sf ${MODQT5_MOC} ${WRKDIR}/bin/moc
 	@ln -sf ${LOCALBASE}/bin/llvm-ar-${MODCLANG_VERSION} ${WRKDIR}/bin/ar
 	@mkdir -p ${WRKSRC}/third_party/node/openbsd/node-openbsd/bin
 	@ln -sf ${TRUEPREFIX}/bin/node ${WRKSRC}/third_party/node/openbsd/node-openbsd/bin/node
@@ -350,6 +355,8 @@ pre-test:
 	*testdata*.tar.xz) \
 		test -d ${WRKSRC}/base/tracing/test/data || \
 			xzdec <${FULLDISTDIR}/${_d} | ${TAR} -C ${WRKDIR} -xf -;; \
+	*font*.tar.gz) \
+		${GZIP_CMD} -d <${FULLDISTDIR}/${_d} | ${TAR} -C ${WRKDIST}/third_party/test_fonts/test_fonts -xf -;; \
 	esac;
 .endfor
 
