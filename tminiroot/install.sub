@@ -1,5 +1,5 @@
 #!/bin/ksh
-#	$OpenBSD: install.sub,v 1.1269 2025/04/06 11:54:36 kn Exp $
+#	$OpenBSD: install.sub,v 1.1278 2025/08/06 16:50:53 florian Exp $
 #
 # Copyright (c) 1997-2015 Todd Miller, Theo de Raadt, Ken Westerback
 # Copyright (c) 2015, Robert Peichaer <rpe@openbsd.org>
@@ -68,7 +68,7 @@ err_exit() {
 
 # Show usage of the installer script and exit.
 usage() {
-	err_exit "usage: ${0##*/} [-ax] [-f filename] [-m install | upgrade]"
+	err_exit "usage: ${0##*/} [-ax] [-f filename]"
 }
 
 # Wait for the ftp(1) process started in start_cgiinfo() to end and extract
@@ -262,7 +262,7 @@ dmesgtail() {
 # Device related functions
 # ------------------------------------------------------------------------------
 
-# Show device name, info, NAA and size for the provided list of disk devices.
+# Show device name, info, NAA and size in gigabytes for the provided disks.
 # Create device nodes as needed and cleanup afterwards.
 diskinfo() {
 	local _d _i _n _s
@@ -1788,10 +1788,10 @@ install_files() {
 		return
 	fi
 
-	# We are committed to installing new files.  Attempt to cope with
-	# potential space shortage in /usr by deleting a few versioned
-	# areas which will be replaced from the new sets
 	if [[ $MODE == upgrade ]]; then
+		# We are committed to installing new files.  Attempt to cope
+		# with potential space shortage in /usr by deleting a few
+		# versioned areas which will be replaced from the new sets
 		if isin base$VERSION.tgz $_get_sets; then
 			rm -f /mnt/usr/share/relink/usr/lib/*
 			rm -rf /mnt/usr/lib/libLLVM.so.[0-7].0
@@ -1804,6 +1804,10 @@ install_files() {
 			# file changed to dir in libc++
 			rm -rf /mnt/usr/include/c++/v1
 		fi
+
+		# From 7.8 onwards, font cache isn't owned by root
+		chown -R _fc-cache:_fc-cache /mnt/var/cache/fontconfig >/dev/null 2>&1
+
 		rm -rf /mnt/var/syspatch/*
 	fi
 
@@ -2429,12 +2433,22 @@ is_rootdisk() {
 
 # Get global root information. ie. ROOTDISK, ROOTDEV and SWAPDEV.
 get_rootinfo() {
-	local _default=$(get_dkdevs_root) _dkdev
+	local _rootdisks=$(get_dkdevs_root) _dkdev
 	local _q="Which disk is the root disk? ('?' for details)"
+
+	
+	if [[ $MODE == install ]]; then
+		# Prefer disks bigger than 1G as small ones tend to be install
+		# media, softraid(4) key disks or tiny USB sticks or SD cards.
+		for _dkdev in $_rootdisks; do
+			diskinfo $_dkdev | grep -q '(0\..*G)$' &&
+				_rootdisks="$(rmel "$_dkdev" $_rootdisks) $_dkdev"
+		done
+	fi
 
 	while :; do
 		echo "Available disks are: $(get_dkdevs_root | sed 's/^$/none/')."
-		_ask "$_q" $_default || continue
+		_ask "$_q" $_rootdisks || continue
 		case $resp in
 		"?")	diskinfo $(get_dkdevs);;
 		'')	;;
@@ -2445,7 +2459,7 @@ get_rootinfo() {
 				[[ $MODE == install ]] && break
 				is_rootdisk "$_dkdev" && break
 				echo "$resp is not a valid root disk."
-				_default="$(rmel "$_dkdev" $_default) $_dkdev"
+				_rootdisks="$(rmel "$_dkdev" $_rootdisks) $_dkdev"
 			else
 				echo "no such disk"
 			fi
@@ -2639,9 +2653,6 @@ enable_network() {
 	echo "127.0.0.1\tlocalhost" >/tmp/i/hosts
 	echo "::1\t\tlocalhost" >>/tmp/i/hosts
 
-	_f=/mnt/etc/soii.key
-	[[ -f $_f ]] && sysctl "net.inet6.ip6.soiikey=$(<$_f)"
-
 	enable_ifs
 }
 
@@ -2796,27 +2807,28 @@ feed_random() {
 # selects from that location. Repeat as many times as the user needs to get all
 # desired sets.
 install_sets() {
-	local _cddevs=$(get_cddevs) _d _im _locs="disk http" _src
+	# Default to method recorded last time, if any.
+	local _cddevs=$(get_cddevs) _d=$CGI_METHOD _im _locs=disk _src
 
-	echo
+	# Offer network methods if there are physical interfaces.
+        if [[ -n $(get_ifs) ]]; then
+		_locs="$_locs http"
 
-	# Set default location to method recorded last time.
-	_d=$CGI_METHOD
+		# Offer NFS if the ramdisk supports it.
+		[[ -x /sbin/mount_nfs ]] && _locs="$_locs nfs"
 
-	# Set default location to HTTP in case we netbooted.
-	ifconfig netboot >/dev/null 2>&1 && : ${_d:=http}
+		# Prefer HTTP to any existing default if installurl(5) exists.
+		[[ -s /mnt/etc/installurl ]] && _d=http
 
-	# Set default location to HTTP if installurl(5) exists.
-	[[ -s /mnt/etc/installurl ]] && _d=http
+		# Default to HTTP, whether netbooted or not.
+		: ${_d:=http}
+	fi
 
-	# Set default location to the first cdrom device if any are found.
+        # Default to CD, assuming it is installXY.iso containing sets.
 	[[ -n $_cddevs ]] && : ${_d:=cd0}
 
-	# Add NFS to set locations if the boot kernel supports it.
-	[[ -x /sbin/mount_nfs ]] && _locs="$_locs nfs"
-
-	# In case none of the above applied, set HTTP as default location.
-	: ${_d:=http}
+	# Without network or CD, only disk is valid and available.
+	: ${_d:=disk}
 
 	# If the default location set so far is not one of the cdrom devices or
 	# is not in the list of valid locations, set a sane default.
@@ -2826,7 +2838,7 @@ install_sets() {
 		done
 	fi
 
-	echo "Let's $MODE the sets!"
+	echo "\nLet's $MODE the sets!"
 	while :; do
 		# Get list of cdroms again in case one just got plugged in.
 		_cddevs=$(get_cddevs)
@@ -2922,12 +2934,17 @@ encr_pwd() {
 	fi
 }
 
-# Store entropy for the next boot.
+# Create future seeds for the bootloader and rc(8).
 store_random() {
-	dd if=/dev/random of=/mnt/var/db/host.random bs=65536 count=1 \
-		status=none
-	dd if=/dev/random of=/mnt/etc/random.seed bs=512 count=1 status=none
-	chmod 600 /mnt/var/db/host.random /mnt/etc/random.seed
+	local _bootseed=/mnt/etc/random.seed _hostseed=/mnt/var/db/host.random
+
+	dd if=/dev/random of=$_bootseed bs=512   count=1 status=none
+	dd if=/dev/random of=$_hostseed bs=65536 count=1 status=none
+
+	# Removal of the sticky bit indicates the file has fresh contents for
+	# use by a subsequent bootloader (who sets the sticky bit to prevent
+	# content reuse).
+	chmod u=rw-t,go= $_bootseed $_hostseed
 }
 
 # Final steps common for installs and upgrades.
@@ -3058,7 +3075,7 @@ __EOT
 		fi
 	fi
 
-	# Store entropy for the next boot.
+	# Update seed files.
 	store_random
 
 	# Pat on the back.
@@ -3563,11 +3580,10 @@ UU=false
 MODE=
 PROGNAME=${0##*/}
 AI_RESPFILE=
-while getopts "af:m:x" opt; do
+while getopts "af:x" opt; do
 	case $opt in
 	a)	AI=true;;
 	f)	AI_RESPFILE=$OPTARG;;
-	m)	MODE=$OPTARG;;
 	x)	UU=true;;
 	*)	usage;;
 	esac
@@ -3702,7 +3718,6 @@ Control-C, but this can leave your system in an inconsistent state.
 
 __EOT
 elif $UU; then
-	MODE=upgrade
 	check_unattendedupgrade || exit 1
 
 	start_watchdog
