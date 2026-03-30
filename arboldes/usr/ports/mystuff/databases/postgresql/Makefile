@@ -5,8 +5,7 @@ COMMENT-contrib=PostgreSQL RDBMS contributions
 COMMENT-plpython=Python procedural language for PostgreSQL
 COMMENT-pg_upgrade=Support for upgrading PostgreSQL data from previous version
 
-VERSION=	17.5
-REVISION=0
+VERSION=	17.9
 PREV_MAJOR=	16
 DISTNAME=	postgresql-${VERSION}
 PKGNAME-main=	postgresql-client-${VERSION}
@@ -28,8 +27,7 @@ PERMIT_PACKAGE=	Yes
 
 WANTLIB += c curses crypto m readline ssl z pthread
 
-SITES=		https://ftp.postgresql.org/pub/source/v${VERSION}/ \
-		ftp://ftp.postgresql.org/pub/source/v${VERSION}/
+SITES=		https://ftp.postgresql.org/pub/source/v${VERSION}/
 MULTI_PACKAGES=	-docs -main -server -contrib -pg_upgrade -plpython
 
 MAKE_FILE=	GNUmakefile

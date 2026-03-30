@@ -1,12 +1,16 @@
 # PROCESO-DE-CONSTRUCCION.md: Guía para la Edificación de adJ
 
-## 1. Visión General: La Obra del Alfarero
+## 1. Visión General
 
-La creación de `adJ` es un proceso análogo a la obra de un alfarero. No se trata de escribir un programa desde cero, sino de tomar la excelente arcilla que es el sistema operativo OpenBSD y moldearla con un propósito superior, transformándola en una nueva creación.
+La creación de `adJ` parte de una base sólida: el sistema operativo OpenBSD.
+Sobre esta base, aplicamos una serie de transformaciones sistemáticas (parches,
+scripts de configuración, paquetes personalizados) para adaptarlo a las
+necesidades específicas de organizaciones de derechos humanos y educación.
 
-> "Mas ahora, oh Jehová, tú eres nuestro padre; nosotros barro, y tú el que nos formaste; así que obra de tus manos somos todos nosotros." (Isaías 64:8).
-
-Este documento detalla el proceso de "moldeado": cómo las fuentes de un OpenBSD estándar son sistemáticamente transformadas, compiladas y empaquetadas para dar a luz a la distribución `adJ`.
+Como está escrito: "Mas ahora, oh Jehová, tú eres nuestro padre; nosotros barro,
+y tú el que nos formaste" (Isaías 64:8). Este versículo refleja nuestra
+convicción de que todo trabajo téctico puede ser una ofrenda al Señor, pero la
+documentación se enfoca en el *cómo* más que en el *por qué* espiritual.
 
 ## 2. Prerrequisitos Ineludibles: Los Cimientos
 
@@ -99,13 +103,21 @@ Esta estrategia de gestión de paquetes es un testimonio de la dedicación de `a
 
 8.  **Firma y Verificación:** El script `distribucion.sh` finaliza calculando sumas de verificación (`SHA256`) para todos los juegos de instalación y firmándolas criptográficamente con `signify` para garantizar la integridad y autenticidad de la distribución.
 
-## 5. Un Acto de Santificación del Lenguaje: De `daemon` a `servicio`
+## 5. Cambio Terminológico: De `daemon` a `servicio`
 
-Un aspecto fundamental y único del proyecto `adJ` es la purificación del lenguaje técnico. Durante el proceso de construcción, se ejecuta una serie de scripts (`hdes/servicio-*.sh`) cuyo único propósito es buscar y reemplazar la palabra `daemon` por `servicio` en todo el código fuente del sistema.
+Una característica distintiva de `adJ` es el reemplazo sistemático del término
+`daemon` por `servicio` en todo el código fuente, mensajes y documentación del
+sistema. Este cambio se automatiza mediante los scripts `hdes/servicio-*.sh`.
 
-> "Ninguna palabra corrompida salga de vuestra boca, sino la que sea buena para la necesaria edificación, a fin de dar gracia a los oyentes." (Efesios 4:29).
+La motivación es doble:
+1. **Neutralidad cultural**: El término "demonio" tiene connotaciones negativas
+   en muchas culturas y puede ser una barrera para usuarios no técnicos.
+2. **Claridad conceptual**: "Servicio" describe con mayor precisión la función
+   de estos programas (procesos en segundo plano que ofrecen servicios).
 
-Esta no es una simple sustitución cosmética. Es una decisión consciente y teológica para emplear una terminología más neutral y universalmente respetuosa, eliminando un término que, aunque estándar en el mundo Unix, posee connotaciones negativas fuera de él. Este acto refleja el compromiso del proyecto de honrar su cosmovisión en cada detalle de la obra.
+El proyecto se guía por el principio de "Ninguna palabra corrompida salga de
+vuestra boca, sino la que sea buena para la necesaria edificación" (Efesios
+4:29), buscando que incluso la terminología técnica edifique al usuario.
 
 ## 6. Verificación y Pasos Siguientes
 

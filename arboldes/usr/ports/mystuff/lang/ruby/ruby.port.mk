@@ -25,7 +25,7 @@ MODRUBY_HANDLE_FLAVORS ?= No
 # If ruby.pork.mk should handle FLAVORs, define a separate FLAVOR
 # for each ruby version.
 .    if !defined(FLAVORS)
-FLAVORS=	ruby32 ruby33 ruby34
+FLAVORS=	ruby33 ruby34 ruby40
 .    endif
 
 # Instead of adding flavors to the end of the package name, we use
@@ -42,19 +42,19 @@ FULLPKGNAME?=		${MODRUBY_PKG_PREFIX}-${PKGNAME}
 SUBST_VARS+=		GEM_BIN_SUFFIX GEM_MAN_SUFFIX
 
 FLAVOR?=
-# Without a FLAVOR, assume the use of ruby 3.3.
+# Without a FLAVOR, assume the use of ruby 3.4.
 .    if empty(FLAVOR)
-FLAVOR =		ruby33
+FLAVOR =		ruby34
 .    endif
 
 # Check for conflicting FLAVORs and set MODRUBY_REV appropriately based
 # on the FLAVOR.
-.    for i in ruby32 ruby33 ruby34
+.    for i in ruby33 ruby34 ruby40
 .      if ${FLAVOR:M$i}
 MODRUBY_REV = ${i:C/ruby([0-9])/\1./}
-.        if ${FLAVOR:N$i:Mruby32} || \
-            ${FLAVOR:N$i:Mruby33} || \
-            ${FLAVOR:N$i:Mruby34}
+.        if ${FLAVOR:N$i:Mruby33} || \
+            ${FLAVOR:N$i:Mruby34} || \
+            ${FLAVOR:N$i:Mruby40}
 ERRORS += "Fatal: Conflicting flavors used: ${FLAVOR}"
 .        endif
 .      endif
@@ -63,8 +63,8 @@ ERRORS += "Fatal: Conflicting flavors used: ${FLAVOR}"
 .endif
 
 # The default ruby version to use for non-gem ports.  Defaults to ruby
-# 3.3 for consistency with the default ruby33 FLAVOR for gem ports.
-MODRUBY_REV?=		3.3
+# 3.4 for consistency with the default ruby34 FLAVOR for gem ports.
+MODRUBY_REV?=		3.4
 
 # Use the FLAVOR as the prefix for the package, to avoid conflicts.
 MODRUBY_PKG_PREFIX =	${MODRUBY_FLAVOR}
@@ -153,7 +153,7 @@ SITES?=		${SITE_RUBYGEMS}
 EXTRACT_SUFX=	.gem
 
 .  if ${CONFIGURE_STYLE:L:Mext}
-# Use ports-gcc for ruby32 extensions if base does not use clang
+# Use ports-gcc for extensions if base does not use clang
 COMPILER ?= 	base-clang ports-gcc
 COMPILER_LANGS ?= c
 # Add build complete file to package so rubygems doesn't complain

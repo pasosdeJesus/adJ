@@ -1476,6 +1476,13 @@ if (test -f /usr/libdata/perl5/*/PerlIO/scalar.pm) then {
     /usr/libdata/perl5/*/auto/PerlIO/scalar
 } fi;
 
+userinfo _fc-cache >/dev/null 2>&1
+if (test "$?" != "0") then {
+	vac="$vac 7.7 a 7.8";	
+	echo "Aplicando actualizaciones de 7.7 a 7.8" >> /var/www/tmp/inst-adJ.bitacora;
+	useradd -u36 -g=uid -c"FC Cache" -d/var/cache/fontconfig -s/sbin/nologin _fc-cache
+} fi;
+
 if  (test "$vac" != "") then {
 	dialog --title 'Actualizaciones aplicadas' --msgbox "\\nSe aplicaron actualizaciones: $vac\\n\\n$mac\\n" 15 60
 } fi;

@@ -170,7 +170,6 @@ docbook-xsl-[v]	Hojas de estilo XSL para DocBook
 git-[v]		Almacenar historia de árbol de directorios
 hevea-[v]		Traductor de LaTeX a HTML
 llama-cpp-[v]	Inferencia de Grandes Modelos de Lenguaje (LLM)
-llvm-[v]		Compilador modular y rápido de C/C++/ObjC
 lua-[v]		Lenguaje de programación potente y liviano
 ocaml-[v]		Lenguaje de programación funcional
 python-[v]		Lenguaje de programación
@@ -503,6 +502,7 @@ OpenEXR-[v]		Formato de imágenes de rango alto y dinámico
 openh264-[v]		Implementación de Cisco del codec H.264
 openjade-[v]	Motor DSSSL orientado a objetos 
 openjp2-[v]		Codec de fuentes abiertas de JPEG 2000
+openjph-[v]
 openldap-client-[v]	Cliente de LDAP de fuentes abiertas
 openpam-[v]	Modulo enchufable de autenticación
 opensp-[v]		Reconocedor SGML orientado a objetos
@@ -527,12 +527,14 @@ p5-Class-Singleton-[v]	Patrón singleton de perl
 p5-Class-Tiny-[v]	Construcciones minimalistas de clases
 p5-Class-XSAccessor-[v]	Genera accesores XS rápidos sin compilación.
 p5-Clone-[v]		Copia tipos de datos perl recursivamente
+p5-Clone-Choose-[v]	
 p5-Config-Tiny-[v]	Métodos simples para escribir/leer archivos estilo .ini
 p5-Cpanel-JSON-XS-[v]	Serialización bifurcada de cPanel JSON:XS
 p5-Crypt-OpenSSL-Bignum-[v]	Aritmética multi-precisión de OpenSSL
 p5-Crypt-OpenSSL-Guess-[v]	Adivinar rutas de inclusión de OpenSSL
 p5-Crypt-OpenSSL-Random-[v]	Rutinas para acceder al prng de OpenSSL
 p5-Crypt-OpenSSL-RSA-[v]	Codificación y decodificación RSA con OpenSSL
+p5-Crypt-URandom-[v]	
 p5-CryptX-[v]		Kit de herramientas criptográficas para Perl
 p5-Data-Dumper-Concise-[v]	Menos indentación
 p5-Data-IEEE754-[v]	Empaqueta  y desempaqueta flotantes big-endian
@@ -753,7 +755,9 @@ py3-lxml-[v]		Uniones en Python para libxml2 y libxslt
 py3-mako-[v]		Lenguaje de plantillas super rápido
 py3-markdown-[v]	Herramienta para convertir texto a HTML
 py3-more-itertools-[v]	Rutinas para iterables más alla de itertools
+py3-tinycss2-[v]  
 py3-typing_extensions-[v]	Pistas de tipos para python retro-portadas
+py3-webencodings-[v]
 py3-wheel-[v]	Implementación para el formato de paquetes "wheel"
 py3-ndg-httpsclient-[v]	Soporte HTTPS ampliado para httplib y urllib2
 py3-numpy-[v]	Librearía numérica y de arreglos rápida en Python

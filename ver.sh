@@ -46,7 +46,7 @@ RUTAKERNELREESPECIAL=""
 
 # Datos del CVS del cual se actualizan fuentes de OpenBSD
 USUARIOCVS="anoncvs"
-MAQCVS="anoncvs3.usa.openbsd.org"
+MAQCVS="anoncvs.spacehopper.org"
 DIRCVS="/cvs"
 
 export DESTDIR=/build/destdir; 

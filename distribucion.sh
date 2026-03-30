@@ -88,8 +88,8 @@ else {
 } fi;
 if (test "$sn" = "s") then {  
   if [ -z "$SSH_AUTH_SOCK" ] ; then
-    eval `ssh-agent -s`
-    ssh-add
+    echo "Ejecut ssh-add antes de usar este script"
+    exit 1;
   fi
 
   if (test -d /usr/src$VP-orig/) then {
@@ -842,6 +842,8 @@ if (test "$sn" = "s") then {
 
   # Modificados para posibilitar compilación
   # Deben estar en mystuff
+    
+  paquete chromium
 
   # Todo lo de perl tuvo que recompilarse
   # evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
@@ -1047,9 +1049,9 @@ if (test "$sn" = "s") then {
 
   ## Muy necesarios de estable con actualizaciones de seguridad
   paquete curl
-  paquete libuv
+  #paquete libuv
   paquete openssl paquetes "openssl" 3.5
-  paquete node
+  #paquete node
 
   ### Requieren recompilación en caso de incluir cambio en FILE
   #paquete unzip  # De no hacerse envía descompresiones a salida estándar
@@ -1073,7 +1075,7 @@ if (test "$sn" = "s") then {
   # Retroportados para cerrar fallas o actualizar
   # Deben estar en arboldes/usr/ports/mystuff y en /usr/ports de current
 
-  paquete rust
+  #paquete rust
 
   paquete postgresql-client paquetes "postgresql-server postgresql-client postgresql-contrib postgresql-docs postgresql-pg_upgrade" 
   paquete postgresql-previous 
@@ -1120,46 +1122,48 @@ if (test "$sn" = "s") then {
   #paquete flac
   #paquete gtk+3 paquetes "gtk+3-cups"
   #paquete gdal
-  paquete ghostscript
-  paquete gnutls
+  #paquete ghostscript
+ # paquete gnutls
   #paquete gnupg
   #paquete gvfs
-  paquete libarchive
+  #paquete libarchive
   #paquete libcupsfilters
+  paquete libffi
   #paquete libgcrypt
   #paquete libgsf
   #paquete libinih
   #paquete libmad
   #paquete libppd
-  paquete libssh
+  #paquete libssh
   #paquete libunbound
   #paquete libvpx
-  paquete libxml
-  paquete libxslt
+  #paquete libxml
+  #paquete libxslt
   #paquete lz4
-  paquete mariadb-client paquetes "mariadb-client mariadb-server" 
+  #paquete mariadb-client paquetes "mariadb-client mariadb-server" 
   #paquete mpg123
-  paquete mutt
-  paquete nginx
+  #paquete mutt
+  #paquete nginx
+  paquete nghttp2
   #paquete nspr
   #paquete oniguruma 
-  #paquete openssl paquetes "openssl" 3.3
-  #paquete openssl paquetes "openssl" 3.2
   #paquete opus
   #paquete pcre2 
   paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 8.3
+  paquete png
+  paquete py3-asn1
   #paquete python paquetes "python" "2.7"
   #paquete python paquetes "python" "3"
   #paquete quirks
-  paquete redis
+  #paquete redis
   #paquete rsync
   #paquete samba paquetes "ldb samba tevent"
-  #paquete sqlite3
-  paquete tiff
+  paquete sqlite3
+  #paquete tiff
   #paquete unrar
   #paquete vim
   #paquete wavpack
-  paquete webkitgtk41
+  #paquete webkitgtk41
   #paquete zsh
 
   ###  
