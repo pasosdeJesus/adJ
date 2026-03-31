@@ -271,7 +271,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src56-orig/lib/libc/time/wcsfti
 +_towcs(wchar_t *bL, size_t bLsize, const char *s)
 +{
 +	size_t numc = mbstowcs(NULL, s, 0) + 1; 
-+	if (numc <= 0 || numc >= bLsize) { 
++	if (numc == 0 || numc >= (bLsize / sizeof(*bL))) { 
 +		(void) fprintf(stderr, "Cannot translate %s to wchar_t *\n", s);
 +		errno = EINVAL;
 +		return NULL;
