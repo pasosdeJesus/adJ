@@ -3,8 +3,8 @@
 Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
 
-### Versión: 7.8a1
-Fecha de publicación: 19/Ago/2025
+### Versión: 7.8
+Fecha de publicación: 1/Abr/2026
 
 Puedes ver novedades respecto a OpenBSD en:
   <https://gitlab.com/pasosdeJesus/adJ/-/blob/ADJ_7_8/Novedades_OpenBSD.md>
@@ -50,29 +50,28 @@ encontrarás:
 
 ### 2.1 Kernel y Sistema Base
 
-Novedades tomadas de <https://www.openbsd.org/77.html>
+Novedades tomadas de <https://www.openbsd.org/78.html>
 
-* Aplicados parches de seguridad hasta el 7.Ago.2025 provenientes de
+* Aplicados parches de seguridad hasta el 31.Mar.2026 provenientes de
   OpenBSD que incluyen soluciones a fallas
 * Controladores ampliados o mejorados para amd64
-  * Tarjetas Ethernet: `rge` ahora soporta Realtek RTL8126 de 2.5Gb
-  * CPUs y GPUs: Sopote para AVX-512, drm(4) actualizado al de Linux 6.6.52,
-    `inteldrm` soporta Meteor Lake
-  * Otros:  Mejora suspender/retomar. Mejoras al controlador `nvme` de ese
-    tipo de discos. Controlador `umb` para dispositivos USB MBIM (Mobile
-    Broadband Interface Model) soporta ahora Quectel EM060K
-* Mejoras a `vmm`: Mejorado suspender/resumir
-* Mejoras a herramientas de Red: Reenvio IPv6 solo en IPsec
-  (`sysctl net.inet6.ip6.forwarding = 2`), Radius mejorado, BGPD mejorado
+  * Tarjetas Ethernet: `rge` ahora soporta Realtek RTL8125D (de 2.5G)
+     y RTL8127 (de 10G). 
+  * USB Ethernet: `ure` ahora soporta RTL8157.
+  * Inalámbricas: Mejoras a `qwx`,  `bfwm` y `iwx`
+  * CPUs y GPUs: `drm` actualizado al de Linux 6.12.50
+  * Otros:  Mejoras a suspender/hibernar. Ya opera orden `ZZZ`
+* Mejoras a `vmm`: Puede iniciar máquinas virtuales confidenciales en
+  procesadores AMD con SEV-ES.
 * Seguridad
   * pledge en más programas
-  * IPSec mejorado
-  * `libressl` actualizado a 4.0.0
-  * Incluye OpenSSH 9.9
+  * LLDP mejorado
+  * `libressl` actualizado a 4.2.0
+  * Incluye OpenSSH 10.2
 * El sistema base incluye mejoras a componentes auditados y mejorados
-  como, `llvm 16.0.6`,  `Xenocara` (basado en `Xorg` 7.8),
-  `perl 5.38.2`
-* El repositorio de paquetes de OpenBSD cuenta con 12312 para amd64
+  como, `llvm 19.1.7`,  `Xenocara` (basado en `Xorg` 7.7),
+  `perl 5.40.1`
+* El repositorio de paquetes de OpenBSD cuenta con 12651 para amd64
 
 
 ## 3. NOVEDADES RESPECTO A ADJ 7.6 PROVENIENTES DE PASOS DE JESÚS
