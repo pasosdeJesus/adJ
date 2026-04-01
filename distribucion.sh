@@ -843,7 +843,6 @@ if (test "$sn" = "s") then {
   # Modificados para posibilitar compilación
   # Deben estar en mystuff
     
-  paquete chromium
 
   # Todo lo de perl tuvo que recompilarse
   # evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
@@ -1149,7 +1148,7 @@ if (test "$sn" = "s") then {
   #paquete oniguruma 
   #paquete opus
   #paquete pcre2 
-  paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 8.3
+  paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 8.4
   paquete png
   paquete py3-asn1
   #paquete python paquetes "python" "2.7"
