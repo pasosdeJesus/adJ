@@ -6,9 +6,12 @@ SRC=/usr/src
 
 cd $SRC/include
 make 
-make includes
-if (test "$?" != "0") then {
-	exit 1;
+if (test "x$SALTAINC" != "x1") then {
+  make includes
+
+  if (test "$?" != "0") then {
+    exit 1;
+  } fi;
 } fi;
 make install
 cd ../lib/libc
@@ -18,4 +21,4 @@ make
 if (test "$?" != "0") then {
 	exit 1;
 } fi;
-make install
+NOMAN=1 make install
