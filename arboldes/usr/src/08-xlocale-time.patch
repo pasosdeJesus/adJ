@@ -1593,7 +1593,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/_def_t
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/xlocale.c src/lib/libc/locale/xlocale.c
 --- src54-x6/lib/libc/locale/xlocale.c	Sat Feb  9 14:26:54 2013
 +++ src/lib/libc/locale/xlocale.c	Tue Dec  3 16:12:45 2013
-@@ -77,9 +77,9 @@
+@@ -98,9 +98,9 @@
  		&__xlocale_global_ctype, 
  		&__xlocale_global_monetary,
  		&__xlocale_global_numeric,
@@ -1605,19 +1605,38 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/xlocal
  		&__xlocale_global_messages */
  	},
  	1,
-@@ -101,12 +101,6 @@
- 	0
- };
+@@ -124,12 +124,6 @@
  
--
--void *
+ 
+ void *
 -__time_load(const char *locale, locale_t unused)
 -{
 -	return NULL;
 -}
- 
- void *
+-
+-void *
  __messages_load(const char *locale, locale_t unused)
+ {
+ 	return NULL;
+@@ -220,6 +214,10 @@
+ 		xlocale_retain((struct xlocale_refcounted*)loc);
+ 	}
+ 
++	if (thread_local_locale != NULL) {         
++		xlocale_release((struct xlocale_refcounted*)thread_local_locale);
++	}
++
+ 	thread_local_locale = loc;	
+ }
+ 
+@@ -253,6 +251,7 @@
+ 	new->numeric_locale_changed = 1;
+ 	return (new);
+ }
++
+ static void
+ copyflags(locale_t new, locale_t old)
+ {
 diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/locale/setlocale.c src/lib/libc/locale/setlocale.c
 --- src54-x6/lib/libc/locale/setlocale.c	Sat Feb  9 14:26:54 2013
 +++ src/lib/libc/locale/setlocale.c	Tue Dec  3 16:12:45 2013

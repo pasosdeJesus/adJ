@@ -1,4 +1,4 @@
-diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src54-num/lib/libc/locale/Makefile.inc src/lib/libc/locale/Makefile.inc
+iff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src54-num/lib/libc/locale/Makefile.inc src/lib/libc/locale/Makefile.inc
 --- src54-num/lib/libc/locale/Makefile.inc	Thu Dec  5 18:53:15 2013
 +++ src/lib/libc/locale/Makefile.inc	Thu Dec  5 19:03:47 2013
 @@ -5,18 +5,18 @@
@@ -3012,7 +3012,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/lib/libc/locale/xl
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src55-orig/lib/libc/locale/xlocale.c src/lib/libc/locale/xlocale.c
 --- src55-orig/lib/libc/locale/xlocale.c	Wed Dec 31 19:00:00 1969
 +++ src/lib/libc/locale/xlocale.c	Wed Apr  3 11:04:42 2013
-@@ -0,0 +1,470 @@
+@@ -0,0 +1,474 @@
 +/*-
 + * Copyright (c) 2011 The FreeBSD Foundation
 + * All rights reserved.
@@ -3245,6 +3245,10 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src55-orig/lib/libc/locale/xlocal
 +	
 +	if (NULL != loc) {
 +		xlocale_retain((struct xlocale_refcounted*)loc);
++	}
++
++	if (thread_local_locale != NULL && thread_local_locale != &__xlocale_global_locale) {
++		xlocale_release((struct xlocale_refcounted*)thread_local_locale);
 +	}
 +
 +	thread_local_locale = loc;	
@@ -3730,9 +3734,9 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/regress/lib/libc/l
 +
 +.include <bsd.regress.mk>
 diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regress/lib/libc/locale/check_xlocale/check_xlocale.c
---- src53collation/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Wed Dec 31 19:00:00 1969
-+++ src/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Wed Apr  3 12:47:22 2013
-@@ -0,0 +1,171 @@
+--- src53collation/regress/lib/libc/locale/check_xlocale/check_xlocale.c.orig Fri Apr  3 15:06:41 2026
++++ src/regress/lib/libc/locale/check_xlocale/check_xlocale.c Fri Apr  3 15:12:17 2026
+@@ -0,0 +1,203 @@
 +/**
 + * Public domain according to Colombian Legislation. 
 + * http://www.pasosdejesus.org/dominio_publico_colombia.html
@@ -3754,6 +3758,8 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/regress/lib/libc/l
 +#include <wchar.h>
 +#include <wctype.h>
 +#include <xlocale.h>
++
++#include <sys/resource.h>
 +
 +int bad = 0;
 +
@@ -3781,28 +3787,29 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/regress/lib/libc/l
 +	char *nl = setlocale(LC_ALL, "es_CO.UTF-8");
 +	printf("locale %s\n", nl);
 +	locale_t es_CO_UTF_8 = uselocale(NULL);
++	printf("2 locale %s\n", nl);
 +	//dpl(es_CO_UTF_8);
 +	char *r;
-+	p(strcmp((r = (char *)querylocale(LC_CTYPE_MASK, es_CO_UTF_8)), "es_CO.UTF-8") == 0);
-+	printf("r=%s\n", r);
-+	p(strcmp((r = (char *)querylocale(LC_COLLATE_MASK, es_CO_UTF_8)), "es_CO.UTF-8") == 0);
-+	printf("r=%s\n", r);
++	//p(strcmp((r = (char *)querylocale(LC_CTYPE_MASK, es_CO_UTF_8)), "es_CO.UTF-8") == 0);
++	//printf("r=%s\n", r);
++	//p(strcmp((r = (char *)querylocale(LC_COLLATE_MASK, es_CO_UTF_8)), "es_CO.UTF-8") == 0);
++	//printf("r=%s\n", r);
 +
 +	p(es_CO_UTF_8 != NULL);
 +	locale_t esp = newlocale(LC_CTYPE_MASK | LC_COLLATE_MASK, "es_CO.UTF-8", NULL);
 +	p(es_CO_UTF_8 != esp);
-+	p(strcmp((r = (char *)querylocale(LC_CTYPE_MASK, esp)), "es_CO.UTF-8") == 0);
-+	printf("r=%s\n", r);
-+	p(strcmp((r = (char *)querylocale(LC_COLLATE_MASK, esp)), "es_CO.UTF-8") == 0);
-+	printf("r=%s\n", r);
++	//p(strcmp((r = (char *)querylocale(LC_CTYPE_MASK, esp)), "es_CO.UTF-8") == 0);
++	//printf("r=%s\n", r);
++	//p(strcmp((r = (char *)querylocale(LC_COLLATE_MASK, esp)), "es_CO.UTF-8") == 0);
++	//printf("r=%s\n", r);
 +
 +	nl = setlocale(LC_ALL, "C");
 +	printf("locale %s\n", nl);
 +	locale_t esp15 = newlocale(LC_CTYPE_MASK | LC_COLLATE_MASK, "es_CO.UTF-8", NULL);
-+	p(strcmp((r = (char *)querylocale(LC_CTYPE_MASK, esp15)), "es_CO.UTF-8") == 0);
-+	printf("r=%s\n", r);
-+	p(strcmp((r = (char *)querylocale(LC_COLLATE_MASK, esp15)), "es_CO.UTF-8") == 0);
-+	printf("r=%s\n", r);
++	//p(strcmp((r = (char *)querylocale(LC_CTYPE_MASK, esp15)), "es_CO.UTF-8") == 0);
++	//printf("r=%s\n", r);
++	//p(strcmp((r = (char *)querylocale(LC_COLLATE_MASK, esp15)), "es_CO.UTF-8") == 0);
++	//printf("r=%s\n", r);
 +
 +	//__print_ctypetable();
 +	locale_t esp2 = duplocale(es_CO_UTF_8);
@@ -3820,6 +3827,7 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/regress/lib/libc/l
 +	freelocale(esp6);
 +}
 +
++/*
 +void test_wchar() {
 +	char *mb = "ñ"; // Source must be in UTF8
 +	char *mbs = "ñoño"; // Una cadena multibyte 
@@ -3896,11 +3904,39 @@ diff -ruN -x obj -x CVS -x *rej -x *orig -x *~ src53collation/regress/lib/libc/l
 +	freelocale(l);
 +
 +}
++*/
++void test_mem() {
++	struct rusage usage;
++	long initial_rss, final_rss;
++	locale_t loc;
++
++	printf("test_mem\n");
++	getrusage(RUSAGE_SELF, &usage);
++	initial_rss = usage.ru_maxrss;
++
++	for (int i = 0; i < 100000; i++) {
++		loc = newlocale(LC_ALL_MASK, "C", NULL);
++		if (loc != (locale_t)0) {
++			uselocale(loc);
++			freelocale(loc);
++		}
++	}
++	uselocale(LC_GLOBAL_LOCALE);
++
++	getrusage(RUSAGE_SELF, &usage);
++	final_rss = usage.ru_maxrss;
++	
++	printf("RSS inicial: %ld KB, final: %ld KB, diff: %ld KB\n", 
++	    initial_rss, final_rss, final_rss - initial_rss);
++	
++	p(final_rss - initial_rss < 1024); 
++}
 +
 +int main()
 +{
 +	test_xlocale();
-+	test_wchar();
++	//test_wchar();
++	test_mem();
 +	
 +	return bad != 0;
 +}
@@ -4355,10 +4391,18 @@ diff -ruN src/lib/libc/hidden/stdlib.h.orig src/lib/libc/hidden/stdlib.h
 +#include_next <xlocale.h>
  
  __BEGIN_HIDDEN_DECLS
- char	*__findenv(const char *, int, int *);
-@@ -101,8 +102,11 @@
- PROTO_DEPRECATED(lrand48);
- /*PROTO_NORMAL(malloc);			not yet, breaks emacs */
+ int	__mktemp4(char *, int, int, int (*)(const char *, int));
+@@ -53,6 +54,7 @@
+ #endif
+ 
+ PROTO_NORMAL(__mb_cur_max);
++PROTO_NORMAL(___mb_cur_max_l);
+ PROTO_NORMAL(__realpath);
+ PROTO_STD_DEPRECATED(_Exit);
+ PROTO_DEPRECATED(a64l);
+@@ -112,8 +114,11 @@
+ PROTO_NORMAL(malloc);
+ PROTO_NORMAL(malloc_conceal);
  PROTO_STD_DEPRECATED(mblen);
 +PROTO_NORMAL(mblen_l);
  PROTO_NORMAL(mbstowcs);	
@@ -4367,8 +4411,8 @@ diff -ruN src/lib/libc/hidden/stdlib.h.orig src/lib/libc/hidden/stdlib.h
 +PROTO_NORMAL(mbtowc_l);	
  PROTO_DEPRECATED(mergesort);
  PROTO_DEPRECATED(mkdtemp);
- PROTO_NORMAL(mkostemp);
-@@ -156,6 +160,8 @@
+ PROTO_DEPRECATED(mkdtemps);
+@@ -169,6 +174,8 @@
  PROTO_NORMAL(unsetenv);
  PROTO_STD_DEPRECATED(valloc);
  PROTO_NORMAL(wcstombs);

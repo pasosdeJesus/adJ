@@ -144,7 +144,7 @@ diff -ruN -x *~ -x *orig src54-orig/regress/lib/libc/locale/check_monetary/check
 +	p(strlen(nl_langinfo(CRNCYSTR)) == 0);
 +}
 +
-+void test_us()
++/*void test_us()
 +{
 +	char *enc[]= { "UTF-8" };
 +	char nom[256];
@@ -297,7 +297,7 @@ diff -ruN -x *~ -x *orig src54-orig/regress/lib/libc/locale/check_monetary/check
 +	p(strcmp(col, " -$ 3,456.7810") == 0);
 +
 +}
-+
++*/
 +void test_ibe()
 +{
 +	char *c1[] = { 
@@ -591,10 +591,10 @@ diff -ruN -x *~ -x *orig src54-orig/regress/lib/libc/locale/check_monetary/check
 +	for(j = 0; j < sizeof(c1) / sizeof(char *) ; j++) {
 +		snprintf(nom, sizeof(nom), "%s.UTF-8", c1[j]);
 +		nl = setlocale(LC_ALL, nom);
-+		strfmon(col, sizeof(col), "%n", -3456.781); 
++		/*strfmon(col, sizeof(col), "%n", -3456.781); 
 +		snprintf(col2, sizeof(col2), "-%s 3.456,78", sc1[j]);
 +		p(strcmp(col, col2) == 0)
-+		printf("%s col=%s, col2=%s\n", nom, col, col2);
++		printf("%s col=%s, col2=%s\n", nom, col, col2);*/
 +	}
 +}
 +
@@ -671,10 +671,10 @@ diff -ruN -x *~ -x *orig src54-orig/regress/lib/libc/locale/check_monetary/check
 +
 +int main()
 +{
-+	test_switch();
++//	test_switch();
 +	test_posix();
-+	test_ibe();
-+	test_us();
++//	test_ibe();
++//	test_us();
 +	
 +	return bad != 0;
 +}

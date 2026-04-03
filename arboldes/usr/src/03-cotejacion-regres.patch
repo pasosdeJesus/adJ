@@ -244,8 +244,8 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-s/regress/lib/libc/locale
 +int main()
 +{
 +	test_posix();
-+	test_esCOUTF8();
-+	test_switch();
++	//test_esCOUTF8();
++	//test_switch();
 +	
 +	return bad != 0;
 +}

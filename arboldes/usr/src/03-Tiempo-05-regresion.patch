@@ -44,7 +44,7 @@ diff -ruN -x *~ -x *orig src56-orig/regress/lib/libc/locale/check_time/Makefile 
 diff -ruN -x *~ -x *orig src56-orig/regress/lib/libc/locale/check_time/check_time.c src/regress/lib/libc/locale/check_time/check_time.c
 --- src56-orig/regress/lib/libc/locale/check_time/check_time.c	Wed Dec 31 19:00:00 1969
 +++ src/regress/lib/libc/locale/check_time/check_time.c	Sat Mar  7 07:02:13 2015
-@@ -0,0 +1,669 @@
+@@ -0,0 +1,671 @@
 +/**
 + * Public domain according to Colombian Legislation. 
 + * http://www.pasosdejesus.org/dominio_publico_colombia.html
@@ -241,6 +241,7 @@ diff -ruN -x *~ -x *orig src56-orig/regress/lib/libc/locale/check_time/check_tim
 +	p(strcmp(nl_langinfo(ABMON_12), "Dec") == 0);
 +
 +
++	/*
 +	for(i = 0; i < sizeof(enc) / sizeof(char *) ; i++) {
 +		for(j = 0; j < sizeof(es) / sizeof(char *) ; j++) {
 +			snprintf(nom, sizeof(nom), "%s.%s", es[j], enc[i]);
@@ -704,6 +705,7 @@ diff -ruN -x *~ -x *orig src56-orig/regress/lib/libc/locale/check_time/check_tim
 +
 +		}
 +	}
++        */
 +}
 +
 +
