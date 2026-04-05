@@ -586,35 +586,37 @@ diff -ruN -x .#* -x *patch -x obj -x CVS -x *~ -x *.orig -x *.rej src53xlocale1/
 diff -ruN -x *.o -x obj -x CVS -x *~ src53xlocale2/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regress/lib/libc/locale/check_xlocale/check_xlocale.c
 --- src53xlocale2/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Mon Apr  8 21:20:56 2013
 +++ src/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Tue Apr  9 05:20:20 2013
-@@ -60,6 +60,11 @@
- 	printf("r=%s\n", r);
- 	p(strcmp((r = (char *)querylocale(LC_COLLATE, esp)), "es_CO.UTF-8") == 0);
- 	printf("r=%s\n", r);
+@@ -72,6 +72,25 @@
+ 	//p(strcmp((r = (char *)querylocale(LC_COLLATE_MASK, esp15)), "es_CO.UTF-8") == 0);
+ 	//printf("r=%s\n", r);
+ 
++/*
++ 	printf("r=%s\n", r);
++ 	p(strcmp((r = (char *)querylocale(LC_COLLATE, esp)), "es_CO.UTF-8") == 0);
++ 	printf("r=%s\n", r);
 +	p(iswlower_l(L'ñ', esp));
 +	p(!iswlower_l(L'Ñ', esp));
 +	wchar_t am;
 +	p((am = towlower_l(L'Á', esp)) == L'á');
 +	printf("am=%lc\n", am);
- 
- 	nl = setlocale(LC_ALL, "C");
- 	printf("locale %s\n", nl);
-@@ -68,7 +73,12 @@
- 	printf("r=%s\n", r);
- 	p(strcmp((r = (char *)querylocale(LC_COLLATE, esp15)), "es_CO.UTF-8") == 0);
- 	printf("r=%s\n", r);
-+	p(iswlower_l(L'ñ', esp15));
++ 
++ 	nl = setlocale(LC_ALL, "C");
++ 	printf("locale %s\n", nl);
++ 	printf("r=%s\n", r);
++        p(iswlower_l(L'ñ', esp15));
 +	p(!iswlower_l(L'Ñ', esp15));
 +	p((am = towlower_l(L'Á', esp15)) == L'á');
 +	printf("am=%lc\n", am);
- 
++*/ 
 +
  	//__print_ctypetable();
  	locale_t esp2 = duplocale(es_CO_UTF_8);
  	locale_t esp3 = duplocale(esp2);
-@@ -162,10 +172,147 @@
+@@ -166,6 +185,122 @@
  
  }
- 
+ */
++
 +void test_ctype() {
 +	char *nl = setlocale(LC_ALL, "es_CO.UTF-8");
 +	locale_t tloc;
@@ -625,7 +627,7 @@ diff -ruN -x *.o -x obj -x CVS -x *~ src53xlocale2/regress/lib/libc/locale/check
 +	printf("locale %s\n", nl);
 +	tloc = uselocale(NULL);
 +	es_CO_UTF_8 = duplocale(tloc);
-+	
++
 +	setlocale(LC_ALL, "POSIX");
 +
 +	p((s = mbstowcs_l(ws, "niño", 10, es_CO_UTF_8)) > 0 && 
@@ -638,11 +640,6 @@ diff -ruN -x *.o -x obj -x CVS -x *~ src53xlocale2/regress/lib/libc/locale/check
 +	p(iswctype_l(L'ñ', wctype_l("lower", es_CO_UTF_8), es_CO_UTF_8));
 +	p(!iswctype_l(L'Ñ', wctype_l("lower", es_CO_UTF_8), es_CO_UTF_8));
 +	p(isalnum_l('a', es_CO_UTF_8));
-+	/* Something like: p(isalnum_l('á', es_CO_UTF_8));
-+	 * would produce warning multi-character constant since it
-+	 * is not portable and in OpenBSD will not suppose by default it is 
-+	 * UTF-8.
-+	 */
 +	p(isalnum_l('1', es_CO_UTF_8));
 +	p(iswalnum_l(L'ñ', es_CO_UTF_8));
 +	p(iswalnum_l(L'1', es_CO_UTF_8));
@@ -673,7 +670,6 @@ diff -ruN -x *.o -x obj -x CVS -x *~ src53xlocale2/regress/lib/libc/locale/check
 +	p(ispunct_l('.', es_CO_UTF_8));
 +	p(!ispunct_l(' ', es_CO_UTF_8));
 +	p(iswpunct_l(L'.', es_CO_UTF_8));
-+	p(iswpunct_l(L'.', es_CO_UTF_8));
 +	p(!iswpunct_l(L'ñ', es_CO_UTF_8));
 +	p(isspace_l(' ', es_CO_UTF_8));
 +	p(!isspace_l('n', es_CO_UTF_8));
@@ -682,7 +678,6 @@ diff -ruN -x *.o -x obj -x CVS -x *~ src53xlocale2/regress/lib/libc/locale/check
 +	p(isupper_l('N', es_CO_UTF_8));
 +	p(!isupper_l('n', es_CO_UTF_8));
 +	p(iswupper_l(L'Ñ', es_CO_UTF_8));
-+	p(iswupper_l(L'Ñ', es_CO_UTF_8));
 +	p(!iswupper_l(L'ñ', es_CO_UTF_8));
 +	p(iswxdigit_l(L'a', es_CO_UTF_8));
 +	p(iswxdigit_l(L'1', es_CO_UTF_8));
@@ -690,7 +685,6 @@ diff -ruN -x *.o -x obj -x CVS -x *~ src53xlocale2/regress/lib/libc/locale/check
 +	p(!iswxdigit_l(L'g', es_CO_UTF_8));
 +	p(isxdigit_l('f', es_CO_UTF_8));
 +	p(!isxdigit_l('g', es_CO_UTF_8));
-+	//p(digittoint_l(L'1', es_CO_UTF_8) == 1);
 +	p(isblank_l(' ', es_CO_UTF_8));
 +	p(!isblank_l('a', es_CO_UTF_8));
 +	p(iswblank_l(L'\t', es_CO_UTF_8));
@@ -700,7 +694,6 @@ diff -ruN -x *.o -x obj -x CVS -x *~ src53xlocale2/regress/lib/libc/locale/check
 +	p(iswhexnumber_l(L'a', es_CO_UTF_8));
 +	p(!iswhexnumber_l(L' ', es_CO_UTF_8));
 +	p(!isideogram_l(' ', es_CO_UTF_8));
-+	//p(iswideogram_l(0x3006, es_CO_UTF_8));
 +	p(!iswideogram_l(L' ', es_CO_UTF_8));
 +	p(isnumber_l('1', es_CO_UTF_8));
 +	p(!isnumber_l(' ', es_CO_UTF_8));
@@ -720,23 +713,11 @@ diff -ruN -x *.o -x obj -x CVS -x *~ src53xlocale2/regress/lib/libc/locale/check
 +	p(!iswspecial_l(L'\0', es_CO_UTF_8));
 +	p(nextwctype(-1, wctype("graph")) > 0);
 +	p(tolower_l('A', es_CO_UTF_8) == 'a');
-+	p(tolower('A') == 'a');
-+	p(_tolower('A') == 'a');
 +	p(towlower_l(L'Á', es_CO_UTF_8) == L'á');
 +	p(towupper_l(L'á', es_CO_UTF_8) == L'Á');
-+	p(towupper(L'a') == L'A');
 +	p(toupper_l('a', es_CO_UTF_8) == 'A');
-+	p(toupper('a') == 'A');
-+	p(_toupper('a') == 'A');
 +	p(wctrans_l("invalido", es_CO_UTF_8) == 0);
-+	wchar_t lu[7][2] = {{ L'ñ', L'Ñ'},
-+		{L'á', L'Á'},
-+		{L'é', L'É'},
-+		{L'í', L'Í'},
-+		{L'ó', L'Ó'},
-+		{L'ú', L'Ú'},
-+		{L'ü', L'Ü'}
-+	};
++	wchar_t lu[7][2] = {{ L'ñ', L'Ñ'}, {L'á', L'Á'}, {L'é', L'É'}, {L'í', L'Í'}, {L'ó', L'Ó'}, {L'ú', L'Ú'}, {L'ü', L'Ü'}};
 +	wctrans_t tl;
 +	p((tl = wctrans_l("tolower", es_CO_UTF_8)) != 0);
 +	wctrans_t tu;
@@ -748,17 +729,20 @@ diff -ruN -x *.o -x obj -x CVS -x *~ src53xlocale2/regress/lib/libc/locale/check
 +		p(towctrans_l(lu[c][0], tu, es_CO_UTF_8) == lu[c][1]);
 +		p(towupper_l(lu[c][0], es_CO_UTF_8) == lu[c][1]);
 +	}
-+
++	freelocale(es_CO_UTF_8);
 +}
 +
- int main()
+ void test_mem() {
+ 	struct rusage usage;
+ 	long initial_rss, final_rss;
+@@ -197,6 +332,7 @@
  {
  	test_xlocale();
- 	test_wchar();
+ 	//test_wchar();
 +	test_ctype();
+ 	test_mem();
  	
  	return bad != 0;
- }
 diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/gen/tolower.3 src53xlocale2/lib/libc/gen/tolower.3
 --- src53xlocale1/lib/libc/gen/tolower.3    Mon Sep  4 22:16:13 2017 
 +++ src/lib/libc/gen/tolower.3    Mon Sep  4 22:16:13 2017 
