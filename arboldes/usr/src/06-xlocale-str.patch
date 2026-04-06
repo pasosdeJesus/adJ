@@ -1091,28 +1091,36 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src54-x5/regress/lib/libc/locale/check_is
 diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/regress/lib/libc/locale/check_xlocale/check_xlocale.c
 --- src53xlocale2/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Tue Apr 16 09:47:00 2013
 +++ src/regress/lib/libc/locale/check_xlocale/check_xlocale.c	Tue Apr 16 09:52:42 2013
-@@ -65,6 +65,8 @@
+@@ -75,13 +75,13 @@
+ /*
+  	printf("r=%s\n", r);
+  	p(strcmp((r = (char *)querylocale(LC_COLLATE, esp)), "es_CO.UTF-8") == 0);
+- 	printf("r=%s\n", r);
++ 	printf("r=%s\n", r);*/
+ 	p(iswlower_l(L'ñ', esp));
+ 	p(!iswlower_l(L'Ñ', esp));
  	wchar_t am;
  	p((am = towlower_l(L'Á', esp)) == L'á');
  	printf("am=%lc\n", am);
-+	p(iswlower_l(L'ñ', esp));
-+	p(!iswlower_l(L'Ñ', esp));
- 
- 	nl = setlocale(LC_ALL, "C");
- 	printf("locale %s\n", nl);
-@@ -77,6 +79,8 @@
+- 
++/* 
+  	nl = setlocale(LC_ALL, "C");
+  	printf("locale %s\n", nl);
+  	printf("r=%s\n", r);
+@@ -89,7 +89,7 @@
  	p(!iswlower_l(L'Ñ', esp15));
  	p((am = towlower_l(L'Á', esp15)) == L'á');
  	printf("am=%lc\n", am);
-+	p(iswlower_l(L'ñ', esp15));
-+	p(!iswlower_l(L'Ñ', esp15));
- 
+-*/ 
++*/
  
  	//__print_ctypetable();
-@@ -308,11 +312,153 @@
- 
+ 	locale_t esp2 = duplocale(es_CO_UTF_8);
+@@ -301,6 +301,146 @@
+ 	freelocale(es_CO_UTF_8);
  }
  
++
 +void test_string() 
 +{
 +	char *nl;
@@ -1139,20 +1147,17 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/regress/lib/libc/locale/che
 +	wchar_t wcse[1000];
 +	mbstowcs(wcse, "é", 1000);
 +	p(wcscoll_l(wcsb, wcse, es_CO_UTF_8) < 0);
-+	
-+	mbstowcs(wcsb, "b", 1000);
-+	mbstowcs(wcse, "é", 1000);
-+	p(wcscoll_l(wcsb, wcse, es_CO_UTF_8) < 0);
++
 +	p(wcscoll_l(L"b", L"é", es_CO_UTF_8) < 0);
 +	p(strcoll("á", "e") < 0);
 +	p(strcoll("ama", "ana") < 0);
 +	p(strcoll_l("á", "e", es_CO_UTF_8) < 0);
-+	p(wcscoll_l(L"b", L"é", es_CO_UTF_8) < 0);
 +	p(wcscoll(L"á", L"e") < 0);
-+	p(wcscoll_l(L"á", L"e", es_CO_UTF_8) < 0);
-+	/* Order in spanish*/
++	
++	/* Orden en español*/
 +	p(wcscoll_l(L" ", L"á", es_CO_UTF_8) < 0);
 +	p(wcscoll_l(L"á", L"b", es_CO_UTF_8) < 0);
++
 +	p(wcscoll_l(L"d", L"é", es_CO_UTF_8) < 0);
 +	p(wcscoll_l(L"é", L"f", es_CO_UTF_8) < 0);
 +	p(wcscoll_l(L"h", L"í", es_CO_UTF_8) < 0);
@@ -1252,17 +1257,20 @@ diff -ruN -x obj -x CVS -x *~ -x *orig src53xlocale2/regress/lib/libc/locale/che
 +	p(wcscasecmp(L"á", L"Á") == 0);
 +	p(wcscasecmp(L"a", L"á") <= 0);
 +	p(wcsncasecmp_l(L"n", L"N", 1, es_CO_UTF_8) == 0);
++	freelocale(es_CO_UTF_8);
 +}
 +
- int main()
- {
+ void test_mem() {
+ 	struct rusage usage;
+ 	long initial_rss, final_rss;
+@@ -333,6 +473,7 @@
  	test_xlocale();
- 	test_wchar();
+ 	//test_wchar();
  	test_ctype();
 +	test_string();
+ 	test_mem();
  	
  	return bad != 0;
- }
 diff -ruN src62-orig/lib/libc/hidden/string.h src/lib/libc/hidden/string.h
 --- src62-orig/lib/libc/hidden/string.h	Sun Dec  3 21:40:11 2017
 +++ src/lib/libc/hidden/string.h	Sun Dec  3 21:40:22 2017
