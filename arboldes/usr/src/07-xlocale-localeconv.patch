@@ -9,7 +9,7 @@ diff -ruN src62-orig/lib/libc/locale/_def_numeric.c src/lib/libc/locale/_def_num
  
  static char    numempty[] = { CHAR_MAX, '\0' };
  
-@@ -53,52 +54,110 @@
+@@ -53,52 +54,114 @@
  
  const _NumericLocale *_CurrentNumericLocale = &_DefaultNumericLocale;
  
@@ -52,9 +52,12 @@ diff -ruN src62-orig/lib/libc/locale/_def_numeric.c src/lib/libc/locale/_def_num
 -		if (_CurrentNumericLocale != &_DefaultNumericLocale) {
 -			__nlocale_changed = 1;
 -			_CurrentNumericLocale = &_DefaultNumericLocale;
--		}
 +		xnum->header.header.retain_count = 0;
-+		xnum->header.header.destructor = NULL;
++		if (xnum == &__xlocale_global_numeric) {
++			xnum->header.header.destructor = NULL;
++		} else {
++			xnum->header.header.destructor = destruct_numeric;
+ 		}
 +		xnum->header.locale[0] = 'C';
 +		xnum->header.locale[1] = '\0';
 +		xnum->buffer = NULL;
@@ -643,7 +646,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src55-orig/lib/libc/locale/_def
  static char
  cnv(const char *str)
  {
-@@ -120,62 +99,137 @@
+@@ -120,62 +99,141 @@
  }
  		
  int
@@ -690,9 +693,12 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src55-orig/lib/libc/locale/_def
 -		if (_CurrentMonetaryLocale != &_DefaultMonetaryLocale) {
 -			__mlocale_changed = 1;
 -			_CurrentMonetaryLocale = &_DefaultMonetaryLocale;
--		}
 +		xmon->header.header.retain_count = 0;
-+		xmon->header.header.destructor = NULL;
++		if (xmon == &__xlocale_global_monetary) {
++			xmon->header.header.destructor = NULL;
++		} else {
++			xmon->header.header.destructor = destruct_monetary;
+ 		}
 +		xmon->header.locale[0] = 'C';
 +		xmon->header.locale[1] = '\0';
 +		xmon->buffer = NULL;
@@ -818,7 +824,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src55-orig/lib/libc/locale/_def
  	printf(	"int_curr_symbol = %s\n"
  			"currency_symbol = %s\n"
  			"mon_decimal_point = %s\n"
-@@ -197,27 +251,27 @@
+@@ -197,27 +255,27 @@
  			"int_n_sep_by_space = %d\n"
  			"int_p_sign_posn = %d\n"
  			"int_n_sign_posn = %d\n",
@@ -913,14 +919,4 @@ diff -ruN src65-orig/lib/libc/locale/localeconv.3 src/lib/libc/locale/localeconv
  .Dv LC_NUMERIC
  and
  .Dv LC_MONETARY
-diff -ruN src78-orig/lib/libc/hidden/stdlib.h src/lib/libc/hidden/stdlib.h
---- src78-orig/lib/libc/hidden/stdlib.h	Fri Mar  1 16:30:40 2024
-+++ src/lib/libc/hidden/stdlib.h	Thu Jan  8 15:25:27 2026
-@@ -54,6 +54,7 @@
- #endif
- 
- PROTO_NORMAL(__mb_cur_max);
-+PROTO_NORMAL(___mb_cur_max_l);
- PROTO_NORMAL(__realpath);
- PROTO_STD_DEPRECATED(_Exit);
- PROTO_DEPRECATED(a64l);
+
