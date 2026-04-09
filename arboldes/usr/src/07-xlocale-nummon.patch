@@ -2303,8 +2303,24 @@ diff -ruN src54-x6/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/reg
  #include <stdio.h>
  #include <stdlib.h>
  #include <string.h>
-@@ -432,12 +433,97 @@
- 	p(wcsncasecmp_l(L"n", L"N", 1, es_CO_UTF_8) == 0);
+@@ -107,7 +108,6 @@
+ 	freelocale(esp6);
+ }
+ 
+-/*
+ void test_wchar() {
+ 	char *mb = "ñ"; // Source must be in UTF8
+ 	char *mbs = "ñoño"; // Una cadena multibyte 
+@@ -184,7 +184,6 @@
+ 	freelocale(l);
+ 
+ }
+-*/
+ 
+ void test_ctype() {
+ 	char *nl = setlocale(LC_ALL, "es_CO.UTF-8");
+@@ -468,12 +467,97 @@
+ 	p(final_rss - initial_rss < 1024); 
  }
  
 +void test_monetary() 
@@ -2393,14 +2409,15 @@ diff -ruN src54-x6/regress/lib/libc/locale/check_xlocale/check_xlocale.c src/reg
  int main()
  {
  	test_xlocale();
- 	test_wchar();
+-	//test_wchar();
++	test_wchar();
  	test_ctype();
  	test_string();
 +	test_monetary();
 +	test_numeric();
+ 	test_mem();
  	
  	return bad != 0;
- }
 diff -ruN -x obj -x CVS -x *orig -x *rej -x *~ src53xlocale1/lib/libc/locale/wcstold.c src53xlocale2/lib/libc/locale/wcstold.c
 --- src53xlocale1/lib/libc/locale/wcstold.c	Mon Apr  8 21:20:25 2013
 +++ src53xlocale2/lib/libc/locale/wcstold.c	Fri Apr 12 12:07:57 2013
