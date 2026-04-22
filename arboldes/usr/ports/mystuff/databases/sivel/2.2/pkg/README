@@ -1,0 +1,35 @@
+Tras instalar asegurese de:
+1. Ponga como dueño de /var/www/htdocs/sivel2 un usuario que no sea
+   root y con el cual lanzará el servidor
+	sudo chown -R $USER:$USER /var/www/htdocs/sivel2
+
+2. Cree un usuario para PostgreSQL, recomendado sivel2des, copie la
+   plantilla de configuración de la base de datos y modifiquela:
+	cd /var/www/htdocs/sivel2
+	chmod -R +w config/database.yml.plantilla db/
+	cp config/database.yml.plantilla config/database.yml
+	vi config/database.yml
+
+3. Cree o actualice base de desarrollo:
+	cd /var/www/htdocs/sivel2
+	bundle exec rake db:setup db:migrate sip:indices
+
+4. Lance servidor de desarrollo
+	cd /var/www/htdocs/sivel2
+	bundle exec rails s -p3400
+   y desde el mismo servidor consulte con un navegador con galletas/cookies 
+   habilitadas la dirección http://127.0.0.1:3400, por ejemplo
+	w3m -cookie http://127.0.0.1:3400
+
+5. Cree o actualice base de producción
+	cd /var/www/htdocs/sivel2
+	RAILS_ENV=production bundle exec rake db:setup db:migrate sip:indices
+
+6. Configure servidor de producción para servir sobre https, ver
+   https://github.com/pasosdeJesus/sivel2/blob/master/README.md
+
+7. Configure inicio automático en cada arranque
+
+8. Arranque
+
+  

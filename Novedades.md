@@ -52,7 +52,7 @@ encontrarás:
 
 Novedades tomadas de <https://www.openbsd.org/78.html>
 
-* Aplicados parches de seguridad hasta el 31.Mar.2026 provenientes de
+* Aplicados parches de seguridad hasta el 10.Abr.2026 provenientes de
   OpenBSD que incluyen soluciones a fallas
 * Controladores ampliados o mejorados para amd64
   * Tarjetas Ethernet: `rge` ahora soporta Realtek RTL8125D (de 2.5G)
@@ -74,23 +74,37 @@ Novedades tomadas de <https://www.openbsd.org/78.html>
 * El repositorio de paquetes de OpenBSD cuenta con 12651 para amd64
 
 
-## 3. NOVEDADES RESPECTO A ADJ 7.6 PROVENIENTES DE PASOS DE JESÚS
+## 3. NOVEDADES RESPECTO A ADJ 7.7 PROVENIENTES DE PASOS DE JESÚS
 
-### 3.1 Instalador y documentación
+### 3.1 Sistema Base
+
+* Parches de locale y xlocale actualizados a fuentes de OpenBSD 7.8.
+* 3 fallas en parches detectadas por modelo de IA, Gemini, corregidas:
+  - Evita desbordamiento de buffer con locales alterados
+  - Arreglada fuga de memoria en xlocale al cambiar locales
+  - Arreglada fuga de memoria al cargar locales monetarios y numéricos
+
+### 3.2 Instalador y documentación
 
 * Documentación actualizada
   * `basico_adJ`
     <https://pasosdejesus.org/doc/basico_adJ/index.html>
   * `usuario_adJ`
-    <https://pasosdejesus.org/doc/usuario_adJ/index.html>
+    <https://pasosdejesus.org/doc/usuario_adJ/index.html> 
+    (Vea la sección sobre Gestión de Energía que opera
+     en OpenBSD/adJ 7.8).
   * `servidor_adJ`
     <https://pasosdejesus.org/doc/servidor_adJ/index.html>
 
-### 3.2 Paquetes
+### 3.3 Paquetes
 
 * Incluye porte de ruby 3.4.9 con `doas gem update --system` habilitado
+* Incluye evangelios-0.9.15 que agrega traducción de Hebreos y hace
+  mejoras en varios libros tras retroalimentación de varios modelos de IA
+  cuidadosamente analizada (DeepSeek y Gemini).
+* Incluye porte de sivel-2.2
 * Incluye portes actualizados para cerrar fallas de curl 8.19,
-  libffi-3.5.2p0, nghttp2-1.68.1, png-1.6.56,
+  libffi-3.5.2p0, nghttp2-1.68.1, openssl-3.5.5V0, png-1.6.56,
   py3-asn1-0.6.3v0, python-3.12.11, redis 6.2.20,
   sqlite3-3.50.7p0
 

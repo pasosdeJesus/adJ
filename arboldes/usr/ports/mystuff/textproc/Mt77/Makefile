@@ -4,7 +4,7 @@
 
 COMMENT=	"Search engine, fast and precise"
 
-VERSION=1.0a6
+VERSION=1.0a7
 REVISION= 
 DISTNAME=v${VERSION}
 CATEGORIES=     textproc
@@ -24,6 +24,9 @@ TEST_TARGET = regr
 #Public domain
 PERMIT_PACKAGE=   	Yes
 
+WANTLIB += xml2
+
+LIB_DEPENDS=textproc/libxml
 CONFIGURE_STYLE=        simple
 CONFIGURE_SCRIPT=       conf.sh
 
@@ -36,7 +39,7 @@ do-regress:
 pre-patch:
 	pwd
 	echo "WRKDIR=${WRKDIR}"
-	mv -f ${WRKDIR}/Mt77-v1.0a6* ${WRKDIR}/Mt77-1.0a6/
+	mv -f ${WRKDIR}/Mt77-v${VERSION}* ${WRKDIR}/Mt77-${VERSION}/
 
 do-install:
 	cd ${WRKSRC} && ${SETENV} ${MAKE_ENV} DESTDIR=${DESTDIR} ${MAKE_PROGRAM} ${MAKE_FLAGS} instala 

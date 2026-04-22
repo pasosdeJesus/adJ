@@ -843,6 +843,9 @@ if (test "$sn" = "s") then {
   # Modificados para posibilitar compilación
   # Deben estar en mystuff
     
+  paquete smartmontools
+  paquete databases/sivel sivel sivel 2.2
+  paquete textproc/Mt77
 
   # Todo lo de perl tuvo que recompilarse
   # evita error loadable library and perl binaries are mismatched (got handshake key 0xca80000, needed 0xcd80000)
@@ -1116,7 +1119,7 @@ if (test "$sn" = "s") then {
   #paquete dkimproxy
   #paquete dovecot
   #paquete dtc
-  paquete firefox-esr # No logra compilarlo
+  #paquete firefox-esr # No logra compilarlo
   #paquete www/firefox-esr-i18n paquetes "firefox-esr-i18n-es-AR"
   #paquete flac
   #paquete gtk+3 paquetes "gtk+3-cups"
@@ -1125,7 +1128,7 @@ if (test "$sn" = "s") then {
  # paquete gnutls
   #paquete gnupg
   #paquete gvfs
-  #paquete libarchive
+  paquete libarchive
   #paquete libcupsfilters
   paquete libffi
   #paquete libgcrypt
@@ -1158,12 +1161,13 @@ if (test "$sn" = "s") then {
   #paquete rsync
   #paquete samba paquetes "ldb samba tevent"
   paquete sqlite3
-  #paquete tiff
+  paquete tiff
   #paquete unrar
   #paquete vim
   #paquete wavpack
   #paquete webkitgtk41
   #paquete zsh
+  paquete xz
 
   ###  
   # Recompilados de estable que usan xlocale (y pueden cerrar fallas)
@@ -1228,7 +1232,6 @@ if (test "$sn" = "s") then {
   paquete education/AnimalesI
   paquete education/AprestamientoI
   paquete education/PlantasCursiva
-  paquete education/NombresCursiva
   paquete fonts/TiposLectoEscritura
   paquete education/asigna
   #paquete textproc/markup  --fuentes ya no existen
@@ -1237,7 +1240,7 @@ if (test "$sn" = "s") then {
   paquete textproc/Mt77
 
   #paquete databases/sivel sivel sivel 1.2
-  paquete databases/sivel sivel sivel 2.1
+  paquete databases/sivel sivel sivel 2.2
 
   rm $dini/$V$VESP-$ARQ/$dest/php5-gd-*-no_x11.tgz > /dev/null 2>&1
 
