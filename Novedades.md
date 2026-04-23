@@ -102,7 +102,7 @@ Novedades tomadas de <https://www.openbsd.org/78.html>
 * Incluye evangelios-0.9.15 que agrega traducción de Hebreos y hace
   mejoras en varios libros tras retroalimentación de varios modelos de IA
   cuidadosamente analizada (DeepSeek y Gemini).
-* Incluye porte de sivel-2.2
+* Incluye porte de sivel-2.2.1
 * Incluye portes actualizados para cerrar fallas de curl 8.19,
   libffi-3.5.2p0, nghttp2-1.68.1, openssl-3.5.5V0, png-1.6.56,
   py3-asn1-0.6.3v0, python-3.12.11, redis 6.2.20,
