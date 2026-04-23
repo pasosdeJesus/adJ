@@ -9,7 +9,7 @@ desde la educación, el respeto por la dignidad humana y la memoria.
 evangelios_dp-[v]	Evangelios: traducción de dominio público.
 sword-[v]		Permite consultar Biblia, incluye módulo KJV 
                         con Biblia en inglés y números Strong. 
-bibletime-[v]	Para estudiar Biblia, usa módulos de sword.
+bibletime-[v]	Para estudiar la Biblia, usa módulos de sword.
 
 
 ** Para organizaciones de Derechos Humanos y Comunidades en Resistencia 
@@ -25,7 +25,7 @@ usuario_adJ-[v]		Documentación para usuarios de adJ
 ** Del proyecto Structio (dominio público) útil para educación:
         http://structio.sf.net/
 
-asigna-[v]		Cuadra horarios en un colegio
+asigna-[v]		Asigna horarios en un colegio
 AnimalesI-[v]		Hojas de lectoescritura letra script
 AprestamientoI-[v]	Hojas de lectoescritura letra script
 PlantasCursiva-[v]	Hojas de lectoescritura letra cursiva
@@ -59,11 +59,11 @@ programas auditados:
         clang           Compilador de C
         Kit Unix        Herramientas típicas en sistemas Unix
         OpenBSD httpd	Servidor web
-        OpenNTPD        Servidor y cliente de NTPD (para sincronizar tiempo)
+        OpenNTPD        Servidor y cliente de NTP (para sincronizar tiempo)
         OpenSMTPD       Agente para transferencia de correo (MTA)
         OpenSSH         Servidor y cliente SSH
         pf              Cortafuegos flexible y fácil de configurar 
-        perl            Interprete de Perl        
+        perl            Intérprete de Perl        
         X-Window        Servidor gráfico
 
 
@@ -79,20 +79,20 @@ que las oficiales de OpenBSD [V]):
 * Escritorio gráfico:
 audacious-[v]		Reproductor multimedia 
 audacity-[v]	Editor de audio
-chromium-[v]	Navegador web Chrome
+chromium-[v]	Navegador web Chromium
 evince-[v]-light	Visor de documentos (proyecto GNOME)
 fluxbox-[v]		Escritorio extra liviano
 fluxter-[v]		Pagina espacios de trabajo en fluxbox
 filezilla-[v]	Transmite archivos (soporta protocolo ssh)
 firefox-esr-[v]	Navegador web Firefox, versión con soporte extendido
 firefox-esr-i18n-es-AR-[v]	Componente de Español para Firefox
-gimp-[v]		Editor gráfico por pixels
+gimp-[v]		Editor gráfico por píxeles
 gnumeric-[v]	Hoja de cálculo
 gv-[v]		Visualizador de PostScript y PDF
 inkscape-[v]	Editor gráfico vectorial
 mplayer-[v]	Escuchar y ver diversidad de audio y vídeo
 libreoffice-[v]	Aplicaciones de oficina
-libreoffice-i18n-es-[v]	Localización en Español para LibreOffice
+libreoffice-i18n-es-[v]	Localización en español para LibreOffice
 qemu-[v]		Emulador de varios sistemas
 vim-[v]-gtk3	Editor de texto eficiente que requiere estudio previo
 vlc-[v]		Reproductor Multimedia
@@ -102,13 +102,13 @@ xfe-[v]		Administrador de archivos
 
 * Escritorio consola:
 antiword-[v]		Convierte a texto plano archivos de MS-Word
-bash-[v]		Interprete de orden requerido para instalar yarn
+bash-[v]		Intérprete de orden requerido para instalar yarn
 bzip2-[v]		Descompresor de formato BZ2
 cdparanoia-[v]	Utilidad para leer CDDA
 cdrtools-[v]		Quema CDs y sistemas de archivo ISO 9660
 colorls-[v]		Comando ls con color
 cups-[v]		Sistema de impresión
-curl-[v]		Descarga de servidores FTP, Gopher, HTTP y HTPPS
+curl-[v]		Descarga de servidores FTP, Gopher, HTTP y HTTPS
 dvd+rw-tools-[v]	Herramientas para escribir DVDs
 dfc-[v]		Muestra uso de disco con colores
 ffmpeg-[v]		Conversor y emisor de vídeo con bktr(4)
@@ -120,15 +120,15 @@ mutt-[v]		Cliente de correo
 rcm-[v]		Maneja archivos de configuración
 rsync-[v]		Para sincronizar copias remotas
 rtorrent-[v]	Sistema de distribución de archivos cooperativo 
-scrot-[v]		Captura imágenes de pantallas
+scrot-[v]		Captura imágenes de pantalla
 sox-[v]		Conversión, grabación, reproducción de sonido
 texlive_base-[v]	Binarios para distribución TeXLive
 texlive_mktexlsr-[v]	mktexlsr para la distribución TeXLive
-texlive_texmf-buildset-[v]	Pequeño texmf de texlive para crear portes
+texlive_texmf-buildset-[v]	Pequeño texmf de TeXLive para crear portes
 texlive_texmf-minimal-[v]	texmf de texlive con funcionalidad básica
 texlive_synctex-[v]	synctex para distribución TeXLive
 unrar-[v]		Extrae, lista y prueba archivos RAR
-unzip-[v]		Descompresión formato ZIP
+unzip-[v]		Descompresión en formato ZIP
 vim-spell-es-[v]	Archivos para revisión ortográfica en español en vim
 vorbis-tools-[v]	Reproduce, codifica y maneja OGG
 wget-[v]		Descarga sitios web
@@ -152,7 +152,7 @@ postgresql-pg_upgrade-[v]	Soporte para actualizar PostgreSQL
 postgresql-previous-[v]	PostgreSQL anterior para usar con pg_upgrade
 postgresql-server-[v]	Servidor de bases de datos PostgreSQL
 redis-[v]		Base de datos persistente tipo llave-valor
-sqlite3-[v]	Implementación embebida de SQL (versión 2).
+sqlite3-[v]	Implementación embebida de SQL (versión 3).
 
 
 * Seguridad:
@@ -348,7 +348,7 @@ libarchive-[v]	Librería para leer y escribir archivos de emisión
 libavif-[v]		Librería para codificar/decodificar
 libass-[v]		Librería para decodificación AC-3
 libassuan-[v]	Librería IPC usada por GnuPG y gpme
-libb2-[v]		Librería de funciones de condensando BLAKE2{b,s,bp,sp}
+libb2-[v]		Librería de funciones de condensando BLAKE2
 libbfio-[v]	Librería de abstracción de entrada/salida en C
 libbinio-[v]		Librería de clases para flujos binarios de E/S
 libbluray-[v]		Soporta reproducción de Blu-ray
@@ -403,7 +403,7 @@ libmodplug-[v]	Librería para decodificar formatos de música estilo mod
 libmpack-[v]		Implementación sencilla de msgpack en C
 libmspack-[v]	Librería para manejar formatos de compresión de MS
 libmypaint-[v]	Librería para hacer pinceladas
-libnettle-[v]	Envía notificaciones de escritorio a un servicio 
+libnettle-[v]	Librería de criptografía
 libnfs-[v]		Librería cliente para acceder a NFS
 libnotify-[v]		Envía notificaciones de escritorio a un servicio 
 libogg-[v]		Librería para flujos de bits OGG
@@ -452,7 +452,7 @@ libvhdi-[v]	Librería y herramientas para el formato de imagenes VHD
 libvidstab-[v]	Librería para estabilización de vídeo
 libvmdk-[v]	Librería y herramientas para el formato de vmdk
 libvorbis-[v]		Codec para compresión de audio
-libvpx-[v]		Codec para video VP8 de Google
+libvpx-[v]		Codec para vídeo VP8 de Google
 libvterm-[v]	Librería para emular una termina VT220/xterm/ECMA-48
 libwebp-[v]		Conversión del formatos gráficos Google WebP
 libwmf-[v]	Conversión y manejo WMF
