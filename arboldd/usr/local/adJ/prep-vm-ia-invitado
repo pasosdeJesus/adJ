@@ -1,0 +1,157 @@
+#!/bin/sh
+# Prepara una máquina con adJ ya instalado para trabajar con Crush y DeepSeek.
+# Ejecutar después de inst-adJ.sh.
+# Dominio público de acuerdo a legislación colombiana.
+# http://www.pasosdejesus.org/dominio_publico_colombia.html
+# 2026. vtamara@pasosdeJesus.org
+
+# Configuración esperada en el ambiente:
+#   IA_USER     - Usuario que usará Crush/DeepSeek (requerido)
+#   NFS_SERVER  - IP o nombre del servidor NFS (opcional, ej: 100.64.1.2)
+#   NFS_PATH    - Ruta exportada en el servidor NFS (opcional, ej: /var/www)
+# Si no se definen NFS_*, /var/www será directorio local.
+
+set -e
+
+if [ -z "$IA_USER" ]; then
+	echo "Error: Defina IA_USER con el nombre del usuario que usará Crush/DeepSeek"
+	echo "  Ej: doas IA_USER=vtamara sh prep-vm-ia"
+	exit 1
+fi
+
+HOME_IA="/home/${IA_USER}"
+
+echo "=== prep-vm-ia: Preparando para Crush/DeepSeek (usuario: ${IA_USER}) ==="
+
+# ---- timecounter (VM) ----
+echo "[timecounter] Configurando..."
+if ! sysctl kern.timecounter.hardware 2>/dev/null | grep -q pvclock0; then
+	sysctl kern.timecounter.hardware=pvclock0 2>/dev/null || true
+	if ! grep -q '^kern.timecounter.hardware=pvclock0' /etc/sysctl.conf 2>/dev/null; then
+		echo 'kern.timecounter.hardware=pvclock0' >> /etc/sysctl.conf
+	fi
+	echo "  + pvclock0"
+else
+	echo "  = pvclock0 ya activo"
+fi
+
+# ---- ntpd con -s ----
+echo "[ntpd] Configurando..."
+if ! grep -q '^ntpd_flags=-s' /etc/rc.conf.local 2>/dev/null; then
+	if grep -q '^ntpd_flags' /etc/rc.conf.local 2>/dev/null; then
+		sed -i 's/^ntpd_flags=.*/ntpd_flags=-s/' /etc/rc.conf.local
+	else
+		echo 'ntpd_flags=-s' >> /etc/rc.conf.local
+	fi
+	rcctl restart ntpd 2>/dev/null || true
+	echo "  + ntpd_flags=-s"
+else
+	echo "  = ntpd_flags ya configurado"
+fi
+
+# ---- npm config ----
+echo "[npm] Configurando..."
+NPMRC="${HOME_IA}/.npmrc"
+if [ ! -f "$NPMRC" ] || ! grep -q 'prefix' "$NPMRC" 2>/dev/null; then
+	echo 'prefix=/usr/local' > "$NPMRC"
+	chown "${IA_USER}:${IA_USER}" "$NPMRC"
+	echo "  + .npmrc configurado"
+else
+	echo "  = .npmrc ya configurado"
+fi
+
+# ---- Montajes NFS ----
+echo "[nfs] Configurando montajes..."
+if [ -n "${NFS_SERVER}" ] && [ -n "${NFS_PATH}" ]; then
+	for dir in /var/www /usr/local /home /var/postgresql; do
+		if mount | grep -q "on ${dir} "; then
+			echo "  = ${dir} ya montado"
+		else
+			mkdir -p "$dir"
+			case "$dir" in
+				/usr/local)
+					opts="rw,wxallowed,suid,intr,tcp"
+					;;
+				/home)
+					opts="rw,soft,intr,tcp"
+					;;
+				*)
+					opts="rw,nosuid,soft,intr,tcp"
+					;;
+			esac
+			mount -t nfs -o "$opts" \
+				"${NFS_SERVER}:${NFS_PATH}${dir}" "$dir" 2>/dev/null || true
+			if ! grep -q " ${dir} " /etc/fstab 2>/dev/null; then
+				echo "${NFS_SERVER}:${NFS_PATH}${dir} ${dir} nfs ${opts} 0 0" >> /etc/fstab
+			fi
+			echo "  + ${dir} montado via NFS"
+		fi
+	done
+else
+	# Sin NFS: solo asegurar /var/www local
+	if [ ! -d /var/www ]; then
+		mkdir -p /var/www
+		chown root:servicio /var/www
+		chmod 755 /var/www
+		echo "  + /var/www creado como directorio local"
+	else
+		echo "  = /var/www ya existe"
+	fi
+fi
+
+# ---- Crush config ----
+echo "[crush] Configurando..."
+CRUSH_DIR="${HOME_IA}/.config/crush"
+CRUSH_JSON="${CRUSH_DIR}/crush.json"
+
+if [ ! -f "$CRUSH_JSON" ]; then
+	mkdir -p "$CRUSH_DIR"
+	cat > "$CRUSH_JSON" << 'FINCRUSH'
+{
+  "providers": {
+    "deepseek": {
+      "type": "openai",
+      "base_url": "https://api.deepseek.com/v1",
+      "api_key": "DEEPSEEK_API_KEY",
+      "models": [
+        { "id": "deepseek-chat", "name": "DeepSeek V4" },
+        { "id": "deepseek-reasoner", "name": "DeepSeek Reasoner" }
+      ]
+    }
+  },
+  "options": {
+    "tui": {
+      "transparent": false
+    }
+  },
+  "providers-x": {
+    "deepseek-thinking": {
+      "type": "anthropic",
+      "base_url": "https://api.deepseek.com/anthropic",
+      "api_key": "DEEPSEEK_API_KEY",
+      "models": [
+        { "id": "deepseek-reasoner", "name": "DeepSeek Thinking" }
+      ]
+    }
+  }
+}
+FINCRUSH
+	chown -R "${IA_USER}:${IA_USER}" "$CRUSH_DIR"
+	echo "  + crush.json creado (reemplace DEEPSEEK_API_KEY)"
+else
+	echo "  = crush.json ya existe"
+fi
+
+# ---- Crush runtime ----
+CRUSH_RUNTIME="${HOME_IA}/.crush"
+if [ ! -d "$CRUSH_RUNTIME" ]; then
+	mkdir -p "$CRUSH_RUNTIME/logs"
+	chown -R "${IA_USER}:${IA_USER}" "$CRUSH_RUNTIME"
+	echo "  + directorio .crush creado"
+else
+	echo "  = directorio .crush ya existe"
+fi
+
+echo ""
+echo "=== prep-vm-ia completado ==="
+echo "Recuerde reemplazar DEEPSEEK_API_KEY en ${CRUSH_JSON}"
