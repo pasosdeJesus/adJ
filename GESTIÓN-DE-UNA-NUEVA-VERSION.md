@@ -43,25 +43,38 @@ Una vez los parches están actualizados, se debe proceder a compilar el kernel y
 
 > El proceso detallado de compilación de cada componente del sistema se describe en el [PROCESO-DE-CONSTRUCCION.md](PROCESO-DE-CONSTRUCCION.md).
 
-### 5. Recompilar Paquetes
+### 5. Generar llaves signify para la siguiente versión y respaldarlas
+
+       doas signify -G -c "Firma adJ 7.9 para paquetes" -n -s /etc/signify/adJ-79-pkg.sec -p /etc/signify/adJ-79-pkg.pub
+       doas signify -G -c "Firma adJ 7.9 para sistema base" -n -s /etc/signify/adJ-79-base.sec -p /etc/signify/adJ-79-base.pub
+
+Respaldalas en otro computador.
+
+Copiar la parte publica en arboldd/etc/signifiy, agregarlas al repositorio y
+si hay versiones anteriores a la versión actual y a la siguiente 
+eliminarlas
+
+        cp /etc/signify/adJ-79*pub arboldd/etc/signify
+
+### 6. Recompilar Paquetes
 Recompilar paquetes que tengan actualizaciones de seguridad o mejoras funcionales.
 
-### 6. Retroportar Paquetes
+### 7. Retroportar Paquetes
 Trabajar en la adaptación de paquetes de versiones más nuevas de OpenBSD para que funcionen en la versión actual de `adJ`. Los resultados útiles no incluidos en el DVD se pueden dejar en un directorio `extra`.
 
-### 7. Regenerar la Distribución
+### 8. Regenerar la Distribución
 Ejecutar el script principal para empaquetar todos los componentes (sin volver a compilar todo).
 ```sh
 doas ./distribucion.sh
 ```
 
-### 8. Documentar Novedades
+### 9. Documentar Novedades
 Retocar la fecha de publicación en `Novedades.md` y publicar una versión preliminar en <http://aprendiendo.pasosdeJesus.org>.
 
-### 9. Generar la Imagen de Instalación
+### 10. Generar la Imagen de Instalación
 Usar `hdes/creaiso.sh` para crear el archivo `.iso` final.
 
-### 10. Probar la Imagen Generada
+### 11. Probar la Imagen Generada
 Es crucial verificar la imagen de instalación en un entorno controlado como QEMU.
 
 > Para las instrucciones detalladas sobre cómo ejecutar las pruebas en QEMU, consulte la [Guía para el Contribuyente](CONTRIBUTING.md).
@@ -112,10 +125,10 @@ A continuación, la lista de verificación de pruebas:
 *   **Aplicaciones:** Confirmar que una aplicación Ruby on Rails opera correctamente.
 *   **Interfaz Gráfica:** Verificar que toda entrada del menú gráfico opere sin errores.
 
-### 11. Crear Directorio en Servidor
+### 12. Crear Directorio en Servidor
 En `adJ.pasosdeJesus.org`, crear el directorio para los paquetes extra: `mkdir /dirftp/7.8-extra`.
 
-### 12. Subir Archivos al Servidor
+### 13. Subir Archivos al Servidor
 Desde el computador de desarrollo, subir la distribución y los paquetes extra.
 ```sh
 hdes/rsync-aotro.sh
@@ -123,10 +136,10 @@ scp -rf AprendiendoDeJesus-7.8-amd64.{img,iso} 7.8-amd64 adJ.pasosdeJesus.org:/d
 rsync extra-7.8/* adJ.pasosdeJesus.org:/dirftp/7.8-extra/
 ```
 
-### 13. Verificar Servicios en Línea
+### 14. Verificar Servicios en Línea
 Verificar la operación de todos los sitios y servicios públicos del proyecto.
 
-### 14. Crear Etiqueta y Rama en Git
+### 15. Crear Etiqueta y Rama en Git
 Al publicar una versión alfa o beta, es necesario marcar el estado del código fuente.
 
 > Para más detalles sobre la estrategia de ramas y etiquetas, consulte la [Guía para el Contribuyente](CONTRIBUTING.md).
@@ -137,7 +150,7 @@ git checkout -b ADJ_7_8
 git push origin ADJ_7_8
 ```
 
-### 15. Anunciar
+### 16. Anunciar
 Publicar en la lista de desarrollo.
 
 ## Pasos para Publicar una Versión Mayor
