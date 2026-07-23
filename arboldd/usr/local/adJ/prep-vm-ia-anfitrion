@@ -10,7 +10,6 @@
 #   VM_DISCO    - Ruta del disco qcow2 (defecto: /var/vmm/${VM_NOMBRE}.qcow2)
 #   VM_MEMORIA  - RAM para la VM (defecto: 4G)
 #   VM_TAMDISCO - Tamaño del disco (defecto: 30G)
-#   RED_PUENTE  - Interfaz puente (defecto: bridge0)
 #   RED_IP_HOST - IP del anfitrión en red puente (defecto: 100.64.1.2/24)
 #   RED_IP_VM   - IP de la VM (defecto: 100.64.1.3)
 #   NFS_PATH    - Directorio a exportar via NFS (defecto: /var/www)
@@ -19,9 +18,8 @@ set -e
 
 VM_NOMBRE="${VM_NOMBRE:-adJ-ia}"
 VM_DISCO="${VM_DISCO:-/var/vmm/${VM_NOMBRE}.qcow2}"
-VM_MEMORIA="${VM_MEMORIA:-4G}"
+VM_MEMORIA="${VM_MEMORIA:-12G}"
 VM_TAMDISCO="${VM_TAMDISCO:-30G}"
-RED_PUENTE="${RED_PUENTE:-bridge0}"
 RED_IP_HOST="${RED_IP_HOST:-100.64.1.2/24}"
 RED_IP_VM="${RED_IP_VM:-100.64.1.3}"
 RED_MASCARA="${RED_MASCARA:-255.255.255.0}"
@@ -52,23 +50,6 @@ else
 	echo "  = ${NFS_PATH} ya exportado"
 fi
 
-# ---- Red puente ----
-echo "[red] Configurando puente ${RED_PUENTE}..."
-if ! ifconfig "$RED_PUENTE" >/dev/null 2>&1; then
-	ifconfig "$RED_PUENTE" create 2>/dev/null || true
-fi
-if ! ifconfig "$RED_PUENTE" 2>/dev/null | grep -q "inet ${RED_IP_HOST%/*}"; then
-	ifconfig "$RED_PUENTE" inet "$RED_IP_HOST"
-fi
-if ! grep -q "^add ${RED_PUENTE}" /etc/hostname.bridge0 2>/dev/null; then
-	if ! grep -q "$RED_PUENTE" /etc/hostname.bridge0 2>/dev/null; then
-		echo "add ${RED_PUENTE}" > /etc/hostname.bridge0
-		echo "inet ${RED_IP_HOST}" >> /etc/hostname.bridge0
-		echo "up" >> /etc/hostname.bridge0
-	fi
-fi
-echo "  + ${RED_PUENTE} configurado ${RED_IP_HOST}"
-
 # ---- Sysctl forwarding ----
 if ! grep -q '^net.inet.ip.forwarding=1' /etc/sysctl.conf 2>/dev/null; then
 	echo 'net.inet.ip.forwarding=1' >> /etc/sysctl.conf
@@ -79,7 +60,7 @@ fi
 echo "[disco] Creando disco ${VM_DISCO}..."
 if [ ! -f "$VM_DISCO" ]; then
 	mkdir -p "$(dirname "$VM_DISCO")"
-	vmctl create "$VM_DISCO" -s "$VM_TAMDISCO"
+	vmctl -v create -s "$VM_TAMDISCO" "$VM_DISCO" 
 	echo "  + disco ${VM_DISCO} creado (${VM_TAMDISCO})"
 else
 	echo "  = disco ${VM_DISCO} ya existe"
@@ -92,14 +73,10 @@ if ! grep -q "vm \"${VM_NOMBRE}\"" /etc/vm.conf 2>/dev/null; then
 
 # VM para Crush/DeepSeek - generada por prep-vm-ia-anfitrion
 vm "${VM_NOMBRE}" {
-	memory ${VM_MEMORIA}
-	disk "${VM_DISCO}"
-	interface {
-		switch "local${VM_NOMBRE}"
-	}
-}
-switch "local${VM_NOMBRE}" {
-	interface ${RED_PUENTE}
+  memory ${VM_MEMORIA}
+  enable
+  disk "${VM_DISCO}"
+  local interface
 }
 FINVM
 	rcctl enable vmd 2>/dev/null || true
