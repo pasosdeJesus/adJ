@@ -3,7 +3,7 @@
 Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
 
-### Versión: 7.8
+### Versión: 7.8p1
 Fecha de publicación: 1/Abr/2026
 
 Puedes ver novedades respecto a OpenBSD en:
@@ -15,13 +15,13 @@ Puedes ver las diversas versiones publicadas en
 <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/> donde entre otras
 encontrarás:
 
-* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-7.8-amd64.img>
+* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-7.8p1-amd64.img>
   que es imagen para escribir en una memoria USB y arrancar con esta bien en
   modo UEFI o bien en modo BIOS Legacy. Una vez
   la descargues puedes escribirla en una USB ubicada en `/dev/sd2c`
   (verifica el dispositivo con `dmesg` y remplaza) con:
 
-       doas dd if=AprendiendoDeJesus-7.8-amd64.img of=/dev/sd2c bs=1M
+       doas dd if=AprendiendoDeJesus-7.8p1-amd64.img of=/dev/sd2c bs=1M
 
   Este proceso puede ser demorado, podrás ver el progreso con
 
@@ -29,13 +29,13 @@ encontrarás:
 
   O si deseas probarla con `qemu` para instalar en un disco `virtual.raw`:
 
-      qemu-system-x86_64 -hda virtual.raw -hdb AprendiendoDeJesus-7.8-amd64.img -boot menu=on
+      qemu-system-x86_64 -hda virtual.raw -hdb AprendiendoDeJesus-7.8p1-amd64.img -boot menu=on
 
-* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-7.8-amd64.iso>
+* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-7.8p1-amd64.iso>
   que es imagen en formato ISO para quemar en DVD e instalar por primera vez
   en modo BIOS Legacy.
 
-* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/7.8-amd64/>
+* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/7.8p1-amd64/>
   que es directorio con el contenido del DVD instalador apropiado para
   descargar con `rsync` desde un adJ o un OpenBSD ya instalado para
   actualizarlo (ver

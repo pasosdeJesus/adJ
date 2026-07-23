@@ -5,7 +5,7 @@
 
 VER=7.8
 REV=
-VESP=""
+VESP="p1"
 
 p0=$0
 dpwd=`pwd`
