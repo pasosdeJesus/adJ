@@ -19,7 +19,7 @@ set -e
 VM_NOMBRE="${VM_NOMBRE:-adJ-ia}"
 VM_DISCO="${VM_DISCO:-/var/vmm/${VM_NOMBRE}.qcow2}"
 VM_MEMORIA="${VM_MEMORIA:-12G}"
-VM_TAMDISCO="${VM_TAMDISCO:-30G}"
+VM_TAMDISCO="${VM_TAMDISCO:-50G}"
 RED_IP_HOST="${RED_IP_HOST:-100.64.1.2/24}"
 RED_IP_VM="${RED_IP_VM:-100.64.1.3}"
 RED_MASCARA="${RED_MASCARA:-255.255.255.0}"
@@ -30,7 +30,7 @@ echo "=== prep-vm-ia-anfitrion: Preparando anfitrión para VM ${VM_NOMBRE} ==="
 
 # ---- Directorios NFS ----
 echo "[nfs] Creando directorios a exportar..."
-for d in "$NFS_PATH" "$NFS_PATH/usr/local" "$NFS_PATH/home" "$NFS_PATH/var/postgresql"; do
+for d in "$NFS_PATH"; do
 	if [ ! -d "$d" ]; then
 		mkdir -p "$d"
 		echo "  + $d creado"
