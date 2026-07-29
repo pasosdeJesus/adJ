@@ -175,15 +175,12 @@ if [ "$INSTALAR" = "s" ]; then
 	rm -f "$AI_IMG"
 	dd if=/dev/zero of="$AI_IMG" bs=1m count=1 2>/dev/null
 
-	vnd=""
-	for i in 0 1 2 3 4 5 6 7 8 9; do
-		if ! vnconfig "vnd${i}" 2>/dev/null | grep -q "not in use" ; then
-			:
-		else
-			vnd="$i"
-			break
-		fi
-	done
+	vnd=$(vnconfig -l 2>/dev/null | grep "not in use" | head -1 | sed -e 's/^vnd\([0-9]*\).*/\1/')
+	if [ -z "$vnd" ]; then
+		echo "Error: No hay dispositivo vnd disponible"
+		rm -f "$AI_IMG"
+		exit 1
+	fi
 	vnconfig "vnd${vnd}" "$AI_IMG" 2>/dev/null
 	newfs_msdos -F 12 "/dev/rvnd${vnd}c" 2>/dev/null >/dev/null
 
