@@ -1,20 +1,29 @@
 #!/bin/sh
 # Prepara la máquina anfitrión para alojar una VM con Crush y DeepSeek.
-# Crea VM en vmd(8), red puente y exporta NFS.
+# Crea VM en vmd(8), configura red puente, exporta NFS y opcionalmente
+# instala adJ de forma automática.
 # Dominio público de acuerdo a legislación colombiana.
 # http://www.pasosdejesus.org/dominio_publico_colombia.html
 # 2026. vtamara@pasosdeJesus.org
 
 # Configuración esperada en el ambiente:
-#   VM_NOMBRE   - Nombre de la VM (requerido, ej: adJ-ia)
+#   VM_NOMBRE   - Nombre de la VM (defecto: adJ-ia)
 #   VM_DISCO    - Ruta del disco qcow2 (defecto: /var/vmm/${VM_NOMBRE}.qcow2)
-#   VM_MEMORIA  - RAM para la VM (defecto: 4G)
-#   VM_TAMDISCO - Tamaño del disco (defecto: 30G)
-#   RED_IP_HOST - IP del anfitrión en red puente (defecto: 100.64.1.2/24)
+#   VM_MEMORIA  - RAM para la VM (defecto: 12G)
+#   VM_TAMDISCO - Tamaño del disco (defecto: 50G)
+#   RED_IP_HOST - IP del anfitrión en la red interna (defecto: 100.64.1.2/24)
 #   RED_IP_VM   - IP de la VM (defecto: 100.64.1.3)
+#   RED_MASCARA - Máscara de subred (defecto: 255.255.255.0)
 #   NFS_PATH    - Directorio a exportar via NFS (defecto: /var/www)
+#   ISO_PATH    - Ruta de la ISO de adJ (defecto: ./AprendiendoDeJesus-*.iso)
+#   INSTALAR    - 's' para autoinstalar sin preguntar, 'n' para saltar
+#   CLAVE_ROOT  - Clave del usuario root en la VM (requerido si INSTALAR=s)
+#   VM_USUARIO  - Usuario inicial en la VM (defecto: vtamara)
+#   ZONA_HORARIA- Zona horaria (defecto: America/Bogota)
+#   DNS_SERVER  - Servidor DNS para la VM (defecto: 8.8.8.8)
 
 set -e
+export PATH="$PATH:/usr/local/bin:/usr/local/sbin:/usr/sbin:/sbin"
 
 VM_NOMBRE="${VM_NOMBRE:-adJ-ia}"
 VM_DISCO="${VM_DISCO:-/var/vmm/${VM_NOMBRE}.qcow2}"
@@ -25,6 +34,15 @@ RED_IP_VM="${RED_IP_VM:-100.64.1.3}"
 RED_MASCARA="${RED_MASCARA:-255.255.255.0}"
 NFS_PATH="${NFS_PATH:-/var/www}"
 NFS_RED="${NFS_RED:-100.64.1}"
+VM_USUARIO="${VM_USUARIO:-vtamara}"
+ZONA_HORARIA="${ZONA_HORARIA:-America/Bogota}"
+DNS_SERVER="${DNS_SERVER:-8.8.8.8}"
+
+w=$(whoami)
+if [ "$w" != "root" ]; then
+	echo "Este script debe ser ejecutado por root o con doas"
+	exit 1
+fi
 
 echo "=== prep-vm-ia-anfitrion: Preparando anfitrión para VM ${VM_NOMBRE} ==="
 
@@ -51,16 +69,20 @@ else
 fi
 
 # ---- Sysctl forwarding ----
+echo "[sysctl] Verificando forwarding..."
 if ! grep -q '^net.inet.ip.forwarding=1' /etc/sysctl.conf 2>/dev/null; then
 	echo 'net.inet.ip.forwarding=1' >> /etc/sysctl.conf
 	sysctl net.inet.ip.forwarding=1
+	echo "  + forwarding activado"
+else
+	echo "  = forwarding ya activo"
 fi
 
 # ---- Disco VM ----
 echo "[disco] Creando disco ${VM_DISCO}..."
 if [ ! -f "$VM_DISCO" ]; then
 	mkdir -p "$(dirname "$VM_DISCO")"
-	vmctl -v create -s "$VM_TAMDISCO" "$VM_DISCO" 
+	vmctl create -s "$VM_TAMDISCO" "$VM_DISCO"
 	echo "  + disco ${VM_DISCO} creado (${VM_TAMDISCO})"
 else
 	echo "  = disco ${VM_DISCO} ya existe"
@@ -73,10 +95,10 @@ if ! grep -q "vm \"${VM_NOMBRE}\"" /etc/vm.conf 2>/dev/null; then
 
 # VM para Crush/DeepSeek - generada por prep-vm-ia-anfitrion
 vm "${VM_NOMBRE}" {
-  memory ${VM_MEMORIA}
-  enable
-  disk "${VM_DISCO}"
-  local interface
+	memory ${VM_MEMORIA}
+	enable
+	disk "${VM_DISCO}"
+	local interface
 }
 FINVM
 	rcctl enable vmd 2>/dev/null || true
@@ -86,18 +108,174 @@ else
 	echo "  = VM ${VM_NOMBRE} ya configurada"
 fi
 
-# ---- Iniciar VM ----
-echo "[vmd] Verificando estado de VM..."
-vmctl show 2>/dev/null | grep -q "$VM_NOMBRE" || true
-vmctl start "$VM_NOMBRE" 2>/dev/null && echo "  + VM ${VM_NOMBRE} iniciada" || echo "  = VM ya estaba corriendo"
+# ---- Arrancar VM si no está corriendo ----
+vmctl show 2>/dev/null | grep -q "$VM_NOMBRE" && VM_RUNNING=1 || VM_RUNNING=0
+
+# ---- Buscar ISO ----
+if [ -z "$ISO_PATH" ]; then
+	for p in AprendiendoDeJesus-*-amd64.iso \
+		../AprendiendoDeJesus-*-amd64.iso \
+		/releasedir/AprendiendoDeJesus-*-amd64.iso; do
+		if [ -f "$p" ]; then
+			ISO_PATH="$p"
+			break
+		fi
+	done
+fi
+
+# ---- Autoinstall ----
+if [ "$INSTALAR" != "s" ] && [ "$INSTALAR" != "n" ]; then
+	VM_MSG="VM ${VM_NOMBRE}"
+	if [ "$VM_RUNNING" != "0" ]; then
+		VM_MSG="${VM_MSG} (deteniendo)"
+	fi
+	echo ""
+	echo "La ${VM_MSG} está lista."
+	if [ -n "$ISO_PATH" ] && [ -f "$ISO_PATH" ]; then
+		echo "ISO detectada: ${ISO_PATH}"
+		echo -n "¿Desea instalar adJ automáticamente en la VM? (s/N): "
+		read resp
+		if [ "$resp" = "s" ] || [ "$resp" = "S" ]; then
+			INSTALAR="s"
+		else
+			INSTALAR="n"
+		fi
+	else
+		echo "No se detectó ISO de adJ. Genérela con hdes/creaiso.sh"
+		echo "  o defina ISO_PATH y vuelva a ejecutar."
+		INSTALAR="n"
+	fi
+fi
+
+if [ "$INSTALAR" = "s" ]; then
+	if [ -z "$ISO_PATH" ] || [ ! -f "$ISO_PATH" ]; then
+		echo "Error: No se encuentra la ISO de adJ."
+		echo "  Genérela con hdes/creaiso.sh o defina ISO_PATH"
+		exit 1
+	fi
+
+	ISO_NOMBRE=$(basename "$ISO_PATH")
+
+	if [ -z "$CLAVE_ROOT" ]; then
+		stty -echo
+		echo -n "Clave para root y ${VM_USUARIO} en la VM: "
+		read CLAVE_ROOT
+		stty echo
+		echo ""
+		if [ -z "$CLAVE_ROOT" ]; then
+			echo "Error: Se requiere una clave"
+			exit 1
+		fi
+	fi
+
+	echo "[autoinstall] Preparando instalación automática..."
+
+	# Crear imagen FAT con install.conf
+	AI_IMG="/var/vmm/autoinstall-${VM_NOMBRE}.img"
+	rm -f "$AI_IMG"
+	dd if=/dev/zero of="$AI_IMG" bs=1m count=1 2>/dev/null
+
+	vnd=""
+	for i in 0 1 2 3 4 5 6 7 8 9; do
+		if ! vnconfig "vnd${i}" 2>/dev/null | grep -q "not in use" ; then
+			:
+		else
+			vnd="$i"
+			break
+		fi
+	done
+	vnconfig "vnd${vnd}" "$AI_IMG" 2>/dev/null
+	newfs_msdos -F 12 "/dev/rvnd${vnd}c" 2>/dev/null >/dev/null
+
+	AI_MNT=$(mktemp -d /tmp/autoinstall.XXXXXX)
+	mount -t msdos "/dev/vnd${vnd}i" "$AI_MNT"
+
+	cat > "$AI_MNT/install.conf" << FINAUTO
+System hostname = ${VM_NOMBRE}
+Which network interface do you wish to configure = vio0
+IPv4 address for vio0 = ${RED_IP_VM}
+Netmask for vio0 = ${RED_MASCARA}
+IPv6 address for vio0 = none
+Which network interface do you wish to configure = done
+Default IPv4 route = ${RED_IP_HOST%/*}
+DNS domain name = 
+DNS nameservers = ${DNS_SERVER}
+Password for root = ${CLAVE_ROOT}
+Start sshd(8) by default = yes
+Do you expect to run the X Window System = no
+Setup a user = ${VM_USUARIO}
+Full name for user = ${VM_USUARIO}
+Password for user = ${CLAVE_ROOT}
+Allow root ssh login = yes
+What timezone are you in = ${ZONA_HORARIA}
+Which disk is the root disk = sd0
+Use (W)hole disk MBR, whole disk (G)PT, (O)penBSD area or (E)dit = W
+Use (A)uto layout, (E)dit auto layout, or create (C)ustom layout = a
+Location of sets = cd0
+Directory does not contain SHA256.sig. Continue without verification = yes
+FINAUTO
+
+	umount "$AI_MNT"
+	vnconfig -u "vnd${vnd}"
+	rmdir "$AI_MNT"
+
+	# Detener VM si corre para reiniciar con ISO
+	if [ "$VM_RUNNING" != "0" ]; then
+		echo "  + deteniendo VM existente..."
+		vmctl stop -w "$VM_NOMBRE" 2>/dev/null || true
+	fi
+
+	echo "  + iniciando instalación automática..."
+	vmctl start "$VM_NOMBRE" \
+		-B cdrom \
+		-d "$ISO_PATH" \
+		-d "$AI_IMG"
+	
+	echo ""
+	echo "  Instalación automática en progreso."
+	echo "  Monitoree con: vmctl console ${VM_NOMBRE}"
+	echo ""
+	echo "  Esperando a que termine la instalación..."
+	
+	# Esperar a que la VM se detenga (instalación completa)
+	while vmctl status 2>/dev/null | grep -q "$VM_NOMBRE.*running"; do
+		sleep 15
+		echo -n "."
+	done
+	
+	echo ""
+	echo "  + instalación completada"
+
+	# Limpiar la imagen de autoinstalacion
+	rm -f "$AI_IMG"
+
+	# Reiniciar VM desde disco
+	echo "  + reiniciando VM desde disco..."
+	vmctl start "$VM_NOMBRE"
+	
+	sleep 3
+	echo "  + VM ${VM_NOMBRE} arrancada. Conéctese: vmctl console ${VM_NOMBRE}"
+else
+	# Sin autoinstalar: solo iniciar VM normalmente
+	if [ "$VM_RUNNING" = "0" ]; then
+		vmctl start "$VM_NOMBRE" 2>/dev/null && \
+			echo "  + VM ${VM_NOMBRE} iniciada" || \
+			echo "  = VM ya estaba corriendo"
+	fi
+fi
 
 echo ""
 echo "=== prep-vm-ia-anfitrion completado ==="
-echo "Próximos pasos:"
-echo "  1. Instalar adJ en la VM (ISO o red)"
-echo "  2. Dentro de la VM ejecutar inst-adJ.sh"
-echo "  3. Luego ejecutar prep-vm-ia-invitado"
+if [ "$INSTALAR" = "s" ]; then
+	echo "adJ instalado. Ahora dentro de la VM:"
+else
+	echo "Próximos pasos:"
+	echo "  1. Instalar adJ en la VM (ISO o red)"
+fi
+echo "  2. Ejecutar inst-adJ.sh"
+echo "  3. Ejecutar prep-vm-ia-invitado"
 echo ""
 echo "IP del anfitrión: ${RED_IP_HOST%/*}"
 echo "IP de la VM:      ${RED_IP_VM}"
+echo "Consola:          vmctl console ${VM_NOMBRE}"
 echo "Directorio NFS:   ${NFS_PATH}"
