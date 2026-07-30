@@ -173,44 +173,9 @@ if [ "$INSTALAR" = "s" ]; then
 	# Crear imagen FAT con install.conf
 	AI_IMG="/var/vmm/autoinstall-${VM_NOMBRE}.img"
 	rm -f "$AI_IMG"
-	dd if=/dev/zero of="$AI_IMG" bs=1m count=1 2>/dev/null
 
-	vnd=$(vnconfig -l 2>/dev/null | grep "not in use" | head -1 | sed -e 's/^vnd\([0-9]*\).*/\1/')
-	if [ -z "$vnd" ]; then
-		echo "Error: No hay dispositivo vnd disponible"
-		rm -f "$AI_IMG"
-		exit 1
-	fi
-	vnconfig "vnd${vnd}" "$AI_IMG" 2>/dev/null
-
-	totsect=2048
-	dl="/tmp/dl.$$"
-	cat > "$dl" << FINDL
-type: vnd
-disk: vnd
-label: autoinstall
-bytes/sector: 512
-sectors/track: 63
-tracks/cylinder: 1
-sectors/cylinder: 63
-cylinders: 32
-total sectors: ${totsect}
-boundstart: 64
-boundend: ${totsect}
-
-16 partitions:
-#                size           offset  fstype [fsize bsize   cpg]
-  c:            ${totsect}                0  unused
-  i:              $((totsect - 64))               64   MSDOS
-FINDL
-	disklabel -R "vnd${vnd}" "$dl" 2>/dev/null >/dev/null
-	rm -f "$dl"
-	newfs_msdos -F 12 "/dev/rvnd${vnd}i" 2>/dev/null >/dev/null
-
-	AI_MNT=$(mktemp -d /tmp/autoinstall.XXXXXX)
-	mount -t msdos "/dev/vnd${vnd}i" "$AI_MNT"
-
-	cat > "$AI_MNT/install.conf" << FINAUTO
+	AI_TMP=$(mktemp -d /tmp/autoinstall.XXXXXX)
+	cat > "$AI_TMP/install.conf" << FINAUTO
 System hostname = ${VM_NOMBRE}
 Which network interface do you wish to configure = vio0
 IPv4 address for vio0 = ${RED_IP_VM}
@@ -235,11 +200,9 @@ Location of sets = cd0
 Directory does not contain SHA256.sig. Continue without verification = yes
 FINAUTO
 
-	umount "$AI_MNT"
-	vnconfig -u "vnd${vnd}"
-	rmdir "$AI_MNT"
-
-	# Detener VM si corre para reiniciar con ISO
+	makefs -t msdos -o fat_type=12 -s 1m "$AI_IMG" "$AI_TMP" 2>/dev/null
+	rm -rf "$AI_TMP"
+	echo "  + imagen de autoinstalación creada"
 	if [ "$VM_RUNNING" != "0" ]; then
 		echo "  + deteniendo VM existente..."
 		vmctl stop -w "$VM_NOMBRE" 2>/dev/null || true
