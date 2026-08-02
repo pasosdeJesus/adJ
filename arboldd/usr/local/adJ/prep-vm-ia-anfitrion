@@ -25,6 +25,7 @@
 set -e
 export PATH="$PATH:/usr/local/bin:/usr/local/sbin:/usr/sbin:/sbin"
 
+
 VM_NOMBRE="${VM_NOMBRE:-adJ-ia}"
 VM_DISCO="${VM_DISCO:-/var/vmm/${VM_NOMBRE}.qcow2}"
 VM_MEMORIA="${VM_MEMORIA:-12G}"
@@ -34,9 +35,11 @@ RED_IP_VM="${RED_IP_VM:-100.64.1.3}"
 RED_MASCARA="${RED_MASCARA:-255.255.255.0}"
 NFS_PATH="${NFS_PATH:-/var/www}"
 NFS_RED="${NFS_RED:-100.64.1}"
-VM_USUARIO="${VM_USUARIO:-vtamara}"
+acus=`whoami`
+VM_USUARIO="${VM_USUARIO:-$acus}"
 ZONA_HORARIA="${ZONA_HORARIA:-America/Bogota}"
 DNS_SERVER="${DNS_SERVER:-8.8.8.8}"
+RUTA_INST="/home/$VM_USUARIO/comp/adJ/7.8p1-amd64/"
 
 w=$(whoami)
 if [ "$w" != "root" ]; then
@@ -78,40 +81,6 @@ else
 	echo "  = forwarding ya activo"
 fi
 
-# ---- Disco VM ----
-echo "[disco] Creando disco ${VM_DISCO}..."
-if [ ! -f "$VM_DISCO" ]; then
-	mkdir -p "$(dirname "$VM_DISCO")"
-	vmctl create -s "$VM_TAMDISCO" "$VM_DISCO"
-	echo "  + disco ${VM_DISCO} creado (${VM_TAMDISCO})"
-else
-	echo "  = disco ${VM_DISCO} ya existe"
-fi
-
-# ---- VM en vmd ----
-echo "[vmd] Configurando /etc/vm.conf..."
-if ! grep -q "vm \"${VM_NOMBRE}\"" /etc/vm.conf 2>/dev/null; then
-	cat >> /etc/vm.conf << FINVM
-
-# VM para Crush/DeepSeek - generada por prep-vm-ia-anfitrion
-vm "${VM_NOMBRE}" {
-	memory ${VM_MEMORIA}
-	enable
-	disk "${VM_DISCO}"
-	local interface
-}
-FINVM
-	rcctl enable vmd 2>/dev/null || true
-	rcctl restart vmd 2>/dev/null || true
-	echo "  + VM ${VM_NOMBRE} configurada en /etc/vm.conf"
-else
-	echo "  = VM ${VM_NOMBRE} ya configurada"
-fi
-
-# ---- Arrancar VM si no está corriendo ----
-vmctl show 2>/dev/null | grep -q "$VM_NOMBRE" && VM_RUNNING=1 || VM_RUNNING=0
-
-# ---- Buscar ISO ----
 if [ -z "$ISO_PATH" ]; then
 	for p in AprendiendoDeJesus-*-amd64.iso \
 		../AprendiendoDeJesus-*-amd64.iso \
@@ -123,38 +92,29 @@ if [ -z "$ISO_PATH" ]; then
 	done
 fi
 
-# ---- Autoinstall ----
-if [ "$INSTALAR" != "s" ] && [ "$INSTALAR" != "n" ]; then
-	VM_MSG="VM ${VM_NOMBRE}"
-	if [ "$VM_RUNNING" != "0" ]; then
-		VM_MSG="${VM_MSG} (deteniendo)"
-	fi
-	echo ""
-	echo "La ${VM_MSG} está lista."
-	if [ -n "$ISO_PATH" ] && [ -f "$ISO_PATH" ]; then
-		echo "ISO detectada: ${ISO_PATH}"
-		echo -n "¿Desea instalar adJ automáticamente en la VM? (s/N): "
-		read resp
-		if [ "$resp" = "s" ] || [ "$resp" = "S" ]; then
-			INSTALAR="s"
-		else
-			INSTALAR="n"
-		fi
-	else
-		echo "No se detectó ISO de adJ. Genérela con hdes/creaiso.sh"
-		echo "  o defina ISO_PATH y vuelva a ejecutar."
-		INSTALAR="n"
-	fi
+if [ -n "$ISO_PATH" ] && [ -f "$ISO_PATH" ]; then
+  echo "ISO detectada: ${ISO_PATH}"
+else
+  echo "No se detectó ISO de adJ. Genérela con hdes/creaiso.sh"
+  echo "  o defina ISO_PATH y vuelva a ejecutar."
+  exit 1
 fi
 
-if [ "$INSTALAR" = "s" ]; then
-	if [ -z "$ISO_PATH" ] || [ ! -f "$ISO_PATH" ]; then
-		echo "Error: No se encuentra la ISO de adJ."
-		echo "  Genérela con hdes/creaiso.sh o defina ISO_PATH"
-		exit 1
-	fi
+rcctl enable vmd 2>/dev/null || true
+rcctl restart vmd 2>/dev/null || true
 
-	ISO_NOMBRE=$(basename "$ISO_PATH")
+# ---- Disco VM ----
+echo "[disco] Creando disco ${VM_DISCO}..."
+if [ ! -f "$VM_DISCO" ]; then
+	mkdir -p "$(dirname "$VM_DISCO")"
+	vmctl -v create -s "$VM_TAMDISCO" "$VM_DISCO" 
+  ls -l $VM_DISCO
+  eval $(stat -s $VM_DISCO)
+  tamvmdisco=$st_size
+
+  echo "  + disco ${VM_DISCO} creado (${VM_TAMDISCO})"
+
+  vnctl stop $VM_NOMBRE
 
 	if [ -z "$CLAVE_ROOT" ]; then
 		stty -echo
@@ -168,84 +128,92 @@ if [ "$INSTALAR" = "s" ]; then
 		fi
 	fi
 
-	echo "[autoinstall] Preparando instalación automática..."
+  if (test ! -f /var/www/htdocs/install.conf) {
+    echo "Creando /var/www/htdocs/install.conf"
+   cat > /var/www/htdocs/install.conf  <<EOF 
+Nombre de la maquina = $VM_NOMBRE
+Clave para root = $CLAVE_ROOT
+Cambiar consola a com0 = si
+Cual velocidad deberia com0 usar = 19200
+Crear cuenta de usuario = $VM_USUARIO
+clave para la cuenta = $CLAVE_ROOT
+Zona horaria = America/Bogota
+Usar (T)odo el disco MBR, todo el disco (G)PT o (E)ditar = T
+URL de la plantilla de autoparticionado para disklabel = http://$RED_IP_HOST/template.disklabel
+Usar distribucion (A)utolocalizada, (E)ditarla, o (C)rear una distribucion = a
+IP del servidor o nombre = $RED_IP_HOST
+Sist. de arch. por montar = $NFS_PATH
+Ruta a componentes = $RUTA_INST
+Continuar en todo caso = si
+Continuar sin verificacion = si
+Set to = si
+EOF
+  } fi;
 
-	# Crear imagen FAT con install.conf
-	AI_IMG="/var/vmm/autoinstall-${VM_NOMBRE}.img"
-	rm -f "$AI_IMG"
+  if (test ! -f /var/www/htdocs/template.disklabel) {
+    echo "Creando /var/www/htdocs/template.disklabel"
+    cat > /var/www/htdocs/template.disklabel  <<EOF 
+/         38G-*         90%
+swap      6G-12G        10%
+EOF
+  } fi;
 
-	AI_TMP=$(mktemp -d /tmp/autoinstall.XXXXXX)
-	cat > "$AI_TMP/install.conf" << FINAUTO
-System hostname = ${VM_NOMBRE}
-Which network interface do you wish to configure = vio0
-IPv4 address for vio0 = ${RED_IP_VM}
-Netmask for vio0 = ${RED_MASCARA}
-IPv6 address for vio0 = none
-Which network interface do you wish to configure = done
-Default IPv4 route = ${RED_IP_HOST%/*}
-DNS domain name = 
-DNS nameservers = ${DNS_SERVER}
-Password for root = ${CLAVE_ROOT}
-Start sshd(8) by default = yes
-Do you expect to run the X Window System = no
-Setup a user = ${VM_USUARIO}
-Full name for user = ${VM_USUARIO}
-Password for user = ${CLAVE_ROOT}
-Allow root ssh login = yes
-What timezone are you in = ${ZONA_HORARIA}
-Which disk is the root disk = sd0
-Use (W)hole disk MBR, whole disk (G)PT, (O)penBSD area or (E)dit = W
-Use (A)uto layout, (E)dit auto layout, or create (C)ustom layout = a
-Location of sets = cd0
-Directory does not contain SHA256.sig. Continue without verification = yes
-FINAUTO
+  grep "server_name  localhost $RED_IP_HOST;" /etc/nginx/nginx.conf > /dev/null 2>&1
+  if (test "$?" != "0") {
+    echo "Ajustando nginx.conf"
+    awk '/listen[[:space:]]+80;/,/root[[:space:]]+\/var\/www\/htdocs;/ {
+    if(/server_name[[:space:]]+localhost;/) sub(/localhost;/, "localhost 100.64.1.2;")
+    } 1' /etc/nginx/nginx.conf
+  } fi;
 
-	makefs -t msdos -o fat_type=12 -s 1m "$AI_IMG" "$AI_TMP" 2>/dev/null
-	rm -rf "$AI_TMP"
-	echo "  + imagen de autoinstalación creada"
-	if [ "$VM_RUNNING" != "0" ]; then
-		echo "  + deteniendo VM existente..."
-		vmctl stop -w "$VM_NOMBRE" 2>/dev/null || true
-	fi
+  echo "Reiniciando nginx"
+  rcctl -d restar nginx
 
-	echo "  + iniciando instalación automática..."
-	vmctl start "$VM_NOMBRE" \
-		-B cdrom \
-		-d "$ISO_PATH" \
-		-d "$AI_IMG"
-	
-	echo ""
-	echo "  Instalación automática en progreso."
-	echo "  Monitoree con: vmctl console ${VM_NOMBRE}"
-	echo ""
-	echo "  Esperando a que termine la instalación..."
-	
-	# Esperar a que la VM se detenga (instalación completa)
-	while vmctl status 2>/dev/null | grep -q "$VM_NOMBRE.*running"; do
-		sleep 15
-		echo -n "."
-	done
-	
-	echo ""
+  echo "Iniciando maquina virtual para autoinstalación, ante la pregunta eliga Autoinstall"
+  vmctl start -m 2G -B cdrom -r $ISO_PATH -d VM_DISCO "$VM_NOMBRE" 
+
 	echo "  + instalación completada"
 
-	# Limpiar la imagen de autoinstalacion
-	rm -f "$AI_IMG"
+  ls -l $VM_DISCO
+  eval $(stat -s $VM_DISCO)
+  tamvmdiscofin=$st_size
 
-	# Reiniciar VM desde disco
-	echo "  + reiniciando VM desde disco..."
-	vmctl start "$VM_NOMBRE"
-	
-	sleep 3
-	echo "  + VM ${VM_NOMBRE} arrancada. Conéctese: vmctl console ${VM_NOMBRE}"
+  if (test "$tamvmdisco" = "$tamvmdiscofin") {
+    echo "No cambio el tamaño del disco virtual, no funcionó la instalación"
+    exit 1;
+  } fi;
+
+
 else
-	# Sin autoinstalar: solo iniciar VM normalmente
-	if [ "$VM_RUNNING" = "0" ]; then
-		vmctl start "$VM_NOMBRE" 2>/dev/null && \
-			echo "  + VM ${VM_NOMBRE} iniciada" || \
-			echo "  = VM ya estaba corriendo"
-	fi
+	echo "  = disco ${VM_DISCO} ya existe suponemos que ya se instaló"
 fi
+
+vmctl show 2>/dev/null | grep -q "$VM_NOMBRE" || true
+
+echo "[vmd] Configurando /etc/vm.conf..."
+if ! grep -q "vm \"${VM_NOMBRE}\"" /etc/vm.conf 2>/dev/null; then
+	cat >> /etc/vm.conf << FINVM
+# VM para Crush/DeepSeek - generada por prep-vm-ia-anfitrion
+vm "${VM_NOMBRE}" {
+  memory ${VM_MEMORIA}
+  disk "${VM_DISCO}"
+  local interface
+}
+FINVM
+	rcctl restart vmd 2>/dev/null || true
+	echo "  + VM ${VM_NOMBRE} configurada en /etc/vm.conf"
+else
+	echo "  = VM ${VM_NOMBRE} ya configurada"
+fi
+
+# ---- Arrancar VM si no está corriendo ----
+vmctl show 2>/dev/null | grep -q "$VM_NOMBRE" && VM_RUNNING=1 || VM_RUNNING=0
+
+
+echo "  + reiniciando VM desde disco..."
+vmctl start "$VM_NOMBRE"
+sleep 3
+echo "  + VM ${VM_NOMBRE} arrancada. Conéctese: vmctl console ${VM_NOMBRE}"
 
 echo ""
 echo "=== prep-vm-ia-anfitrion completado ==="
