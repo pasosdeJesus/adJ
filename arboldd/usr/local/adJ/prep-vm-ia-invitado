@@ -11,6 +11,9 @@
 #   NFS_PATH    - Ruta exportada en el servidor NFS (opcional, ej: /var/www)
 # Si no se definen NFS_*, /var/www será directorio local.
 
+NFS_SERVER=100.64.2.2
+NFS_PATH=/var/www
+
 set -e
 
 if [ -z "$IA_USER" ]; then
@@ -63,18 +66,12 @@ fi
 # ---- Montajes NFS ----
 echo "[nfs] Configurando montajes..."
 if [ -n "${NFS_SERVER}" ] && [ -n "${NFS_PATH}" ]; then
-	for dir in /var/www /usr/local /home /var/postgresql; do
+	for dir in /var/www ; do
 		if mount | grep -q "on ${dir} "; then
 			echo "  = ${dir} ya montado"
 		else
 			mkdir -p "$dir"
 			case "$dir" in
-				/usr/local)
-					opts="rw,wxallowed,suid,intr,tcp"
-					;;
-				/home)
-					opts="rw,soft,intr,tcp"
-					;;
 				*)
 					opts="rw,nosuid,soft,intr,tcp"
 					;;
@@ -155,3 +152,15 @@ fi
 echo ""
 echo "=== prep-vm-ia completado ==="
 echo "Recuerde reemplazar DEEPSEEK_API_KEY en ${CRUSH_JSON}"
+
+# Es mejor compartir /var/www/adJ-ia para evitar lios de seguridad y que tanto
+# en anfitrion como en host se puedan instalar cosas y usar en la misma ruta
+# (visible a nginx).
+# Falta ejecutar doas npm i -g pnpm@10.34.5 (o la más reciente de la serie 10).
+# Falta establecer el pnpm store en /var/www/adJ-ia/.store 
+
+# Se evitan problemas con gitlab configurando en el anfitrion el store en la
+# misma ubicacion en ~/.config/pnpm/rc con store-dir=/var/www/adJ-ia/.store
+# y haciendo el pnpm i desde el anfitrion dode hay más llaves de gitlab.
+
+ 
