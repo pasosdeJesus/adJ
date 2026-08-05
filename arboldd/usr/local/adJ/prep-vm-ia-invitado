@@ -96,6 +96,26 @@ else
 	fi
 fi
 
+# Falta la instalación de crush, para eso se requirió:
+# Instalar go de paquetes 
+# Ejecutar go install github.com/charmbracelet/crush@latest
+# Pero dio
+# adJ-ia$ go install github.com/charmbracelet/crush@latest
+# go: downloading github.com/charmbracelet/crush v0.88.0
+# go: golang.org/dl/go1.26@latest: module golang.org/dl@latest found
+# (v0.0.0-20260707194042-2a89cd203549), but does not contain package
+# golang.org/dl/go1.26
+
+# Como requeria una versión más reciente de go la instalé descargando
+# binarios para OpenBSD de github.com/charmbracelet/crush@latest e instalé con:
+# doas rm -rf /usr/local/go
+# doas tar -C /usr/local/ -xzf go1.26.5.openbsd-amd64.tar.gz
+# Tras eso ya pude ejecutar
+# ulimit -d 20000000
+# go install github.com/charmbracelet/crush@latest
+
+
+
 # ---- Crush config ----
 echo "[crush] Configurando..."
 CRUSH_DIR="${HOME_IA}/.config/crush"

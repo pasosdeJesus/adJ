@@ -11,7 +11,7 @@
 #   VM_DISCO    - Ruta del disco qcow2 (defecto: /var/vmm/${VM_NOMBRE}.qcow2)
 #   VM_MEMORIA  - RAM para la VM (defecto: 12G)
 #   VM_TAMDISCO - Tamaño del disco (defecto: 50G)
-#   RED_IP_HOST - IP del anfitrión en la red interna (defecto: 100.64.1.2/24)
+#   RED_IP_HOST - IP del anfitrión en la red interna (defecto: 100.64.1.2)
 #   RED_IP_VM   - IP de la VM (defecto: 100.64.1.3)
 #   RED_MASCARA - Máscara de subred (defecto: 255.255.255.0)
 #   NFS_PATH    - Directorio a exportar via NFS (defecto: /var/www)
@@ -30,21 +30,21 @@ VM_NOMBRE="${VM_NOMBRE:-adJ-ia}"
 VM_DISCO="${VM_DISCO:-/var/vmm/${VM_NOMBRE}.qcow2}"
 VM_MEMORIA="${VM_MEMORIA:-12G}"
 VM_TAMDISCO="${VM_TAMDISCO:-50G}"
-RED_IP_HOST="${RED_IP_HOST:-100.64.1.2/24}"
+RED_IP_HOST="${RED_IP_HOST:-100.64.1.2}"
 RED_IP_VM="${RED_IP_VM:-100.64.1.3}"
 RED_MASCARA="${RED_MASCARA:-255.255.255.0}"
 NFS_PATH="${NFS_PATH:-/var/www}"
 NFS_RED="${NFS_RED:-100.64.1}"
-acus=`whoami`
-VM_USUARIO="${VM_USUARIO:-$acus}"
+owndir=$(stat -f '%Su' ".")
+VM_USUARIO="${VM_USUARIO:-$owndir}"
 ZONA_HORARIA="${ZONA_HORARIA:-America/Bogota}"
 DNS_SERVER="${DNS_SERVER:-8.8.8.8}"
 RUTA_INST="/home/$VM_USUARIO/comp/adJ/7.8p1-amd64/"
 
 w=$(whoami)
 if [ "$w" != "root" ]; then
-	echo "Este script debe ser ejecutado por root o con doas"
-	exit 1
+  echo "Este script debe ser ejecutado por root o con doas"
+  exit 1
 fi
 
 echo "=== prep-vm-ia-anfitrion: Preparando anfitrión para VM ${VM_NOMBRE} ==="
@@ -52,44 +52,44 @@ echo "=== prep-vm-ia-anfitrion: Preparando anfitrión para VM ${VM_NOMBRE} ==="
 # ---- Directorios NFS ----
 echo "[nfs] Creando directorios a exportar..."
 for d in "$NFS_PATH"; do
-	if [ ! -d "$d" ]; then
-		mkdir -p "$d"
-		echo "  + $d creado"
-	else
-		echo "  = $d ya existe"
-	fi
+  if [ ! -d "$d" ]; then
+    mkdir -p "$d"
+    echo "  + $d creado"
+  else
+    echo "  = $d ya existe"
+  fi
 done
 
 # ---- NFS exports ----
 echo "[nfs] Configurando /etc/exports..."
 if ! grep -q "^${NFS_PATH} " /etc/exports 2>/dev/null; then
-	echo "${NFS_PATH} -alldirs -network=${NFS_RED} -mask=${RED_MASCARA}" >> /etc/exports
-	rcctl enable portmap mountd nfsd 2>/dev/null || true
-	rcctl restart portmap mountd nfsd 2>/dev/null || true
-	echo "  + ${NFS_PATH} exportado para ${NFS_RED}/${RED_MASCARA}"
+  echo "${NFS_PATH} -alldirs -network=${NFS_RED} -mask=${RED_MASCARA}" >> /etc/exports
+  rcctl enable portmap mountd nfsd 2>/dev/null || true
+  rcctl restart portmap mountd nfsd 2>/dev/null || true
+  echo "  + ${NFS_PATH} exportado para ${NFS_RED}/${RED_MASCARA}"
 else
-	echo "  = ${NFS_PATH} ya exportado"
+  echo "  = ${NFS_PATH} ya exportado"
 fi
 
 # ---- Sysctl forwarding ----
 echo "[sysctl] Verificando forwarding..."
 if ! grep -q '^net.inet.ip.forwarding=1' /etc/sysctl.conf 2>/dev/null; then
-	echo 'net.inet.ip.forwarding=1' >> /etc/sysctl.conf
-	sysctl net.inet.ip.forwarding=1
-	echo "  + forwarding activado"
+  echo 'net.inet.ip.forwarding=1' >> /etc/sysctl.conf
+  sysctl net.inet.ip.forwarding=1
+  echo "  + forwarding activado"
 else
-	echo "  = forwarding ya activo"
+  echo "  = forwarding ya activo"
 fi
 
 if [ -z "$ISO_PATH" ]; then
-	for p in AprendiendoDeJesus-*-amd64.iso \
-		../AprendiendoDeJesus-*-amd64.iso \
-		/releasedir/AprendiendoDeJesus-*-amd64.iso; do
-		if [ -f "$p" ]; then
-			ISO_PATH="$p"
-			break
-		fi
-	done
+  for p in AprendiendoDeJesus-*-amd64.iso \
+    ../AprendiendoDeJesus-*-amd64.iso \
+    /releasedir/AprendiendoDeJesus-*-amd64.iso; do
+    if [ -f "$p" ]; then
+      ISO_PATH="$p"
+      break
+    fi
+  done
 fi
 
 if [ -n "$ISO_PATH" ] && [ -f "$ISO_PATH" ]; then
@@ -100,37 +100,40 @@ else
   exit 1
 fi
 
-rcctl enable vmd 2>/dev/null || true
-rcctl restart vmd 2>/dev/null || true
+rc=0
+pgrep vmd || rc=$?
+if (test "$rc" != "0") then {
+  echo "Habilitando e iniciando vmd"
+  rcctl enable vmd 2>/dev/null || true
+  rcctl start vmd 2>/dev/null || true
+} fi;
+
 
 # ---- Disco VM ----
 echo "[disco] Creando disco ${VM_DISCO}..."
 if [ ! -f "$VM_DISCO" ]; then
-	mkdir -p "$(dirname "$VM_DISCO")"
-	vmctl -v create -s "$VM_TAMDISCO" "$VM_DISCO" 
+  mkdir -p "$(dirname "$VM_DISCO")"
+  vmctl -v create -s "$VM_TAMDISCO" "$VM_DISCO" 
   ls -l $VM_DISCO
   eval $(stat -s $VM_DISCO)
   tamvmdisco=$st_size
 
   echo "  + disco ${VM_DISCO} creado (${VM_TAMDISCO})"
 
-  vnctl stop $VM_NOMBRE
+  if [ -z "$CLAVE_ROOT" ]; then
+    stty -echo
+    echo -n "Clave para root y ${VM_USUARIO} en la VM: "
+    read CLAVE_ROOT
+    stty echo
+    echo ""
+    if [ -z "$CLAVE_ROOT" ]; then
+      echo "Error: Se requiere una clave"
+      exit 1
+    fi
+  fi
 
-	if [ -z "$CLAVE_ROOT" ]; then
-		stty -echo
-		echo -n "Clave para root y ${VM_USUARIO} en la VM: "
-		read CLAVE_ROOT
-		stty echo
-		echo ""
-		if [ -z "$CLAVE_ROOT" ]; then
-			echo "Error: Se requiere una clave"
-			exit 1
-		fi
-	fi
-
-  if (test ! -f /var/www/htdocs/install.conf) {
-    echo "Creando /var/www/htdocs/install.conf"
-   cat > /var/www/htdocs/install.conf  <<EOF 
+  echo "Creando /var/www/htdocs/install.conf"
+  cat > /var/www/htdocs/install.conf  <<EOF 
 Nombre de la maquina = $VM_NOMBRE
 Clave para root = $CLAVE_ROOT
 Cambiar consola a com0 = si
@@ -141,69 +144,69 @@ Zona horaria = America/Bogota
 Usar (T)odo el disco MBR, todo el disco (G)PT o (E)ditar = T
 URL de la plantilla de autoparticionado para disklabel = http://$RED_IP_HOST/template.disklabel
 Usar distribucion (A)utolocalizada, (E)ditarla, o (C)rear una distribucion = a
-IP del servidor o nombre = $RED_IP_HOST
-Sist. de arch. por montar = $NFS_PATH
-Ruta a componentes = $RUTA_INST
+Ruta a componentes = /
 Continuar en todo caso = si
 Continuar sin verificacion = si
 Set to = si
 EOF
-  } fi;
 
-  if (test ! -f /var/www/htdocs/template.disklabel) {
-    echo "Creando /var/www/htdocs/template.disklabel"
-    cat > /var/www/htdocs/template.disklabel  <<EOF 
+  echo "Creando /var/www/htdocs/template.disklabel"
+  cat > /var/www/htdocs/template.disklabel  <<EOF 
 /         38G-*         90%
 swap      6G-12G        10%
 EOF
-  } fi;
 
-  grep "server_name  localhost $RED_IP_HOST;" /etc/nginx/nginx.conf > /dev/null 2>&1
-  if (test "$?" != "0") {
+  rc=0
+  grep "server_name  localhost $RED_IP_HOST;" /etc/nginx/nginx.conf > /dev/null 2>&1 || rc=$?
+  if (test "$rc" != "0") then {
     echo "Ajustando nginx.conf"
+    cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.copia
     awk '/listen[[:space:]]+80;/,/root[[:space:]]+\/var\/www\/htdocs;/ {
-    if(/server_name[[:space:]]+localhost;/) sub(/localhost;/, "localhost 100.64.1.2;")
-    } 1' /etc/nginx/nginx.conf
+    if(/server_name[[:space:]]+localhost;/) sub(/localhost;/, "localhost ${RED_IP_HOST};")
+    } 1' /etc/nginx/nginx.conf.copia > /etc/nginx/nginx.conf
   } fi;
 
   echo "Reiniciando nginx"
-  rcctl -d restar nginx
+  rcctl -d restart nginx
 
   echo "Iniciando maquina virtual para autoinstalación, ante la pregunta eliga Autoinstall"
-  vmctl start -m 2G -B cdrom -r $ISO_PATH -d VM_DISCO "$VM_NOMBRE" 
+  cmd="vmctl start -m 2G -B cdrom -r $ISO_PATH -d $VM_DISCO -L -c \"$VM_NOMBRE\""
+  echo $cmd
+  eval $cmd
 
-	echo "  + instalación completada"
+  echo "  + instalación completada"
 
   ls -l $VM_DISCO
   eval $(stat -s $VM_DISCO)
   tamvmdiscofin=$st_size
 
-  if (test "$tamvmdisco" = "$tamvmdiscofin") {
-    echo "No cambio el tamaño del disco virtual, no funcionó la instalación"
+  if (test "$tamvmdisco" = "$tamvmdiscofin") then {
+    echo "No cambio el tamaño del disco virtual, no funcionó la instalación, elimine $VM_DISCO y vuelva a ejecutar"
     exit 1;
   } fi;
 
 
 else
-	echo "  = disco ${VM_DISCO} ya existe suponemos que ya se instaló"
+  echo "  = disco ${VM_DISCO} ya existe suponemos que ya se instaló"
 fi
 
 vmctl show 2>/dev/null | grep -q "$VM_NOMBRE" || true
 
 echo "[vmd] Configurando /etc/vm.conf..."
 if ! grep -q "vm \"${VM_NOMBRE}\"" /etc/vm.conf 2>/dev/null; then
-	cat >> /etc/vm.conf << FINVM
+  cat >> /etc/vm.conf << FINVM
 # VM para Crush/DeepSeek - generada por prep-vm-ia-anfitrion
 vm "${VM_NOMBRE}" {
   memory ${VM_MEMORIA}
+  enable
   disk "${VM_DISCO}"
   local interface
 }
 FINVM
-	rcctl restart vmd 2>/dev/null || true
-	echo "  + VM ${VM_NOMBRE} configurada en /etc/vm.conf"
+  rcctl restart vmd 2>/dev/null || true
+  echo "  + VM ${VM_NOMBRE} configurada en /etc/vm.conf"
 else
-	echo "  = VM ${VM_NOMBRE} ya configurada"
+  echo "  = VM ${VM_NOMBRE} ya configurada"
 fi
 
 # ---- Arrancar VM si no está corriendo ----
@@ -218,10 +221,10 @@ echo "  + VM ${VM_NOMBRE} arrancada. Conéctese: vmctl console ${VM_NOMBRE}"
 echo ""
 echo "=== prep-vm-ia-anfitrion completado ==="
 if [ "$INSTALAR" = "s" ]; then
-	echo "adJ instalado. Ahora dentro de la VM:"
+  echo "adJ instalado. Ahora dentro de la VM:"
 else
-	echo "Próximos pasos:"
-	echo "  1. Instalar adJ en la VM (ISO o red)"
+  echo "Próximos pasos:"
+  echo "  1. Instalar adJ en la VM (ISO o red)"
 fi
 echo "  2. Ejecutar inst-adJ.sh"
 echo "  3. Ejecutar prep-vm-ia-invitado"
@@ -230,3 +233,5 @@ echo "IP del anfitrión: ${RED_IP_HOST%/*}"
 echo "IP de la VM:      ${RED_IP_VM}"
 echo "Consola:          vmctl console ${VM_NOMBRE}"
 echo "Directorio NFS:   ${NFS_PATH}"
+
+# Faltó prepara cortafuegos para puertos tcp,dup 111, 2049,873,958,20480
