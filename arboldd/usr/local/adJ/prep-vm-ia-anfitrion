@@ -6,6 +6,7 @@
 # http://www.pasosdejesus.org/dominio_publico_colombia.html
 # 2026. vtamara@pasosdeJesus.org
 
+<<<<<<< Updated upstream
 # Configuración esperada en el ambiente:
 #   VM_NOMBRE   - Nombre de la VM (defecto: adJ-ia)
 #   VM_DISCO    - Ruta del disco qcow2 (defecto: /var/vmm/${VM_NOMBRE}.qcow2)
@@ -21,15 +22,47 @@
 #   VM_USUARIO  - Usuario inicial en la VM (defecto: vtamara)
 #   ZONA_HORARIA- Zona horaria (defecto: America/Bogota)
 #   DNS_SERVER  - Servidor DNS para la VM (defecto: 8.8.8.8)
+=======
+# Uso:
+#   doas ./prep-vm-ia-anfitrion adJ-port 12G /restovar/adJ.qcow2  # interactivo
+#   doas ./prep-vm-ia-anfitrion -auto adJ-port 12G                 # automático
+#   doas ./prep-vm-ia-anfitrion                                     # usa VM_NOMBRE del ambiente
+>>>>>>> Stashed changes
 
 set -e
 export PATH="$PATH:/usr/local/bin:/usr/local/sbin:/usr/sbin:/sbin"
 
+# ---- Parsear argumentos ----
+AUTO=0
+ARG_NOMBRE=""
+ARG_MEMORIA=""
+ARG_DISCO=""
+while [ $# -gt 0 ]; do
+	case "$1" in
+		-auto) AUTO=1; shift ;;
+		-*) echo "Opción desconocida: $1"; exit 1 ;;
+		*)
+			if [ -z "${ARG_NOMBRE}" ]; then
+				ARG_NOMBRE="$1"
+			elif [ -z "${ARG_MEMORIA}" ]; then
+				ARG_MEMORIA="$1"
+			elif [ -z "${ARG_DISCO}" ]; then
+				ARG_DISCO="$1"
+			else
+				echo "Demasiados argumentos: $1"; exit 1
+			fi
+			shift
+			;;
+	esac
+done
 
-VM_NOMBRE="${VM_NOMBRE:-adJ-ia}"
-VM_DISCO="${VM_DISCO:-/var/vmm/${VM_NOMBRE}.qcow2}"
-VM_MEMORIA="${VM_MEMORIA:-12G}"
+# ---- Valores por defecto (args > ambiente > built-in) ----
+# Detectar usuario real (doas expone DOAS_USER; sino logname; sino whoami)
+acus="${DOAS_USER:-$(logname 2>/dev/null || whoami)}"
+VM_NOMBRE="${ARG_NOMBRE:-${VM_NOMBRE:-adJ-ia}}"
+VM_MEMORIA="${ARG_MEMORIA:-${VM_MEMORIA:-12G}}"
 VM_TAMDISCO="${VM_TAMDISCO:-50G}"
+<<<<<<< Updated upstream
 RED_IP_HOST="${RED_IP_HOST:-100.64.1.2}"
 RED_IP_VM="${RED_IP_VM:-100.64.1.3}"
 RED_MASCARA="${RED_MASCARA:-255.255.255.0}"
@@ -37,9 +70,26 @@ NFS_PATH="${NFS_PATH:-/var/www}"
 NFS_RED="${NFS_RED:-100.64.1}"
 owndir=$(stat -f '%Su' ".")
 VM_USUARIO="${VM_USUARIO:-$owndir}"
+=======
+VM_USUARIO="${VM_USUARIO:-$acus}"
+VM_UID="${VM_UID:-$(id -u "$acus" 2>/dev/null || echo 1000)}"
+if [ -n "${ARG_DISCO}" ]; then
+	VM_DISCO="${ARG_DISCO}"
+elif [ -n "${VM_DISCO}" ]; then
+	: # usar VM_DISCO del ambiente
+elif grep -q "vm \"${VM_NOMBRE}\"" /etc/vm.conf 2>/dev/null; then
+	# Leer disco desde vm.conf
+	VM_DISCO=$(grep -A5 "vm \"${VM_NOMBRE}\"" /etc/vm.conf | grep 'disk ' | sed 's/.*disk "\([^"]*\)".*/\1/')
+	[ -n "$VM_DISCO" ] || VM_DISCO="/var/vmm/${VM_NOMBRE}.qcow2"
+else
+	VM_DISCO="/var/vmm/${VM_NOMBRE}.qcow2"
+fi
+>>>>>>> Stashed changes
 ZONA_HORARIA="${ZONA_HORARIA:-America/Bogota}"
 DNS_SERVER="${DNS_SERVER:-8.8.8.8}"
-RUTA_INST="/home/$VM_USUARIO/comp/adJ/7.8p1-amd64/"
+NFS_PATH="${NFS_PATH:-/var/www}"
+ISO_PATH="${ISO_PATH:-}"
+CLAVE_ROOT="${CLAVE_ROOT:-}"
 
 w=$(whoami)
 if [ "$w" != "root" ]; then
@@ -47,10 +97,90 @@ if [ "$w" != "root" ]; then
   exit 1
 fi
 
-echo "=== prep-vm-ia-anfitrion: Preparando anfitrión para VM ${VM_NOMBRE} ==="
+# ---- Helpers ----
+if which dialog > /dev/null 2>&1; then
+	HAVE_DIALOG=1
+else
+	HAVE_DIALOG=0
+fi
+
+preguntar() {
+	# $1 = título, $2 = mensaje, $3 = default (yes/no)
+	local titulo="$1" mensaje="$2" def="$3"
+	if [ "$AUTO" -eq 1 ]; then
+		return 0
+	fi
+	if [ "$HAVE_DIALOG" -eq 1 ]; then
+		dialog --clear --title "$titulo" --yesno "$mensaje" 0 0
+		local rc=$?
+		clear
+		return $rc
+	else
+		printf "%s [S/n]: " "$mensaje"
+		read r
+		case "$r" in
+			[Nn]*) return 1 ;;
+			*) return 0 ;;
+		esac
+	fi
+}
+
+mostrar_info() {
+	if [ "$AUTO" -eq 1 ]; then
+		return 0
+	fi
+	if [ "$HAVE_DIALOG" -eq 1 ]; then
+		dialog --title "$1" --msgbox "$2" 0 0
+	else
+		echo ""
+		echo "--- $1 ---"
+		echo "$2"
+		echo ""
+	fi
+}
+
+echo "=== prep-vm-ia-anfitrion: VM ${VM_NOMBRE} ==="
+
+RESUMEN="VM:       ${VM_NOMBRE}
+Disco:    ${VM_DISCO}
+Memoria:  ${VM_MEMORIA}
+Usuario:  ${VM_USUARIO} (uid=${VM_UID})
+Zona hor: ${ZONA_HORARIA}
+NFS:      ${NFS_PATH}
+
+¿Continuar con esta configuración?"
+
+if [ "$HAVE_DIALOG" -eq 1 ] && [ "$AUTO" -eq 0 ]; then
+	dialog --clear --title "prep-vm-ia-anfitrion" --yesno "$RESUMEN" 13 60 || exit 0
+	clear
+else
+	echo "$RESUMEN"
+	echo ""
+	if [ "$AUTO" -eq 0 ]; then
+		preguntar "Configuración" "¿Continuar con esta configuración?" || exit 0
+	fi
+fi
+
+# Mostrar estado actual antes de proceder
+echo ""
+echo "=== Estado actual ==="
+echo "--- /etc/vm.conf ---"
+grep -A5 'vm "' /etc/vm.conf 2>/dev/null || echo "  (sin VMs configuradas)"
+echo ""
+echo "--- vmctl show ---"
+vmctl show 2>/dev/null || echo "  (sin VMs corriendo)"
+echo ""
+echo "--- discos en /var/vmm ---"
+ls -lh /var/vmm/*.qcow2 2>/dev/null || echo "  (sin discos en /var/vmm)"
+ls -lh /restovar/*.qcow2 2>/dev/null || true
+echo ""
+
+if [ "$AUTO" -eq 0 ] && [ "$HAVE_DIALOG" -eq 0 ]; then
+	preguntar "Estado" "¿Continuar?" || exit 0
+fi
 
 # ---- Directorios NFS ----
-echo "[nfs] Creando directorios a exportar..."
+echo "[nfs] Verificando directorios..."
 for d in "$NFS_PATH"; do
   if [ ! -d "$d" ]; then
     mkdir -p "$d"
@@ -60,13 +190,20 @@ for d in "$NFS_PATH"; do
   fi
 done
 
-# ---- NFS exports ----
-echo "[nfs] Configurando /etc/exports..."
+# ---- NFS exports (para todas las subredes 100.64.x) ----
+echo "[nfs] Verificando /etc/exports..."
 if ! grep -q "^${NFS_PATH} " /etc/exports 2>/dev/null; then
+<<<<<<< Updated upstream
   echo "${NFS_PATH} -alldirs -network=${NFS_RED} -mask=${RED_MASCARA}" >> /etc/exports
   rcctl enable portmap mountd nfsd 2>/dev/null || true
   rcctl restart portmap mountd nfsd 2>/dev/null || true
   echo "  + ${NFS_PATH} exportado para ${NFS_RED}/${RED_MASCARA}"
+=======
+	echo "${NFS_PATH} -alldirs -network=100.64 -mask=255.255.0.0" >> /etc/exports
+	rcctl enable portmap mountd nfsd 2>/dev/null || true
+	rcctl restart portmap mountd nfsd 2>/dev/null || true
+	echo "  + ${NFS_PATH} exportado para 100.64.0.0/16"
+>>>>>>> Stashed changes
 else
   echo "  = ${NFS_PATH} ya exportado"
 fi
@@ -81,7 +218,9 @@ else
   echo "  = forwarding ya activo"
 fi
 
+# ---- Buscar ISO ----
 if [ -z "$ISO_PATH" ]; then
+<<<<<<< Updated upstream
   for p in AprendiendoDeJesus-*-amd64.iso \
     ../AprendiendoDeJesus-*-amd64.iso \
     /releasedir/AprendiendoDeJesus-*-amd64.iso; do
@@ -90,16 +229,29 @@ if [ -z "$ISO_PATH" ]; then
       break
     fi
   done
+=======
+	for p in AprendiendoDeJesus-*-amd64.iso \
+		../AprendiendoDeJesus-*-amd64.iso \
+		/releasedir/AprendiendoDeJesus-*-amd64.iso \
+		/var/www/htdocs/AprendiendoDeJesus-*-amd64.iso \
+		/home/*/AprendiendoDeJesus-*-amd64.iso; do
+		if [ -f "$p" ]; then
+			ISO_PATH="$p"
+			break
+		fi
+	done
+>>>>>>> Stashed changes
 fi
 
 if [ -n "$ISO_PATH" ] && [ -f "$ISO_PATH" ]; then
-  echo "ISO detectada: ${ISO_PATH}"
+	echo "  = ISO detectada: ${ISO_PATH}"
 else
-  echo "No se detectó ISO de adJ. Genérela con hdes/creaiso.sh"
-  echo "  o defina ISO_PATH y vuelva a ejecutar."
-  exit 1
+	echo "ERROR: No se detectó ISO de adJ. Genérela con hdes/creaiso.sh"
+	echo "  o defina ISO_PATH y vuelva a ejecutar."
+	exit 1
 fi
 
+<<<<<<< Updated upstream
 rc=0
 pgrep vmd || rc=$?
 if (test "$rc" != "0") then {
@@ -108,10 +260,57 @@ if (test "$rc" != "0") then {
   rcctl start vmd 2>/dev/null || true
 } fi;
 
+=======
+# ---- vmd: habilitar y asegurar que corre (sin reiniciar) ----
+rcctl enable vmd 2>/dev/null || true
+if ! rcctl check vmd 2>/dev/null; then
+	rcctl start vmd 2>/dev/null || true
+	echo "  + vmd iniciado"
+else
+	echo "  = vmd ya estaba corriendo"
+fi
+
+# ---- vm.conf (antes del disco para que vmd conozca la VM) ----
+echo ""
+echo "[vmd] Verificando /etc/vm.conf..."
+if grep -q "vm \"${VM_NOMBRE}\"" /etc/vm.conf 2>/dev/null; then
+	echo "  = VM ${VM_NOMBRE} ya está en /etc/vm.conf"
+else
+	if [ "$AUTO" -eq 0 ]; then
+		preguntar "vm.conf" "¿Agregar ${VM_NOMBRE} a /etc/vm.conf?" || exit 0
+	fi
+	cat >> /etc/vm.conf << FINVM
+
+# VM para desarrollo IA — generada por prep-vm-ia-anfitrion
+# Agregar 'enable' abajo de 'memory' una vez instalada y verificada
+vm "${VM_NOMBRE}" {
+  memory ${VM_MEMORIA}
+  disk "${VM_DISCO}" format qcow2
+  local interface
+}
+FINVM
+	echo "  + VM ${VM_NOMBRE} agregada a /etc/vm.conf"
+	# Recargar configuración sin reiniciar (no interrumpe VMs corriendo)
+	vmctl reload 2>/dev/null || true
+fi
+>>>>>>> Stashed changes
 
 # ---- Disco VM ----
-echo "[disco] Creando disco ${VM_DISCO}..."
+echo ""
+echo "[disco] ${VM_DISCO}..."
+
+if [ -f "$VM_DISCO" ]; then
+	tam=$(stat -f '%z' "$VM_DISCO" 2>/dev/null || echo 0)
+	# qcow2 vacío: ~256KB. Instalado: >100MB (base + sets)
+	if [ "$tam" -lt 104857600 ]; then
+		echo "  ! disco existe pero parece no instalado (${tam} bytes) — se reinstalará"
+		rm -f "$VM_DISCO"
+	else
+		echo "  = disco ya instalado (${tam} bytes) — se omite creación e instalación"
+	fi
+fi
 if [ ! -f "$VM_DISCO" ]; then
+<<<<<<< Updated upstream
   mkdir -p "$(dirname "$VM_DISCO")"
   vmctl -v create -s "$VM_TAMDISCO" "$VM_DISCO" 
   ls -l $VM_DISCO
@@ -136,13 +335,47 @@ if [ ! -f "$VM_DISCO" ]; then
   cat > /var/www/htdocs/install.conf  <<EOF 
 Nombre de la maquina = $VM_NOMBRE
 Clave para root = $CLAVE_ROOT
+=======
+	if [ "$AUTO" -eq 0 ]; then
+		preguntar "Disco" "¿Crear disco ${VM_DISCO} (${VM_TAMDISCO}) e instalar adJ?" || exit 0
+	fi
+
+	mkdir -p "$(dirname "$VM_DISCO")"
+	vmctl create -s "$VM_TAMDISCO" "$VM_DISCO"
+	ls -l "$VM_DISCO"
+	eval $(stat -s "$VM_DISCO")
+	tamvmdisco=$st_size
+	echo "  + disco creado (${VM_TAMDISCO})"
+
+	# Pedir clave si no está definida
+	if [ -z "$CLAVE_ROOT" ]; then
+		stty -echo
+		printf "Clave para root y ${VM_USUARIO} en la VM: "
+		read CLAVE_ROOT
+		stty echo
+		echo ""
+		if [ -z "$CLAVE_ROOT" ]; then
+			echo "Error: Se requiere una clave"
+			exit 1
+		fi
+	fi
+
+	# install.conf (sobrescribe siempre para disco nuevo)
+	# Determinar subred según posición en vm.conf (contando entradas "vm ")
+	nvm=$(grep -c '^vm "' /etc/vm.conf 2>/dev/null || echo 1)
+	hostip="100.64.${nvm}.2"
+	echo "  + generando install.conf para ${VM_NOMBRE} (servidor ${hostip})"
+	cat > /var/www/htdocs/install.conf <<EOF
+Nombre de la maquina = ${VM_NOMBRE}
+Clave para root = ${CLAVE_ROOT}
+>>>>>>> Stashed changes
 Cambiar consola a com0 = si
 Cual velocidad deberia com0 usar = 19200
-Crear cuenta de usuario = $VM_USUARIO
-clave para la cuenta = $CLAVE_ROOT
-Zona horaria = America/Bogota
+Crear cuenta de usuario = ${VM_USUARIO}
+clave para la cuenta = ${CLAVE_ROOT}
+Zona horaria = ${ZONA_HORARIA}
 Usar (T)odo el disco MBR, todo el disco (G)PT o (E)ditar = T
-URL de la plantilla de autoparticionado para disklabel = http://$RED_IP_HOST/template.disklabel
+URL de la plantilla de autoparticionado para disklabel = http://${hostip}/template.disklabel
 Usar distribucion (A)utolocalizada, (E)ditarla, o (C)rear una distribucion = a
 Ruta a componentes = /
 Continuar en todo caso = si
@@ -150,6 +383,7 @@ Continuar sin verificacion = si
 Set to = si
 EOF
 
+<<<<<<< Updated upstream
   echo "Creando /var/www/htdocs/template.disklabel"
   cat > /var/www/htdocs/template.disklabel  <<EOF 
 /         38G-*         90%
@@ -207,19 +441,181 @@ FINVM
   echo "  + VM ${VM_NOMBRE} configurada en /etc/vm.conf"
 else
   echo "  = VM ${VM_NOMBRE} ya configurada"
+=======
+	# template.disklabel
+	if [ ! -f /var/www/htdocs/template.disklabel ]; then
+		echo "  + generando template.disklabel"
+		cat > /var/www/htdocs/template.disklabel <<EOF
+/         38G-*         90%
+swap      6G-12G        10%
+EOF
+	fi
+
+	# Asegurar regla PF para todas las interfaces tap (vmd local interfaces)
+	# pf.conf soporta grupos de interfaz: 'on tap' cubre tap0, tap1, tap2...
+	if grep -q 'pass in on {tap0}' /etc/pf.conf 2>/dev/null; then
+		echo "  + ampliando regla PF: {tap0} -> tap (grupo)"
+		sed -i 's/pass in on {tap0}/pass in on tap/' /etc/pf.conf
+		pfctl -f /etc/pf.conf 2>/dev/null || true
+		echo "  + pf recargado"
+	fi
+
+	# Asegurar nginx sirviendo en IPs de todas las subredes de VMs
+	echo "  + actualizando server_name en nginx.conf..."
+	# Contar VMs en vm.conf para generar IPs: 100.64.1.2 100.64.2.2 ...
+	nvm=$(grep -c '^vm "' /etc/vm.conf 2>/dev/null || echo 0)
+	ips="localhost"
+	i=1
+	while [ "$i" -le "$nvm" ]; do
+		ips="$ips 100.64.${i}.2"
+		i=$((i + 1))
+	done
+	tmp=$(mktemp /tmp/nginx.XXXXXX)
+	awk -v ips="$ips" '
+	/listen[[:space:]]+80;/ { in_block=1 }
+	in_block && /server_name[[:space:]]/ {
+		print "    server_name  " ips ";"
+		next
+	}
+	/}/ && in_block { in_block=0 }
+	{ print }
+	' /etc/nginx/nginx.conf > "$tmp" && mv "$tmp" /etc/nginx/nginx.conf
+	echo "  + server_name: $ips"
+	rcctl restart nginx 2>/dev/null || true
+
+	# Autoinstalación
+	echo ""
+	echo "  + arrancando VM para autoinstalación desde ISO..."
+	echo "    (ante la pregunta del instalador, elija 'Autoinstall')"
+	# Detener VM previa con mismo nombre si existe
+	if vmctl show 2>/dev/null | grep -q "\"${VM_NOMBRE}\""; then
+		echo "  ! deteniendo VM previa ${VM_NOMBRE}..."
+		vmctl stop "$VM_NOMBRE" 2>/dev/null || true
+		sleep 2
+	fi
+	# Arrancar one-off con consola y red local (DHCP automático)
+	echo vmctl start -cL -m 2G -B cdrom -r "$ISO_PATH" -d "$VM_DISCO" "$VM_NOMBRE"
+	vmctl start -cL -m 2G -B cdrom -r "$ISO_PATH" -d "$VM_DISCO" "$VM_NOMBRE"
+
+	# Verificar instalación
+	ls -l "$VM_DISCO"
+	eval $(stat -s "$VM_DISCO")
+	tamvmdiscofin=$st_size
+	if [ "$tamvmdiscofin" -le "$tamvmdisco" ]; then
+		echo "ERROR: El disco no cambió de tamaño — la instalación falló"
+		echo "  Revise la VM con: vmctl console ${VM_NOMBRE}"
+		exit 1
+	fi
+	echo "  + instalación completada (disco: ${tamvmdisco} -> ${tamvmdiscofin} bytes)"
 fi
 
-# ---- Arrancar VM si no está corriendo ----
-vmctl show 2>/dev/null | grep -q "$VM_NOMBRE" && VM_RUNNING=1 || VM_RUNNING=0
+# ---- Post-instalación ----
+echo ""
+echo "=== Verificación de pasos para ${VM_NOMBRE} ==="
 
+# Determinar IP de la VM según posición en vm.conf (contando entradas "vm ")
+npos=$(grep '^vm "' /etc/vm.conf | grep -n "\"${VM_NOMBRE}\"" | cut -d: -f1)
+if [ -z "$npos" ]; then
+	npos=$(grep -c '^vm "' /etc/vm.conf 2>/dev/null || echo 0)
+	npos=$((npos + 1))
+fi
+vmip="100.64.${npos}.3"
 
-echo "  + reiniciando VM desde disco..."
-vmctl start "$VM_NOMBRE"
-sleep 3
-echo "  + VM ${VM_NOMBRE} arrancada. Conéctese: vmctl console ${VM_NOMBRE}"
+# 1. Sistema base
+echo ""
+echo "Paso 1: Instalación del sistema base"
+if [ -f "$VM_DISCO" ] && [ "$(stat -f '%z' "$VM_DISCO" 2>/dev/null || echo 0)" -gt 104857600 ]; then
+	echo "  = disco ${VM_DISCO} parece instalado ($(stat -f '%z' "$VM_DISCO") bytes)"
+	if [ "$AUTO" -eq 0 ]; then
+		preguntar "Sistema base" "¿Ya completó la instalación del sistema base en ${VM_NOMBRE}?" || {
+			echo "  ! Complete la instalación y vuelva a ejecutar el script"
+			exit 0
+		}
+	fi
+else
+	echo "  ! El disco no parece instalado. Se requiere completar la instalación primero."
+	if [ "$AUTO" -eq 0 ]; then
+		preguntar "Instalar" "¿Desea iniciar la instalación ahora desde ISO?" || exit 0
+	fi
+	if vmctl show 2>/dev/null | grep -q "\"${VM_NOMBRE}\""; then
+		vmctl stop "$VM_NOMBRE" 2>/dev/null || true
+		sleep 2
+	fi
+	vmctl start -cL -m 2G -B cdrom -r "$ISO_PATH" -d "$VM_DISCO" "$VM_NOMBRE"
+	ls -l "$VM_DISCO"
+	eval $(stat -s "$VM_DISCO")
+	tamvmdiscofin=$st_size
+	if [ "$tamvmdiscofin" -le "$(stat -f '%z' "$VM_DISCO" 2>/dev/null || echo 0)" ]; then
+		echo "ERROR: El disco no cambió de tamaño — la instalación falló"
+		exit 1
+	fi
+	echo "  + instalación completada"
+fi
+
+# Agregar enable en vm.conf si no está
+if grep -q "vm \"${VM_NOMBRE}\"" /etc/vm.conf 2>/dev/null && \
+   ! grep -A5 "vm \"${VM_NOMBRE}\"" /etc/vm.conf | grep -q 'enable'; then
+	echo "  + agregando 'enable' a ${VM_NOMBRE} en /etc/vm.conf"
+	tmp=$(mktemp /tmp/vmconf.XXXXXX)
+	awk -v vm="${VM_NOMBRE}" '
+	$0 ~ "vm \"" vm "\"" { in_block=1 }
+	in_block && /memory/ { print; print "  enable"; next }
+	/}/ && in_block { in_block=0 }
+	{ print }
+	' /etc/vm.conf > "$tmp" && mv "$tmp" /etc/vm.conf
+	vmctl reload 2>/dev/null || true
+>>>>>>> Stashed changes
+fi
+
+# 2. inst-adJ.sh
+echo ""
+echo "Paso 2: Configuración adJ (inst-adJ.sh)"
+EJECUTO_INSTADJ=0
+if [ "$AUTO" -eq 0 ]; then
+	preguntar "inst-adJ.sh" "¿Ya ejecutó inst-adJ.sh dentro de ${VM_NOMBRE}?" && EJECUTO_INSTADJ=1
+else
+	EJECUTO_INSTADJ=1
+fi
+
+# 3. prep-vm-ia-invitado
+EJECUTO_INVITADO=0
+if [ "$EJECUTO_INSTADJ" -eq 1 ]; then
+	echo ""
+	echo "Paso 3: Preparación IA (prep-vm-ia-invitado)"
+	if [ "$AUTO" -eq 0 ]; then
+		preguntar "prep-vm-ia-invitado" "¿Ya ejecutó prep-vm-ia-invitado en ${VM_NOMBRE}?" && EJECUTO_INVITADO=1
+	else
+		EJECUTO_INVITADO=1
+	fi
+fi
+
+# Arrancar VM
+echo ""
+if vmctl show 2>/dev/null | grep -q "\"${VM_NOMBRE}\""; then
+	echo "  = VM ${VM_NOMBRE} ya está corriendo"
+else
+	if [ "$EJECUTO_INVITADO" -eq 1 ]; then
+		# Todo listo: arrancar en background, acceso por SSH
+		echo "  + arrancando ${VM_NOMBRE} en background (IP: ${vmip})"
+		vmctl start "$VM_NOMBRE"
+		sleep 3
+		echo "  + Puede ingresar con: ssh ${VM_USUARIO}@${vmip}"
+	elif [ "$EJECUTO_INSTADJ" -eq 1 ]; then
+		# Falta prep-vm-ia-invitado: arrancar con consola
+		echo "  + arrancando ${VM_NOMBRE} con consola para ejecutar prep-vm-ia-invitado"
+		echo "    Dentro de la VM ejecute: doas IA_USER=${VM_USUARIO} /usr/local/adJ/prep-vm-ia-invitado"
+		vmctl start -c "$VM_NOMBRE"
+	else
+		# Falta inst-adJ.sh: arrancar con consola
+		echo "  + arrancando ${VM_NOMBRE} con consola para ejecutar inst-adJ.sh"
+		echo "    Dentro de la VM ejecute: doas /inst-adJ.sh"
+		vmctl start -c "$VM_NOMBRE"
+	fi
+fi
 
 echo ""
 echo "=== prep-vm-ia-anfitrion completado ==="
+<<<<<<< Updated upstream
 if [ "$INSTALAR" = "s" ]; then
   echo "adJ instalado. Ahora dentro de la VM:"
 else
@@ -235,3 +631,17 @@ echo "Consola:          vmctl console ${VM_NOMBRE}"
 echo "Directorio NFS:   ${NFS_PATH}"
 
 # Faltó prepara cortafuegos para puertos tcp,dup 111, 2049,873,958,20480
+=======
+echo ""
+echo "Próximos pasos dentro de la VM ${VM_NOMBRE}:"
+echo "  1. Verificar que el sistema base instaló correctamente"
+echo "  2. Agregar 'enable' en /etc/vm.conf bajo 'memory' para autoarranque"
+echo "  3. Desde la VM: ejecutar inst-adJ.sh"
+echo "  4. Desde la VM: ejecutar prep-vm-ia-invitado IA_USER=${VM_USUARIO}"
+echo ""
+echo "NOTA: Para evitar problemas de permisos con NFS, asegúrese de que"
+echo "  el usuario ${VM_USUARIO} tenga uid=${VM_UID} en la VM invitada."
+echo "  Después de instalar, verifique con: id -u ${VM_USUARIO}"
+echo ""
+echo "Consola:  vmctl console ${VM_NOMBRE}"
+>>>>>>> Stashed changes

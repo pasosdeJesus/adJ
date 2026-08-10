@@ -11,8 +11,15 @@
 #   NFS_PATH    - Ruta exportada en el servidor NFS (opcional, ej: /var/www)
 # Si no se definen NFS_*, /var/www será directorio local.
 
-NFS_SERVER=100.64.2.2
-NFS_PATH=/var/www
+# NFS_SERVER y NFS_PATH se detectan automáticamente o se reciben del ambiente.
+# Con 'local interface' de vmd, el anfitrión es el gateway de la VM.
+# vmd asigna IP 100.64.N.3 a la VM y 100.64.N.1 al anfitrión via DHCP interno.
+
+if [ -z "${NFS_SERVER}" ]; then
+	NFS_SERVER=$(route -n get default 2>/dev/null | awk '/gateway/ {print $2}')
+fi
+NFS_SERVER="${NFS_SERVER:-100.64.1.1}"
+NFS_PATH="${NFS_PATH:-/var/www}"
 
 set -e
 
@@ -169,18 +176,41 @@ else
 	echo "  = directorio .crush ya existe"
 fi
 
+# ---- pnpm global ----
+echo "[pnpm] Instalando pnpm..."
+if ! which pnpm > /dev/null 2>&1; then
+	npm install -g pnpm@10.34.5 2>&1 | tail -3
+	echo "  + pnpm instalado globalmente"
+else
+	echo "  = pnpm ya instalado: $(pnpm --version)"
+fi
+
+# ---- pnpm store compartido ----
+echo "[pnpm-store] Configurando..."
+PNPM_RC="${HOME_IA}/.config/pnpm/rc"
+if [ ! -f "$PNPM_RC" ] || ! grep -q 'store-dir' "$PNPM_RC" 2>/dev/null; then
+	mkdir -p "$(dirname "$PNPM_RC")"
+	echo 'store-dir=/var/www/adJ-ia/.store' > "$PNPM_RC"
+	chown -R "${IA_USER}:${IA_USER}" "$(dirname "$PNPM_RC")"
+	echo "  + pnpm store configurado en /var/www/adJ-ia/.store"
+else
+	echo "  = pnpm store ya configurado"
+fi
+
+# ---- Paquete m (si está disponible) ----
+echo "[m] Verificando..."
+if ! which m > /dev/null 2>&1; then
+	if pkg_info -e m > /dev/null 2>&1; then
+		echo "  = m ya instalado via paquete"
+	else
+		echo "  ! m no disponible — instalar con pkg_add m cuando el porte esté listo"
+	fi
+else
+	echo "  = m ya disponible: $(which m)"
+fi
+
 echo ""
 echo "=== prep-vm-ia completado ==="
 echo "Recuerde reemplazar DEEPSEEK_API_KEY en ${CRUSH_JSON}"
-
-# Es mejor compartir /var/www/adJ-ia para evitar lios de seguridad y que tanto
-# en anfitrion como en host se puedan instalar cosas y usar en la misma ruta
-# (visible a nginx).
-# Falta ejecutar doas npm i -g pnpm@10.34.5 (o la más reciente de la serie 10).
-# Falta establecer el pnpm store en /var/www/adJ-ia/.store 
-
-# Se evitan problemas con gitlab configurando en el anfitrion el store en la
-# misma ubicacion en ~/.config/pnpm/rc con store-dir=/var/www/adJ-ia/.store
-# y haciendo el pnpm i desde el anfitrion dode hay más llaves de gitlab.
-
- 
+echo "Si m no está disponible, puede usar el árbol de desarrollo:"
+echo "  ~/comp/m/bin/m ai:framework"
