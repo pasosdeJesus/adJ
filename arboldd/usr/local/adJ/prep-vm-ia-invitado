@@ -103,23 +103,44 @@ else
 	fi
 fi
 
-# Falta la instalación de crush, para eso se requirió:
-# Instalar go de paquetes 
-# Ejecutar go install github.com/charmbracelet/crush@latest
-# Pero dio
-# adJ-ia$ go install github.com/charmbracelet/crush@latest
-# go: downloading github.com/charmbracelet/crush v0.88.0
-# go: golang.org/dl/go1.26@latest: module golang.org/dl@latest found
-# (v0.0.0-20260707194042-2a89cd203549), but does not contain package
-# golang.org/dl/go1.26
+# ---- Go (requerido por Crush) ----
+echo "[go] Instalando Go..."
+GO_VERSION="1.26.5"
+GO_TGZ="go${GO_VERSION}.openbsd-amd64.tar.gz"
+GO_URL="https://go.dev/dl/${GO_TGZ}"
+if [ -x /usr/local/go/bin/go ]; then
+	go_ver=$(/usr/local/go/bin/go version 2>/dev/null | awk '{print $3}')
+	echo "  = Go ya instalado: ${go_ver}"
+else
+	echo "  + descargando Go ${GO_VERSION}..."
+	ftp -o "/tmp/${GO_TGZ}" "$GO_URL"
+	echo "  + instalando en /usr/local/go..."
+	rm -rf /usr/local/go
+	tar -C /usr/local -xzf "/tmp/${GO_TGZ}"
+	rm -f "/tmp/${GO_TGZ}"
+	echo "  + Go ${GO_VERSION} instalado"
+fi
 
-# Como requeria una versión más reciente de go la instalé descargando
-# binarios para OpenBSD de github.com/charmbracelet/crush@latest e instalé con:
-# doas rm -rf /usr/local/go
-# doas tar -C /usr/local/ -xzf go1.26.5.openbsd-amd64.tar.gz
-# Tras eso ya pude ejecutar
-# ulimit -d 20000000
-# go install github.com/charmbracelet/crush@latest
+# Asegurar GOPATH para el usuario
+GOBIN="${HOME_IA}/go/bin"
+if ! grep -q '/go/bin' "${HOME_IA}/.profile" 2>/dev/null; then
+	echo "export GOPATH=${HOME_IA}/go" >> "${HOME_IA}/.profile"
+	echo "export PATH=\$PATH:/usr/local/go/bin:${GOBIN}" >> "${HOME_IA}/.profile"
+	chown "${IA_USER}:${IA_USER}" "${HOME_IA}/.profile"
+fi
+mkdir -p "$GOBIN"
+chown -R "${IA_USER}:${IA_USER}" "${HOME_IA}/go" 2>/dev/null || true
+
+# ---- Crush ----
+echo "[crush] Instalando Crush..."
+if [ -x "${GOBIN}/crush" ]; then
+	echo "  = Crush ya instalado: $(${GOBIN}/crush --version 2>/dev/null || echo ok)"
+else
+	echo "  + compilando Crush (puede tomar varios minutos)..."
+	ulimit -d 20000000 2>/dev/null || true
+	su - "${IA_USER}" -c "PATH=\$PATH:/usr/local/go/bin:${GOBIN} GOPATH=${HOME_IA}/go go install github.com/charmbracelet/crush@latest"
+	echo "  + Crush instalado en ${GOBIN}/crush"
+fi
 
 
 
