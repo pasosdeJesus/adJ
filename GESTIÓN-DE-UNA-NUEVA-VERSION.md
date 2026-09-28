@@ -126,14 +126,14 @@ A continuación, la lista de verificación de pruebas:
 *   **Interfaz Gráfica:** Verificar que toda entrada del menú gráfico opere sin errores.
 
 ### 12. Crear Directorio en Servidor
-En `adJ.pasosdeJesus.org`, crear el directorio para los paquetes extra: `mkdir /dirftp/7.8-extra`.
+En `adJ.pasosdeJesus.org`, crear el directorio para los paquetes extra: `mkdir /dirftp/7.9-extra`.
 
 ### 13. Subir Archivos al Servidor
 Desde el computador de desarrollo, subir la distribución y los paquetes extra.
 ```sh
 hdes/rsync-aotro.sh
-scp -rf AprendiendoDeJesus-7.8-amd64.{img,iso} 7.8-amd64 adJ.pasosdeJesus.org:/dirftp/
-rsync extra-7.8/* adJ.pasosdeJesus.org:/dirftp/7.8-extra/
+scp -rf AprendiendoDeJesus-7.9-amd64.{img,iso} 7.9-amd64 adJ.pasosdeJesus.org:/dirftp/
+rsync extra-7.9/* adJ.pasosdeJesus.org:/dirftp/7.9-extra/
 ```
 
 ### 14. Verificar Servicios en Línea
@@ -144,10 +144,10 @@ Al publicar una versión alfa o beta, es necesario marcar el estado del código 
 
 > Para más detalles sobre la estrategia de ramas y etiquetas, consulte la [Guía para el Contribuyente](CONTRIBUTING.md).
 ```sh
-git tag -a v7.8b1 -m "Version 7.8b1"
-git push origin v7.8b1
-git checkout -b ADJ_7_8
-git push origin ADJ_7_8
+git tag -a v7.9b1 -m "Version 7.9b1"
+git push origin v7.9b1
+git checkout -b ADJ_7_9
+git push origin ADJ_7_9
 ```
 
 ### 16. Anunciar

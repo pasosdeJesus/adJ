@@ -3,10 +3,10 @@
 # Dominio público de acuerdo a legislación colombiana. http://www.pasosdejesus.org/dominio_publico_colombia.html. 
 # 2022. vtamara@pasosdeJesus.org
 
-VER=7.8
+VER=7.9
 REV=
-VESP="p1"
-VERP=78
+VESP="b1"
+VERP=79
 
 # Falta /standard/root.hint
 
@@ -1478,8 +1478,8 @@ if (test -f /usr/libdata/perl5/*/PerlIO/scalar.pm) then {
 
 userinfo _fc-cache >/dev/null 2>&1
 if (test "$?" != "0") then {
-	vac="$vac 7.7 a 7.8";	
-	echo "Aplicando actualizaciones de 7.7 a 7.8" >> /var/www/tmp/inst-adJ.bitacora;
+	vac="$vac 7.8 a 7.9";	
+	echo "Aplicando actualizaciones de 7.8 a 7.9" >> /var/www/tmp/inst-adJ.bitacora;
 	useradd -u36 -g=uid -c"FC Cache" -d/var/cache/fontconfig -s/sbin/nologin _fc-cache
 } fi;
 

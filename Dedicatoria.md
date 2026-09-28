@@ -1,3 +1,3 @@
-Encomienda a Jehová tu camino, Y confía en él; y él hará.
+Detrás y delante me rodeaste, y sobre mí pusiste tu mano.
 
-Salmo 37:5
+Salmo 139:5

@@ -1192,7 +1192,7 @@ diff -ruN -x obj -x CVS -x *~ -x *patch -x *orig src54-x6/lib/libc/time/strptime
 +				ep = _find_string(bp, &i, nast, NULL, 4, loc);
  				if (ep != NULL) {
  					tm->tm_gmtoff = (-5 - i) * SECSPERHOUR;
- 					tm->tm_zone = (char *)nast[i];
+ 					tm->tm_zone = nast[i];
  					bp = ep;
  					continue;
  				}
