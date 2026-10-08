@@ -129,6 +129,7 @@ texlive_texmf-minimal-[v]	texmf de texlive con funcionalidad básica
 texlive_synctex-[v]	synctex para distribución TeXLive
 unrar-[v]		Extrae, lista y prueba archivos RAR
 unzip-[v]		Descompresión en formato ZIP
+uriparser-[v]
 vim-spell-es-[v]	Archivos para revisión ortográfica en español en vim
 vorbis-tools-[v]	Reproduce, codifica y maneja OGG
 wget-[v]		Descarga sitios web
@@ -179,12 +180,14 @@ w3m-[v]	Navegador modo texto que soporta UTF-8 y descargas
 
 * Soporte, librerías y desarrollo
 aalib-[v]		Librería de arte ASCII
+afflib3-[v]
 abseil-cpp-[v]	Librerías comunes abseil (C++)
 adplug-[v]		Librería del reproductor de sonido AdLib
 aom-[v]		Codec de vídeo Alliance for Open Media AV1
 appstream-glib-[v]	Librería de metadatos AppStream
 adwaita-icon-theme-[v]	Tema de iconos para GNOME
 adwaita-icon-theme-legacy-[v]	Tema de iconos legado para GNOME
+appstream-[v]
 argon2-[v]	Implementación en C de Argon 2 - condensado/hashing
 arrow-cpp-[v]	Formato en columnas y herramientas para intercambio
 aspell-es-[v]	Revisor de ortografía
@@ -275,6 +278,7 @@ ghostscript-[v]	Genera PostScript
 ghostscript-fonts-[v]	Fuentes para GhostScript
 gitwrapper-[v]	Llama al servidor de repositorios Git apropiado
 glew-[v]		Librería GL Extension Wrangler
+glfw-[v]
 glib2-[v]		Librería de utilidades de propósito general
 glib2-networking-[v]	Módulos relaciones con red gio de GLib
 glib2mm-[v]		Interfaz en C++ para glib2
@@ -342,7 +346,9 @@ lcms-[v]		Librería para manejo de color
 lcms2-[v]		Librería para manejo de color
 lerc-[v]		Compresión "Limited error raster"
 lib2geom-[v]		Librería fácil de usar en C++ para geometría 2D
+libadwaita-[v]
 libaec-[v]		Librería portable para emitir audio
+libaio_compat-[v]
 libao-[v]		Librería portable para emitir audio
 libarchive-[v]	Librería para leer y escribir archivos de emisión
 libavif-[v]		Librería para codificar/decodificar
@@ -371,10 +377,12 @@ libdvdread-[v]	Acceso a archivos DVD
 libebml-[v]		Librería extensible de meta lenguaje binario
 liberation-fonts-[v]	Sustituto para fuentes principales MS TTF
 libevent-[v]	Librería para notificación de eventos
+libewf-[v]
 libexif-[v]	Extrae tags de cámara digital de imágenes JPEG
 libexttextcat-[v]	Librería para adivinar idioma teniendo en cuenta UTF-8
 libfilezilla-[v]	Librería de soporte para FileZilla
 libffi-[v]		Interfaz de funciones foráneas
+libfyaml-[v]
 libgadu-[v]	Implementación del protocolo de Mensajería Gadu-Gadu
 libgcrypt-[v]	Criptografía basada en GnuPG
 libgeotiff-[v]	Librería pata intercambio TIFF en GIS
@@ -388,6 +396,7 @@ libiconv-[v]		Conversión entre codificaciones de caracteres
 libid3tag-[v]	Lector de marcas ID3
 libidn-[v]		Manejo de cadenas de internacionalización
 libidn2-[v]		Implementación de internacionalización IDNA2008
+libimagequant-[v]
 libinih-[v]		Analizador simple de archivos .INI en C
 libinotify-[v]	Envía notif. de escritorio a un servicio de notif.
 libiscsi-[v]		Librería al lado del cliente para implementar iSCSI
@@ -406,8 +415,10 @@ libmypaint-[v]	Librería para hacer pinceladas
 libnettle-[v]	Librería de criptografía
 libnfs-[v]		Librería cliente para acceder a NFS
 libnotify-[v]		Envía notificaciones de escritorio a un servicio 
+libnsgif-[v]
 libogg-[v]		Librería para flujos de bits OGG
 libpaper-[v]		Librería para manejar tipos de papel
+libpcap-[v]
 libplacebo-[v]	Librería reusable para vídeo acelerado por GPU
 libppd-[v]		Para adaptar controladores de impresión legados
 libproxy-[v]		Librería para manejar detalles de un proxy
@@ -424,6 +435,8 @@ libsoup3-[v]	Librería cliente/servidor HTTP para GNOME
 libsigc++-[v]	Plataforma de retro-llamadas para C++
 libsigsegv-[v]	Librería para manejar fallos de página en modo usuario
 libsmb2-[v]		Librería cliente en espacio de usuario para SMB2/SMB3
+libsmdev-[v]
+libsmraw-[v]
 libsndfile-[v]	Maneja varios formatos de audio
 libsodium-[v]	Librería para comunicaciones en red y cifrado
 libsoup-[v]	Implementación SOAP en C
@@ -445,6 +458,7 @@ libudfread-[v]	Librería para leer UDF de dispositivos puros
 libunbound-[v]	Librería de resolvedor DNS que valida
 libunistring-[v]	Manipula cadenas Unicode
 libunibreak-[v]		Implementación de ruptura de líneas y palabras
+libupnp-[v]
 libusb1-[v]		Rutinas para manejar dispositivos USB
 libuv-[v]		Librería para entrada/salida multiplataforma
 libv4l-[v]		Librería en espacio de usuario de libv4l
@@ -452,7 +466,9 @@ libvhdi-[v]	Librería y herramientas para el formato de imagenes VHD
 libvidstab-[v]	Librería para estabilización de vídeo
 libvmdk-[v]	Librería y herramientas para el formato de vmdk
 libvorbis-[v]		Codec para compresión de audio
+libvoikko-[v]
 libvpx-[v]		Codec para vídeo VP8 de Google
+libvslvm-[v]
 libvterm-[v]	Librería para emular una termina VT220/xterm/ECMA-48
 libwebp-[v]		Conversión del formatos gráficos Google WebP
 libwmf-[v]	Conversión y manejo WMF
@@ -460,6 +476,7 @@ libwpd-[v]		Importa y exporta documentos WordPerfect
 libwpe-[v]		Librería para el porte de WebKit con WPE
 libxkbcommon-[v]	Librería para manejar descripciones de teclado
 libxml-[v]		Librería para reconocimiento de XML
+libxmlb-[v]
 libxslt-[v]	Librería para transformaciones XSL en C
 libyaml-[v]		Reconocedor y emisor de YAML 1.1 escrito en C
 libyajl-[v]		Pequeña librería JSON escrita en ANSI C
@@ -478,6 +495,7 @@ mpfr-[v]		Librería de punto flotante de precisión múltiple
 mpg123-[v]		Librería para decodificar y reproducir MPEG
 msgpack-[v]		Implementación en C y C++ de MessagePack
 mypaint-brushes-[v]	Brochas usadas por libmypaint
+mypaint-brushes2-[v]	
 neon-[v]		Librería cliente de HTTP y WebDAV, con interfaz en C
 netcdf-[v]		Librería para accesos a datos orientados a arreglos
 netpbm-[v]		Herramientas para manipular y convertir imágenes
@@ -761,6 +779,7 @@ py3-parsedatetime-[v]	Reconocer fechas y horas leíbles por humanos
 py3-puremagic-[v]	Implementación en python de detección de formatos
 py3-pyRFC3339-[v]	Da formato a fechas de acuerdo al RFC3339
 py3-pypdf-[v]		Librería para manipular páginas de archivos PDF
+py3-Pillow-[v]
 py3-requests-[v]	Librería Python para HTTP simple y elegante
 py3-requests-toolbelt-[v]	Cinturón de utilidades para py-requests
 py3-setuptools-[v]	Sistema de empaquetamiento de módulos Python
@@ -807,6 +826,7 @@ sdl2-[v]		Versión 2 de la librería multimedia
 sdl-image-[v]	Librería de imágenes de SDL
 sfcgal-[v]		Envoltura en C++ para CGAL
 silc-toolkit-[v]	Herramientas para desarrollo de aplicaciones SILC
+simdutf-[v]
 smartmontools-[v]	Control y monitoreo de almacenamiento con SMART
 snappy-[v]		Librería para compresión/descompresión rápida
 sord-[v]		Librería liviana C que almacena datos RDF en memoria
@@ -818,6 +838,7 @@ sratom-[v]		Librería para serializar átomos LV2 hacia/desde RDF
 sudo-[v]		Ejecutar una orden como otro usuario
 suil-[v]		Librería en C carga y envuelve interfaces de LV2
 suitesparse-[v]	Juego de algoritmos para matrices dispersas
+svt-av1-[v] 
 t1utils-[v]		Utilidades para fuentes PostScript tipo 1
 taglib-[v]		Para manejar meta-datos de formatos de audio
 tdb-[v]		Librería para base de datos trivial
@@ -837,6 +858,7 @@ vulkan-loader-[v]	Cargador de Vulkan ICD
 wayland-[v]	Protocolo de servidor de visualización
 wavpack-[v]		Codificador de audio para compresión con y sin perdida
 webkitgtk41-[v]	Interfaz para GTK+3
+webkitgtk60-[v]	
 woff2-[v]		Librería para el formato Web Open Font 2.0
 wpebackend-fdo-[v]	Lado del servidor WPE para Wayland
 wxWidgets-gtk3-[v]	Herramientas para GUIs multi-plataforma

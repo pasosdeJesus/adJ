@@ -34,8 +34,8 @@ cat > /home/$uadJ/.fluxbox/menu <<EOF
 
 [begin] (Fluxbox)
 	[exec] (xfe - Archivos) {PATH=\$PATH:/usr/sbin:/usr/local/sbin:/sbin /usr/local/bin/xfe}
-	[exec] (xterm+tmux) { xterm -geometry 160x48 -en utf8 -e "TERM=xterm-color /usr/bin/tmux -2 -l" }
-	[exec] (xterm) { xterm -geometry 160x48 -en utf8 -ls }
+	[exec] (xterm+tmux) { xterm -geometry 160x48 -e "TERM=xterm-color /usr/bin/tmux -2 -l" }
+	[exec] (xterm) { xterm -geometry 160x48 -ls }
 	[exec] (chromium) {/usr/local/bin/chrome --disable-gpu --allow-file-access-from-files}
 	[exec] (firefox-esr) {/usr/local/bin/firefox-esr}
 [submenu] (Espiritualidad)
@@ -44,7 +44,7 @@ cat > /home/$uadJ/.fluxbox/menu <<EOF
 [end]
 [submenu] (Dispositivos)
 	[exec] (Apagar) {doas /sbin/halt -p}
-	[exec] (Iniciar servicios faltantes) {xterm -en utf8 -e "/usr/bin/doas /bin/ksh /etc/rc.local espera"}
+	[exec] (Iniciar servicios faltantes) {xterm -e "/usr/bin/doas /bin/ksh /etc/rc.local espera"}
 	[exec] (Montar CD) {doas /sbin/mount /mnt/cdrom ; xhost +; doas xfe /mnt/cdrom/ }
 	[exec] (Desmontar CD) {doas /sbin/umount -f /mnt/cdrom}
 	[exec] (Montar USB) {doas /sbin/mount /mnt/usb ; xhost +; doas xfe /mnt/usb/}
@@ -60,13 +60,13 @@ cat > /home/$uadJ/.fluxbox/menu <<EOF
                 [exec] (Cambiar a distribucion Estados Unidos Intl.) {setxkbmap us; xmodmap ~/.Xmodmap-usintl}
   [end]
 	[submenu] (Red)
-                [exec] (Examinar red) {xterm -en utf8 -e '/sbin/ifconfig; echo -n "\n[RETORNO] para examinar enrutamiento (podrá salir con q)"; read; /sbin/route -n show | less'}
-                [exec] (Examinar configuracion cortafuegos) {xterm  -en utf8 -e 'doas  /sbin/pfctl -s all | less '}
-                [exec] (Configurar interfaces de red) {xterm -en utf8 -e '/sbin/ifconfig | grep "^[a-z]*[0-9]:" | sed -e "s/:.*//g" | grep -v "lo0" | grep -v "enc0" | grep -v "pflog0" | grep -v "tun[0-9]" | sed -e "s/\(.*\)/echo \"ENTER para configurar \1\";read;xfw \/etc\/hostname.\1/g" > /tmp/porc.sh;  xhost +; doas sh /tmp/porc.sh' }
+                [exec] (Examinar red) {xterm -e '/sbin/ifconfig; echo -n "\n[RETORNO] para examinar enrutamiento (podrá salir con q)"; read; /sbin/route -n show | less'}
+                [exec] (Examinar configuracion cortafuegos) {xterm  -e 'doas  /sbin/pfctl -s all | less '}
+                [exec] (Configurar interfaces de red) {xterm -e '/sbin/ifconfig | grep "^[a-z]*[0-9]:" | sed -e "s/:.*//g" | grep -v "lo0" | grep -v "enc0" | grep -v "pflog0" | grep -v "tun[0-9]" | sed -e "s/\(.*\)/echo \"ENTER para configurar \1\";read;xfw \/etc\/hostname.\1/g" > /tmp/porc.sh;  xhost +; doas sh /tmp/porc.sh' }
                 [exec] (Configurar puerta de enlace) {doas touch /etc/mygate; xhost +; doas xfw /etc/mygate}
                 [exec] (Configurar cortafuegos) {xhost +; doas xfw /etc/pf.conf}
-                [exec] (Reiniciar red) {xterm -en utf8 -e 'PATH=/sbin:/usr/sbin:/bin:/usr/bin/ /usr/bin/doas /bin/sh /etc/netstart && /usr/bin/doas /sbin/pfctl -f /etc/pf.conf; echo "[RETORNO] para continuar"; read'}
-                [exec] (ping a Internet) {xterm -en utf8 -e '/sbin/ping 190.71.138.118'}
+                [exec] (Reiniciar red) {xterm -e 'PATH=/sbin:/usr/sbin:/bin:/usr/bin/ /usr/bin/doas /bin/sh /etc/netstart && /usr/bin/doas /sbin/pfctl -f /etc/pf.conf; echo "[RETORNO] para continuar"; read'}
+                [exec] (ping a Internet) {xterm -e '/sbin/ping 190.71.138.118'}
         [end]
 [end]
 [submenu] (Oficina)
@@ -80,7 +80,7 @@ cat > /home/$uadJ/.fluxbox/menu <<EOF
 [submenu] (Multimedia)
 	[exec] (audacious) {audacious}
 	[exec] (audacity) {audacity}
-	[exec] (cdio cdplay) {xterm -en utf8 -e "cdio cdplay"}
+	[exec] (cdio cdplay) {xterm -e "cdio cdplay"}
 	[exec] (musescore) {musescore}
 	[exec] (xcdplayer) {xcdplayer}
 	[exec] (vlc) {vlc}
@@ -153,7 +153,7 @@ if (test -x /usr/local/bin/fbsetbg -a -x /usr/local/bin/display -a -f /home/$uad
 if (test -x /usr/local/bin/pidgin) then {
 	LANG=es_CO.UTF-8 /usr/local/bin/pidgin &
 } fi;
-xterm -geometry 160x48 -en utf8 -e /usr/bin/tmux -l &
+xterm -geometry 160x48 -e /usr/bin/tmux -l &
 # /usr/local/bin/bsetroot -solid black
 # fbsetbg -C /usr/local/share/fluxbox/splash.jpg
 # xset -b
