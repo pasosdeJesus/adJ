@@ -1148,8 +1148,8 @@ if (test "$sn" = "s") then {
   #paquete nspr
   #paquete oniguruma 
   #paquete opus
-  #paquete pcre2 
-  paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mcrypt php-mysqli php-pdo_pgsql php-pgsql php-zip" 8.4
+  paquete pcre2
+  paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mysqli php-pdo_pgsql php-pgsql php-zip" 8.5
   paquete png
   paquete py3-asn1
   #paquete python paquetes "python" "2.7"
@@ -1159,7 +1159,9 @@ if (test "$sn" = "s") then {
   #paquete rsync
   #paquete samba paquetes "ldb samba tevent"
   paquete sqlite3
+  paquete tcl paquetes "tcl" 8.6
   paquete tiff
+  paquete tk paquetes "tk" 8.6
   #paquete unrar
   #paquete vim
   #paquete wavpack
@@ -1197,8 +1199,6 @@ if (test "$sn" = "s") then {
 
   ##
   # Retroportados no existentes en versión actual
-
-  paquete misc/llama.cpp paquetes llama-cpp
 
   ####
   # Adaptados de portes estables pero mejorados para adJ, por 
