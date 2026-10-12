@@ -4,7 +4,7 @@
 
 VERSION=2.2.1
 REVISION=
-PKGNAME=sivel-v${VERSION}
+PKGNAME=sivel-${VERSION}
 
 #GH_MAIN=sivel2.0
 #GH_ACCOUNT=pasosdeJesus
