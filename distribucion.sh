@@ -1056,7 +1056,7 @@ if (test "$sn" = "s") then {
   ### Requieren recompilación en caso de incluir cambio en FILE
   #paquete unzip  # De no hacerse envía descompresiones a salida estándar
   paquete python paquetes "python" "3"
-  paquete ruby paquetes "ruby ruby34-ri_docs" 3.4
+  paquete ruby paquetes "ruby ruby40-ri_docs" 4.0
   #paquete gettext-tools paquetes 'gettext-tools gettext-runtime'  # Requerido para compilar muchos
   #paquete m4 # Requerido para compilar bison (instalar antes de compilar bison)
   #paquete bison # Requerido para compilar MariaDB

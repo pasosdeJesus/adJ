@@ -125,3 +125,49 @@ recompilar los ~33 dependientes; solo `pcre2`, `tcl` y `tk`.
 En el entorno del agente, `doas` está bloqueado como orden directa, pero
 se ejecuta con `zsh -c "doas ..."`. Útil solo para esta herramienta; no es
 parte del flujo normal de adJ.
+
+---
+
+## 8. Retroportar un porte a *current* (versión más nueva que la rama)
+
+**Patrón**: cuando se quiere subir un porte a una versión que solo existe
+en *current* (no en la rama estable, p. ej. `TOPENBSD_7_9`), no basta con
+actualizar el porte en `mystuff`. El árbol estándar `/usr/ports/<porte>`
+debe actualizarse también con `cvs up -A` (pasa de la etiqueta estable a
+HEAD). Si no, las autodependencias entre subpaquetes (en particular el
+paquete `debug-*` generado por `DEBUG_PACKAGES`) se resuelven contra la
+versión vieja del estándar y `make package` falla con:
+
+    Error: Dependency = doesn't match FULLPKGNAME: <versión-vieja>
+
+El comentario de `distribucion.sh` lo resume: los retroportados «deben
+estar en `arboldes/usr/ports/mystuff` y en `/usr/ports` de current».
+
+**Ejemplo (7.9)**: `lang/ruby` se subió de 4.0.2p1 (rama 7.9) a 4.0.7
+(current). Solo actualizar `mystuff/lang/ruby/4.0` a 4.0.7 hizo que
+`debug-ruby-4.0.7` fallara al empaquetar, porque su dependencia
+`lang/ruby/4.0,-main` se resolvía contra `/usr/ports/lang/ruby/4.0`
+(4.0.2p1). La solución fue alinear también el estándar:
+
+```
+doas sh -c 'cd /usr/ports/lang/ruby && cvs -q up -A -dP'
+```
+
+Después, `diff -r` entre `mystuff/lang/ruby` y `/usr/ports/lang/ruby`
+muestra únicamente las diferencias propias de adJ (ver patrón 5).
+
+---
+
+## 9. Preservar comportamiento original de RubyGems en `mystuff`
+
+**Patrón**: el porte estándar de Ruby trae
+`patches/patch-lib_rubygems_rb`, que deshabilita `gem update --system`
+con un mensaje («Ruby was installed using an OpenBSD package...»). En adJ
+se quiere conservar el comportamiento original de RubyGems, es decir que
+`doas gem update --system` siga disponible. Por eso, al sincronizar
+`mystuff/lang/ruby` con el estándar, ese patch debe **excluirse** (no
+copiarlo), y no debe agregarse el `REVISION` asociado.
+
+**Ejemplo (7.9)**: al crear `mystuff/lang/ruby/4.0` en 4.0.7, la única
+diferencia contra `/usr/ports/lang/ruby/4.0` es la ausencia de
+`patches/patch-lib_rubygems_rb`.
