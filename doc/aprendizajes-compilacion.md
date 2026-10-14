@@ -171,3 +171,41 @@ copiarlo), y no debe agregarse el `REVISION` asociado.
 **Ejemplo (7.9)**: al crear `mystuff/lang/ruby/4.0` en 4.0.7, la única
 diferencia contra `/usr/ports/lang/ruby/4.0` es la ausencia de
 `patches/patch-lib_rubygems_rb`.
+
+---
+
+## 10. Porte nuevo en C++20 con CMake y dependencias header-only
+
+**Patrón**: para portar software C++20 (como `solc`, el compilador de
+Solidity), se usa `MODULES = devel/cmake` y `COMPILER = base-clang
+ports-gcc` con `COMPILER_LANGS = c++`. Las dependencias header-only
+(`range-v3`, `nlohmann-json`) que usan `NO_BUILD = Yes` y `PKG_ARCH = *`
+no se pueden instalar como dependencia automática de `make` (falla con
+`don't know how to make ... .tgz`); hay que instalarlas por separado
+desde `PKG_PATH` con `pkg_add` antes de compilar.
+
+**Ejemplo (7.9)**: `mystuff/lang/solidity` (`solc` 0.8.37). Dependencias:
+`devel/boost`, `devel/fmt`, `textproc/nlohmann-json`, `devel/range-v3`.
+Flags CMake: `-DTESTS=OFF -DIGNORE_VENDORED_DEPENDENCIES=ON
+-DPEDANTIC=OFF`. `nlohmann-json` y `range-v3` se instalan con `pkg_add`
+antes del `make`, porque son header-only y `make install` falla al
+intentar empaquetarlas.
+
+---
+
+## 11. Condición de carrera (lost wakeup) en tests de regresión
+
+**Patrón**: al modificar un test de regresión que sincroniza hilos con
+`pthread_cond_signal`/`pthread_cond_timedwait`, si se reduce el trabajo
+del hilo principal puede aparecer un timeout (`pthread_cond_timedwait:
+Operation timed out`) por *lost wakeup*: el hilo principal señaliza antes
+de que el otro entre a `timedwait`. La solución es hacer el
+`pthread_mutex_trylock` **antes** del `pthread_cond_signal`, para que el
+otro hilo no pueda avanzar hasta que el primero entre a `timedwait` (que
+libera el mutex).
+
+**Ejemplo (7.9)**: `regress/lib/libc/locale/uselocale/uselocale.c`. El
+parche `04-xlocale-wchar.patch` comentó pruebas del hilo principal,
+volviéndolo tan rápido que señalizaba antes de que el hilo hijo entrara a
+`pthread_cond_timedwait`. Se reordenó `switch_thread` para bloquear el
+mutex antes de señalizar.

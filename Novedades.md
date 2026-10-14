@@ -52,37 +52,42 @@ encontrarás:
 
 Novedades tomadas de <https://www.openbsd.org/79.html>
 
-* Aplicados parches de seguridad hasta el 10.Abr.2026 provenientes de
+
+* El sistema base incluye mejoras a componentes auditados y mejorados
+* Aplicados parches de seguridad hasta el 10.Sep.2026 provenientes de
   OpenBSD que incluyen soluciones a fallas
 * Controladores ampliados o mejorados para amd64
-  * Tarjetas Ethernet: `rge` ahora soporta Realtek RTL8125D (de 2.5G)
-     y RTL8127 (de 10G). 
-  * USB Ethernet: `ure` ahora soporta RTL8157.
-  * Inalámbricas: Mejoras a `qwx`,  `bfwm` y `iwx`
-  * CPUs y GPUs: `drm` actualizado al de Linux 6.12.50
-  * Otros:  Mejoras a suspender/hibernar. Ya opera orden `ZZZ`
-* Mejoras a `vmm`: Puede iniciar máquinas virtuales confidenciales en
-  procesadores AMD con SEV-ES.
+  * Tarjetas Ethernet: `rge` ahora soporta Realtek RTL8126. `bnxt`
+    ahora soporta dispositivos BCM575xx
+  * Inalámbricas: Soporte básico de 802.11ax (WiFi 6). Mejoras a `iwx`
+  * CPUs y GPUs: `drm` actualizado al de Linux 6.18.22. Diversas mejoras
+    para amdgpu. MAXCPUS aumentado a 255 en amd64
+  * Suspender/hibernar: hibernación diferida (`machdep.hibernatedelay`) para
+    no agotar la batería, y gestión de CPUs híbridas (`hw.blockcpu`)
 * Seguridad
   * pledge en más programas
-  * LLDP mejorado
-  * `libressl` actualizado a 4.2.0
-  * Incluye OpenSSH 10.2
+  * `libressl` actualizado a 4.3.0 con intercambio de claves híbrido
+    post-cuántico ML-KEM768 + X25519 (como recomienda D. J. Bernstein y el
+    RFC 10024 -- TLS 1.3)
+  * Incluye OpenSSH 10.3
+  * Redes: IPv6 autoconf (SLAAC) habilitado por defecto
 * El sistema base incluye mejoras a componentes auditados y mejorados
   como, `llvm 19.1.7`,  `Xenocara` (basado en `Xorg` 7.7),
-  `perl 5.40.1`
-* El repositorio de paquetes de OpenBSD cuenta con 12651 para amd64
+  `perl 5.42.2`
+* El repositorio de paquetes de OpenBSD cuenta con 13044 para amd64
 
 
-## 3. NOVEDADES RESPECTO A ADJ 7.7 PROVENIENTES DE PASOS DE JESÚS
+## 3. NOVEDADES RESPECTO A ADJ 7.8 PROVENIENTES DE PASOS DE JESÚS
 
 ### 3.1 Sistema Base
 
-* Parches de locale y xlocale actualizados a fuentes de OpenBSD 7.8.
+* Parches de locale y xlocale actualizados a fuentes de OpenBSD 7.9.
 * 3 fallas en parches detectadas por modelo de IA, Gemini, corregidas:
   - Evita desbordamiento de buffer con locales alterados
   - Arreglada fuga de memoria en xlocale al cambiar locales
   - Arreglada fuga de memoria al cargar locales monetarios y numéricos
+* Corregida condición de carrera en la prueba de regresión de xlocale
+  (`uselocale`) que causaba un timeout al sincronizar hilos.
 
 ### 3.2 Instalador y documentación
 
@@ -92,20 +97,26 @@ Novedades tomadas de <https://www.openbsd.org/79.html>
   * `usuario_adJ`
     <https://pasosdejesus.org/doc/usuario_adJ/index.html> 
     (Vea la sección sobre Gestión de Energía que opera
-     en OpenBSD/adJ 7.8).
+     en OpenBSD/adJ 7.9).
   * `servidor_adJ`
     <https://pasosdejesus.org/doc/servidor_adJ/index.html>
 
 ### 3.3 Paquetes
 
-* Incluye porte de ruby 3.4.9 con `doas gem update --system` habilitado
+* Incluye porte de ruby 4.0.7 con `doas gem update --system` habilitado
 * Incluye evangelios-0.9.15 que agrega traducción de Hebreos y hace
   mejoras en varios libros tras retroalimentación de varios modelos de IA
   cuidadosamente analizada (DeepSeek y Gemini).
 * Incluye porte de sivel-2.2.1
+* Incluye porte de solidity-0.8.37 (`solc`), el compilador de contratos
+  Solidity para Ethereum/EVM, compilado de forma nativa en C++20 (sin Rust
+  ni WASM). Facilita compilar contratos inteligentes en adJ/OpenBSD sin
+  recurrir a binarios externos o hacks.
+* Actualizados postgresql a 18.6 y php a 8.5 (sin el módulo php-mcrypt)
+  desde la rama estable de OpenBSD 7.9.
 * Incluye portes actualizados para cerrar fallas de curl 8.19,
   libffi-3.5.2p0, nghttp2-1.68.1, openssl-3.5.5V0, png-1.6.56,
-  py3-asn1-0.6.3v0, python-3.12.11, redis 6.2.20,
+  py3-asn1-0.6.3v0, python-3.13.14, redis 6.2.20,
   sqlite3-3.50.7p0
 
 

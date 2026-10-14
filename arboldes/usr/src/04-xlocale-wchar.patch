@@ -4731,7 +4731,25 @@ diff -ruN -x obj src67-orig/regress/lib/libc/locale/uselocale/uselocale.c src/re
  #define	_LOCALE_BAD	 (locale_t)3
  
  /* Options for switch_thread() below. */
-@@ -229,7 +228,7 @@
+@@ -194,13 +193,15 @@
+ 	struct timespec	 t;
+ 	int		 irc;
+ 
++	if (flags & SWITCH_WAIT) {
++		if ((irc = pthread_mutex_trylock(&mtx)) != 0)
++			errc(1, irc, "pthread_mutex_trylock(%d)", step);
++	}
+ 	if (flags & SWITCH_SIGNAL) {
+ 		if ((irc = pthread_cond_signal(&cond)) != 0)
+ 			errc(1, irc, "pthread_cond_signal(%d)", step);
+ 	}
+ 	if (flags & SWITCH_WAIT) {
+-		if ((irc = pthread_mutex_trylock(&mtx)) != 0)
+-			errc(1, irc, "pthread_mutex_trylock(%d)", step);
+ 		t.tv_sec = time(NULL) + 2;
+ 		t.tv_nsec = 0;
+ 		if ((irc = pthread_cond_timedwait(&cond, &mtx, &t)) != 0)
+@@ -229,7 +230,7 @@
  	TEST_ER(newlocale, ENOENT, _LOCALE_NONE, LC_COLLATE_MASK, "C.INV");
  	TEST_R(MB_CUR_MAX, 1);
  	setenv("LC_TIME", "C.INV", 1);
@@ -4740,7 +4758,7 @@ diff -ruN -x obj src67-orig/regress/lib/libc/locale/uselocale/uselocale.c src/re
  	unsetenv("LC_TIME");
  	TEST_R(MB_CUR_MAX, 1);
  	setenv("LC_CTYPE", "C.INV", 1);
-@@ -237,122 +236,126 @@
+@@ -237,122 +238,126 @@
  	TEST_R(MB_CUR_MAX, 1);
  
  	/* Test duplocale(3). */
@@ -4939,7 +4957,7 @@ diff -ruN -x obj src67-orig/regress/lib/libc/locale/uselocale/uselocale.c src/re
  
  	/* Test strerror(3). */
  	sego = strerror(EPERM);
-@@ -373,36 +376,38 @@
+@@ -373,36 +378,38 @@
  	free(selc);
  
  	/* Check that the C locale works even while all is set to UTF-8. */
@@ -4992,7 +5010,7 @@ diff -ruN -x obj src67-orig/regress/lib/libc/locale/uselocale/uselocale.c src/re
  	/* Check that the global locale takes effect even in a thread. */
  	TEST_R(nl_langinfo, "UTF-8", CODESET);
  	TEST_R(iswalpha, 1, 0x0153);
-@@ -451,14 +456,14 @@
+@@ -451,14 +458,14 @@
  	TEST_R(MB_CUR_MAX, 1);
  
  	/* Check that *_l(3) works without any locale installed. */

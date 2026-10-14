@@ -119,6 +119,7 @@ Con respecto a OpenBSD 7.9 las novedades son:
 		* xfe		Soporta paquetes tgz
     * ocaml 4.12, ocamlbuild, findlib, dune, hevea
 	* Unicos en adJ 
+		* lang/solidity
 		* emulators/realboy , textproc/biblesync
 		textproc/sword textproc/bibletime 
 		x11/fbdesk textproc/po4a textproc/p5-SGMLNpm
@@ -134,5 +135,5 @@ Con respecto a OpenBSD 7.9 las novedades son:
 		* TiposLectoEscritura Tipografía
 		* asigna		Asigna horario
 		* Mt77		Buscador
-		* sivel 2.0	Sistema de Información de violencia política
+		* sivel 2.2	Sistema de Información de violencia política
 

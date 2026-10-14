@@ -1240,6 +1240,9 @@ if (test "$sn" = "s") then {
   #paquete databases/sivel sivel sivel 1.2
   paquete databases/sivel sivel sivel 2.2
 
+  # Compilador de contratos Solidity (solc) para Ethereum/EVM
+  paquete lang/solidity
+
   rm $dini/$V$VESP-$ARQ/$dest/php5-gd-*-no_x11.tgz > /dev/null 2>&1
 
 } fi;  
