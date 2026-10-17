@@ -1,0 +1,29 @@
+diff -ruN src79-orig/usr.bin/file/magdir/msooxml src/usr.bin/file/magdir/msooxml
+--- src79-orig/usr.bin/file/magdir/msooxml	Wed Dec 31 19:00:00 1969
++++ src/usr.bin/file/magdir/msooxml	Sat Oct 17 08:40:59 2026
+@@ -0,0 +1,25 @@
++#------------------------------------------------------------------------------
++# $File: msooxml,v 1.24 2025/05/29 15:03:04 christos Exp $
++# msooxml:  file(1) magic for Microsoft Office XML
++# From: Ralf Brown <ralf.brown@gmail.com>
++#
++# .docx, .pptx, and .xlsx are ZIP archives whose first member is normally
++# "[Content_Types].xml".  Detect the type by scanning the archive for the
++# distinguishing subdirectory name.
++#
++# Adapted for OpenBSD/adJ.  Taken from FreeBSD:
++#   https://github.com/freebsd/freebsd-src/blob/main/contrib/file/magic/Magdir/msooxml
++# which tracks the file(1) project of Christos Zoulas:
++#   https://github.com/file/file/blob/master/magic/Magdir/msooxml
++# License: BSD 2-clause, compatible with the OpenBSD/ISC license:
++#   https://github.com/file/file/blob/master/COPYING
++
++0	string		PK\003\004
++!:strength +10
++>0x1E	regex		\\[Content_Types\\]\\.xml
++>>&0	search/3000	xl/	Microsoft Excel 2007+
++!:mime	application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
++>>&0	search/3000	word/	Microsoft Word 2007+
++!:mime	application/vnd.openxmlformats-officedocument.wordprocessingml.document
++>>&0	search/3000	ppt/	Microsoft PowerPoint 2007+
++!:mime	application/vnd.openxmlformats-officedocument.presentationml.presentation
