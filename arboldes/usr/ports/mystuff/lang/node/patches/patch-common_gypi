@@ -1,0 +1,43 @@
+Index: common.gypi
+--- common.gypi.orig
++++ common.gypi
+@@ -42,6 +42,9 @@
+ 
+     ##### V8 defaults for Node.js #####
+ 
++    # Enable CET / IBT
++    'v8_enable_cet_ibt': 'true',
++
+     # Turn on SipHash for hash seed generation, addresses HashWick
+     'v8_use_siphash': 'true',
+ 
+@@ -196,7 +199,6 @@
+             }],
+           ],
+         },
+-        'cflags': [ '-O3' ],
+         'conditions': [
+           ['enable_lto=="true"', {
+             'cflags': ['<(lto)'],
+@@ -521,8 +523,10 @@
+             'standalone_static_library': 1,
+           }],
+           ['OS=="openbsd"', {
+-            'cflags': [ '-I/usr/local/include' ],
+-            'ldflags': [ '-Wl,-z,wxneeded' ],
++            'cflags': [ '-idirafter /usr/local/include' ],
++            'ldflags': [ '-Wl,-z,wxneeded'
++                , '-Wl,-rpath,${EOPENSSL_LIB}'
++            ],
+           }],
+           ['_toolset=="host"', {
+             'conditions': [
+@@ -538,7 +542,7 @@
+                 'cflags': [ '-m32' ],
+                 'ldflags': [ '-m32' ],
+               }],
+-              [ 'host_arch=="ppc64" and OS not in "aix os400"', {
++              [ 'host_arch=="ppc64" and OS not in "aix os400 openbsd"', {
+                 'conditions': [
+                   [ 'clang==0', {
+                     'cflags': [ '-mminimal-toc' ],

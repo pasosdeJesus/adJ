@@ -1,0 +1,15 @@
+- one hunk removes #include "expat_config.h"; this (or an alternative,
+see textproc/xmlwf for another approach) needs to be kept unless expat
+in base starts providing this config header
+
+Index: Modules/pyexpat.c
+--- Modules/pyexpat.c.orig
++++ Modules/pyexpat.c
+@@ -11,7 +11,6 @@
+ #include <stdbool.h>
+ #include <stddef.h>               // offsetof()
+ 
+-#include "expat_config.h"
+ #include "expat.h"
+ #include "pyexpat.h"
+ 

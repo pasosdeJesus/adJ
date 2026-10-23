@@ -1,0 +1,62 @@
+#1: Set ports library version
+#2: OpenBSD isn't multi-arch
+#3: llvm-ar (used for LTO) is installed as ar
+#4: Try only the right tcl/tk string
+
+Index: configure.ac
+--- configure.ac.orig
++++ configure.ac
+@@ -251,7 +251,7 @@ VERSION=PYTHON_VERSION
+ 
+ # Version number of Python's own shared library file.
+ AC_SUBST([SOVERSION])
+-SOVERSION=1.0
++SOVERSION=${LIBpython3.13_VERSION}
+ 
+ # The later definition of _XOPEN_SOURCE and _POSIX_C_SOURCE disables
+ # certain features on NetBSD, so we need _NETBSD_SOURCE to re-enable
+@@ -1141,6 +1141,7 @@ AS_CASE([$ac_sys_system],
+   [Darwin*], [MULTIARCH=""],
+   [iOS], [MULTIARCH=""],
+   [FreeBSD*], [MULTIARCH=""],
++  [OpenBSD*], [MULTIARCH=""],
+   [MULTIARCH=$($CC --print-multiarch 2>/dev/null)]
+ )
+ AC_SUBST([MULTIARCH])
+@@ -1969,13 +1970,13 @@ esac
+ [AC_MSG_RESULT([no])])
+ if test "$Py_LTO" = 'true' ; then
+   case $CC in
+-    *clang*)
++    *clang*|cc)
+       LDFLAGS_NOLTO="-fno-lto"
+       dnl Clang linker requires -flto in order to link objects with LTO information.
+       dnl Thin LTO is faster and works for object files with full LTO information, too.
+       AX_CHECK_COMPILE_FLAG([-flto=thin],[LDFLAGS_NOLTO="-flto=thin"],[LDFLAGS_NOLTO="-flto"])
+       AC_SUBST([LLVM_AR])
+-      AC_PATH_TOOL([LLVM_AR], [llvm-ar], [''], [${llvm_path}])
++      AC_PATH_TOOL([LLVM_AR], [ar], [''], [${llvm_path}])
+       AC_SUBST([LLVM_AR_FOUND])
+       if test -n "${LLVM_AR}" -a -x "${LLVM_AR}"
+       then
+@@ -2101,7 +2102,7 @@ LLVM_PROF_ERR=no
+ # GNU Autoconf recommends the use of expr instead of basename.
+ AS_VAR_SET([CC_BASENAME], [$(expr "//$CC" : '.*/\(.*\)')])
+ case "$CC_BASENAME" in
+-  *clang*)
++  *clang*|cc)
+     # Any changes made here should be reflected in the GCC+Darwin case below
+     PGO_PROF_GEN_FLAG="-fprofile-instr-generate"
+     PGO_PROF_USE_FLAG="-fprofile-instr-use=\"\$(shell pwd)/code.profclangd\""
+@@ -4397,11 +4398,7 @@ dnl Detect Tcl/Tk. Use pkg-config if available.
+ dnl
+ found_tcltk=no
+ for _QUERY in \
+-  "tcl >= 8.5.12 tk >= 8.5.12" \
+-  "tcl8.6 tk8.6" \
+   "tcl86 tk86" \
+-  "tcl8.5 >= 8.5.12 tk8.5 >= 8.5.12" \
+-  "tcl85 >= 8.5.12 tk85 >= 8.5.12" \
+ ; do
+   PKG_CHECK_EXISTS([$_QUERY], [
+     PKG_CHECK_MODULES([TCLTK], [$_QUERY], [found_tcltk=yes], [found_tcltk=no])

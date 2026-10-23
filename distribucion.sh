@@ -852,6 +852,29 @@ if (test "$sn" = "s") then {
   # Buscar módulo de Perl con pkg_locate Name.so, recompilarlo e instalarlo 
   function ya {
   }
+  # Recompilar paquetes con actualizaciones de seguridad (2026-10-22)
+  paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mysqli php-pdo_pgsql php-pgsql php-zip" 8.5
+  paquete openssl paquetes "openssl" 3.5
+  paquete rsync
+  paquete vim
+  paquete brotli
+  paquete python paquetes "python" "3"
+  paquete py3-brotli
+  # Paquetes adicionales actualizados por cvs (no en mirror 7.9)
+  paquete cups paquetes "cups cups-libs"
+  paquete enchant2
+  paquete ffmpeg
+  paquete gnutls
+  paquete libexif
+  paquete libunbound
+  paquete libvpx
+  paquete mpg123
+  paquete node
+  paquete openldap-client paquetes "openldap-client"
+  paquete p11-kit
+  paquete py3-tz
+  paquete uriparser
+  paquete firefox-esr
   paquete p5-HTML-Parser
   paquete p5-Module-Build
   paquete p5-Unicode-Stringprep
@@ -1117,7 +1140,7 @@ if (test "$sn" = "s") then {
   #paquete dkimproxy
   #paquete dovecot
   #paquete dtc
-  #paquete firefox-esr # No logra compilarlo
+  paquete firefox-esr
   #paquete www/firefox-esr-i18n paquetes "firefox-esr-i18n-es-AR"
   #paquete flac
   #paquete gtk+3 paquetes "gtk+3-cups"
@@ -1156,14 +1179,14 @@ if (test "$sn" = "s") then {
   #paquete python paquetes "python" "3"
   #paquete quirks
   #paquete redis
-  #paquete rsync
+  paquete rsync
   #paquete samba paquetes "ldb samba tevent"
   paquete sqlite3
   paquete tcl paquetes "tcl" 8.6
   paquete tiff
   paquete tk paquetes "tk" 8.6
   #paquete unrar
-  #paquete vim
+  paquete vim
   #paquete wavpack
   #paquete webkitgtk41
   #paquete zsh
@@ -1211,7 +1234,6 @@ if (test "$sn" = "s") then {
   ####
   # Unicos en adJ 
   # Deben estar en arboldes/usr/ports/mystuff pero no en /usr/ports
-  paquete devel/just
   #paquete net/ton
   #paquete net/ton-toncli
   paquete emulators/realboy

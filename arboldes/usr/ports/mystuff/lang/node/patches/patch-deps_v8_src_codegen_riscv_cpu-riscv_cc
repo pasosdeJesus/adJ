@@ -1,0 +1,39 @@
+Implement instruction cache flush using sysarch(RISCV_SYNC_ICACHE).
+
+Index: deps/v8/src/codegen/riscv/cpu-riscv.cc
+--- deps/v8/src/codegen/riscv/cpu-riscv.cc.orig
++++ deps/v8/src/codegen/riscv/cpu-riscv.cc
+@@ -4,7 +4,13 @@
+ 
+ // CPU specific code for arm independent of OS goes here.
+ 
+-#include <sys/syscall.h>
++#ifdef __OpenBSD__
++# include <sys/types.h>
++# include <machine/sysarch.h>
++#else
++# include <sys/syscall.h>
++#endif
++
+ #include <unistd.h>
+ 
+ #include "src/codegen/cpu-features.h"
+@@ -14,6 +20,10 @@ namespace internal {
+ 
+ void CpuFeatures::FlushICache(void* start, size_t size) {
+ #if !defined(USE_SIMULATOR)
++# ifdef __OpenBSD__
++	struct riscv_sync_icache_args args = { (u_int64_t)(uintptr_t)start, size };
++	sysarch(RISCV_SYNC_ICACHE, &args);
++# else
+   char* end = reinterpret_cast<char*>(start) + size;
+   // SYS_riscv_flush_icache is a symbolic constant used in user-space code to
+   // identify the flush_icache system call, while __NR_riscv_flush_icache is the
+@@ -21,6 +31,7 @@ void CpuFeatures::FlushICache(void* start, size_t size
+   // call.
+   // The flag set to zero will flush all cpu cores.
+   syscall(__NR_riscv_flush_icache, start, end, 0);
++# endif // __OpenBSD__
+ #endif  // !USE_SIMULATOR.
+ }
+ 
