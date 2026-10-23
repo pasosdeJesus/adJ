@@ -112,12 +112,18 @@ Novedades tomadas de <https://www.openbsd.org/79.html>
   Solidity para Ethereum/EVM, compilado de forma nativa en C++20 (sin Rust
   ni WASM). Facilita compilar contratos inteligentes en adJ/OpenBSD sin
   recurrir a binarios externos o hacks.
-* Actualizados postgresql a 18.6 y php a 8.5 (sin el módulo php-mcrypt)
+* Actualizados postgresql a 18.6 y php a 8.5.12 (sin el módulo php-mcrypt)
   desde la rama estable de OpenBSD 7.9.
+* Actualizados por fallas de seguridad críticas (22-23.Oct.2026):
+  php-8.5.12 (CVE-2026-109618 y CVE-2026-109619), node-22.23.4,
+  brotli-1.2.1 y py3-brotli-1.2.1 (CVE-2026-111497),
+  python-3.13.17 (retira la CA comprometida eMudhra/emSign),
+  firefox-esr-140.17.0, openssl-3.5.9, rsync-3.5.1,
+  cups-2.4.19 y vim-9.2.1125.
 * Incluye portes actualizados para cerrar fallas de curl 8.19,
-  libffi-3.5.2p0, nghttp2-1.68.1, openssl-3.5.5V0, png-1.6.56,
-  py3-asn1-0.6.3v0, python-3.13.14, redis 6.2.20,
-  sqlite3-3.50.7p0
+  enchant2-2.8.16, ffmpeg-8.0.3v1, libexif-0.6.26, libffi-3.5.2p0,
+  libunbound-1.26.0, mpg123-1.33.7, nghttp2-1.68.1, openldap-client-2.6.15,
+  png-1.6.59, py3-asn1-0.6.3v0, redis 6.2.20, sqlite3-3.50.7p0
 
 
 ## 4. FE DE ERRATAS
