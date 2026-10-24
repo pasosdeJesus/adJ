@@ -209,3 +209,79 @@ parche `04-xlocale-wchar.patch` comentó pruebas del hilo principal,
 volviéndolo tan rápido que señalizaba antes de que el hilo hijo entrara a
 `pthread_cond_timedwait`. Se reordenó `switch_thread` para bloquear el
 mutex antes de señalizar.
+
+---
+
+## 12. Actualización de seguridad que añade un símbolo/enum en una dependencia
+
+**Patrón**: al subir un paquete (p. ej. un runtime con JIT) a una versión
+que corrige una falla de seguridad, su código puede referenciar un
+símbolo, enum o constante nueva de una biblioteca de la que depende.
+Compilar contra la biblioteca vieja falla con
+`use of undeclared identifier '...'`. El mirror de la rama estable no trae
+la biblioteca con el fix.
+
+**Resolución**: actualizar primero la biblioteca base al mismo nivel del
+fix (bump de versión menor: `GH_TAGNAME`/`VERSION` + `make makesum` +
+`make install`), y luego recompilar el paquete.
+
+**Ejemplo (7.9)**: `node` 22.23.4 (CVE-2026-111497) referencia
+`BROTLI_DECODER_ERROR_FORMAT_BLOCK_SWITCH`, que solo existe en
+`brotli` ≥ 1.2.1. Se subió `brotli` de 1.2.0 a 1.2.1 y node compiló.
+
+---
+
+## 13. Flavor específico de un paquete en `distribucion.sh`
+
+**Patrón**: `paquete <nombre>` compila el flavor por defecto. Si la
+distribución usa un flavor específico (p. ej. `gtk3`), la línea debe ser
+`FLAVOR=<flavor> paquete <nombre>`; la variable de entorno `FLAVOR` se
+hereda en los `make` internos de la función y produce
+`<nombre>-<versión>-<flavor>.tgz`.
+
+**Ejemplo (7.9)**: `vim` (`FLAVORS=gtk3 lua perl python3 ruby`). Con
+`paquete vim` salía `vim-9.2.1125.tgz` (sin gtk3); con
+`FLAVOR=gtk3 paquete vim` sale `vim-9.2.1125-gtk3.tgz`.
+
+---
+
+## 14. Lock obsoleto en `<pobj>/locks`
+
+**Patrón**: si un build se detiene con `kill -9` (SIGKILL), el lock del
+porte queda en `<pobj>/locks/<port>-<versión>.lock`. El siguiente build se
+queda en `Awaiting lock ...` sin avanzar.
+
+**Resolución**: borrar el lock obsoleto (`doas rm -f
+/usr/ports/pobj/locks/<port>-*.lock`).
+
+**Ejemplo (7.9)**: `node-22.23.4v0.lock`.
+
+---
+
+## 15. Paquetes JIT requieren `wxallowed`
+
+**Patrón**: los paquetes con JIT (node, firefox-esr, etc.) exigen que el
+directorio de objetos (`WRKOBJDIR`/`pobj`) esté en un filesystem montado
+con `wxallowed`. Si `pobj` es un symlink a NFS sin `wxallowed`, `make`
+falla con `must be on a wxallowed filesystem`.
+
+**Resolución**: montar el filesystem con `wxallowed` (p. ej.
+`mount -u -o ...,wxallowed <mountpoint>`) y dejarlo en `/etc/fstab`.
+
+**Ejemplo (7.9)**: `/usr/ports/pobj -> /var/www/adJ-ia/pobj` (NFS). Se
+remontó el NFS con `wxallowed` para compilar node/firefox.
+
+---
+
+## 16. Mirror local con índice desactualizado
+
+**Patrón**: un mirror local puede listar un paquete en su índice pero
+fallar al descargar el `.tgz` (`404 Not Found`), porque el sync quedó
+incompleto. No hay que compilarlo; basta bajarlo del mirror oficial.
+
+**Resolución**: descargar el `.tgz` del mirror oficial (p. ej.
+`cdn.openbsd.org`), firmarlo con la llave de adJ (`pkg_sign`) y copiarlo
+a la distribución; y sincronizar el mirror local.
+
+**Ejemplo (7.9)**: `libggml-0.9.11.tgz` da 404 en el mirror local
+(`192.168.177.29`); se descargó de `cdn.openbsd.org`.

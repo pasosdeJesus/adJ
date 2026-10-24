@@ -856,7 +856,7 @@ if (test "$sn" = "s") then {
   paquete php paquetes "php php-bz2 php-curl php-gd php-intl php-ldap php-mysqli php-pdo_pgsql php-pgsql php-zip" 8.5
   paquete openssl paquetes "openssl" 3.5
   paquete rsync
-  paquete vim
+  FLAVOR=gtk3 paquete vim
   paquete brotli
   paquete python paquetes "python" "3"
   paquete py3-brotli
@@ -1186,7 +1186,7 @@ if (test "$sn" = "s") then {
   paquete tiff
   paquete tk paquetes "tk" 8.6
   #paquete unrar
-  paquete vim
+  FLAVOR=gtk3 paquete vim
   #paquete wavpack
   #paquete webkitgtk41
   #paquete zsh
