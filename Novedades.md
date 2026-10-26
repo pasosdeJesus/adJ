@@ -100,6 +100,8 @@ Novedades tomadas de <https://www.openbsd.org/79.html>
      en OpenBSD/adJ 7.9).
   * `servidor_adJ`
     <https://pasosdejesus.org/doc/servidor_adJ/index.html>
+* Documentado que los archivos `.xlsx` se abren con LibreOffice al
+  descargarlos desde Chromium.
 
 ### 3.3 Paquetes
 

@@ -1,0 +1,14 @@
+$OpenBSD$
+
+Index: src/frontend/main.cpp
+--- src/frontend/main.cpp.orig
++++ src/frontend/main.cpp
+@@ -217,6 +217,8 @@ int main(int argc, char* argv[]) {
+ int main(int argc, char* argv[]) {
+     namespace DU = util::directory;
+ 
++    qputenv("QML_DISABLE_DISTANCEFIELD", "1");
++
+     BibleTimeApp app(argc, argv); //for QApplication
+ 
+     // Parse command line arguments:

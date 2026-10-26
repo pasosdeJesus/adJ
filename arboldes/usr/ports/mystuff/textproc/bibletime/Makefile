@@ -37,4 +37,7 @@ CONFIGURE_ARGS +=	-DCMAKE_PREFIX_PATH=${LOCALBASE}/lib/qt5/cmake/ \
 			-DBUILD_HOWTO_HTML=OFF \
 			-DBUILD_HOWTO_PDF=OFF
 
+post-install:
+	${INSTALL_DATA_DIR} ${PREFIX}/share/doc/bibletime
+
 .include <bsd.port.mk>
