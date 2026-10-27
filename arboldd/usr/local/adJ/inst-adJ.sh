@@ -2795,7 +2795,8 @@ for i in ruby19-railties-3.1.3 ruby19-actionmailer-3.1.3 \
     ruby19-thor-0.14.6p1 ruby19-activesupport-3.1.3 \
     ruby19-actionmailer-3.1.3 ruby19-sprockets-2.0.3 ruby19-rack-cache-1.1 \
     ruby19-actionpack-3.1.3 ruby-2.3.1 ruby23-ri-docs ruby ruby30 ruby30-gdbm \
-    ruby30-ri_docs ruby31-ri_docs ruby32-ri_docs ruby33-ri_docs; do
+    ruby30-ri_docs ruby31-ri_docs ruby32-ri_docs ruby33-ri_docs \
+    ruby34-ri_docs ; do
 	pkg_delete -I -D dependencies $i >> /var/www/tmp/inst-adJ.bitacora 2>&1
 done
 
@@ -2815,11 +2816,11 @@ EOF
 	chown $uadJ:$uadJ /home/$uadJ/.irbrc
 } fi;
 
-VRUBY=3.4
+VRUBY=4.0
 VRUBYSP=`echo $VRUBY | sed -e "s/\.//g"`
 echo "* Configurar ruby-$VRUBY" >> /var/www/tmp/inst-adJ.bitacora;
 uruby=$uadJ
-for vrelim in 2.3 2.4 2.5 2.6 2.7 3.0 3.1 3.2 3.3; do
+for vrelim in 2.3 2.4 2.5 2.6 2.7 3.0 3.1 3.2 3.3 3.4; do
 	v=`(cd /var/db/pkg/; ls) | grep ruby*-$vrelim`
 	if (test -d /var/www/bundler/ruby/$vrelim/bundler/gems/ -o -d /usr/local/lib/ruby/$vrelim -o "$v" != "") then {
 		vr2=`echo $vrelim | sed -e "s/\.//g"`
