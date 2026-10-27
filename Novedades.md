@@ -114,6 +114,9 @@ Novedades tomadas de <https://www.openbsd.org/79.html>
   Solidity para Ethereum/EVM, compilado de forma nativa en C++20 (sin Rust
   ni WASM). Facilita compilar contratos inteligentes en adJ/OpenBSD sin
   recurrir a binarios externos o hacks.
+* Incluye porte de `m` (`@pasosdejesus/m` 0.37.4), el CLI para crear y
+  gestionar proyectos Next.js y Hardhat, con sus dependencias opcionales
+  (`contract-test` y `edr`) empaquetadas. Se instala `/usr/local/bin/m`.
 * Actualizados postgresql a 18.6 y php a 8.5.12 (sin el módulo php-mcrypt)
   desde la rama estable de OpenBSD 7.9.
 * Actualizados por fallas de seguridad críticas (22-23.Oct.2026):

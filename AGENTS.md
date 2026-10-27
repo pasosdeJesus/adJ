@@ -137,6 +137,9 @@ stay out. Note: BSD `grep` has no `\|` alternation in basic regex and no `-B`/`-
 **Conventions:**
 - Ports under `arbol*/`; do not rename released files.
 - Keep the per-release notes (`Novedades*.md`) in sync with the change.
+- Compilation/ports lessons live in `doc/aprendizajes-compilacion.md`; add
+  there any new pattern discovered (package cookies, distinfo, plist,
+  `@tag`, `packages-stable`, Qt quirks, etc.).
 
 **Definition of done:** the change builds with `distribucion.sh` for the **target release**,
 the affected docs are updated (§4b trap 6), and the requirement file (if any) is updated. Git

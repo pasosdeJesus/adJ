@@ -285,3 +285,138 @@ a la distribución; y sincronizar el mirror local.
 
 **Ejemplo (7.9)**: `libggml-0.9.11.tgz` da 404 en el mirror local
 (`192.168.177.29`); se descargó de `cdn.openbsd.org`.
+
+---
+
+## 17. `make package` es no-op por la "cookie" del paquete
+
+**Patrón**: `make package` (y `make build`/`make fake`) no hacen nada si el
+`.tgz` ya existe en el repositorio de paquetes
+(`/usr/ports/packages/<arq>/all/`). El paquete existente actúa como
+"cookie" y marca el objetivo como cumplido, aunque la fuente y el fake
+sean más nuevos. `make -n package` muestra el flujo, pero el `make` real
+no ejecuta nada.
+
+**Resolución**: borrar el paquete anterior (la cookie) antes de
+re-empaquetar: `doas rm -f /usr/ports/packages/amd64/all/<pkg>-*.tgz`.
+
+**Ejemplo (7.9)**: `bibletime-3.0.3.tgz` ya existía de una compilación
+anterior, y `make package` no re-empaquetaba con los cambios.
+
+---
+
+## 18. Distfile ausente detiene el build sin aviso claro
+
+**Patrón**: si el distfile falta en `/usr/ports/distfiles/`, `make
+package` no avanza y no da error explícito (parece "no-op"). El paso a
+paso `make extract` sí reporta el avance y es la forma de diagnosticar.
+
+**Resolución**: descargar el distfile (p. ej. de GitHub con
+`.../archive/refs/tags/<tag>.tar.gz`), verificar el `SHA256` contra
+`distinfo` (`cksum -a sha256 -b`) y colocarlo en `/usr/ports/distfiles/`.
+
+**Ejemplo (7.9)**: `bibletime-3.0.3.tar.gz` (GitHub, tag `v3.0.3`).
+
+---
+
+## 19. `change in plist` y el plist de referencia
+
+**Patrón**: al empaquetar, la infraestructura compara el PLIST generado
+(del fake) contra el de referencia en `/usr/ports/plist/<arq>/<pkg>`. Si
+difieren (p. ej. porque se añadió un directorio), `make package` falla
+con `Error: change in plist` y un diff `--- <pkg> +++ <pkg>-new`.
+
+**Resolución**: `doas make plist` para regenerar `pkg/PLIST` desde el fake
+(esto además quita entradas redundantes, p. ej. el directorio padre).
+Luego actualizar la referencia:
+`doas cp /usr/ports/plist/amd64/<pkg>-new /usr/ports/plist/amd64/<pkg>`,
+y volver a `make package`.
+
+**Ejemplo (7.9)**: `bibletime`; el `pkg/PLIST` tenía `share/doc/` (padre
+redundante) y la referencia no traía `share/doc/bibletime/`.
+
+---
+
+## 20. No empaquetar a mano con `pkg_create`; directorios vacíos en el PLIST
+
+**Patrón**: crear el paquete a mano con `pkg_create` omite las definiciones
+`@tag` que inyecta la infraestructura (p. ej. `gtk-update-icon-cache`,
+`update-desktop-database`); el paquete resultante no se instala
+(`Error: @tag ... definition not found`). Además, un directorio vacío se
+lista en el PLIST con barra final (`share/doc/bibletime/`), pero NO el
+padre (`share/doc/`), que se crea solo al instalar.
+
+**Resolución**: usar siempre `make package` (que arma los argumentos
+completos de `pkg_create`), no `pkg_create` a mano. Para un directorio
+vacío, listarlo con barra final y dejar que `make plist` ajuste el resto.
+
+**Ejemplo (7.9)**: `bibletime` requiere `share/doc/bibletime/` vacío (si
+no, aborta en `initDirectoryCache()` al no hallar la documentación).
+
+---
+
+## 21. Portes de documentación (basico/usuario/servidor_adJ)
+
+**Patrón**: los tres manuales comparten `Make.inc` (`V=<versión>`). Para
+subir versión: cambiar `V`, descargar de GitLab
+`https://gitlab.com/pasosdeJesus/<pkg>/-/archive/<pkg>-<V>/<pkg>-<pkg>-<V>.tar.gz`,
+calcular `cksum -a sha256 -b` (base64) y el tamaño (`wc -c`), actualizar
+`distinfo` y colocar el `.tgz` en `/usr/ports/distfiles/`. El tarball
+descomprime en `<pkg>-<pkg>-<V>` (la regla `post-extract` lo renombra).
+
+**Ejemplo (7.9)**: `basico_adJ`, `usuario_adJ`, `servidor_adJ` subidos a
+7.9.
+
+---
+
+## 22. Seguridad de OpenBSD en `packages-stable`
+
+**Patrón**: las actualizaciones de seguridad (branch -stable) están en
+`packages-stable/<arq>/`, no en `packages/<arq>/` (release). Si el mirror
+local no las tiene, bajan de `cdn.openbsd.org`/`ftp.openbsd.org` y se
+firman con `pkg_sign` para la distribución.
+
+**Ejemplo (7.9)**: `firefox-esr-140.17.0` está en `packages-stable`, no en
+`packages` (que trae 140.10.0).
+
+---
+
+## 23. Qt Quick: `QML_DISABLE_DISTANCEFIELD`
+
+**Patrón**: en Qt Quick, el cache de glifos por "distance field" falla en
+OpenBSD para varias fuentes TTF/OTF (los glifos se dibujan con el mismo
+color/alfa que el fondo, invisibles; el subrayado sí se ve). Se corrige
+con `qputenv("QML_DISABLE_DISTANCEFIELD", "1")` antes de crear la
+`QApplication`.
+
+**Ejemplo (7.9)**: `bibletime` (parche `patch-src_frontend_main_cpp`); sin
+el parche, `QML_DISABLE_DISTANCEFIELD=1 bibletime` es el workaround.
+
+---
+
+## 24. Porte npm con `node_modules` empaquetado (JS puro)
+
+**Patrón**: para un paquete npm JS puro (sin binarios nativos) se arma un
+distfile con el tarball de `npm pack` + `node_modules` (instalado con
+`npm install --omit=dev --ignore-scripts`), se copia todo a
+`${PREFIX}/lib/node_modules/<nombre>/` y se hace symlink del binario con
+`${TRUEPREFIX}`. Claves:
+
+- `COMMENT` debe tener **60 caracteres como máximo** (`pkg_create` aborta
+  con "comment is too long").
+- `DESCR` debe ser **ASCII puro**: el em dash `—` (U+2014) provoca
+  "DESCR contains weird characters"; usar `:` o `-`.
+- Antes de empaquetar, **borrar los `man/` de `node_modules`**: `update-plist`
+  marca `man/man1/*.1` como `@man` aunque estén bajo `lib/node_modules/...`
+  (p. ej. la copia anidada de un *peer dependency*), y `pkg_add` sugiere
+  agregar esa ruta a `/etc/man.conf`. La página real va en
+  `${PREFIX}/man/man1/`.
+- Los *peerDependencies* (npm >= 7) se instalan solos y quedan anidados
+  (p. ej. `@pasosdejesus/m` dentro de `node_modules/@pasosdejesus/m` por
+  `contract-test`); no hay que podarlos, se necesitan para resolver imports.
+- Generar el PLIST con `make plist` (no a mano), `NO_BUILD=Yes`,
+  `RUN_DEPENDS=lang/node`, `WRKDIST=${WRKDIR}/package` (root de `npm pack`).
+
+**Ejemplo (7.9)**: `mystuff/devel/m` (`@pasosdejesus/m` 0.37.4), con
+`@pasosdejesus/contract-test` y `@pasosdejesus/edr` como opcionales
+empaquetadas.
