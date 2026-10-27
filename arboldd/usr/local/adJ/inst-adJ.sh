@@ -2172,8 +2172,6 @@ if (test "$?" != "0") then {
 	insacp jasper
 	insacp libidn
 	insacp libffi
-	insacp tcl
-	insacp tk
 	insacp python
 	insacp pcre
 	insacp json-c
