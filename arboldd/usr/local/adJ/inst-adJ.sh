@@ -2786,7 +2786,7 @@ rm -f $docroot/phpinfo.php
 	echo "* Saltando"; >> /var/www/tmp/inst-adJ.sh
 } fi;
 
-insacp ispell
+#insacp ispell
 
 
 for i in ruby19-railties-3.1.3 ruby19-actionmailer-3.1.3 \
