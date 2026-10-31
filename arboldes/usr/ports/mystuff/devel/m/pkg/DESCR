@@ -1,10 +1,44 @@
-Motor para crear y gestionar proyectos estilo Pasos de Jesus.
+Command-line tool to create and manage Web 2.5 applications in a
+Rails-like fashion: Next.js and PostgreSQL for the application, with
+contracts and wallets only where they add value.
 
-Incluye comandos para:
-- ai:framework, ai:principles, ai:skill: alineacion cristiana
-- ai:context, ai:readfile, ai:writefile, ai:edit: interaccion con agentes IA
-- ai:grep, ai:glob: busqueda de archivos
-- m:create, m:update, m:check: proyectos Next.js y Hardhat
-- req:list, req:show, req:cross, req:create, req:close: gestion de requerimientos
-- db:create, db:migrate, db:console, db:dump, db:restore: base de datos
-- eng:opwallet:generate, eng:opwallet:send: billeteras blockchain
+Installs `m` in /usr/local/bin/m, its manual page (man 1 m) and its
+templates, so projects can be created without network or npm.
+
+Bundles the Pasos de Jesus extension (`@pasosdejesus/mpdj`):
+`ai:framework`, `ai:principles`, `ai:skill`, `ai:adJ` and
+`eng:credentials:*` work without installing anything else.
+
+Main commands:
+
+- m:create, m:update, m:check: create a project (apps/web, apps/contracts
+  and engine packages), update it against the templates and verify the
+  recommended layout.
+- db:create, db:drop, db:super:createuser, db:migrate, db:rollback,
+  db:mig:make, db:seed, db:console, db:dump, db:restore: PostgreSQL as in
+  `rails db:*`, with db/structure.sql as the reference schema and types
+  generated in db/db.d.ts.
+- contract:compile, contract:test, contract:typechain, contract:node,
+  contract:deploy, contract:verify, contract:checkdeploy, contract:clean:
+  Solidity without Hardhat (native solc or solc-js), Hardhat-compatible
+  artifacts and tests on an in-memory VM.
+- eng:opwallet:*: operator wallets with offline signing, replacing Foundry's
+  `cast` on OpenBSD; eng:credentials:*: credentials as NFTs.
+- eng:list, eng:sync, eng:check, eng:verify, eng:remove: self-contained
+  engines added or removed without touching the core, with verifiable
+  provenance when copied into the project.
+- req:list, req:show, req:cross, req:compare, req:sync-*: requirements in
+  REQ/ synced with GitLab work items or GitHub issues.
+- ai:skill, ai:context, ai:edit, ai:readfile, ai:writefile, ai:grep,
+  ai:glob: working with AI agents.
+
+Documentation:
+
+- man 1 m
+- https://gitlab.com/pasosdeJesus/m
+- /usr/local/lib/node_modules/@pasosdejesus/m/dist/CHANGELOG.md
+- Getting started with contracts and wallets (in English and Spanish):
+  https://gitlab.com/pasosdeJesus/m/-/blob/main/doc/tutorial-contracts-openbsd-1/es.md
+
+Tested on OpenBSD/adJ with lang/node.  Creating projects requires pnpm 11
+(corepack enable pnpm): pnpm 12 cannot be installed on OpenBSD.
