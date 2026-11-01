@@ -31,11 +31,12 @@ perl -0777 -pe \
   's/>[0-9]+\.[0-9]+[a-zA-Z0-9]*<\/tspan><\/text>/>'"$VERSION"'<\/tspan><\/text>/' \
   "$SVG" > "$TMP/logov.svg"
 
-# 2) Renderizar a las 4 profundidades a 256x185 (mismo tamaño y número de
-#    colores que los XPM actuales: 3, 32, 255 y 255).
-convert "$TMP/logov.svg" -resize 256x185! -colors 3   "$DEST/adJ_1bpp.xpm"
-convert "$TMP/logov.svg" -resize 256x185! -colors 32  "$DEST/adJ_4bpp.xpm"
-convert "$TMP/logov.svg" -resize 256x185! -colors 255 "$DEST/adJ_8bpp.xpm"
-convert "$TMP/logov.svg" -resize 256x185! -colors 255 "$DEST/adJ_15bpp.xpm"
+# 2) Renderizar con fondo transparente (rsvg-convert preserva el canal alfa;
+#    convert aplana el SVG a blanco) y cuantizar a las 4 profundidades a 256x185.
+rsvg-convert -w 256 -h 185 "$TMP/logov.svg" -o "$TMP/logo.png"
+convert "$TMP/logo.png" -colors 3   "$DEST/adJ_1bpp.xpm"
+convert "$TMP/logo.png" -colors 32  "$DEST/adJ_4bpp.xpm"
+convert "$TMP/logo.png" -colors 255 "$DEST/adJ_8bpp.xpm"
+convert "$TMP/logo.png" -colors 255 "$DEST/adJ_15bpp.xpm"
 
 echo "[OK] Logo actualizado a versión $VERSION en $DEST"
