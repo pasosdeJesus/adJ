@@ -160,7 +160,7 @@ Publicar en la lista de desarrollo.
 1.  **Usar la Rama de la Versión:** Asegurarse de estar trabajando sobre la rama correcta (e.g., `git checkout ADJ_7_8`).
 2.  **Actualizar Contenido Propio:** Actualizar SIVeL, evangelios, Mt77 y otros paquetes específicos de `adJ`.
 3.  **Actualizar Documentación:** Actualizar los manuales `basico_adJ`, `usuario_adJ` y `servidor_adJ` y publicarlos.
-4.  **Actualizar Logo:** Con GIMP, actualizar el número de versión en el logo que presenta `xenodm`.
+4.  **Actualizar Logo:** Poner la nueva versión en el `<tspan>` de `arboldvd/medios/logov.svg` (y copiarlo a `<versión>-amd64/medios/`) y ejecutar `hdes/cambia-version-logo.sh <versión>` para regenerar los `adJ_*.xpm` que presenta `xenodm`.
 5.  **Actualizar Instalador:** Revisar y adaptar el instalador (`tminiroot`) a las novedades de OpenBSD.
 6.  **Realizar Pasos de Beta:** Ejecutar los pasos análogos a la publicación de una versión beta.
 7.  **Publicar "Release" en GitHub:** Crear una nueva publicación en la página de releases del repositorio.

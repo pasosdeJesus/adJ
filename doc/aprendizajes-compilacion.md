@@ -420,3 +420,73 @@ distfile con el tarball de `npm pack` + `node_modules` (instalado con
 **Ejemplo (7.9)**: `mystuff/devel/m` (`@pasosdejesus/m` 0.37.4), con
 `@pasosdejesus/contract-test` y `@pasosdejesus/edr` como opcionales
 empaquetadas.
+
+---
+
+## 25. Logo de xenodm: regenerar desde el SVG, no editar píxeles
+
+**Patrón**: el logo de login (`arboldd/etc/X11/xenodm/pixmaps/adJ_*.xpm`)
+se regenera desde `arboldvd/medios/logov.svg`, que trae la versión como un
+`<tspan>` de texto. Cambiar la versión y re-renderizar es más fiable que
+editar píxeles a mano (antes se hacía con GIMP).
+
+**Resolución**: `hdes/cambia-version-logo.sh <versión>` (desde la raíz del
+repo) cambia la versión en el `<tspan>` con `perl` y renderiza a las 4
+profundidades (`-colors 3/32/255/255`) a 256×185.
+
+**Claves**:
+
+- `convert foo.svg …` **aplana el canal alfa a blanco** (ImageMagick delega
+  en inkscape). Para conservar el fondo transparente, renderizar primero con
+  `rsvg-convert -w 256 -h 185` y luego `convert foo.png -colors N xpm:`.
+- `-colors N` de ImageMagick **cuenta también el `None`**; para "None +
+  rojo + blanco" (3 entradas) se usa `-colors 3`, no `-colors 2`.
+- El fondo transparente queda como `c None` en el XPM.
+- Ajustar el lienzo del SVG al contenido: `viewBox` con el bbox que da
+  `inkscape --query-all`.
+
+**Ejemplo (7.9)**: `logov.svg` traía la versión `5.8` y un lienzo Carta
+(612×792pt); se ajustó el lienzo a 705×508, se puso `7.9` y se regeneraron
+los XPM. El `logov.svg` actualizado también se copia a `<versión>-amd64/medios/`.
+
+---
+
+## 26. Actualizar el instalador (tminiroot) a una nueva versión de OpenBSD
+
+**Patrón**: el instalador traducido vive en `tminiroot/`: `install.sub`
+(crudo), `install-lang.sub` (plantilla con mensajes `$_sl*`) y
+`install-es.sub`/`install-en.sub` (generados con `conv.sh`). Al subir de
+versión hay que sincronizar con `/usr/src/distrib/`.
+
+**Resolución**:
+
+- Copiar el `install.sub` nuevo: `cp /usr/src/distrib/miniroot/install.sub install.sub`
+  (y `install-amd64.md` desde `distrib/amd64/common/` si cambió).
+- Aplicar el `git diff` del crudo a `install-lang.sub` (los mensajes van con
+  variables `$_sl*`; la lógica se copia tal cual).
+- Regenerar con `./conv.sh es` y `./conv.sh en`; borrar los temporales
+  `install-*-sinacentos` que deja `conv.sh`.
+
+**Ejemplo (7.9)**: `install.sub` pasó de `1.1278` a `1.1286`: `[a-p]` →
+`[${PARTITIONS}]`, IPv6 por defecto `none`→`autoconf`, `libLLVM.so.[0-8]`,
+refactor de `munge_fstab`/`pick_keydisk` y la variable `PARTITIONS=a-p`
+(con `a-zA-Z` si `kern.maxpartitions=52`). También se eliminaron dos líneas
+obsoletas de `soii.key` (el sysctl `net.inet6.ip6.soiikey` no existe; la
+clave RFC 7217 es el archivo `/etc/soii.key` que lee `slaacd`).
+
+---
+
+## 27. Regenerar `bsd.rd`
+
+**Patrón**: `bsd.rd` (kernel instalador) se regenera con `autoBsdrd=s` en
+`ver-local.sh` y `doas ./distribucion.sh`. No hace falta recompilar todo:
+con los `auto*` previos en `n` solo corre ese bloque.
+
+**Resolución**: el bloque `autoBsdrd` (`distribucion.sh:613-654`) enlaza
+`tminiroot/install-es.sub` → `/usr/src/distrib/miniroot/install-es.sub`,
+compila `cdbr` y `ramdisk_cd` con `DLENG=es`, y copia `obj/bsd.rd` a
+`/releasedir` y a `<versión>-amd64/`. Requiere `/usr/src/distrib`,
+`/sys/arch/amd64/stand/cdbr` y el `DESTDIR` poblado.
+
+**Ejemplo (7.9)**: tras actualizar `tminiroot/` se regeneró `bsd.rd`
+(11 315 152 bytes) y `eficdboot` en `7.9b1-amd64/`.
