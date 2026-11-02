@@ -14,8 +14,13 @@ MAINTAINER=	Vladimir Támara Patiño <vtamara@pasosdeJesus.org>
 HOMEPAGE=	http://traduccion.pasosdeJesus.org
 SITES=	https://gitlab.com/pasosdeJesus/biblia_dp/-/archive/v$V/
 DISTFILES=	v${V}.zip
+SITES.a=	https://gitlab.com/pasosdeJesus/herram_confsh/-/archive/${VHERRAMCORTA}/
+DISTFILES.a=	herram_confsh-${VHERRAMCORTA}-${VHERRAM}.tar.gz
 
 WRKDIST=        ${WRKDIR}/biblia_dp-v${V}-${DIRCOM}
+
+pre-patch:
+	mv -f ${WRKDIR}/herram_confsh-${VHERRAMCORTA}-${VHERRAM}/* ${WRKDIST}/herram_confsh/
 
 #Public domain
 PERMIT_PACKAGE=	Yes
