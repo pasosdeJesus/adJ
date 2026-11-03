@@ -84,9 +84,9 @@ if [ -n "${NFS_SERVER}" ] && [ -n "${NFS_PATH}" ]; then
 					;;
 			esac
 			mount -t nfs -o "$opts" \
-				"${NFS_SERVER}:${NFS_PATH}${dir}" "$dir" 2>/dev/null || true
+				"${NFS_SERVER}:${NFS_PATH}" "$dir" 2>/dev/null || true
 			if ! grep -q " ${dir} " /etc/fstab 2>/dev/null; then
-				echo "${NFS_SERVER}:${NFS_PATH}${dir} ${dir} nfs ${opts} 0 0" >> /etc/fstab
+				echo "${NFS_SERVER}:${NFS_PATH} ${dir} nfs ${opts} 0 0" >> /etc/fstab
 			fi
 			echo "  + ${dir} montado via NFS"
 		fi
