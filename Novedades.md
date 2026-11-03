@@ -71,10 +71,10 @@ Novedades tomadas de <https://www.openbsd.org/79.html>
     RFC 10024 -- TLS 1.3)
   * Incluye OpenSSH 10.3
   * Redes: IPv6 autoconf (SLAAC) habilitado por defecto
-* El sistema base incluye mejoras a componentes auditados y mejorados
-  como, `llvm 19.1.7`,  `Xenocara` (basado en `Xorg` 7.7),
-  `perl 5.42.2`
-* El repositorio de paquetes de OpenBSD cuenta con 13044 para amd64
+* Se actualizan `llvm 19.1.7`, `Xenocara` (basado en `Xorg` 7.7) y
+  `perl 5.42.2`.
+* El repositorio de paquetes de OpenBSD cuenta con 13044 paquetes para
+  amd64.
 
 
 ## 3. NOVEDADES RESPECTO A ADJ 7.8 PROVENIENTES DE PASOS DE JESÚS
@@ -106,17 +106,19 @@ Novedades tomadas de <https://www.openbsd.org/79.html>
 ### 3.3 Paquetes
 
 * Incluye porte de ruby 4.0.7 con `doas gem update --system` habilitado
-* Incluye evangelios-0.9.15 que agrega traducción de Hebreos y hace
-  mejoras en varios libros tras retroalimentación de varios modelos de IA
+* Incluye evangelios-0.9.16 que agrega traducción de 1 Pedro y hace
+  arreglos en varios libros tras retroalimentación de varios modelos de IA
   cuidadosamente analizada (DeepSeek y Gemini).
 * Incluye porte de sivel-2.2.1
 * Incluye porte de solidity-0.8.37 (`solc`), el compilador de contratos
   Solidity para Ethereum/EVM, compilado de forma nativa en C++20 (sin Rust
   ni WASM). Facilita compilar contratos inteligentes en adJ/OpenBSD sin
   recurrir a binarios externos o hacks.
-* Incluye porte de `m` (`@pasosdejesus/m` 0.37.4), el CLI para crear y
-  gestionar proyectos Next.js y Hardhat, con sus dependencias opcionales
-  (`contract-test` y `edr`) empaquetadas. Se instala `/usr/local/bin/m`.
+* Incluye porte de `m` (`@pasosdejesus/m` 0.37.8), el CLI para crear y
+  gestionar proyectos Next.js y contratos Solidity (sin Hardhat), con la
+  extensión `mpdj` (`ai:*`, `eng:credentials:*`) y las dependencias
+  opcionales (`contract-test` y `edr`) empaquetadas. Se instala
+  `/usr/local/bin/m`.
 * Actualizados postgresql a 18.6 y php a 8.5.12 desde la rama estable de 
   OpenBSD 7.9.
 * Actualizados por fallas de seguridad críticas (22-23.Oct.2026):

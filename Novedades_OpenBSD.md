@@ -82,7 +82,7 @@ Con respecto a OpenBSD 7.9 las novedades son:
 		uselocale wcscoll wcsnrtombs_l wcsrtombs_l wcstombs_l
 		wcsxfrm wctob_l wctomb_l wctype_l xlocale
 	* Locales nuevos en /usr/share/locale/
-		* Entre otros de todos los paises de latinoamérica
+		* Entre otros de todos los países de latinoamérica
 	* Zonas horarias nuevas en /usr/share/zoneinfo:
 		* Asia/Khandyga Asia/Ust-Nera Europe/Busingen 
 		posix/Asia/Khandyga posix/Asia/Ust-Nera posix/Europe/Busingen
@@ -92,12 +92,12 @@ Con respecto a OpenBSD 7.9 las novedades son:
 		* xlocale.h  	Soporte para xlocale
 	* Nuevo /usr/libdata/perl5/site_perl/amd64-openbsd/xlocale.ph
 	* Archivos de configuración en /etc
-		* X11/xenodm/pixmas/adJ_*.xpm	Logo
+		* X11/xenodm/pixmaps/adJ_*.xpm	Logo
 		* signify/adJ-*.pub	Llaves criptográficas
 		* En la mayoría de casos daemon remplazado por servicio
-	* Archivos de configuración de ejemplo en /usr/local/shar/examples/adJ
+	* Archivos de configuración de ejemplo en /usr/local/share/examples/adJ
 		* varcorreo.sh	Usado por adicuenta	
-		* varmonitorea.sh	Usar por monitorea
+		* varmonitorea.sh	Usado por monitorea
 
 * Paquetes
 	* Retroportados para cerrar fallas y/o actualizar y/o usar xlocale:
@@ -117,7 +117,6 @@ Con respecto a OpenBSD 7.9 las novedades son:
 		* colorls	Ordena alfabeticamente de acuerdo a locale
 		* hexedit 	Soporta tamaños de archivos más grandes
 		* xfe		Soporta paquetes tgz
-    * ocaml 4.12, ocamlbuild, findlib, dune, hevea
 	* Unicos en adJ 
 		* lang/solidity
 		* emulators/realboy , textproc/biblesync
@@ -126,7 +125,7 @@ Con respecto a OpenBSD 7.9 las novedades son:
 	* Únicos en adJ liderados por Pasos de Jesús
 		* evangelios_dp	Traducción en progreso de dominio público
 		* basico_adJ	Documentación de uso remoto y básico
-		* usuario_adJ	Docuemntación como sistema de escritorio
+		* usuario_adJ	Documentación como sistema de escritorio
 		* servidor_adJ	Documentación como servidor y cortafuegos
 		* AnimalesI	Ejercicios lectoescritura
 		* AprestamientoI	Ejercicios lectoescritura
@@ -135,5 +134,6 @@ Con respecto a OpenBSD 7.9 las novedades son:
 		* TiposLectoEscritura Tipografía
 		* asigna		Asigna horario
 		* Mt77		Buscador
-		* sivel 2.2	Sistema de Información de violencia política
+		* m		CLI para crear/gestionar proyectos Next.js y contratos
+		* sivel 2.2.1	Sistema de Información de violencia política
 
