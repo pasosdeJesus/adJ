@@ -57,6 +57,8 @@ Con respecto a OpenBSD 7.9 las novedades son:
 		* inst-adJ.sh	Instala adJ
 		* inst-sivel.sh	Instala SIVeL
 		* inst.sh		Inicia inst-adJ
+		* prep-vm-ia-anfitrion 	Prepara anfitrión para VMs de desarrollo con IA
+		* prep-vm-ia-invitado 	Prepara VM invitada (Crush/DeepSeek, NFS, Go)
         * reconf-fluxbox.sh reconfigura fluxbox en una cuenta.
 		* reflejazona.sh 	Genera zona reflejada para DNS
 		* repadicuenta.sh Ejecuta adicuenta para todo usuario

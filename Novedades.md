@@ -102,6 +102,12 @@ Novedades tomadas de <https://www.openbsd.org/79.html>
     <https://pasosdejesus.org/doc/servidor_adJ/index.html>
 * Documentado que los archivos `.xlsx` se abren con LibreOffice al
   descargarlos desde Chromium.
+* Nuevos scripts para preparar máquinas virtuales de desarrollo con IA
+  (vmd + NFS), en `/usr/local/adJ/`:
+  * `prep-vm-ia-anfitrion` — crea la VM en el anfitrión, exporta `/var/www`
+    por NFS y opcionalmente autoinstala adJ desde la ISO.
+  * `prep-vm-ia-invitado` — configura una VM adJ ya instalada (Go, Crush,
+    montaje NFS, timecounter, ntpd).
 
 ### 3.3 Paquetes
 
@@ -135,11 +141,6 @@ Novedades tomadas de <https://www.openbsd.org/79.html>
 
 ## 4. FE DE ERRATAS
 
-- El archivo `BUILDINFO` no quedó incluido en el `SHA256` de la imagen de
-  instalación. Al final de la instalación el instalador pregunta
-  "Suma de verificación de BUILDINFO falló. ¿Continuar en todo caso?"; debe
-  responder `si` para completarla (no afecta el sistema instalado). Se
-  corregirá en la próxima revisión.
 - `xenodm` no logra utilizar un teclado latinoamericano que se haya
   configurado en `/etc/kbdtype`.  Para usarlo
   agregue en `/etc/X11/xenodm/Xsetup_0`:
