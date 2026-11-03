@@ -135,6 +135,11 @@ Novedades tomadas de <https://www.openbsd.org/79.html>
 
 ## 4. FE DE ERRATAS
 
+- El archivo `BUILDINFO` no quedó incluido en el `SHA256` de la imagen de
+  instalación. Al final de la instalación el instalador pregunta
+  "Suma de verificación de BUILDINFO falló. ¿Continuar en todo caso?"; debe
+  responder `si` para completarla (no afecta el sistema instalado). Se
+  corregirá en la próxima revisión.
 - `xenodm` no logra utilizar un teclado latinoamericano que se haya
   configurado en `/etc/kbdtype`.  Para usarlo
   agregue en `/etc/X11/xenodm/Xsetup_0`:
