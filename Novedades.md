@@ -4,7 +4,7 @@ Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
 
 ### Versión: 7.9
-Fecha de publicación: 1/Abr/2026
+Fecha de publicación: 3/Nov/2026
 
 Puedes ver novedades respecto a OpenBSD en:
   <https://gitlab.com/pasosdeJesus/adJ/-/blob/ADJ_7_9/Novedades_OpenBSD.md>
@@ -117,8 +117,8 @@ Novedades tomadas de <https://www.openbsd.org/79.html>
 * Incluye porte de `m` (`@pasosdejesus/m` 0.37.4), el CLI para crear y
   gestionar proyectos Next.js y Hardhat, con sus dependencias opcionales
   (`contract-test` y `edr`) empaquetadas. Se instala `/usr/local/bin/m`.
-* Actualizados postgresql a 18.6 y php a 8.5.12 (sin el módulo php-mcrypt)
-  desde la rama estable de OpenBSD 7.9.
+* Actualizados postgresql a 18.6 y php a 8.5.12 desde la rama estable de 
+  OpenBSD 7.9.
 * Actualizados por fallas de seguridad críticas (22-23.Oct.2026):
   php-8.5.12 (CVE-2026-109618 y CVE-2026-109619), node-22.23.4,
   brotli-1.2.1 y py3-brotli-1.2.1 (CVE-2026-111497),
