@@ -46,7 +46,7 @@ encontrarás:
   distribución oficial (pueden no estar firmados y requerir instalación con
   `pkg_add -D unsigned _paquete_`).
 
-## 2. NOVEDADES RESPECTO A ADJ 7.9 PROVENIENTES DE OPENBSD
+## 2. NOVEDADES PROVENIENTES DE OPENBSD 7.9
 
 ### 2.1 Kernel y Sistema Base
 
@@ -54,8 +54,7 @@ Novedades tomadas de <https://www.openbsd.org/79.html>
 
 
 * El sistema base incluye mejoras a componentes auditados y mejorados
-* Aplicados parches de seguridad hasta el 10.Sep.2026 provenientes de
-  OpenBSD que incluyen soluciones a fallas
+* Aplicados parches de seguridad de OpenBSD hasta el 23.Oct.2026.
 * Controladores ampliados o mejorados para amd64
   * Tarjetas Ethernet: `rge` ahora soporta Realtek RTL8126. `bnxt`
     ahora soporta dispositivos BCM575xx
@@ -103,7 +102,7 @@ Novedades tomadas de <https://www.openbsd.org/79.html>
 * Documentado que los archivos `.xlsx` se abren con LibreOffice al
   descargarlos desde Chromium.
 * Nuevos scripts para preparar máquinas virtuales de desarrollo con IA
-  (vmd + NFS), en `/usr/local/adJ/`:
+  (vmd + NFS + crush), en `/usr/local/adJ/`:
   * `prep-vm-ia-anfitrion` — crea la VM en el anfitrión, exporta `/var/www`
     por NFS y opcionalmente autoinstala adJ desde la ISO.
   * `prep-vm-ia-invitado` — configura una VM adJ ya instalada (Go, Crush,
@@ -114,7 +113,8 @@ Novedades tomadas de <https://www.openbsd.org/79.html>
 * Incluye porte de ruby 4.0.7 con `doas gem update --system` habilitado
 * Incluye evangelios-0.9.16 que agrega traducción de 1 Pedro y hace
   arreglos en varios libros tras retroalimentación de varios modelos de IA
-  cuidadosamente analizada (DeepSeek y Gemini).
+  cuidadosamente analizada (DeepSeek y Gemini). El directorio
+  `evangelios_dp` del CD contiene lo mismo que este paquete.
 * Incluye porte de sivel-2.2.1
 * Incluye porte de solidity-0.8.37 (`solc`), el compilador de contratos
   Solidity para Ethereum/EVM, compilado de forma nativa en C++20 (sin Rust
@@ -139,7 +139,18 @@ Novedades tomadas de <https://www.openbsd.org/79.html>
   png-1.6.59, py3-asn1-0.6.3v0, redis 6.2.20, sqlite3-3.50.7p0
 
 
-## 4. FE DE ERRATAS
+## 4. VERIFICACIÓN DE LA DESCARGA
+
+Antes de usar cualquier imagen, verifique su integridad con `signify`:
+
+```
+doas signify -C -p /etc/signify/adJ-79-base.pub -x SHA256.sig
+```
+
+El comando debe reportar `Signature Verified` para cada archivo. Si falla,
+no use la descarga: vuelva a descargarla.
+
+## 5. FE DE ERRATAS
 
 - `xenodm` no logra utilizar un teclado latinoamericano que se haya
   configurado en `/etc/kbdtype`.  Para usarlo
@@ -148,9 +159,11 @@ Novedades tomadas de <https://www.openbsd.org/79.html>
   setxkbmap latam
 ```
 
-## 5. SI QUIERES AYUDARNOS
+## 6. SI QUIERES AYUDARNOS
 
 * Agradecemos tus oraciones.
+* Si prefieres ayudar de otra forma, también puedes: dar una estrella,
+  patrocinar, comprar una USB, mejorar la documentación o traducir.
 * Si tienes una cuenta en gitlab o en github por favor ponle una estrella al
   repositorio en [gitlab](https://gitlab.com/pasosdeJesus/adJ) o
   en [github](https://github.com/pasosdeJesus/adJ/)
