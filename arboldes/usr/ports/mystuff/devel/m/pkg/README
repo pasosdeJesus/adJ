@@ -1,0 +1,55 @@
++-----------------------------------------------------------------------
+| Running ${FULLPKGNAME} on OpenBSD
++-----------------------------------------------------------------------
+
+The `m` CLI is installed as /usr/local/bin/m, with its manual page
+(man 1 m) and its project templates under
+/usr/local/lib/node_modules/@pasosdejesus/m/dist/templates (the copy that
+`m:create` reads, so no network is needed).
+
+The Pasos de Jesus extension (mpdj) is vendored at
+/usr/local/lib/node_modules/@pasosdejesus/mpdj, so `ai:framework`,
+`ai:principles`, `ai:skill`, `ai:adJ` and `eng:credentials:*` work out of
+the box.
+
+First checks:
+
+	m --version
+	m --help
+	m:create myproject "description"
+
+Requirements
+
+Creating projects needs pnpm 11 (corepack enable pnpm).  pnpm 12 cannot be
+installed on OpenBSD: it only ships per-platform binaries.
+
+!!! DO NOT INSTALL m WITH npm AS root
+!!!
+!!! "doas npm i -g @pasosdejesus/m" writes to /usr/local, the same tree
+!!! pkg_add owns: it overwrites bin/m and lib/node_modules/@pasosdejesus/m.
+!!! From then on the package cannot be accounted for: pkg_check reports
+!!! "couldn't read packing-list", pkg_delete does not clean it up and
+!!! pkg_add -u may mix the port's files with npm's.
+
+For a version newer than the port, use a user copy:
+
+	m m:self-update        # installs into ~/.m-cli
+	# keep ~/.bin before /usr/local/bin in PATH
+
+A recent m prefers the newest managed copy (and says which one it uses) and
+never runs a copy owned by another user.  For a one-off: npx @pasosdejesus/m.
+
+If you already installed it with npm as root, restore the package:
+
+	doas npm uninstall -g @pasosdejesus/m
+	doas pkg_delete -f m
+	doas pkg_add -u m
+	pkg_check m
+
+Documentation
+
+	man 1 m
+	https://gitlab.com/pasosdeJesus/m
+	Contracts and wallet tutorial (English and Spanish), in
+	doc/tutorial-contracts-openbsd-1/:
+	https://gitlab.com/pasosdeJesus/m/-/tree/main/doc

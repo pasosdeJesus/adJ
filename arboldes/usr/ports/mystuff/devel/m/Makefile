@@ -1,6 +1,6 @@
 COMMENT =	Rails-style CLI for Web 2.5 apps (Next.js + PostgreSQL)
 
-V =		0.37.8
+V =		0.37.11
 DISTNAME =	m-${V}-full
 PKGNAME =	m-${V}
 CATEGORIES =	devel
@@ -19,10 +19,13 @@ WRKDIST =	${WRKDIR}/package
 # extension (mpdj) vendored alongside, so this port does not download anything
 # from npm:
 #
-#   npm pack @pasosdejesus/m@0.37.8        # -> package/
+#   npm pack @pasosdejesus/m@0.37.11       # -> package/
+#   # quitar devDependencies/optionalPeerDependencies/peerDependencies
+#   # (msip privado, link: a remix, radix-ui/react/next) antes de instalar
+#   node -e 'const f=require("fs");const p=JSON.parse(f.readFileSync("package.json"));delete p.devDependencies;delete p.optionalPeerDependencies;delete p.peerDependencies;f.writeFileSync("package.json",JSON.stringify(p,null,2)+"\n")'
 #   (cd package && npm install --omit=dev)
-#   npm pack @pasosdejesus/mpdj@0.3.2      # -> package-mpdj/
-#   tar czf m-0.37.8-full.tar.gz package package-mpdj
+#   npm pack @pasosdejesus/mpdj@0.3.3      # -> package-mpdj/
+#   tar czf m-0.37.11-full.tar.gz package package-mpdj
 #
 # With `package-mpdj` as a sibling of `package`, `m` loads it as a plugin
 # (`ai:*`, `eng:credentials:*`) and finds `mpdj/ia` without configuration.

@@ -1,0 +1,10 @@
+The m CLI is installed as /usr/local/bin/m.  Quick checks:
+
+	m --version
+	m --help
+	m:create myproject "description"
+
+Read the package readme for requirements and gotchas (pnpm 11, and why you
+must not install m with npm as root):
+
+	pkg_readme m
