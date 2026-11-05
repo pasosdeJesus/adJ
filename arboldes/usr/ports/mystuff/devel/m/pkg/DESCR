@@ -5,10 +5,6 @@ contracts and wallets only where they add value.
 Installs `m` in /usr/local/bin/m, its manual page (man 1 m) and its
 templates, so projects can be created without network or npm.
 
-Bundles the Pasos de Jesus extension (`@pasosdejesus/mpdj`):
-`ai:framework`, `ai:principles`, `ai:skill`, `ai:adJ` and
-`eng:credentials:*` work without installing anything else.
-
 Main commands:
 
 - m:create, m:update, m:check: create a project (apps/web, apps/contracts
@@ -23,13 +19,13 @@ Main commands:
   Solidity without Hardhat (native solc or solc-js), Hardhat-compatible
   artifacts and tests on an in-memory VM.
 - eng:opwallet:*: operator wallets with offline signing, replacing Foundry's
-  `cast` on OpenBSD; eng:credentials:*: credentials as NFTs.
+  `cast` on OpenBSD.
 - eng:list, eng:sync, eng:check, eng:verify, eng:remove: self-contained
   engines added or removed without touching the core, with verifiable
   provenance when copied into the project.
 - req:list, req:show, req:cross, req:compare, req:sync-*: requirements in
   REQ/ synced with GitLab work items or GitHub issues.
-- ai:skill, ai:context, ai:edit, ai:readfile, ai:writefile, ai:grep,
+- ai:context, ai:edit, ai:readfile, ai:writefile, ai:grep,
   ai:glob: working with AI agents.
 
 Documentation:

@@ -493,42 +493,38 @@ compila `cdbr` y `ramdisk_cd` con `DLENG=es`, y copia `obj/bsd.rd` a
 
 ---
 
-## 28. Porte `m` desde tarballs npm individuales (sin blob `-full`)
+## 28. Porte `m` con tarball `-full` generado por CI (sin mpdj)
 
-**Patrón**: el porte `mystuff/devel/m` empaquetaba `m` + `mpdj` como un
-tarball `-full` armado a mano (con `node_modules` preinstalado). Eso no es
-reproducible ni compartible con openbsd-ports. Se reestructuró para bajar
-los tarballs publicados en npm y construir con `pnpm`.
+**Patrón**: el porte `mystuff/devel/m` se reestructuró para no depender de un
+`node_modules` preinstalado a mano ni de red durante la compilación. La CI de
+`m` genera un tarball `-full` (dist + man + node_modules de producción) y lo
+publica en el Generic Package Registry de GitLab; el porte lo baja como
+`DISTFILE` único con `NO_BUILD`. La extensión `mpdj` (PdJ) va aparte y NO se
+incluye en el porte genérico.
 
 **Resolución**:
 
-- `SITES`/`DISTFILES`: el tarball de `@pasosdejesus/m` y el de
-  `@pasosdejesus/mpdj` (extensión). `contract-test`/`edr`/`solc` son
-  `optionalDependencies`/transitivas y las resuelve `pnpm`.
-- `npm pack` de npm mete TODO en un `package/` de nivel superior; por eso
-  `EXTRACT_ONLY = ${DISTNAME}.tgz` (solo `m` se extrae automáticamente) y
-  `mpdj` se desempaca a mano en `do-build`.
-- `m` trae `devDependencies` que ni npm ni pnpm resuelven
-  (`@pasosdejesus/msip` es privado, `@remix-project/*` usa `link:`). Hay que
-  borrar `devDependencies`, `optionalPeerDependencies` y `peerDependencies`
-  del `package.json` antes de instalar.
-- `m` es un proyecto pnpm: se usa
-  `pnpm install --frozen-lockfile --prod --ignore-scripts --node-linker=hoisted`.
-  `--node-linker=hoisted` deja un `node_modules` plano y autocontenido (el
-  layout por defecto usa enlaces simbólicos al store global, que se rompen
-  al empaquetar). `packageManager: pnpm@11.28.6` en el `package.json` hace
-  que corepack use pnpm 11 (pnpm 12 no trae binario para OpenBSD).
-- `pnpm-lock.yaml` versionado en `files/` para reproducibilidad.
-- `RUN_DEPENDS = lang/node` (node trae corepack/pnpm); `BUILD_DEPENDS`
-  también porque `pnpm` corre en la fase de construcción.
+- La CI (`scripts/build-full.sh` + job `publish-full` en `.gitlab-ci.yml`)
+  compila `packages/m`, hace `pnpm pack` (que convierte `workspace:^` a rango
+  semver, a diferencia de `npm pack`), borra `devDependencies`/
+  `optionalPeerDependencies`/`peerDependencies`, instala con
+  `pnpm install --prod --ignore-scripts --node-linker=hoisted` y genera
+  `m-<V>-full.tar.gz`; luego lo sube al Generic Package Registry:
+  `https://gitlab.com/api/v4/projects/76261690/packages/generic/m-full/<V>/...`.
+- `--node-linker=hoisted` deja un `node_modules` plano y autocontenido (el
+  layout por defecto usa enlaces simbólicos al store global, que se rompen al
+  empaquetar).
+- El porte: `DISTFILES = m-<V>-full.tar.gz`, `NO_BUILD = Yes`,
+  `RUN_DEPENDS = lang/node`; `do-install` copia `dist`/`node_modules`/`man`.
+- `pnpm pack` (no `npm pack`) desde `packages/m` es imprescindible: `npm pack`
+  mantiene `workspace:^` y luego `pnpm install` no resuelve `contract-test`/`edr`.
 
-**Trampa de `make package`**: el archivo `.tgz` ES la cookie del paquete y
-no tiene prerequisitos; si ya existe (aunque sea viejo) `make package` no
-hace nada. Para reconstruir: `rm /usr/ports/packages/amd64/all/m-*.tgz`
-(o `make clean`) antes de `make package`.
+**Trampa de `make package`**: el archivo `.tgz` ES la cookie del paquete y no
+tiene prerequisitos; si ya existe (aunque sea viejo) `make package` no hace
+nada. Para reconstruir: `rm /usr/ports/packages/amd64/all/m-*.tgz` (o
+`make clean`) antes de `make package`.
 
-**Ejemplo (7.9)**: `m-0.37.12` se empaquetó desde `m-0.37.12.tgz` +
-`mpdj-0.3.3.tgz`; el `pnpm install` instaló 140 paquetes (contract-test
-0.3.5, edr 0.2.1, solc 0.8.26 y `@ethereumjs/*`). La verificación de
-`m/doc/packaging.md` se cumple: `m --version`, `m contract:compile` (solc
-nativo 0.8.37), `man m` y el pkg-readme.
+**Ejemplo (7.9)**: `m-0.37.12-full.tar.gz` (14 MB) generado por
+`scripts/build-full.sh` y empaquetado sin `mpdj`. Verificación de
+`m/doc/packaging.md`: `m --version` 0.37.12, `m contract:compile` (solc nativo
+0.8.37), `man m` y el pkg-readme; `ai:framework` (mpdj) ya NO está.

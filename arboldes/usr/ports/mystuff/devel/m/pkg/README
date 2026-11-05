@@ -7,11 +7,6 @@ The `m` CLI is installed as /usr/local/bin/m, with its manual page
 /usr/local/lib/node_modules/@pasosdejesus/m/dist/templates (the copy that
 `m:create` reads, so no network is needed).
 
-The Pasos de Jesus extension (mpdj) is vendored at
-/usr/local/lib/node_modules/@pasosdejesus/mpdj, so `ai:framework`,
-`ai:principles`, `ai:skill`, `ai:adJ` and `eng:credentials:*` work out of
-the box.
-
 First checks:
 
 	m --version
