@@ -28,6 +28,10 @@ BUILD_DEPENDS =		devel/boost \
 # process; the checker is built without linking libz3, so this is a run dep.
 RUN_DEPENDS =		math/z3
 
+# Needed so make test actually runs the SMT tests; they are silently skipped
+# when z3 is not found (soltest does not report them as failures).
+TEST_DEPENDS =		math/z3
+
 CONFIGURE_ARGS =	-DTESTS=ON \
 			-DIGNORE_VENDORED_DEPENDENCIES=ON \
 			-DPEDANTIC=OFF
