@@ -1,6 +1,5 @@
-Command-line tool to create and manage Web 2.5 applications in a
-Rails-like fashion: Next.js and PostgreSQL for the application, with
-contracts and wallets only where they add value.
+Command-line tool to create and manage Web 2.5 projects with
+Solidity + Next.js + PostgreSQL in a Rails-like fashion.
 
 Installs `m` in /usr/local/bin/m, its manual page (man 1 m) and its
 templates, so projects can be created without network or npm.
@@ -34,7 +33,7 @@ Documentation:
 - https://gitlab.com/pasosdeJesus/m
 - /usr/local/lib/node_modules/@pasosdejesus/m/dist/CHANGELOG.md
 - Getting started with contracts and wallets (in English and Spanish):
-  https://gitlab.com/pasosdeJesus/m/-/blob/main/doc/tutorial-contracts-openbsd-1/es.md
+  https://gitlab.com/pasosdeJesus/m/-/tree/main/doc/tutorial-contracts-openbsd-1
 
 Tested on OpenBSD/adJ with lang/node.  Creating projects requires pnpm 11
 (corepack enable pnpm): pnpm 12 cannot be installed on OpenBSD.
