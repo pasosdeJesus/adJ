@@ -1,6 +1,6 @@
 COMMENT =	CLI for Web 2.5 projects (Solidity + Next.js + PostgreSQL)
 
-V =		0.37.16
+V =		0.37.20
 DISTNAME =	m-${V}-full
 PKGNAME =	m-${V}
 CATEGORIES =	devel

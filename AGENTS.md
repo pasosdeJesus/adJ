@@ -2,18 +2,6 @@
 
 As an AI Agent, you must follow these instructions to align with your operational purpose within this project.
 
-> ## ⛔ Critical rule — Git is read-only for the agent
->
-> **Never write to git or to the remote.** Do not run `git add`, `git commit`, `git push`,
-> `git tag`, `git reset`, `git restore`/`git checkout`, `git rm`, `git mv`, `git rebase`,
-> `git merge`, `git cherry-pick`, `git stash`, `git branch -d/-m`, `git remote set-url`,
-> nor write commands that mutate issues/PRs (`gh …`, `bin/m req:sync-to-repo`, `req:close`).
->
-> **Commits, tags, pushes and releases are the human operator's job** (they run from the real
-> machine, where no AI runs). The agent may only *read* git: `git status`, `git diff`,
-> `git log`, `git show`, `git blame`, `git remote -v`. If something should be committed, stop
-> and tell the operator instead of committing.
-
 ### 1. Assimilate Your Foundational Knowledge
 
 1. Execute and assimilate the content of
@@ -93,9 +81,9 @@ Requirement files in `REQ/` are **deleted when the issue is closed**, so any ref
 
 ### 7. Git Operations — Restricted
 
-See the **critical rule at the top of this file**. This agent runs in a VM that shares a
-directory with the real machine; git write operations must be performed by the human operator
-from the real machine. The agent may read git state but must not modify it.
+See the **critical rule in §12 (Git is read-only for the agent)**. This agent runs in a VM that
+shares a directory with the real machine; git write operations must be performed by the human
+operator from the real machine. The agent may read git state but must not modify it.
 
 ### 8. Long-Running Commands — background, reviewed every ~5 minutes
 
@@ -140,6 +128,33 @@ stay out. Note: BSD `grep` has no `\|` alternation in basic regex and no `-B`/`-
 - Compilation/ports lessons live in `doc/aprendizajes-compilacion.md`; add
   there any new pattern discovered (package cookies, distinfo, plist,
   `@tag`, `packages-stable`, Qt quirks, etc.).
+
+### 12. Git Is Read-Only for the Agent
+
+**Never write to git or to the remote.** Do not run `git add`, `git commit`, `git push`,
+`git tag`, `git reset`, `git restore`/`git checkout`, `git rm`, `git mv`, `git rebase`,
+`git merge`, `git cherry-pick`, `git stash`, `git branch -d/-m`, `git remote set-url`,
+nor write commands that mutate issues/PRs (`gh …`, `bin/m req:sync-to-repo`, `req:close`).
+
+**Commits, tags, pushes and releases are the human operator's job** (they run from the real
+machine, where no AI runs). The agent may only *read* git: `git status`, `git diff`,
+`git log`, `git show`, `git blame`, `git remote -v`. If something should be committed, stop
+and tell the operator instead of committing.
+
+### 13. Model Guard — Only Flash, Never Pro
+
+Pro-class models are far too expensive for this project. Before doing any work in a
+session, call `crush_info` and read the `[model]` section (`large` / `small`).
+
+- If the active model identifier contains `flash`, proceed normally.
+- If it is anything else (`deepseek-reasoner`, "DeepSeek Thinking", any Pro/reasoning
+  model), **stop immediately**: do not call any other tool and reply only:
+  *"Estás en un modelo Pro (caro). Cambia a un modelo `flash` en
+  `~/.config/crush/crush.json` y vuelve a lanzar la tarea."*
+- If the model cannot be determined, stop and ask the operator to confirm it is Flash.
+
+The hard guarantee is the model catalogue in `~/.config/crush/crush.json` (only
+`deepseek-v4-flash` should be listed); this rule is the safety net for other machines.
 
 **Definition of done:** the change builds with `distribucion.sh` for the **target release**,
 the affected docs are updated (§4b trap 6), and the requirement file (if any) is updated. Git
