@@ -3,8 +3,8 @@
 Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
 
-### Versión: 7.9
-Fecha de publicación: 3/Nov/2026
+### Versión: 7.9p1
+Fecha de publicación: 2/Dic/2026
 
 Puedes ver novedades respecto a OpenBSD en:
   <https://gitlab.com/pasosdeJesus/adJ/-/blob/ADJ_7_9/Novedades_OpenBSD.md>
@@ -15,13 +15,13 @@ Puedes ver las diversas versiones publicadas en
 <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/> donde entre otras
 encontrarás:
 
-* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-7.9-amd64.img>
+* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-7.9p1-amd64.img>
   que es imagen para escribir en una memoria USB y arrancar con esta bien en
   modo UEFI o bien en modo BIOS Legacy. Una vez
   la descargues puedes escribirla en una USB ubicada en `/dev/sd2c`
   (verifica el dispositivo con `dmesg` y remplaza) con:
 
-       doas dd if=AprendiendoDeJesus-7.9-amd64.img of=/dev/sd2c bs=1M
+       doas dd if=AprendiendoDeJesus-7.9p1-amd64.img of=/dev/sd2c bs=1M
 
   Este proceso puede ser demorado, podrás ver el progreso con
 
@@ -29,19 +29,19 @@ encontrarás:
 
   O si deseas probarla con `qemu` para instalar en un disco `virtual.raw`:
 
-      qemu-system-x86_64 -hda virtual.raw -hdb AprendiendoDeJesus-7.9-amd64.img -boot menu=on
+      qemu-system-x86_64 -hda virtual.raw -hdb AprendiendoDeJesus-7.9p1-amd64.img -boot menu=on
 
-* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-7.9-amd64.iso>
+* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-7.9p1-amd64.iso>
   que es imagen en formato ISO para quemar en DVD e instalar por primera vez
   en modo BIOS Legacy.
 
-* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/7.9-amd64/>
+* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/7.9p1-amd64/>
   que es directorio con el contenido del DVD instalador apropiado para
   descargar con `rsync` desde un adJ o un OpenBSD ya instalado para
   actualizarlo (ver
   <https://gitlab.com/pasosdeJesus/adJ/-/blob/ADJ_7_9/Actualiza.md> )
 
-* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/7.9-extra/>
+* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/7.9p1-extra/>
   es directorio con versiones recientes de paquetes no incluidos en
   distribución oficial (pueden no estar firmados y requerir instalación con
   `pkg_add -D unsigned _paquete_`).
@@ -54,7 +54,7 @@ Novedades tomadas de <https://www.openbsd.org/79.html>
 
 
 * El sistema base incluye mejoras a componentes auditados y mejorados
-* Aplicados parches de seguridad de OpenBSD hasta el 23.Oct.2026.
+* Aplicados parches de seguridad de OpenBSD hasta el 15.Nov.2026.
 * Controladores ampliados o mejorados para amd64
   * Tarjetas Ethernet: `rge` ahora soporta Realtek RTL8126. `bnxt`
     ahora soporta dispositivos BCM575xx
@@ -139,6 +139,26 @@ Novedades tomadas de <https://www.openbsd.org/79.html>
   png-1.6.59, py3-asn1-0.6.3v0, redis 6.2.20, sqlite3-3.50.7p0
 
 
+### 3.4 Novedades de adJ 7.9p1
+
+* **Datos abiertos de Noche y Niebla al día.** El directorio
+  `sivel/` del medio de instalación ahora incluye
+  `nocheyniebla1999-2026-xrlt.tar.gz` con **48 187 relatos** del Banco de
+  Datos de Derechos Humanos del CINEP, generados a partir de la base
+  vigente en https://www.nocheyniebla.org/base
+* **Nuevo porte de solidity 0.8.38** (`solc`), con C++23 y la suite de
+  pruebas habilitada: ahora incluye pruebas unitarias, de sintaxis y del
+  verificador SMT contra el `z3` empaquetado (`math/z3` 4.16.0). Cuatro
+  pruebas cuyas expectativas se grabaron con z3 4.13.3 quedan omitidas en
+  OpenBSD mediante `SMTIgnoreOS: openbsd`, y `z3` pasa a ser dependencia de
+  ejecución y de pruebas (el verificador lo invoca como proceso externo,
+  no enlaza `libz3`).
+* **Porte de `m` actualizado a 0.37.20** (`@pasosdejesus/m`), reempaquetado
+  como único tarball `-full` generado por `make publish` de `m`; el porte ya
+  no necesita red durante la compilación.
+* **Paquetes recompilados por fallas de seguridad de OpenBSD hasta
+  el 15.Nov.2026.**
+
 ## 4. VERIFICACIÓN DE LA DESCARGA
 
 Antes de usar cualquier imagen, verifique su integridad con `signify`:
@@ -151,6 +171,9 @@ El comando debe reportar `Signature Verified` para cada archivo. Si falla,
 no use la descarga: vuelva a descargarla.
 
 ## 5. FE DE ERRATAS
+
+Sin erratas conocidas en 7.9p1.
+
 
 - `xenodm` no logra utilizar un teclado latinoamericano que se haya
   configurado en `/etc/kbdtype`.  Para usarlo
