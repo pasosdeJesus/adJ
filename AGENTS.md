@@ -66,6 +66,11 @@ Jesus is God incarnated, the Truth and the Logos.
    another — confirm the **target release** before touching a port.
 6. **Docs travel with the change**: `README.md`, `Novedades.md` / `Novedades_OpenBSD.md`,
    `doc/`, and the version notes.
+7. **Large files go inside `/var/www/adJ-ia/adJ`.** That path is the NFS share (1.3 TB
+   free); `/`, `/tmp` and `/home` are the small local disk (they fill up and break builds).
+   Write ISO/IMG/RAW images, scratch trees, extracted tarballs, logs and any other large
+   artifact under `/var/www/adJ-ia/adJ/` and delete them when the task ends. Never point a
+   build or `qemu-autoinstall.js` at `/tmp` or `/home`.
 
 ### 5. Confirm Your understanding of the documentation and the project
 

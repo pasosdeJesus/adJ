@@ -1,8 +1,22 @@
 #!/bin/sh
 # Crea imagen img para memorias USB (o discos duros)
-# Dominio público. vtamara@pasosdeJesus.org 2017
+# Dominio pÃºblico. vtamara@pasosdeJesus.org 2017
 
 . ./ver.sh
+
+# Directorio donde se escriben los archivos grandes (imagenes, copias de juegos).
+# Recibe la ruta como primer parametro o por la variable DIRIMG.
+# Por omision /var/www/adJ-ia/adJ, que es el NFS compartido con espacio
+# suficiente; /, /tmp y /home se llenan facilmente.
+DIRIMG="${1:-${DIRIMG:-/var/www/adJ-ia/adJ}}"
+DIRIMG="${DIRIMG%/}"
+if (test ! -d "$DIRIMG") then {
+  echo "No existe el directorio $DIRIMG";
+  exit 1;
+} fi;
+RELDIR="$DIRIMG/rel-amd64"
+RELXDIR="$DIRIMG/relx-amd64"
+echo "Directorio para archivos grandes: $DIRIMG";
 
 if (test ! -d $V$VESP-$ARQ) then {
   echo "No existe el directorio $V$VESP-$ARQ";
@@ -11,16 +25,16 @@ if (test ! -d $V$VESP-$ARQ) then {
 im=/usr/src/distrib/amd64/iso/obj/install${VP}.img
 if (test ! -f $im ) then {
   echo "Intentando crear $im"
-  doas rm -rf /home/rel-amd64 /home/relx-amd64
-  doas mkdir -p /home/rel-amd64 /home/relx-amd64
-  cmd="doas cp $V$VESP-$ARQ/{INSTALL.amd64,SHA256,base$VP.tgz,bsd,bsd.mp,bsd.rd,cdboot,cdbr,comp$VP.tgz,game$VP.tgz,man$VP.tgz} /home/rel-amd64/"
+  doas rm -rf "$RELDIR" "$RELXDIR"
+  doas mkdir -p "$RELDIR" "$RELXDIR"
+  cmd="doas cp $V$VESP-$ARQ/{INSTALL.amd64,SHA256,base$VP.tgz,bsd,bsd.mp,bsd.rd,cdboot,cdbr,comp$VP.tgz,game$VP.tgz,man$VP.tgz} $RELDIR/"
   echo "$cmd"
   eval "$cmd"
-  cmd="doas cp $V$VESP-$ARQ/{xbase$VP.tgz,xfont$VP.tgz,xshare$VP.tgz,xserv$VP.tgz} /home/relx-amd64/"
+  cmd="doas cp $V$VESP-$ARQ/{xbase$VP.tgz,xfont$VP.tgz,xshare$VP.tgz,xserv$VP.tgz} $RELXDIR/"
   echo "$cmd"
   eval "$cmd"
-  touch /home/relx-amd64/SHA256 /home/rel-amd64/BUILDINFO
-  (cd /usr/src/distrib/amd64/iso; FSSIZE=940000 make)
+  touch $RELXDIR/SHA256 $RELDIR/BUILDINFO
+  (cd /usr/src/distrib/amd64/iso; RELDIR=$RELDIR RELXDIR=$RELXDIR FSSIZE=940000 make)
   if (test ! -f $im ) then {
     echo "No pudo crearse $im";
     exit 1;
@@ -38,22 +52,24 @@ function ej {
   return $vr
 }
 
-if (test ! -f AprendiendoDeJesus-${V}${VESP}-${ARQ}.img) then {
-  if (test ! -f blanco) then {
-    ej "dd of=blanco bs=1M seek=5000 count=0"
+imgfinal="$DIRIMG/AprendiendoDeJesus-${V}${VESP}-${ARQ}.img"
+blanco="$DIRIMG/blanco"
+if (test ! -f "$imgfinal") then {
+  if (test ! -f "$blanco") then {
+    ej "dd of=$blanco bs=1M seek=5000 count=0"
   } else {
-  echo 'Archivo blanco existente, saltando creacion'
+  echo "Archivo $blanco existente, saltando creacion"
 } fi;
-ej "cat $im blanco > AprendiendoDeJesus-${V}${VESP}-${ARQ}.img"
+ej "cat $im $blanco > $imgfinal"
 } else {
-echo "Archivo AprendiendoDeJesus-${V}${VESP}-${ARQ}.img existente, saltando creacion"
+echo "Archivo $imgfinal existente, saltando creacion"
 } fi;
 ej "doas vnconfig -l | grep 'vnd0: not in use' > /dev/null 2>&1"
 if (test "$?" != "0") then {
   echo "vnd0 ocupado, no se puede continuar";
   exit 1;
 } fi;
-ej "doas vnconfig vnd0 AprendiendoDeJesus-${V}${VESP}-${ARQ}.img"
+ej "doas vnconfig vnd0 $imgfinal"
 ej "doas fdisk -i -b 10000 -y /dev/rvnd0c"
 # adJ64  fdisk: 1> p
 #Disk: /dev/rvnd0c       geometry: 107734/1/100 [10773440 Sectors]
@@ -65,9 +81,10 @@ ej "doas fdisk -i -b 10000 -y /dev/rvnd0c"
 # 1: 00      0   0   0 -      0   0   0 [           0:           0 ] unused      
 # 2: 00      0   0   0 -      0   0   0 [           0:           0 ] unused      
 #*3: A6     10   0  25 -   7372   0  80 [        1024:      736256 ] OpenBSD    
-ej "rm -f tmp/etiqueta.txt"
-ej "doas disklabel /dev/vnd0c  > /tmp/etiqueta.txt"
-cat /tmp/etiqueta.txt
+etiqueta="$DIRIMG/etiqueta.txt"
+ej "rm -f $etiqueta"
+ej "doas disklabel /dev/vnd0c  > $etiqueta"
+cat $etiqueta
 echo "[ENTER] por modificar esta etiqueta"
 read
 doas disklabel -E /dev/vnd0c <<EOF
@@ -100,8 +117,8 @@ ej "doas newfs /dev/rvnd0a"
 ej "doas mount /dev/vnd0a /mnt/tmp"
 ej "doas cp -rf $V$VESP-$ARQ/* /mnt/tmp/"
 
-# Copia la necesario para installbot modo EFI que no está documentado en
-# man installboot (tocó seguir paso a paso y analizar fuentes)
+# Copia la necesario para installbot modo EFI que no estÃ¡ documentado en
+# man installboot (tocÃ³ seguir paso a paso y analizar fuentes)
 # Debe ejecutarse desde /dev o un directorio con los dispositivos
 # Los dispositivos deben llamarse duid.p (bloque) y rduid.p (caracter) con
 # los mismos mayor y menor del dispositivo.
