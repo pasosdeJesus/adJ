@@ -119,21 +119,21 @@ function main() {
 
   const [V, VESP, ARQ] = leerVersion();
   const dirBuild = path.join(REPO, `${V}${VESP}-${ARQ}`);
-  const isoSerial = `/tmp/AprendiendoDeJesus-${V}${VESP}-${ARQ}-serial.iso`;
+  const isoSerial = path.join(REPO, `AprendiendoDeJesus-${V}${VESP}-${ARQ}-serial.iso`);
   const disco = path.join(REPO, 'virtual.raw');
   if (!fs.existsSync(dirBuild)) {
     fail(`No existe ${dirBuild}`);
   }
 
   construirIsoSerial(isoSerial, dirBuild);
-  fs.writeFileSync('/tmp/install.conf', RESPUESTA);
+  fs.writeFileSync(path.join(REPO, 'install.conf'), RESPUESTA);
 
   if (fs.existsSync(disco)) fs.unlinkSync(disco);
   sh(`qemu-img create -f raw ${disco} ${tamano}G`);
   console.log(`[OK] Disco ${disco} (${tamano}G)`);
 
   const httpd = http.createServer((req, res) => {
-    const filePath = path.join('/tmp', path.basename(req.url || ''));
+    const filePath = path.join(REPO, path.basename(req.url || ''));
     fs.readFile(filePath, (err, data) => {
       if (err) { res.writeHead(404); res.end('Not found'); return; }
       res.writeHead(200, { 'Content-Type': 'application/octet-stream' });
