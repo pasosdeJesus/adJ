@@ -101,7 +101,11 @@ function ltf {
 
 function activarcs {
 	ns=$1;
-	rcctl enable $ns
+	if (test -x /etc/rc.d/$ns) then {
+		rcctl -q enable $ns 2>/dev/null
+	} else {
+		echo "* activarcs: no existe /etc/rc.d/$ns, se omite" >> /var/www/tmp/inst-adJ.bitacora
+	} fi;
 } 
 
 function creamontador {
@@ -336,9 +340,14 @@ function insacp {
 		echo "No se encuentra paquete $n. Presione ENTER para continuar o Control-C para cancelar"
 		read
 	} fi;
-	pkg_add $opbor $PKG_PATH/$n-*.tgz >> /var/www/tmp/inst-adJ.bitacora 2>&1
+	pkg_add $opbor $pe >> /var/www/tmp/inst-adJ.bitacora 2>&1
 	if (test "$popc" != "") then {
-		pkg_add $opbor $PKG_PATH/${popc}*.tgz >> /var/www/tmp/inst-adJ.bitacora 2>&1
+		pec=`ls $PKG_PATH/${popc}*.tgz 2> /dev/null`
+		if (test "$pec" = "") then {
+			echo "No se encuentra paquete $popc. Presione ENTER para continuar o Control-C para cancelar"
+			read
+		} fi;
+		pkg_add $opbor $pec >> /var/www/tmp/inst-adJ.bitacora 2>&1
 	} fi;
 }
 
@@ -1799,7 +1808,9 @@ EOF
 	if (test ! -f /root/xorg.conf.new) then {
 		dialog --title 'Configuración de X-Window' --msgbox "\nNo pudo configurarse automaticamente, se empleara un archivo de configuracion genérico que puede requerir su edicion.\n
 Vea la documentacion con man xorg.conf, editelo por ejemplo con mg /etc/X11/xorg.conf y pruebelo con Xorg.  \n" 15 60
-		cp /root/xorg.conf.pordefecto /root/xorg.conf.new
+		if (test -f /root/xorg.conf.pordefecto) then {
+			cp /root/xorg.conf.pordefecto /root/xorg.conf.new
+		} fi;
 	} fi;
 
 	clear
@@ -2369,8 +2380,8 @@ echo "* Instalando PHP" | tee -a /var/www/tmp/inst-adJ.bitacora;
 p=`ls /var/db/pkg | grep "^php"`
 if (test "$p" != "") then {
 	rm -f /var/www/conf/modules/php5.conf 
-	rcctl stop php56_fpm
-	rcctl disable php56_fpm
+	rcctl -q stop php85_fpm 2>/dev/null
+	rcctl -q disable php85_fpm 2>/dev/null
 	for i in php php-2 php5-core partial-php5-core partial-php5-pear partial-php; do
 		pkg_delete -I -D dependencies $i >> /var/www/tmp/inst-adJ.bitacora 2>&1
 	done;
@@ -2516,7 +2527,7 @@ if (test "$p" = "") then {
 	insacp icu4c
 	p=`ls $PKG_PATH/png*` 
 	pkg_add -I -D repair -D libdepends -D update -D updatedepends -r $p >> /var/www/tmp/inst-adJ.bitacora 2>&1
-	p=`ls $PKG_PATH/libxslt* $PKG_PATH/gettext* $PKG_PATH/libxml* $PKG_PATH/png* $PKG_PATH/jpeg* $PKG_PATH/t1lib* $PKG_PATH/libiconv* $PKG_PATH/php*` 
+	p=`ls $PKG_PATH/libxslt* $PKG_PATH/gettext* $PKG_PATH/libxml* $PKG_PATH/png* $PKG_PATH/jpeg* $PKG_PATH/libiconv* $PKG_PATH/php*` 
 	echo $p >> /var/www/tmp/inst-adJ.bitacora 2>&1
 	pkg_add -I -D repair -D libdepends -D update -D updatedepends -r $p >> /var/www/tmp/inst-adJ.bitacora 2>&1
 	rm -f /var/www/conf/modules/php.conf /var/www/conf/php.ini /etc/php.ini
@@ -2571,8 +2582,8 @@ EOF
 w
 q
 EOF
-		activarcs php56_fpm
-		/etc/rc.d/php56_fpm -d start >> /var/www/tmp/inst-adJ.bitacora 2>&1
+		activarcs php85_fpm
+		/etc/rc.d/php85_fpm -d start >> /var/www/tmp/inst-adJ.bitacora 2>&1
 		grep "^ *location .*php" /etc/nginx/nginx.conf > /dev/null 2>&1
 		if (test "$?" != "0") then {
 			grep "^ *ssl_prefer_server_ciphers" /etc/nginx/nginx.conf > /dev/null 2>&1
@@ -2642,7 +2653,7 @@ EOF
 
 if (test "$sweb" = "nginx") then {
 	echo "* Corriendo nginx" >> /var/www/tmp/inst-adJ.bitacora
-	/etc/rc.d/php56_fpm start >> /var/www/tmp/inst-adJ.bitacora 2>&1
+	/etc/rc.d/php85_fpm start >> /var/www/tmp/inst-adJ.bitacora 2>&1
 	/etc/rc.d/nginx start >> /var/www/tmp/inst-adJ.bitacora 2>&1
 } elif (test "$sweb" = "apache") then {
 	echo "* Corriendo Apache" >> /var/www/tmp/inst-adJ.bitacora
@@ -2990,7 +3001,7 @@ if (test "$?" != "0") then {
 	insacp pango
 	insacp gtk+2
 
-	p=`ls $PKG_PATH/libxml-* $PKG_PATH/shared-mime-info-* $PKG_PATH/pcre-* $PKG_PATH/png-* $PKG_PATH/jpeg-* $PKG_PATH/glib2-* $PKG_PATH/tiff-* $PKG_PATH/libiconv-* $PKG_PATH/esound-* $PKG_PATH/atk-* $PKG_PATH/desktop-file-utils-* $PKG_PATH/gettext-* $PKG_PATH/libaudiofile-* $PKG_PATH/gtk+2-* $PKG_PATH/cairo-* $PKG_PATH/pango-* $PKG_PATH/nss-* $PKG_PATH/nspr-* $PKG_PATH/jasper-* $PKG_PATH/hicolor-icon-theme-* $PKG_PATH/chromium-*`
+	p=`ls $PKG_PATH/libxml-* $PKG_PATH/shared-mime-info-* $PKG_PATH/pcre-* $PKG_PATH/png-* $PKG_PATH/jpeg-* $PKG_PATH/glib2-* $PKG_PATH/tiff-* $PKG_PATH/libiconv-* $PKG_PATH/desktop-file-utils-* $PKG_PATH/gettext-* $PKG_PATH/gtk+2-* $PKG_PATH/cairo-* $PKG_PATH/pango-* $PKG_PATH/nss-* $PKG_PATH/nspr-* $PKG_PATH/jasper-* $PKG_PATH/hicolor-icon-theme-* $PKG_PATH/chromium-*`
         pkg_add -I -D repair -D update -D updatedepends -r $p >> /var/www/tmp/inst-adJ.bitacora 2>&1
 	#echo "Sugerencias: " >> /var/www/tmp/inst-adJ.bitacora;
 	#echo "  * Configure localización en español desde about:config general.useragent.local es-AR"
@@ -3153,47 +3164,6 @@ EOF
 # http://es.openoffice.org/programa/diccionario.html
 if (test -f $ARCH/util/es_CO.oxt -a -f /usr/local/lib/libreoffice/program/unopkg) then {
 	/usr/local/lib/libreoffice/program/unopkg add --shared $ARCH/util/es_CO.oxt
-} fi;
-
-echo "* Configurar pidgin con SILC y canales en www.nocheyniebla.org" >> /var/www/tmp/inst-adJ.bitacora;
-if (test ! -f /home/$uadJ/.purple/blist.xml) then {
-
-	cat	/home/$uadJ/.purple/blist.xml <<EOF
-<?xml version='1.0' encoding='UTF-8' ?>
-
-<purple version='1.0'>
-	<blist>
-		<group name='Chats'>
-			<setting name='collapsed' type='bool'>0</setting>
-			<chat proto='prpl-silc' account='$uadJ@www.nocheyniebla.org'>
-				<component name='channel'>soporte-ubuntuCE</component>
-				<setting name='gtk-persistent' type='bool'>1</setting>
-				<setting name='gtk-autojoin' type='bool'>1</setting>
-			</chat>
-			<chat proto='prpl-silc' account='$uadJ@www.nocheyniebla.org'>
-				<component name='channel'>soporte-adJ</component>
-				<setting name='gtk-persistent' type='bool'>1</setting>
-				<setting name='gtk-autojoin' type='bool'>1</setting>
-			</chat>
-			<chat proto='prpl-silc' account='$uadJ@www.nocheyniebla.org'>
-				<component name='channel'>sincodh</component>
-				<setting name='gtk-persistent' type='bool'>1</setting>
-				<setting name='gtk-autojoin' type='bool'>1</setting>
-			</chat>
-			<chat proto='prpl-silc' account='$uadJ@www.nocheyniebla.org'>
-				<component name='channel'>redbandatos</component>
-				<setting name='gtk-persistent' type='bool'>1</setting>
-				<setting name='gtk-mute-sound' type='bool'>0</setting>
-				<setting name='gtk-autojoin' type='bool'>1</setting>
-			</chat>
-		</group>
-	</blist>
-	<privacy>
-		<account proto='prpl-silc' name='$uadJ@www.nocheyniebla.org' mode='1'/>
-	</privacy>
-</purple>
-EOF
-
 } fi;
 
 if (test -d /home/$uadJ/.libreoffice) then {
