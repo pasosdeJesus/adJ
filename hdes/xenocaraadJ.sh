@@ -1,6 +1,6 @@
 #!/bin/sh
-# Detalles de personalización de adJ
-# Dominio público de acuerdo a legislación colombiana.
+# Detalles de personalizaciÃ³n de adJ
+# Dominio pÃºblico de acuerdo a legislaciÃ³n colombiana.
 # 2007. vtamara@pasosdeJesus.org
 
 ed /usr/src/xenocara/app/xdm/config/Xresources.cpp << EOF

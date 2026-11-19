@@ -1,7 +1,7 @@
 #!/bin/sh
 # Verifica que todas las dependencias de los paquetes de un directorio
-# estén resueltas en el mismo directorio.
-# Dominio público. Sin garantías. 2005. vtamara@pasosdejesus.org
+# estÃ©n resueltas en el mismo directorio.
+# Dominio pÃºblico. Sin garantÃ­as. 2005. vtamara@pasosdejesus.org
 
 . ./ver.sh
 

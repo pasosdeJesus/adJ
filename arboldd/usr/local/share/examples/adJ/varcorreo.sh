@@ -32,7 +32,7 @@ usrespaldo=usuarioremoto
 # Usuario en computador local que sincroniza con servidor de respaldo
 usrespaldolocal=usuariolocal
 
-# Nombre de la organización ante servidor de respaldo --usado para grupo y posfijo de cuentas
+# Nombre de la organizaciÃ³n ante servidor de respaldo --usado para grupo y posfijo de cuentas
 orgrespaldo=miorg
 
 # Dominio con el que se configuraran cuentas virtuales en servidor de respaldo

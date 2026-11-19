@@ -1,5 +1,5 @@
 #!/bin/sh
-# Dominio público de acurdo a legislación colombiana. vtamara@pasosdeJesus.org
+# Dominio pÃºblico de acurdo a legislaciÃ³n colombiana. vtamara@pasosdeJesus.org
 # Replaces daemon with servicio in kernel of OpenBSD.  Respects christians and non-christians, more neutral.
 # Run from /usr/src/sys
 # Tested from 4.7 
@@ -10,7 +10,7 @@
 function remplaza {
 	i=$1;
 	if (test ! -f "$i") then {
-		echo "Falta archivo como primer parámetro";
+		echo "Falta archivo como primer parÃ¡metro";
 		exit 1;
 	} fi;
 	rem=1;

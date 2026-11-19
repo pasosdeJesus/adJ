@@ -1,6 +1,6 @@
 #!/bin/sh
 # Crea imagen ISO
-# Dominio público. vtamara@pasosdeJesus.org 2008
+# Dominio pÃºblico. vtamara@pasosdeJesus.org 2008
 # http://bsd.b3ta.org/2007/11/06/custom-openbsd-42-bootable-cd/
 
 . ./ver.sh

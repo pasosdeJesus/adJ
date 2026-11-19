@@ -528,3 +528,141 @@ nada. Para reconstruir: `rm /usr/ports/packages/amd64/all/m-*.tgz` (o
 `scripts/build-full.sh` y empaquetado sin `mpdj`. Verificación de
 `m/doc/packaging.md`: `m --version` 0.37.12, `m contract:compile` (solc nativo
 0.8.37), `man m` y el pkg-readme; `ai:framework` (mpdj) ya NO está.
+
+## 29. Archivos grandes: escribir siempre en el NFS `/var/www/adJ-ia/adJ`
+
+**Patrón**: en esta VM de desarrollo, `/` (y por tanto `/tmp`, `/home`,
+`/usr/src`) es un disco local de 42 GB que se llena con facilidad: los objetos
+de ports (`/build/pobj`) rondan los 8 GB y los sets de instalación otros 5. Un
+solo `virtual.raw` de QEMU (30 GB) o una imagen `.img` (6 GB) agotan el espacio
+y rompen los builds con `No space left on device` sin mensaje claro (el log del
+script queda vacío).
+
+**Detección**: `df -h /` al 100% con pocos MB libres; `du -xsh /var/www/*`
+para confirmar qué ocupa el disco local; `write` creativo falla aunque el
+archivo destino esté en el NFS (el *temporal* va a `/`).
+
+**Resolución**: escribir todo artefacto grande (imágenes ISO/IMG/RAW, árboles
+de scratch, tarballs extraídos, logs de compilación) bajo `/var/www/adJ-ia/adJ`,
+que es el NFS con 1,3 TB libres. En scripts, exponer una variable con valor por
+omisión, como en `hdes/creaimg.sh`:
+
+```sh
+DIRIMG="${1:-${DIRIMG:-/var/www/adJ-ia/adJ}}"
+```
+
+Pasar esa ruta también al `make` del instalador
+(`RELDIR=$RELDIR RELXDIR=$RELXDIR make`), porque `/usr/src/distrib/amd64/iso`
+tiene rutas fijas por omisión en `/home/rel-*`.
+
+**Ejemplo (7.9p1)**: `hdes/qemu-autoinstall.js` escribía `virtual.raw` y la ISO
+serial en `/tmp`; se movieron al repositorio. `hdes/creaimg.sh` construía en
+`/home/rel-amd64` y dejaba la `.img` en el directorio actual; ahora ambos van a
+`DIRIMG`.
+
+## 30. `inst-adJ.sh` acumula referencias a paquetes y servicios desaparecidos
+
+**Patrón**: el instalador conserva nombres de versiones viejas. Al ejecutarlo en
+una versión nueva aparecen errores cosméticos que esconden fallas reales entre
+el ruido: `rcctl: service php56_fpm does not exist`,
+`ls: .../paquetes/t1lib*: No such file or directory`,
+`cp: /root/xorg.conf.pordefecto: No such file or directory`.
+
+**Detección**: ejecutar el instalador completo y filtrar el log:
+
+```sh
+tr -d '\000' < log | sed 's/\x1b\[[0-9;]*[A-Za-z]//g' | tr -d '\r' \
+  | grep -aE 'does not exist|No such file|command not found'
+```
+
+**Resolución**:
+
+- Servicio de PHP: el nombre sigue al paquete (`php-8.5.12` → `php85_fpm`,
+  antes `php56_fpm`). Actualizarlo en **todas** las apariciones
+  (`rcctl stop/disable`, `activarcs`, `/etc/rc.d/...`).
+- `activarcs`: verificar `test -x /etc/rc.d/$ns` antes de `rcctl -q enable`, y
+  registrar en la bitácora cuando el servicio no existe.
+- Listas de `ls $PKG_PATH/paquete-*`: quitar los paquetes que ya no existen en
+  la distribución (`t1lib`, `esound`, `atk`, `libaudiofile`).
+- `insacp` debe seguir deteniéndose con `read` cuando falta un paquete: es el
+  recordatorio de que la lista de paquetes quedó desactualizada.
+
+**Ejemplo (7.9p1)**: seis correcciones en
+`arboldd/usr/local/adJ/inst-adJ.sh`; verificación con `sh -n` y una ejecución
+completa sobre una VM ya en 7.9p1.
+
+## 31. `site79.tgz` se regenera con `distribucion.sh`, no a mano
+
+**Patrón**: `site79.tgz` no contiene sólo `arboldd/`: también lleva lo listado
+en `lista-site` (`usr/bin/colldef`, `usr/localedef`, cabeceras de locale y
+cientos de archivos de `/usr/share/locale`, además de directorios vacíos como
+`usr/share/zoneinfo/posix/...`).
+
+**Resolución**: dejar que lo genere `distribucion.sh` (variable `autoSite=s`).
+Reproducirlo a mano es frágil: las entradas de `lista-site` empiezan con `./` y
+el script las copia con `cp -f /$i` (esto es `/./usr/bin/...`), lo que solo
+funciona por la rama `test -d "/$D_DESTDIR/$i"` cuando `DESTDIR` está definido.
+Una reconstrucción manual pierde directorios vacíos y puede arrastrar archivos
+de builds anteriores.
+
+**Verificación**: comparar el `inst-adJ.sh` embebido con el del repo:
+
+```sh
+tar -xzOf 7.9p1-amd64/site79.tgz ./usr/local/adJ/inst-adJ.sh \
+  | diff - arboldd/usr/local/adJ/inst-adJ.sh
+```
+
+## 32. Firmar la distribución después de cada cambio en un juego
+
+**Patrón**: `signify -C` valida la firma de `SHA256.sig` pero reporta `FAIL`
+por archivo cuando un juego se regeneró después de firmar. Es fácil publicar así
+porque `signify -C` imprime `Signature Verified` y los `FAIL` pasan
+desapercibidos entre las 16 líneas.
+
+**Resolución**: rehacer `SHA256`, firmarlo y regenerar `index.txt` cada vez que
+cambie cualquier `*.tgz`/`bsd*`:
+
+```sh
+cd 7.9p1-amd64
+rm -f SHA256 SHA256.sig
+cksum -a sha256 $(ls *tgz INSTALL.amd64 bsd* cd* BUILDINFO) > SHA256
+doas signify -S -e -s /etc/signify/adJ-79-base.sec -x SHA256.sig -m SHA256
+doas signify -C -p /etc/signify/adJ-79-base.pub -x SHA256.sig   # 16 OK
+ls -l | grep -v index.txt > index.txt
+```
+
+**Ejemplo (7.9p1)**: tras el `rsync` del X recompilado y del `site79.tgz`
+nuevo, `xbase`, `xfont`, `xserv`, `xshare` y `site` daban `FAIL`; refirmar los
+dejó en OK.
+
+## 33. Codificación de los scripts: convertir latin1 → UTF-8
+
+**Patrón**: varios scripts históricos están en ISO-8859-1 (un `ú` se ve como
+`0xFA`). Las herramientas modernas los rechazan (`File content is not valid
+UTF-8`) y las comparaciones con `grep`/`iconv` fallan sin explicación.
+
+**Detección**:
+
+```sh
+git ls-files | while read f; do
+  [ -f "$f" ] && ! iconv -f UTF-8 -t UTF-8 "$f" >/dev/null 2>&1 && echo "$f"
+done
+```
+
+**Resolución**: `iconv -f ISO-8859-1 -t UTF-8` y verificar que el contenido no
+cambió salvo la codificación:
+
+```sh
+diff <(iconv -f ISO-8859-1 -t UTF-8 archivo.latin1) archivo && echo identico
+```
+
+Probar después con `sh -n` los scripts y regenerar la ISO si se tocó
+`tminiroot/install-en` (lo usa el instalador). No convertir binarios (`*.png`,
+`*.ogg`, `*.oxt`, `*.tar.gz`).
+
+**Ejemplo (7.9p1)**: `hdes/creaimg.sh`, `hdes/creaiso.sh`,
+`hdes/servicio-kernel.sh`, `hdes/verificadep.sh`, `hdes/xenocaraadJ.sh`,
+`arboldd/.../varcorreo.sh`, `tminiroot/install-en`,
+`arboldvd/medios/terminos.txt` y el `MESSAGE` de `education/asigna`.
+
+> Mantener este documento al día: detección, resolución y ejemplo.
