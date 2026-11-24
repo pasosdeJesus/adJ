@@ -1,3 +1,4 @@
-Detrás y delante me rodeaste, y sobre mí pusiste tu mano.
+> Así que en todo traten ustedes a los demás exactamente como quieren que
+> ellos los traten a ustedes. De esto se trata la Ley y los Profetas.
 
-Salmo 139:5
+Mateo 7:12

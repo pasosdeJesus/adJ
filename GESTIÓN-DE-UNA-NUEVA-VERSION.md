@@ -45,8 +45,8 @@ Una vez los parches están actualizados, se debe proceder a compilar el kernel y
 
 ### 5. Generar llaves signify para la siguiente versión y respaldarlas
 
-       doas signify -G -c "Firma adJ 7.9 para paquetes" -n -s /etc/signify/adJ-79-pkg.sec -p /etc/signify/adJ-79-pkg.pub
-       doas signify -G -c "Firma adJ 7.9 para sistema base" -n -s /etc/signify/adJ-79-base.sec -p /etc/signify/adJ-79-base.pub
+       doas signify -G -c "Firma adJ 8.0 para paquetes" -n -s /etc/signify/adJ-80-pkg.sec -p /etc/signify/adJ-80-pkg.pub
+       doas signify -G -c "Firma adJ 8.0 para sistema base" -n -s /etc/signify/adJ-80-base.sec -p /etc/signify/adJ-80-base.pub
 
 Respaldalas en otro computador.
 
@@ -54,7 +54,7 @@ Copiar la parte publica en arboldd/etc/signifiy, agregarlas al repositorio y
 si hay versiones anteriores a la versión actual y a la siguiente 
 eliminarlas
 
-        cp /etc/signify/adJ-79*pub arboldd/etc/signify
+        cp /etc/signify/adJ-80*pub arboldd/etc/signify
 
 ### 6. Recompilar Paquetes
 Recompilar paquetes que tengan actualizaciones de seguridad o mejoras funcionales.
@@ -126,14 +126,14 @@ A continuación, la lista de verificación de pruebas:
 *   **Interfaz Gráfica:** Verificar que toda entrada del menú gráfico opere sin errores.
 
 ### 12. Crear Directorio en Servidor
-En `adJ.pasosdeJesus.org`, crear el directorio para los paquetes extra: `mkdir /dirftp/7.9-extra`.
+En `adJ.pasosdeJesus.org`, crear el directorio para los paquetes extra: `mkdir /dirftp/8.0-extra`.
 
 ### 13. Subir Archivos al Servidor
 Desde el computador de desarrollo, subir la distribución y los paquetes extra.
 ```sh
 hdes/rsync-aotro.sh
-scp -rf AprendiendoDeJesus-7.9-amd64.{img,iso} 7.9-amd64 adJ.pasosdeJesus.org:/dirftp/
-rsync extra-7.9/* adJ.pasosdeJesus.org:/dirftp/7.9-extra/
+scp -rf AprendiendoDeJesus-8.0b1-amd64.{img,iso} 8.0b1-amd64 adJ.pasosdeJesus.org:/dirftp/
+rsync extra-8.0/* adJ.pasosdeJesus.org:/dirftp/8.0-extra/
 ```
 
 ### 14. Verificar Servicios en Línea
@@ -144,8 +144,8 @@ Al publicar una versión alfa o beta, es necesario marcar el estado del código 
 
 > Para más detalles sobre la estrategia de ramas y etiquetas, consulte la [Guía para el Contribuyente](CONTRIBUTING.md).
 ```sh
-git tag -a v7.9b1 -m "Version 7.9b1"
-git push origin v7.9b1
+git tag -a v8.0b1 -m "Version 8.0b1"
+git push origin v8.0b1
 git checkout -b ADJ_7_9
 git push origin ADJ_7_9
 ```

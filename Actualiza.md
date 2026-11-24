@@ -1,4 +1,4 @@
-# Actualización a Aprendiendo De Jesús 7.9p1
+# Actualización a Aprendiendo De Jesús 8.0b1
 
 La actualización consta de 3 partes:
 
@@ -14,7 +14,7 @@ La actualización consta de 3 partes:
 	```
 	mkdir -p ~/comp/adJ;
 	cd ~/comp/adJ;
-	rsync-adJ 7.9p1
+	rsync-adJ 8.0b1
 	```
 
   Si ocurre alguna falla durante la transmisión podrá continuar donde
@@ -27,7 +27,8 @@ La actualización consta de 3 partes:
   Si descargó fuentes con el procedimiento anterior ejecutelo con:
 
 	```
-       	doas ~/comp/adJ/7.9p1-amd64/util/preact-adJ.sh
+       	doas ~/comp/adJ/8.0b1-amd64/util/preact-adJ.sh
+	```
 
 ## 2. Actualizar el sistema base:
 
@@ -37,8 +38,25 @@ La actualización consta de 3 partes:
 
 		```
 		cd ~/comp/adJ; 
-		ARCH=~/comp/adJ/7.9p1-amd64 doas 7.9p1-amd64/util/actbase.sh 7.9
+		ARCH=~/comp/adJ/8.0b1-amd64 doas 8.0b1-amd64/util/actbase.sh 8.0
 		```
+
+  Tras descomprimir los juegos de instalación el archivo de ordenes 
+  dejará preparado ```/etc/rc.firsttime``` con los pasos del
+  [Manual Upgrade](https://www.openbsd.org/faq/upgrade80.html) que
+  siguen al reinicio: ```MAKEDEV all```, ```installboot sd0```,
+  ```sysmerge```, ```fw_update``` y ```pkg_add -u```.
+
+* Después del reinicio verifique que ```uname -a``` reporte la nueva 
+  versión y revise ```dmesg -s``` por fallas.  Si no se ejecutaron
+  automáticamente, hágalos en este orden:
+
+	```
+	cd /dev && ./MAKEDEV all
+	installboot sd0
+	sysmerge
+	fw_update
+	```
 
 ## 3. Actualizar aplicaciones:
 
@@ -49,12 +67,12 @@ La actualización consta de 3 partes:
   puede usar:
 
 	```
-	ARCH=~/comp/adJ/7.9p1-amd64 doas /inst-adJ.sh
+	ARCH=~/comp/adJ/8.0b1-amd64 doas /inst-adJ.sh
 	```
 	
   Este archivo de ordenes asiste actualizaciones que puedan hacer 
-  falta de una versión a otra del sistema base (incluidas las d
-  escritas en http://openbsd.org/faq/upgrade70.html) y actualiza cuando es 
+  falta de una versión a otra del sistema base (incluidas las 
+  escritas en http://openbsd.org/faq/upgrade80.html) y actualiza cuando es 
   posible archivos de configuración de diversos paquetes.
 * Puede ejecutar varias veces este archivo de órdenes, pero si el 
   proceso no concluye exitosamente por favor después de ejecutar

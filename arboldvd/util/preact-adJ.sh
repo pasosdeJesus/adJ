@@ -3,9 +3,9 @@
 # Dominio público de acuerdo a legislación colombiana. http://www.pasosdejesus.org/dominio_publico_colombia.html. 
 # 2014. vtamara@pasosdeJesus.org
 
-VER=7.9
+VER=8.0
 REV=
-VESP=""
+VESP="b1"
 
 p0=$0
 dpwd=`pwd`

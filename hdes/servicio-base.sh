@@ -197,7 +197,9 @@ for i in `cat /tmp/tc`; do
 done;
 
 echo "fuse_servicioize"
-mv lib/libfuse/fuse_daemonize.3 lib/libfuse/fuse_servicioize.3
+if (test -f lib/libfuse/fuse_daemonize.3) then {
+	mv lib/libfuse/fuse_daemonize.3 lib/libfuse/fuse_servicioize.3
+} fi;
 
 echo "Buscando /var/log/daemon";
 find . -exec grep -i -l -I "/var/log/daemon" {} ';' > /tmp/tc 2> /dev/null

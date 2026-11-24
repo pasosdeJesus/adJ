@@ -75,8 +75,18 @@ if (test ! -d $V$VESP-$ARQ) then {
   cp /usr/local/share/doc/evangelios_dp/* $V$VESP-$ARQ/evangelios_dp
 } fi;
 
-ANONCVS="anoncvs@anoncvs1.ca.openbsd.org:/cvs"
-ANONCVS="anoncvs@mirror.planetunix.net:/cvs"
+ANONCVS="anoncvs@anoncvs4.usa.openbsd.org:/cvs"
+# Un mirror por arbol para poder actualizarlos en paralelo.
+# Se fijan en ver.sh o ver-local.sh; si no estan, se usa ANONCVS.
+if (test "$ANONCVSSRC" = "") then {
+  ANONCVSSRC="$ANONCVS";
+} fi;
+if (test "$ANONCVSXENOCARA" = "") then {
+  ANONCVSXENOCARA="$ANONCVS";
+} fi;
+if (test "$ANONCVSPORTS" = "") then {
+  ANONCVSPORTS="$ANONCVS";
+} fi;
 
 echo " *> Actualizar fuentes de CVS" | tee -a /var/www/tmp/distrib-adJ.bitacora
 if (test "$inter" = "-i") then {
@@ -86,76 +96,50 @@ if (test "$inter" = "-i") then {
 else {
   sn=$autoCvs;
 } fi;
-if (test "$sn" = "s") then {  
+if (test "$sn" = "s") then {
   if [ -z "$SSH_AUTH_SOCK" ] ; then
     echo "Ejecut ssh-add antes de usar este script"
     exit 1;
   fi
 
+  # Un mirror distinto por arbol permite actualizar los tres en paralelo.
+  # No se tocan los CVS/Root del tarball: se pasa el repositorio con -d.
+  bit=/var/www/tmp/distrib-adJ.bitacora
+  actualizacvs() {
+    nombre=$1
+    dir=$2
+    repo=$3
+    if (test ! -d "$dir") then {
+      echo "*** Falta $dir" >> $bit
+      return 1;
+    } fi;
+    cd "$dir" || return 1
+    echo "*> CVS $nombre en $dir desde $repo" >> $bit
+    cvs -z3 -d "$repo" update -Pd -r$R >> $bit 2>&1
+    echo "*> CVS $nombre terminado con $?" >> $bit
+  }
+
+  actualizacvs fuente /usr/src$VP-orig "$ANONCVSSRC" &
+  pidfuente=$!
+  actualizacvs xenocara /usr/xenocara$VP-orig "$ANONCVSXENOCARA" &
+  pidxenocara=$!
+  actualizacvs portes /usr/ports$VP-orig "$ANONCVSPORTS" &
+  pidportes=$!
+
+  wait $pidfuente; rfuente=$?
+  wait $pidxenocara; rxenocara=$?
+  wait $pidportes; rportes=$?
+  echo "*> CVS fuente=$rfuente xenocara=$rxenocara portes=$rportes" | tee -a $bit
+
   if (test -d /usr/src$VP-orig/) then {
-    cd /usr/src$VP-orig
-    echo "/usr/src$VP-orig"
-  } else {
-    cd /usr/src
-    echo "/usr/src"
-  } fi;
-  if (test ! -f CVS/Root) then {
-    for i in `find . -name CVS`; do 
-      echo $i;
-      echo "$ANONCVS" > $i/Root;
-    done;
-  } fi;
-  cvs -z3 update -Pd -r$R 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
-  if (test -d /usr/src$VP-orig/) then {
-    rsync -ravzp --delete /usr/src$VP-orig/* /usr/src/ 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
-  } fi;
-  if (test -d /usr/src$VP-orig/) then {
-    cd /usr/src$VP-orig/sys 2>&1 >> /var/www/tmp/distrib-adJ.bitacora
-  } else {
-    cd /sys 2>&1 >> /var/www/tmp/distrib-adJ.bitacora
-  } fi;
-  if (test ! -f CVS/Root) then {
-    for i in `find . -name CVS`; do 
-      echo $i;
-      echo "$ANONCVS" > $i/Root;
-    done;
-  } fi;
-  cvs -z3 update -Pd -r$R 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
-  if (test -d /usr/src$VP-orig/) then {
-    rsync -ravzp --delete /usr/src$VP-orig/sys/* /sys/ 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
+    rsync -ravzp --delete /usr/src$VP-orig/* /usr/src/ 2>&1 | tee -a $bit
+    rsync -ravzp --delete /usr/src$VP-orig/sys/* /sys/ 2>&1 | tee -a $bit
   } fi;
   if (test -d /usr/xenocara$VP-orig/) then {
-    cd /usr/xenocara$VP-orig/sys 2>&1 >> /var/www/tmp/distrib-adJ.bitacora
-  } else {
-    cd $XSRCDIR 2>&1 >> /var/www/tmp/distrib-adJ.bitacora
-  } fi;
-  if (test ! -f CVS/Root) then {
-    for i in `find . -name CVS`; do 
-      echo $i;
-      echo "$ANONCVS" > $i/Root;
-    done;
-  } fi;
-  cvs -z3 update -Pd -r$R 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
-  if (test -d /usr/xenocara$VP-orig/) then {
-    rsync -ravzp --delete /usr/xenocara$VP-orig/* $XSRCDIR 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
+    rsync -ravzp --delete /usr/xenocara$VP-orig/* $XSRCDIR 2>&1 | tee -a $bit
   } fi;
   if (test -d /usr/ports$VP-orig/) then {
-    cd /usr/ports$VP-orig/ 2>&1 >> /var/www/tmp/distrib-adJ.bitacora
-  } else {
-    cd /usr/ports/ 2>&1 >> /var/www/tmp/distrib-adJ.bitacora
-  } fi;
-  if (test ! -f CVS/Root) then {
-    for i in `find . -name CVS`; do 
-      echo $i;
-      grep "mystuff" $i > /dev/null 2>&1
-      if (test "$?" != "0") then {
-        echo "$ANONCVS" > $i/Root;
-      } fi;
-    done;
-  } fi;
-  cvs -z3 update -Pd -r$R 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
-  if (test -d /usr/ports$VP-orig/) then {
-    rsync -ravzp /usr/ports$VP-orig/* /usr/ports 2>&1 |  tee -a /var/www/tmp/distrib-adJ.bitacora
+    rsync -ravzp /usr/ports$VP-orig/* /usr/ports 2>&1 | tee -a $bit
   } fi;
 } fi;
 
@@ -322,7 +306,7 @@ if (test "$sn" = "s") then {
   # facilitar aportar  a OpenBSD con prioridad cambios que posiblemente
   # serán aceptados más facilmente
   (cd $dini/arboldes/usr/src; 
-  for i in *patch; do 
+  for i in *patch; do [ -f "$i" ] || continue;
     echo $i; 
     if (test ! -f /usr/src/$i) then { 
       cp $i /usr/src; 
@@ -334,7 +318,7 @@ if (test "$sn" = "s") then {
     } fi; 
   done) 2>&1 |  tee -a  /var/www/tmp/distrib-adJ.bitacora
   (cd $dini/arboldes/usr/ports; 
-  for i in *patch; do 
+  for i in *patch; do [ -f "$i" ] || continue;
     echo $i; 
     if (test ! -f /usr/ports/$i) then { 
       cp $i /usr/ports; 
@@ -392,7 +376,10 @@ if (test "$sn" = "s") then {
 
   # build borrará código objeto 
   # reconstruira dependencias, compilará e instalará
-  cd /usr/src && unset DESTDIR && LANG=POSIX nice make -j4 build 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
+  ulimit -d 8000000 2>/dev/null
+  ulimit -d >> /var/www/tmp/distrib-adJ.bitacora 2>&1
+  sync
+  export MAKEFLAGS=-j1; export MAKE="make -j1"; cd /usr/src && unset DESTDIR && LANG=POSIX nice make -j1 build 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
   echo "whoami 4" >> /var/www/tmp/distrib-adJ.bitacora
   whoami >> /var/www/tmp/distrib-adJ.bitacora 2>&1
   cd $D_DESTDIR/etc && $dini/arboldd/usr/local/adJ/servicio-etc.sh 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora

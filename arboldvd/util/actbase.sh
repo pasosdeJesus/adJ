@@ -11,7 +11,6 @@ if (test "$u" != "root") then {
 	exit 1;
 } fi;
 VCORSP=`echo $VCOR | sed -e "s/\.//g"`
-VSP=79
 
 if (test -f "ver.sh") then {
 	. ./ver.sh
@@ -19,11 +18,13 @@ if (test -f "ver.sh") then {
 	V=$1
 	if (test "$V" = "") then {
 		echo "Primer parámetro debería ser versión, e.g"
-		echo "actbase.sh 8.0"
+		echo "actbase.sh 8.1"
 		exit 1;
 	} fi;
 	VP=`echo $V | sed -e "s/[.]//g"`
 } fi;
+VSP=$VP
+# Los juegos de instalación son los de la versión destino (VSP)
 
 if (test "$V" = "5.1") then {
 	echo "Eliminando /usr/X11R6/share/X11/xkb/symbols/srvr_ctrl";
@@ -54,7 +55,11 @@ if (test "$?" = "0" -a ! -f /etc/X11/xorg.conf) then {
 	touch /etc/X11/xorg-automatico
 } fi;
 echo "(cd /dev; ./MAKEDEV all)" >/etc/rc.firsttime
+echo "installboot sd0" >> /etc/rc.firsttime
+echo "sysmerge -b" >> /etc/rc.firsttime
 echo "fw_update" >> /etc/rc.firsttime
+echo "rm -f /sbin/oreboot /usr/sbin/oinstallboot" >> /etc/rc.firsttime
+echo "pkg_add -u" >> /etc/rc.firsttime
 if (test "$VCORSP" -lt "55" ) then {
 	eusr=`df -kP /usr | awk '{ print $2; }' | tail -n 1`
 	if (test "$eusr" -lt "200000") then {
@@ -113,12 +118,13 @@ read
 cp /sbin/reboot /sbin/oreboot
 cp /usr/sbin/installboot /usr/sbin/oinstallboot
 echo "Se dejó copia de installboot en /usr/sbin/oinstallboot"
-for i in xserv xfont xshare xbase game comp man site base; do
+for i in xshare xserv xfont xbase man game comp site base; do
 	echo $i;
-	tar -C / -xzphf $V$VESP-$ARQ/$i$VSP.tgz
+	tar -C / -xzphf $V$VESP-$ARQ/$i$VSP.tgz || break
 done
-echo "Tras el reinicio recuerde ejecutar:"
-echo "  cd /dev && ./MAKEDEV all"
+echo "Tras el reinicio se ejecutará /etc/rc.firsttime con:"
+echo "  cd /dev && ./MAKEDEV all; installboot sd0; sysmerge -b; fw_update"
+echo "  rm -f /sbin/oreboot /usr/sbin/oinstallboot; pkg_add -u"
 echo "[ENTER] para ejecutar /sbin/oreboot"
 read
 /sbin/oreboot

@@ -5,13 +5,13 @@
 # 2013. vtamara@pasosdeJesus.org
 
 V=$1
-VESP=""
+VESP="b1"
 if (test "$V" = "") then {
 	if (test -f "ver.sh") then {
 		. ./ver.sh
 	} else {
 		echo "Primer parámetro debe ser versión por descargar, e.g:"
-		echo "rsync-adJ 8.0"
+		echo "rsync-adJ 8.1"
 		exit 1;
 	} fi;
 } fi;

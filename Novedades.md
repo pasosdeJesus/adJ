@@ -3,8 +3,8 @@
 Distribución de OpenBSD apropiada para organizaciones de Derechos Humanos
 y Educativas y para quienes esperamos el regreso del Señor Jesucristo.
 
-### Versión: 7.9p1
-Fecha de publicación: 2/Dic/2026
+### Versión: 8.0b1
+Fecha de publicación: 10/Jun/2026
 
 Puedes ver novedades respecto a OpenBSD en:
   <https://gitlab.com/pasosdeJesus/adJ/-/blob/ADJ_7_9/Novedades_OpenBSD.md>
@@ -15,13 +15,13 @@ Puedes ver las diversas versiones publicadas en
 <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/> donde entre otras
 encontrarás:
 
-* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-7.9p1-amd64.img>
+* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-8.0b1-amd64.img>
   que es imagen para escribir en una memoria USB y arrancar con esta bien en
   modo UEFI o bien en modo BIOS Legacy. Una vez
   la descargues puedes escribirla en una USB ubicada en `/dev/sd2c`
   (verifica el dispositivo con `dmesg` y remplaza) con:
 
-       doas dd if=AprendiendoDeJesus-7.9p1-amd64.img of=/dev/sd2c bs=1M
+       doas dd if=AprendiendoDeJesus-8.0b1-amd64.img of=/dev/sd2c bs=1M
 
   Este proceso puede ser demorado, podrás ver el progreso con
 
@@ -29,58 +29,72 @@ encontrarás:
 
   O si deseas probarla con `qemu` para instalar en un disco `virtual.raw`:
 
-      qemu-system-x86_64 -hda virtual.raw -hdb AprendiendoDeJesus-7.9p1-amd64.img -boot menu=on
+      qemu-system-x86_64 -hda virtual.raw -hdb AprendiendoDeJesus-8.0b1-amd64.img -boot menu=on
 
-* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-7.9p1-amd64.iso>
+* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/AprendiendoDeJesus-8.0b1-amd64.iso>
   que es imagen en formato ISO para quemar en DVD e instalar por primera vez
   en modo BIOS Legacy.
 
-* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/7.9p1-amd64/>
+* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/8.0b1-amd64/>
   que es directorio con el contenido del DVD instalador apropiado para
   descargar con `rsync` desde un adJ o un OpenBSD ya instalado para
   actualizarlo (ver
   <https://gitlab.com/pasosdeJesus/adJ/-/blob/ADJ_7_9/Actualiza.md> )
 
-* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/7.9p1-extra/>
+* <https://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/8.0b1-extra/>
   es directorio con versiones recientes de paquetes no incluidos en
   distribución oficial (pueden no estar firmados y requerir instalación con
   `pkg_add -D unsigned _paquete_`).
 
-## 2. NOVEDADES PROVENIENTES DE OPENBSD 7.9
+## 2. NOVEDADES PROVENIENTES DE OPENBSD 8.0
 
 ### 2.1 Kernel y Sistema Base
 
-Novedades tomadas de <https://www.openbsd.org/79.html>
+Novedades tomadas de <https://www.openbsd.org/80.html>
 
-
-* El sistema base incluye mejoras a componentes auditados y mejorados
-* Aplicados parches de seguridad de OpenBSD hasta el 15.Nov.2026.
-* Controladores ampliados o mejorados para amd64
-  * Tarjetas Ethernet: `rge` ahora soporta Realtek RTL8126. `bnxt`
-    ahora soporta dispositivos BCM575xx
-  * Inalámbricas: Soporte básico de 802.11ax (WiFi 6). Mejoras a `iwx`
-  * CPUs y GPUs: `drm` actualizado al de Linux 6.18.22. Diversas mejoras
-    para amdgpu. MAXCPUS aumentado a 255 en amd64
-  * Suspender/hibernar: hibernación diferida (`machdep.hibernatedelay`) para
-    no agotar la batería, y gestión de CPUs híbridas (`hw.blockcpu`)
+* El sistema base incluye mejoras a componentes auditados y mejorados.
+* Aplicados parches de seguridad de OpenBSD hasta el 20.Oct.2026 (fecha de
+  la versión 8.0; las correcciones posteriores se acumulan en 8.0-stable).
+* **`amd64`: espacio de direcciones virtuales del kernel ampliado de 4G a
+  512G**; el mapa directo de `pmap(9)` se ubica en una dirección aleatoria y
+  el cifrado de swap usa instrucciones AES de la CPU.
+* `arm64`: soporte de hibernación, cifrado de swap con AES y bounce buffers.
+* `riscv64`: detección de extensiones vía `AT_HWCAP`, soporte de la extensión
+  vectorial «V» y de la arquitectura avanzada de interrupciones
+  (`imsic(4)`, `aplic(4)`).
+* `sparc64` pasa a la cadena de herramientas LLVM; se retira la arquitectura
+  `loongson`.
+* Controladores ampliados o mejorados
+  * `drm(4)` actualizado a Linux 6.18.53; soporte de Intel Arc A-Series
+    (DG2/Alchemist) en `inteldrm(4)`.
+  * Red: Panther Lake y Wildcat Lake en `em(4)`, Intel E610 en `ix(4)`.
+  * Inalámbricas `qwx(4)`/`qwz(4)`: 802.11n con canales de 40MHz, QoS,
+    correcciones de firmware y de itinerancia.
+  * `vmd(8)`/`vmm(4)`: hasta 64 VCPUs por VM, x2apic, virtio con MSI/MSI-X y
+    descarga de checksum.
 * Seguridad
-  * pledge en más programas
-  * `libressl` actualizado a 4.3.0 con intercambio de claves híbrido
-    post-cuántico ML-KEM768 + X25519 (como recomienda D. J. Bernstein y el
-    RFC 10024 -- TLS 1.3)
-  * Incluye OpenSSH 10.3
-  * Redes: IPv6 autoconf (SLAAC) habilitado por defecto
-* Se actualizan `llvm 19.1.7`, `Xenocara` (basado en `Xorg` 7.7) y
-  `perl 5.42.2`.
-* El repositorio de paquetes de OpenBSD cuenta con 13044 paquetes para
-  amd64.
+  * `libressl` 4.4.0: X25519MLKEM768 como grupo preferido en TLS 1.3,
+    correcciones en CMS, PKCS#7 y validación de cadenas X.509.
+  * OpenSSH 10.6: se deshabilita el codificador LZ77 de `ssh(1)` y se
+    refuerzan `sshd(8)`, `ssh-agent(1)` y `scp(1)`.
+  * `expat` 2.8.4 (CVE-2026-66046, CVE-2026-76641, CVE-2026-76957) y
+    correcciones en `perl(1)` (Storable y `pack`/`unpack`).
+  * `httpd(8)` y `relayd(8)` usan el conjunto de cifrados `secure` y rechazan
+    CL.TE y `obs-fold` (RFC 9112).
+* Herramientas de paquetes
+  * **`pkg_add(1)` ya no busca paquetes en el directorio actual**: toda ruta
+    debe ser explícita o venir de `PKG_PATH`.
+  * `fw_update(8)` valida la firma de `SHA256.sig` local y limita el tamaño de
+    las descargas.
+* Se actualizan `LLVM/Clang 22.1.6`, `Xenocara` (X.Org 7.7, xserver
+  21.1.24), `GCC 16.1.0` y `perl 5.42.3`.
+* El repositorio de paquetes de OpenBSD cuenta con 13060 paquetes para amd64.
 
-
-## 3. NOVEDADES RESPECTO A ADJ 7.8 PROVENIENTES DE PASOS DE JESÚS
+## 3. NOVEDADES RESPECTO A ADJ 7.9 PROVENIENTES DE PASOS DE JESÚS
 
 ### 3.1 Sistema Base
 
-* Parches de locale y xlocale actualizados a fuentes de OpenBSD 7.9.
+* Parches de locale y xlocale reapuntados a las fuentes de OpenBSD 8.0.
 * 3 fallas en parches detectadas por modelo de IA, Gemini, corregidas:
   - Evita desbordamiento de buffer con locales alterados
   - Arreglada fuga de memoria en xlocale al cambiar locales
@@ -96,7 +110,7 @@ Novedades tomadas de <https://www.openbsd.org/79.html>
   * `usuario_adJ`
     <https://pasosdejesus.org/doc/usuario_adJ/index.html> 
     (Vea la sección sobre Gestión de Energía que opera
-     en OpenBSD/adJ 7.9).
+     en OpenBSD/adJ 8.0).
   * `servidor_adJ`
     <https://pasosdejesus.org/doc/servidor_adJ/index.html>
 * Documentado que los archivos `.xlsx` se abren con LibreOffice al
@@ -116,17 +130,17 @@ Novedades tomadas de <https://www.openbsd.org/79.html>
   cuidadosamente analizada (DeepSeek y Gemini). El directorio
   `evangelios_dp` del CD contiene lo mismo que este paquete.
 * Incluye porte de sivel-2.2.1
-* Incluye porte de solidity-0.8.37 (`solc`), el compilador de contratos
-  Solidity para Ethereum/EVM, compilado de forma nativa en C++20 (sin Rust
+* Incluye porte de solidity (`solc`), el compilador de contratos
+  Solidity para Ethereum/EVM, compilado de forma nativa en C++23 (sin Rust
   ni WASM). Facilita compilar contratos inteligentes en adJ/OpenBSD sin
   recurrir a binarios externos o hacks.
-* Incluye porte de `m` (`@pasosdejesus/m` 0.37.8), el CLI para crear y
+* Incluye porte de `m` (`@pasosdejesus/m`), el CLI para crear y
   gestionar proyectos Next.js y contratos Solidity (sin Hardhat), con la
   extensión `mpdj` (`ai:*`, `eng:credentials:*`) y las dependencias
   opcionales (`contract-test` y `edr`) empaquetadas. Se instala
   `/usr/local/bin/m`.
-* Actualizados postgresql a 18.6 y php a 8.5.12 desde la rama estable de 
-  OpenBSD 7.9.
+* Actualizados postgresql a 18.6 y php a 8.5.11 desde la rama estable de
+  OpenBSD 8.0.
 * Actualizados por fallas de seguridad críticas (22-23.Oct.2026):
   php-8.5.12 (CVE-2026-109618 y CVE-2026-109619), node-22.23.4,
   brotli-1.2.1 y py3-brotli-1.2.1 (CVE-2026-111497),
@@ -139,7 +153,7 @@ Novedades tomadas de <https://www.openbsd.org/79.html>
   png-1.6.59, py3-asn1-0.6.3v0, redis 6.2.20, sqlite3-3.50.7p0
 
 
-### 3.4 Novedades de adJ 7.9p1
+### 3.4 Novedades de adJ 7.9 y 7.9p1
 
 * **Datos abiertos de Noche y Niebla al día.** El directorio
   `sivel/` del medio de instalación ahora incluye
@@ -156,15 +170,25 @@ Novedades tomadas de <https://www.openbsd.org/79.html>
 * **Porte de `m` actualizado a 0.37.20** (`@pasosdejesus/m`), reempaquetado
   como único tarball `-full` generado por `make publish` de `m`; el porte ya
   no necesita red durante la compilación.
+* **Nuevas llaves `signify` para 8.0** (`adJ-80-base.pub` y
+  `adJ-80-pkg.pub`), generadas y respaldadas por el operador.
+* **Scripts convertidos de latin1 a UTF-8** (`creaimg.sh`, `creaiso.sh`,
+  `servicio-kernel.sh`, `verificadep.sh`, `xenocaraadJ.sh`, `varcorreo.sh`,
+  `tminiroot/install-en`) y corregidas seis referencias obsoletas en
+  `inst-adJ.sh` (servicio PHP, listas de paquetes inexistentes, plantilla
+  `xorg.conf.pordefecto` y bloque muerto de Pidgin).
+* **`hdes/creaimg.sh` acepta el directorio de trabajo** como parámetro o en
+  `DIRIMG` (por omisión `/var/www/adJ-ia/adJ`), para no llenar el disco local
+  al crear la imagen USB.
 * **Paquetes recompilados por fallas de seguridad de OpenBSD hasta
-  el 15.Nov.2026.**
+  el 20.Oct.2026.**
 
 ## 4. VERIFICACIÓN DE LA DESCARGA
 
 Antes de usar cualquier imagen, verifique su integridad con `signify`:
 
 ```
-doas signify -C -p /etc/signify/adJ-79-base.pub -x SHA256.sig
+doas signify -C -p /etc/signify/adJ-80-base.pub -x SHA256.sig
 ```
 
 El comando debe reportar `Signature Verified` para cada archivo. Si falla,

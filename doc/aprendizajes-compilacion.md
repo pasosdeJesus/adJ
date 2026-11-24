@@ -666,3 +666,65 @@ Probar después con `sh -n` los scripts y regenerar la ISO si se tocó
 `arboldvd/medios/terminos.txt` y el `MESSAGE` de `education/asigna`.
 
 > Mantener este documento al día: detección, resolución y ejemplo.
+
+## 34. Los `*-orig` conservan los permisos del tarball y el CVS corre como root
+
+Los árboles `/usr/src$VP-orig`, `/usr/xenocara$VP-orig` y `/usr/ports$VP-orig`
+son la **copia de referencia** y deben quedar **exactamente como vienen en**
+`src.tar.gz`, `sys.tar.gz`, `xenocara.tar.gz` y `ports.tar.gz` del FTP. Los
+tarballs guardan **uid/gid numéricos** (no `root:wheel`): `src.tar.gz` trae
+`123:wheel` en la mayoría de archivos y `0:wheel` en algunos; `ports.tar.gz`
+y `xenocara.tar.gz` traen `0:wheel`. Deben conservarse tal cual, igual que
+`CVS/Root` = `/cvs` y `CVS/Tag` = `TOPENBSD_8_0`. No se reescriben los
+`CVS/Root` a mano ni se hace `chown` recursivo al usuario.
+
+**Procedimiento**:
+
+```sh
+# 1. Extraer COMO ROOT y CON -p, que conserva uid/gid del tarball.
+#    Ojo: la p va ANTES de la f (tar -xpvzf, no -xvzfp).
+cd /var/www/adJ-ia
+doas mkdir -p src80-orig xenocara80-orig ports80-orig
+doas tar -xpvzf fuentes80/src.tar.gz     -C src80-orig
+doas tar -xpvzf fuentes80/sys.tar.gz     -C src80-orig     # el kernel sobre src
+doas tar -xpvzf fuentes80/xenocara.tar.gz -C xenocara80-orig
+doas tar -xpvzf fuentes80/ports.tar.gz    -C ports80-orig
+
+# 2. ports.tar.gz anida todo bajo ports/: aplanar conservando dueños
+doas sh -c 'cd ports80-orig && cp -Rp ports/. . && rm -rf ports'
+
+# 3. Actualizar con CVS COMO ROOT (doas) y con -d explícito, porque el
+#    CVS/Root original es /cvs y root no tiene CVSROOT en el entorno
+doas sh -c 'cd src80-orig && cvs -z3 -d anoncvs@anoncvs4.usa.openbsd.org:/cvs \
+  update -dAPd -rOPENBSD_8_0'
+# ídem en xenocara80-orig y ports80-orig
+```
+
+**Por qué `-p`**: sin `-p`, `tar` como root aplica el umask y mapea uid/gid
+por nombre en vez de por número. Con `-p` se conservan los números del archivo.
+
+**Por qué root**: `cvs update` necesita escribir en cada directorio y en los
+`CVS/Entries`. Si el árbol pertenece a `root`, el update falla con
+"Permission denied" y el árbol queda a medias. Corriendo con `doas` no hay ese
+problema y los permisos permanecen los del tarball.
+
+**El árbol de trabajo sí se normaliza**: `/usr/src`, `/usr/xenocara` y
+`/usr/ports` son copias de trabajo y sí pasan a `vtamara:wsrc`:
+
+```sh
+doas rsync -ravzp --delete /usr/src80-orig/* /usr/src/
+doas chown -R vtamara:wsrc /usr/src /usr/xenocara /usr/ports
+```
+
+**Verificación**:
+
+```sh
+doas cat src80-orig/CVS/Root      # /cvs
+doas cat src80-orig/CVS/Tag       # TOPENBSD_8_0
+doas ls -ln src80-orig | head -3  # uid/gid numéricos del tarball
+doas grep '#define OpenBSD8_0' /usr/src/sys/sys/param.h
+```
+
+**Síntoma del error**: `rsync: [receiver] mkstemp "/usr/src/sys/.../.archivo.XXXX" failed: Permission denied (13)`
+durante la etapa de CVS de `distribucion.sh`, o `cvs update: No CVSROOT
+specified!` si el `CVS/Root` apunta a un repositorio local inexistente.
