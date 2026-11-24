@@ -376,10 +376,7 @@ if (test "$sn" = "s") then {
 
   # build borrará código objeto 
   # reconstruira dependencias, compilará e instalará
-  ulimit -d 8000000 2>/dev/null
-  ulimit -d >> /var/www/tmp/distrib-adJ.bitacora 2>&1
-  sync
-  export MAKEFLAGS=-j1; export MAKE="make -j1"; cd /usr/src && unset DESTDIR && LANG=POSIX nice make -j1 build 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
+  cd /usr/src && unset DESTDIR && LANG=POSIX nice make -j4 build 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
   echo "whoami 4" >> /var/www/tmp/distrib-adJ.bitacora
   whoami >> /var/www/tmp/distrib-adJ.bitacora 2>&1
   cd $D_DESTDIR/etc && $dini/arboldd/usr/local/adJ/servicio-etc.sh 2>&1 | tee -a /var/www/tmp/distrib-adJ.bitacora
